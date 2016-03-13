@@ -12,6 +12,18 @@ filter elem attr html =
   elem attr (List.filterMap (\x -> x) html)
 
 
+mapWithIndex : (Int -> a -> b) -> List a -> List b
+mapWithIndex f xs =
+  let
+    loop k ys =
+      case ys of
+        [] -> []
+        y :: ys -> f k y :: loop (k+1) ys
+  in
+    loop 0 xs
+
+
+
 onClick' : Signal.Address a -> a -> Html.Attribute
 onClick' address x =
   Html.Events.onWithOptions

@@ -1,25 +1,25 @@
 module Material.Layout
   ( setupSizeChangeSignal
-  , Model, initState
+  , Mode, Model, defaultLayoutModel, initState
   , Action(SwitchTab, ToggleDrawer), update
   , spacer, title, navigation, link
-  , Mode, Config, config, view
+  , Contents, view
   ) where
 
-{-| From the 
+{-| From the
 [Material Design Lite documentation](https://www.getmdl.io/components/index.html#layout-section):
-    
+
 > The Material Design Lite (MDL) layout component is a comprehensive approach to
 > page layout that uses MDL development tenets, allows for efficient use of MDL
 > components, and automatically adapts to different browsers, screen sizes, and
 > devices.
-> 
+>
 > Appropriate and accessible layout is a critical feature of all user interfaces,
 > regardless of a site's content or function. Page design and presentation is
 > therefore an important factor in the overall user experience. See the layout
-> component's 
+> component's
 > [Material Design specifications page](https://www.google.com/design/spec/layout/structure.html#structure-system-bars)
-> for details.  
+> for details.
 >
 > Use of MDL layout principles simplifies the creation of scalable pages by
 > providing reusable components and encourages consistency across environments by
@@ -30,20 +30,20 @@ module Material.Layout
 > flexibility and ease of use.
 
 # Model & Actions
-@docs Model, initState, Action, update
-
-# Sub-components
-@docs spacer, title, navigation, link
+@docs Mode, Model, defaultLayoutModel, initState, Action, update
 
 # View
-@docs Mode, Config, config, view
+@docs Contents, view
+
+## Sub-views
+@docs spacer, title, navigation, link
 
 # Setup
 @docs setupSizeChangeSignal
 -}
 
 
-import Dict exposing (Dict)
+import Array exposing (Array)
 import Maybe exposing (andThen, map)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -79,13 +79,8 @@ setupSizeChangeSignal f =
 -- MODEL
 
 
-type alias TabState =
-  { titles : List String
-  , ripples : Dict String Ripple.Model
-  }
-
 type alias State' =
-  { tabs : TabState
+  { tabs : Array Ripple.Model
   , isSmallScreen : Bool
   }
 
@@ -102,60 +97,74 @@ s model = case model.state of (S state) -> state
 {-| Layout model. If your layout view has tabs, any tab with the same name as
 `selectedTab` will be highlighted as selected; otherwise, `selectedTab` has no
 significance. `isDrawerOpen` indicates whether the drawer, if the layout has
-such, is open; otherwise, it has no significance. The `state` is the opaque
-layout component state; use the function `initState` to construct it. (The names
-of your tabs lives in this state; so you must use `initState` to set those
-names.)
+such, is open; otherwise, it has no significance.
+
+The header disappears on small devices unless
+`fixedHeader` is true. The drawer opens and closes with user interactions
+unless `fixedDrawer` is true, in which case it is permanently open on large
+screens. Tabs scroll horisontally unless `fixedTabs` is true.
+Finally, the header respects `mode`
+
+The `state` is the opaque
+layout component state; use the function `initState` to construct it. If you
+change the number of tabs, you must re-initialise this state.
 -}
 type alias Model =
-  { selectedTab : String
+  { selectedTab : Int
   , isDrawerOpen : Bool
+  -- Configuration
+  , fixedHeader : Bool
+  , fixedDrawer : Bool
+  , fixedTabs : Bool
+  , rippleTabs : Bool
+  , mode : Mode
+  -- State
   , state : State
   }
 
 
-{-| Initialiser for Layout component state. Supply a list of tab titles
-or the empty list if your layout should have no tabs. E.g.,
-
-    initState ["About", "Main", "Contact"]
+{-| Initialiser for Layout component state. Supply a number of tabs you
+use in your layout. If you subsequently change the number of tabs, you
+must re-initialise the state.
 -}
-initState : List String -> State
-initState titles =
-  let ripples =
-    titles
-    |> List.map (\title -> (title, Ripple.model))
-    |> Dict.fromList
-  in
-    S { tabs =
-          { titles = titles
-          , ripples = ripples
-          }
-      , isSmallScreen = False -- TODO
-      }
+initState : Int -> State
+initState no_tabs =
+  S { tabs = Array.repeat no_tabs Ripple.model
+    , isSmallScreen = False -- TODO
+    }
 
 
-hasTabs : Model -> Bool
-hasTabs model =
-  case (s model).tabs.titles of
-    [] -> False
-    [x] -> False -- MDL spec says tabs should come in at least pairs.
-    _ -> True
+{-| Default configuration of the layout: Fixed header, non-fixed drawer,
+non-fixed tabs, tabs do not ripple, tab 0 is selected, standard header
+behaviour.
+-}
+defaultLayoutModel : Model
+defaultLayoutModel =
+  { selectedTab = 0
+  , isDrawerOpen = False
+  , fixedHeader = True
+  , fixedDrawer = False
+  , fixedTabs = False
+  , rippleTabs = True
+  , mode = Standard
+  , state = initState 0
+  }
 
 
 -- ACTIONS, UPDATE
 
 
-{-| Component actions. 
+{-| Component actions.
 Use `SwitchTab` to request a switch of tabs. Use `ToggleDrawer` to toggle the
 opened/closed state of the drawer.
 -}
 type Action
-  = SwitchTab String
+  = SwitchTab Int
   | ToggleDrawer
   -- Private
   | SmallScreen Bool -- True means small screen
   | ScrollTab Int
-  | Ripple String Ripple.Action
+  | Ripple Int Ripple.Action
 
 
 {-| Component update.
@@ -177,19 +186,14 @@ update action model =
     ToggleDrawer ->
       { model | isDrawerOpen = not model.isDrawerOpen } |> pure
 
-    Ripple tab action' ->
+    Ripple tabIndex action' ->
       let
-        tabs = state.tabs
         (state', effect) =
-          Dict.get tab tabs.ripples
+          Array.get tabIndex (s model).tabs
           |> Maybe.map (Ripple.update action')
           |> Maybe.map (\(ripple', effect) ->
-            ({ state
-             | tabs =
-               { tabs
-               | ripples = Dict.insert tab ripple' tabs.ripples
-               }
-             }, Effects.map (Ripple tab) effect))
+            ({ state | tabs = Array.set tabIndex ripple' (s model).tabs }
+            , Effects.map (Ripple tabIndex) effect))
           |> Maybe.withDefault (pure state)
       in
         ({ model | state = S state' }, effect)
@@ -230,7 +234,6 @@ link attrs contents =
 
 
 
-
 -- MAIN VIEWS
 
 
@@ -248,40 +251,12 @@ type Mode
 --  | Waterfall
 
 
-{-| Layout view configuration. The header disappears on small devices unless
-`fixedHeader` is true. The drawer opens and closes with user interactions
-unless `fixedDrawer` is true, in which case it is permanently open on large
-screens. Tabs scroll horisontally unless `fixedTabs` is true. Tabs have a
-ripple-animation when clicked if `rippleTabs` is true. Finally, the header
-respects `mode`
- -}
-type alias Config =
-  { fixedHeader : Bool
-  , fixedDrawer : Bool
-  , fixedTabs : Bool
-  , rippleTabs : Bool
-  , mode : Mode
-  }
-
-
-{-| Default configuration of the layout: Fixed header, non-fixed drawer,
-non-fixed tabs, tabs ripple, standard header behaviour.
--}
-config : Config
-config =
-  { fixedHeader = True
-  , fixedDrawer = False
-  , fixedTabs = False
-  , rippleTabs = True
-  , mode = Standard
-  }
-
 
 type alias Addr = Signal.Address Action
 
 
-tabsView : Addr -> Config -> Model -> Html
-tabsView addr config model =
+tabsView : Addr -> Model -> List Html -> Html
+tabsView addr model tabs =
   let chevron direction offset =
         div
           [ classList
@@ -300,24 +275,23 @@ tabsView addr config model =
       , div
           [ classList
               [ ("mdl-layout__tab-bar", True)
-              , ("mdl-js-ripple-effect", config.rippleTabs)
-              , ("mds-js-ripple-effect--ignore-events", config.rippleTabs)
+              , ("mdl-js-ripple-effect", model.rippleTabs)
+              , ("mds-js-ripple-effect--ignore-events", model.rippleTabs)
               ]
           ]
-          (let (S state) = model.state in
-           state.tabs.titles |> List.map (\tab ->
+          (tabs |> mapWithIndex (\tabIndex tab ->
             filter a
               [ classList
                   [ ("mdl-layout__tab", True)
-                  , ("is-active", tab == model.selectedTab)
+                  , ("is-active", tabIndex == model.selectedTab)
                   ]
-              , onClick addr (SwitchTab tab)
+              , onClick addr (SwitchTab tabIndex)
               ]
-              [ text tab |> Just
-              , if config.rippleTabs then
-                  Dict.get tab state.tabs.ripples |> Maybe.map (
+              [ Just tab
+              , if model.rippleTabs then
+                  Array.get tabIndex (s model).tabs |> Maybe.map (
                     Ripple.view
-                      (Signal.forwardTo addr (Ripple tab))
+                      (Signal.forwardTo addr (Ripple tabIndex))
                       [ class "mdl-layout__tab-ripple-container" ]
                   )
                 else
@@ -328,27 +302,18 @@ tabsView addr config model =
       ]
 
 
-headerView : Config -> Model -> (Maybe Html, Maybe (List Html), Maybe Html) ->  Html
-headerView config model (drawerButton, row, tabs) =
+headerView : Model -> (Maybe Html, Maybe (List Html), Maybe Html) ->  Html
+headerView model (drawerButton, row, tabs) =
   filter Html.header
     [ classList
         [ ("mdl-layout__header", True)
-        , ("is-casting-shadow", config.mode == Standard)
+        , ("is-casting-shadow", model.mode == Standard)
         ]
     ]
     [ drawerButton
     , row |> Maybe.map (div [ class "mdl-layout__header-row" ])
     , tabs
     ]
-
-
-{-}
-visibilityClasses : Visibility -> List (String, Bool)
-visibilityClasses v =
-  [ ("mdl-layout--large-screen-only", v == LargeScreenOnly)
-  , ("mdl-layout--small-screen-only", v == SmallScreenOnly)
-  ]
--}
 
 
 drawerButton : Addr -> Html
@@ -383,39 +348,50 @@ drawerView addr model elems =
     elems
 
 
-type alias Content = (Maybe (List Html), Maybe (List Html))
+{-| Content of the layout only (contents of main pane is set elsewhere). Every
+part is optional. If `header` is `Nothing`, tabs will not be shown.
 
-
-{-| Main layout view. The `Content` argument contains the body
-of the drawer and header (or `Nothing`). The final argument is
-the contents of the main pane.
+The `header` and `drawer` contains the contents of the header row and drawer,
+respectively.  Use `spacer`, `title`, `nav`, and
+`link`, as well as regular Html to construct these. The `tabs` contains
+the title of each tab.
 -}
-view : Addr -> Config -> Model -> Content -> List Html -> Html
-view addr config model (drawer, header) main =
-  let (contentDrawerButton, headerDrawerButton) =
-        case (drawer, header, config.fixedHeader) of
-          (Just _, Just _, True) ->
-            -- Drawer with fixedHeader: Add the button to the header
-             (Nothing, Just <| drawerButton addr)
+type alias Contents =
+  { header : Maybe (List Html)
+  , drawer : Maybe (List Html)
+  , tabs : Maybe (List Html)
+  , main : List Html
+  }
 
-          (Just _, _, _) ->
-            -- Drawer, no or non-fixed header: Add the button before contents.
-             (Just <| drawerButton addr, Nothing)
 
-          _ ->
-            -- No drawer: no button.
-             (Nothing, Nothing)
-      mode =
-        case config.mode of
-          Standard  -> ""
-          Scroll    -> "mdl-layout__header-scroll"
-    --      Waterfall -> "mdl-layout__header-waterfall"
-          Seamed    -> "mdl-layout__header-seamed"
-      tabs =
-        if hasTabs model then
-          tabsView addr config model |> Just
-        else
-          Nothing
+{-| Main layout view.
+-}
+view : Addr -> Model -> Contents -> Html
+view addr model { drawer, header, tabs, main } =
+  let
+    (contentDrawerButton, headerDrawerButton) =
+      case (drawer, header, model.fixedHeader) of
+        (Just _, Just _, True) ->
+          -- Drawer with fixedHeader: Add the button to the header
+           (Nothing, Just <| drawerButton addr)
+
+        (Just _, _, _) ->
+          -- Drawer, no or non-fixed header: Add the button before contents.
+           (Just <| drawerButton addr, Nothing)
+
+        _ ->
+          -- No drawer: no button.
+           (Nothing, Nothing)
+
+    mode =
+      case model.mode of
+        Standard  -> ""
+        Scroll    -> "mdl-layout__header-scroll"
+        -- Waterfall -> "mdl-layout__header-waterfall"
+        Seamed    -> "mdl-layout__header-seamed"
+
+    hasHeader =
+      tabs /= Nothing || header /= Nothing
   in
   div
     [ class "mdl-layout__container" ]
@@ -423,16 +399,19 @@ view addr config model (drawer, header) main =
         [ classList
             [ ("mdl-layout", True)
             , ("is-upgraded", True)
-            , ("is-small-screen", let (S state) = model.state in state.isSmallScreen)
+            , ("is-small-screen", (s model).isSmallScreen)
             , ("has-drawer", drawer /= Nothing)
-            , ("has-tabs", hasTabs model)
+            , ("has-tabs", tabs /= Nothing)
             , ("mdl-js-layout", True)
-            , ("mdl-layout--fixed-drawer", config.fixedDrawer && drawer /= Nothing)
-            , ("mdl-layout--fixed-header", config.fixedHeader && header /= Nothing)
-            , ("mdl-layout--fixed-tabs", config.fixedTabs && hasTabs model)
+            , ("mdl-layout--fixed-drawer", model.fixedDrawer && drawer /= Nothing)
+            , ("mdl-layout--fixed-header", model.fixedHeader && hasHeader)
+            , ("mdl-layout--fixed-tabs", model.fixedTabs && tabs /= Nothing)
             ]
         ]
-        [ header |> Maybe.map (\_ -> headerView config model (headerDrawerButton, header, tabs))
+        [ if hasHeader then
+            Just <| headerView model (headerDrawerButton, header, Maybe.map (tabsView addr model) tabs)
+          else
+            Nothing
         , drawer |> Maybe.map (\_ -> obfuscator addr model)
         , drawer |> Maybe.map (drawerView addr model)
         , contentDrawerButton

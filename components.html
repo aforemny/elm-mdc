@@ -14,20 +14,8 @@
   </head>
   <body>
     <!-- elm -->
-    <script src="built/elm.js"></script>
+    <script src="elm.js"></script>
     <script>
-
-      var isSmallScreenQuery = window.matchMedia('(max-width: 1024px)');
-
-      app = Elm.fullscreen(Elm.Main,
-        { isSmallScreenSignal : isSmallScreenQuery.matches
-        }
-      );
-
-      /* Connect Material/isSmallScreenSignal. */
-      isSmallScreenQuery.addListener(function () {
-        app.ports.isSmallScreenSignal.send(isSmallScreenQuery.matches);
-      });
-
+      app = Elm.fullscreen(Elm.Main);
     </script>
   </body>

@@ -1,11 +1,11 @@
-module Buttons where
+module Demo.Buttons where
 
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Effects
 
-import Material.Button as Button exposing (Appearance(..), Coloring(..))
+import Material.Button as Button exposing (..)
 import Material.Grid as Grid
 import Material.Icon as Icon
 
@@ -27,16 +27,46 @@ tabulate : List a -> List (Int, a)
 tabulate = tabulate' 0
 
 
-row : Appearance -> Bool -> List (Int, (Bool, Button.Config))
-row appearance ripple =
+type alias View =
+  Signal.Address Button.Action -> Button.Model -> Coloring -> List Html -> Html
+
+type alias View' =
+  Signal.Address Button.Action -> Button.Model -> Html
+
+
+view' : View -> Coloring -> Html -> Signal.Address Button.Action -> Button.Model -> Html
+view' view coloring elem addr model =
+  view addr model coloring [elem]
+
+
+describe : String -> Bool -> Coloring -> String
+describe kind ripple coloring =
+  let
+    c =
+      case coloring of
+        Plain -> "plain"
+        Colored -> "colored"
+        Primary -> "primary"
+        Accent -> "accent"
+  in
+    kind ++ ", " ++ c ++ if ripple then " w/ripple" else ""
+
+
+row : (String, Html, View) -> Bool -> List (Int, (Bool, String, View'))
+row (kind, elem, v) ripple =
   [ Plain, Colored, Primary, Accent ]
-  |> List.map (\c -> (ripple, { coloring = c, appearance = appearance }))
+  |> List.map (\c -> (ripple, describe kind ripple c, view' v c elem))
   |> tabulate
 
 
-buttons : List (List (Index, (Bool, Button.Config)))
+buttons : List (List (Index, (Bool, String, View')))
 buttons =
-  [Flat, Raised, FAB, MiniFAB, Icon]
+  [ ("flat", text "Flat Button", Button.flat)
+  , ("raised", text "Raised Button", Button.raised)
+  , ("FAB", Icon.i "add", Button.fab)
+  , ("mini-FAB", Icon.i "zoom_in", Button.minifab)
+  , ("icon", Icon.i "flight_land", Button.icon)
+  ]
   |> List.concatMap (\a -> [row a False, row a True])
   |> tabulate
   |> List.map (\(i, row) -> List.map (\(j, x) -> ((i,j), x)) row)
@@ -47,7 +77,7 @@ model =
   { clicked = ""
   , buttons =
       buttons
-      |> List.concatMap (List.map <| \(idx, (ripple, _)) -> (idx, Button.model ripple))
+      |> List.concatMap (List.map <| \(idx, (ripple, _, _)) -> (idx, Button.model ripple))
       |> Dict.fromList
   }
 
@@ -79,36 +109,15 @@ update (Action idx action) model =
 -- VIEW
 
 
-describe : Bool -> Button.Config -> String
-describe ripple config =
-  let
-    appearance =
-      case config.appearance of
-        Flat -> "flat"
-        Raised -> "raised"
-        FAB -> "FAB"
-        MiniFAB -> "mini-FAB"
-        Icon -> "icon"
-    coloring =
-      case config.coloring of
-        Plain -> "plain"
-        Colored -> "colored"
-        Primary -> "primary"
-        Accent -> "accent"
-  in
-    appearance ++ ", " ++ coloring ++ if ripple then " w/ripple" else ""
-
-
-
 view : Signal.Address Action -> Model -> Html
 view addr model =
   buttons |> List.concatMap (\row ->
-    row |> List.map (\(idx, (ripple, config)) ->
+    row |> List.concatMap (\(idx, (ripple, description, view)) ->
       let model' =
         Dict.get idx model.buttons |> Maybe.withDefault (Button.model False)
       in
-        Grid.cell
-          [ Grid.col Grid.All 3]
+        [ Grid.cell
+          [ Grid.size Grid.All 3]
           [ div
               [ style
                 [ ("text-align", "center")
@@ -116,27 +125,20 @@ view addr model =
                 , ("margin-bottom", "1em")
                 ]
               ]
-              [ Button.view
+              [ view
                   (Signal.forwardTo addr (Action idx))
-                  config
                   model'
-                  []
-                  [ case config.appearance of
-                      Flat -> text <| "Flat Button"
-                      Raised -> text <| "Raised Button"
-                      FAB -> Icon.i "add"
-                      MiniFAB -> Icon.i "zoom_in"
-                      Icon -> Icon.i "flight_land"
-                  ]
               , div
                   [ style
                     [ ("font-size", "9pt")
                     , ("margin-top", "1em")
                     ]
                   ]
-                  [ text <| describe ripple config ]
+                  [ text description
+                  ]
               ]
           ]
+        ]
     )
   )
-  |> Grid.grid 
+  |> Grid.grid

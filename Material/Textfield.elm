@@ -8,19 +8,19 @@ module Material.Textfield where
 > can occur and, typically, text that clearly communicates the intended
 > contents of the text field. The MDL text field component provides various
 > types of text fields, and allows you to add both display and click effects.
-> 
+>
 > Text fields are a common feature of most user interfaces, regardless of a
 > site's content or function. Their design and use is therefore an important
-> factor in the overall user experience. See the text field component's 
-> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html) 
+> factor in the overall user experience. See the text field component's
+> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)
 > for details.
-> 
+>
 > The enhanced text field component has a more vivid visual look than a standard
 > text field, and may be initially or programmatically disabled. There are three
 > main types of text fields in the text field component, each with its own basic
 > coding requirements. The types are single-line, multi-line, and expandable.
 
-This implementation provides only single-line. 
+This implementation provides only single-line.
 
 
 # Configuration

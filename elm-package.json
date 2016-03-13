@@ -7,6 +7,7 @@
         "."
     ],
     "exposed-modules": [
+        "Material",
         "Material.Icon",
         "Material.Button",
         "Material.Textfield",

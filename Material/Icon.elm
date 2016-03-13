@@ -31,9 +31,21 @@ type Size
 
 
 {-| View function for icons. Supply the
-(Material Icons Library)[https://design.google.com/icons/] name as
+[Material Icons Library](https://design.google.com/icons/) name as
 the first argument (replace spaces with underscores); and the size of the icon
-as the second.
+as the second. Do not use this function to produce clickable icons; use
+icon buttons in Material.Button for that.
+
+I.e., to produce a 48px
+["trending flat"](https://design.google.com/icons/#ic_trending_flat) icon with
+no attributes:
+
+    import Material.Icon as Icon
+
+    icon : Html
+    icon = Icon.view "trending_flat" Icon.S48 []
+
+This function will override any `class` set in `List Attribute`.
 -}
 view : String -> Size -> List Attribute -> Html
 view name size attrs =
@@ -51,7 +63,14 @@ view name size attrs =
 
 {-| Render a default-sized icon with no behaviour. The
 `String` argument must be the name of a [Material Icon](https://design.google.com/icons/)
-(replace spaces with underscores). 
+(replace spaces with underscores).
+
+I.e., to produce a default size (24xp) "trending flat" icon:
+
+    import Material.Icon as Icon
+
+    icon : Html
+    icon = Icon.i "trending_flat"
 -}
 i : String -> Html
 i name = view name S []
