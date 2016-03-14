@@ -16,7 +16,7 @@ re-implements the CSS parts in Elm, but relies on the CSS of MDL verbatim.
 
 Build the demo:
 
-    > elm-make Demo.elm
+    > elm-make src/Demo.elm
 
 This will construct a file `index.html`; open that in your browser.
 
