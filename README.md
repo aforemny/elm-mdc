@@ -5,6 +5,9 @@ Port of Google's
 CSS/JS implementation of the
 [Material Design Specification](https://www.google.com/design/spec/material-design/introduction.html).
 
+Live demo 
+[here](https://debois.github.io/elm-mdl/).
+
 MDL is implemented primarily through CSS, with a little bit of Javascript
 adding and removing CSS classes in response to DOM events. This port
 re-implements the CSS parts in Elm, but relies on the CSS of MDL verbatim.

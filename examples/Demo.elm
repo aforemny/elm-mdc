@@ -83,11 +83,11 @@ drawer =
   [ Layout.title "Example drawer"
   , Layout.navigation
     [ Layout.link
-      [href "https://groups.google.com/forum/#!forum/elm-discuss"]
-      [text "Elm Discuss"]
+      [href "https://github.com/debois/elm-mdl"]
+      [text "github"]
     , Layout.link
-      [href "http://elm-lang.org"]
-      [text "Elm"]
+      [href "http://package.elm-lang.org/packages/debois/elm-mdl/1.0.0/"]
+      [text "elm-package"]
     ]
   ]
 
