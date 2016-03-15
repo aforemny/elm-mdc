@@ -149,7 +149,7 @@ view addr model =
       }
     {- The following line is not needed when you manually set up
        your html, as done with page.html. Removing it will then
-       fix the flicker you see on load. 
+       fix the flicker you see on load.
     -}
     |> Material.topWithColors Material.Teal Material.Red
 

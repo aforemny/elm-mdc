@@ -34,7 +34,7 @@ The library has a tiny native component (for measuring geometry of rendered
 Initial page load of the demo will produce a flicker, which can only be 
 avoided if you set up the MDL css to load before elm does. Use the file
 `page.html` as a template. To build the demo in this mode, comment out 
-[line 153 in `examples/Demo.elm`](https://github.com/debois/elm-mdl/blob/master/examples/Demo.elm#L153)
+[line 154 in `examples/Demo.elm`](https://github.com/debois/elm-mdl/blob/master/examples/Demo.elm#L154)
 and build the demo like this: 
 
     > elm-make examples/Demo.elm --output elm.js
