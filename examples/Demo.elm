@@ -147,6 +147,9 @@ view addr model =
       , tabs = Just tabTitles
       , main = [ top ]
       }
+    {- The following line is not needed when you manually set up
+       your html, as done with page.html.
+    -}
     |> Material.topWithColors Material.Teal Material.Red
 
 

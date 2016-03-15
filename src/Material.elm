@@ -5,6 +5,8 @@ module Material
 {-| Material Design component library for Elm based on Google's
 [Material Design Lite](https://www.getmdl.io/).
 
+This file contains CSS loaders only.
+
 @docs Color, topWithColors, top
 -}
 
@@ -96,6 +98,11 @@ to preview combinations.
 
 Please be aware that Grey, Blue Grey, and Brown cannot be secondary colors. If
 you choose them as such anyway, you will get the default theme.
+
+Using this top-level container is not recommended, as most browsers will load
+css concurrently with rendering the initial page, which will produce a flicker
+on page load. The container is included only to provide an option to get started
+quickly and for use with elm-reactor. 
 
 -}
 topWithColors : Color -> Color -> Html -> Html

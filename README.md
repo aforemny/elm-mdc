@@ -9,7 +9,7 @@ MDL is implemented primarily through CSS, with a little bit of Javascript
 adding and removing CSS classes in response to DOM events. This port
 re-implements the CSS parts in Elm, but relies on the CSS of MDL verbatim.
 
-*CAUTION* This is an early and incomplete prototype. Use at your own risk.
+*CAUTION*! This is an early and incomplete prototype. Use at your own risk.
 
 
 ### Get Started
@@ -26,6 +26,19 @@ The library has a tiny native component (for measuring geometry of rendered
   know no better way than to copy `Material.elm` and `Material/*` to your
   own project. 
 
+### Embedding in your own HTML. 
+
+Initial page load of the demo will produce a flicker, which can only be 
+avoided if you set up the MDL css to load before elm does. Use the file
+`page.html` as a template. To build the demo in this mode, comment out 
+[line 153 in `examples/Demo.elm`](https://github.com/debois/elm-mdl/blob/master/examples/Demo.elm#L153)
+and build the demo like this: 
+
+    > elm-make examples/Demo.elm --output elm.js
+
+This will produce a file `elm.js`. Open the file 
+[`page.html`](https://raw.githubusercontent.com/debois/elm-mdl/master/page.html) in your 
+browser; this file will set up MDL css and load `elm.js`.
 
 ### Contribute
 
