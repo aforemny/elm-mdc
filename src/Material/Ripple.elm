@@ -7,13 +7,14 @@ import Json.Decode as Json exposing ((:=), at)
 import Effects exposing (Effects, tick, none)
 
 import Material.Aux exposing (Rectangle, rectangleDecoder, effect)
+import DOM
 
 
 -- MODEL
 
 
 type alias Metrics =
-  { rect : Rectangle
+  { rect : DOM.Rectangle
   , x : Float
   , y : Float
   }
@@ -41,7 +42,7 @@ model =
 
 
 type alias Geometry =
-  { rect : Rectangle
+  { rect : DOM.Rectangle
   , clientX : Maybe Float
   , clientY : Maybe Float
   , touchX : Maybe Float
@@ -52,21 +53,22 @@ type alias Geometry =
 geometryDecoder : Json.Decoder Geometry
 geometryDecoder =
   Json.object5 Geometry
-    rectangleDecoder
+    (DOM.target DOM.boundingClientRect)
     (Json.maybe ("clientX" := Json.float))
     (Json.maybe ("clientY" := Json.float))
     (Json.maybe (at ["touches", "0", "clientX"] Json.float))
     (Json.maybe (at ["touches", "0", "clientY"] Json.float))
 
 
-computeMetrics : Geometry -> Metrics
+computeMetrics : Geometry -> Maybe Metrics
 computeMetrics g =
   let
     rect = g.rect
-    set x y = (x - rect.left, y - rect.top)
-    (x,y) = case (g.clientX, g.clientY, g.touchX, g.touchY) of
+    set x y = (x - rect.left, y - rect.top) |> Just
+  in
+    (case (g.clientX, g.clientY, g.touchX, g.touchY) of
       (Just 0.0, Just 0.0, _, _) ->
-        (rect.width / 2.0, rect.height / 2.0)
+        (rect.width / 2.0, rect.height / 2.0) |> Just
 
       (Just x, Just y, _, _) ->
         set x y
@@ -75,12 +77,9 @@ computeMetrics g =
         set x y
 
       _ ->
-        Debug.crash "Impossible value from geometryDecoder"
-  in
-    { rect = rect
-    , x = x
-    , y = y
-    }
+        Nothing
+
+    ) |> Maybe.map (\(x,y) -> Metrics rect x y)
 
 
 type Action
@@ -95,7 +94,7 @@ update action model =
     Down geometry ->
       { model
       | animation = Frame 0
-      , metrics = computeMetrics geometry |> Just
+      , metrics = computeMetrics geometry
       }
       |> effect (tick <| \_ -> Tick)
 
@@ -118,12 +117,9 @@ update action model =
 
 downOn : String -> Signal.Address Action -> Attribute
 downOn name addr =
-  Material.Aux.on
+  --Material.Aux.on
+  Html.Events.on
     name
-    { preventDefault = False
-    , stopPropagation = False
-    , withGeometry = True
-    }
     geometryDecoder
     (Down >> Signal.message addr)
 
@@ -144,7 +140,8 @@ styles m frame =
     offset = "translate(" ++ toPx m.x ++ ", " ++ toPx m.y ++ ")"
     transformString = "translate(-50%, -50%) " ++ offset ++ scale
     r = m.rect
-    rippleSize = sqrt (r.width * r.width + r.height * r.height) * 2 + 2 |> toPx
+    rippleSize =
+      sqrt (r.width * r.width + r.height * r.height) * 2.0 + 2.0 |> toPx
   in
     [ ("width", rippleSize)
     , ("height", rippleSize)
@@ -173,12 +170,12 @@ view addr attrs model =
       :: attrs
       )
       [ span
-          [ classList
-              [ ("mdl-ripple", True)
-              , ("is-animating", model.animation /= Frame 0)
-              , ("is-visible", model.animation /= Inert)
-              ]
-          , style styling
+        [ classList
+          [ ("mdl-ripple", True)
+          , ("is-animating", model.animation /= Frame 0)
+          , ("is-visible", model.animation /= Inert)
           ]
-          []
+        , style styling
+        ]
+        []
       ]
