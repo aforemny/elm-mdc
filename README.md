@@ -54,6 +54,11 @@ Please do! The easiest place to start is to add more CSS-only components. These 
  - [Lists](https://www.getmdl.io/components/index.html#lists-section)
  - [Shadows](https://github.com/google/material-design-lite/tree/v1.1.2/src/shadow)
 
+Progress bars are pure CSS, and spinners seem to use Javascript only to insert
+auxiliary DOM-nodes on initialisation.
+
+ - [Loading](https://www.getmdl.io/components/index.html#loading-section)
+
 The remaining components, use Javascript
 in various ways. Toggles seem to use Javascript exclusively to insert ripple-animations and __might__ be easy to implement using the `Ripple.elm`
 component:
@@ -64,7 +69,6 @@ The rest I haven't looked at; they may or may not be straightforward to port
 to Elm.
 
  - [Tables](https://www.getmdl.io/components/index.html#tables-section)
- - [Spinners](https://www.getmdl.io/components/index.html#loading-section)
  - [Sliders](https://www.getmdl.io/components/index.html#sliders-section)
  - [Menus](https://www.getmdl.io/components/index.html#menus-section)
  - [Snackbars](https://www.getmdl.io/components/index.html#snackbar-section)
