@@ -51,7 +51,7 @@ import Html.Events exposing (onClick)
 import Effects exposing (Effects)
 import Window
 
-import Material.Aux exposing (..)
+import Material.Helpers exposing (..)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
 

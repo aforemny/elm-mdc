@@ -6,7 +6,7 @@ import Html.Events
 import Json.Decode as Json exposing ((:=), at)
 import Effects exposing (Effects, tick, none)
 
-import Material.Aux exposing (effect)
+import Material.Helpers exposing (effect)
 import DOM
 
 
@@ -117,7 +117,6 @@ update action model =
 
 downOn : String -> Signal.Address Action -> Attribute
 downOn name addr =
-  --Material.Aux.on
   Html.Events.on
     name
     geometryDecoder

@@ -42,7 +42,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Effects exposing (Effects, none)
 
-import Material.Aux as Aux
+import Material.Helpers as Helpers
 import Material.Ripple as Ripple
 
 {-| MDL button.
@@ -126,8 +126,8 @@ view kind addr model coloring html =
       -- Kind.
       , (kind, kind /= "")
       ]
-    , Aux.blurOn "mouseup"
-    , Aux.blurOn "mouseleave"
+    , Helpers.blurOn "mouseup"
+    , Helpers.blurOn "mouseleave"
     , onClick addr Click
     ]
     (case model of
@@ -135,7 +135,7 @@ view kind addr model coloring html =
         Ripple.view
           (Signal.forwardTo addr Ripple)
           [ class "mdl-button__ripple-container"
-          , Aux.blurOn "mouseup" ]
+          , Helpers.blurOn "mouseup" ]
           ripple
         :: html
       _ -> html)

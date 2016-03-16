@@ -1,4 +1,4 @@
-module Material.Aux where
+module Material.Helpers where
 
 import Html
 import Html.Attributes

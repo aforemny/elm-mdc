@@ -79,7 +79,7 @@ individual `CellConfig` elements using `size`, `offset`, and `align`.
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import String
-import Material.Aux exposing (clip, filter)
+import Material.Helpers exposing (clip, filter)
 
 
 {-| The `spacing` parameter indicates whether or not the grid should have

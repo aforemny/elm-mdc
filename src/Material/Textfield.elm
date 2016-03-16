@@ -34,7 +34,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
-import Material.Aux exposing (..)
+import Material.Helpers exposing (filter)
 
 
 -- MODEL
