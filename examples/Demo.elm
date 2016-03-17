@@ -8,12 +8,14 @@ import Signal
 import Task exposing (Task)
 import Array exposing (Array)
 
+import Material.Color as Color
 import Material.Layout as Layout exposing (defaultLayoutModel)
-import Material
+import Material exposing (lift, lift')
 
 import Demo.Buttons
 import Demo.Grid
 import Demo.Textfields
+import Demo.Snackbar
 
 
 -- MODEL
@@ -23,6 +25,7 @@ type alias Model =
   { layout : Layout.Model
   , buttons : Demo.Buttons.Model
   , textfields : Demo.Textfields.Model
+  , snackbar : Demo.Snackbar.Model
   }
 
 
@@ -38,6 +41,7 @@ model =
   { layout = layoutModel
   , buttons = Demo.Buttons.model
   , textfields = Demo.Textfields.model
+  , snackbar = Demo.Snackbar.model
   }
 
 
@@ -48,27 +52,16 @@ type Action
   = LayoutAction Layout.Action
   | ButtonsAction Demo.Buttons.Action
   | TextfieldAction Demo.Textfields.Action
+  | SnackbarAction Demo.Snackbar.Action
 
 
 update : Action -> Model -> (Model, Effects.Effects Action)
 update action model =
-  case action of
-    LayoutAction a ->
-      let
-        (l, e) = Layout.update a model.layout
-      in
-        ({ model | layout = l }, Effects.map LayoutAction e)
-
-    ButtonsAction a ->
-      let
-        (b, e) = Demo.Buttons.update a model.buttons
-      in
-        ({ model | buttons = b }, Effects.map ButtonsAction e)
-
-    TextfieldAction a ->
-      ({ model | textfields = Demo.Textfields.update a model.textfields }
-      , Effects.none
-      )
+  case Debug.log "Action: " action of
+    LayoutAction a -> lift .layout (\m x->{m|layout=x}) LayoutAction Layout.update a model
+    ButtonsAction a -> lift .buttons (\m x->{m|buttons=x}) ButtonsAction Demo.Buttons.update a model
+    TextfieldAction a -> lift' .textfields (\m x->{m|textfields=x}) Demo.Textfields.update a model
+    SnackbarAction a -> lift .snackbar (\m x->{m|snackbar=x}) SnackbarAction Demo.Snackbar.update a model
 
 
 -- VIEW
@@ -109,10 +102,12 @@ header =
 
 tabs : List (String, Addr -> Model -> List Html)
 tabs =
-  [ ("Buttons", \addr model ->
-      [Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons])
+  [ ("Snackbar", \addr model ->
+      [Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar])
   , ("Textfields", \addr model ->
       [Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields])
+  , ("Buttons", \addr model ->
+      [Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons])
   , ("Grid", \addr model -> Demo.Grid.view)
   ]
 
@@ -151,7 +146,7 @@ view addr model =
        your html, as done with page.html. Removing it will then
        fix the flicker you see on load.
     -}
-    |> Material.topWithColors Material.Teal Material.Red
+    |> Material.topWithColors Color.Teal Color.Red
 
 
 init : (Model, Effects.Effects Action)

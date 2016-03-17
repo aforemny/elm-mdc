@@ -1,67 +1,25 @@
 module Material
-  ( Color(..), topWithColors, top
+  ( topWithColors, top
+  , Updater', Updater, lift, lift'
   ) where
 
 {-| Material Design component library for Elm based on Google's
 [Material Design Lite](https://www.getmdl.io/).
 
-This file contains CSS loaders only.
+# Loading CSS
+@docs topWithColors, top
 
-@docs Color, topWithColors, top
+# Component convienience
+@docs Updater', Updater, lift', lift
 -}
 
 
 import String
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Effects exposing (..)
 
-
-{-| Possible colors for color scheme.
--}
-type Color
-  = Indigo
-  | Blue
-  | LightBlue
-  | Cyan
-  | Teal
-  | Green
-  | LightGreen
-  | Lime
-  | Yellow
-  | Amber
-  | Orange
-  | Brown
-  | BlueGrey
-  | Grey
-  | DeepOrange
-  | Red
-  | Pink
-  | Purple
-  | DeepPurple
-
-
-toString : Color -> String
-toString color =
-  case color of
-    Indigo -> "indigo"
-    Blue -> "blue"
-    LightBlue -> "light-blue"
-    Cyan -> "cyan"
-    Teal -> "teal"
-    Green -> "green"
-    LightGreen -> "light-green"
-    Lime -> "lime"
-    Yellow -> "yellow"
-    Amber -> "amber"
-    Orange -> "orange"
-    Brown -> "brown"
-    BlueGrey -> "blue-grey"
-    Grey -> "grey"
-    DeepOrange -> "deep-orange"
-    Red -> "red"
-    Pink -> "pink"
-    Purple -> "purple"
-    DeepPurple -> "deep-purple"
+import Material.Color exposing (..)
 
 
 css : Color -> Color -> String
@@ -71,7 +29,9 @@ css primary accent =
       Grey -> ""
       Brown -> ""
       BlueGrey -> ""
-      _ -> "." ++ toString primary ++ "-" ++ toString accent
+      Primary -> ""
+      Accent -> ""
+      _ -> "." ++ cssName primary ++ "-" ++ cssName accent
   in
     [ "https://code.getmdl.io/1.1.1/material" ++ cssFile ++ ".min.css"
     , "https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -102,7 +62,7 @@ you choose them as such anyway, you will get the default theme.
 Using this top-level container is not recommended, as most browsers will load
 css concurrently with rendering the initial page, which will produce a flicker
 on page load. The container is included only to provide an option to get started
-quickly and for use with elm-reactor. 
+quickly and for use with elm-reactor.
 
 -}
 topWithColors : Color -> Color -> Html -> Html
@@ -124,3 +84,50 @@ top : Html -> Html
 top content =
   -- Force default color-scheme by picking an invalid combination.
   topWithColors Grey Grey content
+
+
+
+
+{-| TODO.
+-}
+type alias Updater' action model =
+  action -> model -> model
+
+
+{-| TODO.
+-}
+type alias Updater action model =
+  action -> model -> (model, Effects action)
+
+type alias ComponentModel model components =
+  { model | components : components }
+
+
+{-| TODO.
+-}
+lift' :
+  (model -> submodel) ->                                      -- get
+  (model -> submodel -> model) ->                             -- set
+  Updater' subaction submodel ->                               -- update
+  subaction ->                                                -- action
+  model ->                                                    -- model
+  (model, Effects action)
+lift' get set update action model =
+  (set model (update action (get model)), Effects.none)
+
+
+{-| TODO.
+-}
+lift :
+  (model -> submodel) ->                                      -- get
+  (model -> submodel -> model) ->                             -- set
+  (subaction -> action) ->                                    -- fwd
+  Updater subaction submodel ->                               -- update
+  subaction ->                                                -- action
+  model ->                                                    -- model
+  (model, Effects action)
+lift get set fwd update action model =
+  let
+    (submodel', e) = update action (get model)
+  in
+    (set model submodel', Effects.map fwd e)

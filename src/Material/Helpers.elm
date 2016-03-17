@@ -28,6 +28,14 @@ pure : a -> (a, Effects b)
 pure = effect Effects.none
 
 
+addFx : Effects a -> (model, Effects a) -> (model, Effects a)
+addFx effect1 (model, effect2) =
+  (model, Effects.batch [effect1, effect2])
+
+mapFx : (a -> b) -> (model, Effects a) -> (model, Effects b)
+mapFx f (model, effect) =
+  (model, Effects.map f effect)
+
 clip : comparable -> comparable -> comparable -> comparable
 clip lower upper k = Basics.max lower (Basics.min k upper)
 

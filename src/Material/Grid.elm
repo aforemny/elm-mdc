@@ -3,6 +3,7 @@ module Material.Grid
   , cell
   , Device(..)
   , Align(..)
+  , CellConfig
   , size
   , offset
   , align
@@ -61,7 +62,7 @@ Cells are configured with a `List CellConfig`; this configuration dictates the
 size, offset, and alignment behaviour of the cell. Construct
 individual `CellConfig` elements using `size`, `offset`, and `align`.
 
-@docs cell, Device, size, offset, Align, align, hide, order
+@docs cell, CellConfig, Device, size, offset, Align, align, hide, order
 -}
 
 
@@ -135,7 +136,7 @@ encapsulates a screen size.)
 type Device = All | Desktop | Tablet | Phone
 
 
-{- Cell configuration. Construct with `size`, `offset`, and `align`.
+{-| Opaque type; construct with `size`, `offset`, `align`, etc.
 -}
 type CellConfig = Config String
 
