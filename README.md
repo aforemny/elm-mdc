@@ -71,5 +71,5 @@ to Elm.
  - [Tables](https://www.getmdl.io/components/index.html#tables-section)
  - [Sliders](https://www.getmdl.io/components/index.html#sliders-section)
  - [Menus](https://www.getmdl.io/components/index.html#menus-section)
- - [Snackbars](https://www.getmdl.io/components/index.html#snackbar-section)
+ - [Snackbars](https://www.getmdl.io/components/index.html#snackbar-section) [Work-in-progress]
  - [Tooltips](https://www.getmdl.io/components/index.html#tooltips-section)
