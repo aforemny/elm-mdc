@@ -27,7 +27,7 @@ module Material.Grid
 >     into the following line.
 >   - If a cell has a specified column size equal to or larger than the number
 >     of columns for the current screen size, it takes up the entirety of its
->     row."
+>     row.
 
 Example use:
 
