@@ -47,7 +47,7 @@ browser; this file will set up MDL css and load `elm.js`.
 
 Please do! The easiest place to start is to add more CSS-only components. These require no porting of Javascript, just putting together css-classes as instructed by the [MDL Component Documentation](https://www.getmdl.io/components/index.html). Take a look at
 
- - [Badges](https://www.getmdl.io/components/index.html#badges-section)
+ - [Badges](https://www.getmdl.io/components/index.html#badges-section) [Work-in-progress: [Håkon Rossebø](https://github.com/hakonrossebo])]
  - [Cards](https://www.getmdl.io/components/index.html#cards-section)
  - [Dialogs](https://www.getmdl.io/components/index.html#dialog-section)
  - [Footers](https://www.getmdl.io/components/index.html#layout-section/footer)
