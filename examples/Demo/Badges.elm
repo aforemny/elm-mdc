@@ -10,7 +10,7 @@ view : List Html
 view =
   [ 
     h1 [][text "Badges"],
-    Icon.viewWithOptions "add" Icon.S18 [] { badgeInfo = Just (Badge.viewDefault "16")},
+    Icon.viewWithOptions "face" Icon.S18 [] { badgeInfo = Just (Badge.viewDefault "16")},
     Icon.viewWithOptions "add" Icon.S18 [] { badgeInfo = Just (Badge.view   { overlap = False, noBackground = False} "99")},
     Icon.viewWithOptions "add" Icon.S18 [] { badgeInfo = Just (Badge.view   { overlap = False, noBackground = True} "4")},
     Icon.view "add" Icon.S18 [],

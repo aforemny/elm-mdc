@@ -37,6 +37,9 @@ type alias Options =
     badgeInfo : Maybe Badge.BadgeInfo
   }
 
+{-| default options
+See Badge on how to create a badge.
+-}
 defaultOptions : Options
 defaultOptions =
   { 
