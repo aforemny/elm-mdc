@@ -1,5 +1,5 @@
 module Material.Snackbar
-  ( Contents, Model, model, toast, snackbar
+  ( Contents, Model, model, toast, snackbar, isActive
   , Action(Add, Action), update
   , view
   ) where
@@ -83,6 +83,25 @@ snackbar message actionMessage action =
   , timeout = 2750
   , fade = 250
   }
+
+{-| TODO
+-}
+isActive : Model a -> Maybe (Contents a)
+isActive model =
+  case model.state of
+    Active c ->
+      Just c
+
+    _ ->
+      Nothing
+
+
+contentsOf : Model a -> Maybe (Contents a)
+contentsOf model =
+  case model.state of
+    Inert -> Nothing
+    Active contents -> Just contents
+    Fading contents -> Just contents
 
 
 -- SNACKBAR STATE MACHINE
@@ -203,14 +222,6 @@ update action model =
 
 
 -- VIEW
-
-
-contentsOf : Model a -> Maybe (Contents a)
-contentsOf model =
-  case model.state of
-    Inert -> Nothing
-    Active contents -> Just contents
-    Fading contents -> Just contents
 
 
 view : Signal.Address (Action a) -> Model a -> Html

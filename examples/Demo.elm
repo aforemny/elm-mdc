@@ -146,7 +146,7 @@ view addr model =
        your html, as done with page.html. Removing it will then
        fix the flicker you see on load.
     -}
-    |> Material.topWithColors Color.Teal Color.Red
+    |> Material.topWithScheme Color.Teal Color.Red
 
 
 init : (Model, Effects.Effects Action)

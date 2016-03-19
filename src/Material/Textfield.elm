@@ -127,6 +127,7 @@ update action model =
 {-| Component view.
 -}
 view : Signal.Address Action -> Model -> Html
+-- TODO: Should take Style argument. 
 view addr model =
   let hasFloat = model.label |> Maybe.map .float |> Maybe.withDefault False
       hasError = model.error |> Maybe.map (always True) |> Maybe.withDefault False

@@ -8,18 +8,18 @@ view : List Html
 view =
   [ [1..12]
     |> List.map (\i -> cell [size All 1] [text "1"])
-    |> grid
+    |> grid []
   , [1 .. 3]
     |> List.map (\i -> cell [size All 4] [text <| "4"])
-    |> grid
+    |> grid []
   , [ cell [size All 6] [text "6"]
     , cell [size All 4] [text "4"]
     , cell [size All 2] [text "2"]
-    ] |> grid
+    ] |> grid []
   , [ cell [size All 6, size Tablet 8] [text "6 (8 tablet)"]
     , cell [size All 4, size Tablet 6] [text "4 (6 tablet)"]
     , cell [size All 2, size Phone 4] [text "2 (4 phone)"]
-    ] |> grid
+    ] |> grid []
   , Html.node "style" [] [text """
       .mdl-cell {
         text-sizing: border-box;
@@ -34,3 +34,5 @@ view =
       }
     """]
   ]
+
+

@@ -1,7 +1,7 @@
 module Material.Button
   ( Model, model, Action(Click), update
-  , Coloring(..)
   , flat, raised, fab, minifab, icon
+  , Button, colored, primary, accent
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -28,12 +28,15 @@ See also the
 # Component
 @docs Model, model, Action, update
 
+# Style
+@docs Button, colored, primary, accent
+
 # View
 Refer to the
 [Material Design Specification](https://www.google.com/design/spec/components/buttons.html)
 for details about what type of buttons are appropriate for which situations.
 
-@docs Coloring, flat, raised, fab, minifab, icon
+@docs flat, raised, fab, minifab, icon
 
 -}
 
@@ -41,8 +44,10 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Effects exposing (Effects, none)
+import Signal exposing (Address, forwardTo)
 
 import Material.Helpers as Helpers
+import Material.Style exposing (Style, cs, cs', styled)
 import Material.Ripple as Ripple
 
 {-| MDL button.
@@ -100,40 +105,50 @@ update action model =
 -- VIEW
 
 
-{-| Coloring of a button. `Plain` respectively `Colored` is the button's
-uncolored respectively colored defaults.
-`Primary` respectively `Accent` chooses a colored button with the indicated
-color.
+{-| Type tag for button styles. 
 -}
-type Coloring
-  = Plain
-  | Colored
-  | Primary
-  | Accent
+type Button = X
 
 
-view : String -> Signal.Address Action -> Model -> Coloring -> List Html -> Html
-view kind addr model coloring html =
-  button
-    [ classList
-      [ ("mdl-button", True)
-      , ("mdl-js-button", True)
-      , ("mdl-js-ripple-effect", model /= S Nothing)
-      -- Color effect.
-      , ("mdl-button--colored", coloring == Colored)
-      , ("mdl-button--primary", coloring == Primary)
-      , ("mdl-button--accent",  coloring == Accent)
-      -- Kind.
-      , (kind, kind /= "")
-      ]
-    , Helpers.blurOn "mouseup"
+{-| Color button with primary or accent color depending on button type. 
+-}
+colored : Style
+colored = 
+  cs "mdl-button--colored"
+
+
+{-| Color button with primary color.
+-}
+primary : Style
+primary = 
+  cs "mdl-button--primary"
+
+{-| Color button with accent color. 
+-}
+accent : Style
+accent = 
+  cs "mdl-button--accent"
+
+
+{-| Component view. 
+-}
+view : String -> Address Action -> Model -> List Style -> List Html -> Html
+view kind addr model styling html =
+  styled button 
+    (  cs "mdl-button"
+    :: cs "mdl-js-button"
+    :: cs' "mdl-js-ripple-effect" (model /= S Nothing)
+    :: cs' kind (kind /= "")
+    :: styling
+    )
+    [ Helpers.blurOn "mouseup"
     , Helpers.blurOn "mouseleave"
     , onClick addr Click
     ]
     (case model of
       S (Just ripple) ->
         Ripple.view
-          (Signal.forwardTo addr Ripple)
+          (forwardTo addr Ripple)
           [ class "mdl-button__ripple-container"
           , Helpers.blurOn "mouseup" ]
           ripple
@@ -161,7 +176,7 @@ Example use (uncolored flat button, assuming properly setup model):
     flatButton = Button.flat addr model Button.Plain [text "Click me!"]
 
 -}
-flat : Signal.Address Action -> Model -> Coloring -> List Html -> Html
+flat : Address Action -> Model -> List Style -> List Html -> Html
 flat = view ""
 
 
@@ -182,7 +197,7 @@ Example use (colored raised button, assuming properly setup model):
     raisedButton = Button.raised addr model Button.Colored [text "Click me!"]
 
 -}
-raised : Signal.Address Action -> Model -> Coloring -> List Html -> Html
+raised : Address Action -> Model -> List Style -> List Html -> Html
 raised = view "mdl-button--raised"
 
 
@@ -208,13 +223,13 @@ Example use (colored with a '+' icon):
     fabButton : Html
     fabButton = fab addr model Colored [Icon.i "add"]
 -}
-fab : Signal.Address Action -> Model -> Coloring -> List Html -> Html
+fab : Address Action -> Model -> List Style -> List Html -> Html
 fab = view "mdl-button--fab"
 
 
 {-| Mini-sized variant of a Floating Action Button; refer to `fab`.
 -}
-minifab : Signal.Address Action -> Model -> Coloring -> List Html -> Html
+minifab : Address Action -> Model -> List Style -> List Html -> Html
 minifab = view "mdl-button--mini-fab"
 
 
@@ -230,5 +245,5 @@ Example use (no color, displaying a '+' icon):
     iconButton : Html
     iconButton = icon addr model Plain [Icon.i "add"]
 -}
-icon : Signal.Address Action -> Model -> Coloring -> List Html -> Html
+icon : Address Action -> Model -> List Style -> List Html -> Html
 icon = view "mdl-button--icon"

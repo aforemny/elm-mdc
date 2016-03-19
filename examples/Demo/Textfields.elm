@@ -49,4 +49,4 @@ view addr model =
   )
   |> Array.toList
   |> List.map (\x -> cell [size All 3] [x])
-  |> grid
+  |> grid []

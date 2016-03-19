@@ -1,13 +1,16 @@
 module Material
-  ( topWithColors, top
+  ( topWithScheme, top
   , Updater', Updater, lift, lift'
   ) where
 
 {-| Material Design component library for Elm based on Google's
 [Material Design Lite](https://www.getmdl.io/).
 
+This module contains only initial CSS setup and convenience function for alleviating
+the pain of the missing component architecture in Elm. 
+
 # Loading CSS
-@docs topWithColors, top
+@docs topWithScheme, top
 
 # Component convienience
 @docs Updater', Updater, lift', lift
@@ -19,38 +22,30 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Effects exposing (..)
 
-import Material.Color exposing (..)
+import Material.Color exposing (Palette(..), Color)
 
 
-css : Color -> Color -> String
-css primary accent =
-  let cssFile =
-    case accent of
-      Grey -> ""
-      Brown -> ""
-      BlueGrey -> ""
-      Primary -> ""
-      Accent -> ""
-      _ -> "." ++ cssName primary ++ "-" ++ cssName accent
-  in
-    [ "https://code.getmdl.io/1.1.1/material" ++ cssFile ++ ".min.css"
-    , "https://fonts.googleapis.com/icon?family=Material+Icons"
-    , "https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext"
-    ]
-    |> List.map (\url -> "@import url(" ++ url ++ ");")
-    |> String.join "\n"
+
+scheme : Palette -> Palette -> String
+scheme primary accent =
+  [ "https://code.getmdl.io/1.1.2/" ++ Material.Color.scheme primary accent 
+  , "https://fonts.googleapis.com/icon?family=Material+Icons"
+  , "https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext"
+  ]
+  |> List.map (\url -> "@import url(" ++ url ++ ");")
+  |> String.join "\n"
 
 
 
 {-| Top-level container for Material components. This will force loading of
-Material Design Lite CSS files. Any component you use must be contained
+Material Design Lite CSS files Any component you use must be contained
 in this container, OR you must manually add something like the following to
 your .html file:
 
     <!-- MDL -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.min.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.min.css" />
 
 Supply primary and accent colors as parameters. Refer to the
 Material Design Lite [Custom CSS theme builder](https://www.getmdl.io/customize/index.html)
@@ -65,15 +60,15 @@ on page load. The container is included only to provide an option to get started
 quickly and for use with elm-reactor.
 
 -}
-topWithColors : Color -> Color -> Html -> Html
-topWithColors primary accent content =
+topWithScheme: Palette -> Palette -> Html -> Html
+topWithScheme primary accent content =
   div [] <|
   {- Trick from Peter Damoc to load CSS outside of <head>.
      https://github.com/pdamoc/elm-mdl/blob/master/src/Mdl.elm#L63
    -}
   [ node "style"
     [ type' "text/css"]
-    [ text <| css primary accent]
+    [ Html.text <| scheme primary accent]
   , content
   ]
 
@@ -83,8 +78,7 @@ topWithColors primary accent content =
 top : Html -> Html
 top content =
   -- Force default color-scheme by picking an invalid combination.
-  topWithColors Grey Grey content
-
+  topWithScheme Grey Grey content
 
 
 

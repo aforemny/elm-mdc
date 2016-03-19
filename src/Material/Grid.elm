@@ -1,9 +1,8 @@
 module Material.Grid
-  ( grid, gridWithOptions, Options
+  ( grid, noSpacing, maxWidth
   , cell
   , Device(..)
   , Align(..)
-  , CellConfig
   , size
   , offset
   , align
@@ -54,91 +53,50 @@ Example use:
         ]
 
 # Grid container
-@docs grid, Options, gridWithOptions
+@docs grid, noSpacing, maxWidth
 
 # Cells
 
-Cells are configured with a `List CellConfig`; this configuration dictates the
-size, offset, and alignment behaviour of the cell. Construct
-individual `CellConfig` elements using `size`, `offset`, and `align`.
+Cells are configured with a `List Style`; this configuration dictates the
+size, offset, etc. of the cell. 
 
-@docs cell, CellConfig, Device, size, offset, Align, align, hide, order
+@docs cell, Device, size, offset, Align, align, hide, order
 -}
 
 
-{- TODO.
-
-1. From MDL docs:
-
-  "You can set a maximum grid width, after which the grid stays centered with
-   padding on either side, by setting its max-width CSS property."
-
-2. mdl-cell--stretch
+{- TODO. I don't understand what "mdl-cell--stretch" or when it might be appropriate.
 -}
 
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import String
+
 import Material.Helpers exposing (clip, filter)
+import Material.Style as Style exposing (Style, cs, styled)
 
 
-{-| The `spacing` parameter indicates whether or not the grid should have
-spacing between cells. The `maxWidth` parameter, which must be a valid CSS
-dimension, indicates the maximum
-width of the grid; if the grid is in a larger container, it stays centered with
-padding on either side.
+{-| Set grid to have no spacing between cells. 
 -}
-type alias Options =
-  { spacing : Bool
-  , maxWidth : Maybe String
-  }
+noSpacing : Style 
+noSpacing = Style.cs "mdl-grid--no-spacing"
 
-
-{-| By default, a grid has spacing between columns, but no maximum width.
+{-| Set maximum grid width. If more space is available, the grid stays centered with
+padding on either side. Width must be a valid CSS dimension. 
 -}
-defaultOptions : Options
-defaultOptions =
-  { spacing = True
-  , maxWidth = Nothing
-  }
-
+maxWidth : String -> Style 
+maxWidth w = Style.css "max-width" w
 
 {-| Construct a grid with options.
 -}
-gridWithOptions : Options -> List Cell -> Html
-gridWithOptions options elms =
-  div
-    [ classList
-        [ ("mdl-grid", True)
-        , ("mdl-grid--no-spacing", not options.spacing)
-        ]
-    , style (
-        options.maxWidth
-        |> Maybe.map (\maxwidth -> [("max-width", maxwidth)])
-        |> Maybe.withDefault []
-      )
-    ]
-    (List.map (\(Cell elm) -> elm) elms)
-
-
-{-| Construct a grid with default options (i.e., default spacing, no
-maximum width.) Use `cell` some number of times to construct the argument
-list.
--}
-grid : List Cell -> Html
-grid = gridWithOptions defaultOptions
+grid : List Style -> List Cell -> Html
+grid styling cells =
+  styled div (cs "mdl-grid" :: styling) [] (List.map (\(Cell elm) -> elm) cells)
 
 
 {-| Device specifiers, used with `size` and `offset`. (A `Device` really
 encapsulates a screen size.)
 -}
 type Device = All | Desktop | Tablet | Phone
-
-
-{-| Opaque type; construct with `size`, `offset`, `align`, etc.
--}
-type CellConfig = Config String
 
 
 {- Opaque cell type.
@@ -158,7 +116,7 @@ suffix device =
 {-| Specify cell size. On devices of type `Device`, the
 cell being specified spans `Int` columns.
 -}
-size : Device -> Int -> CellConfig
+size : Device -> Int -> Style
 size device k =
   let c =
     case device of
@@ -167,14 +125,14 @@ size device k =
       Tablet -> clip 1 8 k
       Phone -> clip 1 4 k
   in
-    "mdl-cell--" ++ toString c ++ "-col" ++ suffix device |> Config
+    "mdl-cell--" ++ toString c ++ "-col" ++ suffix device |> cs
 
 
 {-| Specify cell offset, i.e., empty number of empty cells before the present
 one. On devices of type `Device`, leave `Int` columns blank before the present
 one begins.
 -}
-offset : Device -> Int -> CellConfig
+offset : Device -> Int -> Style
 offset device k =
   let c =
     case device of
@@ -183,7 +141,7 @@ offset device k =
       Tablet -> clip 1 7 k
       Phone -> clip 1 3 k
   in
-    "mdl-cell--" ++ toString c ++ "-offset" ++ suffix device |> Config
+    "mdl-cell--" ++ toString c ++ "-offset" ++ suffix device |> cs
 
 
 {-| Vertical alignment of cells; use with `align`.
@@ -193,9 +151,9 @@ type Align = Top | Middle | Bottom
 
 {-| Specify vertical cell alignment. See `Align`.
 -}
-align : Align -> CellConfig
+align : Align -> Style
 align a =
-  Config <| case a of
+  cs <| case a of
     Top -> "mdl-cell--top"
     Middle -> "mdl-cell--middle"
     Bottom -> "mdl-cell--bottom"
@@ -203,26 +161,23 @@ align a =
 
 {-| Specify that a cell should be hidden on given `Device`.
 -}
-hide : Device -> CellConfig
+hide : Device -> Style
 hide device =
-  Config <| case device of
+  cs <| case device of
     All -> ""
     _ -> "mdl-cell--hide-" ++ suffix device
 
 
 {-| Specify that a cell should re-order itself to position 'Int' on `Device`.
 -}
-order : Device -> Int -> CellConfig
+order : Device -> Int -> Style
 order device n =
-  Config <| "mdl-cell--order-" ++ (toString <| clip 1 12 n) ++ suffix device
+  cs <| "mdl-cell--order-" ++ (toString <| clip 1 12 n) ++ suffix device
 
 
-{-| Construct a cell for use in the argument list for `grid`.
-Construct the cell configuration (first argument) using `size`, `offset`, and
-`align`. Supply contents for the cell as the second argument.
+{-| Construct a cell for use in the argument list for `grid`. Note that this
+module defines various styles to set size, offset, etc. of the cell. 
 -}
-cell : List CellConfig -> List Html -> Cell
-cell configs elms =
-  Cell <| div
-    [class <| String.join " " ("mdl-cell" :: (List.map (\(Config s) -> s) configs))]
-    elms
+cell : List Style -> List Html -> Cell
+cell styling elms =
+  Cell (styled div (cs "mdl-cell" :: styling) [] elms)

@@ -4,10 +4,11 @@ import Effects exposing (Effects, none)
 import Html exposing (..)
 import Html.Attributes exposing (class, style, key)
 import Array exposing (Array)
-import String
 
 import Markdown
 
+import Material.Color as Color
+import Material.Style exposing (styled, cs)
 import Material.Snackbar as Snackbar
 import Material.Button as Button exposing (Action(..))
 import Material.Grid exposing (..)
@@ -102,44 +103,25 @@ update action model =
 -- VIEW
 
 
--- This should be supported by the library somehow.
-colors : Array String
-colors =
-  [ "indigo"
-  , "blue"
-  , "light-blue"
-  , "cyan"
-  , "teal"
-  , "green"
-  , "light-green"
-  , "lime"
-  , "yellow"
-  , "amber"
-  , "orange"
-  , "brown"
-  , "blue-grey"
-  , "grey"
-  , "deep-orange"
-  , "red"
-  , "pink"
-  , "purple"
-  , "deep-purple"
-  ] |> Array.fromList
-
-
-clickView : Int -> Html
-clickView k =
+clickView : Model -> Int -> Html
+clickView model k =
   let
     color =
-      Array.get ((k + 4) % Array.length colors) colors
-        |> Maybe.withDefault "blue"
+      Array.get ((k + 4) % Array.length Color.palette) Color.palette
+        |> Maybe.withDefault Color.Teal
+        |> flip Color.color Color.S500
+
+    selected =
+      (k == model.snackbar.seq - 1) &&
+        (Snackbar.isActive model.snackbar /= Nothing)
   in
-    div
-      [ [ "mdl-color--" ++ color
-        , "mdl-color-text--primary-contrast"
-        , "mdl-shadow--8dp"
-        ] |> String.join " " |> class
-      , style
+    styled div
+      [ Color.background color
+      , Color.text Color.primaryContrast
+      -- TODO. Should have shadow styles someplace. 
+      , cs <| "mdl-shadow--" ++ if selected then "8dp" else "2dp"
+      ] 
+      [ style
           [ ("margin-right", "3ex")
           , ("margin-bottom", "3ex")
           , ("padding", "1.5ex")
@@ -147,36 +129,39 @@ clickView k =
           , ("border-radius", "2px")
           , ("display", "inline-block")
           , ("text-align", "center")
+          , ("transition", "box-shadow 333ms ease-in-out 0s")
           ]
       , key (toString k)
       ]
       [ text <| toString k ]
 
 
+
 view : Signal.Address Action -> Model -> Html
 view addr model =
   div []
     [ intro
-    , grid
+    , grid []
         -- TODO. Buttons should be centered. Desperately need to be able
         -- to add css/classes to top-level element of components (div
         -- in grid, button in button, div in textfield etc.)
         [ cell [ size All 2, size Phone 2, align Top ]
             [ Button.raised
                 (Signal.forwardTo addr ToastButtonAction)
-                model.toastButton Button.Plain
+                model.toastButton 
+                []
                 [ text "Toast" ]
             ]
         , cell [ size All 2, size Phone 2, align Top ]
             [ Button.raised
                 (Signal.forwardTo addr SnackbarButtonAction)
                 model.snackbarButton
-                Button.Plain
+                []
                 [ text "Snackbar" ]
             ]
         , cell
             [ size Desktop 7, size Tablet 3, size Phone 12, align Top ]
-            (model.clicked |> List.reverse |> List.map clickView)
+            (model.clicked |> List.reverse |> List.map (clickView model))
         ]
     , Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar
     ]

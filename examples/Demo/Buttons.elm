@@ -8,6 +8,7 @@ import Effects
 import Material.Button as Button exposing (..)
 import Material.Grid as Grid
 import Material.Icon as Icon
+import Material.Style exposing (Style)
 
 
 -- MODEL
@@ -15,48 +16,32 @@ import Material.Icon as Icon
 
 type alias Index = (Int, Int)
 
-
-tabulate' : Int -> List a -> List (Int, a)
-tabulate' i ys =
-  case ys of
-    [] -> []
-    y :: ys -> (i, y) :: tabulate' (i+1) ys
-
-
-tabulate : List a -> List (Int, a)
-tabulate = tabulate' 0
-
-
 type alias View =
-  Signal.Address Button.Action -> Button.Model -> Coloring -> List Html -> Html
+  Signal.Address Button.Action -> Button.Model -> List Style -> List Html -> Html
 
 type alias View' =
   Signal.Address Button.Action -> Button.Model -> Html
 
 
-view' : View -> Coloring -> Html -> Signal.Address Button.Action -> Button.Model -> Html
+view' : View -> List Style -> Html -> Signal.Address Button.Action -> Button.Model -> Html
 view' view coloring elem addr model =
   view addr model coloring [elem]
 
 
-describe : String -> Bool -> Coloring -> String
-describe kind ripple coloring =
-  let
-    c =
-      case coloring of
-        Plain -> "plain"
-        Colored -> "colored"
-        Primary -> "primary"
-        Accent -> "accent"
-  in
+describe : String -> Bool -> String -> String
+describe kind ripple c =
     kind ++ ", " ++ c ++ if ripple then " w/ripple" else ""
 
 
 row : (String, Html, View) -> Bool -> List (Int, (Bool, String, View'))
 row (kind, elem, v) ripple =
-  [ Plain, Colored, Primary, Accent ]
-  |> List.map (\c -> (ripple, describe kind ripple c, view' v c elem))
-  |> tabulate
+  [ ("plain", [])
+  , ("colored", [Button.colored])
+  , ("primary", [Button.primary])
+  , ("accent", [Button.accent]) 
+  ]
+  |> List.map (\(d,c) -> (ripple, describe kind ripple d, view' v c elem))
+  |> List.indexedMap (,)
 
 
 buttons : List (List (Index, (Bool, String, View')))
@@ -68,8 +53,7 @@ buttons =
   , ("icon", Icon.i "flight_land", Button.icon)
   ]
   |> List.concatMap (\a -> [row a False, row a True])
-  |> tabulate
-  |> List.map (\(i, row) -> List.map (\(j, x) -> ((i,j), x)) row)
+  |> List.indexedMap (\i r -> List.map (\(j, x) -> ((i,j), x)) r)
 
 
 model : Model
@@ -141,4 +125,4 @@ view addr model =
         ]
     )
   )
-  |> Grid.grid
+  |> Grid.grid []
