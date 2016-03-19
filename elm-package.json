@@ -9,11 +9,13 @@
     ],
     "exposed-modules": [
         "Material",
+        "Material.Style", 
+        "Material.Color",
         "Material.Icon",
         "Material.Button",
         "Material.Textfield",
-        "Material.Grid",
-        "Material.Layout"
+        "Material.Layout",
+        "Material.Grid"
     ],
     "dependencies": {
         "debois/elm-dom": "1.0.0 <= v < 2.0.0",
