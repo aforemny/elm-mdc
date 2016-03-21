@@ -1,7 +1,7 @@
 PAGES=../elm-mdl-gh-pages
 
 elm.js: 
-	elm-make examples/Demo.elm --output elm.js
+	elm-make examples/Demo.elm --warn --output elm.js
 
 pages : 
 	elm-make examples/Demo.elm --output $(PAGES)/elm.js

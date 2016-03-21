@@ -173,7 +173,7 @@ introStyle = """
   blockquote:after { content: none; }
   blockquote {
     border-left-style: solid;
-    border-width: 3px;
+    border-width: 1px;
     padding-left: 1.3ex;
     border-color: rgb(255,82,82);
       /* TODO: Really need a way to specify "secondary color" in
@@ -202,7 +202,7 @@ From the
  - [Demo source code](https://github.com/debois/elm-mdl/blob/master/examples/Demo/Snackbar.elm)
  - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/1.0.1/Material-Snackbar)
  - [Material Design Specification](https://www.google.com/design/spec/components/snackbars-toasts.html)
- - [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section).
+ - [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section)
 
 #### Demo
 

@@ -125,8 +125,10 @@ view addr model =
   let top =
         div
           [ style
-            [ ("margin", "auto")
-            , ("width", "90%")
+            [ ("max-width", "55rem")
+            , ("margin", "auto")
+            , ("padding-left", "5%")
+            , ("padding-right", "5%")
             ]
           ]
           ((Array.get model.layout.selectedTab tabViews

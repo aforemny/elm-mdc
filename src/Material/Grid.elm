@@ -1,6 +1,6 @@
 module Material.Grid
   ( grid, noSpacing, maxWidth
-  , cell
+  , Cell, cell
   , Device(..)
   , Align(..)
   , size
@@ -35,7 +35,7 @@ Example use:
 
     top : Html
     top =
-      grid
+      grid []
         [ cell [ size All 4 ]
             [ h4 [] [text "Cell 1"]
             ]
@@ -60,7 +60,7 @@ Example use:
 Cells are configured with a `List Style`; this configuration dictates the
 size, offset, etc. of the cell. 
 
-@docs cell, Device, size, offset, Align, align, hide, order
+@docs cell, Cell, Device, size, offset, Align, align, hide, order
 -}
 
 
@@ -69,7 +69,6 @@ size, offset, etc. of the cell.
 
 
 import Html exposing (..)
-import Html.Attributes exposing (..)
 
 import Material.Helpers exposing (clip, filter)
 import Material.Style as Style exposing (Style, cs, styled)
@@ -99,7 +98,7 @@ encapsulates a screen size.)
 type Device = All | Desktop | Tablet | Phone
 
 
-{- Opaque cell type.
+{-| Opaque cell type.
 -}
 type Cell = Cell Html
 
@@ -144,19 +143,20 @@ offset device k =
     "mdl-cell--" ++ toString c ++ "-offset" ++ suffix device |> cs
 
 
-{-| Vertical alignment of cells; use with `align`.
+{-| Alignment of cell contents; use with `align`.
 -}
-type Align = Top | Middle | Bottom
+type Align = Top | Middle | Bottom 
 
 
 {-| Specify vertical cell alignment. See `Align`.
 -}
 align : Align -> Style
 align a =
-  cs <| case a of
-    Top -> "mdl-cell--top"
-    Middle -> "mdl-cell--middle"
-    Bottom -> "mdl-cell--bottom"
+  case a of 
+    Top -> cs "mdl-cell--top"
+    Middle -> cs "mdl-cell--middle"
+    Bottom -> cs "mdl-cell--bottom"
+
 
 
 {-| Specify that a cell should be hidden on given `Device`.
