@@ -19,9 +19,8 @@ to get deeper into the language.
    [Snackbar](https://github.com/debois/elm-mdl/blob/master/src/Material/Snackbar.elm)
    is functional but has no documentation. 
    ([Issue](https://github.com/debois/elm-mdl/issues/9).) 
-
-  - Demo pages need intro text a la MDL docs. 
-    ([Issue](https://github.com/debois/elm-mdl/issues/8).) 
+ - Demo pages need intro text a la MDL docs. 
+   ([Issue](https://github.com/debois/elm-mdl/issues/8).) 
 
 See the [documentation issue
 list](https://github.com/debois/elm-mdl/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Adocumentation+)
