@@ -2,6 +2,7 @@ module Material.Style
   ( Style
   , styled
   , cs, cs', css, css'
+  , stylesheet
   ) where
 
 
@@ -20,6 +21,9 @@ add to or remove from the contents of an already constructed class Attribute.)
 
 # Application
 @docs styled
+
+# Convenience
+@docs stylesheet
 -}
 
 
@@ -111,3 +115,15 @@ css' key value b =
 -}
 nop : Style 
 nop = NOP
+
+
+-- CONVENIENCE
+
+
+{-| Construct an Html element contributing to the global stylesheet.
+The resulting Html is a <style> element.  Remember to insert the resulting Html
+somewhere. 
+-}
+stylesheet : String -> Html
+stylesheet css = 
+  Html.node "style" [] [Html.text css]

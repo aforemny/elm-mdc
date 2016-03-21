@@ -167,24 +167,8 @@ view addr model =
     ]
 
 
-introStyle : String
-introStyle = """
-  blockquote:before { content: none; }
-  blockquote:after { content: none; }
-  blockquote {
-    border-left-style: solid;
-    border-width: 1px;
-    padding-left: 1.3ex;
-    border-color: rgb(255,82,82);
-      /* TODO: Really need a way to specify "secondary color" in
-         inline css.
-       */
-  }
-"""
-
-
-introBody : Html
-introBody = """
+intro : Html
+intro = """
 # Snackbars & toasts
 
 From the
@@ -209,9 +193,3 @@ From the
 """ |> Markdown.toHtml
 
 
-intro : Html
-intro =
-  div []
-    [ node "style" [] [ text introStyle ]
-    , introBody
-    ]

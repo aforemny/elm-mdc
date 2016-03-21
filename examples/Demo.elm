@@ -11,22 +11,15 @@ import Array exposing (Array)
 import Material.Color as Color
 import Material.Layout as Layout exposing (defaultLayoutModel)
 import Material exposing (lift, lift')
+import Material.Style as Style
 
 import Demo.Buttons
 import Demo.Grid
 import Demo.Textfields
 import Demo.Snackbar
-
+import Demo.Template
 
 -- MODEL
-
-
-type alias Model =
-  { layout : Layout.Model
-  , buttons : Demo.Buttons.Model
-  , textfields : Demo.Textfields.Model
-  , snackbar : Demo.Snackbar.Model
-  }
 
 
 layoutModel : Layout.Model
@@ -36,12 +29,22 @@ layoutModel =
   }
 
 
+type alias Model =
+  { layout : Layout.Model
+  , buttons : Demo.Buttons.Model
+  , textfields : Demo.Textfields.Model
+  , snackbar : Demo.Snackbar.Model
+  , template : Demo.Template.Model
+  }
+
+
 model : Model
 model =
   { layout = layoutModel
   , buttons = Demo.Buttons.model
   , textfields = Demo.Textfields.model
   , snackbar = Demo.Snackbar.model
+  , template = Demo.Template.model
   }
 
 
@@ -53,15 +56,17 @@ type Action
   | ButtonsAction Demo.Buttons.Action
   | TextfieldAction Demo.Textfields.Action
   | SnackbarAction Demo.Snackbar.Action
+  | TemplateAction Demo.Template.Action
 
 
 update : Action -> Model -> (Model, Effects.Effects Action)
 update action model =
   case Debug.log "Action: " action of
-    LayoutAction a -> lift .layout (\m x->{m|layout=x}) LayoutAction Layout.update a model
-    ButtonsAction a -> lift .buttons (\m x->{m|buttons=x}) ButtonsAction Demo.Buttons.update a model
-    TextfieldAction a -> lift' .textfields (\m x->{m|textfields=x}) Demo.Textfields.update a model
-    SnackbarAction a -> lift .snackbar (\m x->{m|snackbar=x}) SnackbarAction Demo.Snackbar.update a model
+    LayoutAction    a -> lift  .layout     (\m x->{m|layout    =x}) LayoutAction   Layout.update          a model
+    ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
+    TextfieldAction a -> lift' .textfields (\m x->{m|textfields=x})                Demo.Textfields.update a model
+    SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
+    TemplateAction  a -> lift  .template   (\m x->{m|template  =x}) TemplateAction Demo.Template.update   a model
 
 
 -- VIEW
@@ -109,6 +114,8 @@ tabs =
   , ("Buttons", \addr model ->
       [Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons])
   , ("Grid", \addr model -> Demo.Grid.view)
+  , ("Template", \addr model -> 
+      [Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template])
   ]
 
 
@@ -118,6 +125,22 @@ tabViews = List.map snd tabs |> Array.fromList
 
 tabTitles : List Html
 tabTitles = List.map (fst >> text) tabs
+
+stylesheet : Html
+stylesheet = Style.stylesheet """
+  blockquote:before { content: none; }
+  blockquote:after { content: none; }
+  blockquote {
+    border-left-style: solid;
+    border-width: 1px;
+    padding-left: 1.3ex;
+    border-color: rgb(255,82,82);
+      /* TODO: Really need a way to specify "secondary color" in
+         inline css.
+       */
+  }
+"""
+
 
 
 view : Signal.Address Action -> Model -> Html
@@ -142,7 +165,7 @@ view addr model =
       { header = Just header
       , drawer = Just drawer
       , tabs = Just tabTitles
-      , main = [ top ]
+      , main = [ stylesheet, top ]
       }
     {- The following line is not needed when you manually set up
        your html, as done with page.html. Removing it will then
