@@ -184,7 +184,7 @@ From the
 #### See also
 
  - [Demo source code](https://github.com/debois/elm-mdl/blob/master/examples/Demo/Snackbar.elm)
- - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/1.0.1/Material-Snackbar)
+ - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Snackbar)
  - [Material Design Specification](https://www.google.com/design/spec/components/snackbars-toasts.html)
  - [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section)
 
