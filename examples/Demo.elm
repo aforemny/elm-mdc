@@ -17,7 +17,7 @@ import Demo.Buttons
 import Demo.Grid
 import Demo.Textfields
 import Demo.Snackbar
-import Demo.Template
+--import Demo.Template
 
 -- MODEL
 
@@ -34,7 +34,7 @@ type alias Model =
   , buttons : Demo.Buttons.Model
   , textfields : Demo.Textfields.Model
   , snackbar : Demo.Snackbar.Model
-  , template : Demo.Template.Model
+  --, template : Demo.Template.Model
   }
 
 
@@ -44,7 +44,7 @@ model =
   , buttons = Demo.Buttons.model
   , textfields = Demo.Textfields.model
   , snackbar = Demo.Snackbar.model
-  , template = Demo.Template.model
+  --, template = Demo.Template.model
   }
 
 
@@ -56,7 +56,7 @@ type Action
   | ButtonsAction Demo.Buttons.Action
   | TextfieldAction Demo.Textfields.Action
   | SnackbarAction Demo.Snackbar.Action
-  | TemplateAction Demo.Template.Action
+  --| TemplateAction Demo.Template.Action
 
 
 update : Action -> Model -> (Model, Effects.Effects Action)
@@ -66,7 +66,7 @@ update action model =
     ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
     TextfieldAction a -> lift' .textfields (\m x->{m|textfields=x})                Demo.Textfields.update a model
     SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
-    TemplateAction  a -> lift  .template   (\m x->{m|template  =x}) TemplateAction Demo.Template.update   a model
+    --TemplateAction  a -> lift  .template   (\m x->{m|template  =x}) TemplateAction Demo.Template.update   a model
 
 
 -- VIEW
@@ -84,7 +84,7 @@ drawer =
       [href "https://github.com/debois/elm-mdl"]
       [text "github"]
     , Layout.link
-      [href "http://package.elm-lang.org/packages/debois/elm-mdl/1.0.0/"]
+      [href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/"]
       [text "elm-package"]
     ]
   ]
@@ -114,8 +114,10 @@ tabs =
   , ("Buttons", \addr model ->
       [Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons])
   , ("Grid", \addr model -> Demo.Grid.view)
+  {-
   , ("Template", \addr model -> 
       [Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template])
+  -}
   ]
 
 
