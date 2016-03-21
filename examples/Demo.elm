@@ -137,9 +137,13 @@ stylesheet = Style.stylesheet """
     border-width: 1px;
     padding-left: 1.3ex;
     border-color: rgb(255,82,82);
+    font-style: normal;
       /* TODO: Really need a way to specify "secondary color" in
          inline css.
        */
+  }
+  p, blockquote { 
+    max-width: 33em;
   }
 """
 
@@ -150,8 +154,7 @@ view addr model =
   let top =
         div
           [ style
-            [ ("max-width", "55rem")
-            , ("margin", "auto")
+            [ ("margin", "auto")
             , ("padding-left", "5%")
             , ("padding-right", "5%")
             ]
