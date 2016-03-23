@@ -1,8 +1,7 @@
 module Material.Badge
   ( Model
-  , view
-  , viewDefault
-  , BadgeInfo
+  , badgeStyle
+  , badgeStyleDefault
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):
@@ -31,17 +30,11 @@ module Material.Badge
 @docs viewDefault, view, BadgeInfo, Options
 -}
 
-
+import String 
 import Html exposing (Attribute)
 import Html.Attributes exposing (attribute)
+import Material.Style exposing (Style, cs, cs', styled, attrib)
 
-
-{-| Internal Type used by other elements. Not sure if this should be documented.
--}
-type alias BadgeInfo =
-  { classes : String
-  , dataBadge : Attribute
-  }
 
 {-| Model for Badge
   ovelap: Bool to set css class - mdl-badge--overlap.	Make the badge overlap with its container
@@ -58,39 +51,40 @@ model =
   , noBackground = False
   }
 
-{-| View function for Badge
+
+{-| Style function for Badge
     
     First parameter will set Badge options. See Options for more info.
     Last parameter will set a value to data-badge="value".	Assigns string value to badge
 
     import Material.Badge as Badge
 
-    badgeInfo : Badge.BadgeInfo
-    badgeInfo = Badge.view { overlap = False, noBackground = False} "3"
+    badgeStyleList : List Style
+    badgeStyleList = Badge.badgeStyle { overlap = False, noBackground = False} "3"
 -}
-view : Model -> String -> BadgeInfo
-view model databadge = 
+badgeStyle : Model -> String -> List Style
+badgeStyle model databadge = 
   let classes =
     [
-      {css = " mdl-badge", show = True} 
-    , {css = " mdl-badge--no-background", show = model.noBackground}
-    , {css = " mdl-badge--overlap", show = model.overlap}
+      {css = "mdl-badge", show = True} 
+    , {css = "mdl-badge--no-background", show = model.noBackground}
+    , {css = "mdl-badge--overlap", show = model.overlap}
     ]
       |> List.filter .show
       |> List.map .css
-      |> List.foldl (++) ""
+      |> String.join " "
   in
-    { classes = " mdl-badge" ++ classes, dataBadge = attribute "data-badge" databadge}  
+    [cs classes, attrib "data-badge" databadge]
 
 
-{-| Create BadgeInfo with default values
+{-| Create Badge Style List with default values
     
     Parameter will set a value to data-badge="value".	Assigns string value to badge
 
     import Material.Badge as Badge
 
-    badgeInfo : Badge.BadgeInfo
-    badgeInfo = Badge.viewDefault "3"
+    badgeStyleListDefault : List Style
+    badgeStyleListDefault = Badge.badgeStyleDefault "3"
 -}
-viewDefault : String -> BadgeInfo
-viewDefault databadge = view model databadge 
+badgeStyleDefault : String -> List Style
+badgeStyleDefault databadge = badgeStyle model databadge 
