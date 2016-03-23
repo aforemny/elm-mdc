@@ -1,18 +1,18 @@
 module Demo.Badges where
 
-import Material.Icon as Icon
-import Material.Badge as Badge
 import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (class, style, key)
+import Material.Badge as Badge
+import Material.Style exposing (..)
 
+-- VIEW
 
 view : List Html
-view =
-  [ 
-    h1 [][text "Badges"],
-    Icon.viewWithOptions "face" Icon.S18 [] { badgeInfo = Just (Badge.viewDefault "16")},
-    Icon.viewWithOptions "add" Icon.S18 [] { badgeInfo = Just (Badge.view   { overlap = False, noBackground = False} "99")},
-    Icon.viewWithOptions "add" Icon.S18 [] { badgeInfo = Just (Badge.view   { overlap = False, noBackground = True} "4")},
-    Icon.view "add" Icon.S18 [],
-    Icon.i "add"
+view = [  div [][p [][]
+        , styled span  (Badge.badgeStyle   { overlap = False, noBackground = False} "4")  [ ] [ text "Span with badge" ]
+        , p [][]
+        , styled span  (Badge.badgeStyle   { overlap = True, noBackground = False} "7")  [ ] [ text "Span with no background badge" ]
+        , p [][]
+        , styled span  (Badge.badgeStyle   { overlap = True, noBackground = False} "14")  [ ] [ text "Span with badge overlap" ]
+    ]
   ]
