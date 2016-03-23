@@ -1,7 +1,7 @@
 module Material.Style
   ( Style
   , styled
-  , cs, cs', css, css'
+  , cs, cs', css, css', attrib
   , stylesheet
   ) where
 
@@ -17,7 +17,7 @@ add to or remove from the contents of an already constructed class Attribute.)
 @docs Style
 
 # Constructors
-@docs cs, cs', css, css'
+@docs cs, cs', css, css', attrib
 
 # Application
 @docs styled
@@ -41,9 +41,16 @@ import Html.Attributes
 type Style
   = Class String
   | CSS (String, String)
+  | Attr (String, String)
   | NOP
 
 
+attrOf : Style -> Maybe (String, String)
+attrOf style =
+  case style of
+    Attr attrib -> Just attrib
+    _ -> Nothing
+    
 cssOf : Style -> Maybe (String, String)
 cssOf style =
   case style of
@@ -75,10 +82,14 @@ Note that if you do specify `style`, `class`, or `classList` attributes in
 -}
 styled : (List Attribute -> a) -> List Style -> List Attribute -> a
 styled ctor styles attrs =
+  let
+    styleAttrs = (List.filterMap attrOf styles) 
+      |> List.map (\attrib -> Html.Attributes.attribute (fst attrib) ( snd attrib))
+  in
   ctor
     (  Html.Attributes.style (List.filterMap cssOf styles)
     :: Html.Attributes.class (String.join " " (List.filterMap classOf styles))
-    :: attrs
+    :: List.append attrs styleAttrs
     )
 
 
@@ -102,6 +113,12 @@ cs' c b =
 css : String -> String -> Style
 css key value =
   CSS (key, value)
+
+{-| Add a custom attribute
+-}
+attrib : String -> String -> Style
+attrib key value =
+  Attr (key, value)
 
 
 {-| Conditionally add a CSS style to a component
