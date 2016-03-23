@@ -1,7 +1,7 @@
 module Material.Badge
-  ( Model
-  , badgeStyle
-  , badgeStyleDefault
+  ( noBackground
+  , overlap
+  , withBadge
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):
@@ -33,23 +33,20 @@ module Material.Badge
 import String 
 import Html exposing (Attribute)
 import Html.Attributes exposing (attribute)
-import Material.Style exposing (Style, cs, cs', styled, attrib)
+import Material.Style exposing (Style, cs, attrib, multiple)
 
 
-{-| Model for Badge
-  ovelap: Bool to set css class - mdl-badge--overlap.	Make the badge overlap with its container
-  noBackground: Bool to set css class - mdl-badge--no-background.	Applies open-circle effect to badge
+{-| No background for badge 
 -}
-type alias Model =
-  { overlap : Bool
-  , noBackground : Bool
-  }
+noBackground : Style
+noBackground = 
+  cs "mdl-badge--no-background"
 
-model : Model
-model =
-  { overlap = True
-  , noBackground = False
-  }
+{-| Overlap Badge 
+-}
+overlap : Style
+overlap = 
+  cs "mdl-badge--overlap"
 
 
 {-| Style function for Badge
@@ -62,29 +59,6 @@ model =
     badgeStyleList : List Style
     badgeStyleList = Badge.badgeStyle { overlap = False, noBackground = False} "3"
 -}
-badgeStyle : Model -> String -> List Style
-badgeStyle model databadge = 
-  let classes =
-    [
-      {css = "mdl-badge", show = True} 
-    , {css = "mdl-badge--no-background", show = model.noBackground}
-    , {css = "mdl-badge--overlap", show = model.overlap}
-    ]
-      |> List.filter .show
-      |> List.map .css
-      |> String.join " "
-  in
-    [cs classes, attrib "data-badge" databadge]
-
-
-{-| Create Badge Style List with default values
-    
-    Parameter will set a value to data-badge="value".	Assigns string value to badge
-
-    import Material.Badge as Badge
-
-    badgeStyleListDefault : List Style
-    badgeStyleListDefault = Badge.badgeStyleDefault "3"
--}
-badgeStyleDefault : String -> List Style
-badgeStyleDefault databadge = badgeStyle model databadge 
+withBadge : String -> Style
+withBadge databadge = 
+  multiple [cs "mdl-badge", attrib "data-badge" databadge]
