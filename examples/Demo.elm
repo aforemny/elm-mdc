@@ -17,6 +17,7 @@ import Demo.Buttons
 import Demo.Grid
 import Demo.Textfields
 import Demo.Snackbar
+import Demo.Badges
 --import Demo.Template
 
 -- MODEL
@@ -118,8 +119,8 @@ tabs =
   , ("Template", \addr model -> 
       [Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template])
   -}
+  , ("Badges", \addr model -> Demo.Badges.view )
   ]
-
 
 tabViews : Array (Addr -> Model -> List Html)
 tabViews = List.map snd tabs |> Array.fromList

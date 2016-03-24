@@ -1,7 +1,7 @@
 module Material.Style
   ( Style
   , styled
-  , cs, cs', css, css'
+  , cs, cs', css, css', attrib, multiple
   , stylesheet
   ) where
 
@@ -17,7 +17,7 @@ add to or remove from the contents of an already constructed class Attribute.)
 @docs Style
 
 # Constructors
-@docs cs, cs', css, css'
+@docs cs, cs', css, css', attrib, multiple
 
 # Application
 @docs styled
@@ -41,9 +41,23 @@ import Html.Attributes
 type Style
   = Class String
   | CSS (String, String)
+  | Attr (String, String)
+  | Multiple (List Style)
   | NOP
 
+multipleOf : Style -> Maybe (List Style)
+multipleOf style =
+  case style of
+    Multiple multiple -> Just multiple
+    _ -> Nothing
 
+
+attrOf : Style -> Maybe (String, String)
+attrOf style =
+  case style of
+    Attr attrib -> Just attrib
+    _ -> Nothing
+    
 cssOf : Style -> Maybe (String, String)
 cssOf style =
   case style of
@@ -57,6 +71,14 @@ classOf style =
     Class c -> Just c
     _ -> Nothing
 
+
+flatten : Style -> List Style -> List Style
+flatten style styles = 
+  case style of
+    Multiple styles' ->
+      List.foldl flatten styles' styles
+    style ->
+      style :: styles
 
 {-| Handle the common case of setting attributes of a standard Html node
 from a List Style. Use like this:
@@ -74,11 +96,16 @@ Note that if you do specify `style`, `class`, or `classList` attributes in
 (*), they will be discarded.
 -}
 styled : (List Attribute -> a) -> List Style -> List Attribute -> a
-styled ctor styles attrs =
+styled ctor styles attrs = 
+  let
+    flatStyles = List.foldl flatten [] styles      
+    styleAttrs = (List.filterMap attrOf flatStyles) 
+      |> List.map (\attrib -> Html.Attributes.attribute (fst attrib) ( snd attrib))
+  in
   ctor
-    (  Html.Attributes.style (List.filterMap cssOf styles)
-    :: Html.Attributes.class (String.join " " (List.filterMap classOf styles))
-    :: attrs
+    (  Html.Attributes.style (List.filterMap cssOf flatStyles)
+    :: Html.Attributes.class (String.join " " (List.filterMap classOf flatStyles))
+    :: List.append attrs styleAttrs
     )
 
 
@@ -103,6 +130,17 @@ css : String -> String -> Style
 css key value =
   CSS (key, value)
 
+{-| Add a custom attribute
+-}
+attrib : String -> String -> Style
+attrib key value =
+  Attr (key, value)
+
+{-| Add a custom attribute
+-}
+multiple : List Style -> Style
+multiple styles =
+  Multiple (styles)
 
 {-| Conditionally add a CSS style to a component
 -}
