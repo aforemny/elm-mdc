@@ -30,9 +30,6 @@ module Material.Badge
 @docs withBadge, noBackground, overlap
 -}
 
-import String 
-import Html exposing (Attribute)
-import Html.Attributes exposing (attribute)
 import Material.Style exposing (Style, cs, attrib, multiple)
 
 
