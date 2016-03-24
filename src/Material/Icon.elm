@@ -1,6 +1,5 @@
 module Material.Icon
-  ( Size(..)
-  , iconSize
+  ( size18, size24, size36, size48
   , view
   , i
   ) where
@@ -16,7 +15,7 @@ This implementation assumes that you have
 
 or an equivalent means of loading the icons in your HTML header.
 
-@docs i, view, Size, iconSize
+@docs i, view, size18, size24, size36, size48
 -}
 
 
@@ -24,25 +23,29 @@ import Html exposing (i, text, Html, Attribute)
 import Html.Attributes exposing (class)
 import Material.Style exposing (Style, cs, styled)
 
-
-{-| Size of an icon. Constructors indicate their pixel size, i.e.,
-`S18` is 18px. The constructor `S` gives you the default size, 24px.
+{-| Icon size styling to indicate their pixel size. This style gives a size of 18px. 
 -}
-type Size
-  = S18 | S24 | S36 | S48 | S
+size18 :  Style
+size18 = 
+  cs "md-18"
 
-
-{-| Icon size styling. This style can be omitted for the default size style `S`. 
+{-| Icon size styling to indicate their pixel size. This style gives a size of 24px. 
 -}
-iconSize : Size -> Style
-iconSize size = 
-      case size of
-        S18 -> cs "md-18"
-        S24 -> cs "md-24"
-        S36 -> cs "md-36"
-        S48 -> cs "md-48"
-        S -> cs ""
+size24 :  Style
+size24 = 
+  cs "md-24"
 
+{-| Icon size styling to indicate their pixel size. This style gives a size of 36px. 
+-}
+size36 :  Style
+size36 = 
+  cs "md-36"
+
+{-| Icon size styling to indicate their pixel size. This style gives a size of 48px. 
+-}
+size48 :  Style
+size48 = 
+  cs "md-48"
 
 {-| View function for icons. Supply the
 [Material Icons Library](https://design.google.com/icons/) name as
@@ -59,7 +62,7 @@ no attributes:
     import Material.Icon as Icon
 
     icon : Html
-    icon = Icon.view "trending_flat" [Icon.iconSize Icon.S48] []
+    icon = Icon.view "trending_flat" [Icon.size48] []
 
 This function will override any `class` set in `List Attribute`.
 -}
