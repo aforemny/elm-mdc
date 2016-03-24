@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, style, key)
 import Material.Badge as Badge
 import Material.Style exposing (..)
-
+import Material.Icon as Icon
 -- VIEW
 
 view : List Html
@@ -23,5 +23,7 @@ view = [  div [][p [][]
         , p [][]
         , styled span  [Badge.withBadge "Δ"]  [ ] [ text "Span with HTML symbol - Delta" ]
         , p [][]
+        , span [][text "Icon with badge"]
+        , Icon.view "face" [Icon.iconSize Icon.S24, Badge.withBadge "33", Badge.overlap ] []
     ]
   ]
