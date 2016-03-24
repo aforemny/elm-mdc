@@ -264,7 +264,7 @@ tabsView addr model tabs =
               , ("mdl-layout__tab-bar-" ++ direction ++ "-button", True)
               ]
           ]
-          [ Icon.view ("chevron_" ++ direction) [Icon.iconSize Icon.S]
+          [ Icon.view ("chevron_" ++ direction) [Icon.size24]
               [onClick addr (ScrollTab offset)]
                 -- TODO: Scroll event
           ]
