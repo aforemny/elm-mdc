@@ -98,10 +98,7 @@ Note that if you do specify `style`, `class`, or `classList` attributes in
 styled : (List Attribute -> a) -> List Style -> List Attribute -> a
 styled ctor styles attrs = 
   let
-    -- multipleStyles = (List.filterMap multipleOf styles)
-      -- could need some help on how to proceed here
     flatStyles = List.foldl flatten [] styles      
-    -- (List.filterMap multipleOf styles) 
     styleAttrs = (List.filterMap attrOf flatStyles) 
       |> List.map (\attrib -> Html.Attributes.attribute (fst attrib) ( snd attrib))
   in
