@@ -27,7 +27,7 @@ module Material.Badge
 > discover additional relevant content. Their design and use is therefore an important
 > factor in the overall user experience.
 
-@docs viewDefault, view, BadgeInfo, Options
+@docs withBadge, noBackground, overlap
 -}
 
 import String 
@@ -36,28 +36,25 @@ import Html.Attributes exposing (attribute)
 import Material.Style exposing (Style, cs, attrib, multiple)
 
 
-{-| No background for badge 
+{-| Optional style for Badge. No background for badge 
 -}
 noBackground : Style
 noBackground = 
   cs "mdl-badge--no-background"
 
-{-| Overlap Badge 
+{-| Optional style for Badge. Overlap Badge 
 -}
 overlap : Style
 overlap = 
   cs "mdl-badge--overlap"
 
 
-{-| Style function for Badge
-    
-    First parameter will set Badge options. See Options for more info.
-    Last parameter will set a value to data-badge="value".	Assigns string value to badge
+{-| Main style  for Badge 
+    The parameter will set a value to data-badge="value".	Assigns string value to badge
 
     import Material.Badge as Badge
-
-    badgeStyleList : List Style
-    badgeStyleList = Badge.badgeStyle { overlap = False, noBackground = False} "3"
+    badgeStyle : Style
+    badgeStyle = Badge.withBadge "3"
 -}
 withBadge : String -> Style
 withBadge databadge = 

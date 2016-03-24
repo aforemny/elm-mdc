@@ -72,6 +72,14 @@ classOf style =
     _ -> Nothing
 
 
+flatten : Style -> List Style -> List Style
+flatten style styles = 
+  case style of
+    Multiple styles' ->
+      List.foldl flatten styles' styles
+    style ->
+      style :: styles
+
 {-| Handle the common case of setting attributes of a standard Html node
 from a List Style. Use like this:
 
@@ -90,16 +98,16 @@ Note that if you do specify `style`, `class`, or `classList` attributes in
 styled : (List Attribute -> a) -> List Style -> List Attribute -> a
 styled ctor styles attrs = 
   let
-    multipleStyles = (List.filterMap multipleOf styles)
+    -- multipleStyles = (List.filterMap multipleOf styles)
       -- could need some help on how to proceed here
-      
-    -- (List.filterMap multipleOf styles)
-    styleAttrs = (List.filterMap attrOf styles) 
+    flatStyles = List.foldl flatten [] styles      
+    -- (List.filterMap multipleOf styles) 
+    styleAttrs = (List.filterMap attrOf flatStyles) 
       |> List.map (\attrib -> Html.Attributes.attribute (fst attrib) ( snd attrib))
   in
   ctor
-    (  Html.Attributes.style (List.filterMap cssOf styles)
-    :: Html.Attributes.class (String.join " " (List.filterMap classOf styles))
+    (  Html.Attributes.style (List.filterMap cssOf flatStyles)
+    :: Html.Attributes.class (String.join " " (List.filterMap classOf flatStyles))
     :: List.append attrs styleAttrs
     )
 

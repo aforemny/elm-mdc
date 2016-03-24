@@ -9,10 +9,13 @@ import Material.Style exposing (..)
 
 view : List Html
 view = [  div [][p [][]
-        , styled span  [Badge.withBadge "56", Badge.overlap]  [ ] [ text "Span with badge" ]
+        , styled span  [Badge.withBadge "2"]  [ ] [ text "Span with badge" ]
         , p [][]
-        -- , styled span  (Badge.badgeStyle   { overlap = True, noBackground = False} "7")  [ ] [ text "Span with no background badge" ]
-        -- , p [][]
-        -- , styled span  (Badge.badgeStyle   { overlap = True, noBackground = False} "14")  [ ] [ text "Span with badge overlap" ]
+        , styled span  [Badge.withBadge "22", Badge.noBackground]  [ ] [ text "Span with no background badge" ]
+        , p [][]
+        , styled span  [Badge.withBadge "33", Badge.overlap]  [ ] [ text "Span with badge overlap" ]
+        , p [][]
+        , styled span  [Badge.withBadge "99", Badge.overlap, Badge.noBackground]  [ ] [ text "Span with badge overlap and no background" ]
+        , p [][]
     ]
   ]
