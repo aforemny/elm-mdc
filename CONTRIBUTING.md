@@ -59,11 +59,11 @@ These components invariably require serious thinking about what is an
 appropriate Elm API and so are usually interesting in their own right for 
 that reason.  Take a look at
 
- - [Badges](https://www.getmdl.io/components/index.html#badges-section) [Work-in-progress: [Håkon Rossebø](https://github.com/hakonrossebo])]
- - [Cards](https://www.getmdl.io/components/index.html#cards-section)
+  
+ - [Cards](https://www.getmdl.io/components/index.html#cards-section) [Work-in-progress: [Håkon Rossebø](https://github.com/hakonrossebo])]
  - [Dialogs](https://www.getmdl.io/components/index.html#dialog-section)
  - [Footers](https://www.getmdl.io/components/index.html#layout-section/footer)
- - [Lists](https://www.getmdl.io/components/index.html#lists-section)
+ - [Lists](https://www.getmdl.io/components/index.html#lists-section) [Work-in-progress: [Håkon Rossebø](https://github.com/hakonrossebo])]
  - [Shadows](https://github.com/google/material-design-lite/tree/v1.1.2/src/shadow)
 
 Progress bars are pure CSS, and spinners seem to use Javascript only to insert
