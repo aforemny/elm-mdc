@@ -22,8 +22,6 @@ import Demo.Badges
 
 -- MODEL
 
-x = 0 + "foo"
-
 
 layoutModel : Layout.Model
 layoutModel =
