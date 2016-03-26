@@ -1,0 +1,6 @@
+language: haskell
+install:
+  - npm install -g elm
+  - elm-package install -y
+script: 
+  - elm-make --yes examples/Demo.elm
