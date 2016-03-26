@@ -22,6 +22,8 @@ import Demo.Badges
 
 -- MODEL
 
+x = 0 + "foo"
+
 
 layoutModel : Layout.Model
 layoutModel =
@@ -115,11 +117,11 @@ tabs =
   , ("Buttons", \addr model ->
       [Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons])
   , ("Grid", \addr model -> Demo.Grid.view)
+  , ("Badges", \addr model -> Demo.Badges.view )
   {-
   , ("Template", \addr model -> 
       [Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template])
   -}
-  , ("Badges", \addr model -> Demo.Badges.view )
   ]
 
 tabViews : Array (Addr -> Model -> List Html)
@@ -145,6 +147,7 @@ stylesheet = Style.stylesheet """
   }
   p, blockquote { 
     max-width: 33em;
+    font-size: 13px;
   }
 """
 

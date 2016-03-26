@@ -140,7 +140,8 @@ clickView model k =
 view : Signal.Address Action -> Model -> Html
 view addr model =
   div []
-    [ intro
+    [ h1 [ class "mdl-typography--display-4-color-contrast" ] [ text "Snackbars & Toasts" ]
+    , intro
     , grid []
         -- TODO. Buttons should be centered. Desperately need to be able
         -- to add css/classes to top-level element of components (div
@@ -169,8 +170,6 @@ view addr model =
 
 intro : Html
 intro = """
-# Snackbars & toasts
-
 From the
 [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section).
 
