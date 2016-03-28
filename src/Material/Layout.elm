@@ -1,8 +1,8 @@
 module Material.Layout
   ( setupSizeChangeSignal
-  , Mode, Model, defaultLayoutModel, initState
+  , Mode(..), Model, defaultLayoutModel, initState
   , Action(SwitchTab, ToggleDrawer), update
-  , spacer, title, navigation, link
+  , row, spacer, title, navigation, link
   , Contents, view
   ) where
 
@@ -36,7 +36,7 @@ module Material.Layout
 @docs Contents, view
 
 ## Sub-views
-@docs spacer, title, navigation, link
+@docs row, spacer, title, navigation, link
 
 # Setup
 @docs setupSizeChangeSignal
@@ -47,13 +47,17 @@ import Array exposing (Array)
 import Maybe exposing (andThen, map)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, on)
 import Effects exposing (Effects)
 import Window
+
+import Json.Decode as Json
 
 import Material.Helpers exposing (..)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
+
+import DOM
 
 
 -- SETUP
@@ -82,6 +86,8 @@ setupSizeChangeSignal f =
 type alias State' =
   { tabs : Array Ripple.Model
   , isSmallScreen : Bool
+  , isCompact : Bool
+  , isAnimating : Bool
   }
 
 
@@ -131,6 +137,8 @@ initState : Int -> State
 initState no_tabs =
   S { tabs = Array.repeat no_tabs Ripple.model
     , isSmallScreen = False -- TODO
+    , isCompact = False
+    , isAnimating = False
     }
 
 
@@ -163,8 +171,11 @@ type Action
   | ToggleDrawer
   -- Private
   | SmallScreen Bool -- True means small screen
-  | ScrollTab Int
+  | ScrollTab Float
+  | ScrollContents Float
   | Ripple Int Ripple.Action
+  | Click 
+  | TransitionEnd
 
 
 {-| Component update.
@@ -172,7 +183,7 @@ type Action
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   let (S state) = model.state in
-  case action of
+    case action of
     SmallScreen isSmall ->
       { model
       | state = S ({ state | isSmallScreen = isSmall })
@@ -198,13 +209,35 @@ update action model =
       in
         ({ model | state = S state' }, effect)
 
+
     ScrollTab tab ->
       (model, Effects.none) -- TODO
 
 
+    ScrollContents scrollTop -> 
+      let 
+        headerVisible = state.isSmallScreen || model.fixedHeader
+        state' = 
+          { state 
+          | isCompact = scrollTop > 0 
+          , isAnimating = headerVisible 
+          }
+      in
+        ( { model | state = S state' }, Effects.none )
+
+
+    TransitionEnd -> 
+      ( { model | state = S { state | isAnimating = False } }
+      , Effects.none
+      )
+
+    Click -> 
+      ( { model | state = S { state | isAnimating = True, isCompact = False } }
+      , Effects.none
+      )
+
 
 -- AUXILIARY VIEWS
-
 
 
 {-| Push subsequent elements in header row or drawer column to the right/bottom.
@@ -233,6 +266,12 @@ link attrs contents =
   a (class "mdl-navigation__link" :: attrs) contents
 
 
+{-| Header row. 
+-}
+row : List Html -> Html
+row = 
+  div [ class "mdl-layout__header-row" ] 
+
 
 -- MAIN VIEWS
 
@@ -243,16 +282,32 @@ link attrs contents =
 - A `Seamed` header does not cast shadow, is permanently affixed to the top of the
   screen.
 - A `Scroll`'ing header scrolls with contents.
+- A `Waterfall` header drops either the top (argument True) or bottom (argument False) 
+header-row when content scrolls. 
 -}
 type Mode
+
   = Standard
   | Seamed
   | Scroll
---  | Waterfall
+  | Waterfall Bool
 
+
+isWaterfall : Mode -> Bool
+isWaterfall mode = 
+  case mode of 
+    Waterfall _ -> True
+    _ -> False
 
 
 type alias Addr = Signal.Address Action
+
+
+toList : Maybe a -> List a
+toList x = 
+  case x of 
+    Nothing -> []
+    Just y -> [y]
 
 
 tabsView : Addr -> Model -> List Html -> Html
@@ -277,6 +332,7 @@ tabsView addr model tabs =
               [ ("mdl-layout__tab-bar", True)
               , ("mdl-js-ripple-effect", model.rippleTabs)
               , ("mds-js-ripple-effect--ignore-events", model.rippleTabs)
+              , ("is-casting-shadow", model.mode == Standard)
               ]
           ]
           (tabs |> mapWithIndex (\tabIndex tab ->
@@ -302,18 +358,44 @@ tabsView addr model tabs =
       ]
 
 
-headerView : Model -> (Maybe Html, Maybe (List Html), Maybe Html) ->  Html
-headerView model (drawerButton, row, tabs) =
-  filter Html.header
-    [ classList
-        [ ("mdl-layout__header", True)
-        , ("is-casting-shadow", model.mode == Standard)
-        ]
-    ]
-    [ drawerButton
-    , row |> Maybe.map (div [ class "mdl-layout__header-row" ])
-    , tabs
-    ]
+headerView : Addr -> Model -> (Maybe Html, List Html, Maybe Html) ->  Html
+headerView addr model (drawerButton, rows, tabs) =
+  let 
+    mode =
+      case model.mode of
+        Standard  -> ""
+        Scroll    -> "mdl-layout__header--scroll"
+        Seamed    -> "mdl-layout__header--seamed"
+        Waterfall True -> "mdl-layout__header--waterfall mdl-layout__header--waterfall-hide-top"
+        Waterfall False -> "mdl-layout__header--waterfall"
+  in
+    Html.header
+      ([ classList
+          [ ("mdl-layout__header", True)
+          , ("is-casting-shadow", 
+              model.mode == Standard || 
+              (isWaterfall model.mode && (s model).isCompact)
+            )
+          , ("is-animating", (s model).isAnimating)
+          , ("is-compact", (s model).isCompact)
+          , (mode, mode /= "")
+          ]
+      ]
+      |> List.append (
+        if isWaterfall model.mode then 
+          [ onClick addr Click
+          , on "transitionend" Json.value (\_ -> Signal.message addr TransitionEnd)
+          ]
+        else
+          []
+        )
+      )
+      (List.concatMap (\x -> x)
+         [ toList drawerButton
+         , rows 
+         , toList tabs
+         ]
+      )
 
 
 drawerButton : Addr -> Html
@@ -349,17 +431,18 @@ drawerView addr model elems =
 
 
 {-| Content of the layout only (contents of main pane is set elsewhere). Every
-part is optional. If `header` is `Nothing`, tabs will not be shown.
+part is optional; if you supply an empty list for either, the sub-component is 
+omitted. 
 
-The `header` and `drawer` contains the contents of the header row and drawer,
-respectively.  Use `spacer`, `title`, `nav`, and
-`link`, as well as regular Html to construct these. The `tabs` contains
+The `header` and `drawer` contains the contents of the header rows and drawer,
+respectively. Use `row`, `spacer`, `title`, `nav`, and `link`, as well as
+regular Html to construct these. The `tabs` contains
 the title of each tab.
 -}
 type alias Contents =
-  { header : Maybe (List Html)
-  , drawer : Maybe (List Html)
-  , tabs : Maybe (List Html)
+  { header : List Html
+  , drawer : List Html
+  , tabs : List Html
   , main : List Html
   }
 
@@ -371,11 +454,11 @@ view addr model { drawer, header, tabs, main } =
   let
     (contentDrawerButton, headerDrawerButton) =
       case (drawer, header, model.fixedHeader) of
-        (Just _, Just _, True) ->
+        (_ :: _, _ :: _, True) ->
           -- Drawer with fixedHeader: Add the button to the header
            (Nothing, Just <| drawerButton addr)
 
-        (Just _, _, _) ->
+        (_ :: _, _, _) ->
           -- Drawer, no or non-fixed header: Add the button before contents.
            (Just <| drawerButton addr, Nothing)
 
@@ -383,38 +466,51 @@ view addr model { drawer, header, tabs, main } =
           -- No drawer: no button.
            (Nothing, Nothing)
 
-    mode =
-      case model.mode of
-        Standard  -> ""
-        Scroll    -> "mdl-layout__header-scroll"
-        -- Waterfall -> "mdl-layout__header-waterfall"
-        Seamed    -> "mdl-layout__header-seamed"
+    hasHeader = 
+      not (List.isEmpty tabs && List.isEmpty header)
 
-    hasHeader =
-      tabs /= Nothing || header /= Nothing
+    tabsElems = 
+      if List.isEmpty tabs then 
+        Nothing
+      else 
+        Just (tabsView addr model tabs)
   in
   div
-    [ class "mdl-layout__container" ]
+    [ classList
+        [ ("mdl-layout__container", True)
+        , ("has-scrolling-header", model.mode == Scroll)
+        ]
+    ]
     [ filter div
         [ classList
-            [ ("mdl-layout", True)
+            [ ("mdl-layout ", True)
             , ("is-upgraded", True)
             , ("is-small-screen", (s model).isSmallScreen)
-            , ("has-drawer", drawer /= Nothing)
-            , ("has-tabs", tabs /= Nothing)
+            , ("has-drawer", drawer /= [])
+            , ("has-tabs", tabs /= [])
             , ("mdl-js-layout", True)
-            , ("mdl-layout--fixed-drawer", model.fixedDrawer && drawer /= Nothing)
+            , ("mdl-layout--fixed-drawer", model.fixedDrawer && drawer /= [])
             , ("mdl-layout--fixed-header", model.fixedHeader && hasHeader)
-            , ("mdl-layout--fixed-tabs", model.fixedTabs && tabs /= Nothing)
+            , ("mdl-layout--fixed-tabs", model.fixedTabs && tabs /= [])
             ]
         ]
         [ if hasHeader then
-            Just <| headerView model (headerDrawerButton, header, Maybe.map (tabsView addr model) tabs)
+            Just <| headerView addr model (headerDrawerButton, header, tabsElems)
           else
             Nothing
-        , drawer |> Maybe.map (\_ -> obfuscator addr model)
-        , drawer |> Maybe.map (drawerView addr model)
+        , if List.isEmpty drawer then Nothing else Just (obfuscator addr model)
+        , if List.isEmpty drawer then Nothing else Just (drawerView addr model drawer)
         , contentDrawerButton
-        , Just <| main' [ class "mdl-layout__content" ] main
+        , main' 
+            ( class "mdl-layout__content" 
+            :: (
+              if isWaterfall model.mode then 
+                [ on "scroll" (DOM.target DOM.scrollTop) (ScrollContents >> Signal.message addr) ]
+              else 
+                []
+              )
+            )
+            main
+          |> Just
         ]
     ]

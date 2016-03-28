@@ -9,6 +9,7 @@ import Task exposing (Task)
 import Array exposing (Array)
 
 import Material.Layout as Layout exposing (defaultLayoutModel)
+import Material.Icon as Icon
 import Material
 
 import Demo.Buttons
@@ -30,6 +31,8 @@ layoutModel : Layout.Model
 layoutModel =
   { defaultLayoutModel
   | state = Layout.initState (List.length tabs)
+  , mode = Layout.Waterfall True
+  , fixedHeader = False
   }
 
 
@@ -83,26 +86,28 @@ drawer =
   [ Layout.title "Example drawer"
   , Layout.navigation
     [ Layout.link
-      [href "https://github.com/debois/elm-mdl"]
-      [text "github"]
+      [ href "https://www.getmdl.io/components/index.html" ]
+      [ text "MDL" ]
     , Layout.link
-      [href "http://package.elm-lang.org/packages/debois/elm-mdl/1.0.0/"]
-      [text "elm-package"]
+      [ href "https://www.google.com/design/spec/material-design/introduction.html"]
+      [ text "Material Design"]
     ]
   ]
 
 
 header : List Html
 header =
-  [ Layout.title "elm-mdl"
-  , Layout.spacer
-  , Layout.navigation
-    [ Layout.link
-      [ href "https://www.getmdl.io/components/index.html" ]
-      [ text "MDL" ]
-    , Layout.link
-      [ href "https://www.google.com/design/spec/material-design/introduction.html"]
-      [ text "Material Design"]
+  [ Layout.row 
+    [ Layout.title "elm-mdl"
+    , Layout.spacer
+    , Layout.navigation
+      [ Layout.link
+        [href "https://github.com/debois/elm-mdl"]
+        [span [] [text "github"] ]
+      , Layout.link
+        [href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/"]
+        [text "elm-package"]
+      ]
     ]
   ]
 
@@ -142,9 +147,9 @@ view addr model =
 
   in
     Layout.view (Signal.forwardTo addr LayoutAction) model.layout
-      { header = Just header
-      , drawer = Just drawer
-      , tabs = Just tabTitles
+      { header = header
+      , drawer = drawer
+      , tabs = tabTitles
       , main = [ top ]
       }
     {- The following line is not needed when you manually set up
