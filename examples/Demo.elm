@@ -178,17 +178,10 @@ view addr model =
 
   in
     Layout.view (Signal.forwardTo addr LayoutAction) model.layout
-<<<<<<< HEAD
-      { header = Just header
-      , drawer = Just drawer
-      , tabs = Just tabTitles
-      , main = [ stylesheet, top ]
-=======
       { header = header
       , drawer = drawer
       , tabs = tabTitles
       , main = [ top ]
->>>>>>> waterfall
       }
     {- The following line is not needed when you manually set up
        your html, as done with page.html. Removing it will then
