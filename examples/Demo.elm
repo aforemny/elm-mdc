@@ -10,8 +10,11 @@ import Array exposing (Array)
 
 import Material.Color as Color
 import Material.Layout as Layout exposing (defaultLayoutModel)
+
 import Material exposing (lift, lift')
 import Material.Style as Style
+import Material.Icon as Icon
+import Material
 
 import Demo.Buttons
 import Demo.Grid
@@ -29,6 +32,8 @@ layoutModel : Layout.Model
 layoutModel =
   { defaultLayoutModel
   | state = Layout.initState (List.length tabs)
+  , mode = Layout.Waterfall True
+  , fixedHeader = False
   }
 
 
@@ -84,26 +89,28 @@ drawer =
   [ Layout.title "Example drawer"
   , Layout.navigation
     [ Layout.link
-      [href "https://github.com/debois/elm-mdl"]
-      [text "github"]
+      [ href "https://www.getmdl.io/components/index.html" ]
+      [ text "MDL" ]
     , Layout.link
-      [href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/"]
-      [text "elm-package"]
+      [ href "https://www.google.com/design/spec/material-design/introduction.html"]
+      [ text "Material Design"]
     ]
   ]
 
 
 header : List Html
 header =
-  [ Layout.title "elm-mdl"
-  , Layout.spacer
-  , Layout.navigation
-    [ Layout.link
-      [ href "https://www.getmdl.io/components/index.html" ]
-      [ text "MDL" ]
-    , Layout.link
-      [ href "https://www.google.com/design/spec/material-design/introduction.html"]
-      [ text "Material Design"]
+  [ Layout.row 
+    [ Layout.title "elm-mdl"
+    , Layout.spacer
+    , Layout.navigation
+      [ Layout.link
+        [href "https://github.com/debois/elm-mdl"]
+        [span [] [text "github"] ]
+      , Layout.link
+        [href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/"]
+        [text "elm-package"]
+      ]
     ]
   ]
 
@@ -171,10 +178,17 @@ view addr model =
 
   in
     Layout.view (Signal.forwardTo addr LayoutAction) model.layout
+<<<<<<< HEAD
       { header = Just header
       , drawer = Just drawer
       , tabs = Just tabTitles
       , main = [ stylesheet, top ]
+=======
+      { header = header
+      , drawer = drawer
+      , tabs = tabTitles
+      , main = [ top ]
+>>>>>>> waterfall
       }
     {- The following line is not needed when you manually set up
        your html, as done with page.html. Removing it will then

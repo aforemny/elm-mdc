@@ -25,7 +25,6 @@ import Effects exposing (..)
 import Material.Color exposing (Palette(..), Color)
 
 
-
 scheme : Palette -> Palette -> String
 scheme primary accent =
   [ "https://code.getmdl.io/1.1.2/" ++ Material.Color.scheme primary accent 
@@ -45,7 +44,7 @@ your .html file:
     <!-- MDL -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.min.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.min.css" />
 
 Supply primary and accent colors as parameters. Refer to the
 Material Design Lite [Custom CSS theme builder](https://www.getmdl.io/customize/index.html)
