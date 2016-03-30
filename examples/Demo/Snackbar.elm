@@ -5,14 +5,15 @@ import Html exposing (..)
 import Html.Attributes exposing (class, style, key)
 import Array exposing (Array)
 
-import Markdown
-
 import Material.Color as Color
 import Material.Style exposing (styled, cs)
 import Material.Snackbar as Snackbar
 import Material.Button as Button exposing (Action(..))
 import Material.Grid exposing (..)
+import Material.Elevation as Elevation
 import Material exposing (lift, lift')
+
+import Demo.Page as Page
 
 
 -- MODEL
@@ -119,7 +120,7 @@ clickView model k =
       [ Color.background color
       , Color.text Color.primaryContrast
       -- TODO. Should have shadow styles someplace. 
-      , cs <| "mdl-shadow--" ++ if selected then "8dp" else "2dp"
+      , Elevation.shadow (if selected then 8 else 2)
       ] 
       [ style
           [ ("margin-right", "3ex")
@@ -139,10 +140,8 @@ clickView model k =
 
 view : Signal.Address Action -> Model -> Html
 view addr model =
-  div []
-    [ h1 [ class "mdl-typography--display-4-color-contrast" ] [ text "Snackbars & Toasts" ]
-    , intro
-    , grid []
+  Page.view srcUrl "Snackbar & Toast" [ intro ] references
+    [ grid []
         -- TODO. Buttons should be centered. Desperately need to be able
         -- to add css/classes to top-level element of components (div
         -- in grid, button in button, div in textfield etc.)
@@ -169,10 +168,8 @@ view addr model =
 
 
 intro : Html
-intro = """
-From the
-[Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section).
-
+intro = 
+  Page.fromMDL "https://www.getmdl.io/components/index.html#snackbar-section" """
 > The Material Design Lite (MDL) __snackbar__ component is a container used to
 > notify a user of an operation's status. It displays at the bottom of the
 > screen. A snackbar may contain an action button to execute a command for the
@@ -180,15 +177,18 @@ From the
 > example. Actions should not be to close the snackbar. By not providing an
 > action, the snackbar becomes a __toast__ component.
 
-#### See also
+""" 
 
- - [Demo source code](https://github.com/debois/elm-mdl/blob/master/examples/Demo/Snackbar.elm)
- - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Snackbar)
- - [Material Design Specification](https://www.google.com/design/spec/components/snackbars-toasts.html)
- - [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section)
+srcUrl : String 
+srcUrl =
+  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Snackbar.elm"
 
-#### Demo
-
-""" |> Markdown.toHtml
+references : List (String, String)
+references = 
+  [ Page.demo srcUrl 
+  , Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Snackbar"
+  , Page.mds "https://www.google.com/design/spec/components/snackbars-toasts.html"
+  , Page.mdl "https://www.getmdl.io/components/index.html#snackbar-section"
+  ]
 
 

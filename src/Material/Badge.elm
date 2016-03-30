@@ -30,7 +30,8 @@ module Material.Badge
 @docs withBadge, noBackground, overlap
 -}
 
-import Material.Style exposing (Style, cs, attrib, multiple)
+import Html.Attributes
+import Material.Style exposing (Style, cs, attribute, multiple)
 
 
 {-| Optional style for Badge. No background for badge 
@@ -55,4 +56,7 @@ overlap =
 -}
 withBadge : String -> Style
 withBadge databadge = 
-  multiple [cs "mdl-badge", attrib "data-badge" databadge]
+  multiple 
+    [ cs "mdl-badge"
+    , attribute (Html.Attributes.attribute "data-badge" databadge)
+    ]
