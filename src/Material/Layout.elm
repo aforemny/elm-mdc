@@ -1,5 +1,5 @@
 module Material.Layout
-  ( setupSizeChangeSignal
+  ( setupSignals
   , Mode(..), Model, defaultLayoutModel, initState
   , Action(SwitchTab, ToggleDrawer), update
   , row, spacer, title, navigation, link
@@ -39,7 +39,7 @@ module Material.Layout
 @docs row, spacer, title, navigation, link
 
 # Setup
-@docs setupSizeChangeSignal
+@docs setupSignals
 -}
 
 
@@ -63,21 +63,38 @@ import DOM
 -- SETUP
 
 
-{-| Setup signal for registering changes in display size. Use with StartApp
-like so, supposing you have a `LayoutAction` encapsulating actions of the
+scrollMailbox : Signal.Mailbox Float
+scrollMailbox = Signal.mailbox 0.0
+
+
+{-| Setup various signals layout needs (viewport size changes, scrolling). Use
+with StartApp like so, supposing you have a `LayoutAction` encapsulating
+actions of the
 layout:
 
     inputs : List (Signal.Signal Action)
     inputs =
-      [ Layout.setupSizeChangeSignal LayoutAction
+      [ Layout.setupSignals LayoutAction
       ]
 -}
-setupSizeChangeSignal : (Action -> a) -> Signal a
-setupSizeChangeSignal f =
-  Window.width
-  |> Signal.map ((>) 1024)
-  |> Signal.dropRepeats
-  |> Signal.map (SmallScreen >> f)
+setupSignals : (Action -> a) -> Signal a
+setupSignals f =
+  {- NB! mergeMany propagates only the first provided signal if more than one
+     signal changes value at the same time.  We are processing two signals: (1)
+     viewport size changes and (2) scrolling of main contents.  It /appears/
+     that these cannot happen at the same time, so the following should be
+     safe. 
+  -}
+  Signal.mergeMany
+    [ Window.width
+        |> Signal.map ((>) 1024)
+        |> Signal.dropRepeats
+        |> Signal.map (SmallScreen >> f)
+    , scrollMailbox.signal
+        |> Signal.map ((<) 0.0)
+        |> Signal.dropRepeats
+        |> Signal.map (ScrollContents >> f) 
+    ]
 
 
 -- MODEL
@@ -172,7 +189,7 @@ type Action
   -- Private
   | SmallScreen Bool -- True means small screen
   | ScrollTab Float
-  | ScrollContents Float
+  | ScrollContents Bool -- True means strictly positive scrollTop
   | Ripple Int Ripple.Action
   | Click 
   | TransitionEnd
@@ -214,12 +231,12 @@ update action model =
       (model, Effects.none) -- TODO
 
 
-    ScrollContents scrollTop -> 
+    ScrollContents isScrolled -> 
       let 
         headerVisible = state.isSmallScreen || model.fixedHeader
         state' = 
           { state 
-          | isCompact = scrollTop > 0 
+          | isCompact = isScrolled
           , isAnimating = headerVisible 
           }
       in
@@ -505,7 +522,7 @@ view addr model { drawer, header, tabs, main } =
             ( class "mdl-layout__content" 
             :: (
               if isWaterfall model.mode then 
-                [ on "scroll" (DOM.target DOM.scrollTop) (ScrollContents >> Signal.message addr) ]
+                [ on "scroll" (DOM.target DOM.scrollTop) (Signal.message scrollMailbox.address) ]
               else 
                 []
               )

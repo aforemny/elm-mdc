@@ -13,7 +13,6 @@ import Material.Layout as Layout exposing (defaultLayoutModel)
 
 import Material exposing (lift, lift')
 import Material.Style as Style
-import Material.Icon as Icon
 import Material
 
 import Demo.Buttons
@@ -24,8 +23,6 @@ import Demo.Badges
 --import Demo.Template
 
 -- MODEL
-
-x = 0 + "foo"
 
 
 layoutModel : Layout.Model
@@ -196,7 +193,7 @@ init = (model, Effects.none)
 
 inputs : List (Signal.Signal Action)
 inputs =
-  [ Layout.setupSizeChangeSignal LayoutAction
+  [ Layout.setupSignals LayoutAction
   ]
 
 
