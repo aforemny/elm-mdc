@@ -8,17 +8,6 @@ import Material.Button as Button
 import Material.Style exposing (Style)
 import Material.Textfield as Textfield
 
-type Action model = 
-  A (model -> (model, Effects (Action model)))
-  
-type alias Updater model action = 
-  action -> model -> (model, Effects action)
-
-
-update : Updater State (Action State)
-update (A f) model = 
-  f model
-
 
 
 map1st : (a -> c) -> (a,b) -> (c,b)
@@ -27,6 +16,20 @@ map1st f (x,y) = (f x, y)
 
 map2nd : (b -> c) -> (a,b) -> (a,c)
 map2nd f (x,y) = (x, f y)
+
+
+
+type alias Updater model action = 
+  action -> model -> (model, Effects action)
+
+
+type Action model = 
+  A (model -> (model, Effects (Action model)))
+  
+
+update : Updater State (Action State)
+update (A f) model = 
+  f model
 
 
 pack : Updater model action -> action -> Action model
@@ -78,11 +81,11 @@ embed :
   Component submodel action a ->            -- Given a "Component submodel ..."
   (model -> States submodel) ->             -- a getter 
   (States submodel -> model -> model) ->    -- a setter
-  Int ->                                    -- an id for this instance
   submodel ->                               -- an initial model for this instance
+  Int ->                                    -- an id for this instance
   Component model action a                  -- ... produce a "Component model ..."
 
-embed component get set id model0 = 
+embed component get set model0 id = 
   let 
     get' model = 
       Dict.get id (get model) |> Maybe.withDefault model0
@@ -102,6 +105,19 @@ embed component get set id model0 =
     }
 
 
+type alias Updater' model action action' = 
+  action -> model -> (model, Effects action, action')
+
+{-
+observe : (action -> action') -> Updater model action -> Updater' model action action'
+observe f update action model = 
+  let 
+    (model', effects) = update action model 
+  in 
+    (model', effects, f action)
+-}
+
+
 instance : ((Action State) -> action) -> Component State a b -> View State action b
 instance f component addr state = 
   component.view 
@@ -114,13 +130,36 @@ f id =
   embed buttonComponent .button (\x y -> { y | button = x}) id (Button.model True)
 -}
 
+type alias Ctor model model' action a = 
+  model -> Int -> Component model' action a
+
+
+type alias ButtonStates a = 
+  { a | button : States Button.Model }
+
+
+mkButton : Ctor (Button.Model) (ButtonStates model') Button.Action (List Style -> List Html -> Html)
+  {-
+    : Button.Model
+    -> Int
+    -> Component
+           { b | button : States Button.Model }
+           Button.Action
+           (List Style -> List Html -> Html)
+  -}
+
+mkButton model0 = 
+  embed buttonComponent .button (\x y -> {y | button = x}) model0
+
+
+
 buttonInstance : ((Action State) -> action) -> Int -> View State action (List Style -> List Html -> Html)
 buttonInstance f id = 
-  embed buttonComponent .button (\x y -> { y | button = x}) id (Button.model True)
-    |> instance f
+  instance f (mkButton (Button.model True) id)
 
+mkTextfield model0 = 
+  embed textfieldComponent .textfield (\x y -> { y | textfield = x}) model0
 
 textfieldInstance f id = 
-  embed textfieldComponent .textfield (\x y -> { y | textfield = x}) id (Textfield.model)
-    |> instance f
+  instance f (mkTextfield Textfield.model id)  
 
