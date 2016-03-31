@@ -2,6 +2,7 @@ module Material.Button
   ( Model, model, Action(Click), update
   , flat, raised, fab, minifab, icon
   , colored, primary, accent
+  , View, component, Component, onClick
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -25,8 +26,8 @@ module Material.Button
 See also the
 [Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).
 
-# Component
-@docs Model, model, Action, update
+# Elm architecture
+@docs Model, model, Action, update, View
 
 # Style
 @docs colored, primary, accent
@@ -37,6 +38,9 @@ Refer to the
 for details about what type of buttons are appropriate for which situations.
 
 @docs flat, raised, fab, minifab, icon
+
+# Component 
+@docs Component, component, onClick
 
 -}
 
@@ -49,6 +53,7 @@ import Signal exposing (Address, forwardTo)
 import Material.Helpers as Helpers
 import Material.Style exposing (Style, cs, cs', styled)
 import Material.Ripple as Ripple
+import Material.Component as Component exposing (Component, Indexed)
 
 {-| MDL button.
 -}
@@ -137,7 +142,7 @@ view kind addr model styling html =
     )
     [ Helpers.blurOn "mouseup"
     , Helpers.blurOn "mouseleave"
-    , onClick addr Click
+    , Html.Events.onClick addr Click
     ]
     (case model of
       S (Just ripple) ->
@@ -151,12 +156,10 @@ view kind addr model styling html =
       _ -> html)
 
 
--- Fake address (for link buttons). 
-
-
-addr : Signal.Address Action
-addr = (Signal.mailbox Click).address
-
+{-| Type of button views. 
+-}
+type alias View = 
+  Address Action -> Model -> List Style -> List Html -> Html
 
 
 {-| From the
@@ -179,7 +182,7 @@ Example use (uncolored flat button, assuming properly setup model):
     flatButton = Button.flat addr model Button.Plain [text "Click me!"]
 
 -}
-flat : Address Action -> Model -> List Style -> List Html -> Html
+flat : View
 flat = view ""
 
 
@@ -200,7 +203,7 @@ Example use (colored raised button, assuming properly setup model):
     raisedButton = Button.raised addr model Button.Colored [text "Click me!"]
 
 -}
-raised : Address Action -> Model -> List Style -> List Html -> Html
+raised : View
 raised = view "mdl-button--raised"
 
 
@@ -226,13 +229,13 @@ Example use (colored with a '+' icon):
     fabButton : Html
     fabButton = fab addr model Colored [Icon.i "add"]
 -}
-fab : Address Action -> Model -> List Style -> List Html -> Html
+fab : View
 fab = view "mdl-button--fab"
 
 
 {-| Mini-sized variant of a Floating Action Button; refer to `fab`.
 -}
-minifab : Address Action -> Model -> List Style -> List Html -> Html
+minifab : View
 minifab = view "mdl-button--mini-fab"
 
 
@@ -248,6 +251,45 @@ Example use (no color, displaying a '+' icon):
     iconButton : Html
     iconButton = icon addr model Plain [Icon.i "add"]
 -}
-icon : Address Action -> Model -> List Style -> List Html -> Html
+icon : View
 icon = view "mdl-button--icon"
+
+
+
+-- COMPONENT
+
+
+{-| Button component type. 
+-}
+type alias Component state obs = 
+  Component.Component 
+    Model
+    { state | button : Indexed Model }
+    Action 
+    obs
+    (List Style -> List Html -> Html)
+
+
+{-| Component constructor. Provide the view function your button should
+have as the first argument, e.g., 
+
+    button = Button.component Button.minifab (Button.model True) 0
+
+-}
+component : View -> Model -> Int -> Component state action
+component view = 
+  Component.setup view update .button (\x y -> {y | button = x}) 
+
+
+{-| Lift the button Click action to your own action. E.g., 
+-}
+onClick : obs -> Component state obs -> Component state obs
+onClick o component  = 
+  (\action -> 
+    case action of 
+      Click -> Just o
+      _ -> Nothing)
+  |> Component.addObserver component 
+
+
 

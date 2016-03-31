@@ -26,15 +26,21 @@ This implementation provides only single-line.
 # Configuration
 @docs Kind, Label
 
-# Component
+# Elm Architecture
 @docs Action, Model, model, update, view
+
+# Component
+@docs component, Component, onInput
+
 -}
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Effects
 
 import Material.Helpers exposing (filter)
+import Material.Component as Component exposing (Indexed)
 
 
 -- MODEL
@@ -160,3 +166,41 @@ view addr model =
       ,   model.error |> Maybe.map (\e ->
             span [class "mdl-textfield__error"] [text e])
       ]
+
+
+
+-- COMPONENT 
+
+
+{-| Textfield component type. 
+-}
+type alias Component state obs = 
+  Component.Component 
+    Model
+    { state | textfield : Indexed Model }
+    Action 
+    obs
+    Html
+
+
+{-| Component constructor. 
+-}
+component : Model -> Int -> Component state action
+component = 
+  let 
+    update' action model = (update action model, Effects.none)
+  in 
+    Component.setup view update' .textfield (\x y -> {y | textfield = x}) 
+
+
+{-| Lift the button Click action to your own action. E.g., 
+-}
+onInput : (String -> obs) -> Component state obs -> Component state obs
+onInput f component  = 
+  (\action -> 
+    case action of 
+      Input str -> Just (f str)
+      _ -> Nothing)
+  |> Component.addObserver component 
+
+

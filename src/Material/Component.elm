@@ -1,61 +1,80 @@
-module Material.Component where
+module Material.Component 
+  ( Component, setup, addObserver
+  , Instance, instance, instance'
+  , update
+  , Indexed
+  , View, Update, Action
+  ) where
+
+{-|
+
+# Types
+
+## Elm architecture types
+@docs View, Update, Action 
+
+## Component types
+@docs Component, Instance
+
+## Helpers
+@docs Indexed
+
+# For component consumers
+@docs instance, instance'
+@docs update
+
+# For component authors
+@docs component, addObserver
+-}
 
 import Effects exposing (Effects)
-import Html exposing (Html)
 import Dict exposing (Dict)
 
-import Material.Button as Button
-import Material.Style exposing (Style)
-import Material.Textfield as Textfield
+
+import Material.Helpers exposing (map1, map2, map1st, map2nd)
 
 
-map1 : (a -> a') -> (a, b, c) -> (a', b, c)
-map1 f (x,y,z) = (f x, y, z)
+-- TYPES
 
 
-map2 : (b -> b') -> (a, b, c) -> (a, b', c)
-map2 f (x,y,z) = (x, f y, z)
+{-| Indexed families of things.
+-}
+type alias Indexed a = 
+  Dict Int a 
 
 
-map1st : (a -> c) -> (a,b) -> (c,b)
-map1st f (x,y) = (f x, y)
-
-
-map2nd : (b -> c) -> (a,b) -> (a,c)
-map2nd f (x,y) = (x, f y)
-
-
+{- Variant of EA update function type, where effects may be 
+lifted to a different type. 
+-}
 type alias Update' model action action' = 
   action -> model -> (model, Effects action')
 
 
+{-| Standard EA update function type. 
+-}
 type alias Update model action = 
   Update' model action action
 
 
-type alias Step model action action' = 
-  action -> model -> (model, Effects action, action')
+{-| Standard EA view function type. 
+-}
+type alias View model action a = 
+  Signal.Address action -> model -> a
 
 
-type alias State =
-  { button : Indexed Button.Model
-  , textfield : Indexed Textfield.Model
-  }
-
-
-state0 : State
-state0 = 
-  { button = Dict.empty
-  , textfield = Dict.empty
-  }
-
-
+{-| Generic component action.
+-}
 type Action model obs = 
   A (model -> (model, Effects (Action model obs), obs))
  
 
+{-| Generic model. 
+-}
 type alias Model model state  = 
   { model | componentState : state }
+
+
+-- FOR CONSUMERS
 
 
 update : 
@@ -79,39 +98,13 @@ update fwd update' (A f) model =
           |> map2nd (\fx' -> Effects.batch [ fx, fx' ]) 
 
 
-pack : (Step model action obs) -> action -> Action model obs
-pack update action = 
-  A (update action >> map2 (Effects.map (pack update))) 
--- CAUTION. Potential crash from update/update name clash. 
+
+-- COMPONENT
 
 
-type alias View model action a = 
-  Signal.Address action -> model -> a
-
-
-type alias Component model action a = 
-  { view : View model action a
-  , update : Update model action 
-  }
-
-
-type alias Indexed a = 
-  Dict Int a 
-
-buttonComponent : Component Button.Model Button.Action (List Style -> List Html -> Html)
-buttonComponent = 
-  { view = Button.raised
-  , update = Button.update
-  }
-
-textfieldComponent : Component Textfield.Model Textfield.Action Html
-textfieldComponent = 
-  { view = Textfield.view
-  , update = \action model -> (Textfield.update action model, Effects.none)
-  }
-
-
-type alias Widget submodel model action obs a = 
+{-| Component type. 
+-}
+type alias Component submodel model action obs a = 
   { view : View model action a
   , update : Update model action 
   , observe : action -> Maybe obs
@@ -120,15 +113,30 @@ type alias Widget submodel model action obs a =
   }
  
 
-widget : 
-  Component submodel action a ->            -- Given a "Component submodel ..."
+{-| Component constructor. You must supply 
+
+1. A view function 
+2. An update function 
+3. A getter
+4. A setter
+
+This will produce a function which needs only
+
+5. An initial model, and
+6. an id
+
+to fit with the `instance` function. 
+-}
+setup : 
+  View submodel action a ->                 -- Given a view function, 
+  Update submodel action ->                 -- an update function 
   (model -> Indexed submodel) ->            -- a getter 
   (Indexed submodel -> model -> model) ->   -- a setter
   submodel ->                               -- an initial model for this instance
-  Int ->                                    -- an id for this instance
-  Widget submodel model action obs a        -- ... produce a "Widget ..."
+  Int ->                                    -- an instance id (*)
+  Component submodel model action obs a     -- ... produce a Component.
 
-widget component get set model0 id = 
+setup view update get set model0 id = 
   let 
     get' model = 
       Dict.get id (get model) |> Maybe.withDefault model0
@@ -137,13 +145,11 @@ widget component get set model0 id =
       set (Dict.insert id submodel (get model)) model 
   in 
     { view = 
-        \addr model -> component.view addr (get' model)
-
+        \addr model -> view addr (get' model)
     , update = 
         \action model -> 
-          component.update action (get' model)
+          update action (get' model)
             |> map1st (flip set' model)
-
     , getModel = get'
     , setModel = set'
     , observe = \_ -> Nothing
@@ -151,11 +157,27 @@ widget component get set model0 id =
 
 
 
+{- EA update function variant where running the function
+produces not just a new model and an effect, but also an 
+observation.
+-}
+type alias Step model action obs =
+  action -> model -> (model, Effects action, obs)
+
+
+{- Convert an update function to a step function by applying a 
+function that converts the action input to the update function into
+an observation.
+-}
 observe : (action -> obs) -> Update model action -> Step model action obs 
 observe f update action =
   update action >> (\(model', effects) -> (model', effects, f action))
 
 
+{-| Type of component instances. A component instance contains a view, 
+and get/set/map for, well, getting, setting, and mapping the component
+model. 
+-}
 type alias Instance submodel model action a = 
   { view : View model action a
   , get : model -> submodel
@@ -164,9 +186,22 @@ type alias Instance submodel model action a =
   }
 
 
+{- Partially apply a step (update + observation) function to an action, 
+producing a generic Action.
+-}
+pack : (Step model action obs) -> action -> Action model obs
+pack update action = 
+  A (update action >> map2 (Effects.map (pack update))) 
+
+
+{-| Instantiate a component. You must supply: 
+
+1. A function embedding `Action` into your actions. 
+2. A component
+-}
 instance : 
   (Action model (Maybe action) -> action) -> 
-  Widget submodel model subaction action a -> 
+  Component submodel model subaction action a -> 
   Instance submodel (Model master model) action a
 instance lift widget = 
   let 
@@ -176,55 +211,48 @@ instance lift widget =
     set x model = 
       { model | componentState = widget.setModel x model.componentState }
 
+    fwd = 
+      pack (observe widget.observe widget.update) >> lift
   in
     { view = 
         \addr model -> 
-          widget.view (Signal.forwardTo addr (pack (observe widget.observe widget.update) >> lift)) model.componentState
+          widget.view (Signal.forwardTo addr fwd) model.componentState
     , get = get
     , set = set
     , map = \f model -> set (f (get model)) model
     }
 
 
-
+{-| Convenience function for instantiating components whose models
+you never need to read or write. (E.g,. Snackbar in Toast form.)
+-}
 instance' : 
   (Action model (Maybe action) -> action) -> 
-  Widget submodel model subaction action a -> 
+  Component submodel model subaction action a -> 
   View (Model m model) action a
+
 instance' lift widget = (instance lift widget).view
       
 
-type alias ButtonStates a = 
-  { a | button : Indexed Button.Model }
-
-buttonWidget : Button.Model -> Int -> Widget Button.Model (ButtonStates m) Button.Action (Maybe obs) (List Style -> List Html -> Html)
-buttonWidget model = 
-  widget buttonComponent .button (\x y -> {y | button = x}) model
-
-type Test = State' (Action State (Maybe Test))
-
-
-addObserver widget f = 
-  { widget 
+{-| Add an observer to a component.
+-}
+addObserver
+  :  { c | observe : a -> Maybe b }
+  -> (a -> Maybe b)
+  -> { c | observe : a -> Maybe b }
+addObserver component f = 
+  { component 
   | observe = 
       \action -> 
         case f action of 
-          Nothing -> widget.observe action 
+          Nothing -> component.observe action 
           x -> x
   }
         
 
 
-onClick f widget  = 
-  (\action -> 
-    case action of 
-      Button.Click -> Just f
-      _ -> Nothing)
-  |> addObserver widget 
 
-
-
-
+{-
 
 type alias TextfieldStates a =
   { a | textfield : Indexed Textfield.Model }
@@ -234,4 +262,6 @@ type alias TextfieldStates a =
 textfieldWidget : Textfield.Model -> Int -> Widget Textfield.Model (TextfieldStates model) Textfield.Action (Maybe obs) Html
 textfieldWidget model = 
   widget textfieldComponent .textfield (\x y -> { y | textfield = x}) model
+
+-}
 

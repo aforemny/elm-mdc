@@ -279,7 +279,7 @@ tabsView addr model tabs =
               , ("mds-js-ripple-effect--ignore-events", model.rippleTabs)
               ]
           ]
-          (tabs |> mapWithIndex (\tabIndex tab ->
+          (tabs |> List.indexedMap (\tabIndex tab ->
             filter a
               [ classList
                   [ ("mdl-layout__tab", True)

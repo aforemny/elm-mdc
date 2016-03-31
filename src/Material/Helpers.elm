@@ -9,17 +9,6 @@ filter elem attr html =
   elem attr (List.filterMap (\x -> x) html)
 
 
-mapWithIndex : (Int -> a -> b) -> List a -> List b
-mapWithIndex f xs =
-  let
-    loop k ys =
-      case ys of
-        [] -> []
-        y :: ys -> f k y :: loop (k+1) ys
-  in
-    loop 0 xs
-
-
 effect : Effects b -> a -> (a, Effects b)
 effect e x = (x, e)
 
@@ -43,3 +32,24 @@ clip lower upper k = Basics.max lower (Basics.min k upper)
 blurOn : String -> Html.Attribute
 blurOn evt =
   Html.Attributes.attribute ("on" ++ evt) <| "this.blur()"
+
+
+-- TUPLES
+
+
+map1 : (a -> a') -> (a, b, c) -> (a', b, c)
+map1 f (x,y,z) = (f x, y, z)
+
+
+map2 : (b -> b') -> (a, b, c) -> (a, b', c)
+map2 f (x,y,z) = (x, f y, z)
+
+
+map1st : (a -> c) -> (a,b) -> (c,b)
+map1st f (x,y) = (f x, y)
+
+
+map2nd : (b -> c) -> (a,b) -> (a,c)
+map2nd f (x,y) = (x, f y)
+
+
