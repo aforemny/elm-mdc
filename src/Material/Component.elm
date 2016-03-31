@@ -9,6 +9,13 @@ import Material.Style exposing (Style)
 import Material.Textfield as Textfield
 
 
+map1 : (a -> a') -> (a, b, c) -> (a', b, c)
+map1 f (x,y,z) = (f x, y, z)
+
+
+map2 : (b -> b') -> (a, b, c) -> (a, b', c)
+map2 f (x,y,z) = (x, f y, z)
+
 
 map1st : (a -> c) -> (a,b) -> (c,b)
 map1st f (x,y) = (f x, y)
@@ -18,42 +25,21 @@ map2nd : (b -> c) -> (a,b) -> (a,c)
 map2nd f (x,y) = (x, f y)
 
 
-
-type alias Updater model action = 
-  action -> model -> (model, Effects action)
-
-
-type Action model = 
-  A (model -> (model, Effects (Action model)))
-  
-
-update : Updater State (Action State)
-update (A f) model = 
-  f model
+type alias Update' model action action' = 
+  action -> model -> (model, Effects action')
 
 
-pack : Updater model action -> action -> Action model
-pack update action = 
-  A ( \m -> map2nd (Effects.map (pack update)) (update action m) )
+type alias Update model action = 
+  Update' model action action
 
 
-type alias View model action a = 
-  Signal.Address action -> model -> a
-
-
-type alias Component model action a = 
-  { view : View model action a
-  , update : Updater model action 
-  }
-
-
-type alias States a = 
-  Dict Int a 
+type alias Step model action action' = 
+  action -> model -> (model, Effects action, action')
 
 
 type alias State =
-  { button : States Button.Model
-  , textfield : States Textfield.Model
+  { button : Indexed Button.Model
+  , textfield : Indexed Textfield.Model
   }
 
 
@@ -63,6 +49,54 @@ state0 =
   , textfield = Dict.empty
   }
 
+
+type Action model obs = 
+  A (model -> (model, Effects (Action model obs), obs))
+ 
+
+type alias Model model state  = 
+  { model | componentState : state }
+
+
+update : 
+  (Action state (Maybe action) -> action) ->      
+  Update (Model model state) action ->                    
+  Update' (Model model state) (Action state (Maybe action)) action
+
+update fwd update' (A f) model = 
+  let 
+    (model', fx, obs) = 
+      f model.componentState
+        |> map1 (\state' -> { model | componentState = state' })
+        |> map2 (Effects.map fwd)
+  in 
+    case obs of 
+      Nothing -> 
+        (model', fx)
+
+      Just x -> 
+        update' x model'
+          |> map2nd (\fx' -> Effects.batch [ fx, fx' ]) 
+
+
+pack : (Step model action obs) -> action -> Action model obs
+pack update action = 
+  A (update action >> map2 (Effects.map (pack update))) 
+-- CAUTION. Potential crash from update/update name clash. 
+
+
+type alias View model action a = 
+  Signal.Address action -> model -> a
+
+
+type alias Component model action a = 
+  { view : View model action a
+  , update : Update model action 
+  }
+
+
+type alias Indexed a = 
+  Dict Int a 
 
 buttonComponent : Component Button.Model Button.Action (List Style -> List Html -> Html)
 buttonComponent = 
@@ -77,89 +111,120 @@ textfieldComponent =
   }
 
 
-embed : 
+type alias Widget submodel model action obs a = 
+  { view : View model action a
+  , update : Update model action 
+  , observe : action -> Maybe obs
+  , getModel : model -> submodel
+  , setModel : submodel -> model -> model
+  }
+ 
+
+widget : 
   Component submodel action a ->            -- Given a "Component submodel ..."
-  (model -> States submodel) ->             -- a getter 
-  (States submodel -> model -> model) ->    -- a setter
+  (model -> Indexed submodel) ->            -- a getter 
+  (Indexed submodel -> model -> model) ->   -- a setter
   submodel ->                               -- an initial model for this instance
   Int ->                                    -- an id for this instance
-  Component model action a                  -- ... produce a "Component model ..."
+  Widget submodel model action obs a        -- ... produce a "Widget ..."
 
-embed component get set model0 id = 
+widget component get set model0 id = 
   let 
     get' model = 
       Dict.get id (get model) |> Maybe.withDefault model0
 
     set' submodel model = 
       set (Dict.insert id submodel (get model)) model 
-
-    view addr model = 
-      component.view addr (get' model)
-
-    update action model = 
-      component.update action (get' model)
-        |> map1st (flip set' model)
   in 
-    { view = view
-    , update = update
+    { view = 
+        \addr model -> component.view addr (get' model)
+
+    , update = 
+        \action model -> 
+          component.update action (get' model)
+            |> map1st (flip set' model)
+
+    , getModel = get'
+    , setModel = set'
+    , observe = \_ -> Nothing
     }
 
 
-type alias Updater' model action action' = 
-  action -> model -> (model, Effects action, action')
 
-{-
-observe : (action -> action') -> Updater model action -> Updater' model action action'
-observe f update action model = 
-  let 
-    (model', effects) = update action model 
-  in 
-    (model', effects, f action)
--}
+observe : (action -> obs) -> Update model action -> Step model action obs 
+observe f update action =
+  update action >> (\(model', effects) -> (model', effects, f action))
 
 
-instance : ((Action State) -> action) -> Component State a b -> View State action b
-instance f component addr state = 
-  component.view 
-    (Signal.forwardTo addr (pack component.update >> f))
-    state 
+type alias Instance submodel model action a = 
+  { view : View model action a
+  , getModel : model -> submodel
+  , setModel : submodel -> model -> model
+  }
 
-{-
-f id = 
 
-  embed buttonComponent .button (\x y -> { y | button = x}) id (Button.model True)
--}
+instance : 
+  (Action model (Maybe action) -> action) -> 
+  Widget submodel model subaction action a -> 
+  Instance submodel model action a
+instance lift widget = 
+  { view = 
+      \addr -> 
+        widget.view (Signal.forwardTo addr (pack (observe widget.observe widget.update) >> lift))
+  , getModel = 
+      widget.getModel
+  , setModel = 
+      widget.setModel
+  }
 
-type alias Ctor model model' action a = 
-  model -> Int -> Component model' action a
+instance' : 
+  (Action model (Maybe action) -> action) -> 
+  Widget submodel model subaction action a -> 
+  View model action a
 
+instance' lift widget = (instance lift widget).view
+      
 
 type alias ButtonStates a = 
-  { a | button : States Button.Model }
+  { a | button : Indexed Button.Model }
+
+--buttonWidget : Button.Model -> Int -> Widget Button.Model (ButtonStates m) Button.Action (Maybe obs) (List Style -> List Html -> Html)
+buttonWidget model = 
+  widget buttonComponent .button (\x y -> {y | button = x}) model
+
+type Test = State' (Action State (Maybe Test))
 
 
-mkButton : Ctor (Button.Model) (ButtonStates model') Button.Action (List Style -> List Html -> Html)
-  {-
-    : Button.Model
-    -> Int
-    -> Component
-           { b | button : States Button.Model }
-           Button.Action
-           (List Style -> List Html -> Html)
-  -}
-
-mkButton model0 = 
-  embed buttonComponent .button (\x y -> {y | button = x}) model0
+addObserver widget f = 
+  { widget 
+  | observe = 
+      \action -> 
+        case f action of 
+          Nothing -> widget.observe action 
+          x -> x
+  }
+        
 
 
+onClick f widget  = 
+  (\action -> 
+    case action of 
+      Button.Click -> 
+        Just f
+      _ -> 
+        Nothing)
+  |> addObserver widget 
 
-buttonInstance : ((Action State) -> action) -> Int -> View State action (List Style -> List Html -> Html)
-buttonInstance f id = 
-  instance f (mkButton (Button.model True) id)
 
-mkTextfield model0 = 
-  embed textfieldComponent .textfield (\x y -> { y | textfield = x}) model0
 
-textfieldInstance f id = 
-  instance f (mkTextfield Textfield.model id)  
+
+
+type alias TextfieldStates a =
+  { a | textfield : Indexed Textfield.Model }
+
+
+
+--textfieldWidget : Textfield.Model -> Int -> Widget Textfield.Model (TextfieldStates model) Textfield.Action (Maybe obs) Html
+textfieldWidget model = 
+  widget textfieldComponent .textfield (\x y -> { y | textfield = x}) model
 
