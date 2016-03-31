@@ -140,7 +140,7 @@ clickView model k =
 
 view : Signal.Address Action -> Model -> Html
 view addr model =
-  Page.view srcUrl "Snackbar & Toast" [ intro ] references
+  Page.body "Snackbar & Toast" srcUrl intro references
     [ grid []
         -- TODO. Buttons should be centered. Desperately need to be able
         -- to add css/classes to top-level element of components (div
@@ -152,7 +152,8 @@ view addr model =
                 []
                 [ text "Toast" ]
             ]
-        , cell [ size All 2, size Phone 2, align Top ]
+        , cell 
+            [ size All 2, size Phone 2, align Top ]
             [ Button.raised
                 (Signal.forwardTo addr SnackbarButtonAction)
                 model.snackbarButton
@@ -179,14 +180,15 @@ intro =
 
 """ 
 
+
 srcUrl : String 
 srcUrl =
   "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Snackbar.elm"
 
+
 references : List (String, String)
 references = 
-  [ Page.demo srcUrl 
-  , Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Snackbar"
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Snackbar"
   , Page.mds "https://www.google.com/design/spec/components/snackbars-toasts.html"
   , Page.mdl "https://www.getmdl.io/components/index.html#snackbar-section"
   ]

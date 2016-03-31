@@ -10,6 +10,9 @@ import Material.Grid as Grid
 import Material.Icon as Icon
 import Material.Style exposing (Style)
 
+import Material.Textfield as Textfield
+import Material.Component exposing (..)
+
 
 -- MODEL
 
@@ -63,34 +66,55 @@ model =
       buttons
       |> List.concatMap (List.map <| \(idx, (ripple, _, _)) -> (idx, Button.model ripple))
       |> Dict.fromList
+  , componentState = state0
   }
 
 
 -- ACTION, UPDATE
 
 
-type Action = Action Index Button.Action
+type Action 
+  = Action Index Button.Action
+  | State' (Material.Component.Action Material.Component.State (Maybe Action))
+  | Click 
+
 
 
 type alias Model =
   { clicked : String
   , buttons : Dict.Dict Index Button.Model
+  , componentState : State
+  -- TODO: Exposed Action should not be parametric.
   }
 
 
 update : Action -> Model -> (Model, Effects.Effects Action)
-update (Action idx action) model =
-  Dict.get idx model.buttons
-  |> Maybe.map (\m0 ->
-    let
-      (m1, e) = Button.update action m0
-    in
-      ({ model | buttons = Dict.insert idx  m1 model.buttons }, Effects.map (Action idx) e)
-  )
-  |> Maybe.withDefault (model, Effects.none)
+update action model = 
+  case action of 
+    Action idx action -> 
+      Dict.get idx model.buttons
+      |> Maybe.map (\m0 ->
+        let
+          (m1, e) = Button.update action m0
+        in
+          ({ model | buttons = Dict.insert idx  m1 model.buttons }, Effects.map (Action idx) e)
+      )
+      |> Maybe.withDefault (model, Effects.none)
+
+    State' action' -> 
+      Material.Component.update State' update action' model
+
+    Click -> 
+      ( tf.map (\m -> { m | value = "You clicked!" }) model, Effects.none ) 
+
+
+
+      
 
 
 -- VIEW
+
+tf = instance State' (textfieldWidget Textfield.model 4) 
 
 
 view : Signal.Address Action -> Model -> Html
@@ -125,4 +149,14 @@ view addr model =
         ]
     )
   )
-  |> Grid.grid []
+  |> (\contents -> 
+    div []
+      [ instance' State' (buttonWidget (Button.model True) 1 |> onClick Click) addr model [] [ text "Click me (1)" ]
+      , instance' State' (buttonWidget (Button.model False) 2) addr model [] [ text "Click me (2)" ]
+      , instance' State' (textfieldWidget Textfield.model 3) addr model
+      , tf.view addr model
+      , Grid.grid [] contents
+      ]
+      )
+
+--i = instance' State' (buttonWidget (Button.model True) 1) -- addr model.componentState [] [ text "Click me (1)" ]

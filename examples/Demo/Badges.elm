@@ -2,7 +2,7 @@ module Demo.Badges (..) where
 
 import Html exposing (..)
 import Material.Badge as Badge
-import Material.Style exposing (..)
+import Material.Style exposing (styled)
 import Material.Icon as Icon
 
 

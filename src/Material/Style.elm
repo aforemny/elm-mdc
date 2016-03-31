@@ -1,7 +1,7 @@
 module Material.Style
   ( Style
   , cs, cs', css, css', attribute, multiple
-  , styled, div', stylesheet
+  , styled, div, stylesheet
   ) where
 
 
@@ -19,7 +19,7 @@ add to or remove from the contents of an already constructed class Attribute.)
 @docs cs, cs', css, css', attribute, multiple
 
 # Application
-@docs styled, div'
+@docs styled, div
 
 # Convenience
 @docs stylesheet
@@ -95,8 +95,7 @@ styled ctor styles attrs' =
 
 
 {-| Handle the ultra-common case of setting attributes of a div element,
-with no custom attributes. Name chosen to avoid conflicts with Html.div. Use
-like this: 
+with no custom attributes. Use like this: 
 
     myDiv : Html 
     myDiv = 
@@ -107,8 +106,8 @@ like this:
         [ text "I'm in color!" ]
 
 -}
-div' : List Style -> List Html -> Html
-div' styles elems = 
+div : List Style -> List Html -> Html
+div styles elems = 
   styled Html.div styles [] elems
 
 

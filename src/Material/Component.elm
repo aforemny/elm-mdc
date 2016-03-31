@@ -158,37 +158,46 @@ observe f update action =
 
 type alias Instance submodel model action a = 
   { view : View model action a
-  , getModel : model -> submodel
-  , setModel : submodel -> model -> model
+  , get : model -> submodel
+  , set : submodel -> model -> model
+  , map : (submodel -> submodel) -> model -> model
   }
 
 
 instance : 
   (Action model (Maybe action) -> action) -> 
   Widget submodel model subaction action a -> 
-  Instance submodel model action a
+  Instance submodel (Model master model) action a
 instance lift widget = 
-  { view = 
-      \addr -> 
-        widget.view (Signal.forwardTo addr (pack (observe widget.observe widget.update) >> lift))
-  , getModel = 
-      widget.getModel
-  , setModel = 
-      widget.setModel
-  }
+  let 
+    get model = 
+      widget.getModel model.componentState
+
+    set x model = 
+      { model | componentState = widget.setModel x model.componentState }
+
+  in
+    { view = 
+        \addr model -> 
+          widget.view (Signal.forwardTo addr (pack (observe widget.observe widget.update) >> lift)) model.componentState
+    , get = get
+    , set = set
+    , map = \f model -> set (f (get model)) model
+    }
+
+
 
 instance' : 
   (Action model (Maybe action) -> action) -> 
   Widget submodel model subaction action a -> 
-  View model action a
-
+  View (Model m model) action a
 instance' lift widget = (instance lift widget).view
       
 
 type alias ButtonStates a = 
   { a | button : Indexed Button.Model }
 
---buttonWidget : Button.Model -> Int -> Widget Button.Model (ButtonStates m) Button.Action (Maybe obs) (List Style -> List Html -> Html)
+buttonWidget : Button.Model -> Int -> Widget Button.Model (ButtonStates m) Button.Action (Maybe obs) (List Style -> List Html -> Html)
 buttonWidget model = 
   widget buttonComponent .button (\x y -> {y | button = x}) model
 
@@ -209,10 +218,8 @@ addObserver widget f =
 onClick f widget  = 
   (\action -> 
     case action of 
-      Button.Click -> 
-        Just f
-      _ -> 
-        Nothing)
+      Button.Click -> Just f
+      _ -> Nothing)
   |> addObserver widget 
 
 
@@ -224,7 +231,7 @@ type alias TextfieldStates a =
 
 
 
---textfieldWidget : Textfield.Model -> Int -> Widget Textfield.Model (TextfieldStates model) Textfield.Action (Maybe obs) Html
+textfieldWidget : Textfield.Model -> Int -> Widget Textfield.Model (TextfieldStates model) Textfield.Action (Maybe obs) Html
 textfieldWidget model = 
   widget textfieldComponent .textfield (\x y -> { y | textfield = x}) model
 

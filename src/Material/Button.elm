@@ -1,7 +1,7 @@
 module Material.Button
   ( Model, model, Action(Click), update
   , flat, raised, fab, minifab, icon
-  , Button, colored, primary, accent
+  , colored, primary, accent
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -29,7 +29,7 @@ See also the
 @docs Model, model, Action, update
 
 # Style
-@docs Button, colored, primary, accent
+@docs colored, primary, accent
 
 # View
 Refer to the
@@ -105,23 +105,19 @@ update action model =
 -- VIEW
 
 
-{-| Type tag for button styles. 
--}
-type Button = X
-
-
-{-| Color button with primary or accent color depending on button type. 
+{-| Color button with primary or accent color depending on button type.
 -}
 colored : Style
-colored = 
+colored =
   cs "mdl-button--colored"
 
 
 {-| Color button with primary color.
 -}
 primary : Style
-primary = 
+primary =
   cs "mdl-button--primary"
+
 
 {-| Color button with accent color. 
 -}
@@ -130,8 +126,6 @@ accent =
   cs "mdl-button--accent"
 
 
-{-| Component view. 
--}
 view : String -> Address Action -> Model -> List Style -> List Html -> Html
 view kind addr model styling html =
   styled button 
@@ -150,10 +144,19 @@ view kind addr model styling html =
         Ripple.view
           (forwardTo addr Ripple)
           [ class "mdl-button__ripple-container"
-          , Helpers.blurOn "mouseup" ]
+          , Helpers.blurOn "mouseup" 
+          ]
           ripple
         :: html
       _ -> html)
+
+
+-- Fake address (for link buttons). 
+
+
+addr : Signal.Address Action
+addr = (Signal.mailbox Click).address
+
 
 
 {-| From the
@@ -247,3 +250,4 @@ Example use (no color, displaying a '+' icon):
 -}
 icon : Address Action -> Model -> List Style -> List Html -> Html
 icon = view "mdl-button--icon"
+
