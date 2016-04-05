@@ -132,16 +132,7 @@ update action model =
       lift .snackbar (\m x -> { m | snackbar = x }) SnackbarAction Demo.Snackbar.update a model
 
     RoutingAction a ->
-      let
-        ( routing', fx ) =
-          Routing.update a model.routing
-
-        model' =
-          { model | routing = routing' }
-      in
-        ( model'
-        , Effects.map RoutingAction fx
-        )
+      lift .routing (\m x -> { m | routing = x }) RoutingAction Routing.update a model
 
     HopAction _ ->
       ( model, Effects.none )
@@ -249,23 +240,16 @@ routingView : Signal.Address Action -> Model -> Html
 routingView addr model =
   case (Debug.log "Route " model.routing.route) of
     Routing.Home ->
-      let
-        model' =
-          { model | layout = setTab model.layout 0 }
-      in
-        appView addr model'
+      appView addr { model | layout = setTab model.layout 0 }
 
     Routing.TabRoute tabNumber ->
-      let
-        model' =
-          { model | layout = setTab model.layout tabNumber }
-      in
-        appView addr model'
+      appView addr { model | layout = setTab model.layout tabNumber }
 
     Routing.NotFoundRoute ->
       div [] [ h2 [] [ text "Not found" ] ]
 
 
+setTab : Layout.Model -> Int -> Layout.Model
 setTab layout tabNumber =
   { layout | selectedTab = tabNumber }
 
@@ -307,11 +291,6 @@ appView addr model =
         Material.topWithScheme Color.Teal Color.Red
 
 
-routerSignal : Signal Action
-routerSignal =
-  Signal.map RoutingAction Routing.signal
-
-
 init : ( Model, Effects.Effects Action )
 init =
   ( model, Effects.none )
@@ -320,7 +299,7 @@ init =
 inputs : List (Signal.Signal Action)
 inputs =
   [ Layout.setupSizeChangeSignal LayoutAction
-  , routerSignal
+  , Signal.map RoutingAction Routing.signal
   ]
 
 
