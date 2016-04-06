@@ -3,4 +3,7 @@ install:
   - npm install -g elm
   - elm-package install -y
 script: 
+  - elm-make --yes examples/Component.elm
+  - elm-make --yes examples/Component-TEA.elm
   - elm-make --yes examples/Demo.elm
+  
