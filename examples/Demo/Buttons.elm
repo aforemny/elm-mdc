@@ -10,7 +10,6 @@ import Material.Grid as Grid
 import Material.Icon as Icon
 import Material.Style exposing (Style)
 
-import Material.Textfield as Textfield
 
 
 -- MODEL

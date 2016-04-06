@@ -296,18 +296,28 @@ type alias Observer obs =
   Component.Observer (Action obs) obs
 
 
+actionObserver : Observer ons 
+actionObserver action = 
+  case action of 
+    Action action' -> 
+      Just action' 
+  
+    _ -> 
+      Nothing
+
+
+
 {-| Component instance.
 -}
 instance : 
   Int
   -> (Component.Action (State state obs) obs -> obs)
   -> (Model obs)
-  -> List (Observer obs)
   -> Instance (State state obs) obs
 
-instance id lift model0 observers = 
+instance id lift model0 = 
   Component.instance 
-    view update .snackbar (\x y -> {y | snackbar = x}) id lift model0 observers
+    view update .snackbar (\x y -> {y | snackbar = x}) id lift model0 [ actionObserver ]
 
 
 {-|
@@ -324,15 +334,4 @@ add contents inst model =
       update (Add contents) (inst.get model)
   in
     (inst.set sb model, Effects.map inst.fwd fx)
-
-{-| Lift the button Click action to your own action. E.g., 
--}
-{-
-fwdClick : obs -> (Observer obs)
-fwdClick obs action = 
-  case action of 
-    Click -> Just obs
-    _ -> Nothing 
-
--}
 

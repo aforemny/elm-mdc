@@ -182,7 +182,7 @@ type alias State state =
 {-| 
 -}
 type alias Instance state obs = 
-  Component.Instance Model state obs Html
+  Component.Instance Model state Action obs Html
 
 
 {-| Component constructor. See module `Material`.

@@ -115,7 +115,7 @@ addToast =
 
 snackbarComponent : Snackbar.Instance Mdl Action
 snackbarComponent = 
-  Snackbar.instance 2 MDL Snackbar.model []
+  Snackbar.instance 2 MDL Snackbar.model 
 
 
 

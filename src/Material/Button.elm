@@ -275,6 +275,7 @@ type alias Instance state obs =
   Component.Instance 
     Model
     state
+    Action
     obs 
     (List Style -> List Html -> Html)
 
