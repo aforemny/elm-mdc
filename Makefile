@@ -3,7 +3,7 @@ PAGES=../elm-mdl-gh-pages
 comp: 
 	elm-make examples/Component.elm --warn --output elm.js
 
-elm.js: 
+demo:
 	elm-make examples/Demo.elm --warn --output elm.js
 
 wip-pages : 

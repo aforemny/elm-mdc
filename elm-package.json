@@ -15,7 +15,8 @@
         "Material.Button",
         "Material.Textfield",
         "Material.Layout",
-        "Material.Grid"
+        "Material.Grid", 
+        "Material.Component"
     ],
     "dependencies": {
         "debois/elm-dom": "1.0.0 <= v < 2.0.0",

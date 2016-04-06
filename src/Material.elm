@@ -141,38 +141,41 @@ import Effects exposing (Effects)
 
 import Material.Button as Button
 import Material.Textfield as Textfield
+import Material.Snackbar as Snackbar
 import Material.Component as Component exposing (Indexed)
 
 
 {-| Model encompassing all Material components. 
 -}
-type alias Model = 
+type alias Model a = 
   { button : Indexed Button.Model
   , textfield : Indexed Textfield.Model
+  , snackbar : Indexed (Snackbar.Model a)
   }
 
 
 {-| Initial model.
 -}
-model : Model
+model : Model a
 model = 
   { button = Dict.empty
   , textfield = Dict.empty
+  , snackbar = Dict.empty
   }
 
 
 {-| Action encompassing actions of all Material components. 
 -}
 type alias Action action = 
-  Component.Action Model action
+  Component.Action (Model action) action
 
 
 {-| Update function for the above Action. 
 -}
 update : 
   (Action action -> action) 
-  -> (Action action) 
-  -> Model 
-  -> (Model, Effects action)
+  -> Action action
+  -> Model action
+  -> (Model action, Effects action)
 update = 
   Component.update

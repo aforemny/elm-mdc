@@ -14,7 +14,7 @@ import Material.Button as Button
 
 type alias Model = 
   { count : Int
-  , mdl : Material.Model    
+  , mdl : Material.Model Action
       -- Boilerplate: Model store for any and all MDL components you need. 
   }
 
@@ -23,7 +23,7 @@ type alias Model =
 model : Model 
 model = 
   { count = 0
-  , mdl = Material.model    
+  , mdl = Material.model 
       -- Always use this initial MDL component model store.
   }
 
@@ -66,6 +66,8 @@ update action model =
 -- VIEW
 
 
+type alias Mdl = Material.Model Action
+
 {- We construct the instances of the Button component that we need, one 
 for the increase button, one for the reset button. First, the increase
 button. The arguments are: 
@@ -79,7 +81,7 @@ button. The arguments are:
     In this case, we hook up Click events of the button to the `Increase` action
     defined above. 
 -}
-increase : Button.Instance Material.Model Action
+increase : Button.Instance Mdl Action
 increase =
   Button.instance 0 MDL 
     Button.flat (Button.model True) 
@@ -89,7 +91,7 @@ increase =
 {- Next, the reset button. This one has id 1, does not ripple, and forwards its
 click event to our Reset action.
 -}
-reset : Button.Instance Material.Model Action
+reset : Button.Instance Mdl Action
 reset = 
   Button.instance 1 MDL 
     Button.flat (Button.model False)

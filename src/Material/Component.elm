@@ -35,30 +35,17 @@ instead at `Material`.
 @docs instance
 
 # Instance consumption
-@docs update
+@docs update, Action
 
 -}
 
 import Effects exposing (Effects)
 import Dict exposing (Dict)
 
-import Material.Helpers exposing (map1, map2, map1st, map2nd)
+import Material.Helpers exposing (map1, map2, map1st, map2nd, Update, Update')
 
 
 -- TYPES
-
-
-{- Variant of EA update function type, where effects may be 
-lifted to a different type. 
--}
-type alias Update' model action action' = 
-  action -> model -> (model, Effects action')
-
-
-{-| Standard EA update function type. 
--}
-type alias Update model action = 
-  Update' model action action
 
 
 {-| Standard EA view function type. 
@@ -66,6 +53,8 @@ type alias Update model action =
 type alias View model action a = 
   Signal.Address action -> model -> a
 
+
+-- EMBEDDING MODELS 
 
 
 {-| Indexed families of things.
@@ -136,14 +125,13 @@ embedIndexed view update get set model0 id =
 
 
 
+-- LIFTING ACTIONS
 
-{-| We need a generic Action which encompasses x
+
+{-| Generic MDL Action. 
 -}
 type Action model obs = 
   A (model -> (model, Effects (Action model obs), Maybe obs))
- 
-
--- FOR CONSUMERS
 
 
 {-| Generic update function for Action. 
@@ -183,11 +171,12 @@ type alias Step model action obs =
 and get/set/map for, well, getting, setting, and mapping the component
 model. 
 -}
-type alias Instance submodel model action a = 
+type alias Instance submodel model subaction action a = 
   { view : View model action a
   , get : model -> submodel
   , set : submodel -> model -> model
   , map : (submodel -> submodel) -> model -> model
+  , fwd : subaction -> action 
   }
 
 
@@ -240,7 +229,7 @@ instance' :
   (Action model action -> action) -> 
   List (Observer subaction action) -> 
   Embedding submodel model subaction a -> 
-  Instance submodel model action a
+  Instance submodel model subaction action a
 instance' lift observers embedding = 
   let 
     fwd = 
@@ -256,6 +245,7 @@ instance' lift observers embedding =
     , get = get
     , set = set
     , map = \f model -> set (f (get model)) model
+    , fwd = fwd
     }
 
 
@@ -282,11 +272,8 @@ instance
     -> (Action container observation -> observation)
     -> model
     -> List (Observer action observation)
-    -> Instance model container observation a
+    -> Instance model container action observation a
 
 instance view update get set id lift model0 observers = 
   embedIndexed view update get set model0 id 
     |> instance' lift observers
-
-
-

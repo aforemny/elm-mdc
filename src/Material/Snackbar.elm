@@ -2,6 +2,7 @@ module Material.Snackbar
   ( Contents, Model, model, toast, snackbar, isActive
   , Action(Add, Action), update
   , view
+  , Instance, instance, add
   ) where
 
 {-| TODO
@@ -24,6 +25,7 @@ import Task
 import Time exposing (Time)
 import Maybe exposing (andThen)
 
+import Material.Component as Component exposing (Indexed)
 import Material.Helpers exposing (mapFx, addFx)
 
 
@@ -44,7 +46,7 @@ type alias Contents a =
 -}
 type alias Model a =
   { queue : List (Contents a)
-  , state : State a
+  , state : State' a
   , seq : Int
   }
 
@@ -84,6 +86,7 @@ snackbar message actionMessage action =
   , fade = 250
   }
 
+
 {-| TODO
 -}
 isActive : Model a -> Maybe (Contents a)
@@ -107,7 +110,7 @@ contentsOf model =
 -- SNACKBAR STATE MACHINE
 
 
-type State a
+type State' a
   = Inert
   | Active (Contents a)
   | Fading (Contents a)
@@ -270,3 +273,66 @@ view addr model =
           )
           buttonBody
       ]
+
+
+-- COMPONENT
+
+
+{-|
+-}
+type alias State s  obs = 
+  { s | snackbar : Indexed (Model obs) }
+
+
+{-|
+-}
+type alias Instance state obs =
+  Component.Instance (Model obs) state (Action obs) obs Html
+
+
+{-|
+-}
+type alias Observer obs = 
+  Component.Observer (Action obs) obs
+
+
+{-| Component instance.
+-}
+instance : 
+  Int
+  -> (Component.Action (State state obs) obs -> obs)
+  -> (Model obs)
+  -> List (Observer obs)
+  -> Instance (State state obs) obs
+
+instance id lift model0 observers = 
+  Component.instance 
+    view update .snackbar (\x y -> {y | snackbar = x}) id lift model0 observers
+
+
+{-|
+  TODO
+-}
+add : 
+  Contents obs 
+  -> Instance (State state obs) obs 
+  -> (State state obs)
+  -> (State state obs, Effects obs)
+add contents inst model = 
+  let
+    (sb, fx) = 
+      update (Add contents) (inst.get model)
+  in
+    (inst.set sb model, Effects.map inst.fwd fx)
+
+{-| Lift the button Click action to your own action. E.g., 
+-}
+{-
+fwdClick : obs -> (Observer obs)
+fwdClick obs action = 
+  case action of 
+    Click -> Just obs
+    _ -> Nothing 
+
+-}
+

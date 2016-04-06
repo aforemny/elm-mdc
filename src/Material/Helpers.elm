@@ -53,3 +53,39 @@ map2nd : (b -> c) -> (a,b) -> (a,c)
 map2nd f (x,y) = (x, f y)
 
 
+{- Variant of EA update function type, where effects may be 
+lifted to a different type. 
+-}
+type alias Update' model action action' = 
+  action -> model -> (model, Effects action')
+
+
+{-| Standard EA update function type. 
+-}
+type alias Update model action = 
+  Update' model action action
+
+
+lift' :
+  (model -> submodel) ->                                      -- get
+  (model -> submodel -> model) ->                             -- set
+  (subaction -> submodel -> submodel) -> 
+  subaction ->                                                -- action
+  model ->                                                    -- model
+  (model, Effects action)
+lift' get set update action model =
+  (set model (update action (get model)), Effects.none)
+
+lift :
+  (model -> submodel) ->                                      -- get
+  (model -> submodel -> model) ->                             -- set
+  (subaction -> action) ->                                    -- fwd
+  Update submodel subaction ->                               -- update
+  subaction ->                                                -- action
+  model ->                                                    -- model
+  (model, Effects action)
+lift get set fwd update action model =
+  let
+    (submodel', e) = update action (get model)
+  in
+    (set model submodel', Effects.map fwd e)

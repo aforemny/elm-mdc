@@ -11,8 +11,6 @@ import Material.Icon as Icon
 import Material.Style exposing (Style)
 
 import Material.Textfield as Textfield
-import Material.Component as Component 
-import Material.Component.All as Setup
 
 
 -- MODEL
@@ -69,7 +67,6 @@ model =
       buttons
       |> List.concatMap (List.map <| \(idx, (ripple, _, _)) -> (idx, Button.model ripple))
       |> Dict.fromList
-  , componentState = Setup.state
   }
 
 
@@ -78,15 +75,11 @@ model =
 
 type Action 
   = Action Index Button.Action
-  | State (Setup.Action Action)
-  | Click 
-  | Input String
 
 
 type alias Model =
   { clicked : String
   , buttons : Dict.Dict Index Button.Model
-  , componentState : Setup.State
   }
 
 
@@ -102,25 +95,6 @@ update action model =
           ({ model | buttons = Dict.insert idx  m1 model.buttons }, Effects.map (Action idx) e)
       )
       |> Maybe.withDefault (model, Effects.none)
-
-    State action' -> 
-      Component.update State update action' model
-
-    Click -> 
-      ( tf.map (\m -> { m | value = "You clicked!" }) model, Effects.none ) 
-
-    Input str -> 
-      ( tf.map (\m -> { m | value = "You wrote '" ++ str ++ "' in the other guy."}) model 
-      , Effects.none
-      )
-
-
-instance = Component.instance State
-instance' = Component.instance' State
-
-
-tf = instance <| Textfield.component Textfield.model 4
-
 
 
 -- VIEW
@@ -161,12 +135,7 @@ view addr model =
   )
   |> (\contents -> 
     div []
-      [ instance' (Button.component Button.flat (Button.model True) 1 |> onClick Click) addr model [] [ text "Click me (1)" ]
-      , instance' (Button.component Button.raised (Button.model False) 2) addr model [] [ text "Click me (2)" ]
-      , instance' (Textfield.component Textfield.model 3 |> Textfield.onInput Input) addr model
-      , tf.view addr model
-      , Grid.grid [] contents
+      [ Grid.grid [] contents
       ]
       )
 
---i = instance' State (buttonWidget (Button.model True) 1) -- addr model.componentState [] [ text "Click me (1)" ]

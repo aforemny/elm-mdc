@@ -182,14 +182,10 @@ type alias State state =
 {-| 
 -}
 type alias Instance state obs = 
-  Component.Instance
-    Model
-    state
-    obs
-    Html
+  Component.Instance Model state obs Html
 
 
-{-| Component constructor. 
+{-| Component constructor. See module `Material`.
 -}
 instance : 
   Int
@@ -198,13 +194,11 @@ instance :
   -> List (Component.Observer Action obs)
   -> Instance (State state) obs
 
-
-instance id lift model0 observers = 
+instance = 
   let 
     update' action model = (update action model, Effects.none)
   in 
-    Component.setup view update' .textfield (\x y -> {y | textfield = x}) model0 id
-      |> Component.instance lift observers
+    Component.instance view update' .textfield (\x y -> {y | textfield = x}) 
 
 
 {-| Lift the button Click action to your own action. E.g., 

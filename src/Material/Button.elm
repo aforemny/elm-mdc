@@ -279,7 +279,8 @@ type alias Instance state obs =
     (List Style -> List Html -> Html)
 
 
-{-| Ydrk. -}
+{-| Component instance.
+-}
 instance : 
   Int
   -> (Component.Action (State state) obs -> obs)
@@ -289,8 +290,8 @@ instance :
   -> Instance (State state) obs
 
 instance id lift view model0 observers = 
-  Component.setup view update .button (\x y -> {y | button = x}) model0 id
-    |> Component.instance lift observers
+  Component.instance 
+    view update .button (\x y -> {y | button = x}) id lift model0 observers
 
 
 {-| Lift the button Click action to your own action. E.g., 

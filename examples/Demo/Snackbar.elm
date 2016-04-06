@@ -5,13 +5,14 @@ import Html exposing (..)
 import Html.Attributes exposing (class, style, key)
 import Array exposing (Array)
 
+import Material.Helpers exposing (map1st, map2nd)
 import Material.Color as Color
 import Material.Style exposing (styled, cs)
 import Material.Snackbar as Snackbar
 import Material.Button as Button exposing (Action(..))
 import Material.Grid exposing (..)
 import Material.Elevation as Elevation
-import Material exposing (lift, lift')
+import Material 
 
 import Demo.Page as Page
 
@@ -19,12 +20,13 @@ import Demo.Page as Page
 -- MODEL
 
 
+type alias Mdl = Material.Model Action
+
+
 type alias Model =
   { count : Int
   , clicked : List Int
-  , snackbar : Snackbar.Model Action
-  , toastButton : Button.Model
-  , snackbarButton : Button.Model
+  , mdl : Mdl
   }
 
 
@@ -32,9 +34,7 @@ model : Model
 model =
   { count = 0
   , clicked = []
-  , snackbar = Snackbar.model
-  , toastButton = Button.model True
-  , snackbarButton = Button.model True
+  , mdl = Material.model
   }
 
 
@@ -43,10 +43,9 @@ model =
 
 type Action
   = Undo Int
-  -- Components
-  | SnackbarAction (Snackbar.Action Action)
-  | ToastButtonAction Button.Action
-  | SnackbarButtonAction Button.Action
+  | AddSnackbar
+  | AddToast
+  | MDL (Material.Action Action)
 
 
 snackbar : Int -> Snackbar.Contents Action
@@ -65,26 +64,26 @@ toast k =
 
 add : (Int -> Snackbar.Contents Action) -> Model -> (Model, Effects Action)
 add f model =
-  let
-    (snackbar', effects) =
-      Snackbar.update (Snackbar.Add (f model.count)) model.snackbar
-  in
-    ({ model
-     | snackbar = snackbar'
-     , count = model.count + 1
-     , clicked = model.count :: model.clicked
-     }
-    , Effects.map SnackbarAction effects)
-
+  let 
+    (mdl', fx) = 
+      Snackbar.add (f model.count) snackbarComponent model.mdl
+    model' = 
+      { model 
+      | mdl = mdl'
+      , count = model.count + 1
+      , clicked = model.count :: model.clicked
+      }
+  in 
+    (model', fx)
 
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    SnackbarButtonAction Click ->
+    AddSnackbar ->
       add snackbar model
 
-    ToastButtonAction Click ->
+    AddToast ->
       add toast model
 
     Undo k ->
@@ -93,15 +92,31 @@ update action model =
        }
       , none)
 
-    SnackbarAction (Snackbar.Action action')
-      -> update action' model
-
-    SnackbarAction       action' -> lift .snackbar       (\m x -> {m|snackbar      =x}) SnackbarAction       Snackbar.update action' model
-    ToastButtonAction    action' -> lift .toastButton    (\m x -> {m|toastButton   =x}) ToastButtonAction    Button.update   action' model
-    SnackbarButtonAction action' -> lift .snackbarButton (\m x -> {m|snackbarButton=x}) SnackbarButtonAction Button.update   action' model
-
+    MDL action' -> 
+      Material.update MDL action' model.mdl
+        |> map1st (\m -> { model | mdl = m })
 
 -- VIEW
+
+
+addSnackbar : Button.Instance Mdl Action 
+addSnackbar = 
+  Button.instance 0 MDL
+    Button.raised (Button.model True)
+    [ Button.fwdClick AddSnackbar ]
+
+
+addToast : Button.Instance Mdl Action 
+addToast = 
+  Button.instance 1 MDL
+    Button.raised (Button.model True)
+    [ Button.fwdClick AddToast ]
+
+
+snackbarComponent : Snackbar.Instance Mdl Action
+snackbarComponent = 
+  Snackbar.instance 2 MDL Snackbar.model []
+
 
 
 clickView : Model -> Int -> Html
@@ -112,9 +127,12 @@ clickView model k =
         |> Maybe.withDefault Color.Teal
         |> flip Color.color Color.S500
 
+    sbmodel = 
+      snackbarComponent.get model.mdl
+
     selected =
-      (k == model.snackbar.seq - 1) &&
-        (Snackbar.isActive model.snackbar /= Nothing)
+      (k == sbmodel.seq - 1) &&
+        (Snackbar.isActive sbmodel /= Nothing)
   in
     styled div
       [ Color.background color
@@ -146,25 +164,17 @@ view addr model =
         -- to add css/classes to top-level element of components (div
         -- in grid, button in button, div in textfield etc.)
         [ cell [ size All 2, size Phone 2, align Top ]
-            [ Button.raised
-                (Signal.forwardTo addr ToastButtonAction)
-                model.toastButton 
-                []
-                [ text "Toast" ]
+            [ addToast.view addr model.mdl [] [ text "Toast" ]
             ]
         , cell 
             [ size All 2, size Phone 2, align Top ]
-            [ Button.raised
-                (Signal.forwardTo addr SnackbarButtonAction)
-                model.snackbarButton
-                []
-                [ text "Snackbar" ]
+            [ addSnackbar.view addr model.mdl [] [ text "Snackbar" ]
             ]
         , cell
             [ size Desktop 7, size Tablet 3, size Phone 12, align Top ]
             (model.clicked |> List.reverse |> List.map (clickView model))
         ]
-    , Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar
+    , snackbarComponent.view addr model.mdl 
     ]
 
 

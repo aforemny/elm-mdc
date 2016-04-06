@@ -10,8 +10,9 @@ import Array exposing (Array)
 
 import Material.Color as Color
 import Material.Layout as Layout exposing (defaultLayoutModel)
-import Material exposing (lift, lift')
+import Material.Helpers exposing (lift, lift')
 import Material.Style as Style
+import Material.Scheme as Scheme
 
 import Demo.Buttons
 import Demo.Grid
@@ -178,7 +179,7 @@ view addr model =
        your html, as done with page.html. Removing it will then
        fix the flicker you see on load.
     -}
-    |> Material.topWithScheme Color.Teal Color.Red
+    |> Scheme.topWithScheme Color.Teal Color.Red
 
 
 init : (Model, Effects.Effects Action)
