@@ -1,127 +1,178 @@
-module Material
-  ( topWithScheme, top
-  , Updater', Updater, lift, lift'
-  ) where
+module Material 
+  ( Model, model
+  , Action, update
+  )
+  where
 
-{-| Material Design component library for Elm based on Google's
+{-|
+
+Material Design component library for Elm based on Google's
 [Material Design Lite](https://www.getmdl.io/).
 
-This module contains only initial CSS setup and convenience function for alleviating
-the pain of the missing component architecture in Elm. 
+Click 
+[here](https://debois.github.io/elm-mdl/)
+for a live demo. 
 
-# Loading CSS
-@docs topWithScheme, top
+# Component model 
 
-# Component convienience
-@docs Updater', Updater, lift', lift
+The component model of the library is simply the Elm Architecture, e.g., 
+each component has Model, Action, view, and update. A minimal example using
+this library in plain Elm Architecture can be found 
+[here](https://github.com/debois/elm-mdl/blob/master/examples/Component-EA.elm).
+
+Nesting large amounts of components in the Elm Architecture is somewhat 
+unwieldy because of the large amount of boilerplate one has to write. This
+library includes "component support", for getting rid of most of that
+boilerplate. A minimal example using component support is 
+[here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
+
+It is important to note that component support lives __within__ the Elm
+architecture; it is not an alternative architecture. 
+
+# Getting started
+
+The easiest way to get started is to start with one of the minimal examples above.
+We recommend going with the library's component support rather than working
+directly in plain Elm Architecture.
+
+# This module
+
+This module contains only convenience functions for working with nested 
+components in the Elm architecture. A minimal example using this library
+with component support can be found 
+[here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
+We encourage you to use the library in this fashion.
+
+All examples in this subsection is from the 
+[above minimal example](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm)
+
+Here is how you use component support in general.  First, boilerplate. 
+
+ 1. Include `Material`:
+    `import Material`
+
+ 2. Add a model container Material components to your model:
+
+    type alias Model = 
+      { ...
+      , mdl : Material.Model    
+      }
+
+    model : Model = 
+      { ...
+      , mdl = Material.model
+      }
+
+ 3. Add an action for Material components. 
+
+    type Action = 
+      ...
+        | MDL (Material.Action Action)
+
+ 4. Handle that action in your update function as follows:
+
+    update action model = 
+      case action of 
+        ...
+          MDL action' -> 
+            let (mdl', fx) = 
+              Material.update MDL action' model.mdl 
+            in 
+              ( { model | mdl = mdl' } , fx )
+
+
+Next, make the component instances you need. Do this in the View section of your 
+source file. Let's say you need a textfield for name entry, and you'd like to
+be notifed whenever the field changes value through your own NameChanged action: 
+
+    import Material.Textfield as Textfield
+
+    ...
+
+    type Action = 
+      ...
+      | NameChanged String
+
+    ... 
+
+    update action model = 
+      case action of 
+        ...
+        NameChanged name -> 
+          -- Do whatever you need to do. 
+
+    ...
+
+    nameInput : Textfield.Instance Material.Model Action
+    nameInput = 
+      Textfield.instance 2 MDL Textfield.model 
+        [ Textfield.fwdInput NameChanged ] 
+
+    
+    view addr model = 
+      ...
+      nameInput.view addr model.mdl 
+
+
+The win relative to using plain Elm Architecture is that adding a component
+neither requires you to update your model, your Actions, nor your update function. 
+(As in the above example, you will frequently have to update the latter two anyway, 
+but now it's not boilerplate, its "business logic".)
+
+
+## Optimising for size
+
+Using this module will force all elm-mdl components to be built and included in 
+your application. If this is unacceptable, you can custom-build a version of this
+module that uses only the components you need. To do so, you need to re-implement
+the present module, modifying the values `model` and `Model`. The module source
+can be found
+  [here](https://github.com/debois/elm-mdl/blob/master/src/Material.elm).
+
+You do not need to re-build the entire elm-mdl library; simply copy the 
+source of this module, give it a new name, modify as itMatendicated above, then use
+your modified module rather than this one. 
+
+@docs Model, model, Action, update
 -}
 
+import Dict 
+import Effects exposing (Effects)
 
-import String
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Effects exposing (..)
-
-import Material.Color exposing (Palette(..), Color)
-
+import Material.Button as Button
+import Material.Textfield as Textfield
+import Material.Component as Component exposing (Indexed)
 
 
-scheme : Palette -> Palette -> String
-scheme primary accent =
-  [ "https://code.getmdl.io/1.1.2/" ++ Material.Color.scheme primary accent 
-  , "https://fonts.googleapis.com/icon?family=Material+Icons"
-  , "https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext"
-  ]
-  |> List.map (\url -> "@import url(" ++ url ++ ");")
-  |> String.join "\n"
-
-
-
-{-| Top-level container for Material components. This will force loading of
-Material Design Lite CSS files Any component you use must be contained
-in this container, OR you must manually add something like the following to
-your .html file:
-
-    <!-- MDL -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.min.css" />
-
-Supply primary and accent colors as parameters. Refer to the
-Material Design Lite [Custom CSS theme builder](https://www.getmdl.io/customize/index.html)
-to preview combinations.
-
-Please be aware that Grey, Blue Grey, and Brown cannot be secondary colors. If
-you choose them as such anyway, you will get the default theme.
-
-Using this top-level container is not recommended, as most browsers will load
-css concurrently with rendering the initial page, which will produce a flicker
-on page load. The container is included only to provide an option to get started
-quickly and for use with elm-reactor.
-
+{-| Model encompassing all Material components. 
 -}
-topWithScheme: Palette -> Palette -> Html -> Html
-topWithScheme primary accent content =
-  div [] <|
-  {- Trick from Peter Damoc to load CSS outside of <head>.
-     https://github.com/pdamoc/elm-mdl/blob/master/src/Mdl.elm#L63
-   -}
-  [ node "style"
-    [ type' "text/css"]
-    [ Html.text <| scheme primary accent]
-  , content
-  ]
+type alias Model = 
+  { button : Indexed Button.Model
+  , textfield : Indexed Textfield.Model
+  }
 
 
-{-| Top-level container with default color scheme.
+{-| Initial model.
 -}
-top : Html -> Html
-top content =
-  -- Force default color-scheme by picking an invalid combination.
-  topWithScheme Grey Grey content
+model : Model
+model = 
+  { button = Dict.empty
+  , textfield = Dict.empty
+  }
 
 
-
-{-| TODO.
+{-| Action encompassing actions of all Material components. 
 -}
-type alias Updater' action model =
-  action -> model -> model
+type alias Action action = 
+  Component.Action Model action
 
 
-{-| TODO.
+{-| Update function for the above Action. 
 -}
-type alias Updater action model =
-  action -> model -> (model, Effects action)
-
-type alias ComponentModel model components =
-  { model | components : components }
-
-
-{-| TODO.
--}
-lift' :
-  (model -> submodel) ->                                      -- get
-  (model -> submodel -> model) ->                             -- set
-  Updater' subaction submodel ->                               -- update
-  subaction ->                                                -- action
-  model ->                                                    -- model
-  (model, Effects action)
-lift' get set update action model =
-  (set model (update action (get model)), Effects.none)
-
-
-{-| TODO.
--}
-lift :
-  (model -> submodel) ->                                      -- get
-  (model -> submodel -> model) ->                             -- set
-  (subaction -> action) ->                                    -- fwd
-  Updater subaction submodel ->                               -- update
-  subaction ->                                                -- action
-  model ->                                                    -- model
-  (model, Effects action)
-lift get set fwd update action model =
-  let
-    (submodel', e) = update action (get model)
-  in
-    (set model submodel', Effects.map fwd e)
+update : 
+  (Action action -> action) 
+  -> (Action action) 
+  -> Model 
+  -> (Model, Effects action)
+update = 
+  Component.update

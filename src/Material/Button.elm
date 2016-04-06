@@ -2,7 +2,7 @@ module Material.Button
   ( Model, model, Action(Click), update
   , flat, raised, fab, minifab, icon
   , colored, primary, accent
-  , View, component, Component, onClick
+  , View, State, Instance, instance, fwdClick 
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -40,7 +40,7 @@ for details about what type of buttons are appropriate for which situations.
 @docs flat, raised, fab, minifab, icon
 
 # Component 
-@docs Component, component, onClick
+@docs State, Instance, instance, fwdClick
 
 -}
 
@@ -53,7 +53,7 @@ import Signal exposing (Address, forwardTo)
 import Material.Helpers as Helpers
 import Material.Style exposing (Style, cs, cs', styled)
 import Material.Ripple as Ripple
-import Material.Component as Component exposing (Component, Indexed)
+import Material.Component as Component exposing (Indexed)
 
 {-| MDL button.
 -}
@@ -259,37 +259,46 @@ icon = view "mdl-button--icon"
 -- COMPONENT
 
 
-{-| Button component type. 
+{-|
 -}
-type alias Component state obs = 
-  Component.Component 
+type alias State s =
+  { s | button : Indexed Model }
+
+
+type alias Observer obs = 
+  Component.Observer Action obs
+
+
+{-|
+-}
+type alias Instance state obs =
+  Component.Instance 
     Model
-    { state | button : Indexed Model }
-    Action 
-    obs
+    state
+    obs 
     (List Style -> List Html -> Html)
 
 
-{-| Component constructor. Provide the view function your button should
-have as the first argument, e.g., 
+{-| Ydrk. -}
+instance : 
+  Int
+  -> (Component.Action (State state) obs -> obs)
+  -> (Address Action -> Model -> List Style -> List Html -> Html)
+  -> Model
+  -> List (Observer obs)
+  -> Instance (State state) obs
 
-    button = Button.component Button.minifab (Button.model True) 0
-
--}
-component : View -> Model -> Int -> Component state action
-component view = 
-  Component.setup view update .button (\x y -> {y | button = x}) 
+instance id lift view model0 observers = 
+  Component.setup view update .button (\x y -> {y | button = x}) model0 id
+    |> Component.instance lift observers
 
 
 {-| Lift the button Click action to your own action. E.g., 
 -}
-onClick : obs -> Component state obs -> Component state obs
-onClick o component  = 
-  (\action -> 
-    case action of 
-      Click -> Just o
-      _ -> Nothing)
-  |> Component.addObserver component 
-
+fwdClick : obs -> (Observer obs)
+fwdClick obs action = 
+  case action of 
+    Click -> Just obs
+    _ -> Nothing 
 
 

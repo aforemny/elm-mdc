@@ -30,7 +30,8 @@ This implementation provides only single-line.
 @docs Action, Model, model, update, view
 
 # Component
-@docs component, Component, onInput
+@docs State, Instance
+@docs instance, fwdInput, fwdBlur, fwdFocus
 
 -}
 
@@ -172,35 +173,63 @@ view addr model =
 -- COMPONENT 
 
 
-{-| Textfield component type. 
+{-|
 -}
-type alias Component state obs = 
-  Component.Component 
+type alias State state = 
+  { state | textfield : Indexed Model }
+
+
+{-| 
+-}
+type alias Instance state obs = 
+  Component.Instance
     Model
-    { state | textfield : Indexed Model }
-    Action 
+    state
     obs
     Html
 
 
 {-| Component constructor. 
 -}
-component : Model -> Int -> Component state action
-component = 
+instance : 
+  Int
+  -> (Component.Action (State state) obs -> obs)
+  -> Model
+  -> List (Component.Observer Action obs)
+  -> Instance (State state) obs
+
+
+instance id lift model0 observers = 
   let 
     update' action model = (update action model, Effects.none)
   in 
-    Component.setup view update' .textfield (\x y -> {y | textfield = x}) 
+    Component.setup view update' .textfield (\x y -> {y | textfield = x}) model0 id
+      |> Component.instance lift observers
 
 
 {-| Lift the button Click action to your own action. E.g., 
 -}
-onInput : (String -> obs) -> Component state obs -> Component state obs
-onInput f component  = 
-  (\action -> 
-    case action of 
-      Input str -> Just (f str)
-      _ -> Nothing)
-  |> Component.addObserver component 
+fwdInput : (String -> obs) -> Action -> Maybe obs
+fwdInput f action =
+  case action of 
+    Input str -> Just (f str)
+    _ -> Nothing
 
+
+{-| Lift the Blur action to your own action. 
+-}
+fwdBlur : obs -> Action -> Maybe obs
+fwdBlur o action = 
+  case action of 
+    Blur -> Just o
+    _ -> Nothing
+
+
+{-| Lift the Focus action to your own action.
+-}
+fwdFocus : obs -> Action -> Maybe obs
+fwdFocus o action =
+  case action of 
+    Focus -> Just o 
+    _ -> Nothing 
 
