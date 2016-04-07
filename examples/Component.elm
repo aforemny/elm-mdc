@@ -15,7 +15,7 @@ import Material.Button as Button
 type alias Model = 
   { count : Int
   , mdl : Material.Model Action
-      -- Boilerplate: Model store for any and all MDL components you need. 
+      -- Boilerplate: mdl is the Model store for any and all MDL components you need. 
   }
 
 
@@ -24,7 +24,7 @@ model : Model
 model = 
   { count = 0
   , mdl = Material.model 
-      -- Always use this initial MDL component model store.
+      -- Boilerplate: Always use this initial MDL model store.
   }
 
 
@@ -36,7 +36,6 @@ type Action
   | Reset
   | MDL (Material.Action Action)   
       -- Boilerplate: Action for MDL actions (ripple animations etc.).
-      -- It should always look like this. 
 
 
 update : Action -> Model -> (Model, Effects.Effects Action)
@@ -83,8 +82,7 @@ button. The arguments are:
 -}
 increase : Button.Instance Mdl Action
 increase =
-  Button.instance 0 MDL 
-    Button.flat (Button.model True) 
+  Button.instance 0 MDL Button.flat (Button.model True) 
     [ Button.fwdClick Increase ]
 
 
@@ -93,8 +91,7 @@ click event to our Reset action.
 -}
 reset : Button.Instance Mdl Action
 reset = 
-  Button.instance 1 MDL 
-    Button.flat (Button.model False)
+  Button.instance 1 MDL Button.flat (Button.model False)
     [ Button.fwdClick Reset ]
 
 

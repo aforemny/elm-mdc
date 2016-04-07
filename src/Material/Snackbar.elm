@@ -281,7 +281,7 @@ view addr model =
 {-|
 -}
 type alias State s  obs = 
-  { s | snackbar : Indexed (Model obs) }
+  { s | snackbar : Maybe (Model obs) }
 
 
 {-|
@@ -306,19 +306,16 @@ actionObserver action =
       Nothing
 
 
-
 {-| Component instance.
 -}
-instance : 
-  Int
-  -> (Component.Action (State state obs) obs -> obs)
+instance 
+  : (Component.Action (State state obs) obs -> obs)
   -> (Model obs)
   -> Instance (State state obs) obs
 
-instance id lift model0 = 
-  Component.instance 
-    view update .snackbar (\x y -> {y | snackbar = x}) id lift model0 [ actionObserver ]
-
+instance lift model0 = 
+  Component.instance1
+    view update .snackbar (\x y -> {y | snackbar = x}) lift model0 [ actionObserver ]
 
 {-|
   TODO
@@ -334,4 +331,3 @@ add contents inst model =
       update (Add contents) (inst.get model)
   in
     (inst.set sb model, Effects.map inst.fwd fx)
-

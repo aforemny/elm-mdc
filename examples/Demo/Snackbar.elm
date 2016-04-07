@@ -20,7 +20,8 @@ import Demo.Page as Page
 -- MODEL
 
 
-type alias Mdl = Material.Model Action
+type alias Mdl = 
+  Material.Model Action
 
 
 type alias Model =
@@ -48,22 +49,8 @@ type Action
   | MDL (Material.Action Action)
 
 
-snackbar : Int -> Snackbar.Contents Action
-snackbar k =
-  Snackbar.snackbar
-    ("Snackbar message #" ++ toString k)
-    "UNDO"
-    (Undo k)
-
-
-toast : Int -> Snackbar.Contents Action
-toast k =
-  Snackbar.toast
-    <| "Toast message #" ++ toString k
-
-
-add : (Int -> Snackbar.Contents Action) -> Model -> (Model, Effects Action)
-add f model =
+add : Model -> (Int -> Snackbar.Contents Action) -> (Model, Effects Action)
+add model f =
   let 
     (mdl', fx) = 
       Snackbar.add (f model.count) snackbarComponent model.mdl
@@ -81,10 +68,12 @@ update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
     AddSnackbar ->
-      add snackbar model
+      add model 
+        <| \k -> Snackbar.snackbar ("Snackbar message #" ++ toString k) "UNDO" (Undo k)
 
-    AddToast ->
-      add toast model
+    AddToast -> 
+      add model
+        <| \k -> Snackbar.toast <| "Toast message #" ++ toString k
 
     Undo k ->
       ({ model
@@ -96,18 +85,19 @@ update action model =
       Material.update MDL action' model.mdl
         |> map1st (\m -> { model | mdl = m })
 
+
 -- VIEW
 
 
-addSnackbar : Button.Instance Mdl Action 
-addSnackbar = 
+addSnackbarButton : Button.Instance Mdl Action 
+addSnackbarButton = 
   Button.instance 0 MDL
     Button.raised (Button.model True)
     [ Button.fwdClick AddSnackbar ]
 
 
-addToast : Button.Instance Mdl Action 
-addToast = 
+addToastButton : Button.Instance Mdl Action 
+addToastButton = 
   Button.instance 1 MDL
     Button.raised (Button.model True)
     [ Button.fwdClick AddToast ]
@@ -115,8 +105,7 @@ addToast =
 
 snackbarComponent : Snackbar.Instance Mdl Action
 snackbarComponent = 
-  Snackbar.instance 2 MDL Snackbar.model 
-
+  Snackbar.instance MDL Snackbar.model 
 
 
 clickView : Model -> Int -> Html
@@ -164,11 +153,11 @@ view addr model =
         -- to add css/classes to top-level element of components (div
         -- in grid, button in button, div in textfield etc.)
         [ cell [ size All 2, size Phone 2, align Top ]
-            [ addToast.view addr model.mdl [] [ text "Toast" ]
+            [ addToastButton.view addr model.mdl [] [ text "Toast" ]
             ]
         , cell 
             [ size All 2, size Phone 2, align Top ]
-            [ addSnackbar.view addr model.mdl [] [ text "Snackbar" ]
+            [ addSnackbarButton.view addr model.mdl [] [ text "Snackbar" ]
             ]
         , cell
             [ size Desktop 7, size Tablet 3, size Phone 12, align Top ]
