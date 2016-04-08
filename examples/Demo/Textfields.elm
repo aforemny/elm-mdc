@@ -15,7 +15,6 @@ import Demo.Page as Page
 -- MODEL
 
 
-
 type alias Model = 
   { mdl : Material.Model Action 
   , rx : (String, Regex.Regex)
@@ -39,9 +38,7 @@ model =
   }
 
 
-
 -- ACTION, UPDATE
-
 
 
 type Action
@@ -62,6 +59,8 @@ transferToDisabled str =
     }) 
 
 
+{- Check that rx matches all of str.
+-}
 match : String -> Regex.Regex -> Bool
 match str rx = 
   Regex.find Regex.All rx str
@@ -129,9 +128,7 @@ field1 =
 field2 : Textfield.Instance Mdl Action
 field2 = 
   Textfield.instance 2 MDL 
-    { m0 
-    | label = Just { text = "Floating label", float = True }
-    }
+    { m0 | label = Just { text = "Floating label", float = True } }
     []
 
 
@@ -148,9 +145,7 @@ field3 =
 field4 : Textfield.Instance Mdl Action
 field4 = 
   Textfield.instance 4 MDL 
-    { m0
-    | label = Just { text = "With error checking", float = False }
-    }
+    { m0 | label = Just { text = "With error checking", float = False } }
     [ Textfield.fwdInput Upd4 ]
 
 
@@ -169,7 +164,8 @@ view addr model =
      )
   |> List.intersperse (cell [size All 1] [])
   |> grid []
-  |> flip (::) []
+  |> flip (::) [] 
+  |> (::) (Html.text "Try entering text into some of the textfields below.")
   |> Page.body "Textfields" srcUrl intro references
 
 

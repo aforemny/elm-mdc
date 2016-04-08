@@ -232,7 +232,11 @@ clickView model (k, square) =
 view : Signal.Address Action -> Model -> Html
 view addr model =
   Page.body "Snackbar & Toast" srcUrl intro references
-    [ grid [ css "margin-top" "32px" ]
+    [ p [] 
+        [ text """Click the buttons below to activate the snackbar. Note that 
+                  multiple activations are automatically queued."""
+        ]
+    , grid [ ] --css "margin-top" "32px" ]
         [ cell 
             [ size All 2, size Phone 2, align Top ]
             [ addToastButton.view addr model.mdl 

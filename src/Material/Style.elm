@@ -1,7 +1,7 @@
 module Material.Style
   ( Style
   , cs, cs', css, css', attribute, multiple
-  , styled, div, stylesheet
+  , styled, div, span, stylesheet
   ) where
 
 
@@ -19,7 +19,7 @@ add to or remove from the contents of an already constructed class Attribute.)
 @docs cs, cs', css, css', attribute, multiple
 
 # Application
-@docs styled, div
+@docs styled, div, span
 
 # Convenience
 @docs stylesheet
@@ -94,8 +94,8 @@ styled ctor styles attrs' =
       )
 
 
-{-| Handle the ultra-common case of setting attributes of a div element,
-with no custom attributes. Use like this: 
+{-| Handle the ultra-common case of setting attributes of a div element.
+Use like this: 
 
     myDiv : Html 
     myDiv = 
@@ -109,6 +109,14 @@ with no custom attributes. Use like this:
 div : List Style -> List Html -> Html
 div styles elems = 
   styled Html.div styles [] elems
+
+
+{-| Convenience function for the reasonably common case of setting attributes
+of a span element. See also `div`. 
+-}
+span : List Style -> List Html -> Html
+span styles elems = 
+  styled Html.span styles [] elems
 
 
 {-| Add a HTML class to a component. (Name chosen to avoid clashing with

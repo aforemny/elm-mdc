@@ -77,7 +77,6 @@ update action model =
 type alias Addr = Signal.Address Action
 
 
-
 drawer : List Html
 drawer =
   [ Layout.title "Example drawer"
@@ -107,15 +106,15 @@ header =
   ]
 
 
-tabs : List (String, Addr -> Model -> List Html)
+tabs : List (String, Addr -> Model -> Html)
 tabs =
   [ ("Snackbar", \addr model ->
-      [Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar])
+      Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
   , ("Textfields", \addr model ->
-      [Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields])
+      Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
   , ("Buttons", \addr model ->
-      [Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons])
-  , ("Grid", \addr model -> [ Demo.Grid.view ])
+      Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons)
+  , ("Grid", \addr model -> Demo.Grid.view)
   , ("Badges", \addr model -> Demo.Badges.view )
   {-
   , ("Template", \addr model -> 
@@ -123,7 +122,7 @@ tabs =
   -}
   ]
 
-tabViews : Array (Addr -> Model -> List Html)
+tabViews : Array (Addr -> Model -> Html)
 tabViews = List.map snd tabs |> Array.fromList
 
 
@@ -145,11 +144,14 @@ stylesheet = Style.stylesheet """
        */
   }
   p, blockquote { 
-    max-width: 33em;
-    font-size: 13px;
+    max-width: 40em;
+  }
+
+  h1, h2 { 
+    /* TODO. Need typography module with kerning. */
+    margin-left: -3px;
   }
 """
-
 
 
 view : Signal.Address Action -> Model -> Html
@@ -162,11 +164,12 @@ view addr model =
             , ("padding-right", "5%")
             ]
           ]
-          ((Array.get model.layout.selectedTab tabViews
-           |> Maybe.withDefault (\addr model ->
-             [div [] [text "This can't happen."]]
-           )
-          ) addr model)
+          [ (Array.get model.layout.selectedTab tabViews
+             |> Maybe.withDefault (\addr model ->
+                  div [] [text "This can't happen."]
+                )
+            ) addr model
+          ]
 
   in
     Layout.view (Signal.forwardTo addr LayoutAction) model.layout

@@ -14,7 +14,6 @@ import Material.Style as Style exposing (styled, cs, css, attribute)
 import Material.Button as Button
 import Material.Color as Color
 import Material.Icon as Icon
-import Material.Elevation as Elevation
 
 
 -- REFERENCES
@@ -90,17 +89,11 @@ title t =
 
 demoTitle : Html 
 demoTitle = 
-  div [] []
-  {-
-  Style.div
+  Style.styled Html.h2
     [ Color.text Color.primary 
-    , css "text-align" "right"
-    , css "padding" ".5em"
-    , cs "mdl-typography--display2" 
-    -- TODO. Typography module
     ]
-    [ text "Demo" ]
-   -} 
+    []
+    [ text "Example" ]
 
 -- VIEW SOURCE BUTTON
 
@@ -113,9 +106,9 @@ fab : String -> Html
 fab url = 
   Button.fab addr (Button.model False)
     [ css "position" "fixed"
-    , css "right" "72px"
-    , css "bottom" "72px"
-    , css "z-index" "9999"
+    , css "right" "48px"
+    , css "top" "72px"
+    , css "z-index" "100"
     , Button.colored
     --, attribute (href srcUrl) 
     , attribute (Html.Attributes.attribute "onclick" ("alert('foo!');")) --("window.location.href = '" ++ srcUrl ++ "';") )
@@ -130,18 +123,24 @@ body : String -> String -> Html -> List (String, String) -> List Html -> Html
 body t srcUrl contents links demo = 
   div []
     [ title t
-    , grid []
+    , grid [ noSpacing ]
        [ cell [ size All 6, size Phone 4 ] [ contents ]
        , cell 
-           [ size All 5, offset Desktop 1, size Phone 4, align Top ] 
+           [ size All 5, offset Desktop 1, size Phone 4, align Top 
+           , css "position" "relative" 
+           ] 
            ( references <| ("Demo source", srcUrl) :: links )
        ]
-    , fab srcUrl
+    --, fab srcUrl
+    -- TODO: buttons can't be links (yet)
+    -- TODO: FAB placement.
+    , demoTitle
     , Style.div 
-        [ Elevation.shadow 2 ]
-        (  demoTitle 
-        :: demo 
-        )
+      [ css "margin-bottom" "48px"
+      --, css "margin-top" "48px"
+        -- , Elevation.shadow 2 
+      ]
+    demo 
     ]
 
 

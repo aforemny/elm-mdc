@@ -10,7 +10,9 @@ import Material.Color as Color
 
 import Demo.Page as Page
 
+
 -- Cell styling
+
 
 style : Int -> List Style
 style h = 
@@ -22,30 +24,41 @@ style h =
   , css "color" "white"
   ]
 
+
 -- Cell variants
+
 
 democell : Int -> List Style -> List Html -> Cell
 democell k styling = 
   cell <| List.concat [style k, styling] 
+
   
 small : List Style -> List Html -> Cell
 small = democell 50
 
+
 std : List Style -> List Html -> Cell
 std = democell 200
 
+
 -- Grid 
+
 
 color : Int -> Style
 color k =
-    Array.get (k % Array.length Color.palette) Color.palette
+    Array.get ((k + 7) % Array.length Color.palette) Color.palette
       |> Maybe.withDefault Color.Teal
       |> flip Color.color Color.S500
       |> Color.background
 
+
 view : Html
 view =
-  [ [1..12]
+  [ p []
+      [ text """Resize your browser-window and observe the effect on the Grid
+                below. Note in particular what happens to the top and bottom rows."""
+      ]
+  , [1..12 ]
     |> List.map (\i -> small [size All 1, color i] [text "1"])
     |> grid []
   , [1 .. 3]
@@ -81,8 +94,6 @@ intro =
 >   - If a cell has a specified column size equal to or larger than the number
 >     of columns for the current screen size, it takes up the entirety of its
 >     row.
-
-Resize your browser-window to observe the effect on the Grid below. 
 """
 
 srcUrl : String

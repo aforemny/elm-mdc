@@ -24,8 +24,8 @@ This module provides an extensible mechanism for collecting arbitrary
 (differently-typed) Elm Architecture components into a single component with
 a single Action type and update function. The module is used internally to 
 produce `instance` functions; if you are using elm-mdl (and are not interested in
-optimising for compiled program size), you should ignore this module and look
-instead at `Material`. 
+optimising for compiled program size or writing your own components), you
+should ignore this module and look instead at `Material`. 
 
 
 # Embeddings 

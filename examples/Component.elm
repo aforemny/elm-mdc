@@ -19,7 +19,6 @@ type alias Model =
   }
 
 
-
 model : Model 
 model = 
   { count = 0
@@ -38,7 +37,7 @@ type Action
       -- Boilerplate: Action for MDL actions (ripple animations etc.).
 
 
-update : Action -> Model -> (Model, Effects.Effects Action)
+update : Action -> Model -> (Model, Effects Action)
 update action model =
   case Debug.log "" action of
     Increase -> 
@@ -66,6 +65,7 @@ update action model =
 
 
 type alias Mdl = Material.Model Action
+
 
 {- We construct the instances of the Button component that we need, one 
 for the increase button, one for the reset button. First, the increase
