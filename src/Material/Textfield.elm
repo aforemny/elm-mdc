@@ -138,6 +138,7 @@ view : Signal.Address Action -> Model -> Html
 view addr model =
   let hasFloat = model.label |> Maybe.map .float |> Maybe.withDefault False
       hasError = model.error |> Maybe.map (always True) |> Maybe.withDefault False
+      labelText = model.label |> Maybe.map .text 
   in
     filter div
       [ classList
@@ -162,10 +163,13 @@ view addr model =
           , onFocus addr Focus
           ]
           []
-      ,   model.label |> Maybe.map (\l ->
-            label [class "mdl-textfield__label"]  [text l.text])
-      ,   model.error |> Maybe.map (\e ->
-            span [class "mdl-textfield__error"] [text e])
+      , Just <| label 
+          [class "mdl-textfield__label"]  
+          (case labelText of 
+            Just str -> [ text str ]
+            Nothing -> [])
+      , model.error |> Maybe.map (\e ->
+          span [class "mdl-textfield__error"] [text e])
       ]
 
 

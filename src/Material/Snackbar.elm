@@ -1,5 +1,5 @@
 module Material.Snackbar
-  ( Contents, Model, model, toast, snackbar, isActive
+  ( Contents, Model, model, toast, snackbar, isActive, activeAction
   , Action(Add, Action), update
   , view
   , Instance, instance, add
@@ -26,7 +26,7 @@ import Time exposing (Time)
 import Maybe exposing (andThen)
 
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers exposing (mapFx, addFx)
+import Material.Helpers exposing (mapFx, addFx, delay)
 
 
 -- MODEL
@@ -88,6 +88,7 @@ snackbar message actionMessage action =
 
 
 {-| TODO
+(Bad name)
 -}
 isActive : Model a -> Maybe (Contents a)
 isActive model =
@@ -97,6 +98,15 @@ isActive model =
 
     _ ->
       Nothing
+
+
+{-|  TODO
+-}
+activeAction : Model a -> Maybe a
+activeAction model = 
+  isActive model 
+    |> flip Maybe.andThen .action 
+    |> Maybe.map snd
 
 
 contentsOf : Model a -> Maybe (Contents a)
@@ -119,13 +129,6 @@ type State' a
 type Transition
   = Timeout
   | Click
-
-
-delay : Time -> a -> Effects a
-delay t x =
-  Task.sleep t
-    |> (flip Task.andThen) (\_ -> Task.succeed x)
-    |> Effects.task
 
 
 move : Transition -> Model a -> (Model a, Effects Transition)

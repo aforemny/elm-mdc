@@ -14,6 +14,7 @@ import Material.Style as Style exposing (styled, cs, css, attribute)
 import Material.Button as Button
 import Material.Color as Color
 import Material.Icon as Icon
+import Material.Elevation as Elevation
 
 
 -- REFERENCES
@@ -78,24 +79,28 @@ fromMDS =
 
 title : String -> Html 
 title t = 
-  Style.div 
+  Style.styled Html.h1 
     [ Color.text Color.primary 
-    , cs "mdl-typography--display-4" 
+    --, cs "mdl-typography--display-4" 
     -- TODO. Typography module
     ]
+    []
     [ text t ]
 
 
 demoTitle : Html 
 demoTitle = 
-  Style.div 
+  div [] []
+  {-
+  Style.div
     [ Color.text Color.primary 
-    , cs "mdl-typography--display-1" 
+    , css "text-align" "right"
+    , css "padding" ".5em"
+    , cs "mdl-typography--display2" 
     -- TODO. Typography module
     ]
     [ text "Demo" ]
-
-
+   -} 
 
 -- VIEW SOURCE BUTTON
 
@@ -110,6 +115,7 @@ fab url =
     [ css "position" "fixed"
     , css "right" "72px"
     , css "bottom" "72px"
+    , css "z-index" "9999"
     , Button.colored
     --, attribute (href srcUrl) 
     , attribute (Html.Attributes.attribute "onclick" ("alert('foo!');")) --("window.location.href = '" ++ srcUrl ++ "';") )
@@ -123,17 +129,20 @@ fab url =
 body : String -> String -> Html -> List (String, String) -> List Html -> Html 
 body t srcUrl contents links demo = 
   div []
-    ( title t
-    :: grid []
-        [ cell [ size All 6, size Phone 4 ] [ contents ]
-        , cell 
-            [ size All 5, offset Desktop 1, size Phone 4, align Top ] 
-            ( references <| ("Demo source", srcUrl) :: links )
-        ]
-    :: fab srcUrl
-    :: demoTitle 
-    :: demo 
-    )
+    [ title t
+    , grid []
+       [ cell [ size All 6, size Phone 4 ] [ contents ]
+       , cell 
+           [ size All 5, offset Desktop 1, size Phone 4, align Top ] 
+           ( references <| ("Demo source", srcUrl) :: links )
+       ]
+    , fab srcUrl
+    , Style.div 
+        [ Elevation.shadow 2 ]
+        (  demoTitle 
+        :: demo 
+        )
+    ]
 
 
 

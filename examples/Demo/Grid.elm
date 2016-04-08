@@ -1,10 +1,14 @@
 module Demo.Grid where
 
-import Material.Grid exposing (..)
-import Material.Style exposing (Style, css)
 
 import Html exposing (..)
-import Markdown
+import Array
+
+import Material.Grid exposing (..)
+import Material.Style exposing (Style, css)
+import Material.Color as Color
+
+import Demo.Page as Page
 
 -- Cell styling
 
@@ -32,31 +36,36 @@ std = democell 200
 
 -- Grid 
 
-view : List Html
+color : Int -> Style
+color k =
+    Array.get (k % Array.length Color.palette) Color.palette
+      |> Maybe.withDefault Color.Teal
+      |> flip Color.color Color.S500
+      |> Color.background
+
+view : Html
 view =
-  [ intro
-  , [1..12]
-    |> List.map (\i -> small [size All 1] [text "1"])
+  [ [1..12]
+    |> List.map (\i -> small [size All 1, color i] [text "1"])
     |> grid []
   , [1 .. 3]
-    |> List.map (\i -> std [size All 4] [text <| "4"])
+    |> List.map (\i -> std [size All 4, color i] [text <| "4"])
     |> grid []
-  , [ std [size All 6] [text "6"]
-    , std [size All 4] [text "4"]
-    , std [size All 2] [text "2"]
+  , [ std [size All 6, color 16] [text "6"]
+    , std [size All 4, color 17] [text "4"]
+    , std [size All 2, color 18] [text "2"]
     ] |> grid []
-  , [ std [size All 6, size Tablet 8] [text "6 (8 tablet)"]
-    , std [size All 4, size Tablet 6] [text "4 (6 tablet)"]
-    , std [size All 2, size Phone 4] [text "2 (4 phone)"]
+  , [ std [size All 6, size Tablet 8, color 19] [text "6 (8 tablet)"]
+    , std [size All 4, size Tablet 6, color 20] [text "4 (6 tablet)"]
+    , std [size All 2, size Phone 4,  color 21] [text "2 (4 phone)"]
     ] |> grid []
   ]
+  |> Page.body "Grid" srcUrl intro references
 
 
 intro : Html
-intro = """
-From the
-[Material Design Lite documentation](http://www.getmdl.io/components/#layout-section/grid):
-
+intro = 
+  Page.fromMDL "http://www.getmdl.io/components/#layout-section/grid" """
 > The Material Design Lite (MDL) grid component is a simplified method for laying
 > out content for multiple screen sizes. It reduces the usual coding burden
 > required to correctly display blocks of content in a variety of display
@@ -73,15 +82,17 @@ From the
 >     of columns for the current screen size, it takes up the entirety of its
 >     row.
 
-#### See also
+Resize your browser-window to observe the effect on the Grid below. 
+"""
 
- - [Demo source code](https://github.com/debois/elm-mdl/blob/master/examples/Demo/Grid.elm)
- - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Grid)
- - [Material Design Specification](https://www.google.com/design/spec/layout/responsive-ui.html#responsive-ui-grid)
- - [Material Design Lite documentation](http://www.getmdl.io/components/#layout-section/grid)
+srcUrl : String
+srcUrl = 
+  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Grid.elm"
 
-#### Demo
-
-""" |> Markdown.toHtml
-
+references : List (String, String) 
+references = 
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Grid"
+  , Page.mds "https://www.google.com/design/spec/layout/responsive-ui.html#responsive-ui-grid"
+  , Page.mdl "http://www.getmdl.io/components/#layout-section/grid"
+  ]
 

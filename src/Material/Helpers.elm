@@ -3,6 +3,8 @@ module Material.Helpers where
 import Html
 import Html.Attributes
 import Effects exposing (Effects)
+import Time exposing (Time)
+import Task
 
 filter : (a -> List b -> c) -> a -> List (Maybe b) -> c
 filter elem attr html =
@@ -89,3 +91,12 @@ lift get set fwd update action model =
     (submodel', e) = update action (get model)
   in
     (set model submodel', Effects.map fwd e)
+
+
+delay : Time -> a -> Effects a
+delay t x =
+  Task.sleep t
+    |> (flip Task.andThen) (always (Task.succeed x))
+    |> Effects.task
+
+

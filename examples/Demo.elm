@@ -66,7 +66,7 @@ update action model =
   case Debug.log "Action: " action of
     LayoutAction    a -> lift  .layout     (\m x->{m|layout    =x}) LayoutAction   Layout.update          a model
     ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
-    TextfieldAction a -> lift' .textfields (\m x->{m|textfields=x})                Demo.Textfields.update a model
+    TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
     SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
     --TemplateAction  a -> lift  .template   (\m x->{m|template  =x}) TemplateAction Demo.Template.update   a model
 
@@ -115,7 +115,7 @@ tabs =
       [Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields])
   , ("Buttons", \addr model ->
       [Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons])
-  , ("Grid", \addr model -> Demo.Grid.view)
+  , ("Grid", \addr model -> [ Demo.Grid.view ])
   , ("Badges", \addr model -> Demo.Badges.view )
   {-
   , ("Template", \addr model -> 

@@ -44,7 +44,8 @@ reset model =
    { model | count = 0 }
 
 
-update : Action -> Model -> (Model, Effects.Effects Action)
+
+update : Action -> Model -> (Model, Effects Action)
 update action model =
   case Debug.log "" action of
     IncreaseButtonAction action' -> 

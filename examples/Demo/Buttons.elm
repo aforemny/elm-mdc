@@ -10,6 +10,7 @@ import Material.Grid as Grid
 import Material.Icon as Icon
 import Material.Style exposing (Style)
 
+import Demo.Page as Page
 
 
 -- MODEL
@@ -132,9 +133,39 @@ view addr model =
         ]
     )
   )
-  |> (\contents -> 
-    div []
-      [ Grid.grid [] contents
-      ]
-      )
+  |> Grid.grid [] 
+  |> flip (::) []
+  |> Page.body "Buttons" srcUrl intro references
+
+intro : Html
+intro =
+  Page.fromMDL "https://www.getmdl.io/components/#buttons-section" """
+> The Material Design Lite (MDL) button component is an enhanced version of the
+> standard HTML `<button>` element. A button consists of text and/or an image that
+> clearly communicates what action will occur when the user clicks or touches it.
+> The MDL button component provides various types of buttons, and allows you to
+> add both display and click effects.
+>
+> Buttons are a ubiquitous feature of most user interfaces, regardless of a
+> site's content or function. Their design and use is therefore an important
+> factor in the overall user experience. See the button component's Material
+> Design specifications page for details.
+>
+> The available button display types are flat (default), raised, fab, mini-fab,
+> and icon; any of these types may be plain (light gray) or colored, and may be
+> initially or programmatically disabled. The fab, mini-fab, and icon button
+> types typically use a small image as their caption rather than text.
+
+"""
+
+srcUrl : String
+srcUrl = 
+  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Buttons.elm"
+
+references : List (String, String)
+references = 
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Button"
+  , Page.mds "https://www.google.com/design/spec/components/buttons.html"
+  , Page.mdl "https://www.getmdl.io/components/#buttons-section"
+  ]
 
