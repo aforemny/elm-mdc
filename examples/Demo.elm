@@ -211,7 +211,9 @@ e404 _ _ =
     [ 
     ]
     [ Style.styled Html.h1
-        [ Style.cs "mdl-typography--display-4" ]
+        [ Style.cs "mdl-typography--display-4" 
+        , Color.background Color.primary 
+        ]
         []
         [ text "404" ]
     ]
