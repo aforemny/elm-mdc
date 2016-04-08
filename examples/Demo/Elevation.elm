@@ -1,61 +1,50 @@
 module Demo.Elevation where
 
-import Effects exposing (Effects, none)
 import Html exposing (..)
 
-import Markdown
+import Material.Style as Style exposing (cs, css)
+import Material.Elevation as Elevation
 
-import Material.Template as Template
-import Material exposing (lift, lift')
-
-
--- MODEL
-
-
-type alias Model =
-  { template : Template.Model
-  }
-
-
-model : Model
-model =
-  { template = Template.model
-  }
-
-
--- ACTION, UPDATE
-
-
-type Action 
-  = TemplateAction Template.Action
-
-
-update : Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
-    TemplateAction action' -> lift .template (\m x -> {m|template=x}) TemplateAction Template.update action' model
+import Demo.Page as Page
 
 
 -- VIEW
 
 
-
-view : Signal.Address Action -> Model -> Html
-view addr model =
-  div []
-    [ intro
-    , Template.view (Signal.forwardTo addr TemplateAction) model.template
+elevate : Int -> Html 
+elevate k = 
+  Style.div 
+    [ css "height" "96px"
+    , css "width"  "128px"
+    , css "margin" "40px"
+    , css "display" "inline-flex"
+    , css "flex-flow" "row wrap" 
+    , css "justify-content" "center"
+    , css "align-items" "center"
+    , Elevation.shadow k
+    ]
+    [ Style.div 
+      [ cs ".mdl-typography--title-color-contrast" 
+        -- TODO. Typography!
+      ] 
+      [ text <| toString k ]
     ]
 
 
 
+
+view : Html
+view =
+  0 :: Elevation.validElevations
+  |> List.map elevate 
+  |> Page.body "Elevation" srcUrl intro references
+
+
+
 intro : Html
-intro = """
-
-
-{-| From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)
-
-> The Material Design Lite (MDL) shadow is not a component in the same sense as
+intro =
+  Page.fromMDL "https://github.com/google/material-design-lite/blob/master/src/shadow/README.md" """
+  > The Material Design Lite (MDL) shadow is not a component in the same sense as
 > an MDL card, menu, or textbox; it is a visual effect that can be assigned to a
 > user interface element. The effect simulates a three-dimensional positioning of
 > the element, as though it is slightly raised above the surface it rests upon —
@@ -78,24 +67,19 @@ assign shadows only to your own elements.
 You are encouraged to visit the
 [Material Design specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html)
 for details about appropriate use of shadows. 
+"""
 
-# TEMPLATE
 
-From the
-[Material Design Lite documentation](https://www.getmdl.io/components/index.html#TEMPLATE-section).
+srcUrl : String
+srcUrl = 
+  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Elevation.elm"
 
-> ...
 
-#### See also
-
- - [Demo source code](https://github.com/debois/elm-mdl/blob/master/examples/Demo/TEMPLATE.elm)
- - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-TEMPLATE)
- - [Material Design Specification](https://www.google.com/design/spec/components/TEMPLATE.html)
- - [Material Design Lite documentation](https://www.getmdl.io/components/index.html#TEMPLATE)
-
-#### Demo
-
-""" |> Markdown.toHtml
-
+references : List (String, String)
+references = 
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Elevation"
+  , Page.mds "https://www.google.com/design/spec/what-is-material/elevation-shadows.html"
+  , Page.mdl "https://github.com/google/material-design-lite/blob/master/src/shadow/README.md"
+  ]
 
 

@@ -1,5 +1,6 @@
 module Material.Elevation
   ( shadow
+  , validElevations
   , transition
   ) where
 
@@ -32,7 +33,7 @@ for details about appropriate use of shadows.
 
 
 # Component
-@docs shadow, transition
+@docs shadow, validElevations, transition
 
 -}
 
@@ -41,12 +42,21 @@ import Material.Style exposing (..)
 
 {-| Indicate the elevation of an element by giving it a shadow. 
 The `z` argument indicates intended elevation; valid values 
-are 0--24. The specification uses only the values
-1-6, 8, 9, 12, 16, 24 for standard UI elements. 
+are 2, 3, 4, 6, 8, 16, 24. Invalid values produce no shadow. 
+  
+(The specification uses only the values 1-6, 8, 9, 12, 16, 24 for standard UI
+elements; MDL sources define all values 0-24, but omits most from production css.)
 -}
 shadow : Int -> Style
 shadow z = 
   cs ("mdl-shadow--" ++ toString z ++ "dp")
+
+
+{-| Programmatically accessible valid elevations for `shadow`.
+-}
+validElevations : List Int 
+validElevations = 
+  [ 2, 3, 4, 6, 8, 16, 24 ] 
 
 
 {-| Add a CSS-transition to changes in elevation. Supply a transition

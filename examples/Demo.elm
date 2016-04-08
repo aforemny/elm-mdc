@@ -1,7 +1,7 @@
 module Main (..) where
 import StartApp
 import Html exposing (..)
-import Html.Attributes exposing (href, class, style)
+import Html.Attributes exposing (href, class, style, key)
 import Signal exposing (Signal)
 import Effects exposing (..)
 import Task
@@ -26,6 +26,7 @@ import Demo.Grid
 import Demo.Textfields
 import Demo.Snackbar
 import Demo.Badges
+import Demo.Elevation
 
 --import Demo.Template
 
@@ -140,7 +141,6 @@ update action model =
     HopAction _ ->
       ( model, Effects.none )
 
-
     ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
 
     TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
@@ -189,14 +189,15 @@ header =
 
 tabs : List (String, String, Addr -> Model -> Html)
 tabs =
-  [ ("Snackbar", "snackbar", \addr model ->
+  [ ("Buttons", "buttons", \addr model ->
+      Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons)
+  , ("Badges", "badges", \addr model -> Demo.Badges.view )
+  , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
+  , ("Grid", "grid", \addr model -> Demo.Grid.view)
+  , ("Snackbar", "snackbar", \addr model ->
       Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
   , ("Textfields", "textfields", \addr model ->
       Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
-  , ("Buttons", "buttons", \addr model ->
-      Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons)
-  , ("Grid", "grid", \addr model -> Demo.Grid.view)
-  , ("Badges", "badges", \addr model -> Demo.Badges.view )
   {-
   , ("Template", \addr model -> 
       [Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template])
@@ -269,9 +270,10 @@ view addr model =
       div
         [ style
             [ ( "margin", "auto" )
-            , ( "padding-left", "5%" )
-            , ( "padding-right", "5%" )
+            , ( "padding-left", "8%" )
+            , ( "padding-right", "8%" )
             ]
+        , key <| toString (fst model.routing)
         ]
         [ (Array.get model.layout.selectedTab tabViews
             |> Maybe.withDefault e404)
