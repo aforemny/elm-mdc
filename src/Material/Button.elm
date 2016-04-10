@@ -2,7 +2,7 @@ module Material.Button
   ( Model, model, Action(Click), update
   , flat, raised, fab, minifab, icon
   , colored, primary, accent
-  , View, State, Instance, instance, fwdClick 
+  , View, Container, Observer, Instance, instance, fwdClick 
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -40,7 +40,7 @@ for details about what type of buttons are appropriate for which situations.
 @docs flat, raised, fab, minifab, icon
 
 # Component 
-@docs State, Instance, instance, fwdClick
+@docs Container, Observer, Instance, instance, fwdClick
 
 -}
 
@@ -261,34 +261,32 @@ icon = view "mdl-button--icon"
 
 {-|
 -}
-type alias State s =
-  { s | button : Indexed Model }
+type alias Container c =
+  { c | button : Indexed Model }
 
 
+{-|
+-}
 type alias Observer obs = 
   Component.Observer Action obs
 
 
 {-|
 -}
-type alias Instance state obs =
+type alias Instance container obs =
   Component.Instance 
-    Model
-    state
-    Action
-    obs 
-    (List Style -> List Html -> Html)
+    Model container Action obs (List Style -> List Html -> Html)
 
 
 {-| Component instance.
 -}
 instance : 
   Int
-  -> (Component.Action (State state) obs -> obs)
+  -> (Component.Action (Container c) obs -> obs)
   -> (Address Action -> Model -> List Style -> List Html -> Html)
   -> Model
   -> List (Observer obs)
-  -> Instance (State state) obs
+  -> Instance (Container c) obs
 
 instance id lift view model0 observers = 
   Component.instance 

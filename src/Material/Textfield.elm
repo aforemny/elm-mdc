@@ -30,7 +30,7 @@ This implementation provides only single-line.
 @docs Action, Model, model, update, view
 
 # Component
-@docs State, Instance
+@docs Container, Instance
 @docs instance, fwdInput, fwdBlur, fwdFocus
 
 -}
@@ -76,7 +76,7 @@ type Kind
   -}
 
 
-{-| Model. The textfield is in its error-state if `error` is not `Nothing`.
+{-| Model. The textfield is in its error-container if `error` is not `Nothing`.
 The contents of the field is `value`.
 -}
 type alias Model =
@@ -179,24 +179,24 @@ view addr model =
 
 {-|
 -}
-type alias State state = 
-  { state | textfield : Indexed Model }
+type alias Container c = 
+  { c | textfield : Indexed Model }
 
 
 {-| 
 -}
-type alias Instance state obs = 
-  Component.Instance Model state Action obs Html
+type alias Instance container obs = 
+  Component.Instance Model container Action obs Html
 
 
 {-| Component constructor. See module `Material`.
 -}
 instance : 
   Int
-  -> (Component.Action (State state) obs -> obs)
+  -> (Component.Action (Container c) obs -> obs)
   -> Model
   -> List (Component.Observer Action obs)
-  -> Instance (State state) obs
+  -> Instance (Container c) obs
 
 instance = 
   let 
