@@ -1,5 +1,7 @@
 # Material Design Components in Elm
 
+[![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
+
 Port of Google's
 [Material Design Lite](https://www.getmdl.io/)
 CSS/JS implementation of the

@@ -1,7 +1,8 @@
 module Material.Button
   ( Model, model, Action(Click), update
   , flat, raised, fab, minifab, icon
-  , Button, colored, primary, accent
+  , colored, primary, accent
+  , View, State, Instance, instance, fwdClick 
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -25,11 +26,11 @@ module Material.Button
 See also the
 [Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).
 
-# Component
-@docs Model, model, Action, update
+# Elm architecture
+@docs Model, model, Action, update, View
 
 # Style
-@docs Button, colored, primary, accent
+@docs colored, primary, accent
 
 # View
 Refer to the
@@ -37,6 +38,9 @@ Refer to the
 for details about what type of buttons are appropriate for which situations.
 
 @docs flat, raised, fab, minifab, icon
+
+# Component 
+@docs State, Instance, instance, fwdClick
 
 -}
 
@@ -49,6 +53,7 @@ import Signal exposing (Address, forwardTo)
 import Material.Helpers as Helpers
 import Material.Style exposing (Style, cs, cs', styled)
 import Material.Ripple as Ripple
+import Material.Component as Component exposing (Indexed)
 
 {-| MDL button.
 -}
@@ -105,23 +110,19 @@ update action model =
 -- VIEW
 
 
-{-| Type tag for button styles. 
--}
-type Button = X
-
-
-{-| Color button with primary or accent color depending on button type. 
+{-| Color button with primary or accent color depending on button type.
 -}
 colored : Style
-colored = 
+colored =
   cs "mdl-button--colored"
 
 
 {-| Color button with primary color.
 -}
 primary : Style
-primary = 
+primary =
   cs "mdl-button--primary"
+
 
 {-| Color button with accent color. 
 -}
@@ -130,8 +131,6 @@ accent =
   cs "mdl-button--accent"
 
 
-{-| Component view. 
--}
 view : String -> Address Action -> Model -> List Style -> List Html -> Html
 view kind addr model styling html =
   styled button 
@@ -143,17 +142,24 @@ view kind addr model styling html =
     )
     [ Helpers.blurOn "mouseup"
     , Helpers.blurOn "mouseleave"
-    , onClick addr Click
+    , Html.Events.onClick addr Click
     ]
     (case model of
       S (Just ripple) ->
         Ripple.view
           (forwardTo addr Ripple)
           [ class "mdl-button__ripple-container"
-          , Helpers.blurOn "mouseup" ]
+          , Helpers.blurOn "mouseup" 
+          ]
           ripple
         :: html
       _ -> html)
+
+
+{-| Type of button views. 
+-}
+type alias View = 
+  Address Action -> Model -> List Style -> List Html -> Html
 
 
 {-| From the
@@ -176,7 +182,7 @@ Example use (uncolored flat button, assuming properly setup model):
     flatButton = Button.flat addr model Button.Plain [text "Click me!"]
 
 -}
-flat : Address Action -> Model -> List Style -> List Html -> Html
+flat : View
 flat = view ""
 
 
@@ -197,7 +203,7 @@ Example use (colored raised button, assuming properly setup model):
     raisedButton = Button.raised addr model Button.Colored [text "Click me!"]
 
 -}
-raised : Address Action -> Model -> List Style -> List Html -> Html
+raised : View
 raised = view "mdl-button--raised"
 
 
@@ -223,13 +229,13 @@ Example use (colored with a '+' icon):
     fabButton : Html
     fabButton = fab addr model Colored [Icon.i "add"]
 -}
-fab : Address Action -> Model -> List Style -> List Html -> Html
+fab : View
 fab = view "mdl-button--fab"
 
 
 {-| Mini-sized variant of a Floating Action Button; refer to `fab`.
 -}
-minifab : Address Action -> Model -> List Style -> List Html -> Html
+minifab : View
 minifab = view "mdl-button--mini-fab"
 
 
@@ -245,5 +251,56 @@ Example use (no color, displaying a '+' icon):
     iconButton : Html
     iconButton = icon addr model Plain [Icon.i "add"]
 -}
-icon : Address Action -> Model -> List Style -> List Html -> Html
+icon : View
 icon = view "mdl-button--icon"
+
+
+
+-- COMPONENT
+
+
+{-|
+-}
+type alias State s =
+  { s | button : Indexed Model }
+
+
+type alias Observer obs = 
+  Component.Observer Action obs
+
+
+{-|
+-}
+type alias Instance state obs =
+  Component.Instance 
+    Model
+    state
+    Action
+    obs 
+    (List Style -> List Html -> Html)
+
+
+{-| Component instance.
+-}
+instance : 
+  Int
+  -> (Component.Action (State state) obs -> obs)
+  -> (Address Action -> Model -> List Style -> List Html -> Html)
+  -> Model
+  -> List (Observer obs)
+  -> Instance (State state) obs
+
+instance id lift view model0 observers = 
+  Component.instance 
+    view update .button (\x y -> {y | button = x}) id lift model0 observers
+
+
+{-| Lift the button Click action to your own action. E.g., 
+-}
+fwdClick : obs -> (Observer obs)
+fwdClick obs action = 
+  case action of 
+    Click -> Just obs
+    _ -> Nothing 
+
+

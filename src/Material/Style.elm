@@ -1,8 +1,7 @@
 module Material.Style
   ( Style
-  , styled
-  , cs, cs', css, css', attrib, multiple
-  , stylesheet
+  , cs, cs', css, css', attribute, multiple
+  , styled, div, span, stylesheet
   ) where
 
 
@@ -17,10 +16,10 @@ add to or remove from the contents of an already constructed class Attribute.)
 @docs Style
 
 # Constructors
-@docs cs, cs', css, css', attrib, multiple
+@docs cs, cs', css, css', attribute, multiple
 
 # Application
-@docs styled
+@docs styled, div, span
 
 # Convenience
 @docs stylesheet
@@ -41,44 +40,32 @@ import Html.Attributes
 type Style
   = Class String
   | CSS (String, String)
-  | Attr (String, String)
+  | Attr Html.Attribute
   | Multiple (List Style)
   | NOP
 
-multipleOf : Style -> Maybe (List Style)
-multipleOf style =
-  case style of
-    Multiple multiple -> Just multiple
-    _ -> Nothing
+
+type alias Summary = 
+  { attrs : List Attribute 
+  , classes : List String 
+  , css : List (String, String)  
+  }
 
 
-attrOf : Style -> Maybe (String, String)
-attrOf style =
-  case style of
-    Attr attrib -> Just attrib
-    _ -> Nothing
-    
-cssOf : Style -> Maybe (String, String)
-cssOf style =
-  case style of
-    CSS css -> Just css
-    _ -> Nothing
+collect1 : Style -> Summary -> Summary
+collect1 style ({ classes, css, attrs } as acc) = 
+  case style of 
+    Class x -> { acc | classes = x :: classes }
+    CSS x -> { acc | css = x :: css }
+    Attr x -> { acc | attrs = x :: attrs }
+    Multiple styles -> List.foldl collect1 acc styles 
+    NOP -> acc
 
 
-classOf : Style -> Maybe String
-classOf style =
-  case style of
-    Class c -> Just c
-    _ -> Nothing
+collect : List Style -> Summary 
+collect =
+  List.foldl collect1 { classes=[], css=[], attrs=[] } 
 
-
-flatten : Style -> List Style -> List Style
-flatten style styles = 
-  case style of
-    Multiple styles' ->
-      List.foldl flatten styles' styles
-    style ->
-      style :: styles
 
 {-| Handle the common case of setting attributes of a standard Html node
 from a List Style. Use like this:
@@ -96,18 +83,40 @@ Note that if you do specify `style`, `class`, or `classList` attributes in
 (*), they will be discarded.
 -}
 styled : (List Attribute -> a) -> List Style -> List Attribute -> a
-styled ctor styles attrs = 
+styled ctor styles attrs' = 
   let
-    flatStyles = List.foldl flatten [] styles      
-    styleAttrs = (List.filterMap attrOf flatStyles) 
-      |> List.map (\attrib -> Html.Attributes.attribute (fst attrib) ( snd attrib))
+      { classes, css, attrs }  = collect styles
   in
-  ctor
-    (  Html.Attributes.style (List.filterMap cssOf flatStyles)
-    :: Html.Attributes.class (String.join " " (List.filterMap classOf flatStyles))
-    :: List.append attrs styleAttrs
-    )
+    ctor
+      (  Html.Attributes.style css
+      :: Html.Attributes.class (String.join " " classes)
+      :: List.append attrs attrs'
+      )
 
+
+{-| Handle the ultra-common case of setting attributes of a div element.
+Use like this: 
+
+    myDiv : Html 
+    myDiv = 
+      Style.div
+        [ Color.background Color.primary
+        , Color.text Color.accentContrast
+        ]
+        [ text "I'm in color!" ]
+
+-}
+div : List Style -> List Html -> Html
+div styles elems = 
+  styled Html.div styles [] elems
+
+
+{-| Convenience function for the reasonably common case of setting attributes
+of a span element. See also `div`. 
+-}
+span : List Style -> List Html -> Html
+span styles elems = 
+  styled Html.span styles [] elems
 
 
 {-| Add a HTML class to a component. (Name chosen to avoid clashing with
@@ -130,17 +139,20 @@ css : String -> String -> Style
 css key value =
   CSS (key, value)
 
+
 {-| Add a custom attribute
 -}
-attrib : String -> String -> Style
-attrib key value =
-  Attr (key, value)
+attribute : Html.Attribute -> Style
+attribute attr = 
+  Attr attr
+
 
 {-| Add a custom attribute
 -}
 multiple : List Style -> Style
 multiple styles =
   Multiple (styles)
+
 
 {-| Conditionally add a CSS style to a component
 -}

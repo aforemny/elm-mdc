@@ -1,7 +1,8 @@
 module Material.Snackbar
-  ( Contents, Model, model, toast, snackbar, isActive
+  ( Contents, Model, model, toast, snackbar, isActive, activeAction
   , Action(Add, Action), update
   , view
+  , Instance, instance, add
   ) where
 
 {-| TODO
@@ -24,7 +25,8 @@ import Task
 import Time exposing (Time)
 import Maybe exposing (andThen)
 
-import Material.Helpers exposing (mapFx, addFx)
+import Material.Component as Component exposing (Indexed)
+import Material.Helpers exposing (mapFx, addFx, delay)
 
 
 -- MODEL
@@ -44,7 +46,7 @@ type alias Contents a =
 -}
 type alias Model a =
   { queue : List (Contents a)
-  , state : State a
+  , state : State' a
   , seq : Int
   }
 
@@ -84,7 +86,9 @@ snackbar message actionMessage action =
   , fade = 250
   }
 
+
 {-| TODO
+(Bad name)
 -}
 isActive : Model a -> Maybe (Contents a)
 isActive model =
@@ -94,6 +98,15 @@ isActive model =
 
     _ ->
       Nothing
+
+
+{-|  TODO
+-}
+activeAction : Model a -> Maybe a
+activeAction model = 
+  isActive model 
+    |> flip Maybe.andThen .action 
+    |> Maybe.map snd
 
 
 contentsOf : Model a -> Maybe (Contents a)
@@ -107,7 +120,7 @@ contentsOf model =
 -- SNACKBAR STATE MACHINE
 
 
-type State a
+type State' a
   = Inert
   | Active (Contents a)
   | Fading (Contents a)
@@ -116,13 +129,6 @@ type State a
 type Transition
   = Timeout
   | Click
-
-
-delay : Time -> a -> Effects a
-delay t x =
-  Task.sleep t
-    |> (flip Task.andThen) (\_ -> Task.succeed x)
-    |> Effects.task
 
 
 move : Transition -> Model a -> (Model a, Effects Transition)
@@ -270,3 +276,61 @@ view addr model =
           )
           buttonBody
       ]
+
+
+-- COMPONENT
+
+
+{-|
+-}
+type alias State s  obs = 
+  { s | snackbar : Maybe (Model obs) }
+
+
+{-|
+-}
+type alias Instance state obs =
+  Component.Instance (Model obs) state (Action obs) obs Html
+
+
+{-|
+-}
+type alias Observer obs = 
+  Component.Observer (Action obs) obs
+
+
+actionObserver : Observer ons 
+actionObserver action = 
+  case action of 
+    Action action' -> 
+      Just action' 
+  
+    _ -> 
+      Nothing
+
+
+{-| Component instance.
+-}
+instance 
+  : (Component.Action (State state obs) obs -> obs)
+  -> (Model obs)
+  -> Instance (State state obs) obs
+
+instance lift model0 = 
+  Component.instance1
+    view update .snackbar (\x y -> {y | snackbar = x}) lift model0 [ actionObserver ]
+
+{-|
+  TODO
+-}
+add : 
+  Contents obs 
+  -> Instance (State state obs) obs 
+  -> (State state obs)
+  -> (State state obs, Effects obs)
+add contents inst model = 
+  let
+    (sb, fx) = 
+      update (Add contents) (inst.get model)
+  in
+    (inst.set sb model, Effects.map inst.fwd fx)

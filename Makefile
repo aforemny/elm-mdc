@@ -1,6 +1,9 @@
 PAGES=../elm-mdl-gh-pages
 
-elm.js: 
+comp: 
+	elm-make examples/Component.elm --warn --output elm.js
+
+demo:
 	elm-make examples/Demo.elm --warn --output elm.js
 
 wip-pages : 
@@ -11,14 +14,14 @@ pages :
 	elm-make examples/Demo.elm --output $(PAGES)/elm.js
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
 
-clean :
+cleanish :
 	rm -f elm.js index.html
 
-veryclean :
+clean :
 	rm -rf elm-stuff/build-artifacts
 
 distclean : clean
 	rm -rf elm-stuff
 
 
-.PHONY : pages elm.js clean veryclean distclean
+.PHONY : pages elm.js clean cleanish distclean

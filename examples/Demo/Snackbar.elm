@@ -4,36 +4,49 @@ import Effects exposing (Effects, none)
 import Html exposing (..)
 import Html.Attributes exposing (class, style, key)
 import Array exposing (Array)
+import Time exposing (Time, millisecond)
 
-import Markdown
-
+import Material.Helpers exposing (map1st, map2nd, delay)
 import Material.Color as Color
-import Material.Style exposing (styled, cs)
+import Material.Style exposing (styled, cs, css)
 import Material.Snackbar as Snackbar
 import Material.Button as Button exposing (Action(..))
 import Material.Grid exposing (..)
-import Material exposing (lift, lift')
+import Material.Elevation as Elevation
+import Material 
+
+import Demo.Page as Page
 
 
 -- MODEL
 
 
+type alias Mdl = 
+  Material.Model Action
+
+
+type Square' 
+  = Appearing 
+  | Idle
+  | Disappearing
+
+
+type alias Square = 
+  (Int, Square')
+
+
 type alias Model =
   { count : Int
-  , clicked : List Int
-  , snackbar : Snackbar.Model Action
-  , toastButton : Button.Model
-  , snackbarButton : Button.Model
+  , squares : List Square
+  , mdl : Mdl
   }
 
 
 model : Model
 model =
   { count = 0
-  , clicked = []
-  , snackbar = Snackbar.model
-  , toastButton = Button.model True
-  , snackbarButton = Button.model True
+  , squares = [] 
+  , mdl = Material.model
   }
 
 
@@ -41,138 +54,220 @@ model =
 
 
 type Action
-  = Undo Int
-  -- Components
-  | SnackbarAction (Snackbar.Action Action)
-  | ToastButtonAction Button.Action
-  | SnackbarButtonAction Button.Action
+  = AddSnackbar
+  | AddToast
+  | Appear Int
+  | Disappear Int
+  | Gone Int
+  | MDL (Material.Action Action)
 
 
-snackbar : Int -> Snackbar.Contents Action
-snackbar k =
-  Snackbar.snackbar
-    ("Snackbar message #" ++ toString k)
-    "UNDO"
-    (Undo k)
+add : Model -> (Int -> Snackbar.Contents Action) -> (Model, Effects Action)
+add model f =
+  let 
+    (mdl', fx) = 
+      Snackbar.add (f model.count) snackbar model.mdl
+    model' = 
+      { model 
+      | mdl = mdl'
+      , count = model.count + 1
+      , squares = (model.count, Appearing) :: model.squares
+      }
+  in 
+    ( model'
+    , Effects.batch 
+        [ Effects.tick (always (Appear model.count))
+        , fx 
+        ]
+    )
 
 
-toast : Int -> Snackbar.Contents Action
-toast k =
-  Snackbar.toast
-    <| "Toast message #" ++ toString k
-
-
-add : (Int -> Snackbar.Contents Action) -> Model -> (Model, Effects Action)
-add f model =
-  let
-    (snackbar', effects) =
-      Snackbar.update (Snackbar.Add (f model.count)) model.snackbar
-  in
-    ({ model
-     | snackbar = snackbar'
-     , count = model.count + 1
-     , clicked = model.count :: model.clicked
-     }
-    , Effects.map SnackbarAction effects)
+mapSquare : Int -> (Square' -> Square') -> Model -> Model
+mapSquare k f model = 
+  { model 
+  | squares = 
+      List.map 
+        ( \((k', sq) as s) -> if k /= k' then s else (k', f sq) )
+        model.squares
+  }
 
 
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    SnackbarButtonAction Click ->
-      add snackbar model
+    AddSnackbar ->
+      add model 
+        <| \k -> Snackbar.snackbar ("Snackbar message #" ++ toString k) "UNDO" (Disappear k)
 
-    ToastButtonAction Click ->
-      add toast model
+    AddToast -> 
+      add model
+        <| \k -> Snackbar.toast <| "Toast message #" ++ toString k
 
-    Undo k ->
+    Appear k -> 
+      ( model |> mapSquare k (always Idle)
+      , none
+      )
+
+    Disappear k -> 
+      ( model |> mapSquare k (always Disappearing)
+      , delay transitionLength (Gone k) 
+      )
+
+    Gone k ->
       ({ model
-         | clicked = List.filter ((/=) k) model.clicked
+       | squares = List.filter (fst >> (/=) k) model.squares
        }
       , none)
 
-    SnackbarAction (Snackbar.Action action')
-      -> update action' model
+    MDL action' -> 
+      Material.update MDL action' model.mdl
+        |> map1st (\m -> { model | mdl = m })
 
-    SnackbarAction       action' -> lift .snackbar       (\m x -> {m|snackbar      =x}) SnackbarAction       Snackbar.update action' model
-    ToastButtonAction    action' -> lift .toastButton    (\m x -> {m|toastButton   =x}) ToastButtonAction    Button.update   action' model
-    SnackbarButtonAction action' -> lift .snackbarButton (\m x -> {m|snackbarButton=x}) SnackbarButtonAction Button.update   action' model
 
 
 -- VIEW
 
 
-clickView : Model -> Int -> Html
-clickView model k =
+addSnackbarButton : Button.Instance Mdl Action 
+addSnackbarButton = 
+  Button.instance 0 MDL
+    Button.raised (Button.model True)
+    [ Button.fwdClick AddSnackbar ]
+
+
+addToastButton : Button.Instance Mdl Action 
+addToastButton = 
+  Button.instance 1 MDL
+    Button.raised (Button.model True)
+    [ Button.fwdClick AddToast ]
+
+
+-- TODO: Bad name
+snackbar : Snackbar.Instance Mdl Action
+snackbar = 
+  Snackbar.instance MDL Snackbar.model 
+
+
+boxHeight : String
+boxHeight = "48px"
+
+
+boxWidth : String
+boxWidth = "64px"
+
+
+transitionLength : Time 
+transitionLength = 150 * millisecond
+
+
+transitions : (String, String)
+transitions = 
+  ("transition"
+  , "box-shadow 333ms ease-in-out 0s, " 
+      ++ "width " ++ toString transitionLength ++ "ms, " 
+      ++ "height " ++ toString transitionLength ++ "ms"
+  )
+
+
+clickView : Model -> Square -> Html
+clickView model (k, square) =
   let
     color =
       Array.get ((k + 4) % Array.length Color.palette) Color.palette
         |> Maybe.withDefault Color.Teal
         |> flip Color.color Color.S500
 
-    selected =
-      (k == model.snackbar.seq - 1) &&
-        (Snackbar.isActive model.snackbar /= Nothing)
+    selected' =
+      Snackbar.activeAction (snackbar.get model.mdl) == Just (Disappear k)
+
+    (width, height, margin, selected) = 
+      case square of 
+        Idle -> 
+          (boxWidth, boxHeight, "16px 16px", selected')      
+        _ -> 
+          ("0", "0", "16px 0", False)
   in
-    styled div
-      [ Color.background color
-      , Color.text Color.primaryContrast
-      -- TODO. Should have shadow styles someplace. 
-      , cs <| "mdl-shadow--" ++ if selected then "8dp" else "2dp"
-      ] 
-      [ style
-          [ ("margin-right", "3ex")
-          , ("margin-bottom", "3ex")
-          , ("padding", "1.5ex")
-          , ("width", "4ex")
-          , ("border-radius", "2px")
+    div 
+      [ style 
+          [ ("height", boxHeight)
+          , ("width", width)
+          , ("position", "relative")
           , ("display", "inline-block")
-          , ("text-align", "center")
-          , ("transition", "box-shadow 333ms ease-in-out 0s")
+          , ("margin", margin)
+          , ("transition", 
+                "width " ++ toString transitionLength ++ "ms ease-in-out 0s, "
+                ++ "margin " ++ toString transitionLength ++ "ms ease-in-out 0s"
+            )
+          , ("z-index", "0")
           ]
-      , key (toString k)
+      , key <| toString k
       ]
-      [ text <| toString k ]
+      [ styled div
+          [ Color.background color
+          , Color.text Color.primaryContrast
+          , Elevation.shadow (if selected then 8 else 2)
+          ] 
+          [ style
+              [ ("display", "inline-flex")
+              , ("align-items", "center")
+              , ("justify-content", "center")
+              , ("height", height)
+              , ("width", width)
+              , ("border-radius", "2px")
+              , transitions
+              , ("overflow", "hidden")
+              , ("box-sizing", "border-box")
+              , ("flex", "0 0 auto")
+              , ("position", "absolute")
+              , ("bottom", "0")
+              , ("left", "0")
+              ]
+          ]
+          [ div [] [ text <| toString k ] ]
+        ]
 
 
 
 view : Signal.Address Action -> Model -> Html
 view addr model =
-  div []
-    [ h1 [ class "mdl-typography--display-4-color-contrast" ] [ text "Snackbars & Toasts" ]
-    , intro
-    , grid []
-        -- TODO. Buttons should be centered. Desperately need to be able
-        -- to add css/classes to top-level element of components (div
-        -- in grid, button in button, div in textfield etc.)
-        [ cell [ size All 2, size Phone 2, align Top ]
-            [ Button.raised
-                (Signal.forwardTo addr ToastButtonAction)
-                model.toastButton 
-                []
+  Page.body "Snackbar & Toast" srcUrl intro references
+    [ p [] 
+        [ text """Click the buttons below to activate the snackbar. Note that 
+                  multiple activations are automatically queued."""
+        ]
+    , grid [ ] --css "margin-top" "32px" ]
+        [ cell 
+            [ size All 2, size Phone 2, align Top ]
+            [ addToastButton.view addr model.mdl 
+                [ Button.colored
+                , css "margin" "16px"
+                ] 
                 [ text "Toast" ]
             ]
-        , cell [ size All 2, size Phone 2, align Top ]
-            [ Button.raised
-                (Signal.forwardTo addr SnackbarButtonAction)
-                model.snackbarButton
-                []
+        , cell 
+            [ size All 2, size Phone 2, align Top ]
+            [ addSnackbarButton.view addr model.mdl 
+                [ Button.colored
+                , css "margin" "16px"
+                ] 
                 [ text "Snackbar" ]
             ]
         , cell
-            [ size Desktop 7, size Tablet 3, size Phone 12, align Top ]
-            (model.clicked |> List.reverse |> List.map (clickView model))
+            [ size Desktop 7, offset Desktop 1 
+            , size Tablet 3, offset Tablet 1
+            , size Phone 4
+            , align Top 
+            ]
+            (model.squares |> List.reverse |> List.map (clickView model))
         ]
-    , Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar
+    , snackbar.view addr model.mdl 
     ]
 
 
 intro : Html
-intro = """
-From the
-[Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section).
-
+intro = 
+  Page.fromMDL "https://www.getmdl.io/components/index.html#snackbar-section" """
 > The Material Design Lite (MDL) __snackbar__ component is a container used to
 > notify a user of an operation's status. It displays at the bottom of the
 > screen. A snackbar may contain an action button to execute a command for the
@@ -180,15 +275,19 @@ From the
 > example. Actions should not be to close the snackbar. By not providing an
 > action, the snackbar becomes a __toast__ component.
 
-#### See also
+""" 
 
- - [Demo source code](https://github.com/debois/elm-mdl/blob/master/examples/Demo/Snackbar.elm)
- - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Snackbar)
- - [Material Design Specification](https://www.google.com/design/spec/components/snackbars-toasts.html)
- - [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section)
 
-#### Demo
+srcUrl : String 
+srcUrl =
+  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Snackbar.elm"
 
-""" |> Markdown.toHtml
+
+references : List (String, String)
+references = 
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Snackbar"
+  , Page.mds "https://www.google.com/design/spec/components/snackbars-toasts.html"
+  , Page.mdl "https://www.getmdl.io/components/index.html#snackbar-section"
+  ]
 
 

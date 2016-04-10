@@ -26,15 +26,22 @@ This implementation provides only single-line.
 # Configuration
 @docs Kind, Label
 
-# Component
+# Elm Architecture
 @docs Action, Model, model, update, view
+
+# Component
+@docs State, Instance
+@docs instance, fwdInput, fwdBlur, fwdFocus
+
 -}
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Effects
 
 import Material.Helpers exposing (filter)
+import Material.Component as Component exposing (Indexed)
 
 
 -- MODEL
@@ -131,6 +138,7 @@ view : Signal.Address Action -> Model -> Html
 view addr model =
   let hasFloat = model.label |> Maybe.map .float |> Maybe.withDefault False
       hasError = model.error |> Maybe.map (always True) |> Maybe.withDefault False
+      labelText = model.label |> Maybe.map .text 
   in
     filter div
       [ classList
@@ -155,8 +163,71 @@ view addr model =
           , onFocus addr Focus
           ]
           []
-      ,   model.label |> Maybe.map (\l ->
-            label [class "mdl-textfield__label"]  [text l.text])
-      ,   model.error |> Maybe.map (\e ->
-            span [class "mdl-textfield__error"] [text e])
+      , Just <| label 
+          [class "mdl-textfield__label"]  
+          (case labelText of 
+            Just str -> [ text str ]
+            Nothing -> [])
+      , model.error |> Maybe.map (\e ->
+          span [class "mdl-textfield__error"] [text e])
       ]
+
+
+
+-- COMPONENT 
+
+
+{-|
+-}
+type alias State state = 
+  { state | textfield : Indexed Model }
+
+
+{-| 
+-}
+type alias Instance state obs = 
+  Component.Instance Model state Action obs Html
+
+
+{-| Component constructor. See module `Material`.
+-}
+instance : 
+  Int
+  -> (Component.Action (State state) obs -> obs)
+  -> Model
+  -> List (Component.Observer Action obs)
+  -> Instance (State state) obs
+
+instance = 
+  let 
+    update' action model = (update action model, Effects.none)
+  in 
+    Component.instance view update' .textfield (\x y -> {y | textfield = x}) 
+
+
+{-| Lift the button Click action to your own action. E.g., 
+-}
+fwdInput : (String -> obs) -> Action -> Maybe obs
+fwdInput f action =
+  case action of 
+    Input str -> Just (f str)
+    _ -> Nothing
+
+
+{-| Lift the Blur action to your own action. 
+-}
+fwdBlur : obs -> Action -> Maybe obs
+fwdBlur o action = 
+  case action of 
+    Blur -> Just o
+    _ -> Nothing
+
+
+{-| Lift the Focus action to your own action.
+-}
+fwdFocus : obs -> Action -> Maybe obs
+fwdFocus o action =
+  case action of 
+    Focus -> Just o 
+    _ -> Nothing 
+

@@ -352,7 +352,7 @@ tabsView addr model tabs =
               , ("is-casting-shadow", model.mode == Standard)
               ]
           ]
-          (tabs |> mapWithIndex (\tabIndex tab ->
+          (tabs |> List.indexedMap (\tabIndex tab ->
             filter a
               [ classList
                   [ ("mdl-layout__tab", True)
