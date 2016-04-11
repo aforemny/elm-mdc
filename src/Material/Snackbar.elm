@@ -8,13 +8,16 @@ module Material.Snackbar
 {-| TODO
 
 # Model
-@ docs Contents, Model, model, toast, snackbar
+@docs Contents, Model, model, toast, snackbar, isActive, activeAction
 
 # Action, Update
 @docs Action, update
 
 # View
 @docs view
+
+# Component support
+@docs Instance, add, instance 
 -}
 
 import Html exposing (..)
@@ -230,6 +233,8 @@ update action model =
 -- VIEW
 
 
+{-|
+-}
 view : Signal.Address (Action a) -> Model a -> Html
 view addr model =
   let
@@ -283,14 +288,14 @@ view addr model =
 
 {-|
 -}
-type alias State s  obs = 
+type alias Container s  obs = 
   { s | snackbar : Maybe (Model obs) }
 
 
 {-|
 -}
-type alias Instance state obs =
-  Component.Instance (Model obs) state (Action obs) obs Html
+type alias Instance container obs =
+  Component.Instance (Model obs) container (Action obs) obs Html
 
 
 {-|
@@ -312,9 +317,9 @@ actionObserver action =
 {-| Component instance.
 -}
 instance 
-  : (Component.Action (State state obs) obs -> obs)
+  : (Component.Action (Container c obs) obs -> obs)
   -> (Model obs)
-  -> Instance (State state obs) obs
+  -> Instance (Container c obs) obs
 
 instance lift model0 = 
   Component.instance1
@@ -325,9 +330,9 @@ instance lift model0 =
 -}
 add : 
   Contents obs 
-  -> Instance (State state obs) obs 
-  -> (State state obs)
-  -> (State state obs, Effects obs)
+  -> Instance (Container c obs) obs 
+  -> (Container c obs)
+  -> (Container c obs, Effects obs)
 add contents inst model = 
   let
     (sb, fx) = 

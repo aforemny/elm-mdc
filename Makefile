@@ -4,7 +4,7 @@ comp:
 	elm-make examples/Component.elm --warn --output elm.js
 
 demo:
-	elm-make examples/Demo.elm --warn --output elm.js
+	(cd demo; elm-make Demo.elm --warn --output ../elm.js)
 
 wip-pages : 
 	elm-make examples/Demo.elm --output $(PAGES)/wip.js
@@ -18,10 +18,10 @@ cleanish :
 	rm -f elm.js index.html
 
 clean :
-	rm -rf elm-stuff/build-artifacts
+	rm -rf elm-stuff/build-artifacts demo/elm-stuff/build-artifacts
 
 distclean : clean
 	rm -rf elm-stuff
 
 
-.PHONY : pages elm.js clean cleanish distclean
+.PHONY : pages elm.js clean cleanish distclean demo
