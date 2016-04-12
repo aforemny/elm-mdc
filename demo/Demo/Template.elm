@@ -3,23 +3,28 @@ module Demo.Template where
 import Effects exposing (Effects, none)
 import Html exposing (..)
 
-import Markdown
-
 import Material.Template as Template
-import Material exposing (lift, lift')
+import Material.Helpers exposing (map1st)
+import Material 
+
+import Demo.Page as Page
 
 
 -- MODEL
 
 
+type alias Mdl = 
+  Material.Model 
+
+
 type alias Model =
-  { template : Template.Model
+  { mdl : Material.Model
   }
 
 
 model : Model
 model =
-  { template = Template.model
+  { mdl = Material.model
   }
 
 
@@ -27,47 +32,56 @@ model =
 
 
 type Action 
-  = TemplateAction Template.Action
+  = TemplateAction 
+  | MDL (Material.Action Action)
 
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    TemplateAction action' -> lift .template (\m x -> {m|template=x}) TemplateAction Template.update action' model
+    TemplateAction -> 
+      (model, Effects.none)
+
+    MDL action' -> 
+      Material.update MDL action' model.mdl
+        |> map1st (\m -> { model | mdl = m })
 
 
 -- VIEW
 
 
+template = 
+  Template.instance 0 MDL Template.model 
+    [ Template.fwdTemplate TemplateAction ]
+
 
 view : Signal.Address Action -> Model -> Html
 view addr model =
-  div []
-    [ intro
-    , Template.view (Signal.forwardTo addr TemplateAction) model.template
-    ]
-
+  [ div 
+      [] 
+      [ template.view addr model.mdl []
+      ]
+  ]
+  |> Page.body2 "TEMPLATE" srcUrl intro references
 
 
 intro : Html
-intro = """
-# TEMPLATE
-
-From the
-[Material Design Lite documentation](https://www.getmdl.io/components/index.html#TEMPLATE-section).
-
+intro = 
+  Page.fromMDL "https://www.getmdl.io/components/index.html#TEMPLATE-section" """
 > ...
+""" 
 
-#### See also
 
- - [Demo source code](https://github.com/debois/elm-mdl/blob/master/examples/Demo/TEMPLATE.elm)
- - [elm-mdl package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-TEMPLATE)
- - [Material Design Specification](https://www.google.com/design/spec/components/TEMPLATE.html)
- - [Material Design Lite documentation](https://www.getmdl.io/components/index.html#TEMPLATE)
+srcUrl : String 
+srcUrl =
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/TEMPLATE.elm"
 
-#### Demo
 
-""" |> Markdown.toHtml
-
+references : List (String, String)
+references = 
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-TEMPLATE"
+  , Page.mds "https://www.google.com/design/spec/components/TEMPLATE.html"
+  , Page.mdl "https://www.getmdl.io/components/index.html#TEMPLATE"
+  ]
 
 

@@ -164,7 +164,7 @@ import Material.Button as Button
 import Material.Textfield as Textfield
 import Material.Snackbar as Snackbar
 import Material.Component as Component exposing (Indexed)
-
+--import Material.Template as Template
 
 {-| Model encompassing all Material components. Since some components store
 user actions in their model (notably Snackbar), the model is generic in the 
@@ -174,6 +174,7 @@ type alias Model =
   { button : Indexed Button.Model
   , textfield : Indexed Textfield.Model
   , snackbar : Maybe (Snackbar.Model Int) 
+--  , template : Indexed Template.Model
   }
 
 
@@ -184,6 +185,7 @@ model =
   { button = Dict.empty
   , textfield = Dict.empty
   , snackbar = Nothing
+--, template = Dict.empty
   }
 
 

@@ -27,7 +27,6 @@ import Demo.Textfields
 import Demo.Snackbar
 import Demo.Badges
 import Demo.Elevation
-
 --import Demo.Template
 
 
@@ -89,7 +88,7 @@ model =
   , buttons = Demo.Buttons.model
   , textfields = Demo.Textfields.model
   , snackbar = Demo.Snackbar.model
-      --, template = Demo.Template.model
+  --, template = Demo.Template.model
   }
 
 
@@ -106,7 +105,7 @@ type Action
   | ButtonsAction Demo.Buttons.Action
   | TextfieldAction Demo.Textfields.Action
   | SnackbarAction Demo.Snackbar.Action
---| TemplateAction Demo.Template.Action
+--  | TemplateAction Demo.Template.Action
 
 
 nth : Int -> List a -> Maybe a
@@ -202,10 +201,8 @@ tabs =
       Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
   , ("Textfields", "textfields", \addr model ->
       Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
-  {-
-  , ("Template", "tempate", \addr model -> 
-      [Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template])
-  -}
+  --, ("Template", "tempate", \addr model -> 
+  --    Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template)
   ]
 
 
