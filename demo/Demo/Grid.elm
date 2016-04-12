@@ -6,7 +6,7 @@ import Array
 
 import Material.Grid exposing (..)
 import Material.Style exposing (Style, css)
-import Material.Color as Color
+import Material.Color as Color 
 
 import Demo.Page as Page
 
@@ -46,7 +46,7 @@ std = democell 200
 
 color : Int -> Style
 color k =
-    Array.get ((k + 7) % Array.length Color.palette) Color.palette
+    Array.get ((k + 11) % Array.length Color.palette) Color.palette
       |> Maybe.withDefault Color.Teal
       |> flip Color.color Color.S500
       |> Color.background
@@ -59,18 +59,18 @@ view =
                 below. Note in particular what happens to the top and bottom rows."""
       ]
   , [1..12 ]
-    |> List.map (\i -> small [size All 1, color i] [text "1"])
+    |> List.map (\i -> small [size All 1, color 4] [text "1"])
     |> grid []
   , [1 .. 3]
-    |> List.map (\i -> std [size All 4, color i] [text <| "4"])
+    |> List.map (\i -> std [size All 4, color 5] [text <| "4"])
     |> grid []
-  , [ std [size All 6, color 16] [text "6"]
-    , std [size All 4, color 17] [text "4"]
-    , std [size All 2, color 18] [text "2"]
+  , [ std [size All 6, color 6] [text "6"]
+    , std [size All 4, color 6] [text "4"]
+    , std [size All 2, color 6] [text "2"]
     ] |> grid []
-  , [ std [size All 6, size Tablet 8, color 19] [text "6 (8 tablet)"]
-    , std [size All 4, size Tablet 6, color 20] [text "4 (6 tablet)"]
-    , std [size All 2, size Phone 4,  color 21] [text "2 (4 phone)"]
+  , [ std [size All 6, size Tablet 8, color 7] [text "6 (8 tablet)"]
+    , std [size All 4, size Tablet 6, color 8] [text "4 (6 tablet)"]
+    , std [size All 2, size Phone 4,  color 9] [text "2 (4 phone)"]
     ] |> grid []
   ]
   |> Page.body "Grid" srcUrl intro references
