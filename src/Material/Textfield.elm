@@ -46,6 +46,7 @@ import Html.Events exposing (..)
 import Effects
 
 import Material.Helpers exposing (filter)
+import Material.Style as Style exposing (cs, cs', Style)
 import Material.Component as Component exposing (Indexed)
 
 
@@ -138,25 +139,23 @@ update action model =
 
 {-| Component view.
 -}
-view : Signal.Address Action -> Model -> Html
--- TODO: Should take Style argument. 
-view addr model =
+view : Signal.Address Action -> Model -> List Style -> Html
+view addr model styles =
   let hasFloat = model.label |> Maybe.map .float |> Maybe.withDefault False
       hasError = model.error |> Maybe.map (always True) |> Maybe.withDefault False
       labelText = model.label |> Maybe.map .text 
   in
-    filter div
-      [ classList
-          [ ("mdl-textfield", True)
-          , ("mdl-js-textfield", True)
-          , ("is-upgraded", True)
-          , ("mdl-textfield--floating-label", hasFloat)
-          , ("is-invalid", hasError)
-          , ("is-dirty", model.value /= "")
-          , ("is-focused", model.isFocused && not model.isDisabled)
-          , ("is-disabled", model.isDisabled)
-          ]
-      ]
+    filter Style.div
+      (  cs "mdl-textfield"
+      :: cs "mdl-js-textfield"
+      :: cs "is-upgraded"
+      :: cs' "mdl-textfield--floating-label" hasFloat
+      :: cs' "is-invalid" hasError
+      :: cs' "is-dirty" (model.value /= "")
+      :: cs' "is-focused" (model.isFocused && not model.isDisabled)
+      :: cs' "is-disabled" model.isDisabled
+      :: styles
+      )
       [ Just <| input
           [ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
@@ -191,7 +190,7 @@ type alias Container c =
 {-| 
 -}
 type alias Instance container obs = 
-  Component.Instance Model container Action obs Html
+  Component.Instance Model container Action obs (List Style -> Html)
 
 
 {-| Component constructor. See module `Material`.
@@ -199,7 +198,7 @@ type alias Instance container obs =
 instance : 
   Int
   -> (Component.Action (Container c) obs -> obs)
-  -> Model
+  -> Model 
   -> List (Component.Observer Action obs)
   -> Instance (Container c) obs
 

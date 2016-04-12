@@ -160,7 +160,7 @@ view addr model =
   |> List.map (\c -> 
       cell 
         [size All 4, offset Desktop 1]
-        [c.view addr model.mdl]
+        [c.view addr model.mdl []]
      )
   |> List.intersperse (cell [size All 1] [])
   |> grid []

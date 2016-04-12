@@ -152,7 +152,9 @@ body1 t srcUrl contents links demo =
     ]
 
 
+body2 : String -> String -> Html -> List (String, String) -> List Html -> Html 
 body2 = body1
+
 
 body3 : String -> String -> Html -> List (String, String) -> List Html -> Html 
 body3 t srcUrl contents links demo = 
