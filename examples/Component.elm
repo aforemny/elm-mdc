@@ -14,7 +14,7 @@ import Material.Button as Button
 
 type alias Model = 
   { count : Int
-  , mdl : Material.Model Action
+  , mdl : Material.Model 
       -- Boilerplate: mdl is the Model store for any and all MDL components you need. 
   }
 
@@ -64,7 +64,8 @@ update action model =
 -- VIEW
 
 
-type alias Mdl = Material.Model Action
+type alias Mdl = 
+  Material.Model 
 
 
 {- We construct the instances of the Button component that we need, one 
