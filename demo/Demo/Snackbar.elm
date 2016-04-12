@@ -264,33 +264,34 @@ clickView model (k, square) =
 
 view : Signal.Address Action -> Model -> Html
 view addr model =
-  Page.body "Snackbar & Toast" srcUrl intro references
+  Page.body2 "Snackbar & Toast" srcUrl intro references
     [ p [] 
         [ text """Click the buttons below to generate toasts and snackbars. Note that 
                   multiple activations are automatically queued."""
         ]
     , grid [ ] 
         [ cell 
-            [ size All 2, size Phone 2, align Top ]
-            [ addToastButton.view addr model.mdl 
-                [ Button.colored
-                , css "margin" "16px"
-                ] 
-                [ text "Toast" ]
-            ]
-        , cell 
-            [ size All 2, size Phone 2, align Top ]
+            [ size All 4, size Desktop 2]
             [ addSnackbarButton.view addr model.mdl 
                 [ Button.colored
-                , css "margin" "16px"
+                , css "width" "8em"
                 ] 
                 [ text "Snackbar" ]
             ]
+        , cell 
+            [ size All 4, size Desktop 2]
+            [ addToastButton.view addr model.mdl 
+                [ Button.colored
+                , css "width" "8em"
+                ] 
+                [ text "Toast" ]
+            ]
         , cell
-            [ size Desktop 7, offset Desktop 1 
-            , size Tablet 3, offset Tablet 1
+            [ size Desktop 10, offset Desktop 1 
+            , size Tablet 6, offset Tablet 1
             , size Phone 4
             , align Top 
+            , css "padding-top" "32px"
             ]
             (model.squares |> List.reverse |> List.map (clickView model))
         ]

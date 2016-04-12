@@ -41,10 +41,19 @@ mdl url =
 
 references : List (String, String) -> List Html
 references links = 
-  [ text "References" 
-  , ul [] 
+  [ header "References" 
+  , ul 
+      [ Html.Attributes.style 
+          [ ("padding-left", "0")
+          ]
+      ] 
       ( links |> List.map (\(str, url) -> 
-          li [] [ a [ href url ] [ text str ] ]
+          li 
+            [ Html.Attributes.style 
+                [ ("list-style-type", "none") 
+                ] 
+            ] 
+            [ a [ href url ] [ text str ] ]
         )
       )
   ]
@@ -87,13 +96,12 @@ title t =
     [ text t ]
 
 
-demoTitle : Html 
-demoTitle = 
-  Style.styled Html.h2
-    [ Color.text Color.primary 
-    ]
-    []
-    [ text "Example" ]
+
+header : String -> Html
+header str = 
+  text str
+
+
 
 -- VIEW SOURCE BUTTON
 
@@ -134,7 +142,7 @@ body1 t srcUrl contents links demo =
     --, fab srcUrl
     -- TODO: buttons can't be links (yet)
     -- TODO: FAB placement.
-    , demoTitle
+    --, header "Examples"
     , Style.div 
       [ css "margin-bottom" "48px"
       --, css "margin-top" "48px"
@@ -144,23 +152,25 @@ body1 t srcUrl contents links demo =
     ]
 
 
-body2 : String -> String -> Html -> List (String, String) -> List Html -> Html 
-body2 t srcUrl contents links demo = 
-  div []
+body2 = body1
+
+body3 : String -> String -> Html -> List (String, String) -> List Html -> Html 
+body3 t srcUrl contents links demo = 
+  div 
+    [
+    ]
     [ title t
     , grid [ noSpacing ]
        [ cell 
-          [ size All 4, size Desktop 6 ] 
-          [ div [] contents
+          [ size All 4, size Desktop 5, size Tablet 8 ] 
+          [ contents
           , div 
               [] 
               ( references <| ("Demo source", srcUrl) :: links ) 
           ]
        , cell 
-           [ size All 4, size Desktop 6 ]
-           ( demoTitle
-           ::  demo 
-           )
+           [ size Phone 4, size Desktop 5, offset Desktop 1, size Tablet 8 ]
+           demo
        ]
     ]
 

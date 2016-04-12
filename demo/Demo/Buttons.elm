@@ -113,8 +113,8 @@ view addr model =
           [ div
               [ style
                 [ ("text-align", "center")
-                , ("margin-top", "1em")
-                , ("margin-bottom", "1em")
+                , ("margin-top", ".6em")
+                , ("margin-bottom", ".6em")
                 ]
               ]
               [ view
@@ -123,7 +123,7 @@ view addr model =
               , div
                   [ style
                     [ ("font-size", "9pt")
-                    , ("margin-top", "1em")
+                    , ("margin-top", ".6em")
                     ]
                   ]
                   [ text description
@@ -134,8 +134,14 @@ view addr model =
     )
   )
   |> Grid.grid [] 
-  |> flip (::) []
-  |> Page.body "Buttons" srcUrl intro references
+  |> flip (::) 
+      [ p [] 
+         [ text """Various combinations of colors and button styles can be seen
+                   below. Most buttons have animations; try clicking."""
+         ]
+      ] 
+  |> List.reverse
+  |> Page.body2 "Buttons" srcUrl intro references
 
 intro : Html
 intro =

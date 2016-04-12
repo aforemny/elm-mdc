@@ -31,13 +31,12 @@ elevate k =
     ]
 
 
-
-
 view : Html
 view =
   0 :: Elevation.validElevations
   |> List.map elevate 
-  |> Page.body "Elevation" srcUrl intro references
+  |> (::) ( p [] [ text """Below are boxes drawn at various elevations.""" ] )
+  |> Page.body1 "Elevation" srcUrl intro references
 
 
 

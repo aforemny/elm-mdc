@@ -166,7 +166,7 @@ view addr model =
   |> grid []
   |> flip (::) [] 
   |> (::) (Html.text "Try entering text into some of the textfields below.")
-  |> Page.body "Textfields" srcUrl intro references
+  |> Page.body2 "Textfields" srcUrl intro references
 
 
 intro : Html

@@ -73,7 +73,7 @@ view =
     , std [size All 2, size Phone 4,  color 9] [text "2 (4 phone)"]
     ] |> grid []
   ]
-  |> Page.body "Grid" srcUrl intro references
+  |> Page.body1 "Grid" srcUrl intro references
 
 
 intro : Html

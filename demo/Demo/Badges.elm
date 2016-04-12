@@ -17,7 +17,10 @@ c = cell [ size All 4 ]
 
 view : Html
 view =
-  [ grid 
+  [ p []
+      [ text """Below are examples of various badges."""
+      ]
+  , grid 
       [] 
       [ c [Style.span [ Badge.withBadge "2" ]  [text "Badge"]  ]
       , c [Style.span 
@@ -39,7 +42,7 @@ view =
       , c [ Icon.view "flight_takeoff" [ Icon.size24, Badge.withBadge "33", Badge.overlap ] [] ]
       ]
   ]
-  |> Page.body "Badges" srcUrl intro references
+  |> Page.body2 "Badges" srcUrl intro references
 
 
 
