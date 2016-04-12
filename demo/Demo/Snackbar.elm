@@ -12,7 +12,7 @@ import Material.Style exposing (styled, cs, css)
 import Material.Snackbar as Snackbar
 import Material.Button as Button exposing (Action(..))
 import Material.Grid exposing (..)
-import Material.Elevation as Elevation
+import Material.Elevation exposing (e2, e8)
 import Material 
 
 import Demo.Page as Page
@@ -236,7 +236,7 @@ clickView model (k, square) =
       [ styled div
           [ Color.background color
           , Color.text Color.primaryContrast
-          , Elevation.shadow (if selected then 8 else 2)
+          , if selected then e8 else e2
           ] 
           [ style
               [ -- Center contents

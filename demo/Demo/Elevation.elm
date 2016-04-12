@@ -2,7 +2,7 @@ module Demo.Elevation where
 
 import Html exposing (..)
 
-import Material.Style as Style exposing (cs, css)
+import Material.Style as Style exposing (cs, css, Style)
 import Material.Elevation as Elevation
 
 import Demo.Page as Page
@@ -11,21 +11,23 @@ import Demo.Page as Page
 -- VIEW
 
 
-elevate : Int -> Html 
-elevate k = 
+elevate : (Style, Int) -> Html 
+elevate (e, k) = 
   Style.div 
     [ css "height" "96px"
     , css "width"  "128px"
     , css "margin" "40px"
+    -- Center
     , css "display" "inline-flex"
     , css "flex-flow" "row wrap" 
     , css "justify-content" "center"
     , css "align-items" "center"
-    , Elevation.shadow k
+    , e
     ]
     [ Style.div 
       [ cs ".mdl-typography--title-color-contrast" 
         -- TODO. Typography!
+      , css "box-radius" "2pt"
       ] 
       [ text <| toString k ]
     ]
@@ -33,7 +35,7 @@ elevate k =
 
 view : Html
 view =
-  0 :: Elevation.validElevations
+  (cs "", 0) :: Elevation.elevations
   |> List.map elevate 
   |> (::) ( p [] [ text """Below are boxes drawn at various elevations.""" ] )
   |> Page.body1 "Elevation" srcUrl intro references

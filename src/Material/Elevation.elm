@@ -1,9 +1,8 @@
 module Material.Elevation
-  ( shadow
-  , validElevations
+  ( e2, e3, e4, e6, e8, e16, e24 
+  , elevations
   , transition
   ) where
-
 
 {-| From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)
 
@@ -36,13 +35,18 @@ Refer to
 for a live demo. 
   
 
-# Component
-@docs shadow, validElevations, transition
+# Elevations
+Each of the values below denote an elevation of a certain heigh, e.g., 
+`e4` will cast a shadow indicating an elevation of 4dp. 
+@docs e2, e3, e4, e6, e8, e16, e24
+@docs elevations
+
+# Transitions
+@docs transition
 
 -}
 
 import Material.Style exposing (..)
-
 
 {-| Indicate the elevation of an element by giving it a shadow. 
 The argument indicates intended elevation; valid values 
@@ -56,11 +60,59 @@ shadow z =
   cs ("mdl-shadow--" ++ toString z ++ "dp")
 
 
-{-| Programmatically accessible valid elevations for `shadow`.
+{-|
 -}
-validElevations : List Int 
-validElevations = 
-  [ 2, 3, 4, 6, 8, 16, 24 ] 
+e2 : Style
+e2 = shadow 2
+
+
+{-|
+-}
+e3 : Style
+e3 = shadow 3
+
+
+{-|
+-}
+e4 : Style
+e4 = shadow 4
+
+{-|
+-}
+e6 : Style
+e6 = shadow 6
+
+
+{-|
+-}
+e8 : Style
+e8 = shadow 8
+
+
+{-|
+-}
+e16 : Style
+e16 = shadow 16
+
+
+{-|
+-}
+e24 : Style
+e24 = shadow 24
+
+
+{-| List of all elevations and their depth in dp. 
+-}
+elevations : List (Style, Int)
+elevations = 
+  [ (e2, 2)
+  , (e3, 3)
+  , (e4, 4)
+  , (e6, 6)
+  , (e8, 8)
+  , (e16, 16)
+  , (e24, 24)
+  ]
 
 
 {-| Add a CSS-transition to changes in elevation. Supply a transition
