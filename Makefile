@@ -1,4 +1,4 @@
-PAGES=../elm-mdl-gh-pages
+PAGES=../../elm-mdl-gh-pages
 
 comp: 
 	elm-make examples/Component.elm --warn --output elm.js
@@ -10,7 +10,7 @@ docs:
 	elm-make --docs=docs.json 
 
 wip-pages : 
-	elm-make examples/Demo.elm --output $(PAGES)/wip.js
+	(cd demo; elm-make Demo.elm --output $(PAGES)/wip.js)
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
 
 pages : 
