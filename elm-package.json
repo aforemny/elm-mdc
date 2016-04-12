@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "2.0.0",
     "summary": "Material Design Lite port to Elm",
     "repository": "https://github.com/debois/elm-mdl.git",
     "license": "BSD3",
@@ -15,8 +15,8 @@
         "Material.Button",
         "Material.Textfield",
         "Material.Layout",
-        "Material.Grid", 
-        "Material.Component", 
+        "Material.Grid",
+        "Material.Component",
         "Material.Elevation",
         "Material.Snackbar"
     ],
