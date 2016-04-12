@@ -520,6 +520,7 @@ view addr model { drawer, header, tabs, main } =
         , contentDrawerButton
         , main' 
             ( class "mdl-layout__content" 
+            :: key ("elm-mdl-layout-" ++ toString model.selectedTab)
             :: (
               if isWaterfall model.mode then 
                 [ on "scroll" (DOM.target DOM.scrollTop) (Signal.message scrollMailbox.address) ]
