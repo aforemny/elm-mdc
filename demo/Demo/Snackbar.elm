@@ -6,7 +6,7 @@ import Html.Attributes exposing (class, style, key)
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
 
-import Material.Helpers exposing (map1st, map2nd, delay)
+import Material.Helpers exposing (map1st, map2nd, pure, delay)
 import Material.Color as Color
 import Material.Style exposing (styled, cs, css)
 import Material.Snackbar as Snackbar
@@ -18,7 +18,9 @@ import Material
 import Demo.Page as Page
 
 
+
 -- MODEL
+
 
 
 type alias Mdl = 
@@ -107,19 +109,13 @@ update action model =
       add (\k -> Snackbar.toast k <| "Toast message #" ++ toString k) model
 
     Appear k -> 
-      ( model |> mapSquare k (\sq -> if sq == Appearing then Waiting else sq)
-      , none
-      )
+      model |> mapSquare k (\sq -> if sq == Appearing then Waiting else sq) |> pure
 
     Snackbar (Snackbar.Begin k) -> 
-      ( model |> mapSquare k (always Active)
-      , none
-      )
+      model |> mapSquare k (always Active) |> pure
 
     Snackbar (Snackbar.End k) -> 
-      ( model |> mapSquare k (always Idle)
-      , none
-      )
+      model |> mapSquare k (always Idle) |> pure
 
     Snackbar (Snackbar.Click k) -> 
       ( model |> mapSquare k (always Disappearing)
@@ -144,6 +140,7 @@ update action model =
 
 
 -- VIEW
+
 
 
 addSnackbarButton : Button.Instance Mdl Action 
@@ -172,13 +169,21 @@ transitionLength : Time
 transitionLength = 150 * millisecond
 
 
-transitions : (String, String)
-transitions = 
+transitionInner : (String, String)
+transitionInner = 
   ("transition"
   , "box-shadow 333ms ease-in-out 0s, " 
       ++ "width " ++ toString transitionLength ++ "ms, " 
       ++ "height " ++ toString transitionLength ++ "ms, "
       ++ "background-color " ++ toString transitionLength ++ "ms"
+  )
+
+
+transitionOuter : (String, String)
+transitionOuter = 
+  ("transition"
+  , "width " ++ toString transitionLength ++ "ms ease-in-out 0s, "
+      ++ "margin " ++ toString transitionLength ++ "ms ease-in-out 0s"
   )
 
 
@@ -210,6 +215,11 @@ clickView model (k, square) =
         (boxWidth, boxHeight, "16px 16px", selected')      
 
   in
+    {- In order to get the box appearance and disappearance animations 
+    to start in the lower-left corner, we render boxes as an outer div 
+    (which animates only width, to cause reflow of surrounding boxes), 
+    and an absolutely positioned inner div (to force animation to start
+    in the lower-left corner. -}
     div 
       [ style 
           [ ("height", boxHeight)
@@ -217,13 +227,11 @@ clickView model (k, square) =
           , ("position", "relative")
           , ("display", "inline-block")
           , ("margin", margin)
-          , ("transition", 
-                "width " ++ toString transitionLength ++ "ms ease-in-out 0s, "
-                ++ "margin " ++ toString transitionLength ++ "ms ease-in-out 0s"
-            )
           , ("z-index", "0")
+          , transitionOuter
           ]
       , key <| toString k
+        {- Interestingly, not setting key messes up CSS transitions in spectacular ways. -}
       ]
       [ styled div
           [ Color.background color
@@ -231,19 +239,22 @@ clickView model (k, square) =
           , Elevation.shadow (if selected then 8 else 2)
           ] 
           [ style
-              [ ("display", "inline-flex")
+              [ -- Center contents
+                ("display", "inline-flex")
               , ("align-items", "center")
               , ("justify-content", "center")
+              , ("flex", "0 0 auto")
+                -- Sizing
               , ("height", height)
               , ("width", width)
               , ("border-radius", "2px")
-              , transitions
-              , ("overflow", "hidden")
               , ("box-sizing", "border-box")
-              , ("flex", "0 0 auto")
+                -- Force appearance/disapparenace to be from/to lower-left corner. 
               , ("position", "absolute")
               , ("bottom", "0")
               , ("left", "0")
+                -- Transitions
+              , transitionInner
               ]
           ]
           [ div [] [ text <| toString k ] ]
@@ -255,7 +266,7 @@ view : Signal.Address Action -> Model -> Html
 view addr model =
   Page.body "Snackbar & Toast" srcUrl intro references
     [ p [] 
-        [ text """Click the buttons below to activate the snackbar. Note that 
+        [ text """Click the buttons below to generate toasts and snackbars. Note that 
                   multiple activations are automatically queued."""
         ]
     , grid [ ] 
