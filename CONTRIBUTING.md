@@ -15,11 +15,6 @@ based more or less directly on the
 the code needing documentation. If you are new to Elm, this could be a good way
 to get deeper into the language. 
 
- - The
-   [Snackbar](https://github.com/debois/elm-mdl/blob/master/src/Material/Snackbar.elm)
-   is functional but has no documentation. 
-   ([Issue](https://github.com/debois/elm-mdl/issues/9).) 
-
 See the [documentation issue
 list](https://github.com/debois/elm-mdl/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Adocumentation+)
 
@@ -77,21 +72,20 @@ to Elm.
  - [Tables](https://www.getmdl.io/components/index.html#tables-section)
  - [Sliders](https://www.getmdl.io/components/index.html#sliders-section)
  - [Menus](https://www.getmdl.io/components/index.html#menus-section)
- - [Snackbars](https://www.getmdl.io/components/index.html#snackbar-section) [Work-in-progress]
  - [Tooltips](https://www.getmdl.io/components/index.html#tooltips-section)
 
 ### Getting started with a new component
 
 Each component has its actual code in `src/Material/NameOfComponent.elm` and a demo in 
-`examples/Demo/NameOfComponent.elm`. These are what you need to construct.
+`demo/Demo/NameOfComponent.elm`. These are what you need to construct.
 To get started quickly, do this:
 
 1. Clone this repository
 2. Copy the file `src/Material/Template.elm` to `src/Material/NameOfYourComponent.elm`. Rename
 as appropriate in the file. 
-3. Copy the file `examples/Demo/Template.elm` to `examples/Demo/NameOfYourComponent.elm`. 
+3. Copy the file `demo/Demo/Template.elm` to `demo/Demo/NameOfYourComponent.elm`. 
 Rename as appropriate in the file. 
-4. In `examples/Demo.elm`, find all the places that mentions `template` or `Template`, 
+4. In `demo/Demo.elm`, find all the places that mentions `template` or `Template`, 
 copy those bits, and rename as appropriate. 
 5. Compile and open `page.html` in a browser.
 
