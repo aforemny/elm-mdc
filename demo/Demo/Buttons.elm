@@ -166,7 +166,7 @@ intro =
 
 srcUrl : String
 srcUrl = 
-  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Buttons.elm"
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Buttons.elm"
 
 references : List (String, String)
 references = 

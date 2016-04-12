@@ -196,7 +196,7 @@ This implementation provides only single-line.
 
 srcUrl : String
 srcUrl = 
-  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Textfields.elm"
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Textfields.elm"
 
 
 references : List (String, String)

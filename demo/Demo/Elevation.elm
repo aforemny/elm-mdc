@@ -73,7 +73,7 @@ for details about appropriate use of shadows.
 
 srcUrl : String
 srcUrl = 
-  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Elevation.elm"
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Elevation.elm"
 
 
 references : List (String, String)

@@ -78,7 +78,7 @@ intro =
 
 srcUrl : String
 srcUrl = 
-  "https://github.com/debois/elm-mdl/blob/master/examples/Demo/Badges.elm"
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Badges.elm"
 
 
 references : List (String, String)
