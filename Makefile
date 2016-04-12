@@ -6,7 +6,9 @@ comp:
 demo:
 	(cd demo; elm-make Demo.elm --warn --output ../elm.js)
 
-docs:
+docs: docs.json
+
+docs.json: 
 	elm-make --docs=docs.json 
 
 wip-pages : 
@@ -18,13 +20,13 @@ pages :
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
 
 cleanish :
-	rm -f elm.js index.html
+	rm -f elm.js index.html docs.json
 
-clean :
+clean : cleanish
 	rm -rf elm-stuff/build-artifacts demo/elm-stuff/build-artifacts
 
 distclean : clean
 	rm -rf elm-stuff
 
 
-.PHONY : pages elm.js clean cleanish distclean demo
+.PHONY : pages elm.js clean cleanish distclean demo docs
