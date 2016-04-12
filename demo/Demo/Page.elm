@@ -1,7 +1,7 @@
 module Demo.Page 
   ( demo, package, mds, mdl
   , fromMDL, fromMDS
-  , body
+  , body1, body2
   ) 
   where
 
@@ -119,8 +119,8 @@ fab url =
 -- BODY 
 
 
-body : String -> String -> Html -> List (String, String) -> List Html -> Html 
-body t srcUrl contents links demo = 
+body1 : String -> String -> Html -> List (String, String) -> List Html -> Html 
+body1 t srcUrl contents links demo = 
   div []
     [ title t
     , grid [ noSpacing ]
@@ -142,6 +142,30 @@ body t srcUrl contents links demo =
       ]
     demo 
     ]
+
+
+body2 : String -> String -> Html -> List (String, String) -> List Html -> Html 
+body2 t srcUrl contents links demo = 
+  div []
+    [ title t
+    , grid [ noSpacing ]
+       [ cell 
+          [ size All 4, size Desktop 6 ] 
+          [ div [] contents
+          , div 
+              [] 
+              ( references <| ("Demo source", srcUrl) :: links ) 
+          ]
+       , cell 
+           [ size All 4, size Desktop 6 ]
+           ( demoTitle
+           ::  demo 
+           )
+       ]
+    ]
+
+
+
 
 
 
