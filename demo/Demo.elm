@@ -116,7 +116,7 @@ nth k xs =
 
 update : Action -> Model -> ( Model, Effects Action )
 update action model =
-  case action of
+  case Debug.log "Action" action of
     LayoutAction a ->
       let
         ( lifted, layoutFx ) =
@@ -203,7 +203,7 @@ tabs =
   , ("Textfields", "textfields", \addr model ->
       Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
   {-
-  , ("Template", \addr model -> 
+  , ("Template", "tempate", \addr model -> 
       [Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template])
   -}
   ]

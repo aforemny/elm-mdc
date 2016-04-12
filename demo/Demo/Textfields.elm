@@ -16,7 +16,7 @@ import Demo.Page as Page
 
 
 type alias Model = 
-  { mdl : Material.Model Action 
+  { mdl : Material.Model 
   , rx : (String, Regex.Regex)
   }
 
@@ -108,7 +108,7 @@ m0 =
 
 
 type alias Mdl = 
-  Material.Model Action
+  Material.Model 
 
 
 field0 : Textfield.Instance Mdl Action

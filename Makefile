@@ -6,6 +6,9 @@ comp:
 demo:
 	(cd demo; elm-make Demo.elm --warn --output ../elm.js)
 
+docs:
+	elm-make --docs=docs.json 
+
 wip-pages : 
 	elm-make examples/Demo.elm --output $(PAGES)/wip.js
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)

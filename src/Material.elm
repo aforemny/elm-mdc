@@ -36,6 +36,10 @@ We recommend going with the library's
 [component support](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm)
 rather than working directly in plain Elm Architecture.
 
+# TODO
+
+Using TEA, Style.
+
 # Component Support
 
 This module contains only convenience functions for working with nested 
@@ -153,16 +157,16 @@ import Material.Component as Component exposing (Indexed)
 user actions in their model (notably Snackbar), the model is generic in the 
 type of such "observations". 
 -}
-type alias Model obs = 
+type alias Model = 
   { button : Indexed Button.Model
   , textfield : Indexed Textfield.Model
-  , snackbar : Maybe (Snackbar.Model obs)
+  , snackbar : Maybe (Snackbar.Model Int) 
   }
 
 
 {-| Initial model.
 -}
-model : Model obs
+model : Model
 model = 
   { button = Dict.empty
   , textfield = Dict.empty
@@ -173,7 +177,7 @@ model =
 {-| Action encompassing actions of all Material components. 
 -}
 type alias Action obs = 
-  Component.Action (Model obs) obs
+  Component.Action Model obs
 
 
 {-| Update function for the above Action. 
@@ -181,7 +185,7 @@ type alias Action obs =
 update : 
   (Action obs -> obs) 
   -> Action obs
-  -> Model obs
-  -> (Model obs, Effects obs)
+  -> Model 
+  -> (Model, Effects obs)
 update = 
   Component.update

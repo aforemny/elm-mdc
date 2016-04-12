@@ -22,11 +22,13 @@ import Demo.Page as Page
 
 
 type alias Mdl = 
-  Material.Model Action
+  Material.Model 
 
 
 type Square' 
   = Appearing 
+  | Waiting
+  | Active
   | Idle
   | Disappearing
 
@@ -38,6 +40,7 @@ type alias Square =
 type alias Model =
   { count : Int
   , squares : List Square
+  , snackbar : Snackbar.Model Int
   , mdl : Mdl
   }
 
@@ -46,6 +49,7 @@ model : Model
 model =
   { count = 0
   , squares = [] 
+  , snackbar = Snackbar.model 
   , mdl = Material.model
   }
 
@@ -57,19 +61,20 @@ type Action
   = AddSnackbar
   | AddToast
   | Appear Int
-  | Disappear Int
   | Gone Int
+  | Snackbar (Snackbar.Action Int)
   | MDL (Material.Action Action)
 
 
-add : Model -> (Int -> Snackbar.Contents Action) -> (Model, Effects Action)
-add model f =
+add : (Int -> Snackbar.Contents Int) -> Model -> (Model, Effects Action)
+add f model =
   let 
-    (mdl', fx) = 
-      Snackbar.add (f model.count) snackbar model.mdl
+    (snackbar', fx) = 
+      Snackbar.add (f model.count) model.snackbar
+        |> map2nd (Effects.map Snackbar)
     model' = 
       { model 
-      | mdl = mdl'
+      | snackbar = snackbar'
       , count = model.count + 1
       , squares = (model.count, Appearing) :: model.squares
       }
@@ -92,24 +97,31 @@ mapSquare k f model =
   }
 
 
-
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
     AddSnackbar ->
-      add model 
-        <| \k -> Snackbar.snackbar ("Snackbar message #" ++ toString k) "UNDO" (Disappear k)
+      add (\k -> Snackbar.snackbar k ("Snackbar message #" ++ toString k) "UNDO") model
 
     AddToast -> 
-      add model
-        <| \k -> Snackbar.toast <| "Toast message #" ++ toString k
+      add (\k -> Snackbar.toast k <| "Toast message #" ++ toString k) model
 
     Appear k -> 
+      ( model |> mapSquare k (\sq -> if sq == Appearing then Waiting else sq)
+      , none
+      )
+
+    Snackbar (Snackbar.Begin k) -> 
+      ( model |> mapSquare k (always Active)
+      , none
+      )
+
+    Snackbar (Snackbar.End k) -> 
       ( model |> mapSquare k (always Idle)
       , none
       )
 
-    Disappear k -> 
+    Snackbar (Snackbar.Click k) -> 
       ( model |> mapSquare k (always Disappearing)
       , delay transitionLength (Gone k) 
       )
@@ -119,6 +131,11 @@ update action model =
        | squares = List.filter (fst >> (/=) k) model.squares
        }
       , none)
+
+    Snackbar action' -> 
+      Snackbar.update action' model.snackbar 
+        |> map1st (\s -> { model | snackbar = s })
+        |> map2nd (Effects.map Snackbar)
 
     MDL action' -> 
       Material.update MDL action' model.mdl
@@ -143,12 +160,6 @@ addToastButton =
     [ Button.fwdClick AddToast ]
 
 
--- TODO: Bad name
-snackbar : Snackbar.Instance Mdl Action
-snackbar = 
-  Snackbar.instance MDL Snackbar.model 
-
-
 boxHeight : String
 boxHeight = "48px"
 
@@ -166,27 +177,38 @@ transitions =
   ("transition"
   , "box-shadow 333ms ease-in-out 0s, " 
       ++ "width " ++ toString transitionLength ++ "ms, " 
-      ++ "height " ++ toString transitionLength ++ "ms"
+      ++ "height " ++ toString transitionLength ++ "ms, "
+      ++ "background-color " ++ toString transitionLength ++ "ms"
   )
 
 
 clickView : Model -> Square -> Html
 clickView model (k, square) =
   let
-    color =
+    palette =
       Array.get ((k + 4) % Array.length Color.palette) Color.palette
         |> Maybe.withDefault Color.Teal
-        |> flip Color.color Color.S500
+
+    shade = 
+      case square of
+        Idle -> 
+          Color.S100
+
+        _ -> 
+          Color.S500
+
+    color = 
+      Color.color palette shade
 
     selected' =
-      Snackbar.activeAction (snackbar.get model.mdl) == Just (Disappear k)
+      square == Active
 
     (width, height, margin, selected) = 
-      case square of 
-        Idle -> 
-          (boxWidth, boxHeight, "16px 16px", selected')      
-        _ -> 
-          ("0", "0", "16px 0", False)
+      if square == Appearing || square == Disappearing then
+        ("0", "0", "16px 0", False)
+      else
+        (boxWidth, boxHeight, "16px 16px", selected')      
+
   in
     div 
       [ style 
@@ -236,7 +258,7 @@ view addr model =
         [ text """Click the buttons below to activate the snackbar. Note that 
                   multiple activations are automatically queued."""
         ]
-    , grid [ ] --css "margin-top" "32px" ]
+    , grid [ ] 
         [ cell 
             [ size All 2, size Phone 2, align Top ]
             [ addToastButton.view addr model.mdl 
@@ -261,7 +283,7 @@ view addr model =
             ]
             (model.squares |> List.reverse |> List.map (clickView model))
         ]
-    , snackbar.view addr model.mdl 
+    , Snackbar.view (Signal.forwardTo addr Snackbar) model.snackbar 
     ]
 
 
