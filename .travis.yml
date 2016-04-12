@@ -5,5 +5,5 @@ install:
 script: 
   - elm-make --yes examples/Component.elm
   - elm-make --yes examples/Component-TEA.elm
-  - elm-make --yes examples/Demo.elm
+  - elm-make --yes demo/Demo.elm
   
