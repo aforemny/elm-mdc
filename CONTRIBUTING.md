@@ -59,7 +59,6 @@ that reason.  Take a look at
  - [Dialogs](https://www.getmdl.io/components/index.html#dialog-section)
  - [Footers](https://www.getmdl.io/components/index.html#layout-section/footer)
  - [Lists](https://www.getmdl.io/components/index.html#lists-section) [Work-in-progress: [Håkon Rossebø](https://github.com/hakonrossebo])]
- - [Shadows](https://github.com/google/material-design-lite/tree/v1.1.2/src/shadow)
 
 Progress bars are pure CSS, and spinners seem to use Javascript only to insert
 auxiliary DOM-nodes on initialisation.
