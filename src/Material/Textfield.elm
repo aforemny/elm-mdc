@@ -20,6 +20,11 @@ module Material.Textfield where
 > main types of text fields in the text field component, each with its own basic
 > coding requirements. The types are single-line, multi-line, and expandable.
 
+
+Refer to 
+[this site](https://debois.github.io/elm-mdl/#/textfields)
+for a live demo.
+ 
 This implementation provides only single-line.
 
 

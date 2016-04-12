@@ -6,9 +6,7 @@ comp:
 demo:
 	(cd demo; elm-make Demo.elm --warn --output ../elm.js)
 
-docs: docs.json
-
-docs.json: 
+docs: 
 	elm-make --docs=docs.json 
 
 wip-pages : 

@@ -29,6 +29,10 @@ module Material.Grid
 >     of columns for the current screen size, it takes up the entirety of its
 >     row.
 
+Refer to 
+[this site](https://debois.github.io/elm-mdl/#/grid)
+for a live demo. 
+
 Example use:
 
     import Material.Grid exposing (grid, cell, size, Device(..))

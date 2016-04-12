@@ -30,10 +30,10 @@ import String
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
-import Material.Color exposing (Palette(..), Color)
+import Material.Color exposing (Hue(..), Color)
 
 
-scheme : Palette -> Palette -> String
+scheme : Hue -> Hue -> String
 scheme primary accent =
   [ "https://code.getmdl.io/1.1.3/" ++ Material.Color.scheme primary accent 
   , "https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -60,7 +60,7 @@ elm-reactor.
 
 TODO: Usage example
 -}
-topWithScheme: Palette -> Palette -> Html -> Html
+topWithScheme: Hue -> Hue -> Html -> Html
 topWithScheme primary accent content =
   div [] <|
   {- Trick from Peter Damoc to load CSS outside of <head>.

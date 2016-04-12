@@ -27,6 +27,10 @@ module Material.Badge
 > discover additional relevant content. Their design and use is therefore an important
 > factor in the overall user experience.
 
+Refer to 
+[this site](https://debois.github.io/elm-mdl/#/badges) 
+for a live demo. 
+
 @docs withBadge, noBackground, overlap
 -}
 

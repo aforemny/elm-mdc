@@ -190,8 +190,8 @@ transitionOuter =
 clickView : Model -> Square -> Html
 clickView model (k, square) =
   let
-    palette =
-      Array.get ((k + 4) % Array.length Color.palette) Color.palette
+    hue =
+      Array.get ((k + 4) % Array.length Color.hues) Color.hues
         |> Maybe.withDefault Color.Teal
 
     shade = 
@@ -203,7 +203,7 @@ clickView model (k, square) =
           Color.S500
 
     color = 
-      Color.color palette shade
+      Color.color hue shade
 
     selected' =
       square == Active

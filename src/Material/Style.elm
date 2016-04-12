@@ -94,8 +94,8 @@ styled ctor styles attrs' =
       )
 
 
-{-| Handle the ultra-common case of setting attributes of a div element.
-Use like this: 
+{-| Convenience function for the ultra-common case of setting attributes of a
+div element. Use like this: 
 
     myDiv : Html 
     myDiv = 
@@ -171,7 +171,7 @@ nop = NOP
 
 
 {-| Construct an Html element contributing to the global stylesheet.
-The resulting Html is a <style> element.  Remember to insert the resulting Html
+The resulting Html is a `<style>` element.  Remember to insert the resulting Html
 somewhere. 
 -}
 stylesheet : String -> Html

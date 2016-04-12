@@ -29,6 +29,9 @@ module Material.Layout
 > consistency in outward appearance and behavior while maintaining development
 > flexibility and ease of use.
 
+# Setup
+@docs setupSignals
+
 # Model & Actions
 @docs Mode, Model, defaultLayoutModel, initState, Action, update
 
@@ -38,10 +41,9 @@ module Material.Layout
 ## Sub-views
 @docs row, spacer, title, navigation, link
 
-# Setup
-@docs setupSignals
 -}
 
+-- TODO: Component support
 
 import Array exposing (Array)
 import Maybe exposing (andThen, map)

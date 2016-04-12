@@ -32,13 +32,29 @@ it is not an alternative architecture.
 # Getting started
 
 The easiest way to get started is to start with one of the minimal examples above.
-We recommend going with the library's 
-[component support](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm)
-rather than working directly in plain Elm Architecture.
+We recommend going with the one that uses 
+[the one that uses](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm)
+the library's component support rather than working directly in plain Elm
+Architecture.
 
-# TODO
+# Colors and CSS
 
-Using TEA, Style.
+The view function of most components has this signature: 
+
+    view : Signal.Address -> Model -> List Style -> Html 
+
+The address is standard, and `Model` is just the model type of the component. 
+The third argument, `List Style`, is a mechanism for you to specify additional
+classes and CSS for the component. You need this, e.g., when you want to
+specify the width of a button. See the
+[Style](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Style)
+module for details. 
+
+Material Design defines a color palette. The 
+[Color](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Color)
+module contains various `Style` values and helper functions for working with
+this color palette.
+
 
 # Component Support
 
@@ -132,14 +148,11 @@ but now it's not boilerplate, its "business logic".)
 
 Using this module will force all elm-mdl components to be built and included in 
 your application. If this is unacceptable, you can custom-build a version of this
-module that uses only the components you need. To do so, you need to re-implement
-the present module, modifying the values `model` and `Model` by commenting out the 
-components you are not using. The module source can be found
-[here](https://github.com/debois/elm-mdl/blob/master/src/Material.elm).
-
-You do not need to re-build the entire elm-mdl library; simply copy the 
-source of this module, give it a new name, modify as it as indicated above,
-then use your modified module rather than this one. 
+module that uses only the components you need. To do so, you need to provide your
+own versions of the type `Model` and the value `model` of the present module. 
+Use the corresponding definitions in this module as a starting point 
+([source](https://github.com/debois/elm-mdl/blob/master/src/Material.elm)) 
+and simply comment out the components you do not need. 
 
 @docs Model, model, Action, update
 -}
@@ -180,7 +193,9 @@ type alias Action obs =
   Component.Action Model obs
 
 
-{-| Update function for the above Action. 
+{-| Update function for the above Action. Provide as the first 
+argument a lifting function that embeds the generic MDL action in 
+your own Action type. 
 -}
 update : 
   (Action obs -> obs) 

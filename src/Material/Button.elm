@@ -26,6 +26,11 @@ module Material.Button
 See also the
 [Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).
 
+Refer to 
+[this site](https://debois.github.io/elm-mdl/#/buttons) 
+for a live demo. 
+
+ 
 # Elm architecture
 @docs Model, model, Action, update, View
 
@@ -39,8 +44,12 @@ for details about what type of buttons are appropriate for which situations.
 
 @docs flat, raised, fab, minifab, icon
 
-# Component 
-@docs Container, Observer, Instance, instance, fwdClick
+# Component support
+@docs instance, fwdClick 
+
+## Component instance types
+
+@docs Container, Observer, Instance
 
 -}
 
@@ -278,12 +287,31 @@ type alias Instance container obs =
     Model container Action obs (List Style -> List Html -> Html)
 
 
-{-| Component instance.
+{-| Create a component instance. Example usage, assuming you have a type
+`Action` with a constructor `MyButtonAction : Action`, and that your 
+`model` has a field `mdl : Material.Model`. 
+
+    type alias Mdl = 
+      Material.Model 
+
+
+    myButton : Button.Instance Mdl Action 
+    myButton = 
+      Button.instance 0 MDL
+        Button.raised (Button.model True)
+        [ Button.fwdClick MyButtonAction ]
+
+
+    -- in your view:
+    ... 
+      div 
+        []
+        [ myButton.view addr model.mdl ]
 -}
 instance : 
   Int
   -> (Component.Action (Container c) obs -> obs)
-  -> (Address Action -> Model -> List Style -> List Html -> Html)
+  -> View
   -> Model
   -> List (Observer obs)
   -> Instance (Container c) obs
@@ -293,7 +321,7 @@ instance id lift view model0 observers =
     view update .button (\x y -> {y | button = x}) id lift model0 observers
 
 
-{-| Lift the button Click action to your own action. E.g., 
+{-| Lift the button Click action to your own action. 
 -}
 fwdClick : obs -> (Observer obs)
 fwdClick obs action = 

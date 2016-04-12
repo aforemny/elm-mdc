@@ -1,5 +1,5 @@
 module Material.Color
-  ( Palette(..), palette
+  ( Hue(..), hues
   , Shade(..), shades
   , Color
   , color
@@ -14,8 +14,6 @@ module Material.Color
 
 {-| Material Design color palette.
 
-@docs Color
-
 # Palette
 
 From the
@@ -26,7 +24,7 @@ From the
 > using the 500 colors as the primary colors in your app and the other colors as
 > accents colors.
 
-@docs Color, white, black, Palette, Shade, color
+@docs Color, white, black, Hue, Shade, color
 
 # Color Schemes
 
@@ -52,7 +50,7 @@ colors.
 @docs background, text
 
 # Misc
-@docs palette, shades, scheme
+@docs hues, shades, scheme
 -}
 
 
@@ -68,7 +66,7 @@ import Material.Style exposing (..)
 
 {-| Color palette.
 -}
-type Palette
+type Hue
   = Indigo
   | Blue
   | LightBlue
@@ -90,10 +88,10 @@ type Palette
   | DeepPurple
 
 
-{-| Color palette as array. Mostly useful for demos.
+{-| Hues as array. Mostly useful for demos.
 -}
-palette : Array Palette
-palette =
+hues : Array Hue
+hues =
   Array.fromList
     [ Indigo
     , Blue
@@ -117,8 +115,8 @@ palette =
     ]
 
 
-paletteName : Palette -> String
-paletteName color =
+hueName : Hue -> String
+hueName color =
   case color of
     Indigo -> "indigo"
     Blue -> "blue"
@@ -212,9 +210,9 @@ type Color = C String
 
 {-| Construct a specific color given a palette base hue and a shade.
 -}
-color : Palette -> Shade -> Color
-color palette shade =
-  C (paletteName palette ++ "-" ++ shadeName shade)
+color : Hue -> Shade -> Color
+color hue shade =
+  C (hueName hue ++ "-" ++ shadeName shade)
 
 
 {-| White color.
@@ -280,14 +278,14 @@ text (C color) =
 {-| Given primary and accent base colors, compute name of appropriate MDL .css-file.
 (You are not likely to need to call this function.)
 -}
-scheme : Palette -> Palette -> String
+scheme : Hue -> Hue -> String
 scheme primary accent =
   let cssFile =
     case accent of
       Grey -> ""
       Brown -> ""
       BlueGrey -> ""
-      _ -> "." ++ paletteName primary ++ "-" ++ paletteName accent
+      _ -> "." ++ hueName primary ++ "-" ++ hueName accent
   in 
     "material" ++ cssFile ++ ".min.css"
 

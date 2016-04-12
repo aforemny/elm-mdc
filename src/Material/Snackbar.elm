@@ -4,10 +4,17 @@ module Material.Snackbar
   , view
   ) where
 
-{-| Material Design "Snackbar" component. 
+{-| From the [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section):
 
-For live demo and intended use, see
-[here](http://localhost:8000/Demo.elm#/snackbar).
+> The Material Design Lite (MDL) __snackbar__ component is a container used to
+> notify a user of an operation's status. It displays at the bottom of the
+> screen. A snackbar may contain an action button to execute a command for the
+> user. Actions should undo the committed action or retry it if it failed for
+> example. Actions should not be to close the snackbar. By not providing an
+> action, the snackbar becomes a __toast__ component.
+
+Refer to [this site](http://debois.github.io/elm-mdl#/snackbar)
+for a live demo. 
 
 # Generating messages
 @docs Contents, toast, snackbar, add

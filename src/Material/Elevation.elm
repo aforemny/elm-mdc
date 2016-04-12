@@ -31,6 +31,10 @@ You are encouraged to visit the
 [Material Design specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html)
 for details about appropriate use of shadows. 
 
+Refer to 
+[this site](https://debois.github.io/elm-mdl/#/elevation)
+for a live demo. 
+  
 
 # Component
 @docs shadow, validElevations, transition
@@ -41,7 +45,7 @@ import Material.Style exposing (..)
 
 
 {-| Indicate the elevation of an element by giving it a shadow. 
-The `z` argument indicates intended elevation; valid values 
+The argument indicates intended elevation; valid values 
 are 2, 3, 4, 6, 8, 16, 24. Invalid values produce no shadow. 
   
 (The specification uses only the values 1-6, 8, 9, 12, 16, 24 for standard UI
@@ -62,7 +66,7 @@ validElevations =
 {-| Add a CSS-transition to changes in elevation. Supply a transition
 duration in milliseconds as argument. 
 
-NB! This style dictated by neither MDL nor the Material Design
+NB! This Style is dictated by neither MDL nor the Material Design
 Specification. 
 -}
 transition : String -> Style 
