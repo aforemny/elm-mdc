@@ -1,5 +1,7 @@
 # Contributing
 
+TL;DR: Check [this list](https://github.com/debois/elm-mdl/issues?q=is%3Aopen+is%3Aissue+label%3Astarting-point).
+
 Please do! You could add documentation, fix bugs, add to the demos/integrate
 with other elm-libraries, or add components. There are opportunities for 
 both newcomers and experienced Elm programmers: adding documentation, fixing
@@ -87,7 +89,8 @@ as appropriate in the file.
 Rename as appropriate in the file. 
 4. In `demo/Demo.elm`, find all the places that mentions `template` or `Template`, 
 copy those bits, and rename as appropriate. 
-5. Compile and open `page.html` in a browser.
+5. Copy the template bits in `src/Material.elm`.
+6. Compile and open `page.html` in a browser.
 
 The last tab contains your component. Now all you need is code!
 
