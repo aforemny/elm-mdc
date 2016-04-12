@@ -19,8 +19,6 @@ to get deeper into the language.
    [Snackbar](https://github.com/debois/elm-mdl/blob/master/src/Material/Snackbar.elm)
    is functional but has no documentation. 
    ([Issue](https://github.com/debois/elm-mdl/issues/9).) 
- - Demo pages need intro text a la MDL docs. 
-   ([Issue](https://github.com/debois/elm-mdl/issues/8).) 
 
 See the [documentation issue
 list](https://github.com/debois/elm-mdl/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Adocumentation+)
@@ -40,12 +38,9 @@ if the library interacts properly with these.  Right now,
 
  - The
    [Snackbar](https://github.com/debois/elm-mdl/blob/master/src/Material/Snackbar.elm)
-   could do with more animation, and it'd be very interesting to see if the library
+   has some animation based on CSS transitions; it'd be very interesting to see if the library
    interacts reasonably with elm-html-animation. 
    ([Issue](https://github.com/debois/elm-mdl/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Ademo).)
-
-  - The main tabs should be connected to a router, so that the url reflects the current tab. 
-  ([Issue](https://github.com/debois/elm-mdl/issues/7).)
 
 See the [demo issue list](https://github.com/debois/elm-mdl/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Ademo).
 
