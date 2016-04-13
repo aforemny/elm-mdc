@@ -14,7 +14,8 @@ HTML-file containing your app, or
 
 # Load CSS from HTML 
 
-To load CSS manually, add the following to your 
+To load CSS manually, add the following to your main html file. 
+
     <!-- MDL -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">

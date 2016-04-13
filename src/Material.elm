@@ -37,7 +37,13 @@ We recommend going with the one that uses
 the library's component support rather than working directly in plain Elm
 Architecture.
 
-# Colors and CSS
+# Interfacing with CSS
+
+This library depends on the CSS part of Google's Material Design Lite. Your app
+will have to load that. See the
+[Scheme](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Scheme)
+module for details. (The starting point implementations above
+load CSS automatically.)
 
 The view function of most components has this signature: 
 
@@ -54,6 +60,7 @@ Material Design defines a color palette. The
 [Color](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Color)
 module contains various `Style` values and helper functions for working with
 this color palette.
+
 
 
 # Component Support
