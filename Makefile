@@ -1,14 +1,20 @@
+ELM=elm-make --yes
 PAGES=../elm-mdl-gh-pages
 
-comp: 
-	elm-make examples/Component.elm --warn --output elm.js
-
 demo:
-	(cd demo; elm-make Demo.elm --warn --output ../elm.js)
+	(cd demo; $(ELM) Demo.elm --warn --output ../elm.js)
+
+comp: 
+	$(ELM) examples/Component.elm --warn --output elm.js
+	
+comp-tea: 
+	$(ELM) examples/Component.elm --warn --output elm.js
 
 docs: 
-	elm-make --docs=docs.json 
+	$(ELM) --docs=docs.json 
 
+test: docs comp comp-tea docs
+	
 wip-pages : 
 	(cd demo; elm-make Demo.elm --output ../$(PAGES)/wip.js)
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
@@ -27,4 +33,4 @@ distclean : clean
 	rm -rf elm-stuff
 
 
-.PHONY : pages elm.js clean cleanish distclean demo docs
+.PHONY : pages elm.js clean cleanish distclean demo docs test
