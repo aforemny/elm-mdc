@@ -306,7 +306,7 @@ type alias Instance container obs =
     ... 
       div 
         []
-        [ myButton.view addr model.mdl ]
+        [ myButton.view addr [] model.mdl ]
 -}
 instance : 
   Int
