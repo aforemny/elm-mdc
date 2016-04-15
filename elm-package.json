@@ -1,11 +1,11 @@
 {
-    "version": "2.1.0",
+    "version": "2.1.1",
     "summary": "Material Design Lite port to Elm",
     "repository": "https://github.com/debois/elm-mdl.git",
     "license": "BSD3",
     "source-directories": [
         "src",
-        "examples", 
+        "examples",
         "demo"
     ],
     "exposed-modules": [
