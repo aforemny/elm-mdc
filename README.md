@@ -10,9 +10,9 @@ CSS/JS implementation of the
 Live demo 
 [here](https://debois.github.io/elm-mdl/).
 
-MDL is implemented primarily through CSS, with a little bit of Javascript
+MDL is implemented primarily through CSS, with a little bit of JavaScript
 adding and removing CSS classes in response to DOM events. This port
-re-implements the CSS parts in Elm, but relies on the CSS of MDL verbatim.
+re-implements the JavaScript parts in Elm, but relies on the CSS of MDL verbatim.
 
 **CAUTION**! This is an early and incomplete prototype. Use at your own risk.
 
