@@ -53,8 +53,6 @@ import Html.Events exposing (onClick, on)
 import Effects exposing (Effects)
 import Window
 
-import Json.Decode as Json
-
 import Material.Helpers exposing (..)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
@@ -95,7 +93,7 @@ setupSignals f =
     , scrollMailbox.signal
         |> Signal.map ((<) 0.0)
         |> Signal.dropRepeats
-        |> Signal.map (ScrollContents >> f) 
+        |> Signal.map (TransitionHeader >> f) 
     ]
 
 
@@ -191,10 +189,10 @@ type Action
   -- Private
   | SmallScreen Bool -- True means small screen
   | ScrollTab Float
-  | ScrollContents Bool -- True means strictly positive scrollTop
-  | Ripple Int Ripple.Action
-  | Click 
+  | TransitionHeader Bool -- True means "transition to isCompact"
   | TransitionEnd
+  -- Subcomponents
+  | Ripple Int Ripple.Action
 
 
 {-| Component update.
@@ -233,25 +231,25 @@ update action model =
       (model, Effects.none) -- TODO
 
 
-    ScrollContents isScrolled -> 
+    TransitionHeader toCompact -> 
       let 
-        headerVisible = state.isSmallScreen || model.fixedHeader
+        headerVisible = (not state.isSmallScreen) || model.fixedHeader
         state' = 
           { state 
-          | isCompact = isScrolled
+          | isCompact = toCompact
           , isAnimating = headerVisible 
           }
       in
-        ( { model | state = S state' }, Effects.none )
+        if not state.isAnimating then 
+          ( { model | state = S state' }
+          , delay 200 TransitionEnd -- See comment on transitionend in view. 
+          )
+        else
+          (model, Effects.none)
 
 
     TransitionEnd -> 
       ( { model | state = S { state | isAnimating = False } }
-      , Effects.none
-      )
-
-    Click -> 
-      ( { model | state = S { state | isAnimating = True, isCompact = False } }
       , Effects.none
       )
 
@@ -380,6 +378,7 @@ tabsView addr model tabs =
 headerView : Addr -> Model -> (Maybe Html, List Html, Maybe Html) ->  Html
 headerView addr model (drawerButton, rows, tabs) =
   let 
+    _ = Debug.log "foo" model.state
     mode =
       case model.mode of
         Standard  -> ""
@@ -402,8 +401,14 @@ headerView addr model (drawerButton, rows, tabs) =
       ]
       |> List.append (
         if isWaterfall model.mode then 
-          [ onClick addr Click
-          , on "transitionend" Json.value (\_ -> Signal.message addr TransitionEnd)
+          [  
+          --  onClick addr Click
+          --, on "transitionend" Json.value (\_ -> Signal.message addr TransitionEnd)
+            {- There is no "ontransitionend" property; you'd have to add a listener, 
+            which Elm won't let us. We manually fire a delayed tick instead. 
+            See also: https://github.com/evancz/virtual-dom/issues/30
+            -}
+            onClick addr (TransitionHeader False)
           ]
         else
           []
