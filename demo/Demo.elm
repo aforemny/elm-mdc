@@ -67,7 +67,7 @@ layoutModel =
   { defaultLayoutModel
   | state = Layout.initState (List.length tabs)
   , mode = Layout.Waterfall False
-  , fixedHeader = False
+  , fixedHeader = True
   }
 
 
