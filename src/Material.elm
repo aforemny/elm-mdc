@@ -170,6 +170,7 @@ import Effects exposing (Effects)
 import Material.Button as Button
 import Material.Textfield as Textfield
 import Material.Snackbar as Snackbar
+import Material.Toggles as Toggles
 import Material.Component as Component exposing (Indexed)
 --import Material.Template as Template
 
@@ -181,6 +182,7 @@ type alias Model =
   { button : Indexed Button.Model
   , textfield : Indexed Textfield.Model
   , snackbar : Maybe (Snackbar.Model Int) 
+  , toggles : Indexed Toggles.Model
 --  , template : Indexed Template.Model
   }
 
@@ -192,6 +194,7 @@ model =
   { button = Dict.empty
   , textfield = Dict.empty
   , snackbar = Nothing
+  , toggles = Dict.empty
 --, template = Dict.empty
   }
 
