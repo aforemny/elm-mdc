@@ -161,13 +161,16 @@ type alias Addr =
 
 drawer : List Html
 drawer =
-  [ Layout.title "Example drawer"
+  [ Layout.title [] [ text "Example drawer" ]
   , Layout.navigation
+    [] 
     [ Layout.link
-        [ href "https://github.com/debois/elm-mdl" ]
+        [ Style.attribute 
+            <| href "https://github.com/debois/elm-mdl" ]
         [ text "github" ]
     , Layout.link
-        [ href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
+        [ Style.attribute 
+            <| href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
         [ text "elm-package" ]
     ]
   ]
@@ -176,17 +179,20 @@ drawer =
 header : List Html
 header =
   [ Layout.row 
-    [ Layout.title "elm-mdl"
-    , Layout.spacer
-    , Layout.navigation
-      [ Layout.link
-        [href "https://github.com/debois/elm-mdl"]
-        [span [] [text "github"] ]
-      , Layout.link
-        [href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/"]
-        [text "elm-package"]
+      []
+      [ Layout.title [] [ text "elm-mdl" ]
+      , Layout.spacer
+      , Layout.navigation []
+          [ Layout.link
+            [ Style.attribute 
+               <| href "https://github.com/debois/elm-mdl"]
+            [ span [] [text "github"] ]
+          , Layout.link 
+              [ Style.attribute 
+                  <| href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
+              [ text "elm-package" ]
+          ]
       ]
-    ]
   ]
 
 
@@ -215,7 +221,6 @@ e404 _ _ =
         [ Style.cs "mdl-typography--display-4" 
         , Color.background Color.primary 
         ]
-        []
         [ text "404" ]
     ]
 
@@ -287,7 +292,7 @@ view addr model =
     Layout.view (Signal.forwardTo addr LayoutAction) model.layout
       { header = header
       , drawer = drawer
-      , tabs = tabTitles
+      , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
       , main = [ stylesheet, top ]
       }
     {- The following line is not needed when you manually set up
