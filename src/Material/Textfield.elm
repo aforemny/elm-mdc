@@ -45,9 +45,10 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Effects
 
+import Parts exposing (Indexed)
+
 import Material.Helpers exposing (filter)
 import Material.Style as Style exposing (cs, cs', Style)
-import Material.Component as Component exposing (Indexed)
 
 
 -- MODEL
@@ -190,26 +191,26 @@ type alias Container c =
 {-| 
 -}
 type alias Instance container obs = 
-  Component.Instance Model container Action obs (List Style -> Html)
+  Parts.Part Model container Action obs (List Style -> Html)
 
 
 {-| Component constructor. See module `Material`.
 -}
 instance : 
   Int
-  -> (Component.Action (Container c) obs -> obs)
+  -> (Parts.Action (Container c) obs -> obs)
   -> Model 
-  -> List (Component.Observer Action obs)
+  -> List (Parts.Observer Action obs)
   -> Instance (Container c) obs
 
 instance = 
   let 
     update' action model = (update action model, Effects.none)
   in 
-    Component.instance view update' .textfield (\x y -> {y | textfield = x}) 
+    Parts.create view update' .textfield (\x y -> {y | textfield = x}) 
 
 
-{-| Lift the button Click action to your own action. E.g., 
+{-| Lift the textfield Input action to your own action. 
 -}
 fwdInput : (String -> obs) -> Action -> Maybe obs
 fwdInput f action =

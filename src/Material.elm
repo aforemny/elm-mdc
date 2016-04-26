@@ -171,7 +171,8 @@ import Material.Button as Button
 import Material.Textfield as Textfield
 import Material.Snackbar as Snackbar
 import Material.Toggles as Toggles
-import Material.Component as Component exposing (Indexed)
+import Parts exposing (Indexed)
+
 --import Material.Template as Template
 
 {-| Model encompassing all Material components. Since some components store
@@ -202,7 +203,7 @@ model =
 {-| Action encompassing actions of all Material components. 
 -}
 type alias Action obs = 
-  Component.Action Model obs
+  Parts.Action Model obs
 
 
 {-| Update function for the above Action. Provide as the first 
@@ -215,4 +216,4 @@ update :
   -> Model 
   -> (Model, Effects obs)
 update = 
-  Component.update
+  Parts.update

@@ -59,10 +59,11 @@ import Html.Events exposing (onClick)
 import Effects exposing (Effects, none)
 import Signal exposing (Address, forwardTo)
 
+import Parts exposing (Indexed, Part)
+
 import Material.Helpers as Helpers
 import Material.Style as Style exposing (Style, cs, cs', styled)
 import Material.Ripple as Ripple
-import Material.Component as Component exposing (Indexed)
 
 {-| MDL button.
 -}
@@ -276,13 +277,13 @@ type alias Container c =
 {-|
 -}
 type alias Observer obs = 
-  Component.Observer Action obs
+  Parts.Observer Action obs
 
 
-{-|
+{ -|
 -}
 type alias Instance container obs =
-  Component.Instance 
+  Part 
     Model container Action obs (List Style -> List Html -> Html)
 
 
@@ -309,14 +310,14 @@ type alias Instance container obs =
 -}
 instance : 
   Int
-  -> (Component.Action (Container c) obs -> obs)
+  -> (Parts.Action (Container c) obs -> obs)
   -> View
   -> Model
   -> List (Observer obs)
   -> Instance (Container c) obs
 
 instance id lift view model0 observers = 
-  Component.instance 
+  Parts.create 
     view update .button (\x y -> {y | button = x}) id lift model0 observers
 
 

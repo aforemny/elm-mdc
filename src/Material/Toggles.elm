@@ -1,4 +1,4 @@
-module Material.Toggles
+module Material.Toggles 
   ( Model, model
   , Action, update
   , switch, checkbox, radio
@@ -46,7 +46,8 @@ import Html.Events exposing (on, onFocus, onBlur)
 import Json.Decode as Decode
 import Signal exposing (Address, forwardTo, message)
 
-import Material.Component as Component exposing (Indexed)
+import Parts exposing (Indexed)
+
 import Material.Style as Style exposing (Style, cs, cs', styled, attribute, multiple)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter)
 import Material.Ripple as Ripple
@@ -236,13 +237,13 @@ type alias Container c =
 {-|
 -}
 type alias Observer obs = 
-  Component.Observer Action obs
+  Parts.Observer Action obs
 
 
 {-|
 -}
 type alias Instance container obs v =
-  Component.Instance 
+  Parts.Part 
     Model container Action obs (List Style -> v)
 
 type alias Radio container obs = 
@@ -260,14 +261,14 @@ type alias Switch container obs =
 -}
 instance : 
   Int
-  -> (Component.Action (Container c) obs -> obs)
+  -> (Parts.Action (Container c) obs -> obs)
   -> (View v)
   -> Model
   -> List (Observer obs)
   -> Instance (Container c) obs v
 
 instance id lift view model0 observers = 
-  Component.instance 
+  Parts.create
     view update .toggles (\x y -> {y | toggles = x}) id lift model0 observers
 
 {-| 
