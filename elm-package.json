@@ -20,7 +20,8 @@
         "Material.Component",
         "Material.Elevation",
         "Material.Snackbar",
-        "Material.Scheme"
+        "Material.Scheme",
+        "Material.Helpers"
     ],
     "dependencies": {
         "debois/elm-dom": "1.0.0 <= v < 2.0.0",

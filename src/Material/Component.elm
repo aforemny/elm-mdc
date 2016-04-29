@@ -43,7 +43,7 @@ import Effects exposing (Effects)
 import Task
 import Dict exposing (Dict)
 
-import Material.Helpers exposing (map1, map2, map1st, map2nd, Update, Update')
+import Material.Helpers exposing (map1st, map2nd, Update, Update')
 
 
 
@@ -349,3 +349,16 @@ instance1
 instance1 view update get set lift model0 observers = 
   embed view update (get >> Maybe.withDefault model0) (Just >> set)
     |> instance' lift observers
+
+
+-- HELPERS
+
+
+map1 : (a -> a') -> (a, b, c) -> (a', b, c)
+map1 f (x,y,z) = (f x, y, z)
+
+
+map2 : (b -> b') -> (a, b, c) -> (a, b', c)
+map2 f (x,y,z) = (x, f y, z)
+
+
