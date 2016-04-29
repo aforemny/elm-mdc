@@ -66,6 +66,14 @@ pure = effect Effects.none
 
 
 
+{-| Attribute which causes element to blur on given event. Example use
+
+    myButton : Html
+    myButton = 
+      button 
+        [ blurOn "mouseleave" ]
+        [ text "Click me!" ]
+-}
 blurOn : String -> Html.Attribute
 blurOn evt =
   Html.Attributes.attribute ("on" ++ evt) <| "this.blur()"
@@ -90,7 +98,7 @@ map2nd : (b -> c) -> (a,b) -> (a,c)
 map2nd f (x,y) = (x, f y)
 
 
-{- Variant of EA update function type, where effects may be 
+{-| Variant of EA update function type, where effects may be 
 lifted to a different type. 
 -}
 type alias Update' model action action' = 
@@ -103,6 +111,8 @@ type alias Update model action =
   Update' model action action
 
 
+{-| Variant of `lift` for effect-free components. 
+-}
 lift' :
   (model -> submodel) ->                                      -- get
   (model -> submodel -> model) ->                             -- set
@@ -113,6 +123,26 @@ lift' :
 lift' get set update action model =
   (set model (update action (get model)), Effects.none)
 
+{-| Convenience function for writing update-function boilerplate. Example use:
+
+  case action of 
+    ...
+    ButtonsAction a -> 
+      lift .buttons (\m x->{m|buttons=x}) ButtonsAction Demo.Buttons.update a model
+
+This is equivalent to the more verbose
+
+  case action of 
+    ...
+    ButtonsAction a -> 
+      let 
+        (buttons', fx) = 
+          Demo.Buttons.update a model.buttons
+      in 
+        ( { model | buttons = buttons'}
+        , Effects.map ButtonsAction fx
+        )
+-}
 lift :
   (model -> submodel) ->                                      -- get
   (model -> submodel -> model) ->                             -- set
