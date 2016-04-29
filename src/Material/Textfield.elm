@@ -62,7 +62,8 @@ type alias Label =
   }
 
 
-{-| Kind of textfield. Currently supports only single-line inputs.
+{-| Kind of textfield. Currently supports only single-line input or password
+inputs.
 -}
 type Kind
   = SingleLine
