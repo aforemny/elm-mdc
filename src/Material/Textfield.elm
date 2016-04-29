@@ -66,6 +66,7 @@ type alias Label =
 -}
 type Kind
   = SingleLine
+  | Password
   {-
   | MultiLine (Maybe Int) -- Max no. of rows or no limit
   -- TODO. Should prevent key event for ENTER
@@ -144,6 +145,10 @@ view addr model styles =
   let hasFloat = model.label |> Maybe.map .float |> Maybe.withDefault False
       hasError = model.error |> Maybe.map (always True) |> Maybe.withDefault False
       labelText = model.label |> Maybe.map .text 
+      inputType = 
+        case model.kind of
+          SingleLine -> "text"
+          Password -> "password"
   in
     filter Style.div
       (  cs "mdl-textfield"
@@ -159,7 +164,7 @@ view addr model styles =
       [ Just <| input
           [ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
-          , type' "text"
+          , type' inputType
           , disabled model.isDisabled
           , value model.value
           , Html.Events.on "input" targetValue (\s -> Signal.message addr (Input s))

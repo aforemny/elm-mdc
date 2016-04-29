@@ -149,6 +149,16 @@ field4 =
     [ Textfield.fwdInput Upd4 ]
 
 
+field5 : Textfield.Instance Mdl Action
+field5 =
+  Textfield.instance 5 MDL
+    { m0 
+    | label = Just { text = "Password", float = True }
+    , kind = Textfield.Password
+    }
+    []
+
+
 view : Signal.Address Action -> Model -> Html
 view addr model =
   [ field0
@@ -156,6 +166,7 @@ view addr model =
   , field2
   , field3
   , field4
+  , field5
   ]
   |> List.map (\c -> 
       cell 

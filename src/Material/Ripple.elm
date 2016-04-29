@@ -28,6 +28,7 @@ type Animation
 type alias Model =
   { animation : Animation
   , metrics : Maybe Metrics
+  , ignoringMouseDown : Bool
   }
 
 
@@ -35,32 +36,35 @@ model : Model
 model =
   { animation = Inert
   , metrics = Nothing
+  , ignoringMouseDown = False
   }
 
 
 -- ACTION, UPDATE
 
 
-type alias Geometry =
+type alias DOMState =
   { rect : DOM.Rectangle
   , clientX : Maybe Float
   , clientY : Maybe Float
   , touchX : Maybe Float
   , touchY : Maybe Float
+  , type' : String
   }
 
 
-geometryDecoder : Json.Decoder Geometry
+geometryDecoder : Json.Decoder DOMState
 geometryDecoder =
-  Json.object5 Geometry
+  Json.object6 DOMState
     (DOM.target DOM.boundingClientRect)
     (Json.maybe ("clientX" := Json.float))
     (Json.maybe ("clientY" := Json.float))
     (Json.maybe (at ["touches", "0", "clientX"] Json.float))
     (Json.maybe (at ["touches", "0", "clientY"] Json.float))
+    ("type" := Json.string)
 
 
-computeMetrics : Geometry -> Maybe Metrics
+computeMetrics : DOMState -> Maybe Metrics
 computeMetrics g =
   let
     rect = g.rect
@@ -83,7 +87,7 @@ computeMetrics g =
 
 
 type Action
-  = Down Geometry
+  = Down DOMState
   | Up
   | Tick
 
@@ -91,12 +95,20 @@ type Action
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    Down geometry ->
-      { model
-      | animation = Frame 0
-      , metrics = computeMetrics geometry
-      }
-      |> effect (tick <| \_ -> Tick)
+    Down domState ->
+      if domState.type' == "mousedown" && model.ignoringMouseDown then
+        { model | ignoringMouseDown = False } |> effect none
+      else
+        { model
+        | animation = Frame 0
+        , metrics = computeMetrics domState
+        , ignoringMouseDown = 
+            if domState.type' == "touchstart" then
+              True
+            else
+              model.ignoringMouseDown
+        }
+        |> effect (tick <| \_ -> Tick)
 
     Up ->
       { model
