@@ -280,7 +280,7 @@ type alias Observer obs =
   Parts.Observer Action obs
 
 
-{ -|
+{-|
 -}
 type alias Instance container obs =
   Part 

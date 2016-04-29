@@ -267,9 +267,9 @@ instance :
   -> List (Observer obs)
   -> Instance (Container c) obs v
 
-instance id lift view model0 observers = 
+instance id lift view model0 = 
   Parts.create
-    view update .toggles (\x y -> {y | toggles = x}) id lift model0 observers
+    view update .toggles (\x y -> {y | toggles = x}) id lift model0 
 
 {-| 
 -}
