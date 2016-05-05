@@ -52,10 +52,10 @@ appropriate Elm API and so are usually interesting in their own right for
 that reason.  Take a look at
 
   
- - [Cards](https://www.getmdl.io/components/index.html#cards-section) [Work-in-progress: [Håkon Rossebø](https://github.com/hakonrossebo])]
+ - [Cards](https://www.getmdl.io/components/index.html#cards-section) [Work-in-progress: [Mike Onslow](https://github.com/mikeonslow)]
  - [Dialogs](https://www.getmdl.io/components/index.html#dialog-section)
  - [Footers](https://www.getmdl.io/components/index.html#layout-section/footer)
- - [Lists](https://www.getmdl.io/components/index.html#lists-section) [Work-in-progress: [Håkon Rossebø](https://github.com/hakonrossebo])]
+ - [Lists](https://www.getmdl.io/components/index.html#lists-section) 
 
 Progress bars are pure CSS, and spinners seem to use Javascript only to insert
 auxiliary DOM-nodes on initialisation.
@@ -71,7 +71,7 @@ component:
 The rest I haven't looked at; they may or may not be straightforward to port
 to Elm.
 
- - [Tables](https://www.getmdl.io/components/index.html#tables-section)[Work in progress: [Alexander Foremny](https://github.com/aforemny)]
+ - [Tables](https://www.getmdl.io/components/index.html#tables-section) [Work in progress: [Alexander Foremny](https://github.com/aforemny)]
  - [Sliders](https://www.getmdl.io/components/index.html#sliders-section)
  - [Menus](https://www.getmdl.io/components/index.html#menus-section) [Work in progress: [Alexander Foremny](https://github.com/aforemny)]
  - [Tooltips](https://www.getmdl.io/components/index.html#tooltips-section)

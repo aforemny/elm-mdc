@@ -22,6 +22,7 @@ import Material.Style as Style
 import Material.Scheme as Scheme
 
 import Demo.Buttons
+import Demo.Menus
 import Demo.Grid
 import Demo.Textfields
 import Demo.Snackbar
@@ -76,6 +77,7 @@ type alias Model =
   { layout : Layout.Model
   , routing : Routing
   , buttons : Demo.Buttons.Model
+  , menus : Demo.Menus.Model
   , textfields : Demo.Textfields.Model
   , toggles : Demo.Toggles.Model
   , snackbar : Demo.Snackbar.Model
@@ -88,6 +90,7 @@ model =
   { layout = layoutModel
   , routing = route0 
   , buttons = Demo.Buttons.model
+  , menus = Demo.Menus.model
   , textfields = Demo.Textfields.model
   , toggles = Demo.Toggles.model
   , snackbar = Demo.Snackbar.model
@@ -106,6 +109,7 @@ type Action
   -- Tabs
   | LayoutAction Layout.Action
   | ButtonsAction Demo.Buttons.Action
+  | MenusAction Demo.Menus.Action
   | TextfieldAction Demo.Textfields.Action
   | SnackbarAction Demo.Snackbar.Action
   | TogglesAction Demo.Toggles.Action
@@ -119,7 +123,7 @@ nth k xs =
 
 update : Action -> Model -> ( Model, Effects Action )
 update action model =
-  case Debug.log "Action" action of
+  case action of
     LayoutAction a ->
       let
         ( lifted, layoutFx ) =
@@ -147,6 +151,8 @@ update action model =
       ( model, Effects.none )
 
     ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
+
+    MenusAction a -> lift  .menus    (\m x->{m|menus   =x}) MenusAction  Demo.Menus.update    a model
 
     TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
 
@@ -206,6 +212,8 @@ tabs : List (String, String, Addr -> Model -> Html)
 tabs =
   [ ("Buttons", "buttons", \addr model ->
       Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons)
+  , ("Menus", "menus", \addr model ->
+      Demo.Menus.view (Signal.forwardTo addr MenusAction) model.menus)
   , ("Badges", "badges", \addr model -> Demo.Badges.view )
   , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
   , ("Grid", "grid", \addr model -> Demo.Grid.view)
