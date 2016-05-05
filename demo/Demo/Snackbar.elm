@@ -152,9 +152,10 @@ addSnackbarButton =
 
 addToastButton : Button.Instance Mdl Action 
 addToastButton = 
-  Button.instance 1 MDL
+  Button.instance 
     Button.raised (Button.model True)
-    [ Button.fwdClick AddToast ]
+    MDL [1]
+    |> flip .view 
 
 
 boxHeight : String
@@ -274,7 +275,7 @@ view addr model =
             ]
         , cell 
             [ size All 4, size Desktop 2]
-            [ addToastButton.view addr model.mdl 
+            [ addToastButton.view addr model.mdl [ Button.fwdClick AddToast ]
                 [ Button.colored
                 , css "width" "8em"
                 ] 

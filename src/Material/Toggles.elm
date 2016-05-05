@@ -259,17 +259,16 @@ type alias Switch container obs =
 {-| Create a component instance. Example usage, assuming you have a type
 `Action` with a constructor ...
 -}
-instance : 
-  Int
-  -> (Parts.Action (Container c) obs -> obs)
+instance  
+  : (Parts.Action (Container c) obs -> obs)
   -> (View v)
   -> Model
-  -> List (Observer obs)
+  -> Parts.Index
   -> Instance (Container c) obs v
 
-instance id lift view model0 = 
+instance lift view model0 = 
   Parts.create
-    view update .toggles (\x y -> {y | toggles = x}) id lift model0 
+    view update .toggles (\x y -> {y | toggles = x}) lift model0 
 
 {-| 
 -}

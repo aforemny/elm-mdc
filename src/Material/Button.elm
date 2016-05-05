@@ -283,8 +283,7 @@ type alias Observer obs =
 {-|
 -}
 type alias Instance container obs =
-  Part 
-    Model container Action obs (List Style -> List Html -> Html)
+  Part Model container Action obs (List Style -> List Html -> Html)
 
 
 {-| Create a component instance. Example usage, assuming you have a type
@@ -308,17 +307,16 @@ type alias Instance container obs =
         []
         [ myButton.view addr model.mdl [ Button.colored ] [ text "Click me!" ]
 -}
-instance : 
-  Int
-  -> (Parts.Action (Container c) obs -> obs)
-  -> View
+instance 
+  : View
   -> Model
-  -> List (Observer obs)
+  -> (Parts.Action (Container c) obs -> obs)
+  -> Parts.Index
   -> Instance (Container c) obs
 
-instance id lift view model0 observers = 
+instance view model0 lift = 
   Parts.create 
-    view update .button (\x y -> {y | button = x}) id lift model0 observers
+    view update .button (\x y -> {y | button = x}) model0 lift 
 
 
 {-| Lift the button Click action to your own action. 

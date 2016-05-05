@@ -53,7 +53,9 @@ import Task
 import Material.Menu.Geometry as Geometry exposing (Geometry)
 import Material.Ripple as Ripple
 import Material.Style as Style exposing (Style, cs, cs', css, css', styled)
-import Material.Component as Component exposing (Indexed)
+import Parts exposing (Indexed, Index)
+
+import DOM
 
 {-| MDL menu.
 -}
@@ -492,18 +494,17 @@ type alias Container c =
 
 
 type alias Observer obs =
-  Component.Observer Action obs
+  Parts.Observer Action obs
 
 
 type alias Instance container obs =
-  Component.Instance Model container Action obs (List Item -> List Html)
+  Parts.Instance Model container Action obs (List Item -> List Html)
 
 
 instance :
-  Int
-  -> (Component.Action (Container c) obs -> obs)
+  (Component.Action (Container c) obs -> obs)
   -> Model
-  -> List (Observer obs)
+  -> Index
   -> Instance (Container c) obs
 
 
