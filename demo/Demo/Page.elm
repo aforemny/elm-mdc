@@ -10,10 +10,10 @@ import Html.Attributes exposing (href, class)
 import Markdown
 
 import Material.Grid exposing (..)
-import Material.Style as Style exposing (styled, cs, css, attribute)
-import Material.Button as Button
+import Material.Options as Options exposing (styled, cs, css)
+--import Material.Button as Button
 import Material.Color as Color
-import Material.Icon as Icon
+--import Material.Icon as Icon
 
 
 -- REFERENCES
@@ -87,7 +87,7 @@ fromMDS =
 
 title : String -> Html 
 title t = 
-  Style.styled Html.h1 
+  Options.styled Html.h1 
     [ Color.text Color.primary 
     --, cs "mdl-typography--display-4" 
     -- TODO. Typography module
@@ -105,23 +105,25 @@ header str =
 -- VIEW SOURCE BUTTON
 
 
+{-
 addr : Signal.Address Button.Action
 addr = (Signal.mailbox Button.Click).address
 
 
 fab : String -> Html 
 fab url = 
-  Button.fab addr (Button.model False)
+  Button.fab addr 
     [ css "position" "fixed"
     , css "right" "48px"
     , css "top" "72px"
     , css "z-index" "100"
     , Button.colored
     --, attribute (href srcUrl) 
-    , attribute (Html.Attributes.attribute "onclick" ("alert('foo!');")) --("window.location.href = '" ++ srcUrl ++ "';") )
+    --, attribute (Html.Attributes.attribute "onclick" ("alert('foo!');")) --("window.location.href = '" ++ srcUrl ++ "';") )
     ]
     [ Icon.i "link" ]
 
+-}
 
 -- BODY 
 
@@ -142,7 +144,7 @@ body1 t srcUrl contents links demo =
     -- TODO: buttons can't be links (yet)
     -- TODO: FAB placement.
     --, header "Examples"
-    , Style.div 
+    , Options.div 
       [ css "margin-bottom" "48px"
       --, css "margin-top" "48px"
         -- , Elevation.shadow 2 

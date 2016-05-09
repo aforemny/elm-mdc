@@ -1,8 +1,10 @@
 module Material.Button
-  ( Model, model, Action(Click), update
+  ( Model, Action, update
   , flat, raised, fab, minifab, icon
   , colored, primary, accent
-  , View, Container, Observer, Instance, instance, fwdClick 
+  , ripple, disabled
+  , View, Container, Observer, Instance, instance
+  , render
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -32,10 +34,10 @@ for a live demo.
 
  
 # Elm architecture
-@docs Model, model, Action, update, View
+@docs Model, Action, update, View
 
-# Style
-@docs colored, primary, accent
+# Options
+@docs colored, primary, accent, ripple, disabled
 
 # View
 Refer to the
@@ -45,7 +47,7 @@ for details about what type of buttons are appropriate for which situations.
 @docs flat, raised, fab, minifab, icon
 
 # Component support
-@docs instance, fwdClick 
+@docs instance, render
 
 ## Component instance types
 
@@ -55,15 +57,16 @@ for details about what type of buttons are appropriate for which situations.
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events 
 import Effects exposing (Effects, none)
 import Signal exposing (Address, forwardTo)
 
-import Parts exposing (Indexed, Part)
+import Parts exposing (Indexed, Index)
 
 import Material.Helpers as Helpers
-import Material.Style as Style exposing (Style, cs, cs', styled)
+import Material.Options as Options exposing (cs, Property)
 import Material.Ripple as Ripple
+
 
 {-| MDL button.
 -}
@@ -72,103 +75,125 @@ import Material.Ripple as Ripple
 -- MODEL
 
 
-{-| Model of the button; common to all kinds of button.
-Use `model` to initalise it.
+{-| 
 -}
-type Model = S (Maybe Ripple.Model)
-
-
-{-| Model initialiser. Call with `True` if the button should ripple when
-clicked, `False` otherwise.
--}
-model : Bool -> Model
-model shouldRipple =
-  if shouldRipple then
-    S (Just Ripple.model)
-  else
-    S Nothing
+type alias Model = Ripple.Model
 
 
 -- ACTION, UPDATE
 
 
-{-| Component action. The `Click` action fires when the button is clicked.
+{-| 
 -}
-type Action
-  = Ripple Ripple.Action
-  | Click
+type alias Action
+  = Ripple.Action
 
 
 {-| Component update.
 -}
 update : Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
-    Click ->
-      (model, none)
-
-    Ripple action' ->
-      case model of
-        S (Just ripple) ->
-          let (ripple', e) = Ripple.update action' ripple
-          in
-            (S (Just ripple'), Effects.map Ripple e)
-        S Nothing ->
-          (model, none)
+update =
+  Ripple.update 
 
 
 -- VIEW
 
 
+{-| 
+-}
+type alias Config = 
+  { ripple : Bool 
+  , onClick : Maybe Attribute
+  , disabled : Bool
+  }
+
+
+defaultConfig : Config
+defaultConfig = 
+  { ripple = False
+  , onClick = Nothing
+  , disabled = False
+  }
+ 
+
+type alias Property = 
+  Options.Property Config 
+
+
+onClick : Address a -> a -> Property
+onClick addr x =
+  Options.set
+    (\options -> { options | onClick = Just (Html.Events.onClick addr x) })
+
+
+{-|
+   TODO
+-}
+ripple : Property 
+ripple = 
+  Options.set
+    (\options -> { options | ripple = True })
+
+
+{-| TODO
+-}
+disabled : Property
+disabled = 
+  Options.set
+    (\options -> { options | disabled = True })
+
+
 {-| Color button with primary or accent color depending on button type.
 -}
-colored : Style
+colored : Property
 colored =
   cs "mdl-button--colored"
 
 
 {-| Color button with primary color.
 -}
-primary : Style
+primary : Property
 primary =
   cs "mdl-button--primary"
 
 
 {-| Color button with accent color. 
 -}
-accent : Style
+accent : Property
 accent = 
   cs "mdl-button--accent"
 
 
-view : String -> Address Action -> Model -> List Style -> List Html -> Html
-view kind addr model styling html =
-  styled button 
-    (  cs "mdl-button"
-    :: cs "mdl-js-button"
-    :: cs' "mdl-js-ripple-effect" (model /= S Nothing)
-    :: cs' kind (kind /= "")
-    :: Style.attribute (Helpers.blurOn "mouseup")
-    :: Style.attribute (Helpers.blurOn "mouseleave")
-    :: Style.attribute (Html.Events.onClick addr Click)
-    :: styling
-    )
-    (case model of
-      S (Just ripple) ->
-        Ripple.view
-          (forwardTo addr Ripple)
-          [ class "mdl-button__ripple-container"
-          , Helpers.blurOn "mouseup" 
-          ]
-          ripple
-        :: html
-      _ -> html)
+view : Address Action -> Model -> List Property -> List Html -> Html
+view addr model config html =
+  let 
+    summary = Options.collect defaultConfig config
+  in
+    Options.apply summary button 
+      [ cs "mdl-button"
+      , cs "mdl-js-button" 
+      ]
+      [ Just (Helpers.blurOn "mouseup")
+      , Just (Helpers.blurOn "mouseleave")
+      , summary.config.onClick 
+      , if summary.config.disabled then Just (Html.Attributes.disabled True) else Nothing
+      ]
+      (if summary.config.ripple then
+          Ripple.view 
+            addr
+            [ class "mdl-button__ripple-container"
+            , Helpers.blurOn "mouseup" 
+            ]
+            model
+          :: html
+        else 
+          html)
 
 
 {-| Type of button views. 
 -}
 type alias View = 
-  Address Action -> Model -> List Style -> List Html -> Html
+  Address Action -> Model -> List Property -> List Html -> Html
 
 
 {-| From the
@@ -191,8 +216,8 @@ Example use (uncolored flat button, assuming properly setup model):
     flatButton = Button.flat addr model Button.Plain [text "Click me!"]
 
 -}
-flat : View
-flat = view ""
+flat : Property
+flat = Options.nop
 
 
 {-| From the
@@ -212,8 +237,8 @@ Example use (colored raised button, assuming properly setup model):
     raisedButton = Button.raised addr model Button.Colored [text "Click me!"]
 
 -}
-raised : View
-raised = view "mdl-button--raised"
+raised : Property 
+raised = cs "mdl-button--raised"
 
 
 {-| Floating Action Button. From the
@@ -238,14 +263,14 @@ Example use (colored with a '+' icon):
     fabButton : Html
     fabButton = fab addr model Colored [Icon.i "add"]
 -}
-fab : View
-fab = view "mdl-button--fab"
+fab : Property
+fab = cs "mdl-button--fab"
 
 
 {-| Mini-sized variant of a Floating Action Button; refer to `fab`.
 -}
-minifab : View
-minifab = view "mdl-button--mini-fab"
+minifab : Property 
+minifab = cs "mdl-button--mini-fab"
 
 
 {-| The [Material Design Lite implementation](https://www.getmdl.io/components/index.html#buttons-section)
@@ -260,8 +285,8 @@ Example use (no color, displaying a '+' icon):
     iconButton : Html
     iconButton = icon addr model Plain [Icon.i "add"]
 -}
-icon : View
-icon = view "mdl-button--icon"
+icon : Property 
+icon = cs "mdl-button--icon"
 
 
 
@@ -283,7 +308,7 @@ type alias Observer obs =
 {-|
 -}
 type alias Instance container obs =
-  Part Model container Action obs (List Style -> List Html -> Html)
+  Parts.Instance Model container Action obs (List Property -> List Html -> Html)
 
 
 {-| Create a component instance. Example usage, assuming you have a type
@@ -319,12 +344,21 @@ instance view model0 lift =
     view update .button (\x y -> {y | button = x}) model0 lift 
 
 
-{-| Lift the button Click action to your own action. 
+
+{-|
+  TODO
 -}
-fwdClick : obs -> (Observer obs)
-fwdClick obs action = 
-  case action of 
-    Click -> Just obs
-    _ -> Nothing 
-
-
+render 
+  : (Parts.Action (Container c) obs -> obs)
+  -> Parts.Index
+  -> Address obs
+  -> (Container c)
+  -> List Property 
+  -> List Html 
+  -> Html
+render lift index = 
+  ((Parts.create
+      view update .button (\x y -> {y | button=x}) Ripple.model lift)
+    index).view []
+    
+  

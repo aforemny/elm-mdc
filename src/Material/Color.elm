@@ -41,12 +41,12 @@ From the
 The Material Design Lite CSS supports this selection; you choose your primary
 and accent colors when loading MDL css; see
 `Material.top`. Many components can be instructed to take on one of the four hues
-mentioned above; below you'll find constructors for these scheme-dependent
+mentioned above; below you'll find `Options` for constructing these scheme-dependent
 colors.
 
 @docs primary, primaryDark, primaryContrast, accent, accentContrast
 
-# Styles
+# Options
 @docs background, text
 
 # Misc
@@ -57,7 +57,7 @@ colors.
 import Array exposing (Array)
 
 
-import Material.Style exposing (..)
+import Material.Options exposing (..)
 
 
 
@@ -257,18 +257,18 @@ accentContrast : Color
 accentContrast = C "accent-contrast"
 
 
--- COLOR STYLES
+-- COLOR OPTIONS
 
 
 {-| Background color.
 -}
-background : Color -> Style
+background : Color -> Property a
 background (C color) =
   cs ("mdl-color--" ++ color)
 
 {-| Text or foreground color.
 -}
-text : Color -> Style
+text : Color -> Property a
 text (C color) =
   cs ("mdl-color-text--" ++ color)
 

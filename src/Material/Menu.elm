@@ -55,7 +55,6 @@ import Material.Ripple as Ripple
 import Material.Style as Style exposing (Style, cs, cs', css, css', styled)
 import Parts exposing (Indexed, Index)
 
-import DOM
 
 {-| MDL menu.
 -}
@@ -501,16 +500,13 @@ type alias Instance container obs =
   Parts.Instance Model container Action obs (List Item -> List Html)
 
 
-instance :
-  (Component.Action (Container c) obs -> obs)
-  -> Model
+instance 
+  : Model 
+  -> (Parts.Action (Container c) obs -> obs)
   -> Index
   -> Instance (Container c) obs
-
-
-instance id lift model0 observer =
-  Component.instance
-    view update .menu (\x y -> {y | menu = x}) id lift model0 observer
+instance =
+  Parts.create view update .menu (\x y -> {y | menu = x}) 
 
 
 fwdOpen : obs -> Observer obs

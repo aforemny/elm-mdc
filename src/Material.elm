@@ -168,10 +168,10 @@ import Dict
 import Effects exposing (Effects)
 
 import Material.Button as Button
-import Material.Textfield as Textfield
-import Material.Menu as Menu
-import Material.Snackbar as Snackbar
-import Material.Toggles as Toggles
+--import Material.Textfield as Textfield
+--import Material.Menu as Menu
+--import Material.Snackbar as Snackbar
+--import Material.Toggles as Toggles
 import Parts exposing (Indexed)
 
 --import Material.Template as Template
@@ -182,10 +182,10 @@ type of such "observations".
 -}
 type alias Model = 
   { button : Indexed Button.Model
-  , textfield : Indexed Textfield.Model
-  , menu : Indexed Menu.Model
-  , snackbar : Maybe (Snackbar.Model Int) 
-  , toggles : Indexed Toggles.Model
+--  , textfield : Indexed Textfield.Model
+--  , menu : Indexed Menu.Model
+--  , snackbar : Maybe (Snackbar.Model Int) 
+--  , toggles : Indexed Toggles.Model
 --  , template : Indexed Template.Model
   }
 
@@ -195,10 +195,10 @@ type alias Model =
 model : Model
 model = 
   { button = Dict.empty
-  , textfield = Dict.empty
-  , menu = Dict.empty
-  , snackbar = Nothing
-  , toggles = Dict.empty
+--  , textfield = Dict.empty
+--  , menu = Dict.empty
+--  , snackbar = Nothing
+--  , toggles = Dict.empty
 --, template = Dict.empty
   }
 

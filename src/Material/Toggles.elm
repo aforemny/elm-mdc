@@ -243,8 +243,7 @@ type alias Observer obs =
 {-|
 -}
 type alias Instance container obs v =
-  Parts.Part 
-    Model container Action obs (List Style -> v)
+  Parts.Instance Model container Action obs (List Style -> v)
 
 type alias Radio container obs = 
   Instance container obs (RadioId -> List Html -> Html)
@@ -260,13 +259,13 @@ type alias Switch container obs =
 `Action` with a constructor ...
 -}
 instance  
-  : (Parts.Action (Container c) obs -> obs)
+  : Model 
+  -> (Parts.Action (Container c) obs -> obs)
   -> (View v)
-  -> Model
   -> Parts.Index
   -> Instance (Container c) obs v
 
-instance lift view model0 = 
+instance lift model0 view = 
   Parts.create
     view update .toggles (\x y -> {y | toggles = x}) lift model0 
 

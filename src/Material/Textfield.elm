@@ -191,14 +191,14 @@ type alias Container c =
 {-| 
 -}
 type alias Instance container obs = 
-  Parts.Part Model container Action obs (List Style -> Html)
+  Parts.Instance Model container Action obs (List Style -> Html)
 
 
 {-| Component constructor. See module `Material`.
 -}
 instance 
-  : (Parts.Action (Container c) obs -> obs)
-  -> Model 
+  : Model 
+  -> (Parts.Action (Container c) obs -> obs)
   -> Parts.Index
   -> Instance (Container c) obs
 

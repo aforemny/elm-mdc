@@ -75,25 +75,25 @@ size, offset, etc. of the cell.
 import Html exposing (..)
 
 import Material.Helpers exposing (clip, filter)
-import Material.Style as Style exposing (Style, cs, styled)
+import Material.Options as Options exposing (Style, cs, styled)
 
 
 {-| Set grid to have no spacing between cells. 
 -}
-noSpacing : Style 
-noSpacing = Style.cs "mdl-grid--no-spacing"
+noSpacing : Style
+noSpacing = Options.cs "mdl-grid--no-spacing"
 
 {-| Set maximum grid width. If more space is available, the grid stays centered with
 padding on either side. Width must be a valid CSS dimension. 
 -}
 maxWidth : String -> Style 
-maxWidth w = Style.css "max-width" w
+maxWidth w = Options.css "max-width" w
 
 {-| Construct a grid with options.
 -}
 grid : List Style -> List Cell -> Html
 grid styling cells =
-  Style.div (cs "mdl-grid" :: styling) (List.map (\(Cell elm) -> elm) cells)
+  Options.div (cs "mdl-grid" :: styling) (List.map (\(Cell elm) -> elm) cells)
 
 
 {-| Device specifiers, used with `size` and `offset`. (A `Device` really
@@ -184,4 +184,4 @@ module defines various styles to set size, offset, etc. of the cell.
 -}
 cell : List Style -> List Html -> Cell
 cell styling elms =
-  Cell (Style.div (cs "mdl-cell" :: styling) elms)
+  Cell (Options.div (cs "mdl-cell" :: styling) elms)

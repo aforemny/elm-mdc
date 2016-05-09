@@ -1,11 +1,25 @@
 module Material.Helpers where
 
+{-| Convenience functions. These are all trivial, but used frequently in the
+elm-mdl implementation. You might find hem useful. 
+
+# Html
+@docs filter
+
+# Effects
+@docs effect, pure
+-}
+
 import Html
 import Html.Attributes
 import Effects exposing (Effects)
 import Time exposing (Time)
 import Task
 
+
+{-| Convert a Html element from taking a list of sub-elements to a list of
+  Maybe Html. This is convenient if you want to include certain sub-elements
+-}
 filter : (a -> List b -> c) -> a -> List (Maybe b) -> c
 filter elem attr html =
   elem attr (List.filterMap (\x -> x) html)

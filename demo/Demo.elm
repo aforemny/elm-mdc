@@ -15,20 +15,19 @@ import Hop.Navigate exposing (navigateTo)
 import Hop.Matchers exposing (match1)
 
 import Material.Color as Color
-import Material.Layout
 import Material.Layout as Layout exposing (defaultLayoutModel)
 import Material.Helpers exposing (lift, lift')
-import Material.Style as Style
+import Material.Options as Style
 import Material.Scheme as Scheme
 
 import Demo.Buttons
-import Demo.Menus
-import Demo.Grid
-import Demo.Textfields
-import Demo.Snackbar
-import Demo.Badges
-import Demo.Elevation
-import Demo.Toggles
+--import Demo.Menus
+--import Demo.Grid
+--import Demo.Textfields
+--import Demo.Snackbar
+--import Demo.Badges
+--import Demo.Elevation
+--import Demo.Toggles
 --import Demo.Template
 
 
@@ -68,7 +67,6 @@ layoutModel : Layout.Model
 layoutModel =
   { defaultLayoutModel
   | state = Layout.initState (List.length tabs)
-  , mode = Layout.Waterfall False
   , fixedHeader = True
   }
 
@@ -77,10 +75,10 @@ type alias Model =
   { layout : Layout.Model
   , routing : Routing
   , buttons : Demo.Buttons.Model
-  , menus : Demo.Menus.Model
-  , textfields : Demo.Textfields.Model
-  , toggles : Demo.Toggles.Model
-  , snackbar : Demo.Snackbar.Model
+  --, menus : Demo.Menus.Model
+  --, textfields : Demo.Textfields.Model
+  --, toggles : Demo.Toggles.Model
+  --, snackbar : Demo.Snackbar.Model
   --, template : Demo.Template.Model
   }
 
@@ -90,10 +88,10 @@ model =
   { layout = layoutModel
   , routing = route0 
   , buttons = Demo.Buttons.model
-  , menus = Demo.Menus.model
-  , textfields = Demo.Textfields.model
-  , toggles = Demo.Toggles.model
-  , snackbar = Demo.Snackbar.model
+  --, menus = Demo.Menus.model
+  --, textfields = Demo.Textfields.model
+  --, toggles = Demo.Toggles.model
+  --, snackbar = Demo.Snackbar.model
   --, template = Demo.Template.model
   }
 
@@ -109,10 +107,10 @@ type Action
   -- Tabs
   | LayoutAction Layout.Action
   | ButtonsAction Demo.Buttons.Action
-  | MenusAction Demo.Menus.Action
-  | TextfieldAction Demo.Textfields.Action
-  | SnackbarAction Demo.Snackbar.Action
-  | TogglesAction Demo.Toggles.Action
+  --| MenusAction Demo.Menus.Action
+  --| TextfieldAction Demo.Textfields.Action
+  --| SnackbarAction Demo.Snackbar.Action
+  --| TogglesAction Demo.Toggles.Action
 --  | TemplateAction Demo.Template.Action
 
 
@@ -152,14 +150,14 @@ update action model =
 
     ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
 
-    MenusAction a -> lift  .menus    (\m x->{m|menus   =x}) MenusAction  Demo.Menus.update    a model
-
-    TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
-
-    SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
-
-    TogglesAction    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesAction Demo.Toggles.update   a model
-
+--    MenusAction a -> lift  .menus    (\m x->{m|menus   =x}) MenusAction  Demo.Menus.update    a model
+--
+--    TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
+--
+--    SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
+--
+--    TogglesAction    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesAction Demo.Toggles.update   a model
+--
     --TemplateAction  a -> lift  .template   (\m x->{m|template  =x}) TemplateAction Demo.Template.update   a model
 
         
@@ -176,7 +174,7 @@ drawer =
   [ Layout.title [] [ text "Example drawer" ]
   , Layout.navigation
     [] 
-    [ Layout.link
+    [ {- Layout.link
         [ Style.attribute 
             <| href "https://github.com/debois/elm-mdl" ]
         [ text "github" ]
@@ -184,7 +182,8 @@ drawer =
         [ Style.attribute 
             <| href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
         [ text "elm-package" ]
-    ]
+        TODO
+    -} ]
   ]
 
 
@@ -195,14 +194,16 @@ header =
       [ Layout.title [] [ text "elm-mdl" ]
       , Layout.spacer
       , Layout.navigation []
-          [ Layout.link
-            [ Style.attribute 
+          [ {- TODO Layout.link
+            [ 
+            Style.attribute 
                <| href "https://github.com/debois/elm-mdl"]
             [ span [] [text "github"] ]
           , Layout.link 
               [ Style.attribute 
                   <| href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
               [ text "elm-package" ]
+            -}
           ]
       ]
   ]
@@ -212,17 +213,17 @@ tabs : List (String, String, Addr -> Model -> Html)
 tabs =
   [ ("Buttons", "buttons", \addr model ->
       Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons)
-  , ("Menus", "menus", \addr model ->
-      Demo.Menus.view (Signal.forwardTo addr MenusAction) model.menus)
-  , ("Badges", "badges", \addr model -> Demo.Badges.view )
-  , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
-  , ("Grid", "grid", \addr model -> Demo.Grid.view)
-  , ("Snackbar", "snackbar", \addr model ->
-      Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
-  , ("Textfields", "textfields", \addr model ->
-      Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
-  , ("Toggles", "toggles", \addr model -> 
-      Demo.Toggles.view (Signal.forwardTo addr TogglesAction) model.toggles)
+--  , ("Menus", "menus", \addr model ->
+--      Demo.Menus.view (Signal.forwardTo addr MenusAction) model.menus)
+--  , ("Badges", "badges", \addr model -> Demo.Badges.view )
+--  , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
+--  , ("Grid", "grid", \addr model -> Demo.Grid.view)
+--  , ("Snackbar", "snackbar", \addr model ->
+--      Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
+--  , ("Textfields", "textfields", \addr model ->
+--      Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
+--  , ("Toggles", "toggles", \addr model -> 
+--      Demo.Toggles.view (Signal.forwardTo addr TogglesAction) model.toggles)
   --, ("Template", "tempate", \addr model -> 
   --    Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template)
   ]
@@ -306,6 +307,7 @@ view addr model =
         ]
   in
     Layout.view (Signal.forwardTo addr LayoutAction) model.layout
+      []
       { header = header
       , drawer = drawer
       , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
