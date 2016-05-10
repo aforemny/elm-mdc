@@ -1,5 +1,5 @@
 module Material.Textfield 
-  ( Property, label, floatingLabel, error, value, disabled
+  ( Property, label, floatingLabel, error, value, disabled, password
   , onInput
   , Action, Model, defaultModel, update, view
   , render
@@ -68,6 +68,7 @@ type alias Config =
   , value : Maybe String
   , disabled : Bool
   , onInput : Maybe Html.Attribute
+  , type' : Html.Attribute
   }
 
 
@@ -78,6 +79,7 @@ defaultConfig =
   , error = Nothing
   , value = Nothing
   , disabled = False
+  , type' = type' "text"
   , onInput = Nothing
   }
 
@@ -142,16 +144,20 @@ onInput addr =
     (\config -> { config | onInput = 
       Just (Html.Events.on "input" targetValue (Signal.message addr)) })
 
+{-|
+-}
+password : Property 
+password =
+  Options.set
+    (\config -> { config | type' = type' "password" })
+
 
 -- MODEL
 
 
 
-{-| Kind of textfield. Currently supports only single-line inputs.
--}
-type Kind
-  = SingleLine
-  {-
+{-| Kind of textfield. Currently supports only single-line input or password
+inputs.
   | MultiLine (Maybe Int) -- Max no. of rows or no limit
   -- TODO. Should prevent key event for ENTER
   -- when number of rows exceeds maxrows argument to constructor:
@@ -239,8 +245,8 @@ view addr model options =
       ([ Just <| Html.input
           [ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
-          , type' "text"
-          , Html.Attributes.disabled config.disabled
+          , config.type'
+          , Html.Attributes.disabled config.disabled 
           , onBlur addr Blur
           , onFocus addr Focus
           , case config.value of

@@ -1,5 +1,5 @@
 {
-    "version": "2.1.3",
+    "version": "3.1.0",
     "summary": "Material Design Lite port to Elm",
     "repository": "https://github.com/debois/elm-mdl.git",
     "license": "BSD3",
@@ -17,7 +17,8 @@
         "Material.Grid",
         "Material.Elevation",
         "Material.Snackbar",
-        "Material.Scheme"
+        "Material.Scheme",
+        "Material.Helpers"
     ],
     "dependencies": {
         "elm-lang/core": "3.0.0 <= v < 4.0.0",

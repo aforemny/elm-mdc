@@ -1,13 +1,26 @@
-module Material.Helpers where
+module Material.Helpers 
+  ( filter, blurOn
+  , map1st, map2nd
+  , delay, fx, pure, effect
+  , lift, lift'
+  , Update, Update'
+  ) where
 
-{-| Convenience functions. These are all trivial, but used frequently in the
-elm-mdl implementation. You might find hem useful. 
+{-| Convenience functions. These are mostly trivial functions that are used
+internally in the library; you might
+find some of them useful. 
 
-# Html
-@docs filter
+# HTML & Events
+@docs filter, blurOn
 
 # Effects
-@docs effect, pure
+@docs pure, effect, delay
+
+# Tuples
+@docs map1st, map2nd
+
+# Elm architecture
+@docs Update, Update', lift, lift'
 -}
 
 import Html
@@ -25,26 +38,32 @@ filter elem attr html =
   elem attr (List.filterMap (\x -> x) html)
 
 
+{-| Add an effect to a value. Example use (supposing you have an 
+action `MyAction`): 
+
+    model |> effect MyAction
+-}
 effect : Effects b -> a -> (a, Effects b)
 effect e x = (x, e)
 
 
+{-| Add the trivial effect to a value. Example use:
+    
+    model |> pure
+-}
 pure : a -> (a, Effects b)
 pure = effect Effects.none
 
 
-addFx : Effects a -> (model, Effects a) -> (model, Effects a)
-addFx effect1 (model, effect2) =
-  (model, Effects.batch [effect1, effect2])
 
-mapFx : (a -> b) -> (model, Effects a) -> (model, Effects b)
-mapFx f (model, effect) =
-  (model, Effects.map f effect)
+{-| Attribute which causes element to blur on given event. Example use
 
-clip : comparable -> comparable -> comparable -> comparable
-clip lower upper k = Basics.max lower (Basics.min k upper)
-
-
+    myButton : Html
+    myButton = 
+      button 
+        [ blurOn "mouseleave" ]
+        [ text "Click me!" ]
+-}
 blurOn : String -> Html.Attribute
 blurOn evt =
   Html.Attributes.attribute ("on" ++ evt) <| "this.blur()"
@@ -53,23 +72,23 @@ blurOn evt =
 -- TUPLES
 
 
-map1 : (a -> a') -> (a, b, c) -> (a', b, c)
-map1 f (x,y,z) = (f x, y, z)
+{-| Map the first element of a tuple. 
 
-
-map2 : (b -> b') -> (a, b, c) -> (a, b', c)
-map2 f (x,y,z) = (x, f y, z)
-
-
+    map1st ((+) 1) (1, "foo") == (2, "foo")
+-}
 map1st : (a -> c) -> (a,b) -> (c,b)
 map1st f (x,y) = (f x, y)
 
 
+{-| Map the second element of a tuple
+
+    map2nd ((+) 1) ("bar", 3) == ("bar", 4)
+-}
 map2nd : (b -> c) -> (a,b) -> (a,c)
 map2nd f (x,y) = (x, f y)
 
 
-{- Variant of EA update function type, where effects may be 
+{-| Variant of EA update function type, where effects may be 
 lifted to a different type. 
 -}
 type alias Update' model action action' = 
@@ -82,6 +101,8 @@ type alias Update model action =
   Update' model action action
 
 
+{-| Variant of `lift` for effect-free components. 
+-}
 lift' :
   (model -> submodel) ->                                      -- get
   (model -> submodel -> model) ->                             -- set
@@ -92,6 +113,26 @@ lift' :
 lift' get set update action model =
   (set model (update action (get model)), Effects.none)
 
+{-| Convenience function for writing update-function boilerplate. Example use:
+
+  case action of 
+    ...
+    ButtonsAction a -> 
+      lift .buttons (\m x->{m|buttons=x}) ButtonsAction Demo.Buttons.update a model
+
+This is equivalent to the more verbose
+
+  case action of 
+    ...
+    ButtonsAction a -> 
+      let 
+        (buttons', fx) = 
+          Demo.Buttons.update a model.buttons
+      in 
+        ( { model | buttons = buttons'}
+        , Effects.map ButtonsAction fx
+        )
+-}
 lift :
   (model -> submodel) ->                                      -- get
   (model -> submodel -> model) ->                             -- set
@@ -112,6 +153,13 @@ fx =
   Task.succeed >> Effects.task
 
 
+{-| Produce a delayed effect. Suppose you want `MyAction` to happen 200ms after
+a button is clicked:
+
+    button 
+      [ onClick (delay 0.2 MyAction) ] 
+      [ text "Click me!" ]
+-}
 delay : Time -> a -> Effects a
 delay t x =
   Task.sleep t

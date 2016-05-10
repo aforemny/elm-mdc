@@ -7,7 +7,6 @@ module Demo.Page
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class)
-import String
 import Markdown
 
 import Material.Grid exposing (..)

@@ -5,7 +5,7 @@ import Html exposing (..)
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
 
-import Material.Helpers exposing (map1st, map2nd, pure, delay)
+import Material.Helpers exposing (map1st, map2nd, delay, pure)
 import Material.Color as Color
 import Material.Options as Options exposing (cs, css, Style)
 import Material.Snackbar as Snackbar

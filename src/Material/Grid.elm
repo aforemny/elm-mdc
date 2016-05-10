@@ -74,7 +74,6 @@ size, offset, etc. of the cell.
 
 import Html exposing (..)
 
-import Material.Helpers exposing (clip, filter)
 import Material.Options as Options exposing (Style, cs, styled)
 
 
@@ -185,3 +184,10 @@ module defines various styles to set size, offset, etc. of the cell.
 cell : List Style -> List Html -> Cell
 cell styling elms =
   Cell (Options.div (cs "mdl-cell" :: styling) elms)
+
+
+-- HELPERS
+
+
+clip : comparable -> comparable -> comparable -> comparable
+clip lower upper k = Basics.max lower (Basics.min k upper)

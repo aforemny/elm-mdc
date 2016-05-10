@@ -83,7 +83,6 @@ match str rx =
     |> List.any (.match >> (==) str)
 
 
-
 view : Signal.Address Action -> Model -> Html
 view addr model =
   [ Textfield.render MDL [0] addr model.mdl 
@@ -108,6 +107,11 @@ view addr model =
         else
           Options.nop
       , Textfield.onInput (Signal.forwardTo addr Upd4)
+      ]
+  , Textfield.render MDL [5] addr model.mdl
+      [ Textfield.label "Enter password"
+      , Textfield.floatingLabel
+      , Textfield.password
       ]
   ]
   |> List.map (\c -> 
