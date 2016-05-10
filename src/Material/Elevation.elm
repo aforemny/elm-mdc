@@ -46,7 +46,7 @@ Each of the values below denote an elevation of a certain heigh, e.g.,
 
 -}
 
-import Material.Style exposing (..)
+import Material.Options exposing (..)
 
 {-| Indicate the elevation of an element by giving it a shadow. 
 The argument indicates intended elevation; valid values 

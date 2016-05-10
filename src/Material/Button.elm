@@ -1,10 +1,11 @@
 module Material.Button
   ( Model, Action, update
   , flat, raised, fab, minifab, icon
-  , colored, primary, accent
+  , plain, colored, primary, accent
   , ripple, disabled
-  , View, Container, Observer, Instance, instance
-  , render
+  , onClick
+  , Property
+  , View, Container, render
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -37,7 +38,8 @@ for a live demo.
 @docs Model, Action, update, View
 
 # Options
-@docs colored, primary, accent, ripple, disabled
+@docs plain, colored, primary, accent
+@docs ripple, disabled, onClick
 
 # View
 Refer to the
@@ -45,13 +47,11 @@ Refer to the
 for details about what type of buttons are appropriate for which situations.
 
 @docs flat, raised, fab, minifab, icon
+@docs Property
 
-# Component support
-@docs instance, render
+# Part
+@docs Container, render
 
-## Component instance types
-
-@docs Container, Observer, Instance
 
 -}
 
@@ -64,7 +64,7 @@ import Signal exposing (Address, forwardTo)
 import Parts exposing (Indexed, Index)
 
 import Material.Helpers as Helpers
-import Material.Options as Options exposing (cs, Property)
+import Material.Options as Options exposing (cs)
 import Material.Ripple as Ripple
 
 
@@ -116,6 +116,8 @@ defaultConfig =
   }
  
 
+{-|
+-}
 type alias Property = 
   Options.Property Config 
 
@@ -141,6 +143,13 @@ disabled : Property
 disabled = 
   Options.set
     (\options -> { options | disabled = True })
+
+
+{-| Plain, uncolored button (default). 
+-}
+plain : Property
+plain =
+  cs "mdl-button--colored"
 
 
 {-| Color button with primary or accent color depending on button type.
@@ -290,59 +299,13 @@ icon = cs "mdl-button--icon"
 
 
 
--- COMPONENT
+-- PART
 
 
 {-|
 -}
 type alias Container c =
   { c | button : Indexed Model }
-
-
-{-|
--}
-type alias Observer obs = 
-  Parts.Observer Action obs
-
-
-{-|
--}
-type alias Instance container obs =
-  Parts.Instance Model container Action obs (List Property -> List Html -> Html)
-
-
-{-| Create a component instance. Example usage, assuming you have a type
-`Action` with a constructor `MyButtonAction : Action`, and that your 
-`model` has a field `mdl : Material.Model`. 
-
-    type alias Mdl = 
-      Material.Model 
-
-
-    myButton : Button.Instance Mdl Action 
-    myButton = 
-      Button.instance 0 MDL
-        Button.raised (Button.model True)
-        [ Button.fwdClick MyButtonAction ]
-
-
-    -- in your view:
-    ... 
-      div 
-        []
-        [ myButton.view addr model.mdl [ Button.colored ] [ text "Click me!" ]
--}
-instance 
-  : View
-  -> Model
-  -> (Parts.Action (Container c) obs -> obs)
-  -> Parts.Index
-  -> Instance (Container c) obs
-
-instance view model0 lift = 
-  Parts.create 
-    view update .button (\x y -> {y | button = x}) model0 lift 
-
 
 
 {-|
@@ -356,9 +319,8 @@ render
   -> List Property 
   -> List Html 
   -> Html
-render lift index = 
-  ((Parts.create
-      view update .button (\x y -> {y | button=x}) Ripple.model lift)
-    index).view []
+render lift = 
+  Parts.create
+      view update .button (\x y -> {y | button=x}) Ripple.model lift
     
   

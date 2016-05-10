@@ -2,7 +2,7 @@ module Demo.Elevation where
 
 import Html exposing (..)
 
-import Material.Style as Style exposing (cs, css, Style)
+import Material.Options as Options exposing (cs, css, Style)
 import Material.Elevation as Elevation
 
 import Demo.Page as Page
@@ -13,7 +13,7 @@ import Demo.Page as Page
 
 elevate : (Style, Int) -> Html 
 elevate (e, k) = 
-  Style.div 
+  Options.div 
     [ css "height" "96px"
     , css "width"  "128px"
     , css "margin" "40px"
@@ -24,7 +24,7 @@ elevate (e, k) =
     , css "align-items" "center"
     , e
     ]
-    [ Style.div 
+    [ Options.div 
       [ cs ".mdl-typography--title-color-contrast" 
         -- TODO. Typography!
       , css "box-radius" "2pt"

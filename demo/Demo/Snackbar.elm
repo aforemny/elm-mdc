@@ -2,15 +2,14 @@ module Demo.Snackbar where
 
 import Effects exposing (Effects, none)
 import Html exposing (..)
-import Html.Attributes exposing (class, style, key)
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
 
 import Material.Helpers exposing (map1st, map2nd, pure, delay)
 import Material.Color as Color
-import Material.Style as Style exposing (cs, css, Style)
+import Material.Options as Options exposing (cs, css, Style)
 import Material.Snackbar as Snackbar
-import Material.Button as Button exposing (Action(..))
+import Material.Button as Button 
 import Material.Grid exposing (..)
 import Material.Elevation exposing (e2, e8)
 import Material 
@@ -134,28 +133,13 @@ update action model =
         |> map2nd (Effects.map Snackbar)
 
     MDL action' -> 
-      Material.update MDL action' model.mdl
-        |> map1st (\m -> { model | mdl = m })
-
+      Material.update MDL action' model
 
 
 -- VIEW
 
 
 
-addSnackbarButton : Button.Instance Mdl Action 
-addSnackbarButton = 
-  Button.instance 0 MDL
-    Button.raised (Button.model True)
-    [ Button.fwdClick AddSnackbar ]
-
-
-addToastButton : Button.Instance Mdl Action 
-addToastButton = 
-  Button.instance 
-    Button.raised (Button.model True)
-    MDL [1]
-    |> flip .view 
 
 
 boxHeight : String
@@ -219,7 +203,7 @@ clickView model (k, square) =
     (which animates only width, to cause reflow of surrounding boxes), 
     and an absolutely positioned inner div (to force animation to start
     in the lower-left corner. -}
-    Style.div 
+    Options.div 
       [ css "height" boxHeight
       , css "width" width
       , css "position" "relative"
@@ -227,11 +211,11 @@ clickView model (k, square) =
       , css "margin" margin
       , css "z-index" "0"
       , transitionOuter
-      , Style.attribute (key <| toString k)
+      , Options.key (toString k)
         {- Interestingly, not setting key messes up CSS transitions in
         spectacular ways. -}
       ]
-      [ Style.div
+      [ Options.div
           [ Color.background color
           , Color.text Color.primaryContrast
           , if selected then e8 else e2
@@ -267,16 +251,20 @@ view addr model =
     , grid [ ] 
         [ cell 
             [ size All 4, size Desktop 2]
-            [ addSnackbarButton.view addr model.mdl 
-                [ Button.colored
+            [ Button.render MDL [0] addr model.mdl
+                [ Button.raised
+                , Button.onClick addr AddSnackbar
+                , Button.colored
                 , css "width" "8em"
                 ] 
                 [ text "Snackbar" ]
             ]
         , cell 
             [ size All 4, size Desktop 2]
-            [ addToastButton.view addr model.mdl [ Button.fwdClick AddToast ]
-                [ Button.colored
+            [ Button.render MDL [1] addr model.mdl 
+                [ Button.raised
+                , Button.colored
+                , Button.onClick addr AddToast
                 , css "width" "8em"
                 ] 
                 [ text "Toast" ]

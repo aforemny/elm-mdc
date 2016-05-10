@@ -65,6 +65,8 @@ this color palette.
 
 # Component Support
 
+TODO
+
 This module contains only convenience functions for working with nested 
 components in the Elm architecture. A minimal example using this library
 with component support can be found 
@@ -99,18 +101,15 @@ Here is how you use component support in general.  First, boilerplate.
 
         type Action = 
           ...
-          | MDL (Material.Action Action)
+          | Mdl (Material.Action Action)
 
  4. Handle that action in your update function as follows:
 
         update action model = 
           case action of 
             ...
-            MDL action' -> 
-              let (mdl', fx) = 
-                Material.update MDL action' model.mdl 
-              in 
-                ( { model | mdl = mdl' } , fx )
+            Mdl action' -> 
+              Material.update Mdl action' model
 
 Next, make the component instances you need. Do this in the View section of your 
 source file. Let's say you need a textfield for name entry, and you'd like to
@@ -168,10 +167,11 @@ import Dict
 import Effects exposing (Effects)
 
 import Material.Button as Button
---import Material.Textfield as Textfield
---import Material.Menu as Menu
---import Material.Snackbar as Snackbar
+import Material.Textfield as Textfield
+import Material.Menu as Menu
+import Material.Snackbar as Snackbar
 --import Material.Toggles as Toggles
+import Material.Helpers exposing (map1st)
 import Parts exposing (Indexed)
 
 --import Material.Template as Template
@@ -182,9 +182,9 @@ type of such "observations".
 -}
 type alias Model = 
   { button : Indexed Button.Model
---  , textfield : Indexed Textfield.Model
---  , menu : Indexed Menu.Model
---  , snackbar : Maybe (Snackbar.Model Int) 
+  , textfield : Indexed Textfield.Model
+  , menu : Indexed Menu.Model
+  , snackbar : Maybe (Snackbar.Model Int) 
 --  , toggles : Indexed Toggles.Model
 --  , template : Indexed Template.Model
   }
@@ -195,9 +195,9 @@ type alias Model =
 model : Model
 model = 
   { button = Dict.empty
---  , textfield = Dict.empty
---  , menu = Dict.empty
---  , snackbar = Nothing
+  , textfield = Dict.empty
+  , menu = Dict.empty
+  , snackbar = Nothing
 --  , toggles = Dict.empty
 --, template = Dict.empty
   }
@@ -216,7 +216,9 @@ your own Action type.
 update : 
   (Action obs -> obs) 
   -> Action obs
-  -> Model 
-  -> (Model, Effects obs)
-update = 
-  Parts.update
+  -> { model | mdl : Model }
+  -> ({ model | mdl : Model }, Effects obs)
+update lift action model = 
+  Parts.update lift action model.mdl 
+    |> map1st (\mdl -> { model | mdl = mdl })
+

@@ -1,7 +1,7 @@
 module Material.Badge
   ( noBackground
   , overlap
-  , withBadge
+  , add
   ) where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):
@@ -31,36 +31,32 @@ Refer to
 [this site](https://debois.github.io/elm-mdl/#/badges) 
 for a live demo. 
 
-@docs withBadge, noBackground, overlap
+@docs add, noBackground, overlap
 -}
 
-import Html.Attributes
-import Material.Style exposing (Style, cs, attribute, multiple)
+import Material.Options as Options exposing (Property, cs, many)
+
 
 
 {-| Optional style for Badge. No background for badge 
 -}
-noBackground : Style
+noBackground : Property a
 noBackground = 
   cs "mdl-badge--no-background"
 
+
 {-| Optional style for Badge. Overlap Badge 
 -}
-overlap : Style
+overlap : Property a
 overlap = 
   cs "mdl-badge--overlap"
 
 
-{-| Main style  for Badge 
-    The parameter will set a value to data-badge="value".	Assigns string value to badge
-
-    import Material.Badge as Badge
-    badgeStyle : Style
-    badgeStyle = Badge.withBadge "3"
+{-| Add a badge to the containing element.
 -}
-withBadge : String -> Style
-withBadge databadge = 
-  multiple 
-    [ cs "mdl-badge"
-    , attribute (Html.Attributes.attribute "data-badge" databadge)
+add : String -> Property a
+add str = 
+  Options.many
+    [ Options.data "badge" str
+    , cs "mdl-badge"
     ]

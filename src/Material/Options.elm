@@ -1,8 +1,8 @@
 module Material.Options
   ( Property, Summary, collect
-  , cs, css, many, nop, set
-  , apply, styled, stylesheet
-  , Style, div, span
+  , cs, css, many, nop, set, data
+  , apply, styled, styled', stylesheet
+  , Style, div, span, onHover, key
   ) where
 
 
@@ -16,13 +16,13 @@ Material container elements.
 (This mechanism is necessary because Elm does not provide a good way to
 add to or remove from the contents of an already constructed class Attribute.)
 
-@docs Many
+@docs many
 
 # Constructors
-@docs cs, cs', css, css', attribute, options
+@docs cs, css, data, options
 
 # Application
-@docs styled, div, span
+@docs styled, styled', div, span, onHover, key
 
 # Convenience
 @docs stylesheet
@@ -33,6 +33,9 @@ import String
 
 import Html exposing (Html, Attribute)
 import Html.Attributes
+import Html.Events exposing (on)
+import Json.Decode as Decoder
+import Signal exposing (Address)
 
 
 -- PROPERTIES
@@ -43,6 +46,7 @@ import Html.Attributes
 type Property a
   = Class String
   | CSS (String, String)
+  | Attribute Attribute
   | Many (List (Property a))
   | Set (a -> a)
   | None
@@ -53,6 +57,7 @@ type Property a
 type alias Summary a = 
   { classes : List String 
   , css : List (String, String)  
+  , attrs : List Attribute
   , config : a
   }
 
@@ -63,6 +68,7 @@ collect1 f option acc =
   case option of 
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
+    Attribute x -> { acc | attrs = x :: acc.attrs }
     Many options -> List.foldl (collect1 f) acc options
     Set g -> { acc | config = f g acc.config }
     None -> acc
@@ -78,14 +84,14 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : a -> List (Property a) -> Summary a
 collect config0 =
-  recollect { classes=[], css=[], config=config0 }
+  recollect { classes=[], css=[], attrs=[], config=config0 }
 
 
 collect' : List (Property a) -> Summary () 
 collect' options = 
   List.foldl 
     (collect1 (\_ _ -> ()))
-    { classes=[], css=[], config=() }
+    { classes=[], css=[], attrs=[], config=() }
     options
 
 
@@ -95,11 +101,12 @@ id x = x
 
 addAttributes : Summary a -> List Attribute -> List Attribute
 addAttributes summary attrs = 
-  (  Html.Attributes.style summary.css
-  :: Html.Attributes.class (String.join " " summary.classes)
-  :: attrs
-  )
-
+  List.concat
+    [ attrs
+    , [ Html.Attributes.style summary.css ]
+    , [ Html.Attributes.class (String.join " " summary.classes) ]
+    , summary.attrs
+    ]
 
 
 {-| 
@@ -127,12 +134,24 @@ apply summary ctor options attrs =
       (List.filterMap id attrs))
 
 
+{-|
+-}
 styled : (List Attribute -> a) -> List (Property b) -> a
 styled ctor props = 
   ctor 
     (addAttributes 
       (collect' props) 
       [])
+
+
+{-|
+-}
+styled' : (List Attribute -> a) -> List (Property b) -> List Attribute -> a
+styled' ctor props attrs = 
+  ctor
+    (addAttributes
+      (collect' props)
+      attrs)
 
 
 {-| Convenience function for the ultra-common case of setting attributes of a
@@ -196,6 +215,19 @@ set =
   Set
 
 
+{-| HTML data-* attributes. 
+-}
+data : String -> String -> Property a
+data key val = 
+  Attribute (Html.Attributes.attribute ("data-" ++ key) val)
+
+
+{-| VirtualDOM keys. 
+-}
+key : String -> Property a
+key k = 
+  Attribute (Html.Attributes.key k)
+
 -- CONVENIENCE
 
 
@@ -213,3 +245,10 @@ stylesheet css =
 
 type alias Style = 
   Property ()
+
+
+{-|
+-}
+onHover : Address a -> a -> Style
+onHover addr x =
+  Attribute (on "mouseover" (Decoder.succeed x) (Signal.message addr))

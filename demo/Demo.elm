@@ -21,12 +21,12 @@ import Material.Options as Style
 import Material.Scheme as Scheme
 
 import Demo.Buttons
---import Demo.Menus
---import Demo.Grid
---import Demo.Textfields
---import Demo.Snackbar
---import Demo.Badges
---import Demo.Elevation
+import Demo.Menus
+import Demo.Grid
+import Demo.Textfields
+import Demo.Snackbar
+import Demo.Badges
+import Demo.Elevation
 --import Demo.Toggles
 --import Demo.Template
 
@@ -75,10 +75,11 @@ type alias Model =
   { layout : Layout.Model
   , routing : Routing
   , buttons : Demo.Buttons.Model
-  --, menus : Demo.Menus.Model
-  --, textfields : Demo.Textfields.Model
+  , badges : Demo.Badges.Model
+  , menus : Demo.Menus.Model
+  , textfields : Demo.Textfields.Model
   --, toggles : Demo.Toggles.Model
-  --, snackbar : Demo.Snackbar.Model
+  , snackbar : Demo.Snackbar.Model
   --, template : Demo.Template.Model
   }
 
@@ -88,10 +89,11 @@ model =
   { layout = layoutModel
   , routing = route0 
   , buttons = Demo.Buttons.model
-  --, menus = Demo.Menus.model
-  --, textfields = Demo.Textfields.model
+  , badges = Demo.Badges.model
+  , menus = Demo.Menus.model
+  , textfields = Demo.Textfields.model
   --, toggles = Demo.Toggles.model
-  --, snackbar = Demo.Snackbar.model
+  , snackbar = Demo.Snackbar.model
   --, template = Demo.Template.model
   }
 
@@ -106,10 +108,11 @@ type Action
   | HopAction ()
   -- Tabs
   | LayoutAction Layout.Action
+  | BadgesAction Demo.Badges.Action
   | ButtonsAction Demo.Buttons.Action
-  --| MenusAction Demo.Menus.Action
-  --| TextfieldAction Demo.Textfields.Action
-  --| SnackbarAction Demo.Snackbar.Action
+  | MenusAction Demo.Menus.Action
+  | TextfieldAction Demo.Textfields.Action
+  | SnackbarAction Demo.Snackbar.Action
   --| TogglesAction Demo.Toggles.Action
 --  | TemplateAction Demo.Template.Action
 
@@ -148,13 +151,16 @@ update action model =
     HopAction _ ->
       ( model, Effects.none )
 
+
     ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
 
---    MenusAction a -> lift  .menus    (\m x->{m|menus   =x}) MenusAction  Demo.Menus.update    a model
+    BadgesAction    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesAction   Demo.Badges.update    a model
+
+    MenusAction a -> lift  .menus    (\m x->{m|menus   =x}) MenusAction  Demo.Menus.update    a model
 --
---    TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
+    TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
 --
---    SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
+    SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
 --
 --    TogglesAction    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesAction Demo.Toggles.update   a model
 --
@@ -213,15 +219,16 @@ tabs : List (String, String, Addr -> Model -> Html)
 tabs =
   [ ("Buttons", "buttons", \addr model ->
       Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons)
---  , ("Menus", "menus", \addr model ->
---      Demo.Menus.view (Signal.forwardTo addr MenusAction) model.menus)
---  , ("Badges", "badges", \addr model -> Demo.Badges.view )
---  , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
---  , ("Grid", "grid", \addr model -> Demo.Grid.view)
---  , ("Snackbar", "snackbar", \addr model ->
---      Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
---  , ("Textfields", "textfields", \addr model ->
---      Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
+  , ("Menus", "menus", \addr model ->
+      Demo.Menus.view (Signal.forwardTo addr MenusAction) model.menus)
+  , ("Badges", "badges", \addr model -> 
+      Demo.Badges.view (Signal.forwardTo addr BadgesAction) model.badges)
+  , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
+  , ("Grid", "grid", \addr model -> Demo.Grid.view)
+  , ("Snackbar", "snackbar", \addr model ->
+      Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
+  , ("Textfields", "textfields", \addr model ->
+      Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
 --  , ("Toggles", "toggles", \addr model -> 
 --      Demo.Toggles.view (Signal.forwardTo addr TogglesAction) model.toggles)
   --, ("Template", "tempate", \addr model -> 
@@ -254,6 +261,11 @@ tabTitles =
 stylesheet : Html
 stylesheet =
   Style.stylesheet """
+  /* The following line is better done in html. We keep it here for
+     compatibility with elm-reactor.
+   */
+  @import url("assets/styles/github-gist.css");
+
   blockquote:before { content: none; }
   blockquote:after { content: none; }
   blockquote {
@@ -273,6 +285,13 @@ stylesheet =
   h1, h2 { 
     /* TODO. Need typography module with kerning. */
     margin-left: -3px;
+  }
+
+  pre { 
+    background-color: #f8f8f8; 
+    padding-top: .5rem;
+    padding-bottom: 1rem;
+    padding-left:1rem;
   }
 """
 
@@ -313,11 +332,18 @@ view addr model =
       , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
       , main = [ stylesheet, top ]
       }
-    {- The following line is not needed when you manually set up
+    {- The following lines are not necessary when you manually set up
        your html, as done with page.html. Removing it will then
        fix the flicker you see on load.
     -}
-    |> Scheme.topWithScheme Color.Teal Color.Red
+    |> (\contents -> 
+      div []
+        [ Scheme.topWithScheme Color.Teal Color.Red contents
+        , Html.node "script"
+           [ Html.Attributes.attribute "src" "assets/highlight.pack.js" ]
+           []
+        ]
+    )
 
 
 init : ( Model, Effects.Effects Action )

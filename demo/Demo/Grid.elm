@@ -5,7 +5,7 @@ import Html exposing (..)
 import Array
 
 import Material.Grid exposing (..)
-import Material.Style exposing (Style, css)
+import Material.Options exposing (Style, css)
 import Material.Color as Color 
 
 import Demo.Page as Page

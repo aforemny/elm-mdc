@@ -29,7 +29,8 @@ import Material.Options as Options exposing (Property, cs, css, styled)
 
 
 type alias Config = 
-  Maybe Attribute
+  { onClick : Maybe Attribute
+  }
 
 
 type alias Property = 
@@ -38,7 +39,8 @@ type alias Property =
 
 defaultConfig : Config
 defaultConfig = 
-  Nothing
+  { onClick = Nothing
+  }
 
 
 {-| TODO
@@ -46,7 +48,7 @@ defaultConfig =
 onClick : Signal.Address a -> a -> Property
 onClick addr x =
   Options.set
-    (always (Just (Html.Events.onClick addr x)))
+    (\config -> { config | onClick = Just (Html.Events.onClick addr x) })
 
 
 {-| Set icon to have size 18px. 
@@ -95,7 +97,7 @@ view name options =
   in 
     Options.apply summary Html.i
       [ cs "material-icons" ]
-      [ summary.config ]
+      [ summary.config.onClick ]
       [ text name ]
 
   

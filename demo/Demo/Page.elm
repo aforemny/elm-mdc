@@ -7,6 +7,7 @@ module Demo.Page
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class)
+import String
 import Markdown
 
 import Material.Grid exposing (..)
@@ -176,10 +177,4 @@ body3 t srcUrl contents links demo =
            demo
        ]
     ]
-
-
-
-
-
-
 

@@ -1,4 +1,10 @@
-module Material.Textfield where
+module Material.Textfield 
+  ( Property, label, floatingLabel, error, value, disabled
+  , onInput
+  , Action, Model, defaultModel, update, view
+  , render
+  )
+  where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
 
@@ -27,40 +33,118 @@ for a live demo.
  
 This implementation provides only single-line.
 
+# Options
+@docs Property, value, label, floatingLabel, error, disabled, onInput
 
-# Configuration
-@docs Kind, Label
+# Part
+@docs render
 
 # Elm Architecture
-@docs Action, Model, model, update, view
+@docs Action, Model, defaultModel, update, view
 
-# Component
-@docs Container, Instance
-@docs instance, fwdInput, fwdBlur, fwdFocus
+
 
 -}
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html exposing (div, span, Html, text)
+import Html.Attributes exposing (class, type', style)
+import Html.Events exposing (onFocus, onBlur, targetValue)
 import Effects
+import Signal exposing (Address)
 
 import Parts exposing (Indexed)
 
-import Material.Helpers exposing (filter)
-import Material.Style as Style exposing (cs, cs', Style)
+import Material.Options as Options exposing (cs, nop)
+
+
+-- OPTIONS
+
+
+
+type alias Config = 
+  { labelText : Maybe String
+  , labelFloat : Bool
+  , error : Maybe String
+  , value : Maybe String
+  , disabled : Bool
+  , onInput : Maybe Html.Attribute
+  }
+
+
+defaultConfig : Config
+defaultConfig = 
+  { labelText = Nothing
+  , labelFloat = False
+  , error = Nothing
+  , value = Nothing
+  , disabled = False
+  , onInput = Nothing
+  }
+
+
+{-|
+  TODO
+-}
+type alias Property = 
+  Options.Property Config
+
+
+{-|
+  TODO
+-}
+label : String -> Property 
+label str = 
+  Options.set 
+    (\config -> { config | labelText = Just str })
+
+{-| 
+  TODO
+-}
+floatingLabel : Property
+floatingLabel =
+  Options.set
+    (\config -> { config | labelFloat = True })
+
+
+{-|
+  TODO
+-}
+error : String -> Property
+error str = 
+  Options.set
+    (\config -> { config | error = Just str })
+
+
+{-| 
+  TODO
+-}
+value : String -> Property
+value str = 
+  Options.set
+    (\config -> { config | value = Just str })
+
+
+{-| 
+  TODO
+-}
+disabled : Property
+disabled = 
+  Options.set
+    (\config -> { config | disabled = True })
+
+
+{-|
+  TODO
+-}
+onInput : Address String -> Property
+onInput addr = 
+  Options.set
+    (\config -> { config | onInput = 
+      Just (Html.Events.on "input" targetValue (Signal.message addr)) })
 
 
 -- MODEL
 
-
-{-| Label configuration. The `text` is the text of the label;
-the label floats if `float` is True.
--}
-type alias Label =
-  { text : String
-  , float : Bool
-  }
 
 
 {-| Kind of textfield. Currently supports only single-line inputs.
@@ -87,24 +171,16 @@ type Kind
 The contents of the field is `value`.
 -}
 type alias Model =
-  { label : Maybe Label
-  , error : Maybe String
-  , kind : Kind
-  , isDisabled : Bool
-  , isFocused : Bool
+  { isFocused : Bool
   , value : String
   }
 
 
 {-| Default model. No label, error, or value.
 -}
-model : Model
-model =
-  { label = Nothing
-  , error = Nothing
-  , kind = SingleLine
-  , isDisabled = False
-  , isFocused = False
+defaultModel : Model
+defaultModel =
+  { isFocused = False
   , value = ""
   }
 
@@ -115,9 +191,9 @@ model =
 {-| Component actions. `Input` carries the new value of the field.
 -}
 type Action
-  = Input String
-  | Blur
+  = Blur
   | Focus
+  | Input String
 
 
 {-| Component update.
@@ -125,9 +201,9 @@ type Action
 update : Action -> Model -> Model
 update action model =
   case action of
-    Input str ->
+    Input str -> 
       { model | value = str }
-
+      
     Blur ->
       { model | isFocused = False }
 
@@ -140,98 +216,78 @@ update action model =
 
 {-| Component view.
 -}
-view : Signal.Address Action -> Model -> List Style -> Html
-view addr model styles =
-  let hasFloat = model.label |> Maybe.map .float |> Maybe.withDefault False
-      hasError = model.error |> Maybe.map (always True) |> Maybe.withDefault False
-      labelText = model.label |> Maybe.map .text 
+view : Signal.Address Action -> Model -> List Property -> Html
+view addr model options =
+  let 
+    ({ config } as summary) = 
+      Options.collect defaultConfig options
+    val = 
+      config.value |> Maybe.withDefault model.value
   in
-    filter Style.div
-      (  cs "mdl-textfield"
-      :: cs "mdl-js-textfield"
-      :: cs "is-upgraded"
-      :: cs' "mdl-textfield--floating-label" hasFloat
-      :: cs' "is-invalid" hasError
-      :: cs' "is-dirty" (model.value /= "")
-      :: cs' "is-focused" (model.isFocused && not model.isDisabled)
-      :: cs' "is-disabled" model.isDisabled
-      :: styles
-      )
-      [ Just <| input
+    Options.apply summary div
+      [ cs "mdl-textfield"
+      , cs "mdl-js-textfield"
+      , cs "is-upgraded"
+      , if config.labelFloat then cs "mdl-textfield--floating-label" else nop
+      , if config.error /= Nothing then cs "is-invalid" else nop 
+      , if val /= "" then cs "is-dirty" else nop
+      , if model.isFocused && not config.disabled then cs "is-focused" else nop
+      , if config.disabled then cs "is-disabled" else nop
+      ]
+      [ config.onInput
+      ]
+      ([ Just <| Html.input
           [ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
           , type' "text"
-          , disabled model.isDisabled
-          , value model.value
-          , Html.Events.on "input" targetValue (\s -> Signal.message addr (Input s))
+          , Html.Attributes.disabled config.disabled
           , onBlur addr Blur
           , onFocus addr Focus
+          , case config.value of
+              Just str -> 
+                Html.Attributes.value str
+              Nothing -> 
+                Html.Events.on "input" targetValue (Input >> Signal.message addr)
           ]
           []
-      , Just <| label 
+      , Just <| Html.label 
           [class "mdl-textfield__label"]  
-          (case labelText of 
+          (case config.labelText of 
             Just str -> [ text str ]
             Nothing -> [])
-      , model.error |> Maybe.map (\e ->
+      , config.error |> Maybe.map (\e ->
           span [class "mdl-textfield__error"] [text e])
       ]
+        |> List.filterMap (\x -> x)
+      )
 
 
 
--- COMPONENT 
+-- PART
 
 
 {-|
 -}
-type alias Container c = 
+type alias Container c =
   { c | textfield : Indexed Model }
 
 
-{-| 
+{-|
+  TODO
 -}
-type alias Instance container obs = 
-  Parts.Instance Model container Action obs (List Style -> Html)
-
-
-{-| Component constructor. See module `Material`.
--}
-instance 
-  : Model 
-  -> (Parts.Action (Container c) obs -> obs)
+render 
+  : (Parts.Action (Container c) obs -> obs)
   -> Parts.Index
-  -> Instance (Container c) obs
-
-instance = 
-  let 
-    update' action model = (update action model, Effects.none)
-  in 
-    Parts.create view update' .textfield (\x y -> {y | textfield = x}) 
-
-
-{-| Lift the textfield Input action to your own action. 
--}
-fwdInput : (String -> obs) -> Action -> Maybe obs
-fwdInput f action =
-  case action of 
-    Input str -> Just (f str)
-    _ -> Nothing
-
-
-{-| Lift the Blur action to your own action. 
--}
-fwdBlur : obs -> Action -> Maybe obs
-fwdBlur o action = 
-  case action of 
-    Blur -> Just o
-    _ -> Nothing
-
-
-{-| Lift the Focus action to your own action.
--}
-fwdFocus : obs -> Action -> Maybe obs
-fwdFocus o action =
-  case action of 
-    Focus -> Just o 
-    _ -> Nothing 
-
+  -> Address obs
+  -> (Container c)
+  -> List Property 
+  -> Html
+render lift = 
+  let
+    update' action model = 
+      (update action model, Effects.none)
+  in
+    Parts.create
+      view update' .textfield (\x y -> {y | textfield=x}) defaultModel lift
+    
+  

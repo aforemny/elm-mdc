@@ -1,13 +1,75 @@
 module Demo.Badges (..) where
 
 import Html exposing (..)
+import Signal exposing (Address)
+import Effects exposing (Effects)
+
+
 import Material.Badge as Badge
-import Material.Style as Style exposing (styled)
+import Material.Options as Options exposing (styled)
 import Material.Icon as Icon
 import Material.Grid exposing (..)
+import Material.Helpers as Helpers
+import Material.Button as Button
+import Material.Options exposing (css)
+import Material
 
+import Demo.Code as Code
 import Demo.Page as Page
 
+
+type Action 
+  = Increase 
+  | Decrease
+  | SetCode String
+  | CodeBox Code.Action
+  | Mdl (Material.Action Action)
+
+
+type alias Model = 
+  { unread : Int
+  , mdl : Material.Model
+  , code : Maybe String
+  , codebox : Code.Model
+  }
+
+
+model : Model 
+model = 
+  { unread = 1
+  , mdl = Material.model
+  , code = Nothing
+  , codebox = Code.model
+  }
+
+
+update : Action -> Model -> (Model, Effects Action)
+update action model = 
+  case action of
+    Mdl action' -> 
+      Material.update Mdl action' model
+
+    Decrease -> 
+      ( { model | unread = model.unread - 1 }
+      , [0..7]
+        |> List.map (\i -> Helpers.delay (2 ^ i * 20 + 750) Increase)
+        |> Effects.batch
+      )
+
+    Increase -> 
+      ( { model | unread = model.unread + 1 }
+      , Effects.none 
+      )
+
+    SetCode code -> 
+      Code.update (Code.Set code) model.codebox
+        |> Helpers.map1st (\codebox -> { model | codebox = codebox })
+        |> Helpers.map2nd (Effects.map CodeBox)
+
+    CodeBox action' -> 
+      Code.update action' model.codebox
+        |> Helpers.map1st (\codebox -> { model | codebox = codebox })
+        |> Helpers.map2nd (Effects.map CodeBox)
 
 -- VIEW
 
@@ -15,31 +77,111 @@ import Demo.Page as Page
 c : List Html -> Cell
 c = cell [ size All 4 ]  
 
-view : Html
-view =
+
+view : Address Action -> Model -> Html
+view addr model =
   [ p []
-      [ text """Below are examples of various badges."""
+      [ text "Typical use of a badge in, say, in an e-mail client:" ]
+  , grid []
+      [ c [ Options.styled span
+              [ if model.unread /= 0 then Badge.add (toString model.unread) else Options.nop
+              ]
+              [ text "Unread" ]
+            
+          , Button.render Mdl [0] addr model.mdl
+              [ css "margin-left" "2rem"
+              , Button.onClick addr Decrease ]
+              [ text "Mark as read"]
+          ]
       ]
+  , p [] 
+      [ text "Below are all possible combinations of badges. Hover to show source excerpt." ]
   , grid 
       [] 
-      [ c [Style.span [ Badge.withBadge "2" ]  [text "Badge"]  ]
-      , c [Style.span 
-            [ Badge.withBadge "22", Badge.noBackground ]  
-            [ text "No background" ]
+      [ c [ let c1 = """    
+              Options.span 
+                [ Badge.add "3" ] 
+                [ text "Badge" ]"""
+            in
+              Options.span 
+                [ Badge.add "3" 
+                , Options.onHover addr <| SetCode c1
+                ] 
+                [ text "Badge" ]  
           ]
-      , c [Style.span 
-            [ Badge.withBadge "33", Badge.overlap ]  
-            [ text "Overlap" ]
+      , c [ let c2 = """
+              Options.span
+                [ Badge.add "♥" ]
+                [ text "Symbol" ]"""
+            in
+              Options.span
+                [ Badge.add "♥" 
+                , Options.onHover addr <| SetCode c2
+                ]
+                [ text "Symbol" ]
+
           ]
-      , c [Style.span 
-            [ Badge.withBadge "99", Badge.overlap, Badge.noBackground ]  
-            [ text "Overlap, no background" ]
+      , c [ let c3 = """
+              Icon.view "shopping_cart"
+                [ Icon.size24
+                , Badge.add "33"
+                ]"""
+            in
+              Options.styled span 
+                [ Options.onHover addr <| SetCode c3 ]
+                [ Icon.view "shopping_cart"
+                  [ Icon.size24
+                  , Badge.add "33"
+                  ]
+                ]
           ]
-      , c [Style.span 
-            [ Badge.withBadge "♥" ]  
-            [ text "Symbol" ]
+      , c [ let c4 = """
+              Options.span 
+                [ Badge.add "5"
+                , Badge.noBackground 
+                ]  
+                [ text "No background" ]"""
+            in 
+              Options.span 
+                [ Badge.add "5"
+                , Badge.noBackground 
+                , Options.onHover addr <| SetCode c4
+                ]  
+                [ text "No background" ]
           ]
-      , c [ Icon.view "flight_takeoff" [ Icon.size24, Badge.withBadge "33", Badge.overlap ] ]
+      , c [ let c5 = """
+              Options.span 
+                [ Badge.add "8"
+                , Badge.overlap 
+                ]  
+                [ text "Overlap" ]"""
+            in
+              Options.span 
+                [ Badge.add "8"
+                , Badge.overlap 
+                , Options.onHover addr <| SetCode c5
+                ]  
+                [ text "Overlap" ]
+          ]
+      , c [ let c6 = """
+              Options.span
+                [ Badge.add "13"
+                , Badge.overlap 
+                , Badge.noBackground 
+                ]  
+                [ text "Overlap, no background" ]"""
+            in
+              Options.span
+                [ Badge.add "13"
+                , Badge.overlap 
+                , Badge.noBackground 
+                , Options.onHover addr <| SetCode c6
+                ]  
+                [ text "Overlap, no background" ]
+          ]
+      ] 
+  , p []
+      [ Code.view (Signal.forwardTo addr CodeBox) model.codebox
       ]
   ]
   |> Page.body2 "Badges" srcUrl intro references

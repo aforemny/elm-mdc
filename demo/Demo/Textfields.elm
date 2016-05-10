@@ -6,7 +6,7 @@ import Regex
 
 import Material.Textfield as Textfield
 import Material.Grid as Grid exposing (..)
-import Material.Helpers exposing (map1st)
+import Material.Options as Options
 import Material
 
 import Demo.Page as Page
@@ -17,24 +17,18 @@ import Demo.Page as Page
 
 type alias Model = 
   { mdl : Material.Model 
-  , rx : (String, Regex.Regex)
+  , str0 : String
+  , str3 : String
+  , str4 : String
   }
-
-
-rx0 : String
-rx0 = 
-  "[0-9]*"
-
-
-setRegex : String -> (String, Regex.Regex)
-setRegex str = 
-  (str, Regex.regex str)
 
 
 model : Model
 model = 
   { mdl = Material.model 
-  , rx = setRegex rx0
+  , str0 = ""
+  , str3 = ""
+  , str4 = ""
   }
 
 
@@ -44,19 +38,41 @@ model =
 type Action
   = MDL (Material.Action Action)
   | Upd0 String 
+  | Upd3 String
   | Upd4 String
 
 
-transferToDisabled : String -> Mdl -> Mdl 
-transferToDisabled str = 
-  field3.map (\m -> 
-    { m 
-    | value = 
-        if str == "" then
-          "" 
-        else 
-          "\"" ++ str ++ "\" (still disabled, though)" 
-    }) 
+update : Action -> Model -> (Model, Effects Action)
+update action model = 
+  case let _ = Debug.log "Model" model in  action of 
+    MDL action' -> 
+      Material.update MDL action' model 
+
+    Upd0 str -> 
+      ( { model | str0 = str }, Effects.none )
+
+    Upd3 str -> 
+      ( { model | str3 = str }, Effects.none )
+  
+    Upd4 str -> 
+      ( { model | str4 = str }, Effects.none )
+
+
+-- VIEW
+
+
+type alias Mdl = 
+  Material.Model 
+
+
+rx : String
+rx = 
+  "[0-9]*"
+
+
+rx' : Regex.Regex
+rx' = 
+  Regex.regex rx
 
 
 {- Check that rx matches all of str.
@@ -67,100 +83,37 @@ match str rx =
     |> List.any (.match >> (==) str)
 
 
-checkRegex : String -> (String, Regex.Regex) -> Mdl -> Mdl 
-checkRegex str (rx', rx) mdl =
-  let
-    value4 = field4.get mdl |> .value
-  in
-    mdl |> field4.map (\m -> { m | error = 
-      if match value4 rx then 
-        Nothing
-      else
-        "Doesn't match regex ' " ++ rx' ++ "'" |> Just
-      })
-
-
-
-update : Action -> Model -> (Model, Effects Action)
-update action model = 
-  case action of 
-    MDL action' -> 
-      Material.update MDL action' model.mdl 
-        |> map1st (\mdl' -> { model | mdl = mdl' })
-
-    Upd0 str -> 
-      ( { model | mdl = transferToDisabled str model.mdl }
-      , Effects.none
-      )
-
-    Upd4 str -> 
-      ( { model | mdl = checkRegex str model.rx model.mdl }
-      , Effects.none
-      )
-
-
--- VIEW
-
-
-m0 : Textfield.Model
-m0 = 
-  Textfield.model
-
-
-type alias Mdl = 
-  Material.Model 
-
-
-field0 : Textfield.Instance Mdl Action
-field0 = 
-  Textfield.instance 0 MDL m0 
-    [ Textfield.fwdInput Upd0
-    ]
-
-
-field1 : Textfield.Instance Mdl Action
-field1 = 
-  Textfield.instance 1 MDL 
-    { m0 | label = Just { text = "Labelled", float = False } }
-    []
-
-
-field2 : Textfield.Instance Mdl Action
-field2 = 
-  Textfield.instance 2 MDL 
-    { m0 | label = Just { text = "Floating label", float = True } }
-    []
-
-
-field3 : Textfield.Instance Mdl Action
-field3 = 
-  Textfield.instance 3 MDL 
-    { m0
-    | label = Just { text = "Disabled", float = False }
-    , isDisabled = True
-    }
-    []
-
-
-field4 : Textfield.Instance Mdl Action
-field4 = 
-  Textfield.instance 4 MDL 
-    { m0 | label = Just { text = "With error checking", float = False } }
-    [ Textfield.fwdInput Upd4 ]
-
 
 view : Signal.Address Action -> Model -> Html
 view addr model =
-  [ field0
-  , field1
-  , field2
-  , field3
-  , field4
+  [ Textfield.render MDL [0] addr model.mdl 
+      [ Textfield.onInput (Signal.forwardTo addr Upd0) ]
+  , Textfield.render MDL [1] addr model.mdl 
+      [ Textfield.label "Labelled" ]
+  , Textfield.render MDL [2] addr model.mdl 
+      [ Textfield.label "Floating label"
+      , Textfield.floatingLabel 
+      ]
+  , Textfield.render MDL [3] addr model.mdl 
+      [ Textfield.label "Disabled"
+      , Textfield.disabled 
+      , Textfield.value <| 
+          model.str0 
+            ++ if model.str0 /= "" then " (still disabled, though)" else ""
+      ]
+  , Textfield.render MDL [4] addr model.mdl 
+      [ Textfield.label "w/error checking" 
+      , if not <| match model.str4 rx' then 
+          Textfield.error <| "Doesn't match " ++ rx
+        else
+          Options.nop
+      , Textfield.onInput (Signal.forwardTo addr Upd4)
+      ]
   ]
   |> List.map (\c -> 
       cell 
         [size All 4, offset Desktop 1]
-        [c.view addr model.mdl []]
+        [c]
      )
   |> List.intersperse (cell [size All 1] [])
   |> grid []
