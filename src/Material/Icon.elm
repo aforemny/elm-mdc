@@ -1,9 +1,9 @@
-module Material.Icon
+module Material.Icon exposing
   ( size18, size24, size36, size48
   , view
   , i
   , onClick
-  ) where
+  )
 
 
 {-| Convenience functions for producing Material Design Icons. Refer to

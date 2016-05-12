@@ -1,8 +1,8 @@
-module Demo.Menus where
+module Demo.Menus exposing where
 
 import Html exposing (Html, text, p)
 import Html.Events exposing (onClick)
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 
 import Material
 import Material.Color as Color
@@ -37,24 +37,24 @@ model =
 -- ACTION, UPDATE
 
 
-type Action
-  = MenuAction Int Menu.Action
-  | MDL (Material.Action Action)
+type Msg
+  = MenuMsg Int Menu.Msg
+  | MDL (Material.Msg Msg)
   | Select String
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     MDL action' ->
       Material.update MDL action' model
 
-    MenuAction idx action ->
-      (model, Effects.none)
+    MenuMsg idx action ->
+      (model, Cmd.none)
 
     Select n -> 
       ( { model | selected = Just n }
-      , Effects.none
+      , Cmd.none
       )
 
 
@@ -71,23 +71,23 @@ menus =
 
 
 
-item : Signal.Address Action -> String -> Html
+item : Signal.Address Msg -> String -> Html
 item addr str = 
   Html.div 
     [ onClick addr (Select str) ]
     [ text str ]
 
 
-items : Signal.Address Action -> List Menu.Item
+items : Signal.Address Msg -> List Menu.Item
 items addr =
-  [ Menu.Item False True  <| item addr "Some Action"
-  , Menu.Item True  True  <| item addr "Another Action"
-  , Menu.Item False False <| item addr "Disabled Action"
-  , Menu.Item False True  <| item addr "Yet Another Action"
+  [ Menu.Item False True  <| item addr "Some Msg"
+  , Menu.Item True  True  <| item addr "Another Msg"
+  , Menu.Item False False <| item addr "Disabled Msg"
+  , Menu.Item False True  <| item addr "Yet Another Msg"
   ]
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   menus
   |> List.indexedMap (\idx m ->
@@ -108,7 +108,7 @@ view addr model =
 
 
 container :
-  Signal.Address Action
+  Signal.Address Msg
   -> Model
   -> Int
   -> (String, Menu.Property)

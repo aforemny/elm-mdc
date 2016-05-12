@@ -1,4 +1,4 @@
-module Material.Grid
+module Material.Grid exposing
   ( grid, noSpacing, maxWidth
   , Cell, cell
   , Device(..)
@@ -8,7 +8,7 @@ module Material.Grid
   , align
   , hide
   , order
-  ) where
+  )
 
 {-| From the
 [Material Design Lite documentation](http://www.getmdl.io/components/#layout-section/grid):
@@ -179,7 +179,7 @@ order device n =
 
 
 {-| Construct a cell for use in the argument list for `grid`. Note that this
-module defines various styles to set size, offset, etc. of the cell. 
+module defines exposing various styles to set size, offset, etc. of the cell. 
 -}
 cell : List Style -> List Html -> Cell
 cell styling elms =

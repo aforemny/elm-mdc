@@ -1,12 +1,12 @@
-module Material.Menu
+module Material.Menu exposing
   ( Model, defaultModel
   , Item
-  , Action, update
+  , Msg, update
   , view
   , Property
   , bottomLeft, bottomRight, topLeft, topRight, ripple
   , render
-  ) where
+  )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#menus-section):
 
@@ -32,7 +32,7 @@ Refer to
 for a live demo.
 
 # Elm architecture
-@docs Model, model, Action, update, View
+@docs Model, model, Msg, update, View
 
 # Alignment
 @docs bottomLeft, bottomRight, topLeft, topRight, unaligned
@@ -41,7 +41,7 @@ for a live demo.
 
 import Array exposing (Array)
 import Dict exposing (Dict)
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Html.Attributes as Html exposing (..)
 import Html.Events as Html exposing (defaultOptions)
 import Html exposing (..)
@@ -50,7 +50,6 @@ import Json.Encode exposing (string)
 import Material.Helpers exposing (..)
 import String
 import Task
-import Signal exposing (Address)
 
 import Material.Menu.Geometry as Geometry exposing (Geometry)
 import Material.Ripple as Ripple
@@ -132,17 +131,17 @@ type alias Item =
 
 {-| Component action.
 -}
-type Action
+type Msg
   = Open Geometry
   | Select Int Geometry
   | Close Geometry
   | Tick
-  | Ripple Int Ripple.Action
+  | Ripple Int Ripple.Msg
 
 
 {-| Component update.
 -}
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
 
   case action of
@@ -159,7 +158,7 @@ update action model =
 
     Tick ->
       ( { model | animationState = Opened }
-      , Effects.none 
+      , Cmd.none 
       )
 
     Close geometry ->
@@ -167,13 +166,13 @@ update action model =
         | animationState = Idle
         , geometry = Just geometry
         }
-      , Effects.none
+      , Cmd.none
       )
 
     Select idx geometry ->
       -- Close the menu after some delay for the ripple effect to show.
       ( { model | animationState = Closing }
-      , Effects.task
+      , Cmd.task
           <| Task.andThen (Task.sleep constant.closeTimeout) << always
           <| Task.succeed (Close geometry) 
       )
@@ -186,7 +185,7 @@ update action model =
            |> Ripple.update action
       in
         ( { model | items = Dict.insert idx model' model.items }
-        , Effects.map (Ripple idx) effects 
+        , Cmd.map (Ripple idx) effects 
         )
 
 
@@ -299,7 +298,7 @@ outlineGeometry : Config -> Geometry -> List Style
 outlineGeometry config geometry = 
   [] 
 
-view : Address Action -> Model -> List Property -> List Item -> Html
+view : Address Msg -> Model -> List Property -> List Item -> Html
 view addr model properties items =
   let 
     summary = Options.collect defaultConfig properties
@@ -381,7 +380,7 @@ view addr model properties items =
       ]
 
 
-makeItem : Address Action -> Config -> Model -> Int -> Item -> Html
+makeItem : Address Msg -> Config -> Model -> Int -> Item -> Html
 makeItem addr config model n item =
   let
     transitionDuration =
@@ -461,7 +460,7 @@ type alias Container c =
 {-|
 -}
 render 
-  : (Parts.Action (Container c) obs -> obs)
+  : (Parts.Msg (Container c) obs -> obs)
   -> Parts.Index
   -> Address obs
   -> Container c
@@ -476,9 +475,9 @@ render =
 
 
 onClick :
-  Address Action
+  Address Msg
   -> Decoder Geometry
-  -> (Geometry -> Action)
+  -> (Geometry -> Msg)
   -> Attribute
 onClick addr decoder action =
   Html.onWithOptions

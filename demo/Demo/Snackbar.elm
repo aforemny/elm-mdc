@@ -1,6 +1,6 @@
-module Demo.Snackbar where
+module Demo.Snackbar exposing where
 
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
@@ -58,21 +58,21 @@ model =
 -- ACTION, UPDATE
 
 
-type Action
+type Msg
   = AddSnackbar
   | AddToast
   | Appear Int
   | Gone Int
-  | Snackbar (Snackbar.Action Int)
-  | MDL (Material.Action Action)
+  | Snackbar (Snackbar.Msg Int)
+  | MDL (Material.Msg Msg)
 
 
-add : (Int -> Snackbar.Contents Int) -> Model -> (Model, Effects Action)
+add : (Int -> Snackbar.Contents Int) -> Model -> (Model, Cmd Msg)
 add f model =
   let 
     (snackbar', fx) = 
       Snackbar.add (f model.count) model.snackbar
-        |> map2nd (Effects.map Snackbar)
+        |> map2nd (Cmd.map Snackbar)
     model' = 
       { model 
       | snackbar = snackbar'
@@ -81,8 +81,8 @@ add f model =
       }
   in 
     ( model'
-    , Effects.batch 
-        [ Effects.tick (always (Appear model.count))
+    , Cmd.batch 
+        [ Cmd.tick (always (Appear model.count))
         , fx 
         ]
     )
@@ -98,7 +98,7 @@ mapSquare k f model =
   }
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     AddSnackbar ->
@@ -130,7 +130,7 @@ update action model =
     Snackbar action' -> 
       Snackbar.update action' model.snackbar 
         |> map1st (\s -> { model | snackbar = s })
-        |> map2nd (Effects.map Snackbar)
+        |> map2nd (Cmd.map Snackbar)
 
     MDL action' -> 
       Material.update MDL action' model
@@ -241,7 +241,7 @@ clickView model (k, square) =
 
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   Page.body2 "Snackbar & Toast" srcUrl intro references
     [ p [] 
@@ -288,8 +288,8 @@ intro =
 > The Material Design Lite (MDL) __snackbar__ component is a container used to
 > notify a user of an operation's status. It displays at the bottom of the
 > screen. A snackbar may contain an action button to execute a command for the
-> user. Actions should undo the committed action or retry it if it failed for
-> example. Actions should not be to close the snackbar. By not providing an
+> user. Msgs should undo the committed action or retry it if it failed for
+> example. Msgs should not be to close the snackbar. By not providing an
 > action, the snackbar becomes a __toast__ component.
 
 """ 

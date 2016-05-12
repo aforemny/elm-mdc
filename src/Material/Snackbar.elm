@@ -1,16 +1,16 @@
-module Material.Snackbar
+module Material.Snackbar exposing
   ( Contents, Model, add, model, toast, snackbar
-  , Action(Begin, End, Click), update
+  , Msg(Begin, End, Click), update
   , view
-  ) where
+  )
 
 {-| From the [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section):
 
 > The Material Design Lite (MDL) __snackbar__ component is a container used to
 > notify a user of an operation's status. It displays at the bottom of the
 > screen. A snackbar may contain an action button to execute a command for the
-> user. Actions should undo the committed action or retry it if it failed for
-> example. Actions should not be to close the snackbar. By not providing an
+> user. Msgs should undo the committed action or retry it if it failed for
+> example. Msgs should not be to close the snackbar. By not providing an
 > action, the snackbar becomes a __toast__ component.
 
 Refer to [this site](http://debois.github.io/elm-mdl#/snackbar)
@@ -22,7 +22,7 @@ for a live demo.
 # Elm Architecture
 
 @docs Model, model
-@docs Action, update
+@docs Msg, update
 @docs view
 
 # Component support
@@ -33,7 +33,7 @@ component.
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Task
 import Time exposing (Time)
 import Maybe exposing (andThen)
@@ -53,7 +53,7 @@ or `snackbar` to construct `Contents`.
  - `action` defines a label for the action-button in the snackbar. If 
     no action is provided, the snackbar is a message-only toast. 
  - `payload` defines the data returned by Snackbar actions for this message. 
-   You will usually choose this to be an Action of yours for later dispatch, 
+   You will usually choose this to be an Msg of yours for later dispatch, 
    e.g., if your snackbar has an "Undo" action, you would store the
    corresponding action as the payload. 
  - `timeout` is the amount of time the snackbar should be visible
@@ -131,16 +131,16 @@ type Transition
   | Clicked
 
 
-forward : a -> Effects a
-forward = Task.succeed >> Effects.task 
+forward : a -> Cmd a
+forward = Task.succeed >> Cmd.task 
 
 
-next : Model a -> Effects Transition -> Effects (Action a)
+next : Model a -> Cmd Transition -> Cmd (Msg a)
 next model = 
-  Effects.map (Move model.seq)
+  Cmd.map (Move model.seq)
 
 
-move : Transition -> Model a -> (Model a, Effects (Action a))
+move : Transition -> Model a -> (Model a, Cmd (Msg a))
 move transition model =
   case (model.state, transition) of
     (Inert, Timeout) ->
@@ -148,7 +148,7 @@ move transition model =
 
     (Active contents, Clicked) -> 
       ( { model | state = Fading contents }
-      , Effects.batch 
+      , Cmd.batch 
           [ delay contents.fade Timeout |> next model 
           , Click contents.payload |> forward
           ]
@@ -156,7 +156,7 @@ move transition model =
 
     (Active contents, Timeout) ->
       ( { model | state = Fading contents }
-      , Effects.batch 
+      , Cmd.batch 
           [ delay contents.fade Timeout |> next model
           , Begin contents.payload |> forward
           ]
@@ -164,8 +164,8 @@ move transition model =
 
     (Fading contents, Timeout) ->
       ( { model | state = Inert}
-      , Effects.batch 
-          [ always Timeout |> Effects.tick |> next model
+      , Cmd.batch 
+          [ always Timeout |> Cmd.tick |> next model
           , End contents.payload |> forward
           ]
       )
@@ -186,7 +186,7 @@ enqueue contents model =
   }
 
 
-tryDequeue : Model a -> (Model a, Effects (Action a))
+tryDequeue : Model a -> (Model a, Cmd (Msg a))
 tryDequeue model =
   case (model.state, model.queue) of
     (Inert, c :: cs) ->
@@ -195,8 +195,8 @@ tryDequeue model =
           , queue = cs
           , seq = model.seq + 1
         }
-      , Effects.batch 
-          [ delay c.timeout Timeout |> Effects.map (Move (model.seq + 1))
+      , Cmd.batch 
+          [ delay c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
           , forward (Begin c.payload)
           ]
       )
@@ -210,7 +210,7 @@ tryDequeue model =
 
 
 
-{-| Elm Architecture Action type.  
+{-| Elm Architecture Msg type.  
 The following actions are observable to you: 
 - `Begin a`. The snackbar is now displaying the message with payload `a`.
 - `End a`. The snackbar is done displaying the message with payload `a`.
@@ -218,7 +218,7 @@ The following actions are observable to you:
 You can consume these three actions without forwarding them to `Snackbar.update`.
 (You still need to forward other Snackbar actions.)
 -}
-type Action a
+type Msg a
   = Begin a
   | End a
   | Click a
@@ -228,7 +228,7 @@ type Action a
 
 {-| Elm Architecture update function. 
 -}
-update : Action a -> Model a -> (Model a, Effects (Action a))
+update : Msg a -> Model a -> (Model a, Cmd (Msg a))
 update action model =
   case action of
     Move seq transition ->
@@ -244,12 +244,12 @@ update action model =
 
 {-| Add a message to the snackbar. If another message is currently displayed, 
 the provided message will be queued. You will be able to observe a `Begin` action
-(see `Action` above) once the action begins displaying.
+(see `Msg` above) once the action begins displaying.
 
 You must dispatch the returned effect for the Snackbar to begin displaying your
 message.
 -}
-add : Contents a -> Model a -> (Model a, Effects (Action a))
+add : Contents a -> Model a -> (Model a, Cmd (Msg a))
 add contents model = 
   enqueue contents model |> tryDequeue
 
@@ -261,7 +261,7 @@ add contents model =
 
 {-| Elm architecture update function. 
 -}
-view : Signal.Address (Action a) -> Model a -> Html
+view : Signal.Address (Msg a) -> Model a -> Html
 view addr model = 
   let
     contents = 

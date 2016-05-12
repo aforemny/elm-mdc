@@ -1,10 +1,10 @@
-module Material.Template
+module Material.Template exposing
   ( Model, model
-  , Action, update
+  , Msg, update
   , view
   , instance, fwdTemplate
   , Container, Observer, Instance
-  ) where
+  )
 
 -- TEMPLATE. Copy this to a file for your component, then update.
 
@@ -18,7 +18,7 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/template)
 for a live demo.
 
-@docs Model, model, Action, update
+@docs Model, model, Msg, update
 @docs view
 
 # Component support
@@ -27,7 +27,7 @@ for a live demo.
 -}
 
 
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
 import Material.Component as Component exposing (Indexed)
@@ -57,13 +57,13 @@ model =
 
 {-| Component action.
 -}
-type Action
-  = MyAction
+type Msg
+  = MyMsg
 
 
 {-| Component update.
 -}
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   (model, none)
 
@@ -73,7 +73,7 @@ update action model =
 
 {-| Component view.
 -}
-view : Signal.Address Action -> Model -> List Style -> Html
+view : Signal.Address Msg -> Model -> List Style -> Html
 view addr model styles =
   Style.div 
     ( cs "TEMPLATE"
@@ -94,22 +94,22 @@ type alias Container c =
 {-|
 -}
 type alias Observer obs = 
-  Component.Observer Action obs
+  Component.Observer Msg obs
 
 
 {-|
 -}
 type alias Instance container obs =
   Component.Instance 
-    Model container Action obs (List Style -> Html)
+    Model container Msg obs (List Style -> Html)
 
 
 {-| Create a component instance. Example usage, assuming you have a type
-`Action` with a constructor ...
+`Msg` with a constructor ...
 -}
 instance : 
   Int
-  -> (Component.Action (Container c) obs -> obs)
+  -> (Component.Msg (Container c) obs -> obs)
   -> Model
   -> List (Observer obs)
   -> Instance (Container c) obs
@@ -124,6 +124,6 @@ instance id lift model0 observers =
 fwdTemplate : obs -> (Observer obs)
 fwdTemplate obs action = 
   case action of 
-    MyAction -> Just obs
+    MyMsg -> Just obs
 
 

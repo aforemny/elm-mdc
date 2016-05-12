@@ -1,8 +1,7 @@
-module Demo.Code where
+module Demo.Code exposing where
 
 import Html exposing (Html, text)
-import Signal exposing (Address)
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 import String
 import Markdown
 
@@ -24,7 +23,7 @@ type alias Model = State
 model : Model 
 model = Idle
 
-type Action 
+type Msg 
   = Set String
   | Timeout String
 
@@ -34,28 +33,28 @@ delay =
   200
 
 
-later : String -> Effects Action 
+later : String -> Cmd Msg 
 later s = 
   Helpers.delay delay (Timeout s)
 
 
-update : Action -> State -> (State, Effects Action)
+update : Msg -> State -> (State, Cmd Msg)
 update action state = 
   let
     guard b x = 
       if b then 
         x
       else
-        (state, Effects.none)
+        (state, Cmd.none)
   in
     case action of 
       Set s -> 
         case state of 
           Idle ->              
-            (First s, Effects.tick (always (Timeout s)))
+            (First s, Cmd.tick (always (Timeout s)))
 
           First _ -> 
-            (First s, Effects.none)
+            (First s, Cmd.none)
             
           Showing s' -> 
             guard (s /= s') ( FadingOut (s', s), later s' )
@@ -64,21 +63,21 @@ update action state =
             guard (s /= s') ( FadingOut (s', s), later s )
 
           FadingOut (s', _) -> 
-            (FadingOut (s', s), Effects.none)
+            (FadingOut (s', s), Cmd.none)
 
       Timeout s -> 
         case state of 
           Idle -> 
-            ( state, Effects.none ) -- Can't happen
+            ( state, Cmd.none ) -- Can't happen
 
           First _ -> 
             ( FadingIn s, later s )
 
           Showing s' -> 
-            ( state, Effects.none ) -- Also can't happen
+            ( state, Cmd.none ) -- Also can't happen
 
           FadingIn s' -> 
-            guard (s == s') ( Showing s, Effects.none )
+            guard (s == s') ( Showing s, Cmd.none )
 
           FadingOut (s', s'') -> 
             guard (s == s') ( FadingIn s'', later s'' )
@@ -133,7 +132,7 @@ code str =
 -- VIEW
 
 
-view : Address Action -> State -> Html
+view : Address Msg -> State -> Html
 view addr state = 
   let 
     opacity =

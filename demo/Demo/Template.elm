@@ -1,6 +1,6 @@
-module Demo.Template where
+module Demo.Template exposing where
 
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
 import Material.Template as Template
@@ -31,16 +31,16 @@ model =
 -- ACTION, UPDATE
 
 
-type Action 
-  = TemplateAction 
-  | MDL (Material.Action Action)
+type Msg 
+  = TemplateMsg 
+  | MDL (Material.Msg Msg)
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    TemplateAction -> 
-      (model, Effects.none)
+    TemplateMsg -> 
+      (model, Cmd.none)
 
     MDL action' -> 
       Material.update MDL action' model.mdl
@@ -52,10 +52,10 @@ update action model =
 
 template = 
   Template.instance 0 MDL Template.model 
-    [ Template.fwdTemplate TemplateAction ]
+    [ Template.fwdTemplate TemplateMsg ]
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   [ div 
       [] 

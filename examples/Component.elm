@@ -1,7 +1,7 @@
 import StartApp
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
-import Effects exposing (Effects, Never)
+import Platform.Cmd exposing (Cmd, Never)
 import Task exposing (Task)
 
 import Material
@@ -30,24 +30,24 @@ model =
 -- ACTION, UPDATE
 
 
-type Action
+type Msg
   = Increase
   | Reset
-  | MDL (Material.Action Action)   
-      -- Boilerplate: Action for MDL actions (ripple animations etc.).
+  | MDL (Material.Msg Msg)   
+      -- Boilerplate: Msg for MDL actions (ripple animations etc.).
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case Debug.log "" action of
     Increase -> 
       ( { model | count = model.count + 1 } 
-      , Effects.none
+      , Cmd.none
       )
 
     Reset -> 
       ( { model | count = 0 }
-      , Effects.none
+      , Cmd.none
       )
 
     {- Boilerplate: MDL action handler. It should always look like this, except
@@ -74,14 +74,14 @@ button. The arguments are:
 
   - An instance id (the `0`). Every component that uses the same model collection
     (model.mdl in this file) must have a distinct instance id. 
-  - An Action creator (`MDL`), lifting MDL actions to your Action type. 
+  - An Msg creator (`MDL`), lifting MDL actions to your Msg type. 
   - A button view (`flat`). 
   - An initial model (`(Button.model True)`---a button with a ripple animation. 
   - A list of observations you want to make of the button (final argument). 
     In this case, we hook up Click events of the button to the `Increase` action
     defined above. 
 -}
-increase : Button.Instance Mdl Action
+increase : Button.Instance Mdl Msg
 increase =
   Button.instance 0 MDL Button.flat (Button.model True) 
     [ Button.fwdClick Increase ]
@@ -90,7 +90,7 @@ increase =
 {- Next, the reset button. This one has id 1, does not ripple, and forwards its
 click event to our Reset action.
 -}
-reset : Button.Instance Mdl Action
+reset : Button.Instance Mdl Msg
 reset = 
   Button.instance 1 MDL Button.flat (Button.model False)
     [ Button.fwdClick Reset ]
@@ -101,7 +101,7 @@ and we did not have to add to our update actions to handle their internal events
 -}
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   div
     [ style
@@ -126,11 +126,11 @@ view addr model =
 -- SETUP
 
 
-init : (Model, Effects.Effects Action)
-init = (model, Effects.none)
+init : (Model, Cmd.Cmd Msg)
+init = (model, Cmd.none)
 
 
-inputs : List (Signal.Signal Action)
+inputs : List (Signal.Signal Msg)
 inputs =
   [ 
   ]

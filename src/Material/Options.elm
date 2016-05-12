@@ -1,9 +1,9 @@
-module Material.Options
+module Material.Options exposing
   ( Property, Summary, collect
-  , cs, css, many, nop, set, data
+  , cs, css, many, nop, set, data, key
   , apply, styled, styled', stylesheet
-  , Style, div, span, onHover, key
-  ) where
+  , Style, div, span, onHover
+  )
 
 
 {-| Setting options of Material components.
@@ -16,16 +16,22 @@ Material container elements.
 (This mechanism is necessary because Elm does not provide a good way to
 add to or remove from the contents of an already constructed class Attribute.)
 
-@docs many
+@docs Property, Style, Summary
+
+@docs many, nop
 
 # Constructors
-@docs cs, css, data, options
+@docs cs, css, data, key
 
 # Application
-@docs styled, styled', div, span, onHover, key
+@docs styled, styled', div, span, onHover
 
 # Convenience
 @docs stylesheet
+
+# Internal
+@docs apply, collect, set
+
 -}
 
 
@@ -35,7 +41,7 @@ import Html exposing (Html, Attribute)
 import Html.Attributes
 import Html.Events exposing (on)
 import Json.Decode as Decoder
-import Signal exposing (Address)
+import Json.Encode as Encoder
 
 
 -- PROPERTIES
@@ -43,27 +49,31 @@ import Signal exposing (Address)
 
 {-| Type of Style information. 
 -}
-type Property a
+type Property c m 
   = Class String
   | CSS (String, String)
-  | Attribute Attribute
-  | Many (List (Property a))
-  | Set (a -> a)
+  | Attribute (Attribute m)
+  | Many (List (Property c m))
+  | Set (c -> c)
   | None
 
 
 {-| Contents of a Property a.
 -}
-type alias Summary a = 
+type alias Summary c m = 
   { classes : List String 
   , css : List (String, String)  
-  , attrs : List Attribute
-  , config : a
+  , attrs : List (Attribute m)
+  , config : c
   }
 
 
 
-collect1 : ((a -> a) -> b -> b) -> Property a -> Summary b -> Summary b
+collect1 
+  : ((c -> c) -> c' -> c') 
+  -> Property c m 
+  -> Summary c' m 
+  -> Summary c' m
 collect1 f option acc = 
   case option of 
     Class x -> { acc | classes = x :: acc.classes }
@@ -74,7 +84,7 @@ collect1 f option acc =
     None -> acc
 
 
-recollect : Summary a -> List (Property a) -> Summary a
+recollect : Summary c m  -> List (Property c m) -> Summary c m
 recollect = 
   List.foldl (collect1 (<|)) 
 
@@ -82,12 +92,12 @@ recollect =
 {-| Flatten a `Property a` into  a `Summary a`. Operates as `fold`
 over options; first two arguments are folding function and initial value. 
 -}
-collect : a -> List (Property a) -> Summary a
+collect : c -> List (Property c m) -> Summary c m
 collect config0 =
   recollect { classes=[], css=[], attrs=[], config=config0 }
 
 
-collect' : List (Property a) -> Summary () 
+collect' : List (Property c m) -> Summary () m 
 collect' options = 
   List.foldl 
     (collect1 (\_ _ -> ()))
@@ -99,7 +109,7 @@ id : a -> a
 id x = x
 
 
-addAttributes : Summary a -> List Attribute -> List Attribute
+addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs = 
   List.concat
     [ attrs
@@ -124,8 +134,8 @@ from a List (Property a). Use like this:
 
 Ignores `b`.
 -}
-apply : Summary b -> (List Attribute -> a) -> List (Property b) 
-    -> List (Maybe Attribute) 
+apply : Summary c m -> (List (Attribute m) -> a) -> List (Property c m) 
+    -> List (Maybe (Attribute m)) 
     -> a
 apply summary ctor options attrs = 
   ctor 
@@ -136,7 +146,7 @@ apply summary ctor options attrs =
 
 {-|
 -}
-styled : (List Attribute -> a) -> List (Property b) -> a
+styled : (List (Attribute m) -> a) -> List (Property c m) -> a
 styled ctor props = 
   ctor 
     (addAttributes 
@@ -146,7 +156,7 @@ styled ctor props =
 
 {-|
 -}
-styled' : (List Attribute -> a) -> List (Property b) -> List Attribute -> a
+styled' : (List (Attribute m) -> a) -> List (Property c m) -> List (Attribute m) -> a
 styled' ctor props attrs = 
   ctor
     (addAttributes
@@ -166,7 +176,7 @@ div element. Use like this:
         [ text "I'm in color!" ]
 
 -}
-div : List (Property a) -> List Html -> Html
+div : List (Property c m) -> List (Html m) -> Html m
 div = 
   styled Html.div 
 
@@ -174,7 +184,7 @@ div =
 {-| Convenience function for the reasonably common case of setting attributes
 of a span element. See also `div`. 
 -}
-span : List (Property a) -> List Html -> Html
+span : List (Property c m) -> List (Html m) -> Html m
 span =
   styled Html.span 
 
@@ -183,50 +193,50 @@ span =
 {-| Add a HTML class to a component. (Name chosen to avoid clashing with
 Html.Attributes.class.)
 -}
-cs : String -> Property a
+cs : String -> Property c m
 cs c = Class c
 
 
 {-| Add a CSS style to a component.
 -}
-css : String -> String -> Property a
+css : String -> String -> Property c m
 css key value =
   CSS (key, value)
 
 
 {-| Add multiple configurations.
 -}
-many : List (Property a) -> Property a
+many : List (Property c m) -> Property c m
 many =
   Many 
 
 
 {-| Add a style that does nothing. 
 -}
-nop : Property a 
+nop : Property c m 
 nop = None
 
 
 {-| Set an option 
 TODO
 -}
-set : (a -> a) -> Property a
+set : (c -> c) -> Property c m
 set = 
   Set
 
 
 {-| HTML data-* attributes. 
 -}
-data : String -> String -> Property a
+data : String -> String -> Property c m
 data key val = 
   Attribute (Html.Attributes.attribute ("data-" ++ key) val)
 
 
 {-| VirtualDOM keys. 
 -}
-key : String -> Property a
+key : String -> Property c m
 key k = 
-  Attribute (Html.Attributes.key k)
+  Attribute (Html.Attributes.property "key" (Encoder.string k))
 
 -- CONVENIENCE
 
@@ -235,7 +245,7 @@ key k =
 The resulting Html is a `<style>` element.  Remember to insert the resulting Html
 somewhere. 
 -}
-stylesheet : String -> Html
+stylesheet : String -> Html m
 stylesheet css = 
   Html.node "style" [] [Html.text css]
 
@@ -243,12 +253,14 @@ stylesheet css =
 -- STYLE
 
 
-type alias Style = 
-  Property ()
+{-| TODO
+-}
+type alias Style m = 
+  Property () m
 
 
 {-|
 -}
-onHover : Address a -> a -> Style
-onHover addr x =
-  Attribute (on "mouseover" (Decoder.succeed x) (Signal.message addr))
+onHover : m -> Style m
+onHover x =
+  Attribute (on "mouseover" (Decoder.succeed x))

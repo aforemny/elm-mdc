@@ -1,7 +1,7 @@
-module Demo.Textfields where
+module Demo.Textfields exposing where
 
 import Html exposing (Html)
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 import Regex        
 
 import Material.Textfield as Textfield
@@ -35,27 +35,27 @@ model =
 -- ACTION, UPDATE
 
 
-type Action
-  = MDL (Material.Action Action)
+type Msg
+  = MDL (Material.Msg Msg)
   | Upd0 String 
   | Upd3 String
   | Upd4 String
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case let _ = Debug.log "Model" model in  action of 
     MDL action' -> 
       Material.update MDL action' model 
 
     Upd0 str -> 
-      ( { model | str0 = str }, Effects.none )
+      ( { model | str0 = str }, Cmd.none )
 
     Upd3 str -> 
-      ( { model | str3 = str }, Effects.none )
+      ( { model | str3 = str }, Cmd.none )
   
     Upd4 str -> 
-      ( { model | str4 = str }, Effects.none )
+      ( { model | str4 = str }, Cmd.none )
 
 
 -- VIEW
@@ -83,7 +83,7 @@ match str rx =
     |> List.any (.match >> (==) str)
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   [ Textfield.render MDL [0] addr model.mdl 
       [ Textfield.onInput (Signal.forwardTo addr Upd0) ]

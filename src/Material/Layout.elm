@@ -1,10 +1,10 @@
-module Material.Layout
-  ( setupSignals
+module Material.Layout exposing
+  ( subscriptions
   , Mode(..), Model, defaultLayoutModel, initState
-  , Action(SwitchTab, ToggleDrawer), update
+  , Msg(SwitchTab, ToggleDrawer), update
   , row, spacer, title, navigation, link
   , Contents, view
-  ) where
+  )
 
 {-| From the
 [Material Design Lite documentation](https://www.getmdl.io/components/index.html#layout-section):
@@ -30,10 +30,10 @@ module Material.Layout
 > flexibility and ease of use.
 
 # Setup
-@docs setupSignals
+@docs subscriptions
 
-# Model & Actions
-@docs Mode, Model, defaultLayoutModel, initState, Action, update
+# Model & Msgs
+@docs Mode, Model, defaultLayoutModel, initState, Msg, update
 
 # View
 @docs Contents, view
@@ -50,7 +50,7 @@ import Maybe exposing (andThen, map)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, on)
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 import Window
 
 import Material.Helpers exposing (..)
@@ -69,23 +69,24 @@ scrollMailbox = Signal.mailbox 0.0
 
 
 {-| Setup various signals layout needs (viewport size changes, scrolling). Use
-with StartApp like so, supposing you have a `LayoutAction` encapsulating
+with StartApp like so, supposing you have a `LayoutMsg` encapsulating
 actions of the
 layout:
 
-    inputs : List (Signal.Signal Action)
+    inputs : List (Signal.Signal Msg)
     inputs =
-      [ Layout.setupSignals LayoutAction
+      [ Layout.subscriptions LayoutMsg
       ]
 -}
-setupSignals : (Action -> a) -> Signal a
-setupSignals f =
+subscriptions : (Msg -> msg) -> Sub msg
+subscriptions f =
   {- NB! mergeMany propagates only the first provided signal if more than one
      signal changes value at the same time.  We are processing two signals: (1)
      viewport size changes and (2) scrolling of main contents.  It /appears/
      that these cannot happen at the same time, so the following should be
      safe. 
   -}
+  {- TODO
   Signal.mergeMany
     [ Window.width
         |> Signal.map ((>) 1024)
@@ -95,6 +96,11 @@ setupSignals f =
         |> Signal.map ((<) 0.0)
         |> Signal.dropRepeats
         |> Signal.map (TransitionHeader >> f) 
+    ]
+  -}
+  Sub.batch 
+    [ Window.resizes 
+        (.width >> (>) 1024 >> SmallScreen >> f)
     ]
 
 
@@ -176,7 +182,7 @@ defaultLayoutModel =
 Use `SwitchTab` to request a switch of tabs. Use `ToggleDrawer` to toggle the
 opened/closed state of the drawer.
 -}
-type Action
+type Msg
   = SwitchTab Int
   | ToggleDrawer
   -- Private
@@ -186,12 +192,12 @@ type Action
       Bool -- True means "transition to isCompact"
   | TransitionEnd
   -- Subcomponents
-  | Ripple Int Ripple.Action
+  | Ripple Int Ripple.Msg
 
 
 {-| Component update.
 -}
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   let (S state) = model.state in
     case action of
@@ -215,14 +221,14 @@ update action model =
           |> Maybe.map (Ripple.update action')
           |> Maybe.map (\(ripple', effect) ->
             ({ state | tabs = Array.set tabIndex ripple' (s model).tabs }
-            , Effects.map (Ripple tabIndex) effect))
+            , Cmd.map (Ripple tabIndex) effect))
           |> Maybe.withDefault (pure state)
       in
         ({ model | state = S state' }, effect)
 
 
     ScrollTab tab ->
-      (model, Effects.none) -- TODO
+      (model, Cmd.none) -- TODO
 
 
     TransitionHeader toCompact -> 
@@ -239,12 +245,12 @@ update action model =
           , delay 200 TransitionEnd -- See comment on transitionend in view. 
           )
         else
-          (model, Effects.none)
+          (model, Cmd.none)
 
 
     TransitionEnd -> 
       ( { model | state = S { state | isAnimating = False } }
-      , Effects.none
+      , Cmd.none
       )
 
 
@@ -380,7 +386,7 @@ isWaterfall mode =
     _ -> False
 
 
-type alias Addr = Signal.Address Action
+type alias Addr = Signal.Address Msg
 
 
 toList : Maybe a -> List a

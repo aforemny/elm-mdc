@@ -1,10 +1,10 @@
-module Parts
+module Parts exposing
   ( embed, embedIndexed, Embedding 
   , View, Update, Index, Indexed
-  , create, create1
+  , Msg
+  , lift
   , update
-  , Action
-  ) where
+  )
 
 {-| 
 
@@ -15,14 +15,16 @@ module Parts
 @docs Indexed, Embedding, embed, embedIndexed
 
 # Part construction
-@docs Action, Instance, Observer, create, create1
+@docs Msg, Instance, Observer, create, create1
 
 # Part consumption
 @docs update
 
 -}
 
-import Effects exposing (Effects)
+import Html exposing (Html)
+import Html.App
+import Platform.Cmd exposing (Cmd)
 import Dict exposing (Dict)
 
 
@@ -34,21 +36,21 @@ import Dict exposing (Dict)
 {-| Standard TEA update function type. 
 -}
 type alias Update model action = 
-  action -> model -> (model, Effects action)
+  action -> model -> (model, Cmd action)
 
 
 {-| Variant of TEA update function type, where effects may be 
 lifted to a different type. 
 -}
 type alias Update' model action action' = 
-  action -> model -> (model, Effects action')
+  action -> model -> (model, Cmd action')
 
 
 
 {-| Standard TEA view function type. 
 -}
-type alias View model action a = 
-  Signal.Address action -> model -> a
+type alias View model a = 
+  model -> a
 
 
 
@@ -70,7 +72,7 @@ view and update functions know how to extract and update their model
 from a larger master model. 
 -}
 type alias Embedding container action a = 
-  { view : View container action a
+  { view : View container a
   , update : Update container action 
   }
  
@@ -88,15 +90,14 @@ the input and output:
 
 -}
 embed : 
-  View model action a ->               -- Given a view function, 
+  View model a ->                      -- Given a view function, 
   Update model action ->               -- an update function 
   (container -> model) ->              -- a getter 
   (model -> container -> container) -> -- a setter
   Embedding container action a         -- produce an Embedding. 
 
 embed view update get set = 
-  { view = 
-      \addr model -> view addr (get model)
+  { view = get >> view
   , update = 
       \action model -> 
         update action (get model)
@@ -109,7 +110,7 @@ type all have their state living inside a shared `Dict`; the individual
 component has a key used to look up its own state. 
 -}
 embedIndexed : 
-  View model action a ->                       -- Given a view function, 
+  View model a ->                              -- Given a view function, 
   Update model action ->                       -- an update function 
   (container -> Indexed model) ->              -- a getter 
   (Indexed model -> container -> container) -> -- a setter
@@ -137,7 +138,7 @@ embedIndexed view update get set model0 id =
 in a single model container, we need to collect actions in a single "master
 action" type.  Obviously, actions need to be eventually executed by running
 the corresponding update function. To avoid this master action type explicitly
-representing the Action/update pairs of elm-mdl components, we represent an
+representing the Msg/update pairs of elm-mdl components, we represent an
 action of an individual component as a partially applied update function; that
 is, a function `container -> container`. E.g., the `Click` action of Button is
 conceptually represented as:
@@ -147,50 +148,55 @@ conceptually represented as:
       embedIndexed 
         Button.view Button.update .button {\m x -> {m|button=x} Button.model 0
 
-    clickAction : container -> container 
-    clickAction = embeddedButton.update Button.click 
+    clickMsg : container -> container 
+    clickMsg = embeddedButton.update Button.click 
 
 When all components are embedded in the same `container` model, we 
 then have a uniform update mechanism. 
 
 TODO
 -}
-type Action container obs = 
-  A (container -> (container, Effects (Action container obs)))
+type Msg container = 
+  Msg (container -> (container, Cmd (Msg container)))
 
 
-{-| Generic update function for Action. 
+{-| Generic update function for Msg. 
 -}
 update : 
-  (Action container obs -> obs) ->      
-  Update' container (Action container obs) obs
+  (Msg container -> obs) ->      
+  Update' container (Msg container) obs
 
-update fwd (A f) container = 
+update fwd (Msg f) container = 
   f container
-    |> map2nd (Effects.map fwd)
+    |> map2nd (Cmd.map fwd)
   
 
 
 -- PARTS
 
 
-{- Partially apply a step function to an action, producing a generic Action.
+type alias Observer msg obs = 
+ msg -> List obs
+
+
+{- Partially apply a step function to an action, producing a generic Msg.
 -}
-pack : (Update model action) -> action -> Action model obs
-pack update action = 
-  A (update action >> map2nd (Effects.map (pack update))) 
+pack : 
+ (Update model msg) 
+ -> msg 
+ -> Msg model 
+pack update msg = 
+  Msg (update msg >> map2nd (Cmd.map (pack update)))
 
 
-{-| Given a lifting function, a list of observers and an embedding, construct an
-Instance. 
--}
-create'
-  : (Action container obs -> obs) 
-  -> Embedding container action a 
-  -> View container obs a
-create' lift embedding = 
-  \addr -> embedding.view (Signal.forwardTo addr (pack embedding.update >> lift))
+lift
+  : (Msg container -> obs) 
+  -> Embedding container msg a 
+  -> (Html msg) -> (Html obs)
+lift f embedding = 
+  Html.App.map (pack embedding.update >> f)
 
+{-
 
 
 {-| It is helpful to see parameter names: 
@@ -200,7 +206,7 @@ create' lift embedding =
 
 Convert a regular Elm Architecture component (`view`, `update`) to a part, 
 i.e., a component which knows how to access its model inside a generic
-container model (`get`, `set`), and which dispatches generic `Action` updates,
+container model (`get`, `set`), and which dispatches generic `Msg` updates,
 lifted to the consumers action type `obs` (`lift`). You can react to actions in
 custom way by providing observers (`observers`). You must also provide an
 initial model (`model0`) and an identifier for the part (`id`). The
@@ -222,7 +228,7 @@ create
   -> (container -> Indexed model)
   -> (Indexed model -> container -> container)
   -> model
-  -> (Action container obs -> obs)
+  -> (Msg container obs -> obs)
   -> Index
   -> View container obs a
 
@@ -240,13 +246,14 @@ create1
   -> (container -> Maybe model)
   -> (Maybe model -> container -> container)
   -> model
-  -> (Action container obs -> obs)
+  -> (Msg container obs -> obs)
   -> View container obs a
 
 create1 view update get set model0 lift = 
   embed view update (get >> Maybe.withDefault model0) (Just >> set)
     |> create' lift 
 
+-}
 
 -- HELPERS
 

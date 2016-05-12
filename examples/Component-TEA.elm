@@ -1,7 +1,7 @@
 import StartApp
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
-import Effects exposing (Effects, Never)
+import Platform.Cmd exposing (Cmd, Never)
 import Task exposing (Task)
 
 import Material.Button as Button
@@ -29,9 +29,9 @@ model =
 -- ACTION, UPDATE
 
 
-type Action
-  = IncreaseButtonAction Button.Action
-  | ResetButtonAction Button.Action
+type Msg
+  = IncreaseButtonMsg Button.Msg
+  | ResetButtonMsg Button.Msg
 
 
 increase : Model -> Model
@@ -45,10 +45,10 @@ reset model =
 
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case Debug.log "" action of
-    IncreaseButtonAction action' -> 
+    IncreaseButtonMsg action' -> 
       let 
         (submodel, fx) =
           Button.update action' model.increaseButtonModel
@@ -60,10 +60,10 @@ update action model =
               model
       in 
         ( { model' | increaseButtonModel = submodel }
-        , Effects.map IncreaseButtonAction fx
+        , Cmd.map IncreaseButtonMsg fx
         )
 
-    ResetButtonAction action' -> 
+    ResetButtonMsg action' -> 
       let 
         (submodel, fx) =
           Button.update action' model.resetButtonModel 
@@ -75,14 +75,14 @@ update action model =
               model
       in 
         ( { model' | resetButtonModel = submodel }
-        , Effects.map ResetButtonAction fx
+        , Cmd.map ResetButtonMsg fx
         )
 
 
 -- VIEW
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   div
     [ style
@@ -93,12 +93,12 @@ view addr model =
     ]
     [ text ("Current count: " ++ toString model.count )
     , Button.flat 
-        (Signal.forwardTo addr IncreaseButtonAction) 
+        (Signal.forwardTo addr IncreaseButtonMsg) 
         model.increaseButtonModel 
         [] 
         [ text "Increase" ]
     , Button.flat 
-        (Signal.forwardTo addr ResetButtonAction)
+        (Signal.forwardTo addr ResetButtonMsg)
         model.resetButtonModel 
         [] 
         [ text "Reset" ]
@@ -113,11 +113,11 @@ view addr model =
 -- SETUP
 
 
-init : (Model, Effects.Effects Action)
-init = (model, Effects.none)
+init : (Model, Cmd.Cmd Msg)
+init = (model, Cmd.none)
 
 
-inputs : List (Signal.Signal Action)
+inputs : List (Signal.Signal Msg)
 inputs =
   [ 
   ]

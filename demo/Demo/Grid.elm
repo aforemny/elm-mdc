@@ -1,4 +1,4 @@
-module Demo.Grid where
+module Demo.Grid exposing where
 
 
 import Html exposing (..)

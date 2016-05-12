@@ -1,8 +1,8 @@
-module Material.Badge
+module Material.Badge exposing
   ( noBackground
   , overlap
   , add
-  ) where
+  )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):
 

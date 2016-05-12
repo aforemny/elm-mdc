@@ -1,8 +1,8 @@
-module Material.Elevation
+module Material.Elevation exposing
   ( e2, e3, e4, e6, e8, e16, e24 
   , elevations
   , transition
-  ) where
+  )
 
 {-| From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)
 

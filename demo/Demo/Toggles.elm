@@ -1,6 +1,6 @@
-module Demo.Toggles where
+module Demo.Toggles exposing where
 
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
 import Material.Toggles as Toggles
@@ -31,11 +31,11 @@ model =
 -- ACTION, UPDATE
 
 
-type Action 
-  = MDL (Material.Action Action)
+type Msg 
+  = MDL (Material.Msg Msg)
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     MDL action' -> 
@@ -46,33 +46,33 @@ update action model =
 -- VIEW
 
 
-switch : Toggles.Switch Mdl Action
+switch : Toggles.Switch Mdl Msg
 switch = 
   Toggles.instance 0 MDL 
     Toggles.switch Toggles.model 
     [ ]
 
-checkbox : Toggles.Checkbox Mdl Action
+checkbox : Toggles.Checkbox Mdl Msg
 checkbox = 
   Toggles.instance 1 MDL 
     Toggles.checkbox Toggles.model 
     [ ]
 
-radio1 : Toggles.Radio Mdl Action 
+radio1 : Toggles.Radio Mdl Msg 
 radio1 = 
   Toggles.instance 2 MDL
     Toggles.radio Toggles.model
     [ ]
 
 
-radio2 : Toggles.Radio Mdl Action 
+radio2 : Toggles.Radio Mdl Msg 
 radio2 = 
   Toggles.instance 3 MDL
     Toggles.radio Toggles.model
     [ ]
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   [ div 
       [] 

@@ -1,6 +1,5 @@
-module Material.Toggles.Common where
+module Material.Toggles.Common exposing where
 
-import Signal exposing (Address, message, forwardTo)
 import Html exposing (label)
 import Html.Attributes exposing (class)
 import Html.Events exposing (on, onFocus, onBlur)
@@ -13,15 +12,15 @@ import Material.Style exposing (styled, cs, cs', attribute, multiple)
 
 {-| Component action.
 -}
-type Action
+type Msg
   = Change
-  | Ripple Ripple.Action
+  | Ripple Ripple.Msg
   | SetFocus Bool
 
 
 {-| Component update.
 -}
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of 
     Change -> 
@@ -30,14 +29,14 @@ update action model =
     Ripple rip -> 
       Ripple.update rip (state model)
         |> map1st (\r -> { model | state = S r })
-        |> map2nd (Effects.map Ripple)
+        |> map2nd (Cmd.map Ripple)
 
     SetFocus focus -> 
       ( { model | isFocused = focus }, none )
 
 
 
-top : String -> Address Action -> Model -> List Style -> List Html -> Html
+top : String -> Address Msg -> Model -> List Style -> List Html -> Html
 top name addr model styles elems = 
   styled label 
     [ cs ("mdl-" ++ name) 

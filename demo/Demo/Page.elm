@@ -1,4 +1,4 @@
-module Demo.Page 
+module Demo.Page exposing 
   ( demo, package, mds, mdl
   , fromMDL, fromMDS
   , body1, body2
@@ -106,7 +106,7 @@ header str =
 
 
 {-
-addr : Signal.Address Button.Action
+addr : Signal.Address Button.Msg
 addr = (Signal.mailbox Button.Click).address
 
 

@@ -1,4 +1,4 @@
-module Material.Color
+module Material.Color exposing
   ( Hue(..), hues
   , Shade(..), shades
   , Color
@@ -9,7 +9,7 @@ module Material.Color
   , background
   , text
   , scheme
-  ) where
+  )
 
 
 {-| Material Design color palette.

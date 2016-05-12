@@ -1,10 +1,12 @@
-module Material.Ripple where
+module Material.Ripple exposing
+  (..
+  )
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
-import Effects exposing (Effects, tick, none)
+import Platform.Cmd exposing (Cmd, tick, none)
 
 import Material.Helpers exposing (effect)
 import DOM
@@ -86,13 +88,13 @@ computeMetrics g =
     ) |> Maybe.map (\(x,y) -> Metrics rect x y)
 
 
-type Action
+type Msg
   = Down DOMState
   | Up
   | Tick
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     Down domState ->
@@ -127,7 +129,7 @@ update action model =
 -- VIEW
 
 
-downOn : String -> Signal.Address Action -> Attribute
+downOn : String -> Signal.Address Msg -> Attribute
 downOn name addr =
   Html.Events.on
     name
@@ -135,7 +137,7 @@ downOn name addr =
     (Down >> Signal.message addr)
 
 
-upOn : String -> Signal.Address Action -> Attribute
+upOn : String -> Signal.Address Msg -> Attribute
 upOn name addr =
   Html.Events.on
     name
@@ -162,7 +164,7 @@ styles m frame =
     ]
 
 
-view : Signal.Address Action -> List Attribute -> Model -> Html
+view : Signal.Address Msg -> List Attribute -> Model -> Html
 view addr attrs model =
   let
     styling =

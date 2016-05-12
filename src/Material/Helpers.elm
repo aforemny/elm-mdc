@@ -1,10 +1,10 @@
-module Material.Helpers 
+module Material.Helpers exposing 
   ( filter, blurOn
   , map1st, map2nd
   , delay, fx, pure, effect
   , lift, lift'
   , Update, Update'
-  ) where
+  )
 
 {-| Convenience functions. These are mostly trivial functions that are used
 internally in the library; you might
@@ -13,7 +13,7 @@ find some of them useful.
 # HTML & Events
 @docs filter, blurOn
 
-# Effects
+# Cmd
 @docs pure, effect, delay
 
 # Tuples
@@ -25,7 +25,7 @@ find some of them useful.
 
 import Html
 import Html.Attributes
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 import Time exposing (Time)
 import Task
 
@@ -39,11 +39,11 @@ filter elem attr html =
 
 
 {-| Add an effect to a value. Example use (supposing you have an 
-action `MyAction`): 
+action `MyMsg`): 
 
-    model |> effect MyAction
+    model |> effect MyMsg
 -}
-effect : Effects b -> a -> (a, Effects b)
+effect : Cmd b -> a -> (a, Cmd b)
 effect e x = (x, e)
 
 
@@ -51,8 +51,8 @@ effect e x = (x, e)
     
     model |> pure
 -}
-pure : a -> (a, Effects b)
-pure = effect Effects.none
+pure : a -> (a, Cmd b)
+pure = effect Cmd.none
 
 
 
@@ -92,7 +92,7 @@ map2nd f (x,y) = (x, f y)
 lifted to a different type. 
 -}
 type alias Update' model action action' = 
-  action -> model -> (model, Effects action')
+  action -> model -> (model, Cmd action')
 
 
 {-| Standard EA update function type. 
@@ -109,28 +109,28 @@ lift' :
   (subaction -> submodel -> submodel) -> 
   subaction ->                                                -- action
   model ->                                                    -- model
-  (model, Effects action)
+  (model, Cmd action)
 lift' get set update action model =
-  (set model (update action (get model)), Effects.none)
+  (set model (update action (get model)), Cmd.none)
 
 {-| Convenience function for writing update-function boilerplate. Example use:
 
   case action of 
     ...
-    ButtonsAction a -> 
-      lift .buttons (\m x->{m|buttons=x}) ButtonsAction Demo.Buttons.update a model
+    ButtonsMsg a -> 
+      lift .buttons (\m x->{m|buttons=x}) ButtonsMsg Demo.Buttons.update a model
 
 This is equivalent to the more verbose
 
   case action of 
     ...
-    ButtonsAction a -> 
+    ButtonsMsg a -> 
       let 
         (buttons', fx) = 
           Demo.Buttons.update a model.buttons
       in 
         ( { model | buttons = buttons'}
-        , Effects.map ButtonsAction fx
+        , Cmd.map ButtonsMsg fx
         )
 -}
 lift :
@@ -140,30 +140,30 @@ lift :
   Update submodel subaction ->                               -- update
   subaction ->                                                -- action
   model ->                                                    -- model
-  (model, Effects action)
+  (model, Cmd action)
 lift get set fwd update action model =
   let
     (submodel', e) = update action (get model)
   in
-    (set model submodel', Effects.map fwd e)
+    (set model submodel', Cmd.map fwd e)
 
 
-fx : a -> Effects a
+fx : a -> Cmd a
 fx =
-  Task.succeed >> Effects.task
+  Task.succeed >> Cmd.task
 
 
-{-| Produce a delayed effect. Suppose you want `MyAction` to happen 200ms after
+{-| Produce a delayed effect. Suppose you want `MyMsg` to happen 200ms after
 a button is clicked:
 
     button 
-      [ onClick (delay 0.2 MyAction) ] 
+      [ onClick (delay 0.2 MyMsg) ] 
       [ text "Click me!" ]
 -}
-delay : Time -> a -> Effects a
+delay : Time -> a -> Cmd a
 delay t x =
   Task.sleep t
     |> (flip Task.andThen) (always (Task.succeed x))
-    |> Effects.task
+    |> Cmd.task
 
 

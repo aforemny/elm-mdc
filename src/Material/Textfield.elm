@@ -1,10 +1,9 @@
-module Material.Textfield 
+module Material.Textfield exposing 
   ( Property, label, floatingLabel, error, value, disabled, password
   , onInput
-  , Action, Model, defaultModel, update, view
-  , render
+  , Msg, Model, defaultModel, update, view
+  --, render
   )
-  where
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
 
@@ -40,7 +39,7 @@ This implementation provides only single-line.
 @docs render
 
 # Elm Architecture
-@docs Action, Model, defaultModel, update, view
+@docs Msg, Model, defaultModel, update, view
 
 
 
@@ -49,8 +48,8 @@ This implementation provides only single-line.
 import Html exposing (div, span, Html, text)
 import Html.Attributes exposing (class, type', style)
 import Html.Events exposing (onFocus, onBlur, targetValue)
-import Effects
-import Signal exposing (Address)
+import Json.Decode as Decoder
+import Platform.Cmd
 
 import Parts exposing (Indexed)
 
@@ -61,18 +60,18 @@ import Material.Options as Options exposing (cs, nop)
 
 
 
-type alias Config = 
+type alias Config m = 
   { labelText : Maybe String
   , labelFloat : Bool
   , error : Maybe String
   , value : Maybe String
   , disabled : Bool
-  , onInput : Maybe Html.Attribute
-  , type' : Html.Attribute
+  , onInput : Maybe (Html.Attribute m)
+  , type' : Html.Attribute m
   }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig = 
   { labelText = Nothing
   , labelFloat = False
@@ -87,14 +86,14 @@ defaultConfig =
 {-|
   TODO
 -}
-type alias Property = 
-  Options.Property Config
+type alias Property m = 
+  Options.Property (Config m) m
 
 
 {-|
   TODO
 -}
-label : String -> Property 
+label : String -> Property m 
 label str = 
   Options.set 
     (\config -> { config | labelText = Just str })
@@ -102,7 +101,7 @@ label str =
 {-| 
   TODO
 -}
-floatingLabel : Property
+floatingLabel : Property m
 floatingLabel =
   Options.set
     (\config -> { config | labelFloat = True })
@@ -111,7 +110,7 @@ floatingLabel =
 {-|
   TODO
 -}
-error : String -> Property
+error : String -> Property m
 error str = 
   Options.set
     (\config -> { config | error = Just str })
@@ -120,7 +119,7 @@ error str =
 {-| 
   TODO
 -}
-value : String -> Property
+value : String -> Property m
 value str = 
   Options.set
     (\config -> { config | value = Just str })
@@ -129,7 +128,7 @@ value str =
 {-| 
   TODO
 -}
-disabled : Property
+disabled : Property m
 disabled = 
   Options.set
     (\config -> { config | disabled = True })
@@ -138,15 +137,15 @@ disabled =
 {-|
   TODO
 -}
-onInput : Address String -> Property
-onInput addr = 
+onInput : (String -> m) -> Property m
+onInput f = 
   Options.set
     (\config -> { config | onInput = 
-      Just (Html.Events.on "input" targetValue (Signal.message addr)) })
+      Just (Html.Events.on "input" (Decoder.map f targetValue)) })
 
 {-|
 -}
-password : Property 
+password : Property m 
 password =
   Options.set
     (\config -> { config | type' = type' "password" })
@@ -156,7 +155,7 @@ password =
 
 
 
-{-| Kind of textfield. Currently supports only single-line input or password
+{- Kind of textfield. Currently supports only single-line input or password
 inputs.
   | MultiLine (Maybe Int) -- Max no. of rows or no limit
   -- TODO. Should prevent key event for ENTER
@@ -196,7 +195,7 @@ defaultModel =
 
 {-| Component actions. `Input` carries the new value of the field.
 -}
-type Action
+type Msg
   = Blur
   | Focus
   | Input String
@@ -204,7 +203,7 @@ type Action
 
 {-| Component update.
 -}
-update : Action -> Model -> Model
+update : Msg -> Model -> Model
 update action model =
   case action of
     Input str -> 
@@ -220,10 +219,11 @@ update action model =
 -- VIEW
 
 
-{-| Component view.
--}
-view : Signal.Address Action -> Model -> List Property -> Html
-view addr model options =
+view = view' (\x -> x)
+
+
+view' : (Msg -> m) -> Model -> List (Property m) -> Html m
+view' lift model options =
   let 
     ({ config } as summary) = 
       Options.collect defaultConfig options
@@ -247,13 +247,13 @@ view addr model options =
           , style [ ("outline", "none") ]
           , config.type'
           , Html.Attributes.disabled config.disabled 
-          , onBlur addr Blur
-          , onFocus addr Focus
+          , onBlur (lift Blur)
+          , onFocus (lift Focus)
           , case config.value of
               Just str -> 
                 Html.Attributes.value str
               Nothing -> 
-                Html.Events.on "input" targetValue (Input >> Signal.message addr)
+                Html.Events.on "input" targetValue (lift Input)
           ]
           []
       , Just <| Html.label 
@@ -277,23 +277,23 @@ view addr model options =
 type alias Container c =
   { c | textfield : Indexed Model }
 
-
+{-
 {-|
   TODO
 -}
 render 
-  : (Parts.Action (Container c) obs -> obs)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
-  -> Address obs
   -> (Container c)
-  -> List Property 
-  -> Html
+  -> List (Property m)
+  -> Html m
 render lift = 
   let
     update' action model = 
-      (update action model, Effects.none)
+      (update action model, Cmd.none)
   in
     Parts.create
       view update' .textfield (\x y -> {y | textfield=x}) defaultModel lift
     
+-}
   

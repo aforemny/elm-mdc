@@ -1,8 +1,7 @@
-module Demo.Badges (..) where
+module Demo.Badges exposing (..)
 
 import Html exposing (..)
-import Signal exposing (Address)
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 
 
 import Material.Badge as Badge
@@ -18,12 +17,12 @@ import Demo.Code as Code
 import Demo.Page as Page
 
 
-type Action 
+type Msg 
   = Increase 
   | Decrease
   | SetCode String
-  | CodeBox Code.Action
-  | Mdl (Material.Action Action)
+  | CodeBox Code.Msg
+  | Mdl (Material.Msg Msg)
 
 
 type alias Model = 
@@ -43,7 +42,7 @@ model =
   }
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of
     Mdl action' -> 
@@ -53,23 +52,23 @@ update action model =
       ( { model | unread = model.unread - 1 }
       , [0..7]
         |> List.map (\i -> Helpers.delay (2 ^ i * 20 + 750) Increase)
-        |> Effects.batch
+        |> Cmd.batch
       )
 
     Increase -> 
       ( { model | unread = model.unread + 1 }
-      , Effects.none 
+      , Cmd.none 
       )
 
     SetCode code -> 
       Code.update (Code.Set code) model.codebox
         |> Helpers.map1st (\codebox -> { model | codebox = codebox })
-        |> Helpers.map2nd (Effects.map CodeBox)
+        |> Helpers.map2nd (Cmd.map CodeBox)
 
     CodeBox action' -> 
       Code.update action' model.codebox
         |> Helpers.map1st (\codebox -> { model | codebox = codebox })
-        |> Helpers.map2nd (Effects.map CodeBox)
+        |> Helpers.map2nd (Cmd.map CodeBox)
 
 -- VIEW
 
@@ -78,7 +77,7 @@ c : List Html -> Cell
 c = cell [ size All 4 ]  
 
 
-view : Address Action -> Model -> Html
+view : Address Msg -> Model -> Html
 view addr model =
   [ p []
       [ text "Typical use of a badge in, say, in an e-mail client:" ]

@@ -1,10 +1,9 @@
-module Demo.Buttons where
+module Demo.Buttons exposing where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 import String
-import Signal exposing (Address)
 
 import Material.Button as Button exposing (..)
 import Material.Grid as Grid
@@ -54,13 +53,13 @@ model =
 -- ACTION/UPDATE
 
 
-type Action 
+type Msg 
   = Click (Kind, Color, Misc)
-  | Mdl (Material.Action Action)
-  | Code Code.Action
+  | Mdl (Material.Msg Msg)
+  | Code Code.Msg
 
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of 
     Mdl action' -> 
@@ -69,7 +68,7 @@ update action model =
     Code action' -> 
       Code.update action' model.code
         |> map1st (\code' -> { model | code = code' })
-        |> map2nd (Effects.map Code)
+        |> map2nd (Cmd.map Code)
 
     Click last -> 
       let
@@ -80,7 +79,7 @@ update action model =
           | last = Just last 
           , code = code'
           }
-        , Effects.map Code fx
+        , Cmd.map Code fx
         )
 
 
@@ -139,7 +138,7 @@ program (kind, color, misc) =
           Ripple -> "ripple"
           Disabled -> "disabled"
           Default -> ""
-      , "onClick addr MyClickAction"
+      , "onClick addr MyClickMsg"
       ] 
       |> List.filter ((/=) "")
       |> List.map ((++) "Button.")
@@ -164,7 +163,7 @@ indexedConcat f xs =
     |> List.concat
 
 
-viewButtons : Address Action -> Model -> List (Grid.Cell)
+viewButtons : Address Msg -> Model -> List (Grid.Cell)
 viewButtons addr model =
   kinds |> indexedConcat (\idx0 kind -> 
   colors |> indexedConcat (\idx1 color -> 
@@ -213,7 +212,7 @@ viewButtons addr model =
   )))
 
 
-view : Address Action -> Model -> Html
+view : Address Msg -> Model -> Html
 view addr model = 
   Page.body2 "Buttons" srcUrl intro references  
     [ p [] 

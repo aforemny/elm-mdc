@@ -1,11 +1,9 @@
-module Main (..) where
+module Main exposing (..)
 import StartApp
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style, key)
-import Signal exposing (Signal)
-import Effects exposing (..)
+import Platform.Cmd exposing (..)
 import Task
-import Signal
 import Task exposing (Task)
 import Array exposing (Array)
 
@@ -102,19 +100,19 @@ model =
 -- ACTION, UPDATE
 
 
-type Action
+type Msg
   -- Hop
   = ApplyRoute ( Route, Hop.Types.Location )
-  | HopAction ()
+  | HopMsg ()
   -- Tabs
-  | LayoutAction Layout.Action
-  | BadgesAction Demo.Badges.Action
-  | ButtonsAction Demo.Buttons.Action
-  | MenusAction Demo.Menus.Action
-  | TextfieldAction Demo.Textfields.Action
-  | SnackbarAction Demo.Snackbar.Action
-  --| TogglesAction Demo.Toggles.Action
---  | TemplateAction Demo.Template.Action
+  | LayoutMsg Layout.Msg
+  | BadgesMsg Demo.Badges.Msg
+  | ButtonsMsg Demo.Buttons.Msg
+  | MenusMsg Demo.Menus.Msg
+  | TextfieldMsg Demo.Textfields.Msg
+  | SnackbarMsg Demo.Snackbar.Msg
+  --| TogglesMsg Demo.Toggles.Msg
+--  | TemplateMsg Demo.Template.Msg
 
 
 nth : Int -> List a -> Maybe a
@@ -122,49 +120,49 @@ nth k xs =
   List.drop k xs |> List.head
 
 
-update : Action -> Model -> ( Model, Effects Action )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
-    LayoutAction a ->
+    LayoutMsg a ->
       let
         ( lifted, layoutFx ) =
-          lift .layout (\m x -> { m | layout = x }) LayoutAction Layout.update a model
+          lift .layout (\m x -> { m | layout = x }) LayoutMsg Layout.update a model
         routeFx =
           case a of 
             Layout.SwitchTab k -> 
               nth k tabs 
-              |> Maybe.map (\(_, path, _) -> Effects.map HopAction (navigateTo path))
-              |> Maybe.withDefault Effects.none
+              |> Maybe.map (\(_, path, _) -> Cmd.map HopMsg (navigateTo path))
+              |> Maybe.withDefault Cmd.none
             _ -> 
-              Effects.none
+              Cmd.none
       in
-        ( lifted, Effects.batch [ layoutFx, routeFx ] )
+        ( lifted, Cmd.batch [ layoutFx, routeFx ] )
 
     ApplyRoute route -> 
       ( { model 
         | routing = route 
         , layout = setTab model.layout (fst route)
         }
-      , Effects.none
+      , Cmd.none
       )
 
-    HopAction _ ->
-      ( model, Effects.none )
+    HopMsg _ ->
+      ( model, Cmd.none )
 
 
-    ButtonsAction   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsAction  Demo.Buttons.update    a model
+    ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
 
-    BadgesAction    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesAction   Demo.Badges.update    a model
+    BadgesMsg    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesMsg   Demo.Badges.update    a model
 
-    MenusAction a -> lift  .menus    (\m x->{m|menus   =x}) MenusAction  Demo.Menus.update    a model
+    MenusMsg a -> lift  .menus    (\m x->{m|menus   =x}) MenusMsg  Demo.Menus.update    a model
 --
-    TextfieldAction a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldAction Demo.Textfields.update a model
+    TextfieldMsg a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldMsg Demo.Textfields.update a model
 --
-    SnackbarAction  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarAction Demo.Snackbar.update   a model
+    SnackbarMsg  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarMsg Demo.Snackbar.update   a model
 --
---    TogglesAction    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesAction Demo.Toggles.update   a model
+--    TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
 --
-    --TemplateAction  a -> lift  .template   (\m x->{m|template  =x}) TemplateAction Demo.Template.update   a model
+    --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
         
 
@@ -172,7 +170,7 @@ update action model =
 
 
 type alias Addr =
-  Signal.Address Action
+  Signal.Address Msg
 
 
 drawer : List Html
@@ -218,21 +216,21 @@ header =
 tabs : List (String, String, Addr -> Model -> Html)
 tabs =
   [ ("Buttons", "buttons", \addr model ->
-      Demo.Buttons.view (Signal.forwardTo addr ButtonsAction) model.buttons)
+      Demo.Buttons.view (Signal.forwardTo addr ButtonsMsg) model.buttons)
   , ("Menus", "menus", \addr model ->
-      Demo.Menus.view (Signal.forwardTo addr MenusAction) model.menus)
+      Demo.Menus.view (Signal.forwardTo addr MenusMsg) model.menus)
   , ("Badges", "badges", \addr model -> 
-      Demo.Badges.view (Signal.forwardTo addr BadgesAction) model.badges)
+      Demo.Badges.view (Signal.forwardTo addr BadgesMsg) model.badges)
   , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
   , ("Grid", "grid", \addr model -> Demo.Grid.view)
   , ("Snackbar", "snackbar", \addr model ->
-      Demo.Snackbar.view (Signal.forwardTo addr SnackbarAction) model.snackbar)
+      Demo.Snackbar.view (Signal.forwardTo addr SnackbarMsg) model.snackbar)
   , ("Textfields", "textfields", \addr model ->
-      Demo.Textfields.view (Signal.forwardTo addr TextfieldAction) model.textfields)
+      Demo.Textfields.view (Signal.forwardTo addr TextfieldMsg) model.textfields)
 --  , ("Toggles", "toggles", \addr model -> 
---      Demo.Toggles.view (Signal.forwardTo addr TogglesAction) model.toggles)
+--      Demo.Toggles.view (Signal.forwardTo addr TogglesMsg) model.toggles)
   --, ("Template", "tempate", \addr model -> 
-  --    Demo.Template.view (Signal.forwardTo addr TemplateAction) model.template)
+  --    Demo.Template.view (Signal.forwardTo addr TemplateMsg) model.template)
   ]
 
 
@@ -307,7 +305,7 @@ setTab layout route =
     { layout | selectedTab = idx }
 
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   let
     top =
@@ -325,7 +323,7 @@ view addr model =
            model
         ]
   in
-    Layout.view (Signal.forwardTo addr LayoutAction) model.layout
+    Layout.view (Signal.forwardTo addr LayoutMsg) model.layout
       []
       { header = header
       , drawer = drawer
@@ -346,14 +344,14 @@ view addr model =
     )
 
 
-init : ( Model, Effects.Effects Action )
+init : ( Model, Cmd.Cmd Msg )
 init =
-  ( model, Effects.none )
+  ( model, Cmd.none )
 
 
-inputs : List (Signal.Signal Action)
+inputs : List (Signal.Signal Msg)
 inputs =
-  [ Layout.setupSignals LayoutAction
+  [ Layout.setupSignals LayoutMsg
   , Signal.map ApplyRoute router.signal
   ]
 

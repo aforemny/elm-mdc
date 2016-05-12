@@ -1,12 +1,12 @@
-module Material.Button
-  ( Model, Action, update
+module Material.Button exposing
+  ( Model, Msg, update
   , flat, raised, fab, minifab, icon
   , plain, colored, primary, accent
   , ripple, disabled
   , onClick
   , Property
   , View, Container, render
-  ) where
+  )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
 
@@ -35,7 +35,7 @@ for a live demo.
 
  
 # Elm architecture
-@docs Model, Action, update, View
+@docs Model, Msg, update, View
 
 # Options
 @docs plain, colored, primary, accent
@@ -58,8 +58,7 @@ for details about what type of buttons are appropriate for which situations.
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events 
-import Effects exposing (Effects, none)
-import Signal exposing (Address, forwardTo)
+import Platform.Cmd exposing (Cmd, none)
 
 import Parts exposing (Indexed, Index)
 
@@ -85,13 +84,13 @@ type alias Model = Ripple.Model
 
 {-| 
 -}
-type alias Action
-  = Ripple.Action
+type alias Msg
+  = Ripple.Msg
 
 
 {-| Component update.
 -}
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update =
   Ripple.update 
 
@@ -173,7 +172,7 @@ accent =
   cs "mdl-button--accent"
 
 
-view : Address Action -> Model -> List Property -> List Html -> Html
+view : Address Msg -> Model -> List Property -> List Html -> Html
 view addr model config html =
   let 
     summary = Options.collect defaultConfig config
@@ -202,7 +201,7 @@ view addr model config html =
 {-| Type of button views. 
 -}
 type alias View = 
-  Address Action -> Model -> List Property -> List Html -> Html
+  Address Msg -> Model -> List Property -> List Html -> Html
 
 
 {-| From the
@@ -250,7 +249,7 @@ raised : Property
 raised = cs "mdl-button--raised"
 
 
-{-| Floating Action Button. From the
+{-| Floating Msg Button. From the
 [Material Design Specification](https://www.google.com/design/spec/components/buttons-floating-action-button.html):
 
 > Floating action buttons are used for a promoted action. They are distinguished
@@ -276,7 +275,7 @@ fab : Property
 fab = cs "mdl-button--fab"
 
 
-{-| Mini-sized variant of a Floating Action Button; refer to `fab`.
+{-| Mini-sized variant of a Floating Msg Button; refer to `fab`.
 -}
 minifab : Property 
 minifab = cs "mdl-button--mini-fab"
@@ -312,7 +311,7 @@ type alias Container c =
   TODO
 -}
 render 
-  : (Parts.Action (Container c) obs -> obs)
+  : (Parts.Msg (Container c) obs -> obs)
   -> Parts.Index
   -> Address obs
   -> (Container c)

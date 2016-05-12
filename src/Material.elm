@@ -1,8 +1,7 @@
-module Material 
+module Material exposing 
   ( Model, model
-  , Action, update
+  , Msg, update
   )
-  where
 
 {-|
 
@@ -16,7 +15,7 @@ for a live demo.
 # Component model 
 
 The component model of the library is simply the Elm Architecture (TEA), i.e.,
-each component has types `Model` and `Action`, and values `view` and `update`. A
+each component has types `Model` and `Msg`, and values `view` and `update`. A
 minimal example using this library in plain TEA can be found
   [here](https://github.com/debois/elm-mdl/blob/master/examples/Component-TEA.elm).
 
@@ -42,7 +41,7 @@ Architecture.
 This library depends on the CSS part of Google's Material Design Lite. Your app
 will have to load that. See the
 [Scheme](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Scheme)
-module for details. (The starting point implementations above
+module for exposing details. (The starting point implementations above
 load CSS automatically.)
 
 The view function of most components has this signature: 
@@ -54,11 +53,11 @@ The third argument, `List Style`, is a mechanism for you to specify additional
 classes and CSS for the component. You need this, e.g., when you want to
 specify the width of a button. See the
 [Style](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Style)
-module for details. 
+module for exposing details. 
 
 Material Design defines a color palette. The 
 [Color](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Color)
-module contains various `Style` values and helper functions for working with
+module contains exposing various `Style` values and helper functions for working with
 this color palette.
 
 
@@ -99,9 +98,9 @@ Here is how you use component support in general.  First, boilerplate.
 
  3. Add an action for Material components. 
 
-        type Action = 
+        type Msg = 
           ...
-          | Mdl (Material.Action Action)
+          | Mdl (Material.Msg Msg)
 
  4. Handle that action in your update function as follows:
 
@@ -119,7 +118,7 @@ be notifed whenever the field changes value through your own NameChanged action:
 
         ...
 
-        type Action = 
+        type Msg = 
           ...
           | NameChanged String
 
@@ -133,7 +132,7 @@ be notifed whenever the field changes value through your own NameChanged action:
 
         ...
 
-        nameInput : Textfield.Instance Material.Model Action
+        nameInput : Textfield.Instance Material.Model Msg
         nameInput = 
           Textfield.instance 2 MDL Textfield.model 
             [ Textfield.fwdInput NameChanged 
@@ -145,7 +144,7 @@ be notifed whenever the field changes value through your own NameChanged action:
 
 
 The win relative to using plain Elm Architecture is that adding a component
-neither requires you to update your model, your Actions, nor your update function. 
+neither requires you to update your model, your Msgs, nor your update function. 
 (As in the above example, you will frequently have to update the latter two anyway, 
 but now it's not boilerplate, its "business logic".)
 
@@ -154,17 +153,17 @@ but now it's not boilerplate, its "business logic".)
 
 Using this module will force all elm-mdl components to be built and included in 
 your application. If this is unacceptable, you can custom-build a version of this
-module that uses only the components you need. To do so, you need to provide your
+module that exposing uses only the components you need. To do so, you need to provide your
 own versions of the type `Model` and the value `model` of the present module. 
 Use the corresponding definitions in this module as a starting point 
 ([source](https://github.com/debois/elm-mdl/blob/master/src/Material.elm)) 
 and simply comment out the components you do not need. 
 
-@docs Model, model, Action, update
+@docs Model, model, Msg, update
 -}
 
 import Dict 
-import Effects exposing (Effects)
+import Platform.Cmd exposing (Cmd)
 
 import Material.Button as Button
 import Material.Textfield as Textfield
@@ -203,21 +202,21 @@ model =
   }
 
 
-{-| Action encompassing actions of all Material components. 
+{-| Msg encompassing actions of all Material components. 
 -}
-type alias Action obs = 
-  Parts.Action Model obs
+type alias Msg obs = 
+  Parts.Msg Model obs
 
 
-{-| Update function for the above Action. Provide as the first 
+{-| Update function for the above Msg. Provide as the first 
 argument a lifting function that embeds the generic MDL action in 
-your own Action type. 
+your own Msg type. 
 -}
 update : 
-  (Action obs -> obs) 
-  -> Action obs
+  (Msg obs -> obs) 
+  -> Msg obs
   -> { model | mdl : Model }
-  -> ({ model | mdl : Model }, Effects obs)
+  -> ({ model | mdl : Model }, Cmd obs)
 update lift action model = 
   Parts.update lift action model.mdl 
     |> map1st (\mdl -> { model | mdl = mdl })

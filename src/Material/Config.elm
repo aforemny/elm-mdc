@@ -1,8 +1,8 @@
-module Material.View
+module Material.View exposing
   ( Property, Summary, collect
   , cs, css, many, nop, set
   , apply, stylesheet
-  ) where
+  )
 
 
 {-| TODO

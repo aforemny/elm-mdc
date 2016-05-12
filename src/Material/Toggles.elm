@@ -1,11 +1,11 @@
-module Material.Toggles 
+module Material.Toggles exposing 
   ( Model, model
-  , Action, update
+  , Msg, update
   , switch, checkbox, radio
   , instance, fwdChange
   , Container, Observer, Instance
   , Radio, Checkbox, Switch
-  ) where
+  )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/index.html#toggles-section/checkbox):
 
@@ -30,7 +30,7 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/toggles)
 for a live demo.
 
-@docs Model, model, Action, update
+@docs Model, model, Msg, update
 @docs view
 
 # Component support
@@ -39,12 +39,11 @@ for a live demo.
 -}
 
 
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.Attributes exposing (type', class, disabled, checked)
 import Html.Events exposing (on, onFocus, onBlur)
 import Json.Decode as Decode
-import Signal exposing (Address, forwardTo, message)
 
 import Parts exposing (Indexed)
 
@@ -94,15 +93,15 @@ state model =
 
 {-| Component action.
 -}
-type Action
+type Msg
   = Change
-  | Ripple Ripple.Action
+  | Ripple Ripple.Msg
   | SetFocus Bool
 
 
 {-| Component update.
 -}
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of 
     Change -> 
@@ -111,7 +110,7 @@ update action model =
     Ripple rip -> 
       Ripple.update rip (state model)
         |> map1st (\r -> { model | state = S r })
-        |> map2nd (Effects.map Ripple)
+        |> map2nd (Cmd.map Ripple)
 
     SetFocus focus -> 
       ( { model | isFocused = focus }, none )
@@ -122,7 +121,7 @@ update action model =
 
 
 
-top : String -> Address Action -> Model -> List Style -> List Html -> Html
+top : String -> Address Msg -> Model -> List Style -> List Html -> Html
 top name addr model styles elems = 
   styled label 
     [ cs ("mdl-" ++ name) 
@@ -148,7 +147,7 @@ top name addr model styles elems =
 
 
 
-checkbox : Address Action -> Model -> List Style -> Html
+checkbox : Address Msg -> Model -> List Style -> Html
 checkbox addr model styles = 
   [ input
     [ type' "checkbox"
@@ -175,7 +174,7 @@ checkbox addr model styles =
 
 {-| TODO
 -}
-switch : Address Action -> Model -> List Style -> Html
+switch : Address Msg -> Model -> List Style -> Html
 switch addr model styles =
   [ input
     [ type' "checkbox"
@@ -201,7 +200,7 @@ type alias RadioId =
   (String, String)
 
 
-radio : Address Action -> Model -> List Style -> RadioId -> List Html -> Html
+radio : Address Msg -> Model -> List Style -> RadioId -> List Html -> Html
 radio addr model styles (value, name) elems = 
   [ input 
     [ type' "radio"
@@ -225,7 +224,7 @@ radio addr model styles (value, name) elems =
 {-|
 -}
 type alias View a =
-  Address Action -> Model -> List Style -> a
+  Address Msg -> Model -> List Style -> a
 
 
 {-| 
@@ -237,13 +236,13 @@ type alias Container c =
 {-|
 -}
 type alias Observer obs = 
-  Parts.Observer Action obs
+  Parts.Observer Msg obs
 
 
 {-|
 -}
 type alias Instance container obs v =
-  Parts.Instance Model container Action obs (List Style -> v)
+  Parts.Instance Model container Msg obs (List Style -> v)
 
 type alias Radio container obs = 
   Instance container obs (RadioId -> List Html -> Html)
@@ -256,11 +255,11 @@ type alias Switch container obs =
 
 
 {-| Create a component instance. Example usage, assuming you have a type
-`Action` with a constructor ...
+`Msg` with a constructor ...
 -}
 instance  
   : Model 
-  -> (Parts.Action (Container c) obs -> obs)
+  -> (Parts.Msg (Container c) obs -> obs)
   -> (View v)
   -> Parts.Index
   -> Instance (Container c) obs v

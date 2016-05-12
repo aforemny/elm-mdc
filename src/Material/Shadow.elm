@@ -1,7 +1,7 @@
-module Material.Elevation
+module Material.Elevation exposing
   ( shadow
   , transition
-  ) where
+  )
 
 
 {-| From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)
@@ -35,7 +35,7 @@ See also the
 -}
 
 
-import Effects exposing (Effects, none)
+import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
 
@@ -62,13 +62,13 @@ model =
 
 {-| Component action.
 -}
-type Action
-  = MyAction
+type Msg
+  = MyMsg
 
 
 {-| Component update.
 -}
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   (model, none)
 
@@ -78,6 +78,6 @@ update action model =
 
 {-| Component view.
 -}
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view addr model =
   div [] [ h1 [] [ text "TEMPLATE" ] ]

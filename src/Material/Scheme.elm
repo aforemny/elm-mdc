@@ -1,6 +1,6 @@
-module Material.Scheme
+module Material.Scheme exposing
   ( topWithScheme, top
-  ) where
+  )
 
 {-| 
 The elm-mdl library depends on Google's MDL CSS implementation, and your

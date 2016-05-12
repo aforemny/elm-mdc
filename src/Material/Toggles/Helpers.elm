@@ -1,6 +1,5 @@
-module Material.Toggles.Common where
+module Material.Toggles.Common exposing where
 
-import Signal exposing (Address, message, forwardTo)
 import Html exposing (label)
 import Html.Attributes exposing (class)
 import Html.Events exposing (on, onFocus, onBlur)
@@ -11,7 +10,7 @@ import Material.Ripple as Ripple
 import Material.Style exposing (styled, cs, cs', attribute, multiple)
 
 
-top : String -> Address Action -> Model -> List Style -> List Html -> Html
+top : String -> Address Msg -> Model -> List Style -> List Html -> Html
 top name addr model styles elems = 
   styled label 
     [ cs ("mdl-" ++ name) 

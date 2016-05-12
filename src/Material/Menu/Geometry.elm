@@ -1,7 +1,7 @@
-module Material.Menu.Geometry
+module Material.Menu.Geometry exposing
   ( Geometry, Element
   , decode, decode'
-  ) where
+  )
 
 import Array exposing (Array)
 import DOM
