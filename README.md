@@ -24,7 +24,7 @@ This will construct a file `index.html`; open that in your browser.
 ### Embedding in your own HTML. 
 
 Initial page load of the demo will produce a flicker, which can only be 
-avoided if you set up the MDL css to load before elm does. Use the file
+avoided if you set up the MDL CSS to load before elm does. Use the file
 `page.html` as a template. To build the demo in this mode, comment out 
 [line 154 in `examples/Demo.elm`](https://github.com/debois/elm-mdl/blob/master/examples/Demo.elm#L154)
 and build the demo like this: 
@@ -33,7 +33,7 @@ and build the demo like this:
 
 This will produce a file `elm.js`. Open the file 
 [`page.html`](https://raw.githubusercontent.com/debois/elm-mdl/master/page.html) in your 
-browser; this file will set up MDL css and load `elm.js`.
+browser; this file will set up MDL CSS and load `elm.js`.
 
 ### Contribute
 
