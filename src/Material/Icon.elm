@@ -28,16 +28,16 @@ import Html.Events
 import Material.Options as Options exposing (Property, cs, css, styled)
 
 
-type alias Config = 
-  { onClick : Maybe Attribute
+type alias Config m = 
+  { onClick : Maybe (Attribute m)
   }
 
 
-type alias Property = 
-  Options.Property Config
+type alias Property m = 
+  Options.Property (Config m) m
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig = 
   { onClick = Nothing
   }
@@ -45,36 +45,36 @@ defaultConfig =
 
 {-| TODO
 -}
-onClick : Signal.Address a -> a -> Property
-onClick addr x =
+onClick : m -> Property m
+onClick x =
   Options.set
-    (\config -> { config | onClick = Just (Html.Events.onClick addr x) })
+    (\config -> { config | onClick = Just (Html.Events.onClick x) })
 
 
 {-| Set icon to have size 18px. 
 -}
-size18 : Property
+size18 : Property m
 size18 = 
   css "font-size" "18px"
 
 
 {-| Set icon to have size 24px. 
 -}
-size24 : Property
+size24 : Property m
 size24 = 
   css "font-size" "24px"
 
 
 {-| Set icon to have size 36px. 
 -}
-size36 : Property
+size36 : Property m
 size36 = 
   css "font-size" "36px"
   
 
 {-| Set icon to have size 48px. 
 -}
-size48 : Property
+size48 : Property m
 size48 = 
   css "font-size" "48px"
 
@@ -87,10 +87,10 @@ produce clickable icons; use icon buttons in Material.Button.icon for that.
 
     import Material.Icon as Icon
 
-    icon : Html
+    icon : Html m
     icon = Icon.view "trending_flat" [Icon.size48] []
 -}
-view : String -> List Property -> Html
+view : String -> List (Property m) -> Html m
 view name options =
   let
     summary = Options.collect defaultConfig options
@@ -112,5 +112,5 @@ I.e., to produce a default size (24xp) "trending flat" icon:
     icon : Html
     icon = Icon.i "trending_flat"
 -}
-i : String -> Html
+i : String -> Html m
 i name = view name []

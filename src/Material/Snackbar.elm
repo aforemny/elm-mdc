@@ -38,7 +38,7 @@ import Task
 import Time exposing (Time)
 import Maybe exposing (andThen)
 
-import Material.Helpers exposing (map2nd, delay)
+import Material.Helpers exposing (map2nd, delay, fx)
 
 
 
@@ -131,9 +131,6 @@ type Transition
   | Clicked
 
 
-forward : a -> Cmd a
-forward = Task.succeed >> Cmd.task 
-
 
 next : Model a -> Cmd Transition -> Cmd (Msg a)
 next model = 
@@ -150,7 +147,7 @@ move transition model =
       ( { model | state = Fading contents }
       , Cmd.batch 
           [ delay contents.fade Timeout |> next model 
-          , Click contents.payload |> forward
+          , Click contents.payload |> fx
           ]
       )
 
@@ -158,15 +155,15 @@ move transition model =
       ( { model | state = Fading contents }
       , Cmd.batch 
           [ delay contents.fade Timeout |> next model
-          , Begin contents.payload |> forward
+          , Begin contents.payload |> fx
           ]
       )
 
     (Fading contents, Timeout) ->
       ( { model | state = Inert}
       , Cmd.batch 
-          [ always Timeout |> Cmd.tick |> next model
-          , End contents.payload |> forward
+          [ fx Timeout |> next model 
+          , End contents.payload |> fx
           ]
       )
 
@@ -197,7 +194,7 @@ tryDequeue model =
         }
       , Cmd.batch 
           [ delay c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
-          , forward (Begin c.payload)
+          , fx (Begin c.payload)
           ]
       )
 
@@ -261,8 +258,8 @@ add contents model =
 
 {-| Elm architecture update function. 
 -}
-view : Signal.Address (Msg a) -> Model a -> Html
-view addr model = 
+view : Model a -> Html (Msg a)
+view model = 
   let
     contents = 
       case model.state of 
@@ -297,7 +294,7 @@ view addr model =
        -- :: ariaHidden "true"
           :: ( contents 
                 |> flip Maybe.andThen .action
-                |> Maybe.map (always [ onClick addr (Move model.seq Clicked) ])
+                |> Maybe.map (always [ onClick (Move model.seq Clicked) ])
                 |> Maybe.withDefault []
              )
           )

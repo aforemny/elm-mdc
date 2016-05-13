@@ -6,9 +6,9 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
-import Platform.Cmd exposing (Cmd, tick, none)
+import Platform.Cmd exposing (Cmd, none)
 
-import Material.Helpers exposing (effect)
+import Material.Helpers exposing (effect, fx)
 import DOM
 
 
@@ -110,7 +110,7 @@ update action model =
             else
               model.ignoringMouseDown
         }
-        |> effect (tick <| \_ -> Tick)
+        |> effect (fx Tick)
 
     Up ->
       { model
@@ -129,20 +129,14 @@ update action model =
 -- VIEW
 
 
-downOn : String -> Signal.Address Msg -> Attribute
-downOn name addr =
-  Html.Events.on
-    name
-    geometryDecoder
-    (Down >> Signal.message addr)
+downOn : String -> Attribute Msg
+downOn name =
+  Html.Events.on name (Json.map Down geometryDecoder)
 
 
-upOn : String -> Signal.Address Msg -> Attribute
-upOn name addr =
-  Html.Events.on
-    name
-    (Json.succeed ())
-    ((\_ -> Up) >> Signal.message addr)
+upOn : String -> Attribute Msg
+upOn name =
+  Html.Events.on name (Json.succeed Up) 
 
 
 styles : Metrics -> Int -> List (String, String)
@@ -164,8 +158,8 @@ styles m frame =
     ]
 
 
-view : Signal.Address Msg -> List Attribute -> Model -> Html
-view addr attrs model =
+view : List (Attribute Msg) -> Model -> Html Msg
+view attrs model =
   let
     styling =
       case (model.metrics, model.animation) of
@@ -174,12 +168,12 @@ view addr attrs model =
         _ -> []
   in
     span
-      (  downOn "mousedown" addr
-      :: downOn "touchstart" addr
-      :: upOn "mouseup" addr
-      :: upOn "mouseleave" addr
-      :: upOn "touchend" addr
-      :: upOn "blur" addr
+      (  downOn "mousedown" 
+      :: downOn "touchstart" 
+      :: upOn "mouseup" 
+      :: upOn "mouseleave" 
+      :: upOn "touchend" 
+      :: upOn "blur" 
       :: attrs
       )
       [ span

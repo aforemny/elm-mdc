@@ -1,10 +1,12 @@
-module Parts exposing
+module Parts exposing (..)
+  {-
   ( embed, embedIndexed, Embedding 
   , View, Update, Index, Indexed
   , Msg
   , lift
   , update
   )
+  -}
 
 {-| 
 
@@ -22,8 +24,6 @@ module Parts exposing
 
 -}
 
-import Html exposing (Html)
-import Html.App
 import Platform.Cmd exposing (Cmd)
 import Dict exposing (Dict)
 
@@ -61,73 +61,47 @@ type alias Index
   = List Int
 
 
+type alias Get c m =
+  c -> m
+
+type alias Set c m = 
+  c -> m -> c
+
+
+embedView : Get container model -> View model a -> View container a
+embedView get view = 
+  get >> view 
+
+
+embedUpdate : 
+    Get container model 
+ -> Set container model 
+ -> Update model msg
+ -> Update container msg
+embedUpdate get set update = 
+  \msg container -> 
+     update msg (get container) |> map1st (set container)
+
+  
+
 {-| Indexed families of things.
 -}
 type alias Indexed a = 
   Dict Index a 
 
 
-{-| An __embedding__ of an Elm Architecture component is a variant in which
-view and update functions know how to extract and update their model 
-from a larger master model. 
--}
-type alias Embedding container action a = 
-  { view : View container a
-  , update : Update container action 
-  }
- 
 
-{-| Embed a component. Third and fourth arguments are a getter (extract the 
-local model from the container) and a setter (update local model in the 
-container). 
-
-It is instructive to compare the types of the view and update function in 
-the input and output:
-
-     {- Input -}                    {- Output -}
-     View model action a            View container action a
-     Update model action            Update container action 
-
--}
-embed : 
-  View model a ->                      -- Given a view function, 
-  Update model action ->               -- an update function 
-  (container -> model) ->              -- a getter 
-  (model -> container -> container) -> -- a setter
-  Embedding container action a         -- produce an Embedding. 
-
-embed view update get set = 
-  { view = get >> view
-  , update = 
-      \action model -> 
-        update action (get model)
-          |> map1st (flip set model)
-  }
-
-
-{-| We are interested in particular embeddings where components of the same
-type all have their state living inside a shared `Dict`; the individual
-component has a key used to look up its own state. 
--}
-embedIndexed : 
-  View model a ->                              -- Given a view function, 
-  Update model action ->                       -- an update function 
-  (container -> Indexed model) ->              -- a getter 
-  (Indexed model -> container -> container) -> -- a setter
-  model ->                                     -- an initial model for this part
-  Index ->                                     -- a part id (*)
-  Embedding container action a                 -- ... produce a Part.
-
-embedIndexed view update get set model0 id = 
-  let 
-    get' model = 
-      Dict.get id (get model) |> Maybe.withDefault model0
-
-    set' submodel model = 
-      set (Dict.insert id submodel (get model)) model 
-  in 
-    embed view update get' set' 
-
+indexed : 
+    Get container (Indexed model)
+ -> Set container (Indexed model)
+ -> model
+ -> Index
+ -> (Get container model, Set container model)
+indexed get set model0 idx =  
+  ( \container -> Dict.get idx (get container) |> Maybe.withDefault model0
+  , \container model -> set container (Dict.insert idx model (get container)) 
+  )
+  
 
 
 -- LIFTING ACTIONS
@@ -175,10 +149,6 @@ update fwd (Msg f) container =
 -- PARTS
 
 
-type alias Observer msg obs = 
- msg -> List obs
-
-
 {- Partially apply a step function to an action, producing a generic Msg.
 -}
 pack : 
@@ -191,10 +161,36 @@ pack update msg =
 
 lift
   : (Msg container -> obs) 
-  -> Embedding container msg a 
-  -> (Html msg) -> (Html obs)
-lift f embedding = 
-  Html.App.map (pack embedding.update >> f)
+  -> Update container msg
+  -> msg -> obs
+lift f update = 
+  pack update >> f
+
+
+create 
+  : ((msg -> obs) -> View model a)
+ -> Update model msg
+ -> Get container (Indexed model)
+ -> Set container (Indexed model)
+ -> model 
+ -> (Msg container -> obs)
+ -> Index
+ -> View container a
+create view update get0 set0 model0 f idx  = 
+  let
+    (get, set) = 
+      indexed get0 set0 model0 idx
+
+    embeddedUpdate = 
+      embedUpdate get set update
+
+    embeddedView = 
+      embedView get <| view (pack embeddedUpdate >> f) 
+  in
+    embeddedView
+
+
+
 
 {-
 

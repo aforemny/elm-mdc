@@ -204,8 +204,8 @@ model =
 
 {-| Msg encompassing actions of all Material components. 
 -}
-type alias Msg obs = 
-  Parts.Msg Model obs
+type alias Msg = 
+  Parts.Msg Model 
 
 
 {-| Update function for the above Msg. Provide as the first 
@@ -213,8 +213,8 @@ argument a lifting function that embeds the generic MDL action in
 your own Msg type. 
 -}
 update : 
-  (Msg obs -> obs) 
-  -> Msg obs
+  (Msg -> obs) 
+  -> Msg 
   -> { model | mdl : Model }
   -> ({ model | mdl : Model }, Cmd obs)
 update lift action model = 

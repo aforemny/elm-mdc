@@ -2,7 +2,7 @@ module Material.Textfield exposing
   ( Property, label, floatingLabel, error, value, disabled, password
   , onInput
   , Msg, Model, defaultModel, update, view
-  --, render
+  , render
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -33,7 +33,7 @@ for a live demo.
 This implementation provides only single-line.
 
 # Options
-@docs Property, value, label, floatingLabel, error, disabled, onInput
+@docs Property, value, label, floatingLabel, error, disabled, onInput, password
 
 # Part
 @docs render
@@ -219,6 +219,9 @@ update action model =
 -- VIEW
 
 
+{-|
+-}
+view : Model -> List (Property Msg) -> Html Msg
 view = view' (\x -> x)
 
 
@@ -253,7 +256,7 @@ view' lift model options =
               Just str -> 
                 Html.Attributes.value str
               Nothing -> 
-                Html.Events.on "input" targetValue (lift Input)
+                Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
           ]
           []
       , Just <| Html.label 
@@ -277,23 +280,18 @@ view' lift model options =
 type alias Container c =
   { c | textfield : Indexed Model }
 
-{-
 {-|
   TODO
 -}
 render 
-  : (Parts.Msg (Container c) m -> m)
+  : (Parts.Msg (Container c) -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> Html m
-render lift = 
-  let
-    update' action model = 
-      (update action model, Cmd.none)
-  in
-    Parts.create
-      view update' .textfield (\x y -> {y | textfield=x}) defaultModel lift
-    
--}
-  
+render =
+  Parts.create 
+    view' (\action model -> (update action model, Cmd.none))
+    .textfield (\c x -> { c | textfield = x }) 
+    defaultModel
+

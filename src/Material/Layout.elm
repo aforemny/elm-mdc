@@ -1,7 +1,7 @@
 module Material.Layout exposing
   ( subscriptions
   , Mode(..), Model, defaultLayoutModel, initState
-  , Msg(SwitchTab, ToggleDrawer), update
+  , Msg, update
   , row, spacer, title, navigation, link
   , Contents, view
   )
@@ -48,12 +48,14 @@ module Material.Layout exposing
 import Array exposing (Array)
 import Maybe exposing (andThen, map)
 import Html exposing (..)
+import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, on)
 import Platform.Cmd exposing (Cmd)
 import Window
+import Json.Decode as Decoder
 
-import Material.Helpers exposing (..)
+import Material.Helpers as Helpers exposing (filter, delay, pure)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop)
@@ -62,10 +64,6 @@ import DOM
 
 
 -- SETUP
-
-
-scrollMailbox : Signal.Mailbox Float
-scrollMailbox = Signal.mailbox 0.0
 
 
 {-| Setup various signals layout needs (viewport size changes, scrolling). Use
@@ -80,24 +78,6 @@ layout:
 -}
 subscriptions : (Msg -> msg) -> Sub msg
 subscriptions f =
-  {- NB! mergeMany propagates only the first provided signal if more than one
-     signal changes value at the same time.  We are processing two signals: (1)
-     viewport size changes and (2) scrolling of main contents.  It /appears/
-     that these cannot happen at the same time, so the following should be
-     safe. 
-  -}
-  {- TODO
-  Signal.mergeMany
-    [ Window.width
-        |> Signal.map ((>) 1024)
-        |> Signal.dropRepeats
-        |> Signal.map (SmallScreen >> f)
-    , scrollMailbox.signal
-        |> Signal.map ((<) 0.0)
-        |> Signal.dropRepeats
-        |> Signal.map (TransitionHeader >> f) 
-    ]
-  -}
   Sub.batch 
     [ Window.resizes 
         (.width >> (>) 1024 >> SmallScreen >> f)
@@ -112,6 +92,7 @@ type alias State' =
   , isSmallScreen : Bool
   , isCompact : Bool
   , isAnimating : Bool
+  , isScrolled : Bool
   }
 
 
@@ -124,7 +105,7 @@ s : Model -> State'
 s model = case model.state of (S state) -> state
 
 
-{-| Layout model. If your layout view has tabs, any tab with the same name as
+{-| TODO. Layout model. If your layout view has tabs, any tab with the same name as
 `selectedTab` will be highlighted as selected; otherwise, `selectedTab` has no
 significance. `isDrawerOpen` indicates whether the drawer, if the layout has
 such, is open; otherwise, it has no significance.
@@ -140,9 +121,7 @@ layout component state; use the function `initState` to construct it. If you
 change the number of tabs, you must re-initialise this state.
 -}
 type alias Model =
-  { selectedTab : Int
-  , isDrawerOpen : Bool
-  , fixedHeader : Bool
+  { isDrawerOpen : Bool
   -- State
   , state : State
   }
@@ -158,6 +137,7 @@ initState no_tabs =
     , isSmallScreen = False -- TODO
     , isCompact = False
     , isAnimating = False
+    , isScrolled = False
     }
 
 
@@ -168,9 +148,7 @@ TODO
 -}
 defaultLayoutModel : Model
 defaultLayoutModel =
-  { fixedHeader = False
-  , selectedTab = 0
-  , isDrawerOpen = False
+  { isDrawerOpen = False
   , state = initState 0
   }
 
@@ -179,17 +157,15 @@ defaultLayoutModel =
 
 
 {-| Component actions.
-Use `SwitchTab` to request a switch of tabs. Use `ToggleDrawer` to toggle the
-opened/closed state of the drawer.
+TODO
 -}
 type Msg
-  = SwitchTab Int
-  | ToggleDrawer
+  = ToggleDrawer
   -- Private
   | SmallScreen Bool -- True means small screen
   | ScrollTab Float
-  | TransitionHeader 
-      Bool -- True means "transition to isCompact"
+  | ScrollPane Bool Float -- True means fixedHeader
+  | TransitionHeader { toCompact : Bool, fixedHeader : Bool }
   | TransitionEnd
   -- Subcomponents
   | Ripple Int Ripple.Msg
@@ -207,9 +183,6 @@ update action model =
       , isDrawerOpen = not isSmall && model.isDrawerOpen
       }
       |> pure
-
-    SwitchTab tab ->
-      { model | selectedTab = tab } |> pure
 
     ToggleDrawer ->
       { model | isDrawerOpen = not model.isDrawerOpen } |> pure
@@ -230,10 +203,20 @@ update action model =
     ScrollTab tab ->
       (model, Cmd.none) -- TODO
 
-
-    TransitionHeader toCompact -> 
+    ScrollPane fixedHeader offset -> 
       let 
-        headerVisible = (not state.isSmallScreen) || model.fixedHeader
+        isScrolled = 0.0 < offset 
+      in
+        if isScrolled /= state.isScrolled then
+          update 
+            (TransitionHeader { toCompact = isScrolled, fixedHeader = fixedHeader })
+            model
+        else
+          (model, Cmd.none)
+
+    TransitionHeader { toCompact, fixedHeader } -> 
+      let 
+        headerVisible = (not state.isSmallScreen) || fixedHeader
         state' = 
           { state 
           | isCompact = toCompact
@@ -259,102 +242,110 @@ update action model =
 
 {-|
 -}
-type alias Config = 
-  { fixedDrawer : Bool
+type alias Config m = 
+  { fixedHeader : Bool
+  , fixedDrawer : Bool
   , fixedTabs : Bool
   , rippleTabs : Bool
   , mode : Mode
+  , selectedTab : Int
+  , onSwitchTab : Maybe (Int -> Attribute m)
   }
 
 
 {-|
 -}
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig = 
-  { fixedDrawer = False
+  { fixedHeader = False
+  , fixedDrawer = False
   , fixedTabs = False
   , rippleTabs = True
   , mode = Standard
+  , onSwitchTab = Nothing
+  , selectedTab = -1
   }
 
 
-type alias Property = 
-  Options.Property Config
+type alias Property m = 
+  Options.Property (Config m) m
 
 
 
-fixedDrawer : Property 
+fixedDrawer : Property m
 fixedDrawer =
   Options.set (\config -> { config | fixedDrawer = True })
 
 
-fixedTabs : Property 
+fixedTabs : Property m
 fixedTabs =
   Options.set (\config -> { config | fixedTabs = True })
 
 
-rippleTabs : Property 
+rippleTabs : Property m
 rippleTabs =
   Options.set (\config -> { config | rippleTabs = True })
 
 
-waterfall : Bool -> Property 
+waterfall : Bool -> Property m
 waterfall b =
   Options.set (\config -> { config | mode = Waterfall b })
 
 
-
-
-
-
-
-
-seamed : Property
+seamed : Property m
 seamed = 
   Options.set (\config -> { config | mode = Seamed })
 
 
-scrolling : Property 
+scrolling : Property m
 scrolling = 
   Options.set (\config -> { config | mode = Scrolling })
 
+
+selectedTab : Int -> Property m
+selectedTab k =
+  Options.set (\config -> { config | selectedTab = k })
+
+
+onSwitchTab : (Int -> m) -> Property m
+onSwitchTab f = 
+  Options.set (\config -> { config | onSwitchTab = Just (f >> onClick) })
 
 
 -- AUXILIARY VIEWS
 
 
 
-
 {-| Push subsequent elements in header row or drawer column to the right/bottom.
 -}
-spacer : Html
+spacer : (Html m)
 spacer = div [class "mdl-layout-spacer"] []
 
 
 {-| Title in header row or drawer.
 -}
-title : List Property -> List Html -> Html
+title : List (Property m) -> List (Html m) -> Html m
 title styles = 
   Options.span (cs "mdl-layout__title" :: styles) 
 
 
 {-| Container for links.
 -}
-navigation : List Style -> List Html -> Html
+navigation : List (Style m) -> List (Html m) -> Html m
 navigation styles contents =
   nav [class "mdl-navigation"] contents
 
 
 {-| Link.
 -}
-link : List Property -> List Html -> Html
+link : List (Property m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a (cs "mdl-navigation__link" :: styles) contents
 
 
 {-| Header row. 
 -}
-row : List Property -> List Html -> Html
+row : List (Property m) -> List (Html m) -> Html m
 row styles = 
   Options.div (cs "mdl-layout__header-row" :: styles) 
 
@@ -386,9 +377,6 @@ isWaterfall mode =
     _ -> False
 
 
-type alias Addr = Signal.Address Msg
-
-
 toList : Maybe a -> List a
 toList x = 
   case x of 
@@ -396,26 +384,27 @@ toList x =
     Just y -> [y]
 
 
-tabsView : Addr -> Config -> Model -> (List Html, List Style) -> Html
-tabsView addr config model (tabs, tabStyles) =
-  let chevron direction offset =
-        div
-          [ classList
-              [ ("mdl-layout__tab-bar-button", True)
-              , ("mdl-layout__tab-bar-" ++ direction ++ "-button", True)
-              ]
-          ]
-          [ Icon.view ("chevron_" ++ direction) 
-              [ Icon.size24
-              , Icon.onClick addr (ScrollTab offset)
-              ]
-              -- TODO: Scroll event
-          ]
+tabsView : 
+  (Msg -> m) -> Config m -> Model -> (List (Html m), List (Style m)) -> Html m
+tabsView lift config model (tabs, tabStyles) =
+  let 
+    chevron direction offset =
+      div
+        [ classList
+            [ ("mdl-layout__tab-bar-button", True)
+            , ("mdl-layout__tab-bar-" ++ direction ++ "-button", True)
+            ]
+        ]
+        [ Icon.view ("chevron_" ++ direction) 
+            [ Icon.size24
+            , Icon.onClick (lift (ScrollTab offset))
+            ]
+          -- TODO: Scroll event
+        ]
   in
     Options.div
-      ( cs "mdl-layout__tab-bar-container"
-      :: []
-      )
+      [ cs "mdl-layout__tab-bar-container"
+      ]
       [ chevron "left" -100
       , Options.div
           [ cs "mdl-layout__tab-bar" 
@@ -433,16 +422,17 @@ tabsView addr config model (tabs, tabStyles) =
             filter a
               [ classList
                   [ ("mdl-layout__tab", True)
-                  , ("is-active", tabIndex == model.selectedTab)
+                  , ("is-active", tabIndex == config.selectedTab)
                   ]
-              , onClick addr (SwitchTab tabIndex)
+              , config.onSwitchTab 
+                  |> Maybe.map ((|>) tabIndex)
+                  |> Maybe.withDefault Helpers.noAttr
               ]
               [ Just tab
               , if config.rippleTabs then
                   Array.get tabIndex (s model).tabs |> Maybe.map (
-                    Ripple.view
-                      (Signal.forwardTo addr (Ripple tabIndex))
-                      [ class "mdl-layout__tab-ripple-container" ]
+                    Ripple.view [ class "mdl-layout__tab-ripple-container" ]
+                    >> App.map (Ripple tabIndex >> lift)
                   )
                 else
                   Nothing
@@ -452,8 +442,11 @@ tabsView addr config model (tabs, tabStyles) =
       ]
 
 
-headerView : Addr -> Config -> Model -> (Maybe Html, List Html, Maybe Html) ->  Html
-headerView addr config model (drawerButton, rows, tabs) =
+headerView 
+  : (Msg -> m) -> Config m -> Model 
+ -> (Maybe (Html m), List (Html m), Maybe (Html m)) 
+ ->  Html m
+headerView lift config model (drawerButton, rows, tabs) =
   let 
     mode =
       case config.mode of
@@ -484,7 +477,9 @@ headerView addr config model (drawerButton, rows, tabs) =
             which Elm won't let us. We manually fire a delayed tick instead. 
             See also: https://github.com/evancz/virtual-dom/issues/30
             -}
-            onClick addr (TransitionHeader False)
+            onClick 
+              (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
+               |> lift)
           ]
         else
           []
@@ -498,29 +493,29 @@ headerView addr config model (drawerButton, rows, tabs) =
       )
 
 
-drawerButton : Addr -> Html
-drawerButton addr =
+drawerButton : (Msg -> m) -> Html m
+drawerButton lift =
   div
     [ class "mdl-layout__drawer-button"
-    , onClick addr ToggleDrawer
+    , onClick (lift ToggleDrawer)
     ]
     [ Icon.i "menu" ]
 
 
-obfuscator : Addr -> Model -> Html
-obfuscator addr model =
+obfuscator : (Msg -> m) -> Model -> Html m
+obfuscator lift model =
   div
     [ classList
         [ ("mdl-layout__obfuscator", True)
         , ("is-visible", model.isDrawerOpen)
         ]
-    , onClick addr ToggleDrawer
+    , onClick (lift ToggleDrawer)
     ]
     []
 
 
-drawerView : Addr -> Model -> List Html -> Html
-drawerView addr model elems =
+drawerView : Model -> List (Html m) -> Html m
+drawerView model elems =
   div
     [ classList
         [ ("mdl-layout__drawer", True)
@@ -539,18 +534,18 @@ respectively. Use `row`, `spacer`, `title`, `nav`, and `link`, as well as
 regular Html to construct these. The `tabs` contains
 the title of each tab.
 -}
-type alias Contents =
-  { header : List Html
-  , drawer : List Html
-  , tabs : (List Html, List Style)
-  , main : List Html
+type alias Contents m =
+  { header : List (Html m)
+  , drawer : List (Html m)
+  , tabs : (List (Html m), List (Style m))
+  , main : List (Html m)
   }
 
 
 {-| Main layout view.
 -}
-view : Addr -> Model -> List Property -> Contents -> Html
-view addr model options { drawer, header, tabs, main } =
+view : (Msg -> m) -> Model -> List (Property m) -> Contents m -> Html m
+view lift model options { drawer, header, tabs, main } =
   let
     summary = 
       Options.collect defaultConfig options
@@ -559,14 +554,14 @@ view addr model options { drawer, header, tabs, main } =
       summary.config 
 
     (contentDrawerButton, headerDrawerButton) =
-      case (drawer, header, model.fixedHeader) of
+      case (drawer, header, config.fixedHeader) of
         (_ :: _, _ :: _, True) ->
           -- Drawer with fixedHeader: Add the button to the header
-           (Nothing, Just <| drawerButton addr)
+           (Nothing, Just <| drawerButton lift)
 
         (_ :: _, _, _) ->
           -- Drawer, no or non-fixed header: Add the button before contents.
-           (Just <| drawerButton addr, Nothing)
+           (Just <| drawerButton lift, Nothing)
 
         _ ->
           -- No drawer: no button.
@@ -582,7 +577,7 @@ view addr model options { drawer, header, tabs, main } =
       if not hasTabs then
         Nothing
       else 
-        Just (tabsView addr config model tabs)
+        Just (tabsView lift config model tabs)
   in
   div
     [ classList
@@ -599,23 +594,28 @@ view addr model options { drawer, header, tabs, main } =
             , ("has-tabs", hasTabs)
             , ("mdl-js-layout", True)
             , ("mdl-layout--fixed-drawer", config.fixedDrawer && drawer /= [])
-            , ("mdl-layout--fixed-header", model.fixedHeader && hasHeader)
+            , ("mdl-layout--fixed-header", config.fixedHeader && hasHeader)
             , ("mdl-layout--fixed-tabs", config.fixedTabs && hasTabs)
             ]
         ]
         [ if hasHeader then
-            Just <| headerView addr config model (headerDrawerButton, header, tabsElems)
+            headerView lift config model (headerDrawerButton, header, tabsElems)
+              |> Just
           else
             Nothing
-        , if List.isEmpty drawer then Nothing else Just (obfuscator addr model)
-        , if List.isEmpty drawer then Nothing else Just (drawerView addr model drawer)
+        , if List.isEmpty drawer then Nothing else Just (obfuscator lift model)
+        , if List.isEmpty drawer then Nothing else Just (drawerView model drawer)
         , contentDrawerButton
         , main' 
             ( class "mdl-layout__content" 
-            :: key ("elm-mdl-layout-" ++ toString model.selectedTab)
+            :: Helpers.key ("elm-mdl-layout-" ++ toString config.selectedTab)
             :: (
               if isWaterfall config.mode then 
-                [ on "scroll" (DOM.target DOM.scrollTop) (Signal.message scrollMailbox.address) ]
+                [ on "scroll" 
+                    (Decoder.map 
+                      (ScrollPane config.fixedHeader >> lift) 
+                      (DOM.target DOM.scrollTop))
+                ]
               else 
                 []
               )
@@ -624,3 +624,6 @@ view addr model options { drawer, header, tabs, main } =
           |> Just
         ]
     ]
+
+
+

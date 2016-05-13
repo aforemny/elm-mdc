@@ -61,7 +61,7 @@ elm-reactor.
 
 TODO: Usage example
 -}
-topWithScheme: Hue -> Hue -> Html -> Html
+topWithScheme: Hue -> Hue -> Html a -> Html a
 topWithScheme primary accent content =
   div [] <|
   {- Trick from Peter Damoc to load CSS outside of <head>.
@@ -76,7 +76,7 @@ topWithScheme primary accent content =
 
 {-| Top-level container with default color scheme. See `topWithScheme` above.
 -}
-top : Html -> Html
+top : Html a -> Html a
 top content =
   -- Force default color-scheme by picking an invalid combination.
   topWithScheme Grey Grey content

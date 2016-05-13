@@ -262,13 +262,13 @@ accentContrast = C "accent-contrast"
 
 {-| Background color.
 -}
-background : Color -> Property a
+background : Color -> Property c m
 background (C color) =
   cs ("mdl-color--" ++ color)
 
 {-| Text or foreground color.
 -}
-text : Color -> Property a
+text : Color -> Property c m
 text (C color) =
   cs ("mdl-color-text--" ++ color)
 

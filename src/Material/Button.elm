@@ -1,11 +1,11 @@
 module Material.Button exposing
-  ( Model, Msg, update
+  ( Model, Msg, update, view
   , flat, raised, fab, minifab, icon
   , plain, colored, primary, accent
   , ripple, disabled
   , onClick
   , Property
-  , View, Container, render
+  , Container, render
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -35,7 +35,7 @@ for a live demo.
 
  
 # Elm architecture
-@docs Model, Msg, update, View
+@docs Model, Msg, update, view
 
 # Options
 @docs plain, colored, primary, accent
@@ -58,6 +58,7 @@ for details about what type of buttons are appropriate for which situations.
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events 
+import Html.App
 import Platform.Cmd exposing (Cmd, none)
 
 import Parts exposing (Indexed, Index)
@@ -66,9 +67,6 @@ import Material.Helpers as Helpers
 import Material.Options as Options exposing (cs)
 import Material.Ripple as Ripple
 
-
-{-| MDL button.
--}
 
 
 -- MODEL
@@ -100,14 +98,14 @@ update =
 
 {-| 
 -}
-type alias Config = 
+type alias Config m = 
   { ripple : Bool 
-  , onClick : Maybe Attribute
+  , onClick : Maybe (Attribute m)
   , disabled : Bool
   }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig = 
   { ripple = False
   , onClick = Nothing
@@ -117,20 +115,22 @@ defaultConfig =
 
 {-|
 -}
-type alias Property = 
-  Options.Property Config 
+type alias Property m = 
+  Options.Property (Config m) m
 
 
-onClick : Address a -> a -> Property
-onClick addr x =
+{-| TODO
+-}
+onClick : m -> Property m
+onClick x =
   Options.set
-    (\options -> { options | onClick = Just (Html.Events.onClick addr x) })
+    (\options -> { options | onClick = Just (Html.Events.onClick x) })
 
 
 {-|
    TODO
 -}
-ripple : Property 
+ripple : Property m 
 ripple = 
   Options.set
     (\options -> { options | ripple = True })
@@ -138,7 +138,7 @@ ripple =
 
 {-| TODO
 -}
-disabled : Property
+disabled : Property m
 disabled = 
   Options.set
     (\options -> { options | disabled = True })
@@ -146,34 +146,40 @@ disabled =
 
 {-| Plain, uncolored button (default). 
 -}
-plain : Property
+plain : Property m
 plain =
   cs "mdl-button--colored"
 
 
 {-| Color button with primary or accent color depending on button type.
 -}
-colored : Property
+colored : Property m
 colored =
   cs "mdl-button--colored"
 
 
 {-| Color button with primary color.
 -}
-primary : Property
+primary : Property m
 primary =
   cs "mdl-button--primary"
 
 
 {-| Color button with accent color. 
 -}
-accent : Property
+accent : Property m
 accent = 
   cs "mdl-button--accent"
 
 
-view : Address Msg -> Model -> List Property -> List Html -> Html
-view addr model config html =
+{-| TODO
+-}
+view : Model -> List (Property Msg) -> List (Html Msg) -> Html Msg
+view =
+  view' identity
+
+view' : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+view' lift model config html =
   let 
     summary = Options.collect defaultConfig config
   in
@@ -187,21 +193,14 @@ view addr model config html =
       , if summary.config.disabled then Just (Html.Attributes.disabled True) else Nothing
       ]
       (if summary.config.ripple then
-          Ripple.view 
-            addr
+          (Html.App.map lift <| Ripple.view 
             [ class "mdl-button__ripple-container"
-            , Helpers.blurOn "mouseup" 
+            , Helpers.blurOn "mouseup"
             ]
-            model
+            model)
           :: html
         else 
           html)
-
-
-{-| Type of button views. 
--}
-type alias View = 
-  Address Msg -> Model -> List Property -> List Html -> Html
 
 
 {-| From the
@@ -224,7 +223,7 @@ Example use (uncolored flat button, assuming properly setup model):
     flatButton = Button.flat addr model Button.Plain [text "Click me!"]
 
 -}
-flat : Property
+flat : Property m
 flat = Options.nop
 
 
@@ -245,7 +244,7 @@ Example use (colored raised button, assuming properly setup model):
     raisedButton = Button.raised addr model Button.Colored [text "Click me!"]
 
 -}
-raised : Property 
+raised : Property m 
 raised = cs "mdl-button--raised"
 
 
@@ -271,13 +270,13 @@ Example use (colored with a '+' icon):
     fabButton : Html
     fabButton = fab addr model Colored [Icon.i "add"]
 -}
-fab : Property
+fab : Property m
 fab = cs "mdl-button--fab"
 
 
 {-| Mini-sized variant of a Floating Msg Button; refer to `fab`.
 -}
-minifab : Property 
+minifab : Property m 
 minifab = cs "mdl-button--mini-fab"
 
 
@@ -293,7 +292,7 @@ Example use (no color, displaying a '+' icon):
     iconButton : Html
     iconButton = icon addr model Plain [Icon.i "add"]
 -}
-icon : Property 
+icon : Property m 
 icon = cs "mdl-button--icon"
 
 
@@ -311,15 +310,13 @@ type alias Container c =
   TODO
 -}
 render 
-  : (Parts.Msg (Container c) obs -> obs)
+  : (Parts.Msg (Container c) -> m)
   -> Parts.Index
-  -> Address obs
   -> (Container c)
-  -> List Property 
-  -> List Html 
-  -> Html
-render lift = 
-  Parts.create
-      view update .button (\x y -> {y | button=x}) Ripple.model lift
+  -> List (Property m)
+  -> List (Html m)
+  -> Html m
+render = 
+  Parts.create view' update .button (\y x -> {y | button=x}) Ripple.model 
     
   

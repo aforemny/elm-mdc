@@ -4,6 +4,7 @@ module Material.Helpers exposing
   , delay, fx, pure, effect
   , lift, lift'
   , Update, Update'
+  , key, noAttr
   )
 
 {-| Convenience functions. These are mostly trivial functions that are used
@@ -11,10 +12,10 @@ internally in the library; you might
 find some of them useful. 
 
 # HTML & Events
-@docs filter, blurOn
+@docs filter, blurOn, key, noAttr
 
 # Cmd
-@docs pure, effect, delay
+@docs pure, effect, delay, fx
 
 # Tuples
 @docs map1st, map2nd
@@ -28,6 +29,8 @@ import Html.Attributes
 import Platform.Cmd exposing (Cmd)
 import Time exposing (Time)
 import Task
+import Process
+import Json.Encode as Encoder
 
 
 {-| Convert a Html element from taking a list of sub-elements to a list of
@@ -64,7 +67,7 @@ pure = effect Cmd.none
         [ blurOn "mouseleave" ]
         [ text "Click me!" ]
 -}
-blurOn : String -> Html.Attribute
+blurOn : String -> Html.Attribute m
 blurOn evt =
   Html.Attributes.attribute ("on" ++ evt) <| "this.blur()"
 
@@ -148,9 +151,12 @@ lift get set fwd update action model =
     (set model submodel', Cmd.map fwd e)
 
 
-fx : a -> Cmd a
-fx =
-  Task.succeed >> Cmd.task
+{-|
+  TODO
+-}
+fx : msg -> Cmd msg
+fx msg =
+  Task.perform (always msg) (always msg) (Task.succeed msg)
 
 
 {-| Produce a delayed effect. Suppose you want `MyMsg` to happen 200ms after
@@ -162,8 +168,28 @@ a button is clicked:
 -}
 delay : Time -> a -> Cmd a
 delay t x =
-  Task.sleep t
-    |> (flip Task.andThen) (always (Task.succeed x))
-    |> Cmd.task
+  Task.perform (always x) (always x) <| Process.sleep t
 
 
+
+{-| Disappared in Elm 0.17, but necessary for correctness of CSS transitions under
+virtual dom.
+-}
+key : String -> Html.Attribute a
+key k =
+  Html.Attributes.property "key" (Encoder.string k)
+
+
+{-| Fake attribute with no effect. Useful to conditionally add attributes, e.g.,
+
+    button 
+      [ if model.shouldReact then 
+          onClick ReactToClick
+        else
+          noAttr
+      ]
+      [ text "Click me!" ]
+-}
+noAttr : Html.Attribute a
+noAttr = 
+  Html.Attributes.attribute "data-elm-mdl-noop" ""

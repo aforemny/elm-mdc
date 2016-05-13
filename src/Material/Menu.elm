@@ -32,29 +32,34 @@ Refer to
 for a live demo.
 
 # Elm architecture
-@docs Model, model, Msg, update, View
+@docs Model, defaultModel, Msg, update, view
 
 # Alignment
-@docs bottomLeft, bottomRight, topLeft, topRight, unaligned
+@docs bottomLeft, bottomRight, topLeft, topRight
+
+TODO
+@docs Item, Property, render, ripple
 -}
 
 
 import Array exposing (Array)
 import Dict exposing (Dict)
 import Platform.Cmd exposing (Cmd, none)
-import Html.Attributes as Html exposing (..)
+import Html.Attributes exposing (..)
 import Html.Events as Html exposing (defaultOptions)
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode exposing (string)
-import Material.Helpers exposing (..)
+import Material.Helpers as Helpers exposing (fx)
 import String
 import Task
+import Html.App
 
 import Material.Menu.Geometry as Geometry exposing (Geometry)
 import Material.Ripple as Ripple
 import Material.Options as Options exposing (Style, cs, css, styled, styled')
 import Material.Icon as Icon
+import Material.Helpers as Helpers
 import Parts exposing (Indexed, Index)
 
 
@@ -119,10 +124,10 @@ defaultModel =
 
 {-| Item model.
 -}
-type alias Item =
+type alias Item m =
   { divider : Bool
   , enabled : Bool
-  , html : Html
+  , html : Html m
   }
 
 
@@ -172,9 +177,7 @@ update action model =
     Select idx geometry ->
       -- Close the menu after some delay for the ripple effect to show.
       ( { model | animationState = Closing }
-      , Cmd.task
-          <| Task.andThen (Task.sleep constant.closeTimeout) << always
-          <| Task.succeed (Close geometry) 
+      , Helpers.delay constant.closeTimeout (Close geometry)
       )
 
     Ripple idx action ->
@@ -216,41 +219,44 @@ defaultConfig =
   }
 
 
-type alias Property = 
-  Options.Property Config
+{-|
+  TODO
+-}
+type alias Property m = 
+  Options.Property Config m
 
 
 {-|
 -}
-ripple : Property 
+ripple : Property m 
 ripple = 
   Options.set (\config -> { config | ripple = True })
 
 
 {-|
 -}
-bottomLeft : Property 
+bottomLeft : Property m 
 bottomLeft = 
   Options.set (\config -> { config | alignment = BottomLeft })
 
 
 {-|
 -}
-bottomRight : Property 
+bottomRight : Property m 
 bottomRight = 
   Options.set (\config -> { config | alignment = BottomRight })
 
 
 {-|
 -}
-topLeft : Property 
+topLeft : Property m 
 topLeft = 
   Options.set (\config -> { config | alignment = TopLeft })
 
 
 {-|
 -}
-topRight : Property 
+topRight : Property m 
 topRight = 
   Options.set (\config -> { config | alignment = TopRight })
 
@@ -264,7 +270,7 @@ topRight =
 -}
 
 
-containerGeometry : Config -> Geometry -> List Property
+containerGeometry : Config -> Geometry -> List (Property m)
 containerGeometry config geometry =
   [ css "width" <| toPx geometry.menu.bounds.width 
   , css "height" <| toPx geometry.menu.bounds.height 
@@ -294,12 +300,20 @@ containerGeometry config geometry =
   ]
 
 
-outlineGeometry : Config -> Geometry -> List Style
+outlineGeometry : Config -> Geometry -> List (Style m)
 outlineGeometry config geometry = 
   [] 
 
-view : Address Msg -> Model -> List Property -> List Item -> Html
-view addr model properties items =
+
+{-| TODO
+-}
+view : Model -> List (Property Msg) -> List (Item Msg) -> Html Msg
+view = 
+  view' identity
+
+
+view' : (Msg -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
+view' lift model properties items =
   let 
     summary = Options.collect defaultConfig properties
     config = summary.config
@@ -311,7 +325,7 @@ view addr model properties items =
         , cs "mdl-js-button"
         , cs "mdl-button--icon"
         ]
-        [ onClick addr Geometry.decode 
+        [ onClick Geometry.decode 
             (if model.animationState == Opened then Close else Open)
         ]
         [ Icon.view "more_vert" 
@@ -319,6 +333,7 @@ view addr model properties items =
           , css "pointer-events" "none"
           ]
         ]
+        |> Html.App.map lift
       , styled div
         [ cs "mdl-menu__container"
         , cs "is-upgraded"
@@ -375,13 +390,13 @@ view addr model properties items =
                    )
                 |> Maybe.withDefault Options.nop
             ]
-            (List.map2 (makeItem addr config model) [1..List.length items] items)
+            (List.map2 (makeItem lift config model) [1..List.length items] items)
         ]
       ]
 
 
-makeItem : Address Msg -> Config -> Model -> Int -> Item -> Html
-makeItem addr config model n item =
+makeItem : (Msg -> m) -> Config -> Model -> Int -> Item m -> Html m
+makeItem lift config model n item =
   let
     transitionDuration =
       constant.transitionDurationSeconds *
@@ -411,10 +426,6 @@ makeItem addr config model n item =
         ((offsetTop n) / height * transitionDuration)
         |> toString
         |> flip (++) "s"
-
-    addr' = 
-      Signal.forwardTo addr (Ripple n)
-
   in
     styled' li
       [ cs "mdl-menu__item"
@@ -424,24 +435,26 @@ makeItem addr config model n item =
       , cs' "mdl-menu__item--full-bleed-divider" item.divider
       ]
       [ if item.enabled then
-           onClick addr Geometry.decode' (Select n)
+           onClick Geometry.decode' (Select n >> lift)
          else
-           Html.attribute "disabled" "disabled"
-      , Html.property "tabindex" (string "-1")
-      , Ripple.downOn "mousedown" addr'
-      , Ripple.downOn "touchstart" addr'
-      , Ripple.upOn "mouseup" addr'
-      , Ripple.upOn "mouseleave" addr'
-      , Ripple.upOn "touchend" addr'
-      , Ripple.upOn "blur" addr'
+           Html.Attributes.attribute "disabled" "disabled"
+      , Html.Attributes.property "tabindex" (string "-1")
+      {- TODO: No way to map an attribute?
+      , Ripple.downOn "mousedown"
+      , Ripple.downOn "touchstart"
+      , Ripple.upOn "mouseup"
+      , Ripple.upOn "mouseleave"
+      , Ripple.upOn "touchend"
+      , Ripple.upOn "blur"
+      -}
       ]
       ( if config.ripple then
           [ item.html
           , Ripple.view
-            ( Signal.forwardTo addr (Ripple n))
-            [ Html.class "mdl-menu__item-ripple-container" ]
+            [ Html.Attributes.class "mdl-menu__item-ripple-container" ]
             ( Dict.get n model.items
               |> Maybe.withDefault Ripple.model)
+            |> Html.App.map (Ripple n >> lift)
           ]
         else
           [ item.html ]
@@ -460,31 +473,22 @@ type alias Container c =
 {-|
 -}
 render 
-  : (Parts.Msg (Container c) obs -> obs)
+  : (Parts.Msg (Container c) -> m)
   -> Parts.Index
-  -> Address obs
   -> Container c
-  -> List Property
-  -> List Item
-  -> Html
+  -> List (Property m)
+  -> List (Item m)
+  -> (Html m)
 render = 
-  Parts.create view update .menu (\x y -> {y | menu=x}) defaultModel 
+  Parts.create view' update .menu (\y x -> {y | menu=x}) defaultModel 
     
   
 -- HELPERS
 
 
-onClick :
-  Address Msg
-  -> Decoder Geometry
-  -> (Geometry -> Msg)
-  -> Attribute
-onClick addr decoder action =
-  Html.onWithOptions
-  "click"
-  defaultOptions
-  decoder
-  (Signal.message addr << action)
+onClick : Decoder Geometry -> (Geometry -> m) -> (Attribute m)
+onClick decoder action =
+  Html.onWithOptions "click" defaultOptions (Json.map action decoder)
 
 
 rect : Float -> Float -> Float -> Float -> String
@@ -499,12 +503,12 @@ toPx : Float -> String
 toPx = toString >> flip (++) "px"
 
 
-cs' : String -> Bool -> Options.Property a
+cs' : String -> Bool -> Options.Property a b
 cs' c p = 
   if p then cs c else Options.nop
 
 
-css' : String -> String -> Bool -> Options.Property a
+css' : String -> String -> Bool -> Options.Property a b
 css' k v p = 
   if p then css k v else Options.nop 
 

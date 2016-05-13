@@ -37,7 +37,7 @@ Example use:
 
     import Material.Grid exposing (grid, cell, size, Device(..))
 
-    top : Html
+    top : (Html a)
     top =
       grid []
         [ cell [ size All 4 ]
@@ -79,18 +79,18 @@ import Material.Options as Options exposing (Style, cs, styled)
 
 {-| Set grid to have no spacing between cells. 
 -}
-noSpacing : Style
+noSpacing : Style a
 noSpacing = Options.cs "mdl-grid--no-spacing"
 
 {-| Set maximum grid width. If more space is available, the grid stays centered with
 padding on either side. Width must be a valid CSS dimension. 
 -}
-maxWidth : String -> Style 
+maxWidth : String -> Style a
 maxWidth w = Options.css "max-width" w
 
 {-| Construct a grid with options.
 -}
-grid : List Style -> List Cell -> Html
+grid : List (Style a) -> List (Cell a) -> Html a
 grid styling cells =
   Options.div (cs "mdl-grid" :: styling) (List.map (\(Cell elm) -> elm) cells)
 
@@ -103,7 +103,7 @@ type Device = All | Desktop | Tablet | Phone
 
 {-| Opaque cell type.
 -}
-type Cell = Cell Html
+type Cell a = Cell (Html a)
 
 
 suffix : Device -> String
@@ -118,7 +118,7 @@ suffix device =
 {-| Specify cell size. On devices of type `Device`, the
 cell being specified spans `Int` columns.
 -}
-size : Device -> Int -> Style
+size : Device -> Int -> Style a
 size device k =
   let c =
     case device of
@@ -134,7 +134,7 @@ size device k =
 one. On devices of type `Device`, leave `Int` columns blank before the present
 one begins.
 -}
-offset : Device -> Int -> Style
+offset : Device -> Int -> Style a
 offset device k =
   let c =
     case device of
@@ -153,7 +153,7 @@ type Align = Top | Middle | Bottom
 
 {-| Specify vertical cell alignment. See `Align`.
 -}
-align : Align -> Style
+align : Align -> Style a
 align a =
   case a of 
     Top -> cs "mdl-cell--top"
@@ -164,7 +164,7 @@ align a =
 
 {-| Specify that a cell should be hidden on given `Device`.
 -}
-hide : Device -> Style
+hide : Device -> Style a
 hide device =
   cs <| case device of
     All -> ""
@@ -173,7 +173,7 @@ hide device =
 
 {-| Specify that a cell should re-order itself to position 'Int' on `Device`.
 -}
-order : Device -> Int -> Style
+order : Device -> Int -> Style a
 order device n =
   cs <| "mdl-cell--order-" ++ (toString <| clip 1 12 n) ++ suffix device
 
@@ -181,7 +181,7 @@ order device n =
 {-| Construct a cell for use in the argument list for `grid`. Note that this
 module defines exposing various styles to set size, offset, etc. of the cell. 
 -}
-cell : List Style -> List Html -> Cell
+cell : List (Style a) -> List (Html a) -> Cell a
 cell styling elms =
   Cell (Options.div (cs "mdl-cell" :: styling) elms)
 
