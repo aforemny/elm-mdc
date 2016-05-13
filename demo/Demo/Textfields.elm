@@ -1,4 +1,4 @@
-module Demo.Textfields exposing where
+module Demo.Textfields exposing (model, Model, update, view, Msg)
 
 import Html exposing (Html)
 import Platform.Cmd exposing (Cmd)
@@ -36,7 +36,7 @@ model =
 
 
 type Msg
-  = MDL (Material.Msg Msg)
+  = MDL Material.Msg 
   | Upd0 String 
   | Upd3 String
   | Upd4 String
@@ -83,32 +83,32 @@ match str rx =
     |> List.any (.match >> (==) str)
 
 
-view : Signal.Address Msg -> Model -> Html
-view addr model =
-  [ Textfield.render MDL [0] addr model.mdl 
-      [ Textfield.onInput (Signal.forwardTo addr Upd0) ]
-  , Textfield.render MDL [1] addr model.mdl 
+view : Model -> Html Msg
+view model =
+  [ Textfield.render MDL [0] model.mdl 
+      [ Textfield.onInput Upd0 ]
+  , Textfield.render MDL [1] model.mdl 
       [ Textfield.label "Labelled" ]
-  , Textfield.render MDL [2] addr model.mdl 
+  , Textfield.render MDL [2] model.mdl 
       [ Textfield.label "Floating label"
       , Textfield.floatingLabel 
       ]
-  , Textfield.render MDL [3] addr model.mdl 
+  , Textfield.render MDL [3] model.mdl 
       [ Textfield.label "Disabled"
       , Textfield.disabled 
       , Textfield.value <| 
           model.str0 
             ++ if model.str0 /= "" then " (still disabled, though)" else ""
       ]
-  , Textfield.render MDL [4] addr model.mdl 
+  , Textfield.render MDL [4] model.mdl 
       [ Textfield.label "w/error checking" 
       , if not <| match model.str4 rx' then 
           Textfield.error <| "Doesn't match " ++ rx
         else
           Options.nop
-      , Textfield.onInput (Signal.forwardTo addr Upd4)
+      , Textfield.onInput Upd4
       ]
-  , Textfield.render MDL [5] addr model.mdl
+  , Textfield.render MDL [5] model.mdl
       [ Textfield.label "Enter password"
       , Textfield.floatingLabel
       , Textfield.password
@@ -126,7 +126,7 @@ view addr model =
   |> Page.body2 "Textfields" srcUrl intro references
 
 
-intro : Html
+intro : Html a
 intro = 
   Page.fromMDL "http://www.getmdl.io/components/#textfields-section" """
 > The Material Design Lite (MDL) text field component is an enhanced version of

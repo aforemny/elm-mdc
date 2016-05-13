@@ -1,20 +1,20 @@
 module Main exposing (..)
-import StartApp
 import Html exposing (..)
-import Html.Attributes exposing (href, class, style, key)
+import Html.Attributes exposing (href, class, style)
+import Html.App as App
 import Platform.Cmd exposing (..)
-import Task
-import Task exposing (Task)
 import Array exposing (Array)
 
+{-
 import Hop
 import Hop.Types
 import Hop.Navigate exposing (navigateTo)
 import Hop.Matchers exposing (match1)
+-}
 
 import Material.Color as Color
 import Material.Layout as Layout exposing (defaultLayoutModel)
-import Material.Helpers exposing (lift, lift')
+import Material.Helpers exposing (lift, lift', key)
 import Material.Options as Style
 import Material.Scheme as Scheme
 
@@ -30,12 +30,10 @@ import Demo.Elevation
 
 
 -- ROUTING 
-
-
+{-
 type Route 
   = Tab Int
   | E404
-
 
 type alias Routing = 
   ( Route, Hop.Types.Location )
@@ -56,22 +54,15 @@ router =
            )
         )
     }
-
+-}
 
 -- MODEL
 
 
-layoutModel : Layout.Model
-layoutModel =
-  { defaultLayoutModel
-  | state = Layout.initState (List.length tabs)
-  , fixedHeader = True
-  }
-
 
 type alias Model =
   { layout : Layout.Model
-  , routing : Routing
+  --, routing : Routing
   , buttons : Demo.Buttons.Model
   , badges : Demo.Badges.Model
   , menus : Demo.Menus.Model
@@ -79,13 +70,14 @@ type alias Model =
   --, toggles : Demo.Toggles.Model
   , snackbar : Demo.Snackbar.Model
   --, template : Demo.Template.Model
+  , selectedTab : Int
   }
 
 
 model : Model
 model =
-  { layout = layoutModel
-  , routing = route0 
+  { layout = defaultLayoutModel
+  --, routing = route0 
   , buttons = Demo.Buttons.model
   , badges = Demo.Badges.model
   , menus = Demo.Menus.model
@@ -93,6 +85,7 @@ model =
   --, toggles = Demo.Toggles.model
   , snackbar = Demo.Snackbar.model
   --, template = Demo.Template.model
+  , selectedTab = 0
   }
 
 
@@ -101,11 +94,13 @@ model =
 
 
 type Msg
+  = 
   -- Hop
-  = ApplyRoute ( Route, Hop.Types.Location )
+  {- = ApplyRoute ( Route, Hop.Types.Location )
   | HopMsg ()
-  -- Tabs
-  | LayoutMsg Layout.Msg
+  | 
+ -} 
+    LayoutMsg Layout.Msg
   | BadgesMsg Demo.Badges.Msg
   | ButtonsMsg Demo.Buttons.Msg
   | MenusMsg Demo.Menus.Msg
@@ -123,6 +118,7 @@ nth k xs =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
+    {-
     LayoutMsg a ->
       let
         ( lifted, layoutFx ) =
@@ -148,7 +144,8 @@ update action model =
 
     HopMsg _ ->
       ( model, Cmd.none )
-
+-}
+    LayoutMsg    a -> lift  .layout     (\m x->{m|layout    =x}) LayoutMsg   Layout.update          a model
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
 
@@ -169,11 +166,7 @@ update action model =
 -- VIEW
 
 
-type alias Addr =
-  Signal.Address Msg
-
-
-drawer : List Html
+drawer : List (Html Msg)
 drawer =
   [ Layout.title [] [ text "Example drawer" ]
   , Layout.navigation
@@ -191,7 +184,7 @@ drawer =
   ]
 
 
-header : List Html
+header : List (Html a)
 header =
   [ Layout.row 
       []
@@ -213,29 +206,24 @@ header =
   ]
 
 
-tabs : List (String, String, Addr -> Model -> Html)
+tabs : List (String, String, Model -> Html Msg)
 tabs =
-  [ ("Buttons", "buttons", \addr model ->
-      Demo.Buttons.view (Signal.forwardTo addr ButtonsMsg) model.buttons)
-  , ("Menus", "menus", \addr model ->
-      Demo.Menus.view (Signal.forwardTo addr MenusMsg) model.menus)
-  , ("Badges", "badges", \addr model -> 
-      Demo.Badges.view (Signal.forwardTo addr BadgesMsg) model.badges)
-  , ("Elevation", "elevation", \addr model -> Demo.Elevation.view )
-  , ("Grid", "grid", \addr model -> Demo.Grid.view)
-  , ("Snackbar", "snackbar", \addr model ->
-      Demo.Snackbar.view (Signal.forwardTo addr SnackbarMsg) model.snackbar)
-  , ("Textfields", "textfields", \addr model ->
-      Demo.Textfields.view (Signal.forwardTo addr TextfieldMsg) model.textfields)
---  , ("Toggles", "toggles", \addr model -> 
+  [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
+  , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
+  , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
+  , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
+  , ("Grid", "grid", \_ -> Demo.Grid.view)
+  , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
+  , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
+--  , ("Toggles", "toggles", \model -> 
 --      Demo.Toggles.view (Signal.forwardTo addr TogglesMsg) model.toggles)
-  --, ("Template", "tempate", \addr model -> 
+  --, ("Template", "tempate", \model -> 
   --    Demo.Template.view (Signal.forwardTo addr TemplateMsg) model.template)
   ]
 
 
-e404 : Addr -> Model -> Html 
-e404 _ _ =  
+e404 : Model -> Html Msg
+e404 _ =  
   div 
     [ 
     ]
@@ -247,16 +235,16 @@ e404 _ _ =
     ]
 
 
-tabViews : Array (Addr -> Model -> Html)
+tabViews : Array (Model -> Html Msg)
 tabViews = List.map (\(_,_,v) -> v) tabs |> Array.fromList
 
 
-tabTitles : List Html
+tabTitles : List (Html a)
 tabTitles =
   List.map (\(x,_,_) -> text x) tabs
 
 
-stylesheet : Html
+stylesheet : Html a
 stylesheet =
   Style.stylesheet """
   /* The following line is better done in html. We keep it here for
@@ -294,6 +282,7 @@ stylesheet =
 """
 
 
+{-
 setTab : Layout.Model -> Route -> Layout.Model
 setTab layout route =
   let 
@@ -303,10 +292,11 @@ setTab layout route =
         E404 -> -1 
   in 
     { layout | selectedTab = idx }
+-}
 
 
-view : Signal.Address Msg -> Model -> Html
-view addr model =
+view : Model -> Html Msg
+view model =
   let
     top =
       div
@@ -315,15 +305,15 @@ view addr model =
             , ( "padding-left", "8%" )
             , ( "padding-right", "8%" )
             ]
-        , key <| toString (fst model.routing)
+        -- TODO: I don't see why the line below is necessary
+        --, key <| toString (fst model.routing)
         ]
-        [ (Array.get model.layout.selectedTab tabViews
+        [ (Array.get model.selectedTab tabViews
             |> Maybe.withDefault e404)
-           addr
            model
         ]
   in
-    Layout.view (Signal.forwardTo addr LayoutMsg) model.layout
+    Layout.view LayoutMsg model.layout
       []
       { header = header
       , drawer = drawer
@@ -348,37 +338,14 @@ init : ( Model, Cmd.Cmd Msg )
 init =
   ( model, Cmd.none )
 
-
-inputs : List (Signal.Signal Msg)
-inputs =
-  [ Layout.setupSignals LayoutMsg
-  , Signal.map ApplyRoute router.signal
-  ]
-
-
-app : StartApp.App Model
-app =
-  StartApp.start
-    { init = init
+main : Program Never
+main =
+  App.program 
+    { init = ( model, none ) 
     , view = view
+    , subscriptions = always <| Layout.subscriptions LayoutMsg
     , update = update
-    , inputs = inputs
     }
 
 
-main : Signal Html
-main =
-  app.html
 
-
--- PORTS
-
-
-port tasks : Signal (Task.Task Never ())
-port tasks =
-  app.tasks
-
-
-port routeRunTask : Task () ()
-port routeRunTask =
-  router.run

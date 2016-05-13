@@ -18,6 +18,7 @@
         "Material.Grid",
         "Material.Elevation",
         "Material.Snackbar",
+        "Material.Badge",
         "Material.Scheme",
         "Material.Helpers",
         "Material.Menu"

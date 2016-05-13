@@ -1,4 +1,4 @@
-module Demo.Elevation exposing where
+module Demo.Elevation exposing (view)
 
 import Html exposing (..)
 
@@ -11,7 +11,7 @@ import Demo.Page as Page
 -- VIEW
 
 
-elevate : (Style, Int) -> Html 
+elevate : (Style a, Int) -> Html a 
 elevate (e, k) = 
   Options.div 
     [ css "height" "96px"
@@ -33,7 +33,7 @@ elevate (e, k) =
     ]
 
 
-view : Html
+view : Html a
 view =
   (cs "", 0) :: Elevation.elevations
   |> List.map elevate 
@@ -42,7 +42,7 @@ view =
 
 
 
-intro : Html
+intro : Html a
 intro =
   Page.fromMDL "https://github.com/google/material-design-lite/blob/master/src/shadow/README.md" """
   > The Material Design Lite (MDL) shadow is not a component in the same sense as

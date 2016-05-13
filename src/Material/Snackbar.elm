@@ -34,7 +34,6 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Platform.Cmd exposing (Cmd, none)
-import Task
 import Time exposing (Time)
 import Maybe exposing (andThen)
 

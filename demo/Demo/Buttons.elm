@@ -1,4 +1,4 @@
-module Demo.Buttons exposing where
+module Demo.Buttons exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -55,7 +55,7 @@ model =
 
 type Msg 
   = Click (Kind, Color, Misc)
-  | Mdl (Material.Msg Msg)
+  | Mdl Material.Msg 
   | Code Code.Msg
 
 
@@ -138,7 +138,7 @@ program (kind, color, misc) =
           Ripple -> "ripple"
           Disabled -> "disabled"
           Default -> ""
-      , "onClick addr MyClickMsg"
+      , "onClick MyClickMsg"
       ] 
       |> List.filter ((/=) "")
       |> List.map ((++) "Button.")
@@ -151,7 +151,7 @@ program (kind, color, misc) =
         MiniFAB -> "Icon.i \"zoom_in\""
         Icon -> "Icon.i \"flight_land\""
   in
-    """Button.render Mdl [0] addr model.mdl
+    """Button.render Mdl [0] model.mdl
   [ """ ++ options ++ """
   ]
   [ """ ++ contents ++ "]"
@@ -163,8 +163,8 @@ indexedConcat f xs =
     |> List.concat
 
 
-viewButtons : Address Msg -> Model -> List (Grid.Cell)
-viewButtons addr model =
+viewButtons : Model -> List (Grid.Cell Msg)
+viewButtons model =
   kinds |> indexedConcat (\idx0 kind -> 
   colors |> indexedConcat (\idx1 color -> 
   miscs |> List.indexedMap (\idx2 misc -> 
@@ -177,7 +177,7 @@ viewButtons addr model =
             , ("margin-bottom", ".6em")
             ]
           ]
-          [ Button.render Mdl [idx0, idx1, idx2] addr model.mdl
+          [ Button.render Mdl [idx0, idx1, idx2] model.mdl
               [ case kind of 
                   Flat -> Button.flat
                   Raised -> Button.raised
@@ -191,7 +191,7 @@ viewButtons addr model =
                   Disabled -> Button.disabled
                   Ripple -> Button.ripple
                   Default -> Options.nop
-              , Button.onClick addr (Click (kind, color, misc))
+              , Button.onClick (Click (kind, color, misc))
               ]
               [ case kind of
                   Flat -> text "Flat button"
@@ -212,27 +212,27 @@ viewButtons addr model =
   )))
 
 
-view : Address Msg -> Model -> Html
-view addr model = 
+view : Model -> Html Msg
+view model = 
   Page.body2 "Buttons" srcUrl intro references  
     [ p [] 
         [ text """Various combinations of colors and button styles can be seen
                   below. Most buttons have animations; try clicking. Code for the
                   last clicked button appears below the buttons."""
         ]
-    , Grid.grid [] (viewButtons addr model)
+    , Grid.grid [] (viewButtons model)
     , p []
         [ model.last 
            |> Maybe.map describe 
            |> Maybe.map (\str -> "Code for '" ++ str ++ "':")
            |> Maybe.withDefault "Click a button to see the corresponding code."
            |> text
-        , Code.view (Signal.forwardTo addr Code) model.code
+        , Code.view model.code
         ]
     ] 
 
 
-intro : Html
+intro : Html a
 intro =
   Page.fromMDL "https://www.getmdl.io/components/#buttons-section" """
 > The Material Design Lite (MDL) button component is an enhanced version of the

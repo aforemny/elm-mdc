@@ -3,7 +3,6 @@ module Demo.Page exposing
   , fromMDL, fromMDS
   , body1, body2
   ) 
-  where
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class)
@@ -39,7 +38,7 @@ mdl url =
   ( "Material Design Lite documentation", url )
 
 
-references : List (String, String) -> List Html
+references : List (String, String) -> List (Html a)
 references links = 
   [ header "References" 
   , ul 
@@ -62,22 +61,22 @@ references links =
 -- DOCUMENTATION QUOTES
 
 
-from : String -> String -> String -> Html
+from : String -> String -> String -> (Html a)
 from title url body = 
   div []
     [ text "From the "
     , a [ href url ] [ text title ] 
     , text ":"
-    , Markdown.toHtml body
+    , Markdown.toHtml [] body
     ] 
 
 
-fromMDL : String -> String -> Html 
+fromMDL : String -> String -> Html a 
 fromMDL = 
   from "Material Design Lite documentation" 
 
 
-fromMDS : String -> String -> Html
+fromMDS : String -> String -> Html a
 fromMDS = 
   from "Material Design Specification"
 
@@ -85,7 +84,7 @@ fromMDS =
 -- TITLES
 
 
-title : String -> Html 
+title : String -> Html a 
 title t = 
   Options.styled Html.h1 
     [ Color.text Color.primary 
@@ -96,7 +95,7 @@ title t =
 
 
 
-header : String -> Html
+header : String -> Html a
 header str = 
   text str
 
@@ -128,7 +127,7 @@ fab url =
 -- BODY 
 
 
-body1 : String -> String -> Html -> List (String, String) -> List Html -> Html 
+body1 : String -> String -> Html a -> List (String, String) -> List (Html a) -> Html a 
 body1 t srcUrl contents links demo = 
   div []
     [ title t
@@ -153,11 +152,11 @@ body1 t srcUrl contents links demo =
     ]
 
 
-body2 : String -> String -> Html -> List (String, String) -> List Html -> Html 
+body2 : String -> String -> Html a -> List (String, String) -> List (Html a) -> Html a 
 body2 = body1
 
 
-body3 : String -> String -> Html -> List (String, String) -> List Html -> Html 
+body3 : String -> String -> Html a -> List (String, String) -> List (Html a) -> Html a 
 body3 t srcUrl contents links demo = 
   div 
     [

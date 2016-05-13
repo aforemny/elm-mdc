@@ -1,4 +1,4 @@
-module Demo.Menus exposing where
+module Demo.Menus exposing (model, Model, view, update, Msg)
 
 import Html exposing (Html, text, p)
 import Html.Events exposing (onClick)
@@ -39,7 +39,7 @@ model =
 
 type Msg
   = MenuMsg Int Menu.Msg
-  | MDL (Material.Msg Msg)
+  | MDL Material.Msg 
   | Select String
 
 
@@ -61,7 +61,7 @@ update action model =
 -- VIEW
 
 
-menus : List (String, Menu.Property)
+menus : List (String, Menu.Property m)
 menus =
   [ ("Bottom left", Menu.bottomLeft)
   , ("Bottom right", Menu.bottomRight)
@@ -71,29 +71,29 @@ menus =
 
 
 
-item : Signal.Address Msg -> String -> Html
-item addr str = 
+item : String -> Html Msg
+item str = 
   Html.div 
-    [ onClick addr (Select str) ]
+    [ onClick (Select str) ]
     [ text str ]
 
 
-items : Signal.Address Msg -> List Menu.Item
-items addr =
-  [ Menu.Item False True  <| item addr "Some Msg"
-  , Menu.Item True  True  <| item addr "Another Msg"
-  , Menu.Item False False <| item addr "Disabled Msg"
-  , Menu.Item False True  <| item addr "Yet Another Msg"
+items : List (Menu.Item Msg)
+items =
+  [ Menu.Item False True  <| item "Some Msg"
+  , Menu.Item True  True  <| item "Another Msg"
+  , Menu.Item False False <| item "Disabled Msg"
+  , Menu.Item False True  <| item "Yet Another Msg"
   ]
 
 
-view : Signal.Address Msg -> Model -> Html
-view addr model =
+view : Model -> Html Msg
+view model =
   menus
   |> List.indexedMap (\idx m ->
        Grid.cell
          [ Grid.size Grid.All 6 ]
-         [ container addr model idx m (items addr) ]
+         [ container model idx m items ]
      )
   |> Grid.grid []
   |> flip (::) 
@@ -107,14 +107,8 @@ view addr model =
   |> Page.body2 "Menus" srcUrl intro references
 
 
-container :
-  Signal.Address Msg
-  -> Model
-  -> Int
-  -> (String, Menu.Property)
-  -> List Menu.Item
-  -> Html
-container addr model idx (description, options) items =
+container : Model -> Int -> (String, Menu.Property Msg) -> List (Menu.Item Msg) -> Html Msg
+container model idx (description, options) items =
   let
     bar idx rightAlign =
       div
@@ -132,7 +126,7 @@ container addr model idx (description, options) items =
             , css "position" "absolute"
             , css (if rightAlign then "right" else "left") "16px"
             ]
-            [ Menu.render MDL [idx] addr model.mdl 
+            [ Menu.render MDL [idx] model.mdl 
                 [ options
                 , Menu.ripple
                 ] 
@@ -178,7 +172,7 @@ container addr model idx (description, options) items =
       ]
 
 
-intro : Html
+intro : Html m
 intro =
   Page.fromMDL "https://www.getmdl.io/components/#menus-section" """
 

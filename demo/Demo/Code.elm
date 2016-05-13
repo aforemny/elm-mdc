@@ -1,4 +1,4 @@
-module Demo.Code exposing where
+module Demo.Code exposing (..) 
 
 import Html exposing (Html, text)
 import Platform.Cmd exposing (Cmd)
@@ -6,7 +6,7 @@ import String
 import Markdown
 
 import Material.Options exposing (css, div, stylesheet)
-import Material.Helpers as Helpers
+import Material.Helpers as Helpers exposing (fx)
 
 
 type State 
@@ -51,7 +51,7 @@ update action state =
       Set s -> 
         case state of 
           Idle ->              
-            (First s, Cmd.tick (always (Timeout s)))
+            (First s, fx (Timeout s))
 
           First _ -> 
             (First s, Cmd.none)
@@ -124,16 +124,16 @@ trim s =
       |> String.join "\n"
 
 
-code : String -> Html
+code : String -> Html a
 code str = 
-  Markdown.toHtml <| "```elm\n" ++ trim str ++ "\n```"
+  Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```"
 
 
 -- VIEW
 
 
-view : Address Msg -> State -> Html
-view addr state = 
+view : State -> Html a
+view state = 
   let 
     opacity =
       case state of 

@@ -22,7 +22,7 @@ type Msg
   | Decrease
   | SetCode String
   | CodeBox Code.Msg
-  | Mdl (Material.Msg Msg)
+  | Mdl Material.Msg 
 
 
 type alias Model = 
@@ -73,12 +73,12 @@ update action model =
 -- VIEW
 
 
-c : List Html -> Cell
+c : List (Html Msg) -> Cell Msg
 c = cell [ size All 4 ]  
 
 
-view : Address Msg -> Model -> Html
-view addr model =
+view : Model -> Html Msg
+view model =
   [ p []
       [ text "Typical use of a badge in, say, in an e-mail client:" ]
   , grid []
@@ -87,9 +87,9 @@ view addr model =
               ]
               [ text "Unread" ]
             
-          , Button.render Mdl [0] addr model.mdl
+          , Button.render Mdl [0] model.mdl
               [ css "margin-left" "2rem"
-              , Button.onClick addr Decrease ]
+              , Button.onClick Decrease ]
               [ text "Mark as read"]
           ]
       ]
@@ -104,7 +104,7 @@ view addr model =
             in
               Options.span 
                 [ Badge.add "3" 
-                , Options.onHover addr <| SetCode c1
+                , Options.onHover <| SetCode c1
                 ] 
                 [ text "Badge" ]  
           ]
@@ -115,7 +115,7 @@ view addr model =
             in
               Options.span
                 [ Badge.add "♥" 
-                , Options.onHover addr <| SetCode c2
+                , Options.onHover <| SetCode c2
                 ]
                 [ text "Symbol" ]
 
@@ -127,7 +127,7 @@ view addr model =
                 ]"""
             in
               Options.styled span 
-                [ Options.onHover addr <| SetCode c3 ]
+                [ Options.onHover <| SetCode c3 ]
                 [ Icon.view "shopping_cart"
                   [ Icon.size24
                   , Badge.add "33"
@@ -144,7 +144,7 @@ view addr model =
               Options.span 
                 [ Badge.add "5"
                 , Badge.noBackground 
-                , Options.onHover addr <| SetCode c4
+                , Options.onHover <| SetCode c4
                 ]  
                 [ text "No background" ]
           ]
@@ -158,7 +158,7 @@ view addr model =
               Options.span 
                 [ Badge.add "8"
                 , Badge.overlap 
-                , Options.onHover addr <| SetCode c5
+                , Options.onHover <| SetCode c5
                 ]  
                 [ text "Overlap" ]
           ]
@@ -174,20 +174,20 @@ view addr model =
                 [ Badge.add "13"
                 , Badge.overlap 
                 , Badge.noBackground 
-                , Options.onHover addr <| SetCode c6
+                , Options.onHover <| SetCode c6
                 ]  
                 [ text "Overlap, no background" ]
           ]
       ] 
   , p []
-      [ Code.view (Signal.forwardTo addr CodeBox) model.codebox
+      [ Code.view model.codebox
       ]
   ]
   |> Page.body2 "Badges" srcUrl intro references
 
 
 
-intro : Html
+intro : Html a
 intro =
   Page.fromMDL "http://www.getmdl.io/components/#badges-section" """
 > The Material Design Lite (MDL) badge component is an onscreen notification

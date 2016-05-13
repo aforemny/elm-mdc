@@ -1,11 +1,13 @@
-module Demo.Snackbar exposing where
+module Demo.Snackbar exposing (model, Model, update, view, Msg) 
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+import Html.App as App
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
 
-import Material.Helpers exposing (map1st, map2nd, delay, pure)
+
+import Material.Helpers exposing (map1st, map2nd, delay, pure, fx)
 import Material.Color as Color
 import Material.Options as Options exposing (cs, css, Style)
 import Material.Snackbar as Snackbar
@@ -64,13 +66,13 @@ type Msg
   | Appear Int
   | Gone Int
   | Snackbar (Snackbar.Msg Int)
-  | MDL (Material.Msg Msg)
+  | MDL Material.Msg 
 
 
 add : (Int -> Snackbar.Contents Int) -> Model -> (Model, Cmd Msg)
 add f model =
   let 
-    (snackbar', fx) = 
+    (snackbar', effect) = 
       Snackbar.add (f model.count) model.snackbar
         |> map2nd (Cmd.map Snackbar)
     model' = 
@@ -82,8 +84,8 @@ add f model =
   in 
     ( model'
     , Cmd.batch 
-        [ Cmd.tick (always (Appear model.count))
-        , fx 
+        [ fx (Appear model.count)
+        , effect 
         ]
     )
 
@@ -154,7 +156,7 @@ transitionLength : Time
 transitionLength = 150 * millisecond
 
 
-transitionInner : Style
+transitionInner : Style a
 transitionInner = 
   css "transition"
     <| "box-shadow 333ms ease-in-out 0s, " 
@@ -163,14 +165,14 @@ transitionInner =
     ++ "background-color " ++ toString transitionLength ++ "ms"
 
 
-transitionOuter : Style
+transitionOuter : Style a
 transitionOuter = 
   css "transition" 
     <| "width " ++ toString transitionLength ++ "ms ease-in-out 0s, "
     ++ "margin " ++ toString transitionLength ++ "ms ease-in-out 0s"
 
 
-clickView : Model -> Square -> Html
+clickView : Model -> Square -> Html a
 clickView model (k, square) =
   let
     hue =
@@ -241,8 +243,8 @@ clickView model (k, square) =
 
 
 
-view : Signal.Address Msg -> Model -> Html
-view addr model =
+view : Model -> Html Msg
+view model =
   Page.body2 "Snackbar & Toast" srcUrl intro references
     [ p [] 
         [ text """Click the buttons below to generate toasts and snackbars. Note that 
@@ -251,9 +253,9 @@ view addr model =
     , grid [ ] 
         [ cell 
             [ size All 4, size Desktop 2]
-            [ Button.render MDL [0] addr model.mdl
+            [ Button.render MDL [0] model.mdl
                 [ Button.raised
-                , Button.onClick addr AddSnackbar
+                , Button.onClick AddSnackbar
                 , Button.colored
                 , css "width" "8em"
                 ] 
@@ -261,10 +263,10 @@ view addr model =
             ]
         , cell 
             [ size All 4, size Desktop 2]
-            [ Button.render MDL [1] addr model.mdl 
+            [ Button.render MDL [1] model.mdl 
                 [ Button.raised
                 , Button.colored
-                , Button.onClick addr AddToast
+                , Button.onClick AddToast
                 , css "width" "8em"
                 ] 
                 [ text "Toast" ]
@@ -278,11 +280,11 @@ view addr model =
             ]
             (model.squares |> List.reverse |> List.map (clickView model))
         ]
-    , Snackbar.view (Signal.forwardTo addr Snackbar) model.snackbar 
+    , Snackbar.view model.snackbar |> App.map Snackbar
     ]
 
 
-intro : Html
+intro : Html a
 intro = 
   Page.fromMDL "https://www.getmdl.io/components/index.html#snackbar-section" """
 > The Material Design Lite (MDL) __snackbar__ component is a container used to

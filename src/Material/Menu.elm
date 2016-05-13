@@ -52,7 +52,6 @@ import Json.Decode as Json exposing (Decoder)
 import Json.Encode exposing (string)
 import Material.Helpers as Helpers exposing (fx)
 import String
-import Task
 import Html.App
 
 import Material.Menu.Geometry as Geometry exposing (Geometry)

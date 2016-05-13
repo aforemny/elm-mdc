@@ -1,4 +1,4 @@
-module Demo.Grid exposing where
+module Demo.Grid exposing (view)
 
 
 import Html exposing (..)
@@ -14,7 +14,7 @@ import Demo.Page as Page
 -- Cell styling
 
 
-style : Int -> List Style
+style : Int -> List (Style a)
 style h = 
   [ css "text-sizing" "border-box"
   , css "background-color" "#BDBDBD"
@@ -28,23 +28,23 @@ style h =
 -- Cell variants
 
 
-democell : Int -> List Style -> List Html -> Cell
+democell : Int -> List (Style a) -> List (Html a) -> Cell a
 democell k styling = 
   cell <| List.concat [style k, styling] 
 
   
-small : List Style -> List Html -> Cell
+small : List (Style a) -> List (Html a) -> Cell a
 small = democell 50
 
 
-std : List Style -> List Html -> Cell
+std : List (Style a) -> List (Html a) -> Cell a
 std = democell 200
 
 
 -- Grid 
 
 
-color : Int -> Style
+color : Int -> Style a
 color k =
     Array.get ((k + 0) % Array.length Color.hues) Color.hues
       |> Maybe.withDefault Color.Teal
@@ -52,7 +52,7 @@ color k =
       |> Color.background
 
 
-view : Html
+view : Html a
 view =
   [ p []
       [ text """Resize your browser-window and observe the effect on the Grid
@@ -76,7 +76,7 @@ view =
   |> Page.body1 "Grid" srcUrl intro references
 
 
-intro : Html
+intro : Html a
 intro = 
   Page.fromMDL "http://www.getmdl.io/components/#layout-section/grid" """
 > The Material Design Lite (MDL) grid component is a simplified method for laying

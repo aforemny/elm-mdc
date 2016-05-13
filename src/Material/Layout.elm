@@ -1,6 +1,6 @@
 module Material.Layout exposing
   ( subscriptions
-  , Mode(..), Model, defaultLayoutModel, initState
+  , Mode(..), Model, defaultLayoutModel
   , Msg, update
   , row, spacer, title, navigation, link
   , Contents, view
@@ -33,7 +33,7 @@ module Material.Layout exposing
 @docs subscriptions
 
 # Model & Msgs
-@docs Mode, Model, defaultLayoutModel, initState, Msg, update
+@docs Mode, Model, defaultLayoutModel, Msg, update
 
 # View
 @docs Contents, view
@@ -45,7 +45,7 @@ module Material.Layout exposing
 
 -- TODO: Component support
 
-import Array exposing (Array)
+import Dict exposing (Dict)
 import Maybe exposing (andThen, map)
 import Html exposing (..)
 import Html.App as App
@@ -55,7 +55,7 @@ import Platform.Cmd exposing (Cmd)
 import Window
 import Json.Decode as Decoder
 
-import Material.Helpers as Helpers exposing (filter, delay, pure)
+import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop)
@@ -66,7 +66,7 @@ import DOM
 -- SETUP
 
 
-{-| Setup various signals layout needs (viewport size changes, scrolling). Use
+{-| TODO Setup various signals layout needs (viewport size changes, scrolling). Use
 with StartApp like so, supposing you have a `LayoutMsg` encapsulating
 actions of the
 layout:
@@ -87,69 +87,31 @@ subscriptions f =
 -- MODEL
 
 
-type alias State' =
-  { tabs : Array Ripple.Model
+{-|
+-}
+type alias Model =
+  { ripples : Dict Int Ripple.Model
   , isSmallScreen : Bool
   , isCompact : Bool
   , isAnimating : Bool
   , isScrolled : Bool
+  , isDrawerOpen : Bool
   }
 
 
-{-| Component private state. Construct with `initState`.
--}
-type State = S State'
-
-
-s : Model -> State'
-s model = case model.state of (S state) -> state
-
-
-{-| TODO. Layout model. If your layout view has tabs, any tab with the same name as
-`selectedTab` will be highlighted as selected; otherwise, `selectedTab` has no
-significance. `isDrawerOpen` indicates whether the drawer, if the layout has
-such, is open; otherwise, it has no significance.
-
-The header disappears on small devices unless
-`fixedHeader` is true. The drawer opens and closes with user interactions
-unless `fixedDrawer` is true, in which case it is permanently open on large
-screens. Tabs scroll horisontally unless `fixedTabs` is true.
-Finally, the header respects `mode`
-
-The `state` is the opaque
-layout component state; use the function `initState` to construct it. If you
-change the number of tabs, you must re-initialise this state.
--}
-type alias Model =
-  { isDrawerOpen : Bool
-  -- State
-  , state : State
-  }
-
-
-{-| Initialiser for Layout component state. Supply a number of tabs you
-use in your layout. If you subsequently change the number of tabs, you
-must re-initialise the state.
--}
-initState : Int -> State
-initState no_tabs =
-  S { tabs = Array.repeat no_tabs Ripple.model
-    , isSmallScreen = False -- TODO
-    , isCompact = False
-    , isAnimating = False
-    , isScrolled = False
-    }
-
-
-{-| Default configuration of the layout: Fixed header, non-fixed drawer,
+{-| TODO Default configuration of the layout: Fixed header, non-fixed drawer,
 non-fixed tabs, tabs do not ripple, tab 0 is selected, standard header
 behaviour.
 TODO
 -}
 defaultLayoutModel : Model
 defaultLayoutModel =
-  { isDrawerOpen = False
-  , state = initState 0
+  { ripples = Dict.empty
+  , isSmallScreen = False -- TODO
+  , isCompact = False
+  , isAnimating = False
+  , isScrolled = False
+  , isDrawerOpen = False
   }
 
 
@@ -175,11 +137,10 @@ type Msg
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  let (S state) = model.state in
-    case action of
+  case action of
     SmallScreen isSmall ->
-      { model
-      | state = S ({ state | isSmallScreen = isSmall })
+      { model  
+      | isSmallScreen = isSmall 
       , isDrawerOpen = not isSmall && model.isDrawerOpen
       }
       |> pure
@@ -188,17 +149,12 @@ update action model =
       { model | isDrawerOpen = not model.isDrawerOpen } |> pure
 
     Ripple tabIndex action' ->
-      let
-        (state', effect) =
-          Array.get tabIndex (s model).tabs
-          |> Maybe.map (Ripple.update action')
-          |> Maybe.map (\(ripple', effect) ->
-            ({ state | tabs = Array.set tabIndex ripple' (s model).tabs }
-            , Cmd.map (Ripple tabIndex) effect))
-          |> Maybe.withDefault (pure state)
-      in
-        ({ model | state = S state' }, effect)
-
+      Dict.get tabIndex model.ripples
+      |> Maybe.withDefault Ripple.model
+      |> Ripple.update action'
+      |> map1st (\ripple' -> 
+          { model | ripples = Dict.insert tabIndex ripple' model.ripples })
+      |> map2nd (Cmd.map (Ripple tabIndex))
 
     ScrollTab tab ->
       (model, Cmd.none) -- TODO
@@ -207,32 +163,35 @@ update action model =
       let 
         isScrolled = 0.0 < offset 
       in
-        if isScrolled /= state.isScrolled then
+        if isScrolled /= model.isScrolled then
           update 
             (TransitionHeader { toCompact = isScrolled, fixedHeader = fixedHeader })
             model
         else
-          (model, Cmd.none)
+          pure model
 
     TransitionHeader { toCompact, fixedHeader } -> 
       let 
-        headerVisible = (not state.isSmallScreen) || fixedHeader
-        state' = 
-          { state 
+        headerVisible = (not model.isSmallScreen) || fixedHeader
+        model' = 
+          { model 
           | isCompact = toCompact
           , isAnimating = headerVisible 
           }
       in
-        if not state.isAnimating then 
-          ( { model | state = S state' }
+        if not model.isAnimating then 
+          ( { model 
+            | isCompact = toCompact
+            , isAnimating = headerVisible 
+            }
           , delay 200 TransitionEnd -- See comment on transitionend in view. 
           )
         else
-          (model, Cmd.none)
+          pure model
 
 
     TransitionEnd -> 
-      ( { model | state = S { state | isAnimating = False } }
+      ( { model | isAnimating = False }
       , Cmd.none
       )
 
@@ -430,10 +389,11 @@ tabsView lift config model (tabs, tabStyles) =
               ]
               [ Just tab
               , if config.rippleTabs then
-                  Array.get tabIndex (s model).tabs |> Maybe.map (
-                    Ripple.view [ class "mdl-layout__tab-ripple-container" ]
-                    >> App.map (Ripple tabIndex >> lift)
-                  )
+                  Dict.get tabIndex model.ripples 
+                    |> Maybe.withDefault Ripple.model
+                    |> Ripple.view [ class "mdl-layout__tab-ripple-container" ]
+                    |> App.map (Ripple tabIndex >> lift)
+                    |> Just
                 else
                   Nothing
               ]
@@ -461,10 +421,10 @@ headerView lift config model (drawerButton, rows, tabs) =
           [ ("mdl-layout__header", True)
           , ("is-casting-shadow", 
               config.mode == Standard || 
-              (isWaterfall config.mode && (s model).isCompact)
+              (isWaterfall config.mode && model.isCompact)
             )
-          , ("is-animating", (s model).isAnimating)
-          , ("is-compact", (s model).isCompact)
+          , ("is-animating", model.isAnimating)
+          , ("is-compact", model.isCompact)
           , (mode, mode /= "")
           ]
       ]
@@ -589,7 +549,7 @@ view lift model options { drawer, header, tabs, main } =
         [ classList
             [ ("mdl-layout ", True)
             , ("is-upgraded", True)
-            , ("is-small-screen", (s model).isSmallScreen)
+            , ("is-small-screen", model.isSmallScreen)
             , ("has-drawer", drawer /= [])
             , ("has-tabs", hasTabs)
             , ("mdl-js-layout", True)
