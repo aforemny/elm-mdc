@@ -13,7 +13,7 @@ comp-tea:
 docs: 
 	$(ELM) --docs=docs.json 
 
-test: docs comp comp-tea docs
+test: docs demo comp comp-tea 
 	
 wip-pages : 
 	(cd demo; elm-make Demo.elm --output ../$(PAGES)/wip.js)

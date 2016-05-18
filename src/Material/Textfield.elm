@@ -300,6 +300,6 @@ render
 render =
   Parts.create 
     view' (\action model -> (update action model, Cmd.none))
-    .textfield (\c x -> { c | textfield = x }) 
+    .textfield (\x c -> { c | textfield = x }) 
     defaultModel
 

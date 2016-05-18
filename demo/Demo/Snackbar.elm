@@ -9,7 +9,7 @@ import Time exposing (Time, millisecond)
 
 import Material.Helpers exposing (map1st, map2nd, delay, pure, cssTransitionStep)
 import Material.Color as Color
-import Material.Options as Options exposing (cs, css, Style)
+import Material.Options as Options exposing (cs, css, Style, nop)
 import Material.Snackbar as Snackbar
 import Material.Button as Button 
 import Material.Grid exposing (..)
@@ -186,14 +186,11 @@ clickView model (k, square) =
     color = 
       Color.color hue shade
 
-    selected' =
-      square == Active
-
     (width, height, margin, selected) = 
       if square == Appearing || square == Disappearing then
         ("0", "0", "16px 0", False)
       else
-        (boxWidth, boxHeight, "16px 16px", selected')      
+        (boxWidth, boxHeight, "16px 16px", square == Active)
 
   in
     {- In order to get the box appearance and disappearance animations 
@@ -208,10 +205,13 @@ clickView model (k, square) =
       , css "display" "inline-block"
       , css "margin" margin
       , css "z-index" "0"
-      , transitionOuter
-      , Options.key (toString k)
-        {- Interestingly, not setting key messes up CSS transitions in
-        spectacular ways. -}
+      {- Virtual-dom reuse of divs when a box disappears triggers css 
+      transitions. As of 0.17, we an no longer use `key` to force 
+      virtual-dom to make each box stay with its original div, so we
+      must manually remove transitions when they might be dangerous.
+      -}
+      --, Options.key (toString k)
+      , if square /= Waiting then transitionOuter else nop
       ]
       [ Options.div
           [ Color.background color
@@ -232,7 +232,7 @@ clickView model (k, square) =
           , css "bottom" "0"
           , css "left" "0"
              -- Transitions
-          ,  transitionInner
+          ,  if square /= Waiting then transitionInner else nop
           ]
           [ div [] [ text <| toString k ] ]
         ]

@@ -639,4 +639,4 @@ render
 render =
   Parts.create1 
     view update 
-    .layout (\c x -> { c | layout = x }) 
+    .layout (\x c -> { c | layout = x }) 

@@ -2,7 +2,6 @@ import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Platform.Cmd exposing (Cmd)
-import Task exposing (Task)
 
 import Material.Button as Button
 import Material.Scheme
@@ -84,7 +83,7 @@ update action model =
 
 
 view : Model -> Html Msg
-view addr model =
+view model =
   div
     [ style [ ("padding", "2rem") ] ]
     [ text ("Current count: " ++ toString model.count )

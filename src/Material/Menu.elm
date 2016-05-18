@@ -502,7 +502,7 @@ render
   -> List (Item m)
   -> (Html m)
 render = 
-  Parts.create view' update .menu (\y x -> {y | menu=x}) defaultModel 
+  Parts.create view' update .menu (\x y -> {y | menu=x}) defaultModel 
     
   
 -- HELPERS

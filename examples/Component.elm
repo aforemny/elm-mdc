@@ -2,7 +2,6 @@ import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Platform.Cmd exposing (Cmd)
-import Task exposing (Task)
 
 import Material
 import Material.Scheme
@@ -69,7 +68,6 @@ view model =
   div 
     [ style [ ("padding", "2rem") ] ]
     [ text ("Current count: " ++ toString model.count )
-
     {- We construct the instances of the Button component that we need, one 
     for the increase button, one for the reset button. First, the increase
     button. The arguments are: 
@@ -102,6 +100,3 @@ main =
     , subscriptions = always Sub.none 
     , update = update
     }
-
-
-

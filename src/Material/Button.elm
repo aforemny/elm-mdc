@@ -325,6 +325,4 @@ render
   -> List (Html m)
   -> Html m
 render = 
-  Parts.create view update .button (\y x -> {y | button=x}) Ripple.model 
-    
-  
+  Parts.create view update .button (\x y -> {y | button=x}) Ripple.model 

@@ -16,16 +16,16 @@ for a live demo.
 
 The component model of the library is simply the Elm Architecture (TEA), i.e.,
 each component has types `Model` and `Msg`, and values `view` and `update`. A
-minimal example using this library in plain TEA can be found
-  [here](https://github.com/debois/elm-mdl/blob/master/examples/Component-TEA.elm).
+minimal example using this library as plain TEA can be found
+[here](https://github.com/debois/elm-mdl/blob/master/examples/Component-TEA.elm).
 
-Using more than a few component in plain TEA is  unwieldy because of the large
-amount of boilerplate one has to write. This library provides the "component 
-support" for getting rid of most of that boilerplate. A minimal example using
-component support is
+Using more than a few component in plain TEA is unwieldy because of the large
+amount of boilerplate one has to write. This library uses the 
+[Parts model](https://github.com/debois/elm-parts) for getting rid of most of
+  that boilerplate. A minimal example using the parts model is
 [here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
 
-It is important to note that component support lives __within__ TEA; 
+It is important to note that the parts model lives __within__ TEA; 
 it is not an alternative architecture. 
 
 # Getting started
@@ -33,8 +33,7 @@ it is not an alternative architecture.
 The easiest way to get started is to start with one of the minimal examples above.
 We recommend going with the one that uses 
 [the one that uses](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm)
-the library's component support rather than working directly in plain Elm
-Architecture.
+the library's component support rather than working directly in plain Elm.
 
 # Interfacing with CSS
 
@@ -44,36 +43,35 @@ will have to load that. See the
 module for exposing details. (The starting point implementations above
 load CSS automatically.)
 
+# View functions
+
 The view function of most components has this signature: 
 
-    view : Signal.Address -> Model -> List Style -> Html 
+    view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 
-The address is standard, and `Model` is just the model type of the component. 
-The third argument, `List Style`, is a mechanism for you to specify additional
-classes and CSS for the component. You need this, e.g., when you want to
-specify the width of a button. See the
-[Style](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Style)
-module for exposing details. 
+For technical reasons, rather than using `Html.App.map f (view ...)`, you
+provide the lifting function `f` directly to the component as the first
+argument. The `Model` argument is standard.  The third argument, `List (Property m)`,
+is a mechanism for you to specify additional classes and CSS for the component, as well
+as messages to send in response to events on the component.  You need this,
+e.g., when you want to specify the width of a button. See the
+[Options](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Options)
+module for details. 
 
 Material Design defines a color palette. The 
 [Color](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Color)
-module contains exposing various `Style` values and helper functions for working with
+module contains exposing various `Property` values and helper functions for working with
 this color palette.
 
+NB! If you are using the parts model rather than plain TEA, call `render` instead of `view`. 
 
+# Parts model
 
-# Component Support
-
-TODO
-
-This module contains only convenience functions for working with nested 
+The present module contains only convenience functions for working with nested 
 components in the Elm architecture. A minimal example using this library
 with component support can be found 
 [here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
 We encourage you to use the library in this fashion.
-
-All examples in this subsection is from the 
-[above minimal example](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm)
 
 Here is how you use component support in general.  First, boilerplate. 
 
@@ -100,19 +98,19 @@ Here is how you use component support in general.  First, boilerplate.
 
         type Msg = 
           ...
-          | Mdl (Material.Msg Msg)
+          | Mdl Material.Msg 
 
- 4. Handle that action in your update function as follows:
+ 4. Handle that message in your update function as follows:
 
-        update action model = 
-          case action of 
+        update message model = 
+          case message of 
             ...
-            Mdl action' -> 
-              Material.update Mdl action' model
+            Mdl message' -> 
+              Material.update Mdl message' model
 
-Next, make the component instances you need. Do this in the View section of your 
-source file. Let's say you need a textfield for name entry, and you'd like to
-be notifed whenever the field changes value through your own NameChanged action: 
+You now have sufficient boilerplate for using __any__ number of elm-mdl components. 
+Let's say you need a textfield for name entry, and you'd like to be notifed
+whenever the field changes value through your own NameChanged action: 
 
         import Material.Textfield as Textfield
 
@@ -134,14 +132,14 @@ be notifed whenever the field changes value through your own NameChanged action:
 
         nameInput : Textfield.Instance Material.Model Msg
         nameInput = 
-          Textfield.instance 2 MDL Textfield.model 
-            [ Textfield.fwdInput NameChanged 
-            ] 
         
         view addr model = 
           ...
-          nameInput.view addr model.mdl 
-
+          Textfield.instance [0] Mdl model.mdl
+            [ css "width" "16rem"
+            , Textfield.floatingLabel
+            , Textfield.onInput NameChanged
+            ] 
 
 The win relative to using plain Elm Architecture is that adding a component
 neither requires you to update your model, your Msgs, nor your update function. 
@@ -165,16 +163,17 @@ and simply comment out the components you do not need.
 import Dict 
 import Platform.Cmd exposing (Cmd)
 
+import Parts exposing (Indexed)
+import Material.Helpers exposing (map1st, map2nd)
+
 import Material.Button as Button
 import Material.Textfield as Textfield
 import Material.Menu as Menu
 import Material.Snackbar as Snackbar
 import Material.Layout as Layout
 --import Material.Toggles as Toggles
-import Material.Helpers exposing (map1st)
-import Parts exposing (Indexed)
-
 --import Material.Template as Template
+
 
 {-| Model encompassing all Material components. Since some components store
 user actions in their model (notably Snackbar), the model is generic in the 
@@ -220,7 +219,7 @@ update :
   -> Msg 
   -> { model | mdl : Model }
   -> ({ model | mdl : Model }, Cmd obs)
-update lift action model = 
-  Parts.update lift action model.mdl 
+update lift msg model = 
+  Parts.update lift msg model.mdl 
     |> map1st (\mdl -> { model | mdl = mdl })
 
