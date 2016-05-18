@@ -12,9 +12,10 @@ import Hop.Navigate exposing (navigateTo)
 import Hop.Matchers exposing (match1)
 -}
 
+import Material
 import Material.Color as Color
-import Material.Layout as Layout exposing (defaultLayoutModel)
-import Material.Helpers exposing (lift, lift', key)
+import Material.Layout as Layout 
+import Material.Helpers exposing (lift, lift')
 import Material.Options as Style
 import Material.Scheme as Scheme
 
@@ -61,7 +62,7 @@ router =
 
 
 type alias Model =
-  { layout : Layout.Model
+  { mdl : Material.Model
   --, routing : Routing
   , buttons : Demo.Buttons.Model
   , badges : Demo.Badges.Model
@@ -76,7 +77,7 @@ type alias Model =
 
 model : Model
 model =
-  { layout = defaultLayoutModel
+  { mdl = Material.model
   --, routing = route0 
   , buttons = Demo.Buttons.model
   , badges = Demo.Badges.model
@@ -100,7 +101,8 @@ type Msg
   | HopMsg ()
   | 
  -} 
-    LayoutMsg Layout.Msg
+    SelectTab Int
+  | Mdl Material.Msg
   | BadgesMsg Demo.Badges.Msg
   | ButtonsMsg Demo.Buttons.Msg
   | MenusMsg Demo.Menus.Msg
@@ -145,7 +147,11 @@ update action model =
     HopMsg _ ->
       ( model, Cmd.none )
 -}
-    LayoutMsg    a -> lift  .layout     (\m x->{m|layout    =x}) LayoutMsg   Layout.update          a model
+    SelectTab k -> 
+      ( { model | selectedTab = k } , Cmd.none )
+
+    Mdl msg -> 
+      Material.update Mdl msg model 
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
 
@@ -313,8 +319,11 @@ view model =
            model
         ]
   in
-    Layout.view LayoutMsg model.layout
-      []
+    Layout.render Mdl model.mdl
+      [ Layout.selectedTab model.selectedTab
+      , Layout.onSelectTab SelectTab
+      , Layout.fixedHeader
+      ]
       { header = header
       , drawer = drawer
       , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
@@ -338,12 +347,13 @@ init : ( Model, Cmd.Cmd Msg )
 init =
   ( model, Cmd.none )
 
+
 main : Program Never
 main =
   App.program 
     { init = ( model, none ) 
     , view = view
-    , subscriptions = always <| Layout.subscriptions LayoutMsg
+    , subscriptions = always Sub.none -- TODO: always Layout.subscriptions 
     , update = update
     }
 

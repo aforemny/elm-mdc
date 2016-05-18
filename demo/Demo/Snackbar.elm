@@ -7,7 +7,7 @@ import Array exposing (Array)
 import Time exposing (Time, millisecond)
 
 
-import Material.Helpers exposing (map1st, map2nd, delay, pure, fx)
+import Material.Helpers exposing (map1st, map2nd, delay, pure, cssTransitionStep)
 import Material.Color as Color
 import Material.Options as Options exposing (cs, css, Style)
 import Material.Snackbar as Snackbar
@@ -84,7 +84,7 @@ add f model =
   in 
     ( model'
     , Cmd.batch 
-        [ fx (Appear model.count)
+        [ cssTransitionStep (Appear model.count)
         , effect 
         ]
     )
@@ -102,7 +102,7 @@ mapSquare k f model =
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case action of
+  case Debug.log "Action" action of
     AddSnackbar ->
       add (\k -> Snackbar.snackbar k ("Snackbar message #" ++ toString k) "UNDO") model
 
@@ -116,7 +116,7 @@ update action model =
       model |> mapSquare k (always Active) |> pure
 
     Snackbar (Snackbar.End k) -> 
-      model |> mapSquare k (always Idle) |> pure
+      model |> mapSquare k (\sq -> if sq /= Disappearing then Idle else sq) |> pure
 
     Snackbar (Snackbar.Click k) -> 
       ( model |> mapSquare k (always Disappearing)
@@ -139,9 +139,6 @@ update action model =
 
 
 -- VIEW
-
-
-
 
 
 boxHeight : String
@@ -170,7 +167,6 @@ transitionOuter =
   css "transition" 
     <| "width " ++ toString transitionLength ++ "ms ease-in-out 0s, "
     ++ "margin " ++ toString transitionLength ++ "ms ease-in-out 0s"
-
 
 clickView : Model -> Square -> Html a
 clickView model (k, square) =

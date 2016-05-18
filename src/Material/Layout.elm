@@ -1,10 +1,15 @@
 module Material.Layout exposing
   ( subscriptions
-  , Mode(..), Model, defaultLayoutModel
+  , Model, defaultModel
   , Msg, update
+  , Property
+  , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
+  , waterfall, seamed, scrolling, selectedTab, onSelectTab
   , row, spacer, title, navigation, link
   , Contents, view
+  , render
   )
+
 
 {-| From the
 [Material Design Lite documentation](https://www.getmdl.io/components/index.html#layout-section):
@@ -29,21 +34,35 @@ module Material.Layout exposing
 > consistency in outward appearance and behavior while maintaining development
 > flexibility and ease of use.
 
-# Setup
+# Subscriptions
 @docs subscriptions
 
-# Model & Msgs
-@docs Mode, Model, defaultLayoutModel, Msg, update
+# Render
+@docs Contents, render
 
-# View
-@docs Contents, view
 
-## Sub-views
+# Options
+@docs Property
+
+## Tabs
+@docs fixedTabs, rippleTabs
+
+## Header
+@docs fixedHeader, fixedDrawer
+@docs waterfall, seamed, scrolling, selectedTab
+
+## Events
+@docs onSelectTab
+
+# Sub-views
 @docs row, spacer, title, navigation, link
+
+# Elm architecture
+@docs view, Msg, Model, defaultModel, update
+
 
 -}
 
--- TODO: Component support
 
 import Dict exposing (Dict)
 import Maybe exposing (andThen, map)
@@ -55,10 +74,11 @@ import Platform.Cmd exposing (Cmd)
 import Window
 import Json.Decode as Decoder
 
+import Parts
 import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
-import Material.Options as Options exposing (Style, cs, nop)
+import Material.Options as Options exposing (Style, cs, nop, css, styled)
 
 import DOM
 
@@ -66,15 +86,7 @@ import DOM
 -- SETUP
 
 
-{-| TODO Setup various signals layout needs (viewport size changes, scrolling). Use
-with StartApp like so, supposing you have a `LayoutMsg` encapsulating
-actions of the
-layout:
-
-    inputs : List (Signal.Signal Msg)
-    inputs =
-      [ Layout.subscriptions LayoutMsg
-      ]
+{-| Layout subscribes to changes in viewport size. 
 -}
 subscriptions : (Msg -> msg) -> Sub msg
 subscriptions f =
@@ -87,7 +99,7 @@ subscriptions f =
 -- MODEL
 
 
-{-|
+{-| Component mode. 
 -}
 type alias Model =
   { ripples : Dict Int Ripple.Model
@@ -99,15 +111,12 @@ type alias Model =
   }
 
 
-{-| TODO Default configuration of the layout: Fixed header, non-fixed drawer,
-non-fixed tabs, tabs do not ripple, tab 0 is selected, standard header
-behaviour.
-TODO
+{-| Default component model. 
 -}
-defaultLayoutModel : Model
-defaultLayoutModel =
+defaultModel : Model
+defaultModel =
   { ripples = Dict.empty
-  , isSmallScreen = False -- TODO
+  , isSmallScreen = False -- TODO: Initial value?
   , isCompact = False
   , isAnimating = False
   , isScrolled = False
@@ -118,12 +127,10 @@ defaultLayoutModel =
 -- ACTIONS, UPDATE
 
 
-{-| Component actions.
-TODO
+{-| Component messages.
 -}
 type Msg
   = ToggleDrawer
-  -- Private
   | SmallScreen Bool -- True means small screen
   | ScrollTab Float
   | ScrollPane Bool Float -- True means fixedHeader
@@ -199,8 +206,6 @@ update action model =
 -- PROPERTIES
 
 
-{-|
--}
 type alias Config m = 
   { fixedHeader : Bool
   , fixedDrawer : Bool
@@ -208,12 +213,10 @@ type alias Config m =
   , rippleTabs : Bool
   , mode : Mode
   , selectedTab : Int
-  , onSwitchTab : Maybe (Int -> Attribute m)
+  , onSelectTab : Maybe (Int -> Attribute m)
   }
 
 
-{-|
--}
 defaultConfig : Config m
 defaultConfig = 
   { fixedHeader = False
@@ -221,54 +224,79 @@ defaultConfig =
   , fixedTabs = False
   , rippleTabs = True
   , mode = Standard
-  , onSwitchTab = Nothing
+  , onSelectTab = Nothing
   , selectedTab = -1
   }
 
 
+{-| Layout options. 
+-}
 type alias Property m = 
   Options.Property (Config m) m
 
 
+{-| Header is "fixed": It appears even on small screens. 
+-}
+fixedHeader : Property m
+fixedHeader =
+  Options.set (\config -> { config | fixedHeader = True })
 
+
+
+{-| Drawer is "fixed": It is always open on large screens. 
+-}
 fixedDrawer : Property m
 fixedDrawer =
   Options.set (\config -> { config | fixedDrawer = True })
 
 
+{-| Tabs are spread out to consume available space and do not scroll horisontally.
+-}
 fixedTabs : Property m
 fixedTabs =
   Options.set (\config -> { config | fixedTabs = True })
 
 
+{-| Make tabs ripple when clicked. 
+-}
 rippleTabs : Property m
 rippleTabs =
   Options.set (\config -> { config | rippleTabs = True })
 
 
+{-| Header behaves as "Waterfall" header: On scroll, the top (argument `True`) or
+the bottom (argument `False`) of the header disappears. 
+-}
 waterfall : Bool -> Property m
 waterfall b =
   Options.set (\config -> { config | mode = Waterfall b })
 
 
+{-| Header behaves as "Seamed" header: it does not cast shadow, is permanently
+affixed to the top of the screen.
+-}
 seamed : Property m
 seamed = 
   Options.set (\config -> { config | mode = Seamed })
 
 
+{-| Header scrolls with contents. 
+-}
 scrolling : Property m
 scrolling = 
   Options.set (\config -> { config | mode = Scrolling })
 
-
+{-| Set the selected tab. 
+-}
 selectedTab : Int -> Property m
 selectedTab k =
   Options.set (\config -> { config | selectedTab = k })
 
-
-onSwitchTab : (Int -> m) -> Property m
-onSwitchTab f = 
-  Options.set (\config -> { config | onSwitchTab = Just (f >> onClick) })
+{-| Receieve notification when tab `k` is selected.
+-}
+onSelectTab : (Int -> m) -> Property m
+onSelectTab f = 
+  Options.set (\config -> { config | onSelectTab = Just (f >> onClick) })
 
 
 -- AUXILIARY VIEWS
@@ -322,7 +350,6 @@ row styles =
 header-row when content scrolls. 
 -}
 type Mode
-
   = Standard
   | Seamed
   | Scrolling
@@ -348,11 +375,10 @@ tabsView :
 tabsView lift config model (tabs, tabStyles) =
   let 
     chevron direction offset =
-      div
-        [ classList
-            [ ("mdl-layout__tab-bar-button", True)
-            , ("mdl-layout__tab-bar-" ++ direction ++ "-button", True)
-            ]
+      styled div
+        [ cs "mdl-layout__tab-bar-button"
+        , cs ("mdl-layout__tab-bar-" ++ direction ++ "-button")
+        , Options.many tabStyles
         ]
         [ Icon.view ("chevron_" ++ direction) 
             [ Icon.size24
@@ -383,7 +409,7 @@ tabsView lift config model (tabs, tabStyles) =
                   [ ("mdl-layout__tab", True)
                   , ("is-active", tabIndex == config.selectedTab)
                   ]
-              , config.onSwitchTab 
+              , config.onSelectTab 
                   |> Maybe.map ((|>) tabIndex)
                   |> Maybe.withDefault Helpers.noAttr
               ]
@@ -568,7 +594,7 @@ view lift model options { drawer, header, tabs, main } =
         , contentDrawerButton
         , main' 
             ( class "mdl-layout__content" 
-            :: Helpers.key ("elm-mdl-layout-" ++ toString config.selectedTab)
+            --:: Helpers.key ("elm-mdl-layout-" ++ toString config.selectedTab)
             :: (
               if isWaterfall config.mode then 
                 [ on "scroll" 
@@ -586,4 +612,31 @@ view lift model options { drawer, header, tabs, main } =
     ]
 
 
+type alias Container c =
+  { c | layout : Model }
 
+
+{-| Component render. Refer to `demo/Demo.elm` on github for an example use. 
+Excerpt:
+
+    Layout.render Mdl model.mdl
+      [ Layout.selectedTab model.selectedTab
+      , Layout.onSelectTab SelectTab
+      , Layout.fixedHeader
+      ]
+      { header = myHeader
+      , drawer = myDrawer
+      , tabs = (tabTitles, [])
+      , main = [ MyComponent.view model ]
+      }
+-}
+render 
+  : (Parts.Msg (Container b) -> c)
+ -> Container b
+ -> List (Property c) 
+ -> Contents c 
+ -> Html c
+render =
+  Parts.create1 
+    view update 
+    .layout (\c x -> { c | layout = x }) 

@@ -169,6 +169,7 @@ import Material.Button as Button
 import Material.Textfield as Textfield
 import Material.Menu as Menu
 import Material.Snackbar as Snackbar
+import Material.Layout as Layout
 --import Material.Toggles as Toggles
 import Material.Helpers exposing (map1st)
 import Parts exposing (Indexed)
@@ -184,6 +185,7 @@ type alias Model =
   , textfield : Indexed Textfield.Model
   , menu : Indexed Menu.Model
   , snackbar : Maybe (Snackbar.Model Int) 
+  , layout : Layout.Model
 --  , toggles : Indexed Toggles.Model
 --  , template : Indexed Template.Model
   }
@@ -197,6 +199,7 @@ model =
   , textfield = Dict.empty
   , menu = Dict.empty
   , snackbar = Nothing
+  , layout = Layout.defaultModel
 --  , toggles = Dict.empty
 --, template = Dict.empty
   }

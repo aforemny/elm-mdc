@@ -30,18 +30,22 @@ Refer to
 [this site](https://debois.github.io/elm-mdl/#/textfields)
 for a live demo.
  
-This implementation provides only single-line.
+This implementation provides only single-line and password.
+
+# Component render
+@docs render
 
 # Options
-@docs Property, value, label, floatingLabel, error, disabled, onInput, password
+@docs Property, value
+  
+# Appearance
+@docs label, floatingLabel, error, disabled
 
-# Part
-@docs render
+# Type 
+@docs password, onInput
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
-
-
 
 -}
 
@@ -274,14 +278,18 @@ view' lift model options =
 
 -- PART
 
-
-{-|
--}
 type alias Container c =
   { c | textfield : Indexed Model }
 
-{-|
-  TODO
+{-| Component render. Below is an example, assuming boilerplate setup as indicated 
+  in `Material`, and a user message `ChangeAgeMsg Int`.
+
+    Textfield.render Mdl [0] model.mdl
+      [ Textfield.label "Your age?"
+      , Textfield.floatingLabel
+      , Textfield.value model.age
+      , Textfield.onInput (String.toInt >> ChangeAgeMsg)
+      ]
 -}
 render 
   : (Parts.Msg (Container c) -> m)

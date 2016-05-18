@@ -38,14 +38,14 @@ import Material.Options as Options exposing (Property, cs, many)
 
 
 
-{-| Optional style for Badge. No background for badge 
+{-| No background for badge.
 -}
 noBackground : Property c m
 noBackground = 
   cs "mdl-badge--no-background"
 
 
-{-| Optional style for Badge. Overlap Badge 
+{-| Badge overlaps text/contents. 
 -}
 overlap : Property c m
 overlap = 

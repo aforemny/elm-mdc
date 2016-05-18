@@ -59,7 +59,15 @@ initial page, which will produce a flicker on page load. The container is
 included only to provide an option to get started quickly and for use with
 elm-reactor.
 
-TODO: Usage example
+Example use: 
+
+  view : Model -> Html Msg
+  view = 
+    div 
+      []
+      [ Scheme.topWithScheme Color.Teal Color.Red contents
+      , ...
+      ]
 -}
 topWithScheme: Hue -> Hue -> Html a -> Html a
 topWithScheme primary accent content =

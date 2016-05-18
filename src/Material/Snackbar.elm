@@ -25,8 +25,8 @@ for a live demo.
 @docs Msg, update
 @docs view
 
-# Component support
-Snackbar does not have component support. It must be used as a regular TEA
+# Render
+Snackbar does not have a `render` value. It must be used as a regular TEA
 component. 
 -}
 
@@ -85,7 +85,7 @@ model : Model a
 model =
   { queue = []
   , state = Inert
-  , seq = 0
+  , seq = -1
   }
 
 
@@ -130,7 +130,6 @@ type Transition
   | Clicked
 
 
-
 next : Model a -> Cmd Transition -> Cmd (Msg a)
 next model = 
   Cmd.map (Move model.seq)
@@ -154,7 +153,6 @@ move transition model =
       ( { model | state = Fading contents }
       , Cmd.batch 
           [ delay contents.fade Timeout |> next model
-          , Begin contents.payload |> fx
           ]
       )
 
@@ -230,6 +228,7 @@ update action model =
     Move seq transition ->
       if seq == model.seq then
         move transition model
+          --|> \pair -> let _ = Debug.log "Post move" (fst pair) in pair
       else
         (model, none)
 

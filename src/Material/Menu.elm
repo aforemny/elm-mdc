@@ -31,14 +31,22 @@ Refer to
 [this site](https://debois.github.io/elm-mdl/#/menus)
 for a live demo.
 
+# Render
+@docs Item, render
+
+# Options
+@docs Property
+
+## Alignment
+@docs bottomLeft, bottomRight, topLeft, topRight
+
+## Appearance
+@docs ripple
+
 # Elm architecture
 @docs Model, defaultModel, Msg, update, view
 
-# Alignment
-@docs bottomLeft, bottomRight, topLeft, topRight
 
-TODO
-@docs Item, Property, render, ripple
 -}
 
 
@@ -50,7 +58,7 @@ import Html.Events as Html exposing (defaultOptions)
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode exposing (string)
-import Material.Helpers as Helpers exposing (fx)
+import Material.Helpers as Helpers exposing (cssTransitionStep)
 import String
 import Html.App
 
@@ -157,7 +165,7 @@ update action model =
               _       -> Opening
         , geometry = Just geometry
         }
-      , fx Tick
+      , cssTransitionStep Tick
       )
 
     Tick ->
@@ -463,13 +471,28 @@ makeItem lift config model n item =
 -- COMPONENT
 
 
-{-|
--}
 type alias Container c =
   { c | menu : Indexed Model }
 
 
-{-|
+{-| Component render. Below is an example, assuming boilerplate setup as
+indicated in `Material`, and a user message `Select String`.
+
+    item : String -> Html Msg
+    item str = 
+      Html.div 
+        [ Html.Events.onClick (Select str) ]
+        [ Html.text str ]
+
+    Menu.render Mdl [idx] model.mdl 
+      [ Menu.topLeft
+      , Menu.ripple
+      ] 
+      [ Menu.Item False True  <| item "Some item"
+      , Menu.Item True  True  <| item "Another item"
+      , Menu.Item False False <| item "Disabled item"
+      , Menu.Item False True  <| item "Yet another item"
+      ]
 -}
 render 
   : (Parts.Msg (Container c) -> m)

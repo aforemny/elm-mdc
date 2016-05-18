@@ -8,7 +8,7 @@ import Html.Events
 import Json.Decode as Json exposing ((:=), at)
 import Platform.Cmd exposing (Cmd, none)
 
-import Material.Helpers exposing (effect, fx)
+import Material.Helpers exposing (effect, fx, cssTransitionStep)
 import DOM
 
 
@@ -110,7 +110,13 @@ update action model =
             else
               model.ignoringMouseDown
         }
-        |> effect (fx Tick)
+        |> effect (cssTransitionStep Tick)
+           {- Issuing Tick immediately does not cause a CSS transition.
+           Presumably, the principled way to proceed is to use
+           elm-lang/animation-frame; but it's not entirely clear to me exactly
+           how to do that in a way that'll be sufficiently convenient for 
+           end-users. 
+           -}
 
     Up ->
       { model

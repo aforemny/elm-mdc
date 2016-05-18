@@ -1,12 +1,13 @@
-import StartApp
+import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
-import Platform.Cmd exposing (Cmd, Never)
+import Platform.Cmd exposing (Cmd)
 import Task exposing (Task)
 
 import Material
 import Material.Scheme
 import Material.Button as Button
+import Material.Options exposing (css)
 
 
 -- MODEL
@@ -33,7 +34,7 @@ model =
 type Msg
   = Increase
   | Reset
-  | MDL (Material.Msg Msg)   
+  | MDL Material.Msg 
       -- Boilerplate: Msg for MDL actions (ripple animations etc.).
 
 
@@ -50,15 +51,10 @@ update action model =
       , Cmd.none
       )
 
-    {- Boilerplate: MDL action handler. It should always look like this, except
-       you can of course choose to put its saved model someplace other than 
-       model.mdl.
+    {- Boilerplate: MDL action handler. It should always look like this.
     -}
     MDL action' -> 
-      let (mdl', fx) = 
-        Material.update MDL action' model.mdl 
-      in 
-        ( { model | mdl = mdl' } , fx )
+      Material.update MDL action' model
 
 
 -- VIEW
@@ -68,92 +64,44 @@ type alias Mdl =
   Material.Model 
 
 
-{- We construct the instances of the Button component that we need, one 
-for the increase button, one for the reset button. First, the increase
-button. The arguments are: 
-
-  - An instance id (the `0`). Every component that uses the same model collection
-    (model.mdl in this file) must have a distinct instance id. 
-  - An Msg creator (`MDL`), lifting MDL actions to your Msg type. 
-  - A button view (`flat`). 
-  - An initial model (`(Button.model True)`---a button with a ripple animation. 
-  - A list of observations you want to make of the button (final argument). 
-    In this case, we hook up Click events of the button to the `Increase` action
-    defined above. 
--}
-increase : Button.Instance Mdl Msg
-increase =
-  Button.instance 0 MDL Button.flat (Button.model True) 
-    [ Button.fwdClick Increase ]
-
-
-{- Next, the reset button. This one has id 1, does not ripple, and forwards its
-click event to our Reset action.
--}
-reset : Button.Instance Mdl Msg
-reset = 
-  Button.instance 1 MDL Button.flat (Button.model False)
-    [ Button.fwdClick Reset ]
-
-
-{- Notice that we did not have to add increase and reset separately to model.mdl, 
-and we did not have to add to our update actions to handle their internal events.
--}
-
-
-view : Signal.Address Msg -> Model -> Html
-view addr model =
-  div
-    [ style
-      [ ("margin", "auto")
-      , ("padding-left", "5%")
-      , ("padding-right", "5%")
-      ]
-    ]
+view : Model -> Html Msg
+view model =
+  div 
+    [ style [ ("padding", "2rem") ] ]
     [ text ("Current count: " ++ toString model.count )
-    , increase.view addr model.mdl [] [ text "Increase" ]
-    , reset.view    addr model.mdl [] [ text "Reset" ]
-    -- Note that we use the .view function of our component instances to
-    -- actually render the component. 
+
+    {- We construct the instances of the Button component that we need, one 
+    for the increase button, one for the reset button. First, the increase
+    button. The arguments are: 
+
+      - An instance id (the `[0]`). Every component that uses the same model
+        collection (model.mdl in this file) must have a distinct instance id.  -
+      - A Msg constructor (`Mdl`), lifting MDL actions to your Msg type. 
+      - An initial model (`(Button.model True)`---a button with a ripple animation. 
+
+    Notice that we do not have to add increase and reset separately to model.mdl, 
+    and we did not have to add to our update actions to handle their internal events.
+    -}
+    , Button.render MDL [0] model.mdl 
+        [ Button.onClick Increase 
+        , css "margin" "0 24px"
+        ]
+        [ text "Increase" ]
+    , Button.render MDL [1] model.mdl 
+        [ Button.onClick Reset ] 
+        [ text "Reset" ]
     ]
   |> Material.Scheme.top
   
 
-{- The remainder of this file is Elm/StartApp boilerplate.
--}
-
-
--- SETUP
-
-
-init : (Model, Cmd.Cmd Msg)
-init = (model, Cmd.none)
-
-
-inputs : List (Signal.Signal Msg)
-inputs =
-  [ 
-  ]
-
-
-app : StartApp.App Model
-app =
-    StartApp.start
-      { init = init
-      , view = view
-      , update = update
-      , inputs = inputs
-      }
-
-
-main : Signal Html
+main : Program Never
 main =
-    app.html
+  App.program 
+    { init = ( model, Cmd.none ) 
+    , view = view
+    , subscriptions = always Sub.none 
+    , update = update
+    }
 
 
--- PORTS
 
-
-port tasks : Signal (Task Never ())
-port tasks =
-    app.tasks

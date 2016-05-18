@@ -1,10 +1,10 @@
 module Material.Helpers exposing 
   ( filter, blurOn
   , map1st, map2nd
-  , delay, fx, pure, effect
+  , delay, fx, pure, effect, cssTransitionStep
   , lift, lift'
   , Update, Update'
-  , key, noAttr
+  , noAttr
   )
 
 {-| Convenience functions. These are mostly trivial functions that are used
@@ -12,10 +12,10 @@ internally in the library; you might
 find some of them useful. 
 
 # HTML & Events
-@docs filter, blurOn, key, noAttr
+@docs filter, blurOn, noAttr
 
 # Cmd
-@docs pure, effect, delay, fx
+@docs pure, effect, delay, fx, cssTransitionStep
 
 # Tuples
 @docs map1st, map2nd
@@ -171,9 +171,16 @@ delay t x =
   Task.perform (always x) (always x) <| Process.sleep t
 
 
+{-| Delay a command sufficiently that you can count on triggering CSS
+transitions.
+-}
+cssTransitionStep : a -> Cmd a
+cssTransitionStep x = 
+  delay 50 x -- 20 fps
 
-{-| Disappared in Elm 0.17, but necessary for correctness of CSS transitions under
-virtual dom.
+
+{-| TODO: Disappared in Elm 0.17, but necessary for correctness of CSS transitions under
+virtual dom. 
 -}
 key : String -> Html.Attribute a
 key k =

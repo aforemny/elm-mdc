@@ -1,11 +1,11 @@
 module Material.Button exposing
-  ( Model, Msg, update, view
+  ( Model, defaultModel, Msg, update, view
   , flat, raised, fab, minifab, icon
   , plain, colored, primary, accent
   , ripple, disabled
   , onClick
   , Property
-  , Container, render
+  , render
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -33,24 +33,28 @@ Refer to
 [this site](https://debois.github.io/elm-mdl/#/buttons) 
 for a live demo. 
 
- 
-# Elm architecture
-@docs Model, Msg, update, view
+# Render
+@docs render
 
 # Options
-@docs plain, colored, primary, accent
-@docs ripple, disabled, onClick
 
-# View
+@docs Property
+
+## Appearance
+@docs plain, colored, primary, accent
+@docs ripple, disabled
+  
+## Events
+@docs onClick
+
+## Type 
 Refer to the
 [Material Design Specification](https://www.google.com/design/spec/components/buttons.html)
 for details about what type of buttons are appropriate for which situations.
-
 @docs flat, raised, fab, minifab, icon
-@docs Property
 
-# Part
-@docs Container, render
+# Elm architecture
+@docs Model, defaultModel, Msg, update, view
 
 
 -}
@@ -77,10 +81,17 @@ import Material.Ripple as Ripple
 type alias Model = Ripple.Model
 
 
+{-|
+-}
+defaultModel : Model
+defaultModel = 
+  Ripple.model
+
+
 -- ACTION, UPDATE
 
 
-{-| 
+{-| Component action.
 -}
 type alias Msg
   = Ripple.Msg
@@ -89,15 +100,13 @@ type alias Msg
 {-| Component update.
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
-update =
-  Ripple.update 
+update action =
+  Ripple.update (Debug.log "Action" action)
 
 
 -- VIEW
 
 
-{-| 
--}
 type alias Config m = 
   { ripple : Bool 
   , onClick : Maybe (Attribute m)
@@ -113,13 +122,13 @@ defaultConfig =
   }
  
 
-{-|
+{-| Properties for Button options.
 -}
 type alias Property m = 
   Options.Property (Config m) m
 
 
-{-| TODO
+{-| Add an `on "click"` handler to a button. 
 -}
 onClick : m -> Property m
 onClick x =
@@ -127,8 +136,7 @@ onClick x =
     (\options -> { options | onClick = Just (Html.Events.onClick x) })
 
 
-{-|
-   TODO
+{-| Set button to ripple when clicked.
 -}
 ripple : Property m 
 ripple = 
@@ -136,7 +144,7 @@ ripple =
     (\options -> { options | ripple = True })
 
 
-{-| TODO
+{-| Set button to "disabled".
 -}
 disabled : Property m
 disabled = 
@@ -172,14 +180,10 @@ accent =
   cs "mdl-button--accent"
 
 
-{-| TODO
+{-| Component view function.
 -}
-view : Model -> List (Property Msg) -> List (Html Msg) -> Html Msg
-view =
-  view' identity
-
-view' : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view' lift model config html =
+view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+view lift model config html =
   let 
     summary = Options.collect defaultConfig config
   in
@@ -300,14 +304,18 @@ icon = cs "mdl-button--icon"
 -- PART
 
 
-{-|
--}
 type alias Container c =
   { c | button : Indexed Model }
 
 
-{-|
-  TODO
+{-| Component render.  Below is an example, assuming boilerplate setup as
+indicated in `Material`, and a user message `PollMsg`.
+    Button.render Mdl [0] model.mdl
+      [ Button.raised
+      , Button.ripple
+      , Button.onClick PollMsg
+      ]
+      [ text "Fetch new"]
 -}
 render 
   : (Parts.Msg (Container c) -> m)
@@ -317,6 +325,6 @@ render
   -> List (Html m)
   -> Html m
 render = 
-  Parts.create view' update .button (\y x -> {y | button=x}) Ripple.model 
+  Parts.create view update .button (\y x -> {y | button=x}) Ripple.model 
     
   

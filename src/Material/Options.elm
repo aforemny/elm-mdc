@@ -6,31 +6,23 @@ module Material.Options exposing
   )
 
 
-{-| Setting options of Material components.
+{-| Setting options for Material components. Refer to the `Material` module
+for intended use. 
 
-This module has much same role as `Attribute` of Elm-html. 
-TODO
-Use this module to (a) add ecustomize components and add your own classes and css to
-Material container elements.
-
-(This mechanism is necessary because Elm does not provide a good way to
-add to or remove from the contents of an already constructed class Attribute.)
-
-@docs Property, Style, Summary
-
-@docs many, nop
+@docs Property
 
 # Constructors
-@docs cs, css, data, key
+@docs cs, css, data, key, many, nop
 
-# Application
-@docs styled, styled', div, span, onHover
+# Html
+@docs Style, styled, styled', div, span, onHover
 
 # Convenience
 @docs stylesheet
 
 # Internal
-@docs apply, collect, set
+The following types and values are used internally in the library. 
+@docs Summary, apply, collect, set
 
 -}
 
@@ -47,7 +39,10 @@ import Json.Encode as Encoder
 -- PROPERTIES
 
 
-{-| Type of Style information. 
+{-| Type of elm-mdl properties. (Do not confuse these with Html properties or
+`Html.Attributes.property`.)
+The type variable `c` identifies the component the property is for. You never have to set it yourself. The type variable `d` by the type of your `Msg`s; you should 
+set this yourself. 
 -}
 type Property c m 
   = Class String
@@ -58,7 +53,7 @@ type Property c m
   | None
 
 
-{-| Contents of a Property a.
+{-| Contents of a `Property c m`.
 -}
 type alias Summary c m = 
   { classes : List String 
@@ -105,10 +100,6 @@ collect' options =
     options
 
 
-id : a -> a
-id x = x
-
-
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs = 
   List.concat
@@ -119,20 +110,8 @@ addAttributes summary attrs =
     ]
 
 
-{-| 
-  TODO
-  Handle the common case of setting attributes of a standard Html node
-from a List (Property a). Use like this:
-
-    import Material.Property exposing (..)
-
-    myDiv : Html
-    myDiv =
-      apply () div
-        [ css "classA", css "classB" ]
-        [ text "This is my div with classes classA and classB!" ]
-
-Ignores `b`.
+{-| Apply a `Summary m`, extra properties, and optional attributes 
+to a standard Html node. 
 -}
 apply : Summary c m -> (List (Attribute m) -> a) -> List (Property c m) 
     -> List (Maybe (Attribute m)) 
@@ -141,10 +120,10 @@ apply summary ctor options attrs =
   ctor 
     (addAttributes 
       (recollect summary options) 
-      (List.filterMap id attrs))
+      (List.filterMap identity attrs))
 
 
-{-|
+{-| Apply properties to a standard Html element. 
 -}
 styled : (List (Attribute m) -> a) -> List (Property c m) -> a
 styled ctor props = 
@@ -154,7 +133,7 @@ styled ctor props =
       [])
 
 
-{-|
+{-| Apply properties and attributes to a standard Html element.
 -}
 styled' : (List (Attribute m) -> a) -> List (Property c m) -> List (Attribute m) -> a
 styled' ctor props attrs = 
@@ -164,12 +143,12 @@ styled' ctor props attrs =
       attrs)
 
 
-{-| Convenience function for the ultra-common case of setting attributes of a
-div element. Use like this: 
+{-| Convenience function for the ultra-common case of apply elm-mdl styling to a
+`div` element. Use like this: 
 
-    myDiv : Html 
+    myDiv : Html m
     myDiv = 
-      Style.div
+      Options.div
         [ Color.background Color.primary
         , Color.text Color.accentContrast
         ]
@@ -190,35 +169,39 @@ span =
 
 
 
-{-| Add a HTML class to a component. (Name chosen to avoid clashing with
+{-| Add an HTML class to a component. (Name chosen to avoid clashing with
 Html.Attributes.class.)
 -}
 cs : String -> Property c m
 cs c = Class c
 
 
-{-| Add a CSS style to a component.
+{-| Add a CSS style to a component. 
 -}
 css : String -> String -> Property c m
 css key value =
   CSS (key, value)
 
 
-{-| Add multiple configurations.
+{-| Multiple options.
 -}
 many : List (Property c m) -> Property c m
 many =
   Many 
 
 
-{-| Add a style that does nothing. 
+{-| Do nothing. Convenient when the absence or 
+presence of Options depends dynamically on other values, e.g., 
+
+    div 
+      [ if model.isActive then css "active" else nop ]
+      [ ... ]
 -}
 nop : Property c m 
 nop = None
 
 
-{-| Set an option 
-TODO
+{-| Set a configuration value. 
 -}
 set : (c -> c) -> Property c m
 set = 
@@ -238,6 +221,7 @@ key : String -> Property c m
 key k = 
   Attribute (Html.Attributes.property "key" (Encoder.string k))
 
+
 -- CONVENIENCE
 
 
@@ -253,13 +237,15 @@ stylesheet css =
 -- STYLE
 
 
-{-| TODO
+{-| Options for situations where there is no configuration, i.e., 
+styling a `div`.
 -}
 type alias Style m = 
   Property () m
 
 
-{-|
+{-| Option adding an `on "mouseover"` event handler to an element. 
+Applicable only to `Style m`, not general Properties. 
 -}
 onHover : m -> Style m
 onHover x =

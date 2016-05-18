@@ -43,7 +43,8 @@ defaultConfig =
   }
 
 
-{-| TODO
+{-| Add an `on "click"` handler to an Icon. (You may want to use a `Button`
+with `Button.icon` instead.)
 -}
 onClick : m -> Property m
 onClick x =
@@ -109,7 +110,7 @@ I.e., to produce a default size (24xp) "trending flat" icon:
 
     import Material.Icon as Icon
 
-    icon : Html
+    icon : Html m
     icon = Icon.i "trending_flat"
 -}
 i : String -> Html m
