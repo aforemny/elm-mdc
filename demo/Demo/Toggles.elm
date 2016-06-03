@@ -1,11 +1,12 @@
-module Demo.Toggles exposing where
+module Demo.Toggles exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+import Array
 
 import Material.Toggles as Toggles
-import Material.Helpers exposing (map1st)
 import Material 
+
 
 import Demo.Page as Page
 
@@ -19,12 +20,16 @@ type alias Mdl =
 
 type alias Model =
   { mdl : Material.Model
+  , toggles : Array.Array Bool
+  , radios : Int
   }
 
 
 model : Model
 model =
   { mdl = Material.model
+  , toggles = Array.fromList [ True, False ] 
+  , radios = 2
   }
 
 
@@ -32,60 +37,67 @@ model =
 
 
 type Msg 
-  = MDL (Material.Msg Msg)
+  = MDL Material.Msg 
+  | Switch Int
+  | Radio Int
+
+
+get : Int -> Model -> Bool
+get k model = 
+  Array.get k model.toggles |> Maybe.withDefault False
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
+    Switch k -> 
+      ( { model 
+        | toggles = Array.set k (get k model |> not) model.toggles
+        } 
+      , none
+      )
+
+    Radio k -> 
+      ( { model | radios = k }, none )
+
     MDL action' -> 
-      Material.update MDL action' model.mdl
-        |> map1st (\m -> { model | mdl = m })
+      Material.update MDL action' model
+
 
 
 -- VIEW
 
 
-switch : Toggles.Switch Mdl Msg
-switch = 
-  Toggles.instance 0 MDL 
-    Toggles.switch Toggles.model 
-    [ ]
-
-checkbox : Toggles.Checkbox Mdl Msg
-checkbox = 
-  Toggles.instance 1 MDL 
-    Toggles.checkbox Toggles.model 
-    [ ]
-
-radio1 : Toggles.Radio Mdl Msg 
-radio1 = 
-  Toggles.instance 2 MDL
-    Toggles.radio Toggles.model
-    [ ]
-
-
-radio2 : Toggles.Radio Mdl Msg 
-radio2 = 
-  Toggles.instance 3 MDL
-    Toggles.radio Toggles.model
-    [ ]
-
-
-view : Signal.Address Msg -> Model -> Html
-view addr model =
+view : Model -> Html Msg
+view model =
   [ div 
       [] 
-      [ switch.view addr model.mdl []
-      , checkbox.view addr model.mdl [] 
-      , radio1.view addr model.mdl [] ("1", "g1") [ text "Option 1" ]
-      , radio2.view addr model.mdl [] ("2", "g2") [ text "Option 2" ]
-      ]
+      [ Toggles.switch MDL [0] model.mdl 
+          [ Toggles.onChange (Switch 0) 
+          , Toggles.value (get 0 model)
+          ]
+      , Toggles.checkbox MDL [1] model.mdl 
+          [ Toggles.onChange (Switch 1) 
+          , Toggles.value (get 1 model)
+          ]
+      , Toggles.radio MDL [2] model.mdl 
+          [ Toggles.value (2 == model.radios) 
+          , Toggles.name "MyRadioGroup"
+          , Toggles.onChange (Radio 2)
+          ]
+          [ text "Foo" ]
+      , Toggles.radio MDL [3] model.mdl
+          [ Toggles.value (3 == model.radios)
+          , Toggles.name "MyRadioGroup"
+          , Toggles.onChange (Radio 3)
+          ]
+          [ text "Bar" ]
+      ] 
   ]
   |> Page.body2 "Toggles" srcUrl intro references
 
 
-intro : Html
+intro : Html Msg
 intro = 
   Page.fromMDL "http://www.getmdl.io/index.html#toggles-section/checkbox" """
 > The Material Design Lite (MDL) checkbox component is an enhanced version of the

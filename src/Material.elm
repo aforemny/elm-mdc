@@ -171,7 +171,7 @@ import Material.Textfield as Textfield
 import Material.Menu as Menu
 import Material.Snackbar as Snackbar
 import Material.Layout as Layout
---import Material.Toggles as Toggles
+import Material.Toggles as Toggles
 --import Material.Template as Template
 
 
@@ -185,7 +185,7 @@ type alias Model =
   , menu : Indexed Menu.Model
   , snackbar : Maybe (Snackbar.Model Int) 
   , layout : Layout.Model
---  , toggles : Indexed Toggles.Model
+  , toggles : Indexed Toggles.Model
 --  , template : Indexed Template.Model
   }
 
@@ -199,7 +199,7 @@ model =
   , menu = Dict.empty
   , snackbar = Nothing
   , layout = Layout.defaultModel
---  , toggles = Dict.empty
+  , toggles = Dict.empty
 --, template = Dict.empty
   }
 

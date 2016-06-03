@@ -1,6 +1,6 @@
 module Material.Options exposing
   ( Property, Summary, collect
-  , cs, css, many, nop, set, data, key
+  , cs, cs', css, many, nop, set, data
   , apply, styled, styled', stylesheet
   , Style, div, span, onHover
   )
@@ -12,7 +12,7 @@ for intended use.
 @docs Property
 
 # Constructors
-@docs cs, css, data, key, many, nop
+@docs cs, cs', css, data, many, nop
 
 # Html
 @docs Style, styled, styled', div, span, onHover
@@ -33,7 +33,6 @@ import Html exposing (Html, Attribute)
 import Html.Attributes
 import Html.Events exposing (on)
 import Json.Decode as Decoder
-import Json.Encode as Encoder
 
 
 -- PROPERTIES
@@ -176,6 +175,14 @@ cs : String -> Property c m
 cs c = Class c
 
 
+{-| Conditionally add an HTML class to a component. (Name chosen to avoid
+clashing with Html.Attributes.class.)
+-}
+cs' : String -> Bool -> Property c m 
+cs' c b = 
+  if b then Class c else None
+
+
 {-| Add a CSS style to a component. 
 -}
 css : String -> String -> Property c m
@@ -213,14 +220,6 @@ set =
 data : String -> String -> Property c m
 data key val = 
   Attribute (Html.Attributes.attribute ("data-" ++ key) val)
-
-
-{-| VirtualDOM keys. 
--}
-key : String -> Property c m
-key k = 
-  Attribute (Html.Attributes.property "key" (Encoder.string k))
-
 
 -- CONVENIENCE
 

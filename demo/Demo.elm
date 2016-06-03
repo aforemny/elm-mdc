@@ -26,7 +26,7 @@ import Demo.Textfields
 import Demo.Snackbar
 import Demo.Badges
 import Demo.Elevation
---import Demo.Toggles
+import Demo.Toggles
 --import Demo.Template
 
 
@@ -68,7 +68,7 @@ type alias Model =
   , badges : Demo.Badges.Model
   , menus : Demo.Menus.Model
   , textfields : Demo.Textfields.Model
-  --, toggles : Demo.Toggles.Model
+  , toggles : Demo.Toggles.Model
   , snackbar : Demo.Snackbar.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
@@ -83,7 +83,7 @@ model =
   , badges = Demo.Badges.model
   , menus = Demo.Menus.model
   , textfields = Demo.Textfields.model
-  --, toggles = Demo.Toggles.model
+  , toggles = Demo.Toggles.model
   , snackbar = Demo.Snackbar.model
   --, template = Demo.Template.model
   , selectedTab = 0
@@ -108,7 +108,7 @@ type Msg
   | MenusMsg Demo.Menus.Msg
   | TextfieldMsg Demo.Textfields.Msg
   | SnackbarMsg Demo.Snackbar.Msg
-  --| TogglesMsg Demo.Toggles.Msg
+  | TogglesMsg Demo.Toggles.Msg
 --  | TemplateMsg Demo.Template.Msg
 
 
@@ -163,7 +163,7 @@ update action model =
 --
     SnackbarMsg  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarMsg Demo.Snackbar.update   a model
 --
---    TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
+    TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
 --
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
@@ -221,9 +221,8 @@ tabs =
   , ("Grid", "grid", \_ -> Demo.Grid.view)
   , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
   , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
---  , ("Toggles", "toggles", \model -> 
---      Demo.Toggles.view (Signal.forwardTo addr TogglesMsg) model.toggles)
-  --, ("Template", "tempate", \model -> 
+  , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
+  --, ("Template", "tempate", .template >> Demo.Template.view >> App.map TemplateMsg)
   --    Demo.Template.view (Signal.forwardTo addr TemplateMsg) model.template)
   ]
 
@@ -323,6 +322,7 @@ view model =
       [ Layout.selectedTab model.selectedTab
       , Layout.onSelectTab SelectTab
       , Layout.fixedHeader
+      , Layout.waterfall True
       ]
       { header = header
       , drawer = drawer
