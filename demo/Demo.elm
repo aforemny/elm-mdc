@@ -322,7 +322,8 @@ view model =
       [ Layout.selectedTab model.selectedTab
       , Layout.onSelectTab SelectTab
       , Layout.fixedHeader
-      , Layout.waterfall True
+      , Layout.fixedDrawer
+      --, Layout.waterfall True
       ]
       { header = header
       , drawer = drawer
@@ -343,17 +344,12 @@ view model =
     )
 
 
-init : ( Model, Cmd.Cmd Msg )
-init =
-  ( model, Cmd.none )
-
-
 main : Program Never
 main =
   App.program 
-    { init = ( model, none ) 
+    { init = ( model, Layout.sub0 Mdl )
     , view = view
-    , subscriptions = always Sub.none -- TODO: always Layout.subscriptions 
+    , subscriptions = Layout.subs Mdl
     , update = update
     }
 

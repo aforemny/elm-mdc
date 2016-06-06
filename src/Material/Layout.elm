@@ -1,13 +1,11 @@
 module Material.Layout exposing
-  ( subscriptions
-  , Model, defaultModel
-  , Msg, update
+  ( init, subscriptions , Model, defaultModel , Msg, update
   , Property
   , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
   , waterfall, seamed, scrolling, selectedTab, onSelectTab
   , row, spacer, title, navigation, link
   , Contents, view
-  , render
+  , sub0, subs, render
   )
 
 
@@ -35,11 +33,10 @@ module Material.Layout exposing
 > flexibility and ease of use.
 
 # Subscriptions
-@docs subscriptions
+@docs sub0, subs
 
 # Render
-@docs Contents, render
-
+@docs Contents, render, sub0, subs
 
 # Options
 @docs Property
@@ -58,7 +55,7 @@ module Material.Layout exposing
 @docs row, spacer, title, navigation, link
 
 # Elm architecture
-@docs view, Msg, Model, defaultModel, update
+@docs view, Msg, Model, defaultModel, update, init, subscriptions
 
 
 -}
@@ -73,6 +70,7 @@ import Html.Events exposing (onClick, on)
 import Platform.Cmd exposing (Cmd)
 import Window
 import Json.Decode as Decoder
+import Task
 
 import Parts
 import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd)
@@ -86,14 +84,33 @@ import DOM
 -- SETUP
 
 
+smallScreenWatch : Int -> Msg
+smallScreenWatch = 
+  (>) 1024 >> SmallScreen 
+
+
+{-| Layout needs initial viewport size
+-}
+init : (Model, Cmd Msg)
+init = 
+  let
+    msg = 
+      Task.perform 
+        (\_ -> smallScreenWatch (Debug.log "Can't get initial window dimensions. Guessing " 1025))
+        smallScreenWatch Window.width
+  in
+    (defaultModel, msg)
+
+
 {-| Layout subscribes to changes in viewport size. 
 -}
-subscriptions : (Msg -> msg) -> Sub msg
-subscriptions f =
-  Sub.batch 
-    [ Window.resizes 
-        (.width >> (>) 1024 >> SmallScreen >> f)
-    ]
+subscriptions : x -> Sub Msg
+subscriptions =
+  let 
+    sub = 
+      Window.resizes (.width >> smallScreenWatch)
+  in
+    always sub
 
 
 -- MODEL
@@ -589,8 +606,8 @@ view lift model options { drawer, header, tabs, main } =
               |> Just
           else
             Nothing
-        , if List.isEmpty drawer then Nothing else Just (obfuscator lift model)
         , if List.isEmpty drawer then Nothing else Just (drawerView model drawer)
+        , if List.isEmpty drawer then Nothing else Just (obfuscator lift model)
         , contentDrawerButton
         , main' 
             ( class "mdl-layout__content" 
@@ -642,3 +659,24 @@ render =
     .layout (\x c -> { c | layout = x }) 
 
 
+pack : Msg -> Parts.Msg (Container b)
+pack = 
+  let
+    embeddedUpdate = 
+      Parts.embedUpdate .layout (\x c -> { c | layout = x }) update
+  in
+    Parts.pack embeddedUpdate
+
+
+{-| Component subscriptions (type compatible with render).
+-}
+subs : (Parts.Msg (Container b) -> c) -> x -> Sub c
+subs lift = 
+  subscriptions >> Sub.map (pack >> lift)
+
+
+{-| Component subscription initialiser.
+-}
+sub0 : (Parts.Msg (Container b) -> c) -> Cmd c
+sub0 lift = 
+  snd init |> Cmd.map (pack >> lift)
