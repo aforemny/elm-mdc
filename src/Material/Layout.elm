@@ -1,11 +1,11 @@
 module Material.Layout exposing
-  ( init, subscriptions , Model, defaultModel , Msg, update
+  ( init, subscriptions , Model, defaultModel, Msg(ToggleDrawer), update
   , Property
   , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
   , waterfall, seamed, scrolling, selectedTab, onSelectTab
   , row, spacer, title, navigation, link
   , Contents, view
-  , sub0, subs, render
+  , sub0, subs, render, toggleDrawer
   )
 
 
@@ -36,7 +36,7 @@ module Material.Layout exposing
 @docs sub0, subs
 
 # Render
-@docs Contents, render, sub0, subs
+@docs Contents, render, toggleDrawer
 
 # Options
 @docs Property
@@ -680,3 +680,13 @@ subs lift =
 sub0 : (Parts.Msg (Container b) -> c) -> Cmd c
 sub0 lift = 
   snd init |> Cmd.map (pack >> lift)
+
+
+{-| Toggle drawer. 
+
+This function is for use with parts typing. For plain TEA, simply issue 
+an update for the exposed Msg `ToggleDrawer`. 
+-}
+toggleDrawer : (Parts.Msg (Container b) -> c) -> c
+toggleDrawer lift = 
+  (pack >> lift) ToggleDrawer 
