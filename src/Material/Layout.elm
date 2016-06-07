@@ -86,7 +86,7 @@ import Dict exposing (Dict)
 import Maybe exposing (andThen, map)
 import Html exposing (..)
 import Html.App as App
-import Html.Attributes exposing (class, classList)
+import Html.Attributes exposing (class, classList, tabindex)
 import Html.Events as Events exposing (on)
 import Platform.Cmd exposing (Cmd)
 import Window
@@ -175,6 +175,7 @@ type Msg
   | ScrollPane Bool Float -- True means fixedHeader
   | TransitionHeader { toCompact : Bool, fixedHeader : Bool }
   | TransitionEnd
+  | NOP
   -- Subcomponents
   | Ripple Int Ripple.Msg
 
@@ -184,6 +185,9 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
+    NOP -> 
+      ( model, Cmd.none ) 
+
     SmallScreen isSmall ->
       { model  
       | isSmallScreen = isSmall 
@@ -542,7 +546,19 @@ drawerButton : (Msg -> m) -> Html m
 drawerButton lift =
   div
     [ class "mdl-layout__drawer-button"
+    , tabindex 0
     , Events.onClick (lift ToggleDrawer)
+    , Events.onWithOptions 
+        "keydown"
+        { stopPropagation = False
+        , preventDefault = True
+        }
+        (Decoder.map 
+          (lift << \key -> case key of 
+              32 {- SPACE -} -> ToggleDrawer
+              13 {- ENTER -} -> ToggleDrawer
+              _ -> NOP)
+          Events.keyCode)
     ]
     [ Icon.i "menu" ]
 
