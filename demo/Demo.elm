@@ -177,16 +177,13 @@ drawer =
   [ Layout.title [] [ text "Example drawer" ]
   , Layout.navigation
     [] 
-    [ {- Layout.link
-        [ Style.attribute 
-            <| href "https://github.com/debois/elm-mdl" ]
+    [  Layout.link
+        [ Layout.href "https://github.com/debois/elm-mdl" ]
         [ text "github" ]
     , Layout.link
-        [ Style.attribute 
-            <| href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
+        [ Layout.href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
         [ text "elm-package" ]
-        TODO
-    -} ]
+    ]
   ]
 
 
@@ -197,16 +194,12 @@ header =
       [ Layout.title [] [ text "elm-mdl" ]
       , Layout.spacer
       , Layout.navigation []
-          [ {- TODO Layout.link
-            [ 
-            Style.attribute 
-               <| href "https://github.com/debois/elm-mdl"]
-            [ span [] [text "github"] ]
-          , Layout.link 
-              [ Style.attribute 
-                  <| href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
+          [ Layout.link
+              [ Layout.href "https://github.com/debois/elm-mdl"]
+              [ span [] [text "github"] ]
+          , Layout.link
+              [ Layout.href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
               [ text "elm-package" ]
-            -}
           ]
       ]
   ]

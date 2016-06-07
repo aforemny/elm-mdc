@@ -34,6 +34,7 @@ import Html.Attributes
 import Html.Events exposing (on)
 import Json.Decode as Decoder
 
+import Material.Options.Internal exposing (..)
 
 -- PROPERTIES
 
@@ -43,13 +44,8 @@ import Json.Decode as Decoder
 The type variable `c` identifies the component the property is for. You never have to set it yourself. The type variable `d` by the type of your `Msg`s; you should 
 set this yourself. 
 -}
-type Property c m 
-  = Class String
-  | CSS (String, String)
-  | Attribute (Attribute m)
-  | Many (List (Property c m))
-  | Set (c -> c)
-  | None
+type alias Property c m = 
+  Material.Options.Internal.Property c m 
 
 
 {-| Contents of a `Property c m`.
@@ -220,6 +216,7 @@ set =
 data : String -> String -> Property c m
 data key val = 
   Attribute (Html.Attributes.attribute ("data-" ++ key) val)
+
 
 -- CONVENIENCE
 

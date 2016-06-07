@@ -3,7 +3,7 @@ module Material.Layout exposing
   , Property
   , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
   , waterfall, seamed, scrolling, selectedTab, onSelectTab
-  , row, spacer, title, navigation, link
+  , row, spacer, title, navigation, link, onClick, href
   , Contents, view
   , sub0, subs, render, toggleDrawer
   )
@@ -33,6 +33,27 @@ module Material.Layout exposing
 > flexibility and ease of use.
 
 # Subscriptions
+
+The layout needs to be initialised with and subscribe to changes in viewport
+sizes. Example initialisation of containing app: 
+
+    import Material.Layout as Layout
+    import Material
+
+    type Msg = 
+      ...
+      | Mdl Material.Msg -- Boilerplate
+
+    ...
+
+    App.program 
+      { init = ( model, Layout.sub0 Mdl )
+      , view = view
+      , subscriptions = Layout.subs Mdl
+      , update = update
+      }
+
+
 @docs sub0, subs
 
 # Render
@@ -52,7 +73,7 @@ module Material.Layout exposing
 @docs onSelectTab
 
 # Sub-views
-@docs row, spacer, title, navigation, link
+@docs row, spacer, title, navigation, link, onClick, href
 
 # Elm architecture
 @docs view, Msg, Model, defaultModel, update, init, subscriptions
@@ -65,8 +86,8 @@ import Dict exposing (Dict)
 import Maybe exposing (andThen, map)
 import Html exposing (..)
 import Html.App as App
-import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, on)
+import Html.Attributes exposing (class, classList)
+import Html.Events as Events exposing (on)
 import Platform.Cmd exposing (Cmd)
 import Window
 import Json.Decode as Decoder
@@ -77,6 +98,7 @@ import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd
 import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop, css, styled)
+import Material.Options.Internal exposing (attribute)
 
 import DOM
 
@@ -313,7 +335,7 @@ selectedTab k =
 -}
 onSelectTab : (Int -> m) -> Property m
 onSelectTab f = 
-  Options.set (\config -> { config | onSelectTab = Just (f >> onClick) })
+  Options.set (\config -> { config | onSelectTab = Just (f >> Events.onClick) })
 
 
 -- AUXILIARY VIEWS
@@ -340,9 +362,29 @@ navigation styles contents =
   nav [class "mdl-navigation"] contents
 
 
+type LinkProp = LinkProp
+
+
+type alias LinkProperty m = 
+  Options.Property LinkProp m
+
+{-| onClick for Links.
+-}
+onClick : m -> LinkProperty m 
+onClick = 
+  Events.onClick >> attribute
+
+
+{-| href for Links.
+-}
+href : String -> LinkProperty m
+href = 
+  Html.Attributes.href >> attribute
+
+
 {-| Link.
 -}
-link : List (Property m) -> List (Html m) -> Html m
+link : List (LinkProperty m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a (cs "mdl-navigation__link" :: styles) contents
 
@@ -474,13 +516,13 @@ headerView lift config model (drawerButton, rows, tabs) =
       |> List.append (
         if isWaterfall config.mode then 
           [  
-          --  onClick addr Click
+          --  Events.onClick addr Click
           --, on "transitionend" Json.value (\_ -> Signal.message addr TransitionEnd)
             {- There is no "ontransitionend" property; you'd have to add a listener, 
             which Elm won't let us. We manually fire a delayed tick instead. 
             See also: https://github.com/evancz/virtual-dom/issues/30
             -}
-            onClick 
+            Events.onClick 
               (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
                |> lift)
           ]
@@ -500,7 +542,7 @@ drawerButton : (Msg -> m) -> Html m
 drawerButton lift =
   div
     [ class "mdl-layout__drawer-button"
-    , onClick (lift ToggleDrawer)
+    , Events.onClick (lift ToggleDrawer)
     ]
     [ Icon.i "menu" ]
 
@@ -512,7 +554,7 @@ obfuscator lift model =
         [ ("mdl-layout__obfuscator", True)
         , ("is-visible", model.isDrawerOpen)
         ]
-    , onClick (lift ToggleDrawer)
+    , Events.onClick (lift ToggleDrawer)
     ]
     []
 
@@ -668,14 +710,18 @@ pack =
     Parts.pack embeddedUpdate
 
 
-{-| Component subscriptions (type compatible with render).
+{-| Component subscriptions (type compatible with render). Either this or 
+`subscriptions` must be connected for the Layout to be responsive under
+viewport size changes. 
 -}
 subs : (Parts.Msg (Container b) -> c) -> x -> Sub c
 subs lift = 
   subscriptions >> Sub.map (pack >> lift)
 
 
-{-| Component subscription initialiser.
+{-| Component subscription initialiser. Either this or 
+`init` must be connected for the Layout to be responsive under
+viewport size changes. Example use: 
 -}
 sub0 : (Parts.Msg (Container b) -> c) -> Cmd c
 sub0 lift = 
