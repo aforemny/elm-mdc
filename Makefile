@@ -30,7 +30,7 @@ clean : cleanish
 	rm -rf elm-stuff/build-artifacts demo/elm-stuff/build-artifacts
 
 distclean : clean
-	rm -rf elm-stuff
+	rm -rf elm-stuff demo/elm-stuff
 
 
 .PHONY : pages elm.js clean cleanish distclean demo docs test
