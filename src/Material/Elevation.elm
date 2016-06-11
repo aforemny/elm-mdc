@@ -55,55 +55,55 @@ are 2, 3, 4, 6, 8, 16, 24. Invalid values produce no shadow.
 (The specification uses only the values 1-6, 8, 9, 12, 16, 24 for standard UI
 elements; MDL sources define all values 0-24, but omits most from production css.)
 -}
-shadow : Int -> Style m
+shadow : Int -> Property a m
 shadow z = 
   cs ("mdl-shadow--" ++ toString z ++ "dp")
 
 
 {-|
 -}
-e2 : Style m
+e2 : Property a m
 e2 = shadow 2
 
 
 {-|
 -}
-e3 : Style m
+e3 : Property a m
 e3 = shadow 3
 
 
 {-|
 -}
-e4 : Style m
+e4 : Property a m
 e4 = shadow 4
 
 {-|
 -}
-e6 : Style m
+e6 : Property a m
 e6 = shadow 6
 
 
 {-|
 -}
-e8 : Style m
+e8 : Property a m
 e8 = shadow 8
 
 
 {-|
 -}
-e16 : Style m
+e16 : Property a m
 e16 = shadow 16
 
 
 {-|
 -}
-e24 : Style m
+e24 : Property a m
 e24 = shadow 24
 
 
 {-| List of all elevations and their depth in dp. 
 -}
-elevations : List (Style m, Int)
+elevations : List (Property a m, Int)
 elevations = 
   [ (e2, 2)
   , (e3, 3)
@@ -118,12 +118,9 @@ elevations =
 {-| Add a CSS-transition to changes in elevation. Supply a transition
 duration in milliseconds as argument. 
 
-NB! This Style m is dictated by neither MDL nor the Material Design
+NB! This Property a m is dictated by neither MDL nor the Material Design
 Specification. 
 -}
-transition : String -> Style m 
+transition : String -> Property a m 
 transition duration = 
   css "transition" ("box-shadow " ++ toString duration ++ "ms ease-in-out 0s")
-
-
-
