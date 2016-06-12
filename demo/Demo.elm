@@ -27,6 +27,7 @@ import Demo.Snackbar
 import Demo.Badges
 import Demo.Elevation
 import Demo.Toggles
+import Demo.Loading
 --import Demo.Template
 
 
@@ -214,6 +215,7 @@ tabs =
   , ("Grid", "grid", \_ -> Demo.Grid.view)
   , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
   , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
+  , ("Loading", "loading", \_ -> Demo.Loading.view)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   --    Demo.Template.view (Signal.forwardTo addr TemplateMsg) model.template)
