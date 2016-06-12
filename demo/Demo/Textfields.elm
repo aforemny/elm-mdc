@@ -113,6 +113,16 @@ view model =
       , Textfield.floatingLabel
       , Textfield.password
       ]
+  , Textfield.render MDL [6] model.mdl
+      [ Textfield.label "Default multiline textfield"
+      , Textfield.textarea
+      ]
+  , Textfield.render MDL [7] model.mdl
+      [ Textfield.label "Multiline with 6 rows"
+      , Textfield.floatingLabel
+      , Textfield.textarea
+      , Textfield.rows 6
+      ]
   ]
   |> List.map (\c -> 
       cell 
