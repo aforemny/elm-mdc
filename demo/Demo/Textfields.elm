@@ -91,7 +91,8 @@ view model =
       [ Textfield.label "Labelled" ]
   , Textfield.render MDL [2] model.mdl 
       [ Textfield.label "Floating label"
-      , Textfield.floatingLabel 
+      , Textfield.floatingLabel
+      , Textfield.text'
       ]
   , Textfield.render MDL [3] model.mdl 
       [ Textfield.label "Disabled"
