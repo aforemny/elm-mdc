@@ -72,6 +72,7 @@ type alias Model =
   , snackbar : Demo.Snackbar.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
+  , transparentHeader : Bool
   }
 
 
@@ -87,6 +88,7 @@ model =
   , snackbar = Demo.Snackbar.model
   --, template = Demo.Template.model
   , selectedTab = 0
+  , transparentHeader = False
   }
 
 
@@ -109,6 +111,7 @@ type Msg
   | TextfieldMsg Demo.Textfields.Msg
   | SnackbarMsg Demo.Snackbar.Msg
   | TogglesMsg Demo.Toggles.Msg
+  | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -151,7 +154,10 @@ update action model =
       ( { model | selectedTab = k } , Cmd.none )
 
     Mdl msg -> 
-      Material.update Mdl msg model 
+      Material.update Mdl msg model
+
+    ToggleHeader ->
+        ({ model | transparentHeader = not model.transparentHeader }, Cmd.none)
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
 
@@ -187,7 +193,7 @@ drawer =
   ]
 
 
-header : List (Html a)
+header : List (Html Msg)
 header =
   [ Layout.row 
       []
@@ -195,6 +201,9 @@ header =
       , Layout.spacer
       , Layout.navigation []
           [ Layout.link
+              [ Layout.href "#", Layout.onClick ToggleHeader]
+              [ text "Toggle header transparency" ]
+          , Layout.link
               [ Layout.href "https://github.com/debois/elm-mdl"]
               [ span [] [text "github"] ]
           , Layout.link
@@ -277,6 +286,14 @@ stylesheet =
     padding-bottom: 1rem;
     padding-left:1rem;
   }
+  .mdl-layout__header--transparent {
+    background: url('https://getmdl.io/assets/demos/transparent.jpg') center / cover;
+  }
+  .mdl-layout__header--transparent .mdl-layout__drawer-button {
+    /* This background is dark, so we set text to white. Use 87% black instead if
+       your background is light. */
+    color: white;
+  }
 """
 
 
@@ -317,6 +334,7 @@ view model =
       , Layout.fixedHeader
       , Layout.fixedDrawer
       --, Layout.waterfall True
+      , if model.transparentHeader then Layout.transparentHeader else Style.nop
       ]
       { header = header
       , drawer = drawer

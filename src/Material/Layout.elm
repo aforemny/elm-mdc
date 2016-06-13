@@ -6,6 +6,7 @@ module Material.Layout exposing
   , row, spacer, title, navigation, link, onClick, href
   , Contents, view
   , sub0, subs, render, toggleDrawer
+  , transparentHeader
   )
 
 
@@ -67,7 +68,9 @@ sizes. Example initialisation of containing app:
 
 ## Header
 @docs fixedHeader, fixedDrawer
-@docs waterfall, seamed, scrolling, selectedTab
+@docs waterfall, seamed, scrolling
+@docs transparentHeader
+@docs selectedTab
 
 ## Events
 @docs onSelectTab
@@ -257,6 +260,7 @@ type alias Config m =
   , mode : Mode
   , selectedTab : Int
   , onSelectTab : Maybe (Int -> Attribute m)
+  , transparentHeader : Bool
   }
 
 
@@ -269,6 +273,7 @@ defaultConfig =
   , mode = Standard
   , onSelectTab = Nothing
   , selectedTab = -1
+  , transparentHeader = False
   }
 
 
@@ -322,6 +327,11 @@ seamed : Property m
 seamed = 
   Options.set (\config -> { config | mode = Seamed })
 
+{-| Header is transparent: It draws on top of the layout's background
+-}
+transparentHeader : Property m
+transparentHeader =
+  Options.set (\config -> { config | transparentHeader = True })
 
 {-| Header scrolls with contents. 
 -}
@@ -521,6 +531,7 @@ headerView lift config model (drawerButton, rows, tabs) =
           , ("is-animating", model.isAnimating)
           , ("is-compact", model.isCompact)
           , (mode, mode /= "")
+          , ("mdl-layout__header--transparent", config.transparentHeader)
           ]
       ]
       |> List.append (
