@@ -155,7 +155,7 @@ type alias Model =
 defaultModel : Model
 defaultModel =
   { ripples = Dict.empty
-  , isSmallScreen = False -- TODO: Initial value?
+  , isSmallScreen = False 
   , isCompact = False
   , isAnimating = False
   , isScrolled = False
@@ -372,6 +372,7 @@ type LinkProp = LinkProp
 type alias LinkProperty m = 
   Options.Property LinkProp m
 
+
 {-| onClick for Links.
 -}
 onClick : m -> LinkProperty m 
@@ -390,7 +391,11 @@ href =
 -}
 link : List (LinkProperty m) -> List (Html m) -> Html m
 link styles contents =
-  Options.styled a (cs "mdl-navigation__link" :: styles) contents
+  Options.styled a 
+    (cs "mdl-navigation__link" 
+     :: attribute (Html.Attributes.attribute "tabindex" "1")
+     :: styles) 
+    contents
 
 
 {-| Header row. 
@@ -475,6 +480,7 @@ tabsView lift config model (tabs, tabStyles) =
               , config.onSelectTab 
                   |> Maybe.map ((|>) tabIndex)
                   |> Maybe.withDefault Helpers.noAttr
+              , Html.Attributes.href ("#mdl-layout-tab-" ++ toString tabIndex)
               ]
               [ Just tab
               , if config.rippleTabs then
@@ -542,25 +548,45 @@ headerView lift config model (drawerButton, rows, tabs) =
       )
 
 
+onKeypressFilterSpaceAndEnter : Html.Attribute x
+onKeypressFilterSpaceAndEnter = """
+  (function (evt) {
+     if (evt && evt.type === "keydown" && (evt.keyCode === 32 || evt.keyCode === 13)) {
+       evt.preventDefault();
+     }
+   })(window.event);
+  """
+    |> Html.Attributes.attribute "onkeypress"
+
+
+
 drawerButton : (Msg -> m) -> Html m
 drawerButton lift =
-  div
-    [ class "mdl-layout__drawer-button"
-    , tabindex 0
-    , Events.onClick (lift ToggleDrawer)
-    , Events.onWithOptions 
-        "keydown"
-        { stopPropagation = False
-        , preventDefault = True
-        }
-        (Decoder.map 
-          (lift << \key -> case key of 
-              32 {- SPACE -} -> ToggleDrawer
-              13 {- ENTER -} -> ToggleDrawer
-              _ -> NOP)
-          Events.keyCode)
+  div 
+    [ --onKeypressFilterSpaceAndEnter
     ]
-    [ Icon.i "menu" ]
+    [
+      div
+        [ class "mdl-layout__drawer-button"
+        , tabindex 1
+        , Events.onClick (lift ToggleDrawer)
+        , Events.onWithOptions 
+            "keydown"
+            { stopPropagation = False
+            , preventDefault = False --  True
+              {- TODO: Should stop propagation exclusively on ENTER, but elm
+              currently require me to decide on options before the keycode value is
+              available. -} 
+            }
+            (Decoder.map 
+              (lift << \key -> case key of 
+                  32 {- SPACE -} -> ToggleDrawer
+                  13 {- ENTER -} -> ToggleDrawer
+                  _ -> NOP)
+              Events.keyCode)
+        ]
+        [ Icon.i "menu" ]
+      ]
 
 
 obfuscator : (Msg -> m) -> Model -> Html m
@@ -575,14 +601,14 @@ obfuscator lift model =
     []
 
 
-drawerView : Model -> List (Html m) -> Html m
-drawerView model elems =
+drawerView : (Msg -> m) -> Model -> List (Html m) -> Html m
+drawerView lift model elems =
   div
     [ classList
         [ ("mdl-layout__drawer", True)
         , ("is-visible", model.isDrawerOpen)
         ]
-    ]
+    ] 
     elems
 
 
@@ -634,6 +660,11 @@ view lift model options { drawer, header, tabs, main } =
     hasHeader = 
       hasTabs || (not (List.isEmpty header))
 
+    hasDrawer = 
+      drawer /= [] 
+        && model.isDrawerOpen 
+        && (not config.fixedDrawer || model.isSmallScreen) 
+
     tabsElems = 
       if not hasTabs then
         Nothing
@@ -647,7 +678,7 @@ view lift model options { drawer, header, tabs, main } =
         ]
     ]
     [ filter div
-        [ classList
+        ([ Just <| classList
             [ ("mdl-layout ", True)
             , ("is-upgraded", True)
             , ("is-small-screen", model.isSmallScreen)
@@ -658,14 +689,27 @@ view lift model options { drawer, header, tabs, main } =
             , ("mdl-layout--fixed-header", config.fixedHeader && hasHeader)
             , ("mdl-layout--fixed-tabs", config.fixedTabs && hasTabs)
             ]
-        ]
+        {- MDL has code to close drawer on ESC, but it seems to be
+           non-operational. We fix it here. Elm 0.17 doesn't give us a way to
+           catch global keyboard events, but we can reasonably assume something inside
+           mdl-layout__container is focused. 
+        -} 
+        , if hasDrawer then
+            on "keydown" 
+               (Decoder.map 
+                 (lift << \key -> if key == 27 then ToggleDrawer else NOP) 
+                 Events.keyCode)
+            |> Just
+          else
+            Nothing
+        ] |> List.filterMap identity)
         [ if hasHeader then
             headerView lift config model (headerDrawerButton, header, tabsElems)
               |> Just
           else
             Nothing
-        , if List.isEmpty drawer then Nothing else Just (drawerView model drawer)
-        , if List.isEmpty drawer then Nothing else Just (obfuscator lift model)
+        , if hasDrawer then Nothing else Just (drawerView lift model drawer)
+        , if hasDrawer then Nothing else Just (obfuscator lift model)
         , contentDrawerButton
         , main' 
             ( class "mdl-layout__content" 

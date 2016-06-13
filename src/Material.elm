@@ -200,7 +200,7 @@ model =
   , snackbar = Nothing
   , layout = Layout.defaultModel
   , toggles = Dict.empty
---, template = Dict.empty
+--  , template = Dict.empty
   }
 
 

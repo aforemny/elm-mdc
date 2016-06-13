@@ -109,7 +109,7 @@ type Msg
   | TextfieldMsg Demo.Textfields.Msg
   | SnackbarMsg Demo.Snackbar.Msg
   | TogglesMsg Demo.Toggles.Msg
---  | TemplateMsg Demo.Template.Msg
+  --| TemplateMsg Demo.Template.Msg
 
 
 nth : Int -> List a -> Maybe a
@@ -215,7 +215,7 @@ tabs =
   , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
   , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
-  --, ("Template", "tempate", .template >> Demo.Template.view >> App.map TemplateMsg)
+  --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   --    Demo.Template.view (Signal.forwardTo addr TemplateMsg) model.template)
   ]
 

@@ -1,10 +1,9 @@
-module Demo.Template exposing where
+module Demo.Template exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
 import Material.Template as Template
-import Material.Helpers exposing (map1st)
 import Material 
 
 import Demo.Page as Page
@@ -33,7 +32,7 @@ model =
 
 type Msg 
   = TemplateMsg 
-  | MDL (Material.Msg Msg)
+  | Mdl Material.Msg 
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -42,30 +41,24 @@ update action model =
     TemplateMsg -> 
       (model, Cmd.none)
 
-    MDL action' -> 
-      Material.update MDL action' model.mdl
-        |> map1st (\m -> { model | mdl = m })
+    Mdl action' -> 
+      Material.update Mdl action' model
 
 
 -- VIEW
 
 
-template = 
-  Template.instance 0 MDL Template.model 
-    [ Template.fwdTemplate TemplateMsg ]
-
-
-view : Signal.Address Msg -> Model -> Html
-view addr model =
+view : Model -> Html Msg
+view model  =
   [ div 
       [] 
-      [ template.view addr model.mdl []
+      [ Template.render Mdl [0] model.mdl [] []
       ]
   ]
   |> Page.body2 "TEMPLATE" srcUrl intro references
 
 
-intro : Html
+intro : Html m
 intro = 
   Page.fromMDL "https://www.getmdl.io/components/index.html#TEMPLATE-section" """
 > ...

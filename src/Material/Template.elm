@@ -1,9 +1,7 @@
 module Material.Template exposing
-  ( Model, model
-  , Msg, update
-  , view
-  , instance, fwdTemplate
-  , Container, Observer, Instance
+  ( Model, defaultModel, Msg, update, view
+  , Property
+  , render
   )
 
 -- TEMPLATE. Copy this to a file for your component, then update.
@@ -30,8 +28,8 @@ for a live demo.
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
-import Material.Component as Component exposing (Indexed)
-import Material.Style as Style exposing (Style, cs, css')
+import Parts exposing (Indexed)
+import Material.Options as Options exposing (Style, cs)
 
 
 -- MODEL
@@ -46,8 +44,8 @@ type alias Model =
 
 {-| Default component model constructor.
 -}
-model : Model
-model =
+defaultModel : Model
+defaultModel =
   {
   }
 
@@ -68,62 +66,59 @@ update action model =
   (model, none)
 
 
+-- PROPERTIES 
+
+
+type alias Config = 
+  { 
+  }
+
+
+defaultConfig : Config 
+defaultConfig = 
+  { 
+  }
+  
+
+type alias Property m = 
+  Options.Property Config m
+
+
+{- See src/Material/Button.elm for an example of, e.g., an onClick handler. 
+-}
+
+
 -- VIEW
 
 
 {-| Component view.
 -}
-view : Signal.Address Msg -> Model -> List Style -> Html
-view addr model styles =
-  Style.div 
+view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+view lift model options elems =
+  Options.div 
     ( cs "TEMPLATE"
-    :: styles
+    :: options
     ) 
-    [ h1 [] [ text "TEMPLATE" ] ]
+    [ h6 [] [ text "TEMPLATE COMPONENT" ] 
+    ]
 
 
 -- COMPONENT
 
-
-{-|
--}
 type alias Container c =
   { c | template : Indexed Model }
 
 
-{-|
+{-| Component render.  
 -}
-type alias Observer obs = 
-  Component.Observer Msg obs
+render 
+  : (Parts.Msg (Container c) -> m)
+  -> Parts.Index
+  -> (Container c)
+  -> List (Property m)
+  -> List (Html m)
+  -> Html m
+render = 
+  Parts.create view update .template (\x y -> {y | template=x}) defaultModel
 
-
-{-|
--}
-type alias Instance container obs =
-  Component.Instance 
-    Model container Msg obs (List Style -> Html)
-
-
-{-| Create a component instance. Example usage, assuming you have a type
-`Msg` with a constructor ...
--}
-instance : 
-  Int
-  -> (Component.Msg (Container c) obs -> obs)
-  -> Model
-  -> List (Observer obs)
-  -> Instance (Container c) obs
-
-instance id lift model0 observers = 
-  Component.instance 
-    view update .template (\x y -> {y | template = x}) id lift model0 observers
-
-
-{-| 
--}
-fwdTemplate : obs -> (Observer obs)
-fwdTemplate obs action = 
-  case action of 
-    MyMsg -> Just obs
-
-
+{- See src/Material/Layout.mdl for how to add subscriptions. -}
