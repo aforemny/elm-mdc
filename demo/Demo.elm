@@ -1,4 +1,4 @@
-module Main exposing (..)
+
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Html.App as App
@@ -16,7 +16,7 @@ import Material
 import Material.Color as Color
 import Material.Layout as Layout 
 import Material.Helpers exposing (lift, lift')
-import Material.Options as Style
+import Material.Options as Options exposing (css)
 import Material.Scheme as Scheme
 import Material.Icon as Icon
 
@@ -200,10 +200,12 @@ drawer =
   ]
 
 
-header : List (Html Msg)
-header =
+header : Model -> List (Html Msg)
+header model =
   [ Layout.row 
-      []
+      [ if model.transparentHeader then css "height" "192px" else Options.nop 
+      , css "transition" "height 333ms ease-in-out 0s"
+      ]
       [ Layout.title [] [ text "elm-mdl" ]
       , Layout.spacer
       , Layout.navigation []
@@ -242,8 +244,8 @@ e404 _ =
   div 
     [ 
     ]
-    [ Style.styled Html.h1
-        [ Style.cs "mdl-typography--display-4" 
+    [ Options.styled Html.h1
+        [ Options.cs "mdl-typography--display-4" 
         , Color.background Color.primary 
         ]
         [ text "404" ]
@@ -261,7 +263,7 @@ tabTitles =
 
 stylesheet : Html a
 stylesheet =
-  Style.stylesheet """
+  Options.stylesheet """
   /* The following line is better done in html. We keep it here for
      compatibility with elm-reactor.
    */
@@ -342,9 +344,9 @@ view model =
       , Layout.fixedHeader
       --, Layout.fixedDrawer
       --, Layout.waterfall True
-      , if model.transparentHeader then Layout.transparentHeader else Style.nop
+      , if model.transparentHeader then Layout.transparentHeader else Options.nop
       ]
-      { header = header
+      { header = header model
       , drawer = drawer
       , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
       , main = [ stylesheet, top ]
