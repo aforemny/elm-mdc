@@ -1,7 +1,6 @@
 module Demo.Loading exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Attr
 
 import Material.Options as Options exposing (div, css)
 import Material.Progress as Loading
