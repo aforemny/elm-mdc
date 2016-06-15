@@ -184,7 +184,8 @@ type Msg
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case action of
+  let _ = Debug.log "Model" model in 
+  case Debug.log "Action" action of
     NOP -> 
       ( model, Cmd.none ) 
 
@@ -589,24 +590,24 @@ drawerButton lift =
       ]
 
 
-obfuscator : (Msg -> m) -> Model -> Html m
-obfuscator lift model =
+obfuscator : (Msg -> m) -> Bool -> Html m
+obfuscator lift isVisible =
   div
     [ classList
         [ ("mdl-layout__obfuscator", True)
-        , ("is-visible", model.isDrawerOpen)
+        , ("is-visible", isVisible)
         ]
     , Events.onClick (lift ToggleDrawer)
     ]
     []
 
 
-drawerView : (Msg -> m) -> Model -> List (Html m) -> Html m
-drawerView lift model elems =
+drawerView : (Msg -> m) -> Bool -> List (Html m) -> Html m
+drawerView lift isVisible elems =
   div
     [ classList
         [ ("mdl-layout__drawer", True)
-        , ("is-visible", model.isDrawerOpen)
+        , ("is-visible", isVisible)
         ]
     ] 
     elems
@@ -662,8 +663,12 @@ view lift model options { drawer, header, tabs, main } =
 
     hasDrawer = 
       drawer /= [] 
-        && model.isDrawerOpen 
-        && (not config.fixedDrawer || model.isSmallScreen) 
+
+    drawerIsFixed = 
+      config.fixedDrawer && not model.isSmallScreen
+
+    drawerIsVisible = 
+      model.isDrawerOpen || drawerIsFixed
 
     tabsElems = 
       if not hasTabs then
@@ -708,8 +713,8 @@ view lift model options { drawer, header, tabs, main } =
               |> Just
           else
             Nothing
-        , if hasDrawer then Nothing else Just (drawerView lift model drawer)
-        , if hasDrawer then Nothing else Just (obfuscator lift model)
+        , if not hasDrawer then Nothing else Just (drawerView lift drawerIsVisible drawer)
+        , if not hasDrawer then Nothing else Just (obfuscator lift (drawerIsVisible && not drawerIsFixed))
         , contentDrawerButton
         , main' 
             ( class "mdl-layout__content" 
