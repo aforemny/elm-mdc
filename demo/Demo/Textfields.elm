@@ -91,7 +91,8 @@ view model =
       [ Textfield.label "Labelled" ]
   , Textfield.render MDL [2] model.mdl 
       [ Textfield.label "Floating label"
-      , Textfield.floatingLabel 
+      , Textfield.floatingLabel
+      , Textfield.text'
       ]
   , Textfield.render MDL [3] model.mdl 
       [ Textfield.label "Disabled"
@@ -112,6 +113,16 @@ view model =
       [ Textfield.label "Enter password"
       , Textfield.floatingLabel
       , Textfield.password
+      ]
+  , Textfield.render MDL [6] model.mdl
+      [ Textfield.label "Default multiline textfield"
+      , Textfield.textarea
+      ]
+  , Textfield.render MDL [7] model.mdl
+      [ Textfield.label "Multiline with 6 rows"
+      , Textfield.floatingLabel
+      , Textfield.textarea
+      , Textfield.rows 6
       ]
   ]
   |> List.map (\c -> 
