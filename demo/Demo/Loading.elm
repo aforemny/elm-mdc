@@ -5,6 +5,9 @@ import Html exposing (Html, text)
 import Material.Options as Options exposing (div, css)
 import Material.Progress as Loading
 import Material.Spinner as Loading
+import Material.Grid as Grid
+
+import Material.Button as Button
 
 import Demo.Code as Code
 import Demo.Page as Page
@@ -12,57 +15,48 @@ import Demo.Page as Page
 
 -- VIEW
 
+demoBars : List (Grid.Cell a)
+demoBars =
+  [ (Loading.progress 44, Code.code "Loading.progress 44")
+  , (Loading.indeterminate, Code.code "Loading.indeterminate")
+  , (Loading.buffered 33 87, Code.code "Loading.buffered 33 87")
+
+  , (,) (Loading.spinner [ Loading.active True ])
+    (Code.code "Loading.spinner [ Loading.active True ]")
+  , (,) (Loading.spinner [ Loading.active True, Loading.singleColor True ])
+    (Code.code """Loading.spinner [ Loading.active True
+                , Loading.singleColor True ]""")
+
+  ] |> List.map demoContainer
+
 
 view : Html m
 view =
   [ div
     []
-    ( List.concat
-      [ [ Code.code """
-            import Material.Spinner as Loading
-            import Material.Progress as Loading
-          """
-        ]
-      , [ (Loading.progress 44, Code.code "Loading.progress 44")
-
-        , (Loading.indeterminate, Code.code "Loading.indeterminate")
-
-        , (Loading.buffered 33 87, Code.code "Loading.buffered 33 87")
-
-        , (,) (Loading.spinner [ Loading.active True ])
-              (Code.code "Loading.spinner [ Loading.active True ]")
-
-        , (,) (Loading.spinner [ Loading.active True, Loading.singleColor True ])
-              (Code.code "Loading.div [ Loading.active True, Loading.singleColor True ]")
-        ]
-        |> List.map demoContainer
+      [ Grid.grid []
+          (List.append
+             [Grid.cell
+                [Grid.size Grid.All 12]
+                [ Html.p [] [text "Example use:"]
+                , Code.code """
+                             import Material.Spinner as Loading
+                             import Material.Progress as Loading
+                             """]
+             ]
+             demoBars)
       ]
-    )
   ]
   |> Page.body2 "Loading" srcUrl intro references
 
 
-demoContainer : (Html m, Html m) -> Html m
+demoContainer : (Html m, Html m) -> (Grid.Cell m)
 demoContainer (html, code) =
-  div
-  [
+  Grid.cell
+  [Grid.size Grid.All 4]
+  [ html
+  , code
   ]
-  [ div
-    [ css "text-align" "center"
-    , css "max-width" "100%"
-    , css "width" "500px"
-    , css "margin" "0 auto"
-    , css "padding" "84px 40px 40px"
-    ]
-    [ html
-    ]
-  , div
-    [
-    ]
-    [ code
-    ]
-  ]
-
 
 intro : Html m
 intro =
