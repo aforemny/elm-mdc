@@ -5,13 +5,6 @@ import Html.App as App
 import Platform.Cmd exposing (..)
 import Array exposing (Array)
 
-{-
-import Hop
-import Hop.Types
-import Hop.Navigate exposing (navigateTo)
-import Hop.Matchers exposing (match1)
--}
-
 import Material
 import Material.Color as Color
 import Material.Layout as Layout 
@@ -30,35 +23,9 @@ import Demo.Badges
 import Demo.Elevation
 import Demo.Toggles
 import Demo.Loading
+import Demo.Layout
 --import Demo.Template
 
-
--- ROUTING 
-{-
-type Route 
-  = Tab Int
-  | E404
-
-type alias Routing = 
-  ( Route, Hop.Types.Location )
-
-route0 : Routing 
-route0 = 
-  ( Tab 0, Hop.Types.newLocation )
-
-
-router : Hop.Types.Router Route
-router =
-  Hop.new
-    { notFound = E404
-    , matchers = 
-        (  match1 (Tab 0) "/"
-        :: (tabs |> List.indexedMap (\idx (_, path, _) -> 
-              match1 (Tab idx) ("/" ++ path))
-           )
-        )
-    }
--}
 
 -- MODEL
 
@@ -66,9 +33,9 @@ router =
 
 type alias Model =
   { mdl : Material.Model
-  --, routing : Routing
   , buttons : Demo.Buttons.Model
   , badges : Demo.Badges.Model
+  , layout : Demo.Layout.Model
   , menus : Demo.Menus.Model
   , textfields : Demo.Textfields.Model
   , toggles : Demo.Toggles.Model
@@ -83,9 +50,9 @@ type alias Model =
 model : Model
 model =
   { mdl = Material.model
-  --, routing = route0 
   , buttons = Demo.Buttons.model
   , badges = Demo.Badges.model
+  , layout = Demo.Layout.model
   , menus = Demo.Menus.model
   , textfields = Demo.Textfields.model
   , toggles = Demo.Toggles.model
@@ -102,22 +69,17 @@ model =
 
 
 type Msg
-  = 
-  -- Hop
-  {- = ApplyRoute ( Route, Hop.Types.Location )
-  | HopMsg ()
-  | 
- -} 
-    SelectTab Int
+  = SelectTab Int
   | Mdl Material.Msg
   | BadgesMsg Demo.Badges.Msg
   | ButtonsMsg Demo.Buttons.Msg
+  | LayoutMsg Demo.Layout.Msg
   | MenusMsg Demo.Menus.Msg
   | TextfieldMsg Demo.Textfields.Msg
   | SnackbarMsg Demo.Snackbar.Msg
   | TogglesMsg Demo.Toggles.Msg
   | TablesMsg Demo.Tables.Msg
-  | ToggleHeader
+  | ToggleHeader 
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -129,60 +91,77 @@ nth k xs =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
-    {-
-    LayoutMsg a ->
-      let
-        ( lifted, layoutFx ) =
-          lift .layout (\m x -> { m | layout = x }) LayoutMsg Layout.update a model
-        routeFx =
-          case a of 
-            Layout.SwitchTab k -> 
-              nth k tabs 
-              |> Maybe.map (\(_, path, _) -> Cmd.map HopMsg (navigateTo path))
-              |> Maybe.withDefault Cmd.none
-            _ -> 
-              Cmd.none
-      in
-        ( lifted, Cmd.batch [ layoutFx, routeFx ] )
-
-    ApplyRoute route -> 
-      ( { model 
-        | routing = route 
-        , layout = setTab model.layout (fst route)
-        }
-      , Cmd.none
-      )
-
-    HopMsg _ ->
-      ( model, Cmd.none )
--}
     SelectTab k -> 
       ( { model | selectedTab = k } , Cmd.none )
 
+    ToggleHeader ->
+      ( { model | transparentHeader = not model.transparentHeader }, Cmd.none)
+
     Mdl msg -> 
       Material.update Mdl msg model
-
-    ToggleHeader ->
-        ({ model | transparentHeader = not model.transparentHeader }, Cmd.none)
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
 
     BadgesMsg    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesMsg   Demo.Badges.update    a model
 
+    LayoutMsg a -> lift  .layout    (\m x->{m|layout   =x}) LayoutMsg  Demo.Layout.update    a model
+
     MenusMsg a -> lift  .menus    (\m x->{m|menus   =x}) MenusMsg  Demo.Menus.update    a model
---
+
     TextfieldMsg a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldMsg Demo.Textfields.update a model
---
+
     SnackbarMsg  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarMsg Demo.Snackbar.update   a model
---
+
     TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
---
+
     TablesMsg   a -> lift  .tables    (\m x->{m|tables   =x}) TablesMsg  Demo.Tables.update    a model
+
 
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
 
 -- VIEW
+
+
+tabs : List (String, String, Model -> Html Msg)
+tabs =
+  [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
+  , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
+  , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
+  , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
+  , ("Grid", "grid", \_ -> Demo.Grid.view)
+  , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
+  , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
+  , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
+  , ("Loading", "loading", \_ -> Demo.Loading.view)
+  , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
+  , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
+  --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
+  ]
+
+
+tabTitles : List (Html a)
+tabTitles =
+  List.map (\(x,_,_) -> text x) tabs
+
+
+tabViews : Array (Model -> Html Msg)
+tabViews = List.map (\(_,_,v) -> v) tabs |> Array.fromList
+
+
+
+e404 : Model -> Html Msg
+e404 _ =  
+  div 
+    [ 
+    ]
+    [ Options.styled Html.h1
+        [ Options.cs "mdl-typography--display-4" 
+        , Color.background Color.primary 
+        ]
+        [ text "404" ]
+    ]
+
 
 
 drawer : List (Html Msg)
@@ -223,42 +202,57 @@ header model =
   ]
 
 
-tabs : List (String, String, Model -> Html Msg)
-tabs =
-  [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
-  , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
-  , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
-  , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
-  , ("Grid", "grid", \_ -> Demo.Grid.view)
-  , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
-  , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
-  , ("Loading", "loading", \_ -> Demo.Loading.view)
-  , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
-  , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
-  --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
-  ]
-
-
-e404 : Model -> Html Msg
-e404 _ =  
-  div 
-    [ 
-    ]
-    [ Options.styled Html.h1
-        [ Options.cs "mdl-typography--display-4" 
-        , Color.background Color.primary 
+view : Model -> Html Msg
+view model =
+  let
+    top =
+      div
+        [ style
+            [ ( "margin", "auto" )
+            , ( "padding-left", "8%" )
+            , ( "padding-right", "8%" )
+            ]
         ]
-        [ text "404" ]
-    ]
+        [ (Array.get model.selectedTab tabViews
+            |> Maybe.withDefault e404)
+           model
+        ]
+  in
+    Layout.render Mdl model.mdl
+      [ Layout.selectedTab model.selectedTab
+      , Layout.onSelectTab SelectTab
+      , Layout.fixedHeader
+      --, Layout.fixedDrawer
+      , Layout.waterfall True
+      , if model.transparentHeader then Layout.transparentHeader else Options.nop
+      ]
+      { header = header model
+      , drawer = drawer
+      , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
+      , main = [ stylesheet, top ]
+      }
+    {- The following lines are not necessary when you manually set up
+       your html, as done with page.html. Removing it will then
+       fix the flicker you see on load.
+    -}
+    |> (\contents -> 
+      div []
+        [ Scheme.topWithScheme Color.Teal Color.Red contents
+        , Html.node "script"
+           [ Html.Attributes.attribute "src" "assets/highlight.pack.js" ]
+           []
+        ]
+    )
 
 
-tabViews : Array (Model -> Html Msg)
-tabViews = List.map (\(_,_,v) -> v) tabs |> Array.fromList
-
-
-tabTitles : List (Html a)
-tabTitles =
-  List.map (\(x,_,_) -> text x) tabs
+main : Program Never
+main =
+  App.program 
+    { init = ( model, Layout.sub0 Mdl )
+    , view = view
+    , subscriptions = Layout.subs Mdl
+    , update = update
+    }
 
 
 stylesheet : Html a
@@ -305,74 +299,3 @@ stylesheet =
     color: white;
   }
 """
-
-
-{-
-setTab : Layout.Model -> Route -> Layout.Model
-setTab layout route =
-  let 
-    idx = 
-      case route of 
-        Tab k -> k
-        E404 -> -1 
-  in 
-    { layout | selectedTab = idx }
--}
-
-
-view : Model -> Html Msg
-view model =
-  let
-    top =
-      div
-        [ style
-            [ ( "margin", "auto" )
-            , ( "padding-left", "8%" )
-            , ( "padding-right", "8%" )
-            ]
-        -- TODO: I don't see why the line below is necessary
-        --, key <| toString (fst model.routing)
-        ]
-        [ (Array.get model.selectedTab tabViews
-            |> Maybe.withDefault e404)
-           model
-        ]
-  in
-    Layout.render Mdl model.mdl
-      [ Layout.selectedTab model.selectedTab
-      , Layout.onSelectTab SelectTab
-      , Layout.fixedHeader
-      --, Layout.fixedDrawer
-      , Layout.waterfall True
-      , if model.transparentHeader then Layout.transparentHeader else Options.nop
-      ]
-      { header = header model
-      , drawer = drawer
-      , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
-      , main = [ stylesheet, top ]
-      }
-    {- The following lines are not necessary when you manually set up
-       your html, as done with page.html. Removing it will then
-       fix the flicker you see on load.
-    -}
-    |> (\contents -> 
-      div []
-        [ Scheme.topWithScheme Color.Teal Color.Red contents
-        , Html.node "script"
-           [ Html.Attributes.attribute "src" "assets/highlight.pack.js" ]
-           []
-        ]
-    )
-
-
-main : Program Never
-main =
-  App.program 
-    { init = ( model, Layout.sub0 Mdl )
-    , view = view
-    , subscriptions = Layout.subs Mdl
-    , update = update
-    }
-
-
-

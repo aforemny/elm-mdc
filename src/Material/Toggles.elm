@@ -189,13 +189,16 @@ top lift name model summary elems =
       , Just (onBlur (lift (SetFocus False)))
       , cfg.onChange
       ] 
-      (if cfg.ripple then 
-         (Html.App.map (Ripple >> lift) <| Ripple.view 
-           [ class "mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center" ]
-           model.ripple
-         ) :: elems
-       else
-         elems)
+      (List.concat 
+        [ elems
+        , if cfg.ripple then 
+            [ Html.App.map (Ripple >> lift) <| Ripple.view 
+               [ class "mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center" ]
+               model.ripple
+            ]
+          else 
+            []
+        ]) 
 
 
 
