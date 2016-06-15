@@ -1,6 +1,7 @@
 module Demo.Loading exposing (..)
 
 import Html exposing (Html, text)
+import Html.Attributes as Attr
 
 import Material.Options as Options exposing (div, css)
 import Material.Progress as Loading
@@ -8,10 +9,64 @@ import Material.Spinner as Loading
 import Material.Grid as Grid
 
 import Material.Button as Button
+import Material
+import Material.Helpers as Helpers
 
 import Demo.Code as Code
 import Demo.Page as Page
 
+type alias Mdl = Material.Model
+
+type alias Model =
+  { mdl : Material.Model
+  , started : Bool
+  , currentProgress : Float
+  }
+
+model : Model
+model =
+  { mdl = Material.model
+  , started = False
+  , currentProgress = 0
+  }
+
+type Msg
+  = Tick
+  | Start
+  | Mdl Material.Msg
+
+
+-- UPDATE
+update : Msg -> Model -> (Model, Cmd Msg)
+update action model =
+  case action of
+      -- 'Simulate' a process that takes some time
+    Tick ->
+      let
+        nextProgress = model.currentProgress + 1
+        progress = if nextProgress > 100 then
+                     0
+                   else
+                     nextProgress
+
+        finishedLoading = nextProgress > 100
+
+        command = if not finishedLoading then
+                    Helpers.delay 100 Tick
+                  else
+                    Cmd.none
+      in
+        ({ model | currentProgress = progress
+         , started = not finishedLoading }, command)
+
+    Start ->
+      if model.started then
+        (model, Cmd.none)
+      else
+        ({ model | started = True}, Helpers.delay 200 Tick)
+
+    Mdl action' ->
+      Material.update Mdl action' model
 
 -- VIEW
 
@@ -30,8 +85,8 @@ demoBars =
   ] |> List.map demoContainer
 
 
-view : Html m
-view =
+view : Model -> Html Msg
+view model =
   [ div
     []
       [ Grid.grid []
@@ -45,6 +100,40 @@ view =
                              """]
              ]
              demoBars)
+      , Grid.grid []
+        [ Grid.cell [ Grid.size Grid.All 12]
+            [ Html.p [] [text "Interactive demos"] ]
+        , Grid.cell
+            [ Grid.size Grid.All 4]
+            [ Loading.progress model.currentProgress
+            -- NOTE: Just a padding component to position the code blocks
+            , div [Options.css "padding-top" "30px"] []
+            , Code.code "Progress bar that updates while loading"
+            , div []
+              [ Button.render Mdl [4] model.mdl
+                  [ Button.raised
+                  , Button.colored
+                  , Button.ripple
+                  , if model.started then Button.disabled else Options.nop
+                  , Button.onClick (Start)]
+                  [text "Start loading"]
+              ]
+            ]
+        , Grid.cell
+            [ Grid.size Grid.All 4 ]
+            [ Loading.spinner [ Loading.active model.started ]
+            , Code.code "Spinner that shows while loading"
+            , div []
+              [ Button.render Mdl [4] model.mdl
+                  [ Button.raised
+                  , Button.colored
+                  , Button.ripple
+                  , if model.started then Button.disabled else Options.nop
+                  , Button.onClick (Start)]
+                  [text "Start loading"]
+              ]
+            ]
+        ]
       ]
   ]
   |> Page.body2 "Loading" srcUrl intro references
