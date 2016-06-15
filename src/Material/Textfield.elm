@@ -3,6 +3,7 @@ module Material.Textfield exposing
   , onInput
   , Msg, Model, defaultModel, update, view
   , render
+  , text', textarea, rows, cols
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -39,10 +40,10 @@ This implementation provides only single-line and password.
 @docs Property, value
   
 # Appearance
-@docs label, floatingLabel, error, disabled
+@docs label, floatingLabel, error, disabled, rows, cols
 
 # Type 
-@docs password, onInput
+@docs password, textarea, text', onInput
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
@@ -62,6 +63,10 @@ import Material.Options as Options exposing (cs, nop)
 
 -- OPTIONS
 
+type Kind
+  = Text
+  | Textarea
+  | Password
 
 
 type alias Config m = 
@@ -71,7 +76,9 @@ type alias Config m =
   , value : Maybe String
   , disabled : Bool
   , onInput : Maybe (Html.Attribute m)
-  , type' : Html.Attribute m
+  , kind : Kind
+  , rows : Maybe Int
+  , cols : Maybe Int
   }
 
 
@@ -82,8 +89,10 @@ defaultConfig =
   , error = Nothing
   , value = Nothing
   , disabled = False
-  , type' = type' "text"
+  , kind = Text
   , onInput = Nothing
+  , rows = Nothing
+  , cols = Nothing
   }
 
 
@@ -147,13 +156,43 @@ onInput f =
     (\config -> { config | onInput = 
       Just (Html.Events.on "input" (Decoder.map f targetValue)) })
 
-{-|
+{-| Sets the type of input to 'password'.
 -}
 password : Property m 
 password =
   Options.set
-    (\config -> { config | type' = type' "password" })
+    (\config -> { config | kind = Password })
 
+
+{-| Creates a multiline textarea using 'textarea' element
+-}
+textarea : Property m
+textarea =
+  Options.set
+    (\config -> { config | kind = Textarea })
+
+{-| Sets the type of input to 'text'. (Name chosen to avoid clashing with Html.text)
+-}
+text' : Property m
+text' =
+  Options.set
+    (\config -> { config | kind = Text })
+
+{-|
+  TODO
+-}
+rows : Int -> Property m
+rows rows =
+  Options.set
+    (\config -> { config | rows = Just rows })
+
+{-|
+  TODO
+-}
+cols : Int -> Property m
+cols cols =
+  Options.set
+    (\config -> { config | cols = Just cols })
 
 -- MODEL
 
@@ -236,6 +275,28 @@ view' lift model options =
       Options.collect defaultConfig options
     val = 
       config.value |> Maybe.withDefault model.value
+
+    isTextarea = config.kind == Textarea
+
+    elementFunction =
+      if isTextarea then
+        Html.textarea
+      else
+        Html.input
+
+    -- Applying the type attribute only if we are not a textarea
+    -- However, if we are a textarea and rows and/or cols have been defined, add them instead
+    typeAttributes =
+      case config.kind of
+          Text -> [type' "text"]
+          Password -> [type' "password"]
+          Textarea ->
+            [] ++ (case config.rows of
+                       Just r -> [Html.Attributes.rows r]
+                       Nothing -> [])
+               ++ (case config.cols of
+                       Just c -> [Html.Attributes.cols c]
+                       Nothing -> [])
   in
     Options.apply summary div
       [ cs "mdl-textfield"
@@ -249,10 +310,9 @@ view' lift model options =
       ]
       [ config.onInput
       ]
-      ([ Just <| Html.input
-          [ class "mdl-textfield__input"
+      ([ Just <| elementFunction
+          ([ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
-          , config.type'
           , Html.Attributes.disabled config.disabled 
           , onBlur (lift Blur)
           , onFocus (lift Focus)
@@ -261,7 +321,7 @@ view' lift model options =
                 Html.Attributes.value str
               Nothing -> 
                 Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
-          ]
+          ] ++ typeAttributes)
           []
       , Just <| Html.label 
           [class "mdl-textfield__label"]  
