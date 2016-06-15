@@ -322,7 +322,7 @@ view model =
       [ Layout.selectedTab model.selectedTab
       , Layout.onSelectTab SelectTab
       , Layout.fixedHeader
-      , Layout.fixedDrawer
+      --, Layout.fixedDrawer
       --, Layout.waterfall True
       ]
       { header = header

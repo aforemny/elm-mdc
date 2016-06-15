@@ -687,10 +687,10 @@ view lift model options { drawer, header, tabs, main } =
             [ ("mdl-layout ", True)
             , ("is-upgraded", True)
             , ("is-small-screen", model.isSmallScreen)
-            , ("has-drawer", drawer /= [])
+            , ("has-drawer", hasDrawer)
             , ("has-tabs", hasTabs)
             , ("mdl-js-layout", True)
-            , ("mdl-layout--fixed-drawer", config.fixedDrawer && drawer /= [])
+            , ("mdl-layout--fixed-drawer", config.fixedDrawer && hasDrawer)
             , ("mdl-layout--fixed-header", config.fixedHeader && hasHeader)
             , ("mdl-layout--fixed-tabs", config.fixedTabs && hasTabs)
             ]
@@ -699,7 +699,7 @@ view lift model options { drawer, header, tabs, main } =
            catch global keyboard events, but we can reasonably assume something inside
            mdl-layout__container is focused. 
         -} 
-        , if hasDrawer then
+        , if drawerIsVisible && not drawerIsFixed then
             on "keydown" 
                (Decoder.map 
                  (lift << \key -> if key == 27 then ToggleDrawer else NOP) 
