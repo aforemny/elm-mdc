@@ -343,7 +343,7 @@ view model =
       , Layout.onSelectTab SelectTab
       , Layout.fixedHeader
       --, Layout.fixedDrawer
-      --, Layout.waterfall True
+      , Layout.waterfall True
       , if model.transparentHeader then Layout.transparentHeader else Options.nop
       ]
       { header = header model

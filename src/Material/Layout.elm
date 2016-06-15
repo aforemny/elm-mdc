@@ -220,7 +220,7 @@ update action model =
         if isScrolled /= model.isScrolled then
           update 
             (TransitionHeader { toCompact = isScrolled, fixedHeader = fixedHeader })
-            model
+            { model | isScrolled = isScrolled }
         else
           pure model
 
