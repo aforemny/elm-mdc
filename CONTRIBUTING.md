@@ -57,11 +57,6 @@ that reason.  Take a look at
  - [Footers](https://www.getmdl.io/components/index.html#layout-section/footer)
  - [Lists](https://www.getmdl.io/components/index.html#lists-section) 
 
-Progress bars are pure CSS, and spinners seem to use Javascript only to insert
-auxiliary DOM-nodes on initialisation.
-
- - [Loading](https://www.getmdl.io/components/index.html#loading-section)
-
 The remaining components, use Javascript
 in various ways. Toggles seem to use Javascript exclusively to insert ripple-animations and __might__ be easy to implement using the `Ripple.elm`
 component:

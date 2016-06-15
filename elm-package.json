@@ -8,17 +8,19 @@
     ],
     "exposed-modules": [
         "Material",
-        "Material.Options",
-        "Material.Scheme",
-        "Material.Helpers",
-        "Material.Color",
         "Material.Badge",
         "Material.Button",
+        "Material.Color",
         "Material.Elevation",
         "Material.Grid",
+        "Material.Helpers",
         "Material.Icon",
         "Material.Layout",
+        "Material.Options",
+        "Material.Progress",
+        "Material.Scheme",
         "Material.Snackbar",
+        "Material.Spinner",
         "Material.Textfield"
     ],
     "dependencies": {
