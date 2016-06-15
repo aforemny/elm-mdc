@@ -18,6 +18,7 @@ import Material.Layout as Layout
 import Material.Helpers exposing (lift, lift')
 import Material.Options as Style
 import Material.Scheme as Scheme
+import Material.Icon as Icon
 
 import Demo.Buttons
 import Demo.Menus
@@ -72,9 +73,10 @@ type alias Model =
   , textfields : Demo.Textfields.Model
   , toggles : Demo.Toggles.Model
   , snackbar : Demo.Snackbar.Model
+  , tables : Demo.Tables.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
-  , tables : Demo.Tables.Model
+  , transparentHeader : Bool
   }
 
 
@@ -88,9 +90,10 @@ model =
   , textfields = Demo.Textfields.model
   , toggles = Demo.Toggles.model
   , snackbar = Demo.Snackbar.model
+  , tables = Demo.Tables.model
   --, template = Demo.Template.model
   , selectedTab = 0
-  , tables = Demo.Tables.model
+  , transparentHeader = False
   }
 
 
@@ -114,6 +117,7 @@ type Msg
   | SnackbarMsg Demo.Snackbar.Msg
   | TogglesMsg Demo.Toggles.Msg
   | TablesMsg Demo.Tables.Msg
+  | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -156,7 +160,10 @@ update action model =
       ( { model | selectedTab = k } , Cmd.none )
 
     Mdl msg -> 
-      Material.update Mdl msg model 
+      Material.update Mdl msg model
+
+    ToggleHeader ->
+        ({ model | transparentHeader = not model.transparentHeader }, Cmd.none)
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
 
@@ -193,7 +200,7 @@ drawer =
   ]
 
 
-header : List (Html a)
+header : List (Html Msg)
 header =
   [ Layout.row 
       []
@@ -201,6 +208,9 @@ header =
       , Layout.spacer
       , Layout.navigation []
           [ Layout.link
+              [ Layout.href "#", Layout.onClick ToggleHeader]
+              [ Icon.i "photo" ]
+          , Layout.link
               [ Layout.href "https://github.com/debois/elm-mdl"]
               [ span [] [text "github"] ]
           , Layout.link
@@ -284,6 +294,14 @@ stylesheet =
     padding-bottom: 1rem;
     padding-left:1rem;
   }
+  .mdl-layout__header--transparent {
+    background: url('https://getmdl.io/assets/demos/transparent.jpg') center / cover;
+  }
+  .mdl-layout__header--transparent .mdl-layout__drawer-button {
+    /* This background is dark, so we set text to white. Use 87% black instead if
+       your background is light. */
+    color: white;
+  }
 """
 
 
@@ -324,6 +342,7 @@ view model =
       , Layout.fixedHeader
       --, Layout.fixedDrawer
       --, Layout.waterfall True
+      , if model.transparentHeader then Layout.transparentHeader else Style.nop
       ]
       { header = header
       , drawer = drawer
