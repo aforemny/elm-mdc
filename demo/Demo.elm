@@ -29,6 +29,7 @@ import Demo.Elevation
 import Demo.Toggles
 import Demo.Loading
 import Demo.Layout
+import Demo.Footer
 --import Demo.Template
 
 
@@ -47,6 +48,7 @@ type alias Model =
   , snackbar : Demo.Snackbar.Model
   , tables : Demo.Tables.Model
   , loading : Demo.Loading.Model
+  , footers : Demo.Footer.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -65,6 +67,7 @@ model =
   , snackbar = Demo.Snackbar.model
   , tables = Demo.Tables.model
   , loading = Demo.Loading.model
+  , footers = Demo.Footer.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -87,6 +90,7 @@ type Msg
   | TogglesMsg Demo.Toggles.Msg
   | TablesMsg Demo.Tables.Msg
   | LoadingMsg Demo.Loading.Msg
+  | FooterMsg Demo.Footer.Msg
   | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
@@ -125,6 +129,7 @@ update action model =
     TablesMsg   a -> lift  .tables    (\m x->{m|tables   =x}) TablesMsg  Demo.Tables.update    a model
 --
     LoadingMsg   a -> lift  .loading    (\m x->{m|loading   =x}) LoadingMsg  Demo.Loading.update    a model
+    FooterMsg   a -> lift  .footers    (\m x->{m|footers   =x}) FooterMsg  Demo.Footer.update    a model
 
 
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
@@ -146,6 +151,7 @@ tabs =
   , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
+  , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   ]
 
