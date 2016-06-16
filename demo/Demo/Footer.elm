@@ -78,19 +78,36 @@ view model  =
 
 intro : Html m
 intro =
-  Page.fromMDL "https://www.getmdl.io/components/index.html#TEMPLATE-section" """
-> ...
+  Page.fromMDL "https://getmdl.io/components/index.html#layout-section/footer" """
+> The Material Design Lite (MDL) footer component is a comprehensive container
+> intended to present a substantial amount of related content in a visually
+> attractive and logically intuitive area. Although it is called "footer", it
+> may be placed at any appropriate location on a device screen, either before or
+> after other content.
+>
+> An MDL footer component takes two basic forms: mega-footer and mini-footer. As
+> the names imply, mega-footers contain more (and more complex) content than
+> mini-footers. A mega-footer presents multiple sections of content separated by
+> horizontal rules, while a mini-footer presents a single section of content. Both
+> footer forms have their own internal structures, including required and optional
+> elements, and typically include both informational and clickable content, such
+> as links.
+>
+> Footers, as represented by this component, are a fairly new feature in user
+> interfaces, and allow users to view discrete blocks of content in a coherent and
+> consistently organized way. Their design and use is an important factor in the
+> overall user experience.
 """
 
 
 srcUrl : String
 srcUrl =
-  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/TEMPLATE.elm"
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Footer.elm"
 
 
 references : List (String, String)
 references =
-  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-TEMPLATE"
-  , Page.mds "https://www.google.com/design/spec/components/TEMPLATE.html"
-  , Page.mdl "https://www.getmdl.io/components/index.html#TEMPLATE"
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Footer"
+  , Page.mds "https://material.google.com/layout/structure.html"
+  , Page.mdl "https://getmdl.io/components/index.html#layout-section/footer"
   ]

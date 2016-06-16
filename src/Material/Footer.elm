@@ -8,16 +8,31 @@ module Material.Footer exposing
   , left, right
   )
 
--- TEMPLATE. Copy this to a file for your component, then update.
+{-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/footer):
 
-{-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#TEMPLATE-section):
-
-> ...
+> The Material Design Lite (MDL) footer component is a comprehensive container
+> intended to present a substantial amount of related content in a visually
+> attractive and logically intuitive area. Although it is called "footer", it
+> may be placed at any appropriate location on a device screen, either before or
+> after other content.
+>
+> An MDL footer component takes two basic forms: mega-footer and mini-footer. As
+> the names imply, mega-footers contain more (and more complex) content than
+> mini-footers. A mega-footer presents multiple sections of content separated by
+> horizontal rules, while a mini-footer presents a single section of content. Both
+> footer forms have their own internal structures, including required and optional
+> elements, and typically include both informational and clickable content, such
+> as links.
+>
+> Footers, as represented by this component, are a fairly new feature in user
+> interfaces, and allow users to view discrete blocks of content in a coherent and
+> consistently organized way. Their design and use is an important factor in the
+> overall user experience.
 
 See also the
-[Material Design Specification]([https://www.google.com/design/spec/components/TEMPLATE.html).
+[Material Design Specification](https://material.google.com/layout/structure.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/template)
+Refer to [this site](http://debois.github.io/elm-mdl#/footer)
 for a live demo.
 
 @docs Model, model, Msg, update
