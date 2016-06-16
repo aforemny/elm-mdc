@@ -42,12 +42,6 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/footer)
 for a live demo.
 
-@docs Model, model, Msg, update
-@docs view
-
-# Component support
-
-@docs Container, Observer, Instance, instance, fwdTemplate
 -}
 
 
@@ -110,6 +104,12 @@ prefix tp =
 
 type Section a = Section (Type, Html a)
 
+type MegaContent a = MegaContent (Html a)
+type MiniContent a = MiniContent (Html a)
+
+
+type Content a = Content (Type, Html a)
+
 {-| Link.
 -}
 link : List (LinkProperty m) -> List (Html m) -> Html m
@@ -117,6 +117,13 @@ link styles contents =
   Options.styled a
     styles
     contents
+
+
+li : List (Style m) -> List (Html m) -> Html m
+li styles content =
+  Options.styled Html.li
+    styles
+    content
 
 dropdown : List (Style m) -> List (Html m) -> Html m
 dropdown styles content =
