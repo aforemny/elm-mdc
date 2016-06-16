@@ -2,67 +2,157 @@ module Demo.Loading exposing (..)
 
 import Html exposing (Html, text)
 
-import Material.Options as Options exposing (div, css)
+import Material.Options as Options exposing (div, css, when)
 import Material.Progress as Loading
 import Material.Spinner as Loading
+import Material.Grid as Grid
+
+import Material.Button as Button
+import Material
+import Material.Helpers as Helpers exposing (map2nd)
 
 import Demo.Code as Code
 import Demo.Page as Page
 
+type alias Mdl = Material.Model
+
+type alias Model =
+  { mdl : Material.Model
+  , running : Bool
+  , progress : Float
+  }
+
+model : Model
+model =
+  { mdl = Material.model
+  , running = False
+  , progress = 14
+  }
+
+type Msg
+  = Tick
+  | Toggle
+  | Mdl Material.Msg
+
+
+-- UPDATE
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update action model =
+  case action of
+      -- 'Simulate' a process that takes some time
+    Tick ->
+      let
+        nextProgress = 
+          model.progress + 1
+
+        progress = 
+          if nextProgress > 100 then 0 else nextProgress
+
+        finishedLoading = 
+          nextProgress > 100
+
+      in
+        ( { model | progress = progress
+          , running = model.running && not finishedLoading 
+          }
+        , if model.running && not finishedLoading then 
+            Helpers.delay 100 Tick 
+          else 
+            Cmd.none
+        )
+
+    Toggle ->
+      ( { model | running = not model.running }
+      , if model.running == False then 
+          Helpers.delay 200 Tick
+        else
+          Cmd.none
+      )
+
+    Mdl action' ->
+      Material.update Mdl action' model
 
 -- VIEW
 
+demoBars : Model -> List (Grid.Cell a)
+demoBars model =
+  let 
+    k = toString model.progress 
+    buffered = min 100.0 (3.0 * model.progress)
+  in
+    [ ( Loading.progress model.progress
+      , "Loading.progress " ++ k
+      )
+    , ( Loading.buffered model.progress buffered
+      , "Loading.buffered " ++ k ++ " " ++ toString buffered
+      )
+    , ( Loading.indeterminate
+      , "Loading.indeterminate" 
+      )
+    , ( Loading.spinner [ Loading.active model.running ]
+      , "Loading.spinner [ Loading.active " ++ toString model.running ++ " ]"
+      )
+    , ( Loading.spinner [ Loading.active model.running, Loading.singleColor True ]
+      , "Loading.spinner [ Loading.active " ++ toString model.running ++
+        "\n                , Loading.singleColor True ]"
+      )
+    ] 
+  |> List.map demoContainer
 
-view : Html m
-view =
+
+view : Model -> Html Msg
+view model =
   [ div
-    []
-    ( List.concat
-      [ [ Code.code """
-            import Material.Spinner as Loading
-            import Material.Progress as Loading
-          """
+      []
+      [ Html.p [] [text "Example use:"]
+      , Grid.grid []
+          ( Grid.cell
+              [ Grid.size Grid.All 12 ]
+              [ Code.code """
+                             import Material.Spinner as Loading
+                             import Material.Progress as Loading
+                             """
+              ]
+          :: demoBars model )
+      , Grid.grid []
+        [ Grid.cell
+            [ Grid.size Grid.All 4]
+            [ div [Options.css "padding-top" "30px"] []
+            , div []
+              [ Button.render Mdl [4] model.mdl
+                  [ Button.raised
+                  , Button.colored
+                  , Button.ripple
+                  , Button.disabled `when` model.running 
+                  , Button.onClick Toggle
+                  ]
+                  [ text "Resume" ]
+              , Options.div [ css "width" "2em", css "display" "inline-block" ] []
+              , Button.render Mdl [5] model.mdl
+                  [ Button.raised
+                  , Button.colored
+                  , Button.ripple
+                  , Button.disabled `when` not model.running
+                  , Button.onClick Toggle
+                  ]
+                  [ text "Pause" ]
+              ]
+            ]
         ]
-      , [ (Loading.progress 44, Code.code "Loading.progress 44")
-
-        , (Loading.indeterminate, Code.code "Loading.indeterminate")
-
-        , (Loading.buffered 33 87, Code.code "Loading.buffered 33 87")
-
-        , (,) (Loading.spinner [ Loading.active True ])
-              (Code.code "Loading.spinner [ Loading.active True ]")
-
-        , (,) (Loading.spinner [ Loading.active True, Loading.singleColor True ])
-              (Code.code "Loading.div [ Loading.active True, Loading.singleColor True ]")
-        ]
-        |> List.map demoContainer
-      ]
-    )
+     ]
   ]
   |> Page.body2 "Loading" srcUrl intro references
 
 
-demoContainer : (Html m, Html m) -> Html m
+demoContainer : (Html m, String) -> (Grid.Cell m)
 demoContainer (html, code) =
-  div
-  [
+  Grid.cell
+  [Grid.size Grid.All 4]
+  [ div [css "text-align" "center"] [html]
+  , Code.code code
   ]
-  [ div
-    [ css "text-align" "center"
-    , css "max-width" "100%"
-    , css "width" "500px"
-    , css "margin" "0 auto"
-    , css "padding" "84px 40px 40px"
-    ]
-    [ html
-    ]
-  , div
-    [
-    ]
-    [ code
-    ]
-  ]
-
 
 intro : Html m
 intro =

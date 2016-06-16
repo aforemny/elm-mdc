@@ -41,6 +41,7 @@ type alias Model =
   , toggles : Demo.Toggles.Model
   , snackbar : Demo.Snackbar.Model
   , tables : Demo.Tables.Model
+  , loading : Demo.Loading.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -58,6 +59,7 @@ model =
   , toggles = Demo.Toggles.model
   , snackbar = Demo.Snackbar.model
   , tables = Demo.Tables.model
+  , loading = Demo.Loading.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -79,7 +81,8 @@ type Msg
   | SnackbarMsg Demo.Snackbar.Msg
   | TogglesMsg Demo.Toggles.Msg
   | TablesMsg Demo.Tables.Msg
-  | ToggleHeader 
+  | LoadingMsg Demo.Loading.Msg
+  | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -115,6 +118,8 @@ update action model =
     TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
 
     TablesMsg   a -> lift  .tables    (\m x->{m|tables   =x}) TablesMsg  Demo.Tables.update    a model
+--
+    LoadingMsg   a -> lift  .loading    (\m x->{m|loading   =x}) LoadingMsg  Demo.Loading.update    a model
 
 
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
@@ -133,7 +138,7 @@ tabs =
   , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
   , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
   , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
-  , ("Loading", "loading", \_ -> Demo.Loading.view)
+  , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)

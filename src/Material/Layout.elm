@@ -187,8 +187,7 @@ type Msg
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  let _ = Debug.log "Model" model in 
-  case Debug.log "Action" action of
+  case action of
     NOP -> 
       ( model, Cmd.none ) 
 

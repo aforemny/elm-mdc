@@ -1,6 +1,7 @@
 module Material.Options exposing
   ( Property, Summary, collect
-  , cs, cs', css, many, nop, set, data
+  , cs, css, many, nop, set, data
+  , when 
   , apply, styled, styled', stylesheet
   , Style, div, span, onHover
   )
@@ -12,7 +13,7 @@ for intended use.
 @docs Property
 
 # Constructors
-@docs cs, cs', css, data, many, nop
+@docs cs, css, data, many, nop, when
 
 # Html
 @docs Style, styled, styled', div, span, onHover
@@ -216,6 +217,16 @@ set =
 data : String -> String -> Property c m
 data key val = 
   Attribute (Html.Attributes.attribute ("data-" ++ key) val)
+
+
+{-| Conditional option. When the guard evaluates to `true`, the option is
+applied; otherwise it is ignored. Use like this: 
+
+    Button.disabled `when` not model.isRunning
+-}
+when : Property c m -> Bool -> Property c m
+when prop guard = 
+  if guard then prop else nop
 
 
 -- CONVENIENCE
