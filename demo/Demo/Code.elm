@@ -1,6 +1,7 @@
 module Demo.Code exposing (..) 
 
 import Html exposing (Html, text)
+
 import Platform.Cmd exposing (Cmd)
 import String
 import Markdown
@@ -126,7 +127,9 @@ trim s =
 
 code : String -> Html a
 code str = 
-  Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```"
+  div 
+    [ css "overflow" "scroll" ]
+    [ Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```" ]
 
 
 -- VIEW
