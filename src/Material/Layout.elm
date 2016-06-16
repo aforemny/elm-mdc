@@ -490,7 +490,7 @@ tabsView lift config model (tabs, tabStyles) =
               , config.onSelectTab 
                   |> Maybe.map ((|>) tabIndex)
                   |> Maybe.withDefault Helpers.noAttr
-              , Html.Attributes.href ("#mdl-layout-tab-" ++ toString tabIndex)
+              --, Html.Attributes.href ("#mdl-layout-tab-" ++ toString tabIndex)
               ]
               [ Just tab
               , if config.rippleTabs then

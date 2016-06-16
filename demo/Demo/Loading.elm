@@ -14,7 +14,6 @@ import Material.Helpers as Helpers exposing (map2nd)
 import Demo.Code as Code
 import Demo.Page as Page
 
-type alias Mdl = Material.Model
 
 type alias Model =
   { mdl : Material.Model
@@ -22,12 +21,14 @@ type alias Model =
   , progress : Float
   }
 
+
 model : Model
 model =
   { mdl = Material.model
   , running = False
   , progress = 14
   }
+
 
 type Msg
   = Tick
@@ -153,6 +154,7 @@ demoContainer (html, code) =
   [ div [css "text-align" "center"] [html]
   , Code.code code
   ]
+
 
 intro : Html m
 intro =

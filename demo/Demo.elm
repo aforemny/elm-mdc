@@ -4,11 +4,16 @@ import Html.Attributes exposing (href, class, style)
 import Html.App as App
 import Platform.Cmd exposing (..)
 import Array exposing (Array)
+import Dict exposing (Dict)
+import String
+
+import Navigation
+import RouteUrl as Routing
 
 import Material
 import Material.Color as Color
 import Material.Layout as Layout 
-import Material.Helpers exposing (lift, lift')
+import Material.Helpers exposing (pure, lift, lift')
 import Material.Options as Options exposing (css)
 import Material.Scheme as Scheme
 import Material.Icon as Icon
@@ -154,6 +159,16 @@ tabViews : Array (Model -> Html Msg)
 tabViews = List.map (\(_,_,v) -> v) tabs |> Array.fromList
 
 
+tabUrls : Array String
+tabUrls = 
+  List.map (\(_,x,_) -> x) tabs |> Array.fromList
+
+
+urlTabs : Dict String Int
+urlTabs = 
+  List.indexedMap (\idx (_,x,_) -> (x, idx)) tabs |> Dict.fromList
+
+
 
 e404 : Model -> Html Msg
 e404 _ =  
@@ -194,7 +209,7 @@ header model =
       , Layout.spacer
       , Layout.navigation []
           [ Layout.link
-              [ Layout.href "#", Layout.onClick ToggleHeader]
+              [ Layout.onClick ToggleHeader]
               [ Icon.i "photo" ]
           , Layout.link
               [ Layout.href "https://github.com/debois/elm-mdl"]
@@ -226,7 +241,7 @@ view model =
     Layout.render Mdl model.mdl
       [ Layout.selectedTab model.selectedTab
       , Layout.onSelectTab SelectTab
-      , Layout.fixedHeader
+      --, Layout.fixedHeader
       --, Layout.fixedDrawer
       , Layout.waterfall True
       , if model.transparentHeader then Layout.transparentHeader else Options.nop
@@ -250,14 +265,54 @@ view model =
     )
 
 
+-- ROUTING
+
+
+urlOf : Model -> String
+urlOf model = 
+  "#" ++ (Array.get model.selectedTab tabUrls |> Maybe.withDefault "")
+
+
+delta2url : Model -> Model -> Maybe Routing.UrlChange
+delta2url model1 model2 = 
+  if model1.selectedTab /= model2.selectedTab then 
+    { entry = Routing.NewEntry
+    , url = urlOf model2
+    } |> Just
+  else
+    Nothing
+        
+
+location2messages : Navigation.Location -> List Msg
+location2messages location = 
+  [ case String.dropLeft 1 location.hash of
+      "" -> 
+        SelectTab 0
+  
+      x -> 
+        Dict.get x urlTabs
+          |> Maybe.withDefault -1
+          |> SelectTab
+  ]
+  
+
+
+-- APP
+
+
 main : Program Never
 main =
-  App.program 
-    { init = ( model, Layout.sub0 Mdl )
+  Routing.program 
+    { delta2url = delta2url
+    , location2messages = location2messages
+    , init = ( model, Layout.sub0 Mdl )
     , view = view
     , subscriptions = Layout.subs Mdl
     , update = update
     }
+
+
+-- CSS
 
 
 stylesheet : Html a
