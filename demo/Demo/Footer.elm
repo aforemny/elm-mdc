@@ -10,6 +10,8 @@ import Material.Icon as Icon
 
 import Demo.Page as Page
 
+import Html.Attributes as Attrs
+
 
 -- MODEL
 
@@ -52,11 +54,13 @@ update action model =
 
 view : Model -> Html Msg
 view model  =
-  [ div
-      []
+  [ p [] [text """Footers come in two sizes, mini and mega"""]
+
+  , p [] [text "Example of a mini footer"]
+  , div []
       [
        Footer.mini [ Options.cs "demo-mini-footer" ]
-         [ Footer.left []
+         [ Footer.miniLeft []
              [ Footer.logo [ Options.cs "demo-mini-footer-logo" ]
                  [ text "Mini footer example" ]
              , Footer.links [ Options.cs "demo-mini-footer-links" ]
@@ -68,10 +72,66 @@ view model  =
                          [text "Link 2"] ]
                  ]
              ]
-         , Footer.right []
+         , Footer.miniRight []
              [Footer.logo [] [text "Mini footer example"]]
          ]
+      , div [] []
       ]
+  , div [Attrs.style [("margin-top", "60px")]] []
+  , p [] [text """Example of a mega footer that contains more content than a mini footer"""]
+  , div []
+    [ Footer.mega []
+        [ Footer.top []
+            [ Footer.megaLeft []
+                [ button [Attrs.class "mdl-mega-footer__social-btn"] []
+                , button [Attrs.class "mdl-mega-footer__social-btn"] []
+                , button [Attrs.class "mdl-mega-footer__social-btn"] []
+                ]
+            , Footer.megaRight []
+                [ a [ Attrs.href "#"] [text "Link 1"]
+                , a [ Attrs.href "#"] [text "Link 2"]
+                , a [ Attrs.href "#"] [text "Link 3"]
+                ]
+
+            ]
+        , Footer.middle []
+            [ Footer.dropdown []
+                [ Footer.heading [] [text "Mega footer example"]
+                , ul [Attrs.class "mdl-mega-footer__link-list"]
+                  [ li []
+                     [ Footer.link [Footer.href "#", Footer.onClick FooterMsg]
+                         [text "Link 1"] ]
+                  , li []
+                     [ Footer.link [Footer.href "#", Footer.onClick FooterMsg]
+                         [text "Link 2"] ]
+                  , li []
+                     [ Footer.link [Footer.href "#", Footer.onClick FooterMsg]
+                         [text "Link 3"] ]
+
+                  ]
+                ]
+            , Footer.dropdown []
+                [ Footer.heading [] [text "Mega footer example"]
+                , ul [Attrs.class "mdl-mega-footer__link-list"]
+                  [ li []
+                     [ Footer.link [Footer.href "#", Footer.onClick FooterMsg]
+                         [text "Link 1"] ]
+                  , li []
+                     [ Footer.link [Footer.href "#", Footer.onClick FooterMsg]
+                         [text "Link 2"] ]
+                  , li []
+                     [ Footer.link [Footer.href "#", Footer.onClick FooterMsg]
+                         [text "Link 3"] ]
+
+                  ]
+                ]
+            ]
+
+        , Footer.bottom []
+            [ Footer.logo [] [text "Mega footer logo"]
+            ]
+        ]
+    ]
   ]
   |> Page.body2 "Footers" srcUrl intro references
 
