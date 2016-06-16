@@ -101,7 +101,7 @@ type alias Msg
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
 update action =
-  Ripple.update (Debug.log "Action" action)
+  Ripple.update action
 
 
 -- VIEW

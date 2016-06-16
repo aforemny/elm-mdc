@@ -82,15 +82,20 @@ view model =
   [ p []
       [ text "Typical use of a badge in, say, in an e-mail client:" ]
   , grid []
-      [ c [ Options.styled span
-              [ if model.unread /= 0 then Badge.add (toString model.unread) else Options.nop
+      [ c [ Options.div 
+              [ css "width" "10em", css "display" "inline-block" ]
+              [ Options.styled span
+                [ if model.unread /= 0 then Badge.add (toString model.unread) else Options.nop
+                ]
+                [ text "Unread" ]
               ]
-              [ text "Unread" ]
-            
           , Button.render Mdl [0] model.mdl
-              [ css "margin-left" "2rem"
-              , Button.onClick Decrease ]
-              [ text "Mark as read"]
+              [ Button.onClick Decrease 
+              , Button.raised
+              , Button.ripple
+              , Button.colored
+              ]
+              [ text "Mark as read" ]
           ]
       ]
   , p [] 

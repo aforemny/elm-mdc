@@ -102,7 +102,7 @@ mapSquare k f model =
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case Debug.log "Action" action of
+  case action of
     AddSnackbar ->
       add (\k -> Snackbar.snackbar k ("Snackbar message #" ++ toString k) "UNDO") model
 

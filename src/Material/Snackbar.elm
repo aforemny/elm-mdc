@@ -228,7 +228,6 @@ update action model =
     Move seq transition ->
       if seq == model.seq then
         move transition model
-          --|> \pair -> let _ = Debug.log "Post move" (fst pair) in pair
       else
         (model, none)
 
