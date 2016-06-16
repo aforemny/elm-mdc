@@ -49,7 +49,7 @@ import Json.Decode as Json
 
 import Parts exposing (Indexed)
 
-import Material.Options as Options exposing (Style, cs, cs', styled, many)
+import Material.Options as Options exposing (Style, cs, styled, many, when)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter)
 import Material.Ripple as Ripple
 
@@ -178,11 +178,11 @@ top lift name model summary elems =
     Options.apply summary label
       [ cs ("mdl-" ++ name) 
       , cs ("mdl-js-" ++ name)
-      , cs' "mdl-js-ripple-effect" cfg.ripple
-      , cs' "mdl-js-ripple-effect--ignore-events" cfg.ripple
+      , cs "mdl-js-ripple-effect" `when` cfg.ripple
+      , cs "mdl-js-ripple-effect--ignore-events" `when` cfg.ripple
       , cs "is-upgraded"
-      , cs' "is-checked" cfg.value
-      , cs' "is-focused" model.isFocused
+      , cs "is-checked" `when` cfg.value
+      , cs "is-focused" `when` model.isFocused
       ]
       [ Just (blurOn "mouseup")
       , Just (onFocus (lift (SetFocus True)))

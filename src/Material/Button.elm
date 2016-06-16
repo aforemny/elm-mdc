@@ -68,7 +68,7 @@ import Platform.Cmd exposing (Cmd, none)
 import Parts exposing (Indexed, Index)
 
 import Material.Helpers as Helpers
-import Material.Options as Options exposing (cs, cs')
+import Material.Options as Options exposing (cs, when)
 import Material.Ripple as Ripple
 
 
@@ -190,7 +190,7 @@ view lift model config html =
     Options.apply summary button 
       [ cs "mdl-button"
       , cs "mdl-js-button" 
-      , cs' "mdl-js-ripple-effect" summary.config.ripple 
+      , cs "mdl-js-ripple-effect" `when` summary.config.ripple 
       ]
       [ Just (Helpers.blurOn "mouseup")
       , Just (Helpers.blurOn "mouseleave")
