@@ -172,6 +172,7 @@ import Material.Menu as Menu
 import Material.Snackbar as Snackbar
 import Material.Layout as Layout
 import Material.Toggles as Toggles
+import Material.Tooltip as Tooltip
 --import Material.Template as Template
 
 
@@ -186,6 +187,7 @@ type alias Model =
   , snackbar : Maybe (Snackbar.Model Int) 
   , layout : Layout.Model
   , toggles : Indexed Toggles.Model
+  , tooltip : Indexed Tooltip.Model
 --  , template : Indexed Template.Model
   }
 
@@ -200,6 +202,7 @@ model =
   , snackbar = Nothing
   , layout = Layout.defaultModel
   , toggles = Dict.empty
+  , tooltip = Dict.empty
 --  , template = Dict.empty
   }
 

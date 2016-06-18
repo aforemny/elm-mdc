@@ -29,6 +29,7 @@ import Demo.Elevation
 import Demo.Toggles
 import Demo.Loading
 import Demo.Layout
+import Demo.Tooltip
 --import Demo.Template
 
 
@@ -47,6 +48,7 @@ type alias Model =
   , snackbar : Demo.Snackbar.Model
   , tables : Demo.Tables.Model
   , loading : Demo.Loading.Model
+  , tooltip : Demo.Tooltip.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -65,6 +67,7 @@ model =
   , snackbar = Demo.Snackbar.model
   , tables = Demo.Tables.model
   , loading = Demo.Loading.model
+  , tooltip = Demo.Tooltip.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -87,6 +90,7 @@ type Msg
   | TogglesMsg Demo.Toggles.Msg
   | TablesMsg Demo.Tables.Msg
   | LoadingMsg Demo.Loading.Msg
+  | TooltipMsg Demo.Tooltip.Msg
   | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
@@ -126,6 +130,7 @@ update action model =
 --
     LoadingMsg   a -> lift  .loading    (\m x->{m|loading   =x}) LoadingMsg  Demo.Loading.update    a model
 
+    TooltipMsg   a -> lift  .tooltip    (\m x->{m|tooltip   =x}) TooltipMsg  Demo.Tooltip.update    a model
 
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
@@ -146,6 +151,7 @@ tabs =
   , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
+  , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> App.map TooltipMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   ]
 
