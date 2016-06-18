@@ -92,8 +92,7 @@ customStyles = """
 
 view : Model -> Html Msg
 view model  =
-  [
-    Options.stylesheet customStyles
+  [ Options.stylesheet customStyles
 
   , p [] [text """Footers come in two sizes, mini and mega.
                 Mega footers usually contain more content than mini footers."""]

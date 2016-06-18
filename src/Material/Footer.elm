@@ -1,6 +1,16 @@
 module Material.Footer
   exposing
-    (..)
+    ( Type(..)
+    , Property
+    , Content
+    , mini, mega, footer
+    , left, right, top, bottom, middle
+    , wrap
+    , logo, text, socialButton
+    , href, link, onClick
+    , dropdown, heading
+    , links, linkItem
+    )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/footer):
 
@@ -28,6 +38,29 @@ See also the
 
 Refer to [this site](http://debois.github.io/elm-mdl#/footer)
 for a live demo.
+
+# Types
+
+@docs Type
+@docs Content
+@docs Property
+
+# Helpers
+
+@docs wrap
+@docs link, onClick, href
+
+# Appearance
+
+@docs footer, mini, mega
+
+# Sections
+
+@docs left, right, top, bottom, middle
+
+# Content
+
+@docs links, logo, text, socialButton, dropdown, heading, linkItem
 
 -}
 
