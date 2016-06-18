@@ -1,31 +1,6 @@
 module Material.Footer
   exposing
     (..)
-    -- ( mini
-    -- , logo
-    -- , links
-    -- , link
-    -- , href
-    -- , onClick
-    -- , button
-    -- , miniLeft
-    -- , miniRight
-    -- , mega
-    -- , top
-    -- , middle
-    -- , bottom
-    -- , megaLeft
-    -- , megaRight
-    -- , dropdown
-    -- , heading
-    -- , footer
-    -- , leftTest
-    -- , logoTest
-    -- , rightTest
-    -- , topTest
-    -- , Type(..)
-    -- , wrap
-    -- )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/footer):
 
@@ -60,27 +35,15 @@ import Html exposing (..)
 import Html.Attributes as Html
 import Html.Events as Events
 import Material.Options as Options exposing (Style, cs)
-import Material.Helpers as Helpers
 
 import String
 import Regex
 import Material.Options.Internal as Internal exposing (attribute)
 
--- PROPERTIES
--- Helpers
--- TODO: Should these be moved somewhere else?
-
--- type LinkProp
---   = LinkProp
-
-
--- type alias LinkProperty m =
---   Options.Property LinkProp m
 
 type Type
   = Mini
   | Mega
-  | Both
 
 
 prefix : Type -> String
@@ -88,27 +51,13 @@ prefix tp =
   case tp of
     Mini -> "mdl-mini-footer"
     Mega -> "mdl-mega-footer"
-    Both -> ""
 
 separator : Type -> String
 separator tp =
   case tp of
     Mini -> "__"
     Mega -> "__"
-    Both -> ""
 
-
--- type FooterContent a
---   = FooterContent (Style a -> List (Style a) -> List (Html a))
-
--- type alias Config =
---   {
---   }
-
--- defaultConfig : Config
--- defaultConfig =
---   {
---   }
 type FooterProperty = FooterProperty
 
 type alias Property m =
@@ -141,7 +90,7 @@ href =
   Html.href >> attribute
 
 {-| Wraps a normal HTML content to `Content`
-|-}
+-}
 wrap : Html m -> Content m
 wrap = HtmlContent
 
@@ -300,7 +249,6 @@ heading styles content =
 
 text : String -> Content m
 text = Html.text >> wrap
---text s = wrap <| Html.text s
 
 socialButton : List (Property m) -> List (Content m) -> Content m
 socialButton styles content =
@@ -309,142 +257,3 @@ socialButton styles content =
     , content = content
     , elem = Html.button
     }
-
--- logoTest : List (Style m) -> List (Html m) -> Content m
--- logoTest styles content =
---   HtmlContent (Options.styled Html.div (cs "mdl-logo" :: styles) content)
-
-
-
-
--- mapContent : Type -> List (Content m) -> List (Html m)
--- mapContent tp contents =
---   List.map (contentToHtml tp) contents
-
--- leftTest : List (Style m) -> List (Content m) -> Content m
--- leftTest styles content =
---   CustomContent
---     { styles = styles
---     , content = content
---     , suffix = "left-section"
---     , elem = Html.div
---     }
-
--- rightTest : List (Style m) -> List (Content m) -> Content m
--- rightTest styles content =
---   CustomContent
---     { styles = styles
---     , content = content
---     , suffix = "right-section"
---     , elem = Html.div
---     }
-
--- topTest : List (Style m) -> List (Content m) -> Content m
--- topTest styles content =
---   CustomContent
---     { styles = styles
---     , content = content
---     , suffix = "top-section"
---     , elem = Html.div
---     }
-
-
--- footer : Type -> List (Style m) -> List (Content m) -> Html m
--- footer tp styles content =
---   Options.styled Html.footer
---     (cs (prefix tp) :: styles)
---     (mapContent tp content)
-
-
--- dropdown : List (Style m) -> List (Html m) -> Html m
--- dropdown styles content =
---   Options.styled Html.div
---     (cs "mdl-mega-footer__drop-down-section" :: styles)
---     content
-
-
--- heading : List (Style m) -> List (Html m) -> Html m
--- heading styles content =
---   Options.styled Html.h1
---     (cs "mdl-mega-footer__heading" :: styles)
---     content
-
-
--- megaLeft : List (Style m) -> List (Html m) -> Html m
--- megaLeft styles content =
---   Options.styled Html.div
---     (cs "mdl-mega-footer__left-section" :: styles)
---     content
-
-
--- megaRight : List (Style m) -> List (Html m) -> Html m
--- megaRight styles content =
---   Options.styled Html.div
---     (cs "mdl-mega-footer__right-section" :: styles)
---     content
-
-
--- top : List (Style m) -> List (Html m) -> Html m
--- top styles content =
---   Options.styled Html.div
---     (cs "mdl-mega-footer__top-section" :: styles)
---     content
-
-
--- middle : List (Style m) -> List (Html m) -> Html m
--- middle styles content =
---   Options.styled Html.div
---     (cs "mdl-mega-footer__middle-section" :: styles)
---     content
-
-
--- bottom : List (Style m) -> List (Html m) -> Html m
--- bottom styles content =
---   Options.styled Html.div
---     (cs "mdl-mega-footer__bottom-section" :: styles)
---     content
-
-
--- mega : List (Style m) -> List (Html m) -> Html m
--- mega styles content =
---   Options.styled Html.footer
---     (cs "mdl-mega-footer" :: styles)
---     content
-
-
--- button : Style m
--- button =
---   cs "mdl-mini-footer__social-btn"
-
-
--- miniLeft : List (Style m) -> List (Html m) -> Html m
--- miniLeft styles content =
---   Options.styled Html.div
---     (cs "mdl-mini-footer__left-section" :: styles)
---     content
-
-
--- miniRight : List (Style m) -> List (Html m) -> Html m
--- miniRight styles content =
---   Options.styled Html.div
---     (cs "mdl-mini-footer__right-section" :: styles)
---     content
-
-
--- logo : List (Style m) -> List (Html m) -> Html m
--- logo styles content =
---   Options.styled Html.div
---     (cs "mdl-logo" :: styles)
---     content
-
-
--- links : List (Style m) -> List (Html m) -> Html m
--- links styles content =
---   Options.styled Html.ul
---     (cs "mdl-mini-footer__link-list" :: styles)
---     content
--- mini : List (Style m) -> List (Html m) -> Html m
--- mini styles content =
---   Options.styled Html.footer
---     (cs "mdl-mini-footer" :: styles)
---     content
