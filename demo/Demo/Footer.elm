@@ -10,7 +10,7 @@ import Material.Icon as Icon
 
 import Demo.Page as Page
 
-import Html.Attributes as Attrs
+import Html.Attributes as Html
 
 
 -- MODEL
@@ -43,7 +43,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     FooterMsg ->
-      (Debug.log "FOOTER" model, Cmd.none)
+      (model, Cmd.none)
 
     Mdl action' ->
       Material.update Mdl action' model
@@ -59,11 +59,44 @@ createLinks nr =
   in
     List.indexedMap makeLink nrs
 
+
+customStyles : String
+customStyles = """
+  .custom-footer {
+    justify-content: center;
+    flex-direction: column;
+  }
+  .custom-footer ul {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    list-style-type: none;
+    justify-content: center;
+  }
+  .custom-footer .mdl-mini-footer__social-btn {
+    background-color: transparent;
+    margin: 0 16px 0 16px;
+    width: 24px;
+    height: 24px;
+  }
+  .custom-footer > ul > li > a {
+    color: white;
+    margin: 0 8px 0 8px;
+    font-weight: 400;
+    font-size: 12px;
+  }
+  """
+
 -- VIEW
 
 view : Model -> Html Msg
 view model  =
-  [ p [] [text """Footers come in two sizes, mini and mega"""]
+  [
+    Options.stylesheet customStyles
+
+  , p [] [text """Footers come in two sizes, mini and mega.
+                Mega footers usually contain more content than mini footers."""]
 
   , p [] [text "Example of a mini footer"]
   , div []
@@ -83,8 +116,9 @@ view model  =
             ]
         ]
     ]
-  , div [Attrs.style [("margin-top", "60px")]] []
-  , p [] [text """Example of a mega footer that contains more content than a mini footer"""]
+  , div [Html.style [("margin-top", "60px")]] []
+  , p [] [text """Example of a mega footer that contains more content than a mini footer.
+                Mega footers also have more sections than minifooters"""]
   , div []
     [ Footer.mega []
         [ Footer.top []
@@ -130,6 +164,29 @@ view model  =
             , Footer.links []
                 <| createLinks 5
             ]
+        ]
+    ]
+
+  , div [Html.style [("margin-top", "60px")]] []
+  , p [] [text "An example of a custom mini footer with custom content"]
+  , div []
+    [ Footer.mini [Options.cs "custom-footer"]
+        [ Footer.wrap <|
+            Html.ul []
+              [ Html.li [Html.class "mdl-mini-footer__social-btn"]
+                  [Html.a [Html.href "#"] [Icon.i "face"]]
+              , Html.li [Html.class "mdl-mini-footer__social-btn"]
+                  [Html.a [Html.href "#"] [Icon.i "settings"]]
+              , Html.li [Html.class "mdl-mini-footer__social-btn"]
+                  [Html.a [Html.href "#"] [Icon.i "donut_large"]]
+              ]
+        , Footer.wrap <|
+            Html.ul []
+              [ Html.li []
+                  [Html.a [Html.href "#"] [text "Link 1"]]
+              , Html.li []
+                  [Html.a [Html.href "#"] [text "Link 2"]]
+              ]
         ]
     ]
   ]
