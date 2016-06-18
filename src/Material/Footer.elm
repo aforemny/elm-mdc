@@ -2,7 +2,8 @@ module Material.Footer
   exposing
     ( Type(..)
     , Property
-    , Content
+    , Content(..)
+    , Footer, Element
     , mini, mega, footer
     , left, right, top, bottom, middle
     , wrap
@@ -42,7 +43,7 @@ for a live demo.
 # Types
 
 @docs Type
-@docs Content
+@docs Content, Footer, Element
 @docs Property
 
 # Helpers
@@ -74,6 +75,8 @@ import Regex
 import Material.Options.Internal as Internal exposing (attribute)
 
 
+{-| The type of the footer
+-}
 type Type
   = Mini
   | Mega
@@ -91,17 +94,27 @@ separator tp =
     Mini -> "__"
     Mega -> "__"
 
+{-| TODO
+-}
 type FooterProperty = FooterProperty
 
+{-| TODO
+-}
 type alias Property m =
   Options.Property FooterProperty m
 
+{-| TODO
+-}
 type Content a
   = HtmlContent (Html a)
   | Content (Footer a)
 
+{-| Helpers alias to wrap a Html element function
+-}
 type alias Element a = (List (Html.Attribute a) -> List (Html.Html a) -> Html.Html a)
 
+{-| Internal type alias for content within a footer
+-}
 type alias Footer a =
   { styles : List (Property a)
   , content : List (Content a)
@@ -261,6 +274,8 @@ links styles content =
     }
 
 
+{-| Creates a link
+-}
 link : List (Property m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a
@@ -275,6 +290,8 @@ li styles content =
       content
 
 
+{-| Creates a link wrapped in a `li`-element
+-}
 linkItem : List (Property m) -> List (Content m) -> Content m
 linkItem styles content =
   Content
