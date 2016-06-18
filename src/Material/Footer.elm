@@ -1,19 +1,31 @@
-module Material.Footer exposing
-  ( mini
-  , logo
-  , links
-  , link, href
-  , onClick
-  , button
-  , miniLeft, miniRight
-
-
-  , mega
-  , top, middle, bottom
-  , Position(..)
-  , megaLeft, megaRight
-  , dropdown, heading
-  )
+module Material.Footer
+  exposing
+    (..)
+    -- ( mini
+    -- , logo
+    -- , links
+    -- , link
+    -- , href
+    -- , onClick
+    -- , button
+    -- , miniLeft
+    -- , miniRight
+    -- , mega
+    -- , top
+    -- , middle
+    -- , bottom
+    -- , megaLeft
+    -- , megaRight
+    -- , dropdown
+    -- , heading
+    -- , footer
+    -- , leftTest
+    -- , logoTest
+    -- , rightTest
+    -- , topTest
+    -- , Type(..)
+    -- , wrap
+    -- )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/footer):
 
@@ -44,54 +56,31 @@ for a live demo.
 
 -}
 
-
 import Html exposing (..)
 import Html.Attributes as Html
-
 import Html.Events as Events
-
 import Material.Options as Options exposing (Style, cs)
+import Material.Helpers as Helpers
 
-import Material.Helpers as Helpers -- exposing (filter, delay, pure, map1st, map2nd)
-
-import Material.Options.Internal exposing (attribute)
+import String
+import Regex
+import Material.Options.Internal as Internal exposing (attribute)
 
 -- PROPERTIES
-
 -- Helpers
 -- TODO: Should these be moved somewhere else?
 
-type LinkProp = LinkProp
-
-type alias LinkProperty m =
-  Options.Property LinkProp m
-
-{-| onClick for Links and Buttons.
--}
-onClick : m -> LinkProperty m
-onClick =
-  Events.onClick >> attribute
-
-{-| href for Links.
--}
-href : String -> LinkProperty m
-href =
-  Html.href >> attribute
+-- type LinkProp
+--   = LinkProp
 
 
-
-type Position
-  = Top Position
-  | Middle Position
-  | Bottom Position
-  | Left
-  | Right
-
+-- type alias LinkProperty m =
+--   Options.Property LinkProp m
 
 type Type
   = Mini
   | Mega
-
+  | Both
 
 
 prefix : Type -> String
@@ -99,115 +88,363 @@ prefix tp =
   case tp of
     Mini -> "mdl-mini-footer"
     Mega -> "mdl-mega-footer"
+    Both -> ""
+
+separator : Type -> String
+separator tp =
+  case tp of
+    Mini -> "__"
+    Mega -> "__"
+    Both -> ""
 
 
+-- type FooterContent a
+--   = FooterContent (Style a -> List (Style a) -> List (Html a))
 
-type Section a = Section (Type, Html a)
+-- type alias Config =
+--   {
+--   }
 
-type MegaContent a = MegaContent (Html a)
-type MiniContent a = MiniContent (Html a)
+-- defaultConfig : Config
+-- defaultConfig =
+--   {
+--   }
+type FooterProperty = FooterProperty
+
+type alias Property m =
+  Options.Property FooterProperty m
+
+type Content a
+  = HtmlContent (Html a)
+  | Content (Footer a)
+
+type alias Element a = (List (Html.Attribute a) -> List (Html.Html a) -> Html.Html a)
+
+type alias Footer a =
+  { styles : List (Property a)
+  , content : List (Content a)
+  , elem : Element a
+  }
 
 
-type Content a = Content (Type, Html a)
-
-{-| Link.
+{-| onClick for Links and Buttons.
 -}
-link : List (LinkProperty m) -> List (Html m) -> Html m
+onClick : m -> Property m
+onClick =
+  Events.onClick >> attribute
+
+
+{-| href for Links.
+-}
+href : String -> Property m
+href =
+  Html.href >> attribute
+
+{-| Wraps a normal HTML content to `Content`
+|-}
+wrap : Html m -> Content m
+wrap = HtmlContent
+
+
+tempPrefix : String
+tempPrefix = "{{prefix}}"
+
+prefixRegex : Regex.Regex
+prefixRegex = Regex.regex tempPrefix
+
+prefixedClass : String -> Property m
+prefixedClass cls =
+  Options.cs (tempPrefix ++ cls)
+
+removePrefix : String -> String
+removePrefix = Regex.replace Regex.All prefixRegex (\_ -> "")
+
+applyPrefix : Type -> Property m -> Property m
+applyPrefix tp prop =
+  let
+    pref = prefix tp
+    sep = separator tp
+  in
+    case prop of
+      Internal.Class s ->
+        if (String.startsWith tempPrefix s) then
+          Options.cs (pref ++ sep ++ (removePrefix s))
+        else
+          prop
+
+      Internal.Many props ->
+        Options.many <| List.map (applyPrefix tp) props
+
+      _ -> prop
+
+
+toHtml : Type -> Footer a -> Html a
+toHtml tp { styles, content, elem } =
+  let
+    styles' = List.map (applyPrefix tp) styles
+  in
+    Options.styled elem
+      styles'
+      (List.map (contentToHtml tp) content)
+
+contentToHtml : Type -> Content a -> Html a
+contentToHtml tp content =
+  case content of
+    HtmlContent (html) -> html
+    Content (c) -> (toHtml tp c)
+
+
+section : String -> List (Property m) -> List (Content m) -> Content m
+section section styles content =
+  Content
+    { styles = (prefixedClass section :: styles)
+    , content = content
+    , elem = Html.div}
+
+left : List (Property m) -> List (Content m) -> Content m
+left = section "left-section"
+
+right : List (Property m) -> List (Content m) -> Content m
+right = section "right-section"
+
+top : List (Property m) -> List (Content m) -> Content m
+top = section "top-section"
+
+middle : List (Property m) -> List (Content m) -> Content m
+middle = section "middle-section"
+
+bottom : List (Property m) -> List (Content m) -> Content m
+bottom = section "bottom-section"
+
+footer : Type -> List (Property m) -> List (Content m) -> Html m
+footer tp config content =
+  let
+    pref = prefix tp
+  in
+    Options.styled Html.footer
+      (cs pref :: config)
+      (List.map (contentToHtml tp) content)
+
+
+mini : List (Property m) -> List (Content m) -> Html m
+mini = footer Mini
+
+mega : List (Property m) -> List (Content m) -> Html m
+mega = footer Mega
+
+
+socialBtn : Property m
+socialBtn = prefixedClass "social-btn"
+
+logo : List (Property m) -> List (Content m) -> Content m
+logo styles content =
+  Content
+    { styles = (cs "mdl-logo" :: styles)
+    , content = content
+    , elem = Html.div
+    }
+
+links : List (Property m) -> List (Content m) -> Content m
+links styles content =
+  Content
+    { styles = (prefixedClass "link-list" :: styles)
+    , content = content
+    , elem = Html.ul
+    }
+
+
+link : List (Property m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a
     styles
     contents
 
-
-li : List (Style m) -> List (Html m) -> Html m
+li : List (Property m) -> List (Html m) -> Content m
 li styles content =
-  Options.styled Html.li
-    styles
-    content
+  wrap <|
+    Options.styled Html.li
+      styles
+      content
 
-dropdown : List (Style m) -> List (Html m) -> Html m
+
+linkItem : List (Property m) -> List (Content m) -> Content m
+linkItem styles content =
+  Content
+    { styles = []
+    , content = [Content { styles = styles, content = content, elem = Html.a }]
+    , elem = Html.li
+    }
+
+
+dropdown : List (Property m) -> List (Content m) -> Content m
 dropdown styles content =
-  Options.styled Html.div
-    (cs "mdl-mega-footer__drop-down-section" :: styles)
-      content
+  Content
+    { styles = (prefixedClass "drop-down-section" :: styles)
+    , content = content
+    , elem = Html.div
+    }
 
-heading : List (Style m) -> List (Html m) -> Html m
+
+headingClass : Property m
+headingClass = prefixedClass "heading"
+
+
+heading : List (Property m) -> List (Content m) -> Content m
 heading styles content =
-  Options.styled Html.h1
-    (cs "mdl-mega-footer__heading" :: styles)
-      content
-
-megaLeft : List (Style m) -> List (Html m) -> Html m
-megaLeft styles content =
-  Options.styled Html.div
-    (cs "mdl-mega-footer__left-section" :: styles)
-      content
-
-megaRight : List (Style m) -> List (Html m) -> Html m
-megaRight styles content =
-  Options.styled Html.div
-    (cs "mdl-mega-footer__right-section" :: styles)
-      content
+  Content
+    { styles = headingClass :: styles
+    , content = content
+    , elem = Html.h1
+    }
 
 
-top : List (Style m) -> List (Html m) -> Html m
-top styles content =
-  Options.styled Html.div
-    (cs "mdl-mega-footer__top-section" :: styles)
-      content
+text : String -> Content m
+text = Html.text >> wrap
+--text s = wrap <| Html.text s
 
-middle : List (Style m) -> List (Html m) -> Html m
-middle styles content =
-  Options.styled Html.div
-    (cs "mdl-mega-footer__middle-section" :: styles)
-      content
+socialButton : List (Property m) -> List (Content m) -> Content m
+socialButton styles content =
+  Content
+    { styles = (socialBtn :: styles)
+    , content = content
+    , elem = Html.button
+    }
 
-bottom : List (Style m) -> List (Html m) -> Html m
-bottom styles content =
-  Options.styled Html.div
-    (cs "mdl-mega-footer__bottom-section" :: styles)
-      content
-
-mega : List (Style m) -> List (Html m) -> Html m
-mega styles content =
-  Options.styled Html.footer
-    (cs "mdl-mega-footer" :: styles)
-      content
-
-button : Style m
-button = cs "mdl-mini-footer__social-btn"
+-- logoTest : List (Style m) -> List (Html m) -> Content m
+-- logoTest styles content =
+--   HtmlContent (Options.styled Html.div (cs "mdl-logo" :: styles) content)
 
 
-miniLeft : List (Style m) -> List (Html m) -> Html m
-miniLeft styles content =
-  Options.styled Html.div
-    (cs "mdl-mini-footer__left-section" :: styles)
-      content
 
-miniRight : List (Style m) -> List (Html m) -> Html m
-miniRight styles content =
-  Options.styled Html.div
-    (cs "mdl-mini-footer__right-section" :: styles)
-      content
 
-logo : List (Style m) -> List (Html m) -> Html m
-logo styles content =
-  Options.styled Html.div
-    (cs "mdl-logo" :: styles)
-      content
+-- mapContent : Type -> List (Content m) -> List (Html m)
+-- mapContent tp contents =
+--   List.map (contentToHtml tp) contents
 
-links : List (Style m) -> List (Html m) -> Html m
-links styles content =
-  Options.styled Html.ul
-    (cs "mdl-mini-footer__link-list" :: styles)
-      content
+-- leftTest : List (Style m) -> List (Content m) -> Content m
+-- leftTest styles content =
+--   CustomContent
+--     { styles = styles
+--     , content = content
+--     , suffix = "left-section"
+--     , elem = Html.div
+--     }
 
--- VIEW
+-- rightTest : List (Style m) -> List (Content m) -> Content m
+-- rightTest styles content =
+--   CustomContent
+--     { styles = styles
+--     , content = content
+--     , suffix = "right-section"
+--     , elem = Html.div
+--     }
 
-{-| View function to render a mini-footer
--}
-mini : List (Style m) -> List (Html m) -> Html m
-mini styles content =
-  Options.styled Html.footer
-    (cs "mdl-mini-footer" :: styles)
-    content
+-- topTest : List (Style m) -> List (Content m) -> Content m
+-- topTest styles content =
+--   CustomContent
+--     { styles = styles
+--     , content = content
+--     , suffix = "top-section"
+--     , elem = Html.div
+--     }
+
+
+-- footer : Type -> List (Style m) -> List (Content m) -> Html m
+-- footer tp styles content =
+--   Options.styled Html.footer
+--     (cs (prefix tp) :: styles)
+--     (mapContent tp content)
+
+
+-- dropdown : List (Style m) -> List (Html m) -> Html m
+-- dropdown styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mega-footer__drop-down-section" :: styles)
+--     content
+
+
+-- heading : List (Style m) -> List (Html m) -> Html m
+-- heading styles content =
+--   Options.styled Html.h1
+--     (cs "mdl-mega-footer__heading" :: styles)
+--     content
+
+
+-- megaLeft : List (Style m) -> List (Html m) -> Html m
+-- megaLeft styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mega-footer__left-section" :: styles)
+--     content
+
+
+-- megaRight : List (Style m) -> List (Html m) -> Html m
+-- megaRight styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mega-footer__right-section" :: styles)
+--     content
+
+
+-- top : List (Style m) -> List (Html m) -> Html m
+-- top styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mega-footer__top-section" :: styles)
+--     content
+
+
+-- middle : List (Style m) -> List (Html m) -> Html m
+-- middle styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mega-footer__middle-section" :: styles)
+--     content
+
+
+-- bottom : List (Style m) -> List (Html m) -> Html m
+-- bottom styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mega-footer__bottom-section" :: styles)
+--     content
+
+
+-- mega : List (Style m) -> List (Html m) -> Html m
+-- mega styles content =
+--   Options.styled Html.footer
+--     (cs "mdl-mega-footer" :: styles)
+--     content
+
+
+-- button : Style m
+-- button =
+--   cs "mdl-mini-footer__social-btn"
+
+
+-- miniLeft : List (Style m) -> List (Html m) -> Html m
+-- miniLeft styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mini-footer__left-section" :: styles)
+--     content
+
+
+-- miniRight : List (Style m) -> List (Html m) -> Html m
+-- miniRight styles content =
+--   Options.styled Html.div
+--     (cs "mdl-mini-footer__right-section" :: styles)
+--     content
+
+
+-- logo : List (Style m) -> List (Html m) -> Html m
+-- logo styles content =
+--   Options.styled Html.div
+--     (cs "mdl-logo" :: styles)
+--     content
+
+
+-- links : List (Style m) -> List (Html m) -> Html m
+-- links styles content =
+--   Options.styled Html.ul
+--     (cs "mdl-mini-footer__link-list" :: styles)
+--     content
+-- mini : List (Style m) -> List (Html m) -> Html m
+-- mini styles content =
+--   Options.styled Html.footer
+--     (cs "mdl-mini-footer" :: styles)
+--     content
