@@ -89,11 +89,10 @@ href : String -> Property m
 href =
   Html.href >> attribute
 
-{-| Wraps a normal HTML content to `Content`
+{-| Wraps a normal HTML value into `Content`
 -}
 wrap : Html m -> Content m
 wrap = HtmlContent
-
 
 tempPrefix : String
 tempPrefix = "{{prefix}}"
@@ -108,6 +107,7 @@ prefixedClass cls =
 removePrefix : String -> String
 removePrefix = Regex.replace Regex.All prefixRegex (\_ -> "")
 
+-- INTERNAL HELPERS
 applyPrefix : Type -> Property m -> Property m
 applyPrefix tp prop =
   let
@@ -142,7 +142,12 @@ contentToHtml tp content =
     HtmlContent (html) -> html
     Content (c) -> (toHtml tp c)
 
+-- End of helpers
 
+
+{-| Creates a section with the given class name
+that gets prefixed by the footer
+-}
 section : String -> List (Property m) -> List (Content m) -> Content m
 section section styles content =
   Content
@@ -150,21 +155,33 @@ section section styles content =
     , content = content
     , elem = Html.div}
 
+{-| Creates a footer `left-section`
+-}
 left : List (Property m) -> List (Content m) -> Content m
 left = section "left-section"
 
+{-| Creates a footer `right-section`
+-}
 right : List (Property m) -> List (Content m) -> Content m
 right = section "right-section"
 
+{-| Creates a footer `top-section`
+-}
 top : List (Property m) -> List (Content m) -> Content m
 top = section "top-section"
 
+{-| Creates a footer `middle-section`
+-}
 middle : List (Property m) -> List (Content m) -> Content m
 middle = section "middle-section"
 
+{-| Creates a footer `bottom-section`
+-}
 bottom : List (Property m) -> List (Content m) -> Content m
 bottom = section "bottom-section"
 
+{-| Creates a footer of `Type`
+-}
 footer : Type -> List (Property m) -> List (Content m) -> Html m
 footer tp config content =
   let
@@ -175,9 +192,14 @@ footer tp config content =
       (List.map (contentToHtml tp) content)
 
 
+
+{-| Creates a footer of `Type` `Mini`
+-}
 mini : List (Property m) -> List (Content m) -> Html m
 mini = footer Mini
 
+{-| Creates a footer of `Type` `Mega`
+-}
 mega : List (Property m) -> List (Content m) -> Html m
 mega = footer Mega
 
@@ -185,6 +207,8 @@ mega = footer Mega
 socialBtn : Property m
 socialBtn = prefixedClass "social-btn"
 
+{-| Creates a footer logo
+-}
 logo : List (Property m) -> List (Content m) -> Content m
 logo styles content =
   Content
@@ -193,6 +217,8 @@ logo styles content =
     , elem = Html.div
     }
 
+{-| Creates a `link-list`
+-}
 links : List (Property m) -> List (Content m) -> Content m
 links styles content =
   Content
@@ -225,6 +251,8 @@ linkItem styles content =
     }
 
 
+{-| Creates a footer `dropdown` section
+-}
 dropdown : List (Property m) -> List (Content m) -> Content m
 dropdown styles content =
   Content
@@ -238,6 +266,8 @@ headingClass : Property m
 headingClass = prefixedClass "heading"
 
 
+{-| Creates a footer `heading` element
+-}
 heading : List (Property m) -> List (Content m) -> Content m
 heading styles content =
   Content
@@ -246,10 +276,13 @@ heading styles content =
     , elem = Html.h1
     }
 
-
+{-| Wraps `Html.text` element to `Content`
+-}
 text : String -> Content m
 text = Html.text >> wrap
 
+{-| Creates a `social-button` with the proper prefix based on the `Type`
+-}
 socialButton : List (Property m) -> List (Content m) -> Content m
 socialButton styles content =
   Content
