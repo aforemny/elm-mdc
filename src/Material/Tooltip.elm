@@ -1,13 +1,4 @@
-module Material.Tooltip
-  exposing
-    (..)
-
-  -- ( Model, defaultModel, Msg, update, view
-  -- , Property
-  -- , render
-  -- )
-
--- TEMPLATE. Copy this to a file for your component, then update.
+module Material.Tooltip exposing (..)
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#TEMPLATE-section):
 
@@ -27,20 +18,24 @@ for a live demo.
 @docs Container, Observer, Instance, instance, fwdTemplate
 -}
 
+-- ( Model, defaultModel, Msg, update, view
+-- , Property
+-- , render
+-- )
+-- TEMPLATE. Copy this to a file for your component, then update.
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-
 import Parts exposing (Indexed)
-import Material.Options as Options exposing (Style, cs)
+import Material.Options as Options exposing (Style, cs, css, when)
 import Material.Options.Internal as Internal
 import Material.Helpers as Helpers
 import DOM
 import Html.Events
 import Html.Attributes
 import Html.App
-
 import Json.Decode as Json exposing ((:=), at)
+
 
 -- MODEL
 
@@ -49,10 +44,7 @@ import Json.Decode as Json exposing ((:=), at)
 -}
 type alias Model =
   { isActive : Bool
-  , left : Float
-  , top : Float
-  , marginLeft : Float
-  , marginTop : Float
+  , domState : DOMState
   }
 
 
@@ -61,12 +53,8 @@ type alias Model =
 defaultModel : Model
 defaultModel =
   { isActive = False
-  , left = 0
-  , top = 0
-  , marginLeft = 0
-  , marginTop = 0
+  , domState = { rect = { left = 0, top = 0, width = 0, height = 0 }, offsetWidth = 0, offsetHeight = 0 }
   }
-
 
 -- ACTION, UPDATE
 
@@ -78,34 +66,124 @@ type Msg
   | Leave
 
 
+type alias Pos =
+  { left : Float
+  , top : Float
+  , marginLeft : Float
+  , marginTop : Float
+  }
+
+
+emptyPos : Pos
+emptyPos =
+  { left = 0
+  , top = 0
+  , marginLeft = 0
+  , marginTop = 0
+  }
+
+
+calculatePos : Position -> DOMState -> Pos
+calculatePos pos domState =
+  let
+    -- _ = Debug.log "Calculating position for " domState
+    props =
+      domState.rect
+
+    offsetWidth =
+      domState.offsetWidth
+
+    offsetHeight =
+      domState.offsetHeight
+
+    left =
+      props.left + (props.width / 2)
+
+    top =
+      props.top + (props.height / 2)
+
+    marginLeft =
+      -1 * (offsetWidth / 2)
+
+    marginTop =
+      -1 * (offsetHeight / 2)
+
+
+    out =
+      case pos of
+        Left ->
+          { left = props.left - offsetWidth - 10
+          , top =
+              if (top + marginTop < 0) then
+                0
+              else
+                top
+          , marginTop =
+              if (top + marginTop < 0) then
+                0
+              else
+                marginTop
+          , marginLeft = 0
+          }
+
+        Right ->
+          { left = props.left + props.width + 10
+          , top =
+              if (top + marginTop < 0) then
+                0
+              else
+                top
+          , marginTop =
+              if (top + marginTop < 0) then
+                0
+              else
+                marginTop
+          , marginLeft = 0
+          }
+
+        Top ->
+          { left =
+              if (left + marginLeft < 0) then
+                0
+              else
+                left
+          , top = props.top - offsetHeight - 10
+          , marginTop = 0
+          , marginLeft =
+              if (left + marginLeft < 0) then
+                0
+              else
+                marginLeft
+          }
+
+        Bottom ->
+          { left =
+              if (left + marginLeft < 0) then
+                0
+              else
+                left
+          , top = props.top + props.height + 10
+          , marginTop = 0
+          , marginLeft =
+              if (left + marginLeft < 0) then
+                0
+              else
+                marginLeft
+          }
+  in
+    out
+
+
 {-| Component update.
 -}
+
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    Enter domState ->
-      let
-        -- _ = Debug.log "STATE" domState
-        r = domState.rect
-        left = r.left + (r.width / 2)
-        top = r.top + (r.height / 2)
-        marginLeft = -1 * (domState.offsetWidth / 2)
-        marginTop = -1 * (domState.offsetHeight / 2)
-
-
-        (al, am) = if (left + marginLeft) < 0 then (0, 0) else (left, marginLeft)
-
-        at = r.top + r.height + 10
-
-      in
-        ({ model | isActive = True
-         , top = at
-         , left = al
-         , marginLeft = am
-         }, none)
-
+    Enter dom ->
+      ({ model | isActive = True, domState = dom }, none)
     Leave ->
-      ({model | isActive = False }, Cmd.none)
+      ({ model | isActive = False }, none)
 
 type alias DOMState =
   { rect : DOM.Rectangle
@@ -113,11 +191,22 @@ type alias DOMState =
   , offsetHeight : Float
   }
 
+
 sibling : Json.Decoder a -> Json.Decoder a
 sibling d =
-  at ["target", "nextSibling"] d
+  Json.oneOf
+    [
+      at [ "target", "nextSibling" ] d
+    , at [ "target", "parentElement", "nextSibling" ] d
+    , at [ "target", "parentElement", "parentElement", "nextSibling" ] d
+    ]
 
-
+siblingAtDepth : Int -> Json.Decoder a -> Json.Decoder a
+siblingAtDepth depth decoder =
+  let
+    parents = List.repeat depth "parentElement"
+  in
+    at (["target"] ++ parents ++ ["nextSibling"]) decoder
 
 stateDecoder : Json.Decoder DOMState
 stateDecoder =
@@ -126,16 +215,28 @@ stateDecoder =
     (sibling DOM.offsetWidth)
     (sibling DOM.offsetHeight)
 
+stateAtDepth : Int -> Json.Decoder DOMState
+stateAtDepth depth =
+  Json.object3 DOMState
+    (DOM.target DOM.boundingClientRect)
+    ((siblingAtDepth depth) DOM.offsetWidth)
+    ((siblingAtDepth depth) DOM.offsetHeight)
+
+
 -- PROPERTIES
+
+
 type Size
   = Default
   | Large
+
 
 type Position
   = Left
   | Right
   | Top
   | Bottom
+
 
 type alias Config =
   { size : Size
@@ -154,126 +255,108 @@ type alias Property m =
   Options.Property Config m
 
 
-
-onEnter : (Msg -> m) -> String -> Attribute m
-onEnter lift s =
-  Html.Events.on s (Json.map (Enter >> lift) stateDecoder)
-
-onLeave : (Msg -> m) -> String -> Attribute m
-onLeave lift s =
-  Html.Events.on s (Json.succeed (lift Leave))
-  --Html.Events.on s (Json.map (Leave >> lift) stateDecoder)
-
-for : String -> Property m
-for s = Internal.Attribute (Html.Attributes.attribute "for" s)
+left : Property m
+left =
+  Options.set (\options -> { options | position = Left })
 
 
--- onSmt : String -> Property m
--- onSmt s = Internal.Attribute (Html.Events.on s (Json.map Enter stateDecoder))
-
---for = Html.Attributes.for >> Internal.attribute
-{- See src/Material/Button.elm for an example of, e.g., an onClick handler.
--}
+right : Property m
+right =
+  Options.set (\options -> { options | position = Right })
 
 
-type alias Elem msg = (List (Attribute msg) -> List (Html msg) -> Html msg)
+top : Property m
+top =
+  Options.set (\options -> { options | position = Top })
 
-type Content a =
-  Content { elem : Elem a
-          , attrs : List (Attribute a)
-          , elements : List (Html a)
-          }
 
-wrap : Elem a -> List (Attribute a) -> List (Html a) -> Content a
-wrap func attrs elems =
-  Content
-    { elem = func
-    , attrs = attrs
-    , elements = elems
-    }
+bottom : Property m
+bottom =
+  Options.set (\options -> { options | position = Bottom })
 
+
+large : Property m
+large =
+  Options.set (\options -> { options | size = Large })
 
 -- VIEW
 
+
 {-| Component view.
 -}
---view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view : (Msg -> m) -> Model -> List (Property m) -> (Content m) -> Html m
-view lift model options elem =
+
+
+view : (Msg -> m) -> Model -> List (Property m) -> List (Html a) -> Html a
+view lift model options content =
   let
-    summary = Options.collect defaultConfig options
+    summary =
+      Options.collect defaultConfig options
+
     config = summary.config
-    -- _ = Debug.log "ELEMENT" elem
 
     px : Float -> String
-    px f = (toString f) ++ "px"
+    px f =
+      (toString f) ++ "px"
 
-    unwrap c =
-      case c of
-        Content { elem, attrs, elements } ->
-          elem (attrs ++ [onEnter lift "mouseenter", onLeave lift "mouseleave"]) elements
-    --{ tag, facts, decoder, children, namespace, descendantsCount} = elem
+    pos =
+      if model.isActive then
+        calculatePos config.position model.domState
+      else
+        emptyPos
   in
-    Options.div
-      []
-      ((unwrap elem) ::
-       [Html.div [ Html.Attributes.classList [ ("mdl-tooltip", True)
-                                             , ("is-active", model.isActive)]
-                 , if (not model.isActive) then
-                     Helpers.noAttr
-                   else
-                     Html.Attributes.style
-                       [ ("left", px model.left)
-                       , ("marginLeft", px model.marginLeft)
-                       , ("top", px model.top)
-                       ]
-                 ]
-            [text "TOOLTIP"]
-         ]
-      )
-    -- Options.apply summary Html.div
-       -- [ cs "mdl-tooltip"]
-       -- [ Just (onEnter lift "mouseenter")
-       -- , Just (onLeave lift "mouseleave")
-
-       -- ]
-       -- [ text "TOOLTIP"]
-    --lift <| test []
-    -- Html.div
-    --   [ onEnter lift "mouseenter"
-    --   , onLeave lift "mouseleave"
-    --   ]
-    --   [text "TOOLTIp"]
-      -- Options.div (cs "mdl-tooltip" :: options)
-      --   [ text "TOOLTIP" ]
-    -- Options.styled' Html.div
-    --    (cs "mdl-tooltip" :: () ::options)
-    --    []
-    --    [text "TOLTIP"]
-    -- Options.div
-    --   ( cs "mdl-tooltip"
-    --   :: options
-    --   )
-    -- [ text "TOOLTIP" ]
-
+    Options.styled div
+      (cs "mdl-tooltip"
+       :: cs "is-active" `when` model.isActive
+       :: cs "mdl-tooltip--large" `when` (config.size == Large)
+       :: css "left" (px pos.left) `when` model.isActive
+       :: css "margin-left" (px pos.marginLeft) `when` model.isActive
+       :: css "top" (px pos.top) `when` model.isActive
+       :: css "margin-top" (px pos.marginTop) `when` model.isActive
+       :: [])
+      content
 
 -- COMPONENT
+
 
 type alias Container c =
   { c | tooltip : Indexed Model }
 
 
-{-| Component render.
--}
-render
-  : (Parts.Msg (Container c) -> m)
+render :
+  (Parts.Msg (Container c) -> m)
   -> Parts.Index
-  -> (Container c)
+  -> Container c
   -> List (Property m)
-  ---> List (Html m)
-  -> Content m
+  -> List (Html m)
   -> Html m
 render =
-  Parts.create view update .tooltip (\x y -> {y | tooltip = x}) defaultModel
+  Parts.create view update .tooltip (\x y -> { y | tooltip = x }) defaultModel
 
-{- See src/Material/Layout.mdl for how to add subscriptions. -}
+
+set : Parts.Set (Indexed Model) (Container c)
+set x y =
+  { y | tooltip = x }
+
+find : Parts.Index -> Parts.Accessors Model (Container c)
+find =
+  Parts.accessors .tooltip set defaultModel
+
+pack : Parts.Index -> Msg -> Parts.Msg (Container c)
+pack idx =
+  let
+    (get, set1) =
+      Parts.indexed .tooltip set defaultModel idx
+
+    embeddedUpdate =
+      Parts.embedUpdate get set1 update
+  in
+    Parts.pack embeddedUpdate
+
+
+--onMouseEnter : (Msg -> m) -> Parts.Index -> Attribute m
+onMouseEnter lift idx =
+  Html.Events.on "mouseenter" (Json.map (Enter >> ((pack idx) >> lift)) stateDecoder)
+
+--onMouseLeave : (Msg -> m) -> Parts.Index -> Attribute m
+onMouseLeave lift idx =
+  Html.Events.on "mouseleave" (Json.succeed (Leave |> ((pack idx) >> lift)))

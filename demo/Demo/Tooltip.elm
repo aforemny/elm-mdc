@@ -7,15 +7,26 @@ import Html.Events as Html exposing (..)
 
 import Material.Tooltip as Tooltip
 import Material
+import Material.Options as Options exposing(cs, css, when)
 
 import Demo.Page as Page
 
+import Material.Grid as Grid
+import Demo.Code as Code
+import Markdown
+
+-- import Html.Attributes
+-- import Html.App
+import Json.Decode as Json exposing ((:=), at)
+
+import Dict
+import Parts
 
 -- MODEL
 
 
-type alias Mdl =
-  Material.Model
+-- type alias MdlAA =
+--   Material.Model
 
 
 type alias Model =
@@ -33,43 +44,72 @@ model =
 
 
 type Msg
-  = TooltipMsg
+  = NoOp
   | Mdl Material.Msg
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    TooltipMsg ->
-      (Debug.log "TOLTIP" model, Cmd.none)
+    NoOp ->
+        (model, Cmd.none)
 
     Mdl action' ->
       Material.update Mdl action' model
 
 
+code : String -> Html a
+code str =
+  div
+    [ style [("overflow", "hidden")] ]
+    [ Markdown.toHtml [] <| "```elm\n" ++ Code.trim str ++ "\n```" ]
+
 -- VIEW
 
+
+demoTooltip : (Html a, String) -> Grid.Cell a
+demoTooltip (tooltip, description) =
+  Grid.cell
+    [Grid.size Grid.All 4]
+    [ div [style [("text-align", "center")]]
+        [tooltip]
+    , code description
+    ]
 
 view : Model -> Html Msg
 view model  =
   [ div
       []
-      [ div [] []
-      --, div [id "tt1", class "icon material-icons"] [text "add"]
-      -- , Tooltip.test []
-      , Tooltip.render Mdl [0] model.mdl
-           []
-           (Tooltip.wrap div [class "icon material-icons"] [text "add"])
-      , p [] [text "Simple tooltip"]
-
-      , Tooltip.render Mdl [1] model.mdl
-           []
-           (Tooltip.wrap div [class "icon material-icons"] [text "print"])
+      [ Html.p [] [text "Example use:"]
+      , Grid.grid []
+          [Grid.cell [Grid.size Grid.All 12]
+             [code """
+                    import Material.Tooltip as Tooltip
+                    """]
+          ]
 
 
-      -- , Tooltip.render Mdl [0] model.mdl
-      --      [Tooltip.for "tt1"]
-      --      []
+      , Grid.grid []
+          [ demoTooltip
+            (div []
+               [ p [style [("margin-bottom", "5px")]]
+                   [ text "HTML is related to but different from "
+                   , span
+                       [ Tooltip.onMouseEnter Mdl [16]
+                       , Tooltip.onMouseLeave Mdl [16]
+                       ]
+                       [i [] [text "XML"]]
+                   ]
+               , Tooltip.render Mdl [16] model.mdl
+                   []
+                   [div [] [text "BAANANA"]]
+               ]
+            , """
+               experiment
+               """
+            )
+
+          ]
       ]
   ]
   |> Page.body2 "TEMPLATE" srcUrl intro references
