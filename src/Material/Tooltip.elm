@@ -74,8 +74,8 @@ type alias Pos =
   }
 
 
-emptyPos : Pos
-emptyPos =
+defaultPos : Pos
+defaultPos =
   { left = 0
   , top = 0
   , marginLeft = 0
@@ -275,17 +275,20 @@ bottom =
   Options.set (\options -> { options | position = Bottom })
 
 
+default : Property m
+default =
+  Options.set (\options -> { options | size = Default })
+
 large : Property m
 large =
   Options.set (\options -> { options | size = Large })
 
+mdl = Internal.Attribute
+
 -- VIEW
-attr = Internal.Attribute
 
 {-| Component view.
 -}
-
-
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html a) -> Html a
 view lift model options content =
   let
@@ -302,7 +305,7 @@ view lift model options content =
       if model.isActive then
         calculatePos config.position model.domState
       else
-        emptyPos
+        defaultPos
   in
     Options.styled div
       (cs "mdl-tooltip"

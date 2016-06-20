@@ -3,11 +3,9 @@ module Demo.Tooltip exposing (..)
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.Attributes as Html exposing (..)
-import Html.Events as Html exposing (..)
 
 import Material.Tooltip as Tooltip
 import Material
-import Material.Options as Options exposing(cs, css, when)
 
 import Demo.Page as Page
 
@@ -15,12 +13,6 @@ import Material.Grid as Grid
 import Demo.Code as Code
 import Markdown
 
--- import Html.Attributes
--- import Html.App
-import Json.Decode as Json exposing ((:=), at)
-
-import Dict
-import Parts
 import Material.Button as Button
 
 -- MODEL
@@ -86,6 +78,22 @@ view model  =
           [Grid.cell [Grid.size Grid.All 12]
              [code """
                     import Material.Tooltip as Tooltip
+
+                    -- Note the index in both the Render as well as the mouse event handlers
+
+                    tooltip : Model -> Html msg
+                    tooltip model =
+                      div []
+                        [ div [ class "icon material-icons"
+                              , Tooltip.onMouseEnter Mdl [0]
+                              , Tooltip.onMouseLeave Mdl [0]
+                              ]
+                              [text "add"]
+
+                        , Tooltip.render Mdl [0] model.mdl
+                            [Tooltip.default]
+                            [div [] [text "Default tooltip"]]
+                        ]
                     """]
           ]
 
@@ -99,7 +107,7 @@ view model  =
                      ] [text "add"]
 
                , Tooltip.render Mdl [0] model.mdl
-                   []
+                   [Tooltip.default]
                    [div [] [text "Default tooltip"]]
                ]
             , """
@@ -146,13 +154,12 @@ view model  =
 
           , demoTooltip
             (div []
-               [
-                Button.render Mdl [0] model.mdl
-                  [ Button.raised
-                  , Tooltip.attr <| Tooltip.onMouseEnter Mdl [3]
-                  , Tooltip.attr <| Tooltip.onMouseLeave Mdl [3]
-                  ]
-                  [ text "BUTTON"]
+               [ Button.render Mdl [0] model.mdl
+                   [ Button.raised
+                   , Tooltip.mdl <| Tooltip.onMouseEnter Mdl [3]
+                   , Tooltip.mdl <| Tooltip.onMouseLeave Mdl [3]
+                   ]
+                   [ text "BUTTON"]
 
                , Tooltip.render Mdl [3] model.mdl
                    [ Tooltip.top
