@@ -17,11 +17,6 @@ import Material.Button as Button
 
 -- MODEL
 
-
--- type alias MdlAA =
---   Material.Model
-
-
 type alias Model =
   { mdl : Material.Model
   }
@@ -34,8 +29,6 @@ model =
 
 
 -- ACTION, UPDATE
-
-
 type Msg
   = NoOp
   | Mdl Material.Msg
@@ -92,7 +85,7 @@ view model  =
 
                         , Tooltip.render Mdl [0] model.mdl
                             [Tooltip.default]
-                            [div [] [text "Default tooltip"]]
+                            [text "Default tooltip"]
                         ]
                     """]
           ]
@@ -108,7 +101,7 @@ view model  =
 
                , Tooltip.render Mdl [0] model.mdl
                    [Tooltip.default]
-                   [div [] [text "Default tooltip"]]
+                   [text "Default tooltip"]
                ]
             , """
                Default tooltip positioned below
@@ -119,15 +112,14 @@ view model  =
             (div []
                [ p [style [("margin-bottom", "5px")]]
                    [ text "HTML is related to but different from "
-                   , span
-                       [ Tooltip.onMouseEnter Mdl [1]
-                       , Tooltip.onMouseLeave Mdl [1]
-                       ]
+                   , span [ Tooltip.onMouseEnter Mdl [1]
+                          , Tooltip.onMouseLeave Mdl [1]
+                          ]
                        [i [] [text "XML"]]
                    ]
                , Tooltip.render Mdl [1] model.mdl
                    [Tooltip.left]
-                   [div [] [text "XML is an acronym for eXtensible Markup Language"]]
+                   [text "XML is an acronym for eXtensible Markup Language"]
                ]
             , """
                Hover over `XML` to see a tooltip
@@ -145,7 +137,7 @@ view model  =
                , Tooltip.render Mdl [2] model.mdl
                    [ Tooltip.large
                    , Tooltip.right]
-                   [div [] [text "Large tooltip"]]
+                   [text "Large tooltip"]
                ]
             , """
                A large tooltip positioned on the right
@@ -164,7 +156,7 @@ view model  =
                , Tooltip.render Mdl [3] model.mdl
                    [ Tooltip.top
                    , Tooltip.large]
-                   [div [] [text "Tooltips also work with material components"]]
+                   [text "Tooltips also work with material components"]
                ]
             , """
                A large tooltip positioned
