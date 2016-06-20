@@ -280,7 +280,7 @@ large =
   Options.set (\options -> { options | size = Large })
 
 -- VIEW
-
+attr = Internal.Attribute
 
 {-| Component view.
 -}
