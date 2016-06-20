@@ -1,39 +1,58 @@
-module Material.Tooltip exposing (..)
+module Material.Tooltip
+  exposing
+  ( Model, defaultModel
+  , Msg, update, view, render
+  , DOMState
+  , left, right, top, bottom
+  , default, large
+  , Property
+  , onMouseEnter
+  , onMouseLeave
+  , mdl
+  )
 
-{-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#TEMPLATE-section):
+{-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):
 
-> ...
+> standard HTML tooltip as produced by the `title` attribute. A tooltip consists
+> of text and/or an image that clearly communicates additional information about
+> an element when the user hovers over or, in a touch-based UI, touches the
+> element. The MDL tooltip component is pre-styled (colors, fonts, and other
+> settings are contained in material.min.css) to provide a vivid, attractive
+> visual element that displays related but typically non-essential content,
+> e.g., a definition, clarification, or brief instruction.
+>
+> Tooltips are a ubiquitous feature of most user interfaces, regardless of a
+> site's content or function. Their design and use is an important factor in the
+> overall user experience. See the tooltip component's Material Design
+> specifications page for details.
 
 See also the
-[Material Design Specification]([https://www.google.com/design/spec/components/TEMPLATE.html).
+[Material Design Specification](https://material.google.com/components/tooltips.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/template)
+Refer to [this site](http://debois.github.io/elm-mdl#/tooltips)
 for a live demo.
 
-@docs Model, model, Msg, update
-@docs view
 
-# Component support
+@docs Model, defaultModel
+@docs Msg, update, view, render
+@docs DOMState
+@docs left, right, top, bottom
+@docs default, large
+@docs Property
+@docs onMouseEnter
+@docs onMouseLeave
+@docs mdl
 
-@docs Container, Observer, Instance, instance, fwdTemplate
 -}
-
--- ( Model, defaultModel, Msg, update, view
--- , Property
--- , render
--- )
--- TEMPLATE. Copy this to a file for your component, then update.
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Parts exposing (Indexed)
 import Material.Options as Options exposing (Style, cs, css, when)
 import Material.Options.Internal as Internal
-import Material.Helpers as Helpers
 import DOM
 import Html.Events
 import Html.Attributes
-import Html.App
 import Json.Decode as Json exposing ((:=), at)
 
 
@@ -53,7 +72,7 @@ type alias Model =
 defaultModel : Model
 defaultModel =
   { isActive = False
-  , domState = { rect = { left = 0, top = 0, width = 0, height = 0 }, offsetWidth = 0, offsetHeight = 0 }
+  , domState = defaultDOMState
   }
 
 -- ACTION, UPDATE
@@ -66,6 +85,8 @@ type Msg
   | Leave
 
 
+{-| Tooltip position
+-}
 type alias Pos =
   { left : Float
   , top : Float
@@ -74,6 +95,8 @@ type alias Pos =
   }
 
 
+{-| Default position constructor
+-}
 defaultPos : Pos
 defaultPos =
   { left = 0
@@ -83,6 +106,26 @@ defaultPos =
   }
 
 
+{-| Position and offsets from dom events for the tooltip
+-}
+type alias DOMState =
+  { rect : DOM.Rectangle
+  , offsetWidth : Float
+  , offsetHeight : Float
+  }
+
+
+{-| Default DOMState constructor
+-}
+defaultDOMState : DOMState
+defaultDOMState =
+  { rect = { left = 0, top = 0, width = 0, height = 0 }
+  , offsetWidth = 0
+  , offsetHeight = 0 }
+
+{-| Calculates the position of the tooltip based on the event
+and the requested position
+-}
 calculatePos : Position -> DOMState -> Pos
 calculatePos pos domState =
   let
@@ -176,7 +219,6 @@ calculatePos pos domState =
 
 {-| Component update.
 -}
-
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
@@ -185,13 +227,9 @@ update action model =
     Leave ->
       ({ model | isActive = False }, none)
 
-type alias DOMState =
-  { rect : DOM.Rectangle
-  , offsetWidth : Float
-  , offsetHeight : Float
-  }
 
-
+{-| Tries and get the next sibling that is available and use the given decoder on it
+-}
 sibling : Json.Decoder a -> Json.Decoder a
 sibling d =
   Json.oneOf
@@ -225,12 +263,15 @@ stateAtDepth depth =
 
 -- PROPERTIES
 
-
+{-| Tooltip size
+-}
 type Size
   = Default
   | Large
 
 
+{-| Tooltip position relative to the element
+-}
 type Position
   = Left
   | Right
@@ -238,51 +279,70 @@ type Position
   | Bottom
 
 
+{-| Tooltip config
+-}
 type alias Config =
   { size : Size
   , position : Position
   }
 
 
+{-| Default configuration for tooltip
+-}
 defaultConfig : Config
 defaultConfig =
   { size = Default
   , position = Bottom
   }
 
-
+{-| Properties for Tooltip options.
+-}
 type alias Property m =
   Options.Property Config m
 
 
+{-| Position the tooltip on the left of the target element
+-}
 left : Property m
 left =
   Options.set (\options -> { options | position = Left })
 
 
+{-| Position the tooltip on the right of the target element
+-}
 right : Property m
 right =
   Options.set (\options -> { options | position = Right })
 
 
+{-| Position the tooltip above the target element
+-}
 top : Property m
 top =
   Options.set (\options -> { options | position = Top })
 
-
+{-| Position the tooltip below the target element
+-}
 bottom : Property m
 bottom =
   Options.set (\options -> { options | position = Bottom })
 
 
+{-| Tooltip with the default size
+-}
 default : Property m
 default =
   Options.set (\options -> { options | size = Default })
 
+{-| Large tooltip
+-}
 large : Property m
 large =
   Options.set (\options -> { options | size = Large })
 
+{-| Maps a Html.Attribute to Material Property
+-}
+mdl : Attribute a -> Internal.Property b a
 mdl = Internal.Attribute
 
 -- VIEW
@@ -325,6 +385,9 @@ type alias Container c =
   { c | tooltip : Indexed Model }
 
 
+{-| Render a tooltip
+TODO
+-}
 render :
   (Parts.Msg (Container c) -> m)
   -> Parts.Index
@@ -355,11 +418,14 @@ pack idx =
   in
     Parts.pack embeddedUpdate
 
-
---onMouseEnter : (Msg -> m) -> Parts.Index -> Attribute m
+{-| Mouse enter event handler
+-}
+onMouseEnter : (Parts.Msg (Container b) -> d) -> Parts.Index -> Attribute d
 onMouseEnter lift idx =
   Html.Events.on "mouseenter" (Json.map (Enter >> ((pack idx) >> lift)) stateDecoder)
 
---onMouseLeave : (Msg -> m) -> Parts.Index -> Attribute m
+{-| Mouse leave event handler
+-}
+onMouseLeave : (Parts.Msg (Container a) -> b) -> Parts.Index -> Attribute b
 onMouseLeave lift idx =
   Html.Events.on "mouseleave" (Json.succeed (Leave |> ((pack idx) >> lift)))

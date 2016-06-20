@@ -81,7 +81,7 @@ view model  =
 
                     -- Note the index in both the Render as well as the mouse event handlers
 
-                    tooltip : Model -> Html msg
+                    tooltip : Model -> Html Msg
                     tooltip model =
                       div []
                         [ div [ class "icon material-icons"
