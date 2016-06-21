@@ -2,11 +2,19 @@ module Demo.Layout exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+import Html.Events
+import String
+import Array exposing (Array)
 
 import Material.Toggles as Toggles
+import Material.Options as Options exposing (css, when)
 import Material 
+import Material.Grid as Grid
+import Material.Color as Color
+import Material.Elevation as Elevation
 
 import Demo.Page as Page
+import Demo.Code as Code
 
 
 -- MODEL
@@ -17,7 +25,7 @@ type alias Mdl =
 
 
 type HeaderType 
-  = Waterfool Bool
+  = Waterfall Bool
   | Seamed
   | Standard
   | Scrolling
@@ -28,9 +36,14 @@ type alias Model =
   , fixedHeader : Bool
   , fixedDrawer : Bool
   , fixedTabs : Bool
-  , header : Maybe HeaderType
+  , header : HeaderType
   , rippleTabs : Bool
   , transparentHeader : Bool
+  , withDrawer : Bool
+  , withHeader : Bool
+  , withTabs : Bool
+  , primary : Color.Hue
+  , accent : Color.Hue
   }
 
 
@@ -40,9 +53,14 @@ model =
   , fixedHeader = False
   , fixedTabs = False
   , fixedDrawer = False
-  , header = Just Standard
+  , header = Standard
   , rippleTabs = True
   , transparentHeader = False
+  , withDrawer = True
+  , withHeader = True
+  , withTabs = True
+  , primary = Color.Teal
+  , accent = Color.Red
   }
 
 
@@ -68,21 +86,221 @@ update action model =
       Material.update Mdl action' model
 
 
+{- Make sure we didn't pick the same primary and accent colour. -}
+fixColors : Model -> Model
+fixColors model = 
+  if model.primary == model.accent then 
+    if model.primary == Color.Indigo then 
+      { model | accent = Color.Red }
+    else 
+      { model | accent = Color.Indigo }
+  else
+    model
+
+
+
+
+
 -- VIEW
 
+
+table : List (Html m) -> Grid.Cell m
+table contents = 
+  Grid.cell 
+    [] 
+    [ Options.div 
+        [ css "display" "inline-flex"
+        , css "flex-direction" "column"
+        , css "width" "auto"
+        ]
+        contents
+    ]
+    
+
+explain : String -> Html m
+explain str = 
+  Options.styled p [ css "margin-top" "1ex", css "margin-bot" "2ex" ] [ text str ]
+
+
+picker : 
+  Array (Color.Hue) -> 
+  Maybe Color.Hue -> 
+  Color.Shade -> 
+  Color.Hue -> (Color.Hue -> Model -> Model) -> Html Msg
+picker hues disabled shade current f = 
+  hues
+    |> Array.toList
+    |> List.map (\hue -> 
+      Options.styled' div 
+        [ Color.background (Color.color hue shade) `when` (disabled /= Just hue)
+        , Color.background (Color.color Color.Grey Color.S200) `when` (disabled == Just hue)
+        , css "width" "50px"
+        , css "height" "50px"
+        , css "margin" "2pt"
+        , css "line-height" "50px"
+        , css "flex-shrink" "0"
+        , Elevation.e8 `when` (current == hue)
+        , css "transition" "box-shadow 300ms ease-in-out 0s, background-color 300ms ease-in-out 0s"
+        , css "cursor" "pointer" `when` (disabled /= Just hue)
+        ] 
+        (if Just hue /= disabled then 
+          [ Html.Events.onClick (f hue >> fixColors |> Update) ]
+         else
+          [])
+        [
+        ]
+      )
+    |> Options.styled div 
+         [ css "display" "flex"
+         , css "flex-wrap" "wrap"
+         ] 
 
 
 view : Model -> Html Msg
 view model  =
-  [ div 
-      [] 
-      [ span []
-          [ Toggles.checkbox Mdl [0] model.mdl
+  [ Grid.grid
+      []
+      [ table 
+          [ h4 [] [ text "Included sub-components" ]
+          , Toggles.switch Mdl [8] model.mdl
+              [ Toggles.onChange (Update <| \m -> { m | withHeader = not m.withHeader })
+              , Toggles.value model.withHeader
+              ]
+              [ text "With header" ]
+          , Toggles.switch Mdl [9] model.mdl
+              [ Toggles.onChange (Update <| \m -> { m | withDrawer = not m.withDrawer })
+              , Toggles.value model.withDrawer
+              ]
+              [ text "With drawer" ]
+          , Toggles.switch Mdl [10] model.mdl
+              [ Toggles.onChange (Update <| \m -> { m | withTabs = not m.withTabs })
+              , Toggles.value model.withTabs
+              ]
+              [ text "With tabs" ]
+          ]
+      , table
+          [ h4 [] [ text "Size-dependent behaviour" ]
+          , Toggles.switch Mdl [0] model.mdl
               [ Toggles.onChange (Update <| \m -> { m | fixedHeader = not m.fixedHeader })
               , Toggles.value model.fixedHeader
               ]
-          , text "Fixed header"
+              [ text "Fixed header" ]
+          , explain """The header by default disappears on small devices. 
+                       This option forces the display of the header on all devices. """ 
+          , Toggles.switch Mdl [1] model.mdl 
+              [ Toggles.onChange (Update <| \m -> { m | fixedDrawer = not m.fixedDrawer })
+              , Toggles.value model.fixedDrawer
+              ]
+              [ text "Fixed drawer" ]
+          , explain """The drawer is by default hidden on all devices. 
+                       This option forces the drawer to be open on large devices. """ 
+          , Toggles.switch Mdl [2] model.mdl
+              [ Toggles.onChange (Update <| \m -> { m | fixedTabs = not m.fixedTabs })
+              , Toggles.value model.fixedTabs
+              ]
+              [ text "Fixed tabs" ]
+          , explain """The tabs by default extend from left to right, scrolling 
+                       when necessary. This option forces tabs to spread out to 
+                       consume all available space.""" 
           ]
+      , table 
+          [ h4 [] [ text "Header behaviour" ] 
+          , Toggles.radio Mdl [3] model.mdl
+              [ Toggles.group "kind" 
+              , Toggles.value <| model.header == Standard 
+              , Toggles.onChange (Update <| \m -> { m | header = Standard })
+              ]
+              [ text "Standard" ]
+          , Toggles.radio Mdl [4] model.mdl
+              [ Toggles.group "kind" 
+              , Toggles.value <| model.header == Seamed 
+              , Toggles.onChange (Update <| \m -> { m | header = Seamed })
+              ]
+              [ text "Seamed" ]
+          , Toggles.radio Mdl [5] model.mdl
+              [ Toggles.group "kind" 
+              , Toggles.value <| model.header == Scrolling 
+              , Toggles.onChange (Update <| \m -> { m | header = Scrolling })
+              ]
+              [ text "Scrolling" ]
+          , Toggles.radio Mdl [6] model.mdl
+              [ Toggles.group "kind" 
+              , Toggles.value <| model.header == (Waterfall True) 
+              , Toggles.onChange (Update <| \m -> { m | header = (Waterfall True) })
+              ]
+              [ text "Watefall (top)" ]
+          , Toggles.radio Mdl [7] model.mdl
+              [ Toggles.group "kind" 
+              , Toggles.value <| model.header == (Waterfall False) 
+              , Toggles.onChange (Update <| \m -> { m | header = (Waterfall False) })
+              ]
+              [ text "Watefall (bottom)" ]
+          ]
+      ]
+  , div [] 
+      [ let 
+          options = 
+            [ if model.fixedHeader then Just "Layout.fixedHeader" else Nothing
+            , if model.fixedDrawer then Just "Layout.fixedDrawer" else Nothing
+            , if model.fixedTabs then Just "Layout.fixedTabs" else Nothing
+            , if model.withHeader then
+                  case model.header of 
+                    Waterfall x -> Just <| "Layout.waterfall " ++ toString x
+                    Seamed -> Just <| "Layout.seamed"
+                    Scrolling -> Just <| "Layout.scrolling"
+                    Standard -> Nothing
+              else
+                Nothing
+            ] 
+          body = 
+            "  { header = " ++ (if model.withHeader then "[ ... ]" else "[]") ++ "\n" ++
+            "  , drawer = " ++ (if model.withDrawer then "[ ... ]" else "[]") ++ "\n" ++
+            "  , tabs = "   ++ (if model.withTabs   then "[ ... ]" else "[]") ++ "\n" ++
+            "  , main = [ ... ]\n" ++ 
+            "  }"
+        in
+          options 
+          |> List.filterMap identity
+          |> String.join "\n  , "
+          |> (++) "import Material.Layout as Layout\n\nLayout.render Mdl model.mdl\n  [ " 
+          |> flip (++) "\n  ]\n"
+          |> flip (++) body
+          |> Code.code
+      ]
+  , div [] 
+      [ h4 [] [ text "Colour" ] 
+      , explain """While technically not part of the layout Component, 
+                   this is a convenient place to demonstrate colour styling."""
+      , Grid.grid [] 
+          [ Grid.cell 
+              [ Grid.size Grid.All 4 ]
+              [ h6 [] [ text "Pick a primary colour" ] 
+              , picker Color.hues Nothing Color.S500 model.primary (\hue m -> { m | primary = hue }) 
+              ]
+          , Grid.cell 
+              [ Grid.size Grid.All 4, Grid.offset Grid.Desktop 2 ]
+              [ h6 [] [ text "Pick an accent colour" ] 
+              , picker Color.accentHues (Just model.primary) Color.A200 model.accent (\hue m -> { m | accent = hue }) ]
+          ]
+      , explain "To use this colour scheme (and to use elm-mdl in general), you must load custom CSS."
+      , [ "<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>"
+        , "<link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>"
+        , "<link rel='stylesheet' href='https://code.getmdl.io/1.1.3/" ++ Color.scheme model.primary model.accent 
+              ++ "'>"
+        ]
+        |> String.join "\n"
+        |> Code.html
+      , explain """For quick experiments, you can alternatively load CSS directly from Elm as follows.
+                   NB! This approach will cause flickering on load and so is
+                   not suitable anything but quick experiments."""
+      , Code.code  <|
+          """import Material.Scheme as Scheme
+import Material.Color as Color
+
+-- Wrap your main html, say, "contents" like this: 
+myView = 
+  Scheme.topWithScheme """ ++ toString model.primary ++ 
+     " " ++ toString model.accent ++ " contents"
       ]
   ]
   |> Page.body2 "Layout" srcUrl intro references

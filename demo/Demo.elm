@@ -14,7 +14,7 @@ import Material
 import Material.Color as Color
 import Material.Layout as Layout 
 import Material.Helpers exposing (pure, lift, lift')
-import Material.Options as Options exposing (css)
+import Material.Options as Options exposing (css, when)
 import Material.Scheme as Scheme
 import Material.Icon as Icon
 
@@ -201,25 +201,28 @@ drawer =
 
 header : Model -> List (Html Msg)
 header model =
-  [ Layout.row 
-      [ if model.transparentHeader then css "height" "192px" else Options.nop 
-      , css "transition" "height 333ms ease-in-out 0s"
-      ]
-      [ Layout.title [] [ text "elm-mdl" ]
-      , Layout.spacer
-      , Layout.navigation []
-          [ Layout.link
-              [ Layout.onClick ToggleHeader]
-              [ Icon.i "photo" ]
-          , Layout.link
-              [ Layout.href "https://github.com/debois/elm-mdl"]
-              [ span [] [text "github"] ]
-          , Layout.link
-              [ Layout.href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
-              [ text "elm-package" ]
-          ]
-      ]
-  ]
+  if model.layout.withHeader then 
+    [ Layout.row 
+        [ if model.transparentHeader then css "height" "192px" else Options.nop 
+        , css "transition" "height 333ms ease-in-out 0s"
+        ]
+        [ Layout.title [] [ text "elm-mdl" ]
+        , Layout.spacer
+        , Layout.navigation []
+            [ Layout.link
+                [ Layout.onClick ToggleHeader]
+                [ Icon.i "photo" ]
+            , Layout.link
+                [ Layout.href "https://github.com/debois/elm-mdl"]
+                [ span [] [text "github"] ]
+            , Layout.link
+                [ Layout.href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
+                [ text "elm-package" ]
+            ]
+        ]
+    ]
+  else
+    []
 
 
 view : Model -> Html Msg
@@ -241,14 +244,24 @@ view model =
     Layout.render Mdl model.mdl
       [ Layout.selectedTab model.selectedTab
       , Layout.onSelectTab SelectTab
-      --, Layout.fixedHeader
-      --, Layout.fixedDrawer
-      , Layout.waterfall True
+      , Layout.fixedHeader `when` model.layout.fixedHeader 
+      , Layout.fixedDrawer `when` model.layout.fixedDrawer
+      , Layout.fixedTabs `when` model.layout.fixedTabs
+      , (case model.layout.header of
+          Demo.Layout.Waterfall x -> Layout.waterfall x
+          Demo.Layout.Seamed -> Layout.seamed
+          Demo.Layout.Standard -> Options.nop
+          Demo.Layout.Scrolling -> Layout.scrolling)
+        `when` model.layout.withHeader
       , if model.transparentHeader then Layout.transparentHeader else Options.nop
       ]
       { header = header model
-      , drawer = drawer
-      , tabs = (tabTitles, [ Color.background (Color.color Color.Teal Color.S400) ])
+      , drawer = if model.layout.withDrawer then drawer else []
+      , tabs = 
+          if model.layout.withTabs then 
+            (tabTitles, [ Color.background (Color.color model.layout.primary Color.S400) ])
+          else
+            ([], [])
       , main = [ stylesheet, top ]
       }
     {- The following lines are not necessary when you manually set up
@@ -257,7 +270,7 @@ view model =
     -}
     |> (\contents -> 
       div []
-        [ Scheme.topWithScheme Color.Teal Color.Red contents
+        [ Scheme.topWithScheme model.layout.primary model.layout.accent contents
         , Html.node "script"
            [ Html.Attributes.attribute "src" "assets/highlight.pack.js" ]
            []

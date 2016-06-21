@@ -132,6 +132,13 @@ code str =
     [ Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```" ]
 
 
+html : String -> Html a
+html str = 
+  div 
+    [ css "overflow" "scroll" ]
+    [ Markdown.toHtml [] <| "```html\n" ++ trim str ++ "\n```" ]
+
+
 -- VIEW
 
 

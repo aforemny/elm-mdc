@@ -1,5 +1,5 @@
 module Material.Color exposing
-  ( Hue(..), hues
+  ( Hue(..), hues, accentHues
   , Shade(..), shades
   , Color
   , color
@@ -50,12 +50,12 @@ colors.
 @docs background, text
 
 # Misc
-@docs hues, shades, scheme
+@docs hues, accentHues, shades, scheme
 -}
 
 
 import Array exposing (Array)
-
+import String
 
 import Material.Options exposing (..)
 
@@ -107,6 +107,29 @@ hues =
     , Brown
     , BlueGrey
     , Grey
+    , DeepOrange
+    , Red
+    , Pink
+    , Purple
+    , DeepPurple
+    ]
+
+{-| Primary hues as array. Mostly useful for demos.
+-}
+accentHues : Array Hue
+accentHues =
+  Array.fromList
+    [ Indigo
+    , Blue
+    , LightBlue
+    , Cyan
+    , Teal
+    , Green
+    , LightGreen
+    , Lime
+    , Yellow
+    , Amber
+    , Orange
     , DeepOrange
     , Red
     , Pink
@@ -280,12 +303,15 @@ text (C color) =
 -}
 scheme : Hue -> Hue -> String
 scheme primary accent =
-  let cssFile =
-    case accent of
-      Grey -> ""
-      Brown -> ""
-      BlueGrey -> ""
-      _ -> "." ++ hueName primary ++ "-" ++ hueName accent
+  let 
+    q = 
+      String.map (\x -> if x == '-' then '_' else x)
+    cssFile =
+      case accent of
+        Grey -> ""
+        Brown -> ""
+        BlueGrey -> ""
+        _ -> "." ++ q (hueName primary) ++ "-" ++ q (hueName accent)
   in 
     "material" ++ cssFile ++ ".min.css"
 

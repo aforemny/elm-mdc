@@ -121,6 +121,6 @@ duration in milliseconds as argument.
 NB! This Property a m is dictated by neither MDL nor the Material Design
 Specification. 
 -}
-transition : String -> Property a m 
+transition : Float -> Property a m 
 transition duration = 
   css "transition" ("box-shadow " ++ toString duration ++ "ms ease-in-out 0s")

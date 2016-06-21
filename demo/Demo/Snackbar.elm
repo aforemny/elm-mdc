@@ -30,6 +30,7 @@ type alias Mdl =
 
 type Square' 
   = Appearing 
+  | Growing
   | Waiting
   | Active
   | Idle
@@ -64,6 +65,7 @@ type Msg
   = AddSnackbar
   | AddToast
   | Appear Int
+  | Grown Int
   | Gone Int
   | Snackbar (Snackbar.Msg Int)
   | MDL Material.Msg 
@@ -110,7 +112,12 @@ update action model =
       add (\k -> Snackbar.toast k <| "Toast message #" ++ toString k) model
 
     Appear k -> 
-      model |> mapSquare k (\sq -> if sq == Appearing then Waiting else sq) |> pure
+      ( model |> mapSquare k (\sq -> if sq == Appearing then Growing else sq)
+      , delay transitionLength (Grown k)
+      )
+
+    Grown k -> 
+      model |> mapSquare k (\sq -> if sq == Growing then Waiting else sq) |> pure
 
     Snackbar (Snackbar.Begin k) -> 
       model |> mapSquare k (always Active) |> pure
@@ -168,6 +175,7 @@ transitionOuter =
     <| "width " ++ toString transitionLength ++ "ms ease-in-out 0s, "
     ++ "margin " ++ toString transitionLength ++ "ms ease-in-out 0s"
 
+
 clickView : Model -> Square -> Html a
 clickView model (k, square) =
   let
@@ -194,10 +202,11 @@ clickView model (k, square) =
 
   in
     {- In order to get the box appearance and disappearance animations 
-    to start in the lower-left corner, we render boxes as an outer div 
-    (which animates only width, to cause reflow of surrounding boxes), 
-    and an absolutely positioned inner div (to force animation to start
-    in the lower-left corner. -}
+    to start in the lower-left corner, we render boxes as an outer div (which
+    animates only width, to cause reflow of surrounding boxes), and an
+    absolutely positioned inner div (to force animation to start in the
+    lower-left corner.
+    -}
     Options.div 
       [ css "height" boxHeight
       , css "width" width
@@ -206,9 +215,9 @@ clickView model (k, square) =
       , css "margin" margin
       , css "z-index" "0"
       {- Virtual-dom reuse of divs when a box disappears triggers css 
-      transitions. As of 0.17, we an no longer use `key` to force 
-      virtual-dom to make each box stay with its original div, so we
-      must manually remove transitions when they might be dangerous.
+      transitions. As of 0.17, we an no longer use `key` to force virtual-dom
+      to make each box stay with its original div, so we must manually remove
+      transitions when they might be dangerous.
       -}
       --, Options.key (toString k)
       , if square /= Waiting then transitionOuter else nop

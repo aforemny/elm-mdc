@@ -3,7 +3,7 @@ module Material.Toggles exposing
   , Msg, update
   , viewSwitch, viewCheckbox, viewRadio
   , switch, checkbox, radio
-  , onChange, ripple, disabled, value, name
+  , onChange, ripple, disabled, value, group
   , Container
   --, Radio, Checkbox, Switch
   )
@@ -107,7 +107,7 @@ type alias Config m =
   { isDisabled : Bool
   , value : Bool
   , ripple : Bool
-  , name : Maybe (Attribute m)
+  , group : Maybe (Attribute m)
   , onChange : Maybe (Attribute m)
   }
 
@@ -117,7 +117,7 @@ defaultConfig =
   { isDisabled = False
   , value = False
   , ripple = True
-  , name = Nothing
+  , group = Nothing
   , onChange = Nothing
   }
 
@@ -163,21 +163,21 @@ value b =
 
 {-| Set radio-button group id 
 -}
-name : String -> Property m
-name s = 
+group : String -> Property m
+group s = 
   Options.set
-    (\options -> { options | name = Just (Html.Attributes.name s) })
+    (\options -> { options | group = Just (Html.Attributes.name s) })
 
 
 
 top : (Msg -> m) -> String -> Model -> Options.Summary (Config m) m -> List (Html m) -> Html m
-top lift name model summary elems =
+top lift group model summary elems =
   let 
     cfg = summary.config
   in
     Options.apply summary label
-      [ cs ("mdl-" ++ name) 
-      , cs ("mdl-js-" ++ name)
+      [ cs ("mdl-" ++ group) 
+      , cs ("mdl-js-" ++ group)
       , cs "mdl-js-ripple-effect" `when` cfg.ripple
       , cs "mdl-js-ripple-effect--ignore-events" `when` cfg.ripple
       , cs "is-upgraded"
@@ -202,8 +202,8 @@ top lift name model summary elems =
 
 
 
-viewCheckbox : (Msg -> m) -> Model -> List (Property m) -> Html m
-viewCheckbox lift model config = 
+viewCheckbox : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+viewCheckbox lift model config elems = 
   let 
     summary = Options.collect defaultConfig config
     cfg = summary.config
@@ -219,7 +219,7 @@ viewCheckbox lift model config =
         -}
       ]
       []
-    , span [ class ("mdl-checkbox__label") ] [] 
+    , span [ class ("mdl-checkbox__label") ] elems 
     , span [ class "mdl-checkbox__focus-helper" ] [] 
     , span 
         [ class "mdl-checkbox__box-outline" ]
@@ -233,8 +233,8 @@ viewCheckbox lift model config =
 
 {-| TODO
 -}
-viewSwitch : (Msg -> m) -> Model -> List (Property m) -> Html m
-viewSwitch lift model config =
+viewSwitch : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+viewSwitch lift model config elems =
   let 
     summary = Options.collect defaultConfig config
     cfg = summary.config
@@ -250,7 +250,7 @@ viewSwitch lift model config =
         -}
       ]
       []
-    ,  span [ class "mdl-switch__label" ] []
+    ,  span [ class "mdl-switch__label" ] elems
     ,  div [ class "mdl-switch__track" ] []
     ,  div 
          [ class "mdl-switch__thumb" ] 
@@ -272,7 +272,7 @@ viewRadio lift model config elems =
         , Just (Html.Attributes.disabled cfg.isDisabled)
         , Just (checked cfg.value)
         -- TODO, Just (Html.Attributes.value cfg.value)
-        , cfg.name
+        , cfg.group
         ] 
       )
       []
@@ -300,31 +300,33 @@ render view =
   Parts.create view update .toggles (\x y -> {y | toggles=x}) defaultModel
 
 
-{-| Component render, checkbox. TODO: Example 
+{-| Component render, checkbox. 
 -}
 checkbox 
   : (Parts.Msg (Container c) -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
+  -> List (Html m) 
   -> Html m
 checkbox = 
   render viewCheckbox
 
 
-{-| Component render, switch. TODO: Example
+{-| Component render, switch. 
 -}
 switch
   : (Parts.Msg (Container c) -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
+  -> List (Html m)
   -> Html m
 switch = 
   render viewSwitch
 
 
-{-| Component render, radio button. TODO: Example
+{-| Component render, radio button. 
 -}
 radio
   : (Parts.Msg (Container c) -> m)

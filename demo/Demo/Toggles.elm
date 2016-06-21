@@ -76,19 +76,21 @@ view model =
           [ Toggles.onChange (Switch 0) 
           , Toggles.value (get 0 model)
           ]
+          [ text "Flub" ]
       , Toggles.checkbox MDL [1] model.mdl 
           [ Toggles.onChange (Switch 1) 
           , Toggles.value (get 1 model)
           ]
+          [ text "Qux" ]
       , Toggles.radio MDL [2] model.mdl 
           [ Toggles.value (2 == model.radios) 
-          , Toggles.name "MyRadioGroup"
+          , Toggles.group "MyRadioGroup"
           , Toggles.onChange (Radio 2)
           ]
           [ text "Foo" ]
       , Toggles.radio MDL [3] model.mdl
           [ Toggles.value (3 == model.radios)
-          , Toggles.name "MyRadioGroup"
+          , Toggles.group "MyRadioGroup"
           , Toggles.onChange (Radio 3)
           ]
           [ text "Bar" ]
