@@ -88,11 +88,8 @@ prefix tp =
     Mini -> "mdl-mini-footer"
     Mega -> "mdl-mega-footer"
 
-separator : Type -> String
-separator tp =
-  case tp of
-    Mini -> "__"
-    Mega -> "__"
+separator : String
+separator = "__"
 
 {-| TODO
 -}
@@ -158,7 +155,7 @@ applyPrefix : Type -> Property m -> Property m
 applyPrefix tp prop =
   let
     pref = prefix tp
-    sep = separator tp
+    sep = separator
   in
     case prop of
       Internal.Class s ->
