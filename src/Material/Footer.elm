@@ -1,16 +1,15 @@
 module Material.Footer
   exposing
-    ( Type(..)
-    , Property
-    , Content(..)
-    , Footer, Element
+    ( Type(..), Property, Content(..), Footer, Element
     , mini, mega, footer
     , left, right, top, bottom, middle
     , wrap
     , logo, text, socialButton
     , href, link, onClick
-    , dropdown, heading
-    , links, linkItem
+    , dropdown
+    , heading
+    , links
+    , linkItem
     )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/footer):
@@ -69,7 +68,6 @@ import Html exposing (..)
 import Html.Attributes as Html
 import Html.Events as Events
 import Material.Options as Options exposing (Style, cs)
-
 import String
 import Regex
 import Material.Options.Internal as Internal exposing (attribute)
@@ -85,20 +83,29 @@ type Type
 prefix : Type -> String
 prefix tp =
   case tp of
-    Mini -> "mdl-mini-footer"
-    Mega -> "mdl-mega-footer"
+    Mini ->
+      "mdl-mini-footer"
+
+    Mega ->
+      "mdl-mega-footer"
+
 
 separator : String
-separator = "__"
+separator =
+  "__"
+
 
 {-| TODO
 -}
-type FooterProperty = FooterProperty
+type FooterProperty
+  = FooterProperty
+
 
 {-| TODO
 -}
 type alias Property m =
   Options.Property FooterProperty m
+
 
 {-| TODO
 -}
@@ -106,9 +113,12 @@ type Content a
   = HtmlContent (Html a)
   | Content (Footer a)
 
+
 {-| Helpers alias to wrap a Html element function
 -}
-type alias Element a = (List (Html.Attribute a) -> List (Html.Html a) -> Html.Html a)
+type alias Element a =
+  List (Html.Attribute a) -> List (Html.Html a) -> Html.Html a
+
 
 {-| Internal type alias for content within a footer
 -}
@@ -132,30 +142,46 @@ href : String -> Property m
 href =
   Html.href >> attribute
 
+
 {-| Wraps a normal HTML value into `Content`
 -}
 wrap : Html m -> Content m
-wrap = HtmlContent
+wrap =
+  HtmlContent
+
 
 tempPrefix : String
-tempPrefix = "{{prefix}}"
+tempPrefix =
+  "{{prefix}}"
+
 
 prefixRegex : Regex.Regex
-prefixRegex = Regex.regex tempPrefix
+prefixRegex =
+  Regex.regex tempPrefix
+
 
 prefixedClass : String -> Property m
 prefixedClass cls =
   Options.cs (tempPrefix ++ cls)
 
+
 removePrefix : String -> String
-removePrefix = Regex.replace Regex.All prefixRegex (\_ -> "")
+removePrefix =
+  Regex.replace Regex.All prefixRegex (\_ -> "")
+
+
 
 -- INTERNAL HELPERS
+
+
 applyPrefix : Type -> Property m -> Property m
 applyPrefix tp prop =
   let
-    pref = prefix tp
-    sep = separator
+    pref =
+      prefix tp
+
+    sep =
+      separator
   in
     case prop of
       Internal.Class s ->
@@ -167,23 +193,31 @@ applyPrefix tp prop =
       Internal.Many props ->
         Options.many <| List.map (applyPrefix tp) props
 
-      _ -> prop
+      _ ->
+        prop
 
 
 toHtml : Type -> Footer a -> Html a
 toHtml tp { styles, content, elem } =
   let
-    styles' = List.map (applyPrefix tp) styles
+    styles' =
+      List.map (applyPrefix tp) styles
   in
     Options.styled elem
       styles'
       (List.map (contentToHtml tp) content)
 
+
 contentToHtml : Type -> Content a -> Html a
 contentToHtml tp content =
   case content of
-    HtmlContent (html) -> html
-    Content (c) -> (toHtml tp c)
+    HtmlContent html ->
+      html
+
+    Content c ->
+      (toHtml tp c)
+
+
 
 -- End of helpers
 
@@ -196,59 +230,76 @@ section section styles content =
   Content
     { styles = (prefixedClass section :: styles)
     , content = content
-    , elem = Html.div}
+    , elem = Html.div
+    }
+
 
 {-| Creates a footer `left-section`
 -}
 left : List (Property m) -> List (Content m) -> Content m
-left = section "left-section"
+left =
+  section "left-section"
+
 
 {-| Creates a footer `right-section`
 -}
 right : List (Property m) -> List (Content m) -> Content m
-right = section "right-section"
+right =
+  section "right-section"
+
 
 {-| Creates a footer `top-section`
 -}
 top : List (Property m) -> List (Content m) -> Content m
-top = section "top-section"
+top =
+  section "top-section"
+
 
 {-| Creates a footer `middle-section`
 -}
 middle : List (Property m) -> List (Content m) -> Content m
-middle = section "middle-section"
+middle =
+  section "middle-section"
+
 
 {-| Creates a footer `bottom-section`
 -}
 bottom : List (Property m) -> List (Content m) -> Content m
-bottom = section "bottom-section"
+bottom =
+  section "bottom-section"
+
 
 {-| Creates a footer of `Type`
 -}
 footer : Type -> List (Property m) -> List (Content m) -> Html m
 footer tp config content =
   let
-    pref = prefix tp
+    pref =
+      prefix tp
   in
     Options.styled Html.footer
       (cs pref :: config)
       (List.map (contentToHtml tp) content)
 
 
-
 {-| Creates a footer of `Type` `Mini`
 -}
 mini : List (Property m) -> List (Content m) -> Html m
-mini = footer Mini
+mini =
+  footer Mini
+
 
 {-| Creates a footer of `Type` `Mega`
 -}
 mega : List (Property m) -> List (Content m) -> Html m
-mega = footer Mega
+mega =
+  footer Mega
 
 
 socialBtn : Property m
-socialBtn = prefixedClass "social-btn"
+socialBtn =
+  prefixedClass "social-btn"
+
 
 {-| Creates a footer logo
 -}
@@ -259,6 +310,7 @@ logo styles content =
     , content = content
     , elem = Html.div
     }
+
 
 {-| Creates a `link-list`
 -}
@@ -279,12 +331,13 @@ link styles contents =
     styles
     contents
 
+
 li : List (Property m) -> List (Html m) -> Content m
 li styles content =
-  wrap <|
-    Options.styled Html.li
-      styles
-      content
+  wrap
+    <| Options.styled Html.li
+        styles
+        content
 
 
 {-| Creates a link wrapped in a `li`-element
@@ -293,7 +346,7 @@ linkItem : List (Property m) -> List (Content m) -> Content m
 linkItem styles content =
   Content
     { styles = []
-    , content = [Content { styles = styles, content = content, elem = Html.a }]
+    , content = [ Content { styles = styles, content = content, elem = Html.a } ]
     , elem = Html.li
     }
 
@@ -310,7 +363,8 @@ dropdown styles content =
 
 
 headingClass : Property m
-headingClass = prefixedClass "heading"
+headingClass =
+  prefixedClass "heading"
 
 
 {-| Creates a footer `heading` element
@@ -323,10 +377,13 @@ heading styles content =
     , elem = Html.h1
     }
 
+
 {-| Wraps `Html.text` element to `Content`
 -}
 text : String -> Content m
-text = Html.text >> wrap
+text =
+  Html.text >> wrap
+
 
 {-| Creates a `social-button` with the proper prefix based on the `Type`
 -}
