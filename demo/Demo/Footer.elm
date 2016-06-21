@@ -55,7 +55,7 @@ createLinks nr =
   let
     nrs = List.repeat nr 0
     makeLink idx _ =
-      (Footer.linkItem [Footer.href "#"] [Footer.text ("Link " ++ toString (idx + 1))])
+      (Footer.linkItem [Footer.href "#footers"] [Footer.text ("Link " ++ toString (idx + 1))])
   in
     List.indexedMap makeLink nrs
 
@@ -129,11 +129,11 @@ view model  =
                 ]
             , Footer.right []
                 [ Footer.wrap <|
-                    Footer.link [Footer.href "#"] [text "Link 1"]
+                    Footer.link [Footer.href "#footers"] [text "Link 1"]
                 , Footer.wrap <|
-                    Footer.link [Footer.href "#"] [text "Link 2"]
+                    Footer.link [Footer.href "#footers"] [text "Link 2"]
                 , Footer.wrap <|
-                    Footer.link [Footer.href "#"] [text "Link 3"]
+                    Footer.link [Footer.href "#footers"] [text "Link 3"]
                 ]
             ]
         , Footer.middle []
@@ -173,18 +173,18 @@ view model  =
         [ Footer.wrap <|
             Html.ul []
               [ Html.li [Html.class "mdl-mini-footer__social-btn"]
-                  [Html.a [Html.href "#"] [Icon.i "face"]]
+                  [Html.a [Html.href "#footers"] [Icon.i "face"]]
               , Html.li [Html.class "mdl-mini-footer__social-btn"]
-                  [Html.a [Html.href "#"] [Icon.i "settings"]]
+                  [Html.a [Html.href "#footers"] [Icon.i "settings"]]
               , Html.li [Html.class "mdl-mini-footer__social-btn"]
-                  [Html.a [Html.href "#"] [Icon.i "donut_large"]]
+                  [Html.a [Html.href "#footers"] [Icon.i "donut_large"]]
               ]
         , Footer.wrap <|
             Html.ul []
               [ Html.li []
-                  [Html.a [Html.href "#"] [text "Link 1"]]
+                  [Html.a [Html.href "#footers"] [text "Link 1"]]
               , Html.li []
-                  [Html.a [Html.href "#"] [text "Link 2"]]
+                  [Html.a [Html.href "#footers"] [text "Link 2"]]
               ]
         ]
     ]
