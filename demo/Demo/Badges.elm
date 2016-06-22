@@ -79,116 +79,121 @@ c = cell [ size All 4 ]
 
 view : Model -> Html Msg
 view model =
-  [ p []
-      [ text "Typical use of a badge in, say, in an e-mail client:" ]
-  , grid []
-      [ c [ Options.div 
-              [ css "width" "10em", css "display" "inline-block" ]
-              [ Options.styled span
-                [ if model.unread /= 0 then Badge.add (toString model.unread) else Options.nop
-                ]
-                [ text "Unread" ]
-              ]
-          , Button.render Mdl [0] model.mdl
-              [ Button.onClick Decrease 
-              , Button.raised
-              , Button.ripple
-              , Button.colored
-              ]
-              [ text "Mark as read" ]
-          ]
-      ]
-  , p [] 
-      [ text "Below are all possible combinations of badges. Hover to show source excerpt." ]
-  , grid 
-      [] 
-      [ c [ let c1 = """    
-              Options.span 
-                [ Badge.add "3" ] 
-                [ text "Badge" ]"""
-            in
-              Options.span 
-                [ Badge.add "3" 
-                , Options.onHover <| SetCode c1
-                ] 
-                [ text "Badge" ]  
-          ]
-      , c [ let c2 = """
-              Options.span
-                [ Badge.add "♥" ]
-                [ text "Symbol" ]"""
-            in
-              Options.span
-                [ Badge.add "♥" 
-                , Options.onHover <| SetCode c2
-                ]
-                [ text "Symbol" ]
-
-          ]
-      , c [ let c3 = """
-              Icon.view "shopping_cart"
-                [ Icon.size24
-                , Badge.add "33"
-                ]"""
-            in
-              Options.styled span 
-                [ Options.onHover <| SetCode c3 ]
-                [ Icon.view "shopping_cart"
-                  [ Icon.size24
-                  , Badge.add "33"
+  let 
+    demo2 = 
+      [ p []
+          [ text "Typical use of a badge in, say, in an e-mail client:" ]
+      , grid []
+          [ c [ Options.div 
+                  [ css "width" "10em", css "display" "inline-block" ]
+                  [ Options.styled span
+                    [ if model.unread /= 0 then Badge.add (toString model.unread) else Options.nop
+                    ]
+                    [ text "Unread" ]
                   ]
-                ]
+              , Button.render Mdl [0] model.mdl
+                  [ Button.onClick Decrease 
+                  , Button.raised
+                  , Button.ripple
+                  , Button.colored
+                  ]
+                  [ text "Mark as read" ]
+              ]
           ]
-      , c [ let c4 = """
-              Options.span 
-                [ Badge.add "5"
-                , Badge.noBackground 
-                ]  
-                [ text "No background" ]"""
-            in 
-              Options.span 
-                [ Badge.add "5"
-                , Badge.noBackground 
-                , Options.onHover <| SetCode c4
-                ]  
-                [ text "No background" ]
-          ]
-      , c [ let c5 = """
-              Options.span 
-                [ Badge.add "8"
-                , Badge.overlap 
-                ]  
-                [ text "Overlap" ]"""
-            in
-              Options.span 
-                [ Badge.add "8"
-                , Badge.overlap 
-                , Options.onHover <| SetCode c5
-                ]  
-                [ text "Overlap" ]
-          ]
-      , c [ let c6 = """
-              Options.span
-                [ Badge.add "13"
-                , Badge.overlap 
-                , Badge.noBackground 
-                ]  
-                [ text "Overlap, no background" ]"""
-            in
-              Options.span
-                [ Badge.add "13"
-                , Badge.overlap 
-                , Badge.noBackground 
-                , Options.onHover <| SetCode c6
-                ]  
-                [ text "Overlap, no background" ]
-          ]
-      ] 
-  , p []
-      [ Code.view model.codebox
       ]
-  ]
-  |> Page.body2 "Badges" srcUrl intro references
+    demo1 = 
+      [ p [] 
+          [ text "Below are all possible combinations of badges. Hover to show source excerpt." ]
+      , grid 
+          [] 
+          [ c [ let c1 = """    
+                  Options.span 
+                    [ Badge.add "3" ] 
+                    [ text "Badge" ]"""
+                in
+                  Options.span 
+                    [ Badge.add "3" 
+                    , Options.onHover <| SetCode c1
+                    ] 
+                    [ text "Badge" ]  
+              ]
+          , c [ let c2 = """
+                  Options.span
+                    [ Badge.add "♥" ]
+                    [ text "Symbol" ]"""
+                in
+                  Options.span
+                    [ Badge.add "♥" 
+                    , Options.onHover <| SetCode c2
+                    ]
+                    [ text "Symbol" ]
+
+              ]
+          , c [ let c3 = """
+                  Icon.view "shopping_cart"
+                    [ Icon.size24
+                    , Badge.add "33"
+                    ]"""
+                in
+                  Options.styled span 
+                    [ Options.onHover <| SetCode c3 ]
+                    [ Icon.view "shopping_cart"
+                      [ Icon.size24
+                      , Badge.add "33"
+                      ]
+                    ]
+              ]
+          , c [ let c4 = """
+                  Options.span 
+                    [ Badge.add "5"
+                    , Badge.noBackground 
+                    ]  
+                    [ text "No background" ]"""
+                in 
+                  Options.span 
+                    [ Badge.add "5"
+                    , Badge.noBackground 
+                    , Options.onHover <| SetCode c4
+                    ]  
+                    [ text "No background" ]
+              ]
+          , c [ let c5 = """
+                  Options.span 
+                    [ Badge.add "8"
+                    , Badge.overlap 
+                    ]  
+                    [ text "Overlap" ]"""
+                in
+                  Options.span 
+                    [ Badge.add "8"
+                    , Badge.overlap 
+                    , Options.onHover <| SetCode c5
+                    ]  
+                    [ text "Overlap" ]
+              ]
+          , c [ let c6 = """
+                  Options.span
+                    [ Badge.add "13"
+                    , Badge.overlap 
+                    , Badge.noBackground 
+                    ]  
+                    [ text "Overlap, no background" ]"""
+                in
+                  Options.span
+                    [ Badge.add "13"
+                    , Badge.overlap 
+                    , Badge.noBackground 
+                    , Options.onHover <| SetCode c6
+                    ]  
+                    [ text "Overlap, no background" ]
+              ]
+          ] 
+      , p []
+          [ Code.view model.codebox
+          ]
+      ]
+  in 
+    Page.body1' "Badges" srcUrl intro references demo1 demo2
 
 
 

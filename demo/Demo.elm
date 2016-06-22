@@ -229,17 +229,8 @@ view : Model -> Html Msg
 view model =
   let
     top =
-      div
-        [ style
-            [ ( "margin", "auto" )
-            , ( "padding-left", "8%" )
-            , ( "padding-right", "8%" )
-            ]
-        ]
-        [ (Array.get model.selectedTab tabViews
-            |> Maybe.withDefault e404)
-           model
-        ]
+      (Array.get model.selectedTab tabViews |> Maybe.withDefault e404) model
+      
   in
     Layout.render Mdl model.mdl
       [ Layout.selectedTab model.selectedTab

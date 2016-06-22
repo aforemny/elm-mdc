@@ -1,7 +1,7 @@
 module Demo.Page exposing 
   ( demo, package, mds, mdl
   , fromMDL, fromMDS
-  , body1, body2
+  , body1, body2, body1'
   ) 
 
 import Html exposing (..)
@@ -126,10 +126,18 @@ fab url =
 
 -- BODY 
 
+boxed : List (Options.Property a b)
+boxed = 
+  [ css "margin" "auto" 
+  , css "padding-left" "8%" 
+  , css "padding-right" "8%" 
+  ]
+
 
 body1 : String -> String -> Html a -> List (String, String) -> List (Html a) -> Html a 
 body1 t srcUrl contents links demo = 
-  div []
+  Options.div
+    boxed
     [ title t
     , grid [ noSpacing ]
        [ cell [ size All 6, size Phone 4 ] [ contents ]
@@ -139,16 +147,42 @@ body1 t srcUrl contents links demo =
            ] 
            ( references <| ("Demo source", srcUrl) :: links )
        ]
-    --, fab srcUrl
-    -- TODO: buttons can't be links (yet)
-    -- TODO: FAB placement.
-    --, header "Examples"
     , Options.div 
       [ css "margin-bottom" "48px"
-      --, css "margin-top" "48px"
-        -- , Elevation.shadow 2 
       ]
-    demo 
+      demo 
+    ]
+
+
+body1' : String -> String -> Html a -> List (String, String) -> List (Html a) -> List (Html a) -> Html a 
+body1' t srcUrl contents links demo1 demo2 = 
+  Options.div
+    []
+    [ Options.div 
+        boxed
+        [ title t
+        , grid [ noSpacing ]
+           [ cell [ size All 6, size Phone 4 ] [ contents ]
+           , cell 
+               [ size All 5, offset Desktop 1, size Phone 4, align Top 
+               , css "position" "relative" 
+               ] 
+               ( references <| ("Demo source", srcUrl) :: links )
+           ]
+        , Options.div 
+          [ css "margin-bottom" "48px"
+          ]
+          demo1
+        ]
+    , Options.div 
+        [ Color.background <| Color.color Color.Orange Color.S50 
+        , css "margin" "auto" 
+        , css "padding-top" "3rem"
+        , css "padding-bottom" "5rem"
+        , css "padding-left" "8%" 
+        , css "padding-right" "8%" 
+        ]
+        demo2
     ]
 
 
