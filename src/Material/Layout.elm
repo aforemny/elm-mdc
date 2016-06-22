@@ -678,7 +678,7 @@ view lift model options { drawer, header, tabs, main } =
       config.fixedDrawer && not model.isSmallScreen
 
     drawerIsVisible = 
-      model.isDrawerOpen || drawerIsFixed
+      model.isDrawerOpen
 
     tabsElems = 
       if not hasTabs then
