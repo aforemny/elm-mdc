@@ -353,6 +353,7 @@ stylesheet =
     padding-top: .5rem;
     padding-bottom: 1rem;
     padding-left:1rem;
+    margin: 0;
   }
   .mdl-layout__header--transparent {
     background: url('https://getmdl.io/assets/demos/transparent.jpg') center / cover;

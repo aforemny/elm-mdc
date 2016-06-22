@@ -6,6 +6,7 @@ import Platform.Cmd exposing (Cmd)
 import String
 import Markdown
 
+import Material.Elevation as Elevation
 import Material.Options exposing (css, div, stylesheet)
 import Material.Helpers as Helpers exposing (fx)
 
@@ -128,14 +129,24 @@ trim s =
 code : String -> Html a
 code str = 
   div 
-    [ css "overflow" "scroll" ]
+    [ css "overflow" "scroll" 
+    , Elevation.e2
+    , css "margin-top" "1rem"
+    , css "margin-bottom" "1rem"
+    , css "border-radius" "2px"
+    ]
     [ Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```" ]
 
 
 html : String -> Html a
 html str = 
   div 
-    [ css "overflow" "scroll" ]
+    [ css "overflow" "scroll" 
+    , css "margin-top" "1rem"
+    , css "margin-bottom" "1rem"
+    , css "border-radius" "2px"
+    , Elevation.e2
+    ]
     [ Markdown.toHtml [] <| "```html\n" ++ trim str ++ "\n```" ]
 
 

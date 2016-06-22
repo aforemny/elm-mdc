@@ -5,7 +5,6 @@ import Html exposing (..)
 import Array
 import Bitwise
 
-import Material.Color as Color
 import Material.Grid as Grid
 import Material.Options as Options exposing (css, cs)
 import Material.Helpers as Helpers

@@ -175,9 +175,12 @@ body1' t srcUrl contents links demo1 demo2 =
           demo1
         ]
     , Options.div 
-        [ Color.background <| Color.color Color.Orange Color.S50 
+        [ css "height" "5rem" ]
+        []
+    , Options.div 
+        [ Color.background <| Color.color Color.Yellow Color.S50 
         , css "margin" "auto" 
-        , css "padding-top" "3rem"
+        , css "padding-top" "2rem"
         , css "padding-bottom" "5rem"
         , css "padding-left" "8%" 
         , css "padding-right" "8%" 
