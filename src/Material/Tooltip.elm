@@ -2,7 +2,7 @@ module Material.Tooltip
   exposing
     ( Model
     , defaultModel
-    , Msg
+    , Msg(..)
     , update
     , view
     , render
@@ -44,15 +44,24 @@ Refer to [this site](http://debois.github.io/elm-mdl#/tooltips)
 for a live demo.
 
 
+# Types
 @docs Model, defaultModel
-@docs Msg, update, view, render
 @docs DOMState
+@docs Property
+
+# Update and render
+@docs Msg, update, view, render
+
+# Content
 @docs left, right, top, bottom
 @docs default, large
-@docs Property
+
+# Events
 @docs onMouseEnter, onMouseLeave
 @docs onEnter, onLeave
 @docs attach
+
+#Utility
 @docs mdl
 
 -}
@@ -65,6 +74,7 @@ import Material.Options.Internal as Internal
 import DOM
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
+import String
 
 
 -- MODEL
@@ -247,36 +257,53 @@ update action model =
 -}
 sibling : Json.Decoder a -> Json.Decoder a
 sibling d =
-  Json.oneOf
-    [ at [ "target", "nextSibling" ] d
-    , at [ "target", "parentElement", "nextSibling" ] d
-    , at [ "target", "parentElement", "parentElement", "nextSibling" ] d
-    ]
-
-
-siblingAtDepth : Int -> Json.Decoder a -> Json.Decoder a
-siblingAtDepth depth decoder =
   let
-    parents =
-      List.repeat depth "parentElement"
+    createPath depth =
+      let
+        parents =
+          List.repeat depth "parentElement"
+      in
+        ([ "target" ] ++ parents ++ [ "nextSibling" ])
+
+    paths =
+      List.map createPath [0..4]
+
+    -- Tries to check if the element is actually a tooltip
+    valid path =
+      isTooltipClass path
+        `Json.andThen`
+          (\res ->
+            if res then
+              at path d
+            else
+              Json.fail ""
+          )
   in
-    at ([ "target" ] ++ parents ++ [ "nextSibling" ]) decoder
+    Json.oneOf (List.map valid paths)
 
 
+{-| Checks if the target at path is an actual tooltip
+-}
+isTooltipClass : List (String) -> Json.Decoder Bool
+isTooltipClass path =
+  (at path DOM.className)
+    `Json.andThen`
+      (\class ->
+        if String.contains "mdl-tooltip" class then
+          Json.succeed True
+        else
+          Json.succeed False
+      )
+
+
+{-| Decodes a DOMState from a DOM event
+-}
 stateDecoder : Json.Decoder DOMState
 stateDecoder =
   Json.object3 DOMState
     (DOM.target DOM.boundingClientRect)
     (sibling DOM.offsetWidth)
     (sibling DOM.offsetHeight)
-
-
-stateAtDepth : Int -> Json.Decoder DOMState
-stateAtDepth depth =
-  Json.object3 DOMState
-    (DOM.target DOM.boundingClientRect)
-    ((siblingAtDepth depth) DOM.offsetWidth)
-    ((siblingAtDepth depth) DOM.offsetHeight)
 
 
 
@@ -494,4 +521,3 @@ onEnter lift =
 onLeave : (Msg -> m) -> Attribute m
 onLeave lift =
   Html.Events.on "mouseleave" (Json.succeed (lift Leave))
-

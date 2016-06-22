@@ -173,6 +173,7 @@ view model  =
                           , Tooltip.onLeave TooltipMsg
                           ]
                        [i [] [text "XML"]]
+                   , p [] [text "This element should not interfere"]
                    ]
                , Tooltip.view TooltipMsg model.nopart
                    [Tooltip.large]
