@@ -50,8 +50,8 @@ for a live demo.
 @docs left, right, top, bottom
 @docs default, large
 @docs Property
-@docs onMouseEnter
-@docs onMouseLeave
+@docs onMouseEnter, onMouseLeave
+@docs onEnter, onLeave
 @docs attach
 @docs mdl
 
@@ -494,3 +494,4 @@ onEnter lift =
 onLeave : (Msg -> m) -> Attribute m
 onLeave lift =
   Html.Events.on "mouseleave" (Json.succeed (lift Leave))
+
