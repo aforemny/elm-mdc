@@ -14,23 +14,27 @@ import Demo.Code as Code
 import Markdown
 
 import Material.Button as Button
+import Material.Icon as Icon
 
 -- MODEL
 
 type alias Model =
   { mdl : Material.Model
+  , nopart : Tooltip.Model
   }
 
 
 model : Model
 model =
   { mdl = Material.model
+  , nopart = Tooltip.defaultModel
   }
 
 
 -- ACTION, UPDATE
 type Msg
   = NoOp
+  | TooltipMsg Tooltip.Msg
   | Mdl Material.Msg
 
 
@@ -39,6 +43,12 @@ update action model =
   case action of
     NoOp ->
         (model, Cmd.none)
+
+    TooltipMsg msg' ->
+      let
+        updated = fst <| (Tooltip.update msg' model.nopart)
+      in
+        ({ model | nopart = updated }, Cmd.none)
 
     Mdl action' ->
       Material.update Mdl action' model
@@ -71,18 +81,14 @@ view model  =
           [Grid.cell [Grid.size Grid.All 12]
              [code """
                     import Material.Tooltip as Tooltip
+                    import Material.Icon as Icon
 
                     -- Note the index in both the Render as well as the mouse event handlers
 
                     tooltip : Model -> Html Msg
                     tooltip model =
                       div []
-                        [ div [ class "icon material-icons"
-                              , Tooltip.onMouseEnter Mdl [0]
-                              , Tooltip.onMouseLeave Mdl [0]
-                              ]
-                              [text "add"]
-
+                        [ Icon.view "add" [ Tooltip.attach Mdl [0] ]
                         , Tooltip.render Mdl [0] model.mdl
                             [Tooltip.default]
                             [text "Default tooltip"]
@@ -94,10 +100,8 @@ view model  =
       , Grid.grid []
           [ demoTooltip
             (div []
-               [ div [ class "icon material-icons"
-                     , Tooltip.onMouseEnter Mdl [0]
-                     , Tooltip.onMouseLeave Mdl [0]
-                     ] [text "add"]
+               [ Icon.view "add"
+                   [ Tooltip.attach Mdl [0] ]
 
                , Tooltip.render Mdl [0] model.mdl
                    [Tooltip.default]
@@ -129,10 +133,8 @@ view model  =
 
           , demoTooltip
             (div []
-               [ div [class "icon material-icons"
-                     , Tooltip.onMouseEnter Mdl [2]
-                     , Tooltip.onMouseLeave Mdl [2]
-                     ] [text "share"]
+               [ Icon.view "share"
+                   [ Tooltip.attach Mdl [2] ]
 
                , Tooltip.render Mdl [2] model.mdl
                    [ Tooltip.large
@@ -148,8 +150,7 @@ view model  =
             (div []
                [ Button.render Mdl [0] model.mdl
                    [ Button.raised
-                   , Tooltip.mdl <| Tooltip.onMouseEnter Mdl [3]
-                   , Tooltip.mdl <| Tooltip.onMouseLeave Mdl [3]
+                   , Tooltip.attach Mdl [3]
                    ]
                    [ text "BUTTON"]
 
@@ -161,6 +162,25 @@ view model  =
             , """
                A large tooltip positioned
                above the button
+               """
+            )
+
+          , demoTooltip
+            (div []
+               [ p [style [("margin-bottom", "5px")]]
+                   [ text "HTML is related to but different from "
+                   , span [ Tooltip.onEnter TooltipMsg
+                          , Tooltip.onLeave TooltipMsg
+                          ]
+                       [i [] [text "XML"]]
+                   ]
+               , Tooltip.view TooltipMsg model.nopart
+                   [Tooltip.large]
+                   [text "No parts!"]
+               ]
+            , """
+               Tooltips also work without
+               using Parts model
                """
             )
           ]

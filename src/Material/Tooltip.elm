@@ -1,15 +1,26 @@
 module Material.Tooltip
   exposing
-  ( Model, defaultModel
-  , Msg, update, view, render
-  , DOMState
-  , left, right, top, bottom
-  , default, large
-  , Property
-  , onMouseEnter
-  , onMouseLeave
-  , mdl
-  )
+    ( Model
+    , defaultModel
+    , Msg
+    , update
+    , view
+    , render
+    , DOMState
+    , left
+    , right
+    , top
+    , bottom
+    , default
+    , large
+    , Property
+    , onMouseEnter
+    , onMouseLeave
+    , attach
+    , onEnter
+    , onLeave
+    , mdl
+    )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):
 
@@ -41,6 +52,7 @@ for a live demo.
 @docs Property
 @docs onMouseEnter
 @docs onMouseLeave
+@docs attach
 @docs mdl
 
 -}
@@ -52,7 +64,6 @@ import Material.Options as Options exposing (Style, cs, css, when)
 import Material.Options.Internal as Internal
 import DOM
 import Html.Events
-import Html.Attributes
 import Json.Decode as Json exposing ((:=), at)
 
 
@@ -74,6 +85,8 @@ defaultModel =
   { isActive = False
   , domState = defaultDOMState
   }
+
+
 
 -- ACTION, UPDATE
 
@@ -121,7 +134,9 @@ defaultDOMState : DOMState
 defaultDOMState =
   { rect = { left = 0, top = 0, width = 0, height = 0 }
   , offsetWidth = 0
-  , offsetHeight = 0 }
+  , offsetHeight = 0
+  }
+
 
 {-| Calculates the position of the tooltip based on the event
 and the requested position
@@ -150,7 +165,6 @@ calculatePos pos domState =
 
     marginTop =
       -1 * (offsetHeight / 2)
-
 
     out =
       case pos of
@@ -219,13 +233,14 @@ calculatePos pos domState =
 
 {-| Component update.
 -}
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
     Enter dom ->
-      ({ model | isActive = True, domState = dom }, none)
+      ( { model | isActive = True, domState = dom }, none )
+
     Leave ->
-      ({ model | isActive = False }, none)
+      ( { model | isActive = False }, none )
 
 
 {-| Tries and get the next sibling that is available and use the given decoder on it
@@ -233,18 +248,20 @@ update action model =
 sibling : Json.Decoder a -> Json.Decoder a
 sibling d =
   Json.oneOf
-    [
-      at [ "target", "nextSibling" ] d
+    [ at [ "target", "nextSibling" ] d
     , at [ "target", "parentElement", "nextSibling" ] d
     , at [ "target", "parentElement", "parentElement", "nextSibling" ] d
     ]
 
+
 siblingAtDepth : Int -> Json.Decoder a -> Json.Decoder a
 siblingAtDepth depth decoder =
   let
-    parents = List.repeat depth "parentElement"
+    parents =
+      List.repeat depth "parentElement"
   in
-    at (["target"] ++ parents ++ ["nextSibling"]) decoder
+    at ([ "target" ] ++ parents ++ [ "nextSibling" ]) decoder
+
 
 stateDecoder : Json.Decoder DOMState
 stateDecoder =
@@ -252,6 +269,7 @@ stateDecoder =
     (DOM.target DOM.boundingClientRect)
     (sibling DOM.offsetWidth)
     (sibling DOM.offsetHeight)
+
 
 stateAtDepth : Int -> Json.Decoder DOMState
 stateAtDepth depth =
@@ -261,7 +279,9 @@ stateAtDepth depth =
     ((siblingAtDepth depth) DOM.offsetHeight)
 
 
+
 -- PROPERTIES
+
 
 {-| Tooltip size
 -}
@@ -295,6 +315,7 @@ defaultConfig =
   , position = Bottom
   }
 
+
 {-| Properties for Tooltip options.
 -}
 type alias Property m =
@@ -321,6 +342,7 @@ top : Property m
 top =
   Options.set (\options -> { options | position = Top })
 
+
 {-| Position the tooltip below the target element
 -}
 bottom : Property m
@@ -334,18 +356,24 @@ default : Property m
 default =
   Options.set (\options -> { options | size = Default })
 
+
 {-| Large tooltip
 -}
 large : Property m
 large =
   Options.set (\options -> { options | size = Large })
 
+
 {-| Maps a Html.Attribute to Material Property
 -}
 mdl : Attribute a -> Internal.Property b a
-mdl = Internal.Attribute
+mdl =
+  Internal.Attribute
+
+
 
 -- VIEW
+
 
 {-| Component view.
 -}
@@ -355,7 +383,8 @@ view lift model options content =
     summary =
       Options.collect defaultConfig options
 
-    config = summary.config
+    config =
+      summary.config
 
     px : Float -> String
     px f =
@@ -369,14 +398,23 @@ view lift model options content =
   in
     Options.styled div
       (cs "mdl-tooltip"
-       :: cs "is-active" `when` model.isActive
-       :: cs "mdl-tooltip--large" `when` (config.size == Large)
-       :: css "left" (px pos.left) `when` model.isActive
-       :: css "margin-left" (px pos.marginLeft) `when` model.isActive
-       :: css "top" (px pos.top) `when` model.isActive
-       :: css "margin-top" (px pos.marginTop) `when` model.isActive
-       :: [])
+        :: cs "is-active"
+        `when` model.isActive
+        :: cs "mdl-tooltip--large"
+        `when` (config.size == Large)
+        :: css "left" (px pos.left)
+        `when` model.isActive
+        :: css "margin-left" (px pos.marginLeft)
+        `when` model.isActive
+        :: css "top" (px pos.top)
+        `when` model.isActive
+        :: css "margin-top" (px pos.marginTop)
+        `when` model.isActive
+        :: []
+      )
       content
+
+
 
 -- COMPONENT
 
@@ -386,7 +424,6 @@ type alias Container c =
 
 
 {-| Render a tooltip
-TODO
 -}
 render :
   (Parts.Msg (Container c) -> m)
@@ -403,14 +440,16 @@ set : Parts.Set (Indexed Model) (Container c)
 set x y =
   { y | tooltip = x }
 
+
 find : Parts.Index -> Parts.Accessors Model (Container c)
 find =
   Parts.accessors .tooltip set defaultModel
 
+
 pack : Parts.Index -> Msg -> Parts.Msg (Container c)
 pack idx =
   let
-    (get, set1) =
+    ( get, set1 ) =
       Parts.indexed .tooltip set defaultModel idx
 
     embeddedUpdate =
@@ -418,14 +457,40 @@ pack idx =
   in
     Parts.pack embeddedUpdate
 
-{-| Mouse enter event handler
+
+{-| Mouse enter event handler for Parts version
 -}
 onMouseEnter : (Parts.Msg (Container b) -> d) -> Parts.Index -> Attribute d
 onMouseEnter lift idx =
   Html.Events.on "mouseenter" (Json.map (Enter >> ((pack idx) >> lift)) stateDecoder)
 
-{-| Mouse leave event handler
+
+{-| Mouse leave event handler for Parts version
 -}
 onMouseLeave : (Parts.Msg (Container a) -> b) -> Parts.Index -> Attribute b
 onMouseLeave lift idx =
   Html.Events.on "mouseleave" (Json.succeed (Leave |> ((pack idx) >> lift)))
+
+
+{-| Attach event handlers for Parts version
+-}
+attach : (Parts.Msg (Container a) -> b) -> Parts.Index -> Options.Property c b
+attach lift index =
+  Options.many
+    [ Internal.attribute <| onMouseEnter lift index
+    , Internal.attribute <| onMouseLeave lift index
+    ]
+
+
+{-| Mouse enter event handler for Non-Parts version
+-}
+onEnter : (Msg -> m) -> Attribute m
+onEnter lift =
+  Html.Events.on "mouseenter" (Json.map (Enter >> lift) stateDecoder)
+
+
+{-| Mouse leave event handler for Non-Parts version
+-}
+onLeave : (Msg -> m) -> Attribute m
+onLeave lift =
+  Html.Events.on "mouseleave" (Json.succeed (lift Leave))
