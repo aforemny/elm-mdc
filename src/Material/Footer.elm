@@ -1,15 +1,35 @@
 module Material.Footer
   exposing
-    ( Type(..), Property, Content(..), Footer, Element
-    , mini, mega, footer
-    , left, right, top, bottom, middle
+    ( Type(..)
+    , Property
+    , Content(..)
+    , Footer
+    , Element
+    , mini
+    , mega
+    , left
+    , right
+    , top
+    , bottom
+    , middle
     , wrap
-    , logo, text, socialButton
-    , href, link, onClick
+    , logo
+    , text
+    , socialButton
+    , href
+    , link
+    , onClick
     , dropdown
     , heading
     , links
     , linkItem
+    , Section(..)
+    , TopSection(..)
+    , MiddleSection(..)
+    , BottomSection(..)
+    , Dropdown(..)
+    , MegaFooter
+    , MiniFooter
     )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/footer):
@@ -45,6 +65,12 @@ for a live demo.
 @docs Content, Footer, Element
 @docs Property
 
+@docs MegaFooter, MiniFooter
+
+@docs Section
+@docs TopSection, MiddleSection, BottomSection
+@docs Dropdown
+
 # Helpers
 
 @docs wrap
@@ -52,7 +78,7 @@ for a live demo.
 
 # Appearance
 
-@docs footer, mini, mega
+@docs mini, mega
 
 # Sections
 
@@ -95,29 +121,23 @@ separator =
   "__"
 
 
-{-| TODO
+{-| `FooterProperty`
 -}
 type FooterProperty
   = FooterProperty
 
 
-{-| TODO
+{-| Property for footers
 -}
 type alias Property m =
   Options.Property FooterProperty m
 
 
-{-| TODO
+{-| Footer content can either be Html or footer specific content
 -}
 type Content a
   = HtmlContent (Html a)
   | Content (Footer a)
-
-
-{-| Helpers alias to wrap a Html element function
--}
-type alias Element a =
-  List (Html.Attribute a) -> List (Html.Html a) -> Html.Html a
 
 
 {-| Internal type alias for content within a footer
@@ -127,6 +147,216 @@ type alias Footer a =
   , content : List (Content a)
   , elem : Element a
   }
+
+
+{-| Helpers alias to wrap a Html element function
+-}
+type alias Element a =
+  List (Html.Attribute a) -> List (Html.Html a) -> Html.Html a
+
+
+{-| Strongly typed `Section` in a footer
+-}
+type Section a
+  = Section (Content a)
+
+
+{-| Strongly typed `Dropdown` in a footer
+-}
+type Dropdown a
+  = Dropdown
+      { props : List (Property a)
+      , content : List (Content a)
+      }
+
+
+{-| Strongly typed `TopSection` in a footer
+-}
+type TopSection a
+  = TopSection
+      { left : Maybe (Section a)
+      , right : Maybe (Section a)
+      , props : List (Property a)
+      }
+
+
+{-| Strongly typed `BottomSection` in a footer
+-}
+type BottomSection a
+  = BottomSection
+      { props : List (Property a)
+      , content : List (Content a)
+      }
+
+
+{-| Strongly typed `MiddleSection` in a footer
+-}
+type MiddleSection a
+  = MiddleSection
+      { props : List (Property a)
+      , content : List (Dropdown a)
+      }
+
+
+{-| MiniFooter consists of two sections
+-}
+type alias MiniFooter a =
+  { left : Maybe (Section a)
+  , right : Maybe (Section a)
+  }
+
+
+{-| MegaFooter consists of three sections
+-}
+type alias MegaFooter a =
+  { top : Maybe (TopSection a)
+  , bottom : Maybe (BottomSection a)
+  , middle : Maybe (MiddleSection a)
+  }
+
+
+{-| Creates a footer `top-section`
+-}
+top : List (Property m) -> MiniFooter m -> Maybe (TopSection m)
+top props { left, right } =
+  Just
+    <| TopSection
+        { left = left
+        , right = right
+        , props = props
+        }
+
+
+{-| Creates a footer `bottom-section`
+-}
+bottom : List (Property m) -> List (Content m) -> Maybe (BottomSection m)
+bottom props content =
+  Just
+    <| BottomSection
+        { props = props
+        , content = content
+        }
+
+
+{-| Creates a footer `dropdown` section
+-}
+dropdown : List (Property m) -> List (Content m) -> Dropdown m
+dropdown props content =
+  Dropdown
+    { props = props
+    , content = content
+    }
+
+
+{-| Creates a footer `middle-section`
+-}
+middle : List (Property m) -> List (Dropdown m) -> Maybe (MiddleSection m)
+middle props content =
+  Just
+    <| MiddleSection
+        { props = props
+        , content = content
+        }
+
+
+{-| Creates a footer of `Type` `Mega`
+-}
+mega : List (Property m) -> MegaFooter m -> Html m
+mega props { top, bottom, middle } =
+  let
+    tp =
+      Mega
+
+    pref =
+      prefix tp
+
+    sep =
+      separator
+
+    topContent =
+      case top of
+        Nothing ->
+          []
+
+        Just (TopSection { props, left, right }) ->
+          [ Options.styled Html.div
+              (cs (pref ++ sep ++ "top-section") :: props)
+              ((leftHtml tp left) ++ (rightHtml tp right))
+          ]
+
+    middleContent =
+      case middle of
+        Nothing ->
+          []
+
+        Just (MiddleSection { props, content }) ->
+          [ Options.styled Html.div
+              (cs (pref ++ sep ++ "middle-section") :: props)
+              (List.map (dropdownHtml) content)
+          ]
+
+    bottomContent =
+      case bottom of
+        Nothing ->
+          []
+
+        Just (BottomSection { props, content }) ->
+          [ Options.styled Html.div
+              (cs (pref ++ sep ++ "bottom-section") :: props)
+              ([] ++ (List.map (contentToHtml tp) content))
+          ]
+  in
+    Options.styled Html.footer
+      (cs pref :: props)
+      (topContent ++ middleContent ++ bottomContent)
+
+
+{-| Creates a footer `left-section`
+-}
+left : List (Property m) -> List (Content m) -> Maybe (Section m)
+left styles content =
+  Just
+    <| Section
+    <| Content
+        { styles = styles
+        , content = content
+        , elem = Html.div
+        }
+
+
+{-| Creates a footer `right-section`
+-}
+right : List (Property m) -> List (Content m) -> Maybe (Section m)
+right styles content =
+  Just
+    <| Section
+    <| Content
+        { styles = styles
+        , content = content
+        , elem = Html.div
+        }
+
+
+{-| Creates a footer of `Type` `Mini`
+-}
+mini : List (Property m) -> MiniFooter m -> Html m
+mini props { left, right } =
+  let
+    tp =
+      Mini
+
+    pref =
+      prefix tp
+
+    leftContent =
+      leftHtml tp left
+
+    rightContent =
+      rightHtml tp right
+  in
+    Options.styled Html.footer
+      (cs pref :: props)
+      (leftContent ++ rightContent)
 
 
 {-| onClick for Links and Buttons.
@@ -150,6 +380,10 @@ wrap =
   HtmlContent
 
 
+
+-- INTERNAL HELPERS
+
+
 tempPrefix : String
 tempPrefix =
   "{{prefix}}"
@@ -168,10 +402,6 @@ prefixedClass cls =
 removePrefix : String -> String
 removePrefix =
   Regex.replace Regex.All prefixRegex (\_ -> "")
-
-
-
--- INTERNAL HELPERS
 
 
 applyPrefix : Type -> Property m -> Property m
@@ -218,82 +448,56 @@ contentToHtml tp content =
       (toHtml tp c)
 
 
-
--- End of helpers
-
-
-{-| Creates a section with the given class name
-that gets prefixed by the footer
--}
-section : String -> List (Property m) -> List (Content m) -> Content m
-section section styles content =
-  Content
-    { styles = (prefixedClass section :: styles)
-    , content = content
-    , elem = Html.div
-    }
-
-
-{-| Creates a footer `left-section`
--}
-left : List (Property m) -> List (Content m) -> Content m
-left =
-  section "left-section"
-
-
-{-| Creates a footer `right-section`
--}
-right : List (Property m) -> List (Content m) -> Content m
-right =
-  section "right-section"
-
-
-{-| Creates a footer `top-section`
--}
-top : List (Property m) -> List (Content m) -> Content m
-top =
-  section "top-section"
-
-
-{-| Creates a footer `middle-section`
--}
-middle : List (Property m) -> List (Content m) -> Content m
-middle =
-  section "middle-section"
-
-
-{-| Creates a footer `bottom-section`
--}
-bottom : List (Property m) -> List (Content m) -> Content m
-bottom =
-  section "bottom-section"
-
-
-{-| Creates a footer of `Type`
--}
-footer : Type -> List (Property m) -> List (Content m) -> Html m
-footer tp config content =
+sectionContent : Type -> String -> Content m -> Html m
+sectionContent tp section content =
   let
     pref =
       prefix tp
+
+    sep =
+      separator
   in
-    Options.styled Html.footer
-      (cs pref :: config)
-      (List.map (contentToHtml tp) content)
+    case content of
+      HtmlContent html ->
+        Options.styled Html.div
+          (cs (pref ++ sep ++ section) :: [])
+          [ html ]
+
+      Content { styles, content, elem } ->
+        Options.styled elem
+          (cs (pref ++ sep ++ section) :: styles)
+          (List.map (contentToHtml tp) content)
 
 
-{-| Creates a footer of `Type` `Mini`
--}
-mini : List (Property m) -> List (Content m) -> Html m
-mini =
-  footer Mini
+dropdownHtml : Dropdown m -> Html m
+dropdownHtml (Dropdown { props, content }) =
+  Options.styled Html.div
+    (cs "mdl-mega-footer__drop-down-section" :: props)
+    (List.map (contentToHtml Mega) content)
 
 
-{-| Creates a footer of `Type` `Mega`
--}
-mega : List (Property m) -> List (Content m) -> Html m
-mega =
-  footer Mega
+leftHtml : Type -> Maybe (Section a) -> List (Html a)
+leftHtml tp left =
+  case left of
+    Just (Section content) ->
+      [ sectionContent tp "left-section" content ]
+
+    Nothing ->
+      []
+
+
+rightHtml : Type -> Maybe (Section a) -> List (Html a)
+rightHtml tp right =
+  case right of
+    Just (Section content) ->
+      [ sectionContent tp "right-section" content ]
+
+    Nothing ->
+      []
+
+
+
+-- END OF INTERNAL HELPERS
 
 
 socialBtn : Property m
@@ -325,11 +529,12 @@ links styles content =
 
 {-| Creates a link
 -}
-link : List (Property m) -> List (Html m) -> Html m
+link : List (Property m) -> List (Html m) -> Content m
 link styles contents =
-  Options.styled a
-    styles
-    contents
+  wrap
+    <| Options.styled a
+        styles
+        contents
 
 
 li : List (Property m) -> List (Html m) -> Content m
@@ -348,17 +553,6 @@ linkItem styles content =
     { styles = []
     , content = [ Content { styles = styles, content = content, elem = Html.a } ]
     , elem = Html.li
-    }
-
-
-{-| Creates a footer `dropdown` section
--}
-dropdown : List (Property m) -> List (Content m) -> Content m
-dropdown styles content =
-  Content
-    { styles = (prefixedClass "drop-down-section" :: styles)
-    , content = content
-    , elem = Html.div
     }
 
 

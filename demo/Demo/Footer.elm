@@ -97,96 +97,71 @@ view model  =
   , p [] [text """Footers come in two sizes, mini and mega.
                 Mega footers usually contain more content than mini footers."""]
 
+  , div [Html.style [("margin-top", "60px")]] []
   , p [] [text "Example of a mini footer"]
   , div []
     [ Footer.mini []
-        [ Footer.left []
-            [ Footer.logo []
-                [Footer.wrap <| text "Mini Footer Example"]
-            , Footer.links []
-                <| createLinks 3
-            ]
-        , Footer.right []
-            [ Footer.logo []
-                [Footer.text "Right Section"]
-            , Footer.socialButton [Options.css "margin-right" "6px"] []
-            , Footer.socialButton [Options.css "margin-right" "6px"] []
-            , Footer.socialButton [] []
-            ]
-        ]
+        { left =
+            Footer.left []
+              [ Footer.logo [] [ Footer.wrap <| text "Mini Footer Example" ]
+              , Footer.links [] <| createLinks 3
+              ]
+
+        , right =
+            Footer.right []
+              [ Footer.logo [] [ Footer.wrap <| text "Mini Footer Right Section" ]
+              , Footer.socialButton [Options.css "margin-right" "6px"] []
+              , Footer.socialButton [Options.css "margin-right" "6px"] []
+              , Footer.socialButton [Options.css "margin-right" "0px"] []
+              ]
+        }
     ]
   , div [Html.style [("margin-top", "60px")]] []
   , p [] [text """Example of a mega footer that contains more content than a mini footer.
                 Mega footers also have more sections than minifooters"""]
   , div []
     [ Footer.mega []
-        [ Footer.top []
-            [ Footer.left []
+        { top =
+            Footer.top []
+            { left = Footer.left []
                 [ Footer.logo [] [ Footer.text "Mega Footer Top Section" ]
                 , Footer.socialButton [Options.css "margin-right" "6px"] []
                 , Footer.socialButton [Options.css "margin-right" "6px"] []
                 , Footer.socialButton [] []
                 ]
-            , Footer.right []
-                [ Footer.wrap <|
-                    Footer.link [Footer.href "#footers"] [text "Link 1"]
-                , Footer.wrap <|
-                    Footer.link [Footer.href "#footers"] [text "Link 2"]
-                , Footer.wrap <|
-                    Footer.link [Footer.href "#footers"] [text "Link 3"]
+            , right = Footer.right []
+                [ Footer.link [Footer.href "#footers"] [text "Link 1"]
+                , Footer.link [Footer.href "#footers"] [text "Link 2"]
+                , Footer.link [Footer.href "#footers"] [text "Link 3"]
                 ]
-            ]
-        , Footer.middle []
+            }
+        , middle = Footer.middle []
             [ Footer.dropdown []
-                [ Footer.heading []
-                    [Footer.text "Mega Footer Middle Section"]
-                , Footer.links []
-                    <| createLinks 6
-                ]
-            , Footer.dropdown []
-                [ Footer.heading []
-                    [Footer.text "Can have"]
-                , Footer.links []
-                    <| createLinks 4
+                [ Footer.heading [] [Footer.text "Mega Footer Middle Section"]
+                , Footer.links [] <| createLinks 6
                 ]
 
             , Footer.dropdown []
-                [ Footer.heading []
-                    [Footer.text "Multiple dropdowns"]
-                , Footer.links []
-                    <| createLinks 5
+                [ Footer.heading [] [Footer.text "Can have"]
+                , Footer.links [] <| createLinks 4
+                ]
+
+            , Footer.dropdown []
+                [ Footer.heading [] [Footer.text "Many dropdowns"]
+                , Footer.links [] <| createLinks 5
+                ]
+
+            , Footer.dropdown []
+                [ Footer.heading [] [Footer.text "And more dropdowns"]
+                , Footer.links [] <| createLinks 2
                 ]
             ]
-        , Footer.bottom []
-            [ Footer.logo []
-                [ Footer.text "Mega Bottom Section Example" ]
-            , Footer.links []
-                <| createLinks 5
-            ]
-        ]
-    ]
 
-  , div [Html.style [("margin-top", "60px")]] []
-  , p [] [text "An example of a custom mini footer with custom content"]
-  , div []
-    [ Footer.mini [Options.cs "custom-footer"]
-        [ Footer.wrap <|
-            Html.ul []
-              [ Html.li [Html.class "mdl-mini-footer__social-btn"]
-                  [Html.a [Html.href "#footers"] [Icon.i "face"]]
-              , Html.li [Html.class "mdl-mini-footer__social-btn"]
-                  [Html.a [Html.href "#footers"] [Icon.i "settings"]]
-              , Html.li [Html.class "mdl-mini-footer__social-btn"]
-                  [Html.a [Html.href "#footers"] [Icon.i "donut_large"]]
-              ]
-        , Footer.wrap <|
-            Html.ul []
-              [ Html.li []
-                  [Html.a [Html.href "#footers"] [text "Link 1"]]
-              , Html.li []
-                  [Html.a [Html.href "#footers"] [text "Link 2"]]
-              ]
-        ]
+        , bottom = Footer.bottom []
+            [ Footer.logo [] [ Footer.text "Mega Bottom Section Example" ]
+            , Footer.links [] <| createLinks 5
+            ]
+        }
     ]
   ]
   |> Page.body2 "Footers" srcUrl intro references
