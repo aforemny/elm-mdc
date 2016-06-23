@@ -285,21 +285,28 @@ view model  =
       [ div [] 
           [ h4 [] [ text "Colour" ] 
           , explain """While technically not part of the layout Component, 
-                       this is a convenient place to demonstrate colour styling."""
+                       this is a convenient place to demonstrate colour styling.
+                       Change the scheme by clicking below. """
+          , explain """Changing the colour scheme affects not just Layout, but
+                       most components. Try changing the scheme, then look what
+                       happens to Buttons, Badges, or Textfields. """
           , Grid.grid [ Grid.noSpacing ] 
               [ Grid.cell 
                   [ Grid.size Grid.All 4 ]
-                  [ h6 [] [ text "Pick a primary colour" ] 
+                  [ h5 [] [ text "Primary colour" ] 
                   , picker Color.hues Nothing Color.S500 model.primary (\hue m -> { m | primary = hue }) 
                   ]
               , Grid.cell 
-                  [ Grid.size Grid.All 4, Grid.offset Grid.Desktop 2 ]
-                  [ h6 [] [ text "Pick an accent colour" ] 
+                  [ Grid.size Grid.All 4 
+                  , Grid.offset Grid.Desktop 2 
+                  ]
+                  [ h5 [] [ text "Accent colour" ] 
                   , picker Color.accentHues (Just model.primary) Color.A200 model.accent (\hue m -> { m | accent = hue })
                   ]
               , Grid.cell
                   [ Grid.size Grid.All 4
                   , css "text-align" "right"
+                  , Grid.order Grid.Phone 0
                   ]
                   [ heading model.primary ]
               , Grid.cell 
@@ -309,6 +316,7 @@ view model  =
                   [ heading model.accent
                   ]
               ]
+          , Options.div [ css "height" "3rem" ] [] 
           , explain "To use this colour scheme (and to use elm-mdl in general), you must load custom CSS."
           , [ "<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>"
             , "<link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>"
