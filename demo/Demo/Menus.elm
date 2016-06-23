@@ -1,6 +1,7 @@
 module Demo.Menus exposing (model, Model, view, update, Msg)
 
-import Html exposing (Html, text, p)
+import Html exposing (Html, text, p, a)
+import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Platform.Cmd exposing (Cmd)
 
@@ -10,6 +11,7 @@ import Material.Elevation as Elevation
 import Material.Grid as Grid
 import Material.Menu as Menu exposing (..)
 import Material.Options as Options exposing (cs, css, div)
+import Material.Textfield as Textfield
 
 import Demo.Page as Page
 
@@ -24,6 +26,7 @@ type alias Mdl =
 type alias Model =
   { mdl : Material.Model
   , selected : Maybe String
+  , icon : String
   }
 
 
@@ -31,6 +34,7 @@ model : Model
 model =
   { mdl = Material.model
   , selected = Nothing
+  , icon = "more_vert"
   }
 
 
@@ -41,6 +45,7 @@ type Msg
   = MenuMsg Int Menu.Msg
   | MDL Material.Msg 
   | Select String
+  | SetIcon String
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -54,6 +59,11 @@ update action model =
 
     Select n -> 
       ( { model | selected = Just n }
+      , Cmd.none
+      )
+
+    SetIcon s -> 
+      ( { model | icon = s } 
       , Cmd.none
       )
 
@@ -89,22 +99,49 @@ items =
 
 view : Model -> Html Msg
 view model =
-  menus
-  |> List.indexedMap (\idx m ->
-       Grid.cell
-         [ Grid.size Grid.All 6 ]
-         [ container model idx m items ]
-     )
-  |> Grid.grid []
-  |> flip (::) 
-    [ p []
-        [ model.selected 
-            |> Maybe.map (\i -> "You chose item '" ++ i ++ "'")
-            |> Maybe.withDefault ""
-            |> text
-        ]
-    ]
-  |> Page.body2 "Menus" srcUrl intro references
+  let 
+    demo1 = 
+      menus
+      |> List.indexedMap (\idx m ->
+           Grid.cell
+             [ Grid.size Grid.All 6 ]
+             [ container model idx m items ]
+         )
+      |> Grid.grid []
+
+    demo2 = 
+      [ Grid.grid 
+          []
+          [ Grid.cell 
+              [ Grid.size Grid.All 4 
+              ] 
+              [ model.selected 
+                  |> Maybe.map (\i -> "You chose item '" ++ i ++ "'")
+                  |> Maybe.withDefault ""
+                  |> text
+              ]
+          , Grid.cell
+              [ Grid.size Grid.All 4
+              , Grid.offset Grid.Desktop 4
+              ]
+              [ Textfield.render MDL [2] model.mdl 
+                  [ Textfield.label "Menu icon"
+                  , Textfield.floatingLabel
+                  , Textfield.value model.icon
+                  , Textfield.onInput SetIcon
+                  ]
+              , Options.styled p [ css "margin-top" "1rem" ] 
+                  [ text "Try 'list' or 'menu', or refer to " 
+                  , a [ href "https://design.google.com/icons/" ]
+                      [ text " the Material Icon library" ]
+                  , text " for possible values. Replace spaces (' ') with underscores ('_')."
+                  ]
+              ]
+          ]
+      ]
+
+  in
+    Page.body1' "Menus" srcUrl intro references [demo1] demo2
 
 
 container : Model -> Int -> (String, Menu.Property Msg) -> List (Menu.Item Msg) -> Html Msg
@@ -128,6 +165,7 @@ container model idx (description, options) items =
             ]
             [ Menu.render MDL [idx] model.mdl 
                 [ options
+                , Menu.icon model.icon
                 , Menu.ripple
                 ] 
                 items
