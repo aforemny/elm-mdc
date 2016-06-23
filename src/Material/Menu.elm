@@ -4,7 +4,7 @@ module Material.Menu exposing
   , Msg, update
   , view
   , Property
-  , bottomLeft, bottomRight, topLeft, topRight, ripple
+  , bottomLeft, bottomRight, topLeft, topRight, ripple, icon
   , render
   )
 
@@ -41,7 +41,7 @@ for a live demo.
 @docs bottomLeft, bottomRight, topLeft, topRight
 
 ## Appearance
-@docs ripple
+@docs ripple, icon
 
 # Elm architecture
 @docs Model, defaultModel, Msg, update, view
@@ -216,6 +216,7 @@ type Alignment =
 type alias Config = 
   { alignment : Alignment 
   , ripple : Bool 
+  , icon : String
   }
 
 
@@ -223,6 +224,7 @@ defaultConfig : Config
 defaultConfig = 
   { alignment = BottomLeft
   , ripple = False
+  , icon = "more_vert"
   }
 
 
@@ -238,6 +240,13 @@ type alias Property m =
 ripple : Property m 
 ripple = 
   Options.set (\config -> { config | ripple = True })
+
+
+{-|
+-}
+icon : String -> Property m 
+icon name = 
+  Options.set (\config -> { config | icon = name })
 
 
 {-|
@@ -335,7 +344,7 @@ view' lift model properties items =
         [ onClick Geometry.decode 
             (if model.animationState == Opened then Close else Open)
         ]
-        [ Icon.view "more_vert" 
+        [ Icon.view config.icon
           [ cs "material-icons"
           , css "pointer-events" "none"
           ]
