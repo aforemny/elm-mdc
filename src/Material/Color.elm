@@ -1,5 +1,5 @@
 module Material.Color exposing
-  ( Hue(..), hues, accentHues
+  ( Hue(..), hues, hueName, accentHues
   , Shade(..), shades
   , Color
   , color
@@ -50,7 +50,7 @@ colors.
 @docs background, text
 
 # Misc
-@docs hues, accentHues, shades, scheme
+@docs hues, hueName, accentHues, shades, scheme
 -}
 
 

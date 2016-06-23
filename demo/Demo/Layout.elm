@@ -7,7 +7,7 @@ import String
 import Array exposing (Array)
 
 import Material.Toggles as Toggles
-import Material.Options as Options exposing (css, when)
+import Material.Options as Options exposing (css, cs, when)
 import Material 
 import Material.Grid as Grid
 import Material.Color as Color
@@ -134,10 +134,10 @@ picker hues disabled shade current f =
       Options.styled' div 
         [ Color.background (Color.color hue shade) `when` (disabled /= Just hue)
         , Color.background (Color.color Color.Grey Color.S200) `when` (disabled == Just hue)
-        , css "width" "50px"
-        , css "height" "50px"
+        , css "width" "56px"
+        , css "height" "56px"
         , css "margin" "2pt"
-        , css "line-height" "50px"
+        , css "line-height" "56px"
         , css "flex-shrink" "0"
         , Elevation.e8 `when` (current == hue)
         , css "transition" "box-shadow 300ms ease-in-out 0s, background-color 300ms ease-in-out 0s"
@@ -150,10 +150,21 @@ picker hues disabled shade current f =
         [
         ]
       )
-    |> Options.styled div 
+    |> Options.div 
          [ css "display" "flex"
          , css "flex-wrap" "wrap"
          ] 
+
+
+heading : Color.Hue -> Html Msg
+heading current = 
+  Options.div 
+    [ css "align-self" "flex-end" 
+    , cs "mdl-typography--display-3"
+    , Color.text (Color.color current Color.S500)
+    ] 
+    [ text (Color.hueName current) ] 
+
 
 
 view : Model -> Html Msg
@@ -275,7 +286,7 @@ view model  =
           [ h4 [] [ text "Colour" ] 
           , explain """While technically not part of the layout Component, 
                        this is a convenient place to demonstrate colour styling."""
-          , Grid.grid [] 
+          , Grid.grid [ Grid.noSpacing ] 
               [ Grid.cell 
                   [ Grid.size Grid.All 4 ]
                   [ h6 [] [ text "Pick a primary colour" ] 
@@ -284,7 +295,19 @@ view model  =
               , Grid.cell 
                   [ Grid.size Grid.All 4, Grid.offset Grid.Desktop 2 ]
                   [ h6 [] [ text "Pick an accent colour" ] 
-                  , picker Color.accentHues (Just model.primary) Color.A200 model.accent (\hue m -> { m | accent = hue }) ]
+                  , picker Color.accentHues (Just model.primary) Color.A200 model.accent (\hue m -> { m | accent = hue })
+                  ]
+              , Grid.cell
+                  [ Grid.size Grid.All 4
+                  , css "text-align" "right"
+                  ]
+                  [ heading model.primary ]
+              , Grid.cell 
+                  [ Grid.size Grid.All 4, Grid.offset Grid.Desktop 2 
+                  , css "text-align" "right"
+                  ]
+                  [ heading model.accent
+                  ]
               ]
           , explain "To use this colour scheme (and to use elm-mdl in general), you must load custom CSS."
           , [ "<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>"
