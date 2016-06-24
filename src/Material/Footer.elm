@@ -24,7 +24,6 @@ module Material.Footer
     , TopSection
     , MiddleSection
     , BottomSection
-    , Dropdown
     , MegaFooter
     , MiniFooter
     )
@@ -66,7 +65,6 @@ for a live demo.
 
 @docs Section
 @docs TopSection, MiddleSection, BottomSection
-@docs Dropdown
 
 # Helpers
 
@@ -158,15 +156,6 @@ type Section a
   = Section (Content a)
 
 
-{-| Strongly typed `Dropdown` in a footer
--}
-type Dropdown a
-  = Dropdown
-      { props : List (Property a)
-      , content : List (Content a)
-      }
-
-
 {-| Strongly typed `TopSection` in a footer
 -}
 type TopSection a
@@ -191,7 +180,7 @@ type BottomSection a
 type MiddleSection a
   = MiddleSection
       { props : List (Property a)
-      , content : List (Dropdown a)
+      , content : List (Content a)
       }
 
 
@@ -237,17 +226,18 @@ bottom props content =
 
 {-| Creates a footer `dropdown` section
 -}
-dropdown : List (Property m) -> List (Content m) -> Dropdown m
+dropdown : List (Property m) -> List (Content m) -> Content m
 dropdown props content =
-  Dropdown
-    { props = props
+  Content
+    { styles = (cs "mdl-mega-footer__drop-down-section" :: props)
     , content = content
+    , elem = Html.div
     }
 
 
 {-| Creates a footer `middle-section`
 -}
-middle : List (Property m) -> List (Dropdown m) -> Maybe (MiddleSection m)
+middle : List (Property m) -> List (Content m) -> Maybe (MiddleSection m)
 middle props content =
   Just
     <| MiddleSection
@@ -289,7 +279,7 @@ mega props { top, bottom, middle } =
         Just (MiddleSection { props, content }) ->
           [ Options.styled Html.div
               (cs (pref ++ sep ++ "middle-section") :: props)
-              (List.map (dropdownHtml) content)
+              (List.map (contentToHtml tp) content)
           ]
 
     bottomContent =
@@ -464,13 +454,6 @@ sectionContent tp section content =
         Options.styled elem
           (cs (pref ++ sep ++ section) :: styles)
           (List.map (contentToHtml tp) content)
-
-
-dropdownHtml : Dropdown m -> Html m
-dropdownHtml (Dropdown { props, content }) =
-  Options.styled Html.div
-    (cs "mdl-mega-footer__drop-down-section" :: props)
-    (List.map (contentToHtml Mega) content)
 
 
 leftHtml : Type -> Maybe (Section a) -> List (Html a)
