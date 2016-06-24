@@ -196,7 +196,28 @@ view model  =
            Tooltips also work without
              using Parts model
              """
-          )
+        )
+
+    , demoTooltip
+        (div []
+           [ Icon.view "face"
+               [ Tooltip.attach Mdl [4] ]
+
+           , Tooltip.render Mdl [4] model.mdl
+             [ Tooltip.large
+             , Tooltip.top
+             , Tooltip.container Html.span]
+               [ img [src "assets/elm.png", width 24, height 24] []
+               , text "A target with a tooltip containing both an image and text."
+               ]
+           ]
+
+
+        , """
+           Tooltips can also be contained in other elements, such as a span or p.
+           They can also contain both images and text.
+           """
+        )
     ]
   ]
   |> Page.body2 "Tooltips" srcUrl intro references

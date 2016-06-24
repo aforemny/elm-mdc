@@ -19,6 +19,8 @@ module Material.Tooltip
     , attach
     , onEnter
     , onLeave
+    , container
+    , HtmlElement
     )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):
@@ -71,11 +73,13 @@ tooltip model =
 @docs DOMState
 @docs Config
 @docs Property
+@docs HtmlElement
 
 # Update and render
 @docs Msg, update, view, render
 
 # Content
+@docs container
 @docs left, right, top, bottom
 @docs large
 
@@ -327,27 +331,35 @@ type Position
   | Bottom
 
 
+{-| Helper for a `Html m` function. e.g. `Html.div`
+-}
+type alias HtmlElement a =
+  List (Attribute a) -> List (Html a) -> Html a
+
+
 {-| Tooltip config
 -}
-type alias Config =
+type alias Config a =
   { size : Size
   , position : Position
+  , container : HtmlElement a
   }
 
 
 {-| Default configuration for tooltip
 -}
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
   { size = Default
   , position = Bottom
+  , container = Html.div
   }
 
 
 {-| Properties for Tooltip options.
 -}
 type alias Property m =
-  Options.Property Config m
+  Options.Property (Config m) m
 
 
 {-| Position the tooltip on the left of the target element
@@ -385,12 +397,20 @@ large =
   Options.set (\options -> { options | size = Large })
 
 
+{-| Set the tooltip container element
+-}
+container : HtmlElement m -> Property m
+container elem =
+  Options.set (\options -> { options | container = elem })
+
+
+
 -- VIEW
 
 
 {-| Component view.
 -}
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html a) -> Html a
+view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model options content =
   let
     summary =
@@ -409,7 +429,7 @@ view lift model options content =
       else
         defaultPos
   in
-    Options.styled div
+    Options.styled config.container
       [ cs "mdl-tooltip"
       , cs "is-active" `when` model.isActive
       , cs "mdl-tooltip--large" `when` (config.size == Large)
