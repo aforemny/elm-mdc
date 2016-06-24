@@ -224,13 +224,27 @@ bottom props content =
         }
 
 
+{-| Create a dropdown section `checkbox`
+-}
+checkbox : Content m
+checkbox =
+  HtmlContent
+    <| Html.input
+        [ Html.class "mdl-mega-footer__heading-checkbox"
+        , Html.type' "checkbox"
+          -- For some reason Html.checked True did not work (did not show up in dom)
+        , Html.attribute "checked" ""
+        ]
+        []
+
+
 {-| Creates a footer `dropdown` section
 -}
 dropdown : List (Property m) -> List (Content m) -> Content m
 dropdown props content =
   Content
     { styles = (cs "mdl-mega-footer__drop-down-section" :: props)
-    , content = content
+    , content = (checkbox :: content)
     , elem = Html.div
     }
 
