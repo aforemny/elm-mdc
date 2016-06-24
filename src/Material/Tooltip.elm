@@ -41,6 +41,28 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/tooltips)
 for a live demo.
 
+**NOTE** To use a `tooltip` you have to attach the mouse event listeners to the target
+either by calling `attach` for `Material` components or `onMouseEnter` and `onMouseLeave` for regular `Html m` elements
+
+The call to `Tooltip.render` should also be the next call following the target.
+
+See example below:
+
+```elm
+import Material.Tooltip as Tooltip
+import Material.Icon as Icon
+
+-- Note the index in both the Render as well as the attach
+
+tooltip : Model -> Html Msg
+tooltip model =
+  div []
+    [ Icon.view "add" [ Tooltip.attach Mdl [0] ]
+    , Tooltip.render Mdl [0] model.mdl
+        [Tooltip.default]
+        [text "Default tooltip"]
+    ]
+```
 
 # Types
 @docs Model, defaultModel
