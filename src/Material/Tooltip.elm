@@ -1,6 +1,7 @@
 module Material.Tooltip
   exposing
     ( Model
+    , Config
     , defaultModel
     , Msg(..)
     , update
@@ -22,6 +23,7 @@ module Material.Tooltip
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):
 
+> The Material Design Lite (MDL) tooltip component is an enhanced version of the
 > standard HTML tooltip as produced by the `title` attribute. A tooltip consists
 > of text and/or an image that clearly communicates additional information about
 > an element when the user hovers over or, in a touch-based UI, touches the
@@ -67,6 +69,7 @@ tooltip model =
 # Types
 @docs Model, defaultModel
 @docs DOMState
+@docs Config
 @docs Property
 
 # Update and render
