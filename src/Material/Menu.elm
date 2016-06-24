@@ -176,7 +176,7 @@ update action model =
     Close geometry ->
       ( { model 
         | animationState = Idle
-        , geometry = Just geometry
+        , geometry = Nothing
         }
       , Cmd.none
       )
