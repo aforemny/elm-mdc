@@ -18,7 +18,6 @@ module Material.Tooltip
     , attach
     , onEnter
     , onLeave
-    , mdl
     )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):
@@ -59,9 +58,6 @@ for a live demo.
 @docs onMouseEnter, onMouseLeave
 @docs onEnter, onLeave
 @docs attach
-
-#Utility
-@docs mdl
 
 -}
 
@@ -364,14 +360,6 @@ large =
   Options.set (\options -> { options | size = Large })
 
 
-{-| Maps a Html.Attribute to Material Property
--}
-mdl : Attribute a -> Internal.Property b a
-mdl =
-  Internal.Attribute
-
-
-
 -- VIEW
 
 
@@ -397,21 +385,14 @@ view lift model options content =
         defaultPos
   in
     Options.styled div
-      (cs "mdl-tooltip"
-        :: cs "is-active"
-        `when` model.isActive
-        :: cs "mdl-tooltip--large"
-        `when` (config.size == Large)
-        :: css "left" (px pos.left)
-        `when` model.isActive
-        :: css "margin-left" (px pos.marginLeft)
-        `when` model.isActive
-        :: css "top" (px pos.top)
-        `when` model.isActive
-        :: css "margin-top" (px pos.marginTop)
-        `when` model.isActive
-        :: []
-      )
+      [ cs "mdl-tooltip"
+      , cs "is-active" `when` model.isActive
+      , cs "mdl-tooltip--large" `when` (config.size == Large)
+      , css "left" (px pos.left) `when` model.isActive
+      , css "margin-left" (px pos.marginLeft) `when` model.isActive
+      , css "top" (px pos.top) `when` model.isActive
+      , css "margin-top" (px pos.marginTop) `when` model.isActive
+      ]
       content
 
 
