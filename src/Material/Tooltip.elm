@@ -175,66 +175,47 @@ calculatePos pos domState =
     marginTop =
       -1 * (offsetHeight / 2)
 
+    -- Returns the values if their sum is above 0
+    getValuesFor l r =
+      if ((l + r) < 0) then
+        ( 0, 0 )
+      else
+        ( l, r )
+
+    ( newTop, newMarginTop ) =
+      getValuesFor top marginTop
+
+    ( newLeft, newMarginLeft ) =
+      getValuesFor left marginLeft
+
     out =
       case pos of
         Left ->
           { left = props.left - offsetWidth - 10
-          , top =
-              if (top + marginTop < 0) then
-                0
-              else
-                top
-          , marginTop =
-              if (top + marginTop < 0) then
-                0
-              else
-                marginTop
+          , top = newTop
+          , marginTop = newMarginTop
           , marginLeft = 0
           }
 
         Right ->
           { left = props.left + props.width + 10
-          , top =
-              if (top + marginTop < 0) then
-                0
-              else
-                top
-          , marginTop =
-              if (top + marginTop < 0) then
-                0
-              else
-                marginTop
+          , top = newTop
+          , marginTop = newMarginTop
           , marginLeft = 0
           }
 
         Top ->
-          { left =
-              if (left + marginLeft < 0) then
-                0
-              else
-                left
+          { left = newLeft
           , top = props.top - offsetHeight - 10
           , marginTop = 0
-          , marginLeft =
-              if (left + marginLeft < 0) then
-                0
-              else
-                marginLeft
+          , marginLeft = newMarginLeft
           }
 
         Bottom ->
-          { left =
-              if (left + marginLeft < 0) then
-                0
-              else
-                left
+          { left = newLeft
           , top = props.top + props.height + 10
           , marginTop = 0
-          , marginLeft =
-              if (left + marginLeft < 0) then
-                0
-              else
-                marginLeft
+          , marginLeft = newMarginLeft
           }
   in
     out
