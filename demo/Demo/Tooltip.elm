@@ -75,120 +75,129 @@ demoTooltip (tooltip, description) =
 
 view : Model -> Html Msg
 view model  =
-  [ div
-      []
-      [ Html.p [] [text "Example use:"]
-      , Grid.grid []
-          [Grid.cell [Grid.size Grid.All 12]
-             [code """
-                    import Material.Tooltip as Tooltip
-                    import Material.Icon as Icon
+  [ Html.p [] [text "Example use:"]
+  , Grid.grid []
+    [Grid.cell [Grid.size Grid.All 12]
+       [code """
+              import Material.Tooltip as Tooltip
+              import Material.Icon as Icon
 
-                    -- Note the index in both the Render as well as the mouse event handlers
+              -- Note the index in both the Render as well as the mouse event handlers
 
-                    tooltip : Model -> Html Msg
-                    tooltip model =
-                      div []
-                        [ Icon.view "add" [ Tooltip.attach Mdl [0] ]
-                        , Tooltip.render Mdl [0] model.mdl
-                            [Tooltip.default]
-                            [text "Default tooltip"]
-                        ]
-                    """]
-          ]
+              tooltip : Model -> Html Msg
+              tooltip model =
+                div []
+                  [ Icon.view "add" [ Tooltip.attach Mdl [0] ]
+
+                  , Tooltip.render Mdl [0] model.mdl
+                      [Tooltip.default]
+                      [text "Default tooltip"]
+                  ]
+              """]
+    ]
+
+  , Grid.grid []
+    [ demoTooltip
+        (div []
+           [ Icon.view "add"
+               [ Tooltip.attach Mdl [0] ]
+
+           , Tooltip.render Mdl [0] model.mdl
+             []
+             [text "Default tooltip"]
+           ]
 
 
-      , Grid.grid []
-          [ demoTooltip
-            (div []
-               [ Icon.view "add"
-                   [ Tooltip.attach Mdl [0] ]
+        , """
+           Default tooltip positioned below
+           """
+        )
 
-               , Tooltip.render Mdl [0] model.mdl
-                   []
-                   [text "Default tooltip"]
+    , demoTooltip
+        (div []
+           [ p [style [("margin-bottom", "5px")]]
+               [ text "HTML is related to but different from "
+
+               , span [ Tooltip.onMouseEnter Mdl [1]
+                      , Tooltip.onMouseLeave Mdl [1]
+                      ]
+                   [i [] [text "XML"]]
                ]
-            , """
-               Default tooltip positioned below
-               """
-            )
 
-          , demoTooltip
-            (div []
-               [ p [style [("margin-bottom", "5px")]]
-                   [ text "HTML is related to but different from "
-                   , span [ Tooltip.onMouseEnter Mdl [1]
-                          , Tooltip.onMouseLeave Mdl [1]
-                          ]
-                       [i [] [text "XML"]]
-                   ]
+           , Tooltip.render Mdl [1] model.mdl
+             [Tooltip.left]
+             [text "XML is an acronym for eXtensible Markup Language"]
+           ]
 
-               , Tooltip.render Mdl [1] model.mdl
-                    [Tooltip.left]
-                    [text "XML is an acronym for eXtensible Markup Language"]
+
+        , """
+           Hover over `XML` to see a tooltip
+           on the left
+           """
+        )
+
+    , demoTooltip
+        (div []
+           [ Icon.view "share"
+               [ Tooltip.attach Mdl [2] ]
+
+           , Tooltip.render Mdl [2] model.mdl
+             [ Tooltip.large
+             , Tooltip.right]
+               [text "Large tooltip"]
+           ]
+
+
+        , """
+           A large tooltip positioned on
+           the right
+           """
+        )
+
+    , demoTooltip
+        (div []
+           [ Button.render Mdl [0] model.mdl
+               [ Button.raised
+               , Tooltip.attach Mdl [3]
                ]
-            , """
-               Hover over `XML` to see a tooltip
-               on the left
-               """
-            )
+               [ text "BUTTON"]
 
-          , demoTooltip
-            (div []
-               [ Icon.view "share"
-                   [ Tooltip.attach Mdl [2] ]
+           , Tooltip.render Mdl [3] model.mdl
+             [ Tooltip.top
+             , Tooltip.large]
+               [text "Tooltips also work with material components"]
+           ]
 
-               , Tooltip.render Mdl [2] model.mdl
-                   [ Tooltip.large
-                   , Tooltip.right]
-                   [text "Large tooltip"]
+
+        , """
+           A large tooltip positioned
+           above the button
+           """
+        )
+
+    , demoTooltip
+        (div []
+           [ p [style [("margin-bottom", "5px")]]
+               [ text "HTML is related to but different from "
+               , span [ Tooltip.onEnter TooltipMsg
+                      , Tooltip.onLeave TooltipMsg
+                      ]
+                   [i [] [text "XML"]]
+               , p [] [text "This element should not interfere"]
                ]
-            , """
-               A large tooltip positioned on
-               the right
-               """
-            )
 
-          , demoTooltip
-            (div []
-               [ Button.render Mdl [0] model.mdl
-                   [ Button.raised
-                   , Tooltip.attach Mdl [3]
-                   ]
-                   [ text "BUTTON"]
+           , Tooltip.view TooltipMsg model.nopart
+             [Tooltip.large]
+             [text "No parts!"]
+           ]
 
-               , Tooltip.render Mdl [3] model.mdl
-                   [ Tooltip.top
-                   , Tooltip.large]
-                   [text "Tooltips also work with material components"]
-               ]
-            , """
-               A large tooltip positioned
-               above the button
-               """
-            )
 
-          , demoTooltip
-            (div []
-               [ p [style [("margin-bottom", "5px")]]
-                   [ text "HTML is related to but different from "
-                   , span [ Tooltip.onEnter TooltipMsg
-                          , Tooltip.onLeave TooltipMsg
-                          ]
-                       [i [] [text "XML"]]
-                   , p [] [text "This element should not interfere"]
-                   ]
-               , Tooltip.view TooltipMsg model.nopart
-                   [Tooltip.large]
-                   [text "No parts!"]
-               ]
-            , """
-               Tooltips also work without
-               using Parts model
-               """
-            )
-          ]
-      ]
+        , """
+           Tooltips also work without
+             using Parts model
+             """
+          )
+    ]
   ]
   |> Page.body2 "Tooltips" srcUrl intro references
 
