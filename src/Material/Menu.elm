@@ -100,7 +100,7 @@ constant =
 -- MODEL
 
 
-{-| TODO. 
+{-| TODO.
 -}
 type alias Model =
   { items : Dict Int Ripple.Model
@@ -158,7 +158,7 @@ update action model =
 
   case action of
     Open geometry ->
-      ( { model 
+      ( { model
         | animationState =
             case model.animationState of
               Opened  -> Opened
@@ -170,13 +170,13 @@ update action model =
 
     Tick ->
       ( { model | animationState = Opened }
-      , Cmd.none 
+      , Cmd.none
       )
 
     Close geometry ->
-      ( { model 
+      ( { model
         | animationState = Idle
-        , geometry = Just geometry
+        , geometry = Nothing
         }
       , Cmd.none
       )
@@ -189,13 +189,13 @@ update action model =
 
     Ripple idx action ->
       let
-        (model', effects) = 
+        (model', effects) =
           Dict.get idx model.items
            |> Maybe.withDefault Ripple.model
            |> Ripple.update action
       in
         ( { model | items = Dict.insert idx model' model.items }
-        , Cmd.map (Ripple idx) effects 
+        , Cmd.map (Ripple idx) effects
         )
 
 
@@ -213,15 +213,15 @@ type Alignment =
   | TopRight
 
 
-type alias Config = 
-  { alignment : Alignment 
-  , ripple : Bool 
+type alias Config =
+  { alignment : Alignment
+  , ripple : Bool
   , icon : String
   }
 
 
-defaultConfig : Config 
-defaultConfig = 
+defaultConfig : Config
+defaultConfig =
   { alignment = BottomLeft
   , ripple = False
   , icon = "more_vert"
@@ -231,49 +231,49 @@ defaultConfig =
 {-|
   TODO
 -}
-type alias Property m = 
+type alias Property m =
   Options.Property Config m
 
 
 {-|
 -}
-ripple : Property m 
-ripple = 
+ripple : Property m
+ripple =
   Options.set (\config -> { config | ripple = True })
 
 
 {-|
 -}
-icon : String -> Property m 
-icon name = 
+icon : String -> Property m
+icon name =
   Options.set (\config -> { config | icon = name })
 
 
 {-|
 -}
-bottomLeft : Property m 
-bottomLeft = 
+bottomLeft : Property m
+bottomLeft =
   Options.set (\config -> { config | alignment = BottomLeft })
 
 
 {-|
 -}
-bottomRight : Property m 
-bottomRight = 
+bottomRight : Property m
+bottomRight =
   Options.set (\config -> { config | alignment = BottomRight })
 
 
 {-|
 -}
-topLeft : Property m 
-topLeft = 
+topLeft : Property m
+topLeft =
   Options.set (\config -> { config | alignment = TopLeft })
 
 
 {-|
 -}
-topRight : Property m 
-topRight = 
+topRight : Property m
+topRight =
   Options.set (\config -> { config | alignment = TopRight })
 
 
@@ -288,11 +288,11 @@ topRight =
 
 containerGeometry : Config -> Geometry -> List (Property m)
 containerGeometry config geometry =
-  [ css "width" <| toPx geometry.menu.bounds.width 
-  , css "height" <| toPx geometry.menu.bounds.height 
+  [ css "width" <| toPx geometry.menu.bounds.width
+  , css "height" <| toPx geometry.menu.bounds.height
   , if (config.alignment == BottomRight) || (config.alignment == BottomLeft) then
       css "top" <| toPx (geometry.button.offsetTop + geometry.button.offsetHeight)
-    else 
+    else
       Options.nop
   , if (config.alignment == BottomRight) || (config.alignment == TopRight) then
       let
@@ -306,42 +306,42 @@ containerGeometry config geometry =
         bottom =
           geometry.container.bounds.top + geometry.container.bounds.height
       in
-        css "bottom" <| toPx (bottom - geometry.button.bounds.top) 
+        css "bottom" <| toPx (bottom - geometry.button.bounds.top)
     else
       Options.nop
   , if (config.alignment == TopLeft) || (config.alignment == BottomLeft) then
-      css "left" <| toPx geometry.menu.offsetLeft 
+      css "left" <| toPx geometry.menu.offsetLeft
     else
       Options.nop
   ]
 
 
 outlineGeometry : Config -> Geometry -> List (Style m)
-outlineGeometry config geometry = 
-  [] 
+outlineGeometry config geometry =
+  []
 
 
 {-| TODO
 -}
 view : Model -> List (Property Msg) -> List (Item Msg) -> Html Msg
-view = 
+view =
   view' identity
 
 
 view' : (Msg -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
 view' lift model properties items =
-  let 
+  let
     summary = Options.collect defaultConfig properties
     config = summary.config
   in
-    div 
+    div
       []
       [ styled' button
         [ cs "mdl-button"
         , cs "mdl-js-button"
         , cs "mdl-button--icon"
         ]
-        [ onClick Geometry.decode 
+        [ onClick Geometry.decode
             (if model.animationState == Opened then Close else Open)
         ]
         [ Icon.view config.icon
@@ -353,16 +353,16 @@ view' lift model properties items =
       , styled div
         [ cs "mdl-menu__container"
         , cs "is-upgraded"
-        , cs' "is-visible" 
+        , cs' "is-visible"
             ((model.animationState == Opened) || (model.animationState == Closing))
-        , model.geometry 
+        , model.geometry
             |> Maybe.map (containerGeometry config >> Options.many)
             |> Maybe.withDefault (Options.nop)
         ]
         [ styled div
           [ cs "mdl-menu__outline"
-          , model.geometry 
-              |> Maybe.map (\geometry -> 
+          , model.geometry
+              |> Maybe.map (\geometry ->
                   [ css "width" <| toPx (geometry.menu.bounds.width)
                   , css "height" <| toPx (geometry.menu.bounds.height)
                   ])
@@ -383,17 +383,17 @@ view' lift model properties items =
                 BottomRight -> cs "mdl-menu--bottom-right"
                 TopLeft -> cs "mdl-menu--top-left"
                 TopRight -> cs "mdl-menu--top-right"
-            , cs' "is-animating" 
-                ((model.animationState == Opening) 
+            , cs' "is-animating"
+                ((model.animationState == Opening)
                 || (model.animationState == Closing))
             , model.geometry
-                |> Maybe.map (\geometry -> 
+                |> Maybe.map (\geometry ->
                    let
                      width  = geometry.menu.bounds.width
                      height = geometry.menu.bounds.height
                    in
-                     (if (model.animationState == Opened) 
-                       || (model.animationState == Closing) 
+                     (if (model.animationState == Opened)
+                       || (model.animationState == Closing)
                      then
                          rect 0 width height 0
                      else
@@ -424,12 +424,12 @@ makeItem lift config model n item =
         |> Maybe.withDefault 0
 
     offsetHeight n =
-      model.geometry 
+      model.geometry
         |> flip Maybe.andThen (.offsetHeights >> Array.get (n-1)) -- n is 1-based
         |> Maybe.withDefault 0
 
     height =
-      model.geometry 
+      model.geometry
         |> Maybe.map (\geometry -> geometry.menu.bounds.height)
         |> Maybe.withDefault 0
 
@@ -445,7 +445,7 @@ makeItem lift config model n item =
   in
     styled' li
       [ cs "mdl-menu__item"
-      , css' "transition-delay" itemDelay 
+      , css' "transition-delay" itemDelay
           ((model.animationState == Opening) || (model.animationState == Opened))
       , cs' "mdl-js-ripple-effect" config.ripple
       , cs' "mdl-menu__item--full-bleed-divider" item.divider
@@ -488,32 +488,32 @@ type alias Container c =
 indicated in `Material`, and a user message `Select String`.
 
     item : String -> Html Msg
-    item str = 
-      Html.div 
+    item str =
+      Html.div
         [ Html.Events.onClick (Select str) ]
         [ Html.text str ]
 
-    Menu.render Mdl [idx] model.mdl 
+    Menu.render Mdl [idx] model.mdl
       [ Menu.topLeft
       , Menu.ripple
-      ] 
+      ]
       [ Menu.Item False True  <| item "Some item"
       , Menu.Item True  True  <| item "Another item"
       , Menu.Item False False <| item "Disabled item"
       , Menu.Item False True  <| item "Yet another item"
       ]
 -}
-render 
+render
   : (Parts.Msg (Container c) -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Item m)
   -> (Html m)
-render = 
-  Parts.create view' update .menu (\x y -> {y | menu=x}) defaultModel 
-    
-  
+render =
+  Parts.create view' update .menu (\x y -> {y | menu=x}) defaultModel
+
+
 -- HELPERS
 
 
@@ -535,11 +535,11 @@ toPx = toString >> flip (++) "px"
 
 
 cs' : String -> Bool -> Options.Property a b
-cs' c p = 
+cs' c p =
   if p then cs c else Options.nop
 
 
 css' : String -> String -> Bool -> Options.Property a b
-css' k v p = 
-  if p then css k v else Options.nop 
+css' k v p =
+  if p then css k v else Options.nop
 
