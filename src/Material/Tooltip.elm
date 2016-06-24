@@ -11,7 +11,6 @@ module Material.Tooltip
     , right
     , top
     , bottom
-    , default
     , large
     , Property
     , onMouseEnter
@@ -54,7 +53,7 @@ for a live demo.
 
 # Content
 @docs left, right, top, bottom
-@docs default, large
+@docs large
 
 # Events
 @docs onMouseEnter, onMouseLeave
@@ -375,13 +374,6 @@ top =
 bottom : Property m
 bottom =
   Options.set (\options -> { options | position = Bottom })
-
-
-{-| Tooltip with the default size
--}
-default : Property m
-default =
-  Options.set (\options -> { options | size = Default })
 
 
 {-| Large tooltip

@@ -104,7 +104,7 @@ view model  =
                    [ Tooltip.attach Mdl [0] ]
 
                , Tooltip.render Mdl [0] model.mdl
-                   [Tooltip.default]
+                   []
                    [text "Default tooltip"]
                ]
             , """
@@ -121,9 +121,10 @@ view model  =
                           ]
                        [i [] [text "XML"]]
                    ]
+
                , Tooltip.render Mdl [1] model.mdl
-                   [Tooltip.left]
-                   [text "XML is an acronym for eXtensible Markup Language"]
+                    [Tooltip.left]
+                    [text "XML is an acronym for eXtensible Markup Language"]
                ]
             , """
                Hover over `XML` to see a tooltip
