@@ -6,7 +6,6 @@ import Html exposing (..)
 import Material.Footer as Footer
 import Material
 import Material.Options as Options
-import Material.Icon as Icon
 
 import Demo.Page as Page
 

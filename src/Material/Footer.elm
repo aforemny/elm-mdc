@@ -1,10 +1,8 @@
 module Material.Footer
   exposing
-    ( Type(..)
+    ( FooterProperty
     , Property
-    , Content(..)
-    , Footer
-    , Element
+    , Content
     , mini
     , mega
     , left
@@ -23,11 +21,11 @@ module Material.Footer
     , heading
     , links
     , linkItem
-    , Section(..)
-    , TopSection(..)
-    , MiddleSection(..)
-    , BottomSection(..)
-    , Dropdown(..)
+    , Section
+    , TopSection
+    , MiddleSection
+    , BottomSection
+    , Dropdown
     , MegaFooter
     , MiniFooter
     )
@@ -61,8 +59,8 @@ for a live demo.
 
 # Types
 
-@docs Type
-@docs Content, Footer, Element
+@docs Content
+@docs FooterProperty
 @docs Property
 
 @docs MegaFooter, MiniFooter
@@ -127,13 +125,13 @@ type FooterProperty
   = FooterProperty
 
 
-{-| Property for footers
+{-| Properties for footers
 -}
 type alias Property m =
   Options.Property FooterProperty m
 
 
-{-| Footer content can either be Html or footer specific content
+{-| Opaque Footer content
 -}
 type Content a
   = HtmlContent (Html a)
