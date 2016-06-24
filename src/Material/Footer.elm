@@ -10,9 +10,8 @@ module Material.Footer
     , top
     , bottom
     , middle
-    , wrap
+    , html
     , logo
-    , text
     , socialButton
     , href
     , link
@@ -71,7 +70,7 @@ for a live demo.
 
 # Helpers
 
-@docs wrap
+@docs html
 @docs link, onClick, href
 
 # Appearance
@@ -84,7 +83,7 @@ for a live demo.
 
 # Content
 
-@docs links, logo, text, socialButton, dropdown, heading, linkItem
+@docs links, logo, socialButton, dropdown, heading, linkItem
 
 -}
 
@@ -147,7 +146,7 @@ type alias Footer a =
   }
 
 
-{-| Helpers alias to wrap a Html element function
+{-| Helpers alias to html a Html element function
 -}
 type alias Element a =
   List (Html.Attribute a) -> List (Html.Html a) -> Html.Html a
@@ -373,8 +372,8 @@ href =
 
 {-| Wraps a normal HTML value into `Content`
 -}
-wrap : Html m -> Content m
-wrap =
+html : Html m -> Content m
+html =
   HtmlContent
 
 
@@ -529,7 +528,7 @@ links styles content =
 -}
 link : List (Property m) -> List (Html m) -> Content m
 link styles contents =
-  wrap
+  html
     <| Options.styled a
         styles
         contents
@@ -537,7 +536,7 @@ link styles contents =
 
 li : List (Property m) -> List (Html m) -> Content m
 li styles content =
-  wrap
+  html
     <| Options.styled Html.li
         styles
         content
@@ -568,13 +567,6 @@ heading styles content =
     , content = content
     , elem = Html.h1
     }
-
-
-{-| Wraps `Html.text` element to `Content`
--}
-text : String -> Content m
-text =
-  Html.text >> wrap
 
 
 {-| Creates a `social-button` with the proper prefix based on the `Type`

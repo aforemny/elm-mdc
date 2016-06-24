@@ -54,7 +54,7 @@ createLinks nr =
   let
     nrs = List.repeat nr 0
     makeLink idx _ =
-      (Footer.linkItem [Footer.href "#footers"] [Footer.text ("Link " ++ toString (idx + 1))])
+      (Footer.linkItem [Footer.href "#footers"] [Footer.html <| text ("Link " ++ toString (idx + 1))])
   in
     List.indexedMap makeLink nrs
 
@@ -102,13 +102,13 @@ view model  =
     [ Footer.mini []
         { left =
             Footer.left []
-              [ Footer.logo [] [ Footer.wrap <| text "Mini Footer Example" ]
+              [ Footer.logo [] [ Footer.html <| text "Mini Footer Example" ]
               , Footer.links [] <| createLinks 3
               ]
 
         , right =
             Footer.right []
-              [ Footer.logo [] [ Footer.wrap <| text "Mini Footer Right Section" ]
+              [ Footer.logo [] [ Footer.html <| text "Mini Footer Right Section" ]
               , Footer.socialButton [Options.css "margin-right" "6px"] []
               , Footer.socialButton [Options.css "margin-right" "6px"] []
               , Footer.socialButton [Options.css "margin-right" "0px"] []
@@ -123,7 +123,7 @@ view model  =
         { top =
             Footer.top []
             { left = Footer.left []
-                [ Footer.logo [] [ Footer.text "Mega Footer Top Section" ]
+                [ Footer.logo [] [ Footer.html <| text "Mega Footer Top Section" ]
                 , Footer.socialButton [Options.css "margin-right" "6px"] []
                 , Footer.socialButton [Options.css "margin-right" "6px"] []
                 , Footer.socialButton [] []
@@ -136,28 +136,28 @@ view model  =
             }
         , middle = Footer.middle []
             [ Footer.dropdown []
-                [ Footer.heading [] [Footer.text "Mega Footer Middle Section"]
+                [ Footer.heading [] [Footer.html <| text "Mega Footer Middle Section"]
                 , Footer.links [] <| createLinks 6
                 ]
 
             , Footer.dropdown []
-                [ Footer.heading [] [Footer.text "Can have"]
+                [ Footer.heading [] [Footer.html <| text "Can have"]
                 , Footer.links [] <| createLinks 4
                 ]
 
             , Footer.dropdown []
-                [ Footer.heading [] [Footer.text "Many dropdowns"]
+                [ Footer.heading [] [Footer.html <| text "Many dropdowns"]
                 , Footer.links [] <| createLinks 5
                 ]
 
             , Footer.dropdown []
-                [ Footer.heading [] [Footer.text "And more dropdowns"]
+                [ Footer.heading [] [Footer.html <| text "And more dropdowns"]
                 , Footer.links [] <| createLinks 2
                 ]
             ]
 
         , bottom = Footer.bottom []
-            [ Footer.logo [] [ Footer.text "Mega Bottom Section Example" ]
+            [ Footer.logo [] [ Footer.html <| text "Mega Bottom Section Example" ]
             , Footer.links [] <| createLinks 5
             ]
         }
