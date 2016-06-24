@@ -2,6 +2,7 @@ module Demo.Page exposing
   ( demo, package, mds, mdl
   , fromMDL, fromMDS
   , body1, body2, body1'
+  , background
   ) 
 
 import Html exposing (..)
@@ -134,6 +135,11 @@ boxed =
   ]
 
 
+background : Color.Color
+background =
+  Color.color Color.Yellow Color.S50 
+
+
 body1 : String -> String -> Html a -> List (String, String) -> List (Html a) -> Html a 
 body1 t srcUrl contents links demo = 
   Options.div
@@ -178,7 +184,7 @@ body1' t srcUrl contents links demo1 demo2 =
         [ css "height" "5rem" ]
         []
     , Options.div 
-        [ Color.background <| Color.color Color.Yellow Color.S50 
+        [ Color.background <| background 
         , css "margin" "auto" 
         , css "padding-top" "2rem"
         , css "padding-bottom" "5rem"

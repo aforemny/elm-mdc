@@ -12,6 +12,7 @@
         "Material.Button",
         "Material.Color",
         "Material.Elevation",
+        "Material.Footer",
         "Material.Grid",
         "Material.Helpers",
         "Material.Icon",
@@ -22,7 +23,7 @@
         "Material.Scheme",
         "Material.Snackbar",
         "Material.Spinner",
-        "Material.Footer",
+        "Material.Tooltip",
         "Material.Textfield"
     ],
     "dependencies": {
