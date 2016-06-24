@@ -138,6 +138,8 @@ accentHues =
     ]
 
 
+{-| Give the MDL CSS name of a color. (Can reasonably be used also for human consumption.)
+-}
 hueName : Hue -> String
 hueName color =
   case color of
