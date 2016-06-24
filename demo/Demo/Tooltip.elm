@@ -69,7 +69,8 @@ demoTooltip (tooltip, description) =
     [Grid.size Grid.All 4]
     [ div [style [("text-align", "center")]]
         [tooltip]
-    , code description
+    , p [style [("font-size", "11pt"), ("margin-top", "1em")]]
+        [text description]
     ]
 
 view : Model -> Html Msg
@@ -143,7 +144,8 @@ view model  =
                    [text "Large tooltip"]
                ]
             , """
-               A large tooltip positioned on the right
+               A large tooltip positioned on
+               the right
                """
             )
 
