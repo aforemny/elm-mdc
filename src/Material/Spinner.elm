@@ -40,7 +40,8 @@ import Html exposing (Html, Attribute)
 import Material.Options as Options exposing (cs, css, nop)
 
 
-{-| A spinner is a loading indicator that by default changes color and is invisible.
+{-| A spinner is a loading indicator that by default changes color and is
+invisible. Example use: 
 
     spinner [ active ] []
 -}

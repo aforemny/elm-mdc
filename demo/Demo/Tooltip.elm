@@ -10,7 +10,6 @@ import Material
 import Demo.Page as Page
 import Demo.Code as Code
 
-import Material.Grid as Grid
 import Material.Button as Button
 import Material.Icon as Icon
 import Material.Options as Options exposing (css)
@@ -57,10 +56,8 @@ update action model =
 -- VIEW
 
 
---demoTooltip : (Html a, String) -> Grid.Cell a
+demoTooltip : List (Html a) -> String -> String -> Html a
 demoTooltip elements description code =
-  --Grid.cell
-    --[ Grid.size Grid.All 6 ]
   Options.div
     [ css "width" "45%" ]
     [ p [] [ text description ] 
@@ -79,9 +76,7 @@ demoTooltip elements description code =
 view : Model -> Html Msg
 view model  =
   [ Html.p [] [text "Example use:"]
-  --, Grid.grid []
-  , 
-  Options.div 
+  , Options.div 
     [ css "display" "flex"
     , css "flex-direction" "column"
     , css "flex-wrap" "wrap"

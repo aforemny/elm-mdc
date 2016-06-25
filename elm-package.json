@@ -23,7 +23,9 @@
         "Material.Scheme",
         "Material.Snackbar",
         "Material.Spinner",
+        "Material.Table",
         "Material.Tooltip",
+        "Material.Toggles",
         "Material.Textfield"
     ],
     "dependencies": {

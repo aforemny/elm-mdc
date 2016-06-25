@@ -2,11 +2,11 @@ module Demo.Loading exposing (..)
 
 import Html exposing (Html, text)
 
-import Material.Options as Options exposing (div, css, when)
+import Material.Options as Options exposing (div, css, cs, when)
 import Material.Progress as Loading
 import Material.Spinner as Loading
 import Material.Grid as Grid
-
+import Material.Color as Color
 import Material.Button as Button
 import Material
 import Material.Helpers as Helpers exposing (map2nd)
@@ -93,11 +93,15 @@ demoBars model =
       , "Loading.indeterminate" 
       )
     , ( Loading.spinner [ Loading.active model.running ]
-      , "Loading.spinner [ Loading.active " ++ toString model.running ++ " ]"
+      , """
+        Loading.spinner 
+          [ Loading.active """ ++ toString model.running ++ " ]"
       )
     , ( Loading.spinner [ Loading.active model.running, Loading.singleColor True ]
-      , "Loading.spinner [ Loading.active " ++ toString model.running ++
-        "\n                , Loading.singleColor True ]"
+      , """
+        Loading.spinner 
+          [ Loading.active """ ++ toString model.running ++ """
+          , Loading.singleColor True ]"""
       )
     ] 
   |> List.map demoContainer
@@ -109,39 +113,50 @@ view model =
       []
       [ Html.p [] [text "Example use:"]
       , Grid.grid []
-          ( Grid.cell
-              [ Grid.size Grid.All 12 ]
-              [ Code.code """
-                             import Material.Spinner as Loading
-                             import Material.Progress as Loading
-                             """
-              ]
-          :: demoBars model )
-      , Grid.grid []
-        [ Grid.cell
-            [ Grid.size Grid.All 4]
-            [ div [Options.css "padding-top" "30px"] []
-            , div []
-              [ Button.render Mdl [4] model.mdl
-                  [ Button.raised
-                  , Button.colored
-                  , Button.ripple
-                  , Button.disabled `when` model.running 
-                  , Button.onClick Toggle
+          ( ( Grid.cell
+                [ Grid.size Grid.All 12 ]
+                [ Code.code """
+                               import Material.Spinner as Loading
+                               import Material.Progress as Loading
+                               """
+                ]
+            :: demoBars model )
+            ++
+            [ Grid.cell
+                [ Grid.size Grid.All 4
+                , css "text-align" "right"
+                , Color.text Color.primary
+                , Grid.align Grid.Bottom
+                ]
+                [ Options.span 
+                    [ cs "mdl-typography--display-4" ] 
+                    [ text <| toString model.progress ]
+                ]
+            , Grid.cell
+                [ Grid.size Grid.All 4]
+                [ div [Options.css "padding-top" "30px"] []
+                , div []
+                  [ Button.render Mdl [4] model.mdl
+                      [ Button.raised
+                      , Button.colored
+                      , Button.ripple
+                      , Button.disabled `when` model.running 
+                      , Button.onClick Toggle
+                      ]
+                      [ text "Resume" ]
+                  , Options.div [ css "width" "2em", css "display" "inline-block" ] []
+                  , Button.render Mdl [5] model.mdl
+                      [ Button.raised
+                      , Button.colored
+                      , Button.ripple
+                      , Button.disabled `when` not model.running
+                      , Button.onClick Toggle
+                      ]
+                      [ text "Pause" ]
                   ]
-                  [ text "Resume" ]
-              , Options.div [ css "width" "2em", css "display" "inline-block" ] []
-              , Button.render Mdl [5] model.mdl
-                  [ Button.raised
-                  , Button.colored
-                  , Button.ripple
-                  , Button.disabled `when` not model.running
-                  , Button.onClick Toggle
-                  ]
-                  [ text "Pause" ]
-              ]
+                ]
             ]
-        ]
+        )
      ]
   ]
   |> Page.body2 "Loading" srcUrl intro references

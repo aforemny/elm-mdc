@@ -33,10 +33,6 @@ import Html exposing (Html)
 import Material.Options as Options exposing (cs, css, nop, div)
 
 
-
--- VIEW
-
-
 {-| An indeterminate progress bar.
 -}
 indeterminate : Html m
@@ -44,22 +40,19 @@ indeterminate =
   bar True False 0 100
 
 
-{-| A progress bar. First argument is completion in percentage.
+{-| A progress bar. First argument is completion in percent (0–100).
 -}
 progress : Float -> Html m
 progress p =
   bar False False p 100
 
 
-{-| A buffered progress bar. First argument is completion in percentage, second
-argument indicates buffering in percentage.
+{-| A buffered progress bar. First argument is completion in percent (0-100),
+second argument indicates buffer completion in percent (0-100). 
 -}
 buffered : Float -> Float -> Html m
 buffered p b =
   bar False True p b
-
-
--- HELPERS
 
 
 {-| Bar helper used for all spinners.
@@ -83,7 +76,6 @@ bar indeterminate buffered p b =
     , css "width" (percentage b)
     ]
     []
-
   , -- width defaults to 0%
     div
     [ cs "auxbar bar bar3"

@@ -1,26 +1,10 @@
 module Material.Tooltip
   exposing
-    ( Model
-    , Config
-    , defaultModel
-    , Msg(..)
-    , update
-    , view
-    , render
-    , DOMState
-    , left
-    , right
-    , top
-    , bottom
-    , large
+    ( Model, defaultModel, Msg(..), update, view
     , Property
-    , onMouseEnter
-    , onMouseLeave
-    , attach
-    , onEnter
-    , onLeave
-    , container
-    , HtmlElement
+    , render, attach
+    , left, right, top, bottom, large, container
+    , onEnter, onLeave
     )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#tooltips-section):
@@ -45,18 +29,13 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/tooltips)
 for a live demo.
 
-**NOTE** To use a `tooltip` you have to attach the mouse event listeners to the target
-either by calling `attach` for `Material` components or `onMouseEnter` and `onMouseLeave` for regular `Html m` elements
-
-The call to `Tooltip.render` should also be the next call following the target.
-
-See example below:
+To use a `tooltip` you have to (a) attach the mouse event listeners to the target
+by calling `attach`, and (b) create a tooltip with element `Tooltip.render`
+as a sibling of the target. Here is an example: 
 
 ```elm
 import Material.Tooltip as Tooltip
 import Material.Icon as Icon
-
--- Note the index in both the Render as well as the attach
 
 tooltip : Model -> Html Msg
 tooltip model =
@@ -68,25 +47,21 @@ tooltip model =
     ]
 ```
 
-# Types
-@docs Model, defaultModel
-@docs DOMState
-@docs Config
+# Render
+@docs attach, render
+
+# Options
 @docs Property
-@docs HtmlElement
-
-# Update and render
-@docs Msg, update, view, render
-
-# Content
-@docs container
 @docs left, right, top, bottom
 @docs large
+@docs container
 
-# Events
-@docs onMouseEnter, onMouseLeave
+# Elm architecture
+If you do not use parts, you should not use `attach`, but instead add the
+`onEnter` and `onLeave` attributes to the target element. 
+
 @docs onEnter, onLeave
-@docs attach
+@docs Model, defaultModel, Msg, update, view
 
 -}
 
@@ -121,11 +96,10 @@ defaultModel =
   }
 
 
-
 -- ACTION, UPDATE
 
 
-{-| Component action.
+{-| Component message.
 -}
 type Msg
   = Enter DOMState
@@ -397,7 +371,11 @@ large =
   Options.set (\options -> { options | size = Large })
 
 
-{-| Set the tooltip container element
+{-| Set the tooltip container element. You are unlikely to need this. 
+
+This option simply sets the  container element for the tooltip itself, which
+you might want to control for layout purposes. It does not set the element
+hovering on which triggers the tooltip; use `attach` to set that. 
 -}
 container : HtmlElement m -> Property m
 container elem =
@@ -449,7 +427,7 @@ type alias Container c =
   { c | tooltip : Indexed Model }
 
 
-{-| Render a tooltip
+{-| Component render.
 -}
 render :
   (Parts.Msg (Container c) -> m)
@@ -465,11 +443,6 @@ render =
 set : Parts.Set (Indexed Model) (Container c)
 set x y =
   { y | tooltip = x }
-
-
-find : Parts.Index -> Parts.Accessors Model (Container c)
-find =
-  Parts.accessors .tooltip set defaultModel
 
 
 pack : Parts.Index -> Msg -> Parts.Msg (Container c)
@@ -508,14 +481,14 @@ attach lift index =
     ]
 
 
-{-| Mouse enter event handler for Non-Parts version
+{-| Mouse enter event handler for non-parts version
 -}
 onEnter : (Msg -> m) -> Attribute m
 onEnter lift =
   Html.Events.on "mouseenter" (Json.map (Enter >> lift) stateDecoder)
 
 
-{-| Mouse leave event handler for Non-Parts version
+{-| Mouse leave event handler for non-parts version
 -}
 onLeave : (Msg -> m) -> Attribute m
 onLeave lift =

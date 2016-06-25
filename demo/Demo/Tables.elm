@@ -3,7 +3,7 @@ module Demo.Tables exposing (..)
 import Html exposing (..)
 
 import Material
-import Material.Grid exposing (grid, cell, size, Device(All))
+import Material.Grid as Grid exposing (grid, cell, size, Device(..))
 import Material.Helpers exposing (pure, map1st, map2nd)
 import Material.Table as Table
 
@@ -61,8 +61,8 @@ type alias Mdl =
 view : Model -> Html Msg
 view model =
   [ grid []
-    [ cell [ size All 12 ] [ table model ]
-    , cell [ size All 12 ] [ code ]
+    [ cell [ size Desktop 4, size Tablet 8, size Phone 4 ] [ table model ]
+    , cell [ size Desktop 8, size Tablet 8, size Phone 4 ] [ code ]
     ]
   ]
   |> Page.body2 "Tables" srcUrl intro references
@@ -138,47 +138,38 @@ table model =
 code : Html msg
 code =
   Code.code """
-    -- sortedData
-    --   : List
-    --     { material : String
-    --     , quantity : String
-    --     , unitPrice : String
-    --     }
-
     Table.table []
-    [
-      Table.thead
-      [
-      ]
-      [ Table.tr []
-        [ Table.th
-          [ Table.sorted model.order
+      [ Table.thead []
+          [ Table.tr []
+              [ Table.th
+                  [ Table.sorted model.order ]
+                  [ text "Material" ]
+              , Table.th 
+                  [ Table.numeric ]
+                  [ text "Quantity" ]
+              , Table.th 
+                  [ Table.numeric ]
+                  [ text "Unit Price" ]
+              ]
           ]
-          [ text "Material"
-          ]
-        , Table.th [ Table.numeric ]
-          [ text "Quantity"
-          ]
-        , Table.th [ Table.numeric ]
-          [ text "Unit Price"
-          ]
-        ]
+      , Table.tbody []
+          ( sortedData |> List.map (\\item ->
+             Table.tr []
+               [ Table.td [] [ text item.material ]
+               , Table.td [ Table.numeric ] [ text item.quantity ]
+               , Table.td [ Table.numeric ] [ text item.unitPrice ]
+               ]
+            )
+          )
       ]
 
-    , Table.tbody []
-      ( sortedData
-        |> List.map (\\item ->
-
-             Table.tr
-             [
-             ]
-             [ Table.td [] [ text item.material ]
-             , Table.td [ Table.numeric ] [ text item.quantity ]
-             , Table.td [ Table.numeric ] [ text item.unitPrice ]
-             ]
-           )
-      )
-    ]
+    {- sortedData
+        : List
+            { material : String
+            , quantity : String
+            , unitPrice : String
+            }
+    -}
   """
 
 

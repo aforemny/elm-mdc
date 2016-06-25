@@ -97,7 +97,7 @@ view model  =
                 Mega footers usually contain more content than mini footers."""]
 
   , div [Html.style [("margin-top", "60px")]] []
-  , p [] [text "Example of a mini footer"]
+  , h4 [] [text "Mini footer"]
   , div []
     [ Footer.mini []
         { left =
@@ -116,8 +116,9 @@ view model  =
         }
     ]
   , div [Html.style [("margin-top", "60px")]] []
-  , p [] [text """Example of a mega footer that contains more content than a mini footer.
-                Mega footers also have more sections than minifooters"""]
+  , h4 [] [ text "Mega footer" ]
+  , p [] [text """The mega footer typically has more contents and more
+                  sections than a mini footer."""]
   , div []
     [ Footer.mega []
         { top =

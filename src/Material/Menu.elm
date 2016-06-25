@@ -1,11 +1,9 @@
 module Material.Menu exposing
-  ( Model, defaultModel
-  , Item
-  , Msg, update
-  , view
+  ( Model, defaultModel, Msg, update, view
+  , render
   , Property
   , bottomLeft, bottomRight, topLeft, topRight, ripple, icon
-  , render
+  , Item
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#menus-section):
@@ -203,7 +201,7 @@ update action model =
 
 
 {-| Menu alignment.
-This specifies where the menu opens in relation to the
+Specifies where the menu opens in relation to the
 button, rather than where the menu is positioned.
 -}
 type Alignment =
@@ -228,49 +226,52 @@ defaultConfig =
   }
 
 
-{-|
-  TODO
+{-| Type of Menu options
 -}
 type alias Property m =
   Options.Property Config m
 
 
-{-|
+{-| Menu items ripple when clicked
 -}
 ripple : Property m
 ripple =
   Options.set (\config -> { config | ripple = True })
 
 
-{-|
+{-| Set the menu icon
 -}
 icon : String -> Property m
 icon name =
   Options.set (\config -> { config | icon = name })
 
 
-{-|
+{-| Menu extends from the bottom-left of the icon.
+(Suitable for the menu-icon sitting in a top-left corner)
 -}
 bottomLeft : Property m
 bottomLeft =
   Options.set (\config -> { config | alignment = BottomLeft })
 
 
-{-|
+{-| Menu extends from the bottom-right of the icon.
+(Suitable for the menu-icon sitting in a top-right corner)
 -}
 bottomRight : Property m
 bottomRight =
   Options.set (\config -> { config | alignment = BottomRight })
 
 
-{-|
+{-| Menu extends from the top-left of the icon.
+(Suitable for the menu-icon sitting in a lower-left corner)
 -}
 topLeft : Property m
 topLeft =
   Options.set (\config -> { config | alignment = TopLeft })
 
 
-{-|
+{-| Menu extends from the rop-right of the icon.
+(Suitable for the menu-icon sitting in a lower-right corner)
 -}
 topRight : Property m
 topRight =
@@ -281,9 +282,6 @@ topRight =
 -- VIEW
 
 
-
-{-| Component view.
--}
 
 
 containerGeometry : Config -> Geometry -> List (Property m)
@@ -321,7 +319,7 @@ outlineGeometry config geometry =
   []
 
 
-{-| TODO
+{-| Component view
 -}
 view : Model -> List (Property Msg) -> List (Item Msg) -> Html Msg
 view =

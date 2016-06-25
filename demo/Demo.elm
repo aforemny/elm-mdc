@@ -257,6 +257,7 @@ view model =
           Demo.Layout.Scrolling -> Layout.scrolling)
         `when` model.layout.withHeader
       , if model.transparentHeader then Layout.transparentHeader else Options.nop
+      , Layout.moreTabs
       ]
       { header = header model
       , drawer = if model.layout.withDrawer then drawer else []

@@ -4,8 +4,6 @@ module Material.Toggles exposing
   , viewSwitch, viewCheckbox, viewRadio
   , switch, checkbox, radio
   , onChange, ripple, disabled, value, group
-  , Container
-  --, Radio, Checkbox, Switch
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/index.html#toggles-section/checkbox):
@@ -31,12 +29,16 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/toggles)
 for a live demo.
 
-@docs Model, model, Msg, update
+# Render
+@docs checkbox, switch, radio
+
+# Options
+@docs onChange, ripple, disabled, value, group
+
+# Elm architecture
+@docs Model, defaultModel, Msg, update
 @docs viewSwitch, viewCheckbox, viewRadio
 
-# Component support
-
-@docs Container, Observer, Instance, instance, fwdTemplate
 -}
 
 
@@ -161,7 +163,8 @@ value b =
     (\options -> { options | value = b })
 
 
-{-| Set radio-button group id 
+{-| Set radio-button group id. Only one button in the same group can be checked
+at a time. 
 -}
 group : String -> Property m
 group s = 
@@ -202,6 +205,8 @@ top lift group model summary elems =
 
 
 
+{-| Component view (checkbox).
+-}
 viewCheckbox : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 viewCheckbox lift model config elems = 
   let 
@@ -231,7 +236,7 @@ viewCheckbox lift model config elems =
     |> top lift "checkbox" model summary
 
 
-{-| TODO
+{-| Component view (switch)
 -}
 viewSwitch : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 viewSwitch lift model config elems =
@@ -259,6 +264,8 @@ viewSwitch lift model config elems =
     |> top lift "switch" model summary 
 
 
+{-| Component view (radio button)
+-}
 viewRadio : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 viewRadio lift model config elems = 
   let 
@@ -283,6 +290,7 @@ viewRadio lift model config elems =
     |> top lift "radio" model summary
 
 
+
 -- COMPONENT
 
 {-| 
@@ -300,7 +308,7 @@ render view =
   Parts.create view update .toggles (\x y -> {y | toggles=x}) defaultModel
 
 
-{-| Component render, checkbox. 
+{-| Component render (checkbox)
 -}
 checkbox 
   : (Parts.Msg (Container c) -> m)
@@ -313,7 +321,7 @@ checkbox =
   render viewCheckbox
 
 
-{-| Component render, switch. 
+{-| Component render (switch) 
 -}
 switch
   : (Parts.Msg (Container c) -> m)
@@ -326,7 +334,7 @@ switch =
   render viewSwitch
 
 
-{-| Component render, radio button. 
+{-| Component render (radio button) 
 -}
 radio
   : (Parts.Msg (Container c) -> m)

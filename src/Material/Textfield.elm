@@ -96,23 +96,20 @@ defaultConfig =
   }
 
 
-{-|
-  TODO
+{-| Type of Textfield options
 -}
 type alias Property m = 
   Options.Property (Config m) m
 
 
-{-|
-  TODO
+{-| Label of the textfield
 -}
 label : String -> Property m 
 label str = 
   Options.set 
     (\config -> { config | labelText = Just str })
 
-{-| 
-  TODO
+{-| Label of textfield animates away from the input area on input
 -}
 floatingLabel : Property m
 floatingLabel =
@@ -120,8 +117,7 @@ floatingLabel =
     (\config -> { config | labelFloat = True })
 
 
-{-|
-  TODO
+{-| Error message
 -}
 error : String -> Property m
 error str = 
@@ -129,8 +125,7 @@ error str =
     (\config -> { config | error = Just str })
 
 
-{-| 
-  TODO
+{-| Current value of the textfield. 
 -}
 value : String -> Property m
 value str = 
@@ -138,8 +133,7 @@ value str =
     (\config -> { config | value = Just str })
 
 
-{-| 
-  TODO
+{-| Disable the textfield input
 -}
 disabled : Property m
 disabled = 
@@ -147,14 +141,14 @@ disabled =
     (\config -> { config | disabled = True })
 
 
-{-|
-  TODO
+{-| Message to dispatch on input
 -}
 onInput : (String -> m) -> Property m
 onInput f = 
   Options.set
     (\config -> { config | onInput = 
       Just (Html.Events.on "input" (Decoder.map f targetValue)) })
+
 
 {-| Sets the type of input to 'password'.
 -}
@@ -178,16 +172,14 @@ text' =
   Options.set
     (\config -> { config | kind = Text })
 
-{-|
-  TODO
+{-| Number of rows in a multi-line input
 -}
 rows : Int -> Property m
 rows rows =
   Options.set
     (\config -> { config | rows = Just rows })
 
-{-|
-  TODO
+{-| Number of columns in a multi-line input
 -}
 cols : Int -> Property m
 cols cols =
@@ -262,14 +254,10 @@ update action model =
 -- VIEW
 
 
-{-|
+{-| Component view
 -}
-view : Model -> List (Property Msg) -> Html Msg
-view = view' (\x -> x)
-
-
-view' : (Msg -> m) -> Model -> List (Property m) -> Html m
-view' lift model options =
+view : (Msg -> m) -> Model -> List (Property m) -> Html m
+view lift model options =
   let 
     ({ config } as summary) = 
       Options.collect defaultConfig options
@@ -359,7 +347,7 @@ render
   -> Html m
 render =
   Parts.create 
-    view' (\action model -> (update action model, Cmd.none))
+    view (\action model -> (update action model, Cmd.none))
     .textfield (\x c -> { c | textfield = x }) 
     defaultModel
 

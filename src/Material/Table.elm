@@ -1,11 +1,8 @@
 module Material.Table exposing
-  (
-    table, thead, tbody, tfoot
+  ( table, thead, tbody, tfoot
   , tr, th, td
   , ascending, descending, sorted, onClick, Order(Ascending,Descending)
-  , selected, numeric
-
-  , view, render
+  , numeric
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#tables-section):
@@ -41,42 +38,38 @@ for a live demo.
 @docs tr, th, td
 
 # Options
-@docs selected
-@docs ascending, descending, sorted
-@docs numeric
+@docs onClick
 
-# Parts & Elm architecture
-@docs render, view
+## Sorting options. 
+The following options have effect only when applied in the header row. 
+@docs ascending, descending, numeric, Order, sorted
 -}
 
-import Dict
 import Html.Events as Html
 import Html exposing (Html, Attribute)
 
 import Material.Options as Options exposing (Property, cs, nop)
-import Parts exposing (Indexed)
 
 
-{-|
+{-| Main table constructor. Example use: 
 
     table []
-    [ thead []
-      [ tr []
-        [ th [ ascending ] [ text "Material" ]
-        , th [ numeric ] [ text "Quantity" ]
-        , th [ numeric ] [ text "Unit Price" ]
-        ]
+      [ thead []
+          [ tr []
+              [ th [ ascending ] [ text "Material" ]
+              , th [ numeric ] [ text "Quantity" ]
+              , th [ numeric ] [ text "Unit Price" ]
+              ]
+          ]
+      , tbody []
+          [ tr []
+              [ td [] [ text "Acrylic (Transparent)" ]
+              , td [ numeric ] [ text "25" ]
+              , td [ numeric ] [ text "$2.90" ]
+              ]
+          {- ... -}
+          ]
       ]
-    , tbody []
-      [ tr []
-        [ td [] [ text "Acrylic (Transparent)" ]
-        , td [ numeric ] [ text "25" ]
-        , td [ numeric ] [ text "$2.90" ]
-        ]
-
-      -- …
-      ]
-    ]
 -}
 table
   : List (Property {} m)
@@ -96,7 +89,8 @@ table options nodes =
     ]
     nodes
 
-
+{-| Define table header row(s) 
+-}
 thead : List (Property {} m) -> List (Html m) -> Html m
 thead options html =
   let
@@ -106,6 +100,8 @@ thead options html =
     Options.apply summary Html.thead [] [] html
 
 
+{-| Define table body
+-}
 tbody : List (Property {} m) -> List (Html m) -> Html m
 tbody options html =
   let
@@ -114,7 +110,8 @@ tbody options html =
   in
     Options.apply summary Html.tbody [] [] html
 
-
+{-| Define table footer row(s)
+-}
 tfoot : List (Property {} m) -> List (Html m) -> Html m
 tfoot options html =
   let
@@ -140,6 +137,8 @@ defaultRow =
   }
 
 
+{-| Table row 
+-}
 tr : List (Property Row m) -> List (Html m) -> Html m
 tr options html =
   let
@@ -153,7 +152,7 @@ tr options html =
     ]
     html
 
-
+{-
 selected : Property { a | selected : Bool } m
 selected =
   Options.set <| \self -> { self | selected = True }
@@ -162,7 +161,7 @@ selected =
 select : Bool -> Property { a | selected : Bool } m
 select value =
   Options.set <| \self -> { self | selected = value }
-
+-}
 
 -- Header
 
@@ -188,6 +187,8 @@ defaultHeader =
   }
 
 
+{-| Define cell in table header 
+-}
 th : List (Property (Header m) m) -> List (Html m) -> Html m
 th options html =
   let
@@ -206,31 +207,43 @@ th options html =
     html
 
 
+{-| Containing column is interpreted as numeric when used as sorting key
+-}
 numeric : Property { a | numeric : Bool } m
 numeric =
   Options.set <| \self -> { self | numeric = True }
 
 
+{-| Containing column should be sorted ascendingly
+-}
 ascending : Property { a | sorted : Maybe Order } m
 ascending =
   sorted Ascending
 
 
+{-| Containing column should be sorted descendingly
+-}
 descending : Property { a | sorted : Maybe Order } m
 descending =
   sorted Descending
 
 
+{-| Containing column should be sorted by given order
+-}
 sorted : Order -> Property { a | sorted : Maybe Order } m
 sorted order =
   Options.set <| \self -> { self | sorted = Just order }
 
 
+{-| Possible orderings 
+-}
 type Order
   = Ascending
   | Descending
 
 
+{-| Dispatch given message when cell is clicked. 
+-}
 onClick : m -> Property { a | onClick : Maybe (Attribute m) } m
 onClick x =
   Options.set (\options -> { options | onClick = Just (Html.onClick x) })
@@ -254,6 +267,8 @@ defaultCell =
   }
 
 
+{-| Define table cell 
+-}
 td : List (Property Cell m) -> List (Html m) -> Html m
 td options html =
   let
@@ -266,25 +281,3 @@ td options html =
     [
     ]
     html
-
-
--- PART
-
-
-view
-  : List (Property {} m)
-  -> List (Html m)
-  -> Html m
-view = table
-
-
-render
-  : (Parts.Msg a -> m)
-  -> Parts.Index
-  -> Parts.View a (List (Property {} m) -> List (Html m) -> Html m)
-render =
-  Parts.create (\_ _ -> view)
-    (\_ model -> (model, Cmd.none))
-    (\_ -> Dict.empty)
-    (\x y -> y)
-    {}
