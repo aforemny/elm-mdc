@@ -51,25 +51,11 @@ These components invariably require serious thinking about what is an
 appropriate Elm API and so are usually interesting in their own right for 
 that reason.  Take a look at
 
-  
- - [Cards](https://www.getmdl.io/components/index.html#cards-section) [Work-in-progress: [Mike Onslow](https://github.com/mikeonslow)]
+ - [Cards](https://www.getmdl.io/components/index.html#cards-section) 
  - [Dialogs](https://www.getmdl.io/components/index.html#dialog-section)
- - [Footers](https://www.getmdl.io/components/index.html#layout-section/footer)
  - [Lists](https://www.getmdl.io/components/index.html#lists-section) 
 
-The remaining components, use Javascript
-in various ways. Toggles seem to use Javascript exclusively to insert ripple-animations and __might__ be easy to implement using the `Ripple.elm`
-component:
-
- - [Toggles](https://www.getmdl.io/components/index.html#toggles-section)[WIP]
-
-The rest I haven't looked at; they may or may not be straightforward to port
-to Elm.
-
- - [Tables](https://www.getmdl.io/components/index.html#tables-section) [Work in progress: [Alexander Foremny](https://github.com/aforemny)]
- - [Sliders](https://www.getmdl.io/components/index.html#sliders-section)
- - [Menus](https://www.getmdl.io/components/index.html#menus-section) [Work in progress: [Alexander Foremny](https://github.com/aforemny)]
- - [Tooltips](https://www.getmdl.io/components/index.html#tooltips-section)
+See the [missing component list](https://github.com/debois/elm-mdl/issues?q=is%3Aissue+is%3Aopen+label%3Acomponent).
 
 ### Getting started with a new component
 
