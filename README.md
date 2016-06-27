@@ -1,13 +1,13 @@
 # Material Design Components in Elm
 
-[![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
-
-[Live demo](https://debois.github.io/elm-mdl/).
-
 Port of Google's
 [Material Design Lite](https://www.getmdl.io/)
 CSS/JS implementation of the
 [Material Design Specification](https://www.google.com/design/spec/material-design/introduction.html).
+
+[Live demo](https://debois.github.io/elm-mdl/).
+
+[![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
 
 MDL is implemented primarily through CSS, with a little bit of JavaScript
 adding and removing CSS classes in response to DOM events. This port

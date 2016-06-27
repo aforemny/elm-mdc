@@ -17,6 +17,10 @@ docs:
 	$(ELM) --docs=docs.json 
 
 test: docs demo comp comp-tea 
+
+copy-assets : 
+	(cd demo; cp -r assets ../$(PAGES))
+	(cd $(PAGES); git add assets)
 	
 wip-pages : 
 	(cd demo; elm-make Demo.elm --output ../$(PAGES)/wip.js)
@@ -36,4 +40,4 @@ distclean : clean
 	rm -rf elm-stuff demo/elm-stuff
 
 
-.PHONY : pages elm.js clean cleanish distclean demo docs test
+.PHONY : pages elm.js clean cleanish distclean demo docs test copy-assets
