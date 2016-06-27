@@ -10,8 +10,8 @@ CSS/JS implementation of the
 
 MDL is implemented primarily through CSS, with a little bit of JavaScript
 adding and removing CSS classes in response to DOM events. This port
-re-implements the JavaScript parts in Elm, but relies on the CSS of MDL verbatim.
-
+re-implements the JavaScript parts in Elm, but relies on the CSS of MDL
+verbatim.
 
 ### Get Started
 
@@ -25,11 +25,11 @@ This will construct a file `index.html`; open that in your browser.
 
 Initial page load of the demo will produce a flicker, which can only be 
 avoided if you set up the MDL CSS to load before elm does. Use the file
-`page.html` as a template. To build the demo in this mode, comment out 
-[line 154 in `examples/Demo.elm`](https://github.com/debois/elm-mdl/blob/master/examples/Demo.elm#L154)
-and build the demo like this: 
+`page.html` as a template. Find the line containing '**' in 
+[demo/Demo.elm](https://github.com/debois/elm-mdl/blob/master/demo/Demo.elm),
+follow the instructions there, and build the demo like this: 
 
-    > elm-make examples/Demo.elm --output elm.js
+    > elm-make demo/Demo.elm --output elm.js
 
 This will produce a file `elm.js`. Open the file 
 [`page.html`](https://raw.githubusercontent.com/debois/elm-mdl/master/page.html) in your 
