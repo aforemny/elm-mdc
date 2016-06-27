@@ -22,7 +22,7 @@ Credits
 
     Very useful customisation of Menu icon.
 
-4. Petre Damon (@pdamoc), new contributor.
+4. Petre Damoc (@pdamoc), new contributor.
 
     Bugfixes to subtle CSS interaction problems in Layout. 
 
