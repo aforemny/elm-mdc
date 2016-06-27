@@ -94,7 +94,9 @@ view model  =
   [ Options.stylesheet customStyles
 
   , p [] [text """Footers come in two sizes, mini and mega.
-                Mega footers usually contain more content than mini footers."""]
+                Mega footers usually contain more content than mini footers.
+                Note that "dropdowns" become dropdowns only when the screen is
+                small enough (resize your viewport to observe)."""]
 
   , div [Html.style [("margin-top", "60px")]] []
   , h4 [] [text "Mini footer"]

@@ -176,17 +176,17 @@ view model  =
           [ table 
               [ h4 [] [ text "Included sub-components" ]
               , Toggles.switch Mdl [8] model.mdl
-                  [ Toggles.onChange (Update <| \m -> { m | withHeader = not m.withHeader })
+                  [ Toggles.onClick (Update <| \m -> { m | withHeader = not m.withHeader })
                   , Toggles.value model.withHeader
                   ]
                   [ text "With header" ]
               , Toggles.switch Mdl [9] model.mdl
-                  [ Toggles.onChange (Update <| \m -> { m | withDrawer = not m.withDrawer })
+                  [ Toggles.onClick (Update <| \m -> { m | withDrawer = not m.withDrawer })
                   , Toggles.value model.withDrawer
                   ]
                   [ text "With drawer" ]
               , Toggles.switch Mdl [10] model.mdl
-                  [ Toggles.onChange (Update <| \m -> { m | withTabs = not m.withTabs })
+                  [ Toggles.onClick (Update <| \m -> { m | withTabs = not m.withTabs })
                   , Toggles.value model.withTabs
                   ]
                   [ text "With tabs" ]
@@ -194,21 +194,21 @@ view model  =
           , table
               [ h4 [] [ text "Size-dependent behaviour" ]
               , Toggles.switch Mdl [0] model.mdl
-                  [ Toggles.onChange (Update <| \m -> { m | fixedHeader = not m.fixedHeader })
+                  [ Toggles.onClick (Update <| \m -> { m | fixedHeader = not m.fixedHeader })
                   , Toggles.value model.fixedHeader
                   ]
                   [ text "Fixed header" ]
               , explain """The header by default disappears on small devices. 
                            This option forces the display of the header on all devices. """ 
               , Toggles.switch Mdl [1] model.mdl 
-                  [ Toggles.onChange (Update <| \m -> { m | fixedDrawer = not m.fixedDrawer })
+                  [ Toggles.onClick (Update <| \m -> { m | fixedDrawer = not m.fixedDrawer })
                   , Toggles.value model.fixedDrawer
                   ]
                   [ text "Fixed drawer" ]
               , explain """The drawer is by default hidden on all devices. 
                            This option forces the drawer to be open on large devices. """ 
               , Toggles.switch Mdl [2] model.mdl
-                  [ Toggles.onChange (Update <| \m -> { m | fixedTabs = not m.fixedTabs })
+                  [ Toggles.onClick (Update <| \m -> { m | fixedTabs = not m.fixedTabs })
                   , Toggles.value model.fixedTabs
                   ]
                   [ text "Fixed tabs" ]
@@ -221,31 +221,31 @@ view model  =
               , Toggles.radio Mdl [3] model.mdl
                   [ Toggles.group "kind" 
                   , Toggles.value <| model.header == Standard 
-                  , Toggles.onChange (Update <| \m -> { m | header = Standard })
+                  , Toggles.onClick (Update <| \m -> { m | header = Standard })
                   ]
                   [ text "Standard" ]
               , Toggles.radio Mdl [4] model.mdl
                   [ Toggles.group "kind" 
                   , Toggles.value <| model.header == Seamed 
-                  , Toggles.onChange (Update <| \m -> { m | header = Seamed })
+                  , Toggles.onClick (Update <| \m -> { m | header = Seamed })
                   ]
                   [ text "Seamed" ]
               , Toggles.radio Mdl [5] model.mdl
                   [ Toggles.group "kind" 
                   , Toggles.value <| model.header == Scrolling 
-                  , Toggles.onChange (Update <| \m -> { m | header = Scrolling })
+                  , Toggles.onClick (Update <| \m -> { m | header = Scrolling })
                   ]
                   [ text "Scrolling" ]
               , Toggles.radio Mdl [6] model.mdl
                   [ Toggles.group "kind" 
                   , Toggles.value <| model.header == (Waterfall True) 
-                  , Toggles.onChange (Update <| \m -> { m | header = (Waterfall True) })
+                  , Toggles.onClick (Update <| \m -> { m | header = (Waterfall True) })
                   ]
                   [ text "Watefall (top)" ]
               , Toggles.radio Mdl [7] model.mdl
                   [ Toggles.group "kind" 
                   , Toggles.value <| model.header == (Waterfall False) 
-                  , Toggles.onChange (Update <| \m -> { m | header = (Waterfall False) })
+                  , Toggles.onClick (Update <| \m -> { m | header = (Waterfall False) })
                   ]
                   [ text "Watefall (bottom)" ]
               ]

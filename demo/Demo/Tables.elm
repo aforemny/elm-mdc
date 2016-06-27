@@ -60,10 +60,8 @@ type alias Mdl =
 
 view : Model -> Html Msg
 view model =
-  [ grid []
-    [ cell [ size Desktop 4, size Tablet 8, size Phone 4 ] [ table model ]
-    , cell [ size Desktop 8, size Tablet 8, size Phone 4 ] [ code ]
-    ]
+  [ table model 
+  , code 
   ]
   |> Page.body2 "Tables" srcUrl intro references
 

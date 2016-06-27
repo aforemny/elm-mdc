@@ -257,7 +257,7 @@ view model =
           [ text """Click the buttons below to generate toasts and snackbars. Note that 
                     multiple activations are automatically queued."""
           ]
-      , grid [ ] 
+      , grid [ css "min-height" "15rem" ] 
           [ cell 
               [ size All 4, size Desktop 2]
               [ Button.render MDL [0] model.mdl

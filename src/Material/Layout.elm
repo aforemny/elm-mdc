@@ -220,6 +220,7 @@ type Msg
   = ToggleDrawer
   | Resize Int
   | ScrollTab TabScrollState
+  | AdvanceTabs Int
   | ScrollPane Bool Float -- True means fixedHeader
   | TransitionHeader { toCompact : Bool, fixedHeader : Bool }
   | TransitionEnd
@@ -287,6 +288,9 @@ update' action model =
           Just { model | ripples = Dict.insert tabIndex ripple' model.ripples })
       |> map2nd (Cmd.map (Ripple tabIndex))
 
+    AdvanceTabs _ -> 
+      -- Don't know how to do this. 
+      pure Nothing
 
     ScrollTab state ->
       {- High-frequency message. To avoid stuttering during scrolling, we must
@@ -551,78 +555,91 @@ toList x =
     Just y -> [y]
 
 
+type Direction = 
+  Left | Right
+
+
+
+
 tabsView : 
   (Msg -> m) -> Config m -> Model -> (List (Html m), List (Style m)) -> Html m
 tabsView lift config model (tabs, tabStyles) =
   let 
     chevron direction offset =
-      styled div
-        [ cs "mdl-layout__tab-bar-button"
-        , cs ("mdl-layout__tab-bar-" ++ direction ++ "-button")
-        , cs "is-active" 
-            `when` 
-              ( (direction == "left" && model.tabScrollState.canScrollLeft) ||
-                (direction == "right" && model.tabScrollState.canScrollRight) )
-        , Options.many tabStyles
-        ]
-        [ Icon.view ("chevron_" ++ direction) 
-            [ Icon.size24
-            --, Icon.onClick (lift (ScrollTab offset))
-            ]
-        ]
-  in
-    div
-      [ class "mdl-layout__tab-bar-container"
-      ]
-      [ chevron "left" -100
-      , Options.div
-          [ cs "mdl-layout__tab-bar" 
-          , if config.rippleTabs then 
-              Options.many 
-                [ cs "mdl-js-ripple-effect"
-                , cs "mds-js-ripple-effect--ignore-events"
-                ]
-            else
-              nop
-          , if config.mode == Standard then cs "is-casting-shadow" else nop
+      let 
+        dir = 
+          case direction of 
+            Left -> "left"
+            Right -> "right"
+      in
+        styled div
+          [ cs "mdl-layout__tab-bar-button"
+          , cs ("mdl-layout__tab-bar-" ++ dir ++ "-button")
+          , cs "is-active" 
+              `when` 
+                ( (direction == Left && model.tabScrollState.canScrollLeft) ||
+                  (direction == Right && model.tabScrollState.canScrollRight) )
           , Options.many tabStyles
-          , attribute <| 
-              on "scroll" 
-                (DOM.target 
-                   (Decoder.object3 
-                      (\scrollWidth clientWidth scrollLeft -> 
-                          { canScrollLeft = scrollLeft > 0
-                          , canScrollRight = scrollWidth - clientWidth > scrollLeft + 1
-                          , width = Just clientWidth
-                          } |> ScrollTab |> lift)
-                      ("scrollWidth" := Decoder.float)
-                      ("clientWidth" := Decoder.float)
-                      ("scrollLeft"  := Decoder.float)))
           ]
-          (tabs |> List.indexedMap (\tabIndex tab ->
-            filter a
-              [ classList
-                  [ ("mdl-layout__tab", True)
-                  , ("is-active", tabIndex == config.selectedTab)
+          [ Icon.view ("chevron_" ++ dir)
+              [ Icon.size24
+              --, Icon.onClick (lift (AdvanceTabs offset))
+              -- Can't actually set scrollLeft of a div. 
+              ]
+          ]
+    in
+      div
+        [ class "mdl-layout__tab-bar-container"
+        ]
+        [ chevron Left -100
+        , Options.div
+            [ cs "mdl-layout__tab-bar" 
+            , if config.rippleTabs then 
+                Options.many 
+                  [ cs "mdl-js-ripple-effect"
+                  , cs "mds-js-ripple-effect--ignore-events"
                   ]
-              , config.onSelectTab 
-                  |> Maybe.map ((|>) tabIndex)
-                  |> Maybe.withDefault Helpers.noAttr
-              --, Html.Attributes.href ("#mdl-layout-tab-" ++ toString tabIndex)
-              ]
-              [ Just tab
-              , if config.rippleTabs then
-                  Dict.get tabIndex model.ripples 
-                    |> Maybe.withDefault Ripple.model
-                    |> Ripple.view [ class "mdl-layout__tab-ripple-container" ]
-                    |> App.map (Ripple tabIndex >> lift)
-                    |> Just
-                else
-                  Nothing
-              ]
-           ))
-      , chevron "right" 100
-      ]
+              else
+                nop
+            , if config.mode == Standard then cs "is-casting-shadow" else nop
+            , Options.many tabStyles
+            , attribute <| 
+                on "scroll" 
+                  (DOM.target 
+                     (Decoder.object3 
+                        (\scrollWidth clientWidth scrollLeft -> 
+                            { canScrollLeft = scrollLeft > 0
+                            , canScrollRight = scrollWidth - clientWidth > scrollLeft + 1
+                            , width = Just clientWidth
+                            } |> ScrollTab |> lift)
+                        ("scrollWidth" := Decoder.float)
+                        ("clientWidth" := Decoder.float)
+                        ("scrollLeft"  := Decoder.float)))
+            ]
+            (tabs |> List.indexedMap (\tabIndex tab ->
+              filter a
+                [ classList
+                    [ ("mdl-layout__tab", True)
+                    , ("is-active", tabIndex == config.selectedTab)
+                    ]
+                , config.onSelectTab 
+                    |> Maybe.map ((|>) tabIndex)
+                    |> Maybe.withDefault Helpers.noAttr
+                --, Html.Attributes.href ("#mdl-layout-tab-" ++ toString tabIndex)
+                ]
+                [ Just tab
+                , if config.rippleTabs then
+                    Dict.get tabIndex model.ripples 
+                      |> Maybe.withDefault Ripple.model
+                      |> Ripple.view [ class "mdl-layout__tab-ripple-container" ]
+                      |> App.map (Ripple tabIndex >> lift)
+                      |> Just
+                  else
+                    Nothing
+                ]
+             ))
+        , chevron Right 100
+        ]
 
 
 headerView 

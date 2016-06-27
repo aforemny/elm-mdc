@@ -134,21 +134,21 @@ view model =
           [] 
           [ Grid.cell row
               [ Toggles.switch Mdl [0] model.mdl 
-                [ Toggles.onChange (Switch 0) 
+                [ Toggles.onClick (Switch 0) 
                 , Toggles.value (get 0 model)
                 ]
                 [ text "Switch" ]
-              , "Toggles.switch Mdl [0] model.mdl\n  [ Toggles.onChange MyToggleMsg ]\n  , Toggles.value "
+              , "Toggles.switch Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg ]\n  , Toggles.value "
                   ++ toString (get 0 model) ++ "\n  ]\n  [ text \"Switch\" ]"
                 |> Code.code
               ]
           , Grid.cell row 
               [ Toggles.checkbox Mdl [1] model.mdl 
-                [ Toggles.onChange (Switch 1) 
+                [ Toggles.onClick (Switch 1) 
                 , Toggles.value (get 1 model)
                 ]
                 [ text "Checkbox" ]
-              , "Toggles.cheeckbox Mdl [0] model.mdl\n  [ Toggles.onChange MyToggleMsg ]\n  , Toggles.value "
+              , "Toggles.cheeckbox Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg ]\n  , Toggles.value "
                   ++ toString (get 1 model) ++ "\n  ]\n  [ text \"Checkbox\" ]"
                 |> Code.code
               ]
@@ -156,14 +156,14 @@ view model =
               [ Toggles.radio Mdl [2] model.mdl 
                   [ Toggles.value (2 == model.radios) 
                   , Toggles.group "MyRadioGroup"
-                  , Toggles.onChange (Radio 2)
+                  , Toggles.onClick (Radio 2)
                   ]
                   [ text "Emacs" ]
               , Toggles.radio Mdl [3] model.mdl
                   [ css "margin-left" "2rem" 
                   , Toggles.value (3 == model.radios)
                   , Toggles.group "MyRadioGroup"
-                  , Toggles.onChange (Radio 3)
+                  , Toggles.onClick (Radio 3)
                   ]
                   [ text "Vim" ]
               , """
@@ -172,13 +172,13 @@ view model =
                     [ Toggles.radio Mdl [0] model.mdl 
                         [ Toggles.value """ ++ toString (2 == model.radios) ++ """
                         , Toggles.group "MyRadioGroup"
-                        , Toggles.onChange MyRadioMsg1
+                        , Toggles.onClick MyRadioMsg1
                         ]
                         [ text "Emacs" ]
                     , Toggles.radio Mdl [1] model.mdl
                         [ Toggles.value """ ++ toString (3 == model.radios) ++ """
                         , Toggles.group "MyRadioGroup"
-                        , Toggles.onChange MyRadioMsg2
+                        , Toggles.onClick MyRadioMsg2
                         ]
                         [ text "Vim" ]
                     ] """
@@ -219,7 +219,7 @@ view model =
                 ]
                 [ text "Increase" ]
             , Toggles.switch Mdl [4] model.mdl
-                [ Toggles.onChange ToggleCounting
+                [ Toggles.onClick ToggleCounting
                 , Toggles.value model.counting
                 ] 
                 [ text "Auto-increase" ]
@@ -233,7 +233,7 @@ view model =
               |> List.map (\idx -> 
                   Toggles.checkbox Mdl [6,idx] model.mdl
                     [ Toggles.value (readBit idx model.counter)
-                    , Toggles.onChange (Update <| \m -> { m | counter = flipBit idx model.counter })
+                    , Toggles.onClick (Update <| \m -> { m | counter = flipBit idx model.counter })
                     , css "display" "inline-block"
                     ]
                     []
