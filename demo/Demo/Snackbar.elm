@@ -250,43 +250,47 @@ clickView model (k, square) =
 
 view : Model -> Html Msg
 view model =
-  Page.body2 "Snackbar & Toast" srcUrl intro references
-    [ p [] 
-        [ text """Click the buttons below to generate toasts and snackbars. Note that 
-                  multiple activations are automatically queued."""
-        ]
-    , grid [ ] 
-        [ cell 
-            [ size All 4, size Desktop 2]
-            [ Button.render MDL [0] model.mdl
-                [ Button.raised
-                , Button.onClick AddSnackbar
-                , Button.colored
-                , css "width" "8em"
-                ] 
-                [ text "Snackbar" ]
-            ]
-        , cell 
-            [ size All 4, size Desktop 2]
-            [ Button.render MDL [1] model.mdl 
-                [ Button.raised
-                , Button.colored
-                , Button.onClick AddToast
-                , css "width" "8em"
-                ] 
-                [ text "Toast" ]
-            ]
-        , cell
-            [ size Desktop 10, offset Desktop 1 
-            , size Tablet 6, offset Tablet 1
-            , size Phone 4
-            , align Top 
-            , css "padding-top" "32px"
-            ]
-            (model.squares |> List.reverse |> List.map (clickView model))
-        ]
-    , Snackbar.view model.snackbar |> App.map Snackbar
-    ]
+  let
+    demo1 = []
+    demo2 = 
+      [ p [] 
+          [ text """Click the buttons below to generate toasts and snackbars. Note that 
+                    multiple activations are automatically queued."""
+          ]
+      , grid [ ] 
+          [ cell 
+              [ size All 4, size Desktop 2]
+              [ Button.render MDL [0] model.mdl
+                  [ Button.raised
+                  , Button.onClick AddSnackbar
+                  , Button.colored
+                  , css "width" "8em"
+                  ] 
+                  [ text "Snackbar" ]
+              ]
+          , cell 
+              [ size All 4, size Desktop 2]
+              [ Button.render MDL [1] model.mdl 
+                  [ Button.raised
+                  , Button.colored
+                  , Button.onClick AddToast
+                  , css "width" "8em"
+                  ] 
+                  [ text "Toast" ]
+              ]
+          , cell
+              [ size Desktop 10, offset Desktop 1 
+              , size Tablet 6, offset Tablet 1
+              , size Phone 4
+              , align Top 
+              , css "padding-top" "32px"
+              ]
+              (model.squares |> List.reverse |> List.map (clickView model))
+          ]
+      , Snackbar.view model.snackbar |> App.map Snackbar
+      ]
+  in
+    Page.body1' "Snackbar & Toast" srcUrl intro references demo1 demo2
 
 
 intro : Html a

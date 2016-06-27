@@ -185,6 +185,7 @@ body1' t srcUrl contents links demo1 demo2 =
         []
     , Options.div 
         [ Color.background <| background 
+        , css "position" "relative"
         , css "margin" "auto" 
         , css "padding-top" "2rem"
         , css "padding-bottom" "5rem"

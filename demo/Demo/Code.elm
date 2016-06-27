@@ -129,7 +129,7 @@ trim s =
 code : String -> Html a
 code str = 
   div 
-    [ css "overflow" "scroll" 
+    [ css "overflow" "auto" 
     , Elevation.e2
     , css "margin-top" "1rem"
     , css "margin-bottom" "1rem"
@@ -141,7 +141,7 @@ code str =
 html : String -> Html a
 html str = 
   div 
-    [ css "overflow" "scroll" 
+    [ css "overflow" "auto" 
     , css "margin-top" "1rem"
     , css "margin-bottom" "1rem"
     , css "border-radius" "2px"

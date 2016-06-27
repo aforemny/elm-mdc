@@ -371,6 +371,9 @@ stylesheet =
   }
 
   pre { 
+    display: inline-block; 
+    box-sizing: border-box;
+    min-width: 100%;
     background-color: #f8f8f8; 
     padding-top: .5rem;
     padding-bottom: 1rem;

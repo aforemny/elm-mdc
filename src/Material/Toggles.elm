@@ -3,7 +3,7 @@ module Material.Toggles exposing
   , Msg, update
   , viewSwitch, viewCheckbox, viewRadio
   , switch, checkbox, radio
-  , onChange, ripple, disabled, value, group
+  , onClick, ripple, disabled, value, group
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/index.html#toggles-section/checkbox):
@@ -33,7 +33,7 @@ for a live demo.
 @docs checkbox, switch, radio
 
 # Options
-@docs onChange, ripple, disabled, value, group
+@docs onClick, ripple, disabled, value, group
 
 # Elm architecture
 @docs Model, defaultModel, Msg, update
@@ -110,7 +110,7 @@ type alias Config m =
   , value : Bool
   , ripple : Bool
   , group : Maybe (Attribute m)
-  , onChange : Maybe (Attribute m)
+  , onClick : Maybe (Attribute m)
   }
 
 
@@ -120,7 +120,7 @@ defaultConfig =
   , value = False
   , ripple = True
   , group = Nothing
-  , onChange = Nothing
+  , onClick = Nothing
   }
 
 
@@ -133,10 +133,10 @@ type alias Property m =
 {-| Add an `on "click"` handler to a toggle. Argument is the 
 new value of the toggle (that is, the negation of the current value).
 -}
-onChange : m -> Property m
-onChange x =
+onClick : m -> Property m
+onClick x =
   Options.set
-    (\options -> { options | onChange = Just (Html.Events.on "change" (Json.succeed x)) })
+    (\options -> { options | onClick = Just (Html.Events.on "change" (Json.succeed x)) })
 
 
 {-| Set toggle to ripple when clicked.
@@ -190,7 +190,7 @@ top lift group model summary elems =
       [ Just (blurOn "mouseup")
       , Just (onFocus (lift (SetFocus True)))
       , Just (onBlur (lift (SetFocus False)))
-      , cfg.onChange
+      , cfg.onClick
       ] 
       (List.concat 
         [ elems
