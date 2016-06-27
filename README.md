@@ -18,6 +18,11 @@ verbatim.
 
 Adapt
 [examples/Component.elm](https://github.com/debois/elm-mdl/tree/master/examples) to suit your needs. 
+Then refer to the [extensive package
+documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/), or look at the 
+[source](https://github.com/debois/elm-mdl/tree/master/demo) of the 
+[Live demo](https://debois.github.io/elm-mdl/), which exercises most components of the library. 
+
 
 ### Contribute
 
