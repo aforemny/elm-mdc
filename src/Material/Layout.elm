@@ -1,9 +1,11 @@
 module Material.Layout exposing
-  ( init, subscriptions , Model, defaultModel, Msg(ToggleDrawer), update
+  ( init, subscriptions , Model, defaultModel
+  , Msg(ToggleDrawer), update
   , Property
   , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
   , waterfall, seamed, scrolling, selectedTab, onSelectTab
   , row, spacer, title, navigation, link, onClick, href
+  , setTabsWidth
   , Contents, view
   , sub0, subs, render, toggleDrawer
   , transparentHeader
@@ -54,6 +56,26 @@ sizes. Example initialisation of containing app:
       , update = update
       }
 
+## Tabs width 
+
+Tabs display chevrons when the viewport is too small to show all tabs
+simultaneously. Unfortunately, Elm currently does not give us a way to
+automatically detect the width of the tabs at app launch. If you have tabs, 
+to make the chevron display correctly at app lauch, you must set 
+`model.tabScrollState.width` manually in `init`. If you're using parts, 
+use `setTabScrollState` to accomplish this. Initialisation would in this case
+be (assuming a tab width of 1384 pixels):
+
+    App.program 
+      { init = 
+          ( { model | mdl = Layout.setTabsWidth 1384 model.mdl }
+            , Layout.sub0 Mdl 
+          )
+      , view = view
+      , subscriptions = .mdl >> Layout.subs Mdl
+      , update = update
+      }
+
 
 @docs sub0, subs
 
@@ -65,12 +87,12 @@ sizes. Example initialisation of containing app:
 
 ## Tabs
 @docs fixedTabs, rippleTabs
+@docs selectedTab, setTabsWidth 
 
 ## Header
 @docs fixedHeader, fixedDrawer
 @docs waterfall, seamed, scrolling
 @docs transparentHeader
-@docs selectedTab
 
 ## Events
 @docs onSelectTab
@@ -93,14 +115,14 @@ import Html.Attributes exposing (class, classList, tabindex)
 import Html.Events as Events exposing (on)
 import Platform.Cmd exposing (Cmd)
 import Window
-import Json.Decode as Decoder
+import Json.Decode as Decoder exposing ((:=))
 import Task
 
 import Parts
 import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
-import Material.Options as Options exposing (Style, cs, nop, css, styled)
+import Material.Options as Options exposing (Style, cs, nop, css, when, styled)
 import Material.Options.Internal exposing (attribute)
 
 import DOM
@@ -109,39 +131,60 @@ import DOM
 -- SETUP
 
 
-smallScreenWatch : Int -> Msg
-smallScreenWatch = 
-  (>) 1024 >> SmallScreen 
-
-
 {-| Layout needs initial viewport size
 -}
 init : (Model, Cmd Msg)
 init = 
   let
-    msg = 
+    measureScreenSize = 
       Task.perform 
-        (\_ -> smallScreenWatch (Debug.log "Can't get initial window dimensions. Guessing " 1025))
-        smallScreenWatch Window.width
+        (\_ -> Resize (Debug.log "Can't get initial window dimensions. Guessing " 1025))
+        Resize 
+        Window.width
   in
-    (defaultModel, msg)
+    ( defaultModel , measureScreenSize )
 
 
 {-| Layout subscribes to changes in viewport size. 
 -}
-subscriptions : x -> Sub Msg
-subscriptions =
-  let 
-    sub = 
-      Window.resizes (.width >> smallScreenWatch)
-  in
-    always sub
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Window.resizes (.width >> Resize)
 
 
 -- MODEL
 
 
-{-| Component mode. 
+type alias TabScrollState =
+  { canScrollLeft : Bool
+  , canScrollRight : Bool
+  , width : Maybe Int
+  }
+
+
+{- Elm don't give us a good way to measure the width of the tabs, so we
+arbitrarily decide that they probably can't scroll. The user can adjust this
+decision by supplying his own estimate of what the width of the tabsWidth might
+be. 
+-}
+defaultTabScrollState : TabScrollState 
+defaultTabScrollState = 
+  { canScrollRight = True
+  , canScrollLeft = False
+  , width = Nothing
+  }
+
+
+setTabsWidth' : Int -> Model -> Model 
+setTabsWidth' width model = 
+  let x = model.tabScrollState in
+  { model 
+  | tabScrollState = 
+    { x | width = Just width }
+  }
+
+
+{-| Component model. 
 -}
 type alias Model =
   { ripples : Dict Int Ripple.Model
@@ -150,6 +193,7 @@ type alias Model =
   , isAnimating : Bool
   , isScrolled : Bool
   , isDrawerOpen : Bool
+  , tabScrollState : TabScrollState
   }
 
 
@@ -163,6 +207,7 @@ defaultModel =
   , isAnimating = False
   , isScrolled = False
   , isDrawerOpen = False
+  , tabScrollState = defaultTabScrollState
   }
 
 
@@ -173,8 +218,8 @@ defaultModel =
 -}
 type Msg
   = ToggleDrawer
-  | SmallScreen Bool -- True means small screen
-  | ScrollTab Float
+  | Resize Int
+  | ScrollTab TabScrollState
   | ScrollPane Bool Float -- True means fixedHeader
   | TransitionHeader { toCompact : Bool, fixedHeader : Bool }
   | TransitionEnd
@@ -186,42 +231,86 @@ type Msg
 {-| Component update.
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
+update msg model = 
+  update' msg model 
+    |> Helpers.map1st (Maybe.withDefault model)
+
+
+update' : Msg -> Model -> (Maybe Model, Cmd Msg)
+update' action model =
   case action of
     NOP -> 
-      ( model, Cmd.none ) 
+      ( Nothing, Cmd.none ) 
 
-    SmallScreen isSmall ->
-      { model  
-      | isSmallScreen = isSmall 
-      , isDrawerOpen = not isSmall && model.isDrawerOpen
-      }
-      |> pure
+    Resize width -> 
+      {- High-frequency message. To avoid stuttering during resizes, we must
+      return referentially the same model if we're not making any updates. (And
+      the user must be using Html.Lazy.)
+      -}
+      let 
+        isSmall = 
+          1024 > width 
+        tabScrollState = 
+          model.tabScrollState.width 
+            |> Maybe.map (\tabsWidth ->
+                  let tabScrollState = model.tabScrollState in
+                  { tabScrollState 
+                  | canScrollRight = tabsWidth + (2 * 56) {- chevrons -} > width 
+                  })
+            |> Maybe.withDefault model.tabScrollState
+                {- We have no idea how much horisontal space tabs consume, so we have no
+                idea whether they scroll or not. -}
+      in
+        pure <| 
+          -- Make sure we return a referentially equal model if we're not
+          -- changing anything. 
+          if isSmall == model.isSmallScreen && 
+             tabScrollState.canScrollRight == model.tabScrollState.canScrollRight
+          then 
+            Nothing
+          else
+            Just <|
+              { model  
+              | isSmallScreen = isSmall 
+              , isDrawerOpen = not isSmall && model.isDrawerOpen
+              , tabScrollState = tabScrollState
+              }
 
     ToggleDrawer ->
-      { model | isDrawerOpen = not model.isDrawerOpen } |> pure
+      Just { model | isDrawerOpen = not model.isDrawerOpen } |> pure
 
     Ripple tabIndex action' ->
       Dict.get tabIndex model.ripples
       |> Maybe.withDefault Ripple.model
       |> Ripple.update action'
       |> map1st (\ripple' -> 
-          { model | ripples = Dict.insert tabIndex ripple' model.ripples })
+          Just { model | ripples = Dict.insert tabIndex ripple' model.ripples })
       |> map2nd (Cmd.map (Ripple tabIndex))
 
-    ScrollTab tab ->
-      (model, Cmd.none) -- TODO
+
+    ScrollTab state ->
+      {- High-frequency message. To avoid stuttering during scrolling, we must
+      return a referentially identical model if we're making  no changes.
+      -}
+      pure <| 
+        if model.tabScrollState /= state then 
+          Just { model | tabScrollState = state } 
+        else
+          Nothing
 
     ScrollPane fixedHeader offset -> 
+      {- High-frequency message. To avoid stuttering during scrolling, we must
+      return a referentially identical model if we're making  no changes.
+      -}
       let 
         isScrolled = 0.0 < offset 
       in
         if isScrolled /= model.isScrolled then
-          update 
+          update' 
             (TransitionHeader { toCompact = isScrolled, fixedHeader = fixedHeader })
             { model | isScrolled = isScrolled }
         else
-          pure model
+          pure Nothing
 
     TransitionHeader { toCompact, fixedHeader } -> 
       let 
@@ -233,20 +322,19 @@ update action model =
           }
       in
         if not model.isAnimating then 
-          ( { model 
-            | isCompact = toCompact
-            , isAnimating = headerVisible 
-            }
+          ( Just <| 
+              { model 
+              | isCompact = toCompact
+              , isAnimating = headerVisible 
+              }
           , delay 200 TransitionEnd -- See comment on transitionend in view. 
           )
         else
-          pure model
+          pure Nothing
 
 
     TransitionEnd -> 
-      ( { model | isAnimating = False }
-      , Cmd.none
-      )
+      pure (Just { model | isAnimating = False })
 
 
 -- PROPERTIES
@@ -261,6 +349,7 @@ type alias Config m =
   , selectedTab : Int
   , onSelectTab : Maybe (Int -> Attribute m)
   , transparentHeader : Bool
+  , moreTabs : Bool
   }
 
 
@@ -273,6 +362,7 @@ defaultConfig =
   , mode = Standard
   , onSelectTab = Nothing
   , selectedTab = -1
+  , moreTabs = False
   , transparentHeader = False
   }
 
@@ -333,6 +423,7 @@ transparentHeader : Property m
 transparentHeader =
   Options.set (\config -> { config | transparentHeader = True })
 
+
 {-| Header scrolls with contents. 
 -}
 scrolling : Property m
@@ -344,6 +435,18 @@ scrolling =
 selectedTab : Int -> Property m
 selectedTab k =
   Options.set (\config -> { config | selectedTab = k })
+
+
+{-| Set this property if tabs are missing the "more tabs on the right" indicator
+chevron on app launch. 
+  
+(Elm core libraries currently don't give us a good way to determine this situation
+automatically.)
+-}
+moreTabs : Property m
+moreTabs =
+  Options.set (\config -> { config | moreTabs = True })
+
 
 {-| Receieve notification when tab `k` is selected.
 -}
@@ -456,17 +559,20 @@ tabsView lift config model (tabs, tabStyles) =
       styled div
         [ cs "mdl-layout__tab-bar-button"
         , cs ("mdl-layout__tab-bar-" ++ direction ++ "-button")
+        , cs "is-active" 
+            `when` 
+              ( (direction == "left" && model.tabScrollState.canScrollLeft) ||
+                (direction == "right" && model.tabScrollState.canScrollRight) )
         , Options.many tabStyles
         ]
         [ Icon.view ("chevron_" ++ direction) 
             [ Icon.size24
-            , Icon.onClick (lift (ScrollTab offset))
+            --, Icon.onClick (lift (ScrollTab offset))
             ]
-          -- TODO: Scroll event
         ]
   in
-    Options.div
-      [ cs "mdl-layout__tab-bar-container"
+    div
+      [ class "mdl-layout__tab-bar-container"
       ]
       [ chevron "left" -100
       , Options.div
@@ -480,6 +586,18 @@ tabsView lift config model (tabs, tabStyles) =
               nop
           , if config.mode == Standard then cs "is-casting-shadow" else nop
           , Options.many tabStyles
+          , attribute <| 
+              on "scroll" 
+                (DOM.target 
+                   (Decoder.object3 
+                      (\scrollWidth clientWidth scrollLeft -> 
+                          { canScrollLeft = scrollLeft > 0
+                          , canScrollRight = scrollWidth - clientWidth > scrollLeft + 1
+                          , width = Just clientWidth
+                          } |> ScrollTab |> lift)
+                      ("scrollWidth" := Decoder.float)
+                      ("clientWidth" := Decoder.float)
+                      ("scrollLeft"  := Decoder.float)))
           ]
           (tabs |> List.indexedMap (\tabIndex tab ->
             filter a
@@ -771,27 +889,25 @@ render
  -> Contents c 
  -> Html c
 render =
-  Parts.create1 
-    view update 
-    .layout (\x c -> { c | layout = x }) 
+  Parts.create1' view update' .layout (\x c -> { c | layout = x }) 
 
 
 pack : Msg -> Parts.Msg (Container b)
 pack = 
   let
     embeddedUpdate = 
-      Parts.embedUpdate .layout (\x c -> { c | layout = x }) update
+      Parts.embedUpdate' .layout (\x c -> { c | layout = x }) update'
   in
-    Parts.pack embeddedUpdate
+    Parts.pack' embeddedUpdate
 
 
 {-| Component subscriptions (type compatible with render). Either this or 
 `subscriptions` must be connected for the Layout to be responsive under
 viewport size changes. 
 -}
-subs : (Parts.Msg (Container b) -> c) -> x -> Sub c
+subs : (Parts.Msg (Container b) -> c) -> Container b -> Sub c
 subs lift = 
-  subscriptions >> Sub.map (pack >> lift)
+  .layout >> subscriptions >> Sub.map (pack >> lift)
 
 
 {-| Component subscription initialiser. Either this or 
@@ -811,3 +927,17 @@ an update for the exposed Msg `ToggleDrawer`.
 toggleDrawer : (Parts.Msg (Container b) -> c) -> c
 toggleDrawer lift = 
   (pack >> lift) ToggleDrawer 
+
+
+{-| Set tabsWidth
+
+This function is for use with parts typing. For plain TEA, simply set the
+`tabsWidth` field in Model. 
+-}
+setTabsWidth : Int -> Container b -> Container b
+setTabsWidth w container = 
+  { container 
+  | layout = setTabsWidth' w container.layout
+  }
+
+

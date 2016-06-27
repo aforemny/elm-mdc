@@ -223,6 +223,6 @@ update :
   -> { model | mdl : Model }
   -> ({ model | mdl : Model }, Cmd obs)
 update lift msg model = 
-  Parts.update lift msg model.mdl 
-    |> map1st (\mdl -> { model | mdl = mdl })
+  Parts.update' lift msg model.mdl 
+    |> map1st (Maybe.map (\mdl -> { model | mdl = mdl }) >> Maybe.withDefault model)
 

@@ -15,12 +15,9 @@
         "elm-lang/window": "1.0.0 <= v < 2.0.0",
         "elm-lang/navigation": "1.0.0 <= v < 2.0.0",
         "debois/elm-dom": "1.2.0 <= v < 2.0.0",
-        "debois/elm-parts": "2.1.0 <= v < 3.0.0",
+        "debois/elm-parts": "3.0.0 <= v < 4.0.0",
         "evancz/elm-markdown": "3.0.0 <= v < 4.0.0",
         "rgrempel/elm-route-url": "2.0.0 <= v < 3.0.0"
-    },
-    "dead-dependencies" : {
-        "sporto/hop": "3.0.0 <= v < 4.0.0"
     },
     "elm-version": "0.17.0 <= v < 0.18.0"
 }

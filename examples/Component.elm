@@ -39,7 +39,7 @@ type Msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case Debug.log "" action of
+  case action of
     Increase -> 
       ( { model | count = model.count + 1 } 
       , Cmd.none

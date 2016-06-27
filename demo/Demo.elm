@@ -1,6 +1,7 @@
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
+import Html.Lazy
 import Html.App as App
 import Platform.Cmd exposing (..)
 import Array exposing (Array)
@@ -238,7 +239,11 @@ header model =
 
 
 view : Model -> Html Msg
-view model =
+view = Html.Lazy.lazy view'
+
+
+view' : Model -> Html Msg
+view' model =
   let
     top =
       (Array.get model.selectedTab tabViews |> Maybe.withDefault e404) model
@@ -257,7 +262,6 @@ view model =
           Demo.Layout.Scrolling -> Layout.scrolling)
         `when` model.layout.withHeader
       , if model.transparentHeader then Layout.transparentHeader else Options.nop
-      , Layout.moreTabs
       ]
       { header = header model
       , drawer = if model.layout.withDrawer then drawer else []
@@ -322,9 +326,14 @@ main =
   Routing.program 
     { delta2url = delta2url
     , location2messages = location2messages
-    , init = ( model, Layout.sub0 Mdl )
+    , init = 
+        ( { model
+          | mdl = Layout.setTabsWidth 1384 model.mdl
+          }
+          , Layout.sub0 Mdl 
+        )
     , view = view
-    , subscriptions = Layout.subs Mdl
+    , subscriptions = .mdl >> Layout.subs Mdl
     , update = update
     }
 

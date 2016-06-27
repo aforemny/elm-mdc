@@ -4,6 +4,9 @@ PAGES=../elm-mdl-gh-pages
 demo:
 	(cd demo; $(ELM) Demo.elm --warn --output ../elm.js)
 
+run-demo:
+	(cd demo; pkill elm-reactor; elm-reactor &)
+
 comp: 
 	$(ELM) examples/Component.elm --warn --output elm.js
 	

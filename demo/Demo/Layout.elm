@@ -50,7 +50,7 @@ type alias Model =
 model : Model
 model =
   { mdl = Material.model
-  , fixedHeader = False
+  , fixedHeader = True
   , fixedTabs = False
   , fixedDrawer = False
   , header = Standard

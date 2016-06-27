@@ -65,7 +65,7 @@ delay = 150
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case Debug.log "Action" action of
+  case action of
     Switch k -> 
       ( { model 
         | toggles = Array.set k (get k model |> not) model.toggles
@@ -90,7 +90,6 @@ update action model =
     ToggleCounting -> 
       ( { model | counting = not model.counting }
       , if not model.counting then 
-          Debug.log "Delaying" <|
           Helpers.delay delay Inc
         else
           Cmd.none

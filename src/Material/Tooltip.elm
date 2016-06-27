@@ -152,7 +152,6 @@ and the requested position
 calculatePos : Position -> DOMState -> Pos
 calculatePos pos domState =
   let
-    -- _ = Debug.log "Calculating position for " domState
     props =
       domState.rect
 
@@ -446,15 +445,15 @@ set x y =
 
 
 pack : Parts.Index -> Msg -> Parts.Msg (Container c)
-pack idx =
+pack =
   let
     ( get, set1 ) =
-      Parts.indexed .tooltip set defaultModel idx
+      Parts.indexed .tooltip set defaultModel 
 
-    embeddedUpdate =
-      Parts.embedUpdate get set1 update
+    embeddedUpdate idx =
+      Parts.embedUpdate (get idx) (set1 idx) update
   in
-    Parts.pack embeddedUpdate
+    \idx -> Parts.pack (embeddedUpdate idx) 
 
 
 {-| Mouse enter event handler for Parts version
