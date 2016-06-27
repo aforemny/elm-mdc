@@ -1,6 +1,7 @@
 # Material Design Components in Elm
 
 [![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
+
 [Live demo](https://debois.github.io/elm-mdl/).
 
 Port of Google's
