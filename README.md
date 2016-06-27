@@ -1,4 +1,4 @@
-# Material Design Components in Elm
+# Material Design Components for Elm
 
 Port of Google's
 [Material Design Lite](https://www.getmdl.io/)
