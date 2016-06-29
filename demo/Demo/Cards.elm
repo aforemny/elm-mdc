@@ -4,9 +4,12 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
 import Material.Card exposing (..)
+import Material.Grid as Grid
 import Material.Button as Button exposing (..)
 import Material.Icon as Icon
 import Material.Elevation exposing(..)
+import Material.Color as Color
+import Material.Options exposing (css)
 import Material
 
 import Demo.Page as Page
@@ -44,22 +47,49 @@ update action model =
 
 view : Model -> Html Msg
 view model =
-  [ card [ width "512px", e2 ]
-    [ Title [] "Welcome"
-    , SupportingText []
-      [text """
+  [ Grid.grid []
+    [ Grid.cell []
+      [ card [ e2 ]
+        [ Title [] "Welcome"
+        , SupportingText []
+          [ text """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Mauris sagittis pellentesque lacus eleifend lacinia...
-"""]
-    , Actions [ border ]
-      [ button [] [text "Get started"]
-      ]
-    , Menu []
-      [ Button.render Mdl [0] model.mdl
-        [ Button.icon
-        , Button.ripple
+"""
+          ]
+        , Actions [ border ]
+          [ Button.render Mdl [0] model.mdl
+            [ Button.colored
+            , Button.ripple
+            ]
+            [ text "Get started" ]
+          ]
+        , Menu []
+          [ Button.render Mdl [1] model.mdl
+            [ Button.icon
+            , Button.ripple
+            ]
+            [ Icon.i "share"]
+          ]
         ]
-        [ Icon.i "share"]
+      ]
+    , Grid.cell []
+      [ card
+        [ e2
+        , width "256px"
+        , height "256px"
+        , css "background" "url('../assets/elm.png') center / cover"
+        ]
+        [ Title [ expand ] ""
+        , Actions
+          [ css "background" "rgba(0, 0, 0, 0.2)"
+          , css "font-weight" "bold"
+          , css "font-size" "14px"
+          , Color.text Color.white
+          ]
+          [ text "elm.png"
+          ]
+        ]
       ]
     ]
   ]

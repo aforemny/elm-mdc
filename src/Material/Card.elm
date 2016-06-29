@@ -4,6 +4,7 @@ module Material.Card exposing
   , width
   , height
   , border
+  , expand
   )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
@@ -56,6 +57,12 @@ height h = Options.css "height" h
 -}
 border : Style a
 border = Options.cs "mdl-card--border"
+
+
+{-| Add the expand class to the card.
+-}
+expand : Style a
+expand = Options.cs "mdl-card--expand"
 
 
 type ContentBlock msg
