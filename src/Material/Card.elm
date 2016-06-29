@@ -1,7 +1,14 @@
 module Material.Card exposing
-  ( Model, defaultModel, Msg, update, view
-  , Property
-  , render
+  ( card
+  , ContentBlock(..)
+  , width
+  , height
+  , border
+  , shadow2p
+  , shadow3p
+  , shadow4p
+  , shadow8p
+  , shadow16p
   )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
@@ -40,93 +47,88 @@ import Parts exposing (Indexed)
 import Material.Options as Options exposing (Style, cs)
 
 
--- MODEL
-
-
-{-| Component model.
+{-| Set card width. Width must be a valid CSS dimension.
 -}
-type alias Model =
-  {
-  }
+width : String -> Style a
+width w = Options.css "width" w
 
 
-{-| Default component model constructor.
+{-| Set card height. Height must be a valid CSS dimension.
 -}
-defaultModel : Model
-defaultModel =
-  {
-  }
+height : String -> Style a
+height h = Options.css "height" h
 
 
--- ACTION, UPDATE
-
-
-{-| Component action.
+{-| Add a border to the card.
 -}
-type Msg
-  = MyMsg
+border : Style a
+border = Options.cs "mdl-card--border"
 
 
-{-| Component update.
+{-| Set card shadow depth to 2.
 -}
-update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
-  (model, none)
+shadow2p : Style a
+shadow2p = Options.cs "mdl-shadow--2dp"
 
-
--- PROPERTIES
-
-
-type alias Config =
-  {
-  }
-
-
-defaultConfig : Config
-defaultConfig =
-  {
-  }
-
-
-type alias Property m =
-  Options.Property Config m
-
-
-{- See src/Material/Button.elm for an example of, e.g., an onClick handler.
+{-| Set card shadow depth to 3.
 -}
+shadow3p : Style a
+shadow3p = Options.cs "mdl-shadow--3dp"
 
-
--- VIEW
-
-
-{-| Component view.
+{-| Set card shadow depth to 4.
 -}
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options elems =
-  Options.div
-    ( cs "TEMPLATE"
-    :: options
-    )
-    [ h6 [] [ text "TEMPLATE COMPONENT" ]
-    ]
+shadow4p : Style a
+shadow4p = Options.cs "mdl-shadow--4dp"
 
-
--- COMPONENT
-
-type alias Container c =
-  { c | template : Indexed Model }
-
-
-{-| Component render.
+{-| Set card shadow depth to 8.
 -}
-render
-  : (Parts.Msg (Container c) -> m)
-  -> Parts.Index
-  -> (Container c)
-  -> List (Property m)
-  -> List (Html m)
-  -> Html m
-render =
-  Parts.create view update .template (\x y -> {y | template=x}) defaultModel
+shadow8p : Style a
+shadow8p = Options.cs "mdl-shadow--8dp"
 
-{- See src/Material/Layout.mdl for how to add subscriptions. -}
+{-| Set card shadow depth to 16.
+-}
+shadow16p : Style a
+shadow16p = Options.cs "mdl-shadow--16dp"
+
+
+type ContentBlock msg
+  = Title (List (Style msg)) String
+  | TitleAndSubtitle (List (Style msg)) String String
+  | Menu (List (Style msg)) (List (Html msg))
+  | Media (List (Style msg)) (List (Html msg))
+  | SupportingText (List (Style msg)) (List (Html msg))
+  | Actions (List (Style msg)) (List (Html msg))
+
+
+contentBlock : ContentBlock msg -> Html msg
+contentBlock block =
+  case block of
+    Title styling title ->
+      Options.div (cs "mdl-card__title" :: styling)
+        [ Options.styled Html.h2
+          (cs "mdl-card__title-text" :: styling)
+          [ text title
+          ]
+        ]
+    TitleAndSubtitle styling title subtitle ->
+      Options.div (cs "mdl-card__title" :: styling)
+        [ Options.styled Html.h2
+          (cs "mdl-card__title-text" :: styling)
+          [ text title ]
+        , Options.span (cs "mdl-card__subtitle-text" :: styling) [text subtitle]
+        ]
+    Menu styling content ->
+      Options.div (cs "mdl-card__menu" :: styling) content
+    Media styling content ->
+      Options.div (cs "mdl-card__media" :: styling) content
+    SupportingText styling content ->
+      Options.div (cs "mdl-card__supporting-text" :: styling) content
+    Actions styling content ->
+      Options.div (cs "mdl-card__actions" :: styling) content
+
+
+{-| Construct a card with options.
+-}
+card : List (Style msg) -> List (ContentBlock msg) -> Html msg
+card styling contentBlocks =
+  Options.div (cs "mdl-card" :: styling) (List.map (contentBlock) contentBlocks)

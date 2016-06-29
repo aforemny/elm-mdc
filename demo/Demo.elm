@@ -36,7 +36,7 @@ import Demo.Tooltip
 import Demo.Tabs
 import Demo.Slider
 import Demo.Typography
-import Demo.Card
+import Demo.Cards
 --import Demo.Template
 
 
@@ -60,6 +60,7 @@ type alias Model =
   , tabs : Demo.Tabs.Model
   , slider : Demo.Slider.Model
   , typography : Demo.Typography.Model
+  , cards : Demo.Cards.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -83,6 +84,7 @@ model =
   , tabs = Demo.Tabs.model
   , slider = Demo.Slider.model
   , typography = Demo.Typography.model
+  , cards = Demo.Cards.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -110,6 +112,7 @@ type Msg
   | TabMsg Demo.Tabs.Msg
   | SliderMsg Demo.Slider.Msg
   | TypographyMsg Demo.Typography.Msg
+  | CardsMsg Demo.Cards.Msg
   | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
@@ -157,6 +160,8 @@ update action model =
 
     TypographyMsg  a -> lift  .typography   (\m x->{m|typography  =x}) TypographyMsg Demo.Typography.update   a model
 
+    CardsMsg   a -> lift  .cards    (\m x->{m|cards   =x}) CardsMsg  Demo.Cards.update    a model
+
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
 
@@ -167,7 +172,7 @@ tabs : List (String, String, Model -> Html Msg)
 tabs =
   [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
   , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
-  , ("Cards", "cards", \_ -> Demo.Card.view)
+  , ("Cards", "cards", .cards >> Demo.Cards.view >> App.map CardsMsg)
   , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
   , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
   , ("Grid", "grid", \_ -> Demo.Grid.view)

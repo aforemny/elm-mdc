@@ -1,25 +1,68 @@
-module Demo.Card exposing (..)
+module Demo.Cards exposing (model, update, view, Model, Msg)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
-import Material.Card as Card
+import Material.Card exposing (..)
+import Material.Button as Button exposing (..)
+import Material.Icon as Icon
 import Material
 
 import Demo.Page as Page
 
 
+-- MODEL
+
+
+type alias Model =
+  { mdl : Material.Model
+  }
+
+
+model : Model
+model =
+  { mdl = Material.model
+  }
+
+
+-- ACTION/UPDATE
+
+
+type Msg
+  = Mdl Material.Msg
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update action model =
+  case action of
+    Mdl action' ->
+      Material.update Mdl action' model
+
+
 -- VIEW
 
-
-view : Html a
-view =
-  [ div
-      []
-      [
+view : Model -> Html Msg
+view model =
+  [ card [ width "512px", shadow2p ]
+    [ Title [] "Welcome"
+    , SupportingText []
+      [text """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Mauris sagittis pellentesque lacus eleifend lacinia...
+"""]
+    , Actions [ border ]
+      [ button [] [text "Get started"]
       ]
+    , Menu []
+      [ Button.render Mdl [0] model.mdl
+        [ Button.icon
+        , Button.ripple
+        ]
+        [ Icon.i "share"]
+      ]
+    ]
   ]
-  |> Page.body2 "Card" srcUrl intro references
+  |> Page.body2 "Cards" srcUrl intro references
 
 
 intro : Html m
