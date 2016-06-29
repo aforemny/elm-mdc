@@ -4,11 +4,6 @@ module Material.Card exposing
   , width
   , height
   , border
-  , shadow2p
-  , shadow3p
-  , shadow4p
-  , shadow8p
-  , shadow16p
   )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
@@ -63,32 +58,6 @@ height h = Options.css "height" h
 -}
 border : Style a
 border = Options.cs "mdl-card--border"
-
-
-{-| Set card shadow depth to 2.
--}
-shadow2p : Style a
-shadow2p = Options.cs "mdl-shadow--2dp"
-
-{-| Set card shadow depth to 3.
--}
-shadow3p : Style a
-shadow3p = Options.cs "mdl-shadow--3dp"
-
-{-| Set card shadow depth to 4.
--}
-shadow4p : Style a
-shadow4p = Options.cs "mdl-shadow--4dp"
-
-{-| Set card shadow depth to 8.
--}
-shadow8p : Style a
-shadow8p = Options.cs "mdl-shadow--8dp"
-
-{-| Set card shadow depth to 16.
--}
-shadow16p : Style a
-shadow16p = Options.cs "mdl-shadow--16dp"
 
 
 type ContentBlock msg

@@ -6,6 +6,7 @@ import Html exposing (..)
 import Material.Card exposing (..)
 import Material.Button as Button exposing (..)
 import Material.Icon as Icon
+import Material.Elevation exposing(..)
 import Material
 
 import Demo.Page as Page
@@ -43,7 +44,7 @@ update action model =
 
 view : Model -> Html Msg
 view model =
-  [ card [ width "512px", shadow2p ]
+  [ card [ width "512px", e2 ]
     [ Title [] "Welcome"
     , SupportingText []
       [text """
