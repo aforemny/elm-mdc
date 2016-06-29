@@ -34,10 +34,8 @@ for a live demo.
 @docs Container, Observer, Instance, instance, fwdTemplate
 -}
 
-
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-
 import Parts exposing (Indexed)
 import Material.Options as Options exposing (Style, cs)
 
@@ -79,6 +77,7 @@ contentBlock block =
           [ text title
           ]
         ]
+
     TitleAndSubtitle styling title subtitle ->
       Options.div (cs "mdl-card__title" :: styling)
         [ Options.styled Html.h2
@@ -86,12 +85,16 @@ contentBlock block =
           [ text title ]
         , Options.span (cs "mdl-card__subtitle-text" :: styling) [text subtitle]
         ]
+
     Menu styling content ->
       Options.div (cs "mdl-card__menu" :: styling) content
+
     Media styling content ->
       Options.div (cs "mdl-card__media" :: styling) content
+
     SupportingText styling content ->
       Options.div (cs "mdl-card__supporting-text" :: styling) content
+
     Actions styling content ->
       Options.div (cs "mdl-card__actions" :: styling) content
 
