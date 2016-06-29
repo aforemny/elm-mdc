@@ -1,11 +1,16 @@
 ELM=elm-make --yes
 PAGES=../elm-mdl-gh-pages
+CLOSURE_COMPILER=compiler.jar
 
 demo:
 	(cd demo; $(ELM) Demo.elm --warn --output ../elm.js)
 
 run-demo:
 	(cd demo; pkill elm-reactor; elm-reactor &)
+
+compile : demo
+	java -jar $(CLOSURE_COMPILER) -O ADVANCED --assume_function_wrapper --js elm.js > /tmp/elm.js && mv /tmp/elm.js elm.js
+	
 
 comp: 
 	$(ELM) examples/Component.elm --warn --output elm.js
