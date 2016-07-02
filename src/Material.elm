@@ -174,6 +174,7 @@ import Material.Layout as Layout
 import Material.Toggles as Toggles
 import Material.Tooltip as Tooltip
 import Material.Tabs as Tabs
+import Material.Slider as Slider
 --import Material.Template as Template
 
 
@@ -190,6 +191,7 @@ type alias Model =
   , toggles : Indexed Toggles.Model
   , tooltip : Indexed Tooltip.Model
   , tabs : Indexed Tabs.Model
+  , slider : Indexed Slider.Model
 --  , template : Indexed Template.Model
   }
 
@@ -206,6 +208,7 @@ model =
   , toggles = Dict.empty
   , tooltip = Dict.empty
   , tabs = Dict.empty
+  , slider = Dict.empty
 --  , template = Dict.empty
   }
 
