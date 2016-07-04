@@ -1,8 +1,5 @@
 module Material.Slider exposing
-  ( Model, defaultModel, Msg, update, view
-  , Property
-  , render
-  )
+  (..)
 
 -- TEMPLATE. Copy this to a file for your component, then update.
 
@@ -31,7 +28,12 @@ import Html.Attributes as Html
 import Html.Events as Html
 
 import Parts exposing (Indexed)
-import Material.Options as Options exposing (Style, cs, css)
+import Material.Options as Options exposing (cs, css)
+import Material.Options.Internal as Internal
+import Material.Helpers as Helpers
+
+import Json.Decode as Json
+import DOM
 
 
 -- MODEL
@@ -71,20 +73,36 @@ update action model =
 -- PROPERTIES
 
 
-type alias Config =
-  {
+type alias Config m =
+  { value : Float
+  , min : Float
+  , max : Float
+  , listener : Maybe (Float -> m)
   }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
-  {
+  { value = 0
+  , min = 0
+  , max = 100
+  , listener = Nothing
   }
 
 
 type alias Property m =
-  Options.Property Config m
+  Options.Property (Config m) m
 
+
+
+value : Float -> Property m
+value v =
+  Options.set (\options -> { options | value = v })
+
+
+onChange : (Float -> m) -> Property m
+onChange l =
+  Options.set (\options -> { options | listener = Just l })
 
 {- See src/Material/Button.elm for an example of, e.g., an onClick handler.
 -}
@@ -103,6 +121,42 @@ type alias Property m =
   };
 -}
 
+onContainerClick : Html.Attribute m
+onContainerClick = """
+(function(event) {
+    if (event.target.className.indexOf("mdl-slider__container") === -1) {
+        console.log("not slider event", event);
+        return;
+    }
+
+    // Discard the original event and create a new event that
+    // is on the slider element.
+    event.preventDefault();
+
+    var elem = event.target.querySelector('input.mdl-slider');
+
+    var newEvent = new MouseEvent('mousedown', {
+      target: event.target,
+      buttons: event.buttons,
+      clientX: event.clientX,
+      clientY: elem.getBoundingClientRect().y
+    });
+    console.log("new event", newEvent);
+    elem.dispatchEvent(newEvent);
+
+})(window.event);
+
+  """
+    |> Html.attribute "onmousedown"
+
+floatVal : Json.Decoder Float
+floatVal =
+  Debug.log "JSON" (Json.at ["target", "valueAsNumber"] Json.float)
+
+
+script : String -> Html m
+script src =
+  Html.node "script" [] [Html.text src]
 
 {-| Component view.
 -}
@@ -115,34 +169,51 @@ view lift model options elems =
     config =
       summary.config
 
+    fraction = (config.value - config.min) / (config.max - config.min)
+
+
+    lower = (toString fraction) ++ " 1 0%"
+    upper = (toString (1 - fraction)) ++ " 1 0%"
+
     background =
       Options.styled Html.div
         [cs "mdl-slider__background-flex"]
         [ Options.styled Html.div
             [ cs "mdl-slider__background-lower"
-            , css "flex" "0 1 0%"
+            , css "flex" lower
             ]
             []
         , Options.styled Html.div
             [ cs "mdl-slider__background-upper"
-            , css "flex" "1 1 0%"
+            , css "flex" upper
             ]
             []
         ]
   in
     Options.styled Html.div
-      [cs "mdl-slider__container"]
+      [ cs "mdl-slider__container"
+      --, Internal.attribute <| (Html.attribute "onmousedown" "onSliderContainerMouseDown(window.event);")
+      ]
       [ Html.input
           [ Html.classList [ ("mdl-slider", True)
                            , ("mdl-js-slider", True)
                            , ("is-upgraded", True)
-                           , ("is-lowest-value", True)
+                           , ("is-lowest-value", fraction == 0)
                            ]
 
           , Html.type' "range"
           , Html.min "0"
           , Html.max "100"
-          , Html.value "0"
+          --, Html.value
+          , Html.attribute "value" "0"
+          , case config.listener of
+              Just l -> Html.on "change" (Json.map l floatVal)
+              Nothing -> Helpers.noAttr
+          , case config.listener of
+              Just l -> Html.on "input" (Json.map l floatVal)
+              Nothing -> Helpers.noAttr
+
+          , Helpers.blurOn "mouseup"
           ]
           []
       , background
