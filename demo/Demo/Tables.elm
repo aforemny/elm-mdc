@@ -3,7 +3,6 @@ module Demo.Tables exposing (..)
 import Html exposing (..)
 
 import Material
-import Material.Grid as Grid exposing (grid, cell, size, Device(..))
 import Material.Helpers exposing (pure, map1st, map2nd)
 import Material.Table as Table
 
