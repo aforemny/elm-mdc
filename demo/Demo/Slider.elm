@@ -35,10 +35,8 @@ model =
 
 -- ACTION, UPDATE
 
-
 type Msg
-  = SliderMsg Float
-  | Slider Int Float
+  = Slider Int Float
   | Mdl Material.Msg
 
 
@@ -50,11 +48,6 @@ get key dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    SliderMsg value ->
-      let
-        _ = []--Debug.log "VALUE" value
-      in
-        ({ model | value = value }, Cmd.none)
 
     Slider idx value ->
       let
@@ -71,8 +64,7 @@ update action model =
 
 view : Model -> Html Msg
 view model  =
-  [ Slider.script scriptHelp
-  , Html.p
+  [ Html.p
       [ Html.style [("width", "300px")]]
       [ Slider.render Mdl [0] model.mdl
           [ Slider.onChange (Slider 0)
@@ -110,43 +102,3 @@ references =
   , Page.mds "https://www.google.com/design/spec/components/TEMPLATE.html"
   , Page.mdl "https://www.getmdl.io/components/index.html#TEMPLATE"
   ]
-
-
-scriptHelp : String
-scriptHelp =
-  """
-   function onSliderContainerMouseDown(event) {
-   console.log("original", event)
-    if (event.target.className.indexOf("mdl-slider__container") === -1) {
-        console.log("not slider event", event);
-        return;
-    }
-
-    // Discard the original event and create a new event that
-    // is on the slider element.
-    event.preventDefault();
-
-    var elem = event.target.querySelector('input.mdl-slider');
-
-    var newEvent = new MouseEvent('mousedown', {
-      target: event.target,
-      buttons: event.buttons,
-      clientX: event.clientX,
-      clientY: elem.getBoundingClientRect().y
-    });
-    console.log("new event", newEvent);
-    elem.dispatchEvent(newEvent);
-}
-
-  function setupListeners() {
-    var containers = document.querySelectorAll(".mdl-slider__container");
-    containers.forEach(function(element) {
-        console.log("processing", element)
-        element.removeEventListener('mousedown', onSliderContainerMouseDown);
-        element.addEventListener('mousedown', onSliderContainerMouseDown);
-    });
-}
-
-  setTimeout(setupListeners, 1000);
-
-  """
