@@ -1,13 +1,24 @@
 module Material.Slider exposing (..)
 
-{-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#TEMPLATE-section):
+{-| From the [Material Design Lite documentation](https://material.google.com/components/sliders.html):
 
-> ...
+> The Material Design Lite (MDL) slider component is an enhanced version of the
+> new HTML5 `<input type="range">` element. A slider consists of a horizontal line
+> upon which sits a small, movable disc (the thumb) and, typically, text that
+> clearly communicates a value that will be set when the user moves it.
+>
+> Sliders are a fairly new feature in user interfaces, and allow users to choose a
+> value from a predetermined range by moving the thumb through the range (lower
+> values to the left, higher values to the right). Their design and use is an
+> important factor in the overall user experience. See the slider component's
+> [Material Design specifications](https://material.google.com/components/sliders.html) page for details.
+>
+> The enhanced slider component may be initially or programmatically disabled.
 
 See also the
-[Material Design Specification]([https://www.google.com/design/spec/components/TEMPLATE.html).
+[Material Design Specification](https://material.google.com/components/sliders.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/template)
+Refer to [this site](http://debois.github.io/elm-mdl#/sliders)
 for a live demo.
 
 @docs Model, model, Msg, update
@@ -74,6 +85,7 @@ type alias Config m =
   , min : Float
   , max : Float
   , listener : Maybe (Float -> m)
+  , disabled : Bool
   }
 
 
@@ -83,6 +95,7 @@ defaultConfig =
   , min = 0
   , max = 100
   , listener = Nothing
+  , disabled = False
   }
 
 
@@ -93,6 +106,11 @@ type alias Property m =
 value : Float -> Property m
 value v =
   Options.set (\options -> { options | value = v })
+
+
+disabled : Property m
+disabled =
+  Options.set (\options -> { options | disabled = True })
 
 
 onChange : (Float -> m) -> Property m

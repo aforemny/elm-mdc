@@ -80,25 +80,45 @@ view model  =
           ]
           []
       ]
+
+  , Html.p
+      [ Html.style [("width", "300px")]]
+      [ Slider.render Mdl [2] model.mdl
+          [ Slider.onChange (Slider 2)
+          , Slider.value (get 2 model.values)
+          ]
+          []
+      ]
   ]
   |> Page.body2 "Sliders" srcUrl intro references
 
 
 intro : Html m
 intro =
-  Page.fromMDL "https://www.getmdl.io/components/index.html#TEMPLATE-section" """
-> ...
+  Page.fromMDL "https://getmdl.io/components/index.html#sliders-section" """
+> The Material Design Lite (MDL) slider component is an enhanced version of the
+> new HTML5 `<input type="range">` element. A slider consists of a horizontal line
+> upon which sits a small, movable disc (the thumb) and, typically, text that
+> clearly communicates a value that will be set when the user moves it.
+>
+> Sliders are a fairly new feature in user interfaces, and allow users to choose a
+> value from a predetermined range by moving the thumb through the range (lower
+> values to the left, higher values to the right). Their design and use is an
+> important factor in the overall user experience. See the slider component's
+> [Material Design specifications](https://material.google.com/components/sliders.html) page for details.
+>
+> The enhanced slider component may be initially or programmatically disabled.
 """
 
 
 srcUrl : String
 srcUrl =
-  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/TEMPLATE.elm"
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Slider.elm"
 
 
 references : List (String, String)
 references =
-  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-TEMPLATE"
-  , Page.mds "https://www.google.com/design/spec/components/TEMPLATE.html"
-  , Page.mdl "https://www.getmdl.io/components/index.html#TEMPLATE"
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Slider"
+  , Page.mds "https://material.google.com/components/sliders.html"
+  , Page.mdl "https://getmdl.io/components/index.html#sliders-section"
   ]
