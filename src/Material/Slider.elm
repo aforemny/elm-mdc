@@ -1,4 +1,14 @@
-module Material.Slider exposing (..)
+module Material.Slider
+  exposing
+    ( Property
+    , value
+    , min
+    , max
+    , step
+    , disabled
+    , onChange
+    , slider
+    )
 
 {-| From the [Material Design Lite documentation](https://material.google.com/components/sliders.html):
 
@@ -21,12 +31,20 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/sliders)
 for a live demo.
 
-@docs Model, model, Msg, update
-@docs view
+#View
 
-# Component support
+@docs slider 
 
-@docs Container, Observer, Instance, instance, fwdTemplate
+# Properties 
+
+@docs Property
+@docs value, min, max 
+@docs step, disabled 
+
+# Events
+
+@docs onChange
+
 -}
 
 import Html exposing (..)
@@ -39,6 +57,7 @@ import Json.Decode as Json
 
 
 -- PROPERTIES
+
 
 type alias Config m =
   { value : Float
@@ -61,6 +80,8 @@ defaultConfig =
   }
 
 
+{-| Properties for Slider options.
+-}
 type alias Property m =
   Options.Property (Config m) m
 
@@ -109,9 +130,11 @@ onChange l =
 
 floatVal : Json.Decoder Float
 floatVal =
-  Debug.log "JSON" (Json.at [ "target", "valueAsNumber" ] Json.float)
+  (Json.at [ "target", "valueAsNumber" ] Json.float)
 
 
+{-| A slider.
+-}
 slider : List (Property m) -> Html m
 slider options =
   let
@@ -193,4 +216,3 @@ slider options =
           []
       , background
       ]
-

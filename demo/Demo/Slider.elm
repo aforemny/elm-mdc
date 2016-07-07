@@ -14,15 +14,8 @@ import Dict exposing (Dict)
 
 
 -- MODEL
-
-
-type alias Mdl =
-  Material.Model
-
-
 type alias Model =
   { mdl : Material.Model
-  , value : Float
   , values : Dict Int Float
   }
 
@@ -30,7 +23,6 @@ type alias Model =
 model : Model
 model =
   { mdl = Material.model
-  , value = 0
   , values = Dict.empty
   }
 
@@ -45,6 +37,7 @@ type Msg
 get : Int -> Dict Int Float -> Float
 get key dict =
   Dict.get key dict |> Maybe.withDefault 0
+
 
 getDef : Int -> Float -> Dict Int Float -> Float
 getDef key def dict =
@@ -85,18 +78,28 @@ view model  =
           [Grid.size Grid.All 12]
           [Code.code """
                         import Material.Slider as Slider
-                      """]
+
+                        slider : Model -> Html Msg 
+                        slider model = 
+                          p [ style [ ("width", "300px") ] ]
+                            [ Slider.slider 
+                                [ Slider.onChange SliderMsg 
+                                , Slider.value model.value  
+                                ]
+                            ]                    
+              """
+          ]
 
       , demoContainer
           ( Slider.slider
               [ Slider.onChange (Slider 0)
-              , Slider.value (get 0 model.values)
+              , Slider.value (getDef 0 50.0 model.values)
               ]
           ,
             """
             Slider.slider
               [ Slider.onChange SliderMsg
-              , Slider.value """ ++ (toString (get 0 model.values)) ++ """
+              , Slider.value """ ++ (toString (getDef 0 50.0 model.values)) ++ """
               ]
              """
           )
@@ -104,18 +107,18 @@ view model  =
       , demoContainer
           ( Slider.slider
               [ Slider.onChange (Slider 1)
-              , Slider.value (getDef 1 4.0 model.values)
+              , Slider.value (getDef 1 0.0 model.values)
               , Slider.max 10
-              , Slider.min 0
+              , Slider.min -10
               , Slider.step 2
               ]
           ,
             """
             Slider.slider
               [ Slider.onChange SliderMsg
-              , Slider.value """ ++ (toString (getDef 1 4.0 model.values)) ++ """
+              , Slider.value """ ++ (toString (getDef 1 0.0 model.values)) ++ """
               , Slider.max 10
-              , Slider.min 0
+              , Slider.min -10
               , Slider.step 2
               ]
              """
@@ -136,7 +139,8 @@ view model  =
               ]
              """
           )
-      ]
+      
+      ]    
   ]
   |> Page.body2 "Sliders" srcUrl intro references
 
