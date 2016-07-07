@@ -29,56 +29,16 @@ for a live demo.
 @docs Container, Observer, Instance, instance, fwdTemplate
 -}
 
--- TEMPLATE. Copy this to a file for your component, then update.
-
-import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.Attributes as Html
 import Html.Events as Html
-import Parts exposing (Indexed)
 import Material.Options as Options exposing (cs, css, when)
 import Material.Options.Internal as Internal
 import Material.Helpers as Helpers
 import Json.Decode as Json
-import DOM
-
-
--- MODEL
-
-
-{-| Component model.
--}
-type alias Model =
-  {}
-
-
-{-| Default component model constructor.
--}
-defaultModel : Model
-defaultModel =
-  {}
-
-
-
--- ACTION, UPDATE
-
-
-{-| Component action.
--}
-type Msg
-  = MyMsg
-
-
-{-| Component update.
--}
-update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  ( model, none )
-
 
 
 -- PROPERTIES
-
 
 type alias Config m =
   { value : Float
@@ -147,18 +107,13 @@ onChange l =
   Options.set (\options -> { options | listener = Just l })
 
 
--- VIEW
-
-
 floatVal : Json.Decoder Float
 floatVal =
   Debug.log "JSON" (Json.at [ "target", "valueAsNumber" ] Json.float)
 
 
-{-| Component view.
--}
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options elems =
+slider : List (Property m) -> Html m
+slider options =
   let
     summary =
       Options.collect defaultConfig options
@@ -191,7 +146,6 @@ view lift model options elems =
             ]
             []
         ]
-
 
     attr : String -> String -> Property m
     attr a v =
@@ -231,33 +185,12 @@ view lift model options elems =
           [ Html.type' "range"
           , Html.max (toString config.max)
           , Html.min (toString config.min)
-          , Html.step (toString  config.step)
-          
-          , Html.attribute "value" (toString config.value)
-          --, Html.attribute "value" "0"
+          , Html.step (toString config.step)
+            --, Html.attribute "value" (toString config.value)
+          , Html.value (toString config.value)
           , Helpers.blurOn "mouseup"
           ]
           []
       , background
       ]
 
-
-
--- COMPONENT
-
-
-type alias Container c =
-  { c | slider : Indexed Model }
-
-
-{-| Component render.
--}
-render :
-  (Parts.Msg (Container c) -> m)
-  -> Parts.Index
-  -> Container c
-  -> List (Property m)
-  -> List (Html m)
-  -> Html m
-render =
-  Parts.create view update .slider (\x y -> { y | slider = x }) defaultModel

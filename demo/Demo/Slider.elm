@@ -88,40 +88,52 @@ view model  =
                       """]
 
       , demoContainer
-          ( Slider.render Mdl [0] model.mdl
+          ( Slider.slider
               [ Slider.onChange (Slider 0)
               , Slider.value (get 0 model.values)
               ]
-              []
           ,
             """
-            Slider.render Mdl [0] model.mdl
-                          [ Slider.onChange SliderMsg
-                          , Slider.value """ ++ (toString (get 0 model.values)) ++ """
-                          ]
-                          []
+            Slider.slider
+              [ Slider.onChange SliderMsg
+              , Slider.value """ ++ (toString (get 0 model.values)) ++ """
+              ]
              """
           )
 
       , demoContainer
-          ( Slider.render Mdl [1] model.mdl
+          ( Slider.slider
               [ Slider.onChange (Slider 1)
               , Slider.value (getDef 1 4.0 model.values)
               , Slider.max 10
               , Slider.min 0
               , Slider.step 2
               ]
-              []
           ,
             """
-            Slider.render Mdl [1] model.mdl
-                          [ Slider.onChange SliderMsg
-                          , Slider.value """ ++ (toString (getDef 1 4.0 model.values)) ++ """
-                          , Slider.max 10
-                          , Slider.min 0
-                          , Slider.step 2
-                          ]
-                          []
+            Slider.slider
+              [ Slider.onChange SliderMsg
+              , Slider.value """ ++ (toString (getDef 1 4.0 model.values)) ++ """
+              , Slider.max 10
+              , Slider.min 0
+              , Slider.step 2
+              ]
+             """
+          )
+
+      , demoContainer
+          ( Slider.slider
+              [ Slider.onChange (Slider 2)
+              , Slider.value (getDef 2 50.0 model.values)
+              , Slider.disabled
+              ]
+          ,
+            """
+            Slider.slider
+              [ Slider.onChange SliderMsg
+              , Slider.value """ ++ (toString (getDef 2 50.0 model.values)) ++ """
+              , Slider.disabled
+              ]
              """
           )
       ]
