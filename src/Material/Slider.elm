@@ -100,6 +100,7 @@ defaultConfig =
   , disabled = False
   }
 
+
 type alias Property m =
   Options.Property (Config m) m
 
@@ -110,11 +111,13 @@ value : Float -> Property m
 value v =
   Options.set (\options -> { options | value = v })
 
+
 {-| Sets the step. Defaults to 0
 -}
 min : Float -> Property m
 min v =
   Options.set (\options -> { options | min = v })
+
 
 {-| Sets the step. Defaults to 100
 -}
@@ -144,25 +147,12 @@ onChange l =
   Options.set (\options -> { options | listener = Just l })
 
 
-
-{- See src/Material/Button.elm for an example of, e.g., an onClick handler.
- -}
 -- VIEW
 
 
 floatVal : Json.Decoder Float
 floatVal =
   Debug.log "JSON" (Json.at [ "target", "valueAsNumber" ] Json.float)
-
-
-type' : String -> Property m
-type' tp =
-  Internal.attribute <| Html.type' tp
-
-
-attr : String -> String -> Property m
-attr a v =
-  (Html.attribute a v) |> Internal.attribute
 
 
 {-| Component view.
@@ -202,15 +192,24 @@ view lift model options elems =
             []
         ]
 
+
+    attr : String -> String -> Property m
+    attr a v =
+      (Html.attribute a v) |> Internal.attribute
+
     onchange =
       case config.listener of
-        Nothing -> Options.nop
+        Nothing ->
+          Options.nop
+
         Just fun ->
           Internal.attribute <| Html.on "change" (Json.map fun floatVal)
 
     oninput =
       case config.listener of
-        Nothing -> Options.nop
+        Nothing ->
+          Options.nop
+
         Just fun ->
           Internal.attribute <| Html.on "input" (Json.map fun floatVal)
   in
@@ -232,7 +231,10 @@ view lift model options elems =
           [ Html.type' "range"
           , Html.max (toString config.max)
           , Html.min (toString config.min)
+          , Html.step (toString  config.step)
+          
           , Html.attribute "value" (toString config.value)
+          --, Html.attribute "value" "0"
           , Helpers.blurOn "mouseup"
           ]
           []

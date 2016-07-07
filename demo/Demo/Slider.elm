@@ -46,6 +46,10 @@ get : Int -> Dict Int Float -> Float
 get key dict =
   Dict.get key dict |> Maybe.withDefault 0
 
+getDef : Int -> Float -> Dict Int Float -> Float
+getDef key def dict =
+  Dict.get key dict |> Maybe.withDefault def
+
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
@@ -84,46 +88,42 @@ view model  =
                       """]
 
       , demoContainer
-          ( Slider.render Mdl [3] model.mdl
-              [ Slider.onChange (Slider 3)
-              , Slider.value (get 3 model.values)
+          ( Slider.render Mdl [0] model.mdl
+              [ Slider.onChange (Slider 0)
+              , Slider.value (get 0 model.values)
               ]
               []
           ,
             """
-            Slider.render Mdl [3] model.mdl
-                          [ Slider.onChange (Slider 3)
-                          , Slider.value """ ++ (toString (get 3 model.values)) ++ """
+            Slider.render Mdl [0] model.mdl
+                          [ Slider.onChange SliderMsg
+                          , Slider.value """ ++ (toString (get 0 model.values)) ++ """
                           ]
                           []
              """
           )
-      ]
-  , Html.p
-      [ Html.style [("width", "300px")]]
-      [ Slider.render Mdl [0] model.mdl
-          [ Slider.onChange (Slider 0)
-          , Slider.value (get 0 model.values)
-          ]
-          []
-      ]
-  , Html.p
-      [ Html.style [("width", "300px")]]
-      [ Slider.render Mdl [1] model.mdl
-          [ Slider.onChange (Slider 1)
-          , Slider.value (get 1 model.values)
-          ]
-          []
-      ]
 
-  , Html.p
-      [ Html.style [("width", "300px")]]
-      [ Slider.render Mdl [2] model.mdl
-          [ Slider.onChange (Slider 2)
-          , Slider.value (get 2 model.values)
-          , Slider.disabled
-          ]
-          []
+      , demoContainer
+          ( Slider.render Mdl [1] model.mdl
+              [ Slider.onChange (Slider 1)
+              , Slider.value (getDef 1 4.0 model.values)
+              , Slider.max 10
+              , Slider.min 0
+              , Slider.step 2
+              ]
+              []
+          ,
+            """
+            Slider.render Mdl [1] model.mdl
+                          [ Slider.onChange SliderMsg
+                          , Slider.value """ ++ (toString (getDef 1 4.0 model.values)) ++ """
+                          , Slider.max 10
+                          , Slider.min 0
+                          , Slider.step 2
+                          ]
+                          []
+             """
+          )
       ]
   ]
   |> Page.body2 "Sliders" srcUrl intro references
