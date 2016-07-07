@@ -6,7 +6,9 @@ import Html.Attributes as Html
 
 import Material.Slider as Slider
 import Material
+import Material.Grid as Grid
 
+import Demo.Code as Code
 import Demo.Page as Page
 import Dict exposing (Dict)
 
@@ -61,10 +63,43 @@ update action model =
 
 -- VIEW
 
+demoContainer : (Html m, String) -> Grid.Cell m
+demoContainer (html, code) =
+  Grid.cell
+    [Grid.size Grid.All 4]
+    [ Html.div [Html.style [("text-align", "center")]]
+        [html]
+    , Code.code code
+    ]
+
 
 view : Model -> Html Msg
 view model  =
-  [ Html.p
+  [ Html.p [] [text "Example use:"]
+  , Grid.grid[]
+      [ Grid.cell
+          [Grid.size Grid.All 12]
+          [Code.code """
+                        import Material.Slider as Slider
+                      """]
+
+      , demoContainer
+          ( Slider.render Mdl [3] model.mdl
+              [ Slider.onChange (Slider 3)
+              , Slider.value (get 3 model.values)
+              ]
+              []
+          ,
+            """
+            Slider.render Mdl [3] model.mdl
+                          [ Slider.onChange (Slider 3)
+                          , Slider.value """ ++ (toString (get 3 model.values)) ++ """
+                          ]
+                          []
+             """
+          )
+      ]
+  , Html.p
       [ Html.style [("width", "300px")]]
       [ Slider.render Mdl [0] model.mdl
           [ Slider.onChange (Slider 0)
