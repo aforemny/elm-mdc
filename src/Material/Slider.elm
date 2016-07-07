@@ -31,15 +31,17 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/sliders)
 for a live demo.
 
+*NOTE* Currently does not work properly on [Microsoft Edge](https://github.com/google/material-design-lite/issues/1625)
+
 #View
 
-@docs slider 
+@docs slider
 
-# Properties 
+# Properties
 
 @docs Property
-@docs value, min, max 
-@docs step, disabled 
+@docs value, min, max
+@docs step, disabled
 
 # Events
 
@@ -133,7 +135,18 @@ floatVal =
   (Json.at [ "target", "valueAsNumber" ] Json.float)
 
 
-{-| A slider.
+{-| A slider consists of a horizontal line upon which sits a small, movable disc (the thumb) and, typically, text that clearly communicates a value that will be set when the user moves it. Example use:
+
+    import Material.Slider as Slider
+
+    slider : Model -> Html Msg
+    slider model =
+      p [ style [ ("width", "300px") ] ]
+        [ Slider.slider
+            [ Slider.onChange SliderMsg
+            , Slider.value model.value
+            ]
+        ]
 -}
 slider : List (Property m) -> Html m
 slider options =
@@ -204,12 +217,13 @@ slider options =
               attr "disabled" ""
             else
               Options.nop
+            -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
+          , css "padding" "8px 0"
           ]
           [ Html.type' "range"
           , Html.max (toString config.max)
           , Html.min (toString config.min)
           , Html.step (toString config.step)
-            --, Html.attribute "value" (toString config.value)
           , Html.value (toString config.value)
           , Helpers.blurOn "mouseup"
           ]

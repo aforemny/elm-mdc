@@ -107,7 +107,7 @@ view model  =
       , demoContainer
           ( Slider.slider
               [ Slider.onChange (Slider 1)
-              , Slider.value (getDef 1 0.0 model.values)
+              , Slider.value (getDef 1 2.0 model.values)
               , Slider.max 10
               , Slider.min -10
               , Slider.step 2
@@ -116,7 +116,7 @@ view model  =
             """
             Slider.slider
               [ Slider.onChange SliderMsg
-              , Slider.value """ ++ (toString (getDef 1 0.0 model.values)) ++ """
+              , Slider.value """ ++ (toString (getDef 1 2.0 model.values)) ++ """
               , Slider.max 10
               , Slider.min -10
               , Slider.step 2
