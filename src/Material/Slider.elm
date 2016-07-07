@@ -84,58 +84,69 @@ type alias Config m =
   { value : Float
   , min : Float
   , max : Float
+  , step : Float
   , listener : Maybe (Float -> m)
   , disabled : Bool
-  , step : Float
   }
 
 
 defaultConfig : Config m
 defaultConfig =
-  { value = 0
+  { value = 50
   , min = 0
   , max = 100
+  , step = 1
   , listener = Nothing
   , disabled = False
-  , step = 1
   }
 
 type alias Property m =
   Options.Property (Config m) m
 
 
+{-| Sets current value
+-}
 value : Float -> Property m
 value v =
   Options.set (\options -> { options | value = v })
 
-
+{-| Sets the step. Defaults to 0
+-}
 min : Float -> Property m
 min v =
   Options.set (\options -> { options | min = v })
 
-
+{-| Sets the step. Defaults to 100
+-}
 max : Float -> Property m
 max v =
   Options.set (\options -> { options | max = v })
 
 
+{-| Sets the step. Defaults to 1
+-}
 step : Float -> Property m
 step v =
   Options.set (\options -> { options | step = v })
 
 
+{-| Disables the slider
+-}
 disabled : Property m
 disabled =
   Options.set (\options -> { options | disabled = True })
 
 
+{-| onChange listener for slider values
+-}
 onChange : (Float -> m) -> Property m
 onChange l =
   Options.set (\options -> { options | listener = Just l })
 
 
 
-{- See src/Material/Button.elm for an example of, e.g., an onClick handler. -}
+{- See src/Material/Button.elm for an example of, e.g., an onClick handler.
+ -}
 -- VIEW
 
 
@@ -225,40 +236,6 @@ view lift model options elems =
           , Helpers.blurOn "mouseup"
           ]
           []
-
-       -- Html.input
-       --    [ Html.classList
-       --        [ ( "mdl-slider", True )
-       --        , ( "mdl-js-slider", True )
-       --        , ( "is-upgraded", True )
-       --        , ( "is-lowest-value", fraction == 0 )
-       --        ]
-       --    , Html.type' "range"
-       --    , Html.min "0"
-       --    , Html.max "100"
-       --      --, Html.value
-       --    , Html.attribute "value" "0"
-
-       --    , if config.disabled then
-       --        Html.attribute "disabled" ""
-       --      else
-       --        Helpers.noAttr
-
-       --    , case config.listener of
-       --        Just l ->
-       --          Html.on "change" (Json.map l floatVal)
-
-       --        Nothing ->
-       --          Helpers.noAttr
-       --    , case config.listener of
-       --        Just l ->
-       --          Html.on "input" (Json.map l floatVal)
-
-       --        Nothing ->
-       --          Helpers.noAttr
-       --    , Helpers.blurOn "mouseup"
-       --    ]
-       --    []
       , background
       ]
 
