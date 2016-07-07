@@ -36,7 +36,7 @@ import Html exposing (..)
 import Html.Attributes as Html
 import Html.Events as Html
 import Parts exposing (Indexed)
-import Material.Options as Options exposing (cs, css)
+import Material.Options as Options exposing (cs, css, when)
 import Material.Options.Internal as Internal
 import Material.Helpers as Helpers
 import Json.Decode as Json
@@ -86,6 +86,7 @@ type alias Config m =
   , max : Float
   , listener : Maybe (Float -> m)
   , disabled : Bool
+  , step : Float
   }
 
 
@@ -96,8 +97,8 @@ defaultConfig =
   , max = 100
   , listener = Nothing
   , disabled = False
+  , step = 1
   }
-
 
 type alias Property m =
   Options.Property (Config m) m
@@ -106,6 +107,21 @@ type alias Property m =
 value : Float -> Property m
 value v =
   Options.set (\options -> { options | value = v })
+
+
+min : Float -> Property m
+min v =
+  Options.set (\options -> { options | min = v })
+
+
+max : Float -> Property m
+max v =
+  Options.set (\options -> { options | max = v })
+
+
+step : Float -> Property m
+step v =
+  Options.set (\options -> { options | step = v })
 
 
 disabled : Property m
@@ -126,6 +142,16 @@ onChange l =
 floatVal : Json.Decoder Float
 floatVal =
   Debug.log "JSON" (Json.at [ "target", "valueAsNumber" ] Json.float)
+
+
+type' : String -> Property m
+type' tp =
+  Internal.attribute <| Html.type' tp
+
+
+attr : String -> String -> Property m
+attr a v =
+  (Html.attribute a v) |> Internal.attribute
 
 
 {-| Component view.
@@ -164,37 +190,75 @@ view lift model options elems =
             ]
             []
         ]
+
+    onchange =
+      case config.listener of
+        Nothing -> Options.nop
+        Just fun ->
+          Internal.attribute <| Html.on "change" (Json.map fun floatVal)
+
+    oninput =
+      case config.listener of
+        Nothing -> Options.nop
+        Just fun ->
+          Internal.attribute <| Html.on "input" (Json.map fun floatVal)
   in
     Options.styled Html.div
       [ cs "mdl-slider__container"
       ]
-      [ Html.input
-          [ Html.classList
-              [ ( "mdl-slider", True )
-              , ( "mdl-js-slider", True )
-              , ( "is-upgraded", True )
-              , ( "is-lowest-value", fraction == 0 )
-              ]
-          , Html.type' "range"
-          , Html.min "0"
-          , Html.max "100"
-            --, Html.value
-          , Html.attribute "value" "0"
-          , case config.listener of
-              Just l ->
-                Html.on "change" (Json.map l floatVal)
-
-              Nothing ->
-                Helpers.noAttr
-          , case config.listener of
-              Just l ->
-                Html.on "input" (Json.map l floatVal)
-
-              Nothing ->
-                Helpers.noAttr
+      [ Options.styled' Html.input
+          [ cs "mdl-slider"
+          , cs "mdl-js-slider"
+          , cs "is-upgraded"
+          , cs "is-lowest-value" `when` (fraction == 0)
+          , onchange
+          , oninput
+          , if config.disabled then
+              attr "disabled" ""
+            else
+              Options.nop
+          ]
+          [ Html.type' "range"
+          , Html.max (toString config.max)
+          , Html.min (toString config.min)
+          , Html.attribute "value" (toString config.value)
           , Helpers.blurOn "mouseup"
           ]
           []
+
+       -- Html.input
+       --    [ Html.classList
+       --        [ ( "mdl-slider", True )
+       --        , ( "mdl-js-slider", True )
+       --        , ( "is-upgraded", True )
+       --        , ( "is-lowest-value", fraction == 0 )
+       --        ]
+       --    , Html.type' "range"
+       --    , Html.min "0"
+       --    , Html.max "100"
+       --      --, Html.value
+       --    , Html.attribute "value" "0"
+
+       --    , if config.disabled then
+       --        Html.attribute "disabled" ""
+       --      else
+       --        Helpers.noAttr
+
+       --    , case config.listener of
+       --        Just l ->
+       --          Html.on "change" (Json.map l floatVal)
+
+       --        Nothing ->
+       --          Helpers.noAttr
+       --    , case config.listener of
+       --        Just l ->
+       --          Html.on "input" (Json.map l floatVal)
+
+       --        Nothing ->
+       --          Helpers.noAttr
+       --    , Helpers.blurOn "mouseup"
+       --    ]
+       --    []
       , background
       ]
 

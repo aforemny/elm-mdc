@@ -86,6 +86,7 @@ view model  =
       [ Slider.render Mdl [2] model.mdl
           [ Slider.onChange (Slider 2)
           , Slider.value (get 2 model.values)
+          , Slider.disabled
           ]
           []
       ]
