@@ -2,7 +2,6 @@ module Demo.Slider exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Attributes as Html
 
 import Material.Slider as Slider
 import Material
@@ -64,8 +63,7 @@ demoContainer : (Html m, String) -> Grid.Cell m
 demoContainer (html, code) =
   Grid.cell
     [Grid.size Grid.All 4]
-    [ Html.div [Html.style [("text-align", "center")]]
-        [html]
+    [ html
     , Code.code code
     ]
 
@@ -76,19 +74,7 @@ view model  =
   , Grid.grid[]
       [ Grid.cell
           [Grid.size Grid.All 12]
-          [Code.code """
-                        import Material.Slider as Slider
-
-                        slider : Model -> Html Msg 
-                        slider model = 
-                          p [ style [ ("width", "300px") ] ]
-                            [ Slider.slider 
-                                [ Slider.onChange SliderMsg 
-                                , Slider.value model.value  
-                                ]
-                            ]                    
-              """
-          ]
+          [Code.code "import Material.Slider as Slider"]
 
       , demoContainer
           ( Slider.slider
@@ -125,19 +111,26 @@ view model  =
           )
 
       , demoContainer
-          ( Slider.slider
+          (let v = getDef 0 50.0 model.values + getDef 1 2.0 model.values in
+          ( 
+            Slider.slider
               [ Slider.onChange (Slider 2)
-              , Slider.value (getDef 2 50.0 model.values)
+              , Slider.value v
+              , Slider.min -10
+              , Slider.max 110
               , Slider.disabled
               ]
           ,
             """
             Slider.slider
               [ Slider.onChange SliderMsg
-              , Slider.value """ ++ (toString (getDef 2 50.0 model.values)) ++ """
+              , Slider.value """ ++ (toString v) ++ """
+              , Slider.min -10
+              , Slider.max 110
               , Slider.disabled
               ]
              """
+          )
           )
       
       ]    

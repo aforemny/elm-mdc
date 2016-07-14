@@ -166,13 +166,13 @@ tabs =
   , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
   , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
   , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
+  , ("Sliders", "sliders", .slider >> Demo.Slider.view >> App.map SliderMsg)
   , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
   , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
   , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> App.map TooltipMsg)
   , ("Tabs", "tabs", .tabs >> Demo.Tabs.view >> App.map TabMsg)
-  , ("Sliders", "sliders", .slider >> Demo.Slider.view >> App.map SliderMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   ]
 

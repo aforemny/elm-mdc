@@ -30,7 +30,6 @@ import Platform.Cmd exposing (Cmd)
 import Time exposing (Time)
 import Task
 import Process
-import Json.Encode as Encoder
 
 
 {-| Convert a Html element from taking a list of sub-elements to a list of

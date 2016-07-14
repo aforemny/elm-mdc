@@ -135,7 +135,9 @@ floatVal =
   (Json.at [ "target", "valueAsNumber" ] Json.float)
 
 
-{-| A slider consists of a horizontal line upon which sits a small, movable disc (the thumb) and, typically, text that clearly communicates a value that will be set when the user moves it. Example use:
+{-| A slider consists of a horizontal line upon which sits a small, movable
+disc (the thumb) and, typically, text that clearly communicates a value that
+will be set when the user moves it. Example use:
 
     import Material.Slider as Slider
 
@@ -183,25 +185,17 @@ slider options =
             []
         ]
 
-    attr : String -> String -> Property m
-    attr a v =
-      (Html.attribute a v) |> Internal.attribute
+    listeners =
+      config.listener
+        |> Maybe.map (\f -> 
+             [ Html.on "change" (Json.map f floatVal)
+             , Html.on "input" (Json.map f floatVal)
+             ]
+             |> List.map Internal.attribute
+             |> Options.many
+           )
+        |> Maybe.withDefault Options.nop 
 
-    onchange =
-      case config.listener of
-        Nothing ->
-          Options.nop
-
-        Just fun ->
-          Internal.attribute <| Html.on "change" (Json.map fun floatVal)
-
-    oninput =
-      case config.listener of
-        Nothing ->
-          Options.nop
-
-        Just fun ->
-          Internal.attribute <| Html.on "input" (Json.map fun floatVal)
   in
     Options.styled Html.div
       [ cs "mdl-slider__container"
@@ -211,12 +205,8 @@ slider options =
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
-          , onchange
-          , oninput
-          , if config.disabled then
-              attr "disabled" ""
-            else
-              Options.nop
+          , listeners
+          , Options.disabled config.disabled
             -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
           , css "padding" "8px 0"
           ]
