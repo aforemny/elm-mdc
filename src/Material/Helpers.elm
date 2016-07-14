@@ -179,14 +179,6 @@ cssTransitionStep x =
   delay 50 x -- 20 fps
 
 
-{-| TODO: Disappared in Elm 0.17, but necessary for correctness of CSS transitions under
-virtual dom. 
--}
-key : String -> Html.Attribute a
-key k =
-  Html.Attributes.property "key" (Encoder.string k)
-
-
 {-| Fake attribute with no effect. Useful to conditionally add attributes, e.g.,
 
     button 
