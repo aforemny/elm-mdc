@@ -82,6 +82,7 @@ import Material.Ripple as Ripple
 import Html.App
 import Html.Attributes as Html exposing (class)
 import Html.Events as Html
+import Html.Keyed as Keyed
 import Dict exposing (Dict)
 
 
@@ -209,10 +210,15 @@ view lift model options tabs tabContent =
 
     -- Wraps the tab content into a proper tab panel
     -- Always active because the visible tab is always active.
+    {- Keyed to prevent scrolling state being retained when we switch tab.
+       This does cause scrolling to reset when changing tabs.
+    -}
     wrapContent =
-      Options.styled Html.div
-        [ cs "mdl-tabs__panel"
-        , cs "is-active"
+      Keyed.node "div"
+        [ Html.classList
+            [ ( "mdl-tab__panel", True )
+            , ( "is-active", True )
+            ]
         ]
 
     unwrapLabel tabIdx (Label ( props, content )) =
@@ -259,7 +265,9 @@ view lift model options tabs tabContent =
       , cs "mdl-js-ripple-effect--ignore-events" `when` config.ripple
       ]
       []
-      (links :: (wrapContent tabContent) :: [])
+      [ links
+      , (wrapContent [ ( toString config.activeTab, Html.div [] tabContent ) ])
+      ]
 
 
 
