@@ -5,7 +5,7 @@ Port of Google's
 CSS/JS implementation of the
 [Material Design Specification](https://www.google.com/design/spec/material-design/introduction.html).
 
-[Live demo](https://debois.github.io/elm-mdl/).
+[Live demo](https://debois.github.io/elm-mdl/) & [package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest).
 
 [![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
 
