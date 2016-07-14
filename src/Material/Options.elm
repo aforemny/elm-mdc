@@ -1,7 +1,7 @@
 module Material.Options exposing
   ( Property, Summary, collect
   , cs, css, many, nop, set, data
-  , when 
+  , when, disabled
   , apply, styled, styled', stylesheet
   , Style, div, span, onHover
   )
@@ -16,7 +16,7 @@ for intended use.
 @docs cs, css, data, many, nop, when
 
 # Html
-@docs Style, styled, styled', div, span, onHover
+@docs Style, styled, styled', div, span, onHover, disabled
 
 # Convenience
 @docs stylesheet
@@ -163,6 +163,11 @@ span : List (Property c m) -> List (Html m) -> Html m
 span =
   styled Html.span 
 
+
+{-| Set HTML disabled attribute. -}
+disabled : Bool -> Property c m 
+disabled v = 
+  Attribute (Html.Attributes.disabled v)
 
 
 {-| Add an HTML class to a component. (Name chosen to avoid clashing with
