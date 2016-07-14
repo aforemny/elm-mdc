@@ -113,6 +113,7 @@ import Html exposing (..)
 import Html.App as App
 import Html.Attributes exposing (class, classList, tabindex)
 import Html.Events as Events exposing (on)
+import Html.Keyed as Keyed
 import Platform.Cmd exposing (Cmd)
 import Window
 import Json.Decode as Decoder exposing ((:=))
@@ -861,21 +862,20 @@ view lift model options { drawer, header, tabs, main } =
         , if not hasDrawer then Nothing else Just (drawerView lift drawerIsVisible drawer)
         , if not hasDrawer then Nothing else Just (obfuscator lift (drawerIsVisible && not drawerIsFixed))
         , contentDrawerButton
-        , main' 
-            ( class "mdl-layout__content" 
-            --:: Helpers.key ("elm-mdl-layout-" ++ toString config.selectedTab)
-            :: (
-              if isWaterfall config.mode then 
-                [ on "scroll" 
-                    (Decoder.map 
-                      (ScrollPane config.fixedHeader >> lift) 
-                      (DOM.target DOM.scrollTop))
-                ]
-              else 
-                []
-              )
+        , Keyed.node "main" 
+            {- Keyed to prevent scrolling state being retained when we switch tab. -}
+            (class "mdl-layout__content" 
+             :: (if isWaterfall config.mode then 
+                   [ on "scroll" 
+                       (Decoder.map 
+                         (ScrollPane config.fixedHeader >> lift) 
+                         (DOM.target DOM.scrollTop))
+                   ]
+                 else 
+                   []
+                )
             )
-            main
+            [ (toString config.selectedTab, div [] main) ]
           |> Just
         ]
     ]

@@ -3,6 +3,7 @@ module Demo.Snackbar exposing (model, Model, update, view, Msg)
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.App as App
+import Html.Keyed as Keyed
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
 
@@ -207,20 +208,14 @@ clickView model (k, square) =
     absolutely positioned inner div (to force animation to start in the
     lower-left corner.
     -}
-    Options.div 
+    Options.div
       [ css "height" boxHeight
       , css "width" width
       , css "position" "relative"
       , css "display" "inline-block"
       , css "margin" margin
       , css "z-index" "0"
-      {- Virtual-dom reuse of divs when a box disappears triggers css 
-      transitions. As of 0.17, we an no longer use `key` to force virtual-dom
-      to make each box stay with its original div, so we must manually remove
-      transitions when they might be dangerous.
-      -}
-      --, Options.key (toString k)
-      , if square /= Waiting then transitionOuter else nop
+      , transitionOuter
       ]
       [ Options.div
           [ Color.background color
@@ -241,11 +236,10 @@ clickView model (k, square) =
           , css "bottom" "0"
           , css "left" "0"
              -- Transitions
-          ,  if square /= Waiting then transitionInner else nop
+          , transitionInner
           ]
           [ div [] [ text <| toString k ] ]
         ]
-
 
 
 view : Model -> Html Msg
@@ -285,7 +279,15 @@ view model =
               , align Top 
               , css "padding-top" "32px"
               ]
-              (model.squares |> List.reverse |> List.map (clickView model))
+              [ Keyed.node "div" 
+                  {- Boxes keyed to avoid CSS transitions getting confused by
+                     virtual-dom re-using nodes.  -}
+                  [] 
+                  (model.squares 
+                    |> List.reverse 
+                    |> List.map (\sq -> (toString (fst sq), clickView model sq))
+                  )
+              ]
           ]
       , Snackbar.view model.snackbar |> App.map Snackbar
       ]
