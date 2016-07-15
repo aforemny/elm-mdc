@@ -77,13 +77,13 @@ view model  =
           [Code.code "import Material.Slider as Slider"]
 
       , demoContainer
-          ( Slider.slider
+          ( Slider.view
               [ Slider.onChange (Slider 0)
               , Slider.value (getDef 0 50.0 model.values)
               ]
           ,
             """
-            Slider.slider
+            Slider.view
               [ Slider.onChange SliderMsg
               , Slider.value """ ++ (toString (getDef 0 50.0 model.values)) ++ """
               ]
@@ -91,7 +91,7 @@ view model  =
           )
 
       , demoContainer
-          ( Slider.slider
+          ( Slider.view
               [ Slider.onChange (Slider 1)
               , Slider.value (getDef 1 2.0 model.values)
               , Slider.max 10
@@ -100,7 +100,7 @@ view model  =
               ]
           ,
             """
-            Slider.slider
+            Slider.view
               [ Slider.onChange SliderMsg
               , Slider.value """ ++ (toString (getDef 1 2.0 model.values)) ++ """
               , Slider.max 10
@@ -113,7 +113,7 @@ view model  =
       , demoContainer
           (let v = getDef 0 50.0 model.values + getDef 1 2.0 model.values in
           ( 
-            Slider.slider
+            Slider.view
               [ Slider.onChange (Slider 2)
               , Slider.value v
               , Slider.min -10
@@ -122,7 +122,7 @@ view model  =
               ]
           ,
             """
-            Slider.slider
+            Slider.view
               [ Slider.onChange SliderMsg
               , Slider.value """ ++ (toString v) ++ """
               , Slider.min -10
