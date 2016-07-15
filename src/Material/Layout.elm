@@ -584,8 +584,11 @@ tabsView lift config model (tabs, tabStyles) =
           ]
           [ Icon.view ("chevron_" ++ dir)
               [ Icon.size24
+              , Html.Attributes.attribute 
+                  "onclick" 
+                  ("document.getElementsByClassName('mdl-layout__tab-bar')[0].scrollLeft += " ++ toString offset)
+                |> attribute
               --, Icon.onClick (lift (AdvanceTabs offset))
-              -- Can't actually set scrollLeft of a div. 
               ]
           ]
     in
@@ -595,6 +598,7 @@ tabsView lift config model (tabs, tabStyles) =
         [ chevron Left -100
         , Options.div
             [ cs "mdl-layout__tab-bar" 
+            , css "scroll-behavior" "smooth"
             , if config.rippleTabs then 
                 Options.many 
                   [ cs "mdl-js-ripple-effect"
