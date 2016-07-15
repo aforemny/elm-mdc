@@ -140,6 +140,11 @@ downOn name =
   Html.Events.on name (Json.map Down geometryDecoder)
 
 
+downOn' : (Msg -> m) -> String -> Attribute m
+downOn' f name =
+  Html.Events.on name (Json.map (Down >> f) geometryDecoder)
+
+
 upOn : String -> Attribute Msg
 upOn name =
   Html.Events.on name (Json.succeed Up) 
@@ -163,9 +168,9 @@ styles m frame =
     , ("transform", transformString)
     ]
 
-
-view : List (Attribute Msg) -> Model -> Html Msg
-view attrs model =
+{-| Add handlers yourself as attrs. -}
+view' : List (Attribute Msg) -> Model -> Html Msg
+view' attrs model =
   let
     styling =
       case (model.metrics, model.animation) of
@@ -174,14 +179,7 @@ view attrs model =
         _ -> []
   in
     span
-      (  downOn "mousedown" 
-      :: downOn "touchstart" 
-      :: upOn "mouseup" 
-      :: upOn "mouseleave" 
-      :: upOn "touchend" 
-      :: upOn "blur" 
-      :: attrs
-      )
+      attrs
       [ span
         [ classList
           [ ("mdl-ripple", True)
@@ -192,3 +190,17 @@ view attrs model =
         ]
         []
       ]
+
+
+view : List (Attribute Msg) -> Model -> Html Msg
+view =
+  view' << flip List.append
+    [ upOn "mouseup" 
+    , upOn "mouseleave" 
+    , upOn "touchend" 
+    , upOn "blur" 
+    , downOn "mousedown" 
+    , downOn "touchstart" 
+    ]
+
+

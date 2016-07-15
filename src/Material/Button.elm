@@ -65,6 +65,7 @@ import Html.Events
 import Html.App
 import Platform.Cmd exposing (Cmd, none)
 
+
 import Parts exposing (Indexed, Index)
 
 import Material.Helpers as Helpers
@@ -180,29 +181,75 @@ accent =
   cs "mdl-button--accent"
 
 
+{- Ladies & Gentlemen: My nastiest hack ever. 
+
+Buttons with ripples are implemented as 
+  <button> ... <span> ... </span></button>
+elements. The button must blur itself when the mouse goes up or leaves, and the
+(ripple) span must clear its animation state under the same events.
+Unfortunately, on firefox, mousedown, mouseleave etc. don't trigger on elements
+inside buttons, so we have to install all handlers on button. But the only way
+I know of to blur something is the `Helpers.blurOn` trick, which seemingly precludes
+also doing anything on the elm side. We work around this by manually triggering
+a 'touchcancel' event on the inner span.
+
+Obviously, once Elm gets proper support for controlling focus/blur, we can dispense
+with all this nonsense.
+-}
+blurAndForward : String -> Attribute m
+blurAndForward event = 
+  Html.Attributes.attribute 
+    ("on" ++ event) 
+    "this.blur(); this.lastChild.dispatchEvent(new Event('touchcancel'));"
+
+
 {-| Component view function.
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model config html =
   let 
     summary = Options.collect defaultConfig config
+
+    startListeners = 
+      if summary.config.ripple then 
+        [ Ripple.downOn' lift "mousedown" |> Just
+        , Ripple.downOn' lift "touchstart" |> Just
+        ]
+      else
+        []
+    
+    stopListeners = 
+      let handle = 
+        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn 
+      in
+        [ handle "mouseup"
+        , handle "mouseleave"
+        , handle "touchend"
+        ]
+
+    misc = 
+      [ summary.config.onClick 
+      , if summary.config.disabled then 
+          Just (Html.Attributes.disabled True) 
+        else 
+          Nothing
+      ] 
   in
     Options.apply summary button 
       [ cs "mdl-button"
       , cs "mdl-js-button" 
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple 
       ]
-      [ Just (Helpers.blurOn "mouseup")
-      , Just (Helpers.blurOn "mouseleave")
-      , summary.config.onClick 
-      , if summary.config.disabled then Just (Html.Attributes.disabled True) else Nothing
-      ]
+      (List.concat [startListeners, stopListeners, misc])
       (if summary.config.ripple then
           List.concat 
             [ html
-            , [ Html.App.map lift <| Ripple.view 
+            -- Ripple element must be last or blurAndForward hack fails. 
+            , [ Html.App.map lift <| Ripple.view' 
                   [ class "mdl-button__ripple-container"
-                  , Helpers.blurOn "mouseup"
+                  --, Helpers.blurOn "mouseup"
+                  , Ripple.upOn "blur"
+                  , Ripple.upOn "touchcancel"
                   ]
                   model
               ]

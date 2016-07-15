@@ -177,14 +177,6 @@ cs : String -> Property c m
 cs c = Class c
 
 
-{-| Conditionally add an HTML class to a component. (Name chosen to avoid
-clashing with Html.Attributes.class.)
--}
-cs' : String -> Bool -> Property c m 
-cs' c b = 
-  if b then Class c else None
-
-
 {-| Add a CSS style to a component. 
 -}
 css : String -> String -> Property c m

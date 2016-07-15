@@ -62,7 +62,7 @@ import Html.App
 
 import Material.Menu.Geometry as Geometry exposing (Geometry)
 import Material.Ripple as Ripple
-import Material.Options as Options exposing (Style, cs, css, styled, styled')
+import Material.Options as Options exposing (Style, cs, css, styled, styled', when)
 import Material.Icon as Icon
 import Material.Helpers as Helpers
 import Parts exposing (Indexed, Index)
@@ -351,7 +351,7 @@ view' lift model properties items =
       , styled div
         [ cs "mdl-menu__container"
         , cs "is-upgraded"
-        , cs' "is-visible"
+        , cs "is-visible" `when`
             ((model.animationState == Opened) || (model.animationState == Closing))
         , model.geometry
             |> Maybe.map (containerGeometry config >> Options.many)
@@ -381,7 +381,7 @@ view' lift model properties items =
                 BottomRight -> cs "mdl-menu--bottom-right"
                 TopLeft -> cs "mdl-menu--top-left"
                 TopRight -> cs "mdl-menu--top-right"
-            , cs' "is-animating"
+            , cs "is-animating" `when`
                 ((model.animationState == Opening)
                 || (model.animationState == Closing))
             , model.geometry
@@ -443,10 +443,10 @@ makeItem lift config model n item =
   in
     styled' li
       [ cs "mdl-menu__item"
-      , css' "transition-delay" itemDelay
+      , css "transition-delay" itemDelay `when`
           ((model.animationState == Opening) || (model.animationState == Opened))
-      , cs' "mdl-js-ripple-effect" config.ripple
-      , cs' "mdl-menu__item--full-bleed-divider" item.divider
+      , cs "mdl-js-ripple-effect" `when` config.ripple
+      , cs "mdl-menu__item--full-bleed-divider" `when` item.divider
       ]
       [ if item.enabled then
            onClick Geometry.decode' (Select n >> lift)
@@ -530,14 +530,3 @@ rect x y w h =
 
 toPx : Float -> String
 toPx = toString >> flip (++) "px"
-
-
-cs' : String -> Bool -> Options.Property a b
-cs' c p =
-  if p then cs c else Options.nop
-
-
-css' : String -> String -> Bool -> Options.Property a b
-css' k v p =
-  if p then css k v else Options.nop
-
