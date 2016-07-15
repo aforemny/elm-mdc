@@ -7,7 +7,7 @@ module Material.Slider
     , step
     , disabled
     , onChange
-    , slider
+    , view
     )
 
 {-| From the [Material Design Lite documentation](https://material.google.com/components/sliders.html):
@@ -35,7 +35,7 @@ for a live demo.
 
 #View
 
-@docs slider
+@docs view
 
 # Properties
 
@@ -144,14 +144,14 @@ will be set when the user moves it. Example use:
     slider : Model -> Html Msg
     slider model =
       p [ style [ ("width", "300px") ] ]
-        [ Slider.slider
+        [ Slider.view
             [ Slider.onChange SliderMsg
             , Slider.value model.value
             ]
         ]
 -}
-slider : List (Property m) -> Html m
-slider options =
+view : List (Property m) -> Html m
+view options =
   let
     summary =
       Options.collect defaultConfig options
