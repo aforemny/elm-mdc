@@ -148,7 +148,7 @@ view model =
                 , Toggles.value (get 1 model)
                 ]
                 [ text "Checkbox" ]
-              , "Toggles.cheeckbox Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg ]\n  , Toggles.value "
+              , "Toggles.checkbox Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg ]\n  , Toggles.value "
                   ++ toString (get 1 model) ++ "\n  ]\n  [ text \"Checkbox\" ]"
                 |> Code.code
               ]
