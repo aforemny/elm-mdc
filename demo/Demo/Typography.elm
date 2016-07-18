@@ -65,6 +65,21 @@ typoRow (html, code) =
     , td [ Html.style [("padding-left", "40px")]] [html]
     ]
 
+
+typoRow' : (Html m, String) -> Html m
+typoRow' (html, code) =
+  tr []
+    [ td [ Html.style [ ("padding-right", "40px")
+                      ]
+         ]
+        [Code.code code]
+    , td [ Html.style [ ("padding-left", "40px")
+                      , ("width", "45%")
+                      ]
+         ]
+        [html]
+    ]
+
 -- VIEW
 
 
@@ -78,117 +93,196 @@ view model  =
                        """
           ]
 
-
       , Grid.cell [ Grid.size Grid.All 12 ]
         [ table []
             [ tbody []
                 [ typoRow
-                   ( p [ Typo.display4 ] [text "Light 112px"]
+                   ( p [ class Typo.display4 ] [text "Light 112px"]
                    , """
-                      p [ Typo.display4 ]
+                      p [ class Typo.display4 ]
                         [ text "Light 112px" ]
                       """
                    )
 
                 , typoRow
-                      ( p [ Typo.display3 ] [text "Regular 56px" ]
+                      ( p [ class Typo.display3 ] [text "Regular 56px" ]
                       , """
-                        p [ Typo.display3 ]
+                        p [ class Typo.display3 ]
                           [text "Regular 56px" ]
                         """
                       )
 
                 , typoRow
-                      ( p [ Typo.display2 ] [text "Regular 45px"]
+                      ( p [ class Typo.display2 ] [text "Regular 45px"]
                       , """
-                        p [ Typo.display2 ]
+                        p [ class Typo.display2 ]
                           [text "Regular 45px"]
                         """
                       )
 
                  , typoRow
-                   ( p [ Typo.display1 ] [text "Regular 34px"]
+                   ( p [ class Typo.display1 ] [text "Regular 34px"]
                    , """
-                      p [ Typo.display1 ]
+                      p [ class Typo.display1 ]
                         [ text "Regular 34px" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.headline ] [text "Regular 24px"]
+                   ( p [ class Typo.headline ] [text "Regular 24px"]
                    , """
-                      p [ Typo.headline ]
+                      p [ class Typo.headline ]
                         [text "Regular 24px"]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.title ] [text "Medium 20px"]
+                   ( p [ class Typo.title ] [text "Medium 20px"]
                    , """
-                      p [ Typo.title ]
+                      p [ class Typo.title ]
                         [text "Medium 20px"]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
+                   ( p [ class Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
                    , """
-                      p [ Typo.subheading ]
+                      p [ class Typo.subheading ]
                         [text "Regular 16px (Device), Regular 15px (Desktop)"]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.body2 ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
+                   ( p [ class Typo.body2 ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
                    , """
-                      p [ Typo.body2 ]
+                      p [ class Typo.body2 ]
                         [text "Medium 14px (Device), Medium 13px (Desktop)"]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.body1 ] [text "Regular 14px (Device), Regular 13px (Desktop)"]
+                   ( p [ class Typo.body1 ] [text "Regular 14px (Device), Regular 13px (Desktop)"]
                    , """
-                      p [ Typo.body1 ]
+                      p [ class Typo.body1 ]
                         [text "Regular 14px (Device), Regular 13px (Desktop)"]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.caption ] [text "Regular 12px"]
+                   ( p [ class Typo.caption ] [text "Regular 12px"]
                    , """
-                      p [ Typo.caption ]
+                      p [ class Typo.caption ]
                         [text "Regular 12px"]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.button ] [text "Medium (All Caps) 14px"]
+                   ( p [ class Typo.button ] [text "Medium (All Caps) 14px"]
                    , """
-                      p [ Typo.button ]
+                      p [ class Typo.button ]
                         [text "Medium (All Caps) 14px"]
                       """
                    )
 
                  , typoRow
-                   ( p [ Typo.menu ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
+                   ( p [ class Typo.menu ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
                    , """
-                      p [ Typo.menu ]
+                      p [ class Typo.menu ]
                         [text "Medium 14px (Device), Medium 13px (Desktop)"]
                       """
                    )
                 ]
             ]
         ]
+
+
+      , Grid.cell [ Grid.size Grid.All 12 ]
+        [ table []
+            [ tbody []
+                [ typoRow'
+                    ( p [ Typo.many [Typo.left, Typo.titleColorContrast] ] [ text "Left align" ]
+                    , """
+                       p [ Typo.many [Typo.left, Typo.titleColorContrast] ]
+                         [ text "Left align" ]
+                       """
+                    )
+
+                , typoRow'
+                    ( p [ Typo.many [Typo.body2ColorContrast,  Typo.center] ] [ text "Center align" ]
+                    , """
+                       p [ Typo.many [Typo.body2ColorContrast,  Typo.center] ]
+                         [ text "Center align" ]
+                       """
+                    )
+
+                , typoRow'
+                    ( p [ Typo.many [Typo.caption, Typo.right] ] [ text "Right align" ]
+                    , """
+                       p [ Typo.many [Typo.caption, Typo.right] ]
+                         [ text "Right align" ]
+                       """
+                    )
+
+                , typoRow'
+                    ( p [ class Typo.justify ] [ text "Justified" ]
+                    , """
+                       p [ class Typo.justify ]
+                         [ text "Justified" ]
+                       """
+                    )
+
+                , typoRow'
+                    ( p [ class Typo.capitalize ] [ text "capitalized" ]
+                    , """
+                       p [ class Typo.capitalize ]
+                         [ text "capitalized" ]
+                       """
+                    )
+
+                , typoRow'
+                    ( p [ class Typo.lowercase ] [ text "LOWERCASE" ]
+                    , """
+                       p [ class Typo.lowercase ]
+                         [ text "LOWERCASE" ]
+                       """
+                    )
+
+                , typoRow'
+                    ( p [ class Typo.uppercase ] [ text "uppercase" ]
+                    , """
+                       p [ class Typo.uppercase ]
+                         [ text "uppercase" ]
+                       """
+                    )
+                ]
+            ]
+        ]
       ]
+
+
   ]
   |> Page.body2 "Typography" srcUrl intro references
 
 
 intro : Html m
 intro =
-  Page.fromMDL "https://www.getmdl.io/components/index.html#Typography-section" """
-> ...
+  Page.fromMDL "https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction" """
+> The Material Design Lite (MDL) typography component is a comprehensive approach
+> to standardizing the use of typefaces in applications and page displays. MDL
+> typography elements are intended to replace the myriad fonts used by developers
+> (which vary significantly in appearance) and provide a robust, uniform library
+> of text styles from which developers can choose.
+>
+> The "Roboto" typeface is the standard for MDL display; it can easily be
+> integrated into a web page using the CSS3 @font-face rule. However, Roboto is
+> most simply accessed and included using a single standard HTML <link> element,
+> which can be obtained at this Google fonts page.
+>
+> Because of the many possible variations in font display characteristics in HTML
+> and CSS, MDL typography aims to provide simple and intuitive styles that use the
+> Roboto font and produce visually attractive and internally consistent text
+> results. See the typography component's [Material Design specifications](https://material.google.com/style/typography.html) page for
+> details.
 """
 
 
@@ -200,6 +294,6 @@ srcUrl =
 references : List (String, String)
 references =
   [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Typography"
-  , Page.mds "https://www.google.com/design/spec/components/Typography.html"
-  , Page.mdl "https://www.getmdl.io/components/index.html#Typography"
+  , Page.mds "https://material.google.com/style/typography.html"
+  , Page.mdl "https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction"
   ]

@@ -1,13 +1,28 @@
 module Material.Typography exposing (..)
 
-{-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#Typography-section):
+{-| From the [Material Design Lite documentation](https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction):
 
-> ...
+> The Material Design Lite (MDL) typography component is a comprehensive approach
+> to standardizing the use of typefaces in applications and page displays. MDL
+> typography elements are intended to replace the myriad fonts used by developers
+> (which vary significantly in appearance) and provide a robust, uniform library
+> of text styles from which developers can choose.
+>
+> The "Roboto" typeface is the standard for MDL display; it can easily be
+> integrated into a web page using the CSS3 @font-face rule. However, Roboto is
+> most simply accessed and included using a single standard HTML <link> element,
+> which can be obtained at this Google fonts page.
+>
+> Because of the many possible variations in font display characteristics in HTML
+> and CSS, MDL typography aims to provide simple and intuitive styles that use the
+> Roboto font and produce visually attractive and internally consistent text
+> results. See the typography component's [Material Design specifications](https://material.google.com/style/typography.html) page for
+> details.
 
 See also the
-[Material Design Specification]([https://www.google.com/design/spec/components/Typography.html).
+[Material Design Specification]([https://www.google.com/design/spec/style/typography.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/Typography)
+Refer to [this site](http://debois.github.io/elm-mdl#/typography)
 for a live demo.
 
 @docs Model, model, Msg, update
@@ -20,6 +35,7 @@ for a live demo.
 
 -- Typography. Copy this to a file for your component, then update.
 
+import Material.Options as Options
 import Html
 import Html.Attributes as Html
 
@@ -37,10 +53,6 @@ type TextStyle
   | Caption
   | Button
   | Menu
-
-
-
-{- This is only in MDL -}
 
 
 type TextTransform
@@ -83,16 +95,6 @@ transformName transform =
 
     Uppercase ->
       "mdl-typography--text-uppercase"
-
-
-nowrap : String
-nowrap =
-  "mdl-typography--text-nowrap"
-
-
-tableStriped : String
-tableStriped =
-  "mdl-typography--table-striped"
 
 
 styleName : TextStyle -> String
@@ -150,6 +152,9 @@ colorContrast style =
     Title ->
       "mdl-typography--title-color-contrast"
 
+    Caption ->
+      "mdl-typography--caption-color-contrast"
+
     _ ->
       ""
 
@@ -167,61 +172,228 @@ forcePreferred style =
       ""
 
 
-display1 : Html.Attribute msg
+
+-- Styles
+
+
+{-| Regular 34px
+-}
+display1 : String
 display1 =
-  Html.class <| styleName Display1
+  styleName Display1
 
 
-display2 : Html.Attribute msg
+{-| Display with color contrast
+-}
+display1ColorContrast : String
+display1ColorContrast =
+  styleName Display1
+
+
+{-| Regular 45px
+-}
+display2 : String
 display2 =
-  Html.class <| styleName Display2
+  styleName Display2
 
 
-display3 : Html.Attribute msg
+{-| Regular 56px
+-}
+display3 : String
 display3 =
-  Html.class <| styleName Display3
+  styleName Display3
 
 
-display4 : Html.Attribute msg
+{-| Light 112px
+-}
+display4 : String
 display4 =
-  Html.class <| styleName Display4
+  styleName Display4
 
 
-headline : Html.Attribute msg
+{-| Regular 24px
+-}
+headline : String
 headline =
-  Html.class <| styleName Headline
+  styleName Headline
 
 
-title : Html.Attribute msg
+{-| Medium 20px
+-}
+title : String
 title =
-  Html.class <| styleName Title
+  styleName Title
 
 
-subheading : Html.Attribute msg
+{-| Title with color contrast
+-}
+titleColorContrast : String
+titleColorContrast =
+  colorContrast Title
+
+
+{-| Regular 16px (Device), Regular 15px (Desktop)
+-}
+subheading : String
 subheading =
-  Html.class <| styleName Subheading
+  styleName Subheading
 
 
-body2 : Html.Attribute msg
+{-| Subhead with color contrast
+-}
+subheadingColorContrast : String
+subheadingColorContrast =
+  colorContrast Subheading
+
+
+{-| Medium 14px (Device), Medium 13px (Desktop)
+-}
+body2 : String
 body2 =
-  Html.class <| styleName Body2
+  styleName Body2
 
 
-body1 : Html.Attribute msg
+{-| Medium 14px (Device), Medium 13px (Desktop)
+-}
+body2ForcePreferred : String
+body2ForcePreferred =
+  forcePreferred Body2
+
+
+{-| Body with color contrast
+-}
+body2ColorContrast : String
+body2ColorContrast =
+  colorContrast Body2
+
+
+{-| Regular 14px (Device), Regular 13px (Desktop)
+-}
+body1 : String
 body1 =
-  Html.class <| styleName Body1
+  styleName Body1
 
 
-caption : Html.Attribute msg
+{-| Regular 14px (Device), Regular 13px (Desktop)
+-}
+body1ForcePreferred : String
+body1ForcePreferred =
+  forcePreferred Body1
+
+
+{-| Regular 12px
+-}
+caption : String
 caption =
-  Html.class <| styleName Caption
+  styleName Caption
 
 
-button : Html.Attribute msg
+{-| Regular 12px
+-}
+captionColorContrast : String
+captionColorContrast =
+  colorContrast Caption
+
+
+{-| Medium (All Caps) 14px
+-}
+button : String
 button =
-  Html.class <| styleName Button
+  styleName Button
 
 
-menu : Html.Attribute msg
+{-| Medium 14px (Device), Medium 13px (Desktop)
+-}
+menu : String
 menu =
-  Html.class <| styleName Menu
+  styleName Menu
+
+
+
+-- Utility
+
+{-| No wrap text
+-}
+nowrap : String
+nowrap =
+  "mdl-typography--text-nowrap"
+
+
+{-| Striped table
+-}
+tableStriped : String
+tableStriped =
+  "mdl-typography--table-striped"
+
+
+{-| Utility function to combine several classes into a `Html.Attribute msg`
+-}
+many : List String -> Html.Attribute msg
+many classes =
+  classes
+    |> List.map (\ class -> (class, True))
+    |> Html.classList
+
+
+{-| Utility function to combine several classes into a `Options.Property c m`
+-}
+many' : List String -> Options.Property c m
+many' classes =
+  classes
+    |> List.map (\ class -> Options.cs class )
+    |> Options.many
+
+-- Align
+
+
+{-| Center aligned text
+-}
+center : String
+center =
+  alignName Center
+
+
+{-| Left aligned text
+-}
+left : String
+left =
+  alignName Left
+
+
+{-| Right aligned text
+-}
+right : String
+right =
+  alignName Right
+
+
+{-| Justified text
+-}
+justify : String
+justify =
+  alignName Justify
+
+
+
+-- Transform
+
+
+{-| Capitalized text
+-}
+capitalize : String
+capitalize =
+  transformName Capitalize
+
+
+{-| Lowercased text
+-}
+lowercase : String
+lowercase =
+  transformName Lowercase
+
+
+{-| Uppercased text
+-}
+uppercase : String
+uppercase =
+  transformName Uppercase
