@@ -138,7 +138,7 @@ view model =
                 , Toggles.value (get 0 model)
                 ]
                 [ text "Switch" ]
-              , "Toggles.switch Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg ]\n  , Toggles.value "
+              , "Toggles.switch Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg\n  , Toggles.value "
                   ++ toString (get 0 model) ++ "\n  ]\n  [ text \"Switch\" ]"
                 |> Code.code
               ]
@@ -148,7 +148,7 @@ view model =
                 , Toggles.value (get 1 model)
                 ]
                 [ text "Checkbox" ]
-              , "Toggles.checkbox Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg ]\n  , Toggles.value "
+              , "Toggles.checkbox Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg\n  , Toggles.value "
                   ++ toString (get 1 model) ++ "\n  ]\n  [ text \"Checkbox\" ]"
                 |> Code.code
               ]
