@@ -28,6 +28,7 @@
         "Material.Tooltip",
         "Material.Toggles",
         "Material.Tabs",
+        "Material.Typography",
         "Material.Textfield"
     ],
     "dependencies": {

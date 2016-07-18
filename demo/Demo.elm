@@ -34,6 +34,7 @@ import Demo.Footer
 import Demo.Tooltip
 import Demo.Tabs
 import Demo.Slider
+import Demo.Typography
 --import Demo.Template
 
 
@@ -56,6 +57,7 @@ type alias Model =
   , tooltip : Demo.Tooltip.Model
   , tabs : Demo.Tabs.Model
   , slider : Demo.Slider.Model
+  , typography : Demo.Typography.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -78,6 +80,7 @@ model =
   , tooltip = Demo.Tooltip.model
   , tabs = Demo.Tabs.model
   , slider = Demo.Slider.model
+  , typography = Demo.Typography.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -104,6 +107,7 @@ type Msg
   | TooltipMsg Demo.Tooltip.Msg
   | TabMsg Demo.Tabs.Msg
   | SliderMsg Demo.Slider.Msg
+  | TypographyMsg Demo.Typography.Msg
   | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
@@ -149,6 +153,7 @@ update action model =
     TooltipMsg   a -> lift  .tooltip    (\m x->{m|tooltip   =x}) TooltipMsg  Demo.Tooltip.update    a model
     TabMsg   a -> lift  .tabs    (\m x->{m|tabs   =x}) TabMsg  Demo.Tabs.update    a model
 
+    TypographyMsg  a -> lift  .typography   (\m x->{m|typography  =x}) TypographyMsg Demo.Typography.update   a model
 
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
@@ -173,6 +178,7 @@ tabs =
   , ("Tabs", "tabs", .tabs >> Demo.Tabs.view >> App.map TabMsg)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> App.map TooltipMsg)
+  , ("Typography", "typography", .typography >> Demo.Typography.view >> App.map TypographyMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   ]
 
