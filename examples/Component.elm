@@ -1,7 +1,6 @@
 import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
-import Platform.Cmd exposing (Cmd)
 
 import Material
 import Material.Scheme
@@ -73,8 +72,8 @@ view model =
     button. The arguments are: 
 
       - An instance id (the `[0]`). Every component that uses the same model
-        collection (model.mdl in this file) must have a distinct instance id.  -
-      - A Msg constructor (`Mdl`), lifting MDL actions to your Msg type. 
+        collection (model.mdl in this file) must have a distinct instance id.
+      - A Msg constructor (`MDL`), lifting MDL actions to your Msg type.
       - An initial model (`(Button.model True)`---a button with a ripple animation. 
 
     Notice that we do not have to add increase and reset separately to model.mdl, 
