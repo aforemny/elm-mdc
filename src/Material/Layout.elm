@@ -832,7 +832,7 @@ view lift model options { drawer, header, tabs, main } =
         , ("has-scrolling-header", config.mode == Scrolling)
         ]
     ]
-    [ filter div
+    [ filter (Keyed.node "div") 
         ([ Just <| classList
             [ ("mdl-layout ", True)
             , ("is-upgraded", True)
@@ -860,13 +860,13 @@ view lift model options { drawer, header, tabs, main } =
         ] |> List.filterMap identity)
         [ if hasHeader then
             headerView lift config model (headerDrawerButton, header, tabsElems)
-              |> Just
+              |> (,) "elm-mdl-header" |> Just
           else
             Nothing
-        , if not hasDrawer then Nothing else Just (drawerView lift drawerIsVisible drawer)
-        , if not hasDrawer then Nothing else Just (obfuscator lift (drawerIsVisible && not drawerIsFixed))
-        , contentDrawerButton
-        , Keyed.node "main" 
+        , if not hasDrawer then Nothing else Just ("elm-mdl-drawer", drawerView lift drawerIsVisible drawer)
+        , if not hasDrawer then Nothing else Just ("elm-mdl-obfuscator", obfuscator lift (drawerIsVisible && not drawerIsFixed))
+        , contentDrawerButton |> Maybe.map ((,) "elm-drawer-button")
+        , main'
             {- Keyed to prevent scrolling state being retained when we switch tab. -}
             (class "mdl-layout__content" 
              :: (if isWaterfall config.mode then 
@@ -879,8 +879,8 @@ view lift model options { drawer, header, tabs, main } =
                    []
                 )
             )
-            [ (toString config.selectedTab, div [] main) ]
-          |> Just
+            main
+          |> (,) (toString config.selectedTab) |> Just
         ]
     ]
 
