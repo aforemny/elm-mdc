@@ -42,25 +42,14 @@ import Parts exposing (Indexed)
 import Material.Options as Options exposing (Property, Style, cs, nop)
 
 
-{-| Main list function
+{-| List main function
 -}
 ul :
     List (Property {} m)
     -> List (Html m)
     -> Html m
-ul options nodes =
-    let
-        summary =
-            Options.collect {} options
-    in
-        Options.apply summary
-            Html.ul
-            [ cs "mdl-list"
-            ]
-            []
-            nodes
-
-
+ul options = 
+    Options.styled Html.ul ([cs "mdl-list"] ++ options)
 
 {-| Default List item
 -}
@@ -68,16 +57,8 @@ li :
     List (Property {} m)
     -> List (Html m)
     -> Html m
-li options nodes =
-    let
-        ({ config } as summary) =
-            Options.collect {} options
-    in
-        Options.apply summary
-            Html.li
-            [ cs "mdl-list__item" ]
-            []
-            nodes
+li options =
+    Options.styled Html.li ([cs "mdl-list__item"] ++ options)
 
 {-| List item with two lines
 -}
@@ -85,18 +66,9 @@ li2 :
     List (Property {} m)
     -> List (Html m)
     -> Html m
-li2 options nodes =
-    let
-        ({ config } as summary) =
-            Options.collect {} options
-    in
-        Options.apply summary
-            Html.li
-            [ cs "mdl-list__item"
-            , cs "mdl-list__item--two-line"
-            ]
-            []
-            nodes
+li2 options =
+    Options.styled Html.li ([cs "mdl-list__item", cs "mdl-list__item--two-line"] ++ options)
+
 
 {-| List item with three lines
 -}
@@ -104,18 +76,8 @@ li3 :
     List (Property {} m)
     -> List (Html m)
     -> Html m
-li3 options nodes =
-    let
-        ({ config } as summary) =
-            Options.collect {} options
-    in
-        Options.apply summary
-            Html.li
-            [ cs "mdl-list__item"
-            , cs "mdl-list__item--three-line"
-            ]
-            []
-            nodes
+li3 options =
+    Options.styled Html.li ([cs "mdl-list__item", cs "mdl-list__item--three-line"] ++ options)
 
 
 {-| Defines the primary content sub-division
