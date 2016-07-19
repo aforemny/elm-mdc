@@ -2,12 +2,11 @@ module Demo.Typography exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Attributes as Html exposing (class, classList)
+import Html.Attributes as Html
 
 import Material.Typography as Typo
 import Material.Options as Options
 import Material
-import Material.Options exposing (styled)
 import Material.Grid as Grid
 
 import Demo.Page as Page
@@ -48,15 +47,6 @@ update action model =
 
     Mdl action' ->
       Material.update Mdl action' model
-
-
-
-typoDemo : (Html m, String) -> Grid.Cell m
-typoDemo (html, code) =
-  Grid.cell [Grid.size Grid.All 4]
-    [ div [] [ html ]
-    , Code.code code
-    ]
 
 
 
