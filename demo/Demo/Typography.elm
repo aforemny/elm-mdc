@@ -90,6 +90,7 @@ view model  =
           [ p [] [text "Example use: "]
           , Code.code """
                        import Material.Typography as Typo
+                       import Html.Attributes exposing (class)
                        """
           ]
 
@@ -108,7 +109,7 @@ view model  =
                       ( p [ class Typo.display3 ] [text "Regular 56px" ]
                       , """
                         p [ class Typo.display3 ]
-                          [text "Regular 56px" ]
+                          [ text "Regular 56px" ]
                         """
                       )
 
@@ -116,7 +117,7 @@ view model  =
                       ( p [ class Typo.display2 ] [text "Regular 45px"]
                       , """
                         p [ class Typo.display2 ]
-                          [text "Regular 45px"]
+                          [ text "Regular 45px" ]
                         """
                       )
 
@@ -132,7 +133,7 @@ view model  =
                    ( p [ class Typo.headline ] [text "Regular 24px"]
                    , """
                       p [ class Typo.headline ]
-                        [text "Regular 24px"]
+                        [ text "Regular 24px" ]
                       """
                    )
 
@@ -140,7 +141,7 @@ view model  =
                    ( p [ class Typo.title ] [text "Medium 20px"]
                    , """
                       p [ class Typo.title ]
-                        [text "Medium 20px"]
+                        [ text "Medium 20px" ]
                       """
                    )
 
@@ -148,7 +149,7 @@ view model  =
                    ( p [ class Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
                    , """
                       p [ class Typo.subheading ]
-                        [text "Regular 16px (Device), Regular 15px (Desktop)"]
+                        [ text "Regular 16px (Device), Regular 15px (Desktop)" ]
                       """
                    )
 
@@ -156,7 +157,7 @@ view model  =
                    ( p [ class Typo.body2 ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
                    , """
                       p [ class Typo.body2 ]
-                        [text "Medium 14px (Device), Medium 13px (Desktop)"]
+                        [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
                       """
                    )
 
@@ -164,7 +165,7 @@ view model  =
                    ( p [ class Typo.body1 ] [text "Regular 14px (Device), Regular 13px (Desktop)"]
                    , """
                       p [ class Typo.body1 ]
-                        [text "Regular 14px (Device), Regular 13px (Desktop)"]
+                        [ text "Regular 14px (Device), Regular 13px (Desktop)" ]
                       """
                    )
 
@@ -172,7 +173,7 @@ view model  =
                    ( p [ class Typo.caption ] [text "Regular 12px"]
                    , """
                       p [ class Typo.caption ]
-                        [text "Regular 12px"]
+                        [ text "Regular 12px" ]
                       """
                    )
 
@@ -180,7 +181,7 @@ view model  =
                    ( p [ class Typo.button ] [text "Medium (All Caps) 14px"]
                    , """
                       p [ class Typo.button ]
-                        [text "Medium (All Caps) 14px"]
+                        [ text "Medium (All Caps) 14px" ]
                       """
                    )
 
@@ -188,7 +189,7 @@ view model  =
                    ( p [ class Typo.menu ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
                    , """
                       p [ class Typo.menu ]
-                        [text "Medium 14px (Device), Medium 13px (Desktop)"]
+                        [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
                       """
                    )
                 ]
@@ -208,9 +209,9 @@ view model  =
                     )
 
                 , typoRow'
-                    ( p [ Typo.many [Typo.body2ColorContrast,  Typo.center] ] [ text "Center align" ]
+                    ( p [ Typo.many [Typo.body2ColorContrast, Typo.center] ] [ text "Center align" ]
                     , """
-                       p [ Typo.many [Typo.body2ColorContrast,  Typo.center] ]
+                       p [ Typo.many [Typo.body2ColorContrast, Typo.center] ]
                          [ text "Center align" ]
                        """
                     )
@@ -224,9 +225,9 @@ view model  =
                     )
 
                 , typoRow'
-                    ( p [ class Typo.justify ] [ text "Justified" ]
+                    ( p [ Typo.many [Typo.justify, Typo.subheadingColorContrast] ] [ text "Justified" ]
                     , """
-                       p [ class Typo.justify ]
+                       p [ Typo.many [Typo.justify, Typo.subheadingColorContrast] ]
                          [ text "Justified" ]
                        """
                     )

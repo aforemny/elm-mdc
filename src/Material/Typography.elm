@@ -1,4 +1,36 @@
-module Material.Typography exposing (..)
+module Material.Typography
+  exposing
+    ( display1
+    , display1ColorContrast
+    , display2
+    , display3
+    , display4
+    , body1
+    , body1ForcePreferred
+    , body2
+    , body2ForcePreferred
+    , body2ColorContrast
+    , headline
+    , subheading
+    , subheadingColorContrast
+    , caption
+    , captionColorContrast
+    , button
+    , menu
+    , title
+    , titleColorContrast
+    , capitalize
+    , lowercase
+    , uppercase
+    , left
+    , center
+    , right
+    , justify
+    , many
+    , many'
+    , nowrap
+    , tableStriped
+    )
 
 {-| From the [Material Design Lite documentation](https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction):
 
@@ -20,20 +52,45 @@ module Material.Typography exposing (..)
 > details.
 
 See also the
-[Material Design Specification]([https://www.google.com/design/spec/style/typography.html).
+[Material Design Specification](https://www.google.com/design/spec/style/typography.html).
 
 Refer to [this site](http://debois.github.io/elm-mdl#/typography)
 for a live demo.
 
-@docs Model, model, Msg, update
-@docs view
+# Styles
 
-# Component support
+@docs display1, display1ColorContrast
+@docs display2
+@docs display3
+@docs display4
+@docs body1, body1ForcePreferred
+@docs body2, body2ForcePreferred, body2ColorContrast
+@docs headline
+@docs subheading, subheadingColorContrast
+@docs caption, captionColorContrast
+@docs button
+@docs menu
+@docs title
+@docs titleColorContrast
 
-@docs Container, Observer, Instance, instance, fwdTypography
+# Transforms
+@docs capitalize
+@docs lowercase
+@docs uppercase
+
+# Alignment
+@docs left
+@docs center
+@docs right
+@docs justify
+
+# Utility
+@docs many
+@docs many'
+@docs nowrap
+@docs tableStriped
+
 -}
-
--- Typography. Copy this to a file for your component, then update.
 
 import Material.Options as Options
 import Html
@@ -155,6 +212,7 @@ colorContrast style =
     Caption ->
       "mdl-typography--caption-color-contrast"
 
+    -- Should _never_ happen (Can check with Debug.crash)
     _ ->
       ""
 
@@ -168,6 +226,7 @@ forcePreferred style =
     Body2 ->
       "mdl-typography--body-2-force-preferred-font"
 
+    -- Should _never_ happen (Can check with Debug.crash)
     _ ->
       ""
 
@@ -312,6 +371,7 @@ menu =
 
 -- Utility
 
+
 {-| No wrap text
 -}
 nowrap : String
@@ -331,7 +391,7 @@ tableStriped =
 many : List String -> Html.Attribute msg
 many classes =
   classes
-    |> List.map (\ class -> (class, True))
+    |> List.map (\class -> ( class, True ))
     |> Html.classList
 
 
@@ -340,8 +400,10 @@ many classes =
 many' : List String -> Options.Property c m
 many' classes =
   classes
-    |> List.map (\ class -> Options.cs class )
+    |> List.map (\class -> Options.cs class)
     |> Options.many
+
+
 
 -- Align
 
