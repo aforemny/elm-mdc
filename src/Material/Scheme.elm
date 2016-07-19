@@ -61,13 +61,13 @@ elm-reactor.
 
 Example use: 
 
-  view : Model -> Html Msg
-  view = 
-    div 
-      []
-      [ Scheme.topWithScheme Color.Teal Color.Red contents
-      , ...
-      ]
+    view : Model -> Html Msg
+    view = 
+      div 
+        []
+        [ Scheme.topWithScheme Color.Teal Color.Red contents
+        , ...
+        ]
 -}
 topWithScheme: Hue -> Hue -> Html a -> Html a
 topWithScheme primary accent content =
