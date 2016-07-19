@@ -26,8 +26,6 @@ module Material.Typography
     , center
     , right
     , justify
-    , many
-    , many'
     , nowrap
     , tableStriped
     )
@@ -85,14 +83,12 @@ for a live demo.
 @docs justify
 
 # Utility
-@docs many
-@docs many'
 @docs nowrap
 @docs tableStriped
 
 -}
 
-import Material.Options as Options
+import Material.Options as Options exposing (cs)
 import Html
 import Html.Attributes as Html
 
@@ -237,135 +233,135 @@ forcePreferred style =
 
 {-| Regular 34px
 -}
-display1 : String
+display1 : Options.Property c m
 display1 =
-  styleName Display1
+  cs <| styleName Display1
 
 
 {-| Display with color contrast
 -}
-display1ColorContrast : String
+display1ColorContrast : Options.Property c m
 display1ColorContrast =
-  styleName Display1
+  cs <| styleName Display1
 
 
 {-| Regular 45px
 -}
-display2 : String
+display2 : Options.Property c m
 display2 =
-  styleName Display2
+  cs <| styleName Display2
 
 
 {-| Regular 56px
 -}
-display3 : String
+display3 : Options.Property c m
 display3 =
-  styleName Display3
+  cs <| styleName Display3
 
 
 {-| Light 112px
 -}
-display4 : String
+display4 : Options.Property c m
 display4 =
-  styleName Display4
+  cs <| styleName Display4
 
 
 {-| Regular 24px
 -}
-headline : String
+headline : Options.Property c m
 headline =
-  styleName Headline
+  cs <| styleName Headline
 
 
 {-| Medium 20px
 -}
-title : String
+title : Options.Property c m
 title =
-  styleName Title
+  cs <| styleName Title
 
 
 {-| Title with color contrast
 -}
-titleColorContrast : String
+titleColorContrast : Options.Property c m
 titleColorContrast =
-  colorContrast Title
+  cs <| colorContrast Title
 
 
 {-| Regular 16px (Device), Regular 15px (Desktop)
 -}
-subheading : String
+subheading : Options.Property c m
 subheading =
-  styleName Subheading
+  cs <| styleName Subheading
 
 
 {-| Subhead with color contrast
 -}
-subheadingColorContrast : String
+subheadingColorContrast : Options.Property c m
 subheadingColorContrast =
-  colorContrast Subheading
+  cs <| colorContrast Subheading
 
 
 {-| Medium 14px (Device), Medium 13px (Desktop)
 -}
-body2 : String
+body2 : Options.Property c m
 body2 =
-  styleName Body2
+  cs <| styleName Body2
 
 
 {-| Medium 14px (Device), Medium 13px (Desktop)
 -}
-body2ForcePreferred : String
+body2ForcePreferred : Options.Property c m
 body2ForcePreferred =
-  forcePreferred Body2
+  cs <| forcePreferred Body2
 
 
 {-| Body with color contrast
 -}
-body2ColorContrast : String
+body2ColorContrast : Options.Property c m
 body2ColorContrast =
-  colorContrast Body2
+  cs <| colorContrast Body2
 
 
 {-| Regular 14px (Device), Regular 13px (Desktop)
 -}
-body1 : String
+body1 : Options.Property c m
 body1 =
-  styleName Body1
+  cs <| styleName Body1
 
 
 {-| Regular 14px (Device), Regular 13px (Desktop)
 -}
-body1ForcePreferred : String
+body1ForcePreferred : Options.Property c m
 body1ForcePreferred =
-  forcePreferred Body1
+  cs <| forcePreferred Body1
 
 
 {-| Regular 12px
 -}
-caption : String
+caption : Options.Property c m
 caption =
-  styleName Caption
+  cs <| styleName Caption
 
 
 {-| Regular 12px
 -}
-captionColorContrast : String
+captionColorContrast : Options.Property c m
 captionColorContrast =
-  colorContrast Caption
+  cs <| colorContrast Caption
 
 
 {-| Medium (All Caps) 14px
 -}
-button : String
+button : Options.Property c m
 button =
-  styleName Button
+  cs <| styleName Button
 
 
 {-| Medium 14px (Device), Medium 13px (Desktop)
 -}
-menu : String
+menu : Options.Property c m
 menu =
-  styleName Menu
+  cs <| styleName Menu
 
 
 
@@ -374,35 +370,16 @@ menu =
 
 {-| No wrap text
 -}
-nowrap : String
+nowrap : Options.Property c m
 nowrap =
-  "mdl-typography--text-nowrap"
+  cs "mdl-typography--text-nowrap"
 
 
 {-| Striped table
 -}
-tableStriped : String
+tableStriped : Options.Property c m
 tableStriped =
-  "mdl-typography--table-striped"
-
-
-{-| Utility function to combine several classes into a `Html.Attribute msg`
--}
-many : List String -> Html.Attribute msg
-many classes =
-  classes
-    |> List.map (\class -> ( class, True ))
-    |> Html.classList
-
-
-{-| Utility function to combine several classes into a `Options.Property c m`
--}
-many' : List String -> Options.Property c m
-many' classes =
-  classes
-    |> List.map (\class -> Options.cs class)
-    |> Options.many
-
+  cs "mdl-typography--table-striped"
 
 
 -- Align
@@ -410,30 +387,30 @@ many' classes =
 
 {-| Center aligned text
 -}
-center : String
+center : Options.Property c m
 center =
-  alignName Center
+  cs <| alignName Center
 
 
 {-| Left aligned text
 -}
-left : String
+left : Options.Property c m
 left =
-  alignName Left
+  cs <| alignName Left
 
 
 {-| Right aligned text
 -}
-right : String
+right : Options.Property c m
 right =
-  alignName Right
+  cs <| alignName Right
 
 
 {-| Justified text
 -}
-justify : String
+justify : Options.Property c m
 justify =
-  alignName Justify
+  cs <| alignName Justify
 
 
 
@@ -442,20 +419,20 @@ justify =
 
 {-| Capitalized text
 -}
-capitalize : String
+capitalize : Options.Property c m
 capitalize =
-  transformName Capitalize
+  cs <| transformName Capitalize
 
 
 {-| Lowercased text
 -}
-lowercase : String
+lowercase : Options.Property c m
 lowercase =
-  transformName Lowercase
+  cs <| transformName Lowercase
 
 
 {-| Uppercased text
 -}
-uppercase : String
+uppercase : Options.Property c m
 uppercase =
-  transformName Uppercase
+  cs <| transformName Uppercase

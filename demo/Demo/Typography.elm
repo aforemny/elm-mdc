@@ -5,7 +5,9 @@ import Html exposing (..)
 import Html.Attributes as Html exposing (class, classList)
 
 import Material.Typography as Typo
+import Material.Options as Options
 import Material
+import Material.Options exposing (styled)
 import Material.Grid as Grid
 
 import Demo.Page as Page
@@ -90,7 +92,8 @@ view model  =
           [ p [] [text "Example use: "]
           , Code.code """
                        import Material.Typography as Typo
-                       import Html.Attributes exposing (class)
+                       import Material.Options as Options
+                       import Html exposing (p)
                        """
           ]
 
@@ -98,97 +101,109 @@ view model  =
         [ table []
             [ tbody []
                 [ typoRow
-                   ( p [ class Typo.display4 ] [text "Light 112px"]
+                   ( Options.styled p [ Typo.display4 ] [text "Light 112px"]
                    , """
-                      p [ class Typo.display4 ]
+                      Options.styled p
+                        [ Typo.display4 ]
                         [ text "Light 112px" ]
                       """
                    )
 
                 , typoRow
-                      ( p [ class Typo.display3 ] [text "Regular 56px" ]
+                      ( Options.styled p [ Typo.display3 ] [text "Regular 56px" ]
                       , """
-                        p [ class Typo.display3 ]
+                        Options.styled p
+                          [ Typo.display3 ]
                           [ text "Regular 56px" ]
                         """
                       )
 
                 , typoRow
-                      ( p [ class Typo.display2 ] [text "Regular 45px"]
+                      ( Options.styled p [ Typo.display2 ] [text "Regular 45px"]
                       , """
-                        p [ class Typo.display2 ]
+                        Options.styled p
+                          [ Typo.display2 ]
                           [ text "Regular 45px" ]
                         """
                       )
 
                  , typoRow
-                   ( p [ class Typo.display1 ] [text "Regular 34px"]
+                   ( Options.styled p [ Typo.display1 ] [text "Regular 34px"]
                    , """
-                      p [ class Typo.display1 ]
+                      Options.styled p
+                        [ Typo.display1 ]
                         [ text "Regular 34px" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.headline ] [text "Regular 24px"]
+                   ( Options.styled p [ Typo.headline ] [text "Regular 24px"]
                    , """
-                      p [ class Typo.headline ]
+                      Options.styled p
+                        [ Typo.headline ]
                         [ text "Regular 24px" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.title ] [text "Medium 20px"]
+                   ( Options.styled p [ Typo.title ] [text "Medium 20px"]
                    , """
-                      p [ class Typo.title ]
+                      Options.styled p
+                        [ Typo.title ]
                         [ text "Medium 20px" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
+                   ( Options.styled p [ Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
                    , """
-                      p [ class Typo.subheading ]
+                      Options.styled p
+                        [ Typo.subheading ]
                         [ text "Regular 16px (Device), Regular 15px (Desktop)" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.body2 ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
+                   ( Options.styled p [ Typo.body2 ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
                    , """
-                      p [ class Typo.body2 ]
+                      Options.styled p
+                        [ Typo.body2 ]
                         [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.body1 ] [text "Regular 14px (Device), Regular 13px (Desktop)"]
+                   ( Options.styled p [ Typo.body1 ] [text "Regular 14px (Device), Regular 13px (Desktop)"]
                    , """
-                      p [ class Typo.body1 ]
+                      Options.styled p
+                        [ Typo.body1 ]
                         [ text "Regular 14px (Device), Regular 13px (Desktop)" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.caption ] [text "Regular 12px"]
+                   ( Options.styled p [ Typo.caption ] [text "Regular 12px"]
                    , """
-                      p [ class Typo.caption ]
+                      Options.styled p
+                        [ Typo.caption ]
                         [ text "Regular 12px" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.button ] [text "Medium (All Caps) 14px"]
+                   ( Options.styled p [ Typo.button ] [text "Medium (All Caps) 14px"]
                    , """
-                      p [ class Typo.button ]
+                      Options.styled p
+                        [ Typo.button ]
                         [ text "Medium (All Caps) 14px" ]
                       """
                    )
 
                  , typoRow
-                   ( p [ class Typo.menu ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
+                   ( Options.styled p [ Typo.menu ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
                    , """
-                      p [ class Typo.menu ]
+                      Options.styled p
+                        [ Typo.menu ]
                         [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
                       """
                    )
@@ -201,57 +216,64 @@ view model  =
         [ table []
             [ tbody []
                 [ typoRow'
-                    ( p [ Typo.many [Typo.left, Typo.titleColorContrast] ] [ text "Left align" ]
+                    ( Options.styled p [ Typo.left, Typo.titleColorContrast ] [ text "Left align" ]
                     , """
-                       p [ Typo.many [Typo.left, Typo.titleColorContrast] ]
+                       Options.styled p
+                         [ Typo.left, Typo.titleColorContrast ]
                          [ text "Left align" ]
                        """
                     )
 
                 , typoRow'
-                    ( p [ Typo.many [Typo.body2ColorContrast, Typo.center] ] [ text "Center align" ]
+                    ( Options.styled p [ Typo.body2ColorContrast, Typo.center ] [ text "Center align" ]
                     , """
-                       p [ Typo.many [Typo.body2ColorContrast, Typo.center] ]
+                       Options.styled p
+                         [ Typo.body2ColorContrast, Typo.center ]
                          [ text "Center align" ]
                        """
                     )
 
                 , typoRow'
-                    ( p [ Typo.many [Typo.caption, Typo.right] ] [ text "Right align" ]
+                    ( Options.styled p [ Typo.caption, Typo.right ] [ text "Right align" ]
                     , """
-                       p [ Typo.many [Typo.caption, Typo.right] ]
+                       Options.styled p
+                         [ Typo.caption, Typo.right ]
                          [ text "Right align" ]
                        """
                     )
 
                 , typoRow'
-                    ( p [ Typo.many [Typo.justify, Typo.subheadingColorContrast] ] [ text "Justified" ]
+                    ( Options.styled p [ Typo.justify, Typo.subheadingColorContrast ] [ text "Justified" ]
                     , """
-                       p [ Typo.many [Typo.justify, Typo.subheadingColorContrast] ]
+                       Options.styled p
+                         [ Typo.justify, Typo.subheadingColorContrast ]
                          [ text "Justified" ]
                        """
                     )
 
                 , typoRow'
-                    ( p [ class Typo.capitalize ] [ text "capitalized" ]
+                    ( Options.styled p [ Typo.capitalize ] [ text "capitalized" ]
                     , """
-                       p [ class Typo.capitalize ]
+                       Options.styled p
+                         [ Typo.capitalize ]
                          [ text "capitalized" ]
                        """
                     )
 
                 , typoRow'
-                    ( p [ class Typo.lowercase ] [ text "LOWERCASE" ]
+                    ( Options.styled p [ Typo.lowercase ] [ text "LOWERCASE" ]
                     , """
-                       p [ class Typo.lowercase ]
+                       Options.styled p
+                         [ Typo.lowercase ]
                          [ text "LOWERCASE" ]
                        """
                     )
 
                 , typoRow'
-                    ( p [ class Typo.uppercase ] [ text "uppercase" ]
+                    ( Options.styled p [ Typo.uppercase ] [ text "uppercase" ]
                     , """
-                       p [ class Typo.uppercase ]
+                       Options.styled p
+                         [ Typo.uppercase ]
                          [ text "uppercase" ]
                        """
                     )
