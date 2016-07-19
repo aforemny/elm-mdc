@@ -118,7 +118,7 @@ defaultConfig : Config m
 defaultConfig =
   { isDisabled = False
   , value = False
-  , ripple = True
+  , ripple = False
   , group = Nothing
   , onClick = Nothing
   }
