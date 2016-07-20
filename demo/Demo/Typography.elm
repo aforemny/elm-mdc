@@ -2,7 +2,7 @@ module Demo.Typography exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Attributes as Html
+--import Html.Attributes as Html
 
 import Material.Typography as Typo
 import Material.Options as Options
@@ -49,232 +49,184 @@ update action model =
       Material.update Mdl action' model
 
 
-
-typoRow : (Html m, String) -> Html m
-typoRow (html, code) =
-  tr []
-    [ td [ Html.style [("padding-right", "40px")]] [Code.code code]
-    , td [ Html.style [("padding-left", "40px")]] [html]
-    ]
-
-
-typoRow' : (Html m, String) -> Html m
-typoRow' (html, code) =
-  tr []
-    [ td [ Html.style [ ("padding-right", "40px")
-                      ]
-         ]
-        [Code.code code]
-    , td [ Html.style [ ("padding-left", "40px")
-                      , ("width", "45%")
-                      ]
-         ]
-        [html]
-    ]
-
 -- VIEW
+
+
+demo1 : List ( Html a, String ) 
+demo1 = 
+  [  ( Options.styled p [ Typo.display4 ] [text "Light 112px"]
+     , """
+       Options.styled p
+         [ Typo.display4 ]
+         [ text "Light 112px" ]
+       """
+     )
+  , ( Options.styled p [ Typo.display3 ] [text "Regular 56px" ]
+    , """
+      Options.styled p
+        [ Typo.display3 ]
+        [ text "Regular 56px" ]
+      """
+    )
+  , ( Options.styled p [ Typo.display2 ] [text "Regular 45px"]
+    , """
+      Options.styled p
+        [ Typo.display2 ]
+        [ text "Regular 45px" ]
+      """
+    )
+  , ( Options.styled p [ Typo.display1 ] [text "Regular 34px"]
+    , """
+      Options.styled p
+        [ Typo.display1 ]
+        [ text "Regular 34px" ]
+      """
+    )
+
+  ,  ( Options.styled p [ Typo.headline ] [text "Regular 24px"]
+     , """
+       Options.styled p
+         [ Typo.headline ]
+         [ text "Regular 24px" ]
+       """
+     )
+  , ( Options.styled p [ Typo.title ] [text "Medium 20px"]
+    , """
+      Options.styled p
+        [ Typo.title ]
+        [ text "Medium 20px" ]
+      """
+     )
+  ,  ( Options.styled p [ Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
+     , """
+       Options.styled p
+         [ Typo.subheading ]
+         [ text "Regular 16px (Device), Regular 15px (Desktop)" ]
+       """
+     )
+  ,  ( Options.styled p [ Typo.body2 ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
+     , """
+        Options.styled p
+          [ Typo.body2 ]
+          [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
+        """
+     )
+  ,  ( Options.styled p [ Typo.body1 ] [text "Regular 14px (Device), Regular 13px (Desktop)"]
+     , """
+        Options.styled p
+          [ Typo.body1 ]
+          [ text "Regular 14px (Device), Regular 13px (Desktop)" ]
+        """
+     )
+  ,  ( Options.styled p [ Typo.caption ] [text "Regular 12px"]
+     , """
+        Options.styled p
+          [ Typo.caption ]
+          [ text "Regular 12px" ]
+        """
+     )
+  ,  ( Options.styled p [ Typo.button ] [text "Medium (All Caps) 14px"]
+     , """
+        Options.styled p
+          [ Typo.button ]
+          [ text "Medium (All Caps) 14px" ]
+        """
+     )
+  ,  ( Options.styled p [ Typo.menu ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
+     , """
+        Options.styled p
+          [ Typo.menu ]
+          [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
+        """
+     )
+  ]
+
+
+demo2 : List ( Html a, String ) 
+demo2 = 
+  [ ( Options.styled p [ Typo.left, Typo.titleColorContrast ] [ text "Left align" ]
+    , """
+       Options.styled p
+         [ Typo.left, Typo.titleColorContrast ]
+         [ text "Left align" ]
+       """
+    )
+  , ( Options.styled p [ Typo.body2ColorContrast, Typo.center ] [ text "Center align" ]
+    , """
+       Options.styled p
+         [ Typo.body2ColorContrast, Typo.center ]
+         [ text "Center align" ]
+       """
+    )
+  , ( Options.styled p [ Typo.caption, Typo.right ] [ text "Right align" ]
+    , """
+       Options.styled p
+         [ Typo.caption, Typo.right ]
+         [ text "Right align" ]
+       """
+    )
+  , ( Options.styled p [ Typo.justify, Typo.subheadingColorContrast ] [ text "Justified" ]
+    , """
+       Options.styled p
+         [ Typo.justify, Typo.subheadingColorContrast ]
+         [ text "Justified" ]
+       """
+    )
+  , ( Options.styled p [ Typo.capitalize ] [ text "capitalized" ]
+    , """
+       Options.styled p
+         [ Typo.capitalize ]
+         [ text "capitalized" ]
+       """
+    )
+  , ( Options.styled p [ Typo.lowercase ] [ text "LOWERCASE" ]
+    , """
+       Options.styled p
+         [ Typo.lowercase ]
+         [ text "LOWERCASE" ]
+       """
+    )
+  , ( Options.styled p [ Typo.uppercase ] [ text "uppercase" ]
+    , """
+       Options.styled p
+         [ Typo.uppercase ]
+         [ text "uppercase" ]
+       """
+    )
+  ]
+
+
 
 
 view : Model -> Html Msg
 view model  =
-  [ Grid.grid []
-      [ Grid.cell [Grid.size Grid.All 12]
-          [ p [] [text "Example use: "]
-          , Code.code """
-                       import Material.Typography as Typo
-                       import Material.Options as Options
-                       import Html exposing (p)
-                       """
-          ]
-
-      , Grid.cell [ Grid.size Grid.All 12 ]
-        [ table []
-            [ tbody []
-                [ typoRow
-                   ( Options.styled p [ Typo.display4 ] [text "Light 112px"]
-                   , """
-                      Options.styled p
-                        [ Typo.display4 ]
-                        [ text "Light 112px" ]
-                      """
-                   )
-
-                , typoRow
-                      ( Options.styled p [ Typo.display3 ] [text "Regular 56px" ]
-                      , """
-                        Options.styled p
-                          [ Typo.display3 ]
-                          [ text "Regular 56px" ]
-                        """
-                      )
-
-                , typoRow
-                      ( Options.styled p [ Typo.display2 ] [text "Regular 45px"]
-                      , """
-                        Options.styled p
-                          [ Typo.display2 ]
-                          [ text "Regular 45px" ]
-                        """
-                      )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.display1 ] [text "Regular 34px"]
-                   , """
-                      Options.styled p
-                        [ Typo.display1 ]
-                        [ text "Regular 34px" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.headline ] [text "Regular 24px"]
-                   , """
-                      Options.styled p
-                        [ Typo.headline ]
-                        [ text "Regular 24px" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.title ] [text "Medium 20px"]
-                   , """
-                      Options.styled p
-                        [ Typo.title ]
-                        [ text "Medium 20px" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
-                   , """
-                      Options.styled p
-                        [ Typo.subheading ]
-                        [ text "Regular 16px (Device), Regular 15px (Desktop)" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.body2 ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
-                   , """
-                      Options.styled p
-                        [ Typo.body2 ]
-                        [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.body1 ] [text "Regular 14px (Device), Regular 13px (Desktop)"]
-                   , """
-                      Options.styled p
-                        [ Typo.body1 ]
-                        [ text "Regular 14px (Device), Regular 13px (Desktop)" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.caption ] [text "Regular 12px"]
-                   , """
-                      Options.styled p
-                        [ Typo.caption ]
-                        [ text "Regular 12px" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.button ] [text "Medium (All Caps) 14px"]
-                   , """
-                      Options.styled p
-                        [ Typo.button ]
-                        [ text "Medium (All Caps) 14px" ]
-                      """
-                   )
-
-                 , typoRow
-                   ( Options.styled p [ Typo.menu ] [text "Medium 14px (Device), Medium 13px (Desktop)"]
-                   , """
-                      Options.styled p
-                        [ Typo.menu ]
-                        [ text "Medium 14px (Device), Medium 13px (Desktop)" ]
-                      """
-                   )
-                ]
-            ]
+  let
+    head = 
+      Grid.cell 
+        [Grid.size Grid.All 12]
+        [ p [] [text "Imports"]
+        , Code.code """
+                     import Material.Typography as Typo
+                     import Material.Options as Options
+                     import Html exposing (p)
+                     """
+        , p [] [ text "Example use" ]
         ]
 
+    cell x = 
+      Grid.cell 
+        [ Grid.size Grid.Desktop 6
+        , Grid.size Grid.Tablet 8
+        , Grid.size Grid.Phone 4
+        ] 
+        [ x ]
 
-      , Grid.cell [ Grid.size Grid.All 12 ]
-        [ table []
-            [ tbody []
-                [ typoRow'
-                    ( Options.styled p [ Typo.left, Typo.titleColorContrast ] [ text "Left align" ]
-                    , """
-                       Options.styled p
-                         [ Typo.left, Typo.titleColorContrast ]
-                         [ text "Left align" ]
-                       """
-                    )
-
-                , typoRow'
-                    ( Options.styled p [ Typo.body2ColorContrast, Typo.center ] [ text "Center align" ]
-                    , """
-                       Options.styled p
-                         [ Typo.body2ColorContrast, Typo.center ]
-                         [ text "Center align" ]
-                       """
-                    )
-
-                , typoRow'
-                    ( Options.styled p [ Typo.caption, Typo.right ] [ text "Right align" ]
-                    , """
-                       Options.styled p
-                         [ Typo.caption, Typo.right ]
-                         [ text "Right align" ]
-                       """
-                    )
-
-                , typoRow'
-                    ( Options.styled p [ Typo.justify, Typo.subheadingColorContrast ] [ text "Justified" ]
-                    , """
-                       Options.styled p
-                         [ Typo.justify, Typo.subheadingColorContrast ]
-                         [ text "Justified" ]
-                       """
-                    )
-
-                , typoRow'
-                    ( Options.styled p [ Typo.capitalize ] [ text "capitalized" ]
-                    , """
-                       Options.styled p
-                         [ Typo.capitalize ]
-                         [ text "capitalized" ]
-                       """
-                    )
-
-                , typoRow'
-                    ( Options.styled p [ Typo.lowercase ] [ text "LOWERCASE" ]
-                    , """
-                       Options.styled p
-                         [ Typo.lowercase ]
-                         [ text "LOWERCASE" ]
-                       """
-                    )
-
-                , typoRow'
-                    ( Options.styled p [ Typo.uppercase ] [ text "uppercase" ]
-                    , """
-                       Options.styled p
-                         [ Typo.uppercase ]
-                         [ text "uppercase" ]
-                       """
-                    )
-                ]
-            ]
-        ]
-      ]
-
-
-  ]
-  |> Page.body2 "Typography" srcUrl intro references
+    demo =
+      List.concatMap (\(d, c) -> [ cell d, cell (Code.code c) ]) 
+  in
+    Page.body1' "Typography" srcUrl intro references 
+      [ Grid.grid [] <| head :: demo demo1 ] 
+      [ Grid.grid [] <| demo demo2 ]
 
 
 intro : Html m
