@@ -18,6 +18,7 @@ import Material.Helpers exposing (pure, lift, lift')
 import Material.Options as Options exposing (css, when)
 import Material.Scheme as Scheme
 import Material.Icon as Icon
+import Material.Typography as Typography
 
 import Demo.Buttons
 import Demo.Menus
@@ -210,7 +211,7 @@ e404 _ =
     ]
     [ Options.styled Html.h1
         [ Options.cs "mdl-typography--display-4" 
-        , Color.background Color.primary 
+        , Typography.center
         ]
         [ text "404" ]
     ]

@@ -12,6 +12,7 @@ import Material
 import Material.Grid as Grid
 import Material.Color as Color
 import Material.Elevation as Elevation
+import Material.Typography as Typography
 
 import Demo.Page as Page
 import Demo.Code as Code
@@ -160,7 +161,7 @@ heading : Color.Hue -> Html Msg
 heading current = 
   Options.div 
     [ css "align-self" "flex-end" 
-    , cs "mdl-typography--display-3"
+    , Typography.display3
     , Color.text (Color.color current Color.S500)
     ] 
     [ text (Color.hueName current) ] 

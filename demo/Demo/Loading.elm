@@ -10,6 +10,7 @@ import Material.Color as Color
 import Material.Button as Button
 import Material
 import Material.Helpers as Helpers exposing (map2nd)
+import Material.Typography as Typography
 
 import Demo.Code as Code
 import Demo.Page as Page
@@ -129,7 +130,7 @@ view model =
                 , Grid.align Grid.Bottom
                 ]
                 [ Options.span 
-                    [ cs "mdl-typography--display-4" ] 
+                    [ Typography.display4 ]
                     [ text <| toString model.progress ]
                 ]
             , Grid.cell

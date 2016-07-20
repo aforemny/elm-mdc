@@ -11,9 +11,8 @@ import Markdown
 
 import Material.Grid exposing (..)
 import Material.Options as Options exposing (styled, cs, css)
---import Material.Button as Button
 import Material.Color as Color
---import Material.Icon as Icon
+--import Material.Typography as Typography
 
 
 -- REFERENCES

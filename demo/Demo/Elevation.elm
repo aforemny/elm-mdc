@@ -4,6 +4,7 @@ import Html exposing (..)
 
 import Material.Options as Options exposing (cs, css, Style)
 import Material.Elevation as Elevation
+import Material.Typography as Typography
 
 import Demo.Page as Page
 
@@ -25,8 +26,7 @@ elevate (e, k) =
     , e
     ]
     [ Options.div 
-      [ cs ".mdl-typography--title-color-contrast" 
-        -- TODO. Typography!
+      [ Typography.titleColorContrast
       , css "box-radius" "2pt"
       ] 
       [ text <| toString k ]

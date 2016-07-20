@@ -10,6 +10,7 @@ import Material.Options as Options exposing (css, cs)
 import Material.Helpers as Helpers
 import Material.Toggles as Toggles
 import Material.Button as Button
+import Material.Typography as Typography
 import Material 
 
 
@@ -203,7 +204,7 @@ view model =
             , Grid.size Grid.Phone 4
             ]
             [ Options.span 
-                [ cs "mdl-typography--display-4" 
+                [ Typography.display4
                 , css "margin-right" "4rem" 
                 ] 
                 [ text <| toString model.counter ]
