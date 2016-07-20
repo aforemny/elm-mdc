@@ -9,15 +9,10 @@ CSS/JS implementation of the
 
 [![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
 
-MDL is implemented primarily through CSS, with a little bit of JavaScript
-adding and removing CSS classes in response to DOM events. This port
-re-implements the JavaScript parts in Elm, but relies on the CSS of MDL
-verbatim.
-
 ### Get Started
 
 Adapt
-[examples/Component.elm](https://github.com/debois/elm-mdl/tree/master/examples) to suit your needs. 
+[examples/Counter.elm](https://github.com/debois/elm-mdl/tree/master/examples) to suit your needs. 
 Then refer to the [extensive package
 documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/), or look at the 
 [source](https://github.com/debois/elm-mdl/tree/master/demo) of the 
@@ -30,4 +25,12 @@ Contributions are warmly encouraged! Whether you are a newcomer to Elm or
 an accomplished expert, the MDL port presents interesting challenges. Refer
 to [this page](https://github.com/debois/elm-mdl/blob/master/CONTRIBUTING.md)
 for a detailed list of possible contributions. 
+
+### Implementation
+
+MDL is implemented primarily through CSS, with a little bit of JavaScript
+adding and removing CSS classes in response to DOM events. This port
+re-implements the JavaScript parts in Elm, but relies on the CSS of MDL
+verbatim.
+
 

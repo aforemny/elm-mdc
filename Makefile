@@ -12,16 +12,19 @@ compile : demo
 	java -jar $(CLOSURE_COMPILER) -O ADVANCED --assume_function_wrapper --js elm.js > /tmp/elm.js && mv /tmp/elm.js elm.js
 	
 
-comp: 
-	$(ELM) examples/Component.elm --warn --output elm.js
+counter1: 
+	$(ELM) examples/Counter.elm --warn --output elm.js
 	
-comp-tea: 
-	$(ELM) examples/Component.elm --warn --output elm.js
+counter-many: 
+	$(ELM) examples/Counter-many.elm --warn --output elm.js
+
+counter1-no-parts: 
+	$(ELM) examples/Counter-no-parts.elm --warn --output elm.js
 
 docs: 
 	$(ELM) --docs=docs.json 
 
-test: docs demo comp comp-tea 
+test: docs demo counter1 counter-many counter1-no-parts
 
 copy-assets : 
 	(cd demo; cp -r assets ../$(PAGES))

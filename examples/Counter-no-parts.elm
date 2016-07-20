@@ -1,3 +1,7 @@
+{- This file shows how to use elm-mdl components as vanilla TEA components. You
+are unlikely to want this; consider looking at Counter.elm instead. 
+-}
+
 import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
@@ -48,8 +52,8 @@ reset model =
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
-  case action of
+update msg model =
+  case msg of
     Increase -> 
        ( { model | count = model.count + 1 } 
        , Cmd.none
@@ -60,19 +64,19 @@ update action model =
        , Cmd.none
        )
  
-    IncreaseButtonMsg action' -> 
+    IncreaseButtonMsg msg' -> 
       let 
         (submodel, fx) =
-          Button.update action' model.increaseButtonModel
+          Button.update msg' model.increaseButtonModel
       in 
         ( { model | increaseButtonModel = submodel }
         , Cmd.map IncreaseButtonMsg fx
         )
 
-    ResetButtonMsg action' -> 
+    ResetButtonMsg msg' -> 
       let 
         (submodel, fx) =
-          Button.update action' model.resetButtonModel 
+          Button.update msg' model.resetButtonModel 
       in 
         ( { model | resetButtonModel = submodel }
         , Cmd.map ResetButtonMsg fx
