@@ -4,6 +4,8 @@ module Material.Textfield exposing
   , Msg, Model, defaultModel, update, view
   , render
   , text', textarea, rows, cols
+  , autofocus
+  , maxlength
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -41,6 +43,7 @@ This implementation provides only single-line and password.
   
 # Appearance
 @docs label, floatingLabel, error, disabled, rows, cols
+@docs autofocus, maxlength
 
 # Type 
 @docs password, textarea, text', onInput
@@ -79,6 +82,8 @@ type alias Config m =
   , kind : Kind
   , rows : Maybe Int
   , cols : Maybe Int
+  , autofocus : Bool
+  , maxlength : Maybe Int
   }
 
 
@@ -93,6 +98,8 @@ defaultConfig =
   , onInput = Nothing
   , rows = Nothing
   , cols = Nothing
+  , autofocus = False
+  , maxlength = Nothing
   }
 
 
@@ -131,6 +138,22 @@ value : String -> Property m
 value str = 
   Options.set
     (\config -> { config | value = Just str })
+
+
+{-| Specifies that the input should automatically get focus when the page loads
+-}
+autofocus : Property m
+autofocus =
+  Options.set
+    (\config -> { config | autofocus = True })
+
+
+{-| Specifies the maximum number of characters allowed in the input
+-}
+maxlength : Int -> Property m
+maxlength v =
+  Options.set
+    (\config -> { config | maxlength = Just v })
 
 
 {-| Disable the textfield input
@@ -285,6 +308,12 @@ view lift model options =
                ++ (case config.cols of
                        Just c -> [Html.Attributes.cols c]
                        Nothing -> [])
+
+    maxlength =
+      case config.maxlength of
+        Just val -> [Html.Attributes.maxlength val]
+        Nothing -> []
+
   in
     Options.apply summary div
       [ cs "mdl-textfield"
@@ -309,7 +338,8 @@ view lift model options =
                 Html.Attributes.value str
               Nothing -> 
                 Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
-          ] ++ typeAttributes)
+          , Html.Attributes.autofocus config.autofocus
+          ] ++ typeAttributes ++ maxlength)
           []
       , Just <| Html.label 
           [class "mdl-textfield__label"]  

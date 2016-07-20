@@ -115,8 +115,10 @@ view model =
       , Textfield.password
       ]
   , Textfield.render MDL [6] model.mdl
-      [ Textfield.label "Default multiline textfield"
+      [ Textfield.label "Default multiline textfield (180 char limit)"
       , Textfield.textarea
+      , Textfield.autofocus
+      , Textfield.maxlength 180
       ]
   , Textfield.render MDL [7] model.mdl
       [ Textfield.label "Multiline with 6 rows"
