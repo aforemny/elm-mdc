@@ -40,6 +40,8 @@ type Msg
   | Upd0 String 
   | Upd3 String
   | Upd4 String
+  | Blur (List Int)
+  | Focus (List Int)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -56,6 +58,12 @@ update action model =
   
     Upd4 str -> 
       ( { model | str4 = str }, Cmd.none )
+
+    Blur idx ->
+      ( model, Cmd.none )
+
+    Focus idx ->
+      ( model, Cmd.none )
 
 
 -- VIEW
@@ -113,12 +121,16 @@ view model =
       [ Textfield.label "Enter password"
       , Textfield.floatingLabel
       , Textfield.password
+      , Textfield.onFocus (Focus [5])
+      , Textfield.onBlur (Blur [5])
       ]
   , Textfield.render MDL [6] model.mdl
-      [ Textfield.label "Default multiline textfield (180 char limit)"
+      [ Textfield.label "Default multiline textfield (50 char limit)"
       , Textfield.textarea
       , Textfield.autofocus
-      , Textfield.maxlength 180
+      , Textfield.maxlength 50
+      , Textfield.onBlur (Blur [6])
+      , Textfield.onFocus (Focus [6])
       ]
   , Textfield.render MDL [7] model.mdl
       [ Textfield.label "Multiline with 6 rows"

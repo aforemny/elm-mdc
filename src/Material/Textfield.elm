@@ -6,6 +6,8 @@ module Material.Textfield exposing
   , text', textarea, rows, cols
   , autofocus
   , maxlength
+  , onBlur
+  , onFocus
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -47,6 +49,7 @@ This implementation provides only single-line and password.
 
 # Type 
 @docs password, textarea, text', onInput
+@docs onBlur, onFocus
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
@@ -55,7 +58,7 @@ This implementation provides only single-line and password.
 
 import Html exposing (div, span, Html, text)
 import Html.Attributes exposing (class, type', style)
-import Html.Events exposing (onFocus, onBlur, targetValue)
+import Html.Events exposing (targetValue)
 import Json.Decode as Decoder
 import Platform.Cmd
 
@@ -84,6 +87,8 @@ type alias Config m =
   , cols : Maybe Int
   , autofocus : Bool
   , maxlength : Maybe Int
+  , onBlur : Maybe (Html.Attribute m)
+  , onFocus : Maybe (Html.Attribute m)
   }
 
 
@@ -100,6 +105,8 @@ defaultConfig =
   , cols = Nothing
   , autofocus = False
   , maxlength = Nothing
+  , onBlur = Nothing
+  , onFocus = Nothing
   }
 
 
@@ -171,6 +178,24 @@ onInput f =
   Options.set
     (\config -> { config | onInput = 
       Just (Html.Events.on "input" (Decoder.map f targetValue)) })
+
+
+{-| The `blur` event occurs when the input loses focus.
+-}
+onBlur : m -> Property m
+onBlur f =
+  Options.set
+    (\config -> { config | onBlur =
+      Just (Html.Events.on "focusout" (Decoder.succeed f)) })
+
+
+{-| The `focus` event occurs when the input gets focus.
+-}
+onFocus : m -> Property m
+onFocus f =
+  Options.set
+    (\config -> { config | onFocus =
+      Just (Html.Events.on "focusin" (Decoder.succeed f)) })
 
 
 {-| Sets the type of input to 'password'.
@@ -257,6 +282,7 @@ type Msg
   = Blur
   | Focus
   | Input String
+  | NoOp
 
 
 {-| Component update.
@@ -264,6 +290,7 @@ type Msg
 update : Msg -> Model -> Model
 update action model =
   case action of
+    NoOp -> model
     Input str -> 
       { model | value = str }
       
@@ -326,13 +353,15 @@ view lift model options =
       , if config.disabled then cs "is-disabled" else nop
       ]
       [ config.onInput
+      , config.onBlur
+      , config.onFocus
       ]
       ([ Just <| elementFunction
           ([ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
           , Html.Attributes.disabled config.disabled 
-          , onBlur (lift Blur)
-          , onFocus (lift Focus)
+          , Html.Events.onBlur (lift Blur)
+          , Html.Events.onFocus (lift Focus)
           , case config.value of
               Just str -> 
                 Html.Attributes.value str
