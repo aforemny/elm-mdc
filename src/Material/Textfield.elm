@@ -282,7 +282,6 @@ type Msg
   = Blur
   | Focus
   | Input String
-  | NoOp
 
 
 {-| Component update.
@@ -290,7 +289,6 @@ type Msg
 update : Msg -> Model -> Model
 update action model =
   case action of
-    NoOp -> model
     Input str -> 
       { model | value = str }
       
