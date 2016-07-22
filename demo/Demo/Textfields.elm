@@ -10,7 +10,10 @@ import Material.Options as Options
 import Material
 
 import Demo.Page as Page
+import String
 
+import Material.Slider as Slider
+import Material.Typography as Typo
 
 -- MODEL
 
@@ -20,6 +23,8 @@ type alias Model =
   , str0 : String
   , str3 : String
   , str4 : String
+  , str6 : String
+  , length : Float 
   }
 
 
@@ -29,6 +34,8 @@ model =
   , str0 = ""
   , str3 = ""
   , str4 = ""
+  , str6 = ""
+  , length = 50
   }
 
 
@@ -40,8 +47,10 @@ type Msg
   | Upd0 String 
   | Upd3 String
   | Upd4 String
+  | Upd6 String
   | Blur (List Int)
   | Focus (List Int)
+  | Slider Float 
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -58,6 +67,12 @@ update action model =
   
     Upd4 str -> 
       ( { model | str4 = str }, Cmd.none )
+      
+    Upd6 str -> 
+      ( { model | str6 = str }, Cmd.none )
+
+    Slider value ->
+        ( { model | length = value }, Cmd.none)
 
     Blur idx ->
       ( model, Cmd.none )
@@ -125,19 +140,50 @@ view model =
       , Textfield.onBlur (Blur [5])
       ]
   , Textfield.render MDL [6] model.mdl
-      [ Textfield.label "Default multiline textfield (50 char limit)"
+      [ Textfield.label "Default multiline textfield"
       , Textfield.textarea
-      , Textfield.autofocus
-      , Textfield.maxlength 50
-      , Textfield.onBlur (Blur [6])
-      , Textfield.onFocus (Focus [6])
       ]
+
   , Textfield.render MDL [7] model.mdl
       [ Textfield.label "Multiline with 6 rows"
       , Textfield.floatingLabel
       , Textfield.textarea
       , Textfield.rows 6
       ]
+
+  , Html.div [] 
+    [ Textfield.render MDL [8] model.mdl
+        [ Textfield.label ("Multiline textfield (" ++ 
+                            (toString (String.length model.str6)) 
+                            ++ " of " ++ (toString (truncate model.length)) 
+                            ++ " char limit)")
+        , Textfield.onInput Upd6
+        , Textfield.textarea
+
+        , Textfield.maxlength (truncate model.length)
+
+        , Textfield.autofocus
+
+        , Textfield.floatingLabel
+        
+        , Textfield.onBlur (Blur [8])
+        , Textfield.onFocus (Focus [8])
+        ]
+    , Options.styled Html.p 
+        [ Options.css "width" "80%" ] 
+        [ Options.styled Html.span
+          [ Typo.caption ]
+          [ Html.text "Drag to change the maxlength" ]
+        , Slider.view
+            [ Slider.onChange Slider
+            , Slider.value model.length
+            , Slider.max 200
+            , Slider.min 50
+            , Slider.step 1
+            ]
+        ]
+    ]
+
   ]
   |> List.map (\c -> 
       cell 
@@ -171,9 +217,6 @@ intro =
 > text field, and may be initially or programmatically disabled. There are three
 > main types of text fields in the text field component, each with its own basic
 > coding requirements. The types are single-line, multi-line, and expandable.
-
-This implementation provides only single-line.
-
 """
 
 srcUrl : String

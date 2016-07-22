@@ -35,8 +35,6 @@ Refer to
 [this site](https://debois.github.io/elm-mdl/#/textfields)
 for a live demo.
  
-This implementation provides only single-line and password.
-
 # Component render
 @docs render
 
