@@ -42,7 +42,7 @@ model =
 
 
 type Msg
-  = MenuMsg Int Menu.msg
+  = MenuMsg Int Menu.Msg
   | MDL Material.Msg
   | Select String
   | SetIcon String
