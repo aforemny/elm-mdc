@@ -19,6 +19,7 @@ import Material.Options as Options exposing (css, when)
 import Material.Scheme as Scheme
 import Material.Icon as Icon
 import Material.Typography as Typography
+import Material.Menu as Menu
 
 import Demo.Buttons
 import Demo.Menus
@@ -354,7 +355,11 @@ main =
           , Layout.sub0 Mdl 
         )
     , view = view
-    , subscriptions = .mdl >> Layout.subs Mdl
+    , subscriptions = \model ->
+        Sub.batch
+        [ Sub.map MenusMsg (Menu.subs Demo.Menus.MDL model.menus.mdl)
+        , Layout.subs Mdl model.mdl
+        ]
     , update = update
     }
 

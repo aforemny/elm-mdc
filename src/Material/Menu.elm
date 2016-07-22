@@ -4,6 +4,7 @@ module Material.Menu exposing
   , Property
   , bottomLeft, bottomRight, topLeft, topRight, ripple, icon
   , Item
+  , subscriptions, subs
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#menus-section):
@@ -57,6 +58,7 @@ import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode exposing (string)
 import Material.Helpers as Helpers exposing (cssTransitionStep)
+import Mouse
 import String
 import Html.App
 
@@ -93,6 +95,39 @@ constant =
 --  , upArrow   = 38
 --  , downArrow = 40
 --  }
+
+
+subs : (Parts.Msg (Container b) -> c) -> Container b -> Sub c
+subs lift =
+  .menu
+  >> Dict.toList
+  >> List.map (\(idx, model) ->
+       subscriptions idx model
+       |> Sub.map (pack idx >> lift)
+     )
+  >> Sub.batch
+
+
+pack : Index -> Msg -> Parts.Msg (Container b)
+pack idx =
+  let
+    get = .menu >> Dict.get idx >> Maybe.withDefault defaultModel
+    set x c = { c | menu = Dict.insert idx x c.menu }
+    update' msg model =
+      update msg model
+      |> Helpers.map1st Just
+    embeddedUpdate =
+      Parts.embedUpdate' get set update'
+  in
+    Parts.pack' embeddedUpdate
+
+
+subscriptions : Index -> Model -> Sub Msg
+subscriptions idx model =
+  if (model.animationState == Opening) || (model.animationState == Opened) then
+      Mouse.clicks Click
+    else
+      Sub.none
 
 
 -- MODEL
@@ -145,16 +180,18 @@ type Msg
   = Open Geometry
   | Select Int Geometry
   | Close Geometry
-  | Tick
+  | Tick Geometry
   | Ripple Int Ripple.Msg
+  | Click Mouse.Position
 
 
 {-| Component update.
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
+update msg model =
 
-  case action of
+  case msg of
+
     Open geometry ->
       ( { model
         | animationState =
@@ -163,11 +200,11 @@ update action model =
               _       -> Opening
         , geometry = Just geometry
         }
-      , cssTransitionStep Tick
+      , cssTransitionStep (Tick geometry)
       )
 
-    Tick ->
-      ( { model | animationState = Opened }
+    Tick geometry ->
+      ( { model | geometry = Just geometry, animationState = Opened }
       , Cmd.none
       )
 
@@ -195,6 +232,24 @@ update action model =
         ( { model | items = Dict.insert idx model' model.items }
         , Cmd.map (Ripple idx) effects
         )
+
+    Click pos ->
+      if (model.animationState == Opening) || (model.animationState == Opened) then
+          case model.geometry of
+            Just geometry ->
+              let
+                inside { x, y } { top, left, width, height } =
+                  (left <= toFloat x) && (toFloat x <= left + width) &&
+                  (top <= toFloat y) && (toFloat y <= top + height)
+              in
+                if pos `inside` geometry.container.bounds then
+                    model ! []
+                  else
+                    update (Close geometry) model
+            Nothing ->
+              model ! []
+        else
+          model ! []
 
 
 -- PROPERTIES
