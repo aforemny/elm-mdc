@@ -4,6 +4,10 @@ module Material.Textfield exposing
   , Msg, Model, defaultModel, update, view
   , render
   , text', textarea, rows, cols
+  , autofocus
+  , maxlength
+  , onBlur
+  , onFocus
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -31,8 +35,6 @@ Refer to
 [this site](https://debois.github.io/elm-mdl/#/textfields)
 for a live demo.
  
-This implementation provides only single-line and password.
-
 # Component render
 @docs render
 
@@ -41,9 +43,11 @@ This implementation provides only single-line and password.
   
 # Appearance
 @docs label, floatingLabel, error, disabled, rows, cols
+@docs autofocus, maxlength
 
 # Type 
 @docs password, textarea, text', onInput
+@docs onBlur, onFocus
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
@@ -52,7 +56,7 @@ This implementation provides only single-line and password.
 
 import Html exposing (div, span, Html, text)
 import Html.Attributes exposing (class, type', style)
-import Html.Events exposing (onFocus, onBlur, targetValue)
+import Html.Events exposing (targetValue)
 import Json.Decode as Decoder
 import Platform.Cmd
 
@@ -79,6 +83,10 @@ type alias Config m =
   , kind : Kind
   , rows : Maybe Int
   , cols : Maybe Int
+  , autofocus : Bool
+  , maxlength : Maybe Int
+  , onBlur : Maybe (Html.Attribute m)
+  , onFocus : Maybe (Html.Attribute m)
   }
 
 
@@ -93,6 +101,10 @@ defaultConfig =
   , onInput = Nothing
   , rows = Nothing
   , cols = Nothing
+  , autofocus = False
+  , maxlength = Nothing
+  , onBlur = Nothing
+  , onFocus = Nothing
   }
 
 
@@ -133,6 +145,22 @@ value str =
     (\config -> { config | value = Just str })
 
 
+{-| Specifies that the input should automatically get focus when the page loads
+-}
+autofocus : Property m
+autofocus =
+  Options.set
+    (\config -> { config | autofocus = True })
+
+
+{-| Specifies the maximum number of characters allowed in the input
+-}
+maxlength : Int -> Property m
+maxlength v =
+  Options.set
+    (\config -> { config | maxlength = Just v })
+
+
 {-| Disable the textfield input
 -}
 disabled : Property m
@@ -148,6 +176,24 @@ onInput f =
   Options.set
     (\config -> { config | onInput = 
       Just (Html.Events.on "input" (Decoder.map f targetValue)) })
+
+
+{-| The `blur` event occurs when the input loses focus.
+-}
+onBlur : m -> Property m
+onBlur f =
+  Options.set
+    (\config -> { config | onBlur =
+      Just (Html.Events.on "focusout" (Decoder.succeed f)) })
+
+
+{-| The `focus` event occurs when the input gets focus.
+-}
+onFocus : m -> Property m
+onFocus f =
+  Options.set
+    (\config -> { config | onFocus =
+      Just (Html.Events.on "focusin" (Decoder.succeed f)) })
 
 
 {-| Sets the type of input to 'password'.
@@ -285,6 +331,12 @@ view lift model options =
                ++ (case config.cols of
                        Just c -> [Html.Attributes.cols c]
                        Nothing -> [])
+
+    maxlength =
+      case config.maxlength of
+        Just val -> [Html.Attributes.maxlength val]
+        Nothing -> []
+
   in
     Options.apply summary div
       [ cs "mdl-textfield"
@@ -297,19 +349,22 @@ view lift model options =
       , if config.disabled then cs "is-disabled" else nop
       ]
       [ config.onInput
+      , config.onBlur
+      , config.onFocus
       ]
       ([ Just <| elementFunction
           ([ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
           , Html.Attributes.disabled config.disabled 
-          , onBlur (lift Blur)
-          , onFocus (lift Focus)
+          , Html.Events.onBlur (lift Blur)
+          , Html.Events.onFocus (lift Focus)
           , case config.value of
               Just str -> 
                 Html.Attributes.value str
               Nothing -> 
                 Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
-          ] ++ typeAttributes)
+          , Html.Attributes.autofocus config.autofocus
+          ] ++ typeAttributes ++ maxlength)
           []
       , Just <| Html.label 
           [class "mdl-textfield__label"]  
