@@ -11,6 +11,8 @@ import Demo.Page as Page
 
 import Html.Attributes as Html
 
+import Demo.Code as Code
+
 
 -- MODEL
 
@@ -87,6 +89,105 @@ customStyles = """
   }
   """
 
+
+miniFooterDoc : String
+miniFooterDoc =
+  """
+    Footer.mini []
+      { left =
+          Footer.left []
+            [ Footer.logo [] [ Footer.html <| text "Mini Footer Example" ]
+            , Footer.links []
+                [ Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 1"]
+                , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 2"]
+                , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 3"]
+                ]
+            ]
+
+      , right =
+          Footer.right []
+            [ Footer.logo [] [ Footer.html <| text "Mini Footer Right Section" ]
+            , Footer.socialButton [Options.css "margin-right" "6px"] []
+            , Footer.socialButton [Options.css "margin-right" "6px"] []
+            , Footer.socialButton [Options.css "margin-right" "0px"] []
+            ]
+      }
+   """
+
+
+megaFooterDoc : String
+megaFooterDoc =
+  """
+    Footer.mega []
+      { top = Footer.top []
+          { left = Footer.left []
+              [ Footer.logo [] [ Footer.html <| text "Mega Footer Top Section" ]
+              , Footer.socialButton [Options.css "margin-right" "6px"] []
+              , Footer.socialButton [Options.css "margin-right" "6px"] []
+              , Footer.socialButton [] []
+              ]
+          , right = Footer.right []
+              [ Footer.link [Footer.href "#footers"] [text "Link 1"]
+              , Footer.link [Footer.href "#footers"] [text "Link 2"]
+              , Footer.link [Footer.href "#footers"] [text "Link 3"]
+              ]
+          }
+      , middle = Footer.middle []
+          [ Footer.dropdown []
+              [ Footer.heading [] [Footer.html <| text "Mega Footer Middle Section"]
+              , Footer.links []
+                  [ Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 1"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 2"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 3"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 4"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 5"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 6"]
+                  ]
+              ]
+
+          , Footer.dropdown []
+              [ Footer.heading [] [Footer.html <| text "Can have"]
+              , Footer.links []
+                  [ Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 1"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 2"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 3"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 4"]
+                  ]
+              ]
+
+          , Footer.dropdown []
+              [ Footer.heading [] [Footer.html <| text "Many dropdowns"]
+              , Footer.links []
+                  [ Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 1"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 2"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 3"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 4"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 5"]
+                  ]
+              ]
+
+          , Footer.dropdown []
+              [ Footer.heading [] [Footer.html <| text "And more dropdowns"]
+              , Footer.links []
+                  [ Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 1"]
+                  , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 2"]
+                  ]
+              ]
+          ]
+
+      , bottom = Footer.bottom []
+          [ Footer.logo [] [ Footer.html <| text "Mega Bottom Section Example" ]
+          , Footer.links []
+              [ Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 1"]
+              , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 2"]
+              , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 3"]
+              , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 4"]
+              , Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text "Link 5"]
+              ]
+          ]
+      }
+   """
+
 -- VIEW
 
 view : Model -> Html Msg
@@ -105,7 +206,14 @@ view model  =
         { left =
             Footer.left []
               [ Footer.logo [] [ Footer.html <| text "Mini Footer Example" ]
-              , Footer.links [] <| createLinks 3
+              , Footer.links []
+                  [ Footer.linkItem [ Footer.href "#footers"]
+                      [ Footer.html <| text "Link 1"]
+                  , Footer.linkItem [ Footer.href "#footers"]
+                      [ Footer.html <| text "Link 2"]
+                  , Footer.linkItem [ Footer.href "#footers"]
+                      [ Footer.html <| text "Link 3"]
+                  ]
               ]
 
         , right =
@@ -117,6 +225,8 @@ view model  =
               ]
         }
     ]
+  , Code.code miniFooterDoc
+
   , div [Html.style [("margin-top", "60px")]] []
   , h4 [] [ text "Mega footer" ]
   , p [] [text """The mega footer typically has more contents and more
@@ -165,6 +275,7 @@ view model  =
             ]
         }
     ]
+  , Code.code megaFooterDoc
   ]
   |> Page.body2 "Footers" srcUrl intro references
 
