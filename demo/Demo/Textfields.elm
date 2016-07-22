@@ -35,7 +35,7 @@ model =
   , str3 = ""
   , str4 = ""
   , str6 = ""
-  , length = 50
+  , length = 5
   }
 
 
@@ -177,8 +177,8 @@ view model =
         , Slider.view
             [ Slider.onChange Slider
             , Slider.value model.length
-            , Slider.max 200
-            , Slider.min 50
+            , Slider.max 100
+            , Slider.min 1
             , Slider.step 1
             ]
         ]
