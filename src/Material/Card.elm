@@ -46,9 +46,7 @@ for a live demo.
 @docs Container, Observer, Instance, instance, fwdTemplate
 -}
 
-import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Parts exposing (Indexed)
 import Material.Options as Options exposing (Style, cs)
 
 
