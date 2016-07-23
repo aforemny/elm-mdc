@@ -80,17 +80,18 @@ contentBlock block =
     Title styling title ->
       Options.div (cs "mdl-card__title" :: styling)
         [ Options.styled Html.h2
-          (cs "mdl-card__title-text" :: styling)
-          [ text title
-          ]
+          [ cs "mdl-card__title-text" ]
+          [ text title ]
         ]
 
     TitleAndSubtitle styling title subtitle ->
       Options.div (cs "mdl-card__title" :: styling)
         [ Options.styled Html.h2
-          (cs "mdl-card__title-text" :: styling)
+          [ cs "mdl-card__title-text" ]
           [ text title ]
-        , Options.span (cs "mdl-card__subtitle-text" :: styling) [text subtitle]
+        , Options.span
+          [ cs "mdl-card__subtitle-text" ]
+          [ text subtitle ]
         ]
 
     Menu styling content ->
