@@ -117,23 +117,23 @@ lift' get set update action model =
 
 {-| Convenience function for writing update-function boilerplate. Example use:
 
-  case action of 
-    ...
-    ButtonsMsg a -> 
-      lift .buttons (\m x->{m|buttons=x}) ButtonsMsg Demo.Buttons.update a model
+    case msg of 
+      ...
+      ButtonsMsg msg' -> 
+        lift .buttons (\m x->{m|buttons=x}) ButtonsMsg Demo.Buttons.update msg' model
 
 This is equivalent to the more verbose
 
-  case action of 
-    ...
-    ButtonsMsg a -> 
-      let 
-        (buttons', cmd) = 
-          Demo.Buttons.update a model.buttons
-      in 
-        ( { model | buttons = buttons'}
-        , Cmd.map ButtonsMsg cmd
-        )
+    case msg of 
+      ...
+      ButtonsMsg msg' -> 
+        let 
+          (buttons', cmd) = 
+            Demo.Buttons.update msg' model.buttons
+        in 
+          ( { model | buttons = buttons'}
+          , Cmd.map ButtonsMsg cmd
+          )
 -}
 lift :
   (model -> submodel) ->                                      -- get

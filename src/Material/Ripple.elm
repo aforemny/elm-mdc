@@ -1,6 +1,4 @@
-module Material.Ripple exposing
-  (..
-  )
+module Material.Ripple exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -8,7 +6,7 @@ import Html.Events
 import Json.Decode as Json exposing ((:=), at)
 import Platform.Cmd exposing (Cmd, none)
 
-import Material.Helpers exposing (effect, cssTransitionStep)
+import Material.Helpers exposing (effect, pure, cssTransitionStep)
 import DOM
 
 
@@ -99,7 +97,7 @@ update action model =
   case action of
     Down domState ->
       if domState.type' == "mousedown" && model.ignoringMouseDown then
-        { model | ignoringMouseDown = False } |> effect none
+        { model | ignoringMouseDown = False } |> pure
       else
         { model
         | animation = Frame 0
@@ -119,16 +117,10 @@ update action model =
            -}
 
     Up ->
-      { model
-      | animation = Inert
-      }
-      |> effect none
+      { model | animation = Inert } |> pure
 
     Tick ->
-      { model
-      | animation = Frame 1
-      }
-      |> effect none
+      { model | animation = Frame 1 } |> pure
 
 
 
