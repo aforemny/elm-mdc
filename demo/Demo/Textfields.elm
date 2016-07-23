@@ -224,12 +224,11 @@ view model =
                             ++ " char limit)")
         , Textfield.onInput Upd6
         , Textfield.textarea
-
         , Textfield.maxlength (truncate model.length)
-
         , Textfield.autofocus
-
         , Textfield.floatingLabel
+        , Textfield.onFocus (SetFocus5 True)
+        , Textfield.onBlur (SetFocus5 False)
         ]
     , Options.styled Html.p
         [ Options.css "width" "80%" ]
@@ -243,6 +242,7 @@ view model =
             , Slider.min 1
             , Slider.step 1
             ]
+        , Textfield.error <| if model.focus5 then "focused" else "not focused"
         ]
     ]
     , """
