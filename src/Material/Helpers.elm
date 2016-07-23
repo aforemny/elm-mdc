@@ -1,7 +1,7 @@
 module Material.Helpers exposing 
   ( filter, blurOn
   , map1st, map2nd
-  , delay, fx, pure, effect, cssTransitionStep
+  , delay, cmd, pure, effect, cssTransitionStep
   , lift, lift'
   , Update, Update'
   , noAttr
@@ -15,7 +15,7 @@ find some of them useful.
 @docs filter, blurOn, noAttr
 
 # Cmd
-@docs pure, effect, delay, fx, cssTransitionStep
+@docs pure, effect, delay, cmd, cssTransitionStep
 
 # Tuples
 @docs map1st, map2nd
@@ -128,11 +128,11 @@ This is equivalent to the more verbose
     ...
     ButtonsMsg a -> 
       let 
-        (buttons', fx) = 
+        (buttons', cmd) = 
           Demo.Buttons.update a model.buttons
       in 
         ( { model | buttons = buttons'}
-        , Cmd.map ButtonsMsg fx
+        , Cmd.map ButtonsMsg cmd
         )
 -}
 lift :
@@ -151,10 +151,10 @@ lift get set fwd update action model =
 
 
 {-|
-  TODO
+  Lift any value of type `msg` to a `Cmd msg`.
 -}
-fx : msg -> Cmd msg
-fx msg =
+cmd : msg -> Cmd msg
+cmd msg =
   Task.perform (always msg) (always msg) (Task.succeed msg)
 
 

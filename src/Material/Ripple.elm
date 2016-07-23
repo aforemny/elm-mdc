@@ -8,7 +8,7 @@ import Html.Events
 import Json.Decode as Json exposing ((:=), at)
 import Platform.Cmd exposing (Cmd, none)
 
-import Material.Helpers exposing (effect, fx, cssTransitionStep)
+import Material.Helpers exposing (effect, cssTransitionStep)
 import DOM
 
 

@@ -8,7 +8,7 @@ import Markdown
 
 import Material.Elevation as Elevation
 import Material.Options exposing (css, div, stylesheet)
-import Material.Helpers as Helpers exposing (fx)
+import Material.Helpers as Helpers exposing (cmd)
 
 
 type State 
@@ -53,7 +53,7 @@ update action state =
       Set s -> 
         case state of 
           Idle ->              
-            (First s, fx (Timeout s))
+            (First s, cmd (Timeout s))
 
           First _ -> 
             (First s, Cmd.none)

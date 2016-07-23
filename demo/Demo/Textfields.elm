@@ -28,6 +28,7 @@ type alias Model =
   , str4 : String
   , str6 : String
   , length : Float
+  , focus5 : Bool
   }
 
 
@@ -39,6 +40,7 @@ model =
   , str4 = ""
   , str6 = ""
   , length = 5
+  , focus5 = False
   }
 
 
@@ -51,8 +53,7 @@ type Msg
   | Upd3 String
   | Upd4 String
   | Upd6 String
-  | Blur (List Int)
-  | Focus (List Int)
+  | SetFocus5 Bool 
   | Slider Float
 
 
@@ -77,12 +78,9 @@ update action model =
     Slider value ->
         ( { model | length = value }, Cmd.none)
 
-    Blur idx ->
-      ( model, Cmd.none )
-
-    Focus idx ->
-      ( model, Cmd.none )
-
+    SetFocus5 x ->
+      { model | focus5 = x } ! [ Cmd.none ]
+      
 
 -- VIEW
 
@@ -181,16 +179,12 @@ view model =
         [ Textfield.label "Enter password"
         , Textfield.floatingLabel
         , Textfield.password
-        , Textfield.onFocus (Focus [5])
-        , Textfield.onBlur (Blur [5])
         ]
     , """
       Textfield.render MDL [5] model.mdl
         [ Textfield.label "Enter password"
         , Textfield.floatingLabel
         , Textfield.password
-        , Textfield.onFocus (Focus [5])
-        , Textfield.onBlur (Blur [5])
         ]
        """
     )
@@ -236,9 +230,6 @@ view model =
         , Textfield.autofocus
 
         , Textfield.floatingLabel
-
-        , Textfield.onBlur (Blur [8])
-        , Textfield.onFocus (Focus [8])
         ]
     , Options.styled Html.p
         [ Options.css "width" "80%" ]

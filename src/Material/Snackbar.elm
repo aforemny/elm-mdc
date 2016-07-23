@@ -37,7 +37,7 @@ import Platform.Cmd exposing (Cmd, none)
 import Time exposing (Time)
 import Maybe exposing (andThen)
 
-import Material.Helpers exposing (map2nd, delay, fx)
+import Material.Helpers exposing (map2nd, delay, cmd)
 
 
 
@@ -145,7 +145,7 @@ move transition model =
       ( { model | state = Fading contents }
       , Cmd.batch 
           [ delay contents.fade Timeout |> next model 
-          , Click contents.payload |> fx
+          , Click contents.payload |> cmd
           ]
       )
 
@@ -159,8 +159,8 @@ move transition model =
     (Fading contents, Timeout) ->
       ( { model | state = Inert}
       , Cmd.batch 
-          [ fx Timeout |> next model 
-          , End contents.payload |> fx
+          [ cmd Timeout |> next model 
+          , End contents.payload |> cmd
           ]
       )
 
@@ -191,7 +191,7 @@ tryDequeue model =
         }
       , Cmd.batch 
           [ delay c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
-          , fx (Begin c.payload)
+          , cmd (Begin c.payload)
           ]
       )
 
