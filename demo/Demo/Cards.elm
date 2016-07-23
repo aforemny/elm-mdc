@@ -2,9 +2,9 @@ module Demo.Cards exposing (model, update, view, Model, Msg)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+import Html.Attributes exposing (style)
 
 import Material.Card as Card exposing (..)
-import Material.Grid as Grid
 import Material.Button as Button exposing (..)
 import Material.Icon as Icon
 import Material.Elevation exposing (..)
@@ -47,10 +47,12 @@ update action model =
 
 view : Model -> Html Msg
 view model =
-  [ Grid.grid []
-    [ Grid.cell []
-      [ card [ e2 ]
-        [ Card.title []
+  [ div [ style [ ("display", "flex") ] ]
+      [ card
+        [ e2
+        , css "margin" "5px"
+        ]
+        [ Card.title [ expand ]
           [ Card.h2 [] [ text "Welcome" ] ]
         , Card.supportingText []
           [ text """
@@ -73,10 +75,9 @@ Mauris sagittis pellentesque lacus eleifend lacinia...
             [ Icon.i "share"]
           ]
         ]
-      ]
-    , Grid.cell []
-      [ card
+      , card
         [ e2
+        , css "margin" "5px"
         , width "256px"
         , height "256px"
         , css "background" "url('../assets/elm.png') center / cover"
@@ -91,10 +92,11 @@ Mauris sagittis pellentesque lacus eleifend lacinia...
           [ text "elm.png"
           ]
         ]
-      ]
-    , Grid.cell []
-      [ card [ e2 ]
-        [ Card.title []
+      , card
+        [ e2
+        , css "margin" "5px"
+        ]
+        [ Card.title [ expand ]
           [ Card.h2 [] [ text "Title" ]
           , Card.subTitle [] [ text "Subtitle" ]
           ]
@@ -107,7 +109,6 @@ Mauris sagittis pellentesque lacus eleifend lacinia...
           ]
         ]
       ]
-    ]
   ]
   |> Page.body2 "Cards" srcUrl intro references
 
