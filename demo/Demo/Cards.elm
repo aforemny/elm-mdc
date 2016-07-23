@@ -3,11 +3,11 @@ module Demo.Cards exposing (model, update, view, Model, Msg)
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 
-import Material.Card exposing (..)
+import Material.Card as Card exposing (..)
 import Material.Grid as Grid
 import Material.Button as Button exposing (..)
 import Material.Icon as Icon
-import Material.Elevation exposing(..)
+import Material.Elevation exposing (..)
 import Material.Color as Color
 import Material.Options exposing (css)
 import Material
@@ -50,21 +50,22 @@ view model =
   [ Grid.grid []
     [ Grid.cell []
       [ card [ e2 ]
-        [ Title [] "Welcome"
-        , SupportingText []
+        [ Card.title []
+          [ Card.h2 [] [ text "Welcome" ] ]
+        , Card.supportingText []
           [ text """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Mauris sagittis pellentesque lacus eleifend lacinia...
 """
           ]
-        , Actions [ border ]
+        , Card.actions [ border ]
           [ Button.render Mdl [0] model.mdl
             [ Button.colored
             , Button.ripple
             ]
             [ text "Get started" ]
           ]
-        , Menu []
+        , Card.menu []
           [ Button.render Mdl [1] model.mdl
             [ Button.icon
             , Button.ripple
@@ -80,14 +81,29 @@ Mauris sagittis pellentesque lacus eleifend lacinia...
         , height "256px"
         , css "background" "url('../assets/elm.png') center / cover"
         ]
-        [ Title [ expand ] ""
-        , Actions
+        [ Card.title [ expand ] []
+        , Card.actions
           [ css "background" "rgba(0, 0, 0, 0.2)"
           , css "font-weight" "bold"
           , css "font-size" "14px"
           , Color.text Color.white
           ]
           [ text "elm.png"
+          ]
+        ]
+      ]
+    , Grid.cell []
+      [ card [ e2 ]
+        [ Card.title []
+          [ Card.h2 [] [ text "Title" ]
+          , Card.subTitle [] [ text "Subtitle" ]
+          ]
+        , Card.actions [ border ]
+          [ Button.render Mdl [2] model.mdl
+            [ Button.colored
+            , Button.ripple
+            ]
+            [ text "Do something" ]
           ]
         ]
       ]

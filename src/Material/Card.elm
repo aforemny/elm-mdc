@@ -1,10 +1,21 @@
 module Material.Card exposing
   ( card
-  , ContentBlock(..)
   , width
   , height
   , border
   , expand
+  , title
+  , menu
+  , media
+  , supportingText
+  , actions
+  , subTitle
+  , h1
+  , h2
+  , h3
+  , h4
+  , h5
+  , h6
   )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
@@ -64,35 +75,94 @@ border = Options.cs "mdl-card--border"
 expand : Style a
 expand = Options.cs "mdl-card--expand"
 
+{-| Within a card specific types of content can exist
+-}
+type ContentBlock a
+  = Title (List (Style a)) (List (Html a))
+  | Menu (List (Style a)) (List (Html a))
+  | Media (List (Style a)) (List (Html a))
+  | SupportingText (List (Style a)) (List (Html a))
+  | Actions (List (Style a)) (List (Html a))
 
-type ContentBlock msg
-  = Title (List (Style msg)) String
-  | TitleAndSubtitle (List (Style msg)) String String
-  | Menu (List (Style msg)) (List (Html msg))
-  | Media (List (Style msg)) (List (Html msg))
-  | SupportingText (List (Style msg)) (List (Html msg))
-  | Actions (List (Style msg)) (List (Html msg))
+{-| Generate a title content block
+-}
+title : List (Style a) -> List (Html a) -> ContentBlock a
+title styling content =
+  Title styling content
 
+{-| Generate a menu content block
+-}
+menu : List (Style a) -> List (Html a) -> ContentBlock a
+menu styling content =
+  Menu styling content
 
-contentBlock : ContentBlock msg -> Html msg
+{-| Generate a media content block
+-}
+media : List (Style a) -> List (Html a) -> ContentBlock a
+media styling content =
+  Media styling content
+
+{-| Generate a supporting text content block
+-}
+supportingText : List (Style a) -> List (Html a) -> ContentBlock a
+supportingText styling content =
+  SupportingText styling content
+
+{-| Generate an actions content block
+-}
+actions : List (Style a) -> List (Html a) -> ContentBlock a
+actions styling content =
+  Actions styling content
+
+{-| Generate a subtitle element for use within a title content block
+-}
+subTitle : List (Style a) -> List (Html a) -> Html a
+subTitle styling content =
+  Options.span (cs "mdl-card__subtitle-text" :: styling) content
+
+{-| Generate a header element (h1) for use within a title content block
+-}
+h1 : List (Style a) -> List (Html a) -> Html a
+h1 styling content =
+  Options.styled Html.h1 (cs "mdl-card__title-text" :: styling) content
+
+{-| Generate a header element (h2) for use within a title content block
+-}
+h2 : List (Style a) -> List (Html a) -> Html a
+h2 styling content =
+  Options.styled Html.h2 (cs "mdl-card__title-text" :: styling) content
+
+{-| Generate a header element (h3) for use within a title content block
+-}
+h3 : List (Style a) -> List (Html a) -> Html a
+h3 styling content =
+  Options.styled Html.h3 (cs "mdl-card__title-text" :: styling) content
+
+{-| Generate a header element (h4) for use within a title content block
+-}
+h4 : List (Style a) -> List (Html a) -> Html a
+h4 styling content =
+  Options.styled Html.h4 (cs "mdl-card__title-text" :: styling) content
+
+{-| Generate a header element (h5) for use within a title content block
+-}
+h5 : List (Style a) -> List (Html a) -> Html a
+h5 styling content =
+  Options.styled Html.h5 (cs "mdl-card__title-text" :: styling) content
+
+{-| Generate a header element (h6) for use within a title content block
+-}
+h6 : List (Style a) -> List (Html a) -> Html a
+h6 styling content =
+  Options.styled Html.h6 (cs "mdl-card__title-text" :: styling) content
+
+{-| Render supplied content block
+-}
+contentBlock : ContentBlock a -> Html a
 contentBlock block =
   case block of
-    Title styling title ->
-      Options.div (cs "mdl-card__title" :: styling)
-        [ Options.styled Html.h2
-          [ cs "mdl-card__title-text" ]
-          [ text title ]
-        ]
-
-    TitleAndSubtitle styling title subtitle ->
-      Options.div (cs "mdl-card__title" :: styling)
-        [ Options.styled Html.h2
-          [ cs "mdl-card__title-text" ]
-          [ text title ]
-        , Options.span
-          [ cs "mdl-card__subtitle-text" ]
-          [ text subtitle ]
-        ]
+    Title styling content ->
+      Options.div (cs "mdl-card__title" :: styling) content
 
     Menu styling content ->
       Options.div (cs "mdl-card__menu" :: styling) content
@@ -109,6 +179,6 @@ contentBlock block =
 
 {-| Construct a card with options.
 -}
-card : List (Style msg) -> List (ContentBlock msg) -> Html msg
+card : List (Style a) -> List (ContentBlock a) -> Html a
 card styling contentBlocks =
   Options.div (cs "mdl-card" :: styling) (List.map (contentBlock) contentBlocks)
