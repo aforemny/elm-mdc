@@ -321,13 +321,8 @@ outlineGeometry config geometry =
 
 {-| Component view
 -}
-view : Model -> List (Property Msg) -> List (Item Msg) -> Html Msg
-view =
-  view' identity
-
-
-view' : (Msg -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
-view' lift model properties items =
+view : (Msg -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
+view lift model properties items =
   let
     summary = Options.collect defaultConfig properties
     config = summary.config
@@ -509,7 +504,7 @@ render
   -> List (Item m)
   -> (Html m)
 render =
-  Parts.create view' update .menu (\x y -> {y | menu=x}) defaultModel
+  Parts.create view update .menu (\x y -> {y | menu=x}) defaultModel
 
 
 -- HELPERS
