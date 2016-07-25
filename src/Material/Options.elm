@@ -3,7 +3,7 @@ module Material.Options exposing
   , cs, css, many, nop, set, data
   , when, disabled
   , apply, styled, styled', stylesheet
-  , Style, div, span, onHover
+  , Style, div, span, img, onHover, center
   )
 
 
@@ -16,7 +16,7 @@ for intended use.
 @docs cs, css, data, many, nop, when
 
 # Html
-@docs Style, styled, styled', div, span, onHover, disabled
+@docs Style, styled, styled', div, span, img, onHover, center, disabled
 
 # Convenience
 @docs stylesheet
@@ -164,6 +164,18 @@ span =
   styled Html.span 
 
 
+{-| Convenience function for the not unreasonably uncommon case of setting
+attributes of an img element. Use like this: 
+
+    img
+      [ Options.css "height" "200px" ]
+      [ Html.Attributes.src "assets/image.jpg" ] 
+-}
+img : List (Property a b) -> List (Attribute b) -> Html b
+img options attrs =
+  styled' Html.img options attrs [] 
+
+
 {-| Set HTML disabled attribute. -}
 disabled : Bool -> Property c m 
 disabled v = 
@@ -254,3 +266,16 @@ Applicable only to `Style m`, not general Properties.
 onHover : m -> Style m
 onHover x =
   Attribute (on "mouseover" (Decoder.succeed x))
+
+
+{-| Options installing css for element to be a flex-box container centering its
+elements. 
+-}
+center : Property c m
+center =
+  many
+    [ css "display" "flex"
+    , css "align-items" "center"
+    , css "justify-content" "center"
+    ]
+

@@ -232,7 +232,7 @@ view model =
         ]
     , Options.styled Html.p
         [ Options.css "width" "80%" ]
-        [ Options.styled Html.span
+        [ Options.span
           [ Typo.caption ]
           [ Html.text "Drag to change the maxlength" ]
         , Slider.view
@@ -242,7 +242,7 @@ view model =
             , Slider.min 1
             , Slider.step 1
             ]
-        , Textfield.error <| if model.focus5 then "focused" else "not focused"
+        --, Textfield.error <| if model.focus5 then "focused" else "not focused"
         ]
     ]
     , """

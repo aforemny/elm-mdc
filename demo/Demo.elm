@@ -37,6 +37,7 @@ import Demo.Tabs
 import Demo.Slider
 import Demo.Typography
 import Demo.Cards
+import Demo.Lists
 --import Demo.Template
 
 
@@ -61,6 +62,7 @@ type alias Model =
   , slider : Demo.Slider.Model
   , typography : Demo.Typography.Model
   , cards : Demo.Cards.Model
+  , lists : Demo.Lists.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -85,6 +87,7 @@ model =
   , slider = Demo.Slider.model
   , typography = Demo.Typography.model
   , cards = Demo.Cards.model
+  , lists = Demo.Lists.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -113,6 +116,7 @@ type Msg
   | SliderMsg Demo.Slider.Msg
   | TypographyMsg Demo.Typography.Msg
   | CardsMsg Demo.Cards.Msg
+  | ListsMsg Demo.Lists.Msg
   | ToggleHeader
   --| TemplateMsg Demo.Template.Msg
 
@@ -161,6 +165,7 @@ update action model =
     TypographyMsg  a -> lift  .typography   (\m x->{m|typography  =x}) TypographyMsg Demo.Typography.update   a model
 
     CardsMsg   a -> lift  .cards    (\m x->{m|cards   =x}) CardsMsg  Demo.Cards.update    a model
+    ListsMsg   a -> lift  .lists    (\m x->{m|lists   =x}) ListsMsg  Demo.Lists.update    a model
 
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
@@ -177,6 +182,7 @@ tabs =
   , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
   , ("Grid", "grid", \_ -> Demo.Grid.view)
   , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
+  , ("Lists", "lists", .lists >> Demo.Lists.view >> App.map ListsMsg)
   , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
   , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
   , ("Sliders", "sliders", .slider >> Demo.Slider.view >> App.map SliderMsg)
@@ -208,7 +214,6 @@ tabUrls =
 urlTabs : Dict String Int
 urlTabs =
   List.indexedMap (\idx (_,x,_) -> (x, idx)) tabs |> Dict.fromList
-
 
 
 e404 : Model -> Html Msg
@@ -275,7 +280,6 @@ view' model =
   let
     top =
       (Array.get model.selectedTab tabViews |> Maybe.withDefault e404) model
-
   in
     Layout.render Mdl model.mdl
       [ Layout.selectedTab model.selectedTab
