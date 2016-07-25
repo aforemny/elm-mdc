@@ -176,6 +176,7 @@ tabs =
   , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
   , ("Grid", "grid", \_ -> Demo.Grid.view)
   , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
+  , ("Lists", "lists", .lists >> Demo.Lists.view >> App.map ListsMsg)
   , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
   , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
   , ("Sliders", "sliders", .slider >> Demo.Slider.view >> App.map SliderMsg)
@@ -186,7 +187,6 @@ tabs =
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> App.map TooltipMsg)
   , ("Typography", "typography", .typography >> Demo.Typography.view >> App.map TypographyMsg)
-  , ("Lists", "lists", .lists >> Demo.Lists.view >> App.map ListsMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   ]
 
@@ -275,6 +275,8 @@ view' model =
   let
     top =
       (Array.get model.selectedTab tabViews |> Maybe.withDefault e404) model
+        |> flip (::) [] 
+        |> Html.div [ Html.Attributes.autofocus True ]
       
   in
     Layout.render Mdl model.mdl

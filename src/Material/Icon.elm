@@ -3,6 +3,7 @@ module Material.Icon exposing
   , view
   , i
   , onClick
+  , Property
   )
 
 
@@ -18,7 +19,7 @@ This implementation assumes that you have
 or an equivalent means of loading the icons in your HTML header. 
 (`Material.top` will do this for you.)
 
-@docs i, view, size18, size24, size36, size48, onClick
+@docs i, view, size18, size24, size36, size48, onClick, Property
 -}
 
 
@@ -33,6 +34,8 @@ type alias Config m =
   }
 
 
+{-| Type of Icon properties. (You are unlikely to need this.)
+-}
 type alias Property m = 
   Options.Property (Config m) m
 

@@ -89,8 +89,6 @@ for a live demo.
 -}
 
 import Material.Options as Options exposing (cs)
-import Html
-import Html.Attributes as Html
 
 
 type TextStyle

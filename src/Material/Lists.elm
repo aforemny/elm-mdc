@@ -2,16 +2,10 @@ module Material.Lists
     exposing
         ( ul
         , li
-        , li2
-        , li3
-        , primaryContent
-        , avatar
-        , icon
-        , secondaryContent
-        , secondaryInfo
-        , secondaryAction
-        , textBody
-        , subTitle
+        , content, subtitle, body, withBody, withSubtitle
+        , avatar, icon
+        , avatarIcon, avatarImage 
+        , content2, info2, action2 
         )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#lists-section):
@@ -25,112 +19,134 @@ See also the
 Refer to [this site](http://debois.github.io/elm-mdl#/lists)
 for a live demo and example code.
 
-# Main list elements
-@docs ul, li, li2, li3
+# List and item containers
+@docs ul, li
 
-# Content configuration for one or multiple lines
-@docs primaryContent, avatar, icon
+# Primary content
+@docs content
+@docs avatarIcon, avatarImage
+@docs title, subtitle, withSubtitle, body, withBody, 
 
-# Content configuration for multiple lines
-@docs secondaryContent, secondaryInfo, secondaryAction, textBody, subTitle
+# Secondary content
+@docs content2, action2, info2
+
 -}
 
-import Platform.Cmd exposing (Cmd, none)
-import Html.Events as Html
 import Html exposing (Html, Attribute)
-import Parts exposing (Indexed)
-import Material.Options as Options exposing (Property, Style, cs, nop)
+import Html.Attributes 
+import Material.Options as Options exposing (Property, Style, cs, css, nop)
+import Material.Icon as Icon
 
 
-{-| List main function
+
+{-| Container for list items. (Use this rather than `Html.ul`.)
 -}
-ul :
-    List (Property {} m)
-    -> List (Html m)
-    -> Html m
+ul : List (Property c m) -> List (Html m) -> Html m
 ul options = 
-    Options.styled Html.ul ([cs "mdl-list"] ++ options)
+  Options.styled Html.ul (cs "mdl-list" :: options)
 
-{-| Default List item
+
+{-| List-item, no secondary content. (Use this rather than `Html.li`.)
 -}
-li :
-    List (Property {} m)
-    -> List (Html m)
-    -> Html m
+li : List (Property c m) -> List (Html m) -> Html m
 li options =
-    Options.styled Html.li ([cs "mdl-list__item"] ++ options)
+  Options.styled Html.li (cs "mdl-list__item" :: options)
 
-{-| List item with two lines
+
+{-| Adjust item spacing to accomodate a 2-line body. Option for `li`. Don't set
+both this and `withSubtitle`. 
 -}
-li2 :
-    List (Property {} m)
-    -> List (Html m)
-    -> Html m
-li2 options =
-    Options.styled Html.li ([cs "mdl-list__item", cs "mdl-list__item--two-line"] ++ options)
+withBody : Property c m 
+withBody = 
+  cs "mdl-list__item--three-line" 
 
 
-{-| List item with three lines
+{-| Adjust inter-item spacing to accomodate a 1-line subtitle. Option for `li`.
+Don't set both this and `withBody`.
 -}
-li3 :
-    List (Property {} m)
-    -> List (Html m)
-    -> Html m
-li3 options =
-    Options.styled Html.li ([cs "mdl-list__item", cs "mdl-list__item--three-line"] ++ options)
+withSubtitle : Property c m 
+withSubtitle = 
+  cs "mdl-list__item--two-line" 
 
 
-{-| Defines the primary content sub-division
+{-| Defines the primary content sub-division. Use within `li`. 
 -}
-primaryContent : Property a m
-primaryContent =
-    cs "mdl-list__item-primary-content"
+content : List (Property a m) -> List (Html m) -> Html m
+content options =
+  Options.span (cs "mdl-list__item-primary-content" :: options)
 
 
-{-| Defines the avatar sub-division
+{-| Defines the secondary content sub-division.	Use within `li`. 
 -}
-avatar : Property a m
-avatar =
-    cs "mdl-list__item-avatar"
+content2 : List (Property a m) -> List (Html m) -> Html m
+content2 options =
+  Options.span (cs "mdl-list__item-secondary-content" :: options)
 
 
-{-| Defines the icon sub-division
+{-| Set an avatar icon. Like `Icon.view`. 
 -}
-icon : Property a m
-icon =
-    cs "mdl-list__item-icon"
+avatarIcon : String -> List (Property a m) -> Html m
+avatarIcon i options =
+  {- Google MDL doesn't properly center icons of non-maximal size. -}
+  Options.div
+    [ Options.center    
+    , Options.many options 
+    , avatar
+    ]
+    [ Icon.i i ]
 
 
-{-| Defines the secondary content sub-division.	Requires an item with twoLine or threeLine.
+{-| Set an avatar image. `src` is a value for `Html.Attributes.src`.
 -}
-secondaryContent : Property a m
-secondaryContent =
-    cs "mdl-list__item-secondary-content"
+avatarImage : String -> List (Property a m) -> Html m
+avatarImage src options = 
+  Options.styled' Html.img 
+    (avatar :: options)
+    [ Html.Attributes.src src ] 
+    []
 
 
-{-| Defines the information sub-division.	Requires an item with twoLine or threeLine.
+avatar : Property c m 
+avatar = 
+  cs "mdl-list__item-avatar"
+
+
+{-| Set an icon. Refer to `Icon.view`. 
 -}
-secondaryInfo : Property a m
-secondaryInfo =
-    cs "mdl-list__item-secondary-info"
+icon : String -> List (Icon.Property m) -> Html m
+icon i options = 
+  Icon.view i (cs "mdl-list__item-icon" :: options)
 
 
-{-| Defines the Action sub-division.	Requires an item with twoLine or threeLine.
+{-| Defines the information sub-division.	Applicable only within `content2`. 
 -}
-secondaryAction : Property a m
-secondaryAction =
+info2 : List (Property c m) -> List (Html m) -> Html m
+info2 options =
+  Options.span (cs "mdl-list__item-secondary-info" :: options)
+
+
+{-| Defines the secondary action sub-division. (The primary action is clicking
+the primary content.)
+-}
+action2 : Property a m
+action2 =
     cs "mdl-list__item-secondary-action"
 
 
-{-| Defines the Text Body sub-division.	Requires an item with twoLine or threeLine.
+{-| Defines the text-body sub-division.	Use within `content`. You need to 
+adjust list-item spacing by applying `withBody` to `li` if you use this. 
+Mutually exclusive with `subtitle`. 
 -}
-textBody : Property a m
-textBody =
-    cs "mdl-list__item-text-body"
+body : List (Property c m) -> List (Html m) -> Html m
+body options =
+  Options.span (cs "mdl-list__item-text-body" :: options)
 
 
-{-| Defines the Sub title sub-division.	Requires an item with twoLine or threeLine.
+{-| Defines the subtitle sub-division.	Use within `content`. You need to 
+adjust list-item spacing by applying `withSubtitle` to `li` if you use this. 
+Mutually exclusive with `body`. 
 -}
-subTitle : Property a m
-subTitle =
-    cs "mdl-list__item-sub-title"
+subtitle : List (Property c m) -> List (Html m) -> Html m
+subtitle options =
+  Options.span (cs "mdl-list__item-sub-title" :: options)
+
