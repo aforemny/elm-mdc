@@ -80,7 +80,7 @@ Mauris sagittis pellentesque lacus eleifend lacinia...
         , css "margin" "5px"
         , width "256px"
         , height "256px"
-        , css "background" "url('../assets/elm.png') center / cover"
+        , css "background" "url('assets/elm.png') center / cover"
         ]
         [ Card.title [ expand ] []
         , Card.actions
