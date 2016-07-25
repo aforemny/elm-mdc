@@ -1,7 +1,7 @@
 module Material.Table exposing
   ( table, thead, tbody, tfoot
   , tr, th, td
-  , ascending, descending, sorted, onClick, Order(Ascending,Descending)
+  , ascending, descending, sorted, selected, onClick, Order(Ascending,Descending)
   , numeric
   )
 
@@ -152,12 +152,12 @@ tr options html =
     ]
     html
 
-{-
 selected : Property { a | selected : Bool } m
 selected =
   Options.set <| \self -> { self | selected = True }
 
 
+{-
 select : Bool -> Property { a | selected : Bool } m
 select value =
   Options.set <| \self -> { self | selected = value }

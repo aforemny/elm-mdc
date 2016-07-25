@@ -1,10 +1,12 @@
 module Demo.Tables exposing (..)
 
-import Html exposing (..)
+import Html exposing (Html, text)
+import Dict exposing (Dict)
 
 import Material
-import Material.Helpers exposing (pure, map1st, map2nd)
+import Material.Options as Options exposing (when)
 import Material.Table as Table
+import Material.Toggles as Toggles
 
 import Demo.Code as Code
 import Demo.Page as Page
@@ -16,6 +18,14 @@ import Demo.Page as Page
 type alias Model =
   { mdl : Material.Model
   , order : Table.Order
+
+  , data : Dict Int
+      { material : String
+      , quantity : String
+      , unitPrice : String
+      , selected : Bool
+      , index : Int
+      }
   }
 
 
@@ -23,6 +33,27 @@ model : Model
 model =
   { mdl = Material.model
   , order = Table.Ascending
+  , data =
+      Dict.fromList << List.map (\r -> (r.index, r)) <|
+      [ { material = "Acrylic (Transparent)"
+        , quantity = "25"
+        , unitPrice = "$2.90"
+        , selected = False
+        , index = 0
+        }
+      , { material = "Plywood (Birch)"
+        , quantity = "50"
+        , unitPrice = "$1.25"
+        , selected = False
+        , index = 1
+        }
+      , { material = "Laminate (Gold on Blue)"
+        , quantity = "10"
+        , unitPrice = "$2.35"
+        , selected = False
+        , index = 2
+        }
+      ]
   }
 
 
@@ -31,6 +62,7 @@ model =
 
 type Msg
   = MDL Material.Msg
+  | Toggle (Maybe Int)
   | Click
 
 
@@ -39,12 +71,27 @@ update msg model =
   case msg of
 
     Click ->
-      pure
-      { model | order =
-                  case model.order of
-                    Table.Ascending -> Table.Descending
-                    _ -> Table.Ascending
-      }
+      { model
+        | order =
+          case model.order of
+            Table.Ascending -> Table.Descending
+            _ -> Table.Ascending
+      } ! []
+
+    Toggle Nothing ->
+      -- Note: We have access to all data, so we can do this:
+      { model
+        | data =
+          Dict.map (\_ r -> { r | selected = not (allSelected model.data) })
+          model.data
+      } ! []
+
+    Toggle (Just idx) ->
+      { model
+        | data =
+          Dict.update idx (Maybe.map (\r -> { r | selected = not r.selected }))
+          model.data
+      } ! []
 
     MDL msg' ->
       Material.update MDL msg' model
@@ -65,33 +112,12 @@ view model =
   |> Page.body2 "Tables" srcUrl intro references
 
 
-data
-  : List
-    { material : String
-    , quantity : String
-    , unitPrice : String
-    }
-data =
-  [ { material = "Acrylic (Transparent)"
-    , quantity = "25"
-    , unitPrice = "$2.90"
-    }
-  , { material = "Plywood (Birch)"
-    , quantity = "50"
-    , unitPrice = "$1.25"
-    }
-  , { material = "Laminate (Gold on Blue)"
-    , quantity = "10"
-    , unitPrice = "$2.35"
-    }
-  ]
-
-
 table : Model -> Html Msg
 table model =
   let
     sortedData =
-      data
+      model.data
+      |> Dict.values
       |> List.sortBy .material
       |> if model.order == Table.Descending then List.reverse else \x -> x
   in
@@ -101,7 +127,13 @@ table model =
       [
       ]
       [ Table.tr []
-        [ Table.th
+        [ Table.th []
+          [ Toggles.checkbox MDL [-1] model.mdl
+            [ Toggles.onClick (Toggle Nothing)
+            , Toggles.value (allSelected model.data)
+            ] []
+          ]
+        , Table.th
           [ Table.sorted model.order
           , Table.onClick Click
           ]
@@ -121,15 +153,25 @@ table model =
         |> List.map (\item ->
 
              Table.tr
-             [
+             [ Table.selected `when` item.selected
              ]
-             [ Table.td [] [ text item.material ]
+             [ Table.td []
+               [ Toggles.checkbox MDL [item.index] model.mdl
+                 [ Toggles.onClick (Toggle (Just item.index))
+                 , Toggles.value item.selected
+                 ] []
+               ]
+             , Table.td [] [ text item.material ]
              , Table.td [ Table.numeric ] [ text item.quantity ]
              , Table.td [ Table.numeric ] [ text item.unitPrice ]
              ]
            )
       )
     ]
+
+allSelected : Dict comparable { a | selected : Bool } -> Bool
+allSelected data =
+  data |> Dict.values >> List.map .selected >> List.foldl (&&) True
 
 
 code : Html msg
