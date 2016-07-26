@@ -200,7 +200,8 @@ blurAndForward : String -> Attribute m
 blurAndForward event = 
   Html.Attributes.attribute 
     ("on" ++ event) 
-    "this.blur(); this.lastChild.dispatchEvent(new Event('touchcancel'));"
+      -- NOTE: IE Does not properly support 'new Event()'. This is a temporary workaround
+      "this.blur(); (function(self) { var e = document.createEvent('Event'); e.initEvent('touchcancel', true, true); self.lastChild.dispatchEvent(e); }(this));"
 
 
 {-| Component view function.
