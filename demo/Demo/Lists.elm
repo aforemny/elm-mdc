@@ -5,7 +5,7 @@ import Html exposing (..)
 import Set exposing (Set)
 import String
 
-import Material.Lists as Lists
+import Material.List as Lists
 import Material
 import Material.Options as Options exposing (when, css)
 import Material.Icon as Icon
