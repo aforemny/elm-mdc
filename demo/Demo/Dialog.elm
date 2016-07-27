@@ -4,7 +4,8 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.Attributes exposing (style)
 
-import Material.Dialog as Card exposing (..)
+import Material.Dialog as Dialog exposing (..)
+import Material.Button as Button exposing (..)
 import Material.Options exposing (css)
 import Material
 
@@ -49,7 +50,7 @@ view model =
         ]
         [ Dialog.title []
           [ text "Welcome" ]
-        , Dialog.Content []
+        , Dialog.content []
           [ text """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Mauris sagittis pellentesque lacus eleifend lacinia...

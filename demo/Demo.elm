@@ -171,7 +171,7 @@ update action model =
     CardsMsg   a -> lift  .cards    (\m x->{m|cards   =x}) CardsMsg  Demo.Cards.update    a model
     ListsMsg   a -> lift  .lists    (\m x->{m|lists   =x}) ListsMsg  Demo.Lists.update    a model
 
-    DialogMsg a - > lift .dialog (\m x->{m|dialog =x}) DialogMsg Demo.Dialog.update a model
+    DialogMsg a -> lift .dialog (\m x->{m|dialog =x}) DialogMsg Demo.Dialog.update a model
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
 
