@@ -8,9 +8,13 @@ module Material.Dialog exposing
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
 
-> The Material Design Lite (MDL) dialog component allows for verification of user > actions, simple data input, and alerts to provide extra information to users.
-
-> To use the dialog component, you must be using a browser that supports the dialog element. Only Chrome and Opera have native support at the time of writing. For other browsers you will need to include the dialog polyfill or create your own.
+> The Material Design Lite (MDL) dialog component allows for verification of user
+> actions, simple data input, and alerts to provide extra information to users.
+>
+> To use the dialog component, you must be using a browser that supports the
+> dialog element. Only Chrome and Opera have native support at the time of
+> writing. For other browsers you will need to include the dialog polyfill
+> or create your own.
 
 
 Refer to [this site](http://debois.github.io/elm-mdl/#/dialog)

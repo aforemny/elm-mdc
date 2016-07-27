@@ -38,6 +38,7 @@ import Demo.Slider
 import Demo.Typography
 import Demo.Cards
 import Demo.Lists
+import Demo.Dialog
 --import Demo.Template
 
 
@@ -63,6 +64,7 @@ type alias Model =
   , typography : Demo.Typography.Model
   , cards : Demo.Cards.Model
   , lists : Demo.Lists.Model
+  , dialog : Demo.Dialog.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -88,6 +90,7 @@ model =
   , typography = Demo.Typography.model
   , cards = Demo.Cards.model
   , lists = Demo.Lists.model
+  , dialog = Demo.Dialog.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -118,6 +121,7 @@ type Msg
   | CardsMsg Demo.Cards.Msg
   | ListsMsg Demo.Lists.Msg
   | ToggleHeader
+  | DialogMsg Demo.Dialog.Msg
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -167,6 +171,7 @@ update action model =
     CardsMsg   a -> lift  .cards    (\m x->{m|cards   =x}) CardsMsg  Demo.Cards.update    a model
     ListsMsg   a -> lift  .lists    (\m x->{m|lists   =x}) ListsMsg  Demo.Lists.update    a model
 
+    DialogMsg a - > lift .dialog (\m x->{m|dialog =x}) DialogMsg Demo.Dialog.update a model
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
 
@@ -178,6 +183,7 @@ tabs =
   [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
   , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
   , ("Cards", "cards", .cards >> Demo.Cards.view >> App.map CardsMsg)
+  , ("Dialog", "dialog", .cards >> Demo.Dialog.view >> App.map DialogMsg)
   , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
   , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
   , ("Grid", "grid", \_ -> Demo.Grid.view)
@@ -222,7 +228,7 @@ e404 _ =
     [
     ]
     [ Options.styled Html.h1
-        [ Options.cs "mdl-typography--display-4" 
+        [ Options.cs "mdl-typography--display-4"
         , Typography.center
         ]
         [ text "404" ]
