@@ -5,38 +5,68 @@ import Html exposing (..)
 import Material.Options as Options exposing (cs, css, Style)
 import Material.Elevation as Elevation
 import Material.Typography as Typography
+import Material.Grid as Grid
 
 import Demo.Page as Page
+import Demo.Code as Code
 
 
 -- VIEW
 
 
 elevate : (Style a, Int) -> Html a 
-elevate (e, k) = 
-  Options.div 
-    [ css "height" "96px"
-    , css "width"  "128px"
-    , css "margin" "40px"
-    -- Center
-    , css "display" "inline-flex"
-    , css "flex-flow" "row wrap" 
+elevate (e, k) =
+  Options.div
+    [ css "display" "inline-flex"
+    , css "flex-flow" "row wrap"
     , css "justify-content" "center"
     , css "align-items" "center"
-    , e
     ]
-    [ Options.div 
-      [ Typography.titleColorContrast
-      , css "box-radius" "2pt"
-      ] 
-      [ text <| toString k ]
+    [ Options.div
+        [ e
+        , css "height" "96px"
+        , css "width"  "128px"
+        , css "margin" "40px"
+
+        -- Center
+        , css "display" "inline-flex"
+        , css "flex-flow" "row wrap"
+        , css "justify-content" "center"
+        , css "align-items" "center"
+        ]
+        [ Options.div
+            [ Typography.titleColorContrast
+            , css "box-radius" "2pt"
+            ]
+            [ text <| toString k ]
+        ]
+    , Options.div
+        [css "width" "300px"]
+        [ Code.code
+            (
+             """
+              Options.div
+                [ Elevation.e""" ++ (toString k) ++ """
+                , css "height" "96px"
+                , css "width"  "128px"
+                , css "margin" "40px"
+                -- Center
+                , css "display" "inline-flex"
+                , css "flex-flow" "row wrap"
+                , css "justify-content" "center"
+                , css "align-items" "center"
+                ]
+                [ text \"""" ++ (toString k) ++ """\" ]"""
+            )
+        ]
     ]
 
 
 view : Html a
 view =
   (cs "", 0) :: Elevation.elevations
-  |> List.map elevate 
+  |> List.map elevate
+  |> (::) ( Code.code """import Material.Elevation as Elevation""" )
   |> (::) ( p [] [ text """Below are boxes drawn at various elevations.""" ] )
   |> Page.body1 "Elevation" srcUrl intro references
 
