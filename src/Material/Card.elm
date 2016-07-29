@@ -1,22 +1,16 @@
-module Material.Card exposing
-  ( card
-  , width
-  , height
-  , border
-  , expand
-  , title
-  , menu
-  , media
-  , supportingText
-  , actions
-  , subTitle
-  , h1
-  , h2
-  , h3
-  , h4
-  , h5
-  , h6
-  )
+module Material.Card
+    exposing
+        ( view
+        , border
+        , expand
+        , title
+        , menu
+        , media
+        , text
+        , actions
+        , subhead
+        , head
+        )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
 
@@ -24,11 +18,11 @@ module Material.Card exposing
 > representing a virtual piece of paper that contains related data — such as a
 > photo, some text, and a link — that are all about a single subject.
 >
-> Cards are a convenient means of coherently displaying related content that is
+> Cards are a convenient means of coherently displaying related block that is
 > composed of different types of objects. They are also well-suited for presenting
 > similar objects whose size or supported actions can vary considerably, like
 > photos with captions of variable length. Cards have a constant width and a
-> variable height, depending on their content.
+> variable height, depending on their block.
 >
 > Cards are a fairly new feature in user interfaces, and allow users an access
 > point to more complex and detailed information. Their design and use is an
@@ -38,145 +32,171 @@ module Material.Card exposing
 Refer to [this site](http://debois.github.io/elm-mdl/#/card)
 for a live demo.
 
-@docs Model, model, Msg, update
+# Render
 @docs view
 
-# Component support
+# Content blocks
+@docs title, media, text, actions
 
-@docs Container, Observer, Instance, instance, fwdTemplate
+## Title block
+@docs subhead, head
+
+# Misc
+@docs expand, border, menu
 -}
 
 import Html exposing (..)
-import Material.Options as Options exposing (Style, cs)
+import Html.Attributes
+
+import Material.Options as Options exposing (Style, cs, css)
+import Material.Options.Internal exposing (attribute)
 
 
-{-| Set card width. Width must be a valid CSS dimension.
--}
-width : String -> Style a
-width w = Options.css "width" w
-
-
-{-| Set card height. Height must be a valid CSS dimension.
--}
-height : String -> Style a
-height h = Options.css "height" h
-
-
-{-| Add a border to the card.
+{-| Separate given content block from others by adding a thin border.
 -}
 border : Style a
-border = Options.cs "mdl-card--border"
+border =
+    Options.cs "mdl-card--border"
 
 
-{-| Add the expand class to the card.
+{-| Set given content block to expand or compress vertically as necessary.
 -}
 expand : Style a
-expand = Options.cs "mdl-card--expand"
+expand =
+    Options.cs "mdl-card--expand"
 
-{-| Within a card specific types of content can exist
+
+{-| Within a card specific types of block can exist
 -}
-type ContentBlock a
-  = Title (List (Style a)) (List (Html a))
-  | Menu (List (Style a)) (List (Html a))
-  | Media (List (Style a)) (List (Html a))
-  | SupportingText (List (Style a)) (List (Html a))
-  | Actions (List (Style a)) (List (Html a))
+type Block a
+    = Title (List (Style a)) (List (Html a))
+    | Menu (List (Style a)) (List (Html a))
+    | Media (List (Style a)) (List (Html a))
+    | SupportingText (List (Style a)) (List (Html a))
+    | Actions (List (Style a)) (List (Html a))
 
-{-| Generate a title content block
+
+{-| Generate a title block
 -}
-title : List (Style a) -> List (Html a) -> ContentBlock a
-title styling content =
-  Title styling content
+title : List (Style a) -> List (Html a) -> Block a
+title styling block =
+    Title 
+      {- MDL has a known bug (or missing feature), which will cause the subhead
+         to come out wrong in title blocks; the bug remains unfixed in 1.3.x
+         because of backwards compatibility concerns. We don't have those yet, 
+         so we fix it here. 
 
-{-| Generate a menu content block
+         https://github.com/google/material-design-lite/issues/1002
+      -}
+      (List.append 
+        styling
+        [ css "justify-content" "flex-end"
+        , css "flex-direction" "column"
+        , css "align-items" "flex-start"
+        ])
+      block
+
+
+{-| Head for title block. (This is called "title" in the Material Design
+Specification.)
 -}
-menu : List (Style a) -> List (Html a) -> ContentBlock a
-menu styling content =
-  Menu styling content
+head : List (Style a) -> List (Html a) -> Html a
+head styling = 
+  Options.styled Html.h1
+    (  cs "mdl-card__title-text"
+    :: css "align-self" "flex-start"
+    :: styling )
 
-{-| Generate a media content block
+
+{-| Sub-head for title block. (This is called "subtitle" in the Material Design
+Specification.
 -}
-media : List (Style a) -> List (Html a) -> ContentBlock a
-media styling content =
-  Media styling content
+subhead : List (Style a) -> List (Html a) -> Html a
+subhead styling =
+    Options.span 
+      (  cs "mdl-card__subtitle-text" 
+      :: css "padding-top" "8px"
+      :: styling
+      ) 
 
-{-| Generate a supporting text content block
+
+
+{-| Generate a menu block
 -}
-supportingText : List (Style a) -> List (Html a) -> ContentBlock a
-supportingText styling content =
-  SupportingText styling content
+menu : List (Style a) -> List (Html a) -> Block a
+menu styling block =
+    Menu styling block
 
-{-| Generate an actions content block
+
+{-| Generate a media block
 -}
-actions : List (Style a) -> List (Html a) -> ContentBlock a
-actions styling content =
-  Actions styling content
+media : List (Style a) -> List (Html a) -> Block a
+media =
+    Media 
 
-{-| Generate a subtitle element for use within a title content block
+
+{-| Generate a supporting text block
 -}
-subTitle : List (Style a) -> List (Html a) -> Html a
-subTitle styling content =
-  Options.span (cs "mdl-card__subtitle-text" :: styling) content
+text : List (Style a) -> List (Html a) -> Block a
+text =
+    SupportingText 
 
-{-| Generate a header element (h1) for use within a title content block
+
+{-| Generate an actions block
 -}
-h1 : List (Style a) -> List (Html a) -> Html a
-h1 styling content =
-  Options.styled Html.h1 (cs "mdl-card__title-text" :: styling) content
+actions : List (Style a) -> List (Html a) -> Block a
+actions =
+    Actions 
 
-{-| Generate a header element (h2) for use within a title content block
+
+{- Cards should be clickable; however, clicks on the menu or controls in the
+action block obviously shouldn't also trigger the card-wide click event. We
+can't use `Html.Events.onWithOptions` because we can't construct a
+`Json.Decoder a` that doesn't fail. Hence this hack. 
 -}
-h2 : List (Style a) -> List (Html a) -> Html a
-h2 styling content =
-  Options.styled Html.h2 (cs "mdl-card__title-text" :: styling) content
+stopClick : Style a
+stopClick = 
+  attribute <| 
+    Html.Attributes.attribute
+      "onclick"
+      "var event = arguments[0] || window.event; event.stopPropagation();"
+      
 
-{-| Generate a header element (h3) for use within a title content block
+{-| Render supplied block
 -}
-h3 : List (Style a) -> List (Html a) -> Html a
-h3 styling content =
-  Options.styled Html.h3 (cs "mdl-card__title-text" :: styling) content
+block : Block a -> Html a
+block block =
+    case block of
+        Title styling block ->
+            Options.div (cs "mdl-card__title" :: styling) block
 
-{-| Generate a header element (h4) for use within a title content block
+        Media styling block ->
+            Options.div (cs "mdl-card__media" :: styling) block
+
+        SupportingText styling block ->
+            Options.div (cs "mdl-card__supporting-text" :: styling) block
+
+        Actions styling block ->
+            Options.div (cs "mdl-card__actions" :: stopClick :: styling) block
+
+        Menu styling block ->
+            Options.div (cs "mdl-card__menu" :: stopClick :: styling) block
+
+
+
+{-| Construct a card.
+
+Notes. Google's MDL implementation sets `min-height: 200px`; this precludes a
+number of the examples from [the specification](https://material.google.com/components/cards.html#cards-usage),
+so the elm-mdl implementation sets `min-height: 0px`. Add `css "min-height" "200px"` as an option to `view`
+to adhere to the MDL implementation. 
 -}
-h4 : List (Style a) -> List (Html a) -> Html a
-h4 styling content =
-  Options.styled Html.h4 (cs "mdl-card__title-text" :: styling) content
-
-{-| Generate a header element (h5) for use within a title content block
--}
-h5 : List (Style a) -> List (Html a) -> Html a
-h5 styling content =
-  Options.styled Html.h5 (cs "mdl-card__title-text" :: styling) content
-
-{-| Generate a header element (h6) for use within a title content block
--}
-h6 : List (Style a) -> List (Html a) -> Html a
-h6 styling content =
-  Options.styled Html.h6 (cs "mdl-card__title-text" :: styling) content
-
-{-| Render supplied content block
--}
-contentBlock : ContentBlock a -> Html a
-contentBlock block =
-  case block of
-    Title styling content ->
-      Options.div (cs "mdl-card__title" :: styling) content
-
-    Menu styling content ->
-      Options.div (cs "mdl-card__menu" :: styling) content
-
-    Media styling content ->
-      Options.div (cs "mdl-card__media" :: styling) content
-
-    SupportingText styling content ->
-      Options.div (cs "mdl-card__supporting-text" :: styling) content
-
-    Actions styling content ->
-      Options.div (cs "mdl-card__actions" :: styling) content
-
-
-{-| Construct a card with options.
--}
-card : List (Style a) -> List (ContentBlock a) -> Html a
-card styling contentBlocks =
-  Options.div (cs "mdl-card" :: styling) (List.map (contentBlock) contentBlocks)
+view : List (Style a) -> List (Block a) -> Html a
+view styling views =
+    Options.div 
+      (List.append
+        styling
+        [ cs "mdl-card" 
+        , css "min-height" "0px"
+        ]) 
+      (List.map block views)
