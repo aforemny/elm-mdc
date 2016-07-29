@@ -54,6 +54,7 @@ type Msg
   | Inc
   | Update (Model -> Model)
   | ToggleCounting
+  | AutoCount
 
 
 get : Int -> Model -> Bool
@@ -79,8 +80,13 @@ update action model =
 
     Inc -> 
       ( { model | counter = model.counter + 1 }
+      , Cmd.none 
+      )
+
+    AutoCount -> 
+      ( { model | counter = model.counter + 1 }
       , if model.counting then 
-          Helpers.delay delay Inc
+          Helpers.delay delay AutoCount
         else
           Cmd.none 
       )
@@ -91,7 +97,7 @@ update action model =
     ToggleCounting -> 
       ( { model | counting = not model.counting }
       , if not model.counting then 
-          Helpers.delay delay Inc
+          Helpers.delay delay AutoCount
         else
           Cmd.none
       )
