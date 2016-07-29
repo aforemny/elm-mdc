@@ -131,9 +131,9 @@ code str =
   div 
     [ css "overflow" "auto" 
     , Elevation.e2
-    , css "margin" "16px"
+    , css "margin-top" "1rem"
+    , css "margin-bottom" "1rem"
     , css "border-radius" "2px"
-    , css "font-size" "10pt"
     ]
     [ Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```" ]
 
@@ -145,7 +145,6 @@ html str =
     , css "margin-top" "1rem"
     , css "margin-bottom" "1rem"
     , css "border-radius" "2px"
-    , css "font-size" "10pt"
     , Elevation.e2
     ]
     [ Markdown.toHtml [] <| "```html\n" ++ trim str ++ "\n```" ]
