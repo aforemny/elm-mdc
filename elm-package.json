@@ -11,6 +11,7 @@
         "Material.Badge",
         "Material.Button",
         "Material.Color",
+        "Material.Dialog", 
         "Material.Elevation",
         "Material.Footer",
         "Material.Grid",

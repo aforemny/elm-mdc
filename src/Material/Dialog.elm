@@ -1,10 +1,13 @@
-module Material.Dialog exposing
-  ( dialog
-  , title
-  , content
-  , actions
-  , fullWidth
-  )
+module Material.Dialog
+  exposing
+    ( view
+    , title
+    , content
+    , actions
+    , fullWidth
+    , openOn
+    , closeOn
+    )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
 
@@ -16,56 +19,66 @@ module Material.Dialog exposing
 > writing. For other browsers you will need to include the dialog polyfill
 > or create your own.
 
-
 Refer to [this site](http://debois.github.io/elm-mdl/#/dialog)
 for a live demo.
 
-@docs Model, model, Msg, update
 @docs view
 
-# Component support
+# Contents
+@docs title, content, actions, fullWidth
 
-@docs Container, Observer, Instance, instance, fwdTemplate
+# Opening & closing
+@docs openOn, closeOn
+
 -}
 
 import Html exposing (..)
-import Material.Options as Options exposing (Style, cs)
+import Html.Attributes 
+
+import Material.Options as Options exposing (Style, Property, cs)
+import Material.Options.Internal as Internal
 
 
-{-| Add the full-width class to a dialog's actions.
+{-| Option to `actions`. If set, each control takes up the full width of the
+dialog. 
 -}
 fullWidth : Style a
-fullWidth = Options.cs "mdl-dialog__actions--full-width"
+fullWidth =
+  Options.cs "mdl-dialog__actions--full-width"
 
 
 {-| Within a dialog specific types of content can exist
 -}
-type ContentBlock a
+type Block a
   = Title (List (Style a)) (List (Html a))
   | Content (List (Style a)) (List (Html a))
   | Actions (List (Style a)) (List (Html a))
 
+
 {-| Generate a title content block
 -}
-title : List (Style a) -> List (Html a) -> ContentBlock a
-title styling content =
-  Title styling content
+title : List (Style a) -> List (Html a) -> Block a
+title =
+  Title 
+
 
 {-| Generate a supporting text content block
 -}
-content : List (Style a) -> List (Html a) -> ContentBlock a
-content styling content =
-  Content styling content
+content : List (Style a) -> List (Html a) -> Block a
+content =
+   Content 
+
 
 {-| Generate an actions content block
 -}
-actions : List (Style a) -> List (Html a) -> ContentBlock a
-actions styling content =
-  Actions styling content
+actions : List (Style a) -> List (Html a) -> Block a
+actions =
+    Actions 
+
 
 {-| Render supplied content block
 -}
-contentBlock : ContentBlock a -> Html a
+contentBlock : Block a -> Html a
 contentBlock block =
   case block of
     Title styling content ->
@@ -78,8 +91,92 @@ contentBlock block =
       Options.div (cs "mdl-dialog__actions" :: styling) content
 
 
-{-| Construct a dialog with options.
+theDialog : String
+theDialog = 
+  "elm-mdl-singleton-dialog"
+
+
+{-| Open dialog in response to given DOM event. The DOM must also contain a
+`dialog` produced using `Dialog.view`.  Use like this: 
+
+    Button.render Mdl [0] model.mdl
+      [ Dialog.openOn "click" ] 
+      [ text "Open dialog" ]
 -}
-dialog : List (Style a) -> List (ContentBlock a) -> Html a
-dialog styling contentBlocks =
-  Options.div (cs "mdl-dialog" :: styling) (List.map (contentBlock) contentBlocks)
+openOn : String -> Property c m 
+openOn = 
+  let
+    handler =
+      """
+        // Don't mess up the elm runtime.
+        var dialog = document.getElementById('""" ++ theDialog ++ """');
+        if (! dialog) { 
+          console.log ('Cannot display dialog: No dialog element. Use `Dialog.view` to construct one.');
+          return;
+        }
+        if (! dialog.showModal) {
+          if (typeof dialogPolyfill !== 'undefined' && dialogPolyfill.registerDialog) { 
+            dialogPolyfill.registerDialog(dialog);
+          } else {
+            console.log ('Cannot display dialog: Your browser does not support the <dialog> element. Get a polyfill at:\\n\\nhttps://github.com/GoogleChrome/dialog-polyfill\\n');
+            return;
+          }
+        }
+        dialog.showModal();
+      """
+  in
+    \event -> 
+      Html.Attributes.attribute ("on" ++ event) handler
+        |> Internal.attribute
+
+
+{-| Close the dialog. The dialog must be open. Use like this: 
+
+    Button.render Mdl [1] model.mdl
+      [ Dialog.closeOn "click" ]
+      [ text "Close" ] 
+-}
+closeOn : String -> Property c m
+closeOn = 
+  let 
+    handler = 
+      """ 
+        // Don't mess up the elm runtime!
+
+        var dialog = document.getElementById('""" ++ theDialog ++ """');
+        if (! dialog) { 
+          console.log ('Cannot close dialog: No dialog element. Use `Dialog.view` to construct one.');
+          return;
+        }
+        if (! dialog.open) {
+          console.log ('Cannot close dialog: The dialog is not open. Use `Dialog.closeOn` only on components rendered inside the dialog.');
+          return;
+        }
+        if (! dialog.close) {
+          console.log ('Cannot close dialog: The dialog does not have a `close` method. Perhaps you forgot a polyfill? Get one at:\\n\\nhttps://github.com/GoogleChrome/dialog-polyfill\\n');
+          return;
+        }
+        dialog.close();"""
+  in
+    \event -> 
+      Html.Attributes.attribute ("on" ++ event) handler
+        |> Internal.attribute
+
+
+{-| Construct a dialog. 
+
+- If you target browser not supporting
+`<dialog>` natively, you will need to load [this
+polyfill](https://github.com/GoogleChrome/dialog-polyfill).
+- Using this polyfill [places
+restrictions](https://github.com/GoogleChrome/dialog-polyfill#limitations) on
+where in the DOM you can put the output of this function.
+- The elm-mdl library currently support only one dialog pr. application. 
+Installing more than one dialog will result in a random one showing. 
+-}
+view : List (Style a) -> List (Block a) -> Html a
+view styling contentBlocks =
+  Options.styled' (Html.node "dialog")
+    (cs "mdl-dialog" :: styling)
+    [ Html.Attributes.id theDialog ]
+    (List.map (contentBlock) contentBlocks)

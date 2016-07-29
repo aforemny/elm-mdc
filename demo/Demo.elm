@@ -320,6 +320,10 @@ view' model =
         , Html.node "script"
            [ Html.Attributes.attribute "src" "assets/highlight.pack.js" ]
            []
+        , App.map DialogMsg (Demo.Dialog.element model.dialog)
+            {- Because of limitations on browsers that have non-native (polyfilled)
+            <dialog> elements, our dialog element /may/ have to sit up here. 
+            -}
         ]
     )
 

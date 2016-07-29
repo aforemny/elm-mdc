@@ -1,12 +1,9 @@
-module Demo.Dialog exposing (model, update, view, Model, Msg)
+module Demo.Dialog exposing (model, update, view, Model, Msg, element)
 
-import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Attributes exposing (style)
 
-import Material.Dialog as Dialog exposing (..)
-import Material.Button as Button exposing (..)
-import Material.Options exposing (css)
+import Material.Dialog as Dialog 
+import Material.Button as Button
 import Material
 
 import Demo.Page as Page
@@ -42,29 +39,37 @@ update action model =
 
 -- VIEW
 
+
+element : Model -> Html Msg
+element model = 
+  Dialog.view
+    [ ]
+    [ Dialog.title [] [ text "Greetings" ]
+    , Dialog.content [] 
+        [ p [] [ text "A strange game—the only winning move is not to play." ]
+        , p [] [ text "How about a nice game of chess?" ] 
+        ]
+    , Dialog.actions [ ]
+      [ Button.render Mdl [0] model.mdl
+          [ Dialog.closeOn "click" ]
+          [ text "Chess" ]
+      , Button.render Mdl [1] model.mdl
+          [ Button.disabled ]
+          [ text "GTNW" ]
+      ]
+    ]
+
+
 view : Model -> Html Msg
 view model =
-  [ div [ style [ ("display", "flex") ] ]
-      [ dialog
-        [ css "margin" "5px"
-        ]
-        [ Dialog.title []
-          [ text "Welcome" ]
-        , Dialog.content []
-          [ text """
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Mauris sagittis pellentesque lacus eleifend lacinia...
-"""
-          ]
-        , Dialog.actions []
-          [ Button.render Mdl [0] model.mdl
-            [ Button.colored
-            , Button.ripple
-            ]
-            [ text "Cool!" ]
-          ]
-        ]
-      ]
+  [ Button.render Mdl [1] model.mdl
+      [ Dialog.openOn "click" ] 
+      [ text "Open dialog" ]
+  {-
+  , Button.render Mdl [2] model.mdl
+      [ Dialog.closeOn "click" ]
+      [ text "Close dialog" ]
+  -}
   ]
   |> Page.body2 "Dialog" srcUrl intro references
 
