@@ -592,12 +592,12 @@ tabsView lift config model (tabs, tabStyles) =
               ]
           ]
     in
-      div
-        [ class "mdl-layout__tab-bar-container"
-        ]
+      Options.div
+        [ cs "mdl-layout__tab-bar-container" ]
         [ chevron Left -100
         , Options.div
             [ cs "mdl-layout__tab-bar" 
+            , css "position" "relative" -- Workaround for debois/elm-dom#4. 
             , css "scroll-behavior" "smooth"
             , if config.rippleTabs then 
                 Options.many 
