@@ -3,7 +3,7 @@ module Material.Options exposing
   , cs, css, many, nop, set, data
   , when, disabled
   , apply, styled, styled', stylesheet
-  , Style, div, span, img, onHover, center
+  , Style, div, span, img, attribute, center, scrim
   )
 
 
@@ -16,7 +16,7 @@ for intended use.
 @docs cs, css, data, many, nop, when
 
 # Html
-@docs Style, styled, styled', div, span, img, onHover, center, disabled
+@docs Style, styled, styled', div, span, img, attribute, center, scrim, disabled
 
 # Convenience
 @docs stylesheet
@@ -32,8 +32,6 @@ import String
 
 import Html exposing (Html, Attribute)
 import Html.Attributes
-import Html.Events exposing (on)
-import Json.Decode as Decoder
 
 import Material.Options.Internal exposing (..)
 
@@ -260,13 +258,12 @@ type alias Style m =
   Property () m
 
 
-{-| Option adding an `on "mouseover"` event handler to an element. 
-Applicable only to `Style m`, not general Properties. 
+{-| Install arbitrary `Html.Attribute`. Applicable only to `Style m`, not 
+general Properties. 
 -}
-onHover : m -> Style m
-onHover x =
-  Attribute (on "mouseover" (Decoder.succeed x))
-
+attribute : Html.Attribute m -> Style m 
+attribute =
+  Attribute 
 
 {-| Options installing css for element to be a flex-box container centering its
 elements. 
@@ -279,3 +276,10 @@ center =
     , css "justify-content" "center"
     ]
 
+
+{-| Scrim. Argument value indicates terminal opacity, the value of which should
+depend on the underlying image. `0.6` works well often. 
+-}
+scrim : Float -> Property c m
+scrim opacity = 
+  css "background" <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " ++ toString opacity ++ "))" 

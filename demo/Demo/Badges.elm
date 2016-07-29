@@ -1,6 +1,7 @@
 module Demo.Badges exposing (..)
 
 import Html exposing (..)
+import Html.Events
 import Platform.Cmd exposing (Cmd)
 
 
@@ -73,6 +74,10 @@ update action model =
 -- VIEW
 
 
+onHover = 
+  Html.Events.onMouseOver >> Options.attribute
+
+
 c : List (Html Msg) -> Cell Msg
 c = cell [ size All 4 ]  
 
@@ -113,7 +118,7 @@ view model =
                 in
                   Options.span 
                     [ Badge.add "3" 
-                    , Options.onHover <| SetCode c1
+                    , onHover <| SetCode c1
                     ] 
                     [ text "Badge" ]  
               ]
@@ -124,7 +129,7 @@ view model =
                 in
                   Options.span
                     [ Badge.add "♥" 
-                    , Options.onHover <| SetCode c2
+                    , onHover <| SetCode c2
                     ]
                     [ text "Symbol" ]
 
@@ -136,7 +141,7 @@ view model =
                     ]"""
                 in
                   Options.styled span 
-                    [ Options.onHover <| SetCode c3 ]
+                    [ onHover <| SetCode c3 ]
                     [ Icon.view "shopping_cart"
                       [ Icon.size24
                       , Badge.add "33"
@@ -153,7 +158,7 @@ view model =
                   Options.span 
                     [ Badge.add "5"
                     , Badge.noBackground 
-                    , Options.onHover <| SetCode c4
+                    , onHover <| SetCode c4
                     ]  
                     [ text "No background" ]
               ]
@@ -167,7 +172,7 @@ view model =
                   Options.span 
                     [ Badge.add "8"
                     , Badge.overlap 
-                    , Options.onHover <| SetCode c5
+                    , onHover <| SetCode c5
                     ]  
                     [ text "Overlap" ]
               ]
@@ -183,7 +188,7 @@ view model =
                     [ Badge.add "13"
                     , Badge.overlap 
                     , Badge.noBackground 
-                    , Options.onHover <| SetCode c6
+                    , onHover <| SetCode c6
                     ]  
                     [ text "Overlap, no background" ]
               ]
