@@ -12,6 +12,7 @@
         "Material.Button",
         "Material.Card",
         "Material.Color",
+        "Material.Dialog", 
         "Material.Elevation",
         "Material.Footer",
         "Material.Grid",
