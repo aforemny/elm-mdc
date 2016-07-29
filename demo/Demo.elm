@@ -183,7 +183,7 @@ tabs =
   [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
   , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
   , ("Cards", "cards", .cards >> Demo.Cards.view >> App.map CardsMsg)
-  , ("Dialog", "dialog", .cards >> Demo.Dialog.view >> App.map DialogMsg)
+  , ("Dialog", "dialog", .dialog >> Demo.Dialog.view >> App.map DialogMsg)
   , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
   , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
   , ("Grid", "grid", \_ -> Demo.Grid.view)
