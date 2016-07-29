@@ -1,5 +1,5 @@
 module Material.Menu exposing
-  ( Model, defaultModel, Msg, update, view, view'
+  ( Model, defaultModel, Msg, update, view
   , render
   , Property
   , bottomLeft, bottomRight, topLeft, topRight, ripple, icon
@@ -42,7 +42,7 @@ for a live demo.
 @docs ripple, icon
 
 # Elm architecture
-@docs Model, defaultModel, Msg, update, view, view'
+@docs Model, defaultModel, Msg, update, view
 
 
 -}
@@ -319,17 +319,10 @@ outlineGeometry config geometry =
   []
 
 
-{-| DEPRECATED. This will be removed and `view'` will be renamed to `view` in 7.0.0.
--}
-view : Model -> List (Property Msg) -> List (Item Msg) -> Html Msg
-view = 
-  view' identity
-
-
-{-| Component view. This will be renamed to `view` in 7.0.0.
+{-| Component view. 
 -} 
-view' : (Msg -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
-view' lift model properties items =
+view : (Msg -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
+view lift model properties items =
   let
     summary = Options.collect defaultConfig properties
     config = summary.config
@@ -511,7 +504,7 @@ render
   -> List (Item m)
   -> (Html m)
 render =
-  Parts.create view' update .menu (\x y -> {y | menu=x}) defaultModel
+  Parts.create view update .menu (\x y -> {y | menu=x}) defaultModel
 
 
 -- HELPERS
