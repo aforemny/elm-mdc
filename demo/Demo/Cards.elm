@@ -694,6 +694,7 @@ right =
     ]
     
 
+aux : Model -> List (Html Msg)
 aux model = 
   [ Options.styled h1 [ Typography.headline ] [ text "Setup" ]
   , Code.code """

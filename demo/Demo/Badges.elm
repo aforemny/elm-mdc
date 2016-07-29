@@ -74,6 +74,7 @@ update action model =
 -- VIEW
 
 
+onHover : a -> Options.Style a
 onHover = 
   Html.Events.onMouseOver >> Options.attribute
 
