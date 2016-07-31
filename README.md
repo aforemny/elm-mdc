@@ -9,15 +9,22 @@ CSS/JS implementation of the
 
 [![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
 
-### Get Started
+### Get Started 
 
 Adapt
 [examples/Counter.elm](https://github.com/debois/elm-mdl/tree/master/examples) to suit your needs. 
-Then refer to the [extensive package
-documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/), or look at the 
-[source](https://github.com/debois/elm-mdl/tree/master/demo) of the 
-[Live demo](https://debois.github.io/elm-mdl/), which exercises most components of the library. 
+The 
+[Live demo](https://debois.github.io/elm-mdl/) contains code samples for most components, which
+you may find helpful. 
 
+### Get help
+
+For more in-depth documentation, refer to the [extensive package
+documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/).
+
+Ask any questions you may have on
+[stackoverflow](https://stackoverflow.com/questions/ask?tags=elm+elm-mdl)
+or on [#elm-mdl](https://elm.slack.com/messages/elm-mdl) in the elm-slack. 
 
 ### Contribute
 
@@ -26,11 +33,20 @@ an accomplished expert, the MDL port presents interesting challenges. Refer
 to [this page](https://github.com/debois/elm-mdl/blob/master/CONTRIBUTING.md)
 for a detailed list of possible contributions. 
 
+Most importantly: Do [report
+bugs](https://github.com/debois/elm-mdl/issues/new). The elm-mdl library
+aims to provide a completely smooth experience with Material Design for elm
+developers. No bug is too small. 
+
+You may want to read the hints on how to get your issue [resolved
+quickly](https://github.com/debois/elm-mdl/blob/master/CONTRIBUTING.md#can-i-speed-up-my-issue)
+but you don't have to. 
+
 ### Implementation
 
 MDL is implemented primarily through CSS, with a little bit of JavaScript
 adding and removing CSS classes in response to DOM events. This port
 re-implements the JavaScript parts in Elm, but relies on the CSS of MDL
-verbatim.
+verbatim. 
 
 
