@@ -7,8 +7,32 @@ module Material.Options exposing
   )
 
 
-{-| Setting options for Material components. Refer to the `Material` module
-for intended use. 
+{-| Setting options for Material components. 
+
+Here is a standard use of an elm-mdl Textfield: 
+
+    Textfield.render MDL [0] model.mdl
+      [ Textfield.floatingLabel
+      , Textfield.label "name"
+      , css "width" "96px"
+      , cs "my-name-textfield"
+      ]
+
+The above code renders a textfield, setting the optional properties
+`floatingLabel` and `label "name"` on the textfield; as well as adding
+additional (CSS) styling `width: 96px;` and the HTML class `my-name-textfield`. 
+
+This module defines the type `Property c m` of such optional properties, the
+elements of the last argument in the above call to `Textfield.render`.
+Individual components, such as Textfield usually instantiate the `c` to avoid
+inadvertently applying, say, a Textfield property to a Button. 
+
+Some optional properties apply to all components, see the `Typography`,
+`Elevation`, `Badge`, and `Color` modules. Such universally applicable
+optional properties can _also_ be applied to standard `Html` elements 
+such as `Html.div`; see `style` et. al. below. This is convenient, e.g., for
+applying MDL typography or color to standard elements. 
+
 
 @docs Property
 
@@ -16,10 +40,15 @@ for intended use.
 @docs cs, css, data, many, nop, when
 
 # Html
-@docs Style, styled, styled', div, span, img, attribute, center, scrim, disabled
+@docs Style, styled, styled'
 
-# Convenience
+## Elements
+@docs div, span, img
 @docs stylesheet
+
+## Attributes
+@docs attribute
+@docs center, scrim, disabled
 
 # Internal
 The following types and values are used internally in the library. 
@@ -39,9 +68,9 @@ import Material.Options.Internal exposing (..)
 
 
 {-| Type of elm-mdl properties. (Do not confuse these with Html properties or
-`Html.Attributes.property`.)
-The type variable `c` identifies the component the property is for. You never have to set it yourself. The type variable `d` by the type of your `Msg`s; you should 
-set this yourself. 
+`Html.Attributes.property`.) The type variable `c` identifies the component the
+property is for. You never have to set it yourself. The type variable `d` by
+the type of your `Msg`s; you should set this yourself. 
 -}
 type alias Property c m = 
   Material.Options.Internal.Property c m 
@@ -204,7 +233,7 @@ many =
 {-| Do nothing. Convenient when the absence or 
 presence of Options depends dynamically on other values, e.g., 
 
-    div 
+    Options.div 
       [ if model.isActive then css "active" else nop ]
       [ ... ]
 -}

@@ -21,6 +21,9 @@ To load CSS manually, add the following to your main html file.
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.min.css" />
 
+You may find the [elm-mdl demo's
+html](https://github.com/debois/elm-mdl/blob/master/demo/page.html) helpful. 
+
 # Loading CSS from Elm 
 
 @docs topWithScheme, top

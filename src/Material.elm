@@ -12,7 +12,57 @@ Click
 [here](https://debois.github.io/elm-mdl/)
 for a live demo. 
 
-# Component model 
+This module contains (a) documentation about overall usage and API principles of
+elm-mdl and (b) functions for suppressing TEA boilerplate. For a "Getting started" 
+guide, refer to [the
+README](https://github.com/debois/elm-mdl/blob/master/README.md#get-started).
+
+
+# Using the library. 
+
+## Interfacing with CSS
+
+This library depends on the CSS part of Google's Material Design Lite. Your app
+will have to load that. See the
+[Scheme](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Scheme)
+module for exposing details. (The starting point implementations above
+load CSS automatically.)
+
+## Color theming
+
+Material Design defines a color palette. The 
+[Color](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Color)
+module contains exposing various `Property` values and helper functions for working with
+this color palette.
+
+## View functions
+
+The view function of most components has this signature: 
+
+    view : (Msg -> m) -> Model -> List (Property m)  -> List (Html m) -> Html m
+
+It's helpful to compare this signature to the standard one of `core/html`, e.g., 
+`Html.div`: 
+
+    div  :                        List (Attribute m) -> List (Html m) -> Html m
+
+1. For technical reasons, rather than using `Html.App.map f (view ...)`, you
+provide the lifting function `f` directly to the component as the first
+argument. 
+2. The `Model` argument is standard for TEA view functions. 
+3. The `List (Property m)` argument can be thought of as an alternative
+to `List (Html.Attribute)`. You customise the behaviour of elm-mdl components
+by supplying these `Property m`, much the same way you set attributes of
+  `Html.div`. See the
+  [Options](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Options)
+  module for details. 
+4. The `List (Html m)` argument is standard: it is the contents of the component, 
+  e.g., the text inside a button. 
+
+NB! If you are using parts to suppress TEA boilerplate, call `render` instead
+of `view` (see below). 
+
+# Suppressing TEA boilerplate
 
 The component model of the library is simply the Elm Architecture (TEA), i.e.,
 each component has types `Model` and `Msg`, and values `view` and `update`. A
@@ -21,51 +71,15 @@ minimal example using this library as plain TEA can be found
 
 Using more than a few component in plain TEA is unwieldy because of the large
 amount of boilerplate one has to write. This library uses the 
-[Parts model](https://github.com/debois/elm-parts) for getting rid of most of
-  that boilerplate. A minimal example using the parts model is
+[Parts mechanic](https://github.com/debois/elm-parts) suppress most of
+  that boilerplate. A minimal example using parts is
 [here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
 
-It is important to note that the parts model lives __within__ TEA; 
-it is not an alternative architecture. 
+It is important to note that parts is not an alternative to TEA; it is simply
+a library which hides much of the tedious TEA boilerplate. 
 
-# Getting started
 
-The easiest way to get started is to start with one of the minimal examples above.
-We recommend going with the one that uses 
-[the one that uses](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm)
-the library's component support rather than working directly in plain Elm.
-
-# Interfacing with CSS
-
-This library depends on the CSS part of Google's Material Design Lite. Your app
-will have to load that. See the
-[Scheme](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Scheme)
-module for exposing details. (The starting point implementations above
-load CSS automatically.)
-
-# View functions
-
-The view function of most components has this signature: 
-
-    view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-
-For technical reasons, rather than using `Html.App.map f (view ...)`, you
-provide the lifting function `f` directly to the component as the first
-argument. The `Model` argument is standard.  The third argument, `List (Property m)`,
-is a mechanism for you to specify additional classes and CSS for the component, as well
-as messages to send in response to events on the component.  You need this,
-e.g., when you want to specify the width of a button. See the
-[Options](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Options)
-module for details. 
-
-Material Design defines a color palette. The 
-[Color](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Color)
-module contains exposing various `Property` values and helper functions for working with
-this color palette.
-
-NB! If you are using the parts model rather than plain TEA, call `render` instead of `view`. 
-
-# Parts model
+## Required boilerplate
 
 The present module contains only convenience functions for working with nested 
 components in the Elm architecture. A minimal example using this library
@@ -73,16 +87,9 @@ with component support can be found
 [here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
 We encourage you to use the library in this fashion.
 
-Here is how you use component support in general.  First, boilerplate. 
+Here is how you use elm-mdl with parts. First, boilerplate. 
 
- 1. Include `Material`:
-
-        <!-- MDL -->
-        <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.min.css" />
-
- 2. Add a model container Material components to your model:
+ 1. Add a model container for Material components to your model:
 
         type alias Model = 
           { ...
@@ -94,13 +101,13 @@ Here is how you use component support in general.  First, boilerplate.
           , mdl = Material.model
           }
 
- 3. Add an action for Material components. 
+ 2. Add an action for Material components. 
 
         type Msg = 
           ...
           | Mdl Material.Msg 
 
- 4. Handle that message in your update function as follows:
+ 3. Handle that message in your update function as follows:
 
         update message model = 
           case message of 
@@ -116,26 +123,12 @@ whenever the field changes value through your own NameChanged action:
 
         ...
 
-        type Msg = 
-          ...
-          | NameChanged String
-
-        ... 
-
-        update action model = 
-          case action of 
-            ...
-            NameChanged name -> 
-              -- Do whatever you need to do. 
-
-        ...
-
         nameInput : Textfield.Instance Material.Model Msg
         nameInput = 
         
         view addr model = 
           ...
-          Textfield.instance [0] Mdl model.mdl
+          Textfield.render [0] Mdl model.mdl
             [ css "width" "16rem"
             , Textfield.floatingLabel
             , Textfield.onInput NameChanged
@@ -143,8 +136,6 @@ whenever the field changes value through your own NameChanged action:
 
 The win relative to using plain Elm Architecture is that adding a component
 neither requires you to update your model, your Msgs, nor your update function. 
-(As in the above example, you will frequently have to update the latter two anyway, 
-but now it's not boilerplate, its "business logic".)
 
 
 ## Optimising for size
@@ -156,6 +147,8 @@ own versions of the type `Model` and the value `model` of the present module.
 Use the corresponding definitions in this module as a starting point 
 ([source](https://github.com/debois/elm-mdl/blob/master/src/Material.elm)) 
 and simply comment out the components you do not need. 
+
+## Parts API
 
 @docs Model, model, Msg, update
 -}
