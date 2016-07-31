@@ -871,19 +871,18 @@ view lift model options { drawer, header, tabs, main } =
         , if not hasDrawer then Nothing else Just ("elm-mdl-drawer", drawerView lift drawerIsVisible drawer)
         , if not hasDrawer then Nothing else Just ("elm-mdl-obfuscator", obfuscator lift (drawerIsVisible && not drawerIsFixed))
         , contentDrawerButton |> Maybe.map ((,) "elm-drawer-button")
-        , main'
-            {- Keyed to prevent scrolling state being retained when we switch tab. -}
-            (class "mdl-layout__content" 
-             :: (if isWaterfall config.mode then 
-                   [ on "scroll" 
-                       (Decoder.map 
-                         (ScrollPane config.fixedHeader >> lift) 
-                         (DOM.target DOM.scrollTop))
-                   ]
-                 else 
-                   []
-                )
-            )
+        , Options.styled main'
+            [ cs "mdl-layout__content" 
+            , css "overflow-y" "visible" `when` (config.mode == Scrolling && config.fixedHeader)
+            , css "overflow-x" "visible" `when` (config.mode == Scrolling && config.fixedHeader)
+            , css "overflow" "visible"   `when` (config.mode == Scrolling && config.fixedHeader)
+              {- Above three lines fixes upstream bug #4180. -}
+            , (on "scroll" >> attribute)
+                 (Decoder.map 
+                   (ScrollPane config.fixedHeader >> lift) 
+                   (DOM.target DOM.scrollTop))
+               `when` isWaterfall config.mode 
+            ]
             main
           |> (,) (toString config.selectedTab) |> Just
         ]
