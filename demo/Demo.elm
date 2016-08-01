@@ -403,11 +403,6 @@ stylesheet =
     max-width: 40em;
   }
 
-  h1, h2 {
-    /* TODO. Need typography module with kerning. */
-    margin-left: -3px;
-  }
-
   pre {
     display: inline-block;
     box-sizing: border-box;
@@ -417,6 +412,9 @@ stylesheet =
     padding-bottom: 1rem;
     padding-left:1rem;
     margin: 0;
+  }
+  code {
+    font-family: 'Roboto Mono';
   }
   .mdl-layout__header--transparent {
     background: url('https://getmdl.io/assets/demos/transparent.jpg') center / cover;
