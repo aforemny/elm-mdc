@@ -402,6 +402,27 @@ info model =
         ]
     ]
       |> withCode """
+  Lists.ul [] 
+    [ Lists.li []
+        [ Lists.content [] [ text "MacBook" ] 
+        , Lists.content2 [] 
+            [ Lists.info2 [] [ text "New" ]
+            , Icon.view "info" [ Color.text Color.primary ]
+            ]
+        ]
+    , Lists.li []
+        [ Lists.content [] [ text "iMac \"27" ] 
+        , Lists.content2 [] 
+            [ Lists.info2 [] [ text "Updated" ]
+            , Icon.view "info" [ Color.text Color.primary ]
+            ]
+        ]
+    , Lists.li []
+        [ Lists.content [] [ text "Mac Pro" ] 
+        , Lists.content2 [] 
+            [ Icon.view "info" [ Color.text Color.primary ]
+            ]
+        ]
 """
 
 
