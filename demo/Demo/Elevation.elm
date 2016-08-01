@@ -1,20 +1,141 @@
-module Demo.Elevation exposing (view)
+module Demo.Elevation exposing (view, update, Msg, Model, model)
 
 import Html exposing (..)
+import Array
 
-import Material.Options as Options exposing (cs, css, Style)
+import Material.Options as Options exposing (cs, css, Style, when)
 import Material.Elevation as Elevation
 import Material.Typography as Typography
+--import Material.Color as Color
+import Material.Slider as Slider
+import Material.Toggles as Toggles
+import Material
 
 import Demo.Page as Page
 import Demo.Code as Code
 
 
+-- MODEL
+
+
+type alias Model = 
+  { transition : Bool
+  , elevation : Int
+  , mdl : Material.Model
+  }
+
+
+model : Model 
+model = 
+  { transition = False
+  , elevation = 1
+  , mdl = Material.model
+  }
+
+
+-- MSG / UPDATE
+
+
+type Msg 
+  = SetElevation Int
+  | FlipTransition
+  | Mdl Material.Msg 
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model = 
+  case msg of 
+    SetElevation k -> 
+      { model | elevation = k } ! [] 
+
+    FlipTransition -> 
+      { model | transition = not model.transition } ! [] 
+
+    Mdl action' -> 
+      Material.update Mdl action' model
+
 -- VIEW
 
 
-elevate : (Style a, Int) -> Html a 
-elevate (e, k) =
+elevate : Model -> (Style a, Int) -> Html a 
+elevate model (e, k) =
+  Options.div
+    [ e
+    , css "height" "96px"
+    , css "width"  "128px"
+    , css "margin" "40px"
+    , css "display" "inline-flex"
+    , Elevation.transition 300 `when` model.transition
+    --, Color.background Color.white
+    , Options.center
+    ]
+    [ Options.div
+        [ Typography.titleColorContrast
+        , css "box-radius" "2pt"
+        ]
+        [ text <| toString k ]
+    ]
+
+
+noElevations : Float 
+noElevations = 
+  Array.length Elevation.elevations |> toFloat
+
+
+demo2 : Model -> List (Html Msg)
+demo2 model = 
+  let
+    (e, k) =
+      Array.get model.elevation Elevation.elevations
+        |> Maybe.withDefault (Elevation.e0, 0)
+    code = 
+      """
+      Options.div
+        [ Elevation.e""" ++ (toString k) ++ """
+        , css "height" "96px"
+        , css "width"  "128px" """ ++ (if model.transition then "\n        , Elevation.transition 300" else "") ++ """
+        , Options.center
+        ]
+        [ text \"""" ++ (toString k) ++ """\" ]"""
+  in
+    [ Options.styled Html.h4 
+        [ ] 
+        [ text "Elevator" ]
+    , Options.div 
+        [ css "display" "flex"
+        , css "align-items" "center"
+        , css "flex-flow" "row wrap"
+        ] 
+        [ elevate model (e, k)
+        , Options.div 
+            [ css "flex-direction" "column" 
+            , css "justify-content" "center"
+            , css "flex-grow" "1"
+            , css "min-width" "256px"
+            ]
+            [ Slider.view
+                [ Slider.onChange (floor >> SetElevation)
+                , Slider.value (toFloat model.elevation)
+                , Slider.min 0
+                , Slider.max (noElevations - 1)
+                , Slider.step 1
+                , css "max-width" "384px"
+                ] 
+            , Toggles.switch Mdl [0] model.mdl
+                [ Toggles.onClick FlipTransition
+                , Toggles.value model.transition
+                , css "margin-left" "20px"
+                , css "margin-top" "24px"
+                ]
+                [ text "Animate" ]
+            ]
+        ]
+    , Code.code code
+    ]
+
+
+
+  {-
   Options.div
     [ css "display" "inline-flex"
     , css "flex-flow" "row wrap"
@@ -59,16 +180,21 @@ elevate (e, k) =
             )
         ]
     ]
+  -}
 
 
-view : Html a
-view =
-  (cs "", 0) :: Elevation.elevations
-  |> List.map elevate
-  |> (::) ( Code.code """import Material.Elevation as Elevation""" )
-  |> (::) ( p [] [ text """Below are boxes drawn at various elevations.""" ] )
-  |> Page.body1 "Elevation" srcUrl intro references
+view : Model -> Html Msg
+view model =
+  let 
+    boxes = 
+      Elevation.elevations |> Array.map (elevate model) |> Array.toList
+    demo1 = 
+      List.append
+        [ p [] [ text """Below are boxes drawn at various elevations."""  ] ]
+        boxes
 
+  in    
+    Page.body1' "Elevation" srcUrl intro references demo1 (demo2 model)
 
 
 intro : Html a

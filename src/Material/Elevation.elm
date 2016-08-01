@@ -1,5 +1,5 @@
 module Material.Elevation exposing
-  ( e2, e3, e4, e6, e8, e16, e24 
+  ( e0, e2, e3, e4, e6, e8, e16, e24 
   , elevations
   , transition
   )
@@ -37,8 +37,9 @@ for a live demo.
 
 # Elevations
 Each of the values below denote an elevation of a certain heigh, e.g., 
-`e4` will cast a shadow indicating an elevation of 4dp. 
-@docs e2, e3, e4, e6, e8, e16, e24
+`e4` will cast a shadow indicating an elevation of 4dp. The default elevation
+is `e0`, no elevation.
+@docs e0, e2, e3, e4, e6, e8, e16, e24
 @docs elevations
 
 # Transitions
@@ -46,6 +47,7 @@ Each of the values below denote an elevation of a certain heigh, e.g.,
 
 -}
 
+import Array exposing (Array)
 import Material.Options exposing (..)
 
 {-| Indicate the elevation of an element by giving it a shadow. 
@@ -58,6 +60,12 @@ elements; MDL sources define all values 0-24, but omits most from production css
 shadow : Int -> Property a m
 shadow z = 
   cs ("mdl-shadow--" ++ toString z ++ "dp")
+
+
+{-|
+-}
+e0 : Property a m
+e0 = nop 
 
 
 {-|
@@ -103,16 +111,18 @@ e24 = shadow 24
 
 {-| List of all elevations and their depth in dp. 
 -}
-elevations : List (Property a m, Int)
+elevations : Array (Property a m, Int)
 elevations = 
-  [ (e2, 2)
-  , (e3, 3)
-  , (e4, 4)
-  , (e6, 6)
-  , (e8, 8)
-  , (e16, 16)
-  , (e24, 24)
-  ]
+  Array.fromList 
+    [ (e0, 0)
+    , (e2, 2)
+    , (e3, 3)
+    , (e4, 4)
+    , (e6, 6)
+    , (e8, 8)
+    , (e16, 16)
+    , (e24, 24)
+    ]
 
 
 {-| Add a CSS-transition to changes in elevation. Supply a transition

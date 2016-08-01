@@ -65,6 +65,7 @@ type alias Model =
   , cards : Demo.Cards.Model
   , lists : Demo.Lists.Model
   , dialog : Demo.Dialog.Model
+  , elevation : Demo.Elevation.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -91,6 +92,7 @@ model =
   , cards = Demo.Cards.model
   , lists = Demo.Lists.model
   , dialog = Demo.Dialog.model
+  , elevation = Demo.Elevation.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -122,6 +124,7 @@ type Msg
   | ListsMsg Demo.Lists.Msg
   | ToggleHeader
   | DialogMsg Demo.Dialog.Msg
+  | ElevationMsg Demo.Elevation.Msg
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -143,35 +146,23 @@ update action model =
       Material.update Mdl msg model
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
-
     BadgesMsg    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesMsg   Demo.Badges.update    a model
-
     LayoutMsg a -> lift  .layout    (\m x->{m|layout   =x}) LayoutMsg  Demo.Layout.update    a model
-
     MenusMsg a -> lift  .menus    (\m x->{m|menus   =x}) MenusMsg  Demo.Menus.update    a model
-
     TextfieldMsg a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldMsg Demo.Textfields.update a model
-
     SnackbarMsg  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarMsg Demo.Snackbar.update   a model
-
     TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
-
     TablesMsg   a -> lift  .tables    (\m x->{m|tables   =x}) TablesMsg  Demo.Tables.update    a model
---
     LoadingMsg   a -> lift  .loading    (\m x->{m|loading   =x}) LoadingMsg  Demo.Loading.update    a model
     FooterMsg   a -> lift  .footers    (\m x->{m|footers   =x}) FooterMsg  Demo.Footer.update    a model
-
     SliderMsg   a -> lift  .slider    (\m x->{m|slider   =x}) SliderMsg  Demo.Slider.update    a model
-
     TooltipMsg   a -> lift  .tooltip    (\m x->{m|tooltip   =x}) TooltipMsg  Demo.Tooltip.update    a model
     TabMsg   a -> lift  .tabs    (\m x->{m|tabs   =x}) TabMsg  Demo.Tabs.update    a model
-
     TypographyMsg  a -> lift  .typography   (\m x->{m|typography  =x}) TypographyMsg Demo.Typography.update   a model
-
     CardsMsg   a -> lift  .cards    (\m x->{m|cards   =x}) CardsMsg  Demo.Cards.update    a model
     ListsMsg   a -> lift  .lists    (\m x->{m|lists   =x}) ListsMsg  Demo.Lists.update    a model
-
     DialogMsg a -> lift .dialog (\m x->{m|dialog =x}) DialogMsg Demo.Dialog.update a model
+    ElevationMsg a -> lift .elevation (\m x->{m|elevation=x}) ElevationMsg Demo.Elevation.update a model
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
 
@@ -184,7 +175,7 @@ tabs =
   , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
   , ("Cards", "cards", .cards >> Demo.Cards.view >> App.map CardsMsg)
   , ("Dialog", "dialog", .dialog >> Demo.Dialog.view >> App.map DialogMsg)
-  , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
+  , ("Elevation", "elevation", .elevation >> Demo.Elevation.view >> App.map ElevationMsg)
   , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
   , ("Grid", "grid", \_ -> Demo.Grid.view)
   , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
@@ -247,6 +238,11 @@ drawer =
     , Layout.link
         [ Layout.href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
         [ text "elm-package" ]
+    , Layout.link
+        [ Layout.href "#cards"
+        , Layout.onClick (Layout.toggleDrawer Mdl)
+        ]
+        [ text "Card component" ]
     ]
   ]
 
