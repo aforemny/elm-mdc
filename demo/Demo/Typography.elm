@@ -97,10 +97,10 @@ demo1 =
         [ text "Medium 20px" ]
       """
      )
-  ,  ( Options.styled p [ Typo.subheading ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
+  ,  ( Options.styled p [ Typo.subhead ] [text "Regular 16px (Device), Regular 15px (Desktop)"]
      , """
        Options.styled p
-         [ Typo.subheading ]
+         [ Typo.subhead ]
          [ text "Regular 16px (Device), Regular 15px (Desktop)" ]
        """
      )
@@ -144,17 +144,17 @@ demo1 =
 
 demo2 : List ( Html a, String ) 
 demo2 = 
-  [ ( Options.styled p [ Typo.left, Typo.titleColorContrast ] [ text "Left align" ]
+  [ ( Options.styled p [ Typo.left, Typo.title ] [ text "Left align" ]
     , """
        Options.styled p
-         [ Typo.left, Typo.titleColorContrast ]
+         [ Typo.left, Typo.title ]
          [ text "Left align" ]
        """
     )
-  , ( Options.styled p [ Typo.body2ColorContrast, Typo.center ] [ text "Center align" ]
+  , ( Options.styled p [ Typo.body2, Typo.center ] [ text "Center align" ]
     , """
        Options.styled p
-         [ Typo.body2ColorContrast, Typo.center ]
+         [ Typo.body2, Typo.center ]
          [ text "Center align" ]
        """
     )
@@ -165,10 +165,10 @@ demo2 =
          [ text "Right align" ]
        """
     )
-  , ( Options.styled p [ Typo.justify, Typo.subheadingColorContrast ] [ text "Justified" ]
+  , ( Options.styled p [ Typo.justify, Typo.subhead ] [ text "Justified" ]
     , """
        Options.styled p
-         [ Typo.justify, Typo.subheadingColorContrast ]
+         [ Typo.justify, Typo.subhead ]
          [ text "Justified" ]
        """
     )

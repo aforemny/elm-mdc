@@ -130,7 +130,7 @@ view model =
                 , Grid.align Grid.Bottom
                 ]
                 [ Options.span 
-                    [ Typography.display4 ]
+                    [ Typography.display4, Typography.contrast 1.0 ]
                     [ text <| toString model.progress ]
                 ]
             , Grid.cell

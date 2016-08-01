@@ -1,24 +1,18 @@
 module Material.Typography
   exposing
     ( display1
-    , display1ColorContrast
     , display2
     , display3
     , display4
     , body1
-    , body1ForcePreferred
     , body2
-    , body2ForcePreferred
-    , body2ColorContrast
     , headline
-    , subheading
-    , subheadingColorContrast
+    , subhead
     , caption
-    , captionColorContrast
     , button
     , menu
     , title
-    , titleColorContrast
+    , contrast
     , capitalize
     , lowercase
     , uppercase
@@ -57,19 +51,28 @@ for a live demo.
 
 # Styles
 
-@docs display1, display1ColorContrast
+The [Material Design
+specification](https://material.google.com/style/typography.html#typography-other-typographic-guidelines)
+stipulates that typography has particular color contrast. The styles in this
+file gives correct contrast for black and white only; for colored typography or backgrounds, use the 
+`contrast` option to regulate color contrast. 
+
+
+@docs display1
 @docs display2
 @docs display3
 @docs display4
-@docs body1, body1ForcePreferred
-@docs body2, body2ForcePreferred, body2ColorContrast
+@docs body1
+@docs body2
 @docs headline
-@docs subheading, subheadingColorContrast
-@docs caption, captionColorContrast
+@docs title
+@docs subhead
+@docs caption
 @docs button
 @docs menu
-@docs title
-@docs titleColorContrast
+
+## Color contrast
+@docs contrast
 
 # Transforms
 @docs capitalize
@@ -88,142 +91,19 @@ for a live demo.
 
 -}
 
-import Material.Options as Options exposing (cs)
+import Material.Options as Options exposing (cs, css)
 
+{- The material specification requires many typographic elements to have
+particular color contrasts. MDL implements this by having both a default style
+(e.g., `mdl-typography--display-1`) and one with reduced contrast adhering to
+the spec when drawn black on white (e.g.,
+`mdl-typography--display-1-color-contrast`). The latter are implemented
+exclusively by setting opacity (e.g., `opacity: 0.54`).
 
-type TextStyle
-  = Display4
-  | Display3
-  | Display2
-  | Display1
-  | Headline
-  | Title
-  | Subheading
-  | Body2
-  | Body1
-  | Caption
-  | Button
-  | Menu
-
-
-type TextTransform
-  = Capitalize
-  | Lowercase
-  | Uppercase
-
-
-type TextAlign
-  = Center
-  | Left
-  | Right
-  | Justify
-
-
-alignName : TextAlign -> String
-alignName align =
-  case align of
-    Center ->
-      "mdl-typography--text-center"
-
-    Left ->
-      "mdl-typography--text-left"
-
-    Right ->
-      "mdl-typography--text-right"
-
-    Justify ->
-      "mdl-typography--text-justify"
-
-
-transformName : TextTransform -> String
-transformName transform =
-  case transform of
-    Capitalize ->
-      "mdl-typography--text-capitalize"
-
-    Lowercase ->
-      "mdl-typography--text-lowercase"
-
-    Uppercase ->
-      "mdl-typography--text-uppercase"
-
-
-styleName : TextStyle -> String
-styleName style =
-  case style of
-    Display4 ->
-      "mdl-typography--display-4"
-
-    Display3 ->
-      "mdl-typography--display-3"
-
-    Display2 ->
-      "mdl-typography--display-2"
-
-    Display1 ->
-      "mdl-typography--display-1"
-
-    Headline ->
-      "mdl-typography--display-1"
-
-    Title ->
-      "mdl-typography--title"
-
-    Subheading ->
-      "mdl-typography--subhead"
-
-    Body2 ->
-      "mdl-typography--body-2"
-
-    Body1 ->
-      "mdl-typography--body-1"
-
-    Caption ->
-      "mdl-typography--caption"
-
-    Button ->
-      "mdl-typography--button"
-
-    Menu ->
-      "mdl-typography--menu"
-
-
-colorContrast : TextStyle -> String
-colorContrast style =
-  case style of
-    Display1 ->
-      "mdl-typography--display-1-color-contrast"
-
-    Body2 ->
-      "mdl-typography--body-2-color-contrast"
-
-    Subheading ->
-      "mdl-typography--subhead-color-contrast"
-
-    Title ->
-      "mdl-typography--title-color-contrast"
-
-    Caption ->
-      "mdl-typography--caption-color-contrast"
-
-    -- Should _never_ happen (Can check with Debug.crash)
-    _ ->
-      ""
-
-
-forcePreferred : TextStyle -> String
-forcePreferred style =
-  case style of
-    Body1 ->
-      "mdl-typography--body-1-force-preferred-font"
-
-    Body2 ->
-      "mdl-typography--body-2-force-preferred-font"
-
-    -- Should _never_ happen (Can check with Debug.crash)
-    _ ->
-      ""
-
+We achieve a nicer API not duplicating every stylename by inversion: The
+default `display1` style is drawn at `opacity: 0.54`; you can override it by
+adding a `contrast` style. 
+-}
 
 
 -- Styles
@@ -233,133 +113,96 @@ forcePreferred style =
 -}
 display1 : Options.Property c m
 display1 =
-  cs <| styleName Display1
-
-
-{-| Display with color contrast
--}
-display1ColorContrast : Options.Property c m
-display1ColorContrast =
-  cs <| styleName Display1
+  cs "mdl-typography--display-1-color-contrast"
 
 
 {-| Regular 45px
 -}
 display2 : Options.Property c m
 display2 =
-  cs <| styleName Display2
+  cs "mdl-typography--display-2-color-contrast"
 
 
 {-| Regular 56px
 -}
 display3 : Options.Property c m
 display3 =
-  cs <| styleName Display3
+  cs "mdl-typography--display-3-color-contrast"
 
 
 {-| Light 112px
 -}
 display4 : Options.Property c m
 display4 =
-  cs <| styleName Display4
+  cs "mdl-typography--display-4-color-contrast"
 
 
 {-| Regular 24px
 -}
 headline : Options.Property c m
 headline =
-  cs <| styleName Headline
+  cs "mdl-typography--headline-color-contrast"
 
 
 {-| Medium 20px
 -}
 title : Options.Property c m
 title =
-  cs <| styleName Title
-
-
-{-| Title with color contrast
--}
-titleColorContrast : Options.Property c m
-titleColorContrast =
-  cs <| colorContrast Title
+  cs "mdl-typography--title-color-contrast"
 
 
 {-| Regular 16px (Device), Regular 15px (Desktop)
 -}
-subheading : Options.Property c m
-subheading =
-  cs <| styleName Subheading
-
-
-{-| Subhead with color contrast
--}
-subheadingColorContrast : Options.Property c m
-subheadingColorContrast =
-  cs <| colorContrast Subheading
-
-
-{-| Medium 14px (Device), Medium 13px (Desktop)
--}
-body2 : Options.Property c m
-body2 =
-  cs <| styleName Body2
-
-
-{-| Medium 14px (Device), Medium 13px (Desktop)
--}
-body2ForcePreferred : Options.Property c m
-body2ForcePreferred =
-  cs <| forcePreferred Body2
-
-
-{-| Body with color contrast
--}
-body2ColorContrast : Options.Property c m
-body2ColorContrast =
-  cs <| colorContrast Body2
+subhead : Options.Property c m
+subhead =
+  cs "mdl-typography--subhead-color-contrast"
 
 
 {-| Regular 14px (Device), Regular 13px (Desktop)
 -}
 body1 : Options.Property c m
 body1 =
-  cs <| styleName Body1
+  cs "mdl-typography--body-1---force-preferred-font-color-contrast"
 
 
-{-| Regular 14px (Device), Regular 13px (Desktop)
+{-| Medium 14px (Device), Medium 13px (Desktop)
 -}
-body1ForcePreferred : Options.Property c m
-body1ForcePreferred =
-  cs <| forcePreferred Body1
+body2 : Options.Property c m
+body2 =
+  cs "mdl-typography--body-2--force-preferred-font-color-contrast"
 
 
 {-| Regular 12px
 -}
 caption : Options.Property c m
 caption =
-  cs <| styleName Caption
-
-
-{-| Regular 12px
--}
-captionColorContrast : Options.Property c m
-captionColorContrast =
-  cs <| colorContrast Caption
+  cs "mdl-typography--caption-force-preferred-font-color-contrast"
 
 
 {-| Medium (All Caps) 14px
 -}
 button : Options.Property c m
 button =
-  cs <| styleName Button
+  cs "mdl-typography--button-color-contrast"
 
 
 {-| Medium 14px (Device), Medium 13px (Desktop)
 -}
 menu : Options.Property c m
 menu =
-  cs <| styleName Menu
+  cs "mdl-typography--menu-color-contrast"
+
+
+
+-- Modifiers
+
+
+{-| Modify contrast of typography. Implemented under the hood by setting CSS
+`opacity`. 
+-}
+contrast : Float -> Options.Property c m
+contrast x =
+  css "opacity" (toString x)
 
 
 
@@ -387,29 +230,28 @@ tableStriped =
 -}
 center : Options.Property c m
 center =
-  cs <| alignName Center
+  cs "mdl-typography--text-center"
 
 
 {-| Left aligned text
 -}
 left : Options.Property c m
 left =
-  cs <| alignName Left
+  cs "mdl-typography--text-left"
 
 
 {-| Right aligned text
 -}
 right : Options.Property c m
 right =
-  cs <| alignName Right
+  cs "mdl-typography--text-right"
 
 
 {-| Justified text
 -}
 justify : Options.Property c m
 justify =
-  cs <| alignName Justify
-
+  cs "mdl-typography--text-justify"
 
 
 -- Transform
@@ -419,18 +261,18 @@ justify =
 -}
 capitalize : Options.Property c m
 capitalize =
-  cs <| transformName Capitalize
+  cs "mdl-typography--text-capitalize"
 
 
 {-| Lowercased text
 -}
 lowercase : Options.Property c m
 lowercase =
-  cs <| transformName Lowercase
+  cs "mdl-typography--text-lowercase"
 
 
 {-| Uppercased text
 -}
 uppercase : Options.Property c m
 uppercase =
-  cs <| transformName Uppercase
+  cs "mdl-typography--text-uppercase"

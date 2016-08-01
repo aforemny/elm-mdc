@@ -186,9 +186,6 @@ table model =
     (card, code, comment)
 
 
--- ORION 
-
-
 grenadine : Card
 grenadine model =
   let 
@@ -283,7 +280,7 @@ reminder model =
             , css "padding" "8px 16px 8px 16px"
             , white
             ] 
-            [ Options.span [ Typography.caption ] [ text "August 3, 2016" ]
+            [ Options.span [ Typography.caption, Typography.contrast 0.87 ] [ text "August 3, 2016" ]
             , Button.render Mdl [1] model.mdl
                 [ Button.icon, Button.ripple ]
                 [ Icon.i "phone" ]
@@ -307,7 +304,7 @@ reminder model =
             , css "padding" "8px 16px 8px 16px"
             , white
             ] 
-            [ Options.span [ Typography.caption ] [ text "August 3, 2016" ]
+            [ Options.span [ Typography.caption, Typography.contrast 0.87 ] [ text "August 3, 2016" ]
             , Button.render Mdl [1] model.mdl
                 [ Button.icon, Button.ripple ]
                 [ Icon.i "phone" ]
@@ -335,7 +332,7 @@ elm model =
         , Card.text
             [ css "background" "rgba(0, 0, 0, 0.5)" ] -- Non-gradient scrim
             [ Options.span 
-                [ white, Typography.title ]
+                [ white, Typography.title, Typography.contrast 1.0 ]
                 [ text "Elm programming" ]
             ]
         ]
@@ -349,7 +346,7 @@ elm model =
         , Card.text
             [ css "background" "rgba(0, 0, 0, 0.5)" ] -- Non-gradient scrim
             [ Options.span 
-                [ white, Typography.title ]
+                [ white, Typography.title, Typography.contrast 1.0 ]
                 [ text "Elm programming" ]
             ]
         ]
@@ -492,7 +489,7 @@ weather model =
             , Options.div 
                 [ css "padding" "2rem 2rem 0 2rem" ]
                 [ Options.span 
-                    [ Typography.display4 
+                    [ Typography.display4, Typography.contrast 0.87
                     , Color.text Color.primary
                     ] 
                     [ text "21°" ]
@@ -696,7 +693,7 @@ right =
 
 aux : Model -> List (Html Msg)
 aux model = 
-  [ Options.styled h1 [ Typography.headline ] [ text "Setup" ]
+  [ h4 [] [ text "Setup" ]
   , Code.code """
       import Material.Card as Card
 
@@ -704,7 +701,7 @@ aux model =
       white = 
         Color.text Color.white 
     """
-  , Options.styled h1 [ Typography.headline ] [ text "Card click" ]
+  , h4 [] [ text "Card click" ]
   , p [] [ text "To react to a card-wide click event, register an onClick handler as indicated below. Be aware that clicks in the action block is ignored in order to not confuse the a click on a control in that block with a click on the entire card." ]
   , Options.div 
       [ css "display" "flex" 
@@ -739,7 +736,7 @@ aux model =
               ]"""
           ]
       ]
-  , Options.styled h1 [ Typography.headline ] [ text "Elevation animation" ]
+  , h4 [] [ text "Elevation animation" ]
   , p [] [ text "If desired, use Elevation.transition to install elevation transitions, e.g., on hover, as demonstrated in the example below." ]
   , let 
       k = 12 

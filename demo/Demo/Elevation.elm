@@ -6,7 +6,6 @@ import Array
 import Material.Options as Options exposing (cs, css, Style, when)
 import Material.Elevation as Elevation
 import Material.Typography as Typography
---import Material.Color as Color
 import Material.Slider as Slider
 import Material.Toggles as Toggles
 import Material
@@ -66,11 +65,10 @@ elevate model (e, k) =
     , css "margin" "40px"
     , css "display" "inline-flex"
     , Elevation.transition 300 `when` model.transition
-    --, Color.background Color.white
     , Options.center
     ]
     [ Options.div
-        [ Typography.titleColorContrast
+        [ Typography.title
         , css "box-radius" "2pt"
         ]
         [ text <| toString k ]
@@ -155,7 +153,7 @@ demo2 model =
         , css "align-items" "center"
         ]
         [ Options.div
-            [ Typography.titleColorContrast
+            [ Typography.title
             , css "box-radius" "2pt"
             ]
             [ text <| toString k ]
