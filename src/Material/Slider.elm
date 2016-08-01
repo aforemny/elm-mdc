@@ -197,9 +197,9 @@ view options =
         |> Maybe.withDefault Options.nop 
 
   in
-    Options.styled Html.div
-      [ cs "mdl-slider__container"
-      ]
+    Options.apply summary Html.div
+      [ cs "mdl-slider__container"]
+      []
       [ Options.styled' Html.input
           [ cs "mdl-slider"
           , cs "mdl-js-slider"
