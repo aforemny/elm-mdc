@@ -162,14 +162,14 @@ subhead =
 -}
 body1 : Options.Property c m
 body1 =
-  cs "mdl-typography--body-1---force-preferred-font-color-contrast"
+  cs "mdl-typography--body-1-force-preferred-font-color-contrast"
 
 
 {-| Medium 14px (Device), Medium 13px (Desktop)
 -}
 body2 : Options.Property c m
 body2 =
-  cs "mdl-typography--body-2--force-preferred-font-color-contrast"
+  cs "mdl-typography--body-2-force-preferred-font-color-contrast"
 
 
 {-| Regular 12px
