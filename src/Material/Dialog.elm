@@ -108,7 +108,8 @@ openOn =
   let
     handler =
       """
-        // Don't mess up the elm runtime.
+      // Don't mess up the elm runtime.
+      try { 
         var dialog = document.getElementById('""" ++ theDialog ++ """');
         if (! dialog) { 
           console.log ('Cannot display dialog: No dialog element. Use `Dialog.view` to construct one.');
@@ -123,6 +124,11 @@ openOn =
           }
         }
         dialog.showModal();
+      }
+      catch (e) 
+      { 
+        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new");
+      }
       """
   in
     \event -> 
@@ -141,8 +147,8 @@ closeOn =
   let 
     handler = 
       """ 
-        // Don't mess up the elm runtime!
-
+      // Don't mess up the elm runtime!
+      try {
         var dialog = document.getElementById('""" ++ theDialog ++ """');
         if (! dialog) { 
           console.log ('Cannot close dialog: No dialog element. Use `Dialog.view` to construct one.');
@@ -156,7 +162,13 @@ closeOn =
           console.log ('Cannot close dialog: The dialog does not have a `close` method. Perhaps you forgot a polyfill? Get one at:\\n\\nhttps://github.com/GoogleChrome/dialog-polyfill\\n');
           return;
         }
-        dialog.close();"""
+        dialog.close();
+      } 
+      catch (e) 
+      { 
+        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new");
+      }
+      """
   in
     \event -> 
       Html.Attributes.attribute ("on" ++ event) handler
