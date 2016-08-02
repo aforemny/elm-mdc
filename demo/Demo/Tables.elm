@@ -5,6 +5,7 @@ import Html exposing (..)
 import Material
 import Material.Helpers exposing (pure, map1st, map2nd)
 import Material.Table as Table
+import Material.Options exposing (css)
 
 import Demo.Code as Code
 import Demo.Page as Page
@@ -134,7 +135,7 @@ table model =
 
 code : Html msg
 code =
-  Code.code """
+  Code.code [ css "margin" "24px 0" ] """
     Table.table []
       [ Table.thead []
           [ Table.tr []

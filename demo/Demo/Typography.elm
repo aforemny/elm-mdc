@@ -5,7 +5,7 @@ import Html exposing (..)
 --import Html.Attributes as Html
 
 import Material.Typography as Typo
-import Material.Options as Options
+import Material.Options as Options exposing (css)
 import Material
 import Material.Grid as Grid
 
@@ -144,31 +144,31 @@ demo1 =
 
 demo2 : List ( Html a, String ) 
 demo2 = 
-  [ ( Options.styled p [ Typo.left, Typo.title ] [ text "Left align" ]
+  [ ( Options.styled p [ Typo.left ] [ text "Left align" ]
     , """
        Options.styled p
-         [ Typo.left, Typo.title ]
+         [ Typo.left ]
          [ text "Left align" ]
        """
     )
-  , ( Options.styled p [ Typo.body2, Typo.center ] [ text "Center align" ]
+  , ( Options.styled p [ Typo.center ] [ text "Center align" ]
     , """
        Options.styled p
-         [ Typo.body2, Typo.center ]
+         [ Typo.center ]
          [ text "Center align" ]
        """
     )
-  , ( Options.styled p [ Typo.caption, Typo.right ] [ text "Right align" ]
+  , ( Options.styled p [ Typo.right ] [ text "Right align" ]
     , """
        Options.styled p
-         [ Typo.caption, Typo.right ]
+         [ Typo.right ]
          [ text "Right align" ]
        """
     )
-  , ( Options.styled p [ Typo.justify, Typo.subhead ] [ text "Justified" ]
+  , ( Options.styled p [ Typo.justify ] [ text "Justified" ]
     , """
        Options.styled p
-         [ Typo.justify, Typo.subhead ]
+         [ Typo.justify ]
          [ text "Justified" ]
        """
     )
@@ -205,7 +205,7 @@ view model  =
       Grid.cell 
         [Grid.size Grid.All 12]
         [ p [] [text "Imports"]
-        , Code.code """
+        , Code.code [ css "margin" "24px 0" ] """
                      import Material.Typography as Typo
                      import Material.Options as Options
                      import Html exposing (p)
@@ -218,11 +218,12 @@ view model  =
         [ Grid.size Grid.Desktop 6
         , Grid.size Grid.Tablet 8
         , Grid.size Grid.Phone 4
+        , Grid.align Grid.Middle
         ] 
         [ x ]
 
     demo =
-      List.concatMap (\(d, c) -> [ cell d, cell (Code.code c) ]) 
+      List.concatMap (\(d, c) -> [ cell d, cell (Code.code [] c) ]) 
   in
     Page.body1' "Typography" srcUrl intro references 
       [ Grid.grid [] <| head :: demo demo1 ] 

@@ -279,7 +279,7 @@ view model  =
               |> (++) "import Material.Layout as Layout\n\nLayout.render Mdl model.mdl\n  [ " 
               |> flip (++) "\n  ]\n"
               |> flip (++) body
-              |> Code.code
+              |> Code.code []
           ]
       ]
     demo2 = 
@@ -325,11 +325,11 @@ view model  =
                   ++ "'>"
             ]
             |> String.join "\n"
-            |> Code.html
+            |> Code.html []
           , explain """For quick experiments, you can alternatively load CSS directly from Elm as follows.
                        NB! This approach will cause flickering on load and so is
                        not suitable anything but quick experiments."""
-          , Code.code  <|
+          , Code.code [] <|
               """import Material.Scheme as Scheme
     import Material.Color as Color
 

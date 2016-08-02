@@ -225,7 +225,7 @@ view model  =
               ]
         }
     ]
-  , Code.code miniFooterDoc
+  , Code.code [ Options.css "margin-top" "20px" ] miniFooterDoc
 
   , div [Html.style [("margin-top", "60px")]] []
   , h4 [] [ text "Mega footer" ]
@@ -275,7 +275,7 @@ view model  =
             ]
         }
     ]
-  , Code.code megaFooterDoc
+  , Code.code [ Options.css "margin-top" "20px" ] megaFooterDoc
   ]
   |> Page.body2 "Footers" srcUrl intro references
 

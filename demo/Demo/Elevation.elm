@@ -128,7 +128,7 @@ demo2 model =
                 [ text "Animate" ]
             ]
         ]
-    , Code.code code
+    , Code.code [ css "margin" "40px" ] code 
     ]
 
 

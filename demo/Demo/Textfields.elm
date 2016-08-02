@@ -1,6 +1,6 @@
 module Demo.Textfields exposing (model, Model, update, view, Msg)
 
-import Html exposing (Html)
+import Html exposing (..)
 import Platform.Cmd exposing (Cmd)
 import Regex
 
@@ -109,7 +109,8 @@ match str rx =
 
 view : Model -> Html Msg
 view model =
-  [ ( Textfield.render MDL [0] model.mdl
+  [ ( "Basic textfield"
+    , Textfield.render MDL [0] model.mdl
         [ Textfield.onInput Upd0 ]
     , """
         Textfield.render MDL [0] model.mdl
@@ -117,14 +118,16 @@ view model =
        """
     )
 
-  , ( Textfield.render MDL [1] model.mdl
+  , ( "Labelled textfield"
+    , Textfield.render MDL [1] model.mdl
         [ Textfield.label "Labelled" ]
     , """
        Textfield.render MDL [1] model.mdl
          [ Textfield.label "Labelled" ]
        """
     )
-  , ( Textfield.render MDL [2] model.mdl
+  , ( "Labelled textfield, floating label"
+    , Textfield.render MDL [2] model.mdl
         [ Textfield.label "Floating label"
         , Textfield.floatingLabel
         , Textfield.text'
@@ -137,7 +140,8 @@ view model =
           ]
        """
     )
-  , ( Textfield.render MDL [3] model.mdl
+  , ( "Disabled textfield"
+    , Textfield.render MDL [3] model.mdl
         [ Textfield.label "Disabled"
         , Textfield.disabled
         , Textfield.value <|
@@ -156,7 +160,8 @@ view model =
         ]
        """
     )
-  , ( Textfield.render MDL [4] model.mdl
+  , ( "Textfield with error checking"
+    , Textfield.render MDL [4] model.mdl
         [ Textfield.label "w/error checking"
         , if not <| match model.str4 rx' then
             Textfield.error <| "Doesn't match " ++ rx
@@ -175,7 +180,8 @@ view model =
       ]
        """
     )
-  , ( Textfield.render MDL [5] model.mdl
+  , ( "Textfield for passwords"
+    , Textfield.render MDL [5] model.mdl
         [ Textfield.label "Enter password"
         , Textfield.floatingLabel
         , Textfield.password
@@ -188,7 +194,8 @@ view model =
         ]
        """
     )
-  , ( Textfield.render MDL [6] model.mdl
+  , ( "Multi-line textfield"
+    , Textfield.render MDL [6] model.mdl
         [ Textfield.label "Default multiline textfield"
         , Textfield.textarea
         ]
@@ -200,7 +207,8 @@ view model =
        """
     )
 
-  , ( Textfield.render MDL [7] model.mdl
+  , ( "Multi-line textfield, 6 rows"
+    , Textfield.render MDL [7] model.mdl
         [ Textfield.label "Multiline with 6 rows"
         , Textfield.floatingLabel
         , Textfield.textarea
@@ -216,7 +224,8 @@ view model =
        """
     )
 
-  , ( Html.div []
+  , ( "Multi-line textfield with character limit"
+    , Html.div []
     [ Textfield.render MDL [8] model.mdl
         [ Textfield.label ("Multiline textfield (" ++
                             (toString (String.length model.str6))
@@ -262,19 +271,17 @@ view model =
     )
 
   ]
-  |> List.map (\(html, code) ->
+  |> List.map (\(header, html, code) ->
       cell
-        [size All 4, offset Desktop 1]
-        [ Options.div
-            [ css "display" "flex"
-            , css "align-items" "center"
-            , css "justify-content" "center"
+        [size Phone 4, size Tablet 6, offset Tablet 1, size Desktop 6, offset Desktop 3]
+        [ h4 [] [ text header ] 
+        , Options.div
+            [ Options.center
             , Color.background Page.background
             ] [html]
-        , Code.code code
+        , Code.code [ css "margin" "24px 0" ] code
         ]
      )
-  |> List.intersperse (cell [size All 1] [])
   |> grid []
   |> flip (::) []
   |> (::) (Html.text "Try entering text into some of the textfields below.")

@@ -6,6 +6,7 @@ import Html exposing (..)
 import Material.Slider as Slider
 import Material
 import Material.Grid as Grid
+import Material.Options exposing (css)
 
 import Demo.Code as Code
 import Demo.Page as Page
@@ -64,7 +65,7 @@ demoContainer (html, code) =
   Grid.cell
     [Grid.size Grid.All 4]
     [ html
-    , Code.code code
+    , Code.code [ css "margin" "24px 0" ] code
     ]
 
 
@@ -74,7 +75,7 @@ view model  =
   , Grid.grid[]
       [ Grid.cell
           [Grid.size Grid.All 12]
-          [Code.code "import Material.Slider as Slider"]
+          [Code.code [ css "margin" "24px 0" ] "import Material.Slider as Slider"]
 
       , demoContainer
           ( Slider.view

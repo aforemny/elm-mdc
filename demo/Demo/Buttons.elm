@@ -227,7 +227,7 @@ view model =
            |> Maybe.map (\str -> "Code for '" ++ str ++ "':")
            |> Maybe.withDefault "Click a button to see the corresponding code."
            |> text
-        , Code.view model.code
+        , Code.view model.code [ Options.css "margin" "20px" ]
         ]
     ] 
 

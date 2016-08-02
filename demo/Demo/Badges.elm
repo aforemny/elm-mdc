@@ -194,9 +194,7 @@ view model =
                     [ text "Overlap, no background" ]
               ]
           ] 
-      , p []
-          [ Code.view model.codebox
-          ]
+      , Code.view model.codebox [ Options.css "margin" "20px 0" ]
       ]
   in 
     Page.body1' "Badges" srcUrl intro references demo1 demo2

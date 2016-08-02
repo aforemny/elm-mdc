@@ -148,7 +148,7 @@ view model =
                 [ text "Switch" ]
               , "Toggles.switch Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg\n  , Toggles.ripple\n  , Toggles.value "
                   ++ toString (get 0 model) ++ "\n  ]\n  [ text \"Switch\" ]"
-                |> Code.code
+                |> Code.code [ css "margin" "16px 0"]
               ]
           , Grid.cell row 
               [ Toggles.checkbox Mdl [1] model.mdl 
@@ -159,7 +159,7 @@ view model =
                 [ text "Checkbox" ]
               , "Toggles.checkbox Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg\n  , Toggles.ripple\n  , Toggles.value "
                   ++ toString (get 1 model) ++ "\n  ]\n  [ text \"Checkbox\" ]"
-                |> Code.code
+                |> Code.code [ css "margin" "16px 0"]
               ]
           , Grid.cell row
               [ Toggles.radio Mdl [2] model.mdl 
@@ -195,7 +195,7 @@ view model =
                         ]
                         [ text "Vim" ]
                     ] """
-                |> Code.code
+                |> Code.code [ css "margin" "16px 0"]
               ]
           ]
       ]

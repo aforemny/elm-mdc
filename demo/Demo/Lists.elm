@@ -79,7 +79,7 @@ withCode = flip (,)
 
 basic : Model -> (Html Msg, String)
 basic model =
-  Lists.ul []
+  Lists.ul [ css "margin" "0", css "padding" "0" ]
     [ Lists.li [] [ Lists.content [] [ text "Elm" ] ]
     , Lists.li [] [ Lists.content [] [ text "F#" ] ]
     , Lists.li [] [ Lists.content [] [ text "Lisp" ] ]
@@ -95,7 +95,7 @@ basic model =
 
 icons : a -> ( Html b, String )
 icons model =
-  Lists.ul []
+  Lists.ul [ css "margin" "0", css "padding" "0" ]
     [ Lists.li []
         [ Lists.content [] 
             [ Lists.icon "inbox" []
@@ -140,7 +140,7 @@ icons model =
 
 avatars : Model -> (Html Msg, String)
 avatars model =
-  Lists.ul []
+  Lists.ul [ css "margin" "0", css "padding" "0" ]
     [ Lists.li []
         [ Lists.content []
             [ Lists.avatarImage "assets/christoffer.jpg" []
@@ -186,7 +186,7 @@ avatars model =
 
 avatarsWithIcons : Model -> (Html Msg, String)
 avatarsWithIcons model =
-  Lists.ul []
+  Lists.ul [ css "margin" "0", css "padding" "0" ]
     [ Lists.li []
         [ Lists.content [] 
             [ Lists.avatarIcon "photo_camera" []
@@ -255,7 +255,7 @@ secondaryAction1 model =
         ]
         [ Icon.i "star" ]
   in 
-    Lists.ul [] 
+    Lists.ul [ css "margin" "0", css "padding" "0" ] 
       [ Lists.li []
           [ Lists.content [] [ text "Alan Turing" ] 
           , star model 0
@@ -299,7 +299,7 @@ secondaryAction2 : Model -> (Html Msg, String)
 secondaryAction2 model = 
   let 
     list = 
-      Lists.ul []
+      Lists.ul [ css "margin" "0", css "padding" "0" ]
         [ Lists.li []
             [ Lists.content [] [ text "Include checkbox?" ]
             , Lists.content2 [] 
@@ -379,7 +379,7 @@ secondaryAction2 model =
 
 info : Model -> (Html Msg, String)
 info model = 
-  Lists.ul [] 
+  Lists.ul [ css "margin" "0", css "padding" "0" ] 
     [ Lists.li []
         [ Lists.content [] [ text "MacBook" ] 
         , Lists.content2 [] 
@@ -428,7 +428,7 @@ info model =
 
 subtitle : Model -> (Html Msg, String)
 subtitle model = 
-  Lists.ul []
+  Lists.ul [ css "margin" "0", css "padding" "0" ]
     [ Lists.li [ Lists.withSubtitle ]
         [ Lists.content [] 
             [ text "Mark Wright" 
@@ -476,7 +476,7 @@ subtitle model =
 
 body : Model -> (Html Msg, String)
 body model = 
-  Lists.ul []
+  Lists.ul [ css "margin" "0", css "padding" "0" ]
     [ Lists.li [ Lists.withBody ] -- NB! Required on every Lists.li containing body. 
         [ Lists.content [] 
             [ text "Robert Frost"
@@ -604,7 +604,7 @@ train ((letter, hue), dest, track, time, msg) =
 
 schedule : Html Msg
 schedule = 
-  Lists.ul [] (List.map train trains)
+  Lists.ul [ css "margin" "0", css "padding" "0" ] (List.map train trains)
 
 
 type File = Folder | File
@@ -644,7 +644,7 @@ git (typ, name, modified, by, hue, x) =
 
 commits : Html a
 commits = 
-  Lists.ul []
+  Lists.ul [ css "margin" "0", css "padding" "0" ]
     (List.map git files)
 
 
@@ -688,7 +688,7 @@ mail model idx (name, img, subj, date, txt) =
 
 inbox : Model -> Html Msg
 inbox model = 
-  Lists.ul [] (List.indexedMap (mail model) mails)
+  Lists.ul [ css "margin" "0", css "padding" "0" ] (List.indexedMap (mail model) mails)
 
 
 demoList : String -> (Html Msg, String) -> List (Grid.Cell Msg)
@@ -702,7 +702,7 @@ demoList title (list, code) =
     , Grid.cell [ half ]
         [ list ]
     , Grid.cell [ half ]
-        [ Code.code code ]
+        [ Code.code [] code ]
     ]
 
 

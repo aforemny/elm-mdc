@@ -180,7 +180,7 @@ body1' t srcUrl contents links demo1 demo2 =
           demo1
         ]
     , Options.div 
-        [ css "height" "5rem" ]
+        boxed
         []
     , Options.div 
         [ Color.background <| background 

@@ -7,7 +7,7 @@ import String
 import Markdown
 
 import Material.Elevation as Elevation
-import Material.Options exposing (css, div, stylesheet)
+import Material.Options as Options exposing (css, div, stylesheet, Property)
 import Material.Helpers as Helpers exposing (cmd)
 
 
@@ -126,36 +126,35 @@ trim s =
       |> String.join "\n"
 
 
-code : String -> Html a
-code str = 
+code : List (Property c m) -> String -> Html m
+code options str = 
   div 
-    [ css "overflow" "auto" 
-    , Elevation.e2
-    , css "margin" "16px"
-    , css "border-radius" "2px"
-    , css "font-size" "10pt"
-    ]
+    (Options.many
+      [ css "overflow" "auto" 
+      , css "border-radius" "2px"
+      , css "font-size" "10pt"
+      , Elevation.e2
+      ] :: options)
     [ Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```" ]
 
 
-html : String -> Html a
-html str = 
+html : List (Property c m) -> String -> Html m
+html options str = 
   div 
-    [ css "overflow" "auto" 
-    , css "margin-top" "1rem"
-    , css "margin-bottom" "1rem"
-    , css "border-radius" "2px"
-    , css "font-size" "10pt"
-    , Elevation.e2
-    ]
+    (Options.many
+      [ css "overflow" "auto" 
+      , css "border-radius" "2px"
+      , css "font-size" "10pt"
+      , Elevation.e2
+      ] :: options)
     [ Markdown.toHtml [] <| "```html\n" ++ trim str ++ "\n```" ]
 
 
 -- VIEW
 
 
-view : State -> Html a
-view state = 
+view : State -> List (Property c a) -> Html a
+view state options = 
   let 
     opacity =
       case state of 
@@ -167,10 +166,10 @@ view state =
     body = 
       case state of 
         Idle -> text ""
-        First s -> code s
-        FadingIn s -> code s
-        FadingOut (s, _) -> code s
-        Showing s -> code s
+        First s -> code options s
+        FadingIn s -> code options s
+        FadingOut (s, _) -> code options s
+        Showing s -> code options s
   in
     div 
       [ css "transition" ("opacity " ++ toString delay ++ "ms ease-in-out")

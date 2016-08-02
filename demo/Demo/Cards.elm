@@ -12,7 +12,6 @@ import Material.Elevation as Elevation
 import Material.Color as Color
 import Material.Options as Options exposing (cs, css)
 import Material
-import Material.Grid as Grid
 import Material.Typography as Typography
 import Material.Tabs as Tabs
 import Material.Helpers exposing (map1st, map2nd)
@@ -100,12 +99,12 @@ update action model =
 
 margin1 : Options.Property a b
 margin1 = 
-  css "margin" "16px"
+  css "margin" "0"
 
 
 margin2 : Options.Property a b
 margin2 = 
-  css "margin" "4px"
+  css "margin" "4px 8px 4px 0px"
 
 
 dynamic : Int -> Msg -> Model -> Options.Style Msg
@@ -649,52 +648,10 @@ event model =
     (card, code, comment)
 
 
-view1 : (Html m, String, Maybe (Html m)) -> List (Grid.Cell m)
-view1 (card, code, comment) = 
-  [ Grid.cell 
-      --[ Grid.size Grid.Tablet 8, Grid.size Grid.Phone 4, Grid.size Grid.Desktop 6 ]
-      [ Grid.size Grid.All 8 ]
-      [ Options.div [ css "height" "1rem" ] [] 
-      , card
-      , comment |> Maybe.withDefault (div [] [])
-      , Options.div [ css "height" "1rem" ] [] 
-      ]
-  , Grid.cell 
-      [ Grid.size Grid.All 4, Grid.align Grid.Bottom ]
-      [ Code.code code ]
-  ]
-
-
-block : Options.Property c Msg
-block = 
-  Options.many
-    [ css "display" "flex"
-    , css "flex-direction" "column"
-    , css "width" "100%"
-    ]
-
-left : Options.Property a b
-left =  
-  Options.many
-    [ css "padding" "5ex 2ex"
-    , css "max-width" "768px" 
-    ]
-
-right : Options.Property a b
-right = 
-  Options.many
-    [ -- css "align-self" "flex-end"
-     css "overflow" "auto"
-    --, css "max-width" "768px"
-    , css "width" "100%"
-    , css "padding" "5ex 2ex"
-    ]
-    
-
 aux : Model -> List (Html Msg)
 aux model = 
   [ h4 [] [ text "Setup" ]
-  , Code.code """
+  , Code.code [] """
       import Material.Card as Card
 
       white : Options.Property c m 
@@ -713,7 +670,7 @@ aux model =
           , Color.background (Color.color Color.Pink Color.S500)
           -- Click
           , Options.attribute <| Html.Events.onClick Click
-          , css "margin" "16px"
+          , css "margin" "0 16px 0 0"
           , css "flex-shrink" "0"
           ]
           [ Card.title [] [ Card.head [ white ] [ text "Click anywhere" ] ] 
@@ -723,7 +680,7 @@ aux model =
       , Options.div 
           [ css "flex-grow" "1"
           ] 
-          [ Code.code """
+          [ Code.code [] """
             Card.view  
               [ css "width" "128px" 
               , Color.background (Color.color Color.Pink Color.S500)
@@ -755,14 +712,14 @@ aux model =
             , Elevation.transition 250
             , Options.attribute <| onMouseEnter (Raise k)
             , Options.attribute <| onMouseLeave (Raise -1)
-            , css "margin" "16px"
+            , css "margin" "0 16px 0 0"
             , css "flex-shrink" "0"
             ]
             [ Card.title [] [ Card.head [ white ] [ text "Hover here" ] ] ]
         , Options.div 
             [ css "flex-grow" "1"
             ] 
-            [ Code.code """
+            [ Code.code [] """
                 Card.view  
                     [ css "height" "128px"
                     , css "width" "128px" 
@@ -799,11 +756,7 @@ view model =
             , elm model
             ] 
           )
-      , Options.div 
-          [ css "width" "100%"
-          , css "margin" "32px 0"
-          ]
-          [ Code.view model.code1 ]
+      , Code.view model.code1 [ css "margin-top" "16px" ]
       ]
 
 
@@ -834,7 +787,7 @@ view model =
               [ css "margin" "32px -12px"
               , css "width" "100%" 
               ]
-              ( Code.view model.code2 
+              ( Code.view model.code2 []
               :: aux model)               
           ]
       ]

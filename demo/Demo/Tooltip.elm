@@ -69,7 +69,7 @@ demoTooltip elements description code =
         , Color.background Page.background
         ]
         elements
-    , Code.code code
+    , Code.code [ css "margin" "24px 0" ] code
     ]
 
 
@@ -82,7 +82,6 @@ view model  =
     , css "flex-wrap" "wrap"
     , css "align-items" "center"
     , css "justify-content" "center"
-    , css "max-height" "90rem"
     ]
     [ demoTooltip
         [ Icon.view "add" 

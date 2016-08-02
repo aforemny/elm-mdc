@@ -116,7 +116,7 @@ view model =
       , Grid.grid []
           ( ( Grid.cell
                 [ Grid.size Grid.All 12 ]
-                [ Code.code """
+                [ Code.code [ css "margin" "24px 0" ] """
                                import Material.Spinner as Loading
                                import Material.Progress as Loading
                                """
@@ -168,7 +168,7 @@ demoContainer (html, code) =
   Grid.cell
   [Grid.size Grid.All 4]
   [ div [css "text-align" "center"] [html]
-  , Code.code code
+  , Code.code [ css "margin" "32px 0" ] code
   ]
 
 
