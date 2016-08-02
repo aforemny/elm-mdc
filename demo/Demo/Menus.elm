@@ -1,4 +1,4 @@
-module Demo.Menus exposing (model, Model, view, update, Msg)
+module Demo.Menus exposing (model, Model, view, update, Msg(MDL))
 
 import Html exposing (Html, text, p, a)
 import Html.Attributes exposing (href)
@@ -43,7 +43,7 @@ model =
 
 type Msg
   = MenuMsg Int Menu.Msg
-  | MDL Material.Msg 
+  | MDL Material.Msg
   | Select String
   | SetIcon String
 
