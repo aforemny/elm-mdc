@@ -1,78 +1,30 @@
 module Demo.Tables exposing (..)
 
-import Html exposing (..)
+import Html exposing (Html, text)
+import Set exposing (Set)
 
 import Material
-import Material.Helpers exposing (pure, map1st, map2nd)
+import Material.Options as Options exposing (when, nop)
 import Material.Table as Table
 import Material.Options exposing (css)
+import Material.Toggles as Toggles
 
 import Demo.Code as Code
 import Demo.Page as Page
 
 
--- MODEL
+-- TABLE DATA
 
 
-type alias Model =
-  { mdl : Material.Model
-  , order : Table.Order
+type alias Data = 
+  { material : String
+  , quantity : String
+  , unitPrice : String
   }
 
 
-model : Model
-model =
-  { mdl = Material.model
-  , order = Table.Ascending
-  }
-
-
--- ACTION, UPDATE
-
-
-type Msg
-  = MDL Material.Msg
-  | Click
-
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-  case msg of
-
-    Click ->
-      pure
-      { model | order =
-                  case model.order of
-                    Table.Ascending -> Table.Descending
-                    _ -> Table.Ascending
-      }
-
-    MDL msg' ->
-      Material.update MDL msg' model
-
-
--- VIEW
-
-
-type alias Mdl =
-  Material.Model
-
-
-view : Model -> Html Msg
-view model =
-  [ table model 
-  , code 
-  ]
-  |> Page.body2 "Tables" srcUrl intro references
-
-
-data
-  : List
-    { material : String
-    , quantity : String
-    , unitPrice : String
-    }
-data =
+data : List Data
+data = 
   [ { material = "Acrylic (Transparent)"
     , quantity = "25"
     , unitPrice = "$2.90"
@@ -88,87 +40,384 @@ data =
   ]
 
 
-table : Model -> Html Msg
-table model =
-  let
-    sortedData =
-      data
-      |> List.sortBy .material
-      |> if model.order == Table.Descending then List.reverse else \x -> x
-  in
-    Table.table []
-    [
-      Table.thead
-      [
-      ]
-      [ Table.tr []
-        [ Table.th
-          [ Table.sorted model.order
-          , Table.onClick Click
-          ]
-          [ text "Material"
-          ]
-        , Table.th [ Table.numeric ]
-          [ text "Quantity"
-          ]
-        , Table.th [ Table.numeric ]
-          [ text "Unit Price"
-          ]
-        ]
-      ]
+{- Unique key for a given data item. 
+-}
+key : Data -> String
+key = 
+  .material
+  
 
-    , Table.tbody []
-      ( sortedData
-        |> List.map (\item ->
-
-             Table.tr
-             [
-             ]
-             [ Table.td [] [ text item.material ]
-             , Table.td [ Table.numeric ] [ text item.quantity ]
-             , Table.td [ Table.numeric ] [ text item.unitPrice ]
-             ]
-           )
-      )
-    ]
-
-
-code : Html msg
-code =
-  Code.code [ css "margin" "24px 0" ] """
-    Table.table []
-      [ Table.thead []
-          [ Table.tr []
-              [ Table.th
-                  [ Table.sorted model.order ]
-                  [ text "Material" ]
-              , Table.th 
-                  [ Table.numeric ]
-                  [ text "Quantity" ]
-              , Table.th 
-                  [ Table.numeric ]
-                  [ text "Unit Price" ]
-              ]
-          ]
-      , Table.tbody []
-          ( sortedData |> List.map (\\item ->
-             Table.tr []
-               [ Table.td [] [ text item.material ]
-               , Table.td [ Table.numeric ] [ text item.quantity ]
-               , Table.td [ Table.numeric ] [ text item.unitPrice ]
-               ]
-            )
-          )
-      ]
-
-    {- sortedData
-        : List
-            { material : String
-            , quantity : String
-            , unitPrice : String
-            }
-    -}
+preamble : String 
+preamble = 
   """
+import Material.Table as Table
+
+type alias Data = 
+  { material : String
+  , quantity : String
+  , unitPrice : String
+  }
+
+data : List Data
+data = 
+  [ { material = "Acrylic (Transparent)"   , quantity = "25" , unitPrice = "$2.90" } 
+  , { material = "Plywood (Birch)"         , quantity = "50" , unitPrice = "$1.25" }
+  , { material = "Laminate (Gold on Blue)" , quantity = "10" , unitPrice = "$2.35" }
+  ]
+  """
+
+
+-- MODEL
+
+
+type alias Model =
+  { mdl : Material.Model
+  , order : Maybe Table.Order
+  , selected : Set String
+  }
+
+
+model : Model
+model =
+  { mdl = Material.model
+  , order = Just Table.Ascending
+  , selected = Set.empty
+  }
+
+
+-- ACTION, UPDATE
+
+
+type Msg
+  = Mdl Material.Msg
+  | ToggleAll
+  | Toggle String
+  | Reorder
+
+
+{- Rotate table ordering : Ascending -> Descending -> No sorting -> ...
+-}
+rotate : Maybe Table.Order -> Maybe Table.Order
+rotate order = 
+  case order of 
+    Just Table.Ascending -> Just Table.Descending
+    Just Table.Descending -> Nothing
+    Nothing -> Just Table.Ascending
+
+
+{- Toggle whether or not a set `set` contains an element `x`.
+-}
+toggle : comparable -> Set comparable -> Set comparable
+toggle x set = 
+  if Set.member x set then 
+    Set.remove x set
+  else
+    Set.insert x set
+
+
+{- True iff all rows are currently selected.
+-}
+allSelected : Model -> Bool
+allSelected model = 
+  Set.size model.selected == List.length data 
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+  case msg of
+
+    Reorder ->
+      { model | order = rotate model.order } ! []
+
+    ToggleAll -> 
+      -- Click on master checkbox
+      { model
+        | selected =
+            if allSelected model then
+              Set.empty
+            else 
+              List.map key data |> Set.fromList 
+      } ! []
+
+    Toggle idx ->
+      -- Click on specific checkbox `idx`
+      { model | selected = toggle idx model.selected } ! []
+
+    Mdl msg' ->
+      Material.update Mdl msg' model
+
+
+-- VIEW
+
+
+reverse : comparable -> comparable -> Order
+reverse x y = 
+  case compare x y of
+    LT -> GT
+    GT -> LT
+    EQ -> EQ
+
+
+basic : Model -> (String, Html Msg, String)
+basic model = 
+  let
+    table = 
+      Table.table []
+        [ Table.thead []
+          [ Table.tr []
+            [ Table.th [] [ text "Material" ]
+            , Table.th [ ] [ text "Quantity" ]
+            , Table.th [ ] [ text "Unit Price" ]
+            ]
+          ]
+        , Table.tbody []
+            (data |> List.map (\item ->
+               Table.tr []
+                 [ Table.td [] [ text item.material ]
+                 , Table.td [ Table.numeric ] [ text item.quantity ]
+                 , Table.td [ Table.numeric ] [ text item.unitPrice ]
+                 ]
+               )
+            )
+        ]
+
+    code = 
+      """ 
+        Table.table []
+        [ Table.thead []
+          [ Table.tr []
+            [ Table.th [] [ text "Material" ]
+            , Table.th [ ] [ text "Quantity" ]
+            , Table.th [ ] [ text "Unit Price" ]
+            ]
+          ]
+        , Table.tbody []
+            (data |> List.map (\\item ->
+               Table.tr []
+                 [ Table.td [] [ text item.material ]
+                 , Table.td [ Table.numeric ] [ text item.quantity ]
+                 , Table.td [ Table.numeric ] [ text item.unitPrice ]
+                 ]
+               )
+            )
+        ]
+      """
+  in 
+    ("Static table", table, code)
+
+
+selectable : Model -> (String, Html Msg, String)
+selectable model =
+  let 
+    table = 
+      Table.table []
+        [ Table.thead []
+          [ Table.tr []
+            [ Table.th []
+                [ Toggles.checkbox Mdl [-1] model.mdl
+                  [ Toggles.onClick ToggleAll
+                  , Toggles.value (allSelected model)
+                  ] []
+                ]
+            , Table.th [] [ text "Material" ]
+            , Table.th [ Table.numeric ] [ text "Quantity" ]
+            , Table.th [ Table.numeric ] [ text "Unit Price" ]
+            ]
+          ]
+        , Table.tbody []
+            ( data
+              |> List.indexedMap (\idx item ->
+                   Table.tr
+                     [ Table.selected `when` Set.member (key item) model.selected ]
+                     [ Table.td []
+                       [ Toggles.checkbox Mdl [idx] model.mdl
+                         [ Toggles.onClick (Toggle <| key item)
+                         , Toggles.value <| Set.member (key item) model.selected
+                         ] []
+                       ]
+                     , Table.td [] [ text item.material ]
+                     , Table.td [ Table.numeric ] [ text item.quantity ]
+                     , Table.td [ Table.numeric ] [ text item.unitPrice ]
+                     ]
+                 )
+            )
+        ]
+
+    code =
+      """
+    view : Model -> Html Msg
+    view model = 
+      Table.table []
+        [ Table.thead []
+          [ Table.tr []
+            [ Table.th []
+                [ Toggles.checkbox Mdl [-1] model.mdl
+                  [ Toggles.onClick ToggleAll
+                  , Toggles.value (allSelected model)
+                  ] []
+                ]
+            , Table.th [] [ text "Material" ]
+            , Table.th [ Table.numeric ] [ text "Quantity" ]
+            , Table.th [ Table.numeric ] [ text "Unit Price" ]
+            ]
+          ]
+        , Table.tbody []
+            ( data
+              |> List.indexedMap (\\idx item ->
+                   Table.tr
+                     [ Table.selected `when` Set.member (key item) model.selected ]
+                     [ Table.td []
+                       [ Toggles.checkbox Mdl [idx] model.mdl
+                         [ Toggles.onClick (Toggle <| key item)
+                         , Toggles.value <| Set.member (key item) model.selected
+                         ] []
+                       ]
+                     , Table.td [] [ text item.material ]
+                     , Table.td [ Table.numeric ] [ text item.quantity ]
+                     , Table.td [ Table.numeric ] [ text item.unitPrice ]
+                     ]
+                 )
+            )
+        ]
+
+
+    type alias Model = 
+      { selected : Set String 
+      , ...
+      }
+
+
+    update : Msg -> Model -> (Model, Cmd Msg)
+    update msg model =
+      case msg of
+        ...
+        ToggleAll -> 
+          { model
+            | selected =
+                if allSelected model then
+                  Set.empty
+                else 
+                  List.map key data |> Set.fromList 
+          } ! []
+
+        Toggle k ->
+          { model 
+            | selected = 
+                if Set.member k model.selected then
+                  Set.remove k model.selected
+                else
+                  Set.insert k model.selected 
+          } ! []
+
+
+      allSelected : Model -> Bool
+      allSelected model = 
+        Set.size model.selected == List.length data 
+
+
+      key : Data -> String
+      key = 
+        .material
+      """
+  in
+    ("Selectable rows", table, code)
+
+
+sortable : Model -> (String, Html Msg, String)
+sortable model =
+  let
+    table = 
+      let
+        sort = 
+          case model.order of 
+            Just Table.Ascending -> List.sortBy .material
+            Just Table.Descending -> List.sortWith (\x y -> reverse (.material x) (.material y))
+            Nothing -> identity
+      in
+        Table.table []
+          [ Table.thead []
+            [ Table.tr []
+              [ Table.th
+                  [ model.order
+                      |> Maybe.map Table.sorted
+                      |> Maybe.withDefault nop 
+                  , Table.onClick Reorder
+                  ]
+                  [ text "Material" ]
+              , Table.th [ Table.numeric ] [ text "Quantity" ]
+              , Table.th [ Table.numeric ] [ text "Unit Price" ]
+              ]
+            ]
+          , Table.tbody []
+              ( sort data
+                |> List.indexedMap (\idx item ->
+                     Table.tr []
+                       [ Table.td [] [ text item.material ]
+                       , Table.td [ Table.numeric ] [ text item.quantity ]
+                       , Table.td [ Table.numeric ] [ text item.unitPrice ]
+                       ]
+                   )
+              )
+          ]
+
+    code = 
+      """ 
+        Table.table []
+          [ Table.thead []
+            [ Table.tr []
+              [ Table.th
+                  [ """ ++ (
+                    case model.order of
+                      Nothing -> ""
+                      Just x -> "Table." ++ toString x ++ ", ") ++ """Table.onClick Reorder ]
+                  [ text "Material" ]
+              , Table.th [ Table.numeric ] [ text "Quantity" ]
+              , Table.th [ Table.numeric ] [ text "Unit Price" ]
+              ]
+            ]
+          , Table.tbody []
+              ( """ ++ (
+                  case model.order of 
+                    Nothing -> ""
+                    Just Table.Ascending -> "mySort "
+                    Just Table.Descending -> "mySortDescending "
+                  ) ++ """data
+                |> List.map (\\item ->
+                     Table.tr []
+                       [ Table.td [] [ text item.material ]
+                       , Table.td [ Table.numeric ] [ text item.quantity ]
+                       , Table.td [ Table.numeric ] [ text item.unitPrice ]
+                       ]
+                   )
+              )
+          ]"""
+  in 
+    ("Sortable rows", table, code)
+
+
+tables : Model -> List (Html Msg)
+tables model = 
+  [ basic model
+  , sortable model
+  , selectable model
+  ]
+    |> List.concatMap (\(title, html, code) -> 
+        [ Html.h4 [] [ text title ] 
+        , Options.div 
+            [ css "display" "flex"
+            , css "flex-flow" "row wrap"
+            , css "align-items" "flex-start"
+            ]
+            [ Options.div [ css "margin" "0 24px 24px 0", css "width" "448px" ] [ html ] 
+            , Code.code [ css "flex-grow" "1", css "margin" "0 0 24px 0" ] code
+            ]
+         ]
+        )
+
+
+view : Model -> Html Msg
+view model =
+  Page.body1' "Tables" srcUrl intro references (tables model) [ Html.h4 [] [ text "Import & data" ], Code.code [] preamble ] 
 
 
 intro : Html Msg

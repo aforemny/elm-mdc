@@ -1,7 +1,7 @@
 module Material.Table exposing
   ( table, thead, tbody, tfoot
   , tr, th, td
-  , ascending, descending, sorted, onClick, Order(Ascending,Descending)
+  , ascending, descending, sorted, selected, onClick, Order(Ascending,Descending)
   , numeric
   )
 
@@ -42,7 +42,7 @@ for a live demo.
 
 ## Sorting options. 
 The following options have effect only when applied in the header row. 
-@docs ascending, descending, numeric, Order, sorted
+@docs ascending, descending, numeric, Order, sorted, selected
 -}
 
 import Html.Events as Html
@@ -152,12 +152,15 @@ tr options html =
     ]
     html
 
-{-
+
+{-| Mark row as selected. 
+-}
 selected : Property { a | selected : Bool } m
 selected =
   Options.set <| \self -> { self | selected = True }
 
 
+{-
 select : Bool -> Property { a | selected : Bool } m
 select value =
   Options.set <| \self -> { self | selected = value }
