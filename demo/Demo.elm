@@ -317,10 +317,17 @@ view' model =
         , Html.node "script"
            [ Html.Attributes.attribute "src" "assets/highlight.pack.js" ]
            []
-        , App.map DialogMsg (Demo.Dialog.element model.dialog)
-            {- Because of limitations on browsers that have non-native (polyfilled)
-            <dialog> elements, our dialog element /may/ have to sit up here. 
-            -}
+        , case nth model.selectedTab tabs of
+            Just ( "Dialog", _, _ ) -> 
+              App.map DialogMsg (Demo.Dialog.element model.dialog)
+              {- Because of limitations on browsers that have non-native (polyfilled)
+              <dialog> elements, our dialog element /may/ have to sit up here. However,
+              running in elm-reactor will never load the polyfill, so we render the 
+              dialog (wrongly if there is no polyfill) only when the Dialog tab is 
+              active.
+              -}
+            _ -> 
+              div [] []
         ]
     )
 
