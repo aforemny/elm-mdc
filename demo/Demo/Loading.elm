@@ -34,7 +34,7 @@ model =
 type Msg
   = Tick
   | Toggle
-  | Mdl Material.Msg
+  | Mdl (Material.Msg Msg)
 
 
 -- UPDATE
@@ -74,7 +74,7 @@ update action model =
       )
 
     Mdl action' ->
-      Material.update Mdl action' model
+      Material.update action' model
 
 -- VIEW
 

@@ -112,13 +112,13 @@ type alias Container c =
 {-| Component render.  
 -}
 render 
-  : (Parts.Msg (Container c) -> m)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m)
   -> Html m
 render = 
-  Parts.create view update .template (\x y -> {y | template=x}) defaultModel
+  Parts.create view (Parts.generalize update) .template (\x y -> {y | template=x}) defaultModel
 
 {- See src/Material/Layout.mdl for how to add subscriptions. -}

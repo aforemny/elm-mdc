@@ -38,7 +38,7 @@ model =
 type Msg 
   = SetElevation Int
   | FlipTransition
-  | Mdl Material.Msg 
+  | Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -51,7 +51,7 @@ update msg model =
       { model | transition = not model.transition } ! [] 
 
     Mdl action' -> 
-      Material.update Mdl action' model
+      Material.update action' model
 
 -- VIEW
 

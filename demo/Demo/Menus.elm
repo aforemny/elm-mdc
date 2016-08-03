@@ -2,7 +2,6 @@ module Demo.Menus exposing (model, Model, view, update, Msg(MDL))
 
 import Html exposing (Html, text, p, a)
 import Html.Attributes exposing (href)
-import Html.Events exposing (onClick)
 import Platform.Cmd exposing (Cmd)
 
 import Material
@@ -43,16 +42,16 @@ model =
 
 type Msg
   = MenuMsg Int Menu.Msg
-  | MDL Material.Msg
+  | MDL (Material.Msg Msg)
   | Select String
   | SetIcon String
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case action of
+  case Debug.log "" action of
     MDL action' ->
-      Material.update MDL action' model
+      Material.update action' model
 
     MenuMsg idx action ->
       (model, Cmd.none)
@@ -80,20 +79,20 @@ menus =
   ] 
 
 
-
-item : String -> Html Msg
-item str = 
-  Html.div 
-    [ onClick (Select str) ]
-    [ text str ]
-
-
 items : List (Menu.Item Msg)
 items =
-  [ Menu.Item False True  <| item "Some Msg"
-  , Menu.Item True  True  <| item "Another Msg"
-  , Menu.Item False False <| item "Disabled Msg"
-  , Menu.Item False True  <| item "Yet Another Msg"
+  [ Menu.item
+    [ Menu.onSelect (Select "Some Msg") ]
+    [ text "Some Msg" ]
+  , Menu.item
+    [ Menu.divider, Menu.onSelect (Select "Another Msg") ]
+    [ text "Another Msg" ]
+  , Menu.item
+    [ Menu.disabled, Menu.onSelect (Select "Disabled Msg") ]
+    [ text "Disabled Msg" ]
+  , Menu.item
+    [ Menu.onSelect (Select "Yet Another Msg") ]
+    [ text "Yet Another Msg" ]
   ]
 
 
@@ -144,7 +143,12 @@ view model =
     Page.body1' "Menus" srcUrl intro references [demo1] demo2
 
 
-container : Model -> Int -> (String, Menu.Property Msg) -> List (Menu.Item Msg) -> Html Msg
+container
+  : Model
+  -> Int
+  -> (String, Menu.Property Msg)
+  -> List (Menu.Item Msg)
+  -> Html Msg
 container model idx (description, options) items =
   let
     bar idx rightAlign =

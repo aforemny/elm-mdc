@@ -36,7 +36,7 @@ model =
 
 type Msg
   = TypographyMsg
-  | Mdl Material.Msg
+  | Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -46,7 +46,7 @@ update action model =
       (model, Cmd.none)
 
     Mdl action' ->
-      Material.update Mdl action' model
+      Material.update action' model
 
 
 -- VIEW

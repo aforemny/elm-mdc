@@ -27,14 +27,14 @@ model =
 
 
 type Msg
-  = Mdl Material.Msg
+  = Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     Mdl action' ->
-      Material.update Mdl action' model
+      Material.update action' model
 
 
 -- VIEW

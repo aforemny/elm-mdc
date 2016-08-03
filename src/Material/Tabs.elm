@@ -281,7 +281,7 @@ type alias Container c =
 {-| Component render.
 -}
 render :
-  (Parts.Msg (Container c) -> m)
+  (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
@@ -289,4 +289,6 @@ render :
   -> List (Html m)
   -> Html m
 render =
-  Parts.create view update .tabs (\x y -> { y | tabs = x }) defaultModel
+  Parts.create 
+    view (Parts.generalize update) 
+   .tabs (\x y -> { y | tabs = x }) defaultModel

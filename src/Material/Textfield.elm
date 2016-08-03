@@ -348,11 +348,13 @@ view lift model options =
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
       ]
-      [ config.onInput
-      , config.onBlur
-      , config.onFocus
-      ]
-      ([ Just <| elementFunction
+      ( List.filterMap identity 
+          [ config.onInput
+          , config.onBlur
+          , config.onFocus
+          ]
+      )
+      [ elementFunction
           ([ class "mdl-textfield__input"
           , style [ ("outline", "none") ]
           , Html.Attributes.disabled config.disabled 
@@ -366,16 +368,15 @@ view lift model options =
           , Html.Attributes.autofocus config.autofocus
           ] ++ typeAttributes ++ maxlength)
           []
-      , Just <| Html.label 
+      , Html.label 
           [class "mdl-textfield__label"]  
           (case config.labelText of 
             Just str -> [ text str ]
             Nothing -> [])
-      , config.error |> Maybe.map (\e ->
-          span [class "mdl-textfield__error"] [text e])
+      , config.error 
+          |> Maybe.map (\e -> span [class "mdl-textfield__error"] [text e])
+          |> Maybe.withDefault (div [] [])
       ]
-        |> List.filterMap (\x -> x)
-      )
 
 
 
@@ -395,14 +396,14 @@ type alias Container c =
       ]
 -}
 render 
-  : (Parts.Msg (Container c) -> m)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> Html m
 render =
   Parts.create 
-    view (\action model -> (update action model, Cmd.none))
+    view (\_ msg model -> Just (update msg model, Cmd.none))
     .textfield (\x c -> { c | textfield = x }) 
     defaultModel
 

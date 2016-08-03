@@ -43,7 +43,7 @@ type Msg
   | Reset Int
   | Add
   | Remove 
-  | MDL Material.Msg 
+  | Mdl (Material.Msg Msg)
 
 
 map : Int -> (a -> a) -> Array a -> Array a
@@ -68,8 +68,8 @@ update msg model =
     Remove ->
       pure { model | counters = Array.slice 0 (Array.length model.counters - 1) model.counters }
 
-    MDL msg' -> 
-      Material.update MDL msg' model
+    Mdl msg' -> 
+      Material.update msg' model
 
 
 -- VIEW
@@ -84,7 +84,7 @@ view1 idx val =
   div 
     [ style [ ("padding", "2rem") ] ]
     [ text ("Current count: " ++ toString val )
-    , Button.render MDL 
+    , Button.render Mdl 
         [0,idx] 
           {- Crucial bit: We don't know how many elements are going to be in
           model.counters, but we still have to come up with _unique_ indices
@@ -97,7 +97,7 @@ view1 idx val =
         , css "margin" "0 24px"
         ]
         [ text "Increase" ]
-    , Button.render MDL [1,idx] model.mdl 
+    , Button.render Mdl [1,idx] model.mdl 
         [ Button.onClick (Reset idx) ] 
         [ text "Reset" ]
     ]
@@ -112,11 +112,11 @@ view model =
         |> List.indexedMap view1
   in 
     List.concatMap identity 
-      [ [ Button.render MDL [2] model.mdl 
+      [ [ Button.render Mdl [2] model.mdl 
             [ Button.onClick Add ] 
             [ text "Add counter" ]  
         ] 
-      , [ Button.render MDL [4] model.mdl
+      , [ Button.render Mdl [4] model.mdl
             [ Button.onClick Remove ] 
             [ text "Remove counter" ] 
         ] 

@@ -429,14 +429,16 @@ type alias Container c =
 {-| Component render.
 -}
 render :
-  (Parts.Msg (Container c) -> m)
+  (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Html m)
   -> Html m
 render =
-  Parts.create view update .tooltip (\x y -> { y | tooltip = x }) defaultModel
+  Parts.create 
+    view (Parts.generalize update) 
+    .tooltip (\x y -> { y | tooltip = x }) defaultModel
 
 
 set : Parts.Set (Indexed Model) (Container c)
@@ -444,35 +446,28 @@ set x y =
   { y | tooltip = x }
 
 
-pack : Parts.Index -> Msg -> Parts.Msg (Container c)
+pack : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Msg -> d
 pack =
-  let
-    ( get, set1 ) =
-      Parts.indexed .tooltip set defaultModel 
-
-    embeddedUpdate idx =
-      Parts.embedUpdate (get idx) (set1 idx) update
-  in
-    \idx -> Parts.pack (embeddedUpdate idx) 
+  Parts.pack (Parts.generalize update) .tooltip set defaultModel 
 
 
-{-| Mouse enter event handler for Parts version
+{-| Mouse enter event handler, Parts variant
 -}
-onMouseEnter : (Parts.Msg (Container b) -> d) -> Parts.Index -> Attribute d
+onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Attribute d
 onMouseEnter lift idx =
-  Html.Events.on "mouseenter" (Json.map (Enter >> ((pack idx) >> lift)) stateDecoder)
+  Html.Events.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
 
 
-{-| Mouse leave event handler for Parts version
+{-| Mouse leave event handler, Parts variant
 -}
-onMouseLeave : (Parts.Msg (Container a) -> b) -> Parts.Index -> Attribute b
+onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Attribute b
 onMouseLeave lift idx =
-  Html.Events.on "mouseleave" (Json.succeed (Leave |> ((pack idx) >> lift)))
+  Html.Events.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
 
 
 {-| Attach event handlers for Parts version
 -}
-attach : (Parts.Msg (Container a) -> b) -> Parts.Index -> Options.Property c b
+attach : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 attach lift index =
   Options.many
     [ Internal.attribute <| onMouseEnter lift index
@@ -480,14 +475,14 @@ attach lift index =
     ]
 
 
-{-| Mouse enter event handler for non-parts version
+{-| Mouse enter event handler, TEA variant
 -}
 onEnter : (Msg -> m) -> Attribute m
 onEnter lift =
   Html.Events.on "mouseenter" (Json.map (Enter >> lift) stateDecoder)
 
 
-{-| Mouse leave event handler for non-parts version
+{-| Mouse leave event handler, TEA variant
 -}
 onLeave : (Msg -> m) -> Attribute m
 onLeave lift =

@@ -48,7 +48,7 @@ model =
 type Msg
     = ListsMsg
     | Flip Int
-    | Mdl Material.Msg
+    | Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -65,7 +65,7 @@ update action model =
 
 
         Mdl action' ->
-            Material.update Mdl action' model
+            Material.update action' model
 
 
 

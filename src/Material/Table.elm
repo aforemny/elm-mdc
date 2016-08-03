@@ -205,8 +205,9 @@ th options html =
         Just Descending -> cs "mdl-data-table__header--sorted-descending"
         Nothing -> nop
     ]
-    [ config.onClick
-    ]
+    (config.onClick 
+       |> Maybe.map (flip (::) [])
+       |> Maybe.withDefault [])
     html
 
 
