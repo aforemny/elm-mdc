@@ -105,7 +105,7 @@ Here is how you use elm-mdl with parts. First, boilerplate.
 
         type Msg = 
           ...
-          | Mdl Material.Msg 
+          | Mdl (Material.Msg Msg)
 
  3. Handle that message in your update function as follows:
 
@@ -113,7 +113,7 @@ Here is how you use elm-mdl with parts. First, boilerplate.
           case message of 
             ...
             Mdl message' -> 
-              Material.update Mdl message' model
+              Material.update message' model
 
 You now have sufficient boilerplate for using __any__ number of elm-mdl components. 
 Let's say you need a textfield for name entry, and you'd like to be notifed
@@ -205,8 +205,8 @@ model =
 
 {-| Msg encompassing actions of all Material components. 
 -}
-type alias Msg = 
-  Parts.Msg Model 
+type alias Msg obs = 
+  Parts.Msg Model obs
 
 
 {-| Update function for the above Msg. Provide as the first 
@@ -214,11 +214,11 @@ argument a lifting function that embeds the generic MDL action in
 your own Msg type. 
 -}
 update : 
-  (Msg -> obs) 
-  -> Msg 
+     Msg obs
   -> { model | mdl : Model }
   -> ({ model | mdl : Model }, Cmd obs)
-update lift msg model = 
-  Parts.update' lift msg model.mdl 
-    |> map1st (Maybe.map (\mdl -> { model | mdl = mdl }) >> Maybe.withDefault model)
+update msg model = 
+  Parts.update' msg model.mdl 
+    |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
+    |> Maybe.withDefault (model, Cmd.none)
 

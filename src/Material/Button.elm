@@ -241,7 +241,8 @@ view lift model config html =
       , cs "mdl-js-button" 
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple 
       ]
-      (List.concat [startListeners, stopListeners, misc])
+      (List.concat [startListeners, stopListeners, misc]
+         |> List.filterMap identity)
       (if summary.config.ripple then
           List.concat 
             [ html
@@ -370,11 +371,11 @@ indicated in `Material`, and a user message `PollMsg`.
       [ text "Fetch new"]
 -}
 render 
-  : (Parts.Msg (Container c) -> m)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m)
   -> Html m
 render = 
-  Parts.create view update .button (\x y -> {y | button=x}) Ripple.model 
+  Parts.create view (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model 

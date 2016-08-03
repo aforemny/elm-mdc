@@ -89,7 +89,7 @@ model =
 
 
 type Msg
-  = Mdl Material.Msg
+  = Mdl (Material.Msg Msg)
   | ToggleAll
   | Toggle String
   | Reorder
@@ -144,7 +144,7 @@ update msg model =
       { model | selected = toggle idx model.selected } ! []
 
     Mdl msg' ->
-      Material.update Mdl msg' model
+      Material.update msg' model
 
 
 -- VIEW

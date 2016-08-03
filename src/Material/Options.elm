@@ -1,7 +1,7 @@
 module Material.Options exposing
   ( Property, Summary, collect
   , cs, css, many, nop, set, data
-  , when, disabled
+  , when, maybe, disabled
   , apply, styled, styled', stylesheet
   , Style, div, span, img, attribute, center, scrim
   )
@@ -37,7 +37,7 @@ applying MDL typography or color to standard elements.
 @docs Property
 
 # Constructors
-@docs cs, css, data, many, nop, when
+@docs cs, css, data, many, nop, when, maybe
 
 # Html
 @docs Style, styled, styled'
@@ -136,14 +136,13 @@ addAttributes summary attrs =
 {-| Apply a `Summary m`, extra properties, and optional attributes 
 to a standard Html node. 
 -}
-apply : Summary c m -> (List (Attribute m) -> a) -> List (Property c m) 
-    -> List (Maybe (Attribute m)) 
-    -> a
+apply : Summary c m -> (List (Attribute m) -> a) 
+    -> List (Property c m) -> List (Attribute m) -> a
 apply summary ctor options attrs = 
   ctor 
     (addAttributes 
-      (recollect summary options) 
-      (List.filterMap identity attrs))
+      (recollect summary options) attrs)
+    
 
 
 {-| Apply properties to a standard Html element. 
@@ -263,6 +262,13 @@ applied; otherwise it is ignored. Use like this:
 when : Property c m -> Bool -> Property c m
 when prop guard = 
   if guard then prop else nop
+
+
+{-| Apply a Maybe option when defined
+-}
+maybe : Maybe (Property c m) -> Property c m
+maybe prop = 
+  prop |> Maybe.withDefault nop 
 
 
 -- CONVENIENCE

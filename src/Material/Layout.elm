@@ -221,7 +221,6 @@ type Msg
   = ToggleDrawer
   | Resize Int
   | ScrollTab TabScrollState
-  | AdvanceTabs Int
   | ScrollPane Bool Float -- True means fixedHeader
   | TransitionHeader { toCompact : Bool, fixedHeader : Bool }
   | TransitionEnd
@@ -234,15 +233,17 @@ type Msg
 -}
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
-  update' msg model 
-    |> Helpers.map1st (Maybe.withDefault model)
+  update' identity msg model 
+    |> Maybe.withDefault (model, Cmd.none)
 
 
-update' : Msg -> Model -> (Maybe Model, Cmd Msg)
-update' action model =
+{-| Component update for Parts. 
+-}
+update' : (Msg -> msg) -> Msg -> Model -> Maybe (Model, Cmd msg)
+update' f action model =
   case action of
     NOP -> 
-      ( Nothing, Cmd.none ) 
+      Nothing
 
     Resize width -> 
       {- High-frequency message. To avoid stuttering during resizes, we must
@@ -263,45 +264,38 @@ update' action model =
                 {- We have no idea how much horisontal space tabs consume, so we have no
                 idea whether they scroll or not. -}
       in
-        pure <| 
-          -- Make sure we return a referentially equal model if we're not
-          -- changing anything. 
-          if isSmall == model.isSmallScreen && 
-             tabScrollState.canScrollRight == model.tabScrollState.canScrollRight
-          then 
-            Nothing
-          else
-            Just <|
-              { model  
-              | isSmallScreen = isSmall 
-              , isDrawerOpen = not isSmall && model.isDrawerOpen
-              , tabScrollState = tabScrollState
-              }
+        if isSmall == model.isSmallScreen && 
+           tabScrollState.canScrollRight == model.tabScrollState.canScrollRight
+        then 
+          Nothing
+        else
+          Just <| pure
+            { model  
+            | isSmallScreen = isSmall 
+            , isDrawerOpen = not isSmall && model.isDrawerOpen
+            , tabScrollState = tabScrollState
+            }
 
     ToggleDrawer ->
-      Just { model | isDrawerOpen = not model.isDrawerOpen } |> pure
+      Just <| pure { model | isDrawerOpen = not model.isDrawerOpen } 
 
     Ripple tabIndex action' ->
       Dict.get tabIndex model.ripples
       |> Maybe.withDefault Ripple.model
       |> Ripple.update action'
       |> map1st (\ripple' -> 
-          Just { model | ripples = Dict.insert tabIndex ripple' model.ripples })
-      |> map2nd (Cmd.map (Ripple tabIndex))
-
-    AdvanceTabs _ -> 
-      -- Don't know how to do this. 
-      pure Nothing
+          { model | ripples = Dict.insert tabIndex ripple' model.ripples })
+      |> map2nd (Cmd.map (f << Ripple tabIndex))
+      |> Just
 
     ScrollTab state ->
       {- High-frequency message. To avoid stuttering during scrolling, we must
       return a referentially identical model if we're making  no changes.
       -}
-      pure <| 
-        if model.tabScrollState /= state then 
-          Just { model | tabScrollState = state } 
-        else
-          Nothing
+      if model.tabScrollState /= state then 
+        Just <| pure { model | tabScrollState = state } 
+      else
+        Nothing
 
     ScrollPane fixedHeader offset -> 
       {- High-frequency message. To avoid stuttering during scrolling, we must
@@ -311,11 +305,11 @@ update' action model =
         isScrolled = 0.0 < offset 
       in
         if isScrolled /= model.isScrolled then
-          update' 
+          update' f
             (TransitionHeader { toCompact = isScrolled, fixedHeader = fixedHeader })
             { model | isScrolled = isScrolled }
         else
-          pure Nothing
+          Nothing
 
     TransitionHeader { toCompact, fixedHeader } -> 
       let 
@@ -327,19 +321,19 @@ update' action model =
           }
       in
         if not model.isAnimating then 
-          ( Just <| 
-              { model 
+          Just 
+            ( { model 
               | isCompact = toCompact
               , isAnimating = headerVisible 
               }
-          , delay 200 TransitionEnd -- See comment on transitionend in view. 
-          )
+            , delay 200 (f TransitionEnd) -- See comment on transitionend in view. 
+            )
         else
-          pure Nothing
+          Nothing
 
 
     TransitionEnd -> 
-      pure (Just { model | isAnimating = False })
+      pure { model | isAnimating = False } |> Just
 
 
 -- PROPERTIES
@@ -594,7 +588,6 @@ tabsView lift config model (tabs, tabStyles) =
                   "onclick" 
                   ("document.getElementsByClassName('mdl-layout__tab-bar')[0].scrollLeft += " ++ toString offset)
                 |> attribute
-              --, Icon.onClick (lift (AdvanceTabs offset))
               ]
           ]
     in
@@ -908,40 +901,37 @@ Excerpt:
       }
 -}
 render 
-  : (Parts.Msg (Container b) -> c)
+  : (Parts.Msg (Container b) c -> c)
  -> Container b
  -> List (Property c) 
  -> Contents c 
  -> Html c
 render =
-  Parts.create1' view update' .layout (\x c -> { c | layout = x }) 
+  Parts.create1
+    view update' .layout (\x c -> { c | layout = x }) 
 
 
-pack : Msg -> Parts.Msg (Container b)
-pack = 
-  let
-    embeddedUpdate = 
-      Parts.embedUpdate' .layout (\x c -> { c | layout = x }) update'
-  in
-    Parts.pack' embeddedUpdate
-
+pack : (Parts.Msg (Container b) m -> m) -> Msg -> m
+pack fwd = 
+  Parts.pack1 
+    update' .layout (\x c -> { c | layout = x }) fwd
 
 {-| Component subscriptions (type compatible with render). Either this or 
 `subscriptions` must be connected for the Layout to be responsive under
 viewport size changes. 
 -}
-subs : (Parts.Msg (Container b) -> c) -> Container b -> Sub c
+subs : (Parts.Msg (Container b) c -> c) -> Container b -> Sub c
 subs lift = 
-  .layout >> subscriptions >> Sub.map (pack >> lift)
+  .layout >> subscriptions >> Sub.map (pack lift)
 
 
 {-| Component subscription initialiser. Either this or 
 `init` must be connected for the Layout to be responsive under
 viewport size changes. Example use: 
 -}
-sub0 : (Parts.Msg (Container b) -> c) -> Cmd c
+sub0 : (Parts.Msg (Container b) c -> c) -> Cmd c
 sub0 lift = 
-  snd init |> Cmd.map (pack >> lift)
+  snd init |> Cmd.map (pack lift)
 
 
 {-| Toggle drawer. 
@@ -949,9 +939,9 @@ sub0 lift =
 This function is for use with parts typing. For plain TEA, simply issue 
 an update for the exposed Msg `ToggleDrawer`. 
 -}
-toggleDrawer : (Parts.Msg (Container b) -> c) -> c
+toggleDrawer : (Parts.Msg (Container b) c -> c) -> c
 toggleDrawer lift = 
-  (pack >> lift) ToggleDrawer 
+  (pack lift) ToggleDrawer 
 
 
 {-| Set tabsWidth

@@ -37,7 +37,7 @@ model =
 
 type Msg
   = SelectTab Int
-  | Mdl Material.Msg
+  | Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -47,7 +47,7 @@ update action model =
       ({ model | tab = idx }, Cmd.none)
 
     Mdl action' ->
-      Material.update Mdl action' model
+      Material.update action' model
 
 
 -- VIEW

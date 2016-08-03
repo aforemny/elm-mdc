@@ -3,8 +3,9 @@ module Material.Menu exposing
   , render
   , Property
   , bottomLeft, bottomRight, topLeft, topRight, ripple, icon
-  , Item
   , subscriptions, subs
+  , Item, item
+  , divider, disabled, onSelect
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#menus-section):
@@ -31,7 +32,10 @@ Refer to
 for a live demo.
 
 # Render
-@docs Item, render
+@docs render, subs
+
+# Items
+@docs Item, item, onSelect, disabled, divider
 
 # Options
 @docs Property
@@ -43,7 +47,7 @@ for a live demo.
 @docs ripple, icon
 
 # Elm architecture
-@docs Model, defaultModel, Msg, update, view
+@docs Model, defaultModel, Msg, update, view, subscriptions
 
 
 -}
@@ -51,22 +55,21 @@ for a live demo.
 
 import Array exposing (Array)
 import Dict exposing (Dict)
-import Platform.Cmd exposing (Cmd, none)
-import Html.Attributes exposing (..)
-import Html.Events as Html exposing (defaultOptions)
+import Html.App
+import Html.Attributes 
+import Html.Events exposing (defaultOptions)
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode exposing (string)
-import Material.Helpers as Helpers exposing (cssTransitionStep)
 import Mouse
 import String
-import Html.App
 
-import Material.Menu.Geometry as Geometry exposing (Geometry)
-import Material.Ripple as Ripple
-import Material.Options as Options exposing (Style, cs, css, styled, styled', when)
+import Material.Helpers as Helpers exposing (pure)
 import Material.Icon as Icon
-import Material.Helpers as Helpers
+import Material.Menu.Geometry as Geometry exposing (Geometry)
+import Material.Options as Options exposing (Style, cs, css, styled, styled', when)
+import Material.Options.Internal exposing (attribute)
+import Material.Ripple as Ripple
 import Parts exposing (Indexed, Index)
 
 
@@ -79,52 +82,32 @@ constant :
   , closeTimeout               : Float
   }
 constant =
-  { transitionDurationSeconds  = 0.3
+  { transitionDurationSeconds  = 0.4
   , transitionDurationFraction = 0.8
   , closeTimeout               = 150
   }
 
 
--- TODO: Key codes are not implemented yet.
 
-
---keycodes =
---  { enter     = 13
---  , escape    = 27
---  , space     = 32
---  , upArrow   = 38
---  , downArrow = 40
---  }
-
-
-subs : (Parts.Msg (Container b) -> c) -> Container b -> Sub c
+{-| Parts-compatible subscription.
+-}
+subs : (Parts.Msg (Container b) m -> m) -> Container b -> Sub m
 subs lift =
   .menu
   >> Dict.toList
   >> List.map (\(idx, model) ->
-       subscriptions idx model
-       |> Sub.map (pack idx >> lift)
+       Sub.map 
+         (pack lift idx)
+         (subscriptions model)
      )
   >> Sub.batch
 
 
-pack : Index -> Msg -> Parts.Msg (Container b)
-pack idx =
-  let
-    get = .menu >> Dict.get idx >> Maybe.withDefault defaultModel
-    set x c = { c | menu = Dict.insert idx x c.menu }
-    update' msg model =
-      update msg model
-      |> Helpers.map1st Just
-    embeddedUpdate =
-      Parts.embedUpdate' get set update'
-  in
-    Parts.pack' embeddedUpdate
-
-
-subscriptions : Index -> Model -> Sub Msg
-subscriptions idx model =
-  if (model.animationState == Opening) || (model.animationState == Opened) then
+{-| Component subscriptions.
+-}
+subscriptions : Model -> Sub (Msg m)
+subscriptions model =
+  if model.animationState == Opened then
       Mouse.clicks Click
     else
       Sub.none
@@ -133,12 +116,13 @@ subscriptions idx model =
 -- MODEL
 
 
-{-| TODO.
+{-| Component model
 -}
 type alias Model =
-  { items : Dict Int Ripple.Model
+  { ripples : Dict Int Ripple.Model
   , animationState : AnimationState
   , geometry : Maybe Geometry
+  , index : Maybe Int
   }
 
 
@@ -149,26 +133,70 @@ type AnimationState
   | Closing
 
 
-{-| TODO.
+{-| Default component model
 -}
 defaultModel : Model
 defaultModel =
-  { items = Dict.empty
+  { ripples = Dict.empty
   , animationState = Idle
   , geometry = Nothing
+  , index = Nothing
   }
 
 
 -- ITEM
 
 
-{-| Item model.
+{-| Type of menu items
 -}
 type alias Item m =
-  { divider : Bool
-  , enabled : Bool
-  , html : Html m
+  { options : List (Options.Property (ItemConfig m) m)
+  , html : List (Html m)
   }
+
+
+{-| Construct a menu item.
+-}
+item : List (Options.Property (ItemConfig m) m) -> List (Html m) -> Item m
+item =
+  Item
+
+
+type alias ItemConfig m =
+  { enabled : Bool
+  , divider : Bool
+  , onSelect : Maybe m
+  }
+
+
+defaultItemConfig : ItemConfig m
+defaultItemConfig =
+  { enabled = True
+  , divider = False
+  , onSelect = Nothing
+  }
+
+
+{-| Render a dividing line before the item
+-}
+divider : Options.Property (ItemConfig m) m
+divider =
+  Options.set (\config -> { config | divider = True })
+
+
+{-| Mark item as disabled.
+-}
+disabled : Options.Property (ItemConfig m) m
+disabled =
+  Options.set (\config -> { config | enabled = False })
+
+
+
+{-| Handle selection of containing item. 
+-}
+onSelect : m -> Options.Property (ItemConfig m) m
+onSelect msg =
+  Options.set (\config -> { config | onSelect = Just msg }) 
 
 
 -- ACTION, UPDATE
@@ -176,20 +204,25 @@ type alias Item m =
 
 {-| Component action.
 -}
-type Msg
+type Msg m
   = Open Geometry
-  | Select Int Geometry
-  | Close Geometry
-  | Tick Geometry
+  | Select Int (Maybe m)
+  | Close
+  | Tick
   | Ripple Int Ripple.Msg
   | Click Mouse.Position
+  | Key (List (Options.Summary (ItemConfig m) m)) Int
+
+
+isActive : Model -> Bool
+isActive model = 
+  (model.animationState == Opened) || (model.animationState == Opening) 
 
 
 {-| Component update.
 -}
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-
+update : (Msg msg -> msg) -> Msg msg -> Model -> (Model, Cmd msg)
+update fwd msg model =
   case msg of
 
     Open geometry ->
@@ -200,41 +233,45 @@ update msg model =
               _       -> Opening
         , geometry = Just geometry
         }
-      , cssTransitionStep (Tick geometry)
+      , Helpers.cmd (fwd Tick)
       )
 
-    Tick geometry ->
-      ( { model | geometry = Just geometry, animationState = Opened }
-      , Cmd.none
-      )
+    Tick ->
+      { model | animationState = Opened } |> pure
 
-    Close geometry ->
-      ( { model
-        | animationState = Idle
-        , geometry = Nothing
-        }
-      , Cmd.none
-      )
+    Close ->
+      { model
+      | animationState = Idle
+      , geometry = Nothing
+      , index = Nothing
+      } |> pure
 
-    Select idx geometry ->
+    Select idx msg ->
       -- Close the menu after some delay for the ripple effect to show.
-      ( { model | animationState = Closing }
-      , Helpers.delay constant.closeTimeout (Close geometry)
-      )
+      let
+        model' = 
+          { model | animationState = Closing }
+        cmds = 
+          List.filterMap identity 
+            [ Helpers.delay constant.closeTimeout (fwd Close) |> Just
+            , msg |> Maybe.map Helpers.cmd
+            ] 
+      in
+        (model', Cmd.batch cmds)
 
     Ripple idx action ->
       let
         (model', effects) =
-          Dict.get idx model.items
+          Dict.get idx model.ripples
            |> Maybe.withDefault Ripple.model
            |> Ripple.update action
       in
-        ( { model | items = Dict.insert idx model' model.items }
-        , Cmd.map (Ripple idx) effects
+        ( { model | ripples = Dict.insert idx model' model.ripples }
+        , Cmd.map (Ripple idx >> fwd) effects
         )
 
     Click pos ->
-      if (model.animationState == Opening) || (model.animationState == Opened) then
+      if isActive model then
           case model.geometry of
             Just geometry ->
               let
@@ -245,10 +282,79 @@ update msg model =
                 if pos `inside` geometry.container.bounds then
                     model ! []
                   else
-                    update (Close geometry) model
+                    update fwd Close model
             Nothing ->
               model ! []
         else
+          model ! []
+
+    Key summaries keyCode ->
+      case keyCode of
+        13 -> -- ENTER
+
+          if isActive model then
+              case model.index of
+                Just index -> 
+                  let
+                    cmd =  
+                      List.drop index summaries
+                        |> List.head
+                        |> flip Maybe.andThen (.config >> .onSelect)
+                  in
+                    update fwd (Select (index + 1) cmd) model
+
+                Nothing -> 
+                  update fwd Close model
+            else
+              model ! []
+
+        27 -> -- ESCAPE
+
+          update fwd Close model
+
+        32 -> -- SPACE
+
+          if isActive model then
+              update fwd (Key summaries 13) model
+            else
+              model ! []
+
+        40 -> -- DOWN_ARROW
+
+          if isActive model then
+              let
+                items = 
+                  List.indexedMap (,) summaries
+              in
+                (items ++ items)
+                |> List.drop (1 + Maybe.withDefault -1 model.index)
+                |> List.filter (snd >> .config >> .enabled)
+                |> List.head 
+                |> Maybe.map (fst >> \index' -> { model | index = Just index' })
+                |> Maybe.withDefault model
+                |> flip (!) [] 
+          else
+            model ! [] 
+
+        38 -> -- UP_ARROW
+
+          if isActive model then
+              let
+                items = 
+                  List.indexedMap (,) summaries
+              in
+                  (items ++ items)
+                  |> List.reverse
+                  |> List.drop ((List.length summaries) - Maybe.withDefault 0 model.index)
+                  |> List.filter (snd >> .config >> .enabled)
+                  |> List.head 
+                  |> Maybe.map (fst >> \index' -> { model | index = Just index' })
+                  |> Maybe.withDefault model
+                  |> pure
+          else
+            model ! []
+
+        _ ->
           model ! []
 
 
@@ -337,8 +443,6 @@ topRight =
 -- VIEW
 
 
-
-
 containerGeometry : Config -> Geometry -> List (Property m)
 containerGeometry config geometry =
   [ css "width" <| toPx geometry.menu.bounds.width
@@ -369,18 +473,22 @@ containerGeometry config geometry =
   ]
 
 
-outlineGeometry : Config -> Geometry -> List (Style m)
-outlineGeometry config geometry =
-  []
-
-
 {-| Component view. 
 -} 
-view : (Msg -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
+view : (Msg m -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
 view lift model properties items =
   let
-    summary = Options.collect defaultConfig properties
-    config = summary.config
+    summary = 
+      Options.collect defaultConfig properties
+      
+    config = 
+      summary.config
+
+    numItems =
+      List.length items
+
+    itemSummaries =
+      List.map (Options.collect defaultItemConfig << .options) items
   in
     div
       []
@@ -388,9 +496,10 @@ view lift model properties items =
         [ cs "mdl-button"
         , cs "mdl-js-button"
         , cs "mdl-button--icon"
+        , attribute (onKeyDown (Key itemSummaries)) `when` isActive model
         ]
         [ onClick Geometry.decode
-            (if model.animationState == Opened then Close else Open)
+            (if model.animationState == Opened then (always Close) else Open)
         ]
         [ Icon.view config.icon
           [ cs "material-icons"
@@ -454,13 +563,21 @@ view lift model properties items =
                    )
                 |> Maybe.withDefault Options.nop
             ]
-            (List.map2 (makeItem lift config model) [1..List.length items] items)
+            ( List.map3 (makeItem lift config model) [0..numItems-1] itemSummaries items
+            )
         ]
       ]
 
 
-makeItem : (Msg -> m) -> Config -> Model -> Int -> Item m -> Html m
-makeItem lift config model n item =
+makeItem
+  : (Msg m -> m)
+  -> Config
+  -> Model
+  -> Int
+  -> Options.Summary (ItemConfig m) m
+  -> Item m
+  -> Html m
+makeItem lift config model index summary item =
   let
     transitionDuration =
       constant.transitionDurationSeconds *
@@ -468,12 +585,12 @@ makeItem lift config model n item =
 
     offsetTop n =
       model.geometry
-        |> flip Maybe.andThen (.offsetTops >> Array.get (n-1)) -- n is 1-based
+        |> flip Maybe.andThen (.offsetTops >> Array.get n)
         |> Maybe.withDefault 0
 
     offsetHeight n =
       model.geometry
-        |> flip Maybe.andThen (.offsetHeights >> Array.get (n-1)) -- n is 1-based
+        |> flip Maybe.andThen (.offsetHeights >> Array.get n)
         |> Maybe.withDefault 0
 
     height =
@@ -481,7 +598,7 @@ makeItem lift config model n item =
         |> Maybe.map (\geometry -> geometry.menu.bounds.height)
         |> Maybe.withDefault 0
 
-    itemDelay =
+    itemDelay n =
       if config.alignment == TopLeft || config.alignment == TopRight then
         (height - offsetTop n - offsetHeight n) / height * transitionDuration
         |> toString
@@ -490,38 +607,42 @@ makeItem lift config model n item =
         ((offsetTop n) / height * transitionDuration)
         |> toString
         |> flip (++) "s"
+
+    ripple = 
+      Ripple index >> lift
   in
-    styled' li
+    Options.apply summary li
       [ cs "mdl-menu__item"
-      , css "transition-delay" itemDelay `when`
-          ((model.animationState == Opening) || (model.animationState == Opened))
+      , css "transition-delay" (itemDelay index) `when` isActive model
       , cs "mdl-js-ripple-effect" `when` config.ripple
-      , cs "mdl-menu__item--full-bleed-divider" `when` item.divider
+      , cs "mdl-menu__item--full-bleed-divider" `when` summary.config.divider
+      , css "background-color" "rgb(238,238,238)" `when` (model.index == Just index)
       ]
-      [ if item.enabled then
-           onClick Geometry.decode' (Select n >> lift)
-         else
+      [ if summary.config.enabled then
+           onClick Geometry.decode' (\_ -> lift (Select index summary.config.onSelect))
+        else
            Html.Attributes.attribute "disabled" "disabled"
       , Html.Attributes.property "tabindex" (string "-1")
-      {- TODO: No way to map an attribute?
-      , Ripple.downOn "mousedown"
-      , Ripple.downOn "touchstart"
-      , Ripple.upOn "mouseup"
-      , Ripple.upOn "mouseleave"
-      , Ripple.upOn "touchend"
-      , Ripple.upOn "blur"
-      -}
-      ]
+      , Ripple.downOn' ripple "mousedown"
+      , Ripple.downOn' ripple "touchstart"
+      , Ripple.upOn' ripple "mouseup"
+      , Ripple.upOn' ripple "mouseleave"
+      , Ripple.upOn' ripple "touchend"
+      , Ripple.upOn' ripple "blur"
+      ] 
+
       ( if config.ripple then
-          [ item.html
-          , Ripple.view
-            [ Html.Attributes.class "mdl-menu__item-ripple-container" ]
-            ( Dict.get n model.items
-              |> Maybe.withDefault Ripple.model)
-            |> Html.App.map (Ripple n >> lift)
-          ]
+          ( (++)
+            item.html
+            [ Ripple.view
+              [ Html.Attributes.class "mdl-menu__item-ripple-container" ]
+              ( Dict.get index model.ripples
+                |> Maybe.withDefault Ripple.model)
+              |> Html.App.map (Ripple index >> lift)
+            ]
+          )
         else
-          [ item.html ]
+          item.html
       )
 
 
@@ -535,31 +656,43 @@ type alias Container c =
 {-| Component render. Below is an example, assuming boilerplate setup as
 indicated in `Material`, and a user message `Select String`.
 
-    item : String -> Html Msg
-    item str =
-      Html.div
-        [ Html.Events.onClick (Select str) ]
-        [ Html.text str ]
-
     Menu.render Mdl [idx] model.mdl
-      [ Menu.topLeft
-      , Menu.ripple
-      ]
-      [ Menu.Item False True  <| item "Some item"
-      , Menu.Item True  True  <| item "Another item"
-      , Menu.Item False False <| item "Disabled item"
-      , Menu.Item False True  <| item "Yet another item"
+      [ Menu.topLeft, Menu.ripple ]
+      [ Menu.item
+        [ onSelect Select "Some item" ]
+        [ text "Some item" ]
+      , Menu.item
+        [ onSelect "Another item", Menu.divider ]
+        [ text "Another item" ]
+      , Menu.item
+        [ onSelect "Disabled item", Menu.disabled ]
+        [ text "Disabled item" ]
+      , Menu.item
+        [ onSelect "Yet another item" ]
+        [ text "Yet another item" ]
       ]
 -}
 render
-  : (Parts.Msg (Container c) -> m)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Item m)
-  -> (Html m)
+  -> Html m
 render =
-  Parts.create view update .menu (\x y -> {y | menu=x}) defaultModel
+  Parts.create 
+    view update' .menu (\x y -> {y | menu=x}) defaultModel
+
+
+pack : (Parts.Msg (Container b) m -> m) -> Parts.Index -> (Msg m) -> m
+pack = 
+  Parts.pack update' .menu (\x y -> {y | menu=x}) defaultModel 
+
+
+update' : Parts.Update Model (Msg msg) msg
+update' fwd msg model = 
+  update fwd msg model 
+    |> Just
 
 
 -- HELPERS
@@ -567,7 +700,17 @@ render =
 
 onClick : Decoder Geometry -> (Geometry -> m) -> (Attribute m)
 onClick decoder action =
-  Html.onWithOptions "click" defaultOptions (Json.map action decoder)
+  Html.Events.on "click" (Json.map action decoder)
+
+
+onKeyDown : (Int -> m) -> (Attribute m)
+onKeyDown action =
+  Html.Events.onWithOptions
+    "keydown" 
+    { preventDefault = True
+    , stopPropagation = False
+    }
+    (Json.map action Html.Events.keyCode)
 
 
 rect : Float -> Float -> Float -> Float -> String

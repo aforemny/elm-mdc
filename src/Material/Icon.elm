@@ -101,7 +101,9 @@ view name options =
   in 
     Options.apply summary Html.i
       [ cs "material-icons" ]
-      [ summary.config.onClick ]
+      ( summary.config.onClick 
+          |> Maybe.map (flip (::) [])
+          |> Maybe.withDefault [] )
       [ text name ]
 
   

@@ -128,8 +128,8 @@ update action model =
 
 
 downOn : String -> Attribute Msg
-downOn name =
-  Html.Events.on name (Json.map Down geometryDecoder)
+downOn =
+  downOn' identity
 
 
 downOn' : (Msg -> m) -> String -> Attribute m
@@ -138,8 +138,13 @@ downOn' f name =
 
 
 upOn : String -> Attribute Msg
-upOn name =
-  Html.Events.on name (Json.succeed Up) 
+upOn =
+  upOn' identity
+
+
+upOn' : (Msg -> m) -> String -> Attribute m
+upOn' f name =
+  Html.Events.on name (Json.succeed (f Up)) 
 
 
 styles : Metrics -> Int -> List (String, String)

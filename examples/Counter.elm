@@ -19,7 +19,7 @@ import Material.Options exposing (css)
 type alias Model = 
   { count : Int
   , mdl : Material.Model 
-      -- Boilerplate: model store for any and all MDL components you use. 
+      -- Boilerplate: model store for any and all Mdl components you use. 
   }
 
 
@@ -27,7 +27,7 @@ model : Model
 model = 
   { count = 0
   , mdl = Material.model 
-      -- Boilerplate: Always use this initial MDL model store.
+      -- Boilerplate: Always use this initial Mdl model store.
   }
 
 
@@ -37,8 +37,8 @@ model =
 type Msg
   = Increase
   | Reset
-  | MDL Material.Msg 
-      -- Boilerplate: Msg clause for internal MDL messages.
+  | Mdl (Material.Msg Msg)
+      -- Boilerplate: Msg clause for internal Mdl messages.
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -54,9 +54,9 @@ update msg model =
       , Cmd.none
       )
 
-    -- Boilerplate: MDL action handler. 
-    MDL msg' -> 
-      Material.update MDL msg' model
+    -- Boilerplate: Mdl action handler. 
+    Mdl msg' -> 
+      Material.update msg' model
 
 
 -- VIEW
@@ -75,7 +75,7 @@ view model =
     for the increase button, one for the reset button. First, the increase
     button. The first three arguments are: 
 
-      - A Msg constructor (`MDL`), lifting MDL messages to the Msg type.
+      - A Msg constructor (`Mdl`), lifting Mdl messages to the Msg type.
       - An instance id (the `[0]`). Every component that uses the same model
         collection (model.mdl in this file) must have a distinct instance id.
       - A reference to the elm-mdl model collection (`model.mdl`). 
@@ -84,22 +84,22 @@ view model =
     separately to our model; and we did not have to add to our update messages
     to handle their internal events.
 
-    MDL components are configured with `Options`, similar to `Html.Attributes`.
+    Mdl components are configured with `Options`, similar to `Html.Attributes`.
     The `Button.onClick Increase` option instructs the button to send the `Increase`
     message when clicked. The `css ...` option adds CSS styling to the button. 
     See `Material.Options` for details on options. 
     -}
-    , Button.render MDL [0] model.mdl 
+    , Button.render Mdl [0] model.mdl 
         [ Button.onClick Increase 
         , css "margin" "0 24px"
         ]
         [ text "Increase" ]
-    , Button.render MDL [1] model.mdl 
+    , Button.render Mdl [1] model.mdl 
         [ Button.onClick Reset ] 
         [ text "Reset" ]
     ]
   |> Material.Scheme.top
-      -- Load Google MDL CSS. You'll likely want to do that not in code as we
+      -- Load Google Mdl CSS. You'll likely want to do that not in code as we
       -- do here, but rather in your master .html file. See the documentation
       -- for the `Material` module for details.
   

@@ -55,7 +55,7 @@ model =
 
 type Msg 
   = Click (Kind, Color, Misc)
-  | Mdl Material.Msg 
+  | Mdl (Material.Msg Msg)
   | Code Code.Msg
 
 
@@ -63,7 +63,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of 
     Mdl action' -> 
-      Material.update Mdl action' model
+      Material.update action' model
 
     Code action' -> 
       Code.update action' model.code

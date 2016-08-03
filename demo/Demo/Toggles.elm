@@ -48,7 +48,7 @@ model =
 
 
 type Msg 
-  = Mdl Material.Msg 
+  = Mdl (Material.Msg Msg)
   | Switch Int
   | Radio Int
   | Inc
@@ -103,7 +103,7 @@ update action model =
       )
 
     Mdl action' -> 
-      Material.update Mdl action' model
+      Material.update action' model
 
 
 

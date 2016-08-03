@@ -51,8 +51,8 @@ import Json.Decode as Json
 
 import Parts exposing (Indexed)
 
-import Material.Options as Options exposing (Style, cs, styled, many, when)
-import Material.Helpers exposing (map1st, map2nd, blurOn, filter)
+import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
+import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
 import Material.Ripple as Ripple
 
 
@@ -187,10 +187,10 @@ top lift group model summary elems =
       , cs "is-checked" `when` cfg.value
       , cs "is-focused" `when` model.isFocused
       ]
-      [ Just (blurOn "mouseup")
-      , Just (onFocus (lift (SetFocus True)))
-      , Just (onBlur (lift (SetFocus False)))
-      , cfg.onClick
+      [ blurOn "mouseup"
+      , onFocus (lift (SetFocus True))
+      , onBlur (lift (SetFocus False))
+      , cfg.onClick |> Maybe.withDefault noAttr
       ] 
       (List.concat 
         [ elems
@@ -301,17 +301,17 @@ type alias Container c =
 
 render
    : ((Msg -> b) -> Parts.View Model c)
-  -> (Parts.Msg { d | toggles : Indexed Model } -> b)
+  -> (Parts.Msg { d | toggles : Indexed Model } b -> b)
   -> Parts.Index
   -> Parts.View { d | toggles : Indexed Model } c
 render view = 
-  Parts.create view update .toggles (\x y -> {y | toggles=x}) defaultModel
+  Parts.create view (Parts.generalize update) .toggles (\x y -> {y | toggles=x}) defaultModel
 
 
 {-| Component render (checkbox)
 -}
 checkbox 
-  : (Parts.Msg (Container c) -> m)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
@@ -324,7 +324,7 @@ checkbox =
 {-| Component render (switch) 
 -}
 switch
-  : (Parts.Msg (Container c) -> m)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
@@ -337,7 +337,7 @@ switch =
 {-| Component render (radio button) 
 -}
 radio
-  : (Parts.Msg (Container c) -> m)
+  : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)

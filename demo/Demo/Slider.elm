@@ -31,7 +31,7 @@ model =
 
 type Msg
   = Slider Int Float
-  | Mdl Material.Msg
+  | Mdl (Material.Msg Msg)
 
 
 get : Int -> Dict Int Float -> Float
@@ -54,8 +54,8 @@ update action model =
       in
         ({ model | values = values }, Cmd.none)
 
-    Mdl action' ->
-      Material.update Mdl action' model
+    Mdl msg' ->
+      Material.update msg' model
 
 
 -- VIEW

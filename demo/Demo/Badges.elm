@@ -23,7 +23,7 @@ type Msg
   | Decrease
   | SetCode String
   | CodeBox Code.Msg
-  | Mdl Material.Msg 
+  | Mdl (Material.Msg Msg)
 
 
 type alias Model = 
@@ -47,7 +47,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of
     Mdl action' -> 
-      Material.update Mdl action' model
+      Material.update action' model
 
     Decrease -> 
       ( { model | unread = model.unread - 1 }

@@ -71,7 +71,7 @@ model =
 type Msg 
   = TemplateMsg 
   | Update (Model -> Model)
-  | Mdl Material.Msg 
+  | Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -84,7 +84,7 @@ update action model =
       (f model, Cmd.none)
 
     Mdl action' -> 
-      Material.update Mdl action' model
+      Material.update action' model
 
 
 {- Make sure we didn't pick the same primary and accent colour. -}

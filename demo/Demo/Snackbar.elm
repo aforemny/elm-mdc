@@ -69,7 +69,7 @@ type Msg
   | Grown Int
   | Gone Int
   | Snackbar (Snackbar.Msg Int)
-  | MDL Material.Msg 
+  | MDL (Material.Msg Msg)
 
 
 add : (Int -> Snackbar.Contents Int) -> Model -> (Model, Cmd Msg)
@@ -143,7 +143,7 @@ update action model =
         |> map2nd (Cmd.map Snackbar)
 
     MDL action' -> 
-      Material.update MDL action' model
+      Material.update action' model
 
 
 -- VIEW

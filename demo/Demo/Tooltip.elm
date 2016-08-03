@@ -34,7 +34,7 @@ model =
 type Msg
   = NoOp
   | TooltipMsg Tooltip.Msg
-  | Mdl Material.Msg
+  | Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -50,7 +50,7 @@ update action model =
         ({ model | tooltip = updated }, Cmd.none)
 
     Mdl action' ->
-      Material.update Mdl action' model
+      Material.update action' model
 
 
 -- VIEW
@@ -84,8 +84,7 @@ view model  =
     , css "justify-content" "center"
     ]
     [ demoTooltip
-        [ Icon.view "add" 
-            [ Tooltip.attach Mdl [0] ]
+        [ Icon.view "add" [ Tooltip.attach Mdl [0] ]
         , Tooltip.render Mdl [0] model.mdl 
             [] 
             [ text "This is an add icon" ]

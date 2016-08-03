@@ -48,7 +48,7 @@ model =
 
 
 type Msg
-  = Mdl Material.Msg
+  = Mdl (Material.Msg Msg)
   | Raise Int
   | ShowCode1 String
   | ShowCode2 String
@@ -62,7 +62,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case Debug.log "" action of
     Mdl action' ->
-      Material.update Mdl action' model
+      Material.update action' model
 
     Raise k -> 
       { model | raised = k } ! [] 

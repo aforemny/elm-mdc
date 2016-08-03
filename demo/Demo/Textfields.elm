@@ -48,7 +48,7 @@ model =
 
 
 type Msg
-  = MDL Material.Msg
+  = MDL (Material.Msg Msg)
   | Upd0 String
   | Upd3 String
   | Upd4 String
@@ -61,7 +61,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     MDL action' ->
-      Material.update MDL action' model
+      Material.update action' model
 
     Upd0 str ->
       ( { model | str0 = str }, Cmd.none )
