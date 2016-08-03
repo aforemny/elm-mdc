@@ -8,6 +8,7 @@ module Material.Grid exposing
   , align
   , hide
   , order
+  , stretch
   )
 
 {-| From the
@@ -64,11 +65,7 @@ Example use:
 Cells are configured with a `List Style`; this configuration dictates the
 size, offset, etc. of the cell. 
 
-@docs cell, Cell, Device, size, offset, Align, align, hide, order
--}
-
-
-{- TODO. I don't understand what "mdl-cell--stretch" or when it might be appropriate.
+@docs cell, Cell, Device, size, offset, Align, align, stretch, hide, order
 -}
 
 
@@ -160,6 +157,12 @@ align a =
     Middle -> cs "mdl-cell--middle"
     Bottom -> cs "mdl-cell--bottom"
 
+
+{-| Specify that a cell stretches vertically to fill the parent.
+-}
+stretch : Style a
+stretch = 
+  cs "mdl-cell--stretch"
 
 
 {-| Specify that a cell should be hidden on given `Device`.

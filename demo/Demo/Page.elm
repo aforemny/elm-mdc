@@ -87,10 +87,7 @@ fromMDS =
 title : String -> Html a 
 title t = 
   Options.styled Html.h1 
-    [ Color.text Color.primary 
-    --, cs "mdl-typography--display-4" 
-    -- TODO. Typography module
-    ]
+    [ Color.text Color.primary ]
     [ text t ]
 
 

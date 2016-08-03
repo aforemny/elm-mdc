@@ -218,7 +218,7 @@ viewCheckbox lift model config elems =
       , class ("mdl-checkbox__input")
       , Html.Attributes.disabled cfg.isDisabled
       , checked cfg.value 
-        {- TODO: the checked attribute is not rendered. Switch still seems to
+        {- The checked attribute is not rendered. Switch still seems to
         work, though, but accessibility is probably compromised. 
         https://github.com/evancz/elm-html/issues/91
         -}
@@ -249,7 +249,7 @@ viewSwitch lift model config elems =
       , class "mdl-switch__input"
       , Html.Attributes.disabled cfg.isDisabled
       , checked cfg.value 
-        {- TODO: the checked attribute is not rendered. Switch still seems to
+        {- the checked attribute is not rendered. Switch still seems to
         work, though, but accessibility is probably compromised. 
         https://github.com/evancz/elm-html/issues/91
         -}
@@ -278,7 +278,6 @@ viewRadio lift model config elems =
         , Just (class "mdl-radio__button")
         , Just (Html.Attributes.disabled cfg.isDisabled)
         , Just (checked cfg.value)
-        -- TODO, Just (Html.Attributes.value cfg.value)
         , cfg.group
         ] 
       )

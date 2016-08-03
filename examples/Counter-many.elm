@@ -49,7 +49,7 @@ type Msg
 map : Int -> (a -> a) -> Array a -> Array a
 map k f a = 
   Array.get k a 
-    |> Maybe.map (\x -> let y = Debug.log "" x in Array.set k (f y) a)
+    |> Maybe.map (\x -> Array.set k (f x) a)
     |> Maybe.withDefault a
 
 

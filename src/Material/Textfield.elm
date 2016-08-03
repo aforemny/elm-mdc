@@ -235,24 +235,6 @@ cols cols =
 -- MODEL
 
 
-
-{- Kind of textfield. Currently supports only single-line input or password
-inputs.
-  | MultiLine (Maybe Int) -- Max no. of rows or no limit
-  -- TODO. Should prevent key event for ENTER
-  -- when number of rows exceeds maxrows argument to constructor:
-
-  MaterialTextfield.prototype.onKeyDown_ = function(event) {
-    var currentRowCount = event.target.value.split('\n').length;
-    if (event.keyCode === 13) {
-      if (currentRowCount >= this.maxRows) {
-        event.preventDefault();
-      }
-    }
-  };
-  -}
-
-
 {-| Model. The textfield is in its error-container if `error` is not `Nothing`.
 The contents of the field is `value`.
 -}

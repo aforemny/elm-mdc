@@ -49,7 +49,7 @@ type Msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case Debug.log "" action of
+  case action of
     MDL action' ->
       Material.update action' model
 

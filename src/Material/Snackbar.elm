@@ -321,6 +321,4 @@ Component support for snackbar was implemented earlier. In case a solution
 presents itself, the last commit to contain this support was:
 
 f0a85912654713238694f48b1a4b7d5a7459965f
-
-TODO
 -}

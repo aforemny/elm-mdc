@@ -60,7 +60,7 @@ type Msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
-  case Debug.log "" action of
+  case action of
     Mdl action' ->
       Material.update action' model
 
@@ -708,7 +708,7 @@ aux model =
             , css "width" "128px" 
             , Color.background (Color.color Color.Pink Color.S500)
             -- Elevation
-            , if Debug.log "" (model.raised == k) then Elevation.e8 else Elevation.e2
+            , if (model.raised == k) then Elevation.e8 else Elevation.e2
             , Elevation.transition 250
             , Options.attribute <| onMouseEnter (Raise k)
             , Options.attribute <| onMouseLeave (Raise -1)

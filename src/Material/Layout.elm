@@ -723,9 +723,9 @@ drawerButton lift =
             "keydown"
             { stopPropagation = False
             , preventDefault = False --  True
-              {- TODO: Should stop propagation exclusively on ENTER, but elm
-              currently require me to decide on options before the keycode value is
-              available. -} 
+              {- Should stop propagation exclusively on ENTER, but elm
+              currently require me to decide on options before the keycode
+              value is available. -} 
             }
             (Decoder.map 
               (lift << \key -> case key of 
