@@ -242,7 +242,7 @@ srcUrl =
 
 references : List (String, String)
 references =
-  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-menu"
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Menu"
   , Page.mds "https://www.google.com/design/spec/components/menus.html"
   , Page.mdl "https://www.getmdl.io/components/#menus-section"
   ]
