@@ -157,7 +157,7 @@ disabled =
 -}
 plain : Property m
 plain =
-  cs "mdl-button--colored"
+  Options.nop
 
 
 {-| Color button with primary or accent color depending on button type.
