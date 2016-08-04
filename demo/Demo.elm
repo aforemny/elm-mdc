@@ -374,7 +374,13 @@ main =
     , location2messages = location2messages
     , init =
         ( { model
-          | mdl = Layout.setTabsWidth 1384 model.mdl
+          | mdl = Layout.setTabsWidth 2124 model.mdl
+          {- elm gives us no way to measure the actual width of tabs. We
+             hardwire it. If you add a tab, remember to update this. Find the
+             new value using: 
+
+             document.getElementsByClassName("mdl-layout__tab-bar")[0].scrollWidth
+          -}
           }
           , Layout.sub0 Mdl
         )
