@@ -94,7 +94,7 @@ srcUrl =
 
 references : List (String, String)
 references =
-  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Card"
+  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Dialog"
   , Page.mds "https://material.google.com/components/dialog.html"
   , Page.mdl "https://getmdl.io/components/#dialog-section"
   ]
