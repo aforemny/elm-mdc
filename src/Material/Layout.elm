@@ -614,7 +614,7 @@ tabsView lift config model (tabs, tabStyles) =
                         (\scrollWidth clientWidth scrollLeft -> 
                             { canScrollLeft = scrollLeft > 0
                             , canScrollRight = scrollWidth - clientWidth > scrollLeft + 1
-                            , width = Just clientWidth
+                            , width = Just scrollWidth
                             } |> ScrollTab |> lift)
                         ("scrollWidth" := Decoder.float)
                         ("clientWidth" := Decoder.float)
