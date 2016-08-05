@@ -56,7 +56,7 @@ type alias DOMState =
 geometryDecoder : Json.Decoder DOMState
 geometryDecoder =
   Json.object6 DOMState
-    (DOM.target DOM.boundingClientRect)
+    ("currentTarget" := DOM.boundingClientRect)
     (Json.maybe ("clientX" := Json.float))
     (Json.maybe ("clientY" := Json.float))
     (Json.maybe (at ["touches", "0", "clientX"] Json.float))
