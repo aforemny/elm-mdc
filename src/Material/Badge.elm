@@ -28,7 +28,7 @@ module Material.Badge exposing
 > factor in the overall user experience.
 
 Refer to 
-[this site](https://debois.github.io/elm-mdl/#/badges) 
+[this site](https://debois.github.io/elm-mdl/#badges)
 for a live demo. 
 
 @docs add, noBackground, overlap
