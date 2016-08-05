@@ -32,7 +32,7 @@ module Material.Textfield exposing
 
 
 Refer to 
-[this site](https://debois.github.io/elm-mdl/#/textfields)
+[this site](https://debois.github.io/elm-mdl/#textfields)
 for a live demo.
  
 # Component render
