@@ -26,7 +26,7 @@ module Material.Toggles exposing
 See also the
 [Material Design Specification](https://www.google.com/design/spec/components/selection-controls.html#).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/toggles)
+Refer to [this site](http://debois.github.io/elm-mdl/#toggles)
 for a live demo.
 
 # Render
