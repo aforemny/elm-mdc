@@ -13,7 +13,7 @@ module Material.Snackbar exposing
 > example. Msgs should not be to close the snackbar. By not providing an
 > action, the snackbar becomes a __toast__ component.
 
-Refer to [this site](http://debois.github.io/elm-mdl#/snackbar)
+Refer to [this site](http://debois.github.io/elm-mdl/#snackbar)
 for a live demo. 
 
 # Generating messages
