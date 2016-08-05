@@ -13,7 +13,7 @@ module Material.Template exposing
 See also the
 [Material Design Specification]([https://www.google.com/design/spec/components/TEMPLATE.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/template)
+Refer to [this site](http://debois.github.io/elm-mdl/#template)
 for a live demo.
 
 @docs Model, model, Msg, update
