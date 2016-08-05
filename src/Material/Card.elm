@@ -29,7 +29,7 @@ module Material.Card
 > important factor in the overall user experience. See the card component's
 > Material Design specifications page for details.
 
-Refer to [this site](http://debois.github.io/elm-mdl/#/card)
+Refer to [this site](http://debois.github.io/elm-mdl/#cards)
 for a live demo.
 
 # Render
