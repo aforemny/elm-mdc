@@ -17,6 +17,7 @@ import Material.Typography as Typo
 import Demo.Code as Code
 
 import Material.Color as Color
+import Json.Decode as Decoder
 
 -- MODEL
 
@@ -55,6 +56,39 @@ type Msg
   | Upd6 String
   | SetFocus5 Bool 
   | Slider Float
+  | KeyUp KeyEvent
+
+
+{-| Selection range
+-}
+type alias Selection =
+  { start : Int
+  , end : Int
+  }
+
+
+{-| KeyEvent
+-}
+type alias KeyEvent =
+  { shift : Bool
+  , keyCode : Int
+  , selection : Selection
+  }
+
+
+selectionDecoder : Decoder.Decoder Selection
+selectionDecoder =
+  Decoder.object2 Selection
+    (Decoder.at ["target", "selectionStart"] Decoder.int)
+    (Decoder.at ["target", "selectionEnd"] Decoder.int)
+
+
+eventDecoder : Decoder.Decoder KeyEvent
+eventDecoder =
+  Decoder.object3 KeyEvent
+    (Decoder.at ["shiftKey"] Decoder.bool)
+    (Decoder.at ["keyCode"] Decoder.int)
+    selectionDecoder
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -80,7 +114,10 @@ update action model =
 
     SetFocus5 x ->
       { model | focus5 = x } ! [ Cmd.none ]
-      
+
+    KeyUp { shift, keyCode, selection } ->
+      -- TODO: Do something with the event
+      (model, Cmd.none)
 
 -- VIEW
 
@@ -213,6 +250,7 @@ view model =
         , Textfield.floatingLabel
         , Textfield.textarea
         , Textfield.rows 6
+        , Textfield.on "keyup" (Decoder.map KeyUp eventDecoder)
         ]
     , """
       Textfield.render MDL [7] model.mdl
