@@ -1,9 +1,7 @@
 module Material.Menu.Geometry exposing
-  ( Geometry, Element
-  , decode, decode'
+  ( Geometry, Element, decode 
   )
 
-import Array exposing (Array)
 import DOM
 import Json.Decode exposing (..)
 
@@ -14,8 +12,8 @@ type alias Geometry =
   { button : Element
   , menu : Element
   , container : Element
-  , offsetTops : Array Float
-  , offsetHeights : Array Float
+  , offsetTops : List Float
+  , offsetHeights : List Float
   }
 
 
@@ -35,20 +33,8 @@ decode =
     (DOM.target element)
     (DOM.target (DOM.nextSibling (DOM.childNode 1 element)))
     (DOM.target (DOM.nextSibling  element))
-    (DOM.target (DOM.nextSibling (DOM.childNode 1 (DOM.childNodes DOM.offsetTop `andThen` (succeed << Array.fromList)))))
-    (DOM.target (DOM.nextSibling (DOM.childNode 1 (DOM.childNodes DOM.offsetHeight `andThen` (succeed << Array.fromList)))))
-
-
-{-| Decode Geometry from a menu item's reference
--}
-decode' : Decoder Geometry
-decode' =
-  object5 Geometry
-    (DOM.target (DOM.parentElement (DOM.parentElement (DOM.previousSibling element))))
-    (DOM.target (DOM.parentElement element))
-    (DOM.target (DOM.parentElement (DOM.parentElement element)))
-    (DOM.target (DOM.parentElement (DOM.childNodes DOM.offsetTop `andThen` (succeed << Array.fromList))))
-    (DOM.target (DOM.parentElement (DOM.childNodes DOM.offsetHeight `andThen` (succeed << Array.fromList))))
+    (DOM.target (DOM.nextSibling (DOM.childNode 1 (DOM.childNodes DOM.offsetTop))))
+    (DOM.target (DOM.nextSibling (DOM.childNode 1 (DOM.childNodes DOM.offsetHeight))))
 
 
 {-| Decode an Element

@@ -9,6 +9,7 @@ import Markdown
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (css, div, stylesheet, Property)
 import Material.Helpers as Helpers exposing (cmd)
+import Material.Color as Color
 
 
 type State 
@@ -133,6 +134,7 @@ code options str =
       [ css "overflow" "auto" 
       , css "border-radius" "2px"
       , css "font-size" "10pt"
+      , Color.background (Color.color Color.BlueGrey Color.S50)
       , Elevation.e2
       ] :: options)
     [ Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```" ]

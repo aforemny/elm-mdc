@@ -53,7 +53,6 @@ for a live demo.
 -}
 
 
-import Array exposing (Array)
 import Dict exposing (Dict)
 import Html.App
 import Html.Attributes 
@@ -82,25 +81,16 @@ constant :
   , closeTimeout               : Float
   }
 constant =
-  { transitionDurationSeconds  = 0.4
+  { transitionDurationSeconds  = 0.3
   , transitionDurationFraction = 0.8
   , closeTimeout               = 150
   }
 
 
-
-{-| Parts-compatible subscription.
--}
-subs : (Parts.Msg (Container b) m -> m) -> Container b -> Sub m
-subs lift =
-  .menu
-  >> Dict.toList
-  >> List.map (\(idx, model) ->
-       Sub.map 
-         (pack lift idx)
-         (subscriptions model)
-     )
-  >> Sub.batch
+transitionDuration : Float
+transitionDuration =
+  constant.transitionDurationSeconds *
+  constant.transitionDurationFraction
 
 
 {-| Component subscriptions.
@@ -192,7 +182,7 @@ disabled =
 
 
 
-{-| Handle selection of containing item. 
+{-| Handle selection of containing item 
 -}
 onSelect : m -> Options.Property (ItemConfig m) m
 onSelect msg =
@@ -279,7 +269,7 @@ update fwd msg model =
                   (left <= toFloat x) && (toFloat x <= left + width) &&
                   (top <= toFloat y) && (toFloat y <= top + height)
               in
-                if pos `inside` geometry.container.bounds then
+                if pos `inside` geometry.menu.bounds then
                     model ! []
                   else
                     update fwd Close model
@@ -443,22 +433,29 @@ topRight =
 -- VIEW
 
 
-containerGeometry : Config -> Geometry -> List (Property m)
-containerGeometry config geometry =
+withGeometry : Model -> (Geometry -> Property m) -> Property m
+withGeometry model f = 
+  model.geometry 
+    |> Maybe.map f 
+    |> Maybe.withDefault Options.nop 
+
+
+containerGeometry : Alignment -> Geometry -> Property m
+containerGeometry alignment geometry =
   [ css "width" <| toPx geometry.menu.bounds.width
   , css "height" <| toPx geometry.menu.bounds.height
-  , if (config.alignment == BottomRight) || (config.alignment == BottomLeft) then
+  , if (alignment == BottomRight) || (alignment == BottomLeft) then
       css "top" <| toPx (geometry.button.offsetTop + geometry.button.offsetHeight)
     else
       Options.nop
-  , if (config.alignment == BottomRight) || (config.alignment == TopRight) then
+  , if (alignment == BottomRight) || (alignment == TopRight) then
       let
         right e = e.bounds.left + e.bounds.width
       in
         css "right" <| toPx (right geometry.container - right geometry.menu)
     else
       Options.nop
-  , if (config.alignment == TopLeft) || (config.alignment == TopRight) then
+  , if (alignment == TopLeft) || (alignment == TopRight) then
       let
         bottom =
           geometry.container.bounds.top + geometry.container.bounds.height
@@ -466,11 +463,31 @@ containerGeometry config geometry =
         css "bottom" <| toPx (bottom - geometry.button.bounds.top)
     else
       Options.nop
-  , if (config.alignment == TopLeft) || (config.alignment == BottomLeft) then
+  , if (alignment == TopLeft) || (alignment == BottomLeft) then
       css "left" <| toPx geometry.menu.offsetLeft
     else
       Options.nop
-  ]
+  ] |> Options.many
+
+
+clip : Model -> Config -> Geometry -> Property m
+clip model config geometry = 
+  let
+   width  = geometry.menu.bounds.width
+   height = geometry.menu.bounds.height
+  in
+    css "clip" <| 
+      if (model.animationState == Opened)
+        || (model.animationState == Closing)
+      then
+         rect 0 width height 0
+      else
+        case config.alignment of
+          BottomRight -> rect 0 width 0 width
+          TopLeft -> rect height 0 height 0
+          TopRight -> rect height width height width
+          _ -> ""
+
 
 
 {-| Component view. 
@@ -484,6 +501,13 @@ view lift model properties items =
     config = 
       summary.config
 
+    alignment = 
+      case config.alignment of
+        BottomLeft  -> cs "mdl-menu--bottom-left"
+        BottomRight -> cs "mdl-menu--bottom-right"
+        TopLeft     -> cs "mdl-menu--top-left"
+        TopRight    -> cs "mdl-menu--top-right"
+
     numItems =
       List.length items
 
@@ -492,153 +516,136 @@ view lift model properties items =
   in
     div
       []
-      [ styled' button
-        [ cs "mdl-button"
-        , cs "mdl-js-button"
-        , cs "mdl-button--icon"
-        , attribute (onKeyDown (Key itemSummaries)) `when` isActive model
-        ]
-        [ onClick Geometry.decode
-            (if model.animationState == Opened then (always Close) else Open)
-        ]
-        [ Icon.view config.icon
-          [ cs "material-icons"
-          , css "pointer-events" "none"
+      [ styled button
+          [ cs "mdl-button"
+          , cs "mdl-js-button"
+          , cs "mdl-button--icon"
+          , attribute (onKeyDown (Key itemSummaries)) `when` isActive model
+          , attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
           ]
-        ]
-        |> Html.App.map lift
-      , styled div
-        [ cs "mdl-menu__container"
-        , cs "is-upgraded"
-        , cs "is-visible" `when`
-            ((model.animationState == Opened) || (model.animationState == Closing))
-        , model.geometry
-            |> Maybe.map (containerGeometry config >> Options.many)
-            |> Maybe.withDefault (Options.nop)
-        ]
-        [ styled div
-          [ cs "mdl-menu__outline"
-          , model.geometry
-              |> Maybe.map (\geometry ->
-                  [ css "width" <| toPx (geometry.menu.bounds.width)
-                  , css "height" <| toPx (geometry.menu.bounds.height)
-                  ])
-              |> Maybe.withDefault []
-              |> Options.many
-          , case config.alignment of
-              BottomLeft  -> cs "mdl-menu--bottom-left"
-              BottomRight -> cs "mdl-menu--bottom-right"
-              TopLeft     -> cs "mdl-menu--top-left"
-              TopRight    -> cs "mdl-menu--top-right"
-          ]
-          []
-        , styled ul
-            [ cs "mdl-menu"
-            , cs "mdl-js-menu"
-            , case config.alignment of
-                BottomLeft -> cs "mdl-menu--bottom-left"
-                BottomRight -> cs "mdl-menu--bottom-right"
-                TopLeft -> cs "mdl-menu--top-left"
-                TopRight -> cs "mdl-menu--top-right"
-            , cs "is-animating" `when`
-                ((model.animationState == Opening)
-                || (model.animationState == Closing))
-            , model.geometry
-                |> Maybe.map (\geometry ->
-                   let
-                     width  = geometry.menu.bounds.width
-                     height = geometry.menu.bounds.height
-                   in
-                     (if (model.animationState == Opened)
-                       || (model.animationState == Closing)
-                     then
-                         rect 0 width height 0
-                     else
-                       case config.alignment of
-                         BottomRight -> rect 0 width 0 width
-                         TopLeft -> rect height 0 height 0
-                         TopRight -> rect height width height width
-                         _ -> ""
-                     ) |> css "clip"
-                   )
-                |> Maybe.withDefault Options.nop
+          [ Icon.view config.icon
+            [ cs "material-icons"
+            , css "pointer-events" "none"
             ]
-            ( List.map3 (makeItem lift config model) [0..numItems-1] itemSummaries items
-            )
-        ]
+          ] |> Html.App.map lift
+      , styled div
+          [ cs "mdl-menu__container"
+          , cs "is-upgraded"
+          , cs "is-visible" `when`
+              ((model.animationState == Opened) || (model.animationState == Closing))
+          , containerGeometry config.alignment |> withGeometry model
+          ]
+          [ styled div
+            [ cs "mdl-menu__outline"
+            , alignment
+            , (\geometry ->
+                [ css "width" <| toPx geometry.menu.bounds.width
+                , css "height" <| toPx geometry.menu.bounds.height
+                ] |> Options.many) |> withGeometry model
+            ]
+            []
+          , styled ul
+              [ cs "mdl-menu"
+              , cs "mdl-js-menu"
+              , cs "is-animating" `when`
+                  ((model.animationState == Opening)
+                  || (model.animationState == Closing))
+              , clip model config |> withGeometry model
+              , alignment
+              ]
+              ( case model.geometry of 
+                  Just g -> 
+                    List.map5 
+                      (view1 lift config model) 
+                      g.offsetTops g.offsetHeights
+                      [0..numItems-1] itemSummaries items
+                  Nothing -> 
+                    List.map3 
+                      (view1 lift config model 0 0) 
+                      [0..numItems-1] itemSummaries items
+              )
+          ]
       ]
 
 
-makeItem
-  : (Msg m -> m)
-  -> Config
-  -> Model
-  -> Int
-  -> Options.Summary (ItemConfig m) m
-  -> Item m
-  -> Html m
-makeItem lift config model index summary item =
+
+delay : Alignment -> Float -> Float -> Float -> Options.Property (ItemConfig m) m
+delay alignment height offsetTop offsetHeight = 
   let
-    transitionDuration =
-      constant.transitionDurationSeconds *
-      constant.transitionDurationFraction
-
-    offsetTop n =
-      model.geometry
-        |> flip Maybe.andThen (.offsetTops >> Array.get n)
-        |> Maybe.withDefault 0
-
-    offsetHeight n =
-      model.geometry
-        |> flip Maybe.andThen (.offsetHeights >> Array.get n)
-        |> Maybe.withDefault 0
-
-    height =
-      model.geometry
-        |> Maybe.map (\geometry -> geometry.menu.bounds.height)
-        |> Maybe.withDefault 0
-
-    itemDelay n =
-      if config.alignment == TopLeft || config.alignment == TopRight then
-        (height - offsetTop n - offsetHeight n) / height * transitionDuration
-        |> toString
-        |> flip (++) "s"
+    t = 
+      if alignment == TopLeft || alignment == TopRight then
+        (height - offsetTop - offsetHeight) / height * transitionDuration
       else
-        ((offsetTop n) / height * transitionDuration)
-        |> toString
-        |> flip (++) "s"
+        (offsetTop / height * transitionDuration)
+  in
+    css "transition-delay" <| toString t ++ "s"
 
+
+view1
+  : (Msg m -> m) -> Config -> Model
+  -> Float -> Float
+  -> Int -> Options.Summary (ItemConfig m) m -> Item m
+  -> Html m
+view1 lift config model offsetTop offsetHeight index summary item =
+  let
     ripple = 
       Ripple index >> lift
+
+    canSelect = 
+        summary.config.enabled 
+          && summary.config.onSelect /= Nothing
+
+    hasRipple =
+      config.ripple && canSelect
   in
     Options.apply summary li
       [ cs "mdl-menu__item"
-      , css "transition-delay" (itemDelay index) `when` isActive model
       , cs "mdl-js-ripple-effect" `when` config.ripple
       , cs "mdl-menu__item--full-bleed-divider" `when` summary.config.divider
       , css "background-color" "rgb(238,238,238)" `when` (model.index == Just index)
+      , case (model.geometry, isActive model) of 
+          (Just g, True) -> 
+            delay config.alignment g.menu.bounds.height offsetTop offsetHeight
+          _ -> 
+            Options.nop
+      -- Not in MDL, but convenient to align icons etc. 
+      , css "display" "flex"
+      , css "align-items" "center"
       ]
-      [ if summary.config.enabled then
-           onClick Geometry.decode' (\_ -> lift (Select index summary.config.onSelect))
-        else
-           Html.Attributes.attribute "disabled" "disabled"
-      , Html.Attributes.property "tabindex" (string "-1")
-      , Ripple.downOn' ripple "mousedown"
-      , Ripple.downOn' ripple "touchstart"
-      , Ripple.upOn' ripple "mouseup"
-      , Ripple.upOn' ripple "mouseleave"
-      , Ripple.upOn' ripple "touchend"
-      , Ripple.upOn' ripple "blur"
-      ] 
-
-      ( if config.ripple then
+      ( List.filterMap identity 
+          [ if canSelect then 
+              Html.Events.onClick 
+                (Select index summary.config.onSelect |> lift) 
+              |> Just
+            else
+              Nothing
+          , if not summary.config.enabled then 
+               Html.Attributes.attribute "disabled" "disabled" |> Just
+            else
+               Nothing
+          , Html.Attributes.property "tabindex" (string "-1") |> Just
+          ]
+        ++
+        ( if hasRipple then
+            [ Ripple.downOn' ripple "mousedown"
+            , Ripple.downOn' ripple "touchstart"
+            , Ripple.upOn' ripple "mouseup"
+            , Ripple.upOn' ripple "mouseleave"
+            , Ripple.upOn' ripple "touchend"
+            , Ripple.upOn' ripple "blur"
+            ] 
+          else
+            []
+        )
+      )
+      ( if hasRipple then
           ( (++)
             item.html
-            [ Ripple.view
+            [ Ripple.view'
               [ Html.Attributes.class "mdl-menu__item-ripple-container" ]
               ( Dict.get index model.ripples
                 |> Maybe.withDefault Ripple.model)
-              |> Html.App.map (Ripple index >> lift)
+              |> Html.App.map ripple
             ]
           )
         else
@@ -689,10 +696,25 @@ pack =
   Parts.pack update' .menu (\x y -> {y | menu=x}) defaultModel 
 
 
+{-| Parts-compatible subscription.
+-}
+subs : (Parts.Msg (Container b) m -> m) -> Container b -> Sub m
+subs lift =
+  .menu
+  >> Dict.toList
+  >> List.map (\(idx, model) ->
+       Sub.map 
+         (pack lift idx)
+         (subscriptions model)
+     )
+  >> Sub.batch
+
+
 update' : Parts.Update Model (Msg msg) msg
 update' fwd msg model = 
   update fwd msg model 
     |> Just
+
 
 
 -- HELPERS

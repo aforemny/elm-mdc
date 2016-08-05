@@ -387,7 +387,7 @@ main =
     , view = view
     , subscriptions = \model ->
         Sub.batch
-        [ Sub.map MenusMsg (Menu.subs Demo.Menus.MDL model.menus.mdl)
+        [ Sub.map MenusMsg (Menu.subs Demo.Menus.Mdl model.menus.mdl)
         , Layout.subs Mdl model.mdl
         ]
     , update = update
@@ -425,7 +425,6 @@ stylesheet =
     display: inline-block;
     box-sizing: border-box;
     min-width: 100%;
-    background-color: #f8f8f8;
     padding-top: .5rem;
     padding-bottom: 1rem;
     padding-left:1rem;
