@@ -400,10 +400,10 @@ view1 model idx { title, menu, code, comment } =
 
 demo1 : Model -> List (Html Msg)
 demo1 model = 
-  [ basic model ("Bottom left", Menu.bottomLeft)
-  , edit model ("Bottom right", Menu.bottomRight)
-  , checkmarks model ("Top left", Menu.topLeft)
-  , icons model ("Top right", Menu.topRight) 
+  [ basic model ("bottomLeft", Menu.bottomLeft)
+  , edit model ("bottomRight", Menu.bottomRight)
+  , checkmarks model ("topLeft", Menu.topLeft)
+  , icons model ("topRight", Menu.topRight) 
   ]
     |> List.indexedMap (view1 model)
     |> List.concatMap identity
