@@ -31,7 +31,7 @@ module Material.Grid exposing
 >     row.
 
 Refer to 
-[this site](https://debois.github.io/elm-mdl/#/grid)
+[this site](https://debois.github.io/elm-mdl/#grid)
 for a live demo. 
 
 Example use:

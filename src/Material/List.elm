@@ -16,7 +16,7 @@ module Material.List
 See also the
 [Material Design Specification]([https://material.google.com/components/lists.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/lists)
+Refer to [this site](http://debois.github.io/elm-mdl/#lists)
 for a live demo and example code.
 
 # List and item containers

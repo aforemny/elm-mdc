@@ -30,7 +30,7 @@ See also the
 [Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).
 
 Refer to 
-[this site](https://debois.github.io/elm-mdl/#/buttons) 
+[this site](https://debois.github.io/elm-mdl/#buttons) 
 for a live demo. 
 
 # Render

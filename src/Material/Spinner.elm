@@ -28,7 +28,7 @@ module Material.Spinner exposing
 > important factor in the overall user experience.
 
 Refer to
-[this site](https://debois.github.io/elm-mdl/#/loading)
+[this site](https://debois.github.io/elm-mdl/#loading)
 for a live demo.
 
 @docs spinner, active, singleColor

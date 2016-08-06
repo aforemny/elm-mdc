@@ -19,7 +19,7 @@ module Material.Dialog
 > writing. For other browsers you will need to include the dialog polyfill
 > or create your own.
 
-Refer to [this site](http://debois.github.io/elm-mdl/#/dialog)
+Refer to [this site](http://debois.github.io/elm-mdl/#dialog)
 for a live demo.
 
 @docs view

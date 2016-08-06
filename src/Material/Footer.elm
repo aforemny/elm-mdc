@@ -52,7 +52,7 @@ module Material.Footer
 See also the
 [Material Design Specification](https://material.google.com/layout/structure.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/footer)
+Refer to [this site](http://debois.github.io/elm-mdl/#footers)
 for a live demo.
 
 # Types

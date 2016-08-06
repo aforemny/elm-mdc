@@ -241,7 +241,8 @@ drawer =
         [ text "elm-package" ]
     , Layout.link
         [ Layout.href "#cards"
-        , Layout.onClick (Layout.toggleDrawer Mdl)
+        -- NOTE: For some reason having this here toggles the scrollbar on the cards page
+        --, Layout.onClick (Layout.toggleDrawer Mdl)
         ]
         [ text "Card component" ]
     ]

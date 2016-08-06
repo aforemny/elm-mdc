@@ -67,7 +67,7 @@ The 7.0.0 release changes the required boilerplate in two aspects.
             Mdl message' -> 
               Material.update message' model
 
-Some components (notable menu) has changed API to varying degrees. If you run
+Some components (notably menu) has changed API to varying degrees. If you run
 into troubles, refer to the code samples in [the
 demo](https://debois.github.io/elm-mdl/); check out [the
 documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/), or
