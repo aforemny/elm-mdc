@@ -31,7 +31,7 @@ You are encouraged to visit the
 for details about appropriate use of shadows. 
 
 Refer to 
-[this site](https://debois.github.io/elm-mdl/#/elevation)
+[this site](https://debois.github.io/elm-mdl/#elevation)
 for a live demo. 
   
 

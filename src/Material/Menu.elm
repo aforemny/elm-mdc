@@ -28,7 +28,7 @@ See also the
 [Material Design Specification]([https://www.google.com/design/spec/components/menus.html).
 
 Refer to
-[this site](https://debois.github.io/elm-mdl/#/menus)
+[this site](https://debois.github.io/elm-mdl/#menus)
 for a live demo.
 
 # Render

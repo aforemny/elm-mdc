@@ -35,6 +35,9 @@ module Material.Layout exposing
 > consistency in outward appearance and behavior while maintaining development
 > flexibility and ease of use.
 
+Refer to [this site](https://debois.github.io/elm-mdl/#layout)
+for a live demo and example code.
+
 # Subscriptions
 
 The layout needs to be initialised with and subscribe to changes in viewport

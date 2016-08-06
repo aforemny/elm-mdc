@@ -28,7 +28,7 @@ module Material.Slider
 See also the
 [Material Design Specification](https://material.google.com/components/sliders.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/sliders)
+Refer to [this site](http://debois.github.io/elm-mdl/#sliders)
 for a live demo.
 
 *NOTE* Currently does not work properly on [Microsoft Edge](https://github.com/google/material-design-lite/issues/1625)

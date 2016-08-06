@@ -21,7 +21,7 @@ module Material.Progress exposing
 > for details.
 
 Refer to
-[this site](https://debois.github.io/elm-mdl/#/loading)
+[this site](https://debois.github.io/elm-mdl/#loading)
 for a live demo.
 
 # Render

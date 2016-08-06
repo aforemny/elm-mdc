@@ -26,7 +26,7 @@ module Material.Tooltip
 See also the
 [Material Design Specification](https://material.google.com/components/tooltips.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/tooltips)
+Refer to [this site](http://debois.github.io/elm-mdl/#tooltips)
 for a live demo.
 
 To use a `tooltip` you have to (a) attach the mouse event listeners to the target

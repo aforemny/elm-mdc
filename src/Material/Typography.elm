@@ -46,7 +46,7 @@ module Material.Typography
 See also the
 [Material Design Specification](https://www.google.com/design/spec/style/typography.html).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/typography)
+Refer to [this site](http://debois.github.io/elm-mdl/#typography)
 for a live demo.
 
 # Styles

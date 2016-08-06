@@ -36,7 +36,7 @@ module Material.Tabs
 See also the
 [Material Design Specification](https://material.google.com/components/tabs.html#tabs-usage).
 
-Refer to [this site](http://debois.github.io/elm-mdl#/tabs)
+Refer to [this site](http://debois.github.io/elm-mdl/#tabs)
 for a live demo.
 
 # Types
