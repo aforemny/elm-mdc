@@ -283,7 +283,7 @@ update' f action model =
             }
 
     ToggleDrawer ->
-      Just <| pure { model | isDrawerOpen = not model.isDrawerOpen } 
+      Just <| pure { model | isDrawerOpen = not model.isDrawerOpen }
 
     Ripple tabIndex action' ->
       Dict.get tabIndex model.ripples
@@ -822,7 +822,7 @@ view lift model options { drawer, header, tabs, main } =
       config.fixedDrawer && not model.isSmallScreen
 
     drawerIsVisible = 
-      model.isDrawerOpen
+      model.isDrawerOpen && not drawerIsFixed
 
     tabsElems = 
       if not hasTabs then
@@ -853,7 +853,7 @@ view lift model options { drawer, header, tabs, main } =
            catch global keyboard events, but we can reasonably assume something inside
            mdl-layout__container is focused. 
         -} 
-        , if drawerIsVisible && not drawerIsFixed then
+        , if drawerIsVisible then
             on "keydown" 
                (Decoder.map 
                  (lift << \key -> if key == 27 then ToggleDrawer else NOP) 
@@ -868,7 +868,7 @@ view lift model options { drawer, header, tabs, main } =
           else
             Nothing
         , if not hasDrawer then Nothing else Just ("elm-mdl-drawer", drawerView lift drawerIsVisible drawer)
-        , if not hasDrawer then Nothing else Just ("elm-mdl-obfuscator", obfuscator lift (drawerIsVisible && not drawerIsFixed))
+        , if not hasDrawer then Nothing else Just ("elm-mdl-obfuscator", obfuscator lift drawerIsVisible)
         , contentDrawerButton |> Maybe.map ((,) "elm-drawer-button")
         , Options.styled main'
             [ cs "mdl-layout__content" 
