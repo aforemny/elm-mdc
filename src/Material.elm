@@ -1,6 +1,7 @@
 module Material exposing 
   ( Model, model
   , Msg, update
+  , subscriptions, init
   )
 
 {-|
@@ -115,6 +116,9 @@ Here is how you use elm-mdl with parts. First, boilerplate.
             Mdl message' -> 
               Material.update message' model
 
+ 4.  If your app is using Layout and/or Menu, you need also to set up
+ subscriptions and initialisations; see `subscriptions` and `init` below.  
+
 You now have sufficient boilerplate for using __any__ number of elm-mdl components. 
 Let's say you need a textfield for name entry, and you'd like to be notifed
 whenever the field changes value through your own NameChanged action: 
@@ -150,7 +154,7 @@ and simply comment out the components you do not need.
 
 ## Parts API
 
-@docs Model, model, Msg, update
+@docs Model, model, Msg, update, subscriptions, init
 -}
 
 import Dict 
@@ -221,4 +225,46 @@ update msg model =
   Parts.update' msg model.mdl 
     |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
     |> Maybe.withDefault (model, Cmd.none)
+
+
+{-| Subscriptions and initialisation of elm-mdl. Some components requires
+subscriptions in order to function. Hook these up to your containing app as
+follows. 
+
+    import Material
+
+    type Model = 
+      { ...
+      , mdl : Material.Model 
+      }
+
+    type Msg = 
+      ...
+      | Mdl Material.Msg 
+
+    ...
+
+    App.program 
+      { init = ( model, Material.init Mdl )
+      , view = view
+      , subscriptions = Material.subs Mdl model
+      , update = update
+      }
+
+Currently, only Layout and Menu require subscriptions, and only Layout require
+initialisation. 
+-}
+subscriptions : (Msg obs -> obs) -> { model | mdl : Model } -> Sub obs
+subscriptions lift model = 
+  Sub.batch 
+    [ Layout.subs lift model.mdl 
+    , Menu.subs lift model.mdl
+    ] 
+
+
+{-| Initialisation. See `subscriptions` above.
+-}
+init : (Msg obs -> obs) -> Cmd obs
+init lift = 
+  Layout.sub0 lift
 

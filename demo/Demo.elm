@@ -382,13 +382,13 @@ main =
              document.getElementsByClassName("mdl-layout__tab-bar")[0].scrollWidth
           -}
           }
-          , Layout.sub0 Mdl
+          , Material.init Mdl
         )
     , view = view
     , subscriptions = \model ->
         Sub.batch
         [ Sub.map MenusMsg (Menu.subs Demo.Menus.Mdl model.menus.mdl)
-        , Layout.subs Mdl model.mdl
+        , Material.subscriptions Mdl model 
         ]
     , update = update
     }

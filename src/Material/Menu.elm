@@ -31,6 +31,32 @@ Refer to
 [this site](https://debois.github.io/elm-mdl/#/menus)
 for a live demo.
 
+# Subscriptions 
+
+The Menu component requires subscriptions to arbitrary mouse clicks to be set
+up. Example initialisation of containing app:  
+
+    import Material.Menu as Menu
+    import Material
+
+    type Model = 
+      { ...
+      , mdl : Material.Model -- Boilerplate
+      }
+
+    type Msg = 
+      ...
+      | Mdl Material.Msg -- Boilerplate
+
+    ...
+
+    App.program 
+      { init = init
+      , view = view
+      , subscriptions = Menu.subs Mdl model
+      , update = update
+      }
+
 # Render
 @docs render, subs
 
@@ -701,15 +727,15 @@ pack =
 subs : (Parts.Msg (Container b) m -> m) -> Container b -> Sub m
 subs lift =
   .menu
-  >> Dict.toList
-  >> List.map (\(idx, model) ->
-       Sub.map 
-         (pack lift idx)
-         (subscriptions model)
-     )
-  >> Sub.batch
-
-
+  >> Dict.foldl 
+       (\idx model ss -> 
+          Sub.map 
+            (pack lift idx)
+            (subscriptions model)
+          :: ss)
+       []
+  >> Sub.batch 
+      
 update' : Parts.Update Model (Msg msg) msg
 update' fwd msg model = 
   update fwd msg model 

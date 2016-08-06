@@ -43,6 +43,11 @@ sizes. Example initialisation of containing app:
     import Material.Layout as Layout
     import Material
 
+    type Model = 
+      { ...
+      , mdl : Material.Model -- Boilerplate
+      }
+
     type Msg = 
       ...
       | Mdl Material.Msg -- Boilerplate
@@ -52,11 +57,12 @@ sizes. Example initialisation of containing app:
     App.program 
       { init = ( model, Layout.sub0 Mdl )
       , view = view
-      , subscriptions = Layout.subs Mdl
+      , subscriptions = Layout.subs Mdl model
       , update = update
       }
 
 ## Tabs width 
+
 
 Tabs display chevrons when the viewport is too small to show all tabs
 simultaneously. Unfortunately, Elm currently does not give us a way to
