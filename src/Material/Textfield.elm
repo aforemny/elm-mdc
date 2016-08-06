@@ -8,6 +8,7 @@ module Material.Textfield exposing
   , maxlength
   , onBlur
   , onFocus
+  , style
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -42,8 +43,18 @@ for a live demo.
 @docs Property, value
   
 # Appearance
+
 @docs label, floatingLabel, error, disabled, rows, cols
 @docs autofocus, maxlength
+
+## Styling
+Textfields are implemented as `<input>` elements sitting inside a
+`<div>`, along with various helper elements. Supplying styling arguments (e.g.,
+`Options.css`) to `render` or `view` will apply these arguments to the
+outermost `<div>`.  If you wish to apply styling to the underlying `<input>`
+element, use the `style` property below. 
+
+@docs style
 
 # Type 
 @docs password, textarea, text', onInput
@@ -62,7 +73,7 @@ import Platform.Cmd
 
 import Parts exposing (Indexed)
 
-import Material.Options as Options exposing (cs, nop)
+import Material.Options as Options exposing (cs, css, nop, Style)
 
 
 -- OPTIONS
@@ -87,6 +98,7 @@ type alias Config m =
   , maxlength : Maybe Int
   , onBlur : Maybe (Html.Attribute m)
   , onFocus : Maybe (Html.Attribute m)
+  , style : List (Options.Style m)
   }
 
 
@@ -105,6 +117,7 @@ defaultConfig =
   , maxlength = Nothing
   , onBlur = Nothing
   , onFocus = Nothing
+  , style = []
   }
 
 
@@ -196,6 +209,14 @@ onFocus f =
       Just (Html.Events.on "focusin" (Decoder.succeed f)) })
 
 
+{-| Set properties on the actual `input` element in the Textfield.
+-}
+style : List (Style m) -> Property m
+style style =
+  Options.set
+    (\config -> { config | style = style ++ config.style })
+
+
 {-| Sets the type of input to 'password'.
 -}
 password : Property m 
@@ -283,6 +304,11 @@ update action model =
 
 
 {-| Component view
+
+Be aware that styling (third argument) is applied to the outermost element
+of the textfield's implementation, and so is mostly useful for positioning
+(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`
+if you need to apply styling to the underlying `<input>` element. 
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> Html m
 view lift model options =
@@ -336,10 +362,12 @@ view lift model options =
           , config.onFocus
           ]
       )
-      [ elementFunction
-          ([ class "mdl-textfield__input"
-          , style [ ("outline", "none") ]
-          , Html.Attributes.disabled config.disabled 
+      [ Options.styled' elementFunction
+          [ Options.many config.style
+          , cs "mdl-textfield__input"
+          , css "outline" "none"
+          ]
+          ([ Html.Attributes.disabled config.disabled 
           , Html.Events.onBlur (lift Blur)
           , Html.Events.onFocus (lift Focus)
           , case config.value of
@@ -371,11 +399,16 @@ type alias Container c =
   in `Material`, and a user message `ChangeAgeMsg Int`.
 
     Textfield.render Mdl [0] model.mdl
-      [ Textfield.label "Your age?"
+      [ Textfield.label "Age"
       , Textfield.floatingLabel
       , Textfield.value model.age
       , Textfield.onInput (String.toInt >> ChangeAgeMsg)
       ]
+
+Be aware that styling (third argument) is applied to the outermost element
+of the textfield's implementation, and so is mostly useful for positioning
+(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`
+if you need to apply styling to the underlying `<input>` element. 
 -}
 render 
   : (Parts.Msg (Container c) m -> m)
