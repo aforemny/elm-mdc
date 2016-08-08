@@ -78,7 +78,6 @@ import Platform.Cmd
 import Parts exposing (Indexed)
 
 import Material.Options as Options exposing (cs, css, nop, Style)
-import Dict exposing (Dict)
 
 
 -- OPTIONS
@@ -102,7 +101,7 @@ type alias Config m =
   , autofocus : Bool
   , maxlength : Maybe Int
   , style : List (Options.Style m)
-  , listeners : Dict String (Html.Attribute m)
+  , listeners : List (Html.Attribute m)
   }
 
 
@@ -120,7 +119,7 @@ defaultConfig =
   , autofocus = False
   , maxlength = Nothing
   , style = []
-  , listeners = Dict.empty
+  , listeners = []
   }
 
 
@@ -192,7 +191,7 @@ on event decoder =
     Options.set
       (\config ->
          { config |
-             listeners = (Dict.insert event (Html.Events.on event decoder) config.listeners)})
+             listeners = config.listeners ++ [(Html.Events.on event decoder)]})
 
 {-| Message to dispatch on input
 -}
@@ -353,7 +352,7 @@ view lift model options =
 
 
     listeners =
-      Dict.values config.listeners
+      config.listeners
 
     textValue =
       case config.value of

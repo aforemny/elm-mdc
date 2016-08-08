@@ -18,6 +18,7 @@ import Demo.Code as Code
 
 import Material.Color as Color
 import Json.Decode as Decoder
+import Material.Helpers as Helpers
 
 -- MODEL
 
@@ -30,6 +31,8 @@ type alias Model =
   , str6 : String
   , length : Float
   , focus5 : Bool
+  , str9 : String
+  , sel9 : String
   }
 
 
@@ -42,6 +45,8 @@ model =
   , str6 = ""
   , length = 5
   , focus5 = False
+  , str9 = ""
+  , sel9 = ""
   }
 
 
@@ -54,9 +59,11 @@ type Msg
   | Upd3 String
   | Upd4 String
   | Upd6 String
+  | Upd9 String
   | SetFocus5 Bool 
   | Slider Float
   | KeyUp KeyEvent
+  | MouseEvent Selection
 
 
 {-| Selection range
@@ -91,6 +98,20 @@ eventDecoder =
     selectionDecoder
 
 
+getSelectedText : String -> Selection -> String
+getSelectedText text { start, end } =
+  let
+    diff = abs (end - start)
+    text' =
+      if (end == start) then
+        ""
+      else
+        text
+          |> String.dropLeft start
+          |> String.left diff
+  in
+    text'
+
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
@@ -109,6 +130,9 @@ update action model =
     Upd6 str ->
       ( { model | str6 = str }, Cmd.none )
 
+    Upd9 str ->
+      ( { model | str9 = str }, Cmd.none )
+
     Slider value ->
         ( { model | length = value }, Cmd.none)
 
@@ -116,8 +140,16 @@ update action model =
       { model | focus5 = x } ! [ Cmd.none ]
 
     KeyUp { shift, keyCode, selection } ->
-      -- TODO: Do something with the event
-      (model, Cmd.none)
+      let
+        selected = getSelectedText model.str9 selection
+      in
+        ({ model | sel9 = selected }, Cmd.none)
+
+    MouseEvent selection ->
+      let
+        selected = getSelectedText model.str9 selection
+      in
+        ({ model | sel9 = selected }, Cmd.none)
 
 -- VIEW
 
@@ -250,7 +282,6 @@ view model =
         , Textfield.floatingLabel
         , Textfield.textarea
         , Textfield.rows 6
-        , Textfield.on "keyup" (Decoder.map KeyUp eventDecoder)
         ]
     , """
       Textfield.render MDL [7] model.mdl
@@ -305,6 +336,43 @@ view model =
          , Textfield.autofocus
          , Textfield.floatingLabel
          ]
+       """
+    )
+  , ( "Custom Event Handler(s)"
+    , Html.div
+        []
+        [ Textfield.render MDL [9] model.mdl
+            [ Textfield.label "Custom event handlers"
+            , Textfield.textarea
+            , Textfield.onInput Upd9
+            , Textfield.on "keyup" (Decoder.map KeyUp eventDecoder)
+            , Textfield.on "mouseup" (Decoder.map MouseEvent selectionDecoder)
+            , Textfield.on "mouseout" (Decoder.map MouseEvent selectionDecoder)
+              -- Should throttle mousemove
+              -- Used because mouseup happens before the selection variables are reset
+              -- when unselecting text. 
+            , Textfield.on "mousemove" (Decoder.map MouseEvent selectionDecoder)
+            ]
+        , Options.styled Html.p
+            [ css "width" "300px"
+            , css "word-wrap" "break-word"
+            ]
+            [ text <| "Selected text: " ++ model.sel9 ]
+        ]
+    , """
+      Textfield.render MDL [9] model.mdl
+        [ Textfield.label "Default multiline textfield"
+        , Textfield.textarea
+        , Textfield.onInput Upd9
+        , Textfield.on "keyup"
+            (Decoder.map KeyUp eventDecoder)
+        , Textfield.on "mouseup"
+            (Decoder.map MouseEvent selectionDecoder)
+        , Textfield.on "mouseout"
+            (Decoder.map MouseEvent selectionDecoder)
+        , Textfield.on "mousemove"
+            (Decoder.map MouseEvent selectionDecoder)
+        ]
        """
     )
 
