@@ -101,8 +101,6 @@ type alias Config m =
   , cols : Maybe Int
   , autofocus : Bool
   , maxlength : Maybe Int
-  , onBlur : Maybe (Html.Attribute m)
-  , onFocus : Maybe (Html.Attribute m)
   , style : List (Options.Style m)
   , listeners : Dict String (Html.Attribute m)
   }
@@ -121,8 +119,6 @@ defaultConfig =
   , cols = Nothing
   , autofocus = False
   , maxlength = Nothing
-  , onBlur = Nothing
-  , onFocus = Nothing
   , style = []
   , listeners = Dict.empty
   }
