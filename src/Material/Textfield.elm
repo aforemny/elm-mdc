@@ -9,6 +9,7 @@ module Material.Textfield exposing
   , onBlur
   , onFocus
   , style
+  , on
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -60,6 +61,9 @@ element, use the `style` property below.
 @docs password, textarea, text', onInput
 @docs onBlur, onFocus
 
+# Advanced
+@docs on
+
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
 
@@ -96,9 +100,8 @@ type alias Config m =
   , cols : Maybe Int
   , autofocus : Bool
   , maxlength : Maybe Int
-  , onBlur : Maybe (Html.Attribute m)
-  , onFocus : Maybe (Html.Attribute m)
   , style : List (Options.Style m)
+  , listeners : List (Html.Attribute m)
   }
 
 
@@ -115,9 +118,8 @@ defaultConfig =
   , cols = Nothing
   , autofocus = False
   , maxlength = Nothing
-  , onBlur = Nothing
-  , onFocus = Nothing
   , style = []
+  , listeners = []
   }
 
 
@@ -182,31 +184,34 @@ disabled =
     (\config -> { config | disabled = True })
 
 
+{-| Add custom event handlers
+ -}
+on : String -> (Decoder.Decoder m) -> Property m
+on event decoder =
+    Options.set
+      (\config ->
+         { config |
+             listeners = config.listeners ++ [(Html.Events.on event decoder)]})
+
 {-| Message to dispatch on input
 -}
 onInput : (String -> m) -> Property m
 onInput f = 
-  Options.set
-    (\config -> { config | onInput = 
-      Just (Html.Events.on "input" (Decoder.map f targetValue)) })
+  on "input" (Decoder.map f targetValue)
 
 
 {-| The `blur` event occurs when the input loses focus.
 -}
 onBlur : m -> Property m
 onBlur f =
-  Options.set
-    (\config -> { config | onBlur =
-      Just (Html.Events.on "focusout" (Decoder.succeed f)) })
+  on "blur" (Decoder.succeed f)
 
 
 {-| The `focus` event occurs when the input gets focus.
 -}
 onFocus : m -> Property m
 onFocus f =
-  Options.set
-    (\config -> { config | onFocus =
-      Just (Html.Events.on "focusin" (Decoder.succeed f)) })
+  on "focus" (Decoder.succeed f)
 
 
 {-| Set properties on the actual `input` element in the Textfield.
@@ -345,6 +350,24 @@ view lift model options =
         Just val -> [Html.Attributes.maxlength val]
         Nothing -> []
 
+
+    listeners =
+      config.listeners
+
+    textValue =
+      case config.value of
+        Just str ->
+          [ Html.Attributes.value str ]
+        Nothing ->
+          []
+
+    defaultInput =
+      case config.value of
+        Just str ->
+          Nothing
+        Nothing ->
+          Just <| Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
+
   in
     Options.apply summary div
       [ cs "mdl-textfield"
@@ -357,10 +380,10 @@ view lift model options =
       , if config.disabled then cs "is-disabled" else nop
       ]
       ( List.filterMap identity 
-          [ config.onInput
-          , config.onBlur
-          , config.onFocus
-          ]
+          ([ Just <| Html.Events.on "focusin" (Decoder.succeed (lift Focus))
+           , Just <| Html.Events.on "focusout" (Decoder.succeed (lift Blur))
+           , defaultInput
+           ])
       )
       [ Options.styled' elementFunction
           [ Options.many config.style
@@ -368,15 +391,8 @@ view lift model options =
           , css "outline" "none"
           ]
           ([ Html.Attributes.disabled config.disabled 
-          , Html.Events.onBlur (lift Blur)
-          , Html.Events.onFocus (lift Focus)
-          , case config.value of
-              Just str -> 
-                Html.Attributes.value str
-              Nothing -> 
-                Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
-          , Html.Attributes.autofocus config.autofocus
-          ] ++ typeAttributes ++ maxlength)
+           , Html.Attributes.autofocus config.autofocus
+           ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners)
           []
       , Html.label 
           [class "mdl-textfield__label"]  
