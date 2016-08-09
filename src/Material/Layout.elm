@@ -321,24 +321,16 @@ update' f action model =
           Nothing
 
     TransitionHeader { toCompact, fixedHeader } -> 
-      let 
-        headerVisible = (not model.isSmallScreen) || fixedHeader
-        model' = 
-          { model 
-          | isCompact = toCompact
-          , isAnimating = headerVisible 
-          }
-      in
-        if not model.isAnimating then 
-          Just 
-            ( { model 
-              | isCompact = toCompact
-              , isAnimating = headerVisible 
-              }
-            , delay 200 (f TransitionEnd) -- See comment on transitionend in view. 
-            )
-        else
-          Nothing
+      if not model.isAnimating then 
+        Just 
+          ( { model 
+            | isCompact = toCompact
+            , isAnimating = (not model.isSmallScreen) || fixedHeader
+            }
+          , Cmd.none 
+          )
+      else
+        Nothing
 
 
     TransitionEnd -> 
@@ -662,42 +654,28 @@ headerView lift config model (drawerButton, rows, tabs) =
   let 
     mode =
       case config.mode of
-        Standard  -> ""
-        Scrolling -> "mdl-layout__header--scroll"
-        Seamed    -> "mdl-layout__header--seamed"
-        Waterfall True -> "mdl-layout__header--waterfall mdl-layout__header--waterfall-hide-top"
-        Waterfall False -> "mdl-layout__header--waterfall"
+        Standard  -> nop
+        Scrolling -> cs "mdl-layout__header--scroll"
+        Seamed    -> cs "mdl-layout__header--seamed"
+        Waterfall True -> cs "mdl-layout__header--waterfall mdl-layout__header--waterfall-hide-top"
+        Waterfall False -> cs "mdl-layout__header--waterfall"
   in
-    Html.header
-      ([ classList
-          [ ("mdl-layout__header", True)
-          , ("is-casting-shadow", 
-              config.mode == Standard || 
-              (isWaterfall config.mode && model.isCompact)
-            )
-          , ("is-animating", model.isAnimating)
-          , ("is-compact", model.isCompact)
-          , (mode, mode /= "")
-          , ("mdl-layout__header--transparent", config.transparentHeader)
-          ]
+    Options.styled Html.header
+      [ cs "mdl-layout__header"
+      , cs "is-casting-shadow" `when` 
+           (config.mode == Standard || 
+             (isWaterfall config.mode && model.isCompact))
+      , cs "is-animating" `when` model.isAnimating
+      , cs "is-compact" `when` model.isCompact
+      , mode
+      , cs "mdl-layout__header--transparent" `when` config.transparentHeader
+      , Options.attribute <|
+          Events.onClick 
+            (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
+              |> lift)
+      , Options.attribute <| 
+          Events.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
       ]
-      |> List.append (
-        if isWaterfall config.mode then 
-          [  
-          --  Events.onClick addr Click
-          --, on "transitionend" Json.value (\_ -> Signal.message addr TransitionEnd)
-            {- There is no "ontransitionend" property; you'd have to add a listener, 
-            which Elm won't let us. We manually fire a delayed tick instead. 
-            See also: https://github.com/evancz/virtual-dom/issues/30
-            -}
-            Events.onClick 
-              (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
-               |> lift)
-          ]
-        else
-          []
-        )
-      )
       (List.concatMap (\x -> x)
          [ toList drawerButton
          , rows 
