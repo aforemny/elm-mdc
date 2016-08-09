@@ -14,7 +14,7 @@ import RouteUrl as Routing
 import Material
 import Material.Color as Color
 import Material.Layout as Layout
-import Material.Helpers exposing (pure, lift, lift')
+import Material.Helpers exposing (pure, lift, map1st, map2nd)
 import Material.Options as Options exposing (css, when)
 import Material.Scheme as Scheme
 import Material.Icon as Icon
@@ -150,7 +150,11 @@ update action model =
     BadgesMsg    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesMsg   Demo.Badges.update    a model
     LayoutMsg a -> lift  .layout    (\m x->{m|layout   =x}) LayoutMsg  Demo.Layout.update    a model
     MenusMsg a -> lift  .menus    (\m x->{m|menus   =x}) MenusMsg  Demo.Menus.update    a model
-    TextfieldMsg a -> lift  .textfields (\m x->{m|textfields=x}) TextfieldMsg Demo.Textfields.update a model
+    TextfieldMsg m -> 
+      Demo.Textfields.update m model.textfields 
+        |> Maybe.map (map1st (\x -> { model | textfields = x }))
+        |> Maybe.withDefault (model, Cmd.none)
+        |> map2nd (Cmd.map TextfieldMsg)
     SnackbarMsg  a -> lift  .snackbar   (\m x->{m|snackbar  =x}) SnackbarMsg Demo.Snackbar.update   a model
     TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
     TablesMsg   a -> lift  .tables    (\m x->{m|tables   =x}) TablesMsg  Demo.Tables.update    a model
