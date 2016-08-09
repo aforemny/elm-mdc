@@ -294,7 +294,11 @@ type alias Style m =
 
 
 {-| Install arbitrary `Html.Attribute`. Applicable only to `Style m`, not 
-general Properties. 
+general Properties. Use like this:
+
+    Options.div 
+      [ Options.attribute <| Html.onClick MyClickEvent ]
+      [ ... ]
 -}
 attribute : Html.Attribute m -> Style m 
 attribute =
