@@ -17,7 +17,7 @@ The
 [Live demo](https://debois.github.io/elm-mdl/) contains code samples for most components, which
 you may find helpful. 
 
-For a long-form tutorial, [@jadams](https://github.com/jadams) produced both an introduction to elm-mdl as both a [daily drip video](https://www.dailydrip.com/topics/elm/drips/elm-mdl-introduction) and a very nice [writeup](https://medium.com/@dailydrip/introduction-to-using-material-design-in-elm-dc2320087410#.dodoot1wd).
+For a long-form tutorial, you might like [@jadams](https://github.com/jadams) excellent "Introduction to elm-mdl", available as both a [daily drip video](https://www.dailydrip.com/topics/elm/drips/elm-mdl-introduction) and a very nice [writeup](https://medium.com/@dailydrip/introduction-to-using-material-design-in-elm-dc2320087410#.dodoot1wd).
 
 ### Get help
 
