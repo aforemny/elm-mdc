@@ -5,6 +5,7 @@ module Material.Helpers exposing
   , lift, lift'
   , Update, Update'
   , noAttr
+  , aria
   )
 
 {-| Convenience functions. These are mostly trivial functions that are used
@@ -12,7 +13,7 @@ internally in the library; you might
 find some of them useful. 
 
 # HTML & Events
-@docs filter, blurOn, noAttr
+@docs filter, blurOn, noAttr, aria
 
 # Cmd
 @docs pure, effect, delay, cmd, cssTransitionStep
@@ -191,3 +192,13 @@ cssTransitionStep x =
 noAttr : Html.Attribute a
 noAttr = 
   Html.Attributes.attribute "data-elm-mdl-noop" ""
+
+
+{-| Install aria-* attributes, conspicuously missing from elm-lang/html.
+-}
+aria : String -> Bool -> Html.Attribute a
+aria name value = 
+  if value then 
+    Html.Attributes.attribute ("aria-" ++ name) "true"
+  else
+    noAttr

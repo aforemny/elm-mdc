@@ -696,14 +696,19 @@ onKeypressFilterSpaceAndEnter = """
 
 
 
-drawerButton : (Msg -> m) -> Html m
-drawerButton lift =
+drawerButton : (Msg -> m) -> Bool -> Html m
+drawerButton lift isVisible =
   div 
     [ --onKeypressFilterSpaceAndEnter
     ]
     [
       div
-        [ class "mdl-layout__drawer-button"
+        [ classList 
+            [ ("mdl-layout__drawer-button", True)
+            ]
+        , Html.Attributes.attribute 
+            "aria-expanded" 
+            (if isVisible then "true" else "false")
         , tabindex 1
         , Events.onClick (lift ToggleDrawer)
         , Events.onWithOptions 
@@ -740,10 +745,13 @@ obfuscator lift isVisible =
 drawerView : (Msg -> m) -> Bool -> List (Html m) -> Html m
 drawerView lift isVisible elems =
   div
-    [ classList
-        [ ("mdl-layout__drawer", True)
+    [ classList 
+        [ ("mdl-layout__drawer", True) 
         , ("is-visible", isVisible)
         ]
+    , Html.Attributes.attribute 
+        "aria-hidden" 
+        (if isVisible then "false" else "true")
     ] 
     elems
 
@@ -780,11 +788,11 @@ view lift model options { drawer, header, tabs, main } =
       case (drawer, header, config.fixedHeader) of
         (_ :: _, _ :: _, True) ->
           -- Drawer with fixedHeader: Add the button to the header
-           (Nothing, Just <| drawerButton lift)
+           (Nothing, Just <| drawerButton lift drawerIsVisible)
 
         (_ :: _, _, _) ->
           -- Drawer, no or non-fixed header: Add the button before contents.
-           (Just <| drawerButton lift, Nothing)
+           (Just <| drawerButton lift drawerIsVisible, Nothing)
 
         _ ->
           -- No drawer: no button.

@@ -37,7 +37,7 @@ import Platform.Cmd exposing (Cmd, none)
 import Time exposing (Time)
 import Maybe exposing (andThen)
 
-import Material.Helpers exposing (map2nd, delay, cmd)
+import Material.Helpers exposing (map2nd, delay, cmd, aria)
 
 
 
@@ -269,6 +269,9 @@ view model =
         Inert -> False
         Active _ -> True
         Fading _ -> False  
+
+    action = 
+      Maybe.andThen contents .action 
   in
     div
       [ classList
@@ -276,7 +279,7 @@ view model =
         , ("mdl-snackbar", True)
         , ("mdl-snackbar--active", isActive)
         ]
-      -- , ariaHidden "true"
+        , aria "hidden" (not isActive)
       ]
       [ div
           [ class "mdl-snackbar__text"
@@ -288,15 +291,16 @@ view model =
       , button
           (  class "mdl-snackbar__action"
           :: type' "button"
-       -- :: ariaHidden "true"
-          :: ( contents 
-                |> flip Maybe.andThen .action
+          :: aria "hidden"
+               ( action 
+                   |> Maybe.map (always (not isActive))
+                   |> Maybe.withDefault True) 
+          :: ( action 
                 |> Maybe.map (always [ onClick (Move model.seq Clicked) ])
                 |> Maybe.withDefault []
              )
           )
-          ( contents
-              |> flip Maybe.andThen .action
+          ( action
               |> Maybe.map (\action -> [ text action ])
               |> Maybe.withDefault []
           )
