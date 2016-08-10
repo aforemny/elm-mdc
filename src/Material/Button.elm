@@ -276,8 +276,11 @@ Example use (uncolored flat button, assuming properly setup model):
 
     import Material.Button as Button
 
-    flatButton : Html
-    flatButton = Button.flat addr model Button.Plain [text "Click me!"]
+    flatButton : Model -> Html
+    flatButton model =
+      Button.render Mdl [0] model.mdl
+        [ Button.flat ]
+        [ text "Click me!" ]
 
 -}
 flat : Property m
@@ -297,8 +300,11 @@ Example use (colored raised button, assuming properly setup model):
 
     import Material.Button as Button
 
-    raisedButton : Html
-    raisedButton = Button.raised addr model Button.Colored [text "Click me!"]
+    raisedButton : Model -> Html
+    raisedButton model =
+      Button.render Mdl [0] model.mdl
+        [ Button.raised ]
+        [ text "Click me!" ]
 
 -}
 raised : Property m 
@@ -324,8 +330,11 @@ Example use (colored with a '+' icon):
     import Material.Button as Button
     import Material.Icon as Icon
 
-    fabButton : Html
-    fabButton = fab addr model Colored [Icon.i "add"]
+    fabButton : Model -> Html
+    fabButton model =
+      Button.render Mdl [0] model.mdl
+        [ Button.fab ]
+        [ Icon.i "add" ]
 -}
 fab : Property m
 fab = cs "mdl-button--fab"
@@ -347,7 +356,10 @@ Example use (no color, displaying a '+' icon):
     import Material.Icon as Icon
 
     iconButton : Html
-    iconButton = icon addr model Plain [Icon.i "add"]
+    iconButton =
+      Button.render Mdl [0] model.mdl
+        [ Button.icon ]
+        [ Icon.i "add" ]
 -}
 icon : Property m 
 icon = cs "mdl-button--icon"
