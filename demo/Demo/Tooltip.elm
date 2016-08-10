@@ -198,7 +198,7 @@ view model  =
             , Tooltip.top
             , Tooltip.container Html.span 
             ]
-              [ img [src "assets/elm.png", width 24, height 24] []
+              [ img [src "assets/images/elm.png", width 24, height 24] []
               , text " Elm"
               ]
         ]

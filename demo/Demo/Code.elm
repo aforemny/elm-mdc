@@ -127,29 +127,28 @@ trim s =
       |> String.join "\n"
 
 
-code : List (Property c m) -> String -> Html m
-code options str = 
-  div 
-    (Options.many
+format : String -> List (Property c m) -> String -> Html m
+format language options str = 
+  Options.styled 
+    (Markdown.toHtmlWith Markdown.defaultOptions)
+    (Options.many 
       [ css "overflow" "auto" 
       , css "border-radius" "2px"
       , css "font-size" "10pt"
       , Color.background (Color.color Color.BlueGrey Color.S50)
       , Elevation.e2
       ] :: options)
-    [ Markdown.toHtml [] <| "```elm\n" ++ trim str ++ "\n```" ]
+    ("```" ++ language ++ "\n" ++ trim str ++ "\n```")
+
+
+code : List (Property c m) -> String -> Html m
+code = 
+  format "elm"
 
 
 html : List (Property c m) -> String -> Html m
-html options str = 
-  div 
-    (Options.many
-      [ css "overflow" "auto" 
-      , css "border-radius" "2px"
-      , css "font-size" "10pt"
-      , Elevation.e2
-      ] :: options)
-    [ Markdown.toHtml [] <| "```html\n" ++ trim str ++ "\n```" ]
+html =
+  format "xml"
 
 
 -- VIEW

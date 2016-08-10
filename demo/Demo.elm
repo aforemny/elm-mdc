@@ -319,7 +319,7 @@ view' model =
       div []
         [ Scheme.topWithScheme model.layout.primary model.layout.accent contents
         , Html.node "script"
-           [ Html.Attributes.attribute "src" "assets/highlight.pack.js" ]
+           [ Html.Attributes.attribute "src" "assets/highlight/highlight.pack.js" ]
            []
         , case nth model.selectedTab tabs of
             Just ( "Dialog", _, _ ) -> 
@@ -407,7 +407,7 @@ stylesheet =
   /* The following line is better done in html. We keep it here for
      compatibility with elm-reactor.
    */
-  @import url("assets/styles/github-gist.css");
+  @import url("assets/highlight/github-gist.css");
 
   blockquote:before { content: none; }
   blockquote:after { content: none; }

@@ -143,19 +143,19 @@ avatars model =
   Lists.ul [ css "margin" "0", css "padding" "0" ]
     [ Lists.li []
         [ Lists.content []
-            [ Lists.avatarImage "assets/christoffer.jpg" []
+            [ Lists.avatarImage "assets/images/christoffer.jpg" []
             , text "Christoffer Wilhelm Eckersberg"
             ]
         ]
      , Lists.li []
         [ Lists.content []
-            [ Lists.avatarImage "assets/edvard.jpg" []
+            [ Lists.avatarImage "assets/images/edvard.jpg" []
             , text "Edvard Munch"
             ]
         ]
      , Lists.li []
         [ Lists.content []
-            [ Lists.avatarImage "assets/peder.jpg" []
+            [ Lists.avatarImage "assets/images/peder.jpg" []
             , text "Peder Severin Krøyer"
             ]
         ]
@@ -666,7 +666,7 @@ mail model idx (name, img, subj, date, txt) =
   in
     Lists.li [ Lists.withBody ]
       [ Lists.content []
-          [ Lists.avatarImage ("assets/" ++ img) []
+          [ Lists.avatarImage ("assets/images/" ++ img) []
           , text subj
           , Lists.body []
               [ Options.span [ css "font-weight" "600" ] [ text name ]

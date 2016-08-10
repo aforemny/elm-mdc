@@ -144,7 +144,7 @@ table model =
         , margin2
         ]
         [ Card.media 
-            [ css "background" "url('assets/table.jpg') center / cover"
+            [ css "background" "url('assets/images/table.jpg') center / cover"
             , css "height" (toString (wide/16 * 9) ++ "px")
             ]
             []
@@ -195,7 +195,7 @@ grenadine model =
         , margin1
         ]
         [ Card.title 
-            [ css "background" "url('assets/pomegranate.jpg') center / cover"
+            [ css "background" "url('assets/images/pomegranate.jpg') center / cover"
             , css "height" "256px"
             , css "padding" "0" -- Clear default padding to encompass scrim
             ] 
@@ -323,7 +323,7 @@ elm model =
       Card.view
         [ css "width" "256px"
         , css "height" "256px"
-        , css "background" "url('assets/elm.png') center / cover"
+        , css "background" "url('assets/images/elm.png') center / cover"
         , dynamic 3 (ShowCode1 code) model
         , margin1
         ]
@@ -377,7 +377,7 @@ playing model =
                 , Card.subhead [ white ] [ text "Jonathan Coulton" ] 
                 ]
             , Options.img 
-                [ Options.attribute <| Html.Attributes.src "assets/artificial-heart.jpg" 
+                [ Options.attribute <| Html.Attributes.src "assets/images/artificial-heart.jpg" 
                 , css "height" "96px"
                 , css "width" "96px"
                 ]
