@@ -316,8 +316,7 @@ mega props { top, bottom, middle } =
 -}
 left : List (Property m) -> List (Content m) -> Maybe (Section m)
 left styles content =
-  Just
-    <| Section
+  (Just << Section)
     <| Content
         { styles = styles
         , content = content
@@ -329,8 +328,7 @@ left styles content =
 -}
 right : List (Property m) -> List (Content m) -> Maybe (Section m)
 right styles content =
-  Just
-    <| Section
+  (Just << Section)
     <| Content
         { styles = styles
         , content = content
