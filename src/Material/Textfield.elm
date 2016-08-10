@@ -94,7 +94,6 @@ type alias Config m =
   , error : Maybe String
   , value : Maybe String
   , disabled : Bool
-  , onInput : Maybe (Html.Attribute m)
   , kind : Kind
   , rows : Maybe Int
   , cols : Maybe Int
@@ -113,7 +112,6 @@ defaultConfig =
   , value = Nothing
   , disabled = False
   , kind = Text
-  , onInput = Nothing
   , rows = Nothing
   , cols = Nothing
   , autofocus = False
