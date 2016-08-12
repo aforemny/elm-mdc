@@ -48,8 +48,7 @@ model =
 
 
 type Msg
-  = MenuMsg Int Menu.Msg
-  | Mdl (Material.Msg Msg)
+  = Mdl (Material.Msg Msg)
   | Select Int Int
   | SetIcon String
   | Flip Int
@@ -61,9 +60,6 @@ update action model =
   case action of
     Mdl action' ->
       Material.update action' model
-
-    MenuMsg idx action ->
-      (model, Cmd.none)
 
     Select menu item -> 
       ( { model | selected = Just (menu, item) }
