@@ -229,7 +229,7 @@ icons model align =
         padding = 
           css "padding-right" "24px"
       in
-        Menu.render Mdl [1] model.mdl 
+        Menu.render Mdl [2] model.mdl 
           (options model align)
           [ Menu.item 
               [ Menu.onSelect (Select 1 0), padding ]
@@ -251,7 +251,7 @@ icons model align =
         padding = 
           css "padding-right" "24px"
       in
-        Menu.render Mdl [1] model.mdl 
+        Menu.render Mdl [2] model.mdl 
           """ ++ showOptions model align ++ """
           [ Menu.item 
               [ Menu.onSelect MySelectMsg0, padding ]
