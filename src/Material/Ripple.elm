@@ -7,6 +7,7 @@ import Json.Decode as Json exposing ((:=), at)
 import Platform.Cmd exposing (Cmd, none)
 
 import Material.Helpers exposing (effect, pure, cssTransitionStep)
+
 import DOM
 
 
@@ -120,7 +121,11 @@ update action model =
       { model | animation = Inert } |> pure
 
     Tick ->
-      { model | animation = Frame 1 } |> pure
+      -- An `Up` might overtake the delayed `Tick`. 
+      if model.animation == Frame 0 then
+        { model | animation = Frame 1 } |> pure
+      else 
+        pure model
 
 
 
