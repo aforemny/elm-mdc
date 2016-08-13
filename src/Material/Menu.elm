@@ -540,7 +540,8 @@ view lift model properties items =
     itemSummaries =
       List.map (Options.collect defaultItemConfig << .options) items
   in
-    div
+    Options.apply summary div
+      ( css "position" "relative" :: properties)
       []
       [ styled button
           [ cs "mdl-button"
@@ -548,6 +549,7 @@ view lift model properties items =
           , cs "mdl-button--icon"
           , attribute (onKeyDown (Key itemSummaries)) `when` isActive model
           , attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
+          , attribute (Html.Events.onClick Close) `when` isActive model
           ]
           [ Icon.view config.icon
             [ cs "material-icons"
