@@ -766,8 +766,8 @@ srcUrl =
 
 references : List ( String, String )
 references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Lists"
+    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-List"
     , Page.mds "https://material.google.com/components/lists.html"
-    , Page.mdl "https://www.getmdl.io/components/index.html#lists"
+    , Page.mdl "https://www.getmdl.io/components/index.html#lists-section"
     ]
 
