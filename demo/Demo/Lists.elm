@@ -119,19 +119,19 @@ icons model =
   Lists.ul []
     [ Lists.li []
         [ Lists.content [] 
-            [ Lists.icon (Icon.view "inbox") []
+            [ Lists.icon "inbox" []
             , text "Inbox"
             ]
         ]
     , Lists.li []
         [ Lists.content [] 
-            [ Lists.icon (Icon.view "send") []
+            [ Lists.icon "send" []
             , text "Sent mail"
             ]
         ]
     , Lists.li []
         [ Lists.content [] 
-            [ Lists.icon (Icon.view "delete") []
+            [ Lists.icon "delete" []
             , text "Trash"
             ]
         ]
