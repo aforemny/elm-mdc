@@ -247,7 +247,7 @@ follows.
     App.program 
       { init = ( model, Material.init Mdl )
       , view = view
-      , subscriptions = Material.subs Mdl model
+      , subscriptions = Material.subscriptions Mdl
       , update = update
       }
 
