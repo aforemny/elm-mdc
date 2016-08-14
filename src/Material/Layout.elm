@@ -475,8 +475,8 @@ title styles =
 {-| Container for links.
 -}
 navigation : List (Style m) -> List (Html m) -> Html m
-navigation styles contents =
-  nav [class "mdl-navigation"] contents
+navigation styles =
+  Options.styled nav (cs "mdl-navigation" :: styles) 
 
 
 type LinkProp = LinkProp
