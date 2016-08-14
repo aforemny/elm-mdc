@@ -12,10 +12,6 @@ import Demo.Page as Page
 -- MODEL
 
 
-type alias Mdl = 
-  Material.Model 
-
-
 type alias Model =
   { mdl : Material.Model
   }

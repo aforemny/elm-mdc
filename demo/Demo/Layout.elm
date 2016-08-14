@@ -21,10 +21,6 @@ import Demo.Code as Code
 -- MODEL
 
 
-type alias Mdl = 
-  Material.Model 
-
-
 type HeaderType 
   = Waterfall Bool
   | Seamed

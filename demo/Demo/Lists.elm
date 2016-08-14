@@ -24,10 +24,6 @@ import Demo.Code as Code
 -- MODEL
 
 
-type alias Mdl =
-    Material.Model
-
-
 type alias Model =
     { mdl : Material.Model
     , toggles : Set Int

@@ -119,10 +119,6 @@ update action model =
 -- VIEW
 
 
-type alias Mdl =
-  Material.Model
-
-
 rx : String
 rx =
   "[0-9]*"

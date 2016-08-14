@@ -24,11 +24,6 @@ import Demo.Page as Page
 -- MODEL
 
 
-
-type alias Mdl = 
-  Material.Model 
-
-
 type Square' 
   = Appearing 
   | Growing
@@ -46,7 +41,7 @@ type alias Model =
   { count : Int
   , squares : List Square
   , snackbar : Snackbar.Model Int
-  , mdl : Mdl
+  , mdl : Material.Model
   }
 
 
