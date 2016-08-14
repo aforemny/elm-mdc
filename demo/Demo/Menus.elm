@@ -44,8 +44,7 @@ model =
 
 
 type Msg
-  = MenuMsg Int Menu.Msg
-  | Mdl (Material.Msg Msg)
+  = Mdl (Material.Msg Msg)
   | Select Int Int
   | SetIcon String
   | Flip Int
@@ -57,9 +56,6 @@ update action model =
   case action of
     Mdl action' ->
       Material.update action' model
-
-    MenuMsg idx action ->
-      (model, Cmd.none)
 
     Select menu item -> 
       ( { model | selected = Just (menu, item) }
@@ -229,7 +225,7 @@ icons model align =
         padding = 
           css "padding-right" "24px"
       in
-        Menu.render Mdl [1] model.mdl 
+        Menu.render Mdl [2] model.mdl 
           (options model align)
           [ Menu.item 
               [ Menu.onSelect (Select 1 0), padding ]
@@ -251,7 +247,7 @@ icons model align =
         padding = 
           css "padding-right" "24px"
       in
-        Menu.render Mdl [1] model.mdl 
+        Menu.render Mdl [2] model.mdl 
           """ ++ showOptions model align ++ """
           [ Menu.item 
               [ Menu.onSelect MySelectMsg0, padding ]

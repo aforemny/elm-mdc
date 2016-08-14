@@ -461,13 +461,13 @@ onSelectTab f =
 
 {-| Push subsequent elements in header row or drawer column to the right/bottom.
 -}
-spacer : (Html m)
+spacer : Html m
 spacer = div [class "mdl-layout-spacer"] []
 
 
 {-| Title in header row or drawer.
 -}
-title : List (Property m) -> List (Html m) -> Html m
+title : List (Options.Property c m) -> List (Html m) -> Html m
 title styles = 
   Options.span (cs "mdl-layout__title" :: styles) 
 
@@ -477,7 +477,6 @@ title styles =
 navigation : List (Style m) -> List (Html m) -> Html m
 navigation styles =
   Options.styled nav (cs "mdl-navigation" :: styles) 
-
 
 type LinkProp = LinkProp
 
@@ -513,7 +512,7 @@ link styles contents =
 
 {-| Header row. 
 -}
-row : List (Property m) -> List (Html m) -> Html m
+row : List (Options.Property c m) -> List (Html m) -> Html m
 row styles = 
   Options.div (cs "mdl-layout__header-row" :: styles) 
 

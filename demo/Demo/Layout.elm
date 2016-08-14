@@ -238,13 +238,13 @@ view model  =
                   , Toggles.value <| model.header == (Waterfall True) 
                   , Toggles.onClick (Update <| \m -> { m | header = (Waterfall True) })
                   ]
-                  [ text "Watefall (top)" ]
+                  [ text "Waterfall (top)" ]
               , Toggles.radio Mdl [7] model.mdl
                   [ Toggles.group "kind" 
                   , Toggles.value <| model.header == (Waterfall False) 
                   , Toggles.onClick (Update <| \m -> { m | header = (Waterfall False) })
                   ]
-                  [ text "Watefall (bottom)" ]
+                  [ text "Waterfall (bottom)" ]
               ]
           ]
       , div [] 
