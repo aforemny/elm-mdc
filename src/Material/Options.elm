@@ -71,7 +71,6 @@ import Html.Attributes
 import Material.Options.Internal exposing (..)
 
 import Json.Decode as Decoder
-import Dict exposing (Dict)
 
 -- PROPERTIES
 
@@ -92,7 +91,7 @@ type alias Summary c m =
   , css : List (String, String)  
   , attrs : List (Attribute m)
   , config : c
-  , listeners : Dict String (Decoder.Decoder m)
+  , listeners : List (String, (Decoder.Decoder m))
   }
 
 
@@ -109,7 +108,8 @@ collect1 f option acc =
     Attribute x -> { acc | attrs = x :: acc.attrs }
     Many options -> List.foldl (collect1 f) acc options
     Set g -> { acc | config = f g acc.config }
-    Listener k v -> { acc | listeners = Dict.insert k v acc.listeners }
+    -- Listener k v -> { acc | listeners = Dict.insert k v acc.listeners }
+    Listener k v -> { acc | listeners = (k, v) :: acc.listeners }
     None -> acc
 
 
@@ -123,14 +123,14 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : c -> List (Property c m) -> Summary c m
 collect config0 =
-  recollect { classes=[], css=[], attrs=[], config=config0, listeners = Dict.empty }
+  recollect { classes=[], css=[], attrs=[], config=config0, listeners = [] }
 
 
 collect' : List (Property c m) -> Summary () m 
 collect' options = 
   List.foldl 
     (collect1 (\_ _ -> ()))
-    { classes=[], css=[], attrs=[], config=(), listeners = Dict.empty}
+    { classes=[], css=[], attrs=[], config=(), listeners = [] }
     options
 
 

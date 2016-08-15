@@ -1,8 +1,10 @@
-module Dispatch exposing
-  ( Msg
-  , forward
-  , listeners
-  )
+module Dispatch
+  exposing
+    ( Msg
+    , forward
+    , listeners
+    , group
+    )
 
 {-| Utility module for dispatching multiple events from a single `Html.Event`
 
@@ -16,6 +18,7 @@ import Json.Decode as Json
 import Html.Events
 import Html
 import Dict exposing (Dict)
+
 
 {-| Message type
 -}
@@ -82,34 +85,35 @@ onEvt lift event decoders =
         |> Just
 
 
+{-| Updates value by given function if found, inserts otherwise
+-}
+upsert : comparable -> m -> (Maybe m -> Maybe m) -> Dict comparable m -> Dict comparable m
+upsert key value func dict =
+  if Dict.member key dict then
+    Dict.update key func dict
+  else
+    Dict.insert key value dict
+
 {-|
 -}
-combineListeners :
-  Dict String (Json.Decoder m)
-  -> Dict String (Json.Decoder m)
-  -> Dict String (List (Json.Decoder m))
-combineListeners first second =
-  Dict.merge
-    (\key value accum -> Dict.insert key [ value ] accum)
-    (\key v1 v2 accum -> Dict.insert key [ v1, v2 ] accum)
-    (\key value accum -> Dict.insert key [ value ] accum)
-    first
-    second
-    Dict.empty
+group : List ( comparable, a ) -> List ( comparable, List a )
+group items =
+  items
+    |> List.foldr
+       (\( k, v ) accum ->
+         upsert k [ v ] (Maybe.map (\a -> v :: a)) accum
+       )
+       Dict.empty
+    |> Dict.toList
 
 
 {-| Combines decoders for events and returns event listeners
 -}
 listeners :
-  (Msg m -> m)
-  -> Dict String (Json.Decoder m)
-  -> Dict String (Json.Decoder m)
-  -> List (Html.Attribute m)
-listeners lift first second =
-  let
-    items =
-      combineListeners first second
-  in
-    Dict.toList items
-      |> List.map (\( event, decoders ) -> onEvt lift event decoders)
-      |> List.filterMap identity
+  (Msg a -> a)
+  -> List ( String, List (Json.Decoder a) )
+  -> List (Html.Attribute a)
+listeners lift items =
+  items
+    |> List.map (\( event, decoders ) -> onEvt lift event decoders)
+    |> List.filterMap identity

@@ -386,9 +386,8 @@ view lift model options =
            Nothing -> [("input", Decoder.map (Input >> lift) targetValue)])
       ]
       |> List.concat
-      |> Dict.fromList
 
-    listeners = Dispatch.listeners (Multi >> lift) internal summary.listeners
+    listeners = Dispatch.listeners (Multi >> lift) (Dispatch.group <| internal ++ summary.listeners)
 
     textValue =
       case config.value of
