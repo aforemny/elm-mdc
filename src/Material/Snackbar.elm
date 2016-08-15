@@ -9,8 +9,8 @@ module Material.Snackbar exposing
 > The Material Design Lite (MDL) __snackbar__ component is a container used to
 > notify a user of an operation's status. It displays at the bottom of the
 > screen. A snackbar may contain an action button to execute a command for the
-> user. Msgs should undo the committed action or retry it if it failed for
-> example. Msgs should not be to close the snackbar. By not providing an
+> user. Actions should undo the committed action or retry it if it failed for
+> example. Actions should not be too close the snackbar. By not providing an
 > action, the snackbar becomes a __toast__ component.
 
 Refer to [this site](http://debois.github.io/elm-mdl/#snackbar)
@@ -52,7 +52,7 @@ or `snackbar` to construct `Contents`.
  - `action` defines a label for the action-button in the snackbar. If 
     no action is provided, the snackbar is a message-only toast. 
  - `payload` defines the data returned by Snackbar actions for this message. 
-   You will usually choose this to be an Msg of yours for later dispatch, 
+   You will usually choose this to be a message of yours for later dispatch, 
    e.g., if your snackbar has an "Undo" action, you would store the
    corresponding action as the payload. 
  - `timeout` is the amount of time the snackbar should be visible
