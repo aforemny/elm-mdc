@@ -80,6 +80,9 @@ import Parts exposing (Indexed)
 import Material.Options as Options exposing (cs, css, nop, Style)
 import Material.Options.Internal as Internal
 
+import Dict exposing (Dict)
+import Dispatch
+
 
 -- OPTIONS
 
@@ -101,7 +104,6 @@ type alias Config m =
   , autofocus : Bool
   , maxlength : Maybe Int
   , inner : List (Options.Style m)
-  , listeners : List (Html.Attribute m)
   }
 
 
@@ -118,7 +120,6 @@ defaultConfig =
   , autofocus = False
   , maxlength = Nothing
   , inner = []
-  , listeners = []
   }
 
 
@@ -186,12 +187,8 @@ disabled =
 {-| Add custom event handlers
  -}
 on : String -> (Decoder.Decoder m) -> Property m
-on event decoder =
-    Options.set
-      (\config ->
-         { config |
-             listeners = config.listeners ++ [(Html.Events.on event decoder)]})
-             
+on =
+  Options.on
 
 {-| Message to dispatch on input
 -}
@@ -307,25 +304,29 @@ defaultModel =
 
 {-| Component actions. `Input` carries the new value of the field.
 -}
-type Msg
+type Msg m
   = Blur
   | Focus
   | Input String
+  | Multi (Dispatch.Msg m)
 
 
 {-| Component update.
 -}
-update : Msg -> Model -> Model
+update : Msg msg -> Model -> (Model, Cmd msg)
 update action model =
   case action of
-    Input str -> 
-      { model | value = str }
-      
+    Multi msg ->
+      (model, Dispatch.forward msg)
+
+    Input str ->
+      ({ model | value = str }, Cmd.none)
+
     Blur ->
-      { model | isFocused = False }
+      ({ model | isFocused = False }, Cmd.none)
 
     Focus ->
-      { model | isFocused = True }
+      ({ model | isFocused = True }, Cmd.none)
 
 
 -- VIEW
@@ -338,7 +339,7 @@ of the textfield's implementation, and so is mostly useful for positioning
 (e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`
 if you need to apply styling to the underlying `<input>` element. 
 -}
-view : (Msg -> m) -> Model -> List (Property m) -> Html m
+view : (Msg m -> m) -> Model -> List (Property m) -> Html m
 view lift model options =
   let 
     ({ config } as summary) = 
@@ -374,8 +375,20 @@ view lift model options =
         Nothing -> []
 
 
-    listeners =
-      config.listeners
+    -- Internal events that require special handling because user provided events
+    -- might overlap with these
+    internal =
+      [[ ("focus", Decoder.succeed (lift Focus))
+       , ("blur", Decoder.succeed (lift Blur))
+       ]
+      , (case config.value of
+           Just _ -> []
+           Nothing -> [("input", Decoder.map (Input >> lift) targetValue)])
+      ]
+      |> List.concat
+      |> Dict.fromList
+
+    listeners = Dispatch.listeners (Multi >> lift) internal summary.listeners
 
     textValue =
       case config.value of
@@ -383,13 +396,6 @@ view lift model options =
           [ Html.Attributes.value str ]
         Nothing ->
           []
-
-    defaultInput =
-      case config.value of
-        Just str ->
-          Nothing
-        Nothing ->
-          Just <| Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
 
   in
     Options.apply summary div
@@ -402,10 +408,7 @@ view lift model options =
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
       ]
-      ( List.filterMap identity 
-          ([ defaultInput
-           ])
-      )
+      []
       [ Options.styled' elementFunction
           [ cs "mdl-textfield__input"
           , css "outline" "none"
@@ -465,7 +468,7 @@ render
   -> Html m
 render =
   Parts.create 
-    view (\_ msg model -> Just (update msg model, Cmd.none))
+    view (\_ msg model -> Just (update msg model))
     .textfield (\x c -> { c | textfield = x }) 
     defaultModel
 

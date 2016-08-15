@@ -1,6 +1,7 @@
 module Material.Options.Internal exposing (..)
 
 import Html
+import Json.Decode
 
 
 {-| Internal type of properties. Do not use directly; use constructor functions
@@ -12,6 +13,7 @@ type Property c m
   | Attribute (Html.Attribute m)
   | Many (List (Property c m))
   | Set (c -> c)
+  | Listener String (Json.Decode.Decoder m)
   | None
 
 
