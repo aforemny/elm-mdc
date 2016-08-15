@@ -57,7 +57,7 @@ model =
 
 
 type Msg
-  = MDL (Material.Msg Msg)
+  = Mdl (Material.Msg Msg)
   | Upd0 String
   | Upd3 String
   | Upd4 String
@@ -84,7 +84,7 @@ pure =
 update : Msg -> Model -> Maybe (Model, Cmd Msg)
 update action model =
   case action of
-    MDL action' ->
+    Mdl action' ->
       Material.update action' model |> Just
 
     Upd0 str ->
@@ -140,30 +140,30 @@ match str rx =
 textfields : Model -> List (String, Html Msg, String) 
 textfields model = 
   [ ( "Basic textfield"
-    , Textfield.render MDL [0] model.mdl
+    , Textfield.render Mdl [0] model.mdl
         [ Textfield.onInput Upd0 ]
     , """
-        Textfield.render MDL [0] model.mdl
+        Textfield.render Mdl [0] model.mdl
           [ Textfield.onInput Upd0 ]
        """
     )
 
   , ( "Labelled textfield"
-    , Textfield.render MDL [1] model.mdl
+    , Textfield.render Mdl [1] model.mdl
         [ Textfield.label "Labelled" ]
     , """
-       Textfield.render MDL [1] model.mdl
+       Textfield.render Mdl [1] model.mdl
          [ Textfield.label "Labelled" ]
        """
     )
   , ( "Labelled textfield, floating label"
-    , Textfield.render MDL [2] model.mdl
+    , Textfield.render Mdl [2] model.mdl
         [ Textfield.label "Floating label"
         , Textfield.floatingLabel
         , Textfield.text'
         ]
     , """
-        Textfield.render MDL [2] model.mdl
+        Textfield.render Mdl [2] model.mdl
           [ Textfield.label "Floating label"
           , Textfield.floatingLabel
           , Textfield.text'
@@ -171,7 +171,7 @@ textfields model =
        """
     )
   , ( "Disabled textfield"
-    , Textfield.render MDL [3] model.mdl
+    , Textfield.render Mdl [3] model.mdl
         [ Textfield.label "Disabled"
         , Textfield.disabled
         , Textfield.value <|
@@ -179,7 +179,7 @@ textfields model =
             ++ if model.str0 /= "" then " (still disabled, though)" else ""
         ]
     , """
-      Textfield.render MDL [3] model.mdl
+      Textfield.render Mdl [3] model.mdl
         [ Textfield.label "Disabled"
         , Textfield.disabled
         , Textfield.value <|
@@ -191,7 +191,7 @@ textfields model =
        """
     )
   , ( "Textfield with error checking"
-    , Textfield.render MDL [4] model.mdl
+    , Textfield.render Mdl [4] model.mdl
         [ Textfield.label "w/error checking"
         , if not <| match model.str4 rx' then
             Textfield.error <| "Doesn't match " ++ rx
@@ -200,7 +200,7 @@ textfields model =
         , Textfield.onInput Upd4
         ]
     , """
-    Textfield.render MDL [4] model.mdl
+    Textfield.render Mdl [4] model.mdl
       [ Textfield.label "w/error checking"
       , if not <| match model.str4 rx' then
           Textfield.error <| "Doesn't match " ++ rx
@@ -211,13 +211,13 @@ textfields model =
        """
     )
   , ( "Textfield for passwords"
-    , Textfield.render MDL [5] model.mdl
+    , Textfield.render Mdl [5] model.mdl
         [ Textfield.label "Enter password"
         , Textfield.floatingLabel
         , Textfield.password
         ]
     , """
-      Textfield.render MDL [5] model.mdl
+      Textfield.render Mdl [5] model.mdl
         [ Textfield.label "Enter password"
         , Textfield.floatingLabel
         , Textfield.password
@@ -225,12 +225,12 @@ textfields model =
        """
     )
   , ( "Multi-line textfield"
-    , Textfield.render MDL [6] model.mdl
+    , Textfield.render Mdl [6] model.mdl
         [ Textfield.label "Default multiline textfield"
         , Textfield.textarea
         ]
     , """
-      Textfield.render MDL [6] model.mdl
+      Textfield.render Mdl [6] model.mdl
         [ Textfield.label "Default multiline textfield"
         , Textfield.textarea
         ]
@@ -238,14 +238,14 @@ textfields model =
     )
 
   , ( "Multi-line textfield, 6 rows"
-    , Textfield.render MDL [7] model.mdl
+    , Textfield.render Mdl [7] model.mdl
         [ Textfield.label "Multiline with 6 rows"
         , Textfield.floatingLabel
         , Textfield.textarea
         , Textfield.rows 6
         ]
     , """
-      Textfield.render MDL [7] model.mdl
+      Textfield.render Mdl [7] model.mdl
         [ Textfield.label "Multiline with 6 rows"
         , Textfield.floatingLabel
         , Textfield.textarea
@@ -256,7 +256,7 @@ textfields model =
 
   , ( "Multi-line textfield with character limit"
     , Html.div []
-    [ Textfield.render MDL [8] model.mdl
+    [ Textfield.render Mdl [8] model.mdl
         [ Textfield.label ("Multiline textfield (" ++
                             (toString (String.length model.str6))
                             ++ " of " ++ (toString (truncate model.length))
@@ -285,7 +285,7 @@ textfields model =
         ]
     ]
     , """
-       Textfield.render MDL [8] model.mdl
+       Textfield.render Mdl [8] model.mdl
          [ Textfield.label
              ("Multiline textfield (" ++
                 (toString (String.length model.str6))
@@ -307,7 +307,7 @@ custom model =
   [ ( "Custom event handling"
     , Html.div
         []
-        [ Textfield.render MDL [9] model.mdl
+        [ Textfield.render Mdl [9] model.mdl
             [ Textfield.label "Custom event handling"
             , Textfield.textarea
             , Textfield.onInput Upd9
@@ -371,7 +371,7 @@ custom model =
       view : Model -> Html Msg
       view model = 
         div []
-          [ Textfield.render MDL [9] model.mdl
+          [ Textfield.render Mdl [9] model.mdl
               [ Textfield.label "Custom event handling"
               , Textfield.textarea
               , Textfield.onInput Input
