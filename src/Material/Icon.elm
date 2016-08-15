@@ -92,7 +92,7 @@ produce clickable icons; use icon buttons in Material.Button.icon for that.
     import Material.Icon as Icon
 
     icon : Html m
-    icon = Icon.view "trending_flat" [Icon.size48] []
+    icon = Icon.view "trending_flat" [Icon.size48]
 -}
 view : String -> List (Property m) -> Html m
 view name options =
