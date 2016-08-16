@@ -575,12 +575,6 @@ tabsView lift config model (tabs, tabStyles) =
                 ( (direction == Left && model.tabScrollState.canScrollLeft) ||
                   (direction == Right && model.tabScrollState.canScrollRight) )
           , Options.many tabStyles
-          , css "display" "inline-block" `when` not config.fixedTabs
-              {- Upstream sets `display: none` when under header threshold
-              (1024px) in v1.1.3, but removed that in master (must be a bug:
-              you want the chevrons to stick around if the tabs do). We're
-              impatient and fix it here.
-              -}
           ]
           [ Icon.view ("chevron_" ++ dir)
               [ Icon.size24
