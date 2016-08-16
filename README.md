@@ -30,7 +30,7 @@ or on [#elm-mdl](https://elm.slack.com/messages/elm-mdl) in the elm-slack.
 
 ### Other projects using Elm-mdl
 
-Check [reference implementations page](REFERENCE_IMPLEMENTATIONS.md) to see a list of projects that are using Elm-mdl.
+Check out the [users page](USERS.md) for a list of projects using elm-mdl.
 
 ### Contribute
 
