@@ -4,6 +4,7 @@ module Material.Options exposing
   , when, maybe, disabled
   , apply, styled, styled', stylesheet
   , Style, div, span, img, attribute, center, scrim
+  , type'
   )
 
 
@@ -37,7 +38,7 @@ applying MDL typography or color to standard elements.
 @docs Property
 
 # Constructors
-@docs cs, css, data, many, nop, when, maybe
+@docs cs, css, data, many, nop, when, maybe, type'
 
 # Html
 @docs Style, styled, styled'
@@ -322,3 +323,9 @@ depend on the underlying image. `0.6` works well often.
 scrim : Float -> Property c m
 scrim opacity = 
   css "background" <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " ++ toString opacity ++ "))" 
+
+
+{-| Defines the type of a button, input, embed, object, script, source, style, or menu.
+-}
+type' : String -> Property c m
+type' = Attribute << Html.Attributes.type'

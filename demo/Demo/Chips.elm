@@ -47,7 +47,7 @@ update action model =
 demoContainer : (Html m, String) -> (Grid.Cell m)
 demoContainer (html, code) =
   Grid.cell
-  [ Grid.size Grid.All 4 ]
+  [ Grid.size Grid.All 6 ]
   [ Options.div
       [ css "text-align" "center" ]
       [ html ]
@@ -59,88 +59,107 @@ demoContainer (html, code) =
 
 demoChips : List (Grid.Cell m)
 demoChips =
-  [ ( Options.styled Html.span
-        [ Chip.chip
-        ]
-        [ Options.styled Html.span
-            [ Chip.text ]
+  [ ( Chip.chip []
+        [ Chip.text []
             [ text "Basic Chip" ]
         ]
     , """
-       Examples
+      Chip.chip []
+        [ Chip.text []
+            [ text "Basic Chip" ]
+        ]
        """
     )
-  , ( Options.styled Html.span
-        [ Chip.chip
-        , Chip.deletable
-        ]
-        [ Options.styled Html.span
-            [ Chip.text ]
+  , ( Chip.chip
+        [ Chip.deletable ]
+        [ Chip.text []
             [ text "Deletable Chip" ]
-        , Options.styled' Html.button
-          [ Chip.action ]
-          [ Html.type' "button" ]
-          [ Icon.view "cancel"
-              []
-          ]
+
+        , Chip.button []
+            [ Icon.view "cancel" [] ]
         ]
     , """
-       Example
+      Chip.chip
+        [ Chip.deletable ]
+        [ Chip.text []
+            [ text "Deletable Chip" ]
+
+        , Chip.button []
+            [ Icon.view "cancel" [] ]
+        ]
        """
     )
-  , ( Options.styled' Html.button
-        [ Chip.chip ]
-        [ Html.type' "button" ]
-        [ Options.styled Html.span
-            [ Chip.text ]
+  , ( Chip.chip' Html.button
+        [ Options.type' "button" ]
+        [ Chip.text []
             [ text "Button Chip" ]
         ]
     , """
-       Examples
+      Chip.chip' Html.button
+        [ Options.type' "button" ]
+        [ Chip.text []
+            [ text "Button Chip" ]
+        ]
        """
     )
-  ,  ( Options.styled Html.span
-          [ Chip.chip
-          , Chip.contact
-          ]
-          [ Options.styled Html.span
-              [ Chip.contactItem
-              , Options.cs "mdl-color--teal "
+  ,  ( Chip.chip
+          [ Chip.contact ]
+          [ Chip.contactItem
+              [ Options.cs "mdl-color--teal"
               , Options.cs "mdl-color-text--white"
               ]
               [ text "A" ]
-          , Options.styled Html.span
-              [ Chip.text ]
+          , Chip.text []
               [ text "Contact Chip" ]
           ]
      , """
-        Example
+        Chip.chip
+          [ Chip.contact ]
+          [ Chip.contactItem
+              [ Options.cs "mdl-color--teal"
+              , Options.cs "mdl-color-text--white"
+              ]
+              [ text "A" ]
+          , Chip.text []
+              [ text "Contact Chip" ]
+          ]
         """
      )
-  , ( Options.styled Html.span
-        [ Chip.chip
-        , Chip.contact
+  , ( Chip.chip
+        [ Chip.contact
         , Chip.deletable
         ]
-        [ Options.styled Html.span
-            [ Chip.contactItem
-            , Options.cs "mdl-color--teal "
+        [ Chip.contactItem
+            [ Options.cs "mdl-color--teal"
             , Options.cs "mdl-color-text--white"
             ]
             [ text "A" ]
-        , Options.styled Html.span
-          [ Chip.text ]
-          [ text "Deletable Contact Chip" ]
 
-        , Options.styled' Html.button
-          [ Chip.action ]
-          [ Html.type' "button" ]
-          [ Icon.view "cancel"
-              []
-          ]
+        , Chip.text []
+            [ text "Deletable Contact Chip" ]
+
+        , Chip.action Html.a
+            [ Options.attribute <| Html.href "#chips" ]
+            [ Icon.view "cancel" [] ]
         ]
     , """
-       Example
+      Chip.chip
+        [ Chip.contact
+        , Chip.deletable
+        ]
+        [ Chip.contactItem
+            [ Options.cs "mdl-color--teal"
+            , Options.cs "mdl-color-text--white"
+            ]
+            [ text "A" ]
+
+        , Chip.text []
+            [ text "Deletable Contact Chip" ]
+
+        , Chip.action Html.a
+            [ Options.attribute <| Html.href "#chips" ]
+            [ Icon.view "cancel" [] ]
+        ]
        """
     )
   ] |> List.map demoContainer
