@@ -2,7 +2,7 @@ module Material.Chip exposing
   ( chip, chip'
   , text, text'
   , contactItem, contactItem'
-  , action, button
+  , action, actionButton
   , contact, deletable
   , HtmlElement
   )
@@ -24,7 +24,7 @@ for a live demo.
 @docs text, text'
 @docs contactItem, contactItem'
 @docs action
-@docs button
+@docs actionButton
 
 # Attributes
 @docs contact, deletable
@@ -88,8 +88,8 @@ action element props content =
 
 {-| Create a chip action `Html.button`
 -}
-button : List (Options.Property c msg) -> List (Html msg) -> Html msg
-button props =
+actionButton : List (Options.Property c msg) -> List (Html msg) -> Html msg
+actionButton props =
   action Html.button ((Options.type' "button") :: props)
 
 

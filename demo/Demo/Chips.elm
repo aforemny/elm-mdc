@@ -7,6 +7,7 @@ import Html.Attributes as Html
 import Material.Chip as Chip
 import Material.Icon as Icon
 import Material.Grid as Grid
+import Material.Color as Color
 import Material.Options as Options exposing (css, cs)
 import Material
 
@@ -74,8 +75,7 @@ demoChips =
         [ Chip.deletable ]
         [ Chip.text []
             [ text "Deletable Chip" ]
-
-        , Chip.button []
+        , Chip.actionButton []
             [ Icon.view "cancel" [] ]
         ]
     , """
@@ -83,8 +83,7 @@ demoChips =
         [ Chip.deletable ]
         [ Chip.text []
             [ text "Deletable Chip" ]
-
-        , Chip.button []
+        , Chip.actionButton []
             [ Icon.view "cancel" [] ]
         ]
        """
@@ -105,8 +104,8 @@ demoChips =
   ,  ( Chip.chip
           [ Chip.contact ]
           [ Chip.contactItem
-              [ Options.cs "mdl-color--teal"
-              , Options.cs "mdl-color-text--white"
+              [ Color.background Color.primary
+              , Color.text Color.white 
               ]
               [ text "A" ]
           , Chip.text []
@@ -116,8 +115,8 @@ demoChips =
         Chip.chip
           [ Chip.contact ]
           [ Chip.contactItem
-              [ Options.cs "mdl-color--teal"
-              , Options.cs "mdl-color-text--white"
+              [ Color.background Color.primary
+              , Color.text Color.white
               ]
               [ text "A" ]
           , Chip.text []
@@ -130,14 +129,12 @@ demoChips =
         , Chip.deletable
         ]
         [ Chip.contactItem
-            [ Options.cs "mdl-color--teal"
-            , Options.cs "mdl-color-text--white"
+            [ Color.background Color.primary
+            , Color.text Color.white
             ]
             [ text "A" ]
-
         , Chip.text []
             [ text "Deletable Contact Chip" ]
-
         , Chip.action Html.a
             [ Options.attribute <| Html.href "#chips" ]
             [ Icon.view "cancel" [] ]
@@ -148,14 +145,12 @@ demoChips =
         , Chip.deletable
         ]
         [ Chip.contactItem
-            [ Options.cs "mdl-color--teal"
-            , Options.cs "mdl-color-text--white"
+            [ Color.background Color.primary
+            , Color.text Color.white
             ]
             [ text "A" ]
-
         , Chip.text []
             [ text "Deletable Contact Chip" ]
-
         , Chip.action Html.a
             [ Options.attribute <| Html.href "#chips" ]
             [ Icon.view "cancel" [] ]
