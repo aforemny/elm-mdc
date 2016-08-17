@@ -190,6 +190,7 @@ on event decoder =
       (\config ->
          { config |
              listeners = config.listeners ++ [(Html.Events.on event decoder)]})
+             
 
 {-| Message to dispatch on input
 -}
@@ -202,14 +203,14 @@ onInput f =
 -}
 onBlur : m -> Property m
 onBlur f =
-  on "blur" (Decoder.succeed f)
+  on "focusout" (Decoder.succeed f)
 
 
 {-| The `focus` event occurs when the input gets focus.
 -}
 onFocus : m -> Property m
 onFocus f =
-  on "focus" (Decoder.succeed f)
+  on "focusin" (Decoder.succeed f)
 
 
 {-| Set properties on the actual `input` element in the Textfield.
@@ -378,9 +379,7 @@ view lift model options =
       , if config.disabled then cs "is-disabled" else nop
       ]
       ( List.filterMap identity 
-          ([ Just <| Html.Events.on "focusin" (Decoder.succeed (lift Focus))
-           , Just <| Html.Events.on "focusout" (Decoder.succeed (lift Blur))
-           , defaultInput
+          ([ defaultInput
            ])
       )
       [ Options.styled' elementFunction
@@ -390,6 +389,8 @@ view lift model options =
           ]
           ([ Html.Attributes.disabled config.disabled 
            , Html.Attributes.autofocus config.autofocus
+           , Html.Events.on "focus" (Decoder.succeed (lift Focus))
+           , Html.Events.on "blur" (Decoder.succeed (lift Blur))
            ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners)
           []
       , Html.label 
