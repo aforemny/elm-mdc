@@ -254,7 +254,7 @@ textfields model =
        """
     )
 
-  , ( "Multi-line textfield with character limit"
+  , ( "Multi-line textfield with character limit (focused: " ++ (toString model.focus5) ++ ")"
     , Html.div []
     [ Textfield.render Mdl [8] model.mdl
         [ Textfield.label ("Multiline textfield (" ++
