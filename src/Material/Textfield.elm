@@ -200,6 +200,17 @@ onInput f =
 
 
 {-| The `blur` event occurs when the input loses focus.
+
+Currently to support this on Firefox you need to include a
+polyfill that enables `focusin` and `focusout` events.
+For example [polyfill.io](https://polyfill.io)
+
+Add the following to your index.html
+
+```html
+<script src="https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin"></script>
+```
+
 -}
 onBlur : m -> Property m
 onBlur f =
@@ -207,6 +218,17 @@ onBlur f =
 
 
 {-| The `focus` event occurs when the input gets focus.
+
+Currently to support this on Firefox you need to include a
+polyfill that enables `focusin` and `focusout` events.
+For example [polyfill.io](https://polyfill.io)
+
+Add the following to your index.html
+
+```html
+<script src="https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin"></script>
+```
+
 -}
 onFocus : m -> Property m
 onFocus f =
