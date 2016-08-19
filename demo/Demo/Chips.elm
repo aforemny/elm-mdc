@@ -14,6 +14,7 @@ import Material
 import Material.Textfield as Textfield
 import Material.Helpers as Helpers
 import Material.Card as Card
+import Material.Button as Button
 
 import Demo.Page as Page
 import Demo.Code as Code
@@ -29,6 +30,7 @@ type alias Model =
   { mdl : Material.Model
   , chips : Dict Int String
   , value : String
+  , details : String
   }
 
 
@@ -37,6 +39,7 @@ model =
   { mdl = Material.model
   , chips = Dict.fromList [(0, "Chip 0")]
   , value = ""
+  , details = ""
   }
 
 
@@ -89,15 +92,14 @@ update action model =
 
     ChipClick index ->
       let
-        _ = Debug.log "CLICKED" index
+        details =
+          Maybe.withDefault ""
+            ( Dict.get index model.chips )
       in
-        (model, Cmd.none)
+        ({ model | details = details }, Cmd.none)
 
     AddChip index content ->
       let
-        -- _ = Debug.log "Adding chip" index
-        -- _ = Debug.log "Content" content
-
         model' =
           { model | chips = Dict.insert index content model.chips }
       in
@@ -105,10 +107,21 @@ update action model =
 
     RemoveChip index ->
       let
-        _ = Debug.log "Removing chip" index
+        d' =
+          Maybe.withDefault ""
+            ( Dict.get index model.chips )
+
+        details =
+          if d' == model.details then
+            ""
+          else
+            model.details
 
         model' =
-          { model | chips = Dict.remove index model.chips }
+          { model |
+            chips = Dict.remove index model.chips
+          , details = details
+          }
 
       in
         (model', Cmd.none)
@@ -188,7 +201,7 @@ demoChips =
         """
      )
   , ( Chip.chipSpan
-        [ Chip.deleteLink "#chips"]
+        [ Chip.deleteLink "#chips" ]
         [ Chip.contact Html.span
             [ Color.background Color.primary
             , Color.text Color.white
@@ -216,7 +229,7 @@ demoChips =
             [ Options.css "background-image" "url('assets/images/elm.png')"
             , Options.css "background-size" "cover"
             ]
-            [ text "" ]
+            []
         , Chip.content []
             [ text "Chip with image" ]
         ]
@@ -228,7 +241,7 @@ demoChips =
             , Options.css "background-size"
                 "cover"
             ]
-            [ text "" ]
+            []
         , Chip.content []
             [ text "Chip with image" ]
         ]
@@ -257,35 +270,74 @@ view model  =
       ]
 
     interactive =
-      [ Options.styled Html.div
-          [ Color.background Color.white
+      [ Html.h4 [] [ text "Interactive demo"]
+
+      , Html.p []
+          [ text "Click on a chip to show its details on a card. Click on the delete icon to remove the chip"]
+
+      , Options.div
+          [ Options.css "display" "flex"
+          , Options.css "align-items" "flex-start"
+          , Options.css "flex-flow" "row-wrap"
           ]
-          ((Dict.toList model.chips
-            |> List.map (\ (index, value) ->
-                           Chip.chipSpan
-                             [ Options.css "margin" "17.5px 0"
-                             , Chip.onClick (ChipClick index)
-                             , Chip.deleteClick (RemoveChip index)
-                             ]
-                             [ Chip.contact Html.img
-                                 [ Options.css "background-image" "url('assets/images/elm.png')"
-                                 , Options.css "background-size" "cover"
-                                 ]
-                                 [ text "" ]
-                             , Chip.content []
-                                 [ text value ]
-                             ]
-                        )
-          ) ++
-             [ Textfield.render Mdl [0] model.mdl
-                 [ Textfield.label "Search"
-                 , Options.css "margin-left" "20px"
-                 , Textfield.on "keyup" (Json.map KeyUp Html.keyCode)
-                 , Textfield.onInput Input
-                 , Textfield.value model.value
-                 ]
-             ]
-          )
+          [ Options.div
+              [ Options.css "width" "200px"
+              , Options.css "flex-shrink" "0"
+              , Options.css "margin-right" "16px"
+              ]
+              ( case model.details of
+                  "" -> []
+                  _ ->
+                    [ Card.view
+                        [ Options.css "width" "200px"
+                        , Color.background (Color.color Color.Pink Color.S500)
+                        ]
+                        [ Card.title []
+                            [ Card.head
+                                [ Color.text Color.white ]
+                                [ text model.details] ]
+                        , Card.text
+                            [ Color.text Color.white ]
+                            [ text "Touching a chip opens a full detailed view (either in a card or full screen) or a menu of options related to that chip." ]
+                        ]
+
+                    ]
+              )
+          , Options.styled Html.div
+              [ Color.background Color.white
+              , Options.css "flex-grow" "1"
+              ]
+              ((Dict.toList model.chips
+               |> List.map (\ (index, value) ->
+                              Chip.chipSpan
+                              [ Options.css "margin" "17.5px 0"
+                              , Chip.onClick (ChipClick index)
+                              , Chip.deleteClick (RemoveChip index)
+                              ]
+                              [ Chip.content []
+                                  [ text value ]
+                              ]
+                           )
+               ) ++
+                 [ Textfield.render Mdl [0] model.mdl
+                     [ Textfield.label "Write and press enter to create a chip"
+                     , Options.css "margin-left" "20px"
+                     , Textfield.on "keyup" (Json.map KeyUp Html.keyCode)
+                     , Textfield.onInput Input
+                     , Textfield.value model.value
+                     ]
+                 , Button.render Mdl [0] model.mdl
+                     [ Button.colored
+                     , Button.ripple
+                     , Button.raised
+                     , Button.onClick (AddChip ((lastIndex model.chips) + 1) ("Chip " ++ toString ((lastIndex model.chips) + 1)))
+                     ]
+                     [ text "Add chip" ]
+                 ])
+          ]
+
+
+
       ]
   in
     Page.body1' "Chips" srcUrl intro references
