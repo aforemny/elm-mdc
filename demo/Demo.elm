@@ -318,6 +318,10 @@ view' model =
     |> (\contents ->
       div []
         [ Scheme.topWithScheme model.layout.primary model.layout.accent contents
+
+        , Html.node "script"
+           [ Html.Attributes.attribute "src" "https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin" ]
+           []
         , Html.node "script"
            [ Html.Attributes.attribute "src" "assets/highlight/highlight.pack.js" ]
            []
