@@ -50,9 +50,6 @@ type Msg
   = Mdl (Material.Msg Msg)
   | AddChip Int String
   | RemoveChip Int
-  | NoOp
-  | KeyUp Int
-  | Input String
   | ChipClick Int
 
 
@@ -75,26 +72,6 @@ addChip dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    NoOp ->
-        (model, Cmd.none)
-
-    Input value ->
-      ( { model | value = value }, Cmd.none )
-
-    KeyUp keyCode ->
-      let
-        -- _ = Debug.log "KeyUp" keyCode
-
-        cmds =
-          if keyCode == 13 then
-            [ Helpers.cmd (AddChip ((lastIndex model.chips) + 1) model.value)
-            , Helpers.cmd (Input "")
-            ]
-          else
-            []
-      in
-        (model, Cmd.batch cmds)
-
     Mdl action' ->
       Material.update action' model
 
