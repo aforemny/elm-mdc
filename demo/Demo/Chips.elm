@@ -37,7 +37,7 @@ type alias Model =
 model : Model
 model =
   { mdl = Material.model
-  , chips = Dict.fromList [(0, "Chip 0")]
+  , chips = Dict.fromList [(0, "Amazing Chip 0")]
   , value = ""
   , details = ""
   }
@@ -63,6 +63,14 @@ lastIndex dict =
     |> List.reverse
     |> List.head
     |> Maybe.withDefault 0
+
+
+addChip : Dict Int String -> Msg
+addChip dict =
+  let
+    index = 1 + lastIndex dict
+  in
+    AddChip index ("Amazing Chip " ++ toString index)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
@@ -278,7 +286,8 @@ view model  =
       , Options.div
           [ Options.css "display" "flex"
           , Options.css "align-items" "flex-start"
-          , Options.css "flex-flow" "row-wrap"
+          , Options.css "flex-flow" "row wrap"
+          , Options.css "min-height" "200px"
           ]
           [ Options.div
               [ Options.css "width" "200px"
@@ -303,40 +312,48 @@ view model  =
 
                     ]
               )
-          , Options.styled Html.div
-              [ Color.background Color.white
-              , Options.css "flex-grow" "1"
+          , Options.div
+              [ Options.css "flex-grow" "1"
+              , Options.css "width" "75%"
               ]
-              ((Dict.toList model.chips
-               |> List.map (\ (index, value) ->
-                              Chip.chipSpan
-                              [ Options.css "margin" "17.5px 0"
-                              , Chip.onClick (ChipClick index)
-                              , Chip.deleteClick (RemoveChip index)
-                              ]
-                              [ Chip.content []
-                                  [ text value ]
-                              ]
-                           )
-               ) ++
-                 [ Textfield.render Mdl [0] model.mdl
-                     [ Textfield.label "Write and press enter to create a chip"
-                     , Options.css "margin-left" "20px"
-                     , Textfield.on "keyup" (Json.map KeyUp Html.keyCode)
-                     , Textfield.onInput Input
-                     , Textfield.value model.value
-                     ]
-                 , Button.render Mdl [0] model.mdl
-                     [ Button.colored
-                     , Button.ripple
-                     , Button.raised
-                     , Button.onClick (AddChip ((lastIndex model.chips) + 1) ("Chip " ++ toString ((lastIndex model.chips) + 1)))
-                     ]
-                     [ text "Add chip" ]
-                 ])
+              [ Options.styled Html.div
+                  [ Color.background Color.white
+                  ]
+                  ((Dict.toList model.chips
+                   |> List.map (\ (index, value) ->
+                                  Chip.chipButton
+                                    [ Options.css "margin" "5px 5px"
+                                    , Chip.onClick (ChipClick index)
+                                    , Chip.deleteClick (RemoveChip index)
+                                    ]
+                                    [ Chip.content []
+                                        [ text value ]
+                                    ]
+                               )
+                   ) ++ [])
+              , Button.render Mdl [0] model.mdl
+                  [ Button.colored
+                  , Button.ripple
+                  , Button.raised
+                  , Button.onClick (addChip model.chips)
+                  ]
+                  [ text "Add chip" ]
+
+              ]
           ]
 
-
+      , Code.code
+          [ Options.css "margin-top" "20px"]
+          """
+            Chip.chipButton
+              [ Options.css "margin" "5px 5px"
+              , Chip.onClick (ChipClick index)
+              , Chip.deleteClick (RemoveChip index)
+              ]
+              [ Chip.content []
+                  [ text ("Amazing Chip " ++ toString index ) ]
+              ]
+           """
 
       ]
   in

@@ -1,10 +1,20 @@
-module Material.Chip exposing
-  ( Property, HtmlElement, Item
-  , chip, chipButton, chipSpan
-  , content , text , contact
-  , deleteIcon , deleteLink , deleteClick
-  , on, onClick
-  )
+module Material.Chip
+  exposing
+    ( Property
+    , HtmlElement
+    , Content
+    , chip
+    , chipButton
+    , chipSpan
+    , content
+    , text
+    , contact
+    , deleteIcon
+    , deleteLink
+    , deleteClick
+    , on
+    , onClick
+    )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#chips-section):
 
@@ -19,7 +29,7 @@ for a live demo.
 
 
 # Types
-@docs Property, HtmlElement, Item
+@docs Property, HtmlElement, Content
 
 # Elements
 @docs chip, chipButton, chipSpan
@@ -31,20 +41,13 @@ for a live demo.
 
 -}
 
--- ( chip, chip'
--- , text, text'
--- , contactItem, contactItem'
--- , action, actionButton
--- , contact, deletable
--- , HtmlElement
--- )
-
 import Html exposing (Attribute, Html)
 import Html.Events
 import Html.Attributes
 import Material.Options as Options exposing (cs)
 import Material.Icon as Icon
 import Material.Options.Internal as Internal
+import Material.Helpers as Helpers
 import Json.Decode as Json
 
 
@@ -79,7 +82,7 @@ type alias Property msg =
 
 {-| Chip can contain only specific kind of content
 -}
-type Item msg
+type Content msg
   = Contact (HtmlElement msg) (List (Property msg)) (List (Html msg))
   | Text (List (Property msg)) (List (Html msg))
   | Action (HtmlElement msg) (List (Property msg)) (List (Html msg))
@@ -138,14 +141,18 @@ on event decoder =
 -}
 onClick : msg -> Property msg
 onClick msg =
-  on "click" (Json.succeed msg)
+  Options.many
+    [ on "click" (Json.succeed msg)
+    , Internal.attribute <| Helpers.blurOn "click"
+    , Internal.attribute <| Helpers.blurOn "mouseleave"
+    ]
 
 
 type alias Priority =
   Int
 
 
-priority : Item a -> Priority
+priority : Content a -> Priority
 priority item =
   case item of
     Contact _ _ _ ->
@@ -158,9 +165,9 @@ priority item =
       2
 
 
-{-| Renders a given `Item`
+{-| Renders a given `Content`
 -}
-renderItem : Item msg -> Html msg
+renderItem : Content msg -> Html msg
 renderItem item =
   case item of
     Contact element props content ->
@@ -189,7 +196,7 @@ hasValue m =
       False
 
 
-getActionElement : Config msg -> Maybe (Item msg)
+getActionElement : Config msg -> Maybe (Content msg)
 getActionElement config =
   let
     hasIcon =
@@ -245,21 +252,21 @@ getActionElement config =
 
 {-| Creates a chip using `Html.button`
 -}
-chipButton : List (Property msg) -> List (Item msg) -> Html msg
+chipButton : List (Property msg) -> List (Content msg) -> Html msg
 chipButton props =
   chip Html.button (Options.type' "button" :: props)
 
 
 {-| Creates a chip using `Html.span`
 -}
-chipSpan : List (Property msg) -> List (Item msg) -> Html msg
+chipSpan : List (Property msg) -> List (Content msg) -> Html msg
 chipSpan =
   chip Html.span
 
 
 {-| Create a chip contained in the given element
 -}
-chip : HtmlElement msg -> List (Property msg) -> List (Item msg) -> Html msg
+chip : HtmlElement msg -> List (Property msg) -> List (Content msg) -> Html msg
 chip element props items =
   let
     summary =
@@ -299,36 +306,34 @@ chip element props items =
       ([ cs "mdl-chip"
        , cs "mdl-chip--contact" `Options.when` isContact
        , cs "mdl-chip--deletable" `Options.when` isDeletable
-       ]
-        ++ props
-      )
+       ] ++ props)
       listeners
       content
 
 
 {-| Generate chip content
 -}
-content : List (Property msg) -> List (Html msg) -> Item msg
+content : List (Property msg) -> List (Html msg) -> Content msg
 content =
   Text
 
 
 {-| Shorthand for `Chip.content [] [ Html.text "text" ]`
 -}
-text : List (Property msg) -> String -> Item msg
+text : List (Property msg) -> String -> Content msg
 text props txt =
   Text props [ Html.text txt ]
 
 
 {-| Create a chip action contained in the given element
 -}
-action : HtmlElement msg -> List (Property msg) -> List (Html msg) -> Item msg
+action : HtmlElement msg -> List (Property msg) -> List (Html msg) -> Content msg
 action =
   Action
 
 
 {-| Create a chip contact contained in the given element
 -}
-contact : HtmlElement msg -> List (Property msg) -> List (Html msg) -> Item msg
+contact : HtmlElement msg -> List (Property msg) -> List (Html msg) -> Content msg
 contact =
   Contact
