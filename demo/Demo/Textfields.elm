@@ -224,6 +224,22 @@ textfields model =
         ]
        """
     )
+  , ( "Expandable textfield"
+    , Textfield.render Mdl [11] model.mdl
+        [ Textfield.label "Expandable"
+        , Textfield.floatingLabel
+        , Textfield.expandable "expandable-1"
+        , Textfield.expandableIcon "search"
+        ]
+    , """
+      Textfield.render Mdl [11] model.mdl
+        [ Textfield.label "Expandable"
+        , Textfield.floatingLabel
+        , Textfield.expandable "expandable-1"
+        , Textfield.expandableIcon "search"
+        ]
+       """
+    )
   , ( "Multi-line textfield"
     , Textfield.render Mdl [6] model.mdl
         [ Textfield.label "Default multiline textfield"
