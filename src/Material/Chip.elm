@@ -4,8 +4,8 @@ module Material.Chip
     , HtmlElement
     , Content
     , chip
-    , chipButton
-    , chipSpan
+    , button
+    , span
     , content
     , text
     , contact
@@ -32,7 +32,7 @@ for a live demo.
 @docs Property, HtmlElement, Content
 
 # Elements
-@docs chip, chipButton, chipSpan
+@docs chip, button, span
 @docs content , text , contact
 
 # Properties
@@ -141,11 +141,7 @@ on event decoder =
 -}
 onClick : msg -> Property msg
 onClick msg =
-  Options.many
-    [ on "click" (Json.succeed msg)
-    , Internal.attribute <| Helpers.blurOn "click"
-    , Internal.attribute <| Helpers.blurOn "mouseleave"
-    ]
+  on "click" (Json.succeed msg)
 
 
 type alias Priority =
@@ -252,15 +248,15 @@ getActionElement config =
 
 {-| Creates a chip using `Html.button`
 -}
-chipButton : List (Property msg) -> List (Content msg) -> Html msg
-chipButton props =
+button : List (Property msg) -> List (Content msg) -> Html msg
+button props =
   chip Html.button (Options.type' "button" :: props)
 
 
 {-| Creates a chip using `Html.span`
 -}
-chipSpan : List (Property msg) -> List (Content msg) -> Html msg
-chipSpan =
+span : List (Property msg) -> List (Content msg) -> Html msg
+span =
   chip Html.span
 
 
@@ -306,6 +302,10 @@ chip element props items =
       ([ cs "mdl-chip"
        , cs "mdl-chip--contact" `Options.when` isContact
        , cs "mdl-chip--deletable" `Options.when` isDeletable
+
+       , Internal.attribute <| Helpers.blurOn "mouseup"
+       , Internal.attribute <| Helpers.blurOn "mouseleave"
+       , Internal.attribute <| Helpers.blurOn "touchend"
        ] ++ props)
       listeners
       content

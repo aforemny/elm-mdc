@@ -129,42 +129,42 @@ demoContainer (html, code) =
 
 demoChips : List (Grid.Cell m)
 demoChips =
-  [ ( Chip.chipSpan []
+  [ ( Chip.span []
         [ Chip.content []
             [ text "Basic Chip" ]
         ]
     , """
-      Chip.chipSpan []
+      Chip.span []
         [ Chip.content []
             [ text "Basic Chip" ]
         ]
        """
     )
-  , ( Chip.chipSpan
+  , ( Chip.span
         [ Chip.deleteIcon "cancel" ]
         [ Chip.content []
             [ text "Deletable Chip" ]
         ]
     , """
-      Chip.chipSpan
+      Chip.span
         [ Chip.deleteIcon "cancel" ]
         [ Chip.content []
             [ text "Deletable Chip" ]
         ]
        """
     )
-  , ( Chip.chipButton []
+  , ( Chip.button []
         [ Chip.content []
             [ text "Button Chip" ]
         ]
     , """
-      Chip.chipButton []
+      Chip.button []
         [ Chip.content []
             [ text "Button Chip" ]
         ]
        """
     )
-  ,  ( Chip.chipSpan []
+  ,  ( Chip.span []
           [ Chip.contact Html.span
               [ Color.background Color.primary
               , Color.text Color.white
@@ -174,7 +174,7 @@ demoChips =
               [ text "Contact Chip" ]
           ]
      , """
-        Chip.chipSpan []
+        Chip.span []
           [ Chip.contact Html.span
               [ Color.background Color.primary
               , Color.text Color.white
@@ -185,7 +185,7 @@ demoChips =
           ]
         """
      )
-  , ( Chip.chipSpan
+  , ( Chip.span
         [ Chip.deleteLink "#chips" ]
         [ Chip.contact Html.span
             [ Color.background Color.primary
@@ -196,7 +196,7 @@ demoChips =
             "Deletable Contact Chip"
         ]
     , """
-      Chip.chipSpan
+      Chip.span
         [ Chip.deleteLink "#chips"
         ]
         [ Chip.contact Html.span
@@ -209,7 +209,7 @@ demoChips =
         ]
        """
     )
-  , ( Chip.chipSpan []
+  , ( Chip.span []
         [ Chip.contact Html.img
             [ Options.css "background-image" "url('assets/images/elm.png')"
             , Options.css "background-size" "cover"
@@ -219,7 +219,7 @@ demoChips =
             [ text "Chip with image" ]
         ]
     , """
-      Chip.chipSpan []
+      Chip.span []
         [ Chip.contact Html.img
             [ Options.css "background-image"
                 "url('assets/images/elm.png')"
@@ -298,7 +298,7 @@ view model  =
                   ]
                   ((Dict.toList model.chips
                    |> List.map (\ (index, value) ->
-                                  Chip.chipButton
+                                  Chip.button
                                     [ Options.css "margin" "5px 5px"
                                     , Chip.onClick (ChipClick index)
                                     , Chip.deleteClick (RemoveChip index)
@@ -322,7 +322,7 @@ view model  =
       , Code.code
           [ Options.css "margin-top" "20px"]
           """
-            Chip.chipButton
+            Chip.button
               [ Options.css "margin" "5px 5px"
               , Chip.onClick (ChipClick index)
               , Chip.deleteClick (RemoveChip index)
