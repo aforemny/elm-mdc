@@ -250,7 +250,7 @@ getActionElement config =
 -}
 button : List (Property msg) -> List (Content msg) -> Html msg
 button props =
-  chip Html.button (Options.type' "button" :: props)
+  chip Html.button ((Internal.attribute <| Html.Attributes.type' "button") :: props)
 
 
 {-| Creates a chip using `Html.span`
