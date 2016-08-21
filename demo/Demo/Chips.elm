@@ -37,7 +37,7 @@ type alias Model =
 model : Model
 model =
   { mdl = Material.model
-  , chips = Dict.fromList [(0, "Amazing Chip 0")]
+  , chips = Dict.fromList [(1, "Amazing Chip 1")]
   , value = ""
   , details = ""
   }
@@ -48,7 +48,7 @@ model =
 
 type Msg
   = Mdl (Material.Msg Msg)
-  | AddChip Int String
+  | AddChip String
   | RemoveChip Int
   | ChipClick Int
 
@@ -61,13 +61,6 @@ lastIndex dict =
     |> List.head
     |> Maybe.withDefault 0
 
-
-addChip : Dict Int String -> Msg
-addChip dict =
-  let
-    index = 1 + lastIndex dict
-  in
-    AddChip index ("Amazing Chip " ++ toString index)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
@@ -83,10 +76,13 @@ update action model =
       in
         ({ model | details = details }, Cmd.none)
 
-    AddChip index content ->
+    AddChip content ->
       let
+        index =
+          1 + lastIndex model.chips
+
         model' =
-          { model | chips = Dict.insert index content model.chips }
+          { model | chips = Dict.insert index (content ++ " " ++ toString index) model.chips }
       in
         (model', Cmd.none)
 
@@ -312,7 +308,7 @@ view model  =
                   [ Button.colored
                   , Button.ripple
                   , Button.raised
-                  , Button.onClick (addChip model.chips)
+                  , Button.onClick (AddChip "Amazing Chip")
                   ]
                   [ text "Add chip" ]
 
