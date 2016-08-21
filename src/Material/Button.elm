@@ -6,6 +6,7 @@ module Material.Button exposing
   , onClick
   , Property
   , render
+  , type'
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -39,6 +40,7 @@ for a live demo.
 # Options
 
 @docs Property
+@docs type'
 
 ## Appearance
 @docs plain, colored, primary, accent
@@ -112,6 +114,7 @@ type alias Config m =
   { ripple : Bool
   , onClick : Maybe (Attribute m)
   , disabled : Bool
+  , buttonType : Maybe String
   }
 
 
@@ -120,6 +123,7 @@ defaultConfig =
   { ripple = False
   , onClick = Nothing
   , disabled = False
+  , buttonType = Nothing
   }
 
 
@@ -181,7 +185,20 @@ accent =
   cs "mdl-button--accent"
 
 
-{- Ladies & Gentlemen: My nastiest hack ever.
+{-| Sets the type of the button e.g.
+
+    Button.render ...
+      [ Button.type' "submit"
+      ]
+      [ ... ]
+-}
+type' : String -> Property m
+type' tp =
+  Options.set
+    (\options -> { options | buttonType = Just tp })
+
+
+{- Ladies & Gentlemen: My nastiest hack ever. 
 
 Buttons with ripples are implemented as
   <button> ... <span> ... </span></button>
@@ -235,13 +252,17 @@ view lift model config html =
         else
           Nothing
       ]
+
+    buttonType =
+      [ Maybe.map Html.Attributes.type' summary.config.buttonType ]
+
   in
     Options.apply summary button
       [ cs "mdl-button"
       , cs "mdl-js-button"
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple
       ]
-      (List.concat [startListeners, stopListeners, misc]
+      (List.concat [startListeners, stopListeners, misc, buttonType ]
          |> List.filterMap identity)
       (if summary.config.ripple then
           List.concat
