@@ -88,7 +88,7 @@ type Kind
   | Password
 
 
-type alias Config m = 
+type alias Config m =
   { labelText : Maybe String
   , labelFloat : Bool
   , error : Maybe String
@@ -99,7 +99,7 @@ type alias Config m =
   , cols : Maybe Int
   , autofocus : Bool
   , maxlength : Maybe Int
-  , style : List (Options.Style m)
+  , inner : List (Options.Style m)
   , listeners : List (Html.Attribute m)
   }
 
@@ -116,7 +116,7 @@ defaultConfig =
   , cols = Nothing
   , autofocus = False
   , maxlength = Nothing
-  , style = []
+  , inner = []
   , listeners = []
   }
 
@@ -237,10 +237,9 @@ onFocus f =
 
 {-| Set properties on the actual `input` element in the Textfield.
 -}
-style : List (Style m) -> Property m
-style style =
-  Options.set
-    (\config -> { config | style = style ++ config.style })
+style : List (Options.Style m) -> Property m
+style =
+  Options.inner
 
 
 {-| Sets the type of input to 'password'.
@@ -405,7 +404,7 @@ view lift model options =
            ])
       )
       [ Options.styled' elementFunction
-          [ Options.many config.style
+          [ Options.many config.inner
           , cs "mdl-textfield__input"
           , css "outline" "none"
           ]

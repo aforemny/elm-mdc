@@ -111,6 +111,7 @@ type alias Config m =
   , ripple : Bool
   , group : Maybe (Attribute m)
   , onClick : Maybe (Attribute m)
+  , inner : List (Options.Style m)
   }
 
 
@@ -121,6 +122,7 @@ defaultConfig =
   , ripple = False
   , group = Nothing
   , onClick = Nothing
+  , inner = []
   }
 
 
@@ -213,9 +215,11 @@ viewCheckbox lift model config elems =
     summary = Options.collect defaultConfig config
     cfg = summary.config
   in 
-    [ input
+    [ Options.styled' Html.input
+      [ cs "mdl-checkbox__input"
+      , Options.many cfg.inner
+      ]
       [ type' "checkbox"
-      , class ("mdl-checkbox__input")
       , Html.Attributes.disabled cfg.isDisabled
       , checked cfg.value 
         {- The checked attribute is not rendered. Switch still seems to
@@ -244,9 +248,11 @@ viewSwitch lift model config elems =
     summary = Options.collect defaultConfig config
     cfg = summary.config
   in 
-    [ input
+    [ Options.styled' Html.input
+      [ cs "mdl-switch__input"
+      , Options.many cfg.inner
+      ]
       [ type' "checkbox"
-      , class "mdl-switch__input"
       , Html.Attributes.disabled cfg.isDisabled
       , checked cfg.value 
         {- the checked attribute is not rendered. Switch still seems to
@@ -272,10 +278,12 @@ viewRadio lift model config elems =
     summary = Options.collect defaultConfig config
     cfg = summary.config
   in 
-    [ input 
+    [ Options.styled' Html.input
+      [ cs "mdl-radio__button"
+      , Options.many cfg.inner
+      ]
       (List.filterMap identity 
         [ Just (type' "radio")
-        , Just (class "mdl-radio__button")
         , Just (Html.Attributes.disabled cfg.isDisabled)
         , Just (checked cfg.value)
         , cfg.group
