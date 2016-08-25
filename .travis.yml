@@ -1,7 +1,15 @@
-language: haskell
+sudo: false
+language: node_js
+cache:
+
+directories:
+  - $HOME/elm-stuff/build-artifacts
+  - demo/elm-stuff/build-artifacts
+node_js:
+  - "4.3"
 install:
-  - npm install -g elm
-  - elm-package install -y
-script: 
-  - make test
-  
+- npm install -g elm
+before_script:
+- elm-package install -y
+script:
+- make test
