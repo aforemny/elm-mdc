@@ -29,9 +29,9 @@ module Material.Button exposing
 See also the
 [Material Design Specification]([https://www.google.com/design/spec/components/buttons.html).
 
-Refer to 
-[this site](https://debois.github.io/elm-mdl/#buttons) 
-for a live demo. 
+Refer to
+[this site](https://debois.github.io/elm-mdl/#buttons)
+for a live demo.
 
 # Render
 @docs render
@@ -43,11 +43,11 @@ for a live demo.
 ## Appearance
 @docs plain, colored, primary, accent
 @docs ripple, disabled
-  
+
 ## Events
 @docs onClick
 
-## Type 
+## Type
 Refer to the
 [Material Design Specification](https://www.google.com/design/spec/components/buttons.html)
 for details about what type of buttons are appropriate for which situations.
@@ -61,7 +61,7 @@ for details about what type of buttons are appropriate for which situations.
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events 
+import Html.Events
 import Html.App
 import Platform.Cmd exposing (Cmd, none)
 
@@ -77,7 +77,7 @@ import Material.Ripple as Ripple
 -- MODEL
 
 
-{-| 
+{-|
 -}
 type alias Model = Ripple.Model
 
@@ -85,7 +85,7 @@ type alias Model = Ripple.Model
 {-|
 -}
 defaultModel : Model
-defaultModel = 
+defaultModel =
   Ripple.model
 
 
@@ -108,28 +108,28 @@ update action =
 -- VIEW
 
 
-type alias Config m = 
-  { ripple : Bool 
+type alias Config m =
+  { ripple : Bool
   , onClick : Maybe (Attribute m)
   , disabled : Bool
   }
 
 
 defaultConfig : Config m
-defaultConfig = 
+defaultConfig =
   { ripple = False
   , onClick = Nothing
   , disabled = False
   }
- 
+
 
 {-| Properties for Button options.
 -}
-type alias Property m = 
+type alias Property m =
   Options.Property (Config m) m
 
 
-{-| Add an `on "click"` handler to a button. 
+{-| Add an `on "click"` handler to a button.
 -}
 onClick : m -> Property m
 onClick x =
@@ -139,8 +139,8 @@ onClick x =
 
 {-| Set button to ripple when clicked.
 -}
-ripple : Property m 
-ripple = 
+ripple : Property m
+ripple =
   Options.set
     (\options -> { options | ripple = True })
 
@@ -148,12 +148,12 @@ ripple =
 {-| Set button to "disabled".
 -}
 disabled : Property m
-disabled = 
+disabled =
   Options.set
     (\options -> { options | disabled = True })
 
 
-{-| Plain, uncolored button (default). 
+{-| Plain, uncolored button (default).
 -}
 plain : Property m
 plain =
@@ -174,16 +174,16 @@ primary =
   cs "mdl-button--primary"
 
 
-{-| Color button with accent color. 
+{-| Color button with accent color.
 -}
 accent : Property m
-accent = 
+accent =
   cs "mdl-button--accent"
 
 
-{- Ladies & Gentlemen: My nastiest hack ever. 
+{- Ladies & Gentlemen: My nastiest hack ever.
 
-Buttons with ripples are implemented as 
+Buttons with ripples are implemented as
   <button> ... <span> ... </span></button>
 elements. The button must blur itself when the mouse goes up or leaves, and the
 (ripple) span must clear its animation state under the same events.
@@ -197,9 +197,9 @@ Obviously, once Elm gets proper support for controlling focus/blur, we can dispe
 with all this nonsense.
 -}
 blurAndForward : String -> Attribute m
-blurAndForward event = 
-  Html.Attributes.attribute 
-    ("on" ++ event) 
+blurAndForward event =
+  Html.Attributes.attribute
+    ("on" ++ event)
       -- NOTE: IE Does not properly support 'new Event()'. This is a temporary workaround
       "this.blur(); (function(self) { var e = document.createEvent('Event'); e.initEvent('touchcancel', true, true); self.lastChild.dispatchEvent(e); }(this));"
 
@@ -208,46 +208,46 @@ blurAndForward event =
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model config html =
-  let 
+  let
     summary = Options.collect defaultConfig config
 
-    startListeners = 
-      if summary.config.ripple then 
+    startListeners =
+      if summary.config.ripple then
         [ Ripple.downOn' lift "mousedown" |> Just
         , Ripple.downOn' lift "touchstart" |> Just
         ]
       else
         []
-    
-    stopListeners = 
-      let handle = 
-        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn 
+
+    stopListeners =
+      let handle =
+        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
       in
         [ handle "mouseup"
         , handle "mouseleave"
         , handle "touchend"
         ]
 
-    misc = 
-      [ summary.config.onClick 
-      , if summary.config.disabled then 
-          Just (Html.Attributes.disabled True) 
-        else 
+    misc =
+      [ summary.config.onClick
+      , if summary.config.disabled then
+          Just (Html.Attributes.disabled True)
+        else
           Nothing
-      ] 
+      ]
   in
-    Options.apply summary button 
+    Options.apply summary button
       [ cs "mdl-button"
-      , cs "mdl-js-button" 
-      , cs "mdl-js-ripple-effect" `when` summary.config.ripple 
+      , cs "mdl-js-button"
+      , cs "mdl-js-ripple-effect" `when` summary.config.ripple
       ]
       (List.concat [startListeners, stopListeners, misc]
          |> List.filterMap identity)
       (if summary.config.ripple then
-          List.concat 
+          List.concat
             [ html
-            -- Ripple element must be last or blurAndForward hack fails. 
-            , [ Html.App.map lift <| Ripple.view' 
+            -- Ripple element must be last or blurAndForward hack fails.
+            , [ Html.App.map lift <| Ripple.view'
                   [ class "mdl-button__ripple-container"
                   --, Helpers.blurOn "mouseup"
                   , Ripple.upOn "blur"
@@ -256,7 +256,7 @@ view lift model config html =
                   model
               ]
             ]
-        else 
+        else
           html)
 
 
@@ -307,7 +307,7 @@ Example use (colored raised button, assuming properly setup model):
         [ text "Click me!" ]
 
 -}
-raised : Property m 
+raised : Property m
 raised = cs "mdl-button--raised"
 
 
@@ -342,7 +342,7 @@ fab = cs "mdl-button--fab"
 
 {-| Mini-sized variant of a Floating Msg Button; refer to `fab`.
 -}
-minifab : Property m 
+minifab : Property m
 minifab = cs "mdl-button--mini-fab"
 
 
@@ -361,7 +361,7 @@ Example use (no color, displaying a '+' icon):
         [ Button.icon ]
         [ Icon.i "add" ]
 -}
-icon : Property m 
+icon : Property m
 icon = cs "mdl-button--icon"
 
 
@@ -375,6 +375,7 @@ type alias Container c =
 
 {-| Component render.  Below is an example, assuming boilerplate setup as
 indicated in `Material`, and a user message `PollMsg`.
+
     Button.render Mdl [0] model.mdl
       [ Button.raised
       , Button.ripple
@@ -382,12 +383,12 @@ indicated in `Material`, and a user message `PollMsg`.
       ]
       [ text "Fetch new"]
 -}
-render 
+render
   : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m)
   -> Html m
-render = 
-  Parts.create view (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model 
+render =
+  Parts.create view (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
