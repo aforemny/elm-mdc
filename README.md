@@ -28,6 +28,11 @@ Ask any questions you may have on
 [stackoverflow](https://stackoverflow.com/questions/ask?tags=elm+elm-mdl)
 or on [#elm-mdl](https://elm.slack.com/messages/elm-mdl) in the elm-slack.
 
+
+### Frequently asked questions
+Please read the [FAQ here](FAQ.md)
+
+
 ### Other projects using Elm-mdl
 
 Check out the [users page](USERS.md) for a list of projects using elm-mdl.
