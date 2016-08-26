@@ -106,7 +106,7 @@ type alias Config m =
   , maxlength : Maybe Int
   , inner : List (Options.Style m)
   , listeners : List (Html.Attribute m)
-  , expandable : String
+  , expandable : Maybe String
   , expandableIcon : String
   }
 
@@ -125,7 +125,7 @@ defaultConfig =
   , maxlength = Nothing
   , inner = []
   , listeners = []
-  , expandable = ""
+  , expandable = Nothing
   , expandableIcon = "search"
   }
 
@@ -153,12 +153,16 @@ floatingLabel =
 
 
 {-| Specifies the textfield as an `expandable`. The property takes the ID
-of the element as parameter as this is currently required
+of the element as parameter as this is currently required.
+
+**NOTE:** When manually setting the **id** of the `input` element using
+`Textfield.style` or `Options.inner` then the `expandable` **id** should match
+the `input` *id*.
 -}
 expandable : String -> Property m
 expandable id =
   Options.set
-    (\config -> { config | expandable = id })
+    (\config -> { config | expandable = Just id })
 
 
 {-| Sets the icon *only* when the expandable has been set to a valid ID.
@@ -419,21 +423,23 @@ view lift model options =
         Nothing ->
           Just <| Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
 
+    -- NOTE: These ids need to match the id of the input element
     labelFor =
-      if config.expandable /= "" then
-        [ Html.Attributes.for config.expandable ]
-      else
-        []
+      case config.expandable of
+        Nothing -> []
+        Just id -> [ Html.Attributes.for id ]
 
     inputId =
-      if config.expandable /= "" then
-        [ Html.Attributes.id config.expandable ]
-      else
-        []
+      case config.expandable of
+        Nothing -> []
+        Just id -> [ Html.Attributes.id id ]
 
     expHolder =
-      if config.expandable /= "" then
-        (\ x ->
+      case config.expandable of
+        Nothing ->
+          identity
+        Just _  ->
+          (\ x ->
            [ Options.styled' Html.label
                [ cs "mdl-button"
                , cs "mdl-js-button"
@@ -446,8 +452,6 @@ view lift model options =
                [ cs "mdl-textfield__expandable-holder" ]
                x
            ])
-      else
-        identity
 
   in
     Options.apply summary div
@@ -459,7 +463,7 @@ view lift model options =
       , if val /= "" then cs "is-dirty" else nop
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
-      , cs "mdl-textfield--expandable" `Options.when` (config.expandable /= "")
+      , cs "mdl-textfield--expandable" `Options.when` (config.expandable /= Nothing)
       ]
       ( List.filterMap identity 
           ([ defaultInput
