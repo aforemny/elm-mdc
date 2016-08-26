@@ -4,31 +4,13 @@ cache:
   directories:
     - tests/elm-stuff/build-artifacts
 
-os:
-  - linux
-  - osx
+node_js:
+  - "4.3"
 
-env:
-  matrix:
-    - ELM_VERSION=0.17.0 TARGET_NODE_VERSION=node
-    - ELM_VERSION=0.17.0 TARGET_NODE_VERSION=4.0
-
-
-before_install:
-  - if [ ${TRAVIS_OS_NAME} == "osx" ];
-    then brew update; brew install nvm; mkdir ~/.nvm; export NVM_DIR=~/.nvm; source $(brew --prefix nvm)/nvm.sh;
-    fi
-  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 install:
-  - nvm install $TARGET_NODE_VERSION
-  - nvm use $TARGET_NODE_VERSION
-  - node --version
-  - npm --version
-  - cd test
-  - npm install -g elm@$ELM_VERSION elm-test
-  - git clone https://github.com/NoRedInk/elm-ops-tooling
-  - elm-ops-tooling/with_retry.rb elm package install --yes
+  - npm install -g elm@$0.17.1 elm-test
+  - elm package install --yes
 
 script:
   - elm-test
