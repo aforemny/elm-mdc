@@ -9,7 +9,6 @@ cache:
 node_js:
   - "4.0"
 
-
 install:
   - npm install -g elm@0.17.1 elm-test
   - elm package install --yes
