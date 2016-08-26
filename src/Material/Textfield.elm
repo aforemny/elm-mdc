@@ -236,6 +236,8 @@ onFocus f =
 
 
 {-| Set properties on the actual `input` element in the Textfield.
+
+**Deprecated**. Use `Options.inner` instead. This value will disappear in 8.0.0.
 -}
 style : List (Options.Style m) -> Property m
 style =
