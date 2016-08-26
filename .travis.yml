@@ -9,7 +9,7 @@ node_js:
 
 
 install:
-  - npm install -g elm@$0.17.1 elm-test
+  - npm install -g elm@0.17.1 elm-test
   - elm package install --yes
 
 script:
