@@ -114,7 +114,7 @@ type alias Config m =
   { ripple : Bool
   , onClick : Maybe (Attribute m)
   , disabled : Bool
-  , buttonType : Maybe String
+  , type' : Maybe String
   }
 
 
@@ -123,7 +123,7 @@ defaultConfig =
   { ripple = False
   , onClick = Nothing
   , disabled = False
-  , buttonType = Nothing
+  , type' = Nothing
   }
 
 
@@ -195,7 +195,7 @@ accent =
 type' : String -> Property m
 type' tp =
   Options.set
-    (\options -> { options | buttonType = Just tp })
+    (\options -> { options | type' = Just tp })
 
 
 {- Ladies & Gentlemen: My nastiest hack ever. 
@@ -253,8 +253,10 @@ view lift model config html =
           Nothing
       ]
 
-    buttonType =
-      [ Maybe.map Html.Attributes.type' summary.config.buttonType ]
+    type' =
+      case summary.config.type' of
+        Nothing -> []
+        Just tp -> [ Just <| Html.Attributes.type' tp ]
 
   in
     Options.apply summary button
@@ -262,7 +264,7 @@ view lift model config html =
       , cs "mdl-js-button"
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple
       ]
-      (List.concat [startListeners, stopListeners, misc, buttonType ]
+      (List.concat [startListeners, stopListeners, misc, type']
          |> List.filterMap identity)
       (if summary.config.ripple then
           List.concat
