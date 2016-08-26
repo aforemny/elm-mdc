@@ -4,6 +4,16 @@ cache:
   directories:
     - tests/elm-stuff/build-artifacts
 
+os:
+  - linux
+  - osx
+
+env:
+  matrix:
+    - ELM_VERSION=0.17.0 TARGET_NODE_VERSION=node
+    - ELM_VERSION=0.17.0 TARGET_NODE_VERSION=4.0
+
+
 before_install:
   - if [ ${TRAVIS_OS_NAME} == "osx" ];
     then brew update; brew install nvm; mkdir ~/.nvm; export NVM_DIR=~/.nvm; source $(brew --prefix nvm)/nvm.sh;
