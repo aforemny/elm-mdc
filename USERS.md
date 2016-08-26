@@ -40,6 +40,7 @@
     * [Live demo/site](https://uehaj.github.io/elm-bmi/)
 *  Elm-SPA-Template - a template for a single page app using elm-mdl
     * [GitHub repository](https://github.com/id3as/elm-spa-template)
+    * [Live deme/site](http://id3as.github.io/elm-spa.html)
 
 
 
