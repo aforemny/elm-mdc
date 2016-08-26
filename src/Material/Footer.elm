@@ -91,7 +91,7 @@ import Html.Events as Events
 import Material.Options as Options exposing (Style, cs)
 import String
 import Regex
-import Material.Options.Internal as Internal exposing (attribute)
+import Material.Options.Internal as Internal
 
 
 {-| The type of the footer
@@ -362,14 +362,14 @@ mini props { left, right } =
 -}
 onClick : m -> Property m
 onClick =
-  Events.onClick >> attribute
+  Events.onClick >> Internal.attribute
 
 
 {-| href for Links.
 -}
 href : String -> Property m
 href =
-  Html.href >> attribute
+  Html.href >> Internal.attribute
 
 
 {-| Wraps a normal HTML value into `Content`

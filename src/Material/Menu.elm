@@ -93,7 +93,7 @@ import Material.Helpers as Helpers exposing (pure)
 import Material.Icon as Icon
 import Material.Menu.Geometry as Geometry exposing (Geometry)
 import Material.Options as Options exposing (Style, cs, css, styled, styled', when)
-import Material.Options.Internal exposing (attribute)
+import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
 import Parts exposing (Indexed, Index)
 
@@ -547,9 +547,9 @@ view lift model properties items =
           [ cs "mdl-button"
           , cs "mdl-js-button"
           , cs "mdl-button--icon"
-          , attribute (onKeyDown (Key itemSummaries)) `when` isActive model
-          , attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
-          , attribute (Html.Events.onClick Close) `when` isActive model
+          , Internal.attribute (onKeyDown (Key itemSummaries)) `when` isActive model
+          , Internal.attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
+          , Internal.attribute (Html.Events.onClick Close) `when` isActive model
           ]
           [ Icon.view config.icon
             [ cs "material-icons"
