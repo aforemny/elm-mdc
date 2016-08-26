@@ -1,10 +1,9 @@
 sudo: false
 language: node_js
 cache:
-
-directories:
-  - $HOME/elm-stuff/build-artifacts
-  - demo/elm-stuff/build-artifacts
+  directories:
+    - $HOME/elm-stuff/build-artifacts
+    - demo/elm-stuff/build-artifacts
 node_js:
   - "4.3"
 install:
