@@ -2,7 +2,7 @@ module Material.Options exposing
   ( Property, Summary, collect
   , cs, css, many, nop, set, data
   , when, maybe, disabled
-  , apply, styled, styled', stylesheet
+  , apply, apply', styled, styled', styled'', stylesheet
   , Style, div, span, img, attribute, center, scrim
   , id
   , inner
@@ -43,7 +43,7 @@ applying MDL typography or color to standard elements.
 @docs cs, css, data, many, nop, when, maybe
 
 # Html
-@docs Style, styled, styled'
+@docs Style, styled
 
 ## Elements
 @docs div, span, img
@@ -60,6 +60,9 @@ applying MDL typography or color to standard elements.
 The following types and values are used internally in the library. 
 @docs Summary, apply, collect, set
 
+@docs apply'
+@docs styled''
+
 -}
 
 
@@ -71,6 +74,7 @@ import Html.Attributes
 import Material.Options.Internal exposing (..)
 
 import Json.Decode as Decoder
+import Dispatch
 
 -- PROPERTIES
 
@@ -143,6 +147,20 @@ addAttributes summary attrs =
     , summary.attrs
     ]
 
+addLiftable
+  : (Dispatch.Msg m -> m)
+  -> Summary c m
+  -> List (Attribute m)
+  -> List (Attribute m)
+addLiftable lift summary attrs =
+  List.concat
+    [ attrs
+    , [ Html.Attributes.style summary.css ]
+    , [ Html.Attributes.class (String.join " " summary.classes) ]
+    , summary.attrs
+    , Dispatch.listeners lift (Dispatch.group summary.listeners)
+    ]
+
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
 to a standard Html node. 
@@ -154,6 +172,18 @@ apply summary ctor options attrs =
     (addAttributes 
       (recollect summary options) attrs)
     
+
+apply'
+    : (Dispatch.Msg a -> a)
+    -> Summary b a
+    -> (List (Attribute a) -> d)
+    -> List (Property b a)
+    -> List (Attribute a)
+    -> d
+apply' lift summary ctor options attrs =
+  ctor
+    (addLiftable lift
+      (recollect summary options) attrs)
 
 
 {-| Apply properties to a standard Html element. 
@@ -175,6 +205,20 @@ styled' ctor props attrs =
       (collect' props)
       attrs)
 
+
+{-| Apply properties and attributes to a standard Html element.
+-}
+styled''
+    : (Dispatch.Msg a -> a)
+    -> (List (Attribute a) -> b)
+    -> List (Property d a)
+    -> List (Attribute a)
+    -> b
+styled'' lift ctor props attrs =
+  ctor
+    (addLiftable lift
+      (collect' props)
+      attrs)
 
 {-| Convenience function for the ultra-common case of apply elm-mdl styling to a
 `div` element. Use like this: 

@@ -66,6 +66,7 @@ type Msg
   | SetFocus5 Bool 
   | Slider Float
   | SelectionChanged Selection
+  | NoOp String
 
 
 selectionDecoder : Decoder.Decoder Msg
@@ -84,6 +85,10 @@ pure =
 update : Msg -> Model -> Maybe (Model, Cmd Msg)
 update action model =
   case action of
+    NoOp msg ->
+      let _ = Debug.log "NOOP" msg
+      in model |> pure
+
     Mdl action' ->
       Material.update action' model |> Just
 
@@ -266,8 +271,14 @@ textfields model =
         , Textfield.maxlength (truncate model.length)
         , Textfield.autofocus
         , Textfield.floatingLabel
-        , Textfield.onFocus (SetFocus5 True)
-        , Textfield.onBlur (SetFocus5 False)
+        -- , Textfield.onFocus (SetFocus5 True)
+        -- , Textfield.onBlur (SetFocus5 False)
+          -- Supporting multiple events
+        , Options.inner
+            [ Options.on "focus" (Decoder.succeed (SetFocus5 True))
+            , Options.on "blur" (Decoder.succeed (SetFocus5 False))
+            , Options.on "focus" (Decoder.succeed (NoOp "FOCUS"))
+            ]
         ]
     , Options.styled Html.p
         [ Options.css "width" "80%" ]

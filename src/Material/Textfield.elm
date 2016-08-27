@@ -78,9 +78,7 @@ import Platform.Cmd
 import Parts exposing (Indexed)
 
 import Material.Options as Options exposing (cs, css, nop, Style)
-import Material.Options.Internal as Internal
 
-import Dict exposing (Dict)
 import Dispatch
 
 
@@ -308,7 +306,7 @@ type Msg m
   = Blur
   | Focus
   | Input String
-  | Multi (Dispatch.Msg m)
+  | Dispatch (Dispatch.Msg m)
 
 
 {-| Component update.
@@ -316,7 +314,7 @@ type Msg m
 update : Msg msg -> Model -> (Model, Cmd msg)
 update action model =
   case action of
-    Multi msg ->
+    Dispatch msg ->
       (model, Dispatch.forward msg)
 
     Input str ->
@@ -344,6 +342,7 @@ view lift model options =
   let 
     ({ config } as summary) = 
       Options.collect defaultConfig options
+
     val = 
       config.value |> Maybe.withDefault model.value
 
@@ -374,21 +373,6 @@ view lift model options =
         Just val -> [Html.Attributes.maxlength val]
         Nothing -> []
 
-
-    -- Internal events that require special handling because user provided events
-    -- might overlap with these
-    internal =
-      [[ ("focus", Decoder.succeed (lift Focus))
-       , ("blur", Decoder.succeed (lift Blur))
-       ]
-      , (case config.value of
-           Just _ -> []
-           Nothing -> [("input", Decoder.map (Input >> lift) targetValue)])
-      ]
-      |> List.concat
-
-    listeners = Dispatch.listeners (Multi >> lift) (Dispatch.group <| internal ++ summary.listeners)
-
     textValue =
       case config.value of
         Just str ->
@@ -397,7 +381,7 @@ view lift model options =
           []
 
   in
-    Options.apply summary div
+    Options.apply' (Dispatch >> lift) summary div
       [ cs "mdl-textfield"
       , cs "mdl-js-textfield"
       , cs "is-upgraded"
@@ -408,7 +392,7 @@ view lift model options =
       , if config.disabled then cs "is-disabled" else nop
       ]
       []
-      [ Options.styled' elementFunction
+      [ Options.styled'' (Dispatch >> lift) elementFunction
           [ cs "mdl-textfield__input"
           , css "outline" "none"
 
@@ -419,13 +403,22 @@ view lift model options =
             Html.Events.on "focus" ... it would not have precedence
             over our own focus handler.
              -}
-          , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
-          , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
+          -- , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
+          -- , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
+
+          , Options.on "focus" (Decoder.succeed (lift Focus))
+          , Options.on "blur" (Decoder.succeed (lift Blur))
+
+          -- If no value is we need the default input decoder to maintain is-dirty
+          , case config.value of
+              Nothing -> Options.on "input" (Decoder.map (Input >> lift) targetValue)
+              Just _ -> Options.nop
+
           , Options.many config.inner
           ]
           ([ Html.Attributes.disabled config.disabled 
            , Html.Attributes.autofocus config.autofocus
-           ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners)
+           ] ++ textValue ++ typeAttributes ++ maxlength)
           []
       , Html.label 
           [class "mdl-textfield__label"]  
