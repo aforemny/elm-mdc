@@ -4,6 +4,8 @@ module Material.Options exposing
   , when, maybe, disabled
   , apply, styled, styled', stylesheet
   , Style, div, span, img, attribute, center, scrim
+  , id
+  , inner
   )
 
 
@@ -47,7 +49,7 @@ applying MDL typography or color to standard elements.
 @docs stylesheet
 
 ## Attributes
-@docs attribute
+@docs attribute, id, inner
 @docs center, scrim, disabled
 
 # Internal
@@ -322,3 +324,26 @@ depend on the underlying image. `0.6` works well often.
 scrim : Float -> Property c m
 scrim opacity = 
   css "background" <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " ++ toString opacity ++ "))" 
+
+
+{-| Sets the id attribute
+-}
+id : String -> Property c m
+id =
+  Attribute << Html.Attributes.id
+
+
+{-| Sets attributes on the inner element for components that support it.
+For example `Textfield`:
+
+    Textfield.render ...
+      [ ...
+      , Options.inner
+          [ Options.id "id-of-the-input"
+          ]
+      ]
+
+-}
+inner : List (Property c m) -> Property { a | inner : List (Property c m) } m
+inner options =
+  set (\c -> { c | inner = options ++ c.inner })

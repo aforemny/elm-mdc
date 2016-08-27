@@ -78,6 +78,7 @@ import Platform.Cmd
 import Parts exposing (Indexed)
 
 import Material.Options as Options exposing (cs, css, nop, Style)
+import Material.Options.Internal as Internal
 
 
 -- OPTIONS
@@ -88,7 +89,7 @@ type Kind
   | Password
 
 
-type alias Config m = 
+type alias Config m =
   { labelText : Maybe String
   , labelFloat : Bool
   , error : Maybe String
@@ -99,7 +100,7 @@ type alias Config m =
   , cols : Maybe Int
   , autofocus : Bool
   , maxlength : Maybe Int
-  , style : List (Options.Style m)
+  , inner : List (Options.Style m)
   , listeners : List (Html.Attribute m)
   }
 
@@ -116,7 +117,7 @@ defaultConfig =
   , cols = Nothing
   , autofocus = False
   , maxlength = Nothing
-  , style = []
+  , inner = []
   , listeners = []
   }
 
@@ -236,11 +237,12 @@ onFocus f =
 
 
 {-| Set properties on the actual `input` element in the Textfield.
+
+**Deprecated**. Use `Options.inner` instead. This value will disappear in 8.0.0.
 -}
-style : List (Style m) -> Property m
-style style =
-  Options.set
-    (\config -> { config | style = style ++ config.style })
+style : List (Options.Style m) -> Property m
+style =
+  Options.inner
 
 
 {-| Sets the type of input to 'password'.
@@ -405,14 +407,22 @@ view lift model options =
            ])
       )
       [ Options.styled' elementFunction
-          [ Options.many config.style
-          , cs "mdl-textfield__input"
+          [ cs "mdl-textfield__input"
           , css "outline" "none"
+
+            {- NOTE: Ordering here is important.
+            Currently former attributes override latter ones.
+            If this changes this needs to be changed as well.
+            Currently this makes sure that even if users provide
+            Html.Events.on "focus" ... it would not have precedence
+            over our own focus handler.
+             -}
+          , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
+          , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
+          , Options.many config.inner
           ]
           ([ Html.Attributes.disabled config.disabled 
            , Html.Attributes.autofocus config.autofocus
-           , Html.Events.on "focus" (Decoder.succeed (lift Focus))
-           , Html.Events.on "blur" (Decoder.succeed (lift Blur))
            ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners)
           []
       , Html.label 
