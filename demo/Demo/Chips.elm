@@ -2,17 +2,12 @@ module Demo.Chips exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Attributes as Html
-import Html.Events as Html
 
 import Material.Chip as Chip
-import Material.Icon as Icon
 import Material.Grid as Grid
 import Material.Color as Color
 import Material.Options as Options exposing (css, cs)
 import Material
-import Material.Textfield as Textfield
-import Material.Helpers as Helpers
 import Material.Card as Card
 import Material.Button as Button
 
@@ -20,8 +15,6 @@ import Demo.Page as Page
 import Demo.Code as Code
 
 import Dict exposing (Dict)
-
-import Json.Decode as Json
 
 -- MODEL
 
