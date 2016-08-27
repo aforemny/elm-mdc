@@ -429,10 +429,10 @@ view lift model options =
         Nothing -> []
         Just id -> [ Html.Attributes.for id ]
 
-    inputId =
+    expandableId =
       case config.expandable of
-        Nothing -> []
-        Just id -> [ Html.Attributes.id id ]
+        Nothing -> Options.nop
+        Just id -> Internal.attribute <| Html.Attributes.id id
 
     expHolder =
       case config.expandable of
@@ -482,11 +482,12 @@ view lift model options =
              -}
           , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
           , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
+          , expandableId
           , Options.many config.inner
           ]
           ([ Html.Attributes.disabled config.disabled 
            , Html.Attributes.autofocus config.autofocus
-           ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners ++ inputId)
+           ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners)
           []
       , Html.label 
           ([class "mdl-textfield__label"] ++ labelFor)
