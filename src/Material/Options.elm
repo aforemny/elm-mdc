@@ -43,7 +43,7 @@ applying MDL typography or color to standard elements.
 @docs cs, css, data, many, nop, when, maybe
 
 # Html
-@docs Style, styled
+@docs Style, styled, styled'
 
 ## Elements
 @docs div, span, img
@@ -171,8 +171,11 @@ apply summary ctor options attrs =
   ctor 
     (addAttributes 
       (recollect summary options) attrs)
-    
 
+
+{-| Apply a `Summary m`, extra properties, and optional attributes
+to a standard Html node.
+-}
 apply'
     : (Dispatch.Msg a -> a)
     -> Summary b a
