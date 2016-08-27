@@ -156,8 +156,8 @@ floatingLabel =
 of the element as parameter as this is currently required.
 
 **NOTE:** When manually setting the **id** of the `input` element using
-`Textfield.style` or `Options.inner` then the `expandable` **id** should match
-the `input` *id*.
+`Options.inner` then the `expandable` **id** must match
+the `input` **id**.
 -}
 expandable : String -> Property m
 expandable id =

@@ -1,6 +1,7 @@
 module Demo.Textfields exposing (model, Model, update, view, Msg)
 
 import Html exposing (..)
+import Html.Attributes
 import Platform.Cmd exposing (Cmd)
 import Regex
 import Json.Decode as Decoder
@@ -228,6 +229,11 @@ textfields model =
     , Textfield.render Mdl [11] model.mdl
         [ Textfield.label "Expandable"
         , Textfield.floatingLabel
+        -- NOTE: The id's must match
+        -- between Html.Attributes.id and Textfield.expandable
+        , Options.inner
+            [ Options.attribute <| Html.Attributes.id "expandable-1"
+            ]
         , Textfield.expandable "expandable-1"
         , Textfield.expandableIcon "search"
         ]
@@ -235,6 +241,11 @@ textfields model =
       Textfield.render Mdl [11] model.mdl
         [ Textfield.label "Expandable"
         , Textfield.floatingLabel
+        -- NOTE: The id's must match
+        -- between Html.Attributes.id and Textfield.expandable
+        , Options.inner
+            [ Options.attribute <| Html.Attributes.id "expandable-1"
+            ]
         , Textfield.expandable "expandable-1"
         , Textfield.expandableIcon "search"
         ]
