@@ -275,9 +275,9 @@ textfields model =
         -- , Textfield.onBlur (SetFocus5 False)
           -- Supporting multiple events
         , Options.inner
-            [ Options.on "focus" (Decoder.succeed (SetFocus5 True))
-            , Options.on "blur" (Decoder.succeed (SetFocus5 False))
-            , Options.on "focus" (Decoder.succeed (NoOp "FOCUS"))
+            [ Options.on1 "focus" (SetFocus5 True)
+            , Options.on1 "blur" (SetFocus5 False)
+            , Options.on1 "focus" (NoOp "FOCUS")
             ]
         ]
     , Options.styled Html.p

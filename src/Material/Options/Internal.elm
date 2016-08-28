@@ -1,6 +1,7 @@
 module Material.Options.Internal exposing (..)
 
 import Html
+import Html.Events
 import Json.Decode
 
 
@@ -13,7 +14,7 @@ type Property c m
   | Attribute (Html.Attribute m)
   | Many (List (Property c m))
   | Set (c -> c)
-  | Listener String (Json.Decode.Decoder m)
+  | Listener String (Html.Events.Options) (Json.Decode.Decoder m)
   | None
 
 

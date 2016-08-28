@@ -11,6 +11,7 @@ module Dispatch
 @docs Msg
 @docs forward
 @docs listeners
+@docs group
 -}
 
 import Material.Helpers as Helpers
@@ -69,21 +70,33 @@ onEvt :
   -> String
   -> List (Json.Decoder msg)
   -> Maybe (Html.Attribute msg)
-onEvt lift event decoders =
+onEvt lift event =
+  onEvtOptions lift event Html.Events.defaultOptions
+
+
+{-| Run multiple decoders on a single Html Event with
+the given options
+-}
+onEvtOptions :
+  (Msg msg -> msg)
+  -> String
+  -> Html.Events.Options
+  -> List (Json.Decoder msg)
+  -> Maybe (Html.Attribute msg)
+onEvtOptions lift event options decoders =
   case decoders of
     [] ->
       Nothing
 
     [ x ] ->
-      Html.Events.on event x
+      Html.Events.onWithOptions event options x
         |> Just
 
     _ ->
       forwardDecoder decoders
         |> Json.map lift
-        |> Html.Events.on event
+        |> Html.Events.onWithOptions event options
         |> Just
-
 
 {-| Updates value by given function if found, inserts otherwise
 -}
@@ -95,15 +108,23 @@ upsert key value func dict =
     Dict.insert key value dict
 
 
+
+pickOptions : List (Json.Decoder a, Html.Events.Options) -> Html.Events.Options
+pickOptions decoders =
+  List.map snd decoders
+    |> List.head
+    |> Maybe.withDefault Html.Events.defaultOptions
+
+
 {-| Combines decoders for events and returns event listeners
 -}
 listeners :
   (Msg a -> a)
-  -> List ( String, List (Json.Decoder a) )
+  -> List ( String, List (Json.Decoder a, Html.Events.Options) )
   -> List (Html.Attribute a)
 listeners lift items =
   items
-    |> List.map (\( event, decoders ) -> onEvt lift event decoders)
+    |> List.map (\( event, decoders ) -> onEvtOptions lift event (pickOptions decoders) (List.map fst decoders))
     |> List.filterMap identity
 
 

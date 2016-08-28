@@ -7,6 +7,7 @@ module Material.Options exposing
   , id
   , inner
   , on
+  , on1
   )
 
 
@@ -54,7 +55,7 @@ applying MDL typography or color to standard elements.
 @docs center, scrim, disabled
 
 ## Events
-@docs on
+@docs on, on1
 
 # Internal
 The following types and values are used internally in the library. 
@@ -70,6 +71,7 @@ import String
 
 import Html exposing (Html, Attribute)
 import Html.Attributes
+import Html.Events
 
 import Material.Options.Internal exposing (..)
 
@@ -95,7 +97,7 @@ type alias Summary c m =
   , css : List (String, String)  
   , attrs : List (Attribute m)
   , config : c
-  , listeners : List (String, (Decoder.Decoder m))
+  , listeners : List (String, (Decoder.Decoder m, Html.Events.Options))
   }
 
 
@@ -113,7 +115,10 @@ collect1 f option acc =
     Many options -> List.foldl (collect1 f) acc options
     Set g -> { acc | config = f g acc.config }
     -- Listener k v -> { acc | listeners = Dict.insert k v acc.listeners }
-    Listener k v -> { acc | listeners = (k, v) :: acc.listeners }
+    Listener event options decoder ->
+      { acc |
+          listeners = (event, (decoder, options)) :: acc.listeners
+      }
     None -> acc
 
 
@@ -408,5 +413,21 @@ inner options =
 {-| Add custom event handlers
  -}
 on : String -> (Decoder.Decoder m) -> Property c m
-on event decoder =
-  Listener event decoder
+on event =
+  onWithOptions event Html.Events.defaultOptions
+
+
+{-| Add a custom event handler that always succeeds.
+
+Roughly equivalent to `Options.on event (Json.Decode.succeed msg)`
+ -}
+on1 : String -> m -> Property c m
+on1 event m =
+  on event (Decoder.succeed m)
+
+
+{-| Add custom event handlers with options
+ -}
+onWithOptions : String -> Html.Events.Options -> (Decoder.Decoder m) -> Property c m
+onWithOptions =
+  Listener
