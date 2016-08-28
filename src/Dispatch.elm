@@ -27,6 +27,10 @@ type Msg m
   = Forward (List m)
 
 
+type alias Pair m =
+  (Json.Decoder m, Maybe (Html.Events.Options))
+
+
 {-| Maps messages to commands
 -}
 forward : Msg m -> Cmd m
@@ -109,9 +113,10 @@ upsert key value func dict =
 
 
 
-pickOptions : List (Json.Decoder a, Html.Events.Options) -> Html.Events.Options
+pickOptions : List (Pair a) -> Html.Events.Options
 pickOptions decoders =
   List.map snd decoders
+    |> List.filterMap identity
     |> List.head
     |> Maybe.withDefault Html.Events.defaultOptions
 
@@ -120,7 +125,7 @@ pickOptions decoders =
 -}
 listeners :
   (Msg a -> a)
-  -> List ( String, List (Json.Decoder a, Html.Events.Options) )
+  -> List ( String, List (Pair a) )
   -> List (Html.Attribute a)
 listeners lift items =
   items

@@ -14,7 +14,7 @@ type Property c m
   | Attribute (Html.Attribute m)
   | Many (List (Property c m))
   | Set (c -> c)
-  | Listener String (Html.Events.Options) (Json.Decode.Decoder m)
+  | Listener String (Maybe (Html.Events.Options)) (Json.Decode.Decoder m)
   | None
 
 

@@ -97,7 +97,7 @@ type alias Summary c m =
   , css : List (String, String)  
   , attrs : List (Attribute m)
   , config : c
-  , listeners : List (String, (Decoder.Decoder m, Html.Events.Options))
+  , listeners : List (String, (Decoder.Decoder m, Maybe Html.Events.Options))
   }
 
 
@@ -414,7 +414,7 @@ inner options =
  -}
 on : String -> (Decoder.Decoder m) -> Property c m
 on event =
-  onWithOptions event Html.Events.defaultOptions
+  Listener event Nothing
 
 
 {-| Add a custom event handler that always succeeds.
@@ -429,5 +429,5 @@ on1 event m =
 {-| Add custom event handlers with options
  -}
 onWithOptions : String -> Html.Events.Options -> (Decoder.Decoder m) -> Property c m
-onWithOptions =
-  Listener
+onWithOptions evt options =
+  Listener evt (Just options)
