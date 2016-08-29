@@ -80,6 +80,7 @@ import Parts exposing (Indexed)
 import Material.Options as Options exposing (cs, css, nop, Style)
 
 import Dispatch
+import Material.Msg as Msg
 
 
 -- OPTIONS
@@ -329,6 +330,11 @@ update action model =
 
 -- VIEW
 
+view' : (Msg.Msg (Container c) m -> m) -> (Msg m -> m) -> Model -> List (Property m) -> Html m
+view' dp lift model options =
+  view lift model (Options.inner [ Options.dispatch dp ]
+                  :: Options.dispatch dp
+                  :: options)
 
 {-| Component view
 
@@ -339,7 +345,8 @@ if you need to apply styling to the underlying `<input>` element.
 -}
 view : (Msg m -> m) -> Model -> List (Property m) -> Html m
 view lift model options =
-  let 
+  let
+
     ({ config } as summary) = 
       Options.collect defaultConfig options
 
@@ -381,7 +388,7 @@ view lift model options =
           []
 
   in
-    Options.apply  summary div
+    Options.apply summary div
       [ cs "mdl-textfield"
       , cs "mdl-js-textfield"
       , cs "is-upgraded"
@@ -390,13 +397,14 @@ view lift model options =
       , if val /= "" then cs "is-dirty" else nop
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
-      , Options.dispatch (Dispatch >> lift)
+      --, Options.dispatch' (Dispatch >> lift)
+      --, Options.dispatch' (Msg.Dispatch >> lift')
       ]
       []
       [ Options.styled' elementFunction
           [ cs "mdl-textfield__input"
           , css "outline" "none"
-          , Options.dispatch (Dispatch >> lift)
+          --, Options.dispatch' (Dispatch >> lift)
 
             {- NOTE: Ordering here is important.
             Currently former attributes override latter ones.
@@ -455,14 +463,14 @@ of the textfield's implementation, and so is mostly useful for positioning
 if you need to apply styling to the underlying `<input>` element. 
 -}
 render 
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> Html m
-render =
+render lift =
   Parts.create 
-    view (\_ msg model -> Just (update msg model))
+    (view' lift) (\_ msg model -> Just (update msg model))
     .textfield (\x c -> { c | textfield = x }) 
     defaultModel
-
+      (Msg.Internal >> lift)

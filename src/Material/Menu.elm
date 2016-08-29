@@ -97,6 +97,7 @@ import Material.Options.Internal exposing (attribute)
 import Material.Ripple as Ripple
 import Parts exposing (Indexed, Index)
 
+import Material.Msg as Msg
 
 -- CONSTANTS
 
@@ -688,6 +689,7 @@ type alias Container c =
   { c | menu : Indexed Model }
 
 
+
 {-| Component render. Below is an example, assuming boilerplate setup as
 indicated in `Material`, and a user message `Select String`.
 
@@ -708,36 +710,39 @@ indicated in `Material`, and a user message `Select String`.
       ]
 -}
 render
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Item m)
   -> Html m
-render =
+render lift =
   Parts.create 
     view update' .menu (\x y -> {y | menu=x}) defaultModel
+      (Msg.Internal >> lift)
 
 
 pack : (Parts.Msg (Container b) m -> m) -> Parts.Index -> (Msg m) -> m
-pack = 
-  Parts.pack update' .menu (\x y -> {y | menu=x}) defaultModel 
+pack lift =
+  Parts.pack update' .menu (\x y -> {y | menu=x}) defaultModel
+    (lift)
 
 
 {-| Parts-compatible subscription.
 -}
-subs : (Parts.Msg (Container b) m -> m) -> Container b -> Sub m
+subs : (Msg.Msg (Container b) m -> m) -> Container b -> Sub m
 subs lift =
   .menu
   >> Dict.foldl 
        (\idx model ss -> 
           Sub.map 
-            (pack lift idx)
+            (pack (Msg.Internal >> lift) idx)
             (subscriptions model)
           :: ss)
        []
-  >> Sub.batch 
-      
+  >> Sub.batch
+
+
 update' : Parts.Update Model (Msg msg) msg
 update' fwd msg model = 
   update fwd msg model 

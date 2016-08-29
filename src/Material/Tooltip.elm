@@ -74,6 +74,7 @@ import DOM
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
 import String
+import Material.Msg as Msg
 
 
 -- MODEL
@@ -429,16 +430,17 @@ type alias Container c =
 {-| Component render.
 -}
 render :
-  (Parts.Msg (Container c) m -> m)
+  (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Html m)
   -> Html m
-render =
+render lift =
   Parts.create 
     view (Parts.generalize update) 
     .tooltip (\x y -> { y | tooltip = x }) defaultModel
+      (Msg.Internal >> lift)
 
 
 set : Parts.Set (Indexed Model) (Container c)
@@ -467,11 +469,11 @@ onMouseLeave lift idx =
 
 {-| Attach event handlers for Parts version
 -}
-attach : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
+attach : (Msg.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 attach lift index =
   Options.many
-    [ Internal.attribute <| onMouseEnter lift index
-    , Internal.attribute <| onMouseLeave lift index
+    [ Internal.attribute <| onMouseEnter (Msg.Internal >> lift) index
+    , Internal.attribute <| onMouseLeave (Msg.Internal >> lift) index
     ]
 
 

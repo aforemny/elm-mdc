@@ -74,7 +74,7 @@ import Material.Helpers as Helpers
 import Material.Options as Options exposing (cs, when)
 import Material.Ripple as Ripple
 
-
+import Material.Msg as Msg
 
 -- MODEL
 
@@ -396,6 +396,10 @@ type alias Container c =
   { c | button : Indexed Model }
 
 
+view' : (Msg.Msg (Container c) m -> m) -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+view' dp lift model options =
+  view lift model (Options.dispatch dp :: options)
+
 {-| Component render.  Below is an example, assuming boilerplate setup as
 indicated in `Material`, and a user message `PollMsg`.
 
@@ -407,11 +411,12 @@ indicated in `Material`, and a user message `PollMsg`.
       [ text "Fetch new"]
 -}
 render
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m)
   -> Html m
-render =
-  Parts.create view (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+render lift =
+  Parts.create (view' lift) (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+    (Msg.Internal >> lift)

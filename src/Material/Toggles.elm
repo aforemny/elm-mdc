@@ -54,6 +54,7 @@ import Parts exposing (Indexed)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
 import Material.Ripple as Ripple
+import Material.Msg as Msg
 
 
 
@@ -308,17 +309,18 @@ type alias Container c =
 
 render
    : ((Msg -> b) -> Parts.View Model c)
-  -> (Parts.Msg { d | toggles : Indexed Model } b -> b)
+  -> (Msg.Msg { d | toggles : Indexed Model } b -> b)
   -> Parts.Index
   -> Parts.View { d | toggles : Indexed Model } c
-render view = 
+render view lift =
   Parts.create view (Parts.generalize update) .toggles (\x y -> {y | toggles=x}) defaultModel
+    (Msg.Internal >> lift)
 
 
 {-| Component render (checkbox)
 -}
 checkbox 
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
@@ -331,7 +333,7 @@ checkbox =
 {-| Component render (switch) 
 -}
 switch
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
@@ -344,7 +346,7 @@ switch =
 {-| Component render (radio button) 
 -}
 radio
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)

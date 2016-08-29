@@ -84,6 +84,7 @@ import Html.Attributes as Html exposing (class)
 import Html.Events as Html
 import Html.Keyed as Keyed
 import Dict exposing (Dict)
+import Material.Msg as Msg
 
 
 -- MODEL
@@ -281,14 +282,15 @@ type alias Container c =
 {-| Component render.
 -}
 render :
-  (Parts.Msg (Container c) m -> m)
+  (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Label m)
   -> List (Html m)
   -> Html m
-render =
+render lift =
   Parts.create 
     view (Parts.generalize update) 
    .tabs (\x y -> { y | tabs = x }) defaultModel
+     (Msg.Internal >> lift)

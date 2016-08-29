@@ -173,6 +173,8 @@ import Material.Tooltip as Tooltip
 import Material.Tabs as Tabs
 --import Material.Template as Template
 
+import Dispatch
+import Material.Msg as Msg
 
 {-| Model encompassing all Material components. Since some components store
 user actions in their model (notably Snackbar), the model is generic in the 
@@ -207,24 +209,28 @@ model =
   }
 
 
-{-| Msg encompassing actions of all Material components. 
+{-| Msg encompassing actions of all Material components.
 -}
-type alias Msg obs = 
-  Parts.Msg Model obs
+type alias Msg obs =
+  Msg.Msg Model obs
 
 
-{-| Update function for the above Msg. Provide as the first 
-argument a lifting function that embeds the generic MDL action in 
-your own Msg type. 
+{-| Update function for the above Msg. Provide as the first
+argument a lifting function that embeds the generic MDL action in
+your own Msg type.
 -}
-update : 
+update :
      Msg obs
   -> { model | mdl : Model }
   -> ({ model | mdl : Model }, Cmd obs)
-update msg model = 
-  Parts.update' msg model.mdl 
-    |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
-    |> Maybe.withDefault (model, Cmd.none)
+update action model =
+  case action of
+    Msg.Internal msg ->
+      Parts.update' msg model.mdl
+        |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
+        |> Maybe.withDefault (model, Cmd.none)
+    Msg.Dispatch msg ->
+      (model, Dispatch.forward msg)
 
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
@@ -257,7 +263,7 @@ initialisation.
 subscriptions : (Msg obs -> obs) -> { model | mdl : Model } -> Sub obs
 subscriptions lift model = 
   Sub.batch 
-    [ Layout.subs lift model.mdl 
+    [ Layout.subs lift model.mdl
     , Menu.subs lift model.mdl
     ] 
 
@@ -267,4 +273,3 @@ subscriptions lift model =
 init : (Msg obs -> obs) -> Cmd obs
 init lift = 
   Layout.sub0 lift
-

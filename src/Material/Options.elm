@@ -8,7 +8,7 @@ module Material.Options exposing
   , inner
   , on
   , on1
-  , dispatch
+  , dispatch, dispatch'
   )
 
 
@@ -56,7 +56,7 @@ applying MDL typography or color to standard elements.
 @docs center, scrim, disabled
 
 ## Events
-@docs on, on1, dispatch
+@docs on, on1, dispatch, dispatch'
 
 # Internal
 The following types and values are used internally in the library. 
@@ -74,7 +74,10 @@ import Html.Events
 import Material.Options.Internal exposing (..)
 
 import Json.Decode as Decoder
+
 import Dispatch
+
+import Material.Msg as Msg
 
 -- PROPERTIES
 
@@ -400,6 +403,15 @@ onWithOptions evt options =
 
 **NOTE** If this is missing no events are dispatched with `Options.on`
  -}
-dispatch : (Dispatch.Msg m -> m) -> Property c m
-dispatch =
+dispatch : (Msg.Msg a m -> m) -> Property c m
+dispatch lift =
+  Lift (Msg.Dispatch >> lift)
+
+
+{-| Add a lifting function that is **required** for multi event dispatch.
+
+**NOTE** If this is missing no events are dispatched with `Options.on`
+ -}
+dispatch' : (Dispatch.Msg b -> b) -> Property c b
+dispatch' =
   Lift

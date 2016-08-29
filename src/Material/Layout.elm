@@ -134,6 +134,7 @@ import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop, css, when, styled)
 import Material.Options.Internal exposing (attribute)
+import Material.Msg as Msg
 
 import DOM
 
@@ -889,14 +890,15 @@ Excerpt:
       }
 -}
 render 
-  : (Parts.Msg (Container b) c -> c)
+  : (Msg.Msg (Container b) c -> c)
  -> Container b
  -> List (Property c) 
  -> Contents c 
  -> Html c
-render =
+render lift =
   Parts.create1
-    view update' .layout (\x c -> { c | layout = x }) 
+    view update' .layout (\x c -> { c | layout = x })
+      (Msg.Internal >> lift)
 
 
 pack : (Parts.Msg (Container b) m -> m) -> Msg -> m
@@ -908,18 +910,18 @@ pack fwd =
 `subscriptions` must be connected for the Layout to be responsive under
 viewport size changes. 
 -}
-subs : (Parts.Msg (Container b) c -> c) -> Container b -> Sub c
+subs : (Msg.Msg (Container b) c -> c) -> Container b -> Sub c
 subs lift = 
-  .layout >> subscriptions >> Sub.map (pack lift)
+  .layout >> subscriptions >> Sub.map (pack (Msg.Internal >> lift))
 
 
 {-| Component subscription initialiser. Either this or 
 `init` must be connected for the Layout to be responsive under
 viewport size changes. Example use: 
 -}
-sub0 : (Parts.Msg (Container b) c -> c) -> Cmd c
+sub0 : (Msg.Msg (Container b) c -> c) -> Cmd c
 sub0 lift = 
-  snd init |> Cmd.map (pack lift)
+  snd init |> Cmd.map (pack (Msg.Internal >> lift))
 
 
 {-| Toggle drawer. 
@@ -927,9 +929,9 @@ sub0 lift =
 This function is for use with parts typing. For plain TEA, simply issue 
 an update for the exposed Msg `ToggleDrawer`. 
 -}
-toggleDrawer : (Parts.Msg (Container b) c -> c) -> c
+toggleDrawer : (Msg.Msg (Container b) c -> c) -> c
 toggleDrawer lift = 
-  (pack lift) ToggleDrawer 
+  (pack (Msg.Internal >> lift)) ToggleDrawer
 
 
 {-| Set tabsWidth

@@ -300,7 +300,8 @@ view model  =
                    |> List.map (\ (index, value) ->
                                   Chip.button
                                     [ Options.css "margin" "5px 5px"
-                                    , Options.dispatch Dispatch
+                                    --, Options.dispatch (Material.dispatch >> Material)
+                                    , Options.dispatch Mdl
                                     , Options.on1 "click" (ChipClick index)
                                     , Options.on1 "click" (NoOp (toString (ChipClick index)))
                                     --, Chip.onClick (ChipClick index)
@@ -315,7 +316,10 @@ view model  =
                   [ Button.colored
                   , Button.ripple
                   , Button.raised
-                  , Button.onClick (AddChip "Amazing Chip")
+                  --, Button.onClick (AddChip "Amazing Chip")
+                  --, Options.dispatch Dispatch
+                  , Options.on1 "click" (AddChip "Amazing Chip")
+                  , Options.on1 "click" (NoOp (toString "Amazing Chip"))
                   ]
                   [ text "Add chip" ]
 
