@@ -3,6 +3,7 @@ module Dispatch
     ( Msg
     , forward
     , listeners
+    , listeners'
     , group
     )
 
@@ -11,6 +12,7 @@ module Dispatch
 @docs Msg
 @docs forward
 @docs listeners
+@docs listeners'
 @docs group
 -}
 
@@ -28,7 +30,7 @@ type Msg m
 
 
 type alias Pair m =
-  (Json.Decoder m, Maybe (Html.Events.Options))
+  ( Json.Decoder m, Maybe (Html.Events.Options) )
 
 
 {-| Maps messages to commands
@@ -102,6 +104,26 @@ onEvtOptions lift event options decoders =
         |> Html.Events.onWithOptions event options
         |> Just
 
+
+onSingle :
+  String
+  -> Html.Events.Options
+  -> List (Json.Decoder msg)
+  -> Maybe (Html.Attribute msg)
+onSingle event options decoders =
+  case decoders of
+    [] ->
+      Nothing
+
+    [ x ] ->
+      Html.Events.onWithOptions event options x
+        |> Just
+
+    x :: xs ->
+      Html.Events.onWithOptions event options x
+        |> Just
+
+
 {-| Updates value by given function if found, inserts otherwise
 -}
 upsert : comparable -> m -> (Maybe m -> Maybe m) -> Dict comparable m -> Dict comparable m
@@ -110,7 +132,6 @@ upsert key value func dict =
     Dict.update key func dict
   else
     Dict.insert key value dict
-
 
 
 pickOptions : List (Pair a) -> Html.Events.Options
@@ -133,24 +154,39 @@ listeners lift items =
     |> List.filterMap identity
 
 
+{-| Combines decoders for events and returns event listeners
+-}
+listeners' :
+  List ( String, List (Pair a) )
+  -> List (Html.Attribute a)
+listeners' items =
+  items
+    |> List.map
+        (\( event, decoders ) ->
+          onSingle event (pickOptions decoders) (List.map fst decoders)
+        )
+    |> List.filterMap identity
+
+
 {-| Group a list of pairs based on the first item
 -}
 group : List ( a, b ) -> List ( a, List b )
-group = group' []
+group =
+  group' []
 
 
-split
-    : a
-    -> List b
-    -> List ( a, b )
-    -> List ( a, b )
-    -> ( List b, List ( a, b ) )
+split :
+  a
+  -> List b
+  -> List ( a, b )
+  -> List ( a, b )
+  -> ( List b, List ( a, b ) )
 split k0 same differ xs =
   case xs of
     [] ->
-      (same, differ)
+      ( same, differ )
 
-    ((k, v) as x) :: xs ->
+    (( k, v ) as x) :: xs ->
       if k == k0 then
         split k0 (v :: same) differ xs
       else
@@ -163,17 +199,18 @@ group' acc items =
     [] ->
       acc
 
-    [(k,v)] ->
-      (k, [v]) :: acc
+    [ ( k, v ) ] ->
+      ( k, [ v ] ) :: acc
 
-    [(k1,v1), (k2,v2)] ->
+    [ ( k1, v1 ), ( k2, v2 ) ] ->
       if k1 == k2 then
-        (k1, [v2, v1]) :: acc
+        ( k1, [ v2, v1 ] ) :: acc
       else
-        (k2, [v2]) :: (k1, [v1]) :: acc
+        ( k2, [ v2 ] ) :: ( k1, [ v1 ] ) :: acc
 
-    (k,v) :: xs ->
-      let (same, different) =
-            split k [v] [] xs
+    ( k, v ) :: xs ->
+      let
+        ( same, different ) =
+          split k [ v ] [] xs
       in
-        group' ((k, same) :: acc) different
+        group' (( k, same ) :: acc) different

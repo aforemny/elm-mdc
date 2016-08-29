@@ -160,7 +160,7 @@ addAttributes summary attrs =
         Just lift ->
           Dispatch.listeners lift (Dispatch.group summary.listeners)
         Nothing ->
-          []
+          Dispatch.listeners' (Dispatch.group summary.listeners)
     ]
 
 
