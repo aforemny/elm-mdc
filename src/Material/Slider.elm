@@ -51,9 +51,7 @@ for a live demo.
 
 import Html exposing (..)
 import Html.Attributes as Html
-import Html.Events as Html
 import Material.Options as Options exposing (cs, css, when)
-import Material.Options.Internal as Internal
 import Material.Helpers as Helpers
 import Json.Decode as Json
 
@@ -206,6 +204,9 @@ view options =
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
+          , case summary.dispatch of
+              Just l -> Options.dispatch' l
+              Nothing -> Options.nop
           , listeners
           , Options.disabled config.disabled
             -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag

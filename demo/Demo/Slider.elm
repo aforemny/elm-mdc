@@ -6,7 +6,7 @@ import Html exposing (..)
 import Material.Slider as Slider
 import Material
 import Material.Grid as Grid
-import Material.Options exposing (css)
+import Material.Options as Options exposing (css)
 
 import Demo.Code as Code
 import Demo.Page as Page
@@ -32,6 +32,7 @@ model =
 type Msg
   = Slider Int Float
   | Mdl (Material.Msg Msg)
+  | NoOp String
 
 
 get : Int -> Dict Int Float -> Float
@@ -47,6 +48,9 @@ getDef key def dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
+    NoOp msg ->
+      let _ = Debug.log "NoOp" msg
+      in (model, Cmd.none)
 
     Slider idx value ->
       let
@@ -80,6 +84,8 @@ view model  =
       , demoContainer
           ( Slider.view
               [ Slider.onChange (Slider 0)
+              , Options.dispatch Mdl
+              , Options.inner [ Options.on1 "change" (NoOp <| toString (Slider 0 0)) ]
               , Slider.value (getDef 0 50.0 model.values)
               ]
           ,
