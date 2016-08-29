@@ -7,6 +7,7 @@ import Json.Decode as Json exposing ((:=), at)
 import Platform.Cmd exposing (Cmd, none)
 
 import Material.Helpers exposing (effect, pure, cssTransitionStep)
+import Material.Options as Options
 
 import DOM
 
@@ -140,6 +141,16 @@ downOn =
 downOn' : (Msg -> m) -> String -> Attribute m
 downOn' f name =
   Html.Events.on name (Json.map (Down >> f) geometryDecoder)
+
+
+downOn_ : (Msg -> m) -> String -> Options.Property c m
+downOn_ f name =
+  Options.on name (Json.map (Down >> f) geometryDecoder)
+
+
+upOn_ : (Msg -> m) -> String -> Options.Property c m
+upOn_ f name =
+  Options.on name (Json.succeed (f Up))
 
 
 upOn : String -> Attribute Msg

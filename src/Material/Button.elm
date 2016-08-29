@@ -225,17 +225,21 @@ view lift model config html =
   let
     summary = Options.collect defaultConfig config
 
-    startListeners =
-      if summary.config.ripple then
-        [ Ripple.downOn' lift "mousedown" |> Just
-        , Ripple.downOn' lift "touchstart" |> Just
+
+    listeners =
+      Options.many
+        [ Ripple.downOn_ lift "mousedown"
+        , Ripple.downOn_ lift "touchstart"
+        , Ripple.upOn_ lift "touchcancel"
+        , Ripple.upOn_ lift "mouseup"
+        , Ripple.upOn_ lift "blur"
+        , Ripple.upOn_ lift "mouseleave"
         ]
-      else
-        []
+
 
     stopListeners =
       let handle =
-        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
+            Just << Helpers.blurOn
       in
         [ handle "mouseup"
         , handle "mouseleave"
@@ -259,8 +263,9 @@ view lift model config html =
       [ cs "mdl-button"
       , cs "mdl-js-button"
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple
+      , listeners
       ]
-      (List.concat [startListeners, stopListeners, misc, type']
+      (List.concat [stopListeners, misc, type']
          |> List.filterMap identity)
       (if summary.config.ripple then
           List.concat
@@ -268,9 +273,8 @@ view lift model config html =
             -- Ripple element must be last or blurAndForward hack fails.
             , [ Html.App.map lift <| Ripple.view'
                   [ class "mdl-button__ripple-container"
-                  --, Helpers.blurOn "mouseup"
-                  , Ripple.upOn "blur"
-                  , Ripple.upOn "touchcancel"
+                  -- , Ripple.upOn "blur"
+                  -- , Ripple.upOn "touchcancel"
                   ]
                   model
               ]
