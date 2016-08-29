@@ -175,24 +175,22 @@ receive mouse clicks via `onClick`.
 
   th [ ascending, numeric ] [ text "Price" ]
 -}
-type alias Header m =
+type alias Header =
   { numeric : Bool
   , sorted : Maybe Order
-  , onClick : Maybe (Attribute m)
   }
 
 
-defaultHeader : Header m
+defaultHeader : Header
 defaultHeader =
   { numeric = False
   , sorted = Nothing
-  , onClick = Nothing
   }
 
 
 {-| Define cell in table header 
 -}
-th : List (Property (Header m) m) -> List (Html m) -> Html m
+th : List (Property (Header) m) -> List (Html m) -> Html m
 th options html =
   let
     ({ config } as summary) =
@@ -205,9 +203,10 @@ th options html =
         Just Descending -> cs "mdl-data-table__header--sorted-descending"
         Nothing -> nop
     ]
-    (config.onClick 
-       |> Maybe.map (flip (::) [])
-       |> Maybe.withDefault [])
+    []
+    -- (config.onClick
+    --    |> Maybe.map (flip (::) [])
+    --    |> Maybe.withDefault [])
     html
 
 
@@ -248,9 +247,10 @@ type Order
 
 {-| Dispatch given message when cell is clicked. 
 -}
-onClick : m -> Property { a | onClick : Maybe (Attribute m) } m
+onClick : m -> Property c m
 onClick x =
-  Options.set (\options -> { options | onClick = Just (Html.onClick x) })
+  Options.on1 "click" x
+  --Options.set (\options -> { options | onClick = Just (Html.onClick x) })
 
 
 --Cell

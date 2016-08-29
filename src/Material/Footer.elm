@@ -362,7 +362,7 @@ mini props { left, right } =
 -}
 onClick : m -> Property m
 onClick =
-  Events.onClick >> attribute
+  Options.on1 "click"
 
 
 {-| href for Links.

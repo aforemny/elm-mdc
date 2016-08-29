@@ -190,10 +190,9 @@ view options =
     listeners =
       config.listener
         |> Maybe.map (\f -> 
-             [ Html.on "change" (Json.map f floatVal)
-             , Html.on "input" (Json.map f floatVal)
+             [ Options.on "change" (Json.map f floatVal)
+             , Options.on "input" (Json.map f floatVal)
              ]
-             |> List.map Internal.attribute
              |> Options.many
            )
         |> Maybe.withDefault Options.nop 

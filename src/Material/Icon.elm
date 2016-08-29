@@ -24,25 +24,24 @@ or an equivalent means of loading the icons in your HTML header.
 
 
 import Html exposing (i, text, Html, Attribute)
-import Html.Events
 
 import Material.Options as Options exposing (Property, cs, css, styled)
 
 
-type alias Config m = 
-  { onClick : Maybe (Attribute m)
+type alias Config =
+  {
   }
 
 
 {-| Type of Icon properties. (You are unlikely to need this.)
 -}
 type alias Property m = 
-  Options.Property (Config m) m
+  Options.Property (Config) m
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig = 
-  { onClick = Nothing
+  {
   }
 
 
@@ -51,8 +50,7 @@ with `Button.icon` instead.)
 -}
 onClick : m -> Property m
 onClick x =
-  Options.set
-    (\config -> { config | onClick = Just (Html.Events.onClick x) })
+  Options.on1 "click" x
 
 
 {-| Set icon to have size 18px. 
@@ -101,9 +99,7 @@ view name options =
   in 
     Options.apply summary Html.i
       [ cs "material-icons" ]
-      ( summary.config.onClick 
-          |> Maybe.map (flip (::) [])
-          |> Maybe.withDefault [] )
+      []
       [ text name ]
 
   

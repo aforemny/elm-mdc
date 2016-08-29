@@ -119,9 +119,11 @@ onSingle event options decoders =
       Html.Events.onWithOptions event options x
         |> Just
 
+    -- NOTE: This need to be changed, currently only for debugging
     x :: xs ->
-      Html.Events.onWithOptions event options x
-        |> Just
+      Debug.crash "Multiple events with no `Options.dispatch Mdl`"
+      -- Html.Events.onWithOptions event options x
+      --   |> Just
 
 
 {-| Updates value by given function if found, inserts otherwise

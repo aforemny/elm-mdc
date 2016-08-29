@@ -110,18 +110,16 @@ update action =
 -- VIEW
 
 
-type alias Config m =
+type alias Config =
   { ripple : Bool
-  , onClick : Maybe (Attribute m)
   , disabled : Bool
   , type' : Maybe String
   }
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
   { ripple = False
-  , onClick = Nothing
   , disabled = False
   , type' = Nothing
   }
@@ -130,15 +128,14 @@ defaultConfig =
 {-| Properties for Button options.
 -}
 type alias Property m =
-  Options.Property (Config m) m
+  Options.Property (Config) m
 
 
 {-| Add an `on "click"` handler to a button.
 -}
 onClick : m -> Property m
 onClick x =
-  Options.set
-    (\options -> { options | onClick = Just (Html.Events.onClick x) })
+  Options.on1 "click" x
 
 
 {-| Set button to ripple when clicked.
@@ -246,8 +243,7 @@ view lift model config html =
         ]
 
     misc =
-      [ summary.config.onClick
-      , if summary.config.disabled then
+      [ if summary.config.disabled then
           Just (Html.Attributes.disabled True)
         else
           Nothing

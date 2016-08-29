@@ -46,7 +46,7 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.App
 import Html.Attributes exposing (type', class, disabled, checked)
-import Html.Events exposing (on, onFocus, onBlur)
+--import Html.Events exposing (on, onFocus, onBlur)
 import Json.Decode as Json
 
 import Parts exposing (Indexed)
@@ -111,7 +111,6 @@ type alias Config m =
   , value : Bool
   , ripple : Bool
   , group : Maybe (Attribute m)
-  , onClick : Maybe (Attribute m)
   , inner : List (Options.Style m)
   }
 
@@ -122,7 +121,6 @@ defaultConfig =
   , value = False
   , ripple = False
   , group = Nothing
-  , onClick = Nothing
   , inner = []
   }
 
@@ -138,8 +136,7 @@ new value of the toggle (that is, the negation of the current value).
 -}
 onClick : m -> Property m
 onClick x =
-  Options.set
-    (\options -> { options | onClick = Just (Html.Events.on "change" (Json.succeed x)) })
+  Options.on1 "change" x
 
 
 {-| Set toggle to ripple when clicked.
@@ -189,12 +186,11 @@ top lift group model summary elems =
       , cs "is-upgraded"
       , cs "is-checked" `when` cfg.value
       , cs "is-focused" `when` model.isFocused
+      , Options.on1 "focus" (lift (SetFocus True))
+      , Options.on1 "blur" (lift (SetFocus False))
       ]
       [ blurOn "mouseup"
-      , onFocus (lift (SetFocus True))
-      , onBlur (lift (SetFocus False))
-      , cfg.onClick |> Maybe.withDefault noAttr
-      ] 
+      ]
       (List.concat 
         [ elems
         , if cfg.ripple then 

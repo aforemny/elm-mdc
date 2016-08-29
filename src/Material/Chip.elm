@@ -61,7 +61,6 @@ type alias Config msg =
   { deleteIcon : Maybe String
   , deleteLink : Maybe (Html.Attribute msg)
   , deleteClick : Maybe (Html.Attribute msg)
-  , listeners : List (Html.Attribute msg)
   }
 
 
@@ -70,7 +69,6 @@ defaultConfig =
   { deleteIcon = Nothing
   , deleteLink = Nothing
   , deleteClick = Nothing
-  , listeners = []
   }
 
 
@@ -128,20 +126,15 @@ deleteClick msg =
 {-| Add custom event handlers
 -}
 on : String -> Json.Decoder m -> Property m
-on event decoder =
-  Options.set
-    (\config ->
-      { config
-        | listeners = config.listeners ++ [ (Html.Events.on event decoder) ]
-      }
-    )
+on =
+  Options.on
 
 
 {-| Add an `onClick` handler to the chip
 -}
 onClick : msg -> Property msg
 onClick msg =
-  on "click" (Json.succeed msg)
+  Options.on "click" (Json.succeed msg)
 
 
 type alias Priority =
@@ -271,9 +264,6 @@ chip element props items =
     config =
       summary.config
 
-    listeners =
-      config.listeners
-
     action =
       getActionElement config
 
@@ -307,7 +297,7 @@ chip element props items =
        , Internal.attribute <| Helpers.blurOn "mouseleave"
        , Internal.attribute <| Helpers.blurOn "touchend"
        ] ++ props)
-      listeners
+      []
       content
 
 

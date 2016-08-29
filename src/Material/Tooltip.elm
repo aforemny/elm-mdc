@@ -69,7 +69,6 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Parts exposing (Indexed)
 import Material.Options as Options exposing (Style, cs, css, when)
-import Material.Options.Internal as Internal
 import DOM
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
