@@ -4,6 +4,7 @@ import Html
 import Html.Events
 import Json.Decode
 
+import Dispatch
 
 {-| Internal type of properties. Do not use directly; use constructor functions
    in the Options module or `attribute` instead.
@@ -15,6 +16,7 @@ type Property c m
   | Many (List (Property c m))
   | Set (c -> c)
   | Listener String (Maybe (Html.Events.Options)) (Json.Decode.Decoder m)
+  | Lift (Dispatch.Msg m -> m)
   | None
 
 

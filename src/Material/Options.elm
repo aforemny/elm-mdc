@@ -2,12 +2,13 @@ module Material.Options exposing
   ( Property, Summary, collect
   , cs, css, many, nop, set, data
   , when, maybe, disabled
-  , apply, apply', styled, styled', styled'', stylesheet
+  , apply, styled, styled', stylesheet
   , Style, div, span, img, attribute, center, scrim
   , id
   , inner
   , on
   , on1
+  , dispatch
   )
 
 
@@ -55,14 +56,11 @@ applying MDL typography or color to standard elements.
 @docs center, scrim, disabled
 
 ## Events
-@docs on, on1
+@docs on, on1, dispatch
 
 # Internal
 The following types and values are used internally in the library. 
 @docs Summary, apply, collect, set
-
-@docs apply'
-@docs styled''
 
 -}
 
@@ -98,6 +96,7 @@ type alias Summary c m =
   , attrs : List (Attribute m)
   , config : c
   , listeners : List (String, (Decoder.Decoder m, Maybe Html.Events.Options))
+  , dispatch : Maybe (Dispatch.Msg m -> m)
   }
 
 
@@ -114,10 +113,13 @@ collect1 f option acc =
     Attribute x -> { acc | attrs = x :: acc.attrs }
     Many options -> List.foldl (collect1 f) acc options
     Set g -> { acc | config = f g acc.config }
-    -- Listener k v -> { acc | listeners = Dict.insert k v acc.listeners }
     Listener event options decoder ->
       { acc |
           listeners = (event, (decoder, options)) :: acc.listeners
+      }
+    Lift m ->
+      { acc |
+          dispatch = Just m
       }
     None -> acc
 
@@ -132,14 +134,14 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : c -> List (Property c m) -> Summary c m
 collect config0 =
-  recollect { classes=[], css=[], attrs=[], config=config0, listeners = [] }
+  recollect { classes=[], css=[], attrs=[], config=config0, listeners = [], dispatch = Nothing }
 
 
 collect' : List (Property c m) -> Summary () m 
 collect' options = 
   List.foldl 
     (collect1 (\_ _ -> ()))
-    { classes=[], css=[], attrs=[], config=(), listeners = [] }
+    { classes=[], css=[], attrs=[], config=(), listeners = [], dispatch = Nothing }
     options
 
 
@@ -150,20 +152,11 @@ addAttributes summary attrs =
     , [ Html.Attributes.style summary.css ]
     , [ Html.Attributes.class (String.join " " summary.classes) ]
     , summary.attrs
-    ]
-
-addLiftable
-  : (Dispatch.Msg m -> m)
-  -> Summary c m
-  -> List (Attribute m)
-  -> List (Attribute m)
-addLiftable lift summary attrs =
-  List.concat
-    [ attrs
-    , [ Html.Attributes.style summary.css ]
-    , [ Html.Attributes.class (String.join " " summary.classes) ]
-    , summary.attrs
-    , Dispatch.listeners lift (Dispatch.group summary.listeners)
+    , case summary.dispatch of
+        Just lift ->
+          Dispatch.listeners lift (Dispatch.group summary.listeners)
+        Nothing ->
+          []
     ]
 
 
@@ -178,23 +171,7 @@ apply summary ctor options attrs =
       (recollect summary options) attrs)
 
 
-{-| Apply a `Summary m`, extra properties, and optional attributes
-to a standard Html node.
--}
-apply'
-    : (Dispatch.Msg a -> a)
-    -> Summary b a
-    -> (List (Attribute a) -> d)
-    -> List (Property b a)
-    -> List (Attribute a)
-    -> d
-apply' lift summary ctor options attrs =
-  ctor
-    (addLiftable lift
-      (recollect summary options) attrs)
-
-
-{-| Apply properties to a standard Html element. 
+{-| Apply properties to a standard Html element.
 -}
 styled : (List (Attribute m) -> a) -> List (Property c m) -> a
 styled ctor props = 
@@ -213,20 +190,6 @@ styled' ctor props attrs =
       (collect' props)
       attrs)
 
-
-{-| Apply properties and attributes to a standard Html element.
--}
-styled''
-    : (Dispatch.Msg a -> a)
-    -> (List (Attribute a) -> b)
-    -> List (Property d a)
-    -> List (Attribute a)
-    -> b
-styled'' lift ctor props attrs =
-  ctor
-    (addLiftable lift
-      (collect' props)
-      attrs)
 
 {-| Convenience function for the ultra-common case of apply elm-mdl styling to a
 `div` element. Use like this: 
@@ -431,3 +394,12 @@ on1 event m =
 onWithOptions : String -> Html.Events.Options -> (Decoder.Decoder m) -> Property c m
 onWithOptions evt options =
   Listener evt (Just options)
+
+
+{-| Add a lifting function that is **required** for multi event dispatch.
+
+**NOTE** If this is missing no events are dispatched with `Options.on`
+ -}
+dispatch : (Dispatch.Msg m -> m) -> Property c m
+dispatch =
+  Lift

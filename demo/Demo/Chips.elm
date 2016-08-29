@@ -16,6 +16,8 @@ import Demo.Code as Code
 
 import Dict exposing (Dict)
 
+import Dispatch
+
 -- MODEL
 
 
@@ -44,6 +46,8 @@ type Msg
   | AddChip String
   | RemoveChip Int
   | ChipClick Int
+  | Dispatch (Dispatch.Msg Msg)
+  | NoOp String
 
 
 
@@ -58,6 +62,13 @@ lastIndex dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
+    NoOp msg ->
+      let _ = Debug.log "NoOp" msg
+      in (model, Cmd.none )
+
+    Dispatch action' ->
+      (model, Dispatch.forward action' )
+
     Mdl action' ->
       Material.update action' model
 
@@ -289,7 +300,10 @@ view model  =
                    |> List.map (\ (index, value) ->
                                   Chip.button
                                     [ Options.css "margin" "5px 5px"
-                                    , Chip.onClick (ChipClick index)
+                                    , Options.dispatch Dispatch
+                                    , Options.on1 "click" (ChipClick index)
+                                    , Options.on1 "click" (NoOp (toString (ChipClick index)))
+                                    --, Chip.onClick (ChipClick index)
                                     , Chip.deleteClick (RemoveChip index)
                                     ]
                                     [ Chip.content []

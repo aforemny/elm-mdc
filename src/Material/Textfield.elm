@@ -381,7 +381,7 @@ view lift model options =
           []
 
   in
-    Options.apply' (Dispatch >> lift) summary div
+    Options.apply  summary div
       [ cs "mdl-textfield"
       , cs "mdl-js-textfield"
       , cs "is-upgraded"
@@ -390,11 +390,13 @@ view lift model options =
       , if val /= "" then cs "is-dirty" else nop
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
+      , Options.dispatch (Dispatch >> lift)
       ]
       []
-      [ Options.styled'' (Dispatch >> lift) elementFunction
+      [ Options.styled' elementFunction
           [ cs "mdl-textfield__input"
           , css "outline" "none"
+          , Options.dispatch (Dispatch >> lift)
 
             {- NOTE: Ordering here is important.
             Currently former attributes override latter ones.
