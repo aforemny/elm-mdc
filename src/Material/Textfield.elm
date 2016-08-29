@@ -303,21 +303,17 @@ defaultModel =
 
 {-| Component actions. `Input` carries the new value of the field.
 -}
-type Msg m
+type Msg
   = Blur
   | Focus
   | Input String
-  | Dispatch (Dispatch.Msg m)
 
 
 {-| Component update.
 -}
-update : Msg msg -> Model -> (Model, Cmd msg)
+update : Msg -> Model -> (Model, Cmd msg)
 update action model =
   case action of
-    Dispatch msg ->
-      (model, Dispatch.forward msg)
-
     Input str ->
       ({ model | value = str }, Cmd.none)
 
@@ -330,7 +326,7 @@ update action model =
 
 -- VIEW
 
-view' : (Msg.Msg (Container c) m -> m) -> (Msg m -> m) -> Model -> List (Property m) -> Html m
+view' : (Msg.Msg (Container c) m -> m) -> (Msg -> m) -> Model -> List (Property m) -> Html m
 view' dp lift model options =
   view lift model (Options.inner [ Options.dispatch dp ]
                   :: Options.dispatch dp
@@ -343,7 +339,7 @@ of the textfield's implementation, and so is mostly useful for positioning
 (e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`
 if you need to apply styling to the underlying `<input>` element. 
 -}
-view : (Msg m -> m) -> Model -> List (Property m) -> Html m
+view : (Msg -> m) -> Model -> List (Property m) -> Html m
 view lift model options =
   let
 
@@ -397,14 +393,11 @@ view lift model options =
       , if val /= "" then cs "is-dirty" else nop
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
-      --, Options.dispatch' (Dispatch >> lift)
-      --, Options.dispatch' (Msg.Dispatch >> lift')
       ]
       []
       [ Options.styled' elementFunction
           [ cs "mdl-textfield__input"
           , css "outline" "none"
-          --, Options.dispatch' (Dispatch >> lift)
 
             {- NOTE: Ordering here is important.
             Currently former attributes override latter ones.
@@ -413,9 +406,6 @@ view lift model options =
             Html.Events.on "focus" ... it would not have precedence
             over our own focus handler.
              -}
-          -- , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
-          -- , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
-
           , Options.on "focus" (Decoder.succeed (lift Focus))
           , Options.on "blur" (Decoder.succeed (lift Blur))
 
