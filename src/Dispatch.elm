@@ -121,7 +121,7 @@ onSingle event options decoders =
 
     -- NOTE: This need to be changed, currently only for debugging
     x :: xs ->
-      Debug.crash "Multiple events with no `Options.dispatch Mdl`"
+      Debug.crash <| "Multiple decoders for Event '" ++ event ++  "' with no `Options.dispatch Mdl`"
       -- Html.Events.onWithOptions event options x
       --   |> Just
 
