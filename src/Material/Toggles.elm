@@ -307,6 +307,7 @@ type alias Container c =
   { c | toggles : Indexed Model }
 
 
+
 render
    : ((Msg -> b) -> Parts.View Model c)
   -> (Msg.Msg { d | toggles : Indexed Model } b -> b)
@@ -326,8 +327,8 @@ checkbox
   -> List (Property m)
   -> List (Html m) 
   -> Html m
-checkbox = 
-  render viewCheckbox
+checkbox lift =
+  render (Options.inject' viewCheckbox lift) lift
 
 
 {-| Component render (switch) 
@@ -339,8 +340,8 @@ switch
   -> List (Property m)
   -> List (Html m)
   -> Html m
-switch = 
-  render viewSwitch
+switch lift =
+  render (Options.inject' viewSwitch lift) lift
 
 
 {-| Component render (radio button) 
@@ -352,8 +353,5 @@ radio
   -> List (Property m)
   -> List (Html m) 
   -> Html m
-radio = 
-  render viewRadio
-
-
-
+radio lift =
+  render (Options.inject' viewRadio lift) lift

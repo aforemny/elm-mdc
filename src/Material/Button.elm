@@ -418,5 +418,5 @@ render
   -> List (Html m)
   -> Html m
 render lift =
-  Parts.create (view' lift) (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+  Parts.create (Options.inject view lift) (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
     (Msg.Internal >> lift)

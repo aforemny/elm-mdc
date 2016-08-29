@@ -438,7 +438,7 @@ render :
   -> Html m
 render lift =
   Parts.create 
-    view (Parts.generalize update) 
+    (Options.inject view lift) (Parts.generalize update)
     .tooltip (\x y -> { y | tooltip = x }) defaultModel
       (Msg.Internal >> lift)
 
