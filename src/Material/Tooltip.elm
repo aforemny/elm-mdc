@@ -455,16 +455,16 @@ pack =
 
 {-| Mouse enter event handler, Parts variant
 -}
-onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Attribute d
+onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Options.Property c d
 onMouseEnter lift idx =
-  Html.Events.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
+  Options.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
 
 
 {-| Mouse leave event handler, Parts variant
 -}
-onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Attribute b
+onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 onMouseLeave lift idx =
-  Html.Events.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
+  Options.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
 
 
 {-| Attach event handlers for Parts version
@@ -472,8 +472,9 @@ onMouseLeave lift idx =
 attach : (Msg.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 attach lift index =
   Options.many
-    [ Internal.attribute <| onMouseEnter (Msg.Internal >> lift) index
-    , Internal.attribute <| onMouseLeave (Msg.Internal >> lift) index
+    [ onMouseEnter (Msg.Internal >> lift) index
+    , onMouseLeave (Msg.Internal >> lift) index
+    , Options.dispatch lift
     ]
 
 
