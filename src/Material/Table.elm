@@ -45,7 +45,6 @@ The following options have effect only when applied in the header row.
 @docs ascending, descending, numeric, Order, sorted, selected
 -}
 
-import Html.Events as Html
 import Html exposing (Html, Attribute)
 
 import Material.Options as Options exposing (Property, cs, nop)

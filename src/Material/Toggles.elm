@@ -47,7 +47,7 @@ import Html exposing (..)
 import Html.App
 import Html.Attributes exposing (type', class, disabled, checked)
 --import Html.Events exposing (on, onFocus, onBlur)
-import Json.Decode as Json
+--import Json.Decode as Json
 
 import Parts exposing (Indexed)
 

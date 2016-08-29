@@ -87,7 +87,6 @@ for a live demo.
 
 import Html exposing (..)
 import Html.Attributes as Html
-import Html.Events as Events
 import Material.Options as Options exposing (Style, cs)
 import String
 import Regex

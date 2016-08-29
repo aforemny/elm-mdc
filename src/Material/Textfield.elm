@@ -79,7 +79,6 @@ import Parts exposing (Indexed)
 
 import Material.Options as Options exposing (cs, css, nop, Style)
 
-import Dispatch
 import Material.Msg as Msg
 
 

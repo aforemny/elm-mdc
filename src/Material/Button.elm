@@ -63,7 +63,7 @@ for details about what type of buttons are appropriate for which situations.
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events
+--import Html.Events
 import Html.App
 import Platform.Cmd exposing (Cmd, none)
 
