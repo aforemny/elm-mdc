@@ -88,51 +88,71 @@ type alias Summary c m =
   }
 
 
+{- `collect` and variants are called multiple times by nearly every use of
+  any elm-mdl component. Carefully consider performance implications before
+  modifying. In particular: 
+
+  - Avoid closures. They are slow to create and cause subsequent GC.
+  - Pre-compute where possible. 
+
+  Earlier versions of `collect`, violating these rules, consumed ~20% of
+  execution time for `Cards.view` and `Textfield.view`.
+-}
+
 
 collect1 
-  : ((c -> c) -> c' -> c') 
-  -> Property c m 
-  -> Summary c' m 
-  -> Summary c' m
-collect1 f option acc = 
+  :  Property c m 
+  -> Summary c m 
+  -> Summary c m
+collect1 option acc = 
   case option of 
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
-    Many options -> List.foldl (collect1 f) acc options
-    Set g -> { acc | config = f g acc.config }
+    Many options -> List.foldl collect1 acc options
+    Set g -> { acc | config = g acc.config }
     None -> acc
 
 
 recollect : Summary c m  -> List (Property c m) -> Summary c m
 recollect = 
-  List.foldl (collect1 (<|)) 
+  List.foldl collect1 
 
 
 {-| Flatten a `Property a` into  a `Summary a`. Operates as `fold`
 over options; first two arguments are folding function and initial value. 
 -}
 collect : c -> List (Property c m) -> Summary c m
-collect config0 =
-  recollect { classes=[], css=[], attrs=[], config=config0 }
+collect =
+  Summary [] [] [] >> recollect 
+
+
+{-| Special-casing of collect for `Property c ()`. 
+-}
+collect1' : Property c m -> Summary () m -> Summary () m
+collect1' options acc = 
+  case options of 
+    Class x -> { acc | classes = x :: acc.classes }
+    CSS x -> { acc | css = x :: acc.css }
+    Attribute x -> { acc | attrs = x :: acc.attrs }
+    Many options -> List.foldl collect1' acc options
+    Set _ -> acc 
+    None -> acc
 
 
 collect' : List (Property c m) -> Summary () m 
-collect' options = 
-  List.foldl 
-    (collect1 (\_ _ -> ()))
-    { classes=[], css=[], attrs=[], config=() }
-    options
+collect' = 
+  List.foldl collect1' (Summary [] [] [] ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs = 
-  List.concat
-    [ attrs
-    , [ Html.Attributes.style summary.css ]
-    , [ Html.Attributes.class (String.join " " summary.classes) ]
-    , summary.attrs
-    ]
+  List.append
+    attrs
+    (  Html.Attributes.style summary.css 
+    :: Html.Attributes.class (String.join " " summary.classes) 
+    :: summary.attrs
+    )
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
@@ -143,7 +163,8 @@ apply : Summary c m -> (List (Attribute m) -> a)
 apply summary ctor options attrs = 
   ctor 
     (addAttributes 
-      (recollect summary options) attrs)
+      (recollect summary options) 
+      attrs)
     
 
 
