@@ -1,5 +1,5 @@
 {
-    "version": "7.4.0",
+    "version": "7.5.0",
     "summary": "Material Design Lite port to Elm",
     "repository": "https://github.com/debois/elm-mdl.git",
     "license": "BSD3",
@@ -11,6 +11,7 @@
         "Material.Badge",
         "Material.Button",
         "Material.Card",
+        "Material.Chip",
         "Material.Color",
         "Material.Dialog",
         "Material.Elevation",

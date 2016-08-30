@@ -40,6 +40,7 @@ import Demo.Typography
 import Demo.Cards
 import Demo.Lists
 import Demo.Dialog
+import Demo.Chips
 --import Demo.Template
 
 
@@ -67,6 +68,7 @@ type alias Model =
   , lists : Demo.Lists.Model
   , dialog : Demo.Dialog.Model
   , elevation : Demo.Elevation.Model
+  , chips : Demo.Chips.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -94,6 +96,7 @@ model =
   , lists = Demo.Lists.model
   , dialog = Demo.Dialog.model
   , elevation = Demo.Elevation.model
+  , chips = Demo.Chips.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -126,6 +129,7 @@ type Msg
   | ToggleHeader
   | DialogMsg Demo.Dialog.Msg
   | ElevationMsg Demo.Elevation.Msg
+  | ChipMsg Demo.Chips.Msg
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -168,6 +172,7 @@ update action model =
     ListsMsg   a -> lift  .lists    (\m x->{m|lists   =x}) ListsMsg  Demo.Lists.update    a model
     DialogMsg a -> lift .dialog (\m x->{m|dialog =x}) DialogMsg Demo.Dialog.update a model
     ElevationMsg a -> lift .elevation (\m x->{m|elevation=x}) ElevationMsg Demo.Elevation.update a model
+    ChipMsg a -> lift .chips (\m x->{m|chips=x}) ChipMsg Demo.Chips.update a model
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
 
@@ -179,6 +184,7 @@ tabs =
   [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
   , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
   , ("Cards", "cards", .cards >> Demo.Cards.view >> App.map CardsMsg)
+  , ("Chips", "chips", .chips >> Demo.Chips.view >> App.map ChipMsg)
   , ("Dialog", "dialog", .dialog >> Demo.Dialog.view >> App.map DialogMsg)
   , ("Elevation", "elevation", .elevation >> Demo.Elevation.view >> App.map ElevationMsg)
   , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
@@ -318,6 +324,10 @@ view' model =
     |> (\contents ->
       div []
         [ Scheme.topWithScheme model.layout.primary model.layout.accent contents
+
+        , Html.node "script"
+           [ Html.Attributes.attribute "src" "https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin" ]
+           []
         , Html.node "script"
            [ Html.Attributes.attribute "src" "assets/highlight/highlight.pack.js" ]
            []

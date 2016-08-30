@@ -10,6 +10,7 @@ module Material.Card
         , actions
         , subhead
         , head
+        , Block
         )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
@@ -33,7 +34,7 @@ Refer to [this site](http://debois.github.io/elm-mdl/#cards)
 for a live demo.
 
 # Render
-@docs view
+@docs view, Block
 
 # Content blocks
 @docs title, media, text, actions
@@ -66,7 +67,7 @@ expand =
     Options.cs "mdl-card--expand"
 
 
-{-| Within a card specific types of block can exist
+{-| Type of a content block within a card.
 -}
 type Block a
     = Title (List (Style a)) (List (Html a))
@@ -188,8 +189,8 @@ block block =
 
 Notes. Google's MDL implementation sets `min-height: 200px`; this precludes a
 number of the examples from [the specification](https://material.google.com/components/cards.html#cards-usage),
-so the elm-mdl implementation sets `min-height: 0px`. Add `css "min-height" "200px"` as an option to `view`
-to adhere to the MDL implementation. 
+so the elm-mdl implementation sets `min-height: 0px`. Add `css "min-height"
+"200px"` as an option to `view` to adhere to the MDL implementation. 
 -}
 view : List (Style a) -> List (Block a) -> Html a
 view styling views =

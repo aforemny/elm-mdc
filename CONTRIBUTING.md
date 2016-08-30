@@ -3,6 +3,10 @@
 Please do! You can report issues, add documentation, fix bugs, enhance the
 demo, or add components. 
 
+Quick links: 
+- [Report an issue](#reporting_issues) 
+- [Submit a pull request](PR.md)
+
 # Reporting issues
 
 One very helpful and very easy way to contribute is to [open an
@@ -108,3 +112,8 @@ The last tab contains your component. Now all you need is code!
 
 To avoid duplication of work, either indicate your interest in an existing issue, or 
 [open a new one](https://github.com/debois/elm-mdl/issues/new).
+
+## What's next?
+
+Once you have some code in place, consider taking a look at our guidelines for
+[submitting a pull request](PR.md).

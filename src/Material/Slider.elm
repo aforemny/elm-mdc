@@ -68,6 +68,7 @@ type alias Config m =
   , step : Float
   , listener : Maybe (Float -> m)
   , disabled : Bool
+  , inner : List (Options.Style m)
   }
 
 
@@ -79,6 +80,7 @@ defaultConfig =
   , step = 1
   , listener = Nothing
   , disabled = False
+  , inner = []
   }
 
 
@@ -209,6 +211,9 @@ view options =
           , Options.disabled config.disabled
             -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
           , css "padding" "8px 0"
+            -- NOTE: This is last here because of how attributes are collected
+            -- This way inner attributes should not override necessary attributes
+          , Options.many config.inner
           ]
           [ Html.type' "range"
           , Html.max (toString config.max)
