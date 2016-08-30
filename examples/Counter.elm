@@ -56,7 +56,7 @@ update msg model =
 
     -- Boilerplate: Mdl action handler. 
     Mdl msg' -> 
-      Material.update msg' model
+      Material.update update msg' model
 
 
 -- VIEW
