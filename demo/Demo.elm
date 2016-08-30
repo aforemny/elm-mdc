@@ -148,7 +148,7 @@ update action model =
       ( { model | transparentHeader = not model.transparentHeader }, Cmd.none)
 
     Mdl msg ->
-      Material.update msg model
+      Material.update update msg model
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
     BadgesMsg    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesMsg   Demo.Badges.update    a model

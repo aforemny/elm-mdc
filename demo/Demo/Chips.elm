@@ -70,7 +70,7 @@ update action model =
       (model, Dispatch.forward action' )
 
     Mdl action' ->
-      Material.update action' model
+      Material.update update action' model
 
     ChipClick index ->
       let

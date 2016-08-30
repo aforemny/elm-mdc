@@ -144,7 +144,7 @@ update msg model =
       { model | selected = toggle idx model.selected } ! []
 
     Mdl msg' ->
-      Material.update msg' model
+      Material.update update msg' model
 
 
 -- VIEW

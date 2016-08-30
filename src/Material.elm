@@ -114,7 +114,7 @@ Here is how you use elm-mdl with parts. First, boilerplate.
           case message of 
             ...
             Mdl message' -> 
-              Material.update message' model
+              Material.update update message' model
 
  4.  If your app is using Layout and/or Menu, you need also to set up
  subscriptions and initialisations; see `subscriptions` and `init` below.  
@@ -215,23 +215,26 @@ type alias Msg obs =
   Msg.Msg Model obs
 
 
-{-| Update function for the above Msg. Provide as the first
-argument a lifting function that embeds the generic MDL action in
-your own Msg type.
+{-| Update function for the above Msg.
+First argument is the user `update` function.
+
+The second argument is a lifting function that
+embeds the generic MDL action in your own Msg type.
 -}
-update :
-     Msg obs
-  -> { model | mdl : Model }
-  -> ({ model | mdl : Model }, Cmd obs)
-update action model =
+update
+    : (a -> { c | mdl : Model } -> ( { c | mdl : Model }, Cmd a ))
+    -> Msg a
+    -> { c | mdl : Model }
+    -> ( { c | mdl : Model }, Cmd a )
+update update' action model =
   case action of
     Msg.Internal msg ->
       Parts.update' msg model.mdl
         |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
         |> Maybe.withDefault (model, Cmd.none)
     Msg.Dispatch msg ->
-      (model, Dispatch.forward msg)
-
+      Dispatch.update update' msg model
+      --(model, Dispatch.forward msg)
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
 subscriptions in order to function. Hook these up to your containing app as

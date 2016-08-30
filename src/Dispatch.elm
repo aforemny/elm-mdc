@@ -5,6 +5,7 @@ module Dispatch
     , listeners
     , listeners'
     , group
+    , update
     )
 
 {-| Utility module for dispatching multiple events from a single `Html.Event`
@@ -14,13 +15,24 @@ module Dispatch
 @docs listeners
 @docs listeners'
 @docs group
+@docs update
 -}
 
-import Material.Helpers as Helpers
+
 import Json.Decode as Json
 import Html.Events
 import Html
 import Dict exposing (Dict)
+import Task
+
+
+{-|
+  Lift any value of type `msg` to a `Cmd msg`.
+-}
+cmd : msg -> Cmd msg
+cmd msg =
+  Task.perform (always msg) (always msg) (Task.succeed msg)
+
 
 
 {-| Message type
@@ -37,7 +49,35 @@ type alias Pair m =
 -}
 forward : Msg m -> Cmd m
 forward (Forward messages) =
-  List.map Helpers.cmd messages |> Cmd.batch
+  List.map cmd messages |> Cmd.batch
+
+
+
+{-| Map the second element of a tuple
+
+    map2nd ((+) 1) ("bar", 3) == ("bar", 4)
+-}
+map2nd : (b -> c) -> (a,b) -> (a,c)
+map2nd f (x,y) = (x, f y)
+
+
+{-| Runs batch update
+-}
+update : (a -> b -> ( b, Cmd a )) -> Msg a -> b -> (b, Cmd a)
+update update (Forward msg) model =
+  let
+    inner cmd (m, gs) =
+      let
+        (m', c') = update cmd m
+      in
+        (m', c' :: gs)
+
+  in
+    List.foldl
+      inner
+      (model, [])
+      msg
+    |> map2nd Cmd.batch
 
 
 {-| Applies given decoders to the same initial value

@@ -82,45 +82,59 @@ pure =
   flip (,) Cmd.none >> Just
 
 
-update : Msg -> Model -> Maybe (Model, Cmd Msg)
-update action model =
+update' : Msg -> Model -> (Model, Cmd Msg)
+update' action model =
   case action of
     NoOp msg ->
       let _ = Debug.log "NOOP" msg
-      in model |> pure
+      in model ! []
 
     Mdl action' ->
-      Material.update action' model |> Just
+      Material.update update' action' model
 
     Upd0 str ->
-      { model | str0 = str } |> pure
+      { model | str0 = str } ! []
 
     Upd3 str ->
-      { model | str3 = str } |> pure
+      { model | str3 = str } ! []
 
     Upd4 str ->
-      { model | str4 = str } |> pure
+      { model | str4 = str } ! []
 
     Upd6 str ->
-      { model | str6 = str } |> pure
+      { model | str6 = str } ! []
 
     Upd9 str ->
-      { model | str9 = str } |> pure
+      { model | str9 = str } ! []
 
     Slider value ->
-      { model | length = value } |> pure
+      { model | length = value } ! []
 
     SetFocus5 x ->
-      { model | focus5 = x } |> pure
+      { model | focus5 = x } ! []
 
+    SelectionChanged selection ->
+      -- High-frequency event; return referentially equal model on NOP.
+      if selection == model.selection then
+        ( model, Cmd.none )
+      else
+        ( { model | selection = selection }, Cmd.none )
+
+
+
+update : Msg -> Model -> Maybe (Model, Cmd Msg)
+update action model =
+  case action of
     SelectionChanged selection ->
       -- High-frequency event; return referentially equal model on NOP. 
       if selection == model.selection then
         Nothing
-      else 
+      else
         ( { model | selection = selection }, Cmd.none )
           |> Just
 
+    _ ->
+      update' action model |> Just
 -- VIEW
 
 

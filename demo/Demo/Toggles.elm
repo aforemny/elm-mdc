@@ -99,7 +99,7 @@ update action model =
       )
 
     Mdl action' -> 
-      Material.update action' model
+      Material.update update action' model
 
 
 

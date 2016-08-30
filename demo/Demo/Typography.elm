@@ -42,7 +42,7 @@ update action model =
       (model, Cmd.none)
 
     Mdl action' ->
-      Material.update action' model
+      Material.update update action' model
 
 
 -- VIEW
