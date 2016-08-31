@@ -325,12 +325,6 @@ update action model =
 
 -- VIEW
 
-view' : (Msg.Msg (Container c) m -> m) -> (Msg -> m) -> Model -> List (Property m) -> Html m
-view' dp lift model options =
-  view lift model (Options.inner [ Options.dispatch dp ]
-                  :: Options.dispatch dp
-                  :: options)
-
 {-| Component view
 
 Be aware that styling (third argument) is applied to the outermost element
@@ -435,6 +429,14 @@ view lift model options =
 
 type alias Container c =
   { c | textfield : Indexed Model }
+
+{-| Internal view' for Textfield to embed Options.dispatch -}
+view' : (Msg.Msg (Container c) m -> m) -> (Msg -> m) -> Model -> List (Property m) -> Html m
+view' dp lift model options =
+  view lift model (Options.inner [ Options.dispatch dp ]
+                  :: Options.dispatch dp
+                  :: options)
+
 
 {-| Component render. Below is an example, assuming boilerplate setup as indicated 
   in `Material`, and a user message `ChangeAgeMsg Int`.

@@ -6,8 +6,8 @@ module Material.Options exposing
   , Style, div, span, img, attribute, center, scrim
   , id
   , inner
-  , on
-  , on1
+  , on, on1
+  , onClick, onBlur, onFocus
   , dispatch, dispatch'
   , inject, inject'
   )
@@ -57,7 +57,11 @@ applying MDL typography or color to standard elements.
 @docs center, scrim, disabled
 
 ## Events
-@docs on, on1, dispatch, dispatch', inject, inject'
+@docs on, on1
+@docs onClick, onBlur, onFocus
+
+## Event internal
+@docs dispatch, dispatch', inject, inject'
 
 # Internal
 The following types and values are used internally in the library. 
@@ -391,6 +395,27 @@ Roughly equivalent to `Options.on event (Json.Decode.succeed msg)`
 on1 : String -> m -> Property c m
 on1 event m =
   on event (Decoder.succeed m)
+
+
+{-| onClick handler
+ -}
+onClick : msg -> Property c msg
+onClick =
+  on1 "click"
+
+
+{-| onFocus handler
+ -}
+onFocus : msg -> Property c msg
+onFocus =
+  on1 "focus"
+
+
+{-| onBlur handler
+ -}
+onBlur : msg -> Property c msg
+onBlur =
+  on1 "blur"
 
 
 {-| Add custom event handlers with options
