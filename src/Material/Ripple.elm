@@ -143,13 +143,13 @@ downOn' f name =
   Html.Events.on name (Json.map (Down >> f) geometryDecoder)
 
 
-downOn_ : (Msg -> m) -> String -> Options.Property c m
-downOn_ f name =
+down : (Msg -> m) -> String -> Options.Property c m
+down f name =
   Options.on name (Json.map (Down >> f) geometryDecoder)
 
 
-upOn_ : (Msg -> m) -> String -> Options.Property c m
-upOn_ f name =
+up : (Msg -> m) -> String -> Options.Property c m
+up f name =
   Options.on name (Json.succeed (f Up))
 
 

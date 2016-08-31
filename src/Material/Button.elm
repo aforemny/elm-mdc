@@ -218,12 +218,12 @@ view lift model config html =
 
     listeners =
       Options.many
-        [ Ripple.downOn_ lift "mousedown"
-        , Ripple.downOn_ lift "touchstart"
-        , Ripple.upOn_ lift "touchcancel"
-        , Ripple.upOn_ lift "mouseup"
-        , Ripple.upOn_ lift "blur"
-        , Ripple.upOn_ lift "mouseleave"
+        [ Ripple.down lift "mousedown"
+        , Ripple.down lift "touchstart"
+        , Ripple.up lift "touchcancel"
+        , Ripple.up lift "mouseup"
+        , Ripple.up lift "blur"
+        , Ripple.up lift "mouseleave"
         ]
 
 
