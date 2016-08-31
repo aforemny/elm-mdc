@@ -21,8 +21,8 @@ module Dispatch
 @docs group
 
 ## Dispatch
-@docs forward
 @docs update
+@docs forward
 -}
 
 import Json.Decode as Json
@@ -160,9 +160,13 @@ onSingle event options decoders =
       Html.Events.onWithOptions event options x
         |> Just
 
-    -- NOTE: This need to be changed, currently only for debugging
     x :: xs ->
-      Debug.crash <| "Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`"
+      let
+        -- NOTE: This probably needs to be changed, currently only for debugging
+        _ = Debug.log "WARNING" ("Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`")
+      in
+        Html.Events.onWithOptions event options x
+          |> Just
 
 
 pickOptions : List (Decoder a) -> Html.Events.Options
