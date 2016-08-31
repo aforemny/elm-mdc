@@ -6,8 +6,14 @@ module Material.Options exposing
   , Style, div, span, img, attribute, center, scrim
   , id
   , inner
+  , onClick, onDoubleClick
+  , onMouseDown, onMouseUp
+  , onMouseEnter, onMouseLeave
+  , onMouseOver, onMouseOut
+  , onCheck, onChange
+  , onBlur, onFocus
   , on, on1
-  , onClick, onBlur, onFocus, onChange
+  , onWithOptions
   , dispatch, dispatch'
   , inject, inject'
   )
@@ -57,8 +63,17 @@ applying MDL typography or color to standard elements.
 @docs center, scrim, disabled
 
 ## Events
+@docs onClick, onDoubleClick,
+      onMouseDown, onMouseUp,
+      onMouseEnter, onMouseLeave,
+      onMouseOver, onMouseOut
+@docs  onCheck, onChange
+@docs onBlur, onFocus
+
+# Custom Event Handlers
 @docs on, on1
-@docs onClick, onBlur, onFocus, onChange
+@docs onWithOptions
+
 
 ## Event internal
 @docs dispatch, dispatch'
@@ -79,7 +94,7 @@ import Html.Events
 
 import Material.Options.Internal exposing (..)
 
-import Json.Decode as Decoder
+import Json.Decode as Json
 
 import Dispatch
 
@@ -103,7 +118,7 @@ type alias Summary c m =
   { classes : List String 
   , css : List (String, String)  
   , attrs : List (Attribute m)
-  , listeners : List (String, (Decoder.Decoder m, Maybe Html.Events.Options))
+  , listeners : List (String, (Json.Decoder m, Maybe Html.Events.Options))
   , dispatch : Maybe (Dispatch.Msg m -> m)
   , config : c
   }
@@ -412,56 +427,112 @@ inner options =
   set (\c -> { c | inner = options ++ c.inner })
 
 
+
+-- EVENTS
+
 {-| Add custom event handlers
  -}
-on : String -> (Decoder.Decoder m) -> Property c m
+on : String -> (Json.Decoder m) -> Property c m
 on event =
   Listener event Nothing
 
 
 {-| Add a custom event handler that always succeeds.
 
-Roughly equivalent to `Options.on event (Json.Decode.succeed msg)`
+Equivalent to `Options.on event (Json.Decode.succeed msg)`
  -}
 on1 : String -> m -> Property c m
 on1 event m =
-  on event (Decoder.succeed m)
+  on event (Json.succeed m)
 
 
-{-| onClick handler
- -}
+{-|-}
 onClick : msg -> Property c msg
-onClick =
-  on1 "click"
+onClick msg =
+  on "click" (Json.succeed msg)
 
 
-{-| onFocus handler
- -}
-onFocus : msg -> Property c msg
-onFocus =
-  on1 "focus"
+{-|-}
+onDoubleClick : msg -> Property c msg
+onDoubleClick msg =
+  on "dblclick" (Json.succeed msg)
 
 
-{-| onBlur handler
- -}
-onBlur : msg -> Property c msg
-onBlur =
-  on1 "blur"
+{-|-}
+onMouseDown : msg -> Property c msg
+onMouseDown msg =
+  on "mousedown" (Json.succeed msg)
 
 
-{-| onChange handler
- -}
+{-|-}
+onMouseUp : msg -> Property c msg
+onMouseUp msg =
+  on "mouseup" (Json.succeed msg)
+
+
+{-|-}
+onMouseEnter : msg -> Property c msg
+onMouseEnter msg =
+  on "mouseenter" (Json.succeed msg)
+
+
+{-|-}
+onMouseLeave : msg -> Property c msg
+onMouseLeave msg =
+  on "mouseleave" (Json.succeed msg)
+
+
+{-|-}
+onMouseOver : msg -> Property c msg
+onMouseOver msg =
+  on "mouseover" (Json.succeed msg)
+
+
+{-|-}
+onMouseOut : msg -> Property c msg
+onMouseOut msg =
+  on "mouseout" (Json.succeed msg)
+
+
+{-| Capture [change](https://developer.mozilla.org/en-US/docs/Web/Events/change)
+events on checkboxes. It will grab the boolean value from `event.target.checked`
+on any input event.
+Check out [targetChecked](#targetChecked) for more details on how this works.
+-}
+onCheck : (Bool -> msg) -> Property c msg
+onCheck tagger =
+  on "change" (Json.map tagger Html.Events.targetChecked)
+
+
+{-|-}
 onChange : msg -> Property c msg
 onChange =
   on1 "change"
 
+-- FOCUS EVENTS
+
+
+{-|-}
+onBlur : msg -> Property c msg
+onBlur msg =
+  on "blur" (Json.succeed msg)
+
+
+{-|-}
+onFocus : msg -> Property c msg
+onFocus msg =
+  on "focus" (Json.succeed msg)
+
 
 {-| Add custom event handlers with options
  -}
-onWithOptions : String -> Html.Events.Options -> (Decoder.Decoder m) -> Property c m
+onWithOptions : String -> Html.Events.Options -> (Json.Decoder m) -> Property c m
 onWithOptions evt options =
   Listener evt (Just options)
 
+
+
+-- DISPATCH
 
 {-| Add a lifting function that is **required** for multi event dispatch.
 To enable multi event dispatch with Mdl:

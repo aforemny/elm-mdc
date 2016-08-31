@@ -76,7 +76,7 @@ update action model =
 
 onHover : a -> Options.Style a
 onHover = 
-  Html.Events.onMouseOver >> Options.attribute
+  Options.onMouseOver
 
 
 c : List (Html Msg) -> Cell Msg
