@@ -5,6 +5,7 @@ import Html.Events
 import Json.Decode
 
 import Dispatch
+import Material.Msg as Msg
 
 {-| Internal type of properties. Do not use directly; use constructor functions
    in the Options module or `attribute` instead.
@@ -29,5 +30,44 @@ attribute =
   Attribute
 
 
+-- INTERNAL UTILITIES
 
 
+{-|-}
+inner : List (Property c m) -> Property { a | inner : List (Property c m) } m
+inner options =
+  Set (\c -> { c | inner = options ++ c.inner })
+
+
+{-|-}
+dispatch : (Msg.Msg a m -> m) -> Property c m
+dispatch lift =
+  Lift (Msg.Dispatch >> lift)
+
+
+{-| Inject dispatch
+ -}
+inject
+    : (a -> b -> List (Property d e) -> f -> g)
+    -> (Msg.Msg h e -> e)
+    -> a
+    -> b
+    -> List (Property d e)
+    -> f
+    -> g
+inject viewFun lift =
+  \a b c d -> viewFun a b (dispatch lift :: c) d
+
+
+{-| Inject dispatch
+ -}
+inject'
+    : (a -> b -> List (Property { f | inner : List (Property d e) } e) -> g -> h)
+    -> (Msg.Msg i e -> e)
+    -> a
+    -> b
+    -> List (Property { f | inner : List (Property d e) } e)
+    -> g
+    -> h
+inject' viewFun lift =
+  \a b c d -> viewFun a b (inner [ dispatch lift ] :: dispatch lift :: c) d

@@ -15,7 +15,6 @@ module Material.Options exposing
   , on, on1
   , onWithOptions
   , dispatch, dispatch'
-  , inject, inject'
   )
 
 
@@ -81,7 +80,6 @@ applying MDL typography or color to standard elements.
 # Internal
 The following types and values are used internally in the library. 
 @docs Summary, apply, collect, set
-@docs inject, inject'
 
 -}
 
@@ -571,31 +569,3 @@ Create an element with Options.styled
 dispatch' : (Dispatch.Msg b -> b) -> Property c b
 dispatch' =
   Lift
-
-
-{-| Inject dispatch
- -}
-inject
-    : (a -> b -> List (Property d e) -> f -> g)
-    -> (Msg.Msg h e -> e)
-    -> a
-    -> b
-    -> List (Property d e)
-    -> f
-    -> g
-inject viewFun lift =
-  \a b c d -> viewFun a b (dispatch lift :: c) d
-
-
-{-| Inject dispatch
- -}
-inject'
-    : (a -> b -> List (Property { f | inner : List (Property d e) } e) -> g -> h)
-    -> (Msg.Msg i e -> e)
-    -> a
-    -> b
-    -> List (Property { f | inner : List (Property d e) } e)
-    -> g
-    -> h
-inject' viewFun lift =
-  \a b c d -> viewFun a b (inner [ dispatch lift ] :: dispatch lift :: c) d

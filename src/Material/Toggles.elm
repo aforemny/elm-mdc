@@ -55,6 +55,7 @@ import Material.Options as Options exposing (Style, cs, styled, many, when, mayb
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
 import Material.Ripple as Ripple
 import Material.Msg as Msg
+import Material.Options.Internal as Internal
 
 
 
@@ -316,7 +317,7 @@ checkbox
   -> List (Html m) 
   -> Html m
 checkbox lift =
-  render (Options.inject' viewCheckbox lift) lift
+  render (Internal.inject' viewCheckbox lift) lift
 
 
 {-| Component render (switch) 
@@ -329,7 +330,7 @@ switch
   -> List (Html m)
   -> Html m
 switch lift =
-  render (Options.inject' viewSwitch lift) lift
+  render (Internal.inject' viewSwitch lift) lift
 
 
 {-| Component render (radio button) 
@@ -342,4 +343,4 @@ radio
   -> List (Html m) 
   -> Html m
 radio lift =
-  render (Options.inject' viewRadio lift) lift
+  render (Internal.inject' viewRadio lift) lift

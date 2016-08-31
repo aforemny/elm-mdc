@@ -69,6 +69,7 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Parts exposing (Indexed)
 import Material.Options as Options exposing (Style, cs, css, when)
+import Material.Options.Internal as Internal
 import DOM
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
@@ -437,7 +438,7 @@ render :
   -> Html m
 render lift =
   Parts.create 
-    (Options.inject view lift) (Parts.generalize update)
+    (Internal.inject view lift) (Parts.generalize update)
     .tooltip (\x y -> { y | tooltip = x }) defaultModel
       (Msg.Internal >> lift)
 

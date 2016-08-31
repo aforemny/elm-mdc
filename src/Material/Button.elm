@@ -67,6 +67,7 @@ import Platform.Cmd exposing (Cmd, none)
 import Parts exposing (Indexed, Index)
 
 import Material.Helpers as Helpers
+import Material.Options.Internal as Internal
 import Material.Options as Options exposing (cs, when)
 import Material.Ripple as Ripple
 
@@ -403,5 +404,5 @@ render
   -> List (Html m)
   -> Html m
 render lift =
-  Parts.create (Options.inject view lift) (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+  Parts.create (Internal.inject view lift) (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
     (Msg.Internal >> lift)

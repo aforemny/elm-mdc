@@ -1,7 +1,6 @@
 module Demo.Badges exposing (..)
 
 import Html exposing (..)
-import Html.Events
 import Platform.Cmd exposing (Cmd)
 
 
