@@ -41,8 +41,8 @@
 *  Elm-SPA-Template - a template for a single page app using elm-mdl
     * [GitHub repository](https://github.com/id3as/elm-spa-template)
     * [Live demo/site](http://id3as.github.io/elm-spa.html)
-
-
+* Time Tracker - An example Single Page Application in Elm, using elm-mdl for the UI, with a Phoenix backend.
+    * [GitHub repository](https://github.com/knewter/time-tracker)
 
 *Disclaimer - elm-mdl does not endorse or suggest that these projects are "best practice". They are only listed here as a reference.*
 
