@@ -230,13 +230,12 @@ update
     -> ( { c | mdl : Model }, Cmd inner )
 update up' action model =
   case action of
+    Msg.Dispatch msg ->
+       Dispatch.update up' msg model
     Msg.Internal msg ->
       Parts.update' msg model.mdl
         |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
         |> Maybe.withDefault (model, Cmd.none)
-    Msg.Dispatch msg ->
-       Dispatch.update up' msg model
-
     -- _ ->
     --     (model, Cmd.none)
       --(model, Dispatch.forward msg)

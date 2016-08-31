@@ -51,6 +51,15 @@ type Msg
 
 
 
+liftUpdate : (Msg -> m) -> Msg -> Model -> (Model, Cmd m)
+liftUpdate lift msg model =
+  case msg of
+    Mdl msg' ->
+      Material.update' lift liftUpdate msg' model
+    _ ->
+      model ! []
+
+
 lastIndex : Dict Int b -> Int
 lastIndex dict =
   Dict.keys dict
