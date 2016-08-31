@@ -2,7 +2,7 @@ module Demo.Chips exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Events as Html
+--import Html.Events as Html
 
 import Material.Chip as Chip
 import Material.Grid as Grid
