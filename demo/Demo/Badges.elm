@@ -98,7 +98,7 @@ view model =
                     [ text "Unread" ]
                   ]
               , Button.render Mdl [0] model.mdl
-                  [ Button.onClick Decrease 
+                  [ Options.onClick Decrease 
                   , Button.raised
                   , Button.ripple
                   , Button.colored

@@ -247,7 +247,7 @@ secondaryAction1 model =
       Button.render Mdl [k] model.mdl
         [ Button.icon 
         , Button.accent `when` Set.member k model.toggles 
-        , Button.onClick (Flip k)
+        , Options.onClick (Flip k)
         ]
         [ Icon.i "star" ]
   in 
@@ -271,7 +271,7 @@ secondaryAction1 model =
       Button.render Mdl [k] model.mdl
         [ Button.icon 
         , Button.accent `when` Set.member k model.toggles 
-        , Button.onClick (Flip k)
+        , Options.onClick (Flip k)
         ]
         [ Icon.i "star" ]
   in 
@@ -301,7 +301,7 @@ secondaryAction2 model =
             , Lists.content2 [] 
                 [ Toggles.checkbox Mdl [4] model.mdl
                     [ Toggles.value (Set.member 4 model.toggles) 
-                    , Toggles.onClick (Flip 4)
+                    , Options.onChange (Flip 4)
                     ] 
                     []
                 ]
@@ -313,7 +313,7 @@ secondaryAction2 model =
                     [Lists.action2]
                     [ Toggles.radio Mdl [5] model.mdl
                         [ Toggles.value (Set.member 5 model.toggles)
-                        , Toggles.onClick (Flip 5)
+                        , Options.onChange (Flip 5)
                         , Options.css "display" "inline"
                         ]
                         []
@@ -325,7 +325,7 @@ secondaryAction2 model =
             , Lists.content2 [] 
                 [ Toggles.switch Mdl [6] model.mdl
                     [ Toggles.value (Set.member 6 model.toggles)
-                    , Toggles.onClick (Flip 6)
+                    , Options.onChange (Flip 6)
                     ]
                     []
                 ]
@@ -340,7 +340,7 @@ secondaryAction2 model =
         , Lists.content2 [] 
             [ Toggles.checkbox Mdl [4] model.mdl
                 [ Toggles.value (Set.member 4 model.toggles) 
-                , Toggles.onClick (Flip 4)
+                , Options.onChange (Flip 4)
                 ] 
                 []
             ]
@@ -352,7 +352,7 @@ secondaryAction2 model =
                 [Lists.action2]
                 [ Toggles.radio Mdl [5] model.mdl
                     [ Toggles.value (Set.member 5 model.toggles)
-                    , Toggles.onClick (Flip 5)
+                    , Options.onChange (Flip 5)
                     , Options.css "display" "inline"
                     ]
                     []
@@ -364,7 +364,7 @@ secondaryAction2 model =
         , Lists.content2 [] 
             [ Toggles.switch Mdl [6] model.mdl
                 [ Toggles.value (Set.member 6 model.toggles)
-                , Toggles.onClick (Flip 6)
+                , Options.onChange (Flip 6)
                 ]
                 []
             ]
@@ -674,7 +674,7 @@ mail model idx (name, img, subj, date, txt) =
           [ Lists.info2 [] [ text date ]
           , Button.render Mdl [k] model.mdl
               [ Button.icon 
-              , Button.onClick (Flip k)
+              , Options.onClick (Flip k)
               ]
               [ Icon.i (if starred then "star" else "star_border") ]
           ]

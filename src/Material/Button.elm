@@ -3,7 +3,6 @@ module Material.Button exposing
   , flat, raised, fab, minifab, icon
   , plain, colored, primary, accent
   , ripple, disabled
-  , onClick
   , Property
   , render
   , type'
@@ -45,9 +44,6 @@ for a live demo.
 ## Appearance
 @docs plain, colored, primary, accent
 @docs ripple, disabled
-
-## Events
-@docs onClick
 
 ## Type
 Refer to the
@@ -129,13 +125,6 @@ defaultConfig =
 -}
 type alias Property m =
   Options.Property (Config) m
-
-
-{-| Add an `on "click"` handler to a button.
--}
-onClick : m -> Property m
-onClick x =
-  Options.on1 "click" x
 
 
 {-| Set button to ripple when clicked.
@@ -402,7 +391,7 @@ indicated in `Material`, and a user message `PollMsg`.
     Button.render Mdl [0] model.mdl
       [ Button.raised
       , Button.ripple
-      , Button.onClick PollMsg
+      , Options.onClick PollMsg
       ]
       [ text "Fetch new"]
 -}

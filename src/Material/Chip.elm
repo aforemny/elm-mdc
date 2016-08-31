@@ -12,8 +12,6 @@ module Material.Chip
     , deleteIcon
     , deleteLink
     , deleteClick
-    , on
-    , onClick
     )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#chips-section):
@@ -37,7 +35,6 @@ for a live demo.
 
 # Properties
 @docs deleteIcon , deleteLink , deleteClick
-@docs on, onClick
 
 -}
 
@@ -121,20 +118,6 @@ deleteClick msg =
               )
       }
     )
-
-
-{-| Add custom event handlers
--}
-on : String -> Json.Decoder m -> Property m
-on =
-  Options.on
-
-
-{-| Add an `onClick` handler to the chip
--}
-onClick : msg -> Property msg
-onClick msg =
-  Options.on "click" (Json.succeed msg)
 
 
 type alias Priority =

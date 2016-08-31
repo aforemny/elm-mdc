@@ -9,7 +9,6 @@ module Material.Textfield exposing
   , onBlur
   , onFocus
   , style
-  , on
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -61,8 +60,6 @@ element, use the `style` property below.
 @docs password, textarea, text', onInput
 @docs onBlur, onFocus
 
-# Advanced
-@docs on
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
@@ -182,17 +179,11 @@ disabled =
     (\config -> { config | disabled = True })
 
 
-{-| Add custom event handlers
- -}
-on : String -> (Decoder.Decoder m) -> Property m
-on =
-  Options.on
-
 {-| Message to dispatch on input
 -}
 onInput : (String -> m) -> Property m
 onInput f = 
-  on "input" (Decoder.map f targetValue)
+  Options.on "input" (Decoder.map f targetValue)
 
 
 {-| The `blur` event occurs when the input loses focus.
@@ -210,7 +201,7 @@ Add the following to your index.html
 -}
 onBlur : m -> Property m
 onBlur f =
-  on "focusout" (Decoder.succeed f)
+  Options.on "focusout" (Decoder.succeed f)
 
 
 {-| The `focus` event occurs when the input gets focus.
@@ -228,7 +219,7 @@ Add the following to your index.html
 -}
 onFocus : m -> Property m
 onFocus f =
-  on "focusin" (Decoder.succeed f)
+  Options.on "focusin" (Decoder.succeed f)
 
 
 {-| Set properties on the actual `input` element in the Textfield.

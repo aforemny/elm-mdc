@@ -215,7 +215,7 @@ selectable model =
           [ Table.tr []
             [ Table.th []
                 [ Toggles.checkbox Mdl [-1] model.mdl
-                  [ Toggles.onClick ToggleAll
+                  [ Options.onChange ToggleAll
                   , Toggles.value (allSelected model)
                   ] []
                 ]
@@ -231,7 +231,7 @@ selectable model =
                      [ Table.selected `when` Set.member (key item) model.selected ]
                      [ Table.td []
                        [ Toggles.checkbox Mdl [idx] model.mdl
-                         [ Toggles.onClick (Toggle <| key item)
+                         [ Options.onChange (Toggle <| key item)
                          , Toggles.value <| Set.member (key item) model.selected
                          ] []
                        ]
@@ -252,7 +252,7 @@ selectable model =
           [ Table.tr []
             [ Table.th []
                 [ Toggles.checkbox Mdl [-1] model.mdl
-                  [ Toggles.onClick ToggleAll
+                  [ Options.onChange ToggleAll
                   , Toggles.value (allSelected model)
                   ] []
                 ]
@@ -268,7 +268,7 @@ selectable model =
                      [ Table.selected `when` Set.member (key item) model.selected ]
                      [ Table.td []
                        [ Toggles.checkbox Mdl [idx] model.mdl
-                         [ Toggles.onClick (Toggle <| key item)
+                         [ Options.onChange (Toggle <| key item)
                          , Toggles.value <| Set.member (key item) model.selected
                          ] []
                        ]
@@ -341,7 +341,7 @@ sortable model =
                   [ model.order
                       |> Maybe.map Table.sorted
                       |> Maybe.withDefault nop 
-                  , Table.onClick Reorder
+                  , Options.onClick Reorder
                   ]
                   [ text "Material" ]
               , Table.th [ Table.numeric ] [ text "Quantity" ]

@@ -251,7 +251,7 @@ drawer =
         [ text "elm-package" ]
     , Layout.link
         [ Layout.href "#cards"
-        , Layout.onClick (Layout.toggleDrawer Mdl)
+        , Options.onClick (Layout.toggleDrawer Mdl)
         ]
         [ text "Card component" ]
     ]
@@ -269,7 +269,7 @@ header model =
         , Layout.spacer
         , Layout.navigation []
             [ Layout.link
-                [ Layout.onClick ToggleHeader]
+                [ Options.onClick ToggleHeader]
                 [ Icon.i "photo" ]
             , Layout.link
                 [ Layout.href "https://github.com/debois/elm-mdl"]

@@ -3,7 +3,7 @@ module Material.Toggles exposing
   , Msg, update
   , viewSwitch, viewCheckbox, viewRadio
   , switch, checkbox, radio
-  , onClick, ripple, disabled, value, group
+  , ripple, disabled, value, group
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/index.html#toggles-section/checkbox):
@@ -33,7 +33,7 @@ for a live demo.
 @docs checkbox, switch, radio
 
 # Options
-@docs onClick, ripple, disabled, value, group
+@docs ripple, disabled, value, group
 
 # Elm architecture
 @docs Model, defaultModel, Msg, update
@@ -129,14 +129,6 @@ defaultConfig =
 -}
 type alias Property m = 
   Options.Property (Config m) m
-
-
-{-| Add an `on "click"` handler to a toggle. Argument is the 
-new value of the toggle (that is, the negation of the current value).
--}
-onClick : m -> Property m
-onClick x =
-  Options.on1 "change" x
 
 
 {-| Set toggle to ripple when clicked.

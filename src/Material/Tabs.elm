@@ -77,11 +77,9 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (Html)
 import Parts exposing (Indexed)
 import Material.Options as Options exposing (cs, when)
-import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
 import Html.App
 import Html.Attributes as Html exposing (class)
-import Html.Events as Html
 import Html.Keyed as Keyed
 import Dict exposing (Dict)
 import Material.Msg as Msg
@@ -227,7 +225,7 @@ view lift model options tabs tabContent =
         ([ cs "mdl-tabs__tab"
          , cs "is-active" `when` (tabIdx == config.activeTab)
          , config.onSelectTab
-            |> Maybe.map (\t -> Internal.attribute <| Html.onClick (t tabIdx))
+            |> Maybe.map (\t -> Options.onClick (t tabIdx))
             |> Maybe.withDefault Options.nop
          ]
           ++ props

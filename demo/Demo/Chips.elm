@@ -313,7 +313,7 @@ view model  =
                                     , Options.dispatch Mdl
                                     , Options.on1 "click" (ChipClick index)
                                     , Options.on1 "click" (NoOp (toString (ChipClick index)))
-                                    --, Chip.onClick (ChipClick index)
+                                    --, Options.onClick (ChipClick index)
                                     , Chip.deleteClick (RemoveChip index)
                                     ]
                                     [ Chip.content []
@@ -325,7 +325,7 @@ view model  =
                   [ Button.colored
                   , Button.ripple
                   , Button.raised
-                  --, Button.onClick (AddChip "Amazing Chip")
+                  --, Options.onClick (AddChip "Amazing Chip")
                   --, Options.dispatch Dispatch
                   , Options.on1 "click" (AddChip "Amazing Chip")
                   , Options.on1 "click" (NoOp (toString "Amazing Chip"))
@@ -340,7 +340,7 @@ view model  =
           """
             Chip.button
               [ Options.css "margin" "5px 5px"
-              , Chip.onClick (ChipClick index)
+              , Options.onClick (ChipClick index)
               , Chip.deleteClick (RemoveChip index)
               ]
               [ Chip.content []

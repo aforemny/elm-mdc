@@ -2,7 +2,6 @@ module Material.Icon exposing
   ( size18, size24, size36, size48
   , view
   , i
-  , onClick
   , Property
   )
 
@@ -19,7 +18,7 @@ This implementation assumes that you have
 or an equivalent means of loading the icons in your HTML header. 
 (`Material.top` will do this for you.)
 
-@docs i, view, size18, size24, size36, size48, onClick, Property
+@docs i, view, size18, size24, size36, size48, Property
 -}
 
 
@@ -44,13 +43,6 @@ defaultConfig =
   {
   }
 
-
-{-| Add an `on "click"` handler to an Icon. (You may want to use a `Button`
-with `Button.icon` instead.)
--}
-onClick : m -> Property m
-onClick x =
-  Options.on1 "click" x
 
 
 {-| Set icon to have size 18px. 

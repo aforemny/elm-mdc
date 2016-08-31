@@ -4,7 +4,7 @@ module Material.Layout exposing
   , Property
   , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
   , waterfall, seamed, scrolling, selectedTab, onSelectTab
-  , row, spacer, title, navigation, link, onClick, href
+  , row, spacer, title, navigation, link, href
   , setTabsWidth
   , Contents, view
   , sub0, subs, render, toggleDrawer
@@ -107,7 +107,7 @@ be (assuming a tab width of 1384 pixels):
 @docs onSelectTab
 
 # Sub-views
-@docs row, spacer, title, navigation, link, onClick, href
+@docs row, spacer, title, navigation, link, href
 
 # Elm architecture
 @docs view, Msg, Model, defaultModel, update, init, subscriptions
@@ -487,13 +487,6 @@ type alias LinkProperty m =
   Options.Property LinkProp m
 
 
-{-| onClick for Links.
--}
-onClick : m -> LinkProperty m 
-onClick = 
-  Events.onClick >> attribute
-
-
 {-| href for Links.
 -}
 href : String -> LinkProperty m
@@ -664,12 +657,10 @@ headerView lift config model (drawerButton, rows, tabs) =
       , cs "is-compact" `when` model.isCompact
       , mode
       , cs "mdl-layout__header--transparent" `when` config.transparentHeader
-      , Options.attribute <|
-          Events.onClick 
+      , Options.onClick 
             (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
               |> lift)
-      , Options.attribute <| 
-          Events.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
+      , Options.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
       ]
       (List.concatMap (\x -> x)
          [ toList drawerButton

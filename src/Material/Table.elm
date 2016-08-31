@@ -1,7 +1,7 @@
 module Material.Table exposing
   ( table, thead, tbody, tfoot
   , tr, th, td
-  , ascending, descending, sorted, selected, onClick, Order(Ascending,Descending)
+  , ascending, descending, sorted, selected, Order(Ascending,Descending)
   , numeric
   )
 
@@ -37,8 +37,6 @@ for a live demo.
 @docs table, thead, tbody, tfoot
 @docs tr, th, td
 
-# Options
-@docs onClick
 
 ## Sorting options. 
 The following options have effect only when applied in the header row. 
@@ -203,9 +201,6 @@ th options html =
         Nothing -> nop
     ]
     []
-    -- (config.onClick
-    --    |> Maybe.map (flip (::) [])
-    --    |> Maybe.withDefault [])
     html
 
 
@@ -242,14 +237,6 @@ sorted order =
 type Order
   = Ascending
   | Descending
-
-
-{-| Dispatch given message when cell is clicked. 
--}
-onClick : m -> Property c m
-onClick x =
-  Options.on1 "click" x
-  --Options.set (\options -> { options | onClick = Just (Html.onClick x) })
 
 
 --Cell

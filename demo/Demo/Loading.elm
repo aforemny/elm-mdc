@@ -142,7 +142,7 @@ view model =
                       , Button.colored
                       , Button.ripple
                       , Button.disabled `when` model.running 
-                      , Button.onClick Toggle
+                      , Options.onClick Toggle
                       ]
                       [ text "Resume" ]
                   , Options.div [ css "width" "2em", css "display" "inline-block" ] []
@@ -151,7 +151,7 @@ view model =
                       , Button.colored
                       , Button.ripple
                       , Button.disabled `when` not model.running
-                      , Button.onClick Toggle
+                      , Options.onClick Toggle
                       ]
                       [ text "Pause" ]
                   ]

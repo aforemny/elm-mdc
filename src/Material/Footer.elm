@@ -15,7 +15,6 @@ module Material.Footer
     , socialButton
     , href
     , link
-    , onClick
     , dropdown
     , heading
     , links
@@ -69,7 +68,7 @@ for a live demo.
 # Helpers
 
 @docs html
-@docs link, onClick, href
+@docs link, href
 
 # Appearance
 
@@ -355,13 +354,6 @@ mini props { left, right } =
     Options.styled Html.footer
       (cs pref :: props)
       (leftContent ++ rightContent)
-
-
-{-| onClick for Links and Buttons.
--}
-onClick : m -> Property m
-onClick =
-  Options.on1 "click"
 
 
 {-| href for Links.

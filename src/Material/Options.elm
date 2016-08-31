@@ -7,7 +7,7 @@ module Material.Options exposing
   , id
   , inner
   , on, on1
-  , onClick, onBlur, onFocus
+  , onClick, onBlur, onFocus, onChange
   , dispatch, dispatch'
   , inject, inject'
   )
@@ -58,7 +58,7 @@ applying MDL typography or color to standard elements.
 
 ## Events
 @docs on, on1
-@docs onClick, onBlur, onFocus
+@docs onClick, onBlur, onFocus, onChange
 
 ## Event internal
 @docs dispatch, dispatch'
@@ -447,6 +447,13 @@ onFocus =
 onBlur : msg -> Property c msg
 onBlur =
   on1 "blur"
+
+
+{-| onChange handler
+ -}
+onChange : msg -> Property c msg
+onChange =
+  on1 "change"
 
 
 {-| Add custom event handlers with options

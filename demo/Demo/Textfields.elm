@@ -337,9 +337,9 @@ custom model =
             , Textfield.textarea
             , Textfield.onInput Upd9
             , Textfield.value model.str9
-            , Textfield.on "keyup" selectionDecoder
-            , Textfield.on "mousemove" selectionDecoder
-            , Textfield.on "click" selectionDecoder
+            , Options.on "keyup" selectionDecoder
+            , Options.on "mousemove" selectionDecoder
+            , Options.on "click" selectionDecoder
         ]
         , Options.styled Html.p
             [ css "width" "300px"
