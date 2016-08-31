@@ -2,6 +2,7 @@ module Material exposing
   ( Model, model
   , Msg, update
   , subscriptions, init
+  , update'
   )
 
 {-|
@@ -155,6 +156,7 @@ and simply comment out the components you do not need.
 ## Parts API
 
 @docs Model, model, Msg, update, subscriptions, init
+@docs update'
 -}
 
 import Dict 
@@ -222,19 +224,48 @@ The second argument is a lifting function that
 embeds the generic MDL action in your own Msg type.
 -}
 update
-    : (a -> { c | mdl : Model } -> ( { c | mdl : Model }, Cmd a ))
-    -> Msg a
+    : (inner -> { c | mdl : Model } -> ( { c | mdl : Model }, Cmd inner ))
+    -> Msg inner
     -> { c | mdl : Model }
-    -> ( { c | mdl : Model }, Cmd a )
-update update' action model =
+    -> ( { c | mdl : Model }, Cmd inner )
+update up' action model =
   case action of
     Msg.Internal msg ->
       Parts.update' msg model.mdl
         |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
         |> Maybe.withDefault (model, Cmd.none)
     Msg.Dispatch msg ->
-      Dispatch.update update' msg model
+       Dispatch.update up' msg model
+
+    -- _ ->
+    --     (model, Cmd.none)
       --(model, Dispatch.forward msg)
+
+
+{-| Update function for the above Msg.
+First argument is a lifting function that lifts from the Msg to the desired message.
+
+Second argument is the `update` function that is calling `Material.update'`
+
+Third argument is a lifting function that embeds the generic MDL action in your own Msg type.
+-}
+update'
+    : (inner -> outer)
+    -> ((inner -> outer) -> inner -> { d | mdl : Model } -> ( { d | mdl : Model }, Cmd outer ))
+    -> Msg inner
+    -> { d | mdl : Model }
+    -> ({ d | mdl : Model }, Cmd outer )
+update' lift up' action model =
+  case action of
+    Msg.Internal msg ->
+      Parts.update' msg model.mdl
+        |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
+        |> Maybe.map (map2nd (Cmd.map lift))
+        |> Maybe.withDefault (model, Cmd.none)
+
+    Msg.Dispatch msg ->
+      Dispatch.update (up' lift) msg model
+
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
 subscriptions in order to function. Hook these up to your containing app as

@@ -1,6 +1,7 @@
 module Dispatch
   exposing
     ( Msg
+    , Decoder
     , forward
     , listeners
     , listeners'
@@ -18,11 +19,9 @@ module Dispatch
 @docs update
 -}
 
-
 import Json.Decode as Json
 import Html.Events
 import Html
-import Dict exposing (Dict)
 import Task
 
 
@@ -34,14 +33,13 @@ cmd msg =
   Task.perform (always msg) (always msg) (Task.succeed msg)
 
 
-
 {-| Message type
 -}
 type Msg m
   = Forward (List m)
 
 
-type alias Pair m =
+type alias Decoder m =
   ( Json.Decoder m, Maybe (Html.Events.Options) )
 
 
@@ -52,32 +50,29 @@ forward (Forward messages) =
   List.map cmd messages |> Cmd.batch
 
 
-
 {-| Map the second element of a tuple
 
     map2nd ((+) 1) ("bar", 3) == ("bar", 4)
 -}
-map2nd : (b -> c) -> (a,b) -> (a,c)
-map2nd f (x,y) = (x, f y)
+map2nd : (b -> c) -> ( a, b ) -> ( a, c )
+map2nd f ( x, y ) =
+  ( x, f y )
 
 
 {-| Runs batch update
 -}
-update : (a -> b -> ( b, Cmd a )) -> Msg a -> b -> (b, Cmd a)
+update : (a -> b -> ( b, Cmd c )) -> Msg a -> b -> ( b, Cmd c )
 update update (Forward msg) model =
   let
-    inner cmd (m, gs) =
-      let
-        (m', c') = update cmd m
-      in
-        (m', c' :: gs)
-
+    inner cmd ( m, gs ) =
+      update cmd m
+        |> map2nd (flip (::) gs)
   in
     List.foldl
       inner
-      (model, [])
+      ( model, [] )
       msg
-    |> map2nd Cmd.batch
+      |> map2nd Cmd.batch
 
 
 {-| Applies given decoders to the same initial value
@@ -87,12 +82,8 @@ applyMultipleDecoders : List (Json.Decoder m) -> Json.Decoder (List m)
 applyMultipleDecoders decoders =
   let
     processDecoder initial decoder =
-      case (Json.decodeValue decoder initial) of
-        Ok smt ->
-          Just smt
-
-        Err _ ->
-          Nothing
+      Json.decodeValue decoder initial
+        |> Result.toMaybe
   in
     Json.customDecoder Json.value
       (\initial ->
@@ -161,22 +152,15 @@ onSingle event options decoders =
 
     -- NOTE: This need to be changed, currently only for debugging
     x :: xs ->
-      Debug.crash <| "Multiple decoders for Event '" ++ event ++  "' with no `Options.dispatch Mdl`"
-      -- Html.Events.onWithOptions event options x
-      --   |> Just
+      Debug.crash <| "Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`"
 
 
-{-| Updates value by given function if found, inserts otherwise
--}
-upsert : comparable -> m -> (Maybe m -> Maybe m) -> Dict comparable m -> Dict comparable m
-upsert key value func dict =
-  if Dict.member key dict then
-    Dict.update key func dict
-  else
-    Dict.insert key value dict
+
+-- Html.Events.onWithOptions event options x
+--   |> Just
 
 
-pickOptions : List (Pair a) -> Html.Events.Options
+pickOptions : List (Decoder a) -> Html.Events.Options
 pickOptions decoders =
   List.map snd decoders
     |> List.filterMap identity
@@ -188,7 +172,7 @@ pickOptions decoders =
 -}
 listeners :
   (Msg a -> a)
-  -> List ( String, List (Pair a) )
+  -> List ( String, List (Decoder a) )
   -> List (Html.Attribute a)
 listeners lift items =
   items
@@ -199,7 +183,7 @@ listeners lift items =
 {-| Combines decoders for events and returns event listeners
 -}
 listeners' :
-  List ( String, List (Pair a) )
+  List ( String, List (Decoder a) )
   -> List (Html.Attribute a)
 listeners' items =
   items
