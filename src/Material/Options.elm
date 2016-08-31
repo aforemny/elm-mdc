@@ -103,25 +103,35 @@ type alias Summary c m =
   { classes : List String 
   , css : List (String, String)  
   , attrs : List (Attribute m)
-  , config : c
   , listeners : List (String, (Decoder.Decoder m, Maybe Html.Events.Options))
   , dispatch : Maybe (Dispatch.Msg m -> m)
+  , config : c
   }
 
 
+{- `collect` and variants are called multiple times by nearly every use of
+  any elm-mdl component. Carefully consider performance implications before
+  modifying. In particular: 
+
+  - Avoid closures. They are slow to create and cause subsequent GC.
+  - Pre-compute where possible. 
+
+  Earlier versions of `collect`, violating these rules, consumed ~20% of
+  execution time for `Cards.view` and `Textfield.view`.
+-}
+
 
 collect1 
-  : ((c -> c) -> c' -> c') 
-  -> Property c m 
-  -> Summary c' m 
-  -> Summary c' m
-collect1 f option acc = 
+  :  Property c m 
+  -> Summary c m 
+  -> Summary c m
+collect1 option acc = 
   case option of 
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
-    Many options -> List.foldl (collect1 f) acc options
-    Set g -> { acc | config = f g acc.config }
+    Many options -> List.foldl collect1 acc options
+    Set g -> { acc | config = g acc.config }
     Listener event options decoder ->
       { acc |
           listeners = (event, (decoder, options)) :: acc.listeners
@@ -135,38 +145,57 @@ collect1 f option acc =
 
 recollect : Summary c m  -> List (Property c m) -> Summary c m
 recollect = 
-  List.foldl (collect1 (<|)) 
+  List.foldl collect1 
 
 
 {-| Flatten a `Property a` into  a `Summary a`. Operates as `fold`
 over options; first two arguments are folding function and initial value. 
 -}
 collect : c -> List (Property c m) -> Summary c m
-collect config0 =
-  recollect { classes=[], css=[], attrs=[], config=config0, listeners = [], dispatch = Nothing }
+collect =
+  Summary [] [] [] [] Nothing  >> recollect 
+
+
+{-| Special-casing of collect for `Property c ()`. 
+-}
+collect1' : Property c m -> Summary () m -> Summary () m
+collect1' options acc = 
+  case options of 
+    Class x -> { acc | classes = x :: acc.classes }
+    CSS x -> { acc | css = x :: acc.css }
+    Attribute x -> { acc | attrs = x :: acc.attrs }
+    Many options -> List.foldl collect1' acc options
+    Set _ -> acc 
+    Listener event options decoder ->
+      { acc | listeners = (event, (decoder, options)) :: acc.listeners}
+    Lift m ->
+      { acc | dispatch = Just m}
+    None -> acc
 
 
 collect' : List (Property c m) -> Summary () m 
-collect' options = 
-  List.foldl 
-    (collect1 (\_ _ -> ()))
-    { classes=[], css=[], attrs=[], config=(), listeners = [], dispatch = Nothing }
-    options
+collect' = 
+  List.foldl collect1' (Summary [] [] [] [] Nothing ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
-addAttributes summary attrs = 
-  List.concat
-    [ attrs
-    , [ Html.Attributes.style summary.css ]
-    , [ Html.Attributes.class (String.join " " summary.classes) ]
-    , summary.attrs
-    , case summary.dispatch of
-        Just lift ->
-          Dispatch.listeners lift (Dispatch.group summary.listeners)
-        Nothing ->
-          Dispatch.listeners' (Dispatch.group summary.listeners)
-    ]
+addAttributes summary attrs =
+  let
+    listeners =
+      (case summary.dispatch of
+         Just lift ->
+           Dispatch.listeners lift (Dispatch.group summary.listeners)
+         Nothing ->
+           Dispatch.listeners' (Dispatch.group summary.listeners)
+      )
+  in
+    List.append
+      attrs
+      (  Html.Attributes.style summary.css
+      :: Html.Attributes.class (String.join " " summary.classes)
+      :: summary.attrs
+      )
+      |> (flip (++) listeners)
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
@@ -177,7 +206,8 @@ apply : Summary c m -> (List (Attribute m) -> a)
 apply summary ctor options attrs = 
   ctor 
     (addAttributes 
-      (recollect summary options) attrs)
+      (recollect summary options) 
+      attrs)
 
 
 {-| Apply properties to a standard Html element.

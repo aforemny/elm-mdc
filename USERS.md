@@ -38,6 +38,10 @@
 * Elm-BMI - BMI Calculator written in Elm.
     * [GitHub repository](https://github.com/uehaj/elm-bmi)
     * [Live demo/site](https://uehaj.github.io/elm-bmi/)
+*  Elm-SPA-Template - a template for a single page app using elm-mdl
+    * [GitHub repository](https://github.com/id3as/elm-spa-template)
+    * [Live demo/site](http://id3as.github.io/elm-spa.html)
+
 
 
 *Disclaimer - elm-mdl does not endorse or suggest that these projects are "best practice". They are only listed here as a reference.*
@@ -47,4 +51,3 @@
     * Comment
     * [GitHub repository](link)
     * [Live demo/site](link)
-
