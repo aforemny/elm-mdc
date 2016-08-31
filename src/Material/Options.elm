@@ -116,6 +116,7 @@ type alias Summary c m =
   { classes : List String 
   , css : List (String, String)  
   , attrs : List (Attribute m)
+  , internal : List (Attribute m)
   , listeners : List (String, (Json.Decoder m, Maybe Html.Events.Options))
   , dispatch : Maybe (Dispatch.Msg m -> m)
   , config : c
@@ -143,16 +144,13 @@ collect1 option acc =
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
+    Internal x -> { acc | internal = x :: acc.internal }
     Many options -> List.foldl collect1 acc options
     Set g -> { acc | config = g acc.config }
     Listener event options decoder ->
-      { acc |
-          listeners = (event, (decoder, options)) :: acc.listeners
-      }
+      { acc | listeners = (event, (decoder, options)) :: acc.listeners}
     Lift m ->
-      { acc |
-          dispatch = Just m
-      }
+      { acc | dispatch = Just m }
     None -> acc
 
 
@@ -166,7 +164,7 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : c -> List (Property c m) -> Summary c m
 collect =
-  Summary [] [] [] [] Nothing  >> recollect 
+  Summary [] [] [] [] [] Nothing  >> recollect
 
 
 {-| Special-casing of collect for `Property c ()`. 
@@ -177,6 +175,7 @@ collect1' options acc =
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
+    Internal x -> { acc | internal = x :: acc.internal }
     Many options -> List.foldl collect1' acc options
     Set _ -> acc 
     Listener event options decoder ->
@@ -188,7 +187,7 @@ collect1' options acc =
 
 collect' : List (Property c m) -> Summary () m 
 collect' = 
-  List.foldl collect1' (Summary [] [] [] [] Nothing ())
+  List.foldl collect1' (Summary [] [] [] [] [] Nothing ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
@@ -202,12 +201,17 @@ addAttributes summary attrs =
            Dispatch.listeners' (Dispatch.group summary.listeners)
       )
   in
+    {- NOTE: Ordering here is important, First apply summary attributes
+    that way internal class and specific attributes can override those
+    provided by the user
+     -}
     List.append
-      attrs
+      summary.attrs
       (  Html.Attributes.style summary.css
       :: Html.Attributes.class (String.join " " summary.classes)
-      :: summary.attrs
+      :: attrs
       )
+      |> (flip (++) summary.internal)
       |> (flip (++) listeners)
 
 
@@ -371,14 +375,16 @@ type alias Style m =
   Property () m
 
 
-{-| Install arbitrary `Html.Attribute`. Applicable only to `Style m`, not 
-general Properties. Use like this:
+{-| Install arbitrary `Html.Attribute`.
 
-    Options.div 
-      [ Options.attribute <| Html.onClick MyClickEvent ]
+    Options.div
+      [ Options.attribute <| Html.Attributes.title "title" ]
       [ ... ]
+
+**NOTE** Do not install event handlers using `Options.attribute`.
+Instead use `Options.on` and the variants.
 -}
-attribute : Html.Attribute m -> Style m 
+attribute : Html.Attribute m -> Property c m
 attribute =
   Attribute 
 

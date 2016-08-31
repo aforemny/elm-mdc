@@ -2,6 +2,7 @@ module Demo.Chips exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+import Html.Events as Html
 
 import Material.Chip as Chip
 import Material.Grid as Grid
@@ -311,8 +312,8 @@ view model  =
                                     [ Options.css "margin" "5px 5px"
                                     --, Options.dispatch (Material.dispatch >> Material)
                                     , Options.dispatch Mdl
-                                    , Options.on1 "click" (ChipClick index)
-                                    , Options.on1 "click" (NoOp (toString (ChipClick index)))
+                                    , Options.onClick (ChipClick index)
+                                    , Options.onClick (NoOp (toString (ChipClick index)))
                                     --, Options.onClick (ChipClick index)
                                     , Chip.deleteClick (RemoveChip index)
                                     ]
@@ -325,10 +326,8 @@ view model  =
                   [ Button.colored
                   , Button.ripple
                   , Button.raised
-                  --, Options.onClick (AddChip "Amazing Chip")
-                  --, Options.dispatch Dispatch
-                  , Options.on1 "click" (AddChip "Amazing Chip")
-                  , Options.on1 "click" (NoOp (toString "Amazing Chip"))
+                  , Options.onClick (AddChip "Amazing Chip")
+                  , Options.onClick (NoOp "Amazing Chip")
                   ]
                   [ text "Add chip" ]
 
