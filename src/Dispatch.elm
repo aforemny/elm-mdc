@@ -11,11 +11,17 @@ module Dispatch
 
 {-| Utility module for dispatching multiple events from a single `Html.Event`
 
+## Types
 @docs Msg
-@docs forward
+@docs Decoder
+
+## Event handlers
 @docs listeners
 @docs listeners'
 @docs group
+
+## Dispatch
+@docs forward
 @docs update
 -}
 
@@ -39,6 +45,8 @@ type alias Msg m
   = (List m)
 
 
+{-| A decoder with possible options
+-}
 type alias Decoder m =
   ( Json.Decoder m, Maybe (Html.Events.Options) )
 
@@ -136,6 +144,8 @@ onEvtOptions lift event options decoders =
         |> Just
 
 
+{-| A single event
+-}
 onSingle :
   String
   -> Html.Events.Options
@@ -163,7 +173,10 @@ pickOptions decoders =
     |> Maybe.withDefault Html.Events.defaultOptions
 
 
-{-| Combines decoders for events and returns event listeners
+{-| This function takes a lifting function and
+pair of events and their handlers and returns
+a list of `Html.Attribute` containing handlers that
+will allow for dispatching of multiple events from a single `Html.Event`
 -}
 listeners :
   (Msg a -> a)
@@ -175,7 +188,11 @@ listeners lift items =
     |> List.filterMap identity
 
 
-{-| Combines decoders for events and returns event listeners
+{-| Take a list of events to a list of decoders and
+apply only the first of those decoders. This
+is only applicable if no lifting argument is available.
+If a lifting argument is available use
+`Dispatch.listeners` instead.
 -}
 listeners' :
   List ( String, List (Decoder a) )

@@ -61,11 +61,12 @@ applying MDL typography or color to standard elements.
 @docs onClick, onBlur, onFocus
 
 ## Event internal
-@docs dispatch, dispatch', inject, inject'
+@docs dispatch, dispatch'
 
 # Internal
 The following types and values are used internally in the library. 
 @docs Summary, apply, collect, set
+@docs inject, inject'
 
 -}
 
@@ -426,8 +427,14 @@ onWithOptions evt options =
 
 
 {-| Add a lifting function that is **required** for multi event dispatch.
+To enable multi event dispatch with Mdl:
 
-**NOTE** If this is missing no events are dispatched with `Options.on`
+    Chip.button
+      [ Options.dispatch Mdl
+      , Options.onClick Click
+      , Options.onClick AnotherClick
+      ]
+      [ ... ]
  -}
 dispatch : (Msg.Msg a m -> m) -> Property c m
 dispatch lift =
@@ -435,8 +442,23 @@ dispatch lift =
 
 
 {-| Add a lifting function that is **required** for multi event dispatch.
+To enable multi event dispatch for anything.
 
-**NOTE** If this is missing no events are dispatched with `Options.on`
+Add a message
+
+    type Msg
+      = ...
+      | Dispatch (Dispatch.Msg Msg)
+      ...
+
+Create an element with Options.styled
+
+    Options.styled Html.button
+      [ Options.dispatch' Dispatch
+      , Options.onClick Click
+      , Options.onClick AnotherClick
+      ]
+      [ ... ]
  -}
 dispatch' : (Dispatch.Msg b -> b) -> Property c b
 dispatch' =
