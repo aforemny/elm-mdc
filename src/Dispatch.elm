@@ -35,8 +35,8 @@ cmd msg =
 
 {-| Message type
 -}
-type Msg m
-  = Forward (List m)
+type alias Msg m
+  = (List m)
 
 
 type alias Decoder m =
@@ -46,7 +46,7 @@ type alias Decoder m =
 {-| Maps messages to commands
 -}
 forward : Msg m -> Cmd m
-forward (Forward messages) =
+forward (messages) =
   List.map cmd messages |> Cmd.batch
 
 
@@ -62,7 +62,7 @@ map2nd f ( x, y ) =
 {-| Runs batch update
 -}
 update : (a -> b -> ( b, Cmd c )) -> Msg a -> b -> ( b, Cmd c )
-update update (Forward msg) model =
+update update (msg) model =
   let
     inner cmd ( m, gs ) =
       update cmd m
@@ -97,7 +97,7 @@ applyMultipleDecoders decoders =
 -}
 forwardDecoder : List (Json.Decoder a) -> Json.Decoder (Msg a)
 forwardDecoder =
-  applyMultipleDecoders >> (Json.map Forward)
+  applyMultipleDecoders
 
 
 {-| Run multiple decoders on a single Html Event
@@ -153,11 +153,6 @@ onSingle event options decoders =
     -- NOTE: This need to be changed, currently only for debugging
     x :: xs ->
       Debug.crash <| "Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`"
-
-
-
--- Html.Events.onWithOptions event options x
---   |> Just
 
 
 pickOptions : List (Decoder a) -> Html.Events.Options
