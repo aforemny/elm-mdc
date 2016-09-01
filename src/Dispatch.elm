@@ -11,13 +11,12 @@ module Dispatch
     , update
     , add
     , lift
-    , lift'
     , empty
+    , get
     )
 
-{-| Utility module for dispatching multiple events from a single `Html.Event`
-
-To add support for Dispatch
+{-| Utility module for apply multiple decoders to a single `Html.Event`.
+To add support for Dispatch:
 
 Add a message to your `Msg`
 
@@ -66,12 +65,12 @@ Add a call to `Dispatch.on` on an element
 
 ## Advanced
 
-These are used for `elm-mdl`. They are likely
-not generic enough for common use
+These are meant for `elm-mdl`. They are likely
+not generic enough for general use.
 
 @docs Decoder
 @docs Config
-@docs empty, add, lift, lift'
+@docs empty, add, lift, get
 @docs listeners
 
 @docs group
@@ -82,6 +81,13 @@ import Json.Decode as Json
 import Html.Events
 import Html
 import Task
+
+
+
+type alias Conf m =
+  { decoders : List (String, (Json.Decoder m, Maybe Html.Events.Options))
+  , lift : Maybe (List m -> m)
+  }
 
 
 {-| Dispatch configuration type.
@@ -102,6 +108,7 @@ empty =
     , lift = Nothing
     }
 
+
 {-| Set the lifting function
  -}
 lift : (List m -> m) -> Config m -> Config m
@@ -110,10 +117,14 @@ lift fn (Config config) =
     { config | lift = Just fn }
 
 
-{-| Get the lifting function
+{-| Get a property from config
  -}
-lift' : (Config m) -> Maybe (List m -> m)
-lift' (Config config) = config.lift
+get
+  : (Conf a -> b)
+  -> Config a
+  -> b
+get prop (Config config) =
+  prop config
 
 
 {-| Add a decoder for event
@@ -124,7 +135,8 @@ add event options decoder (Config config) =
     { config | decoders = (event, (decoder, options)) :: config.decoders }
 
 
-{-| Listeners
+{-| This function returns a list of `Html.Attribute` containing handlers that
+will allow for dispatching of multiple decoders from a single `Html.Event`
  -}
 listeners : Config msg -> List (Html.Attribute msg)
 listeners (Config config) =

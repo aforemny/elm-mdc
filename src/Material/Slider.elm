@@ -205,7 +205,7 @@ view options =
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
-          , case (Dispatch.lift' summary.dispatch) of
+          , case (Dispatch.get .lift summary.dispatch) of
               Just l -> Options.dispatch' l
               Nothing -> Options.nop
           , listeners
