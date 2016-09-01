@@ -165,24 +165,23 @@ applyMultipleDecoders decoders =
 {-| Dispatch multiple decoders for a single event.
  -}
 on
-  : (Msg msg -> msg)
-  -> String
+  : String
+  -> (Msg msg -> msg)
   -> List (Json.Decoder msg)
   -> Maybe (Html.Attribute msg)
-on lift event =
-  onWithOptions lift event Html.Events.defaultOptions
+on event lift =
+  onWithOptions event lift Html.Events.defaultOptions
 
 {-| Dispatch multiple decoders for a single event.
-
 Options apply to the whole event.
  -}
 onWithOptions
-  : (Msg msg -> msg)
-  -> String
+  : String
+  -> (Msg msg -> msg)
   -> Html.Events.Options
   -> List (Json.Decoder msg)
   -> Maybe (Html.Attribute msg)
-onWithOptions lift event options decoders =
+onWithOptions event lift options decoders =
   case decoders of
     [] ->
       Nothing
