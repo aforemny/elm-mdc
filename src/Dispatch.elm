@@ -1,13 +1,14 @@
 module Dispatch
   exposing
-    ( Msg
-    , Decoder
-    , forward
-    , listeners
-    , listeners'
-    , group
-    , update
-    )
+    (..)
+    -- ( Msg
+    -- , Decoder
+    -- , forward
+    -- , listeners
+    -- , listeners'
+    -- , group
+    -- , update
+    -- )
 
 {-| Utility module for dispatching multiple events from a single `Html.Event`
 
@@ -31,6 +32,61 @@ import Html.Attributes
 import Html
 import Task
 
+
+{-| Dispatch configuration type.
+ -}
+type Config m =
+  Config
+    { decoders : List (String, (Json.Decoder m, Maybe Html.Events.Options))
+    , lift : Maybe (Msg m -> m)
+    }
+
+
+{-| Empty configuration
+ -}
+empty : Config m
+empty =
+  Config
+    { decoders = []
+    , lift = Nothing
+    }
+
+{-| Set the lifting function
+ -}
+lift : (Msg m -> m) -> Config m -> Config m
+lift fn (Config config) =
+  Config
+    { config | lift = Just fn }
+
+
+{-| Get the lifting function
+ -}
+lift' : (Config m) -> Maybe (Msg m -> m)
+lift' (Config config) = config.lift
+
+
+{-| Add a decoder for event
+ -}
+add : String -> Maybe Html.Events.Options -> Json.Decoder msg -> Config msg -> Config msg
+add event options decoder (Config config) =
+  Config
+    { config | decoders = (event, (decoder, options)) :: config.decoders }
+
+
+{-| Listeners
+ -}
+listeners'' : Config msg -> List (Html.Attribute msg)
+listeners'' (Config config) =
+  let
+    grouped =
+      group config.decoders
+
+  in
+    case config.lift of
+      Just fn ->
+        listeners fn grouped
+      Nothing ->
+        listeners' grouped
 
 
 {-|

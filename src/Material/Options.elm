@@ -117,8 +117,7 @@ type alias Summary c m =
   , css : List (String, String)  
   , attrs : List (Attribute m)
   , internal : List (Attribute m)
-  , listeners : List (String, (Json.Decoder m, Maybe Html.Events.Options))
-  , dispatch : Maybe (Dispatch.Msg m -> m)
+  , dispatch : Dispatch.Config m
   , config : c
   }
 
@@ -148,9 +147,9 @@ collect1 option acc =
     Many options -> List.foldl collect1 acc options
     Set g -> { acc | config = g acc.config }
     Listener event options decoder ->
-      { acc | listeners = (event, (decoder, options)) :: acc.listeners}
+      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
     Lift m ->
-      { acc | dispatch = Just m }
+      { acc | dispatch = Dispatch.lift m acc.dispatch }
     None -> acc
 
 
@@ -164,7 +163,7 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : c -> List (Property c m) -> Summary c m
 collect =
-  Summary [] [] [] [] [] Nothing  >> recollect
+  Summary [] [] [] [] Dispatch.empty >> recollect
 
 
 {-| Special-casing of collect for `Property c ()`. 
@@ -179,27 +178,21 @@ collect1' options acc =
     Many options -> List.foldl collect1' acc options
     Set _ -> acc 
     Listener event options decoder ->
-      { acc | listeners = (event, (decoder, options)) :: acc.listeners}
+      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
     Lift m ->
-      { acc | dispatch = Just m}
+      { acc | dispatch = Dispatch.lift m acc.dispatch }
     None -> acc
 
 
 collect' : List (Property c m) -> Summary () m 
 collect' = 
-  List.foldl collect1' (Summary [] [] [] [] [] Nothing ())
+  List.foldl collect1' (Summary [] [] [] [] Dispatch.empty ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs =
   let
-    listeners =
-      (case summary.dispatch of
-         Just lift ->
-           Dispatch.listeners lift (Dispatch.group summary.listeners)
-         Nothing ->
-           Dispatch.listeners' (Dispatch.group summary.listeners)
-      )
+    listeners = Dispatch.listeners'' summary.dispatch
   in
     {- NOTE: Ordering here is important, First apply summary attributes
     that way internal class and specific attributes can override those

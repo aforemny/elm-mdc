@@ -54,6 +54,7 @@ import Html.Attributes as Html
 import Material.Options as Options exposing (cs, css, when)
 import Material.Helpers as Helpers
 import Json.Decode as Json
+import Dispatch
 
 
 -- PROPERTIES
@@ -204,7 +205,7 @@ view options =
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
-          , case summary.dispatch of
+          , case (Dispatch.lift' summary.dispatch) of
               Just l -> Options.dispatch' l
               Nothing -> Options.nop
           , listeners
