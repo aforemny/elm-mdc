@@ -192,7 +192,7 @@ collect' =
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs =
   let
-    listeners = Dispatch.listeners'' summary.dispatch
+    listeners = Dispatch.listeners summary.dispatch
   in
     {- NOTE: Ordering here is important, First apply summary attributes
     that way internal class and specific attributes can override those

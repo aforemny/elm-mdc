@@ -75,8 +75,8 @@ add event options decoder (Config config) =
 
 {-| Listeners
  -}
-listeners'' : Config msg -> List (Html.Attribute msg)
-listeners'' (Config config) =
+listeners : Config msg -> List (Html.Attribute msg)
+listeners (Config config) =
   let
     grouped =
       group config.decoders
@@ -84,9 +84,9 @@ listeners'' (Config config) =
   in
     case config.lift of
       Just fn ->
-        listeners fn grouped
+        listeners' fn grouped
       Nothing ->
-        listeners' grouped
+        listeners'' grouped
 
 
 {-|
@@ -96,12 +96,6 @@ cmd : msg -> Cmd msg
 cmd msg =
   Task.perform (always msg) (always msg) (Task.succeed msg)
 
-
-
-{-| NoOp
- -}
-noop : Html.Attribute msg
-noop = Html.Attributes.attribute "data-dispatch-noop" "noop"
 
 {-| Message type
 -}
@@ -131,20 +125,31 @@ map2nd f ( x, y ) =
   ( x, f y )
 
 
+{-|
+-}
+inner : (a -> b -> ( c, d )) -> a -> ( b, List d ) -> ( c, List d )
+inner update cmd ( m, gs ) =
+  update cmd m
+    |> map2nd (flip (::) gs)
+
+
 {-| Runs batch update
 -}
 update : (a -> b -> ( b, Cmd c )) -> Msg a -> b -> ( b, Cmd c )
 update update (msg) model =
-  let
-    inner cmd ( m, gs ) =
-      update cmd m
-        |> map2nd (flip (::) gs)
-  in
-    List.foldl
-      inner
-      ( model, [] )
-      msg
-      |> map2nd Cmd.batch
+  List.foldl
+    (inner update)
+    ( model, [] )
+    msg
+    |> map2nd Cmd.batch
+
+
+{-| Decode value using a decoder
+-}
+processDecoder : Json.Value -> Json.Decoder a -> Maybe a
+processDecoder initial decoder =
+  Json.decodeValue decoder initial
+    |> Result.toMaybe
 
 
 {-| Applies given decoders to the same initial value
@@ -152,17 +157,11 @@ update update (msg) model =
 -}
 applyMultipleDecoders : List (Json.Decoder m) -> Json.Decoder (List m)
 applyMultipleDecoders decoders =
-  let
-    processDecoder initial decoder =
-      Json.decodeValue decoder initial
-        |> Result.toMaybe
-  in
-    Json.customDecoder Json.value
-      (\initial ->
-        List.map (processDecoder initial) decoders
-          |> List.filterMap identity
-          |> Result.Ok
-      )
+  Json.customDecoder Json.value
+    (\initial ->
+       List.filterMap (processDecoder initial) decoders
+       |> Result.Ok
+    )
 
 
 {-|
@@ -178,7 +177,7 @@ onEvt :
   (Msg msg -> msg)
   -> String
   -> List (Json.Decoder msg)
-  -> (Html.Attribute msg)
+  -> Maybe (Html.Attribute msg)
 onEvt lift event =
   onEvtOptions lift event Html.Events.defaultOptions
 
@@ -191,19 +190,21 @@ onEvtOptions :
   -> String
   -> Html.Events.Options
   -> List (Json.Decoder msg)
-  -> (Html.Attribute msg)
+  -> Maybe (Html.Attribute msg)
 onEvtOptions lift event options decoders =
   case decoders of
     [] ->
-      noop
+      Nothing
 
     [ x ] ->
       Html.Events.onWithOptions event options x
+        |> Just
 
     _ ->
       forwardDecoder decoders
         |> Json.map lift
         |> Html.Events.onWithOptions event options
+        |> Just
 
 
 {-| A single event
@@ -212,14 +213,15 @@ onSingle :
   String
   -> Html.Events.Options
   -> List (Json.Decoder msg)
-  -> (Html.Attribute msg)
+  -> Maybe (Html.Attribute msg)
 onSingle event options decoders =
   case decoders of
     [] ->
-      noop
+      Nothing
 
     [ x ] ->
       Html.Events.onWithOptions event options x
+        |> Just
 
     x :: xs ->
       let
@@ -227,14 +229,15 @@ onSingle event options decoders =
         _ = Debug.log "WARNING" ("Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`")
       in
         Html.Events.onWithOptions event options x
+          |> Just
 
 
+{-| Picks a set of options or Html.Events.defaultOptions -}
 pickOptions : List (Decoder a) -> Html.Events.Options
-pickOptions decoders =
-  List.map snd decoders
-    |> List.filterMap identity
-    |> List.head
-    |> Maybe.withDefault Html.Events.defaultOptions
+pickOptions =
+  List.filterMap snd
+    >> List.head
+    >> Maybe.withDefault Html.Events.defaultOptions
 
 
 {-| This function takes a lifting function and
@@ -242,13 +245,13 @@ pair of events and their handlers and returns
 a list of `Html.Attribute` containing handlers that
 will allow for dispatching of multiple events from a single `Html.Event`
 -}
-listeners :
+listeners' :
   (Msg a -> a)
   -> List ( String, List (Decoder a) )
   -> List (Html.Attribute a)
-listeners lift items =
+listeners' lift items =
   items
-    |> List.map (\( event, decoders ) ->
+    |> List.filterMap (\( event, decoders ) ->
        onEvtOptions lift event (pickOptions decoders) (List.map fst decoders)
        )
 
@@ -259,12 +262,12 @@ is only applicable if no lifting argument is available.
 If a lifting argument is available use
 `Dispatch.listeners` instead.
 -}
-listeners' :
+listeners'' :
   List ( String, List (Decoder a) )
   -> List (Html.Attribute a)
-listeners' items =
+listeners'' items =
   items
-    |> List.map
+    |> List.filterMap
         (\( event, decoders ) ->
           onSingle event (pickOptions decoders) (List.map fst decoders)
         )
