@@ -160,12 +160,11 @@ addAttributes summary attrs =
   However, internal attributes should overwrite the ones that we need
   to maintain functionality
   -}
-  List.append
-    summary.attrs
-    (  Html.Attributes.style summary.css
-    :: Html.Attributes.class (String.join " " summary.classes)
-    :: attrs
-    )
+  summary.attrs
+    ++ [ Html.Attributes.style summary.css
+       , Html.Attributes.class (String.join " " summary.classes)
+       ]
+    ++ attrs
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
