@@ -191,21 +191,17 @@ collect' =
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs =
-  let
-    listeners = Dispatch.listeners summary.dispatch
-  in
-    {- NOTE: Ordering here is important, First apply summary attributes
-    that way internal class and specific attributes can override those
-    provided by the user
-     -}
-    List.append
-      summary.attrs
-      (  Html.Attributes.style summary.css
-      :: Html.Attributes.class (String.join " " summary.classes)
-      :: attrs
-      )
-      |> (flip (++) summary.internal)
-      |> (flip (++) listeners)
+  {- NOTE: Ordering here is important, First apply summary attributes
+  that way internal class and specific attributes can override those
+  provided by the user
+    -}
+  summary.attrs
+    ++ [ Html.Attributes.style summary.css
+        , Html.Attributes.class (String.join " " summary.classes)
+        ]
+    ++ attrs
+    ++ summary.internal
+    ++ (Dispatch.listeners summary.dispatch)
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
