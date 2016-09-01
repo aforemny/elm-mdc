@@ -27,8 +27,10 @@ module Dispatch
 
 import Json.Decode as Json
 import Html.Events
+import Html.Attributes
 import Html
 import Task
+
 
 
 {-|
@@ -38,6 +40,12 @@ cmd : msg -> Cmd msg
 cmd msg =
   Task.perform (always msg) (always msg) (Task.succeed msg)
 
+
+
+{-| NoOp
+ -}
+noop : Html.Attribute msg
+noop = Html.Attributes.attribute "data-dispatch-noop" "noop"
 
 {-| Message type
 -}
@@ -114,7 +122,7 @@ onEvt :
   (Msg msg -> msg)
   -> String
   -> List (Json.Decoder msg)
-  -> Maybe (Html.Attribute msg)
+  -> (Html.Attribute msg)
 onEvt lift event =
   onEvtOptions lift event Html.Events.defaultOptions
 
@@ -127,21 +135,19 @@ onEvtOptions :
   -> String
   -> Html.Events.Options
   -> List (Json.Decoder msg)
-  -> Maybe (Html.Attribute msg)
+  -> (Html.Attribute msg)
 onEvtOptions lift event options decoders =
   case decoders of
     [] ->
-      Nothing
+      noop
 
     [ x ] ->
       Html.Events.onWithOptions event options x
-        |> Just
 
     _ ->
       forwardDecoder decoders
         |> Json.map lift
         |> Html.Events.onWithOptions event options
-        |> Just
 
 
 {-| A single event
@@ -150,15 +156,14 @@ onSingle :
   String
   -> Html.Events.Options
   -> List (Json.Decoder msg)
-  -> Maybe (Html.Attribute msg)
+  -> (Html.Attribute msg)
 onSingle event options decoders =
   case decoders of
     [] ->
-      Nothing
+      noop
 
     [ x ] ->
       Html.Events.onWithOptions event options x
-        |> Just
 
     x :: xs ->
       let
@@ -166,7 +171,6 @@ onSingle event options decoders =
         _ = Debug.log "WARNING" ("Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`")
       in
         Html.Events.onWithOptions event options x
-          |> Just
 
 
 pickOptions : List (Decoder a) -> Html.Events.Options
@@ -188,8 +192,9 @@ listeners :
   -> List (Html.Attribute a)
 listeners lift items =
   items
-    |> List.map (\( event, decoders ) -> onEvtOptions lift event (pickOptions decoders) (List.map fst decoders))
-    |> List.filterMap identity
+    |> List.map (\( event, decoders ) ->
+       onEvtOptions lift event (pickOptions decoders) (List.map fst decoders)
+       )
 
 
 {-| Take a list of events to a list of decoders and
@@ -207,7 +212,6 @@ listeners' items =
         (\( event, decoders ) ->
           onSingle event (pickOptions decoders) (List.map fst decoders)
         )
-    |> List.filterMap identity
 
 
 {-| Group a list of pairs based on the first item
