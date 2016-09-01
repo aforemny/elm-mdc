@@ -1,28 +1,80 @@
 module Dispatch
   exposing
-    (..)
-    -- ( Msg
-    -- , Decoder
-    -- , forward
-    -- , listeners
-    -- , listeners'
-    -- , group
-    -- , update
-    -- )
+    ( Msg
+    , Decoder
+    , Config
+    , on
+    , onWithOptions
+    , forward
+    , listeners
+    , group
+    , update
+    , add
+    , lift
+    , lift'
+    , empty
+    )
 
 {-| Utility module for dispatching multiple events from a single `Html.Event`
 
+To add support for Dispatch
+
+Add a message to your `Msg`
+
+    type Msg
+      = ...
+      | Dispatch (List Msg)
+      ...
+
+Add call to `Dispatch.update` in update
+
+    update : Msg -> Model -> (Model, Cmd Msg)
+    update msg model =
+      case msg of
+        ...
+
+      Dispatch messages ->
+        Dispatch.update update messages model
+
+        ...
+
+Add a call to `Dispatch.on` on an element
+
+    view : Model -> Html Msg
+    view model =
+      let
+        decoders =
+          [ Json.Decode.succeed ClickOne
+          , Json.Decode.succeed ClickTwo
+          , Json.Decode.map SomeMessage
+              (Json.at ["target", "offsetWidth"] Json.float) ]
+      in
+        Html.button
+          ([] ++ (case Dispatch.on "click" Dispatch decoders of
+                    Just attr -> [ attr ]
+                    Nothing -> []))
+          [ text "Button" ]
+
+
 ## Types
 @docs Msg
-@docs Decoder
 
-## Event handlers
-@docs listeners
-@docs listeners'
-@docs group
-
-## Dispatch
+## Events
+@docs on
+@docs onWithOptions
 @docs update
+
+## Advanced
+
+These are used for `elm-mdl`. They are likely
+not generic enough for common use
+
+@docs Decoder
+@docs Config
+@docs empty, add, lift, lift'
+@docs listeners
+
+@docs group
 @docs forward
 -}
 
@@ -37,7 +89,7 @@ import Task
 type Config m =
   Config
     { decoders : List (String, (Json.Decoder m, Maybe Html.Events.Options))
-    , lift : Maybe (Msg m -> m)
+    , lift : Maybe (List m -> m)
     }
 
 
@@ -52,7 +104,7 @@ empty =
 
 {-| Set the lifting function
  -}
-lift : (Msg m -> m) -> Config m -> Config m
+lift : (List m -> m) -> Config m -> Config m
 lift fn (Config config) =
   Config
     { config | lift = Just fn }
@@ -60,7 +112,7 @@ lift fn (Config config) =
 
 {-| Get the lifting function
  -}
-lift' : (Config m) -> Maybe (Msg m -> m)
+lift' : (Config m) -> Maybe (List m -> m)
 lift' (Config config) = config.lift
 
 
@@ -110,7 +162,7 @@ type alias Decoder m =
 
 {-| Maps messages to commands
 -}
-forward : Msg m -> Cmd m
+forward : List m -> Cmd m
 forward (messages) =
   List.map cmd messages |> Cmd.batch
 
@@ -132,9 +184,11 @@ inner update cmd ( m, gs ) =
     |> map2nd (flip (::) gs)
 
 
-{-| Runs batch update
+{-| Runs the given `update` on all the messages and
+returns the updated model including batching of
+any commands returned by running the `update`.
 -}
-update : (a -> b -> ( b, Cmd c )) -> Msg a -> b -> ( b, Cmd c )
+update : (msg -> model -> ( model, Cmd any )) -> List msg -> model -> ( model, Cmd any )
 update update (msg) model =
   List.foldl
     (inner update)
@@ -144,7 +198,7 @@ update update (msg) model =
 
 
 {-| Decode value using a decoder
--}
+ -}
 processDecoder : Json.Value -> Json.Decoder a -> Maybe a
 processDecoder initial decoder =
   Json.decodeValue decoder initial
@@ -153,7 +207,7 @@ processDecoder initial decoder =
 
 {-| Applies given decoders to the same initial value
    and return the applied results as a list
--}
+ -}
 applyMultipleDecoders : List (Json.Decoder m) -> Json.Decoder (List m)
 applyMultipleDecoders decoders =
   Json.customDecoder Json.value
@@ -162,11 +216,16 @@ applyMultipleDecoders decoders =
        |> Result.Ok
     )
 
+
 {-| Dispatch multiple decoders for a single event.
+
+Returns `Nothing` if an empty list of decoders is provided.
+Otherwise returns `Just Html.Attribute` with a listener
+that will attempt to run multiple decoders on the event.
  -}
 on
   : String
-  -> (Msg msg -> msg)
+  -> (List msg -> msg)
   -> List (Json.Decoder msg)
   -> Maybe (Html.Attribute msg)
 on event lift =
@@ -174,10 +233,14 @@ on event lift =
 
 {-| Dispatch multiple decoders for a single event.
 Options apply to the whole event.
+
+Returns `Nothing` if an empty list of decoders is provided.
+Otherwise returns `Just Html.Attribute` with a listener
+that will attempt to run multiple decoders on the event.
  -}
 onWithOptions
   : String
-  -> (Msg msg -> msg)
+  -> (List msg -> msg)
   -> Html.Events.Options
   -> List (Json.Decoder msg)
   -> Maybe (Html.Attribute msg)
@@ -201,7 +264,7 @@ onWithOptions event lift options decoders =
 the given options
 -}
 onEvtOptions :
-  (Msg msg -> msg)
+  (List msg -> msg)
   -> (String, List (Decoder msg))
   -> Maybe (Html.Attribute msg)
 onEvtOptions lift (event, pairs) =
@@ -272,7 +335,7 @@ a list of `Html.Attribute` containing handlers that
 will allow for dispatching of multiple events from a single `Html.Event`
 -}
 listeners' :
-  (Msg a -> a)
+  (List a -> a)
   -> List ( String, List (Decoder a) )
   -> List (Html.Attribute a)
 listeners' lift items =
