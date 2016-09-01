@@ -6,6 +6,15 @@ module Material.Options exposing
   , Style, div, span, img, attribute, center, scrim
   , id
   , inner
+  , onClick, onDoubleClick
+  , onMouseDown, onMouseUp
+  , onMouseEnter, onMouseLeave
+  , onMouseOver, onMouseOut
+  , onCheck, onChange
+  , onBlur, onFocus
+  , on, on1
+  , onWithOptions
+  , dispatch, dispatch'
   )
 
 
@@ -52,6 +61,22 @@ applying MDL typography or color to standard elements.
 @docs attribute, id, inner
 @docs center, scrim, disabled
 
+## Events
+@docs onClick, onDoubleClick,
+      onMouseDown, onMouseUp,
+      onMouseEnter, onMouseLeave,
+      onMouseOver, onMouseOut
+@docs  onCheck, onChange
+@docs onBlur, onFocus
+
+# Custom Event Handlers
+@docs on, on1
+@docs onWithOptions
+
+
+## Event internal
+@docs dispatch, dispatch'
+
 # Internal
 The following types and values are used internally in the library. 
 @docs Summary, apply, collect, set
@@ -63,8 +88,15 @@ import String
 
 import Html exposing (Html, Attribute)
 import Html.Attributes
+import Html.Events
 
 import Material.Options.Internal exposing (..)
+
+import Json.Decode as Json
+
+import Dispatch
+
+import Material.Msg as Msg
 
 -- PROPERTIES
 
@@ -84,6 +116,8 @@ type alias Summary c m =
   { classes : List String 
   , css : List (String, String)  
   , attrs : List (Attribute m)
+  , internal : List (Attribute m)
+  , dispatch : Dispatch.Config m
   , config : c
   }
 
@@ -109,8 +143,13 @@ collect1 option acc =
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
+    Internal x -> { acc | internal = x :: acc.internal }
     Many options -> List.foldl collect1 acc options
     Set g -> { acc | config = g acc.config }
+    Listener event options decoder ->
+      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
+    Lift m ->
+      { acc | dispatch = Dispatch.lift m acc.dispatch }
     None -> acc
 
 
@@ -124,7 +163,7 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : c -> List (Property c m) -> Summary c m
 collect =
-  Summary [] [] [] >> recollect 
+  Summary [] [] [] [] Dispatch.empty >> recollect
 
 
 {-| Special-casing of collect for `Property c ()`. 
@@ -135,24 +174,34 @@ collect1' options acc =
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
+    Internal x -> { acc | internal = x :: acc.internal }
     Many options -> List.foldl collect1' acc options
     Set _ -> acc 
+    Listener event options decoder ->
+      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
+    Lift m ->
+      { acc | dispatch = Dispatch.lift m acc.dispatch }
     None -> acc
 
 
 collect' : List (Property c m) -> Summary () m 
 collect' = 
-  List.foldl collect1' (Summary [] [] [] ())
+  List.foldl collect1' (Summary [] [] [] [] Dispatch.empty ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
-addAttributes summary attrs = 
-  List.append
-    attrs
-    (  Html.Attributes.style summary.css 
-    :: Html.Attributes.class (String.join " " summary.classes) 
-    :: summary.attrs
-    )
+addAttributes summary attrs =
+  {- NOTE: Ordering here is important, First apply summary attributes
+  that way internal class and specific attributes can override those
+  provided by the user
+    -}
+  summary.attrs
+    ++ [ Html.Attributes.style summary.css
+        , Html.Attributes.class (String.join " " summary.classes)
+        ]
+    ++ attrs
+    ++ summary.internal
+    ++ (Dispatch.listeners summary.dispatch)
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
@@ -165,10 +214,9 @@ apply summary ctor options attrs =
     (addAttributes 
       (recollect summary options) 
       attrs)
-    
 
 
-{-| Apply properties to a standard Html element. 
+{-| Apply properties to a standard Html element.
 -}
 styled : (List (Attribute m) -> a) -> List (Property c m) -> a
 styled ctor props = 
@@ -316,14 +364,16 @@ type alias Style m =
   Property () m
 
 
-{-| Install arbitrary `Html.Attribute`. Applicable only to `Style m`, not 
-general Properties. Use like this:
+{-| Install arbitrary `Html.Attribute`.
 
-    Options.div 
-      [ Options.attribute <| Html.onClick MyClickEvent ]
+    Options.div
+      [ Options.attribute <| Html.Attributes.title "title" ]
       [ ... ]
+
+**NOTE** Do not install event handlers using `Options.attribute`.
+Instead use `Options.on` and the variants.
 -}
-attribute : Html.Attribute m -> Style m 
+attribute : Html.Attribute m -> Property c m
 attribute =
   Attribute 
 
@@ -368,3 +418,149 @@ For example `Textfield`:
 inner : List (Property c m) -> Property { a | inner : List (Property c m) } m
 inner options =
   set (\c -> { c | inner = options ++ c.inner })
+
+
+
+-- EVENTS
+
+{-| Add custom event handlers
+ -}
+on : String -> (Json.Decoder m) -> Property c m
+on event =
+  Listener event Nothing
+
+
+{-| Add a custom event handler that always succeeds.
+
+Equivalent to `Options.on event (Json.Decode.succeed msg)`
+ -}
+on1 : String -> m -> Property c m
+on1 event m =
+  on event (Json.succeed m)
+
+
+{-|-}
+onClick : msg -> Property c msg
+onClick msg =
+  on "click" (Json.succeed msg)
+
+
+{-|-}
+onDoubleClick : msg -> Property c msg
+onDoubleClick msg =
+  on "dblclick" (Json.succeed msg)
+
+
+{-|-}
+onMouseDown : msg -> Property c msg
+onMouseDown msg =
+  on "mousedown" (Json.succeed msg)
+
+
+{-|-}
+onMouseUp : msg -> Property c msg
+onMouseUp msg =
+  on "mouseup" (Json.succeed msg)
+
+
+{-|-}
+onMouseEnter : msg -> Property c msg
+onMouseEnter msg =
+  on "mouseenter" (Json.succeed msg)
+
+
+{-|-}
+onMouseLeave : msg -> Property c msg
+onMouseLeave msg =
+  on "mouseleave" (Json.succeed msg)
+
+
+{-|-}
+onMouseOver : msg -> Property c msg
+onMouseOver msg =
+  on "mouseover" (Json.succeed msg)
+
+
+{-|-}
+onMouseOut : msg -> Property c msg
+onMouseOut msg =
+  on "mouseout" (Json.succeed msg)
+
+
+{-| Capture [change](https://developer.mozilla.org/en-US/docs/Web/Events/change)
+events on checkboxes. It will grab the boolean value from `event.target.checked`
+on any input event.
+Check out [targetChecked](#targetChecked) for more details on how this works.
+-}
+onCheck : (Bool -> msg) -> Property c msg
+onCheck tagger =
+  on "change" (Json.map tagger Html.Events.targetChecked)
+
+
+{-|-}
+onChange : msg -> Property c msg
+onChange =
+  on1 "change"
+
+-- FOCUS EVENTS
+
+
+{-|-}
+onBlur : msg -> Property c msg
+onBlur msg =
+  on "blur" (Json.succeed msg)
+
+
+{-|-}
+onFocus : msg -> Property c msg
+onFocus msg =
+  on "focus" (Json.succeed msg)
+
+
+{-| Add custom event handlers with options
+ -}
+onWithOptions : String -> Html.Events.Options -> (Json.Decoder m) -> Property c m
+onWithOptions evt options =
+  Listener evt (Just options)
+
+
+
+-- DISPATCH
+
+{-| Add a lifting function that is **required** for multi event dispatch.
+To enable multi event dispatch with Mdl:
+
+    Chip.button
+      [ Options.dispatch Mdl
+      , Options.onClick Click
+      , Options.onClick AnotherClick
+      ]
+      [ ... ]
+ -}
+dispatch : (Msg.Msg a m -> m) -> Property c m
+dispatch lift =
+  Lift (Msg.Dispatch >> lift)
+
+
+{-| Add a lifting function that is **required** for multi event dispatch.
+To enable multi event dispatch for anything.
+
+Add a message
+
+    type Msg
+      = ...
+      | Dispatch (Dispatch.Msg Msg)
+      ...
+
+Create an element with Options.styled
+
+    Options.styled Html.button
+      [ Options.dispatch' Dispatch
+      , Options.onClick Click
+      , Options.onClick AnotherClick
+      ]
+      [ ... ]
+ -}
+dispatch' : (Dispatch.Msg b -> b) -> Property c b
+dispatch' =
+  Lift

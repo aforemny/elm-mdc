@@ -2,6 +2,7 @@ module Demo.Chips exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+--import Html.Events as Html
 
 import Material.Chip as Chip
 import Material.Grid as Grid
@@ -44,7 +45,17 @@ type Msg
   | AddChip String
   | RemoveChip Int
   | ChipClick Int
+  | NoOp String
 
+
+
+liftUpdate : (Msg -> m) -> Msg -> Model -> (Model, Cmd m)
+liftUpdate lift msg model =
+  case msg of
+    Mdl msg' ->
+      Material.update' lift liftUpdate msg' model
+    _ ->
+      model ! []
 
 
 lastIndex : Dict Int b -> Int
@@ -58,8 +69,12 @@ lastIndex dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
+    NoOp msg ->
+      let _ = Debug.log "NoOp" msg
+      in (model, Cmd.none )
+
     Mdl action' ->
-      Material.update action' model
+      Material.update update action' model
 
     ChipClick index ->
       let
@@ -289,7 +304,10 @@ view model  =
                    |> List.map (\ (index, value) ->
                                   Chip.button
                                     [ Options.css "margin" "5px 5px"
-                                    , Chip.onClick (ChipClick index)
+                                    , Options.dispatch Mdl
+                                    , Options.onClick (ChipClick index)
+                                    , Options.onClick (NoOp (toString (ChipClick index)))
+
                                     , Chip.deleteClick (RemoveChip index)
                                     ]
                                     [ Chip.content []
@@ -301,7 +319,8 @@ view model  =
                   [ Button.colored
                   , Button.ripple
                   , Button.raised
-                  , Button.onClick (AddChip "Amazing Chip")
+                  , Options.onClick (AddChip "Amazing Chip")
+                  , Options.onClick (NoOp "Amazing Chip")
                   ]
                   [ text "Add chip" ]
 
@@ -313,7 +332,7 @@ view model  =
           """
             Chip.button
               [ Options.css "margin" "5px 5px"
-              , Chip.onClick (ChipClick index)
+              , Options.onClick (ChipClick index)
               , Chip.deleteClick (RemoveChip index)
               ]
               [ Chip.content []

@@ -15,7 +15,6 @@ module Material.Footer
     , socialButton
     , href
     , link
-    , onClick
     , dropdown
     , heading
     , links
@@ -69,7 +68,7 @@ for a live demo.
 # Helpers
 
 @docs html
-@docs link, onClick, href
+@docs link, href
 
 # Appearance
 
@@ -87,11 +86,10 @@ for a live demo.
 
 import Html exposing (..)
 import Html.Attributes as Html
-import Html.Events as Events
 import Material.Options as Options exposing (Style, cs)
 import String
 import Regex
-import Material.Options.Internal as Internal exposing (attribute)
+import Material.Options.Internal as Internal
 
 
 {-| The type of the footer
@@ -358,18 +356,11 @@ mini props { left, right } =
       (leftContent ++ rightContent)
 
 
-{-| onClick for Links and Buttons.
--}
-onClick : m -> Property m
-onClick =
-  Events.onClick >> attribute
-
-
 {-| href for Links.
 -}
 href : String -> Property m
 href =
-  Html.href >> attribute
+  Html.href >> Internal.attribute
 
 
 {-| Wraps a normal HTML value into `Content`

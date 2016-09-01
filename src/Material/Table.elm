@@ -1,7 +1,7 @@
 module Material.Table exposing
   ( table, thead, tbody, tfoot
   , tr, th, td
-  , ascending, descending, sorted, selected, onClick, Order(Ascending,Descending)
+  , ascending, descending, sorted, selected, Order(Ascending,Descending)
   , numeric
   )
 
@@ -37,15 +37,12 @@ for a live demo.
 @docs table, thead, tbody, tfoot
 @docs tr, th, td
 
-# Options
-@docs onClick
 
 ## Sorting options. 
 The following options have effect only when applied in the header row. 
 @docs ascending, descending, numeric, Order, sorted, selected
 -}
 
-import Html.Events as Html
 import Html exposing (Html, Attribute)
 
 import Material.Options as Options exposing (Property, cs, nop)
@@ -175,24 +172,22 @@ receive mouse clicks via `onClick`.
 
   th [ ascending, numeric ] [ text "Price" ]
 -}
-type alias Header m =
+type alias Header =
   { numeric : Bool
   , sorted : Maybe Order
-  , onClick : Maybe (Attribute m)
   }
 
 
-defaultHeader : Header m
+defaultHeader : Header
 defaultHeader =
   { numeric = False
   , sorted = Nothing
-  , onClick = Nothing
   }
 
 
 {-| Define cell in table header 
 -}
-th : List (Property (Header m) m) -> List (Html m) -> Html m
+th : List (Property (Header) m) -> List (Html m) -> Html m
 th options html =
   let
     ({ config } as summary) =
@@ -205,9 +200,7 @@ th options html =
         Just Descending -> cs "mdl-data-table__header--sorted-descending"
         Nothing -> nop
     ]
-    (config.onClick 
-       |> Maybe.map (flip (::) [])
-       |> Maybe.withDefault [])
+    []
     html
 
 
@@ -244,13 +237,6 @@ sorted order =
 type Order
   = Ascending
   | Descending
-
-
-{-| Dispatch given message when cell is clicked. 
--}
-onClick : m -> Property { a | onClick : Maybe (Attribute m) } m
-onClick x =
-  Options.set (\options -> { options | onClick = Just (Html.onClick x) })
 
 
 --Cell

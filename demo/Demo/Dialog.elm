@@ -34,7 +34,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     Mdl action' ->
-      Material.update action' model
+      Material.update update action' model
 
 
 -- VIEW

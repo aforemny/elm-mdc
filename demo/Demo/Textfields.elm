@@ -66,6 +66,7 @@ type Msg
   | SetFocus5 Bool 
   | Slider Float
   | SelectionChanged Selection
+  | NoOp String
 
 
 selectionDecoder : Decoder.Decoder Msg
@@ -81,41 +82,59 @@ pure =
   flip (,) Cmd.none >> Just
 
 
+update' : Msg -> Model -> (Model, Cmd Msg)
+update' action model =
+  case action of
+    NoOp msg ->
+      let _ = Debug.log "NOOP" msg
+      in model ! []
+
+    Mdl action' ->
+      Material.update update' action' model
+
+    Upd0 str ->
+      { model | str0 = str } ! []
+
+    Upd3 str ->
+      { model | str3 = str } ! []
+
+    Upd4 str ->
+      { model | str4 = str } ! []
+
+    Upd6 str ->
+      { model | str6 = str } ! []
+
+    Upd9 str ->
+      { model | str9 = str } ! []
+
+    Slider value ->
+      { model | length = value } ! []
+
+    SetFocus5 x ->
+      { model | focus5 = x } ! []
+
+    SelectionChanged selection ->
+      -- High-frequency event; return referentially equal model on NOP.
+      if selection == model.selection then
+        ( model, Cmd.none )
+      else
+        ( { model | selection = selection }, Cmd.none )
+
+
+
 update : Msg -> Model -> Maybe (Model, Cmd Msg)
 update action model =
   case action of
-    Mdl action' ->
-      Material.update action' model |> Just
-
-    Upd0 str ->
-      { model | str0 = str } |> pure
-
-    Upd3 str ->
-      { model | str3 = str } |> pure
-
-    Upd4 str ->
-      { model | str4 = str } |> pure
-
-    Upd6 str ->
-      { model | str6 = str } |> pure
-
-    Upd9 str ->
-      { model | str9 = str } |> pure
-
-    Slider value ->
-      { model | length = value } |> pure
-
-    SetFocus5 x ->
-      { model | focus5 = x } |> pure
-
     SelectionChanged selection ->
       -- High-frequency event; return referentially equal model on NOP. 
       if selection == model.selection then
         Nothing
-      else 
+      else
         ( { model | selection = selection }, Cmd.none )
           |> Just
 
+    _ ->
+      update' action model |> Just
 -- VIEW
 
 
@@ -266,8 +285,14 @@ textfields model =
         , Textfield.maxlength (truncate model.length)
         , Textfield.autofocus
         , Textfield.floatingLabel
-        , Textfield.onFocus (SetFocus5 True)
-        , Textfield.onBlur (SetFocus5 False)
+        -- , Textfield.onFocus (SetFocus5 True)
+        -- , Textfield.onBlur (SetFocus5 False)
+          -- Supporting multiple events
+        , Options.inner
+            [ Options.on1 "focus" (SetFocus5 True)
+            , Options.on1 "blur" (SetFocus5 False)
+            , Options.on1 "focus" (NoOp "FOCUS")
+            ]
         ]
     , Options.styled Html.p
         [ Options.css "width" "80%" ]
@@ -312,9 +337,9 @@ custom model =
             , Textfield.textarea
             , Textfield.onInput Upd9
             , Textfield.value model.str9
-            , Textfield.on "keyup" selectionDecoder
-            , Textfield.on "mousemove" selectionDecoder
-            , Textfield.on "click" selectionDecoder
+            , Options.on "keyup" selectionDecoder
+            , Options.on "mousemove" selectionDecoder
+            , Options.on "click" selectionDecoder
         ]
         , Options.styled Html.p
             [ css "width" "300px"

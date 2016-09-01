@@ -3,7 +3,6 @@ module Material.Button exposing
   , flat, raised, fab, minifab, icon
   , plain, colored, primary, accent
   , ripple, disabled
-  , onClick
   , Property
   , render
   , type'
@@ -46,9 +45,6 @@ for a live demo.
 @docs plain, colored, primary, accent
 @docs ripple, disabled
 
-## Events
-@docs onClick
-
 ## Type
 Refer to the
 [Material Design Specification](https://www.google.com/design/spec/components/buttons.html)
@@ -63,7 +59,7 @@ for details about what type of buttons are appropriate for which situations.
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events
+--import Html.Events
 import Html.App
 import Platform.Cmd exposing (Cmd, none)
 
@@ -71,10 +67,11 @@ import Platform.Cmd exposing (Cmd, none)
 import Parts exposing (Indexed, Index)
 
 import Material.Helpers as Helpers
+import Material.Options.Internal as Internal
 import Material.Options as Options exposing (cs, when)
 import Material.Ripple as Ripple
 
-
+import Material.Msg as Msg
 
 -- MODEL
 
@@ -110,18 +107,16 @@ update action =
 -- VIEW
 
 
-type alias Config m =
+type alias Config =
   { ripple : Bool
-  , onClick : Maybe (Attribute m)
   , disabled : Bool
   , type' : Maybe String
   }
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
   { ripple = False
-  , onClick = Nothing
   , disabled = False
   , type' = Nothing
   }
@@ -130,15 +125,7 @@ defaultConfig =
 {-| Properties for Button options.
 -}
 type alias Property m =
-  Options.Property (Config m) m
-
-
-{-| Add an `on "click"` handler to a button.
--}
-onClick : m -> Property m
-onClick x =
-  Options.set
-    (\options -> { options | onClick = Just (Html.Events.onClick x) })
+  Options.Property (Config) m
 
 
 {-| Set button to ripple when clicked.
@@ -228,17 +215,21 @@ view lift model config html =
   let
     summary = Options.collect defaultConfig config
 
-    startListeners =
-      if summary.config.ripple then
-        [ Ripple.downOn' lift "mousedown" |> Just
-        , Ripple.downOn' lift "touchstart" |> Just
+
+    listeners =
+      Options.many
+        [ Ripple.down lift "mousedown"
+        , Ripple.down lift "touchstart"
+        , Ripple.up lift "touchcancel"
+        , Ripple.up lift "mouseup"
+        , Ripple.up lift "blur"
+        , Ripple.up lift "mouseleave"
         ]
-      else
-        []
+
 
     stopListeners =
       let handle =
-        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
+            Just << Helpers.blurOn
       in
         [ handle "mouseup"
         , handle "mouseleave"
@@ -246,8 +237,7 @@ view lift model config html =
         ]
 
     misc =
-      [ summary.config.onClick
-      , if summary.config.disabled then
+      [ if summary.config.disabled then
           Just (Html.Attributes.disabled True)
         else
           Nothing
@@ -263,8 +253,9 @@ view lift model config html =
       [ cs "mdl-button"
       , cs "mdl-js-button"
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple
+      , listeners
       ]
-      (List.concat [startListeners, stopListeners, misc, type']
+      (List.concat [stopListeners, misc, type']
          |> List.filterMap identity)
       (if summary.config.ripple then
           List.concat
@@ -272,9 +263,8 @@ view lift model config html =
             -- Ripple element must be last or blurAndForward hack fails.
             , [ Html.App.map lift <| Ripple.view'
                   [ class "mdl-button__ripple-container"
-                  --, Helpers.blurOn "mouseup"
-                  , Ripple.upOn "blur"
-                  , Ripple.upOn "touchcancel"
+                  -- , Ripple.upOn "blur"
+                  -- , Ripple.upOn "touchcancel"
                   ]
                   model
               ]
@@ -402,16 +392,17 @@ indicated in `Material`, and a user message `PollMsg`.
     Button.render Mdl [0] model.mdl
       [ Button.raised
       , Button.ripple
-      , Button.onClick PollMsg
+      , Options.onClick PollMsg
       ]
       [ text "Fetch new"]
 -}
 render
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m)
   -> Html m
-render =
-  Parts.create view (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+render lift =
+  Parts.create (Internal.inject view lift) (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+    (Msg.Internal >> lift)

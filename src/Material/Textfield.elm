@@ -9,7 +9,6 @@ module Material.Textfield exposing
   , onBlur
   , onFocus
   , style
-  , on
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -61,8 +60,6 @@ element, use the `style` property below.
 @docs password, textarea, text', onInput
 @docs onBlur, onFocus
 
-# Advanced
-@docs on
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
@@ -78,7 +75,8 @@ import Platform.Cmd
 import Parts exposing (Indexed)
 
 import Material.Options as Options exposing (cs, css, nop, Style)
-import Material.Options.Internal as Internal
+
+import Material.Msg as Msg
 
 
 -- OPTIONS
@@ -101,7 +99,6 @@ type alias Config m =
   , autofocus : Bool
   , maxlength : Maybe Int
   , inner : List (Options.Style m)
-  , listeners : List (Html.Attribute m)
   }
 
 
@@ -118,7 +115,6 @@ defaultConfig =
   , autofocus = False
   , maxlength = Nothing
   , inner = []
-  , listeners = []
   }
 
 
@@ -183,21 +179,11 @@ disabled =
     (\config -> { config | disabled = True })
 
 
-{-| Add custom event handlers
- -}
-on : String -> (Decoder.Decoder m) -> Property m
-on event decoder =
-    Options.set
-      (\config ->
-         { config |
-             listeners = config.listeners ++ [(Html.Events.on event decoder)]})
-             
-
 {-| Message to dispatch on input
 -}
 onInput : (String -> m) -> Property m
 onInput f = 
-  on "input" (Decoder.map f targetValue)
+  Options.on "input" (Decoder.map f targetValue)
 
 
 {-| The `blur` event occurs when the input loses focus.
@@ -215,7 +201,7 @@ Add the following to your index.html
 -}
 onBlur : m -> Property m
 onBlur f =
-  on "focusout" (Decoder.succeed f)
+  Options.on "focusout" (Decoder.succeed f)
 
 
 {-| The `focus` event occurs when the input gets focus.
@@ -233,7 +219,7 @@ Add the following to your index.html
 -}
 onFocus : m -> Property m
 onFocus f =
-  on "focusin" (Decoder.succeed f)
+  Options.on "focusin" (Decoder.succeed f)
 
 
 {-| Set properties on the actual `input` element in the Textfield.
@@ -315,21 +301,20 @@ type Msg
 
 {-| Component update.
 -}
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd msg)
 update action model =
   case action of
-    Input str -> 
-      { model | value = str }
-      
+    Input str ->
+      ({ model | value = str }, Cmd.none)
+
     Blur ->
-      { model | isFocused = False }
+      ({ model | isFocused = False }, Cmd.none)
 
     Focus ->
-      { model | isFocused = True }
+      ({ model | isFocused = True }, Cmd.none)
 
 
 -- VIEW
-
 
 {-| Component view
 
@@ -340,9 +325,11 @@ if you need to apply styling to the underlying `<input>` element.
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> Html m
 view lift model options =
-  let 
+  let
+
     ({ config } as summary) = 
       Options.collect defaultConfig options
+
     val = 
       config.value |> Maybe.withDefault model.value
 
@@ -373,23 +360,12 @@ view lift model options =
         Just val -> [Html.Attributes.maxlength val]
         Nothing -> []
 
-
-    listeners =
-      config.listeners
-
     textValue =
       case config.value of
         Just str ->
           [ Html.Attributes.value str ]
         Nothing ->
           []
-
-    defaultInput =
-      case config.value of
-        Just str ->
-          Nothing
-        Nothing ->
-          Just <| Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
 
   in
     Options.apply summary div
@@ -402,10 +378,7 @@ view lift model options =
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
       ]
-      ( List.filterMap identity 
-          ([ defaultInput
-           ])
-      )
+      []
       [ Options.styled' elementFunction
           [ cs "mdl-textfield__input"
           , css "outline" "none"
@@ -417,13 +390,19 @@ view lift model options =
             Html.Events.on "focus" ... it would not have precedence
             over our own focus handler.
              -}
-          , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
-          , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
+          , Options.on "focus" (Decoder.succeed (lift Focus))
+          , Options.on "blur" (Decoder.succeed (lift Blur))
+
+          -- If no value is we need the default input decoder to maintain is-dirty
+          , case config.value of
+              Nothing -> Options.on "input" (Decoder.map (Input >> lift) targetValue)
+              Just _ -> Options.nop
+
           , Options.many config.inner
           ]
           ([ Html.Attributes.disabled config.disabled 
            , Html.Attributes.autofocus config.autofocus
-           ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners)
+           ] ++ textValue ++ typeAttributes ++ maxlength)
           []
       , Html.label 
           [class "mdl-textfield__label"]  
@@ -442,6 +421,14 @@ view lift model options =
 type alias Container c =
   { c | textfield : Indexed Model }
 
+{-| Internal view' for Textfield to embed Options.dispatch -}
+view' : (Msg.Msg (Container c) m -> m) -> (Msg -> m) -> Model -> List (Property m) -> Html m
+view' dp lift model options =
+  view lift model (Options.inner [ Options.dispatch dp ]
+                  :: Options.dispatch dp
+                  :: options)
+
+
 {-| Component render. Below is an example, assuming boilerplate setup as indicated 
   in `Material`, and a user message `ChangeAgeMsg Int`.
 
@@ -458,14 +445,14 @@ of the textfield's implementation, and so is mostly useful for positioning
 if you need to apply styling to the underlying `<input>` element. 
 -}
 render 
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> Html m
-render =
+render lift =
   Parts.create 
-    view (\_ msg model -> Just (update msg model, Cmd.none))
+    (view' lift) (\_ msg model -> Just (update msg model))
     .textfield (\x c -> { c | textfield = x }) 
     defaultModel
-
+      (Msg.Internal >> lift)

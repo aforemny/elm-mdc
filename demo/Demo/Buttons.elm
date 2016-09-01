@@ -63,7 +63,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of 
     Mdl action' -> 
-      Material.update action' model
+      Material.update update action' model
 
     Code action' -> 
       Code.update action' model.code
@@ -191,7 +191,7 @@ viewButtons model =
                   Disabled -> Button.disabled
                   Ripple -> Button.ripple
                   Default -> Options.nop
-              , Button.onClick (Click (kind, color, misc))
+              , Options.onClick (Click (kind, color, misc))
               ]
               [ case kind of
                   Flat -> text "Flat button"

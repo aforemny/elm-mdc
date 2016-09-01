@@ -9,7 +9,7 @@ import Platform.Cmd exposing (Cmd)
 
 import Material.Button as Button
 import Material.Scheme
-import Material.Options exposing (css)
+import Material.Options as Options exposing (css)
 
 
 -- MODEL
@@ -92,12 +92,12 @@ view model =
     [ style [ ("padding", "2rem") ] ]
     [ text ("Current count: " ++ toString model.count )
     , Button.view IncreaseButtonMsg model.increaseButtonModel
-        [ Button.onClick Increase 
+        [ Options.onClick Increase 
         , css "margin" "0 24px"
         ]
         [ text "Increase" ]
     , Button.view ResetButtonMsg model.resetButtonModel 
-        [ Button.onClick Reset ] 
+        [ Options.onClick Reset ] 
         [ text "Reset" ]
     ]
   |> Material.Scheme.top 

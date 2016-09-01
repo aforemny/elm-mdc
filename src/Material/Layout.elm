@@ -4,7 +4,7 @@ module Material.Layout exposing
   , Property
   , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
   , waterfall, seamed, scrolling, selectedTab, onSelectTab
-  , row, spacer, title, navigation, link, onClick, href
+  , row, spacer, title, navigation, link, href
   , setTabsWidth
   , Contents, view
   , sub0, subs, render, toggleDrawer
@@ -107,7 +107,7 @@ be (assuming a tab width of 1384 pixels):
 @docs onSelectTab
 
 # Sub-views
-@docs row, spacer, title, navigation, link, onClick, href
+@docs row, spacer, title, navigation, link, href
 
 # Elm architecture
 @docs view, Msg, Model, defaultModel, update, init, subscriptions
@@ -133,7 +133,8 @@ import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd
 import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop, css, when, styled)
-import Material.Options.Internal exposing (attribute)
+import Material.Options.Internal as Internal
+import Material.Msg as Msg
 
 import DOM
 
@@ -486,18 +487,11 @@ type alias LinkProperty m =
   Options.Property LinkProp m
 
 
-{-| onClick for Links.
--}
-onClick : m -> LinkProperty m 
-onClick = 
-  Events.onClick >> attribute
-
-
 {-| href for Links.
 -}
 href : String -> LinkProperty m
 href = 
-  Html.Attributes.href >> attribute
+  Html.Attributes.href >> Internal.attribute
 
 
 {-| Link.
@@ -506,7 +500,7 @@ link : List (LinkProperty m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a 
     (cs "mdl-navigation__link" 
-     :: attribute (Html.Attributes.attribute "tabindex" "1")
+     :: Internal.attribute (Html.Attributes.attribute "tabindex" "1")
      :: styles) 
     contents
 
@@ -582,7 +576,7 @@ tabsView lift config model (tabs, tabStyles) =
               , Html.Attributes.attribute 
                   "onclick" 
                   ("document.getElementsByClassName('mdl-layout__tab-bar')[0].scrollLeft += " ++ toString offset)
-                |> attribute
+                |> Internal.attribute
               ]
           ]
     in
@@ -602,7 +596,7 @@ tabsView lift config model (tabs, tabStyles) =
                 nop
             , if config.mode == Standard then cs "is-casting-shadow" else nop
             , Options.many tabStyles
-            , attribute <| 
+            , Internal.attribute <| 
                 on "scroll" 
                   (DOM.target 
                      (Decoder.object3 
@@ -663,12 +657,10 @@ headerView lift config model (drawerButton, rows, tabs) =
       , cs "is-compact" `when` model.isCompact
       , mode
       , cs "mdl-layout__header--transparent" `when` config.transparentHeader
-      , Options.attribute <|
-          Events.onClick 
+      , Options.onClick 
             (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
               |> lift)
-      , Options.attribute <| 
-          Events.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
+      , Options.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
       ]
       (List.concatMap (\x -> x)
          [ toList drawerButton
@@ -859,7 +851,7 @@ view lift model options { drawer, header, tabs, main } =
             , css "overflow-x" "visible" `when` (config.mode == Scrolling && config.fixedHeader)
             , css "overflow" "visible"   `when` (config.mode == Scrolling && config.fixedHeader)
               {- Above three lines fixes upstream bug #4180. -}
-            , (on "scroll" >> attribute)
+            , (on "scroll" >> Internal.attribute)
                  (Decoder.map 
                    (ScrollPane config.fixedHeader >> lift) 
                    (DOM.target DOM.scrollTop))
@@ -890,14 +882,15 @@ Excerpt:
       }
 -}
 render 
-  : (Parts.Msg (Container b) c -> c)
+  : (Msg.Msg (Container b) c -> c)
  -> Container b
  -> List (Property c) 
  -> Contents c 
  -> Html c
-render =
+render lift =
   Parts.create1
-    view update' .layout (\x c -> { c | layout = x }) 
+    view update' .layout (\x c -> { c | layout = x })
+      (Msg.Internal >> lift)
 
 
 pack : (Parts.Msg (Container b) m -> m) -> Msg -> m
@@ -909,18 +902,18 @@ pack fwd =
 `subscriptions` must be connected for the Layout to be responsive under
 viewport size changes. 
 -}
-subs : (Parts.Msg (Container b) c -> c) -> Container b -> Sub c
+subs : (Msg.Msg (Container b) c -> c) -> Container b -> Sub c
 subs lift = 
-  .layout >> subscriptions >> Sub.map (pack lift)
+  .layout >> subscriptions >> Sub.map (pack (Msg.Internal >> lift))
 
 
 {-| Component subscription initialiser. Either this or 
 `init` must be connected for the Layout to be responsive under
 viewport size changes. Example use: 
 -}
-sub0 : (Parts.Msg (Container b) c -> c) -> Cmd c
+sub0 : (Msg.Msg (Container b) c -> c) -> Cmd c
 sub0 lift = 
-  snd init |> Cmd.map (pack lift)
+  snd init |> Cmd.map (pack (Msg.Internal >> lift))
 
 
 {-| Toggle drawer. 
@@ -928,9 +921,9 @@ sub0 lift =
 This function is for use with parts typing. For plain TEA, simply issue 
 an update for the exposed Msg `ToggleDrawer`. 
 -}
-toggleDrawer : (Parts.Msg (Container b) c -> c) -> c
+toggleDrawer : (Msg.Msg (Container b) c -> c) -> c
 toggleDrawer lift = 
-  (pack lift) ToggleDrawer 
+  (pack (Msg.Internal >> lift)) ToggleDrawer
 
 
 {-| Set tabsWidth

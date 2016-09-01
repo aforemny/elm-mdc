@@ -2,6 +2,7 @@ module Material exposing
   ( Model, model
   , Msg, update
   , subscriptions, init
+  , update'
   )
 
 {-|
@@ -114,7 +115,7 @@ Here is how you use elm-mdl with parts. First, boilerplate.
           case message of 
             ...
             Mdl message' -> 
-              Material.update message' model
+              Material.update update message' model
 
  4.  If your app is using Layout and/or Menu, you need also to set up
  subscriptions and initialisations; see `subscriptions` and `init` below.  
@@ -155,6 +156,7 @@ and simply comment out the components you do not need.
 ## Parts API
 
 @docs Model, model, Msg, update, subscriptions, init
+@docs update'
 -}
 
 import Dict 
@@ -173,6 +175,8 @@ import Material.Tooltip as Tooltip
 import Material.Tabs as Tabs
 --import Material.Template as Template
 
+import Dispatch
+import Material.Msg as Msg
 
 {-| Model encompassing all Material components. Since some components store
 user actions in their model (notably Snackbar), the model is generic in the 
@@ -207,24 +211,59 @@ model =
   }
 
 
-{-| Msg encompassing actions of all Material components. 
+{-| Msg encompassing actions of all Material components.
 -}
-type alias Msg obs = 
-  Parts.Msg Model obs
+type alias Msg obs =
+  Msg.Msg Model obs
 
 
-{-| Update function for the above Msg. Provide as the first 
-argument a lifting function that embeds the generic MDL action in 
-your own Msg type. 
+{-| Update function for the above Msg.
+First argument is the user `update` function.
+
+The second argument is a lifting function that
+embeds the generic MDL action in your own Msg type.
 -}
-update : 
-     Msg obs
-  -> { model | mdl : Model }
-  -> ({ model | mdl : Model }, Cmd obs)
-update msg model = 
-  Parts.update' msg model.mdl 
-    |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
-    |> Maybe.withDefault (model, Cmd.none)
+update
+    : (inner -> { c | mdl : Model } -> ( { c | mdl : Model }, Cmd inner ))
+    -> Msg inner
+    -> { c | mdl : Model }
+    -> ( { c | mdl : Model }, Cmd inner )
+update up' action model =
+  case action of
+    Msg.Dispatch msg ->
+       Dispatch.update up' msg model
+    Msg.Internal msg ->
+      Parts.update' msg model.mdl
+        |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
+        |> Maybe.withDefault (model, Cmd.none)
+    -- _ ->
+    --     (model, Cmd.none)
+      --(model, Dispatch.forward msg)
+
+
+{-| Update function for the above Msg.
+First argument is a lifting function that lifts from the Msg to the desired message.
+
+Second argument is the `update` function that is calling `Material.update'`
+
+Third argument is a lifting function that embeds the generic MDL action in your own Msg type.
+-}
+update'
+    : (inner -> outer)
+    -> ((inner -> outer) -> inner -> { d | mdl : Model } -> ( { d | mdl : Model }, Cmd outer ))
+    -> Msg inner
+    -> { d | mdl : Model }
+    -> ({ d | mdl : Model }, Cmd outer )
+update' lift up' action model =
+  case action of
+    Msg.Internal msg ->
+      Parts.update' msg model.mdl
+        |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
+        |> Maybe.map (map2nd (Cmd.map lift))
+        |> Maybe.withDefault (model, Cmd.none)
+
+    Msg.Dispatch msg ->
+      Dispatch.update (up' lift) msg model
 
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
@@ -257,7 +296,7 @@ initialisation.
 subscriptions : (Msg obs -> obs) -> { model | mdl : Model } -> Sub obs
 subscriptions lift model = 
   Sub.batch 
-    [ Layout.subs lift model.mdl 
+    [ Layout.subs lift model.mdl
     , Menu.subs lift model.mdl
     ] 
 
@@ -267,4 +306,3 @@ subscriptions lift model =
 init : (Msg obs -> obs) -> Cmd obs
 init lift = 
   Layout.sub0 lift
-

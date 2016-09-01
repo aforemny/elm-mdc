@@ -3,7 +3,7 @@ module Material.Toggles exposing
   , Msg, update
   , viewSwitch, viewCheckbox, viewRadio
   , switch, checkbox, radio
-  , onClick, ripple, disabled, value, group
+  , ripple, disabled, value, group
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/index.html#toggles-section/checkbox):
@@ -33,7 +33,7 @@ for a live demo.
 @docs checkbox, switch, radio
 
 # Options
-@docs onClick, ripple, disabled, value, group
+@docs ripple, disabled, value, group
 
 # Elm architecture
 @docs Model, defaultModel, Msg, update
@@ -46,14 +46,16 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.App
 import Html.Attributes exposing (type', class, disabled, checked)
-import Html.Events exposing (on, onFocus, onBlur)
-import Json.Decode as Json
+--import Html.Events exposing (on, onFocus, onBlur)
+--import Json.Decode as Json
 
 import Parts exposing (Indexed)
 
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
 import Material.Ripple as Ripple
+import Material.Msg as Msg
+import Material.Options.Internal as Internal
 
 
 
@@ -110,7 +112,6 @@ type alias Config m =
   , value : Bool
   , ripple : Bool
   , group : Maybe (Attribute m)
-  , onClick : Maybe (Attribute m)
   , inner : List (Options.Style m)
   }
 
@@ -121,7 +122,6 @@ defaultConfig =
   , value = False
   , ripple = False
   , group = Nothing
-  , onClick = Nothing
   , inner = []
   }
 
@@ -130,15 +130,6 @@ defaultConfig =
 -}
 type alias Property m = 
   Options.Property (Config m) m
-
-
-{-| Add an `on "click"` handler to a toggle. Argument is the 
-new value of the toggle (that is, the negation of the current value).
--}
-onClick : m -> Property m
-onClick x =
-  Options.set
-    (\options -> { options | onClick = Just (Html.Events.on "change" (Json.succeed x)) })
 
 
 {-| Set toggle to ripple when clicked.
@@ -188,12 +179,11 @@ top lift group model summary elems =
       , cs "is-upgraded"
       , cs "is-checked" `when` cfg.value
       , cs "is-focused" `when` model.isFocused
+      , Options.on1 "focus" (lift (SetFocus True))
+      , Options.on1 "blur" (lift (SetFocus False))
       ]
       [ blurOn "mouseup"
-      , onFocus (lift (SetFocus True))
-      , onBlur (lift (SetFocus False))
-      , cfg.onClick |> Maybe.withDefault noAttr
-      ] 
+      ]
       (List.concat 
         [ elems
         , if cfg.ripple then 
@@ -306,52 +296,51 @@ type alias Container c =
   { c | toggles : Indexed Model }
 
 
+
 render
    : ((Msg -> b) -> Parts.View Model c)
-  -> (Parts.Msg { d | toggles : Indexed Model } b -> b)
+  -> (Msg.Msg { d | toggles : Indexed Model } b -> b)
   -> Parts.Index
   -> Parts.View { d | toggles : Indexed Model } c
-render view = 
+render view lift =
   Parts.create view (Parts.generalize update) .toggles (\x y -> {y | toggles=x}) defaultModel
+    (Msg.Internal >> lift)
 
 
 {-| Component render (checkbox)
 -}
 checkbox 
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m) 
   -> Html m
-checkbox = 
-  render viewCheckbox
+checkbox lift =
+  render (Internal.inject' viewCheckbox lift) lift
 
 
 {-| Component render (switch) 
 -}
 switch
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m)
   -> Html m
-switch = 
-  render viewSwitch
+switch lift =
+  render (Internal.inject' viewSwitch lift) lift
 
 
 {-| Component render (radio button) 
 -}
 radio
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
   -> List (Html m) 
   -> Html m
-radio = 
-  render viewRadio
-
-
-
+radio lift =
+  render (Internal.inject' viewRadio lift) lift

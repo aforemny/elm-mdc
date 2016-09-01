@@ -74,6 +74,7 @@ import DOM
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
 import String
+import Material.Msg as Msg
 
 
 -- MODEL
@@ -429,16 +430,17 @@ type alias Container c =
 {-| Component render.
 -}
 render :
-  (Parts.Msg (Container c) m -> m)
+  (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Html m)
   -> Html m
-render =
+render lift =
   Parts.create 
-    view (Parts.generalize update) 
+    (Internal.inject view lift) (Parts.generalize update)
     .tooltip (\x y -> { y | tooltip = x }) defaultModel
+      (Msg.Internal >> lift)
 
 
 set : Parts.Set (Indexed Model) (Container c)
@@ -453,25 +455,26 @@ pack =
 
 {-| Mouse enter event handler, Parts variant
 -}
-onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Attribute d
+onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Options.Property c d
 onMouseEnter lift idx =
-  Html.Events.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
+  Options.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
 
 
 {-| Mouse leave event handler, Parts variant
 -}
-onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Attribute b
+onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 onMouseLeave lift idx =
-  Html.Events.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
+  Options.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
 
 
 {-| Attach event handlers for Parts version
 -}
-attach : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
+attach : (Msg.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 attach lift index =
   Options.many
-    [ Internal.attribute <| onMouseEnter lift index
-    , Internal.attribute <| onMouseLeave lift index
+    [ onMouseEnter (Msg.Internal >> lift) index
+    , onMouseLeave (Msg.Internal >> lift) index
+    , Options.dispatch lift
     ]
 
 

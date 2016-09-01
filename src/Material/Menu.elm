@@ -93,10 +93,11 @@ import Material.Helpers as Helpers exposing (pure)
 import Material.Icon as Icon
 import Material.Menu.Geometry as Geometry exposing (Geometry)
 import Material.Options as Options exposing (Style, cs, css, styled, styled', when)
-import Material.Options.Internal exposing (attribute)
+import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
 import Parts exposing (Indexed, Index)
 
+import Material.Msg as Msg
 
 -- CONSTANTS
 
@@ -547,9 +548,9 @@ view lift model properties items =
           [ cs "mdl-button"
           , cs "mdl-js-button"
           , cs "mdl-button--icon"
-          , attribute (onKeyDown (Key itemSummaries)) `when` isActive model
-          , attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
-          , attribute (Html.Events.onClick Close) `when` isActive model
+          , Internal.attribute (onKeyDown (Key itemSummaries)) `when` isActive model
+          , Internal.attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
+          , Internal.attribute (Html.Events.onClick Close) `when` isActive model
           ]
           [ Icon.view config.icon
             [ cs "material-icons"
@@ -688,6 +689,7 @@ type alias Container c =
   { c | menu : Indexed Model }
 
 
+
 {-| Component render. Below is an example, assuming boilerplate setup as
 indicated in `Material`, and a user message `Select String`.
 
@@ -708,36 +710,39 @@ indicated in `Material`, and a user message `Select String`.
       ]
 -}
 render
-  : (Parts.Msg (Container c) m -> m)
+  : (Msg.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Item m)
   -> Html m
-render =
+render lift =
   Parts.create 
     view update' .menu (\x y -> {y | menu=x}) defaultModel
+      (Msg.Internal >> lift)
 
 
 pack : (Parts.Msg (Container b) m -> m) -> Parts.Index -> (Msg m) -> m
-pack = 
-  Parts.pack update' .menu (\x y -> {y | menu=x}) defaultModel 
+pack lift =
+  Parts.pack update' .menu (\x y -> {y | menu=x}) defaultModel
+    (lift)
 
 
 {-| Parts-compatible subscription.
 -}
-subs : (Parts.Msg (Container b) m -> m) -> Container b -> Sub m
+subs : (Msg.Msg (Container b) m -> m) -> Container b -> Sub m
 subs lift =
   .menu
   >> Dict.foldl 
        (\idx model ss -> 
           Sub.map 
-            (pack lift idx)
+            (pack (Msg.Internal >> lift) idx)
             (subscriptions model)
           :: ss)
        []
-  >> Sub.batch 
-      
+  >> Sub.batch
+
+
 update' : Parts.Update Model (Msg msg) msg
 update' fwd msg model = 
   update fwd msg model 

@@ -51,7 +51,7 @@ update msg model =
       { model | transition = not model.transition } ! [] 
 
     Mdl action' -> 
-      Material.update action' model
+      Material.update update action' model
 
 -- VIEW
 
@@ -120,7 +120,7 @@ demo2 model =
                 , css "max-width" "384px"
                 ] 
             , Toggles.switch Mdl [0] model.mdl
-                [ Toggles.onClick FlipTransition
+                [ Options.onChange FlipTransition
                 , Toggles.value model.transition
                 , css "margin-left" "20px"
                 , css "margin-top" "24px"

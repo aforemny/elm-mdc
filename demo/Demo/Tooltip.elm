@@ -50,7 +50,7 @@ update action model =
         ({ model | tooltip = updated }, Cmd.none)
 
     Mdl action' ->
-      Material.update action' model
+      Material.update update action' model
 
 
 -- VIEW

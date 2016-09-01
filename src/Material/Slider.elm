@@ -51,11 +51,10 @@ for a live demo.
 
 import Html exposing (..)
 import Html.Attributes as Html
-import Html.Events as Html
 import Material.Options as Options exposing (cs, css, when)
-import Material.Options.Internal as Internal
 import Material.Helpers as Helpers
 import Json.Decode as Json
+import Dispatch
 
 
 -- PROPERTIES
@@ -190,10 +189,9 @@ view options =
     listeners =
       config.listener
         |> Maybe.map (\f -> 
-             [ Html.on "change" (Json.map f floatVal)
-             , Html.on "input" (Json.map f floatVal)
+             [ Options.on "change" (Json.map f floatVal)
+             , Options.on "input" (Json.map f floatVal)
              ]
-             |> List.map Internal.attribute
              |> Options.many
            )
         |> Maybe.withDefault Options.nop 
@@ -207,6 +205,9 @@ view options =
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
+          , case (Dispatch.lift' summary.dispatch) of
+              Just l -> Options.dispatch' l
+              Nothing -> Options.nop
           , listeners
           , Options.disabled config.disabled
             -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag

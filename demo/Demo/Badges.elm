@@ -1,7 +1,6 @@
 module Demo.Badges exposing (..)
 
 import Html exposing (..)
-import Html.Events
 import Platform.Cmd exposing (Cmd)
 
 
@@ -47,7 +46,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of
     Mdl action' -> 
-      Material.update action' model
+      Material.update update action' model
 
     Decrease -> 
       ( { model | unread = model.unread - 1 }
@@ -76,7 +75,7 @@ update action model =
 
 onHover : a -> Options.Style a
 onHover = 
-  Html.Events.onMouseOver >> Options.attribute
+  Options.onMouseOver
 
 
 c : List (Html Msg) -> Cell Msg
@@ -98,7 +97,7 @@ view model =
                     [ text "Unread" ]
                   ]
               , Button.render Mdl [0] model.mdl
-                  [ Button.onClick Decrease 
+                  [ Options.onClick Decrease 
                   , Button.raised
                   , Button.ripple
                   , Button.colored

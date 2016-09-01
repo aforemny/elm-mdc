@@ -15,7 +15,7 @@ import Array exposing (Array)
 import Material
 import Material.Scheme
 import Material.Button as Button
-import Material.Options exposing (css)
+import Material.Options as Options exposing (css)
 import Material.Helpers exposing (pure)
 
 
@@ -69,7 +69,7 @@ update msg model =
       pure { model | counters = Array.slice 0 (Array.length model.counters - 1) model.counters }
 
     Mdl msg' -> 
-      Material.update msg' model
+      Material.update update msg' model
 
 
 -- VIEW
@@ -93,12 +93,12 @@ view1 idx val =
           index [0,idx]; "reset buttons" index [1,idx] and so forth. 
           -}
           model.mdl 
-        [ Button.onClick (Increase idx)
+        [ Options.onClick (Increase idx)
         , css "margin" "0 24px"
         ]
         [ text "Increase" ]
     , Button.render Mdl [1,idx] model.mdl 
-        [ Button.onClick (Reset idx) ] 
+        [ Options.onClick (Reset idx) ] 
         [ text "Reset" ]
     ]
 
@@ -113,11 +113,11 @@ view model =
   in 
     List.concatMap identity 
       [ [ Button.render Mdl [2] model.mdl 
-            [ Button.onClick Add ] 
+            [ Options.onClick Add ] 
             [ text "Add counter" ]  
         ] 
       , [ Button.render Mdl [4] model.mdl
-            [ Button.onClick Remove ] 
+            [ Options.onClick Remove ] 
             [ text "Remove counter" ] 
         ] 
       , counters

@@ -10,7 +10,7 @@ import Html.Attributes exposing (href, class, style)
 import Material
 import Material.Scheme
 import Material.Button as Button
-import Material.Options exposing (css)
+import Material.Options as Options exposing (css)
 
 
 -- MODEL
@@ -56,7 +56,7 @@ update msg model =
 
     -- Boilerplate: Mdl action handler. 
     Mdl msg' -> 
-      Material.update msg' model
+      Material.update update msg' model
 
 
 -- VIEW
@@ -85,17 +85,17 @@ view model =
     to handle their internal events.
 
     Mdl components are configured with `Options`, similar to `Html.Attributes`.
-    The `Button.onClick Increase` option instructs the button to send the `Increase`
+    The `Options.onClick Increase` option instructs the button to send the `Increase`
     message when clicked. The `css ...` option adds CSS styling to the button. 
     See `Material.Options` for details on options. 
     -}
     , Button.render Mdl [0] model.mdl 
-        [ Button.onClick Increase 
+        [ Options.onClick Increase 
         , css "margin" "0 24px"
         ]
         [ text "Increase" ]
     , Button.render Mdl [1] model.mdl 
-        [ Button.onClick Reset ] 
+        [ Options.onClick Reset ] 
         [ text "Reset" ]
     ]
   |> Material.Scheme.top

@@ -76,7 +76,7 @@ The 7.0.0 release changes the required boilerplate in two aspects.
           case message of
             ...
             Mdl message' ->
-              Material.update message' model
+              Material.update update message' model
 
 Some components (notably menu) has changed API to varying degrees. If you run
 into troubles, refer to the code samples in [the
@@ -85,3 +85,4 @@ documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/), or
 ask on [#elm-mdl in the elm-slack](https://elm.slack.com/messages/elm-mdl) for
 help in migrating.
  
+

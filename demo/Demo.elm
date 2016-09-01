@@ -148,7 +148,7 @@ update action model =
       ( { model | transparentHeader = not model.transparentHeader }, Cmd.none)
 
     Mdl msg ->
-      Material.update msg model
+      Material.update update msg model
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
     BadgesMsg    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesMsg   Demo.Badges.update    a model
@@ -251,7 +251,7 @@ drawer =
         [ text "elm-package" ]
     , Layout.link
         [ Layout.href "#cards"
-        , Layout.onClick (Layout.toggleDrawer Mdl)
+        , Options.onClick (Layout.toggleDrawer Mdl)
         ]
         [ text "Card component" ]
     ]
@@ -269,7 +269,7 @@ header model =
         , Layout.spacer
         , Layout.navigation []
             [ Layout.link
-                [ Layout.onClick ToggleHeader]
+                [ Options.onClick ToggleHeader]
                 [ Icon.i "photo" ]
             , Layout.link
                 [ Layout.href "https://github.com/debois/elm-mdl"]

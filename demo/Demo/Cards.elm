@@ -3,7 +3,6 @@ module Demo.Cards exposing (model, update, view, Model, Msg)
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.Attributes 
-import Html.Events exposing (onClick, onMouseEnter, onMouseLeave)
 
 import Material.Card as Card 
 import Material.Button as Button 
@@ -62,7 +61,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     Mdl action' ->
-      Material.update action' model
+      Material.update update action' model
 
     Raise k -> 
       { model | raised = k } ! [] 
@@ -111,9 +110,9 @@ dynamic : Int -> Msg -> Model -> Options.Style Msg
 dynamic k showcode model = 
   [ if model.raised == k then Elevation.e8 else Elevation.e2
   , Elevation.transition 250
-  , Options.attribute <| onMouseEnter (Raise k)
-  , Options.attribute <| onMouseLeave (Raise -1)
-  , Options.attribute <| onClick showcode
+  , Options.onMouseEnter (Raise k)
+  , Options.onMouseLeave (Raise -1)
+  , Options.onClick showcode
   ] |> Options.many
 
 
@@ -669,7 +668,7 @@ aux model =
           [ css "width" "128px" 
           , Color.background (Color.color Color.Pink Color.S500)
           -- Click
-          , Options.attribute <| Html.Events.onClick Click
+          , Options.onClick Click
           , css "margin" "0 16px 0 0"
           , css "flex-shrink" "0"
           ]
@@ -685,7 +684,7 @@ aux model =
               [ css "width" "128px" 
               , Color.background (Color.color Color.Pink Color.S500)
               -- Click
-              , Options.attribute <| Html.Events.onClick Click
+              , Options.onClick Click
               ]
               [ Card.title [] [ Card.head [ white ] [ text "Click anywhere" ] ] 
               , Card.text [ white ] [ text <| toString model.clicks ++ " clicks so far." ]
@@ -710,8 +709,8 @@ aux model =
             -- Elevation
             , if (model.raised == k) then Elevation.e8 else Elevation.e2
             , Elevation.transition 250
-            , Options.attribute <| onMouseEnter (Raise k)
-            , Options.attribute <| onMouseLeave (Raise -1)
+            , Options.onMouseEnter (Raise k)
+            , Options.onMouseLeave (Raise -1)
             , css "margin" "0 16px 0 0"
             , css "flex-shrink" "0"
             ]
@@ -727,8 +726,8 @@ aux model =
                     -- Elevation
                     , if model.raised == k then Elevation.e8 else Elevation.e2
                     , Elevation.transition 250
-                    , Options.attribute <| onMouseEnter (Raise k)
-                    , Options.attribute <| onMouseLeave (Raise -1)
+                    , Options.onMouseEnter (Raise k)
+                    , Options.onMouseLeave (Raise -1)
                     ]
                     [ Card.title [] [ Card.head [ white ] [ text "Hover here" ] ] ]"""
             ]
