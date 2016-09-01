@@ -215,7 +215,7 @@ selectable model =
           [ Table.tr []
             [ Table.th []
                 [ Toggles.checkbox Mdl [-1] model.mdl
-                  [ Options.onChange ToggleAll
+                  [ Options.onToggle ToggleAll
                   , Toggles.value (allSelected model)
                   ] []
                 ]
@@ -231,7 +231,7 @@ selectable model =
                      [ Table.selected `when` Set.member (key item) model.selected ]
                      [ Table.td []
                        [ Toggles.checkbox Mdl [idx] model.mdl
-                         [ Options.onChange (Toggle <| key item)
+                         [ Options.onToggle (Toggle <| key item)
                          , Toggles.value <| Set.member (key item) model.selected
                          ] []
                        ]
@@ -252,7 +252,7 @@ selectable model =
           [ Table.tr []
             [ Table.th []
                 [ Toggles.checkbox Mdl [-1] model.mdl
-                  [ Options.onChange ToggleAll
+                  [ Options.onToggle ToggleAll
                   , Toggles.value (allSelected model)
                   ] []
                 ]
@@ -268,7 +268,7 @@ selectable model =
                      [ Table.selected `when` Set.member (key item) model.selected ]
                      [ Table.td []
                        [ Toggles.checkbox Mdl [idx] model.mdl
-                         [ Options.onChange (Toggle <| key item)
+                         [ Options.onToggle (Toggle <| key item)
                          , Toggles.value <| Set.member (key item) model.selected
                          ] []
                        ]

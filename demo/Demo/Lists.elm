@@ -301,7 +301,7 @@ secondaryAction2 model =
             , Lists.content2 [] 
                 [ Toggles.checkbox Mdl [4] model.mdl
                     [ Toggles.value (Set.member 4 model.toggles) 
-                    , Options.onChange (Flip 4)
+                    , Options.onToggle (Flip 4)
                     ] 
                     []
                 ]
@@ -313,7 +313,7 @@ secondaryAction2 model =
                     [Lists.action2]
                     [ Toggles.radio Mdl [5] model.mdl
                         [ Toggles.value (Set.member 5 model.toggles)
-                        , Options.onChange (Flip 5)
+                        , Options.onToggle (Flip 5)
                         , Options.css "display" "inline"
                         ]
                         []
@@ -325,7 +325,7 @@ secondaryAction2 model =
             , Lists.content2 [] 
                 [ Toggles.switch Mdl [6] model.mdl
                     [ Toggles.value (Set.member 6 model.toggles)
-                    , Options.onChange (Flip 6)
+                    , Options.onToggle (Flip 6)
                     ]
                     []
                 ]
@@ -340,7 +340,7 @@ secondaryAction2 model =
         , Lists.content2 [] 
             [ Toggles.checkbox Mdl [4] model.mdl
                 [ Toggles.value (Set.member 4 model.toggles) 
-                , Options.onChange (Flip 4)
+                , Options.onToggle (Flip 4)
                 ] 
                 []
             ]
@@ -352,7 +352,7 @@ secondaryAction2 model =
                 [Lists.action2]
                 [ Toggles.radio Mdl [5] model.mdl
                     [ Toggles.value (Set.member 5 model.toggles)
-                    , Options.onChange (Flip 5)
+                    , Options.onToggle (Flip 5)
                     , Options.css "display" "inline"
                     ]
                     []
@@ -364,7 +364,7 @@ secondaryAction2 model =
         , Lists.content2 [] 
             [ Toggles.switch Mdl [6] model.mdl
                 [ Toggles.value (Set.member 6 model.toggles)
-                , Options.onChange (Flip 6)
+                , Options.onToggle (Flip 6)
                 ]
                 []
             ]

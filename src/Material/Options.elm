@@ -10,7 +10,7 @@ module Material.Options exposing
   , onMouseDown, onMouseUp
   , onMouseEnter, onMouseLeave
   , onMouseOver, onMouseOut
-  , onCheck, onChange
+  , onCheck, onToggle
   , onBlur, onFocus
   , on, on1
   , onWithOptions
@@ -66,7 +66,7 @@ applying MDL typography or color to standard elements.
       onMouseDown, onMouseUp,
       onMouseEnter, onMouseLeave,
       onMouseOver, onMouseOut
-@docs  onCheck, onChange
+@docs  onCheck, onToggle
 @docs onBlur, onFocus
 
 # Custom Event Handlers
@@ -498,8 +498,8 @@ onCheck tagger =
 
 
 {-|-}
-onChange : msg -> Property c msg
-onChange =
+onToggle : msg -> Property c msg
+onToggle =
   on1 "change"
 
 -- FOCUS EVENTS
