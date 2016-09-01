@@ -205,9 +205,9 @@ view options =
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
-          , case (Dispatch.lift' summary.dispatch) of
-              Just l -> Options.dispatch' l
-              Nothing -> Options.nop
+          , Dispatch.plugger summary.dispatch
+              |> Maybe.map Options.dispatch'
+              |> Maybe.withDefault Options.nop
           , listeners
           , Options.disabled config.disabled
             -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
