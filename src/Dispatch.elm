@@ -28,7 +28,6 @@ module Dispatch
 
 import Json.Decode as Json
 import Html.Events
-import Html.Attributes
 import Html
 import Task
 
@@ -163,35 +162,27 @@ applyMultipleDecoders decoders =
        |> Result.Ok
     )
 
-
-{-|
--}
-forwardDecoder : List (Json.Decoder a) -> Json.Decoder (Msg a)
-forwardDecoder =
-  applyMultipleDecoders
-
-
-{-| Run multiple decoders on a single Html Event
--}
-onEvt :
-  (Msg msg -> msg)
+{-| Dispatch multiple decoders for a single event.
+ -}
+on
+  : (Msg msg -> msg)
   -> String
   -> List (Json.Decoder msg)
   -> Maybe (Html.Attribute msg)
-onEvt lift event =
-  onEvtOptions lift event Html.Events.defaultOptions
+on lift event =
+  onWithOptions lift event Html.Events.defaultOptions
 
+{-| Dispatch multiple decoders for a single event.
 
-{-| Run multiple decoders on a single Html Event with
-the given options
--}
-onEvtOptions :
-  (Msg msg -> msg)
+Options apply to the whole event.
+ -}
+onWithOptions
+  : (Msg msg -> msg)
   -> String
   -> Html.Events.Options
   -> List (Json.Decoder msg)
   -> Maybe (Html.Attribute msg)
-onEvtOptions lift event options decoders =
+onWithOptions lift event options decoders =
   case decoders of
     [] ->
       Nothing
@@ -201,35 +192,71 @@ onEvtOptions lift event options decoders =
         |> Just
 
     _ ->
-      forwardDecoder decoders
+      applyMultipleDecoders decoders
         |> Json.map lift
         |> Html.Events.onWithOptions event options
         |> Just
 
 
+{-| Run multiple decoders on a single Html Event with
+the given options
+-}
+onEvtOptions :
+  (Msg msg -> msg)
+  -> (String, List (Decoder msg))
+  -> Maybe (Html.Attribute msg)
+onEvtOptions lift (event, pairs) =
+  let
+    options =
+      pickOptions pairs
+
+    decoders =
+      List.map fst pairs
+  in
+    case decoders of
+      [] ->
+        Nothing
+
+      [ x ] ->
+        Html.Events.onWithOptions event options x
+          |> Just
+
+      _ ->
+        applyMultipleDecoders decoders
+          |> Json.map lift
+          |> Html.Events.onWithOptions event options
+          |> Just
+
+
 {-| A single event
 -}
 onSingle :
-  String
-  -> Html.Events.Options
-  -> List (Json.Decoder msg)
+  (String, List (Decoder msg))
   -> Maybe (Html.Attribute msg)
-onSingle event options decoders =
-  case decoders of
-    [] ->
-      Nothing
+onSingle (event, pairs) =
+  let
+    options =
+      pickOptions pairs
 
-    [ x ] ->
-      Html.Events.onWithOptions event options x
-        |> Just
+    decoders =
+      List.map fst pairs
 
-    x :: xs ->
-      let
-        -- NOTE: This probably needs to be changed, currently only for debugging
-        _ = Debug.log "WARNING" ("Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`")
-      in
+  in
+    case decoders of
+      [] ->
+        Nothing
+
+      [ x ] ->
         Html.Events.onWithOptions event options x
           |> Just
+
+      x :: xs ->
+        let
+          -- NOTE: This probably needs to be changed, currently only for debugging
+          _ = Debug.log "WARNING" ("Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`")
+        in
+          Html.Events.onWithOptions event options x
+            |> Just
 
 
 {-| Picks a set of options or Html.Events.defaultOptions -}
@@ -250,10 +277,7 @@ listeners' :
   -> List ( String, List (Decoder a) )
   -> List (Html.Attribute a)
 listeners' lift items =
-  items
-    |> List.filterMap (\( event, decoders ) ->
-       onEvtOptions lift event (pickOptions decoders) (List.map fst decoders)
-       )
+  List.filterMap (onEvtOptions lift) items
 
 
 {-| Take a list of events to a list of decoders and
@@ -266,11 +290,7 @@ listeners'' :
   List ( String, List (Decoder a) )
   -> List (Html.Attribute a)
 listeners'' items =
-  items
-    |> List.filterMap
-        (\( event, decoders ) ->
-          onSingle event (pickOptions decoders) (List.map fst decoders)
-        )
+  List.filterMap onSingle items
 
 
 {-| Group a list of pairs based on the first item
