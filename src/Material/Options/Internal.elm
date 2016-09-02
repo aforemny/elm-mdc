@@ -4,7 +4,6 @@ import Html
 import Html.Events
 import Json.Decode
 
-import Dispatch
 import Material.Msg as Msg
 
 {-| Internal type of properties. Do not use directly; use constructor functions
@@ -18,7 +17,7 @@ type Property c m
   | Many (List (Property c m))
   | Set (c -> c)
   | Listener String (Maybe (Html.Events.Options)) (Json.Decode.Decoder m)
-  | Lift (Dispatch.Msg m -> m)
+  | Lift (List m -> m)
   | None
 
 

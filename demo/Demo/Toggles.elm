@@ -221,7 +221,7 @@ view model =
                 [ Button.raised
                 , Button.colored
                 , Button.ripple
-                , Options.onToggle Inc
+                , Options.onClick Inc
                 , css "margin-bottom" "2rem"
                 , css "width" "196px"
                 , css "display" "inline-block"
