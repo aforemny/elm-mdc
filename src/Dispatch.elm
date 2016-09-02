@@ -2,6 +2,7 @@ module Dispatch exposing
   ( Config, install, add, plug, plugger, defaultConfig
   , on, onWithOptions
   , update
+  , forward
   )
 
 {-| Utility module for apply multiple decoders to a single `Html.Event`.
@@ -55,6 +56,7 @@ These are tailored for `elm-mdl` specific use.
 
 @docs Config, defaultConfig, plug, plugger, install
 @docs add
+@docs forward
 
 -}
 
@@ -182,10 +184,6 @@ flatten =
 
 
 {-| Dispatch multiple decoders for a single event.
-
-Returns `Nothing` if an empty list of decoders is provided.
-Otherwise returns `Just Html.Attribute` with a listener
-that will attempt to run multiple decoders on the event.
  -}
 on
   : String
@@ -198,12 +196,6 @@ on event lift =
 
 {-| Dispatch multiple decoders for a single event.
 Options apply to the whole event.
-
-Returns `Nothing` if an empty list of decoders is provided.
-Otherwise returns `Just Html.Attribute` with a listener
-that will attempt to run multiple decoders on the event.
-Options apply to all decoders.
-
  -}
 onWithOptions
   : String
