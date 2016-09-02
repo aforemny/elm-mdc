@@ -1,6 +1,6 @@
 module Material exposing 
   ( Model, model
-  , Msg, update
+  , Msg, Container, update
   , subscriptions, init
   )
 
@@ -154,7 +154,7 @@ and simply comment out the components you do not need.
 
 ## Parts API
 
-@docs Model, model, Msg, update, subscriptions, init
+@docs Model, model, Msg, Container, update, subscriptions, init
 -}
 
 import Dict 
@@ -176,9 +176,8 @@ import Material.Tabs as Tabs
 import Dispatch
 import Material.Msg as Msg
 
-{-| Model encompassing all Material components. Since some components store
-user actions in their model (notably Snackbar), the model is generic in the 
-type of such "observations". 
+
+{-| Model encompassing all Material components. 
 -}
 type alias Model = 
   { button : Indexed Button.Model
@@ -215,49 +214,35 @@ type alias Msg obs =
   Msg.Msg Model obs
 
 
-{-| Update function for the above Msg.
-First argument is the user `update` function.
-
-The second argument is a lifting function that
-embeds the generic MDL action in your own Msg type.
+{-| Type of Models with elm-mdl model store `mdl`. 
 -}
-update
-    : Msg inner
-    -> { c | mdl : Model }
-    -> ( { c | mdl : Model }, Cmd inner )
-update action model =
-  case action of
-    Msg.Internal msg ->
-      Parts.update' msg model.mdl
-        |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
-        |> Maybe.withDefault (model, Cmd.none)
-    Msg.Dispatch msg ->
-      (model, Dispatch.forward msg)
+type alias Container c = 
+  { c | mdl : Model }
+
+
+set : Container c -> Model -> Container c
+set c model = 
+  { c | mdl = model }
 
 
 {-| Update function for the above Msg.
-First argument is a lifting function that lifts from the Msg to the desired message.
 
-Second argument is the `update` function that is calling `Material.update'`
-
-Third argument is a lifting function that embeds the generic MDL action in your own Msg type.
+The `update` function operates not directly on a `Material.Model`, but rather
+on a larger model containing the Material model in a field `mdl` (see
+`Container c` above). This way, the `update` function can guarantee that 
+the container model is not updated unless a material component actually changed
+state. 
 -}
-update'
-    : (inner -> outer)
-    -> ((inner -> outer) -> inner -> { d | mdl : Model } -> ( { d | mdl : Model }, Cmd outer ))
-    -> Msg inner
-    -> { d | mdl : Model }
-    -> ({ d | mdl : Model }, Cmd outer )
-update' lift up' action model =
-  case action of
-    Msg.Internal msg ->
-      Parts.update' msg model.mdl
-        |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
-        |> Maybe.map (map2nd (Cmd.map lift))
-        |> Maybe.withDefault (model, Cmd.none)
+update : Msg obs -> Container c -> (Container c, Cmd obs)
+update msg container =
+  case msg of
+    Msg.Internal msg' ->
+      Parts.update' msg' container.mdl
+        |> Maybe.map (map1st <| set container)
+        |> Maybe.withDefault (container, Cmd.none)
 
     Msg.Dispatch msg ->
-      Dispatch.update (up' lift) msg model
+      (container, Dispatch.forward msg)
 
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
