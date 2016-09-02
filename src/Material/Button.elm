@@ -59,10 +59,8 @@ for details about what type of buttons are appropriate for which situations.
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
---import Html.Events
 import Html.App
 import Platform.Cmd exposing (Cmd, none)
-
 
 import Parts exposing (Indexed, Index)
 
@@ -70,18 +68,19 @@ import Material.Helpers as Helpers
 import Material.Options.Internal as Internal
 import Material.Options as Options exposing (cs, when)
 import Material.Ripple as Ripple
-
 import Material.Msg as Msg
+
 
 -- MODEL
 
 
-{-|
+{-| 
 -}
-type alias Model = Ripple.Model
+type alias Model = 
+  Ripple.Model
 
 
-{-|
+{-| 
 -}
 defaultModel : Model
 defaultModel =
@@ -91,7 +90,7 @@ defaultModel =
 -- ACTION, UPDATE
 
 
-{-| Component action.
+{-| 
 -}
 type alias Msg
   = Ripple.Msg
@@ -386,15 +385,20 @@ type alias Container c =
   { c | button : Indexed Model }
 
 
+set : Indexed Model -> Container c -> Container c
+set x y = 
+  { y | button = x }
+
+
 {-| Component render.  Below is an example, assuming boilerplate setup as
-indicated in `Material`, and a user message `PollMsg`.
+indicated in `Material` and a user message `PollMsg`.
 
     Button.render Mdl [0] model.mdl
       [ Button.raised
       , Button.ripple
       , Options.onClick PollMsg
       ]
-      [ text "Fetch new"]
+      [ text "Fetch new" ]
 -}
 render
   : (Msg.Msg (Container c) m -> m)
@@ -404,5 +408,9 @@ render
   -> List (Html m)
   -> Html m
 render lift =
-  Parts.create (Internal.inject view lift) (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+  Parts.create 
+    (Internal.inject view lift) 
+    (Parts.generalize update) 
+    .button set
+    Ripple.model
     (Msg.Internal >> lift)

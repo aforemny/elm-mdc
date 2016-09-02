@@ -55,8 +55,8 @@ inject
     -> List (Property d e)
     -> f
     -> g
-inject viewFun lift =
-  \a b c d -> viewFun a b (dispatch lift :: c) d
+inject view lift a b c =
+  view a b (dispatch lift :: c)
 
 
 {-| Inject dispatch
@@ -69,5 +69,5 @@ inject'
     -> List (Property { f | inner : List (Property d e) } e)
     -> g
     -> h
-inject' viewFun lift =
-  \a b c d -> viewFun a b (inner [ dispatch lift ] :: dispatch lift :: c) d
+inject' view lift a b c =
+  view a b (inner [ dispatch lift ] :: dispatch lift :: c)
