@@ -6,7 +6,7 @@ module Dispatch exposing
   )
 
 {-| Utility module for apply multiple decoders to a single `Html.Event`.
-To add support for Dispatch:
+To enable basic dispatching:
 
 Add a message to your `Msg`
 
@@ -15,7 +15,7 @@ Add a message to your `Msg`
       | Dispatch (List Msg)
       ...
 
-Add call to `Dispatch.update` in update
+Add call to `Dispatch.forward` in update
 
     update : Msg -> Model -> (Model, Cmd Msg)
     update msg model =
@@ -23,7 +23,7 @@ Add call to `Dispatch.update` in update
         ...
 
       Dispatch messages ->
-        Dispatch.update update messages model
+        model ! [ Dispatch.forward messages ]
 
         ...
 
@@ -33,9 +33,9 @@ Add a call to `Dispatch.on` on an element
     view model =
       let
         decoders =
-          [ Json.Decode.succeed ClickOne
-          , Json.Decode.succeed ClickTwo
-          , Json.Decode.map SomeMessage
+          [ Json.Decode.succeed Click
+          , Json.Decode.succeed PerformAnalytics
+          , Json.Decode.map OffsetWidth
               (Json.at ["target", "offsetWidth"] Json.float) ]
       in
         Html.button
@@ -50,7 +50,8 @@ Add a call to `Dispatch.on` on an element
 
 ## Advanced configuration
 
-These are tailored for `elm-mdl` specific use.
+These are tailored for writing UI component librarires
+with stateful components, such as `elm-mdl`.
 
 @docs Config, defaultConfig, plug, plugger, install
 @docs add
