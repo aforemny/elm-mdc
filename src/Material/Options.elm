@@ -149,7 +149,7 @@ collect1 option acc =
     Listener event options decoder ->
       { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
     Lift m ->
-      { acc | dispatch = Dispatch.lift m acc.dispatch }
+      { acc | dispatch = Dispatch.plug m acc.dispatch }
     None -> acc
 
 
@@ -163,7 +163,7 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : c -> List (Property c m) -> Summary c m
 collect =
-  Summary [] [] [] [] Dispatch.empty >> recollect
+  Summary [] [] [] [] Dispatch.defaultConfig >> recollect
 
 
 {-| Special-casing of collect for `Property c ()`. 
@@ -175,33 +175,32 @@ collect1' options acc =
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
     Internal x -> { acc | internal = x :: acc.internal }
-    Many options -> List.foldl collect1' acc options
-    Set _ -> acc 
     Listener event options decoder ->
       { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
+    Many options -> List.foldl collect1' acc options
     Lift m ->
-      { acc | dispatch = Dispatch.lift m acc.dispatch }
+      { acc | dispatch = Dispatch.plug m acc.dispatch }
+    Set _ -> acc 
     None -> acc
 
 
 collect' : List (Property c m) -> Summary () m 
 collect' = 
-  List.foldl collect1' (Summary [] [] [] [] Dispatch.empty ())
+  List.foldl collect1' (Summary [] [] [] [] Dispatch.defaultConfig ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs =
-  {- NOTE: Ordering here is important, First apply summary attributes
-  that way internal class and specific attributes can override those
-  provided by the user
-    -}
+  {- Ordering here is important: First apply summary attributes. That way,
+  internal classes and attributes override those provided by the user.
+  -}
   summary.attrs
     ++ [ Html.Attributes.style summary.css
-        , Html.Attributes.class (String.join " " summary.classes)
-        ]
+       , Html.Attributes.class (String.join " " summary.classes)
+       ]
     ++ attrs
     ++ summary.internal
-    ++ (Dispatch.listeners summary.dispatch)
+    ++ (Dispatch.install summary.dispatch)
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
@@ -561,6 +560,6 @@ Create an element with Options.styled
       ]
       [ ... ]
  -}
-dispatch' : (Dispatch.Msg b -> b) -> Property c b
+dispatch' : (List m -> m) -> Property c m
 dispatch' =
   Lift

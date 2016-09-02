@@ -1,19 +1,8 @@
-module Dispatch
-  exposing
-    ( Msg
-    , Decoder
-    , Config
-    , on
-    , onWithOptions
-    , forward
-    , listeners
-    , group
-    , update
-    , add
-    , lift
-    , empty
-    , get
-    )
+module Dispatch exposing
+  ( Config, install, add, plug, plugger, defaultConfig
+  , on, onWithOptions
+  , update
+  )
 
 {-| Utility module for apply multiple decoders to a single `Html.Event`.
 To add support for Dispatch:
@@ -55,26 +44,18 @@ Add a call to `Dispatch.on` on an element
           [ text "Button" ]
 
 
-## Types
-@docs Msg
-
 ## Events
 @docs on
 @docs onWithOptions
 @docs update
 
-## Advanced
+## Advanced configuration
 
-These are meant for `elm-mdl`. They are likely
-not generic enough for general use.
+These are tailored for `elm-mdl` specific use.
 
-@docs Decoder
-@docs Config
-@docs empty, add, lift, get
-@docs listeners
+@docs Config, defaultConfig, plug, plugger, install
+@docs add
 
-@docs group
-@docs forward
 -}
 
 import Json.Decode as Json
@@ -83,51 +64,44 @@ import Html
 import Task
 
 
+-- CONFIG
 
-type alias Conf m =
-  { decoders : List (String, (Json.Decoder m, Maybe Html.Events.Options))
-  , lift : Maybe (List m -> m)
-  }
-
-
-{-| Dispatch configuration type.
+{-| Dispatch configuration type
  -}
 type Config m =
   Config
     { decoders : List (String, (Json.Decoder m, Maybe Html.Events.Options))
     , lift : Maybe (List m -> m)
+    , lift : Maybe ((List m) -> m)
     }
 
 
 {-| Empty configuration
  -}
-empty : Config m
-empty =
+defaultConfig : Config m
+defaultConfig =
   Config
     { decoders = []
     , lift = Nothing
     }
 
 
-{-| Set the lifting function
+{-| This function tells Dispatch how to convert a list of messages to a single
+message; how to _plug_ itself into your TEA component.
  -}
-lift : (List m -> m) -> Config m -> Config m
-lift fn (Config config) =
-  Config
-    { config | lift = Just fn }
+plug : (List m -> m) -> Config m -> Config m
+plug f (Config config) =
+  Config { config | lift = Just f }
 
 
-{-| Get a property from config
- -}
-get
-  : (Conf a -> b)
-  -> Config a
-  -> b
-get prop (Config config) =
-  prop config
+{-| Get the Dispatch lifting function
+-}
+plugger : Config m -> Maybe (List m -> m)
+plugger (Config config) =
+  config.lift
 
 
-{-| Add a decoder for event
+{-| Add an event-handler to the current configuration
  -}
 add : String -> Maybe Html.Events.Options -> Json.Decoder msg -> Config msg -> Config msg
 add event options decoder (Config config) =
@@ -137,45 +111,31 @@ add event options decoder (Config config) =
 
 {-| This function returns a list of `Html.Attribute` containing handlers that
 will allow for dispatching of multiple decoders from a single `Html.Event`
+Construct event handlers for the given configuration
  -}
-listeners : Config msg -> List (Html.Attribute msg)
-listeners (Config config) =
-  let
-    grouped =
-      group config.decoders
-
-  in
-    case config.lift of
-      Just fn ->
-        listeners' fn grouped
-      Nothing ->
-        listeners'' grouped
+install : Config msg -> List (Html.Attribute msg)
+install (Config config) =
+  case config.lift of
+    Just f ->
+      List.map (onMany f) (group config.decoders)
+    Nothing ->
+      List.map onSingle config.decoders
 
 
-{-|
-  Lift any value of type `msg` to a `Cmd msg`.
+{-| Promote `msg` to `Cmd msg`
 -}
 cmd : msg -> Cmd msg
 cmd msg =
   Task.perform (always msg) (always msg) (Task.succeed msg)
 
 
-{-| Message type
--}
-type alias Msg m
-  = (List m)
-
-
-{-| A decoder with possible options
--}
-type alias Decoder m =
-  ( Json.Decoder m, Maybe (Html.Events.Options) )
+-- UPDATE
 
 
 {-| Maps messages to commands
 -}
-forward : List m -> Cmd m
-forward (messages) =
+forward : (List m) -> Cmd m
+forward messages =
   List.map cmd messages |> Cmd.batch
 
 
@@ -188,10 +148,8 @@ map2nd f ( x, y ) =
   ( x, f y )
 
 
-{-|
--}
-inner : (a -> b -> ( c, d )) -> a -> ( b, List d ) -> ( c, List d )
-inner update cmd ( m, gs ) =
+update1 : (m -> model -> (model, d)) -> m -> ( model, List d ) -> ( model, List d )
+update1 update cmd ( m, gs ) =
   update cmd m
     |> map2nd (flip (::) gs)
 
@@ -200,33 +158,27 @@ inner update cmd ( m, gs ) =
 returns the updated model including batching of
 any commands returned by running the `update`.
 -}
-update : (msg -> model -> ( model, Cmd any )) -> List msg -> model -> ( model, Cmd any )
-update update (msg) model =
-  List.foldl
-    (inner update)
-    ( model, [] )
-    msg
+update : (msg -> model -> (model, Cmd obs)) -> (List msg) -> model -> (model, Cmd obs)
+update update msg model =
+  List.foldl (update1 update) (model, []) msg
     |> map2nd Cmd.batch
 
 
-{-| Decode value using a decoder
- -}
-processDecoder : Json.Value -> Json.Decoder a -> Maybe a
-processDecoder initial decoder =
-  Json.decodeValue decoder initial
-    |> Result.toMaybe
+-- VIEW
+
+
+decode : List (Json.Decoder m) -> Json.Value -> Result c (List m)
+decode decoders v0 =
+  List.filterMap (flip Json.decodeValue v0 >> Result.toMaybe) decoders
+    |> Result.Ok
 
 
 {-| Applies given decoders to the same initial value
    and return the applied results as a list
- -}
-applyMultipleDecoders : List (Json.Decoder m) -> Json.Decoder (List m)
-applyMultipleDecoders decoders =
-  Json.customDecoder Json.value
-    (\initial ->
-       List.filterMap (processDecoder initial) decoders
-       |> Result.Ok
-    )
+-}
+flatten : List (Json.Decoder m) -> Json.Decoder (List m)
+flatten =
+  decode >> Json.customDecoder Json.value
 
 
 {-| Dispatch multiple decoders for a single event.
@@ -237,11 +189,12 @@ that will attempt to run multiple decoders on the event.
  -}
 on
   : String
-  -> (List msg -> msg)
-  -> List (Json.Decoder msg)
-  -> Maybe (Html.Attribute msg)
+  -> (List m -> m)
+  -> List (Json.Decoder m)
+  -> Html.Attribute m
 on event lift =
   onWithOptions event lift Html.Events.defaultOptions
+
 
 {-| Dispatch multiple decoders for a single event.
 Options apply to the whole event.
@@ -249,125 +202,61 @@ Options apply to the whole event.
 Returns `Nothing` if an empty list of decoders is provided.
 Otherwise returns `Just Html.Attribute` with a listener
 that will attempt to run multiple decoders on the event.
+Options apply to all decoders.
+
  -}
 onWithOptions
   : String
-  -> (List msg -> msg)
+  -> (List m -> m)
   -> Html.Events.Options
-  -> List (Json.Decoder msg)
-  -> Maybe (Html.Attribute msg)
+  -> List (Json.Decoder m)
+  -> Html.Attribute m
 onWithOptions event lift options decoders =
-  case decoders of
-    [] ->
-      Nothing
-
-    [ x ] ->
-      Html.Events.onWithOptions event options x
-        |> Just
-
-    _ ->
-      applyMultipleDecoders decoders
-        |> Json.map lift
-        |> Html.Events.onWithOptions event options
-        |> Just
+  flatten decoders
+    |> Json.map lift
+    |> Html.Events.onWithOptions event options
 
 
 {-| Run multiple decoders on a single Html Event with
 the given options
 -}
-onEvtOptions :
-  (List msg -> msg)
-  -> (String, List (Decoder msg))
-  -> Maybe (Html.Attribute msg)
-onEvtOptions lift (event, pairs) =
-  let
-    options =
-      pickOptions pairs
+onMany
+  : (List m -> m)
+  -> ( String, List ( Json.Decoder m, Maybe Html.Events.Options ) )
+  -> Html.Attribute m
+onMany lift decoders =
+  case decoders of
+    -- Install direct handler for singleton case
+    (event, [ decoder ])  ->
+      onSingle (event, decoder)
 
-    decoders =
-      List.map fst pairs
-  in
-    case decoders of
-      [] ->
-        Nothing
-
-      [ x ] ->
-        Html.Events.onWithOptions event options x
-          |> Just
-
-      _ ->
-        applyMultipleDecoders decoders
-          |> Json.map lift
-          |> Html.Events.onWithOptions event options
-          |> Just
+    (event, decoders) ->
+      onWithOptions event lift (pickOptions decoders) (List.map fst decoders)
 
 
-{-| A single event
--}
-onSingle :
-  (String, List (Decoder msg))
-  -> Maybe (Html.Attribute msg)
-onSingle (event, pairs) =
-  let
-    options =
-      pickOptions pairs
-
-    decoders =
-      List.map fst pairs
-
-  in
-    case decoders of
-      [] ->
-        Nothing
-
-      [ x ] ->
-        Html.Events.onWithOptions event options x
-          |> Just
-
-      x :: xs ->
-        let
-          -- NOTE: This probably needs to be changed, currently only for debugging
-          _ = Debug.log "WARNING" ("Multiple decoders for Event '" ++ event ++ "' with no `Options.dispatch Mdl`")
-        in
-          Html.Events.onWithOptions event options x
-            |> Just
+pickOptions : List ( a, Maybe Html.Events.Options ) -> Html.Events.Options
+pickOptions decoders =
+  case decoders of
+    (_, Just options) :: _ -> options
+    _ :: rest -> pickOptions rest
+    [] -> Html.Events.defaultOptions
 
 
-{-| Picks a set of options or Html.Events.defaultOptions -}
-pickOptions : List (Decoder a) -> Html.Events.Options
-pickOptions =
-  List.filterMap snd
-    >> List.head
-    >> Maybe.withDefault Html.Events.defaultOptions
+onSingle
+    : (String, (Json.Decoder m, Maybe Html.Events.Options ))
+    -> Html.Attribute m
+onSingle (event, (decoder, option)) =
+  Html.Events.onWithOptions
+    event
+      (Maybe.withDefault Html.Events.defaultOptions option)
+      decoder
 
 
-{-| This function takes a lifting function and
-pair of events and their handlers and returns
-a list of `Html.Attribute` containing handlers that
-will allow for dispatching of multiple events from a single `Html.Event`
--}
-listeners' :
-  (List a -> a)
-  -> List ( String, List (Decoder a) )
-  -> List (Html.Attribute a)
-listeners' lift items =
-  List.filterMap (onEvtOptions lift) items
+-- UTILITIES
 
 
-{-| Take a list of events to a list of decoders and
-apply only the first of those decoders. This
-is only applicable if no lifting argument is available.
-If a lifting argument is available use
-`Dispatch.listeners` instead.
--}
-listeners'' :
-  List ( String, List (Decoder a) )
-  -> List (Html.Attribute a)
-listeners'' items =
-  List.filterMap onSingle items
-
-
-{-| Group a list of pairs based on the first item
+{-| Group a list of pairs based on the first item. Optimised for lists of size
+< 10 with < 3 overlaps.
 -}
 group : List ( a, b ) -> List ( a, List b )
 group =
