@@ -51,7 +51,7 @@ update msg model =
       { model | transition = not model.transition } ! [] 
 
     Mdl action' -> 
-      Material.update update action' model
+      Material.update action' model
 
 -- VIEW
 

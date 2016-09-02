@@ -69,7 +69,7 @@ update msg model =
       pure { model | counters = Array.slice 0 (Array.length model.counters - 1) model.counters }
 
     Mdl msg' -> 
-      Material.update update msg' model
+      Material.update msg' model
 
 
 -- VIEW

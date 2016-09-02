@@ -11,6 +11,7 @@ import Material.Options as Options exposing (css, cs)
 import Material
 import Material.Card as Card
 import Material.Button as Button
+import Material.Helpers as Helpers
 
 import Demo.Page as Page
 import Demo.Code as Code
@@ -53,7 +54,9 @@ liftUpdate : (Msg -> m) -> Msg -> Model -> (Model, Cmd m)
 liftUpdate lift msg model =
   case msg of
     Mdl msg' ->
-      Material.update' lift liftUpdate msg' model
+      Material.update msg' model
+        |> Helpers.map2nd (Cmd.map lift)
+
     _ ->
       model ! []
 
@@ -74,7 +77,7 @@ update action model =
       in (model, Cmd.none )
 
     Mdl action' ->
-      Material.update update action' model
+      Material.update action' model
 
     ChipClick index ->
       let

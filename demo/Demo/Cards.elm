@@ -61,7 +61,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     Mdl action' ->
-      Material.update update action' model
+      Material.update action' model
 
     Raise k -> 
       { model | raised = k } ! [] 

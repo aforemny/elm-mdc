@@ -2,7 +2,6 @@ module Material exposing
   ( Model, model
   , Msg, update
   , subscriptions, init
-  , update'
   )
 
 {-|
@@ -115,7 +114,7 @@ Here is how you use elm-mdl with parts. First, boilerplate.
           case message of 
             ...
             Mdl message' -> 
-              Material.update update message' model
+              Material.update message' model
 
  4.  If your app is using Layout and/or Menu, you need also to set up
  subscriptions and initialisations; see `subscriptions` and `init` below.  
@@ -156,7 +155,6 @@ and simply comment out the components you do not need.
 ## Parts API
 
 @docs Model, model, Msg, update, subscriptions, init
-@docs update'
 -}
 
 import Dict 
@@ -224,21 +222,17 @@ The second argument is a lifting function that
 embeds the generic MDL action in your own Msg type.
 -}
 update
-    : (inner -> { c | mdl : Model } -> ( { c | mdl : Model }, Cmd inner ))
-    -> Msg inner
+    : Msg inner
     -> { c | mdl : Model }
     -> ( { c | mdl : Model }, Cmd inner )
-update up' action model =
+update action model =
   case action of
-    Msg.Dispatch msg ->
-       Dispatch.update up' msg model
     Msg.Internal msg ->
       Parts.update' msg model.mdl
         |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
         |> Maybe.withDefault (model, Cmd.none)
-    -- _ ->
-    --     (model, Cmd.none)
-      --(model, Dispatch.forward msg)
+    Msg.Dispatch msg ->
+      (model, Dispatch.forward msg)
 
 
 {-| Update function for the above Msg.

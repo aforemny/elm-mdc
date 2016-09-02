@@ -46,7 +46,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of
     Mdl action' -> 
-      Material.update update action' model
+      Material.update action' model
 
     Decrease -> 
       ( { model | unread = model.unread - 1 }

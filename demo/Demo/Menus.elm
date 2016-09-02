@@ -55,7 +55,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     Mdl action' ->
-      Material.update update action' model
+      Material.update action' model
 
     Select menu item -> 
       ( { model | selected = Just (menu, item) }

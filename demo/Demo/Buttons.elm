@@ -63,7 +63,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of 
     Mdl action' -> 
-      Material.update update action' model
+      Material.update action' model
 
     Code action' -> 
       Code.update action' model.code

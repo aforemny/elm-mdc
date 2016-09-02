@@ -80,7 +80,7 @@ update action model =
       (f model, Cmd.none)
 
     Mdl action' -> 
-      Material.update update action' model
+      Material.update action' model
 
 
 {- Make sure we didn't pick the same primary and accent colour. -}

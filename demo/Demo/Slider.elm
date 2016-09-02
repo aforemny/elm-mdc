@@ -59,7 +59,7 @@ update action model =
         ({ model | values = values }, Cmd.none)
 
     Mdl msg' ->
-      Material.update update msg' model
+      Material.update msg' model
 
 
 -- VIEW

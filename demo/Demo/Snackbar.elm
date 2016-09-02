@@ -138,7 +138,7 @@ update action model =
         |> map2nd (Cmd.map Snackbar)
 
     MDL action' -> 
-      Material.update update action' model
+      Material.update action' model
 
 
 -- VIEW
