@@ -7,6 +7,7 @@ module Material.Button exposing
   , Property
   , render
   , type'
+  , link
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -54,6 +55,7 @@ Refer to the
 [Material Design Specification](https://www.google.com/design/spec/components/buttons.html)
 for details about what type of buttons are appropriate for which situations.
 @docs flat, raised, fab, minifab, icon
+@docs link
 
 # Elm architecture
 @docs Model, defaultModel, Msg, update, view
@@ -115,6 +117,7 @@ type alias Config m =
   , onClick : Maybe (Attribute m)
   , disabled : Bool
   , type' : Maybe String
+  , link : Bool
   }
 
 
@@ -124,6 +127,7 @@ defaultConfig =
   , onClick = Nothing
   , disabled = False
   , type' = Nothing
+  , link = False
   }
 
 
@@ -139,6 +143,23 @@ onClick : m -> Property m
 onClick x =
   Options.set
     (\options -> { options | onClick = Just (Html.Events.onClick x) })
+
+
+{-| Turn the `Button` from `button`-element to a `a`-element.
+This allows for a button that looks like a button but can also
+perform link actions.
+
+    Button.render Mdl [0] model.mdl
+      [ Button.link
+      , Options.attribute <|
+          Html.Attributes.href "#some-url"
+      ]
+      [ text "Link Button" ]
+-}
+link : Property m
+link =
+  Options.set
+    (\options -> { options | link = True })
 
 
 {-| Set button to ripple when clicked.
@@ -258,8 +279,15 @@ view lift model config html =
         Nothing -> []
         Just tp -> [ Just <| Html.Attributes.type' tp ]
 
+
+    buttonElement =
+      if summary.config.link then
+        Html.a
+      else
+        Html.button
+
   in
-    Options.apply summary button
+    Options.apply summary buttonElement
       [ cs "mdl-button"
       , cs "mdl-js-button"
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple
