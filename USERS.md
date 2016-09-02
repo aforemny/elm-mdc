@@ -41,6 +41,9 @@
 *  Elm-SPA-Template - a template for a single page app using elm-mdl
     * [GitHub repository](https://github.com/id3as/elm-spa-template)
     * [Live demo/site](http://id3as.github.io/elm-spa.html)
+* Offtie.com - Project allows to save urls to read later without data connection or in AirPlane Mode.
+    * [Bitbucket repository](https://bitbucket.org/gladimdim/offtieweb/src)
+    * [Live site](https://offtie.com/)
 
 
 
