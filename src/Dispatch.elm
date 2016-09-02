@@ -70,17 +70,16 @@ import Task
 
 {-| Dispatch configuration type
  -}
-type Config m =
+type Config msg =
   Config
-    { decoders : List (String, (Json.Decoder m, Maybe Html.Events.Options))
-    , lift : Maybe (List m -> m)
-    , lift : Maybe ((List m) -> m)
+    { decoders : List (String, (Json.Decoder msg, Maybe Html.Events.Options))
+    , lift : Maybe (List msg -> msg)
     }
 
 
 {-| Empty configuration
  -}
-defaultConfig : Config m
+defaultConfig : Config msg
 defaultConfig =
   Config
     { decoders = []
@@ -91,14 +90,14 @@ defaultConfig =
 {-| This function tells Dispatch how to convert a list of messages to a single
 message; how to _plug_ itself into your TEA component.
  -}
-plug : (List m -> m) -> Config m -> Config m
+plug : (List msg -> msg) -> Config msg -> Config msg
 plug f (Config config) =
   Config { config | lift = Just f }
 
 
 {-| Get the Dispatch lifting function
 -}
-plugger : Config m -> Maybe (List m -> m)
+plugger : Config msg -> Maybe (List msg -> msg)
 plugger (Config config) =
   config.lift
 
@@ -136,7 +135,7 @@ cmd msg =
 
 {-| Maps messages to commands
 -}
-forward : (List m) -> Cmd m
+forward : (List msg) -> Cmd msg
 forward messages =
   List.map cmd messages |> Cmd.batch
 
@@ -187,9 +186,9 @@ flatten =
  -}
 on
   : String
-  -> (List m -> m)
-  -> List (Json.Decoder m)
-  -> Html.Attribute m
+  -> (List msg -> msg)
+  -> List (Json.Decoder msg)
+  -> Html.Attribute msg
 on event lift =
   onWithOptions event lift Html.Events.defaultOptions
 
@@ -199,10 +198,10 @@ Options apply to the whole event.
  -}
 onWithOptions
   : String
-  -> (List m -> m)
+  -> (List msg -> msg)
   -> Html.Events.Options
-  -> List (Json.Decoder m)
-  -> Html.Attribute m
+  -> List (Json.Decoder msg)
+  -> Html.Attribute msg
 onWithOptions event lift options decoders =
   flatten decoders
     |> Json.map lift
