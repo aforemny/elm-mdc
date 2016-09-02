@@ -39,9 +39,7 @@ Add a call to `Dispatch.on` on an element
               (Json.at ["target", "offsetWidth"] Json.float) ]
       in
         Html.button
-          ([] ++ (case Dispatch.on "click" Dispatch decoders of
-                    Just attr -> [ attr ]
-                    Nothing -> []))
+          [ Dispatch.on "click" Dispatch decoders ]
           [ text "Button" ]
 
 
