@@ -281,13 +281,12 @@ textfields model =
         , Textfield.maxlength (truncate model.length)
         , Textfield.autofocus
         , Textfield.floatingLabel
-        -- , Textfield.onFocus (SetFocus5 True)
-        -- , Textfield.onBlur (SetFocus5 False)
-          -- Supporting multiple events
+        -- Supporting multiple events
         , Options.inner
-            [ Options.on1 "focus" (SetFocus5 True)
-            , Options.on1 "blur" (SetFocus5 False)
-            , Options.on1 "focus" (NoOp "FOCUS")
+            [ Options.onFocus (SetFocus5 True)
+            , Options.onFocus (NoOp "Focus")
+            , Options.onBlur (SetFocus5 False)
+            , Options.onBlur (NoOp "Blur")
             ]
         ]
     , Options.styled Html.p
@@ -317,6 +316,10 @@ textfields model =
          , Textfield.maxlength (truncate model.length)
          , Textfield.autofocus
          , Textfield.floatingLabel
+         , Options.inner
+             [ Options.onFocus (SetFocus5 True)
+             , Options.onBlur (SetFocus5 False)
+             ]
          ]
        """
     )
