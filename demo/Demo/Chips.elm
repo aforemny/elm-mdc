@@ -47,6 +47,7 @@ type Msg
   | RemoveChip Int
   | ChipClick Int
   | NoOp String
+  | Command String
 
 
 
@@ -72,9 +73,13 @@ lastIndex dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
+    Command msg ->
+      let _ = Debug.log "Command" msg
+      in (model, Cmd.none)
+
     NoOp msg ->
       let _ = Debug.log "NoOp" msg
-      in (model, Cmd.none )
+      in (model, Helpers.delay 1000 (Command msg))
 
     Mdl action' ->
       Material.update action' model
