@@ -426,8 +426,9 @@ view model =
                   , model.icon 
                       |> Maybe.withDefault ""
                       |> Textfield.value
-                  , Textfield.onInput SetIcon
+                  , Options.onInput SetIcon
                   ]
+                  []
               , Options.styled p [ css "margin-top" "1rem" ] 
                   [ text "Try 'list' or 'menu', or refer to " 
                   , a [ href "https://design.google.com/icons/" ]

@@ -5,10 +5,13 @@ import Platform.Cmd exposing (Cmd)
 import Regex
 import Json.Decode as Decoder
 import String
+import Dom
+import Task
 
 import Material.Textfield as Textfield
 import Material.Grid as Grid exposing (..)
 import Material.Options as Options exposing (css)
+import Material.Button as Button
 import Material
 
 import Material.Slider as Slider
@@ -33,7 +36,7 @@ type alias Model =
   , str4 : String
   , str6 : String
   , length : Float
-  , focus5 : Bool
+  , focus : Bool
   , str9 : String
   , selection : Selection
   }
@@ -47,7 +50,7 @@ model =
   , str4 = ""
   , str6 = ""
   , length = 5
-  , focus5 = False
+  , focus = False
   , str9 = "Try selecting within this text"
   , selection = { begin = -1, end = -1 }
   }
@@ -63,10 +66,11 @@ type Msg
   | Upd4 String
   | Upd6 String
   | Upd9 String
-  | SetFocus5 Bool 
+  | SetFocus Bool 
+  | Focus
   | Slider Float
   | SelectionChanged Selection
-  | NoOp String
+  | Nop
 
 
 selectionDecoder : Decoder.Decoder Msg
@@ -77,14 +81,12 @@ selectionDecoder =
          (Decoder.at ["target", "selectionEnd"] Decoder.int)
   
 
-pure : Model -> Maybe (Model, Cmd Msg)
-pure = 
-  flip (,) Cmd.none >> Just
-
-
 update : Msg -> Model -> Maybe (Model, Cmd Msg)
 update action model =
   case action of
+    Nop ->
+      Nothing
+
     SelectionChanged selection ->
       -- High-frequency event; return referentially equal model on NOP. 
       if selection == model.selection then
@@ -93,10 +95,10 @@ update action model =
         ( { model | selection = selection }, Cmd.none )
           |> Just
 
-    NoOp msg ->
-      let _ = Debug.log "NOOP" msg
-      in model ! []
-        |> Just
+    Focus -> 
+      ( model 
+      , Task.perform (always Nop) (always Nop) (Dom.focus "my-textfield")
+      ) |> Just
 
     Mdl action' ->
       Material.update action' model
@@ -126,8 +128,8 @@ update action model =
       { model | length = value } ! []
         |> Just
 
-    SetFocus5 x ->
-      { model | focus5 = x } ! []
+    SetFocus x ->
+      { model | focus = x } ! []
         |> Just
 
 
@@ -156,33 +158,37 @@ textfields : Model -> List (String, Html Msg, String)
 textfields model = 
   [ ( "Basic textfield"
     , Textfield.render Mdl [0] model.mdl
-        [ Textfield.onInput Upd0 ]
+        [ Options.onInput Upd0 ]
+        []
     , """
         Textfield.render Mdl [0] model.mdl
-          [ Textfield.onInput Upd0 ]
+          [ Options.onInput Upd0 ]
+          []
        """
     )
 
   , ( "Labelled textfield"
     , Textfield.render Mdl [1] model.mdl
         [ Textfield.label "Labelled" ]
+        []
     , """
        Textfield.render Mdl [1] model.mdl
          [ Textfield.label "Labelled" ]
+         []
        """
     )
   , ( "Labelled textfield, floating label"
     , Textfield.render Mdl [2] model.mdl
         [ Textfield.label "Floating label"
         , Textfield.floatingLabel
-        , Textfield.text'
         ]
+        []
     , """
         Textfield.render Mdl [2] model.mdl
           [ Textfield.label "Floating label"
           , Textfield.floatingLabel
-          , Textfield.text'
           ]
+          []
        """
     )
   , ( "Disabled textfield"
@@ -193,6 +199,7 @@ textfields model =
             model.str0
             ++ if model.str0 /= "" then " (still disabled, though)" else ""
         ]
+        []
     , """
       Textfield.render Mdl [3] model.mdl
         [ Textfield.label "Disabled"
@@ -203,26 +210,25 @@ textfields model =
                 " (still disabled, though)"
                else ""
         ]
+        []
        """
     )
   , ( "Textfield with error checking"
     , Textfield.render Mdl [4] model.mdl
         [ Textfield.label "w/error checking"
-        , if not <| match model.str4 rx' then
-            Textfield.error <| "Doesn't match " ++ rx
-          else
-            Options.nop
-        , Textfield.onInput Upd4
+        , Textfield.error ("Doesn't match " ++ rx) 
+            `Options.when` (not <| match model.str4 rx')
+        , Options.onInput Upd4
         ]
+        []
     , """
     Textfield.render Mdl [4] model.mdl
       [ Textfield.label "w/error checking"
-      , if not <| match model.str4 rx' then
-          Textfield.error <| "Doesn't match " ++ rx
-        else
-          Options.nop
-      , Textfield.onInput Upd4
+      , Options.onInput Upd4
+      , Textfield.error ("Doesn't match " ++ rx) 
+          `Options.when` (not <| match model.str4 rx')
       ]
+      []
        """
     )
   , ( "Textfield for passwords"
@@ -231,12 +237,14 @@ textfields model =
         , Textfield.floatingLabel
         , Textfield.password
         ]
+        []
     , """
       Textfield.render Mdl [5] model.mdl
         [ Textfield.label "Enter password"
         , Textfield.floatingLabel
         , Textfield.password
         ]
+        []
        """
     )
   , ( "Multi-line textfield"
@@ -244,11 +252,13 @@ textfields model =
         [ Textfield.label "Default multiline textfield"
         , Textfield.textarea
         ]
+        []
     , """
       Textfield.render Mdl [6] model.mdl
         [ Textfield.label "Default multiline textfield"
         , Textfield.textarea
         ]
+        []
        """
     )
 
@@ -259,6 +269,7 @@ textfields model =
         , Textfield.textarea
         , Textfield.rows 6
         ]
+        []
     , """
       Textfield.render Mdl [7] model.mdl
         [ Textfield.label "Multiline with 6 rows"
@@ -266,29 +277,23 @@ textfields model =
         , Textfield.textarea
         , Textfield.rows 6
         ]
+        []
        """
     )
 
-  , ( "Multi-line textfield with character limit (focused: " ++ (toString model.focus5) ++ ")"
+  , ( "Multi-line textfield with character limit"
     , Html.div []
     [ Textfield.render Mdl [8] model.mdl
         [ Textfield.label ("Multiline textfield (" ++
                             (toString (String.length model.str6))
                             ++ " of " ++ (toString (truncate model.length))
                             ++ " char limit)")
-        , Textfield.onInput Upd6
+        , Options.onInput Upd6
         , Textfield.textarea
         , Textfield.maxlength (truncate model.length)
-        , Textfield.autofocus
         , Textfield.floatingLabel
-        -- Supporting multiple events
-        , Options.inner
-            [ Options.onFocus (SetFocus5 True)
-            , Options.onFocus (NoOp "Focus")
-            , Options.onBlur (SetFocus5 False)
-            , Options.onBlur (NoOp "Blur")
-            ]
         ]
+        []
     , Options.styled Html.p
         [ Options.css "width" "80%" ]
         [ Options.span
@@ -301,7 +306,6 @@ textfields model =
             , Slider.min 1
             , Slider.step 1
             ]
-        --, Textfield.error <| if model.focus5 then "focused" else "not focused"
         ]
     ]
     , """
@@ -311,15 +315,10 @@ textfields model =
                 (toString (String.length model.str6))
                 ++ " of " ++ (toString (truncate model.length))
                 ++ " char limit)")
-         , Textfield.onInput Upd6
+         , Options.onInput Upd6
          , Textfield.textarea
          , Textfield.maxlength (truncate model.length)
-         , Textfield.autofocus
          , Textfield.floatingLabel
-         , Options.inner
-             [ Options.onFocus (SetFocus5 True)
-             , Options.onBlur (SetFocus5 False)
-             ]
          ]
        """
     )
@@ -328,18 +327,61 @@ textfields model =
 
 custom : Model -> List (String, Html Msg, String)
 custom model = 
-  [ ( "Custom event handling"
+  [ ("Working with focus" 
+     , Options.div
+        [ css "display" "flex"
+        , css "flex-direction" "column"
+        , css "align-items" "flex-start"
+        ]
+        [ Textfield.render Mdl [10] model.mdl
+            [ Textfield.floatingLabel 
+            , Textfield.label <| if model.focus then "Focused" else "Not focused"
+            , Options.onFocus (SetFocus True)
+            , Options.onBlur (SetFocus False)
+            , Options.id "my-textfield"
+            ]
+            []
+        , Button.render Mdl [11] model.mdl 
+            [ Options.onClick Focus 
+            , Button.colored 
+            , css "align-self" "flex-end"
+            , Button.disabled `Options.when` model.focus
+            ]
+            [ text "Focus" ]
+         ]
+     , """
+       [ Textfield.render Mdl [10] model.mdl
+          [ Textfield.floatingLabel 
+          , Textfield.label <| if model.focus then "Focused" else "Not focused"
+          , Options.onFocus (SetFocus True)
+          , Options.onBlur (SetFocus False)
+          , Options.id "my-textfield"
+          ]
+          []
+      , Button.render Mdl [11] model.mdl 
+          [ Options.onClick Focus 
+          , Button.colored 
+          , css "align-self" "flex-end"
+          , Button.disabled `Options.when` model.focus
+          ]
+          [ text "Focus" ]
+       ]
+          """
+      )
+    , ( "Working with selection"
     , Html.div
         []
         [ Textfield.render Mdl [9] model.mdl
             [ Textfield.label "Custom event handling"
             , Textfield.textarea
-            , Textfield.onInput Upd9
             , Textfield.value model.str9
+            , Options.onInput Upd9
             , Options.on "keyup" selectionDecoder
             , Options.on "mousemove" selectionDecoder
             , Options.on "click" selectionDecoder
-        ]
+            ]
+            []
+        
         , Options.styled Html.p
             [ css "width" "300px"
             , css "word-wrap" "break-word"
@@ -398,11 +440,12 @@ custom model =
           [ Textfield.render Mdl [9] model.mdl
               [ Textfield.label "Custom event handling"
               , Textfield.textarea
-              , Textfield.onInput Input
-              , Textfield.on "keyup" selectionDecoder
-              , Textfield.on "mousemove" selectionDecoder
-              , Textfield.on "click" selectionDecoder
+              , Options.onInput Input
+              , Options.on "keyup" selectionDecoder
+              , Options.on "mousemove" selectionDecoder
+              , Options.on "click" selectionDecoder
               ]
+              []
             , [ text <| "Selected text: " ++ 
                   String.slice model.selection.begin model.selection.end model.value
               ]

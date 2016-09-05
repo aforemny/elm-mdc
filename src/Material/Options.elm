@@ -2,21 +2,25 @@ module Material.Options exposing
   ( Property, Summary, collect
   , cs, css, many, nop, set, data
   , when, maybe, disabled
-  , apply, styled, styled', stylesheet
+  , apply, applyContainer, applyInput
+  , styled, styled', stylesheet
   , Style, div, span, img, attribute, center, scrim
   , id
-  , inner
+  , inner -- TODO: Remove
+  , input, container
   , onClick, onDoubleClick
   , onMouseDown, onMouseUp
   , onMouseEnter, onMouseLeave
   , onMouseOver, onMouseOut
   , onCheck, onToggle
   , onBlur, onFocus
+  , onInput
   , on, on1
   , onWithOptions
   , dispatch, dispatch'
   )
 
+ 
 
 {-| Setting options for Material components. 
 
@@ -42,7 +46,7 @@ Some optional properties apply to all components, see the `Typography`,
 `Elevation`, `Badge`, and `Color` modules. Such universally applicable
 optional properties can _also_ be applied to standard `Html` elements 
 such as `Html.div`; see `style` et. al. below. This is convenient, e.g., for
-applying MDL typography or color to standard elements. 
+applying elm-mdl typography or color to standard elements. 
 
 
 @docs Property
@@ -58,18 +62,19 @@ applying MDL typography or color to standard elements.
 @docs stylesheet
 
 ## Attributes
-@docs attribute, id, inner
+@docs attribute, id
 @docs center, scrim, disabled
 
-## Events
+# Events
 @docs onClick, onDoubleClick,
       onMouseDown, onMouseUp,
       onMouseEnter, onMouseLeave,
       onMouseOver, onMouseOut
-@docs  onCheck, onToggle
+@docs onCheck, onToggle
 @docs onBlur, onFocus
+@docs onInput
 
-# Custom Event Handlers
+## Custom Event Handlers
 @docs on, on1
 @docs onWithOptions
 
@@ -77,9 +82,19 @@ applying MDL typography or color to standard elements.
 ## Event internal
 @docs dispatch, dispatch'
 
+
+# Option distribution 
+Some components emulate HTML `<input>` elements, usually be nesting an actual
+`<input>` element inside additional markup. Options for such components are
+distributed between the container and input element. The `input` option
+guarantees that its argument options are applied to the `input` element. 
+
+See the `Textfield` documentation and demo for discussion and example.
+@docs inner, input, container
+
 # Internal
 The following types and values are used internally in the library. 
-@docs Summary, apply, collect, set
+@docs Summary, apply, applyContainer, applyInput, collect, set
 
 -}
 
@@ -89,14 +104,13 @@ import String
 import Html exposing (Html, Attribute)
 import Html.Attributes
 import Html.Events
-
-import Material.Options.Internal exposing (..)
-
-import Json.Decode as Json
+import Json.Decode as Json 
 
 import Dispatch
 
+import Material.Options.Internal as Internal exposing (..)
 import Material.Msg as Msg
+
 
 -- PROPERTIES
 
@@ -107,7 +121,7 @@ property is for. You never have to set it yourself. The type variable `d` by
 the type of your `Msg`s; you should set this yourself. 
 -}
 type alias Property c m = 
-  Material.Options.Internal.Property c m 
+  Internal.Property c m 
 
 
 {-| Contents of a `Property c m`.
@@ -200,7 +214,7 @@ addAttributes summary attrs =
        ]
     ++ attrs
     ++ summary.internal
-    ++ (Dispatch.install summary.dispatch)
+    ++ Dispatch.install summary.dispatch
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
@@ -213,6 +227,44 @@ apply summary ctor options attrs =
     (addAttributes 
       (recollect summary options) 
       attrs)
+
+
+type alias Container c m = 
+  { c | container : List (Property () m) }
+
+
+type alias Input c m = 
+  { c | inner : List (Property () m) }  -- TODO: Rename
+
+
+{-| TODO
+-}
+applyContainer : 
+    Summary (Container c m) m 
+ -> (List (Attribute m) -> a) 
+ -> List (Style m)  
+ -> a
+applyContainer summary ctor options = 
+  apply 
+    { summary | attrs = [], internal = [], config = () } 
+    ctor
+    (Many summary.config.container :: options)
+    []
+
+
+{-| TODO
+-}
+applyInput : 
+    Summary (Input c m) m 
+ -> (List (Attribute m) -> a) 
+ -> List (Style m)  
+ -> a
+applyInput summary ctor options = 
+  apply 
+    { summary | classes = [], css = [], config = () } 
+    ctor
+    (Many summary.config.inner :: options)
+    []
 
 
 {-| Apply properties to a standard Html element.
@@ -403,20 +455,27 @@ id =
   Attribute << Html.Attributes.id
 
 
-{-| Sets attributes on the inner element for components that support it.
-For example `Textfield`:
+{-| Apply argument options to `input` element in component implementation.
 
-    Textfield.render ...
-      [ ...
-      , Options.inner
-          [ Options.id "id-of-the-input"
-          ]
-      ]
+ TODO: Rename field inner -> input
+-}
+input : List (Property c m) -> Property { a | inner : List (Property c m) } m
+input =
+  Internal.input
 
+
+{-| TODO: remove
 -}
 inner : List (Property c m) -> Property { a | inner : List (Property c m) } m
-inner options =
-  set (\c -> { c | inner = options ++ c.inner })
+inner =
+  Internal.input
+
+
+{-| Apply argument options to container element in component implementation. 
+-}
+container : List (Property c m) -> Property c m
+container =
+  Internal.container 
 
 
 
@@ -515,6 +574,12 @@ onFocus : msg -> Property c msg
 onFocus msg =
   on "focus" (Json.succeed msg)
 
+
+{-|-}
+onInput : (String -> m) -> Property c m
+onInput f = 
+  on "input" (Json.map f Html.Events.targetValue)
+ 
 
 {-| Add custom event handlers with options
  -}
