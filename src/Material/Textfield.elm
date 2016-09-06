@@ -1,14 +1,10 @@
 module Material.Textfield exposing 
   ( Property, label, floatingLabel, error, value, disabled, password
-  , onInput
   , Msg, Model, defaultModel, update, view
   , render
   , text', textarea, rows, cols
   , autofocus
   , maxlength
-  , onBlur
-  , onFocus
-  , style
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -42,44 +38,55 @@ for a live demo.
 # Options
 @docs Property, value
   
-# Appearance
+## Appearance
 
-@docs label, floatingLabel, error, disabled, rows, cols
+@docs label, floatingLabel, error
+
+## Html attributes
+@docs disabled, rows, cols
 @docs autofocus, maxlength
 
-## Styling
-Textfields are implemented as `<input>` elements sitting inside a
-`<div>`, along with various helper elements. Supplying styling arguments (e.g.,
-`Options.css`) to `render` or `view` will apply these arguments to the
-outermost `<div>`.  If you wish to apply styling to the underlying `<input>`
-element, use the `style` property below. 
+## Advanced use
+Textfields are implemented as `<input>` elements sitting inside a container
+`<div>`, along with various helper elements. Options to Textfield are
+distributed between the input and container elements as follows:
 
-@docs style
+ - `Options.id` : container
+ - `Options.css` : container
+ - `Options.cs` : container
+ - `Options.attributes`: input
+ - `Options.on*`: input
+
+You can still apply styling in violation of these rules by using
+`Options.input options` to force `options` to be applied to the input elements;
+and `Options.container options` to force `options` to be applied to the
+container element. 
 
 # Type 
-@docs password, textarea, text', onInput
-@docs onBlur, onFocus
-
+@docs password, textarea, text'
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
 
+
 -}
+
 
 import Html exposing (div, span, Html, text)
 import Html.Attributes exposing (class, type', style)
-import Html.Events exposing (targetValue)
-import Json.Decode as Decoder
+import Html.Events 
 import Platform.Cmd
+import Json.Decode as Decode
 
 import Parts exposing (Indexed)
 
-import Material.Options as Options exposing (cs, css, nop, Style)
-
-import Material.Msg as Msg
+import Material.Options as Options exposing (cs, css, nop, Style, when)
+import Material.Options.Internal as Internal exposing (attribute)
+import Material.Msg as Material
 
 
 -- OPTIONS
+
 
 type Kind
   = Text
@@ -96,9 +103,8 @@ type alias Config m =
   , kind : Kind
   , rows : Maybe Int
   , cols : Maybe Int
-  , autofocus : Bool
-  , maxlength : Maybe Int
-  , inner : List (Options.Style m)
+  , inner : List (Options.Style m)  -- TODO: Rename -> input
+  , container : List (Options.Style m)
   }
 
 
@@ -112,9 +118,8 @@ defaultConfig =
   , kind = Text
   , rows = Nothing
   , cols = Nothing
-  , autofocus = False
-  , maxlength = Nothing
-  , inner = []
+  , inner = [] 
+  , container = [] 
   }
 
 
@@ -130,6 +135,7 @@ label : String -> Property m
 label str = 
   Options.set 
     (\config -> { config | labelText = Just str })
+
 
 {-| Label of textfield animates away from the input area on input
 -}
@@ -159,16 +165,14 @@ value str =
 -}
 autofocus : Property m
 autofocus =
-  Options.set
-    (\config -> { config | autofocus = True })
+  Options.input [ Options.attribute <| Html.Attributes.autofocus True ]
 
 
 {-| Specifies the maximum number of characters allowed in the input
 -}
 maxlength : Int -> Property m
-maxlength v =
-  Options.set
-    (\config -> { config | maxlength = Just v })
+maxlength k =
+  Options.input [ Options.attribute <| Html.Attributes.maxlength k ]
 
 
 {-| Disable the textfield input
@@ -179,56 +183,11 @@ disabled =
     (\config -> { config | disabled = True })
 
 
-{-| Message to dispatch on input
--}
-onInput : (String -> m) -> Property m
-onInput f = 
-  Options.on "input" (Decoder.map f targetValue)
-
-
-{-| The `blur` event occurs when the input loses focus.
-
-Currently to support this on Firefox you need to include a
-polyfill that enables `focusin` and `focusout` events.
-For example [polyfill.io](https://polyfill.io)
-
-Add the following to your index.html
-
-```html
-<script src="https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin"></script>
-```
-
--}
-onBlur : m -> Property m
-onBlur f =
-  Options.on "focusout" (Decoder.succeed f)
-
-
-{-| The `focus` event occurs when the input gets focus.
-
-Currently to support this on Firefox you need to include a
-polyfill that enables `focusin` and `focusout` events.
-For example [polyfill.io](https://polyfill.io)
-
-Add the following to your index.html
-
-```html
-<script src="https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin"></script>
-```
-
--}
-onFocus : m -> Property m
-onFocus f =
-  Options.on "focusin" (Decoder.succeed f)
-
-
 {-| Set properties on the actual `input` element in the Textfield.
-
-**Deprecated**. Use `Options.inner` instead. This value will disappear in 8.0.0.
 -}
-style : List (Options.Style m) -> Property m
-style =
-  Options.inner
+input : List (Options.Style m) -> Property m
+input =
+  Options.input
 
 
 {-| Sets the type of input to 'password'.
@@ -246,6 +205,7 @@ textarea =
   Options.set
     (\config -> { config | kind = Textarea })
 
+
 {-| Sets the type of input to 'text'. (Name chosen to avoid clashing with Html.text)
 -}
 text' : Property m
@@ -253,29 +213,29 @@ text' =
   Options.set
     (\config -> { config | kind = Text })
 
+
 {-| Number of rows in a multi-line input
 -}
 rows : Int -> Property m
-rows rows =
-  Options.set
-    (\config -> { config | rows = Just rows })
+rows k =
+  Internal.input [ Options.attribute <| Html.Attributes.rows k ]
+
 
 {-| Number of columns in a multi-line input
 -}
 cols : Int -> Property m
-cols cols =
-  Options.set
-    (\config -> { config | cols = Just cols })
+cols k =
+  Internal.input [ Options.attribute <| Html.Attributes.cols k ] 
+
 
 -- MODEL
 
 
-{-| Model. The textfield is in its error-container if `error` is not `Nothing`.
-The contents of the field is `value`.
+{-| 
 -}
 type alias Model =
   { isFocused : Bool
-  , value : String
+  , isDirty : Bool 
   }
 
 
@@ -284,7 +244,7 @@ type alias Model =
 defaultModel : Model
 defaultModel =
   { isFocused = False
-  , value = ""
+  , isDirty = False
   }
 
 
@@ -301,17 +261,23 @@ type Msg
 
 {-| Component update.
 -}
-update : Msg -> Model -> (Model, Cmd msg)
-update action model =
+update : x -> Msg -> Model -> Maybe (Model, Cmd msg)
+update _ action model =
   case action of
     Input str ->
-      ({ model | value = str }, Cmd.none)
+      let
+        dirty = str /= ""
+      in
+        if dirty == model.isDirty then 
+          Nothing
+        else
+          Just ({ model | isDirty = dirty }, Cmd.none)
 
     Blur ->
-      ({ model | isFocused = False }, Cmd.none)
+      Just ({ model | isFocused = False }, Cmd.none)
 
     Focus ->
-      ({ model | isFocused = True }, Cmd.none)
+      Just ({ model | isFocused = True }, Cmd.none)
 
 
 -- VIEW
@@ -320,89 +286,49 @@ update action model =
 
 Be aware that styling (third argument) is applied to the outermost element
 of the textfield's implementation, and so is mostly useful for positioning
-(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`
+(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.input`
 if you need to apply styling to the underlying `<input>` element. 
 -}
-view : (Msg -> m) -> Model -> List (Property m) -> Html m
-view lift model options =
+view : (Msg -> m) -> Model -> List (Property m) -> x -> Html m
+view lift model options _ =
   let
-
     ({ config } as summary) = 
       Options.collect defaultConfig options
 
-    val = 
-      config.value |> Maybe.withDefault model.value
-
-    isTextarea = config.kind == Textarea
-
-    elementFunction =
-      if isTextarea then
-        Html.textarea
-      else
-        Html.input
-
-    -- Applying the type attribute only if we are not a textarea
-    -- However, if we are a textarea and rows and/or cols have been defined, add them instead
-    typeAttributes =
-      case config.kind of
-          Text -> [type' "text"]
-          Password -> [type' "password"]
-          Textarea ->
-            [] ++ (case config.rows of
-                       Just r -> [Html.Attributes.rows r]
-                       Nothing -> [])
-               ++ (case config.cols of
-                       Just c -> [Html.Attributes.cols c]
-                       Nothing -> [])
-
-    maxlength =
-      case config.maxlength of
-        Just val -> [Html.Attributes.maxlength val]
-        Nothing -> []
-
-    textValue =
-      case config.value of
-        Just str ->
-          [ Html.Attributes.value str ]
-        Nothing ->
-          []
-
+    inner = 
+      case config.kind of 
+        Textarea -> Html.textarea
+        _ -> Html.input
   in
-    Options.apply summary div
+    Options.applyContainer summary div
       [ cs "mdl-textfield"
       , cs "mdl-js-textfield"
       , cs "is-upgraded"
-      , if config.labelFloat then cs "mdl-textfield--floating-label" else nop
-      , if config.error /= Nothing then cs "is-invalid" else nop 
-      , if val /= "" then cs "is-dirty" else nop
-      , if model.isFocused && not config.disabled then cs "is-focused" else nop
-      , if config.disabled then cs "is-disabled" else nop
+      , cs "mdl-textfield--floating-label" `when` config.labelFloat 
+      , cs "is-invalid" `when` (config.error /= Nothing)
+      , cs "is-dirty" `when` (config.value /= Nothing || model.isDirty)
+      , cs "is-focused" `when` (model.isFocused && not config.disabled)
+      , cs "is-disabled" `when` config.disabled 
       ]
-      []
-      [ Options.styled' elementFunction
+      [ Options.applyInput summary inner 
           [ cs "mdl-textfield__input"
           , css "outline" "none"
-
-            {- NOTE: Ordering here is important.
-            Currently former attributes override latter ones.
-            If this changes this needs to be changed as well.
-            Currently this makes sure that even if users provide
-            Html.Events.on "focus" ... it would not have precedence
-            over our own focus handler.
-             -}
-          , Options.on "focus" (Decoder.succeed (lift Focus))
-          , Options.on "blur" (Decoder.succeed (lift Blur))
-
-          -- If no value is we need the default input decoder to maintain is-dirty
+          , Internal.on1 "focus" lift Focus
+          , Internal.on1 "blur" lift Blur
+          , case config.kind of
+              Text -> attribute <| type' "text"
+              Password -> attribute <| type' "password"
+              _ -> nop 
+          , attribute (Html.Attributes.disabled True) `when` config.disabled
           , case config.value of
-              Nothing -> Options.on "input" (Decoder.map (Input >> lift) targetValue)
-              Just _ -> Options.nop
-
-          , Options.many config.inner
+              Nothing -> 
+                -- If user is not setting value, is we need the default input
+                -- decoder to maintain is-dirty
+                Options.on "input" 
+                  (Decode.map (Input >> lift) Html.Events.targetValue)
+              Just v -> 
+                Html.Attributes.defaultValue v |> attribute
           ]
-          ([ Html.Attributes.disabled config.disabled 
-           , Html.Attributes.autofocus config.autofocus
-           ] ++ textValue ++ typeAttributes ++ maxlength)
           []
       , Html.label 
           [class "mdl-textfield__label"]  
@@ -418,15 +344,14 @@ view lift model options =
 
 -- PART
 
+
 type alias Container c =
   { c | textfield : Indexed Model }
 
-{-| Internal view' for Textfield to embed Options.dispatch -}
-view' : (Msg.Msg (Container c) m -> m) -> (Msg -> m) -> Model -> List (Property m) -> Html m
-view' dp lift model options =
-  view lift model (Options.inner [ Options.dispatch dp ]
-                  :: Options.dispatch dp
-                  :: options)
+
+set : Indexed Model -> Container c -> Container c
+set x c = 
+   { c | textfield = x }
 
 
 {-| Component render. Below is an example, assuming boilerplate setup as indicated 
@@ -441,18 +366,19 @@ view' dp lift model options =
 
 Be aware that styling (third argument) is applied to the outermost element
 of the textfield's implementation, and so is mostly useful for positioning
-(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`
+(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.input`
 if you need to apply styling to the underlying `<input>` element. 
 -}
 render 
-  : (Msg.Msg (Container c) m -> m)
+  : (Material.Msg (Container c) m -> m)
   -> Parts.Index
   -> (Container c)
   -> List (Property m)
+  -> x
   -> Html m
 render lift =
   Parts.create 
-    (view' lift) (\_ msg model -> Just (update msg model))
-    .textfield (\x c -> { c | textfield = x }) 
+    (Internal.inject view lift) update
+    .textfield set
     defaultModel
-      (Msg.Internal >> lift)
+    (Material.Internal >> lift)
