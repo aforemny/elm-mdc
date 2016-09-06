@@ -47,15 +47,15 @@ Add a call to `Dispatch.on` on an element
 @docs on
 @docs onWithOptions
 @docs update
+@docs forward
 
 ## Advanced configuration
 
-These are tailored for writing UI component librarires
+These are tailored for writing UI component libraries
 with stateful components, such as `elm-mdl`.
 
 @docs Config, defaultConfig, plug, plugger, install
 @docs add
-@docs forward
 
 -}
 
