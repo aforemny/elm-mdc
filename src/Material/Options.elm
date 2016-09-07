@@ -1,12 +1,10 @@
 module Material.Options exposing
-  ( Property, Summary, collect
-  , cs, css, many, nop, set, data
+  ( Property 
+  , cs, css, many, nop, data
   , when, maybe, disabled
-  , apply, applyContainer, applyInput
   , styled, styled', stylesheet
   , Style, div, span, img, attribute, center, scrim
   , id
-  , inner -- TODO: Remove
   , input, container
   , onClick, onDoubleClick
   , onMouseDown, onMouseUp
@@ -90,23 +88,16 @@ distributed between the container and input element. The `input` option
 guarantees that its argument options are applied to the `input` element. 
 
 See the `Textfield` documentation and demo for discussion and example.
-@docs inner, input, container
-
-# Internal
-The following types and values are used internally in the library. 
-@docs Summary, apply, applyContainer, applyInput, collect, set
+@docs input, container
 
 -}
 
 
-import String 
 
 import Html exposing (Html, Attribute)
 import Html.Attributes
 import Html.Events
 import Json.Decode as Json 
-
-import Dispatch
 
 import Material.Options.Internal as Internal exposing (..)
 import Material.Msg as Msg
@@ -122,150 +113,6 @@ the type of your `Msg`s; you should set this yourself.
 -}
 type alias Property c m = 
   Internal.Property c m 
-
-
-{-| Contents of a `Property c m`.
--}
-type alias Summary c m = 
-  { classes : List String 
-  , css : List (String, String)  
-  , attrs : List (Attribute m)
-  , internal : List (Attribute m)
-  , dispatch : Dispatch.Config m
-  , config : c
-  }
-
-
-{- `collect` and variants are called multiple times by nearly every use of
-  any elm-mdl component. Carefully consider performance implications before
-  modifying. In particular: 
-
-  - Avoid closures. They are slow to create and cause subsequent GC.
-  - Pre-compute where possible. 
-
-  Earlier versions of `collect`, violating these rules, consumed ~20% of
-  execution time for `Cards.view` and `Textfield.view`.
--}
-
-
-collect1 
-  :  Property c m 
-  -> Summary c m 
-  -> Summary c m
-collect1 option acc = 
-  case option of 
-    Class x -> { acc | classes = x :: acc.classes }
-    CSS x -> { acc | css = x :: acc.css }
-    Attribute x -> { acc | attrs = x :: acc.attrs }
-    Internal x -> { acc | internal = x :: acc.internal }
-    Many options -> List.foldl collect1 acc options
-    Set g -> { acc | config = g acc.config }
-    Listener event options decoder ->
-      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
-    Lift m ->
-      { acc | dispatch = Dispatch.plug m acc.dispatch }
-    None -> acc
-
-
-recollect : Summary c m  -> List (Property c m) -> Summary c m
-recollect = 
-  List.foldl collect1 
-
-
-{-| Flatten a `Property a` into  a `Summary a`. Operates as `fold`
-over options; first two arguments are folding function and initial value. 
--}
-collect : c -> List (Property c m) -> Summary c m
-collect =
-  Summary [] [] [] [] Dispatch.defaultConfig >> recollect
-
-
-{-| Special-casing of collect for `Property c ()`. 
--}
-collect1' : Property c m -> Summary () m -> Summary () m
-collect1' options acc = 
-  case options of 
-    Class x -> { acc | classes = x :: acc.classes }
-    CSS x -> { acc | css = x :: acc.css }
-    Attribute x -> { acc | attrs = x :: acc.attrs }
-    Internal x -> { acc | internal = x :: acc.internal }
-    Listener event options decoder ->
-      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
-    Many options -> List.foldl collect1' acc options
-    Lift m ->
-      { acc | dispatch = Dispatch.plug m acc.dispatch }
-    Set _ -> acc 
-    None -> acc
-
-
-collect' : List (Property c m) -> Summary () m 
-collect' = 
-  List.foldl collect1' (Summary [] [] [] [] Dispatch.defaultConfig ())
-
-
-addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
-addAttributes summary attrs =
-  {- Ordering here is important: First apply summary attributes. That way,
-  internal classes and attributes override those provided by the user.
-  -}
-  summary.attrs
-    ++ [ Html.Attributes.style summary.css
-       , Html.Attributes.class (String.join " " summary.classes)
-       ]
-    ++ attrs
-    ++ summary.internal
-    ++ Dispatch.install summary.dispatch
-
-
-{-| Apply a `Summary m`, extra properties, and optional attributes 
-to a standard Html node. 
--}
-apply : Summary c m -> (List (Attribute m) -> a) 
-    -> List (Property c m) -> List (Attribute m) -> a
-apply summary ctor options attrs = 
-  ctor 
-    (addAttributes 
-      (recollect summary options) 
-      attrs)
-
-
-type alias Container c m = 
-  { c | container : List (Property () m) }
-
-
-type alias Input c m = 
-  { c | inner : List (Property () m) }  -- TODO: Rename
-
-
-{-| TODO
--}
-applyContainer : 
-    Summary (Container c m) m 
- -> (List (Attribute m) -> a) 
- -> List (Style m)  
- -> a
-applyContainer summary ctor options = 
-  apply 
-    { summary | attrs = [], internal = [], config = () } 
-    ctor
-    (Many summary.config.container :: options)
-    []
-
-
-{-| TODO
--}
-applyInput : 
-    Summary (Input c m) m 
- -> (List (Attribute m) -> a) 
- -> List (Style m)  
- -> a
-applyInput summary ctor options = 
-  apply 
-    { summary | classes = [], css = [], config = () } 
-    ctor
-    (Many summary.config.inner :: options)
-    []
-
 
 {-| Apply properties to a standard Html element.
 -}
@@ -362,13 +209,6 @@ nop : Property c m
 nop = None
 
 
-{-| Set a configuration value. 
--}
-set : (c -> c) -> Property c m
-set = 
-  Set
-
-
 {-| HTML data-* attributes. 
 -}
 data : String -> String -> Property c m
@@ -456,30 +296,22 @@ id =
 
 
 {-| Apply argument options to `input` element in component implementation.
-
- TODO: Rename field inner -> input
 -}
-input : List (Property c m) -> Property { a | inner : List (Property c m) } m
+input : List (Style m) -> Property (Input c m) m
 input =
-  Internal.input
-
-
-{-| TODO: remove
--}
-inner : List (Property c m) -> Property { a | inner : List (Property c m) } m
-inner =
   Internal.input
 
 
 {-| Apply argument options to container element in component implementation. 
 -}
-container : List (Property c m) -> Property c m
+container : List (Style m) -> Property (Container c m) m
 container =
   Internal.container 
 
 
 
 -- EVENTS
+
 
 {-| Add custom event handlers
  -}

@@ -1,5 +1,6 @@
 module Dispatch exposing
   ( Config, install, add, plug, plugger, defaultConfig
+  , clear
   , on, onWithOptions
   , update
   , forward
@@ -55,11 +56,12 @@ with stateful components, such as `elm-mdl`.
 
 @docs Config, defaultConfig, plug, plugger, install
 @docs add
+@docs clear
 @docs forward
 
 -}
 
-import Json.Decode as Json
+import Json.Decode as Json exposing (Decoder)
 import Html.Events
 import Html
 import Task
@@ -71,8 +73,8 @@ import Task
  -}
 type Config msg =
   Config
-    { decoders : List (String, (Json.Decoder msg, Maybe Html.Events.Options))
-    , lift : Maybe (List msg -> msg)
+    { decoders : List (String, (Decoder msg, Maybe Html.Events.Options))
+    , lift : Maybe (Decoder (List msg) -> Decoder msg)
     }
 
 
@@ -89,24 +91,32 @@ defaultConfig =
 {-| This function tells Dispatch how to convert a list of messages to a single
 message; how to _plug_ itself into your TEA component.
  -}
-plug : (List msg -> msg) -> Config msg -> Config msg
+plug : (Decoder (List msg) -> Decoder msg) -> Config msg -> Config msg
 plug f (Config config) =
   Config { config | lift = Just f }
 
 
 {-| Get the Dispatch lifting function
 -}
-plugger : Config msg -> Maybe (List msg -> msg)
+plugger : Config msg -> Maybe (Decoder (List msg) -> Decoder msg)
 plugger (Config config) =
   config.lift
 
 
 {-| Add an event-handler to the current configuration
  -}
-add : String -> Maybe Html.Events.Options -> Json.Decoder msg -> Config msg -> Config msg
+add : String -> Maybe Html.Events.Options -> Decoder msg -> Config msg -> Config msg
 add event options decoder (Config config) =
   Config
     { config | decoders = (event, (decoder, options)) :: config.decoders }
+
+
+{-| Clear event handlers in current configuration
+-}
+clear : Config msg -> Config msg
+clear (Config config) = 
+  Config
+    { config | decoders = [] } 
 
 
 {-| This function returns a list of `Html.Attribute` containing handlers that
@@ -167,7 +177,7 @@ update update msg model =
 -- VIEW
 
 
-decode : List (Json.Decoder m) -> Json.Value -> Result c (List m)
+decode : List (Decoder m) -> Json.Value -> Result c (List m)
 decode decoders v0 =
   List.filterMap (flip Json.decodeValue v0 >> Result.toMaybe) decoders
     |> Result.Ok
@@ -176,7 +186,7 @@ decode decoders v0 =
 {-| Applies given decoders to the same initial value
    and return the applied results as a list
 -}
-flatten : List (Json.Decoder m) -> Json.Decoder (List m)
+flatten : List (Decoder m) -> Decoder (List m)
 flatten =
   decode >> Json.customDecoder Json.value
 
@@ -186,7 +196,7 @@ flatten =
 on
   : String
   -> (List msg -> msg)
-  -> List (Json.Decoder msg)
+  -> List (Decoder msg)
   -> Html.Attribute msg
 on event lift =
   onWithOptions event lift Html.Events.defaultOptions
@@ -199,7 +209,7 @@ onWithOptions
   : String
   -> (List msg -> msg)
   -> Html.Events.Options
-  -> List (Json.Decoder msg)
+  -> List (Decoder msg)
   -> Html.Attribute msg
 onWithOptions event lift options decoders =
   flatten decoders
@@ -211,8 +221,8 @@ onWithOptions event lift options decoders =
 the given options
 -}
 onMany
-  : (List m -> m)
-  -> ( String, List ( Json.Decoder m, Maybe Html.Events.Options ) )
+  : (Decoder (List m) -> Decoder m)
+  -> ( String, List ( Decoder m, Maybe Html.Events.Options ) )
   -> Html.Attribute m
 onMany lift decoders =
   case decoders of
@@ -221,7 +231,9 @@ onMany lift decoders =
       onSingle (event, decoder)
 
     (event, decoders) ->
-      onWithOptions event lift (pickOptions decoders) (List.map fst decoders)
+      flatten (List.map fst decoders)
+        |> lift
+        |> Html.Events.onWithOptions event (pickOptions decoders)
 
 
 pickOptions : List ( a, Maybe Html.Events.Options ) -> Html.Events.Options
@@ -233,7 +245,7 @@ pickOptions decoders =
 
 
 onSingle
-    : (String, (Json.Decoder m, Maybe Html.Events.Options ))
+    : (String, (Decoder m, Maybe Html.Events.Options ))
     -> Html.Attribute m
 onSingle (event, (decoder, option)) =
   Html.Events.onWithOptions

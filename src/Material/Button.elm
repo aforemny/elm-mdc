@@ -248,7 +248,7 @@ view lift model config html =
         Just tp -> [ Just <| Html.Attributes.type' tp ]
 
   in
-    Options.apply summary button
+    Internal.apply summary button
       [ cs "mdl-button"
       , cs "mdl-js-button"
       , cs "mdl-js-ripple-effect" `when` summary.config.ripple
