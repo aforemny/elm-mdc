@@ -205,7 +205,7 @@ view options =
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
-          , Dispatch.plugger summary.dispatch
+          , Dispatch.getMsg summary.dispatch
               |> Maybe.map Options.dispatch'
               |> Maybe.withDefault Options.nop
           , listeners

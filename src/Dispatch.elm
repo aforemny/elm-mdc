@@ -1,5 +1,5 @@
 module Dispatch exposing
-  ( Config, install, add, plug, plugger, defaultConfig
+  ( Config, toAttributes, add, setMsg, getMsg, defaultConfig
   , on, onWithOptions
   , update
   , forward
@@ -49,12 +49,12 @@ Add a call to `Dispatch.on` on an element
 @docs update
 @docs forward
 
-## Advanced configuration
+## Utilities
 
 These are tailored for writing UI component libraries
 with stateful components, such as `elm-mdl`.
 
-@docs Config, defaultConfig, plug, plugger, install
+@docs Config, defaultConfig, setMsg, getMsg, toAttributes
 @docs add
 
 -}
@@ -87,17 +87,17 @@ defaultConfig =
 
 
 {-| This function tells Dispatch how to convert a list of messages to a single
-message; how to _plug_ itself into your TEA component.
+message
  -}
-plug : (List msg -> msg) -> Config msg -> Config msg
-plug f (Config config) =
+setMsg : (List msg -> msg) -> Config msg -> Config msg
+setMsg f (Config config) =
   Config { config | lift = Just f }
 
 
 {-| Get the Dispatch lifting function
 -}
-plugger : Config msg -> Maybe (List msg -> msg)
-plugger (Config config) =
+getMsg : Config msg -> Maybe (List msg -> msg)
+getMsg (Config config) =
   config.lift
 
 
@@ -109,12 +109,13 @@ add event options decoder (Config config) =
     { config | decoders = (event, (decoder, options)) :: config.decoders }
 
 
-{-| This function returns a list of `Html.Attribute` containing handlers that
+{-| Construct event toAttributes for the given configuration.
+
+This returns a list of `Html.Attributes` containing toAttributes that
 will allow for dispatching of multiple decoders from a single `Html.Event`
-Construct event handlers for the given configuration
  -}
-install : Config msg -> List (Html.Attribute msg)
-install (Config config) =
+toAttributes : Config msg -> List (Html.Attribute msg)
+toAttributes (Config config) =
   case config.lift of
     Just f ->
       List.map (onMany f) (group config.decoders)
