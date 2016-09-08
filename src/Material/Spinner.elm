@@ -2,7 +2,6 @@ module Material.Spinner exposing
   ( spinner
   , active
   , singleColor
-
   , Property
   , Config
   , defaultConfig
@@ -38,6 +37,7 @@ for a live demo.
 
 import Html exposing (Html, Attribute)
 import Material.Options as Options exposing (cs, css, nop)
+import Material.Options.Internal as Internal
 
 
 {-| A spinner is a loading indicator that by default changes color and is
@@ -48,31 +48,32 @@ invisible. Example use:
 spinner :  List (Property m) -> Html m
 spinner options =
   let
-    ({ config } as summary) = Options.collect defaultConfig options
+    ({ config } as summary) = Internal.collect defaultConfig options
   in
-    Options.apply summary Html.div
+    Internal.apply summary Html.div
     [ cs "mdl-spinner mdl-js-spinner is-upgraded"
     , if config.active then cs "is-active" else nop
     , if config.singleColor then cs "mdl-spinner--single-color" else nop
     ]
     [
     ]
-    ( List.map createLayer [1..4]
-    )
+    layers
 
 
 {-| Make a spinner visible
 -}
 active : Bool -> Property m
-active value =
-  Options.set (\config -> {config | active = value})
+active =
+  (\value config -> {config | active = value})
+    >> Internal.option
 
 
 {-| Make a spinner a single color (the active color) of the stylesheet.
 -}
 singleColor : Bool -> Property m
-singleColor value =
-  Options.set (\config -> {config | singleColor = value})
+singleColor =
+  (\value config -> {config | singleColor = value})
+    >> Internal.option 
 
 
 -- MODEL
@@ -103,8 +104,8 @@ type alias Property m = Options.Property Config m
 -- HELPER
 
 
-createLayer : Int -> Html m
-createLayer n =
+layer : Int -> Html m
+layer n =
   Options.div
   [ cs <| "mdl-spinner__layer mdl-spinner__layer-" ++ toString n
   ]
@@ -114,3 +115,8 @@ createLayer n =
     ]
     |> List.map ((|>) [ Options.div [ cs "mdl-spinner__circle" ] [] ])
   )
+
+
+layers : List (Html m)
+layers = 
+  List.map layer [1..4]

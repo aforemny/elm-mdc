@@ -1,10 +1,14 @@
 module Material.Options.Internal exposing (..)
 
-import Html
+import Html exposing (Attribute)
+import Html.Attributes
 import Html.Events
-import Json.Decode as Json
+import String
+import Json.Decode as Json exposing (Decoder)
 
-import Material.Msg as Msg
+import Dispatch
+import Material.Msg as Material
+
 
 {-| Internal type of properties. Do not use directly; use constructor functions
    in the Options module or `attribute` instead.
@@ -16,8 +20,8 @@ type Property c m
   | Internal (Html.Attribute m)
   | Many (List (Property c m))
   | Set (c -> c)
-  | Listener String (Maybe (Html.Events.Options)) (Json.Decoder m)
-  | Lift (List m -> m)
+  | Listener String (Maybe (Html.Events.Options)) (Decoder m)
+  | Lift (Decoder (List m) -> Decoder m)
   | None
 
 
@@ -30,33 +34,173 @@ attribute =
   Internal
 
 
--- INTERNAL UTILITIES
-
-
-{-| TODO: Change field-name to `input`. 
+{-| Contents of a `Property c m`.
 -}
-input : List (Property c m) -> Property { a | inner : List (Property c m) } m
-input options =
-  Set (\c -> { c | inner = Many options :: c.inner })
+type alias Summary c m = 
+  { classes : List String 
+  , css : List (String, String)  
+  , attrs : List (Attribute m)
+  , internal : List (Attribute m)
+  , dispatch : Dispatch.Config m
+  , config : c
+  }
 
 
-{-|-}
-container : List (Property c m) -> Property c m 
+{- `collect` and variants are called multiple times by nearly every use of
+  any elm-mdl component. Carefully consider performance implications before
+  modifying. In particular: 
+
+  - Avoid closures. They are slow to create and cause subsequent GC.
+  - Pre-compute where possible. 
+
+  Earlier versions of `collect`, violating these rules, consumed ~20% of
+  execution time for `Cards.view` and `Textfield.view`.
+-}
+
+
+collect1 : Property c m -> Summary c m -> Summary c m
+collect1 option acc = 
+  case option of 
+    Class x -> { acc | classes = x :: acc.classes }
+    CSS x -> { acc | css = x :: acc.css }
+    Attribute x -> { acc | attrs = x :: acc.attrs }
+    Internal x -> { acc | internal = x :: acc.internal }
+    Many options -> List.foldl collect1 acc options
+    Set g -> { acc | config = g acc.config }
+    Listener event options decoder ->
+      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
+    Lift m ->
+      { acc | dispatch = Dispatch.setDecoder m acc.dispatch }
+    None -> acc
+
+
+recollect : Summary c m  -> List (Property c m) -> Summary c m
+recollect = 
+  List.foldl collect1 
+
+
+{-| Flatten a `Property a` into  a `Summary a`. Operates as `fold`
+over options; first two arguments are folding function and initial value. 
+-}
+collect : c -> List (Property c m) -> Summary c m
+collect =
+  Summary [] [] [] [] Dispatch.defaultConfig >> recollect
+
+
+{-| Special-casing of collect for `Property c ()`. 
+-}
+collect1' : Property c m -> Summary () m -> Summary () m
+collect1' options acc = 
+  case options of 
+    Class x -> { acc | classes = x :: acc.classes }
+    CSS x -> { acc | css = x :: acc.css }
+    Attribute x -> { acc | attrs = x :: acc.attrs }
+    Internal x -> { acc | internal = x :: acc.internal }
+    Listener event options decoder ->
+      { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
+    Many options -> List.foldl collect1' acc options
+    Lift m ->
+      { acc | dispatch = Dispatch.setDecoder m acc.dispatch }
+    Set _ -> acc 
+    None -> acc
+
+
+collect' : List (Property c m) -> Summary () m 
+collect' = 
+  List.foldl collect1' (Summary [] [] [] [] Dispatch.defaultConfig ())
+
+
+addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
+addAttributes summary attrs =
+  {- Ordering here is important: First apply summary attributes. That way,
+  internal classes and attributes override those provided by the user.
+  -}
+  summary.attrs
+    ++ [ Html.Attributes.style summary.css
+       , Html.Attributes.class (String.join " " summary.classes)
+       ]
+    ++ attrs
+    ++ summary.internal
+    ++ Dispatch.toAttributes summary.dispatch
+
+
+{-| Apply a `Summary m`, extra properties, and optional attributes 
+to a standard Html node. 
+-}
+apply : Summary c m -> (List (Attribute m) -> a) 
+    -> List (Property c m) -> List (Attribute m) -> a
+apply summary ctor options attrs = 
+  ctor 
+    (addAttributes 
+      (recollect summary options) 
+      attrs)
+
+
+type alias Container c m = 
+  { c | container : List (Property () m) }
+
+
+type alias Input c m = 
+  { c | input : List (Property () m) }  
+
+
+applyContainer : 
+    Summary (Container c m) m 
+ -> (List (Attribute m) -> a) 
+ -> List (Property () m)  
+ -> a
+applyContainer summary ctor options = 
+  apply 
+    { summary 
+    | dispatch = Dispatch.clear summary.dispatch
+    , attrs = []
+    , internal = []
+    , config = () 
+    } 
+    ctor
+    (Many summary.config.container :: options)
+    []
+
+
+applyInput : 
+    Summary (Input c m) m 
+ -> (List (Attribute m) -> a) 
+ -> List (Property () m)  
+ -> a
+applyInput summary ctor options = 
+  apply 
+    { summary | classes = [], css = [], config = () } 
+    ctor
+    (Many summary.config.input :: options)
+    []
+
+
+
+option : (c -> c) -> Property c m
+option = 
+  Set
+
+
+input : List (Property () m) -> Property { a | input : List (Property () m) } m
+input =
+    option << (\style config -> { config | input = Many style :: config.input })
+
+
+container : List (Property () m) -> Property { a | container : List (Property () m) } m
 container = 
-  Many
+  option << (\style config -> { config | container = Many style :: config.container })
 
 
-{-|-}
-dispatch : (Msg.Msg a m -> m) -> Property c m
+dispatch : (Material.Msg a m -> m) -> Property c m
 dispatch lift =
-  Lift (Msg.Dispatch >> lift)
+  Lift (Json.map Material.Dispatch >> Json.map lift)
 
 
 {-| Inject dispatch
  -}
 inject
     : (a -> b -> List (Property d e) -> f -> g)
-    -> (Msg.Msg h e -> e)
+    -> (Material.Msg h e -> e)
     -> a
     -> b
     -> List (Property d e)
@@ -64,20 +208,6 @@ inject
     -> g
 inject view lift a b c =
   view a b (dispatch lift :: c)
-
-
-{-| Inject dispatch
- -}
-inject'
-    : (a -> b -> List (Property { f | inner : List (Property d e) } e) -> g -> h)
-    -> (Msg.Msg i e -> e)
-    -> a
-    -> b
-    -> List (Property { f | inner : List (Property d e) } e)
-    -> g
-    -> h
-inject' view lift a b c =
-  view a b (input [ dispatch lift ] :: dispatch lift :: c)
 
 
 {-| Construct lifted handler with trivial decoder in a manner that
@@ -106,4 +236,5 @@ https://groups.google.com/forum/#!topic/elm-discuss/Q6mTrF4T7EU
 on1 : String -> (a -> b) -> a -> Property c b
 on1 event lift m = 
   Listener event Nothing (Json.map lift <| Json.succeed m)
+
 

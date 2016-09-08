@@ -6,8 +6,8 @@ module Material.Slider
     , max
     , step
     , disabled
-    , onChange
     , view
+    , onChange
     )
 
 {-| From the [Material Design Lite documentation](https://material.google.com/components/sliders.html):
@@ -44,7 +44,6 @@ for a live demo.
 @docs step, disabled
 
 # Events
-
 @docs onChange
 
 -}
@@ -52,9 +51,9 @@ for a live demo.
 import Html exposing (..)
 import Html.Attributes as Html
 import Material.Options as Options exposing (cs, css, when)
+import Material.Options.Internal as Internal
 import Material.Helpers as Helpers
 import Json.Decode as Json
-import Dispatch
 
 
 -- PROPERTIES
@@ -65,9 +64,8 @@ type alias Config m =
   , min : Float
   , max : Float
   , step : Float
-  , listener : Maybe (Float -> m)
-  , disabled : Bool
-  , inner : List (Options.Style m)
+  , input : List (Options.Style m)
+  , container : List (Options.Style m)
   }
 
 
@@ -77,9 +75,8 @@ defaultConfig =
   , min = 0
   , max = 100
   , step = 1
-  , listener = Nothing
-  , disabled = False
-  , inner = []
+  , input = []
+  , container = [] 
   }
 
 
@@ -92,48 +89,57 @@ type alias Property m =
 {-| Sets current value
 -}
 value : Float -> Property m
-value v =
-  Options.set (\options -> { options | value = v })
+value =
+  (\v options -> { options | value = v })
+    >> Internal.option
 
 
 {-| Sets the step. Defaults to 0
 -}
 min : Float -> Property m
-min v =
-  Options.set (\options -> { options | min = v })
+min =
+  (\v options -> { options | min = v })
+    >> Internal.option 
 
 
 {-| Sets the step. Defaults to 100
 -}
 max : Float -> Property m
-max v =
-  Options.set (\options -> { options | max = v })
+max =
+  (\v options -> { options | max = v })
+    >> Internal.option
 
 
 {-| Sets the step. Defaults to 1
 -}
 step : Float -> Property m
-step v =
-  Options.set (\options -> { options | step = v })
+step =
+  (\v options -> { options | step = v })
+    >> Internal.option
 
 
 {-| Disables the slider
 -}
 disabled : Property m
 disabled =
-  Options.set (\options -> { options | disabled = True })
-
-
-{-| onChange listener for slider values
--}
-onChange : (Float -> m) -> Property m
-onChange l =
-  Options.set (\options -> { options | listener = Just l })
+  Internal.attribute <| Html.disabled True
 
 
 floatVal : Json.Decoder Float
 floatVal =
   (Json.at [ "target", "valueAsNumber" ] Json.float)
+
+
+{-| onChange listener for slider values
+
+This convenience handler listens for both "change" and "input" events. 
+-}
+onChange : (Float -> m) -> Property m
+onChange f =
+  Options.many 
+   [ Options.on "change" (Json.map f floatVal)
+   , Options.on "input" (Json.map f floatVal)
+   ] 
 
 
 {-| A slider consists of a horizontal line upon which sits a small, movable
@@ -155,7 +161,7 @@ view : List (Property m) -> Html m
 view options =
   let
     summary =
-      Options.collect defaultConfig options
+      Internal.collect defaultConfig options
 
     config =
       summary.config
@@ -186,42 +192,22 @@ view options =
             []
         ]
 
-    listeners =
-      config.listener
-        |> Maybe.map (\f -> 
-             [ Options.on "change" (Json.map f floatVal)
-             , Options.on "input" (Json.map f floatVal)
-             ]
-             |> Options.many
-           )
-        |> Maybe.withDefault Options.nop 
-
   in
-    Options.apply summary Html.div
+    Internal.applyContainer summary Html.div
       [ cs "mdl-slider__container"]
-      []
-      [ Options.styled' Html.input
+      [ Internal.applyInput summary Html.input
           [ cs "mdl-slider"
           , cs "mdl-js-slider"
           , cs "is-upgraded"
           , cs "is-lowest-value" `when` (fraction == 0)
-          , Dispatch.getMsg summary.dispatch
-              |> Maybe.map Options.dispatch'
-              |> Maybe.withDefault Options.nop
-          , listeners
-          , Options.disabled config.disabled
             -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
           , css "padding" "8px 0"
-            -- NOTE: This is last here because of how attributes are collected
-            -- This way inner attributes should not override necessary attributes
-          , Options.many config.inner
-          ]
-          [ Html.type' "range"
-          , Html.max (toString config.max)
-          , Html.min (toString config.min)
-          , Html.step (toString config.step)
-          , Html.value (toString config.value)
-          , Helpers.blurOn "mouseup"
+          , Internal.attribute <| Html.type' "range"
+          , Internal.attribute <| Html.max (toString config.max)
+          , Internal.attribute <| Html.min (toString config.min)
+          , Internal.attribute <| Html.step (toString config.step)
+          , Internal.attribute <| Html.value (toString config.value)
+          , Internal.attribute <| Helpers.blurOn "mouseup"
           ]
           []
       , background

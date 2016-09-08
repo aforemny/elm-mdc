@@ -46,8 +46,6 @@ type Msg
   | AddChip String
   | RemoveChip Int
   | ChipClick Int
-  | NoOp String
-  | Command String
 
 
 
@@ -73,14 +71,6 @@ lastIndex dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    Command msg ->
-      let _ = Debug.log "Command" msg
-      in (model, Cmd.none)
-
-    NoOp msg ->
-      let _ = Debug.log "NoOp" msg
-      in (model, Helpers.delay 1000 (Command msg))
-
     Mdl action' ->
       Material.update action' model
 
@@ -312,10 +302,7 @@ view model  =
                    |> List.map (\ (index, value) ->
                                   Chip.button
                                     [ Options.css "margin" "5px 5px"
-                                    , Options.dispatch Mdl
                                     , Options.onClick (ChipClick index)
-                                    , Options.onClick (NoOp (toString (ChipClick index)))
-
                                     , Chip.deleteClick (RemoveChip index)
                                     ]
                                     [ Chip.content []
@@ -328,7 +315,6 @@ view model  =
                   , Button.ripple
                   , Button.raised
                   , Options.onClick (AddChip "Amazing Chip")
-                  , Options.onClick (NoOp "Amazing Chip")
                   ]
                   [ text "Add chip" ]
 

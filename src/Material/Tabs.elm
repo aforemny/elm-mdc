@@ -76,13 +76,15 @@ for a live demo.
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (Html)
 import Parts exposing (Indexed)
-import Material.Options as Options exposing (cs, when)
-import Material.Ripple as Ripple
 import Html.App
 import Html.Attributes as Html exposing (class)
 import Html.Keyed as Keyed
 import Dict exposing (Dict)
-import Material.Msg as Msg
+
+import Material.Msg as Material
+import Material.Options as Options exposing (cs, when)
+import Material.Ripple as Ripple
+import Material.Options.Internal as Internal
 
 
 -- MODEL
@@ -179,21 +181,24 @@ textLabel p c =
 -}
 ripple : Property m
 ripple =
-  Options.set (\options -> { options | ripple = True })
+  Internal.option (\config -> { config | ripple = True })
 
 
 {-| Receieve notification when tab `k` is selected.
 -}
 onSelectTab : (Int -> m) -> Property m
-onSelectTab k =
-  Options.set (\config -> { config | onSelectTab = Just k })
+onSelectTab =
+  Internal.option << (\k config -> { config | onSelectTab = Just k })
 
 
 {-| Set the active tab.
 -}
 activeTab : Int -> Property m
-activeTab k =
-  Options.set (\config -> { config | activeTab = k })
+activeTab =
+  Internal.option << (\k config -> { config | activeTab = k })
+
+
+-- VIEW
 
 
 {-| Component view.
@@ -202,7 +207,7 @@ view : (Msg -> m) -> Model -> List (Property m) -> List (Label m) -> List (Html 
 view lift model options tabs tabContent =
   let
     summary =
-      Options.collect defaultConfig options
+      Internal.collect defaultConfig options
 
     config =
       summary.config
@@ -222,14 +227,14 @@ view lift model options tabs tabContent =
 
     unwrapLabel tabIdx (Label ( props, content )) =
       Options.styled Html.a
-        ([ cs "mdl-tabs__tab"
-         , cs "is-active" `when` (tabIdx == config.activeTab)
-         , config.onSelectTab
-            |> Maybe.map (\t -> Options.onClick (t tabIdx))
-            |> Maybe.withDefault Options.nop
-         ]
-          ++ props
-        )
+        [ cs "mdl-tabs__tab"
+        , cs "is-active" `when` (tabIdx == config.activeTab)
+        , config.onSelectTab
+           |> Maybe.map (\t -> Options.onClick (t tabIdx))
+           |> Maybe.withDefault Options.nop
+        , Options.many props
+        ]
+        
         (if config.ripple then
           List.concat
             [ content
@@ -255,7 +260,7 @@ view lift model options tabs tabContent =
         ]
         (List.indexedMap unwrapLabel tabs)
   in
-    Options.apply summary
+    Internal.apply summary
       Html.div
       [ cs "mdl-tabs"
       , cs "mdl-js-tabs"
@@ -280,7 +285,7 @@ type alias Container c =
 {-| Component render.
 -}
 render :
-  (Msg.Msg (Container c) m -> m)
+  (Material.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
@@ -291,4 +296,4 @@ render lift =
   Parts.create 
     view (Parts.generalize update) 
    .tabs (\x y -> { y | tabs = x }) defaultModel
-     (Msg.Internal >> lift)
+     (Material.Internal >> lift)

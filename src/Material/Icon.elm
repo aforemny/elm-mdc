@@ -86,14 +86,9 @@ produce clickable icons; use icon buttons in Material.Button.icon for that.
 -}
 view : String -> List (Property m) -> Html m
 view name options =
-  let
-    summary = Options.collect defaultConfig options
-  in 
-    Options.apply summary Html.i
-      [ cs "material-icons" ]
-      []
-      [ text name ]
-
+  Options.styled Html.i
+    ( cs "material-icons" :: options)
+    [ text name ] 
   
 {-| Render a default-sized icon with no behaviour. The
 `String` argument must be the name of a [Material Icon](https://design.google.com/icons/)

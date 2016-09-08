@@ -407,7 +407,7 @@ info model =
             ]
         ]
     , Lists.li []
-        [ Lists.content [] [ text "iMac \"27" ] 
+        [ Lists.content [] [ text "iMac \\\"27" ] 
         , Lists.content2 [] 
             [ Lists.info2 [] [ text "Updated" ]
             , Icon.view "info" [ Color.text Color.primary ]
@@ -609,7 +609,7 @@ type File = Folder | File
 files : List (File, String, String, String, Color.Hue, Maybe Bool)
 files = 
   [ (Folder, "demo",             "2 days ago",   "@aforemny",  Color.Indigo, Just False)
-  , (Folder, "src",              "2 days ago",   "@vipetti",   Color.Indigo, Nothing)
+  , (Folder, "src",              "2 days ago",   "@vipentti",   Color.Indigo, Nothing)
   , (Folder, "examples",         "2 days ago",   "@aforemny",  Color.BlueGrey, Nothing)
   , (File,   "CONTRIBUTING.md",  "28 days ago",  "@debois",    Color.DeepOrange, Just True)
   , (File,   "README.md",        "5 days ago",   "@aforemny",  Color.DeepOrange, Just True)
