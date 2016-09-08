@@ -1,5 +1,5 @@
 module Dispatch exposing
-  ( Config, install, add, plug, plugger, defaultConfig
+  ( Config, toAttributes, add, setMsg, setDecoder, getDecoder, defaultConfig
   , clear
   , on, onWithOptions
   , update
@@ -48,13 +48,14 @@ Add a call to `Dispatch.on` on an element
 @docs on
 @docs onWithOptions
 @docs update
+@docs forward
 
-## Advanced configuration
+## Utilities
 
-These are tailored for writing UI component librarires
+These are tailored for writing UI component libraries
 with stateful components, such as `elm-mdl`.
 
-@docs Config, defaultConfig, plug, plugger, install
+@docs Config, defaultConfig, setMsg, getMsg, toAttributes
 @docs add
 @docs clear
 @docs forward
@@ -88,18 +89,25 @@ defaultConfig =
     }
 
 
-{-| This function tells Dispatch how to convert a list of messages to a single
-message; how to _plug_ itself into your TEA component.
- -}
-plug : (Decoder (List msg) -> Decoder msg) -> Config msg -> Config msg
-plug f (Config config) =
+{-| Tell Dispatch how to convert a list of decoders into a decoder for a single message.
+-}
+setDecoder : (Decoder (List msg) -> Decoder msg) -> Config msg -> Config msg
+setDecoder f (Config config) =
   Config { config | lift = Just f }
 
 
-{-| Get the Dispatch lifting function
+{-| Tell Dispatch how to convert a list of messages into a single message. Alternative 
+to `setDecoder`. 
 -}
-plugger : Config msg -> Maybe (Decoder (List msg) -> Decoder msg)
-plugger (Config config) =
+setMsg : (List msg -> msg) -> Config msg -> Config msg
+setMsg =
+  Json.map >> setDecoder
+
+
+{-| Get the Dispatch message constructor
+-}
+getDecoder : Config msg -> Maybe (Decoder (List msg) -> Decoder msg)
+getDecoder (Config config) =
   config.lift
 
 
@@ -119,12 +127,11 @@ clear (Config config) =
     { config | decoders = [] } 
 
 
-{-| This function returns a list of `Html.Attribute` containing handlers that
-will allow for dispatching of multiple decoders from a single `Html.Event`
-Construct event handlers for the given configuration
+{-| Returns a list of `Html.Attribute` containing handlers that
+dispatch multiple decoders on a single `Html.Event`
  -}
-install : Config msg -> List (Html.Attribute msg)
-install (Config config) =
+toAttributes : Config msg -> List (Html.Attribute msg)
+toAttributes (Config config) =
   case config.lift of
     Just f ->
       List.map (onMany f) (group config.decoders)

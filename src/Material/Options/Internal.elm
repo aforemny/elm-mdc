@@ -70,7 +70,7 @@ collect1 option acc =
     Listener event options decoder ->
       { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
     Lift m ->
-      { acc | dispatch = Dispatch.plug m acc.dispatch }
+      { acc | dispatch = Dispatch.setDecoder m acc.dispatch }
     None -> acc
 
 
@@ -100,7 +100,7 @@ collect1' options acc =
       { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
     Many options -> List.foldl collect1' acc options
     Lift m ->
-      { acc | dispatch = Dispatch.plug m acc.dispatch }
+      { acc | dispatch = Dispatch.setDecoder m acc.dispatch }
     Set _ -> acc 
     None -> acc
 
@@ -121,7 +121,7 @@ addAttributes summary attrs =
        ]
     ++ attrs
     ++ summary.internal
-    ++ Dispatch.install summary.dispatch
+    ++ Dispatch.toAttributes summary.dispatch
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
