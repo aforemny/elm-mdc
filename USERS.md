@@ -7,7 +7,7 @@
 * Hydra frontend - Hydra frontend rewritten with UX in mind.
     * [GitHub repository](https://github.com/domenkozar/hydra-frontend)
     * [Live demo/site](http://hydra-frontend.domenkozar.com/)
-* Elephant-guide - A simple Webpack setup for writing Elm apps.
+* Elephant-guide - Magic: the Gathering deck tuning tool.
     * [GitHub repository](https://github.com/IwalkAlone/elephant-guide)
 * Phoenix-Elm-Chat - Elm and Phoenix Chat Client.
     * This is a chat application that we build out in episodes on the Elm and Elixir tracks for DailyDrip
