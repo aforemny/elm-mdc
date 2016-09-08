@@ -62,8 +62,8 @@ delay : Float
 delay = 150
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
-  case action of
+update msg model =
+  case msg of
     Switch k -> 
       ( { model 
         | toggles = Array.set k (get k model |> not) model.toggles
@@ -251,7 +251,7 @@ view model =
                   )
                |> List.reverse)
         ]
-    ]
+      ]
   in
     Page.body1' "Toggles" srcUrl intro references demo1 demo2
 
