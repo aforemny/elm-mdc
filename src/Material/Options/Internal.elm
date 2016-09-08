@@ -4,7 +4,7 @@ import Html exposing (Attribute)
 import Html.Attributes
 import Html.Events
 import String
-import Json.Decode as Json
+import Json.Decode as Json exposing (Decoder)
 
 import Dispatch
 import Material.Msg as Material
@@ -20,8 +20,8 @@ type Property c m
   | Internal (Html.Attribute m)
   | Many (List (Property c m))
   | Set (c -> c)
-  | Listener String (Maybe (Html.Events.Options)) (Json.Decoder m)
-  | Lift (List m -> m)
+  | Listener String (Maybe (Html.Events.Options)) (Decoder m)
+  | Lift (Decoder (List m) -> Decoder m)
   | None
 
 
@@ -144,8 +144,6 @@ type alias Input c m =
   { c | input : List (Property () m) }  
 
 
-{-| TODO
--}
 applyContainer : 
     Summary (Container c m) m 
  -> (List (Attribute m) -> a) 
@@ -153,14 +151,17 @@ applyContainer :
  -> a
 applyContainer summary ctor options = 
   apply 
-    { summary | attrs = [], internal = [], config = () } 
+    { summary 
+    | dispatch = Dispatch.clear summary.dispatch
+    , attrs = []
+    , internal = []
+    , config = () 
+    } 
     ctor
     (Many summary.config.container :: options)
     []
 
 
-{-| TODO
--}
 applyInput : 
     Summary (Input c m) m 
  -> (List (Attribute m) -> a) 
@@ -175,30 +176,24 @@ applyInput summary ctor options =
 
 
 
-cfg : (c -> c) -> Property c m
-cfg = 
+option : (c -> c) -> Property c m
+option = 
   Set
 
 
 input : List (Property () m) -> Property { a | input : List (Property () m) } m
 input =
-  let
-    set options c = { c | input = Many options :: c.input }
-  in
-    set >> Set
+    option << (\style config -> { config | input = Many style :: config.input })
 
 
 container : List (Property () m) -> Property { a | container : List (Property () m) } m
 container = 
-  let
-    set options c = { c | container = Many options :: c.container }
-  in
-    set >> Set
+  option << (\style config -> { config | container = Many style :: config.container })
 
 
 dispatch : (Material.Msg a m -> m) -> Property c m
 dispatch lift =
-  Lift (Material.Dispatch >> lift)
+  Lift (Json.map Material.Dispatch >> Json.map lift)
 
 
 {-| Inject dispatch
@@ -241,4 +236,5 @@ https://groups.google.com/forum/#!topic/elm-discuss/Q6mTrF4T7EU
 on1 : String -> (a -> b) -> a -> Property c b
 on1 event lift m = 
   Listener event Nothing (Json.map lift <| Json.succeed m)
+
 

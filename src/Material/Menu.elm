@@ -198,22 +198,22 @@ defaultItemConfig =
 -}
 divider : Options.Property (ItemConfig m) m
 divider =
-  Options.set (\config -> { config | divider = True })
+  Internal.option (\config -> { config | divider = True })
 
 
 {-| Mark item as disabled.
 -}
 disabled : Options.Property (ItemConfig m) m
 disabled =
-  Options.set (\config -> { config | enabled = False })
+  Internal.option (\config -> { config | enabled = False })
 
 
 
 {-| Handle selection of containing item 
 -}
 onSelect : m -> Options.Property (ItemConfig m) m
-onSelect msg =
-  Options.set (\config -> { config | onSelect = Just msg }) 
+onSelect =
+  Internal.option << (\msg config -> { config | onSelect = Just msg }) 
 
 
 -- ACTION, UPDATE
@@ -228,7 +228,7 @@ type Msg m
   | Tick
   | Ripple Int Ripple.Msg
   | Click Mouse.Position
-  | Key (List (Options.Summary (ItemConfig m) m)) Int
+  | Key (List (Internal.Summary (ItemConfig m) m)) Int
 
 
 isActive : Model -> Bool
@@ -414,14 +414,14 @@ type alias Property m =
 -}
 ripple : Property m
 ripple =
-  Options.set (\config -> { config | ripple = True })
+  Internal.option (\config -> { config | ripple = True })
 
 
 {-| Set the menu icon
 -}
 icon : String -> Property m
-icon name =
-  Options.set (\config -> { config | icon = name })
+icon =
+  Internal.option << (\name config -> { config | icon = name })
 
 
 {-| Menu extends from the bottom-left of the icon.
@@ -429,7 +429,7 @@ icon name =
 -}
 bottomLeft : Property m
 bottomLeft =
-  Options.set (\config -> { config | alignment = BottomLeft })
+  Internal.option (\config -> { config | alignment = BottomLeft })
 
 
 {-| Menu extends from the bottom-right of the icon.
@@ -437,7 +437,7 @@ bottomLeft =
 -}
 bottomRight : Property m
 bottomRight =
-  Options.set (\config -> { config | alignment = BottomRight })
+  Internal.option (\config -> { config | alignment = BottomRight })
 
 
 {-| Menu extends from the top-left of the icon.
@@ -445,7 +445,7 @@ bottomRight =
 -}
 topLeft : Property m
 topLeft =
-  Options.set (\config -> { config | alignment = TopLeft })
+  Internal.option (\config -> { config | alignment = TopLeft })
 
 
 {-| Menu extends from the rop-right of the icon.
@@ -453,7 +453,7 @@ topLeft =
 -}
 topRight : Property m
 topRight =
-  Options.set (\config -> { config | alignment = TopRight })
+  Internal.option (\config -> { config | alignment = TopRight })
 
 
 
@@ -523,7 +523,7 @@ view : (Msg m -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
 view lift model properties items =
   let
     summary = 
-      Options.collect defaultConfig properties
+      Internal.collect defaultConfig properties
       
     config = 
       summary.config
@@ -539,9 +539,9 @@ view lift model properties items =
       List.length items
 
     itemSummaries =
-      List.map (Options.collect defaultItemConfig << .options) items
+      List.map (Internal.collect defaultItemConfig << .options) items
   in
-    Options.apply summary div
+    Internal.apply summary div
       ( css "position" "relative" :: properties)
       []
       [ styled button
@@ -613,7 +613,7 @@ delay alignment height offsetTop offsetHeight =
 view1
   : (Msg m -> m) -> Config -> Model
   -> Float -> Float
-  -> Int -> Options.Summary (ItemConfig m) m -> Item m
+  -> Int -> Internal.Summary (ItemConfig m) m -> Item m
   -> Html m
 view1 lift config model offsetTop offsetHeight index summary item =
   let
@@ -627,7 +627,7 @@ view1 lift config model offsetTop offsetHeight index summary item =
     hasRipple =
       config.ripple && canSelect
   in
-    Options.apply summary li
+    Internal.apply summary li
       [ cs "mdl-menu__item"
       , cs "mdl-js-ripple-effect" `when` config.ripple
       , cs "mdl-menu__item--full-bleed-divider" `when` summary.config.divider
@@ -640,33 +640,23 @@ view1 lift config model offsetTop offsetHeight index summary item =
       -- Not in MDL, but convenient to align icons etc. 
       , css "display" "flex"
       , css "align-items" "center"
-      ]
-      ( List.filterMap identity 
-          [ if canSelect then 
-              Html.Events.onClick 
-                (Select index summary.config.onSelect |> lift) 
-              |> Just
-            else
-              Nothing
-          , if not summary.config.enabled then 
-               Html.Attributes.attribute "disabled" "disabled" |> Just
-            else
-               Nothing
-          , Html.Attributes.property "tabindex" (string "-1") |> Just
-          ]
-        ++
-        ( if hasRipple then
-            [ Ripple.downOn' ripple "mousedown"
-            , Ripple.downOn' ripple "touchstart"
-            , Ripple.upOn' ripple "mouseup"
-            , Ripple.upOn' ripple "mouseleave"
-            , Ripple.upOn' ripple "touchend"
-            , Ripple.upOn' ripple "blur"
+      , Options.onClick (Select index summary.config.onSelect |> lift) 
+          `when` canSelect
+      , Internal.attribute <| Html.Attributes.disabled (not summary.config.enabled)
+      , Internal.attribute <| Html.Attributes.property "tabindex" (string "-1") 
+      , if hasRipple then 
+          Options.many 
+            [ Internal.attribute <| Ripple.downOn' ripple "mousedown"
+            , Internal.attribute <| Ripple.downOn' ripple "touchstart"
+            , Internal.attribute <| Ripple.upOn' ripple "mouseup"
+            , Internal.attribute <| Ripple.upOn' ripple "mouseleave"
+            , Internal.attribute <| Ripple.upOn' ripple "touchend"
+            , Internal.attribute <| Ripple.upOn' ripple "blur"
             ] 
-          else
-            []
-        )
-      )
+        else 
+          Options.nop
+      ]
+      []
       ( if hasRipple then
           ( (++)
             item.html

@@ -15,7 +15,7 @@ module Material.Options exposing
   , onInput
   , on, on1
   , onWithOptions
-  , dispatch, dispatch'
+  , dispatch 
   )
 
  
@@ -24,28 +24,39 @@ module Material.Options exposing
 
 Here is a standard use of an elm-mdl Textfield: 
 
+    import Material.Textfield as Textfield
+    import Material.Options as Options
+
     Textfield.render MDL [0] model.mdl
       [ Textfield.floatingLabel
       , Textfield.label "name"
-      , css "width" "96px"
-      , cs "my-name-textfield"
+      , Textfield.value model.value
+      , Options.css "width" "96px"
+      , Options.cs "my-textfield-class"
+      , Options.onInput MyReceiveInputMsg
       ]
+      []
 
 The above code renders a textfield, setting the optional properties
 `floatingLabel` and `label "name"` on the textfield; as well as adding
 additional (CSS) styling `width: 96px;` and the HTML class `my-name-textfield`. 
 
-This module defines the type `Property c m` of such optional properties, the
-elements of the last argument in the above call to `Textfield.render`.
-Individual components, such as Textfield usually instantiate the `c` to avoid
-inadvertently applying, say, a Textfield property to a Button. 
+Some optional properties apply to all components and some are
+particular to a specific component. In the above example
+`Textfield.floatingLabel`, `Textfield.label`, and `Textfield.value` are
+specific to `Textfield`, whereas `Options.css`, `Options.cs`, and
+`Options.onInput` apply to any component. 
 
-Some optional properties apply to all components, see the `Typography`,
-`Elevation`, `Badge`, and `Color` modules. Such universally applicable
-optional properties can _also_ be applied to standard `Html` elements 
-such as `Html.div`; see `style` et. al. below. This is convenient, e.g., for
-applying elm-mdl typography or color to standard elements. 
+This module contains some very common universally applicable optional
+properties such as `css`, `cs`, and `id`. In addition, some elm-mdl modules
+expose such options, e.g., `Typography`, `Elevation`, `Badge`, and `Color`.
+Universally applicable optional properties can _also_ be applied to standard
+`Html` elements such as `Html.div`; see `style` et. al. below. This is
+convenient, e.g., for applying elm-mdl typography or color to standard
+elements. 
 
+
+# Optional property
 
 @docs Property
 
@@ -61,9 +72,12 @@ applying elm-mdl typography or color to standard elements.
 
 ## Attributes
 @docs attribute, id
-@docs center, scrim, disabled
+@docs disabled
 
-# Events
+## Helpers
+@docs center, scrim
+
+# Event handlers
 @docs onClick, onDoubleClick,
       onMouseDown, onMouseUp,
       onMouseEnter, onMouseLeave,
@@ -76,20 +90,32 @@ applying elm-mdl typography or color to standard elements.
 @docs on, on1
 @docs onWithOptions
 
+# Advanced usage
 
-## Event internal
-@docs dispatch, dispatch'
+## Option distribution 
+Some components (notably textfields & toggles) are implemented as `<input>`
+elements sitting inside a container `<div>` alongside various helper elements.
+Options to such components are distributed between input and container elements 
+as follows:
 
+| Option               | Element   |
+| -------------------- | --------- |
+| `Options.id`         | input     |
+| `Options.css`        | container |
+| `Options.cs`         | container |
+| `Options.attributes` | input     |
+| `Options.on*`        | input     |
 
-# Option distribution 
-Some components emulate HTML `<input>` elements, usually be nesting an actual
-`<input>` element inside additional markup. Options for such components are
-distributed between the container and input element. The `input` option
-guarantees that its argument options are applied to the `input` element. 
+If you need an option to apply to the other element, use either `Options.input
+options` to force `options` to be applied to the input element; or
+`Options.container options` to force `options` to be applied to the container
+element. 
 
-See the `Textfield` documentation and demo for discussion and example.
 @docs input, container
 
+## Multiple dispatch
+
+@docs dispatch
 -}
 
 
@@ -100,19 +126,36 @@ import Html.Events
 import Json.Decode as Json 
 
 import Material.Options.Internal as Internal exposing (..)
-import Material.Msg as Msg
 
 
 -- PROPERTIES
 
 
-{-| Type of elm-mdl properties. (Do not confuse these with Html properties or
-`Html.Attributes.property`.) The type variable `c` identifies the component the
-property is for. You never have to set it yourself. The type variable `d` by
-the type of your `Msg`s; you should set this yourself. 
+{-| 
+Type of elm-mdl optional properties. (Do not confuse these with Html properties
+or `Html.Attributes.property`.) 
+
+The type variable `c` identifies the component the property is for. You never
+have to set it yourself. The type variable `m` is the type of your messages
+carried by the optional property, if applicable. You should set this yourself. 
+
+The elements of the penultimate argument in the above call to
+`Textfield.render` has this type, specifically:
+
+    List (Property (Textfield.Config) Msg)
 -}
 type alias Property c m = 
   Internal.Property c m 
+
+
+{-| Universally applicable elm-mdl properties, e.g., `Options.css`,
+`Typography.*`, or `Options.onClick`, may be applied to ordinary `Html` values
+such as `Html.h4` using `styled` below. 
+-}
+type alias Style m = 
+  Property () m
+
+
 
 {-| Apply properties to a standard Html element.
 -}
@@ -209,7 +252,7 @@ nop : Property c m
 nop = None
 
 
-{-| HTML data-* attributes. 
+{-| HTML data-* attributes. Prefix "data-" is added automatically. 
 -}
 data : String -> String -> Property c m
 data key val = 
@@ -248,21 +291,14 @@ stylesheet css =
 -- STYLE
 
 
-{-| Options for situations where there is no configuration, i.e., 
-styling a `div`.
--}
-type alias Style m = 
-  Property () m
-
-
 {-| Install arbitrary `Html.Attribute`.
 
     Options.div
       [ Options.attribute <| Html.Attributes.title "title" ]
       [ ... ]
 
-**NOTE** Do not install event handlers using `Options.attribute`.
-Instead use `Options.on` and the variants.
+**NB!** Do not install event handlers using `Options.attribute`.
+Instead use `Options.on` and variants. 
 -}
 attribute : Html.Attribute m -> Property c m
 attribute =
@@ -285,7 +321,9 @@ depend on the underlying image. `0.6` works well often.
 -}
 scrim : Float -> Property c m
 scrim opacity = 
-  css "background" <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " ++ toString opacity ++ "))" 
+  css "background" 
+    <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " 
+         ++ toString opacity ++ "))" 
 
 
 {-| Sets the id attribute
@@ -383,8 +421,8 @@ on any input event.
 Check out [targetChecked](#targetChecked) for more details on how this works.
 -}
 onCheck : (Bool -> msg) -> Property c msg
-onCheck tagger =
-  on "change" (Json.map tagger Html.Events.targetChecked)
+onCheck =
+  (flip Json.map Html.Events.targetChecked) >> on "change"
 
 
 {-|-}
@@ -423,40 +461,47 @@ onWithOptions evt options =
 
 -- DISPATCH
 
-{-| Add a lifting function that is **required** for multi event dispatch.
-To enable multi event dispatch with Mdl:
 
-    Chip.button
-      [ Options.dispatch Mdl
-      , Options.onClick Click
-      , Options.onClick AnotherClick
-      ]
-      [ ... ]
- -}
-dispatch : (Msg.Msg a m -> m) -> Property c m
-dispatch lift =
-  Lift (Msg.Dispatch >> lift)
+{-| Plain-TEA multiple-event dispatch. 
+
+NB! You are _extremely_ unlikely to need this. 
+
+You need this optional property in exactly these circumstances: 
+1. You are using an elm-mdl component which has a `render` function.
+2. You are not using this `render` function, instead calling `view`.
+3. You installed an `on*` handler on the component, but that handler does not
+seem to take effect.  
+
+What's happening in this case is that elm-mdl has an internal handler for the
+same event as your custom handler; e.g., you install `onBlur` on
+`Textfield`, but `Textfield`'s has an internal `onBlur` handler.
+
+In this case you need to tell the component how to dispatch multiple messages
+(one for you, one for itself) in response to a single DOM event. You do so by
+providing a means of folding a list of messages into a single message. (See
+the [Dispatch](TODO) library for one way to define such a function.)
+
+The `render` function does all this automatically. If you are calling `render`,
+you do not need this property. 
+
+Example use:
 
 
-{-| Add a lifting function that is **required** for multi event dispatch.
-To enable multi event dispatch for anything.
-
-Add a message
-
-    type Msg
-      = ...
-      | Dispatch (Dispatch.Msg Msg)
+    type Msg = 
       ...
+      | Textfield (Textfield.Msg)
+      | MyBlurMsg 
+      | Batch (List Msg)
 
-Create an element with Options.styled
+    ...
 
-    Options.styled Html.button
-      [ Options.dispatch' Dispatch
-      , Options.onClick Click
-      , Options.onClick AnotherClick
-      ]
-      [ ... ]
+      Textfield.view Textfield model.textfield 
+        [ Options.dispatch Batch
+        , Options.onBlur MyBlurMsg
+        ]
+        [ ]
  -}
-dispatch' : (List m -> m) -> Property c m
-dispatch' =
-  Lift
+dispatch : (List m -> m) -> Property c m
+dispatch =
+  Json.map >> Lift
+

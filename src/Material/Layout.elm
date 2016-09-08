@@ -378,7 +378,7 @@ type alias Property m =
 -}
 fixedHeader : Property m
 fixedHeader =
-  Options.set (\config -> { config | fixedHeader = True })
+  Internal.option (\config -> { config | fixedHeader = True })
 
 
 
@@ -386,29 +386,30 @@ fixedHeader =
 -}
 fixedDrawer : Property m
 fixedDrawer =
-  Options.set (\config -> { config | fixedDrawer = True })
+  Internal.option (\config -> { config | fixedDrawer = True })
 
 
 {-| Tabs are spread out to consume available space and do not scroll horisontally.
 -}
 fixedTabs : Property m
 fixedTabs =
-  Options.set (\config -> { config | fixedTabs = True })
+  Internal.option (\config -> { config | fixedTabs = True })
 
 
 {-| Make tabs ripple when clicked. 
 -}
 rippleTabs : Property m
 rippleTabs =
-  Options.set (\config -> { config | rippleTabs = True })
+  Internal.option (\config -> { config | rippleTabs = True })
 
 
 {-| Header behaves as "Waterfall" header: On scroll, the top (argument `True`) or
 the bottom (argument `False`) of the header disappears. 
 -}
 waterfall : Bool -> Property m
-waterfall b =
-  Options.set (\config -> { config | mode = Waterfall b })
+waterfall =
+  Internal.option << 
+    (\b config -> { config | mode = Waterfall b })
 
 
 {-| Header behaves as "Seamed" header: it does not cast shadow, is permanently
@@ -416,26 +417,27 @@ affixed to the top of the screen.
 -}
 seamed : Property m
 seamed = 
-  Options.set (\config -> { config | mode = Seamed })
+  Internal.option (\config -> { config | mode = Seamed })
 
 {-| Header is transparent: It draws on top of the layout's background
 -}
 transparentHeader : Property m
 transparentHeader =
-  Options.set (\config -> { config | transparentHeader = True })
+  Internal.option (\config -> { config | transparentHeader = True })
 
 
 {-| Header scrolls with contents. 
 -}
 scrolling : Property m
 scrolling = 
-  Options.set (\config -> { config | mode = Scrolling })
+  Internal.option (\config -> { config | mode = Scrolling })
 
 {-| Set the selected tab. 
 -}
 selectedTab : Int -> Property m
-selectedTab k =
-  Options.set (\config -> { config | selectedTab = k })
+selectedTab =
+  Internal.option << 
+    (\k config -> { config | selectedTab = k })
 
 
 {-| Set this property if tabs are missing the "more tabs on the right" indicator
@@ -446,14 +448,14 @@ automatically.)
 -}
 moreTabs : Property m
 moreTabs =
-  Options.set (\config -> { config | moreTabs = True })
+  Internal.option (\config -> { config | moreTabs = True })
 
 
 {-| Receieve notification when tab `k` is selected.
 -}
 onSelectTab : (Int -> m) -> Property m
-onSelectTab f = 
-  Options.set (\config -> { config | onSelectTab = Just (f >> Events.onClick) })
+onSelectTab = 
+  Internal.option << (\f config -> { config | onSelectTab = Just (f >> Events.onClick) })
 
 
 -- AUXILIARY VIEWS
@@ -468,7 +470,7 @@ spacer = div [class "mdl-layout-spacer"] []
 
 {-| Title in header row or drawer.
 -}
-title : List (Property m) -> List (Html m) -> Html m
+title : List (Options.Style m) -> List (Html m) -> Html m
 title styles = 
   Options.span (cs "mdl-layout__title" :: styles) 
 
@@ -480,23 +482,16 @@ navigation styles contents =
   nav [class "mdl-navigation"] contents
 
 
-type LinkProp = LinkProp
-
-
-type alias LinkProperty m = 
-  Options.Property LinkProp m
-
-
-{-| href for Links.
+{-| href attribute for links
 -}
-href : String -> LinkProperty m
-href = 
-  Html.Attributes.href >> Internal.attribute
+href : String -> Options.Style m 
+href url = 
+  Options.attribute <| Html.Attributes.href url
 
 
 {-| Link.
 -}
-link : List (LinkProperty m) -> List (Html m) -> Html m
+link : List (Options.Style m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a 
     (cs "mdl-navigation__link" 
@@ -507,7 +502,7 @@ link styles contents =
 
 {-| Header row. 
 -}
-row : List (Property m) -> List (Html m) -> Html m
+row : List (Options.Style m) -> List (Html m) -> Html m
 row styles = 
   Options.div (cs "mdl-layout__header-row" :: styles) 
 
@@ -765,7 +760,7 @@ view : (Msg -> m) -> Model -> List (Property m) -> Contents m -> Html m
 view lift model options { drawer, header, tabs, main } =
   let
     summary = 
-      Options.collect defaultConfig options
+      Internal.collect defaultConfig options
 
     config = 
       summary.config 

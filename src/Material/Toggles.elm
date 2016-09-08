@@ -132,7 +132,7 @@ type alias Property m =
 -}
 ripple : Property m 
 ripple = 
-  Internal.cfg (\options -> { options | ripple = True })
+  Internal.option (\options -> { options | ripple = True })
 
 
 {-| Set toggle to "disabled".
@@ -146,7 +146,7 @@ disabled =
 -}
 value : Bool -> Property m
 value = 
-  Internal.cfg << (\b options -> { options | value = b }) 
+  Internal.option << (\b options -> { options | value = b }) 
 
 
 {-| Set radio-button group id. Only one button in the same group can be checked

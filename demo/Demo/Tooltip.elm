@@ -196,7 +196,7 @@ view model  =
         , Tooltip.render Mdl [4] model.mdl
             [ Tooltip.large
             , Tooltip.top
-            , Tooltip.container Html.span 
+            , Tooltip.element Html.span 
             ]
               [ img [src "assets/images/elm.png", width 24, height 24] []
               , text " Elm"

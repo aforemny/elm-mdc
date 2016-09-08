@@ -46,6 +46,7 @@ The following options have effect only when applied in the header row.
 import Html exposing (Html, Attribute)
 
 import Material.Options as Options exposing (Property, cs, nop)
+import Material.Options.Internal as Internal
 
 
 {-| Main table constructor. Example use: 
@@ -73,17 +74,11 @@ table
   -> List (Html m)
   -> Html m
 table options nodes =
-  let
-    summary =
-      Options.collect {} options
-  in
-    Options.apply summary Html.table
-    [ cs "mdl-data-table"
-    , cs "mdl-js-data-table"
-    , cs "is-upgraded"
-    ]
-    [
-    ]
+  Options.styled Html.table 
+    (  cs "mdl-data-table"
+    :: cs "mdl-js-data-table"
+    :: cs "is-upgraded"
+    :: options)
     nodes
 
 {-| Define table header row(s) 
@@ -92,9 +87,9 @@ thead : List (Property {} m) -> List (Html m) -> Html m
 thead options html =
   let
     summary =
-      Options.collect {} options
+      Internal.collect {} options
   in
-    Options.apply summary Html.thead [] [] html
+    Internal.apply summary Html.thead [] [] html
 
 
 {-| Define table body
@@ -103,9 +98,9 @@ tbody : List (Property {} m) -> List (Html m) -> Html m
 tbody options html =
   let
     summary =
-      Options.collect {} options
+      Internal.collect {} options
   in
-    Options.apply summary Html.tbody [] [] html
+    Internal.apply summary Html.tbody [] [] html
 
 {-| Define table footer row(s)
 -}
@@ -113,9 +108,9 @@ tfoot : List (Property {} m) -> List (Html m) -> Html m
 tfoot options html =
   let
     summary =
-      Options.collect {} options
+      Internal.collect {} options
   in
-    Options.apply summary Html.tfoot [] [] html
+    Internal.apply summary Html.tfoot [] [] html
 
 
 -- Row
@@ -140,9 +135,9 @@ tr : List (Property Row m) -> List (Html m) -> Html m
 tr options html =
   let
     ({ config } as summary) =
-      Options.collect defaultRow options
+      Internal.collect defaultRow options
   in
-    Options.apply summary Html.tr
+    Internal.apply summary Html.tr
     [ if config.selected then cs "is-selected" else nop
     ]
     [
@@ -154,14 +149,8 @@ tr options html =
 -}
 selected : Property { a | selected : Bool } m
 selected =
-  Options.set <| \self -> { self | selected = True }
+  Internal.option <| \self -> { self | selected = True }
 
-
-{-
-select : Bool -> Property { a | selected : Bool } m
-select value =
-  Options.set <| \self -> { self | selected = value }
--}
 
 -- Header
 
@@ -191,9 +180,9 @@ th : List (Property (Header) m) -> List (Html m) -> Html m
 th options html =
   let
     ({ config } as summary) =
-      Options.collect defaultHeader options
+      Internal.collect defaultHeader options
   in
-    Options.apply summary Html.th
+    Internal.apply summary Html.th
     [ if config.numeric then nop else cs "mdl-data-table__cell--non-numeric"
     , case config.sorted of
         Just Ascending -> cs "mdl-data-table__header--sorted-ascending"
@@ -208,7 +197,7 @@ th options html =
 -}
 numeric : Property { a | numeric : Bool } m
 numeric =
-  Options.set <| \self -> { self | numeric = True }
+  Internal.option <| \self -> { self | numeric = True }
 
 
 {-| Containing column should be sorted ascendingly
@@ -229,7 +218,7 @@ descending =
 -}
 sorted : Order -> Property { a | sorted : Maybe Order } m
 sorted order =
-  Options.set <| \self -> { self | sorted = Just order }
+  Internal.option <| \self -> { self | sorted = Just order }
 
 
 {-| Possible orderings 
@@ -263,9 +252,9 @@ td : List (Property Cell m) -> List (Html m) -> Html m
 td options html =
   let
     ({ config } as summary) =
-      Options.collect defaultCell options
+      Internal.collect defaultCell options
   in
-    Options.apply summary Html.td
+    Internal.apply summary Html.td
     [ if config.numeric then nop else cs "mdl-data-table__cell--non-numeric"
     ]
     [

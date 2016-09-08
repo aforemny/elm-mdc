@@ -46,22 +46,6 @@ for a live demo.
 @docs disabled, rows, cols
 @docs autofocus, maxlength
 
-## Advanced use
-Textfields are implemented as `<input>` elements sitting inside a container
-`<div>`, along with various helper elements. Options to Textfield are
-distributed between the input and container elements as follows:
-
- - `Options.id` : container
- - `Options.css` : container
- - `Options.cs` : container
- - `Options.attributes`: input
- - `Options.on*`: input
-
-You can still apply styling in violation of these rules by using
-`Options.input options` to force `options` to be applied to the input elements;
-and `Options.container options` to force `options` to be applied to the
-container element. 
-
 # Type 
 @docs password, textarea, text'
 
@@ -103,7 +87,7 @@ type alias Config m =
   , kind : Kind
   , rows : Maybe Int
   , cols : Maybe Int
-  , inner : List (Options.Style m)  -- TODO: Rename -> input
+  , input : List (Options.Style m)  
   , container : List (Options.Style m)
   }
 
@@ -118,7 +102,7 @@ defaultConfig =
   , kind = Text
   , rows = Nothing
   , cols = Nothing
-  , inner = [] 
+  , input = [] 
   , container = [] 
   }
 
@@ -132,54 +116,54 @@ type alias Property m =
 {-| Label of the textfield
 -}
 label : String -> Property m 
-label str = 
-  Options.set 
-    (\config -> { config | labelText = Just str })
+label = 
+  Internal.option <<
+    (\str config -> { config | labelText = Just str })
 
 
 {-| Label of textfield animates away from the input area on input
 -}
 floatingLabel : Property m
 floatingLabel =
-  Options.set
+  Internal.option 
     (\config -> { config | labelFloat = True })
 
 
 {-| Error message
 -}
 error : String -> Property m
-error str = 
-  Options.set
-    (\config -> { config | error = Just str })
+error = 
+  Internal.option <<
+    (\str config -> { config | error = Just str })
 
 
 {-| Current value of the textfield. 
 -}
 value : String -> Property m
-value str = 
-  Options.set
-    (\config -> { config | value = Just str })
+value =
+  Internal.option <<
+    (\str config -> { config | value = Just str })
 
 
 {-| Specifies that the input should automatically get focus when the page loads
 -}
 autofocus : Property m
 autofocus =
-  Options.input [ Options.attribute <| Html.Attributes.autofocus True ]
+  Options.attribute <| Html.Attributes.autofocus True
 
 
 {-| Specifies the maximum number of characters allowed in the input
 -}
 maxlength : Int -> Property m
 maxlength k =
-  Options.input [ Options.attribute <| Html.Attributes.maxlength k ]
+  Options.attribute <| Html.Attributes.maxlength k
 
 
 {-| Disable the textfield input
 -}
 disabled : Property m
 disabled = 
-  Options.set
+  Internal.option
     (\config -> { config | disabled = True })
 
 
@@ -194,7 +178,7 @@ input =
 -}
 password : Property m 
 password =
-  Options.set
+  Internal.option
     (\config -> { config | kind = Password })
 
 
@@ -202,7 +186,7 @@ password =
 -}
 textarea : Property m
 textarea =
-  Options.set
+  Internal.option
     (\config -> { config | kind = Textarea })
 
 
@@ -210,7 +194,7 @@ textarea =
 -}
 text' : Property m
 text' =
-  Options.set
+  Internal.option
     (\config -> { config | kind = Text })
 
 
@@ -293,14 +277,14 @@ view : (Msg -> m) -> Model -> List (Property m) -> x -> Html m
 view lift model options _ =
   let
     ({ config } as summary) = 
-      Options.collect defaultConfig options
+      Internal.collect defaultConfig options
 
     inner = 
       case config.kind of 
         Textarea -> Html.textarea
         _ -> Html.input
   in
-    Options.applyContainer summary div
+    Internal.applyContainer summary div
       [ cs "mdl-textfield"
       , cs "mdl-js-textfield"
       , cs "is-upgraded"
@@ -310,7 +294,7 @@ view lift model options _ =
       , cs "is-focused" `when` (model.isFocused && not config.disabled)
       , cs "is-disabled" `when` config.disabled 
       ]
-      [ Options.applyInput summary inner 
+      [ Internal.applyInput summary inner 
           [ cs "mdl-textfield__input"
           , css "outline" "none"
           , Internal.on1 "focus" lift Focus
