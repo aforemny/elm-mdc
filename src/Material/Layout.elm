@@ -133,7 +133,7 @@ import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd
 import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop, css, when, styled)
-import Material.Options.Internal exposing (attribute)
+import Material.Options.Internal as Internal
 
 import DOM
 
@@ -490,14 +490,14 @@ type alias LinkProperty m =
 -}
 onClick : m -> LinkProperty m 
 onClick = 
-  Events.onClick >> attribute
+  Events.onClick >> Internal.attribute
 
 
 {-| href for Links.
 -}
 href : String -> LinkProperty m
 href = 
-  Html.Attributes.href >> attribute
+  Html.Attributes.href >> Internal.attribute
 
 
 {-| Link.
@@ -506,7 +506,7 @@ link : List (LinkProperty m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a 
     (cs "mdl-navigation__link" 
-     :: attribute (Html.Attributes.attribute "tabindex" "1")
+     :: Internal.attribute (Html.Attributes.attribute "tabindex" "1")
      :: styles) 
     contents
 
@@ -582,7 +582,7 @@ tabsView lift config model (tabs, tabStyles) =
               , Html.Attributes.attribute 
                   "onclick" 
                   ("document.getElementsByClassName('mdl-layout__tab-bar')[0].scrollLeft += " ++ toString offset)
-                |> attribute
+                |> Internal.attribute
               ]
           ]
     in
@@ -602,7 +602,7 @@ tabsView lift config model (tabs, tabStyles) =
                 nop
             , if config.mode == Standard then cs "is-casting-shadow" else nop
             , Options.many tabStyles
-            , attribute <| 
+            , Internal.attribute <| 
                 on "scroll" 
                   (DOM.target 
                      (Decoder.object3 
@@ -663,11 +663,11 @@ headerView lift config model (drawerButton, rows, tabs) =
       , cs "is-compact" `when` model.isCompact
       , mode
       , cs "mdl-layout__header--transparent" `when` config.transparentHeader
-      , Options.attribute <|
+      , Internal.attribute <|
           Events.onClick 
             (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
               |> lift)
-      , Options.attribute <| 
+      , Internal.attribute <|
           Events.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
       ]
       (List.concatMap (\x -> x)
@@ -859,7 +859,7 @@ view lift model options { drawer, header, tabs, main } =
             , css "overflow-x" "visible" `when` (config.mode == Scrolling && config.fixedHeader)
             , css "overflow" "visible"   `when` (config.mode == Scrolling && config.fixedHeader)
               {- Above three lines fixes upstream bug #4180. -}
-            , (on "scroll" >> attribute)
+            , (on "scroll" >> Internal.attribute)
                  (Decoder.map 
                    (ScrollPane config.fixedHeader >> lift) 
                    (DOM.target DOM.scrollTop))

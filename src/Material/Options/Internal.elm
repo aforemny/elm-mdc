@@ -10,6 +10,7 @@ type Property c m
   = Class String
   | CSS (String, String)
   | Attribute (Html.Attribute m)
+  | Internal (Html.Attribute m)
   | Many (List (Property c m))
   | Set (c -> c)
   | None
@@ -21,8 +22,4 @@ So we hide it away here.
 -}
 attribute : Html.Attribute m -> Property c m 
 attribute =
-  Attribute
-
-
-
-
+  Internal
