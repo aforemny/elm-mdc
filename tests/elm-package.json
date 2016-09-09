@@ -1,0 +1,26 @@
+{
+    "version": "1.0.0",
+    "summary": "Test project for Elm-mdl",
+    "repository": "https://github.com/debois/elm-mdl.git",
+    "license": "Apache License, version 2.0",
+    "source-directories": [
+        ".",
+        "../examples",
+        "../demo",
+        "../src"
+        ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "4.0.0 <= v < 5.0.0",
+        "elm-community/elm-test": "2.1.0 <= v < 3.0.0",
+        "rtfeldman/node-test-runner": "2.0.0 <= v < 3.0.0",
+        "debois/elm-dom": "1.2.0 <= v < 2.0.0",
+        "debois/elm-parts": "4.0.0 <= v < 5.0.0",
+        "elm-lang/html": "1.1.0 <= v < 2.0.0",
+        "elm-lang/mouse": "1.0.0 <= v < 2.0.0",
+        "elm-lang/window": "1.0.0 <= v < 2.0.0",
+        "elm-lang/navigation": "1.0.0 <= v < 2.0.0",
+        "evancz/elm-markdown": "3.0.0 <= v < 4.0.0",
+        "rgrempel/elm-route-url": "2.0.0 <= v < 3.0.0"    },
+    "elm-version": "0.17.1 <= v < 0.18.0"
+}
