@@ -1,6 +1,7 @@
 module Demo.Textfields exposing (model, Model, update, view, Msg)
 
 import Html exposing (..)
+import Html.Attributes
 import Platform.Cmd exposing (Cmd)
 import Regex
 import Json.Decode as Decoder
@@ -221,6 +222,22 @@ textfields model =
         [ Textfield.label "Enter password"
         , Textfield.floatingLabel
         , Textfield.password
+        ]
+       """
+    )
+  , ( "Expandable textfield"
+    , Textfield.render Mdl [11] model.mdl
+        [ Textfield.label "Expandable"
+        , Textfield.floatingLabel
+        , Textfield.expandable "id-of-expandable-1"
+        , Textfield.expandableIcon "search"
+        ]
+    , """
+      Textfield.render Mdl [11] model.mdl
+        [ Textfield.label "Expandable"
+        , Textfield.floatingLabel
+        , Textfield.expandable "id-of-expandable-1"
+        , Textfield.expandableIcon "search"
         ]
        """
     )
