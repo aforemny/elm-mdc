@@ -41,4 +41,5 @@ while True:
         print '# Git commit message warnings:\nThese are guidelines to help us improve commit messages.'
         for error in errors:
             print '{}'.format(error)
+        print 'You can run <git commit --amend> to fix this message.'
     break
