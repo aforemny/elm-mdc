@@ -2,6 +2,7 @@ module Demo.Lists exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+import Html.Events 
 import Set exposing (Set)
 import String
 
@@ -27,6 +28,7 @@ import Demo.Code as Code
 type alias Model =
     { mdl : Material.Model
     , toggles : Set Int
+    , str : String
     }
 
 
@@ -34,6 +36,7 @@ model : Model
 model =
     { mdl = Material.model
     , toggles = Set.fromList [1, 9, 10]
+    , str = ""
     }
 
 
@@ -44,6 +47,7 @@ model =
 type Msg
     = ListsMsg
     | Flip Int
+    | Click String
     | Mdl (Material.Msg Msg)
 
 
@@ -59,6 +63,8 @@ update action model =
           else
             ( { model | toggles = Set.insert k model.toggles }, Cmd.none )
 
+        Click str -> 
+            ( { model | str = str }, Cmd.none )
 
         Mdl action' ->
             Material.update action' model
@@ -87,6 +93,68 @@ basic model =
     , Lists.li [] [ Lists.content [] [ text "Lisp" ] ]
     ]
   """
+
+click : Model -> (Html Msg, String)
+click model =
+  div 
+    [] 
+    [ Lists.ul [ css "margin" "0", css "padding" "0" ]
+        [ Lists.li [] 
+            [ Lists.content 
+                [ Options.attribute <| Html.Events.onClick (Click "Elm") ] 
+                [ text "Elm" ] 
+            ]
+        , Lists.li [] 
+            [ Lists.content 
+                [ Options.attribute <| Html.Events.onClick (Click "F#") ] 
+                [ text "F#" ] 
+            ]
+        , Lists.li [] 
+            [ Lists.content 
+                [ Options.attribute <| Html.Events.onClick (Click "Lisp") ] 
+                [ text "Lisp" ] 
+            ]
+        ]
+    , p [] 
+        [ text <| "Try clicking a list item above. " ++ 
+            if model.str /= "" then 
+              "You chose '" ++ model.str ++ "'." 
+            else 
+              "" 
+        ]
+    ]
+  |> withCode """
+ div 
+    [] 
+    [ Lists.ul []
+        [ Lists.li [] 
+            [ Lists.content 
+                [ Options.attribute <| Html.Events.onClick (Click "Elm") ] 
+                [ text "Elm" ] 
+            ]
+        , Lists.li [] 
+            [ Lists.content 
+                [ Options.attribute <| Html.Events.onClick (Click "F#") ] 
+                [ text "F#" ] 
+            ]
+        , Lists.li [] 
+            [ Lists.content 
+                [ Options.attribute <| Html.Events.onClick (Click "Lisp") ] 
+                [ text "Lisp" ] 
+            ]
+        ]
+    , p [] 
+        [ text <| "Try clicking a list item above. " ++ 
+            if model.str /= "" then 
+              "You chose '" ++ model.str ++ "'." 
+            else 
+              "" 
+        ]
+    ]
+  """
+
+
+
 
 
 icons : a -> ( Html b, String )
@@ -720,6 +788,7 @@ view model =
                 , (,) "List with secondary action toggles" secondaryAction2
                 , (,) "List with subtitles" subtitle
                 , (,) "List with body" body
+                , (,) "List with actions" click
                 ])
           ]
       ]

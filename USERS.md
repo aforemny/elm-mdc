@@ -1,13 +1,13 @@
 # Projects using elm-mdl
 
-> This list is intended to show the general usage of elm-mdl, providing a reference of implementations and also better documentation on how elm-mdl is being used in various ways.
-
-> Do you know any projects / applications that should be added here? Submit an issue or a pull request.
+Below is a list of projects using `elm-mdl`. [Submit a
+PR](https://github.com/debois/elm-mdl/edit/v7/USERS.md) to have yours added to
+the list :)
 
 * Hydra frontend - Hydra frontend rewritten with UX in mind.
     * [GitHub repository](https://github.com/domenkozar/hydra-frontend)
     * [Live demo/site](http://hydra-frontend.domenkozar.com/)
-* Elephant-guide - A simple Webpack setup for writing Elm apps.
+* Elephant-guide - Magic: the Gathering deck tuning tool.
     * [GitHub repository](https://github.com/IwalkAlone/elephant-guide)
 * Phoenix-Elm-Chat - Elm and Phoenix Chat Client.
     * This is a chat application that we build out in episodes on the Elm and Elixir tracks for DailyDrip
@@ -16,7 +16,7 @@
     * [Visit DailyDrip to learn more](https://www.dailydrip.com/)
 * Bloggero-elm-mdl - Bloggero -- engine for static blogs with single page interface.
     * [GitHub repository](https://github.com/easimonenko/bloggero-elm-mdl)
-* Billbored - A billboard to post and share shit with ur friends.
+* Billbored - A billboard to post and share with your friends.
     * [GitHub repository](https://github.com/puhrez/billbored)
 * Calliope - Experimental Elm / Electron App, embedding ACE Editor.
     * [GitHub repository](https://github.com/RobertWalter83/calliope)
@@ -41,10 +41,11 @@
 *  Elm-SPA-Template - a template for a single page app using elm-mdl
     * [GitHub repository](https://github.com/id3as/elm-spa-template)
     * [Live demo/site](http://id3as.github.io/elm-spa.html)
-
-
-
-*Disclaimer - elm-mdl does not endorse or suggest that these projects are "best practice". They are only listed here as a reference.*
+* Offtie.com - Project allows to save urls to read later without data connection or in AirPlane Mode.
+    * [Bitbucket repository](https://bitbucket.org/gladimdim/offtieweb/src)
+    * [Live site](https://offtie.com/)
+* Time Tracker - An example Single Page Application in Elm, using elm-mdl for the UI, with a Phoenix backend.
+    * [GitHub repository](https://github.com/knewter/time-tracker)
 
 ### List item template
 * Name - Description.
