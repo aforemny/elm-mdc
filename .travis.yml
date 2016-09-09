@@ -1,7 +1,29 @@
-language: haskell
+sudo: false
+
+language: node_js
+
+cache:
+  directories:
+    - elm-stuff/packages
+    - tests/elm-stuff/build-artifacts
+    - tests/elm-stuff/packages
+    - libsysconfcpus
+
+node_js:
+  - "4.0"
+
 install:
-  - npm install -g elm
-  - elm-package install -y
-script: 
-  - make test
-  
+  - npm install -g elm@0.17.1 elm-test
+  - |
+    if [ ! -d libsysconfcpus/bin ];
+    then
+      git clone https://github.com/obmarg/libsysconfcpus.git; 
+      cd libsysconfcpus;
+      ./configure --prefix=$TRAVIS_BUILD_DIR/libsysconfcpus;
+      make && make install;
+      cd ..;
+    fi
+  - elm package install --yes
+
+script:
+  - libsysconfcpus/bin/sysconfcpus -n 2 elm-test

@@ -10,6 +10,7 @@ module Material.Textfield exposing
   , onFocus
   , style
   , on
+  , expandable, expandableIcon
   )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
@@ -59,6 +60,7 @@ element, use the `style` property below.
 
 # Type 
 @docs password, textarea, text', onInput
+@docs expandable, expandableIcon
 @docs onBlur, onFocus
 
 # Advanced
@@ -79,6 +81,8 @@ import Parts exposing (Indexed)
 
 import Material.Options as Options exposing (cs, css, nop, Style)
 import Material.Options.Internal as Internal
+
+import Material.Icon as Icon
 
 
 -- OPTIONS
@@ -102,6 +106,8 @@ type alias Config m =
   , maxlength : Maybe Int
   , inner : List (Options.Style m)
   , listeners : List (Html.Attribute m)
+  , expandable : Maybe String
+  , expandableIcon : String
   }
 
 
@@ -119,6 +125,8 @@ defaultConfig =
   , maxlength = Nothing
   , inner = []
   , listeners = []
+  , expandable = Nothing
+  , expandableIcon = "search"
   }
 
 
@@ -135,12 +143,36 @@ label str =
   Options.set 
     (\config -> { config | labelText = Just str })
 
+
 {-| Label of textfield animates away from the input area on input
 -}
 floatingLabel : Property m
 floatingLabel =
   Options.set
     (\config -> { config | labelFloat = True })
+
+
+{-| Specifies the textfield as an `expandable`. The property takes the ID
+of the element as parameter as this is currently required.
+
+**NOTE:** When manually setting the **id** of the `input` element using
+`Options.inner` then the `expandable` **id** must match
+the `input` **id**.
+-}
+expandable : String -> Property m
+expandable id =
+  Options.set
+    (\config -> { config | expandable = Just id })
+
+
+{-| Sets the icon *only* when the expandable has been set to a valid ID.
+
+Defaults to `search`
+-}
+expandableIcon : String -> Property m
+expandableIcon id =
+  Options.set
+    (\config -> { config | expandableIcon = id })
 
 
 {-| Error message
@@ -391,6 +423,36 @@ view lift model options =
         Nothing ->
           Just <| Html.Events.on "input" (Decoder.map (Input >> lift) targetValue)
 
+    -- NOTE: These ids need to match the id of the input element
+    labelFor =
+      case config.expandable of
+        Nothing -> []
+        Just id -> [ Html.Attributes.for id ]
+
+    expandableId =
+      case config.expandable of
+        Nothing -> Options.nop
+        Just id -> Internal.attribute <| Html.Attributes.id id
+
+    expHolder =
+      case config.expandable of
+        Nothing ->
+          identity
+        Just _  ->
+          (\ x ->
+           [ Options.styled' Html.label
+               [ cs "mdl-button"
+               , cs "mdl-js-button"
+               , cs "mdl-button--icon"
+               ]
+               labelFor
+               [ Icon.i config.expandableIcon ]
+
+           , Options.styled Html.div
+               [ cs "mdl-textfield__expandable-holder" ]
+               x
+           ])
+
   in
     Options.apply summary div
       [ cs "mdl-textfield"
@@ -401,11 +463,12 @@ view lift model options =
       , if val /= "" then cs "is-dirty" else nop
       , if model.isFocused && not config.disabled then cs "is-focused" else nop
       , if config.disabled then cs "is-disabled" else nop
+      , cs "mdl-textfield--expandable" `Options.when` (config.expandable /= Nothing)
       ]
       ( List.filterMap identity 
           ([ defaultInput
            ])
-      )
+      ) <| expHolder
       [ Options.styled' elementFunction
           [ cs "mdl-textfield__input"
           , css "outline" "none"
@@ -419,6 +482,7 @@ view lift model options =
              -}
           , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
           , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
+          , expandableId
           , Options.many config.inner
           ]
           ([ Html.Attributes.disabled config.disabled 
@@ -426,7 +490,7 @@ view lift model options =
            ] ++ textValue ++ typeAttributes ++ maxlength ++ listeners)
           []
       , Html.label 
-          [class "mdl-textfield__label"]  
+          ([class "mdl-textfield__label"] ++ labelFor)
           (case config.labelText of 
             Just str -> [ text str ]
             Nothing -> [])

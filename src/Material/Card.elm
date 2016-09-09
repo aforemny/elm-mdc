@@ -50,7 +50,7 @@ import Html exposing (..)
 import Html.Attributes
 
 import Material.Options as Options exposing (Style, cs, css)
-import Material.Options.Internal exposing (attribute)
+import Material.Options.Internal as Internal
 
 
 {-| Separate given content block from others by adding a thin border.
@@ -157,7 +157,7 @@ can't use `Html.Events.onWithOptions` because we can't construct a
 -}
 stopClick : Style a
 stopClick = 
-  attribute <| 
+  Internal.attribute <|
     Html.Attributes.attribute
       "onclick"
       "var event = arguments[0] || window.event; event.stopPropagation();"

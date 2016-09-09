@@ -6,6 +6,7 @@ module Material.Options exposing
   , Style, div, span, img, attribute, center, scrim
   , id
   , inner
+  , attr
   )
 
 
@@ -49,7 +50,7 @@ applying MDL typography or color to standard elements.
 @docs stylesheet
 
 ## Attributes
-@docs attribute, id, inner
+@docs attribute, attr, id, inner
 @docs center, scrim, disabled
 
 # Internal
@@ -108,6 +109,12 @@ collect1 option acc =
   case option of 
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
+    {- NOTE: Internal attributes get appended as latter
+    attributes override former.
+    Attributes get added to the front so they can be
+    overridden by internal ones if needed.
+     -}
+    Internal x -> { acc | attrs = acc.attrs ++ [x] }
     Attribute x -> { acc | attrs = x :: acc.attrs }
     Many options -> List.foldl collect1 acc options
     Set g -> { acc | config = g acc.config }
@@ -135,6 +142,7 @@ collect1' options acc =
     Class x -> { acc | classes = x :: acc.classes }
     CSS x -> { acc | css = x :: acc.css }
     Attribute x -> { acc | attrs = x :: acc.attrs }
+    Internal x -> { acc | attrs = acc.attrs ++ [x] }
     Many options -> List.foldl collect1' acc options
     Set _ -> acc 
     None -> acc
@@ -146,13 +154,17 @@ collect' =
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
-addAttributes summary attrs = 
-  List.append
-    attrs
-    (  Html.Attributes.style summary.css 
-    :: Html.Attributes.class (String.join " " summary.classes) 
-    :: summary.attrs
-    )
+addAttributes summary attrs =
+  {- NOTE: Ordering here is important.
+  Allow users to specify arbitrary attributes in summary.attrs.
+  However, internal attributes should overwrite the ones that we need
+  to maintain functionality
+  -}
+  summary.attrs
+    ++ [ Html.Attributes.style summary.css
+       , Html.Attributes.class (String.join " " summary.classes)
+       ]
+    ++ attrs
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes 
@@ -323,9 +335,29 @@ general Properties. Use like this:
       [ Options.attribute <| Html.onClick MyClickEvent ]
       [ ... ]
 -}
-attribute : Html.Attribute m -> Style m 
+attribute : Html.Attribute m -> Style m
 attribute =
-  Attribute 
+  Attribute
+
+
+{-| Install arbitrary `Html.Attribute`. Use like this:
+
+    Options.div
+      [ Options.attr <| Html.onClick MyClickEvent ]
+      [ ... ]
+
+**NOTE** Some attributes might be overridden by attributes
+used internally by *elm-mdl*. Such attributes often include
+`focus` and `blur` on certain elements, such as `Textfield`.
+In the case of `focus` and `blur` you may use `focusin` and `focusout`
+respectively instead (these attributes require polyfill on Firefox).
+
+See [Textfield.onBlur](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Textfield#onBlur) for more information regarding the polyfill.
+-}
+attr : Html.Attribute m -> Property c m
+attr =
+  Attribute
+
 
 {-| Options installing css for element to be a flex-box container centering its
 elements. 
@@ -344,7 +376,7 @@ depend on the underlying image. `0.6` works well often.
 -}
 scrim : Float -> Property c m
 scrim opacity = 
-  css "background" <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " ++ toString opacity ++ "))" 
+  css "background" <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " ++ toString opacity ++ "))"
 
 
 {-| Sets the id attribute
