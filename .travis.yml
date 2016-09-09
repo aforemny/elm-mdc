@@ -26,4 +26,4 @@ install:
   - elm package install --yes
 
 script:
-  - libsysconfcpus/bin/sysconfcpus -n 2 elm-test && ./check_pr_branch.sh $TRAVIS_BRANCH master $TRAVIS_PULL_REQUEST
+  - libsysconfcpus/bin/sysconfcpus -n 2 elm-test && ./build_scripts/check_pr_branch.sh $TRAVIS_BRANCH master $TRAVIS_PULL_REQUEST
