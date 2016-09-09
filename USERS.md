@@ -1,8 +1,8 @@
 # Projects using elm-mdl
 
-> This list is intended to show the general usage of elm-mdl, providing a reference of implementations and also better documentation on how elm-mdl is being used in various ways.
-
-> Do you know any projects / applications that should be added here? Submit an issue or a pull request.
+Below is a list of projects using `elm-mdl`. [Submit a
+PR](https://github.com/debois/elm-mdl/edit/v7/USERS.md) to have yours added to
+the list :)
 
 * Hydra frontend - Hydra frontend rewritten with UX in mind.
     * [GitHub repository](https://github.com/domenkozar/hydra-frontend)
@@ -16,7 +16,7 @@
     * [Visit DailyDrip to learn more](https://www.dailydrip.com/)
 * Bloggero-elm-mdl - Bloggero -- engine for static blogs with single page interface.
     * [GitHub repository](https://github.com/easimonenko/bloggero-elm-mdl)
-* Billbored - A billboard to post and share shit with ur friends.
+* Billbored - A billboard to post and share with your friends.
     * [GitHub repository](https://github.com/puhrez/billbored)
 * Calliope - Experimental Elm / Electron App, embedding ACE Editor.
     * [GitHub repository](https://github.com/RobertWalter83/calliope)
@@ -44,10 +44,8 @@
 * Offtie.com - Project allows to save urls to read later without data connection or in AirPlane Mode.
     * [Bitbucket repository](https://bitbucket.org/gladimdim/offtieweb/src)
     * [Live site](https://offtie.com/)
-
-
-
-*Disclaimer - elm-mdl does not endorse or suggest that these projects are "best practice". They are only listed here as a reference.*
+* Time Tracker - An example Single Page Application in Elm, using elm-mdl for the UI, with a Phoenix backend.
+    * [GitHub repository](https://github.com/knewter/time-tracker)
 
 ### List item template
 * Name - Description.
