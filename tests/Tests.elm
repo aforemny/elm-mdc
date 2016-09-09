@@ -47,17 +47,8 @@ mainSuite =
                 Expect.equal (1) 1
         ]
 
-materialButtonSuite : Test
-materialButtonSuite =
-    describe "Material Button Test Suite"
-        [ test "Sample Button test" <|
-            \() ->
-                Expect.equal (1) 1
-        ]
-
-
 all : Test
 all =
-    describe "elm-css"
+    describe "elm-mdl"
         [ mainSuite
         ]

@@ -1,6 +1,6 @@
 # Testing Elm-mdl
 
-### This is only relevant when developers and contributors to Elm-mdl
+### This is only relevant for developers and contributors to Elm-mdl
 
 Tests are located in a separate *"tests"* folder and does not affect elm-mdl.
 
