@@ -1,7 +1,6 @@
 module Demo.Textfields exposing (model, Model, update, view, Msg)
 
 import Html exposing (..)
-import Html.Attributes
 import Platform.Cmd exposing (Cmd)
 import Regex
 import Json.Decode as Decoder
