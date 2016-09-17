@@ -476,7 +476,7 @@ title styles =
 -}
 navigation : List (Options.Style m) -> List (Html m) -> Html m
 navigation styles contents =
-  nav [class "mdl-navigation"] contents
+  Options.styled Html.nav  (cs "mdl-navigation" :: styles) contents
 
 
 type LinkProp = LinkProp
