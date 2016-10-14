@@ -265,7 +265,7 @@ view model  =
               body = 
                 "  { header = " ++ (if model.withHeader then "[ ... ]" else "[]") ++ "\n" ++
                 "  , drawer = " ++ (if model.withDrawer then "[ ... ]" else "[]") ++ "\n" ++
-                "  , tabs = "   ++ (if model.withTabs   then "[ ... ]" else "[]") ++ "\n" ++
+                "  , tabs = "   ++ (if model.withTabs   then "([ ... ], [ ... ])" else "([], [])") ++ "\n" ++
                 "  , main = [ ... ]\n" ++ 
                 "  }"
             in
