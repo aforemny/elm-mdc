@@ -453,5 +453,5 @@ references : List (String, String)
 references =
   [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Table"
   , Page.mds "https://www.google.com/design/spec/components/data-tables.html"
-  , Page.mdl "https://www.getmdl.io/components/index.html#tables"
+  , Page.mdl "https://getmdl.io/components/index.html#tables-section"
   ]
