@@ -19,6 +19,8 @@ import Material.Icon as Icon
 import Material.Typography as Typography
 import Material.Menu as Menu
 import Material.Toggles as Toggles
+import Material.Select as Select
+
 import Demo.Buttons
 import Demo.Menus
 import Demo.Tables
@@ -39,6 +41,7 @@ import Demo.Cards
 import Demo.Lists
 import Demo.Dialog
 import Demo.Chips
+import Demo.Select
 
 
 -- MODEL
@@ -65,6 +68,7 @@ type alias Model =
     , dialog : Demo.Dialog.Model
     , elevation : Demo.Elevation.Model
     , chips : Demo.Chips.Model
+    , select : Demo.Select.Model
     , selectedTab : Int
     , transparentHeader : Bool
     , logMessages : Bool
@@ -93,6 +97,7 @@ model =
     , dialog = Demo.Dialog.model
     , elevation = Demo.Elevation.model
     , chips = Demo.Chips.model
+    , select = Demo.Select.model
     , selectedTab = 0
     , transparentHeader = False
     , logMessages = False
@@ -125,6 +130,7 @@ type Msg
     | DialogMsg Demo.Dialog.Msg
     | ElevationMsg Demo.Elevation.Msg
     | ChipMsg Demo.Chips.Msg
+    | SelectMsg Demo.Select.Msg
     | ToggleHeader
     | ToggleLog
 
@@ -211,6 +217,8 @@ update msg model =
 
           ChipMsg a ->
               lift .chips (\m x -> { m | chips = x }) ChipMsg Demo.Chips.update a model
+          SelectMsg a ->
+              lift .select (\m x -> { m | select = x }) SelectMsg Demo.Select.update a model
 
 
 
@@ -231,6 +239,7 @@ tabs =
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
     , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
     , ( "Menus", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
+    , ( "Select", "select", .select >> Demo.Select.view >> Html.map SelectMsg)
     , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
     , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
     , ( "Tables", "tables", .tables >> Demo.Tables.view >> Html.map TablesMsg )
@@ -491,11 +500,11 @@ main =
             \model ->
                 Sub.batch
                     [ Sub.map MenusMsg (Menu.subs Demo.Menus.Mdl model.menus.mdl)
+                    , Sub.map SelectMsg (Select.subs Demo.Select.Mdl model.select.mdl)
                     , Material.subscriptions Mdl model
                     ]
         , update = update
         }
-
 
 
 -- CSS

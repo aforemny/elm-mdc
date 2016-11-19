@@ -24,6 +24,8 @@ module Material.Textfield
         , Msg(..)
         , update
         , view
+        , Config
+        , defaultConfig
         )
 
 
@@ -56,7 +58,7 @@ for a live demo.
 @docs render
 
 # Options
-@docs Property, value
+@docs Property, Config, defaultConfig, value
 
 ## Appearance
 
@@ -97,6 +99,8 @@ type Kind
     | Email
 
 
+{-| TODO
+-}
 type alias Config m =
     { labelText : Maybe String
     , labelFloat : Bool
@@ -112,6 +116,8 @@ type alias Config m =
     }
 
 
+{-| TODO
+-}
 defaultConfig : Config m
 defaultConfig =
     { labelText = Nothing
@@ -486,7 +492,7 @@ type alias Store s =
 {-| Component react function.
 -}
 react
-    : ( Component.Msg button Msg menu layout toggles tooltip tabs dispatch -> msg)
+    : ( Component.Msg button Msg menu layout toggles tooltip tabs select dispatch -> msg)
     -> Msg
     -> Index
     -> Store s
@@ -513,7 +519,7 @@ of the textfield's implementation, and so is mostly useful for positioning
 if you need to apply styling to the underlying `<input>` element.
 -}
 render
-    : (Component.Msg button Msg menu layout toggles tooltip tabs dispatch -> m)
+    : (Component.Msg button Msg menu layout toggles tooltip tabs select dispatch -> m)
     -> Index
     -> Store s
     -> List (Property m)
