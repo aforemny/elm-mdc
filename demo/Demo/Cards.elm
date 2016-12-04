@@ -819,7 +819,7 @@ intro =
 
 srcUrl : String
 srcUrl =
-  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Card.elm"
+  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Cards.elm"
 
 
 references : List (String, String)
