@@ -50,8 +50,8 @@ update msg model =
     FlipTransition -> 
       { model | transition = not model.transition } ! [] 
 
-    Mdl action' -> 
-      Material.update action' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
 -- VIEW
 
@@ -64,7 +64,7 @@ elevate model (e, k) =
     , css "width"  "128px"
     , css "margin" "40px"
     , css "display" "inline-flex"
-    , Elevation.transition 300 `when` model.transition
+    , Elevation.transition 300 |> when model.transition
     , Options.center
     ]
     [ Options.div
@@ -192,7 +192,7 @@ view model =
         boxes
 
   in    
-    Page.body1' "Elevation" srcUrl intro references demo1 (demo2 model)
+    Page.body1_ "Elevation" srcUrl intro references demo1 (demo2 model)
 
 
 intro : Html a

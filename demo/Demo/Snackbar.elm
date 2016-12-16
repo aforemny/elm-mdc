@@ -2,7 +2,6 @@ module Demo.Snackbar exposing (model, Model, update, view, Msg)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.App as App
 import Html.Keyed as Keyed
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
@@ -24,7 +23,7 @@ import Demo.Page as Page
 -- MODEL
 
 
-type Square' 
+type Square_ 
   = Appearing 
   | Growing
   | Waiting
@@ -34,7 +33,7 @@ type Square'
 
 
 type alias Square = 
-  (Int, Square')
+  (Int, Square_)
 
 
 type alias Model =
@@ -64,23 +63,23 @@ type Msg
   | Grown Int
   | Gone Int
   | Snackbar (Snackbar.Msg Int)
-  | MDL (Material.Msg Msg)
+  | Mdl (Material.Msg Msg)
 
 
 add : (Int -> Snackbar.Contents Int) -> Model -> (Model, Cmd Msg)
 add f model =
   let 
-    (snackbar', effect) = 
+    (snackbar_, effect) = 
       Snackbar.add (f model.count) model.snackbar
         |> map2nd (Cmd.map Snackbar)
-    model' = 
+    model_ = 
       { model 
-      | snackbar = snackbar'
+      | snackbar = snackbar_
       , count = model.count + 1
       , squares = (model.count, Appearing) :: model.squares
       }
   in 
-    ( model'
+    ( model_
     , Cmd.batch 
         [ cssTransitionStep (Appear model.count)
         , effect 
@@ -88,12 +87,12 @@ add f model =
     )
 
 
-mapSquare : Int -> (Square' -> Square') -> Model -> Model
+mapSquare : Int -> (Square_ -> Square_) -> Model -> Model
 mapSquare k f model = 
   { model 
   | squares = 
       List.map 
-        ( \((k', sq) as s) -> if k /= k' then s else (k', f sq) )
+        ( \((k_, sq) as s) -> if k /= k_ then s else (k_, f sq) )
         model.squares
   }
 
@@ -128,17 +127,17 @@ update action model =
 
     Gone k ->
       ({ model
-       | squares = List.filter (fst >> (/=) k) model.squares
+       | squares = List.filter (Tuple.first >> (/=) k) model.squares
        }
       , none)
 
-    Snackbar action' -> 
-      Snackbar.update action' model.snackbar 
+    Snackbar msg_ -> 
+      Snackbar.update msg_ model.snackbar 
         |> map1st (\s -> { model | snackbar = s })
         |> map2nd (Cmd.map Snackbar)
 
-    MDL action' -> 
-      Material.update action' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
 
 -- VIEW
@@ -249,7 +248,7 @@ view model =
       , grid [ css "min-height" "15rem" ] 
           [ cell 
               [ size All 4, size Desktop 2]
-              [ Button.render MDL [0] model.mdl
+              [ Button.render Mdl [0] model.mdl
                   [ Button.raised
                   , Button.onClick AddSnackbar
                   , Button.colored
@@ -259,7 +258,7 @@ view model =
               ]
           , cell 
               [ size All 4, size Desktop 2]
-              [ Button.render MDL [1] model.mdl 
+              [ Button.render Mdl [1] model.mdl 
                   [ Button.raised
                   , Button.colored
                   , Button.onClick AddToast
@@ -280,14 +279,14 @@ view model =
                   [] 
                   (model.squares 
                     |> List.reverse 
-                    |> List.map (\sq -> (toString (fst sq), clickView model sq))
+                    |> List.map (\sq -> (toString (Tuple.first sq), clickView model sq))
                   )
               ]
           ]
-      , Snackbar.view model.snackbar |> App.map Snackbar
+      , Snackbar.view model.snackbar |> Html.map Snackbar
       ]
   in
-    Page.body1' "Snackbar & Toast" srcUrl intro references demo1 demo2
+    Page.body1_ "Snackbar & Toast" srcUrl intro references demo1 demo2
 
 
 intro : Html a

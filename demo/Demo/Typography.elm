@@ -41,8 +41,8 @@ update action model =
     TypographyMsg ->
       (model, Cmd.none)
 
-    Mdl action' ->
-      Material.update action' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
 
 -- VIEW
@@ -221,7 +221,7 @@ view model  =
     demo =
       List.concatMap (\(d, c) -> [ cell d, cell (Code.code [] c) ]) 
   in
-    Page.body1' "Typography" srcUrl intro references 
+    Page.body1_ "Typography" srcUrl intro references 
       [ Grid.grid [] <| head :: demo demo1 ] 
       [ Grid.grid [] <| demo demo2 ]
 

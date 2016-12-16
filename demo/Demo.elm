@@ -2,7 +2,6 @@
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Html.Lazy
-import Html.App as App
 import Platform.Cmd exposing (..)
 import Array exposing (Array)
 import Dict exposing (Dict)
@@ -148,7 +147,7 @@ update action model =
       ( { model | transparentHeader = not model.transparentHeader }, Cmd.none)
 
     Mdl msg ->
-      Material.update msg model
+      Material.update Mdl msg model
 
     ButtonsMsg   a -> lift  .buttons    (\m x->{m|buttons   =x}) ButtonsMsg  Demo.Buttons.update    a model
     BadgesMsg    a -> lift  .badges     (\m x->{m|badges    =x}) BadgesMsg   Demo.Badges.update    a model
@@ -181,27 +180,27 @@ update action model =
 
 tabs : List (String, String, Model -> Html Msg)
 tabs =
-  [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
-  , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
-  , ("Cards", "cards", .cards >> Demo.Cards.view >> App.map CardsMsg)
-  , ("Chips", "chips", .chips >> Demo.Chips.view >> App.map ChipMsg)
-  , ("Dialog", "dialog", .dialog >> Demo.Dialog.view >> App.map DialogMsg)
-  , ("Elevation", "elevation", .elevation >> Demo.Elevation.view >> App.map ElevationMsg)
-  , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
+  [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> Html.map ButtonsMsg)
+  , ("Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg)
+  , ("Cards", "cards", .cards >> Demo.Cards.view >> Html.map CardsMsg)
+  , ("Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg)
+  , ("Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg)
+  , ("Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg)
+  , ("Footers", "footers", .footers >> Demo.Footer.view >> Html.map FooterMsg)
   , ("Grid", "grid", \_ -> Demo.Grid.view)
-  , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
-  , ("Lists", "lists", .lists >> Demo.Lists.view >> App.map ListsMsg)
-  , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
-  , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
-  , ("Sliders", "sliders", .slider >> Demo.Slider.view >> App.map SliderMsg)
-  , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
-  , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
-  , ("Tabs", "tabs", .tabs >> Demo.Tabs.view >> App.map TabMsg)
-  , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
-  , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
-  , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> App.map TooltipMsg)
-  , ("Typography", "typography", .typography >> Demo.Typography.view >> App.map TypographyMsg)
-  --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
+  , ("Layout", "layout", .layout >> Demo.Layout.view >> Html.map LayoutMsg)
+  , ("Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg)
+  , ("Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg)
+  , ("Menus", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg)
+  , ("Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg)
+  , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg)
+  , ("Tables", "tables", .tables >> Demo.Tables.view >> Html.map TablesMsg)
+  , ("Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg)
+  , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg)
+  , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> Html.map TogglesMsg)
+  , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg)
+  , ("Typography", "typography", .typography >> Demo.Typography.view >> Html.map TypographyMsg)
+  --, ("Template", "template", .template >> Demo.Template.view >> Html.map TemplateMsg)
   ]
 
 
@@ -285,11 +284,11 @@ header model =
 
 
 view : Model -> Html Msg
-view = Html.Lazy.lazy view'
+view = Html.Lazy.lazy view_
 
 
-view' : Model -> Html Msg
-view' model =
+view_ : Model -> Html Msg
+view_ model =
   let
     top =
       (Array.get model.selectedTab tabViews |> Maybe.withDefault e404) model
@@ -297,15 +296,15 @@ view' model =
     Layout.render Mdl model.mdl
       [ Layout.selectedTab model.selectedTab
       , Layout.onSelectTab SelectTab
-      , Layout.fixedHeader `when` model.layout.fixedHeader
-      , Layout.fixedDrawer `when` model.layout.fixedDrawer
-      , Layout.fixedTabs `when` model.layout.fixedTabs
+      , Layout.fixedHeader |> when model.layout.fixedHeader
+      , Layout.fixedDrawer |> when model.layout.fixedDrawer
+      , Layout.fixedTabs |> when model.layout.fixedTabs
       , (case model.layout.header of
           Demo.Layout.Waterfall x -> Layout.waterfall x
           Demo.Layout.Seamed -> Layout.seamed
           Demo.Layout.Standard -> Options.nop
           Demo.Layout.Scrolling -> Layout.scrolling)
-        `when` model.layout.withHeader
+            |> when model.layout.withHeader
       , if model.transparentHeader then Layout.transparentHeader else Options.nop
       ]
       { header = header model
@@ -333,7 +332,7 @@ view' model =
            []
         , case nth model.selectedTab tabs of
             Just ( "Dialog", _, _ ) -> 
-              App.map DialogMsg (Demo.Dialog.element model.dialog)
+              Html.map DialogMsg (Demo.Dialog.element model.dialog)
               {- Because of limitations on browsers that have non-native (polyfilled)
               <dialog> elements, our dialog element /may/ have to sit up here. However,
               running in elm-reactor will never load the polyfill, so we render the 
@@ -381,7 +380,7 @@ location2messages location =
 -- APP
 
 
-main : Program Never
+main : Routing.RouteUrlProgram Never Model Msg
 main =
   Routing.program
     { delta2url = delta2url

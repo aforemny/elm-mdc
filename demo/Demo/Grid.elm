@@ -58,10 +58,10 @@ view =
       [ text """Resize your browser-window and observe the effect on the Grid
                 below. Note in particular what happens to the top and bottom rows."""
       ]
-  , [1..12 ]
+  , List.range 1 12
     |> List.map (\i -> small [size All 1, color 4] [text "1"])
     |> grid []
-  , [1 .. 3]
+  , List.range 1 3
     |> List.map (\i -> std [size All 4, color 5] [text <| "4"])
     |> grid []
   , [ std [size All 6, color 6] [text "6"]

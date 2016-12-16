@@ -54,8 +54,8 @@ update action model =
       in
         ({ model | values = values }, Cmd.none)
 
-    Mdl msg' ->
-      Material.update msg' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
 
 -- VIEW

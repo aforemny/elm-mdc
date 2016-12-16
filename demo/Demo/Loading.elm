@@ -73,8 +73,8 @@ update action model =
           Cmd.none
       )
 
-    Mdl action' ->
-      Material.update action' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
 -- VIEW
 
@@ -141,7 +141,7 @@ view model =
                       [ Button.raised
                       , Button.colored
                       , Button.ripple
-                      , Button.disabled `when` model.running 
+                      , Button.disabled |> when model.running 
                       , Button.onClick Toggle
                       ]
                       [ text "Resume" ]
@@ -150,7 +150,7 @@ view model =
                       [ Button.raised
                       , Button.colored
                       , Button.ripple
-                      , Button.disabled `when` not model.running
+                      , Button.disabled |> when (not model.running)
                       , Button.onClick Toggle
                       ]
                       [ text "Pause" ]

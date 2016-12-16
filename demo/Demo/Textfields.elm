@@ -71,7 +71,7 @@ type Msg
 selectionDecoder : Decoder.Decoder Msg
 selectionDecoder =
   Decoder.map SelectionChanged
-    <| Decoder.object2 Selection
+    <| Decoder.map2 Selection
          (Decoder.at ["target", "selectionStart"] Decoder.int)
          (Decoder.at ["target", "selectionEnd"] Decoder.int)
   
@@ -84,8 +84,8 @@ pure =
 update : Msg -> Model -> Maybe (Model, Cmd Msg)
 update action model =
   case action of
-    Mdl action' ->
-      Material.update action' model |> Just
+    Mdl msg_ ->
+      Material.update Mdl msg_ model |> Just
 
     Upd0 str ->
       { model | str0 = str } |> pure
@@ -124,8 +124,8 @@ rx =
   "[0-9]*"
 
 
-rx' : Regex.Regex
-rx' =
+rx_ : Regex.Regex
+rx_ =
   Regex.regex rx
 
 
@@ -160,13 +160,13 @@ textfields model =
     , Textfield.render Mdl [2] model.mdl
         [ Textfield.label "Floating label"
         , Textfield.floatingLabel
-        , Textfield.text'
+        , Textfield.text_
         ]
     , """
         Textfield.render Mdl [2] model.mdl
           [ Textfield.label "Floating label"
           , Textfield.floatingLabel
-          , Textfield.text'
+          , Textfield.text_
           ]
        """
     )
@@ -193,7 +193,7 @@ textfields model =
   , ( "Textfield with error checking"
     , Textfield.render Mdl [4] model.mdl
         [ Textfield.label "w/error checking"
-        , if not <| match model.str4 rx' then
+        , if not <| match model.str4 rx_ then
             Textfield.error <| "Doesn't match " ++ rx
           else
             Options.nop
@@ -202,7 +202,7 @@ textfields model =
     , """
     Textfield.render Mdl [4] model.mdl
       [ Textfield.label "w/error checking"
-      , if not <| match model.str4 rx' then
+      , if not <| match model.str4 rx_ then
           Textfield.error <| "Doesn't match " ++ rx
         else
           Options.nop
@@ -424,7 +424,7 @@ view model =
     demo2 = 
       grid [] (List.map view1 <| custom model)
   in
-    Page.body1' "Textfields" srcUrl intro references [demo1] [demo2]
+    Page.body1_ "Textfields" srcUrl intro references [demo1] [demo2]
 
 
 

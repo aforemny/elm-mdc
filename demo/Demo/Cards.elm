@@ -61,8 +61,8 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    Mdl action' ->
-      Material.update action' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
     Raise k -> 
       { model | raised = k } ! [] 
@@ -80,13 +80,13 @@ update action model =
         |> map1st (\code -> { model | code2 = code })
         |> map2nd (Cmd.map CodeMsg2)
 
-    CodeMsg1 msg' -> 
-      Code.update msg' model.code1
+    CodeMsg1 msg_ -> 
+      Code.update msg_ model.code1
         |> map1st (\code -> { model | code1 = code })
         |> map2nd (Cmd.map CodeMsg1)
 
-    CodeMsg2 msg' -> 
-      Code.update msg' model.code2
+    CodeMsg2 msg_ -> 
+      Code.update msg_ model.code2
         |> map1st (\code -> { model | code2 = code })
         |> map2nd (Cmd.map CodeMsg2)
 
@@ -791,8 +791,8 @@ view model =
               :: aux model)               
           ]
       ]
-    in 
-      Page.body1' "Cards" srcUrl intro references 
+   in 
+      Page.body1_ "Cards" srcUrl intro references 
         cards1
         cards2
 

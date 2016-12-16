@@ -62,22 +62,22 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of 
-    Mdl action' -> 
-      Material.update action' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
-    Code action' -> 
-      Code.update action' model.code
-        |> map1st (\code' -> { model | code = code' })
+    Code msg_ -> 
+      Code.update msg_ model.code
+        |> map1st (\code_ -> { model | code = code_ })
         |> map2nd (Cmd.map Code)
 
     Click last -> 
       let
-        (code', fx) = 
+        (code_, fx) = 
           Code.update (Code.Set (program last)) model.code
       in
         ( { model 
           | last = Just last 
-          , code = code'
+          , code = code_
           }
         , Cmd.map Code fx
         )

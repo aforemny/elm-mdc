@@ -2,7 +2,7 @@ module Material.Tooltip
   exposing
     ( Model, defaultModel, Msg(..), update, view
     , Property
-    , render, attach
+    , render, react, attach
     , left, right, top, bottom, large, container
     , onEnter, onLeave
     )
@@ -63,16 +63,19 @@ If you do not use parts, you should not use `attach`, but instead add the
 @docs onEnter, onLeave
 @docs Model, defaultModel, Msg, update, view
 
+# Internal use
+@docs react
+
 -}
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Parts exposing (Indexed)
+import Material.Component as Component exposing (Indexed, Index)
 import Material.Options as Options exposing (Style, cs, css, when)
 import Material.Options.Internal as Internal
 import DOM
 import Html.Events
-import Json.Decode as Json exposing ((:=), at)
+import Json.Decode as Json exposing (field, at)
 import String
 
 
@@ -244,12 +247,12 @@ sibling d =
         ([ "target" ] ++ parents ++ [ "nextSibling" ])
 
     paths =
-      List.map createPath [0..4]
+      List.map createPath <| List.range 0 4
 
     -- Tries to check if the element is actually a tooltip
     valid path =
       isTooltipClass path
-        `Json.andThen`
+        |> Json.andThen
           (\res ->
             if res then
               at path d
@@ -265,7 +268,7 @@ sibling d =
 isTooltipClass : List (String) -> Json.Decoder Bool
 isTooltipClass path =
   (at path DOM.className)
-    `Json.andThen`
+    |> Json.andThen
       (\class ->
         if String.contains "mdl-tooltip" class then
           Json.succeed True
@@ -278,7 +281,7 @@ isTooltipClass path =
 -}
 stateDecoder : Json.Decoder DOMState
 stateDecoder =
-  Json.object3 DOMState
+  Json.map3 DOMState
     (DOM.target DOM.boundingClientRect)
     (sibling DOM.offsetWidth)
     (sibling DOM.offsetHeight)
@@ -408,12 +411,12 @@ view lift model options content =
   in
     Options.styled config.container
       [ cs "mdl-tooltip"
-      , cs "is-active" `when` model.isActive
-      , cs "mdl-tooltip--large" `when` (config.size == Large)
-      , css "left" (px pos.left) `when` model.isActive
-      , css "margin-left" (px pos.marginLeft) `when` model.isActive
-      , css "top" (px pos.top) `when` model.isActive
-      , css "margin-top" (px pos.marginTop) `when` model.isActive
+      , cs "is-active" |> when model.isActive
+      , cs "mdl-tooltip--large" |> when (config.size == Large)
+      , css "left" (px pos.left) |> when model.isActive
+      , css "margin-left" (px pos.marginLeft) |> when model.isActive
+      , css "top" (px pos.top) |> when model.isActive
+      , css "margin-top" (px pos.marginTop) |> when model.isActive
       ]
       content
 
@@ -422,52 +425,70 @@ view lift model options content =
 -- COMPONENT
 
 
-type alias Container c =
-  { c | tooltip : Indexed Model }
+type alias Store s =
+  { s | tooltip : Indexed Model }
+
+
+(get, set) = 
+  Component.indexed .tooltip (\x y -> { y | tooltip = x }) defaultModel
+
+
+{-| Component react function
+-}
+react :
+  (Component.Msg button textfield menu layout toggles Msg tabs -> m)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )  
+react =
+    Component.react get set Component.TooltipMsg (Component.generalise update)
 
 
 {-| Component render.
 -}
-render :
-  (Parts.Msg (Container c) m -> m)
-  -> Parts.Index
-  -> Container c
-  -> List (Property m)
-  -> List (Html m)
-  -> Html m
+render
+    : ( Component.Msg button textfield menu snackbar toggles Msg tabs -> m )
+    -> Component.Index
+    -> Store s
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
 render =
-  Parts.create 
-    view (Parts.generalize update) 
-    .tooltip (\x y -> { y | tooltip = x }) defaultModel
+  Component.render get view Component.TooltipMsg
 
 
-set : Parts.Set (Indexed Model) (Container c)
-set x y =
-  { y | tooltip = x }
-
-
-pack : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Msg -> d
-pack =
-  Parts.pack (Parts.generalize update) .tooltip set defaultModel 
-
-
-{-| Mouse enter event handler, Parts variant
+{-| Mouse enter event handler, Component variant
 -}
-onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Attribute d
+onMouseEnter
+  : ( Component.Msg button textfield menu snackbar toggles Msg tabs -> m )
+  -> Component.Index
+  -> Attribute m
 onMouseEnter lift idx =
-  Html.Events.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
+  Html.Events.on 
+    "mouseenter" 
+    (Json.map (Enter >> Component.TooltipMsg idx >> lift) stateDecoder)
 
 
-{-| Mouse leave event handler, Parts variant
+{-| Mouse leave event handler, Component variant
 -}
-onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Attribute b
+
+onMouseLeave
+  : ( Component.Msg button textfield menu snackbar toggles Msg tabs -> m )
+  -> Component.Index
+  -> Attribute m  
 onMouseLeave lift idx =
-  Html.Events.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
+  Html.Events.on 
+    "mouseleave" 
+    (Json.succeed (Leave |> Component.TooltipMsg idx |> lift))
 
 
-{-| Attach event handlers for Parts version
+{-| Attach event handlers for Component version
 -}
-attach : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
+attach
+  : ( Component.Msg button textfield menu snackbar toggles Msg tabs -> m )
+  -> Component.Index
+  -> Options.Property c m
 attach lift index =
   Options.many
     [ Internal.attribute <| onMouseEnter lift index

@@ -47,7 +47,7 @@ It's helpful to compare this signature to the standard one of `core/html`, e.g.,
 
     div  :                        List (Attribute m) -> List (Html m) -> Html m
 
-1. For technical reasons, rather than using `Html.App.map f (view ...)`, you
+1. For technical reasons, rather than using `Html.map f (view ...)`, you
 provide the lifting function `f` directly to the component as the first
 argument. 
 2. The `Model` argument is standard for TEA view functions. 
@@ -158,10 +158,9 @@ and simply comment out the components you do not need.
 -}
 
 import Dict 
-import Platform.Cmd exposing (Cmd)
 
-import Parts exposing (Indexed)
-import Material.Helpers exposing (map1st, map2nd)
+import Material.Component as Component exposing (Indexed, Msg(..))
+import Material.Helpers exposing (map1st)
 
 import Material.Button as Button
 import Material.Textfield as Textfield
@@ -172,6 +171,7 @@ import Material.Toggles as Toggles
 import Material.Tooltip as Tooltip
 import Material.Tabs as Tabs
 --import Material.Template as Template
+
 
 
 {-| Model encompassing all Material components. Since some components store
@@ -207,24 +207,59 @@ model =
   }
 
 
-{-| Msg encompassing actions of all Material components. 
+{-| Material message type
+TODO: m
 -}
-type alias Msg obs = 
-  Parts.Msg Model obs
+type alias Msg m = 
+  Component.Msg 
+    Button.Msg     
+    Textfield.Msg  
+    (Menu.Msg m)
+    -- Snackbar.Msg 
+    Layout.Msg     
+    Toggles.Msg    
+    Tooltip.Msg    
+    Tabs.Msg
+
+
+type alias Container c = 
+  { c | mdl : Model }
 
 
 {-| Update function for the above Msg. Provide as the first 
 argument a lifting function that embeds the generic MDL action in 
 your own Msg type. 
 -}
-update : 
-     Msg obs
-  -> { model | mdl : Model }
-  -> ({ model | mdl : Model }, Cmd obs)
-update msg model = 
-  Parts.update' msg model.mdl 
-    |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
-    |> Maybe.withDefault (model, Cmd.none)
+update : (Msg m -> m) -> Msg m -> Container c -> (Container c, Cmd m)
+update lift msg container = 
+  let 
+      store = .mdl container
+  in
+    (case msg of 
+      ButtonMsg idx msg -> 
+        Button.react lift msg idx store
+
+      TextfieldMsg idx msg -> 
+        Textfield.react lift msg idx store
+
+      MenuMsg idx msg -> 
+        Menu.react (MenuMsg idx >> lift) msg idx store
+
+      LayoutMsg msg -> 
+        Layout.react (LayoutMsg >> lift) msg store
+
+      TogglesMsg idx msg -> 
+        Toggles.react lift msg idx store
+
+      TooltipMsg idx msg -> 
+        Tooltip.react lift msg idx store
+
+      TabsMsg idx msg -> 
+        Tabs.react lift msg idx store)
+
+    |> map1st (Maybe.map (\mdl -> { container | mdl = mdl }))
+    |> map1st (Maybe.withDefault container)
+    
 
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
@@ -254,7 +289,13 @@ follows.
 Currently, only Layout and Menu require subscriptions, and only Layout require
 initialisation. 
 -}
-subscriptions : (Msg obs -> obs) -> { model | mdl : Model } -> Sub obs
+subscriptions
+    : (
+    Component.Msg button textfield (Menu.Msg m) Layout.Msg toggles tooltip tabs
+    -> m
+    )
+    -> { model | mdl : Model }
+    -> Sub m  
 subscriptions lift model = 
   Sub.batch 
     [ Layout.subs lift model.mdl 
@@ -264,7 +305,9 @@ subscriptions lift model =
 
 {-| Initialisation. See `subscriptions` above.
 -}
-init : (Msg obs -> obs) -> Cmd obs
+init
+    : (Component.Msg button textfield menu Layout.Msg toggles tooltip tabs -> m)
+    -> Cmd m   
 init lift = 
   Layout.sub0 lift
 

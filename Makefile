@@ -13,13 +13,13 @@ compile : demo
 	
 
 counter1: 
-	$(ELM) examples/Counter.elm --warn --output elm.js
+	$(ELM) examples/Counter.elm --warn --output examples/counter1.html 
 	
 counter-many: 
-	$(ELM) examples/Counter-many.elm --warn --output elm.js
+	$(ELM) examples/Counter-many.elm --warn --output examples/counter-many.html
 
 counter1-no-parts: 
-	$(ELM) examples/Counter-no-parts.elm --warn --output elm.js
+	$(ELM) examples/Counter-no-parts.elm --warn --output examples/counter1-no-parts.html
 
 docs: 
 	$(ELM) --docs=docs.json 

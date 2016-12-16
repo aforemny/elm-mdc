@@ -143,8 +143,8 @@ update msg model =
       -- Click on specific checkbox `idx`
       { model | selected = toggle idx model.selected } ! []
 
-    Mdl msg' ->
-      Material.update msg' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
 
 -- VIEW
@@ -228,7 +228,7 @@ selectable model =
             ( data
               |> List.indexedMap (\idx item ->
                    Table.tr
-                     [ Table.selected `when` Set.member (key item) model.selected ]
+                     [ Table.selected |> when (Set.member (key item) model.selected) ]
                      [ Table.td []
                        [ Toggles.checkbox Mdl [idx] model.mdl
                          [ Toggles.onClick (Toggle <| key item)
@@ -417,7 +417,7 @@ tables model =
 
 view : Model -> Html Msg
 view model =
-  Page.body1' "Tables" srcUrl intro references (tables model) [ Html.h4 [] [ text "Import & data" ], Code.code [] preamble ] 
+  Page.body1_ "Tables" srcUrl intro references (tables model) [ Html.h4 [] [ text "Import & data" ], Code.code [] preamble ] 
 
 
 intro : Html Msg

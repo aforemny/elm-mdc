@@ -42,8 +42,8 @@ update action model =
     SelectTab idx ->
       ({ model | tab = idx }, Cmd.none)
 
-    Mdl action' ->
-      Material.update action' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
 
 -- VIEW

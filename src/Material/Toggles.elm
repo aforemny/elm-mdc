@@ -2,7 +2,7 @@ module Material.Toggles exposing
   ( Model, defaultModel
   , Msg, update
   , viewSwitch, viewCheckbox, viewRadio
-  , switch, checkbox, radio
+  , switch, checkbox, radio, react
   , onClick, ripple, disabled, value, group
   )
 
@@ -16,7 +16,7 @@ module Material.Toggles exposing
 > individually. The MDL checkbox component allows you to add display and click
 >     effects.
 > 
-> Checkboxes are a common feature of most user interfaces, regardless of a site's
+> Checkboxes are a common feature of most user interfaces, regardless of a site_s
 > content or function. Their design and use is therefore an important factor in
 > the overall user experience. [...]
 > 
@@ -39,17 +39,19 @@ for a live demo.
 @docs Model, defaultModel, Msg, update
 @docs viewSwitch, viewCheckbox, viewRadio
 
+# Internal use
+@docs react
+
 -}
 
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.App
-import Html.Attributes exposing (type', class, disabled, checked)
+import Html.Attributes exposing (type_, class, disabled, checked)
 import Html.Events exposing (on, onFocus, onBlur)
 import Json.Decode as Json
 
-import Parts exposing (Indexed)
+import Material.Component as Component exposing (Indexed, Index)
 
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
@@ -183,11 +185,11 @@ top lift group model summary elems =
     Options.apply summary label
       [ cs ("mdl-" ++ group) 
       , cs ("mdl-js-" ++ group)
-      , cs "mdl-js-ripple-effect" `when` cfg.ripple
-      , cs "mdl-js-ripple-effect--ignore-events" `when` cfg.ripple
+      , cs "mdl-js-ripple-effect" |> when cfg.ripple
+      , cs "mdl-js-ripple-effect--ignore-events" |> when cfg.ripple
       , cs "is-upgraded"
-      , cs "is-checked" `when` cfg.value
-      , cs "is-focused" `when` model.isFocused
+      , cs "is-checked" |> when cfg.value
+      , cs "is-focused" |> when model.isFocused
       ]
       [ blurOn "mouseup"
       , onFocus (lift (SetFocus True))
@@ -197,7 +199,7 @@ top lift group model summary elems =
       (List.concat 
         [ elems
         , if cfg.ripple then 
-            [ Html.App.map (Ripple >> lift) <| Ripple.view 
+            [ Html.map (Ripple >> lift) <| Ripple.view 
                [ class "mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center" ]
                model.ripple
             ]
@@ -215,11 +217,11 @@ viewCheckbox lift model config elems =
     summary = Options.collect defaultConfig config
     cfg = summary.config
   in 
-    [ Options.styled' Html.input
+    [ Options.styled_ Html.input
       [ cs "mdl-checkbox__input"
       , Options.many cfg.inner
       ]
-      [ type' "checkbox"
+      [ type_ "checkbox"
       , Html.Attributes.disabled cfg.isDisabled
       , checked cfg.value 
         {- The checked attribute is not rendered. Switch still seems to
@@ -248,11 +250,11 @@ viewSwitch lift model config elems =
     summary = Options.collect defaultConfig config
     cfg = summary.config
   in 
-    [ Options.styled' Html.input
+    [ Options.styled_ Html.input
       [ cs "mdl-switch__input"
       , Options.many cfg.inner
       ]
-      [ type' "checkbox"
+      [ type_ "checkbox"
       , Html.Attributes.disabled cfg.isDisabled
       , checked cfg.value 
         {- the checked attribute is not rendered. Switch still seems to
@@ -278,12 +280,12 @@ viewRadio lift model config elems =
     summary = Options.collect defaultConfig config
     cfg = summary.config
   in 
-    [ Options.styled' Html.input
+    [ Options.styled_ Html.input
       [ cs "mdl-radio__button"
       , Options.many cfg.inner
       ]
       (List.filterMap identity 
-        [ Just (type' "radio")
+        [ Just (type_ "radio")
         , Just (Html.Attributes.disabled cfg.isDisabled)
         , Just (checked cfg.value)
         , cfg.group
@@ -300,58 +302,64 @@ viewRadio lift model config elems =
 
 -- COMPONENT
 
-{-| 
+
+type alias Store s = 
+  { s | toggles : Indexed Model }
+
+
+(get, set) =
+  Component.indexed .toggles (\x y -> {y | toggles=x}) defaultModel
+
+
+{-| Component react function. 
 -}
-type alias Container c =
-  { c | toggles : Indexed Model }
-
-
-render
-   : ((Msg -> b) -> Parts.View Model c)
-  -> (Parts.Msg { d | toggles : Indexed Model } b -> b)
-  -> Parts.Index
-  -> Parts.View { d | toggles : Indexed Model } c
-render view = 
-  Parts.create view (Parts.generalize update) .toggles (\x y -> {y | toggles=x}) defaultModel
+react :
+  (Component.Msg button textfield menu layout Msg tooltip tabs -> m)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )  
+react =
+    Component.react get set Component.TogglesMsg (Component.generalise update)
 
 
 {-| Component render (checkbox)
 -}
-checkbox 
-  : (Parts.Msg (Container c) m -> m)
-  -> Parts.Index
-  -> (Container c)
+checkbox
+  : ( Component.Msg button textfield menu snackbar Msg tooltip tabs -> m)
+  -> Component.Index
+  -> { a | toggles : Indexed Model }
   -> List (Property m)
-  -> List (Html m) 
+  -> List (Html m)
   -> Html m
 checkbox = 
-  render viewCheckbox
+  Component.render get viewCheckbox Component.TogglesMsg
 
 
 {-| Component render (switch) 
 -}
 switch
-  : (Parts.Msg (Container c) m -> m)
-  -> Parts.Index
-  -> (Container c)
+  : ( Component.Msg button textfield menu snackbar Msg tooltip tabs -> m)
+  -> Component.Index
+  -> Store s
   -> List (Property m)
   -> List (Html m)
   -> Html m
 switch = 
-  render viewSwitch
+  Component.render get viewSwitch Component.TogglesMsg
 
 
 {-| Component render (radio button) 
 -}
 radio
-  : (Parts.Msg (Container c) m -> m)
-  -> Parts.Index
-  -> (Container c)
+  : ( Component.Msg button textfield menu snackbar Msg tooltip tabs -> m)
+  -> Component.Index
+  -> Store s
   -> List (Property m)
-  -> List (Html m) 
+  -> List (Html m)
   -> Html m
 radio = 
-  render viewRadio
+  Component.render get viewRadio Component.TogglesMsg
 
 
 

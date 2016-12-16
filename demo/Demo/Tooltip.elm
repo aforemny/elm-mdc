@@ -43,14 +43,14 @@ update action model =
     NoOp ->
         (model, Cmd.none)
 
-    TooltipMsg msg' ->
+    TooltipMsg msg_ ->
       let
-        updated = fst <| (Tooltip.update msg' model.tooltip)
+        updated = Tuple.first <| (Tooltip.update msg_ model.tooltip)
       in
         ({ model | tooltip = updated }, Cmd.none)
 
-    Mdl action' ->
-      Material.update action' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
 
 -- VIEW

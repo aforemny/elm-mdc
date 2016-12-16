@@ -46,12 +46,13 @@ model =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model = 
   case action of
-    Mdl action' -> 
-      Material.update action' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
     Decrease -> 
       ( { model | unread = model.unread - 1 }
-      , [0..7]
+      , List.range 0 7
+        |> List.map toFloat
         |> List.map (\i -> Helpers.delay (2 ^ i * 20 + 750) Increase)
         |> Cmd.batch
       )
@@ -66,8 +67,8 @@ update action model =
         |> Helpers.map1st (\codebox -> { model | codebox = codebox })
         |> Helpers.map2nd (Cmd.map CodeBox)
 
-    CodeBox action' -> 
-      Code.update action' model.codebox
+    CodeBox msg_ -> 
+      Code.update msg_ model.codebox
         |> Helpers.map1st (\codebox -> { model | codebox = codebox })
         |> Helpers.map2nd (Cmd.map CodeBox)
 
@@ -197,7 +198,7 @@ view model =
       , Code.view model.codebox [ Options.css "margin" "20px 0" ]
       ]
   in 
-    Page.body1' "Badges" srcUrl intro references demo1 demo2
+    Page.body1_ "Badges" srcUrl intro references demo1 demo2
 
 
 

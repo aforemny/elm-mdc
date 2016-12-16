@@ -66,8 +66,8 @@ update action model =
         Click str -> 
             ( { model | str = str }, Cmd.none )
 
-        Mdl action' ->
-            Material.update action' model
+        Mdl msg_ ->
+            Material.update Mdl msg_ model
 
 
 
@@ -314,7 +314,7 @@ secondaryAction1 model =
     star model k = 
       Button.render Mdl [k] model.mdl
         [ Button.icon 
-        , Button.accent `when` Set.member k model.toggles 
+        , Button.accent |> when (Set.member k model.toggles)
         , Button.onClick (Flip k)
         ]
         [ Icon.i "star" ]
@@ -812,7 +812,7 @@ view model =
             ]
         ]
   in
-    Page.body1' "Lists" srcUrl intro references [demo] docs
+    Page.body1_ "Lists" srcUrl intro references [demo] docs
 
 
 intro : Html m

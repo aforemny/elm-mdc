@@ -1,13 +1,27 @@
-module Material.Button exposing
-  ( Model, defaultModel, Msg, update, view
-  , flat, raised, fab, minifab, icon
-  , plain, colored, primary, accent
-  , ripple, disabled
-  , onClick
-  , Property
-  , render
-  , type'
-  )
+module Material.Button
+    exposing
+        ( Model
+        , defaultModel
+        , Msg
+        , update
+        , view
+        , flat
+        , raised
+        , fab
+        , minifab
+        , icon
+        , plain
+        , colored
+        , primary
+        , accent
+        , ripple
+        , disabled
+        , onClick
+        , Property
+        , render
+        , react
+        , type_
+        )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
 
@@ -40,7 +54,7 @@ for a live demo.
 # Options
 
 @docs Property
-@docs type'
+@docs type_
 
 ## Appearance
 @docs plain, colored, primary, accent
@@ -58,22 +72,18 @@ for details about what type of buttons are appropriate for which situations.
 # Elm architecture
 @docs Model, defaultModel, Msg, update, view
 
+@docs react
 
 -}
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events
-import Html.App
 import Platform.Cmd exposing (Cmd, none)
-
-
-import Parts exposing (Indexed, Index)
-
+import Material.Component as Component exposing (Indexed, Index)
 import Material.Helpers as Helpers
 import Material.Options as Options exposing (cs, when)
 import Material.Ripple as Ripple
-
 
 
 -- MODEL
@@ -81,14 +91,16 @@ import Material.Ripple as Ripple
 
 {-|
 -}
-type alias Model = Ripple.Model
+type alias Model =
+    Ripple.Model
 
 
 {-|
 -}
 defaultModel : Model
 defaultModel =
-  Ripple.model
+    Ripple.model
+
 
 
 -- ACTION, UPDATE
@@ -96,93 +108,94 @@ defaultModel =
 
 {-| Component action.
 -}
-type alias Msg
-  = Ripple.Msg
+type alias Msg =
+    Ripple.Msg
 
 
 {-| Component update.
 -}
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action =
-  Ripple.update action
+    Ripple.update action
+
 
 
 -- VIEW
 
 
 type alias Config m =
-  { ripple : Bool
-  , onClick : Maybe (Attribute m)
-  , disabled : Bool
-  , type' : Maybe String
-  }
+    { ripple : Bool
+    , onClick : Maybe (Attribute m)
+    , disabled : Bool
+    , type_ : Maybe String
+    }
 
 
 defaultConfig : Config m
 defaultConfig =
-  { ripple = False
-  , onClick = Nothing
-  , disabled = False
-  , type' = Nothing
-  }
+    { ripple = False
+    , onClick = Nothing
+    , disabled = False
+    , type_ = Nothing
+    }
 
 
 {-| Properties for Button options.
 -}
 type alias Property m =
-  Options.Property (Config m) m
+    Options.Property (Config m) m
 
 
 {-| Add an `on "click"` handler to a button.
 -}
 onClick : m -> Property m
 onClick x =
-  Options.set
-    (\options -> { options | onClick = Just (Html.Events.onClick x) })
+    Options.set
+        (\options -> { options | onClick = Just (Html.Events.onClick x) })
 
 
 {-| Set button to ripple when clicked.
 -}
 ripple : Property m
 ripple =
-  Options.set
-    (\options -> { options | ripple = True })
+    Options.set
+        (\options -> { options | ripple = True })
 
 
 {-| Set button to "disabled".
 -}
 disabled : Property m
 disabled =
-  Options.set
-    (\options -> { options | disabled = True })
+    Options.set
+        (\options -> { options | disabled = True })
 
 
 {-| Plain, uncolored button (default).
 -}
 plain : Property m
 plain =
-  Options.nop
+    Options.nop
 
 
 {-| Color button with primary or accent color depending on button type.
 -}
 colored : Property m
 colored =
-  cs "mdl-button--colored"
+    cs "mdl-button--colored"
 
 
 {-| Color button with primary color.
 -}
 primary : Property m
 primary =
-  cs "mdl-button--primary"
+    cs "mdl-button--primary"
 
 
 {-| Color button with accent color.
 -}
 accent : Property m
 accent =
-  cs "mdl-button--accent"
+    cs "mdl-button--accent"
 
 
 {-| Sets the type of the button e.g.
@@ -192,95 +205,110 @@ accent =
       ]
       [ ... ]
 -}
-type' : String -> Property m
-type' tp =
-  Options.set
-    (\options -> { options | type' = Just tp })
+type_ : String -> Property m
+type_ tp =
+    Options.set
+        (\options -> { options | type_ = Just tp })
 
 
-{- Ladies & Gentlemen: My nastiest hack ever. 
 
-Buttons with ripples are implemented as
-  <button> ... <span> ... </span></button>
-elements. The button must blur itself when the mouse goes up or leaves, and the
-(ripple) span must clear its animation state under the same events.
-Unfortunately, on firefox, mousedown, mouseleave etc. don't trigger on elements
-inside buttons, so we have to install all handlers on button. But the only way
-I know of to blur something is the `Helpers.blurOn` trick, which seemingly precludes
-also doing anything on the elm side. We work around this by manually triggering
-a 'touchcancel' event on the inner span.
+{- Ladies & Gentlemen: My nastiest hack ever.
 
-Obviously, once Elm gets proper support for controlling focus/blur, we can dispense
-with all this nonsense.
+   Buttons with ripples are implemented as
+     <button> ... <span> ... </span></button>
+   elements. The button must blur itself when the mouse goes up or leaves, and the
+   (ripple) span must clear its animation state under the same events.
+   Unfortunately, on firefox, mousedown, mouseleave etc. don't trigger on elements
+   inside buttons, so we have to install all handlers on button. But the only way
+   I know of to blur something is the `Helpers.blurOn` trick, which seemingly precludes
+   also doing anything on the elm side. We work around this by manually triggering
+   a 'touchcancel' event on the inner span.
+
+   Obviously, once Elm gets proper support for controlling focus/blur, we can dispense
+   with all this nonsense.
 -}
+
+
 blurAndForward : String -> Attribute m
 blurAndForward event =
-  Html.Attributes.attribute
-    ("on" ++ event)
-      -- NOTE: IE Does not properly support 'new Event()'. This is a temporary workaround
-      "this.blur(); (function(self) { var e = document.createEvent('Event'); e.initEvent('touchcancel', true, true); self.lastChild.dispatchEvent(e); }(this));"
+    Html.Attributes.attribute
+        ("on" ++ event)
+        -- NOTE: IE Does not properly support 'new Event()'. This is a temporary workaround
+        "this.blur(); (function(self) { var e = document.createEvent('Event'); e.initEvent('touchcancel', true, true); self.lastChild.dispatchEvent(e); }(this));"
 
 
 {-| Component view function.
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model config html =
-  let
-    summary = Options.collect defaultConfig config
+    let
+        summary =
+            Options.collect defaultConfig config
 
-    startListeners =
-      if summary.config.ripple then
-        [ Ripple.downOn' lift "mousedown" |> Just
-        , Ripple.downOn' lift "touchstart" |> Just
-        ]
-      else
-        []
+        startListeners =
+            if summary.config.ripple then
+                [ Ripple.downOn_ lift "mousedown" |> Just
+                , Ripple.downOn_ lift "touchstart" |> Just
+                ]
+            else
+                []
 
-    stopListeners =
-      let handle =
-        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
-      in
-        [ handle "mouseup"
-        , handle "mouseleave"
-        , handle "touchend"
-        ]
+        stopListeners =
+            let
+                handle =
+                    Just
+                        << if summary.config.ripple then
+                            blurAndForward
+                           else
+                            Helpers.blurOn
+            in
+                [ handle "mouseup"
+                , handle "mouseleave"
+                , handle "touchend"
+                ]
 
-    misc =
-      [ summary.config.onClick
-      , if summary.config.disabled then
-          Just (Html.Attributes.disabled True)
-        else
-          Nothing
-      ]
-
-    type' =
-      case summary.config.type' of
-        Nothing -> []
-        Just tp -> [ Just <| Html.Attributes.type' tp ]
-
-  in
-    Options.apply summary button
-      [ cs "mdl-button"
-      , cs "mdl-js-button"
-      , cs "mdl-js-ripple-effect" `when` summary.config.ripple
-      ]
-      (List.concat [startListeners, stopListeners, misc, type']
-         |> List.filterMap identity)
-      (if summary.config.ripple then
-          List.concat
-            [ html
-            -- Ripple element must be last or blurAndForward hack fails.
-            , [ Html.App.map lift <| Ripple.view'
-                  [ class "mdl-button__ripple-container"
-                  --, Helpers.blurOn "mouseup"
-                  , Ripple.upOn "blur"
-                  , Ripple.upOn "touchcancel"
-                  ]
-                  model
-              ]
+        misc =
+            [ summary.config.onClick
+            , if summary.config.disabled then
+                Just (Html.Attributes.disabled True)
+              else
+                Nothing
             ]
-        else
-          html)
+
+        type_ =
+            case summary.config.type_ of
+                Nothing ->
+                    []
+
+                Just tp ->
+                    [ Just <| Html.Attributes.type_ tp ]
+    in
+        Options.apply summary
+            button
+            [ cs "mdl-button"
+            , cs "mdl-js-button"
+            , (cs "mdl-js-ripple-effect") |> when summary.config.ripple
+            ]
+            (List.concat [ startListeners, stopListeners, misc, type_ ]
+                |> List.filterMap identity
+            )
+            (if summary.config.ripple then
+                List.concat
+                    [ html
+                      -- Ripple element must be last or blurAndForward hack fails.
+                    , [ Html.map lift <|
+                            Ripple.view_
+                                [ class "mdl-button__ripple-container"
+                                  --, Helpers.blurOn "mouseup"
+                                , Ripple.upOn "blur"
+                                , Ripple.upOn "touchcancel"
+                                ]
+                                model
+                      ]
+                    ]
+             else
+                html
+            )
 
 
 {-| From the
@@ -307,7 +335,8 @@ Example use (uncolored flat button, assuming properly setup model):
 
 -}
 flat : Property m
-flat = Options.nop
+flat =
+    Options.nop
 
 
 {-| From the
@@ -331,7 +360,8 @@ Example use (colored raised button, assuming properly setup model):
 
 -}
 raised : Property m
-raised = cs "mdl-button--raised"
+raised =
+    cs "mdl-button--raised"
 
 
 {-| Floating Msg Button. From the
@@ -360,13 +390,15 @@ Example use (colored with a '+' icon):
         [ Icon.i "add" ]
 -}
 fab : Property m
-fab = cs "mdl-button--fab"
+fab =
+    cs "mdl-button--fab"
 
 
 {-| Mini-sized variant of a Floating Msg Button; refer to `fab`.
 -}
 minifab : Property m
-minifab = cs "mdl-button--mini-fab"
+minifab =
+    cs "mdl-button--mini-fab"
 
 
 {-| The [Material Design Lite implementation](https://www.getmdl.io/components/index.html#buttons-section)
@@ -385,15 +417,32 @@ Example use (no color, displaying a '+' icon):
         [ Icon.i "add" ]
 -}
 icon : Property m
-icon = cs "mdl-button--icon"
+icon =
+    cs "mdl-button--icon"
 
 
 
--- PART
+-- COMPONENT
 
 
-type alias Container c =
-  { c | button : Indexed Model }
+type alias Store s =
+    { s | button : Indexed Model }
+
+
+( get, set ) =
+    Component.indexed .button (\x y -> { y | button = x }) Ripple.model
+
+
+{-| Component react function (update variant). Internal use only.
+-}
+react :
+  (Component.Msg Msg textfield menu layout toggles tooltip tabs -> m)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )  
+react =
+    Component.react get set Component.ButtonMsg (Component.generalise update)
 
 
 {-| Component render.  Below is an example, assuming boilerplate setup as
@@ -406,12 +455,12 @@ indicated in `Material`, and a user message `PollMsg`.
       ]
       [ text "Fetch new"]
 -}
-render
-  : (Parts.Msg (Container c) m -> m)
-  -> Parts.Index
-  -> (Container c)
-  -> List (Property m)
-  -> List (Html m)
-  -> Html m
+render :
+    (Component.Msg Msg textfield menu snackbar toggles tooltip tabs -> m)
+    -> Index
+    -> { a | button : Indexed Ripple.Model }
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
 render =
-  Parts.create view (Parts.generalize update) .button (\x y -> {y | button=x}) Ripple.model
+    Component.render get view Component.ButtonMsg

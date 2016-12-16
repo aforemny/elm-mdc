@@ -37,8 +37,8 @@ update action model =
     TemplateMsg -> 
       (model, Cmd.none)
 
-    Mdl action' -> 
-      Material.update Mdl action' model
+    Mdl msg_ -> 
+      Material.update Mdl Mdl msg_ model
 
 
 -- VIEW
