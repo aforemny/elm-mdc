@@ -93,10 +93,8 @@ type alias Config m =
   , cols : Maybe Int
   , expandable : Maybe String
   , expandableIcon : String
-=======
   , input : List (Options.Style m)  
   , container : List (Options.Style m)
->>>>>>> 03f5d01d21f752b53861bfa25a5ed4eb764f1679
   }
 
 

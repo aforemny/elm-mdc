@@ -1,8 +1,9 @@
-module Material.Badge exposing
-  ( noBackground
-  , overlap
-  , add
-  )
+module Material.Badge
+    exposing
+        ( noBackground
+        , overlap
+        , add
+        )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#badges-section):
 
@@ -19,17 +20,17 @@ module Material.Badge exposing
 > showing the number of items in the cart.
 > A "Join the discussion!" button might have an accompanying badge indicating the number of
 > users currently participating in the discussion.
-> A badge is almost always positioned near a link so that the user has a convenient way to access 
-> the additional information indicated by the badge. However, depending on the intent, the 
+> A badge is almost always positioned near a link so that the user has a convenient way to access
+> the additional information indicated by the badge. However, depending on the intent, the
 > badge itself may or may not be part of the link.
 >
 > Badges are a new feature in user interfaces, and provide users with a visual clue to help them
 > discover additional relevant content. Their design and use is therefore an important
 > factor in the overall user experience.
 
-Refer to 
+Refer to
 [this site](https://debois.github.io/elm-mdl/#badges)
-for a live demo. 
+for a live demo.
 
 @docs add, noBackground, overlap
 -}
@@ -37,26 +38,25 @@ for a live demo.
 import Material.Options as Options exposing (Property, cs, many)
 
 
-
 {-| No background for badge.
 -}
 noBackground : Property c m
-noBackground = 
-  cs "mdl-badge--no-background"
+noBackground =
+    cs "mdl-badge--no-background"
 
 
-{-| Badge overlaps text/contents. 
+{-| Badge overlaps text/contents.
 -}
 overlap : Property c m
-overlap = 
-  cs "mdl-badge--overlap"
+overlap =
+    cs "mdl-badge--overlap"
 
 
 {-| Add a badge to the containing element.
 -}
 add : String -> Property c m
-add str = 
-  Options.many
-    [ Options.data "badge" str
-    , cs "mdl-badge"
-    ]
+add str =
+    Options.many
+        [ Options.data "badge" str
+        , cs "mdl-badge"
+        ]

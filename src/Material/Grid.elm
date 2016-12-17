@@ -1,15 +1,19 @@
-module Material.Grid exposing
-  ( grid, noSpacing, maxWidth
-  , Cell, cell
-  , Device(..)
-  , Align(..)
-  , size
-  , offset
-  , align
-  , hide
-  , order
-  , stretch
-  )
+module Material.Grid
+    exposing
+        ( grid
+        , noSpacing
+        , maxWidth
+        , Cell
+        , cell
+        , Device(..)
+        , Align(..)
+        , size
+        , offset
+        , align
+        , hide
+        , order
+        , stretch
+        )
 
 {-| From the
 [Material Design Lite documentation](http://www.getmdl.io/components/#layout-section/grid):
@@ -30,9 +34,9 @@ module Material.Grid exposing
 >     of columns for the current screen size, it takes up the entirety of its
 >     row.
 
-Refer to 
+Refer to
 [this site](https://debois.github.io/elm-mdl/#grid)
-for a live demo. 
+for a live demo.
 
 Example use:
 
@@ -63,53 +67,67 @@ Example use:
 # Cells
 
 Cells are configured with a `List Style`; this configuration dictates the
-size, offset, etc. of the cell. 
+size, offset, etc. of the cell.
 
 @docs cell, Cell, Device, size, offset, Align, align, stretch, hide, order
 -}
 
-
 import Html exposing (..)
-
 import Material.Options as Options exposing (Style, cs, styled)
 
 
-{-| Set grid to have no spacing between cells. 
+{-| Set grid to have no spacing between cells.
 -}
 noSpacing : Style a
-noSpacing = Options.cs "mdl-grid--no-spacing"
+noSpacing =
+    Options.cs "mdl-grid--no-spacing"
+
 
 {-| Set maximum grid width. If more space is available, the grid stays centered with
-padding on either side. Width must be a valid CSS dimension. 
+padding on either side. Width must be a valid CSS dimension.
 -}
 maxWidth : String -> Style a
-maxWidth w = Options.css "max-width" w
+maxWidth w =
+    Options.css "max-width" w
+
 
 {-| Construct a grid with options.
 -}
 grid : List (Style a) -> List (Cell a) -> Html a
 grid styling cells =
-  Options.div (cs "mdl-grid" :: styling) (List.map (\(Cell elm) -> elm) cells)
+    Options.div (cs "mdl-grid" :: styling) (List.map (\(Cell elm) -> elm) cells)
 
 
 {-| Device specifiers, used with `size` and `offset`. (A `Device` really
 encapsulates a screen size.)
 -}
-type Device = All | Desktop | Tablet | Phone
+type Device
+    = All
+    | Desktop
+    | Tablet
+    | Phone
 
 
 {-| Opaque cell type.
 -}
-type Cell a = Cell (Html a)
+type Cell a
+    = Cell (Html a)
 
 
 suffix : Device -> String
 suffix device =
-  case device of
-    All -> ""
-    Desktop -> "-desktop"
-    Tablet -> "-tablet"
-    Phone -> "-phone"
+    case device of
+        All ->
+            ""
+
+        Desktop ->
+            "-desktop"
+
+        Tablet ->
+            "-tablet"
+
+        Phone ->
+            "-phone"
 
 
 {-| Specify cell size. On devices of type `Device`, the
@@ -117,14 +135,22 @@ cell being specified spans `Int` columns.
 -}
 size : Device -> Int -> Style a
 size device k =
-  let c =
-    case device of
-      All -> clip 1 12 k
-      Desktop -> clip 1 12 k
-      Tablet -> clip 1 8 k
-      Phone -> clip 1 4 k
-  in
-    "mdl-cell--" ++ toString c ++ "-col" ++ suffix device |> cs
+    let
+        c =
+            case device of
+                All ->
+                    clip 1 12 k
+
+                Desktop ->
+                    clip 1 12 k
+
+                Tablet ->
+                    clip 1 8 k
+
+                Phone ->
+                    clip 1 4 k
+    in
+        "mdl-cell--" ++ toString c ++ "-col" ++ suffix device |> cs
 
 
 {-| Specify cell offset, i.e., empty number of empty cells before the present
@@ -133,64 +159,86 @@ one begins.
 -}
 offset : Device -> Int -> Style a
 offset device k =
-  let c =
-    case device of
-      All -> clip 1 11 k
-      Desktop -> clip 1 11 k
-      Tablet -> clip 1 7 k
-      Phone -> clip 1 3 k
-  in
-    "mdl-cell--" ++ toString c ++ "-offset" ++ suffix device |> cs
+    let
+        c =
+            case device of
+                All ->
+                    clip 1 11 k
+
+                Desktop ->
+                    clip 1 11 k
+
+                Tablet ->
+                    clip 1 7 k
+
+                Phone ->
+                    clip 1 3 k
+    in
+        "mdl-cell--" ++ toString c ++ "-offset" ++ suffix device |> cs
 
 
 {-| Alignment of cell contents; use with `align`.
 -}
-type Align = Top | Middle | Bottom 
+type Align
+    = Top
+    | Middle
+    | Bottom
 
 
 {-| Specify vertical cell alignment. See `Align`.
 -}
 align : Align -> Style a
 align a =
-  case a of 
-    Top -> cs "mdl-cell--top"
-    Middle -> cs "mdl-cell--middle"
-    Bottom -> cs "mdl-cell--bottom"
+    case a of
+        Top ->
+            cs "mdl-cell--top"
+
+        Middle ->
+            cs "mdl-cell--middle"
+
+        Bottom ->
+            cs "mdl-cell--bottom"
 
 
 {-| Specify that a cell stretches vertically to fill the parent.
 -}
 stretch : Style a
-stretch = 
-  cs "mdl-cell--stretch"
+stretch =
+    cs "mdl-cell--stretch"
 
 
 {-| Specify that a cell should be hidden on given `Device`.
 -}
 hide : Device -> Style a
 hide device =
-  cs <| case device of
-    All -> ""
-    _ -> "mdl-cell--hide-" ++ suffix device
+    cs <|
+        case device of
+            All ->
+                ""
+
+            _ ->
+                "mdl-cell--hide-" ++ suffix device
 
 
 {-| Specify that a cell should re-order itself to position 'Int' on `Device`.
 -}
 order : Device -> Int -> Style a
 order device n =
-  cs <| "mdl-cell--order-" ++ (toString <| clip 1 12 n) ++ suffix device
+    cs <| "mdl-cell--order-" ++ (toString <| clip 1 12 n) ++ suffix device
 
 
 {-| Construct a cell for use in the argument list for `grid`. Note that this
-module defines exposing various styles to set size, offset, etc. of the cell. 
+module defines exposing various styles to set size, offset, etc. of the cell.
 -}
 cell : List (Style a) -> List (Html a) -> Cell a
 cell styling elms =
-  Cell (Options.div (cs "mdl-cell" :: styling) elms)
+    Cell (Options.div (cs "mdl-cell" :: styling) elms)
+
 
 
 -- HELPERS
 
 
 clip : comparable -> comparable -> comparable -> comparable
-clip lower upper k = Basics.max lower (Basics.min k upper)
+clip lower upper k =
+    Basics.max lower (Basics.min k upper)

@@ -1,14 +1,14 @@
 module Material.Slider
-  exposing
-    ( Property
-    , value
-    , min
-    , max
-    , step
-    , disabled
-    , view
-    , onChange
-    )
+    exposing
+        ( Property
+        , value
+        , min
+        , max
+        , step
+        , disabled
+        , view
+        , onChange
+        )
 
 {-| From the [Material Design Lite documentation](https://material.google.com/components/sliders.html):
 
@@ -60,86 +60,86 @@ import Json.Decode as Json
 
 
 type alias Config m =
-  { value : Float
-  , min : Float
-  , max : Float
-  , step : Float
-  , input : List (Options.Style m)
-  , container : List (Options.Style m)
-  }
+    { value : Float
+    , min : Float
+    , max : Float
+    , step : Float
+    , input : List (Options.Style m)
+    , container : List (Options.Style m)
+    }
 
 
 defaultConfig : Config m
 defaultConfig =
-  { value = 50
-  , min = 0
-  , max = 100
-  , step = 1
-  , input = []
-  , container = [] 
-  }
+    { value = 50
+    , min = 0
+    , max = 100
+    , step = 1
+    , input = []
+    , container = []
+    }
 
 
 {-| Properties for Slider options.
 -}
 type alias Property m =
-  Options.Property (Config m) m
+    Options.Property (Config m) m
 
 
 {-| Sets current value
 -}
 value : Float -> Property m
 value =
-  (\v options -> { options | value = v })
-    >> Internal.option
+    (\v options -> { options | value = v })
+        >> Internal.option
 
 
 {-| Sets the step. Defaults to 0
 -}
 min : Float -> Property m
 min =
-  (\v options -> { options | min = v })
-    >> Internal.option 
+    (\v options -> { options | min = v })
+        >> Internal.option
 
 
 {-| Sets the step. Defaults to 100
 -}
 max : Float -> Property m
 max =
-  (\v options -> { options | max = v })
-    >> Internal.option
+    (\v options -> { options | max = v })
+        >> Internal.option
 
 
 {-| Sets the step. Defaults to 1
 -}
 step : Float -> Property m
 step =
-  (\v options -> { options | step = v })
-    >> Internal.option
+    (\v options -> { options | step = v })
+        >> Internal.option
 
 
 {-| Disables the slider
 -}
 disabled : Property m
 disabled =
-  Internal.attribute <| Html.disabled True
+    Internal.attribute <| Html.disabled True
 
 
 floatVal : Json.Decoder Float
 floatVal =
-  (Json.at [ "target", "valueAsNumber" ] Json.float)
+    (Json.at [ "target", "valueAsNumber" ] Json.float)
 
 
 {-| onChange listener for slider values
 
-This convenience handler listens for both "change" and "input" events. 
+This convenience handler listens for both "change" and "input" events.
 -}
 onChange : (Float -> m) -> Property m
 onChange f =
-  Options.many 
-   [ Options.on "change" (Json.map f floatVal)
-   , Options.on "input" (Json.map f floatVal)
-   ] 
+    Options.many
+        [ Options.on "change" (Json.map f floatVal)
+        , Options.on "input" (Json.map f floatVal)
+        ]
 
 
 {-| A slider consists of a horizontal line upon which sits a small, movable
@@ -159,56 +159,57 @@ will be set when the user moves it. Example use:
 -}
 view : List (Property m) -> Html m
 view options =
-  let
-    summary =
-      Internal.collect defaultConfig options
+    let
+        summary =
+            Internal.collect defaultConfig options
 
-    config =
-      summary.config
+        config =
+            summary.config
 
-    fraction =
-      (config.value - config.min) / (config.max - config.min)
+        fraction =
+            (config.value - config.min) / (config.max - config.min)
 
-    lower =
-      (toString fraction) ++ " 1 0%"
+        lower =
+            (toString fraction) ++ " 1 0%"
 
-    upper =
-      (toString (1 - fraction)) ++ " 1 0%"
+        upper =
+            (toString (1 - fraction)) ++ " 1 0%"
 
-    -- NOTE: does not work with IE yet. needs mdl-slider__ie-container
-    -- and some additional logic
-    background =
-      Options.styled Html.div
-        [ cs "mdl-slider__background-flex" ]
-        [ Options.styled Html.div
-            [ cs "mdl-slider__background-lower"
-            , css "flex" lower
+        -- NOTE: does not work with IE yet. needs mdl-slider__ie-container
+        -- and some additional logic
+        background =
+            Options.styled Html.div
+                [ cs "mdl-slider__background-flex" ]
+                [ Options.styled Html.div
+                    [ cs "mdl-slider__background-lower"
+                    , css "flex" lower
+                    ]
+                    []
+                , Options.styled Html.div
+                    [ cs "mdl-slider__background-upper"
+                    , css "flex" upper
+                    ]
+                    []
+                ]
+    in
+        Internal.applyContainer summary
+            Html.div
+            [ cs "mdl-slider__container" ]
+            [ Internal.applyInput summary
+                Html.input
+                [ cs "mdl-slider"
+                , cs "mdl-js-slider"
+                , cs "is-upgraded"
+                , cs "is-lowest-value" `when` (fraction == 0)
+                  -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
+                , css "padding" "8px 0"
+                , Internal.attribute <| Html.type' "range"
+                , Internal.attribute <| Html.max (toString config.max)
+                , Internal.attribute <| Html.min (toString config.min)
+                , Internal.attribute <| Html.step (toString config.step)
+                , Internal.attribute <| Html.value (toString config.value)
+                , Internal.attribute <| Helpers.blurOn "mouseup"
+                ]
+                []
+            , background
             ]
-            []
-        , Options.styled Html.div
-            [ cs "mdl-slider__background-upper"
-            , css "flex" upper
-            ]
-            []
-        ]
-
-  in
-    Internal.applyContainer summary Html.div
-      [ cs "mdl-slider__container"]
-      [ Internal.applyInput summary Html.input
-          [ cs "mdl-slider"
-          , cs "mdl-js-slider"
-          , cs "is-upgraded"
-          , cs "is-lowest-value" `when` (fraction == 0)
-            -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
-          , css "padding" "8px 0"
-          , Internal.attribute <| Html.type' "range"
-          , Internal.attribute <| Html.max (toString config.max)
-          , Internal.attribute <| Html.min (toString config.min)
-          , Internal.attribute <| Html.step (toString config.step)
-          , Internal.attribute <| Html.value (toString config.value)
-          , Internal.attribute <| Helpers.blurOn "mouseup"
-          ]
-          []
-      , background
-      ]

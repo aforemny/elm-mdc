@@ -1,9 +1,19 @@
-module Material.Table exposing
-  ( table, thead, tbody, tfoot
-  , tr, th, td
-  , ascending, descending, sorted, selected, Order(Ascending,Descending)
-  , numeric
-  )
+module Material.Table
+    exposing
+        ( table
+        , thead
+        , tbody
+        , tfoot
+        , tr
+        , th
+        , td
+        , ascending
+        , descending
+        , sorted
+        , selected
+        , Order(Ascending, Descending)
+        , numeric
+        )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#tables-section):
 
@@ -38,18 +48,17 @@ for a live demo.
 @docs tr, th, td
 
 
-## Sorting options. 
-The following options have effect only when applied in the header row. 
+## Sorting options.
+The following options have effect only when applied in the header row.
 @docs ascending, descending, numeric, Order, sorted, selected
 -}
 
 import Html exposing (Html, Attribute)
-
 import Material.Options as Options exposing (Property, cs, nop)
 import Material.Options.Internal as Internal
 
 
-{-| Main table constructor. Example use: 
+{-| Main table constructor. Example use:
 
     table []
       [ thead []
@@ -69,48 +78,52 @@ import Material.Options.Internal as Internal
           ]
       ]
 -}
-table
-  : List (Property {} m)
-  -> List (Html m)
-  -> Html m
+table :
+    List (Property {} m)
+    -> List (Html m)
+    -> Html m
 table options nodes =
-  Options.styled Html.table 
-    (  cs "mdl-data-table"
-    :: cs "mdl-js-data-table"
-    :: cs "is-upgraded"
-    :: options)
-    nodes
+    Options.styled Html.table
+        (cs "mdl-data-table"
+            :: cs "mdl-js-data-table"
+            :: cs "is-upgraded"
+            :: options
+        )
+        nodes
 
-{-| Define table header row(s) 
+
+{-| Define table header row(s)
 -}
 thead : List (Property {} m) -> List (Html m) -> Html m
 thead options html =
-  let
-    summary =
-      Internal.collect {} options
-  in
-    Internal.apply summary Html.thead [] [] html
+    let
+        summary =
+            Internal.collect {} options
+    in
+        Internal.apply summary Html.thead [] [] html
 
 
 {-| Define table body
 -}
 tbody : List (Property {} m) -> List (Html m) -> Html m
 tbody options html =
-  let
-    summary =
-      Internal.collect {} options
-  in
-    Internal.apply summary Html.tbody [] [] html
+    let
+        summary =
+            Internal.collect {} options
+    in
+        Internal.apply summary Html.tbody [] [] html
+
 
 {-| Define table footer row(s)
 -}
 tfoot : List (Property {} m) -> List (Html m) -> Html m
 tfoot options html =
-  let
-    summary =
-      Internal.collect {} options
-  in
-    Internal.apply summary Html.tfoot [] [] html
+    let
+        summary =
+            Internal.collect {} options
+    in
+        Internal.apply summary Html.tfoot [] [] html
+
 
 
 -- Row
@@ -119,37 +132,41 @@ tfoot options html =
 {-| A row `tr` can be indicated as selected using `selected`.
 -}
 type alias Row =
-  { selected : Bool
-  }
+    { selected : Bool
+    }
 
 
 defaultRow : { selected : Bool }
 defaultRow =
-  { selected = False
-  }
+    { selected = False
+    }
 
 
-{-| Table row 
+{-| Table row
 -}
 tr : List (Property Row m) -> List (Html m) -> Html m
 tr options html =
-  let
-    ({ config } as summary) =
-      Internal.collect defaultRow options
-  in
-    Internal.apply summary Html.tr
-    [ if config.selected then cs "is-selected" else nop
-    ]
-    [
-    ]
-    html
+    let
+        ({ config } as summary) =
+            Internal.collect defaultRow options
+    in
+        Internal.apply summary
+            Html.tr
+            [ if config.selected then
+                cs "is-selected"
+              else
+                nop
+            ]
+            []
+            html
 
 
-{-| Mark row as selected. 
+{-| Mark row as selected.
 -}
 selected : Property { a | selected : Bool } m
 selected =
-  Internal.option <| \self -> { self | selected = True }
+    Internal.option <| \self -> { self | selected = True }
+
 
 
 -- Header
@@ -162,70 +179,80 @@ receive mouse clicks via `onClick`.
   th [ ascending, numeric ] [ text "Price" ]
 -}
 type alias Header =
-  { numeric : Bool
-  , sorted : Maybe Order
-  }
+    { numeric : Bool
+    , sorted : Maybe Order
+    }
 
 
 defaultHeader : Header
 defaultHeader =
-  { numeric = False
-  , sorted = Nothing
-  }
+    { numeric = False
+    , sorted = Nothing
+    }
 
 
-{-| Define cell in table header 
+{-| Define cell in table header
 -}
-th : List (Property (Header) m) -> List (Html m) -> Html m
+th : List (Property Header m) -> List (Html m) -> Html m
 th options html =
-  let
-    ({ config } as summary) =
-      Internal.collect defaultHeader options
-  in
-    Internal.apply summary Html.th
-    [ if config.numeric then nop else cs "mdl-data-table__cell--non-numeric"
-    , case config.sorted of
-        Just Ascending -> cs "mdl-data-table__header--sorted-ascending"
-        Just Descending -> cs "mdl-data-table__header--sorted-descending"
-        Nothing -> nop
-    ]
-    []
-    html
+    let
+        ({ config } as summary) =
+            Internal.collect defaultHeader options
+    in
+        Internal.apply summary
+            Html.th
+            [ if config.numeric then
+                nop
+              else
+                cs "mdl-data-table__cell--non-numeric"
+            , case config.sorted of
+                Just Ascending ->
+                    cs "mdl-data-table__header--sorted-ascending"
+
+                Just Descending ->
+                    cs "mdl-data-table__header--sorted-descending"
+
+                Nothing ->
+                    nop
+            ]
+            []
+            html
 
 
 {-| Containing column is interpreted as numeric when used as sorting key
 -}
 numeric : Property { a | numeric : Bool } m
 numeric =
-  Internal.option <| \self -> { self | numeric = True }
+    Internal.option <| \self -> { self | numeric = True }
 
 
 {-| Containing column should be sorted ascendingly
 -}
 ascending : Property { a | sorted : Maybe Order } m
 ascending =
-  sorted Ascending
+    sorted Ascending
 
 
 {-| Containing column should be sorted descendingly
 -}
 descending : Property { a | sorted : Maybe Order } m
 descending =
-  sorted Descending
+    sorted Descending
 
 
 {-| Containing column should be sorted by given order
 -}
 sorted : Order -> Property { a | sorted : Maybe Order } m
 sorted order =
-  Internal.option <| \self -> { self | sorted = Just order }
+    Internal.option <| \self -> { self | sorted = Just order }
 
 
-{-| Possible orderings 
+{-| Possible orderings
 -}
 type Order
-  = Ascending
-  | Descending
+    = Ascending
+    | Descending
+
 
 
 --Cell
@@ -236,27 +263,30 @@ type Order
     td [ numeric ] [ text "$2.90" ]
 -}
 type alias Cell =
-  { numeric : Bool
-  }
+    { numeric : Bool
+    }
 
 
 defaultCell : { numeric : Bool }
 defaultCell =
-  { numeric = False
-  }
+    { numeric = False
+    }
 
 
-{-| Define table cell 
+{-| Define table cell
 -}
 td : List (Property Cell m) -> List (Html m) -> Html m
 td options html =
-  let
-    ({ config } as summary) =
-      Internal.collect defaultCell options
-  in
-    Internal.apply summary Html.td
-    [ if config.numeric then nop else cs "mdl-data-table__cell--non-numeric"
-    ]
-    [
-    ]
-    html
+    let
+        ({ config } as summary) =
+            Internal.collect defaultCell options
+    in
+        Internal.apply summary
+            Html.td
+            [ if config.numeric then
+                nop
+              else
+                cs "mdl-data-table__cell--non-numeric"
+            ]
+            []
+            html

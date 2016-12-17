@@ -1,11 +1,12 @@
-module Material.Spinner exposing
-  ( spinner
-  , active
-  , singleColor
-  , Property
-  , Config
-  , defaultConfig
-  )
+module Material.Spinner
+    exposing
+        ( spinner
+        , active
+        , singleColor
+        , Property
+        , Config
+        , defaultConfig
+        )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section/spinner):
 
@@ -41,39 +42,47 @@ import Material.Options.Internal as Internal
 
 
 {-| A spinner is a loading indicator that by default changes color and is
-invisible. Example use: 
+invisible. Example use:
 
     spinner [ active ] []
 -}
-spinner :  List (Property m) -> Html m
+spinner : List (Property m) -> Html m
 spinner options =
-  let
-    ({ config } as summary) = Internal.collect defaultConfig options
-  in
-    Internal.apply summary Html.div
-    [ cs "mdl-spinner mdl-js-spinner is-upgraded"
-    , if config.active then cs "is-active" else nop
-    , if config.singleColor then cs "mdl-spinner--single-color" else nop
-    ]
-    [
-    ]
-    layers
+    let
+        ({ config } as summary) =
+            Internal.collect defaultConfig options
+    in
+        Internal.apply summary
+            Html.div
+            [ cs "mdl-spinner mdl-js-spinner is-upgraded"
+            , if config.active then
+                cs "is-active"
+              else
+                nop
+            , if config.singleColor then
+                cs "mdl-spinner--single-color"
+              else
+                nop
+            ]
+            []
+            layers
 
 
 {-| Make a spinner visible
 -}
 active : Bool -> Property m
 active =
-  (\value config -> {config | active = value})
-    >> Internal.option
+    (\value config -> { config | active = value })
+        >> Internal.option
 
 
 {-| Make a spinner a single color (the active color) of the stylesheet.
 -}
 singleColor : Bool -> Property m
 singleColor =
-  (\value config -> {config | singleColor = value})
-    >> Internal.option 
+    (\value config -> { config | singleColor = value })
+        >> Internal.option
+
 
 
 -- MODEL
@@ -82,23 +91,25 @@ singleColor =
 {-| Spinner config
 -}
 type alias Config =
-  { active : Bool
-  , singleColor : Bool
-  }
+    { active : Bool
+    , singleColor : Bool
+    }
 
 
 {-| Spinner default config is not `active`, not `singleColor`.
 -}
 defaultConfig : Config
 defaultConfig =
-  { active = False
-  , singleColor = False
-  }
+    { active = False
+    , singleColor = False
+    }
 
 
 {-| A spinner's property.
 -}
-type alias Property m = Options.Property Config m
+type alias Property m =
+    Options.Property Config m
+
 
 
 -- HELPER
@@ -106,17 +117,17 @@ type alias Property m = Options.Property Config m
 
 layer : Int -> Html m
 layer n =
-  Options.div
-  [ cs <| "mdl-spinner__layer mdl-spinner__layer-" ++ toString n
-  ]
-  ( [ Options.div [ cs "mdl-spinner__circle-clipper mdl-spinner__left" ]
-    , Options.div [ cs "mdl-spinner__gap-patch" ]
-    , Options.div [ cs "mdl-spinner__circle-clipper mdl-spinner__right" ]
-    ]
-    |> List.map ((|>) [ Options.div [ cs "mdl-spinner__circle" ] [] ])
-  )
+    Options.div
+        [ cs <| "mdl-spinner__layer mdl-spinner__layer-" ++ toString n
+        ]
+        ([ Options.div [ cs "mdl-spinner__circle-clipper mdl-spinner__left" ]
+         , Options.div [ cs "mdl-spinner__gap-patch" ]
+         , Options.div [ cs "mdl-spinner__circle-clipper mdl-spinner__right" ]
+         ]
+            |> List.map ((|>) [ Options.div [ cs "mdl-spinner__circle" ] [] ])
+        )
 
 
 layers : List (Html m)
-layers = 
-  List.map layer [1..4]
+layers =
+    List.map layer [1..4]

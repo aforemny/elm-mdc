@@ -1,12 +1,25 @@
-module Material.Button exposing
-  ( Model, defaultModel, Msg, update, view
-  , flat, raised, fab, minifab, icon
-  , plain, colored, primary, accent
-  , ripple, disabled
-  , Property
-  , render
-  , type'
-  )
+module Material.Button
+    exposing
+        ( Model
+        , defaultModel
+        , Msg
+        , update
+        , view
+        , flat
+        , raised
+        , fab
+        , minifab
+        , icon
+        , plain
+        , colored
+        , primary
+        , accent
+        , ripple
+        , disabled
+        , Property
+        , render
+        , type'
+        )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
 
@@ -61,9 +74,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.App
 import Platform.Cmd exposing (Cmd, none)
-
 import Parts exposing (Indexed, Index)
-
 import Material.Helpers as Helpers
 import Material.Options.Internal as Internal
 import Material.Options as Options exposing (cs, when)
@@ -75,96 +86,98 @@ import Material.Msg as Material
 -- MODEL
 
 
-{-| 
+{-|
 -}
-type alias Model = 
-  Ripple.Model
+type alias Model =
+    Ripple.Model
 
 
-{-| 
+{-|
 -}
 defaultModel : Model
 defaultModel =
-  Ripple.model
+    Ripple.model
+
 
 
 -- ACTION, UPDATE
 
 
-{-| 
+{-|
 -}
-type alias Msg
-  = Ripple.Msg
+type alias Msg =
+    Ripple.Msg
 
 
 {-| Component update.
 -}
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action =
-  Ripple.update action
+    Ripple.update action
+
 
 
 -- VIEW
 
 
 type alias Config =
-  { ripple : Bool
-  }
+    { ripple : Bool
+    }
 
 
 defaultConfig : Config
 defaultConfig =
-  { ripple = False
-  }
+    { ripple = False
+    }
 
 
 {-| Properties for Button options.
 -}
 type alias Property m =
-  Options.Property (Config) m
+    Options.Property Config m
 
 
 {-| Set button to ripple when clicked.
 -}
 ripple : Property m
 ripple =
-  (\options -> { options | ripple = True })
-    |> Internal.option
+    (\options -> { options | ripple = True })
+        |> Internal.option
 
 
 {-| Set button to "disabled".
 -}
 disabled : Property m
 disabled =
-  Internal.attribute <| Html.Attributes.disabled True
+    Internal.attribute <| Html.Attributes.disabled True
 
 
 {-| Plain, uncolored button (default).
 -}
 plain : Property m
 plain =
-  Options.nop
+    Options.nop
 
 
 {-| Color button with primary or accent color depending on button type.
 -}
 colored : Property m
 colored =
-  cs "mdl-button--colored"
+    cs "mdl-button--colored"
 
 
 {-| Color button with primary color.
 -}
 primary : Property m
 primary =
-  cs "mdl-button--primary"
+    cs "mdl-button--primary"
 
 
 {-| Color button with accent color.
 -}
 accent : Property m
 accent =
-  cs "mdl-button--accent"
+    cs "mdl-button--accent"
 
 
 {-| Sets the type of the button e.g.
@@ -176,46 +189,50 @@ accent =
 -}
 type' : String -> Property m
 type' =
-  Html.Attributes.type' >> Internal.attribute 
+    Html.Attributes.type' >> Internal.attribute
 
 
 {-| Component view function.
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model config html =
-  let
-    summary = Internal.collect defaultConfig config
+    let
+        summary =
+            Internal.collect defaultConfig config
 
-    listeners =
-      Options.many
-        [ Ripple.down lift "mousedown"
-        , Ripple.down lift "touchstart"
-        , Ripple.up lift "touchcancel"
-        , Ripple.up lift "mouseup"
-        , Ripple.up lift "blur"
-        , Ripple.up lift "mouseleave"
-        ]
-  in
-    Internal.apply summary button
-      [ cs "mdl-button"
-      , cs "mdl-js-button"
-      , cs "mdl-js-ripple-effect" `when` summary.config.ripple
-      , listeners
-      ]
-      [ Helpers.blurOn "mouseup"
-      , Helpers.blurOn "mouseleave"
-      , Helpers.blurOn "touchend"
-      ]
-      (if summary.config.ripple then
-          List.concat
-            [ html
-            , [ Html.App.map lift <| Ripple.view'
-                  [ class "mdl-button__ripple-container" ]
-                  model
-              ]
+        listeners =
+            Options.many
+                [ Ripple.down lift "mousedown"
+                , Ripple.down lift "touchstart"
+                , Ripple.up lift "touchcancel"
+                , Ripple.up lift "mouseup"
+                , Ripple.up lift "blur"
+                , Ripple.up lift "mouseleave"
+                ]
+    in
+        Internal.apply summary
+            button
+            [ cs "mdl-button"
+            , cs "mdl-js-button"
+            , cs "mdl-js-ripple-effect" `when` summary.config.ripple
+            , listeners
             ]
-        else
-          html)
+            [ Helpers.blurOn "mouseup"
+            , Helpers.blurOn "mouseleave"
+            , Helpers.blurOn "touchend"
+            ]
+            (if summary.config.ripple then
+                List.concat
+                    [ html
+                    , [ Html.App.map lift <|
+                            Ripple.view'
+                                [ class "mdl-button__ripple-container" ]
+                                model
+                      ]
+                    ]
+             else
+                html
+            )
 
 
 {-| From the
@@ -242,7 +259,8 @@ Example use (uncolored flat button, assuming properly setup model):
 
 -}
 flat : Property m
-flat = Options.nop
+flat =
+    Options.nop
 
 
 {-| From the
@@ -266,7 +284,8 @@ Example use (colored raised button, assuming properly setup model):
 
 -}
 raised : Property m
-raised = cs "mdl-button--raised"
+raised =
+    cs "mdl-button--raised"
 
 
 {-| Floating Msg Button. From the
@@ -295,13 +314,15 @@ Example use (colored with a '+' icon):
         [ Icon.i "add" ]
 -}
 fab : Property m
-fab = cs "mdl-button--fab"
+fab =
+    cs "mdl-button--fab"
 
 
 {-| Mini-sized variant of a Floating Msg Button; refer to `fab`.
 -}
 minifab : Property m
-minifab = cs "mdl-button--mini-fab"
+minifab =
+    cs "mdl-button--mini-fab"
 
 
 {-| The [Material Design Lite implementation](https://www.getmdl.io/components/index.html#buttons-section)
@@ -320,7 +341,8 @@ Example use (no color, displaying a '+' icon):
         [ Icon.i "add" ]
 -}
 icon : Property m
-icon = cs "mdl-button--icon"
+icon =
+    cs "mdl-button--icon"
 
 
 
@@ -328,12 +350,12 @@ icon = cs "mdl-button--icon"
 
 
 type alias Container c =
-  { c | button : Indexed Model }
+    { c | button : Indexed Model }
 
 
 set : Indexed Model -> Container c -> Container c
-set x y = 
-  { y | button = x }
+set x y =
+    { y | button = x }
 
 
 {-| Component render.  Below is an example, assuming boilerplate setup as
@@ -346,17 +368,18 @@ indicated in `Material` and a user message `PollMsg`.
       ]
       [ text "Fetch new" ]
 -}
-render
-  : (Material.Msg (Container c) m -> m)
-  -> Parts.Index
-  -> (Container c)
-  -> List (Property m)
-  -> List (Html m)
-  -> Html m
+render :
+    (Material.Msg (Container c) m -> m)
+    -> Parts.Index
+    -> Container c
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
 render lift =
-  Parts.create 
-    (Internal.inject view lift) 
-    (Parts.generalize update) 
-    .button set
-    Ripple.model
-    (Material.Internal >> lift)
+    Parts.create
+        (Internal.inject view lift)
+        (Parts.generalize update)
+        .button
+        set
+        Ripple.model
+        (Material.Internal >> lift)

@@ -1,8 +1,9 @@
-module Material.Progress exposing
-  ( progress
-  , indeterminate
-  , buffered
-  )
+module Material.Progress
+    exposing
+        ( progress
+        , indeterminate
+        , buffered
+        )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#loading-section):
 
@@ -37,22 +38,22 @@ import Material.Options as Options exposing (cs, css, nop, div)
 -}
 indeterminate : Html m
 indeterminate =
-  bar True False 0 100
+    bar True False 0 100
 
 
 {-| A progress bar. First argument is completion in percent (0–100).
 -}
 progress : Float -> Html m
 progress p =
-  bar False False p 100
+    bar False False p 100
 
 
 {-| A buffered progress bar. First argument is completion in percent (0-100),
-second argument indicates buffer completion in percent (0-100). 
+second argument indicates buffer completion in percent (0-100).
 -}
 buffered : Float -> Float -> Html m
 buffered p b =
-  bar False True p b
+    bar False True p b
 
 
 {-| Bar helper used for all spinners.
@@ -60,33 +61,42 @@ Note. They use specific default values for each type.
 -}
 bar : Bool -> Bool -> Float -> Float -> Html m
 bar indeterminate buffered p b =
-  div
-  [ cs "mdl-progress mdl-js-progress is-upgraded"
-  , if indeterminate then cs "mdl-progress__indeterminate" else nop
-  ]
-  [ -- width defaults to 0%
     div
-    [ cs "progressbar bar bar1"
-    , css "width" (percentage p)
-    ]
-    []
-  , -- width defaults to 100%
-    div
-    [ cs "bufferbar bar bar2"
-    , css "width" (percentage b)
-    ]
-    []
-  , -- width defaults to 0%
-    div
-    [ cs "auxbar bar bar3"
-    , css "width" (percentage <| if buffered then (100 - b) else 0)
-    ]
-    []
-  ]
+        [ cs "mdl-progress mdl-js-progress is-upgraded"
+        , if indeterminate then
+            cs "mdl-progress__indeterminate"
+          else
+            nop
+        ]
+        [ -- width defaults to 0%
+          div
+            [ cs "progressbar bar bar1"
+            , css "width" (percentage p)
+            ]
+            []
+        , -- width defaults to 100%
+          div
+            [ cs "bufferbar bar bar2"
+            , css "width" (percentage b)
+            ]
+            []
+        , -- width defaults to 0%
+          div
+            [ cs "auxbar bar bar3"
+            , css "width"
+                (percentage <|
+                    if buffered then
+                        (100 - b)
+                    else
+                        0
+                )
+            ]
+            []
+        ]
 
 
 {-| Format a float as CSS percentage.
 -}
 percentage : Float -> String
 percentage p =
-  toString p ++ "%"
+    toString p ++ "%"
