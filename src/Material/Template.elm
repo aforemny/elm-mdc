@@ -86,7 +86,7 @@ type alias Property m =
 
 
 
-{- See src/Material/Button.elm for an example of, e.g., an onClick handler.  -}
+{- See src/Material/Button.elm for an example of, e.g., an onClick handler. -}
 -- VIEW
 
 
