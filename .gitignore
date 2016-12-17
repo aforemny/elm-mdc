@@ -9,7 +9,7 @@ documentation.json
 
 test.html
 examples/counter-many.html
-	examples/counter1-no-parts.html
-	examples/counter1.html
+examples/counter1-no-parts.html
+examples/counter1.html
 
 .DS_Store

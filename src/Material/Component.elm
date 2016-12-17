@@ -1,10 +1,15 @@
-module Material.Component 
-    exposing 
+module Material.Component
+    exposing
         ( Msg(..)
-        , Index, Indexed, indexed
-        , render, render1
+        , Index
+        , Indexed
+        , indexed
+        , render
+        , render1
         , subs
-        , react1, react, generalise
+        , react1
+        , react
+        , generalise
         )
 
 {-|
@@ -94,21 +99,21 @@ render get_model view ctor =
 
 
 type alias Update msg m model =
-  (msg -> m) -> msg -> model -> (Maybe model, Cmd m)
+    (msg -> m) -> msg -> model -> ( Maybe model, Cmd m )
 
 
 react1 :
     (store -> model)
     -> (store -> model -> store)
     -> (msg -> mdlmsg)
-    -> Update msg m model 
+    -> Update msg m model
     -> (mdlmsg -> m)
     -> msg
     -> store
-    -> (Maybe store, Cmd m)
-react1 get set ctor update lift msg store = 
-  update (ctor >> lift) msg (get store)
-    |> map1st (Maybe.map (set store))
+    -> ( Maybe store, Cmd m )
+react1 get set ctor update lift msg store =
+    update (ctor >> lift) msg (get store)
+        |> map1st (Maybe.map (set store))
 
 
 react :
@@ -123,16 +128,16 @@ react :
     -> ( Maybe store, Cmd m )
 react get set ctor update lift msg idx store =
     update (ctor idx >> lift) msg (get idx store)
-      |> map1st (Maybe.map (set idx store))
+        |> map1st (Maybe.map (set idx store))
 
 
-generalise : 
-    (msg -> model -> (model, Cmd msg))
-    -> Update msg m model 
-generalise update lift msg model = 
-  update msg model 
-    |> map1st Just
-    |> map2nd (Cmd.map lift)
+generalise :
+    (msg -> model -> ( model, Cmd msg ))
+    -> Update msg m model
+generalise update lift msg model =
+    update msg model
+        |> map1st Just
+        |> map2nd (Cmd.map lift)
 
 
 subs :

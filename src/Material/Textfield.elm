@@ -592,14 +592,16 @@ type alias Store s =
 {-| Component react function.
 -}
 react :
-  (Component.Msg button Msg menu layout toggles tooltip tabs -> m)
+    (Component.Msg button Msg menu layout toggles tooltip tabs -> m)
     -> Msg
     -> Index
     -> Store s
-    -> ( Maybe (Store s), Cmd m )  
+    -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Component.TextfieldMsg 
-      (Component.generalise (\msg model -> (update msg model, Cmd.none)))
+    Component.react get
+        set
+        Component.TextfieldMsg
+        (Component.generalise (\msg model -> ( update msg model, Cmd.none )))
 
 
 {-| Component render. Below is an example, assuming boilerplate setup as indicated

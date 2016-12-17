@@ -1017,12 +1017,11 @@ react :
     -> ( Maybe (Store s), Cmd m )
 react lift msg store =
     case update_ lift msg (get store) of
-      Just (model, cmd) -> 
-        (Just (set model store), cmd)
+        Just ( model, cmd ) ->
+            ( Just (set model store), cmd )
 
-      _ -> 
-        (Nothing, Cmd.none)
-
+        _ ->
+            ( Nothing, Cmd.none )
 
 
 {-| Component render. Refer to `demo/Demo.elm` on github for an example use.

@@ -436,11 +436,11 @@ type alias Store s =
 {-| Component react function (update variant). Internal use only.
 -}
 react :
-  (Component.Msg Msg textfield menu layout toggles tooltip tabs -> m)
+    (Component.Msg Msg textfield menu layout toggles tooltip tabs -> m)
     -> Msg
     -> Index
     -> Store s
-    -> ( Maybe (Store s), Cmd m )  
+    -> ( Maybe (Store s), Cmd m )
 react =
     Component.react get set Component.ButtonMsg (Component.generalise update)
 

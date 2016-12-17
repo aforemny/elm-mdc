@@ -285,14 +285,14 @@ type alias Store s =
     Component.indexed .tabs (\x y -> { y | tabs = x }) defaultModel
 
 
-{-| Component react function. 
+{-| Component react function.
 -}
 react :
-  (Component.Msg button textfield menu layout toggles tooltip Msg -> m)
+    (Component.Msg button textfield menu layout toggles tooltip Msg -> m)
     -> Msg
     -> Index
     -> Store s
-    -> ( Maybe (Store s), Cmd m )  
+    -> ( Maybe (Store s), Cmd m )
 react =
     Component.react get set Component.TabsMsg (Component.generalise update)
 
