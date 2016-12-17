@@ -12,8 +12,6 @@ module Material.Chip
     , deleteIcon
     , deleteLink
     , deleteClick
-    , on
-    , onClick
     )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/index.html#chips-section):
@@ -37,7 +35,6 @@ for a live demo.
 
 # Properties
 @docs deleteIcon , deleteLink , deleteClick
-@docs on, onClick
 
 -}
 
@@ -61,7 +58,6 @@ type alias Config msg =
   { deleteIcon : Maybe String
   , deleteLink : Maybe (Html.Attribute msg)
   , deleteClick : Maybe (Html.Attribute msg)
-  , listeners : List (Html.Attribute msg)
   }
 
 
@@ -70,7 +66,6 @@ defaultConfig =
   { deleteIcon = Nothing
   , deleteLink = Nothing
   , deleteClick = Nothing
-  , listeners = []
   }
 
 
@@ -91,8 +86,9 @@ type Content msg
 {-| Set the icon for the delete action
 -}
 deleteIcon : String -> Property msg
-deleteIcon icon =
-  Options.set (\config -> { config | deleteIcon = Just icon })
+deleteIcon =
+  Internal.option 
+    << (\icon config -> { config | deleteIcon = Just icon })
 
 
 {-| Set the link for the delete action.
@@ -100,8 +96,9 @@ deleteIcon icon =
 NOTE. This turns the action to `Html.a` element
 -}
 deleteLink : String -> Property msg
-deleteLink link =
-  Options.set (\config -> { config | deleteLink = Just (Html.Attributes.href link) })
+deleteLink =
+  Internal.option <<
+    (\link config -> { config | deleteLink = Just (Html.Attributes.href link) })
 
 
 {-| Set the `onClick` for the delete action
@@ -110,10 +107,10 @@ NOTE. This stops propagation and prevents default to stop `Chip.onClick` from be
 when this is clicked
 -}
 deleteClick : msg -> Property msg
-deleteClick msg =
+deleteClick =
   -- We want to prevent the onClick of the Chip itself being called when clicking on the delete action
-  Options.set
-    (\config ->
+  Internal.option <<
+    (\msg config ->
       { config
         | deleteClick =
             Just
@@ -123,25 +120,6 @@ deleteClick msg =
               )
       }
     )
-
-
-{-| Add custom event handlers
--}
-on : String -> Json.Decoder m -> Property m
-on event decoder =
-  Options.set
-    (\config ->
-      { config
-        | listeners = config.listeners ++ [ (Html.Events.on event decoder) ]
-      }
-    )
-
-
-{-| Add an `onClick` handler to the chip
--}
-onClick : msg -> Property msg
-onClick msg =
-  on "click" (Json.succeed msg)
 
 
 type alias Priority =
@@ -266,13 +244,10 @@ chip : HtmlElement msg -> List (Property msg) -> List (Content msg) -> Html msg
 chip element props items =
   let
     summary =
-      Options.collect defaultConfig props
+      Internal.collect defaultConfig props
 
     config =
       summary.config
-
-    listeners =
-      config.listeners
 
     action =
       getActionElement config
@@ -299,15 +274,15 @@ chip element props items =
       List.any (\x -> priority x == 0) items
   in
     Options.styled' element
-      ([ cs "mdl-chip"
-       , cs "mdl-chip--contact" `Options.when` isContact
-       , cs "mdl-chip--deletable" `Options.when` isDeletable
-
-       , Internal.attribute <| Helpers.blurOn "mouseup"
-       , Internal.attribute <| Helpers.blurOn "mouseleave"
-       , Internal.attribute <| Helpers.blurOn "touchend"
-       ] ++ props)
-      listeners
+      [ cs "mdl-chip"
+      , cs "mdl-chip--contact" `Options.when` isContact
+      , cs "mdl-chip--deletable" `Options.when` isDeletable
+      , Internal.attribute <| Helpers.blurOn "mouseup"
+      , Internal.attribute <| Helpers.blurOn "mouseleave"
+      , Internal.attribute <| Helpers.blurOn "touchend"
+      , Options.many props
+      ]
+      []
       content
 
 

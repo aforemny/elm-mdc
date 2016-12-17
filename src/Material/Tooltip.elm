@@ -3,7 +3,7 @@ module Material.Tooltip
     ( Model, defaultModel, Msg(..), update, view
     , Property
     , render, attach
-    , left, right, top, bottom, large, container
+    , left, right, top, bottom, large, element
     , onEnter, onLeave
     )
 
@@ -54,7 +54,7 @@ tooltip model =
 @docs Property
 @docs left, right, top, bottom
 @docs large
-@docs container
+@docs element
 
 # Elm architecture
 If you do not use parts, you should not use `attach`, but instead add the
@@ -74,6 +74,7 @@ import DOM
 import Html.Events
 import Json.Decode as Json exposing ((:=), at)
 import String
+import Material.Msg as Material
 
 
 -- MODEL
@@ -315,7 +316,7 @@ type alias HtmlElement a =
 type alias Config a =
   { size : Size
   , position : Position
-  , container : HtmlElement a
+  , elem : HtmlElement a
   }
 
 
@@ -325,7 +326,7 @@ defaultConfig : Config m
 defaultConfig =
   { size = Default
   , position = Bottom
-  , container = Html.div
+  , elem = Html.div
   }
 
 
@@ -339,35 +340,35 @@ type alias Property m =
 -}
 left : Property m
 left =
-  Options.set (\options -> { options | position = Left })
+  Internal.option (\options -> { options | position = Left })
 
 
 {-| Position the tooltip on the right of the target element
 -}
 right : Property m
 right =
-  Options.set (\options -> { options | position = Right })
+  Internal.option (\options -> { options | position = Right })
 
 
 {-| Position the tooltip above the target element
 -}
 top : Property m
 top =
-  Options.set (\options -> { options | position = Top })
+  Internal.option (\options -> { options | position = Top })
 
 
 {-| Position the tooltip below the target element
 -}
 bottom : Property m
 bottom =
-  Options.set (\options -> { options | position = Bottom })
+  Internal.option (\options -> { options | position = Bottom })
 
 
 {-| Large tooltip
 -}
 large : Property m
 large =
-  Options.set (\options -> { options | size = Large })
+  Internal.option (\options -> { options | size = Large })
 
 
 {-| Set the tooltip container element. You are unlikely to need this. 
@@ -376,9 +377,9 @@ This option simply sets the  container element for the tooltip itself, which
 you might want to control for layout purposes. It does not set the element
 hovering on which triggers the tooltip; use `attach` to set that. 
 -}
-container : HtmlElement m -> Property m
-container elem =
-  Options.set (\options -> { options | container = elem })
+element : HtmlElement m -> Property m
+element elem =
+  Internal.option (\options -> { options | elem = elem })
 
 
 
@@ -391,7 +392,7 @@ view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model options content =
   let
     summary =
-      Options.collect defaultConfig options
+      Internal.collect defaultConfig options
 
     config =
       summary.config
@@ -406,7 +407,7 @@ view lift model options content =
       else
         defaultPos
   in
-    Options.styled config.container
+    Options.styled config.elem
       [ cs "mdl-tooltip"
       , cs "is-active" `when` model.isActive
       , cs "mdl-tooltip--large" `when` (config.size == Large)
@@ -429,16 +430,17 @@ type alias Container c =
 {-| Component render.
 -}
 render :
-  (Parts.Msg (Container c) m -> m)
+  (Material.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
   -> List (Property m)
   -> List (Html m)
   -> Html m
-render =
+render lift =
   Parts.create 
-    view (Parts.generalize update) 
-    .tooltip (\x y -> { y | tooltip = x }) defaultModel
+    (Internal.inject view lift) (Parts.generalize update)
+    .tooltip set defaultModel
+      (Material.Internal >> lift)
 
 
 set : Parts.Set (Indexed Model) (Container c)
@@ -453,25 +455,26 @@ pack =
 
 {-| Mouse enter event handler, Parts variant
 -}
-onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Attribute d
+onMouseEnter : (Parts.Msg (Container b) d -> d) -> Parts.Index -> Options.Property c d
 onMouseEnter lift idx =
-  Html.Events.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
+  Options.on "mouseenter" (Json.map (Enter >> pack lift idx) stateDecoder)
 
 
 {-| Mouse leave event handler, Parts variant
 -}
-onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Attribute b
+onMouseLeave : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 onMouseLeave lift idx =
-  Html.Events.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
+  Options.on "mouseleave" (Json.succeed (Leave |> pack lift idx))
 
 
 {-| Attach event handlers for Parts version
 -}
-attach : (Parts.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
+attach : (Material.Msg (Container a) b -> b) -> Parts.Index -> Options.Property c b
 attach lift index =
   Options.many
-    [ Internal.attribute <| onMouseEnter lift index
-    , Internal.attribute <| onMouseLeave lift index
+    [ onMouseEnter (Material.Internal >> lift) index
+    , onMouseLeave (Material.Internal >> lift) index
+    , Internal.dispatch lift
     ]
 
 
@@ -479,11 +482,11 @@ attach lift index =
 -}
 onEnter : (Msg -> m) -> Attribute m
 onEnter lift =
-  Html.Events.on "mouseenter" (Json.map (Enter >> lift) stateDecoder)
+  Html.Events.on "mouseenter" (Json.map lift <| Json.map Enter <| stateDecoder)
 
 
 {-| Mouse leave event handler, TEA variant
 -}
 onLeave : (Msg -> m) -> Attribute m
 onLeave lift =
-  Html.Events.on "mouseleave" (Json.succeed (lift Leave))
+  Html.Events.on "mouseleave" (Json.map lift <| Json.succeed Leave)

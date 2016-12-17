@@ -2,6 +2,7 @@ module Demo.Chips exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
+--import Html.Events as Html
 
 import Material.Chip as Chip
 import Material.Grid as Grid
@@ -10,6 +11,7 @@ import Material.Options as Options exposing (css, cs)
 import Material
 import Material.Card as Card
 import Material.Button as Button
+import Material.Helpers as Helpers
 
 import Demo.Page as Page
 import Demo.Code as Code
@@ -45,6 +47,17 @@ type Msg
   | RemoveChip Int
   | ChipClick Int
 
+
+
+liftUpdate : (Msg -> m) -> Msg -> Model -> (Model, Cmd m)
+liftUpdate lift msg model =
+  case msg of
+    Mdl msg' ->
+      Material.update msg' model
+        |> Helpers.map2nd (Cmd.map lift)
+
+    _ ->
+      model ! []
 
 
 lastIndex : Dict Int b -> Int
@@ -289,7 +302,7 @@ view model  =
                    |> List.map (\ (index, value) ->
                                   Chip.button
                                     [ Options.css "margin" "5px 5px"
-                                    , Chip.onClick (ChipClick index)
+                                    , Options.onClick (ChipClick index)
                                     , Chip.deleteClick (RemoveChip index)
                                     ]
                                     [ Chip.content []
@@ -301,7 +314,7 @@ view model  =
                   [ Button.colored
                   , Button.ripple
                   , Button.raised
-                  , Button.onClick (AddChip "Amazing Chip")
+                  , Options.onClick (AddChip "Amazing Chip")
                   ]
                   [ text "Add chip" ]
 
@@ -313,7 +326,7 @@ view model  =
           """
             Chip.button
               [ Options.css "margin" "5px 5px"
-              , Chip.onClick (ChipClick index)
+              , Options.onClick (ChipClick index)
               , Chip.deleteClick (RemoveChip index)
               ]
               [ Chip.content []

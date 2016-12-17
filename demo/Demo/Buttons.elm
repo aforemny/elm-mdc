@@ -191,7 +191,7 @@ viewButtons model =
                   Disabled -> Button.disabled
                   Ripple -> Button.ripple
                   Default -> Options.nop
-              , Button.onClick (Click (kind, color, misc))
+              , Options.onClick (Click (kind, color, misc))
               ]
               [ case kind of
                   Flat -> text "Flat button"

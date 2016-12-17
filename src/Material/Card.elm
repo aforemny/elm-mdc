@@ -89,12 +89,11 @@ title styling block =
 
          https://github.com/google/material-design-lite/issues/1002
       -}
-      (List.append 
-        styling
-        [ css "justify-content" "flex-end"
-        , css "flex-direction" "column"
-        , css "align-items" "flex-start"
-        ])
+      [ Options.many styling
+      , css "justify-content" "flex-end"
+      , css "flex-direction" "column"
+      , css "align-items" "flex-start"
+      ]
       block
 
 
@@ -157,7 +156,7 @@ can't use `Html.Events.onWithOptions` because we can't construct a
 -}
 stopClick : Style a
 stopClick = 
-  Internal.attribute <|
+  Internal.attribute <| 
     Html.Attributes.attribute
       "onclick"
       "var event = arguments[0] || window.event; event.stopPropagation();"
@@ -195,9 +194,8 @@ so the elm-mdl implementation sets `min-height: 0px`. Add `css "min-height"
 view : List (Style a) -> List (Block a) -> Html a
 view styling views =
     Options.div 
-      (List.append
-        styling
-        [ cs "mdl-card" 
-        , css "min-height" "0px"
-        ]) 
+      [ Options.many styling
+      , cs "mdl-card" 
+      , css "min-height" "0px"
+      ] 
       (List.map block views)

@@ -128,7 +128,7 @@ elevations =
 {-| Add a CSS-transition to changes in elevation. Supply a transition
 duration in milliseconds as argument. 
 
-NB! This Property a m is dictated by neither MDL nor the Material Design
+NB! This property is dictated neither by MDL nor the Material Design
 Specification. 
 -}
 transition : Float -> Property a m 

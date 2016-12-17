@@ -120,7 +120,7 @@ demo2 model =
                 , css "max-width" "384px"
                 ] 
             , Toggles.switch Mdl [0] model.mdl
-                [ Toggles.onClick FlipTransition
+                [ Options.onToggle FlipTransition
                 , Toggles.value model.transition
                 , css "margin-left" "20px"
                 , css "margin-top" "24px"

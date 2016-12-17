@@ -1,6 +1,6 @@
 module Material exposing 
   ( Model, model
-  , Msg, update
+  , Msg, Container, update
   , subscriptions, init
   )
 
@@ -154,7 +154,7 @@ and simply comment out the components you do not need.
 
 ## Parts API
 
-@docs Model, model, Msg, update, subscriptions, init
+@docs Model, model, Msg, Container, update, subscriptions, init
 -}
 
 import Dict 
@@ -173,10 +173,11 @@ import Material.Tooltip as Tooltip
 import Material.Tabs as Tabs
 --import Material.Template as Template
 
+import Dispatch
+import Material.Msg as Msg
 
-{-| Model encompassing all Material components. Since some components store
-user actions in their model (notably Snackbar), the model is generic in the 
-type of such "observations". 
+
+{-| Model encompassing all Material components. 
 -}
 type alias Model = 
   { button : Indexed Button.Model
@@ -207,24 +208,41 @@ model =
   }
 
 
-{-| Msg encompassing actions of all Material components. 
+{-| Msg encompassing actions of all Material components.
 -}
-type alias Msg obs = 
-  Parts.Msg Model obs
+type alias Msg obs =
+  Msg.Msg Model obs
 
 
-{-| Update function for the above Msg. Provide as the first 
-argument a lifting function that embeds the generic MDL action in 
-your own Msg type. 
+{-| Type of Models with elm-mdl model store `mdl`. 
 -}
-update : 
-     Msg obs
-  -> { model | mdl : Model }
-  -> ({ model | mdl : Model }, Cmd obs)
-update msg model = 
-  Parts.update' msg model.mdl 
-    |> Maybe.map (map1st (\mdl -> { model | mdl = mdl }))
-    |> Maybe.withDefault (model, Cmd.none)
+type alias Container c = 
+  { c | mdl : Model }
+
+
+set : Container c -> Model -> Container c
+set c model = 
+  { c | mdl = model }
+
+
+{-| Update function for the above Msg.
+
+The `update` function operates not directly on a `Material.Model`, but rather
+on a larger model containing the Material model in a field `mdl` (see
+`Container c` above). This way, the `update` function can guarantee that 
+the container model is not updated unless a material component actually changed
+state. 
+-}
+update : Msg obs -> Container c -> (Container c, Cmd obs)
+update msg container =
+  case msg of
+    Msg.Internal msg' ->
+      Parts.update' msg' container.mdl
+        |> Maybe.map (map1st <| set container)
+        |> Maybe.withDefault (container, Cmd.none)
+
+    Msg.Dispatch msg ->
+      (container, Dispatch.forward msg)
 
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
@@ -257,7 +275,7 @@ initialisation.
 subscriptions : (Msg obs -> obs) -> { model | mdl : Model } -> Sub obs
 subscriptions lift model = 
   Sub.batch 
-    [ Layout.subs lift model.mdl 
+    [ Layout.subs lift model.mdl
     , Menu.subs lift model.mdl
     ] 
 
@@ -267,4 +285,3 @@ subscriptions lift model =
 init : (Msg obs -> obs) -> Cmd obs
 init lift = 
   Layout.sub0 lift
-

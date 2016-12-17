@@ -6,7 +6,7 @@ import Html exposing (..)
 import Material.Slider as Slider
 import Material
 import Material.Grid as Grid
-import Material.Options exposing (css)
+import Material.Options as Options exposing (css)
 
 import Demo.Code as Code
 import Demo.Page as Page
@@ -47,7 +47,6 @@ getDef key def dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-
     Slider idx value ->
       let
         values = Dict.insert idx value model.values

@@ -62,8 +62,8 @@ delay : Float
 delay = 150
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
-  case action of
+update msg model =
+  case msg of
     Switch k -> 
       ( { model 
         | toggles = Array.set k (get k model |> not) model.toggles
@@ -137,23 +137,23 @@ view model =
           [] 
           [ Grid.cell row
               [ Toggles.switch Mdl [0] model.mdl 
-                [ Toggles.onClick (Switch 0)
+                [ Options.onToggle (Switch 0)
                 , Toggles.ripple
                 , Toggles.value (get 0 model)
                 ]
                 [ text "Switch" ]
-              , "Toggles.switch Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg\n  , Toggles.ripple\n  , Toggles.value "
+              , "Toggles.switch Mdl [0] model.mdl\n  [ Options.onToggle MyToggleMsg\n  , Toggles.ripple\n  , Toggles.value "
                   ++ toString (get 0 model) ++ "\n  ]\n  [ text \"Switch\" ]"
                 |> Code.code [ css "margin" "16px 0"]
               ]
           , Grid.cell row 
               [ Toggles.checkbox Mdl [1] model.mdl 
-                [ Toggles.onClick (Switch 1) 
+                [ Options.onToggle (Switch 1)
                 , Toggles.ripple
                 , Toggles.value (get 1 model)
                 ]
                 [ text "Checkbox" ]
-              , "Toggles.checkbox Mdl [0] model.mdl\n  [ Toggles.onClick MyToggleMsg\n  , Toggles.ripple\n  , Toggles.value "
+              , "Toggles.checkbox Mdl [0] model.mdl\n  [ Options.onToggle MyToggleMsg\n  , Toggles.ripple\n  , Toggles.value "
                   ++ toString (get 1 model) ++ "\n  ]\n  [ text \"Checkbox\" ]"
                 |> Code.code [ css "margin" "16px 0"]
               ]
@@ -162,7 +162,7 @@ view model =
                   [ Toggles.value (2 == model.radios) 
                   , Toggles.group "MyRadioGroup"
                   , Toggles.ripple
-                  , Toggles.onClick (Radio 2)
+                  , Options.onToggle (Radio 2)
                   ]
                   [ text "Emacs" ]
               , Toggles.radio Mdl [3] model.mdl
@@ -170,7 +170,7 @@ view model =
                   , Toggles.value (3 == model.radios)
                   , Toggles.group "MyRadioGroup"
                   , Toggles.ripple
-                  , Toggles.onClick (Radio 3)
+                  , Options.onToggle (Radio 3)
                   ]
                   [ text "Vim" ]
               , """
@@ -180,14 +180,14 @@ view model =
                         [ Toggles.value """ ++ toString (2 == model.radios) ++ """
                         , Toggles.group "MyRadioGroup"
                         , Toggles.ripple
-                        , Toggles.onClick MyRadioMsg1
+                        , Options.onToggle MyRadioMsg1
                         ]
                         [ text "Emacs" ]
                     , Toggles.radio Mdl [1] model.mdl
                         [ Toggles.value """ ++ toString (3 == model.radios) ++ """
                         , Toggles.group "MyRadioGroup"
                         , Toggles.ripple
-                        , Toggles.onClick MyRadioMsg2
+                        , Options.onToggle MyRadioMsg2
                         ]
                         [ text "Vim" ]
                     ] """
@@ -221,14 +221,14 @@ view model =
                 [ Button.raised
                 , Button.colored
                 , Button.ripple
-                , Button.onClick Inc
+                , Options.onClick Inc
                 , css "margin-bottom" "2rem"
                 , css "width" "196px"
                 , css "display" "inline-block"
                 ]
                 [ text "Increase" ]
             , Toggles.switch Mdl [4] model.mdl
-                [ Toggles.onClick ToggleCounting
+                [ Options.onToggle ToggleCounting
                 , Toggles.ripple
                 , Toggles.value model.counting
                 ] 
@@ -244,14 +244,14 @@ view model =
                   Toggles.checkbox Mdl [6,idx] model.mdl
                     [ Toggles.value (readBit idx model.counter)
                     , Toggles.ripple
-                    , Toggles.onClick (Update <| \m -> { m | counter = flipBit idx model.counter })
+                    , Options.onToggle (Update <| \m -> { m | counter = flipBit idx model.counter })
                     , css "display" "inline-block"
                     ]
                     []
                   )
                |> List.reverse)
         ]
-    ]
+      ]
   in
     Page.body1' "Toggles" srcUrl intro references demo1 demo2
 

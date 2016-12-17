@@ -4,7 +4,7 @@ module Material.Layout exposing
   , Property
   , fixedDrawer, fixedTabs, fixedHeader, rippleTabs
   , waterfall, seamed, scrolling, selectedTab, onSelectTab
-  , row, spacer, title, navigation, link, onClick, href
+  , row, spacer, title, navigation, link, href
   , setTabsWidth
   , Contents, view
   , sub0, subs, render, toggleDrawer
@@ -107,7 +107,7 @@ be (assuming a tab width of 1384 pixels):
 @docs onSelectTab
 
 # Sub-views
-@docs row, spacer, title, navigation, link, onClick, href
+@docs row, spacer, title, navigation, link, href
 
 # Elm architecture
 @docs view, Msg, Model, defaultModel, update, init, subscriptions
@@ -134,6 +134,7 @@ import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop, css, when, styled)
 import Material.Options.Internal as Internal
+import Material.Msg as Msg
 
 import DOM
 
@@ -377,7 +378,7 @@ type alias Property m =
 -}
 fixedHeader : Property m
 fixedHeader =
-  Options.set (\config -> { config | fixedHeader = True })
+  Internal.option (\config -> { config | fixedHeader = True })
 
 
 
@@ -385,29 +386,30 @@ fixedHeader =
 -}
 fixedDrawer : Property m
 fixedDrawer =
-  Options.set (\config -> { config | fixedDrawer = True })
+  Internal.option (\config -> { config | fixedDrawer = True })
 
 
 {-| Tabs are spread out to consume available space and do not scroll horisontally.
 -}
 fixedTabs : Property m
 fixedTabs =
-  Options.set (\config -> { config | fixedTabs = True })
+  Internal.option (\config -> { config | fixedTabs = True })
 
 
 {-| Make tabs ripple when clicked. 
 -}
 rippleTabs : Property m
 rippleTabs =
-  Options.set (\config -> { config | rippleTabs = True })
+  Internal.option (\config -> { config | rippleTabs = True })
 
 
 {-| Header behaves as "Waterfall" header: On scroll, the top (argument `True`) or
 the bottom (argument `False`) of the header disappears. 
 -}
 waterfall : Bool -> Property m
-waterfall b =
-  Options.set (\config -> { config | mode = Waterfall b })
+waterfall =
+  Internal.option << 
+    (\b config -> { config | mode = Waterfall b })
 
 
 {-| Header behaves as "Seamed" header: it does not cast shadow, is permanently
@@ -415,26 +417,27 @@ affixed to the top of the screen.
 -}
 seamed : Property m
 seamed = 
-  Options.set (\config -> { config | mode = Seamed })
+  Internal.option (\config -> { config | mode = Seamed })
 
 {-| Header is transparent: It draws on top of the layout's background
 -}
 transparentHeader : Property m
 transparentHeader =
-  Options.set (\config -> { config | transparentHeader = True })
+  Internal.option (\config -> { config | transparentHeader = True })
 
 
 {-| Header scrolls with contents. 
 -}
 scrolling : Property m
 scrolling = 
-  Options.set (\config -> { config | mode = Scrolling })
+  Internal.option (\config -> { config | mode = Scrolling })
 
 {-| Set the selected tab. 
 -}
 selectedTab : Int -> Property m
-selectedTab k =
-  Options.set (\config -> { config | selectedTab = k })
+selectedTab =
+  Internal.option << 
+    (\k config -> { config | selectedTab = k })
 
 
 {-| Set this property if tabs are missing the "more tabs on the right" indicator
@@ -445,14 +448,14 @@ automatically.)
 -}
 moreTabs : Property m
 moreTabs =
-  Options.set (\config -> { config | moreTabs = True })
+  Internal.option (\config -> { config | moreTabs = True })
 
 
 {-| Receieve notification when tab `k` is selected.
 -}
 onSelectTab : (Int -> m) -> Property m
-onSelectTab f = 
-  Options.set (\config -> { config | onSelectTab = Just (f >> Events.onClick) })
+onSelectTab = 
+  Internal.option << (\f config -> { config | onSelectTab = Just (f >> Events.onClick) })
 
 
 -- AUXILIARY VIEWS
@@ -467,7 +470,7 @@ spacer = div [class "mdl-layout-spacer"] []
 
 {-| Title in header row or drawer.
 -}
-title : List (Property m) -> List (Html m) -> Html m
+title : List (Options.Style m) -> List (Html m) -> Html m
 title styles = 
   Options.span (cs "mdl-layout__title" :: styles) 
 
@@ -479,30 +482,16 @@ navigation styles contents =
   Options.styled Html.nav  (cs "mdl-navigation" :: styles) contents
 
 
-type LinkProp = LinkProp
-
-
-type alias LinkProperty m = 
-  Options.Property LinkProp m
-
-
-{-| onClick for Links.
+{-| href attribute for links
 -}
-onClick : m -> LinkProperty m 
-onClick = 
-  Events.onClick >> Internal.attribute
-
-
-{-| href for Links.
--}
-href : String -> LinkProperty m
-href = 
-  Html.Attributes.href >> Internal.attribute
+href : String -> Options.Style m 
+href url = 
+  Options.attribute <| Html.Attributes.href url
 
 
 {-| Link.
 -}
-link : List (LinkProperty m) -> List (Html m) -> Html m
+link : List (Options.Style m) -> List (Html m) -> Html m
 link styles contents =
   Options.styled a 
     (cs "mdl-navigation__link" 
@@ -513,7 +502,7 @@ link styles contents =
 
 {-| Header row. 
 -}
-row : List (Property m) -> List (Html m) -> Html m
+row : List (Options.Style m) -> List (Html m) -> Html m
 row styles = 
   Options.div (cs "mdl-layout__header-row" :: styles) 
 
@@ -663,12 +652,10 @@ headerView lift config model (drawerButton, rows, tabs) =
       , cs "is-compact" `when` model.isCompact
       , mode
       , cs "mdl-layout__header--transparent" `when` config.transparentHeader
-      , Internal.attribute <|
-          Events.onClick 
+      , Options.onClick 
             (TransitionHeader { toCompact=False, fixedHeader=config.fixedHeader }
               |> lift)
-      , Internal.attribute <|
-          Events.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
+      , Options.on "transitionend" (Decoder.succeed <| lift TransitionEnd)
       ]
       (List.concatMap (\x -> x)
          [ toList drawerButton
@@ -773,7 +760,7 @@ view : (Msg -> m) -> Model -> List (Property m) -> Contents m -> Html m
 view lift model options { drawer, header, tabs, main } =
   let
     summary = 
-      Options.collect defaultConfig options
+      Internal.collect defaultConfig options
 
     config = 
       summary.config 
@@ -890,14 +877,15 @@ Excerpt:
       }
 -}
 render 
-  : (Parts.Msg (Container b) c -> c)
+  : (Msg.Msg (Container b) c -> c)
  -> Container b
  -> List (Property c) 
  -> Contents c 
  -> Html c
-render =
+render lift =
   Parts.create1
-    view update' .layout (\x c -> { c | layout = x }) 
+    view update' .layout (\x c -> { c | layout = x })
+      (Msg.Internal >> lift)
 
 
 pack : (Parts.Msg (Container b) m -> m) -> Msg -> m
@@ -909,18 +897,18 @@ pack fwd =
 `subscriptions` must be connected for the Layout to be responsive under
 viewport size changes. 
 -}
-subs : (Parts.Msg (Container b) c -> c) -> Container b -> Sub c
+subs : (Msg.Msg (Container b) c -> c) -> Container b -> Sub c
 subs lift = 
-  .layout >> subscriptions >> Sub.map (pack lift)
+  .layout >> subscriptions >> Sub.map (pack (Msg.Internal >> lift))
 
 
 {-| Component subscription initialiser. Either this or 
 `init` must be connected for the Layout to be responsive under
 viewport size changes. Example use: 
 -}
-sub0 : (Parts.Msg (Container b) c -> c) -> Cmd c
+sub0 : (Msg.Msg (Container b) c -> c) -> Cmd c
 sub0 lift = 
-  snd init |> Cmd.map (pack lift)
+  snd init |> Cmd.map (pack (Msg.Internal >> lift))
 
 
 {-| Toggle drawer. 
@@ -928,9 +916,9 @@ sub0 lift =
 This function is for use with parts typing. For plain TEA, simply issue 
 an update for the exposed Msg `ToggleDrawer`. 
 -}
-toggleDrawer : (Parts.Msg (Container b) c -> c) -> c
+toggleDrawer : (Msg.Msg (Container b) c -> c) -> c
 toggleDrawer lift = 
-  (pack lift) ToggleDrawer 
+  (pack (Msg.Internal >> lift)) ToggleDrawer
 
 
 {-| Set tabsWidth

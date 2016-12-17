@@ -1,41 +1,62 @@
 module Material.Options exposing
-  ( Property, Summary, collect
-  , cs, css, many, nop, set, data
+  ( Property 
+  , cs, css, many, nop, data
   , when, maybe, disabled
-  , apply, styled, styled', stylesheet
+  , styled, styled', stylesheet
   , Style, div, span, img, attribute, center, scrim
   , id
-  , inner
-  , attr
+  , input, container
+  , onClick, onDoubleClick
+  , onMouseDown, onMouseUp
+  , onMouseEnter, onMouseLeave
+  , onMouseOver, onMouseOut
+  , onCheck, onToggle
+  , onBlur, onFocus
+  , onInput
+  , on, on1
+  , onWithOptions
+  , dispatch 
   )
 
+ 
 
 {-| Setting options for Material components. 
 
 Here is a standard use of an elm-mdl Textfield: 
 
+    import Material.Textfield as Textfield
+    import Material.Options as Options
+
     Textfield.render MDL [0] model.mdl
       [ Textfield.floatingLabel
       , Textfield.label "name"
-      , css "width" "96px"
-      , cs "my-name-textfield"
+      , Textfield.value model.value
+      , Options.css "width" "96px"
+      , Options.cs "my-textfield-class"
+      , Options.onInput MyReceiveInputMsg
       ]
+      []
 
 The above code renders a textfield, setting the optional properties
 `floatingLabel` and `label "name"` on the textfield; as well as adding
 additional (CSS) styling `width: 96px;` and the HTML class `my-name-textfield`. 
 
-This module defines the type `Property c m` of such optional properties, the
-elements of the last argument in the above call to `Textfield.render`.
-Individual components, such as Textfield usually instantiate the `c` to avoid
-inadvertently applying, say, a Textfield property to a Button. 
+Some optional properties apply to all components and some are
+particular to a specific component. In the above example
+`Textfield.floatingLabel`, `Textfield.label`, and `Textfield.value` are
+specific to `Textfield`, whereas `Options.css`, `Options.cs`, and
+`Options.onInput` apply to any component. 
 
-Some optional properties apply to all components, see the `Typography`,
-`Elevation`, `Badge`, and `Color` modules. Such universally applicable
-optional properties can _also_ be applied to standard `Html` elements 
-such as `Html.div`; see `style` et. al. below. This is convenient, e.g., for
-applying MDL typography or color to standard elements. 
+This module contains some very common universally applicable optional
+properties such as `css`, `cs`, and `id`. In addition, some elm-mdl modules
+expose such options, e.g., `Typography`, `Elevation`, `Badge`, and `Color`.
+Universally applicable optional properties can _also_ be applied to standard
+`Html` elements such as `Html.div`; see `style` et. al. below. This is
+convenient, e.g., for applying elm-mdl typography or color to standard
+elements. 
 
+
+# Optional property
 
 @docs Property
 
@@ -50,137 +71,93 @@ applying MDL typography or color to standard elements.
 @docs stylesheet
 
 ## Attributes
-@docs attribute, attr, id, inner
-@docs center, scrim, disabled
+@docs attribute, id
+@docs disabled
 
-# Internal
-The following types and values are used internally in the library. 
-@docs Summary, apply, collect, set
+## Helpers
+@docs center, scrim
 
+# Event handlers
+@docs onClick, onDoubleClick,
+      onMouseDown, onMouseUp,
+      onMouseEnter, onMouseLeave,
+      onMouseOver, onMouseOut
+@docs onCheck, onToggle
+@docs onBlur, onFocus
+@docs onInput
+
+## Custom Event Handlers
+@docs on, on1
+@docs onWithOptions
+
+# Advanced usage
+
+## Option distribution 
+Some components (notably textfields & toggles) are implemented as `<input>`
+elements sitting inside a container `<div>` alongside various helper elements.
+Options to such components are distributed between input and container elements 
+as follows:
+
+| Option               | Element   |
+| -------------------- | --------- |
+| `Options.id`         | input     |
+| `Options.css`        | container |
+| `Options.cs`         | container |
+| `Options.attributes` | input     |
+| `Options.on*`        | input     |
+
+If you need an option to apply to the other element, use either `Options.input
+options` to force `options` to be applied to the input element; or
+`Options.container options` to force `options` to be applied to the container
+element. 
+
+@docs input, container
+
+## Multiple dispatch
+
+@docs dispatch
 -}
 
 
-import String 
 
 import Html exposing (Html, Attribute)
 import Html.Attributes
+import Html.Events
+import Json.Decode as Json 
 
-import Material.Options.Internal exposing (..)
+import Material.Options.Internal as Internal exposing (..)
+
 
 -- PROPERTIES
 
 
-{-| Type of elm-mdl properties. (Do not confuse these with Html properties or
-`Html.Attributes.property`.) The type variable `c` identifies the component the
-property is for. You never have to set it yourself. The type variable `d` by
-the type of your `Msg`s; you should set this yourself. 
+{-| 
+Type of elm-mdl optional properties. (Do not confuse these with Html properties
+or `Html.Attributes.property`.) 
+
+The type variable `c` identifies the component the property is for. You never
+have to set it yourself. The type variable `m` is the type of your messages
+carried by the optional property, if applicable. You should set this yourself. 
+
+The elements of the penultimate argument in the above call to
+`Textfield.render` has this type, specifically:
+
+    List (Property (Textfield.Config) Msg)
 -}
 type alias Property c m = 
-  Material.Options.Internal.Property c m 
+  Internal.Property c m 
 
 
-{-| Contents of a `Property c m`.
+{-| Universally applicable elm-mdl properties, e.g., `Options.css`,
+`Typography.*`, or `Options.onClick`, may be applied to ordinary `Html` values
+such as `Html.h4` using `styled` below. 
 -}
-type alias Summary c m = 
-  { classes : List String 
-  , css : List (String, String)  
-  , attrs : List (Attribute m)
-  , config : c
-  }
+type alias Style m = 
+  Property () m
 
 
-{- `collect` and variants are called multiple times by nearly every use of
-  any elm-mdl component. Carefully consider performance implications before
-  modifying. In particular: 
 
-  - Avoid closures. They are slow to create and cause subsequent GC.
-  - Pre-compute where possible. 
-
-  Earlier versions of `collect`, violating these rules, consumed ~20% of
-  execution time for `Cards.view` and `Textfield.view`.
--}
-
-
-collect1 
-  :  Property c m 
-  -> Summary c m 
-  -> Summary c m
-collect1 option acc = 
-  case option of 
-    Class x -> { acc | classes = x :: acc.classes }
-    CSS x -> { acc | css = x :: acc.css }
-    {- NOTE: Internal attributes get appended as latter
-    attributes override former.
-    Attributes get added to the front so they can be
-    overridden by internal ones if needed.
-     -}
-    Internal x -> { acc | attrs = acc.attrs ++ [x] }
-    Attribute x -> { acc | attrs = x :: acc.attrs }
-    Many options -> List.foldl collect1 acc options
-    Set g -> { acc | config = g acc.config }
-    None -> acc
-
-
-recollect : Summary c m  -> List (Property c m) -> Summary c m
-recollect = 
-  List.foldl collect1 
-
-
-{-| Flatten a `Property a` into  a `Summary a`. Operates as `fold`
-over options; first two arguments are folding function and initial value. 
--}
-collect : c -> List (Property c m) -> Summary c m
-collect =
-  Summary [] [] [] >> recollect 
-
-
-{-| Special-casing of collect for `Property c ()`. 
--}
-collect1' : Property c m -> Summary () m -> Summary () m
-collect1' options acc = 
-  case options of 
-    Class x -> { acc | classes = x :: acc.classes }
-    CSS x -> { acc | css = x :: acc.css }
-    Attribute x -> { acc | attrs = x :: acc.attrs }
-    Internal x -> { acc | attrs = acc.attrs ++ [x] }
-    Many options -> List.foldl collect1' acc options
-    Set _ -> acc 
-    None -> acc
-
-
-collect' : List (Property c m) -> Summary () m 
-collect' = 
-  List.foldl collect1' (Summary [] [] [] ())
-
-
-addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
-addAttributes summary attrs =
-  {- NOTE: Ordering here is important.
-  Allow users to specify arbitrary attributes in summary.attrs.
-  However, internal attributes should overwrite the ones that we need
-  to maintain functionality
-  -}
-  summary.attrs
-    ++ [ Html.Attributes.style summary.css
-       , Html.Attributes.class (String.join " " summary.classes)
-       ]
-    ++ attrs
-
-
-{-| Apply a `Summary m`, extra properties, and optional attributes 
-to a standard Html node. 
--}
-apply : Summary c m -> (List (Attribute m) -> a) 
-    -> List (Property c m) -> List (Attribute m) -> a
-apply summary ctor options attrs = 
-  ctor 
-    (addAttributes 
-      (recollect summary options) 
-      attrs)
-    
-
-
-{-| Apply properties to a standard Html element. 
+{-| Apply properties to a standard Html element.
 -}
 styled : (List (Attribute m) -> a) -> List (Property c m) -> a
 styled ctor props = 
@@ -275,14 +252,7 @@ nop : Property c m
 nop = None
 
 
-{-| Set a configuration value. 
--}
-set : (c -> c) -> Property c m
-set = 
-  Set
-
-
-{-| HTML data-* attributes. 
+{-| HTML data-* attributes. Prefix "data-" is added automatically. 
 -}
 data : String -> String -> Property c m
 data key val = 
@@ -321,21 +291,16 @@ stylesheet css =
 -- STYLE
 
 
-{-| Options for situations where there is no configuration, i.e., 
-styling a `div`.
--}
-type alias Style m = 
-  Property () m
+{-| Install arbitrary `Html.Attribute`.
 
-
-{-| Install arbitrary `Html.Attribute`. Applicable only to `Style m`, not 
-general Properties. Use like this:
-
-    Options.div 
-      [ Options.attribute <| Html.onClick MyClickEvent ]
+    Options.div
+      [ Options.attribute <| Html.Attributes.title "title" ]
       [ ... ]
+
+**NB!** Do not install event handlers using `Options.attribute`.
+Instead use `Options.on` and variants. 
 -}
-attribute : Html.Attribute m -> Style m
+attribute : Html.Attribute m -> Property c m
 attribute =
   Attribute
 
@@ -376,7 +341,9 @@ depend on the underlying image. `0.6` works well often.
 -}
 scrim : Float -> Property c m
 scrim opacity = 
-  css "background" <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " ++ toString opacity ++ "))"
+  css "background" 
+    <| "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, " 
+         ++ toString opacity ++ "))" 
 
 
 {-| Sets the id attribute
@@ -386,17 +353,175 @@ id =
   Attribute << Html.Attributes.id
 
 
-{-| Sets attributes on the inner element for components that support it.
-For example `Textfield`:
-
-    Textfield.render ...
-      [ ...
-      , Options.inner
-          [ Options.id "id-of-the-input"
-          ]
-      ]
-
+{-| Apply argument options to `input` element in component implementation.
 -}
-inner : List (Property c m) -> Property { a | inner : List (Property c m) } m
-inner options =
-  set (\c -> { c | inner = options ++ c.inner })
+input : List (Style m) -> Property (Input c m) m
+input =
+  Internal.input
+
+
+{-| Apply argument options to container element in component implementation. 
+-}
+container : List (Style m) -> Property (Container c m) m
+container =
+  Internal.container 
+
+
+
+-- EVENTS
+
+
+{-| Add custom event handlers
+ -}
+on : String -> (Json.Decoder m) -> Property c m
+on event =
+  Listener event Nothing
+
+
+{-| Add a custom event handler that always succeeds.
+
+Equivalent to `Options.on event (Json.Decode.succeed msg)`
+ -}
+on1 : String -> m -> Property c m
+on1 event m =
+  on event (Json.succeed m)
+
+
+{-|-}
+onClick : msg -> Property c msg
+onClick msg =
+  on "click" (Json.succeed msg)
+
+
+{-|-}
+onDoubleClick : msg -> Property c msg
+onDoubleClick msg =
+  on "dblclick" (Json.succeed msg)
+
+
+{-|-}
+onMouseDown : msg -> Property c msg
+onMouseDown msg =
+  on "mousedown" (Json.succeed msg)
+
+
+{-|-}
+onMouseUp : msg -> Property c msg
+onMouseUp msg =
+  on "mouseup" (Json.succeed msg)
+
+
+{-|-}
+onMouseEnter : msg -> Property c msg
+onMouseEnter msg =
+  on "mouseenter" (Json.succeed msg)
+
+
+{-|-}
+onMouseLeave : msg -> Property c msg
+onMouseLeave msg =
+  on "mouseleave" (Json.succeed msg)
+
+
+{-|-}
+onMouseOver : msg -> Property c msg
+onMouseOver msg =
+  on "mouseover" (Json.succeed msg)
+
+
+{-|-}
+onMouseOut : msg -> Property c msg
+onMouseOut msg =
+  on "mouseout" (Json.succeed msg)
+
+
+{-| Capture [change](https://developer.mozilla.org/en-US/docs/Web/Events/change)
+events on checkboxes. It will grab the boolean value from `event.target.checked`
+on any input event.
+Check out [targetChecked](#targetChecked) for more details on how this works.
+-}
+onCheck : (Bool -> msg) -> Property c msg
+onCheck =
+  (flip Json.map Html.Events.targetChecked) >> on "change"
+
+
+{-|-}
+onToggle : msg -> Property c msg
+onToggle =
+  on1 "change"
+
+-- FOCUS EVENTS
+
+
+{-|-}
+onBlur : msg -> Property c msg
+onBlur msg =
+  on "blur" (Json.succeed msg)
+
+
+{-|-}
+onFocus : msg -> Property c msg
+onFocus msg =
+  on "focus" (Json.succeed msg)
+
+
+{-|-}
+onInput : (String -> m) -> Property c m
+onInput f = 
+  on "input" (Json.map f Html.Events.targetValue)
+ 
+
+{-| Add custom event handlers with options
+ -}
+onWithOptions : String -> Html.Events.Options -> (Json.Decoder m) -> Property c m
+onWithOptions evt options =
+  Listener evt (Just options)
+
+
+
+-- DISPATCH
+
+
+{-| Plain-TEA multiple-event dispatch. 
+
+NB! You are _extremely_ unlikely to need this. 
+
+You need this optional property in exactly these circumstances: 
+1. You are using an elm-mdl component which has a `render` function.
+2. You are not using this `render` function, instead calling `view`.
+3. You installed an `on*` handler on the component, but that handler does not
+seem to take effect.  
+
+What's happening in this case is that elm-mdl has an internal handler for the
+same event as your custom handler; e.g., you install `onBlur` on
+`Textfield`, but `Textfield`'s has an internal `onBlur` handler.
+
+In this case you need to tell the component how to dispatch multiple messages
+(one for you, one for itself) in response to a single DOM event. You do so by
+providing a means of folding a list of messages into a single message. (See
+the [Dispatch](TODO) library for one way to define such a function.)
+
+The `render` function does all this automatically. If you are calling `render`,
+you do not need this property. 
+
+Example use:
+
+
+    type Msg = 
+      ...
+      | Textfield (Textfield.Msg)
+      | MyBlurMsg 
+      | Batch (List Msg)
+
+    ...
+
+      Textfield.view Textfield model.textfield 
+        [ Options.dispatch Batch
+        , Options.onBlur MyBlurMsg
+        ]
+        [ ]
+ -}
+dispatch : (List m -> m) -> Property c m
+dispatch =
+  Json.map >> Lift
+

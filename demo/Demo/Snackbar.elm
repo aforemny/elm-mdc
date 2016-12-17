@@ -251,7 +251,7 @@ view model =
               [ size All 4, size Desktop 2]
               [ Button.render MDL [0] model.mdl
                   [ Button.raised
-                  , Button.onClick AddSnackbar
+                  , Options.onClick AddSnackbar
                   , Button.colored
                   , css "width" "8em"
                   ] 
@@ -262,7 +262,7 @@ view model =
               [ Button.render MDL [1] model.mdl 
                   [ Button.raised
                   , Button.colored
-                  , Button.onClick AddToast
+                  , Options.onClick AddToast
                   , css "width" "8em"
                   ] 
                   [ text "Toast" ]
