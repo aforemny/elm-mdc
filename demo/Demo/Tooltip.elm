@@ -169,23 +169,23 @@ view model  =
             [ Tooltip.onEnter TooltipMsg
             , Tooltip.onLeave TooltipMsg
             ]
-            [ text "Parts-independent tooltip" 
+            [ text "Shorthand-independent tooltip" 
             ] 
         , Tooltip.view TooltipMsg model.tooltip
             [ Tooltip.large ]
-            [ text "No parts!" ]
+            [ text "No shorthand!" ]
         ]
-        "Hover to see a tooltip using built with the plain-TEA API."
+        "Hover to see a tooltip using built using only classic TEA."
         """
         [ span 
             [ Tooltip.onEnter TooltipMsg
             , Tooltip.onLeave TooltipMsg
             ]
-            [ text "Parts-independent tooltip" ] 
+            [ text "Shorthand-independent tooltip" ] 
             ] 
         , Tooltip.view TooltipMsg model.tooltip
             [ Tooltip.large ]
-            [ text "No parts!" ]
+            [ text "No shorthand!" ]
         ]
 
         -- TooltipMsg must be dispatched in update.

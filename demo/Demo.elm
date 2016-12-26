@@ -40,7 +40,6 @@ import Demo.Cards
 import Demo.Lists
 import Demo.Dialog
 import Demo.Chips
---import Demo.Template
 
 
 -- MODEL
@@ -68,7 +67,6 @@ type alias Model =
   , dialog : Demo.Dialog.Model
   , elevation : Demo.Elevation.Model
   , chips : Demo.Chips.Model
-  --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
   }
@@ -96,7 +94,6 @@ model =
   , dialog = Demo.Dialog.model
   , elevation = Demo.Elevation.model
   , chips = Demo.Chips.model
-  --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
   }
@@ -129,7 +126,6 @@ type Msg
   | DialogMsg Demo.Dialog.Msg
   | ElevationMsg Demo.Elevation.Msg
   | ChipMsg Demo.Chips.Msg
-  --| TemplateMsg Demo.Template.Msg
 
 
 nth : Int -> List a -> Maybe a
@@ -172,7 +168,6 @@ update msg model =
     DialogMsg a -> lift .dialog (\m x->{m|dialog =x}) DialogMsg Demo.Dialog.update a model
     ElevationMsg a -> lift .elevation (\m x->{m|elevation=x}) ElevationMsg Demo.Elevation.update a model
     ChipMsg a -> lift .chips (\m x->{m|chips=x}) ChipMsg Demo.Chips.update a model
-    --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
 
 -- VIEW
@@ -200,7 +195,6 @@ tabs =
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> Html.map TogglesMsg)
   , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg)
   , ("Typography", "typography", .typography >> Demo.Typography.view >> Html.map TypographyMsg)
-  --, ("Template", "template", .template >> Demo.Template.view >> Html.map TemplateMsg)
   ]
 
 

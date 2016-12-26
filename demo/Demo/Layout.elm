@@ -65,17 +65,13 @@ model =
 
 
 type Msg 
-  = TemplateMsg 
-  | Update (Model -> Model)
+  = Update (Model -> Model)
   | Mdl (Material.Msg Msg)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    TemplateMsg -> 
-      (model, Cmd.none)
-
     Update f -> 
       (f model, Cmd.none)
 

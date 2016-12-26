@@ -65,8 +65,7 @@ by supplying these `Property m`, much the same way you set attributes of
 4. The `List (Html m)` argument is standard: it is the contents of the component,
   e.g., the text inside a button.
 
-NB! If you are using parts to suppress TEA boilerplate, call `render` instead
-of `view` (see below).
+NB! We recommend using shorthands to avoid TEA boilerplate, see below. If you are using shorthands, you should never call `view` directly, but rather use `render`.
 
 # Shorthands for TEA components
 
@@ -83,8 +82,10 @@ shorthands is
 
 It is important to note that the shorthands are not an alternative to TEA; they
 simply do much of the tedious TEA boilerplate. Note that elm-mdl no longer
-depends on the [Parts library](https://github.com/debois/elm-parts) and do not
-put functions in messages. 
+depends on the [Parts library](https://github.com/debois/elm-parts) and does
+not put functions in messages. The elm-mdl library conforms to [component
+guidelines](https://github.com/evancz/elm-sortable-table#usage-rules) from Elm
+language creators. 
 
 ## Required boilerplate
 
@@ -177,7 +178,6 @@ import Material.Layout as Layout
 import Material.Toggles as Toggles
 import Material.Tooltip as Tooltip
 import Material.Tabs as Tabs
---import Material.Template as Template
 
 
 {-| Model encompassing all Material components.
@@ -191,7 +191,6 @@ type alias Model =
     , toggles : Indexed Toggles.Model
     , tooltip : Indexed Tooltip.Model
     , tabs : Indexed Tabs.Model
-    --  , template : Indexed Template.Model
     }
 
 
@@ -207,7 +206,6 @@ model =
     , toggles = Dict.empty
     , tooltip = Dict.empty
     , tabs = Dict.empty
-    --  , template = Dict.empty
     }
 
 

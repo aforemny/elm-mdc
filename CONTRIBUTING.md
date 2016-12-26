@@ -94,21 +94,17 @@ starting work, to avoid duplication of efforts.
 
 ### Getting started with a new component
 
-Each component has its actual code in `src/Material/NameOfComponent.elm` and a demo in 
-`demo/Demo/NameOfComponent.elm`. These are what you need to construct.
-To get started quickly, do this:
+Take a look at the source for one of the simpler components: 
 
-1. Clone this repository
-2. Copy the file `src/Material/Template.elm` to `src/Material/NameOfYourComponent.elm`. Rename
-as appropriate in the file. 
-3. Copy the file `demo/Demo/Template.elm` to `demo/Demo/NameOfYourComponent.elm`. 
-Rename as appropriate in the file. 
-4. In `demo/Demo.elm`, find all the places that mentions `template` or `Template`, 
-copy those bits, and rename as appropriate. 
-5. Copy the template bits in `src/Material.elm`.
-6. Compile and open `page.html` in a browser.
+1. [Badge](https://github.com/debois/elm-mdl/blob/master/src/Material/Badge.elm). No internal messages. 
+2. [Button](https://github.com/debois/elm-mdl/blob/master/src/Material/Button.elm). With internal messages. 
 
-The last tab contains your component. Now all you need is code!
+Focus initially on writin a TEA component, then either copy-paste the boilerplate for adding shorthand support, or call out on the 
+[#elm-mdl](https://elm.slack.com/messages/elm-mdl) slack. 
+
+Look at
+[Layout](https://github.com/debois/elm-mdl/blob/master/src/Material/Layout.elm) to
+see how to implement subscriptions. 
 
 To avoid duplication of work, either indicate your interest in an existing issue, or 
 [open a new one](https://github.com/debois/elm-mdl/issues/new).

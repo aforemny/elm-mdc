@@ -92,7 +92,7 @@ Tabs display chevrons when the viewport is too small to show all tabs
 simultaneously. Unfortunately, Elm currently does not give us a way to
 automatically detect the width of the tabs at app launch. If you have tabs,
 to make the chevron display correctly at app lauch, you must set
-`model.tabScrollState.width` manually in `init`. If you're using parts,
+`model.tabScrollState.width` manually in `init`. If you're using shorthands,
 use `setTabScrollState` to accomplish this. Initialisation would in this case
 be (assuming a tab width of 1384 pixels):
 
@@ -271,7 +271,7 @@ update msg model =
         |> Maybe.withDefault ( model, Cmd.none )
 
 
-{-| Component update for Parts.
+{-| Component update for shorthand.
 -}
 update_ : (Msg -> msg) -> Msg -> Model -> Maybe ( Model, Cmd msg )
 update_ f action model =
@@ -1069,7 +1069,7 @@ toggleDrawer lift =
 
 {-| Set tabsWidth
 
-This function is for use with parts typing. For plain TEA, simply set the
+This function is for use with shorthands. For plain TEA, simply set the
 `tabsWidth` field in Model.
 -}
 setTabsWidth : Int -> Store s -> Store s
