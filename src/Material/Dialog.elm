@@ -187,7 +187,7 @@ Installing more than one dialog will result in a random one showing.
 -}
 view : List (Style a) -> List (Block a) -> Html a
 view styling contentBlocks =
-    Options.styled' (Html.node "dialog")
+    Options.styled_ (Html.node "dialog")
         (cs "mdl-dialog" :: styling)
         [ Html.Attributes.id theDialog ]
         (List.map (contentBlock) contentBlocks)

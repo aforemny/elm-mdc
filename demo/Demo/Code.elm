@@ -59,14 +59,14 @@ update action state =
           First _ -> 
             (First s, Cmd.none)
             
-          Showing s' -> 
-            guard (s /= s') ( FadingOut (s', s), later s' )
+          Showing s_ -> 
+            guard (s /= s_) ( FadingOut (s_, s), later s_ )
 
-          FadingIn s' ->       
-            guard (s /= s') ( FadingOut (s', s), later s )
+          FadingIn s_ ->       
+            guard (s /= s_) ( FadingOut (s_, s), later s )
 
-          FadingOut (s', _) -> 
-            (FadingOut (s', s), Cmd.none)
+          FadingOut (s_, _) -> 
+            (FadingOut (s_, s), Cmd.none)
 
       Timeout s -> 
         case state of 
@@ -76,14 +76,14 @@ update action state =
           First _ -> 
             ( FadingIn s, later s )
 
-          Showing s' -> 
+          Showing s_ -> 
             ( state, Cmd.none ) -- Also can't happen
 
-          FadingIn s' -> 
-            guard (s == s') ( Showing s, Cmd.none )
+          FadingIn s_ -> 
+            guard (s == s_) ( Showing s, Cmd.none )
 
-          FadingOut (s', s'') -> 
-            guard (s == s') ( FadingIn s'', later s'' )
+          FadingOut (s_, s__) -> 
+            guard (s == s_) ( FadingIn s__, later s__ )
 
 
 -- Shenanigans to strip extra whitespace from code examples. 
@@ -92,8 +92,8 @@ update action state =
 lead : Int -> String -> Int
 lead k str = 
   case String.uncons str of 
-    Just (' ', str') -> 
-      lead (k+1) str'
+    Just (' ', str_) -> 
+      lead (k+1) str_
 
     _ -> 
       k
@@ -104,8 +104,8 @@ dropWhile f xs =
   case xs of
     [] -> 
       xs
-    (x :: xs') as xs -> 
-      if f x then dropWhile f xs' else xs
+    (x :: xs_) as xs -> 
+      if f x then dropWhile f xs_ else xs
 
 trim : String -> String
 trim s = 

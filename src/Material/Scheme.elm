@@ -79,7 +79,7 @@ topWithScheme primary accent content =
            https://github.com/pdamoc/elm-mdl/blob/master/src/Mdl.elm#L63
         -}
         [ node "style"
-            [ type' "text/css" ]
+            [ type_ "text/css" ]
             [ Html.text <| scheme primary accent ]
         , content
         ]

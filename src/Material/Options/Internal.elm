@@ -5,8 +5,8 @@ import Html.Attributes
 import Html.Events
 import String
 import Json.Decode as Json exposing (Decoder)
-import Dispatch
-import Material.Msg as Material
+import Material.Dispatch as Dispatch
+import Material.Component as Component
 
 
 {-| Internal type of properties. Do not use directly; use constructor functions
@@ -43,7 +43,6 @@ type alias Summary c m =
     , dispatch : Dispatch.Config m
     , config : c
     }
-
 
 
 {- `collect` and variants are called multiple times by nearly every use of
@@ -104,8 +103,8 @@ collect =
 
 {-| Special-casing of collect for `Property c ()`.
 -}
-collect1' : Property c m -> Summary () m -> Summary () m
-collect1' options acc =
+collect1_ : Property c m -> Summary () m -> Summary () m
+collect1_ options acc =
     case options of
         Class x ->
             { acc | classes = x :: acc.classes }
@@ -123,7 +122,7 @@ collect1' options acc =
             { acc | dispatch = Dispatch.add event options decoder acc.dispatch }
 
         Many options ->
-            List.foldl collect1' acc options
+            List.foldl collect1_ acc options
 
         Lift m ->
             { acc | dispatch = Dispatch.setDecoder m acc.dispatch }
@@ -135,9 +134,9 @@ collect1' options acc =
             acc
 
 
-collect' : List (Property c m) -> Summary () m
-collect' =
-    List.foldl collect1' (Summary [] [] [] [] Dispatch.defaultConfig ())
+collect_ : List (Property c m) -> Summary () m
+collect_ =
+    List.foldl collect1_ (Summary [] [] [] [] Dispatch.defaultConfig ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
@@ -225,21 +224,23 @@ container =
     option << (\style config -> { config | container = Many style :: config.container })
 
 
-dispatch : (Material.Msg a m -> m) -> Property c m
+
+dispatch
+  : (Component.Msg button textfield menu layout toggles tooltip tabs (List m) -> m)
+    -> Property c m 
 dispatch lift =
-    Lift (Json.map Material.Dispatch >> Json.map lift)
+    Lift (Json.map Component.Dispatch >> Json.map lift)
 
 
 {-| Inject dispatch
 -}
-inject :
-    (a -> b -> List (Property d e) -> f -> g)
-    -> (Material.Msg h e -> e)
-    -> a
-    -> b
-    -> List (Property d e)
-    -> f
-    -> g
+inject
+  : (a -> b -> List (Property c m) -> d)
+  -> (Component.Msg button textfield menu layout toggles tooltip tabs (List m) -> m)
+  -> a
+  -> b
+  -> List (Property c m)
+  -> d   
 inject view lift a b c =
     view a b (dispatch lift :: c)
 
@@ -270,4 +271,3 @@ https://groups.google.com/forum/#!topic/elm-discuss/Q6mTrF4T7EU
 on1 : String -> (a -> b) -> a -> Property c b
 on1 event lift m =
     Listener event Nothing (Json.map lift <| Json.succeed m)
-        >>>>>>> 3 f5d01d21f752b53861bfa25a5ed4eb764f1679

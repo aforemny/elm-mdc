@@ -54,7 +54,7 @@ The following options have effect only when applied in the header row.
 -}
 
 import Html exposing (Html, Attribute)
-import Material.Options as Options exposing (Property, cs, nop)
+import Material.Options as Options exposing (Property, cs, nop, when)
 import Material.Options.Internal as Internal
 
 
@@ -152,11 +152,7 @@ tr options html =
     in
         Internal.apply summary
             Html.tr
-            [ if config.selected then
-                cs "is-selected"
-              else
-                nop
-            ]
+            [ cs "is-selected" |> when config.selected ]
             []
             html
 
@@ -166,7 +162,6 @@ tr options html =
 selected : Property { a | selected : Bool } m
 selected =
     Internal.option <| \self -> { self | selected = True }
-
 
 
 -- Header
@@ -201,10 +196,7 @@ th options html =
     in
         Internal.apply summary
             Html.th
-            [ if config.numeric then
-                nop
-              else
-                cs "mdl-data-table__cell--non-numeric"
+            [ cs "mdl-data-table__cell--non-numeric" |> when config.numeric 
             , case config.sorted of
                 Just Ascending ->
                     cs "mdl-data-table__header--sorted-ascending"
@@ -283,10 +275,7 @@ td options html =
     in
         Internal.apply summary
             Html.td
-            [ if config.numeric then
-                nop
-              else
-                cs "mdl-data-table__cell--non-numeric"
+            [ cs "mdl-data-table__cell--non-numeric" |> when config.numeric 
             ]
             []
             html

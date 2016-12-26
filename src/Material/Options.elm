@@ -10,7 +10,7 @@ module Material.Options
         , maybe
         , disabled
         , styled
-        , styled'
+        , styled_
         , stylesheet
         , Style
         , div
@@ -85,7 +85,7 @@ elements.
 @docs cs, css, data, many, nop, when, maybe
 
 # Html
-@docs Style, styled, styled'
+@docs Style, styled, styled_
 
 ## Elements
 @docs div, span, img
@@ -146,6 +146,7 @@ import Json.Decode as Json
 import Material.Options.Internal as Internal exposing (..)
 
 
+
 -- PROPERTIES
 
 
@@ -180,18 +181,18 @@ styled : (List (Attribute m) -> a) -> List (Property c m) -> a
 styled ctor props =
     ctor
         (addAttributes
-            (collect' props)
+            (collect_ props)
             []
         )
 
 
 {-| Apply properties and attributes to a standard Html element.
 -}
-styled' : (List (Attribute m) -> a) -> List (Property c m) -> List (Attribute m) -> a
-styled' ctor props attrs =
+styled_ : (List (Attribute m) -> a) -> List (Property c m) -> List (Attribute m) -> a
+styled_ ctor props attrs =
     ctor
         (addAttributes
-            (collect' props)
+            (collect_ props)
             attrs
         )
 
@@ -230,7 +231,7 @@ attributes of an img element. Use like this:
 -}
 img : List (Property a b) -> List (Attribute b) -> Html b
 img options attrs =
-    styled' Html.img options attrs []
+    styled_ Html.img options attrs []
 
 
 {-| Set HTML disabled attribute.
@@ -284,10 +285,10 @@ data key val =
 {-| Conditional option. When the guard evaluates to `true`, the option is
 applied; otherwise it is ignored. Use like this:
 
-    Button.disabled `when` not model.isRunning
+    Button.disabled |> when (not model.isRunning)
 -}
-when : Property c m -> Bool -> Property c m
-when prop guard =
+when : Bool -> Property c m -> Property c m
+when guard prop  =
     if guard then
         prop
     else
@@ -312,7 +313,6 @@ somewhere.
 stylesheet : String -> Html m
 stylesheet css =
     Html.node "style" [] [ Html.text css ]
-
 
 
 -- STYLE

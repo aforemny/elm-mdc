@@ -10,9 +10,9 @@ module Material.Helpers
         , effect
         , cssTransitionStep
         , lift
-        , lift'
+        , lift_
         , Update
-        , Update'
+        , Update_
         , noAttr
         , aria
         )
@@ -31,7 +31,7 @@ find some of them useful.
 @docs map1st, map2nd
 
 # Elm architecture
-@docs Update, Update', lift, lift'
+@docs Update, Update_, lift, lift_
 -}
 
 import Html
@@ -107,19 +107,19 @@ map2nd f ( x, y ) =
 {-| Variant of EA update function type, where effects may be
 lifted to a different type.
 -}
-type alias Update' model action action' =
-    action -> model -> ( model, Cmd action' )
+type alias Update_ model action action_ =
+    action -> model -> ( model, Cmd action_ )
 
 
 {-| Standard EA update function type.
 -}
 type alias Update model action =
-    Update' model action action
+    Update_ model action action
 
 
 {-| Variant of `lift` for effect-free components.
 -}
-lift' :
+lift_ :
     (model -> submodel)
     -> -- get
        (model -> submodel -> model)
@@ -130,7 +130,7 @@ lift' :
        model
     -> -- model
        ( model, Cmd action )
-lift' get set update action model =
+lift_ get set update action model =
     ( set model (update action (get model)), Cmd.none )
 
 
@@ -138,19 +138,19 @@ lift' get set update action model =
 
     case msg of
       ...
-      ButtonsMsg msg' ->
-        lift .buttons (\m x->{m|buttons=x}) ButtonsMsg Demo.Buttons.update msg' model
+      ButtonsMsg msg_ ->
+        lift .buttons (\m x->{m|buttons=x}) ButtonsMsg Demo.Buttons.update msg_ model
 
 This is equivalent to the more verbose
 
     case msg of
       ...
-      ButtonsMsg msg' ->
+      ButtonsMsg msg_ ->
         let
-          (buttons', cmd) =
-            Demo.Buttons.update msg' model.buttons
+          (buttons_, cmd) =
+            Demo.Buttons.update msg_ model.buttons
         in
-          ( { model | buttons = buttons'}
+          ( { model | buttons = buttons_}
           , Cmd.map ButtonsMsg cmd
           )
 -}
@@ -170,10 +170,10 @@ lift :
        ( model, Cmd action )
 lift get set fwd update action model =
     let
-        ( submodel', e ) =
+        ( submodel_, e ) =
             update action (get model)
     in
-        ( set model submodel', Cmd.map fwd e )
+        ( set model submodel_, Cmd.map fwd e )
 
 
 {-|
@@ -181,7 +181,7 @@ lift get set fwd update action model =
 -}
 cmd : msg -> Cmd msg
 cmd msg =
-    Task.perform (always msg) (always msg) (Task.succeed msg)
+    Task.perform (always msg) (Task.succeed msg)
 
 
 {-| Produce a delayed effect. Suppose you want `MyMsg` to happen 200ms after
@@ -193,7 +193,7 @@ a button is clicked:
 -}
 delay : Time -> a -> Cmd a
 delay t x =
-    Task.perform (always x) (always x) <| Process.sleep t
+    Task.perform (always x) <| Process.sleep t
 
 
 {-| Delay a command sufficiently that you can count on triggering CSS

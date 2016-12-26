@@ -11,7 +11,6 @@ import Material.Options as Options exposing (css, cs)
 import Material
 import Material.Card as Card
 import Material.Button as Button
-import Material.Helpers as Helpers
 
 import Demo.Page as Page
 import Demo.Code as Code
@@ -49,17 +48,6 @@ type Msg
 
 
 
-liftUpdate : (Msg -> m) -> Msg -> Model -> (Model, Cmd m)
-liftUpdate lift msg model =
-  case msg of
-    Mdl msg' ->
-      Material.update msg' model
-        |> Helpers.map2nd (Cmd.map lift)
-
-    _ ->
-      model ! []
-
-
 lastIndex : Dict Int b -> Int
 lastIndex dict =
   Dict.keys dict
@@ -71,8 +59,8 @@ lastIndex dict =
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    Mdl action' ->
-      Material.update action' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
     ChipClick index ->
       let
@@ -87,31 +75,31 @@ update action model =
         index =
           1 + lastIndex model.chips
 
-        model' =
+        model_ =
           { model | chips = Dict.insert index (content ++ " " ++ toString index) model.chips }
       in
-        (model', Cmd.none)
+        (model_, Cmd.none)
 
     RemoveChip index ->
       let
-        d' =
+        d_ =
           Maybe.withDefault ""
             ( Dict.get index model.chips )
 
         details =
-          if d' == model.details then
+          if d_ == model.details then
             ""
           else
             model.details
 
-        model' =
+        model_ =
           { model |
             chips = Dict.remove index model.chips
           , details = details
           }
 
       in
-        (model', Cmd.none)
+        (model_, Cmd.none)
 
 
 -- VIEW
@@ -336,7 +324,7 @@ view model  =
 
       ]
   in
-    Page.body1' "Chips" srcUrl intro references
+    Page.body1_ "Chips" srcUrl intro references
       examples
       interactive
 

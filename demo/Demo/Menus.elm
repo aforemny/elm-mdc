@@ -54,8 +54,8 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
-    Mdl action' ->
-      Material.update action' model
+    Mdl action_ ->
+      Material.update Mdl action_ model
 
     Select menu item -> 
       ( { model | selected = Just (menu, item) }
@@ -98,11 +98,11 @@ type alias Align =
 
 options : Model -> Align -> List (Menu.Property Msg)
 options model align = 
-  [ Menu.ripple `when` model.ripple
+  [ Menu.ripple |> when model.ripple
   , model.icon 
       |> Maybe.map Menu.icon 
       |> Maybe.withDefault nop 
-  , snd align
+  , Tuple.second align
   ] 
 
 
@@ -114,7 +114,7 @@ showOptions model align =
       , model.icon 
           |> Maybe.map (\i -> "Menu.icon \"" ++ i ++ "\"")
           |> Maybe.withDefault "" 
-      , "Menu." ++ fst align
+      , "Menu." ++ Tuple.first align
       ]
       |> List.filter ((/=) "")
       |> String.join ", "
@@ -440,7 +440,7 @@ view model =
       ]
 
   in
-    Page.body1' "Menus" srcUrl intro references (demo1 model) demo2
+    Page.body1_ "Menus" srcUrl intro references (demo1 model) demo2
 
 
 intro : Html m

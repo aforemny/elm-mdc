@@ -79,8 +79,8 @@ update action model =
     Update f -> 
       (f model, Cmd.none)
 
-    Mdl action' -> 
-      Material.update action' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
 
 {- Make sure we didn't pick the same primary and accent colour. -}
@@ -128,17 +128,17 @@ picker hues disabled shade current f =
   hues
     |> Array.toList
     |> List.map (\hue -> 
-      Options.styled' div 
-        [ Color.background (Color.color hue shade) `when` (disabled /= Just hue)
-        , Color.background (Color.color Color.Grey Color.S200) `when` (disabled == Just hue)
+      Options.styled_ div 
+        [ Color.background (Color.color hue shade) |> when (disabled /= Just hue)
+        , Color.background (Color.color Color.Grey Color.S200) |> when (disabled == Just hue)
         , css "width" "56px"
         , css "height" "56px"
         , css "margin" "2pt"
         , css "line-height" "56px"
         , css "flex-shrink" "0"
-        , Elevation.e8 `when` (current == hue)
+        , Elevation.e8 |> when (current == hue)
         , css "transition" "box-shadow 300ms ease-in-out 0s, background-color 300ms ease-in-out 0s"
-        , css "cursor" "pointer" `when` (disabled /= Just hue)
+        , css "cursor" "pointer" |> when (disabled /= Just hue)
         ] 
         (if Just hue /= disabled then 
           [ Html.Events.onClick (f hue >> fixColors |> Update) ]
@@ -336,7 +336,7 @@ view model  =
           ]
       ]
   in
-    Page.body1' "Layout" srcUrl intro references demo1 demo2
+    Page.body1_ "Layout" srcUrl intro references demo1 demo2
 
 
 intro : Html m

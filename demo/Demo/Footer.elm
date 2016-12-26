@@ -42,8 +42,8 @@ update action model =
     FooterMsg ->
       (model, Cmd.none)
 
-    Mdl action' ->
-      Material.update action' model
+    Mdl msg_ ->
+      Material.update Mdl msg_ model
 
 
 

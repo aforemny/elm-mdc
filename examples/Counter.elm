@@ -3,7 +3,6 @@ buttons. Use this as a starting point for using elm-mdl components in your own
 app. 
 -}
 
-import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 
@@ -55,8 +54,8 @@ update msg model =
       )
 
     -- Boilerplate: Mdl action handler. 
-    Mdl msg' -> 
-      Material.update msg' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
 
 -- VIEW
@@ -104,9 +103,9 @@ view model =
       -- for the `Material` module for details.
   
 
-main : Program Never
+main : Program Never Model Msg 
 main =
-  App.program 
+  Html.program 
     { init = ( model, Cmd.none ) 
     , view = view
     , subscriptions = always Sub.none 

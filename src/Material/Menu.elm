@@ -6,6 +6,7 @@ module Material.Menu
         , update
         , view
         , render
+        , react
         , Property
         , bottomLeft
         , bottomRight
@@ -89,11 +90,12 @@ up. Example initialisation of containing app:
 # Elm architecture
 @docs Model, defaultModel, Msg, update, view, subscriptions
 
+# Internal use
+@docs react
 
 -}
 
 import Dict exposing (Dict)
-import Html.App
 import Html.Attributes
 import Html.Events exposing (defaultOptions)
 import Html exposing (..)
@@ -101,14 +103,13 @@ import Json.Decode as Json exposing (Decoder)
 import Json.Encode exposing (string)
 import Mouse
 import String
-import Material.Helpers as Helpers exposing (pure)
+import Material.Helpers as Helpers exposing (pure, map1st)
 import Material.Icon as Icon
 import Material.Menu.Geometry as Geometry exposing (Geometry)
-import Material.Options as Options exposing (Style, cs, css, styled, styled', when)
+import Material.Options as Options exposing (Style, cs, css, styled, styled_, when)
 import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
-import Parts exposing (Indexed, Index)
-import Material.Msg as Msg
+import Material.Component as Component exposing (Indexed, Index)
 
 
 -- CONSTANTS
@@ -229,7 +230,6 @@ onSelect =
     Internal.option << (\msg config -> { config | onSelect = Just msg })
 
 
-
 -- ACTION, UPDATE
 
 
@@ -283,7 +283,7 @@ update fwd msg model =
         Select idx msg ->
             -- Close the menu after some delay for the ripple effect to show.
             let
-                model' =
+                model_ =
                     { model | animationState = Closing }
 
                 cmds =
@@ -292,16 +292,17 @@ update fwd msg model =
                         , msg |> Maybe.map Helpers.cmd
                         ]
             in
-                ( model', Cmd.batch cmds )
+                ( model_, Cmd.batch cmds )
+                
 
         Ripple idx action ->
             let
-                ( model', effects ) =
+                ( model_, effects ) =
                     Dict.get idx model.ripples
                         |> Maybe.withDefault Ripple.model
                         |> Ripple.update action
             in
-                ( { model | ripples = Dict.insert idx model' model.ripples }
+                ( { model | ripples = Dict.insert idx model_ model.ripples }
                 , Cmd.map (Ripple idx >> fwd) effects
                 )
 
@@ -316,7 +317,7 @@ update fwd msg model =
                                     && (top <= toFloat y)
                                     && (toFloat y <= top + height)
                         in
-                            if pos `inside` geometry.menu.bounds then
+                            if inside pos geometry.menu.bounds then
                                 model ! []
                             else
                                 update fwd Close model
@@ -337,7 +338,7 @@ update fwd msg model =
                                     cmd =
                                         List.drop index summaries
                                             |> List.head
-                                            |> flip Maybe.andThen (.config >> .onSelect)
+                                            |> Maybe.andThen (.config >> .onSelect)
                                 in
                                     update fwd (Select (index + 1) cmd) model
 
@@ -366,9 +367,9 @@ update fwd msg model =
                         in
                             (items ++ items)
                                 |> List.drop (1 + Maybe.withDefault -1 model.index)
-                                |> List.filter (snd >> .config >> .enabled)
+                                |> List.filter (Tuple.second >> .config >> .enabled)
                                 |> List.head
-                                |> Maybe.map (fst >> \index' -> { model | index = Just index' })
+                                |> Maybe.map (Tuple.first >> \index_ -> { model | index = Just index_ })
                                 |> Maybe.withDefault model
                                 |> flip (!) []
                     else
@@ -384,9 +385,9 @@ update fwd msg model =
                             (items ++ items)
                                 |> List.reverse
                                 |> List.drop ((List.length summaries) - Maybe.withDefault 0 model.index)
-                                |> List.filter (snd >> .config >> .enabled)
+                                |> List.filter (Tuple.second >> .config >> .enabled)
                                 |> List.head
-                                |> Maybe.map (fst >> \index' -> { model | index = Just index' })
+                                |> Maybe.map (Tuple.first >> \index_ -> { model | index = Just index_ })
                                 |> Maybe.withDefault model
                                 |> pure
                     else
@@ -590,21 +591,20 @@ view lift model properties items =
                 [ cs "mdl-button"
                 , cs "mdl-js-button"
                 , cs "mdl-button--icon"
-                , Internal.attribute (onKeyDown (Key itemSummaries)) `when` isActive model
-                , Internal.attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
-                , Internal.attribute (Html.Events.onClick Close) `when` isActive model
+                , when (isActive model) (Internal.attribute (onKeyDown (Key itemSummaries)))
+                , when (model.animationState /= Opened) (Internal.attribute (onClick Geometry.decode (Open)))
+                , when (isActive model) (Internal.attribute (Html.Events.onClick Close))
                 ]
                 [ Icon.view config.icon
                     [ cs "material-icons"
                     , css "pointer-events" "none"
                     ]
                 ]
-                |> Html.App.map lift
+                |> Html.map lift
             , styled div
                 [ cs "mdl-menu__container"
                 , cs "is-upgraded"
-                , cs "is-visible"
-                    `when` ((model.animationState == Opened) || (model.animationState == Closing))
+                , when ((model.animationState == Opened) || (model.animationState == Closing)) (cs "is-visible")
                 , containerGeometry config.alignment |> withGeometry model
                 ]
                 [ styled div
@@ -622,11 +622,11 @@ view lift model properties items =
                 , styled ul
                     [ cs "mdl-menu"
                     , cs "mdl-js-menu"
-                    , cs "is-animating"
-                        `when`
-                            ((model.animationState == Opening)
-                                || (model.animationState == Closing)
-                            )
+                    , when
+                        ((model.animationState == Opening)
+                            || (model.animationState == Closing)
+                        )
+                        (cs "is-animating")
                     , clip model config |> withGeometry model
                     , alignment
                     ]
@@ -636,14 +636,14 @@ view lift model properties items =
                                 (view1 lift config model)
                                 g.offsetTops
                                 g.offsetHeights
-                                [0..numItems - 1]
+                                (List.range 0 (numItems - 1))
                                 itemSummaries
                                 items
 
                         Nothing ->
                             List.map3
                                 (view1 lift config model 0 0)
-                                [0..numItems - 1]
+                                (List.range 0 (numItems - 1))
                                 itemSummaries
                                 items
                     )
@@ -689,9 +689,9 @@ view1 lift config model offsetTop offsetHeight index summary item =
         Internal.apply summary
             li
             [ cs "mdl-menu__item"
-            , cs "mdl-js-ripple-effect" `when` config.ripple
-            , cs "mdl-menu__item--full-bleed-divider" `when` summary.config.divider
-            , css "background-color" "rgb(238,238,238)" `when` (model.index == Just index)
+            , cs "mdl-js-ripple-effect" |> when config.ripple
+            , cs "mdl-menu__item--full-bleed-divider" |> when summary.config.divider
+            , css "background-color" "rgb(238,238,238)" |> when (model.index == Just index)
             , case ( model.geometry, isActive model ) of
                 ( Just g, True ) ->
                     delay config.alignment g.menu.bounds.height offsetTop offsetHeight
@@ -702,17 +702,17 @@ view1 lift config model offsetTop offsetHeight index summary item =
             , css "display" "flex"
             , css "align-items" "center"
             , Options.onClick (Select index summary.config.onSelect |> lift)
-                `when` canSelect
+                |> when canSelect
             , Internal.attribute <| Html.Attributes.disabled (not summary.config.enabled)
             , Internal.attribute <| Html.Attributes.property "tabindex" (string "-1")
             , if hasRipple then
                 Options.many
-                    [ Internal.attribute <| Ripple.downOn' ripple "mousedown"
-                    , Internal.attribute <| Ripple.downOn' ripple "touchstart"
-                    , Internal.attribute <| Ripple.upOn' ripple "mouseup"
-                    , Internal.attribute <| Ripple.upOn' ripple "mouseleave"
-                    , Internal.attribute <| Ripple.upOn' ripple "touchend"
-                    , Internal.attribute <| Ripple.upOn' ripple "blur"
+                    [ Internal.attribute <| Ripple.downOn_ ripple "mousedown"
+                    , Internal.attribute <| Ripple.downOn_ ripple "touchstart"
+                    , Internal.attribute <| Ripple.upOn_ ripple "mouseup"
+                    , Internal.attribute <| Ripple.upOn_ ripple "mouseleave"
+                    , Internal.attribute <| Ripple.upOn_ ripple "touchend"
+                    , Internal.attribute <| Ripple.upOn_ ripple "blur"
                     ]
               else
                 Options.nop
@@ -721,12 +721,12 @@ view1 lift config model offsetTop offsetHeight index summary item =
             (if hasRipple then
                 ((++)
                     item.html
-                    [ Ripple.view'
+                    [ Ripple.view_
                         [ Html.Attributes.class "mdl-menu__item-ripple-container" ]
                         (Dict.get index model.ripples
                             |> Maybe.withDefault Ripple.model
                         )
-                        |> Html.App.map ripple
+                        |> Html.map ripple
                     ]
                 )
              else
@@ -735,11 +735,30 @@ view1 lift config model offsetTop offsetHeight index summary item =
 
 
 
+
+
 -- COMPONENT
 
 
-type alias Container c =
-    { c | menu : Indexed Model }
+type alias Store s =
+    { s | menu : Indexed Model }
+
+
+( get, set ) =
+    Component.indexed .menu (\x y -> { y | menu = x }) defaultModel
+
+
+{-| Component react function. Internal use only.
+-}
+react :
+    (Msg m -> m)
+    -> Msg m
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react lift msg idx store =
+    update lift msg (get idx store)
+        |> map1st (set idx store >> Just)
 
 
 {-| Component render. Below is an example, assuming boilerplate setup as
@@ -762,51 +781,28 @@ indicated in `Material`, and a user message `Select String`.
       ]
 -}
 render :
-    (Msg.Msg (Container c) m -> m)
-    -> Parts.Index
-    -> Container c
+    (Component.Msg button textfield (Msg m) layout toggles tooltip tabs dispatch
+     -> m
+    )
+    -> Component.Index
+    -> Store s
     -> List (Property m)
     -> List (Item m)
     -> Html m
-render lift =
-    Parts.create
-        view
-        update'
-        .menu
-        (\x y -> { y | menu = x })
-        defaultModel
-        (Msg.Internal >> lift)
+render =
+    Component.render get view Component.MenuMsg
 
 
-pack : (Parts.Msg (Container b) m -> m) -> Parts.Index -> Msg m -> m
-pack lift =
-    Parts.pack update'
-        .menu
-        (\x y -> { y | menu = x })
-        defaultModel
-        (lift)
-
-
-{-| Parts-compatible subscription.
+{-| TODO
 -}
-subs : (Msg.Msg (Container b) m -> m) -> Container b -> Sub m
-subs lift =
-    .menu
-        >> Dict.foldl
-            (\idx model ss ->
-                Sub.map
-                    (pack (Msg.Internal >> lift) idx)
-                    (subscriptions model)
-                    :: ss
-            )
-            []
-        >> Sub.batch
-
-
-update' : Parts.Update Model (Msg msg) msg
-update' fwd msg model =
-    update fwd msg model
-        |> Just
+subs :
+    (Component.Msg button textfield (Msg msg) layout toggles tooltip tabs dispatch
+     -> msg
+    )
+    -> Store s
+    -> Sub msg
+subs =
+    Component.subs Component.MenuMsg .menu subscriptions
 
 
 

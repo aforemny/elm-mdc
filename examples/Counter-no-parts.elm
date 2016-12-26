@@ -2,7 +2,6 @@
 are unlikely to want this; consider looking at Counter.elm instead. 
 -}
 
-import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Platform.Cmd exposing (Cmd)
@@ -64,19 +63,19 @@ update msg model =
        , Cmd.none
        )
  
-    IncreaseButtonMsg msg' -> 
+    IncreaseButtonMsg msg_ -> 
       let 
         (submodel, fx) =
-          Button.update msg' model.increaseButtonModel
+          Button.update msg_ model.increaseButtonModel
       in 
         ( { model | increaseButtonModel = submodel }
         , Cmd.map IncreaseButtonMsg fx
         )
 
-    ResetButtonMsg msg' -> 
+    ResetButtonMsg msg_ -> 
       let 
         (submodel, fx) =
-          Button.update msg' model.resetButtonModel 
+          Button.update msg_ model.resetButtonModel 
       in 
         ( { model | resetButtonModel = submodel }
         , Cmd.map ResetButtonMsg fx
@@ -103,9 +102,9 @@ view model =
   |> Material.Scheme.top 
 
 
-main : Program Never
+main : Program Never Model Msg
 main =
-  App.program 
+  Html.program 
     { init = ( model, Cmd.none ) 
     , view = view
     , subscriptions = always Sub.none 

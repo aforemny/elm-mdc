@@ -13,6 +13,7 @@ module Material.Tabs
         , activeTab
         , Model
         , defaultModel
+        , react
         )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/index.html#layout-section/tabs):
@@ -71,19 +72,19 @@ for a live demo.
 @docs update
 @docs view
 
+# Internal use
+@docs react
 -}
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (Html)
-import Parts exposing (Indexed)
-import Html.App
-import Html.Attributes as Html exposing (class)
+import Material.Component as Component exposing (Indexed, Index)
+import Material.Options as Options exposing (cs, when)
+import Material.Options.Internal as Internal
+import Material.Ripple as Ripple
+import Html.Attributes exposing (class)
 import Html.Keyed as Keyed
 import Dict exposing (Dict)
-import Material.Msg as Material
-import Material.Options as Options exposing (cs, when)
-import Material.Ripple as Ripple
-import Material.Options.Internal as Internal
 
 
 -- MODEL
@@ -119,14 +120,14 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
     case action of
-        Ripple tabIdx action' ->
+        Ripple tabIdx action_ ->
             let
-                ( ripple', cmd ) =
+                ( ripple_, cmd ) =
                     Dict.get tabIdx model.ripples
                         |> Maybe.withDefault Ripple.model
-                        |> Ripple.update action'
+                        |> Ripple.update action_
             in
-                ( { model | ripples = Dict.insert tabIdx ripple' model.ripples }, Cmd.map (Ripple tabIdx) cmd )
+                ( { model | ripples = Dict.insert tabIdx ripple_ model.ripples }, Cmd.map (Ripple tabIdx) cmd )
 
 
 
@@ -219,7 +220,7 @@ view lift model options tabs tabContent =
         -}
         wrapContent =
             Keyed.node "div"
-                [ Html.classList
+                [ Html.Attributes.classList
                     [ ( "mdl-tab__panel", True )
                     , ( "is-active", True )
                     ]
@@ -228,7 +229,7 @@ view lift model options tabs tabContent =
         unwrapLabel tabIdx (Label ( props, content )) =
             Options.styled Html.a
                 [ cs "mdl-tabs__tab"
-                , cs "is-active" `when` (tabIdx == config.activeTab)
+                , cs "is-active" |> when (tabIdx == config.activeTab)
                 , config.onSelectTab
                     |> Maybe.map (\t -> Options.onClick (t tabIdx))
                     |> Maybe.withDefault Options.nop
@@ -238,7 +239,7 @@ view lift model options tabs tabContent =
                     List.concat
                         [ content
                         , [ Ripple.view
-                                [ Html.classList
+                                [ Html.Attributes.classList
                                     [ ( "mdl-tabs__ripple-container", True )
                                     , ( "mdl-tabs__ripple-js-effect", True )
                                     ]
@@ -246,7 +247,7 @@ view lift model options tabs tabContent =
                                 (Dict.get tabIdx model.ripples
                                     |> Maybe.withDefault Ripple.model
                                 )
-                                |> Html.App.map (Ripple tabIdx >> lift)
+                                |> Html.map (Ripple tabIdx >> lift)
                           ]
                         ]
                  else
@@ -264,8 +265,8 @@ view lift model options tabs tabContent =
             [ cs "mdl-tabs"
             , cs "mdl-js-tabs"
             , cs "is-upgraded"
-            , cs "mdl-js-ripple-effect" `when` config.ripple
-            , cs "mdl-js-ripple-effect--ignore-events" `when` config.ripple
+            , when config.ripple (cs "mdl-js-ripple-effect")
+            , when config.ripple (cs "mdl-js-ripple-effect--ignore-events")
             ]
             []
             [ links
@@ -277,25 +278,35 @@ view lift model options tabs tabContent =
 -- COMPONENT
 
 
-type alias Container c =
-    { c | tabs : Indexed Model }
+type alias Store s =
+    { s | tabs : Indexed Model }
+
+
+( get, set ) =
+    Component.indexed .tabs (\x y -> { y | tabs = x }) defaultModel
+
+
+{-| Component react function.
+-}
+react :
+    (Component.Msg button textfield menu layout toggles tooltip Msg dispatch -> m)
+    -> Msg 
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react =
+    Component.react get set Component.TabsMsg (Component.generalise update)
 
 
 {-| Component render.
 -}
 render :
-    (Material.Msg (Container c) m -> m)
-    -> Parts.Index
-    -> Container c
+    (Component.Msg button textfield menu snackbar toggles tooltip Msg dispatch -> m)
+    -> Component.Index
+    -> Store s
     -> List (Property m)
     -> List (Label m)
     -> List (Html m)
     -> Html m
-render lift =
-    Parts.create
-        view
-        (Parts.generalize update)
-        .tabs
-        (\x y -> { y | tabs = x })
-        defaultModel
-        (Material.Internal >> lift)
+render =
+    Component.render get view Component.TabsMsg

@@ -281,7 +281,7 @@ view model =
                     False
 
         action =
-            Maybe.andThen contents .action
+            contents |> Maybe.andThen .action
     in
         div
             [ classList
@@ -300,7 +300,7 @@ view model =
                 )
             , button
                 (class "mdl-snackbar__action"
-                    :: type' "button"
+                    :: type_ "button"
                     :: aria "hidden"
                         (action
                             |> Maybe.map (always (not isActive))

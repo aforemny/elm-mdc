@@ -28,6 +28,7 @@ module Material.Layout
         , sub0
         , subs
         , render
+        , react
         , toggleDrawer
         , transparentHeader
         )
@@ -132,27 +133,27 @@ be (assuming a tab width of 1384 pixels):
 # Elm architecture
 @docs view, Msg, Model, defaultModel, update, init, subscriptions
 
+# Internal use
+@docs react
 
 -}
 
 import Dict exposing (Dict)
 import Maybe exposing (andThen, map)
 import Html exposing (..)
-import Html.App as App
 import Html.Attributes exposing (class, classList, tabindex)
 import Html.Events as Events exposing (on)
 import Html.Keyed as Keyed
 import Platform.Cmd exposing (Cmd)
 import Window
-import Json.Decode as Decoder exposing ((:=))
+import Json.Decode as Decoder exposing (field)
 import Task
-import Parts
+import Material.Component as Component exposing (Indexed, indexed, render1, subs)
 import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
 import Material.Options as Options exposing (Style, cs, nop, css, when, styled)
 import Material.Options.Internal as Internal
-import Material.Msg as Msg
 import DOM
 
 
@@ -165,10 +166,7 @@ init : ( Model, Cmd Msg )
 init =
     let
         measureScreenSize =
-            Task.perform
-                (\_ -> Resize (Debug.log "Can't get initial window dimensions. Guessing " 1025))
-                Resize
-                Window.width
+            Task.perform Resize Window.width
     in
         ( defaultModel, measureScreenSize )
 
@@ -207,8 +205,8 @@ defaultTabScrollState =
     }
 
 
-setTabsWidth' : Int -> Model -> Model
-setTabsWidth' width model =
+setTabsWidth_ : Int -> Model -> Model
+setTabsWidth_ width model =
     let
         x =
             model.tabScrollState
@@ -269,14 +267,14 @@ type Msg
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    update' identity msg model
+    update_ identity msg model
         |> Maybe.withDefault ( model, Cmd.none )
 
 
 {-| Component update for Parts.
 -}
-update' : (Msg -> msg) -> Msg -> Model -> Maybe ( Model, Cmd msg )
-update' f action model =
+update_ : (Msg -> msg) -> Msg -> Model -> Maybe ( Model, Cmd msg )
+update_ f action model =
     case action of
         NOP ->
             Nothing
@@ -327,13 +325,13 @@ update' f action model =
         ToggleDrawer ->
             Just <| pure { model | isDrawerOpen = not model.isDrawerOpen }
 
-        Ripple tabIndex action' ->
+        Ripple tabIndex action_ ->
             Dict.get tabIndex model.ripples
                 |> Maybe.withDefault Ripple.model
-                |> Ripple.update action'
+                |> Ripple.update action_
                 |> map1st
-                    (\ripple' ->
-                        { model | ripples = Dict.insert tabIndex ripple' model.ripples }
+                    (\ripple_ ->
+                        { model | ripples = Dict.insert tabIndex ripple_ model.ripples }
                     )
                 |> map2nd (Cmd.map (f << Ripple tabIndex))
                 |> Just
@@ -356,12 +354,11 @@ update' f action model =
                     0.0 < offset
             in
                 if isScrolled /= model.isScrolled then
-                    update' f
+                    update_ f
                         (TransitionHeader { toCompact = isScrolled, fixedHeader = fixedHeader })
                         { model | isScrolled = isScrolled }
                 else
                     Nothing
-
         TransitionHeader { toCompact, fixedHeader } ->
             if not model.isAnimating then
                 Just
@@ -500,7 +497,6 @@ onSelectTab =
     Internal.option << (\f config -> { config | onSelectTab = Just (f >> Events.onClick) })
 
 
-
 -- AUXILIARY VIEWS
 
 
@@ -611,8 +607,8 @@ tabsView lift config model ( tabs, tabStyles ) =
                 styled div
                     [ cs "mdl-layout__tab-bar-button"
                     , cs ("mdl-layout__tab-bar-" ++ dir ++ "-button")
-                    , cs "is-active"
-                        `when`
+                    , (cs "is-active")
+                        |> when
                             ((direction == Left && model.tabScrollState.canScrollLeft)
                                 || (direction == Right && model.tabScrollState.canScrollRight)
                             )
@@ -650,7 +646,7 @@ tabsView lift config model ( tabs, tabStyles ) =
                 , Internal.attribute <|
                     on "scroll"
                         (DOM.target
-                            (Decoder.object3
+                            (Decoder.map3
                                 (\scrollWidth clientWidth scrollLeft ->
                                     { canScrollLeft = scrollLeft > 0
                                     , canScrollRight = scrollWidth - clientWidth > scrollLeft + 1
@@ -659,9 +655,9 @@ tabsView lift config model ( tabs, tabStyles ) =
                                         |> ScrollTab
                                         |> lift
                                 )
-                                ("scrollWidth" := Decoder.float)
-                                ("clientWidth" := Decoder.float)
-                                ("scrollLeft" := Decoder.float)
+                                (field "scrollWidth" Decoder.float)
+                                (field "clientWidth" Decoder.float)
+                                (field "scrollLeft" Decoder.float)
                             )
                         )
                 ]
@@ -682,7 +678,7 @@ tabsView lift config model ( tabs, tabStyles ) =
                                     Dict.get tabIndex model.ripples
                                         |> Maybe.withDefault Ripple.model
                                         |> Ripple.view [ class "mdl-layout__tab-ripple-container" ]
-                                        |> App.map (Ripple tabIndex >> lift)
+                                        |> Html.map (Ripple tabIndex >> lift)
                                         |> Just
                                   else
                                     Nothing
@@ -720,16 +716,16 @@ headerView lift config model ( drawerButton, rows, tabs ) =
     in
         Options.styled Html.header
             [ cs "mdl-layout__header"
-            , cs "is-casting-shadow"
-                `when`
-                    (config.mode
-                        == Standard
-                        || (isWaterfall config.mode && model.isCompact)
-                    )
-            , cs "is-animating" `when` model.isAnimating
-            , cs "is-compact" `when` model.isCompact
+            , when
+                (config.mode
+                    == Standard
+                    || (isWaterfall config.mode && model.isCompact)
+                )
+                (cs "is-casting-shadow")
+            , when model.isAnimating (cs "is-animating")
+            , when model.isCompact (cs "is-compact")
             , mode
-            , cs "mdl-layout__header--transparent" `when` config.transparentHeader
+            , when config.transparentHeader (cs "mdl-layout__header--transparent")
             , Options.onClick
                 (TransitionHeader { toCompact = False, fixedHeader = config.fixedHeader }
                     |> lift
@@ -882,7 +878,7 @@ view lift model options { drawer, header, tabs, main } =
                     ( Nothing, Nothing )
 
         hasTabs =
-            not (List.isEmpty (fst tabs))
+            not (List.isEmpty (Tuple.first tabs))
 
         hasHeader =
             hasTabs || (not (List.isEmpty header))
@@ -959,17 +955,19 @@ view lift model options { drawer, header, tabs, main } =
                   else
                     Just ( "elm-mdl-obfuscator", obfuscator lift drawerIsVisible )
                 , contentDrawerButton |> Maybe.map ((,) "elm-drawer-button")
-                , Options.styled main'
+                , Options.styled main_
                     [ cs "mdl-layout__content"
-                    , css "overflow-y" "visible" `when` (config.mode == Scrolling && config.fixedHeader)
-                    , css "overflow-x" "visible" `when` (config.mode == Scrolling && config.fixedHeader)
-                    , css "overflow" "visible" `when` (config.mode == Scrolling && config.fixedHeader) {- Above three lines fixes upstream bug #4180. -}
-                    , (on "scroll" >> Internal.attribute)
-                        (Decoder.map
-                            (ScrollPane config.fixedHeader >> lift)
-                            (DOM.target DOM.scrollTop)
+                    , css "overflow-y" "visible" |> when (config.mode == Scrolling && config.fixedHeader)
+                    , css "overflow-x" "visible" |> when (config.mode == Scrolling && config.fixedHeader)
+                    , css "overflow" "visible" |> when (config.mode == Scrolling && config.fixedHeader) {- Above three lines fixes upstream bug #4180. -}
+                    , when
+                        (isWaterfall config.mode)
+                        ((on "scroll" >> Internal.attribute)
+                            (Decoder.map
+                                (ScrollPane config.fixedHeader >> lift)
+                                (DOM.target DOM.scrollTop)
+                            )
                         )
-                        `when` isWaterfall config.mode
                     ]
                     main
                     |> (,) (toString config.selectedTab)
@@ -978,8 +976,34 @@ view lift model options { drawer, header, tabs, main } =
             ]
 
 
-type alias Container c =
-    { c | layout : Model }
+
+-- COMPONENT
+
+
+type alias Store s =
+    { s | layout : Model }
+
+
+( get, set ) =
+    ( .layout
+    , \x s -> { s | layout = x }
+    )
+
+
+{-| Component react function
+-}
+react :
+    (Msg -> m)
+    -> Msg
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react lift msg store =
+    case update_ lift msg (get store) of
+        Just ( model, cmd ) ->
+            ( Just (set model store), cmd )
+
+        _ ->
+            ( Nothing, Cmd.none )
 
 
 {-| Component render. Refer to `demo/Demo.elm` on github for an example use.
@@ -994,58 +1018,51 @@ Excerpt:
       , drawer = myDrawer
       , tabs = (tabTitles, [])
       , main = [ MyComponent.view model ]
-      }
+    }
 -}
-render :
-    (Msg.Msg (Container b) c -> c)
-    -> Container b
-    -> List (Property c)
-    -> Contents c
-    -> Html c
-render lift =
-    Parts.create1
-        view
-        update'
-        .layout
-        (\x c -> { c | layout = x })
-        (Msg.Internal >> lift)
-
-
-pack : (Parts.Msg (Container b) m -> m) -> Msg -> m
-pack fwd =
-    Parts.pack1
-        update'
-        .layout
-        (\x c -> { c | layout = x })
-        fwd
+render
+  : ( Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
+    -> { a | layout : Model }
+    -> List (Property m)
+    -> Contents m
+    -> Html m    
+render =
+    Component.render1 get view Component.LayoutMsg
 
 
 {-| Component subscriptions (type compatible with render). Either this or
 `subscriptions` must be connected for the Layout to be responsive under
 viewport size changes.
 -}
-subs : (Msg.Msg (Container b) c -> c) -> Container b -> Sub c
+subs :
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
+    -> Store s
+    -> Sub m
 subs lift =
-    .layout >> subscriptions >> Sub.map (pack (Msg.Internal >> lift))
+    get >> subscriptions >> Sub.map (Component.LayoutMsg >> lift)
 
 
 {-| Component subscription initialiser. Either this or
 `init` must be connected for the Layout to be responsive under
 viewport size changes. Example use:
 -}
-sub0 : (Msg.Msg (Container b) c -> c) -> Cmd c
+sub0 :
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
+    -> Cmd m
 sub0 lift =
-    snd init |> Cmd.map (pack (Msg.Internal >> lift))
+    Tuple.second init |> Cmd.map (Component.LayoutMsg >> lift)
 
 
 {-| Toggle drawer.
 
-This function is for use with parts typing. For plain TEA, simply issue
+This function is for use with component typing. For plain TEA, simply issue
 an update for the exposed Msg `ToggleDrawer`.
 -}
-toggleDrawer : (Msg.Msg (Container b) c -> c) -> c
+toggleDrawer :
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
+    -> m
 toggleDrawer lift =
-    (pack (Msg.Internal >> lift)) ToggleDrawer
+    (Component.LayoutMsg >> lift) ToggleDrawer
 
 
 {-| Set tabsWidth
@@ -1053,8 +1070,8 @@ toggleDrawer lift =
 This function is for use with parts typing. For plain TEA, simply set the
 `tabsWidth` field in Model.
 -}
-setTabsWidth : Int -> Container b -> Container b
+setTabsWidth : Int -> Store s -> Store s
 setTabsWidth w container =
     { container
-        | layout = setTabsWidth' w container.layout
+        | layout = setTabsWidth_ w container.layout
     }

@@ -102,7 +102,7 @@ avatarIcon i options =
 -}
 avatarImage : String -> List (Property a m) -> Html m
 avatarImage src options =
-    Options.styled' Html.img
+    Options.styled_ Html.img
         (avatar :: options)
         [ Html.Attributes.src src ]
         []

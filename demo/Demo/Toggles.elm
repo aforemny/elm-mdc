@@ -98,8 +98,8 @@ update msg model =
           Cmd.none
       )
 
-    Mdl action' -> 
-      Material.update action' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
 
 
@@ -113,15 +113,15 @@ row =
 
 readBit : Int -> Int -> Bool
 readBit k n = 
-  0 /= (Bitwise.and 0x1 (Bitwise.shiftRight n k))
+  0 /= (Bitwise.and 0x1 (Bitwise.shiftRightBy n k))
 
 
 setBit : Bool -> Int -> Int -> Int
 setBit x k n =
   if x then 
-    Bitwise.or (Bitwise.shiftLeft 0x1 k) n
+    Bitwise.or (Bitwise.shiftLeftBy 0x1 k) n
   else
-    Bitwise.and (Bitwise.complement (Bitwise.shiftLeft 0x1 k)) n
+    Bitwise.and (Bitwise.complement (Bitwise.shiftLeftBy 0x1 k)) n
 
 
 flipBit : Int -> Int -> Int
@@ -239,7 +239,7 @@ view model =
             , css "display" "flex"
             , css "flex-direction" "row"
             ]
-            ( [0..10]
+            ( List.range 0 10 
               |> List.map (\idx -> 
                   Toggles.checkbox Mdl [6,idx] model.mdl
                     [ Toggles.value (readBit idx model.counter)
@@ -253,7 +253,7 @@ view model =
         ]
       ]
   in
-    Page.body1' "Toggles" srcUrl intro references demo1 demo2
+    Page.body1_ "Toggles" srcUrl intro references demo1 demo2
 
 
 intro : Html Msg

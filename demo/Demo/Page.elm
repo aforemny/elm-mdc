@@ -1,7 +1,7 @@
 module Demo.Page exposing 
   ( demo, package, mds, mdl
   , fromMDL, fromMDS
-  , body1, body2, body1'
+  , body1, body2, body1_
   , background
   ) 
 
@@ -156,8 +156,8 @@ body1 t srcUrl contents links demo =
     ]
 
 
-body1' : String -> String -> Html a -> List (String, String) -> List (Html a) -> List (Html a) -> Html a 
-body1' t srcUrl contents links demo1 demo2 = 
+body1_ : String -> String -> Html a -> List (String, String) -> List (Html a) -> List (Html a) -> Html a 
+body1_ t srcUrl contents links demo1 demo2 = 
   Options.div
     []
     [ Options.div 

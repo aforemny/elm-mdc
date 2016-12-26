@@ -33,7 +33,7 @@ type alias Element =
 -}
 decode : Decoder Geometry
 decode =
-    object5 Geometry
+    map5 Geometry
         (DOM.target element)
         (DOM.target (DOM.nextSibling (DOM.childNode 1 element)))
         (DOM.target (DOM.nextSibling element))
@@ -45,7 +45,7 @@ decode =
 -}
 element : Decoder Element
 element =
-    object4 Element
+    map4 Element
         DOM.offsetTop
         DOM.offsetLeft
         DOM.offsetHeight

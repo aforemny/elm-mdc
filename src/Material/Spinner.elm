@@ -37,8 +37,9 @@ for a live demo.
 -}
 
 import Html exposing (Html, Attribute)
-import Material.Options as Options exposing (cs, css, nop)
+import Material.Options as Options exposing (cs, css, nop, when)
 import Material.Options.Internal as Internal
+
 
 
 {-| A spinner is a loading indicator that by default changes color and is
@@ -55,14 +56,8 @@ spinner options =
         Internal.apply summary
             Html.div
             [ cs "mdl-spinner mdl-js-spinner is-upgraded"
-            , if config.active then
-                cs "is-active"
-              else
-                nop
-            , if config.singleColor then
-                cs "mdl-spinner--single-color"
-              else
-                nop
+            , cs "is-active" |> when config.active 
+            , cs "mdl-spinner--single-color" |> when config.singleColor 
             ]
             []
             layers
@@ -130,4 +125,6 @@ layer n =
 
 layers : List (Html m)
 layers =
-    List.map layer [1..4]
+    List.map layer (List.range 1 4) 
+
+

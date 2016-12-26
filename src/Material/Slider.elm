@@ -4,8 +4,8 @@ module Material.Slider
         , value
         , min
         , max
-        , step
         , disabled
+        , step
         , view
         , onChange
         )
@@ -40,8 +40,8 @@ for a live demo.
 # Properties
 
 @docs Property
-@docs value, min, max
-@docs step, disabled
+@docs value, min, max, disabled
+@docs step 
 
 # Events
 @docs onChange
@@ -117,7 +117,7 @@ step =
     (\v options -> { options | step = v })
         >> Internal.option
 
-
+ 
 {-| Disables the slider
 -}
 disabled : Property m
@@ -200,10 +200,10 @@ view options =
                 [ cs "mdl-slider"
                 , cs "mdl-js-slider"
                 , cs "is-upgraded"
-                , cs "is-lowest-value" `when` (fraction == 0)
+                , cs "is-lowest-value" |> when (fraction == 0)
                   -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
                 , css "padding" "8px 0"
-                , Internal.attribute <| Html.type' "range"
+                , Internal.attribute <| Html.type_ "range"
                 , Internal.attribute <| Html.max (toString config.max)
                 , Internal.attribute <| Html.min (toString config.min)
                 , Internal.attribute <| Html.step (toString config.step)

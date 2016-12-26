@@ -3,7 +3,7 @@ module Material.Ripple exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events
-import Json.Decode as Json exposing ((:=), at)
+import Json.Decode as Json exposing (field, at)
 import Platform.Cmd exposing (Cmd, none)
 import Material.Helpers exposing (effect, pure, cssTransitionStep)
 import Material.Options as Options
@@ -51,19 +51,19 @@ type alias DOMState =
     , clientY : Maybe Float
     , touchX : Maybe Float
     , touchY : Maybe Float
-    , type' : String
+    , type_ : String
     }
 
 
 geometryDecoder : Json.Decoder DOMState
 geometryDecoder =
-    Json.object6 DOMState
-        ("currentTarget" := DOM.boundingClientRect)
-        (Json.maybe ("clientX" := Json.float))
-        (Json.maybe ("clientY" := Json.float))
+    Json.map6 DOMState
+        (field "currentTarget" DOM.boundingClientRect)
+        (Json.maybe (field "clientX" Json.float))
+        (Json.maybe (field "clientY" Json.float))
         (Json.maybe (at [ "touches", "0", "clientX" ] Json.float))
         (Json.maybe (at [ "touches", "0", "clientY" ] Json.float))
-        ("type" := Json.string)
+        (field "type" Json.string)
 
 
 computeMetrics : DOMState -> Maybe Metrics
@@ -101,14 +101,14 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
     case action of
         Down domState ->
-            if domState.type' == "mousedown" && model.ignoringMouseDown then
+            if domState.type_ == "mousedown" && model.ignoringMouseDown then
                 { model | ignoringMouseDown = False } |> pure
             else
                 { model
                     | animation = Frame 0
                     , metrics = computeMetrics domState
                     , ignoringMouseDown =
-                        if domState.type' == "touchstart" then
+                        if domState.type_ == "touchstart" then
                             True
                         else
                             model.ignoringMouseDown
@@ -138,11 +138,11 @@ update action model =
 
 downOn : String -> Attribute Msg
 downOn =
-    downOn' identity
+    downOn_ identity
 
 
-downOn' : (Msg -> m) -> String -> Attribute m
-downOn' f name =
+downOn_ : (Msg -> m) -> String -> Attribute m
+downOn_ f name =
     Html.Events.on name (Json.map (Down >> f) geometryDecoder)
 
 
@@ -158,11 +158,11 @@ up f name =
 
 upOn : String -> Attribute Msg
 upOn =
-    upOn' identity
+    upOn_ identity
 
 
-upOn' : (Msg -> m) -> String -> Attribute m
-upOn' f name =
+upOn_ : (Msg -> m) -> String -> Attribute m
+upOn_ f name =
     Html.Events.on name (Json.succeed (f Up))
 
 
@@ -200,8 +200,8 @@ styles m frame =
 
 {-| Add handlers yourself as attrs.
 -}
-view' : List (Attribute Msg) -> Model -> Html Msg
-view' attrs model =
+view_ : List (Attribute Msg) -> Model -> Html Msg
+view_ attrs model =
     let
         styling =
             case ( model.metrics, model.animation ) of
@@ -231,7 +231,7 @@ view' attrs model =
 
 view : List (Attribute Msg) -> Model -> Html Msg
 view =
-    view'
+    view_
         << flip List.append
             [ upOn "mouseup"
             , upOn "mouseleave"

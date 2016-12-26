@@ -1,7 +1,6 @@
 module Demo.Textfields exposing (model, Model, update, view, Msg)
 
 import Html exposing (..)
-import Platform.Cmd exposing (Cmd)
 import Regex
 import Json.Decode as Decoder
 import String
@@ -76,14 +75,14 @@ type Msg
 selectionDecoder : Decoder.Decoder Msg
 selectionDecoder =
   Decoder.map SelectionChanged
-    <| Decoder.object2 Selection
+    <| Decoder.map2 Selection
          (Decoder.at ["target", "selectionStart"] Decoder.int)
          (Decoder.at ["target", "selectionEnd"] Decoder.int)
   
 
 update : Msg -> Model -> Maybe (Model, Cmd Msg)
-update action model =
-  case action of
+update msg model =
+  case msg of
     Nop ->
       Nothing
 
@@ -97,12 +96,11 @@ update action model =
 
     Focus -> 
       ( model 
-      , Task.perform (always Nop) (always Nop) (Dom.focus "my-textfield")
+      , Task.attempt (\_ -> Nop) <| Dom.focus "my-textfield" 
       ) |> Just
 
-    Mdl action' ->
-      Material.update action' model
-        |> Just
+    Mdl msg_ ->
+      Material.update Mdl msg_ model |> Just
 
     Upd0 str ->
       { model | str0 = str } ! []
@@ -141,8 +139,8 @@ rx =
   "[0-9]*"
 
 
-rx' : Regex.Regex
-rx' =
+rx_ : Regex.Regex
+rx_ =
   Regex.regex rx
 
 
@@ -181,12 +179,14 @@ textfields model =
     , Textfield.render Mdl [2] model.mdl
         [ Textfield.label "Floating label"
         , Textfield.floatingLabel
+        , Textfield.text_
         ]
         []
     , """
         Textfield.render Mdl [2] model.mdl
           [ Textfield.label "Floating label"
           , Textfield.floatingLabel
+          , Textfield.text_
           ]
           []
        """
@@ -217,7 +217,7 @@ textfields model =
     , Textfield.render Mdl [4] model.mdl
         [ Textfield.label "w/error checking"
         , Textfield.error ("Doesn't match " ++ rx) 
-            `Options.when` (not <| match model.str4 rx')
+            |> Options.when (not <| match model.str4 rx_)
         , Options.onInput Upd4
         ]
         []
@@ -226,7 +226,7 @@ textfields model =
       [ Textfield.label "w/error checking"
       , Options.onInput Upd4
       , Textfield.error ("Doesn't match " ++ rx) 
-          `Options.when` (not <| match model.str4 rx')
+          |> Options.when (not <| match model.str4 rx_)
       ]
       []
        """
@@ -254,6 +254,7 @@ textfields model =
         , Textfield.expandable "id-of-expandable-1"
         , Textfield.expandableIcon "search"
         ]
+        []
     , """
       Textfield.render Mdl [11] model.mdl
         [ Textfield.label "Expandable"
@@ -261,6 +262,7 @@ textfields model =
         , Textfield.expandable "id-of-expandable-1"
         , Textfield.expandableIcon "search"
         ]
+        []
        """
     )
   , ( "Multi-line textfield"
@@ -361,7 +363,7 @@ custom model =
             [ Options.onClick Focus 
             , Button.colored 
             , css "align-self" "flex-end"
-            , Button.disabled `Options.when` model.focus
+            , Button.disabled |> Options.when model.focus
             ]
             [ text "Focus" ]
          ]
@@ -491,7 +493,7 @@ view model =
     demo2 = 
       grid [] (List.map view1 <| custom model)
   in
-    Page.body1' "Textfields" srcUrl intro references [demo1] [demo2]
+    Page.body1_ "Textfields" srcUrl intro references [demo1] [demo2]
 
 
 

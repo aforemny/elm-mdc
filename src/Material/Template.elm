@@ -106,21 +106,22 @@ view lift model options elems =
 -- COMPONENT
 
 
-type alias Container c =
-    { c | template : Indexed Model }
+type alias Store s =
+    { s | template : Indexed Model }
 
 
 {-| Component render.
+TODO
 -}
 render :
-    (Parts.Msg (Container c) m -> m)
-    -> Parts.Index
-    -> Container c
+    (Component.Msg Msg textfield menu snackbar toggles tooltip tabs dispatch -> m)
+    -> Index
+    -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
 render =
-    Parts.create view (Parts.generalize update) .template (\x y -> { y | template = x }) defaultModel
+    Component.render get view Component.TemplateMsg
 
 
 

@@ -6,7 +6,6 @@ If you are looking for a starting point, you want `Counter.elm` rather than
 this file. 
 -}
 
-import Html.App as App
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 
@@ -68,8 +67,8 @@ update msg model =
     Remove ->
       pure { model | counters = Array.slice 0 (Array.length model.counters - 1) model.counters }
 
-    Mdl msg' -> 
-      Material.update msg' model
+    Mdl msg_ -> 
+      Material.update Mdl msg_ model
 
 
 -- VIEW
@@ -126,9 +125,9 @@ view model =
     |> Material.Scheme.top
   
 
-main : Program Never
+main : Program Never Model Msg
 main =
-  App.program 
+  Html.program 
     { init = ( model, Cmd.none ) 
     , view = view
     , subscriptions = always Sub.none 

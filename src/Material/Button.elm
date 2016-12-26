@@ -18,7 +18,8 @@ module Material.Button
         , disabled
         , Property
         , render
-        , type'
+        , type_
+        , react
         )
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#buttons-section):
@@ -52,7 +53,7 @@ for a live demo.
 # Options
 
 @docs Property
-@docs type'
+@docs type_
 
 ## Appearance
 @docs plain, colored, primary, accent
@@ -67,21 +68,20 @@ for details about what type of buttons are appropriate for which situations.
 # Elm architecture
 @docs Model, defaultModel, Msg, update, view
 
+# Internal use
+@docs react
 
 -}
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.App
 import Platform.Cmd exposing (Cmd, none)
-import Parts exposing (Indexed, Index)
+import Material.Component as Component exposing (Indexed, Index)
 import Material.Helpers as Helpers
 import Material.Options.Internal as Internal
 import Material.Options as Options exposing (cs, when)
 import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
-import Material.Msg as Material
-
 
 -- MODEL
 
@@ -187,9 +187,35 @@ accent =
       ]
       [ ... ]
 -}
-type' : String -> Property m
-type' =
-    Html.Attributes.type' >> Internal.attribute
+type_ : String -> Property m
+type_ =
+   Html.Attributes.type_ >> Internal.attribute
+
+
+
+{- Ladies & Gentlemen: My nastiest hack ever.
+
+   Buttons with ripples are implemented as
+     <button> ... <span> ... </span></button>
+   elements. The button must blur itself when the mouse goes up or leaves, and the
+   (ripple) span must clear its animation state under the same events.
+   Unfortunately, on firefox, mousedown, mouseleave etc. don't trigger on elements
+   inside buttons, so we have to install all handlers on button. But the only way
+   I know of to blur something is the `Helpers.blurOn` trick, which seemingly precludes
+   also doing anything on the elm side. We work around this by manually triggering
+   a 'touchcancel' event on the inner span.
+
+   Obviously, once Elm gets proper support for controlling focus/blur, we can dispense
+   with all this nonsense.
+-}
+
+
+blurAndForward : String -> Attribute m
+blurAndForward event =
+    Html.Attributes.attribute
+        ("on" ++ event)
+        -- NOTE: IE Does not properly support 'new Event()'. This is a temporary workaround
+        "this.blur(); (function(self) { var e = document.createEvent('Event'); e.initEvent('touchcancel', true, true); self.lastChild.dispatchEvent(e); }(this));"
 
 
 {-| Component view function.
@@ -214,7 +240,7 @@ view lift model config html =
             button
             [ cs "mdl-button"
             , cs "mdl-js-button"
-            , cs "mdl-js-ripple-effect" `when` summary.config.ripple
+            , cs "mdl-js-ripple-effect" |> when summary.config.ripple
             , listeners
             ]
             [ Helpers.blurOn "mouseup"
@@ -224,8 +250,8 @@ view lift model config html =
             (if summary.config.ripple then
                 List.concat
                     [ html
-                    , [ Html.App.map lift <|
-                            Ripple.view'
+                    , [ Html.map lift <|
+                            Ripple.view_
                                 [ class "mdl-button__ripple-container" ]
                                 model
                       ]
@@ -346,16 +372,27 @@ icon =
 
 
 
--- PART
+-- COMPONENT
 
 
-type alias Container c =
-    { c | button : Indexed Model }
+type alias Store s =
+    { s | button : Indexed Model }
 
 
-set : Indexed Model -> Container c -> Container c
-set x y =
-    { y | button = x }
+( get, set ) =
+    Component.indexed .button (\x y -> { y | button = x }) Ripple.model
+
+
+{-| Component react function (update variant). Internal use only.
+-}
+react :
+    (Component.Msg Msg textfield menu layout toggles tooltip tabs dispatch -> m)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react =
+    Component.react get set Component.ButtonMsg (Component.generalise update)
 
 
 {-| Component render.  Below is an example, assuming boilerplate setup as
@@ -369,17 +406,11 @@ indicated in `Material` and a user message `PollMsg`.
       [ text "Fetch new" ]
 -}
 render :
-    (Material.Msg (Container c) m -> m)
-    -> Parts.Index
-    -> Container c
+    (Component.Msg Msg textfield menu snackbar toggles tooltip tabs dispatch -> m)
+    -> Index
+    -> { a | button : Indexed Ripple.Model }
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render lift =
-    Parts.create
-        (Internal.inject view lift)
-        (Parts.generalize update)
-        .button
-        set
-        Ripple.model
-        (Material.Internal >> lift)
+render =
+    Component.render get view Component.ButtonMsg
