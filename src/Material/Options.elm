@@ -119,13 +119,16 @@ elements sitting inside a container `<div>` alongside various helper elements.
 Options to such components are distributed between input and container elements
 as follows:
 
-| Option               | Element   |
-| -------------------- | --------- |
-| `Options.id`         | input     |
-| `Options.css`        | container |
-| `Options.cs`         | container |
-| `Options.attributes` | input     |
-| `Options.on*`        | input     |
+<table>
+  <tr>
+    <th>Option</th><th>Element</th>
+  </tr>
+  <tr> <td>`Options.id`         </td><td> input     </td> </tr> 
+  <tr> <td>`Options.css`        </td><td> container </td> </tr>
+  <tr> <td>`Options.cs`         </td><td> container </td> </tr>
+  <tr> <td>`Options.attributes` </td><td> input     </td> </tr>
+  <tr> <td>`Options.on*`        </td><td> input     </td> </tr>
+</table>
 
 If you need an option to apply to the other element, use either `Options.input
 options` to force `options` to be applied to the input element; or
