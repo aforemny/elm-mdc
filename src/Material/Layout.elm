@@ -769,6 +769,8 @@ drawerButton lift isVisible =
                     "false"
                 )
             , tabindex 1
+            {- No-one else is putting events on the drawerbutton, so we don't 
+            need to go through dispatch here. -}
             , Events.onClick (lift ToggleDrawer)
             , Events.onWithOptions
                 "keydown"

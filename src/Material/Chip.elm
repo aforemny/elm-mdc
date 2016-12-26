@@ -39,7 +39,6 @@ for a live demo.
 -}
 
 import Html exposing (Attribute, Html)
-import Html.Events
 import Html.Attributes
 import Material.Options as Options exposing (cs)
 import Material.Icon as Icon
@@ -103,24 +102,15 @@ deleteLink =
 
 {-| Set the `onClick` for the delete action
 
-NOTE. This stops propagation and prevents default to stop `Chip.onClick` from being called
-when this is clicked
+NOTE. This stops propagation and prevents default to stop `onClick` from being
+called when this is clicked.
 -}
 deleteClick : msg -> Property msg
-deleteClick =
-    -- We want to prevent the onClick of the Chip itself being called when clicking on the delete action
-    Internal.option
-        << (\msg config ->
-                { config
-                    | deleteClick =
-                        Just
-                            (Html.Events.onWithOptions "click"
-                                { stopPropagation = True, preventDefault = True }
-                                (Json.succeed msg)
-                            )
-                }
-           )
-
+deleteClick msg =
+    Options.onWithOptions
+      "click" 
+       { stopPropagation = True, preventDefault = True }
+       (Json.succeed msg)
 
 type alias Priority =
     Int

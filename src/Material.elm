@@ -68,7 +68,7 @@ by supplying these `Property m`, much the same way you set attributes of
 NB! If you are using parts to suppress TEA boilerplate, call `render` instead
 of `view` (see below).
 
-# Suppressing TEA boilerplate
+# Shorthands for TEA components
 
 The component model of the library is simply the Elm Architecture (TEA), i.e.,
 each component has types `Model` and `Msg`, and values `view` and `update`. A
@@ -76,14 +76,15 @@ minimal example using this library as plain TEA can be found
 [here](https://github.com/debois/elm-mdl/blob/master/examples/Component-TEA.elm).
 
 Using more than a few component in plain TEA is unwieldy because of the large
-amount of boilerplate one has to write. This library uses the
-[Parts mechanic](https://github.com/debois/elm-parts) suppress most of
-  that boilerplate. A minimal example using parts is
-[here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
+amount of boilerplate one has to write. The elm-mdl library supports
+shorthands for avoiding most of this boilerplate. A minimal example using
+shorthands is
+  [here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
 
-It is important to note that parts is not an alternative to TEA; it is simply
-a library which hides much of the tedious TEA boilerplate.
-
+It is important to note that the shorthands are not an alternative to TEA; they
+simply do much of the tedious TEA boilerplate. Note that elm-mdl no longer
+depends on the [Parts library](https://github.com/debois/elm-parts) and do not
+put functions in messages. 
 
 ## Required boilerplate
 
@@ -93,7 +94,7 @@ with component support can be found
 [here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
 We encourage you to use the library in this fashion.
 
-Here is how you use elm-mdl with parts. First, boilerplate.
+Here is how you use elm-mdl with shorthands. First, boilerplate.
 
  1. Add a model container for Material components to your model:
 
@@ -118,8 +119,8 @@ Here is how you use elm-mdl with parts. First, boilerplate.
         update message model =
           case message of
             ...
-            Mdl message' ->
-              Material.update message' model
+            Mdl message_ ->
+              Material.update Mdl message_ model
 
  4.  If your app is using Layout and/or Menu, you need also to set up
  subscriptions and initialisations; see `subscriptions` and `init` below.
@@ -129,6 +130,7 @@ Let's say you need a textfield for name entry, and you'd like to be notifed
 whenever the field changes value through your own NameChanged action:
 
         import Material.Textfield as Textfield
+        import Material.Options as Options
 
         ...
 
@@ -140,7 +142,7 @@ whenever the field changes value through your own NameChanged action:
           Textfield.render [0] Mdl model.mdl
             [ css "width" "16rem"
             , Textfield.floatingLabel
-            , Textfield.onInput NameChanged
+            , Options.onInput NameChanged
             ]
 
 The win relative to using plain Elm Architecture is that adding a component
@@ -151,13 +153,14 @@ neither requires you to update your model, your Msgs, nor your update function.
 
 Using this module will force all elm-mdl components to be built and included in
 your application. If this is unacceptable, you can custom-build a version of this
-module that exposing uses only the components you need. To do so, you need to provide your
-own versions of the type `Model` and the value `model` of the present module.
-Use the corresponding definitions in this module as a starting point
-([source](https://github.com/debois/elm-mdl/blob/master/src/Material.elm))
-and simply comment out the components you do not need.
+module that exposing uses only the components you need. To do so, you need to
+provide your own versions of the type aliases `Msg` and `Model` and the value
+`model` of the present module.  Use the corresponding definitions in this
+module as a starting point
+  ([source](https://github.com/debois/elm-mdl/blob/master/src/Material.elm))
+  and simply comment out the components you do not need.
 
-## Parts API
+## Shorthands
 
 @docs Model, model, Msg, Container, update, subscriptions, init
 -}
@@ -283,14 +286,14 @@ follows.
 
     type Msg =
       ...
-      | Mdl Material.Msg
+      | Mdl (Material.Msg Msg)
 
     ...
 
     App.program
       { init = ( model, Material.init Mdl )
       , view = view
-      , subscriptions = Material.subscriptions Mdl
+      , subscriptions = Material.subscriptions Mdl 
       , update = update
       }
 

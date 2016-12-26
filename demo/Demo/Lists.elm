@@ -2,7 +2,6 @@ module Demo.Lists exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Events 
 import Set exposing (Set)
 import String
 
@@ -101,17 +100,17 @@ click model =
     [ Lists.ul [ css "margin" "0", css "padding" "0" ]
         [ Lists.li [] 
             [ Lists.content 
-                [ Options.attribute <| Html.Events.onClick (Click "Elm") ] 
+                [ Options.onClick (Click "Elm") ] 
                 [ text "Elm" ] 
             ]
         , Lists.li [] 
             [ Lists.content 
-                [ Options.attribute <| Html.Events.onClick (Click "F#") ] 
+                [ Options.onClick (Click "F#") ] 
                 [ text "F#" ] 
             ]
         , Lists.li [] 
             [ Lists.content 
-                [ Options.attribute <| Html.Events.onClick (Click "Lisp") ] 
+                [ Options.onClick (Click "Lisp") ] 
                 [ text "Lisp" ] 
             ]
         ]

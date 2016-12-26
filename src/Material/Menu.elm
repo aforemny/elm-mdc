@@ -591,9 +591,13 @@ view lift model properties items =
                 [ cs "mdl-button"
                 , cs "mdl-js-button"
                 , cs "mdl-button--icon"
-                , when (isActive model) (Internal.attribute (onKeyDown (Key itemSummaries)))
-                , when (model.animationState /= Opened) (Internal.attribute (onClick Geometry.decode (Open)))
-                , when (isActive model) (Internal.attribute (Html.Events.onClick Close))
+                , when 
+                    (isActive model) 
+                    (onKeyDown (Key itemSummaries))
+                , when 
+                    (model.animationState /= Opened) 
+                    (Options.on "click" (Json.map Open Geometry.decode))
+                , when (isActive model) (Options.onClick Close)
                 ]
                 [ Icon.view config.icon
                     [ cs "material-icons"
@@ -814,9 +818,9 @@ onClick decoder action =
     Html.Events.on "click" (Json.map action decoder)
 
 
-onKeyDown : (Int -> m) -> Attribute m
+onKeyDown : (Int -> m) -> Options.Property c m
 onKeyDown action =
-    Html.Events.onWithOptions
+    Options.onWithOptions
         "keydown"
         { preventDefault = True
         , stopPropagation = False

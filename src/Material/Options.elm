@@ -512,7 +512,7 @@ onWithOptions evt options =
 -- DISPATCH
 
 
-{-| Plain-TEA multiple-event dispatch.
+{-| No-shorthand multiple-event dispatch.
 
 NB! You are _extremely_ unlikely to need this.
 
@@ -529,7 +529,7 @@ same event as your custom handler; e.g., you install `onBlur` on
 In this case you need to tell the component how to dispatch multiple messages
 (one for you, one for itself) in response to a single DOM event. You do so by
 providing a means of folding a list of messages into a single message. (See
-the [Dispatch](TODO) library for one way to define such a function.)
+the [Dispatch](https://github.com/vipentti/elm-dispatch) library for one way to define such a function.)
 
 The `render` function does all this automatically. If you are calling `render`,
 you do not need this property.

@@ -454,7 +454,7 @@ react =
       [ Textfield.label "Age"
       , Textfield.floatingLabel
       , Textfield.value model.age
-      , Textfield.onInput (String.toInt >> ChangeAgeMsg)
+      , Options.onInput (String.toInt >> ChangeAgeMsg)
       ]
 
 Be aware that styling (third argument) is applied to the outermost element
