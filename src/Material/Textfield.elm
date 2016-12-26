@@ -370,17 +370,17 @@ view lift model options _ =
             [ cs "mdl-textfield"
             , cs "mdl-js-textfield"
             , cs "is-upgraded"
-            , Internal.attribute <| Html.Events.on "focus" (Decoder.succeed (lift Focus))
-            , Internal.attribute <| Html.Events.on "blur" (Decoder.succeed (lift Blur))
+            , Internal.on1 "focus" lift Focus
+            , Internal.on1 "blur" lift Blur
             , cs "mdl-textfield--floating-label" |> when config.labelFloat
             , cs "is-invalid" |> when  (config.error /= Nothing)
             , cs "is-dirty" |> when  (config.value /= Nothing || model.isDirty)
             , cs "is-focused" |> when  (model.isFocused && not config.disabled)
             , cs "is-disabled" |> when  config.disabled
             , cs "mdl-textfield--expandable" |> when (config.expandable /= Nothing)
-            ]
+            ] <| expHolder
             [ Internal.applyInput summary 
-                Html.input
+                (if config.kind == Textarea then Html.textarea else Html.input)
                 [ cs "mdl-textfield__input"
                 , css "outline" "none"
                 , Internal.on1 "focus" lift Focus
@@ -391,7 +391,6 @@ view lift model options _ =
 
                     Password ->
                         Internal.attribute <| type_ "password"
-
                     _ ->
                         nop
                 , Internal.attribute (Html.Attributes.disabled True) |> when config.disabled
