@@ -1,5 +1,5 @@
-module Material.Textfield exposing 
-  ( Property, label, floatingLabel, error, value, disabled, password
+module Material.Textfield exposing
+  ( Property, label, floatingLabel, error, value, disabled, password, email
   , onInput
   , Msg, Model, defaultModel, update, view
   , render
@@ -59,7 +59,7 @@ element, use the `style` property below.
 @docs style
 
 # Type 
-@docs password, textarea, text', onInput
+@docs password, email, textarea, text', onInput
 @docs expandable, expandableIcon
 @docs onBlur, onFocus
 
@@ -91,6 +91,7 @@ type Kind
   = Text
   | Textarea
   | Password
+  | Email
 
 
 type alias Config m =
@@ -277,6 +278,14 @@ style =
   Options.inner
 
 
+{-| Sets the type of input to 'email'.
+-}
+email : Property m
+email =
+  Options.set
+    (\config -> { config | kind = Email })
+
+
 {-| Sets the type of input to 'password'.
 -}
 password : Property m 
@@ -392,6 +401,7 @@ view lift model options =
       case config.kind of
           Text -> [type' "text"]
           Password -> [type' "password"]
+          Email -> [type' "email"]
           Textarea ->
             [] ++ (case config.rows of
                        Just r -> [Html.Attributes.rows r]
