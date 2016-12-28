@@ -37,13 +37,25 @@ can use the compiler to identify the necessary changes.
 
     _Motivation_. See change (4) above. 
 
-6. The `Material.update` function now needs a lifting function. 
+6. `Options.when x y` becomes `Options.when y x` (switch of parameter order). 
 
-            update msg model                             -- 7.x.x
+    _Motivation_. `when` was intended to be used infix, with backticks, 
+    but this usage is no longer supported by Elm 0.18. The switching of 
+    parameter order allows using `when` with piping: 
+
+        cs "important-css-class" `when` model.isImportant
+
+    becomes 
+
+        cs "important-css-class" |> when model.isImportant
+
+7. The `Material.update` function now needs a lifting function. 
+
+            Material.update msg model                     -- 7.x.x
 
         becomes
 
-            update Mdl msg model                         -- 8.0.0
+            Material.update Mdl msg model                 -- 8.0.0
    
     _Motivation_. This change is necessitated by the move away from 
     the [Parts library](https://github.com/debois/elm-parts). 
