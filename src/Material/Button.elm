@@ -150,10 +150,12 @@ perform link actions.
       ]
       [ text "Link Button" ]
 -}
-link : Property m
-link =
-  Options.set
-    (\options -> { options | link = True })
+link : String -> Property m
+link href =
+  Options.many 
+    [ Internal.option (\options -> { options | link = True })
+    , Internal.attribute <| Html.Attributes.href href 
+    ]
 
 
 {-| Set button to ripple when clicked.
@@ -227,8 +229,6 @@ type_ =
    Obviously, once Elm gets proper support for controlling focus/blur, we can dispense
    with all this nonsense.
 -}
-
-
 blurAndForward : String -> Attribute m
 blurAndForward event =
     Html.Attributes.attribute
@@ -265,125 +265,6 @@ view lift model config html =
             [ Helpers.blurOn "mouseup"
             , Helpers.blurOn "mouseleave"
             , Helpers.blurOn "touchend"
-||||||| merged common ancestors
-  let
-    summary = Options.collect defaultConfig config
-
-    startListeners =
-      if summary.config.ripple then
-        [ Ripple.downOn' lift "mousedown" |> Just
-        , Ripple.downOn' lift "touchstart" |> Just
-        ]
-      else
-        []
-
-    stopListeners =
-      let handle =
-        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
-      in
-        [ handle "mouseup"
-        , handle "mouseleave"
-        , handle "touchend"
-        ]
-
-    misc =
-      [ summary.config.onClick
-      , if summary.config.disabled then
-          Just (Html.Attributes.disabled True)
-        else
-          Nothing
-      ]
-
-    type' =
-      case summary.config.type' of
-        Nothing -> []
-        Just tp -> [ Just <| Html.Attributes.type' tp ]
-
-  in
-    Options.apply summary button
-      [ cs "mdl-button"
-      , cs "mdl-js-button"
-      , cs "mdl-js-ripple-effect" `when` summary.config.ripple
-      ]
-      (List.concat [startListeners, stopListeners, misc, type']
-         |> List.filterMap identity)
-      (if summary.config.ripple then
-          List.concat
-            [ html
-            -- Ripple element must be last or blurAndForward hack fails.
-            , [ Html.App.map lift <| Ripple.view'
-                  [ class "mdl-button__ripple-container"
-
-
-START HERE: Checkout this file and demo/Demo/Buttons/elm from v8, then manually move changes from v8
-                  --, Helpers.blurOn "mouseup"
-                  , Ripple.upOn "blur"
-                  , Ripple.upOn "touchcancel"
-                  ]
-                  model
-              ]
-=======
-  let
-    summary = Options.collect defaultConfig config
-
-    startListeners =
-      if summary.config.ripple then
-        [ Ripple.downOn' lift "mousedown" |> Just
-        , Ripple.downOn' lift "touchstart" |> Just
-        ]
-      else
-        []
-
-    stopListeners =
-      let handle =
-        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
-      in
-        [ handle "mouseup"
-        , handle "mouseleave"
-        , handle "touchend"
-        ]
-
-    misc =
-      [ summary.config.onClick
-      , if summary.config.disabled then
-          Just (Html.Attributes.disabled True)
-        else
-          Nothing
-      ]
-
-    type' =
-      case summary.config.type' of
-        Nothing -> []
-        Just tp -> [ Just <| Html.Attributes.type' tp ]
-
-
-    buttonElement =
-      if summary.config.link then
-        Html.a
-      else
-        Html.button
-
-  in
-    Options.apply summary buttonElement
-      [ cs "mdl-button"
-      , cs "mdl-js-button"
-      , cs "mdl-js-ripple-effect" `when` summary.config.ripple
-      ]
-      (List.concat [startListeners, stopListeners, misc, type']
-         |> List.filterMap identity)
-      (if summary.config.ripple then
-          List.concat
-            [ html
-            -- Ripple element must be last or blurAndForward hack fails.
-            , [ Html.App.map lift <| Ripple.view'
-                  [ class "mdl-button__ripple-container"
-                  --, Helpers.blurOn "mouseup"
-                  , Ripple.upOn "blur"
-                  , Ripple.upOn "touchcancel"
-                  ]
-                  model
-              ]
->>>>>>> v7
             ]
             (if summary.config.ripple then
                 List.concat

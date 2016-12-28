@@ -214,7 +214,7 @@ viewButtons model =
 
 view : Model -> Html Msg
 view model = 
-  Page.body1' "Buttons" srcUrl intro references
+  Page.body1_ "Buttons" srcUrl intro references
     [ p []
         [ text """Various combinations of colors and button styles can be seen
                   below. Most buttons have animations; try clicking. Code for the
@@ -235,45 +235,55 @@ view model =
         ]
 
     , p []
-        [ text """Link buttons are links that look and act like buttons.
-                However, they also support attributes for links such as 'href' and 'target'."""
+        [ text """
+          To make a button act like a link, supply the option `Button.link
+          "<href>"`. The example below opens the Grid tab of this demo."""
         ]
 
     , Button.render Mdl [9, 0, 0, 1] model.mdl
         [ Button.ripple
-        , Button.link
-        , Options.attr <| href "#buttons"
+        , Button.colored
+        , Button.raised
+        , Button.link "#grid"
         ]
-        [ text "Basic Link" ]
+        [ text "Link" ]
 
     , Code.code [ Options.css "margin" "20px 0" ]
       """
       Button.render Mdl [9, 0, 0, 1] model.mdl
         [ Button.ripple
-        , Button.link
-        , Options.attr <| Html.Attributes.href "#buttons"
+        , Button.colored
+        , Button.raised
+        , Button.link "#grid"
         ]
-        [ text "Basic Link" ]
+        [ text "Link" ]
       """
-
+    , p [] 
+      [ text """
+          Buttons with the `link` property function as HTML `a` elements. 
+          You can supply the usual attributes, e.g, `target`. The example
+          below opens the link in a new tab or window, depending on the
+          browser.  
+        """
+      ]
     , Button.render Mdl [9, 0, 0, 2] model.mdl
         [ Button.ripple
         , Button.colored
         , Button.raised
-        , Button.link
-        , Options.attr <| href "#buttons"
+        , Button.link "#grid"
+        , Options.attribute <| Html.Attributes.target "_blank"
         ]
-        [ text "Link with ripple" ]
+        [ text "Open in new tab" ]
     , Code.code [ Options.css "margin" "20px 0" ]
       """
       Button.render Mdl [9, 0, 0, 2] model.mdl
         [ Button.ripple
         , Button.colored
         , Button.raised
-        , Button.link
-        , Options.attr <| Html.Attributes.href "#buttons"
+        , Button.link "#grid"
+        , Options.attribute <| Html.Attributes.target "_blank"
         ]
-        [ text "Link with ripple" ]
+        [ text "Ripple and target" ]
       """
     ]
 

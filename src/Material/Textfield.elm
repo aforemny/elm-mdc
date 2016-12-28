@@ -13,6 +13,7 @@ module Material.Textfield
         , textarea
         , rows
         , cols
+        , email
         , autofocus
         , maxlength
         , expandable
@@ -23,6 +24,7 @@ module Material.Textfield
         , update
         , view
         )
+
 
 {-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
 
@@ -63,8 +65,7 @@ for a live demo.
 @docs disabled, rows, cols
 @docs autofocus, maxlength
 
-# Type
-@docs password, textarea, text_
+@docs password, email, textarea, text_
 @docs expandable, expandableIcon
 
 # Elm Architecture
@@ -92,6 +93,7 @@ type Kind
     = Text
     | Textarea
     | Password
+    | Email
 
 
 type alias Config m =
@@ -101,8 +103,6 @@ type alias Config m =
     , value : Maybe String
     , disabled : Bool
     , kind : Kind
-    , rows : Maybe Int
-    , cols : Maybe Int
     , expandable : Maybe String
     , expandableIcon : String
     , input : List (Options.Style m)
@@ -118,8 +118,6 @@ defaultConfig =
     , value = Nothing
     , disabled = False
     , kind = Text
-    , rows = Nothing
-    , cols = Nothing
     , expandable = Nothing
     , expandableIcon = "search"
     , input = []
@@ -215,6 +213,14 @@ disabled =
 input : List (Options.Style m) -> Property m
 input =
     Options.input
+
+
+{-| Sets the type of input to 'email'.
+-}
+email : Property m
+email =
+  Internal.option
+    (\config -> { config | kind = Email })
 
 
 {-| Sets the type of input to 'password'.
