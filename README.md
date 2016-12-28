@@ -7,7 +7,7 @@ CSS/JS implementation of the
 
 [Live demo](https://debois.github.io/elm-mdl/) & [package documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest).
 
-[![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
+[![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=v8)](https://travis-ci.org/debois/elm-mdl)
 
 ### Migration
 
