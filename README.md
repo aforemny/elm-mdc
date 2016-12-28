@@ -9,6 +9,10 @@ CSS/JS implementation of the
 
 [![Build Status](https://travis-ci.org/debois/elm-mdl.svg?branch=master)](https://travis-ci.org/debois/elm-mdl)
 
+### Migration
+
+If you are updating form 7.x.x, refer to the [Migration guide](https://github.com/debois/elm-mdl/blob/v8/MIGRATION.md).
+
 ### Get Started
 
 Adapt

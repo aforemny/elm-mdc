@@ -18,13 +18,13 @@ counter1:
 counter-many: 
 	$(ELM) examples/Counter-many.elm --warn --output examples/counter-many.html
 
-counter1-no-parts: 
-	$(ELM) examples/Counter-no-parts.elm --warn --output examples/counter1-no-parts.html
+counter-no-shorthand: 
+	$(ELM) examples/Counter-no-shorthand.elm --warn --output examples/counter-no-shorthand.html
 
 docs: 
 	$(ELM) --docs=docs.json 
 
-test: docs demo counter1 counter-many counter1-no-parts
+test: docs demo counter1 counter-many counter-no-shorthand
 
 copy-assets : 
 	(cd demo; cp -r assets ../$(PAGES))
