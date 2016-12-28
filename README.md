@@ -65,29 +65,3 @@ MDL is implemented primarily through CSS, with a little bit of JavaScript
 adding and removing CSS classes in response to DOM events. This port
 re-implements the JavaScript parts in Elm, but relies on the CSS of MDL
 verbatim.
-
-### Upgrading from 6.x.x
-
-The 7.0.0 release changes the required boilerplate in two aspects.
-
-1. The type of elm-mdl messages should now be:
-
-        type Msg =
-          ...
-          | Mdl (Material.Msg Msg)
-
-2. Dispatching elm-mdl messages should now be:
-
-        update message model =
-          case message of
-            ...
-            Mdl message' ->
-              Material.update message' model
-
-Some components (notably menu) has changed API to varying degrees. If you run
-into troubles, refer to the code samples in [the
-demo](https://debois.github.io/elm-mdl/); check out [the
-documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/), or
-ask on [#elm-mdl in the elm-slack](https://elm.slack.com/messages/elm-mdl) for
-help in migrating.
-
