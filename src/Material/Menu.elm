@@ -707,7 +707,9 @@ view1 lift config model offsetTop offsetHeight index summary item =
             , css "align-items" "center"
             , Options.onClick (Select index summary.config.onSelect |> lift)
                 |> when canSelect
-            , Internal.attribute <| Html.Attributes.disabled (not summary.config.enabled)
+            , when (not summary.config.enabled) 
+                <| (Internal.attribute
+                      (Html.Attributes.attribute "disabled" "disabled"))
             , Internal.attribute <| Html.Attributes.property "tabindex" (string "-1")
             , if hasRipple then
                 Options.many
