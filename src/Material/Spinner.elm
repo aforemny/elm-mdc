@@ -45,7 +45,7 @@ import Material.Options.Internal as Internal
 {-| A spinner is a loading indicator that by default changes color and is
 invisible. Example use:
 
-    spinner [ active ] []
+    spinner [ active True ] []
 -}
 spinner : List (Property m) -> Html m
 spinner options =
