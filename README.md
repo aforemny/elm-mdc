@@ -21,6 +21,8 @@ The
 [Live demo](https://debois.github.io/elm-mdl/) contains code samples for most components, which
 you may find helpful.
 
+Use one of the [templates](https://github.com/debois/elm-mdl/blob/v7/TEMPLATES.md) to get an easy starting point into elm-mdl.
+
 For a long-form tutorial, you might like [@jadams](https://github.com/jadams) excellent "Introduction to elm-mdl", available as both a [daily drip video](https://www.dailydrip.com/topics/elm/drips/elm-mdl-introduction) and a very nice [writeup](https://medium.com/@dailydrip/introduction-to-using-material-design-in-elm-dc2320087410#.dodoot1wd).
 
 ### Get help
@@ -88,5 +90,4 @@ demo](https://debois.github.io/elm-mdl/); check out [the
 documentation](http://package.elm-lang.org/packages/debois/elm-mdl/latest/), or
 ask on [#elm-mdl in the elm-slack](https://elm.slack.com/messages/elm-mdl) for
 help in migrating.
- 
 

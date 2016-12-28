@@ -214,8 +214,8 @@ viewButtons model =
 
 view : Model -> Html Msg
 view model = 
-  Page.body2 "Buttons" srcUrl intro references  
-    [ p [] 
+  Page.body1' "Buttons" srcUrl intro references
+    [ p []
         [ text """Various combinations of colors and button styles can be seen
                   below. Most buttons have animations; try clicking. Code for the
                   last clicked button appears below the buttons."""
@@ -229,7 +229,53 @@ view model =
            |> text
         , Code.view model.code [ Options.css "margin" "20px" ]
         ]
-    ] 
+    ]
+    [ h4 [ id "link-buttons" ]
+        [ text "Link buttons"
+        ]
+
+    , p []
+        [ text """Link buttons are links that look and act like buttons.
+                However, they also support attributes for links such as 'href' and 'target'."""
+        ]
+
+    , Button.render Mdl [9, 0, 0, 1] model.mdl
+        [ Button.ripple
+        , Button.link
+        , Options.attr <| href "#buttons"
+        ]
+        [ text "Basic Link" ]
+
+    , Code.code [ Options.css "margin" "20px 0" ]
+      """
+      Button.render Mdl [9, 0, 0, 1] model.mdl
+        [ Button.ripple
+        , Button.link
+        , Options.attr <| Html.Attributes.href "#buttons"
+        ]
+        [ text "Basic Link" ]
+      """
+
+    , Button.render Mdl [9, 0, 0, 2] model.mdl
+        [ Button.ripple
+        , Button.colored
+        , Button.raised
+        , Button.link
+        , Options.attr <| href "#buttons"
+        ]
+        [ text "Link with ripple" ]
+    , Code.code [ Options.css "margin" "20px 0" ]
+      """
+      Button.render Mdl [9, 0, 0, 2] model.mdl
+        [ Button.ripple
+        , Button.colored
+        , Button.raised
+        , Button.link
+        , Options.attr <| Html.Attributes.href "#buttons"
+        ]
+        [ text "Link with ripple" ]
+      """
+    ]
 
 
 intro : Html a

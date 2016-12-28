@@ -258,7 +258,7 @@ view model =
 
 intro : Html Msg
 intro = 
-  Page.fromMDL "http://www.getmdl.io/index.html#toggles-section/checkbox" """
+  Page.fromMDL "https://getmdl.io/components/index.html#toggles-section" """
 > The Material Design Lite (MDL) checkbox component is an enhanced version of the
 > standard HTML `<input type="checkbox">` element. A checkbox consists of a small
 > square and, typically, text that clearly communicates a binary condition that
@@ -285,7 +285,7 @@ references : List (String, String)
 references = 
   [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Toggles"
   , Page.mds "https://www.google.com/design/spec/components/selection-controls.html"
-  , Page.mdl "http://www.getmdl.io/index.html#toggles-section/checkbox"
+  , Page.mdl "https://getmdl.io/components/index.html#toggles-section"
   ]
 
 

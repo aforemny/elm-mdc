@@ -199,6 +199,6 @@ srcUrl =
 references : List (String, String)
 references =
   [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Loading"
-  , Page.mds "https://www.google.com/design/spec/components/Loading.html"
-  , Page.mdl "https://www.getmdl.io/components/index.html#Loading"
+  , Page.mds "https://material.google.com/components/progress-activity.html"
+  , Page.mdl "https://getmdl.io/components/index.html#loading-section"
   ]

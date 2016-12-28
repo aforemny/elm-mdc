@@ -17,6 +17,7 @@ module Material.Button
         , ripple
         , disabled
         , Property
+        , link
         , render
         , type_
         , react
@@ -64,6 +65,7 @@ Refer to the
 [Material Design Specification](https://www.google.com/design/spec/components/buttons.html)
 for details about what type of buttons are appropriate for which situations.
 @docs flat, raised, fab, minifab, icon
+@docs link
 
 # Elm architecture
 @docs Model, defaultModel, Msg, update, view
@@ -75,10 +77,8 @@ for details about what type of buttons are appropriate for which situations.
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Platform.Cmd exposing (Cmd, none)
 import Material.Component as Component exposing (Indexed, Index)
 import Material.Helpers as Helpers
-import Material.Options.Internal as Internal
 import Material.Options as Options exposing (cs, when)
 import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
@@ -122,12 +122,14 @@ update action =
 
 type alias Config =
     { ripple : Bool
+    , link : Bool
     }
 
 
 defaultConfig : Config
 defaultConfig =
     { ripple = False
+    , link = False
     }
 
 
@@ -135,6 +137,23 @@ defaultConfig =
 -}
 type alias Property m =
     Options.Property Config m
+
+
+{-| Turn the `Button` from `button`-element to an `a`-element.
+This allows for a button that looks like a button but can also
+perform link actions.
+
+    Button.render Mdl [0] model.mdl
+      [ Button.link
+      , Options.attribute <|
+          Html.Attributes.href "#some-url"
+      ]
+      [ text "Link Button" ]
+-}
+link : Property m
+link =
+  Options.set
+    (\options -> { options | link = True })
 
 
 {-| Set button to ripple when clicked.
@@ -237,7 +256,7 @@ view lift model config html =
                 ]
     in
         Internal.apply summary
-            button
+            (if summary.config.link then Html.a else Html.button)
             [ cs "mdl-button"
             , cs "mdl-js-button"
             , cs "mdl-js-ripple-effect" |> when summary.config.ripple
@@ -246,6 +265,125 @@ view lift model config html =
             [ Helpers.blurOn "mouseup"
             , Helpers.blurOn "mouseleave"
             , Helpers.blurOn "touchend"
+||||||| merged common ancestors
+  let
+    summary = Options.collect defaultConfig config
+
+    startListeners =
+      if summary.config.ripple then
+        [ Ripple.downOn' lift "mousedown" |> Just
+        , Ripple.downOn' lift "touchstart" |> Just
+        ]
+      else
+        []
+
+    stopListeners =
+      let handle =
+        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
+      in
+        [ handle "mouseup"
+        , handle "mouseleave"
+        , handle "touchend"
+        ]
+
+    misc =
+      [ summary.config.onClick
+      , if summary.config.disabled then
+          Just (Html.Attributes.disabled True)
+        else
+          Nothing
+      ]
+
+    type' =
+      case summary.config.type' of
+        Nothing -> []
+        Just tp -> [ Just <| Html.Attributes.type' tp ]
+
+  in
+    Options.apply summary button
+      [ cs "mdl-button"
+      , cs "mdl-js-button"
+      , cs "mdl-js-ripple-effect" `when` summary.config.ripple
+      ]
+      (List.concat [startListeners, stopListeners, misc, type']
+         |> List.filterMap identity)
+      (if summary.config.ripple then
+          List.concat
+            [ html
+            -- Ripple element must be last or blurAndForward hack fails.
+            , [ Html.App.map lift <| Ripple.view'
+                  [ class "mdl-button__ripple-container"
+
+
+START HERE: Checkout this file and demo/Demo/Buttons/elm from v8, then manually move changes from v8
+                  --, Helpers.blurOn "mouseup"
+                  , Ripple.upOn "blur"
+                  , Ripple.upOn "touchcancel"
+                  ]
+                  model
+              ]
+=======
+  let
+    summary = Options.collect defaultConfig config
+
+    startListeners =
+      if summary.config.ripple then
+        [ Ripple.downOn' lift "mousedown" |> Just
+        , Ripple.downOn' lift "touchstart" |> Just
+        ]
+      else
+        []
+
+    stopListeners =
+      let handle =
+        Just << if summary.config.ripple then blurAndForward else Helpers.blurOn
+      in
+        [ handle "mouseup"
+        , handle "mouseleave"
+        , handle "touchend"
+        ]
+
+    misc =
+      [ summary.config.onClick
+      , if summary.config.disabled then
+          Just (Html.Attributes.disabled True)
+        else
+          Nothing
+      ]
+
+    type' =
+      case summary.config.type' of
+        Nothing -> []
+        Just tp -> [ Just <| Html.Attributes.type' tp ]
+
+
+    buttonElement =
+      if summary.config.link then
+        Html.a
+      else
+        Html.button
+
+  in
+    Options.apply summary buttonElement
+      [ cs "mdl-button"
+      , cs "mdl-js-button"
+      , cs "mdl-js-ripple-effect" `when` summary.config.ripple
+      ]
+      (List.concat [startListeners, stopListeners, misc, type']
+         |> List.filterMap identity)
+      (if summary.config.ripple then
+          List.concat
+            [ html
+            -- Ripple element must be last or blurAndForward hack fails.
+            , [ Html.App.map lift <| Ripple.view'
+                  [ class "mdl-button__ripple-container"
+                  --, Helpers.blurOn "mouseup"
+                  , Ripple.upOn "blur"
+                  , Ripple.upOn "touchcancel"
+                  ]
+                  model
+              ]
+>>>>>>> v7
             ]
             (if summary.config.ripple then
                 List.concat

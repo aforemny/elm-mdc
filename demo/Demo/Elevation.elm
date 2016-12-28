@@ -197,7 +197,7 @@ view model =
 
 intro : Html a
 intro =
-  Page.fromMDL "https://github.com/google/material-design-lite/blob/master/src/shadow/README.md" """
+  Page.fromMDL "https://github.com/google/material-design-lite/blob/mdl-1.x/src/shadow/README.md" """
   > The Material Design Lite (MDL) shadow is not a component in the same sense as
 > an MDL card, menu, or textbox; it is a visual effect that can be assigned to a
 > user interface element. The effect simulates a three-dimensional positioning of
@@ -233,7 +233,7 @@ references : List (String, String)
 references = 
   [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Elevation"
   , Page.mds "https://www.google.com/design/spec/what-is-material/elevation-shadows.html"
-  , Page.mdl "https://github.com/google/material-design-lite/blob/master/src/shadow/README.md"
+  , Page.mdl "https://github.com/google/material-design-lite/blob/mdl-1.x/src/shadow/README.md"
   ]
 
 
