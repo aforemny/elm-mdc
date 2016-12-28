@@ -1,4 +1,0 @@
-- Fix TODOs
-- Search and replace use of term Parts (remember filenames)
-- Go over main documentation
-- Migration guide. 
