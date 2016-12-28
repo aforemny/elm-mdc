@@ -48,4 +48,9 @@ distclean : clean
 	rm -rf elm-stuff demo/elm-stuff
 
 
-.PHONY : pages elm.js clean cleanish distclean demo docs test copy-assets
+install-hooks: 
+	cp build_scripts/hooks/commit-msg .git/hooks
+	chmod a+x .git/hooks/commit-msg
+
+
+.PHONY : pages elm.js clean cleanish distclean demo docs test copy-assets install-hooks
