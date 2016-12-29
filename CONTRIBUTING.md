@@ -83,7 +83,7 @@ list](https://github.com/debois/elm-mdl/issues?utf8=%E2%9C%93&q=is%3Aissue+label
 ## Implement new components
 
 The library presently implements all components of Google's Material Design
-Lite 1.2.0. But you could contribute a component _not_ covered by MDL.
+Lite 1.3.0. But you could contribute a component _not_ covered by MDL.
 
 See the [missing component list](https://github.com/debois/elm-mdl/issues?q=is%3Aissue+is%3Aopen+label%3Acomponent).
 

@@ -310,7 +310,9 @@ view_ model =
             ([], [])
       , main = [ stylesheet, top ]
       }
-    {- ** The following lines are not necessary when you manually set up
+    {- ** Begin
+    
+       The following lines are not necessary when you manually set up
        your html, as done with page.html. Removing it will then
        fix the flicker you see on load.
     -}
@@ -337,6 +339,7 @@ view_ model =
               div [] []
         ]
     )
+    {- ** End -}
 
 
 -- ROUTING

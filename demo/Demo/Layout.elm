@@ -313,7 +313,7 @@ view model  =
           , explain "To use this colour scheme (and to use elm-mdl in general), you must load custom CSS."
           , [ "<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>"
             , "<link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>"
-            , "<link rel='stylesheet' href='https://code.getmdl.io/1.2.0/" ++ Color.scheme model.primary model.accent
+            , "<link rel='stylesheet' href='https://code.getmdl.io/1.3.0/" ++ Color.scheme model.primary model.accent
                   ++ "'>"
             ]
             |> String.join "\n"

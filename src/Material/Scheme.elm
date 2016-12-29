@@ -21,7 +21,7 @@ To load CSS manually, add the following to your main html file.
     <!-- MDL -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.0/material.min.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.min.css" />
 
 You may find the [elm-mdl demo's
 html](https://github.com/debois/elm-mdl/blob/master/demo/page.html) helpful.
@@ -39,7 +39,7 @@ import Material.Color exposing (Hue(..), Color)
 
 scheme : Hue -> Hue -> String
 scheme primary accent =
-    [ "https://code.getmdl.io/1.2.0/" ++ Material.Color.scheme primary accent
+    [ "https://code.getmdl.io/1.3.0/" ++ Material.Color.scheme primary accent
     , "https://fonts.googleapis.com/icon?family=Material+Icons"
     , "https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext"
     ]
