@@ -273,7 +273,7 @@ type alias Model =
     }
 
 
-{-| Default model. No label, error, or value.
+{-| Default model. 
 -}
 defaultModel : Model
 defaultModel =
@@ -325,7 +325,7 @@ update _ action model =
 
 Be aware that styling (third argument) is applied to the outermost element
 of the textfield's implementation, and so is mostly useful for positioning
-(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.input`
+(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Options.input`
 if you need to apply styling to the underlying `<input>` element.
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> x -> Html m
@@ -397,9 +397,13 @@ view lift model options _ =
 
                     Password ->
                         Internal.attribute <| type_ "password"
+
+                    Email -> 
+                        Internal.attribute <| type_ "email" 
                     _ ->
                         nop
-                , Internal.attribute (Html.Attributes.disabled True) |> when config.disabled
+                , Internal.attribute (Html.Attributes.disabled True) 
+                    |> when config.disabled
                 , expandableId
                 , case config.value of
                     Nothing ->
@@ -409,7 +413,7 @@ view lift model options _ =
                             (Decoder.map (Input >> lift) Html.Events.targetValue)
 
                     Just v ->
-                        Html.Attributes.defaultValue v |> Internal.attribute
+                        Internal.attribute <| Html.Attributes.value v
                 ]
                 []
             , Html.label

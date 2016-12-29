@@ -104,7 +104,7 @@ update msg model =
 
     Upd0 str ->
       { model | str0 = str } ! []
-        |> Just
+       |> Just
 
     Upd3 str ->
       { model | str3 = str } ! []
@@ -219,6 +219,7 @@ textfields model =
         , Textfield.error ("Doesn't match " ++ rx) 
             |> Options.when (not <| match model.str4 rx_)
         , Options.onInput Upd4
+        , Textfield.value model.str4
         ]
         []
     , """
@@ -247,8 +248,23 @@ textfields model =
         []
        """
     )
+  , ( "Textfield for email"
+    , Textfield.render Mdl [6] model.mdl
+        [ Textfield.label "Enter email"
+        , Textfield.floatingLabel
+        , Textfield.email
+        ]
+        []
+    , """
+      Textfield.render Mdl [6] model.mdl
+        [ Textfield.label "Enter email"
+        , Textfield.floatingLabel
+        , Textfield.email
+        []
+       """
+    )
   , ( "Expandable textfield"
-    , Textfield.render Mdl [11] model.mdl
+    , Textfield.render Mdl [7] model.mdl
         [ Textfield.label "Expandable"
         , Textfield.floatingLabel
         , Textfield.expandable "id-of-expandable-1"
@@ -256,7 +272,7 @@ textfields model =
         ]
         []
     , """
-      Textfield.render Mdl [11] model.mdl
+      Textfield.render Mdl [7] model.mdl
         [ Textfield.label "Expandable"
         , Textfield.floatingLabel
         , Textfield.expandable "id-of-expandable-1"
@@ -266,13 +282,13 @@ textfields model =
        """
     )
   , ( "Multi-line textfield"
-    , Textfield.render Mdl [6] model.mdl
+    , Textfield.render Mdl [8] model.mdl
         [ Textfield.label "Default multiline textfield"
         , Textfield.textarea
         ]
         []
     , """
-      Textfield.render Mdl [6] model.mdl
+      Textfield.render Mdl [8] model.mdl
         [ Textfield.label "Default multiline textfield"
         , Textfield.textarea
         ]
@@ -281,7 +297,7 @@ textfields model =
     )
 
   , ( "Multi-line textfield, 6 rows"
-    , Textfield.render Mdl [7] model.mdl
+    , Textfield.render Mdl [9] model.mdl
         [ Textfield.label "Multiline with 6 rows"
         , Textfield.floatingLabel
         , Textfield.textarea
@@ -289,7 +305,7 @@ textfields model =
         ]
         []
     , """
-      Textfield.render Mdl [7] model.mdl
+      Textfield.render Mdl [9] model.mdl
         [ Textfield.label "Multiline with 6 rows"
         , Textfield.floatingLabel
         , Textfield.textarea
@@ -301,7 +317,7 @@ textfields model =
 
   , ( "Multi-line textfield with character limit"
     , Html.div []
-    [ Textfield.render Mdl [8] model.mdl
+    [ Textfield.render Mdl [10] model.mdl
         [ Textfield.label ("Multiline textfield (" ++
                             (toString (String.length model.str6))
                             ++ " of " ++ (toString (truncate model.length))
@@ -327,7 +343,7 @@ textfields model =
         ]
     ]
     , """
-       Textfield.render Mdl [8] model.mdl
+       Textfield.render Mdl [10] model.mdl
          [ Textfield.label
              ("Multiline textfield (" ++
                 (toString (String.length model.str6))
@@ -351,7 +367,7 @@ custom model =
         , css "flex-direction" "column"
         , css "align-items" "flex-start"
         ]
-        [ Textfield.render Mdl [10] model.mdl
+        [ Textfield.render Mdl [11] model.mdl
             [ Textfield.floatingLabel 
             , Textfield.label <| if model.focus then "Focused" else "Not focused"
             , Options.onFocus (SetFocus True)
@@ -359,7 +375,7 @@ custom model =
             , Options.id "my-textfield"
             ]
             []
-        , Button.render Mdl [11] model.mdl 
+        , Button.render Mdl [12] model.mdl 
             [ Options.onClick Focus 
             , Button.colored 
             , css "align-self" "flex-end"
@@ -368,7 +384,7 @@ custom model =
             [ text "Focus" ]
          ]
      , """
-       [ Textfield.render Mdl [10] model.mdl
+       [ Textfield.render Mdl [11] model.mdl
           [ Textfield.floatingLabel 
           , Textfield.label <| if model.focus then "Focused" else "Not focused"
           , Options.onFocus (SetFocus True)
@@ -376,7 +392,7 @@ custom model =
           , Options.id "my-textfield"
           ]
           []
-      , Button.render Mdl [11] model.mdl 
+      , Button.render Mdl [12] model.mdl 
           [ Options.onClick Focus 
           , Button.colored 
           , css "align-self" "flex-end"
@@ -389,7 +405,7 @@ custom model =
     , ( "Working with selection"
     , Html.div
         []
-        [ Textfield.render Mdl [9] model.mdl
+        [ Textfield.render Mdl [13] model.mdl
             [ Textfield.label "Custom event handling"
             , Textfield.textarea
             , Textfield.value model.str9
@@ -455,7 +471,7 @@ custom model =
       view : Model -> Html Msg
       view model = 
         div []
-          [ Textfield.render Mdl [9] model.mdl
+          [ Textfield.render Mdl [13] model.mdl
               [ Textfield.label "Custom event handling"
               , Textfield.textarea
               , Options.onInput Input
