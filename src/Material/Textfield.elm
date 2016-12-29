@@ -380,7 +380,11 @@ view lift model options _ =
             , Internal.on1 "blur" lift Blur
             , cs "mdl-textfield--floating-label" |> when config.labelFloat
             , cs "is-invalid" |> when  (config.error /= Nothing)
-            , cs "is-dirty" |> when  (config.value /= Nothing || model.isDirty)
+            , cs "is-dirty" 
+                |> when (case config.value of
+                           Just "" -> False
+                           Just _ -> True
+                           Nothing -> model.isDirty)
             , cs "is-focused" |> when  (model.isFocused && not config.disabled)
             , cs "is-disabled" |> when  config.disabled
             , cs "mdl-textfield--expandable" |> when (config.expandable /= Nothing)
