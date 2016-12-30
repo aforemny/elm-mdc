@@ -1,5 +1,7 @@
 module Demo.Layout exposing (..)
 
+import Dom.Scroll
+import Task
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Html.Events
@@ -8,8 +10,10 @@ import Array exposing (Array)
 import Material.Toggles as Toggles
 import Material.Options as Options exposing (css, cs, when)
 import Material
+import Material.Layout as Layout
 import Material.Grid as Grid
 import Material.Color as Color
+import Material.Button as Button
 import Material.Elevation as Elevation
 import Material.Typography as Typography
 import Demo.Page as Page
@@ -66,6 +70,8 @@ model =
 type Msg
     = Update (Model -> Model)
     | Mdl (Material.Msg Msg)
+    | ScrollToTop
+    | Nop
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -77,6 +83,11 @@ update action model =
         Mdl msg_ ->
             Material.update Mdl msg_ model
 
+        ScrollToTop ->
+            ( model, Task.attempt (always Nop) <| Dom.Scroll.toTop Layout.mainId)
+
+        Nop ->
+            ( model, Cmd.none )
 
 
 {- Make sure we didn't pick the same primary and accent colour. -}
@@ -395,6 +406,27 @@ view model =
                         ++ toString model.accent
                         ++ " contents"
                 ]
+            , h4 [] [ text "Scroll-to-top" ]
+            , explain """The main layout container has HTML id "elm-mdl-layout-main". You can use this id, e.g., 
+                         to scroll to top. Try it out: """
+            , Button.render Mdl
+                [ 0 ]
+                model.mdl
+                [ Button.raised
+                , Button.colored
+                , Options.onClick ScrollToTop
+                ]
+                [ text "Scroll" ]
+            , explain """Assuming your app has messages ScrollToTop (requesting such a scroll) 
+                         and Nop (doing nothing), here is what your update function
+                         would look like for the above button:"""
+                            , Code.code [] <|
+                """ScrollToTop ->
+    ( model, Task.attempt (always Nop) <| Dom.Scroll.toTop Layout.mainId )
+
+Nop ->
+    ( model, Cmd.none )
+"""
             ]
     in
         Page.body1_ "Layout" srcUrl intro references demo1 demo2
