@@ -12,13 +12,9 @@ to loading v1.3.0 CSS. See "Load CSS from HTML" in the
 
 ## Changes
 
-**Features:**
-
-- Grid: setting size/offset to 0 produces size/offset of 1 [\#241](https://github.com/debois/elm-mdl/issues/241)
-
-
 **Bugfixes:**
 
+- Grid: setting size/offset to 0 produces size/offset of 1 [\#241](https://github.com/debois/elm-mdl/issues/241)
 - Textfield.value does not update for empty string [\#261](https://github.com/debois/elm-mdl/issues/261)
 - Textfield label always floats if Textfield.value is set [\#264](https://github.com/debois/elm-mdl/issues/264)
 - Fixed-drawer rendering error [\#258](https://github.com/debois/elm-mdl/issues/258)
