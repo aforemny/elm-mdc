@@ -11,10 +11,10 @@
 read -r -d '' wrong_branch_major_minor << EOM
 WRONG BRANCH — submit this PR to master instead.
 
-You have submitted your PR to the v7 branch, which is only for 7.x.x
+You have submitted your PR to the v8 branch, which is only for 8.x.x
 releases of elm-mdl. Your PR compiles just fine, but the changes you
 introduce force a major version bump of elm-mdl, and so cannot be
-released as a 7.x.x version.
+released as a 8.x.x version.
 
 Please re-submit your PR against master.
 
@@ -26,13 +26,13 @@ EOM
 
 # User message when MINOR/PATCH version on major branch
 read -r -d '' wrong_branch_minor_major << EOM
-WRONG BRANCH — submit this PR to v7 instead.
+WRONG BRANCH — submit this PR to v8 instead.
 
-You have submitted your PR to the master branch, which is only for 8.x.x
+You have submitted your PR to the master branch, which is only for 9.x.x
 releases of elm-mdl. Your changes do not require a major version bump
-and can be released as a 7.x.x version.
+and can be released as a 8.x.x version.
 
-Please re-submit your PR against v7.
+Please re-submit your PR against v8.
 
 Apologies for the inconvenience,
 
