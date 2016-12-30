@@ -2,15 +2,11 @@ module Demo.Footer exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-
 import Material.Footer as Footer
 import Material
 import Material.Options as Options
-
 import Demo.Page as Page
-
 import Html.Attributes as Html
-
 import Demo.Code as Code
 
 
@@ -18,47 +14,50 @@ import Demo.Code as Code
 
 
 type alias Model =
-  { mdl : Material.Model
-  }
+    { mdl : Material.Model
+    }
 
 
 model : Model
 model =
-  { mdl = Material.model
-  }
+    { mdl = Material.model
+    }
+
 
 
 -- ACTION, UPDATE
 
 
 type Msg
-  = FooterMsg
-  | Mdl (Material.Msg Msg)
+    = FooterMsg
+    | Mdl (Material.Msg Msg)
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
-  case action of
-    FooterMsg ->
-      (model, Cmd.none)
+    case action of
+        FooterMsg ->
+            ( model, Cmd.none )
 
-    Mdl msg_ ->
-      Material.update Mdl msg_ model
-
+        Mdl msg_ ->
+            Material.update Mdl msg_ model
 
 
 createLinks : Int -> List (Footer.Content m)
 createLinks nr =
-  let
-    nrs = List.repeat nr 0
-    makeLink idx _ =
-      (Footer.linkItem [Footer.href "#footers"] [Footer.html <| text ("Link " ++ toString (idx + 1))])
-  in
-    List.indexedMap makeLink nrs
+    let
+        nrs =
+            List.repeat nr 0
+
+        makeLink idx _ =
+            (Footer.linkItem [ Footer.href "#footers" ] [ Footer.html <| text ("Link " ++ toString (idx + 1)) ])
+    in
+        List.indexedMap makeLink nrs
 
 
 customStyles : String
-customStyles = """
+customStyles =
+    """
   .custom-footer {
     justify-content: center;
     flex-direction: column;
@@ -88,7 +87,7 @@ customStyles = """
 
 miniFooterDoc : String
 miniFooterDoc =
-  """
+    """
     Footer.mini []
       { left =
           Footer.left []
@@ -113,7 +112,7 @@ miniFooterDoc =
 
 megaFooterDoc : String
 megaFooterDoc =
-  """
+    """
     Footer.mega []
       { top = Footer.top []
           { left = Footer.left []
@@ -184,101 +183,100 @@ megaFooterDoc =
       }
    """
 
+
+
 -- VIEW
 
-view : Model -> Html Msg
-view model  =
-  [ Options.stylesheet customStyles
 
-  , p [] [text """Footers come in two sizes, mini and mega.
+view : Model -> Html Msg
+view model =
+    [ Options.stylesheet customStyles
+    , p [] [ text """Footers come in two sizes, mini and mega.
                 Mega footers usually contain more content than mini footers.
                 Note that "dropdowns" become dropdowns only when the screen is
-                small enough (resize your viewport to observe)."""]
-
-  , div [Html.style [("margin-top", "60px")]] []
-  , h4 [] [text "Mini footer"]
-  , div []
-    [ Footer.mini []
-        { left =
-            Footer.left []
-              [ Footer.logo [] [ Footer.html <| text "Mini Footer Example" ]
-              , Footer.links []
-                  [ Footer.linkItem [ Footer.href "#footers"]
-                      [ Footer.html <| text "Link 1"]
-                  , Footer.linkItem [ Footer.href "#footers"]
-                      [ Footer.html <| text "Link 2"]
-                  , Footer.linkItem [ Footer.href "#footers"]
-                      [ Footer.html <| text "Link 3"]
-                  ]
-              ]
-
-        , right =
-            Footer.right []
-              [ Footer.logo [] [ Footer.html <| text "Mini Footer Right Section" ]
-              , Footer.socialButton [Options.css "margin-right" "6px"] []
-              , Footer.socialButton [Options.css "margin-right" "6px"] []
-              , Footer.socialButton [Options.css "margin-right" "0px"] []
-              ]
-        }
-    ]
-  , Code.code [ Options.css "margin-top" "20px" ] miniFooterDoc
-
-  , div [Html.style [("margin-top", "60px")]] []
-  , h4 [] [ text "Mega footer" ]
-  , p [] [text """The mega footer typically has more contents and more
-                  sections than a mini footer."""]
-  , div []
-    [ Footer.mega []
-        { top =
-            Footer.top []
-            { left = Footer.left []
-                [ Footer.logo [] [ Footer.html <| text "Mega Footer Top Section" ]
-                , Footer.socialButton [Options.css "margin-right" "6px"] []
-                , Footer.socialButton [Options.css "margin-right" "6px"] []
-                , Footer.socialButton [] []
-                ]
-            , right = Footer.right []
-                [ Footer.link [Footer.href "#footers"] [text "Link 1"]
-                , Footer.link [Footer.href "#footers"] [text "Link 2"]
-                , Footer.link [Footer.href "#footers"] [text "Link 3"]
-                ]
+                small enough (resize your viewport to observe).""" ]
+    , div [ Html.style [ ( "margin-top", "60px" ) ] ] []
+    , h4 [] [ text "Mini footer" ]
+    , div []
+        [ Footer.mini []
+            { left =
+                Footer.left []
+                    [ Footer.logo [] [ Footer.html <| text "Mini Footer Example" ]
+                    , Footer.links []
+                        [ Footer.linkItem [ Footer.href "#footers" ]
+                            [ Footer.html <| text "Link 1" ]
+                        , Footer.linkItem [ Footer.href "#footers" ]
+                            [ Footer.html <| text "Link 2" ]
+                        , Footer.linkItem [ Footer.href "#footers" ]
+                            [ Footer.html <| text "Link 3" ]
+                        ]
+                    ]
+            , right =
+                Footer.right []
+                    [ Footer.logo [] [ Footer.html <| text "Mini Footer Right Section" ]
+                    , Footer.socialButton [ Options.css "margin-right" "6px" ] []
+                    , Footer.socialButton [ Options.css "margin-right" "6px" ] []
+                    , Footer.socialButton [ Options.css "margin-right" "0px" ] []
+                    ]
             }
-        , middle = Footer.middle []
-            [ Footer.dropdown []
-                [ Footer.heading [] [Footer.html <| text "Mega Footer Middle Section"]
-                , Footer.links [] <| createLinks 6
-                ]
-
-            , Footer.dropdown []
-                [ Footer.heading [] [Footer.html <| text "Can have"]
-                , Footer.links [] <| createLinks 4
-                ]
-
-            , Footer.dropdown []
-                [ Footer.heading [] [Footer.html <| text "Many dropdowns"]
-                , Footer.links [] <| createLinks 5
-                ]
-
-            , Footer.dropdown []
-                [ Footer.heading [] [Footer.html <| text "And more dropdowns"]
-                , Footer.links [] <| createLinks 2
-                ]
-            ]
-
-        , bottom = Footer.bottom []
-            [ Footer.logo [] [ Footer.html <| text "Mega Bottom Section Example" ]
-            , Footer.links [] <| createLinks 5
-            ]
-        }
+        ]
+    , Code.code [ Options.css "margin-top" "20px" ] miniFooterDoc
+    , div [ Html.style [ ( "margin-top", "60px" ) ] ] []
+    , h4 [] [ text "Mega footer" ]
+    , p [] [ text """The mega footer typically has more contents and more
+                  sections than a mini footer.""" ]
+    , div []
+        [ Footer.mega []
+            { top =
+                Footer.top []
+                    { left =
+                        Footer.left []
+                            [ Footer.logo [] [ Footer.html <| text "Mega Footer Top Section" ]
+                            , Footer.socialButton [ Options.css "margin-right" "6px" ] []
+                            , Footer.socialButton [ Options.css "margin-right" "6px" ] []
+                            , Footer.socialButton [] []
+                            ]
+                    , right =
+                        Footer.right []
+                            [ Footer.link [ Footer.href "#footers" ] [ text "Link 1" ]
+                            , Footer.link [ Footer.href "#footers" ] [ text "Link 2" ]
+                            , Footer.link [ Footer.href "#footers" ] [ text "Link 3" ]
+                            ]
+                    }
+            , middle =
+                Footer.middle []
+                    [ Footer.dropdown []
+                        [ Footer.heading [] [ Footer.html <| text "Mega Footer Middle Section" ]
+                        , Footer.links [] <| createLinks 6
+                        ]
+                    , Footer.dropdown []
+                        [ Footer.heading [] [ Footer.html <| text "Can have" ]
+                        , Footer.links [] <| createLinks 4
+                        ]
+                    , Footer.dropdown []
+                        [ Footer.heading [] [ Footer.html <| text "Many dropdowns" ]
+                        , Footer.links [] <| createLinks 5
+                        ]
+                    , Footer.dropdown []
+                        [ Footer.heading [] [ Footer.html <| text "And more dropdowns" ]
+                        , Footer.links [] <| createLinks 2
+                        ]
+                    ]
+            , bottom =
+                Footer.bottom []
+                    [ Footer.logo [] [ Footer.html <| text "Mega Bottom Section Example" ]
+                    , Footer.links [] <| createLinks 5
+                    ]
+            }
+        ]
+    , Code.code [ Options.css "margin-top" "20px" ] megaFooterDoc
     ]
-  , Code.code [ Options.css "margin-top" "20px" ] megaFooterDoc
-  ]
-  |> Page.body2 "Footers" srcUrl intro references
+        |> Page.body2 "Footers" srcUrl intro references
 
 
 intro : Html m
 intro =
-  Page.fromMDL "https://getmdl.io/components/index.html#layout-section/footer" """
+    Page.fromMDL "https://getmdl.io/components/index.html#layout-section/footer" """
 > The Material Design Lite (MDL) footer component is a comprehensive container
 > intended to present a substantial amount of related content in a visually
 > attractive and logically intuitive area. Although it is called "footer", it
@@ -302,12 +300,12 @@ intro =
 
 srcUrl : String
 srcUrl =
-  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Footer.elm"
+    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Footer.elm"
 
 
-references : List (String, String)
+references : List ( String, String )
 references =
-  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Footer"
-  , Page.mds "https://material.google.com/layout/structure.html"
-  , Page.mdl "https://getmdl.io/components/index.html#layout-section/footer"
-  ]
+    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Footer"
+    , Page.mds "https://material.google.com/layout/structure.html"
+    , Page.mdl "https://getmdl.io/components/index.html#layout-section/footer"
+    ]

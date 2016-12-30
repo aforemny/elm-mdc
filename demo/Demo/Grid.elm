@@ -1,13 +1,10 @@
 module Demo.Grid exposing (view)
 
-
 import Html exposing (..)
 import Array
-
 import Material.Grid exposing (..)
 import Material.Options exposing (Style, css)
-import Material.Color as Color 
-
+import Material.Color as Color
 import Demo.Page as Page
 
 
@@ -15,70 +12,76 @@ import Demo.Page as Page
 
 
 style : Int -> List (Style a)
-style h = 
-  [ css "text-sizing" "border-box"
-  , css "background-color" "#BDBDBD"
-  , css "height" (toString h ++ "px")
-  , css "padding-left" "8px"
-  , css "padding-top" "4px"
-  , css "color" "white"
-  ]
+style h =
+    [ css "text-sizing" "border-box"
+    , css "background-color" "#BDBDBD"
+    , css "height" (toString h ++ "px")
+    , css "padding-left" "8px"
+    , css "padding-top" "4px"
+    , css "color" "white"
+    ]
+
 
 
 -- Cell variants
 
 
 democell : Int -> List (Style a) -> List (Html a) -> Cell a
-democell k styling = 
-  cell <| List.concat [style k, styling] 
+democell k styling =
+    cell <| List.concat [ style k, styling ]
 
-  
+
 small : List (Style a) -> List (Html a) -> Cell a
-small = democell 50
+small =
+    democell 50
 
 
 std : List (Style a) -> List (Html a) -> Cell a
-std = democell 200
+std =
+    democell 200
 
 
--- Grid 
+
+-- Grid
 
 
 color : Int -> Style a
 color k =
     Array.get ((k + 0) % Array.length Color.hues) Color.hues
-      |> Maybe.withDefault Color.Teal
-      |> flip Color.color Color.S500
-      |> Color.background
+        |> Maybe.withDefault Color.Teal
+        |> flip Color.color Color.S500
+        |> Color.background
 
 
 view : Html a
 view =
-  [ p []
-      [ text """Resize your browser-window and observe the effect on the Grid
+    [ p []
+        [ text """Resize your browser-window and observe the effect on the Grid
                 below. Note in particular what happens to the top and bottom rows."""
+        ]
+    , List.range 1 12
+        |> List.map (\i -> small [ size All 1, color 4 ] [ text "1" ])
+        |> grid []
+    , List.range 1 3
+        |> List.map (\i -> std [ size All 4, color 5 ] [ text <| "4" ])
+        |> grid []
+    , [ std [ size All 6, color 6 ] [ text "6" ]
+      , std [ size All 4, color 6 ] [ text "4" ]
+      , std [ size All 2, color 6 ] [ text "2" ]
       ]
-  , List.range 1 12
-    |> List.map (\i -> small [size All 1, color 4] [text "1"])
-    |> grid []
-  , List.range 1 3
-    |> List.map (\i -> std [size All 4, color 5] [text <| "4"])
-    |> grid []
-  , [ std [size All 6, color 6] [text "6"]
-    , std [size All 4, color 6] [text "4"]
-    , std [size All 2, color 6] [text "2"]
-    ] |> grid []
-  , [ std [size All 6, size Tablet 8, color 7] [text "6 (8 tablet)"]
-    , std [size All 4, size Tablet 6, color 8] [text "4 (6 tablet)"]
-    , std [size All 2, size Phone 4,  color 9] [text "2 (4 phone)"]
-    ] |> grid []
-  ]
-  |> Page.body1 "Grid" srcUrl intro references
+        |> grid []
+    , [ std [ size All 6, size Tablet 8, color 7 ] [ text "6 (8 tablet)" ]
+      , std [ size All 4, size Tablet 6, color 8 ] [ text "4 (6 tablet)" ]
+      , std [ size All 2, size Phone 4, color 9 ] [ text "2 (4 phone)" ]
+      ]
+        |> grid []
+    ]
+        |> Page.body1 "Grid" srcUrl intro references
 
 
 intro : Html a
-intro = 
-  Page.fromMDL "http://www.getmdl.io/components/#layout-section/grid" """
+intro =
+    Page.fromMDL "http://www.getmdl.io/components/#layout-section/grid" """
 > The Material Design Lite (MDL) grid component is a simplified method for laying
 > out content for multiple screen sizes. It reduces the usual coding burden
 > required to correctly display blocks of content in a variety of display
@@ -96,13 +99,15 @@ intro =
 >     row.
 """
 
-srcUrl : String
-srcUrl = 
-  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Grid.elm"
 
-references : List (String, String) 
-references = 
-  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Grid"
-  , Page.mds "https://www.google.com/design/spec/layout/responsive-ui.html#responsive-ui-grid"
-  , Page.mdl "http://www.getmdl.io/components/#layout-section/grid"
-  ]
+srcUrl : String
+srcUrl =
+    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Grid.elm"
+
+
+references : List ( String, String )
+references =
+    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Grid"
+    , Page.mds "https://www.google.com/design/spec/layout/responsive-ui.html#responsive-ui-grid"
+    , Page.mdl "http://www.getmdl.io/components/#layout-section/grid"
+    ]
