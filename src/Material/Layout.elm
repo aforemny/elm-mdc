@@ -31,6 +31,7 @@ module Material.Layout
         , react
         , toggleDrawer
         , transparentHeader
+        , mainId
         )
 
 {-| From the
@@ -118,6 +119,7 @@ be (assuming a tab width of 1384 pixels):
 ## Tabs
 @docs fixedTabs, rippleTabs
 @docs selectedTab, setTabsWidth
+@docs mainId
 
 ## Header
 @docs fixedHeader, fixedDrawer
@@ -152,7 +154,7 @@ import Material.Component as Component exposing (Indexed, indexed, render1, subs
 import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd)
 import Material.Ripple as Ripple
 import Material.Icon as Icon
-import Material.Options as Options exposing (Style, cs, nop, css, when, styled)
+import Material.Options as Options exposing (Style, cs, nop, css, when, styled, id)
 import Material.Options.Internal as Internal
 import DOM
 
@@ -215,6 +217,13 @@ setTabsWidth_ width model =
             | tabScrollState =
                 { x | width = Just width }
         }
+
+
+{-| HTML id of main contents container. Useful for, e.g., scroll-to-top. 
+-}
+mainId : String
+mainId = 
+  "elm-mdl-layout-main"
 
 
 {-| Component model.
@@ -359,6 +368,7 @@ update_ f action model =
                         { model | isScrolled = isScrolled }
                 else
                     Nothing
+
         TransitionHeader { toCompact, fixedHeader } ->
             if not model.isAnimating then
                 Just
@@ -495,6 +505,7 @@ moreTabs =
 onSelectTab : (Int -> m) -> Property m
 onSelectTab =
     Internal.option << (\f config -> { config | onSelectTab = Just (f >> Events.onClick) })
+
 
 
 -- AUXILIARY VIEWS
@@ -769,8 +780,9 @@ drawerButton lift isVisible =
                     "false"
                 )
             , tabindex 1
-            {- No-one else is putting events on the drawerbutton, so we don't 
-            need to go through dispatch here. -}
+              {- No-one else is putting events on the drawerbutton, so we don't
+                 need to go through dispatch here.
+              -}
             , Events.onClick (lift ToggleDrawer)
             , Events.onWithOptions
                 "keydown"
@@ -958,7 +970,8 @@ view lift model options { drawer, header, tabs, main } =
                     Just ( "elm-mdl-obfuscator", obfuscator lift drawerIsVisible )
                 , contentDrawerButton |> Maybe.map ((,) "elm-drawer-button")
                 , Options.styled main_
-                    [ cs "mdl-layout__content"
+                    [ id mainId 
+                    , cs "mdl-layout__content"
                     , css "overflow-y" "visible" |> when (config.mode == Scrolling && config.fixedHeader)
                     , css "overflow-x" "visible" |> when (config.mode == Scrolling && config.fixedHeader)
                     , css "overflow" "visible" |> when (config.mode == Scrolling && config.fixedHeader) {- Above three lines fixes upstream bug #4180. -}
@@ -1022,12 +1035,12 @@ Excerpt:
       , main = [ MyComponent.view model ]
     }
 -}
-render
-  : ( Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
+render :
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
     -> { a | layout : Model }
     -> List (Property m)
     -> Contents m
-    -> Html m    
+    -> Html m
 render =
     Component.render1 get view Component.LayoutMsg
 

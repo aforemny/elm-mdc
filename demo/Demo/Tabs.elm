@@ -3,12 +3,10 @@ module Demo.Tabs exposing (..)
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Markdown
-
 import Material.Options as Options exposing (css)
 import Material.Icon as Icon
 import Material.Tabs as Tabs
 import Material
-
 import Demo.Page as Page
 import Demo.Code as Code
 
@@ -17,40 +15,44 @@ import Demo.Code as Code
 
 
 type alias Model =
-  { mdl : Material.Model
-  , tab : Int
-  }
+    { mdl : Material.Model
+    , tab : Int
+    }
 
 
 model : Model
 model =
-  { mdl = Material.model
-  , tab = 1
-  }
+    { mdl = Material.model
+    , tab = 1
+    }
+
 
 
 -- ACTION, UPDATE
 
+
 type Msg
-  = SelectTab Int
-  | Mdl (Material.Msg Msg)
+    = SelectTab Int
+    | Mdl (Material.Msg Msg)
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
-  case action of
-    SelectTab idx ->
-      ({ model | tab = idx }, Cmd.none)
+    case action of
+        SelectTab idx ->
+            ( { model | tab = idx }, Cmd.none )
 
-    Mdl msg_ ->
-      Material.update Mdl msg_ model
+        Mdl msg_ ->
+            Material.update Mdl msg_ model
+
 
 
 -- VIEW
 
+
 aboutTab : Html Msg
 aboutTab =
-  """
+    """
 From the [Material Design specification](https://material.google.com/components/tabs.html#tabs-usage):
 
 > Use tabs to organize content at a high level, for example, to present different sections of a newspaper. Don’t use tabs for carousels or pagination of content. Those use cases involve viewing content, not navigating between groups of content.
@@ -61,28 +63,29 @@ From the [Material Design specification](https://material.google.com/components/
 >
 > Fixed tabs should be used with a limited number of tabs and when consistent placement will aid muscle memory. Scrollable tabs should be used when there are many or a variable number of tabs.
     """
-      |> Markdown.toHtml [] 
-  
+        |> Markdown.toHtml []
+
+
 exampleTab : Html Msg
 exampleTab =
-  Code.code []
-    """
+    Code.code []
+        """
      Tabs.render Mdl [0] model.mdl
       [ Tabs.ripple
       , Tabs.onSelectTab SelectTab
       , Tabs.activeTab model.tab
       ]
-      [ Tabs.label 
-          [ Options.center ] 
+      [ Tabs.label
+          [ Options.center ]
           [ Icon.i "info_outline"
           , Options.span [ css "width" "4px" ] []
-          , text "About tabs" 
+          , text "About tabs"
           ]
-      , Tabs.label 
-          [ Options.center ] 
+      , Tabs.label
+          [ Options.center ]
           [ Icon.i "code"
-          , Options.span [ css "width" "4px" ] []  
-          , text "Example" 
+          , Options.span [ css "width" "4px" ] []
+          , text "Example"
           ]
       ]
       [ case model.tab of
@@ -93,43 +96,49 @@ exampleTab =
 
 
 view : Model -> Html Msg
-view model  =
-  [ Tabs.render Mdl [0] model.mdl
-      [ Tabs.ripple
-      , Tabs.onSelectTab SelectTab
-      , Tabs.activeTab model.tab
-      ]
-      [ Tabs.label 
-          [ Options.center ] 
-          [ Icon.i "info_outline"
-          , Options.span [ css "width" "4px" ] []
-          , text "About tabs" 
-          ]
-      , Tabs.label 
-          [ Options.center ] 
-          [ Icon.i "code"
-          , Options.span [ css "width" "4px" ] []
-          , text "Example" 
-          ]
-      ]
-      [ Options.div 
-          [ css "margin" "24px auto"
-          , css "align-items" "flex-start"
-          , Options.center
-          , css "overflow-y" "auto"
-          , css "height" "512px"
-          ]
-          [ case model.tab of
-              0 -> aboutTab
-              _ -> exampleTab
-          ]
-      ]
-  ] |> Page.body2 "Tabs" srcUrl intro references
+view model =
+    [ Tabs.render Mdl
+        [ 0 ]
+        model.mdl
+        [ Tabs.ripple
+        , Tabs.onSelectTab SelectTab
+        , Tabs.activeTab model.tab
+        ]
+        [ Tabs.label
+            [ Options.center ]
+            [ Icon.i "info_outline"
+            , Options.span [ css "width" "4px" ] []
+            , text "About tabs"
+            ]
+        , Tabs.label
+            [ Options.center ]
+            [ Icon.i "code"
+            , Options.span [ css "width" "4px" ] []
+            , text "Example"
+            ]
+        ]
+        [ Options.div
+            [ css "margin" "24px auto"
+            , css "align-items" "flex-start"
+            , Options.center
+            , css "overflow-y" "auto"
+            , css "height" "512px"
+            ]
+            [ case model.tab of
+                0 ->
+                    aboutTab
+
+                _ ->
+                    exampleTab
+            ]
+        ]
+    ]
+        |> Page.body2 "Tabs" srcUrl intro references
 
 
 intro : Html m
 intro =
-  Page.fromMDL "https://getmdl.io/components/index.html#layout-section/tabs" """
+    Page.fromMDL "https://getmdl.io/components/index.html#layout-section/tabs" """
 > The Material Design Lite (MDL) tab component is a user interface element that
 > allows different content blocks to share the same screen space in a mutually
 > exclusive manner. Tabs are always presented in sets of two or more, and they
@@ -150,12 +159,12 @@ intro =
 
 srcUrl : String
 srcUrl =
-  "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Tabs.elm"
+    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Tabs.elm"
 
 
-references : List (String, String)
+references : List ( String, String )
 references =
-  [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Tabs"
-  , Page.mds "https://material.google.com/components/tabs.html"
-  , Page.mdl "https://getmdl.io/components/index.html#layout-section/tabs"
-  ]
+    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Tabs"
+    , Page.mds "https://material.google.com/components/tabs.html"
+    , Page.mdl "https://getmdl.io/components/index.html#layout-section/tabs"
+    ]
