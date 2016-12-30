@@ -1,7 +1,7 @@
 # Projects using elm-mdl
 
 Below is a list of projects using `elm-mdl`. [Submit a
-PR](https://github.com/debois/elm-mdl/edit/v7/USERS.md) to have yours added to
+PR](https://github.com/debois/elm-mdl/edit/v8/USERS.md) to have yours added to
 the list :)
 
 * Hydra frontend - Hydra frontend rewritten with UX in mind.

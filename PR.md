@@ -10,8 +10,8 @@ guidelines, but it saves us a lot of time and effort if you do.
   Make the PR against master if `elm-package diff` reports a major version bump,
   against the current version branch otherwise. 
 
-  Example. You implement a feature on the v7 branch. `elm-package diff` reports
-  a "minor version change". Submit a PR against the v7 branch. If instead 
+  Example. You implement a feature on the v8 branch. `elm-package diff` reports
+  a "minor version change". Submit a PR against the v8 branch. If instead 
   `elm-package diff` reports a "major version change", submit a PR against master. 
 
   Submitting your PR to the correct branch ensures that your fix/feature goes
