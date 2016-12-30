@@ -5,6 +5,7 @@ module Material
         , Msg
         , Container
         , update
+        , update_
         , subscriptions
         , init
         )
@@ -163,7 +164,7 @@ module as a starting point
 
 ## Shorthands
 
-@docs Model, model, Msg, Container, update, subscriptions, init
+@docs Model, model, Msg, Container, update, update_, subscriptions, init
 -}
 
 import Dict
@@ -238,37 +239,40 @@ your own Msg type.
 -}
 update : (Msg m -> m) -> Msg m -> Container c -> ( Container c, Cmd m )
 update lift msg container =
-    let
-        store =
-            .mdl container
-    in
-        (case msg of
-            ButtonMsg idx msg ->
-                Button.react lift msg idx store
+  update_ lift msg (.mdl container)
+      |> map1st (Maybe.map (\mdl -> { container | mdl = mdl }))
+      |> map1st (Maybe.withDefault container)
 
-            TextfieldMsg idx msg ->
-                Textfield.react lift msg idx store
 
-            MenuMsg idx msg ->
-                Menu.react (MenuMsg idx >> lift) msg idx store
+{-| Variant update function that explicitly signals whether model needs update. 
+If it is not clear to you that you need this, you do not :)
+-}
+update_ : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
+update_ lift msg store =
+    case msg of
+       ButtonMsg idx msg ->
+           Button.react lift msg idx store
 
-            LayoutMsg msg ->
-                Layout.react (LayoutMsg >> lift) msg store
+       TextfieldMsg idx msg ->
+           Textfield.react lift msg idx store
 
-            TogglesMsg idx msg ->
-                Toggles.react lift msg idx store
+       MenuMsg idx msg ->
+           Menu.react (MenuMsg idx >> lift) msg idx store
 
-            TooltipMsg idx msg ->
-                Tooltip.react lift msg idx store
+       LayoutMsg msg ->
+           Layout.react (LayoutMsg >> lift) msg store
 
-            TabsMsg idx msg ->
-                Tabs.react lift msg idx store
+       TogglesMsg idx msg ->
+           Toggles.react lift msg idx store
 
-            Dispatch msgs -> 
-                (Nothing, Dispatch.forward msgs)
-        )
-        |> map1st (Maybe.map (\mdl -> { container | mdl = mdl }))
-        |> map1st (Maybe.withDefault container)
+       TooltipMsg idx msg ->
+           Tooltip.react lift msg idx store
+
+       TabsMsg idx msg ->
+           Tabs.react lift msg idx store
+
+       Dispatch msgs -> 
+           (Nothing, Dispatch.forward msgs)
 
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires

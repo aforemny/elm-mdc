@@ -18,6 +18,7 @@ import Material.Scheme as Scheme
 import Material.Icon as Icon
 import Material.Typography as Typography
 import Material.Menu as Menu
+import Material.Toggles as Toggles
 import Demo.Buttons
 import Demo.Menus
 import Demo.Tables
@@ -66,6 +67,7 @@ type alias Model =
     , chips : Demo.Chips.Model
     , selectedTab : Int
     , transparentHeader : Bool
+    , logMessages : Bool
     }
 
 
@@ -93,6 +95,7 @@ model =
     , chips = Demo.Chips.model
     , selectedTab = 0
     , transparentHeader = False
+    , logMessages = False
     }
 
 
@@ -119,10 +122,11 @@ type Msg
     | TypographyMsg Demo.Typography.Msg
     | CardsMsg Demo.Cards.Msg
     | ListsMsg Demo.Lists.Msg
-    | ToggleHeader
     | DialogMsg Demo.Dialog.Msg
     | ElevationMsg Demo.Elevation.Msg
     | ChipMsg Demo.Chips.Msg
+    | ToggleHeader
+    | ToggleLog
 
 
 nth : Int -> List a -> Maybe a
@@ -132,75 +136,81 @@ nth k xs =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "Message" msg of
-        SelectTab k ->
-            ( { model | selectedTab = k }, Cmd.none )
+    let 
+        log msg = 
+            if model.logMessages then Debug.log "Msg" else identity
+    in
+      case log "Msg" msg of
+          SelectTab k ->
+              ( { model | selectedTab = k }, Cmd.none )
 
-        ToggleHeader ->
-            ( { model | transparentHeader = not model.transparentHeader }, Cmd.none )
+          ToggleHeader ->
+              ( { model | transparentHeader = not model.transparentHeader }, Cmd.none )
+          ToggleLog -> 
+              ( { model | logMessages = not model.logMessages }, Cmd.none )
 
-        Mdl msg ->
-            Material.update Mdl msg model
+          Mdl msg ->
+              Material.update Mdl msg model
 
-        ButtonsMsg a ->
-            lift .buttons (\m x -> { m | buttons = x }) ButtonsMsg Demo.Buttons.update a model
+          ButtonsMsg a ->
+              lift .buttons (\m x -> { m | buttons = x }) ButtonsMsg Demo.Buttons.update a model
 
-        BadgesMsg a ->
-            lift .badges (\m x -> { m | badges = x }) BadgesMsg Demo.Badges.update a model
+          BadgesMsg a ->
+              lift .badges (\m x -> { m | badges = x }) BadgesMsg Demo.Badges.update a model
 
-        LayoutMsg a ->
-            lift .layout (\m x -> { m | layout = x }) LayoutMsg Demo.Layout.update a model
+          LayoutMsg a ->
+              lift .layout (\m x -> { m | layout = x }) LayoutMsg Demo.Layout.update a model
 
-        MenusMsg a ->
-            lift .menus (\m x -> { m | menus = x }) MenusMsg Demo.Menus.update a model
+          MenusMsg a ->
+              lift .menus (\m x -> { m | menus = x }) MenusMsg Demo.Menus.update a model
 
-        TextfieldMsg m ->
-            Demo.Textfields.update m model.textfields
-                |> Maybe.map (map1st (\x -> { model | textfields = x }))
-                |> Maybe.withDefault ( model, Cmd.none )
-                |> map2nd (Cmd.map TextfieldMsg)
+          TextfieldMsg m ->
+              Demo.Textfields.update m model.textfields
+                  |> Maybe.map (map1st (\x -> { model | textfields = x }))
+                  |> Maybe.withDefault ( model, Cmd.none )
+                  |> map2nd (Cmd.map TextfieldMsg)
 
-        SnackbarMsg a ->
-            lift .snackbar (\m x -> { m | snackbar = x }) SnackbarMsg Demo.Snackbar.update a model
+          SnackbarMsg a ->
+              lift .snackbar (\m x -> { m | snackbar = x }) SnackbarMsg Demo.Snackbar.update a model
 
-        TogglesMsg a ->
-            lift .toggles (\m x -> { m | toggles = x }) TogglesMsg Demo.Toggles.update a model
+          TogglesMsg a ->
+              lift .toggles (\m x -> { m | toggles = x }) TogglesMsg Demo.Toggles.update a model
 
-        TablesMsg a ->
-            lift .tables (\m x -> { m | tables = x }) TablesMsg Demo.Tables.update a model
+          TablesMsg a ->
+              lift .tables (\m x -> { m | tables = x }) TablesMsg Demo.Tables.update a model
 
-        LoadingMsg a ->
-            lift .loading (\m x -> { m | loading = x }) LoadingMsg Demo.Loading.update a model
+          LoadingMsg a ->
+              lift .loading (\m x -> { m | loading = x }) LoadingMsg Demo.Loading.update a model
 
-        FooterMsg a ->
-            lift .footers (\m x -> { m | footers = x }) FooterMsg Demo.Footer.update a model
+          FooterMsg a ->
+              lift .footers (\m x -> { m | footers = x }) FooterMsg Demo.Footer.update a model
 
-        SliderMsg a ->
-            lift .slider (\m x -> { m | slider = x }) SliderMsg Demo.Slider.update a model
+          SliderMsg a ->
+              lift .slider (\m x -> { m | slider = x }) SliderMsg Demo.Slider.update a model
 
-        TooltipMsg a ->
-            lift .tooltip (\m x -> { m | tooltip = x }) TooltipMsg Demo.Tooltip.update a model
+          TooltipMsg a ->
+              lift .tooltip (\m x -> { m | tooltip = x }) TooltipMsg Demo.Tooltip.update a model
 
-        TabMsg a ->
-            lift .tabs (\m x -> { m | tabs = x }) TabMsg Demo.Tabs.update a model
+          TabMsg a ->
+              lift .tabs (\m x -> { m | tabs = x }) TabMsg Demo.Tabs.update a model
 
-        TypographyMsg a ->
-            lift .typography (\m x -> { m | typography = x }) TypographyMsg Demo.Typography.update a model
+          TypographyMsg a ->
+              lift .typography (\m x -> { m | typography = x }) TypographyMsg Demo.Typography.update a model
 
-        CardsMsg a ->
-            lift .cards (\m x -> { m | cards = x }) CardsMsg Demo.Cards.update a model
+          CardsMsg a ->
+              lift .cards (\m x -> { m | cards = x }) CardsMsg Demo.Cards.update a model
 
-        ListsMsg a ->
-            lift .lists (\m x -> { m | lists = x }) ListsMsg Demo.Lists.update a model
+          ListsMsg a ->
+              lift .lists (\m x -> { m | lists = x }) ListsMsg Demo.Lists.update a model
 
-        DialogMsg a ->
-            lift .dialog (\m x -> { m | dialog = x }) DialogMsg Demo.Dialog.update a model
+          DialogMsg a ->
+              lift .dialog (\m x -> { m | dialog = x }) DialogMsg Demo.Dialog.update a model
 
-        ElevationMsg a ->
-            lift .elevation (\m x -> { m | elevation = x }) ElevationMsg Demo.Elevation.update a model
+          ElevationMsg a ->
+              lift .elevation (\m x -> { m | elevation = x }) ElevationMsg Demo.Elevation.update a model
 
-        ChipMsg a ->
-            lift .chips (\m x -> { m | chips = x }) ChipMsg Demo.Chips.update a model
+          ChipMsg a ->
+              lift .chips (\m x -> { m | chips = x }) ChipMsg Demo.Chips.update a model
 
 
 
@@ -264,9 +274,9 @@ e404 _ =
         ]
 
 
-drawer : List (Html Msg)
-drawer =
-    [ Layout.title [] [ text "Example drawer" ]
+drawer : Model -> List (Html Msg)
+drawer model =
+    [ Layout.title [] [ text "elm-mdl" ]
     , Layout.navigation
         []
         [ Layout.link
@@ -280,6 +290,31 @@ drawer =
             , Options.onClick (Layout.toggleDrawer Mdl)
             ]
             [ text "Card component" ]
+        , Layout.link
+            [ css "display" "inline-flex" 
+            , css "flex-wrap" "wrap"
+            , css "justify-content" "space-between" 
+            , css "align-items" "center" 
+            , Options.onToggle ToggleLog
+            , Options.onClick ToggleLog
+            ]
+            [ text "Log messages" 
+            , Toggles.checkbox Mdl [0] model.mdl
+                [ Toggles.ripple
+                , Toggles.value model.logMessages
+                , css "width" "32px"
+                ]
+                []
+            , if model.logMessages then 
+                Options.div 
+                  [ Typography.caption 
+                  , css "width" "100%"
+                  ]
+                  [ text "Open your Javascript console to observe MDL messages" ] 
+                
+              else
+                text ""
+            ]
         ]
     ]
 
@@ -353,7 +388,7 @@ view_ model =
             { header = header model
             , drawer =
                 if model.layout.withDrawer then
-                    drawer
+                    drawer model
                 else
                     []
             , tabs =

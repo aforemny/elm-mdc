@@ -68,31 +68,61 @@ model =
 
 
 type Msg
-    = Update (Model -> Model)
-    | Mdl (Material.Msg Msg)
+    = Mdl (Material.Msg Msg)
     | ScrollToTop
     | Nop
+    | SetPrimaryColor Color.Hue
+    | SetAccentColor Color.Hue
+    | ToggleHeader
+    | ToggleDrawer
+    | ToggleTabs
+    | ToggleFixedHeader
+    | ToggleFixedDrawer
+    | ToggleFixedTabs
+    | SetHeader HeaderType
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
     case action of
-        Update f ->
-            ( f model, Cmd.none )
-
         Mdl msg_ ->
             Material.update Mdl msg_ model
 
         ScrollToTop ->
-            ( model, Task.attempt (always Nop) <| Dom.Scroll.toTop Layout.mainId)
+            model ! [ Task.attempt (always Nop) <| Dom.Scroll.toTop Layout.mainId ]
 
         Nop ->
-            ( model, Cmd.none )
+            model ! [] 
+
+        SetPrimaryColor hue -> 
+            fixColors { model | primary = hue } ! [] 
+
+        SetAccentColor hue -> 
+            { model | accent = hue } ! [] 
+
+        ToggleHeader -> 
+            { model | withHeader = not model.withHeader } ! [] 
+
+        ToggleDrawer -> 
+            { model | withDrawer = not model.withDrawer } ! [] 
+
+        ToggleTabs -> 
+            { model | withTabs = not model.withTabs } ! [] 
+
+        ToggleFixedHeader -> 
+            { model | fixedHeader = not model.fixedHeader } ! [] 
+
+        ToggleFixedDrawer -> 
+            { model | fixedDrawer = not model.fixedDrawer } ! [] 
+
+        ToggleFixedTabs -> 
+            { model | fixedTabs = not model.fixedTabs } ! [] 
+
+        SetHeader h -> 
+            { model | header = h } ! [] 
 
 
 {- Make sure we didn't pick the same primary and accent colour. -}
-
-
 fixColors : Model -> Model
 fixColors model =
     if model.primary == model.accent then
@@ -131,9 +161,9 @@ picker :
     -> Maybe Color.Hue
     -> Color.Shade
     -> Color.Hue
-    -> (Color.Hue -> Model -> Model)
+    -> (Color.Hue -> Msg)
     -> Html Msg
-picker hues disabled shade current f =
+picker hues disabled shade current msg =
     hues
         |> Array.toList
         |> List.map
@@ -151,7 +181,7 @@ picker hues disabled shade current f =
                     , css "cursor" "pointer" |> when (disabled /= Just hue)
                     ]
                     (if Just hue /= disabled then
-                        [ Html.Events.onClick (f hue >> fixColors |> Update) ]
+                        [ Html.Events.onClick (msg hue) ]
                      else
                         []
                     )
@@ -184,21 +214,21 @@ view model =
                     , Toggles.switch Mdl
                         [ 8 ]
                         model.mdl
-                        [ Options.onToggle (Update <| \m -> { m | withHeader = not m.withHeader })
+                        [ Options.onToggle ToggleHeader
                         , Toggles.value model.withHeader
                         ]
                         [ text "With header" ]
                     , Toggles.switch Mdl
                         [ 9 ]
                         model.mdl
-                        [ Options.onToggle (Update <| \m -> { m | withDrawer = not m.withDrawer })
+                        [ Options.onToggle ToggleDrawer
                         , Toggles.value model.withDrawer
                         ]
                         [ text "With drawer" ]
                     , Toggles.switch Mdl
                         [ 10 ]
                         model.mdl
-                        [ Options.onToggle (Update <| \m -> { m | withTabs = not m.withTabs })
+                        [ Options.onToggle ToggleTabs
                         , Toggles.value model.withTabs
                         ]
                         [ text "With tabs" ]
@@ -208,7 +238,7 @@ view model =
                     , Toggles.switch Mdl
                         [ 0 ]
                         model.mdl
-                        [ Options.onToggle (Update <| \m -> { m | fixedHeader = not m.fixedHeader })
+                        [ Options.onToggle ToggleFixedHeader
                         , Toggles.value model.fixedHeader
                         ]
                         [ text "Fixed header" ]
@@ -217,7 +247,7 @@ view model =
                     , Toggles.switch Mdl
                         [ 1 ]
                         model.mdl
-                        [ Options.onToggle (Update <| \m -> { m | fixedDrawer = not m.fixedDrawer })
+                        [ Options.onToggle ToggleFixedDrawer
                         , Toggles.value model.fixedDrawer
                         ]
                         [ text "Fixed drawer" ]
@@ -226,7 +256,7 @@ view model =
                     , Toggles.switch Mdl
                         [ 2 ]
                         model.mdl
-                        [ Options.onToggle (Update <| \m -> { m | fixedTabs = not m.fixedTabs })
+                        [ Options.onToggle ToggleFixedTabs
                         , Toggles.value model.fixedTabs
                         ]
                         [ text "Fixed tabs" ]
@@ -241,7 +271,7 @@ view model =
                         model.mdl
                         [ Toggles.group "kind"
                         , Toggles.value <| model.header == Standard
-                        , Options.onToggle (Update <| \m -> { m | header = Standard })
+                        , Options.onToggle (SetHeader Standard)
                         ]
                         [ text "Standard" ]
                     , Toggles.radio Mdl
@@ -249,7 +279,7 @@ view model =
                         model.mdl
                         [ Toggles.group "kind"
                         , Toggles.value <| model.header == Seamed
-                        , Options.onToggle (Update <| \m -> { m | header = Seamed })
+                        , Options.onToggle (SetHeader Seamed)
                         ]
                         [ text "Seamed" ]
                     , Toggles.radio Mdl
@@ -257,7 +287,7 @@ view model =
                         model.mdl
                         [ Toggles.group "kind"
                         , Toggles.value <| model.header == Scrolling
-                        , Options.onToggle (Update <| \m -> { m | header = Scrolling })
+                        , Options.onToggle (SetHeader Scrolling)
                         ]
                         [ text "Scrolling" ]
                     , Toggles.radio Mdl
@@ -265,7 +295,7 @@ view model =
                         model.mdl
                         [ Toggles.group "kind"
                         , Toggles.value <| model.header == (Waterfall True)
-                        , Options.onToggle (Update <| \m -> { m | header = (Waterfall True) })
+                        , Options.onToggle (SetHeader <| Waterfall True)
                         ]
                         [ text "Waterfall (top)" ]
                     , Toggles.radio Mdl
@@ -273,7 +303,7 @@ view model =
                         model.mdl
                         [ Toggles.group "kind"
                         , Toggles.value <| model.header == (Waterfall False)
-                        , Options.onToggle (Update <| \m -> { m | header = (Waterfall False) })
+                        , Options.onToggle (SetHeader <| Waterfall False)
                         ]
                         [ text "Waterfall (bottom)" ]
                     ]
@@ -358,14 +388,14 @@ view model =
                     [ Grid.cell
                         [ Grid.size Grid.All 4 ]
                         [ h5 [] [ text "Primary colour" ]
-                        , picker Color.hues Nothing Color.S500 model.primary (\hue m -> { m | primary = hue })
+                        , picker Color.hues Nothing Color.S500 model.primary SetPrimaryColor
                         ]
                     , Grid.cell
                         [ Grid.size Grid.All 4
                         , Grid.offset Grid.Desktop 2
                         ]
                         [ h5 [] [ text "Accent colour" ]
-                        , picker Color.accentHues (Just model.primary) Color.A200 model.accent (\hue m -> { m | accent = hue })
+                        , picker Color.accentHues (Just model.primary) Color.A200 model.accent SetAccentColor
                         ]
                     , Grid.cell
                         [ Grid.size Grid.All 4
