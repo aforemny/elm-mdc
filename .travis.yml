@@ -17,7 +17,7 @@ install:
   - |
     if [ ! -d libsysconfcpus/bin ];
     then
-      git clone https://github.com/obmarg/libsysconfcpus.git; 
+      git clone https://github.com/obmarg/libsysconfcpus.git;
       cd libsysconfcpus;
       ./configure --prefix=$TRAVIS_BUILD_DIR/libsysconfcpus;
       make && make install;
@@ -26,4 +26,4 @@ install:
   - elm package install --yes
 
 script:
-  - libsysconfcpus/bin/sysconfcpus -n 2 elm-test
+  - libsysconfcpus/bin/sysconfcpus -n 2 elm-test && ./build_scripts/check_pr_branch.sh $TRAVIS_BRANCH master $TRAVIS_PULL_REQUEST
