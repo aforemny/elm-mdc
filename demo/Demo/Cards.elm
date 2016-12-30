@@ -168,12 +168,12 @@ table model =
         code =
             """
       Card.view
-        [ css "width" """" ++ toString wide ++ """px")
+        [ css "width" \"""" ++ toString wide ++ """px")
         , Color.background (Color.color Color.DeepPurple Color.S300)
         ]
         [ Card.media
             [ css "background" "url('assets/table.jpg') center / cover"
-            , css "height" """" ++ toString (wide / 16 * 9) ++ """px")
+            , css "height" \"""" ++ toString (wide / 16 * 9) ++ """px")
             ]
             []
         , Card.title [ ]
@@ -415,7 +415,7 @@ playing model =
         code =
             """
       Card.view
-        [ css "width" """" ++ toString wide ++ """px"
+        [ css "width" \"""" ++ toString wide ++ """px"
         , Color.background (Color.color Color.Amber Color.S600)
         ]
         [ Card.title

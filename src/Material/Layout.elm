@@ -31,6 +31,7 @@ module Material.Layout
         , react
         , toggleDrawer
         , transparentHeader
+        , mainId
         )
 
 {-| From the
@@ -118,6 +119,7 @@ be (assuming a tab width of 1384 pixels):
 ## Tabs
 @docs fixedTabs, rippleTabs
 @docs selectedTab, setTabsWidth
+@docs mainId
 
 ## Header
 @docs fixedHeader, fixedDrawer
@@ -215,6 +217,13 @@ setTabsWidth_ width model =
             | tabScrollState =
                 { x | width = Just width }
         }
+
+
+{-| HTML id of main contents container. Useful for, e.g., scroll-to-top. 
+-}
+mainId : String
+mainId = 
+  "elm-mdl-layout-main"
 
 
 {-| Component model.
@@ -961,7 +970,7 @@ view lift model options { drawer, header, tabs, main } =
                     Just ( "elm-mdl-obfuscator", obfuscator lift drawerIsVisible )
                 , contentDrawerButton |> Maybe.map ((,) "elm-drawer-button")
                 , Options.styled main_
-                    [ id "elm-mdl-layout-main"
+                    [ id mainId 
                     , cs "mdl-layout__content"
                     , css "overflow-y" "visible" |> when (config.mode == Scrolling && config.fixedHeader)
                     , css "overflow-x" "visible" |> when (config.mode == Scrolling && config.fixedHeader)

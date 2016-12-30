@@ -102,7 +102,7 @@ demo2 model =
                 ++ """
         , Options.center
         ]
-        [ text """"
+        [ text \""""
                 ++ (toString k)
                 ++ """" ]"""
     in
