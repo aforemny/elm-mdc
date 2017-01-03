@@ -27,7 +27,7 @@ can use the compiler to identify the necessary changes.
     elements, this argument makes all elm-mdl `render` functions have the same
     number and meaning of parameters. 
   
-4. `Textfield.inner` is renamed `Options.input`. 
+4. `Textfield.inner` and `Textfield.style` become `Options.input`. 
 
     _Motivation_. Some elm-mdl components pretend to be input elements, even though 
     they are implemented as a number of `div`s containing an `input` element
