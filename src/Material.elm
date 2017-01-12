@@ -73,13 +73,13 @@ NB! We recommend using shorthands to avoid TEA boilerplate, see below. If you ar
 The component model of the library is simply the Elm Architecture (TEA), i.e.,
 each component has types `Model` and `Msg`, and values `view` and `update`. A
 minimal example using this library as plain TEA can be found
-[here](https://github.com/debois/elm-mdl/blob/master/examples/Component-TEA.elm).
+[here](https://github.com/debois/elm-mdl/blob/master/examples/Counter-no-parts.elm).
 
 Using more than a few component in plain TEA is unwieldy because of the large
 amount of boilerplate one has to write. The elm-mdl library supports
 shorthands for avoiding most of this boilerplate. A minimal example using
 shorthands is
-  [here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
+  [here](http://github.com/debois/elm-mdl/blob/master/examples/Counter.elm).
 
 It is important to note that the shorthands are not an alternative to TEA; they
 simply do much of the tedious TEA boilerplate. Note that elm-mdl no longer
@@ -93,7 +93,7 @@ language creators.
 The present module contains only convenience functions for working with nested
 components in the Elm architecture. A minimal example using this library
 with component support can be found
-[here](http://github.com/debois/elm-mdl/blob/master/examples/Component.elm).
+[here](http://github.com/debois/elm-mdl/blob/master/examples/Counter.elm).
 We encourage you to use the library in this fashion.
 
 Here is how you use elm-mdl with shorthands. First, boilerplate.
