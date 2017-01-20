@@ -11,7 +11,7 @@ CSS/JS implementation of the
 
 ### Migration
 
-If you are updating form 7.x.x, refer to the [Migration guide](https://github.com/debois/elm-mdl/blob/v8/MIGRATION.md).
+If you are updating from 7.x.x, refer to the [Migration guide](https://github.com/debois/elm-mdl/blob/v8/MIGRATION.md).
 
 ### Get Started
 
