@@ -55,7 +55,7 @@ The following options have effect only when applied in the header row.
 
 import Html exposing (Html, Attribute)
 import Material.Options as Options exposing (Property, cs, nop, when)
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
 
 
 {-| Main table constructor. Example use:

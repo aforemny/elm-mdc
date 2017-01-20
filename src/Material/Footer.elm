@@ -89,7 +89,7 @@ import Html.Attributes as Html
 import Material.Options as Options exposing (Style, cs)
 import String
 import Regex
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
 
 
 {-| The type of the footer

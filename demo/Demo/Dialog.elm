@@ -1,13 +1,10 @@
 module Demo.Dialog exposing (model, update, view, Model, Msg, element)
 
-import Demo.Code as Code
 import Demo.Page as Page
-import Html.Attributes exposing (..)
 import Html exposing (..)
 import Material
 import Material.Button as Button
 import Material.Dialog as Dialog
-import Material.Options as Options exposing (css)
 
 
 -- MODEL

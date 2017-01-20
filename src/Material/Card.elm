@@ -51,10 +51,8 @@ for a live demo.
 @docs expand, border, menu
 -}
 
-import Html.Attributes
 import Html exposing (Html)
-import Material.Options as Options exposing (Style, cs, div, css)
-import Material.Options.Internal as Internal
+import Material.Options as Options exposing (Style, cs, css, div)
 
 
 {-| Generate a primary block

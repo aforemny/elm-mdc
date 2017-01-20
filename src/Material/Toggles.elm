@@ -55,14 +55,20 @@ for a live demo.
 
 -}
 
-import Html exposing (..)
 import Html.Attributes exposing (type_, class, disabled, checked)
-import Material.Component as Component exposing (Indexed, Index)
-import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
+import Html exposing (..)
+import Material.Component as Component exposing (Indexed)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
+import Material.Internal.Options as Internal
+import Material.Internal.Options as Internal
+import Material.Internal.Toggles exposing (Msg(..))
+import Material.Internal.Toggles exposing (Msg(..))
+import Material.Msg
+import Material.Msg exposing (Index)
+import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
+import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
 import Material.Ripple as Ripple
-import Material.Options.Internal as Internal
-import Svg exposing (Svg, path)
+import Svg exposing (path)
 import Svg.Attributes as Svg
 
 -- MODEL
@@ -91,9 +97,8 @@ defaultModel =
 
 {-| Component action.
 -}
-type Msg
-    = Ripple Ripple.Msg
-    | SetFocus Bool
+type alias Msg
+    = Material.Internal.Toggles.Msg
 
 
 {-| Component update.
@@ -302,49 +307,49 @@ type alias Store s =
 {-| Component react function.
 -}
 react :
-    (Component.Msg button textfield menu layout Msg tooltip tabs dispatch -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Component.TogglesMsg (Component.generalise update)
+    Component.react get set Material.Msg.TogglesMsg (Component.generalise update)
 
 
 {-| Component render (checkbox)
 -}
 checkbox :
-    (Component.Msg button textfield menu snackbar Msg tooltip tabs dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> { a | toggles : Indexed Model }
     -> List (Property m)
     -> List (Html m)
     -> Html m
 checkbox =
-    Component.render get viewCheckbox Component.TogglesMsg
+    Component.render get viewCheckbox Material.Msg.TogglesMsg
 
 
 {-| Component render (switch)
 -}
 switch :
-    (Component.Msg button textfield menu snackbar Msg tooltip tabs dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
 switch =
-    Component.render get viewSwitch Component.TogglesMsg
+    Component.render get viewSwitch Material.Msg.TogglesMsg
 
 
 {-| Component render (radio button)
 -}
 radio :
-    (Component.Msg button textfield menu snackbar Msg tooltip tabs dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
 radio =
-    Component.render get viewRadio Component.TogglesMsg
+    Component.render get viewRadio Material.Msg.TogglesMsg

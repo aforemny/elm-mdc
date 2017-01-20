@@ -38,7 +38,7 @@ for a live demo.
 
 import Html exposing (Html, Attribute)
 import Material.Options as Options exposing (cs, css, nop, when)
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
 
 
 

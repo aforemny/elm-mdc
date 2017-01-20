@@ -68,24 +68,28 @@ li options =
 
 {-| List item's start detail
 -}
+startDetail : List (Property c m) -> List (Html m) -> Html m
 startDetail options =
     Options.styled Html.span (cs "mdc-list-item__start-detail" :: options)
 
 
 {-| List item's start detail icon
 -}
+startDetailIcon : String -> List (Property Icon.Config m) -> Html m
 startDetailIcon icon options =
     Icon.view icon (cs "mdc-list-item__start-detail" :: options)
 
 
 {-| List item's end detail
 -}
+endDetail : List (Property c m) -> List (Html m) -> Html m
 endDetail options =
     Options.styled Html.span (cs "mdc-list-item__end-detail" :: options)
 
 
 {-| List item's end detail icon
 -}
+endDetailIcon : String -> List (Property Icon.Config m) -> Html m
 endDetailIcon icon options =
     Icon.view icon (cs "mdc-list-item__end-detail" :: options)
 
@@ -97,25 +101,31 @@ avatarImage src options =
     Options.styled_ Html.img (cs "mdc-list-item__start-detail"::options) [ Html.Attributes.src src ] []
 
 
+text : List (Property c m) -> List (Html m) -> Html m
 text options =
     Options.styled Html.span (cs "mdc-list-item__text"::options)
 
 
+secondary : List (Property c m) -> List (Html m) -> Html m
 secondary options =
     Options.styled Html.span (cs "mdc-list-item__text__secondary"::options)
 
 
+divider : List (Property c m) -> Html m
 divider options =
     Options.styled Html.hr (cs "mdc-list-divider"::options) []
 
 
+inset : Property c m
 inset =
     cs "mdc-list-divider--inset"
 
 
+group : List (Property c m) -> List (Html m) -> Html m
 group options =
     Options.styled Html.div (cs "mdc-list-group"::options)
 
 
+subheader : List (Property c m) -> List (Html m) -> Html m
 subheader options =
     Options.styled Html.div (cs "mdc-list-group__subheader"::options)

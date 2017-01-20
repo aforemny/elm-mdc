@@ -1,15 +1,10 @@
 module Demo.Elevation exposing (view, update, Msg, Model, model)
 
 import Html exposing (..)
-import Array
 import Material.Options as Options exposing (cs, css, Style, when)
 import Material.Elevation as Elevation
-import Material.Typography as Typography
-import Material.Slider as Slider
-import Material.Toggles as Toggles
 import Material
 import Demo.Page as Page
-import Demo.Code as Code
 
 
 -- MODEL

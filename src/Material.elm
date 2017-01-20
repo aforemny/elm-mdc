@@ -3,7 +3,6 @@ module Material
         ( Model
         , model
         , Msg
-        , Container
         , update
         , update_
         , subscriptions
@@ -51,6 +50,7 @@ The view function of most components has this signature:
 It's helpful to compare this signature to the standard one of `core/html`, e.g.,
 `Html.div`:
 
+    view : (Msg -> m) -> Model -> List (Property m)  -> List (Html m) -> Html m
     div  :                        List (Attribute m) -> List (Html m) -> Html m
 
 1. For technical reasons, rather than using `Html.map f (view ...)`, you
@@ -164,80 +164,66 @@ module as a starting point
 
 ## Shorthands
 
-@docs Model, model, Msg, Container, update, update_, subscriptions, init
+@docs Model, model, Msg, update, update_, subscriptions, init
 -}
 
 import Dict
-import Material.Component as Component exposing (Indexed, Msg(..))
+import Material.Button as Button
+import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
 import Material.Helpers exposing (map1st)
-import Material.Button as Button
-import Material.Textfield as Textfield
-import Material.Menu as Menu
-import Material.Snackbar as Snackbar
 import Material.Layout as Layout
+import Material.Menu as Menu
+import Material.Msg exposing (Msg(..))
+import Material.Select as Select
+import Material.Tabs as Tabs
+import Material.Textfield as Textfield
 import Material.Toggles as Toggles
 import Material.Tooltip as Tooltip
-import Material.Tabs as Tabs
 
 
 {-| Model encompassing all Material components.
 -}
-type alias Model =
+type alias Model = 
     { button : Indexed Button.Model
     , textfield : Indexed Textfield.Model
     , menu : Indexed Menu.Model
-    , snackbar : Maybe (Snackbar.Model Int)
+    --, snackbar : Maybe (Snackbar.Model Int)
     , layout : Layout.Model
     , toggles : Indexed Toggles.Model
     , tooltip : Indexed Tooltip.Model
     , tabs : Indexed Tabs.Model
+    , select : Indexed Select.Model
     }
 
 
 {-| Initial model.
 -}
 model : Model
-model =
+model = 
     { button = Dict.empty
     , textfield = Dict.empty
     , menu = Dict.empty
-    , snackbar = Nothing
+    --, snackbar = Nothing
     , layout = Layout.defaultModel
     , toggles = Dict.empty
     , tooltip = Dict.empty
     , tabs = Dict.empty
+    , select = Dict.empty
     }
 
 
 {-| Material message type
-TODO: m
 -}
 type alias Msg m =
-    Component.Msg 
-        Button.Msg
-        Textfield.Msg
-        (Menu.Msg m)
-        -- Snackbar.Msg
-        Layout.Msg
-        Toggles.Msg
-        Tooltip.Msg
-        Tabs.Msg
-        (List m)
-
-
-
-{-| Type of records that have an MDL model container. 
--}
-type alias Container c =
-    { c | mdl : Model }
+    Material.Msg.Msg m
 
 
 {-| Update function for the above Msg. Provide as the first
 argument a lifting function that embeds the generic MDL action in
 your own Msg type.
 -}
-update : (Msg m -> m) -> Msg m -> Container c -> ( Container c, Cmd m )
+update : (Msg m -> m) -> Msg m -> { c | mdl : Model } -> (  { c | mdl : Model }, Cmd m )
 update lift msg container =
   update_ lift msg (.mdl container)
       |> map1st (Maybe.map (\mdl -> { container | mdl = mdl }))
@@ -259,6 +245,9 @@ update_ lift msg store =
        MenuMsg idx msg ->
            Menu.react (MenuMsg idx >> lift) msg idx store
 
+       SelectMsg idx msg ->
+           Select.react (SelectMsg idx >> lift) msg idx store
+
        LayoutMsg msg ->
            Layout.react (LayoutMsg >> lift) msg store
 
@@ -273,7 +262,6 @@ update_ lift msg store =
 
        Dispatch msgs -> 
            (Nothing, Dispatch.forward msgs)
-
 
 {-| Subscriptions and initialisation of elm-mdl. Some components requires
 subscriptions in order to function. Hook these up to your containing app as
@@ -302,12 +290,7 @@ follows.
 Currently, only Layout and Menu require subscriptions, and only Layout require
 initialisation.
 -}
-subscriptions :
-    (Component.Msg button textfield (Menu.Msg m) Layout.Msg toggles tooltip tabs dispatch
-     -> m
-    )
-    -> { model | mdl : Model }
-    -> Sub m
+subscriptions : (Msg m -> m) -> { model | mdl : Model } -> Sub m
 subscriptions lift model =
     Sub.batch
         [ Layout.subs lift model.mdl
@@ -317,8 +300,6 @@ subscriptions lift model =
 
 {-| Initialisation. See `subscriptions` above.
 -}
-init :
-    (Component.Msg button textfield menu Layout.Msg toggles tooltip tabs dispatch -> m)
-    -> Cmd m
+init : (Msg m -> m) -> Cmd m
 init lift =
     Layout.sub0 lift

@@ -7,6 +7,8 @@ module Material.Icon
         , view
         , i
         , Property
+        , Config
+        , defaultConfig
         )
 
 {-| Convenience functions for producing Material Design Icons. Refer to

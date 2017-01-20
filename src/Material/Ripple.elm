@@ -1,13 +1,14 @@
 module Material.Ripple exposing (..)
 
-import Html exposing (..)
+import DOM
 import Html.Attributes exposing (..)
 import Html.Events
+import Html exposing (..)
 import Json.Decode as Json exposing (field, at)
-import Platform.Cmd exposing (Cmd, none)
 import Material.Helpers exposing (effect, pure, cssTransitionStep)
 import Material.Options as Options
-import DOM
+import Material.Internal.Ripple exposing (Msg(..), DOMState)
+import Platform.Cmd exposing (Cmd, none)
 
 
 -- MODEL
@@ -45,14 +46,8 @@ model =
 -- ACTION, UPDATE
 
 
-type alias DOMState =
-    { rect : DOM.Rectangle
-    , clientX : Maybe Float
-    , clientY : Maybe Float
-    , touchX : Maybe Float
-    , touchY : Maybe Float
-    , type_ : String
-    }
+type alias DOMState
+    = Material.Internal.Ripple.DOMState
 
 
 geometryDecoder : Json.Decoder DOMState
@@ -91,10 +86,8 @@ computeMetrics g =
             |> Maybe.map (\( x, y ) -> Metrics rect x y)
 
 
-type Msg
-    = Down DOMState
-    | Up
-    | Tick
+type alias Msg
+    = Material.Internal.Ripple.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

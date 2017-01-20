@@ -8,11 +8,8 @@ import Material.Grid as Grid
 import Material.Options as Options exposing (css, cs)
 import Material.Helpers as Helpers
 import Material.Toggles as Toggles
-import Material.Button as Button
-import Material.Typography as Typography
 import Material
 import Demo.Page as Page
-import Demo.Code as Code
 
 
 -- MODEL

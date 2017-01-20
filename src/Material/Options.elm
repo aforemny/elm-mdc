@@ -146,7 +146,7 @@ import Html exposing (Html, Attribute)
 import Html.Attributes
 import Html.Events
 import Json.Decode as Json
-import Material.Options.Internal as Internal exposing (..)
+import Material.Internal.Options as Internal exposing (..)
 
 
 

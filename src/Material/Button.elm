@@ -78,12 +78,14 @@ for details about what type of buttons are appropriate for which situations.
 
 -}
 
-import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html exposing (..)
 import Material.Component as Component exposing (Indexed, Index)
 import Material.Helpers as Helpers
+import Material.Internal.Button exposing (Msg)
+import Material.Internal.Options as Internal
+import Material.Msg
 import Material.Options as Options exposing (cs, css, when)
-import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
 
 -- MODEL
@@ -105,11 +107,10 @@ defaultModel =
 
 -- ACTION, UPDATE
 
-
 {-|
 -}
 type alias Msg =
-    Ripple.Msg
+    Material.Internal.Button.Msg
 
 
 {-| Component update.
@@ -429,13 +430,13 @@ type alias Store s =
 {-| Component react function (update variant). Internal use only.
 -}
 react :
-    (Component.Msg Msg textfield menu layout toggles tooltip tabs dispatch -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Component.ButtonMsg (Component.generalise update)
+    Component.react get set Material.Msg.ButtonMsg (Component.generalise update)
 
 
 {-| Component render.  Below is an example, assuming boilerplate setup as
@@ -449,11 +450,11 @@ indicated in `Material` and a user message `PollMsg`.
       [ text "Fetch new" ]
 -}
 render :
-    (Component.Msg Msg textfield menu snackbar toggles tooltip tabs dispatch -> m)
+    (Material.Msg.Msg m -> m)
     -> Index
     -> { a | button : Indexed Ripple.Model }
     -> List (Property m)
     -> List (Html m)
     -> Html m
 render =
-    Component.render get view Component.ButtonMsg
+    Component.render get view Material.Msg.ButtonMsg

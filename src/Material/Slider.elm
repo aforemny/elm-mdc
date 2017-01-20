@@ -51,7 +51,7 @@ for a live demo.
 import Html exposing (..)
 import Html.Attributes as Html
 import Material.Options as Options exposing (cs, css, when)
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
 import Material.Helpers as Helpers
 import Json.Decode as Json
 

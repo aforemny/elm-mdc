@@ -39,7 +39,7 @@ for a live demo.
 import Html exposing (..)
 import Html.Attributes as Html
 import Material.Options as Options exposing (Style, Property, cs)
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
 
 
 {-| Dialog header

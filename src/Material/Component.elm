@@ -1,7 +1,6 @@
 module Material.Component
     exposing
-        ( Msg(..)
-        , Index
+        ( Index
         , Indexed
         , indexed
         , render
@@ -13,26 +12,14 @@ module Material.Component
         )
 
 {-|
-@docs Index, Indexed, Store
+@docs Indexed, Store
 @docs indexed, render
 @docs subs
 -}
 
 import Dict exposing (Dict)
 import Material.Helpers exposing (map1st, map2nd)
-
-
-type Msg button textfield menu layout toggles tooltip tabs dispatch
-    = ButtonMsg Index button
-    | TextfieldMsg Index textfield
-    | MenuMsg Index menu
-      --| SnackbarMsg        snackbar
-    | LayoutMsg layout
-    | TogglesMsg Index toggles
-    | TooltipMsg Index tooltip
-    | TabsMsg Index tabs
-    | Dispatch dispatch
-
+import Material.Msg exposing (Index, Msg(..))
 
 {-| Type of indices. An index has to be `comparable`
 
@@ -42,8 +29,8 @@ support nested dynamically constructed elements: Use indices `[0]`, `[1]`, ...
 for statically known top-level components, then use `[0,0]`, `[0,1]`, ...
 for a dynamically generated list of components.
 -}
-type alias Index =
-    List Int
+type alias Index
+    = Material.Msg.Index
 
 
 {-| Indexed families of things.
@@ -75,8 +62,8 @@ indexed get_model set_model model0 =
 render1 :
     (store -> model)
     -> ((msg -> m) -> model -> x)
-    -> (msg -> mdlmsg)
-    -> (mdlmsg -> m)
+    -> (msg -> Msg m)
+    -> (Msg m -> m)
     -> store
     -> x
 render1 get_model view ctor =
@@ -89,14 +76,14 @@ render1 get_model view ctor =
 render :
     (Index -> store -> model)
     -> ((msg -> m) -> model -> x)
-    -> (Index -> msg -> mdlmsg)
-    -> (mdlmsg -> m)
+    -> (Index -> msg -> Msg m)
+    -> (Msg m -> m)
     -> Index
     -> store
     -> x
 render get_model view ctor =
     \lift idx store ->
-        view (ctor idx >> lift) (get_model idx store)
+        view (ctor idx >> lift) (get_model idx store) 
 
 
 type alias Update msg m model =

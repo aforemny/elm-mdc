@@ -1,23 +1,13 @@
 module Demo.Lists exposing (..)
 
-import Demo.Code as Code
 import Demo.Page as Page
 import Html.Attributes as Html
 import Html exposing (Html)
 import Material
-import Material.Button as Button
-import Material.Color as Color
-import Material.Grid as Grid
-import Material.Helpers as Helpers
 import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (div, styled, cs, css, when)
-import Material.Ripple as Ripple
-import Material.Toggles as Toggles
-import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
-import Set exposing (Set)
-import String
 
 
 -- MODEL
@@ -51,6 +41,8 @@ update msg model =
 
 -- VIEW
 
+
+inlineCss : Html msg
 inlineCss =
     Html.node "style"
     [ Html.type_ "text/css"
@@ -88,6 +80,7 @@ i.mdc-list-item__start-detail {
 """ ]
 
 
+singleLine : List (Options.Style m) -> Html m
 singleLine options =
     Lists.ul options
     ( Lists.li [] [ Html.text "Single-line item" ]
@@ -95,6 +88,7 @@ singleLine options =
     )
 
 
+startDetail : List (Options.Style m) -> Html m
 startDetail options =
     Lists.ul options
     ( Lists.li []
@@ -105,6 +99,7 @@ startDetail options =
     )
 
 
+startDetailExample : Html msg
 startDetailExample =
     Lists.ul []
     [ Lists.li []
@@ -122,6 +117,7 @@ startDetailExample =
     ]
 
 
+avatarList : List (Options.Style m) -> Html m
 avatarList options =
     Lists.ul
     ( Lists.avatar
@@ -142,6 +138,7 @@ avatarList options =
     ]
 
 
+avatarListExample : Html msg
 avatarListExample =
     Lists.ul
     [ Lists.avatar
@@ -161,6 +158,7 @@ avatarListExample =
     ]
 
 
+endDetail : List (Options.Style m) -> Html m
 endDetail options =
     Lists.ul options
     ( Lists.li []
@@ -171,6 +169,7 @@ endDetail options =
     )
 
 
+avatarPlusEndDetail : List (Options.Style m) -> Html m
 avatarPlusEndDetail options =
     Lists.ul
     ( Lists.avatar
@@ -185,6 +184,7 @@ avatarPlusEndDetail options =
     )
 
 
+avatarWithTextAndIconExample : Html m
 avatarWithTextAndIconExample =
     let
         item src text icon =
@@ -210,6 +210,7 @@ avatarWithTextAndIconExample =
     ]
 
 
+twoLine : List (Options.Style m) -> Html m
 twoLine options =
     Lists.ul
     ( Lists.twoLine
@@ -227,6 +228,7 @@ twoLine options =
     )
 
 
+startDetail_ : List (Options.Style m) -> Html m
 startDetail_ options =
     Lists.ul
     ( Lists.twoLine
@@ -245,6 +247,7 @@ startDetail_ options =
     )
 
 
+avatarList_ : List (Options.Style m) -> Html m
 avatarList_ options =
     Lists.ul
     ( Lists.twoLine
@@ -264,6 +267,7 @@ avatarList_ options =
     )
 
 
+endDetail_ : List (Options.Style m) -> Html m
 endDetail_ options =
     Lists.ul
     ( Lists.twoLine
@@ -282,6 +286,7 @@ endDetail_ options =
     )
 
 
+twoLineAvatarPlusTextPlusIconExample : Html m
 twoLineAvatarPlusTextPlusIconExample =
     let
         item primary secondary =
@@ -334,6 +339,7 @@ twoLineAvatarPlusTextPlusIconExample =
     |> Html.div []
 
 
+fullWidthDividers : Html m
 fullWidthDividers =
     Lists.ul []
     ( List.concat
@@ -347,6 +353,7 @@ fullWidthDividers =
     )
 
 
+insetDividers : Html m
 insetDividers =
     Lists.ul
     [ Lists.avatar
@@ -368,6 +375,7 @@ insetDividers =
     )
 
 
+basicGroups : Html m
 basicGroups =
     Lists.group []
     [ Lists.subheader [] [ Html.text "List 1" ]
@@ -384,6 +392,7 @@ basicGroups =
     ]
 
 
+groupsExample : Html m
 groupsExample =
     let
         file =
@@ -460,6 +469,7 @@ groupsExample =
     |> Html.div []
 
 
+interactiveList : Html m
 interactiveList =
     -- TODO: ripple
     Lists.ul []

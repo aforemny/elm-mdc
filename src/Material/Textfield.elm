@@ -22,9 +22,11 @@ module Material.Textfield
         , expandableIcon
         , Model
         , defaultModel
-        , Msg(..)
+        , Msg
         , update
         , view
+        , Config
+        , defaultConfig
         )
 
 
@@ -57,7 +59,7 @@ for a live demo.
 @docs render
 
 # Options
-@docs Property, value, defaultValue
+@docs Property, Config, defaultConfig, value, defaultValue
 
 ## Appearance
 
@@ -78,14 +80,20 @@ for a live demo.
 
 -}
 
-import Html exposing (div, span, Html, text)
 import Html.Attributes exposing (class, type_, style)
 import Html.Events exposing (targetValue, keyCode, defaultOptions)
+import Html exposing (div, span, Html, text)
 import Json.Decode as Decoder
-import Material.Component as Component exposing (Index, Indexed)
+import Material.Internal.Textfield exposing (Msg(..))
+import Material.Msg exposing (Index) 
+import Material.Component as Component exposing (Indexed)
 import Material.Options as Options exposing (cs, css, nop, Style, when)
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
 import Material.Icon as Icon
+import Material.Internal.Options as Internal
+import Material.Internal.Textfield exposing (Msg(..))
+import Material.Msg
+import Material.Options as Options exposing (cs, css, nop, Style, when)
 
 
 -- OPTIONS
@@ -98,6 +106,8 @@ type Kind
     | Email
 
 
+{-| TODO
+-}
 type alias Config m =
     { labelText : Maybe String
     , labelFloat : Bool
@@ -114,6 +124,8 @@ type alias Config m =
     }
 
 
+{-| TODO
+-}
 defaultConfig : Config m
 defaultConfig =
     { labelText = Nothing
@@ -306,13 +318,10 @@ defaultModel =
 -- ACTIONS, UPDATE
 
 
-{-| Component actions. `Input` carries the new value of the field.
+{-| Component actions. 
 -}
-type Msg
-    = Blur
-    | Focus
-    | Input String
-    | NoOp
+type alias Msg
+    = Material.Internal.Textfield.Msg
 
 
 {-| Component update.
@@ -405,26 +414,26 @@ view lift model options _ =
                 Just _ ->
                     (\x ->
                         [ Options.styled_ Html.label
-                            [ cs "mdc-button"
-                            , cs "mdc-js-button"
-                            , cs "mdc-button--icon"
+                            [ cs "mdl-button"
+                            , cs "mdl-js-button"
+                            , cs "mdl-button--icon"
                             ]
                             labelFor
                             [ Icon.i config.expandableIcon ]
                         , Options.styled Html.div
-                            [ cs "mdc-textfield__expandable-holder" ]
+                            [ cs "mdl-textfield__expandable-holder" ]
                             x
                         ]
                     )
     in
         Internal.applyContainer summary
             div
-            [ cs "mdc-textfield"
-            , cs "mdc-js-textfield"
+            [ cs "mdl-textfield"
+            , cs "mdl-js-textfield"
             , cs "is-upgraded"
             , Internal.on1 "focus" lift Focus
             , Internal.on1 "blur" lift Blur
-            , cs "mdc-textfield--floating-label" |> when config.labelFloat
+            , cs "mdl-textfield--floating-label" |> when config.labelFloat
             , cs "is-invalid" |> when (config.error /= Nothing)
             , cs "is-dirty"
                 |> when (case config.value of
@@ -433,12 +442,12 @@ view lift model options _ =
                            Nothing -> model.isDirty)
             , cs "is-focused" |> when (model.isFocused && not config.disabled)
             , cs "is-disabled" |> when config.disabled
-            , cs "mdc-textfield--expandable" |> when (config.expandable /= Nothing)
+            , cs "mdl-textfield--expandable" |> when (config.expandable /= Nothing)
             , preventEnterWhenMaxRowsExceeded
             ] <| expHolder
             [ Internal.applyInput summary
                 (if config.kind == Textarea then Html.textarea else Html.input)
-                [ cs "mdc-textfield__input"
+                [ cs "mdl-textfield__input"
                 , css "outline" "none"
                 , Internal.on1 "focus" lift Focus
                 , Internal.on1 "blur" lift Blur
@@ -469,7 +478,7 @@ view lift model options _ =
                 ]
                 []
             , Html.label
-                ([ class "mdc-textfield__label" ] ++ labelFor)
+                ([ class "mdl-textfield__label" ] ++ labelFor)
                 (case config.labelText of
                     Just str ->
                         [ text str ]
@@ -478,7 +487,7 @@ view lift model options _ =
                         []
                 )
             , config.error
-                |> Maybe.map (\e -> span [ class "mdc-textfield__error" ] [ text e ])
+                |> Maybe.map (\e -> span [ class "mdl-textfield__error" ] [ text e ])
                 |> Maybe.withDefault (div [] [])
             ]
 
@@ -497,7 +506,7 @@ type alias Store s =
 {-| Component react function.
 -}
 react
-    : ( Component.Msg button Msg menu layout toggles tooltip tabs dispatch -> msg)
+    : (Material.Msg.Msg m -> msg)
     -> Msg
     -> Index
     -> Store s
@@ -505,7 +514,7 @@ react
 react =
     Component.react get
         set
-        Component.TextfieldMsg update
+        Material.Msg.TextfieldMsg update
 
 
 {-| Component render. Below is an example, assuming boilerplate setup as indicated
@@ -517,6 +526,7 @@ react =
       , Textfield.value model.age
       , Options.onInput (String.toInt >> ChangeAgeMsg)
       ]
+      []
 
 Be aware that styling (third argument) is applied to the outermost element
 of the textfield's implementation, and so is mostly useful for positioning
@@ -524,12 +534,14 @@ of the textfield's implementation, and so is mostly useful for positioning
 if you need to apply styling to the underlying `<input>` element.
 -}
 render
-    : (Component.Msg button Msg menu layout toggles tooltip tabs (List m) -> m)
+    : (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> x
     -> Html m       
 render lift index store options =
-    Component.render get view Component.TextfieldMsg lift index store
+    Component.render get view Material.Msg.TextfieldMsg lift index store
         (Internal.dispatch lift :: options)
+
+-- TODO: use inject ^^^^^

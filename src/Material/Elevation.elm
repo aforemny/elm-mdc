@@ -43,7 +43,6 @@ for a live demo.
 
 -}
 
-import Array exposing (Array)
 import Material.Options exposing (..)
 
 

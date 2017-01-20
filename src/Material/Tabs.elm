@@ -76,12 +76,15 @@ for a live demo.
 @docs react
 -}
 
-import Platform.Cmd exposing (Cmd, none)
+import Dict exposing (Dict)
+import Html.Attributes exposing (class)
 import Html exposing (Html)
-import Material.Component as Component exposing (Indexed, Index)
+import Material.Internal.Tabs exposing (Msg(..))
+import Material.Component as Component exposing (Indexed)
 import Material.Options as Options exposing (cs, when)
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
 import Material.Ripple as Ripple
+import Material.Msg exposing (Index)
 import Html.Attributes exposing (class)
 import Html.Keyed as Keyed
 import Dict exposing (Dict)
@@ -111,8 +114,8 @@ defaultModel =
 
 {-| Component action.
 -}
-type Msg
-    = Ripple Int Ripple.Msg
+type alias Msg
+    = Material.Internal.Tabs.Msg
 
 
 {-| Component update.
@@ -289,24 +292,24 @@ type alias Store s =
 {-| Component react function.
 -}
 react :
-    (Component.Msg button textfield menu layout toggles tooltip Msg dispatch -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg 
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Component.TabsMsg (Component.generalise update)
+    Component.react get set Material.Msg.TabsMsg (Component.generalise update)
 
 
 {-| Component render.
 -}
 render :
-    (Component.Msg button textfield menu snackbar toggles tooltip Msg dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> Store s
     -> List (Property m)
     -> List (Label m)
     -> List (Html m)
     -> Html m
 render =
-    Component.render get view Component.TabsMsg
+    Component.render get view Material.Msg.TabsMsg

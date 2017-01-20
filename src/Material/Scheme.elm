@@ -31,7 +31,6 @@ html](https://github.com/debois/elm-mdl/blob/master/demo/page.html) helpful.
 @docs topWithScheme, top
 -}
 
-import String
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Material.Color exposing (Hue(..), Color)

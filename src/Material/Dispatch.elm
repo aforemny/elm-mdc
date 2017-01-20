@@ -26,7 +26,7 @@ only if you want to have an API where users specify
 options as lists of things and we want to accumulate event-handlers
 for various events.
 
-To see how they are used in [elm-mdl](http://package.elm-lang.org/packages/debois/elm-mdl/latest) see [collecting the handlers](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm#L70-L73) and [adding them as attributes](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Options/Internal.elm#L112-L125)
+To see how they are used in [elm-mdl](http://package.elm-lang.org/packages/debois/elm-mdl/latest) see [collecting the handlers](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Internal.Options.elm#L70-L73) and [adding them as attributes](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Internal.Options.elm#L112-L125)
 
 @docs Config, defaultConfig, setDecoder, getDecoder, setMsg, toAttributes
 @docs add
@@ -34,9 +34,10 @@ To see how they are used in [elm-mdl](http://package.elm-lang.org/packages/deboi
 
 -}
 
-import Json.Decode as Json exposing (Decoder)
-import Html.Events
 import Html
+import Html.Events
+import Json.Decode as Json exposing (Decoder)
+import Material.Internal.Dispatch exposing (Config(..))
 import Task
 
 
@@ -44,11 +45,8 @@ import Task
 
 {-| Dispatch configuration type
  -}
-type Config msg =
-  Config
-    { decoders : List (String, (Decoder msg, Maybe Html.Events.Options))
-    , lift : Maybe (Decoder (List msg) -> Decoder msg)
-    }
+type alias Config msg
+    = Material.Internal.Dispatch.Config msg
 
 
 {-| Empty configuration

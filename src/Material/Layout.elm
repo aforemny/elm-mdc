@@ -4,7 +4,7 @@ module Material.Layout
         , subscriptions
         , Model
         , defaultModel
-        , Msg(ToggleDrawer)
+        , Msg
         , update
         , Property
         , fixedDrawer
@@ -139,22 +139,25 @@ be (assuming a tab width of 1384 pixels):
 -}
 
 import Dict exposing (Dict)
-import Maybe exposing (andThen, map)
-import Html exposing (..)
+import DOM
+import DOM
 import Html.Attributes exposing (class, classList, tabindex)
 import Html.Events as Events exposing (on)
+import Html exposing (..)
 import Html.Keyed as Keyed
-import Platform.Cmd exposing (Cmd)
-import Window
 import Json.Decode as Decoder exposing (field)
-import Task
 import Material.Component as Component exposing (Indexed, indexed, render1, subs)
 import Material.Helpers as Helpers exposing (filter, delay, pure, map1st, map2nd)
-import Material.Ripple as Ripple
 import Material.Icon as Icon
+import Material.Internal.Layout exposing (Msg(..))
+import Material.Internal.Layout exposing (Msg(..), TabScrollState)
+import Material.Internal.Options as Internal
+import Material.Msg
+import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, nop, css, when, styled, id)
-import Material.Options.Internal as Internal
-import DOM
+import Material.Ripple as Ripple
+import Task
+import Window
 
 
 -- SETUP
@@ -180,14 +183,6 @@ subscriptions model =
 
 
 -- MODEL
-
-
-type alias TabScrollState =
-    { canScrollLeft : Bool
-    , canScrollRight : Bool
-    , width : Maybe Int
-    }
-
 
 
 {- Elm don't give us a good way to measure the width of the tabs, so we
@@ -257,17 +252,8 @@ defaultModel =
 
 {-| Component messages.
 -}
-type Msg
-    = ToggleDrawer
-    | Resize Int
-    | ScrollTab TabScrollState
-    | ScrollPane Bool Float
-      -- True means fixedHeader
-    | TransitionHeader { toCompact : Bool, fixedHeader : Bool }
-    | TransitionEnd
-    | NOP
-      -- Subcomponents
-    | Ripple Int Ripple.Msg
+type alias Msg
+    = Material.Internal.Layout.Msg
 
 
 {-| Component update.
@@ -1037,36 +1023,31 @@ Excerpt:
     }
 -}
 render :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
+    (Material.Msg.Msg m -> m)
     -> { a | layout : Model }
     -> List (Property m)
     -> Contents m
     -> Html m
 render =
-    Component.render1 get view Component.LayoutMsg
+    Component.render1 get view Material.Msg.LayoutMsg
 
 
 {-| Component subscriptions (type compatible with render). Either this or
 `subscriptions` must be connected for the Layout to be responsive under
 viewport size changes.
 -}
-subs :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
-    -> Store s
-    -> Sub m
+subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
 subs lift =
-    get >> subscriptions >> Sub.map (Component.LayoutMsg >> lift)
+    get >> subscriptions >> Sub.map (Material.Msg.LayoutMsg >> lift)
 
 
 {-| Component subscription initialiser. Either this or
 `init` must be connected for the Layout to be responsive under
 viewport size changes. Example use:
 -}
-sub0 :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
-    -> Cmd m
+sub0 : (Material.Msg.Msg m -> m) -> Cmd m
 sub0 lift =
-    Tuple.second init |> Cmd.map (Component.LayoutMsg >> lift)
+    Tuple.second init |> Cmd.map (Material.Msg.LayoutMsg >> lift)
 
 
 {-| Toggle drawer.
@@ -1074,11 +1055,9 @@ sub0 lift =
 This function is for use with component typing. For plain TEA, simply issue
 an update for the exposed Msg `ToggleDrawer`.
 -}
-toggleDrawer :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
-    -> m
+toggleDrawer : (Material.Msg.Msg m -> m) -> m
 toggleDrawer lift =
-    (Component.LayoutMsg >> lift) ToggleDrawer
+    (Material.Msg.LayoutMsg >> lift) ToggleDrawer
 
 
 {-| Set tabsWidth

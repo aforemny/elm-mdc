@@ -6,7 +6,7 @@ module Material.Snackbar
         , model
         , toast
         , snackbar
-        , Msg(Begin, End, Click)
+        , Msg(..)
         , update
         , view
         )
@@ -217,7 +217,7 @@ type Msg a
     = Begin a
     | End a
     | Click a
-      -- Private
+    -- Private
     | Move Int Transition
 
 

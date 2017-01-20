@@ -8,13 +8,8 @@ import Html exposing (..)
 import Material
 import Material.Button as Button
 import Material.Card as Card
-import Material.Color as Color
-import Material.Elevation as Elevation
 import Material.Helpers exposing (map1st, map2nd)
-import Material.Icon as Icon
 import Material.Options as Options exposing (cs, css)
-import Material.Tabs as Tabs
-import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 
@@ -101,6 +96,7 @@ type alias Card =
     Model -> ( Html Msg, String, Maybe (Html Msg) )
 
 
+demoCard : List (Options.Style m) -> List (Html m) -> Html m
 demoCard options =
     Card.view
     (  css "margin" "24px"
@@ -110,12 +106,14 @@ demoCard options =
     )
 
 
+demoSupportingText : Html msg
 demoSupportingText =
     Card.supportingText []
     [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
     ]
 
 
+card0 : Model -> Html Msg
 card0 model =
     demoCard
     [
@@ -131,6 +129,7 @@ card0 model =
     ]
 
 
+demoMedia : List (Options.Style m) -> List (Html m) -> Html m
 demoMedia options =
     Card.media
     ( css "background-size" "cover"
@@ -139,6 +138,7 @@ demoMedia options =
     )
 
 
+demoActions : List (Options.Style Msg) -> Html Msg
 demoActions options =
     Card.actions
     options
@@ -155,26 +155,32 @@ demoActions options =
     ]
 
 
+demoTitle0 : Html m
 demoTitle0 =
     Card.title [ Card.large ] [ text "Title" ]
 
 
+demoSubtitle0 : Html m
 demoSubtitle0 =
     Card.subtitle [] [ text "Subehead" ]
 
 
+demoTitle1 : Html m
 demoTitle1 =
     Card.title [ Card.large ] [ text "Title goes here" ]
 
 
+demoSubtitle1 : Html m
 demoSubtitle1 =
     Card.subtitle [] [ text "Subtitle here" ]
 
 
+demoTitle2 : Html m
 demoTitle2 =
     Card.title [ Card.large ] [ text "Title" ]
 
 
+demoPrimary : List (Options.Style m) -> Html m
 demoPrimary options =
     Card.primary
     (  css "position" "relative"
@@ -193,6 +199,7 @@ demoPrimary options =
     ]
 
 
+card1 : Model -> Html Msg
 card1 model =
     demoCard []
     [ demoPrimary []
@@ -217,6 +224,7 @@ card2 model =
     ]
 
 
+demoPrimary2 : List (Options.Style m) -> Html m
 demoPrimary2 options =
     Card.primary
     (  css "position" "relative"
@@ -227,6 +235,7 @@ demoPrimary2 options =
     ]
 
 
+card3 : Model -> Html Msg
 card3 model =
     demoCard []
     [ demoMedia
@@ -238,6 +247,7 @@ card3 model =
     ]
 
 
+card4 : Model -> Html Msg
 card4 model =
     demoCard []
     [ Card.primary
@@ -253,6 +263,7 @@ card4 model =
     ]
 
 
+card5 : Model -> Html Msg
 card5 model =
     demoCard
     [ Card.darkTheme
@@ -282,6 +293,7 @@ card5 model =
     ]
 
 
+card6 : Model -> Html Msg
 card6 model =
     demoCard []
     [ demoMedia
@@ -299,6 +311,7 @@ card6 model =
     ]
 
 
+mediaItem : List (Options.Style Msg) -> Html Msg
 mediaItem options =
     Card.mediaItem options
     [ Html.img
@@ -312,6 +325,7 @@ mediaItem options =
     ]
 
 
+demoPrimary3 : List (Options.Style Msg) -> Html Msg
 demoPrimary3 options =
     Card.primary
     (  css "position" "relative"
@@ -322,14 +336,17 @@ demoPrimary3 options =
     ]
 
 
+demoTitle3 : Html msg
 demoTitle3 =
     Card.title [ Card.large ] [ text "Title here" ]
 
 
+demoSubtitle3 : Html msg
 demoSubtitle3 =
     Card.subtitle [] [ text "Subtitle here" ]
 
 
+card7 : Model -> Html Msg
 card7 model =
     demoCard []
     [ Card.horizontalBlock []
@@ -340,6 +357,7 @@ card7 model =
     ]
 
 
+card8 : Model -> Html Msg
 card8 model =
     demoCard []
     [ Card.horizontalBlock []
@@ -350,6 +368,7 @@ card8 model =
     ]
 
 
+card9 : Model -> Html Msg
 card9 model =
     demoCard []
     [ Card.horizontalBlock []
@@ -360,6 +379,7 @@ card9 model =
     ]
 
 
+card10 : Model -> Html Msg
 card10 model =
     demoCard
     [

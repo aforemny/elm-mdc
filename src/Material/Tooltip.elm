@@ -2,7 +2,7 @@ module Material.Tooltip
     exposing
         ( Model
         , defaultModel
-        , Msg(..)
+        , Msg
         , update
         , view
         , Property
@@ -81,12 +81,21 @@ If you do not use parts, you should not use `attach`, but instead add the
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Material.Component as Component exposing (Indexed, Index)
+import Material.Internal.Tooltip exposing (Msg(..), DOMState, defaultDOMState)
 import Material.Options as Options exposing (Style, cs, css, when)
-import Material.Options.Internal as Internal
+import Material.Internal.Options as Internal
+import Material.Component as Component exposing (Indexed)
+import Material.Msg exposing (Index)
 import DOM
 import Html.Events
+import Html exposing (..)
 import Json.Decode as Json exposing (field, at)
+import Material.Component as Component exposing (Indexed)
+import Material.Internal.Options as Internal
+import Material.Internal.Tooltip exposing (Msg(..))
+import Material.Msg
+import Material.Options as Options exposing (Style, cs, css, when)
+import Platform.Cmd exposing (Cmd, none)
 import String
 
 
@@ -116,9 +125,8 @@ defaultModel =
 
 {-| Component message.
 -}
-type Msg
-    = Enter DOMState
-    | Leave
+type alias Msg
+    = Material.Internal.Tooltip.Msg
 
 
 {-| Tooltip position
@@ -141,24 +149,6 @@ defaultPos =
     , marginTop = 0
     }
 
-
-{-| Position and offsets from dom events for the tooltip
--}
-type alias DOMState =
-    { rect : DOM.Rectangle
-    , offsetWidth : Float
-    , offsetHeight : Float
-    }
-
-
-{-| Default DOMState constructor
--}
-defaultDOMState : DOMState
-defaultDOMState =
-    { rect = { left = 0, top = 0, width = 0, height = 0 }
-    , offsetWidth = 0
-    , offsetHeight = 0
-    }
 
 
 {-| Calculates the position of the tooltip based on the event
@@ -447,57 +437,57 @@ type alias Store s =
 {-| Component react function
 -}
 react :
-    (Component.Msg button textfield menu layout toggles Msg tabs dispatch -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Component.TooltipMsg (Component.generalise update)
+    Component.react get set Material.Msg.TooltipMsg (Component.generalise update)
 
 
 {-| Component render.
 -}
 render :
-    (Component.Msg button textfield menu snackbar toggles Msg tabs dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
 render =
-    Component.render get view Component.TooltipMsg
+    Component.render get view Material.Msg.TooltipMsg
 
 
 {-| Mouse enter event handler, Component variant
 -}
 onMouseEnter :
-    (Component.Msg button textfield menu snackbar toggles Msg tabs dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> Options.Property c m
 onMouseEnter lift idx =
     Options.on
         "mouseenter"
-        (Json.map (Enter >> Component.TooltipMsg idx >> lift) stateDecoder)
+        (Json.map (Enter >> Material.Msg.TooltipMsg idx >> lift) stateDecoder)
 
 
 {-| Mouse leave event handler, Component variant
 -}
 onMouseLeave :
-    (Component.Msg button textfield menu snackbar toggles Msg tabs dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> Options.Property c m
 onMouseLeave lift idx =
     Options.on
         "mouseleave"
-        (Json.succeed (Leave |> Component.TooltipMsg idx |> lift))
+        (Json.succeed (Leave |> Material.Msg.TooltipMsg idx |> lift))
 
 
 {-| Attach event handlers for Component version
 -}
 attach :
-    (Component.Msg button textfield menu snackbar toggles Msg tabs dispatch -> m)
-    -> Component.Index
+    (Material.Msg.Msg m -> m)
+    -> Index
     -> Options.Property c m
 attach lift index =
     Options.many

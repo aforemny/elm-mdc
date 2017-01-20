@@ -1,17 +1,14 @@
-module Material.Options.Internal exposing (..)
+module Material.Internal.Options exposing (..)
 
-import Html exposing (Attribute)
 import Html.Attributes
 import Html.Events
-import String
+import Html exposing (Attribute)
 import Json.Decode as Json exposing (Decoder)
 import Material.Dispatch as Dispatch
-import Material.Component as Component
+import Material.Msg exposing (Msg(..))
+import String
 
 
-{-| Internal type of properties. Do not use directly; use constructor functions
-   in the Options module or `attribute` instead.
--}
 type Property c m
     = Class String
     | CSS ( String, String )
@@ -24,15 +21,6 @@ type Property c m
     | None
 
 
-{-| We've seen examples of users inadverdently overriding event handlers / html
-classes / css styling with this function, causing malfunctions in the library.
-So we hide it away here.
--}
-attribute : Html.Attribute m -> Property c m
-attribute =
-    Internal
-
-
 {-| Contents of a `Property c m`.
 -}
 type alias Summary c m =
@@ -43,6 +31,15 @@ type alias Summary c m =
     , dispatch : Dispatch.Config m
     , config : c
     }
+
+
+{-| We've seen examples of users inadverdently overriding event handlers / html
+classes / css styling with this function, causing malfunctions in the library.
+So we hide it away here.
+-}
+attribute : Html.Attribute m -> Property c m
+attribute =
+    Internal
 
 
 {- `collect` and variants are called multiple times by nearly every use of
@@ -224,19 +221,16 @@ container =
     option << (\style config -> { config | container = Many style :: config.container })
 
 
-
-dispatch
-  : (Component.Msg button textfield menu layout toggles tooltip tabs (List m) -> m)
-    -> Property c m 
+dispatch : (Msg m -> m) -> Property c m 
 dispatch lift =
-    Lift (Json.map Component.Dispatch >> Json.map lift)
+    Lift (Json.map Dispatch >> Json.map lift)
 
 
 {-| Inject dispatch
 -}
 inject
   : (a -> b -> List (Property c m) -> d)
-  -> (Component.Msg button textfield menu layout toggles tooltip tabs (List m) -> m)
+  -> (Msg m -> m)
   -> a
   -> b
   -> List (Property c m)
