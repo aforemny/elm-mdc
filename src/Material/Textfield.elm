@@ -5,6 +5,7 @@ module Material.Textfield
         , floatingLabel
         , error
         , value
+        , defaultValue
         , disabled
         , password
         , render
@@ -106,6 +107,7 @@ type alias Config m =
     , labelFloat : Bool
     , error : Maybe String
     , value : Maybe String
+    , defaultValue : Maybe String
     , disabled : Bool
     , kind : Kind
     , expandable : Maybe String
@@ -124,6 +126,7 @@ defaultConfig =
     , labelFloat = False
     , error = Nothing
     , value = Nothing
+    , defaultValue = Nothing
     , disabled = False
     , kind = Text
     , expandable = Nothing
@@ -193,6 +196,14 @@ value : String -> Property m
 value =
     Internal.option
         << (\str config -> { config | value = Just str })
+
+
+{-| Set the default value of the textfield
+-}
+defaultValue : String -> Property m
+defaultValue =
+    Internal.option
+        << (\str config -> { config | defaultValue = Just str })
 
 
 {-| Specifies that the input should automatically get focus when the page loads
@@ -420,14 +431,14 @@ view lift model options _ =
             , Internal.on1 "focus" lift Focus
             , Internal.on1 "blur" lift Blur
             , cs "mdl-textfield--floating-label" |> when config.labelFloat
-            , cs "is-invalid" |> when  (config.error /= Nothing)
-            , cs "is-dirty" 
+            , cs "is-invalid" |> when (config.error /= Nothing)
+            , cs "is-dirty"
                 |> when (case config.value of
                            Just "" -> False
                            Just _ -> True
                            Nothing -> model.isDirty)
-            , cs "is-focused" |> when  (model.isFocused && not config.disabled)
-            , cs "is-disabled" |> when  config.disabled
+            , cs "is-focused" |> when (model.isFocused && not config.disabled)
+            , cs "is-disabled" |> when config.disabled
             , cs "mdl-textfield--expandable" |> when (config.expandable /= Nothing)
             , preventEnterWhenMaxRowsExceeded
             ] <| expHolder
@@ -460,6 +471,12 @@ view lift model options _ =
 
                     Just v ->
                         Internal.attribute <| Html.Attributes.value v
+                , case config.defaultValue of
+                    Nothing ->
+                        Options.nop
+
+                    Just v ->
+                        Internal.attribute <| Html.Attributes.defaultValue v
                 ]
                 []
             , Html.label
@@ -475,7 +492,6 @@ view lift model options _ =
                 |> Maybe.map (\e -> span [ class "mdl-textfield__error" ] [ text e ])
                 |> Maybe.withDefault (div [] [])
             ]
-
 
 
 -- COMPONENT
