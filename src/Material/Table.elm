@@ -37,10 +37,10 @@ module Material.Table
 > intuitive for the user.
 
 See also the
-[Material Design Specification]([https://www.google.com/design/spec/components/data-tables.html).
+[Material Design Specification](https://www.google.com/design/spec/components/data-tables.html).
 
 Refer to
-[this this](https://debois.github.io/elm-mdl/#tables)
+[this site](https://debois.github.io/elm-mdl/#tables)
 for a live demo.
 
 # HTML
