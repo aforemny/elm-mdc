@@ -179,10 +179,10 @@ program ( kind, color, misc ) =
 
                 Default ->
                     ""
-            , "onClick MyClickMsg"
             ]
                 |> List.filter ((/=) "")
                 |> List.map ((++) "Button.")
+                |> \l -> List.append l ["Options.onClick MyClickMsg"]
                 |> String.join "\n  , "
 
         contents =
