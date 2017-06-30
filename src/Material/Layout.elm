@@ -702,9 +702,11 @@ headerView :
     (Msg -> m)
     -> Config m
     -> Model
+    -> Bool
+    -> Bool
     -> ( Maybe (Html m), List (Html m), Maybe (Html m) )
     -> Html m
-headerView lift config model ( drawerButton, rows, tabs ) =
+headerView lift config model hasHeader hasDrawer ( drawerButton, rows, tabs ) =
     let
         mode =
             case config.mode of
@@ -725,6 +727,7 @@ headerView lift config model ( drawerButton, rows, tabs ) =
     in
         Options.styled Html.header
             [ cs "mdl-layout__header"
+            , css "min-height" "48px" |> when (not hasHeader && not hasDrawer)
             , when
                 (config.mode
                     == Standard
@@ -893,7 +896,7 @@ view lift model options { drawer, header, tabs, main } =
             not (List.isEmpty (Tuple.first tabs))
 
         hasHeader =
-            hasTabs || (not (List.isEmpty header))
+            not (List.isEmpty header)
 
         hasDrawer =
             drawer /= []
@@ -926,7 +929,7 @@ view lift model options { drawer, header, tabs, main } =
                         , ( "has-tabs", hasTabs )
                         , ( "mdl-js-layout", True )
                         , ( "mdl-layout--fixed-drawer", config.fixedDrawer && hasDrawer )
-                        , ( "mdl-layout--fixed-header", config.fixedHeader && hasHeader )
+                        , ( "mdl-layout--fixed-header", config.fixedHeader && (hasHeader || hasTabs) )
                         , ( "mdl-layout--fixed-tabs", config.fixedTabs && hasTabs )
                         ]
                    {- MDL has code to close drawer on ESC, but it seems to be
@@ -952,8 +955,8 @@ view lift model options { drawer, header, tabs, main } =
                  ]
                     |> List.filterMap identity
                 )
-                [ if hasHeader then
-                    headerView lift config model ( headerDrawerButton, header, tabsElems )
+                [ if hasHeader || hasTabs then
+                    headerView lift config model hasHeader hasDrawer ( headerDrawerButton, header, tabsElems )
                         |> (,) "elm-mdl-header"
                         |> Just
                   else
