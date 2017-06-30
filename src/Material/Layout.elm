@@ -69,15 +69,13 @@ sizes. Example initialisation of containing app:
     import Material
 
     type alias Model =
-      { ...
-      , mdl : Material.Model -- Boilerplate
+      { …
+      , mdl : Material.Model
       }
 
     type Msg =
-      ...
-      | Mdl Material.Msg -- Boilerplate
-
-    ...
+      …
+      | Mdl (Material.Msg Msg)
 
     App.program
       { init = ( model, Layout.sub0 Mdl )

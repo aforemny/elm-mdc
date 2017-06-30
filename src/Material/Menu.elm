@@ -56,14 +56,12 @@ up. Example initialisation of containing app:
 
     type Model =
       { …
-      , mdl : Material.Model -- Boilerplate
+      , mdl : Material.Model
       }
 
     type Msg =
       …
-      | Mdl Material.Msg -- Boilerplate
-
-    …
+      | Mdl (Material.Msg Msg)
 
     App.program
       { init = init
