@@ -122,14 +122,16 @@ update action =
 
 type alias Config =
     { ripple : Bool
-    , link : Bool
+    , link : Maybe String
+    , disabled : Bool
     }
 
 
 defaultConfig : Config
 defaultConfig =
     { ripple = False
-    , link = False
+    , link = Nothing
+    , disabled = False
     }
 
 
@@ -144,18 +146,14 @@ This allows for a button that looks like a button but can also
 perform link actions.
 
     Button.render Mdl [0] model.mdl
-      [ Button.link
-      , Options.attribute <|
-          Html.Attributes.href "#some-url"
+      [ Button.link "#some-url"
       ]
       [ text "Link Button" ]
 -}
 link : String -> Property m
 link href =
-  Options.many 
-    [ Internal.option (\options -> { options | link = True })
-    , Internal.attribute <| Html.Attributes.href href 
-    ]
+    (\options -> { options | link = Just href })
+        |> Internal.option
 
 
 {-| Set button to ripple when clicked.
@@ -170,7 +168,8 @@ ripple =
 -}
 disabled : Property m
 disabled =
-    Internal.attribute <| Html.Attributes.disabled True
+    (\options -> { options | disabled = True })
+        |> Internal.option
 
 
 {-| Plain, uncolored button (default).
@@ -240,10 +239,10 @@ blurAndForward event =
 {-| Component view function.
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model config html =
+view lift model options html =
     let
-        summary =
-            Internal.collect defaultConfig config
+        ({ config } as summary) =
+            Internal.collect defaultConfig options
 
         listeners =
             Options.many
@@ -256,18 +255,24 @@ view lift model config html =
                 ]
     in
         Internal.apply summary
-            (if summary.config.link then Html.a else Html.button)
+            (if config.link /= Nothing then Html.a else Html.button)
             [ cs "mdl-button"
             , cs "mdl-js-button"
             , cs "mdl-js-ripple-effect" |> when summary.config.ripple
             , css "box-sizing" "border-box"
             , listeners
+            , Internal.attribute (Html.Attributes.href (Maybe.withDefault "" config.link) )
+                |> when ((config.link /= Nothing) && not config.disabled)
+            , Internal.attribute (Html.Attributes.disabled True)
+                |> when config.disabled
+            , cs "mdl-button--disabled"
+                |> when config.disabled
             ]
             [ Helpers.blurOn "mouseup"
             , Helpers.blurOn "mouseleave"
             , Helpers.blurOn "touchend"
             ]
-            (if summary.config.ripple then
+            (if config.ripple then
                 List.concat
                     [ html
                     , [ Html.map lift <|
