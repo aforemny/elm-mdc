@@ -324,8 +324,8 @@ type Msg
 {-| Component update.
 -}
 update : x -> Msg -> Model -> ( Maybe Model, Cmd msg )
-update _ action model =
-    (case action of
+update _ msg model =
+    (case msg of
         Input str ->
             let
                 dirty =
@@ -442,7 +442,7 @@ view lift model options _ =
             , cs "mdl-textfield--expandable" |> when (config.expandable /= Nothing)
             , preventEnterWhenMaxRowsExceeded
             ] <| expHolder
-            [ Internal.applyInput summary 
+            [ Internal.applyInput summary
                 (if config.kind == Textarea then Html.textarea else Html.input)
                 [ cs "mdl-textfield__input"
                 , css "outline" "none"
@@ -462,15 +462,10 @@ view lift model options _ =
                 , Internal.attribute (Html.Attributes.disabled True) 
                     |> when config.disabled
                 , expandableId
-                , case config.value of
-                    Nothing ->
-                        -- If user is not setting value, is we need the default input
-                        -- decoder to maintain is-dirty
-                        Options.on "input"
-                            (Decoder.map (Input >> lift) Html.Events.targetValue)
-
-                    Just v ->
-                        Internal.attribute <| Html.Attributes.value v
+                , Options.onInput (Input >> lift)
+                , Internal.attribute
+                    (Html.Attributes.value (Maybe.withDefault "" config.value))
+                  |> when (config.value /= Nothing)
                 , case config.defaultValue of
                     Nothing ->
                         Options.nop
@@ -535,11 +530,12 @@ of the textfield's implementation, and so is mostly useful for positioning
 if you need to apply styling to the underlying `<input>` element.
 -}
 render
-    : (Component.Msg button Msg menu layout toggles tooltip tabs select dispatch -> m)
+    : (Component.Msg button Msg menu layout toggles tooltip tabs select (List m) -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> x
     -> Html m       
-render =
-    Component.render get view Component.TextfieldMsg
+render lift index store options =
+    Component.render get view Component.TextfieldMsg lift index store
+        (Internal.dispatch lift :: options)
