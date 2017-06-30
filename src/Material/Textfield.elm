@@ -59,7 +59,7 @@ for a live demo.
 @docs render
 
 # Options
-@docs Property, Config, defaultConfig, value
+@docs Property, Config, defaultConfig, value, defaultValue
 
 ## Appearance
 
@@ -67,7 +67,7 @@ for a live demo.
 
 ## Html attributes
 @docs disabled, rows, cols
-@docs autofocus, maxlength
+@docs autofocus, maxlength, maxRows
 
 @docs password, email, textarea, text_
 @docs expandable, expandableIcon

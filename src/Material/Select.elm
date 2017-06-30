@@ -69,6 +69,9 @@ Along with this module you will want to import Material.Dropdown.Item.
 # Options
 @docs Property
 
+# Alignment
+@docs below, over
+
 # Appearance
 @docs value, label, floatingLabel, disabled, error, autofocus, ripple, index
 

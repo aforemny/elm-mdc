@@ -38,7 +38,7 @@ Material.Menu and Material.Select.
 @docs Property
 
 # Alignment
-@docs Alignment, bottomLeft, bottomRight, topLeft, topRight
+@docs Alignment, bottomLeft, bottomRight, topLeft, topRight, below, over
 
 # Configuration
 @docs index
