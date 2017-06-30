@@ -79,7 +79,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Material.Component as Component exposing (Indexed, Index)
 import Material.Helpers as Helpers
-import Material.Options as Options exposing (cs, when)
+import Material.Options as Options exposing (cs, css, when)
 import Material.Options.Internal as Internal
 import Material.Ripple as Ripple
 
@@ -260,6 +260,7 @@ view lift model config html =
             [ cs "mdl-button"
             , cs "mdl-js-button"
             , cs "mdl-js-ripple-effect" |> when summary.config.ripple
+            , css "box-sizing" "border-box"
             , listeners
             ]
             [ Helpers.blurOn "mouseup"
