@@ -1,20 +1,19 @@
 module Demo.Menus exposing (model, Model, view, update, Msg(Mdl))
 
-import Demo.Code as Code
-import Demo.Page as Page
-import Html.Attributes exposing (href)
 import Html exposing (Html, text, p, a)
+import Html.Attributes exposing (href)
+import Set exposing (Set)
+import String
 import Material
 import Material.Color as Color
 import Material.Elevation as Elevation
 import Material.Grid as Grid
-import Material.Icon as Icon
 import Material.Menu as Menu
 import Material.Options as Options exposing (cs, css, div, nop, when)
-import Material.Dropdown.Item as Item
 import Material.Textfield as Textfield
-import Set exposing (Set)
-import String
+import Material.Icon as Icon
+import Demo.Page as Page
+import Demo.Code as Code
 
 
 -- MODEL
@@ -25,6 +24,7 @@ type alias Model =
     , selected : Maybe ( Int, Int )
     , checked : Set Int
     , icon : Maybe String
+    , ripple : Bool
     }
 
 
@@ -34,6 +34,7 @@ model =
     , selected = Nothing
     , checked = Set.fromList [ 0, 2 ]
     , icon = Nothing
+    , ripple = True
     }
 
 
@@ -104,7 +105,8 @@ type alias Align =
 
 options : Model -> Align -> List (Menu.Property Msg)
 options model align =
-    [ model.icon
+    [ Menu.ripple |> when model.ripple
+    , model.icon
         |> Maybe.map Menu.icon
         |> Maybe.withDefault nop
     , Tuple.second align
@@ -115,7 +117,11 @@ showOptions : Model -> Align -> String
 showOptions model align =
     let
         inner =
-            [ model.icon
+            [ if model.ripple then
+                "Menu.ripple"
+              else
+                ""
+            , model.icon
                 |> Maybe.map (\i -> "Menu.icon \"" ++ i ++ "\"")
                 |> Maybe.withDefault ""
             , "Menu." ++ Tuple.first align
@@ -137,32 +143,27 @@ basic model align =
             [ 0 ]
             model.mdl
             (options model align)
-            ( let
-                  item options html =
-                      Item.item (Item.ripple::options) html
-              in
-                [ item
-                    [ Item.onSelect (Select 0 0) ]
-                    [ text "English (US)" ]
-                , item
-                    [ Item.onSelect (Select 0 1) ]
-                    [ text "français" ]
-                , item
-                    [ Item.onSelect (Select 0 2) ]
-                    [ text "中文" ]
-                ]
-            )
+            [ Menu.item
+                [ Menu.onSelect (Select 0 0) ]
+                [ text "English (US)" ]
+            , Menu.item
+                [ Menu.onSelect (Select 0 1) ]
+                [ text "français" ]
+            , Menu.item
+                [ Menu.onSelect (Select 0 2) ]
+                [ text "中文" ]
+            ]
     , code = """
       Menu.render Mdl [0] model.mdl
         """ ++ showOptions model align ++ """
-        [ Item.item
-            [ Item.onSelect MySelectMsg0 ]
+        [ Menu.item
+            [ Menu.onSelect MySelectMsg0 ]
             [ text "English (US)" ]
-        , Item.item
-            [ Item.onSelect MySelectMsg1 ]
+        , Menu.item
+            [ Menu.onSelect MySelectMsg1 ]
             [ text "français" ]
-        , Item.item
-            [ Item.onSelect MySelectMsg2 ]
+        , Menu.item
+            [ Menu.onSelect MySelectMsg2 ]
             [ text "中文" ]
         ]
         """
@@ -179,27 +180,48 @@ edit model align =
             [ 1 ]
             model.mdl
             (options model align)
-            [ Item.item
-                [ Item.onSelect (Select 1 0) ]
+            [ Menu.item
+                [ Menu.onSelect (Select 1 0) ]
                 [ text "Undo" ]
-            , Item.item
-                [ Item.onSelect (Select 1 1)
-                , Item.divider
-                , Item.disabled
+            , Menu.item
+                [ Menu.onSelect (Select 1 1)
+                , Menu.divider
+                , Menu.disabled
                 ]
                 [ text "Redo" ]
-            , Item.item
-                [ Item.disabled ]
+            , Menu.item
+                [ Menu.disabled ]
                 [ text "Cut" ]
-            , Item.item
-                [ Item.disabled ]
+            , Menu.item
+                [ Menu.disabled ]
                 [ text "Copy" ]
-            , Item.item
-                [ Item.onSelect (Select 1 4) ]
+            , Menu.item
+                [ Menu.onSelect (Select 1 4) ]
                 [ text "Paste" ]
             ]
     , code = """
-          """
+     Menu.render Mdl [1] model.mdl
+        """ ++ showOptions model align ++ """
+        [ Menu.item
+            [ Menu.onSelect MySelectMsg0 ]
+            [ text "Undo" ]
+        , Menu.item
+            [ Menu.divider
+            , Menu.disabled
+            ]
+            [ text "Redo" ]
+        , Menu.item
+            [ Menu.onSelect MySelectMsgWontFire
+            , Menu.disabled
+            ]
+            [ text "Cut" ]
+        , Menu.item
+            [ Menu.disabled ]
+            [ text "Copy" ]
+        , Menu.item
+            [ Menu.onSelect MySelectMsg4 ]
+            [ text "Paste" ]
+        ]"""
     , comment =
         """It doesn't matter whether or not you supply an `onSelect` handler to a
            `disabled` item. Even if you do, clicks won't register."""
@@ -221,17 +243,17 @@ icons model align =
                 [ 2 ]
                 model.mdl
                 (options model align)
-                [ Item.item
-                    [ Item.onSelect (Select 1 0), padding ]
+                [ Menu.item
+                    [ Menu.onSelect (Select 1 0), padding ]
                     [ i "remove_red_eye", text "Preview" ]
-                , Item.item
-                    [ Item.onSelect (Select 1 1), padding ]
+                , Menu.item
+                    [ Menu.onSelect (Select 1 1), padding ]
                     [ i "person_add", text "Share" ]
-                , Item.item
-                    [ Item.onSelect (Select 1 2), padding, Item.divider ]
+                , Menu.item
+                    [ Menu.onSelect (Select 1 2), padding, Menu.divider ]
                     [ i "link", text "Get link" ]
-                , Item.item
-                    [ Item.onSelect (Select 1 3), padding ]
+                , Menu.item
+                    [ Menu.onSelect (Select 1 3), padding ]
                     [ i "delete", text "Remove" ]
                 ]
     , code = """
@@ -243,17 +265,17 @@ icons model align =
       in
         Menu.render Mdl [2] model.mdl
           """ ++ showOptions model align ++ """
-          [ Item.item
-              [ Item.onSelect MySelectMsg0, padding ]
+          [ Menu.item
+              [ Menu.onSelect MySelectMsg0, padding ]
               [ i "remove_red_eye", text "Preview" ]
-          , Item.item
-              [ Item.onSelect MySelectMsg1, padding ]
+          , Menu.item
+              [ Menu.onSelect MySelectMsg1, padding ]
               [ i "person_add", text "Share" ]
-          , Item.item
-              [ Item.onSelect MySelectMsg2, padding, Item.divider ]
+          , Menu.item
+              [ Menu.onSelect MySelectMsg2, padding, Menu.divider ]
               [ i "link", text "Get link" ]
-          , Item.item
-              [ Item.onSelect MySelectMsg3, padding ]
+          , Menu.item
+              [ Menu.onSelect MySelectMsg3, padding ]
               [ i "delete", text "Remove" ]
           ]"""
     , comment =
@@ -282,14 +304,14 @@ checkmarks model align =
                 [ 3 ]
                 model.mdl
                 (options model align)
-                [ Item.item
-                    [ Item.onSelect (Flip 0) ]
+                [ Menu.item
+                    [ Menu.onSelect (Flip 0) ]
                     [ checkmark (isChecked 0), text "Grid lines" ]
-                , Item.item
-                    [ Item.onSelect (Flip 1) ]
+                , Menu.item
+                    [ Menu.onSelect (Flip 1) ]
                     [ checkmark (isChecked 1), text "Page breaks" ]
-                , Item.item
-                    [ Item.onSelect (Flip 2) ]
+                , Menu.item
+                    [ Menu.onSelect (Flip 2) ]
                     [ checkmark (isChecked 2), text "Rules" ]
                 ]
         , code = """
@@ -302,14 +324,14 @@ checkmarks model align =
         in
           Menu.render Mdl [3] model.mdl
             """ ++ showOptions model align ++ """
-            [ Item.item
-                [ Item.onSelect MySelectMsg0
+            [ Menu.item
+                [ Menu.onSelect MySelectMsg0
                 [ checkmark """ ++ (toString <| isChecked 0) ++ """, text "Grid lines" ]
-            , Item.item
-                [ Item.onSelect MySelectMsg1 ]
+            , Menu.item
+                [ Menu.onSelect MySelectMsg1 ]
                 [ checkmark """ ++ (toString <| isChecked 1) ++ """, text "Page breaks" ]
-            , Item.item
-                [ Item.onSelect MySelectMsg2 ]
+            , Menu.item
+                [ Menu.onSelect MySelectMsg2 ]
                 [ checkmark """ ++ (toString <| isChecked 2) ++ """, text "Rules" ]
             ]"""
         , comment =

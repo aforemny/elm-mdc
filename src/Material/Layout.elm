@@ -1037,7 +1037,7 @@ Excerpt:
     }
 -}
 render :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs select dispatch -> m)
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
     -> { a | layout : Model }
     -> List (Property m)
     -> Contents m
@@ -1051,7 +1051,7 @@ render =
 viewport size changes.
 -}
 subs :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs select dispatch -> m)
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
     -> Store s
     -> Sub m
 subs lift =
@@ -1063,7 +1063,7 @@ subs lift =
 viewport size changes. Example use:
 -}
 sub0 :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs select dispatch -> m)
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
     -> Cmd m
 sub0 lift =
     Tuple.second init |> Cmd.map (Component.LayoutMsg >> lift)
@@ -1075,7 +1075,7 @@ This function is for use with component typing. For plain TEA, simply issue
 an update for the exposed Msg `ToggleDrawer`.
 -}
 toggleDrawer :
-    (Component.Msg button textfield menu Msg toggles tooltip tabs select dispatch -> m)
+    (Component.Msg button textfield menu Msg toggles tooltip tabs dispatch -> m)
     -> m
 toggleDrawer lift =
     (Component.LayoutMsg >> lift) ToggleDrawer

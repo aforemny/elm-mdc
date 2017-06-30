@@ -22,7 +22,7 @@ import Dict exposing (Dict)
 import Material.Helpers exposing (map1st, map2nd)
 
 
-type Msg button textfield menu layout toggles tooltip tabs select dispatch
+type Msg button textfield menu layout toggles tooltip tabs dispatch
     = ButtonMsg Index button
     | TextfieldMsg Index textfield
     | MenuMsg Index menu
@@ -31,7 +31,6 @@ type Msg button textfield menu layout toggles tooltip tabs select dispatch
     | TogglesMsg Index toggles
     | TooltipMsg Index tooltip
     | TabsMsg Index tabs
-    | SelectMsg Index select
     | Dispatch dispatch
 
 
