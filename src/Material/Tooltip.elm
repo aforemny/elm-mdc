@@ -282,7 +282,7 @@ isTooltipClass path =
     (at path DOM.className)
         |> Json.andThen
             (\class ->
-                if String.contains "mdl-tooltip" class then
+                if String.contains "mdc-tooltip" class then
                     Json.succeed True
                 else
                     Json.succeed False
@@ -421,9 +421,9 @@ view lift model options content =
                 defaultPos
     in
         Options.styled config.elem
-            [ cs "mdl-tooltip"
+            [ cs "mdc-tooltip"
             , cs "is-active" |> when model.isActive
-            , cs "mdl-tooltip--large" |> when (config.size == Large)
+            , cs "mdc-tooltip--large" |> when (config.size == Large)
             , css "left" (px pos.left) |> when model.isActive
             , css "margin-left" (px pos.marginLeft) |> when model.isActive
             , css "top" (px pos.top) |> when model.isActive

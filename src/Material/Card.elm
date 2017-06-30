@@ -56,14 +56,14 @@ import Material.Options.Internal as Internal
 -}
 border : Style a
 border =
-    Options.cs "mdl-card--border"
+    Options.cs "mdc-card--border"
 
 
 {-| Set given content block to expand or compress vertically as necessary.
 -}
 expand : Style a
 expand =
-    Options.cs "mdl-card--expand"
+    Options.cs "mdc-card--expand"
 
 
 {-| Type of a content block within a card.
@@ -102,7 +102,7 @@ Specification.)
 head : List (Style a) -> List (Html a) -> Html a
 head styling =
     Options.styled Html.h1
-        (cs "mdl-card__title-text"
+        (cs "mdc-card__title-text"
             :: css "align-self" "flex-start"
             :: styling
         )
@@ -114,7 +114,7 @@ Specification.
 subhead : List (Style a) -> List (Html a) -> Html a
 subhead styling =
     Options.span
-        (cs "mdl-card__subtitle-text"
+        (cs "mdc-card__subtitle-text"
             :: css "padding-top" "8px"
             :: styling
         )
@@ -170,19 +170,19 @@ block : Block a -> Html a
 block block =
     case block of
         Title styling block ->
-            Options.div (cs "mdl-card__title" :: styling) block
+            Options.div (cs "mdc-card__title" :: styling) block
 
         Media styling block ->
-            Options.div (cs "mdl-card__media" :: styling) block
+            Options.div (cs "mdc-card__media" :: styling) block
 
         SupportingText styling block ->
-            Options.div (cs "mdl-card__supporting-text" :: styling) block
+            Options.div (cs "mdc-card__supporting-text" :: styling) block
 
         Actions styling block ->
-            Options.div (cs "mdl-card__actions" :: stopClick :: styling) block
+            Options.div (cs "mdc-card__actions" :: stopClick :: styling) block
 
         Menu styling block ->
-            Options.div (cs "mdl-card__menu" :: stopClick :: styling) block
+            Options.div (cs "mdc-card__menu" :: stopClick :: styling) block
 
 
 {-| Construct a card.
@@ -196,7 +196,7 @@ view : List (Style a) -> List (Block a) -> Html a
 view styling views =
     Options.div
         [ Options.many styling
-        , cs "mdl-card"
+        , cs "mdc-card"
         , css "min-height" "0px"
         ]
         (List.map block views)

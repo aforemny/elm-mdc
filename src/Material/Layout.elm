@@ -221,7 +221,7 @@ setTabsWidth_ width model =
 -}
 mainId : String
 mainId = 
-  "elm-mdl-layout-main"
+  "elm-mdc-layout-main"
 
 
 {-| Component model.
@@ -513,21 +513,21 @@ onSelectTab =
 -}
 spacer : Html m
 spacer =
-    div [ class "mdl-layout-spacer" ] []
+    div [ class "mdc-layout-spacer" ] []
 
 
 {-| Title in header row or drawer.
 -}
 title : List (Options.Style m) -> List (Html m) -> Html m
 title styles =
-    Options.span (cs "mdl-layout__title" :: styles)
+    Options.span (cs "mdc-layout__title" :: styles)
 
 
 {-| Container for links.
 -}
 navigation : List (Options.Style m) -> List (Html m) -> Html m
 navigation styles contents =
-    Options.styled Html.nav (cs "mdl-navigation" :: styles) contents
+    Options.styled Html.nav (cs "mdc-navigation" :: styles) contents
 
 
 {-| href attribute for links
@@ -542,7 +542,7 @@ href url =
 link : List (Options.Style m) -> List (Html m) -> Html m
 link styles contents =
     Options.styled a
-        (cs "mdl-navigation__link"
+        (cs "mdc-navigation__link"
             :: Internal.attribute (Html.Attributes.attribute "tabindex" "1")
             :: styles
         )
@@ -553,7 +553,7 @@ link styles contents =
 -}
 row : List (Options.Style m) -> List (Html m) -> Html m
 row styles =
-    Options.div (cs "mdl-layout__header-row" :: styles)
+    Options.div (cs "mdc-layout__header-row" :: styles)
 
 
 
@@ -614,8 +614,8 @@ tabsView lift config model ( tabs, tabStyles ) =
                             "right"
             in
                 styled div
-                    [ cs "mdl-layout__tab-bar-button"
-                    , cs ("mdl-layout__tab-bar-" ++ dir ++ "-button")
+                    [ cs "mdc-layout__tab-bar-button"
+                    , cs ("mdc-layout__tab-bar-" ++ dir ++ "-button")
                     , (cs "is-active")
                         |> when
                             ((direction == Left && model.tabScrollState.canScrollLeft)
@@ -627,22 +627,22 @@ tabsView lift config model ( tabs, tabStyles ) =
                         [ Icon.size24
                         , Html.Attributes.attribute
                             "onclick"
-                            ("document.getElementsByClassName('mdl-layout__tab-bar')[0].scrollLeft += " ++ toString offset)
+                            ("document.getElementsByClassName('mdc-layout__tab-bar')[0].scrollLeft += " ++ toString offset)
                             |> Internal.attribute
                         ]
                     ]
     in
         Options.div
-            [ cs "mdl-layout__tab-bar-container" ]
+            [ cs "mdc-layout__tab-bar-container" ]
             [ chevron Left -100
             , Options.div
-                [ cs "mdl-layout__tab-bar"
+                [ cs "mdc-layout__tab-bar"
                 , css "position" "relative"
                   -- Workaround for debois/elm-dom#4.
                 , css "scroll-behavior" "smooth"
                 , if config.rippleTabs then
                     Options.many
-                        [ cs "mdl-js-ripple-effect"
+                        [ cs "mdc-js-ripple-effect"
                         , cs "mds-js-ripple-effect--ignore-events"
                         ]
                   else
@@ -675,7 +675,7 @@ tabsView lift config model ( tabs, tabStyles ) =
                         (\tabIndex tab ->
                             filter a
                                 [ classList
-                                    [ ( "mdl-layout__tab", True )
+                                    [ ( "mdc-layout__tab", True )
                                     , ( "is-active", tabIndex == config.selectedTab )
                                     ]
                                 , config.onSelectTab
@@ -686,7 +686,7 @@ tabsView lift config model ( tabs, tabStyles ) =
                                 , if config.rippleTabs then
                                     Dict.get tabIndex model.ripples
                                         |> Maybe.withDefault Ripple.model
-                                        |> Ripple.view [ class "mdl-layout__tab-ripple-container" ]
+                                        |> Ripple.view [ class "mdc-layout__tab-ripple-container" ]
                                         |> Html.map (Ripple tabIndex >> lift)
                                         |> Just
                                   else
@@ -714,19 +714,19 @@ headerView lift config model hasHeader hasDrawer ( drawerButton, rows, tabs ) =
                     nop
 
                 Scrolling ->
-                    cs "mdl-layout__header--scroll"
+                    cs "mdc-layout__header--scroll"
 
                 Seamed ->
-                    cs "mdl-layout__header--seamed"
+                    cs "mdc-layout__header--seamed"
 
                 Waterfall True ->
-                    cs "mdl-layout__header--waterfall mdl-layout__header--waterfall-hide-top"
+                    cs "mdc-layout__header--waterfall mdc-layout__header--waterfall-hide-top"
 
                 Waterfall False ->
-                    cs "mdl-layout__header--waterfall"
+                    cs "mdc-layout__header--waterfall"
     in
         Options.styled Html.header
-            [ cs "mdl-layout__header"
+            [ cs "mdc-layout__header"
             , css "min-height" "48px" |> when (not hasHeader && not hasDrawer)
             , when
                 (config.mode
@@ -737,7 +737,7 @@ headerView lift config model hasHeader hasDrawer ( drawerButton, rows, tabs ) =
             , when model.isAnimating (cs "is-animating")
             , when model.isCompact (cs "is-compact")
             , mode
-            , when config.transparentHeader (cs "mdl-layout__header--transparent")
+            , when config.transparentHeader (cs "mdc-layout__header--transparent")
             , Options.onClick
                 (TransitionHeader { toCompact = False, fixedHeader = config.fixedHeader }
                     |> lift
@@ -771,7 +771,7 @@ drawerButton lift isVisible =
         ]
         [ div
             [ classList
-                [ ( "mdl-layout__drawer-button", True )
+                [ ( "mdc-layout__drawer-button", True )
                 ]
             , Html.Attributes.attribute
                 "aria-expanded"
@@ -824,7 +824,7 @@ obfuscator : (Msg -> m) -> Bool -> Html m
 obfuscator lift isVisible =
     div
         [ classList
-            [ ( "mdl-layout__obfuscator", True )
+            [ ( "mdc-layout__obfuscator", True )
             , ( "is-visible", isVisible )
             ]
         , Events.onClick (lift ToggleDrawer)
@@ -836,7 +836,7 @@ drawerView : (Msg -> m) -> Bool -> List (Html m) -> Html m
 drawerView lift isVisible elems =
     div
         [ classList
-            [ ( "mdl-layout__drawer", True )
+            [ ( "mdc-layout__drawer", True )
             , ( "is-visible", isVisible )
             ]
         , Html.Attributes.attribute
@@ -915,27 +915,27 @@ view lift model options { drawer, header, tabs, main } =
     in
         div
             [ classList
-                [ ( "mdl-layout__container", True )
+                [ ( "mdc-layout__container", True )
                 , ( "has-scrolling-header", config.mode == Scrolling )
                 ]
             ]
             [ filter (Keyed.node "div")
                 ([ Just <|
                     classList
-                        [ ( "mdl-layout ", True )
+                        [ ( "mdc-layout ", True )
                         , ( "is-upgraded", True )
                         , ( "is-small-screen", model.isSmallScreen )
                         , ( "has-drawer", hasDrawer )
                         , ( "has-tabs", hasTabs )
-                        , ( "mdl-js-layout", True )
-                        , ( "mdl-layout--fixed-drawer", config.fixedDrawer && hasDrawer )
-                        , ( "mdl-layout--fixed-header", config.fixedHeader && (hasHeader || hasTabs) )
-                        , ( "mdl-layout--fixed-tabs", config.fixedTabs && hasTabs )
+                        , ( "mdc-js-layout", True )
+                        , ( "mdc-layout--fixed-drawer", config.fixedDrawer && hasDrawer )
+                        , ( "mdc-layout--fixed-header", config.fixedHeader && (hasHeader || hasTabs) )
+                        , ( "mdc-layout--fixed-tabs", config.fixedTabs && hasTabs )
                         ]
                    {- MDL has code to close drawer on ESC, but it seems to be
                       non-operational. We fix it here. Elm 0.17 doesn't give us a way to
                       catch global keyboard events, but we can reasonably assume something inside
-                      mdl-layout__container is focused.
+                      mdc-layout__container is focused.
                    -}
                  , if drawerIsVisible then
                     on "keydown"
@@ -957,22 +957,22 @@ view lift model options { drawer, header, tabs, main } =
                 )
                 [ if hasHeader || hasTabs then
                     headerView lift config model hasHeader hasDrawer ( headerDrawerButton, header, tabsElems )
-                        |> (,) "elm-mdl-header"
+                        |> (,) "elm-mdc-header"
                         |> Just
                   else
                     Nothing
                 , if not hasDrawer then
                     Nothing
                   else
-                    Just ( "elm-mdl-drawer", drawerView lift drawerIsVisible drawer )
+                    Just ( "elm-mdc-drawer", drawerView lift drawerIsVisible drawer )
                 , if not hasDrawer then
                     Nothing
                   else
-                    Just ( "elm-mdl-obfuscator", obfuscator lift drawerIsVisible )
+                    Just ( "elm-mdc-obfuscator", obfuscator lift drawerIsVisible )
                 , contentDrawerButton |> Maybe.map ((,) "elm-drawer-button")
                 , Options.styled main_
                     [ id mainId 
-                    , cs "mdl-layout__content"
+                    , cs "mdc-layout__content"
                     , css "overflow-y" "visible" |> when (config.mode == Scrolling && config.fixedHeader)
                     , css "overflow-x" "visible" |> when (config.mode == Scrolling && config.fixedHeader)
                     , css "overflow" "visible" |> when (config.mode == Scrolling && config.fixedHeader) {- Above three lines fixes upstream bug #4180. -}

@@ -174,10 +174,10 @@ top lift kind model summary elems =
     in
         Internal.applyContainer summary
             label
-            [ cs ("mdl-" ++ kind)
-            , cs ("mdl-js-" ++ kind)
-            , cs "mdl-js-ripple-effect" |> when cfg.ripple
-            , cs "mdl-js-ripple-effect--ignore-events" |> when cfg.ripple
+            [ cs ("mdc-" ++ kind)
+            , cs ("mdc-js-" ++ kind)
+            , cs "mdc-js-ripple-effect" |> when cfg.ripple
+            , cs "mdc-js-ripple-effect--ignore-events" |> when cfg.ripple
             , cs "is-upgraded"
             , cs "is-checked" |> when cfg.value
             , cs "is-focused" |> when model.isFocused
@@ -190,7 +190,7 @@ top lift kind model summary elems =
                 , if cfg.ripple then
                     [ Html.map (Ripple >> lift) <|
                         Ripple.view
-                            [ class "mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center" ]
+                            [ class "mdc-switch__ripple-container mdc-js-ripple-effect mdc-ripple--center" ]
                             model.ripple
                     ]
                   else
@@ -209,17 +209,17 @@ viewCheckbox lift model config elems =
     in
         [ Internal.applyInput summary
             Html.input
-            [ cs "mdl-checkbox__input"
+            [ cs "mdc-checkbox__input"
             , Internal.attribute <| type_ "checkbox"
             , Internal.attribute <| checked summary.config.value
             ]
             []
-        , span [ class ("mdl-checkbox__label") ] elems
-        , span [ class "mdl-checkbox__focus-helper" ] []
+        , span [ class ("mdc-checkbox__label") ] elems
+        , span [ class "mdc-checkbox__focus-helper" ] []
         , span
-            [ class "mdl-checkbox__box-outline" ]
+            [ class "mdc-checkbox__box-outline" ]
             [ span
-                [ class "mdl-checkbox__tick-outline" ]
+                [ class "mdc-checkbox__tick-outline" ]
                 []
             ]
         ]
@@ -236,16 +236,16 @@ viewSwitch lift model config elems =
     in
         [ Internal.applyInput summary
             Html.input
-            [ cs "mdl-switch__input"
+            [ cs "mdc-switch__input"
             , Internal.attribute <| type_ "checkbox"
             , Internal.attribute <| checked summary.config.value
             ]
             []
-        , span [ class "mdl-switch__label" ] elems
-        , div [ class "mdl-switch__track" ] []
+        , span [ class "mdc-switch__label" ] elems
+        , div [ class "mdc-switch__track" ] []
         , div
-            [ class "mdl-switch__thumb" ]
-            [ span [ class "mdl-switch__focus-helper" ] [] ]
+            [ class "mdc-switch__thumb" ]
+            [ span [ class "mdc-switch__focus-helper" ] [] ]
         ]
             |> top lift "switch" model summary
 
@@ -260,14 +260,14 @@ viewRadio lift model config elems =
     in
         [ Internal.applyInput summary
             Html.input
-            [ cs "mdl-radio__button"
+            [ cs "mdc-radio__button"
             , Options.attribute <| type_ "radio"
             , Options.attribute <| checked summary.config.value
             ]
             []
-        , span [ class "mdl-radio__label" ] elems
-        , span [ class "mdl-radio__outer-circle" ] []
-        , span [ class "mdl-radio__inner-circle" ] []
+        , span [ class "mdc-radio__label" ] elems
+        , span [ class "mdc-radio__outer-circle" ] []
+        , span [ class "mdc-radio__inner-circle" ] []
         ]
             |> top lift "radio" model summary
 

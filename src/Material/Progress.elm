@@ -62,9 +62,9 @@ Note. They use specific default values for each type.
 bar : Bool -> Bool -> Float -> Float -> Html m
 bar indeterminate buffered p b =
     div
-        [ cs "mdl-progress mdl-js-progress is-upgraded"
+        [ cs "mdc-progress mdc-js-progress is-upgraded"
         , if indeterminate then
-            cs "mdl-progress__indeterminate"
+            cs "mdc-progress__indeterminate"
           else
             nop
         ]

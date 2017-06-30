@@ -43,7 +43,7 @@ dialog.
 -}
 fullWidth : Style a
 fullWidth =
-    Options.cs "mdl-dialog__actions--full-width"
+    Options.cs "mdc-dialog__actions--full-width"
 
 
 {-| Within a dialog specific types of content can exist
@@ -81,18 +81,18 @@ contentBlock : Block a -> Html a
 contentBlock block =
     case block of
         Title styling content ->
-            Options.div (cs "mdl-dialog__title" :: styling) content
+            Options.div (cs "mdc-dialog__title" :: styling) content
 
         Content styling content ->
-            Options.div (cs "mdl-dialog__content" :: styling) content
+            Options.div (cs "mdc-dialog__content" :: styling) content
 
         Actions styling content ->
-            Options.div (cs "mdl-dialog__actions" :: styling) content
+            Options.div (cs "mdc-dialog__actions" :: styling) content
 
 
 theDialog : String
 theDialog =
-    "elm-mdl-singleton-dialog"
+    "elm-mdc-singleton-dialog"
 
 
 {-| Open dialog in response to given DOM event. The DOM must also contain a
@@ -188,6 +188,6 @@ Installing more than one dialog will result in a random one showing.
 view : List (Style a) -> List (Block a) -> Html a
 view styling contentBlocks =
     Options.styled_ (Html.node "dialog")
-        (cs "mdl-dialog" :: styling)
+        (cs "mdc-dialog" :: styling)
         [ Html.Attributes.id theDialog ]
         (List.map (contentBlock) contentBlocks)

@@ -68,7 +68,7 @@ elements; MDL sources define all values 0-24, but omits most from production css
 -}
 shadow : Int -> Property a m
 shadow z =
-    cs ("mdl-shadow--" ++ toString z ++ "dp")
+    cs ("mdc-shadow--" ++ toString z ++ "dp")
 
 
 {-|

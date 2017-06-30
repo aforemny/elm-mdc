@@ -103,10 +103,10 @@ prefix : Type -> String
 prefix tp =
     case tp of
         Mini ->
-            "mdl-mini-footer"
+            "mdc-mini-footer"
 
         Mega ->
-            "mdl-mega-footer"
+            "mdc-mega-footer"
 
 
 separator : String
@@ -228,7 +228,7 @@ checkbox : Content m
 checkbox =
     HtmlContent <|
         Html.input
-            [ Html.class "mdl-mega-footer__heading-checkbox"
+            [ Html.class "mdc-mega-footer__heading-checkbox"
             , Html.type_ "checkbox"
               -- For some reason Html.checked True did not work (did not show up in dom)
             , Html.attribute "checked" ""
@@ -241,7 +241,7 @@ checkbox =
 dropdown : List (Property m) -> List (Content m) -> Content m
 dropdown props content =
     Content
-        { styles = (cs "mdl-mega-footer__drop-down-section" :: props)
+        { styles = (cs "mdc-mega-footer__drop-down-section" :: props)
         , content = (checkbox :: content)
         , elem = Html.div
         }
@@ -493,7 +493,7 @@ socialBtn =
 logo : List (Property m) -> List (Content m) -> Content m
 logo styles content =
     Content
-        { styles = (cs "mdl-logo" :: styles)
+        { styles = (cs "mdc-logo" :: styles)
         , content = content
         , elem = Html.div
         }

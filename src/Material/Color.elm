@@ -368,14 +368,14 @@ accentContrast =
 -}
 background : Color -> Property c m
 background (C color) =
-    cs ("mdl-color--" ++ color)
+    cs ("mdc-color--" ++ color)
 
 
 {-| Text or foreground color.
 -}
 text : Color -> Property c m
 text (C color) =
-    cs ("mdl-color-text--" ++ color)
+    cs ("mdc-color-text--" ++ color)
 
 
 

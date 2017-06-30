@@ -219,7 +219,7 @@ view_ attrs model =
             attrs
             [ span
                 [ classList
-                    [ ( "mdl-ripple", True )
+                    [ ( "mdc-ripple", True )
                     , ( "is-animating", model.animation /= Frame 0 )
                     , ( "is-visible", model.animation /= Inert )
                     ]

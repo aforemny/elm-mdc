@@ -405,26 +405,26 @@ view lift model options _ =
                 Just _ ->
                     (\x ->
                         [ Options.styled_ Html.label
-                            [ cs "mdl-button"
-                            , cs "mdl-js-button"
-                            , cs "mdl-button--icon"
+                            [ cs "mdc-button"
+                            , cs "mdc-js-button"
+                            , cs "mdc-button--icon"
                             ]
                             labelFor
                             [ Icon.i config.expandableIcon ]
                         , Options.styled Html.div
-                            [ cs "mdl-textfield__expandable-holder" ]
+                            [ cs "mdc-textfield__expandable-holder" ]
                             x
                         ]
                     )
     in
         Internal.applyContainer summary
             div
-            [ cs "mdl-textfield"
-            , cs "mdl-js-textfield"
+            [ cs "mdc-textfield"
+            , cs "mdc-js-textfield"
             , cs "is-upgraded"
             , Internal.on1 "focus" lift Focus
             , Internal.on1 "blur" lift Blur
-            , cs "mdl-textfield--floating-label" |> when config.labelFloat
+            , cs "mdc-textfield--floating-label" |> when config.labelFloat
             , cs "is-invalid" |> when (config.error /= Nothing)
             , cs "is-dirty"
                 |> when (case config.value of
@@ -433,12 +433,12 @@ view lift model options _ =
                            Nothing -> model.isDirty)
             , cs "is-focused" |> when (model.isFocused && not config.disabled)
             , cs "is-disabled" |> when config.disabled
-            , cs "mdl-textfield--expandable" |> when (config.expandable /= Nothing)
+            , cs "mdc-textfield--expandable" |> when (config.expandable /= Nothing)
             , preventEnterWhenMaxRowsExceeded
             ] <| expHolder
             [ Internal.applyInput summary
                 (if config.kind == Textarea then Html.textarea else Html.input)
-                [ cs "mdl-textfield__input"
+                [ cs "mdc-textfield__input"
                 , css "outline" "none"
                 , Internal.on1 "focus" lift Focus
                 , Internal.on1 "blur" lift Blur
@@ -469,7 +469,7 @@ view lift model options _ =
                 ]
                 []
             , Html.label
-                ([ class "mdl-textfield__label" ] ++ labelFor)
+                ([ class "mdc-textfield__label" ] ++ labelFor)
                 (case config.labelText of
                     Just str ->
                         [ text str ]
@@ -478,7 +478,7 @@ view lift model options _ =
                         []
                 )
             , config.error
-                |> Maybe.map (\e -> span [ class "mdl-textfield__error" ] [ text e ])
+                |> Maybe.map (\e -> span [ class "mdc-textfield__error" ] [ text e ])
                 |> Maybe.withDefault (div [] [])
             ]
 

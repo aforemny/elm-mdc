@@ -80,7 +80,7 @@ import Material.Options as Options exposing (Style, cs, styled)
 -}
 noSpacing : Style a
 noSpacing =
-    Options.cs "mdl-grid--no-spacing"
+    Options.cs "mdc-grid--no-spacing"
 
 
 {-| Set maximum grid width. If more space is available, the grid stays centered with
@@ -95,7 +95,7 @@ maxWidth w =
 -}
 grid : List (Style a) -> List (Cell a) -> Html a
 grid styling cells =
-    Options.div (cs "mdl-grid" :: styling) (List.map (\(Cell elm) -> elm) cells)
+    Options.div (cs "mdc-grid" :: styling) (List.map (\(Cell elm) -> elm) cells)
 
 
 {-| Device specifiers, used with `size` and `offset`. (A `Device` really
@@ -150,7 +150,7 @@ size device k =
                 Phone ->
                     clip 1 4 k
     in
-        "mdl-cell--" ++ toString c ++ "-col" ++ suffix device |> cs
+        "mdc-cell--" ++ toString c ++ "-col" ++ suffix device |> cs
 
 
 {-| Specify cell offset, i.e., empty number of empty cells before the present
@@ -174,7 +174,7 @@ offset device k =
                 Phone ->
                     clip 0 3 k
     in
-        "mdl-cell--" ++ toString c ++ "-offset" ++ suffix device |> cs
+        "mdc-cell--" ++ toString c ++ "-offset" ++ suffix device |> cs
 
 
 {-| Alignment of cell contents; use with `align`.
@@ -191,20 +191,20 @@ align : Align -> Style a
 align a =
     case a of
         Top ->
-            cs "mdl-cell--top"
+            cs "mdc-cell--top"
 
         Middle ->
-            cs "mdl-cell--middle"
+            cs "mdc-cell--middle"
 
         Bottom ->
-            cs "mdl-cell--bottom"
+            cs "mdc-cell--bottom"
 
 
 {-| Specify that a cell stretches vertically to fill the parent.
 -}
 stretch : Style a
 stretch =
-    cs "mdl-cell--stretch"
+    cs "mdc-cell--stretch"
 
 
 {-| Specify that a cell should be hidden on given `Device`.
@@ -217,14 +217,14 @@ hide device =
                 ""
 
             _ ->
-                "mdl-cell--hide" ++ suffix device
+                "mdc-cell--hide" ++ suffix device
 
 
 {-| Specify that a cell should re-order itself to position 'Int' on `Device`.
 -}
 order : Device -> Int -> Style a
 order device n =
-    cs <| "mdl-cell--order-" ++ (toString <| clip 1 12 n) ++ suffix device
+    cs <| "mdc-cell--order-" ++ (toString <| clip 1 12 n) ++ suffix device
 
 
 {-| Construct a cell for use in the argument list for `grid`. Note that this
@@ -232,7 +232,7 @@ module defines exposing various styles to set size, offset, etc. of the cell.
 -}
 cell : List (Style a) -> List (Html a) -> Cell a
 cell styling elms =
-    Cell (Options.div (cs "mdl-cell" :: styling) elms)
+    Cell (Options.div (cs "mdc-cell" :: styling) elms)
 
 
 

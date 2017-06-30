@@ -220,7 +220,7 @@ cssTransitionStep x =
 -}
 noAttr : Html.Attribute a
 noAttr =
-    Html.Attributes.attribute "data-elm-mdl-noop" ""
+    Html.Attributes.attribute "data-elm-mdc-noop" ""
 
 
 {-| Install aria-* attributes, conspicuously missing from elm-lang/html.

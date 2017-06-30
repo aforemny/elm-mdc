@@ -52,14 +52,14 @@ import Material.Icon as Icon
 -}
 ul : List (Property c m) -> List (Html m) -> Html m
 ul options =
-    Options.styled Html.ul (cs "mdl-list" :: options)
+    Options.styled Html.ul (cs "mdc-list" :: options)
 
 
 {-| List-item, no secondary content. (Use this rather than `Html.li`.)
 -}
 li : List (Property c m) -> List (Html m) -> Html m
 li options =
-    Options.styled Html.li (cs "mdl-list__item" :: options)
+    Options.styled Html.li (cs "mdc-list__item" :: options)
 
 
 {-| Adjust item spacing to accomodate a 2-line body. Option for `li`. Don't set
@@ -67,7 +67,7 @@ both this and `withSubtitle`.
 -}
 withBody : Property c m
 withBody =
-    cs "mdl-list__item--three-line"
+    cs "mdc-list__item--three-line"
 
 
 {-| Adjust inter-item spacing to accomodate a 1-line subtitle. Option for `li`.
@@ -75,14 +75,14 @@ Don't set both this and `withBody`.
 -}
 withSubtitle : Property c m
 withSubtitle =
-    cs "mdl-list__item--two-line"
+    cs "mdc-list__item--two-line"
 
 
 {-| Defines the primary content sub-division. Use within `li`.
 -}
 content : List (Property a m) -> List (Html m) -> Html m
 content options =
-    Options.span (cs "mdl-list__item-primary-content" :: options)
+    Options.span (cs "mdc-list__item-primary-content" :: options)
 
 
 {-| Set an avatar icon. Like `Icon.view`.
@@ -114,14 +114,14 @@ you want, then add this property. (You may want to use this in conjunction with
 -}
 avatar : Property c m
 avatar =
-    cs "mdl-list__item-avatar"
+    cs "mdc-list__item-avatar"
 
 
 {-| Set an icon. Refer to `Icon.view`.
 -}
 icon : String -> List (Icon.Property m) -> Html m
 icon i options =
-    Icon.view i (cs "mdl-list__item-icon" :: options)
+    Icon.view i (cs "mdc-list__item-icon" :: options)
 
 
 {-| Defines the text-body sub-division.	Use within `content`. You need to
@@ -130,7 +130,7 @@ Mutually exclusive with `subtitle`.
 -}
 body : List (Property c m) -> List (Html m) -> Html m
 body options =
-    Options.span (cs "mdl-list__item-text-body" :: options)
+    Options.span (cs "mdc-list__item-text-body" :: options)
 
 
 {-| Defines the subtitle sub-division.	Use within `content`. You need to
@@ -139,21 +139,21 @@ Mutually exclusive with `body`.
 -}
 subtitle : List (Property c m) -> List (Html m) -> Html m
 subtitle options =
-    Options.span (cs "mdl-list__item-sub-title" :: options)
+    Options.span (cs "mdc-list__item-sub-title" :: options)
 
 
 {-| Defines the secondary content sub-division.	Use within `li`.
 -}
 content2 : List (Property a m) -> List (Html m) -> Html m
 content2 options =
-    Options.span (cs "mdl-list__item-secondary-content" :: options)
+    Options.span (cs "mdc-list__item-secondary-content" :: options)
 
 
 {-| Defines the information sub-division.	Applicable only within `content2`.
 -}
 info2 : List (Property c m) -> List (Html m) -> Html m
 info2 options =
-    Options.span (cs "mdl-list__item-secondary-info" :: options)
+    Options.span (cs "mdc-list__item-secondary-info" :: options)
 
 
 {-| Defines the secondary action sub-division. (The primary action is clicking
@@ -161,4 +161,4 @@ the primary content.)
 -}
 action2 : Property a m
 action2 =
-    cs "mdl-list__item-secondary-action"
+    cs "mdc-list__item-secondary-action"

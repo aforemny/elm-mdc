@@ -183,21 +183,21 @@ plain =
 -}
 colored : Property m
 colored =
-    cs "mdl-button--colored"
+    cs "mdc-button--colored"
 
 
 {-| Color button with primary color.
 -}
 primary : Property m
 primary =
-    cs "mdl-button--primary"
+    cs "mdc-button--primary"
 
 
 {-| Color button with accent color.
 -}
 accent : Property m
 accent =
-    cs "mdl-button--accent"
+    cs "mdc-button--accent"
 
 
 {-| Sets the type of the button e.g.
@@ -256,16 +256,16 @@ view lift model options html =
     in
         Internal.apply summary
             (if config.link /= Nothing then Html.a else Html.button)
-            [ cs "mdl-button"
-            , cs "mdl-js-button"
-            , cs "mdl-js-ripple-effect" |> when summary.config.ripple
+            [ cs "mdc-button"
+            , cs "mdc-js-button"
+            , cs "mdc-js-ripple-effect" |> when summary.config.ripple
             , css "box-sizing" "border-box"
             , listeners
             , Internal.attribute (Html.Attributes.href (Maybe.withDefault "" config.link) )
                 |> when ((config.link /= Nothing) && not config.disabled)
             , Internal.attribute (Html.Attributes.disabled True)
                 |> when config.disabled
-            , cs "mdl-button--disabled"
+            , cs "mdc-button--disabled"
                 |> when config.disabled
             ]
             [ Helpers.blurOn "mouseup"
@@ -277,7 +277,7 @@ view lift model options html =
                     [ html
                     , [ Html.map lift <|
                             Ripple.view_
-                                [ class "mdl-button__ripple-container" ]
+                                [ class "mdc-button__ripple-container" ]
                                 model
                       ]
                     ]
@@ -336,7 +336,7 @@ Example use (colored raised button, assuming properly setup model):
 -}
 raised : Property m
 raised =
-    cs "mdl-button--raised"
+    cs "mdc-button--raised"
 
 
 {-| Floating Msg Button. From the
@@ -366,7 +366,7 @@ Example use (colored with a '+' icon):
 -}
 fab : Property m
 fab =
-    cs "mdl-button--fab"
+    cs "mdc-button--fab"
 
 
 {-| Mini-sized variant of a Floating Msg Button; refer to `fab`.
@@ -374,7 +374,7 @@ fab =
 minifab : Property m
 minifab =
     Options.many
-        [ cs "mdl-button--mini-fab"
+        [ cs "mdc-button--mini-fab"
         , fab
         ]
 
@@ -396,7 +396,7 @@ Example use (no color, displaying a '+' icon):
 -}
 icon : Property m
 icon =
-    cs "mdl-button--icon"
+    cs "mdc-button--icon"
 
 
 

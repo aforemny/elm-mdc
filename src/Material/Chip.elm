@@ -144,17 +144,17 @@ renderItem item =
     case item of
         Contact element props content ->
             Options.styled element
-                (cs "mdl-chip__contact" :: props)
+                (cs "mdc-chip__contact" :: props)
                 content
 
         Text props content ->
             Options.styled Html.span
-                (cs "mdl-chip__text" :: props)
+                (cs "mdc-chip__text" :: props)
                 content
 
         Action element props content ->
             Options.styled element
-                (cs "mdl-chip__action" :: props)
+                (cs "mdc-chip__action" :: props)
                 content
 
 
@@ -272,9 +272,9 @@ chip element props items =
             List.any (\x -> priority x == 0) items
     in
         Options.styled element
-            ([ cs "mdl-chip"
-             , Options.when isContact (cs "mdl-chip--contact")
-             , Options.when isDeletable (cs "mdl-chip--deletable")
+            ([ cs "mdc-chip"
+             , Options.when isContact (cs "mdc-chip--contact")
+             , Options.when isDeletable (cs "mdc-chip--deletable")
              , Internal.attribute <| Helpers.blurOn "mouseup"
              , Internal.attribute <| Helpers.blurOn "mouseleave"
              , Internal.attribute <| Helpers.blurOn "touchend"

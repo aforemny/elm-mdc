@@ -84,8 +84,8 @@ table :
     -> Html m
 table options nodes =
     Options.styled Html.table
-        (cs "mdl-data-table"
-            :: cs "mdl-js-data-table"
+        (cs "mdc-data-table"
+            :: cs "mdc-js-data-table"
             :: cs "is-upgraded"
             :: options
         )
@@ -196,13 +196,13 @@ th options html =
     in
         Internal.apply summary
             Html.th
-            [ cs "mdl-data-table__cell--non-numeric" |> when (not config.numeric) 
+            [ cs "mdc-data-table__cell--non-numeric" |> when (not config.numeric) 
             , case config.sorted of
                 Just Ascending ->
-                    cs "mdl-data-table__header--sorted-ascending"
+                    cs "mdc-data-table__header--sorted-ascending"
 
                 Just Descending ->
-                    cs "mdl-data-table__header--sorted-descending"
+                    cs "mdc-data-table__header--sorted-descending"
 
                 Nothing ->
                     nop
@@ -276,7 +276,7 @@ td options html =
     in
         Internal.apply summary
             Html.td
-            [ cs "mdl-data-table__cell--non-numeric" |> when (not config.numeric)
+            [ cs "mdc-data-table__cell--non-numeric" |> when (not config.numeric)
             ]
             []
             html

@@ -42,14 +42,14 @@ import Material.Options as Options exposing (Property, cs, many)
 -}
 noBackground : Property c m
 noBackground =
-    cs "mdl-badge--no-background"
+    cs "mdc-badge--no-background"
 
 
 {-| Badge overlaps text/contents.
 -}
 overlap : Property c m
 overlap =
-    cs "mdl-badge--overlap"
+    cs "mdc-badge--overlap"
 
 
 {-| Add a badge to the containing element.
@@ -58,5 +58,5 @@ add : String -> Property c m
 add str =
     Options.many
         [ Options.data "badge" str
-        , cs "mdl-badge"
+        , cs "mdc-badge"
         ]

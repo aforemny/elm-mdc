@@ -221,14 +221,14 @@ view lift model options tabs tabContent =
         wrapContent =
             Keyed.node "div"
                 [ Html.Attributes.classList
-                    [ ( "mdl-tab__panel", True )
+                    [ ( "mdc-tab__panel", True )
                     , ( "is-active", True )
                     ]
                 ]
 
         unwrapLabel tabIdx (Label ( props, content )) =
             Options.styled Html.a
-                [ cs "mdl-tabs__tab"
+                [ cs "mdc-tabs__tab"
                 , cs "is-active" |> when (tabIdx == config.activeTab)
                 , config.onSelectTab
                     |> Maybe.map (\t -> Options.onClick (t tabIdx))
@@ -240,8 +240,8 @@ view lift model options tabs tabContent =
                         [ content
                         , [ Ripple.view
                                 [ Html.Attributes.classList
-                                    [ ( "mdl-tabs__ripple-container", True )
-                                    , ( "mdl-tabs__ripple-js-effect", True )
+                                    [ ( "mdc-tabs__ripple-container", True )
+                                    , ( "mdc-tabs__ripple-js-effect", True )
                                     ]
                                 ]
                                 (Dict.get tabIdx model.ripples
@@ -256,17 +256,17 @@ view lift model options tabs tabContent =
 
         links =
             Options.styled Html.div
-                [ cs "mdl-tabs__tab-bar"
+                [ cs "mdc-tabs__tab-bar"
                 ]
                 (List.indexedMap unwrapLabel tabs)
     in
         Internal.apply summary
             Html.div
-            [ cs "mdl-tabs"
-            , cs "mdl-js-tabs"
+            [ cs "mdc-tabs"
+            , cs "mdc-js-tabs"
             , cs "is-upgraded"
-            , when config.ripple (cs "mdl-js-ripple-effect")
-            , when config.ripple (cs "mdl-js-ripple-effect--ignore-events")
+            , when config.ripple (cs "mdc-js-ripple-effect")
+            , when config.ripple (cs "mdc-js-ripple-effect--ignore-events")
             ]
             []
             [ links

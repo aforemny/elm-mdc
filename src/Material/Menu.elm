@@ -564,16 +564,16 @@ view lift model properties items =
         alignment =
             case config.alignment of
                 BottomLeft ->
-                    cs "mdl-menu--bottom-left"
+                    cs "mdc-menu--bottom-left"
 
                 BottomRight ->
-                    cs "mdl-menu--bottom-right"
+                    cs "mdc-menu--bottom-right"
 
                 TopLeft ->
-                    cs "mdl-menu--top-left"
+                    cs "mdc-menu--top-left"
 
                 TopRight ->
-                    cs "mdl-menu--top-right"
+                    cs "mdc-menu--top-right"
 
         numItems =
             List.length items
@@ -586,9 +586,9 @@ view lift model properties items =
             (css "position" "relative" :: properties)
             []
             [ styled button
-                [ cs "mdl-button"
-                , cs "mdl-js-button"
-                , cs "mdl-button--icon"
+                [ cs "mdc-button"
+                , cs "mdc-js-button"
+                , cs "mdc-button--icon"
                 , when 
                     (isActive model) 
                     (onKeyDown (Key itemSummaries))
@@ -604,13 +604,13 @@ view lift model properties items =
                 ]
                 |> Html.map lift
             , styled div
-                [ cs "mdl-menu__container"
+                [ cs "mdc-menu__container"
                 , cs "is-upgraded"
                 , when ((model.animationState == Opened) || (model.animationState == Closing)) (cs "is-visible")
                 , containerGeometry config.alignment |> withGeometry model
                 ]
                 [ styled div
-                    [ cs "mdl-menu__outline"
+                    [ cs "mdc-menu__outline"
                     , alignment
                     , (\geometry ->
                         [ css "width" <| toPx geometry.menu.bounds.width
@@ -622,8 +622,8 @@ view lift model properties items =
                     ]
                     []
                 , styled ul
-                    [ cs "mdl-menu"
-                    , cs "mdl-js-menu"
+                    [ cs "mdc-menu"
+                    , cs "mdc-js-menu"
                     , when
                         ((model.animationState == Opening)
                             || (model.animationState == Closing)
@@ -690,9 +690,9 @@ view1 lift config model offsetTop offsetHeight index summary item =
     in
         Internal.apply summary
             li
-            [ cs "mdl-menu__item"
-            , cs "mdl-js-ripple-effect" |> when config.ripple
-            , cs "mdl-menu__item--full-bleed-divider" |> when summary.config.divider
+            [ cs "mdc-menu__item"
+            , cs "mdc-js-ripple-effect" |> when config.ripple
+            , cs "mdc-menu__item--full-bleed-divider" |> when summary.config.divider
             , css "background-color" "rgb(238,238,238)" |> when (model.index == Just index)
             , case ( model.geometry, isActive model ) of
                 ( Just g, True ) ->
@@ -726,7 +726,7 @@ view1 lift config model offsetTop offsetHeight index summary item =
                 ((++)
                     item.html
                     [ Ripple.view_
-                        [ Html.Attributes.class "mdl-menu__item-ripple-container" ]
+                        [ Html.Attributes.class "mdc-menu__item-ripple-container" ]
                         (Dict.get index model.ripples
                             |> Maybe.withDefault Ripple.model
                         )

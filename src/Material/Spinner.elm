@@ -55,9 +55,9 @@ spinner options =
     in
         Internal.apply summary
             Html.div
-            [ cs "mdl-spinner mdl-js-spinner is-upgraded"
+            [ cs "mdc-spinner mdc-js-spinner is-upgraded"
             , cs "is-active" |> when config.active 
-            , cs "mdl-spinner--single-color" |> when config.singleColor 
+            , cs "mdc-spinner--single-color" |> when config.singleColor 
             ]
             []
             layers
@@ -113,13 +113,13 @@ type alias Property m =
 layer : Int -> Html m
 layer n =
     Options.div
-        [ cs <| "mdl-spinner__layer mdl-spinner__layer-" ++ toString n
+        [ cs <| "mdc-spinner__layer mdc-spinner__layer-" ++ toString n
         ]
-        ([ Options.div [ cs "mdl-spinner__circle-clipper mdl-spinner__left" ]
-         , Options.div [ cs "mdl-spinner__gap-patch" ]
-         , Options.div [ cs "mdl-spinner__circle-clipper mdl-spinner__right" ]
+        ([ Options.div [ cs "mdc-spinner__circle-clipper mdc-spinner__left" ]
+         , Options.div [ cs "mdc-spinner__gap-patch" ]
+         , Options.div [ cs "mdc-spinner__circle-clipper mdc-spinner__right" ]
          ]
-            |> List.map ((|>) [ Options.div [ cs "mdl-spinner__circle" ] [] ])
+            |> List.map ((|>) [ Options.div [ cs "mdc-spinner__circle" ] [] ])
         )
 
 

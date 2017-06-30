@@ -175,18 +175,18 @@ view options =
         upper =
             (toString (1 - fraction)) ++ " 1 0%"
 
-        -- NOTE: does not work with IE yet. needs mdl-slider__ie-container
+        -- NOTE: does not work with IE yet. needs mdc-slider__ie-container
         -- and some additional logic
         background =
             Options.styled Html.div
-                [ cs "mdl-slider__background-flex" ]
+                [ cs "mdc-slider__background-flex" ]
                 [ Options.styled Html.div
-                    [ cs "mdl-slider__background-lower"
+                    [ cs "mdc-slider__background-lower"
                     , css "flex" lower
                     ]
                     []
                 , Options.styled Html.div
-                    [ cs "mdl-slider__background-upper"
+                    [ cs "mdc-slider__background-upper"
                     , css "flex" upper
                     ]
                     []
@@ -194,11 +194,11 @@ view options =
     in
         Internal.applyContainer summary
             Html.div
-            [ cs "mdl-slider__container" ]
+            [ cs "mdc-slider__container" ]
             [ Internal.applyInput summary
                 Html.input
-                [ cs "mdl-slider"
-                , cs "mdl-js-slider"
+                [ cs "mdc-slider"
+                , cs "mdc-js-slider"
                 , cs "is-upgraded"
                 , cs "is-lowest-value" |> when (fraction == 0)
                   -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag

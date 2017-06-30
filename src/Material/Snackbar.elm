@@ -285,21 +285,21 @@ view model =
     in
         div
             [ classList
-                [ ( "mdl-js-snackbar", True )
-                , ( "mdl-snackbar", True )
-                , ( "mdl-snackbar--active", isActive )
+                [ ( "mdc-js-snackbar", True )
+                , ( "mdc-snackbar", True )
+                , ( "mdc-snackbar--active", isActive )
                 ]
             , aria "hidden" (not isActive)
             ]
             [ div
-                [ class "mdl-snackbar__text"
+                [ class "mdc-snackbar__text"
                 ]
                 (contents
                     |> Maybe.map (\c -> [ text c.message ])
                     |> Maybe.withDefault []
                 )
             , button
-                (class "mdl-snackbar__action"
+                (class "mdc-snackbar__action"
                     :: type_ "button"
                     :: aria "hidden"
                         (action
