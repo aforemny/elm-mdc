@@ -3,6 +3,7 @@ PAGES=../elm-mdl-gh-pages
 CLOSURE_COMPILER=compiler.jar
 
 demo:
+	rsync -r material-components-web/build demo/material-components-web
 	(cd demo; $(ELM) Demo.elm --warn --output ../elm.js)
 
 run-demo:
