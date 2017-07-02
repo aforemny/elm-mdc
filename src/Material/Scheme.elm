@@ -39,12 +39,13 @@ import Material.Color exposing (Hue(..), Color)
 
 scheme : Hue -> Hue -> String
 scheme primary accent =
-    [ "https://code.getmdl.io/1.3.0/" ++ Material.Color.scheme primary accent
-    , "https://fonts.googleapis.com/icon?family=Material+Icons"
-    , "https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext"
-    ]
-        |> List.map (\url -> "@import url(" ++ url ++ ");")
-        |> String.join "\n"
+    "" -- TODO
+--    [ "https://code.getmdl.io/1.3.0/" ++ Material.Color.scheme primary accent
+--    , "https://fonts.googleapis.com/icon?family=Material+Icons"
+--    , "https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext"
+--    ]
+--        |> List.map (\url -> "@import url(" ++ url ++ ");")
+--        |> String.join "\n"
 
 
 {-| Top-level container for Material components. This will force loading of

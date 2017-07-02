@@ -173,17 +173,6 @@ body1_ t srcUrl contents links demo1 demo2 =
         [ Options.div
             boxed
             [ title t
-            , grid [ noSpacing ]
-                [ cell [ size All 6, size Phone 4 ] [ contents ]
-                , cell
-                    [ size All 5
-                    , offset Desktop 1
-                    , size Phone 4
-                    , align Top
-                    , css "position" "relative"
-                    ]
-                    (references <| ( "Demo source", srcUrl ) :: links)
-                ]
             , Options.div
                 [ css "margin-bottom" "48px"
                 ]

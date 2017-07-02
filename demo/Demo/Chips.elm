@@ -271,12 +271,12 @@ view model =
                                 [ Options.css "width" "200px"
                                 , Color.background (Color.color Color.Pink Color.S500)
                                 ]
-                                [ Card.title []
-                                    [ Card.head
+                                [ Card.primary []
+                                    [ Card.title
                                         [ Color.text Color.white ]
                                         [ text model.details ]
                                     ]
-                                , Card.text
+                                , Card.supportingText
                                     [ Color.text Color.white ]
                                     [ text "Touching a chip opens a full detailed view (either in a card or full screen) or a menu of options related to that chip." ]
                                 ]
