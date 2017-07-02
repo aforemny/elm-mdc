@@ -1,20 +1,21 @@
 module Demo.Cards exposing (model, update, view, Model, Msg)
 
-import Platform.Cmd exposing (Cmd, none)
-import Html exposing (..)
-import Html.Attributes
-import Material.Card as Card
-import Material.Button as Button
-import Material.Icon as Icon
-import Material.Elevation as Elevation
-import Material.Color as Color
-import Material.Options as Options exposing (cs, css)
-import Material
-import Material.Typography as Typography
-import Material.Tabs as Tabs
-import Material.Helpers exposing (map1st, map2nd)
-import Demo.Page as Page
 import Demo.Code as Code
+import Demo.Page as Page
+import Html.Attributes
+import Html.Attributes as Html exposing (..)
+import Html exposing (..)
+import Material
+import Material.Button as Button
+import Material.Card as Card
+import Material.Color as Color
+import Material.Elevation as Elevation
+import Material.Helpers exposing (map1st, map2nd)
+import Material.Icon as Icon
+import Material.Options as Options exposing (cs, css)
+import Material.Tabs as Tabs
+import Material.Typography as Typography
+import Platform.Cmd exposing (Cmd, none)
 
 
 -- MODEL
@@ -96,763 +97,326 @@ update action model =
 -- VIEW
 
 
-margin1 : Options.Property a b
-margin1 =
-    css "margin" "0"
-
-
-margin2 : Options.Property a b
-margin2 =
-    css "margin" "4px 8px 4px 0px"
-
-
-dynamic : Int -> Msg -> Model -> Options.Style Msg
-dynamic k showcode model =
-    [ if model.raised == k then
-        Elevation.e8
-      else
-        Elevation.e2
-    , Elevation.transition 250
-    , Options.onMouseEnter (Raise k)
-    , Options.onMouseLeave (Raise -1)
-    , Options.onClick showcode
-    ]
-        |> Options.many
-
-
-white : Options.Property c m
-white =
-    Color.text Color.white
-
-
-wide : Float
-wide =
-    400
-
-
 type alias Card =
     Model -> ( Html Msg, String, Maybe (Html Msg) )
 
 
-table : Card
-table model =
-    let
-        white =
-            Color.text Color.white
-
-        card =
-            Card.view
-                [ dynamic 0 (ShowCode2 code) model
-                , css "width" (toString wide ++ "px")
-                , Color.background (Color.color Color.DeepPurple Color.S300)
-                , margin2
-                ]
-                [ Card.media
-                    [ css "background" "url('assets/images/table.jpg') center / cover"
-                    , css "height" (toString (wide / 16 * 9) ++ "px")
-                    ]
-                    []
-                , Card.title []
-                    [ Card.head [ white ] [ text "Table mountain" ]
-                    , Card.subhead [ white ] [ text "Cape Town, South Africa" ]
-                    ]
-                , Card.menu []
-                    [ Button.render Mdl
-                        [ 0, 0 ]
-                        model.mdl
-                        [ Button.icon, Button.ripple, white ]
-                        [ Icon.i "share" ]
-                    ]
-                ]
-
-        code =
-            """
-      Card.view
-        [ css "width" \"""" ++ toString wide ++ """px")
-        , Color.background (Color.color Color.DeepPurple Color.S300)
-        ]
-        [ Card.media
-            [ css "background" "url('assets/table.jpg') center / cover"
-            , css "height" \"""" ++ toString (wide / 16 * 9) ++ """px")
-            ]
-            []
-        , Card.title [ ]
-            [ Card.head [ white ] [ text "Table mountain" ]
-            , Card.subhead [ white ] [ text "Cape Town, South Africa" ]
-            ]
-        , Card.menu []
-            [ Button.render Mdl [0,0] model.mdl
-              [ Button.icon, Button.ripple, white ]
-              [ Icon.i "share" ]
-            ]
-        ] """
-
-        comment =
-            Nothing
-    in
-        ( card, code, comment )
+demoCard options =
+    Card.view
+    (  css "margin" "24px"
+    :: css "min-width" "320px"
+    :: css "max-width" "21.875rem"
+    :: options
+    )
 
 
-grenadine : Card
-grenadine model =
-    let
-        card =
-            Card.view
-                [ dynamic 1 (ShowCode1 code) model
-                , css "width" "256px"
-                , margin1
-                ]
-                [ Card.title
-                    [ css "background" "url('assets/images/pomegranate.jpg') center / cover"
-                    , css "height" "256px"
-                    , css "padding" "0"
-                      -- Clear default padding to encompass scrim
-                    ]
-                    [ Card.head
-                        [ white
-                        , Options.scrim 0.75
-                        , css "padding" "16px"
-                          -- Restore default padding inside scrim
-                        , css "width" "100%"
-                        ]
-                        [ text "Grenadine" ]
-                    ]
-                , Card.text []
-                    [ text "Non-alcoholic syrup used for both its tart and sweet flavour as well as its deep red color." ]
-                , Card.actions
-                    [ Card.border ]
-                    [ Button.render Mdl
-                        [ 1, 0 ]
-                        model.mdl
-                        [ Button.ripple, Button.accent ]
-                        [ text "Ingredients" ]
-                    , Button.render Mdl
-                        [ 1, 1 ]
-                        model.mdl
-                        [ Button.ripple, Button.accent ]
-                        [ text "Cocktails" ]
-                    ]
-                ]
-
-        code =
-            """
-      Card.view
-        [ dynamic 1 (ShowCode1 code) model
-        , css "width" "256px"
-        ]
-        [ Card.title
-            [ css "background" "url('assets/pomegranate.jpg') center / cover"
-            , css "height" "256px"
-            , css "padding" "0" -- Clear default padding to encompass scrim
-            ]
-            [ Card.head
-                [ white
-                , Options.scrim 0.75
-                , css "padding" "16px" -- Restore default padding inside scrim
-                , css "width" "100%"
-                ]
-                [ text "Grenadine" ]
-            ]
-        , Card.text []
-            [ text "Non-alcoholic syrup used for both its tart and sweet flavour as well as its deep red color." ]
-        , Card.actions
-            [ Card.border ]
-            [ Button.render Mdl [1,0] model.mdl
-                [ Button.ripple, Button.accent ]
-                [ text "Ingredients" ]
-            , Button.render Mdl [1,1] model.mdl
-                [ Button.ripple, Button.accent ]
-                [ text "Cocktails" ]
-            ]
-        ]
-"""
-
-        comment =
-            Nothing
-    in
-        ( card, code, comment )
+demoSupportingText =
+    Card.supportingText []
+    [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+    ]
 
 
-reminder : Card
-reminder model =
-    let
-        card =
-            Card.view
-                [ dynamic 2 (ShowCode2 code) model
-                , css "width" "192px"
-                , css "height" "192px"
-                , Color.background (Color.color Color.LightBlue Color.S400)
-                , margin2
-                ]
-                [ Card.title [] [ Card.head [ white ] [ text "Call Petronella" ] ]
-                , Card.text [ Card.expand ] []
-                  -- Filler
-                , Card.actions
-                    [ Card.border
-                      -- Modify flexbox to accomodate small text in action block
-                    , css "display" "flex"
-                    , css "justify-content" "space-between"
-                    , css "align-items" "center"
-                    , css "padding" "8px 16px 8px 16px"
-                    , white
-                    ]
-                    [ Options.span [ Typography.caption, Typography.contrast 0.87 ] [ text "August 3, 2016" ]
-                    , Button.render Mdl
-                        [ 1 ]
-                        model.mdl
-                        [ Button.icon, Button.ripple ]
-                        [ Icon.i "phone" ]
-                    ]
-                ]
-
-        code =
-            """
-      Card.view
-        [ css "width" "192px"
-        , css "height" "192px"
-        , Color.background (Color.color Color.LightBlue Color.S400)
-        ]
-        [ Card.title [] [ Card.head [ white ] [ text "Call Petronella" ] ]
-        , Card.text [ Card.expand ]  [] -- Filler
-        , Card.actions
-            [ Card.border
-            -- Modify flexbox to accomodate small text in action block
-            , css "display" "flex"
-            , css "justify-content" "space-between"
-            , css "align-items" "center"
-            , css "padding" "8px 16px 8px 16px"
-            , white
-            ]
-            [ Options.span [ Typography.caption, Typography.contrast 0.87 ] [ text "August 3, 2016" ]
-            , Button.render Mdl [1] model.mdl
-                [ Button.icon, Button.ripple ]
-                [ Icon.i "phone" ]
-            ]
-        ]
-"""
-
-        comment =
-            Nothing
-    in
-        ( card, code, comment )
-
-
-elm : Card
-elm model =
-    let
-        card =
-            Card.view
-                [ css "width" "256px"
-                , css "height" "256px"
-                , css "background" "url('assets/images/elm.png') center / cover"
-                , dynamic 3 (ShowCode1 code) model
-                , margin1
-                ]
-                [ Card.text [ Card.expand ] []
-                  -- Filler
-                , Card.text
-                    [ css "background" "rgba(0, 0, 0, 0.5)" ]
-                    -- Non-gradient scrim
-                    [ Options.span
-                        [ white, Typography.title, Typography.contrast 1.0 ]
-                        [ text "Elm programming" ]
-                    ]
-                ]
-
-        code =
-            """
-      Card.view
-        [ css "width" "256px"
-        , css "height" "256px"
-        , css "background" "url('assets/elm.png') center / cover"
-        ]
-        [ Card.text [ Card.expand ] [] -- Filler
-        , Card.text
-            [ css "background" "rgba(0, 0, 0, 0.5)" ] -- Non-gradient scrim
-            [ Options.span
-                [ white, Typography.title, Typography.contrast 1.0 ]
-                [ text "Elm programming" ]
-            ]
-        ]
-"""
-
-        comment =
-            Nothing
-    in
-        ( card, code, comment )
-
-
-playing : Card
-playing model =
-    let
-        card =
-            Card.view
-                [ css "width" (toString wide ++ "px")
-                , Color.background (Color.color Color.Amber Color.S600)
-                , dynamic 5 (ShowCode2 code) model
-                , margin2
-                ]
-                [ Card.title
-                    [ css "align-content" "flex-start"
-                    , css "flex-direction" "row"
-                    , css "align-items" "flex-start"
-                    , css "justify-content" "space-between"
-                    ]
-                    [ Options.div
-                        []
-                        [ Card.head [ white ] [ text "Artificial Heart" ]
-                        , Card.subhead [ white ] [ text "Jonathan Coulton" ]
-                        ]
-                    , Options.img
-                        [ Options.attribute <| Html.Attributes.src "assets/images/artificial-heart.jpg"
-                        , css "height" "96px"
-                        , css "width" "96px"
-                        ]
-                        []
-                    ]
-                ]
-
-        code =
-            """
-      Card.view
-        [ css "width" \"""" ++ toString wide ++ """px"
-        , Color.background (Color.color Color.Amber Color.S600)
-        ]
-        [ Card.title
-            [ css "align-content" "flex-start"
-            , css "flex-direction" "row"
-            , css "align-items" "flex-start"
-            , css "justify-content" "space-between"
-            ]
-            [ Options.div
-                []
-                [ Card.head [ white ] [ text "Artificial Heart" ]
-                , Card.subhead [ white ] [ text "Jonathan Coulton" ]
-                ]
-            , Options.img
-                [ Options.attribute <| Html.Attributes.src "assets/artificial-heart.jpg"
-                , css "height" "96px"
-                , css "width" "96px"
-                ]
-                []
-            ]
-        ]
-"""
-
-        comment =
-            Nothing
-    in
-        ( card, code, comment )
-
-
-weather : Card
-weather model =
-    let
-        sun =
-            Color.color Color.Amber Color.S500
-
-        rain =
-            Color.color Color.LightBlue Color.S500
-
-        today =
-            [ ( "now", 21, -1, Color.primary, "cloud" )
-            , ( "16", 21, -1, Color.primary, "cloud" )
-            , ( "17", 20, -1, Color.primary, "cloud" )
-            , ( "18", 20, -1, rain, "grain" )
-            , ( "19", 19, -1, rain, "grain" )
-            , ( "20", 19, -1, Color.primary, "cloud_queue" )
-            , ( "21", 28, -1, Color.primary, "cloud_queue" )
-            ]
-
-        next3 =
-            [ ( "thu", 21, 14, sun, "wb_sunny" )
-            , ( "fri", 22, 15, rain, "grain" )
-            , ( "sat", 20, 13, sun, "wb_sunny" )
-            , ( "sun", 21, 13, rain, "grain" )
-            , ( "mon", 20, 13, rain, "grain" )
-            , ( "tue", 20, 13, sun, "wb_sunny" )
-            , ( "wed", 21, 15, sun, "wb_sunny" )
-            ]
-
-        cell =
-            css "width" "64px"
-
-        row ( time, high, low, color, icon ) =
-            Card.subhead
-                [ css "display" "flex"
-                , css "justify-content" "space-between"
-                , css "align-items" "center"
-                , css "padding" ".3rem 2.5rem"
-                ]
-                [ Options.span [ cell ] [ text time ]
-                , Options.span [ cell, css "text-align" "center" ]
-                    [ Icon.view icon [ Color.text color, Icon.size18 ] ]
-                , Options.span [ cell, css "text-align" "right" ]
-                    [ text <| toString high ++ "° "
-                    , Options.span
-                        [ css "color" "rgba(0,0,0,0.37)" ]
-                        [ text <|
-                            if low >= 0 then
-                                toString low ++ "°"
-                            else
-                                ""
-                        ]
-                    ]
-                ]
-
-        list items =
-            [ Options.div
-                [ css "display" "flex"
-                , css "flex-direction" "column"
-                , css "padding" "1rem 0"
-                , css "color" "rgba(0, 0, 0, 0.54)"
-                ]
-                (List.map row items)
-            ]
-
-        card =
-            Card.view
-                [ dynamic 6 (ShowCode1 code) model
-                , css "width" "256px"
-                , margin1
-                ]
-                [ Card.title
-                    [ css "flex-direction" "column" ]
-                    [ Card.head [] [ text "Copenhagen" ]
-                    , Card.subhead [] [ text "Wed, 14:55, mostly cloudy" ]
-                    , Options.div
-                        [ css "padding" "2rem 2rem 0 2rem" ]
-                        [ Options.span
-                            [ Typography.display4
-                            , Typography.contrast 0.87
-                            , Color.text Color.primary
-                            ]
-                            [ text "21°" ]
-                        ]
-                    ]
-                , Card.actions []
-                    [ Tabs.render Mdl
-                        [ 5, 2 ]
-                        model.mdl
-                        [ Tabs.ripple
-                        , Tabs.onSelectTab SetTab
-                        , Tabs.activeTab model.tab
-                        ]
-                        [ Tabs.label [] [ text "Today" ]
-                        , Tabs.label [] [ text "7-day" ]
-                        ]
-                        (list
-                            (if model.tab == 0 then
-                                today
-                             else
-                                next3
-                            )
-                        )
-                    ]
-                ]
-
-        code =
-            """
-    sun =
-      Color.color Color.Amber Color.S500
-
-    rain =
-      Color.color Color.LightBlue Color.S500
-
-    today =
-      [ ("now", 21, -1, Color.primary, "cloud")
-      , ("16",  21, -1, Color.primary, "cloud")
-      , ("17",  20, -1, Color.primary, "cloud")
-      , ("18",  20, -1, rain, "grain")
-      , ("19",  19, -1, rain, "grain")
-      , ("20",  19, -1, Color.primary, "cloud_queue")
-      , ("21",  28, -1, Color.primary, "cloud_queue")
+card0 model =
+    demoCard
+    [
+    ]
+    [ Card.media
+      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
+      , css "background-size" "cover"
+      , css "height" "12.313rem"
       ]
-
-    next3 =
-      [ ("thu", 21, 14, sun, "wb_sunny")
-      , ("fri", 22, 15, rain, "grain")
-      , ("sat", 20, 13, sun, "wb_sunny")
-      , ("sun", 21, 13, rain, "grain")
-      , ("mon", 20, 13, rain, "grain")
-      , ("tue", 20, 13, sun, "wb_sunny")
-      , ("wed", 21, 15, sun, "wb_sunny")
+      [
       ]
+    , demoSupportingText
+    ]
 
-    cell =
-      css "width" "64px"
 
-    row (time, high, low, color, icon) =
-      Card.subhead
-        [ css "display" "flex"
-        , css "justify-content" "space-between"
-        , css "align-items" "center"
-        , css "padding" ".3rem 2.5rem"
-        ]
-        [ Options.span [ cell ] [ text time ]
-        , Options.span [ cell, css "text-align" "center" ]
-            [ Icon.view icon [ Color.text color, Icon.size18 ] ]
-        , Options.span [ cell, css "text-align" "right" ]
-            [ text <| toString high ++ "° "
-            , Options.span
-                [ css "color" "rgba(0,0,0,0.37)" ]
-                [ text <| if low >= 0 then toString low ++ "°" else "" ]
-            ]
-        ]
+demoMedia options =
+    Card.media
+    ( css "background-size" "cover"
+    :: css "height" "12.313rem"
+    :: options
+    )
 
-    list items =
-      [ Options.div
-          [ css "display" "flex"
-          , css "flex-direction" "column"
-          , css "padding" "1rem 0"
-          , css "color" "rgba(0, 0, 0, 0.54)"
+
+demoActions options =
+    Card.actions
+    options
+    [ Button.render Mdl [1,1,0] model.mdl
+      [ Button.compact
+      ]
+      [ text "Action 1"
+      ]
+    , Button.render Mdl [1,1,1] model.mdl
+      [ Button.compact
+      ]
+      [ text "Action 2"
+      ]
+    ]
+
+
+demoTitle0 =
+    Card.title [ Card.large ] [ text "Title" ]
+
+
+demoSubtitle0 =
+    Card.subtitle [] [ text "Subehead" ]
+
+
+demoTitle1 =
+    Card.title [ Card.large ] [ text "Title goes here" ]
+
+
+demoSubtitle1 =
+    Card.subtitle [] [ text "Subtitle here" ]
+
+
+demoTitle2 =
+    Card.title [ Card.large ] [ text "Title" ]
+
+
+demoPrimary options =
+    Card.primary
+    (  css "position" "relative"
+    :: options
+    )
+    [ Options.div
+          [ css "position" "absolute"
+          , css "background" "#bdbdbd"
+          , css "height" "2.5rem"
+          , css "width" "2.5rem"
+          , css "border-radius" "50%"
           ]
-          (List.map row items)
+          []
+    , Card.title [ css "margin-left" "56px" ] [ text "Title" ]
+    , Card.subtitle [ css "margin-left" "56px" ] [ text "Subhead" ]
+    ]
+
+
+card1 model =
+    demoCard []
+    [ demoPrimary []
+    , demoMedia
+      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
       ]
-
-    card =
-      Card.view
-        [ css "width" "256px" ]
-        [ Card.title
-            [ css "flex-direction" "column" ]
-            [ Card.head [ ] [ text "Copenhagen" ]
-            , Card.subhead [ ] [ text "Wed, 14:55, mostly cloudy" ]
-            , Options.div
-                [ css "padding" "2rem 2rem 0 2rem" ]
-                [ Options.span
-                    [ Typography.display4
-                    , Color.text Color.primary
-                    ]
-                    [ text "21°" ]
-                ]
-            ]
-        , Card.actions [ ]
-            [ Tabs.render Mdl [5,2] model.mdl
-                [ Tabs.ripple
-                , Tabs.onSelectTab SetTab
-                , Tabs.activeTab model.tab
-                ]
-                [ Tabs.label [] [ text "Today" ]
-                , Tabs.label [] [ text "7-day" ]
-                ]
-                (list (if model.tab == 0 then today else next3))
-            ]
-         ]
-"""
-
-        comment =
-            Nothing
-    in
-        ( card, code, comment )
+      []
+    , demoSupportingText
+    , demoActions []
+    ]
 
 
-event : Card
-event model =
-    let
-        card =
-            Card.view
-                [ dynamic 7 (ShowCode2 code) model
-                , Color.background (Color.color Color.DeepOrange Color.S400)
-                , css "width" "192px"
-                , css "height" "192px"
-                , margin2
-                ]
-                [ Card.title [] [ Card.head [ white ] [ text "Roskilde Festival" ] ]
-                , Card.text [ white ] [ text "Buy tickets before May" ]
-                , Card.actions
-                    [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
-                    [ Button.render Mdl
-                        [ 8, 1 ]
-                        model.mdl
-                        [ Button.icon, Button.ripple ]
-                        [ Icon.i "favorite_border" ]
-                    , Button.render Mdl
-                        [ 8, 2 ]
-                        model.mdl
-                        [ Button.icon, Button.ripple ]
-                        [ Icon.i "event_available" ]
-                    ]
-                ]
+card2 : Model -> Html Msg
+card2 model =
+    demoCard []
+    [ demoPrimary []
+    , demoMedia
+      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
+      ]
+      []
+    , demoActions [ Card.vertical ]
+    ]
 
-        code =
-            """
-      Card.view
-        [ Color.background (Color.color Color.DeepOrange Color.S400)
-        , css "width" "192px"
-        , css "height" "192px"
+
+demoPrimary2 options =
+    Card.primary
+    (  css "position" "relative"
+    :: options
+    )
+    [ demoTitle1
+    , demoSubtitle1
+    ]
+
+
+card3 model =
+    demoCard []
+    [ demoMedia
+      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
+      ]
+      []
+    , demoPrimary2 []
+    , demoActions []
+    ]
+
+
+card4 model =
+    demoCard []
+    [ Card.primary
+      [ css "position" "relative"
+      ]
+      [ demoTitle1
+      , demoSubtitle1
+      ]
+    , Card.supportingText []
+      [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+      ]
+    , demoActions []
+    ]
+
+
+card5 model =
+    demoCard
+    [ Card.darkTheme
+    , css "background-image" "url(https://material-components-web.appspot.com/images/1-1.jpg"
+    , css "background-size" "cover"
+    , css "height" "21.875rem"
+    ]
+    [ demoPrimary2
+      [ css "background" "rgba(0,0,0,0.4)"
+      ]
+    , Card.actions
+      [ css "background" "rgba(0,0,0,0.4)"
+      ]
+      [ Button.render Mdl [1,1,0] model.mdl
+        [ Button.compact
+        , Button.darkTheme
         ]
-        [ Card.title [ ] [ Card.head [ white ] [ text "Roskilde Festival" ] ]
-        , Card.text [ white ] [ text "Buy tickets before May" ]
-        , Card.actions
-            [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
-            [ Button.render Mdl [8,1] model.mdl
-                [ Button.icon, Button.ripple ]
-                [ Icon.i "favorite_border" ]
-            , Button.render Mdl [8,2] model.mdl
-                [ Button.icon, Button.ripple ]
-                [ Icon.i "event_available" ]
-            ]
-        ]"""
-
-        comment =
-            Nothing
-    in
-        ( card, code, comment )
-
-
-aux : Model -> List (Html Msg)
-aux model =
-    [ h4 [] [ text "Setup" ]
-    , Code.code [] """
-      import Material.Card as Card
-
-      white : Options.Property c m
-      white =
-        Color.text Color.white
-    """
-    , h4 [] [ text "Card click" ]
-    , p [] [ text "To react to a card-wide click event, register an onClick handler as indicated below. Be aware that clicks in the action block is ignored in order to not confuse the a click on a control in that block with a click on the entire card." ]
-    , Options.div
-        [ css "display" "flex"
-        , css "align-items" "flex-start"
-        , css "flex-flow" "row wrap"
+        [ text "Action 1"
         ]
-        [ Card.view
-            [ css "width" "128px"
-            , Color.background (Color.color Color.Pink Color.S500)
-              -- Click
-            , Options.onClick Click
-            , css "margin" "0 16px 0 0"
-            , css "flex-shrink" "0"
-            ]
-            [ Card.title [] [ Card.head [ white ] [ text "Click anywhere" ] ]
-            , Card.text [ white ] [ text <| toString model.clicks ++ " clicks so far." ]
-            , Card.actions [ Card.border, white ] [ text "(not here)" ]
-            ]
-        , Options.div
-            [ css "flex-grow" "1"
-            ]
-            [ Code.code [] """
-            Card.view
-              [ css "width" "128px"
-              , Color.background (Color.color Color.Pink Color.S500)
-              -- Click
-              , Options.onClick Click
-              ]
-              [ Card.title [] [ Card.head [ white ] [ text "Click anywhere" ] ]
-              , Card.text [ white ] [ text <| toString model.clicks ++ " clicks so far." ]
-              , Card.actions [ Card.border, white ] [ text "(not here)" ]
-              ]"""
-            ]
+      , Button.render Mdl [1,1,1] model.mdl
+        [ Button.compact
+        , Button.darkTheme
         ]
-    , h4 [] [ text "Elevation animation" ]
-    , p [] [ text "If desired, use Elevation.transition to install elevation transitions, e.g., on hover, as demonstrated in the example below." ]
-    , let
-        k =
-            12
-      in
-        Options.div
-            [ css "display" "flex"
-            , css "align-items" "flex-start"
-            , css "flex-flow" "row wrap"
-            ]
-            [ Card.view
-                [ css "height" "128px"
-                , css "width" "128px"
-                , Color.background (Color.color Color.Pink Color.S500)
-                  -- Elevation
-                , if (model.raised == k) then
-                    Elevation.e8
-                  else
-                    Elevation.e2
-                , Elevation.transition 250
-                , Options.onMouseEnter (Raise k)
-                , Options.onMouseLeave (Raise -1)
-                , css "margin" "0 16px 0 0"
-                , css "flex-shrink" "0"
-                ]
-                [ Card.title [] [ Card.head [ white ] [ text "Hover here" ] ] ]
-            , Options.div
-                [ css "flex-grow" "1"
-                ]
-                [ Code.code [] """
-                Card.view
-                    [ css "height" "128px"
-                    , css "width" "128px"
-                    , Color.background (Color.color Color.Brown Color.S500)
-                    -- Elevation
-                    , if model.raised == k then Elevation.e8 else Elevation.e2
-                    , Elevation.transition 250
-                    , Options.onMouseEnter (Raise k)
-                    , Options.onMouseLeave (Raise -1)
-                    ]
-                    [ Card.title [] [ Card.head [ white ] [ text "Hover here" ] ] ]"""
-                ]
-            ]
+        [ text "Action 2"
+        ]
+      ]
+    ]
+
+
+card6 model =
+    demoCard []
+    [ demoMedia
+      [ css "background-image" "url(https://material-components-web.appspot.com/images/1-1.jpg)"
+      ]
+      [ Card.title [ Card.large ] [ text "Title" ]
+      ]
+    , Card.actions []
+      [ Button.render Mdl [1,6,0] model.mdl
+        [ Button.compact
+        ]
+        [ text "Action 1"
+        ]
+      ]
+    ]
+
+
+mediaItem options =
+    Card.mediaItem options
+    [ Html.img
+      [ Html.src "https://material-components-web.appspot.com/images/1-1.jpg"
+      , Html.style
+        [ ("width", "auto")
+        , ("height", "100%")
+        ]
+      ]
+      []
+    ]
+
+
+demoPrimary3 options =
+    Card.primary
+    (  css "position" "relative"
+    :: options
+    )
+    [ demoTitle3
+    , demoSubtitle3
+    ]
+
+
+demoTitle3 =
+    Card.title [ Card.large ] [ text "Title here" ]
+
+
+demoSubtitle3 =
+    Card.subtitle [] [ text "Subtitle here" ]
+
+
+card7 model =
+    demoCard []
+    [ Card.horizontalBlock []
+      [ demoPrimary3 []
+      , mediaItem []
+      ]
+    , demoActions []
+    ]
+
+
+card8 model =
+    demoCard []
+    [ Card.horizontalBlock []
+      [ demoPrimary3 []
+      , mediaItem [ Card.x1dot5 ]
+      ]
+    , demoActions []
+    ]
+
+
+card9 model =
+    demoCard []
+    [ Card.horizontalBlock []
+      [ demoPrimary3 []
+      , mediaItem [ Card.x2 ]
+      ]
+    , demoActions []
+    ]
+
+
+card10 model =
+    demoCard
+    [
+    ]
+    [ Card.horizontalBlock []
+      [ mediaItem [ Card.x3 ]
+      , Card.actions
+        [ Card.vertical
+        ]
+        [ Button.render Mdl [1,10,0] model.mdl
+          [ Button.compact
+          ]
+          [ text "A 1"
+          ]
+        , Button.render Mdl [1,10,1] model.mdl
+          [ Button.compact
+          ]
+          [ text "A 2"
+          ]
+        ]
+      ]
     ]
 
 
 view : Model -> Html Msg
 view model =
     let
-        cards1 =
-            [ p [] [ text "Click a card below to see its implementation further down the page." ]
-            , Options.div
-                [ css "display" "flex"
-                , css "flex-flow" "row wrap"
-                , css "justify-content" "space-between"
-                , css "align-items" "flex-start"
-                , css "width" "100%"
-                , css "margin-top" "4rem"
-                ]
-                (List.map (\( html, _, _ ) -> html)
-                    [ weather model
-                    , grenadine model
-                    , elm model
-                    ]
-                )
-            , Code.view model.code1 [ css "margin-top" "16px" ]
+        demoWrapper =
+            Options.div
+            [ css "display" "flex"
+            , css "margin" "24px"
+            , css "flex-flow" "row wrap"
+            , css "align-content" "left"
+            , css "justify-content" "left"
+            , cs "mdc-typography"
             ]
-
-        cards2 =
-            [ Options.div
-                [ css "display" "flex"
-                , css "flex-flow" "row wrap"
-                , css "align-items" "flex-end"
-                , css "margin-top" "64px"
-                ]
-                [ Options.div
-                    [ css "display" "flex"
-                    , css "flex-flow" "row wrap"
-                    , css "justify-content" "space-between"
-                    , css "align-items" "center"
-                    , css "min-width" "256px"
-                    , css "max-width" "400px"
-                    , css "flex" "1 1 auto"
-                    ]
-                    (List.map (\( html, _, _ ) -> html)
-                        [ table model
-                        , playing model
-                        , reminder model
-                        , event model
-                        ]
-                    )
-                , Options.div
-                    [ css "margin" "32px -12px"
-                    , css "width" "100%"
-                    ]
-                    (Code.view model.code2 []
-                        :: aux model
-                    )
-                ]
-            ]
+                << List.map (\card -> Html.div [] [ card ])
     in
-        Page.body1_ "Cards"
-            srcUrl
-            intro
-            references
-            cards1
-            cards2
+    Page.body1_ "Cards"
+        srcUrl
+        intro
+        references
+        []
+        [ demoWrapper
+          [ card0 model
+          , card1 model
+          , card2 model
+          , card3 model
+          , card4 model
+          , card5 model
+          , card6 model
+          , card7 model
+          , card8 model
+          , card9 model
+          , card10 model
+          ]
+        ]
 
 
 intro : Html m
