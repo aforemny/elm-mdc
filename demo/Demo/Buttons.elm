@@ -7,7 +7,7 @@ import String
 import Material.Button as Button exposing (..)
 import Material.Grid as Grid
 import Material.Icon as Icon
-import Material.Options as Options exposing (Style)
+import Material.Options as Options exposing (Style, cs, css, when)
 import Material.Helpers exposing (map1st, map2nd)
 import Material
 import Demo.Code as Code
@@ -301,82 +301,96 @@ viewButtons model =
 
 view : Model -> Html Msg
 view model =
-    Page.body1_ "Buttons"
-        srcUrl
-        intro
-        references
-        [ p []
-            [ text """Various combinations of colors and button styles can be seen
-                  below. Most buttons have animations; try clicking. Code for the
-                  last clicked button appears below the buttons."""
-            ]
-        , Grid.grid [] (viewButtons model)
-        , p []
-            [ model.last
-                |> Maybe.map describe
-                |> Maybe.map (\str -> "Code for '" ++ str ++ "':")
-                |> Maybe.withDefault "Click a button to see the corresponding code."
-                |> text
-            , Code.view model.code [ Options.css "margin" "20px" ]
-            ]
-        ]
-        [ h4 [ id "link-buttons" ]
-            [ text "Link buttons"
-            ]
-        , p []
-            [ text """
-          To make a button act like a link, supply the option `Button.link
-          "<href>"`. The example below opens the Grid tab of this demo."""
-            ]
-        , Button.render Mdl
-            [ 9, 0, 0, 1 ]
-            model.mdl
-            [ Button.ripple
-            , Button.colored
-            , Button.raised
-            , Button.link "#grid"
-            ]
-            [ text "Link" ]
-        , Code.code [ Options.css "margin" "20px 0" ]
-            """
-      Button.render Mdl [9, 0, 0, 1] model.mdl
-        [ Button.ripple
-        , Button.colored
-        , Button.raised
-        , Button.link "#grid"
-        ]
-        [ text "Link" ]
-      """
-        , p []
-            [ text """
-          Buttons with the `link` property function as HTML `a` elements.
-          You can supply the usual attributes, e.g, `target`. The example
-          below opens the link in a new tab or window, depending on the
-          browser.
-        """
-            ]
-        , Button.render Mdl
-            [ 9, 0, 0, 2 ]
-            model.mdl
-            [ Button.ripple
-            , Button.colored
-            , Button.raised
-            , Button.link "#grid"
-            , Options.attribute <| Html.Attributes.target "_blank"
-            ]
-            [ text "Open in new tab" ]
-        , Code.code [ Options.css "margin" "20px 0" ]
-            """
-      Button.render Mdl [9, 0, 0, 2] model.mdl
-        [ Button.ripple
-        , Button.colored
-        , Button.raised
-        , Button.link "#grid"
-        , Options.attribute <| Html.Attributes.target "_blank"
-        ]
-        [ text "Ripple and target" ]
-      """
-        ]
+    div
+    [
+    ]
+    ( [ { headline = "Buttons", link = False, disabled = False }
+      , { headline = "Links with Button Style", link = True, disabled = False }
+      , { headline = "Disabled", link = False, disabled = True }
+      ]
+      |> List.concat << List.map (\row ->
+           ( List.concat
+             [ [ div
+                 [ class "mdc-typography--title"
+                 , style
+                   [ ("padding", "64px 16px 24px")
+                   ]
+                 ]
+                 [ text row.headline
+                 ]
+               ]
+             , [ { dense = False, compact = False }
+               , { dense = True, compact = False }
+               , { dense = False, compact = True }
+               ]
+               |> List.map (\button ->
+                      [ { dense = button.dense
+                        , compact = button.compact
+                        , raised = False
+                        }
+                      , { dense = button.dense
+                        , compact = button.compact
+                        , raised = True
+                        }
+                      ]
+                  )
+               |> List.concat
+               |> List.map (\button ->
+                    Button.render Mdl [9,0,0,1] model.mdl
+                    [ css "margin" "16px"
+                    , Button.link "" |> when row.link
+                    , Button.disabled |> when row.disabled
+                    , Button.raised |> when button.raised
+                    , Button.ripple
+                    , Button.compact |> when button.compact
+                    , Button.dense |> when button.dense
+                    ]
+                    [ [ if button.dense then Just "Dense" else Nothing
+                      , if button.compact then Just "Compact" else Nothing
+                      , if button.raised then Just "Raised" else Just "Default"
+                      ]
+                      |> List.filterMap identity
+                      |> String.join " "
+                      |> text
+                    ]
+                  )
+             , [ { primary = False }
+               , { primary = True }
+               ]
+               |> List.map (\button ->
+                      [ { primary = button.primary
+                        , raised = False
+                        }
+                      , { primary = button.primary
+                        , raised = True
+                        }
+                      ]
+                  )
+               |> List.concat
+               |> List.map (\button ->
+                    Button.render Mdl [9,0,0,1] model.mdl
+                    [ css "margin" "16px"
+                    , Button.link "" |> when row.link
+                    , Button.disabled |> when row.disabled
+                    , Button.ripple
+                    , if button.primary then
+                          Button.primary
+                        else
+                          Button.accent
+                    , Button.raised |> when button.raised
+                    ]
+                    [ [ if button.raised then "Raised" else "Default"
+                      , "width"
+                      , if button.primary then "Primary" else "Accent"
+                      ]
+                      |> String.join " "
+                      |> text
+                    ]
+                  )
+             ]
+           )
+         )
+    )
 
 
 intro : Html a

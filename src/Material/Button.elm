@@ -5,6 +5,9 @@ module Material.Button
         , Msg
         , update
         , view
+        , darkTheme
+        , compact
+        , dense
         , flat
         , raised
         , fab
@@ -337,6 +340,18 @@ Example use (colored raised button, assuming properly setup model):
 raised : Property m
 raised =
     cs "mdc-button--raised"
+
+compact : Property m
+compact =
+    cs "mdc-button--compact"
+
+darkTheme : Property m
+darkTheme =
+    cs "mdc-button--dark-theme"
+
+dense : Property m
+dense =
+    cs "mdc-button--dense"
 
 
 {-| Floating Msg Button. From the
