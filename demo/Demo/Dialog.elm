@@ -1,26 +1,28 @@
 module Demo.Dialog exposing (model, update, view, Model, Msg, element)
 
+import Demo.Code as Code
+import Demo.Page as Page
 import Html.Attributes exposing (..)
 import Html exposing (..)
 import Material
 import Material.Button as Button
 import Material.Dialog as Dialog
-import Material.Options exposing (css)
-import Demo.Page as Page
-import Demo.Code as Code
+import Material.Options as Options exposing (css)
 
 
 -- MODEL
 
 
 type alias Model =
-    { mdl : Material.Model
+    { scrolling : Bool
+    , mdl : Material.Model
     }
 
 
 model : Model
 model =
-    { mdl = Material.model
+    { scrolling = False
+    , mdl = Material.model
     }
 
 
@@ -33,10 +35,10 @@ type Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-    case action of
-        Mdl action_ ->
-            Material.update Mdl action_ model
+update msg model =
+    case Debug.log "msg" msg of
+        Mdl msg_ ->
+            Material.update Mdl msg_ model
 
 
 
@@ -45,107 +47,49 @@ update action model =
 
 element : Model -> Html Msg
 element model =
-    Dialog.view
-        []
-        [ Dialog.title [] [ text "Greetings" ]
-        , Dialog.content []
-            [ p [] [ text "A strange game—the only winning move is not to play." ]
-            , p [] [ text "How about a nice game of chess?" ]
-            ]
-        , Dialog.actions []
-            [ Button.render Mdl
-                [ 0 ]
-                model.mdl
-                [ Dialog.closeOn "click" ]
-                [ text "Chess" ]
-            , Button.render Mdl
-                [ 1 ]
-                model.mdl
-                [ Button.disabled ]
-                [ text "GTNW" ]
-            ]
+    Dialog.view []
+    [ Dialog.header []
+      [ Dialog.title [] [ text "Use Google's location service?" ]
+      ]
+    , Dialog.body []
+        [ text "Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running."
         ]
+    , Dialog.footer []
+        [ Dialog.cancelButton
+          (Button.render Mdl [0] model.mdl)
+          [ Dialog.closeOn "click"
+          ]
+          [ text "Decline" ]
+        , Dialog.acceptButton
+          (Button.render Mdl [1] model.mdl)
+          [ Dialog.closeOn "click"
+          ]
+          [ text "Accept" ]
+        ]
+    ]
+
+
+element1 : Model -> Html Msg
+element1 model =
+    Dialog.view []
+    [ -- TODO: scrolling demo
+    ]
 
 
 view : Model -> Html Msg
 view model =
-    [ div
-      [ style
-        [ ("font-weight", "bold")
-        , ("margin-bottom", "30px")
-        ]
+    Page.body1_ "Dialog" srcUrl intro references []
+    [ Button.render Mdl [0] model.mdl
+      [ Dialog.openOn "click"
       ]
-      [ text "Dialogs are experimental. Be sure to check out the "
-      , a
-        [ href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Dialog"
-        , style [("font-weight", "inherit")]
-        ]
-        [ text "Package documentation"
-        ]
-      , text " for the required polyfill."
+      [ text "Show dialog"
       ]
-
-    , Button.render Mdl
-        [ 1 ]
-        model.mdl
-        [ Dialog.openOn "click" ]
-        [ text "Open dialog" ]
-      {-
-         , Button.render Mdl [2] model.mdl
-             [ Dialog.closeOn "click" ]
-             [ text "Close dialog" ]
-      -}
-
-    , Code.code
-      [ css "margin" "32px 0"
+    , Button.render Mdl [1] model.mdl
+      [ Dialog.openOn "click"
       ]
-      """
-
--- Define the dialog
-
-dialog : Model -> Html Msg
-dialog model =
-    Dialog.view
-        []
-        [ Dialog.title [] [ text "Greetings" ]
-        , Dialog.content []
-            [ p [] [ text "A strange game—the only winning move is not to play." ]
-            , p [] [ text "How about a nice game of chess?" ]
-            ]
-        , Dialog.actions []
-            [ Button.render Mdl
-                [ 0 ]
-                model.mdl
-                [ Dialog.closeOn "click" ]
-                [ text "Chess" ]
-            , Button.render Mdl
-                [ 1 ]
-                model.mdl
-                [ Button.disabled ]
-                [ text "GTNW" ]
-            ]
-        ]
-
--- 2. Add it to your view function's outmost div
-
-view =
-    div
-    [ …
+      [ text "Show scrolling dialog"
+      ]
     ]
-    [ …
-    , dialog model
-    ]
-
--- 3. Attach it to a button
-
-Button.render Mdl
-  [ 1 ]
-  model.mdl
-  [ Dialog.openOn "click" ]
-  [ text "Open dialog" ]
-      """
-    ]
-    |> Page.body2 "Dialog" srcUrl intro references
 
 
 intro : Html m

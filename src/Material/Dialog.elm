@@ -1,10 +1,14 @@
 module Material.Dialog
     exposing
         ( view
+        , open
+        , header
         , title
-        , content
-        , actions
-        , fullWidth
+        , body
+        , scrollable
+        , footer
+        , acceptButton
+        , cancelButton
         , openOn
         , closeOn
         )
@@ -33,61 +37,66 @@ for a live demo.
 -}
 
 import Html exposing (..)
-import Html.Attributes
+import Html.Attributes as Html
 import Material.Options as Options exposing (Style, Property, cs)
 import Material.Options.Internal as Internal
 
 
-{-| Option to `actions`. If set, each control takes up the full width of the
-dialog.
+{-| Dialog header
 -}
-fullWidth : Style a
-fullWidth =
-    Options.cs "mdc-dialog__actions--full-width"
+header : List (Style a) -> List (Html a) -> Html a
+header options =
+    Options.div (cs "mdc-dialog__header"::options)
 
 
-{-| Within a dialog specific types of content can exist
+{-| Dialog title
 -}
-type Block a
-    = Title (List (Style a)) (List (Html a))
-    | Content (List (Style a)) (List (Html a))
-    | Actions (List (Style a)) (List (Html a))
+title : List (Style a) -> List (Html a) -> Html a
+title options =
+    Options.div (cs "mdc-dialog__header__title"::options)
 
 
-{-| Generate a title content block
+{-| Dialog body
 -}
-title : List (Style a) -> List (Html a) -> Block a
-title =
-    Title
+body : List (Style a) -> List (Html a) -> Html a
+body options =
+    Options.div (cs "mdc-dialog__body"::options)
 
 
-{-| Generate a supporting text content block
+{-| Make dialog body scrollable
 -}
-content : List (Style a) -> List (Html a) -> Block a
-content =
-    Content
+scrollable : Style a
+scrollable =
+    cs "mdc-dialog__body--scrollable"
 
 
 {-| Generate an actions content block
 -}
-actions : List (Style a) -> List (Html a) -> Block a
-actions =
-    Actions
+footer : List (Style a) -> List (Html a) -> Html a
+footer options =
+    Options.div (cs "mdc-dialog__footer"::options)
 
 
-{-| Render supplied content block
+{-| Dialog's accept button
 -}
-contentBlock : Block a -> Html a
-contentBlock block =
-    case block of
-        Title styling content ->
-            Options.div (cs "mdc-dialog__title" :: styling) content
+acceptButton
+  : (List (Options.Property s a) -> List (Html a) -> Html a)
+  -> List (Options.Property s a)
+  -> List (Html a)
+  -> Html a
+acceptButton button options =
+    button (cs "mdc-dialog__footer__button"::cs "mdc-dialog__footer__button--accept"::options)
 
-        Content styling content ->
-            Options.div (cs "mdc-dialog__content" :: styling) content
 
-        Actions styling content ->
-            Options.div (cs "mdc-dialog__actions" :: styling) content
+{-| Dialog's cancel button
+-}
+cancelButton
+    : (List (Options.Property s a) -> List (Html a) -> Html a)
+    -> List (Options.Property s a)
+    -> List (Html a)
+    -> Html a
+cancelButton button options =
+    button (cs "mdc-dialog__footer__button"::cs "mdc-dialog__footer__button--cancel"::options)
 
 
 theDialog : String
@@ -131,7 +140,7 @@ openOn =
       """
     in
         \event ->
-            Html.Attributes.attribute ("on" ++ event) handler
+            Html.attribute ("on" ++ event) handler
                 |> Internal.attribute
 
 
@@ -170,7 +179,7 @@ closeOn =
       """
     in
         \event ->
-            Html.Attributes.attribute ("on" ++ event) handler
+            Html.attribute ("on" ++ event) handler
                 |> Internal.attribute
 
 
@@ -185,9 +194,16 @@ where in the DOM you can put the output of this function.
 - The elm-mdl library currently support only one dialog pr. application.
 Installing more than one dialog will result in a random one showing.
 -}
-view : List (Style a) -> List (Block a) -> Html a
-view styling contentBlocks =
+view : List (Style a) -> List (Html a) -> Html a
+view styling nodes =
     Options.styled_ (Html.node "dialog")
         (cs "mdc-dialog" :: styling)
-        [ Html.Attributes.id theDialog ]
-        (List.map (contentBlock) contentBlocks)
+        [ Html.id theDialog ]
+        [ Html.div [ Html.class "mdc-dialog__surface" ] nodes
+        , Html.div [ Html.class "mdc-dialog__backdrop" ] []
+        ]
+
+
+open : Style a
+open =
+    cs "mdc-dialog--open"
