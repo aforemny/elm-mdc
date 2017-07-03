@@ -146,7 +146,7 @@ format language options str =
             , css "border-radius" "2px"
             , css "font-size" "10pt"
             , Color.background (Color.color Color.BlueGrey Color.S50)
-            , Elevation.e2
+            , Elevation.elevation 2
             ]
             :: options
         )

@@ -1,14 +1,6 @@
 module Material.Elevation
     exposing
-        ( e0
-        , e2
-        , e3
-        , e4
-        , e6
-        , e8
-        , e16
-        , e24
-        , elevations
+        ( elevation
         , transition
         )
 
@@ -44,11 +36,7 @@ for a live demo.
 
 
 # Elevations
-Each of the values below denote an elevation of a certain heigh, e.g.,
-`e4` will cast a shadow indicating an elevation of 4dp. The default elevation
-is `e0`, no elevation.
-@docs e0, e2, e3, e4, e6, e8, e16, e24
-@docs elevations
+@docs elevation
 
 # Transitions
 @docs transition
@@ -66,81 +54,9 @@ are 2, 3, 4, 6, 8, 16, 24. Invalid values produce no shadow.
 (The specification uses only the values 1-6, 8, 9, 12, 16, 24 for standard UI
 elements; MDL sources define all values 0-24, but omits most from production css.)
 -}
-shadow : Int -> Property a m
-shadow z =
-    cs ("mdc-shadow--" ++ toString z ++ "dp")
-
-
-{-|
--}
-e0 : Property a m
-e0 =
-    nop
-
-
-{-|
--}
-e2 : Property a m
-e2 =
-    shadow 2
-
-
-{-|
--}
-e3 : Property a m
-e3 =
-    shadow 3
-
-
-{-|
--}
-e4 : Property a m
-e4 =
-    shadow 4
-
-
-{-|
--}
-e6 : Property a m
-e6 =
-    shadow 6
-
-
-{-|
--}
-e8 : Property a m
-e8 =
-    shadow 8
-
-
-{-|
--}
-e16 : Property a m
-e16 =
-    shadow 16
-
-
-{-|
--}
-e24 : Property a m
-e24 =
-    shadow 24
-
-
-{-| List of all elevations and their depth in dp.
--}
-elevations : Array ( Property a m, Int )
-elevations =
-    Array.fromList
-        [ ( e0, 0 )
-        , ( e2, 2 )
-        , ( e3, 3 )
-        , ( e4, 4 )
-        , ( e6, 6 )
-        , ( e8, 8 )
-        , ( e16, 16 )
-        , ( e24, 24 )
-        ]
+elevation : Int -> Property a m
+elevation z =
+    cs ("mdc-elevation--z" ++ toString (clamp 0 24 z))
 
 
 {-| Add a CSS-transition to changes in elevation. Supply a transition

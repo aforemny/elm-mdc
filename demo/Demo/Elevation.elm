@@ -53,158 +53,33 @@ update msg model =
             Material.update Mdl msg_ model
 
 
-
 -- VIEW
-
-
-elevate : Model -> ( Style a, Int ) -> Html a
-elevate model ( e, k ) =
-    Options.div
-        [ e
-        , css "height" "96px"
-        , css "width" "128px"
-        , css "margin" "40px"
-        , css "display" "inline-flex"
-        , Elevation.transition 300 |> when model.transition
-        , Options.center
-        ]
-        [ Options.div
-            [ Typography.title
-            , css "box-radius" "2pt"
-            ]
-            [ text <| toString k ]
-        ]
-
-
-noElevations : Float
-noElevations =
-    Array.length Elevation.elevations |> toFloat
-
-
-demo2 : Model -> List (Html Msg)
-demo2 model =
-    let
-        ( e, k ) =
-            Array.get model.elevation Elevation.elevations
-                |> Maybe.withDefault ( Elevation.e0, 0 )
-
-        code =
-            """
-      Options.div
-        [ Elevation.e""" ++ (toString k) ++ """
-        , css "height" "96px"
-        , css "width"  "128px" """
-                ++ (if model.transition then
-                        "\n        , Elevation.transition 300"
-                    else
-                        ""
-                   )
-                ++ """
-        , Options.center
-        ]
-        [ text \""""
-                ++ (toString k)
-                ++ """" ]"""
-    in
-        [ Options.styled Html.h4
-            []
-            [ text "Elevator" ]
-        , Options.div
-            [ css "display" "flex"
-            , css "align-items" "center"
-            , css "flex-flow" "row wrap"
-            ]
-            [ elevate model ( e, k )
-            , Options.div
-                [ css "flex-direction" "column"
-                , css "justify-content" "center"
-                , css "flex-grow" "1"
-                , css "min-width" "256px"
-                ]
-                [ Slider.view
-                    [ Slider.onChange (floor >> SetElevation)
-                    , Slider.value (toFloat model.elevation)
-                    , Slider.min 0
-                    , Slider.max (noElevations - 1)
-                    , Slider.step 1
-                    , css "max-width" "384px"
-                    ]
-                , Toggles.switch Mdl
-                    [ 0 ]
-                    model.mdl
-                    [ Options.onToggle FlipTransition
-                    , Toggles.value model.transition
-                    , css "margin-left" "20px"
-                    , css "margin-top" "24px"
-                    ]
-                    [ text "Animate" ]
-                ]
-            ]
-        , Code.code [ css "margin" "40px" ] code
-        ]
-
-
-
-{-
-   Options.div
-     [ css "display" "inline-flex"
-     , css "flex-flow" "row wrap"
-     , css "justify-content" "center"
-     , css "align-items" "center"
-     ]
-     [ Options.div
-         [ e
-         , css "height" "96px"
-         , css "width"  "128px"
-         , css "margin" "40px"
-
-         -- Center
-         , css "display" "inline-flex"
-         , css "flex-flow" "row wrap"
-         , css "justify-content" "center"
-         , css "align-items" "center"
-         ]
-         [ Options.div
-             [ Typography.title
-             , css "box-radius" "2pt"
-             ]
-             [ text <| toString k ]
-         ]
-     , Options.div
-         [css "width" "300px"]
-         [ Code.code
-             (
-              """
-               Options.div
-                 [ Elevation.e""" ++ (toString k) ++ """
-                 , css "height" "96px"
-                 , css "width"  "128px"
-                 , css "margin" "40px"
-                 -- Center
-                 , css "display" "inline-flex"
-                 , css "flex-flow" "row wrap"
-                 , css "justify-content" "center"
-                 , css "align-items" "center"
-                 ]
-                 [ text \"""" ++ (toString k) ++ """\" ]"""
-             )
-         ]
-     ]
--}
 
 
 view : Model -> Html Msg
 view model =
-    let
-        boxes =
-            Elevation.elevations |> Array.map (elevate model) |> Array.toList
-
-        demo1 =
-            List.append
-                [ p [] [ text """Below are boxes drawn at various elevations.""" ] ]
-                boxes
-    in
-        Page.body1_ "Elevation" srcUrl intro references demo1 (demo2 model)
+    Page.body1_ "Elevation" srcUrl intro references []
+    [ Options.div
+      [ css "display" "flex"
+      , css "flex-flow" "row wrap"
+      ]
+      ( List.map (\z ->
+            Options.div
+            [ Elevation.elevation z
+            , css "width" "200px"
+            , css "height" "100px"
+            , css "margin" "0 60px 80px"
+            , css "line-height" "100px"
+            , css "color" "#9e9e9e"
+            , css "font-size" "0.8em"
+            , css "border-radius" "3px"
+            ]
+            [ text (toString z ++ "dp")
+            ]
+          )
+          (List.range 0 24)
+      )
+    ]
 
 
 intro : Html a

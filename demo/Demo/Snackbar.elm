@@ -11,7 +11,7 @@ import Material.Options as Options exposing (cs, css, Style, nop)
 import Material.Snackbar as Snackbar
 import Material.Button as Button
 import Material.Grid exposing (..)
-import Material.Elevation exposing (e2, e8)
+import Material.Elevation as Elevation
 import Material
 import Demo.Page as Page
 
@@ -255,9 +255,9 @@ clickView model ( k, square ) =
                 [ Color.background color
                 , Color.text Color.primaryContrast
                 , if selected then
-                    e8
+                    Elevation.elevation 8
                   else
-                    e2
+                    Elevation.elevation 2
                   -- Center contents
                 , css "display" "inline-flex"
                 , css "align-items" "center"

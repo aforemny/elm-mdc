@@ -176,7 +176,7 @@ picker hues disabled shade current msg =
                     , css "margin" "2pt"
                     , css "line-height" "56px"
                     , css "flex-shrink" "0"
-                    , Elevation.e8 |> when (current == hue)
+                    , Elevation.elevation 8 |> when (current == hue)
                     , css "transition" "box-shadow 300ms ease-in-out 0s, background-color 300ms ease-in-out 0s"
                     , css "cursor" "pointer" |> when (disabled /= Just hue)
                     ]

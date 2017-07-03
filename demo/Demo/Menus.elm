@@ -389,7 +389,7 @@ view1 model idx { title, menu, code, comment } =
                 , css "justify-content" "space-between"
                 ]
                 [ div
-                    [ Elevation.e2
+                    [ Elevation.elevation 2
                     , css "margin" "0 64px 64px 64px"
                     , css "width" "200px"
                     ]
