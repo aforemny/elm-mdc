@@ -62,6 +62,8 @@ import Material.Options as Options exposing (Style, cs, styled, many, when, mayb
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
 import Material.Ripple as Ripple
 import Material.Options.Internal as Internal
+import Svg exposing (Svg, path)
+import Svg.Attributes as Svg
 
 -- MODEL
 
@@ -173,7 +175,7 @@ top lift kind model summary elems =
             summary.config
     in
         Internal.applyContainer summary
-            label
+            div
             [ cs ("mdc-" ++ kind)
             , cs ("mdc-js-" ++ kind)
             , cs "mdc-js-ripple-effect" |> when cfg.ripple
@@ -209,19 +211,32 @@ viewCheckbox lift model config elems =
     in
         [ Internal.applyInput summary
             Html.input
-            [ cs "mdc-checkbox__input"
+            [ cs "mdc-checkbox__native-control"
             , Internal.attribute <| type_ "checkbox"
             , Internal.attribute <| checked summary.config.value
             ]
             []
-        , span [ class ("mdc-checkbox__label") ] elems
-        , span [ class "mdc-checkbox__focus-helper" ] []
-        , span
-            [ class "mdc-checkbox__box-outline" ]
-            [ span
-                [ class "mdc-checkbox__tick-outline" ]
-                []
+        , styled div
+          [ cs "mdc-checkbox__background"
+          ]
+          [ Svg.svg
+            [ Svg.class "mdc-checkbox__checkmark"
+            , Svg.viewBox "0 0 24 24"
             ]
+            [ path
+              [ Svg.class "mdc-checkbox__checkmark__path"
+              , Svg.fill "none"
+              , Svg.stroke "white"
+              , Svg.d "M1.73,12.91 8.1,19.28 22.79,4.59"
+              ]
+              [
+              ]
+            ]
+          , styled div
+            [ cs "mdc-checkbox__mixedmark"
+            ]
+            []
+          ]
         ]
             |> top lift "checkbox" model summary
 
