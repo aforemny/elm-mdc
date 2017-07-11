@@ -1,57 +1,26 @@
 ELM=elm-make --yes
-PAGES=../elm-mdl-gh-pages
-CLOSURE_COMPILER=compiler.jar
+PAGES=../elm-mdc-gh-pages
 
 demo:
-	rsync -r material-components-web/build demo/material-components-web
-	(cd demo; $(ELM) Demo.elm --warn --output ../elm.js)
+	mkdir -p build
+	cp demo/page.html build/index.html
+	cp material-components-web/build/material-components-web.css build
+	(cd demo; $(ELM) Demo.elm --warn --output ../build/elm.js)
 
-run-demo:
-	(cd demo; pkill elm-reactor; elm-reactor &)
+docs:
+	$(ELM) --docs=docs.json
 
-compile : demo
-	java -jar $(CLOSURE_COMPILER) -O ADVANCED --assume_function_wrapper --js elm.js > /tmp/elm.js && mv /tmp/elm.js elm.js
-	
-
-counter1: 
-	$(ELM) examples/Counter.elm --warn --output examples/counter1.html 
-	
-counter-many: 
-	$(ELM) examples/Counter-many.elm --warn --output examples/counter-many.html
-
-counter-no-shorthand: 
-	$(ELM) examples/Counter-no-shorthand.elm --warn --output examples/counter-no-shorthand.html
-
-docs: 
-	$(ELM) --docs=docs.json 
-
-test: docs demo counter1 counter-many counter-no-shorthand
-
-copy-assets : 
-	(cd demo; cp -r assets ../$(PAGES))
-	(cd $(PAGES); git add assets)
-	
-wip-pages : 
-	(cd demo; elm-make Demo.elm --output ../$(PAGES)/wip.js)
+pages:
+	rsync -r build/ $(PAGES)
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
 
-pages : 
-	(cd demo; elm-make Demo.elm --output ../$(PAGES)/elm.js)
-	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
+cleanish:
+	rm -rf build
 
-cleanish :
-	rm -f elm.js index.html docs.json
-
-clean : cleanish
+clean: cleanish
 	rm -rf elm-stuff/build-artifacts demo/elm-stuff/build-artifacts
 
 distclean : clean
 	rm -rf elm-stuff demo/elm-stuff
 
-
-install-hooks: 
-	cp build_scripts/hooks/commit-msg .git/hooks
-	chmod a+x .git/hooks/commit-msg
-
-
-.PHONY : pages elm.js clean cleanish distclean demo docs test copy-assets install-hooks
+.PHONY : pages clean cleanish distclean demo docs

@@ -1,62 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>The elm-mdl library</title>
 
+    <!-- dialog polyfill -->
     <script src="assets/dialog/dialog-polyfill.js"></script>
     <link rel="stylesheet" type="text/css" href="assets/dialog/dialog-polyfill.css" />
 
+    <!-- mdc -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-
-    <!-- mdc -->
-    <link rel="stylesheet" href="material-components-web/build/material-components-web.css" />
-    <!--
-    <link rel="stylesheet" href="material-components-web/build/mdc.animation.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.button.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.card.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.checkbox.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.dialog.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.drawer.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.elevation.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.fab.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.form-field.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.grid-list.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.icon-toggle.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.layout-grid.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.linear-progress.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.list.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.menu.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.radio.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.ripple.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.select.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.slider.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.snackbar.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.switch.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.tabs.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.textfield.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.theme.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.toolbar.css" />
-    <link rel="stylesheet" href="material-components-web/build/mdc.typography.css" />
-    -->
-
-    <!-- Highlight
-
-      The demo uses the JS/CSS package below to get code highlighting. You
-      don't need this; neither is necessary for the elm-mdl library to function
-      correctly.
-    -->
-    <link rel="stylesheet" href="assets/highlight/github-gist.css" />
-    <script src="assets/highlight/highlight.pack.js"></script>
+    <link rel="stylesheet" href="material-components-web.css" />
   </head>
   <body>
     <!-- elm -->
-    <script src="../elm.js"></script>
+    <script src="elm.js"></script>
     <script>
       app = Elm.Main.fullscreen();
     </script>
