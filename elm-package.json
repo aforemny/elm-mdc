@@ -1,7 +1,7 @@
 {
-    "version": "8.1.0",
-    "summary": "Material Design Lite port to Elm",
-    "repository": "https://github.com/debois/elm-mdl.git",
+    "version": "1.0.0",
+    "summary": "Material Components for the Web port to Elm",
+    "repository": "https://github.com/aforemny/elm-mdc.git",
     "license": "Apache License, version 2.0",
     "source-directories": [
         "src"
