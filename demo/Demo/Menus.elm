@@ -1,22 +1,14 @@
 module Demo.Menus exposing (model, Model, view, update, Msg(Mdl))
 
-import Demo.Code as Code
 import Demo.Page as Page
-import Html.Attributes exposing (href)
+import Html.Attributes as Html exposing (href)
 import Html exposing (Html, text, p, a)
 import Material
 import Material.Button as Button
-import Material.Color as Color
-import Material.Dropdown.Item as Item
-import Material.Elevation as Elevation
-import Material.Grid as Grid
-import Material.Icon as Icon
 import Material.List as Lists
 import Material.Menu as Menu
 import Material.Options as Options exposing (cs, css, div, nop, when)
-import Material.Textfield as Textfield
 import Set exposing (Set)
-import String
 
 
 -- MODEL
@@ -47,10 +39,7 @@ model =
 
 type Msg
     = Mdl (Material.Msg Msg)
-    | Select Int Int
-    | SetIcon String
-    | Flip Int
-    | Nop
+    | Select Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -59,36 +48,11 @@ update action model =
         Mdl action_ ->
             Material.update Mdl action_ model
 
-        Select menu item ->
-            ( { model | selected = Just ( menu, item ) }
-            , Cmd.none
-            )
-
-        SetIcon s ->
-            ( { model
-                | icon =
-                    if s == "" then
-                        Nothing
-                    else
-                        Just s
-              }
-            , Cmd.none
-            )
-
-        Flip k ->
-            ( { model
-                | checked =
-                    if Set.member k model.checked then
-                        Set.remove k model.checked
-                    else
-                        Set.insert k model.checked
-              }
-            , Cmd.none
-            )
-
-        Nop ->
-            ( model, Cmd.none )
-
+        Select index ->
+            let
+                _ = Debug.log "select" index
+            in
+            model ! []
 
 
 -- VIEW
@@ -116,11 +80,31 @@ view model =
           [ -- Menu.open
           ]
           ( Menu.ul Lists.ul []
-            [ Menu.li Lists.li [] [ Html.text "Back" ]
-            , Menu.li Lists.li [] [ Html.text "Forward" ]
-            , Menu.li Lists.li [] [ Html.text "Reload" ]
+            [ Menu.li Lists.li
+              [ Options.onClick (Select 0)
+              , Options.attribute (Html.tabindex 0)
+              ]
+              [ Html.text "Back"
+              ]
+            , Menu.li Lists.li
+              [ Options.onClick (Select 1)
+              , Options.attribute (Html.tabindex 0)
+              ]
+              [ Html.text "Forward"
+              ]
+            , Menu.li Lists.li
+              [ Options.onClick (Select 2)
+              , Options.attribute (Html.tabindex 0)
+              ]
+              [ Html.text "Reload"
+              ]
             , Menu.li (\options nodes -> Lists.divider options) [] []
-            , Menu.li Lists.li [] [ Html.text "Save As..." ]
+            , Menu.li Lists.li
+              [ Options.onClick (Select 3)
+              , Options.attribute (Html.tabindex 0)
+              ]
+              [ Html.text "Save As..."
+              ]
             ]
           )
         ]
