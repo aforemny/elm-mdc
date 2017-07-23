@@ -14187,6 +14187,143 @@ var _debois$elm_mdl$Material_Dropdown$Config = F3(
 		return {alignment: a, index: b, listeners: c};
 	});
 
+//import Maybe, Native.List //
+
+var _elm_lang$core$Native_Regex = function() {
+
+function escape(str)
+{
+	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+function caseInsensitive(re)
+{
+	return new RegExp(re.source, 'gi');
+}
+function regex(raw)
+{
+	return new RegExp(raw, 'g');
+}
+
+function contains(re, string)
+{
+	return string.match(re) !== null;
+}
+
+function find(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var out = [];
+	var number = 0;
+	var string = str;
+	var lastIndex = re.lastIndex;
+	var prevLastIndex = -1;
+	var result;
+	while (number++ < n && (result = re.exec(string)))
+	{
+		if (prevLastIndex === re.lastIndex) break;
+		var i = result.length - 1;
+		var subs = new Array(i);
+		while (i > 0)
+		{
+			var submatch = result[i];
+			subs[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		out.push({
+			match: result[0],
+			submatches: _elm_lang$core$Native_List.fromArray(subs),
+			index: result.index,
+			number: number
+		});
+		prevLastIndex = re.lastIndex;
+	}
+	re.lastIndex = lastIndex;
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+function replace(n, re, replacer, string)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var count = 0;
+	function jsReplacer(match)
+	{
+		if (count++ >= n)
+		{
+			return match;
+		}
+		var i = arguments.length - 3;
+		var submatches = new Array(i);
+		while (i > 0)
+		{
+			var submatch = arguments[i];
+			submatches[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		return replacer({
+			match: match,
+			submatches: _elm_lang$core$Native_List.fromArray(submatches),
+			index: arguments[arguments.length - 2],
+			number: count
+		});
+	}
+	return string.replace(re, jsReplacer);
+}
+
+function split(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	if (n === Infinity)
+	{
+		return _elm_lang$core$Native_List.fromArray(str.split(re));
+	}
+	var string = str;
+	var result;
+	var out = [];
+	var start = re.lastIndex;
+	var restoreLastIndex = re.lastIndex;
+	while (n--)
+	{
+		if (!(result = re.exec(string))) break;
+		out.push(string.slice(start, result.index));
+		start = re.lastIndex;
+	}
+	out.push(string.slice(start));
+	re.lastIndex = restoreLastIndex;
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+return {
+	regex: regex,
+	caseInsensitive: caseInsensitive,
+	escape: escape,
+
+	contains: F2(contains),
+	find: F3(find),
+	replace: F4(replace),
+	split: F3(split)
+};
+
+}();
+
+var _elm_lang$core$Regex$split = _elm_lang$core$Native_Regex.split;
+var _elm_lang$core$Regex$replace = _elm_lang$core$Native_Regex.replace;
+var _elm_lang$core$Regex$find = _elm_lang$core$Native_Regex.find;
+var _elm_lang$core$Regex$contains = _elm_lang$core$Native_Regex.contains;
+var _elm_lang$core$Regex$caseInsensitive = _elm_lang$core$Native_Regex.caseInsensitive;
+var _elm_lang$core$Regex$regex = _elm_lang$core$Native_Regex.regex;
+var _elm_lang$core$Regex$escape = _elm_lang$core$Native_Regex.escape;
+var _elm_lang$core$Regex$Match = F4(
+	function (a, b, c, d) {
+		return {match: a, submatches: b, index: c, number: d};
+	});
+var _elm_lang$core$Regex$Regex = {ctor: 'Regex'};
+var _elm_lang$core$Regex$AtMost = function (a) {
+	return {ctor: 'AtMost', _0: a};
+};
+var _elm_lang$core$Regex$All = {ctor: 'All'};
+
 var _debois$elm_mdl$Material_Textfield$update = F3(
 	function (_p0, msg, model) {
 		return A3(
@@ -14200,11 +14337,15 @@ var _debois$elm_mdl$Material_Textfield$update = F3(
 				var _p1 = msg;
 				switch (_p1.ctor) {
 					case 'Input':
-						var dirty = !_elm_lang$core$Native_Utils.eq(_p1._0, '');
-						return _elm_lang$core$Native_Utils.eq(dirty, model.isDirty) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(
+						var _p2 = _p1._0;
+						var dirty = !_elm_lang$core$Native_Utils.eq(_p2, '');
+						return _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
-								{isDirty: dirty}));
+								{
+									value: _elm_lang$core$Maybe$Just(_p2),
+									isDirty: dirty
+								}));
 					case 'Blur':
 						return _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
@@ -14220,8 +14361,8 @@ var _debois$elm_mdl$Material_Textfield$update = F3(
 				}
 			}());
 	});
-var _debois$elm_mdl$Material_Textfield$defaultModel = {isFocused: false, isDirty: false};
-var _debois$elm_mdl$Material_Textfield$_p2 = A3(
+var _debois$elm_mdl$Material_Textfield$defaultModel = {isFocused: false, isDirty: false, value: _elm_lang$core$Maybe$Nothing};
+var _debois$elm_mdl$Material_Textfield$_p3 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
 		return _.textfield;
@@ -14233,9 +14374,59 @@ var _debois$elm_mdl$Material_Textfield$_p2 = A3(
 				{textfield: x});
 		}),
 	_debois$elm_mdl$Material_Textfield$defaultModel);
-var _debois$elm_mdl$Material_Textfield$get = _debois$elm_mdl$Material_Textfield$_p2._0;
-var _debois$elm_mdl$Material_Textfield$set = _debois$elm_mdl$Material_Textfield$_p2._1;
+var _debois$elm_mdl$Material_Textfield$get = _debois$elm_mdl$Material_Textfield$_p3._0;
+var _debois$elm_mdl$Material_Textfield$set = _debois$elm_mdl$Material_Textfield$_p3._1;
 var _debois$elm_mdl$Material_Textfield$react = A4(_debois$elm_mdl$Material_Component$react, _debois$elm_mdl$Material_Textfield$get, _debois$elm_mdl$Material_Textfield$set, _debois$elm_mdl$Material_Msg$TextfieldMsg, _debois$elm_mdl$Material_Textfield$update);
+var _debois$elm_mdl$Material_Textfield$placeholder = function (value) {
+	return _debois$elm_mdl$Material_Internal_Options$input(
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$attribute(
+				A2(_elm_lang$html$Html_Attributes$attribute, 'placeholder', value)),
+			_1: {ctor: '[]'}
+		});
+};
+var _debois$elm_mdl$Material_Textfield$multiline = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{multiline: true});
+	});
+var _debois$elm_mdl$Material_Textfield$invalid = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{invalid: true});
+	});
+var _debois$elm_mdl$Material_Textfield$fullWidth = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fullWidth: true});
+	});
+var _debois$elm_mdl$Material_Textfield$type_ = function (_p4) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (value, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						type_: _elm_lang$core$Maybe$Just(value)
+					});
+			})(_p4));
+};
+var _debois$elm_mdl$Material_Textfield$required = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{required: true});
+	});
+var _debois$elm_mdl$Material_Textfield$dense = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{dense: true});
+	});
 var _debois$elm_mdl$Material_Textfield$maxRows = function (k) {
 	return _debois$elm_mdl$Material_Internal_Options$option(
 		function (config) {
@@ -14264,6 +14455,39 @@ var _debois$elm_mdl$Material_Textfield$rows = function (k) {
 			_1: {ctor: '[]'}
 		});
 };
+var _debois$elm_mdl$Material_Textfield$pattern = function (_p5) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (value, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						pattern: _elm_lang$core$Maybe$Just(value)
+					});
+			})(_p5));
+};
+var _debois$elm_mdl$Material_Textfield$textfield = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{textfieldBox: true});
+	});
+var _debois$elm_mdl$Material_Textfield$email = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{
+				type_: _elm_lang$core$Maybe$Just('email')
+			});
+	});
+var _debois$elm_mdl$Material_Textfield$password = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{
+				type_: _elm_lang$core$Maybe$Just('password')
+			});
+	});
 var _debois$elm_mdl$Material_Textfield$input = _debois$elm_mdl$Material_Options$input;
 var _debois$elm_mdl$Material_Textfield$disabled = _debois$elm_mdl$Material_Internal_Options$option(
 	function (config) {
@@ -14277,7 +14501,7 @@ var _debois$elm_mdl$Material_Textfield$maxlength = function (k) {
 };
 var _debois$elm_mdl$Material_Textfield$autofocus = _debois$elm_mdl$Material_Options$attribute(
 	_elm_lang$html$Html_Attributes$autofocus(true));
-var _debois$elm_mdl$Material_Textfield$defaultValue = function (_p3) {
+var _debois$elm_mdl$Material_Textfield$defaultValue = function (_p6) {
 	return _debois$elm_mdl$Material_Internal_Options$option(
 		F2(
 			function (str, config) {
@@ -14286,9 +14510,9 @@ var _debois$elm_mdl$Material_Textfield$defaultValue = function (_p3) {
 					{
 						defaultValue: _elm_lang$core$Maybe$Just(str)
 					});
-			})(_p3));
+			})(_p6));
 };
-var _debois$elm_mdl$Material_Textfield$value = function (_p4) {
+var _debois$elm_mdl$Material_Textfield$value = function (_p7) {
 	return _debois$elm_mdl$Material_Internal_Options$option(
 		F2(
 			function (str, config) {
@@ -14297,36 +14521,7 @@ var _debois$elm_mdl$Material_Textfield$value = function (_p4) {
 					{
 						value: _elm_lang$core$Maybe$Just(str)
 					});
-			})(_p4));
-};
-var _debois$elm_mdl$Material_Textfield$error = function (_p5) {
-	return _debois$elm_mdl$Material_Internal_Options$option(
-		F2(
-			function (str, config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						error: _elm_lang$core$Maybe$Just(str)
-					});
-			})(_p5));
-};
-var _debois$elm_mdl$Material_Textfield$expandableIcon = function (id) {
-	return _debois$elm_mdl$Material_Internal_Options$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{expandableIcon: id});
-		});
-};
-var _debois$elm_mdl$Material_Textfield$expandable = function (id) {
-	return _debois$elm_mdl$Material_Internal_Options$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{
-					expandable: _elm_lang$core$Maybe$Just(id)
-				});
-		});
+			})(_p7));
 };
 var _debois$elm_mdl$Material_Textfield$floatingLabel = _debois$elm_mdl$Material_Internal_Options$option(
 	function (config) {
@@ -14334,7 +14529,7 @@ var _debois$elm_mdl$Material_Textfield$floatingLabel = _debois$elm_mdl$Material_
 			config,
 			{labelFloat: true});
 	});
-var _debois$elm_mdl$Material_Textfield$label = function (_p6) {
+var _debois$elm_mdl$Material_Textfield$label = function (_p8) {
 	return _debois$elm_mdl$Material_Internal_Options$option(
 		F2(
 			function (str, config) {
@@ -14343,102 +14538,35 @@ var _debois$elm_mdl$Material_Textfield$label = function (_p6) {
 					{
 						labelText: _elm_lang$core$Maybe$Just(str)
 					});
-			})(_p6));
+			})(_p8));
 };
-var _debois$elm_mdl$Material_Textfield$Config = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return function (k) {
-											return function (l) {
-												return {labelText: a, labelFloat: b, error: c, value: d, defaultValue: e, disabled: f, kind: g, expandable: h, expandableIcon: i, input: j, container: k, maxRows: l};
-											};
-										};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
-};
-var _debois$elm_mdl$Material_Textfield$Model = F2(
-	function (a, b) {
-		return {isFocused: a, isDirty: b};
-	});
-var _debois$elm_mdl$Material_Textfield$Email = {ctor: 'Email'};
-var _debois$elm_mdl$Material_Textfield$email = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{kind: _debois$elm_mdl$Material_Textfield$Email});
-	});
-var _debois$elm_mdl$Material_Textfield$Password = {ctor: 'Password'};
-var _debois$elm_mdl$Material_Textfield$password = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{kind: _debois$elm_mdl$Material_Textfield$Password});
-	});
-var _debois$elm_mdl$Material_Textfield$Textarea = {ctor: 'Textarea'};
-var _debois$elm_mdl$Material_Textfield$textarea = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{kind: _debois$elm_mdl$Material_Textfield$Textarea});
-	});
-var _debois$elm_mdl$Material_Textfield$Text = {ctor: 'Text'};
 var _debois$elm_mdl$Material_Textfield$defaultConfig = {
 	labelText: _elm_lang$core$Maybe$Nothing,
 	labelFloat: false,
-	error: _elm_lang$core$Maybe$Nothing,
 	value: _elm_lang$core$Maybe$Nothing,
 	defaultValue: _elm_lang$core$Maybe$Nothing,
 	disabled: false,
-	kind: _debois$elm_mdl$Material_Textfield$Text,
-	expandable: _elm_lang$core$Maybe$Nothing,
-	expandableIcon: 'search',
 	input: {ctor: '[]'},
 	container: {ctor: '[]'},
-	maxRows: _elm_lang$core$Maybe$Nothing
+	maxRows: _elm_lang$core$Maybe$Nothing,
+	dense: false,
+	required: false,
+	type_: _elm_lang$core$Maybe$Just('text'),
+	textfieldBox: false,
+	pattern: _elm_lang$core$Maybe$Nothing,
+	multiline: false,
+	fullWidth: false,
+	invalid: false
 };
 var _debois$elm_mdl$Material_Textfield$view = F4(
-	function (lift, model, options, _p7) {
-		var _p8 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Textfield$defaultConfig, options);
-		var summary = _p8;
-		var config = _p8.config;
-		var labelFor = function () {
-			var _p9 = config.expandable;
-			if (_p9.ctor === 'Nothing') {
-				return {ctor: '[]'};
-			} else {
-				return {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$for(_p9._0),
-					_1: {ctor: '[]'}
-				};
-			}
-		}();
-		var expandableId = function () {
-			var _p10 = config.expandable;
-			if (_p10.ctor === 'Nothing') {
-				return _debois$elm_mdl$Material_Options$nop;
-			} else {
-				return _debois$elm_mdl$Material_Internal_Options$attribute(
-					_elm_lang$html$Html_Attributes$id(_p10._0));
-			}
-		}();
+	function (lift, model, options, _p9) {
+		var isDirty = model.isDirty;
+		var _p10 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Textfield$defaultConfig, options);
+		var summary = _p10;
+		var config = _p10.config;
 		var preventEnterWhenMaxRowsExceeded = A2(
 			_debois$elm_mdl$Material_Options$when,
-			_elm_lang$core$Native_Utils.eq(config.kind, _debois$elm_mdl$Material_Textfield$Textarea) && (!_elm_lang$core$Native_Utils.eq(config.maxRows, _elm_lang$core$Maybe$Nothing)),
+			config.multiline && (!_elm_lang$core$Native_Utils.eq(config.maxRows, _elm_lang$core$Maybe$Nothing)),
 			A3(
 				_debois$elm_mdl$Material_Options$onWithOptions,
 				'keydown',
@@ -14464,51 +14592,28 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 							}),
 						_elm_lang$html$Html_Events$keyCode,
 						_elm_lang$html$Html_Events$targetValue))));
-		var expHolder = function () {
-			var _p13 = config.expandable;
-			if (_p13.ctor === 'Nothing') {
-				return _elm_lang$core$Basics$identity;
+		var isFocused = model.isFocused && (!config.disabled);
+		var isInvalid = function () {
+			var _p13 = config.pattern;
+			if (_p13.ctor === 'Just') {
+				return A2(
+					_elm_lang$core$Maybe$withDefault,
+					false,
+					A2(
+						_elm_lang$core$Maybe$map,
+						function (_p14) {
+							return !A2(
+								_elm_lang$core$Regex$contains,
+								_elm_lang$core$Regex$regex(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'^',
+										A2(_elm_lang$core$Basics_ops['++'], _p13._0, '$'))),
+								_p14);
+						},
+						model.value));
 			} else {
-				return function (x) {
-					return {
-						ctor: '::',
-						_0: A4(
-							_debois$elm_mdl$Material_Options$styled_,
-							_elm_lang$html$Html$label,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Options$cs('mdl-button'),
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$cs('mdl-js-button'),
-									_1: {
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$cs('mdl-button--icon'),
-										_1: {ctor: '[]'}
-									}
-								}
-							},
-							labelFor,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Icon$i(config.expandableIcon),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$cs('mdl-textfield__expandable-holder'),
-									_1: {ctor: '[]'}
-								},
-								x),
-							_1: {ctor: '[]'}
-						}
-					};
-				};
+				return false;
 			}
 		}();
 		return A4(
@@ -14517,71 +14622,56 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdl-textfield'),
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-textfield'),
 				_1: {
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs('mdl-js-textfield'),
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-textfield--upgraded'),
 					_1: {
 						ctor: '::',
-						_0: _debois$elm_mdl$Material_Options$cs('is-upgraded'),
+						_0: A3(_debois$elm_mdl$Material_Internal_Options$on1, 'focus', lift, _debois$elm_mdl$Material_Internal_Textfield$Focus),
 						_1: {
 							ctor: '::',
-							_0: A3(_debois$elm_mdl$Material_Internal_Options$on1, 'focus', lift, _debois$elm_mdl$Material_Internal_Textfield$Focus),
+							_0: A3(_debois$elm_mdl$Material_Internal_Options$on1, 'blur', lift, _debois$elm_mdl$Material_Internal_Textfield$Blur),
 							_1: {
 								ctor: '::',
-								_0: A3(_debois$elm_mdl$Material_Internal_Options$on1, 'blur', lift, _debois$elm_mdl$Material_Internal_Textfield$Blur),
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									isFocused,
+									_debois$elm_mdl$Material_Options$cs('mdc-textfield--focused')),
 								_1: {
 									ctor: '::',
 									_0: A2(
 										_debois$elm_mdl$Material_Options$when,
-										config.labelFloat,
-										_debois$elm_mdl$Material_Options$cs('mdl-textfield--floating-label')),
+										config.disabled,
+										_debois$elm_mdl$Material_Options$cs('mdc-textfield--disabled')),
 									_1: {
 										ctor: '::',
 										_0: A2(
 											_debois$elm_mdl$Material_Options$when,
-											!_elm_lang$core$Native_Utils.eq(config.error, _elm_lang$core$Maybe$Nothing),
-											_debois$elm_mdl$Material_Options$cs('is-invalid')),
+											config.dense,
+											_debois$elm_mdl$Material_Options$cs('mdc-textfield--dense')),
 										_1: {
 											ctor: '::',
 											_0: A2(
 												_debois$elm_mdl$Material_Options$when,
-												function () {
-													var _p14 = config.value;
-													if (_p14.ctor === 'Just') {
-														if (_p14._0 === '') {
-															return false;
-														} else {
-															return true;
-														}
-													} else {
-														return model.isDirty;
-													}
-												}(),
-												_debois$elm_mdl$Material_Options$cs('is-dirty')),
+												config.fullWidth,
+												_debois$elm_mdl$Material_Options$cs('mdc-textfield--fullwidth')),
 											_1: {
 												ctor: '::',
 												_0: A2(
 													_debois$elm_mdl$Material_Options$when,
-													model.isFocused && (!config.disabled),
-													_debois$elm_mdl$Material_Options$cs('is-focused')),
+													isInvalid,
+													_debois$elm_mdl$Material_Options$cs('mdc-textfield--invalid')),
 												_1: {
 													ctor: '::',
 													_0: A2(
 														_debois$elm_mdl$Material_Options$when,
-														config.disabled,
-														_debois$elm_mdl$Material_Options$cs('is-disabled')),
+														config.multiline,
+														_debois$elm_mdl$Material_Options$cs('mdc-textfield--multiline')),
 													_1: {
 														ctor: '::',
-														_0: A2(
-															_debois$elm_mdl$Material_Options$when,
-															!_elm_lang$core$Native_Utils.eq(config.expandable, _elm_lang$core$Maybe$Nothing),
-															_debois$elm_mdl$Material_Options$cs('mdl-textfield--expandable')),
-														_1: {
-															ctor: '::',
-															_0: preventEnterWhenMaxRowsExceeded,
-															_1: {ctor: '[]'}
-														}
+														_0: preventEnterWhenMaxRowsExceeded,
+														_1: {ctor: '[]'}
 													}
 												}
 											}
@@ -14593,19 +14683,24 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 					}
 				}
 			},
-			expHolder(
-				{
-					ctor: '::',
-					_0: A4(
-						_debois$elm_mdl$Material_Internal_Options$applyInput,
-						summary,
-						_elm_lang$core$Native_Utils.eq(config.kind, _debois$elm_mdl$Material_Textfield$Textarea) ? _elm_lang$html$Html$textarea : _elm_lang$html$Html$input,
-						{
+			{
+				ctor: '::',
+				_0: A4(
+					_debois$elm_mdl$Material_Internal_Options$applyInput,
+					summary,
+					config.multiline ? _elm_lang$html$Html$textarea : _elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$cs('mdc-textfield__input'),
+						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Options$cs('mdl-textfield__input'),
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'outline', 'none'),
 							_1: {
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'outline', 'none'),
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									config.textfieldBox,
+									_debois$elm_mdl$Material_Options$cs('mdc-textfield--box')),
 								_1: {
 									ctor: '::',
 									_0: A3(_debois$elm_mdl$Material_Internal_Options$on1, 'focus', lift, _debois$elm_mdl$Material_Internal_Textfield$Focus),
@@ -14614,123 +14709,107 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 										_0: A3(_debois$elm_mdl$Material_Internal_Options$on1, 'blur', lift, _debois$elm_mdl$Material_Internal_Textfield$Blur),
 										_1: {
 											ctor: '::',
-											_0: function () {
-												var _p15 = config.kind;
-												switch (_p15.ctor) {
-													case 'Text':
-														return _debois$elm_mdl$Material_Internal_Options$attribute(
-															_elm_lang$html$Html_Attributes$type_('text'));
-													case 'Password':
-														return _debois$elm_mdl$Material_Internal_Options$attribute(
-															_elm_lang$html$Html_Attributes$type_('password'));
-													case 'Email':
-														return _debois$elm_mdl$Material_Internal_Options$attribute(
-															_elm_lang$html$Html_Attributes$type_('email'));
-													default:
-														return _debois$elm_mdl$Material_Options$nop;
-												}
-											}(),
+											_0: _debois$elm_mdl$Material_Options$onInput(
+												function (_p15) {
+													return lift(
+														_debois$elm_mdl$Material_Internal_Textfield$Input(_p15));
+												}),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_debois$elm_mdl$Material_Options$when,
-													config.disabled,
-													_debois$elm_mdl$Material_Internal_Options$attribute(
-														_elm_lang$html$Html_Attributes$disabled(true))),
-												_1: {
-													ctor: '::',
-													_0: expandableId,
-													_1: {
+												_0: function (_p16) {
+													return _debois$elm_mdl$Material_Options$many(
+														A2(
+															_elm_lang$core$List$map,
+															_debois$elm_mdl$Material_Internal_Options$attribute,
+															A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p16)));
+												}(
+													{
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Options$onInput(
-															function (_p16) {
-																return lift(
-																	_debois$elm_mdl$Material_Internal_Textfield$Input(_p16));
-															}),
+														_0: ((!config.multiline) ? _elm_lang$core$Maybe$Just : _elm_lang$core$Basics$always(_elm_lang$core$Maybe$Nothing))(
+															_elm_lang$html$Html_Attributes$type_(
+																A2(_elm_lang$core$Maybe$withDefault, 'text', config.type_))),
 														_1: {
 															ctor: '::',
-															_0: A2(
-																_debois$elm_mdl$Material_Options$when,
-																!_elm_lang$core$Native_Utils.eq(config.value, _elm_lang$core$Maybe$Nothing),
-																_debois$elm_mdl$Material_Internal_Options$attribute(
-																	_elm_lang$html$Html_Attributes$value(
-																		A2(_elm_lang$core$Maybe$withDefault, '', config.value)))),
+															_0: (config.disabled ? _elm_lang$core$Maybe$Just : _elm_lang$core$Basics$always(_elm_lang$core$Maybe$Nothing))(
+																_elm_lang$html$Html_Attributes$disabled(true)),
 															_1: {
 																ctor: '::',
-																_0: function () {
-																	var _p17 = config.defaultValue;
-																	if (_p17.ctor === 'Nothing') {
-																		return _debois$elm_mdl$Material_Options$nop;
-																	} else {
-																		return _debois$elm_mdl$Material_Internal_Options$attribute(
-																			_elm_lang$html$Html_Attributes$defaultValue(_p17._0));
+																_0: (config.required ? _elm_lang$core$Maybe$Just : _elm_lang$core$Basics$always(_elm_lang$core$Maybe$Nothing))(
+																	A2(
+																		_elm_lang$html$Html_Attributes$property,
+																		'required',
+																		_elm_lang$core$Json_Encode$bool(true))),
+																_1: {
+																	ctor: '::',
+																	_0: ((!_elm_lang$core$Native_Utils.eq(config.pattern, _elm_lang$core$Maybe$Nothing)) ? _elm_lang$core$Maybe$Just : _elm_lang$core$Basics$always(_elm_lang$core$Maybe$Nothing))(
+																		A2(
+																			_elm_lang$html$Html_Attributes$property,
+																			'pattern',
+																			_elm_lang$core$Json_Encode$string(
+																				A2(_elm_lang$core$Maybe$withDefault, '', config.pattern)))),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$core$Maybe$Just(
+																			A2(_elm_lang$html$Html_Attributes$attribute, 'outline', 'medium none')),
+																		_1: {ctor: '[]'}
 																	}
-																}(),
-																_1: {ctor: '[]'}
+																}
 															}
 														}
-													}
-												}
+													}),
+												_1: {ctor: '[]'}
 											}
 										}
 									}
 								}
 							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$label,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Options$cs('mdc-textfield__label'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									isFocused || isDirty,
+									_debois$elm_mdl$Material_Options$cs('mdc-textfield__label--float-above')),
+								_1: {ctor: '[]'}
+							}
 						},
-						{ctor: '[]'}),
+						function () {
+							var _p17 = config.labelText;
+							if (_p17.ctor === 'Just') {
+								return {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(_p17._0),
+									_1: {ctor: '[]'}
+								};
+							} else {
+								return {ctor: '[]'};
+							}
+						}()),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$label,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('mdl-textfield__label'),
-									_1: {ctor: '[]'}
-								},
-								labelFor),
-							function () {
-								var _p18 = config.labelText;
-								if (_p18.ctor === 'Just') {
-									return {
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(_p18._0),
-										_1: {ctor: '[]'}
-									};
-								} else {
-									return {ctor: '[]'};
-								}
-							}()),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Maybe$withDefault,
-								A2(
-									_elm_lang$html$Html$div,
-									{ctor: '[]'},
-									{ctor: '[]'}),
-								A2(
-									_elm_lang$core$Maybe$map,
-									function (e) {
-										return A2(
-											_elm_lang$html$Html$span,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('mdl-textfield__error'),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text(e),
-												_1: {ctor: '[]'}
-											});
-									},
-									config.error)),
-							_1: {ctor: '[]'}
-						}
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-textfield__bottom-line'),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
 					}
-				}));
+				}
+			});
 	});
 var _debois$elm_mdl$Material_Textfield$render = F4(
 	function (lift, index, store, options) {
@@ -14748,11 +14827,42 @@ var _debois$elm_mdl$Material_Textfield$render = F4(
 				_1: options
 			});
 	});
-var _debois$elm_mdl$Material_Textfield$text_ = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{kind: _debois$elm_mdl$Material_Textfield$Text});
+var _debois$elm_mdl$Material_Textfield$Config = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return function (o) {
+															return function (p) {
+																return {labelText: a, labelFloat: b, value: c, defaultValue: d, disabled: e, input: f, container: g, maxRows: h, dense: i, required: j, type_: k, textfieldBox: l, pattern: m, multiline: n, fullWidth: o, invalid: p};
+															};
+														};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _debois$elm_mdl$Material_Textfield$Model = F3(
+	function (a, b, c) {
+		return {isFocused: a, isDirty: b, value: c};
 	});
 
 var _debois$elm_mdl$Material_Select$toPx = function (_p0) {
@@ -14858,21 +14968,11 @@ var _debois$elm_mdl$Material_Select$textfieldOption = function (option) {
 				});
 		});
 };
-var _debois$elm_mdl$Material_Select$value = function (_p2) {
+var _debois$elm_mdl$Material_Select$label = function (_p2) {
 	return _debois$elm_mdl$Material_Select$textfieldOption(
-		_debois$elm_mdl$Material_Textfield$value(_p2));
-};
-var _debois$elm_mdl$Material_Select$label = function (_p3) {
-	return _debois$elm_mdl$Material_Select$textfieldOption(
-		_debois$elm_mdl$Material_Textfield$label(_p3));
-};
-var _debois$elm_mdl$Material_Select$floatingLabel = _debois$elm_mdl$Material_Select$textfieldOption(_debois$elm_mdl$Material_Textfield$floatingLabel);
-var _debois$elm_mdl$Material_Select$error = function (_p4) {
-	return _debois$elm_mdl$Material_Select$textfieldOption(
-		_debois$elm_mdl$Material_Textfield$error(_p4));
+		_debois$elm_mdl$Material_Textfield$label(_p2));
 };
 var _debois$elm_mdl$Material_Select$disabled = _debois$elm_mdl$Material_Select$textfieldOption(_debois$elm_mdl$Material_Textfield$disabled);
-var _debois$elm_mdl$Material_Select$autofocus = _debois$elm_mdl$Material_Select$textfieldOption(_debois$elm_mdl$Material_Textfield$autofocus);
 var _debois$elm_mdl$Material_Select$defaultConfig = {
 	textfield: {ctor: '[]'},
 	dropdown: {ctor: '[]'},
@@ -14882,47 +14982,47 @@ var _debois$elm_mdl$Material_Select$view = F4(
 	function (lift, model, properties, items) {
 		var itemSummaries = A2(
 			_elm_lang$core$List$map,
-			function (_p5) {
+			function (_p3) {
 				return A2(
 					_debois$elm_mdl$Material_Internal_Options$collect,
 					_debois$elm_mdl$Material_Dropdown_Item$defaultConfig,
 					function (_) {
 						return _.options;
-					}(_p5));
+					}(_p3));
 			},
 			items);
 		var itemInfos = A2(
 			_elm_lang$core$List$map,
-			function (_p6) {
-				var _p7 = _p6;
-				var _p8 = _p7.config;
-				return {enabled: _p8.enabled, onSelect: _p8.onSelect};
+			function (_p4) {
+				var _p5 = _p4;
+				var _p6 = _p5.config;
+				return {enabled: _p6.enabled, onSelect: _p6.onSelect};
 			},
 			itemSummaries);
 		var ripple = A2(
 			_elm_lang$core$Maybe$withDefault,
 			_debois$elm_mdl$Material_Ripple$model,
 			A2(_elm_lang$core$Dict$get, -1, model.dropdown.ripples));
-		var fwdRipple = function (_p9) {
+		var fwdRipple = function (_p7) {
 			return lift(
 				_debois$elm_mdl$Material_Internal_Select$DropdownMsg(
 					A2(
 						_debois$elm_mdl$Material_Internal_Dropdown$ItemMsg,
 						-1,
-						_debois$elm_mdl$Material_Internal_Item$Ripple(_p9))));
+						_debois$elm_mdl$Material_Internal_Item$Ripple(_p7))));
 		};
-		var _p10 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Select$defaultConfig, properties);
-		var summary = _p10;
-		var config = _p10.config;
+		var _p8 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Select$defaultConfig, properties);
+		var summary = _p8;
+		var config = _p8.config;
 		var dropdownOptions = config.dropdown;
 		var dropdownSummary = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Dropdown$defaultConfig, dropdownOptions);
 		var dropdownConfig = dropdownSummary.config;
 		var defaultIndex = A2(_debois$elm_mdl$Material_Dropdown$defaultIndex, model.dropdown, dropdownConfig.index);
 		var dropdown = A4(
 			_debois$elm_mdl$Material_Dropdown$view,
-			function (_p11) {
+			function (_p9) {
 				return lift(
-					_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p11));
+					_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p9));
 			},
 			model.dropdown,
 			{ctor: '::', _0: _debois$elm_mdl$Material_Dropdown$over, _1: dropdownOptions},
@@ -14940,9 +15040,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 							'keydown',
 							A2(
 								_elm_lang$core$Json_Decode$map,
-								function (_p12) {
+								function (_p10) {
 									return lift(
-										_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p12));
+										_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p10));
 								},
 								A3(
 									_elm_lang$core$Json_Decode$map2,
@@ -14963,9 +15063,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 									'input',
 									A2(
 										_elm_lang$core$Json_Decode$map,
-										function (_p13) {
+										function (_p11) {
 											return lift(
-												_debois$elm_mdl$Material_Internal_Select$Input(_p13));
+												_debois$elm_mdl$Material_Internal_Select$Input(_p11));
 										},
 										_elm_lang$html$Html_Events$targetValue)),
 								_1: {
@@ -14978,9 +15078,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 											'focus',
 											A2(
 												_elm_lang$core$Json_Decode$map,
-												function (_p14) {
+												function (_p12) {
 													return lift(
-														_debois$elm_mdl$Material_Internal_Select$Focus(_p14));
+														_debois$elm_mdl$Material_Internal_Select$Focus(_p12));
 												},
 												_debois$elm_mdl$Material_Select$decodeAsInput))),
 									_1: {
@@ -14993,9 +15093,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 												'click',
 												A2(
 													_elm_lang$core$Json_Decode$map,
-													function (_p15) {
+													function (_p13) {
 														return lift(
-															_debois$elm_mdl$Material_Internal_Select$Open(_p15));
+															_debois$elm_mdl$Material_Internal_Select$Open(_p13));
 													},
 													_debois$elm_mdl$Material_Select$decodeAsInput))),
 										_1: {ctor: '[]'}
@@ -15022,9 +15122,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 				ctor: '::',
 				_0: A4(
 					_debois$elm_mdl$Material_Textfield$view,
-					function (_p16) {
+					function (_p14) {
 						return lift(
-							_debois$elm_mdl$Material_Internal_Select$TextfieldMsg(_p16));
+							_debois$elm_mdl$Material_Internal_Select$TextfieldMsg(_p14));
 					},
 					model.textfield,
 					textfieldOptions,
@@ -15126,19 +15226,19 @@ var _debois$elm_mdl$Material_Select$view = F4(
 	});
 var _debois$elm_mdl$Material_Select$update = F3(
 	function (fwd, msg, model) {
-		var _p17 = msg;
-		switch (_p17.ctor) {
+		var _p15 = msg;
+		switch (_p15.ctor) {
 			case 'DropdownMsg':
-				var _p18 = A3(
+				var _p16 = A3(
 					_debois$elm_mdl$Material_Dropdown$update,
-					function (_p19) {
+					function (_p17) {
 						return fwd(
-							_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p19));
+							_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p17));
 					},
-					_p17._0,
+					_p15._0,
 					model.dropdown);
-				var dropdown = _p18._0;
-				var cmds = _p18._1;
+				var dropdown = _p16._0;
+				var cmds = _p16._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -15150,13 +15250,13 @@ var _debois$elm_mdl$Material_Select$update = F3(
 						_1: {ctor: '[]'}
 					});
 			case 'TextfieldMsg':
-				var _p20 = A3(
+				var _p18 = A3(
 					_debois$elm_mdl$Material_Textfield$update,
 					{ctor: '_Tuple0'},
-					_p17._0,
+					_p15._0,
 					model.textfield);
-				var textfield = _p20._0;
-				var cmd = _p20._1;
+				var textfield = _p18._0;
+				var cmd = _p18._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -15177,17 +15277,17 @@ var _debois$elm_mdl$Material_Select$update = F3(
 						{openOnFocus: true}),
 					{ctor: '[]'});
 			case 'Open':
-				var msg_ = _debois$elm_mdl$Material_Internal_Dropdown$Open(_p17._0);
-				var _p21 = A3(
+				var msg_ = _debois$elm_mdl$Material_Internal_Dropdown$Open(_p15._0);
+				var _p19 = A3(
 					_debois$elm_mdl$Material_Dropdown$update,
-					function (_p22) {
+					function (_p20) {
 						return fwd(
-							_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p22));
+							_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p20));
 					},
 					msg_,
 					model.dropdown);
-				var dropdown = _p21._0;
-				var cmds = _p21._1;
+				var dropdown = _p19._0;
+				var cmds = _p19._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -15200,17 +15300,17 @@ var _debois$elm_mdl$Material_Select$update = F3(
 					});
 			case 'Focus':
 				if (model.openOnFocus) {
-					var msg_ = _debois$elm_mdl$Material_Internal_Dropdown$Open(_p17._0);
-					var _p23 = A3(
+					var msg_ = _debois$elm_mdl$Material_Internal_Dropdown$Open(_p15._0);
+					var _p21 = A3(
 						_debois$elm_mdl$Material_Dropdown$update,
-						function (_p24) {
+						function (_p22) {
 							return fwd(
-								_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p24));
+								_debois$elm_mdl$Material_Internal_Select$DropdownMsg(_p22));
 						},
 						msg_,
 						model.dropdown);
-					var dropdown = _p23._0;
-					var cmds = _p23._1;
+					var dropdown = _p21._0;
+					var cmds = _p21._1;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
@@ -15243,7 +15343,7 @@ var _debois$elm_mdl$Material_Select$update = F3(
 	});
 var _debois$elm_mdl$Material_Select$item = _debois$elm_mdl$Material_Dropdown_Item$item;
 var _debois$elm_mdl$Material_Select$defaultModel = {dropdown: _debois$elm_mdl$Material_Dropdown$defaultModel, textfield: _debois$elm_mdl$Material_Textfield$defaultModel, openOnFocus: false};
-var _debois$elm_mdl$Material_Select$_p25 = A3(
+var _debois$elm_mdl$Material_Select$_p23 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
 		return _.select;
@@ -15255,15 +15355,15 @@ var _debois$elm_mdl$Material_Select$_p25 = A3(
 				{select: x});
 		}),
 	_debois$elm_mdl$Material_Select$defaultModel);
-var _debois$elm_mdl$Material_Select$get = _debois$elm_mdl$Material_Select$_p25._0;
-var _debois$elm_mdl$Material_Select$set = _debois$elm_mdl$Material_Select$_p25._1;
+var _debois$elm_mdl$Material_Select$get = _debois$elm_mdl$Material_Select$_p23._0;
+var _debois$elm_mdl$Material_Select$set = _debois$elm_mdl$Material_Select$_p23._1;
 var _debois$elm_mdl$Material_Select$react = F4(
 	function (lift, msg, idx, store) {
 		return A2(
 			_debois$elm_mdl$Material_Helpers$map1st,
-			function (_p26) {
+			function (_p24) {
 				return _elm_lang$core$Maybe$Just(
-					A3(_debois$elm_mdl$Material_Select$set, idx, store, _p26));
+					A3(_debois$elm_mdl$Material_Select$set, idx, store, _p24));
 			},
 			A3(
 				_debois$elm_mdl$Material_Select$update,
@@ -15274,9 +15374,9 @@ var _debois$elm_mdl$Material_Select$react = F4(
 var _debois$elm_mdl$Material_Select$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Select$get, _debois$elm_mdl$Material_Select$view, _debois$elm_mdl$Material_Msg$SelectMsg);
 var _debois$elm_mdl$Material_Select$subscriptions = function (model) {
 	return model.dropdown.open ? _elm_lang$mouse$Mouse$clicks(
-		function (_p27) {
+		function (_p25) {
 			return _debois$elm_mdl$Material_Internal_Select$DropdownMsg(
-				A2(_debois$elm_mdl$Material_Internal_Dropdown$Click, _debois$elm_mdl$Material_Internal_Dropdown$Over, _p27));
+				A2(_debois$elm_mdl$Material_Internal_Dropdown$Click, _debois$elm_mdl$Material_Internal_Dropdown$Over, _p25));
 		}) : _elm_lang$core$Platform_Sub$none;
 };
 var _debois$elm_mdl$Material_Select$subs = A3(
@@ -21515,143 +21615,6 @@ var _debois$elm_mdl$Demo_Elevation$FlipTransition = {ctor: 'FlipTransition'};
 var _debois$elm_mdl$Demo_Elevation$SetElevation = function (a) {
 	return {ctor: 'SetElevation', _0: a};
 };
-
-//import Maybe, Native.List //
-
-var _elm_lang$core$Native_Regex = function() {
-
-function escape(str)
-{
-	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
-function caseInsensitive(re)
-{
-	return new RegExp(re.source, 'gi');
-}
-function regex(raw)
-{
-	return new RegExp(raw, 'g');
-}
-
-function contains(re, string)
-{
-	return string.match(re) !== null;
-}
-
-function find(n, re, str)
-{
-	n = n.ctor === 'All' ? Infinity : n._0;
-	var out = [];
-	var number = 0;
-	var string = str;
-	var lastIndex = re.lastIndex;
-	var prevLastIndex = -1;
-	var result;
-	while (number++ < n && (result = re.exec(string)))
-	{
-		if (prevLastIndex === re.lastIndex) break;
-		var i = result.length - 1;
-		var subs = new Array(i);
-		while (i > 0)
-		{
-			var submatch = result[i];
-			subs[--i] = submatch === undefined
-				? _elm_lang$core$Maybe$Nothing
-				: _elm_lang$core$Maybe$Just(submatch);
-		}
-		out.push({
-			match: result[0],
-			submatches: _elm_lang$core$Native_List.fromArray(subs),
-			index: result.index,
-			number: number
-		});
-		prevLastIndex = re.lastIndex;
-	}
-	re.lastIndex = lastIndex;
-	return _elm_lang$core$Native_List.fromArray(out);
-}
-
-function replace(n, re, replacer, string)
-{
-	n = n.ctor === 'All' ? Infinity : n._0;
-	var count = 0;
-	function jsReplacer(match)
-	{
-		if (count++ >= n)
-		{
-			return match;
-		}
-		var i = arguments.length - 3;
-		var submatches = new Array(i);
-		while (i > 0)
-		{
-			var submatch = arguments[i];
-			submatches[--i] = submatch === undefined
-				? _elm_lang$core$Maybe$Nothing
-				: _elm_lang$core$Maybe$Just(submatch);
-		}
-		return replacer({
-			match: match,
-			submatches: _elm_lang$core$Native_List.fromArray(submatches),
-			index: arguments[arguments.length - 2],
-			number: count
-		});
-	}
-	return string.replace(re, jsReplacer);
-}
-
-function split(n, re, str)
-{
-	n = n.ctor === 'All' ? Infinity : n._0;
-	if (n === Infinity)
-	{
-		return _elm_lang$core$Native_List.fromArray(str.split(re));
-	}
-	var string = str;
-	var result;
-	var out = [];
-	var start = re.lastIndex;
-	var restoreLastIndex = re.lastIndex;
-	while (n--)
-	{
-		if (!(result = re.exec(string))) break;
-		out.push(string.slice(start, result.index));
-		start = re.lastIndex;
-	}
-	out.push(string.slice(start));
-	re.lastIndex = restoreLastIndex;
-	return _elm_lang$core$Native_List.fromArray(out);
-}
-
-return {
-	regex: regex,
-	caseInsensitive: caseInsensitive,
-	escape: escape,
-
-	contains: F2(contains),
-	find: F3(find),
-	replace: F4(replace),
-	split: F3(split)
-};
-
-}();
-
-var _elm_lang$core$Regex$split = _elm_lang$core$Native_Regex.split;
-var _elm_lang$core$Regex$replace = _elm_lang$core$Native_Regex.replace;
-var _elm_lang$core$Regex$find = _elm_lang$core$Native_Regex.find;
-var _elm_lang$core$Regex$contains = _elm_lang$core$Native_Regex.contains;
-var _elm_lang$core$Regex$caseInsensitive = _elm_lang$core$Native_Regex.caseInsensitive;
-var _elm_lang$core$Regex$regex = _elm_lang$core$Native_Regex.regex;
-var _elm_lang$core$Regex$escape = _elm_lang$core$Native_Regex.escape;
-var _elm_lang$core$Regex$Match = F4(
-	function (a, b, c, d) {
-		return {match: a, submatches: b, index: c, number: d};
-	});
-var _elm_lang$core$Regex$Regex = {ctor: 'Regex'};
-var _elm_lang$core$Regex$AtMost = function (a) {
-	return {ctor: 'AtMost', _0: a};
-};
-var _elm_lang$core$Regex$All = {ctor: 'All'};
 
 var _debois$elm_mdl$Material_Footer$tempPrefix = '{{prefix}}';
 var _debois$elm_mdl$Material_Footer$prefixRegex = _elm_lang$core$Regex$regex(_debois$elm_mdl$Material_Footer$tempPrefix);
@@ -29737,289 +29700,163 @@ var _debois$elm_mdl$Demo_Tabs$view = function (model) {
 		});
 };
 
-var _debois$elm_mdl$Demo_Textfields$references = {
-	ctor: '::',
-	_0: _debois$elm_mdl$Demo_Page$package('http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Textfield'),
-	_1: {
-		ctor: '::',
-		_0: _debois$elm_mdl$Demo_Page$mds('https://www.google.com/design/spec/components/text-fields.html'),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Page$mdl('https://www.getmdl.io/components/#textfields-section'),
-			_1: {ctor: '[]'}
-		}
-	}
-};
-var _debois$elm_mdl$Demo_Textfields$srcUrl = 'https://github.com/debois/elm-mdl/blob/master/demo/Demo/Textfields.elm';
-var _debois$elm_mdl$Demo_Textfields$intro = A2(_debois$elm_mdl$Demo_Page$fromMDL, 'http://www.getmdl.io/components/#textfields-section', '\n> The Material Design Lite (MDL) text field component is an enhanced version of\n> the standard HTML `<input type=\"text\">` and `<input type=\"textarea\">` elements.\n> A text field consists of a horizontal line indicating where keyboard input\n> can occur and, typically, text that clearly communicates the intended\n> contents of the text field. The MDL text field component provides various\n> types of text fields, and allows you to add both display and click effects.\n>\n> Text fields are a common feature of most user interfaces, regardless of a\n> site\'s content or function. Their design and use is therefore an important\n> factor in the overall user experience. See the text field component\'s\n> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)\n> for details.\n>\n> The enhanced text field component has a more vivid visual look than a standard\n> text field, and may be initially or programmatically disabled. There are three\n> main types of text fields in the text field component, each with its own basic\n> coding requirements. The types are single-line, multi-line, and expandable.\n');
-var _debois$elm_mdl$Demo_Textfields$view1 = function (_p0) {
-	var _p1 = _p0;
+var _debois$elm_mdl$Material_Textfield_HelperText$validationMsg = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{validationMsg: true});
+	});
+var _debois$elm_mdl$Material_Textfield_HelperText$persistent = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{persistent: true});
+	});
+var _debois$elm_mdl$Material_Textfield_HelperText$defaultConfig = {persistent: false, validationMsg: false};
+var _debois$elm_mdl$Material_Textfield_HelperText$helperText = function (options) {
+	var _p0 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Textfield_HelperText$defaultConfig, options);
+	var summary = _p0;
+	var config = _p0.config;
 	return A2(
-		_debois$elm_mdl$Material_Grid$cell,
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$p,
 		{
 			ctor: '::',
-			_0: A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$Phone, 4),
-			_1: {
-				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$Tablet, 6),
-				_1: {
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Grid$offset, _debois$elm_mdl$Material_Grid$Tablet, 1),
-					_1: {
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$Desktop, 8),
-						_1: {
-							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Grid$offset, _debois$elm_mdl$Material_Grid$Desktop, 2),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$h4,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p1._0),
-					_1: {ctor: '[]'}
-				}),
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-textfield-helptext'),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_debois$elm_mdl$Material_Options$div,
-					{
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Options$center,
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _p1._1,
-						_1: {ctor: '[]'}
-					}),
+					_debois$elm_mdl$Material_Options$when,
+					config.persistent,
+					_debois$elm_mdl$Material_Options$cs('mdc-textfield-helptext--persistent')),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_debois$elm_mdl$Demo_Code$code,
-						{
-							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px 0'),
-							_1: {ctor: '[]'}
-						},
-						_p1._2),
-					_1: {ctor: '[]'}
+						_debois$elm_mdl$Material_Options$when,
+						config.validationMsg,
+						_debois$elm_mdl$Material_Options$cs('mdc-textfield-helptext--validation-msg')),
+					_1: options
 				}
 			}
 		});
 };
-var _debois$elm_mdl$Demo_Textfields$match = F2(
-	function (str, rx) {
-		return A2(
-			_elm_lang$core$List$any,
-			function (_p2) {
-				return A2(
-					F2(
-						function (x, y) {
-							return _elm_lang$core$Native_Utils.eq(x, y);
-						}),
-					str,
-					function (_) {
-						return _.match;
-					}(_p2));
-			},
-			A3(_elm_lang$core$Regex$find, _elm_lang$core$Regex$All, rx, str));
-	});
-var _debois$elm_mdl$Demo_Textfields$rx = '[0-9]*';
-var _debois$elm_mdl$Demo_Textfields$rx_ = _elm_lang$core$Regex$regex(_debois$elm_mdl$Demo_Textfields$rx);
-var _debois$elm_mdl$Demo_Textfields$model = {
-	mdl: _debois$elm_mdl$Material$model,
-	str0: '',
-	str3: '',
-	str4: '',
-	str6: '',
-	str7: '',
-	length: 5,
-	focus: false,
-	str9: 'Try selecting within this text',
-	selection: {begin: -1, end: -1}
-};
-var _debois$elm_mdl$Demo_Textfields$Selection = F2(
+var _debois$elm_mdl$Material_Textfield_HelperText$Config = F2(
 	function (a, b) {
-		return {begin: a, end: b};
+		return {persistent: a, validationMsg: b};
 	});
-var _debois$elm_mdl$Demo_Textfields$Model = function (a) {
-	return function (b) {
-		return function (c) {
-			return function (d) {
-				return function (e) {
-					return function (f) {
-						return function (g) {
-							return function (h) {
-								return function (i) {
-									return function (j) {
-										return {mdl: a, str0: b, str3: c, str4: d, str6: e, str7: f, length: g, focus: h, str9: i, selection: j};
-									};
-								};
-							};
-						};
-					};
-				};
-			};
-		};
-	};
+
+var _debois$elm_mdl$Demo_Textfields$updateExample = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'ToggleDisabled':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{disabled: !model.disabled});
+			case 'ToggleRtl':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{rtl: !model.rtl});
+			case 'ToggleDarkTheme':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{darkTheme: !model.darkTheme});
+			case 'ToggleDense':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{dense: !model.dense});
+			case 'ToggleRequired':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{required: !model.required});
+			case 'ToggleHelperText':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{helperText: !model.helperText});
+			case 'TogglePersistent':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{persistent: !model.persistent});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{validationMsg: !model.validationMsg});
+		}
+	});
+var _debois$elm_mdl$Demo_Textfields$defaultExample = {disabled: false, rtl: false, darkTheme: false, dense: false, required: false, helperText: false, persistent: false, validationMsg: false};
+var _debois$elm_mdl$Demo_Textfields$model = {mdl: _debois$elm_mdl$Material$model, example0: _debois$elm_mdl$Demo_Textfields$defaultExample, example1: _debois$elm_mdl$Demo_Textfields$defaultExample, example2: _debois$elm_mdl$Demo_Textfields$defaultExample, example3: _debois$elm_mdl$Demo_Textfields$defaultExample, example4: _debois$elm_mdl$Demo_Textfields$defaultExample};
+var _debois$elm_mdl$Demo_Textfields$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {mdl: a, example0: b, example1: c, example2: d, example3: e, example4: f};
+	});
+var _debois$elm_mdl$Demo_Textfields$Example = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {disabled: a, rtl: b, darkTheme: c, dense: d, required: e, helperText: f, persistent: g, validationMsg: h};
+	});
+var _debois$elm_mdl$Demo_Textfields$Example4Msg = function (a) {
+	return {ctor: 'Example4Msg', _0: a};
 };
-var _debois$elm_mdl$Demo_Textfields$Nop = {ctor: 'Nop'};
-var _debois$elm_mdl$Demo_Textfields$SelectionChanged = function (a) {
-	return {ctor: 'SelectionChanged', _0: a};
+var _debois$elm_mdl$Demo_Textfields$Example3Msg = function (a) {
+	return {ctor: 'Example3Msg', _0: a};
 };
-var _debois$elm_mdl$Demo_Textfields$selectionDecoder = A2(
-	_elm_lang$core$Json_Decode$map,
-	_debois$elm_mdl$Demo_Textfields$SelectionChanged,
-	A3(
-		_elm_lang$core$Json_Decode$map2,
-		_debois$elm_mdl$Demo_Textfields$Selection,
-		A2(
-			_elm_lang$core$Json_Decode$at,
-			{
-				ctor: '::',
-				_0: 'target',
-				_1: {
-					ctor: '::',
-					_0: 'selectionStart',
-					_1: {ctor: '[]'}
-				}
-			},
-			_elm_lang$core$Json_Decode$int),
-		A2(
-			_elm_lang$core$Json_Decode$at,
-			{
-				ctor: '::',
-				_0: 'target',
-				_1: {
-					ctor: '::',
-					_0: 'selectionEnd',
-					_1: {ctor: '[]'}
-				}
-			},
-			_elm_lang$core$Json_Decode$int)));
-var _debois$elm_mdl$Demo_Textfields$Slider = function (a) {
-	return {ctor: 'Slider', _0: a};
+var _debois$elm_mdl$Demo_Textfields$Example2Msg = function (a) {
+	return {ctor: 'Example2Msg', _0: a};
 };
-var _debois$elm_mdl$Demo_Textfields$Focus = {ctor: 'Focus'};
-var _debois$elm_mdl$Demo_Textfields$SetFocus = function (a) {
-	return {ctor: 'SetFocus', _0: a};
+var _debois$elm_mdl$Demo_Textfields$Example1Msg = function (a) {
+	return {ctor: 'Example1Msg', _0: a};
 };
-var _debois$elm_mdl$Demo_Textfields$Upd9 = function (a) {
-	return {ctor: 'Upd9', _0: a};
-};
-var _debois$elm_mdl$Demo_Textfields$Upd7 = function (a) {
-	return {ctor: 'Upd7', _0: a};
-};
-var _debois$elm_mdl$Demo_Textfields$Upd6 = function (a) {
-	return {ctor: 'Upd6', _0: a};
-};
-var _debois$elm_mdl$Demo_Textfields$Upd4 = function (a) {
-	return {ctor: 'Upd4', _0: a};
-};
-var _debois$elm_mdl$Demo_Textfields$Upd3 = function (a) {
-	return {ctor: 'Upd3', _0: a};
-};
-var _debois$elm_mdl$Demo_Textfields$Upd0 = function (a) {
-	return {ctor: 'Upd0', _0: a};
+var _debois$elm_mdl$Demo_Textfields$Example0Msg = function (a) {
+	return {ctor: 'Example0Msg', _0: a};
 };
 var _debois$elm_mdl$Demo_Textfields$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
 var _debois$elm_mdl$Demo_Textfields$update = F2(
 	function (msg, model) {
-		var _p3 = msg;
-		switch (_p3.ctor) {
-			case 'Nop':
-				return _elm_lang$core$Maybe$Nothing;
-			case 'SelectionChanged':
-				var _p4 = _p3._0;
-				return _elm_lang$core$Native_Utils.eq(_p4, model.selection) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(
-					{
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{selection: _p4}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					});
-			case 'Focus':
-				return _elm_lang$core$Maybe$Just(
-					{
-						ctor: '_Tuple2',
-						_0: model,
-						_1: A2(
-							_elm_lang$core$Task$attempt,
-							function (_p5) {
-								return _debois$elm_mdl$Demo_Textfields$Nop;
-							},
-							_elm_lang$dom$Dom$focus('my-textfield'))
-					});
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'Mdl':
 				return _elm_lang$core$Maybe$Just(
-					A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Textfields$Mdl, _p3._0, model));
-			case 'Upd0':
+					A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Textfields$Mdl, _p1._0, model));
+			case 'Example0Msg':
 				return _elm_lang$core$Maybe$Just(
 					A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{str0: _p3._0}),
+							{
+								example0: A2(_debois$elm_mdl$Demo_Textfields$updateExample, _p1._0, model.example0)
+							}),
 						{ctor: '[]'}));
-			case 'Upd3':
+			case 'Example1Msg':
 				return _elm_lang$core$Maybe$Just(
 					A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{str3: _p3._0}),
+							{
+								example1: A2(_debois$elm_mdl$Demo_Textfields$updateExample, _p1._0, model.example1)
+							}),
 						{ctor: '[]'}));
-			case 'Upd4':
+			case 'Example2Msg':
 				return _elm_lang$core$Maybe$Just(
 					A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{str4: _p3._0}),
+							{
+								example2: A2(_debois$elm_mdl$Demo_Textfields$updateExample, _p1._0, model.example2)
+							}),
 						{ctor: '[]'}));
-			case 'Upd6':
+			case 'Example3Msg':
 				return _elm_lang$core$Maybe$Just(
 					A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{str6: _p3._0}),
-						{ctor: '[]'}));
-			case 'Upd7':
-				return _elm_lang$core$Maybe$Just(
-					A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{str7: _p3._0}),
-						{ctor: '[]'}));
-			case 'Upd9':
-				return _elm_lang$core$Maybe$Just(
-					A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{str9: _p3._0}),
-						{ctor: '[]'}));
-			case 'Slider':
-				return _elm_lang$core$Maybe$Just(
-					A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{length: _p3._0}),
+							{
+								example3: A2(_debois$elm_mdl$Demo_Textfields$updateExample, _p1._0, model.example3)
+							}),
 						{ctor: '[]'}));
 			default:
 				return _elm_lang$core$Maybe$Just(
@@ -30027,478 +29864,553 @@ var _debois$elm_mdl$Demo_Textfields$update = F2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{focus: _p3._0}),
+							{
+								example4: A2(_debois$elm_mdl$Demo_Textfields$updateExample, _p1._0, model.example4)
+							}),
 						{ctor: '[]'}));
 		}
 	});
-var _debois$elm_mdl$Demo_Textfields$textfields = function (model) {
-	return {
-		ctor: '::',
-		_0: {
-			ctor: '_Tuple3',
-			_0: 'Basic textfield',
-			_1: A5(
-				_debois$elm_mdl$Material_Textfield$render,
-				_debois$elm_mdl$Demo_Textfields$Mdl,
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
-				model.mdl,
-				{
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$onInput(_debois$elm_mdl$Demo_Textfields$Upd0),
-					_1: {ctor: '[]'}
-				},
-				{ctor: '[]'}),
-			_2: '\n        Textfield.render Mdl [0] model.mdl\n          [ Options.onInput Upd0 ]\n          []\n       '
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple3',
-				_0: 'Labelled textfield',
-				_1: A5(
-					_debois$elm_mdl$Material_Textfield$render,
-					_debois$elm_mdl$Demo_Textfields$Mdl,
-					{
-						ctor: '::',
-						_0: 1,
-						_1: {ctor: '[]'}
-					},
-					model.mdl,
-					{
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Textfield$label('Labelled'),
-						_1: {ctor: '[]'}
-					},
-					{ctor: '[]'}),
-				_2: '\n       Textfield.render Mdl [1] model.mdl\n         [ Textfield.label \"Labelled\" ]\n         []\n       '
-			},
-			_1: {
+var _debois$elm_mdl$Demo_Textfields$example1 = F4(
+	function (mdl, idx, lift, model) {
+		return A2(
+			_debois$elm_mdl$Material_Options$div,
+			{ctor: '[]'},
+			{
 				ctor: '::',
-				_0: {
-					ctor: '_Tuple3',
-					_0: 'Labelled textfield, floating label',
-					_1: A5(
-						_debois$elm_mdl$Material_Textfield$render,
-						_debois$elm_mdl$Demo_Textfields$Mdl,
-						{
-							ctor: '::',
-							_0: 2,
-							_1: {ctor: '[]'}
-						},
-						model.mdl,
-						{
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Textfield$label('Floating label'),
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Textfield$text_,
-									_1: {ctor: '[]'}
-								}
-							}
-						},
-						{ctor: '[]'}),
-					_2: '\n        Textfield.render Mdl [2] model.mdl\n          [ Textfield.label \"Floating label\"\n          , Textfield.floatingLabel\n          , Textfield.text_\n          ]\n          []\n       '
-				},
+				_0: A2(
+					_elm_lang$html$Html$h2,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Password field with validation'),
+						_1: {ctor: '[]'}
+					}),
 				_1: {
 					ctor: '::',
-					_0: {
-						ctor: '_Tuple3',
-						_0: 'Disabled textfield',
-						_1: A5(
-							_debois$elm_mdl$Material_Textfield$render,
-							_debois$elm_mdl$Demo_Textfields$Mdl,
-							{
-								ctor: '::',
-								_0: 3,
-								_1: {ctor: '[]'}
-							},
-							model.mdl,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Textfield$label('Disabled'),
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Textfield$disabled,
-									_1: {
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Textfield$value(
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												model.str0,
-												(!_elm_lang$core$Native_Utils.eq(model.str0, '')) ? ' (still disabled, though)' : '')),
-										_1: {ctor: '[]'}
-									}
-								}
-							},
-							{ctor: '[]'}),
-						_2: '\n      Textfield.render Mdl [3] model.mdl\n        [ Textfield.label \"Disabled\"\n        , Textfield.disabled\n        , Textfield.value <|\n            model.str0\n            ++ if model.str0 /= \"\" then\n                \" (still disabled, though)\"\n               else \"\"\n        ]\n        []\n       '
-					},
-					_1: {
-						ctor: '::',
-						_0: {
-							ctor: '_Tuple3',
-							_0: 'Textfield with error checking',
-							_1: A5(
-								_debois$elm_mdl$Material_Textfield$render,
-								_debois$elm_mdl$Demo_Textfields$Mdl,
-								{
-									ctor: '::',
-									_0: 4,
-									_1: {ctor: '[]'}
-								},
-								model.mdl,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Textfield$label('w/error checking'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Options$when,
-											!A2(_debois$elm_mdl$Demo_Textfields$match, model.str4, _debois$elm_mdl$Demo_Textfields$rx_),
-											_debois$elm_mdl$Material_Textfield$error(
-												A2(_elm_lang$core$Basics_ops['++'], 'Doesn\'t match ', _debois$elm_mdl$Demo_Textfields$rx))),
-										_1: {
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$onInput(_debois$elm_mdl$Demo_Textfields$Upd4),
-											_1: {
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Textfield$value(model.str4),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								},
-								{ctor: '[]'}),
-							_2: '\n    Textfield.render Mdl [4] model.mdl\n      [ Textfield.label \"w/error checking\"\n      , Options.onInput Upd4\n      , Textfield.error (\"Doesn\'t match \" ++ rx)\n          |> Options.when (not <| match model.str4 rx_)\n      ]\n      []\n       '
-						},
-						_1: {
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$section,
+						{
 							ctor: '::',
-							_0: {
-								ctor: '_Tuple3',
-								_0: 'Textfield for passwords',
-								_1: A5(
-									_debois$elm_mdl$Material_Textfield$render,
-									_debois$elm_mdl$Demo_Textfields$Mdl,
-									{
-										ctor: '::',
-										_0: 5,
-										_1: {ctor: '[]'}
-									},
-									model.mdl,
-									{
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Textfield$label('Enter password'),
-										_1: {
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
-											_1: {
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Textfield$password,
-												_1: {ctor: '[]'}
-											}
-										}
-									},
-									{ctor: '[]'}),
-								_2: '\n      Textfield.render Mdl [5] model.mdl\n        [ Textfield.label \"Enter password\"\n        , Textfield.floatingLabel\n        , Textfield.password\n        ]\n        []\n       '
-							},
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.darkTheme,
+								_debois$elm_mdl$Material_Options$cs('mdc-theme--dark')),
 							_1: {
 								ctor: '::',
-								_0: {
-									ctor: '_Tuple3',
-									_0: 'Textfield for email',
-									_1: A5(
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									model.rtl,
+									_debois$elm_mdl$Material_Options$attribute(
+										_elm_lang$html$Html_Attributes$dir('rtl'))),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								model.darkTheme ? {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mdc-theme--dark'),
+									_1: {ctor: '[]'}
+								} : {ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
 										_debois$elm_mdl$Material_Textfield$render,
 										_debois$elm_mdl$Demo_Textfields$Mdl,
 										{
 											ctor: '::',
-											_0: 6,
+											_0: idx,
 											_1: {ctor: '[]'}
 										},
-										model.mdl,
+										mdl,
 										{
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Textfield$label('Enter email'),
+											_0: _debois$elm_mdl$Material_Textfield$label('Choose password'),
 											_1: {
 												ctor: '::',
-												_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
+												_0: _debois$elm_mdl$Material_Textfield$password,
 												_1: {
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Textfield$email,
-													_1: {ctor: '[]'}
+													_0: _debois$elm_mdl$Material_Textfield$pattern('.{8,}'),
+													_1: {
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Textfield$required,
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										},
 										{ctor: '[]'}),
-									_2: '\n      Textfield.render Mdl [6] model.mdl\n        [ Textfield.label \"Enter email\"\n        , Textfield.floatingLabel\n        , Textfield.email\n        []\n       '
-								},
-								_1: {
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple3',
-										_0: 'Expandable textfield',
-										_1: A5(
-											_debois$elm_mdl$Material_Textfield$render,
-											_debois$elm_mdl$Demo_Textfields$Mdl,
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Textfield_HelperText$helperText,
 											{
 												ctor: '::',
-												_0: 7,
-												_1: {ctor: '[]'}
-											},
-											model.mdl,
-											{
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Textfield$label('Expandable'),
+												_0: _debois$elm_mdl$Material_Textfield_HelperText$persistent,
 												_1: {
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
+													_0: _debois$elm_mdl$Material_Textfield_HelperText$validationMsg,
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Must be at least 8 characters long'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Textfields$ToggleValidationMsg = {ctor: 'ToggleValidationMsg'};
+var _debois$elm_mdl$Demo_Textfields$TogglePersistent = {ctor: 'TogglePersistent'};
+var _debois$elm_mdl$Demo_Textfields$ToggleHelperText = {ctor: 'ToggleHelperText'};
+var _debois$elm_mdl$Demo_Textfields$ToggleRequired = {ctor: 'ToggleRequired'};
+var _debois$elm_mdl$Demo_Textfields$ToggleDense = {ctor: 'ToggleDense'};
+var _debois$elm_mdl$Demo_Textfields$ToggleDarkTheme = {ctor: 'ToggleDarkTheme'};
+var _debois$elm_mdl$Demo_Textfields$ToggleRtl = {ctor: 'ToggleRtl'};
+var _debois$elm_mdl$Demo_Textfields$ToggleDisabled = {ctor: 'ToggleDisabled'};
+var _debois$elm_mdl$Demo_Textfields$example0 = F4(
+	function (mdl, idx, lift, model) {
+		return A2(
+			_debois$elm_mdl$Material_Options$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h2,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Full Functionality Component (Floating Label, Validation, Autocomplete)'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$section,
+						{
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.darkTheme,
+								_debois$elm_mdl$Material_Options$cs('mdc-theme--dark')),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									model.rtl,
+									_debois$elm_mdl$Material_Options$attribute(
+										_elm_lang$html$Html_Attributes$dir('rtl'))),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								model.darkTheme ? {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mdc-theme--dark'),
+									_1: {ctor: '[]'}
+								} : {ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Textfield$render,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
+											ctor: '::',
+											_0: idx,
+											_1: {ctor: '[]'}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Textfield$label('Email Address'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Textfield$disabled),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.dense, _debois$elm_mdl$Material_Textfield$dense),
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Textfield$expandable('id-of-expandable-1'),
-														_1: {
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Textfield$expandableIcon('search'),
-															_1: {ctor: '[]'}
-														}
+														_0: A2(_debois$elm_mdl$Material_Options$when, model.required, _debois$elm_mdl$Material_Textfield$required),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Textfield_HelperText$helperText,
+											{
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.persistent, _debois$elm_mdl$Material_Textfield_HelperText$persistent),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.validationMsg, _debois$elm_mdl$Material_Textfield_HelperText$validationMsg),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_debois$elm_mdl$Material_Options$when,
+															!model.helperText,
+															A2(_debois$elm_mdl$Material_Options$css, 'display', 'none')),
+														_1: {ctor: '[]'}
 													}
 												}
 											},
-											{ctor: '[]'}),
-										_2: '\n      Textfield.render Mdl [7] model.mdl\n        [ Textfield.label \"Expandable\"\n        , Textfield.floatingLabel\n        , Textfield.expandable \"id-of-expandable-1\"\n        , Textfield.expandableIcon \"search\"\n        ]\n        []\n       '
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Help Text (possibly validation message)'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A5(
+									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Demo_Textfields$Mdl,
+									{
+										ctor: '::',
+										_0: idx,
+										_1: {
+											ctor: '::',
+											_0: 0,
+											_1: {ctor: '[]'}
+										}
 									},
+									mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$onClick(
+											lift(_debois$elm_mdl$Demo_Textfields$ToggleDisabled)),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Disabled'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
+											ctor: '::',
+											_0: idx,
+											_1: {
+												ctor: '::',
+												_0: 1,
+												_1: {ctor: '[]'}
+											}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$onClick(
+												lift(_debois$elm_mdl$Demo_Textfields$ToggleRtl)),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
-										_0: {
-											ctor: '_Tuple3',
-											_0: 'Multi-line textfield',
-											_1: A5(
-												_debois$elm_mdl$Material_Textfield$render,
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('RTL'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A5(
+											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Demo_Textfields$Mdl,
+											{
+												ctor: '::',
+												_0: idx,
+												_1: {
+													ctor: '::',
+													_0: 2,
+													_1: {ctor: '[]'}
+												}
+											},
+											mdl,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$onClick(
+													lift(_debois$elm_mdl$Demo_Textfields$ToggleDarkTheme)),
+												_1: {ctor: '[]'}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Dark Theme'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$div,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A5(
+												_debois$elm_mdl$Material_Toggles$checkbox,
 												_debois$elm_mdl$Demo_Textfields$Mdl,
 												{
 													ctor: '::',
-													_0: 8,
-													_1: {ctor: '[]'}
-												},
-												model.mdl,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Textfield$label('Default multiline textfield'),
+													_0: idx,
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Textfield$textarea,
+														_0: 3,
 														_1: {ctor: '[]'}
 													}
 												},
+												mdl,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$onClick(
+														lift(_debois$elm_mdl$Demo_Textfields$ToggleDense)),
+													_1: {ctor: '[]'}
+												},
 												{ctor: '[]'}),
-											_2: '\n      Textfield.render Mdl [8] model.mdl\n        [ Textfield.label \"Default multiline textfield\"\n        , Textfield.textarea\n        ]\n        []\n       '
-										},
-										_1: {
-											ctor: '::',
-											_0: {
-												ctor: '_Tuple3',
-												_0: 'Multi-line textfield, 6 rows',
-												_1: A5(
-													_debois$elm_mdl$Material_Textfield$render,
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Dense'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Options$div,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A5(
+													_debois$elm_mdl$Material_Toggles$checkbox,
 													_debois$elm_mdl$Demo_Textfields$Mdl,
 													{
 														ctor: '::',
-														_0: 9,
-														_1: {ctor: '[]'}
-													},
-													model.mdl,
-													{
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Textfield$label('Multiline with 6 rows'),
+														_0: idx,
 														_1: {
 															ctor: '::',
-															_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
-															_1: {
-																ctor: '::',
-																_0: _debois$elm_mdl$Material_Textfield$textarea,
-																_1: {
-																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Textfield$rows(6),
-																	_1: {ctor: '[]'}
-																}
-															}
+															_0: 4,
+															_1: {ctor: '[]'}
 														}
 													},
+													mdl,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$onClick(
+															lift(_debois$elm_mdl$Demo_Textfields$ToggleRequired)),
+														_1: {ctor: '[]'}
+													},
 													{ctor: '[]'}),
-												_2: '\n      Textfield.render Mdl [9] model.mdl\n        [ Textfield.label \"Multiline with 6 rows\"\n        , Textfield.floatingLabel\n        , Textfield.textarea\n        , Textfield.rows 6\n        ]\n        []\n       '
-											},
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$label,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Required'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Options$div,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A5(
+														_debois$elm_mdl$Material_Toggles$checkbox,
+														_debois$elm_mdl$Demo_Textfields$Mdl,
+														{
+															ctor: '::',
+															_0: idx,
+															_1: {
+																ctor: '::',
+																_0: 5,
+																_1: {ctor: '[]'}
+															}
+														},
+														mdl,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$onClick(
+																lift(_debois$elm_mdl$Demo_Textfields$ToggleHelperText)),
+															_1: {ctor: '[]'}
+														},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$label,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Use Helper Text'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}),
 											_1: {
 												ctor: '::',
-												_0: {
-													ctor: '_Tuple3',
-													_0: 'Multi-line textfield with character limit',
-													_1: A2(
-														_elm_lang$html$Html$div,
+												_0: A2(
+													_debois$elm_mdl$Material_Options$div,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A5(
+															_debois$elm_mdl$Material_Toggles$checkbox,
+															_debois$elm_mdl$Demo_Textfields$Mdl,
+															{
+																ctor: '::',
+																_0: idx,
+																_1: {
+																	ctor: '::',
+																	_0: 6,
+																	_1: {ctor: '[]'}
+																}
+															},
+															mdl,
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$onClick(
+																	lift(_debois$elm_mdl$Demo_Textfields$TogglePersistent)),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_debois$elm_mdl$Material_Options$when, !model.helperText, _debois$elm_mdl$Material_Toggles$disabled),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$label,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Make helper text persistent'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Options$div,
 														{ctor: '[]'},
 														{
 															ctor: '::',
 															_0: A5(
-																_debois$elm_mdl$Material_Textfield$render,
+																_debois$elm_mdl$Material_Toggles$checkbox,
 																_debois$elm_mdl$Demo_Textfields$Mdl,
 																{
 																	ctor: '::',
-																	_0: 10,
-																	_1: {ctor: '[]'}
-																},
-																model.mdl,
-																{
-																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Textfield$label(
-																		A2(
-																			_elm_lang$core$Basics_ops['++'],
-																			'Multiline textfield (',
-																			A2(
-																				_elm_lang$core$Basics_ops['++'],
-																				_elm_lang$core$Basics$toString(
-																					_elm_lang$core$String$length(model.str6)),
-																				A2(
-																					_elm_lang$core$Basics_ops['++'],
-																					' of ',
-																					A2(
-																						_elm_lang$core$Basics_ops['++'],
-																						_elm_lang$core$Basics$toString(
-																							_elm_lang$core$Basics$truncate(model.length)),
-																						' char limit)'))))),
+																	_0: idx,
 																	_1: {
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Options$onInput(_debois$elm_mdl$Demo_Textfields$Upd6),
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Textfield$textarea,
-																			_1: {
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Material_Textfield$maxlength(
-																					_elm_lang$core$Basics$truncate(model.length)),
-																				_1: {
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		}
+																		_0: 7,
+																		_1: {ctor: '[]'}
+																	}
+																},
+																mdl,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$onClick(
+																		lift(_debois$elm_mdl$Demo_Textfields$ToggleValidationMsg)),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_debois$elm_mdl$Material_Options$when, !model.helperText, _debois$elm_mdl$Material_Toggles$disabled),
+																		_1: {ctor: '[]'}
 																	}
 																},
 																{ctor: '[]'}),
 															_1: {
 																ctor: '::',
-																_0: A3(
-																	_debois$elm_mdl$Material_Options$styled,
-																	_elm_lang$html$Html$p,
+																_0: A2(
+																	_elm_lang$html$Html$label,
+																	{ctor: '[]'},
 																	{
 																		ctor: '::',
-																		_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '80%'),
+																		_0: _elm_lang$html$Html$text('Use helper text as validation message'),
 																		_1: {ctor: '[]'}
-																	},
-																	{
-																		ctor: '::',
-																		_0: A2(
-																			_debois$elm_mdl$Material_Options$span,
-																			{
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Material_Typography$caption,
-																				_1: {ctor: '[]'}
-																			},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('Drag to change the maxlength'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Slider$view(
-																				{
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_Slider$onChange(_debois$elm_mdl$Demo_Textfields$Slider),
-																					_1: {
-																						ctor: '::',
-																						_0: _debois$elm_mdl$Material_Slider$value(model.length),
-																						_1: {
-																							ctor: '::',
-																							_0: _debois$elm_mdl$Material_Slider$max(100),
-																							_1: {
-																								ctor: '::',
-																								_0: _debois$elm_mdl$Material_Slider$min(1),
-																								_1: {
-																									ctor: '::',
-																									_0: _debois$elm_mdl$Material_Slider$step(1),
-																									_1: {ctor: '[]'}
-																								}
-																							}
-																						}
-																					}
-																				}),
-																			_1: {ctor: '[]'}
-																		}
 																	}),
 																_1: {ctor: '[]'}
 															}
 														}),
-													_2: '\n       Textfield.render Mdl [10] model.mdl\n         [ Textfield.label\n             (\"Multiline textfield (\" ++\n                (toString (String.length model.str6))\n                ++ \" of \" ++ (toString (truncate model.length))\n                ++ \" char limit)\")\n         , Options.onInput Upd6\n         , Textfield.textarea\n         , Textfield.maxlength (truncate model.length)\n         , Textfield.floatingLabel\n         ]\n       '
-												},
-												_1: {
-													ctor: '::',
-													_0: {
-														ctor: '_Tuple3',
-														_0: 'Multi-line textfield with row limit',
-														_1: A2(
-															_elm_lang$html$Html$div,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: A5(
-																	_debois$elm_mdl$Material_Textfield$render,
-																	_debois$elm_mdl$Demo_Textfields$Mdl,
-																	{
-																		ctor: '::',
-																		_0: 11,
-																		_1: {ctor: '[]'}
-																	},
-																	model.mdl,
-																	{
-																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Textfield$label(
-																			A2(
-																				_elm_lang$core$Basics_ops['++'],
-																				'Multiline textfield (',
-																				A2(
-																					_elm_lang$core$Basics_ops['++'],
-																					_elm_lang$core$Basics$toString(
-																						_elm_lang$core$List$length(
-																							A2(_elm_lang$core$String$split, '\n', model.str7))),
-																					' of 3 row limit)'))),
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Options$onInput(_debois$elm_mdl$Demo_Textfields$Upd6),
-																			_1: {
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Material_Textfield$textarea,
-																				_1: {
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_Textfield$maxRows(3),
-																					_1: {
-																						ctor: '::',
-																						_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
-																						_1: {ctor: '[]'}
-																					}
-																				}
-																			}
-																		}
-																	},
-																	{ctor: '[]'}),
-																_1: {ctor: '[]'}
-															}),
-														_2: '\n       Textfield.render Mdl [11] model.mdl\n         [ Textfield.label\n             (\"Multiline textfield (\"\n                 ++ (toString (List.length (String.lines model.str7)))\n                 ++ \" of 3 row limit)\"\n         , Options.onInput Upd6\n         , Textfield.textarea\n         , Textfield.maxRows 3\n         , Textfield.floatingLabel\n         ]\n       '
-													},
 													_1: {ctor: '[]'}
 												}
 											}
@@ -30509,215 +30421,826 @@ var _debois$elm_mdl$Demo_Textfields$textfields = function (model) {
 						}
 					}
 				}
-			}
-		}
-	};
-};
-var _debois$elm_mdl$Demo_Textfields$custom = function (model) {
-	return {
-		ctor: '::',
-		_0: {
-			ctor: '_Tuple3',
-			_0: 'Working with focus',
-			_1: A2(
-				_debois$elm_mdl$Material_Options$div,
-				{
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
-					_1: {
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-direction', 'column'),
-						_1: {
-							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'align-items', 'flex-start'),
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				{
-					ctor: '::',
-					_0: A5(
-						_debois$elm_mdl$Material_Textfield$render,
-						_debois$elm_mdl$Demo_Textfields$Mdl,
-						{
-							ctor: '::',
-							_0: 11,
-							_1: {ctor: '[]'}
-						},
-						model.mdl,
-						{
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Textfield$floatingLabel,
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Textfield$label(
-									model.focus ? 'Focused' : 'Not focused'),
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$onFocus(
-										_debois$elm_mdl$Demo_Textfields$SetFocus(true)),
-									_1: {
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$onBlur(
-											_debois$elm_mdl$Demo_Textfields$SetFocus(false)),
-										_1: {
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$id('my-textfield'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A5(
-							_debois$elm_mdl$Material_Button$render,
-							_debois$elm_mdl$Demo_Textfields$Mdl,
-							{
-								ctor: '::',
-								_0: 12,
-								_1: {ctor: '[]'}
-							},
-							model.mdl,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Textfields$Focus),
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Button$colored,
-									_1: {
-										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$css, 'align-self', 'flex-end'),
-										_1: {
-											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$when, model.focus, _debois$elm_mdl$Material_Button$disabled),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Focus'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_2: '\n       [ Textfield.render Mdl [11] model.mdl\n          [ Textfield.floatingLabel\n          , Textfield.label <| if model.focus then \"Focused\" else \"Not focused\"\n          , Options.onFocus (SetFocus True)\n          , Options.onBlur (SetFocus False)\n          , Options.id \"my-textfield\"\n          ]\n          []\n      , Button.render Mdl [12] model.mdl\n          [ Options.onClick Focus\n          , Button.colored\n          , css \"align-self\" \"flex-end\"\n          , Button.disabled `Options.when` model.focus\n          ]\n          [ text \"Focus\" ]\n       ]\n          '
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple3',
-				_0: 'Working with selection',
-				_1: A2(
-					_elm_lang$html$Html$div,
+			});
+	});
+var _debois$elm_mdl$Demo_Textfields$example2 = F4(
+	function (mdl, idx, lift, model) {
+		return A2(
+			_debois$elm_mdl$Material_Options$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h2,
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: A5(
-							_debois$elm_mdl$Material_Textfield$render,
-							_debois$elm_mdl$Demo_Textfields$Mdl,
-							{
+						_0: _elm_lang$html$Html$text('Textfield box'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$section,
+						{
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.darkTheme,
+								_debois$elm_mdl$Material_Options$cs('mdc-theme--dark')),
+							_1: {
 								ctor: '::',
-								_0: 13,
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									model.rtl,
+									_debois$elm_mdl$Material_Options$attribute(
+										_elm_lang$html$Html_Attributes$dir('rtl'))),
 								_1: {ctor: '[]'}
-							},
-							model.mdl,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Textfield$label('Custom event handling'),
-								_1: {
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								model.darkTheme ? {
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Textfield$textarea,
-									_1: {
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Textfield$value(model.str9),
-										_1: {
+									_0: _elm_lang$html$Html_Attributes$class('mdc-theme--dark'),
+									_1: {ctor: '[]'}
+								} : {ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Textfield$render,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$onInput(_debois$elm_mdl$Demo_Textfields$Upd9),
+											_0: idx,
+											_1: {ctor: '[]'}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Textfield$label('Your Name'),
 											_1: {
 												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$on, 'keyup', _debois$elm_mdl$Demo_Textfields$selectionDecoder),
+												_0: _debois$elm_mdl$Material_Textfield$textfield,
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Textfield_HelperText$helperText,
+											{
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.persistent, _debois$elm_mdl$Material_Textfield_HelperText$persistent),
 												_1: {
 													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$on, 'mousemove', _debois$elm_mdl$Demo_Textfields$selectionDecoder),
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.validationMsg, _debois$elm_mdl$Material_Textfield_HelperText$validationMsg),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Must provide a name'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A5(
+									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Demo_Textfields$Mdl,
+									{
+										ctor: '::',
+										_0: idx,
+										_1: {
+											ctor: '::',
+											_0: 0,
+											_1: {ctor: '[]'}
+										}
+									},
+									mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$onClick(
+											lift(_debois$elm_mdl$Demo_Textfields$ToggleDisabled)),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Disabled'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
+											ctor: '::',
+											_0: idx,
+											_1: {
+												ctor: '::',
+												_0: 1,
+												_1: {ctor: '[]'}
+											}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$onClick(
+												lift(_debois$elm_mdl$Demo_Textfields$ToggleRtl)),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('RTL'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A5(
+											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Demo_Textfields$Mdl,
+											{
+												ctor: '::',
+												_0: idx,
+												_1: {
+													ctor: '::',
+													_0: 2,
+													_1: {ctor: '[]'}
+												}
+											},
+											mdl,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$onClick(
+													lift(_debois$elm_mdl$Demo_Textfields$ToggleDarkTheme)),
+												_1: {ctor: '[]'}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Dark Theme'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$div,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A5(
+												_debois$elm_mdl$Material_Toggles$checkbox,
+												_debois$elm_mdl$Demo_Textfields$Mdl,
+												{
+													ctor: '::',
+													_0: idx,
 													_1: {
 														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$on, 'click', _debois$elm_mdl$Demo_Textfields$selectionDecoder),
+														_0: 3,
+														_1: {ctor: '[]'}
+													}
+												},
+												mdl,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$onClick(
+														lift(_debois$elm_mdl$Demo_Textfields$ToggleDense)),
+													_1: {ctor: '[]'}
+												},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Dense'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Textfields$example3 = F4(
+	function (mdl, idx, lift, model) {
+		return A2(
+			_debois$elm_mdl$Material_Options$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h2,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Multi-line Textfields'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$section,
+						{
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.darkTheme,
+								_debois$elm_mdl$Material_Options$cs('mdc-theme--dark')),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									model.rtl,
+									_debois$elm_mdl$Material_Options$attribute(
+										_elm_lang$html$Html_Attributes$dir('rtl'))),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								model.darkTheme ? {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mdc-theme--dark'),
+									_1: {ctor: '[]'}
+								} : {ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Textfield$render,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
+											ctor: '::',
+											_0: idx,
+											_1: {ctor: '[]'}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Textfield$label('Multi-line Label'),
+											_1: {
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Textfield$multiline,
+												_1: {
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Textfield$rows(8),
+													_1: {
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Textfield$cols(40),
 														_1: {ctor: '[]'}
 													}
 												}
 											}
-										}
-									}
-								}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$p,
-								{
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '300px'),
-									_1: {
-										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$css, 'word-wrap', 'break-word'),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											'Selected text: ',
-											A3(_elm_lang$core$String$slice, model.selection.begin, model.selection.end, model.str9))),
+										},
+										{ctor: '[]'}),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A5(
+									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Demo_Textfields$Mdl,
+									{
+										ctor: '::',
+										_0: idx,
+										_1: {
+											ctor: '::',
+											_0: 0,
+											_1: {ctor: '[]'}
+										}
+									},
+									mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$onClick(
+											lift(_debois$elm_mdl$Demo_Textfields$ToggleDisabled)),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Disabled'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
+											ctor: '::',
+											_0: idx,
+											_1: {
+												ctor: '::',
+												_0: 1,
+												_1: {ctor: '[]'}
+											}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$onClick(
+												lift(_debois$elm_mdl$Demo_Textfields$ToggleRtl)),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('RTL'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A5(
+											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Demo_Textfields$Mdl,
+											{
+												ctor: '::',
+												_0: idx,
+												_1: {
+													ctor: '::',
+													_0: 2,
+													_1: {ctor: '[]'}
+												}
+											},
+											mdl,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$onClick(
+													lift(_debois$elm_mdl$Demo_Textfields$ToggleDarkTheme)),
+												_1: {ctor: '[]'}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Dark Theme'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$div,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A5(
+												_debois$elm_mdl$Material_Toggles$checkbox,
+												_debois$elm_mdl$Demo_Textfields$Mdl,
+												{
+													ctor: '::',
+													_0: idx,
+													_1: {
+														ctor: '::',
+														_0: 3,
+														_1: {ctor: '[]'}
+													}
+												},
+												mdl,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$onClick(
+														lift(_debois$elm_mdl$Demo_Textfields$ToggleDense)),
+													_1: {ctor: '[]'}
+												},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Dense'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
 						}
+					}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Textfields$example4 = F4(
+	function (mdl, idx, lift, model) {
+		return A2(
+			_debois$elm_mdl$Material_Options$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h2,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Full-Width Textfields'),
+						_1: {ctor: '[]'}
 					}),
-				_2: '\n      type alias Selection =\n        { begin : Int\n        , end : Int\n        }\n\n\n      type alias Model =\n        { value : String\n        , selection : Selection\n        }\n\n\n      type Msg =\n        ...\n        | SelectionChanged Selection\n        | Input String\n\n\n      update msg model =\n        case msg of\n          ...\n          | Selection selection ->\n              {- This clause is triggered by the high-frequency mousemove\n              event. When the selection didn\'t change, we make sure to\n              return an unchanged model so that Html.Lazy can kick in and\n              prevent unnecessary re-renders.\n              -}\n              if model.selection == selection then\n                ( model, Cmd.none )\n              else\n                ( { model | selection = selection }, Cmd.none )\n\n          | Input str ->\n              ( { model | value = str }, Cmd.none )\n\n\n      selectionDecoder : Decoder.Decoder Msg\n      selectionDecoder =\n        Decoder.object2 Selection\n          (Decoder.at [\"target\", \"selectionStart\"] Decoder.int)\n          (Decoder.at [\"target\", \"selectionEnd\"] Decoder.int)\n\n\n      view : Model -> Html Msg\n      view model =\n        div []\n          [ Textfield.render Mdl [13] model.mdl\n              [ Textfield.label \"Custom event handling\"\n              , Textfield.textarea\n              , Options.onInput Input\n              , Options.on \"keyup\" selectionDecoder\n              , Options.on \"mousemove\" selectionDecoder\n              , Options.on \"click\" selectionDecoder\n              ]\n              []\n            , [ text <| \"Selected text: \" ++\n                  String.slice model.selection.begin model.selection.end model.value\n              ]\n     '
-			},
-			_1: {ctor: '[]'}
-		}
-	};
-};
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$section,
+						{
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.darkTheme,
+								_debois$elm_mdl$Material_Options$cs('mdc-theme--dark')),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									model.rtl,
+									_debois$elm_mdl$Material_Options$attribute(
+										_elm_lang$html$Html_Attributes$dir('rtl'))),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								model.darkTheme ? {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mdc-theme--dark'),
+									_1: {ctor: '[]'}
+								} : {ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Textfield$render,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
+											ctor: '::',
+											_0: idx,
+											_1: {
+												ctor: '::',
+												_0: 0,
+												_1: {ctor: '[]'}
+											}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Textfield$placeholder('Subject'),
+											_1: {
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Textfield$fullWidth,
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A5(
+											_debois$elm_mdl$Material_Textfield$render,
+											_debois$elm_mdl$Demo_Textfields$Mdl,
+											{
+												ctor: '::',
+												_0: idx,
+												_1: {
+													ctor: '::',
+													_0: 1,
+													_1: {ctor: '[]'}
+												}
+											},
+											mdl,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Textfield$placeholder('Message'),
+												_1: {
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Textfield$multiline,
+													_1: {
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Textfield$fullWidth,
+														_1: {
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Textfield$rows(8),
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Textfield$cols(40),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A5(
+									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Demo_Textfields$Mdl,
+									{
+										ctor: '::',
+										_0: idx,
+										_1: {
+											ctor: '::',
+											_0: 2,
+											_1: {ctor: '[]'}
+										}
+									},
+									mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$onClick(
+											lift(_debois$elm_mdl$Demo_Textfields$ToggleDisabled)),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Disabled'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Demo_Textfields$Mdl,
+										{
+											ctor: '::',
+											_0: idx,
+											_1: {
+												ctor: '::',
+												_0: 3,
+												_1: {ctor: '[]'}
+											}
+										},
+										mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$onClick(
+												lift(_debois$elm_mdl$Demo_Textfields$ToggleRtl)),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('RTL'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A5(
+											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Demo_Textfields$Mdl,
+											{
+												ctor: '::',
+												_0: idx,
+												_1: {
+													ctor: '::',
+													_0: 4,
+													_1: {ctor: '[]'}
+												}
+											},
+											mdl,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$onClick(
+													lift(_debois$elm_mdl$Demo_Textfields$ToggleDarkTheme)),
+												_1: {ctor: '[]'}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Dark Theme'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$div,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A5(
+												_debois$elm_mdl$Material_Toggles$checkbox,
+												_debois$elm_mdl$Demo_Textfields$Mdl,
+												{
+													ctor: '::',
+													_0: idx,
+													_1: {
+														ctor: '::',
+														_0: 5,
+														_1: {ctor: '[]'}
+													}
+												},
+												mdl,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$onClick(
+														lift(_debois$elm_mdl$Demo_Textfields$ToggleDense)),
+													_1: {ctor: '[]'}
+												},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Dense'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
 var _debois$elm_mdl$Demo_Textfields$view = function (model) {
-	var demo2 = A2(
-		_debois$elm_mdl$Material_Grid$grid,
+	return A2(
+		_debois$elm_mdl$Material_Options$div,
 		{ctor: '[]'},
-		A2(
-			_elm_lang$core$List$map,
-			_debois$elm_mdl$Demo_Textfields$view1,
-			_debois$elm_mdl$Demo_Textfields$custom(model)));
-	var demo1 = A2(
-		_debois$elm_mdl$Material_Grid$grid,
-		{ctor: '[]'},
-		A2(
-			_elm_lang$core$List$map,
-			_debois$elm_mdl$Demo_Textfields$view1,
-			_debois$elm_mdl$Demo_Textfields$textfields(model)));
-	return A6(
-		_debois$elm_mdl$Demo_Page$body1_,
-		'Textfields',
-		_debois$elm_mdl$Demo_Textfields$srcUrl,
-		_debois$elm_mdl$Demo_Textfields$intro,
-		_debois$elm_mdl$Demo_Textfields$references,
 		{
 			ctor: '::',
-			_0: demo1,
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: demo2,
+			_0: A3(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$section,
+				{
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('example'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A4(_debois$elm_mdl$Demo_Textfields$example0, model.mdl, 0, _debois$elm_mdl$Demo_Textfields$Example0Msg, model.example0),
+					_1: {
+						ctor: '::',
+						_0: A4(_debois$elm_mdl$Demo_Textfields$example1, model.mdl, 1, _debois$elm_mdl$Demo_Textfields$Example1Msg, model.example1),
+						_1: {
+							ctor: '::',
+							_0: A4(_debois$elm_mdl$Demo_Textfields$example2, model.mdl, 2, _debois$elm_mdl$Demo_Textfields$Example2Msg, model.example2),
+							_1: {
+								ctor: '::',
+								_0: A4(_debois$elm_mdl$Demo_Textfields$example3, model.mdl, 3, _debois$elm_mdl$Demo_Textfields$Example3Msg, model.example3),
+								_1: {
+									ctor: '::',
+									_0: A4(_debois$elm_mdl$Demo_Textfields$example4, model.mdl, 4, _debois$elm_mdl$Demo_Textfields$Example4Msg, model.example4),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
 			_1: {ctor: '[]'}
 		});
 };
