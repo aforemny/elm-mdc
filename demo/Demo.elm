@@ -24,6 +24,7 @@ import Demo.Menus
 import Demo.Tables
 import Demo.Grid
 import Demo.Textfields
+import Demo.Theme
 import Demo.Snackbar
 import Demo.Badges
 import Demo.Elevation
@@ -51,6 +52,7 @@ type alias Model =
     , layout : Demo.Layout.Model
     , menus : Demo.Menus.Model
     , textfields : Demo.Textfields.Model
+    , theme : Demo.Theme.Model
     , toggles : Demo.Toggles.Model
     , snackbar : Demo.Snackbar.Model
     , tables : Demo.Tables.Model
@@ -79,6 +81,7 @@ model =
     , layout = Demo.Layout.model
     , menus = Demo.Menus.model
     , textfields = Demo.Textfields.model
+    , theme = Demo.Theme.model
     , toggles = Demo.Toggles.model
     , snackbar = Demo.Snackbar.model
     , tables = Demo.Tables.model
@@ -111,6 +114,7 @@ type Msg
     | LayoutMsg Demo.Layout.Msg
     | MenusMsg Demo.Menus.Msg
     | TextfieldMsg Demo.Textfields.Msg
+    | ThemeMsg Demo.Theme.Msg
     | SnackbarMsg Demo.Snackbar.Msg
     | TogglesMsg Demo.Toggles.Msg
     | TablesMsg Demo.Tables.Msg
@@ -169,6 +173,9 @@ update msg model =
                   |> Maybe.map (map1st (\x -> { model | textfields = x }))
                   |> Maybe.withDefault ( model, Cmd.none )
                   |> map2nd (Cmd.map TextfieldMsg)
+
+          ThemeMsg a ->
+              lift .theme (\m x -> { m | theme = x }) ThemeMsg Demo.Theme.update a model
 
           SnackbarMsg a ->
               lift .snackbar (\m x -> { m | snackbar = x }) SnackbarMsg Demo.Snackbar.update a model
@@ -236,6 +243,7 @@ tabs =
     , ( "Tables", "tables", .tables >> Demo.Tables.view >> Html.map TablesMsg )
     , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
     , ( "Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg )
+    , ( "Theme", "theme", .theme >> Demo.Theme.view >> Html.map ThemeMsg )
     , ( "Toggles", "toggles", .toggles >> Demo.Toggles.view >> Html.map TogglesMsg )
     , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
     , ( "Typography", "typography", .typography >> Demo.Typography.view >> Html.map TypographyMsg )
