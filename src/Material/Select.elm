@@ -2,12 +2,12 @@ module Material.Select
     exposing
         (
           Property
-        , value
+--        , value
         , label
-        , floatingLabel
+--        , floatingLabel
         , disabled
-        , error
-        , autofocus
+--        , error
+--        , autofocus
         , ripple
         , index
         , over
@@ -277,11 +277,11 @@ below =
     dropdownOption Dropdown.below
 
 
-{-| Select shows `s` as the selected value.
--}
-value : String -> Property m
-value =
-    textfieldOption << Textfield.value
+--{-| Select shows `s` as the selected value.
+---}
+--value : String -> Property m
+--value =
+--    textfieldOption << Textfield.value
 
 
 {-| Select itself ripples when clicked
@@ -298,18 +298,18 @@ label =
     textfieldOption << Textfield.label
 
 
-{-| Label of Select animates away from the input area on input
--}
-floatingLabel : Property m
-floatingLabel =
-    textfieldOption Textfield.floatingLabel
+--{-| Label of Select animates away from the input area on input
+---}
+--floatingLabel : Property m
+--floatingLabel =
+--    textfieldOption Textfield.floatingLabel
 
 
-{-| Error message
--}
-error : String -> Property m
-error =
-    textfieldOption << Textfield.error
+--{-| Error message
+---}
+--error : String -> Property m
+--error =
+--    textfieldOption << Textfield.error
 
 
 {-| Disable the Select input
@@ -319,11 +319,11 @@ disabled =
     textfieldOption Textfield.disabled
 
 
-{-| Specifies tha the Select should automatically get focus when the page loads
--}
-autofocus : Property m
-autofocus =
-    textfieldOption Textfield.autofocus
+--{-| Specifies tha the Select should automatically get focus when the page loads
+---}
+--autofocus : Property m
+--autofocus =
+--    textfieldOption Textfield.autofocus
 
 
 -- VIEW

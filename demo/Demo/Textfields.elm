@@ -1,631 +1,464 @@
 module Demo.Textfields exposing (model, Model, update, view, Msg)
 
-import Html exposing (..)
-import Regex
-import Json.Decode as Decoder
-import String
-import Dom
-import Task
-import Material.Textfield as Textfield
-import Material.Grid as Grid exposing (..)
-import Material.Options as Options exposing (css)
-import Material.Button as Button
+import Html.Attributes as Html
+import Html exposing (Html)
 import Material
-import Material.Slider as Slider
-import Material.Typography as Typo
-import Demo.Page as Page
-import Demo.Code as Code
+import Material.Options as Options
+import Material.Options exposing (when, styled, cs, css, div)
+import Material.Textfield as Textfield
+import Material.Textfield.HelperText as Textfield
+import Material.Toggles as Toggles
 
 
 -- MODEL
 
 
-type alias Selection =
-    { begin : Int
-    , end : Int
+type alias Model =
+    { mdl : Material.Model
+    , example0 : Example
+    , example1 : Example
+    , example2 : Example
+    , example3 : Example
+    , example4 : Example
     }
 
 
-type alias Model =
-    { mdl : Material.Model
-    , str0 : String
-    , str3 : String
-    , str4 : String
-    , str6 : String
-    , str7 : String
-    , length : Float
-    , focus : Bool
-    , str9 : String
-    , selection : Selection
+type alias Example =
+    { disabled : Bool
+    , rtl : Bool
+    , darkTheme : Bool
+    , dense : Bool
+    , required : Bool
+    , helperText : Bool
+    , persistent : Bool
+    , validationMsg : Bool
+    }
+
+
+defaultExample : Example
+defaultExample =
+    { disabled = False
+    , rtl = False
+    , darkTheme = False
+    , dense = False
+    , required = False
+    , helperText = False
+    , persistent = False
+    , validationMsg = False
     }
 
 
 model : Model
 model =
     { mdl = Material.model
-    , str0 = ""
-    , str3 = ""
-    , str4 = ""
-    , str6 = ""
-    , str7 = ""
-    , length = 5
-    , focus = False
-    , str9 = "Try selecting within this text"
-    , selection = { begin = -1, end = -1 }
+    , example0 = defaultExample
+    , example1 = defaultExample
+    , example2 = defaultExample
+    , example3 = defaultExample
+    , example4 = defaultExample
     }
-
-
-
--- ACTION, UPDATE
 
 
 type Msg
     = Mdl (Material.Msg Msg)
-    | Upd0 String
-    | Upd3 String
-    | Upd4 String
-    | Upd6 String
-    | Upd7 String
-    | Upd9 String
-    | SetFocus Bool
-    | Focus
-    | Slider Float
-    | SelectionChanged Selection
-    | Nop
+    | Example0Msg ExampleMsg
+    | Example1Msg ExampleMsg
+    | Example2Msg ExampleMsg
+    | Example3Msg ExampleMsg
+    | Example4Msg ExampleMsg
 
 
-selectionDecoder : Decoder.Decoder Msg
-selectionDecoder =
-    Decoder.map SelectionChanged <|
-        Decoder.map2 Selection
-            (Decoder.at [ "target", "selectionStart" ] Decoder.int)
-            (Decoder.at [ "target", "selectionEnd" ] Decoder.int)
+type ExampleMsg
+    = ToggleDisabled
+    | ToggleRtl
+    | ToggleDarkTheme
+    | ToggleDense
+    | ToggleRequired
+    | ToggleHelperText
+    | TogglePersistent
+    | ToggleValidationMsg
 
 
 update : Msg -> Model -> Maybe ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Nop ->
-            Nothing
-
-        SelectionChanged selection ->
-            -- High-frequency event; return referentially equal model on NOP.
-            if selection == model.selection then
-                Nothing
-            else
-                ( { model | selection = selection }, Cmd.none )
-                    |> Just
-
-        Focus ->
-            ( model
-            , Task.attempt (\_ -> Nop) <| Dom.focus "my-textfield"
-            )
-                |> Just
-
         Mdl msg_ ->
             Material.update Mdl msg_ model |> Just
 
-        Upd0 str ->
-            { model | str0 = str }
-                ! []
-                |> Just
+        Example0Msg msg_ ->
+            { model | example0 = updateExample msg_ model.example0 } ! []
+            |> Just
 
-        Upd3 str ->
-            { model | str3 = str }
-                ! []
-                |> Just
+        Example1Msg msg_ ->
+            { model | example1 = updateExample msg_ model.example1 } ! []
+            |> Just
 
-        Upd4 str ->
-            { model | str4 = str }
-                ! []
-                |> Just
+        Example2Msg msg_ ->
+            { model | example2 = updateExample msg_ model.example2 } ! []
+            |> Just
 
-        Upd6 str ->
-            { model | str6 = str }
-                ! []
-                |> Just
+        Example3Msg msg_ ->
+            { model | example3 = updateExample msg_ model.example3 } ! []
+            |> Just
 
-        Upd7 str ->
-            { model | str7 = str }
-                ! []
-                |> Just
+        Example4Msg msg_ ->
+            { model | example4 = updateExample msg_ model.example4 } ! []
+            |> Just
 
-        Upd9 str ->
-            { model | str9 = str }
-                ! []
-                |> Just
 
-        Slider value ->
-            { model | length = value }
-                ! []
-                |> Just
+updateExample : ExampleMsg -> Example -> Example
+updateExample msg model =
+    case msg of
+        ToggleDisabled ->
+            { model | disabled = not model.disabled }
 
-        SetFocus x ->
-            { model | focus = x }
-                ! []
-                |> Just
+        ToggleRtl ->
+            { model | rtl = not model.rtl }
 
+        ToggleDarkTheme ->
+            { model | darkTheme = not model.darkTheme }
+
+        ToggleDense ->
+            { model | dense = not model.dense }
+
+        ToggleRequired ->
+            { model | required = not model.required }
+
+        ToggleHelperText ->
+            { model | helperText = not model.helperText }
+
+        TogglePersistent ->
+            { model | persistent = not model.persistent }
+
+        ToggleValidationMsg ->
+            { model | validationMsg = not model.validationMsg }
 
 
 -- VIEW
 
 
-rx : String
-rx =
-    "[0-9]*"
-
-
-rx_ : Regex.Regex
-rx_ =
-    Regex.regex rx
-
-
-
-{- Check that rx matches all of str. -}
-
-
-match : String -> Regex.Regex -> Bool
-match str rx =
-    Regex.find Regex.All rx str
-        |> List.any (.match >> (==) str)
-
-
-textfields : Model -> List ( String, Html Msg, String )
-textfields model =
-    [ ( "Basic textfield"
-      , Textfield.render Mdl
-            [ 0 ]
-            model.mdl
-            [ Options.onInput Upd0 ]
-            []
-      , """
-        Textfield.render Mdl [0] model.mdl
-          [ Options.onInput Upd0 ]
-          []
-       """
-      )
-    , ( "Labelled textfield"
-      , Textfield.render Mdl
-            [ 1 ]
-            model.mdl
-            [ Textfield.label "Labelled" ]
-            []
-      , """
-       Textfield.render Mdl [1] model.mdl
-         [ Textfield.label "Labelled" ]
-         []
-       """
-      )
-    , ( "Labelled textfield, floating label"
-      , Textfield.render Mdl
-            [ 2 ]
-            model.mdl
-            [ Textfield.label "Floating label"
-            , Textfield.floatingLabel
-            , Textfield.text_
-            ]
-            []
-      , """
-        Textfield.render Mdl [2] model.mdl
-          [ Textfield.label "Floating label"
-          , Textfield.floatingLabel
-          , Textfield.text_
-          ]
-          []
-       """
-      )
-    , ( "Disabled textfield"
-      , Textfield.render Mdl
-            [ 3 ]
-            model.mdl
-            [ Textfield.label "Disabled"
-            , Textfield.disabled
-            , Textfield.value <|
-                model.str0
-                    ++ if model.str0 /= "" then
-                        " (still disabled, though)"
-                       else
-                        ""
-            ]
-            []
-      , """
-      Textfield.render Mdl [3] model.mdl
-        [ Textfield.label "Disabled"
-        , Textfield.disabled
-        , Textfield.value <|
-            model.str0
-            ++ if model.str0 /= "" then
-                " (still disabled, though)"
-               else ""
-        ]
-        []
-       """
-      )
-    , ( "Textfield with error checking"
-      , Textfield.render Mdl
-            [ 4 ]
-            model.mdl
-            [ Textfield.label "w/error checking"
-            , Textfield.error ("Doesn't match " ++ rx)
-                |> Options.when (not <| match model.str4 rx_)
-            , Options.onInput Upd4
-            , Textfield.value model.str4
-            ]
-            []
-      , """
-    Textfield.render Mdl [4] model.mdl
-      [ Textfield.label "w/error checking"
-      , Options.onInput Upd4
-      , Textfield.error ("Doesn't match " ++ rx)
-          |> Options.when (not <| match model.str4 rx_)
-      ]
-      []
-       """
-      )
-    , ( "Textfield for passwords"
-      , Textfield.render Mdl
-            [ 5 ]
-            model.mdl
-            [ Textfield.label "Enter password"
-            , Textfield.floatingLabel
-            , Textfield.password
-            ]
-            []
-      , """
-      Textfield.render Mdl [5] model.mdl
-        [ Textfield.label "Enter password"
-        , Textfield.floatingLabel
-        , Textfield.password
-        ]
-        []
-       """
-      )
-    , ( "Textfield for email"
-      , Textfield.render Mdl
-            [ 6 ]
-            model.mdl
-            [ Textfield.label "Enter email"
-            , Textfield.floatingLabel
-            , Textfield.email
-            ]
-            []
-      , """
-      Textfield.render Mdl [6] model.mdl
-        [ Textfield.label "Enter email"
-        , Textfield.floatingLabel
-        , Textfield.email
-        []
-       """
-      )
-    , ( "Expandable textfield"
-      , Textfield.render Mdl
-            [ 7 ]
-            model.mdl
-            [ Textfield.label "Expandable"
-            , Textfield.floatingLabel
-            , Textfield.expandable "id-of-expandable-1"
-            , Textfield.expandableIcon "search"
-            ]
-            []
-      , """
-      Textfield.render Mdl [7] model.mdl
-        [ Textfield.label "Expandable"
-        , Textfield.floatingLabel
-        , Textfield.expandable "id-of-expandable-1"
-        , Textfield.expandableIcon "search"
-        ]
-        []
-       """
-      )
-    , ( "Multi-line textfield"
-      , Textfield.render Mdl
-            [ 8 ]
-            model.mdl
-            [ Textfield.label "Default multiline textfield"
-            , Textfield.textarea
-            ]
-            []
-      , """
-      Textfield.render Mdl [8] model.mdl
-        [ Textfield.label "Default multiline textfield"
-        , Textfield.textarea
-        ]
-        []
-       """
-      )
-    , ( "Multi-line textfield, 6 rows"
-      , Textfield.render Mdl
-            [ 9 ]
-            model.mdl
-            [ Textfield.label "Multiline with 6 rows"
-            , Textfield.floatingLabel
-            , Textfield.textarea
-            , Textfield.rows 6
-            ]
-            []
-      , """
-      Textfield.render Mdl [9] model.mdl
-        [ Textfield.label "Multiline with 6 rows"
-        , Textfield.floatingLabel
-        , Textfield.textarea
-        , Textfield.rows 6
-        ]
-        []
-       """
-      )
-    , ( "Multi-line textfield with character limit"
-      , Html.div []
-            [ Textfield.render Mdl
-                [ 10 ]
-                model.mdl
-                [ Textfield.label
-                    ("Multiline textfield ("
-                        ++ (toString (String.length model.str6))
-                        ++ " of "
-                        ++ (toString (truncate model.length))
-                        ++ " char limit)"
-                    )
-                , Options.onInput Upd6
-                , Textfield.textarea
-                , Textfield.maxlength (truncate model.length)
-                , Textfield.floatingLabel
-                ]
-                []
-            , Options.styled Html.p
-                [ Options.css "width" "80%" ]
-                [ Options.span
-                    [ Typo.caption ]
-                    [ Html.text "Drag to change the maxlength" ]
-                , Slider.view
-                    [ Slider.onChange Slider
-                    , Slider.value model.length
-                    , Slider.max 100
-                    , Slider.min 1
-                    , Slider.step 1
-                    ]
-                ]
-            ]
-      , """
-       Textfield.render Mdl [10] model.mdl
-         [ Textfield.label
-             ("Multiline textfield (" ++
-                (toString (String.length model.str6))
-                ++ " of " ++ (toString (truncate model.length))
-                ++ " char limit)")
-         , Options.onInput Upd6
-         , Textfield.textarea
-         , Textfield.maxlength (truncate model.length)
-         , Textfield.floatingLabel
-         ]
-       """
-      )
-    , ( "Multi-line textfield with row limit"
-      , Html.div []
-            [ Textfield.render Mdl
-                [ 11 ]
-                model.mdl
-                [ Textfield.label
-                    ("Multiline textfield ("
-                        ++ (toString (List.length (String.split "\n" model.str7)))
-                        ++ " of 3 row limit)"
-                    )
-                , Options.onInput Upd6
-                , Textfield.textarea
-                , Textfield.maxRows 3
-                , Textfield.floatingLabel
-                ]
-                []
-            ]
-      , """
-       Textfield.render Mdl [11] model.mdl
-         [ Textfield.label
-             ("Multiline textfield ("
-                 ++ (toString (List.length (String.lines model.str7)))
-                 ++ " of 3 row limit)"
-         , Options.onInput Upd6
-         , Textfield.textarea
-         , Textfield.maxRows 3
-         , Textfield.floatingLabel
-         ]
-       """
-      )
-    ]
-
-
-custom : Model -> List ( String, Html Msg, String )
-custom model =
-    [ ( "Working with focus"
-      , Options.div
-            [ css "display" "flex"
-            , css "flex-direction" "column"
-            , css "align-items" "flex-start"
-            ]
-            [ Textfield.render Mdl
-                [ 11 ]
-                model.mdl
-                [ Textfield.floatingLabel
-                , Textfield.label <|
-                    if model.focus then
-                        "Focused"
-                    else
-                        "Not focused"
-                , Options.onFocus (SetFocus True)
-                , Options.onBlur (SetFocus False)
-                , Options.id "my-textfield"
-                ]
-                []
-            , Button.render Mdl
-                [ 12 ]
-                model.mdl
-                [ Options.onClick Focus
-                , Button.colored
-                , css "align-self" "flex-end"
-                , Button.disabled |> Options.when model.focus
-                ]
-                [ text "Focus" ]
-            ]
-      , """
-       [ Textfield.render Mdl [11] model.mdl
-          [ Textfield.floatingLabel
-          , Textfield.label <| if model.focus then "Focused" else "Not focused"
-          , Options.onFocus (SetFocus True)
-          , Options.onBlur (SetFocus False)
-          , Options.id "my-textfield"
-          ]
-          []
-      , Button.render Mdl [12] model.mdl
-          [ Options.onClick Focus
-          , Button.colored
-          , css "align-self" "flex-end"
-          , Button.disabled `Options.when` model.focus
-          ]
-          [ text "Focus" ]
-       ]
-          """
-      )
-    , ( "Working with selection"
-      , Html.div
-            []
-            [ Textfield.render Mdl
-                [ 13 ]
-                model.mdl
-                [ Textfield.label "Custom event handling"
-                , Textfield.textarea
-                , Textfield.value model.str9
-                , Options.onInput Upd9
-                , Options.on "keyup" selectionDecoder
-                , Options.on "mousemove" selectionDecoder
-                , Options.on "click" selectionDecoder
-                ]
-                []
-            , Options.styled Html.p
-                [ css "width" "300px"
-                , css "word-wrap" "break-word"
-                ]
-                [ text <|
-                    "Selected text: "
-                        ++ String.slice model.selection.begin model.selection.end model.str9
-                ]
-            ]
-      , """
-      type alias Selection =
-        { begin : Int
-        , end : Int
-        }
-
-
-      type alias Model =
-        { value : String
-        , selection : Selection
-        }
-
-
-      type Msg =
-        ...
-        | SelectionChanged Selection
-        | Input String
-
-
-      update msg model =
-        case msg of
-          ...
-          | Selection selection ->
-              {- This clause is triggered by the high-frequency mousemove
-              event. When the selection didn't change, we make sure to
-              return an unchanged model so that Html.Lazy can kick in and
-              prevent unnecessary re-renders.
-              -}
-              if model.selection == selection then
-                ( model, Cmd.none )
-              else
-                ( { model | selection = selection }, Cmd.none )
-
-          | Input str ->
-              ( { model | value = str }, Cmd.none )
-
-
-      selectionDecoder : Decoder.Decoder Msg
-      selectionDecoder =
-        Decoder.object2 Selection
-          (Decoder.at ["target", "selectionStart"] Decoder.int)
-          (Decoder.at ["target", "selectionEnd"] Decoder.int)
-
-
-      view : Model -> Html Msg
-      view model =
-        div []
-          [ Textfield.render Mdl [13] model.mdl
-              [ Textfield.label "Custom event handling"
-              , Textfield.textarea
-              , Options.onInput Input
-              , Options.on "keyup" selectionDecoder
-              , Options.on "mousemove" selectionDecoder
-              , Options.on "click" selectionDecoder
-              ]
-              []
-            , [ text <| "Selected text: " ++
-                  String.slice model.selection.begin model.selection.end model.value
-              ]
-     """
-      )
-    ]
-
-
-view1 : ( String, Html Msg, String ) -> Cell Msg
-view1 ( header, html, code ) =
-    cell
-        [ size Phone 4, size Tablet 6, offset Tablet 1, size Desktop 8, offset Desktop 2 ]
-        [ h4 [] [ text header ]
-        , Options.div
-            [ Options.center ]
-            [ html ]
-        , Code.code [ css "margin" "24px 0" ] code
-        ]
-
-
 view : Model -> Html Msg
 view model =
-    let
-        demo1 =
-            grid [] (List.map view1 <| textfields model)
-
-        demo2 =
-            grid [] (List.map view1 <| custom model)
-    in
-        Page.body1_ "Textfields" srcUrl intro references [ demo1 ] [ demo2 ]
-
-
-intro : Html a
-intro =
-    Page.fromMDL "http://www.getmdl.io/components/#textfields-section" """
-> The Material Design Lite (MDL) text field component is an enhanced version of
-> the standard HTML `<input type="text">` and `<input type="textarea">` elements.
-> A text field consists of a horizontal line indicating where keyboard input
-> can occur and, typically, text that clearly communicates the intended
-> contents of the text field. The MDL text field component provides various
-> types of text fields, and allows you to add both display and click effects.
->
-> Text fields are a common feature of most user interfaces, regardless of a
-> site's content or function. Their design and use is therefore an important
-> factor in the overall user experience. See the text field component's
-> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)
-> for details.
->
-> The enhanced text field component has a more vivid visual look than a standard
-> text field, and may be initially or programmatically disabled. There are three
-> main types of text fields in the text field component, each with its own basic
-> coding requirements. The types are single-line, multi-line, and expandable.
-"""
+    div []
+    [ styled Html.section
+      [ cs "example"
+      ]
+      [ example0 model.mdl 0 Example0Msg model.example0
+      , example1 model.mdl 1 Example1Msg model.example1
+      , example2 model.mdl 2 Example2Msg model.example2
+      , example3 model.mdl 3 Example3Msg model.example3
+      , example4 model.mdl 4 Example4Msg model.example4
+      ]
+    ]
 
 
-srcUrl : String
-srcUrl =
-    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Textfields.elm"
+example0 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
+example0 mdl idx lift model =
+    div []
+    [
+      Html.h2 []
+      [ Html.text
+        "Full Functionality Component (Floating Label, Validation, Autocomplete)"
+      ]
+
+    , styled Html.section
+      [ cs "mdc-theme--dark" |> when model.darkTheme
+      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      ]
+      [ Html.div
+        ( if model.darkTheme then
+              [ Html.class "mdc-theme--dark" ]
+          else
+              []
+        )
+        [ Textfield.render Mdl [idx] mdl
+          [ Textfield.label "Email Address"
+          , Textfield.disabled |> when model.disabled
+          , Textfield.dense |> when model.dense
+          , Textfield.required |> when model.required
+          ]
+          []
+        , Textfield.helperText
+          [ Textfield.persistent |> when model.persistent
+          , Textfield.validationMsg |> when model.validationMsg
+          , css "display" "none" |> when (not model.helperText)
+          ]
+          [ Html.text "Help Text (possibly validation message)"
+          ]
+        ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,0] mdl
+        [ Options.onClick (lift ToggleDisabled)
+        ]
+        []
+      , Html.label [] [ Html.text "Disabled" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,1] mdl
+        [ Options.onClick (lift ToggleRtl)
+        ]
+        []
+      , Html.label [] [ Html.text "RTL" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,2] mdl
+        [ Options.onClick (lift ToggleDarkTheme)
+        ]
+        []
+      , Html.label [] [ Html.text "Dark Theme" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,3] mdl
+        [ Options.onClick (lift ToggleDense)
+        ]
+        []
+      , Html.label [] [ Html.text "Dense" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,4] mdl
+        [ Options.onClick (lift ToggleRequired)
+        ]
+        []
+      , Html.label [] [ Html.text "Required" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,5] mdl
+        [ Options.onClick (lift ToggleHelperText)
+        ]
+        []
+      , Html.label [] [ Html.text "Use Helper Text" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,6] mdl
+        [ Options.onClick (lift TogglePersistent)
+        , Toggles.disabled |> when (not model.helperText)
+        ]
+        []
+      , Html.label [] [ Html.text "Make helper text persistent" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,7] mdl
+        [ Options.onClick (lift ToggleValidationMsg)
+        , Toggles.disabled |> when (not model.helperText)
+        ]
+        []
+      , Html.label [] [ Html.text "Use helper text as validation message" ]
+      ]
+    ]
 
 
-references : List ( String, String )
-references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Textfield"
-    , Page.mds "https://www.google.com/design/spec/components/text-fields.html"
-    , Page.mdl "https://www.getmdl.io/components/#textfields-section"
+example1 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
+example1 mdl idx lift model =
+    div []
+    [ Html.h2 []
+      [ Html.text "Password field with validation"
+      ]
+
+    , styled Html.section
+      [ cs "mdc-theme--dark" |> when model.darkTheme
+      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      ]
+      [ Html.div
+        ( if model.darkTheme then
+              [ Html.class "mdc-theme--dark" ]
+          else
+              []
+        )
+        [ Textfield.render Mdl [idx] mdl
+          [ Textfield.label "Choose password"
+          , Textfield.password
+          , Textfield.pattern ".{8,}"
+          , Textfield.required
+          ]
+          []
+        , Textfield.helperText
+          [ Textfield.persistent
+          , Textfield.validationMsg
+          ]
+          [ Html.text "Must be at least 8 characters long"
+          ]
+        ]
+      ]
+    ]
+
+
+example2 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
+example2 mdl idx lift model =
+    div []
+    [ Html.h2 []
+      [ Html.text "Textfield box"
+      ]
+
+    , styled Html.section
+      [ cs "mdc-theme--dark" |> when model.darkTheme
+      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      ]
+      [ Html.div
+        ( if model.darkTheme then
+              [ Html.class "mdc-theme--dark" ]
+          else
+              []
+        )
+        [ Textfield.render Mdl [idx] mdl
+          [ Textfield.label "Your Name"
+          , Textfield.textfield
+          ]
+          []
+        , Textfield.helperText
+          [ Textfield.persistent |> when model.persistent
+          , Textfield.validationMsg |> when model.validationMsg
+          ]
+          [ Html.text "Must provide a name"
+          ]
+        ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,0] mdl
+        [ Options.onClick (lift ToggleDisabled)
+        ]
+        []
+      , Html.label [] [ Html.text "Disabled" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,1] mdl
+        [ Options.onClick (lift ToggleRtl)
+        ]
+        []
+      , Html.label [] [ Html.text "RTL" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,2] mdl
+        [ Options.onClick (lift ToggleDarkTheme)
+        ]
+        []
+      , Html.label [] [ Html.text "Dark Theme" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,3] mdl
+        [ Options.onClick (lift ToggleDense)
+        ]
+        []
+      , Html.label [] [ Html.text "Dense" ]
+      ]
+    ]
+
+
+example3 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
+example3 mdl idx lift model =
+    div []
+    [ Html.h2 []
+      [ Html.text "Multi-line Textfields"
+      ]
+
+    , styled Html.section
+      [ cs "mdc-theme--dark" |> when model.darkTheme
+      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      ]
+      [ Html.div
+        ( if model.darkTheme then
+              [ Html.class "mdc-theme--dark" ]
+          else
+              []
+        )
+        [ Textfield.render Mdl [idx] mdl
+          [ Textfield.label "Multi-line Label"
+          , Textfield.multiline
+          , Textfield.rows 8
+          , Textfield.cols 40
+          ]
+          []
+        ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,0] mdl
+        [ Options.onClick (lift ToggleDisabled)
+        ]
+        []
+      , Html.label [] [ Html.text "Disabled" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,1] mdl
+        [ Options.onClick (lift ToggleRtl)
+        ]
+        []
+      , Html.label [] [ Html.text "RTL" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,2] mdl
+        [ Options.onClick (lift ToggleDarkTheme)
+        ]
+        []
+      , Html.label [] [ Html.text "Dark Theme" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,3] mdl
+        [ Options.onClick (lift ToggleDense)
+        ]
+        []
+      , Html.label [] [ Html.text "Dense" ]
+      ]
+    ]
+
+
+example4 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
+example4 mdl idx lift model =
+    div []
+    [ Html.h2 []
+      [ Html.text "Full-Width Textfields"
+      ]
+
+    , styled Html.section
+      [ cs "mdc-theme--dark" |> when model.darkTheme
+      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      ]
+      [ Html.div
+        ( if model.darkTheme then
+              [ Html.class "mdc-theme--dark" ]
+          else
+              []
+        )
+        [ Textfield.render Mdl [idx,0] mdl
+          [ Textfield.placeholder "Subject"
+          , Textfield.fullWidth
+          ]
+          []
+        , Textfield.render Mdl [idx,1] mdl
+          [ Textfield.placeholder "Message"
+          , Textfield.multiline
+          , Textfield.fullWidth
+          , Textfield.rows 8
+          , Textfield.cols 40
+          ]
+          []
+        ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,2] mdl
+        [ Options.onClick (lift ToggleDisabled)
+        ]
+        []
+      , Html.label [] [ Html.text "Disabled" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,3] mdl
+        [ Options.onClick (lift ToggleRtl)
+        ]
+        []
+      , Html.label [] [ Html.text "RTL" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,4] mdl
+        [ Options.onClick (lift ToggleDarkTheme)
+        ]
+        []
+      , Html.label [] [ Html.text "Dark Theme" ]
+      ]
+    , div []
+      [ Toggles.checkbox Mdl [idx,5] mdl
+        [ Options.onClick (lift ToggleDense)
+        ]
+        []
+      , Html.label [] [ Html.text "Dense" ]
+      ]
     ]

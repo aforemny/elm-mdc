@@ -34,6 +34,7 @@
         "Material.Tabs",
         "Material.Typography",
         "Material.Textfield"
+        "Material.Textfield.HelperText"
     ],
     "dependencies": {
         "debois/elm-dom": "1.2.3 <= v < 2.0.0",

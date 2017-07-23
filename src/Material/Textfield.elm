@@ -2,24 +2,27 @@ module Material.Textfield
     exposing
         ( Property
         , label
-        , floatingLabel
-        , error
-        , value
-        , defaultValue
+--        , floatingLabel
+--        , value
+--        , defaultValue
         , disabled
-        , password
         , render
         , react
-        , text_
-        , textarea
+--        , autofocus
+--        , maxlength
+        , dense
+        , required
+        , type_
+        , password
+        , email
+        , textfield
         , rows
         , cols
-        , email
-        , autofocus
-        , maxlength
         , maxRows
-        , expandable
-        , expandableIcon
+        , pattern
+        , multiline
+        , fullWidth
+        , placeholder
         , Model
         , defaultModel
         , Msg
@@ -63,14 +66,13 @@ for a live demo.
 
 ## Appearance
 
-@docs label, floatingLabel, error
+@docs label, floatingLabel
 
 ## Html attributes
 @docs disabled, rows, cols
 @docs autofocus, maxlength, maxRows
 
 @docs password, email, textarea, text_
-@docs expandable, expandableIcon
 
 # Elm Architecture
 @docs Msg, Model, defaultModel, update, view
@@ -80,30 +82,20 @@ for a live demo.
 
 -}
 
-import Html.Attributes exposing (class, type_, style)
-import Html.Events exposing (targetValue, keyCode, defaultOptions)
+import Html.Attributes as Html exposing (class, type_, style)
+import Html.Events as Html exposing (defaultOptions)
 import Html exposing (div, span, Html, text)
-import Json.Decode as Decoder
+import Json.Decode as Decode
+import Json.Encode as Json
+import Material.Component as Component exposing (Indexed)
+import Material.Internal.Options as Internal
 import Material.Internal.Textfield exposing (Msg(..))
 import Material.Msg exposing (Index) 
-import Material.Component as Component exposing (Indexed)
 import Material.Options as Options exposing (cs, css, nop, Style, when)
-import Material.Internal.Options as Internal
-import Material.Icon as Icon
-import Material.Internal.Options as Internal
-import Material.Internal.Textfield exposing (Msg(..))
-import Material.Msg
-import Material.Options as Options exposing (cs, css, nop, Style, when)
+import Regex
 
 
 -- OPTIONS
-
-
-type Kind
-    = Text
-    | Textarea
-    | Password
-    | Email
 
 
 {-| TODO
@@ -111,16 +103,20 @@ type Kind
 type alias Config m =
     { labelText : Maybe String
     , labelFloat : Bool
-    , error : Maybe String
     , value : Maybe String
     , defaultValue : Maybe String
     , disabled : Bool
-    , kind : Kind
-    , expandable : Maybe String
-    , expandableIcon : String
     , input : List (Options.Style m)
     , container : List (Options.Style m)
     , maxRows : Maybe Int
+    , dense : Bool
+    , required : Bool
+    , type_ : Maybe String
+    , textfieldBox : Bool
+    , pattern : Maybe String
+    , multiline : Bool
+    , fullWidth : Bool
+    , invalid : Bool
     }
 
 
@@ -130,16 +126,20 @@ defaultConfig : Config m
 defaultConfig =
     { labelText = Nothing
     , labelFloat = False
-    , error = Nothing
     , value = Nothing
     , defaultValue = Nothing
     , disabled = False
-    , kind = Text
-    , expandable = Nothing
-    , expandableIcon = "search"
     , input = []
     , container = []
     , maxRows = Nothing
+    , dense = False
+    , required = False
+    , type_ = Just "text"
+    , textfieldBox = False
+    , pattern = Nothing
+    , multiline = False
+    , fullWidth = False
+    , invalid = False
     }
 
 
@@ -165,37 +165,6 @@ floatingLabel =
         (\config -> { config | labelFloat = True })
 
 
-{-| Specifies the textfield as an `expandable`. The property takes the ID
-of the element as parameter as this is currently required.
-
-**NOTE:** When manually setting the **id** of the `input` element using
-`Options.inner` then the `expandable` **id** must match
-the `input` **id**.
--}
-expandable : String -> Property m
-expandable id =
-    Internal.option
-        (\config -> { config | expandable = Just id })
-
-
-{-| Sets the icon *only* when the expandable has been set to a valid ID.
-
-Defaults to `search`
--}
-expandableIcon : String -> Property m
-expandableIcon id =
-  Internal.option
-        (\config -> { config | expandableIcon = id })
-
-
-{-| Error message
--}
-error : String -> Property m
-error =
-    Internal.option
-        << (\str config -> { config | error = Just str })
-
-
 {-| Current value of the textfield.
 -}
 value : String -> Property m
@@ -216,14 +185,14 @@ defaultValue =
 -}
 autofocus : Property m
 autofocus =
-    Options.attribute <| Html.Attributes.autofocus True
+    Options.attribute <| Html.autofocus True
 
 
 {-| Specifies the maximum number of characters allowed in the input
 -}
 maxlength : Int -> Property m
 maxlength k =
-    Options.attribute <| Html.Attributes.maxlength k
+    Options.attribute <| Html.maxlength k
 
 
 {-| Disable the textfield input
@@ -241,50 +210,46 @@ input =
     Options.input
 
 
-{-| Sets the type of input to 'email'.
--}
-email : Property m
-email =
-  Internal.option
-    (\config -> { config | kind = Email })
-
-
 {-| Sets the type of input to 'password'.
 -}
 password : Property m
 password =
-    Internal.option
-        (\config -> { config | kind = Password })
+    Internal.option (\config -> { config | type_ = Just "password" })
 
 
-{-| Creates a multiline textarea using 'textarea' element
+{-| Sets the type of input to 'email'.
 -}
-textarea : Property m
-textarea =
-    Internal.option
-        (\config -> { config | kind = Textarea })
+email : Property m
+email =
+    Internal.option (\config -> { config | type_ = Just "email" })
 
 
-{-| Sets the type of input to 'text'. (Name chosen to avoid clashing with Html.text)
+{-| TODO
 -}
-text_ : Property m
-text_ =
-    Internal.option
-        (\config -> { config | kind = Text })
+textfield : Property m
+textfield =
+    Internal.option (\config -> { config | textfieldBox = True })
+
+
+{-| TODO
+-}
+pattern : String -> Property m
+pattern =
+    Internal.option << (\value config -> { config | pattern = Just value })
 
 
 {-| Number of rows in a multi-line input
 -}
 rows : Int -> Property m
 rows k =
-    Internal.input [ Options.attribute <| Html.Attributes.rows k ]
+    Internal.input [ Options.attribute <| Html.rows k ]
 
 
 {-| Number of columns in a multi-line input
 -}
 cols : Int -> Property m
 cols k =
-    Internal.input [ Options.attribute <| Html.Attributes.cols k ]
+    Internal.input [ Options.attribute <| Html.cols k ]
 
 
 {-| Maximum number of rows (only Textrea).
@@ -292,6 +257,45 @@ cols k =
 maxRows : Int -> Property m
 maxRows k =
     Internal.option (\config -> { config | maxRows = Just k })
+
+
+{-| TODO
+-}
+dense : Property m
+dense =
+    Internal.option (\config -> { config | dense = True })
+
+
+{-| TODO
+-}
+required : Property m
+required =
+    Internal.option (\config -> { config | required = True })
+
+
+type_ : String -> Property m
+type_ =
+    Internal.option << (\value config -> { config | type_ = Just value })
+
+
+fullWidth : Property m
+fullWidth =
+    Internal.option (\config -> { config | fullWidth = True })
+
+
+invalid : Property m
+invalid =
+    Internal.option (\config -> { config | invalid = True })
+
+
+multiline : Property m
+multiline =
+    Internal.option (\config -> { config | multiline = True })
+
+
+placeholder : String -> Property m
+placeholder value =
+    Internal.input [ Options.attribute <| Html.attribute "placeholder" value ]
 
 
 -- MODEL
@@ -302,6 +306,7 @@ maxRows k =
 type alias Model =
     { isFocused : Bool
     , isDirty : Bool
+    , value : Maybe String
     }
 
 
@@ -311,6 +316,7 @@ defaultModel : Model
 defaultModel =
     { isFocused = False
     , isDirty = False
+    , value = Nothing
     }
 
 
@@ -334,10 +340,7 @@ update _ msg model =
                 dirty =
                     str /= ""
             in
-                if dirty == model.isDirty then
-                    Nothing
-                else
-                    Just { model | isDirty = dirty }
+                Just { model | value = Just str, isDirty = dirty }
 
         Blur ->
             Just { model | isFocused = False }
@@ -368,30 +371,16 @@ view lift model options _ =
         ({ config } as summary) =
             Internal.collect defaultConfig options
 
-        -- NOTE: These ids need to match the id of the input element
-        labelFor =
-            case config.expandable of
-                Nothing ->
-                    []
-
-                Just id ->
-                    [ Html.Attributes.for id ]
-
-        expandableId =
-            case config.expandable of
-                Nothing ->
-                    Options.nop
-
-                Just id ->
-                    Internal.attribute <| Html.Attributes.id id
+        isDirty =
+            model.isDirty
 
         preventEnterWhenMaxRowsExceeded =
             Options.onWithOptions "keydown"
                 { defaultOptions
                   | preventDefault = True
                 }
-                ( Decoder.map2 (,) keyCode targetValue
-                  |> Decoder.andThen (\ (keyCode, value) ->
+                ( Decode.map2 (,) Html.keyCode Html.targetValue
+                  |> Decode.andThen (\ (keyCode, value) ->
                       let
                           rows =
                               value
@@ -399,96 +388,78 @@ view lift model options _ =
                               |> List.length
                       in
                       if (rows >= Maybe.withDefault 0 config.maxRows) && (keyCode == 13) then
-                            Decoder.succeed (lift NoOp)
+                            Decode.succeed (lift NoOp)
                           else
-                            Decoder.fail ""
+                            Decode.fail ""
                     )
                 )
-            |> when ((config.kind == Textarea) && (config.maxRows /= Nothing))
+            |> when (config.multiline && (config.maxRows /= Nothing))
 
-        expHolder =
-            case config.expandable of
-                Nothing ->
-                    identity
+        isFocused =
+            model.isFocused && not config.disabled
 
-                Just _ ->
-                    (\x ->
-                        [ Options.styled_ Html.label
-                            [ cs "mdl-button"
-                            , cs "mdl-js-button"
-                            , cs "mdl-button--icon"
-                            ]
-                            labelFor
-                            [ Icon.i config.expandableIcon ]
-                        , Options.styled Html.div
-                            [ cs "mdl-textfield__expandable-holder" ]
-                            x
-                        ]
-                    )
+        isInvalid =
+            case config.pattern of
+                Just pattern ->
+                    model.value
+                    |> Maybe.map (not << Regex.contains (Regex.regex ("^" ++ pattern ++ "$")))
+                    |> Maybe.withDefault False
+                Nothing -> False
     in
         Internal.applyContainer summary
             div
-            [ cs "mdl-textfield"
-            , cs "mdl-js-textfield"
-            , cs "is-upgraded"
+            [ cs "mdc-textfield"
+            , cs "mdc-textfield--upgraded"
             , Internal.on1 "focus" lift Focus
             , Internal.on1 "blur" lift Blur
-            , cs "mdl-textfield--floating-label" |> when config.labelFloat
-            , cs "is-invalid" |> when (config.error /= Nothing)
-            , cs "is-dirty"
-                |> when (case config.value of
-                           Just "" -> False
-                           Just _ -> True
-                           Nothing -> model.isDirty)
-            , cs "is-focused" |> when (model.isFocused && not config.disabled)
-            , cs "is-disabled" |> when config.disabled
-            , cs "mdl-textfield--expandable" |> when (config.expandable /= Nothing)
+            , cs "mdc-textfield--focused" |> when isFocused 
+            , cs "mdc-textfield--disabled" |> when config.disabled
+            , cs "mdc-textfield--dense" |> when config.dense
+            , cs "mdc-textfield--fullwidth" |> when config.fullWidth
+            , cs "mdc-textfield--invalid" |> when isInvalid
+            , cs "mdc-textfield--multiline" |> when config.multiline
             , preventEnterWhenMaxRowsExceeded
-            ] <| expHolder
+            ]
             [ Internal.applyInput summary
-                (if config.kind == Textarea then Html.textarea else Html.input)
-                [ cs "mdl-textfield__input"
+                (if config.multiline then Html.textarea else Html.input)
+                [
+                  cs "mdc-textfield__input"
                 , css "outline" "none"
+                , cs "mdc-textfield--box" |> when config.textfieldBox
                 , Internal.on1 "focus" lift Focus
                 , Internal.on1 "blur" lift Blur
-                , case config.kind of
-                    Text ->
-                        Internal.attribute <| type_ "text"
-
-                    Password ->
-                        Internal.attribute <| type_ "password"
-
-                    Email -> 
-                        Internal.attribute <| type_ "email" 
-                    _ ->
-                        nop
-                , Internal.attribute (Html.Attributes.disabled True) 
-                    |> when config.disabled
-                , expandableId
                 , Options.onInput (Input >> lift)
-                , Internal.attribute
-                    (Html.Attributes.value (Maybe.withDefault "" config.value))
-                  |> when (config.value /= Nothing)
-                , case config.defaultValue of
-                    Nothing ->
-                        Options.nop
-
-                    Just v ->
-                        Internal.attribute <| Html.Attributes.defaultValue v
+                , Options.many << List.map Internal.attribute << List.filterMap identity <|
+                  [ Html.type_ (Maybe.withDefault "text" config.type_)
+                    |> if not config.multiline then Just else always Nothing
+                    -- TODO: ^^^^ can crash Elm runtime
+                  , Html.disabled True
+                    |> if config.disabled then Just else always Nothing
+                  , Html.property "required" (Json.bool True)
+                    |> if config.required then Just else always Nothing
+                  , Html.property "pattern" (Json.string (Maybe.withDefault "" config.pattern))
+                    |> if config.pattern /= Nothing then Just else always Nothing
+                  , Html.attribute "outline" "medium none"
+                    |> Just
+                  ]
                 ]
                 []
-            , Html.label
-                ([ class "mdl-textfield__label" ] ++ labelFor)
-                (case config.labelText of
+            , Options.styled Html.label
+                [ cs "mdc-textfield__label"
+                , cs "mdc-textfield__label--float-above" |> when (isFocused || isDirty)
+                ]
+                ( case config.labelText of
                     Just str ->
                         [ text str ]
 
                     Nothing ->
                         []
                 )
-            , config.error
-                |> Maybe.map (\e -> span [ class "mdl-textfield__error" ] [ text e ])
-                |> Maybe.withDefault (div [] [])
+            , Options.styled div
+              [ cs "mdc-textfield__bottom-line"
+              ]
+              [
+              ]
             ]
 
 
