@@ -28,16 +28,12 @@ import Html.Attributes exposing (href, class, style)
 import Html exposing (..)
 import Html.Lazy
 import Material
-import Material.Color as Color
 import Material.Helpers exposing (pure, lift, map1st, map2nd)
 import Material.Icon as Icon
 import Material.Layout as Layout
 import Material.Menu as Menu
 import Material.Options as Options exposing (css, when)
-import Material.Scheme as Scheme
-import Material.Toggles as Toggles
 import Material.Toolbar as Toolbar
-import Material.Typography as Typography
 import Navigation
 import Platform.Cmd exposing (..)
 import RouteUrl as Routing
@@ -295,80 +291,6 @@ e404 _ =
         ]
 
 
-drawer : Model -> List (Html Msg)
-drawer model =
-    [ Layout.title [] [ text "elm-mdl" ]
-    , Layout.navigation
-        []
-        [ Layout.link
-            [ Layout.href "https://github.com/debois/elm-mdl" ]
-            [ text "github" ]
-        , Layout.link
-            [ Layout.href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
-            [ text "elm-package" ]
-        , Layout.link
-            [ Layout.href "#cards"
-            , Options.onClick (Layout.toggleDrawer Mdl)
-            ]
-            [ text "Card component" ]
-        , Layout.link
-            [ css "display" "inline-flex" 
-            , css "flex-wrap" "wrap"
-            , css "justify-content" "space-between" 
-            , css "align-items" "center" 
-            , Options.onToggle ToggleLog
-            , Options.onClick ToggleLog
-            ]
-            [ text "Log messages" 
-            , Toggles.checkbox Mdl [0] model.mdl
-                [ Toggles.ripple
-                , Toggles.value model.logMessages
-                , css "width" "32px"
-                ]
-                []
-            , if model.logMessages then 
-                Options.div 
-                  [ Typography.caption 
-                  , css "width" "100%"
-                  ]
-                  [ text "Open your Javascript console to observe MDL messages" ] 
-                
-              else
-                text ""
-            ]
-        ]
-    ]
-
-
-header : Model -> List (Html Msg)
-header model =
-    if model.layout.withHeader then
-        [ Layout.row
-            [ if model.transparentHeader then
-                css "height" "192px"
-              else
-                Options.nop
-            , css "transition" "height 333ms ease-in-out 0s"
-            ]
-            [ Layout.title [] [ text "elm-mdl" ]
-            , Layout.spacer
-            , Layout.navigation []
-                [ Layout.link
-                    [ Options.onClick ToggleHeader ]
-                    [ Icon.i "photo" ]
-                , Layout.link
-                    [ Layout.href "https://github.com/debois/elm-mdl" ]
-                    [ span [] [ text "github" ] ]
-                , Layout.link
-                    [ Layout.href "http://package.elm-lang.org/packages/debois/elm-mdl/latest/" ]
-                    [ text "elm-package" ]
-                ]
-            ]
-        ]
-    else
-        []
-
-
 view : Model -> Html Msg
 view =
     Html.Lazy.lazy view_
@@ -416,76 +338,7 @@ view_ model =
               ]
             ]
           ]
-        , Layout.render Mdl
-              model.mdl
-              [ Layout.selectedTab (Maybe.withDefault 0 model.selectedTab)
-                |> when (model.selectedTab /= Nothing)
-              , Layout.onSelectTab SelectTab
-              , Layout.fixedHeader |> when model.layout.fixedHeader
-              , Layout.fixedDrawer |> when model.layout.fixedDrawer
-              , Layout.fixedTabs |> when model.layout.fixedTabs
-              , (case model.layout.header of
-                  Demo.Layout.Waterfall x ->
-                      Layout.waterfall x
-
-                  Demo.Layout.Seamed ->
-                      Layout.seamed
-
-                  Demo.Layout.Standard ->
-                      Options.nop
-
-                  Demo.Layout.Scrolling ->
-                      Layout.scrolling
-                )
-                  |> when model.layout.withHeader
-              , if model.transparentHeader then
-                  Layout.transparentHeader
-                else
-                  Options.nop
-              ]
-              { header = header model
-              , drawer =
-                  if model.layout.withDrawer then
-                      drawer model
-                  else
-                      []
-              , tabs =
-                  if model.layout.withTabs then
-                      ( tabTitles, [ Color.background (Color.color model.layout.primary Color.S400) ] )
-                  else
-                      ( [], [] )
-              , main = [ stylesheet, top ]
-              }
-              {- ** Begin
-
-                 The following lines are not necessary when you manually set up
-                 your html, as done with page.html. Removing it will then
-                 fix the flicker you see on load.
-              -}
-              |>
-                  (\contents ->
-                      div []
-                          [ Scheme.topWithScheme model.layout.primary model.layout.accent contents
-                          , Html.node "script"
-                              [ Html.Attributes.attribute "src" "https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin" ]
-                              []
-                          , Html.node "script"
-                              [ Html.Attributes.attribute "src" "assets/highlight/highlight.pack.js" ]
-                              []
-                          , case nth (Maybe.withDefault -1 model.selectedTab) tabs of
-                              Just ( "Dialog", _, _ ) ->
-                                  Html.map DialogMsg (Demo.Dialog.element model.dialog)
-
-                              {- Because of limitations on browsers that have non-native (polyfilled)
-                                 <dialog> elements, our dialog element /may/ have to sit up here. However,
-                                 running in elm-reactor will never load the polyfill, so we render the
-                                 dialog (wrongly if there is no polyfill) only when the Dialog tab is
-                                 active.
-                              -}
-                              _ ->
-                                  div [] []
-                          ]
-                  )
+        , top
         ]
 
 
