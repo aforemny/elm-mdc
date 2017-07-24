@@ -276,7 +276,6 @@ e404 _ =
         []
         [ Options.styled Html.h1
             [ Options.cs "mdl-typography--display-4"
-            , Typography.center
             ]
             [ text "404" ]
         ]

@@ -4,6 +4,7 @@ import Html exposing (Html)
 import Material
 import Material.Options exposing (Style, when, styled, cs, css, div, span)
 import Material.Theme as Theme
+import Material.Typography as Typography
 
 
 -- MODEL
@@ -39,14 +40,14 @@ view model =
     div
     []
     [ styled Html.h2
-      [ Theme.display1
+      [ Typography.display1
       ]
       [ Html.text "Theme colors"
       ]
     , example0
 
     , styled Html.h2
-      [ Theme.display1
+      [ Typography.display1
       ]
       [ Html.text "Text colors for contrast"
       ]
@@ -60,7 +61,7 @@ example0 =
     [ cs "example"
     ]
     [ styled Html.h3
-      [ Theme.title
+      [ Typography.title
       ]
       [ Html.text "Theme colors as text"
       ]
@@ -69,9 +70,9 @@ example0 =
         [ Html.text "Primary"
         ]
       , demoThemeColorBlock
-        [ Theme.typography
+        [ Typography.typography
         , Theme.primary
-        , Theme.body2
+        , Typography.body2
         ]
         [ Html.text "Lorem ipsum"
         ]
@@ -81,16 +82,16 @@ example0 =
         [ Html.text "Accent"
         ]
       , demoThemeColorBlock
-        [ Theme.typography
+        [ Typography.typography
         , Theme.accent
-        , Theme.body2
+        , Typography.body2
         ]
         [ Html.text "Lorem ipsum"
         ]
       ]
 
     , styled Html.h3
-      [ Theme.title
+      [ Typography.title
       ]
       [ Html.text "Theme colors as background"
       ]
@@ -99,9 +100,9 @@ example0 =
         [ Html.text "Primary"
         ]
       , demoThemeColorBlock
-        [ Theme.typography
+        [ Typography.typography
         , Theme.primaryBg
-        , Theme.body2
+        , Typography.body2
         ]
         []
       ]
@@ -110,9 +111,9 @@ example0 =
         [ Html.text "Accent"
         ]
       , demoThemeColorBlock
-        [ Theme.typography
+        [ Typography.typography
         , Theme.accentBg
-        , Theme.body2
+        , Typography.body2
         ]
         []
       ]
@@ -121,9 +122,9 @@ example0 =
         [ Html.text "Background"
         ]
       , demoThemeColorBlock
-        [ Theme.typography
+        [ Typography.typography
         , Theme.background
-        , Theme.body2
+        , Typography.body2
         ]
         []
       ]
@@ -172,14 +173,14 @@ example1 =
     let
         demo background nodes =
             demoThemeTextStyles
-            [ Theme.typography
-            , Theme.body2
+            [ Typography.typography
+            , Typography.body2
             , background
             ]
             ( let
                   options =
-                      [ Theme.typography
-                      , Theme.body2
+                      [ Typography.typography
+                      , Typography.body2
                       , css "padding" "0 16px"
                       ]
               in
@@ -191,7 +192,7 @@ example1 =
     [ cs "example"
     ]
     [ styled Html.h3
-      [ Theme.title
+      [ Typography.title
       ]
       [ Html.text "Text on background"
       ]
@@ -205,7 +206,7 @@ example1 =
       ]
 
     , styled Html.h3
-      [ Theme.title
+      [ Typography.title
       ]
       [ Html.text "Text on primary"
       ]
@@ -219,7 +220,7 @@ example1 =
       ]
 
     , styled Html.h3
-      [ Theme.title
+      [ Typography.title
       ]
       [ Html.text "Text on accent"
       ]
@@ -233,7 +234,7 @@ example1 =
       ]
 
     , styled Html.h3
-      [ Theme.title
+      [ Typography.title
       ]
       [ Html.text "Text on user-defined light background"
       ]
@@ -247,7 +248,7 @@ example1 =
       ]
 
     , styled Html.h3
-      [ Theme.title
+      [ Typography.title
       ]
       [ Html.text "Text on user-defined dark background"
       ]

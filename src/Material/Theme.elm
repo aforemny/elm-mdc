@@ -7,11 +7,6 @@ module Material.Theme exposing
     , accentBg
     , background
 
-    , typography
-    , display1
-    , title
-    , body2
-
     , textPrimaryOnPrimary
     , textSecondaryOnPrimary
     , textHintOnPrimary
@@ -229,26 +224,3 @@ textIconOnDark options icon =
     )
     [ text icon
     ]
-
-
--- TYPOGRPAHY
-
-
-typography : Style m
-typography =
-    cs "mdc-typography"
-
-
-display1 : Style m
-display1 =
-    cs "mdc-typography--display1"
-
-
-title : Style m
-title =
-    cs "mdc-typography--title"
-
-
-body2 : Style m
-body2 =
-    cs "mdc-typography--body2"
