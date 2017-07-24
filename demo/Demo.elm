@@ -1,45 +1,47 @@
 module Main exposing (..)
 
-import Html exposing (..)
-import Html.Attributes exposing (href, class, style)
-import Html.Lazy
-import Platform.Cmd exposing (..)
 import Array exposing (Array)
-import Dict exposing (Dict)
-import String
-import Navigation
-import RouteUrl as Routing
-import Material
-import Material.Color as Color
-import Material.Layout as Layout
-import Material.Helpers exposing (pure, lift, map1st, map2nd)
-import Material.Options as Options exposing (css, when)
-import Material.Scheme as Scheme
-import Material.Icon as Icon
-import Material.Typography as Typography
-import Material.Menu as Menu
-import Material.Toggles as Toggles
+import Demo.Badges
 import Demo.Buttons
+import Demo.Cards
+import Demo.Chips
+import Demo.Dialog
+import Demo.Elevation
+import Demo.Footer
+import Demo.Layout
+import Demo.Lists
+import Demo.Loading
 import Demo.Menus
+import Demo.Slider
+import Demo.Snackbar
+import Demo.Startpage
 import Demo.Tables
-import Demo.Grid
+import Demo.Tabs
 import Demo.Textfields
 import Demo.Theme
-import Demo.Snackbar
-import Demo.Badges
-import Demo.Elevation
 import Demo.Toggles
-import Demo.Loading
-import Demo.Layout
-import Demo.Footer
+import Demo.Toolbar
 import Demo.Tooltip
-import Demo.Tabs
-import Demo.Slider
 import Demo.Typography
-import Demo.Cards
-import Demo.Lists
-import Demo.Dialog
-import Demo.Chips
+import Dict exposing (Dict)
+import Html.Attributes exposing (href, class, style)
+import Html exposing (..)
+import Html.Lazy
+import Material
+import Material.Color as Color
+import Material.Helpers exposing (pure, lift, map1st, map2nd)
+import Material.Icon as Icon
+import Material.Layout as Layout
+import Material.Menu as Menu
+import Material.Options as Options exposing (css, when)
+import Material.Scheme as Scheme
+import Material.Toggles as Toggles
+import Material.Toolbar as Toolbar
+import Material.Typography as Typography
+import Navigation
+import Platform.Cmd exposing (..)
+import RouteUrl as Routing
+import String
 
 
 -- MODEL
@@ -59,6 +61,7 @@ type alias Model =
     , loading : Demo.Loading.Model
     , footers : Demo.Footer.Model
     , tooltip : Demo.Tooltip.Model
+    , toolbar : Demo.Toolbar.Model
     , tabs : Demo.Tabs.Model
     , slider : Demo.Slider.Model
     , typography : Demo.Typography.Model
@@ -67,7 +70,7 @@ type alias Model =
     , dialog : Demo.Dialog.Model
     , elevation : Demo.Elevation.Model
     , chips : Demo.Chips.Model
-    , selectedTab : Int
+    , selectedTab : Maybe Int
     , transparentHeader : Bool
     , logMessages : Bool
     }
@@ -88,6 +91,7 @@ model =
     , loading = Demo.Loading.model
     , footers = Demo.Footer.model
     , tooltip = Demo.Tooltip.model
+    , toolbar = Demo.Toolbar.model
     , tabs = Demo.Tabs.model
     , slider = Demo.Slider.model
     , typography = Demo.Typography.model
@@ -96,7 +100,7 @@ model =
     , dialog = Demo.Dialog.model
     , elevation = Demo.Elevation.model
     , chips = Demo.Chips.model
-    , selectedTab = 0
+    , selectedTab = Nothing
     , transparentHeader = False
     , logMessages = False
     }
@@ -108,6 +112,7 @@ model =
 
 type Msg
     = SelectTab Int
+    | ClearTab
     | Mdl (Material.Msg Msg)
     | BadgesMsg Demo.Badges.Msg
     | ButtonsMsg Demo.Buttons.Msg
@@ -121,6 +126,7 @@ type Msg
     | LoadingMsg Demo.Loading.Msg
     | FooterMsg Demo.Footer.Msg
     | TooltipMsg Demo.Tooltip.Msg
+    | ToolbarMsg Demo.Toolbar.Msg
     | TabMsg Demo.Tabs.Msg
     | SliderMsg Demo.Slider.Msg
     | TypographyMsg Demo.Typography.Msg
@@ -146,7 +152,10 @@ update msg model =
     in
       case log "Msg" msg of
           SelectTab k ->
-              ( { model | selectedTab = k }, Cmd.none )
+              ( { model | selectedTab = Just k }, Cmd.none )
+
+          ClearTab ->
+              ( { model | selectedTab = Nothing }, Cmd.none )
 
           ToggleHeader ->
               ( { model | transparentHeader = not model.transparentHeader }, Cmd.none )
@@ -198,6 +207,9 @@ update msg model =
           TooltipMsg a ->
               lift .tooltip (\m x -> { m | tooltip = x }) TooltipMsg Demo.Tooltip.update a model
 
+          ToolbarMsg a ->
+              lift .toolbar (\m x -> { m | toolbar = x }) ToolbarMsg Demo.Toolbar.update a model
+
           TabMsg a ->
               lift .tabs (\m x -> { m | tabs = x }) TabMsg Demo.Tabs.update a model
 
@@ -227,26 +239,28 @@ update msg model =
 tabs : List ( String, String, Model -> Html Msg )
 tabs =
     [ ( "Buttons", "buttons", .buttons >> Demo.Buttons.view >> Html.map ButtonsMsg )
-    , ( "Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg )
-    , ( "Cards", "cards", .cards >> Demo.Cards.view >> Html.map CardsMsg )
-    , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
+    , ( "Card", "cards", .cards >> Demo.Cards.view >> Html.map CardsMsg )
+    , ( "Checkbox", "toggles", .toggles >> Demo.Toggles.view >> Html.map TogglesMsg )
     , ( "Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg )
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
-    , ( "Footers", "footers", .footers >> Demo.Footer.view >> Html.map FooterMsg )
-    , ( "Grid", "grid", \_ -> Demo.Grid.view )
-    , ( "Layout", "layout", .layout >> Demo.Layout.view >> Html.map LayoutMsg )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
-    , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
-    , ( "Menus", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
-    , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
-    , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
-    , ( "Tables", "tables", .tables >> Demo.Tables.view >> Html.map TablesMsg )
-    , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
+    , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
     , ( "Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg )
     , ( "Theme", "theme", .theme >> Demo.Theme.view >> Html.map ThemeMsg )
-    , ( "Toggles", "toggles", .toggles >> Demo.Toggles.view >> Html.map TogglesMsg )
-    , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
+    , ( "Toolbar", "toolbar", .toolbar >> Demo.Toolbar.view >> Html.map ToolbarMsg )
     , ( "Typography", "typography", .typography >> Demo.Typography.view >> Html.map TypographyMsg )
+
+    -- , ( "Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg )
+    -- , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
+    -- , ( "Footers", "footers", .footers >> Demo.Footer.view >> Html.map FooterMsg )
+    -- , ( "Grid", "grid", \_ -> Demo.Grid.view )
+    -- , ( "Layout", "layout", .layout >> Demo.Layout.view >> Html.map LayoutMsg )
+    -- , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
+    -- , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
+    -- , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
+    -- , ( "Tables", "tables", .tables >> Demo.Tables.view >> Html.map TablesMsg )
+    -- , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
+    -- , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
     ]
 
 
@@ -364,77 +378,115 @@ view_ : Model -> Html Msg
 view_ model =
     let
         top =
-            (Array.get model.selectedTab tabViews |> Maybe.withDefault e404) model
+            case model.selectedTab of
+                Nothing ->
+                    Demo.Startpage.view SelectTab
+                Just selectedTab ->
+                    (Array.get selectedTab tabViews |> Maybe.withDefault e404) model
+        title =
+            case model.selectedTab of
+                Nothing ->
+                    text "Material Components Catalog"
+                Just selectedTab ->
+                    nth selectedTab tabTitles |> Maybe.withDefault (text "")
     in
-        Layout.render Mdl
-            model.mdl
-            [ Layout.selectedTab model.selectedTab
-            , Layout.onSelectTab SelectTab
-            , Layout.fixedHeader |> when model.layout.fixedHeader
-            , Layout.fixedDrawer |> when model.layout.fixedDrawer
-            , Layout.fixedTabs |> when model.layout.fixedTabs
-            , (case model.layout.header of
-                Demo.Layout.Waterfall x ->
-                    Layout.waterfall x
-
-                Demo.Layout.Seamed ->
-                    Layout.seamed
-
-                Demo.Layout.Standard ->
-                    Options.nop
-
-                Demo.Layout.Scrolling ->
-                    Layout.scrolling
-              )
-                |> when model.layout.withHeader
-            , if model.transparentHeader then
-                Layout.transparentHeader
-              else
-                Options.nop
+        div
+        [
+        ]
+        [ Toolbar.view
+          [ Toolbar.fixed
+          ]
+          [ Toolbar.row []
+            [ Toolbar.section
+              [ Toolbar.alignStart
+              ]
+              [ Toolbar.icon_
+                [ Toolbar.menu
+                ]
+                [ case model.selectedTab of
+                      Nothing ->
+                          Html.img
+                          [ Html.Attributes.src "https://material-components-web.appspot.com/images/ic_component_24px_white.svg"
+                          ]
+                          []
+                      Just _ ->
+                          Icon.view "" [ Options.onClick ClearTab ]
+                ]
+              , Toolbar.title [] [ title ]
+              ]
             ]
-            { header = header model
-            , drawer =
-                if model.layout.withDrawer then
-                    drawer model
-                else
-                    []
-            , tabs =
-                if model.layout.withTabs then
-                    ( tabTitles, [ Color.background (Color.color model.layout.primary Color.S400) ] )
-                else
-                    ( [], [] )
-            , main = [ stylesheet, top ]
-            }
-            {- ** Begin
+          ]
+        , Layout.render Mdl
+              model.mdl
+              [ Layout.selectedTab (Maybe.withDefault 0 model.selectedTab)
+                |> when (model.selectedTab /= Nothing)
+              , Layout.onSelectTab SelectTab
+              , Layout.fixedHeader |> when model.layout.fixedHeader
+              , Layout.fixedDrawer |> when model.layout.fixedDrawer
+              , Layout.fixedTabs |> when model.layout.fixedTabs
+              , (case model.layout.header of
+                  Demo.Layout.Waterfall x ->
+                      Layout.waterfall x
 
-               The following lines are not necessary when you manually set up
-               your html, as done with page.html. Removing it will then
-               fix the flicker you see on load.
-            -}
-            |>
-                (\contents ->
-                    div []
-                        [ Scheme.topWithScheme model.layout.primary model.layout.accent contents
-                        , Html.node "script"
-                            [ Html.Attributes.attribute "src" "https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin" ]
-                            []
-                        , Html.node "script"
-                            [ Html.Attributes.attribute "src" "assets/highlight/highlight.pack.js" ]
-                            []
-                        , case nth model.selectedTab tabs of
-                            Just ( "Dialog", _, _ ) ->
-                                Html.map DialogMsg (Demo.Dialog.element model.dialog)
+                  Demo.Layout.Seamed ->
+                      Layout.seamed
 
-                            {- Because of limitations on browsers that have non-native (polyfilled)
-                               <dialog> elements, our dialog element /may/ have to sit up here. However,
-                               running in elm-reactor will never load the polyfill, so we render the
-                               dialog (wrongly if there is no polyfill) only when the Dialog tab is
-                               active.
-                            -}
-                            _ ->
-                                div [] []
-                        ]
+                  Demo.Layout.Standard ->
+                      Options.nop
+
+                  Demo.Layout.Scrolling ->
+                      Layout.scrolling
                 )
+                  |> when model.layout.withHeader
+              , if model.transparentHeader then
+                  Layout.transparentHeader
+                else
+                  Options.nop
+              ]
+              { header = header model
+              , drawer =
+                  if model.layout.withDrawer then
+                      drawer model
+                  else
+                      []
+              , tabs =
+                  if model.layout.withTabs then
+                      ( tabTitles, [ Color.background (Color.color model.layout.primary Color.S400) ] )
+                  else
+                      ( [], [] )
+              , main = [ stylesheet, top ]
+              }
+              {- ** Begin
+
+                 The following lines are not necessary when you manually set up
+                 your html, as done with page.html. Removing it will then
+                 fix the flicker you see on load.
+              -}
+              |>
+                  (\contents ->
+                      div []
+                          [ Scheme.topWithScheme model.layout.primary model.layout.accent contents
+                          , Html.node "script"
+                              [ Html.Attributes.attribute "src" "https://cdn.polyfill.io/v2/polyfill.js?features=Event.focusin" ]
+                              []
+                          , Html.node "script"
+                              [ Html.Attributes.attribute "src" "assets/highlight/highlight.pack.js" ]
+                              []
+                          , case nth (Maybe.withDefault -1 model.selectedTab) tabs of
+                              Just ( "Dialog", _, _ ) ->
+                                  Html.map DialogMsg (Demo.Dialog.element model.dialog)
+
+                              {- Because of limitations on browsers that have non-native (polyfilled)
+                                 <dialog> elements, our dialog element /may/ have to sit up here. However,
+                                 running in elm-reactor will never load the polyfill, so we render the
+                                 dialog (wrongly if there is no polyfill) only when the Dialog tab is
+                                 active.
+                              -}
+                              _ ->
+                                  div [] []
+                          ]
+                  )
+        ]
 
 
 
@@ -444,7 +496,11 @@ view_ model =
 
 urlOf : Model -> String
 urlOf model =
-    "#" ++ (Array.get model.selectedTab tabUrls |> Maybe.withDefault "")
+    case model.selectedTab of
+        Nothing ->
+            ""
+        Just selectedTab ->
+            "#" ++ (Array.get selectedTab tabUrls |> Maybe.withDefault "")
 
 
 delta2url : Model -> Model -> Maybe Routing.UrlChange
@@ -462,7 +518,7 @@ location2messages : Navigation.Location -> List Msg
 location2messages location =
     [ case String.dropLeft 1 location.hash of
         "" ->
-            SelectTab 0
+            ClearTab
 
         x ->
             Dict.get x urlTabs
