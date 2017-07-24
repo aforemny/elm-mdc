@@ -22924,33 +22924,18 @@ var _elm_lang$dom$Dom_Scroll$toTop = function (id) {
 	return A2(_elm_lang$dom$Dom_Scroll$toY, id, 0);
 };
 
-var _debois$elm_mdl$Material_Typography$uppercase = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-uppercase');
-var _debois$elm_mdl$Material_Typography$lowercase = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-lowercase');
-var _debois$elm_mdl$Material_Typography$capitalize = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-capitalize');
-var _debois$elm_mdl$Material_Typography$justify = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-justify');
-var _debois$elm_mdl$Material_Typography$right = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-right');
-var _debois$elm_mdl$Material_Typography$left = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-left');
-var _debois$elm_mdl$Material_Typography$center = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-center');
-var _debois$elm_mdl$Material_Typography$tableStriped = _debois$elm_mdl$Material_Options$cs('mdc-typography--table-striped');
-var _debois$elm_mdl$Material_Typography$nowrap = _debois$elm_mdl$Material_Options$cs('mdc-typography--text-nowrap');
-var _debois$elm_mdl$Material_Typography$contrast = function (x) {
-	return A2(
-		_debois$elm_mdl$Material_Options$css,
-		'opacity',
-		_elm_lang$core$Basics$toString(x));
-};
-var _debois$elm_mdl$Material_Typography$menu = _debois$elm_mdl$Material_Options$cs('mdc-typography--menu-color-contrast');
-var _debois$elm_mdl$Material_Typography$button = _debois$elm_mdl$Material_Options$cs('mdc-typography--button-color-contrast');
-var _debois$elm_mdl$Material_Typography$caption = _debois$elm_mdl$Material_Options$cs('mdc-typography--caption-force-preferred-font-color-contrast');
-var _debois$elm_mdl$Material_Typography$body2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--body-2-force-preferred-font-color-contrast');
-var _debois$elm_mdl$Material_Typography$body1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--body-1-force-preferred-font-color-contrast');
-var _debois$elm_mdl$Material_Typography$subhead = _debois$elm_mdl$Material_Options$cs('mdc-typography--subhead-color-contrast');
-var _debois$elm_mdl$Material_Typography$title = _debois$elm_mdl$Material_Options$cs('mdc-typography--title-color-contrast');
-var _debois$elm_mdl$Material_Typography$headline = _debois$elm_mdl$Material_Options$cs('mdc-typography--headline-color-contrast');
-var _debois$elm_mdl$Material_Typography$display4 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display-4-color-contrast');
-var _debois$elm_mdl$Material_Typography$display3 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display-3-color-contrast');
-var _debois$elm_mdl$Material_Typography$display2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display-2-color-contrast');
-var _debois$elm_mdl$Material_Typography$display1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display-1-color-contrast');
+var _debois$elm_mdl$Material_Typography$adjustMargin = _debois$elm_mdl$Material_Options$cs('mdc-typography--adjust-margin');
+var _debois$elm_mdl$Material_Typography$subheading2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--subheading');
+var _debois$elm_mdl$Material_Typography$subheading1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--subheading');
+var _debois$elm_mdl$Material_Typography$headline = _debois$elm_mdl$Material_Options$cs('mdc-typography--headline');
+var _debois$elm_mdl$Material_Typography$body2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--body2');
+var _debois$elm_mdl$Material_Typography$caption = _debois$elm_mdl$Material_Options$cs('mdc-typography--caption');
+var _debois$elm_mdl$Material_Typography$title = _debois$elm_mdl$Material_Options$cs('mdc-typography--title');
+var _debois$elm_mdl$Material_Typography$display4 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display4');
+var _debois$elm_mdl$Material_Typography$display3 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display3');
+var _debois$elm_mdl$Material_Typography$display2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display2');
+var _debois$elm_mdl$Material_Typography$display1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display1');
+var _debois$elm_mdl$Material_Typography$typography = _debois$elm_mdl$Material_Options$cs('mdc-typography');
 
 var _debois$elm_mdl$Demo_Layout$references = {
 	ctor: '::',
@@ -26646,15 +26631,7 @@ var _debois$elm_mdl$Demo_Loading$view = function (model) {
 											ctor: '::',
 											_0: A2(
 												_debois$elm_mdl$Material_Options$span,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Typography$display4,
-													_1: {
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Typography$contrast(1.0),
-														_1: {ctor: '[]'}
-													}
-												},
+												{ctor: '[]'},
 												{
 													ctor: '::',
 													_0: _elm_lang$html$Html$text(
@@ -31245,10 +31222,6 @@ var _debois$elm_mdl$Demo_Textfields$view = function (model) {
 		});
 };
 
-var _debois$elm_mdl$Material_Theme$body2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--body2');
-var _debois$elm_mdl$Material_Theme$title = _debois$elm_mdl$Material_Options$cs('mdc-typography--title');
-var _debois$elm_mdl$Material_Theme$display1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display1');
-var _debois$elm_mdl$Material_Theme$typography = _debois$elm_mdl$Material_Options$cs('mdc-typography');
 var _debois$elm_mdl$Material_Theme$textIconOnDark = F2(
 	function (options, icon) {
 		return A2(
@@ -31409,10 +31382,10 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 				_debois$elm_mdl$Demo_Theme$demoThemeTextStyles,
 				{
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Theme$typography,
+					_0: _debois$elm_mdl$Material_Typography$typography,
 					_1: {
 						ctor: '::',
-						_0: _debois$elm_mdl$Material_Theme$body2,
+						_0: _debois$elm_mdl$Material_Typography$body2,
 						_1: {
 							ctor: '::',
 							_0: background,
@@ -31423,10 +31396,10 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 				function () {
 					var options = {
 						ctor: '::',
-						_0: _debois$elm_mdl$Material_Theme$typography,
+						_0: _debois$elm_mdl$Material_Typography$typography,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Theme$body2,
+							_0: _debois$elm_mdl$Material_Typography$body2,
 							_1: {
 								ctor: '::',
 								_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '0 16px'),
@@ -31457,7 +31430,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 				_elm_lang$html$Html$h3,
 				{
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Theme$title,
+					_0: _debois$elm_mdl$Material_Typography$title,
 					_1: {ctor: '[]'}
 				},
 				{
@@ -31536,7 +31509,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 						_elm_lang$html$Html$h3,
 						{
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Theme$title,
+							_0: _debois$elm_mdl$Material_Typography$title,
 							_1: {ctor: '[]'}
 						},
 						{
@@ -31615,7 +31588,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 								_elm_lang$html$Html$h3,
 								{
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Theme$title,
+									_0: _debois$elm_mdl$Material_Typography$title,
 									_1: {ctor: '[]'}
 								},
 								{
@@ -31694,7 +31667,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 										_elm_lang$html$Html$h3,
 										{
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Theme$title,
+											_0: _debois$elm_mdl$Material_Typography$title,
 											_1: {ctor: '[]'}
 										},
 										{
@@ -31773,7 +31746,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 												_elm_lang$html$Html$h3,
 												{
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Theme$title,
+													_0: _debois$elm_mdl$Material_Typography$title,
 													_1: {ctor: '[]'}
 												},
 												{
@@ -31948,7 +31921,7 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 			_elm_lang$html$Html$h3,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Theme$title,
+				_0: _debois$elm_mdl$Material_Typography$title,
 				_1: {ctor: '[]'}
 			},
 			{
@@ -31977,13 +31950,13 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 							_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Theme$typography,
+								_0: _debois$elm_mdl$Material_Typography$typography,
 								_1: {
 									ctor: '::',
 									_0: _debois$elm_mdl$Material_Theme$primary,
 									_1: {
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Theme$body2,
+										_0: _debois$elm_mdl$Material_Typography$body2,
 										_1: {ctor: '[]'}
 									}
 								}
@@ -32017,13 +31990,13 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 								_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 								{
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Theme$typography,
+									_0: _debois$elm_mdl$Material_Typography$typography,
 									_1: {
 										ctor: '::',
 										_0: _debois$elm_mdl$Material_Theme$accent,
 										_1: {
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Theme$body2,
+											_0: _debois$elm_mdl$Material_Typography$body2,
 											_1: {ctor: '[]'}
 										}
 									}
@@ -32043,7 +32016,7 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 						_elm_lang$html$Html$h3,
 						{
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Theme$title,
+							_0: _debois$elm_mdl$Material_Typography$title,
 							_1: {ctor: '[]'}
 						},
 						{
@@ -32072,13 +32045,13 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 										_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 										{
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Theme$typography,
+											_0: _debois$elm_mdl$Material_Typography$typography,
 											_1: {
 												ctor: '::',
 												_0: _debois$elm_mdl$Material_Theme$primaryBg,
 												_1: {
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Theme$body2,
+													_0: _debois$elm_mdl$Material_Typography$body2,
 													_1: {ctor: '[]'}
 												}
 											}
@@ -32108,13 +32081,13 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 											_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 											{
 												ctor: '::',
-												_0: _debois$elm_mdl$Material_Theme$typography,
+												_0: _debois$elm_mdl$Material_Typography$typography,
 												_1: {
 													ctor: '::',
 													_0: _debois$elm_mdl$Material_Theme$accentBg,
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Theme$body2,
+														_0: _debois$elm_mdl$Material_Typography$body2,
 														_1: {ctor: '[]'}
 													}
 												}
@@ -32144,13 +32117,13 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 												_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 												{
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Theme$typography,
+													_0: _debois$elm_mdl$Material_Typography$typography,
 													_1: {
 														ctor: '::',
 														_0: _debois$elm_mdl$Material_Theme$background,
 														_1: {
 															ctor: '::',
-															_0: _debois$elm_mdl$Material_Theme$body2,
+															_0: _debois$elm_mdl$Material_Typography$body2,
 															_1: {ctor: '[]'}
 														}
 													}
@@ -32178,7 +32151,7 @@ var _debois$elm_mdl$Demo_Theme$view = function (model) {
 				_elm_lang$html$Html$h2,
 				{
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Theme$display1,
+					_0: _debois$elm_mdl$Material_Typography$display1,
 					_1: {ctor: '[]'}
 				},
 				{
@@ -32196,7 +32169,7 @@ var _debois$elm_mdl$Demo_Theme$view = function (model) {
 						_elm_lang$html$Html$h2,
 						{
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Theme$display1,
+							_0: _debois$elm_mdl$Material_Typography$display1,
 							_1: {ctor: '[]'}
 						},
 						{
@@ -32933,391 +32906,260 @@ var _debois$elm_mdl$Demo_Tooltip$view = function (model) {
 };
 var _debois$elm_mdl$Demo_Tooltip$NoOp = {ctor: 'NoOp'};
 
-var _debois$elm_mdl$Demo_Typography$references = {
-	ctor: '::',
-	_0: _debois$elm_mdl$Demo_Page$package('http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Typography'),
-	_1: {
-		ctor: '::',
-		_0: _debois$elm_mdl$Demo_Page$mds('https://material.google.com/style/typography.html'),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Page$mdl('https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction'),
-			_1: {ctor: '[]'}
-		}
-	}
-};
-var _debois$elm_mdl$Demo_Typography$srcUrl = 'https://github.com/debois/elm-mdl/blob/master/demo/Demo/Typography.elm';
-var _debois$elm_mdl$Demo_Typography$intro = A2(_debois$elm_mdl$Demo_Page$fromMDL, 'https://github.com/google/material-design-lite/tree/mdl-1.x/src/typography#introduction', '\n> The Material Design Lite (MDL) typography component is a comprehensive approach\n> to standardizing the use of typefaces in applications and page displays. MDL\n> typography elements are intended to replace the myriad fonts used by developers\n> (which vary significantly in appearance) and provide a robust, uniform library\n> of text styles from which developers can choose.\n>\n> The \"Roboto\" typeface is the standard for MDL display; it can easily be\n> integrated into a web page using the CSS3 @font-face rule. However, Roboto is\n> most simply accessed and included using a single standard HTML <link> element,\n> which can be obtained at this Google fonts page.\n>\n> Because of the many possible variations in font display characteristics in HTML\n> and CSS, MDL typography aims to provide simple and intuitive styles that use the\n> Roboto font and produce visually attractive and internally consistent text\n> results. See the typography component\'s [Material Design specifications](https://material.google.com/style/typography.html) page for\n> details.\n');
-var _debois$elm_mdl$Demo_Typography$demo2 = {
-	ctor: '::',
-	_0: {
-		ctor: '_Tuple2',
-		_0: A3(
+var _debois$elm_mdl$Demo_Typography$example = F2(
+	function (title, adjustMargin) {
+		return A3(
 			_debois$elm_mdl$Material_Options$styled,
-			_elm_lang$html$Html$p,
+			_elm_lang$html$Html$section,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Typography$left,
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text('Left align'),
-				_1: {ctor: '[]'}
-			}),
-		_1: '\n       Options.styled p\n         [ Typo.left ]\n         [ text \"Left align\" ]\n       '
-	},
-	_1: {
-		ctor: '::',
-		_0: {
-			ctor: '_Tuple2',
-			_0: A3(
-				_debois$elm_mdl$Material_Options$styled,
-				_elm_lang$html$Html$p,
-				{
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Typography$center,
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Center align'),
-					_1: {ctor: '[]'}
-				}),
-			_1: '\n       Options.styled p\n         [ Typo.center ]\n         [ text \"Center align\" ]\n       '
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
-				_0: A3(
-					_debois$elm_mdl$Material_Options$styled,
-					_elm_lang$html$Html$p,
-					{
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Typography$right,
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Right align'),
-						_1: {ctor: '[]'}
-					}),
-				_1: '\n       Options.styled p\n         [ Typo.right ]\n         [ text \"Right align\" ]\n       '
-			},
-			_1: {
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: A3(
-						_debois$elm_mdl$Material_Options$styled,
-						_elm_lang$html$Html$p,
-						{
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Typography$justify,
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Justified'),
-							_1: {ctor: '[]'}
-						}),
-					_1: '\n       Options.styled p\n         [ Typo.justify ]\n         [ text \"Justified\" ]\n       '
-				},
+				_0: _debois$elm_mdl$Material_Options$cs('demo-typography--section'),
 				_1: {
 					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: A3(
-							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$p,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Typography$capitalize,
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('capitalized'),
-								_1: {ctor: '[]'}
-							}),
-						_1: '\n       Options.styled p\n         [ Typo.capitalize ]\n         [ text \"capitalized\" ]\n       '
-					},
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
 					_1: {
 						ctor: '::',
-						_0: {
-							ctor: '_Tuple2',
-							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$p,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Typography$lowercase,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('LOWERCASE'),
-									_1: {ctor: '[]'}
-								}),
-							_1: '\n       Options.styled p\n         [ Typo.lowercase ]\n         [ text \"LOWERCASE\" ]\n       '
-						},
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
 						_1: {
 							ctor: '::',
-							_0: {
-								ctor: '_Tuple2',
-								_0: A3(
-									_debois$elm_mdl$Material_Options$styled,
-									_elm_lang$html$Html$p,
-									{
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Typography$uppercase,
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('uppercase'),
-										_1: {ctor: '[]'}
-									}),
-								_1: '\n       Options.styled p\n         [ Typo.uppercase ]\n         [ text \"uppercase\" ]\n       '
-							},
-							_1: {ctor: '[]'}
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'border', '1px solid #ddd'),
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Typography$typography,
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
-			}
-		}
-	}
-};
-var _debois$elm_mdl$Demo_Typography$demo1 = {
-	ctor: '::',
-	_0: {
-		ctor: '_Tuple2',
-		_0: A3(
-			_debois$elm_mdl$Material_Options$styled,
-			_elm_lang$html$Html$p,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Typography$display4,
-				_1: {ctor: '[]'}
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text('Light 112px'),
-				_1: {ctor: '[]'}
-			}),
-		_1: '\n       Options.styled p\n         [ Typo.display4 ]\n         [ text \"Light 112px\" ]\n       '
-	},
-	_1: {
-		ctor: '::',
-		_0: {
-			ctor: '_Tuple2',
-			_0: A3(
-				_debois$elm_mdl$Material_Options$styled,
-				_elm_lang$html$Html$p,
-				{
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Typography$display3,
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Regular 56px'),
-					_1: {ctor: '[]'}
-				}),
-			_1: '\n      Options.styled p\n        [ Typo.display3 ]\n        [ text \"Regular 56px\" ]\n      '
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
 				_0: A3(
 					_debois$elm_mdl$Material_Options$styled,
-					_elm_lang$html$Html$p,
+					_elm_lang$html$Html$h2,
 					{
 						ctor: '::',
-						_0: _debois$elm_mdl$Material_Typography$display2,
+						_0: _debois$elm_mdl$Material_Typography$display1,
 						_1: {ctor: '[]'}
 					},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('Regular 45px'),
+						_0: _elm_lang$html$Html$text(title),
 						_1: {ctor: '[]'}
 					}),
-				_1: '\n      Options.styled p\n        [ Typo.display2 ]\n        [ text \"Regular 45px\" ]\n      '
-			},
-			_1: {
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
+				_1: {
+					ctor: '::',
 					_0: A3(
 						_debois$elm_mdl$Material_Options$styled,
-						_elm_lang$html$Html$p,
+						_elm_lang$html$Html$h1,
 						{
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Typography$display1,
-							_1: {ctor: '[]'}
+							_0: _debois$elm_mdl$Material_Typography$display4,
+							_1: {
+								ctor: '::',
+								_0: adjustMargin,
+								_1: {ctor: '[]'}
+							}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('Regular 34px'),
+							_0: _elm_lang$html$Html$text('Display 4'),
 							_1: {ctor: '[]'}
 						}),
-					_1: '\n      Options.styled p\n        [ Typo.display1 ]\n        [ text \"Regular 34px\" ]\n      '
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
+					_1: {
+						ctor: '::',
 						_0: A3(
 							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$p,
+							_elm_lang$html$Html$h1,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Typography$headline,
-								_1: {ctor: '[]'}
+								_0: _debois$elm_mdl$Material_Typography$display3,
+								_1: {
+									ctor: '::',
+									_0: adjustMargin,
+									_1: {ctor: '[]'}
+								}
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Regular 24px'),
+								_0: _elm_lang$html$Html$text('Display 3'),
 								_1: {ctor: '[]'}
 							}),
-						_1: '\n       Options.styled p\n         [ Typo.headline ]\n         [ text \"Regular 24px\" ]\n       '
-					},
-					_1: {
-						ctor: '::',
-						_0: {
-							ctor: '_Tuple2',
+						_1: {
+							ctor: '::',
 							_0: A3(
 								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$p,
+								_elm_lang$html$Html$h1,
 								{
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Typography$title,
-									_1: {ctor: '[]'}
+									_0: _debois$elm_mdl$Material_Typography$display2,
+									_1: {
+										ctor: '::',
+										_0: adjustMargin,
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Medium 20px'),
+									_0: _elm_lang$html$Html$text('Display 2'),
 									_1: {ctor: '[]'}
 								}),
-							_1: '\n      Options.styled p\n        [ Typo.title ]\n        [ text \"Medium 20px\" ]\n      '
-						},
-						_1: {
-							ctor: '::',
-							_0: {
-								ctor: '_Tuple2',
+							_1: {
+								ctor: '::',
 								_0: A3(
 									_debois$elm_mdl$Material_Options$styled,
-									_elm_lang$html$Html$p,
+									_elm_lang$html$Html$h1,
 									{
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Typography$subhead,
-										_1: {ctor: '[]'}
+										_0: _debois$elm_mdl$Material_Typography$display1,
+										_1: {
+											ctor: '::',
+											_0: adjustMargin,
+											_1: {ctor: '[]'}
+										}
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Regular 16px (Device), Regular 15px (Desktop)'),
+										_0: _elm_lang$html$Html$text('Display 1'),
 										_1: {ctor: '[]'}
 									}),
-								_1: '\n       Options.styled p\n         [ Typo.subhead ]\n         [ text \"Regular 16px (Device), Regular 15px (Desktop)\" ]\n       '
-							},
-							_1: {
-								ctor: '::',
-								_0: {
-									ctor: '_Tuple2',
+								_1: {
+									ctor: '::',
 									_0: A3(
 										_debois$elm_mdl$Material_Options$styled,
-										_elm_lang$html$Html$p,
+										_elm_lang$html$Html$h1,
 										{
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Typography$body2,
-											_1: {ctor: '[]'}
+											_0: _debois$elm_mdl$Material_Typography$headline,
+											_1: {
+												ctor: '::',
+												_0: adjustMargin,
+												_1: {ctor: '[]'}
+											}
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Medium 14px (Device), Medium 13px (Desktop)'),
+											_0: _elm_lang$html$Html$text('Headline'),
 											_1: {ctor: '[]'}
 										}),
-									_1: '\n        Options.styled p\n          [ Typo.body2 ]\n          [ text \"Medium 14px (Device), Medium 13px (Desktop)\" ]\n        '
-								},
-								_1: {
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple2',
+									_1: {
+										ctor: '::',
 										_0: A3(
 											_debois$elm_mdl$Material_Options$styled,
-											_elm_lang$html$Html$p,
+											_elm_lang$html$Html$h2,
 											{
 												ctor: '::',
-												_0: _debois$elm_mdl$Material_Typography$body1,
-												_1: {ctor: '[]'}
+												_0: _debois$elm_mdl$Material_Typography$title,
+												_1: {
+													ctor: '::',
+													_0: adjustMargin,
+													_1: {ctor: '[]'}
+												}
 											},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Regular 14px (Device), Regular 13px (Desktop)'),
-												_1: {ctor: '[]'}
+												_0: _elm_lang$html$Html$text('Title'),
+												_1: {
+													ctor: '::',
+													_0: A3(
+														_debois$elm_mdl$Material_Options$styled,
+														_elm_lang$html$Html$span,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Typography$caption,
+															_1: {
+																ctor: '::',
+																_0: adjustMargin,
+																_1: {ctor: '[]'}
+															}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Caption.'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
 											}),
-										_1: '\n        Options.styled p\n          [ Typo.body1 ]\n          [ text \"Regular 14px (Device), Regular 13px (Desktop)\" ]\n        '
-									},
-									_1: {
-										ctor: '::',
-										_0: {
-											ctor: '_Tuple2',
+										_1: {
+											ctor: '::',
 											_0: A3(
 												_debois$elm_mdl$Material_Options$styled,
-												_elm_lang$html$Html$p,
+												_elm_lang$html$Html$h3,
 												{
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Typography$caption,
-													_1: {ctor: '[]'}
+													_0: _debois$elm_mdl$Material_Typography$subheading2,
+													_1: {
+														ctor: '::',
+														_0: adjustMargin,
+														_1: {ctor: '[]'}
+													}
 												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('Regular 12px'),
+													_0: _elm_lang$html$Html$text('Subheading 2'),
 													_1: {ctor: '[]'}
 												}),
-											_1: '\n        Options.styled p\n          [ Typo.caption ]\n          [ text \"Regular 12px\" ]\n        '
-										},
-										_1: {
-											ctor: '::',
-											_0: {
-												ctor: '_Tuple2',
+											_1: {
+												ctor: '::',
 												_0: A3(
 													_debois$elm_mdl$Material_Options$styled,
-													_elm_lang$html$Html$p,
+													_elm_lang$html$Html$h4,
 													{
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Typography$button,
-														_1: {ctor: '[]'}
+														_0: _debois$elm_mdl$Material_Typography$subheading1,
+														_1: {
+															ctor: '::',
+															_0: adjustMargin,
+															_1: {ctor: '[]'}
+														}
 													},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Medium (All Caps) 14px'),
+														_0: _elm_lang$html$Html$text('Subheading 1'),
 														_1: {ctor: '[]'}
 													}),
-												_1: '\n        Options.styled p\n          [ Typo.button ]\n          [ text \"Medium (All Caps) 14px\" ]\n        '
-											},
-											_1: {
-												ctor: '::',
-												_0: {
-													ctor: '_Tuple2',
+												_1: {
+													ctor: '::',
 													_0: A3(
 														_debois$elm_mdl$Material_Options$styled,
 														_elm_lang$html$Html$p,
 														{
 															ctor: '::',
-															_0: _debois$elm_mdl$Material_Typography$menu,
-															_1: {ctor: '[]'}
+															_0: _debois$elm_mdl$Material_Typography$body2,
+															_1: {
+																ctor: '::',
+																_0: adjustMargin,
+																_1: {ctor: '[]'}
+															}
 														},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('Medium 14px (Device), Medium 13px (Desktop)'),
+															_0: _elm_lang$html$Html$text('Body 1 paragraph. Lorem ipsum dolor sit amet, consectetur\n      adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore\n      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco\n      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in\n      reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n      pariatur.'),
 															_1: {ctor: '[]'}
 														}),
-													_1: '\n        Options.styled p\n          [ Typo.menu ]\n          [ text \"Medium 14px (Device), Medium 13px (Desktop)\" ]\n        '
-												},
-												_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: A3(
+															_debois$elm_mdl$Material_Options$styled,
+															_elm_lang$html$Html$aside,
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Typography$body2,
+																_1: {
+																	ctor: '::',
+																	_0: adjustMargin,
+																	_1: {ctor: '[]'}
+																}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Body 2 text, calling something out.'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
 											}
 										}
 									}
@@ -33326,120 +33168,20 @@ var _debois$elm_mdl$Demo_Typography$demo1 = {
 						}
 					}
 				}
-			}
-		}
-	}
-};
-var _debois$elm_mdl$Demo_Typography$view = function (model) {
-	var cell = function (x) {
-		return A2(
-			_debois$elm_mdl$Material_Grid$cell,
-			{
-				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$Desktop, 6),
-				_1: {
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$Tablet, 8),
-					_1: {
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$Phone, 4),
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Grid$align(_debois$elm_mdl$Material_Grid$Middle),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: x,
-				_1: {ctor: '[]'}
 			});
-	};
-	var demo = _elm_lang$core$List$concatMap(
-		function (_p0) {
-			var _p1 = _p0;
-			return {
-				ctor: '::',
-				_0: cell(_p1._0),
-				_1: {
-					ctor: '::',
-					_0: cell(
-						A2(
-							_debois$elm_mdl$Demo_Code$code,
-							{ctor: '[]'},
-							_p1._1)),
-					_1: {ctor: '[]'}
-				}
-			};
-		});
-	var head = A2(
-		_debois$elm_mdl$Material_Grid$cell,
+	});
+var _debois$elm_mdl$Demo_Typography$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$All, 12),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$p,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Imports'),
-					_1: {ctor: '[]'}
-				}),
+			_0: A2(_debois$elm_mdl$Demo_Typography$example, 'Styles', _debois$elm_mdl$Material_Options$nop),
 			_1: {
 				ctor: '::',
-				_0: A2(
-					_debois$elm_mdl$Demo_Code$code,
-					{
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px 0'),
-						_1: {ctor: '[]'}
-					},
-					'\n                     import Material.Typography as Typo\n                     import Material.Options as Options\n                     import Html exposing (p)\n                     '),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$p,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Example use'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
+				_0: A2(_debois$elm_mdl$Demo_Typography$example, 'Styles with margin adjustments', _debois$elm_mdl$Material_Typography$adjustMargin),
+				_1: {ctor: '[]'}
 			}
-		});
-	return A6(
-		_debois$elm_mdl$Demo_Page$body1_,
-		'Typography',
-		_debois$elm_mdl$Demo_Typography$srcUrl,
-		_debois$elm_mdl$Demo_Typography$intro,
-		_debois$elm_mdl$Demo_Typography$references,
-		{
-			ctor: '::',
-			_0: A2(
-				_debois$elm_mdl$Material_Grid$grid,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: head,
-					_1: demo(_debois$elm_mdl$Demo_Typography$demo1)
-				}),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_debois$elm_mdl$Material_Grid$grid,
-				{ctor: '[]'},
-				demo(_debois$elm_mdl$Demo_Typography$demo2)),
-			_1: {ctor: '[]'}
 		});
 };
 var _debois$elm_mdl$Demo_Typography$model = {mdl: _debois$elm_mdl$Material$model};
@@ -33450,15 +33192,10 @@ var _debois$elm_mdl$Demo_Typography$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
 var _debois$elm_mdl$Demo_Typography$update = F2(
-	function (action, model) {
-		var _p2 = action;
-		if (_p2.ctor === 'TypographyMsg') {
-			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-		} else {
-			return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Typography$Mdl, _p2._0, model);
-		}
+	function (msg, model) {
+		var _p0 = msg;
+		return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Typography$Mdl, _p0._0, model);
 	});
-var _debois$elm_mdl$Demo_Typography$TypographyMsg = {ctor: 'TypographyMsg'};
 
 var _elm_lang$html$Html_Lazy$lazy3 = _elm_lang$virtual_dom$VirtualDom$lazy3;
 var _elm_lang$html$Html_Lazy$lazy2 = _elm_lang$virtual_dom$VirtualDom$lazy2;
@@ -35016,11 +34753,7 @@ var _debois$elm_mdl$Main$e404 = function (_p0) {
 				{
 					ctor: '::',
 					_0: _debois$elm_mdl$Material_Options$cs('mdl-typography--display-4'),
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Typography$center,
-						_1: {ctor: '[]'}
-					}
+					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
