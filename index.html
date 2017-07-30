@@ -16,12 +16,44 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <link rel="stylesheet" href="material-components-web.css" />
+
   </head>
   <body>
+    <!-- node insertion, credits (https://davidwalsh.name/detect-node-insertion): -->
+    <script type="text/javascript">
+      var insertListener = function(event) {
+        if (event.animationName == "nodeInserted") {
+          console.warn("Another node has been inserted! ", event, event.target);
+          event.target.dispatchEvent(new Event('mdc-init'));
+        }
+      }
+
+      document.addEventListener("animationstart", insertListener, false); // standard + firefox
+      document.addEventListener("MSAnimationStart", insertListener, false); // IE
+      document.addEventListener("webkitAnimationStart", insertListener, false); // Chrome + Safari
+    </script>
+    <style type="text/css">
+      @keyframes nodeInserted {
+        from { opacity: 0.99; }
+        to { opacity: 1; }
+      }
+    </style>
+
     <!-- elm -->
     <script src="elm.js"></script>
     <script>
       app = Elm.Main.fullscreen();
+      app.ports.scrollTop.subscribe(function() {
+          document.scrollingElement.scrollTop = 0;
+      });
     </script>
+
+    <style type="text/css">
+    .mdc-tab-bar
+    {
+      animation-duration: 0.001s;
+      animation-name: nodeInserted;
+    }
+    </style>
   </body>
 </html>
