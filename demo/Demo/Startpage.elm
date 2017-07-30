@@ -63,15 +63,15 @@ view selectTab =
             , title = "Snackbar", subtitle = "Transient messages" }
           , { index = -1, icon = "ic_switch_24px.svg", wip = True
             , title = "Switch", subtitle = "On off switches" }
-          , { index = -1, icon = "ic_tabs_24px.svg", wip = True
+          , { index = 7, icon = "ic_tabs_24px.svg", wip = False
             , title = "Tabs", subtitle = "Tabs with support for icon and text labels" }
-          , { index = 7, icon = "ic_text_field_24px.svg", wip = False
+          , { index = 8, icon = "ic_text_field_24px.svg", wip = False
             , title = "Text field", subtitle = "Single and multiline text fields" }
-          , { index = 8, icon = "ic_theme_24px.svg", wip = False
+          , { index = 9, icon = "ic_theme_24px.svg", wip = False
             , title = "Theme", subtitle = "Using primary and accent colors" }
-          , { index = 9, icon = "ic_toolbar_24px.svg", wip = False
+          , { index = 10, icon = "ic_toolbar_24px.svg", wip = False
             , title = "Toolbar", subtitle = "Header and footers" }
-          , { index = 10, icon = "ic_typography_24px.svg", wip = False
+          , { index = 11, icon = "ic_typography_24px.svg", wip = False
             , title = "Typography", subtitle = "Type hierarchy" }
           ]
           |> List.map (\{ index, title, subtitle, icon, wip } ->

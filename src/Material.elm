@@ -258,7 +258,7 @@ update_ lift msg store =
            Tooltip.react lift msg idx store
 
        TabsMsg idx msg ->
-           Tabs.react lift msg idx store
+           Tabs.react (TabsMsg idx >> lift) msg idx store
 
        Dispatch msgs -> 
            (Nothing, Dispatch.forward msgs)

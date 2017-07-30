@@ -35,7 +35,7 @@ type Msg m
     | LayoutMsg Layout.Msg
     | MenuMsg Index (Menu.Msg m)
     | SelectMsg Index (Select.Msg m)
-    | TabsMsg Index Tabs.Msg
+    | TabsMsg Index (Tabs.Msg m)
     | TextfieldMsg Index Textfield.Msg
     | TogglesMsg Index Toggles.Msg
     | TooltipMsg Index Tooltip.Msg

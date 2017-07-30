@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Array exposing (Array)
 import Demo.Badges
@@ -25,19 +25,22 @@ import Demo.Tooltip
 import Demo.Typography
 import Dict exposing (Dict)
 import Html.Attributes exposing (href, class, style)
-import Html exposing (..)
+import Html exposing (Html, text)
 import Html.Lazy
 import Material
 import Material.Helpers exposing (pure, lift, map1st, map2nd)
 import Material.Icon as Icon
 import Material.Layout as Layout
 import Material.Menu as Menu
-import Material.Options as Options exposing (css, when)
+import Material.Options as Options exposing (styled, css, when)
 import Material.Toolbar as Toolbar
 import Navigation
 import Platform.Cmd exposing (..)
 import RouteUrl as Routing
 import String
+
+
+port scrollTop : () -> Cmd msg
 
 
 -- MODEL
@@ -148,13 +151,14 @@ update msg model =
     in
       case log "Msg" msg of
           SelectTab k ->
-              ( { model | selectedTab = Just k }, Cmd.none )
+              { model | selectedTab = Just k } ! [ scrollTop () ]
 
           ClearTab ->
-              ( { model | selectedTab = Nothing }, Cmd.none )
+              { model | selectedTab = Nothing } ! [ scrollTop () ]
 
           ToggleHeader ->
               ( { model | transparentHeader = not model.transparentHeader }, Cmd.none )
+
           ToggleLog -> 
               ( { model | logMessages = not model.logMessages }, Cmd.none )
 
@@ -241,6 +245,7 @@ tabs =
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
+    , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
     , ( "Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg )
     , ( "Theme", "theme", .theme >> Demo.Theme.view >> Html.map ThemeMsg )
     , ( "Toolbar", "toolbar", .toolbar >> Demo.Toolbar.view >> Html.map ToolbarMsg )
@@ -255,7 +260,6 @@ tabs =
     -- , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
     -- , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
     -- , ( "Tables", "tables", .tables >> Demo.Tables.view >> Html.map TablesMsg )
-    -- , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
     -- , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
     ]
 
@@ -282,7 +286,7 @@ urlTabs =
 
 e404 : Model -> Html Msg
 e404 _ =
-    div
+    Html.div
         []
         [ Options.styled Html.h1
             [ Options.cs "mdl-typography--display-4"
@@ -312,7 +316,7 @@ view_ model =
                 Just selectedTab ->
                     nth selectedTab tabTitles |> Maybe.withDefault (text "")
     in
-        div
+        Html.div
         [
         ]
         [ Toolbar.view
@@ -332,13 +336,17 @@ view_ model =
                           ]
                           []
                       Just _ ->
-                          Icon.view "" [ Options.onClick ClearTab ]
+                          Icon.view "" [ Options.onClick ClearTab, css "cursor" "pointer" ]
                 ]
               , Toolbar.title [] [ title ]
               ]
             ]
           ]
-        , top
+        , styled Html.div
+          [ Toolbar.fixedAdjust
+          ]
+          [ top
+          ]
         ]
 
 
