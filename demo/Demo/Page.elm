@@ -145,75 +145,19 @@ background =
 
 body1 : String -> String -> Html a -> List ( String, String ) -> List (Html a) -> Html a
 body1 t srcUrl contents links demo =
-    Options.div
-        boxed
-        [ title t
-        , grid [ noSpacing ]
-            [ cell [ size All 6, size Phone 4 ] [ contents ]
-            , cell
-                [ size All 5
-                , offset Desktop 1
-                , size Phone 4
-                , align Top
-                , css "position" "relative"
-                ]
-                (references <| ( "Demo source", srcUrl ) :: links)
-            ]
-        , Options.div
-            [ css "margin-bottom" "48px"
-            ]
-            demo
-        ]
+    div [] []
 
 
 body1_ : String -> String -> Html a -> List ( String, String ) -> List (Html a) -> List (Html a) -> Html a
 body1_ t srcUrl contents links demo1 demo2 =
-    Options.div
-        []
-        [ Options.div
-            boxed
-            [ title t
-            , Options.div
-                [ css "margin-bottom" "48px"
-                ]
-                demo1
-            ]
-        , Options.div
-            boxed
-            []
-        , Options.div
-            [ Color.background <| background
-            , css "position" "relative"
-            , css "margin" "auto"
-            , css "padding-top" "2rem"
-            , css "padding-bottom" "5rem"
-            , css "padding-left" "8%"
-            , css "padding-right" "8%"
-            ]
-            demo2
-        ]
+    div [] []
 
 
 body2 : String -> String -> Html a -> List ( String, String ) -> List (Html a) -> Html a
-body2 =
-    body1
+body2 _ _ _ _ _ =
+    div [] []
 
 
 body3 : String -> String -> Html a -> List ( String, String ) -> List (Html a) -> Html a
 body3 t srcUrl contents links demo =
-    div
-        []
-        [ title t
-        , grid [ noSpacing ]
-            [ cell
-                [ size All 4, size Desktop 5, size Tablet 8 ]
-                [ contents
-                , div
-                    []
-                    (references <| ( "Demo source", srcUrl ) :: links)
-                ]
-            , cell
-                [ size Phone 4, size Desktop 5, offset Desktop 1, size Tablet 8 ]
-                demo
-            ]
-        ]
+    div [] []

@@ -4,12 +4,8 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Array
 import Bitwise
-import Material.Grid as Grid
-import Material.Options as Options exposing (css, cs)
 import Material.Helpers as Helpers
-import Material.Toggles as Toggles
 import Material
-import Demo.Page as Page
 
 
 -- MODEL
@@ -103,11 +99,6 @@ update msg model =
 -- VIEW
 
 
-row : List (Options.Style a)
-row =
-    [ Grid.size Grid.Desktop 4, Grid.size Grid.Tablet 8, Grid.size Grid.Phone 4 ]
-
-
 readBit : Int -> Int -> Bool
 readBit k n =
     0 /= (Bitwise.and 0x01 (Bitwise.shiftRightBy n k))
@@ -128,43 +119,4 @@ flipBit k n =
 
 view : Model -> Html Msg
 view model =
-    Page.body1_ "Toggles" srcUrl intro references []
-    [ Toggles.checkbox Mdl [0] model.mdl
-      [
-      ]
-      [ text "Switch"
-      ]
-    ]
-
-
-intro : Html Msg
-intro =
-    Page.fromMDL "https://getmdl.io/components/index.html#toggles-section" """
-> The Material Design Lite (MDL) checkbox component is an enhanced version of the
-> standard HTML `<input type="checkbox">` element. A checkbox consists of a small
-> square and, typically, text that clearly communicates a binary condition that
-> will be set or unset when the user clicks or touches it. Checkboxes typically,
-> but not necessarily, appear in groups, and can be selected and deselected
-> individually. The MDL checkbox component allows you to add display and click
->     effects.
->
-> Checkboxes are a common feature of most user interfaces, regardless of a site's
-> content or function. Their design and use is therefore an important factor in
-> the overall user experience. [...]
->
-> The enhanced checkbox component has a more vivid visual look than a standard
-> checkbox, and may be initially or programmatically disabled.
-"""
-
-
-srcUrl : String
-srcUrl =
-    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Toggles.elm"
-
-
-references : List ( String, String )
-references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Toggles"
-    , Page.mds "https://www.google.com/design/spec/components/selection-controls.html"
-    , Page.mdl "https://getmdl.io/components/index.html#toggles-section"
-    ]
+    div [] []

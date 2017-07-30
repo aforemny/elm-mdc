@@ -1,6 +1,5 @@
 module Demo.Lists exposing (..)
 
-import Demo.Page as Page
 import Html.Attributes as Html
 import Html exposing (Html)
 import Material
@@ -144,15 +143,15 @@ avatarListExample =
     [ Lists.avatar
     ]
     [ Lists.li []
-      [ Lists.avatarImage "https://material-components-web.appspot.com/images/animal1.svg" []
+      [ Lists.avatarImage "images/animal1.svg" []
       , Html.text "Panda"
       ]
     , Lists.li []
-      [ Lists.avatarImage "https://material-components-web.appspot.com/images/animal2.svg" []
+      [ Lists.avatarImage "images/animal2.svg" []
       , Html.text "Sleuth"
       ]
     , Lists.li []
-      [ Lists.avatarImage "https://material-components-web.appspot.com/images/animal3.svg" []
+      [ Lists.avatarImage "images/animal3.svg" []
       , Html.text "Brown Bear"
       ]
     ]
@@ -190,7 +189,7 @@ avatarWithTextAndIconExample =
         item src text icon =
             let
                 url =
-                    "https://material-components-web.appspot.com/images/" ++ src
+                    "images/" ++ src
             in
             Lists.li []
             [ Lists.avatarImage url []
@@ -490,7 +489,7 @@ interactiveList =
 
 view : Model -> Html Msg
 view model =
-    Page.body1_ "Lists" srcUrl intro references []
+    div []
     [ inlineCss
 
     , Html.section []
@@ -697,26 +696,4 @@ view model =
         , interactiveList
         ]
       ]
-    ]
-
-
-intro : Html m
-intro =
-    Page.fromMDL "https://www.getmdl.io/components/index.html#lists-section" """
-> Lists present multiple line items vertically as a single continuous element.
-> Refer to the [Material Design
-Spec](https://material.google.com/components/lists.html) to know more about the
-content options.  """
-
-
-srcUrl : String
-srcUrl =
-    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Lists.elm"
-
-
-references : List ( String, String )
-references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-List"
-    , Page.mds "https://material.google.com/components/lists.html"
-    , Page.mdl "https://www.getmdl.io/components/index.html#lists-section"
     ]

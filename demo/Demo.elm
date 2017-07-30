@@ -8,6 +8,7 @@ import Demo.Chips
 import Demo.Dialog
 import Demo.Elevation
 import Demo.Footer
+import Demo.Grid
 import Demo.Layout
 import Demo.Lists
 import Demo.Loading
@@ -243,6 +244,7 @@ tabs =
     , ( "Checkbox", "toggles", .toggles >> Demo.Toggles.view >> Html.map TogglesMsg )
     , ( "Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg )
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
+    , ( "Grid list", "grid-list", \_ -> Demo.Grid.view )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
     , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
@@ -254,7 +256,6 @@ tabs =
     -- , ( "Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg )
     -- , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
     -- , ( "Footers", "footers", .footers >> Demo.Footer.view >> Html.map FooterMsg )
-    -- , ( "Grid", "grid", \_ -> Demo.Grid.view )
     -- , ( "Layout", "layout", .layout >> Demo.Layout.view >> Html.map LayoutMsg )
     -- , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
     -- , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )

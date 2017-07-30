@@ -119,7 +119,7 @@ card0 model =
     [
     ]
     [ Card.media
-      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
+      [ css "background-image" "url(images/16-9.jpg)"
       , css "background-size" "cover"
       , css "height" "12.313rem"
       ]
@@ -204,7 +204,7 @@ card1 model =
     demoCard []
     [ demoPrimary []
     , demoMedia
-      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
+      [ css "background-image" "url(images/16-9.jpg)"
       ]
       []
     , demoSupportingText
@@ -217,7 +217,7 @@ card2 model =
     demoCard []
     [ demoPrimary []
     , demoMedia
-      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
+      [ css "background-image" "url(images/16-9.jpg)"
       ]
       []
     , demoActions [ Card.vertical ]
@@ -239,7 +239,7 @@ card3 : Model -> Html Msg
 card3 model =
     demoCard []
     [ demoMedia
-      [ css "background-image" "url(https://material-components-web.appspot.com/images/16-9.jpg)"
+      [ css "background-image" "url(images/16-9.jpg)"
       ]
       []
     , demoPrimary2 []
@@ -267,7 +267,7 @@ card5 : Model -> Html Msg
 card5 model =
     demoCard
     [ Card.darkTheme
-    , css "background-image" "url(https://material-components-web.appspot.com/images/1-1.jpg"
+    , css "background-image" "url(images/1-1.jpg"
     , css "background-size" "cover"
     , css "height" "21.875rem"
     ]
@@ -297,7 +297,7 @@ card6 : Model -> Html Msg
 card6 model =
     demoCard []
     [ demoMedia
-      [ css "background-image" "url(https://material-components-web.appspot.com/images/1-1.jpg)"
+      [ css "background-image" "url(images/1-1.jpg)"
       ]
       [ Card.title [ Card.large ] [ text "Title" ]
       ]
@@ -315,7 +315,7 @@ mediaItem : List (Options.Style Msg) -> Html Msg
 mediaItem options =
     Card.mediaItem options
     [ Html.img
-      [ Html.src "https://material-components-web.appspot.com/images/1-1.jpg"
+      [ Html.src "images/1-1.jpg"
       , Html.style
         [ ("width", "auto")
         , ("height", "100%")
