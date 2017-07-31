@@ -1,6 +1,5 @@
 module Demo.Dialog exposing (model, update, view, Model, Msg, element)
 
-import Demo.Page as Page
 import Html exposing (..)
 import Material
 import Material.Button as Button
@@ -75,41 +74,15 @@ element1 model =
 
 view : Model -> Html Msg
 view model =
-    Page.body1_ "Dialog" srcUrl intro references []
-    [ Button.render Mdl [0] model.mdl
-      [ Dialog.openOn "click"
-      ]
-      [ text "Show dialog"
-      ]
-    , Button.render Mdl [1] model.mdl
-      [ Dialog.openOn "click"
-      ]
-      [ text "Show scrolling dialog"
-      ]
+  div []
+  [ Button.render Mdl [0] model.mdl
+    [ Dialog.openOn "click"
     ]
-
-
-intro : Html m
-intro =
-    Page.fromMDL "https://getmdl.io/components/#dialog-section" """
-> The Material Design Lite (MDL) dialog component allows for verification of user
-> actions, simple data input, and alerts to provide extra information to users.
->
-> To use the dialog component, you must be using a browser that supports the
-> dialog element. Only Chrome and Opera have native support at the time of
-> writing. For other browsers you will need to include the dialog polyfill
-> or create your own.
-"""
-
-
-srcUrl : String
-srcUrl =
-    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Dialog.elm"
-
-
-references : List ( String, String )
-references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Dialog"
-    , Page.mds "https://material.google.com/components/dialogs.html"
-    , Page.mdl "https://getmdl.io/components/#dialog-section"
+    [ text "Show dialog"
     ]
+  , Button.render Mdl [1] model.mdl
+    [ Dialog.openOn "click"
+    ]
+    [ text "Show scrolling dialog"
+    ]
+  ]

@@ -7,7 +7,6 @@ import Demo.Cards
 import Demo.Chips
 import Demo.Dialog
 import Demo.Elevation
-import Demo.Footer
 import Demo.Grid
 import Demo.Layout
 import Demo.Lists
@@ -16,11 +15,10 @@ import Demo.Menus
 import Demo.Slider
 import Demo.Snackbar
 import Demo.Startpage
-import Demo.Tables
 import Demo.Tabs
 import Demo.Textfields
 import Demo.Theme
-import Demo.Toggles
+import Demo.Checkbox
 import Demo.Toolbar
 import Demo.Tooltip
 import Demo.Typography
@@ -55,11 +53,9 @@ type alias Model =
     , menus : Demo.Menus.Model
     , textfields : Demo.Textfields.Model
     , theme : Demo.Theme.Model
-    , toggles : Demo.Toggles.Model
+    , checkbox : Demo.Checkbox.Model
     , snackbar : Demo.Snackbar.Model
-    , tables : Demo.Tables.Model
     , loading : Demo.Loading.Model
-    , footers : Demo.Footer.Model
     , tooltip : Demo.Tooltip.Model
     , toolbar : Demo.Toolbar.Model
     , tabs : Demo.Tabs.Model
@@ -85,11 +81,9 @@ model =
     , menus = Demo.Menus.model
     , textfields = Demo.Textfields.model
     , theme = Demo.Theme.model
-    , toggles = Demo.Toggles.model
+    , checkbox = Demo.Checkbox.model
     , snackbar = Demo.Snackbar.model
-    , tables = Demo.Tables.model
     , loading = Demo.Loading.model
-    , footers = Demo.Footer.model
     , tooltip = Demo.Tooltip.model
     , toolbar = Demo.Toolbar.model
     , tabs = Demo.Tabs.model
@@ -121,10 +115,8 @@ type Msg
     | TextfieldMsg Demo.Textfields.Msg
     | ThemeMsg Demo.Theme.Msg
     | SnackbarMsg Demo.Snackbar.Msg
-    | TogglesMsg Demo.Toggles.Msg
-    | TablesMsg Demo.Tables.Msg
+    | CheckboxMsg Demo.Checkbox.Msg
     | LoadingMsg Demo.Loading.Msg
-    | FooterMsg Demo.Footer.Msg
     | TooltipMsg Demo.Tooltip.Msg
     | ToolbarMsg Demo.Toolbar.Msg
     | TabMsg Demo.Tabs.Msg
@@ -190,17 +182,11 @@ update msg model =
           SnackbarMsg a ->
               lift .snackbar (\m x -> { m | snackbar = x }) SnackbarMsg Demo.Snackbar.update a model
 
-          TogglesMsg a ->
-              lift .toggles (\m x -> { m | toggles = x }) TogglesMsg Demo.Toggles.update a model
-
-          TablesMsg a ->
-              lift .tables (\m x -> { m | tables = x }) TablesMsg Demo.Tables.update a model
+          CheckboxMsg a ->
+              lift .checkbox (\m x -> { m | checkbox = x }) CheckboxMsg Demo.Checkbox.update a model
 
           LoadingMsg a ->
               lift .loading (\m x -> { m | loading = x }) LoadingMsg Demo.Loading.update a model
-
-          FooterMsg a ->
-              lift .footers (\m x -> { m | footers = x }) FooterMsg Demo.Footer.update a model
 
           SliderMsg a ->
               lift .slider (\m x -> { m | slider = x }) SliderMsg Demo.Slider.update a model
@@ -241,7 +227,7 @@ tabs : List ( String, String, Model -> Html Msg )
 tabs =
     [ ( "Buttons", "buttons", .buttons >> Demo.Buttons.view >> Html.map ButtonsMsg )
     , ( "Card", "cards", .cards >> Demo.Cards.view >> Html.map CardsMsg )
-    , ( "Checkbox", "toggles", .toggles >> Demo.Toggles.view >> Html.map TogglesMsg )
+    , ( "Checkbox", "checkbox", .checkbox >> Demo.Checkbox.view >> Html.map CheckboxMsg )
     , ( "Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg )
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
     , ( "Grid list", "grid-list", \_ -> Demo.Grid.view )
@@ -255,12 +241,10 @@ tabs =
 
     -- , ( "Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg )
     -- , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
-    -- , ( "Footers", "footers", .footers >> Demo.Footer.view >> Html.map FooterMsg )
     -- , ( "Layout", "layout", .layout >> Demo.Layout.view >> Html.map LayoutMsg )
     -- , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
     -- , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
     -- , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
-    -- , ( "Tables", "tables", .tables >> Demo.Tables.view >> Html.map TablesMsg )
     -- , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
     ]
 
@@ -360,7 +344,7 @@ urlOf : Model -> String
 urlOf model =
     case model.selectedTab of
         Nothing ->
-            ""
+            "#"
         Just selectedTab ->
             "#" ++ (Array.get selectedTab tabUrls |> Maybe.withDefault "")
 

@@ -13,7 +13,6 @@ import Material.Button as Button
 import Material.Grid exposing (..)
 import Material.Elevation as Elevation
 import Material
-import Demo.Page as Page
 
 
 -- MODEL

@@ -5,12 +5,9 @@ import Html exposing (..)
 import Html.Attributes as Html exposing (..)
 import Material.Tooltip as Tooltip
 import Material
-import Demo.Page as Page
-import Demo.Code as Code
 import Material.Button as Button
 import Material.Icon as Icon
 import Material.Options as Options exposing (css)
-import Material.Color as Color
 
 
 -- MODEL
@@ -70,15 +67,14 @@ demoTooltip elements description code =
             , css "align-items" "center"
             , css "justify-content" "center"
             , css "height" "5rem"
-            , Color.background Page.background
             ]
             elements
-        , Code.code [ css "margin" "24px 0" ] code
         ]
 
 
 view : Model -> Html Msg
 view model =
+    div []
     [ Html.p [] [ text "Example use:" ]
     , Options.div
         [ css "display" "flex"
@@ -234,37 +230,4 @@ view model =
         ]
         """
         ]
-    ]
-        |> Page.body2 "Tooltips" srcUrl intro references
-
-
-intro : Html m
-intro =
-    Page.fromMDL "https://getmdl.io/components/index.html#tooltips-section" """
-> The Material Design Lite (MDL) tooltip component is an enhanced version of the
-> standard HTML tooltip as produced by the `title` attribute. A tooltip consists
-> of text and/or an image that clearly communicates additional information about
-> an element when the user hovers over or, in a touch-based UI, touches the
-> element. The MDL tooltip component is pre-styled (colors, fonts, and other
-> settings are contained in material.min.css) to provide a vivid, attractive
-> visual element that displays related but typically non-essential content,
-> e.g., a definition, clarification, or brief instruction.
->
-> Tooltips are a ubiquitous feature of most user interfaces, regardless of a
-> site's content or function. Their design and use is an important factor in the
-> overall user experience. See the tooltip component's Material Design
-> specifications page for details.
-"""
-
-
-srcUrl : String
-srcUrl =
-    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Tooltip.elm"
-
-
-references : List ( String, String )
-references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Tooltip"
-    , Page.mds "https://material.google.com/components/tooltips.html"
-    , Page.mdl "https://www.getmdl.io/components/index.html#tooltips-section"
     ]

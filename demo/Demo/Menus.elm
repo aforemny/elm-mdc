@@ -1,6 +1,5 @@
 module Demo.Menus exposing (model, Model, view, update, Msg(Mdl))
 
-import Demo.Page as Page
 import Html.Attributes as Html exposing (href)
 import Html exposing (Html, text, p, a)
 import Material
@@ -60,7 +59,7 @@ update action model =
 
 view : Model -> Html Msg
 view model =
-    Page.body1_ "Menus" srcUrl intro references []
+    div []
     [ div
       [ css "position" "relative"
       ]
@@ -109,38 +108,4 @@ view model =
           )
         ]
       ]
-    ]
-
-
-intro : Html m
-intro =
-    Page.fromMDL "https://www.getmdl.io/components/#menus-section" """
-
-> The Material Design Lite (MDL) menu component is a user interface element
-> that allows users to select one of a number of options. The selection
-> typically results in an action initiation, a setting change, or other
-> observable effect. Menu options are always presented in sets of two or more,
-> and options may be programmatically enabled or disabled as required. The menu
-> appears when the user is asked to choose among a series of options, and is
-> usually dismissed after the choice is made.
->
-> Menus are an established but non-standardized feature in user interfaces, and
-> allow users to make choices that direct the activity, progress, or
-> characteristics of software. Their design and use is an important factor in
-> the overall user experience. See the menu component's <a href="http://www.google.com/design/spec/components/menus.html">Material Design
-> specifications page</a> for details.
-
-"""
-
-
-srcUrl : String
-srcUrl =
-    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Menus.elm"
-
-
-references : List ( String, String )
-references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Menu"
-    , Page.mds "https://www.google.com/design/spec/components/menus.html"
-    , Page.mdl "https://www.getmdl.io/components/#menus-section"
     ]

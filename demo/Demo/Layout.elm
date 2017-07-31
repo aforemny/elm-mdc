@@ -16,8 +16,6 @@ import Material.Color as Color
 import Material.Button as Button
 import Material.Elevation as Elevation
 import Material.Typography as Typography
-import Demo.Page as Page
-import Demo.Code as Code
 
 
 -- MODEL

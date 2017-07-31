@@ -6,8 +6,6 @@ import Material.Slider as Slider
 import Material
 import Material.Grid as Grid
 import Material.Options as Options exposing (css)
-import Demo.Code as Code
-import Demo.Page as Page
 import Dict exposing (Dict)
 
 

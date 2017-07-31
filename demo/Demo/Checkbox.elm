@@ -1,13 +1,12 @@
-module Demo.Badges exposing (..)
+module Demo.Checkbox exposing (..)
 
+import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Platform.Cmd exposing (Cmd)
-import Material.Helpers as Helpers
+import Material.Toggles as Toggles
 import Material
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+-- MODEL
 
 
 type alias Model =
@@ -21,6 +20,10 @@ model =
     }
 
 
+type Msg
+    = Mdl (Material.Msg Msg)
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -28,10 +31,15 @@ update msg model =
             Material.update Mdl msg_ model
 
 
-
 -- VIEW
 
 
 view : Model -> Html Msg
 view model =
-    div [] []
+    div []
+    [ Toggles.checkbox Mdl [0] model.mdl
+      [
+      ]
+      [ text "Switch"
+      ]
+    ]

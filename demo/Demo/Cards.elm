@@ -1,14 +1,11 @@
 module Demo.Cards exposing (model, update, view, Model, Msg)
 
-import Demo.Code as Code
-import Demo.Page as Page
 import Html.Attributes
 import Html.Attributes as Html exposing (..)
 import Html exposing (..)
 import Material
 import Material.Button as Button
 import Material.Card as Card
-import Material.Helpers exposing (map1st, map2nd)
 import Material.Options as Options exposing (cs, css)
 import Platform.Cmd exposing (Cmd, none)
 
@@ -18,22 +15,12 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model =
     { mdl : Material.Model
-    , raised : Int
-    , tab : Int
-    , code1 : Code.Model
-    , code2 : Code.Model
-    , clicks : Int
     }
 
 
 model : Model
 model =
     { mdl = Material.model
-    , raised = -1
-    , tab = 0
-    , code1 = Code.model
-    , code2 = Code.model
-    , clicks = 0
     }
 
 
@@ -43,50 +30,13 @@ model =
 
 type Msg
     = Mdl (Material.Msg Msg)
-    | Raise Int
-    | ShowCode1 String
-    | ShowCode2 String
-    | CodeMsg1 Code.Msg
-    | CodeMsg2 Code.Msg
-    | SetTab Int
-    | Click
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-    case action of
+update msg model =
+    case msg of
         Mdl msg_ ->
             Material.update Mdl msg_ model
-
-        Raise k ->
-            { model | raised = k } ! []
-
-        SetTab k ->
-            { model | tab = k } ! []
-
-        ShowCode1 str ->
-            Code.update (Code.Set str) model.code1
-                |> map1st (\code -> { model | code1 = code })
-                |> map2nd (Cmd.map CodeMsg1)
-
-        ShowCode2 str ->
-            Code.update (Code.Set str) model.code2
-                |> map1st (\code -> { model | code2 = code })
-                |> map2nd (Cmd.map CodeMsg2)
-
-        CodeMsg1 msg_ ->
-            Code.update msg_ model.code1
-                |> map1st (\code -> { model | code1 = code })
-                |> map2nd (Cmd.map CodeMsg1)
-
-        CodeMsg2 msg_ ->
-            Code.update msg_ model.code2
-                |> map1st (\code -> { model | code2 = code })
-                |> map2nd (Cmd.map CodeMsg2)
-
-        Click ->
-            { model | clicks = model.clicks + 1 } ! []
-
 
 
 -- VIEW
@@ -418,55 +368,16 @@ view model =
             ]
                 << List.map (\card -> Html.div [] [ card ])
     in
-    Page.body1_ "Cards"
-        srcUrl
-        intro
-        references
-        []
-        [ demoWrapper
-          [ card0 model
-          , card1 model
-          , card2 model
-          , card3 model
-          , card4 model
-          , card5 model
-          , card6 model
-          , card7 model
-          , card8 model
-          , card9 model
-          , card10 model
-          ]
-        ]
-
-
-intro : Html m
-intro =
-    Page.fromMDL "https://getmdl.io/components/#cards-section" """
-> The Material Design Lite (MDL) card component is a user interface element
-> representing a virtual piece of paper that contains related data — such as a
-> photo, some text, and a link — that are all about a single subject.
->
-> Cards are a convenient means of coherently displaying related content that is
-> composed of different types of objects. They are also well-suited for presenting
-> similar objects whose size or supported actions can vary considerably, like
-> photos with captions of variable length. Cards have a constant width and a
-> variable height, depending on their content.
->
-> Cards are a fairly new feature in user interfaces, and allow users an access
-> point to more complex and detailed information. Their design and use is an
-> important factor in the overall user experience. See the card component's
-> Material Design specifications page for details.
-"""
-
-
-srcUrl : String
-srcUrl =
-    "https://github.com/debois/elm-mdl/blob/master/demo/Demo/Cards.elm"
-
-
-references : List ( String, String )
-references =
-    [ Page.package "http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Card"
-    , Page.mds "https://material.google.com/components/cards.html"
-    , Page.mdl "https://getmdl.io/components/#cards-section"
-    ]
+    demoWrapper
+      [ card0 model
+      , card1 model
+      , card2 model
+      , card3 model
+      , card4 model
+      , card5 model
+      , card6 model
+      , card7 model
+      , card8 model
+      , card9 model
+      , card10 model
+      ]
