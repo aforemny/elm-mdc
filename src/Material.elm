@@ -173,7 +173,6 @@ import Material.Fab as Fab
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
 import Material.Helpers exposing (map1st)
-import Material.Layout as Layout
 import Material.Menu as Menu
 import Material.Msg exposing (Msg(..))
 import Material.Select as Select
@@ -190,8 +189,6 @@ type alias Model =
     , fab : Indexed Fab.Model
     , textfield : Indexed Textfield.Model
     , menu : Indexed Menu.Model
-    --, snackbar : Maybe (Snackbar.Model Int)
-    , layout : Layout.Model
     , toggles : Indexed Toggles.Model
     , tooltip : Indexed Tooltip.Model
     , tabs : Indexed Tabs.Model
@@ -207,8 +204,6 @@ model =
     , fab = Dict.empty
     , textfield = Dict.empty
     , menu = Dict.empty
-    --, snackbar = Nothing
-    , layout = Layout.defaultModel
     , toggles = Dict.empty
     , tooltip = Dict.empty
     , tabs = Dict.empty
@@ -254,9 +249,6 @@ update_ lift msg store =
        SelectMsg idx msg ->
            Select.react (SelectMsg idx >> lift) msg idx store
 
-       LayoutMsg msg ->
-           Layout.react (LayoutMsg >> lift) msg store
-
        TogglesMsg idx msg ->
            Toggles.react lift msg idx store
 
@@ -299,8 +291,7 @@ initialisation.
 subscriptions : (Msg m -> m) -> { model | mdl : Model } -> Sub m
 subscriptions lift model =
     Sub.batch
-        [ Layout.subs lift model.mdl
-        , Menu.subs lift model.mdl
+        [ Menu.subs lift model.mdl
         , Select.subs lift model.mdl
         ]
 
@@ -309,4 +300,4 @@ subscriptions lift model =
 -}
 init : (Msg m -> m) -> Cmd m
 init lift =
-    Layout.sub0 lift
+    Cmd.none

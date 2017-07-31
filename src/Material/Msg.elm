@@ -7,7 +7,6 @@ module Material.Msg
 
 import Material.Internal.Button as Button 
 import Material.Internal.Fab as Fab 
-import Material.Internal.Layout as Layout
 import Material.Internal.Menu as Menu
 import Material.Internal.Select as Select
 import Material.Internal.Tabs as Tabs
@@ -34,7 +33,6 @@ type Msg m
     = ButtonMsg Index Button.Msg
     | FabMsg Index Fab.Msg
     | Dispatch (List m)
-    | LayoutMsg Layout.Msg
     | MenuMsg Index (Menu.Msg m)
     | SelectMsg Index (Select.Msg m)
     | TabsMsg Index (Tabs.Msg m)

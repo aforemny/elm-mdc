@@ -1,4 +1,4 @@
-module Material.Grid
+module Material.GridList
     exposing
         ( view
         , headerCaption

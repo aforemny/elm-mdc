@@ -9,8 +9,8 @@ import Demo.Selects
 import Demo.Chips
 import Demo.Dialog
 import Demo.Elevation
-import Demo.Grid
-import Demo.Layout
+import Demo.GridList
+import Demo.LayoutGrid
 import Demo.Lists
 import Demo.Loading
 import Demo.Menus
@@ -31,7 +31,6 @@ import Html.Lazy
 import Material
 import Material.Helpers exposing (pure, lift, map1st, map2nd)
 import Material.Icon as Icon
-import Material.Layout as Layout
 import Material.Menu as Menu
 import Material.Select as Select
 import Material.Options as Options exposing (styled, css, when)
@@ -54,7 +53,7 @@ type alias Model =
     , selects : Demo.Selects.Model
     , fabs : Demo.Fabs.Model
     , badges : Demo.Badges.Model
-    , layout : Demo.Layout.Model
+    , layoutGrid : Demo.LayoutGrid.Model
     , menus : Demo.Menus.Model
     , textfields : Demo.Textfields.Model
     , theme : Demo.Theme.Model
@@ -84,7 +83,7 @@ model =
     , selects = Demo.Selects.model
     , fabs = Demo.Fabs.model
     , badges = Demo.Badges.model
-    , layout = Demo.Layout.model
+    , layoutGrid = Demo.LayoutGrid.model
     , menus = Demo.Menus.model
     , textfields = Demo.Textfields.model
     , theme = Demo.Theme.model
@@ -118,7 +117,7 @@ type Msg
     | BadgesMsg Demo.Badges.Msg
     | ButtonsMsg Demo.Buttons.Msg
     | FabsMsg Demo.Fabs.Msg
-    | LayoutMsg Demo.Layout.Msg
+    | LayoutGridMsg Demo.LayoutGrid.Msg
     | MenusMsg Demo.Menus.Msg
     | TextfieldMsg Demo.Textfields.Msg
     | SelectMsg Demo.Selects.Msg
@@ -176,8 +175,8 @@ update msg model =
           BadgesMsg a ->
               lift .badges (\m x -> { m | badges = x }) BadgesMsg Demo.Badges.update a model
 
-          LayoutMsg a ->
-              lift .layout (\m x -> { m | layout = x }) LayoutMsg Demo.Layout.update a model
+          LayoutGridMsg a ->
+              lift .layoutGrid (\m x -> { m | layoutGrid = x }) LayoutGridMsg Demo.LayoutGrid.update a model
 
           MenusMsg a ->
               lift .menus (\m x -> { m | menus = x }) MenusMsg Demo.Menus.update a model
@@ -246,7 +245,8 @@ tabs =
     , ( "Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg )
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
     , ( "Floating action button", "fab", .fabs >> Demo.Fabs.view >> Html.map FabsMsg )
-    , ( "Grid list", "grid-list", \_ -> Demo.Grid.view )
+    , ( "Grid list", "grid-list", always Demo.GridList.view )
+    , ( "Layout grid", "layout-grid", .layoutGrid >> Demo.LayoutGrid.view >> Html.map LayoutGridMsg )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
     , ( "Select", "select", .selects >> Demo.Selects.view >> Html.map SelectMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
@@ -258,7 +258,6 @@ tabs =
 
     -- , ( "Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg )
     -- , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
-    -- , ( "Layout", "layout", .layout >> Demo.Layout.view >> Html.map LayoutMsg )
     -- , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
     -- , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
     -- , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
@@ -400,16 +399,7 @@ main =
         { delta2url = delta2url
         , location2messages = location2messages
         , init =
-            ( { model
-                | mdl =
-                    Layout.setTabsWidth 2124 model.mdl
-                    {- elm gives us no way to measure the actual width of tabs. We
-                       hardwire it. If you add a tab, remember to update this. Find the
-                       new value using:
-
-                       document.getElementsByClassName("mdl-layout__tab-bar")[0].scrollWidth
-                    -}
-              }
+            ( model
             , Material.init Mdl
             )
         , view = view

@@ -1,7 +1,7 @@
-module Demo.Grid exposing (view)
+module Demo.GridList exposing (view)
 
 import Html exposing (Html, text)
-import Material.Grid as GridList
+import Material.GridList as GridList
 import Material.Options exposing (styled, css, cs)
 
 
