@@ -1,89 +1,54 @@
-module Material.Ripple exposing (..)
+module Material.Ripple exposing
+    ( Model
+    , defaultModel
+    , Msg
+    , update
+    , bounded
+    , unbounded
+    , accent
+    , primary
+    , react
+    )
 
+import Dict
 import DOM
-import Html.Attributes exposing (..)
-import Html.Events
+import Html.Attributes as Html
 import Html exposing (..)
-import Json.Decode as Json exposing (field, at)
-import Material.Helpers exposing (effect, pure, cssTransitionStep)
-import Material.Options as Options
-import Material.Internal.Ripple exposing (Msg(..), DOMState)
+import Json.Decode as Json exposing (Decoder, field, at)
+import Material.Component as Component exposing (Indexed)
+import Material.Internal.Options as Internal exposing (Property)
+import Material.Internal.Ripple exposing (Msg(..), Geometry, defaultGeometry)
+import Material.Msg exposing (Index)
+import Material.Options as Options exposing (styled, cs, css, when)
 import Platform.Cmd exposing (Cmd, none)
 
 
 -- MODEL
 
 
-type alias Metrics =
-    { rect : DOM.Rectangle
-    , x : Float
-    , y : Float
-    }
-
-
-type Animation
-    = Frame Int
-      -- There is only 0 and 1.
-    | Inert
-
-
 type alias Model =
-    { animation : Animation
-    , metrics : Maybe Metrics
-    , ignoringMouseDown : Bool
+    { focus : Bool
+    , activated : Bool
+    , geometry : Geometry
     }
 
 
+defaultModel : Model
+defaultModel =
+    { focus = False
+    , activated = False
+    , geometry = defaultGeometry
+    }
+
+
+-- TODO: rename model to defaultModel
 model : Model
 model =
-    { animation = Inert
-    , metrics = Nothing
-    , ignoringMouseDown = False
-    }
+    defaultModel
 
 
 
 -- ACTION, UPDATE
-
-
-type alias DOMState
-    = Material.Internal.Ripple.DOMState
-
-
-geometryDecoder : Json.Decoder DOMState
-geometryDecoder =
-    Json.map6 DOMState
-        (field "currentTarget" DOM.boundingClientRect)
-        (Json.maybe (field "clientX" Json.float))
-        (Json.maybe (field "clientY" Json.float))
-        (Json.maybe (at [ "touches", "0", "clientX" ] Json.float))
-        (Json.maybe (at [ "touches", "0", "clientY" ] Json.float))
-        (field "type" Json.string)
-
-
-computeMetrics : DOMState -> Maybe Metrics
-computeMetrics g =
-    let
-        rect =
-            g.rect
-
-        set x y =
-            ( x - rect.left, y - rect.top ) |> Just
-    in
-        (case ( g.clientX, g.clientY, g.touchX, g.touchY ) of
-            ( Just 0.0, Just 0.0, _, _ ) ->
-                ( rect.width / 2.0, rect.height / 2.0 ) |> Just
-
-            ( Just x, Just y, _, _ ) ->
-                set x y
-
-            ( _, _, Just x, Just y ) ->
-                set x y
-
-            _ ->
-                Nothing
-        )
-            |> Maybe.map (\( x, y ) -> Metrics rect x y)
 
 
 type alias Msg
@@ -91,145 +56,229 @@ type alias Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-    case action of
-        Down domState ->
-            if domState.type_ == "mousedown" && model.ignoringMouseDown then
-                { model | ignoringMouseDown = False } |> pure
-            else
-                { model
-                    | animation = Frame 0
-                    , metrics = computeMetrics domState
-                    , ignoringMouseDown =
-                        if domState.type_ == "touchstart" then
-                            True
-                        else
-                            model.ignoringMouseDown
-                }
-                    |> effect (cssTransitionStep Tick)
+update msg model =
+    case msg of
 
-        {- Issuing Tick immediately does not cause a CSS transition.
-           Presumably, the principled way to proceed is to use
-           elm-lang/animation-frame; but it's not entirely clear to me exactly
-           how to do that in a way that'll be sufficiently convenient for
-           end-users.
-        -}
-        Up ->
-            { model | animation = Inert } |> pure
+        Focus geometry ->
+            { model
+                | focus = True
+                , geometry =
+                    if model.activated then
+                        model.geometry
+                    else
+                        geometry
+            }
+                ! []
 
-        Tick ->
-            -- An `Up` might overtake the delayed `Tick`.
-            if model.animation == Frame 0 then
-                { model | animation = Frame 1 } |> pure
-            else
-                pure model
+        Blur ->
+            { model
+                | focus = False
+            }
+                ! []
 
+        Activate geometry ->
+            { model
+                | activated = True
+                , geometry = geometry
+            }
+                ! []
+
+        Deactivate ->
+            { model
+                | activated = False
+                , focus = False
+            }
+                ! []
 
 
 -- VIEW
 
 
-downOn : String -> Attribute Msg
-downOn =
-    downOn_ identity
+bounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> (Options.Property c m, Html m)
+bounded lift_ index store =
+    view False lift_ index store
 
 
-downOn_ : (Msg -> m) -> String -> Attribute m
-downOn_ f name =
-    Html.Events.on name (Json.map (Down >> f) geometryDecoder)
+unbounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> (Options.Property c m, Html m)
+unbounded lift_ index store =
+    view True lift_ index store
 
 
-down : (Msg -> m) -> String -> Options.Property c m
-down f name =
-    Options.on name (Json.map (Down >> f) geometryDecoder)
+accent : Property c m
+accent =
+    cs "mdc-ripple-surface--accent"
 
 
-up : (Msg -> m) -> String -> Options.Property c m
-up f name =
-    Options.on name (Json.succeed (f Up))
+primary : Property c m
+primary =
+    cs "mdc-ripple-surface--primary"
 
 
-upOn : String -> Attribute Msg
-upOn =
-    upOn_ identity
-
-
-upOn_ : (Msg -> m) -> String -> Attribute m
-upOn_ f name =
-    Html.Events.on name (Json.succeed (f Up))
-
-
-styles : Metrics -> Int -> List ( String, String )
-styles m frame =
+{-| TODO
+-}
+view : Bool -> (Material.Msg.Msg m -> m) -> Index -> Store s -> (Options.Property c m, Html m)
+view isUnbounded lift_ index store =
     let
-        scale =
-            if frame == 0 then
-                "scale(0.0001, 0.0001)"
+        lift =
+            lift_ << Material.Msg.RippleMsg index
+
+        geometry =
+            Debug.log "geometry" model.geometry
+
+        surfaceWidth =
+            toString geometry.frame.width ++ "px"
+
+        surfaceHeight =
+            toString geometry.frame.height ++ "px"
+
+        fgSize =
+            toString initialSize ++ "px"
+
+        surfaceDiameter =
+            sqrt ((geometry.frame.width^2) + (geometry.frame.height^2))
+
+        maxRadius =
+            surfaceDiameter + 10
+
+        fgScale =
+            toString (maxRadius / initialSize)
+
+        maxDimension =
+            Basics.max geometry.frame.width geometry.frame.height
+
+        initialSize =
+            maxDimension * 0.6
+
+        startPoint =
+            if wasActivatedByPointer && not isUnbounded then
+                { x = geometry.event.pageX - geometry.frame.left - (initialSize / 2)
+                , y = geometry.event.pageY - geometry.frame.top - (initialSize / 2)
+                }
             else
-                ""
+                { x = (geometry.frame.width - initialSize) / 2
+                , y = (geometry.frame.height - initialSize) / 2
+                }
 
-        toPx k =
-            (toString (round k)) ++ "px"
+        endPoint =
+            { x = (geometry.frame.width - initialSize) / 2
+            , y = (geometry.frame.height - initialSize) / 2
+            }
 
-        offset =
-            "translate(" ++ toPx m.x ++ ", " ++ toPx m.y ++ ")"
+        translateStart =
+            toString startPoint.x ++ "px, " ++ toString startPoint.y ++ "px"
 
-        transformString =
-            "translate(-50%, -50%) " ++ offset ++ scale
+        translateEnd =
+            toString endPoint.x ++ "px, " ++ toString endPoint.y ++ "px"
 
-        r =
-            m.rect
+        wasActivatedByPointer =
+            List.member geometry.event.type_
+            [ "mousedown"
+            , "touchstart"
+            , "pointerdown"
+            ]
 
-        rippleSize =
-            sqrt (r.width * r.width + r.height * r.height) * 2.0 + 2.0 |> toPx
+        top =
+            toString startPoint.y ++ "px"
+
+        left =
+            toString startPoint.x ++ "px"
+
+        summary =
+          Internal.collect ()
+          ( List.concat
+            [ [ Internal.variable "--mdc-ripple-surface-width" surfaceWidth
+              , Internal.variable "--mdc-ripple-surface-height" surfaceHeight
+              , Internal.variable "--mdc-ripple-fg-size" fgSize
+              , Internal.variable "--mdc-ripple-fg-scale" fgScale
+              ]
+            , if isUnbounded then
+                  [ Internal.variable "--mdc-ripple-top" top
+                  , Internal.variable "--mdc-ripple-left" left
+                  ]
+              else
+                  [ Internal.variable "--mdc-ripple-fg-translate-start" translateStart
+                  , Internal.variable "--mdc-ripple-fg-translate-end" translateEnd
+                  ]
+            ]
+          )
+
+        (selector, styleNode) =
+            Internal.cssVariables summary
+
+        model =
+            Maybe.withDefault defaultModel (Dict.get index store.ripple)
     in
-        [ ( "width", rippleSize )
-        , ( "height", rippleSize )
-        , ( "-webkit-transform", transformString )
-        , ( "-ms-transform", transformString )
-        , ( "transform", transformString )
+    (
+      Options.many
+      [ Options.on "focus" (Json.map (Focus >> lift) (decodeGeometry "focus"))
+      , Options.on "blur" (Json.succeed (lift Blur))
+      , Options.on "keydown" (Json.map (Activate >> lift) (decodeGeometry "keydown"))
+      , Options.on "keyup" (Json.succeed (lift Deactivate))
+      , Options.on "mousedown" (Json.map (Activate >> lift) (decodeGeometry "mousedown"))
+      , Options.on "mouseup" (Json.succeed (lift Deactivate))
+      , Options.on "pointerdown" (Json.map (Activate >> lift) (decodeGeometry "pointerdown"))
+      , Options.on "pointerup" (Json.succeed (lift Deactivate))
+      , Options.on "touchstart" (Json.map (Activate >> lift) (decodeGeometry "touchstart"))
+      , Options.on "touchend" (Json.succeed (lift Deactivate))
+
+      , cs "mdc-ripple-surface"
+      , cs "mdc-ripple-upgraded"
+      , Options.attribute (Html.tabindex 0)
+
+      , when isUnbounded << Options.many <|
+        [ cs "mdc-ripple-upgraded--unbounded"
+        , css "overflow" "visible"
+        , Options.data "data-mdc-ripple-is-unbounded" ""
         ]
 
+      , when model.activated << Options.many <|
+        [ cs "mdc-ripple-upgraded--background-active-fill"
+        , cs "mdc-ripple-upgraded--foreground-activation"
+        ]
 
-{-| Add handlers yourself as attrs.
--}
-view_ : List (Attribute Msg) -> Model -> Html Msg
-view_ attrs model =
-    let
-        styling =
-            case ( model.metrics, model.animation ) of
-                ( Just metrics, Frame frame ) ->
-                    styles metrics frame
+      , when model.focus <|
+        cs "mdc-ripple-upgraded--background-focused"
 
-                ( Just metrics, Inert ) ->
-                    styles metrics 1
+      , -- CSS variable hack selector:
+        cs selector
+      ]
 
-                -- Hack.
-                _ ->
-                    []
-    in
-        span
-            attrs
-            [ span
-                [ classList
-                    [ ( "mdc-ripple", True )
-                    , ( "is-animating", model.animation /= Frame 0 )
-                    , ( "is-visible", model.animation /= Inert )
-                    ]
-                , style styling
-                ]
-                []
-            ]
+    , styleNode
+    )
 
 
-view : List (Attribute Msg) -> Model -> Html Msg
-view =
-    view_
-        << flip List.append
-            [ upOn "mouseup"
-            , upOn "mouseleave"
-            , upOn "touchend"
-            , upOn "blur"
-            , downOn "mousedown"
-            , downOn "touchstart"
-            ]
+type alias Store s =
+    { s | ripple : Indexed Model
+    }
+
+
+( get, set ) =
+    Component.indexed .ripple (\x y -> { y | ripple = x }) defaultModel
+
+
+react : (Material.Msg.Msg m -> m) -> Msg -> Index -> Store s -> ( Maybe (Store s), Cmd m )
+react =
+    Component.react get set Material.Msg.RippleMsg (Component.generalise update)
+
+
+decodeGeometry : String -> Decoder Geometry
+decodeGeometry type_ =
+    Json.map3
+        (\isSurfaceDisabled event frame ->
+            { isSurfaceDisabled = isSurfaceDisabled
+            , event = event
+            , frame = frame
+            }
+        )
+        ( DOM.target <|
+          Json.oneOf
+          [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
+          , Json.succeed False
+          ]
+        )
+        ( Json.map2 (\pageX pageY -> { type_ = type_, pageX = pageX, pageY = pageY })
+              (Json.at [ "pageX" ] Json.float)
+              (Json.at [ "pageY" ] Json.float)
+        )
+        ( DOM.target DOM.boundingClientRect
+        )

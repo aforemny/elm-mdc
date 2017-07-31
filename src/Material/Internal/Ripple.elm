@@ -1,20 +1,26 @@
-module Material.Internal.Ripple exposing (Msg(..), DOMState)
+module Material.Internal.Ripple exposing (Msg(..), Geometry, defaultGeometry)
 
 
-import DOM
+import DOM exposing (Rectangle)
 
 
 type Msg
-    = Down DOMState
-    | Up
-    | Tick
+    = Focus Geometry
+    | Blur
+    | Activate Geometry
+    | Deactivate
 
 
-type alias DOMState =
-    { rect : DOM.Rectangle
-    , clientX : Maybe Float
-    , clientY : Maybe Float
-    , touchX : Maybe Float
-    , touchY : Maybe Float
-    , type_ : String
+type alias Geometry =
+    { isSurfaceDisabled : Bool
+    , event : { type_ : String, pageX : Float, pageY : Float }
+    , frame : Rectangle
+    }
+
+
+defaultGeometry : Geometry
+defaultGeometry =
+    { isSurfaceDisabled = False
+    , event = { type_ = "", pageX = 0, pageY = 0 }
+    , frame = { width = 0, height = 0, left = 0, top = 0 }
     }

@@ -180,6 +180,7 @@ import Material.Tabs as Tabs
 import Material.Textfield as Textfield
 import Material.Toggles as Toggles
 import Material.Tooltip as Tooltip
+import Material.Ripple as Ripple
 
 
 {-| Model encompassing all Material components.
@@ -193,6 +194,7 @@ type alias Model =
     , tooltip : Indexed Tooltip.Model
     , tabs : Indexed Tabs.Model
     , select : Indexed Select.Model
+    , ripple : Indexed Ripple.Model
     }
 
 
@@ -208,6 +210,7 @@ model =
     , tooltip = Dict.empty
     , tabs = Dict.empty
     , select = Dict.empty
+    , ripple = Dict.empty
     }
 
 
@@ -257,6 +260,9 @@ update_ lift msg store =
 
        TabsMsg idx msg ->
            Tabs.react (TabsMsg idx >> lift) msg idx store
+
+       RippleMsg idx msg ->
+           Ripple.react lift msg idx store
 
        Dispatch msgs -> 
            (Nothing, Dispatch.forward msgs)

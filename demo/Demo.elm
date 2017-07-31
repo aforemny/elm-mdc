@@ -14,6 +14,7 @@ import Demo.LayoutGrid
 import Demo.Lists
 import Demo.Loading
 import Demo.Menus
+import Demo.Ripple
 import Demo.Slider
 import Demo.Snackbar
 import Demo.Startpage
@@ -39,6 +40,9 @@ import Navigation
 import Platform.Cmd exposing (..)
 import RouteUrl as Routing
 import String
+
+
+-- PORTS
 
 
 port scrollTop : () -> Cmd msg
@@ -69,6 +73,7 @@ type alias Model =
     , lists : Demo.Lists.Model
     , dialog : Demo.Dialog.Model
     , elevation : Demo.Elevation.Model
+    , ripple : Demo.Ripple.Model
     , chips : Demo.Chips.Model
     , selectedTab : Maybe Int
     , transparentHeader : Bool
@@ -99,6 +104,7 @@ model =
     , lists = Demo.Lists.model
     , dialog = Demo.Dialog.model
     , elevation = Demo.Elevation.model
+    , ripple = Demo.Ripple.model
     , chips = Demo.Chips.model
     , selectedTab = Nothing
     , transparentHeader = False
@@ -134,6 +140,7 @@ type Msg
     | ListsMsg Demo.Lists.Msg
     | DialogMsg Demo.Dialog.Msg
     | ElevationMsg Demo.Elevation.Msg
+    | RippleMsg Demo.Ripple.Msg
     | ChipMsg Demo.Chips.Msg
     | ToggleHeader
     | ToggleLog
@@ -226,6 +233,9 @@ update msg model =
           ElevationMsg a ->
               lift .elevation (\m x -> { m | elevation = x }) ElevationMsg Demo.Elevation.update a model
 
+          RippleMsg a ->
+              lift .ripple (\m x -> { m | ripple = x }) RippleMsg Demo.Ripple.update a model
+
           ChipMsg a ->
               lift .chips (\m x -> { m | chips = x }) ChipMsg Demo.Chips.update a model
 
@@ -248,6 +258,7 @@ tabs =
     , ( "Grid list", "grid-list", always Demo.GridList.view )
     , ( "Layout grid", "layout-grid", .layoutGrid >> Demo.LayoutGrid.view >> Html.map LayoutGridMsg )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
+    , ( "Ripple", "ripple", .ripple >> Demo.Ripple.view >> Html.map RippleMsg )
     , ( "Select", "select", .selects >> Demo.Selects.view >> Html.map SelectMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
     , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )

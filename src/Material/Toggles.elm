@@ -67,7 +67,6 @@ import Material.Msg
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
-import Material.Ripple as Ripple
 import Svg exposing (path)
 import Svg.Attributes as Svg
 
@@ -77,8 +76,7 @@ import Svg.Attributes as Svg
 {-| Component model.
 -}
 type alias Model =
-    { ripple : Ripple.Model
-    , isFocused : Bool
+    { isFocused : Bool
     }
 
 
@@ -86,8 +84,7 @@ type alias Model =
 -}
 defaultModel : Model
 defaultModel =
-    { ripple = Ripple.model
-    , isFocused = False
+    { isFocused = False
     }
 
 
@@ -106,11 +103,6 @@ type alias Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
     case action of
-        Ripple rip ->
-            Ripple.update rip model.ripple
-                |> map1st (\r -> { model | ripple = r })
-                |> map2nd (Cmd.map Ripple)
-
         SetFocus focus ->
             ( { model | isFocused = focus }, Cmd.none )
 
@@ -192,18 +184,7 @@ top lift kind model summary elems =
             , Internal.on1 "blur" lift (SetFocus False)
             , Internal.attribute <| blurOn "mouseup"
             ]
-            (List.concat
-                [ elems
-                , if cfg.ripple then
-                    [ Html.map (Ripple >> lift) <|
-                        Ripple.view
-                            [ class "mdc-switch__ripple-container mdc-js-ripple-effect mdc-ripple--center" ]
-                            model.ripple
-                    ]
-                  else
-                    []
-                ]
-            )
+            elems
 
 
 {-| Component view (checkbox).

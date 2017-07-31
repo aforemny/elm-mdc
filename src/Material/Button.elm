@@ -86,7 +86,7 @@ import Material.Internal.Button exposing (Msg)
 import Material.Internal.Options as Internal
 import Material.Msg
 import Material.Options as Options exposing (cs, css, when)
-import Material.Ripple as Ripple
+
 
 -- MODEL
 
@@ -94,14 +94,14 @@ import Material.Ripple as Ripple
 {-|
 -}
 type alias Model =
-    Ripple.Model
+    {}
 
 
 {-|
 -}
 defaultModel : Model
 defaultModel =
-    Ripple.model
+    {}
 
 
 
@@ -116,8 +116,9 @@ type alias Msg =
 {-| Component update.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action =
-    Ripple.update action
+update action model =
+    model ! []
+    -- Ripple.update action
 
 
 
@@ -243,20 +244,10 @@ blurAndForward event =
 {-| Component view function.
 -}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options html =
+view lift model options =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
-
-        listeners =
-            Options.many
-                [ Ripple.down lift "mousedown"
-                , Ripple.down lift "touchstart"
-                , Ripple.up lift "touchcancel"
-                , Ripple.up lift "mouseup"
-                , Ripple.up lift "blur"
-                , Ripple.up lift "mouseleave"
-                ]
     in
         Internal.apply summary
             (if config.link /= Nothing then Html.a else Html.button)
@@ -264,7 +255,6 @@ view lift model options html =
             , cs "mdc-js-button"
             , cs "mdc-js-ripple-effect" |> when summary.config.ripple
             , css "box-sizing" "border-box"
-            , listeners
             , Internal.attribute (Html.Attributes.href (Maybe.withDefault "" config.link) )
                 |> when ((config.link /= Nothing) && not config.disabled)
             , Internal.attribute (Html.Attributes.disabled True)
@@ -276,18 +266,6 @@ view lift model options html =
             , Helpers.blurOn "mouseleave"
             , Helpers.blurOn "touchend"
             ]
-            (if config.ripple then
-                List.concat
-                    [ html
-                    , [ Html.map lift <|
-                            Ripple.view_
-                                [ class "mdc-button__ripple-container" ]
-                                model
-                      ]
-                    ]
-             else
-                html
-            )
 
 
 {-| From the
@@ -419,12 +397,13 @@ icon =
 -- COMPONENT
 
 
+-- TODO: eliminate Store
 type alias Store s =
     { s | button : Indexed Model }
 
 
 ( get, set ) =
-    Component.indexed .button (\x y -> { y | button = x }) Ripple.model
+    Component.indexed .button (\x y -> { y | button = x }) {}
 
 
 {-| Component react function (update variant). Internal use only.
@@ -452,7 +431,7 @@ indicated in `Material` and a user message `PollMsg`.
 render :
     (Material.Msg.Msg m -> m)
     -> Index
-    -> { a | button : Indexed Ripple.Model }
+    -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m

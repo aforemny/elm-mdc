@@ -13,6 +13,7 @@ import Material.Internal.Tabs as Tabs
 import Material.Internal.Textfield as Textfield
 import Material.Internal.Toggles as Toggles
 import Material.Internal.Tooltip as Tooltip
+import Material.Internal.Ripple as Ripple
 
 
 {-| Type of indices. An index has to be `comparable`
@@ -39,3 +40,4 @@ type Msg m
     | TextfieldMsg Index Textfield.Msg
     | TogglesMsg Index Toggles.Msg
     | TooltipMsg Index Tooltip.Msg
+    | RippleMsg Index Ripple.Msg
