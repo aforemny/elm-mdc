@@ -2,6 +2,7 @@ port module Main exposing (..)
 
 import Array exposing (Array)
 import Demo.Badges
+import Demo.Fabs
 import Demo.Buttons
 import Demo.Cards
 import Demo.Chips
@@ -48,6 +49,7 @@ port scrollTop : () -> Cmd msg
 type alias Model =
     { mdl : Material.Model
     , buttons : Demo.Buttons.Model
+    , fabs : Demo.Fabs.Model
     , badges : Demo.Badges.Model
     , layout : Demo.Layout.Model
     , menus : Demo.Menus.Model
@@ -76,6 +78,7 @@ model : Model
 model =
     { mdl = Material.model
     , buttons = Demo.Buttons.model
+    , fabs = Demo.Fabs.model
     , badges = Demo.Badges.model
     , layout = Demo.Layout.model
     , menus = Demo.Menus.model
@@ -110,6 +113,7 @@ type Msg
     | Mdl (Material.Msg Msg)
     | BadgesMsg Demo.Badges.Msg
     | ButtonsMsg Demo.Buttons.Msg
+    | FabsMsg Demo.Fabs.Msg
     | LayoutMsg Demo.Layout.Msg
     | MenusMsg Demo.Menus.Msg
     | TextfieldMsg Demo.Textfields.Msg
@@ -160,6 +164,9 @@ update msg model =
 
           ButtonsMsg a ->
               lift .buttons (\m x -> { m | buttons = x }) ButtonsMsg Demo.Buttons.update a model
+
+          FabsMsg a ->
+              lift .fabs (\m x -> { m | fabs = x }) FabsMsg Demo.Fabs.update a model
 
           BadgesMsg a ->
               lift .badges (\m x -> { m | badges = x }) BadgesMsg Demo.Badges.update a model
@@ -230,6 +237,7 @@ tabs =
     , ( "Checkbox", "checkbox", .checkbox >> Demo.Checkbox.view >> Html.map CheckboxMsg )
     , ( "Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg )
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
+    , ( "Floating action button", "fab", .fabs >> Demo.Fabs.view >> Html.map FabsMsg )
     , ( "Grid list", "grid-list", \_ -> Demo.Grid.view )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )

@@ -169,6 +169,7 @@ module as a starting point
 
 import Dict
 import Material.Button as Button
+import Material.Fab as Fab
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
 import Material.Helpers exposing (map1st)
@@ -186,6 +187,7 @@ import Material.Tooltip as Tooltip
 -}
 type alias Model = 
     { button : Indexed Button.Model
+    , fab : Indexed Fab.Model
     , textfield : Indexed Textfield.Model
     , menu : Indexed Menu.Model
     --, snackbar : Maybe (Snackbar.Model Int)
@@ -202,6 +204,7 @@ type alias Model =
 model : Model
 model = 
     { button = Dict.empty
+    , fab = Dict.empty
     , textfield = Dict.empty
     , menu = Dict.empty
     --, snackbar = Nothing
@@ -238,6 +241,9 @@ update_ lift msg store =
     case msg of
        ButtonMsg idx msg ->
            Button.react lift msg idx store
+
+       FabMsg idx msg ->
+           Fab.react lift msg idx store
 
        TextfieldMsg idx msg ->
            Textfield.react lift msg idx store
