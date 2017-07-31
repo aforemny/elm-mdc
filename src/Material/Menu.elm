@@ -191,17 +191,25 @@ ul node options items =
 attach : (Material.Msg.Msg m -> m) -> Index -> Options.Property c m
 attach lift idx =
     Options.many
-    [ Options.on "click" (Json.map (Toggle >> Material.Msg.MenuMsg idx >> lift) decodeGeometry)
+    [ Options.on "click" (Json.map (Toggle >> Material.Msg.MenuMsg idx >> lift) decodeGeometryOnButton)
+    ]
+
+
+connect : (Material.Internal.Menu.Msg m -> m) -> Options.Property c m
+connect lift =
+    Options.many
+    [ Options.on "click" (Json.map (Toggle >> lift) decodeGeometryOnButton)
     ]
 
 
 -- ACTION, UPDATE
 
 
-{-| Component action.
--}
-type alias Msg m
-    = Material.Internal.Menu.Msg m
+-- TODO (select can't have this):
+--{-| Component action.
+---}
+--type alias Msg m
+--    = Material.Internal.Menu.Msg m
 
 
 {-| Component update.
@@ -681,24 +689,7 @@ react lift msg idx store =
         |> map1st (set idx store >> Just)
 
 
-{-| Component render. Below is an example, assuming boilerplate setup as
-indicated in `Material`, and a user message `Select String`.
-
-    Menu.render Mdl [idx] model.mdl
-      [ Menu.topLeft, Menu.ripple ]
-      [ Menu.item
-        [ onSelect Select "Some item" ]
-        [ text "Some item" ]
-      , Menu.item
-        [ onSelect "Another item", Menu.divider ]
-        [ text "Another item" ]
-      , Menu.item
-        [ onSelect "Disabled item", Menu.disabled ]
-        [ text "Disabled item" ]
-      , Menu.item
-        [ onSelect "Yet another item" ]
-        [ text "Yet another item" ]
-      ]
+{-|  TODO
 -}
 render :
     (Material.Msg.Msg m -> m)
@@ -748,19 +739,22 @@ decodeKeyCode : Decoder KeyCode
 decodeKeyCode =
     Html.keyCode
 
+decodeGeometryOnButton : Decoder Geometry
+decodeGeometryOnButton =
+    DOM.target      <| -- "button"
+    DOM.nextSibling <| -- ".mdc-simple-menu"
+    decodeGeometry
+
+
 decodeGeometry : Decoder Geometry
 decodeGeometry =
     Json.map5 Geometry
-    ( DOM.target      <| -- "button"
-      DOM.nextSibling <| -- ".mdc-simple-menu"
-      DOM.childNode 0 <| -- ".mdc-simple-menu__items.mdc-list"
+    ( DOM.childNode 0 <| -- ".mdc-simple-menu__items.mdc-list"
       Json.map2
         (\offsetWidth offsetHeight -> { width = offsetWidth, height = offsetHeight })
         DOM.offsetWidth DOM.offsetHeight
     )
-    ( DOM.target      <| -- "button"
-      DOM.nextSibling <| -- ".mdc-simple-menu"
-      DOM.childNode 0 <| -- ".mdc-simple-menu__items.mdc-list"
+    ( DOM.childNode 0 <| -- ".mdc-simple-menu__items.mdc-list"
       DOM.childNodes  <|
       Json.map2
         (\offsetTop offsetHeight -> { top = offsetTop, height = offsetHeight })
@@ -768,8 +762,7 @@ decodeGeometry =
     )
     ( Json.succeed { isRtl = False } -- TODO: RTL
     )
-    ( ( DOM.target        <| -- "button"
-        DOM.parentElement <| -- ".mdc-menu-anchor"
+    ( ( DOM.parentElement <| -- ".parent"
         DOM.boundingClientRect
       )
       |> Json.map (\rect ->
@@ -790,7 +783,7 @@ decodeGeometry =
             , decoder
             ]
       in
-        DOM.target << traverseToRoot <|
+        traverseToRoot <|
         Json.map2
           (\clientWidth clientHeight -> { width = clientWidth, height = clientHeight })
           DOM.offsetWidth
@@ -809,3 +802,8 @@ rect x y w h =
 toPx : Float -> String
 toPx =
     toString >> flip (++) "px"
+
+
+onSelect : Decoder m -> Property m
+onSelect =
+    Options.on "click"

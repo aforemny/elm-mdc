@@ -301,6 +301,7 @@ subscriptions lift model =
     Sub.batch
         [ Layout.subs lift model.mdl
         , Menu.subs lift model.mdl
+        , Select.subs lift model.mdl
         ]
 
 

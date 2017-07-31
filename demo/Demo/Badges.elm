@@ -2,7 +2,6 @@ module Demo.Badges exposing (..)
 
 import Html exposing (..)
 import Platform.Cmd exposing (Cmd)
-import Material.Helpers as Helpers
 import Material
 
 

@@ -2,15 +2,12 @@ module Demo.Snackbar exposing (model, Model, update, view, Msg)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Keyed as Keyed
 import Array exposing (Array)
 import Time exposing (Time, millisecond)
 import Material.Helpers exposing (map1st, map2nd, delay, pure, cssTransitionStep)
 import Material.Color as Color
 import Material.Options as Options exposing (cs, css, Style, nop)
 import Material.Snackbar as Snackbar
-import Material.Button as Button
-import Material.Grid exposing (..)
 import Material.Elevation as Elevation
 import Material
 

@@ -5,6 +5,7 @@ import Demo.Badges
 import Demo.Fabs
 import Demo.Buttons
 import Demo.Cards
+import Demo.Selects
 import Demo.Chips
 import Demo.Dialog
 import Demo.Elevation
@@ -32,6 +33,7 @@ import Material.Helpers exposing (pure, lift, map1st, map2nd)
 import Material.Icon as Icon
 import Material.Layout as Layout
 import Material.Menu as Menu
+import Material.Select as Select
 import Material.Options as Options exposing (styled, css, when)
 import Material.Toolbar as Toolbar
 import Navigation
@@ -49,6 +51,7 @@ port scrollTop : () -> Cmd msg
 type alias Model =
     { mdl : Material.Model
     , buttons : Demo.Buttons.Model
+    , selects : Demo.Selects.Model
     , fabs : Demo.Fabs.Model
     , badges : Demo.Badges.Model
     , layout : Demo.Layout.Model
@@ -78,6 +81,7 @@ model : Model
 model =
     { mdl = Material.model
     , buttons = Demo.Buttons.model
+    , selects = Demo.Selects.model
     , fabs = Demo.Fabs.model
     , badges = Demo.Badges.model
     , layout = Demo.Layout.model
@@ -117,6 +121,7 @@ type Msg
     | LayoutMsg Demo.Layout.Msg
     | MenusMsg Demo.Menus.Msg
     | TextfieldMsg Demo.Textfields.Msg
+    | SelectMsg Demo.Selects.Msg
     | ThemeMsg Demo.Theme.Msg
     | SnackbarMsg Demo.Snackbar.Msg
     | CheckboxMsg Demo.Checkbox.Msg
@@ -225,6 +230,9 @@ update msg model =
           ChipMsg a ->
               lift .chips (\m x -> { m | chips = x }) ChipMsg Demo.Chips.update a model
 
+          SelectMsg a ->
+              lift .selects (\m x -> { m | selects = x }) SelectMsg Demo.Selects.update a model
+
 
 
 -- VIEW
@@ -240,6 +248,7 @@ tabs =
     , ( "Floating action button", "fab", .fabs >> Demo.Fabs.view >> Html.map FabsMsg )
     , ( "Grid list", "grid-list", \_ -> Demo.Grid.view )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
+    , ( "Select", "select", .selects >> Demo.Selects.view >> Html.map SelectMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
     , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
     , ( "Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg )
@@ -407,8 +416,8 @@ main =
         , subscriptions =
             \model ->
                 Sub.batch
-                    -- TODO: why do I need them {Menu,Select}.subs here?
                     [ Sub.map MenusMsg (Menu.subs Demo.Menus.Mdl model.menus.mdl)
+                    , Sub.map SelectMsg (Select.subs Demo.Selects.Mdl model.selects.mdl)
                     , Material.subscriptions Mdl model
                     ]
         , update = update

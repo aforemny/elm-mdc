@@ -7,6 +7,8 @@ module Material.Theme exposing
     , accentBg
     , background
 
+    , dark
+
     , textPrimaryOnPrimary
     , textSecondaryOnPrimary
     , textHintOnPrimary
@@ -224,3 +226,8 @@ textIconOnDark options icon =
     )
     [ text icon
     ]
+
+
+dark : Style m
+dark =
+    cs "mdc-theme--dark"

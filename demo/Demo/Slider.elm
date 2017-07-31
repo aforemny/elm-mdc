@@ -2,10 +2,7 @@ module Demo.Slider exposing (..)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Material.Slider as Slider
 import Material
-import Material.Grid as Grid
-import Material.Options as Options exposing (css)
 import Dict exposing (Dict)
 
 

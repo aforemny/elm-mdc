@@ -4,18 +4,9 @@ import Dom.Scroll
 import Task
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
-import Html.Events
-import String
-import Array exposing (Array)
-import Material.Toggles as Toggles
-import Material.Options as Options exposing (css, cs, when)
 import Material
 import Material.Layout as Layout
-import Material.Grid as Grid
 import Material.Color as Color
-import Material.Button as Button
-import Material.Elevation as Elevation
-import Material.Typography as Typography
 
 
 -- MODEL

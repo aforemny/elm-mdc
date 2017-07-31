@@ -78,7 +78,7 @@ type alias Msg m
 -}
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
-    case Debug.log "msg" msg of
+    case msg of
 
         Dispatch msgs ->
             model ! [ Dispatch.forward msgs ]
@@ -127,7 +127,7 @@ update lift msg model =
                     geometry.scrollFrame.width
 
                 translationOffset =
-                    Debug.log "concealedTabs" concealedTabs
+                    concealedTabs
                     |> List.foldl
                        (\(_, tab) (accum, translationOffset) ->
                              let
