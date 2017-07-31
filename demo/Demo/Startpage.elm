@@ -37,9 +37,7 @@ view selectTab =
             , title = "Drawer", subtitle = "Permanent drawer below toolbar" }
           , { index = 4, icon = "ic_shadow_24px.svg", wip = False
             , title = "Elevation", subtitle = "Shadow for different elevations" }
-          , { index = 5, icon = "ic_shadow_24px.svg", wip = False
-            , title = "Floating action buttons", subtitle = "The primary action in an application" }
-          , { index = -1, icon = "ic_button_24px.svg", wip = True
+          , { index = 5, icon = "ic_button_24px.svg", wip = False
             , title = "Floating action button", subtitle = "The primary action in an application" }
           , { index = 6, icon = "ic_card_24px.svg", wip = False
             , title = "Grid list", subtitle = "2D grid layouts" }
