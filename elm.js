@@ -23475,63 +23475,59 @@ var _debois$elm_mdl$Demo_Startpage$view = function (selectTab) {
 																_0: {index: 4, icon: 'ic_shadow_24px.svg', wip: false, title: 'Elevation', subtitle: 'Shadow for different elevations'},
 																_1: {
 																	ctor: '::',
-																	_0: {index: 5, icon: 'ic_shadow_24px.svg', wip: false, title: 'Floating action buttons', subtitle: 'The primary action in an application'},
+																	_0: {index: 5, icon: 'ic_button_24px.svg', wip: false, title: 'Floating action button', subtitle: 'The primary action in an application'},
 																	_1: {
 																		ctor: '::',
-																		_0: {index: -1, icon: 'ic_button_24px.svg', wip: true, title: 'Floating action button', subtitle: 'The primary action in an application'},
+																		_0: {index: 6, icon: 'ic_card_24px.svg', wip: false, title: 'Grid list', subtitle: '2D grid layouts'},
 																		_1: {
 																			ctor: '::',
-																			_0: {index: 6, icon: 'ic_card_24px.svg', wip: false, title: 'Grid list', subtitle: '2D grid layouts'},
+																			_0: {index: -1, icon: 'ic_component_24px.svg', wip: true, title: 'Icon toggle', subtitle: 'Toggling icon states'},
 																			_1: {
 																				ctor: '::',
-																				_0: {index: -1, icon: 'ic_component_24px.svg', wip: true, title: 'Icon toggle', subtitle: 'Toggling icon states'},
+																				_0: {index: -1, icon: 'ic_card_24px.svg', wip: true, title: 'Layout grid', subtitle: 'Grid and gutter support'},
 																				_1: {
 																					ctor: '::',
-																					_0: {index: -1, icon: 'ic_card_24px.svg', wip: true, title: 'Layout grid', subtitle: 'Grid and gutter support'},
+																					_0: {index: -1, icon: 'ic_progress_activity.svg', wip: true, title: 'Linear progress', subtitle: 'Fills from 0% to 100%, represented by bars'},
 																					_1: {
 																						ctor: '::',
-																						_0: {index: -1, icon: 'ic_progress_activity.svg', wip: true, title: 'Linear progress', subtitle: 'Fills from 0% to 100%, represented by bars'},
+																						_0: {index: 7, icon: 'ic_list_24px.svg', wip: false, title: 'List', subtitle: 'Item layouts in lists'},
 																						_1: {
 																							ctor: '::',
-																							_0: {index: 7, icon: 'ic_list_24px.svg', wip: false, title: 'List', subtitle: 'Item layouts in lists'},
+																							_0: {index: -1, icon: 'ic_radio_button_24px.svg', wip: true, title: 'Radio buttons', subtitle: 'Single selection controls'},
 																							_1: {
 																								ctor: '::',
-																								_0: {index: -1, icon: 'ic_radio_button_24px.svg', wip: true, title: 'Radio buttons', subtitle: 'Single selection controls'},
+																								_0: {index: -1, icon: 'ic_ripple_24px.svg', wip: true, title: 'Ripple', subtitle: 'Touch ripple'},
 																								_1: {
 																									ctor: '::',
-																									_0: {index: -1, icon: 'ic_ripple_24px.svg', wip: true, title: 'Ripple', subtitle: 'Touch ripple'},
+																									_0: {index: 8, icon: 'ic_menu_24px.svg', wip: false, title: 'Select', subtitle: 'Popover selection menus'},
 																									_1: {
 																										ctor: '::',
-																										_0: {index: 8, icon: 'ic_menu_24px.svg', wip: false, title: 'Select', subtitle: 'Popover selection menus'},
+																										_0: {index: 9, icon: 'ic_menu_24px.svg', wip: false, title: 'Simple Menu', subtitle: 'Pop over menus'},
 																										_1: {
 																											ctor: '::',
-																											_0: {index: 9, icon: 'ic_menu_24px.svg', wip: false, title: 'Simple Menu', subtitle: 'Pop over menus'},
+																											_0: {index: -1, icon: 'slider.svg', wip: true, title: 'Slider', subtitle: 'Range Controls'},
 																											_1: {
 																												ctor: '::',
-																												_0: {index: -1, icon: 'slider.svg', wip: true, title: 'Slider', subtitle: 'Range Controls'},
+																												_0: {index: -1, icon: 'ic_toast_24px.svg', wip: true, title: 'Snackbar', subtitle: 'Transient messages'},
 																												_1: {
 																													ctor: '::',
-																													_0: {index: -1, icon: 'ic_toast_24px.svg', wip: true, title: 'Snackbar', subtitle: 'Transient messages'},
+																													_0: {index: -1, icon: 'ic_switch_24px.svg', wip: true, title: 'Switch', subtitle: 'On off switches'},
 																													_1: {
 																														ctor: '::',
-																														_0: {index: -1, icon: 'ic_switch_24px.svg', wip: true, title: 'Switch', subtitle: 'On off switches'},
+																														_0: {index: 10, icon: 'ic_tabs_24px.svg', wip: false, title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
 																														_1: {
 																															ctor: '::',
-																															_0: {index: 10, icon: 'ic_tabs_24px.svg', wip: false, title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
+																															_0: {index: 11, icon: 'ic_text_field_24px.svg', wip: false, title: 'Text field', subtitle: 'Single and multiline text fields'},
 																															_1: {
 																																ctor: '::',
-																																_0: {index: 11, icon: 'ic_text_field_24px.svg', wip: false, title: 'Text field', subtitle: 'Single and multiline text fields'},
+																																_0: {index: 12, icon: 'ic_theme_24px.svg', wip: false, title: 'Theme', subtitle: 'Using primary and accent colors'},
 																																_1: {
 																																	ctor: '::',
-																																	_0: {index: 12, icon: 'ic_theme_24px.svg', wip: false, title: 'Theme', subtitle: 'Using primary and accent colors'},
+																																	_0: {index: 13, icon: 'ic_toolbar_24px.svg', wip: false, title: 'Toolbar', subtitle: 'Header and footers'},
 																																	_1: {
 																																		ctor: '::',
-																																		_0: {index: 13, icon: 'ic_toolbar_24px.svg', wip: false, title: 'Toolbar', subtitle: 'Header and footers'},
-																																		_1: {
-																																			ctor: '::',
-																																			_0: {index: 14, icon: 'ic_typography_24px.svg', wip: false, title: 'Typography', subtitle: 'Type hierarchy'},
-																																			_1: {ctor: '[]'}
-																																		}
+																																		_0: {index: 14, icon: 'ic_typography_24px.svg', wip: false, title: 'Typography', subtitle: 'Type hierarchy'},
+																																		_1: {ctor: '[]'}
 																																	}
 																																}
 																															}
