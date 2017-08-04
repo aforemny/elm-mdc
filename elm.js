@@ -9335,7 +9335,7 @@ var _debois$elm_mdl$Material_Internal_Textfield$Input = function (a) {
 var _debois$elm_mdl$Material_Internal_Textfield$Focus = {ctor: 'Focus'};
 var _debois$elm_mdl$Material_Internal_Textfield$Blur = {ctor: 'Blur'};
 
-var _debois$elm_mdl$Material_Internal_Toggles$SetFocus = function (a) {
+var _debois$elm_mdl$Material_Internal_Checkbox$SetFocus = function (a) {
 	return {ctor: 'SetFocus', _0: a};
 };
 
@@ -9361,9 +9361,9 @@ var _debois$elm_mdl$Material_Msg$TooltipMsg = F2(
 	function (a, b) {
 		return {ctor: 'TooltipMsg', _0: a, _1: b};
 	});
-var _debois$elm_mdl$Material_Msg$TogglesMsg = F2(
+var _debois$elm_mdl$Material_Msg$CheckboxMsg = F2(
 	function (a, b) {
-		return {ctor: 'TogglesMsg', _0: a, _1: b};
+		return {ctor: 'CheckboxMsg', _0: a, _1: b};
 	});
 var _debois$elm_mdl$Material_Msg$TextfieldMsg = F2(
 	function (a, b) {
@@ -14605,115 +14605,72 @@ var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$a
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
 
-var _debois$elm_mdl$Material_Toggles$top = F5(
-	function (lift, kind, model, summary, elems) {
-		var cfg = summary.config;
+var _debois$elm_mdl$Material_Checkbox$indeterminate = _debois$elm_mdl$Material_Internal_Options$input(
+	{
+		ctor: '::',
+		_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+			A2(
+				_elm_lang$html$Html_Attributes$property,
+				'indeterminate',
+				_elm_lang$core$Json_Encode$bool(true))),
+		_1: {ctor: '[]'}
+	});
+var _debois$elm_mdl$Material_Checkbox$checked = _debois$elm_mdl$Material_Options$cs('mdc-checkbox--checked');
+var _debois$elm_mdl$Material_Checkbox$disabled = _debois$elm_mdl$Material_Options$many(
+	{
+		ctor: '::',
+		_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox--disabled'),
+		_1: {
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Internal_Options$input(
+				{
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+						_elm_lang$html$Html_Attributes$disabled(true)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
+var _debois$elm_mdl$Material_Checkbox$defaultConfig = {
+	input: {ctor: '[]'},
+	container: {ctor: '[]'}
+};
+var _debois$elm_mdl$Material_Checkbox$view = F4(
+	function (lift, model, options, _p0) {
+		var _p1 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Checkbox$defaultConfig, options);
+		var summary = _p1;
+		var config = _p1.config;
 		return A4(
 			_debois$elm_mdl$Material_Internal_Options$applyContainer,
 			summary,
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs(
-					A2(_elm_lang$core$Basics_ops['++'], 'mdc-', kind)),
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox'),
 				_1: {
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs(
-						A2(_elm_lang$core$Basics_ops['++'], 'mdc-js-', kind)),
+					_0: A3(
+						_debois$elm_mdl$Material_Internal_Options$on1,
+						'focus',
+						lift,
+						_debois$elm_mdl$Material_Internal_Checkbox$SetFocus(true)),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_Options$when,
-							cfg.ripple,
-							_debois$elm_mdl$Material_Options$cs('mdc-js-ripple-effect')),
+						_0: A3(
+							_debois$elm_mdl$Material_Internal_Options$on1,
+							'blur',
+							lift,
+							_debois$elm_mdl$Material_Internal_Checkbox$SetFocus(false)),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Options$when,
-								cfg.ripple,
-								_debois$elm_mdl$Material_Options$cs('mdc-js-ripple-effect--ignore-events')),
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Options$cs('is-upgraded'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Options$when,
-										cfg.value,
-										_debois$elm_mdl$Material_Options$cs('is-checked')),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Options$when,
-											model.isFocused,
-											_debois$elm_mdl$Material_Options$cs('is-focused')),
-										_1: {
-											ctor: '::',
-											_0: A3(
-												_debois$elm_mdl$Material_Internal_Options$on1,
-												'focus',
-												lift,
-												_debois$elm_mdl$Material_Internal_Toggles$SetFocus(true)),
-											_1: {
-												ctor: '::',
-												_0: A3(
-													_debois$elm_mdl$Material_Internal_Options$on1,
-													'blur',
-													lift,
-													_debois$elm_mdl$Material_Internal_Toggles$SetFocus(false)),
-												_1: {
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-														_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}
-								}
-							}
+							_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+								_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
+							_1: {ctor: '[]'}
 						}
 					}
 				}
 			},
-			elems);
-	});
-var _debois$elm_mdl$Material_Toggles$group = function (_p0) {
-	return _debois$elm_mdl$Material_Options$attribute(
-		_elm_lang$html$Html_Attributes$name(_p0));
-};
-var _debois$elm_mdl$Material_Toggles$value = function (_p1) {
-	return _debois$elm_mdl$Material_Internal_Options$option(
-		F2(
-			function (b, options) {
-				return _elm_lang$core$Native_Utils.update(
-					options,
-					{value: b});
-			})(_p1));
-};
-var _debois$elm_mdl$Material_Toggles$disabled = _debois$elm_mdl$Material_Internal_Options$attribute(
-	_elm_lang$html$Html_Attributes$disabled(true));
-var _debois$elm_mdl$Material_Toggles$ripple = _debois$elm_mdl$Material_Internal_Options$option(
-	function (options) {
-		return _elm_lang$core$Native_Utils.update(
-			options,
-			{ripple: true});
-	});
-var _debois$elm_mdl$Material_Toggles$defaultConfig = {
-	value: false,
-	ripple: false,
-	input: {ctor: '[]'},
-	container: {ctor: '[]'}
-};
-var _debois$elm_mdl$Material_Toggles$viewCheckbox = F4(
-	function (lift, model, config, elems) {
-		var summary = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Toggles$defaultConfig, config);
-		return A5(
-			_debois$elm_mdl$Material_Toggles$top,
-			lift,
-			'checkbox',
-			model,
-			summary,
 			{
 				ctor: '::',
 				_0: A4(
@@ -14727,12 +14684,7 @@ var _debois$elm_mdl$Material_Toggles$viewCheckbox = F4(
 							ctor: '::',
 							_0: _debois$elm_mdl$Material_Internal_Options$attribute(
 								_elm_lang$html$Html_Attributes$type_('checkbox')),
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-									_elm_lang$html$Html_Attributes$checked(summary.config.value)),
-								_1: {ctor: '[]'}
-							}
+							_1: {ctor: '[]'}
 						}
 					},
 					{ctor: '[]'}),
@@ -14801,154 +14753,9 @@ var _debois$elm_mdl$Material_Toggles$viewCheckbox = F4(
 				}
 			});
 	});
-var _debois$elm_mdl$Material_Toggles$viewSwitch = F4(
-	function (lift, model, config, elems) {
-		var summary = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Toggles$defaultConfig, config);
-		return A5(
-			_debois$elm_mdl$Material_Toggles$top,
-			lift,
-			'switch',
-			model,
-			summary,
-			{
-				ctor: '::',
-				_0: A4(
-					_debois$elm_mdl$Material_Internal_Options$applyInput,
-					summary,
-					_elm_lang$html$Html$input,
-					{
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Options$cs('mdc-switch__input'),
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-								_elm_lang$html$Html_Attributes$type_('checkbox')),
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-									_elm_lang$html$Html_Attributes$checked(summary.config.value)),
-								_1: {ctor: '[]'}
-							}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$span,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('mdc-switch__label'),
-							_1: {ctor: '[]'}
-						},
-						elems),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('mdc-switch__track'),
-								_1: {ctor: '[]'}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('mdc-switch__thumb'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$span,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('mdc-switch__focus-helper'),
-											_1: {ctor: '[]'}
-										},
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			});
-	});
-var _debois$elm_mdl$Material_Toggles$viewRadio = F4(
-	function (lift, model, config, elems) {
-		var summary = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Toggles$defaultConfig, config);
-		return A5(
-			_debois$elm_mdl$Material_Toggles$top,
-			lift,
-			'radio',
-			model,
-			summary,
-			{
-				ctor: '::',
-				_0: A4(
-					_debois$elm_mdl$Material_Internal_Options$applyInput,
-					summary,
-					_elm_lang$html$Html$input,
-					{
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Options$cs('mdc-radio__button'),
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Options$attribute(
-								_elm_lang$html$Html_Attributes$type_('radio')),
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Options$attribute(
-									_elm_lang$html$Html_Attributes$checked(summary.config.value)),
-								_1: {ctor: '[]'}
-							}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$span,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('mdc-radio__label'),
-							_1: {ctor: '[]'}
-						},
-						elems),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$span,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('mdc-radio__outer-circle'),
-								_1: {ctor: '[]'}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$span,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('mdc-radio__inner-circle'),
-									_1: {ctor: '[]'}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			});
-	});
-var _debois$elm_mdl$Material_Toggles$update = F2(
-	function (action, model) {
-		var _p2 = action;
+var _debois$elm_mdl$Material_Checkbox$update = F2(
+	function (msg, model) {
+		var _p2 = msg;
 		return {
 			ctor: '_Tuple2',
 			_0: _elm_lang$core$Native_Utils.update(
@@ -14957,8 +14764,8 @@ var _debois$elm_mdl$Material_Toggles$update = F2(
 			_1: _elm_lang$core$Platform_Cmd$none
 		};
 	});
-var _debois$elm_mdl$Material_Toggles$defaultModel = {isFocused: false};
-var _debois$elm_mdl$Material_Toggles$_p3 = A3(
+var _debois$elm_mdl$Material_Checkbox$defaultModel = {isFocused: false};
+var _debois$elm_mdl$Material_Checkbox$_p3 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
 		return _.toggles;
@@ -14969,24 +14776,22 @@ var _debois$elm_mdl$Material_Toggles$_p3 = A3(
 				y,
 				{toggles: x});
 		}),
-	_debois$elm_mdl$Material_Toggles$defaultModel);
-var _debois$elm_mdl$Material_Toggles$get = _debois$elm_mdl$Material_Toggles$_p3._0;
-var _debois$elm_mdl$Material_Toggles$set = _debois$elm_mdl$Material_Toggles$_p3._1;
-var _debois$elm_mdl$Material_Toggles$react = A4(
+	_debois$elm_mdl$Material_Checkbox$defaultModel);
+var _debois$elm_mdl$Material_Checkbox$get = _debois$elm_mdl$Material_Checkbox$_p3._0;
+var _debois$elm_mdl$Material_Checkbox$set = _debois$elm_mdl$Material_Checkbox$_p3._1;
+var _debois$elm_mdl$Material_Checkbox$react = A4(
 	_debois$elm_mdl$Material_Component$react,
-	_debois$elm_mdl$Material_Toggles$get,
-	_debois$elm_mdl$Material_Toggles$set,
-	_debois$elm_mdl$Material_Msg$TogglesMsg,
-	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Toggles$update));
-var _debois$elm_mdl$Material_Toggles$checkbox = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Toggles$get, _debois$elm_mdl$Material_Toggles$viewCheckbox, _debois$elm_mdl$Material_Msg$TogglesMsg);
-var _debois$elm_mdl$Material_Toggles$switch = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Toggles$get, _debois$elm_mdl$Material_Toggles$viewSwitch, _debois$elm_mdl$Material_Msg$TogglesMsg);
-var _debois$elm_mdl$Material_Toggles$radio = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Toggles$get, _debois$elm_mdl$Material_Toggles$viewRadio, _debois$elm_mdl$Material_Msg$TogglesMsg);
-var _debois$elm_mdl$Material_Toggles$Model = function (a) {
+	_debois$elm_mdl$Material_Checkbox$get,
+	_debois$elm_mdl$Material_Checkbox$set,
+	_debois$elm_mdl$Material_Msg$CheckboxMsg,
+	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Checkbox$update));
+var _debois$elm_mdl$Material_Checkbox$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Checkbox$get, _debois$elm_mdl$Material_Checkbox$view, _debois$elm_mdl$Material_Msg$CheckboxMsg);
+var _debois$elm_mdl$Material_Checkbox$Model = function (a) {
 	return {isFocused: a};
 };
-var _debois$elm_mdl$Material_Toggles$Config = F4(
-	function (a, b, c, d) {
-		return {value: a, ripple: b, input: c, container: d};
+var _debois$elm_mdl$Material_Checkbox$Config = F2(
+	function (a, b) {
+		return {input: a, container: b};
 	});
 
 var _debois$elm_mdl$Material_Tooltip$onLeave = function (lift) {
@@ -15363,8 +15168,8 @@ var _debois$elm_mdl$Material$update_ = F3(
 					_p0._1,
 					_p6,
 					store);
-			case 'TogglesMsg':
-				return A4(_debois$elm_mdl$Material_Toggles$react, lift, _p0._1, _p0._0, store);
+			case 'CheckboxMsg':
+				return A4(_debois$elm_mdl$Material_Checkbox$react, lift, _p0._1, _p0._0, store);
 			case 'TooltipMsg':
 				return A4(_debois$elm_mdl$Material_Tooltip$react, lift, _p0._1, _p0._0, store);
 			case 'TabsMsg':
@@ -16743,40 +16548,531 @@ var _debois$elm_mdl$Demo_Cards$view = function (model) {
 		});
 };
 
-var _debois$elm_mdl$Demo_Checkbox$model = {mdl: _debois$elm_mdl$Material$model};
-var _debois$elm_mdl$Demo_Checkbox$Model = function (a) {
-	return {mdl: a};
-};
+var _debois$elm_mdl$Material_Theme$dark = _debois$elm_mdl$Material_Options$cs('mdc-theme--dark');
+var _debois$elm_mdl$Material_Theme$textIconOnDark = F2(
+	function (options, icon) {
+		return A2(
+			_debois$elm_mdl$Material_Options$span,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-dark'),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
+					_1: options
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(icon),
+				_1: {ctor: '[]'}
+			});
+	});
+var _debois$elm_mdl$Material_Theme$textDisabledOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-dark');
+var _debois$elm_mdl$Material_Theme$textHintOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-dark');
+var _debois$elm_mdl$Material_Theme$textSecondaryOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-dark');
+var _debois$elm_mdl$Material_Theme$textPrimaryOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-dark');
+var _debois$elm_mdl$Material_Theme$textIconOnLight = F2(
+	function (options, icon) {
+		return A2(
+			_debois$elm_mdl$Material_Options$span,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-light'),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
+					_1: options
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(icon),
+				_1: {ctor: '[]'}
+			});
+	});
+var _debois$elm_mdl$Material_Theme$textDisabledOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-light');
+var _debois$elm_mdl$Material_Theme$textHintOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-light');
+var _debois$elm_mdl$Material_Theme$textSecondaryOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-light');
+var _debois$elm_mdl$Material_Theme$textPrimaryOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-light');
+var _debois$elm_mdl$Material_Theme$textIconOnBackground = F2(
+	function (options, icon) {
+		return A2(
+			_debois$elm_mdl$Material_Options$span,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-background'),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
+					_1: options
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(icon),
+				_1: {ctor: '[]'}
+			});
+	});
+var _debois$elm_mdl$Material_Theme$textDisabledOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-background');
+var _debois$elm_mdl$Material_Theme$textHintOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-background');
+var _debois$elm_mdl$Material_Theme$textSecondaryOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-background');
+var _debois$elm_mdl$Material_Theme$textPrimaryOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-background');
+var _debois$elm_mdl$Material_Theme$textIconOnAccent = F2(
+	function (options, icon) {
+		return A2(
+			_debois$elm_mdl$Material_Options$span,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-accent'),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
+					_1: options
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(icon),
+				_1: {ctor: '[]'}
+			});
+	});
+var _debois$elm_mdl$Material_Theme$textDisabledOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-accent');
+var _debois$elm_mdl$Material_Theme$textHintOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-accent');
+var _debois$elm_mdl$Material_Theme$textSecondaryOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-accent');
+var _debois$elm_mdl$Material_Theme$textPrimaryOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-accent');
+var _debois$elm_mdl$Material_Theme$textIconOnPrimary = F2(
+	function (options, icon) {
+		return A2(
+			_debois$elm_mdl$Material_Options$span,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-primary'),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
+					_1: options
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(icon),
+				_1: {ctor: '[]'}
+			});
+	});
+var _debois$elm_mdl$Material_Theme$textDisabledOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-primary');
+var _debois$elm_mdl$Material_Theme$textHintOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-primary');
+var _debois$elm_mdl$Material_Theme$textSecondaryOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-primary');
+var _debois$elm_mdl$Material_Theme$textPrimaryOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-primary');
+var _debois$elm_mdl$Material_Theme$background = _debois$elm_mdl$Material_Options$cs('mdc-theme--background');
+var _debois$elm_mdl$Material_Theme$accentBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--accent-bg');
+var _debois$elm_mdl$Material_Theme$primaryBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary-bg');
+var _debois$elm_mdl$Material_Theme$accent = _debois$elm_mdl$Material_Options$cs('mdc-theme--accent');
+var _debois$elm_mdl$Material_Theme$primary = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary');
+
+var _debois$elm_mdl$Demo_Checkbox$model = {mdl: _debois$elm_mdl$Material$model, rtl: false, alignEnd: false, indeterminate: false, checked0: false, checked1: false, disabled0: false, disabled1: false};
+var _debois$elm_mdl$Demo_Checkbox$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {mdl: a, rtl: b, alignEnd: c, indeterminate: d, checked0: e, checked1: f, disabled0: g, disabled1: h};
+	});
+var _debois$elm_mdl$Demo_Checkbox$ToggleDisabled1 = {ctor: 'ToggleDisabled1'};
+var _debois$elm_mdl$Demo_Checkbox$ToggleDisabled0 = {ctor: 'ToggleDisabled0'};
+var _debois$elm_mdl$Demo_Checkbox$ToggleChecked1 = {ctor: 'ToggleChecked1'};
+var _debois$elm_mdl$Demo_Checkbox$ToggleChecked0 = {ctor: 'ToggleChecked0'};
+var _debois$elm_mdl$Demo_Checkbox$ToggleIndeterminate = {ctor: 'ToggleIndeterminate'};
+var _debois$elm_mdl$Demo_Checkbox$ToggleAlignEnd = {ctor: 'ToggleAlignEnd'};
+var _debois$elm_mdl$Demo_Checkbox$ToggleRtl = {ctor: 'ToggleRtl'};
 var _debois$elm_mdl$Demo_Checkbox$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
 var _debois$elm_mdl$Demo_Checkbox$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Checkbox$Mdl, _p0._0, model);
+		switch (_p0.ctor) {
+			case 'Mdl':
+				return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Checkbox$Mdl, _p0._0, model);
+			case 'ToggleRtl':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{rtl: !model.rtl}),
+					{ctor: '[]'});
+			case 'ToggleAlignEnd':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{alignEnd: !model.alignEnd}),
+					{ctor: '[]'});
+			case 'ToggleIndeterminate':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{indeterminate: !model.indeterminate}),
+					{ctor: '[]'});
+			case 'ToggleChecked0':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{checked0: !model.checked0}),
+					{ctor: '[]'});
+			case 'ToggleChecked1':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{checked1: !model.checked1}),
+					{ctor: '[]'});
+			case 'ToggleDisabled0':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{disabled0: !model.disabled0}),
+					{ctor: '[]'});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{disabled1: !model.disabled1}),
+					{ctor: '[]'});
+		}
 	});
 var _debois$elm_mdl$Demo_Checkbox$view = function (model) {
+	var example = function (options) {
+		return A2(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('example'),
+				_1: {
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+							_1: options
+						}
+					}
+				}
+			});
+	};
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: A5(
-				_debois$elm_mdl$Material_Toggles$checkbox,
-				_debois$elm_mdl$Demo_Checkbox$Mdl,
+			_0: A2(
+				example,
 				{
 					ctor: '::',
-					_0: 0,
+					_0: A2(
+						_debois$elm_mdl$Material_Options$when,
+						model.rtl,
+						_debois$elm_mdl$Material_Options$attribute(
+							A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'))),
 					_1: {ctor: '[]'}
 				},
-				model.mdl,
-				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Switch'),
-					_1: {ctor: '[]'}
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$h2,
+						{
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Checkbox'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$when,
+										model.alignEnd,
+										_debois$elm_mdl$Material_Options$cs('mdc-form-field--align-end')),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A5(
+									_debois$elm_mdl$Material_Checkbox$render,
+									_debois$elm_mdl$Demo_Checkbox$Mdl,
+									{
+										ctor: '::',
+										_0: 0,
+										_1: {ctor: '[]'}
+									},
+									model.mdl,
+									{
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$when, model.checked0, _debois$elm_mdl$Material_Checkbox$checked),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.indeterminate, _debois$elm_mdl$Material_Checkbox$indeterminate),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled0, _debois$elm_mdl$Material_Checkbox$disabled),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('This is my checkbox'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$span,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(' '),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_debois$elm_mdl$Demo_Checkbox$ToggleIndeterminate),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Make indeterminate'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(' '),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_debois$elm_mdl$Demo_Checkbox$ToggleRtl),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Toggle RTL'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$span,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(' '),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(_debois$elm_mdl$Demo_Checkbox$ToggleAlignEnd),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Toggle Align End'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$span,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(' '),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$button,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onClick(_debois$elm_mdl$Demo_Checkbox$ToggleDisabled0),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Toggle Disabled'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: A2(
+					example,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Theme$dark,
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$h2,
+							{
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Dark Theme'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Checkbox$render,
+										_debois$elm_mdl$Demo_Checkbox$Mdl,
+										{
+											ctor: '::',
+											_0: 1,
+											_1: {ctor: '[]'}
+										},
+										model.mdl,
+										{
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.checked1, _debois$elm_mdl$Material_Checkbox$checked),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled1, _debois$elm_mdl$Material_Checkbox$disabled),
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('This is my checkbox'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$span,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(' '),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_debois$elm_mdl$Demo_Checkbox$ToggleDisabled1),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Toggle Disabled'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 
@@ -22892,128 +23188,6 @@ var _debois$elm_mdl$Material_Typography$display2 = _debois$elm_mdl$Material_Opti
 var _debois$elm_mdl$Material_Typography$display1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display1');
 var _debois$elm_mdl$Material_Typography$typography = _debois$elm_mdl$Material_Options$cs('mdc-typography');
 
-var _debois$elm_mdl$Material_Theme$dark = _debois$elm_mdl$Material_Options$cs('mdc-theme--dark');
-var _debois$elm_mdl$Material_Theme$textIconOnDark = F2(
-	function (options, icon) {
-		return A2(
-			_debois$elm_mdl$Material_Options$span,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-dark'),
-				_1: {
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _debois$elm_mdl$Material_Theme$textDisabledOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-dark');
-var _debois$elm_mdl$Material_Theme$textHintOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-dark');
-var _debois$elm_mdl$Material_Theme$textSecondaryOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-dark');
-var _debois$elm_mdl$Material_Theme$textPrimaryOnDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-dark');
-var _debois$elm_mdl$Material_Theme$textIconOnLight = F2(
-	function (options, icon) {
-		return A2(
-			_debois$elm_mdl$Material_Options$span,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-light'),
-				_1: {
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _debois$elm_mdl$Material_Theme$textDisabledOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-light');
-var _debois$elm_mdl$Material_Theme$textHintOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-light');
-var _debois$elm_mdl$Material_Theme$textSecondaryOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-light');
-var _debois$elm_mdl$Material_Theme$textPrimaryOnLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-light');
-var _debois$elm_mdl$Material_Theme$textIconOnBackground = F2(
-	function (options, icon) {
-		return A2(
-			_debois$elm_mdl$Material_Options$span,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-background'),
-				_1: {
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _debois$elm_mdl$Material_Theme$textDisabledOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-background');
-var _debois$elm_mdl$Material_Theme$textHintOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-background');
-var _debois$elm_mdl$Material_Theme$textSecondaryOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-background');
-var _debois$elm_mdl$Material_Theme$textPrimaryOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-background');
-var _debois$elm_mdl$Material_Theme$textIconOnAccent = F2(
-	function (options, icon) {
-		return A2(
-			_debois$elm_mdl$Material_Options$span,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-accent'),
-				_1: {
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _debois$elm_mdl$Material_Theme$textDisabledOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-accent');
-var _debois$elm_mdl$Material_Theme$textHintOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-accent');
-var _debois$elm_mdl$Material_Theme$textSecondaryOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-accent');
-var _debois$elm_mdl$Material_Theme$textPrimaryOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-accent');
-var _debois$elm_mdl$Material_Theme$textIconOnPrimary = F2(
-	function (options, icon) {
-		return A2(
-			_debois$elm_mdl$Material_Options$span,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-primary'),
-				_1: {
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _debois$elm_mdl$Material_Theme$textDisabledOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-primary');
-var _debois$elm_mdl$Material_Theme$textHintOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-primary');
-var _debois$elm_mdl$Material_Theme$textSecondaryOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-primary');
-var _debois$elm_mdl$Material_Theme$textPrimaryOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-primary');
-var _debois$elm_mdl$Material_Theme$background = _debois$elm_mdl$Material_Options$cs('mdc-theme--background');
-var _debois$elm_mdl$Material_Theme$accentBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--accent-bg');
-var _debois$elm_mdl$Material_Theme$primaryBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary-bg');
-var _debois$elm_mdl$Material_Theme$accent = _debois$elm_mdl$Material_Options$cs('mdc-theme--accent');
-var _debois$elm_mdl$Material_Theme$primary = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary');
-
 var _debois$elm_mdl$Demo_Selects$model = {mdl: _debois$elm_mdl$Material$model, selects: _elm_lang$core$Dict$empty, darkTheme: false, rtl: false, disabled: false};
 var _debois$elm_mdl$Demo_Selects$Model = F5(
 	function (a, b, c, d, e) {
@@ -23261,7 +23435,7 @@ var _debois$elm_mdl$Demo_Selects$view = function (model) {
 							{
 								ctor: '::',
 								_0: A5(
-									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Material_Checkbox$render,
 									_debois$elm_mdl$Demo_Selects$Mdl,
 									{
 										ctor: '::',
@@ -23274,7 +23448,7 @@ var _debois$elm_mdl$Demo_Selects$view = function (model) {
 										_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Selects$ToggleDarkTheme),
 										_1: {
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Toggles$value(model.darkTheme),
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.darkTheme, _debois$elm_mdl$Material_Checkbox$checked),
 											_1: {ctor: '[]'}
 										}
 									},
@@ -23300,7 +23474,7 @@ var _debois$elm_mdl$Demo_Selects$view = function (model) {
 								{
 									ctor: '::',
 									_0: A5(
-										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Material_Checkbox$render,
 										_debois$elm_mdl$Demo_Selects$Mdl,
 										{
 											ctor: '::',
@@ -23313,7 +23487,7 @@ var _debois$elm_mdl$Demo_Selects$view = function (model) {
 											_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Selects$ToggleRtl),
 											_1: {
 												ctor: '::',
-												_0: _debois$elm_mdl$Material_Toggles$value(model.rtl),
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.rtl, _debois$elm_mdl$Material_Checkbox$checked),
 												_1: {ctor: '[]'}
 											}
 										},
@@ -23339,7 +23513,7 @@ var _debois$elm_mdl$Demo_Selects$view = function (model) {
 									{
 										ctor: '::',
 										_0: A5(
-											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Material_Checkbox$render,
 											_debois$elm_mdl$Demo_Selects$Mdl,
 											{
 												ctor: '::',
@@ -23352,7 +23526,7 @@ var _debois$elm_mdl$Demo_Selects$view = function (model) {
 												_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Selects$ToggleDisabled),
 												_1: {
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Toggles$value(model.disabled),
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Checkbox$checked),
 													_1: {ctor: '[]'}
 												}
 											},
@@ -23598,7 +23772,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = function (model) {
 							{
 								ctor: '::',
 								_0: A5(
-									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Material_Checkbox$render,
 									_debois$elm_mdl$Demo_Snackbar$Mdl,
 									{
 										ctor: '::',
@@ -23614,7 +23788,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = function (model) {
 											_elm_lang$core$Json_Decode$succeed(_debois$elm_mdl$Demo_Snackbar$ToggleMultiline)),
 										_1: {
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Toggles$value(model.multiline),
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.multiline, _debois$elm_mdl$Material_Checkbox$checked),
 											_1: {ctor: '[]'}
 										}
 									},
@@ -23651,7 +23825,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = function (model) {
 									{
 										ctor: '::',
 										_0: A5(
-											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Material_Checkbox$render,
 											_debois$elm_mdl$Demo_Snackbar$Mdl,
 											{
 												ctor: '::',
@@ -23667,10 +23841,10 @@ var _debois$elm_mdl$Demo_Snackbar$view = function (model) {
 													_elm_lang$core$Json_Decode$succeed(_debois$elm_mdl$Demo_Snackbar$ToggleActionOnBottom)),
 												_1: {
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Toggles$value(model.actionOnBottom),
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.actionOnBottom, _debois$elm_mdl$Material_Checkbox$checked),
 													_1: {
 														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$when, !model.multiline, _debois$elm_mdl$Material_Toggles$disabled),
+														_0: A2(_debois$elm_mdl$Material_Options$when, !model.multiline, _debois$elm_mdl$Material_Checkbox$disabled),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -23708,7 +23882,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = function (model) {
 											{
 												ctor: '::',
 												_0: A5(
-													_debois$elm_mdl$Material_Toggles$checkbox,
+													_debois$elm_mdl$Material_Checkbox$render,
 													_debois$elm_mdl$Demo_Snackbar$Mdl,
 													{
 														ctor: '::',
@@ -23724,7 +23898,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = function (model) {
 															_elm_lang$core$Json_Decode$succeed(_debois$elm_mdl$Demo_Snackbar$ToggleDismissOnAction)),
 														_1: {
 															ctor: '::',
-															_0: _debois$elm_mdl$Material_Toggles$value(model.dismissOnAction),
+															_0: A2(_debois$elm_mdl$Material_Options$when, model.dismissOnAction, _debois$elm_mdl$Material_Checkbox$checked),
 															_1: {ctor: '[]'}
 														}
 													},
@@ -26306,7 +26480,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 							{
 								ctor: '::',
 								_0: A5(
-									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Material_Checkbox$render,
 									_debois$elm_mdl$Demo_Textfields$Mdl,
 									{
 										ctor: '::',
@@ -26346,7 +26520,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 								{
 									ctor: '::',
 									_0: A5(
-										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Material_Checkbox$render,
 										_debois$elm_mdl$Demo_Textfields$Mdl,
 										{
 											ctor: '::',
@@ -26386,7 +26560,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 									{
 										ctor: '::',
 										_0: A5(
-											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Material_Checkbox$render,
 											_debois$elm_mdl$Demo_Textfields$Mdl,
 											{
 												ctor: '::',
@@ -26426,7 +26600,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 										{
 											ctor: '::',
 											_0: A5(
-												_debois$elm_mdl$Material_Toggles$checkbox,
+												_debois$elm_mdl$Material_Checkbox$render,
 												_debois$elm_mdl$Demo_Textfields$Mdl,
 												{
 													ctor: '::',
@@ -26466,7 +26640,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 											{
 												ctor: '::',
 												_0: A5(
-													_debois$elm_mdl$Material_Toggles$checkbox,
+													_debois$elm_mdl$Material_Checkbox$render,
 													_debois$elm_mdl$Demo_Textfields$Mdl,
 													{
 														ctor: '::',
@@ -26506,7 +26680,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 												{
 													ctor: '::',
 													_0: A5(
-														_debois$elm_mdl$Material_Toggles$checkbox,
+														_debois$elm_mdl$Material_Checkbox$render,
 														_debois$elm_mdl$Demo_Textfields$Mdl,
 														{
 															ctor: '::',
@@ -26546,7 +26720,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 													{
 														ctor: '::',
 														_0: A5(
-															_debois$elm_mdl$Material_Toggles$checkbox,
+															_debois$elm_mdl$Material_Checkbox$render,
 															_debois$elm_mdl$Demo_Textfields$Mdl,
 															{
 																ctor: '::',
@@ -26564,7 +26738,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 																	lift(_debois$elm_mdl$Demo_Textfields$TogglePersistent)),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_debois$elm_mdl$Material_Options$when, !model.helperText, _debois$elm_mdl$Material_Toggles$disabled),
+																	_0: A2(_debois$elm_mdl$Material_Options$when, !model.helperText, _debois$elm_mdl$Material_Checkbox$disabled),
 																	_1: {ctor: '[]'}
 																}
 															},
@@ -26590,7 +26764,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 														{
 															ctor: '::',
 															_0: A5(
-																_debois$elm_mdl$Material_Toggles$checkbox,
+																_debois$elm_mdl$Material_Checkbox$render,
 																_debois$elm_mdl$Demo_Textfields$Mdl,
 																{
 																	ctor: '::',
@@ -26608,7 +26782,7 @@ var _debois$elm_mdl$Demo_Textfields$example0 = F4(
 																		lift(_debois$elm_mdl$Demo_Textfields$ToggleValidationMsg)),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_debois$elm_mdl$Material_Options$when, !model.helperText, _debois$elm_mdl$Material_Toggles$disabled),
+																		_0: A2(_debois$elm_mdl$Material_Options$when, !model.helperText, _debois$elm_mdl$Material_Checkbox$disabled),
 																		_1: {ctor: '[]'}
 																	}
 																},
@@ -26735,7 +26909,7 @@ var _debois$elm_mdl$Demo_Textfields$example2 = F4(
 							{
 								ctor: '::',
 								_0: A5(
-									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Material_Checkbox$render,
 									_debois$elm_mdl$Demo_Textfields$Mdl,
 									{
 										ctor: '::',
@@ -26775,7 +26949,7 @@ var _debois$elm_mdl$Demo_Textfields$example2 = F4(
 								{
 									ctor: '::',
 									_0: A5(
-										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Material_Checkbox$render,
 										_debois$elm_mdl$Demo_Textfields$Mdl,
 										{
 											ctor: '::',
@@ -26815,7 +26989,7 @@ var _debois$elm_mdl$Demo_Textfields$example2 = F4(
 									{
 										ctor: '::',
 										_0: A5(
-											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Material_Checkbox$render,
 											_debois$elm_mdl$Demo_Textfields$Mdl,
 											{
 												ctor: '::',
@@ -26855,7 +27029,7 @@ var _debois$elm_mdl$Demo_Textfields$example2 = F4(
 										{
 											ctor: '::',
 											_0: A5(
-												_debois$elm_mdl$Material_Toggles$checkbox,
+												_debois$elm_mdl$Material_Checkbox$render,
 												_debois$elm_mdl$Demo_Textfields$Mdl,
 												{
 													ctor: '::',
@@ -26981,7 +27155,7 @@ var _debois$elm_mdl$Demo_Textfields$example3 = F4(
 							{
 								ctor: '::',
 								_0: A5(
-									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Material_Checkbox$render,
 									_debois$elm_mdl$Demo_Textfields$Mdl,
 									{
 										ctor: '::',
@@ -27021,7 +27195,7 @@ var _debois$elm_mdl$Demo_Textfields$example3 = F4(
 								{
 									ctor: '::',
 									_0: A5(
-										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Material_Checkbox$render,
 										_debois$elm_mdl$Demo_Textfields$Mdl,
 										{
 											ctor: '::',
@@ -27061,7 +27235,7 @@ var _debois$elm_mdl$Demo_Textfields$example3 = F4(
 									{
 										ctor: '::',
 										_0: A5(
-											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Material_Checkbox$render,
 											_debois$elm_mdl$Demo_Textfields$Mdl,
 											{
 												ctor: '::',
@@ -27101,7 +27275,7 @@ var _debois$elm_mdl$Demo_Textfields$example3 = F4(
 										{
 											ctor: '::',
 											_0: A5(
-												_debois$elm_mdl$Material_Toggles$checkbox,
+												_debois$elm_mdl$Material_Checkbox$render,
 												_debois$elm_mdl$Demo_Textfields$Mdl,
 												{
 													ctor: '::',
@@ -27261,7 +27435,7 @@ var _debois$elm_mdl$Demo_Textfields$example4 = F4(
 							{
 								ctor: '::',
 								_0: A5(
-									_debois$elm_mdl$Material_Toggles$checkbox,
+									_debois$elm_mdl$Material_Checkbox$render,
 									_debois$elm_mdl$Demo_Textfields$Mdl,
 									{
 										ctor: '::',
@@ -27301,7 +27475,7 @@ var _debois$elm_mdl$Demo_Textfields$example4 = F4(
 								{
 									ctor: '::',
 									_0: A5(
-										_debois$elm_mdl$Material_Toggles$checkbox,
+										_debois$elm_mdl$Material_Checkbox$render,
 										_debois$elm_mdl$Demo_Textfields$Mdl,
 										{
 											ctor: '::',
@@ -27341,7 +27515,7 @@ var _debois$elm_mdl$Demo_Textfields$example4 = F4(
 									{
 										ctor: '::',
 										_0: A5(
-											_debois$elm_mdl$Material_Toggles$checkbox,
+											_debois$elm_mdl$Material_Checkbox$render,
 											_debois$elm_mdl$Demo_Textfields$Mdl,
 											{
 												ctor: '::',
@@ -27381,7 +27555,7 @@ var _debois$elm_mdl$Demo_Textfields$example4 = F4(
 										{
 											ctor: '::',
 											_0: A5(
-												_debois$elm_mdl$Material_Toggles$checkbox,
+												_debois$elm_mdl$Material_Checkbox$render,
 												_debois$elm_mdl$Demo_Textfields$Mdl,
 												{
 													ctor: '::',
