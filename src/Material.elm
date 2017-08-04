@@ -169,18 +169,19 @@ module as a starting point
 
 import Dict
 import Material.Button as Button
-import Material.Fab as Fab
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
+import Material.Fab as Fab
 import Material.Helpers exposing (map1st)
 import Material.Menu as Menu
 import Material.Msg exposing (Msg(..))
+import Material.Ripple as Ripple
 import Material.Select as Select
+import Material.Snackbar as Snackbar
 import Material.Tabs as Tabs
 import Material.Textfield as Textfield
 import Material.Toggles as Toggles
 import Material.Tooltip as Tooltip
-import Material.Ripple as Ripple
 
 
 {-| Model encompassing all Material components.
@@ -195,6 +196,7 @@ type alias Model =
     , tabs : Indexed Tabs.Model
     , select : Indexed Select.Model
     , ripple : Indexed Ripple.Model
+    , snackbar : Indexed Snackbar.Model
     }
 
 
@@ -211,6 +213,7 @@ model =
     , tabs = Dict.empty
     , select = Dict.empty
     , ripple = Dict.empty
+    , snackbar = Dict.empty
     }
 
 
@@ -239,6 +242,9 @@ update_ lift msg store =
     case msg of
        ButtonMsg idx msg ->
            Button.react lift msg idx store
+
+       SnackbarMsg idx msg ->
+           Snackbar.react (SnackbarMsg idx >> lift) msg idx store
 
        FabMsg idx msg ->
            Fab.react lift msg idx store

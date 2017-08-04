@@ -48,9 +48,6 @@ update action model =
             Material.update Mdl action_ model
 
         Select index ->
-            let
-                _ = Debug.log "select" index
-            in
             model ! []
 
 

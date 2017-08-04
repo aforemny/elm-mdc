@@ -93,7 +93,7 @@ model =
     , textfields = Demo.Textfields.model
     , theme = Demo.Theme.model
     , checkbox = Demo.Checkbox.model
-    , snackbar = Demo.Snackbar.model
+    , snackbar = Demo.Snackbar.defaultModel
     , loading = Demo.Loading.model
     , tooltip = Demo.Tooltip.model
     , toolbar = Demo.Toolbar.model
@@ -261,6 +261,7 @@ tabs =
     , ( "Ripple", "ripple", .ripple >> Demo.Ripple.view >> Html.map RippleMsg )
     , ( "Select", "select", .selects >> Demo.Selects.view >> Html.map SelectMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
+    , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
     , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
     , ( "Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg )
     , ( "Theme", "theme", .theme >> Demo.Theme.view >> Html.map ThemeMsg )
@@ -271,7 +272,6 @@ tabs =
     -- , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
     -- , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
     -- , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
-    -- , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
     -- , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
     ]
 

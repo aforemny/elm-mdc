@@ -5,10 +5,18 @@ module Material.Snackbar
         , add
         , model
         , toast
-        , snackbar
-        , Msg(..)
+        , snack
         , update
+        , Config
+        , defaultConfig
         , view
+        , Property
+        , Store
+        , render
+        , react
+        , alignStart
+        , alignEnd
+        , onDismiss
         )
 
 {-| From the [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section):
@@ -37,152 +45,151 @@ Snackbar does not have a `render` value. It must be used as a regular TEA
 component.
 -}
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
-import Platform.Cmd exposing (Cmd, none)
-import Time exposing (Time)
+import Dict
+import Html.Attributes as Html
+import Html exposing (Html, text)
+import Material.Component as Component exposing (Indexed)
+import Material.Helpers as Helpers exposing (map1st, delay, cmd)
+import Material.Internal.Options as Internal
+import Material.Internal.Snackbar exposing (Msg(..), Transition(..))
+import Material.Msg exposing (Index)
+import Material.Options as Options exposing (styled, cs, when)
 import Maybe exposing (andThen)
-import Material.Helpers exposing (map2nd, delay, cmd, aria)
+import Platform.Cmd exposing (Cmd)
+import Time exposing (Time)
 
 
 -- MODEL
 
 
-{-| Defines a single snackbar message. Usually, you would use either `toast`
-or `snackbar` to construct `Contents`.
-
- - `message` defines the (text) message displayed
- - `action` defines a label for the action-button in the snackbar. If
-    no action is provided, the snackbar is a message-only toast.
- - `payload` defines the data returned by Snackbar actions for this message.
-   You will usually choose this to be a message of yours for later dispatch,
-   e.g., if your snackbar has an "Undo" action, you would store the
-   corresponding action as the payload.
- - `timeout` is the amount of time the snackbar should be visible
- - `fade` is the duration of the fading animation of the snackbar.
-
-If you are satsified with the default timeout and fade, do not construct
-values of this type yourself; use `snackbar` and `toast` below instead.
+{-| TODO
 -}
-type alias Contents a =
+type alias Contents =
     { message : String
     , action : Maybe String
-    , payload : a
     , timeout : Time
     , fade : Time
+    , multiline : Bool
+    , actionOnBottom : Bool
+    , dismissOnAction : Bool
     }
 
 
 {-| Do not construct this yourself; use `model` below.
 -}
-type alias Model a =
-    { queue : List (Contents a)
-    , state : State a
+type alias Model =
+    { queue : List Contents
+    , state : State
     , seq : Int
     }
 
 
 {-| Default snackbar model.
 -}
-model : Model a
+model : Model
 model =
+    defaultModel
+
+
+defaultModel : Model
+defaultModel =
     { queue = []
     , state = Inert
     , seq = -1
     }
 
 
-{-| Generate toast with given payload and message. Timeout is 2750ms, fade 250ms.
+type alias Msg m =
+    Material.Internal.Snackbar.Msg m
+
+
+{-| Generate toast with given message. Timeout is 2750ms, fade 250ms.
 -}
-toast : a -> String -> Contents a
-toast payload message =
+toast : String -> Contents
+toast message =
     { message = message
     , action = Nothing
-    , payload = payload
     , timeout = 2750
     , fade = 250
+    , multiline = False
+    , actionOnBottom = False
+    , dismissOnAction = True
     }
 
 
-{-| Generate snackbar with given payload, message and label.
+{-| Generate snack with given message and label.
 Timeout is 2750ms, fade 250ms.
 -}
-snackbar : a -> String -> String -> Contents a
-snackbar payload message label =
+snack : String -> String -> Contents
+snack message label =
     { message = message
     , action = Just label
-    , payload = payload
     , timeout = 2750
     , fade = 250
+    , multiline = True
+    , actionOnBottom = False
+    , dismissOnAction = True
     }
-
 
 
 -- SNACKBAR STATE MACHINE
 
 
-type State a
+type alias Transition =
+    Material.Internal.Snackbar.Transition
+
+
+type State
     = Inert
-    | Active (Contents a)
-    | Fading (Contents a)
+    | Active (Contents)
+    | Fading (Contents)
 
 
-type Transition
-    = Timeout
-    | Clicked
-
-
-next : Model a -> Cmd Transition -> Cmd (Msg a)
+next : Model -> Cmd Transition -> Cmd (Msg m)
 next model =
     Cmd.map (Move model.seq)
 
 
-move : Transition -> Model a -> ( Model a, Cmd (Msg a) )
+move : Transition -> Model -> ( Model, Cmd (Msg m) )
 move transition model =
     case ( model.state, transition ) of
         ( Inert, Timeout ) ->
             tryDequeue model
 
         ( Active contents, Clicked ) ->
-            ( { model | state = Fading contents }
-            , Cmd.batch
-                [ delay contents.fade Timeout |> next model
-                , Click contents.payload |> cmd
-                ]
-            )
+            { model
+                | state = Fading contents
+            }
+                ! [ delay contents.fade Timeout |> next model ]
 
         ( Active contents, Timeout ) ->
-            ( { model | state = Fading contents }
-            , Cmd.batch
-                [ delay contents.fade Timeout |> next model
-                ]
-            )
+            { model
+                | state = Fading contents
+            }
+                ! [ delay contents.fade Timeout |> next model ]
 
         ( Fading contents, Timeout ) ->
-            ( { model | state = Inert }
-            , Cmd.batch
-                [ cmd Timeout |> next model
-                , End contents.payload |> cmd
-                ]
-            )
+            { model
+                | state = Inert
+            }
+                ! [ cmd Timeout |> next model ]
 
         _ ->
-            ( model, none )
+            model ! []
 
 
 
 -- NOTIFICATION QUEUE
 
 
-enqueue : Contents a -> Model a -> Model a
+enqueue : Contents -> Model -> Model
 enqueue contents model =
     { model
         | queue = List.append model.queue [ contents ]
     }
 
 
-tryDequeue : Model a -> ( Model a, Cmd (Msg a) )
+tryDequeue : Model -> ( Model, Cmd (Msg m) )
 tryDequeue model =
     case ( model.state, model.queue ) of
         ( Inert, c :: cs ) ->
@@ -193,48 +200,44 @@ tryDequeue model =
               }
             , Cmd.batch
                 [ delay c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
-                , cmd (Begin c.payload)
                 ]
             )
 
         _ ->
-            ( model, none )
+            model ! []
 
 
 
 -- ACTIONS, UPDATE
 
 
-{-| Elm Architecture Msg type.
-The following actions are observable to you:
-- `Begin a`. The snackbar is now displaying the message with payload `a`.
-- `End a`. The snackbar is done displaying the message with payload `a`.
-- `Click a`. The user clicked the action on the message with payload `a`.
-You can consume these three actions without forwarding them to `Snackbar.update`.
-(You still need to forward other Snackbar actions.)
--}
-type Msg a
-    = Begin a
-    | End a
-    | Click a
-    -- Private
-    | Move Int Transition
-
-
 {-| Elm Architecture update function.
 -}
-update : Msg a -> Model a -> ( Model a, Cmd (Msg a) )
-update action model =
-    case action of
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update fwd msg model =
+    case msg of
         Move seq transition ->
             if seq == model.seq then
-                move transition model
+                move transition model |> Helpers.map2nd (Cmd.map fwd)
             else
-                ( model, none )
+                model ! []
 
-        _ ->
-            -- Begin, End, Click are for external consumption only.
-            ( model, none )
+        Dismiss dismissOnAction actionOnDismiss ->
+            let
+                fwdEffect =
+                    case actionOnDismiss of
+                        Just msg_ ->
+                            cmd msg_
+                        Nothing ->
+                            Cmd.none
+
+            in
+            ( if dismissOnAction then
+                  update fwd (Move model.seq Clicked) model
+              else
+                  model ! []
+            )
+                |> Helpers.map2nd (\cmd -> Cmd.batch [ cmd, fwdEffect ])
 
 
 {-| Add a message to the snackbar. If another message is currently displayed,
@@ -244,19 +247,59 @@ the provided message will be queued. You will be able to observe a `Begin` actio
 You must dispatch the returned effect for the Snackbar to begin displaying your
 message.
 -}
-add : Contents a -> Model a -> ( Model a, Cmd (Msg a) )
-add contents model =
-    enqueue contents model |> tryDequeue
+add : (Material.Msg.Msg m -> m) -> Index -> Contents -> { a | mdl : Store s } -> ( { a | mdl : Store s }, Cmd m )
+add lift idx contents model =
+    let
+        component_ =
+            Dict.get idx model.mdl.snackbar
+            |> Maybe.withDefault defaultModel
 
+        (component, effects ) =
+          enqueue contents component_ |> tryDequeue
+
+        mdl =
+          let
+              mdl_ =
+                  model.mdl
+          in
+          { mdl_ | snackbar = Dict.insert idx component mdl_.snackbar }
+    in
+        { model | mdl = mdl } ! [ Cmd.map (Material.Msg.SnackbarMsg idx >> lift) effects ]
 
 
 -- VIEW
 
 
-{-| Elm architecture update function.
+type alias Config m =
+    { onDismiss : Maybe m
+    }
+
+
+defaultConfig : Config m
+defaultConfig =
+    { onDismiss = Nothing
+    }
+
+
+onDismiss : m -> Property m
+onDismiss =
+    Internal.option << (\msg config -> { config | onDismiss = Just msg })
+
+
+alignStart : Property m
+alignStart =
+    Options.cs "mdc-snackbar--align-start"
+
+
+alignEnd : Property m
+alignEnd =
+    Options.cs "mdc-snackbar--align-end"
+
+
+{-| TODO
 -}
-view : Model a -> Html (Msg a)
-view model =
+view : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+view lift model options _ =
     let
         contents =
             case model.state of
@@ -282,56 +325,93 @@ view model =
 
         action =
             contents |> Maybe.andThen .action
+
+        multiline =
+            (Maybe.map .multiline contents == Just True)
+
+        actionOnBottom =
+            (Maybe.map .actionOnBottom contents == Just True)
+            && multiline
+
+        dismissHandler =
+            case (contents, config.onDismiss) of
+                ( Just content, Just _ ) ->
+                    Options.onClick (lift (Dismiss content.dismissOnAction config.onDismiss))
+                _ ->
+                    Options.nop
+
+        ({ config } as summary) =
+            Internal.collect defaultConfig options
     in
-        div
-            [ classList
-                [ ( "mdc-js-snackbar", True )
-                , ( "mdc-snackbar", True )
-                , ( "mdc-snackbar--active", isActive )
-                ]
-            , aria "hidden" (not isActive)
-            ]
-            [ div
-                [ class "mdc-snackbar__text"
-                ]
-                (contents
-                    |> Maybe.map (\c -> [ text c.message ])
-                    |> Maybe.withDefault []
-                )
-            , button
-                (class "mdc-snackbar__action"
-                    :: type_ "button"
-                    :: aria "hidden"
-                        (action
-                            |> Maybe.map (always (not isActive))
-                            |> Maybe.withDefault True
-                        )
-                    :: (action
-                            |> Maybe.map (always [ onClick (Move model.seq Clicked) ])
-                            |> Maybe.withDefault []
-                       )
-                )
-                (action
-                    |> Maybe.map (\action -> [ text action ])
-                    |> Maybe.withDefault []
-                )
-            ]
+    Internal.apply summary Html.div
+    [ cs "mdc-snackbar"
+    , cs "mdc-snackbar--active"
+      |> when isActive
+    , cs "mdc-snackbar--multiline"
+      |> when multiline
+    , cs "mdc-snackbar--action-on-bottom"
+      |> when actionOnBottom
+    ]
+    []
+    [ styled Html.div
+      [ cs "mdc-snackbar__text"
+      ]
+      (contents
+          |> Maybe.map (\c -> [ text c.message ])
+          |> Maybe.withDefault []
+      )
+    , styled Html.div
+      [ cs "mdc-snackbar__action-wrapper"
+      ]
+      [ Options.styled_ Html.button
+        [ cs "mdc-button"
+        , cs "mdc-snackbar__action-button"
+        , dismissHandler
+        ]
+        [ Html.type_ "button"
+        ]
+        (action
+            |> Maybe.map (\action -> [ text action ])
+            |> Maybe.withDefault []
+        )
+      ]
+    ]
 
 
+type alias Property m =
+    Options.Property (Config m) m
 
--- COMPONENT
-{- Component support for Snackbar is currently disabled. The type "Model a" of
-   the Snackbar Model escapes into the global Mdl model, polluting users model
-   with the type variable "a". This is unacceptable in itself; it makes
-   component support too hard to use for non-expert users.
 
-   This problem is compounded by the elm compiler bug
-   [#1192](https://github.com/elm-lang/elm-compiler/issues/1192), which causes
-   (apparently) unhelpful error messages on errors related to wrong use of type
-   constructors.
+( get, set ) =
+    Component.indexed .snackbar (\x y -> { y | snackbar = x }) model
 
-   Component support for snackbar was implemented earlier. In case a solution
-   presents itself, the last commit to contain this support was:
 
-   f0a85912654713238694f48b1a4b7d5a7459965f
+type alias Store s =
+    { s | snackbar : Indexed Model
+    }
+
+
+{-| TODO
 -}
+react :
+    (Msg m -> m)
+    -> Msg m
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react lift msg idx store =
+    update lift msg (get idx store)
+        |> map1st (set idx store >> Just)
+
+
+{-| TODO
+-}
+render :
+    (Material.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+render =
+    Component.render get view Material.Msg.SnackbarMsg

@@ -123,7 +123,7 @@ view isUnbounded lift_ index store =
             lift_ << Material.Msg.RippleMsg index
 
         geometry =
-            Debug.log "geometry" model.geometry
+            model.geometry
 
         surfaceWidth =
             toString geometry.frame.width ++ "px"

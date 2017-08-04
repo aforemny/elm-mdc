@@ -8,12 +8,13 @@ module Material.Msg
 import Material.Internal.Button as Button 
 import Material.Internal.Fab as Fab 
 import Material.Internal.Menu as Menu
+import Material.Internal.Ripple as Ripple
 import Material.Internal.Select as Select
+import Material.Internal.Snackbar as Snackbar
 import Material.Internal.Tabs as Tabs
 import Material.Internal.Textfield as Textfield
 import Material.Internal.Toggles as Toggles
 import Material.Internal.Tooltip as Tooltip
-import Material.Internal.Ripple as Ripple
 
 
 {-| Type of indices. An index has to be `comparable`
@@ -32,6 +33,7 @@ type alias Index =
 -}
 type Msg m
     = ButtonMsg Index Button.Msg
+    | SnackbarMsg Index (Snackbar.Msg m)
     | FabMsg Index Fab.Msg
     | Dispatch (List m)
     | MenuMsg Index (Menu.Msg m)

@@ -32,7 +32,7 @@ type Msg
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "msg" msg of
+    case msg of
         Mdl msg_ ->
             Material.update Mdl msg_ model
 
