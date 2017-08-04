@@ -7,7 +7,7 @@ import Material.Options as Options
 import Material.Options exposing (when, styled, cs, css, div)
 import Material.Textfield as Textfield
 import Material.Textfield.HelperText as Textfield
-import Material.Toggles as Toggles
+import Material.Checkbox as Checkbox
 
 
 -- MODEL
@@ -188,59 +188,59 @@ example0 mdl idx lift model =
         ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,0] mdl
+      [ Checkbox.render Mdl [idx,0] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,1] mdl
+      [ Checkbox.render Mdl [idx,1] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,2] mdl
+      [ Checkbox.render Mdl [idx,2] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,3] mdl
+      [ Checkbox.render Mdl [idx,3] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []
       , Html.label [] [ Html.text "Dense" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,4] mdl
+      [ Checkbox.render Mdl [idx,4] mdl
         [ Options.onClick (lift ToggleRequired)
         ]
         []
       , Html.label [] [ Html.text "Required" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,5] mdl
+      [ Checkbox.render Mdl [idx,5] mdl
         [ Options.onClick (lift ToggleHelperText)
         ]
         []
       , Html.label [] [ Html.text "Use Helper Text" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,6] mdl
+      [ Checkbox.render Mdl [idx,6] mdl
         [ Options.onClick (lift TogglePersistent)
-        , Toggles.disabled |> when (not model.helperText)
+        , Checkbox.disabled |> when (not model.helperText)
         ]
         []
       , Html.label [] [ Html.text "Make helper text persistent" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,7] mdl
+      [ Checkbox.render Mdl [idx,7] mdl
         [ Options.onClick (lift ToggleValidationMsg)
-        , Toggles.disabled |> when (not model.helperText)
+        , Checkbox.disabled |> when (not model.helperText)
         ]
         []
       , Html.label [] [ Html.text "Use helper text as validation message" ]
@@ -314,28 +314,28 @@ example2 mdl idx lift model =
         ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,0] mdl
+      [ Checkbox.render Mdl [idx,0] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,1] mdl
+      [ Checkbox.render Mdl [idx,1] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,2] mdl
+      [ Checkbox.render Mdl [idx,2] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,3] mdl
+      [ Checkbox.render Mdl [idx,3] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []
@@ -371,28 +371,28 @@ example3 mdl idx lift model =
         ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,0] mdl
+      [ Checkbox.render Mdl [idx,0] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,1] mdl
+      [ Checkbox.render Mdl [idx,1] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,2] mdl
+      [ Checkbox.render Mdl [idx,2] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,3] mdl
+      [ Checkbox.render Mdl [idx,3] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []
@@ -434,28 +434,28 @@ example4 mdl idx lift model =
         ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,2] mdl
+      [ Checkbox.render Mdl [idx,2] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,3] mdl
+      [ Checkbox.render Mdl [idx,3] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,4] mdl
+      [ Checkbox.render Mdl [idx,4] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
     , div []
-      [ Toggles.checkbox Mdl [idx,5] mdl
+      [ Checkbox.render Mdl [idx,5] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []

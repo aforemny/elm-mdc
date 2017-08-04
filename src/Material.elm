@@ -180,7 +180,7 @@ import Material.Select as Select
 import Material.Snackbar as Snackbar
 import Material.Tabs as Tabs
 import Material.Textfield as Textfield
-import Material.Toggles as Toggles
+import Material.Checkbox as Checkbox
 import Material.Tooltip as Tooltip
 
 
@@ -191,7 +191,7 @@ type alias Model =
     , fab : Indexed Fab.Model
     , textfield : Indexed Textfield.Model
     , menu : Indexed Menu.Model
-    , toggles : Indexed Toggles.Model
+    , toggles : Indexed Checkbox.Model
     , tooltip : Indexed Tooltip.Model
     , tabs : Indexed Tabs.Model
     , select : Indexed Select.Model
@@ -258,8 +258,8 @@ update_ lift msg store =
        SelectMsg idx msg ->
            Select.react (SelectMsg idx >> lift) msg idx store
 
-       TogglesMsg idx msg ->
-           Toggles.react lift msg idx store
+       CheckboxMsg idx msg ->
+           Checkbox.react lift msg idx store
 
        TooltipMsg idx msg ->
            Tooltip.react lift msg idx store

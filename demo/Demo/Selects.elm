@@ -5,7 +5,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Json.Decode as Json
 import Material
-import Material.Toggles as Checkbox
+import Material.Checkbox as Checkbox
 import Material.Component exposing (Index, Indexed)
 import Material.List as Lists
 import Material.Menu as Menu
@@ -119,9 +119,9 @@ view model =
 
     , Html.div
       []
-      [ Checkbox.checkbox Mdl [1] model.mdl
+      [ Checkbox.render Mdl [1] model.mdl
         [ Options.onClick ToggleDarkTheme
-        , Checkbox.value model.darkTheme
+        , Checkbox.checked |> when model.darkTheme
         ]
         []
       , Html.label [] [ text "Dark theme" ]
@@ -129,9 +129,9 @@ view model =
 
     , Html.div
       []
-      [ Checkbox.checkbox Mdl [2] model.mdl
+      [ Checkbox.render Mdl [2] model.mdl
         [ Options.onClick ToggleRtl
-        , Checkbox.value model.rtl
+        , Checkbox.checked |> when model.rtl
         ]
         []
       , Html.label [] [ text "RTL" ]
@@ -139,9 +139,9 @@ view model =
 
     , Html.div
       []
-      [ Checkbox.checkbox Mdl [3] model.mdl
+      [ Checkbox.render Mdl [3] model.mdl
         [ Options.onClick ToggleDisabled
-        , Checkbox.value model.disabled
+        , Checkbox.checked |> when model.disabled
         ]
         []
       , Html.label [] [ text "Disabled" ]

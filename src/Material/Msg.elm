@@ -13,7 +13,7 @@ import Material.Internal.Select as Select
 import Material.Internal.Snackbar as Snackbar
 import Material.Internal.Tabs as Tabs
 import Material.Internal.Textfield as Textfield
-import Material.Internal.Toggles as Toggles
+import Material.Internal.Checkbox as Checkbox
 import Material.Internal.Tooltip as Tooltip
 
 
@@ -40,6 +40,6 @@ type Msg m
     | SelectMsg Index (Select.Msg m)
     | TabsMsg Index (Tabs.Msg m)
     | TextfieldMsg Index Textfield.Msg
-    | TogglesMsg Index Toggles.Msg
+    | CheckboxMsg Index Checkbox.Msg
     | TooltipMsg Index Tooltip.Msg
     | RippleMsg Index Ripple.Msg

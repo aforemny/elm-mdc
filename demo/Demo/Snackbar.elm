@@ -10,7 +10,7 @@ import Material.Options as Options exposing (styled, cs, css, nop, when)
 import Material.Snackbar as Snackbar
 import Material.Textfield as Textfield
 import Material.Theme as Theme
-import Material.Toggles as Checkbox
+import Material.Checkbox as Checkbox
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
@@ -120,9 +120,9 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.checkbox Mdl [0] model.mdl
+        [ Checkbox.render Mdl [0] model.mdl
           [ Options.on "change" (Json.succeed ToggleMultiline)
-          , Checkbox.value model.multiline
+          , Checkbox.checked |> when model.multiline
           ]
           []
         , Html.label [] [ text "Multiline" ]
@@ -132,9 +132,9 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.checkbox Mdl [1] model.mdl
+        [ Checkbox.render Mdl [1] model.mdl
           [ Options.on "change" (Json.succeed ToggleActionOnBottom)
-          , Checkbox.value model.actionOnBottom
+          , Checkbox.checked |> when model.actionOnBottom
           , when (not model.multiline) <|
             Checkbox.disabled
           ]
@@ -146,9 +146,9 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.checkbox Mdl [2] model.mdl
+        [ Checkbox.render Mdl [2] model.mdl
           [ Options.on "change" (Json.succeed ToggleDismissOnAction)
-          , Checkbox.value model.dismissOnAction
+          , Checkbox.checked |> when model.dismissOnAction
           ]
           []
         , Html.label [] [ text "Dismiss On Action" ]
