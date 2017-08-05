@@ -3,6 +3,7 @@ port module Main exposing (..)
 import Array exposing (Array)
 import Demo.Badges
 import Demo.Fabs
+import Demo.IconToggle
 import Demo.Buttons
 import Demo.Cards
 import Demo.Selects
@@ -22,6 +23,7 @@ import Demo.Tabs
 import Demo.Textfields
 import Demo.Theme
 import Demo.Checkbox
+import Demo.Switch
 import Demo.Toolbar
 import Demo.Tooltip
 import Demo.Typography
@@ -54,6 +56,7 @@ port scrollTop : () -> Cmd msg
 type alias Model =
     { mdl : Material.Model
     , buttons : Demo.Buttons.Model
+    , iconToggle : Demo.IconToggle.Model
     , selects : Demo.Selects.Model
     , fabs : Demo.Fabs.Model
     , badges : Demo.Badges.Model
@@ -62,6 +65,7 @@ type alias Model =
     , textfields : Demo.Textfields.Model
     , theme : Demo.Theme.Model
     , checkbox : Demo.Checkbox.Model
+    , switch : Demo.Switch.Model
     , snackbar : Demo.Snackbar.Model
     , loading : Demo.Loading.Model
     , tooltip : Demo.Tooltip.Model
@@ -85,6 +89,7 @@ model : Model
 model =
     { mdl = Material.model
     , buttons = Demo.Buttons.model
+    , iconToggle = Demo.IconToggle.model
     , selects = Demo.Selects.model
     , fabs = Demo.Fabs.model
     , badges = Demo.Badges.model
@@ -93,6 +98,7 @@ model =
     , textfields = Demo.Textfields.model
     , theme = Demo.Theme.model
     , checkbox = Demo.Checkbox.model
+    , switch = Demo.Switch.model
     , snackbar = Demo.Snackbar.defaultModel
     , loading = Demo.Loading.model
     , tooltip = Demo.Tooltip.model
@@ -124,12 +130,14 @@ type Msg
     | ButtonsMsg Demo.Buttons.Msg
     | FabsMsg Demo.Fabs.Msg
     | LayoutGridMsg Demo.LayoutGrid.Msg
+    | IconToggleMsg Demo.IconToggle.Msg
     | MenusMsg Demo.Menus.Msg
     | TextfieldMsg Demo.Textfields.Msg
     | SelectMsg Demo.Selects.Msg
     | ThemeMsg Demo.Theme.Msg
     | SnackbarMsg Demo.Snackbar.Msg
     | CheckboxMsg Demo.Checkbox.Msg
+    | SwitchMsg Demo.Switch.Msg
     | LoadingMsg Demo.Loading.Msg
     | TooltipMsg Demo.Tooltip.Msg
     | ToolbarMsg Demo.Toolbar.Msg
@@ -185,6 +193,9 @@ update msg model =
           LayoutGridMsg a ->
               lift .layoutGrid (\m x -> { m | layoutGrid = x }) LayoutGridMsg Demo.LayoutGrid.update a model
 
+          IconToggleMsg a ->
+              lift .iconToggle (\m x -> { m | iconToggle = x }) IconToggleMsg Demo.IconToggle.update a model
+
           MenusMsg a ->
               lift .menus (\m x -> { m | menus = x }) MenusMsg Demo.Menus.update a model
 
@@ -202,6 +213,9 @@ update msg model =
 
           CheckboxMsg a ->
               lift .checkbox (\m x -> { m | checkbox = x }) CheckboxMsg Demo.Checkbox.update a model
+
+          SwitchMsg a ->
+              lift .switch (\m x -> { m | switch = x }) SwitchMsg Demo.Switch.update a model
 
           LoadingMsg a ->
               lift .loading (\m x -> { m | loading = x }) LoadingMsg Demo.Loading.update a model
@@ -256,12 +270,14 @@ tabs =
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
     , ( "Floating action button", "fab", .fabs >> Demo.Fabs.view >> Html.map FabsMsg )
     , ( "Grid list", "grid-list", always Demo.GridList.view )
+    , ( "Icon toggle", "icon-toggle", .iconToggle >> Demo.IconToggle.view >> Html.map IconToggleMsg)
     , ( "Layout grid", "layout-grid", .layoutGrid >> Demo.LayoutGrid.view >> Html.map LayoutGridMsg )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
     , ( "Ripple", "ripple", .ripple >> Demo.Ripple.view >> Html.map RippleMsg )
     , ( "Select", "select", .selects >> Demo.Selects.view >> Html.map SelectMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
     , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
+    , ( "Switch", "switch", .switch >> Demo.Switch.view >> Html.map SwitchMsg )
     , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
     , ( "Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg )
     , ( "Theme", "theme", .theme >> Demo.Theme.view >> Html.map ThemeMsg )

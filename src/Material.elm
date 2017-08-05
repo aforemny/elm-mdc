@@ -169,18 +169,20 @@ module as a starting point
 
 import Dict
 import Material.Button as Button
+import Material.Checkbox as Checkbox
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
 import Material.Fab as Fab
 import Material.Helpers exposing (map1st)
+import Material.IconToggle as IconToggle
 import Material.Menu as Menu
 import Material.Msg exposing (Msg(..))
 import Material.Ripple as Ripple
 import Material.Select as Select
 import Material.Snackbar as Snackbar
+import Material.Switch as Switch
 import Material.Tabs as Tabs
 import Material.Textfield as Textfield
-import Material.Checkbox as Checkbox
 import Material.Tooltip as Tooltip
 
 
@@ -188,10 +190,12 @@ import Material.Tooltip as Tooltip
 -}
 type alias Model = 
     { button : Indexed Button.Model
+    , iconToggle : Indexed IconToggle.Model
     , fab : Indexed Fab.Model
     , textfield : Indexed Textfield.Model
     , menu : Indexed Menu.Model
-    , toggles : Indexed Checkbox.Model
+    , checkbox : Indexed Checkbox.Model
+    , switch : Indexed Switch.Model
     , tooltip : Indexed Tooltip.Model
     , tabs : Indexed Tabs.Model
     , select : Indexed Select.Model
@@ -205,10 +209,12 @@ type alias Model =
 model : Model
 model = 
     { button = Dict.empty
+    , iconToggle = Dict.empty
     , fab = Dict.empty
     , textfield = Dict.empty
     , menu = Dict.empty
-    , toggles = Dict.empty
+    , checkbox = Dict.empty
+    , switch = Dict.empty
     , tooltip = Dict.empty
     , tabs = Dict.empty
     , select = Dict.empty
@@ -243,6 +249,9 @@ update_ lift msg store =
        ButtonMsg idx msg ->
            Button.react lift msg idx store
 
+       IconToggleMsg idx msg ->
+           IconToggle.react lift msg idx store
+
        SnackbarMsg idx msg ->
            Snackbar.react (SnackbarMsg idx >> lift) msg idx store
 
@@ -260,6 +269,9 @@ update_ lift msg store =
 
        CheckboxMsg idx msg ->
            Checkbox.react lift msg idx store
+
+       SwitchMsg idx msg ->
+           Switch.react lift msg idx store
 
        TooltipMsg idx msg ->
            Tooltip.react lift msg idx store

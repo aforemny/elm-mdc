@@ -42,58 +42,58 @@ module Material.Theme exposing
 
 
 import Html exposing (Html, text)
-import Material.Options exposing (Style, span, cs)
+import Material.Options exposing (Property, span, cs)
 
 
 -- THEME
 
 
-primary : Style m
+primary : Property c m
 primary =
     cs "mdc-theme--primary"
 
 
-accent : Style m
+accent : Property c m
 accent =
     cs "mdc-theme--accent"
 
 
-primaryBg : Style m
+primaryBg : Property c m
 primaryBg =
     cs "mdc-theme--primary-bg"
 
 
-accentBg : Style m
+accentBg : Property c m
 accentBg =
     cs "mdc-theme--accent-bg"
 
 
-background : Style m
+background : Property c m
 background =
     cs "mdc-theme--background"
 
 
-textPrimaryOnPrimary : Style m
+textPrimaryOnPrimary : Property c m
 textPrimaryOnPrimary =
     cs "mdc-theme--text-primary-on-primary"
 
 
-textSecondaryOnPrimary : Style m
+textSecondaryOnPrimary : Property c m
 textSecondaryOnPrimary =
     cs "mdc-theme--text-secondary-on-primary"
 
 
-textHintOnPrimary : Style m
+textHintOnPrimary : Property c m
 textHintOnPrimary =
     cs "mdc-theme--text-hint-on-primary"
 
 
-textDisabledOnPrimary : Style m
+textDisabledOnPrimary : Property c m
 textDisabledOnPrimary =
     cs "mdc-theme--text-disabled-on-primary"
 
 
-textIconOnPrimary : List (Style m) -> String -> Html m
+textIconOnPrimary : List (Property c m) -> String -> Html m
 textIconOnPrimary options icon =
     span
     ( cs "mdc-theme--text-icon-on-primary"
@@ -104,27 +104,27 @@ textIconOnPrimary options icon =
     ]
 
 
-textPrimaryOnAccent : Style m
+textPrimaryOnAccent : Property c m
 textPrimaryOnAccent =
     cs "mdc-theme--text-primary-on-accent"
 
 
-textSecondaryOnAccent : Style m
+textSecondaryOnAccent : Property c m
 textSecondaryOnAccent =
     cs "mdc-theme--text-secondary-on-accent"
 
 
-textHintOnAccent : Style m
+textHintOnAccent : Property c m
 textHintOnAccent =
     cs "mdc-theme--text-hint-on-accent"
 
 
-textDisabledOnAccent : Style m
+textDisabledOnAccent : Property c m
 textDisabledOnAccent =
     cs "mdc-theme--text-disabled-on-accent"
 
 
-textIconOnAccent : List (Style m) -> String -> Html m
+textIconOnAccent : List (Property c m) -> String -> Html m
 textIconOnAccent options icon =
     span
     ( cs "mdc-theme--text-icon-on-accent"
@@ -135,27 +135,27 @@ textIconOnAccent options icon =
     ]
 
 
-textPrimaryOnBackground : Style m
+textPrimaryOnBackground : Property c m
 textPrimaryOnBackground =
     cs "mdc-theme--text-primary-on-background"
 
 
-textSecondaryOnBackground : Style m
+textSecondaryOnBackground : Property c m
 textSecondaryOnBackground =
     cs "mdc-theme--text-secondary-on-background"
 
 
-textHintOnBackground : Style m
+textHintOnBackground : Property c m
 textHintOnBackground =
     cs "mdc-theme--text-hint-on-background"
 
 
-textDisabledOnBackground : Style m
+textDisabledOnBackground : Property c m
 textDisabledOnBackground =
     cs "mdc-theme--text-disabled-on-background"
 
 
-textIconOnBackground : List (Style m) -> String -> Html m
+textIconOnBackground : List (Property c m) -> String -> Html m
 textIconOnBackground options icon =
     span
     ( cs "mdc-theme--text-icon-on-background"
@@ -166,27 +166,27 @@ textIconOnBackground options icon =
     ]
 
 
-textPrimaryOnLight : Style m
+textPrimaryOnLight : Property c m
 textPrimaryOnLight =
     cs "mdc-theme--text-primary-on-light"
 
 
-textSecondaryOnLight : Style m
+textSecondaryOnLight : Property c m
 textSecondaryOnLight =
     cs "mdc-theme--text-secondary-on-light"
 
 
-textHintOnLight : Style m
+textHintOnLight : Property c m
 textHintOnLight =
     cs "mdc-theme--text-hint-on-light"
 
 
-textDisabledOnLight : Style m
+textDisabledOnLight : Property c m
 textDisabledOnLight =
     cs "mdc-theme--text-disabled-on-light"
 
 
-textIconOnLight : List (Style m) -> String -> Html m
+textIconOnLight : List (Property c m) -> String -> Html m
 textIconOnLight options icon =
     span
     ( cs "mdc-theme--text-icon-on-light"
@@ -197,27 +197,27 @@ textIconOnLight options icon =
     ]
 
 
-textPrimaryOnDark : Style m
+textPrimaryOnDark : Property c m
 textPrimaryOnDark =
     cs "mdc-theme--text-primary-on-dark"
 
 
-textSecondaryOnDark : Style m
+textSecondaryOnDark : Property c m
 textSecondaryOnDark =
     cs "mdc-theme--text-secondary-on-dark"
 
 
-textHintOnDark : Style m
+textHintOnDark : Property c m
 textHintOnDark =
     cs "mdc-theme--text-hint-on-dark"
 
 
-textDisabledOnDark : Style m
+textDisabledOnDark : Property c m
 textDisabledOnDark =
     cs "mdc-theme--text-disabled-on-dark"
 
 
-textIconOnDark : List (Style m) -> String -> Html m
+textIconOnDark : List (Property c m) -> String -> Html m
 textIconOnDark options icon =
     span
     ( cs "mdc-theme--text-icon-on-dark"
@@ -228,6 +228,6 @@ textIconOnDark options icon =
     ]
 
 
-dark : Style m
+dark : Property c m
 dark =
     cs "mdc-theme--dark"

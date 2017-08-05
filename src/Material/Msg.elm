@@ -6,6 +6,7 @@ module Material.Msg
 -}
 
 import Material.Internal.Button as Button 
+import Material.Internal.IconToggle as IconToggle 
 import Material.Internal.Fab as Fab 
 import Material.Internal.Menu as Menu
 import Material.Internal.Ripple as Ripple
@@ -14,6 +15,7 @@ import Material.Internal.Snackbar as Snackbar
 import Material.Internal.Tabs as Tabs
 import Material.Internal.Textfield as Textfield
 import Material.Internal.Checkbox as Checkbox
+import Material.Internal.Switch as Switch
 import Material.Internal.Tooltip as Tooltip
 
 
@@ -33,6 +35,7 @@ type alias Index =
 -}
 type Msg m
     = ButtonMsg Index Button.Msg
+    | IconToggleMsg Index IconToggle.Msg
     | SnackbarMsg Index (Snackbar.Msg m)
     | FabMsg Index Fab.Msg
     | Dispatch (List m)
@@ -41,5 +44,6 @@ type Msg m
     | TabsMsg Index (Tabs.Msg m)
     | TextfieldMsg Index Textfield.Msg
     | CheckboxMsg Index Checkbox.Msg
+    | SwitchMsg Index Switch.Msg
     | TooltipMsg Index Tooltip.Msg
     | RippleMsg Index Ripple.Msg

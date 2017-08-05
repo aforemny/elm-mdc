@@ -6,6 +6,7 @@ module Material.Options
         , many
         , nop
         , data
+        , aria
         , when
         , maybe
         , disabled
@@ -283,6 +284,13 @@ nop =
 data : String -> String -> Property c m
 data key val =
     Attribute (Html.Attributes.attribute ("data-" ++ key) val)
+
+
+{-| TODO
+-}
+aria : String -> String -> Property c m
+aria key val =
+    Attribute (Html.Attributes.attribute ("aria-" ++ key) val)
 
 
 {-| Conditional option. When the guard evaluates to `true`, the option is

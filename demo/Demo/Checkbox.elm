@@ -100,7 +100,8 @@ view model =
         , cs "mdc-form-field--align-end" |> when model.alignEnd
         ]
         [ Checkbox.render Mdl [0] model.mdl
-          [ Checkbox.checked |> when model.checked0
+          [ Options.onClick ToggleChecked0
+          , Checkbox.checked |> when model.checked0
           , Checkbox.indeterminate |> when model.indeterminate
           , Checkbox.disabled |> when model.disabled0
           ]
@@ -149,7 +150,8 @@ view model =
         [ cs "mdc-form-field"
         ]
         [ Checkbox.render Mdl [1] model.mdl
-          [ Checkbox.checked |> when model.checked1
+          [ Options.onClick ToggleChecked1
+          , Checkbox.checked |> when model.checked1
           , Checkbox.disabled |> when model.disabled1
           ]
           [

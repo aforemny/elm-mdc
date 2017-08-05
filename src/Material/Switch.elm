@@ -1,4 +1,4 @@
-module Material.Checkbox
+module Material.Switch
     exposing
         ( Model
         , defaultModel
@@ -8,8 +8,7 @@ module Material.Checkbox
         , view
         , render
         , disabled
-        , indeterminate
-        , checked
+        , on
         , react
         )
 
@@ -19,15 +18,12 @@ module Material.Checkbox
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
-import Json.Encode
 import Material.Component as Component exposing (Indexed)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
-import Material.Internal.Checkbox exposing (Msg(..))
 import Material.Internal.Options as Internal
+import Material.Internal.Switch exposing (Msg(..))
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
-import Svg.Attributes as Svg
-import Svg exposing (path)
 
 -- MODEL
 
@@ -54,12 +50,12 @@ defaultModel =
 {-| Component message.
 -}
 type alias Msg
-    = Material.Internal.Checkbox.Msg
+    = Material.Internal.Switch.Msg
 
 
 {-| Component update.
 -}
-update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
+update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
 update _ msg model =
     case msg of
         SetFocus focus ->
@@ -106,18 +102,9 @@ disabled =
 
 {-| TODO
 -}
-checked : Property m
-checked =
+on : Property m
+on =
     Internal.option (\config -> { config | value = True })
-
-
-{-| TODO
--}
-indeterminate : Property m
-indeterminate =
-    Internal.input
-    [ Internal.attribute <| Html.property "indeterminate" (Json.Encode.bool True)
-    ]
 
 
 -- VIEW
@@ -132,12 +119,12 @@ view lift model options _ =
             Internal.collect defaultConfig options
     in
     Internal.applyContainer summary Html.div
-    [ cs "mdc-checkbox"
+    [ cs "mdc-switch"
     , Internal.attribute <| blurOn "mouseup"
     ]
     [ Internal.applyInput summary
         Html.input
-        [ cs "mdc-checkbox__native-control"
+        [ cs "mdc-switch__native-control"
         , Internal.attribute <| Html.type_ "checkbox"
         , Internal.attribute <| Html.checked config.value
         , Internal.on1 "focus" lift (SetFocus True)
@@ -150,25 +137,13 @@ view lift model options _ =
         ]
         []
     , styled Html.div
-      [ cs "mdc-checkbox__background"
+      [ cs "mdc-switch__background"
       ]
-      [ Svg.svg
-        [ Svg.class "mdc-checkbox__checkmark"
-        , Svg.viewBox "0 0 24 24"
+      [ styled Html.div
+        [ cs "mdc-switch__knob"
         ]
-        [ path
-          [ Svg.class "mdc-checkbox__checkmark__path"
-          , Svg.fill "none"
-          , Svg.stroke "white"
-          , Svg.d "M1.73,12.91 8.1,19.28 22.79,4.59"
-          ]
-          [
-          ]
+        [
         ]
-      , styled Html.div
-        [ cs "mdc-checkbox__mixedmark"
-        ]
-        []
       ]
     ]
 
@@ -177,11 +152,11 @@ view lift model options _ =
 
 
 type alias Store s =
-    { s | checkbox : Indexed Model }
+    { s | switch : Indexed Model }
 
 
 ( get, set ) =
-    Component.indexed .checkbox (\x y -> { y | checkbox = x }) defaultModel
+    Component.indexed .switch (\x y -> { y | switch = x }) defaultModel
 
 
 {-| Component react function.
@@ -193,8 +168,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Material.Msg.CheckboxMsg update
-    -- TODO: make react always like this ^^^^, don't use generalise?
+    Component.react get set Material.Msg.SwitchMsg update
 
 
 {-| Component render (checkbox)
@@ -207,5 +181,5 @@ render :
     -> List (Html m)
     -> Html m
 render lift index store options =
-    Component.render get view Material.Msg.CheckboxMsg lift index store
+    Component.render get view Material.Msg.SwitchMsg lift index store
         (Internal.dispatch lift :: options)
