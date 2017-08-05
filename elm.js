@@ -8859,6 +8859,8 @@ var _debois$elm_mdl$Material_Helpers$filter = F3(
 
 var _debois$elm_mdl$Material_Internal_Button$NoOp = {ctor: 'NoOp'};
 
+var _debois$elm_mdl$Material_Internal_IconToggle$NoOp = {ctor: 'NoOp'};
+
 var _debois$elm_mdl$Material_Internal_Fab$NoOp = {ctor: 'NoOp'};
 
 var _elm_lang$dom$Native_Dom = function() {
@@ -9335,7 +9337,13 @@ var _debois$elm_mdl$Material_Internal_Textfield$Input = function (a) {
 var _debois$elm_mdl$Material_Internal_Textfield$Focus = {ctor: 'Focus'};
 var _debois$elm_mdl$Material_Internal_Textfield$Blur = {ctor: 'Blur'};
 
+var _debois$elm_mdl$Material_Internal_Checkbox$NoOp = {ctor: 'NoOp'};
 var _debois$elm_mdl$Material_Internal_Checkbox$SetFocus = function (a) {
+	return {ctor: 'SetFocus', _0: a};
+};
+
+var _debois$elm_mdl$Material_Internal_Switch$NoOp = {ctor: 'NoOp'};
+var _debois$elm_mdl$Material_Internal_Switch$SetFocus = function (a) {
 	return {ctor: 'SetFocus', _0: a};
 };
 
@@ -9360,6 +9368,10 @@ var _debois$elm_mdl$Material_Msg$RippleMsg = F2(
 var _debois$elm_mdl$Material_Msg$TooltipMsg = F2(
 	function (a, b) {
 		return {ctor: 'TooltipMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$SwitchMsg = F2(
+	function (a, b) {
+		return {ctor: 'SwitchMsg', _0: a, _1: b};
 	});
 var _debois$elm_mdl$Material_Msg$CheckboxMsg = F2(
 	function (a, b) {
@@ -9391,6 +9403,10 @@ var _debois$elm_mdl$Material_Msg$FabMsg = F2(
 var _debois$elm_mdl$Material_Msg$SnackbarMsg = F2(
 	function (a, b) {
 		return {ctor: 'SnackbarMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$IconToggleMsg = F2(
+	function (a, b) {
+		return {ctor: 'IconToggleMsg', _0: a, _1: b};
 	});
 var _debois$elm_mdl$Material_Msg$ButtonMsg = F2(
 	function (a, b) {
@@ -10421,6 +10437,14 @@ var _debois$elm_mdl$Material_Options$stylesheet = function (css) {
 			_1: {ctor: '[]'}
 		});
 };
+var _debois$elm_mdl$Material_Options$aria = F2(
+	function (key, val) {
+		return _debois$elm_mdl$Material_Internal_Options$Attribute(
+			A2(
+				_elm_lang$html$Html_Attributes$attribute,
+				A2(_elm_lang$core$Basics_ops['++'], 'aria-', key),
+				val));
+	});
 var _debois$elm_mdl$Material_Options$data = F2(
 	function (key, val) {
 		return _debois$elm_mdl$Material_Internal_Options$Attribute(
@@ -10660,6 +10684,571 @@ var _debois$elm_mdl$Material_Button$Config = F3(
 		return {ripple: a, link: b, disabled: c};
 	});
 
+var _elm_lang$svg$Svg$map = _elm_lang$virtual_dom$VirtualDom$map;
+var _elm_lang$svg$Svg$text = _elm_lang$virtual_dom$VirtualDom$text;
+var _elm_lang$svg$Svg$svgNamespace = A2(
+	_elm_lang$virtual_dom$VirtualDom$property,
+	'namespace',
+	_elm_lang$core$Json_Encode$string('http://www.w3.org/2000/svg'));
+var _elm_lang$svg$Svg$node = F3(
+	function (name, attributes, children) {
+		return A3(
+			_elm_lang$virtual_dom$VirtualDom$node,
+			name,
+			{ctor: '::', _0: _elm_lang$svg$Svg$svgNamespace, _1: attributes},
+			children);
+	});
+var _elm_lang$svg$Svg$svg = _elm_lang$svg$Svg$node('svg');
+var _elm_lang$svg$Svg$foreignObject = _elm_lang$svg$Svg$node('foreignObject');
+var _elm_lang$svg$Svg$animate = _elm_lang$svg$Svg$node('animate');
+var _elm_lang$svg$Svg$animateColor = _elm_lang$svg$Svg$node('animateColor');
+var _elm_lang$svg$Svg$animateMotion = _elm_lang$svg$Svg$node('animateMotion');
+var _elm_lang$svg$Svg$animateTransform = _elm_lang$svg$Svg$node('animateTransform');
+var _elm_lang$svg$Svg$mpath = _elm_lang$svg$Svg$node('mpath');
+var _elm_lang$svg$Svg$set = _elm_lang$svg$Svg$node('set');
+var _elm_lang$svg$Svg$a = _elm_lang$svg$Svg$node('a');
+var _elm_lang$svg$Svg$defs = _elm_lang$svg$Svg$node('defs');
+var _elm_lang$svg$Svg$g = _elm_lang$svg$Svg$node('g');
+var _elm_lang$svg$Svg$marker = _elm_lang$svg$Svg$node('marker');
+var _elm_lang$svg$Svg$mask = _elm_lang$svg$Svg$node('mask');
+var _elm_lang$svg$Svg$pattern = _elm_lang$svg$Svg$node('pattern');
+var _elm_lang$svg$Svg$switch = _elm_lang$svg$Svg$node('switch');
+var _elm_lang$svg$Svg$symbol = _elm_lang$svg$Svg$node('symbol');
+var _elm_lang$svg$Svg$desc = _elm_lang$svg$Svg$node('desc');
+var _elm_lang$svg$Svg$metadata = _elm_lang$svg$Svg$node('metadata');
+var _elm_lang$svg$Svg$title = _elm_lang$svg$Svg$node('title');
+var _elm_lang$svg$Svg$feBlend = _elm_lang$svg$Svg$node('feBlend');
+var _elm_lang$svg$Svg$feColorMatrix = _elm_lang$svg$Svg$node('feColorMatrix');
+var _elm_lang$svg$Svg$feComponentTransfer = _elm_lang$svg$Svg$node('feComponentTransfer');
+var _elm_lang$svg$Svg$feComposite = _elm_lang$svg$Svg$node('feComposite');
+var _elm_lang$svg$Svg$feConvolveMatrix = _elm_lang$svg$Svg$node('feConvolveMatrix');
+var _elm_lang$svg$Svg$feDiffuseLighting = _elm_lang$svg$Svg$node('feDiffuseLighting');
+var _elm_lang$svg$Svg$feDisplacementMap = _elm_lang$svg$Svg$node('feDisplacementMap');
+var _elm_lang$svg$Svg$feFlood = _elm_lang$svg$Svg$node('feFlood');
+var _elm_lang$svg$Svg$feFuncA = _elm_lang$svg$Svg$node('feFuncA');
+var _elm_lang$svg$Svg$feFuncB = _elm_lang$svg$Svg$node('feFuncB');
+var _elm_lang$svg$Svg$feFuncG = _elm_lang$svg$Svg$node('feFuncG');
+var _elm_lang$svg$Svg$feFuncR = _elm_lang$svg$Svg$node('feFuncR');
+var _elm_lang$svg$Svg$feGaussianBlur = _elm_lang$svg$Svg$node('feGaussianBlur');
+var _elm_lang$svg$Svg$feImage = _elm_lang$svg$Svg$node('feImage');
+var _elm_lang$svg$Svg$feMerge = _elm_lang$svg$Svg$node('feMerge');
+var _elm_lang$svg$Svg$feMergeNode = _elm_lang$svg$Svg$node('feMergeNode');
+var _elm_lang$svg$Svg$feMorphology = _elm_lang$svg$Svg$node('feMorphology');
+var _elm_lang$svg$Svg$feOffset = _elm_lang$svg$Svg$node('feOffset');
+var _elm_lang$svg$Svg$feSpecularLighting = _elm_lang$svg$Svg$node('feSpecularLighting');
+var _elm_lang$svg$Svg$feTile = _elm_lang$svg$Svg$node('feTile');
+var _elm_lang$svg$Svg$feTurbulence = _elm_lang$svg$Svg$node('feTurbulence');
+var _elm_lang$svg$Svg$font = _elm_lang$svg$Svg$node('font');
+var _elm_lang$svg$Svg$linearGradient = _elm_lang$svg$Svg$node('linearGradient');
+var _elm_lang$svg$Svg$radialGradient = _elm_lang$svg$Svg$node('radialGradient');
+var _elm_lang$svg$Svg$stop = _elm_lang$svg$Svg$node('stop');
+var _elm_lang$svg$Svg$circle = _elm_lang$svg$Svg$node('circle');
+var _elm_lang$svg$Svg$ellipse = _elm_lang$svg$Svg$node('ellipse');
+var _elm_lang$svg$Svg$image = _elm_lang$svg$Svg$node('image');
+var _elm_lang$svg$Svg$line = _elm_lang$svg$Svg$node('line');
+var _elm_lang$svg$Svg$path = _elm_lang$svg$Svg$node('path');
+var _elm_lang$svg$Svg$polygon = _elm_lang$svg$Svg$node('polygon');
+var _elm_lang$svg$Svg$polyline = _elm_lang$svg$Svg$node('polyline');
+var _elm_lang$svg$Svg$rect = _elm_lang$svg$Svg$node('rect');
+var _elm_lang$svg$Svg$use = _elm_lang$svg$Svg$node('use');
+var _elm_lang$svg$Svg$feDistantLight = _elm_lang$svg$Svg$node('feDistantLight');
+var _elm_lang$svg$Svg$fePointLight = _elm_lang$svg$Svg$node('fePointLight');
+var _elm_lang$svg$Svg$feSpotLight = _elm_lang$svg$Svg$node('feSpotLight');
+var _elm_lang$svg$Svg$altGlyph = _elm_lang$svg$Svg$node('altGlyph');
+var _elm_lang$svg$Svg$altGlyphDef = _elm_lang$svg$Svg$node('altGlyphDef');
+var _elm_lang$svg$Svg$altGlyphItem = _elm_lang$svg$Svg$node('altGlyphItem');
+var _elm_lang$svg$Svg$glyph = _elm_lang$svg$Svg$node('glyph');
+var _elm_lang$svg$Svg$glyphRef = _elm_lang$svg$Svg$node('glyphRef');
+var _elm_lang$svg$Svg$textPath = _elm_lang$svg$Svg$node('textPath');
+var _elm_lang$svg$Svg$text_ = _elm_lang$svg$Svg$node('text');
+var _elm_lang$svg$Svg$tref = _elm_lang$svg$Svg$node('tref');
+var _elm_lang$svg$Svg$tspan = _elm_lang$svg$Svg$node('tspan');
+var _elm_lang$svg$Svg$clipPath = _elm_lang$svg$Svg$node('clipPath');
+var _elm_lang$svg$Svg$colorProfile = _elm_lang$svg$Svg$node('colorProfile');
+var _elm_lang$svg$Svg$cursor = _elm_lang$svg$Svg$node('cursor');
+var _elm_lang$svg$Svg$filter = _elm_lang$svg$Svg$node('filter');
+var _elm_lang$svg$Svg$script = _elm_lang$svg$Svg$node('script');
+var _elm_lang$svg$Svg$style = _elm_lang$svg$Svg$node('style');
+var _elm_lang$svg$Svg$view = _elm_lang$svg$Svg$node('view');
+
+var _elm_lang$svg$Svg_Attributes$writingMode = _elm_lang$virtual_dom$VirtualDom$attribute('writing-mode');
+var _elm_lang$svg$Svg_Attributes$wordSpacing = _elm_lang$virtual_dom$VirtualDom$attribute('word-spacing');
+var _elm_lang$svg$Svg_Attributes$visibility = _elm_lang$virtual_dom$VirtualDom$attribute('visibility');
+var _elm_lang$svg$Svg_Attributes$unicodeBidi = _elm_lang$virtual_dom$VirtualDom$attribute('unicode-bidi');
+var _elm_lang$svg$Svg_Attributes$textRendering = _elm_lang$virtual_dom$VirtualDom$attribute('text-rendering');
+var _elm_lang$svg$Svg_Attributes$textDecoration = _elm_lang$virtual_dom$VirtualDom$attribute('text-decoration');
+var _elm_lang$svg$Svg_Attributes$textAnchor = _elm_lang$virtual_dom$VirtualDom$attribute('text-anchor');
+var _elm_lang$svg$Svg_Attributes$stroke = _elm_lang$virtual_dom$VirtualDom$attribute('stroke');
+var _elm_lang$svg$Svg_Attributes$strokeWidth = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-width');
+var _elm_lang$svg$Svg_Attributes$strokeOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-opacity');
+var _elm_lang$svg$Svg_Attributes$strokeMiterlimit = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-miterlimit');
+var _elm_lang$svg$Svg_Attributes$strokeLinejoin = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-linejoin');
+var _elm_lang$svg$Svg_Attributes$strokeLinecap = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-linecap');
+var _elm_lang$svg$Svg_Attributes$strokeDashoffset = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-dashoffset');
+var _elm_lang$svg$Svg_Attributes$strokeDasharray = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-dasharray');
+var _elm_lang$svg$Svg_Attributes$stopOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('stop-opacity');
+var _elm_lang$svg$Svg_Attributes$stopColor = _elm_lang$virtual_dom$VirtualDom$attribute('stop-color');
+var _elm_lang$svg$Svg_Attributes$shapeRendering = _elm_lang$virtual_dom$VirtualDom$attribute('shape-rendering');
+var _elm_lang$svg$Svg_Attributes$pointerEvents = _elm_lang$virtual_dom$VirtualDom$attribute('pointer-events');
+var _elm_lang$svg$Svg_Attributes$overflow = _elm_lang$virtual_dom$VirtualDom$attribute('overflow');
+var _elm_lang$svg$Svg_Attributes$opacity = _elm_lang$virtual_dom$VirtualDom$attribute('opacity');
+var _elm_lang$svg$Svg_Attributes$mask = _elm_lang$virtual_dom$VirtualDom$attribute('mask');
+var _elm_lang$svg$Svg_Attributes$markerStart = _elm_lang$virtual_dom$VirtualDom$attribute('marker-start');
+var _elm_lang$svg$Svg_Attributes$markerMid = _elm_lang$virtual_dom$VirtualDom$attribute('marker-mid');
+var _elm_lang$svg$Svg_Attributes$markerEnd = _elm_lang$virtual_dom$VirtualDom$attribute('marker-end');
+var _elm_lang$svg$Svg_Attributes$lightingColor = _elm_lang$virtual_dom$VirtualDom$attribute('lighting-color');
+var _elm_lang$svg$Svg_Attributes$letterSpacing = _elm_lang$virtual_dom$VirtualDom$attribute('letter-spacing');
+var _elm_lang$svg$Svg_Attributes$kerning = _elm_lang$virtual_dom$VirtualDom$attribute('kerning');
+var _elm_lang$svg$Svg_Attributes$imageRendering = _elm_lang$virtual_dom$VirtualDom$attribute('image-rendering');
+var _elm_lang$svg$Svg_Attributes$glyphOrientationVertical = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-orientation-vertical');
+var _elm_lang$svg$Svg_Attributes$glyphOrientationHorizontal = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-orientation-horizontal');
+var _elm_lang$svg$Svg_Attributes$fontWeight = _elm_lang$virtual_dom$VirtualDom$attribute('font-weight');
+var _elm_lang$svg$Svg_Attributes$fontVariant = _elm_lang$virtual_dom$VirtualDom$attribute('font-variant');
+var _elm_lang$svg$Svg_Attributes$fontStyle = _elm_lang$virtual_dom$VirtualDom$attribute('font-style');
+var _elm_lang$svg$Svg_Attributes$fontStretch = _elm_lang$virtual_dom$VirtualDom$attribute('font-stretch');
+var _elm_lang$svg$Svg_Attributes$fontSize = _elm_lang$virtual_dom$VirtualDom$attribute('font-size');
+var _elm_lang$svg$Svg_Attributes$fontSizeAdjust = _elm_lang$virtual_dom$VirtualDom$attribute('font-size-adjust');
+var _elm_lang$svg$Svg_Attributes$fontFamily = _elm_lang$virtual_dom$VirtualDom$attribute('font-family');
+var _elm_lang$svg$Svg_Attributes$floodOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('flood-opacity');
+var _elm_lang$svg$Svg_Attributes$floodColor = _elm_lang$virtual_dom$VirtualDom$attribute('flood-color');
+var _elm_lang$svg$Svg_Attributes$filter = _elm_lang$virtual_dom$VirtualDom$attribute('filter');
+var _elm_lang$svg$Svg_Attributes$fill = _elm_lang$virtual_dom$VirtualDom$attribute('fill');
+var _elm_lang$svg$Svg_Attributes$fillRule = _elm_lang$virtual_dom$VirtualDom$attribute('fill-rule');
+var _elm_lang$svg$Svg_Attributes$fillOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('fill-opacity');
+var _elm_lang$svg$Svg_Attributes$enableBackground = _elm_lang$virtual_dom$VirtualDom$attribute('enable-background');
+var _elm_lang$svg$Svg_Attributes$dominantBaseline = _elm_lang$virtual_dom$VirtualDom$attribute('dominant-baseline');
+var _elm_lang$svg$Svg_Attributes$display = _elm_lang$virtual_dom$VirtualDom$attribute('display');
+var _elm_lang$svg$Svg_Attributes$direction = _elm_lang$virtual_dom$VirtualDom$attribute('direction');
+var _elm_lang$svg$Svg_Attributes$cursor = _elm_lang$virtual_dom$VirtualDom$attribute('cursor');
+var _elm_lang$svg$Svg_Attributes$color = _elm_lang$virtual_dom$VirtualDom$attribute('color');
+var _elm_lang$svg$Svg_Attributes$colorRendering = _elm_lang$virtual_dom$VirtualDom$attribute('color-rendering');
+var _elm_lang$svg$Svg_Attributes$colorProfile = _elm_lang$virtual_dom$VirtualDom$attribute('color-profile');
+var _elm_lang$svg$Svg_Attributes$colorInterpolation = _elm_lang$virtual_dom$VirtualDom$attribute('color-interpolation');
+var _elm_lang$svg$Svg_Attributes$colorInterpolationFilters = _elm_lang$virtual_dom$VirtualDom$attribute('color-interpolation-filters');
+var _elm_lang$svg$Svg_Attributes$clip = _elm_lang$virtual_dom$VirtualDom$attribute('clip');
+var _elm_lang$svg$Svg_Attributes$clipRule = _elm_lang$virtual_dom$VirtualDom$attribute('clip-rule');
+var _elm_lang$svg$Svg_Attributes$clipPath = _elm_lang$virtual_dom$VirtualDom$attribute('clip-path');
+var _elm_lang$svg$Svg_Attributes$baselineShift = _elm_lang$virtual_dom$VirtualDom$attribute('baseline-shift');
+var _elm_lang$svg$Svg_Attributes$alignmentBaseline = _elm_lang$virtual_dom$VirtualDom$attribute('alignment-baseline');
+var _elm_lang$svg$Svg_Attributes$zoomAndPan = _elm_lang$virtual_dom$VirtualDom$attribute('zoomAndPan');
+var _elm_lang$svg$Svg_Attributes$z = _elm_lang$virtual_dom$VirtualDom$attribute('z');
+var _elm_lang$svg$Svg_Attributes$yChannelSelector = _elm_lang$virtual_dom$VirtualDom$attribute('yChannelSelector');
+var _elm_lang$svg$Svg_Attributes$y2 = _elm_lang$virtual_dom$VirtualDom$attribute('y2');
+var _elm_lang$svg$Svg_Attributes$y1 = _elm_lang$virtual_dom$VirtualDom$attribute('y1');
+var _elm_lang$svg$Svg_Attributes$y = _elm_lang$virtual_dom$VirtualDom$attribute('y');
+var _elm_lang$svg$Svg_Attributes$xmlSpace = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:space');
+var _elm_lang$svg$Svg_Attributes$xmlLang = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:lang');
+var _elm_lang$svg$Svg_Attributes$xmlBase = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:base');
+var _elm_lang$svg$Svg_Attributes$xlinkType = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:type');
+var _elm_lang$svg$Svg_Attributes$xlinkTitle = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:title');
+var _elm_lang$svg$Svg_Attributes$xlinkShow = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:show');
+var _elm_lang$svg$Svg_Attributes$xlinkRole = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:role');
+var _elm_lang$svg$Svg_Attributes$xlinkHref = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:href');
+var _elm_lang$svg$Svg_Attributes$xlinkArcrole = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:arcrole');
+var _elm_lang$svg$Svg_Attributes$xlinkActuate = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:actuate');
+var _elm_lang$svg$Svg_Attributes$xChannelSelector = _elm_lang$virtual_dom$VirtualDom$attribute('xChannelSelector');
+var _elm_lang$svg$Svg_Attributes$x2 = _elm_lang$virtual_dom$VirtualDom$attribute('x2');
+var _elm_lang$svg$Svg_Attributes$x1 = _elm_lang$virtual_dom$VirtualDom$attribute('x1');
+var _elm_lang$svg$Svg_Attributes$xHeight = _elm_lang$virtual_dom$VirtualDom$attribute('x-height');
+var _elm_lang$svg$Svg_Attributes$x = _elm_lang$virtual_dom$VirtualDom$attribute('x');
+var _elm_lang$svg$Svg_Attributes$widths = _elm_lang$virtual_dom$VirtualDom$attribute('widths');
+var _elm_lang$svg$Svg_Attributes$width = _elm_lang$virtual_dom$VirtualDom$attribute('width');
+var _elm_lang$svg$Svg_Attributes$viewTarget = _elm_lang$virtual_dom$VirtualDom$attribute('viewTarget');
+var _elm_lang$svg$Svg_Attributes$viewBox = _elm_lang$virtual_dom$VirtualDom$attribute('viewBox');
+var _elm_lang$svg$Svg_Attributes$vertOriginY = _elm_lang$virtual_dom$VirtualDom$attribute('vert-origin-y');
+var _elm_lang$svg$Svg_Attributes$vertOriginX = _elm_lang$virtual_dom$VirtualDom$attribute('vert-origin-x');
+var _elm_lang$svg$Svg_Attributes$vertAdvY = _elm_lang$virtual_dom$VirtualDom$attribute('vert-adv-y');
+var _elm_lang$svg$Svg_Attributes$version = _elm_lang$virtual_dom$VirtualDom$attribute('version');
+var _elm_lang$svg$Svg_Attributes$values = _elm_lang$virtual_dom$VirtualDom$attribute('values');
+var _elm_lang$svg$Svg_Attributes$vMathematical = _elm_lang$virtual_dom$VirtualDom$attribute('v-mathematical');
+var _elm_lang$svg$Svg_Attributes$vIdeographic = _elm_lang$virtual_dom$VirtualDom$attribute('v-ideographic');
+var _elm_lang$svg$Svg_Attributes$vHanging = _elm_lang$virtual_dom$VirtualDom$attribute('v-hanging');
+var _elm_lang$svg$Svg_Attributes$vAlphabetic = _elm_lang$virtual_dom$VirtualDom$attribute('v-alphabetic');
+var _elm_lang$svg$Svg_Attributes$unitsPerEm = _elm_lang$virtual_dom$VirtualDom$attribute('units-per-em');
+var _elm_lang$svg$Svg_Attributes$unicodeRange = _elm_lang$virtual_dom$VirtualDom$attribute('unicode-range');
+var _elm_lang$svg$Svg_Attributes$unicode = _elm_lang$virtual_dom$VirtualDom$attribute('unicode');
+var _elm_lang$svg$Svg_Attributes$underlineThickness = _elm_lang$virtual_dom$VirtualDom$attribute('underline-thickness');
+var _elm_lang$svg$Svg_Attributes$underlinePosition = _elm_lang$virtual_dom$VirtualDom$attribute('underline-position');
+var _elm_lang$svg$Svg_Attributes$u2 = _elm_lang$virtual_dom$VirtualDom$attribute('u2');
+var _elm_lang$svg$Svg_Attributes$u1 = _elm_lang$virtual_dom$VirtualDom$attribute('u1');
+var _elm_lang$svg$Svg_Attributes$type_ = _elm_lang$virtual_dom$VirtualDom$attribute('type');
+var _elm_lang$svg$Svg_Attributes$transform = _elm_lang$virtual_dom$VirtualDom$attribute('transform');
+var _elm_lang$svg$Svg_Attributes$to = _elm_lang$virtual_dom$VirtualDom$attribute('to');
+var _elm_lang$svg$Svg_Attributes$title = _elm_lang$virtual_dom$VirtualDom$attribute('title');
+var _elm_lang$svg$Svg_Attributes$textLength = _elm_lang$virtual_dom$VirtualDom$attribute('textLength');
+var _elm_lang$svg$Svg_Attributes$targetY = _elm_lang$virtual_dom$VirtualDom$attribute('targetY');
+var _elm_lang$svg$Svg_Attributes$targetX = _elm_lang$virtual_dom$VirtualDom$attribute('targetX');
+var _elm_lang$svg$Svg_Attributes$target = _elm_lang$virtual_dom$VirtualDom$attribute('target');
+var _elm_lang$svg$Svg_Attributes$tableValues = _elm_lang$virtual_dom$VirtualDom$attribute('tableValues');
+var _elm_lang$svg$Svg_Attributes$systemLanguage = _elm_lang$virtual_dom$VirtualDom$attribute('systemLanguage');
+var _elm_lang$svg$Svg_Attributes$surfaceScale = _elm_lang$virtual_dom$VirtualDom$attribute('surfaceScale');
+var _elm_lang$svg$Svg_Attributes$style = _elm_lang$virtual_dom$VirtualDom$attribute('style');
+var _elm_lang$svg$Svg_Attributes$string = _elm_lang$virtual_dom$VirtualDom$attribute('string');
+var _elm_lang$svg$Svg_Attributes$strikethroughThickness = _elm_lang$virtual_dom$VirtualDom$attribute('strikethrough-thickness');
+var _elm_lang$svg$Svg_Attributes$strikethroughPosition = _elm_lang$virtual_dom$VirtualDom$attribute('strikethrough-position');
+var _elm_lang$svg$Svg_Attributes$stitchTiles = _elm_lang$virtual_dom$VirtualDom$attribute('stitchTiles');
+var _elm_lang$svg$Svg_Attributes$stemv = _elm_lang$virtual_dom$VirtualDom$attribute('stemv');
+var _elm_lang$svg$Svg_Attributes$stemh = _elm_lang$virtual_dom$VirtualDom$attribute('stemh');
+var _elm_lang$svg$Svg_Attributes$stdDeviation = _elm_lang$virtual_dom$VirtualDom$attribute('stdDeviation');
+var _elm_lang$svg$Svg_Attributes$startOffset = _elm_lang$virtual_dom$VirtualDom$attribute('startOffset');
+var _elm_lang$svg$Svg_Attributes$spreadMethod = _elm_lang$virtual_dom$VirtualDom$attribute('spreadMethod');
+var _elm_lang$svg$Svg_Attributes$speed = _elm_lang$virtual_dom$VirtualDom$attribute('speed');
+var _elm_lang$svg$Svg_Attributes$specularExponent = _elm_lang$virtual_dom$VirtualDom$attribute('specularExponent');
+var _elm_lang$svg$Svg_Attributes$specularConstant = _elm_lang$virtual_dom$VirtualDom$attribute('specularConstant');
+var _elm_lang$svg$Svg_Attributes$spacing = _elm_lang$virtual_dom$VirtualDom$attribute('spacing');
+var _elm_lang$svg$Svg_Attributes$slope = _elm_lang$virtual_dom$VirtualDom$attribute('slope');
+var _elm_lang$svg$Svg_Attributes$seed = _elm_lang$virtual_dom$VirtualDom$attribute('seed');
+var _elm_lang$svg$Svg_Attributes$scale = _elm_lang$virtual_dom$VirtualDom$attribute('scale');
+var _elm_lang$svg$Svg_Attributes$ry = _elm_lang$virtual_dom$VirtualDom$attribute('ry');
+var _elm_lang$svg$Svg_Attributes$rx = _elm_lang$virtual_dom$VirtualDom$attribute('rx');
+var _elm_lang$svg$Svg_Attributes$rotate = _elm_lang$virtual_dom$VirtualDom$attribute('rotate');
+var _elm_lang$svg$Svg_Attributes$result = _elm_lang$virtual_dom$VirtualDom$attribute('result');
+var _elm_lang$svg$Svg_Attributes$restart = _elm_lang$virtual_dom$VirtualDom$attribute('restart');
+var _elm_lang$svg$Svg_Attributes$requiredFeatures = _elm_lang$virtual_dom$VirtualDom$attribute('requiredFeatures');
+var _elm_lang$svg$Svg_Attributes$requiredExtensions = _elm_lang$virtual_dom$VirtualDom$attribute('requiredExtensions');
+var _elm_lang$svg$Svg_Attributes$repeatDur = _elm_lang$virtual_dom$VirtualDom$attribute('repeatDur');
+var _elm_lang$svg$Svg_Attributes$repeatCount = _elm_lang$virtual_dom$VirtualDom$attribute('repeatCount');
+var _elm_lang$svg$Svg_Attributes$renderingIntent = _elm_lang$virtual_dom$VirtualDom$attribute('rendering-intent');
+var _elm_lang$svg$Svg_Attributes$refY = _elm_lang$virtual_dom$VirtualDom$attribute('refY');
+var _elm_lang$svg$Svg_Attributes$refX = _elm_lang$virtual_dom$VirtualDom$attribute('refX');
+var _elm_lang$svg$Svg_Attributes$radius = _elm_lang$virtual_dom$VirtualDom$attribute('radius');
+var _elm_lang$svg$Svg_Attributes$r = _elm_lang$virtual_dom$VirtualDom$attribute('r');
+var _elm_lang$svg$Svg_Attributes$primitiveUnits = _elm_lang$virtual_dom$VirtualDom$attribute('primitiveUnits');
+var _elm_lang$svg$Svg_Attributes$preserveAspectRatio = _elm_lang$virtual_dom$VirtualDom$attribute('preserveAspectRatio');
+var _elm_lang$svg$Svg_Attributes$preserveAlpha = _elm_lang$virtual_dom$VirtualDom$attribute('preserveAlpha');
+var _elm_lang$svg$Svg_Attributes$pointsAtZ = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtZ');
+var _elm_lang$svg$Svg_Attributes$pointsAtY = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtY');
+var _elm_lang$svg$Svg_Attributes$pointsAtX = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtX');
+var _elm_lang$svg$Svg_Attributes$points = _elm_lang$virtual_dom$VirtualDom$attribute('points');
+var _elm_lang$svg$Svg_Attributes$pointOrder = _elm_lang$virtual_dom$VirtualDom$attribute('point-order');
+var _elm_lang$svg$Svg_Attributes$patternUnits = _elm_lang$virtual_dom$VirtualDom$attribute('patternUnits');
+var _elm_lang$svg$Svg_Attributes$patternTransform = _elm_lang$virtual_dom$VirtualDom$attribute('patternTransform');
+var _elm_lang$svg$Svg_Attributes$patternContentUnits = _elm_lang$virtual_dom$VirtualDom$attribute('patternContentUnits');
+var _elm_lang$svg$Svg_Attributes$pathLength = _elm_lang$virtual_dom$VirtualDom$attribute('pathLength');
+var _elm_lang$svg$Svg_Attributes$path = _elm_lang$virtual_dom$VirtualDom$attribute('path');
+var _elm_lang$svg$Svg_Attributes$panose1 = _elm_lang$virtual_dom$VirtualDom$attribute('panose-1');
+var _elm_lang$svg$Svg_Attributes$overlineThickness = _elm_lang$virtual_dom$VirtualDom$attribute('overline-thickness');
+var _elm_lang$svg$Svg_Attributes$overlinePosition = _elm_lang$virtual_dom$VirtualDom$attribute('overline-position');
+var _elm_lang$svg$Svg_Attributes$origin = _elm_lang$virtual_dom$VirtualDom$attribute('origin');
+var _elm_lang$svg$Svg_Attributes$orientation = _elm_lang$virtual_dom$VirtualDom$attribute('orientation');
+var _elm_lang$svg$Svg_Attributes$orient = _elm_lang$virtual_dom$VirtualDom$attribute('orient');
+var _elm_lang$svg$Svg_Attributes$order = _elm_lang$virtual_dom$VirtualDom$attribute('order');
+var _elm_lang$svg$Svg_Attributes$operator = _elm_lang$virtual_dom$VirtualDom$attribute('operator');
+var _elm_lang$svg$Svg_Attributes$offset = _elm_lang$virtual_dom$VirtualDom$attribute('offset');
+var _elm_lang$svg$Svg_Attributes$numOctaves = _elm_lang$virtual_dom$VirtualDom$attribute('numOctaves');
+var _elm_lang$svg$Svg_Attributes$name = _elm_lang$virtual_dom$VirtualDom$attribute('name');
+var _elm_lang$svg$Svg_Attributes$mode = _elm_lang$virtual_dom$VirtualDom$attribute('mode');
+var _elm_lang$svg$Svg_Attributes$min = _elm_lang$virtual_dom$VirtualDom$attribute('min');
+var _elm_lang$svg$Svg_Attributes$method = _elm_lang$virtual_dom$VirtualDom$attribute('method');
+var _elm_lang$svg$Svg_Attributes$media = _elm_lang$virtual_dom$VirtualDom$attribute('media');
+var _elm_lang$svg$Svg_Attributes$max = _elm_lang$virtual_dom$VirtualDom$attribute('max');
+var _elm_lang$svg$Svg_Attributes$mathematical = _elm_lang$virtual_dom$VirtualDom$attribute('mathematical');
+var _elm_lang$svg$Svg_Attributes$maskUnits = _elm_lang$virtual_dom$VirtualDom$attribute('maskUnits');
+var _elm_lang$svg$Svg_Attributes$maskContentUnits = _elm_lang$virtual_dom$VirtualDom$attribute('maskContentUnits');
+var _elm_lang$svg$Svg_Attributes$markerWidth = _elm_lang$virtual_dom$VirtualDom$attribute('markerWidth');
+var _elm_lang$svg$Svg_Attributes$markerUnits = _elm_lang$virtual_dom$VirtualDom$attribute('markerUnits');
+var _elm_lang$svg$Svg_Attributes$markerHeight = _elm_lang$virtual_dom$VirtualDom$attribute('markerHeight');
+var _elm_lang$svg$Svg_Attributes$local = _elm_lang$virtual_dom$VirtualDom$attribute('local');
+var _elm_lang$svg$Svg_Attributes$limitingConeAngle = _elm_lang$virtual_dom$VirtualDom$attribute('limitingConeAngle');
+var _elm_lang$svg$Svg_Attributes$lengthAdjust = _elm_lang$virtual_dom$VirtualDom$attribute('lengthAdjust');
+var _elm_lang$svg$Svg_Attributes$lang = _elm_lang$virtual_dom$VirtualDom$attribute('lang');
+var _elm_lang$svg$Svg_Attributes$keyTimes = _elm_lang$virtual_dom$VirtualDom$attribute('keyTimes');
+var _elm_lang$svg$Svg_Attributes$keySplines = _elm_lang$virtual_dom$VirtualDom$attribute('keySplines');
+var _elm_lang$svg$Svg_Attributes$keyPoints = _elm_lang$virtual_dom$VirtualDom$attribute('keyPoints');
+var _elm_lang$svg$Svg_Attributes$kernelUnitLength = _elm_lang$virtual_dom$VirtualDom$attribute('kernelUnitLength');
+var _elm_lang$svg$Svg_Attributes$kernelMatrix = _elm_lang$virtual_dom$VirtualDom$attribute('kernelMatrix');
+var _elm_lang$svg$Svg_Attributes$k4 = _elm_lang$virtual_dom$VirtualDom$attribute('k4');
+var _elm_lang$svg$Svg_Attributes$k3 = _elm_lang$virtual_dom$VirtualDom$attribute('k3');
+var _elm_lang$svg$Svg_Attributes$k2 = _elm_lang$virtual_dom$VirtualDom$attribute('k2');
+var _elm_lang$svg$Svg_Attributes$k1 = _elm_lang$virtual_dom$VirtualDom$attribute('k1');
+var _elm_lang$svg$Svg_Attributes$k = _elm_lang$virtual_dom$VirtualDom$attribute('k');
+var _elm_lang$svg$Svg_Attributes$intercept = _elm_lang$virtual_dom$VirtualDom$attribute('intercept');
+var _elm_lang$svg$Svg_Attributes$in2 = _elm_lang$virtual_dom$VirtualDom$attribute('in2');
+var _elm_lang$svg$Svg_Attributes$in_ = _elm_lang$virtual_dom$VirtualDom$attribute('in');
+var _elm_lang$svg$Svg_Attributes$ideographic = _elm_lang$virtual_dom$VirtualDom$attribute('ideographic');
+var _elm_lang$svg$Svg_Attributes$id = _elm_lang$virtual_dom$VirtualDom$attribute('id');
+var _elm_lang$svg$Svg_Attributes$horizOriginY = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-origin-y');
+var _elm_lang$svg$Svg_Attributes$horizOriginX = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-origin-x');
+var _elm_lang$svg$Svg_Attributes$horizAdvX = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-adv-x');
+var _elm_lang$svg$Svg_Attributes$height = _elm_lang$virtual_dom$VirtualDom$attribute('height');
+var _elm_lang$svg$Svg_Attributes$hanging = _elm_lang$virtual_dom$VirtualDom$attribute('hanging');
+var _elm_lang$svg$Svg_Attributes$gradientUnits = _elm_lang$virtual_dom$VirtualDom$attribute('gradientUnits');
+var _elm_lang$svg$Svg_Attributes$gradientTransform = _elm_lang$virtual_dom$VirtualDom$attribute('gradientTransform');
+var _elm_lang$svg$Svg_Attributes$glyphRef = _elm_lang$virtual_dom$VirtualDom$attribute('glyphRef');
+var _elm_lang$svg$Svg_Attributes$glyphName = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-name');
+var _elm_lang$svg$Svg_Attributes$g2 = _elm_lang$virtual_dom$VirtualDom$attribute('g2');
+var _elm_lang$svg$Svg_Attributes$g1 = _elm_lang$virtual_dom$VirtualDom$attribute('g1');
+var _elm_lang$svg$Svg_Attributes$fy = _elm_lang$virtual_dom$VirtualDom$attribute('fy');
+var _elm_lang$svg$Svg_Attributes$fx = _elm_lang$virtual_dom$VirtualDom$attribute('fx');
+var _elm_lang$svg$Svg_Attributes$from = _elm_lang$virtual_dom$VirtualDom$attribute('from');
+var _elm_lang$svg$Svg_Attributes$format = _elm_lang$virtual_dom$VirtualDom$attribute('format');
+var _elm_lang$svg$Svg_Attributes$filterUnits = _elm_lang$virtual_dom$VirtualDom$attribute('filterUnits');
+var _elm_lang$svg$Svg_Attributes$filterRes = _elm_lang$virtual_dom$VirtualDom$attribute('filterRes');
+var _elm_lang$svg$Svg_Attributes$externalResourcesRequired = _elm_lang$virtual_dom$VirtualDom$attribute('externalResourcesRequired');
+var _elm_lang$svg$Svg_Attributes$exponent = _elm_lang$virtual_dom$VirtualDom$attribute('exponent');
+var _elm_lang$svg$Svg_Attributes$end = _elm_lang$virtual_dom$VirtualDom$attribute('end');
+var _elm_lang$svg$Svg_Attributes$elevation = _elm_lang$virtual_dom$VirtualDom$attribute('elevation');
+var _elm_lang$svg$Svg_Attributes$edgeMode = _elm_lang$virtual_dom$VirtualDom$attribute('edgeMode');
+var _elm_lang$svg$Svg_Attributes$dy = _elm_lang$virtual_dom$VirtualDom$attribute('dy');
+var _elm_lang$svg$Svg_Attributes$dx = _elm_lang$virtual_dom$VirtualDom$attribute('dx');
+var _elm_lang$svg$Svg_Attributes$dur = _elm_lang$virtual_dom$VirtualDom$attribute('dur');
+var _elm_lang$svg$Svg_Attributes$divisor = _elm_lang$virtual_dom$VirtualDom$attribute('divisor');
+var _elm_lang$svg$Svg_Attributes$diffuseConstant = _elm_lang$virtual_dom$VirtualDom$attribute('diffuseConstant');
+var _elm_lang$svg$Svg_Attributes$descent = _elm_lang$virtual_dom$VirtualDom$attribute('descent');
+var _elm_lang$svg$Svg_Attributes$decelerate = _elm_lang$virtual_dom$VirtualDom$attribute('decelerate');
+var _elm_lang$svg$Svg_Attributes$d = _elm_lang$virtual_dom$VirtualDom$attribute('d');
+var _elm_lang$svg$Svg_Attributes$cy = _elm_lang$virtual_dom$VirtualDom$attribute('cy');
+var _elm_lang$svg$Svg_Attributes$cx = _elm_lang$virtual_dom$VirtualDom$attribute('cx');
+var _elm_lang$svg$Svg_Attributes$contentStyleType = _elm_lang$virtual_dom$VirtualDom$attribute('contentStyleType');
+var _elm_lang$svg$Svg_Attributes$contentScriptType = _elm_lang$virtual_dom$VirtualDom$attribute('contentScriptType');
+var _elm_lang$svg$Svg_Attributes$clipPathUnits = _elm_lang$virtual_dom$VirtualDom$attribute('clipPathUnits');
+var _elm_lang$svg$Svg_Attributes$class = _elm_lang$virtual_dom$VirtualDom$attribute('class');
+var _elm_lang$svg$Svg_Attributes$capHeight = _elm_lang$virtual_dom$VirtualDom$attribute('cap-height');
+var _elm_lang$svg$Svg_Attributes$calcMode = _elm_lang$virtual_dom$VirtualDom$attribute('calcMode');
+var _elm_lang$svg$Svg_Attributes$by = _elm_lang$virtual_dom$VirtualDom$attribute('by');
+var _elm_lang$svg$Svg_Attributes$bias = _elm_lang$virtual_dom$VirtualDom$attribute('bias');
+var _elm_lang$svg$Svg_Attributes$begin = _elm_lang$virtual_dom$VirtualDom$attribute('begin');
+var _elm_lang$svg$Svg_Attributes$bbox = _elm_lang$virtual_dom$VirtualDom$attribute('bbox');
+var _elm_lang$svg$Svg_Attributes$baseProfile = _elm_lang$virtual_dom$VirtualDom$attribute('baseProfile');
+var _elm_lang$svg$Svg_Attributes$baseFrequency = _elm_lang$virtual_dom$VirtualDom$attribute('baseFrequency');
+var _elm_lang$svg$Svg_Attributes$azimuth = _elm_lang$virtual_dom$VirtualDom$attribute('azimuth');
+var _elm_lang$svg$Svg_Attributes$autoReverse = _elm_lang$virtual_dom$VirtualDom$attribute('autoReverse');
+var _elm_lang$svg$Svg_Attributes$attributeType = _elm_lang$virtual_dom$VirtualDom$attribute('attributeType');
+var _elm_lang$svg$Svg_Attributes$attributeName = _elm_lang$virtual_dom$VirtualDom$attribute('attributeName');
+var _elm_lang$svg$Svg_Attributes$ascent = _elm_lang$virtual_dom$VirtualDom$attribute('ascent');
+var _elm_lang$svg$Svg_Attributes$arabicForm = _elm_lang$virtual_dom$VirtualDom$attribute('arabic-form');
+var _elm_lang$svg$Svg_Attributes$amplitude = _elm_lang$virtual_dom$VirtualDom$attribute('amplitude');
+var _elm_lang$svg$Svg_Attributes$allowReorder = _elm_lang$virtual_dom$VirtualDom$attribute('allowReorder');
+var _elm_lang$svg$Svg_Attributes$alphabetic = _elm_lang$virtual_dom$VirtualDom$attribute('alphabetic');
+var _elm_lang$svg$Svg_Attributes$additive = _elm_lang$virtual_dom$VirtualDom$attribute('additive');
+var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$attribute('accumulate');
+var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
+var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
+
+var _debois$elm_mdl$Material_Checkbox$indeterminate = _debois$elm_mdl$Material_Internal_Options$input(
+	{
+		ctor: '::',
+		_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+			A2(
+				_elm_lang$html$Html_Attributes$property,
+				'indeterminate',
+				_elm_lang$core$Json_Encode$bool(true))),
+		_1: {ctor: '[]'}
+	});
+var _debois$elm_mdl$Material_Checkbox$checked = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{value: true});
+	});
+var _debois$elm_mdl$Material_Checkbox$disabled = _debois$elm_mdl$Material_Options$many(
+	{
+		ctor: '::',
+		_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox--disabled'),
+		_1: {
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Internal_Options$input(
+				{
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+						_elm_lang$html$Html_Attributes$disabled(true)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
+var _debois$elm_mdl$Material_Checkbox$defaultConfig = {
+	input: {ctor: '[]'},
+	container: {ctor: '[]'},
+	value: false
+};
+var _debois$elm_mdl$Material_Checkbox$view = F4(
+	function (lift, model, options, _p0) {
+		var _p1 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Checkbox$defaultConfig, options);
+		var summary = _p1;
+		var config = _p1.config;
+		return A4(
+			_debois$elm_mdl$Material_Internal_Options$applyContainer,
+			summary,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox'),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+						_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A4(
+					_debois$elm_mdl$Material_Internal_Options$applyInput,
+					summary,
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox__native-control'),
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+								_elm_lang$html$Html_Attributes$type_('checkbox')),
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+									_elm_lang$html$Html_Attributes$checked(config.value)),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Internal_Options$on1,
+										'focus',
+										lift,
+										_debois$elm_mdl$Material_Internal_Checkbox$SetFocus(true)),
+									_1: {
+										ctor: '::',
+										_0: A3(
+											_debois$elm_mdl$Material_Internal_Options$on1,
+											'blur',
+											lift,
+											_debois$elm_mdl$Material_Internal_Checkbox$SetFocus(false)),
+										_1: {
+											ctor: '::',
+											_0: A3(
+												_debois$elm_mdl$Material_Options$onWithOptions,
+												'click',
+												{preventDefault: true, stopPropagation: false},
+												_elm_lang$core$Json_Decode$succeed(
+													lift(_debois$elm_mdl$Material_Internal_Checkbox$NoOp))),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox__background'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$svg,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$class('mdc-checkbox__checkmark'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 24 24'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$svg$Svg$path,
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$class('mdc-checkbox__checkmark__path'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$d('M1.73,12.91 8.1,19.28 22.79,4.59'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox__mixedmark'),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Material_Checkbox$update = F3(
+	function (_p2, msg, model) {
+		var _p3 = msg;
+		if (_p3.ctor === 'SetFocus') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Just(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{isFocused: _p3._0})),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _debois$elm_mdl$Material_Checkbox$defaultModel = {isFocused: false};
+var _debois$elm_mdl$Material_Checkbox$_p4 = A3(
+	_debois$elm_mdl$Material_Component$indexed,
+	function (_) {
+		return _.checkbox;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{checkbox: x});
+		}),
+	_debois$elm_mdl$Material_Checkbox$defaultModel);
+var _debois$elm_mdl$Material_Checkbox$get = _debois$elm_mdl$Material_Checkbox$_p4._0;
+var _debois$elm_mdl$Material_Checkbox$set = _debois$elm_mdl$Material_Checkbox$_p4._1;
+var _debois$elm_mdl$Material_Checkbox$react = A4(_debois$elm_mdl$Material_Component$react, _debois$elm_mdl$Material_Checkbox$get, _debois$elm_mdl$Material_Checkbox$set, _debois$elm_mdl$Material_Msg$CheckboxMsg, _debois$elm_mdl$Material_Checkbox$update);
+var _debois$elm_mdl$Material_Checkbox$render = F4(
+	function (lift, index, store, options) {
+		return A7(
+			_debois$elm_mdl$Material_Component$render,
+			_debois$elm_mdl$Material_Checkbox$get,
+			_debois$elm_mdl$Material_Checkbox$view,
+			_debois$elm_mdl$Material_Msg$CheckboxMsg,
+			lift,
+			index,
+			store,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Internal_Options$dispatch(lift),
+				_1: options
+			});
+	});
+var _debois$elm_mdl$Material_Checkbox$Model = function (a) {
+	return {isFocused: a};
+};
+var _debois$elm_mdl$Material_Checkbox$Config = F3(
+	function (a, b, c) {
+		return {input: a, container: b, value: c};
+	});
+
 var _debois$elm_mdl$Material_Fab$disabled = _debois$elm_mdl$Material_Internal_Options$option(
 	function (options) {
 		return _elm_lang$core$Native_Utils.update(
@@ -10754,6 +11343,138 @@ var _debois$elm_mdl$Material_Fab$Model = {};
 var _debois$elm_mdl$Material_Fab$Config = function (a) {
 	return {disabled: a};
 };
+
+var _debois$elm_mdl$Material_IconToggle$disabled = _debois$elm_mdl$Material_Options$cs('mdc-icon-toggle--disabled');
+var _debois$elm_mdl$Material_IconToggle$accent = _debois$elm_mdl$Material_Options$cs('mdc-icon-toggle--accent');
+var _debois$elm_mdl$Material_IconToggle$primary = _debois$elm_mdl$Material_Options$cs('mdc-icon-toggle--primary');
+var _debois$elm_mdl$Material_IconToggle$inner = function (_p0) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (value, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						inner: _elm_lang$core$Maybe$Just(value)
+					});
+			})(_p0));
+};
+var _debois$elm_mdl$Material_IconToggle$label = F2(
+	function (on, off) {
+		return _debois$elm_mdl$Material_Internal_Options$option(
+			function (config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						label: {on: on, off: off}
+					});
+			});
+	});
+var _debois$elm_mdl$Material_IconToggle$icon = F2(
+	function (on, off) {
+		return _debois$elm_mdl$Material_Internal_Options$option(
+			function (config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						icon: {on: on, off: off}
+					});
+			});
+	});
+var _debois$elm_mdl$Material_IconToggle$on = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{on: true});
+	});
+var _debois$elm_mdl$Material_IconToggle$defaultConfig = {
+	on: false,
+	label: {on: '', off: ''},
+	icon: {on: '', off: ''},
+	inner: _elm_lang$core$Maybe$Nothing
+};
+var _debois$elm_mdl$Material_IconToggle$view = F4(
+	function (lift, model, options, _p1) {
+		var _p2 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_IconToggle$defaultConfig, options);
+		var summary = _p2;
+		var config = _p2.config;
+		return A5(
+			_debois$elm_mdl$Material_Internal_Options$apply,
+			summary,
+			_elm_lang$core$Native_Utils.eq(config.inner, _elm_lang$core$Maybe$Nothing) ? _elm_lang$html$Html$i : _elm_lang$html$Html$span,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-icon-toggle'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Material_Options$when,
+						_elm_lang$core$Native_Utils.eq(config.inner, _elm_lang$core$Maybe$Nothing),
+						_debois$elm_mdl$Material_Options$cs('material-icons')),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$aria,
+							'label',
+							config.on ? config.label.on : config.label.off),
+						_1: options
+					}
+				}
+			},
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: (!_elm_lang$core$Native_Utils.eq(config.inner, _elm_lang$core$Maybe$Nothing)) ? A3(
+					_debois$elm_mdl$Material_Options$styled,
+					_elm_lang$html$Html$i,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$cs(
+							A2(_elm_lang$core$Maybe$withDefault, 'material-icons', config.inner)),
+						_1: {
+							ctor: '::',
+							_0: config.on ? _debois$elm_mdl$Material_Options$cs(config.icon.on) : _debois$elm_mdl$Material_Options$cs(config.icon.off),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}) : _elm_lang$html$Html$text(
+					config.on ? config.icon.on : config.icon.off),
+				_1: {ctor: '[]'}
+			});
+	});
+var _debois$elm_mdl$Material_IconToggle$update = F2(
+	function (msg, model) {
+		var _p3 = msg;
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			model,
+			{ctor: '[]'});
+	});
+var _debois$elm_mdl$Material_IconToggle$defaultModel = false;
+var _debois$elm_mdl$Material_IconToggle$_p4 = A3(
+	_debois$elm_mdl$Material_Component$indexed,
+	function (_) {
+		return _.iconToggle;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{iconToggle: x});
+		}),
+	_debois$elm_mdl$Material_IconToggle$defaultModel);
+var _debois$elm_mdl$Material_IconToggle$get = _debois$elm_mdl$Material_IconToggle$_p4._0;
+var _debois$elm_mdl$Material_IconToggle$set = _debois$elm_mdl$Material_IconToggle$_p4._1;
+var _debois$elm_mdl$Material_IconToggle$react = A4(
+	_debois$elm_mdl$Material_Component$react,
+	_debois$elm_mdl$Material_IconToggle$get,
+	_debois$elm_mdl$Material_IconToggle$set,
+	_debois$elm_mdl$Material_Msg$IconToggleMsg,
+	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_IconToggle$update));
+var _debois$elm_mdl$Material_IconToggle$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_IconToggle$get, _debois$elm_mdl$Material_IconToggle$view, _debois$elm_mdl$Material_Msg$IconToggleMsg);
+var _debois$elm_mdl$Material_IconToggle$Config = F4(
+	function (a, b, c, d) {
+		return {on: a, label: b, icon: c, inner: d};
+	});
 
 var _elm_lang$animation_frame$Native_AnimationFrame = function()
 {
@@ -12945,6 +13666,182 @@ var _debois$elm_mdl$Material_Snackbar$react = F4(
 				A2(_debois$elm_mdl$Material_Snackbar$get, idx, store)));
 	});
 
+var _debois$elm_mdl$Material_Switch$on = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{value: true});
+	});
+var _debois$elm_mdl$Material_Switch$disabled = _debois$elm_mdl$Material_Options$many(
+	{
+		ctor: '::',
+		_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox--disabled'),
+		_1: {
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Internal_Options$input(
+				{
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+						_elm_lang$html$Html_Attributes$disabled(true)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
+var _debois$elm_mdl$Material_Switch$defaultConfig = {
+	input: {ctor: '[]'},
+	container: {ctor: '[]'},
+	value: false
+};
+var _debois$elm_mdl$Material_Switch$view = F4(
+	function (lift, model, options, _p0) {
+		var _p1 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Switch$defaultConfig, options);
+		var summary = _p1;
+		var config = _p1.config;
+		return A4(
+			_debois$elm_mdl$Material_Internal_Options$applyContainer,
+			summary,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-switch'),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+						_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A4(
+					_debois$elm_mdl$Material_Internal_Options$applyInput,
+					summary,
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$cs('mdc-switch__native-control'),
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+								_elm_lang$html$Html_Attributes$type_('checkbox')),
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+									_elm_lang$html$Html_Attributes$checked(config.value)),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Internal_Options$on1,
+										'focus',
+										lift,
+										_debois$elm_mdl$Material_Internal_Switch$SetFocus(true)),
+									_1: {
+										ctor: '::',
+										_0: A3(
+											_debois$elm_mdl$Material_Internal_Options$on1,
+											'blur',
+											lift,
+											_debois$elm_mdl$Material_Internal_Switch$SetFocus(false)),
+										_1: {
+											ctor: '::',
+											_0: A3(
+												_debois$elm_mdl$Material_Options$onWithOptions,
+												'click',
+												{preventDefault: true, stopPropagation: false},
+												_elm_lang$core$Json_Decode$succeed(
+													lift(_debois$elm_mdl$Material_Internal_Switch$NoOp))),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Options$cs('mdc-switch__background'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-switch__knob'),
+									_1: {ctor: '[]'}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Material_Switch$update = F3(
+	function (_p2, msg, model) {
+		var _p3 = msg;
+		if (_p3.ctor === 'SetFocus') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Just(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{isFocused: _p3._0})),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _debois$elm_mdl$Material_Switch$defaultModel = {isFocused: false};
+var _debois$elm_mdl$Material_Switch$_p4 = A3(
+	_debois$elm_mdl$Material_Component$indexed,
+	function (_) {
+		return _.$switch;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{$switch: x});
+		}),
+	_debois$elm_mdl$Material_Switch$defaultModel);
+var _debois$elm_mdl$Material_Switch$get = _debois$elm_mdl$Material_Switch$_p4._0;
+var _debois$elm_mdl$Material_Switch$set = _debois$elm_mdl$Material_Switch$_p4._1;
+var _debois$elm_mdl$Material_Switch$react = A4(_debois$elm_mdl$Material_Component$react, _debois$elm_mdl$Material_Switch$get, _debois$elm_mdl$Material_Switch$set, _debois$elm_mdl$Material_Msg$SwitchMsg, _debois$elm_mdl$Material_Switch$update);
+var _debois$elm_mdl$Material_Switch$render = F4(
+	function (lift, index, store, options) {
+		return A7(
+			_debois$elm_mdl$Material_Component$render,
+			_debois$elm_mdl$Material_Switch$get,
+			_debois$elm_mdl$Material_Switch$view,
+			_debois$elm_mdl$Material_Msg$SwitchMsg,
+			lift,
+			index,
+			store,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Internal_Options$dispatch(lift),
+				_1: options
+			});
+	});
+var _debois$elm_mdl$Material_Switch$Model = function (a) {
+	return {isFocused: a};
+};
+var _debois$elm_mdl$Material_Switch$Config = F3(
+	function (a, b, c) {
+		return {input: a, container: b, value: c};
+	});
+
 var _debois$elm_mdl$Material_Tabs$catMaybes = A2(
 	_elm_lang$core$List$foldr,
 	F2(
@@ -14264,536 +15161,6 @@ var _debois$elm_mdl$Material_Textfield$Model = F3(
 		return {isFocused: a, isDirty: b, value: c};
 	});
 
-var _elm_lang$svg$Svg$map = _elm_lang$virtual_dom$VirtualDom$map;
-var _elm_lang$svg$Svg$text = _elm_lang$virtual_dom$VirtualDom$text;
-var _elm_lang$svg$Svg$svgNamespace = A2(
-	_elm_lang$virtual_dom$VirtualDom$property,
-	'namespace',
-	_elm_lang$core$Json_Encode$string('http://www.w3.org/2000/svg'));
-var _elm_lang$svg$Svg$node = F3(
-	function (name, attributes, children) {
-		return A3(
-			_elm_lang$virtual_dom$VirtualDom$node,
-			name,
-			{ctor: '::', _0: _elm_lang$svg$Svg$svgNamespace, _1: attributes},
-			children);
-	});
-var _elm_lang$svg$Svg$svg = _elm_lang$svg$Svg$node('svg');
-var _elm_lang$svg$Svg$foreignObject = _elm_lang$svg$Svg$node('foreignObject');
-var _elm_lang$svg$Svg$animate = _elm_lang$svg$Svg$node('animate');
-var _elm_lang$svg$Svg$animateColor = _elm_lang$svg$Svg$node('animateColor');
-var _elm_lang$svg$Svg$animateMotion = _elm_lang$svg$Svg$node('animateMotion');
-var _elm_lang$svg$Svg$animateTransform = _elm_lang$svg$Svg$node('animateTransform');
-var _elm_lang$svg$Svg$mpath = _elm_lang$svg$Svg$node('mpath');
-var _elm_lang$svg$Svg$set = _elm_lang$svg$Svg$node('set');
-var _elm_lang$svg$Svg$a = _elm_lang$svg$Svg$node('a');
-var _elm_lang$svg$Svg$defs = _elm_lang$svg$Svg$node('defs');
-var _elm_lang$svg$Svg$g = _elm_lang$svg$Svg$node('g');
-var _elm_lang$svg$Svg$marker = _elm_lang$svg$Svg$node('marker');
-var _elm_lang$svg$Svg$mask = _elm_lang$svg$Svg$node('mask');
-var _elm_lang$svg$Svg$pattern = _elm_lang$svg$Svg$node('pattern');
-var _elm_lang$svg$Svg$switch = _elm_lang$svg$Svg$node('switch');
-var _elm_lang$svg$Svg$symbol = _elm_lang$svg$Svg$node('symbol');
-var _elm_lang$svg$Svg$desc = _elm_lang$svg$Svg$node('desc');
-var _elm_lang$svg$Svg$metadata = _elm_lang$svg$Svg$node('metadata');
-var _elm_lang$svg$Svg$title = _elm_lang$svg$Svg$node('title');
-var _elm_lang$svg$Svg$feBlend = _elm_lang$svg$Svg$node('feBlend');
-var _elm_lang$svg$Svg$feColorMatrix = _elm_lang$svg$Svg$node('feColorMatrix');
-var _elm_lang$svg$Svg$feComponentTransfer = _elm_lang$svg$Svg$node('feComponentTransfer');
-var _elm_lang$svg$Svg$feComposite = _elm_lang$svg$Svg$node('feComposite');
-var _elm_lang$svg$Svg$feConvolveMatrix = _elm_lang$svg$Svg$node('feConvolveMatrix');
-var _elm_lang$svg$Svg$feDiffuseLighting = _elm_lang$svg$Svg$node('feDiffuseLighting');
-var _elm_lang$svg$Svg$feDisplacementMap = _elm_lang$svg$Svg$node('feDisplacementMap');
-var _elm_lang$svg$Svg$feFlood = _elm_lang$svg$Svg$node('feFlood');
-var _elm_lang$svg$Svg$feFuncA = _elm_lang$svg$Svg$node('feFuncA');
-var _elm_lang$svg$Svg$feFuncB = _elm_lang$svg$Svg$node('feFuncB');
-var _elm_lang$svg$Svg$feFuncG = _elm_lang$svg$Svg$node('feFuncG');
-var _elm_lang$svg$Svg$feFuncR = _elm_lang$svg$Svg$node('feFuncR');
-var _elm_lang$svg$Svg$feGaussianBlur = _elm_lang$svg$Svg$node('feGaussianBlur');
-var _elm_lang$svg$Svg$feImage = _elm_lang$svg$Svg$node('feImage');
-var _elm_lang$svg$Svg$feMerge = _elm_lang$svg$Svg$node('feMerge');
-var _elm_lang$svg$Svg$feMergeNode = _elm_lang$svg$Svg$node('feMergeNode');
-var _elm_lang$svg$Svg$feMorphology = _elm_lang$svg$Svg$node('feMorphology');
-var _elm_lang$svg$Svg$feOffset = _elm_lang$svg$Svg$node('feOffset');
-var _elm_lang$svg$Svg$feSpecularLighting = _elm_lang$svg$Svg$node('feSpecularLighting');
-var _elm_lang$svg$Svg$feTile = _elm_lang$svg$Svg$node('feTile');
-var _elm_lang$svg$Svg$feTurbulence = _elm_lang$svg$Svg$node('feTurbulence');
-var _elm_lang$svg$Svg$font = _elm_lang$svg$Svg$node('font');
-var _elm_lang$svg$Svg$linearGradient = _elm_lang$svg$Svg$node('linearGradient');
-var _elm_lang$svg$Svg$radialGradient = _elm_lang$svg$Svg$node('radialGradient');
-var _elm_lang$svg$Svg$stop = _elm_lang$svg$Svg$node('stop');
-var _elm_lang$svg$Svg$circle = _elm_lang$svg$Svg$node('circle');
-var _elm_lang$svg$Svg$ellipse = _elm_lang$svg$Svg$node('ellipse');
-var _elm_lang$svg$Svg$image = _elm_lang$svg$Svg$node('image');
-var _elm_lang$svg$Svg$line = _elm_lang$svg$Svg$node('line');
-var _elm_lang$svg$Svg$path = _elm_lang$svg$Svg$node('path');
-var _elm_lang$svg$Svg$polygon = _elm_lang$svg$Svg$node('polygon');
-var _elm_lang$svg$Svg$polyline = _elm_lang$svg$Svg$node('polyline');
-var _elm_lang$svg$Svg$rect = _elm_lang$svg$Svg$node('rect');
-var _elm_lang$svg$Svg$use = _elm_lang$svg$Svg$node('use');
-var _elm_lang$svg$Svg$feDistantLight = _elm_lang$svg$Svg$node('feDistantLight');
-var _elm_lang$svg$Svg$fePointLight = _elm_lang$svg$Svg$node('fePointLight');
-var _elm_lang$svg$Svg$feSpotLight = _elm_lang$svg$Svg$node('feSpotLight');
-var _elm_lang$svg$Svg$altGlyph = _elm_lang$svg$Svg$node('altGlyph');
-var _elm_lang$svg$Svg$altGlyphDef = _elm_lang$svg$Svg$node('altGlyphDef');
-var _elm_lang$svg$Svg$altGlyphItem = _elm_lang$svg$Svg$node('altGlyphItem');
-var _elm_lang$svg$Svg$glyph = _elm_lang$svg$Svg$node('glyph');
-var _elm_lang$svg$Svg$glyphRef = _elm_lang$svg$Svg$node('glyphRef');
-var _elm_lang$svg$Svg$textPath = _elm_lang$svg$Svg$node('textPath');
-var _elm_lang$svg$Svg$text_ = _elm_lang$svg$Svg$node('text');
-var _elm_lang$svg$Svg$tref = _elm_lang$svg$Svg$node('tref');
-var _elm_lang$svg$Svg$tspan = _elm_lang$svg$Svg$node('tspan');
-var _elm_lang$svg$Svg$clipPath = _elm_lang$svg$Svg$node('clipPath');
-var _elm_lang$svg$Svg$colorProfile = _elm_lang$svg$Svg$node('colorProfile');
-var _elm_lang$svg$Svg$cursor = _elm_lang$svg$Svg$node('cursor');
-var _elm_lang$svg$Svg$filter = _elm_lang$svg$Svg$node('filter');
-var _elm_lang$svg$Svg$script = _elm_lang$svg$Svg$node('script');
-var _elm_lang$svg$Svg$style = _elm_lang$svg$Svg$node('style');
-var _elm_lang$svg$Svg$view = _elm_lang$svg$Svg$node('view');
-
-var _elm_lang$svg$Svg_Attributes$writingMode = _elm_lang$virtual_dom$VirtualDom$attribute('writing-mode');
-var _elm_lang$svg$Svg_Attributes$wordSpacing = _elm_lang$virtual_dom$VirtualDom$attribute('word-spacing');
-var _elm_lang$svg$Svg_Attributes$visibility = _elm_lang$virtual_dom$VirtualDom$attribute('visibility');
-var _elm_lang$svg$Svg_Attributes$unicodeBidi = _elm_lang$virtual_dom$VirtualDom$attribute('unicode-bidi');
-var _elm_lang$svg$Svg_Attributes$textRendering = _elm_lang$virtual_dom$VirtualDom$attribute('text-rendering');
-var _elm_lang$svg$Svg_Attributes$textDecoration = _elm_lang$virtual_dom$VirtualDom$attribute('text-decoration');
-var _elm_lang$svg$Svg_Attributes$textAnchor = _elm_lang$virtual_dom$VirtualDom$attribute('text-anchor');
-var _elm_lang$svg$Svg_Attributes$stroke = _elm_lang$virtual_dom$VirtualDom$attribute('stroke');
-var _elm_lang$svg$Svg_Attributes$strokeWidth = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-width');
-var _elm_lang$svg$Svg_Attributes$strokeOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-opacity');
-var _elm_lang$svg$Svg_Attributes$strokeMiterlimit = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-miterlimit');
-var _elm_lang$svg$Svg_Attributes$strokeLinejoin = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-linejoin');
-var _elm_lang$svg$Svg_Attributes$strokeLinecap = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-linecap');
-var _elm_lang$svg$Svg_Attributes$strokeDashoffset = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-dashoffset');
-var _elm_lang$svg$Svg_Attributes$strokeDasharray = _elm_lang$virtual_dom$VirtualDom$attribute('stroke-dasharray');
-var _elm_lang$svg$Svg_Attributes$stopOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('stop-opacity');
-var _elm_lang$svg$Svg_Attributes$stopColor = _elm_lang$virtual_dom$VirtualDom$attribute('stop-color');
-var _elm_lang$svg$Svg_Attributes$shapeRendering = _elm_lang$virtual_dom$VirtualDom$attribute('shape-rendering');
-var _elm_lang$svg$Svg_Attributes$pointerEvents = _elm_lang$virtual_dom$VirtualDom$attribute('pointer-events');
-var _elm_lang$svg$Svg_Attributes$overflow = _elm_lang$virtual_dom$VirtualDom$attribute('overflow');
-var _elm_lang$svg$Svg_Attributes$opacity = _elm_lang$virtual_dom$VirtualDom$attribute('opacity');
-var _elm_lang$svg$Svg_Attributes$mask = _elm_lang$virtual_dom$VirtualDom$attribute('mask');
-var _elm_lang$svg$Svg_Attributes$markerStart = _elm_lang$virtual_dom$VirtualDom$attribute('marker-start');
-var _elm_lang$svg$Svg_Attributes$markerMid = _elm_lang$virtual_dom$VirtualDom$attribute('marker-mid');
-var _elm_lang$svg$Svg_Attributes$markerEnd = _elm_lang$virtual_dom$VirtualDom$attribute('marker-end');
-var _elm_lang$svg$Svg_Attributes$lightingColor = _elm_lang$virtual_dom$VirtualDom$attribute('lighting-color');
-var _elm_lang$svg$Svg_Attributes$letterSpacing = _elm_lang$virtual_dom$VirtualDom$attribute('letter-spacing');
-var _elm_lang$svg$Svg_Attributes$kerning = _elm_lang$virtual_dom$VirtualDom$attribute('kerning');
-var _elm_lang$svg$Svg_Attributes$imageRendering = _elm_lang$virtual_dom$VirtualDom$attribute('image-rendering');
-var _elm_lang$svg$Svg_Attributes$glyphOrientationVertical = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-orientation-vertical');
-var _elm_lang$svg$Svg_Attributes$glyphOrientationHorizontal = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-orientation-horizontal');
-var _elm_lang$svg$Svg_Attributes$fontWeight = _elm_lang$virtual_dom$VirtualDom$attribute('font-weight');
-var _elm_lang$svg$Svg_Attributes$fontVariant = _elm_lang$virtual_dom$VirtualDom$attribute('font-variant');
-var _elm_lang$svg$Svg_Attributes$fontStyle = _elm_lang$virtual_dom$VirtualDom$attribute('font-style');
-var _elm_lang$svg$Svg_Attributes$fontStretch = _elm_lang$virtual_dom$VirtualDom$attribute('font-stretch');
-var _elm_lang$svg$Svg_Attributes$fontSize = _elm_lang$virtual_dom$VirtualDom$attribute('font-size');
-var _elm_lang$svg$Svg_Attributes$fontSizeAdjust = _elm_lang$virtual_dom$VirtualDom$attribute('font-size-adjust');
-var _elm_lang$svg$Svg_Attributes$fontFamily = _elm_lang$virtual_dom$VirtualDom$attribute('font-family');
-var _elm_lang$svg$Svg_Attributes$floodOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('flood-opacity');
-var _elm_lang$svg$Svg_Attributes$floodColor = _elm_lang$virtual_dom$VirtualDom$attribute('flood-color');
-var _elm_lang$svg$Svg_Attributes$filter = _elm_lang$virtual_dom$VirtualDom$attribute('filter');
-var _elm_lang$svg$Svg_Attributes$fill = _elm_lang$virtual_dom$VirtualDom$attribute('fill');
-var _elm_lang$svg$Svg_Attributes$fillRule = _elm_lang$virtual_dom$VirtualDom$attribute('fill-rule');
-var _elm_lang$svg$Svg_Attributes$fillOpacity = _elm_lang$virtual_dom$VirtualDom$attribute('fill-opacity');
-var _elm_lang$svg$Svg_Attributes$enableBackground = _elm_lang$virtual_dom$VirtualDom$attribute('enable-background');
-var _elm_lang$svg$Svg_Attributes$dominantBaseline = _elm_lang$virtual_dom$VirtualDom$attribute('dominant-baseline');
-var _elm_lang$svg$Svg_Attributes$display = _elm_lang$virtual_dom$VirtualDom$attribute('display');
-var _elm_lang$svg$Svg_Attributes$direction = _elm_lang$virtual_dom$VirtualDom$attribute('direction');
-var _elm_lang$svg$Svg_Attributes$cursor = _elm_lang$virtual_dom$VirtualDom$attribute('cursor');
-var _elm_lang$svg$Svg_Attributes$color = _elm_lang$virtual_dom$VirtualDom$attribute('color');
-var _elm_lang$svg$Svg_Attributes$colorRendering = _elm_lang$virtual_dom$VirtualDom$attribute('color-rendering');
-var _elm_lang$svg$Svg_Attributes$colorProfile = _elm_lang$virtual_dom$VirtualDom$attribute('color-profile');
-var _elm_lang$svg$Svg_Attributes$colorInterpolation = _elm_lang$virtual_dom$VirtualDom$attribute('color-interpolation');
-var _elm_lang$svg$Svg_Attributes$colorInterpolationFilters = _elm_lang$virtual_dom$VirtualDom$attribute('color-interpolation-filters');
-var _elm_lang$svg$Svg_Attributes$clip = _elm_lang$virtual_dom$VirtualDom$attribute('clip');
-var _elm_lang$svg$Svg_Attributes$clipRule = _elm_lang$virtual_dom$VirtualDom$attribute('clip-rule');
-var _elm_lang$svg$Svg_Attributes$clipPath = _elm_lang$virtual_dom$VirtualDom$attribute('clip-path');
-var _elm_lang$svg$Svg_Attributes$baselineShift = _elm_lang$virtual_dom$VirtualDom$attribute('baseline-shift');
-var _elm_lang$svg$Svg_Attributes$alignmentBaseline = _elm_lang$virtual_dom$VirtualDom$attribute('alignment-baseline');
-var _elm_lang$svg$Svg_Attributes$zoomAndPan = _elm_lang$virtual_dom$VirtualDom$attribute('zoomAndPan');
-var _elm_lang$svg$Svg_Attributes$z = _elm_lang$virtual_dom$VirtualDom$attribute('z');
-var _elm_lang$svg$Svg_Attributes$yChannelSelector = _elm_lang$virtual_dom$VirtualDom$attribute('yChannelSelector');
-var _elm_lang$svg$Svg_Attributes$y2 = _elm_lang$virtual_dom$VirtualDom$attribute('y2');
-var _elm_lang$svg$Svg_Attributes$y1 = _elm_lang$virtual_dom$VirtualDom$attribute('y1');
-var _elm_lang$svg$Svg_Attributes$y = _elm_lang$virtual_dom$VirtualDom$attribute('y');
-var _elm_lang$svg$Svg_Attributes$xmlSpace = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:space');
-var _elm_lang$svg$Svg_Attributes$xmlLang = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:lang');
-var _elm_lang$svg$Svg_Attributes$xmlBase = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/XML/1998/namespace', 'xml:base');
-var _elm_lang$svg$Svg_Attributes$xlinkType = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:type');
-var _elm_lang$svg$Svg_Attributes$xlinkTitle = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:title');
-var _elm_lang$svg$Svg_Attributes$xlinkShow = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:show');
-var _elm_lang$svg$Svg_Attributes$xlinkRole = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:role');
-var _elm_lang$svg$Svg_Attributes$xlinkHref = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:href');
-var _elm_lang$svg$Svg_Attributes$xlinkArcrole = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:arcrole');
-var _elm_lang$svg$Svg_Attributes$xlinkActuate = A2(_elm_lang$virtual_dom$VirtualDom$attributeNS, 'http://www.w3.org/1999/xlink', 'xlink:actuate');
-var _elm_lang$svg$Svg_Attributes$xChannelSelector = _elm_lang$virtual_dom$VirtualDom$attribute('xChannelSelector');
-var _elm_lang$svg$Svg_Attributes$x2 = _elm_lang$virtual_dom$VirtualDom$attribute('x2');
-var _elm_lang$svg$Svg_Attributes$x1 = _elm_lang$virtual_dom$VirtualDom$attribute('x1');
-var _elm_lang$svg$Svg_Attributes$xHeight = _elm_lang$virtual_dom$VirtualDom$attribute('x-height');
-var _elm_lang$svg$Svg_Attributes$x = _elm_lang$virtual_dom$VirtualDom$attribute('x');
-var _elm_lang$svg$Svg_Attributes$widths = _elm_lang$virtual_dom$VirtualDom$attribute('widths');
-var _elm_lang$svg$Svg_Attributes$width = _elm_lang$virtual_dom$VirtualDom$attribute('width');
-var _elm_lang$svg$Svg_Attributes$viewTarget = _elm_lang$virtual_dom$VirtualDom$attribute('viewTarget');
-var _elm_lang$svg$Svg_Attributes$viewBox = _elm_lang$virtual_dom$VirtualDom$attribute('viewBox');
-var _elm_lang$svg$Svg_Attributes$vertOriginY = _elm_lang$virtual_dom$VirtualDom$attribute('vert-origin-y');
-var _elm_lang$svg$Svg_Attributes$vertOriginX = _elm_lang$virtual_dom$VirtualDom$attribute('vert-origin-x');
-var _elm_lang$svg$Svg_Attributes$vertAdvY = _elm_lang$virtual_dom$VirtualDom$attribute('vert-adv-y');
-var _elm_lang$svg$Svg_Attributes$version = _elm_lang$virtual_dom$VirtualDom$attribute('version');
-var _elm_lang$svg$Svg_Attributes$values = _elm_lang$virtual_dom$VirtualDom$attribute('values');
-var _elm_lang$svg$Svg_Attributes$vMathematical = _elm_lang$virtual_dom$VirtualDom$attribute('v-mathematical');
-var _elm_lang$svg$Svg_Attributes$vIdeographic = _elm_lang$virtual_dom$VirtualDom$attribute('v-ideographic');
-var _elm_lang$svg$Svg_Attributes$vHanging = _elm_lang$virtual_dom$VirtualDom$attribute('v-hanging');
-var _elm_lang$svg$Svg_Attributes$vAlphabetic = _elm_lang$virtual_dom$VirtualDom$attribute('v-alphabetic');
-var _elm_lang$svg$Svg_Attributes$unitsPerEm = _elm_lang$virtual_dom$VirtualDom$attribute('units-per-em');
-var _elm_lang$svg$Svg_Attributes$unicodeRange = _elm_lang$virtual_dom$VirtualDom$attribute('unicode-range');
-var _elm_lang$svg$Svg_Attributes$unicode = _elm_lang$virtual_dom$VirtualDom$attribute('unicode');
-var _elm_lang$svg$Svg_Attributes$underlineThickness = _elm_lang$virtual_dom$VirtualDom$attribute('underline-thickness');
-var _elm_lang$svg$Svg_Attributes$underlinePosition = _elm_lang$virtual_dom$VirtualDom$attribute('underline-position');
-var _elm_lang$svg$Svg_Attributes$u2 = _elm_lang$virtual_dom$VirtualDom$attribute('u2');
-var _elm_lang$svg$Svg_Attributes$u1 = _elm_lang$virtual_dom$VirtualDom$attribute('u1');
-var _elm_lang$svg$Svg_Attributes$type_ = _elm_lang$virtual_dom$VirtualDom$attribute('type');
-var _elm_lang$svg$Svg_Attributes$transform = _elm_lang$virtual_dom$VirtualDom$attribute('transform');
-var _elm_lang$svg$Svg_Attributes$to = _elm_lang$virtual_dom$VirtualDom$attribute('to');
-var _elm_lang$svg$Svg_Attributes$title = _elm_lang$virtual_dom$VirtualDom$attribute('title');
-var _elm_lang$svg$Svg_Attributes$textLength = _elm_lang$virtual_dom$VirtualDom$attribute('textLength');
-var _elm_lang$svg$Svg_Attributes$targetY = _elm_lang$virtual_dom$VirtualDom$attribute('targetY');
-var _elm_lang$svg$Svg_Attributes$targetX = _elm_lang$virtual_dom$VirtualDom$attribute('targetX');
-var _elm_lang$svg$Svg_Attributes$target = _elm_lang$virtual_dom$VirtualDom$attribute('target');
-var _elm_lang$svg$Svg_Attributes$tableValues = _elm_lang$virtual_dom$VirtualDom$attribute('tableValues');
-var _elm_lang$svg$Svg_Attributes$systemLanguage = _elm_lang$virtual_dom$VirtualDom$attribute('systemLanguage');
-var _elm_lang$svg$Svg_Attributes$surfaceScale = _elm_lang$virtual_dom$VirtualDom$attribute('surfaceScale');
-var _elm_lang$svg$Svg_Attributes$style = _elm_lang$virtual_dom$VirtualDom$attribute('style');
-var _elm_lang$svg$Svg_Attributes$string = _elm_lang$virtual_dom$VirtualDom$attribute('string');
-var _elm_lang$svg$Svg_Attributes$strikethroughThickness = _elm_lang$virtual_dom$VirtualDom$attribute('strikethrough-thickness');
-var _elm_lang$svg$Svg_Attributes$strikethroughPosition = _elm_lang$virtual_dom$VirtualDom$attribute('strikethrough-position');
-var _elm_lang$svg$Svg_Attributes$stitchTiles = _elm_lang$virtual_dom$VirtualDom$attribute('stitchTiles');
-var _elm_lang$svg$Svg_Attributes$stemv = _elm_lang$virtual_dom$VirtualDom$attribute('stemv');
-var _elm_lang$svg$Svg_Attributes$stemh = _elm_lang$virtual_dom$VirtualDom$attribute('stemh');
-var _elm_lang$svg$Svg_Attributes$stdDeviation = _elm_lang$virtual_dom$VirtualDom$attribute('stdDeviation');
-var _elm_lang$svg$Svg_Attributes$startOffset = _elm_lang$virtual_dom$VirtualDom$attribute('startOffset');
-var _elm_lang$svg$Svg_Attributes$spreadMethod = _elm_lang$virtual_dom$VirtualDom$attribute('spreadMethod');
-var _elm_lang$svg$Svg_Attributes$speed = _elm_lang$virtual_dom$VirtualDom$attribute('speed');
-var _elm_lang$svg$Svg_Attributes$specularExponent = _elm_lang$virtual_dom$VirtualDom$attribute('specularExponent');
-var _elm_lang$svg$Svg_Attributes$specularConstant = _elm_lang$virtual_dom$VirtualDom$attribute('specularConstant');
-var _elm_lang$svg$Svg_Attributes$spacing = _elm_lang$virtual_dom$VirtualDom$attribute('spacing');
-var _elm_lang$svg$Svg_Attributes$slope = _elm_lang$virtual_dom$VirtualDom$attribute('slope');
-var _elm_lang$svg$Svg_Attributes$seed = _elm_lang$virtual_dom$VirtualDom$attribute('seed');
-var _elm_lang$svg$Svg_Attributes$scale = _elm_lang$virtual_dom$VirtualDom$attribute('scale');
-var _elm_lang$svg$Svg_Attributes$ry = _elm_lang$virtual_dom$VirtualDom$attribute('ry');
-var _elm_lang$svg$Svg_Attributes$rx = _elm_lang$virtual_dom$VirtualDom$attribute('rx');
-var _elm_lang$svg$Svg_Attributes$rotate = _elm_lang$virtual_dom$VirtualDom$attribute('rotate');
-var _elm_lang$svg$Svg_Attributes$result = _elm_lang$virtual_dom$VirtualDom$attribute('result');
-var _elm_lang$svg$Svg_Attributes$restart = _elm_lang$virtual_dom$VirtualDom$attribute('restart');
-var _elm_lang$svg$Svg_Attributes$requiredFeatures = _elm_lang$virtual_dom$VirtualDom$attribute('requiredFeatures');
-var _elm_lang$svg$Svg_Attributes$requiredExtensions = _elm_lang$virtual_dom$VirtualDom$attribute('requiredExtensions');
-var _elm_lang$svg$Svg_Attributes$repeatDur = _elm_lang$virtual_dom$VirtualDom$attribute('repeatDur');
-var _elm_lang$svg$Svg_Attributes$repeatCount = _elm_lang$virtual_dom$VirtualDom$attribute('repeatCount');
-var _elm_lang$svg$Svg_Attributes$renderingIntent = _elm_lang$virtual_dom$VirtualDom$attribute('rendering-intent');
-var _elm_lang$svg$Svg_Attributes$refY = _elm_lang$virtual_dom$VirtualDom$attribute('refY');
-var _elm_lang$svg$Svg_Attributes$refX = _elm_lang$virtual_dom$VirtualDom$attribute('refX');
-var _elm_lang$svg$Svg_Attributes$radius = _elm_lang$virtual_dom$VirtualDom$attribute('radius');
-var _elm_lang$svg$Svg_Attributes$r = _elm_lang$virtual_dom$VirtualDom$attribute('r');
-var _elm_lang$svg$Svg_Attributes$primitiveUnits = _elm_lang$virtual_dom$VirtualDom$attribute('primitiveUnits');
-var _elm_lang$svg$Svg_Attributes$preserveAspectRatio = _elm_lang$virtual_dom$VirtualDom$attribute('preserveAspectRatio');
-var _elm_lang$svg$Svg_Attributes$preserveAlpha = _elm_lang$virtual_dom$VirtualDom$attribute('preserveAlpha');
-var _elm_lang$svg$Svg_Attributes$pointsAtZ = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtZ');
-var _elm_lang$svg$Svg_Attributes$pointsAtY = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtY');
-var _elm_lang$svg$Svg_Attributes$pointsAtX = _elm_lang$virtual_dom$VirtualDom$attribute('pointsAtX');
-var _elm_lang$svg$Svg_Attributes$points = _elm_lang$virtual_dom$VirtualDom$attribute('points');
-var _elm_lang$svg$Svg_Attributes$pointOrder = _elm_lang$virtual_dom$VirtualDom$attribute('point-order');
-var _elm_lang$svg$Svg_Attributes$patternUnits = _elm_lang$virtual_dom$VirtualDom$attribute('patternUnits');
-var _elm_lang$svg$Svg_Attributes$patternTransform = _elm_lang$virtual_dom$VirtualDom$attribute('patternTransform');
-var _elm_lang$svg$Svg_Attributes$patternContentUnits = _elm_lang$virtual_dom$VirtualDom$attribute('patternContentUnits');
-var _elm_lang$svg$Svg_Attributes$pathLength = _elm_lang$virtual_dom$VirtualDom$attribute('pathLength');
-var _elm_lang$svg$Svg_Attributes$path = _elm_lang$virtual_dom$VirtualDom$attribute('path');
-var _elm_lang$svg$Svg_Attributes$panose1 = _elm_lang$virtual_dom$VirtualDom$attribute('panose-1');
-var _elm_lang$svg$Svg_Attributes$overlineThickness = _elm_lang$virtual_dom$VirtualDom$attribute('overline-thickness');
-var _elm_lang$svg$Svg_Attributes$overlinePosition = _elm_lang$virtual_dom$VirtualDom$attribute('overline-position');
-var _elm_lang$svg$Svg_Attributes$origin = _elm_lang$virtual_dom$VirtualDom$attribute('origin');
-var _elm_lang$svg$Svg_Attributes$orientation = _elm_lang$virtual_dom$VirtualDom$attribute('orientation');
-var _elm_lang$svg$Svg_Attributes$orient = _elm_lang$virtual_dom$VirtualDom$attribute('orient');
-var _elm_lang$svg$Svg_Attributes$order = _elm_lang$virtual_dom$VirtualDom$attribute('order');
-var _elm_lang$svg$Svg_Attributes$operator = _elm_lang$virtual_dom$VirtualDom$attribute('operator');
-var _elm_lang$svg$Svg_Attributes$offset = _elm_lang$virtual_dom$VirtualDom$attribute('offset');
-var _elm_lang$svg$Svg_Attributes$numOctaves = _elm_lang$virtual_dom$VirtualDom$attribute('numOctaves');
-var _elm_lang$svg$Svg_Attributes$name = _elm_lang$virtual_dom$VirtualDom$attribute('name');
-var _elm_lang$svg$Svg_Attributes$mode = _elm_lang$virtual_dom$VirtualDom$attribute('mode');
-var _elm_lang$svg$Svg_Attributes$min = _elm_lang$virtual_dom$VirtualDom$attribute('min');
-var _elm_lang$svg$Svg_Attributes$method = _elm_lang$virtual_dom$VirtualDom$attribute('method');
-var _elm_lang$svg$Svg_Attributes$media = _elm_lang$virtual_dom$VirtualDom$attribute('media');
-var _elm_lang$svg$Svg_Attributes$max = _elm_lang$virtual_dom$VirtualDom$attribute('max');
-var _elm_lang$svg$Svg_Attributes$mathematical = _elm_lang$virtual_dom$VirtualDom$attribute('mathematical');
-var _elm_lang$svg$Svg_Attributes$maskUnits = _elm_lang$virtual_dom$VirtualDom$attribute('maskUnits');
-var _elm_lang$svg$Svg_Attributes$maskContentUnits = _elm_lang$virtual_dom$VirtualDom$attribute('maskContentUnits');
-var _elm_lang$svg$Svg_Attributes$markerWidth = _elm_lang$virtual_dom$VirtualDom$attribute('markerWidth');
-var _elm_lang$svg$Svg_Attributes$markerUnits = _elm_lang$virtual_dom$VirtualDom$attribute('markerUnits');
-var _elm_lang$svg$Svg_Attributes$markerHeight = _elm_lang$virtual_dom$VirtualDom$attribute('markerHeight');
-var _elm_lang$svg$Svg_Attributes$local = _elm_lang$virtual_dom$VirtualDom$attribute('local');
-var _elm_lang$svg$Svg_Attributes$limitingConeAngle = _elm_lang$virtual_dom$VirtualDom$attribute('limitingConeAngle');
-var _elm_lang$svg$Svg_Attributes$lengthAdjust = _elm_lang$virtual_dom$VirtualDom$attribute('lengthAdjust');
-var _elm_lang$svg$Svg_Attributes$lang = _elm_lang$virtual_dom$VirtualDom$attribute('lang');
-var _elm_lang$svg$Svg_Attributes$keyTimes = _elm_lang$virtual_dom$VirtualDom$attribute('keyTimes');
-var _elm_lang$svg$Svg_Attributes$keySplines = _elm_lang$virtual_dom$VirtualDom$attribute('keySplines');
-var _elm_lang$svg$Svg_Attributes$keyPoints = _elm_lang$virtual_dom$VirtualDom$attribute('keyPoints');
-var _elm_lang$svg$Svg_Attributes$kernelUnitLength = _elm_lang$virtual_dom$VirtualDom$attribute('kernelUnitLength');
-var _elm_lang$svg$Svg_Attributes$kernelMatrix = _elm_lang$virtual_dom$VirtualDom$attribute('kernelMatrix');
-var _elm_lang$svg$Svg_Attributes$k4 = _elm_lang$virtual_dom$VirtualDom$attribute('k4');
-var _elm_lang$svg$Svg_Attributes$k3 = _elm_lang$virtual_dom$VirtualDom$attribute('k3');
-var _elm_lang$svg$Svg_Attributes$k2 = _elm_lang$virtual_dom$VirtualDom$attribute('k2');
-var _elm_lang$svg$Svg_Attributes$k1 = _elm_lang$virtual_dom$VirtualDom$attribute('k1');
-var _elm_lang$svg$Svg_Attributes$k = _elm_lang$virtual_dom$VirtualDom$attribute('k');
-var _elm_lang$svg$Svg_Attributes$intercept = _elm_lang$virtual_dom$VirtualDom$attribute('intercept');
-var _elm_lang$svg$Svg_Attributes$in2 = _elm_lang$virtual_dom$VirtualDom$attribute('in2');
-var _elm_lang$svg$Svg_Attributes$in_ = _elm_lang$virtual_dom$VirtualDom$attribute('in');
-var _elm_lang$svg$Svg_Attributes$ideographic = _elm_lang$virtual_dom$VirtualDom$attribute('ideographic');
-var _elm_lang$svg$Svg_Attributes$id = _elm_lang$virtual_dom$VirtualDom$attribute('id');
-var _elm_lang$svg$Svg_Attributes$horizOriginY = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-origin-y');
-var _elm_lang$svg$Svg_Attributes$horizOriginX = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-origin-x');
-var _elm_lang$svg$Svg_Attributes$horizAdvX = _elm_lang$virtual_dom$VirtualDom$attribute('horiz-adv-x');
-var _elm_lang$svg$Svg_Attributes$height = _elm_lang$virtual_dom$VirtualDom$attribute('height');
-var _elm_lang$svg$Svg_Attributes$hanging = _elm_lang$virtual_dom$VirtualDom$attribute('hanging');
-var _elm_lang$svg$Svg_Attributes$gradientUnits = _elm_lang$virtual_dom$VirtualDom$attribute('gradientUnits');
-var _elm_lang$svg$Svg_Attributes$gradientTransform = _elm_lang$virtual_dom$VirtualDom$attribute('gradientTransform');
-var _elm_lang$svg$Svg_Attributes$glyphRef = _elm_lang$virtual_dom$VirtualDom$attribute('glyphRef');
-var _elm_lang$svg$Svg_Attributes$glyphName = _elm_lang$virtual_dom$VirtualDom$attribute('glyph-name');
-var _elm_lang$svg$Svg_Attributes$g2 = _elm_lang$virtual_dom$VirtualDom$attribute('g2');
-var _elm_lang$svg$Svg_Attributes$g1 = _elm_lang$virtual_dom$VirtualDom$attribute('g1');
-var _elm_lang$svg$Svg_Attributes$fy = _elm_lang$virtual_dom$VirtualDom$attribute('fy');
-var _elm_lang$svg$Svg_Attributes$fx = _elm_lang$virtual_dom$VirtualDom$attribute('fx');
-var _elm_lang$svg$Svg_Attributes$from = _elm_lang$virtual_dom$VirtualDom$attribute('from');
-var _elm_lang$svg$Svg_Attributes$format = _elm_lang$virtual_dom$VirtualDom$attribute('format');
-var _elm_lang$svg$Svg_Attributes$filterUnits = _elm_lang$virtual_dom$VirtualDom$attribute('filterUnits');
-var _elm_lang$svg$Svg_Attributes$filterRes = _elm_lang$virtual_dom$VirtualDom$attribute('filterRes');
-var _elm_lang$svg$Svg_Attributes$externalResourcesRequired = _elm_lang$virtual_dom$VirtualDom$attribute('externalResourcesRequired');
-var _elm_lang$svg$Svg_Attributes$exponent = _elm_lang$virtual_dom$VirtualDom$attribute('exponent');
-var _elm_lang$svg$Svg_Attributes$end = _elm_lang$virtual_dom$VirtualDom$attribute('end');
-var _elm_lang$svg$Svg_Attributes$elevation = _elm_lang$virtual_dom$VirtualDom$attribute('elevation');
-var _elm_lang$svg$Svg_Attributes$edgeMode = _elm_lang$virtual_dom$VirtualDom$attribute('edgeMode');
-var _elm_lang$svg$Svg_Attributes$dy = _elm_lang$virtual_dom$VirtualDom$attribute('dy');
-var _elm_lang$svg$Svg_Attributes$dx = _elm_lang$virtual_dom$VirtualDom$attribute('dx');
-var _elm_lang$svg$Svg_Attributes$dur = _elm_lang$virtual_dom$VirtualDom$attribute('dur');
-var _elm_lang$svg$Svg_Attributes$divisor = _elm_lang$virtual_dom$VirtualDom$attribute('divisor');
-var _elm_lang$svg$Svg_Attributes$diffuseConstant = _elm_lang$virtual_dom$VirtualDom$attribute('diffuseConstant');
-var _elm_lang$svg$Svg_Attributes$descent = _elm_lang$virtual_dom$VirtualDom$attribute('descent');
-var _elm_lang$svg$Svg_Attributes$decelerate = _elm_lang$virtual_dom$VirtualDom$attribute('decelerate');
-var _elm_lang$svg$Svg_Attributes$d = _elm_lang$virtual_dom$VirtualDom$attribute('d');
-var _elm_lang$svg$Svg_Attributes$cy = _elm_lang$virtual_dom$VirtualDom$attribute('cy');
-var _elm_lang$svg$Svg_Attributes$cx = _elm_lang$virtual_dom$VirtualDom$attribute('cx');
-var _elm_lang$svg$Svg_Attributes$contentStyleType = _elm_lang$virtual_dom$VirtualDom$attribute('contentStyleType');
-var _elm_lang$svg$Svg_Attributes$contentScriptType = _elm_lang$virtual_dom$VirtualDom$attribute('contentScriptType');
-var _elm_lang$svg$Svg_Attributes$clipPathUnits = _elm_lang$virtual_dom$VirtualDom$attribute('clipPathUnits');
-var _elm_lang$svg$Svg_Attributes$class = _elm_lang$virtual_dom$VirtualDom$attribute('class');
-var _elm_lang$svg$Svg_Attributes$capHeight = _elm_lang$virtual_dom$VirtualDom$attribute('cap-height');
-var _elm_lang$svg$Svg_Attributes$calcMode = _elm_lang$virtual_dom$VirtualDom$attribute('calcMode');
-var _elm_lang$svg$Svg_Attributes$by = _elm_lang$virtual_dom$VirtualDom$attribute('by');
-var _elm_lang$svg$Svg_Attributes$bias = _elm_lang$virtual_dom$VirtualDom$attribute('bias');
-var _elm_lang$svg$Svg_Attributes$begin = _elm_lang$virtual_dom$VirtualDom$attribute('begin');
-var _elm_lang$svg$Svg_Attributes$bbox = _elm_lang$virtual_dom$VirtualDom$attribute('bbox');
-var _elm_lang$svg$Svg_Attributes$baseProfile = _elm_lang$virtual_dom$VirtualDom$attribute('baseProfile');
-var _elm_lang$svg$Svg_Attributes$baseFrequency = _elm_lang$virtual_dom$VirtualDom$attribute('baseFrequency');
-var _elm_lang$svg$Svg_Attributes$azimuth = _elm_lang$virtual_dom$VirtualDom$attribute('azimuth');
-var _elm_lang$svg$Svg_Attributes$autoReverse = _elm_lang$virtual_dom$VirtualDom$attribute('autoReverse');
-var _elm_lang$svg$Svg_Attributes$attributeType = _elm_lang$virtual_dom$VirtualDom$attribute('attributeType');
-var _elm_lang$svg$Svg_Attributes$attributeName = _elm_lang$virtual_dom$VirtualDom$attribute('attributeName');
-var _elm_lang$svg$Svg_Attributes$ascent = _elm_lang$virtual_dom$VirtualDom$attribute('ascent');
-var _elm_lang$svg$Svg_Attributes$arabicForm = _elm_lang$virtual_dom$VirtualDom$attribute('arabic-form');
-var _elm_lang$svg$Svg_Attributes$amplitude = _elm_lang$virtual_dom$VirtualDom$attribute('amplitude');
-var _elm_lang$svg$Svg_Attributes$allowReorder = _elm_lang$virtual_dom$VirtualDom$attribute('allowReorder');
-var _elm_lang$svg$Svg_Attributes$alphabetic = _elm_lang$virtual_dom$VirtualDom$attribute('alphabetic');
-var _elm_lang$svg$Svg_Attributes$additive = _elm_lang$virtual_dom$VirtualDom$attribute('additive');
-var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$attribute('accumulate');
-var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
-var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
-
-var _debois$elm_mdl$Material_Checkbox$indeterminate = _debois$elm_mdl$Material_Internal_Options$input(
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-			A2(
-				_elm_lang$html$Html_Attributes$property,
-				'indeterminate',
-				_elm_lang$core$Json_Encode$bool(true))),
-		_1: {ctor: '[]'}
-	});
-var _debois$elm_mdl$Material_Checkbox$checked = _debois$elm_mdl$Material_Options$cs('mdc-checkbox--checked');
-var _debois$elm_mdl$Material_Checkbox$disabled = _debois$elm_mdl$Material_Options$many(
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox--disabled'),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Internal_Options$input(
-				{
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-						_elm_lang$html$Html_Attributes$disabled(true)),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		}
-	});
-var _debois$elm_mdl$Material_Checkbox$defaultConfig = {
-	input: {ctor: '[]'},
-	container: {ctor: '[]'}
-};
-var _debois$elm_mdl$Material_Checkbox$view = F4(
-	function (lift, model, options, _p0) {
-		var _p1 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Checkbox$defaultConfig, options);
-		var summary = _p1;
-		var config = _p1.config;
-		return A4(
-			_debois$elm_mdl$Material_Internal_Options$applyContainer,
-			summary,
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox'),
-				_1: {
-					ctor: '::',
-					_0: A3(
-						_debois$elm_mdl$Material_Internal_Options$on1,
-						'focus',
-						lift,
-						_debois$elm_mdl$Material_Internal_Checkbox$SetFocus(true)),
-					_1: {
-						ctor: '::',
-						_0: A3(
-							_debois$elm_mdl$Material_Internal_Options$on1,
-							'blur',
-							lift,
-							_debois$elm_mdl$Material_Internal_Checkbox$SetFocus(false)),
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-								_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: A4(
-					_debois$elm_mdl$Material_Internal_Options$applyInput,
-					summary,
-					_elm_lang$html$Html$input,
-					{
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox__native-control'),
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Internal_Options$attribute(
-								_elm_lang$html$Html_Attributes$type_('checkbox')),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A3(
-						_debois$elm_mdl$Material_Options$styled,
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox__background'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$svg$Svg$svg,
-								{
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$class('mdc-checkbox__checkmark'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 24 24'),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$svg$Svg$path,
-										{
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$class('mdc-checkbox__checkmark__path'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$fill('none'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$d('M1.73,12.91 8.1,19.28 22.79,4.59'),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A3(
-									_debois$elm_mdl$Material_Options$styled,
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$cs('mdc-checkbox__mixedmark'),
-										_1: {ctor: '[]'}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
-				}
-			});
-	});
-var _debois$elm_mdl$Material_Checkbox$update = F2(
-	function (msg, model) {
-		var _p2 = msg;
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Native_Utils.update(
-				model,
-				{isFocused: _p2._0}),
-			_1: _elm_lang$core$Platform_Cmd$none
-		};
-	});
-var _debois$elm_mdl$Material_Checkbox$defaultModel = {isFocused: false};
-var _debois$elm_mdl$Material_Checkbox$_p3 = A3(
-	_debois$elm_mdl$Material_Component$indexed,
-	function (_) {
-		return _.toggles;
-	},
-	F2(
-		function (x, y) {
-			return _elm_lang$core$Native_Utils.update(
-				y,
-				{toggles: x});
-		}),
-	_debois$elm_mdl$Material_Checkbox$defaultModel);
-var _debois$elm_mdl$Material_Checkbox$get = _debois$elm_mdl$Material_Checkbox$_p3._0;
-var _debois$elm_mdl$Material_Checkbox$set = _debois$elm_mdl$Material_Checkbox$_p3._1;
-var _debois$elm_mdl$Material_Checkbox$react = A4(
-	_debois$elm_mdl$Material_Component$react,
-	_debois$elm_mdl$Material_Checkbox$get,
-	_debois$elm_mdl$Material_Checkbox$set,
-	_debois$elm_mdl$Material_Msg$CheckboxMsg,
-	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Checkbox$update));
-var _debois$elm_mdl$Material_Checkbox$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Checkbox$get, _debois$elm_mdl$Material_Checkbox$view, _debois$elm_mdl$Material_Msg$CheckboxMsg);
-var _debois$elm_mdl$Material_Checkbox$Model = function (a) {
-	return {isFocused: a};
-};
-var _debois$elm_mdl$Material_Checkbox$Config = F2(
-	function (a, b) {
-		return {input: a, container: b};
-	});
-
 var _debois$elm_mdl$Material_Tooltip$onLeave = function (lift) {
 	return A2(
 		_elm_lang$html$Html_Events$on,
@@ -15131,6 +15498,8 @@ var _debois$elm_mdl$Material$update_ = F3(
 		switch (_p0.ctor) {
 			case 'ButtonMsg':
 				return A4(_debois$elm_mdl$Material_Button$react, lift, _p0._1, _p0._0, store);
+			case 'IconToggleMsg':
+				return A4(_debois$elm_mdl$Material_IconToggle$react, lift, _p0._1, _p0._0, store);
 			case 'SnackbarMsg':
 				var _p2 = _p0._0;
 				return A4(
@@ -15170,6 +15539,8 @@ var _debois$elm_mdl$Material$update_ = F3(
 					store);
 			case 'CheckboxMsg':
 				return A4(_debois$elm_mdl$Material_Checkbox$react, lift, _p0._1, _p0._0, store);
+			case 'SwitchMsg':
+				return A4(_debois$elm_mdl$Material_Switch$react, lift, _p0._1, _p0._0, store);
 			case 'TooltipMsg':
 				return A4(_debois$elm_mdl$Material_Tooltip$react, lift, _p0._1, _p0._0, store);
 			case 'TabsMsg':
@@ -15214,7 +15585,7 @@ var _debois$elm_mdl$Material$update = F3(
 						return _.mdl;
 					}(container))));
 	});
-var _debois$elm_mdl$Material$model = {button: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, toggles: _elm_lang$core$Dict$empty, tooltip: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty};
+var _debois$elm_mdl$Material$model = {button: _elm_lang$core$Dict$empty, iconToggle: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, checkbox: _elm_lang$core$Dict$empty, $switch: _elm_lang$core$Dict$empty, tooltip: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty};
 var _debois$elm_mdl$Material$Model = function (a) {
 	return function (b) {
 		return function (c) {
@@ -15225,7 +15596,11 @@ var _debois$elm_mdl$Material$Model = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {button: a, fab: b, textfield: c, menu: d, toggles: e, tooltip: f, tabs: g, select: h, ripple: i, snackbar: j};
+										return function (k) {
+											return function (l) {
+												return {button: a, iconToggle: b, fab: c, textfield: d, menu: e, checkbox: f, $switch: g, tooltip: h, tabs: i, select: j, ripple: k, snackbar: l};
+											};
+										};
 									};
 								};
 							};
@@ -16830,14 +17205,18 @@ var _debois$elm_mdl$Demo_Checkbox$view = function (model) {
 									model.mdl,
 									{
 										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$when, model.checked0, _debois$elm_mdl$Material_Checkbox$checked),
+										_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Checkbox$ToggleChecked0),
 										_1: {
 											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$when, model.indeterminate, _debois$elm_mdl$Material_Checkbox$indeterminate),
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.checked0, _debois$elm_mdl$Material_Checkbox$checked),
 											_1: {
 												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled0, _debois$elm_mdl$Material_Checkbox$disabled),
-												_1: {ctor: '[]'}
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.indeterminate, _debois$elm_mdl$Material_Checkbox$indeterminate),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled0, _debois$elm_mdl$Material_Checkbox$disabled),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
 									},
@@ -17021,11 +17400,15 @@ var _debois$elm_mdl$Demo_Checkbox$view = function (model) {
 										model.mdl,
 										{
 											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$when, model.checked1, _debois$elm_mdl$Material_Checkbox$checked),
+											_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Checkbox$ToggleChecked1),
 											_1: {
 												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled1, _debois$elm_mdl$Material_Checkbox$disabled),
-												_1: {ctor: '[]'}
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.checked1, _debois$elm_mdl$Material_Checkbox$checked),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled1, _debois$elm_mdl$Material_Checkbox$disabled),
+													_1: {ctor: '[]'}
+												}
 											}
 										},
 										{ctor: '[]'}),
@@ -18621,6 +19004,748 @@ var _debois$elm_mdl$Demo_GridList$view = A2(
 			}),
 		_1: {ctor: '[]'}
 	});
+
+var _debois$elm_mdl$Material_Typography$adjustMargin = _debois$elm_mdl$Material_Options$cs('mdc-typography--adjust-margin');
+var _debois$elm_mdl$Material_Typography$subheading2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--subheading');
+var _debois$elm_mdl$Material_Typography$subheading1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--subheading');
+var _debois$elm_mdl$Material_Typography$headline = _debois$elm_mdl$Material_Options$cs('mdc-typography--headline');
+var _debois$elm_mdl$Material_Typography$body2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--body2');
+var _debois$elm_mdl$Material_Typography$caption = _debois$elm_mdl$Material_Options$cs('mdc-typography--caption');
+var _debois$elm_mdl$Material_Typography$title = _debois$elm_mdl$Material_Options$cs('mdc-typography--title');
+var _debois$elm_mdl$Material_Typography$display4 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display4');
+var _debois$elm_mdl$Material_Typography$display3 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display3');
+var _debois$elm_mdl$Material_Typography$display2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display2');
+var _debois$elm_mdl$Material_Typography$display1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display1');
+var _debois$elm_mdl$Material_Typography$typography = _debois$elm_mdl$Material_Options$cs('mdc-typography');
+
+var _debois$elm_mdl$Demo_IconToggle$model = {mdl: _debois$elm_mdl$Material$model, iconToggles: _elm_lang$core$Dict$empty};
+var _debois$elm_mdl$Demo_IconToggle$Model = F2(
+	function (a, b) {
+		return {mdl: a, iconToggles: b};
+	});
+var _debois$elm_mdl$Demo_IconToggle$Toggle = function (a) {
+	return {ctor: 'Toggle', _0: a};
+};
+var _debois$elm_mdl$Demo_IconToggle$Mdl = function (a) {
+	return {ctor: 'Mdl', _0: a};
+};
+var _debois$elm_mdl$Demo_IconToggle$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Mdl') {
+			return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_IconToggle$Mdl, _p0._0, model);
+		} else {
+			var _p1 = _p0._0;
+			var iconToggle = !A2(
+				_elm_lang$core$Maybe$withDefault,
+				false,
+				A2(_elm_lang$core$Dict$get, _p1, model.iconToggles));
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{
+						iconToggles: A3(_elm_lang$core$Dict$insert, _p1, iconToggle, model.iconToggles)
+					}),
+				{ctor: '[]'});
+		}
+	});
+var _debois$elm_mdl$Demo_IconToggle$view = function (model) {
+	var iconToggle = F2(
+		function (idx, options) {
+			var isOn = A2(
+				_elm_lang$core$Maybe$withDefault,
+				false,
+				A2(_elm_lang$core$Dict$get, idx, model.iconToggles));
+			return A4(
+				_debois$elm_mdl$Material_IconToggle$render,
+				_debois$elm_mdl$Demo_IconToggle$Mdl,
+				idx,
+				model.mdl,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '1rem'),
+					_1: {
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$onClick(
+							_debois$elm_mdl$Demo_IconToggle$Toggle(idx)),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$when, isOn, _debois$elm_mdl$Material_IconToggle$on),
+							_1: options
+						}
+					}
+				});
+		});
+	var toggleExample = function (options) {
+		return A2(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('toggle-example'),
+				_1: {
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'min-width', '240px'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+							_1: options
+						}
+					}
+				}
+			});
+	};
+	var title = function (options) {
+		return A2(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$h2,
+			{
+				ctor: '::',
+				_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+				_1: {
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '0.8em'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0.8em'),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'font-size', '1.3em'),
+							_1: options
+						}
+					}
+				}
+			});
+	};
+	var example = function (options) {
+		return A2(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('example'),
+				_1: {
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-flow', 'row wrap'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'align-content', 'left'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'left'),
+										_1: options
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+	};
+	return A3(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Typography$typography,
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A3(
+				_elm_lang$html$Html$node,
+				'style',
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('text/css'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('@import url(\"https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css\");'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					example,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: function () {
+							var isOn = A2(
+								_elm_lang$core$Maybe$withDefault,
+								false,
+								A2(
+									_elm_lang$core$Dict$get,
+									{
+										ctor: '::',
+										_0: 0,
+										_1: {ctor: '[]'}
+									},
+									model.iconToggles));
+							return A2(
+								toggleExample,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										title,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Using Material Icons'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A3(
+											iconToggle,
+											{
+												ctor: '::',
+												_0: 0,
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+													_1: {ctor: '[]'}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(
+												isOn ? 'Favorited? yes' : 'Favorited? no'),
+											_1: {ctor: '[]'}
+										}
+									}
+								});
+						}(),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								toggleExample,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										title,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Using Font Awesome'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A3(
+											iconToggle,
+											{
+												ctor: '::',
+												_0: 1,
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Unstar this Icon', 'Star this Icon'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'fa-star', 'fa-star-o'),
+													_1: {
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_IconToggle$inner('fa'),
+														_1: {ctor: '[]'}
+													}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									toggleExample,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Theme$dark,
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											title,
+											{
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'color', '#fff'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Dark Theme'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A3(
+												iconToggle,
+												{
+													ctor: '::',
+													_0: 2,
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+														_1: {
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_IconToggle$primary,
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										toggleExample,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Primary Colored Icons'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A3(
+													iconToggle,
+													{
+														ctor: '::',
+														_0: 3,
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_IconToggle$primary,
+																_1: {ctor: '[]'}
+															}
+														}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											toggleExample,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													title,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Accent Colored Icons'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A3(
+														iconToggle,
+														{
+															ctor: '::',
+															_0: 4,
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+															_1: {
+																ctor: '::',
+																_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_IconToggle$accent,
+																	_1: {ctor: '[]'}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												toggleExample,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														title,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Disabled Icons'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A3(
+															iconToggle,
+															{
+																ctor: '::',
+																_0: 5,
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_IconToggle$disabled,
+																		_1: {ctor: '[]'}
+																	}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {
+															ctor: '::',
+															_0: A3(
+																_debois$elm_mdl$Material_Options$styled,
+																_elm_lang$html$Html$div,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Theme$dark,
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#303030'),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_Options$css, 'padding-bottom', '1rem'),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																},
+																{
+																	ctor: '::',
+																	_0: A3(
+																		iconToggle,
+																		{
+																			ctor: '::',
+																			_0: 6,
+																			_1: {ctor: '[]'}
+																		},
+																		{
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+																				_1: {
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Material_IconToggle$disabled,
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		},
+																		{ctor: '[]'}),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}),
+											_1: {
+												ctor: '::',
+												_0: function () {
+													var demoColorCombo = F4(
+														function (idx, iconToggleOptions, options, nodes) {
+															return A3(
+																_debois$elm_mdl$Material_Options$styled,
+																_elm_lang$html$Html$div,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$cs('demo-color-combo'),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '250px'),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '1rem'),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_debois$elm_mdl$Material_Options$css, 'border-radius', '4px'),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'inline-flex'),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-direction', 'column'),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_debois$elm_mdl$Material_Options$css, 'align-items', 'center'),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'center'),
+																								_1: {
+																									ctor: '::',
+																									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-right', '8px'),
+																									_1: options
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																},
+																_elm_lang$core$List$concat(
+																	{
+																		ctor: '::',
+																		_0: {
+																			ctor: '::',
+																			_0: function () {
+																				var isOn = A2(
+																					_elm_lang$core$Maybe$withDefault,
+																					false,
+																					A2(_elm_lang$core$Dict$get, idx, model.iconToggles));
+																				return A5(
+																					_debois$elm_mdl$Material_IconToggle$render,
+																					_debois$elm_mdl$Demo_IconToggle$Mdl,
+																					idx,
+																					model.mdl,
+																					{
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Options$onClick(
+																							_debois$elm_mdl$Demo_IconToggle$Toggle(idx)),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_debois$elm_mdl$Material_Options$when, isOn, _debois$elm_mdl$Material_IconToggle$on),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(_debois$elm_mdl$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+																								_1: {
+																									ctor: '::',
+																									_0: A2(_debois$elm_mdl$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+																									_1: options
+																								}
+																							}
+																						}
+																					},
+																					{ctor: '[]'});
+																			}(),
+																			_1: {ctor: '[]'}
+																		},
+																		_1: {
+																			ctor: '::',
+																			_0: nodes,
+																			_1: {ctor: '[]'}
+																		}
+																	}));
+														});
+													return A2(
+														toggleExample,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																title,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Additional Color Combinations'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A3(
+																	_debois$elm_mdl$Material_Options$styled,
+																	_elm_lang$html$Html$div,
+																	{
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Options$cs('demo-color-combos'),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_debois$elm_mdl$Material_Options$css, 'align-items', 'center'),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'flex-start'),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: A4(
+																			demoColorCombo,
+																			{
+																				ctor: '::',
+																				_0: 7,
+																				_1: {ctor: '[]'}
+																			},
+																			{
+																				ctor: '::',
+																				_0: _debois$elm_mdl$Material_Theme$textPrimaryOnPrimary,
+																				_1: {ctor: '[]'}
+																			},
+																			{
+																				ctor: '::',
+																				_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#3e82f7'),
+																				_1: {ctor: '[]'}
+																			},
+																			{
+																				ctor: '::',
+																				_0: A3(
+																					_debois$elm_mdl$Material_Options$styled,
+																					_elm_lang$html$Html$p,
+																					{
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Theme$textPrimaryOnPrimary,
+																						_1: {ctor: '[]'}
+																					},
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html$text('Light icon on background'),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: A4(
+																				demoColorCombo,
+																				{
+																					ctor: '::',
+																					_0: 8,
+																					_1: {ctor: '[]'}
+																				},
+																				{ctor: '[]'},
+																				{
+																					ctor: '::',
+																					_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#00bcd6'),
+																					_1: {ctor: '[]'}
+																				},
+																				{
+																					ctor: '::',
+																					_0: A2(
+																						_elm_lang$html$Html$p,
+																						{ctor: '[]'},
+																						{
+																							ctor: '::',
+																							_0: _elm_lang$html$Html$text('Light icon on background'),
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {ctor: '[]'}
+																				}),
+																			_1: {
+																				ctor: '::',
+																				_0: A4(
+																					demoColorCombo,
+																					{
+																						ctor: '::',
+																						_0: 9,
+																						_1: {ctor: '[]'}
+																					},
+																					{
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Theme$textPrimaryOnDark,
+																						_1: {ctor: '[]'}
+																					},
+																					{
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Theme$dark,
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#303030'),
+																							_1: {ctor: '[]'}
+																						}
+																					},
+																					{
+																						ctor: '::',
+																						_0: A3(
+																							_debois$elm_mdl$Material_Options$styled,
+																							_elm_lang$html$Html$p,
+																							{
+																								ctor: '::',
+																								_0: _debois$elm_mdl$Material_Theme$textPrimaryOnDark,
+																								_1: {ctor: '[]'}
+																							},
+																							{
+																								ctor: '::',
+																								_0: _elm_lang$html$Html$text('Light icon on background'),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														});
+												}(),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 
 var _debois$elm_mdl$Material_LayoutGrid$span = F2(
 	function (device, value) {
@@ -23175,19 +24300,6 @@ var _debois$elm_mdl$Demo_Ripple$view = function (model) {
 		});
 };
 
-var _debois$elm_mdl$Material_Typography$adjustMargin = _debois$elm_mdl$Material_Options$cs('mdc-typography--adjust-margin');
-var _debois$elm_mdl$Material_Typography$subheading2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--subheading');
-var _debois$elm_mdl$Material_Typography$subheading1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--subheading');
-var _debois$elm_mdl$Material_Typography$headline = _debois$elm_mdl$Material_Options$cs('mdc-typography--headline');
-var _debois$elm_mdl$Material_Typography$body2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--body2');
-var _debois$elm_mdl$Material_Typography$caption = _debois$elm_mdl$Material_Options$cs('mdc-typography--caption');
-var _debois$elm_mdl$Material_Typography$title = _debois$elm_mdl$Material_Options$cs('mdc-typography--title');
-var _debois$elm_mdl$Material_Typography$display4 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display4');
-var _debois$elm_mdl$Material_Typography$display3 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display3');
-var _debois$elm_mdl$Material_Typography$display2 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display2');
-var _debois$elm_mdl$Material_Typography$display1 = _debois$elm_mdl$Material_Options$cs('mdc-typography--display1');
-var _debois$elm_mdl$Material_Typography$typography = _debois$elm_mdl$Material_Options$cs('mdc-typography');
-
 var _debois$elm_mdl$Demo_Selects$model = {mdl: _debois$elm_mdl$Material$model, selects: _elm_lang$core$Dict$empty, darkTheme: false, rtl: false, disabled: false};
 var _debois$elm_mdl$Demo_Selects$Model = F5(
 	function (a, b, c, d, e) {
@@ -24528,52 +25640,52 @@ var _debois$elm_mdl$Demo_Startpage$view = function (selectTab) {
 																		_0: {index: 6, icon: 'ic_card_24px.svg', wip: false, title: 'Grid list', subtitle: '2D grid layouts'},
 																		_1: {
 																			ctor: '::',
-																			_0: {index: -1, icon: 'ic_component_24px.svg', wip: true, title: 'Icon toggle', subtitle: 'Toggling icon states'},
+																			_0: {index: 7, icon: 'ic_component_24px.svg', wip: false, title: 'Icon toggle', subtitle: 'Toggling icon states'},
 																			_1: {
 																				ctor: '::',
-																				_0: {index: 7, icon: 'ic_card_24px.svg', wip: false, title: 'Layout grid', subtitle: 'Grid and gutter support'},
+																				_0: {index: 8, icon: 'ic_card_24px.svg', wip: false, title: 'Layout grid', subtitle: 'Grid and gutter support'},
 																				_1: {
 																					ctor: '::',
 																					_0: {index: -1, icon: 'ic_progress_activity.svg', wip: true, title: 'Linear progress', subtitle: 'Fills from 0% to 100%, represented by bars'},
 																					_1: {
 																						ctor: '::',
-																						_0: {index: 8, icon: 'ic_list_24px.svg', wip: false, title: 'List', subtitle: 'Item layouts in lists'},
+																						_0: {index: 9, icon: 'ic_list_24px.svg', wip: false, title: 'List', subtitle: 'Item layouts in lists'},
 																						_1: {
 																							ctor: '::',
 																							_0: {index: -1, icon: 'ic_radio_button_24px.svg', wip: true, title: 'Radio buttons', subtitle: 'Single selection controls'},
 																							_1: {
 																								ctor: '::',
-																								_0: {index: 9, icon: 'ic_ripple_24px.svg', wip: false, title: 'Ripple', subtitle: 'Touch ripple'},
+																								_0: {index: 10, icon: 'ic_ripple_24px.svg', wip: false, title: 'Ripple', subtitle: 'Touch ripple'},
 																								_1: {
 																									ctor: '::',
 																									_0: {index: 10, icon: 'ic_menu_24px.svg', wip: false, title: 'Select', subtitle: 'Popover selection menus'},
 																									_1: {
 																										ctor: '::',
-																										_0: {index: 11, icon: 'ic_menu_24px.svg', wip: false, title: 'Simple Menu', subtitle: 'Pop over menus'},
+																										_0: {index: 12, icon: 'ic_menu_24px.svg', wip: false, title: 'Simple Menu', subtitle: 'Pop over menus'},
 																										_1: {
 																											ctor: '::',
 																											_0: {index: -1, icon: 'slider.svg', wip: true, title: 'Slider', subtitle: 'Range Controls'},
 																											_1: {
 																												ctor: '::',
-																												_0: {index: 12, icon: 'ic_toast_24px.svg', wip: false, title: 'Snackbar', subtitle: 'Transient messages'},
+																												_0: {index: 13, icon: 'ic_toast_24px.svg', wip: false, title: 'Snackbar', subtitle: 'Transient messages'},
 																												_1: {
 																													ctor: '::',
-																													_0: {index: -1, icon: 'ic_switch_24px.svg', wip: true, title: 'Switch', subtitle: 'On off switches'},
+																													_0: {index: 14, icon: 'ic_switch_24px.svg', wip: false, title: 'Switch', subtitle: 'On off switches'},
 																													_1: {
 																														ctor: '::',
-																														_0: {index: 13, icon: 'ic_tabs_24px.svg', wip: false, title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
+																														_0: {index: 15, icon: 'ic_tabs_24px.svg', wip: false, title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
 																														_1: {
 																															ctor: '::',
-																															_0: {index: 14, icon: 'ic_text_field_24px.svg', wip: false, title: 'Text field', subtitle: 'Single and multiline text fields'},
+																															_0: {index: 16, icon: 'ic_text_field_24px.svg', wip: false, title: 'Text field', subtitle: 'Single and multiline text fields'},
 																															_1: {
 																																ctor: '::',
-																																_0: {index: 15, icon: 'ic_theme_24px.svg', wip: false, title: 'Theme', subtitle: 'Using primary and accent colors'},
+																																_0: {index: 17, icon: 'ic_theme_24px.svg', wip: false, title: 'Theme', subtitle: 'Using primary and accent colors'},
 																																_1: {
 																																	ctor: '::',
-																																	_0: {index: 16, icon: 'ic_toolbar_24px.svg', wip: false, title: 'Toolbar', subtitle: 'Header and footers'},
+																																	_0: {index: 18, icon: 'ic_toolbar_24px.svg', wip: false, title: 'Toolbar', subtitle: 'Header and footers'},
 																																	_1: {
 																																		ctor: '::',
-																																		_0: {index: 17, icon: 'ic_typography_24px.svg', wip: false, title: 'Typography', subtitle: 'Type hierarchy'},
+																																		_0: {index: 19, icon: 'ic_typography_24px.svg', wip: false, title: 'Typography', subtitle: 'Type hierarchy'},
 																																		_1: {ctor: '[]'}
 																																	}
 																																}
@@ -24605,6 +25717,379 @@ var _debois$elm_mdl$Demo_Startpage$view = function (selectTab) {
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
+		});
+};
+
+var _debois$elm_mdl$Demo_Switch$model = {mdl: _debois$elm_mdl$Material$model, on0: false, on1: false};
+var _debois$elm_mdl$Demo_Switch$Model = F3(
+	function (a, b, c) {
+		return {mdl: a, on0: b, on1: c};
+	});
+var _debois$elm_mdl$Demo_Switch$ToggleOn1 = {ctor: 'ToggleOn1'};
+var _debois$elm_mdl$Demo_Switch$ToggleOn0 = {ctor: 'ToggleOn0'};
+var _debois$elm_mdl$Demo_Switch$Mdl = function (a) {
+	return {ctor: 'Mdl', _0: a};
+};
+var _debois$elm_mdl$Demo_Switch$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Mdl':
+				return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Switch$Mdl, _p0._0, model);
+			case 'ToggleOn0':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{on0: !model.on0}),
+					{ctor: '[]'});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{on1: !model.on1}),
+					{ctor: '[]'});
+		}
+	});
+var _debois$elm_mdl$Demo_Switch$view = function (model) {
+	var example = function (options) {
+		return A2(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('example'),
+				_1: {
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '16px'),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '40px'),
+							_1: options
+						}
+					}
+				}
+			});
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				example,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#eee'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$h2,
+						{
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Switch on Light Theme'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A5(
+									_debois$elm_mdl$Material_Switch$render,
+									_debois$elm_mdl$Demo_Switch$Mdl,
+									{
+										ctor: '::',
+										_0: 0,
+										_1: {ctor: '[]'}
+									},
+									model.mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Switch$ToggleOn0),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.on0, _debois$elm_mdl$Material_Switch$on),
+											_1: {ctor: '[]'}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('off/on'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					example,
+					{
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#eee'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$h2,
+							{
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Switch on Light Theme - Disabled'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Switch$render,
+										_debois$elm_mdl$Demo_Switch$Mdl,
+										{
+											ctor: '::',
+											_0: 2,
+											_1: {ctor: '[]'}
+										},
+										model.mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Switch$disabled,
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('off/on'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						example,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Theme$dark,
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$h2,
+								{
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Switch on Dark Theme'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A5(
+											_debois$elm_mdl$Material_Switch$render,
+											_debois$elm_mdl$Demo_Switch$Mdl,
+											{
+												ctor: '::',
+												_0: 1,
+												_1: {ctor: '[]'}
+											},
+											model.mdl,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$onClick(_debois$elm_mdl$Demo_Switch$ToggleOn1),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.on1, _debois$elm_mdl$Material_Switch$on),
+													_1: {ctor: '[]'}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('off/on'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							example,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Theme$dark,
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$h2,
+									{
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Switch on Dark Theme - Disabled'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A5(
+												_debois$elm_mdl$Material_Switch$render,
+												_debois$elm_mdl$Demo_Switch$Mdl,
+												{
+													ctor: '::',
+													_0: 3,
+													_1: {ctor: '[]'}
+												},
+												model.mdl,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Switch$disabled,
+													_1: {ctor: '[]'}
+												},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('off/on'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
 		});
 };
 
@@ -31820,7 +33305,7 @@ var _debois$elm_mdl$Main$nth = F2(
 		return _elm_lang$core$List$head(
 			A2(_elm_lang$core$List$drop, k, xs));
 	});
-var _debois$elm_mdl$Main$model = {mdl: _debois$elm_mdl$Material$model, buttons: _debois$elm_mdl$Demo_Buttons$model, selects: _debois$elm_mdl$Demo_Selects$model, fabs: _debois$elm_mdl$Demo_Fabs$model, badges: _debois$elm_mdl$Demo_Badges$model, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$model, menus: _debois$elm_mdl$Demo_Menus$model, textfields: _debois$elm_mdl$Demo_Textfields$model, theme: _debois$elm_mdl$Demo_Theme$model, checkbox: _debois$elm_mdl$Demo_Checkbox$model, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, loading: _debois$elm_mdl$Demo_Loading$model, tooltip: _debois$elm_mdl$Demo_Tooltip$model, toolbar: _debois$elm_mdl$Demo_Toolbar$model, tabs: _debois$elm_mdl$Demo_Tabs$model, slider: _debois$elm_mdl$Demo_Slider$model, typography: _debois$elm_mdl$Demo_Typography$model, cards: _debois$elm_mdl$Demo_Cards$model, lists: _debois$elm_mdl$Demo_Lists$model, dialog: _debois$elm_mdl$Demo_Dialog$model, elevation: _debois$elm_mdl$Demo_Elevation$model, ripple: _debois$elm_mdl$Demo_Ripple$model, chips: _debois$elm_mdl$Demo_Chips$model, selectedTab: _elm_lang$core$Maybe$Nothing, transparentHeader: false, logMessages: false};
+var _debois$elm_mdl$Main$model = {mdl: _debois$elm_mdl$Material$model, buttons: _debois$elm_mdl$Demo_Buttons$model, iconToggle: _debois$elm_mdl$Demo_IconToggle$model, selects: _debois$elm_mdl$Demo_Selects$model, fabs: _debois$elm_mdl$Demo_Fabs$model, badges: _debois$elm_mdl$Demo_Badges$model, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$model, menus: _debois$elm_mdl$Demo_Menus$model, textfields: _debois$elm_mdl$Demo_Textfields$model, theme: _debois$elm_mdl$Demo_Theme$model, checkbox: _debois$elm_mdl$Demo_Checkbox$model, $switch: _debois$elm_mdl$Demo_Switch$model, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, loading: _debois$elm_mdl$Demo_Loading$model, tooltip: _debois$elm_mdl$Demo_Tooltip$model, toolbar: _debois$elm_mdl$Demo_Toolbar$model, tabs: _debois$elm_mdl$Demo_Tabs$model, slider: _debois$elm_mdl$Demo_Slider$model, typography: _debois$elm_mdl$Demo_Typography$model, cards: _debois$elm_mdl$Demo_Cards$model, lists: _debois$elm_mdl$Demo_Lists$model, dialog: _debois$elm_mdl$Demo_Dialog$model, elevation: _debois$elm_mdl$Demo_Elevation$model, ripple: _debois$elm_mdl$Demo_Ripple$model, chips: _debois$elm_mdl$Demo_Chips$model, selectedTab: _elm_lang$core$Maybe$Nothing, transparentHeader: false, logMessages: false};
 var _debois$elm_mdl$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -31852,7 +33337,11 @@ var _debois$elm_mdl$Main$Model = function (a) {
 																							return function (x) {
 																								return function (y) {
 																									return function (z) {
-																										return {mdl: a, buttons: b, selects: c, fabs: d, badges: e, layoutGrid: f, menus: g, textfields: h, theme: i, checkbox: j, snackbar: k, loading: l, tooltip: m, toolbar: n, tabs: o, slider: p, typography: q, cards: r, lists: s, dialog: t, elevation: u, ripple: v, chips: w, selectedTab: x, transparentHeader: y, logMessages: z};
+																										return function (_1) {
+																											return function (_2) {
+																												return {mdl: a, buttons: b, iconToggle: c, selects: d, fabs: e, badges: f, layoutGrid: g, menus: h, textfields: i, theme: j, checkbox: k, $switch: l, snackbar: m, loading: n, tooltip: o, toolbar: p, tabs: q, slider: r, typography: s, cards: t, lists: u, dialog: v, elevation: w, ripple: x, chips: y, selectedTab: z, transparentHeader: _1, logMessages: _2};
+																											};
+																										};
 																									};
 																								};
 																							};
@@ -31917,6 +33406,9 @@ var _debois$elm_mdl$Main$TooltipMsg = function (a) {
 var _debois$elm_mdl$Main$LoadingMsg = function (a) {
 	return {ctor: 'LoadingMsg', _0: a};
 };
+var _debois$elm_mdl$Main$SwitchMsg = function (a) {
+	return {ctor: 'SwitchMsg', _0: a};
+};
 var _debois$elm_mdl$Main$CheckboxMsg = function (a) {
 	return {ctor: 'CheckboxMsg', _0: a};
 };
@@ -31934,6 +33426,9 @@ var _debois$elm_mdl$Main$TextfieldMsg = function (a) {
 };
 var _debois$elm_mdl$Main$MenusMsg = function (a) {
 	return {ctor: 'MenusMsg', _0: a};
+};
+var _debois$elm_mdl$Main$IconToggleMsg = function (a) {
+	return {ctor: 'IconToggleMsg', _0: a};
 };
 var _debois$elm_mdl$Main$LayoutGridMsg = function (a) {
 	return {ctor: 'LayoutGridMsg', _0: a};
@@ -32052,15 +33547,15 @@ var _debois$elm_mdl$Main$tabs = {
 								ctor: '::',
 								_0: {
 									ctor: '_Tuple3',
-									_0: 'Layout grid',
-									_1: 'layout-grid',
+									_0: 'Icon toggle',
+									_1: 'icon-toggle',
 									_2: function (_p7) {
 										return A2(
 											_elm_lang$html$Html$map,
-											_debois$elm_mdl$Main$LayoutGridMsg,
-											_debois$elm_mdl$Demo_LayoutGrid$view(
+											_debois$elm_mdl$Main$IconToggleMsg,
+											_debois$elm_mdl$Demo_IconToggle$view(
 												function (_) {
-													return _.layoutGrid;
+													return _.iconToggle;
 												}(_p7)));
 									}
 								},
@@ -32068,15 +33563,15 @@ var _debois$elm_mdl$Main$tabs = {
 									ctor: '::',
 									_0: {
 										ctor: '_Tuple3',
-										_0: 'Lists',
-										_1: 'lists',
+										_0: 'Layout grid',
+										_1: 'layout-grid',
 										_2: function (_p8) {
 											return A2(
 												_elm_lang$html$Html$map,
-												_debois$elm_mdl$Main$ListsMsg,
-												_debois$elm_mdl$Demo_Lists$view(
+												_debois$elm_mdl$Main$LayoutGridMsg,
+												_debois$elm_mdl$Demo_LayoutGrid$view(
 													function (_) {
-														return _.lists;
+														return _.layoutGrid;
 													}(_p8)));
 										}
 									},
@@ -32084,15 +33579,15 @@ var _debois$elm_mdl$Main$tabs = {
 										ctor: '::',
 										_0: {
 											ctor: '_Tuple3',
-											_0: 'Ripple',
-											_1: 'ripple',
+											_0: 'Lists',
+											_1: 'lists',
 											_2: function (_p9) {
 												return A2(
 													_elm_lang$html$Html$map,
-													_debois$elm_mdl$Main$RippleMsg,
-													_debois$elm_mdl$Demo_Ripple$view(
+													_debois$elm_mdl$Main$ListsMsg,
+													_debois$elm_mdl$Demo_Lists$view(
 														function (_) {
-															return _.ripple;
+															return _.lists;
 														}(_p9)));
 											}
 										},
@@ -32100,15 +33595,15 @@ var _debois$elm_mdl$Main$tabs = {
 											ctor: '::',
 											_0: {
 												ctor: '_Tuple3',
-												_0: 'Select',
-												_1: 'select',
+												_0: 'Ripple',
+												_1: 'ripple',
 												_2: function (_p10) {
 													return A2(
 														_elm_lang$html$Html$map,
-														_debois$elm_mdl$Main$SelectMsg,
-														_debois$elm_mdl$Demo_Selects$view(
+														_debois$elm_mdl$Main$RippleMsg,
+														_debois$elm_mdl$Demo_Ripple$view(
 															function (_) {
-																return _.selects;
+																return _.ripple;
 															}(_p10)));
 												}
 											},
@@ -32116,15 +33611,15 @@ var _debois$elm_mdl$Main$tabs = {
 												ctor: '::',
 												_0: {
 													ctor: '_Tuple3',
-													_0: 'Simple Menu',
-													_1: 'menus',
+													_0: 'Select',
+													_1: 'select',
 													_2: function (_p11) {
 														return A2(
 															_elm_lang$html$Html$map,
-															_debois$elm_mdl$Main$MenusMsg,
-															_debois$elm_mdl$Demo_Menus$view(
+															_debois$elm_mdl$Main$SelectMsg,
+															_debois$elm_mdl$Demo_Selects$view(
 																function (_) {
-																	return _.menus;
+																	return _.selects;
 																}(_p11)));
 													}
 												},
@@ -32132,15 +33627,15 @@ var _debois$elm_mdl$Main$tabs = {
 													ctor: '::',
 													_0: {
 														ctor: '_Tuple3',
-														_0: 'Snackbar',
-														_1: 'snackbar',
+														_0: 'Simple Menu',
+														_1: 'menus',
 														_2: function (_p12) {
 															return A2(
 																_elm_lang$html$Html$map,
-																_debois$elm_mdl$Main$SnackbarMsg,
-																_debois$elm_mdl$Demo_Snackbar$view(
+																_debois$elm_mdl$Main$MenusMsg,
+																_debois$elm_mdl$Demo_Menus$view(
 																	function (_) {
-																		return _.snackbar;
+																		return _.menus;
 																	}(_p12)));
 														}
 													},
@@ -32148,15 +33643,15 @@ var _debois$elm_mdl$Main$tabs = {
 														ctor: '::',
 														_0: {
 															ctor: '_Tuple3',
-															_0: 'Tabs',
-															_1: 'tabs',
+															_0: 'Snackbar',
+															_1: 'snackbar',
 															_2: function (_p13) {
 																return A2(
 																	_elm_lang$html$Html$map,
-																	_debois$elm_mdl$Main$TabMsg,
-																	_debois$elm_mdl$Demo_Tabs$view(
+																	_debois$elm_mdl$Main$SnackbarMsg,
+																	_debois$elm_mdl$Demo_Snackbar$view(
 																		function (_) {
-																			return _.tabs;
+																			return _.snackbar;
 																		}(_p13)));
 															}
 														},
@@ -32164,15 +33659,15 @@ var _debois$elm_mdl$Main$tabs = {
 															ctor: '::',
 															_0: {
 																ctor: '_Tuple3',
-																_0: 'Textfields',
-																_1: 'textfields',
+																_0: 'Switch',
+																_1: 'switch',
 																_2: function (_p14) {
 																	return A2(
 																		_elm_lang$html$Html$map,
-																		_debois$elm_mdl$Main$TextfieldMsg,
-																		_debois$elm_mdl$Demo_Textfields$view(
+																		_debois$elm_mdl$Main$SwitchMsg,
+																		_debois$elm_mdl$Demo_Switch$view(
 																			function (_) {
-																				return _.textfields;
+																				return _.$switch;
 																			}(_p14)));
 																}
 															},
@@ -32180,15 +33675,15 @@ var _debois$elm_mdl$Main$tabs = {
 																ctor: '::',
 																_0: {
 																	ctor: '_Tuple3',
-																	_0: 'Theme',
-																	_1: 'theme',
+																	_0: 'Tabs',
+																	_1: 'tabs',
 																	_2: function (_p15) {
 																		return A2(
 																			_elm_lang$html$Html$map,
-																			_debois$elm_mdl$Main$ThemeMsg,
-																			_debois$elm_mdl$Demo_Theme$view(
+																			_debois$elm_mdl$Main$TabMsg,
+																			_debois$elm_mdl$Demo_Tabs$view(
 																				function (_) {
-																					return _.theme;
+																					return _.tabs;
 																				}(_p15)));
 																	}
 																},
@@ -32196,15 +33691,15 @@ var _debois$elm_mdl$Main$tabs = {
 																	ctor: '::',
 																	_0: {
 																		ctor: '_Tuple3',
-																		_0: 'Toolbar',
-																		_1: 'toolbar',
+																		_0: 'Textfields',
+																		_1: 'textfields',
 																		_2: function (_p16) {
 																			return A2(
 																				_elm_lang$html$Html$map,
-																				_debois$elm_mdl$Main$ToolbarMsg,
-																				_debois$elm_mdl$Demo_Toolbar$view(
+																				_debois$elm_mdl$Main$TextfieldMsg,
+																				_debois$elm_mdl$Demo_Textfields$view(
 																					function (_) {
-																						return _.toolbar;
+																						return _.textfields;
 																					}(_p16)));
 																		}
 																	},
@@ -32212,19 +33707,53 @@ var _debois$elm_mdl$Main$tabs = {
 																		ctor: '::',
 																		_0: {
 																			ctor: '_Tuple3',
-																			_0: 'Typography',
-																			_1: 'typography',
+																			_0: 'Theme',
+																			_1: 'theme',
 																			_2: function (_p17) {
 																				return A2(
 																					_elm_lang$html$Html$map,
-																					_debois$elm_mdl$Main$TypographyMsg,
-																					_debois$elm_mdl$Demo_Typography$view(
+																					_debois$elm_mdl$Main$ThemeMsg,
+																					_debois$elm_mdl$Demo_Theme$view(
 																						function (_) {
-																							return _.typography;
+																							return _.theme;
 																						}(_p17)));
 																			}
 																		},
-																		_1: {ctor: '[]'}
+																		_1: {
+																			ctor: '::',
+																			_0: {
+																				ctor: '_Tuple3',
+																				_0: 'Toolbar',
+																				_1: 'toolbar',
+																				_2: function (_p18) {
+																					return A2(
+																						_elm_lang$html$Html$map,
+																						_debois$elm_mdl$Main$ToolbarMsg,
+																						_debois$elm_mdl$Demo_Toolbar$view(
+																							function (_) {
+																								return _.toolbar;
+																							}(_p18)));
+																				}
+																			},
+																			_1: {
+																				ctor: '::',
+																				_0: {
+																					ctor: '_Tuple3',
+																					_0: 'Typography',
+																					_1: 'typography',
+																					_2: function (_p19) {
+																						return A2(
+																							_elm_lang$html$Html$map,
+																							_debois$elm_mdl$Main$TypographyMsg,
+																							_debois$elm_mdl$Demo_Typography$view(
+																								function (_) {
+																									return _.typography;
+																								}(_p19)));
+																					}
+																				},
+																				_1: {ctor: '[]'}
+																			}
+																		}
 																	}
 																}
 															}
@@ -32245,30 +33774,30 @@ var _debois$elm_mdl$Main$tabs = {
 };
 var _debois$elm_mdl$Main$tabTitles = A2(
 	_elm_lang$core$List$map,
-	function (_p18) {
-		var _p19 = _p18;
-		return _elm_lang$html$Html$text(_p19._0);
+	function (_p20) {
+		var _p21 = _p20;
+		return _elm_lang$html$Html$text(_p21._0);
 	},
 	_debois$elm_mdl$Main$tabs);
 var _debois$elm_mdl$Main$tabViews = _elm_lang$core$Array$fromList(
 	A2(
 		_elm_lang$core$List$map,
-		function (_p20) {
-			var _p21 = _p20;
-			return _p21._2;
+		function (_p22) {
+			var _p23 = _p22;
+			return _p23._2;
 		},
 		_debois$elm_mdl$Main$tabs));
 var _debois$elm_mdl$Main$tabUrls = _elm_lang$core$Array$fromList(
 	A2(
 		_elm_lang$core$List$map,
-		function (_p22) {
-			var _p23 = _p22;
-			return _p23._1;
+		function (_p24) {
+			var _p25 = _p24;
+			return _p25._1;
 		},
 		_debois$elm_mdl$Main$tabs));
 var _debois$elm_mdl$Main$urlOf = function (model) {
-	var _p24 = model.selectedTab;
-	if (_p24.ctor === 'Nothing') {
+	var _p26 = model.selectedTab;
+	if (_p26.ctor === 'Nothing') {
 		return '#';
 	} else {
 		return A2(
@@ -32277,7 +33806,7 @@ var _debois$elm_mdl$Main$urlOf = function (model) {
 			A2(
 				_elm_lang$core$Maybe$withDefault,
 				'',
-				A2(_elm_lang$core$Array$get, _p24._0, _debois$elm_mdl$Main$tabUrls)));
+				A2(_elm_lang$core$Array$get, _p26._0, _debois$elm_mdl$Main$tabUrls)));
 	}
 };
 var _debois$elm_mdl$Main$delta2url = F2(
@@ -32292,9 +33821,9 @@ var _debois$elm_mdl$Main$urlTabs = _elm_lang$core$Dict$fromList(
 	A2(
 		_elm_lang$core$List$indexedMap,
 		F2(
-			function (idx, _p25) {
-				var _p26 = _p25;
-				return {ctor: '_Tuple2', _0: _p26._1, _1: idx};
+			function (idx, _p27) {
+				var _p28 = _p27;
+				return {ctor: '_Tuple2', _0: _p28._1, _1: idx};
 			}),
 		_debois$elm_mdl$Main$tabs));
 var _debois$elm_mdl$Main$BadgesMsg = function (a) {
@@ -32308,15 +33837,15 @@ var _debois$elm_mdl$Main$update = F2(
 		var log = function (msg) {
 			return model.logMessages ? _elm_lang$core$Debug$log('Msg') : _elm_lang$core$Basics$identity;
 		};
-		var _p27 = A2(log, 'Msg', msg);
-		switch (_p27.ctor) {
+		var _p29 = A2(log, 'Msg', msg);
+		switch (_p29.ctor) {
 			case 'SelectTab':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							selectedTab: _elm_lang$core$Maybe$Just(_p27._0)
+							selectedTab: _elm_lang$core$Maybe$Just(_p29._0)
 						}),
 					{
 						ctor: '::',
@@ -32353,7 +33882,7 @@ var _debois$elm_mdl$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Mdl':
-				return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Main$Mdl, _p27._0, model);
+				return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Main$Mdl, _p29._0, model);
 			case 'ButtonsMsg':
 				return A6(
 					_debois$elm_mdl$Material_Helpers$lift,
@@ -32368,7 +33897,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$ButtonsMsg,
 					_debois$elm_mdl$Demo_Buttons$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'FabsMsg':
 				return A6(
@@ -32384,7 +33913,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$FabsMsg,
 					_debois$elm_mdl$Demo_Fabs$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'BadgesMsg':
 				return A6(
@@ -32400,7 +33929,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$BadgesMsg,
 					_debois$elm_mdl$Demo_Badges$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'LayoutGridMsg':
 				return A6(
@@ -32416,7 +33945,23 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$LayoutGridMsg,
 					_debois$elm_mdl$Demo_LayoutGrid$update,
-					_p27._0,
+					_p29._0,
+					model);
+			case 'IconToggleMsg':
+				return A6(
+					_debois$elm_mdl$Material_Helpers$lift,
+					function (_) {
+						return _.iconToggle;
+					},
+					F2(
+						function (m, x) {
+							return _elm_lang$core$Native_Utils.update(
+								m,
+								{iconToggle: x});
+						}),
+					_debois$elm_mdl$Main$IconToggleMsg,
+					_debois$elm_mdl$Demo_IconToggle$update,
+					_p29._0,
 					model);
 			case 'MenusMsg':
 				return A6(
@@ -32432,7 +33977,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$MenusMsg,
 					_debois$elm_mdl$Demo_Menus$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'TextfieldMsg':
 				return A2(
@@ -32449,7 +33994,7 @@ var _debois$elm_mdl$Main$update = F2(
 										model,
 										{textfields: x});
 								}),
-							A2(_debois$elm_mdl$Demo_Textfields$update, _p27._0, model.textfields))));
+							A2(_debois$elm_mdl$Demo_Textfields$update, _p29._0, model.textfields))));
 			case 'ThemeMsg':
 				return A6(
 					_debois$elm_mdl$Material_Helpers$lift,
@@ -32464,7 +34009,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$ThemeMsg,
 					_debois$elm_mdl$Demo_Theme$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'SnackbarMsg':
 				return A6(
@@ -32480,7 +34025,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$SnackbarMsg,
 					_debois$elm_mdl$Demo_Snackbar$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'CheckboxMsg':
 				return A6(
@@ -32496,7 +34041,23 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$CheckboxMsg,
 					_debois$elm_mdl$Demo_Checkbox$update,
-					_p27._0,
+					_p29._0,
+					model);
+			case 'SwitchMsg':
+				return A6(
+					_debois$elm_mdl$Material_Helpers$lift,
+					function (_) {
+						return _.$switch;
+					},
+					F2(
+						function (m, x) {
+							return _elm_lang$core$Native_Utils.update(
+								m,
+								{$switch: x});
+						}),
+					_debois$elm_mdl$Main$SwitchMsg,
+					_debois$elm_mdl$Demo_Switch$update,
+					_p29._0,
 					model);
 			case 'LoadingMsg':
 				return A6(
@@ -32512,7 +34073,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$LoadingMsg,
 					_debois$elm_mdl$Demo_Loading$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'SliderMsg':
 				return A6(
@@ -32528,7 +34089,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$SliderMsg,
 					_debois$elm_mdl$Demo_Slider$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'TooltipMsg':
 				return A6(
@@ -32544,7 +34105,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$TooltipMsg,
 					_debois$elm_mdl$Demo_Tooltip$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'ToolbarMsg':
 				return A6(
@@ -32560,7 +34121,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$ToolbarMsg,
 					_debois$elm_mdl$Demo_Toolbar$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'TabMsg':
 				return A6(
@@ -32576,7 +34137,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$TabMsg,
 					_debois$elm_mdl$Demo_Tabs$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'TypographyMsg':
 				return A6(
@@ -32592,7 +34153,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$TypographyMsg,
 					_debois$elm_mdl$Demo_Typography$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'CardsMsg':
 				return A6(
@@ -32608,7 +34169,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$CardsMsg,
 					_debois$elm_mdl$Demo_Cards$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'ListsMsg':
 				return A6(
@@ -32624,7 +34185,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$ListsMsg,
 					_debois$elm_mdl$Demo_Lists$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'DialogMsg':
 				return A6(
@@ -32640,7 +34201,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$DialogMsg,
 					_debois$elm_mdl$Demo_Dialog$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'ElevationMsg':
 				return A6(
@@ -32656,7 +34217,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$ElevationMsg,
 					_debois$elm_mdl$Demo_Elevation$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'RippleMsg':
 				return A6(
@@ -32672,7 +34233,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$RippleMsg,
 					_debois$elm_mdl$Demo_Ripple$update,
-					_p27._0,
+					_p29._0,
 					model);
 			case 'ChipMsg':
 				return A6(
@@ -32688,7 +34249,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$ChipMsg,
 					_debois$elm_mdl$Demo_Chips$update,
-					_p27._0,
+					_p29._0,
 					model);
 			default:
 				return A6(
@@ -32704,7 +34265,7 @@ var _debois$elm_mdl$Main$update = F2(
 						}),
 					_debois$elm_mdl$Main$SelectMsg,
 					_debois$elm_mdl$Demo_Selects$update,
-					_p27._0,
+					_p29._0,
 					model);
 		}
 	});
@@ -32714,25 +34275,25 @@ var _debois$elm_mdl$Main$SelectTab = function (a) {
 };
 var _debois$elm_mdl$Main$view_ = function (model) {
 	var title = function () {
-		var _p28 = model.selectedTab;
-		if (_p28.ctor === 'Nothing') {
+		var _p30 = model.selectedTab;
+		if (_p30.ctor === 'Nothing') {
 			return _elm_lang$html$Html$text('Material Components Catalog');
 		} else {
 			return A2(
 				_elm_lang$core$Maybe$withDefault,
 				_elm_lang$html$Html$text(''),
-				A2(_debois$elm_mdl$Main$nth, _p28._0, _debois$elm_mdl$Main$tabTitles));
+				A2(_debois$elm_mdl$Main$nth, _p30._0, _debois$elm_mdl$Main$tabTitles));
 		}
 	}();
 	var top = function () {
-		var _p29 = model.selectedTab;
-		if (_p29.ctor === 'Nothing') {
+		var _p31 = model.selectedTab;
+		if (_p31.ctor === 'Nothing') {
 			return _debois$elm_mdl$Demo_Startpage$view(_debois$elm_mdl$Main$SelectTab);
 		} else {
 			return A2(
 				_elm_lang$core$Maybe$withDefault,
 				_debois$elm_mdl$Main$e404,
-				A2(_elm_lang$core$Array$get, _p29._0, _debois$elm_mdl$Main$tabViews))(model);
+				A2(_elm_lang$core$Array$get, _p31._0, _debois$elm_mdl$Main$tabViews))(model);
 		}
 	}();
 	return A2(
@@ -32773,8 +34334,8 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 										{
 											ctor: '::',
 											_0: function () {
-												var _p30 = model.selectedTab;
-												if (_p30.ctor === 'Nothing') {
+												var _p32 = model.selectedTab;
+												if (_p32.ctor === 'Nothing') {
 													return A2(
 														_elm_lang$html$Html$img,
 														{
@@ -32841,15 +34402,15 @@ var _debois$elm_mdl$Main$location2messages = function (location) {
 	return {
 		ctor: '::',
 		_0: function () {
-			var _p31 = A2(_elm_lang$core$String$dropLeft, 1, location.hash);
-			if (_p31 === '') {
+			var _p33 = A2(_elm_lang$core$String$dropLeft, 1, location.hash);
+			if (_p33 === '') {
 				return _debois$elm_mdl$Main$ClearTab;
 			} else {
 				return _debois$elm_mdl$Main$SelectTab(
 					A2(
 						_elm_lang$core$Maybe$withDefault,
 						-1,
-						A2(_elm_lang$core$Dict$get, _p31, _debois$elm_mdl$Main$urlTabs)));
+						A2(_elm_lang$core$Dict$get, _p33, _debois$elm_mdl$Main$urlTabs)));
 			}
 		}(),
 		_1: {ctor: '[]'}
