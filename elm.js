@@ -24239,18 +24239,19 @@ var _debois$elm_mdl$Demo_Radio$view = function (model) {
 			ctor: '::',
 			_0: function () {
 				var group = 'ex0';
-				var isSelected = function (name) {
-					return A2(
-						_elm_lang$core$Maybe$withDefault,
-						false,
-						A2(
-							_elm_lang$core$Maybe$map,
-							F2(
-								function (x, y) {
-									return _elm_lang$core$Native_Utils.eq(x, y);
-								})(name),
-							A2(_elm_lang$core$Dict$get, group, model.radios)));
-				};
+				var isSelected = F2(
+					function (isDef, name) {
+						return A2(
+							_elm_lang$core$Maybe$withDefault,
+							isDef,
+							A2(
+								_elm_lang$core$Maybe$map,
+								F2(
+									function (x, y) {
+										return _elm_lang$core$Native_Utils.eq(x, y);
+									})(name),
+								A2(_elm_lang$core$Dict$get, group, model.radios)));
+					});
 				return A2(
 					example,
 					{ctor: '[]'},
@@ -24305,7 +24306,7 @@ var _debois$elm_mdl$Demo_Radio$view = function (model) {
 													ctor: '::',
 													_0: A2(
 														_debois$elm_mdl$Material_Options$when,
-														isSelected(name),
+														A2(isSelected, true, name),
 														_debois$elm_mdl$Material_Radio$selected),
 													_1: {
 														ctor: '::',
@@ -24361,7 +24362,7 @@ var _debois$elm_mdl$Demo_Radio$view = function (model) {
 														ctor: '::',
 														_0: A2(
 															_debois$elm_mdl$Material_Options$when,
-															isSelected(name),
+															A2(isSelected, false, name),
 															_debois$elm_mdl$Material_Radio$selected),
 														_1: {
 															ctor: '::',
@@ -24394,18 +24395,19 @@ var _debois$elm_mdl$Demo_Radio$view = function (model) {
 				ctor: '::',
 				_0: function () {
 					var group = 'ex1';
-					var isSelected = function (name) {
-						return A2(
-							_elm_lang$core$Maybe$withDefault,
-							false,
-							A2(
-								_elm_lang$core$Maybe$map,
-								F2(
-									function (x, y) {
-										return _elm_lang$core$Native_Utils.eq(x, y);
-									})(name),
-								A2(_elm_lang$core$Dict$get, group, model.radios)));
-					};
+					var isSelected = F2(
+						function (isDef, name) {
+							return A2(
+								_elm_lang$core$Maybe$withDefault,
+								isDef,
+								A2(
+									_elm_lang$core$Maybe$map,
+									F2(
+										function (x, y) {
+											return _elm_lang$core$Native_Utils.eq(x, y);
+										})(name),
+									A2(_elm_lang$core$Dict$get, group, model.radios)));
+						});
 					return A2(
 						example,
 						{
@@ -24472,7 +24474,7 @@ var _debois$elm_mdl$Demo_Radio$view = function (model) {
 														ctor: '::',
 														_0: A2(
 															_debois$elm_mdl$Material_Options$when,
-															isSelected(name),
+															A2(isSelected, true, name),
 															_debois$elm_mdl$Material_Radio$selected),
 														_1: {
 															ctor: '::',
@@ -24528,7 +24530,7 @@ var _debois$elm_mdl$Demo_Radio$view = function (model) {
 															ctor: '::',
 															_0: A2(
 																_debois$elm_mdl$Material_Options$when,
-																isSelected(name),
+																A2(isSelected, false, name),
 																_debois$elm_mdl$Material_Radio$selected),
 															_1: {
 																ctor: '::',
