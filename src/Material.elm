@@ -169,6 +169,7 @@ module as a starting point
 
 import Dict
 import Material.Button as Button
+import Material.Radio as Radio
 import Material.Checkbox as Checkbox
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
@@ -190,6 +191,7 @@ import Material.Tooltip as Tooltip
 -}
 type alias Model = 
     { button : Indexed Button.Model
+    , radio : Indexed Radio.Model
     , iconToggle : Indexed IconToggle.Model
     , fab : Indexed Fab.Model
     , textfield : Indexed Textfield.Model
@@ -209,6 +211,7 @@ type alias Model =
 model : Model
 model = 
     { button = Dict.empty
+    , radio = Dict.empty
     , iconToggle = Dict.empty
     , fab = Dict.empty
     , textfield = Dict.empty
@@ -248,6 +251,9 @@ update_ lift msg store =
     case msg of
        ButtonMsg idx msg ->
            Button.react lift msg idx store
+
+       RadioMsg idx msg ->
+           Radio.react lift msg idx store
 
        IconToggleMsg idx msg ->
            IconToggle.react lift msg idx store

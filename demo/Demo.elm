@@ -23,6 +23,7 @@ import Demo.Tabs
 import Demo.Textfields
 import Demo.Theme
 import Demo.Checkbox
+import Demo.Radio
 import Demo.Switch
 import Demo.Toolbar
 import Demo.Tooltip
@@ -77,6 +78,7 @@ type alias Model =
     , lists : Demo.Lists.Model
     , dialog : Demo.Dialog.Model
     , elevation : Demo.Elevation.Model
+    , radio : Demo.Radio.Model
     , ripple : Demo.Ripple.Model
     , chips : Demo.Chips.Model
     , selectedTab : Maybe Int
@@ -107,6 +109,7 @@ model =
     , slider = Demo.Slider.model
     , typography = Demo.Typography.model
     , cards = Demo.Cards.model
+    , radio = Demo.Radio.model
     , lists = Demo.Lists.model
     , dialog = Demo.Dialog.model
     , elevation = Demo.Elevation.model
@@ -150,6 +153,7 @@ type Msg
     | ElevationMsg Demo.Elevation.Msg
     | RippleMsg Demo.Ripple.Msg
     | ChipMsg Demo.Chips.Msg
+    | RadioMsg Demo.Radio.Msg
     | ToggleHeader
     | ToggleLog
 
@@ -253,6 +257,9 @@ update msg model =
           ChipMsg a ->
               lift .chips (\m x -> { m | chips = x }) ChipMsg Demo.Chips.update a model
 
+          RadioMsg a ->
+              lift .radio (\m x -> { m | radio = x }) RadioMsg Demo.Radio.update a model
+
           SelectMsg a ->
               lift .selects (\m x -> { m | selects = x }) SelectMsg Demo.Selects.update a model
 
@@ -273,6 +280,7 @@ tabs =
     , ( "Icon toggle", "icon-toggle", .iconToggle >> Demo.IconToggle.view >> Html.map IconToggleMsg)
     , ( "Layout grid", "layout-grid", .layoutGrid >> Demo.LayoutGrid.view >> Html.map LayoutGridMsg )
     , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
+    , ( "Radio", "radio", .radio >> Demo.Radio.view >> Html.map RadioMsg )
     , ( "Ripple", "ripple", .ripple >> Demo.Ripple.view >> Html.map RippleMsg )
     , ( "Select", "select", .selects >> Demo.Selects.view >> Html.map SelectMsg )
     , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
@@ -286,8 +294,6 @@ tabs =
 
     -- , ( "Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg )
     -- , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
-    -- , ( "Loading", "loading", .loading >> Demo.Loading.view >> Html.map LoadingMsg )
-    -- , ( "Sliders", "sliders", .slider >> Demo.Slider.view >> Html.map SliderMsg )
     -- , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
     ]
 

@@ -6,6 +6,7 @@ module Material.Msg
 -}
 
 import Material.Internal.Button as Button 
+import Material.Internal.Radio as Radio 
 import Material.Internal.IconToggle as IconToggle 
 import Material.Internal.Fab as Fab 
 import Material.Internal.Menu as Menu
@@ -47,3 +48,4 @@ type Msg m
     | SwitchMsg Index Switch.Msg
     | TooltipMsg Index Tooltip.Msg
     | RippleMsg Index Ripple.Msg
+    | RadioMsg Index Radio.Msg
