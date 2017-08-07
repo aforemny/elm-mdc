@@ -111,8 +111,8 @@ secondary options =
     Options.styled Html.span (cs "mdc-list-item__text__secondary"::options)
 
 
-divider : List (Property c m) -> Html m
-divider options =
+divider : List (Property c m) -> List (Html m) -> Html m
+divider options _ =
     Options.styled Html.hr (cs "mdc-list-divider"::options) []
 
 

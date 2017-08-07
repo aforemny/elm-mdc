@@ -94,7 +94,7 @@ view model =
               ]
               [ Html.text "Reload"
               ]
-            , Menu.li (\options nodes -> Lists.divider options) [] []
+            , Menu.li Lists.divider [] []
             , Menu.li Lists.li
               [ Options.onClick (Select 3)
               , Options.attribute (Html.tabindex 0)

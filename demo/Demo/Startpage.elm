@@ -27,51 +27,51 @@ view selectTab =
             , title = "Checkbox", subtitle = "Multi-selection controls" }
           , { index = 3, icon = "ic_dialog_24px.svg", wip = False
             , title = "Dialog", subtitle = "Secondary text" }
-          , { index = -1, icon = "ic_side_navigation_24px.svg", wip = True
+          , { index = 4, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Temporary" }
-          , { index = -1, icon = "ic_side_navigation_24px.svg", wip = True
+          , { index = 5, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Persistent" }
-          , { index = -1, icon = "ic_side_navigation_24px.svg", wip = True
+          , { index = 6, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Permanent drawer above toolbar" }
-          , { index = -1, icon = "ic_side_navigation_24px.svg", wip = True
+          , { index = 7, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Permanent drawer below toolbar" }
-          , { index = 4, icon = "ic_shadow_24px.svg", wip = False
+          , { index = 8, icon = "ic_shadow_24px.svg", wip = False
             , title = "Elevation", subtitle = "Shadow for different elevations" }
-          , { index = 5, icon = "ic_button_24px.svg", wip = False
+          , { index = 9, icon = "ic_button_24px.svg", wip = False
             , title = "Floating action button", subtitle = "The primary action in an application" }
-          , { index = 6, icon = "ic_card_24px.svg", wip = False
+          , { index = 10, icon = "ic_card_24px.svg", wip = False
             , title = "Grid list", subtitle = "2D grid layouts" }
-          , { index = 7, icon = "ic_component_24px.svg", wip = False
+          , { index = 11, icon = "ic_component_24px.svg", wip = False
             , title = "Icon toggle", subtitle = "Toggling icon states" }
-          , { index = 8, icon = "ic_card_24px.svg", wip = False
+          , { index = 12, icon = "ic_card_24px.svg", wip = False
             , title = "Layout grid", subtitle = "Grid and gutter support" }
           , { index = -1, icon = "ic_progress_activity.svg", wip = True
             , title = "Linear progress", subtitle = "Fills from 0% to 100%, represented by bars" }
-          , { index = 9, icon = "ic_list_24px.svg", wip = False
+          , { index = 13, icon = "ic_list_24px.svg", wip = False
             , title = "List", subtitle = "Item layouts in lists" }
-          , { index = 10, icon = "ic_radio_button_24px.svg", wip = False
+          , { index = 14, icon = "ic_radio_button_24px.svg", wip = False
             , title = "Radio buttons", subtitle = "Single selection controls" }
-          , { index = 11, icon = "ic_ripple_24px.svg", wip = False
+          , { index = 15, icon = "ic_ripple_24px.svg", wip = False
             , title = "Ripple", subtitle = "Touch ripple" }
-          , { index = 11, icon = "ic_menu_24px.svg", wip = False
+          , { index = 16, icon = "ic_menu_24px.svg", wip = False
             , title = "Select", subtitle = "Popover selection menus" }
-          , { index = 13, icon = "ic_menu_24px.svg", wip = False
+          , { index = 17, icon = "ic_menu_24px.svg", wip = False
             , title = "Simple Menu", subtitle = "Pop over menus" }
           , { index = -1, icon = "slider.svg", wip = True
             , title = "Slider", subtitle = "Range Controls" }
-          , { index = 14, icon = "ic_toast_24px.svg", wip = False
+          , { index = 18, icon = "ic_toast_24px.svg", wip = False
             , title = "Snackbar", subtitle = "Transient messages" }
-          , { index = 15, icon = "ic_switch_24px.svg", wip = False
+          , { index = 19, icon = "ic_switch_24px.svg", wip = False
             , title = "Switch", subtitle = "On off switches" }
-          , { index = 16, icon = "ic_tabs_24px.svg", wip = False
+          , { index = 20, icon = "ic_tabs_24px.svg", wip = False
             , title = "Tabs", subtitle = "Tabs with support for icon and text labels" }
-          , { index = 17, icon = "ic_text_field_24px.svg", wip = False
+          , { index = 21, icon = "ic_text_field_24px.svg", wip = False
             , title = "Text field", subtitle = "Single and multiline text fields" }
-          , { index = 18, icon = "ic_theme_24px.svg", wip = False
+          , { index = 22, icon = "ic_theme_24px.svg", wip = False
             , title = "Theme", subtitle = "Using primary and accent colors" }
-          , { index = 19, icon = "ic_toolbar_24px.svg", wip = False
+          , { index = 23, icon = "ic_toolbar_24px.svg", wip = False
             , title = "Toolbar", subtitle = "Header and footers" }
-          , { index = 20, icon = "ic_typography_24px.svg", wip = False
+          , { index = 24, icon = "ic_typography_24px.svg", wip = False
             , title = "Typography", subtitle = "Type hierarchy" }
           ]
           |> List.map (\{ index, title, subtitle, icon, wip } ->

@@ -344,7 +344,7 @@ fullWidthDividers =
     ( List.concat
       [ Lists.li [] [ Html.text "Single-line item - section 1" ]
         |> List.repeat 3
-      , [ Lists.divider []
+      , [ Lists.divider [] []
         ]
       , Lists.li [] [ Html.text "Single-line item - section 2" ]
         |> List.repeat 2
@@ -363,7 +363,7 @@ insetDividers =
         , Html.text "Single-line item - section 1"
         ]
           |> List.repeat 3
-      , [ Lists.divider [ Lists.inset ]
+      , [ Lists.divider [ Lists.inset ] []
         ]
       , Lists.li []
         [ Lists.startDetail [ cs "gray-bg" ] []
@@ -382,7 +382,7 @@ basicGroups =
       ( Lists.li [] [ Html.text "Single-line item" ]
         |> List.repeat 3
       )
-    , Lists.divider []
+    , Lists.divider [] []
     , Lists.subheader [] [ Html.text "List 2" ]
     , Lists.ul []
       ( Lists.li [] [ Html.text "Single-line item" ]
@@ -450,7 +450,7 @@ groupsExample =
         , folder "Recipes" "Jan 17, 2014"
         , folder "Work" "Jan 28, 2014"
         ]
-      , Lists.divider [ Lists.inset ]
+      , Lists.divider [ Lists.inset ] []
       , Lists.subheader []
         [ Html.text "Files"
         ]

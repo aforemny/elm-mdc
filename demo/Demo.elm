@@ -1,44 +1,47 @@
 port module Main exposing (..)
 
 import Array exposing (Array)
+import Demo.Page as Page
 import Demo.Badges
-import Demo.Fabs
-import Demo.IconToggle
 import Demo.Buttons
 import Demo.Cards
-import Demo.Selects
+import Demo.Checkbox
 import Demo.Chips
 import Demo.Dialog
 import Demo.Elevation
+import Demo.Fabs
 import Demo.GridList
+import Demo.IconToggle
 import Demo.LayoutGrid
 import Demo.Lists
 import Demo.Loading
 import Demo.Menus
+import Demo.PermanentAboveDrawer
+import Demo.PermanentBelowDrawer
+import Demo.PersistentDrawer
+import Demo.Radio
 import Demo.Ripple
+import Demo.Selects
 import Demo.Slider
 import Demo.Snackbar
 import Demo.Startpage
+import Demo.Switch
 import Demo.Tabs
+import Demo.TemporaryDrawer
 import Demo.Textfields
 import Demo.Theme
-import Demo.Checkbox
-import Demo.Radio
-import Demo.Switch
 import Demo.Toolbar
 import Demo.Tooltip
 import Demo.Typography
 import Dict exposing (Dict)
-import Html.Attributes exposing (href, class, style)
 import Html exposing (Html, text)
 import Html.Lazy
 import Material
 import Material.Helpers exposing (pure, lift, map1st, map2nd)
-import Material.Icon as Icon
 import Material.Menu as Menu
-import Material.Select as Select
+import Material.Drawer as Drawer
 import Material.Options as Options exposing (styled, css, when)
-import Material.Toolbar as Toolbar
+import Material.Select as Select
 import Navigation
 import Platform.Cmd exposing (..)
 import RouteUrl as Routing
@@ -84,6 +87,10 @@ type alias Model =
     , selectedTab : Maybe Int
     , transparentHeader : Bool
     , logMessages : Bool
+    , temporaryDrawer : Demo.TemporaryDrawer.Model
+    , persistentDrawer : Demo.PersistentDrawer.Model
+    , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model
+    , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model
     }
 
 
@@ -118,6 +125,10 @@ model =
     , selectedTab = Nothing
     , transparentHeader = False
     , logMessages = False
+    , temporaryDrawer = Demo.TemporaryDrawer.model
+    , persistentDrawer = Demo.PersistentDrawer.model
+    , permanentAboveDrawer = Demo.PermanentAboveDrawer.model
+    , permanentBelowDrawer = Demo.PermanentBelowDrawer.model
     }
 
 
@@ -135,6 +146,10 @@ type Msg
     | LayoutGridMsg Demo.LayoutGrid.Msg
     | IconToggleMsg Demo.IconToggle.Msg
     | MenusMsg Demo.Menus.Msg
+    | TemporaryDrawerMsg Demo.TemporaryDrawer.Msg
+    | PersistentDrawerMsg Demo.PersistentDrawer.Msg
+    | PermanentAboveDrawerMsg Demo.PermanentAboveDrawer.Msg
+    | PermanentBelowDrawerMsg Demo.PermanentBelowDrawer.Msg
     | TextfieldMsg Demo.Textfields.Msg
     | SelectMsg Demo.Selects.Msg
     | ThemeMsg Demo.Theme.Msg
@@ -187,6 +202,18 @@ update msg model =
 
           ButtonsMsg a ->
               lift .buttons (\m x -> { m | buttons = x }) ButtonsMsg Demo.Buttons.update a model
+
+          TemporaryDrawerMsg a ->
+              lift .temporaryDrawer (\m x -> { m | temporaryDrawer = x }) TemporaryDrawerMsg Demo.TemporaryDrawer.update a model
+
+          PersistentDrawerMsg a ->
+              lift .persistentDrawer (\m x -> { m | persistentDrawer = x }) PersistentDrawerMsg Demo.PersistentDrawer.update a model
+
+          PermanentAboveDrawerMsg a ->
+              lift .permanentAboveDrawer (\m x -> { m | permanentAboveDrawer = x }) PermanentAboveDrawerMsg Demo.PermanentAboveDrawer.update a model
+
+          PermanentBelowDrawerMsg a ->
+              lift .permanentBelowDrawer (\m x -> { m | permanentBelowDrawer = x }) PermanentBelowDrawerMsg Demo.PermanentBelowDrawer.update a model
 
           FabsMsg a ->
               lift .fabs (\m x -> { m | fabs = x }) FabsMsg Demo.Fabs.update a model
@@ -270,10 +297,20 @@ update msg model =
 
 tabs : List ( String, String, Model -> Html Msg )
 tabs =
+    let
+        page =
+            { toolbar = Page.toolbar ClearTab model.selectedTab
+            , clearTab = ClearTab
+            }
+    in
     [ ( "Buttons", "buttons", .buttons >> Demo.Buttons.view >> Html.map ButtonsMsg )
     , ( "Card", "cards", .cards >> Demo.Cards.view >> Html.map CardsMsg )
     , ( "Checkbox", "checkbox", .checkbox >> Demo.Checkbox.view >> Html.map CheckboxMsg )
     , ( "Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg )
+    , ( "Temporary Drawer", "temporary-drawer", .temporaryDrawer >> Demo.TemporaryDrawer.view >> Html.map TemporaryDrawerMsg )
+    , ( "Persistent Drawer", "persistent-drawer", .persistentDrawer >> Demo.PersistentDrawer.view >> Html.map PersistentDrawerMsg )
+    , ( "Permanent Above Drawer", "permanent-drawer-above-toolbar", .permanentAboveDrawer >> Demo.PermanentAboveDrawer.view PermanentAboveDrawerMsg page )
+    , ( "Permanent Below Drawer", "permanent-drawer-below-toolbar", .permanentBelowDrawer >> Demo.PermanentBelowDrawer.view PermanentBelowDrawerMsg page )
     , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
     , ( "Floating action button", "fab", .fabs >> Demo.Fabs.view >> Html.map FabsMsg )
     , ( "Grid list", "grid-list", always Demo.GridList.view )
@@ -331,7 +368,8 @@ e404 _ =
 
 view : Model -> Html Msg
 view =
-    Html.Lazy.lazy view_
+    view_
+    -- TODO: Should be: Html.Lazy.lazy view_, but triggers virtual-dom bug #110
 
 
 view_ : Model -> Html Msg
@@ -350,38 +388,7 @@ view_ model =
                 Just selectedTab ->
                     nth selectedTab tabTitles |> Maybe.withDefault (text "")
     in
-        Html.div
-        [
-        ]
-        [ Toolbar.view
-          [ Toolbar.fixed
-          ]
-          [ Toolbar.row []
-            [ Toolbar.section
-              [ Toolbar.alignStart
-              ]
-              [ Toolbar.icon_
-                [ Toolbar.menu
-                ]
-                [ case model.selectedTab of
-                      Nothing ->
-                          Html.img
-                          [ Html.Attributes.src "https://material-components-web.appspot.com/images/ic_component_24px_white.svg"
-                          ]
-                          []
-                      Just _ ->
-                          Icon.view "" [ Options.onClick ClearTab, css "cursor" "pointer" ]
-                ]
-              , Toolbar.title [] [ title ]
-              ]
-            ]
-          ]
-        , styled Html.div
-          [ Toolbar.fixedAdjust
-          ]
-          [ top
-          ]
-        ]
+        top
 
 
 
@@ -441,6 +448,10 @@ main =
                 Sub.batch
                     [ Sub.map MenusMsg (Menu.subs Demo.Menus.Mdl model.menus.mdl)
                     , Sub.map SelectMsg (Select.subs Demo.Selects.Mdl model.selects.mdl)
+                    , Sub.map TemporaryDrawerMsg (Drawer.subs Demo.TemporaryDrawer.Mdl model.temporaryDrawer.mdl)
+                    , Sub.map PersistentDrawerMsg (Drawer.subs Demo.PersistentDrawer.Mdl model.persistentDrawer.mdl)
+                    , Sub.map PermanentAboveDrawerMsg (Drawer.subs Demo.PermanentAboveDrawer.Mdl model.permanentAboveDrawer.mdl)
+                    , Sub.map PermanentBelowDrawerMsg (Drawer.subs Demo.PermanentBelowDrawer.Mdl model.permanentBelowDrawer.mdl)
                     , Material.subscriptions Mdl model
                     ]
         , update = update

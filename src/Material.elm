@@ -170,6 +170,7 @@ module as a starting point
 import Dict
 import Material.Button as Button
 import Material.Radio as Radio
+import Material.Drawer as Drawer
 import Material.Checkbox as Checkbox
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
@@ -192,6 +193,7 @@ import Material.Tooltip as Tooltip
 type alias Model = 
     { button : Indexed Button.Model
     , radio : Indexed Radio.Model
+    , drawer : Indexed Drawer.Model
     , iconToggle : Indexed IconToggle.Model
     , fab : Indexed Fab.Model
     , textfield : Indexed Textfield.Model
@@ -212,6 +214,7 @@ model : Model
 model = 
     { button = Dict.empty
     , radio = Dict.empty
+    , drawer = Dict.empty
     , iconToggle = Dict.empty
     , fab = Dict.empty
     , textfield = Dict.empty
@@ -254,6 +257,9 @@ update_ lift msg store =
 
        RadioMsg idx msg ->
            Radio.react lift msg idx store
+
+       DrawerMsg idx msg ->
+           Drawer.react lift msg idx store
 
        IconToggleMsg idx msg ->
            IconToggle.react lift msg idx store
@@ -323,6 +329,7 @@ subscriptions lift model =
     Sub.batch
         [ Menu.subs lift model.mdl
         , Select.subs lift model.mdl
+        , Drawer.subs lift model.mdl
         ]
 
 

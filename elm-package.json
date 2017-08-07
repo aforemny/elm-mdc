@@ -37,7 +37,10 @@
         "Material.Textfield.HelperText",
         "Material.Theme",
         "Material.Tooltip",
-        "Material.Typography"
+        "Material.Typography",
+        "Material.Drawer.Temporary",
+        "Material.Drawer.Permanent",
+        "Material.Drawer.Persistent"
     ],
     "dependencies": {
         "debois/elm-dom": "1.2.3 <= v < 2.0.0",
