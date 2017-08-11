@@ -1,4 +1,4 @@
-module Demo.PersistentDrawer exposing (..)
+module Demo.PersistentDrawer exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -21,9 +21,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , open = False
     }
 

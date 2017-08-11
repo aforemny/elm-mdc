@@ -1,4 +1,4 @@
-module Demo.Page exposing (..)
+module Demo.Page exposing (Page, toolbar)
 
 import Html exposing (Html, text)
 import Material.Options as Options exposing (styled, cs, css, when)

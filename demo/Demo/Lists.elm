@@ -1,4 +1,4 @@
-module Demo.Lists exposing (..)
+module Demo.Lists exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html.Attributes as Html
 import Html exposing (Html)
@@ -17,9 +17,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     }
 
 

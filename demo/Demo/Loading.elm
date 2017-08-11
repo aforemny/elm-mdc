@@ -1,4 +1,4 @@
-module Demo.Loading exposing (..)
+module Demo.Loading exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html exposing (Html, text)
 import Material.Options as Options exposing (div, css, cs, when)
@@ -14,9 +14,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , running = False
     , progress = 14
     }

@@ -1,4 +1,4 @@
-module Demo.Fabs exposing (Model, model, Msg, update, view)
+module Demo.Fabs exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 
 import Html exposing (Html, text)
@@ -16,9 +16,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     }
 
 

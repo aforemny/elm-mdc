@@ -1,4 +1,4 @@
-module Demo.Elevation exposing (view, update, Msg, Model, model)
+module Demo.Elevation exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html exposing (..)
 import Material
@@ -16,11 +16,11 @@ type alias Model =
     }
 
 
-model : Model
-model =
+defaultModel : Model
+defaultModel =
     { transition = False
     , elevation = 1
-    , mdl = Material.model
+    , mdl = Material.defaultModel
     }
 
 

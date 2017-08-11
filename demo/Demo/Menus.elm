@@ -1,4 +1,4 @@
-module Demo.Menus exposing (model, Model, view, update, Msg(Mdl))
+module Demo.Menus exposing (Model, defaultModel, Msg(Mdl), view, update)
 
 import Html.Attributes as Html exposing (href)
 import Html exposing (Html, text, p, a)
@@ -22,9 +22,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , selected = Nothing
     , checked = Set.fromList [ 0, 2 ]
     , icon = Nothing

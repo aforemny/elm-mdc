@@ -1,4 +1,4 @@
-module Demo.Switch exposing (..)
+module Demo.Switch exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html exposing (Html, text)
 import Material
@@ -18,9 +18,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , on0 = False
     , on1 = False
     }

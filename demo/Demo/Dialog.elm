@@ -1,4 +1,4 @@
-module Demo.Dialog exposing (model, update, view, Model, Msg, element)
+module Demo.Dialog exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html exposing (..)
 import Material
@@ -15,10 +15,10 @@ type alias Model =
     }
 
 
-model : Model
-model =
+defaultModel : Model
+defaultModel =
     { scrolling = False
-    , mdl = Material.model
+    , mdl = Material.defaultModel
     }
 
 

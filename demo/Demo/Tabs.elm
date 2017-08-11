@@ -1,4 +1,4 @@
-module Demo.Tabs exposing (..)
+module Demo.Tabs exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Dict exposing (Dict)
 import Html exposing (..)
@@ -31,9 +31,9 @@ defaultExample =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , examples = Dict.empty
     }
 

@@ -1,4 +1,4 @@
-module Demo.Textfields exposing (model, Model, update, view, Msg)
+module Demo.Textfields exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Html.Attributes as Html
 import Html exposing (Html)
@@ -48,9 +48,9 @@ defaultExample =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , example0 = defaultExample
     , example1 = defaultExample
     , example2 = defaultExample

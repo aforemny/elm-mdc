@@ -1,4 +1,4 @@
-module Demo.IconToggle exposing (Model,model,Msg,update,view)
+module Demo.IconToggle exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Dict
 import Html.Attributes as Html
@@ -18,9 +18,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , iconToggles = Dict.empty
     }
 

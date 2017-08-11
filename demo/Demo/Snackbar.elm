@@ -1,4 +1,4 @@
-module Demo.Snackbar exposing (Model, defaultModel, Msg, update, view)
+module Demo.Snackbar exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Html.Attributes as Html
 import Html.Events as Html
@@ -28,7 +28,7 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.model
+    { mdl = Material.defaultModel
     , multiline = False
     , actionOnBottom = False
     , dismissOnAction = True

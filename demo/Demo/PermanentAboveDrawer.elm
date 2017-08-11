@@ -1,4 +1,4 @@
-module Demo.PermanentAboveDrawer exposing (..)
+module Demo.PermanentAboveDrawer exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Demo.Page as Page exposing (Page)
 import Html as Html_
@@ -25,9 +25,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , toggle0 = False
     , toggle1 = False
     }

@@ -41,13 +41,6 @@ defaultModel =
     }
 
 
--- TODO: rename model to defaultModel
-model : Model
-model =
-    defaultModel
-
-
-
 -- ACTION, UPDATE
 
 

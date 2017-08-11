@@ -1,4 +1,4 @@
-module Demo.LayoutGrid exposing (Model,model,Msg,update,view)
+module Demo.LayoutGrid exposing (Model,defaultModel,Msg,update,view)
 
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -10,8 +10,8 @@ type alias Model =
     {}
 
 
-model : Model
-model =
+defaultModel : Model
+defaultModel =
     {}
 
 

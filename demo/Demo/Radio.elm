@@ -1,4 +1,4 @@
-module Demo.Radio exposing (..)
+module Demo.Radio exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Dict exposing (Dict)
 import Html exposing (Html, text)
@@ -18,9 +18,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , radios = Dict.empty
     }
 

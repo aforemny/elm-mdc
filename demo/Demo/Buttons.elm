@@ -1,4 +1,4 @@
-module Demo.Buttons exposing (..)
+module Demo.Buttons exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -9,22 +9,15 @@ import Material.Options as Options exposing (Style, cs, css, when)
 import Material
 
 
--- MODEL
-
-
 type alias Model =
     { mdl : Material.Model
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     }
-
-
-
--- ACTION/UPDATE
 
 
 type Msg = Mdl (Material.Msg Msg)
@@ -35,9 +28,6 @@ update msg model =
     case msg of
         Mdl msg_ ->
             Material.update Mdl msg_ model
-
-
--- VIEW
 
 
 view : Model -> Html Msg

@@ -1,4 +1,4 @@
-module Demo.Theme exposing (model, Model, update, view, Msg)
+module Demo.Theme exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Html exposing (Html)
 import Material
@@ -15,9 +15,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     }
 
 

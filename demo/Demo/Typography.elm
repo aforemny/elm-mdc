@@ -1,4 +1,4 @@
-module Demo.Typography exposing (..)
+module Demo.Typography exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
@@ -19,9 +19,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     }
 
 

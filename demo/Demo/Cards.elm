@@ -1,4 +1,4 @@
-module Demo.Cards exposing (model, update, view, Model, Msg)
+module Demo.Cards exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Html.Attributes
 import Html.Attributes as Html exposing (..)
@@ -10,22 +10,15 @@ import Material.Options as Options exposing (cs, css)
 import Platform.Cmd exposing (Cmd, none)
 
 
--- MODEL
-
-
 type alias Model =
     { mdl : Material.Model
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     }
-
-
-
--- ACTION/UPDATE
 
 
 type Msg
@@ -39,11 +32,33 @@ update msg model =
             Material.update Mdl msg_ model
 
 
--- VIEW
-
-
-type alias Card =
-    Model -> ( Html Msg, String, Maybe (Html Msg) )
+view : Model -> Html Msg
+view model =
+    let
+        demoWrapper =
+            Options.div
+            [ css "display" "flex"
+            , css "margin" "24px"
+            , css "flex-flow" "row wrap"
+            , css "align-content" "left"
+            , css "justify-content" "left"
+            , cs "mdc-typography"
+            ]
+                << List.map (\card -> Html.div [] [ card ])
+    in
+    demoWrapper
+      [ card0 model
+      , card1 model
+      , card2 model
+      , card3 model
+      , card4 model
+      , card5 model
+      , card6 model
+      , card7 model
+      , card8 model
+      , card9 model
+      , card10 model
+      ]
 
 
 demoCard : List (Options.Style m) -> List (Html m) -> Html m
@@ -88,8 +103,8 @@ demoMedia options =
     )
 
 
-demoActions : List (Options.Style Msg) -> Html Msg
-demoActions options =
+demoActions : Model -> List (Options.Style Msg) -> Html Msg
+demoActions model options =
     Card.actions
     options
     [ Button.render Mdl [1,1,0] model.mdl
@@ -158,7 +173,7 @@ card1 model =
       ]
       []
     , demoSupportingText
-    , demoActions []
+    , demoActions model []
     ]
 
 
@@ -170,7 +185,7 @@ card2 model =
       [ css "background-image" "url(images/16-9.jpg)"
       ]
       []
-    , demoActions [ Card.vertical ]
+    , demoActions model [ Card.vertical ]
     ]
 
 
@@ -193,7 +208,7 @@ card3 model =
       ]
       []
     , demoPrimary2 []
-    , demoActions []
+    , demoActions model []
     ]
 
 
@@ -209,7 +224,7 @@ card4 model =
     , Card.supportingText []
       [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
       ]
-    , demoActions []
+    , demoActions model []
     ]
 
 
@@ -303,7 +318,7 @@ card7 model =
       [ demoPrimary3 []
       , mediaItem []
       ]
-    , demoActions []
+    , demoActions model []
     ]
 
 
@@ -314,7 +329,7 @@ card8 model =
       [ demoPrimary3 []
       , mediaItem [ Card.x1dot5 ]
       ]
-    , demoActions []
+    , demoActions model []
     ]
 
 
@@ -325,7 +340,7 @@ card9 model =
       [ demoPrimary3 []
       , mediaItem [ Card.x2 ]
       ]
-    , demoActions []
+    , demoActions model []
     ]
 
 
@@ -352,32 +367,3 @@ card10 model =
         ]
       ]
     ]
-
-
-view : Model -> Html Msg
-view model =
-    let
-        demoWrapper =
-            Options.div
-            [ css "display" "flex"
-            , css "margin" "24px"
-            , css "flex-flow" "row wrap"
-            , css "align-content" "left"
-            , css "justify-content" "left"
-            , cs "mdc-typography"
-            ]
-                << List.map (\card -> Html.div [] [ card ])
-    in
-    demoWrapper
-      [ card0 model
-      , card1 model
-      , card2 model
-      , card3 model
-      , card4 model
-      , card5 model
-      , card6 model
-      , card7 model
-      , card8 model
-      , card9 model
-      , card10 model
-      ]

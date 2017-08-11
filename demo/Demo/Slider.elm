@@ -1,4 +1,4 @@
-module Demo.Slider exposing (..)
+module Demo.Slider exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
@@ -15,9 +15,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , values = Dict.empty
     }
 

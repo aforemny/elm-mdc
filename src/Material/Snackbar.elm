@@ -3,7 +3,6 @@ module Material.Snackbar
         ( Contents
         , Model
         , add
-        , model
         , toast
         , snack
         , update
@@ -86,11 +85,6 @@ type alias Model =
 
 {-| Default snackbar model.
 -}
-model : Model
-model =
-    defaultModel
-
-
 defaultModel : Model
 defaultModel =
     { queue = []
@@ -383,7 +377,7 @@ type alias Property m =
 
 
 ( get, set ) =
-    Component.indexed .snackbar (\x y -> { y | snackbar = x }) model
+    Component.indexed .snackbar (\x y -> { y | snackbar = x }) defaultModel
 
 
 type alias Store s =

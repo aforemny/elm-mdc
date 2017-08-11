@@ -1,4 +1,4 @@
-module Demo.Checkbox exposing (..)
+module Demo.Checkbox exposing (Model,defaultModel,Msg(Mdl),update,view)
 
 import Html.Attributes as Html
 import Html.Events as Html
@@ -25,9 +25,9 @@ type alias Model =
     }
 
 
-model : Model
-model =
-    { mdl = Material.model
+defaultModel : Model
+defaultModel =
+    { mdl = Material.defaultModel
     , rtl = False
     , alignEnd = False
     , indeterminate = False
