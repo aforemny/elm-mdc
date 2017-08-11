@@ -1,194 +1,41 @@
 module Material
     exposing
         ( Model
-        , model
+        , defaultModel
         , Msg
         , update
-        , update_
         , subscriptions
         , init
+        , top
         )
 
 {-|
-
-Material Design component library for Elm based on Google's
-[Material Design Lite](https://www.getmdl.io/).
-
-Click
-[here](https://debois.github.io/elm-mdl/)
-for a live demo.
-
-This module contains (a) documentation about overall usage and API principles of
-elm-mdl and (b) functions for suppressing TEA boilerplate. For a "Getting started"
-guide, refer to [the
-README](https://github.com/debois/elm-mdl/blob/master/README.md#get-started).
-
-
-# Using the library.
-
-## Interfacing with CSS
-
-This library depends on the CSS part of Google's Material Design Lite. Your app
-will have to load that. See the
-[Scheme](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Scheme)
-module for exposing details. (The starting point implementations above
-load CSS automatically.)
-
-## Color theming
-
-Material Design defines a color palette. The
-[Color](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Color)
-module contains exposing various `Property` values and helper functions for working with
-this color palette.
-
-## View functions
-
-The view function of most components has this signature:
-
-    view : (Msg -> m) -> Model -> List (Property m)  -> List (Html m) -> Html m
-
-It's helpful to compare this signature to the standard one of `core/html`, e.g.,
-`Html.div`:
-
-    view : (Msg -> m) -> Model -> List (Property m)  -> List (Html m) -> Html m
-    div  :                        List (Attribute m) -> List (Html m) -> Html m
-
-1. For technical reasons, rather than using `Html.map f (view ...)`, you
-provide the lifting function `f` directly to the component as the first
-argument.
-2. The `Model` argument is standard for TEA view functions.
-3. The `List (Property m)` argument can be thought of as an alternative
-to `List (Html.Attribute)`. You customise the behaviour of elm-mdl components
-by supplying these `Property m`, much the same way you set attributes of
-  `Html.div`. See the
-  [Options](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Options)
-  module for details.
-4. The `List (Html m)` argument is standard: it is the contents of the component,
-  e.g., the text inside a button.
-
-NB! We recommend using shorthands to avoid TEA boilerplate, see below. If you are using shorthands, you should never call `view` directly, but rather use `render`.
-
-# Shorthands for TEA components
-
-The component model of the library is simply the Elm Architecture (TEA), i.e.,
-each component has types `Model` and `Msg`, and values `view` and `update`. A
-minimal example using this library as plain TEA can be found
-[here](https://github.com/debois/elm-mdl/blob/master/examples/Counter-no-parts.elm).
-
-Using more than a few component in plain TEA is unwieldy because of the large
-amount of boilerplate one has to write. The elm-mdl library supports
-shorthands for avoiding most of this boilerplate. A minimal example using
-shorthands is
-  [here](http://github.com/debois/elm-mdl/blob/master/examples/Counter.elm).
-
-It is important to note that the shorthands are not an alternative to TEA; they
-simply do much of the tedious TEA boilerplate. Note that elm-mdl no longer
-depends on the [Parts library](https://github.com/debois/elm-parts) and does
-not put functions in messages. The elm-mdl library conforms to [component
-guidelines](https://github.com/evancz/elm-sortable-table#usage-rules) from Elm
-language creators. 
-
-## Required boilerplate
-
-The present module contains only convenience functions for working with nested
-components in the Elm architecture. A minimal example using this library
-with component support can be found
-[here](http://github.com/debois/elm-mdl/blob/master/examples/Counter.elm).
-We encourage you to use the library in this fashion.
-
-Here is how you use elm-mdl with shorthands. First, boilerplate.
-
- 1. Add a model container for Material components to your model:
-
-        type alias Model =
-          { ...
-          , mdl : Material.Model
-          }
-
-        model : Model =
-          { ...
-          , mdl = Material.model
-          }
-
- 2. Add an action for Material components.
-
-        type Msg =
-          ...
-          | Mdl (Material.Msg Msg)
-
- 3. Handle that message in your update function as follows:
-
-        update message model =
-          case message of
-            ...
-            Mdl message_ ->
-              Material.update Mdl message_ model
-
- 4.  If your app is using Layout and/or Menu, you need also to set up
- subscriptions and initialisations; see `subscriptions` and `init` below.
-
-You now have sufficient boilerplate for using __any__ number of elm-mdl components.
-Let's say you need a textfield for name entry, and you'd like to be notifed
-whenever the field changes value through your own NameChanged action:
-
-        import Material.Textfield as Textfield
-        import Material.Options as Options
-
-        ...
-
-        nameInput : Textfield.Instance Material.Model Msg
-        nameInput =
-
-        view addr model =
-          ...
-          Textfield.render [0] Mdl model.mdl
-            [ css "width" "16rem"
-            , Textfield.floatingLabel
-            , Options.onInput NameChanged
-            ]
-
-The win relative to using plain Elm Architecture is that adding a component
-neither requires you to update your model, your Msgs, nor your update function.
-
-
-## Optimising for size
-
-Using this module will force all elm-mdl components to be built and included in
-your application. If this is unacceptable, you can custom-build a version of this
-module that exposing uses only the components you need. To do so, you need to
-provide your own versions of the type aliases `Msg` and `Model` and the value
-`model` of the present module.  Use the corresponding definitions in this
-module as a starting point
-  ([source](https://github.com/debois/elm-mdl/blob/master/src/Material.elm))
-  and simply comment out the components you do not need.
-
-## Shorthands
-
-@docs Model, model, Msg, update, update_, subscriptions, init
+@docs top
 -}
 
 import Dict
+import Html.Attributes as Html
+import Html exposing (Html, text)
 import Material.Button as Button
-import Material.Radio as Radio
-import Material.Drawer as Drawer
 import Material.Checkbox as Checkbox
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
+import Material.Drawer as Drawer
 import Material.Fab as Fab
 import Material.Helpers exposing (map1st)
 import Material.IconToggle as IconToggle
 import Material.Menu as Menu
 import Material.Msg exposing (Msg(..))
+import Material.Radio as Radio
 import Material.Ripple as Ripple
 import Material.Select as Select
 import Material.Snackbar as Snackbar
 import Material.Switch as Switch
 import Material.Tabs as Tabs
 import Material.Textfield as Textfield
-import Material.Tooltip as Tooltip
 
 
-{-| Model encompassing all Material components.
+{-| Material Store
 -}
 type alias Model = 
     { button : Indexed Button.Model
@@ -200,7 +47,6 @@ type alias Model =
     , menu : Indexed Menu.Model
     , checkbox : Indexed Checkbox.Model
     , switch : Indexed Switch.Model
-    , tooltip : Indexed Tooltip.Model
     , tabs : Indexed Tabs.Model
     , select : Indexed Select.Model
     , ripple : Indexed Ripple.Model
@@ -208,10 +54,10 @@ type alias Model =
     }
 
 
-{-| Initial model.
+{-| Initial Material Store
 -}
-model : Model
-model = 
+defaultModel : Model
+defaultModel = 
     { button = Dict.empty
     , radio = Dict.empty
     , drawer = Dict.empty
@@ -221,7 +67,6 @@ model =
     , menu = Dict.empty
     , checkbox = Dict.empty
     , switch = Dict.empty
-    , tooltip = Dict.empty
     , tabs = Dict.empty
     , select = Dict.empty
     , ripple = Dict.empty
@@ -235,9 +80,7 @@ type alias Msg m =
     Material.Msg.Msg m
 
 
-{-| Update function for the above Msg. Provide as the first
-argument a lifting function that embeds the generic MDL action in
-your own Msg type.
+{-| Material update
 -}
 update : (Msg m -> m) -> Msg m -> { c | mdl : Model } -> (  { c | mdl : Model }, Cmd m )
 update lift msg container =
@@ -246,9 +89,6 @@ update lift msg container =
       |> map1st (Maybe.withDefault container)
 
 
-{-| Variant update function that explicitly signals whether model needs update. 
-If it is not clear to you that you need this, you do not :)
--}
 update_ : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update_ lift msg store =
     case msg of
@@ -284,9 +124,6 @@ update_ lift msg store =
 
        SwitchMsg idx msg ->
            Switch.react lift msg idx store
-
-       TooltipMsg idx msg ->
-           Tooltip.react lift msg idx store
 
        TabsMsg idx msg ->
            Tabs.react (TabsMsg idx >> lift) msg idx store
@@ -338,3 +175,81 @@ subscriptions lift model =
 init : (Msg m -> m) -> Cmd m
 init lift =
     Cmd.none
+
+
+{-| Convenience function to add external CSS and JS scripts to your view
+function:
+
+*Note:* This is here only for prototyping. You will want to set this up
+properly in your index.html. See TODO.
+
+```
+view_ model =
+    *your view function*
+
+view model =
+    Material.top (view_ model)
+```
+-}
+top : Html a -> Html a
+top content =
+    Html.div []
+    [
+      content
+
+    , Html.node "style"
+      [ Html.type_ "text/css"
+      ]
+      [ [ "https://fonts.googleapis.com/css?family=Roboto+Mono"
+        , "https://fonts.googleapis.com/icon?family=Material+Icons"
+        , "https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+        , "https://raw.githubusercontent.com/aforemny/elm-mdc/master/material-components-web.css"
+        , "https://raw.githubusercontent.com/aforemny/elm-mdc/master/dialog-polyfill.css"
+        ]
+        |> List.map (\url ->
+               "@import url(" ++ url ++ ");"
+           )
+        |> String.join "\n"
+        |> text
+      ]
+
+    , Html.node "script"
+      [ Html.type_ "text/javascript"
+      , Html.src "https://raw.githubusercontent.com/aforemny/elm-mdc/master/dialog-polyfill.js"
+      ]
+      []
+
+    , -- node insertion, credits (https://davidwalsh.name/detect-node-insertion):
+      Html.node "script"
+      [ Html.type_ "text/javascript"
+      ]
+      [ text """
+var insertListener = function(event) {
+  if (event.animationName == "nodeInserted") {
+    console.warn("Another node has been inserted! ", event, event.target);
+    event.target.dispatchEvent(new Event('mdc-init'));
+  }
+}
+
+document.addEventListener("animationstart", insertListener, false); // standard + firefox
+document.addEventListener("MSAnimationStart", insertListener, false); // IE
+document.addEventListener("webkitAnimationStart", insertListener, false); // Chrome + Safari
+"""
+      ]
+
+    , Html.node "script"
+      [ Html.type_ "text/css"
+      ]
+      [ text """
+@keyframes nodeInserted {
+  from { opacity: 0.99; }
+  to { opacity: 1; }
+}
+
+.mdc-tab-bar {
+  animation-duration: 0.001s;
+  animation-name: nodeInserted;
+}
+"""
+      ]
+    ]

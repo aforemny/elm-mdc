@@ -1,14 +1,11 @@
 module Demo.Fabs exposing (Model, defaultModel, Msg(Mdl), update, view)
 
-
 import Html exposing (Html, text)
 import Material
 import Material.Fab as Fab
 import Material.Msg
 import Material.Options exposing (css)
-
-
--- MODEL
+import Demo.Page exposing (Page)
 
 
 type alias Model =
@@ -22,26 +19,26 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg.Msg m)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
 
 
--- VIEW
-
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         fab idx options =
-            Fab.render Mdl [idx] model.mdl (css "margin" "16px" :: options) "favorite_border"
+            Fab.render (Mdl >> lift) [idx] model.mdl
+                (css "margin" "16px" :: options)
+                "favorite_border"
     in
-    Html.div []
+    page.body "Floating action buttons"
     [
       Html.section []
       [ Html.fieldset []

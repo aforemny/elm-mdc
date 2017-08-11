@@ -1,5 +1,6 @@
 module Demo.Startpage exposing (view)
 
+import Demo.Page exposing (Page, Url(..))
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.List as Lists
@@ -7,11 +8,14 @@ import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Toolbar as Toolbar
 
 
-view : (Int -> msg) -> Html msg
-view selectTab =
+view : Page m -> Html m
+view page =
     styled Html.div
     []
-    [ styled Html.nav
+    [
+      page.toolbar "elm-mdc demo"
+
+    , styled Html.nav
       [ Toolbar.fixedAdjust
       ]
       [ Lists.ul
@@ -19,64 +23,64 @@ view selectTab =
         , cs "catalog-list"
         , css "padding-left" "26px"
         ]
-        ( [ { index = 0, icon = "ic_button_24px.svg", wip = False
+        ( [ { url = Button, icon = "ic_button_24px.svg", wip = False
             , title = "Button", subtitle = "Raised and flat buttons" }
-          , { index = 1, icon = "ic_card_24px.svg", wip = False
+          , { url = Card, icon = "ic_card_24px.svg", wip = False
             , title = "Card", subtitle = "Various card layout styles" }
-          , { index = 2, icon = "ic_selection_control_24px.svg", wip = False
+          , { url = Checkbox, icon = "ic_selection_control_24px.svg", wip = False
             , title = "Checkbox", subtitle = "Multi-selection controls" }
-          , { index = 3, icon = "ic_dialog_24px.svg", wip = False
+          , { url = Dialog, icon = "ic_dialog_24px.svg", wip = False
             , title = "Dialog", subtitle = "Secondary text" }
-          , { index = 4, icon = "ic_side_navigation_24px.svg", wip = False
+          , { url = TemporaryDrawer, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Temporary" }
-          , { index = 5, icon = "ic_side_navigation_24px.svg", wip = False
+          , { url = PersistentDrawer, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Persistent" }
-          , { index = 6, icon = "ic_side_navigation_24px.svg", wip = False
+          , { url = PermanentAboveDrawer, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Permanent drawer above toolbar" }
-          , { index = 7, icon = "ic_side_navigation_24px.svg", wip = False
+          , { url = PermanentBelowDrawer, icon = "ic_side_navigation_24px.svg", wip = False
             , title = "Drawer", subtitle = "Permanent drawer below toolbar" }
-          , { index = 8, icon = "ic_shadow_24px.svg", wip = False
+          , { url = Elevation, icon = "ic_shadow_24px.svg", wip = False
             , title = "Elevation", subtitle = "Shadow for different elevations" }
-          , { index = 9, icon = "ic_button_24px.svg", wip = False
+          , { url = Fabs, icon = "ic_button_24px.svg", wip = False
             , title = "Floating action button", subtitle = "The primary action in an application" }
-          , { index = 10, icon = "ic_card_24px.svg", wip = False
+          , { url = GridList, icon = "ic_card_24px.svg", wip = False
             , title = "Grid list", subtitle = "2D grid layouts" }
-          , { index = 11, icon = "ic_component_24px.svg", wip = False
+          , { url = IconToggle, icon = "ic_component_24px.svg", wip = False
             , title = "Icon toggle", subtitle = "Toggling icon states" }
-          , { index = 12, icon = "ic_card_24px.svg", wip = False
+          , { url = LayoutGrid, icon = "ic_card_24px.svg", wip = False
             , title = "Layout grid", subtitle = "Grid and gutter support" }
-          , { index = -1, icon = "ic_progress_activity.svg", wip = True
+          , { url = LinearProgress, icon = "ic_progress_activity.svg", wip = True
             , title = "Linear progress", subtitle = "Fills from 0% to 100%, represented by bars" }
-          , { index = 13, icon = "ic_list_24px.svg", wip = False
+          , { url = List, icon = "ic_list_24px.svg", wip = False
             , title = "List", subtitle = "Item layouts in lists" }
-          , { index = 14, icon = "ic_radio_button_24px.svg", wip = False
+          , { url = RadioButton, icon = "ic_radio_button_24px.svg", wip = False
             , title = "Radio buttons", subtitle = "Single selection controls" }
-          , { index = 15, icon = "ic_ripple_24px.svg", wip = False
+          , { url = Ripple, icon = "ic_ripple_24px.svg", wip = False
             , title = "Ripple", subtitle = "Touch ripple" }
-          , { index = 16, icon = "ic_menu_24px.svg", wip = False
+          , { url = Select, icon = "ic_menu_24px.svg", wip = False
             , title = "Select", subtitle = "Popover selection menus" }
-          , { index = 17, icon = "ic_menu_24px.svg", wip = False
+          , { url = SimpleMenu, icon = "ic_menu_24px.svg", wip = False
             , title = "Simple Menu", subtitle = "Pop over menus" }
-          , { index = -1, icon = "slider.svg", wip = True
+          , { url = Slider, icon = "slider.svg", wip = True
             , title = "Slider", subtitle = "Range Controls" }
-          , { index = 18, icon = "ic_toast_24px.svg", wip = False
+          , { url = Snackbar, icon = "ic_toast_24px.svg", wip = False
             , title = "Snackbar", subtitle = "Transient messages" }
-          , { index = 19, icon = "ic_switch_24px.svg", wip = False
+          , { url = Switch, icon = "ic_switch_24px.svg", wip = False
             , title = "Switch", subtitle = "On off switches" }
-          , { index = 20, icon = "ic_tabs_24px.svg", wip = False
+          , { url = Tabs, icon = "ic_tabs_24px.svg", wip = False
             , title = "Tabs", subtitle = "Tabs with support for icon and text labels" }
-          , { index = 21, icon = "ic_text_field_24px.svg", wip = False
+          , { url = TextField, icon = "ic_text_field_24px.svg", wip = False
             , title = "Text field", subtitle = "Single and multiline text fields" }
-          , { index = 22, icon = "ic_theme_24px.svg", wip = False
+          , { url = Theme, icon = "ic_theme_24px.svg", wip = False
             , title = "Theme", subtitle = "Using primary and accent colors" }
-          , { index = 23, icon = "ic_toolbar_24px.svg", wip = False
+          , { url = Toolbar, icon = "ic_toolbar_24px.svg", wip = False
             , title = "Toolbar", subtitle = "Header and footers" }
-          , { index = 24, icon = "ic_typography_24px.svg", wip = False
+          , { url = Typography, icon = "ic_typography_24px.svg", wip = False
             , title = "Typography", subtitle = "Type hierarchy" }
           ]
-          |> List.map (\{ index, title, subtitle, icon, wip } ->
+          |> List.map (\{ url, title, subtitle, icon, wip } ->
                Lists.li
-               [ Options.onClick (selectTab index)
+               [ Options.onClick (page.setUrl url)
                  |> when (not wip)
                , css "cursor" "pointer" |> when (not wip)
                , css "opacity" "0.5" |> when wip

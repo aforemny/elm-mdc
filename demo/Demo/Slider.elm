@@ -4,9 +4,7 @@ import Platform.Cmd exposing (Cmd, none)
 import Html exposing (..)
 import Material
 import Dict exposing (Dict)
-
-
--- MODEL
+import Demo.Page exposing (Page)
 
 
 type alias Model =
@@ -22,43 +20,17 @@ defaultModel =
     }
 
 
-
--- ACTION, UPDATE
-
-
-type Msg
-    = Slider Int Float
-    | Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
 
 
-get : Int -> Dict Int Float -> Float
-get key dict =
-    Dict.get key dict |> Maybe.withDefault 0
-
-
-getDef : Int -> Float -> Dict Int Float -> Float
-getDef key def dict =
-    Dict.get key dict |> Maybe.withDefault def
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-    case action of
-        Slider idx value ->
-            let
-                values =
-                    Dict.insert idx value model.values
-            in
-                ( { model | values = values }, Cmd.none )
-
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
+    case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
 
 
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     div [] []

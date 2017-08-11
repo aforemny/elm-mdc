@@ -1,69 +1,41 @@
-module Demo.Toolbar exposing ( Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Toolbar exposing ( view )
 
+import Demo.Page exposing (Page)
 import Html.Attributes as Html
 import Html exposing (Html, text)
-import Material
 import Material.Options as Options exposing (styled, cs, css)
 import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 
 
--- MODEL
-
-
-type alias Model =
-    { mdl : Material.Model
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { mdl = Material.defaultModel
-    }
-
-
-type Msg
-    = Mdl (Material.Msg Msg)
-
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-    case msg of
-        Mdl msg_ ->
-            Material.update Mdl msg_ model
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
+view : Page m -> Html m
+view page =
     styled Html.div
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ example model "Normal Toolbar" example0
-    , example model "Fixed Toolbar" example1
-    , example model "Waterfall Toolbar" example2
-    , example model "Default Flexible Toolbar" example3
-    , example model "Waterfall Flexible Toolbar" example4
-    , example model "Waterfall Toolbar Fix Last Row" example5
-    , example model "Waterfall Flexible Toolbar with Custom Style" example6
+    [ example "Normal Toolbar" example0
+    , example "Fixed Toolbar" example1
+    , example "Waterfall Toolbar" example2
+    , example "Default Flexible Toolbar" example3
+    , example "Waterfall Flexible Toolbar" example4
+    , example "Waterfall Toolbar Fix Last Row" example5
+    , example "Waterfall Flexible Toolbar with Custom Style" example6
     ]
 
 
-example : Model -> String -> (Model -> Html msg) -> Html msg
-example model title view =
+example : String -> Html msg -> Html msg
+example title example =
     styled Html.div
     [
     ]
     [ Html.h2 [] [ text title ]
-    , view model
+    , example
     ]
 
 
-example0 : Model -> Html Msg
-example0 model =
+example0 : Html m
+example0 =
     styled Html.div
     [ Typography.typography
     , cs "mdc-toolbar-demo"
@@ -93,8 +65,8 @@ example0 model =
     ]
 
 
-example1 : Model -> Html Msg
-example1 model =
+example1 : Html m
+example1 =
     styled Html.div
     [ Typography.typography
     , cs "mdc-toolbar-demo"
@@ -124,8 +96,8 @@ example1 model =
     ]
 
 
-example2 : Model -> Html Msg
-example2 model =
+example2 : Html m
+example2 =
     styled Html.div
     [ Typography.typography
     , cs "mdc-toolbar-demo"
@@ -157,43 +129,8 @@ example2 model =
     ]
 
 
-example3 : Model -> Html Msg
-example3 model =
-    styled Html.div
-    [ Typography.typography
-    , cs "mdc-toolbar-demo"
-    ]
-    [ Toolbar.view
-      [ Toolbar.fixed
-      , Toolbar.waterfall
-      , Toolbar.flexible
-      , Toolbar.flexibleDefaultBehavior
-      , Toolbar.flexibleSpaceMaximized
-      ]
-      [ Toolbar.row
-        [ css "height" "224px"
-        ]
-        [ Toolbar.section
-          [ Toolbar.alignStart
-          ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
-          , Toolbar.title [] [ text "Title" ]
-          ]
-        , Toolbar.section
-          [ Toolbar.alignEnd
-          ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
-          ]
-        ]
-      ]
-    , body
-    ]
-
-
-example4 : Model -> Html Msg
-example4 model =
+example3 : Html m
+example3 =
     styled Html.div
     [ Typography.typography
     , cs "mdc-toolbar-demo"
@@ -214,11 +151,7 @@ example4 model =
           [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
-        ]
-      , Toolbar.row
-        [
-        ]
-        [ Toolbar.section
+        , Toolbar.section
           [ Toolbar.alignEnd
           ]
           [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
@@ -231,8 +164,8 @@ example4 model =
     ]
 
 
-example5 : Model -> Html Msg
-example5 model =
+example4 : Html m
+example4 =
     styled Html.div
     [ Typography.typography
     , cs "mdc-toolbar-demo"
@@ -270,8 +203,47 @@ example5 model =
     ]
 
 
-example6 : Model -> Html Msg
-example6 model =
+example5 : Html m
+example5 =
+    styled Html.div
+    [ Typography.typography
+    , cs "mdc-toolbar-demo"
+    ]
+    [ Toolbar.view
+      [ Toolbar.fixed
+      , Toolbar.waterfall
+      , Toolbar.flexible
+      , Toolbar.flexibleDefaultBehavior
+      , Toolbar.flexibleSpaceMaximized
+      ]
+      [ Toolbar.row
+        [ css "height" "224px"
+        ]
+        [ Toolbar.section
+          [ Toolbar.alignStart
+          ]
+          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          , Toolbar.title [] [ text "Title" ]
+          ]
+        ]
+      , Toolbar.row
+        [
+        ]
+        [ Toolbar.section
+          [ Toolbar.alignEnd
+          ]
+          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
+          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
+          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+          ]
+        ]
+      ]
+    , body
+    ]
+
+
+example6 : Html m
+example6 =
     styled Html.div
     [ Typography.typography
     , cs "mdc-toolbar-demo"

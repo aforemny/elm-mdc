@@ -1,15 +1,15 @@
-ELM=elm-make --yes
+ELM=elm-make --yes --warn
 PAGES=../elm-mdc-gh-pages
 
-demo:
+all:
 	mkdir -p build
 	rsync -r material-components-web/demos/images build
 	cp demo/page.html build/index.html
 	cp material-components-web/build/material-components-web.css build
-	(cd demo; $(ELM) Demo.elm --warn --output ../build/elm.js)
+	(cd demo; $(ELM) Demo.elm --output ../build/elm.js)
 
 docs:
-	$(ELM) --docs=docs.json
+	$(ELM) --docs=documentation.json
 
 pages:
 	rsync -r build/ $(PAGES)
@@ -23,5 +23,3 @@ clean: cleanish
 
 distclean : clean
 	rm -rf elm-stuff demo/elm-stuff
-
-.PHONY : pages clean cleanish distclean demo docs

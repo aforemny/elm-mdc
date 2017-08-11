@@ -13,6 +13,7 @@ import Material.Theme as Theme
 import Material.Checkbox as Checkbox
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
+import Demo.Page exposing (Page)
 
 
 type alias Model =
@@ -38,8 +39,8 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
     | ToggleMultiline
     | ToggleActionOnBottom
     | ToggleDismissOnAction
@@ -50,11 +51,11 @@ type Msg
     | Dismiss
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
         ToggleMultiline ->
             { model | multiline = not model.multiline } ! []
         ToggleActionOnBottom ->
@@ -88,7 +89,7 @@ update msg model =
                             , action = Just "Hide"
                         }
             in
-            Snackbar.add Mdl idx contents model
+            Snackbar.add (Mdl >> lift) idx contents model
         Dismiss ->
             let
                 _ = Debug.log "msg" Dismiss
@@ -96,8 +97,8 @@ update msg model =
             model ! []
 
 
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         example options =
             styled Html.div
@@ -107,144 +108,147 @@ view model =
             :: options
             )
     in
-    styled Html.div
-    [ when model.darkTheme << Options.many <|
-      [ Theme.dark
-      , css "background-color" "#333"
+    page.body "Snackbar"
+    [
+      styled Html.div
+      [ when model.darkTheme << Options.many <|
+        [ Theme.dark
+        , css "background-color" "#333"
+        ]
       ]
-    ]
-    [ example []
-      [
-        styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
-
-      , styled Html.div
-        [ cs "mdc-form-field"
-        ]
-        [ Checkbox.render Mdl [0] model.mdl
-          [ Options.on "change" (Json.succeed ToggleMultiline)
-          , Checkbox.checked |> when model.multiline
-          ]
-          []
-        , Html.label [] [ text "Multiline" ]
-        ]
-      , Html.br [] []
-
-      , styled Html.div
-        [ cs "mdc-form-field"
-        ]
-        [ Checkbox.render Mdl [1] model.mdl
-          [ Options.on "change" (Json.succeed ToggleActionOnBottom)
-          , Checkbox.checked |> when model.actionOnBottom
-          , when (not model.multiline) <|
-            Checkbox.disabled
-          ]
-          []
-        , Html.label [] [ text "Action on Bottom" ]
-        ]
-      , Html.br [] []
-
-      , styled Html.div
-        [ cs "mdc-form-field"
-        ]
-        [ Checkbox.render Mdl [2] model.mdl
-          [ Options.on "change" (Json.succeed ToggleDismissOnAction)
-          , Checkbox.checked |> when model.dismissOnAction
-          ]
-          []
-        , Html.label [] [ text "Dismiss On Action" ]
-        ]
-      , Html.br [] []
-
-      , Button.render Mdl [3] model.mdl
-        [ Options.on "click" (Json.succeed ToggleDarkTheme)
-        , Button.primary
-        , Button.raised
-        ]
-        [ text "Toggle Dark Theme"
-        ]
-      , Html.br [] []
-
-      , Textfield.render Mdl [4] model.mdl
-        [ -- Textfield.defaultValue model.messageText
-          -- ^^ TODO
-          Textfield.label "Message Text"
-        , Options.on "input" (Json.map SetMessageText Html.targetValue)
-        ]
+      [ example []
         [
-        ]
-      , Html.br [] []
+          styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
 
-      , Textfield.render Mdl [5] model.mdl
-        [ -- Textfield.defaultValue model.actionText
-          -- ^^ TODO
-          Textfield.label "Action Text"
-        , Options.on "input" (Json.map SetActionText Html.targetValue)
-        ]
-        [
-        ]
-      , Html.br [] []
+        , styled Html.div
+          [ cs "mdc-form-field"
+          ]
+          [ Checkbox.render (Mdl >> lift) [0] model.mdl
+            [ Options.on "change" (Json.succeed (lift ToggleMultiline))
+            , Checkbox.checked |> when model.multiline
+            ]
+            []
+          , Html.label [] [ text "Multiline" ]
+          ]
+        , Html.br [] []
 
-      , Button.render Mdl [6] model.mdl
-        [ Button.raised
-        , css "margin-top" "14px"
-        , Options.on "click" (Json.succeed (Show [10]))
-        ]
-        [ text "Show"
-        ]
+        , styled Html.div
+          [ cs "mdc-form-field"
+          ]
+          [ Checkbox.render (Mdl >> lift) [1] model.mdl
+            [ Options.on "change" (Json.succeed (lift ToggleActionOnBottom))
+            , Checkbox.checked |> when model.actionOnBottom
+            , when (not model.multiline) <|
+              Checkbox.disabled
+            ]
+            []
+          , Html.label [] [ text "Action on Bottom" ]
+          ]
+        , Html.br [] []
 
-      , Button.render Mdl [7] model.mdl
-        [ Button.raised
-        , css "margin-top" "14px"
-        , Options.on "click" (Json.succeed (Show [11]))
-        ]
-        [ text "Show Rtl"
-        ]
+        , styled Html.div
+          [ cs "mdc-form-field"
+          ]
+          [ Checkbox.render (Mdl >> lift) [2] model.mdl
+            [ Options.on "change" (Json.succeed (lift ToggleDismissOnAction))
+            , Checkbox.checked |> when model.dismissOnAction
+            ]
+            []
+          , Html.label [] [ text "Dismiss On Action" ]
+          ]
+        , Html.br [] []
 
-      , Button.render Mdl [8] model.mdl
-        [ Button.raised
-        , css "margin-top" "14px"
-        , Options.on "click" (Json.succeed (Show [12]))
-        ]
-        [ text "Show Start Aligned"
-        ]
+        , Button.render (Mdl >> lift) [3] model.mdl
+          [ Options.on "click" (Json.succeed (lift ToggleDarkTheme))
+          , Button.primary
+          , Button.raised
+          ]
+          [ text "Toggle Dark Theme"
+          ]
+        , Html.br [] []
 
-      , Button.render Mdl [9] model.mdl
-        [ Button.raised
-        , css "margin-top" "14px"
-        , Options.on "click" (Json.succeed (Show [13]))
-        ]
-        [ text "Show Start Aligned (Rtl)"
-        ]
+        , Textfield.render (Mdl >> lift) [4] model.mdl
+          [ -- Textfield.defaultValue model.messageText
+            -- ^^ TODO
+            Textfield.label "Message Text"
+          , Options.on "input" (Json.map (SetMessageText >> lift) Html.targetValue)
+          ]
+          [
+          ]
+        , Html.br [] []
 
-      , Snackbar.render Mdl [10] model.mdl
-        [ Snackbar.onDismiss Dismiss
-        ]
-        []
+        , Textfield.render (Mdl >> lift) [5] model.mdl
+          [ -- Textfield.defaultValue model.actionText
+            -- ^^ TODO
+            Textfield.label "Action Text"
+          , Options.on "input" (Json.map (SetActionText >> lift) Html.targetValue)
+          ]
+          [
+          ]
+        , Html.br [] []
 
-      , Html.div
-        [ Html.attribute "dir" "rtl"
-        ]
-        [ Snackbar.render Mdl [11] model.mdl
-          [ Snackbar.onDismiss Dismiss
+        , Button.render (Mdl >> lift) [6] model.mdl
+          [ Button.raised
+          , css "margin-top" "14px"
+          , Options.on "click" (Json.succeed (lift (Show [10])))
+          ]
+          [ text "Show"
+          ]
+
+        , Button.render (Mdl >> lift) [7] model.mdl
+          [ Button.raised
+          , css "margin-top" "14px"
+          , Options.on "click" (Json.succeed (lift (Show [11])))
+          ]
+          [ text "Show Rtl"
+          ]
+
+        , Button.render (Mdl >> lift) [8] model.mdl
+          [ Button.raised
+          , css "margin-top" "14px"
+          , Options.on "click" (Json.succeed (lift (Show [12])))
+          ]
+          [ text "Show Start Aligned"
+          ]
+
+        , Button.render (Mdl >> lift) [9] model.mdl
+          [ Button.raised
+          , css "margin-top" "14px"
+          , Options.on "click" (Json.succeed (lift (Show [13])))
+          ]
+          [ text "Show Start Aligned (Rtl)"
+          ]
+
+        , Snackbar.render (Mdl >> lift) [10] model.mdl
+          [ Snackbar.onDismiss (lift Dismiss)
           ]
           []
-        ]
 
-      , Snackbar.render Mdl [12] model.mdl
-        [ Snackbar.onDismiss Dismiss
-        , Snackbar.alignStart
-        ]
-        []
+        , Html.div
+          [ Html.attribute "dir" "rtl"
+          ]
+          [ Snackbar.render (Mdl >> lift) [11] model.mdl
+            [ Snackbar.onDismiss (lift Dismiss)
+            ]
+            []
+          ]
 
-      , Html.div
-        [ Html.attribute "dir" "rtl"
-        ]
-        [ Snackbar.render Mdl [13] model.mdl
-          [ Snackbar.onDismiss Dismiss
+        , Snackbar.render (Mdl >> lift) [12] model.mdl
+          [ Snackbar.onDismiss (lift Dismiss)
           , Snackbar.alignStart
           ]
           []
-        ]
 
+        , Html.div
+          [ Html.attribute "dir" "rtl"
+          ]
+          [ Snackbar.render (Mdl >> lift) [13] model.mdl
+            [ Snackbar.onDismiss (lift Dismiss)
+            , Snackbar.alignStart
+            ]
+            []
+          ]
+
+        ]
       ]
     ]

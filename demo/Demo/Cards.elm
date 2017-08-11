@@ -1,8 +1,9 @@
 module Demo.Cards exposing (Model, defaultModel, Msg(Mdl), update, view)
 
-import Html.Attributes
-import Html.Attributes as Html exposing (..)
-import Html exposing (..)
+import Demo.Page exposing (Page)
+import Html as Html_
+import Html.Attributes as Html
+import Html exposing (Html, text)
 import Material
 import Material.Button as Button
 import Material.Card as Card
@@ -21,19 +22,19 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
 
 
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         demoWrapper =
             Options.div
@@ -45,325 +46,301 @@ view model =
             , cs "mdc-typography"
             ]
                 << List.map (\card -> Html.div [] [ card ])
+
+
+        demoCard options =
+            Card.view
+            (  css "margin" "24px"
+            :: css "min-width" "320px"
+            :: css "max-width" "21.875rem"
+            :: options
+            )
+
+
+        demoSupportingText =
+            Card.supportingText []
+            [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
+            ]
+
+
+        card0 model =
+            demoCard
+            [
+            ]
+            [ Card.media
+              [ css "background-image" "url(images/16-9.jpg)"
+              , css "background-size" "cover"
+              , css "height" "12.313rem"
+              ]
+              [
+              ]
+            , demoSupportingText
+            ]
+
+
+        demoMedia options =
+            Card.media
+            ( css "background-size" "cover"
+            :: css "height" "12.313rem"
+            :: options
+            )
+
+
+        demoActions model options =
+            Card.actions
+            options
+            [
+              Button.render (Mdl >> lift) [1,1,0] model.mdl
+              [ Button.compact
+              ]
+              [ text "Action 1"
+              ]
+            , Button.render (Mdl >> lift) [1,1,1] model.mdl
+              [ Button.compact
+              ]
+              [ text "Action 2"
+              ]
+            ]
+
+
+        demoTitle0 =
+            Card.title [ Card.large ] [ text "Title" ]
+
+
+        demoSubtitle0 =
+            Card.subtitle [] [ text "Subehead" ]
+
+
+        demoTitle1 =
+            Card.title [ Card.large ] [ text "Title goes here" ]
+
+
+        demoSubtitle1 =
+            Card.subtitle [] [ text "Subtitle here" ]
+
+
+        demoTitle2 =
+            Card.title [ Card.large ] [ text "Title" ]
+
+
+        demoPrimary options =
+            Card.primary
+            (  css "position" "relative"
+            :: options
+            )
+            [ Options.div
+                  [ css "position" "absolute"
+                  , css "background" "#bdbdbd"
+                  , css "height" "2.5rem"
+                  , css "width" "2.5rem"
+                  , css "border-radius" "50%"
+                  ]
+                  []
+            , Card.title [ css "margin-left" "56px" ] [ text "Title" ]
+            , Card.subtitle [ css "margin-left" "56px" ] [ text "Subhead" ]
+            ]
+
+
+        card1 model =
+            demoCard []
+            [ demoPrimary []
+            , demoMedia
+              [ css "background-image" "url(images/16-9.jpg)"
+              ]
+              []
+            , demoSupportingText
+            , demoActions model []
+            ]
+
+
+        card2 model =
+            demoCard []
+            [ demoPrimary []
+            , demoMedia
+              [ css "background-image" "url(images/16-9.jpg)"
+              ]
+              []
+            , demoActions model [ Card.vertical ]
+            ]
+
+
+        demoPrimary2 options =
+            Card.primary
+            (  css "position" "relative"
+            :: options
+            )
+            [ demoTitle1
+            , demoSubtitle1
+            ]
+
+        card3 model =
+            demoCard []
+            [ demoMedia
+              [ css "background-image" "url(images/16-9.jpg)"
+              ]
+              []
+            , demoPrimary2 []
+            , demoActions model []
+            ]
+
+
+        card4 model =
+            demoCard []
+            [ Card.primary
+              [ css "position" "relative"
+              ]
+              [ demoTitle1
+              , demoSubtitle1
+              ]
+            , Card.supportingText []
+              [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+              ]
+            , demoActions model []
+            ]
+
+
+        card5 model =
+            demoCard
+            [ Card.darkTheme
+            , css "background-image" "url(images/1-1.jpg"
+            , css "background-size" "cover"
+            , css "height" "21.875rem"
+            ]
+            [ demoPrimary2
+              [ css "background" "rgba(0,0,0,0.4)"
+              ]
+            , Card.actions
+              [ css "background" "rgba(0,0,0,0.4)"
+              ]
+              [ Button.render (Mdl >> lift) [1,1,0] model.mdl
+                [ Button.compact
+                , Button.darkTheme
+                ]
+                [ text "Action 1"
+                ]
+              , Button.render (Mdl >> lift) [1,1,1] model.mdl
+                [ Button.compact
+                , Button.darkTheme
+                ]
+                [ text "Action 2"
+                ]
+              ]
+            ]
+
+
+        card6 model =
+            demoCard []
+            [ demoMedia
+              [ css "background-image" "url(images/1-1.jpg)"
+              ]
+              [ Card.title [ Card.large ] [ text "Title" ]
+              ]
+            , Card.actions []
+              [ Button.render (Mdl >> lift) [1,6,0] model.mdl
+                [ Button.compact
+                ]
+                [ text "Action 1"
+                ]
+              ]
+            ]
+
+
+        mediaItem options =
+            Card.mediaItem options
+            [ Html.img
+              [ Html.src "images/1-1.jpg"
+              , Html.style
+                [ ("width", "auto")
+                , ("height", "100%")
+                ]
+              ]
+              []
+            ]
+
+
+        demoPrimary3 options =
+            Card.primary
+            (  css "position" "relative"
+            :: options
+            )
+            [ demoTitle3
+            , demoSubtitle3
+            ]
+
+
+        demoTitle3 =
+            Card.title [ Card.large ] [ text "Title here" ]
+
+
+        demoSubtitle3 =
+            Card.subtitle [] [ text "Subtitle here" ]
+
+
+        card7 model =
+            demoCard []
+            [ Card.horizontalBlock []
+              [ demoPrimary3 []
+              , mediaItem []
+              ]
+            , demoActions model []
+            ]
+
+
+        card8 model =
+            demoCard []
+            [ Card.horizontalBlock []
+              [ demoPrimary3 []
+              , mediaItem [ Card.x1dot5 ]
+              ]
+            , demoActions model []
+            ]
+
+
+        card9 model =
+            demoCard []
+            [ Card.horizontalBlock []
+              [ demoPrimary3 []
+              , mediaItem [ Card.x2 ]
+              ]
+            , demoActions model []
+            ]
+
+
+        card10 model =
+            demoCard
+            [
+            ]
+            [ Card.horizontalBlock []
+              [ mediaItem [ Card.x3 ]
+              , Card.actions
+                [ Card.vertical
+                ]
+                [ Button.render (Mdl >> lift) [1,10,0] model.mdl
+                  [ Button.compact
+                  ]
+                  [ text "A 1"
+                  ]
+                , Button.render (Mdl >> lift) [1,10,1] model.mdl
+                  [ Button.compact
+                  ]
+                  [ text "A 2"
+                  ]
+                ]
+              ]
+            ]
     in
-    demoWrapper
-      [ card0 model
-      , card1 model
-      , card2 model
-      , card3 model
-      , card4 model
-      , card5 model
-      , card6 model
-      , card7 model
-      , card8 model
-      , card9 model
-      , card10 model
-      ]
-
-
-demoCard : List (Options.Style m) -> List (Html m) -> Html m
-demoCard options =
-    Card.view
-    (  css "margin" "24px"
-    :: css "min-width" "320px"
-    :: css "max-width" "21.875rem"
-    :: options
-    )
-
-
-demoSupportingText : Html msg
-demoSupportingText =
-    Card.supportingText []
-    [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
-    ]
-
-
-card0 : Model -> Html Msg
-card0 model =
-    demoCard
-    [
-    ]
-    [ Card.media
-      [ css "background-image" "url(images/16-9.jpg)"
-      , css "background-size" "cover"
-      , css "height" "12.313rem"
-      ]
-      [
-      ]
-    , demoSupportingText
-    ]
-
-
-demoMedia : List (Options.Style m) -> List (Html m) -> Html m
-demoMedia options =
-    Card.media
-    ( css "background-size" "cover"
-    :: css "height" "12.313rem"
-    :: options
-    )
-
-
-demoActions : Model -> List (Options.Style Msg) -> Html Msg
-demoActions model options =
-    Card.actions
-    options
-    [ Button.render Mdl [1,1,0] model.mdl
-      [ Button.compact
-      ]
-      [ text "Action 1"
-      ]
-    , Button.render Mdl [1,1,1] model.mdl
-      [ Button.compact
-      ]
-      [ text "Action 2"
-      ]
-    ]
-
-
-demoTitle0 : Html m
-demoTitle0 =
-    Card.title [ Card.large ] [ text "Title" ]
-
-
-demoSubtitle0 : Html m
-demoSubtitle0 =
-    Card.subtitle [] [ text "Subehead" ]
-
-
-demoTitle1 : Html m
-demoTitle1 =
-    Card.title [ Card.large ] [ text "Title goes here" ]
-
-
-demoSubtitle1 : Html m
-demoSubtitle1 =
-    Card.subtitle [] [ text "Subtitle here" ]
-
-
-demoTitle2 : Html m
-demoTitle2 =
-    Card.title [ Card.large ] [ text "Title" ]
-
-
-demoPrimary : List (Options.Style m) -> Html m
-demoPrimary options =
-    Card.primary
-    (  css "position" "relative"
-    :: options
-    )
-    [ Options.div
-          [ css "position" "absolute"
-          , css "background" "#bdbdbd"
-          , css "height" "2.5rem"
-          , css "width" "2.5rem"
-          , css "border-radius" "50%"
+    page.body "Cards"
+    [ demoWrapper
+          [ card0 model
+          , card1 model
+          , card2 model
+          , card3 model
+          , card4 model
+          , card5 model
+          , card6 model
+          , card7 model
+          , card8 model
+          , card9 model
+          , card10 model
           ]
-          []
-    , Card.title [ css "margin-left" "56px" ] [ text "Title" ]
-    , Card.subtitle [ css "margin-left" "56px" ] [ text "Subhead" ]
-    ]
-
-
-card1 : Model -> Html Msg
-card1 model =
-    demoCard []
-    [ demoPrimary []
-    , demoMedia
-      [ css "background-image" "url(images/16-9.jpg)"
-      ]
-      []
-    , demoSupportingText
-    , demoActions model []
-    ]
-
-
-card2 : Model -> Html Msg
-card2 model =
-    demoCard []
-    [ demoPrimary []
-    , demoMedia
-      [ css "background-image" "url(images/16-9.jpg)"
-      ]
-      []
-    , demoActions model [ Card.vertical ]
-    ]
-
-
-demoPrimary2 : List (Options.Style m) -> Html m
-demoPrimary2 options =
-    Card.primary
-    (  css "position" "relative"
-    :: options
-    )
-    [ demoTitle1
-    , demoSubtitle1
-    ]
-
-
-card3 : Model -> Html Msg
-card3 model =
-    demoCard []
-    [ demoMedia
-      [ css "background-image" "url(images/16-9.jpg)"
-      ]
-      []
-    , demoPrimary2 []
-    , demoActions model []
-    ]
-
-
-card4 : Model -> Html Msg
-card4 model =
-    demoCard []
-    [ Card.primary
-      [ css "position" "relative"
-      ]
-      [ demoTitle1
-      , demoSubtitle1
-      ]
-    , Card.supportingText []
-      [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-      ]
-    , demoActions model []
-    ]
-
-
-card5 : Model -> Html Msg
-card5 model =
-    demoCard
-    [ Card.darkTheme
-    , css "background-image" "url(images/1-1.jpg"
-    , css "background-size" "cover"
-    , css "height" "21.875rem"
-    ]
-    [ demoPrimary2
-      [ css "background" "rgba(0,0,0,0.4)"
-      ]
-    , Card.actions
-      [ css "background" "rgba(0,0,0,0.4)"
-      ]
-      [ Button.render Mdl [1,1,0] model.mdl
-        [ Button.compact
-        , Button.darkTheme
-        ]
-        [ text "Action 1"
-        ]
-      , Button.render Mdl [1,1,1] model.mdl
-        [ Button.compact
-        , Button.darkTheme
-        ]
-        [ text "Action 2"
-        ]
-      ]
-    ]
-
-
-card6 : Model -> Html Msg
-card6 model =
-    demoCard []
-    [ demoMedia
-      [ css "background-image" "url(images/1-1.jpg)"
-      ]
-      [ Card.title [ Card.large ] [ text "Title" ]
-      ]
-    , Card.actions []
-      [ Button.render Mdl [1,6,0] model.mdl
-        [ Button.compact
-        ]
-        [ text "Action 1"
-        ]
-      ]
-    ]
-
-
-mediaItem : List (Options.Style Msg) -> Html Msg
-mediaItem options =
-    Card.mediaItem options
-    [ Html.img
-      [ Html.src "images/1-1.jpg"
-      , Html.style
-        [ ("width", "auto")
-        , ("height", "100%")
-        ]
-      ]
-      []
-    ]
-
-
-demoPrimary3 : List (Options.Style Msg) -> Html Msg
-demoPrimary3 options =
-    Card.primary
-    (  css "position" "relative"
-    :: options
-    )
-    [ demoTitle3
-    , demoSubtitle3
-    ]
-
-
-demoTitle3 : Html msg
-demoTitle3 =
-    Card.title [ Card.large ] [ text "Title here" ]
-
-
-demoSubtitle3 : Html msg
-demoSubtitle3 =
-    Card.subtitle [] [ text "Subtitle here" ]
-
-
-card7 : Model -> Html Msg
-card7 model =
-    demoCard []
-    [ Card.horizontalBlock []
-      [ demoPrimary3 []
-      , mediaItem []
-      ]
-    , demoActions model []
-    ]
-
-
-card8 : Model -> Html Msg
-card8 model =
-    demoCard []
-    [ Card.horizontalBlock []
-      [ demoPrimary3 []
-      , mediaItem [ Card.x1dot5 ]
-      ]
-    , demoActions model []
-    ]
-
-
-card9 : Model -> Html Msg
-card9 model =
-    demoCard []
-    [ Card.horizontalBlock []
-      [ demoPrimary3 []
-      , mediaItem [ Card.x2 ]
-      ]
-    , demoActions model []
-    ]
-
-
-card10 : Model -> Html Msg
-card10 model =
-    demoCard
-    [
-    ]
-    [ Card.horizontalBlock []
-      [ mediaItem [ Card.x3 ]
-      , Card.actions
-        [ Card.vertical
-        ]
-        [ Button.render Mdl [1,10,0] model.mdl
-          [ Button.compact
-          ]
-          [ text "A 1"
-          ]
-        , Button.render Mdl [1,10,1] model.mdl
-          [ Button.compact
-          ]
-          [ text "A 2"
-          ]
-        ]
-      ]
     ]

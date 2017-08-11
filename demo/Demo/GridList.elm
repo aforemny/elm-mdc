@@ -3,13 +3,12 @@ module Demo.GridList exposing (view)
 import Html exposing (Html, text)
 import Material.GridList as GridList
 import Material.Options exposing (styled, css, cs)
+import Demo.Page exposing (Page)
 
 
-view : Html a
-view =
-    Html.div
-    [
-    ]
+view : Page m -> Html m
+view page =
+    page.body "Grid list"
     [ styled Html.section
       [ cs "example"
       , cs "examples"

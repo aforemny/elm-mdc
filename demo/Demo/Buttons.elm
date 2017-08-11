@@ -1,12 +1,12 @@
 module Demo.Buttons exposing (Model,defaultModel,Msg(Mdl),update,view)
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Platform.Cmd exposing (Cmd)
-import String
-import Material.Button as Button exposing (..)
-import Material.Options as Options exposing (Style, cs, css, when)
+import Demo.Page exposing (Page)
+import Html exposing (Html, text)
 import Material
+import Material.Button as Button
+import Material.Options as Options exposing (styled, cs, css, when)
+import Material.Typography as Typography
+import String
 
 
 type alias Model =
@@ -20,32 +20,29 @@ defaultModel =
     }
 
 
-type Msg = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
 
 
-view : Model -> Html Msg
-view model =
-    div
-    [
-    ]
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
+    page.body "Buttons"
     ( [ { headline = "Buttons", link = False, disabled = False }
       , { headline = "Links with Button Style", link = True, disabled = False }
       , { headline = "Disabled", link = False, disabled = True }
       ]
       |> List.concat << List.map (\row ->
            ( List.concat
-             [ [ div
-                 [ class "mdc-typography--title"
-                 , style
-                   [ ("padding", "64px 16px 24px")
-                   ]
+             [ [ styled Html.div
+                 [ Typography.title
+                 , css "padding" "64px 16px 24px"
                  ]
                  [ text row.headline
                  ]
@@ -66,10 +63,10 @@ view model =
                       ]
                   )
                |> List.concat
-               |> List.map (\button ->
-                    Button.render Mdl [9,0,0,1] model.mdl
+               |> List.indexedMap (\idx button ->
+                    Button.render (Mdl >> lift) [0,idx] model.mdl
                     [ css "margin" "16px"
-                    , Button.link "" |> when row.link
+                    , Button.link "#buttons" |> when row.link
                     , Button.disabled |> when row.disabled
                     , Button.raised |> when button.raised
                     , Button.ripple
@@ -98,10 +95,10 @@ view model =
                       ]
                   )
                |> List.concat
-               |> List.map (\button ->
-                    Button.render Mdl [9,0,0,1] model.mdl
+               |> List.indexedMap (\idx button ->
+                    Button.render (Mdl >> lift) [1,idx] model.mdl
                     [ css "margin" "16px"
-                    , Button.link "" |> when row.link
+                    , Button.link "#buttons" |> when row.link
                     , Button.disabled |> when row.disabled
                     , Button.ripple
                     , if button.primary then

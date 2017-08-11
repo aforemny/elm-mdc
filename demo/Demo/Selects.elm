@@ -1,4 +1,4 @@
-module Demo.Selects exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Selects exposing (Model, defaultModel, Msg(Mdl), update, view, subscriptions)
 
 import Dict
 import Html exposing (Html, text)
@@ -14,9 +14,7 @@ import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Select as Select
 import Material.Typography as Typography
 import Material.Theme as Theme
-
-
--- MODEL
+import Demo.Page exposing (Page)
 
 
 type alias Model =
@@ -38,19 +36,19 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg.Msg m)
     | Select Index Int String
     | ToggleDarkTheme
     | ToggleRtl
     | ToggleDisabled
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
 
         Select idx index value ->
             { model | selects = Dict.insert idx (index, value) model.selects } ! []
@@ -65,100 +63,91 @@ update msg model =
             { model | disabled = not model.disabled } ! []
 
 
--- VIEW
-
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         (selectedIndex, selectedText) =
             Dict.get [0] model.selects
             |> Maybe.withDefault (0, "Pick a food group")
     in
-    styled Html.section
-    [ cs "example"
-    ]
-    [ styled Html.h2 [ Typography.title ] [ text "Fully-Featured Component" ]
-    , styled Html.section
-      [ cs "demo-wrapper"
-      , when model.darkTheme <|
-        Options.many
-        [ Theme.dark
-        , css "background-color" "#303030"
-        ]
-      , when model.rtl <|
-        Options.attribute (Html.attribute "dir" "rtl")
+    page.body "Select"
+    [
+      styled Html.section
+      [ cs "example"
       ]
-      [ Select.render Mdl [0] model.mdl
-        [ Select.selectedText selectedText
-        , Select.index selectedIndex
-        , Select.disabled |> when model.disabled
-        ]
-        ( [ "Pick a food group"
-          , "Bread, Cereal, Rice, and Pasta"
-          , "Vegetables"
-          , "Fruit"
-          , "Milk, Yogurt, and Cheese"
-          , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
-          , "Fats, Oils, and Sweets"
+      [ styled Html.h2 [ Typography.title ] [ text "Fully-Featured Component" ]
+      , styled Html.section
+        [ cs "demo-wrapper"
+        , when model.darkTheme <|
+          Options.many
+          [ Theme.dark
+          , css "background-color" "#303030"
           ]
-          |> List.indexedMap (\index label ->
-                 Menu.li Lists.li
-                 [ Menu.onSelect (Json.succeed (Select [0] index label))
-                 -- TODO: disabled
-                 -- Menu.disabled |> when ((index == 0) || (index == 3))
-                 ]
-                 [ text label ]
-             )
-        )
-      ]
-
-    , Html.p []
-      [ text "Currently selected:"
-      , Html.span [] [ text (selectedText ++ " at index " ++ toString selectedIndex) ]
-      ]
-
-    , Html.div
-      []
-      [ Checkbox.render Mdl [1] model.mdl
-        [ Options.onClick ToggleDarkTheme
-        , Checkbox.checked |> when model.darkTheme
+        , when model.rtl <|
+          Options.attribute (Html.attribute "dir" "rtl")
         ]
-        []
-      , Html.label [] [ text "Dark theme" ]
-      ]
-
-    , Html.div
-      []
-      [ Checkbox.render Mdl [2] model.mdl
-        [ Options.onClick ToggleRtl
-        , Checkbox.checked |> when model.rtl
+        [ Select.render (Mdl >> lift) [0] model.mdl
+          [ Select.selectedText selectedText
+          , Select.index selectedIndex
+          , Select.disabled |> when model.disabled
+          ]
+          ( [ "Pick a food group"
+            , "Bread, Cereal, Rice, and Pasta"
+            , "Vegetables"
+            , "Fruit"
+            , "Milk, Yogurt, and Cheese"
+            , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
+            , "Fats, Oils, and Sweets"
+            ]
+            |> List.indexedMap (\index label ->
+                   Menu.li Lists.li
+                   [ Menu.onSelect (Json.succeed (lift (Select [0] index label)))
+                   -- TODO: disabled
+                   -- Menu.disabled |> when ((index == 0) || (index == 3))
+                   ]
+                   [ text label ]
+               )
+          )
         ]
-        []
-      , Html.label [] [ text "RTL" ]
-      ]
 
-    , Html.div
-      []
-      [ Checkbox.render Mdl [3] model.mdl
-        [ Options.onClick ToggleDisabled
-        , Checkbox.checked |> when model.disabled
+      , Html.p []
+        [ text "Currently selected:"
+        , Html.span [] [ text (selectedText ++ " at index " ++ toString selectedIndex) ]
         ]
+
+      , Html.div
         []
-      , Html.label [] [ text "Disabled" ]
+        [ Checkbox.render (Mdl >> lift) [1] model.mdl
+          [ Options.onClick (lift ToggleDarkTheme)
+          , Checkbox.checked |> when model.darkTheme
+          ]
+          []
+        , Html.label [] [ text "Dark theme" ]
+        ]
+
+      , Html.div
+        []
+        [ Checkbox.render (Mdl >> lift) [2] model.mdl
+          [ Options.onClick (lift ToggleRtl)
+          , Checkbox.checked |> when model.rtl
+          ]
+          []
+        , Html.label [] [ text "RTL" ]
+        ]
+
+      , Html.div
+        []
+        [ Checkbox.render (Mdl >> lift) [3] model.mdl
+          [ Options.onClick (lift ToggleDisabled)
+          , Checkbox.checked |> when model.disabled
+          ]
+          []
+        , Html.label [] [ text "Disabled" ]
+        ]
       ]
     ]
 
---  <p>Currently selected: <span id="currently-selected">(none)</span></p>
---  <div>
---    <input id="dark-theme" type="checkbox">
---    <label for="dark-theme">Dark Theme</label>
---  </div>
---  <div>
---    <input id="rtl" type="checkbox">
---    <label for="rtl">RTL</label>
---  </div>
---  <div>
---    <input id="disabled" type="checkbox">
---    <label for="disabled">Disabled</label>
---  </div>
---</section>
+
+subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions lift model =
+    Select.subs (Mdl >> lift) model.mdl

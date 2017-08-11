@@ -6,6 +6,7 @@ import Material.Switch as Switch
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
+import Demo.Page exposing (Page)
 
 
 -- MODEL
@@ -26,17 +27,17 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
     | ToggleOn0
     | ToggleOn1
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
         ToggleOn0 ->
             { model | on0 = not model.on0 } ! []
         ToggleOn1 ->
@@ -46,8 +47,8 @@ update msg model =
 -- VIEW
 
 
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         example options =
             styled Html.div
@@ -58,7 +59,7 @@ view model =
             :: options
             )
     in
-    Html.div []
+    page.body "Switches"
     [
       example
       [ css "background-color" "#eee"
@@ -71,8 +72,8 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Switch.render Mdl [0] model.mdl
-          [ Options.onClick ToggleOn0
+        [ Switch.render (Mdl >> lift) [0] model.mdl
+          [ Options.onClick (lift ToggleOn0)
           , Switch.on |> when model.on0
           ]
           [
@@ -92,7 +93,7 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Switch.render Mdl [2] model.mdl
+        [ Switch.render (Mdl >> lift) [2] model.mdl
           [ Switch.disabled
           ]
           [
@@ -114,8 +115,8 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Switch.render Mdl [1] model.mdl
-          [ Options.onClick ToggleOn1
+        [ Switch.render (Mdl >> lift) [1] model.mdl
+          [ Options.onClick (lift ToggleOn1)
           , Switch.on |> when model.on1
           ]
           [
@@ -137,7 +138,7 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Switch.render Mdl [3] model.mdl
+        [ Switch.render (Mdl >> lift) [3] model.mdl
           [ Switch.disabled
           ]
           [

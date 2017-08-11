@@ -2,12 +2,14 @@ module Demo.Textfields exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Html.Attributes as Html
 import Html exposing (Html)
+import Html as Html_
 import Material
 import Material.Options as Options
-import Material.Options exposing (when, styled, cs, css, div)
+import Material.Options exposing (when, styled, cs, css)
 import Material.Textfield as Textfield
 import Material.Textfield.HelperText as Textfield
 import Material.Checkbox as Checkbox
+import Demo.Page exposing (Page)
 
 
 -- MODEL
@@ -59,8 +61,8 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
     | Example0Msg ExampleMsg
     | Example1Msg ExampleMsg
     | Example2Msg ExampleMsg
@@ -79,31 +81,26 @@ type ExampleMsg
     | ToggleValidationMsg
 
 
-update : Msg -> Model -> Maybe ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model |> Just
+            Material.update (Mdl >> lift) msg_ model
 
         Example0Msg msg_ ->
             { model | example0 = updateExample msg_ model.example0 } ! []
-            |> Just
 
         Example1Msg msg_ ->
             { model | example1 = updateExample msg_ model.example1 } ! []
-            |> Just
 
         Example2Msg msg_ ->
             { model | example2 = updateExample msg_ model.example2 } ! []
-            |> Just
 
         Example3Msg msg_ ->
             { model | example3 = updateExample msg_ model.example3 } ! []
-            |> Just
 
         Example4Msg msg_ ->
             { model | example4 = updateExample msg_ model.example4 } ! []
-            |> Just
 
 
 updateExample : ExampleMsg -> Example -> Example
@@ -137,24 +134,24 @@ updateExample msg model =
 -- VIEW
 
 
-view : Model -> Html Msg
-view model =
-    div []
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
+    page.body "Text fields"
     [ styled Html.section
       [ cs "example"
       ]
-      [ example0 model.mdl 0 Example0Msg model.example0
-      , example1 model.mdl 1 Example1Msg model.example1
-      , example2 model.mdl 2 Example2Msg model.example2
-      , example3 model.mdl 3 Example3Msg model.example3
-      , example4 model.mdl 4 Example4Msg model.example4
+      [ example0 lift model.mdl 0 (Example0Msg >> lift) model.example0
+      , example1 lift model.mdl 1 (Example1Msg >> lift) model.example1
+      , example2 lift model.mdl 2 (Example2Msg >> lift) model.example2
+      , example3 lift model.mdl 3 (Example3Msg >> lift) model.example3
+      , example4 lift model.mdl 4 (Example4Msg >> lift) model.example4
       ]
     ]
 
 
-example0 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
-example0 mdl idx lift model =
-    div []
+example0 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
+example0 fwd mdl idx lift model =
+    styled Html.div []
     [
       Html.h2 []
       [ Html.text
@@ -171,7 +168,7 @@ example0 mdl idx lift model =
           else
               []
         )
-        [ Textfield.render Mdl [idx] mdl
+        [ Textfield.render (Mdl >> fwd) [idx] mdl
           [ Textfield.label "Email Address"
           , Textfield.disabled |> when model.disabled
           , Textfield.dense |> when model.dense
@@ -187,58 +184,58 @@ example0 mdl idx lift model =
           ]
         ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,0] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,0] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,1] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,1] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,2] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,3] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []
       , Html.label [] [ Html.text "Dense" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,4] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,4] mdl
         [ Options.onClick (lift ToggleRequired)
         ]
         []
       , Html.label [] [ Html.text "Required" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,5] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,5] mdl
         [ Options.onClick (lift ToggleHelperText)
         ]
         []
       , Html.label [] [ Html.text "Use Helper Text" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,6] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,6] mdl
         [ Options.onClick (lift TogglePersistent)
         , Checkbox.disabled |> when (not model.helperText)
         ]
         []
       , Html.label [] [ Html.text "Make helper text persistent" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,7] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,7] mdl
         [ Options.onClick (lift ToggleValidationMsg)
         , Checkbox.disabled |> when (not model.helperText)
         ]
@@ -248,9 +245,9 @@ example0 mdl idx lift model =
     ]
 
 
-example1 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
-example1 mdl idx lift model =
-    div []
+example1 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
+example1 fwd mdl idx lift model =
+    styled Html.div []
     [ Html.h2 []
       [ Html.text "Password field with validation"
       ]
@@ -265,7 +262,7 @@ example1 mdl idx lift model =
           else
               []
         )
-        [ Textfield.render Mdl [idx] mdl
+        [ Textfield.render (Mdl >> fwd) [idx] mdl
           [ Textfield.label "Choose password"
           , Textfield.password
           , Textfield.pattern ".{8,}"
@@ -283,9 +280,9 @@ example1 mdl idx lift model =
     ]
 
 
-example2 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
-example2 mdl idx lift model =
-    div []
+example2 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
+example2 fwd mdl idx lift model =
+    styled Html.div []
     [ Html.h2 []
       [ Html.text "Textfield box"
       ]
@@ -300,7 +297,7 @@ example2 mdl idx lift model =
           else
               []
         )
-        [ Textfield.render Mdl [idx] mdl
+        [ Textfield.render (Mdl >> fwd) [idx] mdl
           [ Textfield.label "Your Name"
           , Textfield.textfield
           ]
@@ -313,29 +310,29 @@ example2 mdl idx lift model =
           ]
         ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,0] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,0] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,1] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,1] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,2] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,3] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []
@@ -344,9 +341,9 @@ example2 mdl idx lift model =
     ]
 
 
-example3 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
-example3 mdl idx lift model =
-    div []
+example3 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
+example3 fwd mdl idx lift model =
+    styled Html.div []
     [ Html.h2 []
       [ Html.text "Multi-line Textfields"
       ]
@@ -361,7 +358,7 @@ example3 mdl idx lift model =
           else
               []
         )
-        [ Textfield.render Mdl [idx] mdl
+        [ Textfield.render (Mdl >> fwd) [idx] mdl
           [ Textfield.label "Multi-line Label"
           , Textfield.multiline
           , Textfield.rows 8
@@ -370,29 +367,29 @@ example3 mdl idx lift model =
           []
         ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,0] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,0] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,1] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,1] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,2] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,3] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []
@@ -401,9 +398,9 @@ example3 mdl idx lift model =
     ]
 
 
-example4 : Material.Model -> Int -> (ExampleMsg -> Msg) -> Example -> Html Msg
-example4 mdl idx lift model =
-    div []
+example4 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
+example4 fwd mdl idx lift model =
+    styled Html.div []
     [ Html.h2 []
       [ Html.text "Full-Width Textfields"
       ]
@@ -418,12 +415,12 @@ example4 mdl idx lift model =
           else
               []
         )
-        [ Textfield.render Mdl [idx,0] mdl
+        [ Textfield.render (Mdl >> fwd) [idx,0] mdl
           [ Textfield.placeholder "Subject"
           , Textfield.fullWidth
           ]
           []
-        , Textfield.render Mdl [idx,1] mdl
+        , Textfield.render (Mdl >> fwd) [idx,1] mdl
           [ Textfield.placeholder "Message"
           , Textfield.multiline
           , Textfield.fullWidth
@@ -433,29 +430,29 @@ example4 mdl idx lift model =
           []
         ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,2] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
         [ Options.onClick (lift ToggleDisabled)
         ]
         []
       , Html.label [] [ Html.text "Disabled" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,3] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
         [ Options.onClick (lift ToggleRtl)
         ]
         []
       , Html.label [] [ Html.text "RTL" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,4] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,4] mdl
         [ Options.onClick (lift ToggleDarkTheme)
         ]
         []
       , Html.label [] [ Html.text "Dark Theme" ]
       ]
-    , div []
-      [ Checkbox.render Mdl [idx,5] mdl
+    , styled Html.div []
+      [ Checkbox.render (Mdl >> fwd) [idx,5] mdl
         [ Options.onClick (lift ToggleDense)
         ]
         []

@@ -1,5 +1,6 @@
 module Demo.IconToggle exposing (Model,defaultModel,Msg(Mdl),update,view)
 
+import Demo.Page exposing (Page)
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -9,7 +10,6 @@ import Material.IconToggle as IconToggle
 import Material.Options as Options
 import Material.Options exposing (styled, cs, css, when)
 import Material.Theme as Theme
-import Material.Typography as Typography
 
 
 type alias Model =
@@ -25,16 +25,16 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
     | Toggle Index
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
         Toggle idx ->
             let
                 iconToggle =
@@ -46,8 +46,8 @@ update msg model =
             ! []
 
 
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         example options =
             styled Html.div
@@ -85,16 +85,14 @@ view model =
                     Dict.get idx model.iconToggles
                     |> Maybe.withDefault False
             in
-            IconToggle.render Mdl idx model.mdl
+            IconToggle.render (Mdl >> lift) idx model.mdl
             ( css "margin-left" "1rem"
-            :: Options.onClick (Toggle idx)
+            :: Options.onClick (lift (Toggle idx))
             :: when isOn IconToggle.on
             :: options
             )
     in
-    styled Html.div
-    [ Typography.typography
-    ]
+    page.body "Icon toggles"
     [
       Html.node "style"
       [ Html.type_ "text/css"
@@ -207,8 +205,8 @@ view model =
                             Dict.get idx model.iconToggles
                             |> Maybe.withDefault False
                     in
-                    IconToggle.render Mdl idx model.mdl
-                    ( Options.onClick (Toggle idx)
+                    IconToggle.render (Mdl >> lift) idx model.mdl
+                    ( Options.onClick (lift (Toggle idx))
                     :: when isOn IconToggle.on
                     :: IconToggle.label "Remove from Fravorites" "Add to Favorites"
                     :: IconToggle.icon  "favorite" "favorite_border"

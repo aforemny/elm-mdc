@@ -1,9 +1,19 @@
-module Demo.TemporaryDrawer exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.TemporaryDrawer exposing
+    (
+      Model
+    , defaultModel
+    , Msg(Mdl)
+    , update
+    , view
+    , subscriptions
+    )
 
+import Demo.Page exposing (Page)
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.Component exposing (Index)
+import Material.Drawer
 import Material.Drawer.Temporary as Drawer
 import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
@@ -28,25 +38,25 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
     | Open Index
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
         Open idx ->
-            model ! [ Drawer.open Mdl idx ]
+            model ! [ Drawer.open (Mdl >> lift) idx ]
 
 
 -- VIEW
 
 
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     Html.div []
     [
       Toolbar.view
@@ -62,7 +72,7 @@ view model =
             [ styled Html.i
                   [ cs "material-icons"
                   , css "cursor" "pointer"
-                  , Options.onClick (Open [0])
+                  , Options.onClick (lift (Open [0]))
                   ]
                   [ text "menu"
                   ]
@@ -72,7 +82,7 @@ view model =
         ]
       ]
 
-    , Drawer.render Mdl [0] model.mdl []
+    , Drawer.render (Mdl >> lift) [0] model.mdl []
       [ Drawer.header
         [ Theme.primaryBg
         , Theme.textPrimaryOnPrimary
@@ -119,3 +129,8 @@ view model =
         ]
       ]
     ]
+
+
+subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions lift model =
+    Material.Drawer.subs (Mdl >> lift) model.mdl

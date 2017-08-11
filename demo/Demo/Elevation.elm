@@ -4,6 +4,7 @@ import Html exposing (..)
 import Material
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (cs, css, Style, when)
+import Demo.Page exposing (Page)
 
 
 -- MODEL
@@ -24,23 +25,23 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
 
 
 -- VIEW
 
 
-view : Model -> Html Msg
-view model =
-    div []
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
+    page.body "Elevation"
     [ Options.div
       [ css "display" "flex"
       , css "flex-flow" "row wrap"

@@ -1,11 +1,20 @@
-module Demo.PermanentAboveDrawer exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.PermanentAboveDrawer exposing
+    (
+      Model
+    , defaultModel
+    , Msg(Mdl)
+    , update
+    , view
+    , subscriptions
+    )
 
-import Demo.Page as Page exposing (Page)
+import Demo.Page as Page exposing (Page, Url(..))
+import Demo.Page exposing (Page)
 import Html as Html_
 import Html.Attributes as Html
 import Html exposing (Html, text, map)
 import Material
-import Material.Component exposing (Index)
+import Material.Drawer
 import Material.Drawer.Permanent as Drawer
 import Material.Elevation as Elevation
 import Material.List as Lists
@@ -33,20 +42,17 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
-    | Open Index
+type Msg m
+    = Mdl (Material.Msg m)
     | Toggle0
     | Toggle1
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
-        Open idx ->
-            model ! [ Drawer.open Mdl idx ]
+            Material.update (Mdl >> lift) msg_ model
         Toggle0 ->
             { model | toggle0 = not model.toggle0 } ! []
         Toggle1 ->
@@ -56,7 +62,7 @@ update msg model =
 -- VIEW
 
 
-view : (Msg -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     styled Html.div
     [ cs "demo-body"
@@ -69,8 +75,7 @@ view lift page model =
     , css "width" "100%"
     ]
     [ 
-      Html_.map lift <|
-      Drawer.render Mdl [0] model.mdl []
+      Drawer.render (Mdl >> lift) [0] model.mdl []
       [
         Drawer.toolbarSpacer [] []
 
@@ -129,7 +134,7 @@ view lift page model =
               ]
               [ styled Html.i
                 [ cs "material-icons"
-                , Options.onClick page.clearTab
+                , Options.onClick (page.setUrl StartPage)
                 , css "cursor" "pointer"
                 ]
                 [ text "arrow_back" ]
@@ -186,3 +191,9 @@ view lift page model =
         ]
       ]
     ]
+
+
+
+subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions lift model =
+    Material.Drawer.subs (Mdl >> lift) model.mdl

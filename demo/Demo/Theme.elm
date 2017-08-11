@@ -1,44 +1,15 @@
-module Demo.Theme exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Theme exposing (view)
 
 import Html exposing (Html)
-import Material
 import Material.Options exposing (Style, when, styled, cs, css, div, span)
 import Material.Theme as Theme
 import Material.Typography as Typography
+import Demo.Page exposing (Page)
 
 
--- MODEL
-
-
-type alias Model =
-    { mdl : Material.Model
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { mdl = Material.defaultModel
-    }
-
-
-type Msg
-    = Mdl (Material.Msg Msg)
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Mdl msg_ ->
-            Material.update Mdl msg_ model
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    div
-    []
+view : Page m -> Html m
+view page =
+    page.body "Theme"
     [ styled Html.h2
       [ Typography.display1
       ]
@@ -55,7 +26,7 @@ view model =
     ]
 
 
-example0 : Html Msg
+example0 : Html m
 example0 =
     styled Html.section
     [ cs "example"
@@ -168,7 +139,7 @@ demoThemeColorBlock options =
     )
 
 
-example1 : Html Msg
+example1 : Html m
 example1 =
     let
         demo background nodes =

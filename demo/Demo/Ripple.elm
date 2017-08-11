@@ -5,6 +5,7 @@ import Material
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (styled, cs, css)
 import Material.Ripple as Ripple
+import Demo.Page exposing (Page)
 
 
 -- MODEL
@@ -21,22 +22,22 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
 
 
 -- VIEW
 
 
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         demoSurface =
             Options.many
@@ -62,13 +63,13 @@ view model =
             :: options
             )
     in
-    Html.div []
+    page.body "Ripple"
     [
       example []
       [ Html.h2 [] [ text "Bounded" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded Mdl [0] model.mdl
+                Ripple.bounded (Mdl >> lift) [0] model.mdl
         in
         styled Html.div
         [ demoSurface
@@ -84,7 +85,7 @@ view model =
       [ Html.h2 [] [ text "Unbounded" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.unbounded Mdl [1] model.mdl
+                Ripple.unbounded (Mdl >> lift) [1] model.mdl
         in
         styled Html.div
         [ cs "material-icons"
@@ -104,7 +105,7 @@ view model =
       [ Html.h2 [] [ text "Theme Styles" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded Mdl [2] model.mdl
+                Ripple.bounded (Mdl >> lift) [2] model.mdl
         in
         styled Html.div
         [ demoSurface
@@ -117,7 +118,7 @@ view model =
         ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded Mdl [3] model.mdl
+                Ripple.bounded (Mdl >> lift) [3] model.mdl
         in
         styled Html.div
         [ demoSurface

@@ -7,9 +7,7 @@ import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Radio as Radio
 import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
-
-
--- MODEL
+import Demo.Page exposing (Page)
 
 
 type alias Model =
@@ -25,16 +23,16 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
     | Set String String
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
         Set group value ->
             let
                 radio =
@@ -47,11 +45,8 @@ update msg model =
                 ! []
 
 
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         example options =
             styled Html.div
@@ -62,7 +57,7 @@ view model =
             :: options
             )
     in
-    Html.div []
+    page.body "Radio buttons"
     [
       let
         group =
@@ -90,8 +85,8 @@ view model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Radio.render Mdl idx model.mdl
-          [ Options.onClick (Set group name)
+        [ Radio.render (Mdl >> lift) idx model.mdl
+          [ Options.onClick (lift (Set group name))
           , Radio.selected |> when (isSelected True name)
           , Radio.name group
           ]
@@ -109,8 +104,8 @@ view model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Radio.render Mdl idx model.mdl
-          [ Options.onClick (Set group name)
+        [ Radio.render (Mdl >> lift) idx model.mdl
+          [ Options.onClick (lift (Set group name))
           , Radio.selected |> when (isSelected False name)
           , Radio.name group
           ]
@@ -149,8 +144,8 @@ view model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Radio.render Mdl idx model.mdl
-          [ Options.onClick (Set group name)
+        [ Radio.render (Mdl >> lift) idx model.mdl
+          [ Options.onClick (lift (Set group name))
           , Radio.selected |> when (isSelected True name)
           , Radio.name group
           ]
@@ -168,8 +163,8 @@ view model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Radio.render Mdl idx model.mdl
-          [ Options.onClick (Set group name)
+        [ Radio.render (Mdl >> lift) idx model.mdl
+          [ Options.onClick (lift (Set group name))
           , Radio.selected |> when (isSelected False name)
           , Radio.name group
           ]
@@ -198,7 +193,7 @@ view model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Radio.render Mdl idx model.mdl
+          [ Radio.render (Mdl >> lift) idx model.mdl
             [ Radio.selected
             , Radio.disabled
             ]
@@ -216,7 +211,7 @@ view model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Radio.render Mdl idx model.mdl
+          [ Radio.render (Mdl >> lift) idx model.mdl
             [ Radio.disabled
             ]
             []
@@ -238,7 +233,7 @@ view model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Radio.render Mdl idx model.mdl
+          [ Radio.render (Mdl >> lift) idx model.mdl
             [ Radio.selected
             , Radio.disabled
             ]
@@ -256,7 +251,7 @@ view model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Radio.render Mdl idx model.mdl
+          [ Radio.render (Mdl >> lift) idx model.mdl
             [ Radio.disabled
             ]
             []

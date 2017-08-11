@@ -9,6 +9,7 @@ import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
+import Demo.Page exposing (Page)
 
 
 -- MODEL
@@ -38,18 +39,17 @@ defaultModel =
     }
 
 
-
--- ACTION, UPDATE
-
-
-type Msg
-    = SelectTab Int Int
-    | Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
+    | SelectTab Int Int
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
+        Mdl msg_ ->
+            Material.update (Mdl >> lift) msg_ model
+
         SelectTab index tabIndex ->
             let
                 example =
@@ -60,35 +60,27 @@ update msg model =
             in
             { model | examples = Dict.insert index example model.examples } ! []
 
-        Mdl msg_ ->
-            Material.update Mdl msg_ model
 
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    div
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
+    page.body "Tabs"
     [
-    ]
-    [ example0  model.mdl  0 (Dict.get  0 model.examples |> Maybe.withDefault defaultExample)
-    , example1  model.mdl  1 (Dict.get  1 model.examples |> Maybe.withDefault defaultExample)
-    , example2  model.mdl  2 (Dict.get  2 model.examples |> Maybe.withDefault defaultExample)
-    , example3  model.mdl  3 (Dict.get  3 model.examples |> Maybe.withDefault defaultExample)
-    , example4  model.mdl  4 (Dict.get  4 model.examples |> Maybe.withDefault defaultExample)
-    , example5  model.mdl  5 (Dict.get  5 model.examples |> Maybe.withDefault defaultExample)
-    , example6  model.mdl  6 (Dict.get  6 model.examples |> Maybe.withDefault defaultExample)
-    , example7  model.mdl  7 (Dict.get  7 model.examples |> Maybe.withDefault defaultExample)
-    , example8  model.mdl  8 (Dict.get  8 model.examples |> Maybe.withDefault defaultExample)
-    , example9  model.mdl  9 (Dict.get  9 model.examples |> Maybe.withDefault defaultExample)
-    , example10 model.mdl 10 (Dict.get 10 model.examples |> Maybe.withDefault defaultExample)
+      example0  lift model.mdl  0 (Dict.get  0 model.examples |> Maybe.withDefault defaultExample)
+    , example1  lift model.mdl  1 (Dict.get  1 model.examples |> Maybe.withDefault defaultExample)
+    , example2  lift model.mdl  2 (Dict.get  2 model.examples |> Maybe.withDefault defaultExample)
+    , example3  lift model.mdl  3 (Dict.get  3 model.examples |> Maybe.withDefault defaultExample)
+    , example4  lift model.mdl  4 (Dict.get  4 model.examples |> Maybe.withDefault defaultExample)
+    , example5  lift model.mdl  5 (Dict.get  5 model.examples |> Maybe.withDefault defaultExample)
+    , example6  lift model.mdl  6 (Dict.get  6 model.examples |> Maybe.withDefault defaultExample)
+    , example7  lift model.mdl  7 (Dict.get  7 model.examples |> Maybe.withDefault defaultExample)
+    , example8  lift model.mdl  8 (Dict.get  8 model.examples |> Maybe.withDefault defaultExample)
+    , example9  lift model.mdl  9 (Dict.get  9 model.examples |> Maybe.withDefault defaultExample)
+    , example10 lift model.mdl 10 (Dict.get 10 model.examples |> Maybe.withDefault defaultExample)
     ]
 
 
-example0 : Material.Model -> Int -> Example -> Html Msg
-example0 mdl index model =
+example0 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example0 lift mdl index model =
     styled Html.section
     [
     ]
@@ -97,7 +89,7 @@ example0 mdl index model =
       ]
       [ text "Basic Tab Bar"
       ]
-    , TabBar.render Mdl [index] mdl
+    , TabBar.render (Mdl >> lift) [index] mdl
       [ TabBar.indicator
       ]
       [ TabBar.tab [] [ text "Item One" ]
@@ -109,8 +101,8 @@ example0 mdl index model =
 
 -- TODO: Scroller
 
-example1 : Material.Model -> Int -> Example -> Html Msg
-example1 mdl index model =
+example1 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example1 lift mdl index model =
     styled Html.section
     [
     ]
@@ -119,7 +111,7 @@ example1 mdl index model =
       ]
       [ text "Tab Bar with Scroller"
       ]
-    , TabBar.render Mdl [index] mdl
+    , TabBar.render (Mdl >> lift) [index] mdl
       [ TabBar.indicator
       , TabBar.scroller
       ]
@@ -136,8 +128,8 @@ example1 mdl index model =
     ]
 
 
-example2 : Material.Model -> Int -> Example -> Html Msg
-example2 mdl index model =
+example2 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example2 lift mdl index model =
     styled Html.section
     [
     ]
@@ -146,7 +138,7 @@ example2 mdl index model =
       ]
       [ text "Icon Tab Labels"
       ]
-    , TabBar.render Mdl [index] mdl
+    , TabBar.render (Mdl >> lift) [index] mdl
       [ TabBar.indicator
       ]
       [ TabBar.tab [] [ TabBar.icon [] "phone" ]
@@ -156,8 +148,8 @@ example2 mdl index model =
     ]
 
 
-example3 : Material.Model -> Int -> Example -> Html Msg
-example3 mdl index model =
+example3 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example3 lift mdl index model =
     styled Html.section
     [
     ]
@@ -166,7 +158,7 @@ example3 mdl index model =
       ]
       [ text "Icon Tab Labels"
       ]
-    , TabBar.render Mdl [index] mdl
+    , TabBar.render (Mdl >> lift) [index] mdl
       [ TabBar.indicator
       ]
       [ TabBar.tab [ TabBar.withIconAndText ] [ TabBar.icon [] "phone", TabBar.iconLabel [] "Recents" ]
@@ -176,8 +168,8 @@ example3 mdl index model =
     ]
 
 
-example4 : Material.Model -> Int -> Example -> Html Msg
-example4 mdl index model =
+example4 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example4 lift mdl index model =
     styled Html.section
     [
     ]
@@ -186,7 +178,7 @@ example4 mdl index model =
         ]
         [ text "Primary Color Indicator"
         ]
-      , TabBar.render Mdl [index] mdl
+      , TabBar.render (Mdl >> lift) [index] mdl
         [ TabBar.indicator
         , TabBar.indicatorPrimary
         ]
@@ -197,8 +189,8 @@ example4 mdl index model =
     ]
 
 
-example5 : Material.Model -> Int -> Example -> Html Msg
-example5 mdl index model =
+example5 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example5 lift mdl index model =
     styled Html.section
     [
     ]
@@ -207,7 +199,7 @@ example5 mdl index model =
       ]
       [ text "Accent Color Indicator"
       ]
-    , TabBar.render Mdl [index] mdl
+    , TabBar.render (Mdl >> lift) [index] mdl
       [ TabBar.indicator
       , TabBar.indicatorAccent
       ]
@@ -218,8 +210,8 @@ example5 mdl index model =
     ]
 
 
-example6 : Material.Model -> Int -> Example -> Html Msg
-example6 mdl index model =
+example6 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example6 lift mdl index model =
     styled Html.section
     [
     ]
@@ -240,7 +232,7 @@ example6 mdl index model =
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ TabBar.render Mdl [index] mdl
+          [ TabBar.render (Mdl >> lift) [index] mdl
             [ TabBar.indicator
             ]
             [ TabBar.tab [] [ text "Item One" ]
@@ -253,8 +245,8 @@ example6 mdl index model =
     ]
 
 
-example7 : Material.Model -> Int -> Example -> Html Msg
-example7 mdl index model =
+example7 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example7 lift mdl index model =
     styled Html.section
     [
     ]
@@ -278,7 +270,7 @@ example7 mdl index model =
           , css "right" "0"
           , css "bottom" "-16px"
           ]
-          [ TabBar.render Mdl [index] mdl
+          [ TabBar.render (Mdl >> lift) [index] mdl
             [
             ]
             [ TabBar.tab [] [ text "Item One" ]
@@ -291,8 +283,8 @@ example7 mdl index model =
     ]
 
 
-example8 : Material.Model -> Int -> Example -> Html Msg
-example8 mdl index model =
+example8 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example8 lift mdl index model =
     styled Html.section
     [
     ]
@@ -313,7 +305,7 @@ example8 mdl index model =
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ TabBar.render Mdl [index] mdl
+          [ TabBar.render (Mdl >> lift) [index] mdl
             [ TabBar.indicator
             , TabBar.indicatorPrimary
             ]
@@ -327,8 +319,8 @@ example8 mdl index model =
     ]
 
 
-example9 : Material.Model -> Int -> Example -> Html Msg
-example9 mdl index model =
+example9 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example9 lift mdl index model =
     styled Html.section
     [
     ]
@@ -349,7 +341,7 @@ example9 mdl index model =
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ TabBar.render Mdl [index] mdl
+          [ TabBar.render (Mdl >> lift) [index] mdl
             [ TabBar.indicator
             , TabBar.indicatorAccent
             ]
@@ -363,8 +355,8 @@ example9 mdl index model =
     ]
 
 
-example10 : Material.Model -> Int -> Example -> Html Msg
-example10 mdl index model =
+example10 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example10 lift mdl index model =
     let
         items =
             [ "Item One", "Item Two", "Item Three" ]
@@ -377,13 +369,13 @@ example10 mdl index model =
       ]
       [ text "Within Toolbar, Dynamic Content Control"
       ]
-    , TabBar.render Mdl [index] mdl
+    , TabBar.render (Mdl >> lift) [index] mdl
       [ TabBar.indicator
       ]
       ( items
         |> List.indexedMap (\i label ->
              TabBar.tab
-             [ Options.onClick (SelectTab index i)
+             [ Options.onClick (lift (SelectTab index i))
              ]
              [ text label
              ]
@@ -446,32 +438,3 @@ example10 mdl index model =
            )
       )
     ]
-
---    <section>
---      <div class="panels">
---        <p class="panel" id="panel-1" role="tabpanel" aria-hidden="false">Item One</p>
---        <p class="panel" id="panel-2" role="tabpanel" aria-hidden="true">Item Two</p>
---        <p class="panel active" id="panel-3" role="tabpanel" aria-hidden="true">Item Three</p>
---      </div>
---      <div class="dots">
---        <a class="dot" data-trigger="panel-1" href="#panel-1"></a>
---        <a class="dot" data-trigger="panel-2" href="#panel-2"></a>
---        <a class="dot active" data-trigger="panel-3" href="#panel-3"></a>
---      </div>
---    </section>
---
---
---    <div class="mdc-toolbar" id="dynamic-demo-toolbar">
---      <div class="mdc-toolbar__row">
---        <div class="mdc-toolbar__section mdc-toolbar__section--align-start">
---
---          <nav id="dynamic-tab-bar" class="mdc-tab-bar mdc-tab-bar--indicator-accent mdc-tab-bar-upgraded" role="tablist">
---            <a role="tab" aria-controls="panel-1" class="mdc-tab mdc-ripple-upgraded" href="#panel-1" style="--mdc-ripple-surface-width:160px; --mdc-ripple-surface-height:48px; --mdc-ripple-fg-size:96px; --mdc-ripple-fg-scale:1.8442177514850917; --mdc-ripple-fg-translate-start:51px, -17.75px; --mdc-ripple-fg-translate-end:32px, -24px;">Item One</a>
---            <a role="tab" aria-controls="panel-2" class="mdc-tab mdc-ripple-upgraded" href="#panel-2" style="--mdc-ripple-surface-width:160px; --mdc-ripple-surface-height:48px; --mdc-ripple-fg-size:96px; --mdc-ripple-fg-scale:1.8442177514850917; --mdc-ripple-fg-translate-start:-1px, -18.75px; --mdc-ripple-fg-translate-end:32px, -24px;">Item Two</a>
---            <a role="tab" aria-controls="panel-3" class="mdc-tab mdc-ripple-upgraded mdc-tab--active" href="#panel-3" style="--mdc-ripple-surface-width:160px; --mdc-ripple-surface-height:48px; --mdc-ripple-fg-size:96px; --mdc-ripple-fg-scale:1.8442177514850917; --mdc-ripple-fg-translate-start:-15px, -17.75px; --mdc-ripple-fg-translate-end:32px, -24px;">Item Three</a>
---            <span class="mdc-tab-bar__indicator" style="transform: translateX(320px) scale(0.333333, 1); visibility: visible;"></span>
---          </nav>
---
---        </div>
---      </div>
---    </div>

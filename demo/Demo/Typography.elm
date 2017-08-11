@@ -1,53 +1,16 @@
-module Demo.Typography exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Typography exposing ( view )
 
-import Platform.Cmd exposing (Cmd, none)
+import Demo.Page exposing (Page)
 import Html exposing (..)
-
-
---import Html.Attributes as Html
-
-import Material
 import Material.Options as Options exposing (Style, styled, cs, css, nop)
 import Material.Typography as Typography
 
 
--- MODEL
-
-
-type alias Model =
-    { mdl : Material.Model
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { mdl = Material.defaultModel
-    }
-
-
-
--- ACTION, UPDATE
-
-
-type Msg
-    = Mdl (Material.Msg Msg)
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Mdl msg_ ->
-            Material.update Mdl msg_ model
-
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    div []
-    [ example "Styles" nop
+view : Page m -> Html m
+view page =
+    page.body "Typography"
+    [
+      example "Styles" nop
     , example "Styles with margin adjustments" Typography.adjustMargin
     ]
 

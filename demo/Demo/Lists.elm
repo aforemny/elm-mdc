@@ -1,47 +1,227 @@
-module Demo.Lists exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.Lists exposing (view)
 
+import Demo.Page exposing (Page)
 import Html.Attributes as Html
 import Html exposing (Html)
-import Material
 import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (div, styled, cs, css, when)
-import Platform.Cmd exposing (Cmd, none)
 
 
--- MODEL
+view : Page m -> Html m
+view page =
+    page.body "Lists"
+    [
+      inlineCss
+
+    , Html.section []
+      [ Html.h2 [] [ Html.text "Single-Line list" ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Text only" ]
+        , singleLine []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Text only (Dense)" ]
+        , singleLine [ Lists.dense ]
+        ]
+
+      , styled Html.section
+        [ cs "mdc-theme--dark"
+        ]
+        [ Html.h3 [] [ Html.text "Text only (dark)" ]
+        , singleLine []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Start Detail" ]
+        , Html.aside [] [ Html.p [] [ Html.em [] [ Html.text "Note: The grey background is styled using demo placeholder styles" ] ] ]
+        , startDetail []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Start Detail (Dense)" ]
+        , startDetail [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Start Detail Example - Icon with Text" ]
+        , startDetailExample
+        ]
+
+      , styled Html.section
+        [ cs "mdc-theme--dark"
+        ]
+        [ Html.h3 [] [ Html.text "Start Detail Example - Icon with Text (dark)" ]
+        , startDetailExample
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Avatar List" ]
+        , avatarList []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Avatar List (Dense)" ]
+        , avatarList [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Example - Avatar with Text" ]
+        , avatarListExample
+        ]
+
+      , styled Html.section
+        [ cs "mdc-theme--dark"
+        ]
+        [ Html.h3 [] [ Html.text "Example - Avatar with Text (dark)" ]
+        , avatarListExample
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "End Detail" ]
+        , endDetail []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "End Detail (Dense)" ]
+        , endDetail [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Avatar + End Detail" ]
+        , avatarPlusEndDetail []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Avatar + End Detail (Dense)" ]
+        , avatarPlusEndDetail [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Example - Avatar with Text and Icon" ]
+        , avatarWithTextAndIconExample
+        ]
+
+      , styled Html.section
+        [ cs "mdc-theme--dark"
+        ]
+        [ Html.h3 [] [ Html.text "Example - Avatar with Text and Icon (Dark)" ]
+        , avatarWithTextAndIconExample
+        ]
+      ]
+
+    , Html.section []
+      [ Html.h2 [] [ Html.text "Two-line List" ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Text-Only" ]
+        , twoLine []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Text-Only (Dense)" ]
+        , twoLine [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Start Detail" ]
+        , startDetail_ []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Start Detail (Dense)" ]
+        , startDetail_ [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Avatar List" ]
+        , avatarList_ []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Avatar List (Dense)" ]
+        , avatarList_ [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "End Detail" ]
+        , endDetail_ []
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "End Detail (Dense)" ]
+        , endDetail_ [ Lists.dense ]
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Example - Two-line avatar + text + icon" ]
+        , twoLineAvatarPlusTextPlusIconExample
+        ]
+
+      , styled Html.section
+        [ cs "mdc-theme--dark"
+        ]
+        [ Html.h3 [] [ Html.text "Example - Two-line avatar + text + icon (Dark)" ]
+        , twoLineAvatarPlusTextPlusIconExample
+        ]
+      ]
+
+    , Html.section []
+      [ Html.h2 [] [ Html.text "List Dividers" ]
+      ,
+        Html.section []
+        [ Html.h3 [] [ Html.text "Full-Width Dividers" ]
+        , fullWidthDividers
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Inset Dividers" ]
+        , insetDividers
+        ]
+      ]
+
+    , Html.section []
+      [ Html.h2 [] [ Html.text "List Groups" ]
+      ,
+        Html.section []
+        [ Html.h3 [] [ Html.text "Basic Usage" ]
+        , basicGroups
+        ]
+
+      , Html.section []
+        [ Html.h3 [] [ Html.text "Example - Two-line Lists, Avatars, end detail, inset dividers" ]
+        , groupsExample
+        ]
+
+      , styled Html.section
+        [ cs "mdc-theme--dark"
+        ]
+        [ Html.h3 [] [ Html.text "Example - Two-line Lists, Avatars, end detail, inset dividers (Dark)" ]
+        , groupsExample
+        ]
+      ]
+
+    , Html.section []
+      [ Html.h2 [] [ Html.text "Interactive Lists (with ink ripple)" ]
+      ,
+        Html.section []
+        [ Html.h3 [] [ Html.text "Example - Interactive List" ]
+        , interactiveList
+        ]
+
+      , styled Html.section
+        [ cs "mdc-theme--dark"
+        ]
+        [ Html.h3 [] [ Html.text "Example - Interactive List (Dark)" ]
+        , interactiveList
+        ]
+      ]
+    ]
 
 
-type alias Model =
-    { mdl : Material.Model
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { mdl = Material.defaultModel
-    }
-
-
-
--- UPDATE
-
-
-type Msg
-    = Mdl (Material.Msg Msg)
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Mdl msg_ ->
-            Material.update Mdl msg_ model
-
-
--- VIEW
-
-
-inlineCss : Html msg
+inlineCss : Html m
 inlineCss =
     Html.node "style"
     [ Html.type_ "text/css"
@@ -98,7 +278,7 @@ startDetail options =
     )
 
 
-startDetailExample : Html msg
+startDetailExample : Html m
 startDetailExample =
     Lists.ul []
     [ Lists.li []
@@ -137,7 +317,7 @@ avatarList options =
     ]
 
 
-avatarListExample : Html msg
+avatarListExample : Html m
 avatarListExample =
     Lists.ul
     [ Lists.avatar
@@ -483,217 +663,5 @@ interactiveList =
     , Lists.li []
       [ Lists.startDetailIcon "data_usage" []
       , Html.text "Data Usage"
-      ]
-    ]
-
-
-view : Model -> Html Msg
-view model =
-    div []
-    [ inlineCss
-
-    , Html.section []
-      [ Html.h2 [] [ Html.text "Single-Line list" ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Text only" ]
-        , singleLine []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Text only (Dense)" ]
-        , singleLine [ Lists.dense ]
-        ]
-
-      , styled Html.section
-        [ cs "mdc-theme--dark"
-        ]
-        [ Html.h3 [] [ Html.text "Text only (dark)" ]
-        , singleLine []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Start Detail" ]
-        , Html.aside [] [ Html.p [] [ Html.em [] [ Html.text "Note: The grey background is styled using demo placeholder styles" ] ] ]
-        , startDetail []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Start Detail (Dense)" ]
-        , startDetail [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Start Detail Example - Icon with Text" ]
-        , startDetailExample
-        ]
-
-      , styled Html.section
-        [ cs "mdc-theme--dark"
-        ]
-        [ Html.h3 [] [ Html.text "Start Detail Example - Icon with Text (dark)" ]
-        , startDetailExample
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Avatar List" ]
-        , avatarList []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Avatar List (Dense)" ]
-        , avatarList [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Example - Avatar with Text" ]
-        , avatarListExample
-        ]
-
-      , styled Html.section
-        [ cs "mdc-theme--dark"
-        ]
-        [ Html.h3 [] [ Html.text "Example - Avatar with Text (dark)" ]
-        , avatarListExample
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "End Detail" ]
-        , endDetail []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "End Detail (Dense)" ]
-        , endDetail [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Avatar + End Detail" ]
-        , avatarPlusEndDetail []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Avatar + End Detail (Dense)" ]
-        , avatarPlusEndDetail [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Example - Avatar with Text and Icon" ]
-        , avatarWithTextAndIconExample
-        ]
-
-      , styled Html.section
-        [ cs "mdc-theme--dark"
-        ]
-        [ Html.h3 [] [ Html.text "Example - Avatar with Text and Icon (Dark)" ]
-        , avatarWithTextAndIconExample
-        ]
-      ]
-
-    , Html.section []
-      [ Html.h2 [] [ Html.text "Two-line List" ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Text-Only" ]
-        , twoLine []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Text-Only (Dense)" ]
-        , twoLine [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Start Detail" ]
-        , startDetail_ []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Start Detail (Dense)" ]
-        , startDetail_ [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Avatar List" ]
-        , avatarList_ []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Avatar List (Dense)" ]
-        , avatarList_ [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "End Detail" ]
-        , endDetail_ []
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "End Detail (Dense)" ]
-        , endDetail_ [ Lists.dense ]
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Example - Two-line avatar + text + icon" ]
-        , twoLineAvatarPlusTextPlusIconExample
-        ]
-
-      , styled Html.section
-        [ cs "mdc-theme--dark"
-        ]
-        [ Html.h3 [] [ Html.text "Example - Two-line avatar + text + icon (Dark)" ]
-        , twoLineAvatarPlusTextPlusIconExample
-        ]
-      ]
-
-    , Html.section []
-      [ Html.h2 [] [ Html.text "List Dividers" ]
-      ,
-        Html.section []
-        [ Html.h3 [] [ Html.text "Full-Width Dividers" ]
-        , fullWidthDividers
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Inset Dividers" ]
-        , insetDividers
-        ]
-      ]
-
-    , Html.section []
-      [ Html.h2 [] [ Html.text "List Groups" ]
-      ,
-        Html.section []
-        [ Html.h3 [] [ Html.text "Basic Usage" ]
-        , basicGroups
-        ]
-
-      , Html.section []
-        [ Html.h3 [] [ Html.text "Example - Two-line Lists, Avatars, end detail, inset dividers" ]
-        , groupsExample
-        ]
-
-      , styled Html.section
-        [ cs "mdc-theme--dark"
-        ]
-        [ Html.h3 [] [ Html.text "Example - Two-line Lists, Avatars, end detail, inset dividers (Dark)" ]
-        , groupsExample
-        ]
-      ]
-
-    , Html.section []
-      [ Html.h2 [] [ Html.text "Interactive Lists (with ink ripple)" ]
-      ,
-        Html.section []
-        [ Html.h3 [] [ Html.text "Example - Interactive List" ]
-        , interactiveList
-        ]
-
-      , styled Html.section
-        [ cs "mdc-theme--dark"
-        ]
-        [ Html.h3 [] [ Html.text "Example - Interactive List (Dark)" ]
-        , interactiveList
-        ]
       ]
     ]

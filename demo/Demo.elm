@@ -1,12 +1,8 @@
 port module Main exposing (..)
 
-import Array exposing (Array)
-import Demo.Page as Page
-import Demo.Badges
 import Demo.Buttons
 import Demo.Cards
 import Demo.Checkbox
-import Demo.Chips
 import Demo.Dialog
 import Demo.Elevation
 import Demo.Fabs
@@ -16,6 +12,7 @@ import Demo.LayoutGrid
 import Demo.Lists
 import Demo.Loading
 import Demo.Menus
+import Demo.Page as Page exposing (Url(..))
 import Demo.PermanentAboveDrawer
 import Demo.PermanentBelowDrawer
 import Demo.PersistentDrawer
@@ -31,336 +28,247 @@ import Demo.TemporaryDrawer
 import Demo.Textfields
 import Demo.Theme
 import Demo.Toolbar
-import Demo.Tooltip
 import Demo.Typography
-import Dict exposing (Dict)
 import Html exposing (Html, text)
-import Html.Lazy
 import Material
-import Material.Helpers exposing (pure, lift, map1st, map2nd)
-import Material.Menu as Menu
-import Material.Drawer as Drawer
 import Material.Options as Options exposing (styled, css, when)
-import Material.Select as Select
+import Material.Toolbar as Toolbar
 import Navigation
 import Platform.Cmd exposing (..)
 import RouteUrl as Routing
-import String
-
-
--- PORTS
 
 
 port scrollTop : () -> Cmd msg
 
 
--- MODEL
-
-
 type alias Model =
     { mdl : Material.Model
+    , url : Url
     , buttons : Demo.Buttons.Model
-    , iconToggle : Demo.IconToggle.Model
-    , selects : Demo.Selects.Model
-    , fabs : Demo.Fabs.Model
-    , badges : Demo.Badges.Model
-    , layoutGrid : Demo.LayoutGrid.Model
-    , menus : Demo.Menus.Model
-    , textfields : Demo.Textfields.Model
-    , theme : Demo.Theme.Model
-    , checkbox : Demo.Checkbox.Model
-    , switch : Demo.Switch.Model
-    , snackbar : Demo.Snackbar.Model
-    , loading : Demo.Loading.Model
-    , tooltip : Demo.Tooltip.Model
-    , toolbar : Demo.Toolbar.Model
-    , tabs : Demo.Tabs.Model
-    , slider : Demo.Slider.Model
-    , typography : Demo.Typography.Model
     , cards : Demo.Cards.Model
-    , lists : Demo.Lists.Model
+    , checkbox : Demo.Checkbox.Model
     , dialog : Demo.Dialog.Model
     , elevation : Demo.Elevation.Model
-    , radio : Demo.Radio.Model
-    , ripple : Demo.Ripple.Model
-    , chips : Demo.Chips.Model
-    , selectedTab : Maybe Int
-    , transparentHeader : Bool
-    , logMessages : Bool
-    , temporaryDrawer : Demo.TemporaryDrawer.Model
-    , persistentDrawer : Demo.PersistentDrawer.Model
+    , fabs : Demo.Fabs.Model
+    , iconToggle : Demo.IconToggle.Model
+    , menus : Demo.Menus.Model
     , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model
     , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model
+    , persistentDrawer : Demo.PersistentDrawer.Model
+    , radio : Demo.Radio.Model
+    , ripple : Demo.Ripple.Model
+    , selects : Demo.Selects.Model
+    , slider : Demo.Slider.Model
+    , snackbar : Demo.Snackbar.Model
+    , switch : Demo.Switch.Model
+    , tabs : Demo.Tabs.Model
+    , temporaryDrawer : Demo.TemporaryDrawer.Model
+    , textfields : Demo.Textfields.Model
     }
 
 
-model : Model
-model =
+defaultModel : Model
+defaultModel =
     { mdl = Material.defaultModel
+    , url = StartPage
     , buttons = Demo.Buttons.defaultModel
-    , iconToggle = Demo.IconToggle.defaultModel
-    , selects = Demo.Selects.defaultModel
-    , fabs = Demo.Fabs.defaultModel
-    , layoutGrid = Demo.LayoutGrid.defaultModel
-    , menus = Demo.Menus.defaultModel
-    , textfields = Demo.Textfields.defaultModel
-    , theme = Demo.Theme.defaultModel
-    , checkbox = Demo.Checkbox.defaultModel
-    , switch = Demo.Switch.defaultModel
-    , snackbar = Demo.Snackbar.defaultModel
-    , loading = Demo.Loading.defaultModel
-    , toolbar = Demo.Toolbar.defaultModel
-    , tabs = Demo.Tabs.defaultModel
-    , slider = Demo.Slider.defaultModel
-    , typography = Demo.Typography.defaultModel
     , cards = Demo.Cards.defaultModel
-    , radio = Demo.Radio.defaultModel
-    , lists = Demo.Lists.defaultModel
+    , checkbox = Demo.Checkbox.defaultModel
     , dialog = Demo.Dialog.defaultModel
     , elevation = Demo.Elevation.defaultModel
-    , ripple = Demo.Ripple.defaultModel
-    , selectedTab = Nothing
-    , transparentHeader = False
-    , logMessages = False
-    , temporaryDrawer = Demo.TemporaryDrawer.defaultModel
-    , persistentDrawer = Demo.PersistentDrawer.defaultModel
+    , fabs = Demo.Fabs.defaultModel
+    , iconToggle = Demo.IconToggle.defaultModel
+    , menus = Demo.Menus.defaultModel
     , permanentAboveDrawer = Demo.PermanentAboveDrawer.defaultModel
     , permanentBelowDrawer = Demo.PermanentBelowDrawer.defaultModel
+    , persistentDrawer = Demo.PersistentDrawer.defaultModel
+    , radio = Demo.Radio.defaultModel
+    , ripple = Demo.Ripple.defaultModel
+    , selects = Demo.Selects.defaultModel
+    , slider = Demo.Slider.defaultModel
+    , snackbar = Demo.Snackbar.defaultModel
+    , switch = Demo.Switch.defaultModel
+    , tabs = Demo.Tabs.defaultModel
+    , temporaryDrawer = Demo.TemporaryDrawer.defaultModel
+    , textfields = Demo.Textfields.defaultModel
     }
-
-
-
--- ACTION, UPDATE
 
 
 type Msg
-    = SelectTab Int
-    | ClearTab
-    | Mdl (Material.Msg Msg)
-    | BadgesMsg Demo.Badges.Msg
-    | ButtonsMsg Demo.Buttons.Msg
-    | FabsMsg Demo.Fabs.Msg
-    | LayoutGridMsg Demo.LayoutGrid.Msg
-    | IconToggleMsg Demo.IconToggle.Msg
-    | MenusMsg Demo.Menus.Msg
-    | TemporaryDrawerMsg Demo.TemporaryDrawer.Msg
-    | PersistentDrawerMsg Demo.PersistentDrawer.Msg
-    | PermanentAboveDrawerMsg Demo.PermanentAboveDrawer.Msg
-    | PermanentBelowDrawerMsg Demo.PermanentBelowDrawer.Msg
-    | TextfieldMsg Demo.Textfields.Msg
-    | SelectMsg Demo.Selects.Msg
-    | ThemeMsg Demo.Theme.Msg
-    | SnackbarMsg Demo.Snackbar.Msg
-    | CheckboxMsg Demo.Checkbox.Msg
-    | SwitchMsg Demo.Switch.Msg
-    | LoadingMsg Demo.Loading.Msg
-    | TooltipMsg Demo.Tooltip.Msg
-    | ToolbarMsg Demo.Toolbar.Msg
-    | TabMsg Demo.Tabs.Msg
-    | SliderMsg Demo.Slider.Msg
-    | TypographyMsg Demo.Typography.Msg
-    | CardsMsg Demo.Cards.Msg
-    | ListsMsg Demo.Lists.Msg
-    | DialogMsg Demo.Dialog.Msg
-    | ElevationMsg Demo.Elevation.Msg
-    | RippleMsg Demo.Ripple.Msg
-    | ChipMsg Demo.Chips.Msg
-    | RadioMsg Demo.Radio.Msg
-    | ToggleHeader
-    | ToggleLog
+    = Mdl (Material.Msg Msg)
 
+    | SetUrl Url
 
-nth : Int -> List a -> Maybe a
-nth k xs =
-    List.drop k xs |> List.head
+    | ButtonsMsg (Demo.Buttons.Msg Msg)
+    | CardsMsg (Demo.Cards.Msg Msg)
+    | CheckboxMsg (Demo.Checkbox.Msg Msg)
+    | DialogMsg (Demo.Dialog.Msg Msg)
+    | ElevationMsg (Demo.Elevation.Msg Msg)
+    | FabsMsg (Demo.Fabs.Msg Msg)
+    | IconToggleMsg (Demo.IconToggle.Msg Msg)
+    | SimpleMenuMsg (Demo.Menus.Msg Msg)
+    | PermanentAboveDrawerMsg (Demo.PermanentAboveDrawer.Msg Msg)
+    | PermanentBelowDrawerMsg (Demo.PermanentBelowDrawer.Msg Msg)
+    | PersistentDrawerMsg (Demo.PersistentDrawer.Msg Msg)
+    | RadioMsg (Demo.Radio.Msg Msg)
+    | RippleMsg (Demo.Ripple.Msg Msg)
+    | SelectMsg (Demo.Selects.Msg Msg)
+    | SliderMsg (Demo.Slider.Msg Msg)
+    | SnackbarMsg (Demo.Snackbar.Msg Msg)
+    | SwitchMsg (Demo.Switch.Msg Msg)
+    | TabsMsg (Demo.Tabs.Msg Msg)
+    | TemporaryDrawerMsg (Demo.TemporaryDrawer.Msg Msg)
+    | TextfieldMsg (Demo.Textfields.Msg Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    let 
-        log msg = 
-            if model.logMessages then Debug.log "Msg" else identity
-    in
-      case log "Msg" msg of
-          SelectTab k ->
-              { model | selectedTab = Just k } ! [ scrollTop () ]
+    case msg of
+        Mdl msg ->
+            Material.update Mdl msg model
 
-          ClearTab ->
-              { model | selectedTab = Nothing } ! [ scrollTop () ]
+        SetUrl url ->
+            { model | url = url } ! [ scrollTop () ]
 
-          ToggleHeader ->
-              ( { model | transparentHeader = not model.transparentHeader }, Cmd.none )
+        ButtonsMsg msg_ ->
+            let
+                (buttons, effects) =
+                    Demo.Buttons.update ButtonsMsg msg_ model.buttons
+            in
+                ( { model | buttons = buttons }, effects )
 
-          ToggleLog -> 
-              ( { model | logMessages = not model.logMessages }, Cmd.none )
+        CardsMsg msg_ ->
+            let
+                (cards, effects) =
+                    Demo.Cards.update CardsMsg msg_ model.cards
+            in
+                ( { model | cards = cards }, effects )
 
-          Mdl msg ->
-              Material.update Mdl msg model
+        CheckboxMsg msg_ ->
+            let
+                (checkbox, effects) =
+                    Demo.Checkbox.update CheckboxMsg msg_ model.checkbox
+            in
+                ( { model | checkbox = checkbox }, effects )
 
-          ButtonsMsg a ->
-              lift .buttons (\m x -> { m | buttons = x }) ButtonsMsg Demo.Buttons.update a model
+        DialogMsg msg_ ->
+            let
+                (dialog, effects) =
+                    Demo.Dialog.update DialogMsg msg_ model.dialog
+            in
+                ( { model | dialog = dialog }, effects )
 
-          TemporaryDrawerMsg a ->
-              lift .temporaryDrawer (\m x -> { m | temporaryDrawer = x }) TemporaryDrawerMsg Demo.TemporaryDrawer.update a model
+        ElevationMsg msg_ ->
+            let
+                (elevation, effects) =
+                    Demo.Elevation.update ElevationMsg msg_ model.elevation
+            in
+                ( { model | elevation = elevation }, effects )
 
-          PersistentDrawerMsg a ->
-              lift .persistentDrawer (\m x -> { m | persistentDrawer = x }) PersistentDrawerMsg Demo.PersistentDrawer.update a model
+        TemporaryDrawerMsg msg_ ->
+            let
+                (temporaryDrawer, effects) =
+                    Demo.TemporaryDrawer.update TemporaryDrawerMsg msg_ model.temporaryDrawer
+            in
+                ( { model | temporaryDrawer = temporaryDrawer }, effects )
 
-          PermanentAboveDrawerMsg a ->
-              lift .permanentAboveDrawer (\m x -> { m | permanentAboveDrawer = x }) PermanentAboveDrawerMsg Demo.PermanentAboveDrawer.update a model
+        PersistentDrawerMsg msg_ ->
+            let
+                (persistentDrawer, effects) =
+                    Demo.PersistentDrawer.update PersistentDrawerMsg msg_ model.persistentDrawer
+            in
+                ( { model | persistentDrawer = persistentDrawer }, effects )
 
-          PermanentBelowDrawerMsg a ->
-              lift .permanentBelowDrawer (\m x -> { m | permanentBelowDrawer = x }) PermanentBelowDrawerMsg Demo.PermanentBelowDrawer.update a model
+        PermanentAboveDrawerMsg msg_ ->
+            let
+                (permanentAboveDrawer, effects) =
+                    Demo.PermanentAboveDrawer.update PermanentAboveDrawerMsg msg_ model.permanentAboveDrawer
+            in
+                ( { model | permanentAboveDrawer = permanentAboveDrawer }, effects )
 
-          FabsMsg a ->
-              lift .fabs (\m x -> { m | fabs = x }) FabsMsg Demo.Fabs.update a model
+        PermanentBelowDrawerMsg msg_ ->
+            let
+                (permanentBelowDrawer, effects) =
+                    Demo.PermanentBelowDrawer.update PermanentBelowDrawerMsg msg_ model.permanentBelowDrawer
+            in
+                ( { model | permanentBelowDrawer = permanentBelowDrawer }, effects )
 
-          BadgesMsg a ->
-              lift .badges (\m x -> { m | badges = x }) BadgesMsg Demo.Badges.update a model
+        FabsMsg msg_ ->
+            let
+                (fabs, effects) =
+                    Demo.Fabs.update FabsMsg msg_ model.fabs
+            in
+                ( { model | fabs = fabs }, effects )
 
-          LayoutGridMsg a ->
-              lift .layoutGrid (\m x -> { m | layoutGrid = x }) LayoutGridMsg Demo.LayoutGrid.update a model
+        IconToggleMsg msg_ ->
+            let
+                (iconToggle, effects) =
+                    Demo.IconToggle.update IconToggleMsg msg_ model.iconToggle
+            in
+                ( { model | iconToggle = iconToggle }, effects )
 
-          IconToggleMsg a ->
-              lift .iconToggle (\m x -> { m | iconToggle = x }) IconToggleMsg Demo.IconToggle.update a model
+        SimpleMenuMsg msg_ ->
+            let
+                (menus, effects) =
+                    Demo.Menus.update SimpleMenuMsg msg_ model.menus
+            in
+                ( { model | menus = menus }, effects )
 
-          MenusMsg a ->
-              lift .menus (\m x -> { m | menus = x }) MenusMsg Demo.Menus.update a model
+        RadioMsg msg_ ->
+            let
+                (radio, effects) =
+                    Demo.Radio.update RadioMsg msg_ model.radio
+            in
+                ( { model | radio = radio }, effects )
 
-          TextfieldMsg m ->
-              Demo.Textfields.update m model.textfields
-                  |> Maybe.map (map1st (\x -> { model | textfields = x }))
-                  |> Maybe.withDefault ( model, Cmd.none )
-                  |> map2nd (Cmd.map TextfieldMsg)
+        RippleMsg msg_ ->
+            let
+                (ripple, effects) =
+                    Demo.Ripple.update RippleMsg msg_ model.ripple
+            in
+                ( { model | ripple = ripple }, effects )
 
-          ThemeMsg a ->
-              lift .theme (\m x -> { m | theme = x }) ThemeMsg Demo.Theme.update a model
+        SelectMsg msg_ ->
+            let
+                (selects, effects) =
+                    Demo.Selects.update SelectMsg msg_ model.selects
+            in
+                ( { model | selects = selects }, effects )
 
-          SnackbarMsg a ->
-              lift .snackbar (\m x -> { m | snackbar = x }) SnackbarMsg Demo.Snackbar.update a model
+        SliderMsg msg_ ->
+            let
+                (slider, effects) =
+                    Demo.Slider.update SliderMsg msg_ model.slider
+            in
+                ( { model | slider = slider }, effects )
 
-          CheckboxMsg a ->
-              lift .checkbox (\m x -> { m | checkbox = x }) CheckboxMsg Demo.Checkbox.update a model
+        SnackbarMsg msg_ ->
+            let
+                (snackbar, effects) =
+                    Demo.Snackbar.update SnackbarMsg msg_ model.snackbar
+            in
+                ( { model | snackbar = snackbar }, effects ) 
 
-          SwitchMsg a ->
-              lift .switch (\m x -> { m | switch = x }) SwitchMsg Demo.Switch.update a model
+        SwitchMsg msg_ ->
+            let
+                (switch, effects) =
+                    Demo.Switch.update SwitchMsg msg_ model.switch
+            in
+                ( { model | switch = switch }, effects ) 
 
-          LoadingMsg a ->
-              lift .loading (\m x -> { m | loading = x }) LoadingMsg Demo.Loading.update a model
+        TextfieldMsg msg_ ->
+            let
+                (textfields, effects) =
+                    Demo.Textfields.update TextfieldMsg msg_ model.textfields
+            in
+                ( { model | textfields = textfields }, effects ) 
 
-          SliderMsg a ->
-              lift .slider (\m x -> { m | slider = x }) SliderMsg Demo.Slider.update a model
-
-          TooltipMsg a ->
-              lift .tooltip (\m x -> { m | tooltip = x }) TooltipMsg Demo.Tooltip.update a model
-
-          ToolbarMsg a ->
-              lift .toolbar (\m x -> { m | toolbar = x }) ToolbarMsg Demo.Toolbar.update a model
-
-          TabMsg a ->
-              lift .tabs (\m x -> { m | tabs = x }) TabMsg Demo.Tabs.update a model
-
-          TypographyMsg a ->
-              lift .typography (\m x -> { m | typography = x }) TypographyMsg Demo.Typography.update a model
-
-          CardsMsg a ->
-              lift .cards (\m x -> { m | cards = x }) CardsMsg Demo.Cards.update a model
-
-          ListsMsg a ->
-              lift .lists (\m x -> { m | lists = x }) ListsMsg Demo.Lists.update a model
-
-          DialogMsg a ->
-              lift .dialog (\m x -> { m | dialog = x }) DialogMsg Demo.Dialog.update a model
-
-          ElevationMsg a ->
-              lift .elevation (\m x -> { m | elevation = x }) ElevationMsg Demo.Elevation.update a model
-
-          RippleMsg a ->
-              lift .ripple (\m x -> { m | ripple = x }) RippleMsg Demo.Ripple.update a model
-
-          ChipMsg a ->
-              lift .chips (\m x -> { m | chips = x }) ChipMsg Demo.Chips.update a model
-
-          RadioMsg a ->
-              lift .radio (\m x -> { m | radio = x }) RadioMsg Demo.Radio.update a model
-
-          SelectMsg a ->
-              lift .selects (\m x -> { m | selects = x }) SelectMsg Demo.Selects.update a model
-
-
-
--- VIEW
-
-
-tabs : List ( String, String, Model -> Html Msg )
-tabs =
-    let
-        page =
-            { toolbar = Page.toolbar ClearTab model.selectedTab
-            , clearTab = ClearTab
-            }
-    in
-    [ ( "Buttons", "buttons", .buttons >> Demo.Buttons.view >> Html.map ButtonsMsg )
-    , ( "Card", "cards", .cards >> Demo.Cards.view >> Html.map CardsMsg )
-    , ( "Checkbox", "checkbox", .checkbox >> Demo.Checkbox.view >> Html.map CheckboxMsg )
-    , ( "Dialog", "dialog", .dialog >> Demo.Dialog.view >> Html.map DialogMsg )
-    , ( "Temporary Drawer", "temporary-drawer", .temporaryDrawer >> Demo.TemporaryDrawer.view >> Html.map TemporaryDrawerMsg )
-    , ( "Persistent Drawer", "persistent-drawer", .persistentDrawer >> Demo.PersistentDrawer.view >> Html.map PersistentDrawerMsg )
-    , ( "Permanent Above Drawer", "permanent-drawer-above-toolbar", .permanentAboveDrawer >> Demo.PermanentAboveDrawer.view PermanentAboveDrawerMsg page )
-    , ( "Permanent Below Drawer", "permanent-drawer-below-toolbar", .permanentBelowDrawer >> Demo.PermanentBelowDrawer.view PermanentBelowDrawerMsg page )
-    , ( "Elevation", "elevation", .elevation >> Demo.Elevation.view >> Html.map ElevationMsg )
-    , ( "Floating action button", "fab", .fabs >> Demo.Fabs.view >> Html.map FabsMsg )
-    , ( "Grid list", "grid-list", always Demo.GridList.view )
-    , ( "Icon toggle", "icon-toggle", .iconToggle >> Demo.IconToggle.view >> Html.map IconToggleMsg)
-    , ( "Layout grid", "layout-grid", .layoutGrid >> Demo.LayoutGrid.view >> Html.map LayoutGridMsg )
-    , ( "Lists", "lists", .lists >> Demo.Lists.view >> Html.map ListsMsg )
-    , ( "Radio", "radio", .radio >> Demo.Radio.view >> Html.map RadioMsg )
-    , ( "Ripple", "ripple", .ripple >> Demo.Ripple.view >> Html.map RippleMsg )
-    , ( "Select", "select", .selects >> Demo.Selects.view >> Html.map SelectMsg )
-    , ( "Simple Menu", "menus", .menus >> Demo.Menus.view >> Html.map MenusMsg )
-    , ( "Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> Html.map SnackbarMsg )
-    , ( "Switch", "switch", .switch >> Demo.Switch.view >> Html.map SwitchMsg )
-    , ( "Tabs", "tabs", .tabs >> Demo.Tabs.view >> Html.map TabMsg )
-    , ( "Textfields", "textfields", .textfields >> Demo.Textfields.view >> Html.map TextfieldMsg )
-    , ( "Theme", "theme", .theme >> Demo.Theme.view >> Html.map ThemeMsg )
-    , ( "Toolbar", "toolbar", .toolbar >> Demo.Toolbar.view >> Html.map ToolbarMsg )
-    , ( "Typography", "typography", .typography >> Demo.Typography.view >> Html.map TypographyMsg )
-
-    -- , ( "Badges", "badges", .badges >> Demo.Badges.view >> Html.map BadgesMsg )
-    -- , ( "Chips", "chips", .chips >> Demo.Chips.view >> Html.map ChipMsg )
-    -- , ( "Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> Html.map TooltipMsg )
-    ]
-
-
-tabTitles : List (Html a)
-tabTitles =
-    List.map (\( x, _, _ ) -> text x) tabs
-
-
-tabViews : Array (Model -> Html Msg)
-tabViews =
-    List.map (\( _, _, v ) -> v) tabs |> Array.fromList
-
-
-tabUrls : Array String
-tabUrls =
-    List.map (\( _, x, _ ) -> x) tabs |> Array.fromList
-
-
-urlTabs : Dict String Int
-urlTabs =
-    List.indexedMap (\idx ( _, x, _ ) -> ( x, idx )) tabs |> Dict.fromList
-
-
-e404 : Model -> Html Msg
-e404 _ =
-    Html.div
-        []
-        [ Options.styled Html.h1
-            [ Options.cs "mdl-typography--display-4"
-            ]
-            [ text "404" ]
-        ]
+        TabsMsg msg_ ->
+            let
+                (tabs, effects) =
+                    Demo.Tabs.update TabsMsg msg_ model.tabs
+            in
+                ( { model | tabs = tabs }, effects ) 
 
 
 view : Model -> Html Msg
@@ -372,39 +280,155 @@ view =
 view_ : Model -> Html Msg
 view_ model =
     let
-        top =
-            case model.selectedTab of
-                Nothing ->
-                    Demo.Startpage.view SelectTab
-                Just selectedTab ->
-                    (Array.get selectedTab tabViews |> Maybe.withDefault e404) model
-        title =
-            case model.selectedTab of
-                Nothing ->
-                    text "Material Components Catalog"
-                Just selectedTab ->
-                    nth selectedTab tabTitles |> Maybe.withDefault (text "")
+        page =
+            { toolbar = Page.toolbar SetUrl model.url
+            , setUrl = SetUrl
+            , body =
+                \title nodes ->
+                styled Html.div
+                    [ Toolbar.fixedAdjust
+                    ]
+                    ( List.concat
+                      [ [ Page.toolbar SetUrl model.url title
+                        ]
+                      , nodes
+                      ]
+                    )
+            }
     in
-        top
+    case model.url of
+        StartPage ->
+            Demo.Startpage.view page
 
+        Button ->
+            Demo.Buttons.view ButtonsMsg page model.buttons
 
+        Card ->
+            Demo.Cards.view CardsMsg page model.cards
 
-{- ** End -}
--- ROUTING
+        Checkbox ->
+            Demo.Checkbox.view CheckboxMsg page model.checkbox
+
+        Dialog ->
+            Demo.Dialog.view DialogMsg page model.dialog
+
+        TemporaryDrawer ->
+            Demo.TemporaryDrawer.view TemporaryDrawerMsg page model.temporaryDrawer
+
+        PersistentDrawer ->
+            Demo.PersistentDrawer.view PersistentDrawerMsg page model.persistentDrawer
+
+        PermanentAboveDrawer ->
+            Demo.PermanentAboveDrawer.view PermanentAboveDrawerMsg page model.permanentAboveDrawer
+
+        PermanentBelowDrawer ->
+            Demo.PermanentBelowDrawer.view PermanentBelowDrawerMsg page model.permanentBelowDrawer
+
+        Elevation ->
+            Demo.Elevation.view ElevationMsg page model.elevation
+
+        Fabs ->
+            Demo.Fabs.view FabsMsg page model.fabs
+
+        IconToggle ->
+            Demo.IconToggle.view IconToggleMsg page model.iconToggle
+
+        LinearProgress ->
+            Demo.Loading.view page
+
+        List ->
+            Demo.Lists.view page
+
+        RadioButton ->
+            Demo.Radio.view RadioMsg page model.radio
+
+        Select ->
+            Demo.Selects.view SelectMsg page model.selects
+
+        SimpleMenu ->
+            Demo.Menus.view SimpleMenuMsg page model.menus
+
+        Slider ->
+            Demo.Slider.view SliderMsg page model.slider
+
+        Snackbar ->
+            Demo.Snackbar.view SnackbarMsg page model.snackbar
+
+        Switch ->
+            Demo.Switch.view SwitchMsg page model.switch
+
+        Tabs ->
+            Demo.Tabs.view TabsMsg page model.tabs
+
+        TextField ->
+            Demo.Textfields.view TextfieldMsg page model.textfields
+
+        Theme ->
+            Demo.Theme.view page
+
+        Toolbar ->
+            Demo.Toolbar.view page
+
+        GridList ->
+            Demo.GridList.view page
+
+        LayoutGrid ->
+            Demo.LayoutGrid.view page
+
+        Ripple ->
+            Demo.Ripple.view RippleMsg page model.ripple
+
+        Typography ->
+            Demo.Typography.view page
+
+        Error404 requestedHash ->
+            Html.div
+                []
+                [ Options.styled Html.h1
+                    [ Options.cs "mdl-typography--display-4"
+                    ]
+                    [ text "404" ]
+                , text requestedHash
+                ]
 
 
 urlOf : Model -> String
 urlOf model =
-    case model.selectedTab of
-        Nothing ->
-            "#"
-        Just selectedTab ->
-            "#" ++ (Array.get selectedTab tabUrls |> Maybe.withDefault "")
+    case model.url of
+        StartPage -> "#"
+        Button -> "#buttons"
+        Card -> "#cards"
+        Checkbox -> "#checkbox"
+        Dialog -> "#dialog"
+        TemporaryDrawer -> "#temporary-drawer"
+        PersistentDrawer -> "#persistent-drawer"
+        PermanentAboveDrawer -> "#permanent-drawer-above"
+        PermanentBelowDrawer -> "#permanent-drawer-below"
+        Elevation -> "#elevation"
+        Fabs -> "#fabs"
+        GridList -> "#grid-list"
+        IconToggle -> "#icon-toggle"
+        LayoutGrid -> "#layout-grid"
+        LinearProgress -> "#linear-progress"
+        List -> "#lists"
+        RadioButton -> "#radio-buttons"
+        Ripple -> "#ripple"
+        Select -> "#select"
+        SimpleMenu -> "#simple-menu"
+        Slider -> "#slider"
+        Snackbar -> "#snackbar"
+        Switch -> "#switch"
+        Tabs -> "#tabs"
+        TextField -> "#text-field"
+        Theme -> "#theme"
+        Toolbar -> "#toolbar"
+        Typography -> "#typography"
+        Error404 requestedHash -> requestedHash
 
 
 delta2url : Model -> Model -> Maybe Routing.UrlChange
 delta2url model1 model2 =
-    if model1.selectedTab /= model2.selectedTab then
+    if model1.url /= model2.url then
         { entry = Routing.NewEntry
         , url = urlOf model2
         }
@@ -415,19 +439,39 @@ delta2url model1 model2 =
 
 location2messages : Navigation.Location -> List Msg
 location2messages location =
-    [ case String.dropLeft 1 location.hash of
-        "" ->
-            ClearTab
-
-        x ->
-            Dict.get x urlTabs
-                |> Maybe.withDefault -1
-                |> SelectTab
+    [ SetUrl <|
+      case location.hash of
+          "" -> StartPage
+          "#" -> StartPage
+          "#buttons" -> Button
+          "#cards" -> Card
+          "#checkbox" -> Checkbox
+          "#dialog" -> Dialog
+          "#temporary-drawer" -> TemporaryDrawer
+          "#persistent-drawer" -> PersistentDrawer
+          "#permanent-drawer-above" -> PermanentAboveDrawer
+          "#permanent-drawer-below" -> PermanentBelowDrawer
+          "#elevation" -> Elevation
+          "#fabs" -> Fabs
+          "#grid-list" -> GridList
+          "#icon-toggle" -> IconToggle
+          "#layout-grid" -> LayoutGrid
+          "#linear-progress" -> LinearProgress
+          "#lists" -> List
+          "#radio-buttons" -> RadioButton
+          "#ripple" -> Ripple
+          "#select" -> Select
+          "#simple-menu" -> SimpleMenu
+          "#slider" -> Slider
+          "#snackbar" -> Snackbar
+          "#switch" -> Switch
+          "#tabs" -> Tabs
+          "#text-field" -> TextField
+          "#theme" -> Theme
+          "#toolbar" -> Toolbar
+          "#typography" -> Typography
+          _ -> Error404 location.hash
     ]
-
-
-
--- APP
 
 
 main : Routing.RouteUrlProgram Never Model Msg
@@ -436,71 +480,25 @@ main =
         { delta2url = delta2url
         , location2messages = location2messages
         , init =
-            ( model
+            ( defaultModel
             , Material.init Mdl
             )
         , view = view
-        , subscriptions =
-            \model ->
-                Sub.batch
-                    [ Sub.map MenusMsg (Menu.subs Demo.Menus.Mdl model.menus.mdl)
-                    , Sub.map SelectMsg (Select.subs Demo.Selects.Mdl model.selects.mdl)
-                    , Sub.map TemporaryDrawerMsg (Drawer.subs Demo.TemporaryDrawer.Mdl model.temporaryDrawer.mdl)
-                    , Sub.map PersistentDrawerMsg (Drawer.subs Demo.PersistentDrawer.Mdl model.persistentDrawer.mdl)
-                    , Sub.map PermanentAboveDrawerMsg (Drawer.subs Demo.PermanentAboveDrawer.Mdl model.permanentAboveDrawer.mdl)
-                    , Sub.map PermanentBelowDrawerMsg (Drawer.subs Demo.PermanentBelowDrawer.Mdl model.permanentBelowDrawer.mdl)
-                    , Material.subscriptions Mdl model
-                    ]
+        , subscriptions = subscriptions
         , update = update
         }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [
+          Material.subscriptions Mdl model
 
--- CSS
-
-
-stylesheet : Html a
-stylesheet =
-    Options.stylesheet """
-  /* The following line is better done in html. We keep it here for
-     compatibility with elm-reactor.
-   */
-  @import url("assets/highlight/github-gist.css");
-
-  blockquote:before { content: none; }
-  blockquote:after { content: none; }
-  blockquote {
-    border-left-style: solid;
-    border-width: 1px;
-    padding-left: 1.3ex;
-    border-color: rgb(255,82,82);
-      /* Really need a way to specify "secondary color" in
-         inline css.
-       */
-    font-style: normal;
-  }
-  p, blockquote {
-    max-width: 40em;
-  }
-
-  pre {
-    display: inline-block;
-    box-sizing: border-box;
-    min-width: 100%;
-    padding-top: .5rem;
-    padding-bottom: 1rem;
-    padding-left:1rem;
-    margin: 0;
-  }
-  code {
-    font-family: 'Roboto Mono';
-  }
-  .mdl-layout__header--transparent {
-    background: url('https://getmdl.io/assets/demos/transparent.jpg') center / cover;
-  }
-  .mdl-layout__header--transparent .mdl-layout__drawer-button {
-    /* This background is dark, so we set text to white. Use 87% black instead if
-       your background is light. */
-    color: white;
-  }
-"""
+        , Demo.Menus.subscriptions SimpleMenuMsg model.menus
+        , Demo.PermanentAboveDrawer.subscriptions PermanentAboveDrawerMsg model.permanentAboveDrawer
+        , Demo.PermanentBelowDrawer.subscriptions PermanentBelowDrawerMsg model.permanentBelowDrawer
+        , Demo.PersistentDrawer.subscriptions PersistentDrawerMsg model.persistentDrawer
+        , Demo.Selects.subscriptions SelectMsg model.selects
+        , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
+        ]

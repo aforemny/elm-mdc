@@ -73,7 +73,7 @@ Along with this module you will want to to import Material.Dropdown.Item.
 
 -}
 
-import AnimationFrame
+-- import AnimationFrame
 import DOM exposing (Rectangle)
 import Html.Events as Html exposing (defaultOptions)
 import Html exposing (..)
@@ -105,7 +105,8 @@ subscriptions model =
       else
         Sub.none
     , if model.animating then
-        AnimationFrame.diffs (\dt -> Tick (dt / transitionDurationMs))
+        Sub.none -- TODO:
+        -- AnimationFrame.diffs (\dt -> Tick (dt / transitionDurationMs))
       else
         Sub.none
     ]

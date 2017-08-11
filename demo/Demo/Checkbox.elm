@@ -1,5 +1,6 @@
 module Demo.Checkbox exposing (Model,defaultModel,Msg(Mdl),update,view)
 
+import Demo.Page exposing (Page)
 import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (Html, text)
@@ -8,9 +9,6 @@ import Material.Checkbox as Checkbox
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
-
-
--- MODEL
 
 
 type alias Model =
@@ -38,8 +36,8 @@ defaultModel =
     }
 
 
-type Msg
-    = Mdl (Material.Msg Msg)
+type Msg m
+    = Mdl (Material.Msg m)
     | ToggleRtl
     | ToggleAlignEnd
     | ToggleIndeterminate
@@ -49,11 +47,11 @@ type Msg
     | ToggleDisabled1
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update Mdl msg_ model
+            Material.update (Mdl >> lift) msg_ model
         ToggleRtl ->
             { model | rtl = not model.rtl } ! []
         ToggleAlignEnd ->
@@ -70,11 +68,8 @@ update msg model =
             { model | disabled1 = not model.disabled1 } ! []
 
 
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         example options =
             styled Html.div
@@ -85,7 +80,7 @@ view model =
             :: options
             )
     in
-    Html.div []
+    page.body "Checkbox"
     [
       example
       [ Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
@@ -99,8 +94,8 @@ view model =
         [ cs "mdc-form-field"
         , cs "mdc-form-field--align-end" |> when model.alignEnd
         ]
-        [ Checkbox.render Mdl [0] model.mdl
-          [ Options.onClick ToggleChecked0
+        [ Checkbox.render (Mdl >> lift) [0] model.mdl
+          [ Options.onClick (lift ToggleChecked0)
           , Checkbox.checked |> when model.checked0
           , Checkbox.indeterminate |> when model.indeterminate
           , Checkbox.disabled |> when model.disabled0
@@ -111,25 +106,25 @@ view model =
         ]
       , Html.span [] [ text " " ]
       , Html.button
-        [ Html.onClick ToggleIndeterminate
+        [ Html.onClick (lift ToggleIndeterminate)
         ]
         [ text "Make indeterminate"
         ]
       , Html.span [] [ text " " ]
       , Html.button
-        [ Html.onClick ToggleRtl
+        [ Html.onClick (lift ToggleRtl)
         ]
         [ text "Toggle RTL"
         ]
       , Html.span [] [ text " " ]
       , Html.button
-        [ Html.onClick ToggleAlignEnd
+        [ Html.onClick (lift ToggleAlignEnd)
         ]
         [ text "Toggle Align End"
         ]
       , Html.span [] [ text " " ]
       , Html.button
-        [ Html.onClick ToggleDisabled0
+        [ Html.onClick (lift ToggleDisabled0)
         ]
         [ text "Toggle Disabled"
         ]
@@ -149,8 +144,8 @@ view model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.render Mdl [1] model.mdl
-          [ Options.onClick ToggleChecked1
+        [ Checkbox.render (Mdl >> lift) [1] model.mdl
+          [ Options.onClick (lift ToggleChecked1)
           , Checkbox.checked |> when model.checked1
           , Checkbox.disabled |> when model.disabled1
           ]
@@ -160,7 +155,7 @@ view model =
         ]
       , Html.span [] [ text " " ]
       , Html.button
-        [ Html.onClick ToggleDisabled1
+        [ Html.onClick (lift ToggleDisabled1)
         ]
         [ text "Toggle Disabled"
         ]
