@@ -10,7 +10,7 @@ import Demo.GridList
 import Demo.IconToggle
 import Demo.LayoutGrid
 import Demo.Lists
-import Demo.Loading
+import Demo.LinearProgress
 import Demo.Menus
 import Demo.Page as Page exposing (Url(..))
 import Demo.PermanentAboveDrawer
@@ -334,7 +334,7 @@ view_ model =
             Demo.IconToggle.view IconToggleMsg page model.iconToggle
 
         LinearProgress ->
-            Demo.Loading.view page
+            Demo.LinearProgress.view page
 
         List ->
             Demo.Lists.view page

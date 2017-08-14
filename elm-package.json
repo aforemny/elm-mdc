@@ -23,7 +23,7 @@
         "Material.List",
         "Material.Menu",
         "Material.Options",
-        "Material.Progress",
+        "Material.LinearProgress",
         "Material.Radio",
         "Material.Slider",
         "Material.Snackbar",
