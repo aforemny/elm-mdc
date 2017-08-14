@@ -10449,58 +10449,60 @@ var _debois$elm_mdl$Demo_Page$hero = function (options) {
 	return A2(
 		_debois$elm_mdl$Material_Options$styled,
 		_elm_lang$html$Html$section,
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('hero'),
-			_1: {
+		_elm_lang$core$List$reverse(
+			{
 				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Options$css, 'display', '-webkit-box'),
+				_0: _debois$elm_mdl$Material_Options$cs('hero'),
 				_1: {
 					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', '-ms-flexbox'),
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', '-webkit-box'),
 					_1: {
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'display', '-ms-flexbox'),
 						_1: {
 							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-orient', 'horizontal'),
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
 							_1: {
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-direction', 'normal'),
+								_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-orient', 'horizontal'),
 								_1: {
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-flow', 'row nowrap'),
+									_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-direction', 'normal'),
 									_1: {
 										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-flow', 'row nowrap'),
+										_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-flow', 'row nowrap'),
 										_1: {
 											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-align', 'center'),
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-flow', 'row nowrap'),
 											_1: {
 												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-align', 'center'),
+												_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-align', 'center'),
 												_1: {
 													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$css, 'align-items', 'center'),
+													_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-align', 'center'),
 													_1: {
 														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-pack', 'center'),
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'align-items', 'center'),
 														_1: {
 															ctor: '::',
-															_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-pack', 'center'),
+															_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-pack', 'center'),
 															_1: {
 																ctor: '::',
-																_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'center'),
+																_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-pack', 'center'),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '360px'),
+																	_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'center'),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '360px'),
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '360px'),
 																		_1: {
 																			ctor: '::',
-																			_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', 'rgba(0, 0, 0, 0.05)'),
-																			_1: options
+																			_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '360px'),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', 'rgba(0, 0, 0, 0.05)'),
+																				_1: options
+																			}
 																		}
 																	}
 																}
@@ -10516,8 +10518,7 @@ var _debois$elm_mdl$Demo_Page$hero = function (options) {
 						}
 					}
 				}
-			}
-		});
+			}));
 };
 var _debois$elm_mdl$Demo_Page$Page = F3(
 	function (a, b, c) {
@@ -22837,6 +22838,456 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 		});
 };
 
+var _debois$elm_mdl$Material_LinearProgress$accent = _debois$elm_mdl$Material_Options$cs('mdc-linear-progress--accent');
+var _debois$elm_mdl$Material_LinearProgress$reversed = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{reversed: true});
+	});
+var _debois$elm_mdl$Material_LinearProgress$buffered = F2(
+	function (value, buffer) {
+		return _debois$elm_mdl$Material_Internal_Options$option(
+			function (config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{buffered: true, value: value, buffer: buffer});
+			});
+	});
+var _debois$elm_mdl$Material_LinearProgress$indeterminate = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{indeterminate: true});
+	});
+var _debois$elm_mdl$Material_LinearProgress$determinate = function (value) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{determinate: true, value: value});
+		});
+};
+var _debois$elm_mdl$Material_LinearProgress$defaultConfig = {value: 0, buffer: 0, determinate: false, indeterminate: false, buffered: false, reversed: false};
+var _debois$elm_mdl$Material_LinearProgress$view = F2(
+	function (options, _p0) {
+		var _p1 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_LinearProgress$defaultConfig, options);
+		var summary = _p1;
+		var config = _p1.config;
+		return A5(
+			_debois$elm_mdl$Material_Internal_Options$apply,
+			summary,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-linear-progress'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Material_Options$when,
+						config.indeterminate,
+						_debois$elm_mdl$Material_Options$cs('mdc-linear-progress--indeterminate')),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$when,
+							config.reversed,
+							_debois$elm_mdl$Material_Options$cs('mdc-linear-progress--reversed')),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A3(
+					_debois$elm_mdl$Material_Options$styled,
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$cs('mdc-linear-progress__buffering-dots'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Options$cs('mdc-linear-progress__buffer'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									config.buffered,
+									A2(
+										_debois$elm_mdl$Material_Options$css,
+										'transform',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'scaleX(',
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												_elm_lang$core$Basics$toString(config.buffer),
+												')')))),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-linear-progress__bar mdc-linear-progress__primary-bar'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$when,
+										!config.indeterminate,
+										A2(
+											_debois$elm_mdl$Material_Options$css,
+											'transform',
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												'scaleX(',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(config.value),
+													')')))),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$span,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$cs('mdc-linear-progress__bar-inner'),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-linear-progress__bar mdc-linear-progress__secondary-bar'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$span,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-linear-progress__bar-inner'),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _debois$elm_mdl$Material_LinearProgress$Config = F6(
+	function (a, b, c, d, e, f) {
+		return {value: a, buffer: b, determinate: c, indeterminate: d, buffered: e, reversed: f};
+	});
+
+var _debois$elm_mdl$Demo_LinearProgress$view = function (page) {
+	var linearProgressDemo = F3(
+		function (caption, options, nodes) {
+			return A3(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$figure,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '64px'),
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$List$concat(
+					{
+						ctor: '::',
+						_0: nodes,
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$figcaption,
+									{
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '16px'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(caption),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							},
+							_1: {ctor: '[]'}
+						}
+					}));
+		});
+	return A2(
+		page.body,
+		'Linear Progress Indicators',
+		{
+			ctor: '::',
+			_0: A2(
+				_debois$elm_mdl$Demo_Page$hero,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '4px'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '4px'),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Material_LinearProgress$view,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_LinearProgress$indeterminate,
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A3(
+					_debois$elm_mdl$Material_Options$styled,
+					_elm_lang$html$Html$section,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$fieldset,
+							{
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '16px'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$legend,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Typography$title,
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '16px'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'padding-top', '64px'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'padding-bottom', '24px'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Linear Progress Indicators'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										linearProgressDemo,
+										'Determinate',
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_LinearProgress$view,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_LinearProgress$determinate(0.5),
+													_1: {ctor: '[]'}
+												},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A3(
+											linearProgressDemo,
+											'Indeterminate',
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_LinearProgress$view,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_LinearProgress$indeterminate,
+														_1: {ctor: '[]'}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A3(
+												linearProgressDemo,
+												'Buffer',
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_LinearProgress$view,
+														{
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_LinearProgress$buffered, 0.5, 0.75),
+															_1: {ctor: '[]'}
+														},
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A3(
+													linearProgressDemo,
+													'Reversed',
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_debois$elm_mdl$Material_LinearProgress$view,
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_LinearProgress$reversed,
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_LinearProgress$determinate(0.5),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A3(
+														linearProgressDemo,
+														'Indeterminate Reversed',
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																_debois$elm_mdl$Material_LinearProgress$view,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_LinearProgress$reversed,
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_LinearProgress$indeterminate,
+																		_1: {ctor: '[]'}
+																	}
+																},
+																{ctor: '[]'}),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A3(
+															linearProgressDemo,
+															'Buffer Reversed',
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	_debois$elm_mdl$Material_LinearProgress$view,
+																	{
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_LinearProgress$reversed,
+																		_1: {
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_LinearProgress$buffered, 0.5, 0.75),
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{ctor: '[]'}),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A3(
+																linearProgressDemo,
+																'Accent',
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_debois$elm_mdl$Material_LinearProgress$view,
+																		{
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_LinearProgress$determinate(0.5),
+																			_1: {
+																				ctor: '::',
+																				_0: _debois$elm_mdl$Material_LinearProgress$accent,
+																				_1: {ctor: '[]'}
+																			}
+																		},
+																		{ctor: '[]'}),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+
 var _debois$elm_mdl$Demo_Lists$interactiveList = A2(
 	_debois$elm_mdl$Material_List$ul,
 	{ctor: '[]'},
@@ -24863,13 +25314,6 @@ var _debois$elm_mdl$Demo_Lists$view = function (page) {
 				}
 			}
 		});
-};
-
-var _debois$elm_mdl$Demo_Loading$view = function (page) {
-	return A2(
-		_debois$elm_mdl$Material_Options$div,
-		{ctor: '[]'},
-		{ctor: '[]'});
 };
 
 var _elm_lang$core$Set$foldr = F3(
@@ -30341,33 +30785,19 @@ var _debois$elm_mdl$Demo_Startpage$view = function (page) {
 								_elm_lang$core$List$map,
 								function (_p0) {
 									var _p1 = _p0;
-									var _p2 = _p1.wip;
 									return A2(
 										_debois$elm_mdl$Material_List$li,
 										{
 											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Options$when,
-												!_p2,
-												_debois$elm_mdl$Material_Options$onClick(
-													page.setUrl(_p1.url))),
+											_0: _debois$elm_mdl$Material_Options$onClick(
+												page.setUrl(_p1.url)),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_debois$elm_mdl$Material_Options$when,
-													!_p2,
-													A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer')),
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer'),
 												_1: {
 													ctor: '::',
-													_0: A2(
-														_debois$elm_mdl$Material_Options$when,
-														_p2,
-														A2(_debois$elm_mdl$Material_Options$css, 'opacity', '0.5')),
-													_1: {
-														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '72px'),
-														_1: {ctor: '[]'}
-													}
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '72px'),
+													_1: {ctor: '[]'}
 												}
 											}
 										},
@@ -30420,85 +30850,85 @@ var _debois$elm_mdl$Demo_Startpage$view = function (page) {
 								},
 								{
 									ctor: '::',
-									_0: {url: _debois$elm_mdl$Demo_Page$Button, icon: 'ic_button_24px.svg', wip: false, title: 'Button', subtitle: 'Raised and flat buttons'},
+									_0: {url: _debois$elm_mdl$Demo_Page$Button, icon: 'ic_button_24px.svg', title: 'Button', subtitle: 'Raised and flat buttons'},
 									_1: {
 										ctor: '::',
-										_0: {url: _debois$elm_mdl$Demo_Page$Card, icon: 'ic_card_24px.svg', wip: false, title: 'Card', subtitle: 'Various card layout styles'},
+										_0: {url: _debois$elm_mdl$Demo_Page$Card, icon: 'ic_card_24px.svg', title: 'Card', subtitle: 'Various card layout styles'},
 										_1: {
 											ctor: '::',
-											_0: {url: _debois$elm_mdl$Demo_Page$Checkbox, icon: 'ic_selection_control_24px.svg', wip: false, title: 'Checkbox', subtitle: 'Multi-selection controls'},
+											_0: {url: _debois$elm_mdl$Demo_Page$Checkbox, icon: 'ic_selection_control_24px.svg', title: 'Checkbox', subtitle: 'Multi-selection controls'},
 											_1: {
 												ctor: '::',
-												_0: {url: _debois$elm_mdl$Demo_Page$Dialog, icon: 'ic_dialog_24px.svg', wip: false, title: 'Dialog', subtitle: 'Secondary text'},
+												_0: {url: _debois$elm_mdl$Demo_Page$Dialog, icon: 'ic_dialog_24px.svg', title: 'Dialog', subtitle: 'Secondary text'},
 												_1: {
 													ctor: '::',
-													_0: {url: _debois$elm_mdl$Demo_Page$TemporaryDrawer, icon: 'ic_side_navigation_24px.svg', wip: false, title: 'Drawer', subtitle: 'Temporary'},
+													_0: {url: _debois$elm_mdl$Demo_Page$TemporaryDrawer, icon: 'ic_side_navigation_24px.svg', title: 'Drawer', subtitle: 'Temporary'},
 													_1: {
 														ctor: '::',
-														_0: {url: _debois$elm_mdl$Demo_Page$PersistentDrawer, icon: 'ic_side_navigation_24px.svg', wip: false, title: 'Drawer', subtitle: 'Persistent'},
+														_0: {url: _debois$elm_mdl$Demo_Page$PersistentDrawer, icon: 'ic_side_navigation_24px.svg', title: 'Drawer', subtitle: 'Persistent'},
 														_1: {
 															ctor: '::',
-															_0: {url: _debois$elm_mdl$Demo_Page$PermanentAboveDrawer, icon: 'ic_side_navigation_24px.svg', wip: false, title: 'Drawer', subtitle: 'Permanent drawer above toolbar'},
+															_0: {url: _debois$elm_mdl$Demo_Page$PermanentAboveDrawer, icon: 'ic_side_navigation_24px.svg', title: 'Drawer', subtitle: 'Permanent drawer above toolbar'},
 															_1: {
 																ctor: '::',
-																_0: {url: _debois$elm_mdl$Demo_Page$PermanentBelowDrawer, icon: 'ic_side_navigation_24px.svg', wip: false, title: 'Drawer', subtitle: 'Permanent drawer below toolbar'},
+																_0: {url: _debois$elm_mdl$Demo_Page$PermanentBelowDrawer, icon: 'ic_side_navigation_24px.svg', title: 'Drawer', subtitle: 'Permanent drawer below toolbar'},
 																_1: {
 																	ctor: '::',
-																	_0: {url: _debois$elm_mdl$Demo_Page$Elevation, icon: 'ic_shadow_24px.svg', wip: false, title: 'Elevation', subtitle: 'Shadow for different elevations'},
+																	_0: {url: _debois$elm_mdl$Demo_Page$Elevation, icon: 'ic_shadow_24px.svg', title: 'Elevation', subtitle: 'Shadow for different elevations'},
 																	_1: {
 																		ctor: '::',
-																		_0: {url: _debois$elm_mdl$Demo_Page$Fabs, icon: 'ic_button_24px.svg', wip: false, title: 'Floating action button', subtitle: 'The primary action in an application'},
+																		_0: {url: _debois$elm_mdl$Demo_Page$Fabs, icon: 'ic_button_24px.svg', title: 'Floating action button', subtitle: 'The primary action in an application'},
 																		_1: {
 																			ctor: '::',
-																			_0: {url: _debois$elm_mdl$Demo_Page$GridList, icon: 'ic_card_24px.svg', wip: false, title: 'Grid list', subtitle: '2D grid layouts'},
+																			_0: {url: _debois$elm_mdl$Demo_Page$GridList, icon: 'ic_card_24px.svg', title: 'Grid list', subtitle: '2D grid layouts'},
 																			_1: {
 																				ctor: '::',
-																				_0: {url: _debois$elm_mdl$Demo_Page$IconToggle, icon: 'ic_component_24px.svg', wip: false, title: 'Icon toggle', subtitle: 'Toggling icon states'},
+																				_0: {url: _debois$elm_mdl$Demo_Page$IconToggle, icon: 'ic_component_24px.svg', title: 'Icon toggle', subtitle: 'Toggling icon states'},
 																				_1: {
 																					ctor: '::',
-																					_0: {url: _debois$elm_mdl$Demo_Page$LayoutGrid, icon: 'ic_card_24px.svg', wip: false, title: 'Layout grid', subtitle: 'Grid and gutter support'},
+																					_0: {url: _debois$elm_mdl$Demo_Page$LayoutGrid, icon: 'ic_card_24px.svg', title: 'Layout grid', subtitle: 'Grid and gutter support'},
 																					_1: {
 																						ctor: '::',
-																						_0: {url: _debois$elm_mdl$Demo_Page$LinearProgress, icon: 'ic_progress_activity.svg', wip: true, title: 'Linear progress', subtitle: 'Fills from 0% to 100%, represented by bars'},
+																						_0: {url: _debois$elm_mdl$Demo_Page$LinearProgress, icon: 'ic_progress_activity.svg', title: 'Linear progress', subtitle: 'Fills from 0% to 100%, represented by bars'},
 																						_1: {
 																							ctor: '::',
-																							_0: {url: _debois$elm_mdl$Demo_Page$List, icon: 'ic_list_24px.svg', wip: false, title: 'List', subtitle: 'Item layouts in lists'},
+																							_0: {url: _debois$elm_mdl$Demo_Page$List, icon: 'ic_list_24px.svg', title: 'List', subtitle: 'Item layouts in lists'},
 																							_1: {
 																								ctor: '::',
-																								_0: {url: _debois$elm_mdl$Demo_Page$RadioButton, icon: 'ic_radio_button_24px.svg', wip: false, title: 'Radio buttons', subtitle: 'Single selection controls'},
+																								_0: {url: _debois$elm_mdl$Demo_Page$RadioButton, icon: 'ic_radio_button_24px.svg', title: 'Radio buttons', subtitle: 'Single selection controls'},
 																								_1: {
 																									ctor: '::',
-																									_0: {url: _debois$elm_mdl$Demo_Page$Ripple, icon: 'ic_ripple_24px.svg', wip: false, title: 'Ripple', subtitle: 'Touch ripple'},
+																									_0: {url: _debois$elm_mdl$Demo_Page$Ripple, icon: 'ic_ripple_24px.svg', title: 'Ripple', subtitle: 'Touch ripple'},
 																									_1: {
 																										ctor: '::',
-																										_0: {url: _debois$elm_mdl$Demo_Page$Select, icon: 'ic_menu_24px.svg', wip: false, title: 'Select', subtitle: 'Popover selection menus'},
+																										_0: {url: _debois$elm_mdl$Demo_Page$Select, icon: 'ic_menu_24px.svg', title: 'Select', subtitle: 'Popover selection menus'},
 																										_1: {
 																											ctor: '::',
-																											_0: {url: _debois$elm_mdl$Demo_Page$SimpleMenu, icon: 'ic_menu_24px.svg', wip: false, title: 'Simple Menu', subtitle: 'Pop over menus'},
+																											_0: {url: _debois$elm_mdl$Demo_Page$SimpleMenu, icon: 'ic_menu_24px.svg', title: 'Simple Menu', subtitle: 'Pop over menus'},
 																											_1: {
 																												ctor: '::',
-																												_0: {url: _debois$elm_mdl$Demo_Page$Slider, icon: 'slider.svg', wip: false, title: 'Slider', subtitle: 'Range Controls'},
+																												_0: {url: _debois$elm_mdl$Demo_Page$Slider, icon: 'slider.svg', title: 'Slider', subtitle: 'Range Controls'},
 																												_1: {
 																													ctor: '::',
-																													_0: {url: _debois$elm_mdl$Demo_Page$Snackbar, icon: 'ic_toast_24px.svg', wip: false, title: 'Snackbar', subtitle: 'Transient messages'},
+																													_0: {url: _debois$elm_mdl$Demo_Page$Snackbar, icon: 'ic_toast_24px.svg', title: 'Snackbar', subtitle: 'Transient messages'},
 																													_1: {
 																														ctor: '::',
-																														_0: {url: _debois$elm_mdl$Demo_Page$Switch, icon: 'ic_switch_24px.svg', wip: false, title: 'Switch', subtitle: 'On off switches'},
+																														_0: {url: _debois$elm_mdl$Demo_Page$Switch, icon: 'ic_switch_24px.svg', title: 'Switch', subtitle: 'On off switches'},
 																														_1: {
 																															ctor: '::',
-																															_0: {url: _debois$elm_mdl$Demo_Page$Tabs, icon: 'ic_tabs_24px.svg', wip: false, title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
+																															_0: {url: _debois$elm_mdl$Demo_Page$Tabs, icon: 'ic_tabs_24px.svg', title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
 																															_1: {
 																																ctor: '::',
-																																_0: {url: _debois$elm_mdl$Demo_Page$TextField, icon: 'ic_text_field_24px.svg', wip: false, title: 'Text field', subtitle: 'Single and multiline text fields'},
+																																_0: {url: _debois$elm_mdl$Demo_Page$TextField, icon: 'ic_text_field_24px.svg', title: 'Text field', subtitle: 'Single and multiline text fields'},
 																																_1: {
 																																	ctor: '::',
-																																	_0: {url: _debois$elm_mdl$Demo_Page$Theme, icon: 'ic_theme_24px.svg', wip: false, title: 'Theme', subtitle: 'Using primary and accent colors'},
+																																	_0: {url: _debois$elm_mdl$Demo_Page$Theme, icon: 'ic_theme_24px.svg', title: 'Theme', subtitle: 'Using primary and accent colors'},
 																																	_1: {
 																																		ctor: '::',
-																																		_0: {url: _debois$elm_mdl$Demo_Page$Toolbar, icon: 'ic_toolbar_24px.svg', wip: false, title: 'Toolbar', subtitle: 'Header and footers'},
+																																		_0: {url: _debois$elm_mdl$Demo_Page$Toolbar, icon: 'ic_toolbar_24px.svg', title: 'Toolbar', subtitle: 'Header and footers'},
 																																		_1: {
 																																			ctor: '::',
-																																			_0: {url: _debois$elm_mdl$Demo_Page$Typography, icon: 'ic_typography_24px.svg', wip: false, title: 'Typography', subtitle: 'Type hierarchy'},
+																																			_0: {url: _debois$elm_mdl$Demo_Page$Typography, icon: 'ic_typography_24px.svg', title: 'Typography', subtitle: 'Type hierarchy'},
 																																			_1: {ctor: '[]'}
 																																		}
 																																	}
@@ -38452,7 +38882,7 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 		case 'IconToggle':
 			return A3(_debois$elm_mdl$Demo_IconToggle$view, _debois$elm_mdl$Main$IconToggleMsg, page, model.iconToggle);
 		case 'LinearProgress':
-			return _debois$elm_mdl$Demo_Loading$view(page);
+			return _debois$elm_mdl$Demo_LinearProgress$view(page);
 		case 'List':
 			return _debois$elm_mdl$Demo_Lists$view(page);
 		case 'RadioButton':
