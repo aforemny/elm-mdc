@@ -18,6 +18,7 @@ import Material.Internal.Tabs as Tabs
 import Material.Internal.Textfield as Textfield
 import Material.Internal.Checkbox as Checkbox
 import Material.Internal.Switch as Switch
+import Material.Internal.Slider as Slider
 
 
 {-| Type of indices. An index has to be `comparable`
@@ -36,16 +37,17 @@ type alias Index =
 -}
 type Msg m
     = ButtonMsg Index Button.Msg
-    | IconToggleMsg Index IconToggle.Msg
-    | SnackbarMsg Index (Snackbar.Msg m)
-    | FabMsg Index Fab.Msg
+    | CheckboxMsg Index Checkbox.Msg
     | Dispatch (List m)
+    | DrawerMsg Index Drawer.Msg
+    | FabMsg Index Fab.Msg
+    | IconToggleMsg Index IconToggle.Msg
     | MenuMsg Index (Menu.Msg m)
+    | RadioMsg Index Radio.Msg
+    | RippleMsg Index Ripple.Msg
     | SelectMsg Index (Select.Msg m)
+    | SliderMsg Index (Slider.Msg m)
+    | SnackbarMsg Index (Snackbar.Msg m)
+    | SwitchMsg Index Switch.Msg
     | TabsMsg Index (Tabs.Msg m)
     | TextfieldMsg Index Textfield.Msg
-    | CheckboxMsg Index Checkbox.Msg
-    | SwitchMsg Index Switch.Msg
-    | RippleMsg Index Ripple.Msg
-    | RadioMsg Index Radio.Msg
-    | DrawerMsg Index Drawer.Msg

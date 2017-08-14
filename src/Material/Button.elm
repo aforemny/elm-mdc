@@ -397,7 +397,6 @@ icon =
 -- COMPONENT
 
 
--- TODO: eliminate Store
 type alias Store s =
     { s | button : Indexed Model }
 

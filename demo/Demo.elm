@@ -501,4 +501,5 @@ subscriptions model =
         , Demo.PersistentDrawer.subscriptions PersistentDrawerMsg model.persistentDrawer
         , Demo.Selects.subscriptions SelectMsg model.selects
         , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
+        , Demo.Slider.subscriptions SliderMsg model.slider
         ]

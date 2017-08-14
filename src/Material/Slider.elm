@@ -1,82 +1,122 @@
 module Material.Slider
     exposing
-        ( Property
-        , value
+        ( Model
+        , Property
+        , view
+        , render
+        , react
+        , update
         , min
         , max
+        , value
         , disabled
-        , step
-        , view
+        , discrete
+        , targetValue
         , onChange
+        , onInput
+        , steps
+        , trackMarkers
+        , subscriptions
+        , subs
         )
 
-{-| From the [Material Design Lite documentation](https://material.google.com/components/sliders.html):
-
-> The Material Design Lite (MDL) slider component is an enhanced version of the
-> new HTML5 `<input type="range">` element. A slider consists of a horizontal line
-> upon which sits a small, movable disc (the thumb) and, typically, text that
-> clearly communicates a value that will be set when the user moves it.
->
-> Sliders are a fairly new feature in user interfaces, and allow users to choose a
-> value from a predetermined range by moving the thumb through the range (lower
-> values to the left, higher values to the right). Their design and use is an
-> important factor in the overall user experience. See the slider component's
-> [Material Design specifications](https://material.google.com/components/sliders.html) page for details.
->
-> The enhanced slider component may be initially or programmatically disabled.
-
-See also the
-[Material Design Specification](https://material.google.com/components/sliders.html).
-
-Refer to [this site](http://debois.github.io/elm-mdl/#sliders)
-for a live demo.
-
-*NOTE* Currently does not work properly on [Microsoft Edge](https://github.com/google/material-design-lite/issues/1625)
-
-#View
-
-@docs view
-
-# Properties
-
-@docs Property
-@docs value, min, max, disabled
-@docs step 
-
-# Events
-@docs onChange
-
--}
-
-import Html exposing (..)
+import DOM
+import Html as Html_
+import Html as Html exposing (Html, text)
 import Html.Attributes as Html
-import Material.Options as Options exposing (cs, css, when)
-import Material.Internal.Options as Internal
+import Json.Decode as Json exposing (Decoder)
+import Material.Component as Component exposing (Index, Indexed)
 import Material.Helpers as Helpers
-import Json.Decode as Json
+import Material.Internal.Options as Internal
+import Material.Internal.Slider exposing (Msg(..), Geometry, defaultGeometry)
+import Material.Msg
+import Material.Options as Options exposing (styled, cs, css, when)
+import Svg
+import Svg.Attributes as Svg
 
 
--- PROPERTIES
+type alias Model =
+    { focus : Bool
+    , active : Bool
+    , geometry : Maybe Geometry
+    , value : Maybe Float
+    , inTransit : Bool
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { focus = False
+    , active = False
+    , geometry = Nothing
+    , value = Nothing
+    , inTransit = False
+    }
+
+
+type alias Msg m =
+    Material.Internal.Slider.Msg m
+
+
+update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update fwd msg model =
+    case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
+        Dispatch ms ->
+            ( model, Cmd.batch (List.map Helpers.cmd ms) )
+
+        Focus ->
+            ( { model | focus = True }, Cmd.none )
+
+        Blur ->
+            ( { model | focus = False, active = False }, Cmd.none )
+
+        Tick ->
+            ( { model | inTransit = False }, Cmd.none )
+
+        Activate inTransit geometry ->
+            ( { model
+            | active = True
+            , geometry = Just geometry
+            , inTransit = inTransit
+            , value = Just (computeValue geometry)
+            }, Cmd.none )
+
+        Drag geometry ->
+            ( { model
+            | geometry = Just geometry
+            , inTransit = False
+            , value = Just (computeValue geometry)
+            }, Cmd.none )
+
+        Up ->
+            ( { model | active = False }, Cmd.none )
 
 
 type alias Config m =
     { value : Float
     , min : Float
     , max : Float
-    , step : Float
-    , input : List (Options.Style m)
-    , container : List (Options.Style m)
+    , discrete : Bool
+    , steps : Int
+    , onInput : Maybe (Decoder m)
+    , onChange : Maybe (Decoder m)
+    , trackMarkers : Bool
     }
 
 
 defaultConfig : Config m
 defaultConfig =
-    { value = 50
+    { value = 0
     , min = 0
     , max = 100
-    , step = 1
-    , input = []
-    , container = []
+    , steps = 1
+    , discrete = False
+    , onInput = Nothing
+    , onChange = Nothing
+    , trackMarkers = False
     }
 
 
@@ -86,132 +126,391 @@ type alias Property m =
     Options.Property (Config m) m
 
 
-{-| Sets current value
+{-| TODO
 -}
 value : Float -> Property m
 value =
-    (\v options -> { options | value = v })
-        >> Internal.option
+    Internal.option << (\value config -> { config | value = value })
 
 
-{-| Sets the step. Defaults to 0
+{-| TODO
 -}
-min : Float -> Property m
+min : Int -> Property m
 min =
-    (\v options -> { options | min = v })
-        >> Internal.option
+    Internal.option << (\min config -> { config | min = toFloat min })
 
 
-{-| Sets the step. Defaults to 100
+{-| TODO
 -}
-max : Float -> Property m
+max : Int -> Property m
 max =
-    (\v options -> { options | max = v })
-        >> Internal.option
+    Internal.option << (\max config -> { config | max = toFloat max })
 
 
-{-| Sets the step. Defaults to 1
+{-| TODO
 -}
-step : Float -> Property m
-step =
-    (\v options -> { options | step = v })
-        >> Internal.option
+discrete : Property m
+discrete =
+    Internal.option (\config -> { config | discrete = True })
 
  
-{-| Disables the slider
+{-| TODO
 -}
 disabled : Property m
 disabled =
-    Internal.attribute <| Html.disabled True
-
-
-floatVal : Json.Decoder Float
-floatVal =
-    (Json.at [ "target", "valueAsNumber" ] Json.float)
-
-
-{-| onChange listener for slider values
-
-This convenience handler listens for both "change" and "input" events.
--}
-onChange : (Float -> m) -> Property m
-onChange f =
     Options.many
-        [ Options.on "change" (Json.map f floatVal)
-        , Options.on "input" (Json.map f floatVal)
-        ]
+    [ cs "mdc-slider--disabled"
+    , Internal.attribute <| Html.disabled True
+    ]
 
 
-{-| A slider consists of a horizontal line upon which sits a small, movable
-disc (the thumb) and, typically, text that clearly communicates a value that
-will be set when the user moves it. Example use:
-
-    import Material.Slider as Slider
-
-    slider : Model -> Html Msg
-    slider model =
-      p [ style [ ("width", "300px") ] ]
-        [ Slider.view
-            [ Slider.onChange SliderMsg
-            , Slider.value model.value
-            ]
-        ]
--}
-view : List (Property m) -> Html m
-view options =
+view : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+view lift model options _ =
     let
-        summary =
+        ({ config } as summary) =
             Internal.collect defaultConfig options
 
-        config =
-            summary.config
+        continuousValue =
+            if model.active then
+                model.value
+                |> Maybe.withDefault config.value
+            else
+                config.value
 
-        fraction =
-            (config.value - config.min) / (config.max - config.min)
+        value =
+            if config.discrete then
+                discretize config.steps continuousValue
+            else
+                continuousValue
 
-        lower =
-            (toString fraction) ++ " 1 0%"
+        translateX =
+            let
+                v =
+                    value
+                    |> clamp config.min config.max
 
-        upper =
-            (toString (1 - fraction)) ++ " 1 0%"
+                c =
+                    if (config.max - config.min) /= 0 then
+                        (v - config.min) / (config.max - config.min)
+                        |> clamp 0 1
+                    else
+                        0
+            in
+                model.geometry
+                |> Maybe.map .width
+                |> Maybe.map ((*) c)
+                |> Maybe.withDefault 0
 
-        -- NOTE: does not work with IE yet. needs mdc-slider__ie-container
-        -- and some additional logic
-        background =
-            Options.styled Html.div
-                [ cs "mdc-slider__background-flex" ]
-                [ Options.styled Html.div
-                    [ cs "mdc-slider__background-lower"
-                    , css "flex" lower
-                    ]
-                    []
-                , Options.styled Html.div
-                    [ cs "mdc-slider__background-upper"
-                    , css "flex" upper
-                    ]
-                    []
-                ]
-    in
-        Internal.applyContainer summary
-            Html.div
-            [ cs "mdc-slider__container" ]
-            [ Internal.applyInput summary
-                Html.input
-                [ cs "mdc-slider"
-                , cs "mdc-js-slider"
-                , cs "is-upgraded"
-                , cs "is-lowest-value" |> when (fraction == 0)
-                  -- FIX for Firefox problem where you had to click on the 2px tall slider to initiate drag
-                , css "padding" "8px 0"
-                  -- FIX for MS Edge problem with input "range" height not depending on thumb height and clipping it
-                , css "min-height" "20px"
-                , Internal.attribute <| Html.type_ "range"
-                , Internal.attribute <| Html.max (toString config.max)
-                , Internal.attribute <| Html.min (toString config.min)
-                , Internal.attribute <| Html.step (toString config.step)
-                , Internal.attribute <| Html.value (toString config.value)
-                , Internal.attribute <| Helpers.blurOn "mouseup"
-                ]
-                []
-            , background
+        activateOn event =
+            Options.on event (Json.map (Activate True >> lift) decodeGeometry)
+
+        upOn event =
+            Options.on event (Json.succeed (lift Up))
+
+        dragOn event =
+            Options.on event (Json.map (Drag >> lift) decodeGeometry)
+
+        inputOn event =
+            Options.on event (Maybe.withDefault (Json.succeed (lift NoOp)) config.onInput)
+
+        changeOn event =
+            Options.on event (Maybe.withDefault (Json.succeed (lift NoOp)) config.onChange)
+
+        ups =
+          [ "mouseup"
+          , "touchend"
+          , "pointerup"
+          ]
+
+        downs =
+            [ "mousedown"
+            , "touchstart"
+            , "keydown"
+            , "pointerdown"
             ]
+
+        moves =
+          [ "mousemove"
+          , "touchmove"
+          , "pointermove"
+          ]
+
+        leaves =
+          [ "mouseleave"
+          , "touchleave" -- TODO
+          , "pointerleave" -- TODO
+          ]
+
+        activateOn_ event =
+            Options.onWithOptions event
+                { stopPropagation = True
+                , preventDefault = False
+                }
+                (Json.map (Activate False >> lift) decodeGeometry)
+
+        trackScale =
+            if config.max - config.min == 0 then
+                0
+            else
+                (value - config.min) / (config.max - config.min)
+    in
+        Internal.apply summary Html.div
+        [ cs "mdc-slider"
+        , cs "mdc-slider--focus" |> when model.focus
+        , cs "mdc-slider--active" |> when model.active
+        , cs "mdc-slider--off" |> when (value <= config.min)
+        , cs "mdc-slider--discrete" |> when config.discrete
+        , cs "mdc-slider--in-transit" |> when model.inTransit
+        , cs "mdc-slider--display-markers" |> when config.trackMarkers
+        , Options.attribute (Html.tabindex 0)
+        , Options.on "focus" (Json.succeed (lift Focus))
+        , Options.on "blur" (Json.succeed (lift Blur))
+        , Options.data "min" (toString config.min)
+        , Options.data "max" (toString config.max)
+        , Options.data "steps" (toString config.steps)
+
+        , List.map activateOn downs
+          |> Options.many
+
+        , List.map upOn (List.concat [ups, leaves, ["blur"]])
+          |> Options.many
+
+        , when (config.onChange /= Nothing) <|
+          Options.many (List.map changeOn ups)
+
+        , when model.active <|
+              Options.many (List.map dragOn moves)
+
+        , when (config.onInput /= Nothing) <|
+          if model.active then
+              Options.many (List.map inputOn (List.concat [downs, ups, moves]))
+          else
+              Options.many (List.map inputOn downs)
+        ]
+        []
+        [
+          styled Html.div
+          [ cs "mdc-slider__track-container"
+          ]
+          [ styled Html.div
+            [ cs "mdc-slider__track"
+            , css "transform" ("scaleX(" ++ toString trackScale ++ ")")
+            ]
+            []
+          , styled Html.div
+            [ cs "mdc-slider__track-marker-container"
+            ]
+            ( List.repeat ((round (config.max  - config.min)) // config.steps) <|
+              styled Html.div
+              [ cs "mdc-slider__track-marker"
+              ]
+              [
+              ]
+            )
+          ]
+
+        , styled Html.div
+          [ cs "mdc-slider__thumb-container"
+          , Options.many (List.map activateOn_ downs)
+          , css "transform" ("translateX(" ++ toString translateX ++ "px) translateX(-50%)")
+          , Options.on "transitionend" -- TODO: dispatch
+              ( Json.map2
+                  (\tick onInput -> lift (Dispatch [tick, onInput]))
+                  (Json.succeed (lift Tick))
+                  (Maybe.withDefault (Json.succeed (lift NoOp)) config.onInput)
+              )
+          ]
+          [ Svg.svg
+            [ Svg.class "mdc-slider__thumb"
+            , Svg.width "21"
+            , Svg.height "21"
+            ]
+            [ Svg.circle
+              [ Svg.cx "10.5"
+              , Svg.cy "10.5"
+              , Svg.r "7.875"
+              ]
+              []
+            ]
+
+          , styled Html.div
+            [ cs "mdc-slider__focus-ring"
+            ]
+            []
+
+          , styled Html.div
+            [ cs "mdc-slider__pin"
+            ]
+            [
+              styled Html.div
+              [ cs "mdc-slider__pin-value-marker"
+              ]
+              [ text (toString value)
+              ]
+            ]
+          ]
+        ]
+
+
+
+-- COMPONENT
+
+
+type alias Store s =
+    { s | slider : Indexed Model }
+
+
+( get, set ) =
+    Component.indexed .slider (\x y -> { y | slider = x }) defaultModel
+
+
+{-| Component react function (update variant). Internal use only.
+-}
+react :
+    (Msg m -> m)
+    -> Msg m
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react lift msg idx store =
+    update lift msg (get idx store)
+        |> Helpers.map1st (set idx store >> Just)
+
+        -- TODO: ^^^^^ react
+
+
+{-|
+-}
+render :
+    (Material.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+render lift index store options =
+    Component.render get view Material.Msg.SliderMsg lift index store
+        (Internal.dispatch lift :: options)
+
+
+targetValue : Decoder Float
+targetValue =
+    Json.map
+       (\ geometry ->
+            if geometry.discrete then
+                discretize geometry.steps (computeValue geometry)
+            else
+                computeValue geometry
+       )
+       decodeGeometry
+
+
+discretize : Int -> Float -> Float
+discretize steps continuousValue =
+    toFloat (steps * round (continuousValue / toFloat steps))
+
+
+computeValue : Geometry -> Float
+computeValue geometry =
+    let
+        c =
+            if geometry.width /= 0 then
+                (geometry.x - geometry.left) / geometry.width
+            else
+                0
+            |> clamp 0 1
+
+    in
+    geometry.min + c * (geometry.max - geometry.min)
+    |> clamp geometry.min geometry.max
+
+
+decodeGeometry : Decoder Geometry
+decodeGeometry =
+    Json.oneOf
+    [ Json.at [ "pageX" ] Json.float
+    , Json.succeed 0
+    ]
+    |> Json.andThen (\ x ->
+          DOM.target <|
+          traverseToContainer <|
+          Json.map6
+              ( \offsetWidth offsetLeft discrete min max steps ->
+                  { width = offsetWidth
+                  , left = offsetLeft
+                  , x = x
+                  , discrete = discrete
+                  , min = min
+                  , max = max
+                  , steps = steps
+                  }
+              )
+              DOM.offsetWidth
+              DOM.offsetLeft
+              ( hasClass "mdc-slider--discrete" )
+              ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
+              ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
+              ( data "steps" (Json.map (String.toInt >> Result.withDefault 1) Json.string) )
+          )
+
+
+data : String -> Decoder a -> Decoder a
+data key decoder =
+    Json.at [ "dataset", key ] decoder
+
+
+traverseToContainer : Decoder a -> Decoder a
+traverseToContainer decoder =
+    hasClass "mdc-slider"
+    |> Json.andThen (\ doesHaveClass ->
+        if doesHaveClass then
+            decoder
+        else
+            DOM.parentElement (Json.lazy (\_ -> traverseToContainer decoder))
+    )
+
+
+hasClass : String -> Decoder Bool
+hasClass class =
+    Json.map
+      ( \className ->
+          String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
+      )
+      ( Json.at [ "className" ] Json.string )
+
+
+onChange : Decoder m -> Property m
+onChange =
+    Internal.option << (\ decoder config -> { config | onChange = Just decoder } )
+
+
+onInput : Decoder m -> Property m
+onInput =
+    Internal.option << (\ decoder config -> { config | onInput = Just decoder } )
+
+
+steps : Int -> Property m
+steps =
+    Internal.option << (\ steps config -> { config | steps = steps } )
+
+
+trackMarkers : Property m
+trackMarkers =
+    Internal.option (\ config -> { config | trackMarkers = True } )
+
+
+subscriptions : Model -> Sub (Msg m)
+subscriptions model =
+    Sub.none
+--    if model.active then
+--        Sub.batch
+--        [ Mouse.moves Mouse
+--        , Mouse.ups (always Up)
+--        ]
+--    else
+--        Sub.none
+
+
+subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
+subs =
+    Component.subs Material.Msg.SliderMsg .slider subscriptions

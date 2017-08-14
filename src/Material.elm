@@ -29,6 +29,7 @@ import Material.Msg exposing (Msg(..))
 import Material.Radio as Radio
 import Material.Ripple as Ripple
 import Material.Select as Select
+import Material.Slider as Slider
 import Material.Snackbar as Snackbar
 import Material.Switch as Switch
 import Material.Tabs as Tabs
@@ -51,6 +52,7 @@ type alias Model =
     , select : Indexed Select.Model
     , ripple : Indexed Ripple.Model
     , snackbar : Indexed Snackbar.Model
+    , slider : Indexed Slider.Model
     }
 
 
@@ -71,6 +73,7 @@ defaultModel =
     , select = Dict.empty
     , ripple = Dict.empty
     , snackbar = Dict.empty
+    , slider = Dict.empty
     }
 
 
@@ -125,6 +128,10 @@ update_ lift msg store =
        SwitchMsg idx msg ->
            Switch.react lift msg idx store
 
+       SliderMsg idx msg ->
+           Slider.react (SliderMsg idx >> lift) msg idx store
+           -- TODO: change all components to do this? ^^^^
+
        TabsMsg idx msg ->
            Tabs.react (TabsMsg idx >> lift) msg idx store
 
@@ -167,6 +174,7 @@ subscriptions lift model =
         [ Menu.subs lift model.mdl
         , Select.subs lift model.mdl
         , Drawer.subs lift model.mdl
+        , Slider.subs lift model.mdl
         ]
 
 

@@ -61,7 +61,7 @@ view page =
             , title = "Select", subtitle = "Popover selection menus" }
           , { url = SimpleMenu, icon = "ic_menu_24px.svg", wip = False
             , title = "Simple Menu", subtitle = "Pop over menus" }
-          , { url = Slider, icon = "slider.svg", wip = True
+          , { url = Slider, icon = "slider.svg", wip = False
             , title = "Slider", subtitle = "Range Controls" }
           , { url = Snackbar, icon = "ic_toast_24px.svg", wip = False
             , title = "Snackbar", subtitle = "Transient messages" }
