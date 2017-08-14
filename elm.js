@@ -9708,26 +9708,27 @@ var _debois$elm_mdl$Material_Internal_Switch$SetFocus = function (a) {
 	return {ctor: 'SetFocus', _0: a};
 };
 
-var _debois$elm_mdl$Material_Msg$DrawerMsg = F2(
-	function (a, b) {
-		return {ctor: 'DrawerMsg', _0: a, _1: b};
+var _debois$elm_mdl$Material_Internal_Slider$defaultGeometry = {width: 0, left: 0, x: 0, discrete: false, min: 0, max: 100, steps: 1};
+var _debois$elm_mdl$Material_Internal_Slider$Geometry = F7(
+	function (a, b, c, d, e, f, g) {
+		return {width: a, left: b, x: c, discrete: d, steps: e, min: f, max: g};
 	});
-var _debois$elm_mdl$Material_Msg$RadioMsg = F2(
+var _debois$elm_mdl$Material_Internal_Slider$Dispatch = function (a) {
+	return {ctor: 'Dispatch', _0: a};
+};
+var _debois$elm_mdl$Material_Internal_Slider$Tick = {ctor: 'Tick'};
+var _debois$elm_mdl$Material_Internal_Slider$Up = {ctor: 'Up'};
+var _debois$elm_mdl$Material_Internal_Slider$Drag = function (a) {
+	return {ctor: 'Drag', _0: a};
+};
+var _debois$elm_mdl$Material_Internal_Slider$Activate = F2(
 	function (a, b) {
-		return {ctor: 'RadioMsg', _0: a, _1: b};
+		return {ctor: 'Activate', _0: a, _1: b};
 	});
-var _debois$elm_mdl$Material_Msg$RippleMsg = F2(
-	function (a, b) {
-		return {ctor: 'RippleMsg', _0: a, _1: b};
-	});
-var _debois$elm_mdl$Material_Msg$SwitchMsg = F2(
-	function (a, b) {
-		return {ctor: 'SwitchMsg', _0: a, _1: b};
-	});
-var _debois$elm_mdl$Material_Msg$CheckboxMsg = F2(
-	function (a, b) {
-		return {ctor: 'CheckboxMsg', _0: a, _1: b};
-	});
+var _debois$elm_mdl$Material_Internal_Slider$Blur = {ctor: 'Blur'};
+var _debois$elm_mdl$Material_Internal_Slider$Focus = {ctor: 'Focus'};
+var _debois$elm_mdl$Material_Internal_Slider$NoOp = {ctor: 'NoOp'};
+
 var _debois$elm_mdl$Material_Msg$TextfieldMsg = F2(
 	function (a, b) {
 		return {ctor: 'TextfieldMsg', _0: a, _1: b};
@@ -9736,28 +9737,52 @@ var _debois$elm_mdl$Material_Msg$TabsMsg = F2(
 	function (a, b) {
 		return {ctor: 'TabsMsg', _0: a, _1: b};
 	});
-var _debois$elm_mdl$Material_Msg$SelectMsg = F2(
+var _debois$elm_mdl$Material_Msg$SwitchMsg = F2(
 	function (a, b) {
-		return {ctor: 'SelectMsg', _0: a, _1: b};
-	});
-var _debois$elm_mdl$Material_Msg$MenuMsg = F2(
-	function (a, b) {
-		return {ctor: 'MenuMsg', _0: a, _1: b};
-	});
-var _debois$elm_mdl$Material_Msg$Dispatch = function (a) {
-	return {ctor: 'Dispatch', _0: a};
-};
-var _debois$elm_mdl$Material_Msg$FabMsg = F2(
-	function (a, b) {
-		return {ctor: 'FabMsg', _0: a, _1: b};
+		return {ctor: 'SwitchMsg', _0: a, _1: b};
 	});
 var _debois$elm_mdl$Material_Msg$SnackbarMsg = F2(
 	function (a, b) {
 		return {ctor: 'SnackbarMsg', _0: a, _1: b};
 	});
+var _debois$elm_mdl$Material_Msg$SliderMsg = F2(
+	function (a, b) {
+		return {ctor: 'SliderMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$SelectMsg = F2(
+	function (a, b) {
+		return {ctor: 'SelectMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$RippleMsg = F2(
+	function (a, b) {
+		return {ctor: 'RippleMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$RadioMsg = F2(
+	function (a, b) {
+		return {ctor: 'RadioMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$MenuMsg = F2(
+	function (a, b) {
+		return {ctor: 'MenuMsg', _0: a, _1: b};
+	});
 var _debois$elm_mdl$Material_Msg$IconToggleMsg = F2(
 	function (a, b) {
 		return {ctor: 'IconToggleMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$FabMsg = F2(
+	function (a, b) {
+		return {ctor: 'FabMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$DrawerMsg = F2(
+	function (a, b) {
+		return {ctor: 'DrawerMsg', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Material_Msg$Dispatch = function (a) {
+	return {ctor: 'Dispatch', _0: a};
+};
+var _debois$elm_mdl$Material_Msg$CheckboxMsg = F2(
+	function (a, b) {
+		return {ctor: 'CheckboxMsg', _0: a, _1: b};
 	});
 var _debois$elm_mdl$Material_Msg$ButtonMsg = F2(
 	function (a, b) {
@@ -10420,6 +10445,80 @@ var _debois$elm_mdl$Material_Toolbar$view = function (options) {
 		});
 };
 
+var _debois$elm_mdl$Demo_Page$hero = function (options) {
+	return A2(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$section,
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('hero'),
+			_1: {
+				ctor: '::',
+				_0: A2(_debois$elm_mdl$Material_Options$css, 'display', '-webkit-box'),
+				_1: {
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', '-ms-flexbox'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-orient', 'horizontal'),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-direction', 'normal'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-flow', 'row nowrap'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-flow', 'row nowrap'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-align', 'center'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-align', 'center'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'align-items', 'center'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, '-webkit-box-pack', 'center'),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$css, '-ms-flex-pack', 'center'),
+															_1: {
+																ctor: '::',
+																_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'center'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '360px'),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '360px'),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', 'rgba(0, 0, 0, 0.05)'),
+																			_1: options
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
 var _debois$elm_mdl$Demo_Page$Page = F3(
 	function (a, b, c) {
 		return {toolbar: a, setUrl: b, body: c};
@@ -13719,6 +13818,882 @@ var _debois$elm_mdl$Material_Select$Config = F3(
 		return {index: a, selectedText: b, disabled: c};
 	});
 
+var _debois$elm_mdl$Material_Slider$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _debois$elm_mdl$Material_Slider$subs = A3(
+	_debois$elm_mdl$Material_Component$subs,
+	_debois$elm_mdl$Material_Msg$SliderMsg,
+	function (_) {
+		return _.slider;
+	},
+	_debois$elm_mdl$Material_Slider$subscriptions);
+var _debois$elm_mdl$Material_Slider$trackMarkers = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{trackMarkers: true});
+	});
+var _debois$elm_mdl$Material_Slider$steps = function (_p0) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (steps, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{steps: steps});
+			})(_p0));
+};
+var _debois$elm_mdl$Material_Slider$onInput = function (_p1) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (decoder, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						onInput: _elm_lang$core$Maybe$Just(decoder)
+					});
+			})(_p1));
+};
+var _debois$elm_mdl$Material_Slider$onChange = function (_p2) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (decoder, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						onChange: _elm_lang$core$Maybe$Just(decoder)
+					});
+			})(_p2));
+};
+var _debois$elm_mdl$Material_Slider$hasClass = function ($class) {
+	return A2(
+		_elm_lang$core$Json_Decode$map,
+		function (className) {
+			return A2(
+				_elm_lang$core$String$contains,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' ',
+					A2(_elm_lang$core$Basics_ops['++'], $class, ' ')),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' ',
+					A2(_elm_lang$core$Basics_ops['++'], className, ' ')));
+		},
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'className',
+				_1: {ctor: '[]'}
+			},
+			_elm_lang$core$Json_Decode$string));
+};
+var _debois$elm_mdl$Material_Slider$traverseToContainer = function (decoder) {
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (doesHaveClass) {
+			return doesHaveClass ? decoder : _debois$elm_dom$DOM$parentElement(
+				_elm_lang$core$Json_Decode$lazy(
+					function (_p3) {
+						return _debois$elm_mdl$Material_Slider$traverseToContainer(decoder);
+					}));
+		},
+		_debois$elm_mdl$Material_Slider$hasClass('mdc-slider'));
+};
+var _debois$elm_mdl$Material_Slider$data = F2(
+	function (key, decoder) {
+		return A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'dataset',
+				_1: {
+					ctor: '::',
+					_0: key,
+					_1: {ctor: '[]'}
+				}
+			},
+			decoder);
+	});
+var _debois$elm_mdl$Material_Slider$decodeGeometry = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function (x) {
+		return _debois$elm_dom$DOM$target(
+			_debois$elm_mdl$Material_Slider$traverseToContainer(
+				A7(
+					_elm_lang$core$Json_Decode$map6,
+					F6(
+						function (offsetWidth, offsetLeft, discrete, min, max, steps) {
+							return {width: offsetWidth, left: offsetLeft, x: x, discrete: discrete, min: min, max: max, steps: steps};
+						}),
+					_debois$elm_dom$DOM$offsetWidth,
+					_debois$elm_dom$DOM$offsetLeft,
+					_debois$elm_mdl$Material_Slider$hasClass('mdc-slider--discrete'),
+					A2(
+						_debois$elm_mdl$Material_Slider$data,
+						'min',
+						A2(
+							_elm_lang$core$Json_Decode$map,
+							function (_p4) {
+								return A2(
+									_elm_lang$core$Result$withDefault,
+									1,
+									_elm_lang$core$String$toFloat(_p4));
+							},
+							_elm_lang$core$Json_Decode$string)),
+					A2(
+						_debois$elm_mdl$Material_Slider$data,
+						'max',
+						A2(
+							_elm_lang$core$Json_Decode$map,
+							function (_p5) {
+								return A2(
+									_elm_lang$core$Result$withDefault,
+									1,
+									_elm_lang$core$String$toFloat(_p5));
+							},
+							_elm_lang$core$Json_Decode$string)),
+					A2(
+						_debois$elm_mdl$Material_Slider$data,
+						'steps',
+						A2(
+							_elm_lang$core$Json_Decode$map,
+							function (_p6) {
+								return A2(
+									_elm_lang$core$Result$withDefault,
+									1,
+									_elm_lang$core$String$toInt(_p6));
+							},
+							_elm_lang$core$Json_Decode$string)))));
+	},
+	_elm_lang$core$Json_Decode$oneOf(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'pageX',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$core$Json_Decode$succeed(0),
+				_1: {ctor: '[]'}
+			}
+		}));
+var _debois$elm_mdl$Material_Slider$computeValue = function (geometry) {
+	var c = (!_elm_lang$core$Native_Utils.eq(geometry.width, 0)) ? ((geometry.x - geometry.left) / geometry.width) : A3(_elm_lang$core$Basics$clamp, 0, 1, 0);
+	return A3(_elm_lang$core$Basics$clamp, geometry.min, geometry.max, geometry.min + (c * (geometry.max - geometry.min)));
+};
+var _debois$elm_mdl$Material_Slider$discretize = F2(
+	function (steps, continuousValue) {
+		return _elm_lang$core$Basics$toFloat(
+			steps * _elm_lang$core$Basics$round(
+				continuousValue / _elm_lang$core$Basics$toFloat(steps)));
+	});
+var _debois$elm_mdl$Material_Slider$targetValue = A2(
+	_elm_lang$core$Json_Decode$map,
+	function (geometry) {
+		return geometry.discrete ? A2(
+			_debois$elm_mdl$Material_Slider$discretize,
+			geometry.steps,
+			_debois$elm_mdl$Material_Slider$computeValue(geometry)) : _debois$elm_mdl$Material_Slider$computeValue(geometry);
+	},
+	_debois$elm_mdl$Material_Slider$decodeGeometry);
+var _debois$elm_mdl$Material_Slider$disabled = _debois$elm_mdl$Material_Options$many(
+	{
+		ctor: '::',
+		_0: _debois$elm_mdl$Material_Options$cs('mdc-slider--disabled'),
+		_1: {
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Internal_Options$attribute(
+				_elm_lang$html$Html_Attributes$disabled(true)),
+			_1: {ctor: '[]'}
+		}
+	});
+var _debois$elm_mdl$Material_Slider$discrete = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{discrete: true});
+	});
+var _debois$elm_mdl$Material_Slider$max = function (_p7) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (max, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						max: _elm_lang$core$Basics$toFloat(max)
+					});
+			})(_p7));
+};
+var _debois$elm_mdl$Material_Slider$min = function (_p8) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (min, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						min: _elm_lang$core$Basics$toFloat(min)
+					});
+			})(_p8));
+};
+var _debois$elm_mdl$Material_Slider$value = function (_p9) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		F2(
+			function (value, config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{value: value});
+			})(_p9));
+};
+var _debois$elm_mdl$Material_Slider$defaultConfig = {value: 0, min: 0, max: 100, steps: 1, discrete: false, onInput: _elm_lang$core$Maybe$Nothing, onChange: _elm_lang$core$Maybe$Nothing, trackMarkers: false};
+var _debois$elm_mdl$Material_Slider$view = F4(
+	function (lift, model, options, _p10) {
+		var activateOn_ = function (event) {
+			return A3(
+				_debois$elm_mdl$Material_Options$onWithOptions,
+				event,
+				{stopPropagation: true, preventDefault: false},
+				A2(
+					_elm_lang$core$Json_Decode$map,
+					function (_p11) {
+						return lift(
+							A2(_debois$elm_mdl$Material_Internal_Slider$Activate, false, _p11));
+					},
+					_debois$elm_mdl$Material_Slider$decodeGeometry));
+		};
+		var leaves = {
+			ctor: '::',
+			_0: 'mouseleave',
+			_1: {
+				ctor: '::',
+				_0: 'touchleave',
+				_1: {
+					ctor: '::',
+					_0: 'pointerleave',
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+		var moves = {
+			ctor: '::',
+			_0: 'mousemove',
+			_1: {
+				ctor: '::',
+				_0: 'touchmove',
+				_1: {
+					ctor: '::',
+					_0: 'pointermove',
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+		var downs = {
+			ctor: '::',
+			_0: 'mousedown',
+			_1: {
+				ctor: '::',
+				_0: 'touchstart',
+				_1: {
+					ctor: '::',
+					_0: 'keydown',
+					_1: {
+						ctor: '::',
+						_0: 'pointerdown',
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+		var ups = {
+			ctor: '::',
+			_0: 'mouseup',
+			_1: {
+				ctor: '::',
+				_0: 'touchend',
+				_1: {
+					ctor: '::',
+					_0: 'pointerup',
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+		var dragOn = function (event) {
+			return A2(
+				_debois$elm_mdl$Material_Options$on,
+				event,
+				A2(
+					_elm_lang$core$Json_Decode$map,
+					function (_p12) {
+						return lift(
+							_debois$elm_mdl$Material_Internal_Slider$Drag(_p12));
+					},
+					_debois$elm_mdl$Material_Slider$decodeGeometry));
+		};
+		var upOn = function (event) {
+			return A2(
+				_debois$elm_mdl$Material_Options$on,
+				event,
+				_elm_lang$core$Json_Decode$succeed(
+					lift(_debois$elm_mdl$Material_Internal_Slider$Up)));
+		};
+		var activateOn = function (event) {
+			return A2(
+				_debois$elm_mdl$Material_Options$on,
+				event,
+				A2(
+					_elm_lang$core$Json_Decode$map,
+					function (_p13) {
+						return lift(
+							A2(_debois$elm_mdl$Material_Internal_Slider$Activate, true, _p13));
+					},
+					_debois$elm_mdl$Material_Slider$decodeGeometry));
+		};
+		var _p14 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Slider$defaultConfig, options);
+		var summary = _p14;
+		var config = _p14.config;
+		var continuousValue = model.active ? A2(_elm_lang$core$Maybe$withDefault, config.value, model.value) : config.value;
+		var value = config.discrete ? A2(_debois$elm_mdl$Material_Slider$discretize, config.steps, continuousValue) : continuousValue;
+		var translateX = function () {
+			var v = A3(_elm_lang$core$Basics$clamp, config.min, config.max, value);
+			var c = (!_elm_lang$core$Native_Utils.eq(config.max - config.min, 0)) ? A3(_elm_lang$core$Basics$clamp, 0, 1, (v - config.min) / (config.max - config.min)) : 0;
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				0,
+				A2(
+					_elm_lang$core$Maybe$map,
+					F2(
+						function (x, y) {
+							return x * y;
+						})(c),
+					A2(
+						_elm_lang$core$Maybe$map,
+						function (_) {
+							return _.width;
+						},
+						model.geometry)));
+		}();
+		var inputOn = function (event) {
+			return A2(
+				_debois$elm_mdl$Material_Options$on,
+				event,
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					_elm_lang$core$Json_Decode$succeed(
+						lift(_debois$elm_mdl$Material_Internal_Slider$NoOp)),
+					config.onInput));
+		};
+		var changeOn = function (event) {
+			return A2(
+				_debois$elm_mdl$Material_Options$on,
+				event,
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					_elm_lang$core$Json_Decode$succeed(
+						lift(_debois$elm_mdl$Material_Internal_Slider$NoOp)),
+					config.onChange));
+		};
+		var trackScale = _elm_lang$core$Native_Utils.eq(config.max - config.min, 0) ? 0 : ((value - config.min) / (config.max - config.min));
+		return A5(
+			_debois$elm_mdl$Material_Internal_Options$apply,
+			summary,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-slider'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Material_Options$when,
+						model.focus,
+						_debois$elm_mdl$Material_Options$cs('mdc-slider--focus')),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$when,
+							model.active,
+							_debois$elm_mdl$Material_Options$cs('mdc-slider--active')),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								_elm_lang$core$Native_Utils.cmp(value, config.min) < 1,
+								_debois$elm_mdl$Material_Options$cs('mdc-slider--off')),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									config.discrete,
+									_debois$elm_mdl$Material_Options$cs('mdc-slider--discrete')),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$when,
+										model.inTransit,
+										_debois$elm_mdl$Material_Options$cs('mdc-slider--in-transit')),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Options$when,
+											config.trackMarkers,
+											_debois$elm_mdl$Material_Options$cs('mdc-slider--display-markers')),
+										_1: {
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$attribute(
+												_elm_lang$html$Html_Attributes$tabindex(0)),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Options$on,
+													'focus',
+													_elm_lang$core$Json_Decode$succeed(
+														lift(_debois$elm_mdl$Material_Internal_Slider$Focus))),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Options$on,
+														'blur',
+														_elm_lang$core$Json_Decode$succeed(
+															lift(_debois$elm_mdl$Material_Internal_Slider$Blur))),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_debois$elm_mdl$Material_Options$data,
+															'min',
+															_elm_lang$core$Basics$toString(config.min)),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_debois$elm_mdl$Material_Options$data,
+																'max',
+																_elm_lang$core$Basics$toString(config.max)),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_debois$elm_mdl$Material_Options$data,
+																	'steps',
+																	_elm_lang$core$Basics$toString(config.steps)),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$many(
+																		A2(_elm_lang$core$List$map, activateOn, downs)),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Options$many(
+																			A2(
+																				_elm_lang$core$List$map,
+																				upOn,
+																				_elm_lang$core$List$concat(
+																					{
+																						ctor: '::',
+																						_0: ups,
+																						_1: {
+																							ctor: '::',
+																							_0: leaves,
+																							_1: {
+																								ctor: '::',
+																								_0: {
+																									ctor: '::',
+																									_0: 'blur',
+																									_1: {ctor: '[]'}
+																								},
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					}))),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				_debois$elm_mdl$Material_Options$when,
+																				!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing),
+																				_debois$elm_mdl$Material_Options$many(
+																					A2(_elm_lang$core$List$map, changeOn, ups))),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_debois$elm_mdl$Material_Options$when,
+																					model.active,
+																					_debois$elm_mdl$Material_Options$many(
+																						A2(_elm_lang$core$List$map, dragOn, moves))),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						_debois$elm_mdl$Material_Options$when,
+																						!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing),
+																						model.active ? _debois$elm_mdl$Material_Options$many(
+																							A2(
+																								_elm_lang$core$List$map,
+																								inputOn,
+																								_elm_lang$core$List$concat(
+																									{
+																										ctor: '::',
+																										_0: downs,
+																										_1: {
+																											ctor: '::',
+																											_0: ups,
+																											_1: {
+																												ctor: '::',
+																												_0: moves,
+																												_1: {ctor: '[]'}
+																											}
+																										}
+																									}))) : _debois$elm_mdl$Material_Options$many(
+																							A2(_elm_lang$core$List$map, inputOn, downs))),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A3(
+					_debois$elm_mdl$Material_Options$styled,
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__track-container'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__track'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$css,
+										'transform',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'scaleX(',
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												_elm_lang$core$Basics$toString(trackScale),
+												')'))),
+									_1: {ctor: '[]'}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__track-marker-container'),
+									_1: {ctor: '[]'}
+								},
+								A2(
+									_elm_lang$core$List$repeat,
+									(_elm_lang$core$Basics$round(config.max - config.min) / config.steps) | 0,
+									A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__track-marker'),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}))),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__thumb-container'),
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Options$many(
+									A2(_elm_lang$core$List$map, activateOn_, downs)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$css,
+										'transform',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'translateX(',
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												_elm_lang$core$Basics$toString(translateX),
+												'px) translateX(-50%)'))),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Options$on,
+											'transitionend',
+											A3(
+												_elm_lang$core$Json_Decode$map2,
+												F2(
+													function (tick, onInput) {
+														return lift(
+															_debois$elm_mdl$Material_Internal_Slider$Dispatch(
+																{
+																	ctor: '::',
+																	_0: tick,
+																	_1: {
+																		ctor: '::',
+																		_0: onInput,
+																		_1: {ctor: '[]'}
+																	}
+																}));
+													}),
+												_elm_lang$core$Json_Decode$succeed(
+													lift(_debois$elm_mdl$Material_Internal_Slider$Tick)),
+												A2(
+													_elm_lang$core$Maybe$withDefault,
+													_elm_lang$core$Json_Decode$succeed(
+														lift(_debois$elm_mdl$Material_Internal_Slider$NoOp)),
+													config.onInput))),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$svg,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$class('mdc-slider__thumb'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$width('21'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$height('21'),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$svg$Svg$circle,
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$cx('10.5'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$cy('10.5'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$r('7.875'),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__focus-ring'),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__pin'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A3(
+												_debois$elm_mdl$Material_Options$styled,
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$cs('mdc-slider__pin-value-marker'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(
+														_elm_lang$core$Basics$toString(value)),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Material_Slider$update = F3(
+	function (fwd, msg, model) {
+		var _p15 = msg;
+		switch (_p15.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'Dispatch':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _elm_lang$core$Platform_Cmd$batch(
+						A2(_elm_lang$core$List$map, _debois$elm_mdl$Material_Helpers$cmd, _p15._0))
+				};
+			case 'Focus':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{focus: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Blur':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{focus: false, active: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Tick':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{inTransit: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Activate':
+				var _p16 = _p15._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							active: true,
+							geometry: _elm_lang$core$Maybe$Just(_p16),
+							inTransit: _p15._0,
+							value: _elm_lang$core$Maybe$Just(
+								_debois$elm_mdl$Material_Slider$computeValue(_p16))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Drag':
+				var _p17 = _p15._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							geometry: _elm_lang$core$Maybe$Just(_p17),
+							inTransit: false,
+							value: _elm_lang$core$Maybe$Just(
+								_debois$elm_mdl$Material_Slider$computeValue(_p17))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{active: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _debois$elm_mdl$Material_Slider$defaultModel = {focus: false, active: false, geometry: _elm_lang$core$Maybe$Nothing, value: _elm_lang$core$Maybe$Nothing, inTransit: false};
+var _debois$elm_mdl$Material_Slider$_p18 = A3(
+	_debois$elm_mdl$Material_Component$indexed,
+	function (_) {
+		return _.slider;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{slider: x});
+		}),
+	_debois$elm_mdl$Material_Slider$defaultModel);
+var _debois$elm_mdl$Material_Slider$get = _debois$elm_mdl$Material_Slider$_p18._0;
+var _debois$elm_mdl$Material_Slider$set = _debois$elm_mdl$Material_Slider$_p18._1;
+var _debois$elm_mdl$Material_Slider$react = F4(
+	function (lift, msg, idx, store) {
+		return A2(
+			_debois$elm_mdl$Material_Helpers$map1st,
+			function (_p19) {
+				return _elm_lang$core$Maybe$Just(
+					A3(_debois$elm_mdl$Material_Slider$set, idx, store, _p19));
+			},
+			A3(
+				_debois$elm_mdl$Material_Slider$update,
+				lift,
+				msg,
+				A2(_debois$elm_mdl$Material_Slider$get, idx, store)));
+	});
+var _debois$elm_mdl$Material_Slider$render = F4(
+	function (lift, index, store, options) {
+		return A7(
+			_debois$elm_mdl$Material_Component$render,
+			_debois$elm_mdl$Material_Slider$get,
+			_debois$elm_mdl$Material_Slider$view,
+			_debois$elm_mdl$Material_Msg$SliderMsg,
+			lift,
+			index,
+			store,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Internal_Options$dispatch(lift),
+				_1: options
+			});
+	});
+var _debois$elm_mdl$Material_Slider$Model = F5(
+	function (a, b, c, d, e) {
+		return {focus: a, active: b, geometry: c, value: d, inTransit: e};
+	});
+var _debois$elm_mdl$Material_Slider$Config = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {value: a, min: b, max: c, discrete: d, steps: e, onInput: f, onChange: g, trackMarkers: h};
+	});
+
 var _debois$elm_mdl$Material_Snackbar$alignEnd = _debois$elm_mdl$Material_Options$cs('mdc-snackbar--align-end');
 var _debois$elm_mdl$Material_Snackbar$alignStart = _debois$elm_mdl$Material_Options$cs('mdc-snackbar--align-start');
 var _debois$elm_mdl$Material_Snackbar$onDismiss = function (_p0) {
@@ -15783,7 +16758,11 @@ var _debois$elm_mdl$Material$subscriptions = F2(
 					_1: {
 						ctor: '::',
 						_0: A2(_debois$elm_mdl$Material_Drawer$subs, lift, model.mdl),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Slider$subs, lift, model.mdl),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			});
@@ -15841,16 +16820,27 @@ var _debois$elm_mdl$Material$update_ = F3(
 				return A4(_debois$elm_mdl$Material_Checkbox$react, lift, _p0._1, _p0._0, store);
 			case 'SwitchMsg':
 				return A4(_debois$elm_mdl$Material_Switch$react, lift, _p0._1, _p0._0, store);
-			case 'TabsMsg':
+			case 'SliderMsg':
 				var _p8 = _p0._0;
 				return A4(
-					_debois$elm_mdl$Material_Tabs$react,
+					_debois$elm_mdl$Material_Slider$react,
 					function (_p7) {
 						return lift(
-							A2(_debois$elm_mdl$Material_Msg$TabsMsg, _p8, _p7));
+							A2(_debois$elm_mdl$Material_Msg$SliderMsg, _p8, _p7));
 					},
 					_p0._1,
 					_p8,
+					store);
+			case 'TabsMsg':
+				var _p10 = _p0._0;
+				return A4(
+					_debois$elm_mdl$Material_Tabs$react,
+					function (_p9) {
+						return lift(
+							A2(_debois$elm_mdl$Material_Msg$TabsMsg, _p10, _p9));
+					},
+					_p0._1,
+					_p10,
 					store);
 			case 'RippleMsg':
 				return A4(_debois$elm_mdl$Material_Ripple$react, lift, _p0._1, _p0._0, store);
@@ -15883,7 +16873,7 @@ var _debois$elm_mdl$Material$update = F3(
 						return _.mdl;
 					}(container))));
 	});
-var _debois$elm_mdl$Material$defaultModel = {button: _elm_lang$core$Dict$empty, radio: _elm_lang$core$Dict$empty, drawer: _elm_lang$core$Dict$empty, iconToggle: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, checkbox: _elm_lang$core$Dict$empty, $switch: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty};
+var _debois$elm_mdl$Material$defaultModel = {button: _elm_lang$core$Dict$empty, radio: _elm_lang$core$Dict$empty, drawer: _elm_lang$core$Dict$empty, iconToggle: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, checkbox: _elm_lang$core$Dict$empty, $switch: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty, slider: _elm_lang$core$Dict$empty};
 var _debois$elm_mdl$Material$Model = function (a) {
 	return function (b) {
 		return function (c) {
@@ -15897,7 +16887,9 @@ var _debois$elm_mdl$Material$Model = function (a) {
 										return function (k) {
 											return function (l) {
 												return function (m) {
-													return {button: a, radio: b, drawer: c, iconToggle: d, fab: e, textfield: f, menu: g, checkbox: h, $switch: i, tabs: j, select: k, ripple: l, snackbar: m};
+													return function (n) {
+														return {button: a, radio: b, drawer: c, iconToggle: d, fab: e, textfield: f, menu: g, checkbox: h, $switch: i, tabs: j, select: k, ripple: l, snackbar: m, slider: n};
+													};
 												};
 											};
 										};
@@ -27316,17 +28308,84 @@ var _debois$elm_mdl$Demo_Selects$subscriptions = F2(
 			model.mdl);
 	});
 
-var _debois$elm_mdl$Demo_Slider$view = F3(
-	function (lift, page, model) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
-			{ctor: '[]'});
-	});
-var _debois$elm_mdl$Demo_Slider$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, values: _elm_lang$core$Dict$empty};
-var _debois$elm_mdl$Demo_Slider$Model = F2(
+var _debois$elm_mdl$Demo_Slider$defaultModel = {
+	mdl: _debois$elm_mdl$Material$defaultModel,
+	values: _elm_lang$core$Dict$fromList(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: {
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				_1: 30
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: {
+						ctor: '::',
+						_0: 1,
+						_1: {ctor: '[]'}
+					},
+					_1: 30
+				},
+				_1: {ctor: '[]'}
+			}
+		}),
+	inputs: _elm_lang$core$Dict$empty,
+	min: 0,
+	max: 100,
+	steps: 1,
+	darkTheme: false,
+	disabled: false,
+	customBg: false,
+	rtl: false
+};
+var _debois$elm_mdl$Demo_Slider$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {mdl: a, values: b, inputs: c, min: d, max: e, steps: f, darkTheme: g, disabled: h, customBg: i, rtl: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _debois$elm_mdl$Demo_Slider$ToggleRtl = {ctor: 'ToggleRtl'};
+var _debois$elm_mdl$Demo_Slider$ToggleCustomBg = {ctor: 'ToggleCustomBg'};
+var _debois$elm_mdl$Demo_Slider$ToggleDisabled = {ctor: 'ToggleDisabled'};
+var _debois$elm_mdl$Demo_Slider$ToggleDarkTheme = {ctor: 'ToggleDarkTheme'};
+var _debois$elm_mdl$Demo_Slider$SetSteps = function (a) {
+	return {ctor: 'SetSteps', _0: a};
+};
+var _debois$elm_mdl$Demo_Slider$SetMax = function (a) {
+	return {ctor: 'SetMax', _0: a};
+};
+var _debois$elm_mdl$Demo_Slider$SetMin = function (a) {
+	return {ctor: 'SetMin', _0: a};
+};
+var _debois$elm_mdl$Demo_Slider$Input = F2(
 	function (a, b) {
-		return {mdl: a, values: b};
+		return {ctor: 'Input', _0: a, _1: b};
+	});
+var _debois$elm_mdl$Demo_Slider$Change = F2(
+	function (a, b) {
+		return {ctor: 'Change', _0: a, _1: b};
 	});
 var _debois$elm_mdl$Demo_Slider$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
@@ -27334,14 +28393,1130 @@ var _debois$elm_mdl$Demo_Slider$Mdl = function (a) {
 var _debois$elm_mdl$Demo_Slider$update = F3(
 	function (lift, msg, model) {
 		var _p0 = msg;
-		return A3(
-			_debois$elm_mdl$Material$update,
-			function (_p1) {
+		switch (_p0.ctor) {
+			case 'Mdl':
+				return A3(
+					_debois$elm_mdl$Material$update,
+					function (_p1) {
+						return lift(
+							_debois$elm_mdl$Demo_Slider$Mdl(_p1));
+					},
+					_p0._0,
+					model);
+			case 'Change':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							values: A3(_elm_lang$core$Dict$insert, _p0._0, _p0._1, model.values)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Input':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							inputs: A3(_elm_lang$core$Dict$insert, _p0._0, _p0._1, model.inputs)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetMin':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{min: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetMax':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{max: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetSteps':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{steps: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleDarkTheme':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{darkTheme: !model.darkTheme}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleDisabled':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{disabled: !model.disabled}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleCustomBg':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{customBg: !model.customBg}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{rtl: !model.rtl}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _debois$elm_mdl$Demo_Slider$view = F3(
+	function (lift, page, model) {
+		var sliderWrapper = function (options) {
+			return A2(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: function (_p2) {
+						return A2(
+							_debois$elm_mdl$Material_Options$when,
+							model.darkTheme,
+							_debois$elm_mdl$Material_Options$many(_p2));
+					}(
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Theme$dark,
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, '--mdc-theme-primary', '#64dd17'),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: function (_p3) {
+							return A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.customBg,
+								_debois$elm_mdl$Material_Options$many(_p3));
+						}(
+							{
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'backgrund-color', '#eee'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, '--mdc-slider-bg-color-behind-component', '#eee'),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.rtl,
+								_debois$elm_mdl$Material_Options$attribute(
+									A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'))),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '0 16px'),
+								_1: options
+							}
+						}
+					}
+				});
+		};
+		var example = function (options) {
+			return A2(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$section,
+				{
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('example'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+							_1: options
+						}
+					}
+				});
+		};
+		return A2(
+			page.body,
+			'Slider',
+			{
+				ctor: '::',
+				_0: A2(
+					_debois$elm_mdl$Demo_Page$hero,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '0 auto'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '100%'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '600px'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, '--mdc-slider-bg-color-behind-component', '#f2f2f2'),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: function () {
+									var idx = {
+										ctor: '::',
+										_0: 0,
+										_1: {ctor: '[]'}
+									};
+									return A5(
+										_debois$elm_mdl$Material_Slider$render,
+										function (_p4) {
+											return lift(
+												_debois$elm_mdl$Demo_Slider$Mdl(_p4));
+										},
+										idx,
+										model.mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Slider$value(
+												A2(
+													_elm_lang$core$Maybe$withDefault,
+													0,
+													A2(_elm_lang$core$Dict$get, idx, model.values))),
+											_1: {
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Slider$onInput(
+													A2(
+														_elm_lang$core$Json_Decode$map,
+														function (_p5) {
+															return lift(
+																A2(_debois$elm_mdl$Demo_Slider$Input, idx, _p5));
+														},
+														_debois$elm_mdl$Material_Slider$targetValue)),
+												_1: {
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Slider$onChange(
+														A2(
+															_elm_lang$core$Json_Decode$map,
+															function (_p6) {
+																return lift(
+																	A2(_debois$elm_mdl$Demo_Slider$Change, idx, _p6));
+															},
+															_debois$elm_mdl$Material_Slider$targetValue)),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'});
+								}(),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						example,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$em,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Note that in browsers that support custom properties, we alter theme\'s primary color when using the dark theme toggle so that the slider appears more visible'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: function () {
+							var idx = {
+								ctor: '::',
+								_0: 1,
+								_1: {ctor: '[]'}
+							};
+							return A2(
+								example,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$h2,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Continuous Slider'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$p,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Select Value:'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												sliderWrapper,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A5(
+														_debois$elm_mdl$Material_Slider$render,
+														function (_p7) {
+															return lift(
+																_debois$elm_mdl$Demo_Slider$Mdl(_p7));
+														},
+														idx,
+														model.mdl,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Slider$value(
+																A2(
+																	_elm_lang$core$Maybe$withDefault,
+																	0,
+																	A2(_elm_lang$core$Dict$get, idx, model.values))),
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Slider$onInput(
+																	A2(
+																		_elm_lang$core$Json_Decode$map,
+																		function (_p8) {
+																			return lift(
+																				A2(_debois$elm_mdl$Demo_Slider$Input, idx, _p8));
+																		},
+																		_debois$elm_mdl$Material_Slider$targetValue)),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Slider$onChange(
+																		A2(
+																			_elm_lang$core$Json_Decode$map,
+																			function (_p9) {
+																				return lift(
+																					A2(_debois$elm_mdl$Demo_Slider$Change, idx, _p9));
+																			},
+																			_debois$elm_mdl$Material_Slider$targetValue)),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Slider$min(model.min),
+																		_1: {
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_Slider$max(model.max),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Slider$disabled),
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$p,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Value from Slider.onInput: '),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$span,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text(
+																		_elm_lang$core$Basics$toString(
+																			A2(
+																				_elm_lang$core$Maybe$withDefault,
+																				0,
+																				A2(_elm_lang$core$Dict$get, idx, model.inputs)))),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$p,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Value from Slider.onChange: '),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$span,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text(
+																			_elm_lang$core$Basics$toString(
+																				A2(
+																					_elm_lang$core$Maybe$withDefault,
+																					0,
+																					A2(_elm_lang$core$Dict$get, idx, model.values)))),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								});
+						}(),
+						_1: {
+							ctor: '::',
+							_0: function () {
+								var idx = {
+									ctor: '::',
+									_0: 2,
+									_1: {ctor: '[]'}
+								};
+								return A2(
+									example,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$h2,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Discrete Slider'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$p,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Select Value:'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													sliderWrapper,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A5(
+															_debois$elm_mdl$Material_Slider$render,
+															function (_p10) {
+																return lift(
+																	_debois$elm_mdl$Demo_Slider$Mdl(_p10));
+															},
+															idx,
+															model.mdl,
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Slider$value(
+																	A2(
+																		_elm_lang$core$Maybe$withDefault,
+																		0,
+																		A2(_elm_lang$core$Dict$get, idx, model.values))),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Slider$onInput(
+																		A2(
+																			_elm_lang$core$Json_Decode$map,
+																			function (_p11) {
+																				return lift(
+																					A2(_debois$elm_mdl$Demo_Slider$Input, idx, _p11));
+																			},
+																			_debois$elm_mdl$Material_Slider$targetValue)),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Slider$onChange(
+																			A2(
+																				_elm_lang$core$Json_Decode$map,
+																				function (_p12) {
+																					return lift(
+																						A2(_debois$elm_mdl$Demo_Slider$Change, idx, _p12));
+																				},
+																				_debois$elm_mdl$Material_Slider$targetValue)),
+																		_1: {
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_Slider$discrete,
+																			_1: {
+																				ctor: '::',
+																				_0: _debois$elm_mdl$Material_Slider$min(model.min),
+																				_1: {
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Material_Slider$max(model.max),
+																					_1: {
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Slider$steps(model.steps),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Slider$disabled),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$p,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Value from Slider.onInput: '),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$span,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text(
+																			_elm_lang$core$Basics$toString(
+																				A2(
+																					_elm_lang$core$Maybe$withDefault,
+																					0,
+																					A2(_elm_lang$core$Dict$get, idx, model.inputs)))),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$p,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Value from Slider.onChange: '),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$span,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text(
+																				_elm_lang$core$Basics$toString(
+																					A2(
+																						_elm_lang$core$Maybe$withDefault,
+																						0,
+																						A2(_elm_lang$core$Dict$get, idx, model.values)))),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									});
+							}(),
+							_1: {
+								ctor: '::',
+								_0: function () {
+									var idx = {
+										ctor: '::',
+										_0: 3,
+										_1: {ctor: '[]'}
+									};
+									return A2(
+										example,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$h2,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Discrete Slider with markers'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$p,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Select Value:'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														sliderWrapper,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A5(
+																_debois$elm_mdl$Material_Slider$render,
+																function (_p13) {
+																	return lift(
+																		_debois$elm_mdl$Demo_Slider$Mdl(_p13));
+																},
+																idx,
+																model.mdl,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Slider$value(
+																		A2(
+																			_elm_lang$core$Maybe$withDefault,
+																			0,
+																			A2(_elm_lang$core$Dict$get, idx, model.values))),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Slider$onInput(
+																			A2(
+																				_elm_lang$core$Json_Decode$map,
+																				function (_p14) {
+																					return lift(
+																						A2(_debois$elm_mdl$Demo_Slider$Input, idx, _p14));
+																				},
+																				_debois$elm_mdl$Material_Slider$targetValue)),
+																		_1: {
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_Slider$onChange(
+																				A2(
+																					_elm_lang$core$Json_Decode$map,
+																					function (_p15) {
+																						return lift(
+																							A2(_debois$elm_mdl$Demo_Slider$Change, idx, _p15));
+																					},
+																					_debois$elm_mdl$Material_Slider$targetValue)),
+																			_1: {
+																				ctor: '::',
+																				_0: _debois$elm_mdl$Material_Slider$discrete,
+																				_1: {
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Material_Slider$min(model.min),
+																					_1: {
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Slider$max(model.max),
+																						_1: {
+																							ctor: '::',
+																							_0: _debois$elm_mdl$Material_Slider$steps(model.steps),
+																							_1: {
+																								ctor: '::',
+																								_0: _debois$elm_mdl$Material_Slider$trackMarkers,
+																								_1: {
+																									ctor: '::',
+																									_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Slider$disabled),
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																},
+																{ctor: '[]'}),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$p,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Value from Slider.onInput: '),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$span,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text(
+																				_elm_lang$core$Basics$toString(
+																					A2(
+																						_elm_lang$core$Maybe$withDefault,
+																						0,
+																						A2(_elm_lang$core$Dict$get, idx, model.inputs)))),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$p,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Value from Slider.onChange: '),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$span,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text(
+																					_elm_lang$core$Basics$toString(
+																						A2(
+																							_elm_lang$core$Maybe$withDefault,
+																							0,
+																							A2(_elm_lang$core$Dict$get, idx, model.values)))),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										});
+								}(),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										example,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$label,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Min: '),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$input,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$type_('number'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$min('0'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Attributes$max('100'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$html$Html_Attributes$defaultValue('0'),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(
+																							_elm_lang$html$Html_Events$on,
+																							'input',
+																							A2(
+																								_elm_lang$core$Json_Decode$map,
+																								function (_p16) {
+																									return lift(
+																										_debois$elm_mdl$Demo_Slider$SetMin(
+																											A2(
+																												_elm_lang$core$Maybe$withDefault,
+																												0,
+																												_elm_lang$core$Result$toMaybe(
+																													_elm_lang$core$String$toInt(_p16)))));
+																								},
+																								_elm_lang$html$Html_Events$targetValue)),
+																						_1: {ctor: '[]'}
+																					}
+																				}
+																			}
+																		}
+																	},
+																	{ctor: '[]'}),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$label,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Max: '),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$input,
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$type_('number'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Attributes$min('0'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$html$Html_Attributes$max('100'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$defaultValue('100'),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(
+																								_elm_lang$html$Html_Events$on,
+																								'input',
+																								A2(
+																									_elm_lang$core$Json_Decode$map,
+																									function (_p17) {
+																										return lift(
+																											_debois$elm_mdl$Demo_Slider$SetMax(
+																												A2(
+																													_elm_lang$core$Maybe$withDefault,
+																													100,
+																													_elm_lang$core$Result$toMaybe(
+																														_elm_lang$core$String$toInt(_p17)))));
+																									},
+																									_elm_lang$html$Html_Events$targetValue)),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				}
+																			}
+																		},
+																		{ctor: '[]'}),
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$div,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$label,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Step: '),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$input,
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Attributes$type_('number'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$html$Html_Attributes$min('0'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$max('100'),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$html$Html_Attributes$defaultValue('1'),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(
+																									_elm_lang$html$Html_Events$on,
+																									'input',
+																									A2(
+																										_elm_lang$core$Json_Decode$map,
+																										function (_p18) {
+																											return lift(
+																												_debois$elm_mdl$Demo_Slider$SetSteps(
+																													A2(
+																														_elm_lang$core$Maybe$withDefault,
+																														1,
+																														_elm_lang$core$Result$toMaybe(
+																															_elm_lang$core$String$toInt(_p18)))));
+																										},
+																										_elm_lang$html$Html_Events$targetValue)),
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					}
+																				}
+																			},
+																			{ctor: '[]'}),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$div,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$label,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Dark Theme: '),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				_elm_lang$html$Html$input,
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$checked(model.darkTheme),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(
+																								_elm_lang$html$Html_Events$on,
+																								'change',
+																								_elm_lang$core$Json_Decode$succeed(
+																									lift(_debois$elm_mdl$Demo_Slider$ToggleDarkTheme))),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				},
+																				{ctor: '[]'}),
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$div,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$label,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Disabled: '),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_elm_lang$html$Html$input,
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$html$Html_Attributes$checked(model.disabled),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(
+																									_elm_lang$html$Html_Events$on,
+																									'change',
+																									_elm_lang$core$Json_Decode$succeed(
+																										lift(_debois$elm_mdl$Demo_Slider$ToggleDisabled))),
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					},
+																					{ctor: '[]'}),
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$div,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$label,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text('Use Custom BG Color: '),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						_elm_lang$html$Html$input,
+																						{
+																							ctor: '::',
+																							_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																							_1: {
+																								ctor: '::',
+																								_0: _elm_lang$html$Html_Attributes$checked(model.customBg),
+																								_1: {
+																									ctor: '::',
+																									_0: A2(
+																										_elm_lang$html$Html_Events$on,
+																										'change',
+																										_elm_lang$core$Json_Decode$succeed(
+																											lift(_debois$elm_mdl$Demo_Slider$ToggleCustomBg))),
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						},
+																						{ctor: '[]'}),
+																					_1: {ctor: '[]'}
+																				}
+																			}),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$div,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: A2(
+																				_elm_lang$html$Html$label,
+																				{ctor: '[]'},
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text('RTL: '),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(
+																							_elm_lang$html$Html$input,
+																							{
+																								ctor: '::',
+																								_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																								_1: {
+																									ctor: '::',
+																									_0: _elm_lang$html$Html_Attributes$checked(model.rtl),
+																									_1: {
+																										ctor: '::',
+																										_0: A2(
+																											_elm_lang$html$Html_Events$on,
+																											'change',
+																											_elm_lang$core$Json_Decode$succeed(
+																												lift(_debois$elm_mdl$Demo_Slider$ToggleRtl))),
+																										_1: {ctor: '[]'}
+																									}
+																								}
+																							},
+																							{ctor: '[]'}),
+																						_1: {ctor: '[]'}
+																					}
+																				}),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Slider$subscriptions = F2(
+	function (lift, model) {
+		return A2(
+			_debois$elm_mdl$Material_Slider$subs,
+			function (_p19) {
 				return lift(
-					_debois$elm_mdl$Demo_Slider$Mdl(_p1));
+					_debois$elm_mdl$Demo_Slider$Mdl(_p19));
 			},
-			_p0._0,
-			model);
+			model.mdl);
 	});
 
 var _debois$elm_mdl$Demo_Snackbar$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, multiline: false, actionOnBottom: false, dismissOnAction: true, darkTheme: false, messageText: 'Message deleted', actionText: 'Undo'};
@@ -28302,7 +30477,7 @@ var _debois$elm_mdl$Demo_Startpage$view = function (page) {
 																											_0: {url: _debois$elm_mdl$Demo_Page$SimpleMenu, icon: 'ic_menu_24px.svg', wip: false, title: 'Simple Menu', subtitle: 'Pop over menus'},
 																											_1: {
 																												ctor: '::',
-																												_0: {url: _debois$elm_mdl$Demo_Page$Slider, icon: 'slider.svg', wip: true, title: 'Slider', subtitle: 'Range Controls'},
+																												_0: {url: _debois$elm_mdl$Demo_Page$Slider, icon: 'slider.svg', wip: false, title: 'Slider', subtitle: 'Range Controls'},
 																												_1: {
 																													ctor: '::',
 																													_0: {url: _debois$elm_mdl$Demo_Page$Snackbar, icon: 'ic_toast_24px.svg', wip: false, title: 'Snackbar', subtitle: 'Transient messages'},
@@ -36674,7 +38849,11 @@ var _debois$elm_mdl$Main$subscriptions = function (model) {
 								_1: {
 									ctor: '::',
 									_0: A2(_debois$elm_mdl$Demo_TemporaryDrawer$subscriptions, _debois$elm_mdl$Main$TemporaryDrawerMsg, model.temporaryDrawer),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Demo_Slider$subscriptions, _debois$elm_mdl$Main$SliderMsg, model.slider),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
