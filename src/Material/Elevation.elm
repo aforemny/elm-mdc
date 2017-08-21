@@ -1,68 +1,183 @@
 module Material.Elevation
     exposing
-        ( elevation
+        (
+          z0
+        , z1
+        , z2
+        , z3
+        , z4
+        , z5
+        , z6
+        , z7
+        , z8
+        , z9
+        , z10
+        , z11
+        , z12
+        , z13
+        , z14
+        , z15
+        , z16
+        , z17
+        , z18
+        , z19
+        , z20
+        , z21
+        , z22
+        , z23
+        , z24
         , transition
         )
 
-{-| From the [Material Design Lite documentation](https://github.com/google/material-design-lite/blob/master/src/shadow/README.md)
+{-| Shadows provide important visual cues about objects’ depth and directional
+movement. An object’s elevation determines the appearance of its shadow.
 
-> The Material Design Lite (MDL) shadow is not a component in the same sense as
-> an MDL card, menu, or textbox; it is a visual effect that can be assigned to a
-> user interface element. The effect simulates a three-dimensional positioning of
-> the element, as though it is slightly raised above the surface it rests upon —
-> a positive z-axis value, in user interface terms. The shadow starts at the
-> edges of the element and gradually fades outward, providing a realistic 3-D
-> effect.
->
-> Shadows are a convenient and intuitive means of distinguishing an element from
-> its surroundings. A shadow can draw the user's eye to an object and emphasize
-> the object's importance, uniqueness, or immediacy.
->
-> Shadows are a well-established feature in user interfaces, and provide users
-> with a visual clue to an object's intended use or value. Their design and use
-> is an important factor in the overall user experience.)
+## Design & API Documentation
 
-The [Material Design Specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html#elevation-shadows-elevation-android-)
-pre-defines appropriate elevation for most UI elements; you need to manually
-assign shadows only to your own elements.
-
-You are encouraged to visit the
-[Material Design specification](https://www.google.com/design/spec/what-is-material/elevation-shadows.html)
-for details about appropriate use of shadows.
-
-Refer to
-[this site](https://debois.github.io/elm-mdl/#elevation)
-for a live demo.
+- [Material Design guidelines: Shadows & elevation](https://material.io/components/web/catalog/elevation/)
+- [Demo](https://aforemny.github.io/elm-mdc/#elevation)
 
 
-# Elevations
-@docs elevation
+## Elevations
 
-# Transitions
+@docs z0, z1, z2, z3, z4, z5, z6, z7, z8, z9, z10, z11, z12, z13, z14, z15
+@docs z16, z17, z18, z19, z20, z21, z22, z23, z24
 @docs transition
-
 -}
 
 import Material.Options exposing (..)
 
 
-{-| Indicate the elevation of an element by giving it a shadow.
-The argument indicates intended elevation; valid values
-are 2, 3, 4, 6, 8, 16, 24. Invalid values produce no shadow.
-
-(The specification uses only the values 1-6, 8, 9, 12, 16, 24 for standard UI
-elements; MDL sources define all values 0-24, but omits most from production css.)
--}
-elevation : Int -> Property a m
-elevation z =
-    cs ("mdc-elevation--z" ++ toString (clamp 0 24 z))
+z0 : Property a m
+z0 =
+    z 0
 
 
-{-| Add a CSS-transition to changes in elevation. Supply a transition
-duration in milliseconds as argument.
+z1 : Property a m
+z1 =
+    z 1
 
-NB! This property is dictated neither by MDL nor the Material Design Specification.
--}
-transition : Float -> Property a m
-transition duration =
-    css "transition" ("box-shadow " ++ toString duration ++ "ms ease-in-out 0s")
+
+z2 : Property a m
+z2 =
+    z 2
+
+
+z3 : Property a m
+z3 =
+    z 3
+
+
+z4 : Property a m
+z4 =
+    z 4
+
+
+z5 : Property a m
+z5 =
+    z 5
+
+
+z6 : Property a m
+z6 =
+    z 6
+
+
+z7 : Property a m
+z7 =
+    z 7
+
+
+z8 : Property a m
+z8 =
+    z 8
+
+
+z9 : Property a m
+z9 =
+    z 9
+
+
+z10 : Property a m
+z10 =
+    z 10
+
+
+z11 : Property a m
+z11 =
+    z 11
+
+
+z12 : Property a m
+z12 =
+    z 12
+
+
+z13 : Property a m
+z13 =
+    z 13
+
+
+z14 : Property a m
+z14 =
+    z 14
+
+
+z15 : Property a m
+z15 =
+    z 15
+
+
+z16 : Property a m
+z16 =
+    z 16
+
+
+z17 : Property a m
+z17 =
+    z 17
+
+
+z18 : Property a m
+z18 =
+    z 18
+
+
+z19 : Property a m
+z19 =
+    z 19
+
+
+z20 : Property a m
+z20 =
+    z 20
+
+
+z21 : Property a m
+z21 =
+    z 21
+
+
+z22 : Property a m
+z22 =
+    z 22
+
+
+z23 : Property a m
+z23 =
+    z 23
+
+
+z24 : Property a m
+z24 =
+    z 24
+
+
+z : Int -> Property a m
+z v =
+    cs <| "mdc-elevation--z" ++ toString v
+
+
+transition : Property a m
+transition =
+    cs "mdc-elevation--transition"
