@@ -209,16 +209,6 @@ type alias Store s =
     Component.indexed .button (\x y -> { y | button = x }) defaultModel
 
 
-react :
-    (Material.Msg.Msg m -> m)
-    -> Msg
-    -> Index
-    -> Store s
-    -> ( Maybe (Store s), Cmd m )
-react =
-    Component.react get set Material.Msg.ButtonMsg (Component.generalise update)
-
-
 render :
     (Material.Msg.Msg m -> m)
     -> Index
@@ -228,3 +218,13 @@ render :
     -> Html m
 render =
     Component.render get view Material.Msg.ButtonMsg
+
+
+react :
+    (Material.Msg.Msg m -> m)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react =
+    Component.react get set Material.Msg.ButtonMsg (Component.generalise update)

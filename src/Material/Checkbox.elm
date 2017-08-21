@@ -1,19 +1,43 @@
 module Material.Checkbox
     exposing
-        ( Model
+        ( -- VIEW
+          view
+        , Property
+        , disabled
+        , checked
+        , indeterminate
+
+          -- TEA
+        , Model
         , defaultModel
         , Msg
         , update
-        , Config
-        , view
+
+          -- RENDER
         , render
-        , disabled
-        , indeterminate
-        , checked
         , react
         )
 
-{-| TODO
+{-| The MDC Checkbox component is a spec-aligned checkbox component adhering to
+the Material Design checkbox requirements.
+
+## Design & API Documentation
+
+- [Material Design guidelines: Selection Controls – Checkbox](https://material.io/guidelines/components/selection-controls.html#selection-controls-checkbox)
+- [Demo](https://aforemny.github.io/elm-mdc/#checkbox)
+
+## View
+@docs view
+
+## Properties
+@docs Property
+@docs disabled, checked, indeterminate
+
+## TEA architecture
+@docs Model, defaultModel, Msg, update
+
+## Featured render
+@docs Property, render
 -}
 
 import Html.Attributes as Html
@@ -29,36 +53,22 @@ import Material.Options as Options exposing (Style, cs, styled, many, when, mayb
 import Svg.Attributes as Svg
 import Svg exposing (path)
 
--- MODEL
 
-
-{-| Component model.
--}
 type alias Model =
     { isFocused : Bool
     }
 
 
-{-| Default component model.
--}
 defaultModel : Model
 defaultModel =
     { isFocused = False
     }
 
 
-
--- ACTION, UPDATE
-
-
-{-| Component message.
--}
 type alias Msg
     = Material.Internal.Checkbox.Msg
 
 
-{-| Component update.
--}
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update _ msg model =
     case msg of
@@ -66,9 +76,6 @@ update _ msg model =
             ( Just { model | isFocused = focus }, Cmd.none )
         NoOp ->
             ( Nothing, Cmd.none )
-
-
--- OPTIONS
 
 
 type alias Config m =
@@ -86,14 +93,10 @@ defaultConfig =
     }
 
 
-{-| TODO
--}
 type alias Property m =
     Options.Property (Config m) m
 
 
-{-| TODO
--}
 disabled : Property m
 disabled =
     Options.many
@@ -104,15 +107,11 @@ disabled =
     ]
 
 
-{-| TODO
--}
 checked : Property m
 checked =
     Internal.option (\config -> { config | value = True })
 
 
-{-| TODO
--}
 indeterminate : Property m
 indeterminate =
     Internal.input
@@ -120,11 +119,6 @@ indeterminate =
     ]
 
 
--- VIEW
-
-
-{-| Component view.
--}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model options _ =
     let
@@ -173,9 +167,6 @@ view lift model options _ =
     ]
 
 
--- COMPONENT
-
-
 type alias Store s =
     { s | checkbox : Indexed Model }
 
@@ -184,21 +175,6 @@ type alias Store s =
     Component.indexed .checkbox (\x y -> { y | checkbox = x }) defaultModel
 
 
-{-| Component react function.
--}
-react :
-    (Material.Msg.Msg m -> m)
-    -> Msg
-    -> Index
-    -> Store s
-    -> ( Maybe (Store s), Cmd m )
-react =
-    Component.react get set Material.Msg.CheckboxMsg update
-    -- TODO: make react always like this ^^^^, don't use generalise?
-
-
-{-| Component render (checkbox)
--}
 render :
     (Material.Msg.Msg m -> m)
     -> Index
@@ -209,3 +185,14 @@ render :
 render lift index store options =
     Component.render get view Material.Msg.CheckboxMsg lift index store
         (Internal.dispatch lift :: options)
+
+
+react :
+    (Material.Msg.Msg m -> m)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react =
+    Component.react get set Material.Msg.CheckboxMsg update
+    -- TODO: make react always like this ^^^^, don't use generalise?
