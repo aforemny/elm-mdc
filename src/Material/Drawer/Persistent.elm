@@ -1,26 +1,58 @@
 module Material.Drawer.Persistent
     exposing
-        ( Model
-        , defaultModel
-        , Msg
-        , update
-        , Config
-        , view
-        , render
-        , react
+        ( -- VIEW
+          view
+        , Property
+
         , header
         , headerContent
         , content
-        -- , open
-        , subs
+        , toolbarSpacer
+
+          -- TEA
         , subscriptions
         , open
         , close
         , toggle
-        , toolbarSpacer
+        , Model
+        , defaultModel
+        , Msg
+        , update
+          
+          -- RENDER
+        , subs
+        , emit
+        , render
+        , Store
+        , react
         )
 
-{-| TODO
+{-| The MDC Drawer component is a spec-aligned drawer component adhering to the
+Material Design navigation drawer pattern. It implements permanent, persistent,
+and temporary drawers.
+
+## Design & API Documentation
+
+- [Material Design guidelines: Navigation drawer](https://material.io/guidelines/patterns/navigation-drawer.html)
+- [Demo: Temporary Drawer](https://aforemny.github.io/elm-mdc/#temporary-drawer)
+- [Demo: Persistent Drawer](https://aforemny.github.io/elm-mdc/#persistent-drawer)
+- [Demo: Permanent Drawer Above Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-above)
+- [Demo: Permanent Drawer Below Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-below)
+
+## View
+@docs view
+@docs Property
+
+## Elements
+@docs header, headerContent, content, toolbarSpacer
+
+## TEA architecture
+@docs subscriptions, Model, defaultModel, Msg, update
+@docs open, close, toggle
+
+## Featured render
+@docs subs, emit, render
+@docs Store, react
 -}
 
 import Html exposing (Html, text)
@@ -28,40 +60,22 @@ import Material.Drawer as Drawer
 import Material.Msg exposing (Index)
 
 
--- MODEL
-
-
-{-| Component model.
--}
 type alias Model =
     Drawer.Model
 
 
-{-| Default component model.
--}
 defaultModel : Model
 defaultModel =
     Drawer.defaultModel
 
 
-
--- ACTION, UPDATE
-
-
-{-| Component message.
--}
 type alias Msg
     = Drawer.Msg
 
 
-{-| Component update.
--}
 update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
 update =
     Drawer.update
-
-
--- OPTIONS
 
 
 type alias Config m =
@@ -73,22 +87,10 @@ defaultConfig =
     Drawer.defaultConfig
 
 
-{-| TODO
--}
 type alias Property m =
     Drawer.Property m
 
 
--- VIEW
-
-
-className : String
-className =
-    "mdc-persistent-drawer"
-
-
-{-| Component view.
--}
 view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view =
     Drawer.view className
@@ -109,27 +111,15 @@ content =
     Drawer.content className
 
 
--- COMPONENT
+toolbarSpacer : List (Property m) -> List (Html m) -> Html m
+toolbarSpacer =
+    Drawer.toolbarSpacer
 
 
 type alias Store s =
     Drawer.Store s
 
 
-{-| Component react function.
--}
-react :
-    (Material.Msg.Msg m -> m)
-    -> Msg
-    -> Index
-    -> Store s
-    -> ( Maybe (Store s), Cmd m )
-react =
-    Drawer.react
-
-
-{-| Component render (drawer)
--}
 render :
     (Material.Msg.Msg m -> m)
     -> Index
@@ -139,6 +129,16 @@ render :
     -> Html m
 render =
     Drawer.render className
+
+
+react :
+    (Material.Msg.Msg m -> m)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd m )
+react =
+    Drawer.react
 
 
 subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
@@ -151,26 +151,26 @@ subscriptions =
     Drawer.subscriptions
 
 
---
-
-open : (Material.Msg.Msg m -> m) -> Index -> Cmd m
+open : Msg
 open =
     Drawer.open True
 
 
-close : (Material.Msg.Msg m -> m) -> Index -> Cmd m
+close : Msg
 close =
     Drawer.close
 
 
-toggle : (Material.Msg.Msg m -> m) -> Index -> Cmd m
+toggle : Msg
 toggle =
     Drawer.toggle True
 
 
--- persistent
+emit : (Material.Msg.Msg m -> m) -> Index -> Msg -> Cmd m
+emit =
+    Drawer.emit
 
 
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer =
-    Drawer.toolbarSpacer
+className : String
+className =
+    "mdc-persistent-drawer"

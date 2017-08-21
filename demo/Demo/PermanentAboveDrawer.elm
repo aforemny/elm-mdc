@@ -78,39 +78,43 @@ view lift page model =
       Drawer.render (Mdl >> lift) [0] model.mdl []
       [
         Drawer.toolbarSpacer [] []
+      , Lists.listItem
+        [ Options.attribute (Html.href "#permanent-drawer-above") ]
+        [ Lists.startDetailIcon "inbox" []
+        , text "Inbox"
+        ]
+      , Lists.listItem
+        [ Options.attribute (Html.href "#permanent-drawer-above") ]
+        [ Lists.startDetailIcon "star" []
+        , text "Star"
+        ]
+      , Lists.listItem
+        [ Options.attribute (Html.href "#permanent-drawer-above") ]
+        [ Lists.startDetailIcon "send" []
+        , text "Sent Mail"
+        ]
+      , Lists.listItem
+        [ Options.attribute (Html.href "#permanent-drawer-above") ]
+        [ Lists.startDetailIcon "drafts" []
+        , text "Drafts"
+        ]
 
-      , Lists.ul []
-        [ Lists.li []
-          [ Lists.startDetailIcon "inbox" []
-          , Html.a [ Html.href "#" ] [ text "Inbox" ]
-          ]
-        , Lists.li []
-          [ Lists.startDetailIcon "star" []
-          , Html.a [ Html.href "#" ] [ text "Star" ]
-          ]
-        , Lists.li []
-          [ Lists.startDetailIcon "send" []
-          , Html.a [ Html.href "#" ] [ text "Sent Mail" ]
-          ]
-        , Lists.li []
-          [ Lists.startDetailIcon "drafts" []
-          , Html.a [ Html.href "#" ] [ text "Drafts" ]
-          ]
+      , Lists.divider [] []
 
-        , Lists.divider [] []
-
-        , Lists.li []
-          [ Lists.startDetailIcon "email" []
-          , Html.a [ Html.href "#" ] [ text "All Mail" ]
-          ]
-        , Lists.li []
-          [ Lists.startDetailIcon "delete" []
-          , Html.a [ Html.href "#" ] [ text "Trash" ]
-          ]
-        , Lists.li []
-          [ Lists.startDetailIcon "report" []
-          , Html.a [ Html.href "#" ] [ text "Spam" ]
-          ]
+      , Lists.listItem
+        [ Options.attribute (Html.href "#permanent-drawer-above") ]
+        [ Lists.startDetailIcon "email" []
+        , text "All Mail"
+        ]
+      , Lists.listItem
+        [ Options.attribute (Html.href "#permanent-drawer-above") ]
+        [ Lists.startDetailIcon "delete" []
+        , text "Trash"
+        ]
+      , Lists.listItem
+        [ Options.attribute (Html.href "#permanent-drawer-above") ]
+        [ Lists.startDetailIcon "report" []
+        , text "Spam"
         ]
       ]
 

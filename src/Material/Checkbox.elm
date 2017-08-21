@@ -15,6 +15,7 @@ module Material.Checkbox
 
           -- RENDER
         , render
+        , Store
         , react
         )
 
@@ -37,7 +38,8 @@ the Material Design checkbox requirements.
 @docs Model, defaultModel, Msg, update
 
 ## Featured render
-@docs Property, render
+@docs render
+@docs Store, react
 -}
 
 import Html.Attributes as Html

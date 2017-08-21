@@ -287,6 +287,8 @@ view_ model =
                 \title nodes ->
                 styled Html.div
                     [ Toolbar.fixedAdjust
+                    , css "width" "100%"
+                    , css "height" "100%"
                     ]
                     ( List.concat
                       [ [ Page.toolbar SetUrl model.url title

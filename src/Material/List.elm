@@ -11,6 +11,7 @@ module Material.List
         , avatarImage
         , endDetail
         , endDetailIcon
+        , listItem
 
         , text
         , secondary
@@ -64,6 +65,13 @@ twoLine =
 li : List (Property c m) -> List (Html m) -> Html m
 li options =
     Options.styled Html.li (cs "mdc-list-item" :: options)
+
+
+{-| List item
+-}
+listItem : List (Property c m) -> List (Html m) -> Html m
+listItem options =
+    Options.styled Html.a (cs "mdc-list-item" :: options)
 
 
 {-| List item's start detail

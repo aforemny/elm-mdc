@@ -3,6 +3,7 @@ module Material.Typography
         ( typography
         , title
         , caption
+        , body1
         , body2
         , headline
         , subheading1
@@ -54,6 +55,11 @@ title =
 caption : Style m
 caption =
     cs "mdc-typography--caption"
+
+
+body1 : Style m
+body1 =
+    cs "mdc-typography--body1"
 
 
 body2 : Style m

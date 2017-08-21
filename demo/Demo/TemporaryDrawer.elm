@@ -19,10 +19,8 @@ import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Theme as Theme
 import Material.Toolbar as Toolbar
+import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
-
-
--- MODEL
 
 
 type alias Model =
@@ -49,10 +47,7 @@ update lift msg model =
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
         Open idx ->
-            model ! [ Drawer.open (Mdl >> lift) idx ]
-
-
--- VIEW
+            model ! [ Drawer.emit (Mdl >> lift) idx Drawer.open ]
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
@@ -93,40 +88,55 @@ view lift page model =
         ]
 
       , Drawer.content []
-        [ Lists.ul []
-          [ Lists.li []
-            [ Lists.startDetailIcon "inbox" []
-            , Html.a [ Html.href "#" ] [ text "Inbox" ]
-            ]
-          , Lists.li []
-            [ Lists.startDetailIcon "star" []
-            , Html.a [ Html.href "#" ] [ text "Star" ]
-            ]
-          , Lists.li []
-            [ Lists.startDetailIcon "send" []
-            , Html.a [ Html.href "#" ] [ text "Sent Mail" ]
-            ]
-          , Lists.li []
-            [ Lists.startDetailIcon "drafts" []
-            , Html.a [ Html.href "#" ] [ text "Drafts" ]
-            ]
+        [ Lists.listItem
+          [ Options.attribute (Html.href "#temporary-drawer") ]
+          [ Lists.startDetailIcon "inbox" []
+          , text "Inbox"
+          ]
+        , Lists.listItem
+          [ Options.attribute (Html.href "#temporary-drawer") ]
+          [ Lists.startDetailIcon "star" []
+          , text "Star"
+          ]
+        , Lists.listItem
+          [ Options.attribute (Html.href "#temporary-drawer") ]
+          [ Lists.startDetailIcon "send" []
+          , text "Sent Mail"
+          ]
+        , Lists.listItem
+          [ Options.attribute (Html.href "#temporary-drawer") ]
+          [ Lists.startDetailIcon "drafts" []
+          , text "Drafts"
+          ]
 
-          , Lists.divider [] []
+        , Lists.divider [] []
 
-          , Lists.li []
-            [ Lists.startDetailIcon "email" []
-            , Html.a [ Html.href "#" ] [ text "All Mail" ]
-            ]
-          , Lists.li []
-            [ Lists.startDetailIcon "delete" []
-            , Html.a [ Html.href "#" ] [ text "Trash" ]
-            ]
-          , Lists.li []
-            [ Lists.startDetailIcon "report" []
-            , Html.a [ Html.href "#" ] [ text "Spam" ]
-            ]
+        , Lists.listItem
+          [ Options.attribute (Html.href "#temporary-drawer") ]
+          [ Lists.startDetailIcon "email" []
+          , text "All Mail"
+          ]
+        , Lists.listItem
+          [ Options.attribute (Html.href "#temporary-drawer") ]
+          [ Lists.startDetailIcon "delete" []
+          , text "Trash"
+          ]
+        , Lists.listItem
+          [ Options.attribute (Html.href "#temporary-drawer") ]
+          [ Lists.startDetailIcon "report" []
+          , text "Spam"
           ]
         ]
+      ]
+
+    , styled Html.div
+      [ Toolbar.fixedAdjust
+      , css "padding-left" "16px"
+      , css "overflow" "auto"
+      ]
+      [
+        styled Html.h1 [ Typography.display1 ] [ text "Temporary Drawer" ]
+      , styled Html.p [ Typography.body1 ] [ text "Click the menu icon above to open." ]
       ]
     ]
 
