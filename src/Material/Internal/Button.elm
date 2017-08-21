@@ -1,5 +1,7 @@
-module Material.Internal.Button exposing (Msg)
+module Material.Internal.Button exposing (Msg(..))
+
+import Material.Internal.Ripple as Ripple
 
 
 type Msg =
-    NoOp
+    RippleMsg Ripple.Msg

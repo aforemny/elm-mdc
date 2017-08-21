@@ -8,6 +8,7 @@ module Material.Ripple exposing
     , accent
     , primary
     , react
+    , view
     )
 
 import Dict
@@ -87,14 +88,14 @@ update msg model =
 -- VIEW
 
 
-bounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> (Options.Property c m, Html m)
-bounded lift_ index store =
-    view False lift_ index store
+bounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> x -> y -> (Options.Property c m, Html m)
+bounded lift index store options =
+    Component.render get (view False) Material.Msg.RippleMsg lift index store options
 
 
-unbounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> (Options.Property c m, Html m)
-unbounded lift_ index store =
-    view True lift_ index store
+unbounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> x -> y -> (Options.Property c m, Html m)
+unbounded lift index store options =
+    Component.render get (view True) Material.Msg.RippleMsg lift index store options
 
 
 accent : Property c m
@@ -107,14 +108,9 @@ primary =
     cs "mdc-ripple-surface--primary"
 
 
-{-| TODO
--}
-view : Bool -> (Material.Msg.Msg m -> m) -> Index -> Store s -> (Options.Property c m, Html m)
-view isUnbounded lift_ index store =
+view : Bool -> (Msg -> m) -> Model -> x -> y -> (Options.Property c m, Html m)
+view isUnbounded lift model _ _ =
     let
-        lift =
-            lift_ << Material.Msg.RippleMsg index
-
         geometry =
             model.geometry
 
@@ -197,9 +193,6 @@ view isUnbounded lift_ index store =
 
         (selector, styleNode) =
             Internal.cssVariables summary
-
-        model =
-            Maybe.withDefault defaultModel (Dict.get index store.ripple)
     in
     (
       Options.many

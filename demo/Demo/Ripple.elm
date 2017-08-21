@@ -69,7 +69,7 @@ view lift page model =
       [ Html.h2 [] [ text "Bounded" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded (Mdl >> lift) [0] model.mdl
+                Ripple.bounded (Mdl >> lift) [0] model.mdl () ()
         in
         styled Html.div
         [ demoSurface
@@ -85,7 +85,7 @@ view lift page model =
       [ Html.h2 [] [ text "Unbounded" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.unbounded (Mdl >> lift) [1] model.mdl
+                Ripple.unbounded (Mdl >> lift) [1] model.mdl () ()
         in
         styled Html.div
         [ cs "material-icons"
@@ -105,7 +105,7 @@ view lift page model =
       [ Html.h2 [] [ text "Theme Styles" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded (Mdl >> lift) [2] model.mdl
+                Ripple.bounded (Mdl >> lift) [2] model.mdl () ()
         in
         styled Html.div
         [ demoSurface
@@ -118,7 +118,7 @@ view lift page model =
         ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded (Mdl >> lift) [3] model.mdl
+                Ripple.bounded (Mdl >> lift) [3] model.mdl () ()
         in
         styled Html.div
         [ demoSurface
