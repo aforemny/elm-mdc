@@ -11,7 +11,6 @@ module Material.Ripple exposing
     , view
     )
 
-import Dict
 import DOM
 import Html.Attributes as Html
 import Html exposing (..)

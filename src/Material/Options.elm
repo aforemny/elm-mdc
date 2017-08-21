@@ -77,7 +77,7 @@ type alias Property c m =
 `Typography.*`, or `Options.onClick`, may be applied to ordinary `Html` values
 such as `Html.h4` using `styled` below.
 -}
-type alias Style m =
+type alias Style m = -- TODO: remove
     Property () m
 
 
@@ -118,6 +118,7 @@ styled_ ctor props attrs =
 div : List (Property c m) -> List (Html m) -> Html m
 div =
     styled Html.div
+-- TODO REMOVE
 
 
 {-| Convenience function for the reasonably common case of setting attributes
@@ -126,6 +127,7 @@ of a span element. See also `div`.
 span : List (Property c m) -> List (Html m) -> Html m
 span =
     styled Html.span
+-- TODO REMOVE
 
 
 {-| Convenience function for the not unreasonably uncommon case of setting
@@ -138,6 +140,7 @@ attributes of an img element. Use like this:
 img : List (Property a b) -> List (Attribute b) -> Html b
 img options attrs =
     styled_ Html.img options attrs []
+-- TODO REMOVE
 
 
 {-| Set HTML disabled attribute.
@@ -145,6 +148,7 @@ img options attrs =
 disabled : Bool -> Property c m
 disabled v =
     Attribute (Html.Attributes.disabled v)
+-- TODO REMOVE
 
 
 {-| Add an HTML class to a component. (Name chosen to avoid clashing with
@@ -273,6 +277,7 @@ center =
         , css "align-items" "center"
         , css "justify-content" "center"
         ]
+-- TODO REMOVE
 
 
 {-| Scrim. Argument value indicates terminal opacity, the value of which should
@@ -284,6 +289,7 @@ scrim opacity =
         "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, "
             ++ toString opacity
             ++ "))"
+-- TODO REMOVE
 
 
 {-| Sets the id attribute

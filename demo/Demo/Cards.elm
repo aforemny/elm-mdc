@@ -1,29 +1,33 @@
 module Demo.Cards exposing (Model, defaultModel, Msg(Mdl), update, view)
 
-import Demo.Page exposing (Page)
+import Demo.Page as Page exposing (Page)
 import Html as Html_
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
 import Material.Card as Card
-import Material.Options as Options exposing (cs, css)
+import Material.Checkbox as Checkbox
+import Material.Options as Options exposing (styled, cs, css, when)
 import Platform.Cmd exposing (Cmd, none)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { rtl : Bool
+    , mdl : Material.Model
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { rtl = False
+    , mdl = Material.defaultModel
     }
 
 
 type Msg m
     = Mdl (Material.Msg m)
+    | ToggleRtl
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
@@ -31,20 +35,30 @@ update lift msg model =
     case msg of
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
+        ToggleRtl ->
+            ( { model | rtl = not model.rtl }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     let
-        demoWrapper =
+        example options =
+            styled Html.div
+            ( css "margin" "24px"
+            :: css "padding" "24px"
+            :: options
+            )
+
+        demoWrapper options =
             Options.div
-            [ css "display" "flex"
-            , css "margin" "24px"
-            , css "flex-flow" "row wrap"
-            , css "align-content" "left"
-            , css "justify-content" "left"
-            , cs "mdc-typography"
-            ]
+            ( css "display" "flex"
+            :: css "margin" "24px"
+            :: css "flex-flow" "row wrap"
+            :: css "align-content" "left"
+            :: css "justify-content" "left"
+            :: cs "mdc-typography"
+            :: options
+            )
                 << List.map (\card -> Html.div [] [ card ])
 
 
@@ -136,8 +150,22 @@ view lift page model =
                   , css "border-radius" "50%"
                   ]
                   []
-            , Card.title [ css "margin-left" "56px" ] [ text "Title" ]
-            , Card.subtitle [ css "margin-left" "56px" ] [ text "Subhead" ]
+            , Card.title
+              [ if model.rtl then
+                    css "margin-right" "56px"
+                else
+                    css "margin-left" "56px"
+              ]
+              [ text "Title"
+              ]
+            , Card.subtitle
+              [ if model.rtl then
+                    css "margin-right" "56px"
+                else
+                    css "margin-left" "56px"
+              ]
+              [ text "Subhead"
+              ]
             ]
 
 
@@ -329,18 +357,53 @@ view lift page model =
               ]
             ]
     in
-    page.body "Cards"
-    [ demoWrapper
-          [ card0 model
-          , card1 model
-          , card2 model
-          , card3 model
-          , card4 model
-          , card5 model
-          , card6 model
-          , card7 model
-          , card8 model
-          , card9 model
-          , card10 model
+    page.body "Card"
+    [
+      Page.hero
+      [ css "min-height" "480px"
+      ]
+      [ demoCard
+        [ css "background-color" "white"
+        ]
+        [ demoMedia
+          [ css "background-image" "url(images/16-9.jpg)"
           ]
+          []
+        , demoPrimary2 []
+        , demoActions model []
+        ]
+      ]
+
+    , example []
+      [ styled Html.div
+        [ cs "mdc-form-field"
+        ]
+        [ Checkbox.render (Mdl >> lift) [0] model.mdl
+          [ Options.onClick (lift ToggleRtl)
+          , Checkbox.checked |> when model.rtl
+          ]
+          [
+          ]
+        , Html.label []
+          [ text "Toggle RTL"
+          ]
+        ]
+      ]
+    
+    , demoWrapper
+      [ Html.dir "rtl"
+        |> when model.rtl << Options.attribute
+      ]
+      [ card0 model
+      , card1 model
+      , card2 model
+      , card3 model
+      , card4 model
+      , card5 model
+      , card6 model
+      , card7 model
+      , card8 model
+      , card9 model
+      , card10 model
+      ]
     ]
