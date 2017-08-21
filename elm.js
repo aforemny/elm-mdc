@@ -11408,13 +11408,13 @@ var _debois$elm_mdl$Material_Button$_p6 = A3(
 	_debois$elm_mdl$Material_Button$defaultModel);
 var _debois$elm_mdl$Material_Button$get = _debois$elm_mdl$Material_Button$_p6._0;
 var _debois$elm_mdl$Material_Button$set = _debois$elm_mdl$Material_Button$_p6._1;
+var _debois$elm_mdl$Material_Button$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Button$get, _debois$elm_mdl$Material_Button$view, _debois$elm_mdl$Material_Msg$ButtonMsg);
 var _debois$elm_mdl$Material_Button$react = A4(
 	_debois$elm_mdl$Material_Component$react,
 	_debois$elm_mdl$Material_Button$get,
 	_debois$elm_mdl$Material_Button$set,
 	_debois$elm_mdl$Material_Msg$ButtonMsg,
 	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Button$update));
-var _debois$elm_mdl$Material_Button$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Button$get, _debois$elm_mdl$Material_Button$view, _debois$elm_mdl$Material_Msg$ButtonMsg);
 var _debois$elm_mdl$Material_Button$Model = function (a) {
 	return {ripple: a};
 };
@@ -11963,7 +11963,6 @@ var _debois$elm_mdl$Material_Checkbox$_p4 = A3(
 	_debois$elm_mdl$Material_Checkbox$defaultModel);
 var _debois$elm_mdl$Material_Checkbox$get = _debois$elm_mdl$Material_Checkbox$_p4._0;
 var _debois$elm_mdl$Material_Checkbox$set = _debois$elm_mdl$Material_Checkbox$_p4._1;
-var _debois$elm_mdl$Material_Checkbox$react = A4(_debois$elm_mdl$Material_Component$react, _debois$elm_mdl$Material_Checkbox$get, _debois$elm_mdl$Material_Checkbox$set, _debois$elm_mdl$Material_Msg$CheckboxMsg, _debois$elm_mdl$Material_Checkbox$update);
 var _debois$elm_mdl$Material_Checkbox$render = F4(
 	function (lift, index, store, options) {
 		return A7(
@@ -11980,6 +11979,7 @@ var _debois$elm_mdl$Material_Checkbox$render = F4(
 				_1: options
 			});
 	});
+var _debois$elm_mdl$Material_Checkbox$react = A4(_debois$elm_mdl$Material_Component$react, _debois$elm_mdl$Material_Checkbox$get, _debois$elm_mdl$Material_Checkbox$set, _debois$elm_mdl$Material_Msg$CheckboxMsg, _debois$elm_mdl$Material_Checkbox$update);
 var _debois$elm_mdl$Material_Checkbox$Model = function (a) {
 	return {isFocused: a};
 };
@@ -18640,13 +18640,14 @@ var _debois$elm_mdl$Material_Theme$primaryBg = _debois$elm_mdl$Material_Options$
 var _debois$elm_mdl$Material_Theme$accent = _debois$elm_mdl$Material_Options$cs('mdc-theme--accent');
 var _debois$elm_mdl$Material_Theme$primary = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary');
 
-var _debois$elm_mdl$Demo_Checkbox$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, rtl: false, alignEnd: false, indeterminate: false, checked0: false, checked1: false, disabled0: false, disabled1: false};
-var _debois$elm_mdl$Demo_Checkbox$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {mdl: a, rtl: b, alignEnd: c, indeterminate: d, checked0: e, checked1: f, disabled0: g, disabled1: h};
+var _debois$elm_mdl$Demo_Checkbox$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, rtl: false, alignEnd: false, indeterminate: false, checked0: false, checked1: false, checked2: false, disabled1: false, disabled2: false};
+var _debois$elm_mdl$Demo_Checkbox$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {mdl: a, rtl: b, alignEnd: c, indeterminate: d, checked0: e, checked1: f, checked2: g, disabled1: h, disabled2: i};
 	});
+var _debois$elm_mdl$Demo_Checkbox$ToggleDisabled2 = {ctor: 'ToggleDisabled2'};
 var _debois$elm_mdl$Demo_Checkbox$ToggleDisabled1 = {ctor: 'ToggleDisabled1'};
-var _debois$elm_mdl$Demo_Checkbox$ToggleDisabled0 = {ctor: 'ToggleDisabled0'};
+var _debois$elm_mdl$Demo_Checkbox$ToggleChecked2 = {ctor: 'ToggleChecked2'};
 var _debois$elm_mdl$Demo_Checkbox$ToggleChecked1 = {ctor: 'ToggleChecked1'};
 var _debois$elm_mdl$Demo_Checkbox$ToggleChecked0 = {ctor: 'ToggleChecked0'};
 var _debois$elm_mdl$Demo_Checkbox$ToggleIndeterminate = {ctor: 'ToggleIndeterminate'};
@@ -18703,19 +18704,26 @@ var _debois$elm_mdl$Demo_Checkbox$update = F3(
 						model,
 						{checked1: !model.checked1}),
 					{ctor: '[]'});
-			case 'ToggleDisabled0':
+			case 'ToggleChecked2':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{disabled0: !model.disabled0}),
+						{checked2: !model.checked2}),
+					{ctor: '[]'});
+			case 'ToggleDisabled1':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{disabled1: !model.disabled1}),
 					{ctor: '[]'});
 			default:
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{disabled1: !model.disabled1}),
+						{disabled2: !model.disabled2}),
 					{ctor: '[]'});
 		}
 	});
@@ -18749,208 +18757,64 @@ var _debois$elm_mdl$Demo_Checkbox$view = F3(
 			{
 				ctor: '::',
 				_0: A2(
-					example,
-					{
-						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_Options$when,
-							model.rtl,
-							_debois$elm_mdl$Material_Options$attribute(
-								A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'))),
-						_1: {ctor: '[]'}
-					},
+					_debois$elm_mdl$Demo_Page$hero,
+					{ctor: '[]'},
 					{
 						ctor: '::',
 						_0: A3(
 							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$h2,
+							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
 								_1: {
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+									_0: A2(
+										_debois$elm_mdl$Material_Options$when,
+										model.alignEnd,
+										_debois$elm_mdl$Material_Options$cs('mdc-form-field--align-end')),
 									_1: {ctor: '[]'}
 								}
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Checkbox'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Options$when,
-											model.alignEnd,
-											_debois$elm_mdl$Material_Options$cs('mdc-form-field--align-end')),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: A5(
-										_debois$elm_mdl$Material_Checkbox$render,
-										function (_p2) {
-											return lift(
-												_debois$elm_mdl$Demo_Checkbox$Mdl(_p2));
-										},
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
-										model.mdl,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$onClick(
-												lift(_debois$elm_mdl$Demo_Checkbox$ToggleChecked0)),
-											_1: {
-												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$when, model.checked0, _debois$elm_mdl$Material_Checkbox$checked),
-												_1: {
-													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$when, model.indeterminate, _debois$elm_mdl$Material_Checkbox$indeterminate),
-													_1: {
-														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled0, _debois$elm_mdl$Material_Checkbox$disabled),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$label,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('This is my checkbox'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$span,
-									{ctor: '[]'},
+								_0: A5(
+									_debois$elm_mdl$Material_Checkbox$render,
+									function (_p2) {
+										return lift(
+											_debois$elm_mdl$Demo_Checkbox$Mdl(_p2));
+									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(' '),
+										_0: 0,
 										_1: {ctor: '[]'}
-									}),
+									},
+									model.mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$onClick(
+											lift(_debois$elm_mdl$Demo_Checkbox$ToggleChecked0)),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.checked0, _debois$elm_mdl$Material_Checkbox$checked),
+											_1: {ctor: '[]'}
+										}
+									},
+									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$button,
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onClick(
-												lift(_debois$elm_mdl$Demo_Checkbox$ToggleIndeterminate)),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Make indeterminate'),
+											_0: _elm_lang$html$Html$text('Checkbox'),
 											_1: {ctor: '[]'}
 										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$span,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text(' '),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$button,
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onClick(
-														lift(_debois$elm_mdl$Demo_Checkbox$ToggleRtl)),
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Toggle RTL'),
-													_1: {ctor: '[]'}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$span,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text(' '),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$button,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Events$onClick(
-																lift(_debois$elm_mdl$Demo_Checkbox$ToggleAlignEnd)),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Toggle Align End'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$span,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text(' '),
-																_1: {ctor: '[]'}
-															}),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$button,
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Events$onClick(
-																		lift(_debois$elm_mdl$Demo_Checkbox$ToggleDisabled0)),
-																	_1: {ctor: '[]'}
-																},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Toggle Disabled'),
-																	_1: {ctor: '[]'}
-																}),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}
-										}
-									}
+									_1: {ctor: '[]'}
 								}
-							}
-						}
+							}),
+						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
@@ -18958,12 +18822,12 @@ var _debois$elm_mdl$Demo_Checkbox$view = F3(
 						example,
 						{
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Theme$dark,
-							_1: {
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
-								_1: {ctor: '[]'}
-							}
+							_0: A2(
+								_debois$elm_mdl$Material_Options$when,
+								model.rtl,
+								_debois$elm_mdl$Material_Options$attribute(
+									A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'))),
+							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
@@ -18976,16 +18840,12 @@ var _debois$elm_mdl$Demo_Checkbox$view = F3(
 									_1: {
 										ctor: '::',
 										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
-										_1: {
-											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
-											_1: {ctor: '[]'}
-										}
+										_1: {ctor: '[]'}
 									}
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Dark Theme'),
+									_0: _elm_lang$html$Html$text('Checkbox'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -18996,7 +18856,14 @@ var _debois$elm_mdl$Demo_Checkbox$view = F3(
 									{
 										ctor: '::',
 										_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Options$when,
+												model.alignEnd,
+												_debois$elm_mdl$Material_Options$cs('mdc-form-field--align-end')),
+											_1: {ctor: '[]'}
+										}
 									},
 									{
 										ctor: '::',
@@ -19021,8 +18888,12 @@ var _debois$elm_mdl$Demo_Checkbox$view = F3(
 													_0: A2(_debois$elm_mdl$Material_Options$when, model.checked1, _debois$elm_mdl$Material_Checkbox$checked),
 													_1: {
 														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled1, _debois$elm_mdl$Material_Checkbox$disabled),
-														_1: {ctor: '[]'}
+														_0: A2(_debois$elm_mdl$Material_Options$when, model.indeterminate, _debois$elm_mdl$Material_Checkbox$indeterminate),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled1, _debois$elm_mdl$Material_Checkbox$disabled),
+															_1: {ctor: '[]'}
+														}
 													}
 												}
 											},
@@ -19057,20 +18928,220 @@ var _debois$elm_mdl$Demo_Checkbox$view = F3(
 											{
 												ctor: '::',
 												_0: _elm_lang$html$Html_Events$onClick(
-													lift(_debois$elm_mdl$Demo_Checkbox$ToggleDisabled1)),
+													lift(_debois$elm_mdl$Demo_Checkbox$ToggleIndeterminate)),
 												_1: {ctor: '[]'}
 											},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Toggle Disabled'),
+												_0: _elm_lang$html$Html$text('Make indeterminate'),
 												_1: {ctor: '[]'}
 											}),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$span,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(' '),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															lift(_debois$elm_mdl$Demo_Checkbox$ToggleRtl)),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Toggle RTL'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$span,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(' '),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$button,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onClick(
+																	lift(_debois$elm_mdl$Demo_Checkbox$ToggleAlignEnd)),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Toggle Align End'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$span,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text(' '),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$button,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Events$onClick(
+																			lift(_debois$elm_mdl$Demo_Checkbox$ToggleDisabled1)),
+																		_1: {ctor: '[]'}
+																	},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Toggle Disabled'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A2(
+							example,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Theme$dark,
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$h2,
+									{
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Dark Theme'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A5(
+												_debois$elm_mdl$Material_Checkbox$render,
+												function (_p4) {
+													return lift(
+														_debois$elm_mdl$Demo_Checkbox$Mdl(_p4));
+												},
+												{
+													ctor: '::',
+													_0: 2,
+													_1: {ctor: '[]'}
+												},
+												model.mdl,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$onClick(
+														lift(_debois$elm_mdl$Demo_Checkbox$ToggleChecked2)),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$when, model.checked2, _debois$elm_mdl$Material_Checkbox$checked),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled2, _debois$elm_mdl$Material_Checkbox$disabled),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('This is my checkbox'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(' '),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														lift(_debois$elm_mdl$Demo_Checkbox$ToggleDisabled2)),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Toggle Disabled'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});
