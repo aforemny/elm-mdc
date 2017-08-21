@@ -8979,7 +8979,27 @@ var _debois$elm_mdl$Material_Dispatch$defaultConfig = _debois$elm_mdl$Material_I
 		lift: _elm_lang$core$Maybe$Nothing
 	});
 
-var _debois$elm_mdl$Material_Internal_Button$NoOp = {ctor: 'NoOp'};
+var _debois$elm_mdl$Material_Internal_Ripple$defaultGeometry = {
+	isSurfaceDisabled: false,
+	event: {type_: '', pageX: 0, pageY: 0},
+	frame: {width: 0, height: 0, left: 0, top: 0}
+};
+var _debois$elm_mdl$Material_Internal_Ripple$Geometry = F3(
+	function (a, b, c) {
+		return {isSurfaceDisabled: a, event: b, frame: c};
+	});
+var _debois$elm_mdl$Material_Internal_Ripple$Deactivate = {ctor: 'Deactivate'};
+var _debois$elm_mdl$Material_Internal_Ripple$Activate = function (a) {
+	return {ctor: 'Activate', _0: a};
+};
+var _debois$elm_mdl$Material_Internal_Ripple$Blur = {ctor: 'Blur'};
+var _debois$elm_mdl$Material_Internal_Ripple$Focus = function (a) {
+	return {ctor: 'Focus', _0: a};
+};
+
+var _debois$elm_mdl$Material_Internal_Button$RippleMsg = function (a) {
+	return {ctor: 'RippleMsg', _0: a};
+};
 
 var _debois$elm_mdl$Material_Internal_Drawer$defaultGeometry = {width: 0};
 var _debois$elm_mdl$Material_Internal_Drawer$Geometry = function (a) {
@@ -9631,24 +9651,6 @@ var _debois$elm_mdl$Material_Internal_Menu$Open = function (a) {
 };
 var _debois$elm_mdl$Material_Internal_Menu$Toggle = function (a) {
 	return {ctor: 'Toggle', _0: a};
-};
-
-var _debois$elm_mdl$Material_Internal_Ripple$defaultGeometry = {
-	isSurfaceDisabled: false,
-	event: {type_: '', pageX: 0, pageY: 0},
-	frame: {width: 0, height: 0, left: 0, top: 0}
-};
-var _debois$elm_mdl$Material_Internal_Ripple$Geometry = F3(
-	function (a, b, c) {
-		return {isSurfaceDisabled: a, event: b, frame: c};
-	});
-var _debois$elm_mdl$Material_Internal_Ripple$Deactivate = {ctor: 'Deactivate'};
-var _debois$elm_mdl$Material_Internal_Ripple$Activate = function (a) {
-	return {ctor: 'Activate', _0: a};
-};
-var _debois$elm_mdl$Material_Internal_Ripple$Blur = {ctor: 'Blur'};
-var _debois$elm_mdl$Material_Internal_Ripple$Focus = function (a) {
-	return {ctor: 'Focus', _0: a};
 };
 
 var _debois$elm_mdl$Material_Internal_Select$MenuMsg = function (a) {
@@ -10820,63 +10822,442 @@ var _debois$elm_mdl$Material_Component$indexed = F3(
 		return {ctor: '_Tuple2', _0: get_, _1: set_};
 	});
 
-var _debois$elm_mdl$Material_Button$_p0 = A3(
+var _debois$elm_mdl$Material_Ripple$decodeGeometry = function (type_) {
+	return A4(
+		_elm_lang$core$Json_Decode$map3,
+		F3(
+			function (isSurfaceDisabled, event, frame) {
+				return {isSurfaceDisabled: isSurfaceDisabled, event: event, frame: frame};
+			}),
+		_debois$elm_dom$DOM$target(
+			_elm_lang$core$Json_Decode$oneOf(
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Json_Decode$map,
+						_elm_lang$core$Basics$always(true),
+						A2(
+							_elm_lang$core$Json_Decode$at,
+							{
+								ctor: '::',
+								_0: 'disabled',
+								_1: {ctor: '[]'}
+							},
+							_elm_lang$core$Json_Decode$string)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Json_Decode$succeed(false),
+						_1: {ctor: '[]'}
+					}
+				})),
+		A3(
+			_elm_lang$core$Json_Decode$map2,
+			F2(
+				function (pageX, pageY) {
+					return {type_: type_, pageX: pageX, pageY: pageY};
+				}),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'pageX',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'pageY',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float)),
+		_debois$elm_dom$DOM$target(_debois$elm_dom$DOM$boundingClientRect));
+};
+var _debois$elm_mdl$Material_Ripple$view = F5(
+	function (isUnbounded, lift, model, _p1, _p0) {
+		var geometry = model.geometry;
+		var surfaceWidth = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(geometry.frame.width),
+			'px');
+		var surfaceHeight = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(geometry.frame.height),
+			'px');
+		var surfaceDiameter = _elm_lang$core$Basics$sqrt(
+			Math.pow(geometry.frame.width, 2) + Math.pow(geometry.frame.height, 2));
+		var maxRadius = surfaceDiameter + 10;
+		var maxDimension = A2(_elm_lang$core$Basics$max, geometry.frame.width, geometry.frame.height);
+		var initialSize = maxDimension * 0.6;
+		var fgSize = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(initialSize),
+			'px');
+		var fgScale = _elm_lang$core$Basics$toString(maxRadius / initialSize);
+		var endPoint = {x: (geometry.frame.width - initialSize) / 2, y: (geometry.frame.height - initialSize) / 2};
+		var translateEnd = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(endPoint.x),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'px, ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(endPoint.y),
+					'px')));
+		var wasActivatedByPointer = A2(
+			_elm_lang$core$List$member,
+			geometry.event.type_,
+			{
+				ctor: '::',
+				_0: 'mousedown',
+				_1: {
+					ctor: '::',
+					_0: 'touchstart',
+					_1: {
+						ctor: '::',
+						_0: 'pointerdown',
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+		var startPoint = (wasActivatedByPointer && (!isUnbounded)) ? {x: (geometry.event.pageX - geometry.frame.left) - (initialSize / 2), y: (geometry.event.pageY - geometry.frame.top) - (initialSize / 2)} : {x: (geometry.frame.width - initialSize) / 2, y: (geometry.frame.height - initialSize) / 2};
+		var translateStart = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(startPoint.x),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'px, ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(startPoint.y),
+					'px')));
+		var top = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(startPoint.y),
+			'px');
+		var left = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(startPoint.x),
+			'px');
+		var summary = A2(
+			_debois$elm_mdl$Material_Internal_Options$collect,
+			{ctor: '_Tuple0'},
+			_elm_lang$core$List$concat(
+				{
+					ctor: '::',
+					_0: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-surface-width', surfaceWidth),
+						_1: {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-surface-height', surfaceHeight),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-size', fgSize),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-scale', fgScale),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					_1: {
+						ctor: '::',
+						_0: isUnbounded ? {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-top', top),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-left', left),
+								_1: {ctor: '[]'}
+							}
+						} : {
+							ctor: '::',
+							_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-translate-start', translateStart),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-translate-end', translateEnd),
+								_1: {ctor: '[]'}
+							}
+						},
+						_1: {ctor: '[]'}
+					}
+				}));
+		var _p2 = _debois$elm_mdl$Material_Internal_Options$cssVariables(summary);
+		var selector = _p2._0;
+		var styleNode = _p2._1;
+		return {
+			ctor: '_Tuple2',
+			_0: _debois$elm_mdl$Material_Options$many(
+				{
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Material_Options$on,
+						'focus',
+						A2(
+							_elm_lang$core$Json_Decode$map,
+							function (_p3) {
+								return lift(
+									_debois$elm_mdl$Material_Internal_Ripple$Focus(_p3));
+							},
+							_debois$elm_mdl$Material_Ripple$decodeGeometry('focus'))),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Options$on,
+							'blur',
+							_elm_lang$core$Json_Decode$succeed(
+								lift(_debois$elm_mdl$Material_Internal_Ripple$Blur))),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Options$on,
+								'keydown',
+								A2(
+									_elm_lang$core$Json_Decode$map,
+									function (_p4) {
+										return lift(
+											_debois$elm_mdl$Material_Internal_Ripple$Activate(_p4));
+									},
+									_debois$elm_mdl$Material_Ripple$decodeGeometry('keydown'))),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Options$on,
+									'keyup',
+									_elm_lang$core$Json_Decode$succeed(
+										lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$on,
+										'mousedown',
+										A2(
+											_elm_lang$core$Json_Decode$map,
+											function (_p5) {
+												return lift(
+													_debois$elm_mdl$Material_Internal_Ripple$Activate(_p5));
+											},
+											_debois$elm_mdl$Material_Ripple$decodeGeometry('mousedown'))),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Options$on,
+											'mouseup',
+											_elm_lang$core$Json_Decode$succeed(
+												lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Options$on,
+												'pointerdown',
+												A2(
+													_elm_lang$core$Json_Decode$map,
+													function (_p6) {
+														return lift(
+															_debois$elm_mdl$Material_Internal_Ripple$Activate(_p6));
+													},
+													_debois$elm_mdl$Material_Ripple$decodeGeometry('pointerdown'))),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Options$on,
+													'pointerup',
+													_elm_lang$core$Json_Decode$succeed(
+														lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Options$on,
+														'touchstart',
+														A2(
+															_elm_lang$core$Json_Decode$map,
+															function (_p7) {
+																return lift(
+																	_debois$elm_mdl$Material_Internal_Ripple$Activate(_p7));
+															},
+															_debois$elm_mdl$Material_Ripple$decodeGeometry('touchstart'))),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_debois$elm_mdl$Material_Options$on,
+															'touchend',
+															_elm_lang$core$Json_Decode$succeed(
+																lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
+														_1: {
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface'),
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded'),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$attribute(
+																		_elm_lang$html$Html_Attributes$tabindex(0)),
+																	_1: {
+																		ctor: '::',
+																		_0: function (_p8) {
+																			return A2(
+																				_debois$elm_mdl$Material_Options$when,
+																				isUnbounded,
+																				_debois$elm_mdl$Material_Options$many(_p8));
+																		}(
+																			{
+																				ctor: '::',
+																				_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--unbounded'),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(_debois$elm_mdl$Material_Options$css, 'overflow', 'visible'),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(_debois$elm_mdl$Material_Options$data, 'data-mdc-ripple-is-unbounded', ''),
+																						_1: {ctor: '[]'}
+																					}
+																				}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: function (_p9) {
+																				return A2(
+																					_debois$elm_mdl$Material_Options$when,
+																					model.activated,
+																					_debois$elm_mdl$Material_Options$many(_p9));
+																			}(
+																				{
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-active-fill'),
+																					_1: {
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--foreground-activation'),
+																						_1: {ctor: '[]'}
+																					}
+																				}),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_debois$elm_mdl$Material_Options$when,
+																					model.focus,
+																					_debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-focused')),
+																				_1: {
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Material_Options$cs(selector),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}),
+			_1: styleNode
+		};
+	});
+var _debois$elm_mdl$Material_Ripple$primary = _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--primary');
+var _debois$elm_mdl$Material_Ripple$accent = _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--accent');
+var _debois$elm_mdl$Material_Ripple$update = F2(
+	function (msg, model) {
+		var _p10 = msg;
+		switch (_p10.ctor) {
+			case 'Focus':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							focus: true,
+							geometry: model.activated ? model.geometry : _p10._0
+						}),
+					{ctor: '[]'});
+			case 'Blur':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{focus: false}),
+					{ctor: '[]'});
+			case 'Activate':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{activated: true, geometry: _p10._0}),
+					{ctor: '[]'});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{activated: false, focus: false}),
+					{ctor: '[]'});
+		}
+	});
+var _debois$elm_mdl$Material_Ripple$defaultModel = {focus: false, activated: false, geometry: _debois$elm_mdl$Material_Internal_Ripple$defaultGeometry};
+var _debois$elm_mdl$Material_Ripple$_p11 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
-		return _.button;
+		return _.ripple;
 	},
 	F2(
 		function (x, y) {
 			return _elm_lang$core$Native_Utils.update(
 				y,
-				{button: x});
+				{ripple: x});
 		}),
-	{});
-var _debois$elm_mdl$Material_Button$get = _debois$elm_mdl$Material_Button$_p0._0;
-var _debois$elm_mdl$Material_Button$set = _debois$elm_mdl$Material_Button$_p0._1;
-var _debois$elm_mdl$Material_Button$icon = _debois$elm_mdl$Material_Options$cs('mdc-button--icon');
-var _debois$elm_mdl$Material_Button$fab = _debois$elm_mdl$Material_Options$cs('mdc-button--fab');
-var _debois$elm_mdl$Material_Button$minifab = _debois$elm_mdl$Material_Options$many(
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Options$cs('mdc-button--mini-fab'),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Button$fab,
-			_1: {ctor: '[]'}
-		}
+	_debois$elm_mdl$Material_Ripple$defaultModel);
+var _debois$elm_mdl$Material_Ripple$get = _debois$elm_mdl$Material_Ripple$_p11._0;
+var _debois$elm_mdl$Material_Ripple$set = _debois$elm_mdl$Material_Ripple$_p11._1;
+var _debois$elm_mdl$Material_Ripple$bounded = F4(
+	function (lift, index, store, options) {
+		return A7(
+			_debois$elm_mdl$Material_Component$render,
+			_debois$elm_mdl$Material_Ripple$get,
+			_debois$elm_mdl$Material_Ripple$view(false),
+			_debois$elm_mdl$Material_Msg$RippleMsg,
+			lift,
+			index,
+			store,
+			options);
 	});
-var _debois$elm_mdl$Material_Button$dense = _debois$elm_mdl$Material_Options$cs('mdc-button--dense');
-var _debois$elm_mdl$Material_Button$darkTheme = _debois$elm_mdl$Material_Options$cs('mdc-button--dark-theme');
-var _debois$elm_mdl$Material_Button$compact = _debois$elm_mdl$Material_Options$cs('mdc-button--compact');
-var _debois$elm_mdl$Material_Button$raised = _debois$elm_mdl$Material_Options$cs('mdc-button--raised');
-var _debois$elm_mdl$Material_Button$flat = _debois$elm_mdl$Material_Options$nop;
-var _debois$elm_mdl$Material_Button$blurAndForward = function (event) {
-	return A2(
-		_elm_lang$html$Html_Attributes$attribute,
-		A2(_elm_lang$core$Basics_ops['++'], 'on', event),
-		'this.blur(); (function(self) { var e = document.createEvent(\'Event\'); e.initEvent(\'touchcancel\', true, true); self.lastChild.dispatchEvent(e); }(this));');
-};
-var _debois$elm_mdl$Material_Button$type_ = function (_p1) {
+var _debois$elm_mdl$Material_Ripple$unbounded = F4(
+	function (lift, index, store, options) {
+		return A7(
+			_debois$elm_mdl$Material_Component$render,
+			_debois$elm_mdl$Material_Ripple$get,
+			_debois$elm_mdl$Material_Ripple$view(true),
+			_debois$elm_mdl$Material_Msg$RippleMsg,
+			lift,
+			index,
+			store,
+			options);
+	});
+var _debois$elm_mdl$Material_Ripple$react = A4(
+	_debois$elm_mdl$Material_Component$react,
+	_debois$elm_mdl$Material_Ripple$get,
+	_debois$elm_mdl$Material_Ripple$set,
+	_debois$elm_mdl$Material_Msg$RippleMsg,
+	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Ripple$update));
+var _debois$elm_mdl$Material_Ripple$Model = F3(
+	function (a, b, c) {
+		return {focus: a, activated: b, geometry: c};
+	});
+
+var _debois$elm_mdl$Material_Button$type_ = function (_p0) {
 	return _debois$elm_mdl$Material_Internal_Options$attribute(
-		_elm_lang$html$Html_Attributes$type_(_p1));
+		_elm_lang$html$Html_Attributes$type_(_p0));
 };
-var _debois$elm_mdl$Material_Button$accent = _debois$elm_mdl$Material_Options$cs('mdc-button--accent');
-var _debois$elm_mdl$Material_Button$primary = _debois$elm_mdl$Material_Options$cs('mdc-button--primary');
-var _debois$elm_mdl$Material_Button$colored = _debois$elm_mdl$Material_Options$cs('mdc-button--colored');
-var _debois$elm_mdl$Material_Button$plain = _debois$elm_mdl$Material_Options$nop;
-var _debois$elm_mdl$Material_Button$disabled = _debois$elm_mdl$Material_Internal_Options$option(
-	function (options) {
-		return _elm_lang$core$Native_Utils.update(
-			options,
-			{disabled: true});
-	});
-var _debois$elm_mdl$Material_Button$ripple = _debois$elm_mdl$Material_Internal_Options$option(
-	function (options) {
-		return _elm_lang$core$Native_Utils.update(
-			options,
-			{ripple: true});
-	});
 var _debois$elm_mdl$Material_Button$link = function (href) {
 	return _debois$elm_mdl$Material_Internal_Options$option(
 		function (options) {
@@ -10887,13 +11268,44 @@ var _debois$elm_mdl$Material_Button$link = function (href) {
 				});
 		});
 };
+var _debois$elm_mdl$Material_Button$darkTheme = _debois$elm_mdl$Material_Options$cs('mdc-button--dark-theme');
+var _debois$elm_mdl$Material_Button$colored = _debois$elm_mdl$Material_Options$cs('mdc-button--colored');
+var _debois$elm_mdl$Material_Button$accent = _debois$elm_mdl$Material_Options$cs('mdc-button--accent');
+var _debois$elm_mdl$Material_Button$primary = _debois$elm_mdl$Material_Options$cs('mdc-button--primary');
+var _debois$elm_mdl$Material_Button$dense = _debois$elm_mdl$Material_Options$cs('mdc-button--dense');
+var _debois$elm_mdl$Material_Button$compact = _debois$elm_mdl$Material_Options$cs('mdc-button--compact');
+var _debois$elm_mdl$Material_Button$ripple = _debois$elm_mdl$Material_Internal_Options$option(
+	function (options) {
+		return _elm_lang$core$Native_Utils.update(
+			options,
+			{ripple: true});
+	});
+var _debois$elm_mdl$Material_Button$raised = _debois$elm_mdl$Material_Options$cs('mdc-button--raised');
+var _debois$elm_mdl$Material_Button$disabled = _debois$elm_mdl$Material_Internal_Options$option(
+	function (options) {
+		return _elm_lang$core$Native_Utils.update(
+			options,
+			{disabled: true});
+	});
 var _debois$elm_mdl$Material_Button$defaultConfig = {ripple: false, link: _elm_lang$core$Maybe$Nothing, disabled: false};
-var _debois$elm_mdl$Material_Button$view = F3(
-	function (lift, model, options) {
-		var _p2 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Button$defaultConfig, options);
-		var summary = _p2;
-		var config = _p2.config;
-		return A4(
+var _debois$elm_mdl$Material_Button$view = F4(
+	function (lift, model, options, nodes) {
+		var _p1 = A5(
+			_debois$elm_mdl$Material_Ripple$view,
+			false,
+			function (_p2) {
+				return lift(
+					_debois$elm_mdl$Material_Internal_Button$RippleMsg(_p2));
+			},
+			model.ripple,
+			{ctor: '_Tuple0'},
+			{ctor: '_Tuple0'});
+		var rippleOptions = _p1._0;
+		var rippleStyles = _p1._1;
+		var _p3 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Button$defaultConfig, options);
+		var summary = _p3;
+		var config = _p3.config;
+		return A5(
 			_debois$elm_mdl$Material_Internal_Options$apply,
 			summary,
 			(!_elm_lang$core$Native_Utils.eq(config.link, _elm_lang$core$Maybe$Nothing)) ? _elm_lang$html$Html$a : _elm_lang$html$Html$button,
@@ -10933,7 +11345,11 @@ var _debois$elm_mdl$Material_Button$view = F3(
 											_debois$elm_mdl$Material_Options$when,
 											config.disabled,
 											_debois$elm_mdl$Material_Options$cs('mdc-button--disabled')),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$when, config.ripple, rippleOptions),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}
@@ -10953,24 +11369,55 @@ var _debois$elm_mdl$Material_Button$view = F3(
 						_1: {ctor: '[]'}
 					}
 				}
-			});
+			},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				nodes,
+				{
+					ctor: '::',
+					_0: rippleStyles,
+					_1: {ctor: '[]'}
+				}));
 	});
-var _debois$elm_mdl$Material_Button$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Button$get, _debois$elm_mdl$Material_Button$view, _debois$elm_mdl$Material_Msg$ButtonMsg);
 var _debois$elm_mdl$Material_Button$update = F2(
-	function (action, model) {
-		return A2(
-			_elm_lang$core$Platform_Cmd_ops['!'],
-			model,
-			{ctor: '[]'});
+	function (msg, model) {
+		var _p4 = msg;
+		var _p5 = A2(_debois$elm_mdl$Material_Ripple$update, _p4._0, model.ripple);
+		var ripple = _p5._0;
+		var effects = _p5._1;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{ripple: ripple}),
+			_1: A2(_elm_lang$core$Platform_Cmd$map, _debois$elm_mdl$Material_Internal_Button$RippleMsg, effects)
+		};
 	});
+var _debois$elm_mdl$Material_Button$defaultModel = {ripple: _debois$elm_mdl$Material_Ripple$defaultModel};
+var _debois$elm_mdl$Material_Button$_p6 = A3(
+	_debois$elm_mdl$Material_Component$indexed,
+	function (_) {
+		return _.button;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{button: x});
+		}),
+	_debois$elm_mdl$Material_Button$defaultModel);
+var _debois$elm_mdl$Material_Button$get = _debois$elm_mdl$Material_Button$_p6._0;
+var _debois$elm_mdl$Material_Button$set = _debois$elm_mdl$Material_Button$_p6._1;
 var _debois$elm_mdl$Material_Button$react = A4(
 	_debois$elm_mdl$Material_Component$react,
 	_debois$elm_mdl$Material_Button$get,
 	_debois$elm_mdl$Material_Button$set,
 	_debois$elm_mdl$Material_Msg$ButtonMsg,
 	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Button$update));
-var _debois$elm_mdl$Material_Button$defaultModel = {};
-var _debois$elm_mdl$Material_Button$Model = {};
+var _debois$elm_mdl$Material_Button$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Button$get, _debois$elm_mdl$Material_Button$view, _debois$elm_mdl$Material_Msg$ButtonMsg);
+var _debois$elm_mdl$Material_Button$Model = function (a) {
+	return {ripple: a};
+};
 var _debois$elm_mdl$Material_Button$Config = F3(
 	function (a, b, c) {
 		return {ripple: a, link: b, disabled: c};
@@ -12937,430 +13384,6 @@ var _debois$elm_mdl$Material_Radio$Model = function (a) {
 var _debois$elm_mdl$Material_Radio$Config = F3(
 	function (a, b, c) {
 		return {input: a, container: b, value: c};
-	});
-
-var _debois$elm_mdl$Material_Ripple$decodeGeometry = function (type_) {
-	return A4(
-		_elm_lang$core$Json_Decode$map3,
-		F3(
-			function (isSurfaceDisabled, event, frame) {
-				return {isSurfaceDisabled: isSurfaceDisabled, event: event, frame: frame};
-			}),
-		_debois$elm_dom$DOM$target(
-			_elm_lang$core$Json_Decode$oneOf(
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Json_Decode$map,
-						_elm_lang$core$Basics$always(true),
-						A2(
-							_elm_lang$core$Json_Decode$at,
-							{
-								ctor: '::',
-								_0: 'disabled',
-								_1: {ctor: '[]'}
-							},
-							_elm_lang$core$Json_Decode$string)),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$core$Json_Decode$succeed(false),
-						_1: {ctor: '[]'}
-					}
-				})),
-		A3(
-			_elm_lang$core$Json_Decode$map2,
-			F2(
-				function (pageX, pageY) {
-					return {type_: type_, pageX: pageX, pageY: pageY};
-				}),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'pageX',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'pageY',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float)),
-		_debois$elm_dom$DOM$target(_debois$elm_dom$DOM$boundingClientRect));
-};
-var _debois$elm_mdl$Material_Ripple$primary = _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--primary');
-var _debois$elm_mdl$Material_Ripple$accent = _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--accent');
-var _debois$elm_mdl$Material_Ripple$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'Focus':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							focus: true,
-							geometry: model.activated ? model.geometry : _p0._0
-						}),
-					{ctor: '[]'});
-			case 'Blur':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{focus: false}),
-					{ctor: '[]'});
-			case 'Activate':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{activated: true, geometry: _p0._0}),
-					{ctor: '[]'});
-			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{activated: false, focus: false}),
-					{ctor: '[]'});
-		}
-	});
-var _debois$elm_mdl$Material_Ripple$defaultModel = {focus: false, activated: false, geometry: _debois$elm_mdl$Material_Internal_Ripple$defaultGeometry};
-var _debois$elm_mdl$Material_Ripple$view = F4(
-	function (isUnbounded, lift_, index, store) {
-		var model = A2(
-			_elm_lang$core$Maybe$withDefault,
-			_debois$elm_mdl$Material_Ripple$defaultModel,
-			A2(_elm_lang$core$Dict$get, index, store.ripple));
-		var geometry = model.geometry;
-		var surfaceWidth = A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(geometry.frame.width),
-			'px');
-		var surfaceHeight = A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(geometry.frame.height),
-			'px');
-		var surfaceDiameter = _elm_lang$core$Basics$sqrt(
-			Math.pow(geometry.frame.width, 2) + Math.pow(geometry.frame.height, 2));
-		var maxRadius = surfaceDiameter + 10;
-		var maxDimension = A2(_elm_lang$core$Basics$max, geometry.frame.width, geometry.frame.height);
-		var initialSize = maxDimension * 0.6;
-		var fgSize = A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(initialSize),
-			'px');
-		var fgScale = _elm_lang$core$Basics$toString(maxRadius / initialSize);
-		var endPoint = {x: (geometry.frame.width - initialSize) / 2, y: (geometry.frame.height - initialSize) / 2};
-		var translateEnd = A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(endPoint.x),
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'px, ',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(endPoint.y),
-					'px')));
-		var wasActivatedByPointer = A2(
-			_elm_lang$core$List$member,
-			geometry.event.type_,
-			{
-				ctor: '::',
-				_0: 'mousedown',
-				_1: {
-					ctor: '::',
-					_0: 'touchstart',
-					_1: {
-						ctor: '::',
-						_0: 'pointerdown',
-						_1: {ctor: '[]'}
-					}
-				}
-			});
-		var startPoint = (wasActivatedByPointer && (!isUnbounded)) ? {x: (geometry.event.pageX - geometry.frame.left) - (initialSize / 2), y: (geometry.event.pageY - geometry.frame.top) - (initialSize / 2)} : {x: (geometry.frame.width - initialSize) / 2, y: (geometry.frame.height - initialSize) / 2};
-		var translateStart = A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(startPoint.x),
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'px, ',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(startPoint.y),
-					'px')));
-		var top = A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(startPoint.y),
-			'px');
-		var left = A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(startPoint.x),
-			'px');
-		var summary = A2(
-			_debois$elm_mdl$Material_Internal_Options$collect,
-			{ctor: '_Tuple0'},
-			_elm_lang$core$List$concat(
-				{
-					ctor: '::',
-					_0: {
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-surface-width', surfaceWidth),
-						_1: {
-							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-surface-height', surfaceHeight),
-							_1: {
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-size', fgSize),
-								_1: {
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-scale', fgScale),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					},
-					_1: {
-						ctor: '::',
-						_0: isUnbounded ? {
-							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-top', top),
-							_1: {
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-left', left),
-								_1: {ctor: '[]'}
-							}
-						} : {
-							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-translate-start', translateStart),
-							_1: {
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Internal_Options$variable, '--mdc-ripple-fg-translate-end', translateEnd),
-								_1: {ctor: '[]'}
-							}
-						},
-						_1: {ctor: '[]'}
-					}
-				}));
-		var _p1 = _debois$elm_mdl$Material_Internal_Options$cssVariables(summary);
-		var selector = _p1._0;
-		var styleNode = _p1._1;
-		var lift = function (_p2) {
-			return lift_(
-				A2(_debois$elm_mdl$Material_Msg$RippleMsg, index, _p2));
-		};
-		return {
-			ctor: '_Tuple2',
-			_0: _debois$elm_mdl$Material_Options$many(
-				{
-					ctor: '::',
-					_0: A2(
-						_debois$elm_mdl$Material_Options$on,
-						'focus',
-						A2(
-							_elm_lang$core$Json_Decode$map,
-							function (_p3) {
-								return lift(
-									_debois$elm_mdl$Material_Internal_Ripple$Focus(_p3));
-							},
-							_debois$elm_mdl$Material_Ripple$decodeGeometry('focus'))),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_Options$on,
-							'blur',
-							_elm_lang$core$Json_Decode$succeed(
-								lift(_debois$elm_mdl$Material_Internal_Ripple$Blur))),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Options$on,
-								'keydown',
-								A2(
-									_elm_lang$core$Json_Decode$map,
-									function (_p4) {
-										return lift(
-											_debois$elm_mdl$Material_Internal_Ripple$Activate(_p4));
-									},
-									_debois$elm_mdl$Material_Ripple$decodeGeometry('keydown'))),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_debois$elm_mdl$Material_Options$on,
-									'keyup',
-									_elm_lang$core$Json_Decode$succeed(
-										lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Options$on,
-										'mousedown',
-										A2(
-											_elm_lang$core$Json_Decode$map,
-											function (_p5) {
-												return lift(
-													_debois$elm_mdl$Material_Internal_Ripple$Activate(_p5));
-											},
-											_debois$elm_mdl$Material_Ripple$decodeGeometry('mousedown'))),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Options$on,
-											'mouseup',
-											_elm_lang$core$Json_Decode$succeed(
-												lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Options$on,
-												'pointerdown',
-												A2(
-													_elm_lang$core$Json_Decode$map,
-													function (_p6) {
-														return lift(
-															_debois$elm_mdl$Material_Internal_Ripple$Activate(_p6));
-													},
-													_debois$elm_mdl$Material_Ripple$decodeGeometry('pointerdown'))),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_debois$elm_mdl$Material_Options$on,
-													'pointerup',
-													_elm_lang$core$Json_Decode$succeed(
-														lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_debois$elm_mdl$Material_Options$on,
-														'touchstart',
-														A2(
-															_elm_lang$core$Json_Decode$map,
-															function (_p7) {
-																return lift(
-																	_debois$elm_mdl$Material_Internal_Ripple$Activate(_p7));
-															},
-															_debois$elm_mdl$Material_Ripple$decodeGeometry('touchstart'))),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_debois$elm_mdl$Material_Options$on,
-															'touchend',
-															_elm_lang$core$Json_Decode$succeed(
-																lift(_debois$elm_mdl$Material_Internal_Ripple$Deactivate))),
-														_1: {
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface'),
-															_1: {
-																ctor: '::',
-																_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded'),
-																_1: {
-																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Options$attribute(
-																		_elm_lang$html$Html_Attributes$tabindex(0)),
-																	_1: {
-																		ctor: '::',
-																		_0: function (_p8) {
-																			return A2(
-																				_debois$elm_mdl$Material_Options$when,
-																				isUnbounded,
-																				_debois$elm_mdl$Material_Options$many(_p8));
-																		}(
-																			{
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--unbounded'),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(_debois$elm_mdl$Material_Options$css, 'overflow', 'visible'),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(_debois$elm_mdl$Material_Options$data, 'data-mdc-ripple-is-unbounded', ''),
-																						_1: {ctor: '[]'}
-																					}
-																				}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: function (_p9) {
-																				return A2(
-																					_debois$elm_mdl$Material_Options$when,
-																					model.activated,
-																					_debois$elm_mdl$Material_Options$many(_p9));
-																			}(
-																				{
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-active-fill'),
-																					_1: {
-																						ctor: '::',
-																						_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--foreground-activation'),
-																						_1: {ctor: '[]'}
-																					}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: A2(
-																					_debois$elm_mdl$Material_Options$when,
-																					model.focus,
-																					_debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-focused')),
-																				_1: {
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_Options$cs(selector),
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}),
-			_1: styleNode
-		};
-	});
-var _debois$elm_mdl$Material_Ripple$bounded = F3(
-	function (lift_, index, store) {
-		return A4(_debois$elm_mdl$Material_Ripple$view, false, lift_, index, store);
-	});
-var _debois$elm_mdl$Material_Ripple$unbounded = F3(
-	function (lift_, index, store) {
-		return A4(_debois$elm_mdl$Material_Ripple$view, true, lift_, index, store);
-	});
-var _debois$elm_mdl$Material_Ripple$_p10 = A3(
-	_debois$elm_mdl$Material_Component$indexed,
-	function (_) {
-		return _.ripple;
-	},
-	F2(
-		function (x, y) {
-			return _elm_lang$core$Native_Utils.update(
-				y,
-				{ripple: x});
-		}),
-	_debois$elm_mdl$Material_Ripple$defaultModel);
-var _debois$elm_mdl$Material_Ripple$get = _debois$elm_mdl$Material_Ripple$_p10._0;
-var _debois$elm_mdl$Material_Ripple$set = _debois$elm_mdl$Material_Ripple$_p10._1;
-var _debois$elm_mdl$Material_Ripple$react = A4(
-	_debois$elm_mdl$Material_Component$react,
-	_debois$elm_mdl$Material_Ripple$get,
-	_debois$elm_mdl$Material_Ripple$set,
-	_debois$elm_mdl$Material_Msg$RippleMsg,
-	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Ripple$update));
-var _debois$elm_mdl$Material_Ripple$Model = F3(
-	function (a, b, c) {
-		return {focus: a, activated: b, geometry: c};
 	});
 
 var _debois$elm_mdl$Material_Icon$view = F2(
@@ -16942,254 +16965,349 @@ var _debois$elm_mdl$Demo_Buttons$view = F3(
 		return A2(
 			page.body,
 			'Buttons',
-			function (_p2) {
-				return _elm_lang$core$List$concat(
-					A2(
-						_elm_lang$core$List$map,
-						function (row) {
-							return _elm_lang$core$List$concat(
-								{
-									ctor: '::',
-									_0: {
+			_elm_lang$core$List$concat(
+				{
+					ctor: '::',
+					_0: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Demo_Page$hero,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A5(
+									_debois$elm_mdl$Material_Button$render,
+									function (_p2) {
+										return lift(
+											_debois$elm_mdl$Demo_Buttons$Mdl(_p2));
+									},
+									{
 										ctor: '::',
-										_0: A3(
-											_debois$elm_mdl$Material_Options$styled,
-											_elm_lang$html$Html$div,
-											{
+										_0: 0,
+										_1: {
+											ctor: '::',
+											_0: 0,
+											_1: {ctor: '[]'}
+										}
+									},
+									model.mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Button$ripple,
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-right', '32px'),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Flat'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Button$render,
+										function (_p3) {
+											return lift(
+												_debois$elm_mdl$Demo_Buttons$Mdl(_p3));
+										},
+										{
+											ctor: '::',
+											_0: 0,
+											_1: {
 												ctor: '::',
-												_0: _debois$elm_mdl$Material_Typography$title,
+												_0: 1,
+												_1: {ctor: '[]'}
+											}
+										},
+										model.mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Button$ripple,
+											_1: {
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Button$raised,
 												_1: {
 													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '64px 16px 24px'),
-													_1: {ctor: '[]'}
+													_0: _debois$elm_mdl$Material_Button$primary,
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '32px'),
+														_1: {ctor: '[]'}
+													}
 												}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text(row.headline),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									},
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$core$List$indexedMap,
-											F2(
-												function (idx, button) {
-													return A5(
-														_debois$elm_mdl$Material_Button$render,
-														function (_p3) {
-															return lift(
-																_debois$elm_mdl$Demo_Buttons$Mdl(_p3));
-														},
-														{
-															ctor: '::',
-															_0: 0,
-															_1: {
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Raised'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					_1: {
+						ctor: '::',
+						_0: function (_p4) {
+							return _elm_lang$core$List$concat(
+								A2(
+									_elm_lang$core$List$indexedMap,
+									F2(
+										function (rowIdx, row) {
+											return _elm_lang$core$List$concat(
+												{
+													ctor: '::',
+													_0: {
+														ctor: '::',
+														_0: A3(
+															_debois$elm_mdl$Material_Options$styled,
+															_elm_lang$html$Html$div,
+															{
 																ctor: '::',
-																_0: idx,
-																_1: {ctor: '[]'}
-															}
-														},
-														model.mdl,
-														{
-															ctor: '::',
-															_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '16px'),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_debois$elm_mdl$Material_Options$when,
-																	row.link,
-																	_debois$elm_mdl$Material_Button$link('#buttons')),
+																_0: _debois$elm_mdl$Material_Typography$title,
 																_1: {
 																	ctor: '::',
-																	_0: A2(_debois$elm_mdl$Material_Options$when, row.disabled, _debois$elm_mdl$Material_Button$disabled),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(_debois$elm_mdl$Material_Options$when, button.raised, _debois$elm_mdl$Material_Button$raised),
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Button$ripple,
-																			_1: {
-																				ctor: '::',
-																				_0: A2(_debois$elm_mdl$Material_Options$when, button.compact, _debois$elm_mdl$Material_Button$compact),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(_debois$elm_mdl$Material_Options$when, button.dense, _debois$elm_mdl$Material_Button$dense),
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		}
-																	}
+																	_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '64px 16px 24px'),
+																	_1: {ctor: '[]'}
 																}
-															}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(
-																A2(
-																	_elm_lang$core$String$join,
-																	' ',
-																	A2(
-																		_elm_lang$core$List$filterMap,
-																		_elm_lang$core$Basics$identity,
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text(row.headline),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													},
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$core$List$indexedMap,
+															F2(
+																function (idx, button) {
+																	return A5(
+																		_debois$elm_mdl$Material_Button$render,
+																		function (_p5) {
+																			return lift(
+																				_debois$elm_mdl$Demo_Buttons$Mdl(_p5));
+																		},
 																		{
 																			ctor: '::',
-																			_0: button.dense ? _elm_lang$core$Maybe$Just('Dense') : _elm_lang$core$Maybe$Nothing,
+																			_0: 2 * (rowIdx + 1),
 																			_1: {
 																				ctor: '::',
-																				_0: button.compact ? _elm_lang$core$Maybe$Just('Compact') : _elm_lang$core$Maybe$Nothing,
+																				_0: idx,
+																				_1: {ctor: '[]'}
+																			}
+																		},
+																		model.mdl,
+																		{
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '16px'),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_debois$elm_mdl$Material_Options$when,
+																					row.link,
+																					_debois$elm_mdl$Material_Button$link('#buttons')),
 																				_1: {
 																					ctor: '::',
-																					_0: button.raised ? _elm_lang$core$Maybe$Just('Raised') : _elm_lang$core$Maybe$Just('Default'),
+																					_0: A2(_debois$elm_mdl$Material_Options$when, row.disabled, _debois$elm_mdl$Material_Button$disabled),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(_debois$elm_mdl$Material_Options$when, button.raised, _debois$elm_mdl$Material_Button$raised),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_debois$elm_mdl$Material_Options$when, row.ripple, _debois$elm_mdl$Material_Button$ripple),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(_debois$elm_mdl$Material_Options$when, button.compact, _debois$elm_mdl$Material_Button$compact),
+																								_1: {
+																									ctor: '::',
+																									_0: A2(_debois$elm_mdl$Material_Options$when, button.dense, _debois$elm_mdl$Material_Button$dense),
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text(
+																				A2(
+																					_elm_lang$core$String$join,
+																					' ',
+																					A2(
+																						_elm_lang$core$List$filterMap,
+																						_elm_lang$core$Basics$identity,
+																						{
+																							ctor: '::',
+																							_0: button.dense ? _elm_lang$core$Maybe$Just('Dense') : _elm_lang$core$Maybe$Nothing,
+																							_1: {
+																								ctor: '::',
+																								_0: button.compact ? _elm_lang$core$Maybe$Just('Compact') : _elm_lang$core$Maybe$Nothing,
+																								_1: {
+																									ctor: '::',
+																									_0: button.raised ? _elm_lang$core$Maybe$Just('Raised') : _elm_lang$core$Maybe$Just('Default'),
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						}))),
+																			_1: {ctor: '[]'}
+																		});
+																}),
+															_elm_lang$core$List$concat(
+																A2(
+																	_elm_lang$core$List$map,
+																	function (button) {
+																		return {
+																			ctor: '::',
+																			_0: {dense: button.dense, compact: button.compact, raised: false},
+																			_1: {
+																				ctor: '::',
+																				_0: {dense: button.dense, compact: button.compact, raised: true},
+																				_1: {ctor: '[]'}
+																			}
+																		};
+																	},
+																	{
+																		ctor: '::',
+																		_0: {dense: false, compact: false},
+																		_1: {
+																			ctor: '::',
+																			_0: {dense: true, compact: false},
+																			_1: {
+																				ctor: '::',
+																				_0: {dense: false, compact: true},
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	}))),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$core$List$indexedMap,
+																F2(
+																	function (idx, button) {
+																		return A5(
+																			_debois$elm_mdl$Material_Button$render,
+																			function (_p6) {
+																				return lift(
+																					_debois$elm_mdl$Demo_Buttons$Mdl(_p6));
+																			},
+																			{
+																				ctor: '::',
+																				_0: (2 * (rowIdx + 1)) + 1,
+																				_1: {
+																					ctor: '::',
+																					_0: idx,
 																					_1: {ctor: '[]'}
 																				}
+																			},
+																			model.mdl,
+																			{
+																				ctor: '::',
+																				_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '16px'),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						_debois$elm_mdl$Material_Options$when,
+																						row.link,
+																						_debois$elm_mdl$Material_Button$link('#buttons')),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(_debois$elm_mdl$Material_Options$when, row.disabled, _debois$elm_mdl$Material_Button$disabled),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_debois$elm_mdl$Material_Options$when, row.ripple, _debois$elm_mdl$Material_Button$ripple),
+																							_1: {
+																								ctor: '::',
+																								_0: button.primary ? _debois$elm_mdl$Material_Button$primary : _debois$elm_mdl$Material_Button$accent,
+																								_1: {
+																									ctor: '::',
+																									_0: A2(_debois$elm_mdl$Material_Options$when, button.raised, _debois$elm_mdl$Material_Button$raised),
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text(
+																					A2(
+																						_elm_lang$core$String$join,
+																						' ',
+																						{
+																							ctor: '::',
+																							_0: button.raised ? 'Raised' : 'Default',
+																							_1: {
+																								ctor: '::',
+																								_0: 'width',
+																								_1: {
+																									ctor: '::',
+																									_0: button.primary ? 'Primary' : 'Accent',
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						})),
+																				_1: {ctor: '[]'}
+																			});
+																	}),
+																_elm_lang$core$List$concat(
+																	A2(
+																		_elm_lang$core$List$map,
+																		function (button) {
+																			return {
+																				ctor: '::',
+																				_0: {primary: button.primary, raised: false},
+																				_1: {
+																					ctor: '::',
+																					_0: {primary: button.primary, raised: true},
+																					_1: {ctor: '[]'}
+																				}
+																			};
+																		},
+																		{
+																			ctor: '::',
+																			_0: {primary: false},
+																			_1: {
+																				ctor: '::',
+																				_0: {primary: true},
+																				_1: {ctor: '[]'}
 																			}
 																		}))),
 															_1: {ctor: '[]'}
-														});
-												}),
-											_elm_lang$core$List$concat(
-												A2(
-													_elm_lang$core$List$map,
-													function (button) {
-														return {
-															ctor: '::',
-															_0: {dense: button.dense, compact: button.compact, raised: false},
-															_1: {
-																ctor: '::',
-																_0: {dense: button.dense, compact: button.compact, raised: true},
-																_1: {ctor: '[]'}
-															}
-														};
-													},
-													{
-														ctor: '::',
-														_0: {dense: false, compact: false},
-														_1: {
-															ctor: '::',
-															_0: {dense: true, compact: false},
-															_1: {
-																ctor: '::',
-																_0: {dense: false, compact: true},
-																_1: {ctor: '[]'}
-															}
 														}
-													}))),
+													}
+												});
+										}),
+									_p4));
+						}(
+							{
+								ctor: '::',
+								_0: {headline: 'Buttons', link: false, disabled: false, ripple: true},
+								_1: {
+									ctor: '::',
+									_0: {headline: 'Without ripple', link: false, disabled: false, ripple: false},
+									_1: {
+										ctor: '::',
+										_0: {headline: 'Links with Button Style', link: true, disabled: false, ripple: true},
 										_1: {
 											ctor: '::',
-											_0: A2(
-												_elm_lang$core$List$indexedMap,
-												F2(
-													function (idx, button) {
-														return A5(
-															_debois$elm_mdl$Material_Button$render,
-															function (_p4) {
-																return lift(
-																	_debois$elm_mdl$Demo_Buttons$Mdl(_p4));
-															},
-															{
-																ctor: '::',
-																_0: 1,
-																_1: {
-																	ctor: '::',
-																	_0: idx,
-																	_1: {ctor: '[]'}
-																}
-															},
-															model.mdl,
-															{
-																ctor: '::',
-																_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '16px'),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_debois$elm_mdl$Material_Options$when,
-																		row.link,
-																		_debois$elm_mdl$Material_Button$link('#buttons')),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(_debois$elm_mdl$Material_Options$when, row.disabled, _debois$elm_mdl$Material_Button$disabled),
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Button$ripple,
-																			_1: {
-																				ctor: '::',
-																				_0: button.primary ? _debois$elm_mdl$Material_Button$primary : _debois$elm_mdl$Material_Button$accent,
-																				_1: {
-																					ctor: '::',
-																					_0: A2(_debois$elm_mdl$Material_Options$when, button.raised, _debois$elm_mdl$Material_Button$raised),
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		}
-																	}
-																}
-															},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text(
-																	A2(
-																		_elm_lang$core$String$join,
-																		' ',
-																		{
-																			ctor: '::',
-																			_0: button.raised ? 'Raised' : 'Default',
-																			_1: {
-																				ctor: '::',
-																				_0: 'width',
-																				_1: {
-																					ctor: '::',
-																					_0: button.primary ? 'Primary' : 'Accent',
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		})),
-																_1: {ctor: '[]'}
-															});
-													}),
-												_elm_lang$core$List$concat(
-													A2(
-														_elm_lang$core$List$map,
-														function (button) {
-															return {
-																ctor: '::',
-																_0: {primary: button.primary, raised: false},
-																_1: {
-																	ctor: '::',
-																	_0: {primary: button.primary, raised: true},
-																	_1: {ctor: '[]'}
-																}
-															};
-														},
-														{
-															ctor: '::',
-															_0: {primary: false},
-															_1: {
-																ctor: '::',
-																_0: {primary: true},
-																_1: {ctor: '[]'}
-															}
-														}))),
+											_0: {headline: 'Disabled', link: false, disabled: true, ripple: true},
 											_1: {ctor: '[]'}
 										}
 									}
-								});
-						},
-						_p2));
-			}(
-				{
-					ctor: '::',
-					_0: {headline: 'Buttons', link: false, disabled: false},
-					_1: {
-						ctor: '::',
-						_0: {headline: 'Links with Button Style', link: true, disabled: false},
-						_1: {
-							ctor: '::',
-							_0: {headline: 'Disabled', link: false, disabled: true},
-							_1: {ctor: '[]'}
-						}
+								}
+							}),
+						_1: {ctor: '[]'}
 					}
 				}));
 	});
@@ -28107,7 +28225,7 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 						_1: {
 							ctor: '::',
 							_0: function () {
-								var _p2 = A3(
+								var _p2 = A5(
 									_debois$elm_mdl$Material_Ripple$bounded,
 									function (_p3) {
 										return lift(
@@ -28118,7 +28236,9 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 										_0: 0,
 										_1: {ctor: '[]'}
 									},
-									model.mdl);
+									model.mdl,
+									{ctor: '_Tuple0'},
+									{ctor: '_Tuple0'});
 								var rippleOptions = _p2._0;
 								var rippleStyles = _p2._1;
 								return A3(
@@ -28168,7 +28288,7 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 							_1: {
 								ctor: '::',
 								_0: function () {
-									var _p4 = A3(
+									var _p4 = A5(
 										_debois$elm_mdl$Material_Ripple$unbounded,
 										function (_p5) {
 											return lift(
@@ -28179,7 +28299,9 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 											_0: 1,
 											_1: {ctor: '[]'}
 										},
-										model.mdl);
+										model.mdl,
+										{ctor: '_Tuple0'},
+										{ctor: '_Tuple0'});
 									var rippleOptions = _p4._0;
 									var rippleStyles = _p4._1;
 									return A3(
@@ -28245,7 +28367,7 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 								_1: {
 									ctor: '::',
 									_0: function () {
-										var _p6 = A3(
+										var _p6 = A5(
 											_debois$elm_mdl$Material_Ripple$bounded,
 											function (_p7) {
 												return lift(
@@ -28256,7 +28378,9 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 												_0: 2,
 												_1: {ctor: '[]'}
 											},
-											model.mdl);
+											model.mdl,
+											{ctor: '_Tuple0'},
+											{ctor: '_Tuple0'});
 										var rippleOptions = _p6._0;
 										var rippleStyles = _p6._1;
 										return A3(
@@ -28292,7 +28416,7 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 									_1: {
 										ctor: '::',
 										_0: function () {
-											var _p8 = A3(
+											var _p8 = A5(
 												_debois$elm_mdl$Material_Ripple$bounded,
 												function (_p9) {
 													return lift(
@@ -28303,7 +28427,9 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 													_0: 3,
 													_1: {ctor: '[]'}
 												},
-												model.mdl);
+												model.mdl,
+												{ctor: '_Tuple0'},
+												{ctor: '_Tuple0'});
 											var rippleOptions = _p8._0;
 											var rippleStyles = _p8._1;
 											return A3(
