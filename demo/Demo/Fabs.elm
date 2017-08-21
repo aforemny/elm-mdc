@@ -1,11 +1,11 @@
 module Demo.Fabs exposing (Model, defaultModel, Msg(Mdl), update, view)
 
+import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Fab as Fab
 import Material.Msg
-import Material.Options exposing (css)
-import Demo.Page exposing (Page)
+import Material.Options exposing (styled, css)
 
 
 type alias Model =
@@ -35,26 +35,41 @@ view lift page model =
     let
         fab idx options =
             Fab.render (Mdl >> lift) [idx] model.mdl
-                (css "margin" "16px" :: options)
+                ( Fab.ripple
+                :: css "margin" "16px"
+                :: options
+                )
                 "favorite_border"
+
+        legend options =
+            styled Html.div
+            ( css "padding" "64px 16px 24px"
+            :: options
+            )
     in
     page.body "Floating action buttons"
     [
+      Page.hero []
+      [
+        fab 0 []
+      ]
+
+    ,
       Html.section []
-      [ Html.fieldset []
-        [ Html.legend [] [ text "Normal FABs" ]
-        , fab 0 []
-        , fab 1 [ Fab.mini ]
-        , fab 2 [ Fab.plain ]
-        , fab 3 [ Fab.plain, Fab.mini ]
+      [ Html.div []
+        [ legend [] [ text "Normal FABs" ]
+        , fab 1 []
+        , fab 2 [ Fab.mini ]
+        , fab 3 [ Fab.plain ]
+        , fab 4 [ Fab.plain, Fab.mini ]
         ]
 
-      , Html.fieldset []
-        [ Html.legend [] [ text "Disabled FABs" ]
-        , fab 4 [ Fab.disabled ]
-        , fab 5 [ Fab.disabled, Fab.mini ]
-        , fab 6 [ Fab.disabled, Fab.plain ]
-        , fab 7 [ Fab.disabled, Fab.plain, Fab.mini ]
+      , Html.div []
+        [ legend [] [ text "Disabled FABs" ]
+        , fab 5 [ Fab.disabled ]
+        , fab 6 [ Fab.disabled, Fab.mini ]
+        , fab 7 [ Fab.disabled, Fab.plain ]
+        , fab 8 [ Fab.disabled, Fab.plain, Fab.mini ]
         ]
       ]
     ]

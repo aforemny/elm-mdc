@@ -55,7 +55,8 @@ Material Design button requirements.
 @docs Model, defaultModel, Msg, update
 
 ## Featured render
-@docs Property, render
+@docs render
+@docs Store, react
 -}
 
 import Html.Attributes exposing (..)

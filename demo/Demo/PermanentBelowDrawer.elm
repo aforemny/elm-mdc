@@ -150,7 +150,7 @@ view lift page model =
           , styled Html.div
             [ css "width" "200vw"
             , css "display" "none" |> when (not model.toggle0)
-            , Elevation.elevation 2
+            , Elevation.z2
             ]
             [ text "&nbsp;" ]
           ]
@@ -165,7 +165,7 @@ view lift page model =
           , styled Html.div
             [ css "height" "200vh"
             , css "display" "none" |> when (not model.toggle1)
-            , Elevation.elevation 2
+            , Elevation.z2
             ]
             [ text "&nbsp;" ]
           ]

@@ -407,7 +407,7 @@ urlOf model =
         PermanentAboveDrawer -> "#permanent-drawer-above"
         PermanentBelowDrawer -> "#permanent-drawer-below"
         Elevation -> "#elevation"
-        Fabs -> "#fabs"
+        Fabs -> "#fab"
         GridList -> "#grid-list"
         IconToggle -> "#icon-toggle"
         LayoutGrid -> "#layout-grid"
@@ -454,7 +454,7 @@ location2messages location =
           "#permanent-drawer-above" -> PermanentAboveDrawer
           "#permanent-drawer-below" -> PermanentBelowDrawer
           "#elevation" -> Elevation
-          "#fabs" -> Fabs
+          "#fab" -> Fabs
           "#grid-list" -> GridList
           "#icon-toggle" -> IconToggle
           "#layout-grid" -> LayoutGrid

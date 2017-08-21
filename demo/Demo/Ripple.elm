@@ -73,7 +73,7 @@ view lift page model =
         in
         styled Html.div
         [ demoSurface
-        , Elevation.elevation 2
+        , Elevation.z2
         , rippleOptions
         ]
         [ text "Interact with me!"
@@ -109,7 +109,7 @@ view lift page model =
         in
         styled Html.div
         [ demoSurface
-        , Elevation.elevation 2
+        , Elevation.z2
         , rippleOptions
         , Ripple.primary
         ]
@@ -122,7 +122,7 @@ view lift page model =
         in
         styled Html.div
         [ demoSurface
-        , Elevation.elevation 2
+        , Elevation.z2
         , rippleOptions
         , Ripple.accent
         ]
