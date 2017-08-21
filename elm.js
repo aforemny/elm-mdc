@@ -17312,37 +17312,11 @@ var _debois$elm_mdl$Demo_Buttons$view = F3(
 				}));
 	});
 
-var _debois$elm_mdl$Material_Card$darkTheme = _debois$elm_mdl$Material_Options$cs('mdc-card--theme-dark');
-var _debois$elm_mdl$Material_Card$view = function (options) {
-	return _debois$elm_mdl$Material_Options$div(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-card'),
-			_1: options
-		});
-};
 var _debois$elm_mdl$Material_Card$horizontalBlock = function (options) {
 	return _debois$elm_mdl$Material_Options$div(
 		{
 			ctor: '::',
 			_0: _debois$elm_mdl$Material_Options$cs('mdc-card__horizontal-block'),
-			_1: options
-		});
-};
-var _debois$elm_mdl$Material_Card$vertical = _debois$elm_mdl$Material_Options$cs('mdc-card__actions--vertical');
-var _debois$elm_mdl$Material_Card$actions = function (options) {
-	return _debois$elm_mdl$Material_Options$div(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-card__actions'),
-			_1: options
-		});
-};
-var _debois$elm_mdl$Material_Card$supportingText = function (options) {
-	return _debois$elm_mdl$Material_Options$div(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-card__supporting-text'),
 			_1: options
 		});
 };
@@ -17362,6 +17336,23 @@ var _debois$elm_mdl$Material_Card$media = function (options) {
 		{
 			ctor: '::',
 			_0: _debois$elm_mdl$Material_Options$cs('mdc-card__media'),
+			_1: options
+		});
+};
+var _debois$elm_mdl$Material_Card$vertical = _debois$elm_mdl$Material_Options$cs('mdc-card__actions--vertical');
+var _debois$elm_mdl$Material_Card$actions = function (options) {
+	return _debois$elm_mdl$Material_Options$div(
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-card__actions'),
+			_1: options
+		});
+};
+var _debois$elm_mdl$Material_Card$supportingText = function (options) {
+	return _debois$elm_mdl$Material_Options$div(
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-card__supporting-text'),
 			_1: options
 		});
 };
@@ -17390,25 +17381,48 @@ var _debois$elm_mdl$Material_Card$primary = function (options) {
 			_1: options
 		});
 };
-
-var _debois$elm_mdl$Demo_Cards$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel};
-var _debois$elm_mdl$Demo_Cards$Model = function (a) {
-	return {mdl: a};
+var _debois$elm_mdl$Material_Card$view = function (options) {
+	return _debois$elm_mdl$Material_Options$div(
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-card'),
+			_1: options
+		});
 };
+var _debois$elm_mdl$Material_Card$darkTheme = _debois$elm_mdl$Material_Options$cs('mdc-card--theme-dark');
+var _debois$elm_mdl$Material_Card$defaultConfig = {};
+var _debois$elm_mdl$Material_Card$Config = {};
+
+var _debois$elm_mdl$Demo_Cards$defaultModel = {rtl: false, mdl: _debois$elm_mdl$Material$defaultModel};
+var _debois$elm_mdl$Demo_Cards$Model = F2(
+	function (a, b) {
+		return {rtl: a, mdl: b};
+	});
+var _debois$elm_mdl$Demo_Cards$ToggleRtl = {ctor: 'ToggleRtl'};
 var _debois$elm_mdl$Demo_Cards$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
 var _debois$elm_mdl$Demo_Cards$update = F3(
 	function (lift, msg, model) {
 		var _p0 = msg;
-		return A3(
-			_debois$elm_mdl$Material$update,
-			function (_p1) {
-				return lift(
-					_debois$elm_mdl$Demo_Cards$Mdl(_p1));
-			},
-			_p0._0,
-			model);
+		if (_p0.ctor === 'Mdl') {
+			return A3(
+				_debois$elm_mdl$Material$update,
+				function (_p1) {
+					return lift(
+						_debois$elm_mdl$Demo_Cards$Mdl(_p1));
+				},
+				_p0._0,
+				model);
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{rtl: !model.rtl}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
 	});
 var _debois$elm_mdl$Demo_Cards$view = F3(
 	function (lift, page, model) {
@@ -17520,7 +17534,7 @@ var _debois$elm_mdl$Demo_Cards$view = F3(
 							_debois$elm_mdl$Material_Card$title,
 							{
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '56px'),
+								_0: model.rtl ? A2(_debois$elm_mdl$Material_Options$css, 'margin-right', '56px') : A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '56px'),
 								_1: {ctor: '[]'}
 							},
 							{
@@ -17534,7 +17548,7 @@ var _debois$elm_mdl$Demo_Cards$view = F3(
 								_debois$elm_mdl$Material_Card$subtitle,
 								{
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '56px'),
+									_0: model.rtl ? A2(_debois$elm_mdl$Material_Options$css, 'margin-right', '56px') : A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '56px'),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -18278,88 +18292,217 @@ var _debois$elm_mdl$Demo_Cards$view = F3(
 					_1: {ctor: '[]'}
 				});
 		};
-		var demoWrapper = function (_p9) {
-			return A2(
-				_debois$elm_mdl$Material_Options$div,
-				{
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
-					_1: {
+		var demoWrapper = function (options) {
+			return function (_p9) {
+				return A2(
+					_debois$elm_mdl$Material_Options$div,
+					{
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
 						_1: {
 							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-flow', 'row wrap'),
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
 							_1: {
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'align-content', 'left'),
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'flex-flow', 'row wrap'),
 								_1: {
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'left'),
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'align-content', 'left'),
 									_1: {
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$cs('mdc-typography'),
-										_1: {ctor: '[]'}
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'left'),
+										_1: {
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-typography'),
+											_1: options
+										}
 									}
 								}
 							}
 						}
-					}
-				},
-				A2(
-					_elm_lang$core$List$map,
-					function (card) {
-						return A2(
-							_elm_lang$html$Html$div,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: card,
-								_1: {ctor: '[]'}
-							});
 					},
-					_p9));
+					A2(
+						_elm_lang$core$List$map,
+						function (card) {
+							return A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: card,
+									_1: {ctor: '[]'}
+								});
+						},
+						_p9));
+			};
+		};
+		var example = function (options) {
+			return A2(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+						_1: options
+					}
+				});
 		};
 		return A2(
 			page.body,
-			'Cards',
+			'Card',
 			{
 				ctor: '::',
-				_0: demoWrapper(
+				_0: A2(
+					_debois$elm_mdl$Demo_Page$hero,
 					{
 						ctor: '::',
-						_0: card0(model),
-						_1: {
-							ctor: '::',
-							_0: card1(model),
-							_1: {
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '480px'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							demoCard,
+							{
 								ctor: '::',
-								_0: card2(model),
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', 'white'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									demoMedia,
+									{
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'background-image', 'url(images/16-9.jpg)'),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
 								_1: {
 									ctor: '::',
-									_0: card3(model),
+									_0: demoPrimary2(
+										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
-										_0: card4(model),
-										_1: {
+										_0: A2(
+											demoActions,
+											model,
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						example,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A5(
+										_debois$elm_mdl$Material_Checkbox$render,
+										function (_p10) {
+											return lift(
+												_debois$elm_mdl$Demo_Cards$Mdl(_p10));
+										},
+										{
 											ctor: '::',
-											_0: card5(model),
+											_0: 0,
+											_1: {ctor: '[]'}
+										},
+										model.mdl,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$onClick(
+												lift(_debois$elm_mdl$Demo_Cards$ToggleRtl)),
 											_1: {
 												ctor: '::',
-												_0: card6(model),
+												_0: A2(_debois$elm_mdl$Material_Options$when, model.rtl, _debois$elm_mdl$Material_Checkbox$checked),
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Toggle RTL'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							demoWrapper,
+							{
+								ctor: '::',
+								_0: function (_p11) {
+									return A2(
+										_debois$elm_mdl$Material_Options$when,
+										model.rtl,
+										_debois$elm_mdl$Material_Options$attribute(_p11));
+								}(
+									_elm_lang$html$Html_Attributes$dir('rtl')),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: card0(model),
+								_1: {
+									ctor: '::',
+									_0: card1(model),
+									_1: {
+										ctor: '::',
+										_0: card2(model),
+										_1: {
+											ctor: '::',
+											_0: card3(model),
+											_1: {
+												ctor: '::',
+												_0: card4(model),
 												_1: {
 													ctor: '::',
-													_0: card7(model),
+													_0: card5(model),
 													_1: {
 														ctor: '::',
-														_0: card8(model),
+														_0: card6(model),
 														_1: {
 															ctor: '::',
-															_0: card9(model),
+															_0: card7(model),
 															_1: {
 																ctor: '::',
-																_0: card10(model),
-																_1: {ctor: '[]'}
+																_0: card8(model),
+																_1: {
+																	ctor: '::',
+																	_0: card9(model),
+																	_1: {
+																		ctor: '::',
+																		_0: card10(model),
+																		_1: {ctor: '[]'}
+																	}
+																}
 															}
 														}
 													}
@@ -18368,10 +18511,10 @@ var _debois$elm_mdl$Demo_Cards$view = F3(
 										}
 									}
 								}
-							}
-						}
-					}),
-				_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
 			});
 	});
 
