@@ -9,8 +9,8 @@ import Demo.Fabs
 import Demo.GridList
 import Demo.IconToggle
 import Demo.LayoutGrid
-import Demo.Lists
 import Demo.LinearProgress
+import Demo.Lists
 import Demo.Menus
 import Demo.Page as Page exposing (Url(..))
 import Demo.PermanentAboveDrawer
@@ -50,6 +50,7 @@ type alias Model =
     , dialog : Demo.Dialog.Model
     , elevation : Demo.Elevation.Model
     , fabs : Demo.Fabs.Model
+    , gridList : Demo.GridList.Model
     , iconToggle : Demo.IconToggle.Model
     , menus : Demo.Menus.Model
     , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model
@@ -91,6 +92,7 @@ defaultModel =
     , tabs = Demo.Tabs.defaultModel
     , temporaryDrawer = Demo.TemporaryDrawer.defaultModel
     , textfields = Demo.Textfields.defaultModel
+    , gridList = Demo.GridList.defaultModel
     }
 
 
@@ -119,6 +121,7 @@ type Msg
     | TabsMsg (Demo.Tabs.Msg Msg)
     | TemporaryDrawerMsg (Demo.TemporaryDrawer.Msg Msg)
     | TextfieldMsg (Demo.Textfields.Msg Msg)
+    | GridListMsg (Demo.GridList.Msg Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -270,6 +273,13 @@ update msg model =
             in
                 ( { model | tabs = tabs }, effects ) 
 
+        GridListMsg msg_ ->
+            let
+                (gridList, effects) =
+                    Demo.GridList.update GridListMsg msg_ model.gridList
+            in
+                ( { model | gridList = gridList }, effects ) 
+
 
 view : Model -> Html Msg
 view =
@@ -372,7 +382,7 @@ view_ model =
             Demo.Toolbar.view page
 
         GridList ->
-            Demo.GridList.view page
+            Demo.GridList.view GridListMsg page model.gridList
 
         LayoutGrid ->
             Demo.LayoutGrid.view page

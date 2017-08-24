@@ -1,25 +1,54 @@
 module Material.GridList
     exposing
         ( view
-        , headerCaption
+
+        , tile
+
+        , primary
+        , image
+
+        , secondary
+        , icon
+        , title
+        , supportingText
+
         , twolineCaption
+        , headerCaption
+        , gutter1
+
         , iconAlignStart
         , iconAlignEnd
-        , gutter1
+
         , tileAspect16x9
         , tileAspect4x3
         , tileAspect3x4
         , tileAspect2x3
         , tileAspect3x2
-        , tile
-        , primary
-        , secondary
-        , image
-        , title
-        , supportingText
-        , icon
+
         , primaryContent
         )
+
+{-|
+Grid List provides a RTL-aware Material Design Grid list component adhering to
+the Material Design Grid list spec. Grid Lists are best suited for presenting
+homogeneous data, typically images. Each item in a grid list is called a tile.
+Tiles maintain consistent width, height, and padding across screen sizes.
+([Material Components for
+Web](https://material.io/components/web/catalog/grid-lists/))
+
+@docs view
+
+## Elements
+@docs tile, primary, image, secondary, icon, title, supportingText
+
+## Properties
+@docs headerCaption, twolineCaption, gutter1
+@docs iconAlignStart, iconAlignEnd
+@docs tileAspect16x9, tileAspect4x3, tileAspect3x4, tileAspect2x3, tileAspect3x2
+
+## Background images
+@docs primaryContent
+-}
 
 
 import Html.Attributes as Html
