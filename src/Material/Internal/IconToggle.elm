@@ -1,4 +1,6 @@
-module Material.Internal.IconToggle exposing (Msg)
+module Material.Internal.IconToggle exposing (Msg(..))
+
+import Material.Internal.Ripple as Ripple
 
 type Msg
-    = NoOp
+    = RippleMsg Ripple.Msg

@@ -1,22 +1,54 @@
 module Material.IconToggle exposing
-    ( Model
+    ( -- VIEW
+      view
+    , Property
+    , disabled
+    , on
+
+    , icon
+    , label
+
+    , primary
+    , accent
+
+    , inner
+    
+    -- TEA
+    , Model
     , defaultModel
     , Msg
     , update
-    , Config
-    , defaultConfig
-    , view
-    , Property
-    , on
-    , icon
-    , label
-    , inner
-    , primary
-    , accent
-    , disabled
+
+    -- RENDER
     , render
+    , Store
     , react
     )
+
+{-|
+## Design & API Documentation
+
+- [Material Design guidelines: Toggle buttons](https://material.io/guidelines/components/buttons.html#buttons-toggle-buttons)
+- [Demo](https://aforemny.github.io/elm-mdc/#icon-toggle)
+
+## View
+@docs view
+
+## Properties
+@docs Property
+@docs disabled
+@docs on
+@docs icon, label
+@docs primary, accent
+@docs inner
+
+## TEA architecture
+@docs Model, defaultModel, Msg, update
+
+## Featured render
+@docs render
+@docs Store, react
+-}
 
 import Html exposing (Html, text)
 import Material.Component as Component exposing (Index, Indexed)
@@ -24,15 +56,20 @@ import Material.Internal.IconToggle exposing (Msg(..))
 import Material.Internal.Options as Internal
 import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
+import Material.Ripple as Ripple
 
 
 type alias Model =
-    Bool
+    { on : Bool
+    , ripple : Ripple.Model
+    }
 
 
 defaultModel : Model
 defaultModel =
-    False
+    { on = False
+    , ripple = Ripple.defaultModel
+    }
 
 
 type alias Msg =
@@ -42,7 +79,12 @@ type alias Msg =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        _ -> model ! []
+        RippleMsg msg_ ->
+          let
+              ( ripple, effects ) =
+                  Ripple.update msg_ model.ripple
+          in
+          ( { model | ripple = ripple }, Cmd.map RippleMsg effects )
 
 
 type alias Config =
@@ -106,11 +148,16 @@ view lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
+
+        ( rippleOptions, rippleStyle ) =
+            Ripple.view True (RippleMsg >> lift) model.ripple [] []
+            -- ^^^^ TODO: Ripple.view type signature
     in
     Internal.apply summary (if config.inner == Nothing then Html.i else Html.span)
     ( cs "mdc-icon-toggle"
     :: when (config.inner == Nothing) (cs "material-icons")
     :: Options.aria "label" (if config.on then config.label.on else config.label.off)
+    :: rippleOptions
     :: options
     )
     []
@@ -125,6 +172,7 @@ view lift model options _ =
           []
       else
           text (if config.on then config.icon.on else config.icon.off)
+    , rippleStyle
     ]
 
 

@@ -1,6 +1,6 @@
 module Demo.IconToggle exposing (Model,defaultModel,Msg(Mdl),update,view)
 
-import Demo.Page exposing (Page)
+import Demo.Page as Page exposing (Page)
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -94,6 +94,23 @@ view lift page model =
     in
     page.body "Icon toggles"
     [
+      Page.hero []
+      [
+        let
+            isOn =
+              Dict.get [0] model.iconToggles
+              |> Maybe.withDefault False
+        in
+        toggleExample []
+        [ iconToggle [0]
+              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
+              , IconToggle.icon  "favorite" "favorite_border"
+              ]
+              []
+        ]
+      ]
+
+    ,
       Html.node "style"
       [ Html.type_ "text/css"
       ]
@@ -103,26 +120,31 @@ view lift page model =
       [
         let
             isOn =
-              Dict.get [0] model.iconToggles
+              Dict.get [1] model.iconToggles
               |> Maybe.withDefault False
         in
         toggleExample []
         [ title [] [ text "Using Material Icons" ]
-        , iconToggle [0]
+        , iconToggle [1]
               [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
               , IconToggle.icon  "favorite" "favorite_border"
               ]
               []
-        , text <|
-          if isOn then
-              "Favorited? yes"
-          else
-              "Favorited? no"
+        , styled Html.p
+          [ css "margin-top" "20px"
+          , css "margin-bottom" "20px"
+          ]
+          [ text <|
+            if isOn then
+                "Favorited? yes"
+            else
+                "Favorited? no"
+          ]
         ]
 
       , toggleExample []
         [ title [] [ text "Using Font Awesome" ]
-        , iconToggle [1]
+        , iconToggle [2]
               [ IconToggle.label "Unstar this Icon" "Star this Icon"
               , IconToggle.icon "fa-star" "fa-star-o"
               , IconToggle.inner "fa"
@@ -135,16 +157,6 @@ view lift page model =
         , css "background-color" "#333"
         ]
         [ title [ css "color" "#fff" ] [ text "Dark Theme" ]
-        , iconToggle [2]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
-              , IconToggle.primary
-              ]
-              []
-        ]
-
-      , toggleExample []
-        [ title [] [ text "Primary Colored Icons" ]
         , iconToggle [3]
               [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
               , IconToggle.icon  "favorite" "favorite_border"
@@ -154,8 +166,18 @@ view lift page model =
         ]
 
       , toggleExample []
-        [ title [] [ text "Accent Colored Icons" ]
+        [ title [] [ text "Primary Colored Icons" ]
         , iconToggle [4]
+              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
+              , IconToggle.icon  "favorite" "favorite_border"
+              , IconToggle.primary
+              ]
+              []
+        ]
+
+      , toggleExample []
+        [ title [] [ text "Accent Colored Icons" ]
+        , iconToggle [5]
               [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
               , IconToggle.icon  "favorite" "favorite_border"
               , IconToggle.accent
@@ -165,7 +187,7 @@ view lift page model =
 
       , toggleExample []
         [ title [] [ text "Disabled Icons" ]
-        , iconToggle [5]
+        , iconToggle [6]
               [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
               , IconToggle.icon  "favorite" "favorite_border"
               , IconToggle.disabled
@@ -176,7 +198,7 @@ view lift page model =
           , css "background-color" "#303030"
           , css "padding-bottom" "1rem"
           ]
-          [ iconToggle [6]
+          [ iconToggle [7]
               [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
               , IconToggle.icon  "favorite" "favorite_border"
               , IconToggle.disabled
@@ -227,7 +249,7 @@ view lift page model =
           , css "justify-content" "flex-start"
           ]
           [
-            demoColorCombo [7]
+            demoColorCombo [8]
             [ Theme.textPrimaryOnPrimary
             ]
             [ css "background-color" "#3e82f7"
@@ -239,7 +261,7 @@ view lift page model =
               ]
             ]
 
-          , demoColorCombo [8]
+          , demoColorCombo [9]
             []
             [ css "background-color" "#00bcd6"
             ]
@@ -248,7 +270,7 @@ view lift page model =
               ]
             ]
 
-          , demoColorCombo [9]
+          , demoColorCombo [10]
             [ Theme.textPrimaryOnDark
             ]
             [ Theme.dark
