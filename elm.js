@@ -32434,81 +32434,46 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 			{
 				ctor: '::',
 				_0: A2(
-					example,
-					{
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#eee'),
-						_1: {ctor: '[]'}
-					},
+					_debois$elm_mdl$Demo_Page$hero,
+					{ctor: '[]'},
 					{
 						ctor: '::',
 						_0: A3(
 							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$h2,
+							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
-								_1: {
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
-									_1: {ctor: '[]'}
-								}
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Switch on Light Theme'),
+								_0: A5(
+									_debois$elm_mdl$Material_Switch$render,
+									function (_p2) {
+										return lift(
+											_debois$elm_mdl$Demo_Switch$Mdl(_p2));
+									},
+									{
+										ctor: '::',
+										_0: 0,
+										_1: {ctor: '[]'}
+									},
+									model.mdl,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$onClick(
+											lift(_debois$elm_mdl$Demo_Switch$ToggleOn0)),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.on0, _debois$elm_mdl$Material_Switch$on),
+											_1: {ctor: '[]'}
+										}
+									},
+									{ctor: '[]'}),
 								_1: {ctor: '[]'}
 							}),
-						_1: {
-							ctor: '::',
-							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A5(
-										_debois$elm_mdl$Material_Switch$render,
-										function (_p2) {
-											return lift(
-												_debois$elm_mdl$Demo_Switch$Mdl(_p2));
-										},
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
-										model.mdl,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$onClick(
-												lift(_debois$elm_mdl$Demo_Switch$ToggleOn0)),
-											_1: {
-												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$when, model.on0, _debois$elm_mdl$Material_Switch$on),
-												_1: {ctor: '[]'}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$label,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('off/on'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
+						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
@@ -32535,7 +32500,7 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Switch on Light Theme - Disabled'),
+									_0: _elm_lang$html$Html$text('Switch on Light Theme'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -32558,14 +32523,19 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 											},
 											{
 												ctor: '::',
-												_0: 2,
+												_0: 1,
 												_1: {ctor: '[]'}
 											},
 											model.mdl,
 											{
 												ctor: '::',
-												_0: _debois$elm_mdl$Material_Switch$disabled,
-												_1: {ctor: '[]'}
+												_0: _debois$elm_mdl$Material_Options$onClick(
+													lift(_debois$elm_mdl$Demo_Switch$ToggleOn0)),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$when, model.on0, _debois$elm_mdl$Material_Switch$on),
+													_1: {ctor: '[]'}
+												}
 											},
 											{ctor: '[]'}),
 										_1: {
@@ -32590,12 +32560,8 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 							example,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Theme$dark,
-								_1: {
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
-									_1: {ctor: '[]'}
-								}
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#eee'),
+								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
@@ -32608,16 +32574,12 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 										_1: {
 											ctor: '::',
 											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
-											_1: {
-												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
-												_1: {ctor: '[]'}
-											}
+											_1: {ctor: '[]'}
 										}
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Switch on Dark Theme'),
+										_0: _elm_lang$html$Html$text('Switch on Light Theme - Disabled'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
@@ -32640,19 +32602,14 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 												},
 												{
 													ctor: '::',
-													_0: 1,
+													_0: 2,
 													_1: {ctor: '[]'}
 												},
 												model.mdl,
 												{
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$onClick(
-														lift(_debois$elm_mdl$Demo_Switch$ToggleOn1)),
-													_1: {
-														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$when, model.on1, _debois$elm_mdl$Material_Switch$on),
-														_1: {ctor: '[]'}
-													}
+													_0: _debois$elm_mdl$Material_Switch$disabled,
+													_1: {ctor: '[]'}
 												},
 												{ctor: '[]'}),
 											_1: {
@@ -32704,7 +32661,7 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('Switch on Dark Theme - Disabled'),
+											_0: _elm_lang$html$Html$text('Switch on Dark Theme'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -32733,8 +32690,13 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 													model.mdl,
 													{
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Switch$disabled,
-														_1: {ctor: '[]'}
+														_0: _debois$elm_mdl$Material_Options$onClick(
+															lift(_debois$elm_mdl$Demo_Switch$ToggleOn1)),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$when, model.on1, _debois$elm_mdl$Material_Switch$on),
+															_1: {ctor: '[]'}
+														}
 													},
 													{ctor: '[]'}),
 												_1: {
@@ -32753,7 +32715,90 @@ var _debois$elm_mdl$Demo_Switch$view = F3(
 										_1: {ctor: '[]'}
 									}
 								}),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: A2(
+									example,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Theme$dark,
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: A3(
+											_debois$elm_mdl$Material_Options$styled,
+											_elm_lang$html$Html$h2,
+											{
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+														_1: {ctor: '[]'}
+													}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Switch on Dark Theme - Disabled'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A3(
+												_debois$elm_mdl$Material_Options$styled,
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A5(
+														_debois$elm_mdl$Material_Switch$render,
+														function (_p6) {
+															return lift(
+																_debois$elm_mdl$Demo_Switch$Mdl(_p6));
+														},
+														{
+															ctor: '::',
+															_0: 4,
+															_1: {ctor: '[]'}
+														},
+														model.mdl,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Switch$disabled,
+															_1: {ctor: '[]'}
+														},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$label,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('off/on'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
