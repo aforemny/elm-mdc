@@ -9723,6 +9723,11 @@ var _debois$elm_mdl$Material_Internal_Slider$Geometry = F7(
 	function (a, b, c, d, e, f, g) {
 		return {width: a, left: b, x: c, discrete: d, steps: e, min: f, max: g};
 	});
+var _debois$elm_mdl$Material_Internal_Slider$AnimationFrame = {ctor: 'AnimationFrame'};
+var _debois$elm_mdl$Material_Internal_Slider$Resize = {ctor: 'Resize'};
+var _debois$elm_mdl$Material_Internal_Slider$Init = function (a) {
+	return {ctor: 'Init', _0: a};
+};
 var _debois$elm_mdl$Material_Internal_Slider$Dispatch = function (a) {
 	return {ctor: 'Dispatch', _0: a};
 };
@@ -13964,8 +13969,306 @@ var _debois$elm_mdl$Material_Select$Config = F3(
 		return {index: a, selectedText: b, disabled: c};
 	});
 
+var _elm_lang$animation_frame$Native_AnimationFrame = function()
+{
+
+function create()
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		var id = requestAnimationFrame(function() {
+			callback(_elm_lang$core$Native_Scheduler.succeed(Date.now()));
+		});
+
+		return function() {
+			cancelAnimationFrame(id);
+		};
+	});
+}
+
+return {
+	create: create
+};
+
+}();
+
+var _elm_lang$animation_frame$AnimationFrame$rAF = _elm_lang$animation_frame$Native_AnimationFrame.create(
+	{ctor: '_Tuple0'});
+var _elm_lang$animation_frame$AnimationFrame$subscription = _elm_lang$core$Native_Platform.leaf('AnimationFrame');
+var _elm_lang$animation_frame$AnimationFrame$State = F3(
+	function (a, b, c) {
+		return {subs: a, request: b, oldTime: c};
+	});
+var _elm_lang$animation_frame$AnimationFrame$init = _elm_lang$core$Task$succeed(
+	A3(
+		_elm_lang$animation_frame$AnimationFrame$State,
+		{ctor: '[]'},
+		_elm_lang$core$Maybe$Nothing,
+		0));
+var _elm_lang$animation_frame$AnimationFrame$onEffects = F3(
+	function (router, subs, _p0) {
+		var _p1 = _p0;
+		var _p5 = _p1.request;
+		var _p4 = _p1.oldTime;
+		var _p2 = {ctor: '_Tuple2', _0: _p5, _1: subs};
+		if (_p2._0.ctor === 'Nothing') {
+			if (_p2._1.ctor === '[]') {
+				return _elm_lang$core$Task$succeed(
+					A3(
+						_elm_lang$animation_frame$AnimationFrame$State,
+						{ctor: '[]'},
+						_elm_lang$core$Maybe$Nothing,
+						_p4));
+			} else {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (pid) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (time) {
+								return _elm_lang$core$Task$succeed(
+									A3(
+										_elm_lang$animation_frame$AnimationFrame$State,
+										subs,
+										_elm_lang$core$Maybe$Just(pid),
+										time));
+							},
+							_elm_lang$core$Time$now);
+					},
+					_elm_lang$core$Process$spawn(
+						A2(
+							_elm_lang$core$Task$andThen,
+							_elm_lang$core$Platform$sendToSelf(router),
+							_elm_lang$animation_frame$AnimationFrame$rAF)));
+			}
+		} else {
+			if (_p2._1.ctor === '[]') {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (_p3) {
+						return _elm_lang$core$Task$succeed(
+							A3(
+								_elm_lang$animation_frame$AnimationFrame$State,
+								{ctor: '[]'},
+								_elm_lang$core$Maybe$Nothing,
+								_p4));
+					},
+					_elm_lang$core$Process$kill(_p2._0._0));
+			} else {
+				return _elm_lang$core$Task$succeed(
+					A3(_elm_lang$animation_frame$AnimationFrame$State, subs, _p5, _p4));
+			}
+		}
+	});
+var _elm_lang$animation_frame$AnimationFrame$onSelfMsg = F3(
+	function (router, newTime, _p6) {
+		var _p7 = _p6;
+		var _p10 = _p7.subs;
+		var diff = newTime - _p7.oldTime;
+		var send = function (sub) {
+			var _p8 = sub;
+			if (_p8.ctor === 'Time') {
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					_p8._0(newTime));
+			} else {
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					_p8._0(diff));
+			}
+		};
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (pid) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (_p9) {
+						return _elm_lang$core$Task$succeed(
+							A3(
+								_elm_lang$animation_frame$AnimationFrame$State,
+								_p10,
+								_elm_lang$core$Maybe$Just(pid),
+								newTime));
+					},
+					_elm_lang$core$Task$sequence(
+						A2(_elm_lang$core$List$map, send, _p10)));
+			},
+			_elm_lang$core$Process$spawn(
+				A2(
+					_elm_lang$core$Task$andThen,
+					_elm_lang$core$Platform$sendToSelf(router),
+					_elm_lang$animation_frame$AnimationFrame$rAF)));
+	});
+var _elm_lang$animation_frame$AnimationFrame$Diff = function (a) {
+	return {ctor: 'Diff', _0: a};
+};
+var _elm_lang$animation_frame$AnimationFrame$diffs = function (tagger) {
+	return _elm_lang$animation_frame$AnimationFrame$subscription(
+		_elm_lang$animation_frame$AnimationFrame$Diff(tagger));
+};
+var _elm_lang$animation_frame$AnimationFrame$Time = function (a) {
+	return {ctor: 'Time', _0: a};
+};
+var _elm_lang$animation_frame$AnimationFrame$times = function (tagger) {
+	return _elm_lang$animation_frame$AnimationFrame$subscription(
+		_elm_lang$animation_frame$AnimationFrame$Time(tagger));
+};
+var _elm_lang$animation_frame$AnimationFrame$subMap = F2(
+	function (func, sub) {
+		var _p11 = sub;
+		if (_p11.ctor === 'Time') {
+			return _elm_lang$animation_frame$AnimationFrame$Time(
+				function (_p12) {
+					return func(
+						_p11._0(_p12));
+				});
+		} else {
+			return _elm_lang$animation_frame$AnimationFrame$Diff(
+				function (_p13) {
+					return func(
+						_p11._0(_p13));
+				});
+		}
+	});
+_elm_lang$core$Native_Platform.effectManagers['AnimationFrame'] = {pkg: 'elm-lang/animation-frame', init: _elm_lang$animation_frame$AnimationFrame$init, onEffects: _elm_lang$animation_frame$AnimationFrame$onEffects, onSelfMsg: _elm_lang$animation_frame$AnimationFrame$onSelfMsg, tag: 'sub', subMap: _elm_lang$animation_frame$AnimationFrame$subMap};
+
+var _elm_lang$window$Native_Window = function()
+{
+
+var size = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)	{
+	callback(_elm_lang$core$Native_Scheduler.succeed({
+		width: window.innerWidth,
+		height: window.innerHeight
+	}));
+});
+
+return {
+	size: size
+};
+
+}();
+var _elm_lang$window$Window_ops = _elm_lang$window$Window_ops || {};
+_elm_lang$window$Window_ops['&>'] = F2(
+	function (task1, task2) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (_p0) {
+				return task2;
+			},
+			task1);
+	});
+var _elm_lang$window$Window$onSelfMsg = F3(
+	function (router, dimensions, state) {
+		var _p1 = state;
+		if (_p1.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var send = function (_p2) {
+				var _p3 = _p2;
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					_p3._0(dimensions));
+			};
+			return A2(
+				_elm_lang$window$Window_ops['&>'],
+				_elm_lang$core$Task$sequence(
+					A2(_elm_lang$core$List$map, send, _p1._0.subs)),
+				_elm_lang$core$Task$succeed(state));
+		}
+	});
+var _elm_lang$window$Window$init = _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
+var _elm_lang$window$Window$size = _elm_lang$window$Native_Window.size;
+var _elm_lang$window$Window$width = A2(
+	_elm_lang$core$Task$map,
+	function (_) {
+		return _.width;
+	},
+	_elm_lang$window$Window$size);
+var _elm_lang$window$Window$height = A2(
+	_elm_lang$core$Task$map,
+	function (_) {
+		return _.height;
+	},
+	_elm_lang$window$Window$size);
+var _elm_lang$window$Window$onEffects = F3(
+	function (router, newSubs, oldState) {
+		var _p4 = {ctor: '_Tuple2', _0: oldState, _1: newSubs};
+		if (_p4._0.ctor === 'Nothing') {
+			if (_p4._1.ctor === '[]') {
+				return _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
+			} else {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (pid) {
+						return _elm_lang$core$Task$succeed(
+							_elm_lang$core$Maybe$Just(
+								{subs: newSubs, pid: pid}));
+					},
+					_elm_lang$core$Process$spawn(
+						A3(
+							_elm_lang$dom$Dom_LowLevel$onWindow,
+							'resize',
+							_elm_lang$core$Json_Decode$succeed(
+								{ctor: '_Tuple0'}),
+							function (_p5) {
+								return A2(
+									_elm_lang$core$Task$andThen,
+									_elm_lang$core$Platform$sendToSelf(router),
+									_elm_lang$window$Window$size);
+							})));
+			}
+		} else {
+			if (_p4._1.ctor === '[]') {
+				return A2(
+					_elm_lang$window$Window_ops['&>'],
+					_elm_lang$core$Process$kill(_p4._0._0.pid),
+					_elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing));
+			} else {
+				return _elm_lang$core$Task$succeed(
+					_elm_lang$core$Maybe$Just(
+						{subs: newSubs, pid: _p4._0._0.pid}));
+			}
+		}
+	});
+var _elm_lang$window$Window$subscription = _elm_lang$core$Native_Platform.leaf('Window');
+var _elm_lang$window$Window$Size = F2(
+	function (a, b) {
+		return {width: a, height: b};
+	});
+var _elm_lang$window$Window$MySub = function (a) {
+	return {ctor: 'MySub', _0: a};
+};
+var _elm_lang$window$Window$resizes = function (tagger) {
+	return _elm_lang$window$Window$subscription(
+		_elm_lang$window$Window$MySub(tagger));
+};
+var _elm_lang$window$Window$subMap = F2(
+	function (func, _p6) {
+		var _p7 = _p6;
+		return _elm_lang$window$Window$MySub(
+			function (_p8) {
+				return func(
+					_p7._0(_p8));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window', init: _elm_lang$window$Window$init, onEffects: _elm_lang$window$Window$onEffects, onSelfMsg: _elm_lang$window$Window$onSelfMsg, tag: 'sub', subMap: _elm_lang$window$Window$subMap};
+
 var _debois$elm_mdl$Material_Slider$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$window$Window$resizes(
+				_elm_lang$core$Basics$always(_debois$elm_mdl$Material_Internal_Slider$Resize)),
+			_1: {
+				ctor: '::',
+				_0: model.requestAnimation ? _elm_lang$animation_frame$AnimationFrame$times(
+					_elm_lang$core$Basics$always(_debois$elm_mdl$Material_Internal_Slider$AnimationFrame)) : _elm_lang$core$Platform_Sub$none,
+				_1: {ctor: '[]'}
+			}
+		});
 };
 var _debois$elm_mdl$Material_Slider$subs = A3(
 	_debois$elm_mdl$Material_Component$subs,
@@ -14288,7 +14591,7 @@ var _debois$elm_mdl$Material_Slider$view = F4(
 				_elm_lang$core$Json_Decode$succeed(
 					lift(_debois$elm_mdl$Material_Internal_Slider$Up)));
 		};
-		var activateOn = function (event) {
+		var initOn = function (event) {
 			return A2(
 				_debois$elm_mdl$Material_Options$on,
 				event,
@@ -14296,13 +14599,25 @@ var _debois$elm_mdl$Material_Slider$view = F4(
 					_elm_lang$core$Json_Decode$map,
 					function (_p13) {
 						return lift(
-							A2(_debois$elm_mdl$Material_Internal_Slider$Activate, true, _p13));
+							_debois$elm_mdl$Material_Internal_Slider$Init(_p13));
 					},
 					_debois$elm_mdl$Material_Slider$decodeGeometry));
 		};
-		var _p14 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Slider$defaultConfig, options);
-		var summary = _p14;
-		var config = _p14.config;
+		var activateOn = function (event) {
+			return A2(
+				_debois$elm_mdl$Material_Options$on,
+				event,
+				A2(
+					_elm_lang$core$Json_Decode$map,
+					function (_p14) {
+						return lift(
+							A2(_debois$elm_mdl$Material_Internal_Slider$Activate, true, _p14));
+					},
+					_debois$elm_mdl$Material_Slider$decodeGeometry));
+		};
+		var _p15 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Slider$defaultConfig, options);
+		var summary = _p15;
+		var config = _p15.config;
 		var continuousValue = model.active ? A2(_elm_lang$core$Maybe$withDefault, config.value, model.value) : config.value;
 		var value = config.discrete ? A2(_debois$elm_mdl$Material_Slider$discretize, config.steps, continuousValue) : continuousValue;
 		var translateX = function () {
@@ -14426,71 +14741,82 @@ var _debois$elm_mdl$Material_Slider$view = F4(
 																	_elm_lang$core$Basics$toString(config.steps)),
 																_1: {
 																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Options$many(
-																		A2(_elm_lang$core$List$map, activateOn, downs)),
+																	_0: initOn('elm-mdc-init'),
 																	_1: {
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Options$many(
-																			A2(
-																				_elm_lang$core$List$map,
-																				upOn,
-																				_elm_lang$core$List$concat(
-																					{
-																						ctor: '::',
-																						_0: ups,
-																						_1: {
-																							ctor: '::',
-																							_0: leaves,
-																							_1: {
-																								ctor: '::',
-																								_0: {
-																									ctor: '::',
-																									_0: 'blur',
-																									_1: {ctor: '[]'}
-																								},
-																								_1: {ctor: '[]'}
-																							}
-																						}
-																					}))),
+																		_0: A2(
+																			_debois$elm_mdl$Material_Options$when,
+																			model.requestAnimation,
+																			_debois$elm_mdl$Material_Options$cs('elm-mdc-slider--uninitialized')),
 																		_1: {
 																			ctor: '::',
-																			_0: A2(
-																				_debois$elm_mdl$Material_Options$when,
-																				!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing),
-																				_debois$elm_mdl$Material_Options$many(
-																					A2(_elm_lang$core$List$map, changeOn, ups))),
+																			_0: _debois$elm_mdl$Material_Options$many(
+																				A2(_elm_lang$core$List$map, activateOn, downs)),
 																			_1: {
 																				ctor: '::',
-																				_0: A2(
-																					_debois$elm_mdl$Material_Options$when,
-																					model.active,
-																					_debois$elm_mdl$Material_Options$many(
-																						A2(_elm_lang$core$List$map, dragOn, moves))),
+																				_0: _debois$elm_mdl$Material_Options$many(
+																					A2(
+																						_elm_lang$core$List$map,
+																						upOn,
+																						_elm_lang$core$List$concat(
+																							{
+																								ctor: '::',
+																								_0: ups,
+																								_1: {
+																									ctor: '::',
+																									_0: leaves,
+																									_1: {
+																										ctor: '::',
+																										_0: {
+																											ctor: '::',
+																											_0: 'blur',
+																											_1: {ctor: '[]'}
+																										},
+																										_1: {ctor: '[]'}
+																									}
+																								}
+																							}))),
 																				_1: {
 																					ctor: '::',
 																					_0: A2(
 																						_debois$elm_mdl$Material_Options$when,
-																						!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing),
-																						model.active ? _debois$elm_mdl$Material_Options$many(
-																							A2(
-																								_elm_lang$core$List$map,
-																								inputOn,
-																								_elm_lang$core$List$concat(
-																									{
-																										ctor: '::',
-																										_0: downs,
-																										_1: {
-																											ctor: '::',
-																											_0: ups,
-																											_1: {
+																						!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing),
+																						_debois$elm_mdl$Material_Options$many(
+																							A2(_elm_lang$core$List$map, changeOn, ups))),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(
+																							_debois$elm_mdl$Material_Options$when,
+																							model.active,
+																							_debois$elm_mdl$Material_Options$many(
+																								A2(_elm_lang$core$List$map, dragOn, moves))),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(
+																								_debois$elm_mdl$Material_Options$when,
+																								!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing),
+																								model.active ? _debois$elm_mdl$Material_Options$many(
+																									A2(
+																										_elm_lang$core$List$map,
+																										inputOn,
+																										_elm_lang$core$List$concat(
+																											{
 																												ctor: '::',
-																												_0: moves,
-																												_1: {ctor: '[]'}
-																											}
-																										}
-																									}))) : _debois$elm_mdl$Material_Options$many(
-																							A2(_elm_lang$core$List$map, inputOn, downs))),
-																					_1: {ctor: '[]'}
+																												_0: downs,
+																												_1: {
+																													ctor: '::',
+																													_0: ups,
+																													_1: {
+																														ctor: '::',
+																														_0: moves,
+																														_1: {ctor: '[]'}
+																													}
+																												}
+																											}))) : _debois$elm_mdl$Material_Options$many(
+																									A2(_elm_lang$core$List$map, inputOn, downs))),
+																							_1: {ctor: '[]'}
+																						}
+																					}
 																				}
 																			}
 																		}
@@ -14712,8 +15038,8 @@ var _debois$elm_mdl$Material_Slider$view = F4(
 	});
 var _debois$elm_mdl$Material_Slider$update = F3(
 	function (fwd, msg, model) {
-		var _p15 = msg;
-		switch (_p15.ctor) {
+		var _p16 = msg;
+		switch (_p16.ctor) {
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'Dispatch':
@@ -14721,7 +15047,7 @@ var _debois$elm_mdl$Material_Slider$update = F3(
 					ctor: '_Tuple2',
 					_0: model,
 					_1: _elm_lang$core$Platform_Cmd$batch(
-						A2(_elm_lang$core$List$map, _debois$elm_mdl$Material_Helpers$cmd, _p15._0))
+						A2(_elm_lang$core$List$map, _debois$elm_mdl$Material_Helpers$cmd, _p16._0))
 				};
 			case 'Focus':
 				return {
@@ -14748,35 +15074,49 @@ var _debois$elm_mdl$Material_Slider$update = F3(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Activate':
-				var _p16 = _p15._1;
+				var _p17 = _p16._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
 							active: true,
-							geometry: _elm_lang$core$Maybe$Just(_p16),
-							inTransit: _p15._0,
-							value: _elm_lang$core$Maybe$Just(
-								_debois$elm_mdl$Material_Slider$computeValue(_p16))
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'Drag':
-				var _p17 = _p15._0;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
 							geometry: _elm_lang$core$Maybe$Just(_p17),
-							inTransit: false,
+							inTransit: _p16._0,
 							value: _elm_lang$core$Maybe$Just(
 								_debois$elm_mdl$Material_Slider$computeValue(_p17))
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'Drag':
+				var _p18 = _p16._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							geometry: _elm_lang$core$Maybe$Just(_p18),
+							inTransit: false,
+							value: _elm_lang$core$Maybe$Just(
+								_debois$elm_mdl$Material_Slider$computeValue(_p18))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Init':
+				var _p19 = _p16._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							geometry: _elm_lang$core$Maybe$Just(_p19),
+							value: _elm_lang$core$Maybe$Just(
+								_debois$elm_mdl$Material_Slider$computeValue(_p19)),
+							initialized: true
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Up':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -14784,10 +15124,26 @@ var _debois$elm_mdl$Material_Slider$update = F3(
 						{active: false}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'Resize':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{requestAnimation: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return model.requestAnimation ? {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{requestAnimation: false, initialized: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
-var _debois$elm_mdl$Material_Slider$defaultModel = {focus: false, active: false, geometry: _elm_lang$core$Maybe$Nothing, value: _elm_lang$core$Maybe$Nothing, inTransit: false};
-var _debois$elm_mdl$Material_Slider$_p18 = A3(
+var _debois$elm_mdl$Material_Slider$defaultModel = {focus: false, active: false, geometry: _elm_lang$core$Maybe$Nothing, value: _elm_lang$core$Maybe$Nothing, inTransit: false, initialized: false, requestAnimation: true};
+var _debois$elm_mdl$Material_Slider$_p20 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
 		return _.slider;
@@ -14799,15 +15155,15 @@ var _debois$elm_mdl$Material_Slider$_p18 = A3(
 				{slider: x});
 		}),
 	_debois$elm_mdl$Material_Slider$defaultModel);
-var _debois$elm_mdl$Material_Slider$get = _debois$elm_mdl$Material_Slider$_p18._0;
-var _debois$elm_mdl$Material_Slider$set = _debois$elm_mdl$Material_Slider$_p18._1;
+var _debois$elm_mdl$Material_Slider$get = _debois$elm_mdl$Material_Slider$_p20._0;
+var _debois$elm_mdl$Material_Slider$set = _debois$elm_mdl$Material_Slider$_p20._1;
 var _debois$elm_mdl$Material_Slider$react = F4(
 	function (lift, msg, idx, store) {
 		return A2(
 			_debois$elm_mdl$Material_Helpers$map1st,
-			function (_p19) {
+			function (_p21) {
 				return _elm_lang$core$Maybe$Just(
-					A3(_debois$elm_mdl$Material_Slider$set, idx, store, _p19));
+					A3(_debois$elm_mdl$Material_Slider$set, idx, store, _p21));
 			},
 			A3(
 				_debois$elm_mdl$Material_Slider$update,
@@ -14831,9 +15187,9 @@ var _debois$elm_mdl$Material_Slider$render = F4(
 				_1: options
 			});
 	});
-var _debois$elm_mdl$Material_Slider$Model = F5(
-	function (a, b, c, d, e) {
-		return {focus: a, active: b, geometry: c, value: d, inTransit: e};
+var _debois$elm_mdl$Material_Slider$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {focus: a, active: b, geometry: c, value: d, inTransit: e, initialized: f, requestAnimation: g};
 	});
 var _debois$elm_mdl$Material_Slider$Config = F8(
 	function (a, b, c, d, e, f, g, h) {
@@ -15853,7 +16209,7 @@ var _debois$elm_mdl$Material_Tabs$view = F4(
 									!model.initialized,
 									A2(
 										_debois$elm_mdl$Material_Options$on,
-										'mdc-init',
+										'elm-mdc-init',
 										A2(
 											_elm_lang$core$Json_Decode$map,
 											function (_p3) {
@@ -16864,7 +17220,7 @@ var _debois$elm_mdl$Material$top = function (content) {
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('\nvar insertListener = function(event) {\n  if (event.animationName == \"nodeInserted\") {\n    console.warn(\"Another node has been inserted! \", event, event.target);\n    event.target.dispatchEvent(new Event(\'mdc-init\'));\n  }\n}\n\ndocument.addEventListener(\"animationstart\", insertListener, false); // standard + firefox\ndocument.addEventListener(\"MSAnimationStart\", insertListener, false); // IE\ndocument.addEventListener(\"webkitAnimationStart\", insertListener, false); // Chrome + Safari\n'),
+								_0: _elm_lang$html$Html$text('\nvar insertListener = function(event) {\n  if (event.animationName == \"nodeInserted\") {\n    console.warn(\"Another node has been inserted! \", event, event.target);\n    event.target.dispatchEvent(new Event(\'elm-mdc-init\'));\n  }\n}\n\ndocument.addEventListener(\"animationstart\", insertListener, false); // standard + firefox\ndocument.addEventListener(\"MSAnimationStart\", insertListener, false); // IE\ndocument.addEventListener(\"webkitAnimationStart\", insertListener, false); // Chrome + Safari\n'),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
@@ -16879,7 +17235,7 @@ var _debois$elm_mdl$Material$top = function (content) {
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('\n@keyframes nodeInserted {\n  from { opacity: 0.99; }\n  to { opacity: 1; }\n}\n\n.mdc-tab-bar {\n  animation-duration: 0.001s;\n  animation-name: nodeInserted;\n}\n'),
+									_0: _elm_lang$html$Html$text('\n@keyframes nodeInserted {\n  from { opacity: 0.99; }\n  to { opacity: 1; }\n}\n\n.mdc-slider,\n.mdc-tab-bar\n{\n  animation-duration: 0.001s;\n  animation-name: nodeInserted;\n}\n'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -22176,128 +22532,6 @@ var _debois$elm_mdl$Material_LayoutGrid$view = function (options) {
 };
 var _debois$elm_mdl$Material_LayoutGrid$defaultConfig = {};
 var _debois$elm_mdl$Material_LayoutGrid$Config = {};
-
-var _elm_lang$window$Native_Window = function()
-{
-
-var size = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)	{
-	callback(_elm_lang$core$Native_Scheduler.succeed({
-		width: window.innerWidth,
-		height: window.innerHeight
-	}));
-});
-
-return {
-	size: size
-};
-
-}();
-var _elm_lang$window$Window_ops = _elm_lang$window$Window_ops || {};
-_elm_lang$window$Window_ops['&>'] = F2(
-	function (task1, task2) {
-		return A2(
-			_elm_lang$core$Task$andThen,
-			function (_p0) {
-				return task2;
-			},
-			task1);
-	});
-var _elm_lang$window$Window$onSelfMsg = F3(
-	function (router, dimensions, state) {
-		var _p1 = state;
-		if (_p1.ctor === 'Nothing') {
-			return _elm_lang$core$Task$succeed(state);
-		} else {
-			var send = function (_p2) {
-				var _p3 = _p2;
-				return A2(
-					_elm_lang$core$Platform$sendToApp,
-					router,
-					_p3._0(dimensions));
-			};
-			return A2(
-				_elm_lang$window$Window_ops['&>'],
-				_elm_lang$core$Task$sequence(
-					A2(_elm_lang$core$List$map, send, _p1._0.subs)),
-				_elm_lang$core$Task$succeed(state));
-		}
-	});
-var _elm_lang$window$Window$init = _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
-var _elm_lang$window$Window$size = _elm_lang$window$Native_Window.size;
-var _elm_lang$window$Window$width = A2(
-	_elm_lang$core$Task$map,
-	function (_) {
-		return _.width;
-	},
-	_elm_lang$window$Window$size);
-var _elm_lang$window$Window$height = A2(
-	_elm_lang$core$Task$map,
-	function (_) {
-		return _.height;
-	},
-	_elm_lang$window$Window$size);
-var _elm_lang$window$Window$onEffects = F3(
-	function (router, newSubs, oldState) {
-		var _p4 = {ctor: '_Tuple2', _0: oldState, _1: newSubs};
-		if (_p4._0.ctor === 'Nothing') {
-			if (_p4._1.ctor === '[]') {
-				return _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
-			} else {
-				return A2(
-					_elm_lang$core$Task$andThen,
-					function (pid) {
-						return _elm_lang$core$Task$succeed(
-							_elm_lang$core$Maybe$Just(
-								{subs: newSubs, pid: pid}));
-					},
-					_elm_lang$core$Process$spawn(
-						A3(
-							_elm_lang$dom$Dom_LowLevel$onWindow,
-							'resize',
-							_elm_lang$core$Json_Decode$succeed(
-								{ctor: '_Tuple0'}),
-							function (_p5) {
-								return A2(
-									_elm_lang$core$Task$andThen,
-									_elm_lang$core$Platform$sendToSelf(router),
-									_elm_lang$window$Window$size);
-							})));
-			}
-		} else {
-			if (_p4._1.ctor === '[]') {
-				return A2(
-					_elm_lang$window$Window_ops['&>'],
-					_elm_lang$core$Process$kill(_p4._0._0.pid),
-					_elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing));
-			} else {
-				return _elm_lang$core$Task$succeed(
-					_elm_lang$core$Maybe$Just(
-						{subs: newSubs, pid: _p4._0._0.pid}));
-			}
-		}
-	});
-var _elm_lang$window$Window$subscription = _elm_lang$core$Native_Platform.leaf('Window');
-var _elm_lang$window$Window$Size = F2(
-	function (a, b) {
-		return {width: a, height: b};
-	});
-var _elm_lang$window$Window$MySub = function (a) {
-	return {ctor: 'MySub', _0: a};
-};
-var _elm_lang$window$Window$resizes = function (tagger) {
-	return _elm_lang$window$Window$subscription(
-		_elm_lang$window$Window$MySub(tagger));
-};
-var _elm_lang$window$Window$subMap = F2(
-	function (func, _p6) {
-		var _p7 = _p6;
-		return _elm_lang$window$Window$MySub(
-			function (_p8) {
-				return func(
-					_p7._0(_p8));
-			});
-	});
-_elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window', init: _elm_lang$window$Window$init, onEffects: _elm_lang$window$Window$onEffects, onSelfMsg: _elm_lang$window$Window$onSelfMsg, tag: 'sub', subMap: _elm_lang$window$Window$subMap};
 
 var _debois$elm_mdl$Demo_LayoutGrid$update = F3(
 	function (lift, msg, model) {
@@ -30071,7 +30305,7 @@ var _debois$elm_mdl$Demo_Slider$view = F3(
 						}(
 							{
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'backgrund-color', '#eee'),
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#eee'),
 								_1: {
 									ctor: '::',
 									_0: A2(_debois$elm_mdl$Material_Options$css, '--mdc-slider-bg-color-behind-component', '#eee'),
