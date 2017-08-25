@@ -1,12 +1,30 @@
 module Material.LinearProgress
     exposing
         ( view
+        , Property
         , determinate
         , indeterminate
         , buffered
         , reversed
         , accent
         )
+
+{-|
+The MDC Linear Progress component is a spec-aligned linear progress indicator component adhering to the Material Design progress & activity requirements.
+
+## Design & API Documentation
+
+- [Guidelines](https://material.io/guidelines/components/progress-activity.html)
+- [Demo](https://aforemny.github.io/elm-mdc/#linear-progress)
+
+## View
+@docs view
+
+## Properties
+@docs determinate, indeterminate, buffered
+@docs reversed
+@docs accent
+-}
 
 import Html exposing (Html)
 import Material.Internal.Options as Internal

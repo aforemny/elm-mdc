@@ -27,10 +27,7 @@ view page =
     in
     page.body "Linear Progress Indicators"
     [
-      Page.hero
-      [ css "height" "4px"
-      , css "min-height" "4px"
-      ]
+      Page.hero []
       [ LinearProgress.view
         [ LinearProgress.indeterminate
         ]
@@ -38,7 +35,7 @@ view page =
       ]
 
     , styled Html.section []
-      [ styled Html.fieldset
+      [ styled Html.div
         [ css "margin" "24px"
         , css "margin-top" "0"
         , css "margin-bottom" "16px"
