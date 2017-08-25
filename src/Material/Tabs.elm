@@ -359,7 +359,7 @@ view lift model options nodes =
               [ cs "mdc-tab-bar-scroller__scroller-frame__tabs"
               , css "transform" tabBarTransform
               ]
-            , Options.on "mdc-init"
+            , Options.on "elm-mdc-init"
                   (Json.map (Init >> lift)
                   (decodeGeometryOnTabBar config.indicator))
                 |> when (not model.initialized)

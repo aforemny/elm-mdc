@@ -24,7 +24,7 @@
       var insertListener = function(event) {
         if (event.animationName == "nodeInserted") {
           console.warn("Another node has been inserted! ", event, event.target);
-          event.target.dispatchEvent(new Event('mdc-init'));
+          event.target.dispatchEvent(new Event('elm-mdc-init'));
         }
       }
 
@@ -49,6 +49,8 @@
     </script>
 
     <style type="text/css">
+
+    .elm-mdc-slider--uninitialized,
     .mdc-tab-bar
     {
       animation-duration: 0.001s;

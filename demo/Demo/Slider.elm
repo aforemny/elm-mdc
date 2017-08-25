@@ -115,7 +115,7 @@ view lift page model =
               ]
             )
           :: ( when model.customBg << Options.many <|
-               [ css "backgrund-color" "#eee"
+               [ css "background-color" "#eee"
                , css "--mdc-slider-bg-color-behind-component" "#eee" -- TODO
                ]
              )

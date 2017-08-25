@@ -1,25 +1,61 @@
 module Material.Slider
     exposing
-        ( Model
+        ( -- VIEW
+          view
         , Property
-        , view
-        , render
-        , react
-        , update
+        , disabled
+        , value
         , min
         , max
-        , value
-        , disabled
         , discrete
-        , targetValue
-        , onChange
-        , onInput
         , steps
         , trackMarkers
+        , onChange
+        , onInput
+        , targetValue
+        
+          -- TEA
         , subscriptions
+        , Model
+        , defaultModel
+        , Msg
+        , update
+          
+          -- Featured render
         , subs
+        , render
+        , Store
+        , react
         )
 
+{-|
+## Design and API Documentation
+
+- [Material Design guidelines: Sliders](https://material.io/guidelines/components/sliders.html)
+- [Demo](https://aforemny.github.io/elm-mdc/slider)
+
+## View
+@docs view
+
+
+## Properties
+@docs Property
+@docs disabeld
+@docs value, min, max
+@docs discrete, steps, trackMarkers
+@docs onChange, onInput, targetValue
+
+## TEA
+@docs subscriptions
+@docs Model, defaultModel, Msg, update
+
+## Featured render
+@docs subs
+@docs render
+@docs Store, react
+-}
+
+import AnimationFrame
 import DOM
 import Html as Html_
 import Html as Html exposing (Html, text)
@@ -33,6 +69,7 @@ import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
 import Svg
 import Svg.Attributes as Svg
+import Window
 
 
 type alias Model =
@@ -41,6 +78,8 @@ type alias Model =
     , geometry : Maybe Geometry
     , value : Maybe Float
     , inTransit : Bool
+    , initialized : Bool
+    , requestAnimation : Bool
     }
 
 
@@ -51,6 +90,8 @@ defaultModel =
     , geometry = Nothing
     , value = Nothing
     , inTransit = False
+    , initialized = False
+    , requestAnimation = True
     }
 
 
@@ -78,21 +119,55 @@ update fwd msg model =
 
         Activate inTransit geometry ->
             ( { model
-            | active = True
-            , geometry = Just geometry
-            , inTransit = inTransit
-            , value = Just (computeValue geometry)
-            }, Cmd.none )
+                | active = True
+                , geometry = Just geometry
+                , inTransit = inTransit
+                , value = Just (computeValue geometry)
+              }
+            ,
+              Cmd.none
+            )
 
         Drag geometry ->
             ( { model
-            | geometry = Just geometry
-            , inTransit = False
-            , value = Just (computeValue geometry)
-            }, Cmd.none )
+                | geometry = Just geometry
+                , inTransit = False
+                , value = Just (computeValue geometry)
+              }
+            ,
+              Cmd.none
+            )
+
+        Init geometry ->
+            ( { model
+                | geometry = Just geometry
+                , value = Just (computeValue geometry)
+                , initialized = True
+              }
+            ,
+              Cmd.none
+            )
 
         Up ->
             ( { model | active = False }, Cmd.none )
+
+        Resize ->
+            ( { model | requestAnimation = True }
+            ,
+                Cmd.none
+            )
+
+        AnimationFrame ->
+            if model.requestAnimation then
+                ( { model
+                    | requestAnimation = False
+                    , initialized = False
+                  }
+                ,
+                  Cmd.none
+                )
+            else
+                ( model, Cmd.none )
 
 
 type alias Config m =
@@ -204,6 +279,9 @@ view lift model options _ =
         activateOn event =
             Options.on event (Json.map (Activate True >> lift) decodeGeometry)
 
+        initOn event =
+            Options.on event (Json.map (Init >> lift) decodeGeometry)
+
         upOn event =
             Options.on event (Json.succeed (lift Up))
 
@@ -268,6 +346,10 @@ view lift model options _ =
         , Options.data "min" (toString config.min)
         , Options.data "max" (toString config.max)
         , Options.data "steps" (toString config.steps)
+
+        , initOn "elm-mdc-init"
+        , cs "elm-mdc-slider--uninitialized"
+          |> when model.requestAnimation
 
         , List.map activateOn downs
           |> Options.many
@@ -501,14 +583,15 @@ trackMarkers =
 
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
-    Sub.none
---    if model.active then
---        Sub.batch
---        [ Mouse.moves Mouse
---        , Mouse.ups (always Up)
---        ]
---    else
---        Sub.none
+    Sub.batch
+    [
+      Window.resizes (always Resize)
+
+    , if model.requestAnimation then
+          AnimationFrame.times (always AnimationFrame)
+      else
+          Sub.none
+    ]
 
 
 subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m

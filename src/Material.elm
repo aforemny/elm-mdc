@@ -235,7 +235,7 @@ top content =
 var insertListener = function(event) {
   if (event.animationName == "nodeInserted") {
     console.warn("Another node has been inserted! ", event, event.target);
-    event.target.dispatchEvent(new Event('mdc-init'));
+    event.target.dispatchEvent(new Event('elm-mdc-init'));
   }
 }
 
@@ -254,7 +254,9 @@ document.addEventListener("webkitAnimationStart", insertListener, false); // Chr
   to { opacity: 1; }
 }
 
-.mdc-tab-bar {
+.mdc-slider,
+.mdc-tab-bar
+{
   animation-duration: 0.001s;
   animation-name: nodeInserted;
 }

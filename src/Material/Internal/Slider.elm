@@ -10,6 +10,9 @@ type Msg m
     | Up
     | Tick
     | Dispatch (List m)
+    | Init Geometry
+    | Resize
+    | AnimationFrame
 
 
 type alias Geometry =
