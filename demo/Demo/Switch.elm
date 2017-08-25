@@ -1,12 +1,12 @@
 module Demo.Switch exposing (Model,defaultModel,Msg(Mdl),update,view)
 
+import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
-import Material.Switch as Switch
 import Material.Options as Options exposing (styled, cs, css, when)
+import Material.Switch as Switch
 import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
-import Demo.Page exposing (Page)
 
 
 -- MODEL
@@ -61,7 +61,20 @@ view lift page model =
     in
     page.body "Switches"
     [
-      example
+      Page.hero []
+      [ styled Html.div
+        [ cs "mdc-form-field"
+        ]
+        [ Switch.render (Mdl >> lift) [0] model.mdl
+          [ Options.onClick (lift ToggleOn0)
+          , Switch.on |> when model.on0
+          ]
+          [
+          ]
+        ]
+      ]
+
+    , example
       [ css "background-color" "#eee"
       ]
       [ styled Html.h2
@@ -72,7 +85,7 @@ view lift page model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Switch.render (Mdl >> lift) [0] model.mdl
+        [ Switch.render (Mdl >> lift) [1] model.mdl
           [ Options.onClick (lift ToggleOn0)
           , Switch.on |> when model.on0
           ]
@@ -115,7 +128,7 @@ view lift page model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Switch.render (Mdl >> lift) [1] model.mdl
+        [ Switch.render (Mdl >> lift) [3] model.mdl
           [ Options.onClick (lift ToggleOn1)
           , Switch.on |> when model.on1
           ]
@@ -138,7 +151,7 @@ view lift page model =
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Switch.render (Mdl >> lift) [3] model.mdl
+        [ Switch.render (Mdl >> lift) [4] model.mdl
           [ Switch.disabled
           ]
           [

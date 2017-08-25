@@ -1,18 +1,43 @@
 module Material.Switch
     exposing
-        ( Model
+        ( -- VIEW
+          view
+        , Property
+        , disabled
+        , on
+
+          -- TEA
+        , Model
         , defaultModel
         , Msg
         , update
-        , Config
-        , view
+
+          -- RENDER
         , render
-        , disabled
-        , on
+        , Store
         , react
         )
 
-{-| TODO
+{-|
+> The MDC Switch component is a spec-aligned switch component adhering to the
+> Material Design Switch requirements. It works without JavaScript.
+
+## Design & API Documentation
+
+- [Material Design guidelines: Switches](https://material.io/guidelines/components/selection-controls.html#selection-controls-switch)
+- [Demo](https://aforemny.github.io/elm-mdc/#switch)
+
+## View
+@docs view
+
+## Properties
+@docs Property, disabled, on
+
+## TEA
+@docs Model, defaultModel, Msg, update
+
+## Featured render
+@docs render, Store, react
 -}
 
 import Html.Attributes as Html
