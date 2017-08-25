@@ -23896,15 +23896,7 @@ var _debois$elm_mdl$Demo_LinearProgress$view = function (page) {
 			ctor: '::',
 			_0: A2(
 				_debois$elm_mdl$Demo_Page$hero,
-				{
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '4px'),
-					_1: {
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '4px'),
-						_1: {ctor: '[]'}
-					}
-				},
+				{ctor: '[]'},
 				{
 					ctor: '::',
 					_0: A2(
@@ -23927,7 +23919,7 @@ var _debois$elm_mdl$Demo_LinearProgress$view = function (page) {
 						ctor: '::',
 						_0: A3(
 							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$fieldset,
+							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
 								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
