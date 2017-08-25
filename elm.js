@@ -24592,9 +24592,18 @@ var _debois$elm_mdl$Demo_Lists$twoLineAvatarPlusTextPlusIconExample = function (
 					}
 				});
 		});
-	return A2(
+	return A3(
+		_debois$elm_mdl$Material_Options$styled,
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(_debois$elm_mdl$Material_Options$css, 'min-width', '340px'),
+			_1: {
+				ctor: '::',
+				_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '600px'),
+				_1: {ctor: '[]'}
+			}
+		},
 		{
 			ctor: '::',
 			_0: A3(
@@ -25183,564 +25192,239 @@ var _debois$elm_mdl$Demo_Lists$inlineCss = A3(
 	},
 	{
 		ctor: '::',
-		_0: _elm_lang$html$Html$text('\nsection {\n  padding: 24px;\n}\n.mdc-list, .mdc-list-group {\n  max-width: 600px;\n  border: 1px solid rgba(0,0,0,.1);\n}\n.mdc-list-group > .mdc-list {\n  max-width: auto;\n  border: none;\n}\n.mdc-theme--dark .mdc-list {\n  border: none;\n}\nsection.mdc-theme--dark {\n  background-color: #303030;\n}\n.mdc-theme--dark > h3 {\n  color: white;\n}\n.gray-bg {\n  background-color: rgba(0,0,0,.26);\n}\ni.mdc-list-item__start-detail {\n  color: rgba(0,0,0,.54);\n}\n.mdc-theme--dark i.mdc-list-item__start-detail {\n  color: rgba(255,255,255,.7);\n}\n'),
+		_0: _elm_lang$html$Html$text('\n.hero .mdc-list {\n  background-color: #fff;\n  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);\n}\n.mdc-list, .mdc-list-group {\n  max-width: 600px;\n  border: 1px solid rgba(0,0,0,.1);\n}\n.mdc-list-group > .mdc-list {\n  max-width: auto;\n  border: none;\n}\n.mdc-theme--dark .mdc-list {\n  border: none;\n}\nsection.mdc-theme--dark {\n  background-color: #303030;\n}\n.mdc-theme--dark > h3 {\n  color: white;\n}\n.gray-bg {\n  background-color: rgba(0,0,0,.26);\n}\ni.mdc-list-item__start-detail {\n  color: rgba(0,0,0,.54);\n}\n.mdc-theme--dark i.mdc-list-item__start-detail {\n  color: rgba(255,255,255,.7);\n}\n'),
 		_1: {ctor: '[]'}
 	});
-var _debois$elm_mdl$Demo_Lists$view = function (page) {
-	return A2(
-		page.body,
-		'Lists',
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Lists$inlineCss,
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$section,
-					{ctor: '[]'},
-					{
+var _debois$elm_mdl$Demo_Lists$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, rtl: false};
+var _debois$elm_mdl$Demo_Lists$Model = F2(
+	function (a, b) {
+		return {mdl: a, rtl: b};
+	});
+var _debois$elm_mdl$Demo_Lists$ToggleRtl = {ctor: 'ToggleRtl'};
+var _debois$elm_mdl$Demo_Lists$Mdl = function (a) {
+	return {ctor: 'Mdl', _0: a};
+};
+var _debois$elm_mdl$Demo_Lists$update = F3(
+	function (lift, msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Mdl') {
+			return A3(
+				_debois$elm_mdl$Material$update,
+				function (_p1) {
+					return lift(
+						_debois$elm_mdl$Demo_Lists$Mdl(_p1));
+				},
+				_p0._0,
+				model);
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{rtl: !model.rtl}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
+	});
+var _debois$elm_mdl$Demo_Lists$view = F3(
+	function (lift, page, model) {
+		var demoWrapper = function (options) {
+			return A2(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$section,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$h2,
-							{ctor: '[]'},
+							_debois$elm_mdl$Material_Options$when,
+							model.rtl,
+							_debois$elm_mdl$Material_Options$attribute(
+								_elm_lang$html$Html_Attributes$dir('rtl'))),
+						_1: options
+					}
+				});
+		};
+		var section = function (options) {
+			return A2(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$section,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+					_1: options
+				});
+		};
+		var h3 = function (options) {
+			return A2(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$h3,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '20px'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '16px'),
+						_1: options
+					}
+				});
+		};
+		var h2 = function (options) {
+			return A2(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$h2,
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+					_1: options
+				});
+		};
+		return A2(
+			page.body,
+			'Lists',
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Demo_Lists$inlineCss,
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Demo_Page$hero,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Demo_Lists$twoLineAvatarPlusTextPlusIconExample,
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Single-Line list'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$section,
-								{ctor: '[]'},
-								{
+								_0: _debois$elm_mdl$Material_Options$cs('preamble'),
+								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$h3,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Text only'),
-											_1: {ctor: '[]'}
-										}),
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '600px'),
 									_1: {
 										ctor: '::',
-										_0: _debois$elm_mdl$Demo_Lists$singleLine(
-											{ctor: '[]'}),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$section,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$h3,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Text only (Dense)'),
-												_1: {ctor: '[]'}
-											}),
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '48px'),
 										_1: {
 											ctor: '::',
-											_0: _debois$elm_mdl$Demo_Lists$singleLine(
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_List$dense,
-													_1: {ctor: '[]'}
-												}),
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '72px'),
+											_1: {
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Typography$body1,
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '20px'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '20px'),
 											_1: {ctor: '[]'}
 										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('NOTE: For the purposes of this demo, we\'ve set a max-width of\n600px on all mdc-list elements, and surrounded them by a 1px border. This is\nnot included in the base css, which has the list take up as much width as\npossible (since it\'s a block element).'),
+										_1: {ctor: '[]'}
 									}),
 								_1: {
 									ctor: '::',
 									_0: A3(
 										_debois$elm_mdl$Material_Options$styled,
-										_elm_lang$html$Html$section,
+										_elm_lang$html$Html$div,
 										{
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
 											_1: {ctor: '[]'}
 										},
 										{
 											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$h3,
-												{ctor: '[]'},
+											_0: A5(
+												_debois$elm_mdl$Material_Checkbox$render,
+												function (_p2) {
+													return lift(
+														_debois$elm_mdl$Demo_Lists$Mdl(_p2));
+												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('Text only (dark)'),
+													_0: 0,
 													_1: {ctor: '[]'}
-												}),
+												},
+												model.mdl,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$onClick(
+														lift(_debois$elm_mdl$Demo_Lists$ToggleRtl)),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$when, model.rtl, _debois$elm_mdl$Material_Checkbox$checked),
+														_1: {ctor: '[]'}
+													}
+												},
+												{ctor: '[]'}),
 											_1: {
 												ctor: '::',
-												_0: _debois$elm_mdl$Demo_Lists$singleLine(
-													{ctor: '[]'}),
+												_0: A2(
+													_elm_lang$html$Html$label,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Toggle RTL'),
+														_1: {ctor: '[]'}
+													}),
 												_1: {ctor: '[]'}
 											}
 										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$section,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$h3,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Start Detail'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$aside,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$p,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$em,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('Note: The grey background is styled using demo placeholder styles'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {ctor: '[]'}
-																}),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _debois$elm_mdl$Demo_Lists$startDetail(
-															{ctor: '[]'}),
-														_1: {ctor: '[]'}
-													}
-												}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$section,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h3,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Start Detail (Dense)'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _debois$elm_mdl$Demo_Lists$startDetail(
-															{
-																ctor: '::',
-																_0: _debois$elm_mdl$Material_List$dense,
-																_1: {ctor: '[]'}
-															}),
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$section,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$h3,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Start Detail Example - Icon with Text'),
-																_1: {ctor: '[]'}
-															}),
-														_1: {
-															ctor: '::',
-															_0: _debois$elm_mdl$Demo_Lists$startDetailExample,
-															_1: {ctor: '[]'}
-														}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A3(
-														_debois$elm_mdl$Material_Options$styled,
-														_elm_lang$html$Html$section,
-														{
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$h3,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Start Detail Example - Icon with Text (dark)'),
-																	_1: {ctor: '[]'}
-																}),
-															_1: {
-																ctor: '::',
-																_0: _debois$elm_mdl$Demo_Lists$startDetailExample,
-																_1: {ctor: '[]'}
-															}
-														}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$section,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$h3,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Avatar List'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: _debois$elm_mdl$Demo_Lists$avatarList(
-																		{ctor: '[]'}),
-																	_1: {ctor: '[]'}
-																}
-															}),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$section,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$h3,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('Avatar List (Dense)'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: _debois$elm_mdl$Demo_Lists$avatarList(
-																			{
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Material_List$dense,
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																}),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$section,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$h3,
-																			{ctor: '[]'},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('Example - Avatar with Text'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Demo_Lists$avatarListExample,
-																			_1: {ctor: '[]'}
-																		}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A3(
-																		_debois$elm_mdl$Material_Options$styled,
-																		_elm_lang$html$Html$section,
-																		{
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
-																			_1: {ctor: '[]'}
-																		},
-																		{
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$h3,
-																				{ctor: '[]'},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('Example - Avatar with Text (dark)'),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Demo_Lists$avatarListExample,
-																				_1: {ctor: '[]'}
-																			}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$section,
-																			{ctor: '[]'},
-																			{
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$h3,
-																					{ctor: '[]'},
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('End Detail'),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Demo_Lists$endDetail(
-																						{ctor: '[]'}),
-																					_1: {ctor: '[]'}
-																				}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$section,
-																				{ctor: '[]'},
-																				{
-																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$h3,
-																						{ctor: '[]'},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('End Detail (Dense)'),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: _debois$elm_mdl$Demo_Lists$endDetail(
-																							{
-																								ctor: '::',
-																								_0: _debois$elm_mdl$Material_List$dense,
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {ctor: '[]'}
-																					}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$section,
-																					{ctor: '[]'},
-																					{
-																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$h3,
-																							{ctor: '[]'},
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('Avatar + End Detail'),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {
-																							ctor: '::',
-																							_0: _debois$elm_mdl$Demo_Lists$avatarPlusEndDetail(
-																								{ctor: '[]'}),
-																							_1: {ctor: '[]'}
-																						}
-																					}),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$section,
-																						{ctor: '[]'},
-																						{
-																							ctor: '::',
-																							_0: A2(
-																								_elm_lang$html$Html$h3,
-																								{ctor: '[]'},
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html$text('Avatar + End Detail (Dense)'),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {
-																								ctor: '::',
-																								_0: _debois$elm_mdl$Demo_Lists$avatarPlusEndDetail(
-																									{
-																										ctor: '::',
-																										_0: _debois$elm_mdl$Material_List$dense,
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$section,
-																							{ctor: '[]'},
-																							{
-																								ctor: '::',
-																								_0: A2(
-																									_elm_lang$html$Html$h3,
-																									{ctor: '[]'},
-																									{
-																										ctor: '::',
-																										_0: _elm_lang$html$Html$text('Example - Avatar with Text and Icon'),
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {
-																									ctor: '::',
-																									_0: _debois$elm_mdl$Demo_Lists$avatarWithTextAndIconExample,
-																									_1: {ctor: '[]'}
-																								}
-																							}),
-																						_1: {
-																							ctor: '::',
-																							_0: A3(
-																								_debois$elm_mdl$Material_Options$styled,
-																								_elm_lang$html$Html$section,
-																								{
-																									ctor: '::',
-																									_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
-																									_1: {ctor: '[]'}
-																								},
-																								{
-																									ctor: '::',
-																									_0: A2(
-																										_elm_lang$html$Html$h3,
-																										{ctor: '[]'},
-																										{
-																											ctor: '::',
-																											_0: _elm_lang$html$Html$text('Example - Avatar with Text and Icon (Dark)'),
-																											_1: {ctor: '[]'}
-																										}),
-																									_1: {
-																										ctor: '::',
-																										_0: _debois$elm_mdl$Demo_Lists$avatarWithTextAndIconExample,
-																										_1: {ctor: '[]'}
-																									}
-																								}),
-																							_1: {ctor: '[]'}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
+									_1: {ctor: '[]'}
 								}
-							}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$section,
-						{ctor: '[]'},
-						{
+							}),
+						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$h2,
+								demoWrapper,
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Two-line List'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$section,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$h3,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Text-Only'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: _debois$elm_mdl$Demo_Lists$twoLine(
-												{ctor: '[]'}),
-											_1: {ctor: '[]'}
-										}
-									}),
-								_1: {
-									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$section,
+										h2,
 										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$h3,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Text-Only (Dense)'),
-													_1: {ctor: '[]'}
-												}),
-											_1: {
-												ctor: '::',
-												_0: _debois$elm_mdl$Demo_Lists$twoLine(
-													{
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_List$dense,
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}
+											_0: _elm_lang$html$Html$text('Single-Line list'),
+											_1: {ctor: '[]'}
 										}),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$section,
+											section,
 											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$h3,
+													h3,
 													{ctor: '[]'},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Start Detail'),
+														_0: _elm_lang$html$Html$text('Text only'),
 														_1: {ctor: '[]'}
 													}),
 												_1: {
 													ctor: '::',
-													_0: _debois$elm_mdl$Demo_Lists$startDetail_(
+													_0: _debois$elm_mdl$Demo_Lists$singleLine(
 														{ctor: '[]'}),
 													_1: {ctor: '[]'}
 												}
@@ -25748,21 +25432,21 @@ var _debois$elm_mdl$Demo_Lists$view = function (page) {
 										_1: {
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$section,
+												section,
 												{ctor: '[]'},
 												{
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$h3,
+														h3,
 														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('Start Detail (Dense)'),
+															_0: _elm_lang$html$Html$text('Text only (Dense)'),
 															_1: {ctor: '[]'}
 														}),
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Demo_Lists$startDetail_(
+														_0: _debois$elm_mdl$Demo_Lists$singleLine(
 															{
 																ctor: '::',
 																_0: _debois$elm_mdl$Material_List$dense,
@@ -25774,21 +25458,25 @@ var _debois$elm_mdl$Demo_Lists$view = function (page) {
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$section,
-													{ctor: '[]'},
+													section,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+														_1: {ctor: '[]'}
+													},
 													{
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$h3,
+															h3,
 															{ctor: '[]'},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text('Avatar List'),
+																_0: _elm_lang$html$Html$text('Text only (dark)'),
 																_1: {ctor: '[]'}
 															}),
 														_1: {
 															ctor: '::',
-															_0: _debois$elm_mdl$Demo_Lists$avatarList_(
+															_0: _debois$elm_mdl$Demo_Lists$singleLine(
 																{ctor: '[]'}),
 															_1: {ctor: '[]'}
 														}
@@ -25796,281 +25484,373 @@ var _debois$elm_mdl$Demo_Lists$view = function (page) {
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$section,
+														section,
 														{ctor: '[]'},
 														{
 															ctor: '::',
 															_0: A2(
-																_elm_lang$html$Html$h3,
+																h3,
 																{ctor: '[]'},
 																{
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Avatar List (Dense)'),
+																	_0: _elm_lang$html$Html$text('Start Detail'),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {
 																ctor: '::',
-																_0: _debois$elm_mdl$Demo_Lists$avatarList_(
+																_0: A2(
+																	_elm_lang$html$Html$aside,
+																	{ctor: '[]'},
 																	{
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_List$dense,
+																		_0: A2(
+																			_elm_lang$html$Html$p,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: A2(
+																					_elm_lang$html$Html$em,
+																					{ctor: '[]'},
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html$text('Note: The grey background is styled using demo placeholder styles'),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {ctor: '[]'}
+																			}),
 																		_1: {ctor: '[]'}
 																	}),
-																_1: {ctor: '[]'}
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Demo_Lists$startDetail(
+																		{ctor: '[]'}),
+																	_1: {ctor: '[]'}
+																}
 															}
 														}),
 													_1: {
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$section,
+															section,
 															{ctor: '[]'},
 															{
 																ctor: '::',
 																_0: A2(
-																	_elm_lang$html$Html$h3,
+																	h3,
 																	{ctor: '[]'},
 																	{
 																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('End Detail'),
+																		_0: _elm_lang$html$Html$text('Start Detail (Dense)'),
 																		_1: {ctor: '[]'}
 																	}),
 																_1: {
 																	ctor: '::',
-																	_0: _debois$elm_mdl$Demo_Lists$endDetail_(
-																		{ctor: '[]'}),
+																	_0: _debois$elm_mdl$Demo_Lists$startDetail(
+																		{
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_List$dense,
+																			_1: {ctor: '[]'}
+																		}),
 																	_1: {ctor: '[]'}
 																}
 															}),
 														_1: {
 															ctor: '::',
 															_0: A2(
-																_elm_lang$html$Html$section,
+																section,
 																{ctor: '[]'},
 																{
 																	ctor: '::',
 																	_0: A2(
-																		_elm_lang$html$Html$h3,
+																		h3,
 																		{ctor: '[]'},
 																		{
 																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('End Detail (Dense)'),
+																			_0: _elm_lang$html$Html$text('Start Detail Example - Icon with Text'),
 																			_1: {ctor: '[]'}
 																		}),
 																	_1: {
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Demo_Lists$endDetail_(
-																			{
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Material_List$dense,
-																				_1: {ctor: '[]'}
-																			}),
+																		_0: _debois$elm_mdl$Demo_Lists$startDetailExample,
 																		_1: {ctor: '[]'}
 																	}
 																}),
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_elm_lang$html$Html$section,
-																	{ctor: '[]'},
+																	section,
+																	{
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+																		_1: {ctor: '[]'}
+																	},
 																	{
 																		ctor: '::',
 																		_0: A2(
-																			_elm_lang$html$Html$h3,
+																			h3,
 																			{ctor: '[]'},
 																			{
 																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('Example - Two-line avatar + text + icon'),
+																				_0: _elm_lang$html$Html$text('Start Detail Example - Icon with Text (dark)'),
 																				_1: {ctor: '[]'}
 																			}),
 																		_1: {
 																			ctor: '::',
-																			_0: _debois$elm_mdl$Demo_Lists$twoLineAvatarPlusTextPlusIconExample,
+																			_0: _debois$elm_mdl$Demo_Lists$startDetailExample,
 																			_1: {ctor: '[]'}
 																		}
 																	}),
 																_1: {
 																	ctor: '::',
-																	_0: A3(
-																		_debois$elm_mdl$Material_Options$styled,
-																		_elm_lang$html$Html$section,
-																		{
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
-																			_1: {ctor: '[]'}
-																		},
+																	_0: A2(
+																		section,
+																		{ctor: '[]'},
 																		{
 																			ctor: '::',
 																			_0: A2(
-																				_elm_lang$html$Html$h3,
+																				h3,
 																				{ctor: '[]'},
 																				{
 																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('Example - Two-line avatar + text + icon (Dark)'),
+																					_0: _elm_lang$html$Html$text('Avatar List'),
 																					_1: {ctor: '[]'}
 																				}),
 																			_1: {
 																				ctor: '::',
-																				_0: _debois$elm_mdl$Demo_Lists$twoLineAvatarPlusTextPlusIconExample,
+																				_0: _debois$elm_mdl$Demo_Lists$avatarList(
+																					{ctor: '[]'}),
 																				_1: {ctor: '[]'}
 																			}
 																		}),
-																	_1: {ctor: '[]'}
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			section,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: A2(
+																					h3,
+																					{ctor: '[]'},
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html$text('Avatar List (Dense)'),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Demo_Lists$avatarList(
+																						{
+																							ctor: '::',
+																							_0: _debois$elm_mdl$Material_List$dense,
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {ctor: '[]'}
+																				}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				section,
+																				{ctor: '[]'},
+																				{
+																					ctor: '::',
+																					_0: A2(
+																						h3,
+																						{ctor: '[]'},
+																						{
+																							ctor: '::',
+																							_0: _elm_lang$html$Html$text('Example - Avatar with Text'),
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Demo_Lists$avatarListExample,
+																						_1: {ctor: '[]'}
+																					}
+																				}),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					section,
+																					{
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+																						_1: {ctor: '[]'}
+																					},
+																					{
+																						ctor: '::',
+																						_0: A2(
+																							h3,
+																							{ctor: '[]'},
+																							{
+																								ctor: '::',
+																								_0: _elm_lang$html$Html$text('Example - Avatar with Text (dark)'),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {
+																							ctor: '::',
+																							_0: _debois$elm_mdl$Demo_Lists$avatarListExample,
+																							_1: {ctor: '[]'}
+																						}
+																					}),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						section,
+																						{ctor: '[]'},
+																						{
+																							ctor: '::',
+																							_0: A2(
+																								h3,
+																								{ctor: '[]'},
+																								{
+																									ctor: '::',
+																									_0: _elm_lang$html$Html$text('End Detail'),
+																									_1: {ctor: '[]'}
+																								}),
+																							_1: {
+																								ctor: '::',
+																								_0: _debois$elm_mdl$Demo_Lists$endDetail(
+																									{ctor: '[]'}),
+																								_1: {ctor: '[]'}
+																							}
+																						}),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(
+																							section,
+																							{ctor: '[]'},
+																							{
+																								ctor: '::',
+																								_0: A2(
+																									h3,
+																									{ctor: '[]'},
+																									{
+																										ctor: '::',
+																										_0: _elm_lang$html$Html$text('End Detail (Dense)'),
+																										_1: {ctor: '[]'}
+																									}),
+																								_1: {
+																									ctor: '::',
+																									_0: _debois$elm_mdl$Demo_Lists$endDetail(
+																										{
+																											ctor: '::',
+																											_0: _debois$elm_mdl$Material_List$dense,
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {ctor: '[]'}
+																								}
+																							}),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(
+																								section,
+																								{ctor: '[]'},
+																								{
+																									ctor: '::',
+																									_0: A2(
+																										h3,
+																										{ctor: '[]'},
+																										{
+																											ctor: '::',
+																											_0: _elm_lang$html$Html$text('Avatar + End Detail'),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {
+																										ctor: '::',
+																										_0: _debois$elm_mdl$Demo_Lists$avatarPlusEndDetail(
+																											{ctor: '[]'}),
+																										_1: {ctor: '[]'}
+																									}
+																								}),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(
+																									section,
+																									{ctor: '[]'},
+																									{
+																										ctor: '::',
+																										_0: A2(
+																											h3,
+																											{ctor: '[]'},
+																											{
+																												ctor: '::',
+																												_0: _elm_lang$html$Html$text('Avatar + End Detail (Dense)'),
+																												_1: {ctor: '[]'}
+																											}),
+																										_1: {
+																											ctor: '::',
+																											_0: _debois$elm_mdl$Demo_Lists$avatarPlusEndDetail(
+																												{
+																													ctor: '::',
+																													_0: _debois$elm_mdl$Material_List$dense,
+																													_1: {ctor: '[]'}
+																												}),
+																											_1: {ctor: '[]'}
+																										}
+																									}),
+																								_1: {
+																									ctor: '::',
+																									_0: A2(
+																										section,
+																										{ctor: '[]'},
+																										{
+																											ctor: '::',
+																											_0: A2(
+																												h3,
+																												{ctor: '[]'},
+																												{
+																													ctor: '::',
+																													_0: _elm_lang$html$Html$text('Example - Avatar with Text and Icon'),
+																													_1: {ctor: '[]'}
+																												}),
+																											_1: {
+																												ctor: '::',
+																												_0: _debois$elm_mdl$Demo_Lists$avatarWithTextAndIconExample,
+																												_1: {ctor: '[]'}
+																											}
+																										}),
+																									_1: {
+																										ctor: '::',
+																										_0: A2(
+																											section,
+																											{
+																												ctor: '::',
+																												_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+																												_1: {ctor: '[]'}
+																											},
+																											{
+																												ctor: '::',
+																												_0: A2(
+																													h3,
+																													{ctor: '[]'},
+																													{
+																														ctor: '::',
+																														_0: _elm_lang$html$Html$text('Example - Avatar with Text and Icon (Dark)'),
+																														_1: {ctor: '[]'}
+																													}),
+																												_1: {
+																													ctor: '::',
+																													_0: _debois$elm_mdl$Demo_Lists$avatarWithTextAndIconExample,
+																													_1: {ctor: '[]'}
+																												}
+																											}),
+																										_1: {ctor: '[]'}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
 																}
 															}
 														}
 													}
 												}
-											}
-										}
-									}
-								}
-							}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$section,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$h2,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('List Dividers'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$section,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$h3,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Full-Width Dividers'),
-													_1: {ctor: '[]'}
-												}),
-											_1: {
-												ctor: '::',
-												_0: _debois$elm_mdl$Demo_Lists$fullWidthDividers,
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$section,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$h3,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Inset Dividers'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: _debois$elm_mdl$Demo_Lists$insetDividers,
-													_1: {ctor: '[]'}
-												}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$section,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$h2,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('List Groups'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$section,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$h3,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Basic Usage'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: _debois$elm_mdl$Demo_Lists$basicGroups,
-													_1: {ctor: '[]'}
-												}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$section,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h3,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Example - Two-line Lists, Avatars, end detail, inset dividers'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _debois$elm_mdl$Demo_Lists$groupsExample,
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A3(
-													_debois$elm_mdl$Material_Options$styled,
-													_elm_lang$html$Html$section,
-													{
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$h3,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Example - Two-line Lists, Avatars, end detail, inset dividers (Dark)'),
-																_1: {ctor: '[]'}
-															}),
-														_1: {
-															ctor: '::',
-															_0: _debois$elm_mdl$Demo_Lists$groupsExample,
-															_1: {ctor: '[]'}
-														}
-													}),
-												_1: {ctor: '[]'}
 											}
 										}
 									}
@@ -26078,77 +25858,491 @@ var _debois$elm_mdl$Demo_Lists$view = function (page) {
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$html$Html$section,
+									demoWrapper,
 									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$h2,
+											h2,
 											{ctor: '[]'},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Interactive Lists (with ink ripple)'),
+												_0: _elm_lang$html$Html$text('Two-line List'),
 												_1: {ctor: '[]'}
 											}),
 										_1: {
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$section,
+												section,
 												{ctor: '[]'},
 												{
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$h3,
+														h3,
 														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('Example - Interactive List'),
+															_0: _elm_lang$html$Html$text('Text-Only'),
 															_1: {ctor: '[]'}
 														}),
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Demo_Lists$interactiveList,
+														_0: _debois$elm_mdl$Demo_Lists$twoLine(
+															{ctor: '[]'}),
 														_1: {ctor: '[]'}
 													}
 												}),
 											_1: {
 												ctor: '::',
-												_0: A3(
-													_debois$elm_mdl$Material_Options$styled,
-													_elm_lang$html$Html$section,
-													{
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
-														_1: {ctor: '[]'}
-													},
+												_0: A2(
+													section,
+													{ctor: '[]'},
 													{
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$h3,
+															h3,
 															{ctor: '[]'},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text('Example - Interactive List (Dark)'),
+																_0: _elm_lang$html$Html$text('Text-Only (Dense)'),
 																_1: {ctor: '[]'}
 															}),
 														_1: {
 															ctor: '::',
-															_0: _debois$elm_mdl$Demo_Lists$interactiveList,
+															_0: _debois$elm_mdl$Demo_Lists$twoLine(
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_List$dense,
+																	_1: {ctor: '[]'}
+																}),
 															_1: {ctor: '[]'}
 														}
 													}),
-												_1: {ctor: '[]'}
+												_1: {
+													ctor: '::',
+													_0: A2(
+														section,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																h3,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Start Detail'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Demo_Lists$startDetail_(
+																	{ctor: '[]'}),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															section,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	h3,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Start Detail (Dense)'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Demo_Lists$startDetail_(
+																		{
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_List$dense,
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																section,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		h3,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Avatar List'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Demo_Lists$avatarList_(
+																			{ctor: '[]'}),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	section,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: A2(
+																			h3,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text('Avatar List (Dense)'),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Demo_Lists$avatarList_(
+																				{
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Material_List$dense,
+																					_1: {ctor: '[]'}
+																				}),
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		section,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: A2(
+																				h3,
+																				{ctor: '[]'},
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text('End Detail'),
+																					_1: {ctor: '[]'}
+																				}),
+																			_1: {
+																				ctor: '::',
+																				_0: _debois$elm_mdl$Demo_Lists$endDetail_(
+																					{ctor: '[]'}),
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			section,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: A2(
+																					h3,
+																					{ctor: '[]'},
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html$text('End Detail (Dense)'),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {
+																					ctor: '::',
+																					_0: _debois$elm_mdl$Demo_Lists$endDetail_(
+																						{
+																							ctor: '::',
+																							_0: _debois$elm_mdl$Material_List$dense,
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {ctor: '[]'}
+																				}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				section,
+																				{ctor: '[]'},
+																				{
+																					ctor: '::',
+																					_0: A2(
+																						h3,
+																						{ctor: '[]'},
+																						{
+																							ctor: '::',
+																							_0: _elm_lang$html$Html$text('Example - Two-line avatar + text + icon'),
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Demo_Lists$twoLineAvatarPlusTextPlusIconExample,
+																						_1: {ctor: '[]'}
+																					}
+																				}),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					section,
+																					{
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+																						_1: {ctor: '[]'}
+																					},
+																					{
+																						ctor: '::',
+																						_0: A2(
+																							h3,
+																							{ctor: '[]'},
+																							{
+																								ctor: '::',
+																								_0: _elm_lang$html$Html$text('Example - Two-line avatar + text + icon (Dark)'),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {
+																							ctor: '::',
+																							_0: _debois$elm_mdl$Demo_Lists$twoLineAvatarPlusTextPlusIconExample,
+																							_1: {ctor: '[]'}
+																						}
+																					}),
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
 											}
 										}
 									}),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: A2(
+										demoWrapper,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												h2,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('List Dividers'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													section,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															h3,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Full-Width Dividers'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: _debois$elm_mdl$Demo_Lists$fullWidthDividers,
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														section,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																h3,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Inset Dividers'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Demo_Lists$insetDividers,
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											demoWrapper,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													h2,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('List Groups'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														section,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																h3,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Basic Usage'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Demo_Lists$basicGroups,
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															section,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	h3,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Example - Two-line Lists, Avatars, end detail, inset dividers'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Demo_Lists$groupsExample,
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																section,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		h3,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Example - Two-line Lists, Avatars, end detail, inset dividers (Dark)'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Demo_Lists$groupsExample,
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												demoWrapper,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														h2,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Interactive Lists (with ink ripple)'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															section,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	h3,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Example - Interactive List'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Demo_Lists$interactiveList,
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																section,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--dark'),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		h3,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Example - Interactive List (Dark)'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Demo_Lists$interactiveList,
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
 							}
 						}
 					}
 				}
-			}
-		});
-};
+			});
+	});
 
 var _elm_lang$core$Set$foldr = F3(
 	function (f, b, _p0) {
@@ -39414,7 +39608,7 @@ var _debois$elm_mdl$Main$delta2url = F2(
 				url: _debois$elm_mdl$Main$urlOf(model2)
 			}) : _elm_lang$core$Maybe$Nothing;
 	});
-var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_Radio$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel};
+var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_Radio$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel, lists: _debois$elm_mdl$Demo_Lists$defaultModel};
 var _debois$elm_mdl$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -39444,7 +39638,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 																					return function (v) {
 																						return function (w) {
 																							return function (x) {
-																								return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, layoutGrid: k, menus: l, permanentAboveDrawer: m, permanentBelowDrawer: n, persistentDrawer: o, radio: p, ripple: q, selects: r, slider: s, snackbar: t, $switch: u, tabs: v, temporaryDrawer: w, textfields: x};
+																								return function (y) {
+																									return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, layoutGrid: k, menus: l, permanentAboveDrawer: m, permanentBelowDrawer: n, persistentDrawer: o, radio: p, ripple: q, selects: r, slider: s, snackbar: t, $switch: u, tabs: v, temporaryDrawer: w, textfields: x, lists: y};
+																								};
 																							};
 																						};
 																					};
@@ -39468,6 +39664,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 			};
 		};
 	};
+};
+var _debois$elm_mdl$Main$ListsMsg = function (a) {
+	return {ctor: 'ListsMsg', _0: a};
 };
 var _debois$elm_mdl$Main$LayoutGridMsg = function (a) {
 	return {ctor: 'LayoutGridMsg', _0: a};
@@ -39609,7 +39808,7 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 		case 'LinearProgress':
 			return _debois$elm_mdl$Demo_LinearProgress$view(page);
 		case 'List':
-			return _debois$elm_mdl$Demo_Lists$view(page);
+			return A3(_debois$elm_mdl$Demo_Lists$view, _debois$elm_mdl$Main$ListsMsg, page, model.lists);
 		case 'RadioButton':
 			return A3(_debois$elm_mdl$Demo_Radio$view, _debois$elm_mdl$Main$RadioMsg, page, model.radio);
 		case 'Select':
@@ -39990,7 +40189,7 @@ var _debois$elm_mdl$Main$update = F2(
 						{gridList: gridList}),
 					_1: effects
 				};
-			default:
+			case 'LayoutGridMsg':
 				var _p25 = A3(_debois$elm_mdl$Demo_LayoutGrid$update, _debois$elm_mdl$Main$LayoutGridMsg, _p3._0, model.layoutGrid);
 				var layoutGrid = _p25._0;
 				var effects = _p25._1;
@@ -40001,12 +40200,23 @@ var _debois$elm_mdl$Main$update = F2(
 						{layoutGrid: layoutGrid}),
 					_1: effects
 				};
+			default:
+				var _p26 = A3(_debois$elm_mdl$Demo_Lists$update, _debois$elm_mdl$Main$ListsMsg, _p3._0, model.lists);
+				var lists = _p26._0;
+				var effects = _p26._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{lists: lists}),
+					_1: effects
+				};
 		}
 	});
 var _debois$elm_mdl$Main$init = function () {
-	var _p26 = _debois$elm_mdl$Demo_LayoutGrid$init(_debois$elm_mdl$Main$LayoutGridMsg);
-	var layoutGrid = _p26._0;
-	var layoutGridEffects = _p26._1;
+	var _p27 = _debois$elm_mdl$Demo_LayoutGrid$init(_debois$elm_mdl$Main$LayoutGridMsg);
+	var layoutGrid = _p27._0;
+	var layoutGridEffects = _p27._1;
 	return {
 		ctor: '_Tuple2',
 		_0: _elm_lang$core$Native_Utils.update(
