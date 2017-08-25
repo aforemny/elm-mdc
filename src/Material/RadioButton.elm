@@ -1,19 +1,47 @@
-module Material.Radio
+module Material.RadioButton
     exposing
-        ( Model
-        , defaultModel
-        , Msg
-        , update
-        , Config
-        , view
-        , render
+        ( -- VIEWW
+          view
+        , Property
         , disabled
         , selected
         , name
+        
+          -- TEA
+        , Model
+        , defaultModel
+        , Msg
+        , update
+
+          -- RENDER
+        , render
+        , Store
         , react
         )
 
-{-| TODO
+{-|
+The MDC Radio Button component provides a radio button adhering to the Material
+Design Specification. It requires no Javascript out of the box, but can be
+enhanced with Javascript to provide better interaction UX as well as a
+component-level API for state modification.
+
+## Design & API Documentation
+
+- [Material Design guidelines: Selection Controls – Radio buttons](https://material.io/guidelines/components/selection-controls.html#selection-controls-radio-button)
+- [Demo](https://aforemny.github.io/elm-mdc/#radio-buttons)
+
+## View
+@docs view
+
+## Properties
+@docs Property, disabled, selected
+
+## TEA architecture
+@docs Model, defaultModel, Msg, update
+
+## Featured render
+@docs render
+@docs Store, react
 -}
 
 import Html.Attributes as Html
@@ -22,9 +50,10 @@ import Json.Decode as Json
 import Material.Component as Component exposing (Indexed)
 import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
 import Material.Internal.Options as Internal
-import Material.Internal.Radio exposing (Msg(..))
+import Material.Internal.RadioButton exposing (Msg(..))
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
+import Material.Ripple as Ripple
 
 -- MODEL
 
@@ -32,7 +61,8 @@ import Material.Options as Options exposing (Style, cs, styled, many, when, mayb
 {-| Component model.
 -}
 type alias Model =
-    { isFocused : Bool
+    { ripple : Ripple.Model
+    , isFocused : Bool
     }
 
 
@@ -40,7 +70,8 @@ type alias Model =
 -}
 defaultModel : Model
 defaultModel =
-    { isFocused = False
+    { ripple = Ripple.defaultModel
+    , isFocused = False
     }
 
 
@@ -51,14 +82,23 @@ defaultModel =
 {-| Component message.
 -}
 type alias Msg
-    = Material.Internal.Radio.Msg
+    = Material.Internal.RadioButton.Msg
 
 
 {-| Component update.
 -}
-update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
-update _ msg model =
+update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
+update lift msg model =
     case msg of
+        RippleMsg msg_ ->
+            let
+                ( ripple, effects ) =
+                    Ripple.update msg_ model.ripple
+            in
+            ( Just { model | ripple = ripple }
+            ,
+              Cmd.map (RippleMsg >> lift) effects
+            )
         SetFocus focus ->
             ( Just { model | isFocused = focus }, Cmd.none )
         NoOp ->
@@ -125,10 +165,14 @@ view lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
+
+        ( rippleOptions, rippleStyle ) =
+            Ripple.view True (RippleMsg >> lift) model.ripple [] []
     in
     Internal.applyContainer summary Html.div
     [ cs "mdc-radio"
     , Internal.attribute <| blurOn "mouseup"
+    , rippleOptions
     ]
     [ Internal.applyInput summary
         Html.input
@@ -150,6 +194,8 @@ view lift model options _ =
       [ styled Html.div [ cs "mdc-radio__inner-circle" ] []
       , styled Html.div [ cs "mdc-radio__outer-circle" ] []
       ]
+
+    , rippleStyle
     ]
 
 
@@ -173,7 +219,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Material.Msg.RadioMsg update
+    Component.react get set Material.Msg.RadioButtonMsg update
 
 
 {-| Component render (radio)
@@ -186,5 +232,5 @@ render :
     -> List (Html m)
     -> Html m
 render lift index store options =
-    Component.render get view Material.Msg.RadioMsg lift index store
+    Component.render get view Material.Msg.RadioButtonMsg lift index store
         (Internal.dispatch lift :: options)

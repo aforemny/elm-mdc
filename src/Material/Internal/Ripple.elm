@@ -1,6 +1,5 @@
 module Material.Internal.Ripple exposing (Msg(..), Geometry, defaultGeometry)
 
-
 import DOM exposing (Rectangle)
 
 

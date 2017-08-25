@@ -7,7 +7,7 @@ module Material.Msg
 
 import Material.Internal.Button as Button 
 import Material.Internal.Drawer as Drawer 
-import Material.Internal.Radio as Radio 
+import Material.Internal.RadioButton as RadioButton
 import Material.Internal.IconToggle as IconToggle 
 import Material.Internal.Fab as Fab 
 import Material.Internal.Menu as Menu
@@ -43,7 +43,7 @@ type Msg m
     | FabMsg Index Fab.Msg
     | IconToggleMsg Index IconToggle.Msg
     | MenuMsg Index (Menu.Msg m)
-    | RadioMsg Index Radio.Msg
+    | RadioButtonMsg Index RadioButton.Msg
     | RippleMsg Index Ripple.Msg
     | SelectMsg Index (Select.Msg m)
     | SliderMsg Index (Slider.Msg m)

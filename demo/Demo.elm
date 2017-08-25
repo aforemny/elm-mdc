@@ -17,7 +17,7 @@ import Demo.Page as Page exposing (Url(..))
 import Demo.PermanentAboveDrawer
 import Demo.PermanentBelowDrawer
 import Demo.PersistentDrawer
-import Demo.Radio
+import Demo.RadioButtons
 import Demo.Ripple
 import Demo.Lists
 import Demo.Selects
@@ -60,7 +60,7 @@ type alias Model =
     , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model
     , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model
     , persistentDrawer : Demo.PersistentDrawer.Model
-    , radio : Demo.Radio.Model
+    , radio : Demo.RadioButtons.Model
     , ripple : Demo.Ripple.Model
     , selects : Demo.Selects.Model
     , slider : Demo.Slider.Model
@@ -88,7 +88,7 @@ defaultModel =
     , permanentAboveDrawer = Demo.PermanentAboveDrawer.defaultModel
     , permanentBelowDrawer = Demo.PermanentBelowDrawer.defaultModel
     , persistentDrawer = Demo.PersistentDrawer.defaultModel
-    , radio = Demo.Radio.defaultModel
+    , radio = Demo.RadioButtons.defaultModel
     , ripple = Demo.Ripple.defaultModel
     , selects = Demo.Selects.defaultModel
     , slider = Demo.Slider.defaultModel
@@ -119,7 +119,7 @@ type Msg
     | PermanentAboveDrawerMsg (Demo.PermanentAboveDrawer.Msg Msg)
     | PermanentBelowDrawerMsg (Demo.PermanentBelowDrawer.Msg Msg)
     | PersistentDrawerMsg (Demo.PersistentDrawer.Msg Msg)
-    | RadioMsg (Demo.Radio.Msg Msg)
+    | RadioButtonsMsg (Demo.RadioButtons.Msg Msg)
     | RippleMsg (Demo.Ripple.Msg Msg)
     | SelectMsg (Demo.Selects.Msg Msg)
     | SliderMsg (Demo.Slider.Msg Msg)
@@ -226,10 +226,10 @@ update msg model =
             in
                 ( { model | menus = menus }, effects )
 
-        RadioMsg msg_ ->
+        RadioButtonsMsg msg_ ->
             let
                 (radio, effects) =
-                    Demo.Radio.update RadioMsg msg_ model.radio
+                    Demo.RadioButtons.update RadioButtonsMsg msg_ model.radio
             in
                 ( { model | radio = radio }, effects )
 
@@ -376,7 +376,7 @@ view_ model =
             Demo.Lists.view ListsMsg page model.lists
 
         RadioButton ->
-            Demo.Radio.view RadioMsg page model.radio
+            Demo.RadioButtons.view RadioButtonsMsg page model.radio
 
         Select ->
             Demo.Selects.view SelectMsg page model.selects

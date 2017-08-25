@@ -26,7 +26,7 @@ import Material.Helpers exposing (map1st)
 import Material.IconToggle as IconToggle
 import Material.Menu as Menu
 import Material.Msg exposing (Msg(..))
-import Material.Radio as Radio
+import Material.RadioButton as RadioButton
 import Material.Ripple as Ripple
 import Material.Select as Select
 import Material.Slider as Slider
@@ -40,7 +40,7 @@ import Material.Textfield as Textfield
 -}
 type alias Model = 
     { button : Indexed Button.Model
-    , radio : Indexed Radio.Model
+    , radio : Indexed RadioButton.Model
     , drawer : Indexed Drawer.Model
     , iconToggle : Indexed IconToggle.Model
     , fab : Indexed Fab.Model
@@ -98,8 +98,8 @@ update_ lift msg store =
        ButtonMsg idx msg ->
            Button.react lift msg idx store
 
-       RadioMsg idx msg ->
-           Radio.react lift msg idx store
+       RadioButtonMsg idx msg ->
+           RadioButton.react lift msg idx store
 
        DrawerMsg idx msg ->
            Drawer.react lift msg idx store
