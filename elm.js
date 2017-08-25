@@ -31311,6 +31311,7 @@ var _debois$elm_mdl$Demo_Snackbar$Model = F7(
 	function (a, b, c, d, e, f, g) {
 		return {mdl: a, multiline: b, actionOnBottom: c, dismissOnAction: d, darkTheme: e, messageText: f, actionText: g};
 	});
+var _debois$elm_mdl$Demo_Snackbar$NoOp = {ctor: 'NoOp'};
 var _debois$elm_mdl$Demo_Snackbar$Dismiss = {ctor: 'Dismiss'};
 var _debois$elm_mdl$Demo_Snackbar$Show = function (a) {
 	return {ctor: 'Show', _0: a};
@@ -31341,55 +31342,63 @@ var _debois$elm_mdl$Demo_Snackbar$update = F3(
 					},
 					_p0._0,
 					model);
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'ToggleMultiline':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{multiline: !model.multiline}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleActionOnBottom':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{actionOnBottom: !model.actionOnBottom}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleDismissOnAction':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{dismissOnAction: !model.dismissOnAction}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleDarkTheme':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{darkTheme: !model.darkTheme}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'SetMessageText':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{messageText: _p0._0}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'SetActionText':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{actionText: _p0._0}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'Show':
 				var contents = function () {
 					if (model.multiline) {
 						var snack = A2(_debois$elm_mdl$Material_Snackbar$snack, model.messageText, model.actionText);
 						return _elm_lang$core$Native_Utils.update(
 							snack,
-							{dismissOnAction: model.dismissOnAction});
+							{dismissOnAction: model.dismissOnAction, actionOnBottom: model.actionOnBottom});
 					} else {
 						var toast = _debois$elm_mdl$Material_Snackbar$toast(model.messageText);
 						return _elm_lang$core$Native_Utils.update(
@@ -31411,10 +31420,7 @@ var _debois$elm_mdl$Demo_Snackbar$update = F3(
 					model);
 			default:
 				var _p3 = A2(_elm_lang$core$Debug$log, 'msg', _debois$elm_mdl$Demo_Snackbar$Dismiss);
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{ctor: '[]'});
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
 var _debois$elm_mdl$Demo_Snackbar$view = F3(
@@ -31442,321 +31448,328 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 			'Snackbar',
 			{
 				ctor: '::',
-				_0: A3(
-					_debois$elm_mdl$Material_Options$styled,
-					_elm_lang$html$Html$div,
+				_0: A2(
+					_debois$elm_mdl$Demo_Page$hero,
+					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: function (_p4) {
-							return A2(
-								_debois$elm_mdl$Material_Options$when,
-								model.darkTheme,
-								_debois$elm_mdl$Material_Options$many(_p4));
-						}(
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Theme$dark,
-								_1: {
+						_0: function () {
+							var demoSnackbar = function () {
+								var snack = A2(_debois$elm_mdl$Material_Snackbar$snack, 'Message sent', 'Undo');
+								var contents = _elm_lang$core$Native_Utils.update(
+									snack,
+									{multiline: false});
+								var def = _debois$elm_mdl$Material_Snackbar$defaultModel;
+								return _elm_lang$core$Native_Utils.update(
+									def,
+									{
+										queue: {ctor: '[]'},
+										state: _debois$elm_mdl$Material_Snackbar$Active(contents),
+										seq: 0
+									});
+							}();
+							return A4(
+								_debois$elm_mdl$Material_Snackbar$view,
+								_elm_lang$core$Basics$always(
+									lift(_debois$elm_mdl$Demo_Snackbar$NoOp)),
+								demoSnackbar,
+								{
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
-									_1: {ctor: '[]'}
-								}
-							}),
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'relative'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'left', '0'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'transform', 'none'),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{ctor: '[]'});
+						}(),
 						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							example,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: A3(
-									_debois$elm_mdl$Material_Options$styled,
-									_elm_lang$html$Html$h2,
-									{
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_debois$elm_mdl$Material_Options$styled,
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: function (_p4) {
+								return A2(
+									_debois$elm_mdl$Material_Options$when,
+									model.darkTheme,
+									_debois$elm_mdl$Material_Options$many(_p4));
+							}(
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Theme$dark,
+									_1: {
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Typography$title,
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Basic Example'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '100%'),
+											_1: {ctor: '[]'}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								example,
+								{
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'min-height', '100%'),
+									_1: {ctor: '[]'}
+								},
+								{
 									ctor: '::',
 									_0: A3(
 										_debois$elm_mdl$Material_Options$styled,
-										_elm_lang$html$Html$div,
+										_elm_lang$html$Html$h2,
 										{
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+											_0: _debois$elm_mdl$Material_Typography$title,
 											_1: {ctor: '[]'}
 										},
 										{
 											ctor: '::',
-											_0: A5(
-												_debois$elm_mdl$Material_Checkbox$render,
-												function (_p5) {
-													return lift(
-														_debois$elm_mdl$Demo_Snackbar$Mdl(_p5));
-												},
-												{
-													ctor: '::',
-													_0: 0,
-													_1: {ctor: '[]'}
-												},
-												model.mdl,
-												{
-													ctor: '::',
-													_0: A2(
-														_debois$elm_mdl$Material_Options$on,
-														'change',
-														_elm_lang$core$Json_Decode$succeed(
-															lift(_debois$elm_mdl$Demo_Snackbar$ToggleMultiline))),
-													_1: {
-														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$when, model.multiline, _debois$elm_mdl$Material_Checkbox$checked),
-														_1: {ctor: '[]'}
-													}
-												},
-												{ctor: '[]'}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$label,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Multiline'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}
+											_0: _elm_lang$html$Html$text('Basic Example'),
+											_1: {ctor: '[]'}
 										}),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$br,
-											{ctor: '[]'},
-											{ctor: '[]'}),
-										_1: {
-											ctor: '::',
-											_0: A3(
-												_debois$elm_mdl$Material_Options$styled,
-												_elm_lang$html$Html$div,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: A5(
-														_debois$elm_mdl$Material_Checkbox$render,
-														function (_p6) {
-															return lift(
-																_debois$elm_mdl$Demo_Snackbar$Mdl(_p6));
-														},
-														{
-															ctor: '::',
-															_0: 1,
-															_1: {ctor: '[]'}
-														},
-														model.mdl,
-														{
-															ctor: '::',
-															_0: A2(
-																_debois$elm_mdl$Material_Options$on,
-																'change',
-																_elm_lang$core$Json_Decode$succeed(
-																	lift(_debois$elm_mdl$Demo_Snackbar$ToggleActionOnBottom))),
-															_1: {
-																ctor: '::',
-																_0: A2(_debois$elm_mdl$Material_Options$when, model.actionOnBottom, _debois$elm_mdl$Material_Checkbox$checked),
-																_1: {
-																	ctor: '::',
-																	_0: A2(_debois$elm_mdl$Material_Options$when, !model.multiline, _debois$elm_mdl$Material_Checkbox$disabled),
-																	_1: {ctor: '[]'}
-																}
-															}
-														},
-														{ctor: '[]'}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$label,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Action on Bottom'),
-																_1: {ctor: '[]'}
-															}),
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {
+										_0: A3(
+											_debois$elm_mdl$Material_Options$styled,
+											_elm_lang$html$Html$div,
+											{
 												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$br,
-													{ctor: '[]'},
+												_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A5(
+													_debois$elm_mdl$Material_Checkbox$render,
+													function (_p5) {
+														return lift(
+															_debois$elm_mdl$Demo_Snackbar$Mdl(_p5));
+													},
+													{
+														ctor: '::',
+														_0: 0,
+														_1: {ctor: '[]'}
+													},
+													model.mdl,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$onClick(
+															lift(_debois$elm_mdl$Demo_Snackbar$ToggleMultiline)),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$when, model.multiline, _debois$elm_mdl$Material_Checkbox$checked),
+															_1: {ctor: '[]'}
+														}
+													},
 													{ctor: '[]'}),
 												_1: {
 													ctor: '::',
-													_0: A3(
-														_debois$elm_mdl$Material_Options$styled,
-														_elm_lang$html$Html$div,
+													_0: A2(
+														_elm_lang$html$Html$label,
+														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+															_0: _elm_lang$html$Html$text('Multiline'),
 															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: A5(
-																_debois$elm_mdl$Material_Checkbox$render,
-																function (_p7) {
-																	return lift(
-																		_debois$elm_mdl$Demo_Snackbar$Mdl(_p7));
-																},
-																{
+														}),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$br,
+												{ctor: '[]'},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A3(
+													_debois$elm_mdl$Material_Options$styled,
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A5(
+															_debois$elm_mdl$Material_Checkbox$render,
+															function (_p6) {
+																return lift(
+																	_debois$elm_mdl$Demo_Snackbar$Mdl(_p6));
+															},
+															{
+																ctor: '::',
+																_0: 1,
+																_1: {ctor: '[]'}
+															},
+															model.mdl,
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$onClick(
+																	lift(_debois$elm_mdl$Demo_Snackbar$ToggleActionOnBottom)),
+																_1: {
 																	ctor: '::',
-																	_0: 2,
-																	_1: {ctor: '[]'}
-																},
-																model.mdl,
-																{
-																	ctor: '::',
-																	_0: A2(
-																		_debois$elm_mdl$Material_Options$on,
-																		'change',
-																		_elm_lang$core$Json_Decode$succeed(
-																			lift(_debois$elm_mdl$Demo_Snackbar$ToggleDismissOnAction))),
+																	_0: A2(_debois$elm_mdl$Material_Options$when, model.actionOnBottom, _debois$elm_mdl$Material_Checkbox$checked),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_debois$elm_mdl$Material_Options$when, model.dismissOnAction, _debois$elm_mdl$Material_Checkbox$checked),
+																		_0: A2(_debois$elm_mdl$Material_Options$when, !model.multiline, _debois$elm_mdl$Material_Checkbox$disabled),
 																		_1: {ctor: '[]'}
 																	}
-																},
-																{ctor: '[]'}),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$label,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Dismiss On Action'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
-															}
-														}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$br,
-															{ctor: '[]'},
+																}
+															},
 															{ctor: '[]'}),
 														_1: {
 															ctor: '::',
-															_0: A5(
-																_debois$elm_mdl$Material_Button$render,
-																function (_p8) {
-																	return lift(
-																		_debois$elm_mdl$Demo_Snackbar$Mdl(_p8));
-																},
+															_0: A2(
+																_elm_lang$html$Html$label,
+																{ctor: '[]'},
 																{
 																	ctor: '::',
-																	_0: 3,
-																	_1: {ctor: '[]'}
-																},
-																model.mdl,
-																{
-																	ctor: '::',
-																	_0: A2(
-																		_debois$elm_mdl$Material_Options$on,
-																		'click',
-																		_elm_lang$core$Json_Decode$succeed(
-																			lift(_debois$elm_mdl$Demo_Snackbar$ToggleDarkTheme))),
-																	_1: {
-																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Button$primary,
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Button$raised,
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Toggle Dark Theme'),
+																	_0: _elm_lang$html$Html$text('Action on Bottom'),
 																	_1: {ctor: '[]'}
 																}),
-															_1: {
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$br,
+														{ctor: '[]'},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A3(
+															_debois$elm_mdl$Material_Options$styled,
+															_elm_lang$html$Html$div,
+															{
 																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$br,
-																	{ctor: '[]'},
+																_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: A5(
+																	_debois$elm_mdl$Material_Checkbox$render,
+																	function (_p7) {
+																		return lift(
+																			_debois$elm_mdl$Demo_Snackbar$Mdl(_p7));
+																	},
+																	{
+																		ctor: '::',
+																		_0: 2,
+																		_1: {ctor: '[]'}
+																	},
+																	model.mdl,
+																	{
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Options$onClick(
+																			lift(_debois$elm_mdl$Demo_Snackbar$ToggleDismissOnAction)),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(_debois$elm_mdl$Material_Options$when, model.dismissOnAction, _debois$elm_mdl$Material_Checkbox$checked),
+																			_1: {ctor: '[]'}
+																		}
+																	},
 																	{ctor: '[]'}),
 																_1: {
 																	ctor: '::',
-																	_0: A5(
-																		_debois$elm_mdl$Material_Textfield$render,
-																		function (_p9) {
-																			return lift(
-																				_debois$elm_mdl$Demo_Snackbar$Mdl(_p9));
-																		},
+																	_0: A2(
+																		_elm_lang$html$Html$label,
+																		{ctor: '[]'},
 																		{
 																			ctor: '::',
-																			_0: 4,
+																			_0: _elm_lang$html$Html$text('Dismiss On Action'),
 																			_1: {ctor: '[]'}
-																		},
-																		model.mdl,
-																		{
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$br,
+																{ctor: '[]'},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: A5(
+																	_debois$elm_mdl$Material_Button$render,
+																	function (_p8) {
+																		return lift(
+																			_debois$elm_mdl$Demo_Snackbar$Mdl(_p8));
+																	},
+																	{
+																		ctor: '::',
+																		_0: 3,
+																		_1: {ctor: '[]'}
+																	},
+																	model.mdl,
+																	{
+																		ctor: '::',
+																		_0: A2(
+																			_debois$elm_mdl$Material_Options$on,
+																			'click',
+																			_elm_lang$core$Json_Decode$succeed(
+																				lift(_debois$elm_mdl$Demo_Snackbar$ToggleDarkTheme))),
+																		_1: {
 																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Textfield$label('Message Text'),
+																			_0: _debois$elm_mdl$Material_Button$primary,
 																			_1: {
 																				ctor: '::',
-																				_0: A2(
-																					_debois$elm_mdl$Material_Options$on,
-																					'input',
-																					A2(
-																						_elm_lang$core$Json_Decode$map,
-																						function (_p10) {
-																							return lift(
-																								_debois$elm_mdl$Demo_Snackbar$SetMessageText(_p10));
-																						},
-																						_elm_lang$html$Html_Events$targetValue)),
+																				_0: _debois$elm_mdl$Material_Button$raised,
 																				_1: {ctor: '[]'}
 																			}
-																		},
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Toggle Dark Theme'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$br,
+																		{ctor: '[]'},
 																		{ctor: '[]'}),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$br,
-																			{ctor: '[]'},
-																			{ctor: '[]'}),
-																		_1: {
-																			ctor: '::',
-																			_0: A5(
-																				_debois$elm_mdl$Material_Textfield$render,
-																				function (_p11) {
-																					return lift(
-																						_debois$elm_mdl$Demo_Snackbar$Mdl(_p11));
-																				},
-																				{
+																		_0: A5(
+																			_debois$elm_mdl$Material_Textfield$render,
+																			function (_p9) {
+																				return lift(
+																					_debois$elm_mdl$Demo_Snackbar$Mdl(_p9));
+																			},
+																			{
+																				ctor: '::',
+																				_0: 4,
+																				_1: {ctor: '[]'}
+																			},
+																			model.mdl,
+																			{
+																				ctor: '::',
+																				_0: _debois$elm_mdl$Material_Textfield$value(model.messageText),
+																				_1: {
 																					ctor: '::',
-																					_0: 5,
-																					_1: {ctor: '[]'}
-																				},
-																				model.mdl,
-																				{
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_Textfield$label('Action Text'),
+																					_0: _debois$elm_mdl$Material_Textfield$label('Message Text'),
 																					_1: {
 																						ctor: '::',
 																						_0: A2(
@@ -31764,74 +31777,76 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																							'input',
 																							A2(
 																								_elm_lang$core$Json_Decode$map,
-																								function (_p12) {
+																								function (_p10) {
 																									return lift(
-																										_debois$elm_mdl$Demo_Snackbar$SetActionText(_p12));
+																										_debois$elm_mdl$Demo_Snackbar$SetMessageText(_p10));
 																								},
 																								_elm_lang$html$Html_Events$targetValue)),
 																						_1: {ctor: '[]'}
 																					}
-																				},
+																				}
+																			},
+																			{ctor: '[]'}),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				_elm_lang$html$Html$br,
+																				{ctor: '[]'},
 																				{ctor: '[]'}),
 																			_1: {
 																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$br,
-																					{ctor: '[]'},
+																				_0: A5(
+																					_debois$elm_mdl$Material_Textfield$render,
+																					function (_p11) {
+																						return lift(
+																							_debois$elm_mdl$Demo_Snackbar$Mdl(_p11));
+																					},
+																					{
+																						ctor: '::',
+																						_0: 5,
+																						_1: {ctor: '[]'}
+																					},
+																					model.mdl,
+																					{
+																						ctor: '::',
+																						_0: _debois$elm_mdl$Material_Textfield$value(model.actionText),
+																						_1: {
+																							ctor: '::',
+																							_0: _debois$elm_mdl$Material_Textfield$label('Action Text'),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(
+																									_debois$elm_mdl$Material_Options$on,
+																									'input',
+																									A2(
+																										_elm_lang$core$Json_Decode$map,
+																										function (_p12) {
+																											return lift(
+																												_debois$elm_mdl$Demo_Snackbar$SetActionText(_p12));
+																										},
+																										_elm_lang$html$Html_Events$targetValue)),
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					},
 																					{ctor: '[]'}),
 																				_1: {
 																					ctor: '::',
-																					_0: A5(
-																						_debois$elm_mdl$Material_Button$render,
-																						function (_p13) {
-																							return lift(
-																								_debois$elm_mdl$Demo_Snackbar$Mdl(_p13));
-																						},
-																						{
-																							ctor: '::',
-																							_0: 6,
-																							_1: {ctor: '[]'}
-																						},
-																						model.mdl,
-																						{
-																							ctor: '::',
-																							_0: _debois$elm_mdl$Material_Button$raised,
-																							_1: {
-																								ctor: '::',
-																								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '14px'),
-																								_1: {
-																									ctor: '::',
-																									_0: A2(
-																										_debois$elm_mdl$Material_Options$on,
-																										'click',
-																										_elm_lang$core$Json_Decode$succeed(
-																											lift(
-																												_debois$elm_mdl$Demo_Snackbar$Show(
-																													{
-																														ctor: '::',
-																														_0: 10,
-																														_1: {ctor: '[]'}
-																													})))),
-																									_1: {ctor: '[]'}
-																								}
-																							}
-																						},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('Show'),
-																							_1: {ctor: '[]'}
-																						}),
+																					_0: A2(
+																						_elm_lang$html$Html$br,
+																						{ctor: '[]'},
+																						{ctor: '[]'}),
 																					_1: {
 																						ctor: '::',
 																						_0: A5(
 																							_debois$elm_mdl$Material_Button$render,
-																							function (_p14) {
+																							function (_p13) {
 																								return lift(
-																									_debois$elm_mdl$Demo_Snackbar$Mdl(_p14));
+																									_debois$elm_mdl$Demo_Snackbar$Mdl(_p13));
 																							},
 																							{
 																								ctor: '::',
-																								_0: 7,
+																								_0: 6,
 																								_1: {ctor: '[]'}
 																							},
 																							model.mdl,
@@ -31851,7 +31866,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																													_debois$elm_mdl$Demo_Snackbar$Show(
 																														{
 																															ctor: '::',
-																															_0: 11,
+																															_0: 10,
 																															_1: {ctor: '[]'}
 																														})))),
 																										_1: {ctor: '[]'}
@@ -31860,20 +31875,20 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																							},
 																							{
 																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('Show Rtl'),
+																								_0: _elm_lang$html$Html$text('Show'),
 																								_1: {ctor: '[]'}
 																							}),
 																						_1: {
 																							ctor: '::',
 																							_0: A5(
 																								_debois$elm_mdl$Material_Button$render,
-																								function (_p15) {
+																								function (_p14) {
 																									return lift(
-																										_debois$elm_mdl$Demo_Snackbar$Mdl(_p15));
+																										_debois$elm_mdl$Demo_Snackbar$Mdl(_p14));
 																								},
 																								{
 																									ctor: '::',
-																									_0: 8,
+																									_0: 7,
 																									_1: {ctor: '[]'}
 																								},
 																								model.mdl,
@@ -31893,7 +31908,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																														_debois$elm_mdl$Demo_Snackbar$Show(
 																															{
 																																ctor: '::',
-																																_0: 12,
+																																_0: 11,
 																																_1: {ctor: '[]'}
 																															})))),
 																											_1: {ctor: '[]'}
@@ -31902,20 +31917,20 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																								},
 																								{
 																									ctor: '::',
-																									_0: _elm_lang$html$Html$text('Show Start Aligned'),
+																									_0: _elm_lang$html$Html$text('Show Rtl'),
 																									_1: {ctor: '[]'}
 																								}),
 																							_1: {
 																								ctor: '::',
 																								_0: A5(
 																									_debois$elm_mdl$Material_Button$render,
-																									function (_p16) {
+																									function (_p15) {
 																										return lift(
-																											_debois$elm_mdl$Demo_Snackbar$Mdl(_p16));
+																											_debois$elm_mdl$Demo_Snackbar$Mdl(_p15));
 																									},
 																									{
 																										ctor: '::',
-																										_0: 9,
+																										_0: 8,
 																										_1: {ctor: '[]'}
 																									},
 																									model.mdl,
@@ -31935,7 +31950,7 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																															_debois$elm_mdl$Demo_Snackbar$Show(
 																																{
 																																	ctor: '::',
-																																	_0: 13,
+																																	_0: 12,
 																																	_1: {ctor: '[]'}
 																																})))),
 																												_1: {ctor: '[]'}
@@ -31944,50 +31959,115 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																									},
 																									{
 																										ctor: '::',
-																										_0: _elm_lang$html$Html$text('Show Start Aligned (Rtl)'),
+																										_0: _elm_lang$html$Html$text('Show Start Aligned'),
 																										_1: {ctor: '[]'}
 																									}),
 																								_1: {
 																									ctor: '::',
 																									_0: A5(
-																										_debois$elm_mdl$Material_Snackbar$render,
-																										function (_p17) {
+																										_debois$elm_mdl$Material_Button$render,
+																										function (_p16) {
 																											return lift(
-																												_debois$elm_mdl$Demo_Snackbar$Mdl(_p17));
+																												_debois$elm_mdl$Demo_Snackbar$Mdl(_p16));
 																										},
 																										{
 																											ctor: '::',
-																											_0: 10,
+																											_0: 9,
 																											_1: {ctor: '[]'}
 																										},
 																										model.mdl,
 																										{
 																											ctor: '::',
-																											_0: _debois$elm_mdl$Material_Snackbar$onDismiss(
-																												lift(_debois$elm_mdl$Demo_Snackbar$Dismiss)),
-																											_1: {ctor: '[]'}
+																											_0: _debois$elm_mdl$Material_Button$raised,
+																											_1: {
+																												ctor: '::',
+																												_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '14px'),
+																												_1: {
+																													ctor: '::',
+																													_0: A2(
+																														_debois$elm_mdl$Material_Options$on,
+																														'click',
+																														_elm_lang$core$Json_Decode$succeed(
+																															lift(
+																																_debois$elm_mdl$Demo_Snackbar$Show(
+																																	{
+																																		ctor: '::',
+																																		_0: 13,
+																																		_1: {ctor: '[]'}
+																																	})))),
+																													_1: {ctor: '[]'}
+																												}
+																											}
 																										},
-																										{ctor: '[]'}),
+																										{
+																											ctor: '::',
+																											_0: _elm_lang$html$Html$text('Show Start Aligned (Rtl)'),
+																											_1: {ctor: '[]'}
+																										}),
 																									_1: {
 																										ctor: '::',
-																										_0: A2(
-																											_elm_lang$html$Html$div,
-																											{
-																												ctor: '::',
-																												_0: A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'),
-																												_1: {ctor: '[]'}
+																										_0: A5(
+																											_debois$elm_mdl$Material_Snackbar$render,
+																											function (_p17) {
+																												return lift(
+																													_debois$elm_mdl$Demo_Snackbar$Mdl(_p17));
 																											},
 																											{
 																												ctor: '::',
+																												_0: 10,
+																												_1: {ctor: '[]'}
+																											},
+																											model.mdl,
+																											{
+																												ctor: '::',
+																												_0: _debois$elm_mdl$Material_Snackbar$onDismiss(
+																													lift(_debois$elm_mdl$Demo_Snackbar$Dismiss)),
+																												_1: {ctor: '[]'}
+																											},
+																											{ctor: '[]'}),
+																										_1: {
+																											ctor: '::',
+																											_0: A2(
+																												_elm_lang$html$Html$div,
+																												{
+																													ctor: '::',
+																													_0: A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'),
+																													_1: {ctor: '[]'}
+																												},
+																												{
+																													ctor: '::',
+																													_0: A5(
+																														_debois$elm_mdl$Material_Snackbar$render,
+																														function (_p18) {
+																															return lift(
+																																_debois$elm_mdl$Demo_Snackbar$Mdl(_p18));
+																														},
+																														{
+																															ctor: '::',
+																															_0: 11,
+																															_1: {ctor: '[]'}
+																														},
+																														model.mdl,
+																														{
+																															ctor: '::',
+																															_0: _debois$elm_mdl$Material_Snackbar$onDismiss(
+																																lift(_debois$elm_mdl$Demo_Snackbar$Dismiss)),
+																															_1: {ctor: '[]'}
+																														},
+																														{ctor: '[]'}),
+																													_1: {ctor: '[]'}
+																												}),
+																											_1: {
+																												ctor: '::',
 																												_0: A5(
 																													_debois$elm_mdl$Material_Snackbar$render,
-																													function (_p18) {
+																													function (_p19) {
 																														return lift(
-																															_debois$elm_mdl$Demo_Snackbar$Mdl(_p18));
+																															_debois$elm_mdl$Demo_Snackbar$Mdl(_p19));
 																													},
 																													{
 																														ctor: '::',
-																														_0: 11,
+																														_0: 12,
 																														_1: {ctor: '[]'}
 																													},
 																													model.mdl,
@@ -31995,73 +32075,51 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 																														ctor: '::',
 																														_0: _debois$elm_mdl$Material_Snackbar$onDismiss(
 																															lift(_debois$elm_mdl$Demo_Snackbar$Dismiss)),
-																														_1: {ctor: '[]'}
+																														_1: {
+																															ctor: '::',
+																															_0: _debois$elm_mdl$Material_Snackbar$alignStart,
+																															_1: {ctor: '[]'}
+																														}
 																													},
 																													{ctor: '[]'}),
-																												_1: {ctor: '[]'}
-																											}),
-																										_1: {
-																											ctor: '::',
-																											_0: A5(
-																												_debois$elm_mdl$Material_Snackbar$render,
-																												function (_p19) {
-																													return lift(
-																														_debois$elm_mdl$Demo_Snackbar$Mdl(_p19));
-																												},
-																												{
+																												_1: {
 																													ctor: '::',
-																													_0: 12,
-																													_1: {ctor: '[]'}
-																												},
-																												model.mdl,
-																												{
-																													ctor: '::',
-																													_0: _debois$elm_mdl$Material_Snackbar$onDismiss(
-																														lift(_debois$elm_mdl$Demo_Snackbar$Dismiss)),
-																													_1: {
-																														ctor: '::',
-																														_0: _debois$elm_mdl$Material_Snackbar$alignStart,
-																														_1: {ctor: '[]'}
-																													}
-																												},
-																												{ctor: '[]'}),
-																											_1: {
-																												ctor: '::',
-																												_0: A2(
-																													_elm_lang$html$Html$div,
-																													{
-																														ctor: '::',
-																														_0: A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'),
-																														_1: {ctor: '[]'}
-																													},
-																													{
-																														ctor: '::',
-																														_0: A5(
-																															_debois$elm_mdl$Material_Snackbar$render,
-																															function (_p20) {
-																																return lift(
-																																	_debois$elm_mdl$Demo_Snackbar$Mdl(_p20));
-																															},
-																															{
-																																ctor: '::',
-																																_0: 13,
-																																_1: {ctor: '[]'}
-																															},
-																															model.mdl,
-																															{
-																																ctor: '::',
-																																_0: _debois$elm_mdl$Material_Snackbar$onDismiss(
-																																	lift(_debois$elm_mdl$Demo_Snackbar$Dismiss)),
-																																_1: {
+																													_0: A2(
+																														_elm_lang$html$Html$div,
+																														{
+																															ctor: '::',
+																															_0: A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'),
+																															_1: {ctor: '[]'}
+																														},
+																														{
+																															ctor: '::',
+																															_0: A5(
+																																_debois$elm_mdl$Material_Snackbar$render,
+																																function (_p20) {
+																																	return lift(
+																																		_debois$elm_mdl$Demo_Snackbar$Mdl(_p20));
+																																},
+																																{
 																																	ctor: '::',
-																																	_0: _debois$elm_mdl$Material_Snackbar$alignStart,
+																																	_0: 13,
 																																	_1: {ctor: '[]'}
-																																}
-																															},
-																															{ctor: '[]'}),
-																														_1: {ctor: '[]'}
-																													}),
-																												_1: {ctor: '[]'}
+																																},
+																																model.mdl,
+																																{
+																																	ctor: '::',
+																																	_0: _debois$elm_mdl$Material_Snackbar$onDismiss(
+																																		lift(_debois$elm_mdl$Demo_Snackbar$Dismiss)),
+																																	_1: {
+																																		ctor: '::',
+																																		_0: _debois$elm_mdl$Material_Snackbar$alignStart,
+																																		_1: {ctor: '[]'}
+																																	}
+																																},
+																																{ctor: '[]'}),
+																															_1: {ctor: '[]'}
+																														}),
+																													_1: {ctor: '[]'}
+																												}
 																											}
 																										}
 																									}
@@ -32081,11 +32139,11 @@ var _debois$elm_mdl$Demo_Snackbar$view = F3(
 											}
 										}
 									}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
 			});
 	});
 
