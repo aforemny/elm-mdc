@@ -1,6 +1,7 @@
 module Material.List
     exposing
-        ( ul
+        ( -- View
+          ul
         , dense
         , avatar
         , twoLine
@@ -23,7 +24,31 @@ module Material.List
         , subheader
         )
 
-{-| TODO
+{-|
+MDC List provides styles which implement Material Design Lists - “A single
+continuous column of tessellated subdivisions of equal width.” Both single-line
+and two-line lists are supported (with three-line lists coming soon). MDC Lists
+are designed to be accessible and RTL aware.
+
+## Design & API Documentation
+
+- [Material Design guidelines: Lists](https://material.io/guidelines/components/lists.html)
+- [Demo](https://aforemny.github.io/elm-mdc/#lists)
+
+## View
+@docs ul, dense, avatar, twoLine
+
+## Elements
+@docs li, text, secondary
+@docs startDetail, startDetailIcon
+@docs endDetail, endDetailIcon
+@docs avatarImage, listItem
+
+## List dividers
+@docs divider, inset
+
+## List groups
+@docs group, subheader
 -}
 
 import Html exposing (Html, Attribute)

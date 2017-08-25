@@ -19,6 +19,7 @@ import Demo.PermanentBelowDrawer
 import Demo.PersistentDrawer
 import Demo.Radio
 import Demo.Ripple
+import Demo.Lists
 import Demo.Selects
 import Demo.Slider
 import Demo.Snackbar
@@ -68,6 +69,7 @@ type alias Model =
     , tabs : Demo.Tabs.Model
     , temporaryDrawer : Demo.TemporaryDrawer.Model
     , textfields : Demo.Textfields.Model
+    , lists : Demo.Lists.Model
     }
 
 
@@ -97,6 +99,7 @@ defaultModel =
     , textfields = Demo.Textfields.defaultModel
     , gridList = Demo.GridList.defaultModel
     , layoutGrid = Demo.LayoutGrid.defaultModel
+    , lists = Demo.Lists.defaultModel
     }
 
 
@@ -127,6 +130,7 @@ type Msg
     | TextfieldMsg (Demo.Textfields.Msg Msg)
     | GridListMsg (Demo.GridList.Msg Msg)
     | LayoutGridMsg (Demo.LayoutGrid.Msg)
+    | ListsMsg (Demo.Lists.Msg Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -292,6 +296,13 @@ update msg model =
             in
                 ( { model | layoutGrid = layoutGrid }, effects ) 
 
+        ListsMsg msg_ ->
+            let
+                (lists, effects) =
+                    Demo.Lists.update ListsMsg msg_ model.lists
+            in
+                ( { model | lists = lists }, effects ) 
+
 
 view : Model -> Html Msg
 view =
@@ -362,7 +373,7 @@ view_ model =
             Demo.LinearProgress.view page
 
         List ->
-            Demo.Lists.view page
+            Demo.Lists.view ListsMsg page model.lists
 
         RadioButton ->
             Demo.Radio.view RadioMsg page model.radio
