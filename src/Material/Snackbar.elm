@@ -1,47 +1,56 @@
 module Material.Snackbar
     exposing
-        ( Contents
-        , Model
-        , add
-        , toast
-        , snack
-        , update
-        , Config
-        , defaultConfig
-        , view
+        ( -- VIEW
+          view
         , Property
-        , Store
-        , render
-        , react
         , alignStart
         , alignEnd
         , onDismiss
+
+        , Contents
+        , toast
+        , snack
+
+          -- TEA
+        , Model
+        , State(..)
+        , defaultModel
+        , Msg
+        , update
+        , add
+
+          -- RENDER
+        , render
+        , Store
+        , react
         )
 
-{-| From the [Material Design Lite documentation](https://www.getmdl.io/components/index.html#snackbar-section):
+{-|
+> The MDC Snackbar component is a spec-aligned snackbar/toast component
+> adhering to the Material Design snackbars & toasts requirements. It requires
+> JavaScript to show and hide itself.
 
-> The Material Design Lite (MDL) __snackbar__ component is a container used to
-> notify a user of an operation's status. It displays at the bottom of the
-> screen. A snackbar may contain an action button to execute a command for the
-> user. Actions should undo the committed action or retry it if it failed for
-> example. Actions should not be too close the snackbar. By not providing an
-> action, the snackbar becomes a __toast__ component.
+## Design & API Documentation
 
-Refer to [this site](http://debois.github.io/elm-mdl/#snackbar)
-for a live demo.
+- [Material Design guidelines: Snackbars & toasts](https://material.io/guidelines/components/snackbars-toasts.html)
+- [Demo](https://aforemny.github.io/elm-mdc/#snackbar)
 
-# Generating messages
-@docs Contents, toast, snackbar, add
-
-# Elm Architecture
-
-@docs Model, model
-@docs Msg, update
+## View
 @docs view
+@docs Property
+@docs alignStart, alignEnd, onDismiss
 
-# Render
-Snackbar does not have a `render` value. It must be used as a regular TEA
-component.
+## Contents
+@docs Contents
+@docs toast
+@docs snack
+
+## TEA
+@docs Model, defaultModel, Msg, update, add
+
+## Render
+@docs render
+@docs Store, react
 -}
 
 import Dict

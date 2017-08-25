@@ -1,19 +1,19 @@
 module Demo.Snackbar exposing (Model, defaultModel, Msg(Mdl), update, view)
 
+import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
 import Material
 import Material.Button as Button
+import Material.Checkbox as Checkbox
 import Material.Options as Options exposing (styled, cs, css, nop, when)
 import Material.Snackbar as Snackbar
 import Material.Textfield as Textfield
 import Material.Theme as Theme
-import Material.Checkbox as Checkbox
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
-import Demo.Page exposing (Page)
 
 
 type alias Model =
@@ -49,6 +49,7 @@ type Msg m
     | SetActionText String
     | Show (List Int)
     | Dismiss
+    | NoOp
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
@@ -56,18 +57,20 @@ update lift msg model =
     case msg of
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
+        NoOp ->
+            ( model, Cmd.none )
         ToggleMultiline ->
-            { model | multiline = not model.multiline } ! []
+            ( { model | multiline = not model.multiline }, Cmd.none )
         ToggleActionOnBottom ->
-            { model | actionOnBottom = not model.actionOnBottom } ! []
+            ( { model | actionOnBottom = not model.actionOnBottom }, Cmd.none )
         ToggleDismissOnAction ->
-            { model | dismissOnAction = not model.dismissOnAction } ! []
+            ( { model | dismissOnAction = not model.dismissOnAction }, Cmd.none )
         ToggleDarkTheme ->
-            { model | darkTheme = not model.darkTheme } ! []
+            ( { model | darkTheme = not model.darkTheme }, Cmd.none )
         SetMessageText messageText  ->
-            { model | messageText = messageText } ! []
+            ( { model | messageText = messageText }, Cmd.none )
         SetActionText actionText  ->
-            { model | actionText = actionText } ! []
+            ( { model | actionText = actionText }, Cmd.none )
         Show idx ->
             let
                 contents =
@@ -78,6 +81,7 @@ update lift msg model =
                         in
                         { snack
                             | dismissOnAction = model.dismissOnAction
+                            , actionOnBottom = model.actionOnBottom
                         }
                     else
                         let
@@ -94,7 +98,7 @@ update lift msg model =
             let
                 _ = Debug.log "msg" Dismiss
             in
-            model ! []
+            ( model, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
@@ -110,13 +114,48 @@ view lift page model =
     in
     page.body "Snackbar"
     [
+
+      Page.hero []
+      [
+        let
+            demoSnackbar =
+                let
+                    def =
+                        Snackbar.defaultModel
+
+                    snack =
+                        Snackbar.snack "Message sent" "Undo"
+
+                    contents =
+                        { snack
+                            | multiline = False
+                        }
+                in
+                { def
+                    | queue = []
+                    , state = Snackbar.Active contents
+                    , seq = 0
+                }
+        in
+        Snackbar.view (always (lift NoOp)) demoSnackbar
+        [ css "position" "relative"
+        , css "left" "0"
+        , css "transform" "none"
+        ]
+        []
+      ]
+
+    ,
       styled Html.div
       [ when model.darkTheme << Options.many <|
         [ Theme.dark
         , css "background-color" "#333"
+        , css "min-height" "100%"
         ]
       ]
-      [ example []
+      [ example
+        [ css "min-height" "100%"
+        ]
         [
           styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
 
@@ -124,7 +163,7 @@ view lift page model =
           [ cs "mdc-form-field"
           ]
           [ Checkbox.render (Mdl >> lift) [0] model.mdl
-            [ Options.on "change" (Json.succeed (lift ToggleMultiline))
+            [ Options.onClick (lift ToggleMultiline)
             , Checkbox.checked |> when model.multiline
             ]
             []
@@ -136,10 +175,9 @@ view lift page model =
           [ cs "mdc-form-field"
           ]
           [ Checkbox.render (Mdl >> lift) [1] model.mdl
-            [ Options.on "change" (Json.succeed (lift ToggleActionOnBottom))
+            [ Options.onClick (lift ToggleActionOnBottom)
             , Checkbox.checked |> when model.actionOnBottom
-            , when (not model.multiline) <|
-              Checkbox.disabled
+            , Checkbox.disabled |> when (not model.multiline)
             ]
             []
           , Html.label [] [ text "Action on Bottom" ]
@@ -150,7 +188,7 @@ view lift page model =
           [ cs "mdc-form-field"
           ]
           [ Checkbox.render (Mdl >> lift) [2] model.mdl
-            [ Options.on "change" (Json.succeed (lift ToggleDismissOnAction))
+            [ Options.onClick (lift ToggleDismissOnAction)
             , Checkbox.checked |> when model.dismissOnAction
             ]
             []
@@ -168,9 +206,8 @@ view lift page model =
         , Html.br [] []
 
         , Textfield.render (Mdl >> lift) [4] model.mdl
-          [ -- Textfield.defaultValue model.messageText
-            -- ^^ TODO
-            Textfield.label "Message Text"
+          [ Textfield.value model.messageText
+          , Textfield.label "Message Text"
           , Options.on "input" (Json.map (SetMessageText >> lift) Html.targetValue)
           ]
           [
@@ -178,9 +215,8 @@ view lift page model =
         , Html.br [] []
 
         , Textfield.render (Mdl >> lift) [5] model.mdl
-          [ -- Textfield.defaultValue model.actionText
-            -- ^^ TODO
-            Textfield.label "Action Text"
+          [ Textfield.value model.actionText
+          , Textfield.label "Action Text"
           , Options.on "input" (Json.map (SetActionText >> lift) Html.targetValue)
           ]
           [

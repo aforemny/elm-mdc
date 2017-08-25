@@ -3,8 +3,8 @@ module Material.Textfield
         ( Property
         , label
 --        , floatingLabel
---        , value
---        , defaultValue
+        , value
+        , defaultValue
         , disabled
         , render
         , react
