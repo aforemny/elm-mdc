@@ -1,14 +1,85 @@
-module Demo.LayoutGrid exposing ( view )
+module Demo.LayoutGrid exposing ( Model, defaultModel, Msg(..), update, init, subscriptions, view )
 
+import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
+import Html.Events as Html
 import Html exposing (Html, text)
+import Json.Decode as Json
 import Material.LayoutGrid as LayoutGrid
 import Material.Options as Options exposing (styled, cs, css, when)
-import Demo.Page exposing (Page)
+import Task
+import Window
 
 
-view : Page m -> Html m
-view page =
+type alias Model =
+    { desktopMargin : String
+    , desktopGutter : String
+    , desktopColumnWidth : String
+    , tabletMargin : String
+    , tabletGutter : String
+    , tabletColumnWidth : String
+    , phoneMargin : String
+    , phoneGutter : String
+    , phoneColumnWidth : String
+    , windowWidth : Maybe Int
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { desktopMargin = "24px"
+    , desktopGutter = "24px"
+    , desktopColumnWidth = "72px"
+    , tabletMargin = "16px"
+    , tabletGutter = "16px"
+    , tabletColumnWidth = "72px"
+    , phoneMargin = "16px"
+    , phoneGutter = "16px"
+    , phoneColumnWidth = "72px"
+    , windowWidth = Nothing
+    }
+
+
+type Msg
+    = SetDesktopMargin String
+    | SetDesktopGutter String
+    | SetDesktopColumnWidth String
+    | SetTabletMargin String
+    | SetTabletGutter String
+    | SetTabletColumnWidth String
+    | SetPhoneMargin String
+    | SetPhoneGutter String
+    | SetPhoneColumnWidth String
+    | Resize Window.Size
+
+
+update : (Msg -> m) -> Msg -> Model -> ( Model, Cmd m )
+update lift msg model =
+    case msg of
+        SetDesktopMargin v ->
+            ( { model | desktopMargin = v }, Cmd.none )
+        SetDesktopGutter v ->
+            ( { model | desktopGutter = v }, Cmd.none )
+        SetDesktopColumnWidth v ->
+            ( { model | desktopColumnWidth = v }, Cmd.none )
+        SetTabletMargin v ->
+            ( { model | tabletMargin = v }, Cmd.none )
+        SetTabletGutter v ->
+            ( { model | tabletGutter = v }, Cmd.none )
+        SetTabletColumnWidth v ->
+            ( { model | tabletColumnWidth = v }, Cmd.none )
+        SetPhoneMargin v ->
+            ( { model | phoneMargin = v }, Cmd.none )
+        SetPhoneGutter v ->
+            ( { model | phoneGutter = v }, Cmd.none )
+        SetPhoneColumnWidth v ->
+            ( { model | phoneColumnWidth = v }, Cmd.none )
+        Resize { width, height } ->
+            ( { model | windowWidth = Just width }, Cmd.none )
+
+
+view : (Msg -> m) -> Page m -> Model -> Html m
+view lift page model =
     let
         demoGridLegend node text_ =
             styled node
@@ -75,77 +146,107 @@ view page =
     in
     page.body "Layout grid"
     [
+      Html.node "style"
+      [ Html.type_ "text/css"
+      ]
+      [ text <| """
+:root {
+    --mdc-layout-grid-margin-desktop: """ ++ model.desktopMargin ++ """;
+    --mdc-layout-grid-gutter-desktop: """ ++ model.desktopGutter ++ """;
+    --mdc-layout-grid-column-width-desktop: """ ++ model.desktopColumnWidth ++ """;
+    --mdc-layout-grid-margin-tablet: """ ++ model.tabletMargin ++ """;
+    --mdc-layout-grid-gutter-tablet: """ ++ model.tabletGutter ++ """;
+    --mdc-layout-grid-column-width-tablet: """ ++ model.tabletColumnWidth ++ """;
+    --mdc-layout-grid-margin-phone: """ ++ model.phoneMargin ++ """;
+    --mdc-layout-grid-gutter-phone: """ ++ model.phoneGutter ++ """;
+    --mdc-layout-grid-column-width-phone: """ ++ model.phoneColumnWidth ++ """;
+}
+"""
+      ]
+
+    , Page.hero []
+      [ LayoutGrid.view
+        [ demoGrid
+        ]
+        [ LayoutGrid.inner []
+          ( List.repeat 3 <|
+              LayoutGrid.cell
+              [ css "height" "60px"
+              , demoCell -- TODO: change order?
+              , LayoutGrid.span4
+              ]
+              []
+          )
+        ]
+      ]
+
+    , let
+          margins =
+              [ "8px", "16px", "24px", "40px"
+              ]
+
+          gutters =
+              margins
+
+          columnWidths =
+              [ "72px", "84px" ]
+
+          control title set get options =
+              styled Html.div
+              [ demoControls
+              ]
+              [ text title
+              , Html.select
+                [ Html.on "change" (Json.map (set >> lift) Html.targetValue)
+                ]
+                ( options
+                  |> List.map (\v ->
+                        Html.option
+                        [ Html.selected (get model == v)
+                        , Html.value v
+                        ]
+                        [ text v
+                        ]
+                     )
+                )
+              ]
+
+          controls device setMargin getMargin setGutter getGutter =
+              LayoutGrid.cell []
+              [
+                control (device ++ " Margin:") setMargin getMargin margins
+              , control (device ++ " Gutter:") setGutter getGutter gutters
+              ]
+      in
       styled Html.section
       [ cs "examples"
+      , css "margin" "24px"
       ]
-      [ -- TODO: demoControls
+      [
         LayoutGrid.view
         [
         ]
-        [ LayoutGrid.inner []
-          [ LayoutGrid.cell []
-            [ styled Html.div
-              [ demoControls
-              ]
-              [ text "Desktop Margin:"
-              , Html.select []
-                [ Html.option [ Html.value "8px" ] [ text "8px" ]
-                , Html.option [ Html.value "16px" ] [ text "16px" ]
-                , Html.option [ Html.value "24px" ] [ text "24px" ]
-                , Html.option [ Html.value "40px" ] [ text "40px" ]
-                ]
-              , Html.br [] []
-              , text "Desktop Gutter:"
-              , Html.select []
-                [ Html.option [ Html.value "8px" ] [ text "8px" ]
-                , Html.option [ Html.value "16px" ] [ text "16px" ]
-                , Html.option [ Html.value "24px" ] [ text "24px" ]
-                , Html.option [ Html.value "40px" ] [ text "40px" ]
-                ]
-              ]
-            ]
-          , LayoutGrid.cell []
-            [ styled Html.div
-              [ demoControls
-              ]
-              [ text "Tablet Margin:"
-              , Html.select []
-                [ Html.option [ Html.value "8px" ] [ text "8px" ]
-                , Html.option [ Html.value "16px" ] [ text "16px" ]
-                , Html.option [ Html.value "24px" ] [ text "24px" ]
-                , Html.option [ Html.value "40px" ] [ text "40px" ]
-                ]
-              , Html.br [] []
-              , text "Tablet Gutter:"
-              , Html.select []
-                [ Html.option [ Html.value "8px" ] [ text "8px" ]
-                , Html.option [ Html.value "16px" ] [ text "16px" ]
-                , Html.option [ Html.value "24px" ] [ text "24px" ]
-                , Html.option [ Html.value "40px" ] [ text "40px" ]
-                ]
-              ]
-            ]
-          , LayoutGrid.cell []
-            [ styled Html.div
-              [ demoControls
-              ]
-              [ text "Phone Margin:"
-              , Html.select []
-                [ Html.option [ Html.value "8px" ] [ text "8px" ]
-                , Html.option [ Html.value "16px" ] [ text "16px" ]
-                , Html.option [ Html.value "24px" ] [ text "24px" ]
-                , Html.option [ Html.value "40px" ] [ text "40px" ]
-                ]
-              , Html.br [] []
-              , text "Phone Gutter:"
-              , Html.select []
-                [ Html.option [ Html.value "8px" ] [ text "8px" ]
-                , Html.option [ Html.value "16px" ] [ text "16px" ]
-                , Html.option [ Html.value "24px" ] [ text "24px" ]
-                , Html.option [ Html.value "40px" ] [ text "40px" ]
-                ]
-              ]
-            ]
+        [ let
+              desktopControls =
+                  controls "Desktop"
+                      SetDesktopMargin .desktopMargin
+                      SetDesktopGutter .desktopGutter
+
+              tabletControls =
+                  controls "Tablet"
+                      SetTabletMargin .tabletMargin
+                      SetTabletGutter .tabletGutter
+
+              phoneControls =
+                  controls "Phone"
+                      SetPhoneMargin .phoneMargin
+                      SetPhoneGutter .phoneGutter
+          in
+          LayoutGrid.inner []
+          [
+            desktopControls
+          , tabletControls
+          , phoneControls
           ]
         ]
 
@@ -264,29 +365,26 @@ view page =
           [ LayoutGrid.cell
             [ demoControls
             ]
-            [ text "Desktop Column Width:"
-            , Html.select []
-              [ Html.option [ Html.value "72px", Html.selected True ] [ text "72px" ]
-              , Html.option [ Html.value "84px", Html.selected True ] [ text "84px" ]
-              ]
+            [ control "Desktop Column Width:"
+                SetDesktopColumnWidth
+                .desktopColumnWidth
+                columnWidths
             ]
           , LayoutGrid.cell
             [ demoControls
             ]
-            [ text "Tablet Column Width:"
-            , Html.select []
-              [ Html.option [ Html.value "72px", Html.selected True ] [ text "72px" ]
-              , Html.option [ Html.value "84px", Html.selected True ] [ text "84px" ]
-              ]
+            [ control "Tablet Column Width:"
+                SetTabletColumnWidth  
+                .tabletColumnWidth
+                columnWidths
             ]
           , LayoutGrid.cell
             [ demoControls
             ]
-            [ text "Phone Column Width:"
-            , Html.select []
-              [ Html.option [ Html.value "72px", Html.selected True ] [ text "72px" ]
-              , Html.option [ Html.value "84px", Html.selected True ] [ text "84px" ]
-              ]
+            [ control "Phone Column Width:"
+                SetPhoneColumnWidth
+                .phoneColumnWidth
+                columnWidths
             ]
           ]
         ]
@@ -294,9 +392,7 @@ view page =
       , demoGridLegend Html.div "Fixed column width layout grid and center alignment by default"
       , LayoutGrid.view
         [ demoGrid
-        -- TODO: fixedColumnWidth
-        -- , LayoutGrid.fixedColumnWidth
-        , css "max-width" "1280px"
+        , LayoutGrid.fixedColumnWidth
         ]
         [ LayoutGrid.inner []
           ( LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
@@ -307,9 +403,7 @@ view page =
       , demoGridLegend Html.div "Fixed column width layout grid and right alignment"
       , LayoutGrid.view
         [ demoGrid
-        -- TODO: fixedColumnWidth
-        -- , LayoutGrid.fixedColumnWidth
-        , css "max-width" "1280px"
+        , LayoutGrid.fixedColumnWidth
         , LayoutGrid.alignRight
         ]
         [ LayoutGrid.inner []
@@ -318,7 +412,36 @@ view page =
           )
         ]
 
-      , -- TODO: demoRuler
-        styled Html.div [ demoRuler ] [ text "???px (?)" ]
+      , styled Html.div
+        [ demoRuler
+        ]
+        [ let
+            device =
+                model.windowWidth
+                |> Maybe.map (\ width ->
+                      if width >= 840 then
+                          "desktop"
+                      else if width >= 480 then
+                          "tablet"
+                      else
+                          "phone"
+                   )
+                |> Maybe.withDefault "desktop"
+          in
+          Html.div []
+          [ text <|
+            toString (Maybe.withDefault 0 model.windowWidth) ++ "px (" ++ device ++ ")"
+          ]
+        ]
       ]
     ]
+
+
+init : (Msg -> m) -> ( Model, Cmd m )
+init lift =
+    ( defaultModel, Task.perform (lift << Resize) Window.size )
+
+
+subscriptions : (Msg -> m) -> Model -> Sub m
+subscriptions lift model =
+    Window.resizes (Resize >> lift)

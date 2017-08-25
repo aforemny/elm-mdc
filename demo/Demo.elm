@@ -9,6 +9,7 @@ import Demo.Fabs
 import Demo.GridList
 import Demo.IconToggle
 import Demo.LayoutGrid
+import Demo.LayoutGrid
 import Demo.LinearProgress
 import Demo.Lists
 import Demo.Menus
@@ -33,6 +34,7 @@ import Html exposing (Html, text)
 import Material
 import Material.Options as Options exposing (styled, css, when)
 import Material.Toolbar as Toolbar
+import Material.Typography as Typography
 import Navigation
 import Platform.Cmd exposing (..)
 import RouteUrl as Routing
@@ -52,6 +54,7 @@ type alias Model =
     , fabs : Demo.Fabs.Model
     , gridList : Demo.GridList.Model
     , iconToggle : Demo.IconToggle.Model
+    , layoutGrid : Demo.LayoutGrid.Model
     , menus : Demo.Menus.Model
     , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model
     , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model
@@ -93,6 +96,7 @@ defaultModel =
     , temporaryDrawer = Demo.TemporaryDrawer.defaultModel
     , textfields = Demo.Textfields.defaultModel
     , gridList = Demo.GridList.defaultModel
+    , layoutGrid = Demo.LayoutGrid.defaultModel
     }
 
 
@@ -122,6 +126,7 @@ type Msg
     | TemporaryDrawerMsg (Demo.TemporaryDrawer.Msg Msg)
     | TextfieldMsg (Demo.Textfields.Msg Msg)
     | GridListMsg (Demo.GridList.Msg Msg)
+    | LayoutGridMsg (Demo.LayoutGrid.Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -280,6 +285,13 @@ update msg model =
             in
                 ( { model | gridList = gridList }, effects ) 
 
+        LayoutGridMsg msg_ ->
+            let
+                (layoutGrid, effects) =
+                    Demo.LayoutGrid.update LayoutGridMsg msg_ model.layoutGrid
+            in
+                ( { model | layoutGrid = layoutGrid }, effects ) 
+
 
 view : Model -> Html Msg
 view =
@@ -297,6 +309,7 @@ view_ model =
                 \title nodes ->
                 styled Html.div
                     [ Toolbar.fixedAdjust
+                    , Typography.typography
                     , css "width" "100%"
                     , css "height" "100%"
                     ]
@@ -385,7 +398,7 @@ view_ model =
             Demo.GridList.view GridListMsg page model.gridList
 
         LayoutGrid ->
-            Demo.LayoutGrid.view page
+            Demo.LayoutGrid.view LayoutGridMsg page model.layoutGrid
 
         Ripple ->
             Demo.Ripple.view RippleMsg page model.ripple
@@ -491,14 +504,28 @@ main =
     Routing.program
         { delta2url = delta2url
         , location2messages = location2messages
-        , init =
-            ( defaultModel
-            , Material.init Mdl
-            )
+        , init = init
         , view = view
         , subscriptions = subscriptions
         , update = update
         }
+
+
+init : ( Model, Cmd Msg )
+init =
+    let
+        ( layoutGrid, layoutGridEffects ) =
+            Demo.LayoutGrid.init LayoutGridMsg
+    in
+    ( { defaultModel
+          | layoutGrid = layoutGrid
+      }
+    ,
+      Cmd.batch
+      [ Material.init Mdl
+      , layoutGridEffects
+      ]
+    )
 
 
 subscriptions : Model -> Sub Msg
@@ -514,4 +541,5 @@ subscriptions model =
         , Demo.Selects.subscriptions SelectMsg model.selects
         , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
         , Demo.Slider.subscriptions SliderMsg model.slider
+        , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
         ]
