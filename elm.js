@@ -22131,43 +22131,330 @@ var _debois$elm_mdl$Material_LayoutGrid$view = function (options) {
 			_1: options
 		});
 };
+var _debois$elm_mdl$Material_LayoutGrid$defaultConfig = {};
+var _debois$elm_mdl$Material_LayoutGrid$Config = {};
 
-var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
-	var demoRuler = _debois$elm_mdl$Material_Options$many(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('demo-ruler'),
-			_1: {
+var _elm_lang$window$Native_Window = function()
+{
+
+var size = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)	{
+	callback(_elm_lang$core$Native_Scheduler.succeed({
+		width: window.innerWidth,
+		height: window.innerHeight
+	}));
+});
+
+return {
+	size: size
+};
+
+}();
+var _elm_lang$window$Window_ops = _elm_lang$window$Window_ops || {};
+_elm_lang$window$Window_ops['&>'] = F2(
+	function (task1, task2) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (_p0) {
+				return task2;
+			},
+			task1);
+	});
+var _elm_lang$window$Window$onSelfMsg = F3(
+	function (router, dimensions, state) {
+		var _p1 = state;
+		if (_p1.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var send = function (_p2) {
+				var _p3 = _p2;
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					_p3._0(dimensions));
+			};
+			return A2(
+				_elm_lang$window$Window_ops['&>'],
+				_elm_lang$core$Task$sequence(
+					A2(_elm_lang$core$List$map, send, _p1._0.subs)),
+				_elm_lang$core$Task$succeed(state));
+		}
+	});
+var _elm_lang$window$Window$init = _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
+var _elm_lang$window$Window$size = _elm_lang$window$Native_Window.size;
+var _elm_lang$window$Window$width = A2(
+	_elm_lang$core$Task$map,
+	function (_) {
+		return _.width;
+	},
+	_elm_lang$window$Window$size);
+var _elm_lang$window$Window$height = A2(
+	_elm_lang$core$Task$map,
+	function (_) {
+		return _.height;
+	},
+	_elm_lang$window$Window$size);
+var _elm_lang$window$Window$onEffects = F3(
+	function (router, newSubs, oldState) {
+		var _p4 = {ctor: '_Tuple2', _0: oldState, _1: newSubs};
+		if (_p4._0.ctor === 'Nothing') {
+			if (_p4._1.ctor === '[]') {
+				return _elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing);
+			} else {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (pid) {
+						return _elm_lang$core$Task$succeed(
+							_elm_lang$core$Maybe$Just(
+								{subs: newSubs, pid: pid}));
+					},
+					_elm_lang$core$Process$spawn(
+						A3(
+							_elm_lang$dom$Dom_LowLevel$onWindow,
+							'resize',
+							_elm_lang$core$Json_Decode$succeed(
+								{ctor: '_Tuple0'}),
+							function (_p5) {
+								return A2(
+									_elm_lang$core$Task$andThen,
+									_elm_lang$core$Platform$sendToSelf(router),
+									_elm_lang$window$Window$size);
+							})));
+			}
+		} else {
+			if (_p4._1.ctor === '[]') {
+				return A2(
+					_elm_lang$window$Window_ops['&>'],
+					_elm_lang$core$Process$kill(_p4._0._0.pid),
+					_elm_lang$core$Task$succeed(_elm_lang$core$Maybe$Nothing));
+			} else {
+				return _elm_lang$core$Task$succeed(
+					_elm_lang$core$Maybe$Just(
+						{subs: newSubs, pid: _p4._0._0.pid}));
+			}
+		}
+	});
+var _elm_lang$window$Window$subscription = _elm_lang$core$Native_Platform.leaf('Window');
+var _elm_lang$window$Window$Size = F2(
+	function (a, b) {
+		return {width: a, height: b};
+	});
+var _elm_lang$window$Window$MySub = function (a) {
+	return {ctor: 'MySub', _0: a};
+};
+var _elm_lang$window$Window$resizes = function (tagger) {
+	return _elm_lang$window$Window$subscription(
+		_elm_lang$window$Window$MySub(tagger));
+};
+var _elm_lang$window$Window$subMap = F2(
+	function (func, _p6) {
+		var _p7 = _p6;
+		return _elm_lang$window$Window$MySub(
+			function (_p8) {
+				return func(
+					_p7._0(_p8));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window', init: _elm_lang$window$Window$init, onEffects: _elm_lang$window$Window$onEffects, onSelfMsg: _elm_lang$window$Window$onSelfMsg, tag: 'sub', subMap: _elm_lang$window$Window$subMap};
+
+var _debois$elm_mdl$Demo_LayoutGrid$update = F3(
+	function (lift, msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'SetDesktopMargin':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{desktopMargin: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetDesktopGutter':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{desktopGutter: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetDesktopColumnWidth':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{desktopColumnWidth: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetTabletMargin':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{tabletMargin: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetTabletGutter':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{tabletGutter: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetTabletColumnWidth':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{tabletColumnWidth: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetPhoneMargin':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{phoneMargin: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetPhoneGutter':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{phoneGutter: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SetPhoneColumnWidth':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{phoneColumnWidth: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							windowWidth: _elm_lang$core$Maybe$Just(_p0._0.width)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _debois$elm_mdl$Demo_LayoutGrid$defaultModel = {desktopMargin: '24px', desktopGutter: '24px', desktopColumnWidth: '72px', tabletMargin: '16px', tabletGutter: '16px', tabletColumnWidth: '72px', phoneMargin: '16px', phoneGutter: '16px', phoneColumnWidth: '72px', windowWidth: _elm_lang$core$Maybe$Nothing};
+var _debois$elm_mdl$Demo_LayoutGrid$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {desktopMargin: a, desktopGutter: b, desktopColumnWidth: c, tabletMargin: d, tabletGutter: e, tabletColumnWidth: f, phoneMargin: g, phoneGutter: h, phoneColumnWidth: i, windowWidth: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$Resize = function (a) {
+	return {ctor: 'Resize', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$init = function (lift) {
+	return {
+		ctor: '_Tuple2',
+		_0: _debois$elm_mdl$Demo_LayoutGrid$defaultModel,
+		_1: A2(
+			_elm_lang$core$Task$perform,
+			function (_p1) {
+				return lift(
+					_debois$elm_mdl$Demo_LayoutGrid$Resize(_p1));
+			},
+			_elm_lang$window$Window$size)
+	};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$subscriptions = F2(
+	function (lift, model) {
+		return _elm_lang$window$Window$resizes(
+			function (_p2) {
+				return lift(
+					_debois$elm_mdl$Demo_LayoutGrid$Resize(_p2));
+			});
+	});
+var _debois$elm_mdl$Demo_LayoutGrid$SetPhoneColumnWidth = function (a) {
+	return {ctor: 'SetPhoneColumnWidth', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetPhoneGutter = function (a) {
+	return {ctor: 'SetPhoneGutter', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetPhoneMargin = function (a) {
+	return {ctor: 'SetPhoneMargin', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetTabletColumnWidth = function (a) {
+	return {ctor: 'SetTabletColumnWidth', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetTabletGutter = function (a) {
+	return {ctor: 'SetTabletGutter', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetTabletMargin = function (a) {
+	return {ctor: 'SetTabletMargin', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetDesktopColumnWidth = function (a) {
+	return {ctor: 'SetDesktopColumnWidth', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetDesktopGutter = function (a) {
+	return {ctor: 'SetDesktopGutter', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$SetDesktopMargin = function (a) {
+	return {ctor: 'SetDesktopMargin', _0: a};
+};
+var _debois$elm_mdl$Demo_LayoutGrid$view = F3(
+	function (lift, page, model) {
+		var demoRuler = _debois$elm_mdl$Material_Options$many(
+			{
 				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'fixed'),
+				_0: _debois$elm_mdl$Material_Options$cs('demo-ruler'),
 				_1: {
 					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'fixed'),
 					_1: {
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'center'),
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'flex'),
 						_1: {
 							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'bottom', '0'),
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'justify-content', 'center'),
 							_1: {
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'left', '0'),
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'bottom', '0'),
 								_1: {
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '20px'),
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'left', '0'),
 									_1: {
 										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '100%'),
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '20px'),
 										_1: {
 											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '0'),
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '100%'),
 											_1: {
 												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$css, 'background', 'black'),
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '0'),
 												_1: {
 													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
-													_1: {ctor: '[]'}
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'background', 'black'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
@@ -22177,734 +22464,429 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 						}
 					}
 				}
-			}
-		});
-	var demoParentCell = _debois$elm_mdl$Material_Options$many(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('demo-parent-cell'),
-			_1: {
+			});
+		var demoParentCell = _debois$elm_mdl$Material_Options$many(
+			{
 				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'relative'),
+				_0: _debois$elm_mdl$Material_Options$cs('demo-parent-cell'),
 				_1: {
 					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#aaa'),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-	var demoCell = _debois$elm_mdl$Material_Options$many(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('demo-cell'),
-			_1: {
-				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Options$css, 'box-sizing', 'border-box'),
-				_1: {
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#666'),
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'relative'),
 					_1: {
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '200px'),
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#aaa'),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+		var demoCell = _debois$elm_mdl$Material_Options$many(
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('demo-cell'),
+				_1: {
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'box-sizing', 'border-box'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#666'),
 						_1: {
 							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '8px'),
+							_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '200px'),
 							_1: {
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '8px'),
 								_1: {
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'font-size', '1.5rem'),
-									_1: {ctor: '[]'}
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'font-size', '1.5rem'),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		});
-	var demoChildCell = _debois$elm_mdl$Material_Options$many(
-		{
-			ctor: '::',
-			_0: demoCell,
-			_1: {
+			});
+		var demoChildCell = _debois$elm_mdl$Material_Options$many(
+			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('demo-child-cell'),
+				_0: demoCell,
 				_1: {
 					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'relative'),
-					_1: {ctor: '[]'}
+					_0: _debois$elm_mdl$Material_Options$cs('demo-child-cell'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'relative'),
+						_1: {ctor: '[]'}
+					}
 				}
-			}
-		});
-	var demoGrid = _debois$elm_mdl$Material_Options$many(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('demo-grid'),
-			_1: {
+			});
+		var demoGrid = _debois$elm_mdl$Material_Options$many(
+			{
 				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#ddd'),
+				_0: _debois$elm_mdl$Material_Options$cs('demo-grid'),
 				_1: {
 					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '32px'),
-					_1: {ctor: '[]'}
+					_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#ddd'),
+					_1: {
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '32px'),
+						_1: {ctor: '[]'}
+					}
 				}
-			}
-		});
-	var demoControls = _debois$elm_mdl$Material_Options$many(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('demo-controls'),
-			_1: {
+			});
+		var demoControls = _debois$elm_mdl$Material_Options$many(
+			{
 				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
+				_0: _debois$elm_mdl$Material_Options$cs('demo-controls'),
 				_1: {
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '8px'),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-	var demoGridLegend = F2(
-		function (node, text_) {
-			return A3(
-				_debois$elm_mdl$Material_Options$styled,
-				node,
-				{
 					ctor: '::',
 					_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
 					_1: {
 						ctor: '::',
-						_0: _debois$elm_mdl$Material_Options$cs('demo-grid-legend'),
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-bottom', '8px'),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+		var demoGridLegend = F2(
+			function (node, text_) {
+				return A3(
+					_debois$elm_mdl$Material_Options$styled,
+					node,
+					{
+						ctor: '::',
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
 						_1: {
 							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '16px 0 8px 0'),
-							_1: {ctor: '[]'}
+							_0: _debois$elm_mdl$Material_Options$cs('demo-grid-legend'),
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '16px 0 8px 0'),
+								_1: {ctor: '[]'}
+							}
 						}
-					}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(text_),
-					_1: {ctor: '[]'}
-				});
-		});
-	return A2(
-		page.body,
-		'Layout grid',
-		{
-			ctor: '::',
-			_0: A3(
-				_debois$elm_mdl$Material_Options$styled,
-				_elm_lang$html$Html$section,
-				{
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Options$cs('examples'),
-					_1: {ctor: '[]'}
-				},
-				{
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(text_),
+						_1: {ctor: '[]'}
+					});
+			});
+		return A2(
+			page.body,
+			'Layout grid',
+			{
+				ctor: '::',
+				_0: A3(
+					_elm_lang$html$Html$node,
+					'style',
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('text/css'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'\n:root {\n    --mdc-layout-grid-margin-desktop: ',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									model.desktopMargin,
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										';\n    --mdc-layout-grid-gutter-desktop: ',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											model.desktopGutter,
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												';\n    --mdc-layout-grid-column-width-desktop: ',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													model.desktopColumnWidth,
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														';\n    --mdc-layout-grid-margin-tablet: ',
+														A2(
+															_elm_lang$core$Basics_ops['++'],
+															model.tabletMargin,
+															A2(
+																_elm_lang$core$Basics_ops['++'],
+																';\n    --mdc-layout-grid-gutter-tablet: ',
+																A2(
+																	_elm_lang$core$Basics_ops['++'],
+																	model.tabletGutter,
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		';\n    --mdc-layout-grid-column-width-tablet: ',
+																		A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			model.tabletColumnWidth,
+																			A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				';\n    --mdc-layout-grid-margin-phone: ',
+																				A2(
+																					_elm_lang$core$Basics_ops['++'],
+																					model.phoneMargin,
+																					A2(
+																						_elm_lang$core$Basics_ops['++'],
+																						';\n    --mdc-layout-grid-gutter-phone: ',
+																						A2(
+																							_elm_lang$core$Basics_ops['++'],
+																							model.phoneGutter,
+																							A2(
+																								_elm_lang$core$Basics_ops['++'],
+																								';\n    --mdc-layout-grid-column-width-phone: ',
+																								A2(_elm_lang$core$Basics_ops['++'], model.phoneColumnWidth, ';\n}\n'))))))))))))))))))),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
 					ctor: '::',
 					_0: A2(
-						_debois$elm_mdl$Material_LayoutGrid$view,
+						_debois$elm_mdl$Demo_Page$hero,
 						{ctor: '[]'},
 						{
 							ctor: '::',
 							_0: A2(
-								_debois$elm_mdl$Material_LayoutGrid$inner,
-								{ctor: '[]'},
+								_debois$elm_mdl$Material_LayoutGrid$view,
+								{
+									ctor: '::',
+									_0: demoGrid,
+									_1: {ctor: '[]'}
+								},
 								{
 									ctor: '::',
 									_0: A2(
-										_debois$elm_mdl$Material_LayoutGrid$cell,
+										_debois$elm_mdl$Material_LayoutGrid$inner,
 										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: A3(
-												_debois$elm_mdl$Material_Options$styled,
-												_elm_lang$html$Html$div,
+										A2(
+											_elm_lang$core$List$repeat,
+											3,
+											A2(
+												_debois$elm_mdl$Material_LayoutGrid$cell,
 												{
 													ctor: '::',
-													_0: demoControls,
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Desktop Margin:'),
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '60px'),
 													_1: {
 														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$select,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$option,
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$value('8px'),
-																		_1: {ctor: '[]'}
-																	},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('8px'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$option,
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html_Attributes$value('16px'),
-																			_1: {ctor: '[]'}
-																		},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('16px'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$option,
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$value('24px'),
-																				_1: {ctor: '[]'}
-																			},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('24px'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$option,
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$value('40px'),
-																					_1: {ctor: '[]'}
-																				},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('40px'),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																}
-															}),
+														_0: demoCell,
 														_1: {
 															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$br,
-																{ctor: '[]'},
-																{ctor: '[]'}),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Desktop Gutter:'),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$select,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$option,
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$value('8px'),
-																					_1: {ctor: '[]'}
-																				},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('8px'),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$option,
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$value('16px'),
-																						_1: {ctor: '[]'}
-																					},
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('16px'),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$option,
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$value('24px'),
-																							_1: {ctor: '[]'}
-																						},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('24px'),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$option,
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$value('40px'),
-																								_1: {ctor: '[]'}
-																							},
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('40px'),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {ctor: '[]'}
-																					}
-																				}
-																			}
-																		}),
-																	_1: {ctor: '[]'}
-																}
-															}
+															_0: _debois$elm_mdl$Material_LayoutGrid$span4,
+															_1: {ctor: '[]'}
 														}
 													}
-												}),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_LayoutGrid$cell,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: A3(
-													_debois$elm_mdl$Material_Options$styled,
-													_elm_lang$html$Html$div,
-													{
-														ctor: '::',
-														_0: demoControls,
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Tablet Margin:'),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$select,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$option,
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html_Attributes$value('8px'),
-																			_1: {ctor: '[]'}
-																		},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('8px'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$option,
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$value('16px'),
-																				_1: {ctor: '[]'}
-																			},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('16px'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$option,
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$value('24px'),
-																					_1: {ctor: '[]'}
-																				},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('24px'),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$option,
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$value('40px'),
-																						_1: {ctor: '[]'}
-																					},
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('40px'),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {ctor: '[]'}
-																			}
-																		}
-																	}
-																}),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$br,
-																	{ctor: '[]'},
-																	{ctor: '[]'}),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Tablet Gutter:'),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$select,
-																			{ctor: '[]'},
-																			{
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$option,
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$value('8px'),
-																						_1: {ctor: '[]'}
-																					},
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('8px'),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$option,
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$value('16px'),
-																							_1: {ctor: '[]'}
-																						},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('16px'),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$option,
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$value('24px'),
-																								_1: {ctor: '[]'}
-																							},
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('24px'),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {
-																							ctor: '::',
-																							_0: A2(
-																								_elm_lang$html$Html$option,
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html_Attributes$value('40px'),
-																									_1: {ctor: '[]'}
-																								},
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html$text('40px'),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {ctor: '[]'}
-																						}
-																					}
-																				}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}
-														}
-													}),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_LayoutGrid$cell,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: A3(
-														_debois$elm_mdl$Material_Options$styled,
-														_elm_lang$html$Html$div,
-														{
-															ctor: '::',
-															_0: demoControls,
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Phone Margin:'),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$select,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$option,
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$value('8px'),
-																				_1: {ctor: '[]'}
-																			},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('8px'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$option,
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$value('16px'),
-																					_1: {ctor: '[]'}
-																				},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('16px'),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$option,
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$value('24px'),
-																						_1: {ctor: '[]'}
-																					},
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('24px'),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$option,
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$value('40px'),
-																							_1: {ctor: '[]'}
-																						},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('40px'),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {ctor: '[]'}
-																				}
-																			}
-																		}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$br,
-																		{ctor: '[]'},
-																		{ctor: '[]'}),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Phone Gutter:'),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$select,
-																				{ctor: '[]'},
-																				{
-																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$option,
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$value('8px'),
-																							_1: {ctor: '[]'}
-																						},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('8px'),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$option,
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$value('16px'),
-																								_1: {ctor: '[]'}
-																							},
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('16px'),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {
-																							ctor: '::',
-																							_0: A2(
-																								_elm_lang$html$Html$option,
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html_Attributes$value('24px'),
-																									_1: {ctor: '[]'}
-																								},
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html$text('24px'),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {
-																								ctor: '::',
-																								_0: A2(
-																									_elm_lang$html$Html$option,
-																									{
-																										ctor: '::',
-																										_0: _elm_lang$html$Html_Attributes$value('40px'),
-																										_1: {ctor: '[]'}
-																									},
-																									{
-																										ctor: '::',
-																										_0: _elm_lang$html$Html$text('40px'),
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}
-																						}
-																					}
-																				}),
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																}
-															}
-														}),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}
-									}
+												},
+												{ctor: '[]'}))),
+									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
 						ctor: '::',
-						_0: A3(
-							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Options$cs('demo-warning'),
-								_1: {ctor: '[]'}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of default wide (4 columns) items'),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_debois$elm_mdl$Material_LayoutGrid$view,
-									{
-										ctor: '::',
-										_0: demoGrid,
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_LayoutGrid$inner,
-											{ctor: '[]'},
-											A2(
-												_elm_lang$core$List$repeat,
-												3,
-												A2(
-													_debois$elm_mdl$Material_LayoutGrid$cell,
-													{
-														ctor: '::',
-														_0: demoCell,
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('4'),
-														_1: {ctor: '[]'}
-													}))),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of 1 column wide items'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_LayoutGrid$view,
-											{
-												ctor: '::',
-												_0: demoGrid,
-												_1: {ctor: '[]'}
-											},
-											{
+						_0: function () {
+							var control = F4(
+								function (title, set, get, options) {
+									return A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: demoControls,
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(title),
+											_1: {
 												ctor: '::',
 												_0: A2(
-													_debois$elm_mdl$Material_LayoutGrid$inner,
-													{ctor: '[]'},
+													_elm_lang$html$Html$select,
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html_Events$on,
+															'change',
+															A2(
+																_elm_lang$core$Json_Decode$map,
+																function (_p3) {
+																	return lift(
+																		set(_p3));
+																},
+																_elm_lang$html$Html_Events$targetValue)),
+														_1: {ctor: '[]'}
+													},
 													A2(
-														_elm_lang$core$List$repeat,
-														12,
-														A2(
-															_debois$elm_mdl$Material_LayoutGrid$cell,
-															{
-																ctor: '::',
-																_0: demoCell,
-																_1: {
+														_elm_lang$core$List$map,
+														function (v) {
+															return A2(
+																_elm_lang$html$Html$option,
+																{
 																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_LayoutGrid$span1,
+																	_0: _elm_lang$html$Html_Attributes$selected(
+																		_elm_lang$core$Native_Utils.eq(
+																			get(model),
+																			v)),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$value(v),
+																		_1: {ctor: '[]'}
+																	}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text(v),
 																	_1: {ctor: '[]'}
-																}
-															},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('1'),
-																_1: {ctor: '[]'}
-															}))),
+																});
+														},
+														options)),
 												_1: {ctor: '[]'}
-											}),
+											}
+										});
+								});
+							var columnWidths = {
+								ctor: '::',
+								_0: '72px',
+								_1: {
+									ctor: '::',
+									_0: '84px',
+									_1: {ctor: '[]'}
+								}
+							};
+							var margins = {
+								ctor: '::',
+								_0: '8px',
+								_1: {
+									ctor: '::',
+									_0: '16px',
+									_1: {
+										ctor: '::',
+										_0: '24px',
 										_1: {
 											ctor: '::',
-											_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of differently sized items'),
+											_0: '40px',
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							};
+							var gutters = margins;
+							var controls = F5(
+								function (device, setMargin, getMargin, setGutter, getGutter) {
+									return A2(
+										_debois$elm_mdl$Material_LayoutGrid$cell,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A4(
+												control,
+												A2(_elm_lang$core$Basics_ops['++'], device, ' Margin:'),
+												setMargin,
+												getMargin,
+												margins),
+											_1: {
+												ctor: '::',
+												_0: A4(
+													control,
+													A2(_elm_lang$core$Basics_ops['++'], device, ' Gutter:'),
+													setGutter,
+													getGutter,
+													gutters),
+												_1: {ctor: '[]'}
+											}
+										});
+								});
+							return A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$section,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('examples'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_LayoutGrid$view,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: function () {
+												var phoneControls = A5(
+													controls,
+													'Phone',
+													_debois$elm_mdl$Demo_LayoutGrid$SetPhoneMargin,
+													function (_) {
+														return _.phoneMargin;
+													},
+													_debois$elm_mdl$Demo_LayoutGrid$SetPhoneGutter,
+													function (_) {
+														return _.phoneGutter;
+													});
+												var tabletControls = A5(
+													controls,
+													'Tablet',
+													_debois$elm_mdl$Demo_LayoutGrid$SetTabletMargin,
+													function (_) {
+														return _.tabletMargin;
+													},
+													_debois$elm_mdl$Demo_LayoutGrid$SetTabletGutter,
+													function (_) {
+														return _.tabletGutter;
+													});
+												var desktopControls = A5(
+													controls,
+													'Desktop',
+													_debois$elm_mdl$Demo_LayoutGrid$SetDesktopMargin,
+													function (_) {
+														return _.desktopMargin;
+													},
+													_debois$elm_mdl$Demo_LayoutGrid$SetDesktopGutter,
+													function (_) {
+														return _.desktopGutter;
+													});
+												return A2(
+													_debois$elm_mdl$Material_LayoutGrid$inner,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: desktopControls,
+														_1: {
+															ctor: '::',
+															_0: tabletControls,
+															_1: {
+																ctor: '::',
+																_0: phoneControls,
+																_1: {ctor: '[]'}
+															}
+														}
+													});
+											}(),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A3(
+											_debois$elm_mdl$Material_Options$styled,
+											_elm_lang$html$Html$div,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$cs('demo-warning'),
+												_1: {ctor: '[]'}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of default wide (4 columns) items'),
 											_1: {
 												ctor: '::',
 												_0: A2(
@@ -22919,69 +22901,26 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 														_0: A2(
 															_debois$elm_mdl$Material_LayoutGrid$inner,
 															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: A2(
+															A2(
+																_elm_lang$core$List$repeat,
+																3,
+																A2(
 																	_debois$elm_mdl$Material_LayoutGrid$cell,
 																	{
 																		ctor: '::',
 																		_0: demoCell,
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_LayoutGrid$span6,
-																			_1: {ctor: '[]'}
-																		}
+																		_1: {ctor: '[]'}
 																	},
 																	{
 																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('6'),
+																		_0: _elm_lang$html$Html$text('4'),
 																		_1: {ctor: '[]'}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_debois$elm_mdl$Material_LayoutGrid$cell,
-																		{
-																			ctor: '::',
-																			_0: demoCell,
-																			_1: {
-																				ctor: '::',
-																				_0: _debois$elm_mdl$Material_LayoutGrid$span4,
-																				_1: {ctor: '[]'}
-																			}
-																		},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('4'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_debois$elm_mdl$Material_LayoutGrid$cell,
-																			{
-																				ctor: '::',
-																				_0: demoCell,
-																				_1: {
-																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_LayoutGrid$span2,
-																					_1: {ctor: '[]'}
-																				}
-																			},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('2'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}),
+																	}))),
 														_1: {ctor: '[]'}
 													}),
 												_1: {
 													ctor: '::',
-													_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of items with tweaks at different screen sizes'),
+													_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of 1 column wide items'),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -22996,81 +22935,30 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																_0: A2(
 																	_debois$elm_mdl$Material_LayoutGrid$inner,
 																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: A2(
+																	A2(
+																		_elm_lang$core$List$repeat,
+																		12,
+																		A2(
 																			_debois$elm_mdl$Material_LayoutGrid$cell,
 																			{
 																				ctor: '::',
 																				_0: demoCell,
 																				_1: {
 																					ctor: '::',
-																					_0: _debois$elm_mdl$Material_LayoutGrid$span6,
-																					_1: {
-																						ctor: '::',
-																						_0: _debois$elm_mdl$Material_LayoutGrid$span8Tablet,
-																						_1: {ctor: '[]'}
-																					}
+																					_0: _debois$elm_mdl$Material_LayoutGrid$span1,
+																					_1: {ctor: '[]'}
 																				}
 																			},
 																			{
 																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('6 (8 tablet)'),
+																				_0: _elm_lang$html$Html$text('1'),
 																				_1: {ctor: '[]'}
-																			}),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_debois$elm_mdl$Material_LayoutGrid$cell,
-																				{
-																					ctor: '::',
-																					_0: demoCell,
-																					_1: {
-																						ctor: '::',
-																						_0: _debois$elm_mdl$Material_LayoutGrid$span4,
-																						_1: {
-																							ctor: '::',
-																							_0: _debois$elm_mdl$Material_LayoutGrid$span6Tablet,
-																							_1: {ctor: '[]'}
-																						}
-																					}
-																				},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text('4 (6 tablet)'),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: A2(
-																					_debois$elm_mdl$Material_LayoutGrid$cell,
-																					{
-																						ctor: '::',
-																						_0: demoCell,
-																						_1: {
-																							ctor: '::',
-																							_0: _debois$elm_mdl$Material_LayoutGrid$span2,
-																							_1: {
-																								ctor: '::',
-																								_0: _debois$elm_mdl$Material_LayoutGrid$span4Phone,
-																								_1: {ctor: '[]'}
-																							}
-																						}
-																					},
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('2 (4 phone)'),
-																						_1: {ctor: '[]'}
-																					}),
-																				_1: {ctor: '[]'}
-																			}
-																		}
-																	}),
+																			}))),
 																_1: {ctor: '[]'}
 															}),
 														_1: {
 															ctor: '::',
-															_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid nested within parent grid cell'),
+															_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of differently sized items'),
 															_1: {
 																ctor: '::',
 																_0: A2(
@@ -23091,94 +22979,17 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																					_debois$elm_mdl$Material_LayoutGrid$cell,
 																					{
 																						ctor: '::',
-																						_0: demoParentCell,
+																						_0: demoCell,
 																						_1: {
 																							ctor: '::',
-																							_0: _debois$elm_mdl$Material_LayoutGrid$span4,
+																							_0: _debois$elm_mdl$Material_LayoutGrid$span6,
 																							_1: {ctor: '[]'}
 																						}
 																					},
 																					{
 																						ctor: '::',
-																						_0: A2(
-																							_debois$elm_mdl$Material_LayoutGrid$inner,
-																							{ctor: '[]'},
-																							A2(
-																								_elm_lang$core$List$repeat,
-																								3,
-																								A2(
-																									_debois$elm_mdl$Material_LayoutGrid$cell,
-																									{
-																										ctor: '::',
-																										_0: demoChildCell,
-																										_1: {
-																											ctor: '::',
-																											_0: _debois$elm_mdl$Material_LayoutGrid$span4,
-																											_1: {ctor: '[]'}
-																										}
-																									},
-																									{
-																										ctor: '::',
-																										_0: A3(
-																											_debois$elm_mdl$Material_Options$styled,
-																											_elm_lang$html$Html$span,
-																											{
-																												ctor: '::',
-																												_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'absolute'),
-																												_1: {
-																													ctor: '::',
-																													_0: A2(_debois$elm_mdl$Material_Options$css, 'bottom', '8px'),
-																													_1: {
-																														ctor: '::',
-																														_0: A2(_debois$elm_mdl$Material_Options$css, 'right', '8px'),
-																														_1: {
-																															ctor: '::',
-																															_0: A2(_debois$elm_mdl$Material_Options$css, 'color', '#ddd'),
-																															_1: {ctor: '[]'}
-																														}
-																													}
-																												}
-																											},
-																											{
-																												ctor: '::',
-																												_0: _elm_lang$html$Html$text('Child 4'),
-																												_1: {ctor: '[]'}
-																											}),
-																										_1: {ctor: '[]'}
-																									}))),
-																						_1: {
-																							ctor: '::',
-																							_0: A3(
-																								_debois$elm_mdl$Material_Options$styled,
-																								_elm_lang$html$Html$span,
-																								{
-																									ctor: '::',
-																									_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'absolute'),
-																									_1: {
-																										ctor: '::',
-																										_0: A2(_debois$elm_mdl$Material_Options$css, 'top', '8px'),
-																										_1: {
-																											ctor: '::',
-																											_0: A2(_debois$elm_mdl$Material_Options$css, 'left', '8px'),
-																											_1: {
-																												ctor: '::',
-																												_0: A2(_debois$elm_mdl$Material_Options$css, 'font-size', '1.5rem'),
-																												_1: {
-																													ctor: '::',
-																													_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
-																													_1: {ctor: '[]'}
-																												}
-																											}
-																										}
-																									}
-																								},
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html$text('Parent 4'),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {ctor: '[]'}
-																						}
+																						_0: _elm_lang$html$Html$text('6'),
+																						_1: {ctor: '[]'}
 																					}),
 																				_1: {
 																					ctor: '::',
@@ -23207,13 +23018,13 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																								_0: demoCell,
 																								_1: {
 																									ctor: '::',
-																									_0: _debois$elm_mdl$Material_LayoutGrid$span4,
+																									_0: _debois$elm_mdl$Material_LayoutGrid$span2,
 																									_1: {ctor: '[]'}
 																								}
 																							},
 																							{
 																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('4'),
+																								_0: _elm_lang$html$Html$text('2'),
 																								_1: {ctor: '[]'}
 																							}),
 																						_1: {ctor: '[]'}
@@ -23224,29 +23035,44 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																	}),
 																_1: {
 																	ctor: '::',
-																	_0: A2(demoGridLegend, _elm_lang$html$Html$h2, 'Grid with max width'),
+																	_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of items with tweaks at different screen sizes'),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid with max width (1280px) and center alignment by default'),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(
-																				_debois$elm_mdl$Material_LayoutGrid$view,
-																				{
-																					ctor: '::',
-																					_0: demoGrid,
-																					_1: {
+																		_0: A2(
+																			_debois$elm_mdl$Material_LayoutGrid$view,
+																			{
+																				ctor: '::',
+																				_0: demoGrid,
+																				_1: {ctor: '[]'}
+																			},
+																			{
+																				ctor: '::',
+																				_0: A2(
+																					_debois$elm_mdl$Material_LayoutGrid$inner,
+																					{ctor: '[]'},
+																					{
 																						ctor: '::',
-																						_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '1280px'),
-																						_1: {ctor: '[]'}
-																					}
-																				},
-																				{
-																					ctor: '::',
-																					_0: A2(
-																						_debois$elm_mdl$Material_LayoutGrid$inner,
-																						{ctor: '[]'},
-																						{
+																						_0: A2(
+																							_debois$elm_mdl$Material_LayoutGrid$cell,
+																							{
+																								ctor: '::',
+																								_0: demoCell,
+																								_1: {
+																									ctor: '::',
+																									_0: _debois$elm_mdl$Material_LayoutGrid$span6,
+																									_1: {
+																										ctor: '::',
+																										_0: _debois$elm_mdl$Material_LayoutGrid$span8Tablet,
+																										_1: {ctor: '[]'}
+																									}
+																								}
+																							},
+																							{
+																								ctor: '::',
+																								_0: _elm_lang$html$Html$text('6 (8 tablet)'),
+																								_1: {ctor: '[]'}
+																							}),
+																						_1: {
 																							ctor: '::',
 																							_0: A2(
 																								_debois$elm_mdl$Material_LayoutGrid$cell,
@@ -23256,12 +23082,16 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																									_1: {
 																										ctor: '::',
 																										_0: _debois$elm_mdl$Material_LayoutGrid$span4,
-																										_1: {ctor: '[]'}
+																										_1: {
+																											ctor: '::',
+																											_0: _debois$elm_mdl$Material_LayoutGrid$span6Tablet,
+																											_1: {ctor: '[]'}
+																										}
 																									}
 																								},
 																								{
 																									ctor: '::',
-																									_0: _elm_lang$html$Html$text(''),
+																									_0: _elm_lang$html$Html$text('4 (6 tablet)'),
 																									_1: {ctor: '[]'}
 																								}),
 																							_1: {
@@ -23273,14 +23103,136 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																										_0: demoCell,
 																										_1: {
 																											ctor: '::',
+																											_0: _debois$elm_mdl$Material_LayoutGrid$span2,
+																											_1: {
+																												ctor: '::',
+																												_0: _debois$elm_mdl$Material_LayoutGrid$span4Phone,
+																												_1: {ctor: '[]'}
+																											}
+																										}
+																									},
+																									{
+																										ctor: '::',
+																										_0: _elm_lang$html$Html$text('2 (4 phone)'),
+																										_1: {ctor: '[]'}
+																									}),
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					}),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid nested within parent grid cell'),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_debois$elm_mdl$Material_LayoutGrid$view,
+																					{
+																						ctor: '::',
+																						_0: demoGrid,
+																						_1: {ctor: '[]'}
+																					},
+																					{
+																						ctor: '::',
+																						_0: A2(
+																							_debois$elm_mdl$Material_LayoutGrid$inner,
+																							{ctor: '[]'},
+																							{
+																								ctor: '::',
+																								_0: A2(
+																									_debois$elm_mdl$Material_LayoutGrid$cell,
+																									{
+																										ctor: '::',
+																										_0: demoParentCell,
+																										_1: {
+																											ctor: '::',
 																											_0: _debois$elm_mdl$Material_LayoutGrid$span4,
 																											_1: {ctor: '[]'}
 																										}
 																									},
 																									{
 																										ctor: '::',
-																										_0: _elm_lang$html$Html$text(''),
-																										_1: {ctor: '[]'}
+																										_0: A2(
+																											_debois$elm_mdl$Material_LayoutGrid$inner,
+																											{ctor: '[]'},
+																											A2(
+																												_elm_lang$core$List$repeat,
+																												3,
+																												A2(
+																													_debois$elm_mdl$Material_LayoutGrid$cell,
+																													{
+																														ctor: '::',
+																														_0: demoChildCell,
+																														_1: {
+																															ctor: '::',
+																															_0: _debois$elm_mdl$Material_LayoutGrid$span4,
+																															_1: {ctor: '[]'}
+																														}
+																													},
+																													{
+																														ctor: '::',
+																														_0: A3(
+																															_debois$elm_mdl$Material_Options$styled,
+																															_elm_lang$html$Html$span,
+																															{
+																																ctor: '::',
+																																_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'absolute'),
+																																_1: {
+																																	ctor: '::',
+																																	_0: A2(_debois$elm_mdl$Material_Options$css, 'bottom', '8px'),
+																																	_1: {
+																																		ctor: '::',
+																																		_0: A2(_debois$elm_mdl$Material_Options$css, 'right', '8px'),
+																																		_1: {
+																																			ctor: '::',
+																																			_0: A2(_debois$elm_mdl$Material_Options$css, 'color', '#ddd'),
+																																			_1: {ctor: '[]'}
+																																		}
+																																	}
+																																}
+																															},
+																															{
+																																ctor: '::',
+																																_0: _elm_lang$html$Html$text('Child 4'),
+																																_1: {ctor: '[]'}
+																															}),
+																														_1: {ctor: '[]'}
+																													}))),
+																										_1: {
+																											ctor: '::',
+																											_0: A3(
+																												_debois$elm_mdl$Material_Options$styled,
+																												_elm_lang$html$Html$span,
+																												{
+																													ctor: '::',
+																													_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'absolute'),
+																													_1: {
+																														ctor: '::',
+																														_0: A2(_debois$elm_mdl$Material_Options$css, 'top', '8px'),
+																														_1: {
+																															ctor: '::',
+																															_0: A2(_debois$elm_mdl$Material_Options$css, 'left', '8px'),
+																															_1: {
+																																ctor: '::',
+																																_0: A2(_debois$elm_mdl$Material_Options$css, 'font-size', '1.5rem'),
+																																_1: {
+																																	ctor: '::',
+																																	_0: A2(_debois$elm_mdl$Material_Options$css, 'color', 'white'),
+																																	_1: {ctor: '[]'}
+																																}
+																															}
+																														}
+																													}
+																												},
+																												{
+																													ctor: '::',
+																													_0: _elm_lang$html$Html$text('Parent 4'),
+																													_1: {ctor: '[]'}
+																												}),
+																											_1: {ctor: '[]'}
+																										}
 																									}),
 																								_1: {
 																									ctor: '::',
@@ -23297,56 +23249,7 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																										},
 																										{
 																											ctor: '::',
-																											_0: _elm_lang$html$Html$text(''),
-																											_1: {ctor: '[]'}
-																										}),
-																									_1: {ctor: '[]'}
-																								}
-																							}
-																						}),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {
-																				ctor: '::',
-																				_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid with max width (1280px) and left alignment'),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(
-																						_debois$elm_mdl$Material_LayoutGrid$view,
-																						{
-																							ctor: '::',
-																							_0: demoGrid,
-																							_1: {
-																								ctor: '::',
-																								_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '1280px'),
-																								_1: {
-																									ctor: '::',
-																									_0: _debois$elm_mdl$Material_LayoutGrid$alignLeft,
-																									_1: {ctor: '[]'}
-																								}
-																							}
-																						},
-																						{
-																							ctor: '::',
-																							_0: A2(
-																								_debois$elm_mdl$Material_LayoutGrid$inner,
-																								{ctor: '[]'},
-																								{
-																									ctor: '::',
-																									_0: A2(
-																										_debois$elm_mdl$Material_LayoutGrid$cell,
-																										{
-																											ctor: '::',
-																											_0: demoCell,
-																											_1: {
-																												ctor: '::',
-																												_0: _debois$elm_mdl$Material_LayoutGrid$span4,
-																												_1: {ctor: '[]'}
-																											}
-																										},
-																										{
-																											ctor: '::',
-																											_0: _elm_lang$html$Html$text(''),
+																											_0: _elm_lang$html$Html$text('4'),
 																											_1: {ctor: '[]'}
 																										}),
 																									_1: {
@@ -23364,10 +23267,40 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																											},
 																											{
 																												ctor: '::',
-																												_0: _elm_lang$html$Html$text(''),
+																												_0: _elm_lang$html$Html$text('4'),
 																												_1: {ctor: '[]'}
 																											}),
-																										_1: {
+																										_1: {ctor: '[]'}
+																									}
+																								}
+																							}),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(demoGridLegend, _elm_lang$html$Html$h2, 'Grid with max width'),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid with max width (1280px) and center alignment by default'),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(
+																								_debois$elm_mdl$Material_LayoutGrid$view,
+																								{
+																									ctor: '::',
+																									_0: demoGrid,
+																									_1: {
+																										ctor: '::',
+																										_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '1280px'),
+																										_1: {ctor: '[]'}
+																									}
+																								},
+																								{
+																									ctor: '::',
+																									_0: A2(
+																										_debois$elm_mdl$Material_LayoutGrid$inner,
+																										{ctor: '[]'},
+																										{
 																											ctor: '::',
 																											_0: A2(
 																												_debois$elm_mdl$Material_LayoutGrid$cell,
@@ -23385,142 +23318,23 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																													_0: _elm_lang$html$Html$text(''),
 																													_1: {ctor: '[]'}
 																												}),
-																											_1: {ctor: '[]'}
-																										}
-																									}
-																								}),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid'),
-																						_1: {
-																							ctor: '::',
-																							_0: A2(
-																								_debois$elm_mdl$Material_LayoutGrid$view,
-																								{ctor: '[]'},
-																								{
-																									ctor: '::',
-																									_0: A2(
-																										_debois$elm_mdl$Material_LayoutGrid$inner,
-																										{ctor: '[]'},
-																										{
-																											ctor: '::',
-																											_0: A2(
-																												_debois$elm_mdl$Material_LayoutGrid$cell,
-																												{
-																													ctor: '::',
-																													_0: demoControls,
-																													_1: {ctor: '[]'}
-																												},
-																												{
-																													ctor: '::',
-																													_0: _elm_lang$html$Html$text('Desktop Column Width:'),
-																													_1: {
-																														ctor: '::',
-																														_0: A2(
-																															_elm_lang$html$Html$select,
-																															{ctor: '[]'},
-																															{
-																																ctor: '::',
-																																_0: A2(
-																																	_elm_lang$html$Html$option,
-																																	{
-																																		ctor: '::',
-																																		_0: _elm_lang$html$Html_Attributes$value('72px'),
-																																		_1: {
-																																			ctor: '::',
-																																			_0: _elm_lang$html$Html_Attributes$selected(true),
-																																			_1: {ctor: '[]'}
-																																		}
-																																	},
-																																	{
-																																		ctor: '::',
-																																		_0: _elm_lang$html$Html$text('72px'),
-																																		_1: {ctor: '[]'}
-																																	}),
-																																_1: {
-																																	ctor: '::',
-																																	_0: A2(
-																																		_elm_lang$html$Html$option,
-																																		{
-																																			ctor: '::',
-																																			_0: _elm_lang$html$Html_Attributes$value('84px'),
-																																			_1: {
-																																				ctor: '::',
-																																				_0: _elm_lang$html$Html_Attributes$selected(true),
-																																				_1: {ctor: '[]'}
-																																			}
-																																		},
-																																		{
-																																			ctor: '::',
-																																			_0: _elm_lang$html$Html$text('84px'),
-																																			_1: {ctor: '[]'}
-																																		}),
-																																	_1: {ctor: '[]'}
-																																}
-																															}),
-																														_1: {ctor: '[]'}
-																													}
-																												}),
 																											_1: {
 																												ctor: '::',
 																												_0: A2(
 																													_debois$elm_mdl$Material_LayoutGrid$cell,
 																													{
 																														ctor: '::',
-																														_0: demoControls,
-																														_1: {ctor: '[]'}
+																														_0: demoCell,
+																														_1: {
+																															ctor: '::',
+																															_0: _debois$elm_mdl$Material_LayoutGrid$span4,
+																															_1: {ctor: '[]'}
+																														}
 																													},
 																													{
 																														ctor: '::',
-																														_0: _elm_lang$html$Html$text('Tablet Column Width:'),
-																														_1: {
-																															ctor: '::',
-																															_0: A2(
-																																_elm_lang$html$Html$select,
-																																{ctor: '[]'},
-																																{
-																																	ctor: '::',
-																																	_0: A2(
-																																		_elm_lang$html$Html$option,
-																																		{
-																																			ctor: '::',
-																																			_0: _elm_lang$html$Html_Attributes$value('72px'),
-																																			_1: {
-																																				ctor: '::',
-																																				_0: _elm_lang$html$Html_Attributes$selected(true),
-																																				_1: {ctor: '[]'}
-																																			}
-																																		},
-																																		{
-																																			ctor: '::',
-																																			_0: _elm_lang$html$Html$text('72px'),
-																																			_1: {ctor: '[]'}
-																																		}),
-																																	_1: {
-																																		ctor: '::',
-																																		_0: A2(
-																																			_elm_lang$html$Html$option,
-																																			{
-																																				ctor: '::',
-																																				_0: _elm_lang$html$Html_Attributes$value('84px'),
-																																				_1: {
-																																					ctor: '::',
-																																					_0: _elm_lang$html$Html_Attributes$selected(true),
-																																					_1: {ctor: '[]'}
-																																				}
-																																			},
-																																			{
-																																				ctor: '::',
-																																				_0: _elm_lang$html$Html$text('84px'),
-																																				_1: {ctor: '[]'}
-																																			}),
-																																		_1: {ctor: '[]'}
-																																	}
-																																}),
-																															_1: {ctor: '[]'}
-																														}
+																														_0: _elm_lang$html$Html$text(''),
+																														_1: {ctor: '[]'}
 																													}),
 																												_1: {
 																													ctor: '::',
@@ -23528,58 +23342,17 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																														_debois$elm_mdl$Material_LayoutGrid$cell,
 																														{
 																															ctor: '::',
-																															_0: demoControls,
-																															_1: {ctor: '[]'}
+																															_0: demoCell,
+																															_1: {
+																																ctor: '::',
+																																_0: _debois$elm_mdl$Material_LayoutGrid$span4,
+																																_1: {ctor: '[]'}
+																															}
 																														},
 																														{
 																															ctor: '::',
-																															_0: _elm_lang$html$Html$text('Phone Column Width:'),
-																															_1: {
-																																ctor: '::',
-																																_0: A2(
-																																	_elm_lang$html$Html$select,
-																																	{ctor: '[]'},
-																																	{
-																																		ctor: '::',
-																																		_0: A2(
-																																			_elm_lang$html$Html$option,
-																																			{
-																																				ctor: '::',
-																																				_0: _elm_lang$html$Html_Attributes$value('72px'),
-																																				_1: {
-																																					ctor: '::',
-																																					_0: _elm_lang$html$Html_Attributes$selected(true),
-																																					_1: {ctor: '[]'}
-																																				}
-																																			},
-																																			{
-																																				ctor: '::',
-																																				_0: _elm_lang$html$Html$text('72px'),
-																																				_1: {ctor: '[]'}
-																																			}),
-																																		_1: {
-																																			ctor: '::',
-																																			_0: A2(
-																																				_elm_lang$html$Html$option,
-																																				{
-																																					ctor: '::',
-																																					_0: _elm_lang$html$Html_Attributes$value('84px'),
-																																					_1: {
-																																						ctor: '::',
-																																						_0: _elm_lang$html$Html_Attributes$selected(true),
-																																						_1: {ctor: '[]'}
-																																					}
-																																				},
-																																				{
-																																					ctor: '::',
-																																					_0: _elm_lang$html$Html$text('84px'),
-																																					_1: {ctor: '[]'}
-																																				}),
-																																			_1: {ctor: '[]'}
-																																		}
-																																	}),
-																																_1: {ctor: '[]'}
-																															}
+																															_0: _elm_lang$html$Html$text(''),
+																															_1: {ctor: '[]'}
 																														}),
 																													_1: {ctor: '[]'}
 																												}
@@ -23589,7 +23362,7 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																								}),
 																							_1: {
 																								ctor: '::',
-																								_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid and center alignment by default'),
+																								_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid with max width (1280px) and left alignment'),
 																								_1: {
 																									ctor: '::',
 																									_0: A2(
@@ -23600,7 +23373,11 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																											_1: {
 																												ctor: '::',
 																												_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '1280px'),
-																												_1: {ctor: '[]'}
+																												_1: {
+																													ctor: '::',
+																													_0: _debois$elm_mdl$Material_LayoutGrid$alignLeft,
+																													_1: {ctor: '[]'}
+																												}
 																											}
 																										},
 																										{
@@ -23608,81 +23385,274 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 																											_0: A2(
 																												_debois$elm_mdl$Material_LayoutGrid$inner,
 																												{ctor: '[]'},
-																												A2(
-																													_elm_lang$core$List$repeat,
-																													3,
-																													A2(
+																												{
+																													ctor: '::',
+																													_0: A2(
 																														_debois$elm_mdl$Material_LayoutGrid$cell,
 																														{
 																															ctor: '::',
 																															_0: demoCell,
 																															_1: {
 																																ctor: '::',
-																																_0: _debois$elm_mdl$Material_LayoutGrid$span1,
+																																_0: _debois$elm_mdl$Material_LayoutGrid$span4,
 																																_1: {ctor: '[]'}
 																															}
 																														},
-																														{ctor: '[]'}))),
-																											_1: {ctor: '[]'}
-																										}),
-																									_1: {
-																										ctor: '::',
-																										_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid and right alignment'),
-																										_1: {
-																											ctor: '::',
-																											_0: A2(
-																												_debois$elm_mdl$Material_LayoutGrid$view,
-																												{
-																													ctor: '::',
-																													_0: demoGrid,
+																														{
+																															ctor: '::',
+																															_0: _elm_lang$html$Html$text(''),
+																															_1: {ctor: '[]'}
+																														}),
 																													_1: {
 																														ctor: '::',
-																														_0: A2(_debois$elm_mdl$Material_Options$css, 'max-width', '1280px'),
+																														_0: A2(
+																															_debois$elm_mdl$Material_LayoutGrid$cell,
+																															{
+																																ctor: '::',
+																																_0: demoCell,
+																																_1: {
+																																	ctor: '::',
+																																	_0: _debois$elm_mdl$Material_LayoutGrid$span4,
+																																	_1: {ctor: '[]'}
+																																}
+																															},
+																															{
+																																ctor: '::',
+																																_0: _elm_lang$html$Html$text(''),
+																																_1: {ctor: '[]'}
+																															}),
 																														_1: {
 																															ctor: '::',
-																															_0: _debois$elm_mdl$Material_LayoutGrid$alignRight,
-																															_1: {ctor: '[]'}
-																														}
-																													}
-																												},
-																												{
-																													ctor: '::',
-																													_0: A2(
-																														_debois$elm_mdl$Material_LayoutGrid$inner,
-																														{ctor: '[]'},
-																														A2(
-																															_elm_lang$core$List$repeat,
-																															3,
-																															A2(
+																															_0: A2(
 																																_debois$elm_mdl$Material_LayoutGrid$cell,
 																																{
 																																	ctor: '::',
 																																	_0: demoCell,
 																																	_1: {
 																																		ctor: '::',
-																																		_0: _debois$elm_mdl$Material_LayoutGrid$span1,
+																																		_0: _debois$elm_mdl$Material_LayoutGrid$span4,
 																																		_1: {ctor: '[]'}
 																																	}
 																																},
-																																{ctor: '[]'}))),
+																																{
+																																	ctor: '::',
+																																	_0: _elm_lang$html$Html$text(''),
+																																	_1: {ctor: '[]'}
+																																}),
+																															_1: {ctor: '[]'}
+																														}
+																													}
+																												}),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {
+																										ctor: '::',
+																										_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid'),
+																										_1: {
+																											ctor: '::',
+																											_0: A2(
+																												_debois$elm_mdl$Material_LayoutGrid$view,
+																												{ctor: '[]'},
+																												{
+																													ctor: '::',
+																													_0: A2(
+																														_debois$elm_mdl$Material_LayoutGrid$inner,
+																														{ctor: '[]'},
+																														{
+																															ctor: '::',
+																															_0: A2(
+																																_debois$elm_mdl$Material_LayoutGrid$cell,
+																																{
+																																	ctor: '::',
+																																	_0: demoControls,
+																																	_1: {ctor: '[]'}
+																																},
+																																{
+																																	ctor: '::',
+																																	_0: A4(
+																																		control,
+																																		'Desktop Column Width:',
+																																		_debois$elm_mdl$Demo_LayoutGrid$SetDesktopColumnWidth,
+																																		function (_) {
+																																			return _.desktopColumnWidth;
+																																		},
+																																		columnWidths),
+																																	_1: {ctor: '[]'}
+																																}),
+																															_1: {
+																																ctor: '::',
+																																_0: A2(
+																																	_debois$elm_mdl$Material_LayoutGrid$cell,
+																																	{
+																																		ctor: '::',
+																																		_0: demoControls,
+																																		_1: {ctor: '[]'}
+																																	},
+																																	{
+																																		ctor: '::',
+																																		_0: A4(
+																																			control,
+																																			'Tablet Column Width:',
+																																			_debois$elm_mdl$Demo_LayoutGrid$SetTabletColumnWidth,
+																																			function (_) {
+																																				return _.tabletColumnWidth;
+																																			},
+																																			columnWidths),
+																																		_1: {ctor: '[]'}
+																																	}),
+																																_1: {
+																																	ctor: '::',
+																																	_0: A2(
+																																		_debois$elm_mdl$Material_LayoutGrid$cell,
+																																		{
+																																			ctor: '::',
+																																			_0: demoControls,
+																																			_1: {ctor: '[]'}
+																																		},
+																																		{
+																																			ctor: '::',
+																																			_0: A4(
+																																				control,
+																																				'Phone Column Width:',
+																																				_debois$elm_mdl$Demo_LayoutGrid$SetPhoneColumnWidth,
+																																				function (_) {
+																																					return _.phoneColumnWidth;
+																																				},
+																																				columnWidths),
+																																			_1: {ctor: '[]'}
+																																		}),
+																																	_1: {ctor: '[]'}
+																																}
+																															}
+																														}),
 																													_1: {ctor: '[]'}
 																												}),
 																											_1: {
 																												ctor: '::',
-																												_0: A3(
-																													_debois$elm_mdl$Material_Options$styled,
-																													_elm_lang$html$Html$div,
-																													{
+																												_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid and center alignment by default'),
+																												_1: {
+																													ctor: '::',
+																													_0: A2(
+																														_debois$elm_mdl$Material_LayoutGrid$view,
+																														{
+																															ctor: '::',
+																															_0: demoGrid,
+																															_1: {
+																																ctor: '::',
+																																_0: _debois$elm_mdl$Material_LayoutGrid$fixedColumnWidth,
+																																_1: {ctor: '[]'}
+																															}
+																														},
+																														{
+																															ctor: '::',
+																															_0: A2(
+																																_debois$elm_mdl$Material_LayoutGrid$inner,
+																																{ctor: '[]'},
+																																A2(
+																																	_elm_lang$core$List$repeat,
+																																	3,
+																																	A2(
+																																		_debois$elm_mdl$Material_LayoutGrid$cell,
+																																		{
+																																			ctor: '::',
+																																			_0: demoCell,
+																																			_1: {
+																																				ctor: '::',
+																																				_0: _debois$elm_mdl$Material_LayoutGrid$span1,
+																																				_1: {ctor: '[]'}
+																																			}
+																																		},
+																																		{ctor: '[]'}))),
+																															_1: {ctor: '[]'}
+																														}),
+																													_1: {
 																														ctor: '::',
-																														_0: demoRuler,
-																														_1: {ctor: '[]'}
-																													},
-																													{
-																														ctor: '::',
-																														_0: _elm_lang$html$Html$text('???px (?)'),
-																														_1: {ctor: '[]'}
-																													}),
-																												_1: {ctor: '[]'}
+																														_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid and right alignment'),
+																														_1: {
+																															ctor: '::',
+																															_0: A2(
+																																_debois$elm_mdl$Material_LayoutGrid$view,
+																																{
+																																	ctor: '::',
+																																	_0: demoGrid,
+																																	_1: {
+																																		ctor: '::',
+																																		_0: _debois$elm_mdl$Material_LayoutGrid$fixedColumnWidth,
+																																		_1: {
+																																			ctor: '::',
+																																			_0: _debois$elm_mdl$Material_LayoutGrid$alignRight,
+																																			_1: {ctor: '[]'}
+																																		}
+																																	}
+																																},
+																																{
+																																	ctor: '::',
+																																	_0: A2(
+																																		_debois$elm_mdl$Material_LayoutGrid$inner,
+																																		{ctor: '[]'},
+																																		A2(
+																																			_elm_lang$core$List$repeat,
+																																			3,
+																																			A2(
+																																				_debois$elm_mdl$Material_LayoutGrid$cell,
+																																				{
+																																					ctor: '::',
+																																					_0: demoCell,
+																																					_1: {
+																																						ctor: '::',
+																																						_0: _debois$elm_mdl$Material_LayoutGrid$span1,
+																																						_1: {ctor: '[]'}
+																																					}
+																																				},
+																																				{ctor: '[]'}))),
+																																	_1: {ctor: '[]'}
+																																}),
+																															_1: {
+																																ctor: '::',
+																																_0: A3(
+																																	_debois$elm_mdl$Material_Options$styled,
+																																	_elm_lang$html$Html$div,
+																																	{
+																																		ctor: '::',
+																																		_0: demoRuler,
+																																		_1: {ctor: '[]'}
+																																	},
+																																	{
+																																		ctor: '::',
+																																		_0: function () {
+																																			var device = A2(
+																																				_elm_lang$core$Maybe$withDefault,
+																																				'desktop',
+																																				A2(
+																																					_elm_lang$core$Maybe$map,
+																																					function (width) {
+																																						return (_elm_lang$core$Native_Utils.cmp(width, 840) > -1) ? 'desktop' : ((_elm_lang$core$Native_Utils.cmp(width, 480) > -1) ? 'tablet' : 'phone');
+																																					},
+																																					model.windowWidth));
+																																			return A2(
+																																				_elm_lang$html$Html$div,
+																																				{ctor: '[]'},
+																																				{
+																																					ctor: '::',
+																																					_0: _elm_lang$html$Html$text(
+																																						A2(
+																																							_elm_lang$core$Basics_ops['++'],
+																																							_elm_lang$core$Basics$toString(
+																																								A2(_elm_lang$core$Maybe$withDefault, 0, model.windowWidth)),
+																																							A2(
+																																								_elm_lang$core$Basics_ops['++'],
+																																								'px (',
+																																								A2(_elm_lang$core$Basics_ops['++'], device, ')')))),
+																																					_1: {ctor: '[]'}
+																																				});
+																																		}(),
+																																		_1: {ctor: '[]'}
+																																	}),
+																																_1: {ctor: '[]'}
+																															}
+																														}
+																													}
+																												}
 																											}
 																										}
 																									}
@@ -23702,14 +23672,13 @@ var _debois$elm_mdl$Demo_LayoutGrid$view = function (page) {
 											}
 										}
 									}
-								}
-							}
-						}
+								});
+						}(),
+						_1: {ctor: '[]'}
 					}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
+				}
+			});
+	});
 
 var _debois$elm_mdl$Material_LinearProgress$accent = _debois$elm_mdl$Material_Options$cs('mdc-linear-progress--accent');
 var _debois$elm_mdl$Material_LinearProgress$reversed = _debois$elm_mdl$Material_Internal_Options$option(
@@ -39453,7 +39422,7 @@ var _debois$elm_mdl$Main$delta2url = F2(
 				url: _debois$elm_mdl$Main$urlOf(model2)
 			}) : _elm_lang$core$Maybe$Nothing;
 	});
-var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_Radio$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel};
+var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_Radio$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel};
 var _debois$elm_mdl$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -39482,7 +39451,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 																				return function (u) {
 																					return function (v) {
 																						return function (w) {
-																							return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, menus: k, permanentAboveDrawer: l, permanentBelowDrawer: m, persistentDrawer: n, radio: o, ripple: p, selects: q, slider: r, snackbar: s, $switch: t, tabs: u, temporaryDrawer: v, textfields: w};
+																							return function (x) {
+																								return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, layoutGrid: k, menus: l, permanentAboveDrawer: m, permanentBelowDrawer: n, persistentDrawer: o, radio: p, ripple: q, selects: r, slider: s, snackbar: t, $switch: u, tabs: v, temporaryDrawer: w, textfields: x};
+																							};
 																						};
 																					};
 																				};
@@ -39505,6 +39476,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 			};
 		};
 	};
+};
+var _debois$elm_mdl$Main$LayoutGridMsg = function (a) {
+	return {ctor: 'LayoutGridMsg', _0: a};
 };
 var _debois$elm_mdl$Main$GridListMsg = function (a) {
 	return {ctor: 'GridListMsg', _0: a};
@@ -39586,11 +39560,15 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 						_0: _debois$elm_mdl$Material_Toolbar$fixedAdjust,
 						_1: {
 							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '100%'),
+							_0: _debois$elm_mdl$Material_Typography$typography,
 							_1: {
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '100%'),
-								_1: {ctor: '[]'}
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '100%'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '100%'),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					},
@@ -39663,7 +39641,7 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 		case 'GridList':
 			return A3(_debois$elm_mdl$Demo_GridList$view, _debois$elm_mdl$Main$GridListMsg, page, model.gridList);
 		case 'LayoutGrid':
-			return _debois$elm_mdl$Demo_LayoutGrid$view(page);
+			return A3(_debois$elm_mdl$Demo_LayoutGrid$view, _debois$elm_mdl$Main$LayoutGridMsg, page, model.layoutGrid);
 		case 'Ripple':
 			return A3(_debois$elm_mdl$Demo_Ripple$view, _debois$elm_mdl$Main$RippleMsg, page, model.ripple);
 		case 'Typography':
@@ -40009,7 +39987,7 @@ var _debois$elm_mdl$Main$update = F2(
 						{tabs: tabs}),
 					_1: effects
 				};
-			default:
+			case 'GridListMsg':
 				var _p24 = A3(_debois$elm_mdl$Demo_GridList$update, _debois$elm_mdl$Main$GridListMsg, _p3._0, model.gridList);
 				var gridList = _p24._0;
 				var effects = _p24._1;
@@ -40020,8 +39998,40 @@ var _debois$elm_mdl$Main$update = F2(
 						{gridList: gridList}),
 					_1: effects
 				};
+			default:
+				var _p25 = A3(_debois$elm_mdl$Demo_LayoutGrid$update, _debois$elm_mdl$Main$LayoutGridMsg, _p3._0, model.layoutGrid);
+				var layoutGrid = _p25._0;
+				var effects = _p25._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{layoutGrid: layoutGrid}),
+					_1: effects
+				};
 		}
 	});
+var _debois$elm_mdl$Main$init = function () {
+	var _p26 = _debois$elm_mdl$Demo_LayoutGrid$init(_debois$elm_mdl$Main$LayoutGridMsg);
+	var layoutGrid = _p26._0;
+	var layoutGridEffects = _p26._1;
+	return {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Native_Utils.update(
+			_debois$elm_mdl$Main$defaultModel,
+			{layoutGrid: layoutGrid}),
+		_1: _elm_lang$core$Platform_Cmd$batch(
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material$init(_debois$elm_mdl$Main$Mdl),
+				_1: {
+					ctor: '::',
+					_0: layoutGridEffects,
+					_1: {ctor: '[]'}
+				}
+			})
+	};
+}();
 var _debois$elm_mdl$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
@@ -40048,7 +40058,11 @@ var _debois$elm_mdl$Main$subscriptions = function (model) {
 									_1: {
 										ctor: '::',
 										_0: A2(_debois$elm_mdl$Demo_Slider$subscriptions, _debois$elm_mdl$Main$SliderMsg, model.slider),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Demo_LayoutGrid$subscriptions, _debois$elm_mdl$Main$LayoutGridMsg, model.layoutGrid),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}
@@ -40059,18 +40073,7 @@ var _debois$elm_mdl$Main$subscriptions = function (model) {
 		});
 };
 var _debois$elm_mdl$Main$main = _rgrempel$elm_route_url$RouteUrl$program(
-	{
-		delta2url: _debois$elm_mdl$Main$delta2url,
-		location2messages: _debois$elm_mdl$Main$location2messages,
-		init: {
-			ctor: '_Tuple2',
-			_0: _debois$elm_mdl$Main$defaultModel,
-			_1: _debois$elm_mdl$Material$init(_debois$elm_mdl$Main$Mdl)
-		},
-		view: _debois$elm_mdl$Main$view,
-		subscriptions: _debois$elm_mdl$Main$subscriptions,
-		update: _debois$elm_mdl$Main$update
-	})();
+	{delta2url: _debois$elm_mdl$Main$delta2url, location2messages: _debois$elm_mdl$Main$location2messages, init: _debois$elm_mdl$Main$init, view: _debois$elm_mdl$Main$view, subscriptions: _debois$elm_mdl$Main$subscriptions, update: _debois$elm_mdl$Main$update})();
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
