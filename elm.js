@@ -9016,9 +9016,12 @@ var _debois$elm_mdl$Material_Internal_Drawer$Click = {ctor: 'Click'};
 var _debois$elm_mdl$Material_Internal_Drawer$Tick = {ctor: 'Tick'};
 var _debois$elm_mdl$Material_Internal_Drawer$NoOp = {ctor: 'NoOp'};
 
-var _debois$elm_mdl$Material_Internal_Radio$NoOp = {ctor: 'NoOp'};
-var _debois$elm_mdl$Material_Internal_Radio$SetFocus = function (a) {
+var _debois$elm_mdl$Material_Internal_RadioButton$NoOp = {ctor: 'NoOp'};
+var _debois$elm_mdl$Material_Internal_RadioButton$SetFocus = function (a) {
 	return {ctor: 'SetFocus', _0: a};
+};
+var _debois$elm_mdl$Material_Internal_RadioButton$RippleMsg = function (a) {
+	return {ctor: 'RippleMsg', _0: a};
 };
 
 var _debois$elm_mdl$Material_Internal_IconToggle$RippleMsg = function (a) {
@@ -9764,9 +9767,9 @@ var _debois$elm_mdl$Material_Msg$RippleMsg = F2(
 	function (a, b) {
 		return {ctor: 'RippleMsg', _0: a, _1: b};
 	});
-var _debois$elm_mdl$Material_Msg$RadioMsg = F2(
+var _debois$elm_mdl$Material_Msg$RadioButtonMsg = F2(
 	function (a, b) {
-		return {ctor: 'RadioMsg', _0: a, _1: b};
+		return {ctor: 'RadioButtonMsg', _0: a, _1: b};
 	});
 var _debois$elm_mdl$Material_Msg$MenuMsg = F2(
 	function (a, b) {
@@ -13263,17 +13266,17 @@ var _debois$elm_mdl$Material_Menu$view = F4(
 	});
 var _debois$elm_mdl$Material_Menu$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Menu$get, _debois$elm_mdl$Material_Menu$view, _debois$elm_mdl$Material_Msg$MenuMsg);
 
-var _debois$elm_mdl$Material_Radio$name = function (value) {
+var _debois$elm_mdl$Material_RadioButton$name = function (value) {
 	return _debois$elm_mdl$Material_Internal_Options$attribute(
 		_elm_lang$html$Html_Attributes$name(value));
 };
-var _debois$elm_mdl$Material_Radio$selected = _debois$elm_mdl$Material_Internal_Options$option(
+var _debois$elm_mdl$Material_RadioButton$selected = _debois$elm_mdl$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{value: true});
 	});
-var _debois$elm_mdl$Material_Radio$disabled = _debois$elm_mdl$Material_Options$many(
+var _debois$elm_mdl$Material_RadioButton$disabled = _debois$elm_mdl$Material_Options$many(
 	{
 		ctor: '::',
 		_0: _debois$elm_mdl$Material_Options$cs('mdc-radio--disabled'),
@@ -13289,16 +13292,28 @@ var _debois$elm_mdl$Material_Radio$disabled = _debois$elm_mdl$Material_Options$m
 			_1: {ctor: '[]'}
 		}
 	});
-var _debois$elm_mdl$Material_Radio$defaultConfig = {
+var _debois$elm_mdl$Material_RadioButton$defaultConfig = {
 	input: {ctor: '[]'},
 	container: {ctor: '[]'},
 	value: false
 };
-var _debois$elm_mdl$Material_Radio$view = F4(
+var _debois$elm_mdl$Material_RadioButton$view = F4(
 	function (lift, model, options, _p0) {
-		var _p1 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Radio$defaultConfig, options);
-		var summary = _p1;
-		var config = _p1.config;
+		var _p1 = A5(
+			_debois$elm_mdl$Material_Ripple$view,
+			true,
+			function (_p2) {
+				return lift(
+					_debois$elm_mdl$Material_Internal_RadioButton$RippleMsg(_p2));
+			},
+			model.ripple,
+			{ctor: '[]'},
+			{ctor: '[]'});
+		var rippleOptions = _p1._0;
+		var rippleStyle = _p1._1;
+		var _p3 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_RadioButton$defaultConfig, options);
+		var summary = _p3;
+		var config = _p3.config;
 		return A4(
 			_debois$elm_mdl$Material_Internal_Options$applyContainer,
 			summary,
@@ -13310,7 +13325,11 @@ var _debois$elm_mdl$Material_Radio$view = F4(
 					ctor: '::',
 					_0: _debois$elm_mdl$Material_Internal_Options$attribute(
 						_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: rippleOptions,
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{
@@ -13336,14 +13355,14 @@ var _debois$elm_mdl$Material_Radio$view = F4(
 										_debois$elm_mdl$Material_Internal_Options$on1,
 										'focus',
 										lift,
-										_debois$elm_mdl$Material_Internal_Radio$SetFocus(true)),
+										_debois$elm_mdl$Material_Internal_RadioButton$SetFocus(true)),
 									_1: {
 										ctor: '::',
 										_0: A3(
 											_debois$elm_mdl$Material_Internal_Options$on1,
 											'blur',
 											lift,
-											_debois$elm_mdl$Material_Internal_Radio$SetFocus(false)),
+											_debois$elm_mdl$Material_Internal_RadioButton$SetFocus(false)),
 										_1: {
 											ctor: '::',
 											_0: A3(
@@ -13351,7 +13370,7 @@ var _debois$elm_mdl$Material_Radio$view = F4(
 												'click',
 												{preventDefault: true, stopPropagation: false},
 												_elm_lang$core$Json_Decode$succeed(
-													lift(_debois$elm_mdl$Material_Internal_Radio$NoOp))),
+													lift(_debois$elm_mdl$Material_Internal_RadioButton$NoOp))),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -13395,28 +13414,51 @@ var _debois$elm_mdl$Material_Radio$view = F4(
 								_1: {ctor: '[]'}
 							}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: rippleStyle,
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});
-var _debois$elm_mdl$Material_Radio$update = F3(
-	function (_p2, msg, model) {
-		var _p3 = msg;
-		if (_p3.ctor === 'SetFocus') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Maybe$Just(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{isFocused: _p3._0})),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+var _debois$elm_mdl$Material_RadioButton$update = F3(
+	function (lift, msg, model) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'RippleMsg':
+				var _p5 = A2(_debois$elm_mdl$Material_Ripple$update, _p4._0, model.ripple);
+				var ripple = _p5._0;
+				var effects = _p5._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{ripple: ripple})),
+					_1: A2(
+						_elm_lang$core$Platform_Cmd$map,
+						function (_p6) {
+							return lift(
+								_debois$elm_mdl$Material_Internal_RadioButton$RippleMsg(_p6));
+						},
+						effects)
+				};
+			case 'SetFocus':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{isFocused: _p4._0})),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
-var _debois$elm_mdl$Material_Radio$defaultModel = {isFocused: false};
-var _debois$elm_mdl$Material_Radio$_p4 = A3(
+var _debois$elm_mdl$Material_RadioButton$defaultModel = {ripple: _debois$elm_mdl$Material_Ripple$defaultModel, isFocused: false};
+var _debois$elm_mdl$Material_RadioButton$_p7 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
 		return _.radio;
@@ -13427,17 +13469,17 @@ var _debois$elm_mdl$Material_Radio$_p4 = A3(
 				y,
 				{radio: x});
 		}),
-	_debois$elm_mdl$Material_Radio$defaultModel);
-var _debois$elm_mdl$Material_Radio$get = _debois$elm_mdl$Material_Radio$_p4._0;
-var _debois$elm_mdl$Material_Radio$set = _debois$elm_mdl$Material_Radio$_p4._1;
-var _debois$elm_mdl$Material_Radio$react = A4(_debois$elm_mdl$Material_Component$react, _debois$elm_mdl$Material_Radio$get, _debois$elm_mdl$Material_Radio$set, _debois$elm_mdl$Material_Msg$RadioMsg, _debois$elm_mdl$Material_Radio$update);
-var _debois$elm_mdl$Material_Radio$render = F4(
+	_debois$elm_mdl$Material_RadioButton$defaultModel);
+var _debois$elm_mdl$Material_RadioButton$get = _debois$elm_mdl$Material_RadioButton$_p7._0;
+var _debois$elm_mdl$Material_RadioButton$set = _debois$elm_mdl$Material_RadioButton$_p7._1;
+var _debois$elm_mdl$Material_RadioButton$react = A4(_debois$elm_mdl$Material_Component$react, _debois$elm_mdl$Material_RadioButton$get, _debois$elm_mdl$Material_RadioButton$set, _debois$elm_mdl$Material_Msg$RadioButtonMsg, _debois$elm_mdl$Material_RadioButton$update);
+var _debois$elm_mdl$Material_RadioButton$render = F4(
 	function (lift, index, store, options) {
 		return A7(
 			_debois$elm_mdl$Material_Component$render,
-			_debois$elm_mdl$Material_Radio$get,
-			_debois$elm_mdl$Material_Radio$view,
-			_debois$elm_mdl$Material_Msg$RadioMsg,
+			_debois$elm_mdl$Material_RadioButton$get,
+			_debois$elm_mdl$Material_RadioButton$view,
+			_debois$elm_mdl$Material_Msg$RadioButtonMsg,
 			lift,
 			index,
 			store,
@@ -13447,10 +13489,11 @@ var _debois$elm_mdl$Material_Radio$render = F4(
 				_1: options
 			});
 	});
-var _debois$elm_mdl$Material_Radio$Model = function (a) {
-	return {isFocused: a};
-};
-var _debois$elm_mdl$Material_Radio$Config = F3(
+var _debois$elm_mdl$Material_RadioButton$Model = F2(
+	function (a, b) {
+		return {ripple: a, isFocused: b};
+	});
+var _debois$elm_mdl$Material_RadioButton$Config = F3(
 	function (a, b, c) {
 		return {input: a, container: b, value: c};
 	});
@@ -16876,8 +16919,8 @@ var _debois$elm_mdl$Material$update_ = F3(
 		switch (_p0.ctor) {
 			case 'ButtonMsg':
 				return A4(_debois$elm_mdl$Material_Button$react, lift, _p0._1, _p0._0, store);
-			case 'RadioMsg':
-				return A4(_debois$elm_mdl$Material_Radio$react, lift, _p0._1, _p0._0, store);
+			case 'RadioButtonMsg':
+				return A4(_debois$elm_mdl$Material_RadioButton$react, lift, _p0._1, _p0._0, store);
 			case 'DrawerMsg':
 				return A4(_debois$elm_mdl$Material_Drawer$react, lift, _p0._1, _p0._0, store);
 			case 'IconToggleMsg':
@@ -28219,19 +28262,23 @@ var _debois$elm_mdl$Demo_PersistentDrawer$subscriptions = F2(
 			model.mdl);
 	});
 
-var _debois$elm_mdl$Demo_Radio$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, radios: _elm_lang$core$Dict$empty};
-var _debois$elm_mdl$Demo_Radio$Model = F2(
+var _debois$elm_mdl$Demo_RadioButtons$defaultModel = {
+	mdl: _debois$elm_mdl$Material$defaultModel,
+	radios: _elm_lang$core$Dict$fromList(
+		{ctor: '[]'})
+};
+var _debois$elm_mdl$Demo_RadioButtons$Model = F2(
 	function (a, b) {
 		return {mdl: a, radios: b};
 	});
-var _debois$elm_mdl$Demo_Radio$Set = F2(
+var _debois$elm_mdl$Demo_RadioButtons$Set = F2(
 	function (a, b) {
 		return {ctor: 'Set', _0: a, _1: b};
 	});
-var _debois$elm_mdl$Demo_Radio$Mdl = function (a) {
+var _debois$elm_mdl$Demo_RadioButtons$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
-var _debois$elm_mdl$Demo_Radio$update = F3(
+var _debois$elm_mdl$Demo_RadioButtons$update = F3(
 	function (lift, msg, model) {
 		var _p0 = msg;
 		if (_p0.ctor === 'Mdl') {
@@ -28239,7 +28286,7 @@ var _debois$elm_mdl$Demo_Radio$update = F3(
 				_debois$elm_mdl$Material$update,
 				function (_p1) {
 					return lift(
-						_debois$elm_mdl$Demo_Radio$Mdl(_p1));
+						_debois$elm_mdl$Demo_RadioButtons$Mdl(_p1));
 				},
 				_p0._0,
 				model);
@@ -28259,7 +28306,7 @@ var _debois$elm_mdl$Demo_Radio$update = F3(
 				{ctor: '[]'});
 		}
 	});
-var _debois$elm_mdl$Demo_Radio$view = F3(
+var _debois$elm_mdl$Demo_RadioButtons$view = F3(
 	function (lift, page, model) {
 		var example = function (options) {
 			return A2(
@@ -28289,7 +28336,7 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 			{
 				ctor: '::',
 				_0: function () {
-					var group = 'ex0';
+					var group = 'hero';
 					var isSelected = F2(
 						function (isDef, name) {
 							return A2(
@@ -28304,95 +28351,25 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 									A2(_elm_lang$core$Dict$get, group, model.radios)));
 						});
 					return A2(
-						example,
+						_debois$elm_mdl$Demo_Page$hero,
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$h2,
+							_0: A2(
+								example,
+								{ctor: '[]'},
 								{
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
-									_1: {
-										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Radio'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: function () {
-									var name = 'Radio 1';
-									var idx = {
-										ctor: '::',
-										_0: 0,
-										_1: {ctor: '[]'}
-									};
-									return A3(
-										_debois$elm_mdl$Material_Options$styled,
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: A5(
-												_debois$elm_mdl$Material_Radio$render,
-												function (_p3) {
-													return lift(
-														_debois$elm_mdl$Demo_Radio$Mdl(_p3));
-												},
-												idx,
-												model.mdl,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$onClick(
-														lift(
-															A2(_debois$elm_mdl$Demo_Radio$Set, group, name))),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_debois$elm_mdl$Material_Options$when,
-															A2(isSelected, true, name),
-															_debois$elm_mdl$Material_Radio$selected),
-														_1: {
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Radio$name(group),
-															_1: {ctor: '[]'}
-														}
-													}
-												},
-												{ctor: '[]'}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$label,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text(name),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}
-										});
-								}(),
-								_1: {
 									ctor: '::',
 									_0: function () {
-										var name = 'Radio 2';
+										var name = 'Radio 1';
 										var idx = {
 											ctor: '::',
 											_0: 0,
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: 0,
+												_1: {ctor: '[]'}
+											}
 										};
 										return A3(
 											_debois$elm_mdl$Material_Options$styled,
@@ -28405,10 +28382,10 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_debois$elm_mdl$Material_Radio$render,
-													function (_p4) {
+													_debois$elm_mdl$Material_RadioButton$render,
+													function (_p3) {
 														return lift(
-															_debois$elm_mdl$Demo_Radio$Mdl(_p4));
+															_debois$elm_mdl$Demo_RadioButtons$Mdl(_p3));
 													},
 													idx,
 													model.mdl,
@@ -28416,44 +28393,87 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 														ctor: '::',
 														_0: _debois$elm_mdl$Material_Options$onClick(
 															lift(
-																A2(_debois$elm_mdl$Demo_Radio$Set, group, name))),
+																A2(_debois$elm_mdl$Demo_RadioButtons$Set, group, name))),
 														_1: {
 															ctor: '::',
 															_0: A2(
 																_debois$elm_mdl$Material_Options$when,
-																A2(isSelected, false, name),
-																_debois$elm_mdl$Material_Radio$selected),
+																A2(isSelected, true, name),
+																_debois$elm_mdl$Material_RadioButton$selected),
 															_1: {
 																ctor: '::',
-																_0: _debois$elm_mdl$Material_Radio$name(group),
+																_0: _debois$elm_mdl$Material_RadioButton$name(group),
 																_1: {ctor: '[]'}
 															}
 														}
 													},
 													{ctor: '[]'}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$label,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(name),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}
+												_1: {ctor: '[]'}
 											});
 									}(),
-									_1: {ctor: '[]'}
-								}
-							}
+									_1: {
+										ctor: '::',
+										_0: function () {
+											var name = 'Radio 2';
+											var idx = {
+												ctor: '::',
+												_0: 0,
+												_1: {
+													ctor: '::',
+													_0: 1,
+													_1: {ctor: '[]'}
+												}
+											};
+											return A3(
+												_debois$elm_mdl$Material_Options$styled,
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A5(
+														_debois$elm_mdl$Material_RadioButton$render,
+														function (_p4) {
+															return lift(
+																_debois$elm_mdl$Demo_RadioButtons$Mdl(_p4));
+														},
+														idx,
+														model.mdl,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$onClick(
+																lift(
+																	A2(_debois$elm_mdl$Demo_RadioButtons$Set, group, name))),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_debois$elm_mdl$Material_Options$when,
+																	A2(isSelected, false, name),
+																	_debois$elm_mdl$Material_RadioButton$selected),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_RadioButton$name(group),
+																	_1: {ctor: '[]'}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												});
+										}(),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
 						});
 				}(),
 				_1: {
 					ctor: '::',
 					_0: function () {
-						var group = 'ex1';
+						var group = 'ex0';
 						var isSelected = F2(
 							function (isDef, name) {
 								return A2(
@@ -28469,15 +28489,7 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 							});
 						return A2(
 							example,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Theme$dark,
-								_1: {
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
-									_1: {ctor: '[]'}
-								}
-							},
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: A3(
@@ -28489,16 +28501,12 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 										_1: {
 											ctor: '::',
 											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
-											_1: {
-												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$css, 'color', '#fff'),
-												_1: {ctor: '[]'}
-											}
+											_1: {ctor: '[]'}
 										}
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Dark Theme'),
+										_0: _elm_lang$html$Html$text('Radio'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
@@ -28507,8 +28515,12 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 										var name = 'Radio 1';
 										var idx = {
 											ctor: '::',
-											_0: 2,
-											_1: {ctor: '[]'}
+											_0: 1,
+											_1: {
+												ctor: '::',
+												_0: 0,
+												_1: {ctor: '[]'}
+											}
 										};
 										return A3(
 											_debois$elm_mdl$Material_Options$styled,
@@ -28521,10 +28533,10 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_debois$elm_mdl$Material_Radio$render,
+													_debois$elm_mdl$Material_RadioButton$render,
 													function (_p5) {
 														return lift(
-															_debois$elm_mdl$Demo_Radio$Mdl(_p5));
+															_debois$elm_mdl$Demo_RadioButtons$Mdl(_p5));
 													},
 													idx,
 													model.mdl,
@@ -28532,16 +28544,16 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 														ctor: '::',
 														_0: _debois$elm_mdl$Material_Options$onClick(
 															lift(
-																A2(_debois$elm_mdl$Demo_Radio$Set, group, name))),
+																A2(_debois$elm_mdl$Demo_RadioButtons$Set, group, name))),
 														_1: {
 															ctor: '::',
 															_0: A2(
 																_debois$elm_mdl$Material_Options$when,
 																A2(isSelected, true, name),
-																_debois$elm_mdl$Material_Radio$selected),
+																_debois$elm_mdl$Material_RadioButton$selected),
 															_1: {
 																ctor: '::',
-																_0: _debois$elm_mdl$Material_Radio$name(group),
+																_0: _debois$elm_mdl$Material_RadioButton$name(group),
 																_1: {ctor: '[]'}
 															}
 														}
@@ -28567,8 +28579,12 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 											var name = 'Radio 2';
 											var idx = {
 												ctor: '::',
-												_0: 3,
-												_1: {ctor: '[]'}
+												_0: 1,
+												_1: {
+													ctor: '::',
+													_0: 1,
+													_1: {ctor: '[]'}
+												}
 											};
 											return A3(
 												_debois$elm_mdl$Material_Options$styled,
@@ -28581,10 +28597,10 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 												{
 													ctor: '::',
 													_0: A5(
-														_debois$elm_mdl$Material_Radio$render,
+														_debois$elm_mdl$Material_RadioButton$render,
 														function (_p6) {
 															return lift(
-																_debois$elm_mdl$Demo_Radio$Mdl(_p6));
+																_debois$elm_mdl$Demo_RadioButtons$Mdl(_p6));
 														},
 														idx,
 														model.mdl,
@@ -28592,16 +28608,16 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 															ctor: '::',
 															_0: _debois$elm_mdl$Material_Options$onClick(
 																lift(
-																	A2(_debois$elm_mdl$Demo_Radio$Set, group, name))),
+																	A2(_debois$elm_mdl$Demo_RadioButtons$Set, group, name))),
 															_1: {
 																ctor: '::',
 																_0: A2(
 																	_debois$elm_mdl$Material_Options$when,
 																	A2(isSelected, false, name),
-																	_debois$elm_mdl$Material_Radio$selected),
+																	_debois$elm_mdl$Material_RadioButton$selected),
 																_1: {
 																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Radio$name(group),
+																	_0: _debois$elm_mdl$Material_RadioButton$name(group),
 																	_1: {ctor: '[]'}
 																}
 															}
@@ -28628,41 +28644,131 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 					}(),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							example,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: A3(
-									_debois$elm_mdl$Material_Options$styled,
-									_elm_lang$html$Html$h2,
-									{
-										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
-										_1: {
-											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
-											_1: {ctor: '[]'}
-										}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Disabled'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
+						_0: function () {
+							var group = 'ex1';
+							var isSelected = F2(
+								function (isDef, name) {
+									return A2(
+										_elm_lang$core$Maybe$withDefault,
+										isDef,
+										A2(
+											_elm_lang$core$Maybe$map,
+											F2(
+												function (x, y) {
+													return _elm_lang$core$Native_Utils.eq(x, y);
+												})(name),
+											A2(_elm_lang$core$Dict$get, group, model.radios)));
+								});
+							return A2(
+								example,
+								{
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$div,
-										{ctor: '[]'},
+									_0: _debois$elm_mdl$Material_Theme$dark,
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$h2,
 										{
 											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'color', '#fff'),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Dark Theme'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: function () {
+											var name = 'Radio 1';
+											var idx = {
+												ctor: '::',
+												_0: 2,
+												_1: {
+													ctor: '::',
+													_0: 0,
+													_1: {ctor: '[]'}
+												}
+											};
+											return A3(
+												_debois$elm_mdl$Material_Options$styled,
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A5(
+														_debois$elm_mdl$Material_RadioButton$render,
+														function (_p7) {
+															return lift(
+																_debois$elm_mdl$Demo_RadioButtons$Mdl(_p7));
+														},
+														idx,
+														model.mdl,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$onClick(
+																lift(
+																	A2(_debois$elm_mdl$Demo_RadioButtons$Set, group, name))),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_debois$elm_mdl$Material_Options$when,
+																	A2(isSelected, true, name),
+																	_debois$elm_mdl$Material_RadioButton$selected),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_RadioButton$name(group),
+																	_1: {ctor: '[]'}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$label,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text(name),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												});
+										}(),
+										_1: {
+											ctor: '::',
 											_0: function () {
-												var name = 'Radio 1';
+												var name = 'Radio 2';
 												var idx = {
 													ctor: '::',
-													_0: 4,
-													_1: {ctor: '[]'}
+													_0: 2,
+													_1: {
+														ctor: '::',
+														_0: 1,
+														_1: {ctor: '[]'}
+													}
 												};
 												return A3(
 													_debois$elm_mdl$Material_Options$styled,
@@ -28675,20 +28781,29 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 													{
 														ctor: '::',
 														_0: A5(
-															_debois$elm_mdl$Material_Radio$render,
-															function (_p7) {
+															_debois$elm_mdl$Material_RadioButton$render,
+															function (_p8) {
 																return lift(
-																	_debois$elm_mdl$Demo_Radio$Mdl(_p7));
+																	_debois$elm_mdl$Demo_RadioButtons$Mdl(_p8));
 															},
 															idx,
 															model.mdl,
 															{
 																ctor: '::',
-																_0: _debois$elm_mdl$Material_Radio$selected,
+																_0: _debois$elm_mdl$Material_Options$onClick(
+																	lift(
+																		A2(_debois$elm_mdl$Demo_RadioButtons$Set, group, name))),
 																_1: {
 																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Radio$disabled,
-																	_1: {ctor: '[]'}
+																	_0: A2(
+																		_debois$elm_mdl$Material_Options$when,
+																		A2(isSelected, false, name),
+																		_debois$elm_mdl$Material_RadioButton$selected),
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_RadioButton$name(group),
+																		_1: {ctor: '[]'}
+																	}
 																}
 															},
 															{ctor: '[]'}),
@@ -28699,85 +28814,59 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 																{ctor: '[]'},
 																{
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Disabled Radio 2'),
+																	_0: _elm_lang$html$Html$text(name),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {ctor: '[]'}
 														}
 													});
 											}(),
+											_1: {ctor: '[]'}
+										}
+									}
+								});
+						}(),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								example,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$h2,
+										{
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '0'),
 											_1: {
 												ctor: '::',
-												_0: function () {
-													var name = 'Radio 2';
-													var idx = {
-														ctor: '::',
-														_0: 5,
-														_1: {ctor: '[]'}
-													};
-													return A3(
-														_debois$elm_mdl$Material_Options$styled,
-														_elm_lang$html$Html$div,
-														{
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: A5(
-																_debois$elm_mdl$Material_Radio$render,
-																function (_p8) {
-																	return lift(
-																		_debois$elm_mdl$Demo_Radio$Mdl(_p8));
-																},
-																idx,
-																model.mdl,
-																{
-																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Radio$disabled,
-																	_1: {ctor: '[]'}
-																},
-																{ctor: '[]'}),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$label,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Disabled Radio 2'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
-															}
-														});
-												}(),
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-top', '0'),
 												_1: {ctor: '[]'}
 											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Disabled'),
+											_1: {ctor: '[]'}
 										}),
 									_1: {
 										ctor: '::',
-										_0: A3(
-											_debois$elm_mdl$Material_Options$styled,
+										_0: A2(
 											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Theme$dark,
-												_1: {
-													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
-													_1: {ctor: '[]'}
-												}
-											},
+											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: function () {
 													var name = 'Radio 1';
 													var idx = {
 														ctor: '::',
-														_0: 5,
-														_1: {ctor: '[]'}
+														_0: 3,
+														_1: {
+															ctor: '::',
+															_0: 0,
+															_1: {ctor: '[]'}
+														}
 													};
 													return A3(
 														_debois$elm_mdl$Material_Options$styled,
@@ -28790,19 +28879,19 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 														{
 															ctor: '::',
 															_0: A5(
-																_debois$elm_mdl$Material_Radio$render,
+																_debois$elm_mdl$Material_RadioButton$render,
 																function (_p9) {
 																	return lift(
-																		_debois$elm_mdl$Demo_Radio$Mdl(_p9));
+																		_debois$elm_mdl$Demo_RadioButtons$Mdl(_p9));
 																},
 																idx,
 																model.mdl,
 																{
 																	ctor: '::',
-																	_0: _debois$elm_mdl$Material_Radio$selected,
+																	_0: _debois$elm_mdl$Material_RadioButton$selected,
 																	_1: {
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Radio$disabled,
+																		_0: _debois$elm_mdl$Material_RadioButton$disabled,
 																		_1: {ctor: '[]'}
 																	}
 																},
@@ -28814,7 +28903,7 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 																	{ctor: '[]'},
 																	{
 																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Disabled Radio 2'),
+																		_0: _elm_lang$html$Html$text('Disabled Radio 1'),
 																		_1: {ctor: '[]'}
 																	}),
 																_1: {ctor: '[]'}
@@ -28827,8 +28916,12 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 														var name = 'Radio 2';
 														var idx = {
 															ctor: '::',
-															_0: 6,
-															_1: {ctor: '[]'}
+															_0: 3,
+															_1: {
+																ctor: '::',
+																_0: 1,
+																_1: {ctor: '[]'}
+															}
 														};
 														return A3(
 															_debois$elm_mdl$Material_Options$styled,
@@ -28841,16 +28934,16 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 															{
 																ctor: '::',
 																_0: A5(
-																	_debois$elm_mdl$Material_Radio$render,
+																	_debois$elm_mdl$Material_RadioButton$render,
 																	function (_p10) {
 																		return lift(
-																			_debois$elm_mdl$Demo_Radio$Mdl(_p10));
+																			_debois$elm_mdl$Demo_RadioButtons$Mdl(_p10));
 																	},
 																	idx,
 																	model.mdl,
 																	{
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Radio$disabled,
+																		_0: _debois$elm_mdl$Material_RadioButton$disabled,
 																		_1: {ctor: '[]'}
 																	},
 																	{ctor: '[]'}),
@@ -28871,11 +28964,135 @@ var _debois$elm_mdl$Demo_Radio$view = F3(
 													_1: {ctor: '[]'}
 												}
 											}),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A3(
+												_debois$elm_mdl$Material_Options$styled,
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Theme$dark,
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#333'),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: function () {
+														var name = 'Radio 1';
+														var idx = {
+															ctor: '::',
+															_0: 4,
+															_1: {
+																ctor: '::',
+																_0: 0,
+																_1: {ctor: '[]'}
+															}
+														};
+														return A3(
+															_debois$elm_mdl$Material_Options$styled,
+															_elm_lang$html$Html$div,
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: A5(
+																	_debois$elm_mdl$Material_RadioButton$render,
+																	function (_p11) {
+																		return lift(
+																			_debois$elm_mdl$Demo_RadioButtons$Mdl(_p11));
+																	},
+																	idx,
+																	model.mdl,
+																	{
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_RadioButton$selected,
+																		_1: {
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_RadioButton$disabled,
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{ctor: '[]'}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$label,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Disabled Radio 1'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															});
+													}(),
+													_1: {
+														ctor: '::',
+														_0: function () {
+															var name = 'Radio 2';
+															var idx = {
+																ctor: '::',
+																_0: 4,
+																_1: {
+																	ctor: '::',
+																	_0: 1,
+																	_1: {ctor: '[]'}
+																}
+															};
+															return A3(
+																_debois$elm_mdl$Material_Options$styled,
+																_elm_lang$html$Html$div,
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$cs('mdc-form-field'),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: A5(
+																		_debois$elm_mdl$Material_RadioButton$render,
+																		function (_p12) {
+																			return lift(
+																				_debois$elm_mdl$Demo_RadioButtons$Mdl(_p12));
+																		},
+																		idx,
+																		model.mdl,
+																		{
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_RadioButton$disabled,
+																			_1: {ctor: '[]'}
+																		},
+																		{ctor: '[]'}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$label,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text('Disabled Radio 2'),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
+																});
+														}(),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}
 									}
-								}
-							}),
-						_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			});
@@ -39608,7 +39825,7 @@ var _debois$elm_mdl$Main$delta2url = F2(
 				url: _debois$elm_mdl$Main$urlOf(model2)
 			}) : _elm_lang$core$Maybe$Nothing;
 	});
-var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_Radio$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel, lists: _debois$elm_mdl$Demo_Lists$defaultModel};
+var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_RadioButtons$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel, lists: _debois$elm_mdl$Demo_Lists$defaultModel};
 var _debois$elm_mdl$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -39698,8 +39915,8 @@ var _debois$elm_mdl$Main$SelectMsg = function (a) {
 var _debois$elm_mdl$Main$RippleMsg = function (a) {
 	return {ctor: 'RippleMsg', _0: a};
 };
-var _debois$elm_mdl$Main$RadioMsg = function (a) {
-	return {ctor: 'RadioMsg', _0: a};
+var _debois$elm_mdl$Main$RadioButtonsMsg = function (a) {
+	return {ctor: 'RadioButtonsMsg', _0: a};
 };
 var _debois$elm_mdl$Main$PersistentDrawerMsg = function (a) {
 	return {ctor: 'PersistentDrawerMsg', _0: a};
@@ -39810,7 +40027,7 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 		case 'List':
 			return A3(_debois$elm_mdl$Demo_Lists$view, _debois$elm_mdl$Main$ListsMsg, page, model.lists);
 		case 'RadioButton':
-			return A3(_debois$elm_mdl$Demo_Radio$view, _debois$elm_mdl$Main$RadioMsg, page, model.radio);
+			return A3(_debois$elm_mdl$Demo_RadioButtons$view, _debois$elm_mdl$Main$RadioButtonsMsg, page, model.radio);
 		case 'Select':
 			return A3(_debois$elm_mdl$Demo_Selects$view, _debois$elm_mdl$Main$SelectMsg, page, model.selects);
 		case 'SimpleMenu':
@@ -40090,8 +40307,8 @@ var _debois$elm_mdl$Main$update = F2(
 						{menus: menus}),
 					_1: effects
 				};
-			case 'RadioMsg':
-				var _p16 = A3(_debois$elm_mdl$Demo_Radio$update, _debois$elm_mdl$Main$RadioMsg, _p3._0, model.radio);
+			case 'RadioButtonsMsg':
+				var _p16 = A3(_debois$elm_mdl$Demo_RadioButtons$update, _debois$elm_mdl$Main$RadioButtonsMsg, _p3._0, model.radio);
 				var radio = _p16._0;
 				var effects = _p16._1;
 				return {
