@@ -9684,13 +9684,15 @@ var _debois$elm_mdl$Material_Internal_Tabs$Geometry = F2(
 	function (a, b) {
 		return {tabs: a, scrollFrame: b};
 	});
+var _debois$elm_mdl$Material_Internal_Tabs$AnimationFrame = {ctor: 'AnimationFrame'};
+var _debois$elm_mdl$Material_Internal_Tabs$Resize = {ctor: 'Resize'};
+var _debois$elm_mdl$Material_Internal_Tabs$Init = function (a) {
+	return {ctor: 'Init', _0: a};
+};
 var _debois$elm_mdl$Material_Internal_Tabs$RippleMsg = F2(
 	function (a, b) {
 		return {ctor: 'RippleMsg', _0: a, _1: b};
 	});
-var _debois$elm_mdl$Material_Internal_Tabs$Init = function (a) {
-	return {ctor: 'Init', _0: a};
-};
 var _debois$elm_mdl$Material_Internal_Tabs$ScrollBackward = function (a) {
 	return {ctor: 'ScrollBackward', _0: a};
 };
@@ -15824,25 +15826,27 @@ var _debois$elm_mdl$Material_Switch$Config = F3(
 		return {input: a, container: b, value: c};
 	});
 
-var _debois$elm_mdl$Material_Tabs$catMaybes = A2(
-	_elm_lang$core$List$foldr,
-	F2(
-		function (maybe, accum) {
-			return A2(
-				_elm_lang$core$Maybe$withDefault,
-				accum,
-				A2(
-					_elm_lang$core$Maybe$map,
-					A2(
-						_elm_lang$core$Basics$flip,
-						F2(
-							function (x, y) {
-								return {ctor: '::', _0: x, _1: y};
-							}),
-						accum),
-					maybe));
-		}),
-	{ctor: '[]'});
+var _debois$elm_mdl$Material_Tabs$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$window$Window$resizes(
+				_elm_lang$core$Basics$always(_debois$elm_mdl$Material_Internal_Tabs$Resize)),
+			_1: {
+				ctor: '::',
+				_0: model.requestAnimation ? _elm_lang$animation_frame$AnimationFrame$times(
+					_elm_lang$core$Basics$always(_debois$elm_mdl$Material_Internal_Tabs$AnimationFrame)) : _elm_lang$core$Platform_Sub$none,
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _debois$elm_mdl$Material_Tabs$subs = A3(
+	_debois$elm_mdl$Material_Component$subs,
+	_debois$elm_mdl$Material_Msg$TabsMsg,
+	function (_) {
+		return _.tabs;
+	},
+	_debois$elm_mdl$Material_Tabs$subscriptions);
 var _debois$elm_mdl$Material_Tabs$decodeGeometry = function (hasIndicator) {
 	return A3(
 		_elm_lang$core$Json_Decode$map2,
@@ -16254,19 +16258,23 @@ var _debois$elm_mdl$Material_Tabs$view = F4(
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_debois$elm_mdl$Material_Options$when,
-									!model.initialized,
+									_debois$elm_mdl$Material_Options$on,
+									'elm-mdc-init',
 									A2(
-										_debois$elm_mdl$Material_Options$on,
-										'elm-mdc-init',
-										A2(
-											_elm_lang$core$Json_Decode$map,
-											function (_p6) {
-												return lift(
-													_debois$elm_mdl$Material_Internal_Tabs$Init(_p6));
-											},
-											_debois$elm_mdl$Material_Tabs$decodeGeometryOnTabBar(config.indicator)))),
-								_1: {ctor: '[]'}
+										_elm_lang$core$Json_Decode$map,
+										function (_p6) {
+											return lift(
+												_debois$elm_mdl$Material_Internal_Tabs$Init(_p6));
+										},
+										_debois$elm_mdl$Material_Tabs$decodeGeometryOnTabBar(config.indicator))),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$when,
+										model.requestAnimation,
+										_debois$elm_mdl$Material_Options$cs('elm-mdc-tab-bar--uninitialized')),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}
@@ -16426,40 +16434,13 @@ var _debois$elm_mdl$Material_Tabs$update = F3(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'Init':
-				var _p18 = _p13._0;
-				return {
-					ctor: '_Tuple2',
-					_0: function () {
-						if (!model.initialized) {
-							var totalTabsWidth = A3(
-								_elm_lang$core$List$foldl,
-								F2(
-									function (tab, accum) {
-										return tab.width + accum;
-									}),
-								0,
-								_p18.tabs);
-							return _elm_lang$core$Native_Utils.update(
-								model,
-								{
-									geometry: _p18,
-									scale: A2(_debois$elm_mdl$Material_Tabs$computeScale, _p18, 0),
-									nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth, _p18.scrollFrame.width) > 0,
-									backIndicator: false,
-									initialized: true
-								});
-						} else {
-							return model;
-						}
-					}(),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
 			case 'ScrollBackward':
-				var _p25 = _p13._0;
-				var totalTabsWidth = _debois$elm_mdl$Material_Tabs$computeTotalTabsWidth(_p25);
-				var scrollFrameWidth = _p25.scrollFrame.width;
-				var concealedTabs = _debois$elm_mdl$Material_Tabs$catMaybes(
+				var _p24 = _p13._0;
+				var totalTabsWidth = _debois$elm_mdl$Material_Tabs$computeTotalTabsWidth(_p24);
+				var scrollFrameWidth = _p24.scrollFrame.width;
+				var concealedTabs = A2(
+					_elm_lang$core$List$filterMap,
+					_elm_lang$core$Basics$identity,
 					A2(
 						_elm_lang$core$List$indexedMap,
 						F2(
@@ -16468,18 +16449,18 @@ var _debois$elm_mdl$Material_Tabs$update = F3(
 								return (_elm_lang$core$Native_Utils.cmp(tabRight + model.translationOffset, 0) < 0) ? _elm_lang$core$Maybe$Just(
 									{ctor: '_Tuple2', _0: index, _1: tab}) : _elm_lang$core$Maybe$Nothing;
 							}),
-						_elm_lang$core$List$reverse(_p25.tabs)));
+						_elm_lang$core$List$reverse(_p24.tabs)));
 				var translationOffset = _elm_lang$core$Tuple$second(
 					A3(
 						_elm_lang$core$List$foldl,
 						F2(
-							function (_p20, _p19) {
-								var _p21 = _p20;
-								var _p24 = _p21._1;
-								var _p22 = _p19;
-								var _p23 = _p22._0;
-								var accum_ = _p23 + _p24.width;
-								return (_elm_lang$core$Native_Utils.cmp(accum_, scrollFrameWidth) > 0) ? {ctor: '_Tuple2', _0: _p23, _1: 0 - _p24.offsetLeft} : {ctor: '_Tuple2', _0: accum_, _1: 0 - _p24.offsetLeft};
+							function (_p19, _p18) {
+								var _p20 = _p19;
+								var _p23 = _p20._1;
+								var _p21 = _p18;
+								var _p22 = _p21._0;
+								var accum_ = _p22 + _p23.width;
+								return (_elm_lang$core$Native_Utils.cmp(accum_, scrollFrameWidth) > 0) ? {ctor: '_Tuple2', _0: _p22, _1: 0 - _p23.offsetLeft} : {ctor: '_Tuple2', _0: accum_, _1: 0 - _p23.offsetLeft};
 							}),
 						{ctor: '_Tuple2', _0: 0, _1: model.translationOffset},
 						concealedTabs));
@@ -16488,18 +16469,20 @@ var _debois$elm_mdl$Material_Tabs$update = F3(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							geometry: _p25,
+							geometry: _p24,
 							translationOffset: translationOffset,
 							nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth + translationOffset, scrollFrameWidth) > 0,
 							backIndicator: _elm_lang$core$Native_Utils.cmp(translationOffset, 0) < 0
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
-				var _p28 = _p13._0;
-				var totalTabsWidth = _debois$elm_mdl$Material_Tabs$computeTotalTabsWidth(_p28);
-				var scrollFrameWidth = _p28.scrollFrame.width;
-				var concealedTabs = _debois$elm_mdl$Material_Tabs$catMaybes(
+			case 'ScrollForward':
+				var _p27 = _p13._0;
+				var totalTabsWidth = _debois$elm_mdl$Material_Tabs$computeTotalTabsWidth(_p27);
+				var scrollFrameWidth = _p27.scrollFrame.width;
+				var concealedTabs = A2(
+					_elm_lang$core$List$filterMap,
+					_elm_lang$core$Basics$identity,
 					A2(
 						_elm_lang$core$List$indexedMap,
 						F2(
@@ -16508,15 +16491,15 @@ var _debois$elm_mdl$Material_Tabs$update = F3(
 								return (_elm_lang$core$Native_Utils.cmp(tabRight + model.translationOffset, scrollFrameWidth) > 0) ? _elm_lang$core$Maybe$Just(
 									{ctor: '_Tuple2', _0: index, _1: tab}) : _elm_lang$core$Maybe$Nothing;
 							}),
-						_p28.tabs));
+						_p27.tabs));
 				var translationOffset = A2(
 					_elm_lang$core$Maybe$withDefault,
 					model.translationOffset,
 					A2(
 						_elm_lang$core$Maybe$map,
-						function (_p26) {
-							var _p27 = _p26;
-							return 0 - _p27._1.offsetLeft;
+						function (_p25) {
+							var _p26 = _p25;
+							return 0 - _p26._1.offsetLeft;
 						},
 						_elm_lang$core$List$head(concealedTabs)));
 				return {
@@ -16524,16 +16507,57 @@ var _debois$elm_mdl$Material_Tabs$update = F3(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							geometry: _p28,
+							geometry: _p27,
 							translationOffset: translationOffset,
 							nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth + translationOffset, scrollFrameWidth) > 0,
 							backIndicator: _elm_lang$core$Native_Utils.cmp(translationOffset, 0) < 0
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'Init':
+				var _p28 = _p13._0;
+				return {
+					ctor: '_Tuple2',
+					_0: function () {
+						var totalTabsWidth = A3(
+							_elm_lang$core$List$foldl,
+							F2(
+								function (tab, accum) {
+									return tab.width + accum;
+								}),
+							0,
+							_p28.tabs);
+						return _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								geometry: _p28,
+								scale: A2(_debois$elm_mdl$Material_Tabs$computeScale, _p28, 0),
+								nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth, _p28.scrollFrame.width) > 0,
+								backIndicator: false,
+								initialized: true
+							});
+					}(),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Resize':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{requestAnimation: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return model.requestAnimation ? {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{requestAnimation: false, initialized: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
-var _debois$elm_mdl$Material_Tabs$defaultModel = {index: 0, geometry: _debois$elm_mdl$Material_Internal_Tabs$defaultGeometry, translationOffset: 0, scale: 0, nextIndicator: false, backIndicator: false, initialized: false, ripples: _elm_lang$core$Dict$empty};
+var _debois$elm_mdl$Material_Tabs$defaultModel = {index: 0, geometry: _debois$elm_mdl$Material_Internal_Tabs$defaultGeometry, translationOffset: 0, scale: 0, nextIndicator: false, backIndicator: false, ripples: _elm_lang$core$Dict$empty, initialized: false, requestAnimation: true};
 var _debois$elm_mdl$Material_Tabs$_p29 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
@@ -16563,9 +16587,9 @@ var _debois$elm_mdl$Material_Tabs$react = F4(
 				A2(_debois$elm_mdl$Material_Tabs$get, idx, store)));
 	});
 var _debois$elm_mdl$Material_Tabs$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Tabs$get, _debois$elm_mdl$Material_Tabs$view, _debois$elm_mdl$Material_Msg$TabsMsg);
-var _debois$elm_mdl$Material_Tabs$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {index: a, geometry: b, translationOffset: c, scale: d, nextIndicator: e, backIndicator: f, initialized: g, ripples: h};
+var _debois$elm_mdl$Material_Tabs$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {index: a, geometry: b, translationOffset: c, scale: d, nextIndicator: e, backIndicator: f, ripples: g, initialized: h, requestAnimation: i};
 	});
 var _debois$elm_mdl$Material_Tabs$Config = F3(
 	function (a, b, c) {
@@ -17334,7 +17358,7 @@ var _debois$elm_mdl$Material$top = function (content) {
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('\n@keyframes nodeInserted {\n  from { opacity: 0.99; }\n  to { opacity: 1; }\n}\n\n.mdc-slider,\n.mdc-tab-bar\n{\n  animation-duration: 0.001s;\n  animation-name: nodeInserted;\n}\n'),
+									_0: _elm_lang$html$Html$text('\n@keyframes nodeInserted {\n  from { opacity: 0.99; }\n  to { opacity: 1; }\n}\n\n.elm-mdc-slider--uninitialized,\n.elm-mdc-tab-bar--uninitialized\n{\n  animation-duration: 0.001s;\n  animation-name: nodeInserted;\n}\n'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -17352,17 +17376,21 @@ var _debois$elm_mdl$Material$subscriptions = F2(
 		return _elm_lang$core$Platform_Sub$batch(
 			{
 				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Menu$subs, lift, model.mdl),
+				_0: A2(_debois$elm_mdl$Material_Drawer$subs, lift, model.mdl),
 				_1: {
 					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Select$subs, lift, model.mdl),
+					_0: A2(_debois$elm_mdl$Material_Menu$subs, lift, model.mdl),
 					_1: {
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Drawer$subs, lift, model.mdl),
+						_0: A2(_debois$elm_mdl$Material_Select$subs, lift, model.mdl),
 						_1: {
 							ctor: '::',
 							_0: A2(_debois$elm_mdl$Material_Slider$subs, lift, model.mdl),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Tabs$subs, lift, model.mdl),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -34528,6 +34556,16 @@ var _debois$elm_mdl$Demo_Tabs$view = F3(
 				}
 			});
 	});
+var _debois$elm_mdl$Demo_Tabs$subscriptions = F2(
+	function (lift, model) {
+		return A2(
+			_debois$elm_mdl$Material_Tabs$subs,
+			function (_p14) {
+				return lift(
+					_debois$elm_mdl$Demo_Tabs$Mdl(_p14));
+			},
+			model.mdl);
+	});
 
 var _debois$elm_mdl$Material_Drawer_Temporary$className = 'mdc-temporary-drawer';
 var _debois$elm_mdl$Material_Drawer_Temporary$emit = _debois$elm_mdl$Material_Drawer$emit;
@@ -41007,7 +41045,11 @@ var _debois$elm_mdl$Main$subscriptions = function (model) {
 										_1: {
 											ctor: '::',
 											_0: A2(_debois$elm_mdl$Demo_LayoutGrid$subscriptions, _debois$elm_mdl$Main$LayoutGridMsg, model.layoutGrid),
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Demo_Tabs$subscriptions, _debois$elm_mdl$Main$TabsMsg, model.tabs),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}
