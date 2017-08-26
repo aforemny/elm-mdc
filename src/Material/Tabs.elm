@@ -1,24 +1,72 @@
 module Material.Tabs
     exposing
         (
-          withIconAndText
-        , tab
-        , icon
-        , iconLabel
+          -- VIEW
+          view
+
+          -- PROPERTIES
         , Property
-        , Msg
-        , render
-        , update
-        , view
-        , Model
-        , defaultModel
-        , react
         , scroller
         , indicatorPrimary
         , indicatorAccent
         , indicator
+
+          -- TABS
+        , tab
+        , withIconAndText
+        , icon
+        , iconLabel
+
+          -- TEA
+        , subscriptions
+        , Model
+        , defaultModel
+        , Msg
+        , update
+
+          -- RENDER
+        , subs
+        , render
+        , Store
+        , react
         )
 
+{-|
+> The MDC Tabs component contains components which are used to create
+> spec-aligned tabbed navigation components adhering to the Material Design
+> tabs guidelines. These components are:
+>
+> - mdc-tab: The individual tab elements
+> - mdc-tab-bar: The main component which is composed of mdc-tab elements
+> - mdc-tab-bar-scroller: The component which controls the horizontal scrolling behavior of an mdc-tab-bar that overflows its container
+
+## Design & API Documentation
+
+- [Material Design guidelines: Tabs](https://material.io/guidelines/components/tabs.html)
+- [Demo](https://aforemny.github.io/elm-mdc/#tabs)
+
+## View
+@docs view
+
+## Properties
+@docs Property
+@docs scroller
+@docs indicatorPrimary, indicatorAccent, indicator
+
+## Tabs
+@docs tab
+@docs withIconAndText
+@docs icon
+@docs iconLabel
+
+## TEA
+@docs Model, defaultModel, Msg, update
+
+## Render
+@docs render, Store, react
+-}
+
+import AnimationFrame
 import Dict exposing (Dict)
 import DOM
 import Html exposing (Html, text)
@@ -31,10 +79,9 @@ import Material.Internal.Tabs exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, styled, cs, css, when)
 import Material.Ripple as Ripple
+import Window
 
 
-{-| Component model.
--}
 type alias Model =
     { index : Int
     , geometry : Geometry
@@ -42,13 +89,12 @@ type alias Model =
     , scale : Float
     , nextIndicator : Bool
     , backIndicator : Bool
-    , initialized : Bool
     , ripples : Dict Int Ripple.Model
+    , initialized : Bool
+    , requestAnimation : Bool
     }
 
 
-{-| Default component model constructor.
--}
 defaultModel : Model
 defaultModel =
     { index = 0
@@ -57,23 +103,16 @@ defaultModel =
     , scale = 0
     , nextIndicator = False
     , backIndicator = False
-    , initialized = False
     , ripples = Dict.empty
+    , initialized = False
+    , requestAnimation = True
     }
 
 
-
--- ACTION, UPDATE
-
-
-{-| Component action.
--}
 type alias Msg m
     = Material.Internal.Tabs.Msg m
 
 
-{-| Component update.
--}
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
@@ -102,25 +141,6 @@ update lift msg model =
               Cmd.none
             )
 
-        Init geometry ->
-            ( if not model.initialized then
-                  let
-                      totalTabsWidth =
-                          List.foldl (\tab accum -> tab.width + accum) 0 geometry.tabs
-                  in
-                  { model
-                      | geometry = geometry
-                      , scale = computeScale geometry 0
-                      , nextIndicator = totalTabsWidth > geometry.scrollFrame.width
-                      , backIndicator = False
-                      , initialized = True
-                  }
-              else
-                model
-            ,
-              Cmd.none
-            )
-
         ScrollBackward geometry ->
             let
                 concealedTabs =
@@ -135,7 +155,7 @@ update lift msg model =
                            else
                                Nothing
                        )
-                    |> catMaybes
+                    |> List.filterMap identity
 
                 scrollFrameWidth =
                     geometry.scrollFrame.width
@@ -168,7 +188,6 @@ update lift msg model =
             ,
               Cmd.none
             )
-
         ScrollForward geometry ->
             let
                 concealedTabs =
@@ -183,7 +202,7 @@ update lift msg model =
                            else
                                Nothing
                        )
-                    |> catMaybes
+                    |> List.filterMap identity
 
                 scrollFrameWidth =
                     geometry.scrollFrame.width
@@ -207,8 +226,36 @@ update lift msg model =
               Cmd.none
             )
 
+        Init geometry ->
+            ( let
+                  totalTabsWidth =
+                      List.foldl (\tab accum -> tab.width + accum) 0 geometry.tabs
+              in
+              { model
+                  | geometry = geometry
+                  , scale = computeScale geometry 0
+                  , nextIndicator = totalTabsWidth > geometry.scrollFrame.width
+                  , backIndicator = False
+                  , initialized = True
+              }
+            ,
+              Cmd.none
+            )
 
--- PROPERTIES
+        Resize ->
+            ( { model | requestAnimation = True }, Cmd.none )
+
+        AnimationFrame ->
+            if model.requestAnimation then
+                ( { model
+                    | requestAnimation = False
+                    , initialized = True
+                  }
+                ,
+                  Cmd.none
+                )
+            else
+                ( model, Cmd.none )
 
 
 type alias Config =
@@ -251,8 +298,6 @@ indicator =
     Internal.option (\config -> { config | indicator = True })
 
 
-{-| TODO
--}
 tab : List (Property m)
     -> List (Html m)
     -> { node : List (Property m) -> List (Html m) -> Html m
@@ -276,17 +321,10 @@ iconLabel options str =
     styled Html.span [ cs "mdc-tab__icon-text" ] [ text str ]
 
 
-{-| Tab options.
--}
 type alias Property m =
     Options.Property (Config) m
 
 
--- VIEW
-
-
-{-| Component view.
--}
 view
     : (Msg m -> m)
     -> Model
@@ -391,7 +429,8 @@ view lift model options nodes =
             , Options.on "elm-mdc-init"
                   (Json.map (Init >> lift)
                   (decodeGeometryOnTabBar config.indicator))
-                |> when (not model.initialized)
+            , cs "elm-mdc-tab-bar--uninitialized"
+                |> when model.requestAnimation
             ]
             [
             ]
@@ -436,9 +475,6 @@ view lift model options nodes =
             )
 
 
--- COMPONENT
-
-
 type alias Store s =
     { s | tabs : Indexed Model }
 
@@ -447,8 +483,6 @@ type alias Store s =
     Component.indexed .tabs (\x y -> { y | tabs = x }) defaultModel
 
 
-{-| Component react function.
--}
 react :
     (Msg m -> m)
     -> Msg m
@@ -459,8 +493,6 @@ react lift msg idx store =
     update lift msg (get idx store) |> map1st (set idx store >> Just)
 
 
-{-| Component render.
--}
 render :
     (Material.Msg.Msg m -> m)
     -> Index
@@ -546,12 +578,19 @@ decodeGeometry hasIndicator =
         )
 
 
-catMaybes : List (Maybe a) -> List a
-catMaybes =
-    List.foldr
-        (\maybe accum ->
-            maybe
-            |> Maybe.map (flip (::) accum)
-            |> Maybe.withDefault accum
-        )
-        []
+subscriptions : Model -> Sub (Msg m)
+subscriptions model =
+    Sub.batch
+    [
+      Window.resizes (always Resize)
+    ,
+      if model.requestAnimation then
+          AnimationFrame.times (always AnimationFrame)
+      else
+          Sub.none
+    ]
+
+
+subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
+subs =
+    Component.subs Material.Msg.TabsMsg .tabs subscriptions

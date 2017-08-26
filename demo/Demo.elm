@@ -553,4 +553,5 @@ subscriptions model =
         , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
         , Demo.Slider.subscriptions SliderMsg model.slider
         , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
+        , Demo.Tabs.subscriptions TabsMsg model.tabs
         ]

@@ -1,4 +1,4 @@
-module Demo.Tabs exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.Tabs exposing (Model,defaultModel,Msg(Mdl),update,view,subscriptions)
 
 import Dict exposing (Dict)
 import Html exposing (..)
@@ -452,3 +452,8 @@ fieldset options =
     :: css "padding" "0 24px 16px"
     :: options
     )
+
+
+subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions lift model =
+    TabBar.subs (Mdl >> lift) model.mdl

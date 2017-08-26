@@ -171,10 +171,11 @@ initialisation.
 subscriptions : (Msg m -> m) -> { model | mdl : Model } -> Sub m
 subscriptions lift model =
     Sub.batch
-        [ Menu.subs lift model.mdl
+        [ Drawer.subs lift model.mdl
+        , Menu.subs lift model.mdl
         , Select.subs lift model.mdl
-        , Drawer.subs lift model.mdl
         , Slider.subs lift model.mdl
+        , Tabs.subs lift model.mdl
         ]
 
 
@@ -254,8 +255,8 @@ document.addEventListener("webkitAnimationStart", insertListener, false); // Chr
   to { opacity: 1; }
 }
 
-.mdc-slider,
-.mdc-tab-bar
+.elm-mdc-slider--uninitialized,
+.elm-mdc-tab-bar--uninitialized
 {
   animation-duration: 0.001s;
   animation-name: nodeInserted;

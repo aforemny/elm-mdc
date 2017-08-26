@@ -8,8 +8,10 @@ type Msg m
     | Dispatch (List m)
     | ScrollForward Geometry
     | ScrollBackward Geometry
-    | Init Geometry
     | RippleMsg Int Ripple.Msg
+    | Init Geometry
+    | Resize
+    | AnimationFrame
 
 
 type alias Geometry =
