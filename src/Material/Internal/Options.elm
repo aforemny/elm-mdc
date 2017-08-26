@@ -176,8 +176,10 @@ cssVariables summary =
 
         styleNodeBlock =
             summary.vars
-            |> List.map (\( key, value ) -> key ++ ": " ++ value ++ ";")
+            |> List.map (\( key, value ) -> key ++ ": " ++ value ++ " !important;")
             |> String.join "\n"
+
+            -- ^^^^ TODO: important
 
         styleNodeText =
             "." ++ class ++ " {" ++ styleNodeBlock ++ " }" 

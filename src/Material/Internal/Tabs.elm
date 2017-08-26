@@ -1,5 +1,7 @@
 module Material.Internal.Tabs exposing (Msg(..), Geometry, defaultGeometry)
 
+import Material.Internal.Ripple as Ripple
+
 
 type Msg m
     = Select Int Geometry
@@ -7,6 +9,7 @@ type Msg m
     | ScrollForward Geometry
     | ScrollBackward Geometry
     | Init Geometry
+    | RippleMsg Int Ripple.Msg
 
 
 type alias Geometry =

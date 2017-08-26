@@ -10,7 +10,6 @@ module Material.Tabs
         , render
         , update
         , view
-        -- , ripple
         , Model
         , defaultModel
         , react
@@ -20,6 +19,7 @@ module Material.Tabs
         , indicator
         )
 
+import Dict exposing (Dict)
 import DOM
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
@@ -30,22 +30,20 @@ import Material.Internal.Options as Internal
 import Material.Internal.Tabs exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, styled, cs, css, when)
-
-
--- MODEL
+import Material.Ripple as Ripple
 
 
 {-| Component model.
 -}
 type alias Model =
-    { -- ripples : Dict Int Ripple.Model
-      index : Int
+    { index : Int
     , geometry : Geometry
     , translationOffset : Float
     , scale : Float
     , nextIndicator : Bool
     , backIndicator : Bool
     , initialized : Bool
+    , ripples : Dict Int Ripple.Model
     }
 
 
@@ -53,14 +51,14 @@ type alias Model =
 -}
 defaultModel : Model
 defaultModel =
-    { -- ripples = Dict.empty
-      index = 0
+    { index = 0
     , geometry = defaultGeometry
     , translationOffset = 0
     , scale = 0
     , nextIndicator = False
     , backIndicator = False
     , initialized = False
+    , ripples = Dict.empty
     }
 
 
@@ -79,15 +77,30 @@ type alias Msg m
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
+        RippleMsg index msg_ ->
+            let
+                ( ripple, effects ) =
+                    Ripple.update msg_
+                      ( Dict.get index model.ripples
+                        |> Maybe.withDefault Ripple.defaultModel
+                      )
+            in
+            ( { model | ripples = Dict.insert index ripple model.ripples }
+            ,
+              Cmd.map (RippleMsg index >> lift) effects
+            )
 
         Dispatch msgs ->
-            model ! [ Dispatch.forward msgs ]
+            ( model, Dispatch.forward msgs )
 
         Select index geometry ->
-            { model
-                | index = index
-                , scale = computeScale geometry index
-            } ! []
+            ( { model
+                  | index = index
+                  , scale = computeScale geometry index
+              }
+            ,
+              Cmd.none
+            )
 
         Init geometry ->
             ( if not model.initialized then
@@ -104,8 +117,9 @@ update lift msg model =
                   }
               else
                 model
+            ,
+              Cmd.none
             )
-                ! []
 
         ScrollBackward geometry ->
             let
@@ -145,13 +159,15 @@ update lift msg model =
                 totalTabsWidth =
                     computeTotalTabsWidth geometry
             in
-            { model
-                | geometry = geometry
-                , translationOffset = translationOffset
-                , nextIndicator = totalTabsWidth + translationOffset > scrollFrameWidth
-                , backIndicator = translationOffset < 0
-            }
-                ! []
+            ( { model
+                  | geometry = geometry
+                  , translationOffset = translationOffset
+                  , nextIndicator = totalTabsWidth + translationOffset > scrollFrameWidth
+                  , backIndicator = translationOffset < 0
+              }
+            ,
+              Cmd.none
+            )
 
         ScrollForward geometry ->
             let
@@ -181,13 +197,15 @@ update lift msg model =
                 totalTabsWidth =
                     computeTotalTabsWidth geometry
             in
-            { model
-                | geometry = geometry
-                , translationOffset = translationOffset
-                , nextIndicator = totalTabsWidth + translationOffset > scrollFrameWidth
-                , backIndicator = translationOffset < 0
-            }
-                ! []
+            ( { model
+                  | geometry = geometry
+                  , translationOffset = translationOffset
+                  , nextIndicator = totalTabsWidth + translationOffset > scrollFrameWidth
+                  , backIndicator = translationOffset < 0
+              }
+            ,
+              Cmd.none
+            )
 
 
 -- PROPERTIES
@@ -349,6 +367,17 @@ view lift model options nodes =
 
         hasIndicator =
             config.indicator
+
+        rippleStyles =
+            nodes
+            |> List.indexedMap (\ index _ ->
+                 Ripple.view False (RippleMsg index >> lift)
+                   ( Dict.get index model.ripples
+                     |> Maybe.withDefault Ripple.defaultModel
+                   )
+                   () ()
+               )
+            |> List.map Tuple.second
     in
         (if config.scroller then tabBarScroller else identity) <|
         Internal.apply summary
@@ -369,15 +398,27 @@ view lift model options nodes =
             ( List.concat
               [ nodes
                 |> List.indexedMap (\index { node, options, childs }  ->
-                       node
-                           (  cs "mdc-tab"
+                       let
+                          ( rippleOptions, _ ) =
+                              Ripple.view False (RippleMsg index >> lift)
+                                ( Dict.get index model.ripples
+                                  |> Maybe.withDefault Ripple.defaultModel
+                                )
+                                () ()
+                       in
+                       [ node
+                           ( cs "mdc-tab"
                            :: when (model.index == index) (cs "mdc-tab--active")
                            :: Options.on "click" (Json.map (Select index >> lift) (decodeGeometryOnTab hasIndicator))
                            :: Options.dispatch (Dispatch >> lift)
+                           :: rippleOptions
                            :: options
                            )
                            childs
+                       ]
                    )
+                |> List.concat
+
               , if config.indicator then
                     [ styled Html.div
                       [ cs "mdc-tab-bar__indicator"
@@ -389,6 +430,8 @@ view lift model options nodes =
                     ]
                 else
                     []
+
+              , rippleStyles
               ]
             )
 
@@ -480,13 +523,23 @@ decodeGeometry hasIndicator =
     Json.map2
         (\tabs scrollFrame -> { tabs = tabs, scrollFrame = scrollFrame })
         ( (Json.map (if hasIndicator then (\xs -> List.take ((List.length xs) - 1) xs) else identity)) <|
-          DOM.childNodes  <|
-          Json.map2
-              (\offsetLeft width ->
-                  { offsetLeft = offsetLeft, width = width }
-              )
-              DOM.offsetLeft
-              DOM.offsetWidth
+          Json.map (List.filterMap identity) <|
+          DOM.childNodes
+            ( Json.at [ "tagName" ] Json.string
+              |> Json.andThen (\ tagName ->
+                    case String.toLower tagName of
+                        "style" ->
+                            Json.succeed Nothing
+                        _ ->
+                            Json.map Just <|
+                            Json.map2
+                                (\offsetLeft width ->
+                                    { offsetLeft = offsetLeft, width = width }
+                                )
+                                DOM.offsetLeft
+                                DOM.offsetWidth
+                 )
+            )
         )
         ( DOM.parentElement <| -- .mdc-tab-bar-scroller__scroll-frame
           Json.map (\width -> { width = width }) DOM.offsetWidth
