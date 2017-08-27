@@ -248,22 +248,47 @@ react =
 
 decodeGeometry : String -> Decoder Geometry
 decodeGeometry type_ =
-    Json.map3
-        (\isSurfaceDisabled event frame ->
-            { isSurfaceDisabled = isSurfaceDisabled
-            , event = event
-            , frame = frame
-            }
-        )
-        ( DOM.target <|
-          Json.oneOf
-          [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
-          , Json.succeed False
-          ]
-        )
-        ( Json.map2 (\pageX pageY -> { type_ = type_, pageX = pageX, pageY = pageY })
-              (Json.at [ "pageX" ] Json.float)
-              (Json.at [ "pageY" ] Json.float)
-        )
-        ( DOM.target DOM.boundingClientRect
-        )
+    let
+        traverseToContainer cont =
+            Json.oneOf
+            [ DOM.className
+              |> Json.andThen (\ className ->
+                     let
+                        hasClass class =
+                            String.contains (encaps class) << encaps
+
+                        encaps str =
+                            " " ++ str ++ " "
+                     in
+                     if hasClass "mdc-ripple-upgraded" className then
+                         cont
+                     else
+                         Json.fail "Material.Ripple.decodeGeometry"
+                 )
+            , DOM.parentElement (Json.lazy (\_ -> traverseToContainer cont))
+            ]
+    in
+    (
+      ( Json.map2 (\pageX pageY -> { type_ = type_, pageX = pageX, pageY = pageY })
+            (Json.at [ "pageX" ] Json.float)
+            (Json.at [ "pageY" ] Json.float)
+      )
+      |> Json.andThen (\ event ->
+            DOM.target          <| -- .mdc-ripple-upgraded [*]
+            traverseToContainer <| -- .mdc-ripple-upgraded
+            Json.map2
+                (\isSurfaceDisabled frame ->
+                    { event = event
+                    , isSurfaceDisabled = isSurfaceDisabled
+                    , frame = frame
+                    }
+                )
+                ( Json.oneOf
+                  [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
+                  , Json.succeed False
+                  ]
+                )
+                ( DOM.boundingClientRect
+                )
+         )
+     )
