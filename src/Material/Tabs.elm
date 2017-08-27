@@ -313,12 +313,21 @@ tab options childs =
 
 icon : List (Style m) -> String -> Html m
 icon options icon =
-    styled Html.i [ cs "mdc-tab__icon", cs "material-icons" ] [ text icon ]
+    styled Html.i
+    [ cs "mdc-tab__icon"
+    , cs "material-icons"
+    ]
+    [ text icon
+    ]
 
 
 iconLabel : List (Style m) -> String -> Html m
 iconLabel options str =
-    styled Html.span [ cs "mdc-tab__icon-text" ] [ text str ]
+    styled Html.span
+    [ cs "mdc-tab__icon-text"
+    ]
+    [ text str
+    ]
 
 
 type alias Property m =
@@ -539,8 +548,21 @@ decodeGeometryOnIndicator hasIndicator =
 
 decodeGeometryOnTab : Bool -> Decoder Geometry
 decodeGeometryOnTab hasIndicator =
-    DOM.target        <| -- .mdc-tab
-    DOM.parentElement <| -- .mdc-tab-bar
+    let
+        traverseToTabBar cont =
+            Json.oneOf
+            [ DOM.className
+              |> Json.andThen (\ className ->
+                    if String.contains (" mdc-tab-bar ") (" " ++ className ++ " ") then
+                        cont
+                    else
+                        Json.fail "Material.Tabs.decodeGeometryOnTabBar"
+                 )
+            , DOM.parentElement (Json.lazy (\_ -> traverseToTabBar cont))
+            ]
+    in
+    DOM.target       <| -- .mdc-tab [*]
+    traverseToTabBar <|
     decodeGeometry hasIndicator
 
 
