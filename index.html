@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var insertListener = function(event) {
         if (event.animationName == "nodeInserted") {
-          console.warn("Another node has been inserted! ", event, event.target);
+          //console.warn("Another node has been inserted! ", event, event.target);
           event.target.dispatchEvent(new Event('elm-mdc-init'));
         }
       }
