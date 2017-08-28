@@ -38461,7 +38461,15 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
 								_1: {
 									ctor: '::',
 									_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'background-image', 'url(images/4-3.jpg)'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'background-size', 'cover'),
+											_1: {ctor: '[]'}
+										}
+									}
 								}
 							}
 						}
