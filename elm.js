@@ -17189,7 +17189,19 @@ var _debois$elm_mdl$Material_Toolbar$flexible = _debois$elm_mdl$Material_Interna
 			config,
 			{flexible: true});
 	});
-var _debois$elm_mdl$Material_Toolbar$waterfall = _debois$elm_mdl$Material_Options$cs('mdc-toolbar--waterfall');
+var _debois$elm_mdl$Material_Toolbar$waterfall = function (minimized) {
+	return _debois$elm_mdl$Material_Options$many(
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--waterfall'),
+			_1: {
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs(
+					minimized ? 'mdc-toolbar--flexible-space-minimized' : 'mdc-toolbar-flexible-space-maximized'),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Options$cs('mdc-toolbar--fixed');
 var _debois$elm_mdl$Material_Toolbar$defaultConfig = {flexible: false, flexibleBehavior: _elm_lang$core$Maybe$Nothing};
 var _debois$elm_mdl$Material_Toolbar$view = F3(
@@ -38309,12 +38321,8 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMinimized,
-								_1: {ctor: '[]'}
-							}
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
+							_1: {ctor: '[]'}
 						}
 					},
 					{
@@ -38446,7 +38454,7 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
 							_1: {
 								ctor: '::',
 								_0: _debois$elm_mdl$Material_Toolbar$flexible,
@@ -38598,7 +38606,7 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
 							_1: {
 								ctor: '::',
 								_0: _debois$elm_mdl$Material_Toolbar$flexible,
@@ -38750,7 +38758,7 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
 							_1: {
 								ctor: '::',
 								_0: _debois$elm_mdl$Material_Toolbar$flexible,
@@ -38902,7 +38910,7 @@ var _debois$elm_mdl$Demo_Toolbar$customToolbar = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
 							_1: {
 								ctor: '::',
 								_0: _debois$elm_mdl$Material_Toolbar$flexible,
