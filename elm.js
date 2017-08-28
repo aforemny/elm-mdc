@@ -38847,11 +38847,15 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$waterfall(model.scroll.pageY),
+							_0: _debois$elm_mdl$Material_Toolbar$flexible(model.scroll.pageY),
 							_1: {
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexible(model.scroll.pageY),
-								_1: {ctor: '[]'}
+								_0: _debois$elm_mdl$Material_Toolbar$backgroundImage('images/4-3.jpg'),
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Toolbar$waterfall(model.scroll.pageY),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					},
