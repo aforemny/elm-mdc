@@ -17165,7 +17165,11 @@ var _debois$elm_mdl$Material_Toolbar$flexible = function (minimized) {
 				ctor: '::',
 				_0: _debois$elm_mdl$Material_Options$cs(
 					minimized ? 'mdc-toolbar--flexible-space-minimized' : 'mdc-toolbar-flexible-space-maximized'),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-default-behavior'),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
