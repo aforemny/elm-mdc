@@ -17205,6 +17205,12 @@ var _debois$elm_mdl$Material_Toolbar$icon = F2(
 				_1: {ctor: '[]'}
 			});
 	});
+var _debois$elm_mdl$Material_Toolbar$fixedLastRow = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fixedLastRow: true});
+	});
 var _debois$elm_mdl$Material_Toolbar$backgroundImage = function (backgroundImage) {
 	return _debois$elm_mdl$Material_Internal_Options$option(
 		function (config) {
@@ -17235,12 +17241,7 @@ var _debois$elm_mdl$Material_Toolbar$waterfall = function (scrollTop) {
 				});
 		});
 };
-var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{fixedLastRow: true});
-	});
+var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Options$cs('mdc-toolbar--fixed');
 var _debois$elm_mdl$Material_Toolbar$defaultConfig = {flexible: _elm_lang$core$Maybe$Nothing, waterfall: _elm_lang$core$Maybe$Nothing, backgroundImage: _elm_lang$core$Maybe$Nothing, fixedLastRow: false};
 var _debois$elm_mdl$Material_Toolbar$update = F2(
 	function (msg, model) {
@@ -39149,7 +39150,11 @@ var _debois$elm_mdl$Demo_Toolbar$customToolbar = F2(
 							_1: {
 								ctor: '::',
 								_0: _debois$elm_mdl$Material_Toolbar$flexible(model.scroll.pageY),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Toolbar$fixedLastRow,
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					},
