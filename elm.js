@@ -37533,256 +37533,64 @@ var _debois$elm_mdl$Demo_Toolbar$body = A2(
 				_0: _elm_lang$html$Html$text('Pellentesque habitant morbi tristique senectus et netus et\nmalesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,\nultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas\nsemper. Aenean ultricies mi vitae est. Pellentesque habitant morbi tristique\nsenectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam,\nfeugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet\nquam egestas semper. Aenean ultricies mi vitae est.'),
 				_1: {ctor: '[]'}
 			})));
-var _debois$elm_mdl$Demo_Toolbar$customToolbar = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
+var _debois$elm_mdl$Demo_Toolbar$customToolbar = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Toolbar$fixed,
+				_0: _debois$elm_mdl$Material_Typography$typography,
 				_1: {
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Toolbar$flexible,
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
-					{
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
-									{
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
-										_1: {ctor: '[]'}
-									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_debois$elm_mdl$Material_Toolbar$row,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Toolbar$icon,
-											{
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Options$attribute(
-													_elm_lang$html$Html_Attributes$href('#')),
-												_1: {ctor: '[]'}
-											},
-											'print'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Toolbar$icon,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$attribute(
-														_elm_lang$html$Html_Attributes$href('#')),
-													_1: {ctor: '[]'}
-												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}),
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
 					_1: {ctor: '[]'}
 				}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
-	});
-var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Toolbar$fixed,
-				_1: {
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Toolbar$flexible,
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
 			},
 			{
 				ctor: '::',
 				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
+					_debois$elm_mdl$Material_Toolbar$view,
 					{
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
-						_1: {ctor: '[]'}
+						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Toolbar$flexible,
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
+									_1: {
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
 					},
 					{
 						ctor: '::',
 						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
+							_debois$elm_mdl$Material_Toolbar$row,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
 								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
 								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
+									_debois$elm_mdl$Material_Toolbar$section,
 									{
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
 										_1: {ctor: '[]'}
 									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_debois$elm_mdl$Material_Toolbar$row,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
+									{
 										ctor: '::',
 										_0: A2(
 											_debois$elm_mdl$Material_Toolbar$icon,
@@ -37792,8 +37600,37 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = A3(
 													_elm_lang$html$Html_Attributes$href('#')),
 												_1: {ctor: '[]'}
 											},
-											'print'),
+											'menu'),
 										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Toolbar$row,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
 											ctor: '::',
 											_0: A2(
 												_debois$elm_mdl$Material_Toolbar$icon,
@@ -37803,272 +37640,103 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = A3(
 														_elm_lang$html$Html_Attributes$href('#')),
 													_1: {ctor: '[]'}
 												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {ctor: '[]'}
+														},
+														'more_vert'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
-						}),
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
 					_1: {ctor: '[]'}
 				}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
+			});
 	});
-var _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
+var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Toolbar$fixed,
+				_0: _debois$elm_mdl$Material_Typography$typography,
 				_1: {
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Toolbar$flexible,
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
-					{
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
-									{
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
-										_1: {ctor: '[]'}
-									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_debois$elm_mdl$Material_Toolbar$row,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Toolbar$icon,
-											{
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Options$attribute(
-													_elm_lang$html$Html_Attributes$href('#')),
-												_1: {ctor: '[]'}
-											},
-											'print'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Toolbar$icon,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$attribute(
-														_elm_lang$html$Html_Attributes$href('#')),
-													_1: {ctor: '[]'}
-												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}),
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
 					_1: {ctor: '[]'}
 				}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
-	});
-var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Toolbar$fixed,
-				_1: {
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Toolbar$flexible,
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
 			},
 			{
 				ctor: '::',
 				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
+					_debois$elm_mdl$Material_Toolbar$view,
 					{
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
-						_1: {ctor: '[]'}
+						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Toolbar$flexible,
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
+									_1: {
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
 					},
 					{
 						ctor: '::',
 						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
+							_debois$elm_mdl$Material_Toolbar$row,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
 								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
 								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
+									_debois$elm_mdl$Material_Toolbar$section,
 									{
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
 										_1: {ctor: '[]'}
 									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_debois$elm_mdl$Material_Toolbar$row,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
+									{
 										ctor: '::',
 										_0: A2(
 											_debois$elm_mdl$Material_Toolbar$icon,
@@ -38078,8 +37746,37 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = A3(
 													_elm_lang$html$Html_Attributes$href('#')),
 												_1: {ctor: '[]'}
 											},
-											'print'),
+											'menu'),
 										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Toolbar$row,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
 											ctor: '::',
 											_0: A2(
 												_debois$elm_mdl$Material_Toolbar$icon,
@@ -38089,122 +37786,103 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = A3(
 														_elm_lang$html$Html_Attributes$href('#')),
 													_1: {ctor: '[]'}
 												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {ctor: '[]'}
+														},
+														'more_vert'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
-						}),
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
 					_1: {ctor: '[]'}
 				}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
+			});
 	});
-var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
+var _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Toolbar$fixed,
+				_0: _debois$elm_mdl$Material_Typography$typography,
 				_1: {
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Toolbar$flexible,
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
-							_1: {
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-								_1: {ctor: '[]'}
-							}
-						}
-					}
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
+					_1: {ctor: '[]'}
 				}
 			},
 			{
 				ctor: '::',
 				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
+					_debois$elm_mdl$Material_Toolbar$view,
 					{
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
-						_1: {ctor: '[]'}
+						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Toolbar$flexible,
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
+									_1: {
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
 					},
 					{
 						ctor: '::',
 						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
+							_debois$elm_mdl$Material_Toolbar$row,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
 								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
 								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
+									_debois$elm_mdl$Material_Toolbar$section,
 									{
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
 										_1: {ctor: '[]'}
 									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
+									{
 										ctor: '::',
 										_0: A2(
 											_debois$elm_mdl$Material_Toolbar$icon,
@@ -38214,8 +37892,37 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = A3(
 													_elm_lang$html$Html_Attributes$href('#')),
 												_1: {ctor: '[]'}
 											},
-											'print'),
+											'menu'),
 										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Toolbar$row,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
 											ctor: '::',
 											_0: A2(
 												_debois$elm_mdl$Material_Toolbar$icon,
@@ -38225,110 +37932,483 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = A3(
 														_elm_lang$html$Html_Attributes$href('#')),
 													_1: {ctor: '[]'}
 												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {ctor: '[]'}
+														},
+														'more_vert'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
 						}
 					}),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
-	});
-var _debois$elm_mdl$Demo_Toolbar$menuToolbar = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Toolbar$fixed,
 				_1: {
 					ctor: '::',
-					_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-						_1: {ctor: '[]'}
-					}
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Typography$typography,
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
+					_1: {ctor: '[]'}
 				}
 			},
 			{
 				ctor: '::',
 				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
+					_debois$elm_mdl$Material_Toolbar$view,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Toolbar$flexible,
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
+									_1: {
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Toolbar$row,
+							{
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Toolbar$section,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Toolbar$icon,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$attribute(
+													_elm_lang$html$Html_Attributes$href('#')),
+												_1: {ctor: '[]'}
+											},
+											'menu'),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Toolbar$row,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$icon,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#')),
+													_1: {ctor: '[]'}
+												},
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {ctor: '[]'}
+														},
+														'more_vert'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Typography$typography,
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_debois$elm_mdl$Material_Toolbar$view,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
+							_1: {
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Toolbar$flexible,
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
+									_1: {
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Toolbar$row,
+							{
+								ctor: '::',
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Toolbar$section,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Toolbar$icon,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$attribute(
+													_elm_lang$html$Html_Attributes$href('#')),
+												_1: {ctor: '[]'}
+											},
+											'menu'),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$icon,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#')),
+													_1: {ctor: '[]'}
+												},
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {ctor: '[]'}
+														},
+														'more_vert'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Toolbar$fixedToolbar = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Typography$typography,
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_debois$elm_mdl$Material_Toolbar$view,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Toolbar$row,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Toolbar$section,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Toolbar$icon,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$attribute(
+													_elm_lang$html$Html_Attributes$href('#')),
+												_1: {ctor: '[]'}
+											},
+											'menu'),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$icon,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#')),
+													_1: {ctor: '[]'}
+												},
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {ctor: '[]'}
+														},
+														'more_vert'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Toolbar$defaultToolbar = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Typography$typography,
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_debois$elm_mdl$Material_Toolbar$view,
 					{ctor: '[]'},
 					{
 						ctor: '::',
 						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
-								_1: {ctor: '[]'}
-							},
+							_debois$elm_mdl$Material_Toolbar$row,
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
+									_debois$elm_mdl$Material_Toolbar$section,
 									{
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
 										_1: {ctor: '[]'}
 									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
+									{
 										ctor: '::',
 										_0: A2(
 											_debois$elm_mdl$Material_Toolbar$icon,
@@ -38338,8 +38418,30 @@ var _debois$elm_mdl$Demo_Toolbar$menuToolbar = A3(
 													_elm_lang$html$Html_Attributes$href('#')),
 												_1: {ctor: '[]'}
 											},
-											'print'),
+											'menu'),
 										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
 											ctor: '::',
 											_0: A2(
 												_debois$elm_mdl$Material_Toolbar$icon,
@@ -38349,249 +38451,44 @@ var _debois$elm_mdl$Demo_Toolbar$menuToolbar = A3(
 														_elm_lang$html$Html_Attributes$href('#')),
 													_1: {ctor: '[]'}
 												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
-	});
-var _debois$elm_mdl$Demo_Toolbar$fixedToolbar = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Toolbar$fixed,
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
-									{
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
-										_1: {ctor: '[]'}
-									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {ctor: '[]'}
+														},
+														'more_vert'),
+													_1: {ctor: '[]'}
+												}
+											}
 										}),
 									_1: {ctor: '[]'}
 								}
 							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Toolbar$icon,
-											{
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Options$attribute(
-													_elm_lang$html$Html_Attributes$href('#')),
-												_1: {ctor: '[]'}
-											},
-											'print'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Toolbar$icon,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$attribute(
-														_elm_lang$html$Html_Attributes$href('#')),
-													_1: {ctor: '[]'}
-												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
+						_1: {ctor: '[]'}
 					}),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
-	});
-var _debois$elm_mdl$Demo_Toolbar$defaultToolbar = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$div,
-	{
-		ctor: '::',
-		_0: _debois$elm_mdl$Material_Typography$typography,
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-			_1: {ctor: '[]'}
-		}
-	},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_Toolbar$view,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_debois$elm_mdl$Material_Toolbar$row,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_Toolbar$section,
-							{
-								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$alignStart,
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_debois$elm_mdl$Material_Toolbar$icon,
-									{
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#')),
-										_1: {ctor: '[]'}
-									},
-									'menu'),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$title,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Title'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$section,
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Material_Toolbar$icon,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#')),
-											_1: {ctor: '[]'}
-										},
-										'file_download'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Toolbar$icon,
-											{
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Options$attribute(
-													_elm_lang$html$Html_Attributes$href('#')),
-												_1: {ctor: '[]'}
-											},
-											'print'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Toolbar$icon,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$attribute(
-														_elm_lang$html$Html_Attributes$href('#')),
-													_1: {ctor: '[]'}
-												},
-												'more_vert'),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: _debois$elm_mdl$Demo_Toolbar$body,
-			_1: {ctor: '[]'}
-		}
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
+					_1: {ctor: '[]'}
+				}
+			});
 	});
 var _debois$elm_mdl$Demo_Toolbar$iframe = F2(
 	function (title, sub) {
@@ -38708,27 +38605,212 @@ var _debois$elm_mdl$Demo_Toolbar$iframe = F2(
 				}
 			});
 	});
-var _debois$elm_mdl$Demo_Toolbar$view = F2(
-	function (page, toolbarPage) {
-		var _p0 = toolbarPage;
-		if (_p0.ctor === 'Just') {
-			switch (_p0._0.ctor) {
+var _debois$elm_mdl$Demo_Toolbar$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel};
+var _debois$elm_mdl$Demo_Toolbar$Model = function (a) {
+	return {mdl: a};
+};
+var _debois$elm_mdl$Demo_Toolbar$Mdl = function (a) {
+	return {ctor: 'Mdl', _0: a};
+};
+var _debois$elm_mdl$Demo_Toolbar$update = F3(
+	function (lift, msg, model) {
+		var _p0 = msg;
+		return A3(
+			_debois$elm_mdl$Material$update,
+			function (_p1) {
+				return lift(
+					_debois$elm_mdl$Demo_Toolbar$Mdl(_p1));
+			},
+			_p0._0,
+			model);
+	});
+var _debois$elm_mdl$Demo_Toolbar$menuToolbar = F2(
+	function (lift, model) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Typography$typography,
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_debois$elm_mdl$Material_Toolbar$view,
+					{
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Material_Toolbar$row,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_Toolbar$section,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$alignStart,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_debois$elm_mdl$Material_Toolbar$icon,
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$attribute(
+													_elm_lang$html$Html_Attributes$href('#')),
+												_1: {ctor: '[]'}
+											},
+											'menu'),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$title,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Title'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Toolbar$section,
+										{
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Toolbar$alignEnd,
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_debois$elm_mdl$Material_Toolbar$icon,
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#')),
+													_1: {ctor: '[]'}
+												},
+												'file_download'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_debois$elm_mdl$Material_Toolbar$icon,
+													{
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$attribute(
+															_elm_lang$html$Html_Attributes$href('#')),
+														_1: {ctor: '[]'}
+													},
+													'print'),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_debois$elm_mdl$Material_Toolbar$icon,
+														{
+															ctor: '::',
+															_0: _debois$elm_mdl$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#')),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_debois$elm_mdl$Material_Menu$attach,
+																	function (_p2) {
+																		return lift(
+																			_debois$elm_mdl$Demo_Toolbar$Mdl(_p2));
+																	},
+																	{
+																		ctor: '::',
+																		_0: 0,
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														},
+														'more_vert'),
+													_1: {
+														ctor: '::',
+														_0: A5(
+															_debois$elm_mdl$Material_Menu$render,
+															function (_p3) {
+																return lift(
+																	_debois$elm_mdl$Demo_Toolbar$Mdl(_p3));
+															},
+															{
+																ctor: '::',
+																_0: 0,
+																_1: {ctor: '[]'}
+															},
+															model.mdl,
+															{ctor: '[]'},
+															A3(
+																_debois$elm_mdl$Material_Menu$ul,
+																_debois$elm_mdl$Material_List$ul,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: A3(
+																		_debois$elm_mdl$Material_Menu$li,
+																		_debois$elm_mdl$Material_List$li,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Back'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																})),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _debois$elm_mdl$Demo_Toolbar$body,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _debois$elm_mdl$Demo_Toolbar$view = F4(
+	function (lift, page, toolbarPage, model) {
+		var _p4 = toolbarPage;
+		if (_p4.ctor === 'Just') {
+			switch (_p4._0.ctor) {
 				case 'DefaultToolbar':
-					return _debois$elm_mdl$Demo_Toolbar$defaultToolbar;
+					return A2(_debois$elm_mdl$Demo_Toolbar$defaultToolbar, lift, model);
 				case 'FixedToolbar':
-					return _debois$elm_mdl$Demo_Toolbar$fixedToolbar;
+					return A2(_debois$elm_mdl$Demo_Toolbar$fixedToolbar, lift, model);
 				case 'MenuToolbar':
-					return _debois$elm_mdl$Demo_Toolbar$menuToolbar;
+					return A2(_debois$elm_mdl$Demo_Toolbar$menuToolbar, lift, model);
 				case 'WaterfallToolbar':
-					return _debois$elm_mdl$Demo_Toolbar$waterfallToolbar;
+					return A2(_debois$elm_mdl$Demo_Toolbar$waterfallToolbar, lift, model);
 				case 'DefaultFlexibleToolbar':
-					return _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar;
+					return A2(_debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar, lift, model);
 				case 'WaterfallFlexibleToolbar':
-					return _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar;
+					return A2(_debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar, lift, model);
 				case 'WaterfallToolbarFix':
-					return _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix;
+					return A2(_debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix, lift, model);
 				default:
-					return _debois$elm_mdl$Demo_Toolbar$customToolbar;
+					return A2(_debois$elm_mdl$Demo_Toolbar$customToolbar, lift, model);
 			}
 		} else {
 			return A2(
@@ -40782,7 +40864,7 @@ var _debois$elm_mdl$Main$delta2url = F2(
 				url: _debois$elm_mdl$Main$urlOf(model2)
 			}) : _elm_lang$core$Maybe$Nothing;
 	});
-var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_RadioButtons$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel, lists: _debois$elm_mdl$Demo_Lists$defaultModel, theme: _debois$elm_mdl$Demo_Theme$defaultModel};
+var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_RadioButtons$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel, lists: _debois$elm_mdl$Demo_Lists$defaultModel, theme: _debois$elm_mdl$Demo_Theme$defaultModel, toolbar: _debois$elm_mdl$Demo_Toolbar$defaultModel};
 var _debois$elm_mdl$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -40814,7 +40896,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 																							return function (x) {
 																								return function (y) {
 																									return function (z) {
-																										return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, layoutGrid: k, menus: l, permanentAboveDrawer: m, permanentBelowDrawer: n, persistentDrawer: o, radio: p, ripple: q, selects: r, slider: s, snackbar: t, $switch: u, tabs: v, temporaryDrawer: w, textfields: x, lists: y, theme: z};
+																										return function (_1) {
+																											return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, layoutGrid: k, menus: l, permanentAboveDrawer: m, permanentBelowDrawer: n, persistentDrawer: o, radio: p, ripple: q, selects: r, slider: s, snackbar: t, $switch: u, tabs: v, temporaryDrawer: w, textfields: x, lists: y, theme: z, toolbar: _1};
+																										};
 																									};
 																								};
 																							};
@@ -40840,6 +40924,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 			};
 		};
 	};
+};
+var _debois$elm_mdl$Main$ToolbarMsg = function (a) {
+	return {ctor: 'ToolbarMsg', _0: a};
 };
 var _debois$elm_mdl$Main$ThemeMsg = function (a) {
 	return {ctor: 'ThemeMsg', _0: a};
@@ -41007,7 +41094,7 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 		case 'Theme':
 			return A3(_debois$elm_mdl$Demo_Theme$view, _debois$elm_mdl$Main$ThemeMsg, page, model.theme);
 		case 'Toolbar':
-			return A2(_debois$elm_mdl$Demo_Toolbar$view, page, _p1._0);
+			return A4(_debois$elm_mdl$Demo_Toolbar$view, _debois$elm_mdl$Main$ToolbarMsg, page, _p1._0, model.toolbar);
 		case 'GridList':
 			return A3(_debois$elm_mdl$Demo_GridList$view, _debois$elm_mdl$Main$GridListMsg, page, model.gridList);
 		case 'LayoutGrid':
@@ -41414,7 +41501,7 @@ var _debois$elm_mdl$Main$update = F2(
 						{lists: lists}),
 					_1: effects
 				};
-			default:
+			case 'ThemeMsg':
 				var _p27 = A3(_debois$elm_mdl$Demo_Theme$update, _debois$elm_mdl$Main$ThemeMsg, _p3._0, model.theme);
 				var theme = _p27._0;
 				var effects = _p27._1;
@@ -41425,12 +41512,23 @@ var _debois$elm_mdl$Main$update = F2(
 						{theme: theme}),
 					_1: effects
 				};
+			default:
+				var _p28 = A3(_debois$elm_mdl$Demo_Toolbar$update, _debois$elm_mdl$Main$ToolbarMsg, _p3._0, model.toolbar);
+				var toolbar = _p28._0;
+				var effects = _p28._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{toolbar: toolbar}),
+					_1: effects
+				};
 		}
 	});
 var _debois$elm_mdl$Main$init = function () {
-	var _p28 = _debois$elm_mdl$Demo_LayoutGrid$init(_debois$elm_mdl$Main$LayoutGridMsg);
-	var layoutGrid = _p28._0;
-	var layoutGridEffects = _p28._1;
+	var _p29 = _debois$elm_mdl$Demo_LayoutGrid$init(_debois$elm_mdl$Main$LayoutGridMsg);
+	var layoutGrid = _p29._0;
+	var layoutGridEffects = _p29._1;
 	return {
 		ctor: '_Tuple2',
 		_0: _elm_lang$core$Native_Utils.update(
