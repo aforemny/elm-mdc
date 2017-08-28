@@ -62,6 +62,7 @@ import Material.Internal.Options as Internal
 import Material.Internal.Textfield exposing (Msg(..))
 import Material.Msg exposing (Index) 
 import Material.Options as Options exposing (cs, css, nop, Style, when)
+import Material.Ripple as Ripple
 import Regex
 
 
@@ -217,6 +218,7 @@ type alias Model =
     { isFocused : Bool
     , isDirty : Bool
     , value : Maybe String
+    , ripple : Ripple.Model
     }
 
 
@@ -225,6 +227,7 @@ defaultModel =
     { isFocused = False
     , isDirty = False
     , value = Nothing
+    , ripple = Ripple.defaultModel
     }
 
 
@@ -232,26 +235,31 @@ type alias Msg
     = Material.Internal.Textfield.Msg
 
 
-update : x -> Msg -> Model -> ( Maybe Model, Cmd msg )
-update _ msg model =
-    (case msg of
+update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
+update lift msg model =
+    case msg of
         Input str ->
             let
                 dirty =
                     str /= ""
             in
-                Just { model | value = Just str, isDirty = dirty }
+            ( Just { model | value = Just str, isDirty = dirty }, Cmd.none )
 
         Blur ->
-            Just { model | isFocused = False }
+            ( Just { model | isFocused = False }, Cmd.none )
 
         Focus ->
-            Just { model | isFocused = True }
+            ( Just { model | isFocused = True }, Cmd.none )
 
         NoOp ->
-            Just model
-    )
-      |> flip (!) []
+            ( Just model, Cmd.none )
+
+        RippleMsg msg_ ->
+            let
+                ( ripple, effects ) =
+                    Ripple.update msg_ model.ripple
+            in
+            ( Just { model | ripple = ripple }, Cmd.map (RippleMsg >> lift) effects )
 
 
 
@@ -288,6 +296,9 @@ view lift model options _ =
         isFocused =
             model.isFocused && not config.disabled
 
+        ( rippleOptions, rippleStyle ) =
+            Ripple.view False (RippleMsg >> lift) model.ripple [] []
+
         isInvalid =
             case config.pattern of
                 Just pattern ->
@@ -308,6 +319,10 @@ view lift model options _ =
             , cs "mdc-textfield--fullwidth" |> when config.fullWidth
             , cs "mdc-textfield--invalid" |> when isInvalid
             , cs "mdc-textfield--multiline" |> when config.multiline
+            , when config.textfieldBox << Options.many <|
+              [ cs "mdc-textfield--box"
+              , rippleOptions
+              ]
             , preventEnterWhenMaxRowsExceeded
             ]
             [ Internal.applyInput summary
@@ -315,7 +330,6 @@ view lift model options _ =
                 [
                   cs "mdc-textfield__input"
                 , css "outline" "none"
-                , cs "mdc-textfield--box" |> when config.textfieldBox
                 , Internal.on1 "focus" lift Focus
                 , Internal.on1 "blur" lift Blur
                 , Options.onInput (Input >> lift)
@@ -350,6 +364,8 @@ view lift model options _ =
               ]
               [
               ]
+
+            , rippleStyle
             ]
 
 
