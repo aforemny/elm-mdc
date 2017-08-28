@@ -17235,8 +17235,13 @@ var _debois$elm_mdl$Material_Toolbar$waterfall = function (scrollTop) {
 				});
 		});
 };
-var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Options$cs('mdc-toolbar--fixed');
-var _debois$elm_mdl$Material_Toolbar$defaultConfig = {flexible: _elm_lang$core$Maybe$Nothing, waterfall: _elm_lang$core$Maybe$Nothing, backgroundImage: _elm_lang$core$Maybe$Nothing};
+var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fixedLastRow: true});
+	});
+var _debois$elm_mdl$Material_Toolbar$defaultConfig = {flexible: _elm_lang$core$Maybe$Nothing, waterfall: _elm_lang$core$Maybe$Nothing, backgroundImage: _elm_lang$core$Maybe$Nothing, fixedLastRow: false};
 var _debois$elm_mdl$Material_Toolbar$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -17284,8 +17289,8 @@ var _debois$elm_mdl$Material_Toolbar$resize = F2(
 			{toolbarRowHeight: toolbarRowHeight, toolbarHeight: toolbarHeight, flexibleExpansionHeight: flexibleExpansionHeight, maxTranslateYDistance: maxTranslateYDistance, scrollThreshold: scrollThreshold}) : calculations;
 	});
 var _debois$elm_mdl$Material_Toolbar$defaultCalculations = {toolbarRowHeight: 0, toolbarHeight: 0, toolbarRatio: 0, flexibleExpansionHeight: 0, flexibleExpansionRatio: 0, maxTranslateYDistance: 0, maxTranslateYRatio: 0, scrollThreshold: 0, scrollThresholdRatio: 0};
-var _debois$elm_mdl$Material_Toolbar$calculate = F2(
-	function (geometry, scrollTop) {
+var _debois$elm_mdl$Material_Toolbar$calculate = F3(
+	function (config, geometry, scrollTop) {
 		var updateToolbarStyles = function (calculations) {
 			var flexibleExpansionRatio = A2(_elm_lang$core$Basics$max, 0, 1 - (scrollTop / (calculations.flexibleExpansionHeight + 1.0e-4)));
 			var hasScrolledOutOfThreshold = _elm_lang$core$Native_Utils.cmp(scrollTop, calculations.scrollThreshold) > 0;
@@ -17303,7 +17308,7 @@ var _debois$elm_mdl$Material_Toolbar$calculate = F2(
 				calculations,
 				{toolbarRowHeight: toolbarRowHeight, toolbarHeight: toolbarHeight, flexibleExpansionHeight: flexibleExpansionHeight, maxTranslateYDistance: maxTranslateYDistance, scrollThreshold: scrollThreshold});
 		};
-		var fixedLastRow = false;
+		var fixedLastRow = config.fixedLastRow;
 		var initKeyRatio = function (calculations) {
 			var toolbarRowHeight = geometry.getRowHeight;
 			var firstRowMaxRatio = _elm_lang$core$Native_Utils.eq(toolbarRowHeight, 0) ? 0 : (geometry.getFirstRowElementOffsetHeight / toolbarRowHeight);
@@ -17347,7 +17352,7 @@ var _debois$elm_mdl$Material_Toolbar$view = F4(
 		var _p4 = function () {
 			var _p5 = {ctor: '_Tuple2', _0: scrollTop, _1: model.geometry};
 			if (((_p5.ctor === '_Tuple2') && (_p5._0.ctor === 'Just')) && (_p5._1.ctor === 'Just')) {
-				var calculations = A2(_debois$elm_mdl$Material_Toolbar$calculate, _p5._1._0, _p5._0._0);
+				var calculations = A3(_debois$elm_mdl$Material_Toolbar$calculate, config, _p5._1._0, _p5._0._0);
 				var backgroundImage = function () {
 					var _p6 = config.backgroundImage;
 					if (_p6.ctor === 'Just') {
@@ -17500,9 +17505,9 @@ var _debois$elm_mdl$Material_Toolbar$Calculations = F9(
 	function (a, b, c, d, e, f, g, h, i) {
 		return {toolbarRowHeight: a, toolbarHeight: b, toolbarRatio: c, flexibleExpansionHeight: d, flexibleExpansionRatio: e, maxTranslateYDistance: f, maxTranslateYRatio: g, scrollThreshold: h, scrollThresholdRatio: i};
 	});
-var _debois$elm_mdl$Material_Toolbar$Config = F3(
-	function (a, b, c) {
-		return {flexible: a, waterfall: b, backgroundImage: c};
+var _debois$elm_mdl$Material_Toolbar$Config = F4(
+	function (a, b, c, d) {
+		return {flexible: a, waterfall: b, backgroundImage: c, fixedLastRow: d};
 	});
 
 var _debois$elm_mdl$Material$top = function (content) {
@@ -38863,11 +38868,7 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 						ctor: '::',
 						_0: A2(
 							_debois$elm_mdl$Material_Toolbar$row,
-							{
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
-								_1: {ctor: '[]'}
-							},
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: A2(
