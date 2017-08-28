@@ -17205,6 +17205,16 @@ var _debois$elm_mdl$Material_Toolbar$icon = F2(
 				_1: {ctor: '[]'}
 			});
 	});
+var _debois$elm_mdl$Material_Toolbar$backgroundImage = function (backgroundImage) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					backgroundImage: _elm_lang$core$Maybe$Just(backgroundImage)
+				});
+		});
+};
 var _debois$elm_mdl$Material_Toolbar$flexible = function (scrollTop) {
 	return _debois$elm_mdl$Material_Internal_Options$option(
 		function (config) {
@@ -17226,7 +17236,7 @@ var _debois$elm_mdl$Material_Toolbar$waterfall = function (scrollTop) {
 		});
 };
 var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Options$cs('mdc-toolbar--fixed');
-var _debois$elm_mdl$Material_Toolbar$defaultConfig = {flexible: _elm_lang$core$Maybe$Nothing, waterfall: _elm_lang$core$Maybe$Nothing};
+var _debois$elm_mdl$Material_Toolbar$defaultConfig = {flexible: _elm_lang$core$Maybe$Nothing, waterfall: _elm_lang$core$Maybe$Nothing, backgroundImage: _elm_lang$core$Maybe$Nothing};
 var _debois$elm_mdl$Material_Toolbar$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -17309,8 +17319,8 @@ var _debois$elm_mdl$Material_Toolbar$calculate = F2(
 			setKeyHeights(
 				initKeyRatio(_debois$elm_mdl$Material_Toolbar$defaultCalculations)));
 	});
-var _debois$elm_mdl$Material_Toolbar$view = F3(
-	function (lift, model, options) {
+var _debois$elm_mdl$Material_Toolbar$view = F4(
+	function (lift, model, options, nodes) {
 		var initOn = function (event) {
 			return A2(
 				_debois$elm_mdl$Material_Options$on,
@@ -17326,7 +17336,95 @@ var _debois$elm_mdl$Material_Toolbar$view = F3(
 		var _p2 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Toolbar$defaultConfig, options);
 		var summary = _p2;
 		var config = _p2.config;
-		return A4(
+		var scrollTop = function () {
+			var _p3 = config.flexible;
+			if (_p3.ctor === 'Just') {
+				return _elm_lang$core$Maybe$Just(_p3._0);
+			} else {
+				return config.waterfall;
+			}
+		}();
+		var _p4 = function () {
+			var _p5 = {ctor: '_Tuple2', _0: scrollTop, _1: model.geometry};
+			if (((_p5.ctor === '_Tuple2') && (_p5._0.ctor === 'Just')) && (_p5._1.ctor === 'Just')) {
+				var calculations = A2(_debois$elm_mdl$Material_Toolbar$calculate, _p5._1._0, _p5._0._0);
+				var backgroundImage = function () {
+					var _p6 = config.backgroundImage;
+					if (_p6.ctor === 'Just') {
+						return {
+							ctor: '::',
+							_0: A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_Options$css,
+										'background-image',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'url(',
+											A2(_elm_lang$core$Basics_ops['++'], _p6._0, ')'))),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'background-size', 'cover'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'transition', 'opacity 0.2s ease'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'absolute'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'top', '0'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'left', '0'),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '100%'),
+															_1: {
+																ctor: '::',
+																_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '100%'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_debois$elm_mdl$Material_Options$css,
+																		'opacity',
+																		(_elm_lang$core$Native_Utils.cmp(calculations.flexibleExpansionRatio, 0) > 0) ? '1' : '0'),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						};
+					} else {
+						return {ctor: '[]'};
+					}
+				}();
+				return {
+					ctor: '_Tuple2',
+					_0: (_elm_lang$core$Native_Utils.cmp(calculations.flexibleExpansionRatio, 1) > -1) ? _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-space-maximized') : ((_elm_lang$core$Native_Utils.cmp(calculations.flexibleExpansionRatio, 0) < 1) ? _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-space-minimized') : _debois$elm_mdl$Material_Options$nop),
+					_1: backgroundImage
+				};
+			} else {
+				return {
+					ctor: '_Tuple2',
+					_0: _debois$elm_mdl$Material_Options$nop,
+					_1: {ctor: '[]'}
+				};
+			}
+		}();
+		var flexibleBehavior = _p4._0;
+		var backgroundImage = _p4._1;
+		return A5(
 			_debois$elm_mdl$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$header,
@@ -17338,7 +17436,16 @@ var _debois$elm_mdl$Material_Toolbar$view = F3(
 					_0: A2(
 						_debois$elm_mdl$Material_Options$when,
 						!_elm_lang$core$Native_Utils.eq(config.flexible, _elm_lang$core$Maybe$Nothing),
-						_debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible')),
+						_debois$elm_mdl$Material_Options$many(
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible'),
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-default-behavior'),
+									_1: {ctor: '[]'}
+								}
+							})),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -17354,34 +17461,17 @@ var _debois$elm_mdl$Material_Toolbar$view = F3(
 									_debois$elm_mdl$Material_Options$when,
 									model.requestAnimation,
 									_debois$elm_mdl$Material_Options$cs('elm-mdc-toolbar--uninitialized')),
-								_1: {
-									ctor: '::',
-									_0: function () {
-										var _p3 = {ctor: '_Tuple2', _0: config.flexible, _1: model.geometry};
-										if (((_p3.ctor === '_Tuple2') && (_p3._0.ctor === 'Just')) && (_p3._1.ctor === 'Just')) {
-											var calculations = A2(
-												_elm_lang$core$Debug$log,
-												'calculation',
-												A2(
-													_debois$elm_mdl$Material_Toolbar$calculate,
-													A2(_elm_lang$core$Debug$log, 'geometry', _p3._1._0),
-													A2(_elm_lang$core$Debug$log, 'scrollTop', _p3._0._0)));
-											return (_elm_lang$core$Native_Utils.cmp(calculations.flexibleExpansionRatio, 1) > -1) ? _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-space-maximized') : ((_elm_lang$core$Native_Utils.cmp(calculations.flexibleExpansionRatio, 0) < 1) ? _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-space-minimized') : _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-default-behavior'));
-										} else {
-											return _debois$elm_mdl$Material_Options$nop;
-										}
-									}(),
-									_1: options
-								}
+								_1: {ctor: '::', _0: flexibleBehavior, _1: options}
 							}
 						}
 					}
 				}
 			},
-			{ctor: '[]'});
+			{ctor: '[]'},
+			A2(_elm_lang$core$Basics_ops['++'], nodes, backgroundImage));
 	});
 var _debois$elm_mdl$Material_Toolbar$defaultModel = {calculations: _debois$elm_mdl$Material_Toolbar$defaultCalculations, geometry: _elm_lang$core$Maybe$Nothing, initialized: false, requestAnimation: true};
-var _debois$elm_mdl$Material_Toolbar$_p4 = A3(
+var _debois$elm_mdl$Material_Toolbar$_p7 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
 		return _.toolbar;
@@ -17393,8 +17483,8 @@ var _debois$elm_mdl$Material_Toolbar$_p4 = A3(
 				{toolbar: x});
 		}),
 	_debois$elm_mdl$Material_Toolbar$defaultModel);
-var _debois$elm_mdl$Material_Toolbar$get = _debois$elm_mdl$Material_Toolbar$_p4._0;
-var _debois$elm_mdl$Material_Toolbar$set = _debois$elm_mdl$Material_Toolbar$_p4._1;
+var _debois$elm_mdl$Material_Toolbar$get = _debois$elm_mdl$Material_Toolbar$_p7._0;
+var _debois$elm_mdl$Material_Toolbar$set = _debois$elm_mdl$Material_Toolbar$_p7._1;
 var _debois$elm_mdl$Material_Toolbar$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Toolbar$get, _debois$elm_mdl$Material_Toolbar$view, _debois$elm_mdl$Material_Msg$ToolbarMsg);
 var _debois$elm_mdl$Material_Toolbar$react = A4(
 	_debois$elm_mdl$Material_Component$react,
@@ -17410,9 +17500,9 @@ var _debois$elm_mdl$Material_Toolbar$Calculations = F9(
 	function (a, b, c, d, e, f, g, h, i) {
 		return {toolbarRowHeight: a, toolbarHeight: b, toolbarRatio: c, flexibleExpansionHeight: d, flexibleExpansionRatio: e, maxTranslateYDistance: f, maxTranslateYRatio: g, scrollThreshold: h, scrollThresholdRatio: i};
 	});
-var _debois$elm_mdl$Material_Toolbar$Config = F2(
-	function (a, b) {
-		return {flexible: a, waterfall: b};
+var _debois$elm_mdl$Material_Toolbar$Config = F3(
+	function (a, b, c) {
+		return {flexible: a, waterfall: b, backgroundImage: c};
 	});
 
 var _debois$elm_mdl$Material$top = function (content) {
@@ -38617,19 +38707,11 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
 					model.mdl,
 					{
 						ctor: '::',
-						_0: _debois$elm_mdl$Material_Toolbar$fixed,
+						_0: _debois$elm_mdl$Material_Toolbar$flexible(model.scroll.pageY),
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$flexible(model.scroll.pageY),
-							_1: {
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-image', 'url(images/4-3.jpg)'),
-								_1: {
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'background-size', 'cover'),
-									_1: {ctor: '[]'}
-								}
-							}
+							_0: _debois$elm_mdl$Material_Toolbar$backgroundImage('images/4-3.jpg'),
+							_1: {ctor: '[]'}
 						}
 					},
 					{
@@ -38674,14 +38756,7 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
 											_1: {ctor: '[]'}
 										}
 									}),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Material_Toolbar$row,
-								{ctor: '[]'},
-								{
+								_1: {
 									ctor: '::',
 									_0: A2(
 										_debois$elm_mdl$Material_Toolbar$section,
@@ -38728,9 +38803,9 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
 											}
 										}),
 									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
+								}
+							}),
+						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
