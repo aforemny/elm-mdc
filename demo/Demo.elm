@@ -12,6 +12,7 @@ import Demo.LayoutGrid
 import Demo.LayoutGrid
 import Demo.LinearProgress
 import Demo.Lists
+import Demo.Lists
 import Demo.Menus
 import Demo.Page as Page exposing (Url(..))
 import Demo.PermanentAboveDrawer
@@ -19,7 +20,6 @@ import Demo.PermanentBelowDrawer
 import Demo.PersistentDrawer
 import Demo.RadioButtons
 import Demo.Ripple
-import Demo.Lists
 import Demo.Selects
 import Demo.Slider
 import Demo.Snackbar
@@ -28,6 +28,7 @@ import Demo.Switch
 import Demo.Tabs
 import Demo.TemporaryDrawer
 import Demo.Textfields
+import Demo.Theme
 import Demo.Theme
 import Demo.Toolbar
 import Demo.Typography
@@ -70,6 +71,7 @@ type alias Model =
     , temporaryDrawer : Demo.TemporaryDrawer.Model
     , textfields : Demo.Textfields.Model
     , lists : Demo.Lists.Model
+    , theme : Demo.Theme.Model
     }
 
 
@@ -100,6 +102,7 @@ defaultModel =
     , gridList = Demo.GridList.defaultModel
     , layoutGrid = Demo.LayoutGrid.defaultModel
     , lists = Demo.Lists.defaultModel
+    , theme = Demo.Theme.defaultModel
     }
 
 
@@ -131,6 +134,7 @@ type Msg
     | GridListMsg (Demo.GridList.Msg Msg)
     | LayoutGridMsg (Demo.LayoutGrid.Msg)
     | ListsMsg (Demo.Lists.Msg Msg)
+    | ThemeMsg (Demo.Theme.Msg Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -303,6 +307,13 @@ update msg model =
             in
                 ( { model | lists = lists }, effects ) 
 
+        ThemeMsg msg_ ->
+            let
+                (theme, effects) =
+                    Demo.Theme.update ThemeMsg msg_ model.theme
+            in
+                ( { model | theme = theme }, effects ) 
+
 
 view : Model -> Html Msg
 view =
@@ -400,7 +411,7 @@ view_ model =
             Demo.Textfields.view TextfieldMsg page model.textfields
 
         Theme ->
-            Demo.Theme.view page
+            Demo.Theme.view ThemeMsg page model.theme
 
         Toolbar ->
             Demo.Toolbar.view page

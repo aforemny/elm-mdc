@@ -282,7 +282,7 @@ example8 lift mdl index model =
         [ text "Within mdc-toolbar + primary indicator"
         ]
       , Toolbar.view
-        [ Theme.accentBg
+        [ Theme.secondaryBg
         ]
         [ Toolbar.row []
           [ Toolbar.section
