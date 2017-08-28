@@ -10552,7 +10552,9 @@ var _debois$elm_mdl$Demo_Page$Error404 = function (a) {
 	return {ctor: 'Error404', _0: a};
 };
 var _debois$elm_mdl$Demo_Page$Typography = {ctor: 'Typography'};
-var _debois$elm_mdl$Demo_Page$Toolbar = {ctor: 'Toolbar'};
+var _debois$elm_mdl$Demo_Page$Toolbar = function (a) {
+	return {ctor: 'Toolbar', _0: a};
+};
 var _debois$elm_mdl$Demo_Page$Theme = {ctor: 'Theme'};
 var _debois$elm_mdl$Demo_Page$TextField = {ctor: 'TextField'};
 var _debois$elm_mdl$Demo_Page$Tabs = {ctor: 'Tabs'};
@@ -10669,6 +10671,14 @@ var _debois$elm_mdl$Demo_Page$toolbar = F3(
 				_1: {ctor: '[]'}
 			});
 	});
+var _debois$elm_mdl$Demo_Page$CustomToolbar = {ctor: 'CustomToolbar'};
+var _debois$elm_mdl$Demo_Page$WaterfallToolbarFix = {ctor: 'WaterfallToolbarFix'};
+var _debois$elm_mdl$Demo_Page$WaterfallFlexibleToolbar = {ctor: 'WaterfallFlexibleToolbar'};
+var _debois$elm_mdl$Demo_Page$DefaultFlexibleToolbar = {ctor: 'DefaultFlexibleToolbar'};
+var _debois$elm_mdl$Demo_Page$WaterfallToolbar = {ctor: 'WaterfallToolbar'};
+var _debois$elm_mdl$Demo_Page$MenuToolbar = {ctor: 'MenuToolbar'};
+var _debois$elm_mdl$Demo_Page$FixedToolbar = {ctor: 'FixedToolbar'};
+var _debois$elm_mdl$Demo_Page$DefaultToolbar = {ctor: 'DefaultToolbar'};
 
 var _debois$elm_mdl$Material_Helpers$noAttr = A2(_elm_lang$html$Html_Attributes$attribute, 'data-elm-mdc-noop', '');
 var _debois$elm_mdl$Material_Helpers$aria = F2(
@@ -32566,7 +32576,12 @@ var _debois$elm_mdl$Demo_Startpage$view = function (page) {
 																																	_0: {url: _debois$elm_mdl$Demo_Page$Theme, icon: 'ic_theme_24px.svg', title: 'Theme', subtitle: 'Using primary and accent colors'},
 																																	_1: {
 																																		ctor: '::',
-																																		_0: {url: _debois$elm_mdl$Demo_Page$Toolbar, icon: 'ic_toolbar_24px.svg', title: 'Toolbar', subtitle: 'Header and footers'},
+																																		_0: {
+																																			url: _debois$elm_mdl$Demo_Page$Toolbar(_elm_lang$core$Maybe$Nothing),
+																																			icon: 'ic_toolbar_24px.svg',
+																																			title: 'Toolbar',
+																																			subtitle: 'Header and footers'
+																																		},
 																																		_1: {
 																																			ctor: '::',
 																																			_0: {url: _debois$elm_mdl$Demo_Page$Typography, icon: 'ic_typography_24px.svg', title: 'Typography', subtitle: 'Type hierarchy'},
@@ -38458,49 +38473,88 @@ var _debois$elm_mdl$Demo_Toolbar$example = F2(
 				}
 			});
 	});
-var _debois$elm_mdl$Demo_Toolbar$view = function (page) {
-	return A3(
-		_debois$elm_mdl$Material_Options$styled,
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Typography$typography,
-			_1: {
+var _debois$elm_mdl$Demo_Toolbar$iframe = F2(
+	function (title, sub) {
+		var url = A2(_elm_lang$core$Basics_ops['++'], 'https://aforemny.github.io/elm-mdc/#toolbar/', sub);
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
-				_1: {ctor: '[]'}
-			}
-		},
-		{
-			ctor: '::',
-			_0: A2(_debois$elm_mdl$Demo_Toolbar$example, 'Normal Toolbar', _debois$elm_mdl$Demo_Toolbar$example0),
-			_1: {
-				ctor: '::',
-				_0: A2(_debois$elm_mdl$Demo_Toolbar$example, 'Fixed Toolbar', _debois$elm_mdl$Demo_Toolbar$example1),
-				_1: {
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Demo_Toolbar$example, 'Waterfall Toolbar', _debois$elm_mdl$Demo_Toolbar$example2),
-					_1: {
+				_0: A2(
+					_elm_lang$html$Html$h2,
+					{ctor: '[]'},
+					{
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Demo_Toolbar$example, 'Default Flexible Toolbar', _debois$elm_mdl$Demo_Toolbar$example3),
+						_0: _elm_lang$html$Html$text(title),
 						_1: {
 							ctor: '::',
-							_0: A2(_debois$elm_mdl$Demo_Toolbar$example, 'Waterfall Flexible Toolbar', _debois$elm_mdl$Demo_Toolbar$example4),
-							_1: {
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Demo_Toolbar$example, 'Waterfall Toolbar Fix Last Row', _debois$elm_mdl$Demo_Toolbar$example5),
-								_1: {
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{ctor: '[]'},
+								{
 									ctor: '::',
-									_0: A2(_debois$elm_mdl$Demo_Toolbar$example, 'Waterfall Flexible Toolbar with Custom Style', _debois$elm_mdl$Demo_Toolbar$example6),
+									_0: _elm_lang$html$Html$text('Toggle RTL'),
 									_1: {ctor: '[]'}
-								}
-							}
+								}),
+							_1: {ctor: '[]'}
 						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$a,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$href(url),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('View in separate window'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$iframe,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$src(url),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
 					}
 				}
-			}
-		});
-};
+			});
+	});
+var _debois$elm_mdl$Demo_Toolbar$view = F2(
+	function (page, toolbarPage) {
+		var _p0 = toolbarPage;
+		if (_p0.ctor === 'Just') {
+			return _debois$elm_mdl$Demo_Toolbar$example0;
+		} else {
+			return A3(
+				_debois$elm_mdl$Material_Options$styled,
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _debois$elm_mdl$Material_Typography$typography,
+					_1: {
+						ctor: '::',
+						_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar-demo'),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(_debois$elm_mdl$Demo_Toolbar$iframe, 'Normal Toolbar', 'default-toolbar'),
+					_1: {ctor: '[]'}
+				});
+		}
+	});
 
 var _debois$elm_mdl$Demo_Typography$example = F2(
 	function (title, adjustMargin) {
@@ -40340,7 +40394,28 @@ var _debois$elm_mdl$Main$urlOf = function (model) {
 		case 'Theme':
 			return '#theme';
 		case 'Toolbar':
-			return '#toolbar';
+			if (_p0._0.ctor === 'Nothing') {
+				return '#toolbar';
+			} else {
+				switch (_p0._0._0.ctor) {
+					case 'DefaultToolbar':
+						return '#toolbar/default-toolbar';
+					case 'FixedToolbar':
+						return '#toolbar/fixed-toolbar';
+					case 'MenuToolbar':
+						return '#toolbar/menu-toolbar';
+					case 'WaterfallToolbar':
+						return '#toolbar/waterfall-toolbar';
+					case 'DefaultFlexibleToolbar':
+						return '#toolbar/default-flexible-toolbar';
+					case 'WaterfallFlexibleToolbar':
+						return '#toolbar/waterfall-flexible-toolbar';
+					case 'WaterfallToolbarFix':
+						return '#toolbar/waterfall-toolbar-fix-last-row';
+					default:
+						return '#toolbar/waterfall-flexible-toolbar-custom-style';
+				}
+			}
 		case 'Typography':
 			return '#typography';
 		default:
@@ -40580,7 +40655,7 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 		case 'Theme':
 			return A3(_debois$elm_mdl$Demo_Theme$view, _debois$elm_mdl$Main$ThemeMsg, page, model.theme);
 		case 'Toolbar':
-			return _debois$elm_mdl$Demo_Toolbar$view(page);
+			return A2(_debois$elm_mdl$Demo_Toolbar$view, page, _p1._0);
 		case 'GridList':
 			return A3(_debois$elm_mdl$Demo_GridList$view, _debois$elm_mdl$Main$GridListMsg, page, model.gridList);
 		case 'LayoutGrid':
@@ -40679,7 +40754,31 @@ var _debois$elm_mdl$Main$location2messages = function (location) {
 					case '#theme':
 						return _debois$elm_mdl$Demo_Page$Theme;
 					case '#toolbar':
-						return _debois$elm_mdl$Demo_Page$Toolbar;
+						return _debois$elm_mdl$Demo_Page$Toolbar(_elm_lang$core$Maybe$Nothing);
+					case '#toolbar/default-toolbar':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$DefaultToolbar));
+					case '#toolbar/fixed-toolbar':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$FixedToolbar));
+					case '#toolbar/menu-toolbar':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$MenuToolbar));
+					case '#toolbar/waterfall-toolbar':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$WaterfallToolbar));
+					case '#toolbar/default-flexible-toolbar':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$DefaultFlexibleToolbar));
+					case '#toolbar/waterfall-flexible-toolbar':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$WaterfallFlexibleToolbar));
+					case '#toolbar/waterfall-toolbar-fix-last-row':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$WaterfallToolbarFix));
+					case '#toolbar/waterfall-flexible-toolbar-custom-style':
+						return _debois$elm_mdl$Demo_Page$Toolbar(
+							_elm_lang$core$Maybe$Just(_debois$elm_mdl$Demo_Page$CustomToolbar));
 					case '#typography':
 						return _debois$elm_mdl$Demo_Page$Typography;
 					default:
