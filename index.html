@@ -46,12 +46,16 @@
       app.ports.scrollTop.subscribe(function() {
           document.scrollingElement.scrollTop = 0;
       });
+      window.addEventListener("scroll", function(event) {
+          app.ports.onScroll.send( { pageX: 0, pageY : window.pageYOffset } )
+      });
     </script>
 
     <style type="text/css">
 
     .elm-mdc-slider--uninitialized,
-    .elm-mdc-tab-bar--uninitialized
+    .elm-mdc-tab-bar--uninitialized,
+    .elm-mdc-toolbar--uninitialized
     {
       animation-duration: 0.001s;
       animation-name: nodeInserted;
