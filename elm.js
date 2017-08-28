@@ -39043,7 +39043,14 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = F2(
 											_1: {ctor: '[]'}
 										}
 									}),
-								_1: {
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Toolbar$row,
+								{ctor: '[]'},
+								{
 									ctor: '::',
 									_0: A2(
 										_debois$elm_mdl$Material_Toolbar$section,
@@ -39090,9 +39097,9 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = F2(
 											}
 										}),
 									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}),
 				_1: {
 					ctor: '::',
