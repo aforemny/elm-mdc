@@ -1,84 +1,54 @@
 module Material.Textfield
     exposing
-        ( Property
+        ( -- VIEW
+          view
+        , Property
+        
+          -- OPTIONS
         , label
---        , floatingLabel
-        , value
-        , defaultValue
         , disabled
-        , render
-        , react
---        , autofocus
---        , maxlength
         , dense
+        , value
+        , fullWidth
+        , placeholder
+        , autofocus
+        , maxlength
+
+        , pattern
         , required
-        , type_
-        , password
-        , email
+
         , textfield
+        , multiline
         , rows
         , cols
         , maxRows
-        , pattern
-        , multiline
-        , fullWidth
-        , placeholder
+
+        , password
+        , email
+        , type_
+          
+          -- TEA
         , Model
         , defaultModel
         , Msg
         , update
-        , view
-        , Config
-        , defaultConfig
+          
+          -- RENDER
+        , render
+        , Store
+        , react
         )
 
+{-|
+> The MDC Text Field component provides a textual input field adhering to the
+> Material Design Specification. It is fully accessible, ships with RTL
+> support, and includes a gracefully-degraded version that does not require any
+> javascript.
 
-{-| From the [Material Design Lite documentation](http://www.getmdl.io/components/#textfields-section):
+## Design & API Documentation
 
-> The Material Design Lite (MDL) text field component is an enhanced version of
-> the standard HTML `<input type="text">` and `<input type="textarea">` elements.
-> A text field consists of a horizontal line indicating where keyboard input
-> can occur and, typically, text that clearly communicates the intended
-> contents of the text field. The MDL text field component provides various
-> types of text fields, and allows you to add both display and click effects.
->
-> Text fields are a common feature of most user interfaces, regardless of a
-> site's content or function. Their design and use is therefore an important
-> factor in the overall user experience. See the text field component's
-> [Material  Design specifications page](https://www.google.com/design/spec/components/text-fields.html)
-> for details.
->
-> The enhanced text field component has a more vivid visual look than a standard
-> text field, and may be initially or programmatically disabled. There are three
-> main types of text fields in the text field component, each with its own basic
-> coding requirements. The types are single-line, multi-line, and expandable.
-
-
-Refer to
-[this site](https://debois.github.io/elm-mdl/#textfields)
-for a live demo.
-
-# Component render
-@docs render
-
-# Options
-@docs Property, Config, defaultConfig, value, defaultValue
-
-## Appearance
-
-@docs label, floatingLabel
-
-## Html attributes
-@docs disabled, rows, cols
-@docs autofocus, maxlength, maxRows
-
-@docs password, email, textarea, text_
-
-# Elm Architecture
-@docs Msg, Model, defaultModel, update, view
-
-# Internal use
-@docs react
+- (Material Design guidelines: Text Fields)[https://material.io/guidelines/components/text-fields.html]
+- (Demo)[https://aforemny.github.io/elm-mdc/#text-field]
 
 -}
 
@@ -95,11 +65,6 @@ import Material.Options as Options exposing (cs, css, nop, Style, when)
 import Regex
 
 
--- OPTIONS
-
-
-{-| TODO
--}
 type alias Config m =
     { labelText : Maybe String
     , labelFloat : Bool
@@ -120,8 +85,6 @@ type alias Config m =
     }
 
 
-{-| TODO
--}
 defaultConfig : Config m
 defaultConfig =
     { labelText = Nothing
@@ -143,131 +106,83 @@ defaultConfig =
     }
 
 
-{-| Type of Textfield options
--}
 type alias Property m =
     Options.Property (Config m) m
 
 
-{-| Label of the textfield
--}
 label : String -> Property m
 label =
     Internal.option
         << (\str config -> { config | labelText = Just str })
 
 
-{-| Label of textfield animates away from the input area on input
--}
-floatingLabel : Property m
-floatingLabel =
-    Internal.option
-        (\config -> { config | labelFloat = True })
-
-
-{-| Current value of the textfield.
--}
 value : String -> Property m
 value =
     Internal.option
         << (\str config -> { config | value = Just str })
 
 
-{-| Set the default value of the textfield
--}
-defaultValue : String -> Property m
-defaultValue =
-    Internal.option
-        << (\str config -> { config | defaultValue = Just str })
-
-
-{-| Specifies that the input should automatically get focus when the page loads
--}
 autofocus : Property m
 autofocus =
     Options.attribute <| Html.autofocus True
 
 
-{-| Specifies the maximum number of characters allowed in the input
--}
 maxlength : Int -> Property m
 maxlength k =
     Options.attribute <| Html.maxlength k
 
 
-{-| Disable the textfield input
--}
 disabled : Property m
 disabled =
     Internal.option
         (\config -> { config | disabled = True })
 
 
-{-| Set properties on the actual `input` element in the Textfield.
--}
 input : List (Options.Style m) -> Property m
 input =
     Options.input
 
 
-{-| Sets the type of input to 'password'.
--}
 password : Property m
 password =
     Internal.option (\config -> { config | type_ = Just "password" })
 
 
-{-| Sets the type of input to 'email'.
--}
 email : Property m
 email =
     Internal.option (\config -> { config | type_ = Just "email" })
 
 
-{-| TODO
--}
 textfield : Property m
 textfield =
     Internal.option (\config -> { config | textfieldBox = True })
 
 
-{-| TODO
--}
 pattern : String -> Property m
 pattern =
     Internal.option << (\value config -> { config | pattern = Just value })
 
 
-{-| Number of rows in a multi-line input
--}
 rows : Int -> Property m
 rows k =
     Internal.input [ Options.attribute <| Html.rows k ]
 
 
-{-| Number of columns in a multi-line input
--}
 cols : Int -> Property m
 cols k =
     Internal.input [ Options.attribute <| Html.cols k ]
 
 
-{-| Maximum number of rows (only Textrea).
--}
 maxRows : Int -> Property m
 maxRows k =
     Internal.option (\config -> { config | maxRows = Just k })
 
 
-{-| TODO
--}
 dense : Property m
 dense =
     Internal.option (\config -> { config | dense = True })
 
 
-{-| TODO
--}
 required : Property m
 required =
     Internal.option (\config -> { config | required = True })
@@ -298,11 +213,6 @@ placeholder value =
     Internal.input [ Options.attribute <| Html.attribute "placeholder" value ]
 
 
--- MODEL
-
-
-{-|
--}
 type alias Model =
     { isFocused : Bool
     , isDirty : Bool
@@ -310,8 +220,6 @@ type alias Model =
     }
 
 
-{-| Default model. 
--}
 defaultModel : Model
 defaultModel =
     { isFocused = False
@@ -320,18 +228,10 @@ defaultModel =
     }
 
 
-
--- ACTIONS, UPDATE
-
-
-{-| Component actions. 
--}
 type alias Msg
     = Material.Internal.Textfield.Msg
 
 
-{-| Component update.
--}
 update : x -> Msg -> Model -> ( Maybe Model, Cmd msg )
 update _ msg model =
     (case msg of
@@ -355,16 +255,6 @@ update _ msg model =
 
 
 
--- VIEW
-
-
-{-| Component view
-
-Be aware that styling (third argument) is applied to the outermost element
-of the textfield's implementation, and so is mostly useful for positioning
-(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Options.input`
-if you need to apply styling to the underlying `<input>` element.
--}
 view : (Msg -> m) -> Model -> List (Property m) -> x -> Html m
 view lift model options _ =
     let
@@ -463,9 +353,6 @@ view lift model options _ =
             ]
 
 
--- COMPONENT
-
-
 type alias Store s =
     { s | textfield : Indexed Model }
 
@@ -474,8 +361,6 @@ type alias Store s =
     Component.indexed .textfield (\x c -> { c | textfield = x }) defaultModel
 
 
-{-| Component react function.
--}
 react
     : (Material.Msg.Msg m -> msg)
     -> Msg
@@ -488,22 +373,6 @@ react =
         Material.Msg.TextfieldMsg update
 
 
-{-| Component render. Below is an example, assuming boilerplate setup as indicated
-  in `Material`, and a user message `ChangeAgeMsg Int`.
-
-    Textfield.render Mdl [0] model.mdl
-      [ Textfield.label "Age"
-      , Textfield.floatingLabel
-      , Textfield.value model.age
-      , Options.onInput (String.toInt >> ChangeAgeMsg)
-      ]
-      []
-
-Be aware that styling (third argument) is applied to the outermost element
-of the textfield's implementation, and so is mostly useful for positioning
-(e.g., `margin: 0 auto;` or `align-self: flex-end`). See `Textfield.style`
-if you need to apply styling to the underlying `<input>` element.
--}
 render
     : (Material.Msg.Msg m -> m)
     -> Index

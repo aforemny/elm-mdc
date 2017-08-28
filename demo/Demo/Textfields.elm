@@ -1,18 +1,16 @@
 module Demo.Textfields exposing (Model, defaultModel, Msg(Mdl), update, view)
 
-import Html.Attributes as Html
-import Html exposing (Html)
+import Demo.Page as Page exposing (Page)
 import Html as Html_
+import Html.Attributes as Html
+import Html.Events as Html
+import Html exposing (Html)
 import Material
 import Material.Options as Options
 import Material.Options exposing (when, styled, cs, css)
 import Material.Textfield as Textfield
 import Material.Textfield.HelperText as Textfield
-import Material.Checkbox as Checkbox
-import Demo.Page exposing (Page)
-
-
--- MODEL
+import Material.Typography as Typography
 
 
 type alias Model =
@@ -131,27 +129,27 @@ updateExample msg model =
             { model | validationMsg = not model.validationMsg }
 
 
--- VIEW
-
-
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     page.body "Text fields"
-    [ styled Html.section
-      [ cs "example"
+    [
+      Page.hero []
+      [ Textfield.render (Mdl >> lift) [0] model.mdl
+        [ Textfield.label "Text field"
+        ]
+        []
       ]
-      [ example0 lift model.mdl 0 (Example0Msg >> lift) model.example0
-      , example1 lift model.mdl 1 (Example1Msg >> lift) model.example1
-      , example2 lift model.mdl 2 (Example2Msg >> lift) model.example2
-      , example3 lift model.mdl 3 (Example3Msg >> lift) model.example3
-      , example4 lift model.mdl 4 (Example4Msg >> lift) model.example4
-      ]
+    , example0 lift model.mdl 1 (Example0Msg >> lift) model.example0
+    , example1 lift model.mdl 2 (Example1Msg >> lift) model.example1
+    , example2 lift model.mdl 3 (Example2Msg >> lift) model.example2
+    , example3 lift model.mdl 4 (Example3Msg >> lift) model.example3
+    , example4 lift model.mdl 5 (Example4Msg >> lift) model.example4
     ]
 
 
 example0 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
 example0 fwd mdl idx lift model =
-    styled Html.div []
+    example []
     [
       Html.h2 []
       [ Html.text
@@ -185,69 +183,69 @@ example0 fwd mdl idx lift model =
         ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,0] mdl
-        [ Options.onClick (lift ToggleDisabled)
+      [ checkbox
+        [ Html.onClick (lift ToggleDisabled)
         ]
         []
-      , Html.label [] [ Html.text "Disabled" ]
+      , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,1] mdl
-        [ Options.onClick (lift ToggleRtl)
+      [ checkbox
+        [ Html.onClick (lift ToggleRtl)
         ]
         []
-      , Html.label [] [ Html.text "RTL" ]
+      , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
-        [ Options.onClick (lift ToggleDarkTheme)
+      [ checkbox
+        [ Html.onClick (lift ToggleDarkTheme)
         ]
         []
-      , Html.label [] [ Html.text "Dark Theme" ]
+      , Html.label [] [ Html.text " Dark Theme" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
-        [ Options.onClick (lift ToggleDense)
+      [ checkbox
+        [ Html.onClick (lift ToggleDense)
         ]
         []
-      , Html.label [] [ Html.text "Dense" ]
+      , Html.label [] [ Html.text " Dense" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,4] mdl
-        [ Options.onClick (lift ToggleRequired)
+      [ checkbox
+        [ Html.onClick (lift ToggleRequired)
         ]
         []
-      , Html.label [] [ Html.text "Required" ]
+      , Html.label [] [ Html.text " Required" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,5] mdl
-        [ Options.onClick (lift ToggleHelperText)
+      [ checkbox
+        [ Html.onClick (lift ToggleHelperText)
         ]
         []
-      , Html.label [] [ Html.text "Use Helper Text" ]
+      , Html.label [] [ Html.text " Use Helper Text" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,6] mdl
-        [ Options.onClick (lift TogglePersistent)
-        , Checkbox.disabled |> when (not model.helperText)
+      [ checkbox
+        [ Html.onClick (lift TogglePersistent)
+        , Html.disabled (not model.helperText)
         ]
         []
-      , Html.label [] [ Html.text "Make helper text persistent" ]
+      , Html.label [] [ Html.text " Make helper text persistent" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,7] mdl
-        [ Options.onClick (lift ToggleValidationMsg)
-        , Checkbox.disabled |> when (not model.helperText)
+      [ checkbox
+        [ Html.onClick (lift ToggleValidationMsg)
+        , Html.disabled (not model.helperText)
         ]
         []
-      , Html.label [] [ Html.text "Use helper text as validation message" ]
+      , Html.label [] [ Html.text " Use helper text as validation message" ]
       ]
     ]
 
 
 example1 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
 example1 fwd mdl idx lift model =
-    styled Html.div []
+    example []
     [ Html.h2 []
       [ Html.text "Password field with validation"
       ]
@@ -282,7 +280,7 @@ example1 fwd mdl idx lift model =
 
 example2 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
 example2 fwd mdl idx lift model =
-    styled Html.div []
+    example []
     [ Html.h2 []
       [ Html.text "Textfield box"
       ]
@@ -311,39 +309,39 @@ example2 fwd mdl idx lift model =
         ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,0] mdl
-        [ Options.onClick (lift ToggleDisabled)
+      [ checkbox
+        [ Html.onClick (lift ToggleDisabled)
         ]
         []
-      , Html.label [] [ Html.text "Disabled" ]
+      , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,1] mdl
-        [ Options.onClick (lift ToggleRtl)
+      [ checkbox
+        [ Html.onClick (lift ToggleRtl)
         ]
         []
-      , Html.label [] [ Html.text "RTL" ]
+      , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
-        [ Options.onClick (lift ToggleDarkTheme)
+      [ checkbox
+        [ Html.onClick (lift ToggleDarkTheme)
         ]
         []
-      , Html.label [] [ Html.text "Dark Theme" ]
+      , Html.label [] [ Html.text " Dark Theme" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
-        [ Options.onClick (lift ToggleDense)
+      [ checkbox
+        [ Html.onClick (lift ToggleDense)
         ]
         []
-      , Html.label [] [ Html.text "Dense" ]
+      , Html.label [] [ Html.text " Dense" ]
       ]
     ]
 
 
 example3 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
 example3 fwd mdl idx lift model =
-    styled Html.div []
+    example []
     [ Html.h2 []
       [ Html.text "Multi-line Textfields"
       ]
@@ -368,39 +366,39 @@ example3 fwd mdl idx lift model =
         ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,0] mdl
-        [ Options.onClick (lift ToggleDisabled)
+      [ checkbox
+        [ Html.onClick (lift ToggleDisabled)
         ]
         []
-      , Html.label [] [ Html.text "Disabled" ]
+      , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,1] mdl
-        [ Options.onClick (lift ToggleRtl)
+      [ checkbox
+        [ Html.onClick (lift ToggleRtl)
         ]
         []
-      , Html.label [] [ Html.text "RTL" ]
+      , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
-        [ Options.onClick (lift ToggleDarkTheme)
+      [ checkbox
+        [ Html.onClick (lift ToggleDarkTheme)
         ]
         []
-      , Html.label [] [ Html.text "Dark Theme" ]
+      , Html.label [] [ Html.text " Dark Theme" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
-        [ Options.onClick (lift ToggleDense)
+      [ checkbox
+        [ Html.onClick (lift ToggleDense)
         ]
         []
-      , Html.label [] [ Html.text "Dense" ]
+      , Html.label [] [ Html.text " Dense" ]
       ]
     ]
 
 
 example4 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
 example4 fwd mdl idx lift model =
-    styled Html.div []
+    example []
     [ Html.h2 []
       [ Html.text "Full-Width Textfields"
       ]
@@ -431,31 +429,58 @@ example4 fwd mdl idx lift model =
         ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,2] mdl
-        [ Options.onClick (lift ToggleDisabled)
+      [ checkbox
+        [ Html.onClick (lift ToggleDisabled)
         ]
         []
-      , Html.label [] [ Html.text "Disabled" ]
+      , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,3] mdl
-        [ Options.onClick (lift ToggleRtl)
+      [ checkbox
+        [ Html.onClick (lift ToggleRtl)
         ]
         []
-      , Html.label [] [ Html.text "RTL" ]
+      , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,4] mdl
-        [ Options.onClick (lift ToggleDarkTheme)
+      [ checkbox
+        [ Html.onClick (lift ToggleDarkTheme)
         ]
         []
-      , Html.label [] [ Html.text "Dark Theme" ]
+      , Html.label [] [ Html.text " Dark Theme" ]
       ]
     , styled Html.div []
-      [ Checkbox.render (Mdl >> fwd) [idx,5] mdl
-        [ Options.onClick (lift ToggleDense)
+      [ checkbox
+        [ Html.onClick (lift ToggleDense)
         ]
         []
-      , Html.label [] [ Html.text "Dense" ]
+      , Html.label [] [ Html.text " Dense" ]
       ]
     ]
+
+
+example : List (Options.Property c m) -> List (Html m) -> Html m
+example options =
+    styled Html.div
+    ( css "padding" "24px"
+    :: css "margin" "24px"
+    :: options
+    )
+
+
+h2 : List (Options.Property () m) -> List (Html m) -> Html m
+h2 options =
+    styled Html.h2
+    ( css "margin-top" "20px"
+    :: css "margin-bottom" "20px"
+    :: Typography.title
+    :: options
+    )
+
+
+checkbox : List (Html.Attribute m) -> List (Html m) -> Html m
+checkbox options =
+    Html.input
+    ( Html.type_ "checkbox"
+    :: options
+    )
