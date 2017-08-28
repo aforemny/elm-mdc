@@ -38143,16 +38143,8 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = F2(
 							_0: _debois$elm_mdl$Material_Toolbar$waterfall,
 							_1: {
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexible,
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior,
-									_1: {
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-										_1: {ctor: '[]'}
-									}
-								}
+								_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
+								_1: {ctor: '[]'}
 							}
 						}
 					},
@@ -38160,11 +38152,7 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = F2(
 						ctor: '::',
 						_0: A2(
 							_debois$elm_mdl$Material_Toolbar$row,
-							{
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '224px'),
-								_1: {ctor: '[]'}
-							},
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: A2(
