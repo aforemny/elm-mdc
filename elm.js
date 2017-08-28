@@ -19299,13 +19299,13 @@ var _debois$elm_mdl$Material_Theme$textDisabledOnBackground = _debois$elm_mdl$Ma
 var _debois$elm_mdl$Material_Theme$textHintOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-background');
 var _debois$elm_mdl$Material_Theme$textSecondaryOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-background');
 var _debois$elm_mdl$Material_Theme$textPrimaryOnBackground = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-background');
-var _debois$elm_mdl$Material_Theme$textIconOnAccent = F2(
+var _debois$elm_mdl$Material_Theme$textIconOnSecondary = F2(
 	function (options, icon) {
 		return A2(
 			_debois$elm_mdl$Material_Options$span,
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-accent'),
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-theme--text-icon-on-secondary'),
 				_1: {
 					ctor: '::',
 					_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
@@ -19318,10 +19318,10 @@ var _debois$elm_mdl$Material_Theme$textIconOnAccent = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _debois$elm_mdl$Material_Theme$textDisabledOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-accent');
-var _debois$elm_mdl$Material_Theme$textHintOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-accent');
-var _debois$elm_mdl$Material_Theme$textSecondaryOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-accent');
-var _debois$elm_mdl$Material_Theme$textPrimaryOnAccent = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-accent');
+var _debois$elm_mdl$Material_Theme$textDisabledOnSecondary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-disabled-on-secondary');
+var _debois$elm_mdl$Material_Theme$textHintOnSecondary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-hint-on-secondary');
+var _debois$elm_mdl$Material_Theme$textSecondaryOnSecondary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-secondary');
+var _debois$elm_mdl$Material_Theme$textPrimaryOnSecondary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-secondary');
 var _debois$elm_mdl$Material_Theme$textIconOnPrimary = F2(
 	function (options, icon) {
 		return A2(
@@ -19346,9 +19346,17 @@ var _debois$elm_mdl$Material_Theme$textHintOnPrimary = _debois$elm_mdl$Material_
 var _debois$elm_mdl$Material_Theme$textSecondaryOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-secondary-on-primary');
 var _debois$elm_mdl$Material_Theme$textPrimaryOnPrimary = _debois$elm_mdl$Material_Options$cs('mdc-theme--text-primary-on-primary');
 var _debois$elm_mdl$Material_Theme$background = _debois$elm_mdl$Material_Options$cs('mdc-theme--background');
-var _debois$elm_mdl$Material_Theme$accentBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--accent-bg');
+var _debois$elm_mdl$Material_Theme$secondaryDarkBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--secondary-dark-bg');
+var _debois$elm_mdl$Material_Theme$primaryDarkBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary-dark-bg');
+var _debois$elm_mdl$Material_Theme$secondaryLightBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--secondary-light-bg');
+var _debois$elm_mdl$Material_Theme$primaryLightBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary-light-bg');
+var _debois$elm_mdl$Material_Theme$secondaryBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--secondary-bg');
 var _debois$elm_mdl$Material_Theme$primaryBg = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary-bg');
-var _debois$elm_mdl$Material_Theme$accent = _debois$elm_mdl$Material_Options$cs('mdc-theme--accent');
+var _debois$elm_mdl$Material_Theme$secondaryDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--secondary-dark');
+var _debois$elm_mdl$Material_Theme$primaryDark = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary-dark');
+var _debois$elm_mdl$Material_Theme$secondaryLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--secondary-light');
+var _debois$elm_mdl$Material_Theme$primaryLight = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary-light');
+var _debois$elm_mdl$Material_Theme$secondary = _debois$elm_mdl$Material_Options$cs('mdc-theme--secondary');
 var _debois$elm_mdl$Material_Theme$primary = _debois$elm_mdl$Material_Options$cs('mdc-theme--primary');
 
 var _debois$elm_mdl$Demo_Checkbox$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, rtl: false, alignEnd: false, indeterminate: false, checked0: false, checked1: false, checked2: false, disabled1: false, disabled2: false};
@@ -33999,7 +34007,7 @@ var _debois$elm_mdl$Demo_Tabs$example8 = F4(
 								_debois$elm_mdl$Material_Toolbar$view,
 								{
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Theme$accentBg,
+									_0: _debois$elm_mdl$Material_Theme$secondaryBg,
 									_1: {ctor: '[]'}
 								},
 								{
@@ -36562,6 +36570,40 @@ var _debois$elm_mdl$Demo_Textfields$view = F3(
 			});
 	});
 
+var _debois$elm_mdl$Demo_Theme$example = function (options) {
+	return A2(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$section,
+		{
+			ctor: '::',
+			_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+			_1: {
+				ctor: '::',
+				_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+				_1: options
+			}
+		});
+};
+var _debois$elm_mdl$Demo_Theme$h3 = function (options) {
+	return A2(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$h2,
+		{ctor: '::', _0: _debois$elm_mdl$Material_Typography$title, _1: options});
+};
+var _debois$elm_mdl$Demo_Theme$h2 = function (options) {
+	return A2(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$h2,
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Typography$display1,
+			_1: {
+				ctor: '::',
+				_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '30px 0 30px 48px'),
+				_1: options
+			}
+		});
+};
 var _debois$elm_mdl$Demo_Theme$demoThemeTextStyles = function (options) {
 	return _debois$elm_mdl$Material_Options$div(
 		{
@@ -36615,16 +36657,8 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 				function () {
 					var options = {
 						ctor: '::',
-						_0: _debois$elm_mdl$Material_Typography$typography,
-						_1: {
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Typography$body2,
-							_1: {
-								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '0 16px'),
-								_1: {ctor: '[]'}
-							}
-						}
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '0 16px'),
+						_1: {ctor: '[]'}
 					};
 					return A2(
 						_elm_lang$core$List$map,
@@ -36634,24 +36668,14 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 						nodes);
 				}());
 		});
-	return A3(
-		_debois$elm_mdl$Material_Options$styled,
-		_elm_lang$html$Html$section,
+	return A2(
+		_debois$elm_mdl$Demo_Theme$example,
+		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('example'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A3(
-				_debois$elm_mdl$Material_Options$styled,
-				_elm_lang$html$Html$h3,
-				{
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Typography$title,
-					_1: {ctor: '[]'}
-				},
+			_0: A2(
+				_debois$elm_mdl$Demo_Theme$h3,
+				{ctor: '[]'},
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html$text('Text on background'),
@@ -36723,14 +36747,9 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 					}),
 				_1: {
 					ctor: '::',
-					_0: A3(
-						_debois$elm_mdl$Material_Options$styled,
-						_elm_lang$html$Html$h3,
-						{
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Typography$title,
-							_1: {ctor: '[]'}
-						},
+					_0: A2(
+						_debois$elm_mdl$Demo_Theme$h3,
+						{ctor: '[]'},
 						{
 							ctor: '::',
 							_0: _elm_lang$html$Html$text('Text on primary'),
@@ -36802,30 +36821,25 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 							}),
 						_1: {
 							ctor: '::',
-							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$h3,
+							_0: A2(
+								_debois$elm_mdl$Demo_Theme$h3,
+								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Typography$title,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Text on accent'),
+									_0: _elm_lang$html$Html$text('Text on secondary'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
 								ctor: '::',
 								_0: A2(
 									demo,
-									_debois$elm_mdl$Material_Theme$accentBg,
+									_debois$elm_mdl$Material_Theme$secondaryBg,
 									{
 										ctor: '::',
 										_0: function (options) {
 											return A2(
 												_debois$elm_mdl$Material_Options$span,
-												{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textPrimaryOnAccent, _1: options},
+												{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textPrimaryOnSecondary, _1: options},
 												{
 													ctor: '::',
 													_0: _elm_lang$html$Html$text('Primary'),
@@ -36837,7 +36851,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 											_0: function (options) {
 												return A2(
 													_debois$elm_mdl$Material_Options$span,
-													{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textSecondaryOnAccent, _1: options},
+													{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textSecondaryOnSecondary, _1: options},
 													{
 														ctor: '::',
 														_0: _elm_lang$html$Html$text('Secondary'),
@@ -36849,7 +36863,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 												_0: function (options) {
 													return A2(
 														_debois$elm_mdl$Material_Options$span,
-														{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textHintOnAccent, _1: options},
+														{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textHintOnSecondary, _1: options},
 														{
 															ctor: '::',
 															_0: _elm_lang$html$Html$text('Hint'),
@@ -36861,7 +36875,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 													_0: function (options) {
 														return A2(
 															_debois$elm_mdl$Material_Options$span,
-															{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textHintOnAccent, _1: options},
+															{ctor: '::', _0: _debois$elm_mdl$Material_Theme$textHintOnSecondary, _1: options},
 															{
 																ctor: '::',
 																_0: _elm_lang$html$Html$text('Disabled'),
@@ -36871,7 +36885,7 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 													_1: {
 														ctor: '::',
 														_0: function (options) {
-															return A2(_debois$elm_mdl$Material_Theme$textIconOnAccent, options, 'favorite');
+															return A2(_debois$elm_mdl$Material_Theme$textIconOnSecondary, options, 'favorite');
 														},
 														_1: {ctor: '[]'}
 													}
@@ -36881,14 +36895,9 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 									}),
 								_1: {
 									ctor: '::',
-									_0: A3(
-										_debois$elm_mdl$Material_Options$styled,
-										_elm_lang$html$Html$h3,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Typography$title,
-											_1: {ctor: '[]'}
-										},
+									_0: A2(
+										_debois$elm_mdl$Demo_Theme$h3,
+										{ctor: '[]'},
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html$text('Text on user-defined light background'),
@@ -36960,14 +36969,9 @@ var _debois$elm_mdl$Demo_Theme$example1 = function () {
 											}),
 										_1: {
 											ctor: '::',
-											_0: A3(
-												_debois$elm_mdl$Material_Options$styled,
-												_elm_lang$html$Html$h3,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Typography$title,
-													_1: {ctor: '[]'}
-												},
+											_0: A2(
+												_debois$elm_mdl$Demo_Theme$h3,
+												{ctor: '[]'},
 												{
 													ctor: '::',
 													_0: _elm_lang$html$Html$text('Text on user-defined dark background'),
@@ -37062,7 +37066,7 @@ var _debois$elm_mdl$Demo_Theme$demoThemeColorBlock = function (options) {
 					_0: A2(_debois$elm_mdl$Material_Options$css, 'box-sizing', 'border-box'),
 					_1: {
 						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '130px'),
+						_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '150px'),
 						_1: {
 							ctor: '::',
 							_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '50px'),
@@ -37085,30 +37089,6 @@ var _debois$elm_mdl$Demo_Theme$demoThemeColorBlock = function (options) {
 			}
 		});
 };
-var _debois$elm_mdl$Demo_Theme$demoThemeColorLabel = function (options) {
-	return _debois$elm_mdl$Material_Options$div(
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('demo-theme__color__label'),
-			_1: {
-				ctor: '::',
-				_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'inline-block'),
-				_1: {
-					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'box-sizing', 'border-box'),
-					_1: {
-						ctor: '::',
-						_0: A2(_debois$elm_mdl$Material_Options$css, 'width', '130px'),
-						_1: {
-							ctor: '::',
-							_0: A2(_debois$elm_mdl$Material_Options$css, 'marign-bottom', '1rem'),
-							_1: options
-						}
-					}
-				}
-			}
-		});
-};
 var _debois$elm_mdl$Demo_Theme$demoThemeColor = function (options) {
 	return _debois$elm_mdl$Material_Options$div(
 		{
@@ -37125,24 +37105,155 @@ var _debois$elm_mdl$Demo_Theme$demoThemeColor = function (options) {
 			}
 		});
 };
-var _debois$elm_mdl$Demo_Theme$example0 = A3(
-	_debois$elm_mdl$Material_Options$styled,
-	_elm_lang$html$Html$section,
+var _debois$elm_mdl$Demo_Theme$themeColorsAsBackground = A2(
+	_debois$elm_mdl$Demo_Theme$example,
+	{ctor: '[]'},
 	{
 		ctor: '::',
-		_0: _debois$elm_mdl$Material_Options$cs('example'),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: A3(
-			_debois$elm_mdl$Material_Options$styled,
-			_elm_lang$html$Html$h3,
+		_0: A2(
+			_debois$elm_mdl$Demo_Theme$h3,
+			{ctor: '[]'},
 			{
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Typography$title,
+				_0: _elm_lang$html$Html$text('Theme colors as background'),
 				_1: {ctor: '[]'}
-			},
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_debois$elm_mdl$Demo_Theme$demoThemeColor,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Theme$primaryBg,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Primary'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Theme$primaryLightBg,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Primary Light'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Theme$primaryDarkBg,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Primary Dark'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_debois$elm_mdl$Demo_Theme$demoThemeColor,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Theme$secondaryBg,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Secondary'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Theme$secondaryLightBg,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Secondary Light'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Theme$secondaryDarkBg,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Secondary Dark'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_debois$elm_mdl$Demo_Theme$demoThemeColor,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Theme$background,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Background'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	});
+var _debois$elm_mdl$Demo_Theme$themeColorsAsText = A2(
+	_debois$elm_mdl$Demo_Theme$example,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: A2(
+			_debois$elm_mdl$Demo_Theme$h3,
+			{ctor: '[]'},
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html$text('Theme colors as text'),
@@ -37156,8 +37267,12 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 				{
 					ctor: '::',
 					_0: A2(
-						_debois$elm_mdl$Demo_Theme$demoThemeColorLabel,
-						{ctor: '[]'},
+						_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+						{
+							ctor: '::',
+							_0: _debois$elm_mdl$Material_Theme$primary,
+							_1: {ctor: '[]'}
+						},
 						{
 							ctor: '::',
 							_0: _elm_lang$html$Html$text('Primary'),
@@ -37169,23 +37284,30 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 							_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Typography$typography,
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Theme$primary,
-									_1: {
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Typography$body2,
-										_1: {ctor: '[]'}
-									}
-								}
+								_0: _debois$elm_mdl$Material_Theme$primaryLight,
+								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Lorem ipsum'),
+								_0: _elm_lang$html$Html$text('Primary Light'),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Theme$primaryDark,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Primary Dark'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}),
 			_1: {
@@ -37196,11 +37318,15 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 					{
 						ctor: '::',
 						_0: A2(
-							_debois$elm_mdl$Demo_Theme$demoThemeColorLabel,
-							{ctor: '[]'},
+							_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('Accent'),
+								_0: _debois$elm_mdl$Material_Theme$secondary,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Secondary'),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
@@ -37209,20 +37335,127 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 								_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
 								{
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Typography$typography,
+									_0: _debois$elm_mdl$Material_Theme$secondaryLight,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Secondary Light'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Theme$secondaryDark,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Secondary Dark'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _debois$elm_mdl$Demo_Theme$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel};
+var _debois$elm_mdl$Demo_Theme$Model = function (a) {
+	return {mdl: a};
+};
+var _debois$elm_mdl$Demo_Theme$Mdl = function (a) {
+	return {ctor: 'Mdl', _0: a};
+};
+var _debois$elm_mdl$Demo_Theme$update = F3(
+	function (lift, msg, model) {
+		var _p0 = msg;
+		return A3(
+			_debois$elm_mdl$Material$update,
+			function (_p1) {
+				return lift(
+					_debois$elm_mdl$Demo_Theme$Mdl(_p1));
+			},
+			_p0._0,
+			model);
+	});
+var _debois$elm_mdl$Demo_Theme$view = F3(
+	function (lift, page, model) {
+		return A2(
+			page.body,
+			'Theme',
+			{
+				ctor: '::',
+				_0: A2(
+					_debois$elm_mdl$Demo_Page$hero,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A5(
+							_debois$elm_mdl$Material_Button$render,
+							function (_p2) {
+								return lift(
+									_debois$elm_mdl$Demo_Theme$Mdl(_p2));
+							},
+							{
+								ctor: '::',
+								_0: 0,
+								_1: {ctor: '[]'}
+							},
+							model.mdl,
+							{
+								ctor: '::',
+								_0: _debois$elm_mdl$Material_Button$raised,
+								_1: {
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Button$primary,
 									_1: {
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Theme$accent,
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Primary'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A5(
+								_debois$elm_mdl$Material_Button$render,
+								function (_p3) {
+									return lift(
+										_debois$elm_mdl$Demo_Theme$Mdl(_p3));
+								},
+								{
+									ctor: '::',
+									_0: 0,
+									_1: {ctor: '[]'}
+								},
+								model.mdl,
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Button$raised,
+									_1: {
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Button$accent,
 										_1: {
 											ctor: '::',
-											_0: _debois$elm_mdl$Material_Typography$body2,
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
 											_1: {ctor: '[]'}
 										}
 									}
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Lorem ipsum'),
+									_0: _elm_lang$html$Html$text('Secondary'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -37230,181 +37463,41 @@ var _debois$elm_mdl$Demo_Theme$example0 = A3(
 					}),
 				_1: {
 					ctor: '::',
-					_0: A3(
-						_debois$elm_mdl$Material_Options$styled,
-						_elm_lang$html$Html$h3,
+					_0: A2(
+						_debois$elm_mdl$Demo_Theme$h2,
+						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Typography$title,
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Theme colors as background'),
+							_0: _elm_lang$html$Html$text('Theme colors'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Demo_Theme$demoThemeColor,
-							{ctor: '[]'},
-							{
+						_0: _debois$elm_mdl$Demo_Theme$themeColorsAsText,
+						_1: {
+							ctor: '::',
+							_0: _debois$elm_mdl$Demo_Theme$themeColorsAsBackground,
+							_1: {
 								ctor: '::',
 								_0: A2(
-									_debois$elm_mdl$Demo_Theme$demoThemeColorLabel,
+									_debois$elm_mdl$Demo_Theme$h2,
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Primary'),
+										_0: _elm_lang$html$Html$text('Text colors for contrast'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Typography$typography,
-											_1: {
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Theme$primaryBg,
-												_1: {
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Typography$body2,
-													_1: {ctor: '[]'}
-												}
-											}
-										},
-										{ctor: '[]'}),
+									_0: _debois$elm_mdl$Demo_Theme$example1,
 									_1: {ctor: '[]'}
 								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_debois$elm_mdl$Demo_Theme$demoThemeColor,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: A2(
-										_debois$elm_mdl$Demo_Theme$demoThemeColorLabel,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Accent'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
-											{
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Typography$typography,
-												_1: {
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Theme$accentBg,
-													_1: {
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Typography$body2,
-														_1: {ctor: '[]'}
-													}
-												}
-											},
-											{ctor: '[]'}),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_debois$elm_mdl$Demo_Theme$demoThemeColor,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Demo_Theme$demoThemeColorLabel,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Background'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Demo_Theme$demoThemeColorBlock,
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Typography$typography,
-													_1: {
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Theme$background,
-														_1: {
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Typography$body2,
-															_1: {ctor: '[]'}
-														}
-													}
-												},
-												{ctor: '[]'}),
-											_1: {ctor: '[]'}
-										}
-									}),
-								_1: {ctor: '[]'}
 							}
 						}
 					}
 				}
-			}
-		}
+			});
 	});
-var _debois$elm_mdl$Demo_Theme$view = function (page) {
-	return A2(
-		page.body,
-		'Theme',
-		{
-			ctor: '::',
-			_0: A3(
-				_debois$elm_mdl$Material_Options$styled,
-				_elm_lang$html$Html$h2,
-				{
-					ctor: '::',
-					_0: _debois$elm_mdl$Material_Typography$display1,
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Theme colors'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _debois$elm_mdl$Demo_Theme$example0,
-				_1: {
-					ctor: '::',
-					_0: A3(
-						_debois$elm_mdl$Material_Options$styled,
-						_elm_lang$html$Html$h2,
-						{
-							ctor: '::',
-							_0: _debois$elm_mdl$Material_Typography$display1,
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Text colors for contrast'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: _debois$elm_mdl$Demo_Theme$example1,
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		});
-};
 
 var _debois$elm_mdl$Demo_Toolbar$body = A2(
 	_elm_lang$html$Html$div,
@@ -40262,7 +40355,7 @@ var _debois$elm_mdl$Main$delta2url = F2(
 				url: _debois$elm_mdl$Main$urlOf(model2)
 			}) : _elm_lang$core$Maybe$Nothing;
 	});
-var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_RadioButtons$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel, lists: _debois$elm_mdl$Demo_Lists$defaultModel};
+var _debois$elm_mdl$Main$defaultModel = {mdl: _debois$elm_mdl$Material$defaultModel, url: _debois$elm_mdl$Demo_Page$StartPage, buttons: _debois$elm_mdl$Demo_Buttons$defaultModel, cards: _debois$elm_mdl$Demo_Cards$defaultModel, checkbox: _debois$elm_mdl$Demo_Checkbox$defaultModel, dialog: _debois$elm_mdl$Demo_Dialog$defaultModel, elevation: _debois$elm_mdl$Demo_Elevation$defaultModel, fabs: _debois$elm_mdl$Demo_Fabs$defaultModel, iconToggle: _debois$elm_mdl$Demo_IconToggle$defaultModel, menus: _debois$elm_mdl$Demo_Menus$defaultModel, permanentAboveDrawer: _debois$elm_mdl$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _debois$elm_mdl$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _debois$elm_mdl$Demo_PersistentDrawer$defaultModel, radio: _debois$elm_mdl$Demo_RadioButtons$defaultModel, ripple: _debois$elm_mdl$Demo_Ripple$defaultModel, selects: _debois$elm_mdl$Demo_Selects$defaultModel, slider: _debois$elm_mdl$Demo_Slider$defaultModel, snackbar: _debois$elm_mdl$Demo_Snackbar$defaultModel, $switch: _debois$elm_mdl$Demo_Switch$defaultModel, tabs: _debois$elm_mdl$Demo_Tabs$defaultModel, temporaryDrawer: _debois$elm_mdl$Demo_TemporaryDrawer$defaultModel, textfields: _debois$elm_mdl$Demo_Textfields$defaultModel, gridList: _debois$elm_mdl$Demo_GridList$defaultModel, layoutGrid: _debois$elm_mdl$Demo_LayoutGrid$defaultModel, lists: _debois$elm_mdl$Demo_Lists$defaultModel, theme: _debois$elm_mdl$Demo_Theme$defaultModel};
 var _debois$elm_mdl$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -40293,7 +40386,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 																						return function (w) {
 																							return function (x) {
 																								return function (y) {
-																									return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, layoutGrid: k, menus: l, permanentAboveDrawer: m, permanentBelowDrawer: n, persistentDrawer: o, radio: p, ripple: q, selects: r, slider: s, snackbar: t, $switch: u, tabs: v, temporaryDrawer: w, textfields: x, lists: y};
+																									return function (z) {
+																										return {mdl: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, elevation: g, fabs: h, gridList: i, iconToggle: j, layoutGrid: k, menus: l, permanentAboveDrawer: m, permanentBelowDrawer: n, persistentDrawer: o, radio: p, ripple: q, selects: r, slider: s, snackbar: t, $switch: u, tabs: v, temporaryDrawer: w, textfields: x, lists: y, theme: z};
+																									};
 																								};
 																							};
 																						};
@@ -40318,6 +40413,9 @@ var _debois$elm_mdl$Main$Model = function (a) {
 			};
 		};
 	};
+};
+var _debois$elm_mdl$Main$ThemeMsg = function (a) {
+	return {ctor: 'ThemeMsg', _0: a};
 };
 var _debois$elm_mdl$Main$ListsMsg = function (a) {
 	return {ctor: 'ListsMsg', _0: a};
@@ -40480,7 +40578,7 @@ var _debois$elm_mdl$Main$view_ = function (model) {
 		case 'TextField':
 			return A3(_debois$elm_mdl$Demo_Textfields$view, _debois$elm_mdl$Main$TextfieldMsg, page, model.textfields);
 		case 'Theme':
-			return _debois$elm_mdl$Demo_Theme$view(page);
+			return A3(_debois$elm_mdl$Demo_Theme$view, _debois$elm_mdl$Main$ThemeMsg, page, model.theme);
 		case 'Toolbar':
 			return _debois$elm_mdl$Demo_Toolbar$view(page);
 		case 'GridList':
@@ -40854,7 +40952,7 @@ var _debois$elm_mdl$Main$update = F2(
 						{layoutGrid: layoutGrid}),
 					_1: effects
 				};
-			default:
+			case 'ListsMsg':
 				var _p26 = A3(_debois$elm_mdl$Demo_Lists$update, _debois$elm_mdl$Main$ListsMsg, _p3._0, model.lists);
 				var lists = _p26._0;
 				var effects = _p26._1;
@@ -40865,12 +40963,23 @@ var _debois$elm_mdl$Main$update = F2(
 						{lists: lists}),
 					_1: effects
 				};
+			default:
+				var _p27 = A3(_debois$elm_mdl$Demo_Theme$update, _debois$elm_mdl$Main$ThemeMsg, _p3._0, model.theme);
+				var theme = _p27._0;
+				var effects = _p27._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{theme: theme}),
+					_1: effects
+				};
 		}
 	});
 var _debois$elm_mdl$Main$init = function () {
-	var _p27 = _debois$elm_mdl$Demo_LayoutGrid$init(_debois$elm_mdl$Main$LayoutGridMsg);
-	var layoutGrid = _p27._0;
-	var layoutGridEffects = _p27._1;
+	var _p28 = _debois$elm_mdl$Demo_LayoutGrid$init(_debois$elm_mdl$Main$LayoutGridMsg);
+	var layoutGrid = _p28._0;
+	var layoutGridEffects = _p28._1;
 	return {
 		ctor: '_Tuple2',
 		_0: _elm_lang$core$Native_Utils.update(
