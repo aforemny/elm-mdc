@@ -17156,39 +17156,19 @@ var _debois$elm_mdl$Material_Toolbar$icon = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{
-				flexible: true,
-				flexibleBehavior: _elm_lang$core$Maybe$Just('mdc-toolbar--flexible-space-maximized')
-			});
-	});
-var _debois$elm_mdl$Material_Toolbar$flexibleSpaceMinimized = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{
-				flexible: true,
-				flexibleBehavior: _elm_lang$core$Maybe$Just('mdc-toolbar--flexible-space-minimized')
-			});
-	});
-var _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{
-				flexible: true,
-				flexibleBehavior: _elm_lang$core$Maybe$Just('mdc-toolbar--flexible-space-maximized')
-			});
-	});
-var _debois$elm_mdl$Material_Toolbar$flexible = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{flexible: true});
-	});
+var _debois$elm_mdl$Material_Toolbar$flexible = function (minimized) {
+	return _debois$elm_mdl$Material_Options$many(
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible'),
+			_1: {
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs(
+					minimized ? 'mdc-toolbar--flexible-space-minimized' : 'mdc-toolbar-flexible-space-maximized'),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _debois$elm_mdl$Material_Toolbar$waterfall = function (minimized) {
 	return _debois$elm_mdl$Material_Options$many(
 		{
@@ -38454,22 +38434,14 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
+							_0: _debois$elm_mdl$Material_Toolbar$flexible(false),
 							_1: {
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexible,
+								_0: A2(_debois$elm_mdl$Material_Options$css, 'background-image', 'url(images/4-3.jpg)'),
 								_1: {
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-									_1: {
-										ctor: '::',
-										_0: A2(_debois$elm_mdl$Material_Options$css, 'background-image', 'url(images/4-3.jpg)'),
-										_1: {
-											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$css, 'background-size', 'cover'),
-											_1: {ctor: '[]'}
-										}
-									}
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'background-size', 'cover'),
+									_1: {ctor: '[]'}
 								}
 							}
 						}
@@ -38617,12 +38589,8 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
 							_1: {
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexible,
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-									_1: {ctor: '[]'}
-								}
+								_0: _debois$elm_mdl$Material_Toolbar$flexible(false),
+								_1: {ctor: '[]'}
 							}
 						}
 					},
@@ -38769,12 +38737,8 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = F2(
 							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
 							_1: {
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexible,
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-									_1: {ctor: '[]'}
-								}
+								_0: _debois$elm_mdl$Material_Toolbar$flexible(false),
+								_1: {ctor: '[]'}
 							}
 						}
 					},
@@ -38921,12 +38885,8 @@ var _debois$elm_mdl$Demo_Toolbar$customToolbar = F2(
 							_0: _debois$elm_mdl$Material_Toolbar$waterfall(false),
 							_1: {
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$flexible,
-								_1: {
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Toolbar$flexibleSpaceMaximized,
-									_1: {ctor: '[]'}
-								}
+								_0: _debois$elm_mdl$Material_Toolbar$flexible(false),
+								_1: {ctor: '[]'}
 							}
 						}
 					},
