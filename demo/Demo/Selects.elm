@@ -3,7 +3,6 @@ module Demo.Selects exposing (Model, defaultModel, Msg(Mdl), update, view, subsc
 import Dict
 import Html exposing (Html, text)
 import Html.Attributes as Html
-import Json.Decode as Json
 import Material
 import Material.Checkbox as Checkbox
 import Material.Component exposing (Index, Indexed)
@@ -101,7 +100,7 @@ view lift page model =
             ]
             |> List.indexedMap (\index label ->
                    Menu.li Lists.li
-                   [ Menu.onSelect (Json.succeed (lift (Select [0] index label)))
+                   [ Menu.onSelect (lift (Select [0] index label))
                    -- TODO: disabled
                    -- Menu.disabled |> when ((index == 0) || (index == 3))
                    ]

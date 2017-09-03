@@ -17,9 +17,10 @@ import Mouse
 {-| TODO
 -}
 type Msg m
-    = Toggle Geometry
-    | Open Geometry
-    | Close Geometry
+    = Toggle
+    | Init Geometry
+    | Open
+    | Close
     | Tick Float
     | Click Mouse.Position
     | KeyDown Meta Key KeyCode

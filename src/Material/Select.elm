@@ -174,7 +174,7 @@ view lift model options items =
     , css "width" "439px"
     , -- TODO: Menu.connect
       when (not config.disabled) <|
-      Options.on "click" (Json.map (Material.Internal.Menu.Toggle >> MenuMsg >> lift) decodeGeometry)
+      Options.onClick (lift (MenuMsg (Material.Internal.Menu.Toggle)))
     ]
     [ Html.attribute "role" "listbox"
     , Html.tabindex 0

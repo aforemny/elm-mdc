@@ -70,6 +70,7 @@ toolbar
 toolbar lift idx mdl setUrl url title =
     Toolbar.render lift idx mdl
     [ Toolbar.fixed
+    , css "z-index" "10"
     ]
     [ Toolbar.row []
       [ Toolbar.section

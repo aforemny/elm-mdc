@@ -221,7 +221,8 @@ document.addEventListener("webkitAnimationStart", insertListener, false); // Chr
 
 .elm-mdc-slider--uninitialized,
 .elm-mdc-tab-bar--uninitialized,
-.elm-mdc-toolbar--uninitialized
+.elm-mdc-toolbar--uninitialized,
+.elm-mdc-simple-menu--uninitialized
 {
   animation-duration: 0.001s;
   animation-name: nodeInserted;

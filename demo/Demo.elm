@@ -351,17 +351,19 @@ view_ model =
             , body =
                 \title nodes ->
                 styled Html.div
-                    [ Toolbar.fixedAdjust
-                    , Typography.typography
-                    , css "width" "100%"
-                    , css "height" "100%"
+                [ css "display" "flex"
+                , css "flex-flow" "column"
+                , css "height" "100%"
+                , Typography.typography
+                ]
+                ( List.concat
+                  [ [ Page.toolbar Mdl [0] model.mdl SetUrl model.url title
                     ]
-                    ( List.concat
-                      [ [ Page.toolbar Mdl [0] model.mdl SetUrl model.url title
-                        ]
-                      , nodes
-                      ]
-                    )
+                  , [ styled Html.div [ Toolbar.fixedAdjust ] []
+                    ]
+                  , nodes
+                  ]
+                )
             }
     in
     case model.url of
