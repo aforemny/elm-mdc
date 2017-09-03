@@ -12522,11 +12522,7 @@ _elm_lang$core$Native_Platform.effectManagers['AnimationFrame'] = {pkg: 'elm-lan
 
 var _debois$elm_mdl$Material_Menu$themeDark = _debois$elm_mdl$Material_Options$cs('mdc-simple-menu--theme-dark');
 var _debois$elm_mdl$Material_Menu$onSelect = function (msg) {
-	return A3(
-		_debois$elm_mdl$Material_Options$onWithOptions,
-		'click',
-		{preventDefault: false, stopPropagation: false},
-		_elm_lang$core$Json_Decode$succeed(msg));
+	return _debois$elm_mdl$Material_Options$onClick(msg);
 };
 var _debois$elm_mdl$Material_Menu$toPx = function (_p0) {
 	return A3(
@@ -12690,12 +12686,6 @@ var _debois$elm_mdl$Material_Menu$index = function (_p2) {
 					});
 			})(_p2));
 };
-var _debois$elm_mdl$Material_Menu$open = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{open: true});
-	});
 var _debois$elm_mdl$Material_Menu$defaultConfig = {index: _elm_lang$core$Maybe$Nothing, alignment: _elm_lang$core$Maybe$Nothing, open: false};
 var _debois$elm_mdl$Material_Menu$update = F3(
 	function (fwd, msg, model) {
@@ -12720,7 +12710,8 @@ var _debois$elm_mdl$Material_Menu$update = F3(
 								open: model.opening,
 								opening: false,
 								geometry: _elm_lang$core$Maybe$Just(_p3._0),
-								requestAnimation: false
+								requestAnimation: false,
+								initialized: true
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -12754,40 +12745,32 @@ var _debois$elm_mdl$Material_Menu$update = F3(
 							{ctor: '[]'});
 					}
 				case 'Tick':
-					var startScaleY = function () {
-						var geometry = A2(_elm_lang$core$Maybe$withDefault, _debois$elm_mdl$Material_Internal_Menu$defaultGeometry, model.geometry);
-						var height = geometry.itemsContainer.height;
-						var itemHeight = A2(
-							_elm_lang$core$Maybe$withDefault,
-							0,
-							A2(
-								_elm_lang$core$Maybe$map,
-								function (_) {
-									return _.height;
-								},
-								_elm_lang$core$List$head(geometry.itemGeometries)));
-						return model.open ? A2(
-							_elm_lang$core$Basics$max,
-							_elm_lang$core$Native_Utils.eq(height, 0) ? 0 : (itemHeight / height),
-							model.startScaleY) : model.startScaleY;
-					}();
+					var startScaleY = model.startScaleY;
 					var startScaleX = model.startScaleX;
 					var targetScale = model.open ? 1 : 0;
 					var time = A3(_elm_lang$core$Basics$clamp, 0, 1, model.time + _p3._0);
-					var easeX = time;
-					var scaleX = startScaleX + ((targetScale - startScaleX) * easeX);
-					var invScaleX = _elm_lang$core$Native_Utils.eq(scaleX, 0) ? 1 : (1 / scaleX);
-					var easeY = time;
-					var scaleY = startScaleY + ((targetScale - startScaleY) * easeY);
-					var invScaleY = _elm_lang$core$Native_Utils.eq(scaleY, 0) ? 1 : (1 / scaleY);
 					var transitionY2 = 1;
 					var transitionX2 = 0.2;
 					var transitionY1 = 0;
 					var transitionX1 = 0;
 					var transitionScaleAdjustmentY = 0.2;
-					var timeY = model.open ? A3(_elm_lang$core$Basics$clamp, 0, 1, (time - transitionScaleAdjustmentY) / (1 - transitionScaleAdjustmentY)) : A3(_elm_lang$core$Basics$clamp, 0, 1, time);
+					var timeY = A3(
+						_elm_lang$core$Basics$clamp,
+						0,
+						1,
+						model.open ? ((time - transitionScaleAdjustmentY) / (1 - transitionScaleAdjustmentY)) : time);
+					var easeY = timeY;
+					var scaleY = (startScaleY * (1 - easeY)) + (targetScale * easeY);
+					var invScaleY = 1 / scaleY;
 					var transitionScaleAdjustmentX = 0.5;
-					var timeX = model.open ? A3(_elm_lang$core$Basics$clamp, 0, 1, time + transitionScaleAdjustmentX) : A3(_elm_lang$core$Basics$clamp, 0, 1, (time - transitionScaleAdjustmentX) / (1 - transitionScaleAdjustmentX));
+					var timeX = A3(
+						_elm_lang$core$Basics$clamp,
+						0,
+						1,
+						model.open ? (time + transitionScaleAdjustmentX) : ((time - transitionScaleAdjustmentX) / (1 - transitionScaleAdjustmentX)));
+					var easeX = timeX;
+					var scaleX = (startScaleX * (1 - easeX)) + (targetScale * easeX);
+					var invScaleX = 1 / scaleX;
 					var transitionDurationMs = 300;
 					var selectedTriggerDelay = 50;
 					return A2(
@@ -12798,7 +12781,7 @@ var _debois$elm_mdl$Material_Menu$update = F3(
 								time: time,
 								animating: _elm_lang$core$Native_Utils.cmp(time, 1) < 0,
 								scaleX: scaleX,
-								scaleY: scaleX,
+								scaleY: scaleY,
 								invScaleX: invScaleX,
 								invScaleY: invScaleY
 							}),
@@ -12975,41 +12958,9 @@ var _debois$elm_mdl$Material_Menu$Config = F3(
 		return {index: a, alignment: b, open: c};
 	});
 var _debois$elm_mdl$Material_Menu$OpenFromBottomRight = {ctor: 'OpenFromBottomRight'};
-var _debois$elm_mdl$Material_Menu$openFromBottomRight = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{
-				alignment: _elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Menu$OpenFromBottomRight)
-			});
-	});
 var _debois$elm_mdl$Material_Menu$OpenFromBottomLeft = {ctor: 'OpenFromBottomLeft'};
-var _debois$elm_mdl$Material_Menu$openFromBottomLeft = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{
-				alignment: _elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Menu$OpenFromBottomLeft)
-			});
-	});
 var _debois$elm_mdl$Material_Menu$OpenFromTopRight = {ctor: 'OpenFromTopRight'};
-var _debois$elm_mdl$Material_Menu$openFromTopRight = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{
-				alignment: _elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Menu$OpenFromTopRight)
-			});
-	});
 var _debois$elm_mdl$Material_Menu$OpenFromTopLeft = {ctor: 'OpenFromTopLeft'};
-var _debois$elm_mdl$Material_Menu$openFromTopLeft = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{
-				alignment: _elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Menu$OpenFromTopLeft)
-			});
-	});
 var _debois$elm_mdl$Material_Menu$view = F4(
 	function (lift, model, options, ul) {
 		var initOn = function (event) {
@@ -13025,6 +12976,24 @@ var _debois$elm_mdl$Material_Menu$view = F4(
 					_debois$elm_mdl$Material_Menu$decodeGeometry));
 		};
 		var geometry = A2(_elm_lang$core$Maybe$withDefault, _debois$elm_mdl$Material_Internal_Menu$defaultGeometry, model.geometry);
+		var transitionDelay = F2(
+			function (i, itemGeometry) {
+				var toFixed = function (value) {
+					return _elm_lang$core$Basics$toFloat(
+						_elm_lang$core$Basics$floor(1000 * value)) / 1000;
+				};
+				var itemHeight = itemGeometry.height;
+				var itemTop = itemGeometry.top;
+				var transitionScaleAdjustmentY = 0.2;
+				var start = transitionScaleAdjustmentY;
+				var transitionDurationMs = 300;
+				var transitionDuration = transitionDurationMs / 1000;
+				var height = geometry.itemsContainer.height;
+				var itemDelayFraction = _elm_lang$core$Native_Utils.eq(height, 0) ? 0 : (itemTop / height);
+				var itemDelay = (start + (itemDelayFraction * (1 - start))) * transitionDuration;
+				var numItems = _elm_lang$core$List$length(ul.items);
+				return toFixed(itemDelay);
+			});
 		var _p11 = function () {
 			var height = geometry.itemsContainer.height;
 			var width = geometry.itemsContainer.width;
@@ -13053,28 +13022,6 @@ var _debois$elm_mdl$Material_Menu$view = F4(
 		var _p12 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Menu$defaultConfig, options);
 		var summary = _p12;
 		var config = _p12.config;
-		var transitionDelay = F2(
-			function (i, itemGeometry) {
-				var toFixed = function (value) {
-					return _elm_lang$core$Basics$toFloat(
-						_elm_lang$core$Basics$floor(1000 * value)) / 1000;
-				};
-				var itemHeight = itemGeometry.height;
-				var itemTop = itemGeometry.top;
-				var transitionScaleAdjustmentY = 0.2;
-				var start = transitionScaleAdjustmentY;
-				var transitionDurationMs = 300;
-				var transitionDuration = transitionDurationMs / 1000;
-				var height = geometry.itemsContainer.height;
-				var itemDelayFraction = _elm_lang$core$Native_Utils.eq(height, 0) ? 0 : ((_elm_lang$core$Native_Utils.eq(
-					config.alignment,
-					_elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Menu$OpenFromBottomLeft)) || _elm_lang$core$Native_Utils.eq(
-					config.alignment,
-					_elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Menu$OpenFromBottomRight))) ? (((height - itemTop) - itemHeight) / height) : (itemTop / height));
-				var itemDelay = (start + (itemDelayFraction * (1 - start))) * transitionDuration;
-				var numItems = _elm_lang$core$List$length(ul.items);
-				return toFixed(itemDelay);
-			});
 		return A5(
 			_debois$elm_mdl$Material_Internal_Options$apply,
 			summary,
@@ -13133,39 +13080,49 @@ var _debois$elm_mdl$Material_Menu$view = F4(
 										}()),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Options$css,
-											'transform',
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												'scale(',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(model.scaleX),
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														',',
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(model.scaleY),
-															')'))))),
-										_1: {
-											ctor: '::',
-											_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'absolute'),
-											_1: {
+										_0: function (_p16) {
+											return A2(
+												_debois$elm_mdl$Material_Options$when,
+												model.initialized,
+												_debois$elm_mdl$Material_Options$many(_p16));
+										}(
+											{
 												ctor: '::',
-												_0: A2(_debois$elm_mdl$Material_Options$css, position.horizontal, '0'),
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'position', 'absolute'),
 												_1: {
 													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$css, position.vertical, '0'),
+													_0: A2(_debois$elm_mdl$Material_Options$css, position.horizontal, '0'),
 													_1: {
 														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$css, 'transform-origin', transformOrigin),
-														_1: {ctor: '[]'}
+														_0: A2(_debois$elm_mdl$Material_Options$css, position.vertical, '0'),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$css, 'transform-origin', transformOrigin),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_debois$elm_mdl$Material_Options$css,
+																	'transform',
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		'scale(',
+																		A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			_elm_lang$core$Basics$toString(model.scaleX),
+																			A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				',',
+																				A2(
+																					_elm_lang$core$Basics_ops['++'],
+																					_elm_lang$core$Basics$toString(model.scaleY),
+																					')'))))),
+																_1: {ctor: '[]'}
+															}
+														}
 													}
 												}
-											}
-										}
+											}),
+										_1: {ctor: '[]'}
 									}
 								}
 							}
@@ -13205,11 +13162,11 @@ var _debois$elm_mdl$Material_Menu$view = F4(
 					model.open ? A2(
 						_elm_lang$core$List$indexedMap,
 						F2(
-							function (i, _p16) {
-								var _p17 = _p16;
-								var _p18 = _p17._0;
+							function (i, _p17) {
+								var _p18 = _p17;
+								var _p19 = _p18._0;
 								return A2(
-									_p18.node,
+									_p19.node,
 									{
 										ctor: '::',
 										_0: A2(
@@ -13218,11 +13175,11 @@ var _debois$elm_mdl$Material_Menu$view = F4(
 											A2(
 												_elm_lang$core$Basics_ops['++'],
 												_elm_lang$core$Basics$toString(
-													A2(transitionDelay, i, _p17._1)),
+													A2(transitionDelay, i, _p18._1)),
 												's')),
-										_1: _p18.options
+										_1: _p19.options
 									},
-									_p18.childs);
+									_p19.childs);
 							}),
 						A3(
 							_elm_lang$core$List$map2,
@@ -27279,7 +27236,7 @@ var _debois$elm_mdl$Demo_Menus$Mdl = function (a) {
 };
 var _debois$elm_mdl$Demo_Menus$update = F3(
 	function (lift, msg, model) {
-		var _p0 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Mdl':
 				return A3(
@@ -27344,8 +27301,28 @@ var _debois$elm_mdl$Demo_Menus$view = F3(
 							model.mdl,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Menu$open,
-								_1: {ctor: '[]'}
+								_0: _debois$elm_mdl$Material_Options$cs('mdc-simple-menu--open'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'transform', 'scale(1,1)'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'top', 'unset'),
+										_1: {
+											ctor: '::',
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'left', 'unset'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'bottom', 'unset'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'right', 'unset'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
 							},
 							A3(
 								_debois$elm_mdl$Material_Menu$ul,
