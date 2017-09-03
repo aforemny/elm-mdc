@@ -16,72 +16,69 @@ module Material.Typography
         )
 
 
-import Material.Options as Options exposing (Style, styled, cs, css)
+import Material.Options as Options exposing (Property, styled, cs, css)
 
 
--- TYPOGRPAHY
-
-
-typography : Style m
+typography : Property c m
 typography =
     cs "mdc-typography"
 
 
-display1 : Style m
+display1 : Property c m
 display1 =
     cs "mdc-typography--display1"
 
 
-display2 : Style m
+display2 : Property c m
 display2 =
     cs "mdc-typography--display2"
 
 
-display3 : Style m
+display3 : Property c m
 display3 =
     cs "mdc-typography--display3"
 
 
-display4 : Style m
+display4 : Property c m
 display4 =
     cs "mdc-typography--display4"
 
 
-title : Style m
+title : Property c m
 title =
     cs "mdc-typography--title"
 
 
-caption : Style m
+caption : Property c m
 caption =
     cs "mdc-typography--caption"
 
 
-body1 : Style m
+body1 : Property c m
 body1 =
     cs "mdc-typography--body1"
 
 
-body2 : Style m
+body2 : Property c m
 body2 =
     cs "mdc-typography--body2"
 
 
-headline : Style m
+headline : Property c m
 headline =
     cs "mdc-typography--headline"
 
 
-subheading1 : Style m
+subheading1 : Property c m
 subheading1 =
     cs "mdc-typography--subheading"
 
 
-subheading2 : Style m
+subheading2 : Property c m
 subheading2 =
     cs "mdc-typography--subheading"
 
 
-adjustMargin : Style m
+adjustMargin : Property c m
 adjustMargin =
     cs "mdc-typography--adjust-margin"

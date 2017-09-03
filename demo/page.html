@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var insertListener = function(event) {
         if (event.animationName == "nodeInserted") {
-          console.warn("Another node has been inserted! ", event, event.target);
+          //console.warn("Another node has been inserted! ", event, event.target);
           event.target.dispatchEvent(new Event('elm-mdc-init'));
         }
       }
@@ -46,12 +46,16 @@
       app.ports.scrollTop.subscribe(function() {
           document.scrollingElement.scrollTop = 0;
       });
+      window.addEventListener("scroll", function(event) {
+          app.ports.onScroll.send( { pageX: 0, pageY : window.pageYOffset } )
+      });
     </script>
 
     <style type="text/css">
 
     .elm-mdc-slider--uninitialized,
-    .elm-mdc-tab-bar--uninitialized
+    .elm-mdc-tab-bar--uninitialized,
+    .elm-mdc-toolbar--uninitialized
     {
       animation-duration: 0.001s;
       animation-name: nodeInserted;

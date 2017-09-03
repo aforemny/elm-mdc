@@ -54,7 +54,7 @@ view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     Html.div []
     [
-      Toolbar.view
+      Toolbar.render (Mdl >> lift) [1] model.mdl
       [ Toolbar.fixed
       ]
       [ Toolbar.row []

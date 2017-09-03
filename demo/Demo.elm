@@ -14,7 +14,7 @@ import Demo.LinearProgress
 import Demo.Lists
 import Demo.Lists
 import Demo.Menus
-import Demo.Page as Page exposing (Url(..))
+import Demo.Page as Page exposing (Url(..), ToolbarPage(..))
 import Demo.PermanentAboveDrawer
 import Demo.PermanentBelowDrawer
 import Demo.PersistentDrawer
@@ -45,6 +45,9 @@ import RouteUrl as Routing
 port scrollTop : () -> Cmd msg
 
 
+port onScroll : ({ pageX : Float, pageY : Float } -> msg) -> Sub msg
+
+
 type alias Model =
     { mdl : Material.Model
     , url : Url
@@ -72,6 +75,7 @@ type alias Model =
     , textfields : Demo.Textfields.Model
     , lists : Demo.Lists.Model
     , theme : Demo.Theme.Model
+    , toolbar : Demo.Toolbar.Model
     }
 
 
@@ -103,6 +107,7 @@ defaultModel =
     , layoutGrid = Demo.LayoutGrid.defaultModel
     , lists = Demo.Lists.defaultModel
     , theme = Demo.Theme.defaultModel
+    , toolbar = Demo.Toolbar.defaultModel
     }
 
 
@@ -110,6 +115,7 @@ type Msg
     = Mdl (Material.Msg Msg)
 
     | SetUrl Url
+    | Scroll { pageX : Float, pageY : Float }
 
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
@@ -135,6 +141,7 @@ type Msg
     | LayoutGridMsg (Demo.LayoutGrid.Msg)
     | ListsMsg (Demo.Lists.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
+    | ToolbarMsg (Demo.Toolbar.Msg Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -145,6 +152,13 @@ update msg model =
 
         SetUrl url ->
             { model | url = url } ! [ scrollTop () ]
+
+        Scroll scroll ->
+            let
+                ( toolbar, effects ) =
+                    Demo.Toolbar.update ToolbarMsg (Demo.Toolbar.Scroll scroll) model.toolbar
+            in
+            ( { model | toolbar = toolbar }, effects )
 
         ButtonsMsg msg_ ->
             let
@@ -314,6 +328,13 @@ update msg model =
             in
                 ( { model | theme = theme }, effects ) 
 
+        ToolbarMsg msg_ ->
+            let
+                (toolbar, effects) =
+                    Demo.Toolbar.update ToolbarMsg msg_ model.toolbar
+            in
+                ( { model | toolbar = toolbar }, effects )
+
 
 view : Model -> Html Msg
 view =
@@ -325,7 +346,7 @@ view_ : Model -> Html Msg
 view_ model =
     let
         page =
-            { toolbar = Page.toolbar SetUrl model.url
+            { toolbar = Page.toolbar Mdl [0] model.mdl SetUrl model.url
             , setUrl = SetUrl
             , body =
                 \title nodes ->
@@ -336,7 +357,7 @@ view_ model =
                     , css "height" "100%"
                     ]
                     ( List.concat
-                      [ [ Page.toolbar SetUrl model.url title
+                      [ [ Page.toolbar Mdl [0] model.mdl SetUrl model.url title
                         ]
                       , nodes
                       ]
@@ -413,8 +434,8 @@ view_ model =
         Theme ->
             Demo.Theme.view ThemeMsg page model.theme
 
-        Toolbar ->
-            Demo.Toolbar.view page
+        Toolbar toolparPage ->
+            Demo.Toolbar.view ToolbarMsg page toolparPage model.toolbar
 
         GridList ->
             Demo.GridList.view GridListMsg page model.gridList
@@ -468,7 +489,15 @@ urlOf model =
         Tabs -> "#tabs"
         TextField -> "#text-field"
         Theme -> "#theme"
-        Toolbar -> "#toolbar"
+        Toolbar Nothing -> "#toolbar"
+        Toolbar (Just DefaultToolbar) -> "#toolbar/default-toolbar"
+        Toolbar (Just FixedToolbar) -> "#toolbar/fixed-toolbar"
+        Toolbar (Just MenuToolbar) -> "#toolbar/menu-toolbar"
+        Toolbar (Just WaterfallToolbar) -> "#toolbar/waterfall-toolbar"
+        Toolbar (Just DefaultFlexibleToolbar) -> "#toolbar/default-flexible-toolbar"
+        Toolbar (Just WaterfallFlexibleToolbar) -> "#toolbar/waterfall-flexible-toolbar"
+        Toolbar (Just WaterfallToolbarFix) -> "#toolbar/waterfall-toolbar-fix-last-row"
+        Toolbar (Just CustomToolbar) -> "#toolbar/waterfall-flexible-toolbar-custom-style"
         Typography -> "#typography"
         Error404 requestedHash -> requestedHash
 
@@ -515,7 +544,15 @@ location2messages location =
           "#tabs" -> Tabs
           "#text-field" -> TextField
           "#theme" -> Theme
-          "#toolbar" -> Toolbar
+          "#toolbar" -> Toolbar Nothing
+          "#toolbar/default-toolbar" -> Toolbar (Just DefaultToolbar)
+          "#toolbar/fixed-toolbar" -> Toolbar (Just FixedToolbar)
+          "#toolbar/menu-toolbar" -> Toolbar (Just MenuToolbar)
+          "#toolbar/waterfall-toolbar" -> Toolbar (Just WaterfallToolbar)
+          "#toolbar/default-flexible-toolbar" -> Toolbar (Just DefaultFlexibleToolbar)
+          "#toolbar/waterfall-flexible-toolbar" -> Toolbar (Just WaterfallFlexibleToolbar)
+          "#toolbar/waterfall-toolbar-fix-last-row" -> Toolbar (Just WaterfallToolbarFix)
+          "#toolbar/waterfall-flexible-toolbar-custom-style" -> Toolbar (Just CustomToolbar)
           "#typography" -> Typography
           _ -> Error404 location.hash
     ]
@@ -557,6 +594,7 @@ subscriptions model =
           Material.subscriptions Mdl model
 
         , Demo.Menus.subscriptions SimpleMenuMsg model.menus
+        , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
         , Demo.PermanentAboveDrawer.subscriptions PermanentAboveDrawerMsg model.permanentAboveDrawer
         , Demo.PermanentBelowDrawer.subscriptions PermanentBelowDrawerMsg model.permanentBelowDrawer
         , Demo.PersistentDrawer.subscriptions PersistentDrawerMsg model.persistentDrawer
@@ -565,4 +603,6 @@ subscriptions model =
         , Demo.Slider.subscriptions SliderMsg model.slider
         , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
         , Demo.Tabs.subscriptions TabsMsg model.tabs
+
+        , onScroll Scroll
         ]

@@ -9,10 +9,6 @@ module Material
         , top
         )
 
-{-|
-@docs top
--}
-
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -34,10 +30,9 @@ import Material.Snackbar as Snackbar
 import Material.Switch as Switch
 import Material.Tabs as Tabs
 import Material.Textfield as Textfield
+import Material.Toolbar as Toolbar
 
 
-{-| Material Store
--}
 type alias Model = 
     { button : Indexed Button.Model
     , radio : Indexed RadioButton.Model
@@ -53,11 +48,10 @@ type alias Model =
     , ripple : Indexed Ripple.Model
     , snackbar : Indexed Snackbar.Model
     , slider : Indexed Slider.Model
+    , toolbar : Indexed Toolbar.Model
     }
 
 
-{-| Initial Material Store
--}
 defaultModel : Model
 defaultModel = 
     { button = Dict.empty
@@ -74,17 +68,14 @@ defaultModel =
     , ripple = Dict.empty
     , snackbar = Dict.empty
     , slider = Dict.empty
+    , toolbar = Dict.empty
     }
 
 
-{-| Material message type
--}
 type alias Msg m =
     Material.Msg.Msg m
 
 
-{-| Material update
--}
 update : (Msg m -> m) -> Msg m -> { c | mdl : Model } -> (  { c | mdl : Model }, Cmd m )
 update lift msg container =
   update_ lift msg (.mdl container)
@@ -95,8 +86,14 @@ update lift msg container =
 update_ : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update_ lift msg store =
     case msg of
+       Dispatch msgs -> 
+           (Nothing, Dispatch.forward msgs)
+
        ButtonMsg idx msg ->
            Button.react lift msg idx store
+
+       ToolbarMsg idx msg ->
+           Toolbar.react lift msg idx store
 
        RadioButtonMsg idx msg ->
            RadioButton.react lift msg idx store
@@ -138,36 +135,7 @@ update_ lift msg store =
        RippleMsg idx msg ->
            Ripple.react lift msg idx store
 
-       Dispatch msgs -> 
-           (Nothing, Dispatch.forward msgs)
 
-{-| Subscriptions and initialisation of elm-mdl. Some components requires
-subscriptions in order to function. Hook these up to your containing app as
-follows.
-
-    import Material
-
-    type Model =
-      { ...
-      , mdl : Material.Model
-      }
-
-    type Msg =
-      ...
-      | Mdl (Material.Msg Msg)
-
-    ...
-
-    App.program
-      { init = ( model, Material.init Mdl )
-      , view = view
-      , subscriptions = Material.subscriptions Mdl 
-      , update = update
-      }
-
-Currently, only Layout and Menu require subscriptions, and only Layout require
-initialisation.
--}
 subscriptions : (Msg m -> m) -> { model | mdl : Model } -> Sub m
 subscriptions lift model =
     Sub.batch
@@ -176,30 +144,26 @@ subscriptions lift model =
         , Select.subs lift model.mdl
         , Slider.subs lift model.mdl
         , Tabs.subs lift model.mdl
+        , Toolbar.subs lift model.mdl
         ]
 
 
-{-| Initialisation. See `subscriptions` above.
--}
 init : (Msg m -> m) -> Cmd m
 init lift =
     Cmd.none
+    -- TODO: Layout init, etc.
+
+--    Task.perform (\_ -> lift (Scroll { pageX = 0, pageY = 0 })) <|
+--    Dom.onDocument
+--      "scroll"
+--      ( Json.map (Scroll >> lift) <|
+--        Json.map2 (\pageX pageY -> { pageX = pageX, pageY = pageY })
+--          ( Json.at [ "pageX" ] Json.int )
+--          ( Json.at [ "pageY" ] Json.int )
+--      )
+--      ( \_ -> Task.succeed () )
 
 
-{-| Convenience function to add external CSS and JS scripts to your view
-function:
-
-*Note:* This is here only for prototyping. You will want to set this up
-properly in your index.html. See TODO.
-
-```
-view_ model =
-    *your view function*
-
-view model =
-    Material.top (view_ model)
-```
--}
 top : Html a -> Html a
 top content =
     Html.div []
@@ -256,7 +220,8 @@ document.addEventListener("webkitAnimationStart", insertListener, false); // Chr
 }
 
 .elm-mdc-slider--uninitialized,
-.elm-mdc-tab-bar--uninitialized
+.elm-mdc-tab-bar--uninitialized,
+.elm-mdc-toolbar--uninitialized
 {
   animation-duration: 0.001s;
   animation-name: nodeInserted;

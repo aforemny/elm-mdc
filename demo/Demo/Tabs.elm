@@ -212,7 +212,7 @@ example6 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar"
         ]
-      , Toolbar.view
+      , Toolbar.render (Mdl >> lift) [2*index] mdl
         [
         ]
         [ Toolbar.row []
@@ -224,7 +224,7 @@ example6 lift mdl index model =
           , Toolbar.section
             [ Toolbar.alignEnd
             ]
-            [ TabBar.render (Mdl >> lift) [index] mdl
+            [ TabBar.render (Mdl >> lift) [2*index+1] mdl
               [ TabBar.indicator
               ]
               [ TabBar.tab [] [ text "Item One" ]
@@ -245,7 +245,7 @@ example7 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar"
         ]
-      , Toolbar.view
+      , Toolbar.render (Mdl >> lift) [2*index] mdl
         [
         ]
         [ Toolbar.row []
@@ -260,7 +260,7 @@ example7 lift mdl index model =
             , css "right" "0"
             , css "bottom" "-16px"
             ]
-            [ TabBar.render (Mdl >> lift) [index] mdl
+            [ TabBar.render (Mdl >> lift) [2*index+1] mdl
               [
               ]
               [ TabBar.tab [] [ text "Item One" ]
@@ -281,7 +281,7 @@ example8 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar + primary indicator"
         ]
-      , Toolbar.view
+      , Toolbar.render (Mdl >> lift) [2*index] mdl
         [ Theme.secondaryBg
         ]
         [ Toolbar.row []
@@ -293,7 +293,7 @@ example8 lift mdl index model =
           , Toolbar.section
             [ Toolbar.alignEnd
             ]
-            [ TabBar.render (Mdl >> lift) [index] mdl
+            [ TabBar.render (Mdl >> lift) [2*index+1] mdl
               [ TabBar.indicator
               , TabBar.indicatorPrimary
               ]
@@ -315,7 +315,7 @@ example9 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar + accent indicator"
         ]
-      , Toolbar.view
+      , Toolbar.render (Mdl >> lift) [2*index] mdl
         [ Theme.primaryBg
         ]
         [ Toolbar.row []
@@ -327,7 +327,7 @@ example9 lift mdl index model =
           , Toolbar.section
             [ Toolbar.alignEnd
             ]
-            [ TabBar.render (Mdl >> lift) [index] mdl
+            [ TabBar.render (Mdl >> lift) [2*index+1] mdl
               [ TabBar.indicator
               , TabBar.indicatorAccent
               ]
@@ -353,14 +353,14 @@ example10 lift mdl index model =
       [ legend []
         [ text "Within Toolbar, Dynamic Content Control"
         ]
-      , Toolbar.view
+      , Toolbar.render (Mdl >> lift) [2*index] mdl
         [ Theme.primaryBg
         ]
         [ Toolbar.row []
           [ Toolbar.section
             [ Toolbar.alignEnd
             ]
-            [ TabBar.render (Mdl >> lift) [index] mdl
+            [ TabBar.render (Mdl >> lift) [2*index+1] mdl
               [ TabBar.indicator
               ]
               ( items

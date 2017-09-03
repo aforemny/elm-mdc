@@ -114,7 +114,8 @@ view lift page model =
       , css "box-sizing" "border-box"
       ]
       [
-        Toolbar.view []
+        Toolbar.render (Mdl >> lift) [1] model.mdl
+        []
         [ Toolbar.row []
           [ Toolbar.section
             [ Toolbar.alignStart

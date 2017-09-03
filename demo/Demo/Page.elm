@@ -1,7 +1,9 @@
-module Demo.Page exposing (Page, Url(..), toolbar, hero)
+module Demo.Page exposing (Page, ToolbarPage(..), Url(..), toolbar, hero)
 
 import Html.Attributes as Html
 import Html exposing (Html, text)
+import Material
+import Material.Msg
 import Material.Options as Options exposing (Property, styled, cs, css, when)
 import Material.Toolbar as Toolbar
 
@@ -40,14 +42,33 @@ type Url
     | Tabs
     | TextField
     | Theme
-    | Toolbar
+    | Toolbar (Maybe ToolbarPage)
     | Typography
     | Error404 String
 
 
-toolbar : (Url -> m) -> Url -> String -> Html m
-toolbar setUrl url title =
-    Toolbar.view
+type ToolbarPage
+    = DefaultToolbar
+    | FixedToolbar
+    | MenuToolbar
+    | WaterfallToolbar
+    | DefaultFlexibleToolbar
+    | WaterfallFlexibleToolbar
+    | WaterfallToolbarFix
+    | CustomToolbar
+
+
+
+toolbar
+  : (Material.Msg.Msg m -> m)
+  -> Material.Msg.Index
+  -> Material.Model
+  -> (Url -> m)
+  -> Url
+  -> String
+  -> Html m
+toolbar lift idx mdl setUrl url title =
+    Toolbar.render lift idx mdl
     [ Toolbar.fixed
     ]
     [ Toolbar.row []

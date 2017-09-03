@@ -73,7 +73,7 @@ view page =
             , title = "Text field", subtitle = "Single and multiline text fields" }
           , { url = Theme, icon = "ic_theme_24px.svg"
             , title = "Theme", subtitle = "Using primary and accent colors" }
-          , { url = Toolbar, icon = "ic_toolbar_24px.svg"
+          , { url = Toolbar Nothing, icon = "ic_toolbar_24px.svg"
             , title = "Toolbar", subtitle = "Header and footers" }
           , { url = Typography, icon = "ic_typography_24px.svg"
             , title = "Typography", subtitle = "Type hierarchy" }

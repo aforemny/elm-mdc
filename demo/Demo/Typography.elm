@@ -1,7 +1,7 @@
 module Demo.Typography exposing ( view )
 
-import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
+import Demo.Page exposing (Page)
+import Html exposing (..)
 import Material.Options as Options exposing (Style, styled, cs, css, nop)
 import Material.Typography as Typography
 
@@ -10,14 +10,7 @@ view : Page m -> Html m
 view page =
     page.body "Typography"
     [
-      Page.hero []
-      [ styled Html.h2
-        [ Typography.display4
-        ]
-        [ text "Tt"
-        ]
-      ]
-    , example "Styles" nop
+      example "Styles" nop
     , example "Styles with margin adjustments" Typography.adjustMargin
     ]
 
