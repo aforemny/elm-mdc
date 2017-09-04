@@ -345,6 +345,8 @@ view lift model options _ =
                     |> if config.pattern /= Nothing then Just else always Nothing
                   , Html.attribute "outline" "medium none"
                     |> Just
+                  , Html.value (Maybe.withDefault "" config.value)
+                    |> if config.value /= Nothing then Just else always Nothing
                   ]
                 ]
                 []
