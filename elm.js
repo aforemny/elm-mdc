@@ -12727,7 +12727,7 @@ var _debois$elm_mdl$Material_Menu$update = F3(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{open: false, opening: false, geometry: _elm_lang$core$Maybe$Nothing, animating: true, time: 0, startScaleX: model.scaleX, startScaleY: model.scaleY}),
+							{open: false, opening: false, animating: true, time: 0, startScaleX: model.scaleX, startScaleY: model.scaleY}),
 						{ctor: '[]'});
 				case 'Click':
 					if (model.open) {
@@ -13740,54 +13740,55 @@ var _debois$elm_mdl$Material_Select$view = F4(
 							_0: _debois$elm_mdl$Material_Options$cs('mdc-select__menu'),
 							_1: {
 								ctor: '::',
-								_0: A2(_debois$elm_mdl$Material_Options$css, 'bottom', 'auto'),
-								_1: {
-									ctor: '::',
-									_0: A2(_debois$elm_mdl$Material_Options$css, 'right', 'auto'),
-									_1: {
+								_0: function (_p4) {
+									return A2(
+										_debois$elm_mdl$Material_Options$when,
+										model.menu.initialized,
+										_debois$elm_mdl$Material_Options$many(_p4));
+								}(
+									{
 										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Options$css,
-											'left',
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												_elm_lang$core$Basics$toString(left),
-												'px')),
+										_0: _debois$elm_mdl$Material_Menu$index(
+											A2(_elm_lang$core$Maybe$withDefault, 0, config.index)),
 										_1: {
 											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Options$css,
-												'top',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(adjustedTop),
-													'px')),
+											_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_debois$elm_mdl$Material_Options$css,
-													'transform-origin',
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														'center ',
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(transformOrigin),
-															'px'))),
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'transform-origin', transformOrigin),
 												_1: {
 													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$css, 'display', 'block'),
+													_0: A2(
+														_debois$elm_mdl$Material_Options$css,
+														'left',
+														A2(
+															_elm_lang$core$Basics_ops['++'],
+															_elm_lang$core$Basics$toString(left),
+															'px')),
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Menu$index(
-															A2(_elm_lang$core$Maybe$withDefault, 0, config.index)),
-														_1: {ctor: '[]'}
+														_0: A2(
+															_debois$elm_mdl$Material_Options$css,
+															'top',
+															A2(
+																_elm_lang$core$Basics_ops['++'],
+																_elm_lang$core$Basics$toString(adjustedTop),
+																'px')),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$css, 'bottom', 'unset'),
+															_1: {
+																ctor: '::',
+																_0: A2(_debois$elm_mdl$Material_Options$css, 'right', 'unset'),
+																_1: {ctor: '[]'}
+															}
+														}
 													}
 												}
 											}
 										}
-									}
-								}
+									}),
+								_1: {ctor: '[]'}
 							}
 						},
 						A3(
@@ -13801,17 +13802,17 @@ var _debois$elm_mdl$Material_Select$view = F4(
 	});
 var _debois$elm_mdl$Material_Select$update = F3(
 	function (fwd, msg, model) {
-		var _p4 = msg;
-		var _p5 = A3(
+		var _p5 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		var _p6 = A3(
 			_debois$elm_mdl$Material_Menu$update,
-			function (_p6) {
+			function (_p7) {
 				return fwd(
-					_debois$elm_mdl$Material_Internal_Select$MenuMsg(_p6));
+					_debois$elm_mdl$Material_Internal_Select$MenuMsg(_p7));
 			},
-			_p4._0,
+			_p5._0,
 			model.menu);
-		var menu = _p5._0;
-		var menuCmd = _p5._1;
+		var menu = _p6._0;
+		var menuCmd = _p6._1;
 		return A2(
 			_elm_lang$core$Platform_Cmd_ops['!'],
 			_elm_lang$core$Native_Utils.update(
@@ -13824,7 +13825,7 @@ var _debois$elm_mdl$Material_Select$update = F3(
 			});
 	});
 var _debois$elm_mdl$Material_Select$defaultModel = {menu: _debois$elm_mdl$Material_Menu$defaultModel};
-var _debois$elm_mdl$Material_Select$_p7 = A3(
+var _debois$elm_mdl$Material_Select$_p8 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
 	function (_) {
 		return _.select;
@@ -13836,15 +13837,15 @@ var _debois$elm_mdl$Material_Select$_p7 = A3(
 				{select: x});
 		}),
 	_debois$elm_mdl$Material_Select$defaultModel);
-var _debois$elm_mdl$Material_Select$get = _debois$elm_mdl$Material_Select$_p7._0;
-var _debois$elm_mdl$Material_Select$set = _debois$elm_mdl$Material_Select$_p7._1;
+var _debois$elm_mdl$Material_Select$get = _debois$elm_mdl$Material_Select$_p8._0;
+var _debois$elm_mdl$Material_Select$set = _debois$elm_mdl$Material_Select$_p8._1;
 var _debois$elm_mdl$Material_Select$react = F4(
 	function (lift, msg, idx, store) {
 		return A2(
 			_debois$elm_mdl$Material_Helpers$map1st,
-			function (_p8) {
+			function (_p9) {
 				return _elm_lang$core$Maybe$Just(
-					A3(_debois$elm_mdl$Material_Select$set, idx, store, _p8));
+					A3(_debois$elm_mdl$Material_Select$set, idx, store, _p9));
 			},
 			A3(
 				_debois$elm_mdl$Material_Select$update,
@@ -16968,7 +16969,13 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 																	ctor: '::',
 																	_0: _elm_lang$core$Maybe$Just(
 																		A2(_elm_lang$html$Html_Attributes$attribute, 'outline', 'medium none')),
-																	_1: {ctor: '[]'}
+																	_1: {
+																		ctor: '::',
+																		_0: ((!_elm_lang$core$Native_Utils.eq(config.value, _elm_lang$core$Maybe$Nothing)) ? _elm_lang$core$Maybe$Just : _elm_lang$core$Basics$always(_elm_lang$core$Maybe$Nothing))(
+																			_elm_lang$html$Html_Attributes$value(
+																				A2(_elm_lang$core$Maybe$withDefault, '', config.value))),
+																		_1: {ctor: '[]'}
+																	}
 																}
 															}
 														}
@@ -17528,10 +17535,10 @@ var _debois$elm_mdl$Material$top = function (content) {
 												_0: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
 												_1: {
 													ctor: '::',
-													_0: 'https://raw.githubusercontent.com/aforemny/elm-mdc/master/material-components-web.css',
+													_0: 'https://aforemny.github.io/elm-mdc/material-components-web.css',
 													_1: {
 														ctor: '::',
-														_0: 'https://raw.githubusercontent.com/aforemny/elm-mdc/master/dialog-polyfill.css',
+														_0: 'https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.css',
 														_1: {ctor: '[]'}
 													}
 												}
@@ -17550,7 +17557,7 @@ var _debois$elm_mdl$Material$top = function (content) {
 							_0: _elm_lang$html$Html_Attributes$type_('text/javascript'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src('https://raw.githubusercontent.com/aforemny/elm-mdc/master/dialog-polyfill.js'),
+								_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.js'),
 								_1: {ctor: '[]'}
 							}
 						},
@@ -17889,7 +17896,10 @@ var _debois$elm_mdl$Demo_Page$toolbar = F6(
 				_0: _debois$elm_mdl$Material_Toolbar$fixed,
 				_1: {
 					ctor: '::',
-					_0: A2(_debois$elm_mdl$Material_Options$css, 'z-index', '10'),
+					_0: A2(
+						_debois$elm_mdl$Material_Options$when,
+						_elm_lang$core$Native_Utils.eq(url, _debois$elm_mdl$Demo_Page$SimpleMenu),
+						A2(_debois$elm_mdl$Material_Options$css, 'z-index', '10')),
 					_1: {ctor: '[]'}
 				}
 			},
@@ -30824,276 +30834,252 @@ var _debois$elm_mdl$Demo_Selects$update = F3(
 	});
 var _debois$elm_mdl$Demo_Selects$view = F3(
 	function (lift, page, model) {
-		var _p2 = A2(
-			_elm_lang$core$Maybe$withDefault,
-			{ctor: '_Tuple2', _0: 0, _1: 'Pick a food group'},
-			A2(
-				_elm_lang$core$Dict$get,
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
-				model.selects));
-		var selectedIndex = _p2._0;
-		var selectedText = _p2._1;
+		var exampleSelect = F3(
+			function (id, options, _p2) {
+				return A5(
+					_debois$elm_mdl$Material_Select$render,
+					function (_p3) {
+						return lift(
+							_debois$elm_mdl$Demo_Selects$Mdl(_p3));
+					},
+					id,
+					model.mdl,
+					options,
+					A2(
+						_elm_lang$core$List$indexedMap,
+						F2(
+							function (index, label) {
+								return A3(
+									_debois$elm_mdl$Material_Menu$li,
+									_debois$elm_mdl$Material_List$li,
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Menu$onSelect(
+											lift(
+												A3(_debois$elm_mdl$Demo_Selects$Select, id, index, label))),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(label),
+										_1: {ctor: '[]'}
+									});
+							}),
+						{
+							ctor: '::',
+							_0: 'Pick a food group',
+							_1: {
+								ctor: '::',
+								_0: 'Bread, Cereal, Rice, and Pasta',
+								_1: {
+									ctor: '::',
+									_0: 'Vegetables',
+									_1: {
+										ctor: '::',
+										_0: 'Fruit',
+										_1: {
+											ctor: '::',
+											_0: 'Milk, Yogurt, and Cheese',
+											_1: {
+												ctor: '::',
+												_0: 'Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts',
+												_1: {
+													ctor: '::',
+													_0: 'Fats, Oils, and Sweets',
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}));
+			});
 		return A2(
 			page.body,
 			'Select',
 			{
 				ctor: '::',
-				_0: A3(
-					_debois$elm_mdl$Material_Options$styled,
-					_elm_lang$html$Html$section,
-					{
-						ctor: '::',
-						_0: _debois$elm_mdl$Material_Options$cs('example'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A3(
-							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$h2,
+				_0: function () {
+					var _p4 = A2(
+						_elm_lang$core$Maybe$withDefault,
+						{ctor: '_Tuple2', _0: 0, _1: 'Pick a food group'},
+						A2(
+							_elm_lang$core$Dict$get,
 							{
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Typography$title,
+								_0: 0,
 								_1: {ctor: '[]'}
 							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Fully-Featured Component'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
+							model.selects));
+					var selectedIndex = _p4._0;
+					var selectedText = _p4._1;
+					return A2(
+						_debois$elm_mdl$Demo_Page$hero,
+						{ctor: '[]'},
+						{
 							ctor: '::',
 							_0: A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$section,
+								exampleSelect,
 								{
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$cs('demo-wrapper'),
+									_0: 0,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _debois$elm_mdl$Material_Select$selectedText(selectedText),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_debois$elm_mdl$Material_Options$when,
-											model.darkTheme,
-											_debois$elm_mdl$Material_Options$many(
-												{
-													ctor: '::',
-													_0: _debois$elm_mdl$Material_Theme$dark,
-													_1: {
-														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#303030'),
-														_1: {ctor: '[]'}
-													}
-												})),
+										_0: _debois$elm_mdl$Material_Select$index(selectedIndex),
 										_1: {
 											ctor: '::',
-											_0: A2(
-												_debois$elm_mdl$Material_Options$when,
-												model.rtl,
-												_debois$elm_mdl$Material_Options$attribute(
-													A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'))),
+											_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Select$disabled),
 											_1: {ctor: '[]'}
 										}
 									}
 								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						});
+				}(),
+				_1: {
+					ctor: '::',
+					_0: function () {
+						var _p5 = A2(
+							_elm_lang$core$Maybe$withDefault,
+							{ctor: '_Tuple2', _0: 0, _1: 'Pick a food group'},
+							A2(
+								_elm_lang$core$Dict$get,
 								{
 									ctor: '::',
-									_0: A5(
-										_debois$elm_mdl$Material_Select$render,
-										function (_p3) {
-											return lift(
-												_debois$elm_mdl$Demo_Selects$Mdl(_p3));
-										},
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
-										model.mdl,
-										{
-											ctor: '::',
-											_0: _debois$elm_mdl$Material_Select$selectedText(selectedText),
-											_1: {
-												ctor: '::',
-												_0: _debois$elm_mdl$Material_Select$index(selectedIndex),
-												_1: {
-													ctor: '::',
-													_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Select$disabled),
-													_1: {ctor: '[]'}
-												}
-											}
-										},
-										A2(
-											_elm_lang$core$List$indexedMap,
-											F2(
-												function (index, label) {
-													return A3(
-														_debois$elm_mdl$Material_Menu$li,
-														_debois$elm_mdl$Material_List$li,
-														{
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Menu$onSelect(
-																lift(
-																	A3(
-																		_debois$elm_mdl$Demo_Selects$Select,
-																		{
-																			ctor: '::',
-																			_0: 0,
-																			_1: {ctor: '[]'}
-																		},
-																		index,
-																		label))),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(label),
-															_1: {ctor: '[]'}
-														});
-												}),
-											{
-												ctor: '::',
-												_0: 'Pick a food group',
-												_1: {
-													ctor: '::',
-													_0: 'Bread, Cereal, Rice, and Pasta',
-													_1: {
-														ctor: '::',
-														_0: 'Vegetables',
-														_1: {
-															ctor: '::',
-															_0: 'Fruit',
-															_1: {
-																ctor: '::',
-																_0: 'Milk, Yogurt, and Cheese',
-																_1: {
-																	ctor: '::',
-																	_0: 'Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts',
-																	_1: {
-																		ctor: '::',
-																		_0: 'Fats, Oils, and Sweets',
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}
-														}
-													}
-												}
-											})),
+									_0: 1,
 									_1: {ctor: '[]'}
-								}),
-							_1: {
+								},
+								model.selects));
+						var selectedIndex = _p5._0;
+						var selectedText = _p5._1;
+						return A3(
+							_debois$elm_mdl$Material_Options$styled,
+							_elm_lang$html$Html$section,
+							{
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$p,
-									{ctor: '[]'},
+								_0: _debois$elm_mdl$Material_Options$cs('example'),
+								_1: {
+									ctor: '::',
+									_0: A2(_debois$elm_mdl$Material_Options$css, 'margin', '24px'),
+									_1: {
+										ctor: '::',
+										_0: A2(_debois$elm_mdl$Material_Options$css, 'padding', '24px'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A3(
+									_debois$elm_mdl$Material_Options$styled,
+									_elm_lang$html$Html$h2,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Currently selected:'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$span,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text(
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															selectedText,
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																' at index ',
-																_elm_lang$core$Basics$toString(selectedIndex)))),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}
+										_0: _debois$elm_mdl$Material_Typography$title,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Select'),
+										_1: {ctor: '[]'}
 									}),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$div,
-										{ctor: '[]'},
+									_0: A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$section,
 										{
 											ctor: '::',
-											_0: A5(
-												_debois$elm_mdl$Material_Checkbox$render,
-												function (_p4) {
-													return lift(
-														_debois$elm_mdl$Demo_Selects$Mdl(_p4));
-												},
+											_0: _debois$elm_mdl$Material_Options$cs('demo-wrapper'),
+											_1: {
+												ctor: '::',
+												_0: A2(_debois$elm_mdl$Material_Options$css, 'padding-top', '4px'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'padding-bottom', '4px'),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_debois$elm_mdl$Material_Options$when,
+															model.darkTheme,
+															_debois$elm_mdl$Material_Options$many(
+																{
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Theme$dark,
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'background-color', '#303030'),
+																		_1: {ctor: '[]'}
+																	}
+																})),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_debois$elm_mdl$Material_Options$when,
+																model.rtl,
+																_debois$elm_mdl$Material_Options$attribute(
+																	A2(_elm_lang$html$Html_Attributes$attribute, 'dir', 'rtl'))),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										},
+										{
+											ctor: '::',
+											_0: A3(
+												exampleSelect,
 												{
 													ctor: '::',
 													_0: 1,
 													_1: {ctor: '[]'}
 												},
-												model.mdl,
 												{
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$onClick(
-														lift(_debois$elm_mdl$Demo_Selects$ToggleDarkTheme)),
+													_0: _debois$elm_mdl$Material_Select$selectedText(selectedText),
 													_1: {
 														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$when, model.darkTheme, _debois$elm_mdl$Material_Checkbox$checked),
-														_1: {ctor: '[]'}
+														_0: _debois$elm_mdl$Material_Select$index(selectedIndex),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Select$disabled),
+															_1: {ctor: '[]'}
+														}
 													}
 												},
 												{ctor: '[]'}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$label,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Dark theme'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}
+											_1: {ctor: '[]'}
 										}),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$div,
+											_elm_lang$html$Html$p,
 											{ctor: '[]'},
 											{
 												ctor: '::',
-												_0: A5(
-													_debois$elm_mdl$Material_Checkbox$render,
-													function (_p5) {
-														return lift(
-															_debois$elm_mdl$Demo_Selects$Mdl(_p5));
-													},
-													{
-														ctor: '::',
-														_0: 2,
-														_1: {ctor: '[]'}
-													},
-													model.mdl,
-													{
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Options$onClick(
-															lift(_debois$elm_mdl$Demo_Selects$ToggleRtl)),
-														_1: {
-															ctor: '::',
-															_0: A2(_debois$elm_mdl$Material_Options$when, model.rtl, _debois$elm_mdl$Material_Checkbox$checked),
-															_1: {ctor: '[]'}
-														}
-													},
-													{ctor: '[]'}),
+												_0: _elm_lang$html$Html$text('Currently selected:'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$label,
+														_elm_lang$html$Html$span,
 														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('RTL'),
+															_0: _elm_lang$html$Html$text(
+																A2(
+																	_elm_lang$core$Basics_ops['++'],
+																	selectedText,
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		' at index ',
+																		_elm_lang$core$Basics$toString(selectedIndex)))),
 															_1: {ctor: '[]'}
 														}),
 													_1: {ctor: '[]'}
@@ -31106,59 +31092,129 @@ var _debois$elm_mdl$Demo_Selects$view = F3(
 												{ctor: '[]'},
 												{
 													ctor: '::',
-													_0: A5(
-														_debois$elm_mdl$Material_Checkbox$render,
-														function (_p6) {
-															return lift(
-																_debois$elm_mdl$Demo_Selects$Mdl(_p6));
-														},
+													_0: A2(
+														_elm_lang$html$Html$label,
+														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: 3,
-															_1: {ctor: '[]'}
-														},
-														model.mdl,
-														{
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Options$onClick(
-																lift(_debois$elm_mdl$Demo_Selects$ToggleDisabled)),
+															_0: A2(
+																_elm_lang$html$Html$input,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Events$onClick(
+																			lift(_debois$elm_mdl$Demo_Selects$ToggleDarkTheme)),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$checked(model.darkTheme),
+																			_1: {ctor: '[]'}
+																		}
+																	}
+																},
+																{ctor: '[]'}),
 															_1: {
 																ctor: '::',
-																_0: A2(_debois$elm_mdl$Material_Options$when, model.disabled, _debois$elm_mdl$Material_Checkbox$checked),
+																_0: _elm_lang$html$Html$text(' Dark theme'),
 																_1: {ctor: '[]'}
 															}
-														},
-														{ctor: '[]'}),
-													_1: {
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													{
 														ctor: '::',
 														_0: A2(
 															_elm_lang$html$Html$label,
 															{ctor: '[]'},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text('Disabled'),
-																_1: {ctor: '[]'}
+																_0: A2(
+																	_elm_lang$html$Html$input,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Events$onClick(
+																				lift(_debois$elm_mdl$Demo_Selects$ToggleRtl)),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Attributes$checked(model.rtl),
+																				_1: {ctor: '[]'}
+																			}
+																		}
+																	},
+																	{ctor: '[]'}),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text(' RTL'),
+																	_1: {ctor: '[]'}
+																}
 															}),
 														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$div,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$label,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$input,
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Events$onClick(
+																					lift(_debois$elm_mdl$Demo_Selects$ToggleDisabled)),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$html$Html_Attributes$checked(model.disabled),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		},
+																		{ctor: '[]'}),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text(' Disabled'),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}
 										}
 									}
 								}
-							}
-						}
-					}),
-				_1: {ctor: '[]'}
+							});
+					}(),
+					_1: {ctor: '[]'}
+				}
 			});
 	});
 var _debois$elm_mdl$Demo_Selects$subscriptions = F2(
 	function (lift, model) {
 		return A2(
 			_debois$elm_mdl$Material_Select$subs,
-			function (_p7) {
+			function (_p6) {
 				return lift(
-					_debois$elm_mdl$Demo_Selects$Mdl(_p7));
+					_debois$elm_mdl$Demo_Selects$Mdl(_p6));
 			},
 			model.mdl);
 	});
