@@ -187,13 +187,16 @@ view lift model options items =
       ]
     , Menu.view (MenuMsg >> lift) model.menu
       [ cs "mdc-select__menu"
-      , css "bottom" "auto"
-      , css "right" "auto"
-      , css "left" (toString left ++ "px")
-      , css "top" (toString adjustedTop ++ "px")
-      , css "transform-origin" ("center " ++ toString transformOrigin ++ "px")
-      , css "display" "block"
-      , Menu.index (Maybe.withDefault 0 config.index)
+      , when model.menu.initialized << Options.many <|
+        [ 
+          Menu.index (Maybe.withDefault 0 config.index)
+        , css "display" "block"
+        , css "transform-origin" transformOrigin
+        , css "left" (toString left ++ "px")
+        , css "top" (toString adjustedTop ++ "px")
+        , css "bottom" "unset"
+        , css "right" "unset"
+        ]
       ]
       ( Menu.ul Lists.ul
         []

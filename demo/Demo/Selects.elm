@@ -1,19 +1,19 @@
 module Demo.Selects exposing (Model, defaultModel, Msg(Mdl), update, view, subscriptions)
 
+import Demo.Page as Page exposing (Page)
 import Dict
-import Html exposing (Html, text)
 import Html.Attributes as Html
+import Html.Events as Html
+import Html exposing (Html, text)
 import Material
-import Material.Checkbox as Checkbox
 import Material.Component exposing (Index, Indexed)
 import Material.List as Lists
 import Material.Menu as Menu
 import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Select as Select
-import Material.Typography as Typography
 import Material.Theme as Theme
-import Demo.Page exposing (Page)
+import Material.Typography as Typography
 
 
 type alias Model =
@@ -65,18 +65,57 @@ update lift msg model =
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     let
-        (selectedIndex, selectedText) =
-            Dict.get [0] model.selects
-            |> Maybe.withDefault (0, "Pick a food group")
+        exampleSelect id options _ =
+            Select.render (Mdl >> lift) id model.mdl options
+            ( [ "Pick a food group"
+              , "Bread, Cereal, Rice, and Pasta"
+              , "Vegetables"
+              , "Fruit"
+              , "Milk, Yogurt, and Cheese"
+              , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
+              , "Fats, Oils, and Sweets"
+              ]
+              |> List.indexedMap (\index label ->
+                     Menu.li Lists.li
+                     [ Menu.onSelect (lift (Select id index label))
+                     -- TODO:
+                     -- , Menu.disabled |> when ((index == 0) || (index == 3))
+                     ]
+                     [ text label ]
+                 )
+            )
     in
     page.body "Select"
     [
+      let
+          (selectedIndex, selectedText) =
+              Dict.get [0] model.selects
+              |> Maybe.withDefault (0, "Pick a food group")
+      in
+      Page.hero []
+      [ exampleSelect [0]
+        [ Select.selectedText selectedText
+        , Select.index selectedIndex
+        , Select.disabled |> when model.disabled
+        ]
+        []
+      ]
+
+    , let
+          (selectedIndex, selectedText) =
+              Dict.get [1] model.selects
+              |> Maybe.withDefault (0, "Pick a food group")
+      in
       styled Html.section
       [ cs "example"
+      , css "margin" "24px"
+      , css "padding" "24px"
       ]
-      [ styled Html.h2 [ Typography.title ] [ text "Fully-Featured Component" ]
+      [ styled Html.h2 [ Typography.title ] [ text "Select" ]
       , styled Html.section
         [ cs "demo-wrapper"
+        , css "padding-top" "4px"
+        , css "padding-bottom" "4px"
         , when model.darkTheme <|
           Options.many
           [ Theme.dark
@@ -85,28 +124,13 @@ view lift page model =
         , when model.rtl <|
           Options.attribute (Html.attribute "dir" "rtl")
         ]
-        [ Select.render (Mdl >> lift) [0] model.mdl
-          [ Select.selectedText selectedText
-          , Select.index selectedIndex
-          , Select.disabled |> when model.disabled
-          ]
-          ( [ "Pick a food group"
-            , "Bread, Cereal, Rice, and Pasta"
-            , "Vegetables"
-            , "Fruit"
-            , "Milk, Yogurt, and Cheese"
-            , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
-            , "Fats, Oils, and Sweets"
-            ]
-            |> List.indexedMap (\index label ->
-                   Menu.li Lists.li
-                   [ Menu.onSelect (lift (Select [0] index label))
-                   -- TODO: disabled
-                   -- Menu.disabled |> when ((index == 0) || (index == 3))
-                   ]
-                   [ text label ]
-               )
-          )
+        [
+          exampleSelect [1]
+              [ Select.selectedText selectedText
+              , Select.index selectedIndex
+              , Select.disabled |> when model.disabled
+              ]
+              []
         ]
 
       , Html.p []
@@ -116,32 +140,41 @@ view lift page model =
 
       , Html.div
         []
-        [ Checkbox.render (Mdl >> lift) [1] model.mdl
-          [ Options.onClick (lift ToggleDarkTheme)
-          , Checkbox.checked |> when model.darkTheme
+        [ Html.label []
+          [ Html.input
+            [ Html.type_ "checkbox"
+            , Html.onClick (lift ToggleDarkTheme)
+            , Html.checked model.darkTheme
+            ]
+            []
+          , text " Dark theme"
           ]
-          []
-        , Html.label [] [ text "Dark theme" ]
         ]
 
       , Html.div
         []
-        [ Checkbox.render (Mdl >> lift) [2] model.mdl
-          [ Options.onClick (lift ToggleRtl)
-          , Checkbox.checked |> when model.rtl
+        [ Html.label []
+          [ Html.input
+            [ Html.type_ "checkbox"
+            , Html.onClick (lift ToggleRtl)
+            , Html.checked model.rtl
+            ]
+            []
+          , text " RTL"
           ]
-          []
-        , Html.label [] [ text "RTL" ]
         ]
 
       , Html.div
         []
-        [ Checkbox.render (Mdl >> lift) [3] model.mdl
-          [ Options.onClick (lift ToggleDisabled)
-          , Checkbox.checked |> when model.disabled
+        [ Html.label []
+          [ Html.input
+            [ Html.type_ "checkbox"
+            , Html.onClick (lift ToggleDisabled)
+            , Html.checked model.disabled
+            ]
+            []
+          , text " Disabled"
           ]
-          []
-        , Html.label [] [ text "Disabled" ]
         ]
       ]
     ]

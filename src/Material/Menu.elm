@@ -161,7 +161,6 @@ update fwd msg model =
             { model
                 | open = False
                 , opening = False
-                , geometry = Nothing
 
                 -- animation:
                 , animating = True
