@@ -176,8 +176,8 @@ top content =
       [ [ "https://fonts.googleapis.com/css?family=Roboto+Mono"
         , "https://fonts.googleapis.com/icon?family=Material+Icons"
         , "https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-        , "https://raw.githubusercontent.com/aforemny/elm-mdc/master/material-components-web.css"
-        , "https://raw.githubusercontent.com/aforemny/elm-mdc/master/dialog-polyfill.css"
+        , "https://aforemny.github.io/elm-mdc/material-components-web.css"
+        , "https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.css"
         ]
         |> List.map (\url ->
                "@import url(" ++ url ++ ");"
@@ -188,7 +188,7 @@ top content =
 
     , Html.node "script"
       [ Html.type_ "text/javascript"
-      , Html.src "https://raw.githubusercontent.com/aforemny/elm-mdc/master/dialog-polyfill.js"
+      , Html.src "https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.js"
       ]
       []
 
