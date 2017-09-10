@@ -340,6 +340,26 @@ type Alignment
     | OpenFromBottomRight
 
 
+openFromTopLeft : Property m
+openFromTopLeft =
+    Internal.option (\ config -> { config | alignment = Just OpenFromTopLeft })
+
+
+openFromTopRight : Property m
+openFromTopRight =
+    Internal.option (\ config -> { config | alignment = Just OpenFromTopRight })
+
+
+openFromBottomLeft : Property m
+openFromBottomLeft =
+    Internal.option (\ config -> { config | alignment = Just OpenFromBottomLeft })
+
+
+openFromBottomRight : Property m
+openFromBottomRight =
+    Internal.option (\ config -> { config | alignment = Just OpenFromBottomRight })
+
+
 defaultConfig : Config
 defaultConfig =
     { index = Nothing
@@ -473,10 +493,20 @@ view lift model options ul =
                     topOverflow > 0
 
                 vertical =
-                    if extendsBeyondTopBounds && (bottomOverflow < topOverflow) then
-                        "bottom"
-                    else
-                        "top"
+                    case config.alignment of
+                        Just OpenFromTopLeft ->
+                            "top"
+                        Just OpenFromTopRight ->
+                            "top"
+                        Just OpenFromBottomLeft ->
+                            "bottom"
+                        Just OpenFromBottomRight ->
+                            "bottom"
+                        Nothing ->
+                            if extendsBeyondTopBounds && (bottomOverflow < topOverflow) then
+                                "bottom"
+                            else
+                                "top"
 
                 leftOverflow =
                     anchor.left + width - windowWidth
@@ -491,16 +521,26 @@ view lift model options ul =
                     rightOverflow > 0
 
                 horizontal =
-                    if adapter.isRtl then
-                        if extendsBeyondRightBounds && (leftOverflow < rightOverflow) then
+                    case config.alignment of
+                        Just OpenFromTopLeft ->
                             "left"
-                        else
+                        Just OpenFromTopRight ->
                             "right"
-                    else
-                        if extendsBeyondLeftBounds && (rightOverflow < leftOverflow) then
-                            "right"
-                        else
+                        Just OpenFromBottomLeft ->
                             "left"
+                        Just OpenFromBottomRight ->
+                            "right"
+                        Nothing ->
+                            if adapter.isRtl then
+                                if extendsBeyondRightBounds && (leftOverflow < rightOverflow) then
+                                    "left"
+                                else
+                                    "right"
+                            else
+                                if extendsBeyondLeftBounds && (rightOverflow < leftOverflow) then
+                                    "right"
+                                else
+                                    "left"
 
                 transformOrigin =
                     vertical ++ " " ++ horizontal
