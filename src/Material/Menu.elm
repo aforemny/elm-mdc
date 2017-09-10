@@ -60,7 +60,7 @@ defaultModel =
     , open = False
     , geometry = Nothing
     , initialized = False
-    , requestAnimation = True
+    , requestAnimation = False
     , opening = False
 
     -- animation:

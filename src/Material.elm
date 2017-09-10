@@ -210,7 +210,7 @@ document.addEventListener("webkitAnimationStart", insertListener, false); // Chr
 """
       ]
 
-    , Html.node "script"
+    , Html.node "style"
       [ Html.type_ "text/css"
       ]
       [ text """
