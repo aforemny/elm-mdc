@@ -56,21 +56,21 @@ update lift msg model =
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
         ToggleRtl ->
-            { model | rtl = not model.rtl } ! []
+            ( { model | rtl = not model.rtl }, Cmd.none )
         ToggleAlignEnd ->
-            { model | alignEnd = not model.alignEnd } ! []
+            ( { model | alignEnd = not model.alignEnd }, Cmd.none )
         ToggleIndeterminate ->
-            { model | indeterminate = not model.indeterminate } ! []
+            ( { model | indeterminate = not model.indeterminate }, Cmd.none )
         ToggleChecked0 ->
-            { model | checked0 = not model.checked0 } ! []
+            ( { model | checked0 = not model.checked0 }, Cmd.none )
         ToggleChecked1 ->
-            { model | checked1 = not model.checked1 } ! []
+            ( { model | checked1 = not model.checked1, indeterminate = False }, Cmd.none )
         ToggleChecked2 ->
-            { model | checked2 = not model.checked2 } ! []
+            ( { model | checked2 = not model.checked2 }, Cmd.none )
         ToggleDisabled1 ->
-            { model | disabled1 = not model.disabled1 } ! []
+            ( { model | disabled1 = not model.disabled1 }, Cmd.none )
         ToggleDisabled2 ->
-            { model | disabled2 = not model.disabled2 } ! []
+            ( { model | disabled2 = not model.disabled2 }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
