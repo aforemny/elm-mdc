@@ -11986,7 +11986,7 @@ var _debois$elm_mdl$Material_Drawer$view = F5(
 							_0: A3(
 								_debois$elm_mdl$Material_Options$onWithOptions,
 								'click',
-								{stopPropagation: false, preventDefault: false},
+								{stopPropagation: true, preventDefault: false},
 								_elm_lang$core$Json_Decode$succeed(
 									lift(_debois$elm_mdl$Material_Internal_Drawer$NoOp))),
 							_1: {
@@ -28971,7 +28971,16 @@ var _debois$elm_mdl$Demo_PermanentAboveDrawer$view = F3(
 														{
 															ctor: '::',
 															_0: _debois$elm_mdl$Material_Toolbar$menu,
-															_1: {ctor: '[]'}
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$onClick(
+																	page.setUrl(_debois$elm_mdl$Demo_Page$StartPage)),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer'),
+																	_1: {ctor: '[]'}
+																}
+															}
 														},
 														{
 															ctor: '::',
@@ -28983,13 +28992,8 @@ var _debois$elm_mdl$Demo_PermanentAboveDrawer$view = F3(
 																	_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
 																	_1: {
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Options$onClick(
-																			page.setUrl(_debois$elm_mdl$Demo_Page$StartPage)),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer'),
-																			_1: {ctor: '[]'}
-																		}
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'pointer-events', 'none'),
+																		_1: {ctor: '[]'}
 																	}
 																},
 																{
@@ -29003,7 +29007,19 @@ var _debois$elm_mdl$Demo_PermanentAboveDrawer$view = F3(
 														ctor: '::',
 														_0: A2(
 															_debois$elm_mdl$Material_Toolbar$title,
-															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$cs('catalog-menu'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_debois$elm_mdl$Material_Options$css, 'font-family', '\'Roboto Mono\', monospace'),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '8px'),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															},
 															{
 																ctor: '::',
 																_0: _elm_lang$html$Html$text('Permanent Drawer Above Toolbar'),
@@ -30014,7 +30030,22 @@ var _debois$elm_mdl$Demo_PersistentDrawer$view = F3(
 														{
 															ctor: '::',
 															_0: _debois$elm_mdl$Material_Toolbar$menu,
-															_1: {ctor: '[]'}
+															_1: {
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$onClick(
+																	lift(
+																		_debois$elm_mdl$Demo_PersistentDrawer$Open(
+																			{
+																				ctor: '::',
+																				_0: 0,
+																				_1: {ctor: '[]'}
+																			}))),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer'),
+																	_1: {ctor: '[]'}
+																}
+															}
 														},
 														{
 															ctor: '::',
@@ -30026,19 +30057,8 @@ var _debois$elm_mdl$Demo_PersistentDrawer$view = F3(
 																	_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer'),
-																		_1: {
-																			ctor: '::',
-																			_0: _debois$elm_mdl$Material_Options$onClick(
-																				lift(
-																					_debois$elm_mdl$Demo_PersistentDrawer$Open(
-																						{
-																							ctor: '::',
-																							_0: 0,
-																							_1: {ctor: '[]'}
-																						}))),
-																			_1: {ctor: '[]'}
-																		}
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'pointer-events', 'none'),
+																		_1: {ctor: '[]'}
 																	}
 																},
 																{
@@ -30052,7 +30072,19 @@ var _debois$elm_mdl$Demo_PersistentDrawer$view = F3(
 														ctor: '::',
 														_0: A2(
 															_debois$elm_mdl$Material_Toolbar$title,
-															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _debois$elm_mdl$Material_Options$cs('catalog-menu'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_debois$elm_mdl$Material_Options$css, 'font-family', '\'Roboto Mono\', monospace'),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '8px'),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															},
 															{
 																ctor: '::',
 																_0: _elm_lang$html$Html$text('Persistent Drawer'),
@@ -36326,7 +36358,22 @@ var _debois$elm_mdl$Demo_TemporaryDrawer$view = F3(
 											{
 												ctor: '::',
 												_0: _debois$elm_mdl$Material_Toolbar$menu,
-												_1: {ctor: '[]'}
+												_1: {
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$onClick(
+														lift(
+															_debois$elm_mdl$Demo_TemporaryDrawer$Open(
+																{
+																	ctor: '::',
+																	_0: 0,
+																	_1: {ctor: '[]'}
+																}))),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer'),
+														_1: {ctor: '[]'}
+													}
+												}
 											},
 											{
 												ctor: '::',
@@ -36338,19 +36385,8 @@ var _debois$elm_mdl$Demo_TemporaryDrawer$view = F3(
 														_0: _debois$elm_mdl$Material_Options$cs('material-icons'),
 														_1: {
 															ctor: '::',
-															_0: A2(_debois$elm_mdl$Material_Options$css, 'cursor', 'pointer'),
-															_1: {
-																ctor: '::',
-																_0: _debois$elm_mdl$Material_Options$onClick(
-																	lift(
-																		_debois$elm_mdl$Demo_TemporaryDrawer$Open(
-																			{
-																				ctor: '::',
-																				_0: 0,
-																				_1: {ctor: '[]'}
-																			}))),
-																_1: {ctor: '[]'}
-															}
+															_0: A2(_debois$elm_mdl$Material_Options$css, 'pointer-events', 'none'),
+															_1: {ctor: '[]'}
 														}
 													},
 													{
@@ -36364,7 +36400,19 @@ var _debois$elm_mdl$Demo_TemporaryDrawer$view = F3(
 											ctor: '::',
 											_0: A2(
 												_debois$elm_mdl$Material_Toolbar$title,
-												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _debois$elm_mdl$Material_Options$cs('catalog-menu'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$css, 'font-family', '\'Roboto Mono\', monospace'),
+														_1: {
+															ctor: '::',
+															_0: A2(_debois$elm_mdl$Material_Options$css, 'margin-left', '8px'),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
 												{
 													ctor: '::',
 													_0: _elm_lang$html$Html$text('Temporary Drawer'),
