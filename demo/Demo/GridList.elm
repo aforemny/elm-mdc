@@ -1,4 +1,4 @@
-module Demo.GridList exposing (Model, defaultModel, Msg, update, view)
+module Demo.GridList exposing (Model, defaultModel, Msg, subscriptions, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
@@ -50,13 +50,13 @@ view lift page model =
     page.body "Grid list"
     [
       Page.hero []
-      [ GridList.view
+      [ GridList.render (lift << Mdl) [0] model.mdl
         [ css "width" "340px"
         ]
         ( List.repeat 12 <|
           GridList.tile
           [ css "width" "72px"
-          , css "margin" "2px"
+          , css "margin" "2px 0"
           ]
           [ GridList.primary
             [ css "background-color" "#000"
@@ -94,10 +94,10 @@ view lift page model =
       ]
       [
         h2 [] [ text "Grid List (Default): empty grid" ]
-      , GridList.view [] []
+      , GridList.render (lift << Mdl) [1] model.mdl [] []
 
       , h2 [] [ text "Grid List (Default): tile aspect ratio 1x1 with oneline footer caption" ]
-      , GridList.view []
+      , GridList.render (lift << Mdl) [2] model.mdl []
         ( ( GridList.tile []
             [ GridList.primary []
               [ GridList.image [] "images/1-1.jpg"
@@ -113,7 +113,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with 1px gutter" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [3] model.mdl
         [ GridList.gutter1
         ]
         ( ( GridList.tile
@@ -133,7 +133,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 image only" ]
-      , GridList.view []
+      , GridList.render (lift << Mdl) [4] model.mdl []
         ( ( GridList.tile []
             [ GridList.primary []
               [ GridList.image [] "images/1-1.jpg"
@@ -144,7 +144,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with oneline header caption" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [5] model.mdl
         [ GridList.headerCaption
         ]
         ( ( GridList.tile []
@@ -162,7 +162,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with twoline footer caption" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [6] model.mdl
         [ GridList.twolineCaption
         ]
         ( ( GridList.tile []
@@ -183,7 +183,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with oneline footer caption and icon at start of the caption" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [7] model.mdl
         [ GridList.iconAlignStart
         ]
         ( ( GridList.tile []
@@ -202,7 +202,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with twoline footer caption and icon at start of the caption" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [8] model.mdl
         [ GridList.iconAlignStart
         , GridList.twolineCaption
         ]
@@ -225,7 +225,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with oneline footer caption and icon at end of the caption" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [9] model.mdl
         [ GridList.iconAlignEnd
         ]
         ( ( GridList.tile []
@@ -244,7 +244,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with twoline footer caption and icon at end of the caption" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [10] model.mdl
         [ GridList.twolineCaption
         , GridList.iconAlignEnd
         ]
@@ -267,7 +267,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 16x9 with oneline footer caption (Support: 16:9, 4:3, 3:4, 2:3, 3:2 as well)" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [11] model.mdl
         [ GridList.tileAspect16x9
         ]
         ( ( GridList.tile []
@@ -285,7 +285,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: use div's background instead of img tag (useful when image ratio cannot be ensured)" ]
-      , GridList.view
+      , GridList.render (lift << Mdl) [12] model.mdl
         [ GridList.headerCaption
         ]
         ( ( GridList.tile []
@@ -305,3 +305,8 @@ view lift page model =
         )
       ]
     ]
+
+
+subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions lift model =
+    Material.subscriptions (lift << Mdl) model

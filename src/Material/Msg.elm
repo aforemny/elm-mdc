@@ -5,6 +5,7 @@ import Material.Internal.Button as Button
 import Material.Internal.Checkbox as Checkbox
 import Material.Internal.Drawer as Drawer 
 import Material.Internal.Fab as Fab 
+import Material.Internal.GridList as GridList
 import Material.Internal.IconToggle as IconToggle 
 import Material.Internal.Menu as Menu
 import Material.Internal.RadioButton as RadioButton
@@ -28,6 +29,7 @@ type Msg m
     | CheckboxMsg Index Checkbox.Msg
     | DrawerMsg Index Drawer.Msg
     | FabMsg Index Fab.Msg
+    | GridListMsg Index (GridList.Msg m)
     | IconToggleMsg Index IconToggle.Msg
     | MenuMsg Index (Menu.Msg m)
     | RadioButtonMsg Index RadioButton.Msg

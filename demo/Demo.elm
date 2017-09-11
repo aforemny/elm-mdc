@@ -595,16 +595,17 @@ subscriptions model =
         [
           Material.subscriptions Mdl model
 
+        , Demo.GridList.subscriptions GridListMsg model.gridList
+        , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
         , Demo.Menus.subscriptions SimpleMenuMsg model.menus
-        , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
         , Demo.PermanentAboveDrawer.subscriptions PermanentAboveDrawerMsg model.permanentAboveDrawer
         , Demo.PermanentBelowDrawer.subscriptions PermanentBelowDrawerMsg model.permanentBelowDrawer
         , Demo.PersistentDrawer.subscriptions PersistentDrawerMsg model.persistentDrawer
         , Demo.Selects.subscriptions SelectMsg model.selects
-        , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
         , Demo.Slider.subscriptions SliderMsg model.slider
-        , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
         , Demo.Tabs.subscriptions TabsMsg model.tabs
+        , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
+        , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
 
         , onScroll Scroll
         ]

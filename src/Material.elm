@@ -12,16 +12,18 @@ module Material
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
+import Material.Component as Component exposing (Indexed)
+import Material.Helpers exposing (map1st)
+import Material.Msg exposing (Msg(..))
+
 import Material.Button as Button
 import Material.Checkbox as Checkbox
-import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
 import Material.Drawer as Drawer
 import Material.Fab as Fab
-import Material.Helpers exposing (map1st)
+import Material.GridList as GridList
 import Material.IconToggle as IconToggle
 import Material.Menu as Menu
-import Material.Msg exposing (Msg(..))
 import Material.RadioButton as RadioButton
 import Material.Ripple as Ripple
 import Material.Select as Select
@@ -35,19 +37,20 @@ import Material.Toolbar as Toolbar
 
 type alias Model = 
     { button : Indexed Button.Model
-    , radio : Indexed RadioButton.Model
-    , drawer : Indexed Drawer.Model
-    , iconToggle : Indexed IconToggle.Model
-    , fab : Indexed Fab.Model
-    , textfield : Indexed Textfield.Model
-    , menu : Indexed Menu.Model
     , checkbox : Indexed Checkbox.Model
+    , drawer : Indexed Drawer.Model
+    , fab : Indexed Fab.Model
+    , gridList : Indexed GridList.Model
+    , iconToggle : Indexed IconToggle.Model
+    , menu : Indexed Menu.Model
+    , radio : Indexed RadioButton.Model
+    , ripple : Indexed Ripple.Model
+    , select : Indexed Select.Model
+    , slider : Indexed Slider.Model
+    , snackbar : Indexed Snackbar.Model
     , switch : Indexed Switch.Model
     , tabs : Indexed Tabs.Model
-    , select : Indexed Select.Model
-    , ripple : Indexed Ripple.Model
-    , snackbar : Indexed Snackbar.Model
-    , slider : Indexed Slider.Model
+    , textfield : Indexed Textfield.Model
     , toolbar : Indexed Toolbar.Model
     }
 
@@ -55,19 +58,20 @@ type alias Model =
 defaultModel : Model
 defaultModel = 
     { button = Dict.empty
-    , radio = Dict.empty
-    , drawer = Dict.empty
-    , iconToggle = Dict.empty
-    , fab = Dict.empty
-    , textfield = Dict.empty
-    , menu = Dict.empty
     , checkbox = Dict.empty
+    , drawer = Dict.empty
+    , fab = Dict.empty
+    , gridList = Dict.empty
+    , iconToggle = Dict.empty
+    , menu = Dict.empty
+    , radio = Dict.empty
+    , ripple = Dict.empty
+    , select = Dict.empty
+    , slider = Dict.empty
+    , snackbar = Dict.empty
     , switch = Dict.empty
     , tabs = Dict.empty
-    , select = Dict.empty
-    , ripple = Dict.empty
-    , snackbar = Dict.empty
-    , slider = Dict.empty
+    , textfield = Dict.empty
     , toolbar = Dict.empty
     }
 
@@ -85,61 +89,66 @@ update lift msg container =
 
 update_ : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update_ lift msg store =
+    -- TODO: Make all components use react
+    -- TODO: Make component Msgs uniform
     case msg of
-       Dispatch msgs -> 
-           (Nothing, Dispatch.forward msgs)
+        Dispatch msgs -> 
+            (Nothing, Dispatch.forward msgs)
 
-       ButtonMsg idx msg ->
-           Button.react lift msg idx store
+        ButtonMsg idx msg ->
+            Button.react lift msg idx store
 
-       ToolbarMsg idx msg ->
-           Toolbar.react lift msg idx store
+        CheckboxMsg idx msg ->
+            Checkbox.react lift msg idx store
 
-       RadioButtonMsg idx msg ->
-           RadioButton.react lift msg idx store
+        DrawerMsg idx msg ->
+            Drawer.react lift msg idx store
 
-       DrawerMsg idx msg ->
-           Drawer.react lift msg idx store
+        FabMsg idx msg ->
+            Fab.react lift msg idx store
 
-       IconToggleMsg idx msg ->
-           IconToggle.react lift msg idx store
+        GridListMsg idx msg ->
+            GridList.react lift msg idx store
 
-       SnackbarMsg idx msg ->
-           Snackbar.react (SnackbarMsg idx >> lift) msg idx store
+        IconToggleMsg idx msg ->
+            IconToggle.react lift msg idx store
 
-       FabMsg idx msg ->
-           Fab.react lift msg idx store
+        MenuMsg idx msg ->
+            Menu.react (MenuMsg idx >> lift) msg idx store
 
-       TextfieldMsg idx msg ->
-           Textfield.react lift msg idx store
+        RadioButtonMsg idx msg ->
+            RadioButton.react lift msg idx store
 
-       MenuMsg idx msg ->
-           Menu.react (MenuMsg idx >> lift) msg idx store
+        RippleMsg idx msg ->
+            Ripple.react lift msg idx store
 
-       SelectMsg idx msg ->
-           Select.react (SelectMsg idx >> lift) msg idx store
+        SelectMsg idx msg ->
+            Select.react (SelectMsg idx >> lift) msg idx store
 
-       CheckboxMsg idx msg ->
-           Checkbox.react lift msg idx store
+        SliderMsg idx msg ->
+            Slider.react (SliderMsg idx >> lift) msg idx store
 
-       SwitchMsg idx msg ->
-           Switch.react lift msg idx store
+        SnackbarMsg idx msg ->
+            Snackbar.react (SnackbarMsg idx >> lift) msg idx store
 
-       SliderMsg idx msg ->
-           Slider.react (SliderMsg idx >> lift) msg idx store
-           -- TODO: change all components to do this? ^^^^
+        SwitchMsg idx msg ->
+            Switch.react lift msg idx store
 
-       TabsMsg idx msg ->
-           Tabs.react (TabsMsg idx >> lift) msg idx store
+        TabsMsg idx msg ->
+            Tabs.react (TabsMsg idx >> lift) msg idx store
 
-       RippleMsg idx msg ->
-           Ripple.react lift msg idx store
+        TextfieldMsg idx msg ->
+            Textfield.react lift msg idx store
+
+        ToolbarMsg idx msg ->
+            Toolbar.react lift msg idx store
 
 
 subscriptions : (Msg m -> m) -> { model | mdl : Model } -> Sub m
 subscriptions lift model =
     Sub.batch
         [ Drawer.subs lift model.mdl
+        , GridList.subs lift model.mdl
         , Menu.subs lift model.mdl
         , Select.subs lift model.mdl
         , Slider.subs lift model.mdl
@@ -222,7 +231,8 @@ document.addEventListener("webkitAnimationStart", insertListener, false); // Chr
 .elm-mdc-slider--uninitialized,
 .elm-mdc-tab-bar--uninitialized,
 .elm-mdc-toolbar--uninitialized,
-.elm-mdc-simple-menu--uninitialized
+.elm-mdc-simple-menu--uninitialized,
+.elm-mdc-grid-list--uninitialized
 {
   animation-duration: 0.001s;
   animation-name: nodeInserted;
