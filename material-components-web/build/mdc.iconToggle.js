@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/assets/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 55);
+/******/ 	return __webpack_require__(__webpack_require__.s = 58);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -110,7 +110,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var MDCFoundation = function () {
   _createClass(MDCFoundation, null, [{
     key: "cssClasses",
-
 
     /** @return enum{cssClasses} */
     get: function get() {
@@ -218,7 +217,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var MDCComponent = function () {
   _createClass(MDCComponent, null, [{
     key: 'attachTo',
-
 
     /**
      * @param {!Element} root
@@ -361,145 +359,6 @@ var MDCComponent = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__foundation__ = __webpack_require__(0);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCFoundation", function() { return __WEBPACK_IMPORTED_MODULE_0__foundation__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component__ = __webpack_require__(1);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCComponent", function() { return __WEBPACK_IMPORTED_MODULE_1__component__["a"]; });
-/**
- * Copyright 2016 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["supportsCssVariables"] = supportsCssVariables;
-/* harmony export (immutable) */ __webpack_exports__["applyPassive"] = applyPassive;
-/* harmony export (immutable) */ __webpack_exports__["getMatchesProperty"] = getMatchesProperty;
-/* harmony export (immutable) */ __webpack_exports__["getNormalizedEventCoords"] = getNormalizedEventCoords;
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/** @private {boolean|undefined} */
-var supportsPassive_ = void 0;
-
-/**
- * @param {!Window} windowObj
- * @return {boolean|undefined}
- */
-function supportsCssVariables(windowObj) {
-  var supportsFunctionPresent = windowObj.CSS && typeof windowObj.CSS.supports === 'function';
-  if (!supportsFunctionPresent) {
-    return;
-  }
-
-  var explicitlySupportsCssVars = windowObj.CSS.supports('--css-vars', 'yes');
-  // See: https://bugs.webkit.org/show_bug.cgi?id=154669
-  // See: README section on Safari
-  var weAreFeatureDetectingSafari10plus = windowObj.CSS.supports('(--css-vars: yes)') && windowObj.CSS.supports('color', '#00000000');
-  return explicitlySupportsCssVars || weAreFeatureDetectingSafari10plus;
-}
-
-//
-/**
- * Determine whether the current browser supports passive event listeners, and if so, use them.
- * @param {!Window=} globalObj
- * @param {boolean=} forceRefresh
- * @return {boolean|{passive: boolean}}
- */
-function applyPassive() {
-  var globalObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
-  var forceRefresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-  if (supportsPassive_ === undefined || forceRefresh) {
-    var isSupported = false;
-    try {
-      globalObj.document.addEventListener('test', null, { get passive() {
-          isSupported = true;
-        } });
-    } catch (e) {}
-
-    supportsPassive_ = isSupported;
-  }
-
-  return supportsPassive_ ? { passive: true } : false;
-}
-
-/**
- * @param {!Object} HTMLElementPrototype
- * @return {!Array<string>}
- */
-function getMatchesProperty(HTMLElementPrototype) {
-  return ['webkitMatchesSelector', 'msMatchesSelector', 'matches'].filter(function (p) {
-    return p in HTMLElementPrototype;
-  }).pop();
-}
-
-/**
- * @param {!Event} ev
- * @param {!{x: number, y: number}} pageOffset
- * @param {!ClientRect} clientRect
- * @return {!{x: number, y: number}}
- */
-function getNormalizedEventCoords(ev, pageOffset, clientRect) {
-  var x = pageOffset.x,
-      y = pageOffset.y;
-
-  var documentX = x + clientRect.left;
-  var documentY = y + clientRect.top;
-
-  var normalizedX = void 0;
-  var normalizedY = void 0;
-  // Determine touch point relative to the ripple container.
-  if (ev.type === 'touchstart') {
-    normalizedX = ev.changedTouches[0].pageX - documentX;
-    normalizedY = ev.changedTouches[0].pageY - documentY;
-  } else {
-    normalizedX = ev.pageX - documentX;
-    normalizedY = ev.pageY - documentY;
-  }
-
-  return { x: normalizedX, y: normalizedY };
-}
-
-/***/ }),
-
-/***/ 4:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -550,7 +409,6 @@ var MDCRippleAdapter = function () {
 
   _createClass(MDCRippleAdapter, [{
     key: "browserSupportsCssVars",
-
 
     /** @return {boolean} */
     value: function browserSupportsCssVars() {}
@@ -648,6 +506,163 @@ var MDCRippleAdapter = function () {
 
 /***/ }),
 
+/***/ 3:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["supportsCssVariables"] = supportsCssVariables;
+/* harmony export (immutable) */ __webpack_exports__["applyPassive"] = applyPassive;
+/* harmony export (immutable) */ __webpack_exports__["getMatchesProperty"] = getMatchesProperty;
+/* harmony export (immutable) */ __webpack_exports__["getNormalizedEventCoords"] = getNormalizedEventCoords;
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Stores result from supportsCssVariables to avoid redundant processing to detect CSS custom variable support.
+ * @private {boolean|undefined}
+ */
+var supportsCssVariables_ = void 0;
+
+/**
+ * Stores result from applyPassive to avoid redundant processing to detect passive event listener support.
+ * @private {boolean|undefined}
+ */
+var supportsPassive_ = void 0;
+
+/**
+ * @param {!Window} windowObj
+ * @return {boolean}
+ */
+function detectEdgePseudoVarBug(windowObj) {
+  // Detect versions of Edge with buggy var() support
+  // See: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11495448/
+  var document = windowObj.document;
+  var className = 'test-edge-css-var';
+  var styleNode = document.createElement('style');
+  document.head.appendChild(styleNode);
+  var sheet = styleNode.sheet;
+  // Internet Explorer 11 requires indices to always be specified to insertRule
+  sheet.insertRule(':root { --' + className + ': 1px solid #000; }', 0);
+  sheet.insertRule('.' + className + ' { visibility: hidden; }', 1);
+  sheet.insertRule('.' + className + '::before { border: var(--' + className + '); }', 2);
+  var node = document.createElement('div');
+  node.className = className;
+  document.body.appendChild(node);
+  // Bug exists if ::before style ends up propagating to the parent element
+  var hasPseudoVarBug = windowObj.getComputedStyle(node).borderTopStyle === 'solid';
+  node.remove();
+  styleNode.remove();
+  return hasPseudoVarBug;
+}
+
+/**
+ * @param {!Window} windowObj
+ * @param {boolean=} forceRefresh
+ * @return {boolean|undefined}
+ */
+function supportsCssVariables(windowObj) {
+  var forceRefresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (typeof supportsCssVariables_ === 'boolean' && !forceRefresh) {
+    return supportsCssVariables_;
+  }
+
+  var supportsFunctionPresent = windowObj.CSS && typeof windowObj.CSS.supports === 'function';
+  if (!supportsFunctionPresent) {
+    return;
+  }
+
+  var explicitlySupportsCssVars = windowObj.CSS.supports('--css-vars', 'yes');
+  // See: https://bugs.webkit.org/show_bug.cgi?id=154669
+  // See: README section on Safari
+  var weAreFeatureDetectingSafari10plus = windowObj.CSS.supports('(--css-vars: yes)') && windowObj.CSS.supports('color', '#00000000');
+
+  if (explicitlySupportsCssVars || weAreFeatureDetectingSafari10plus) {
+    supportsCssVariables_ = !detectEdgePseudoVarBug(windowObj);
+  } else {
+    supportsCssVariables_ = false;
+  }
+  return supportsCssVariables_;
+}
+
+//
+/**
+ * Determine whether the current browser supports passive event listeners, and if so, use them.
+ * @param {!Window=} globalObj
+ * @param {boolean=} forceRefresh
+ * @return {boolean|{passive: boolean}}
+ */
+function applyPassive() {
+  var globalObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+  var forceRefresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (supportsPassive_ === undefined || forceRefresh) {
+    var isSupported = false;
+    try {
+      globalObj.document.addEventListener('test', null, { get passive() {
+          isSupported = true;
+        } });
+    } catch (e) {}
+
+    supportsPassive_ = isSupported;
+  }
+
+  return supportsPassive_ ? { passive: true } : false;
+}
+
+/**
+ * @param {!Object} HTMLElementPrototype
+ * @return {!Array<string>}
+ */
+function getMatchesProperty(HTMLElementPrototype) {
+  return ['webkitMatchesSelector', 'msMatchesSelector', 'matches'].filter(function (p) {
+    return p in HTMLElementPrototype;
+  }).pop();
+}
+
+/**
+ * @param {!Event} ev
+ * @param {!{x: number, y: number}} pageOffset
+ * @param {!ClientRect} clientRect
+ * @return {!{x: number, y: number}}
+ */
+function getNormalizedEventCoords(ev, pageOffset, clientRect) {
+  var x = pageOffset.x,
+      y = pageOffset.y;
+
+  var documentX = x + clientRect.left;
+  var documentY = y + clientRect.top;
+
+  var normalizedX = void 0;
+  var normalizedY = void 0;
+  // Determine touch point relative to the ripple container.
+  if (ev.type === 'touchstart') {
+    normalizedX = ev.changedTouches[0].pageX - documentX;
+    normalizedY = ev.changedTouches[0].pageY - documentY;
+  } else {
+    normalizedX = ev.pageX - documentX;
+    normalizedY = ev.pageY - documentY;
+  }
+
+  return { x: normalizedX, y: normalizedY };
+}
+
+/***/ }),
+
 /***/ 5:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -655,7 +670,7 @@ var MDCRippleAdapter = function () {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MDCRipple", function() { return MDCRipple; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base_component__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adapter__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adapter__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__foundation__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util__ = __webpack_require__(3);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCRippleFoundation", function() { return __WEBPACK_IMPORTED_MODULE_2__foundation__["a"]; });
@@ -790,7 +805,7 @@ var MDCRipple = function (_MDCComponent) {
     }
 
     /**
-     * @param {!MDCRipple} instance
+     * @param {!RippleCapableSurface} instance
      * @return {!MDCRippleAdapter}
      */
 
@@ -846,26 +861,54 @@ var MDCRipple = function (_MDCComponent) {
   return MDCRipple;
 }(__WEBPACK_IMPORTED_MODULE_0__material_base_component__["a" /* default */]);
 
+/**
+ * See Material Design spec for more details on when to use ripples.
+ * https://material.io/guidelines/motion/choreography.html#choreography-creation
+ * @record
+ */
+
+var RippleCapableSurface = function RippleCapableSurface() {
+  _classCallCheck(this, RippleCapableSurface);
+};
+
+/** @protected {!Element} */
+
+
+RippleCapableSurface.prototype.root_;
+
+/**
+ * Whether or not the ripple bleeds out of the bounds of the element.
+ * @type {boolean|undefined}
+ */
+RippleCapableSurface.prototype.unbounded;
+
+/**
+ * Whether or not the ripple is attached to a disabled component.
+ * @type {boolean|undefined}
+ */
+RippleCapableSurface.prototype.disabled;
+
 /***/ }),
 
-/***/ 55:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(56);
+module.exports = __webpack_require__(59);
 
 
 /***/ }),
 
-/***/ 56:
+/***/ 59:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MDCIconToggle", function() { return MDCIconToggle; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__material_ripple__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__foundation__ = __webpack_require__(57);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCIconToggleFoundation", function() { return __WEBPACK_IMPORTED_MODULE_2__foundation__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base_component__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__foundation__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__material_ripple_adapter__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__material_ripple__ = __webpack_require__(5);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCIconToggleFoundation", function() { return __WEBPACK_IMPORTED_MODULE_1__foundation__["a"]; });
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -896,11 +939,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+/* eslint-disable no-unused-vars */
+
+/* eslint-enable no-unused-vars */
 
 
 
 
-
+/**
+ * @extends {MDCComponent<!MDCIconToggleFoundation>}
+ */
 var MDCIconToggle = function (_MDCComponent) {
   _inherits(MDCIconToggle, _MDCComponent);
 
@@ -920,18 +968,28 @@ var MDCIconToggle = function (_MDCComponent) {
       args[_key] = arguments[_key];
     }
 
+    /** @private {!MDCRipple} */
     var _this = _possibleConstructorReturn(this, (_ref = MDCIconToggle.__proto__ || Object.getPrototypeOf(MDCIconToggle)).call.apply(_ref, [this].concat(args)));
 
     _this.ripple_ = _this.initRipple_();
     return _this;
   }
 
+  /** @return {!Element} */
+
+
   _createClass(MDCIconToggle, [{
     key: 'initRipple_',
+
+
+    /**
+     * @return {!MDCRipple}
+     * @private
+     */
     value: function initRipple_() {
       var _this2 = this;
 
-      var adapter = _extends(__WEBPACK_IMPORTED_MODULE_1__material_ripple__["MDCRipple"].createAdapter(this), {
+      var adapter = _extends(__WEBPACK_IMPORTED_MODULE_3__material_ripple__["MDCRipple"].createAdapter(this), {
         isUnbounded: function isUnbounded() {
           return true;
         },
@@ -955,8 +1013,8 @@ var MDCIconToggle = function (_MDCComponent) {
           };
         }
       });
-      var foundation = new __WEBPACK_IMPORTED_MODULE_1__material_ripple__["MDCRippleFoundation"](adapter);
-      return new __WEBPACK_IMPORTED_MODULE_1__material_ripple__["MDCRipple"](this.root_, foundation);
+      var foundation = new __WEBPACK_IMPORTED_MODULE_3__material_ripple__["MDCRippleFoundation"](adapter);
+      return new __WEBPACK_IMPORTED_MODULE_3__material_ripple__["MDCRipple"](this.root_, foundation);
     }
   }, {
     key: 'destroy',
@@ -964,12 +1022,15 @@ var MDCIconToggle = function (_MDCComponent) {
       this.ripple_.destroy();
       _get(MDCIconToggle.prototype.__proto__ || Object.getPrototypeOf(MDCIconToggle.prototype), 'destroy', this).call(this);
     }
+
+    /** @return {!MDCIconToggleFoundation} */
+
   }, {
     key: 'getDefaultFoundation',
     value: function getDefaultFoundation() {
       var _this3 = this;
 
-      return new __WEBPACK_IMPORTED_MODULE_2__foundation__["a" /* default */]({
+      return new __WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */]({
         addClass: function addClass(className) {
           return _this3.iconEl_.classList.add(className);
         },
@@ -983,14 +1044,14 @@ var MDCIconToggle = function (_MDCComponent) {
           return _this3.root_.removeEventListener(type, handler);
         },
         setText: function setText(text) {
-          _this3.iconEl_.textContent = text;
+          return _this3.iconEl_.textContent = text;
         },
         getTabIndex: function getTabIndex() {
           return (/* number */_this3.root_.tabIndex
           );
         },
         setTabIndex: function setTabIndex(tabIndex) {
-          _this3.root_.tabIndex = tabIndex;
+          return _this3.root_.tabIndex = tabIndex;
         },
         getAttr: function getAttr(name, value) {
           return _this3.root_.getAttribute(name, value);
@@ -1002,16 +1063,19 @@ var MDCIconToggle = function (_MDCComponent) {
           return _this3.root_.removeAttribute(name);
         },
         notifyChange: function notifyChange(evtData) {
-          return _this3.emit(__WEBPACK_IMPORTED_MODULE_2__foundation__["a" /* default */].strings.CHANGE_EVENT, evtData);
+          return _this3.emit(__WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */].strings.CHANGE_EVENT, evtData);
         }
       });
     }
   }, {
     key: 'initialSyncWithDOM',
     value: function initialSyncWithDOM() {
-      this.on = this.root_.getAttribute(__WEBPACK_IMPORTED_MODULE_2__foundation__["a" /* default */].strings.ARIA_PRESSED) === 'true';
-      this.disabled = this.root_.getAttribute(__WEBPACK_IMPORTED_MODULE_2__foundation__["a" /* default */].strings.ARIA_DISABLED) === 'true';
+      this.on = this.root_.getAttribute(__WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */].strings.ARIA_PRESSED) === 'true';
+      this.disabled = this.root_.getAttribute(__WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */].strings.ARIA_DISABLED) === 'true';
     }
+
+    /** @return {boolean} */
+
   }, {
     key: 'refreshToggleData',
     value: function refreshToggleData() {
@@ -1020,301 +1084,40 @@ var MDCIconToggle = function (_MDCComponent) {
   }, {
     key: 'iconEl_',
     get: function get() {
-      var sel = this.root_.dataset.iconInnerSelector;
+      var sel = this.root_.dataset['iconInnerSelector'];
 
-      return sel ? this.root_.querySelector(sel) : this.root_;
+      return sel ?
+      /** @type {!Element} */this.root_.querySelector(sel) : this.root_;
     }
   }, {
     key: 'on',
     get: function get() {
       return this.foundation_.isOn();
-    },
+    }
+
+    /** @param {boolean} isOn */
+    ,
     set: function set(isOn) {
       this.foundation_.toggle(isOn);
     }
+
+    /** @return {boolean} */
+
   }, {
     key: 'disabled',
     get: function get() {
       return this.foundation_.isDisabled();
-    },
+    }
+
+    /** @param {boolean} isDisabled */
+    ,
     set: function set(isDisabled) {
       this.foundation_.setDisabled(isDisabled);
     }
   }]);
 
   return MDCIconToggle;
-}(__WEBPACK_IMPORTED_MODULE_0__material_base__["MDCComponent"]);
-
-/***/ }),
-
-/***/ 57:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(58);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-
-var MDCIconToggleFoundation = function (_MDCFoundation) {
-  _inherits(MDCIconToggleFoundation, _MDCFoundation);
-
-  _createClass(MDCIconToggleFoundation, null, [{
-    key: 'cssClasses',
-    get: function get() {
-      return __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */];
-    }
-  }, {
-    key: 'strings',
-    get: function get() {
-      return __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* strings */];
-    }
-  }, {
-    key: 'defaultAdapter',
-    get: function get() {
-      return {
-        addClass: function addClass() /* className: string */{},
-        removeClass: function removeClass() /* className: string */{},
-        registerInteractionHandler: function registerInteractionHandler() /* type: string, handler: EventListener */{},
-        deregisterInteractionHandler: function deregisterInteractionHandler() /* type: string, handler: EventListener */{},
-        setText: function setText() /* text: string */{},
-        getTabIndex: function getTabIndex() {
-          return (/* number */0
-          );
-        },
-        setTabIndex: function setTabIndex() /* tabIndex: number */{},
-        getAttr: function getAttr() {
-          return (/* name: string */ /* string */''
-          );
-        },
-        setAttr: function setAttr() /* name: string, value: string */{},
-        rmAttr: function rmAttr() /* name: string */{},
-        notifyChange: function notifyChange() /* evtData: {isOn: boolean} */{}
-      };
-    }
-  }]);
-
-  function MDCIconToggleFoundation(adapter) {
-    _classCallCheck(this, MDCIconToggleFoundation);
-
-    var _this = _possibleConstructorReturn(this, (MDCIconToggleFoundation.__proto__ || Object.getPrototypeOf(MDCIconToggleFoundation)).call(this, _extends(MDCIconToggleFoundation.defaultAdapter, adapter)));
-
-    _this.on_ = false;
-    _this.disabled_ = false;
-    _this.savedTabIndex_ = -1;
-    _this.toggleOnData_ = null;
-    _this.toggleOffData_ = null;
-    _this.clickHandler_ = function () {
-      return _this.toggleFromEvt_();
-    };
-    _this.isHandlingKeydown_ = false;
-    _this.keydownHandler_ = function (evt) {
-      if (isSpace(evt)) {
-        _this.isHandlingKeydown_ = true;
-        return evt.preventDefault();
-      }
-    };
-    _this.keyupHandler_ = function (evt) {
-      if (isSpace(evt)) {
-        _this.isHandlingKeydown_ = false;
-        _this.toggleFromEvt_();
-      }
-    };
-    return _this;
-  }
-
-  _createClass(MDCIconToggleFoundation, [{
-    key: 'init',
-    value: function init() {
-      this.refreshToggleData();
-      this.adapter_.registerInteractionHandler('click', this.clickHandler_);
-      this.adapter_.registerInteractionHandler('keydown', this.keydownHandler_);
-      this.adapter_.registerInteractionHandler('keyup', this.keyupHandler_);
-    }
-  }, {
-    key: 'refreshToggleData',
-    value: function refreshToggleData() {
-      var _MDCIconToggleFoundat = MDCIconToggleFoundation.strings,
-          DATA_TOGGLE_ON = _MDCIconToggleFoundat.DATA_TOGGLE_ON,
-          DATA_TOGGLE_OFF = _MDCIconToggleFoundat.DATA_TOGGLE_OFF;
-
-      this.toggleOnData_ = this.parseJsonDataAttr_(DATA_TOGGLE_ON);
-      this.toggleOffData_ = this.parseJsonDataAttr_(DATA_TOGGLE_OFF);
-    }
-  }, {
-    key: 'destroy',
-    value: function destroy() {
-      this.adapter_.deregisterInteractionHandler('click', this.clickHandler_);
-      this.adapter_.deregisterInteractionHandler('keydown', this.keydownHandler_);
-      this.adapter_.deregisterInteractionHandler('keyup', this.keyupHandler_);
-    }
-  }, {
-    key: 'toggleFromEvt_',
-    value: function toggleFromEvt_() {
-      this.toggle();
-      var isOn = this.on_;
-
-      this.adapter_.notifyChange({ isOn: isOn });
-    }
-  }, {
-    key: 'isOn',
-    value: function isOn() {
-      return this.on_;
-    }
-  }, {
-    key: 'toggle',
-    value: function toggle() {
-      var isOn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : !this.on_;
-
-      this.on_ = isOn;
-
-      var _MDCIconToggleFoundat2 = MDCIconToggleFoundation.strings,
-          ARIA_LABEL = _MDCIconToggleFoundat2.ARIA_LABEL,
-          ARIA_PRESSED = _MDCIconToggleFoundat2.ARIA_PRESSED;
-
-      var _ref = this.on_ ? this.toggleOnData_ : this.toggleOffData_,
-          content = _ref.content,
-          label = _ref.label,
-          cssClass = _ref.cssClass;
-
-      var _ref2 = this.on_ ? this.toggleOffData_ : this.toggleOnData_,
-          classToRemove = _ref2.cssClass;
-
-      if (this.on_) {
-        this.adapter_.setAttr(ARIA_PRESSED, 'true');
-      } else {
-        this.adapter_.setAttr(ARIA_PRESSED, 'false');
-      }
-
-      if (classToRemove) {
-        this.adapter_.removeClass(classToRemove);
-      }
-      if (cssClass) {
-        this.adapter_.addClass(cssClass);
-      }
-      if (content) {
-        this.adapter_.setText(content);
-      }
-      if (label) {
-        this.adapter_.setAttr(ARIA_LABEL, label);
-      }
-    }
-  }, {
-    key: 'parseJsonDataAttr_',
-    value: function parseJsonDataAttr_(dataAttr) {
-      var val = this.adapter_.getAttr(dataAttr);
-      if (!val) {
-        return {};
-      }
-      return JSON.parse(val);
-    }
-  }, {
-    key: 'isDisabled',
-    value: function isDisabled() {
-      return this.disabled_;
-    }
-  }, {
-    key: 'setDisabled',
-    value: function setDisabled(isDisabled) {
-      this.disabled_ = isDisabled;
-
-      var DISABLED = MDCIconToggleFoundation.cssClasses.DISABLED;
-      var ARIA_DISABLED = MDCIconToggleFoundation.strings.ARIA_DISABLED;
-
-
-      if (this.disabled_) {
-        this.savedTabIndex = this.adapter_.getTabIndex();
-        this.adapter_.setTabIndex(-1);
-        this.adapter_.setAttr(ARIA_DISABLED, 'true');
-        this.adapter_.addClass(DISABLED);
-      } else {
-        this.adapter_.setTabIndex(this.savedTabIndex);
-        this.adapter_.rmAttr(ARIA_DISABLED);
-        this.adapter_.removeClass(DISABLED);
-      }
-    }
-  }, {
-    key: 'isKeyboardActivated',
-    value: function isKeyboardActivated() {
-      return this.isHandlingKeydown_;
-    }
-  }]);
-
-  return MDCIconToggleFoundation;
-}(__WEBPACK_IMPORTED_MODULE_0__material_base__["MDCFoundation"]);
-
-/* harmony default export */ __webpack_exports__["a"] = (MDCIconToggleFoundation);
-
-
-function isSpace(_ref3) {
-  var key = _ref3.key,
-      keyCode = _ref3.keyCode;
-
-  return key && key === 'Space' || keyCode === 32;
-}
-
-/***/ }),
-
-/***/ 58:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return cssClasses; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return strings; });
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-var cssClasses = {
-  ROOT: 'mdc-icon-toggle',
-  DISABLED: 'mdc-icon-toggle--disabled'
-};
-
-var strings = {
-  DATA_TOGGLE_ON: 'data-toggle-on',
-  DATA_TOGGLE_OFF: 'data-toggle-off',
-  ARIA_PRESSED: 'aria-pressed',
-  ARIA_DISABLED: 'aria-disabled',
-  ARIA_LABEL: 'aria-label',
-  CHANGE_EVENT: 'MDCIconToggle:change'
-};
+}(__WEBPACK_IMPORTED_MODULE_0__material_base_component__["a" /* default */]);
 
 /***/ }),
 
@@ -1323,7 +1126,7 @@ var strings = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base_foundation__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adapter__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adapter__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constants__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util__ = __webpack_require__(3);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1707,7 +1510,7 @@ var MDCRippleFoundation = function (_MDCFoundation) {
 
       var startPoint = void 0;
       if (wasActivatedByPointer) {
-        startPoint = __WEBPACK_IMPORTED_MODULE_3__util__["getNormalizedEventCoords"](
+        startPoint = Object(__WEBPACK_IMPORTED_MODULE_3__util__["getNormalizedEventCoords"])(
         /** @type {!Event} */activationEvent, this.adapter_.getWindowPageOffset(), this.adapter_.computeBoundingRect());
       } else {
         startPoint = {
@@ -1962,6 +1765,508 @@ var MDCRippleFoundation = function (_MDCFoundation) {
 }(__WEBPACK_IMPORTED_MODULE_0__material_base_foundation__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (MDCRippleFoundation);
+
+/***/ }),
+
+/***/ 60:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export KeyboardKey */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base_foundation__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adapter__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constants__ = __webpack_require__(62);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+/* eslint-disable no-unused-vars */
+
+
+
+/**
+ * @extends {MDCFoundation<!MDCIconToggleAdapter>}
+ */
+
+var MDCIconToggleFoundation = function (_MDCFoundation) {
+  _inherits(MDCIconToggleFoundation, _MDCFoundation);
+
+  _createClass(MDCIconToggleFoundation, null, [{
+    key: 'cssClasses',
+    get: function get() {
+      return __WEBPACK_IMPORTED_MODULE_2__constants__["a" /* cssClasses */];
+    }
+  }, {
+    key: 'strings',
+    get: function get() {
+      return __WEBPACK_IMPORTED_MODULE_2__constants__["b" /* strings */];
+    }
+  }, {
+    key: 'defaultAdapter',
+    get: function get() {
+      return {
+        addClass: function addClass() /* className: string */{},
+        removeClass: function removeClass() /* className: string */{},
+        registerInteractionHandler: function registerInteractionHandler() /* type: string, handler: EventListener */{},
+        deregisterInteractionHandler: function deregisterInteractionHandler() /* type: string, handler: EventListener */{},
+        setText: function setText() /* text: string */{},
+        getTabIndex: function getTabIndex() {
+          return (/* number */0
+          );
+        },
+        setTabIndex: function setTabIndex() /* tabIndex: number */{},
+        getAttr: function getAttr() {
+          return (/* name: string */ /* string */''
+          );
+        },
+        setAttr: function setAttr() /* name: string, value: string */{},
+        rmAttr: function rmAttr() /* name: string */{},
+        notifyChange: function notifyChange() /* evtData: IconToggleEvent */{}
+      };
+    }
+  }]);
+
+  function MDCIconToggleFoundation(adapter) {
+    _classCallCheck(this, MDCIconToggleFoundation);
+
+    /** @private {boolean} */
+    var _this = _possibleConstructorReturn(this, (MDCIconToggleFoundation.__proto__ || Object.getPrototypeOf(MDCIconToggleFoundation)).call(this, _extends(MDCIconToggleFoundation.defaultAdapter, adapter)));
+
+    _this.on_ = false;
+
+    /** @private {boolean} */
+    _this.disabled_ = false;
+
+    /** @private {number} */
+    _this.savedTabIndex_ = -1;
+
+    /** @private {?IconToggleState} */
+    _this.toggleOnData_ = null;
+
+    /** @private {?IconToggleState} */
+    _this.toggleOffData_ = null;
+
+    _this.clickHandler_ = /** @private {!EventListener} */function () {
+      return _this.toggleFromEvt_();
+    };
+
+    /** @private {boolean} */
+    _this.isHandlingKeydown_ = false;
+
+    _this.keydownHandler_ = /** @private {!EventListener} */function ( /** @type {!KeyboardKey} */evt) {
+      if (isSpace(evt)) {
+        _this.isHandlingKeydown_ = true;
+        return evt.preventDefault();
+      }
+    };
+
+    _this.keyupHandler_ = /** @private {!EventListener} */function ( /** @type {!KeyboardKey} */evt) {
+      if (isSpace(evt)) {
+        _this.isHandlingKeydown_ = false;
+        _this.toggleFromEvt_();
+      }
+    };
+    return _this;
+  }
+
+  _createClass(MDCIconToggleFoundation, [{
+    key: 'init',
+    value: function init() {
+      this.refreshToggleData();
+      this.adapter_.registerInteractionHandler('click', this.clickHandler_);
+      this.adapter_.registerInteractionHandler('keydown', this.keydownHandler_);
+      this.adapter_.registerInteractionHandler('keyup', this.keyupHandler_);
+    }
+  }, {
+    key: 'refreshToggleData',
+    value: function refreshToggleData() {
+      var _MDCIconToggleFoundat = MDCIconToggleFoundation.strings,
+          DATA_TOGGLE_ON = _MDCIconToggleFoundat.DATA_TOGGLE_ON,
+          DATA_TOGGLE_OFF = _MDCIconToggleFoundat.DATA_TOGGLE_OFF;
+
+      this.toggleOnData_ = this.parseJsonDataAttr_(DATA_TOGGLE_ON);
+      this.toggleOffData_ = this.parseJsonDataAttr_(DATA_TOGGLE_OFF);
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      this.adapter_.deregisterInteractionHandler('click', this.clickHandler_);
+      this.adapter_.deregisterInteractionHandler('keydown', this.keydownHandler_);
+      this.adapter_.deregisterInteractionHandler('keyup', this.keyupHandler_);
+    }
+
+    /** @private */
+
+  }, {
+    key: 'toggleFromEvt_',
+    value: function toggleFromEvt_() {
+      this.toggle();
+      var isOn = this.on_;
+
+      this.adapter_.notifyChange( /** @type {!IconToggleEvent} */{ isOn: isOn });
+    }
+
+    /** @return {boolean} */
+
+  }, {
+    key: 'isOn',
+    value: function isOn() {
+      return this.on_;
+    }
+
+    /** @param {boolean=} isOn */
+
+  }, {
+    key: 'toggle',
+    value: function toggle() {
+      var isOn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : !this.on_;
+
+      this.on_ = isOn;
+
+      var _MDCIconToggleFoundat2 = MDCIconToggleFoundation.strings,
+          ARIA_LABEL = _MDCIconToggleFoundat2.ARIA_LABEL,
+          ARIA_PRESSED = _MDCIconToggleFoundat2.ARIA_PRESSED;
+
+
+      if (this.on_) {
+        this.adapter_.setAttr(ARIA_PRESSED, 'true');
+      } else {
+        this.adapter_.setAttr(ARIA_PRESSED, 'false');
+      }
+
+      var _ref = this.on_ ? this.toggleOffData_ : this.toggleOnData_,
+          classToRemove = _ref.cssClass;
+
+      if (classToRemove) {
+        this.adapter_.removeClass(classToRemove);
+      }
+
+      var _ref2 = this.on_ ? this.toggleOnData_ : this.toggleOffData_,
+          content = _ref2.content,
+          label = _ref2.label,
+          cssClass = _ref2.cssClass;
+
+      if (cssClass) {
+        this.adapter_.addClass(cssClass);
+      }
+      if (content) {
+        this.adapter_.setText(content);
+      }
+      if (label) {
+        this.adapter_.setAttr(ARIA_LABEL, label);
+      }
+    }
+
+    /**
+     * @param {string} dataAttr
+     * @return {!IconToggleState}
+     */
+
+  }, {
+    key: 'parseJsonDataAttr_',
+    value: function parseJsonDataAttr_(dataAttr) {
+      var val = this.adapter_.getAttr(dataAttr);
+      if (!val) {
+        return {};
+      }
+      return (/** @type {!IconToggleState} */JSON.parse(val)
+      );
+    }
+
+    /** @return {boolean} */
+
+  }, {
+    key: 'isDisabled',
+    value: function isDisabled() {
+      return this.disabled_;
+    }
+
+    /** @param {boolean} isDisabled */
+
+  }, {
+    key: 'setDisabled',
+    value: function setDisabled(isDisabled) {
+      this.disabled_ = isDisabled;
+
+      var DISABLED = MDCIconToggleFoundation.cssClasses.DISABLED;
+      var ARIA_DISABLED = MDCIconToggleFoundation.strings.ARIA_DISABLED;
+
+
+      if (this.disabled_) {
+        this.savedTabIndex_ = this.adapter_.getTabIndex();
+        this.adapter_.setTabIndex(-1);
+        this.adapter_.setAttr(ARIA_DISABLED, 'true');
+        this.adapter_.addClass(DISABLED);
+      } else {
+        this.adapter_.setTabIndex(this.savedTabIndex_);
+        this.adapter_.rmAttr(ARIA_DISABLED);
+        this.adapter_.removeClass(DISABLED);
+      }
+    }
+
+    /** @return {boolean} */
+
+  }, {
+    key: 'isKeyboardActivated',
+    value: function isKeyboardActivated() {
+      return this.isHandlingKeydown_;
+    }
+  }]);
+
+  return MDCIconToggleFoundation;
+}(__WEBPACK_IMPORTED_MODULE_0__material_base_foundation__["a" /* default */]);
+
+/**
+ * @typedef {!{
+ *   key: string,
+ *   keyCode: number
+ * }}
+ */
+
+
+/* harmony default export */ __webpack_exports__["a"] = (MDCIconToggleFoundation);
+var KeyboardKey = void 0;
+
+/**
+ * @param {!KeyboardKey} keyboardKey
+ * @return {boolean}
+ */
+function isSpace(keyboardKey) {
+  return keyboardKey.key === 'Space' || keyboardKey.keyCode === 32;
+}
+
+/** @record */
+
+var IconToggleState = function IconToggleState() {
+  _classCallCheck(this, IconToggleState);
+};
+
+/**
+ * The aria-label value of the icon toggle, or undefined if there is no aria-label.
+ * @export {string|undefined}
+ */
+
+
+IconToggleState.prototype.label;
+
+/**
+ * The text for the icon toggle, or undefined if there is no text.
+ * @export {string|undefined}
+ */
+IconToggleState.prototype.content;
+
+/**
+ * The CSS class to add to the icon toggle, or undefined if there is no CSS class.
+ * @export {string|undefined}
+ */
+IconToggleState.prototype.cssClass;
+
+/***/ }),
+
+/***/ 61:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export IconToggleEvent */
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Copyright 2017 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* eslint no-unused-vars: [2, {"args": "none"}] */
+
+/**
+ * Adapter for MDC Icon Toggle. Provides an interface for managing
+ * - classes
+ * - dom
+ * - inner text
+ * - event handlers
+ * - event dispatch
+ *
+ * Additionally, provides type information for the adapter to the Closure
+ * compiler.
+ *
+ * Implement this adapter for your framework of choice to delegate updates to
+ * the component in your framework of choice. See architecture documentation
+ * for more details.
+ * https://github.com/material-components/material-components-web/blob/master/docs/architecture.md
+ *
+ * @record
+ */
+var MDCIconToggleAdapter = function () {
+  function MDCIconToggleAdapter() {
+    _classCallCheck(this, MDCIconToggleAdapter);
+  }
+
+  _createClass(MDCIconToggleAdapter, [{
+    key: "addClass",
+
+    /** @param {string} className */
+    value: function addClass(className) {}
+
+    /** @param {string} className */
+
+  }, {
+    key: "removeClass",
+    value: function removeClass(className) {}
+
+    /**
+     * @param {string} type
+     * @param {!EventListener} handler
+     */
+
+  }, {
+    key: "registerInteractionHandler",
+    value: function registerInteractionHandler(type, handler) {}
+
+    /**
+     * @param {string} type
+     * @param {!EventListener} handler
+     */
+
+  }, {
+    key: "deregisterInteractionHandler",
+    value: function deregisterInteractionHandler(type, handler) {}
+
+    /** @param {string} text */
+
+  }, {
+    key: "setText",
+    value: function setText(text) {}
+
+    /** @return {number} */
+
+  }, {
+    key: "getTabIndex",
+    value: function getTabIndex() {}
+
+    /** @param {number} tabIndex */
+
+  }, {
+    key: "setTabIndex",
+    value: function setTabIndex(tabIndex) {}
+
+    /**
+     * @param {string} name
+     * @return {string}
+     */
+
+  }, {
+    key: "getAttr",
+    value: function getAttr(name) {}
+
+    /**
+     * @param {string} name
+     * @param {string} value
+     */
+
+  }, {
+    key: "setAttr",
+    value: function setAttr(name, value) {}
+
+    /** @param {string} name */
+
+  }, {
+    key: "rmAttr",
+    value: function rmAttr(name) {}
+
+    /** @param {!IconToggleEvent} evtData */
+
+  }, {
+    key: "notifyChange",
+    value: function notifyChange(evtData) {}
+  }]);
+
+  return MDCIconToggleAdapter;
+}();
+
+/**
+ * @typedef {!{
+ *   isOn: boolean,
+ * }}
+ */
+
+
+/* unused harmony default export */ var _unused_webpack_default_export = (MDCIconToggleAdapter);
+var IconToggleEvent = void 0;
+
+/***/ }),
+
+/***/ 62:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return cssClasses; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return strings; });
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/** @enum {string} */
+var cssClasses = {
+  ROOT: 'mdc-icon-toggle',
+  DISABLED: 'mdc-icon-toggle--disabled'
+};
+
+/** @enum {string} */
+var strings = {
+  DATA_TOGGLE_ON: 'data-toggle-on',
+  DATA_TOGGLE_OFF: 'data-toggle-off',
+  ARIA_PRESSED: 'aria-pressed',
+  ARIA_DISABLED: 'aria-disabled',
+  ARIA_LABEL: 'aria-label',
+  CHANGE_EVENT: 'MDCIconToggle:change'
+};
 
 /***/ }),
 

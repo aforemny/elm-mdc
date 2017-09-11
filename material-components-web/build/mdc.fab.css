@@ -35,40 +35,6 @@
  * This mixin should be applied to elements whose elevation values will change depending on their
  * context (e.g. when active or disabled).
  */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
 /** MDC Ripple keyframes are split into their own file so that _mixins.scss can rely on them. */
 @-webkit-keyframes mdc-ripple-fg-radius-in {
   from {
@@ -121,79 +87,6 @@
   to {
     opacity: 0; } }
 
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 .mdc-fab {
   --mdc-ripple-surface-width: 0;
   --mdc-ripple-surface-height: 0;
@@ -232,10 +125,12 @@
   -moz-appearance: none;
   -webkit-appearance: none;
   overflow: hidden;
+  /* @alternate */
   background-color: #ff4081;
-  background-color: var(--mdc-theme-accent, #ff4081);
+  background-color: var(--mdc-theme-secondary, #ff4081);
+  /* @alternate */
   color: white;
-  color: var(--mdc-theme-text-primary-on-accent, white);
+  color: var(--mdc-theme-text-primary-on-secondary, white);
   -webkit-box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
           box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); }
   .mdc-fab:not(.mdc-ripple-upgraded):hover::before, .mdc-fab:not(.mdc-ripple-upgraded):focus::before, .mdc-fab:not(.mdc-ripple-upgraded):active::after {
@@ -260,6 +155,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -271,14 +167,19 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-fab.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -299,8 +200,10 @@
   .mdc-fab.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -312,12 +215,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-fab.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -339,6 +246,7 @@
     height: 40px; }
   .mdc-fab--plain {
     background-color: white;
+    /* @alternate */
     color: rgba(0, 0, 0, 0.87);
     color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
     .mdc-fab--plain::before {
@@ -359,6 +267,7 @@
       left: calc(50% - 100%);
       width: 200%;
       height: 200%;
+      /* @alternate */
       -webkit-transform: scale(0);
               transform: scale(0);
       -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -370,14 +279,19 @@
               transition-duration: 120ms;
       opacity: 1; }
     .mdc-fab--plain.mdc-ripple-upgraded--unbounded::before {
+      /* @alternate */
       top: calc(50% - 50%);
       top: var(--mdc-ripple-top, calc(50% - 50%));
+      /* @alternate */
       left: calc(50% - 50%);
       left: var(--mdc-ripple-left, calc(50% - 50%));
+      /* @alternate */
       width: 100%;
       width: var(--mdc-ripple-fg-size, 100%);
+      /* @alternate */
       height: 100%;
       height: var(--mdc-ripple-fg-size, 100%);
+      /* @alternate */
       -webkit-transform: scale(0);
               transform: scale(0);
       -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -398,8 +312,10 @@
     .mdc-fab--plain.mdc-ripple-upgraded::after {
       top: 0;
       left: 0;
+      /* @alternate */
       width: 100%;
       width: var(--mdc-ripple-fg-size, 100%);
+      /* @alternate */
       height: 100%;
       height: var(--mdc-ripple-fg-size, 100%);
       -webkit-transform: scale(0);
@@ -411,12 +327,16 @@
       -webkit-transform-origin: center center;
               transform-origin: center center; }
     .mdc-fab--plain.mdc-ripple-upgraded--unbounded::after {
+      /* @alternate */
       top: 0;
       top: var(--mdc-ripple-top, 0);
+      /* @alternate */
       left: 0;
       left: var(--mdc-ripple-left, 0);
+      /* @alternate */
       width: 100%;
       width: var(--mdc-ripple-fg-size, 100%);
+      /* @alternate */
       height: 100%;
       height: var(--mdc-ripple-fg-size, 100%);
       -webkit-transform: scale(0);

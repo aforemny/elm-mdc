@@ -5,79 +5,6 @@
 */
 /* TODO(sgomes): Figure out what to do about desktop font sizes. */
 /* TODO(sgomes): Figure out what to do about i18n and i18n font sizes. */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /**
  * Creates a rule that will be applied when an MDC-Web component is within the context of an RTL layout.
  *
@@ -171,7 +98,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -237,6 +164,9 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   line-height: 1.75rem;
+  text-decoration: inherit;
+  text-transform: inherit;
+  /* @alternate */
   color: rgba(0, 0, 0, 0.87);
   color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87));
   padding-left: 0;
@@ -255,8 +185,8 @@
           justify-content: flex-start;
   max-width: calc(100% - 24px);
   height: 32px;
-  -webkit-transition: border-bottom-color 150ms 0ms cubic-bezier(0.4, 0, 1, 1), background-color 150ms 0ms cubic-bezier(0.4, 0, 1, 1);
-  transition: border-bottom-color 150ms 0ms cubic-bezier(0.4, 0, 1, 1), background-color 150ms 0ms cubic-bezier(0.4, 0, 1, 1);
+  -webkit-transition: border-bottom-color 150ms 0ms cubic-bezier(0.4, 0, 0.6, 1), background-color 150ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+  transition: border-bottom-color 150ms 0ms cubic-bezier(0.4, 0, 0.6, 1), background-color 150ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 0;
@@ -273,6 +203,7 @@
   .mdc-select::-ms-expand {
     display: none; }
   .mdc-select:focus {
+    /* @alternate */
     border-bottom-color: #3f51b5;
     border-bottom-color: var(--mdc-theme-primary, #3f51b5);
     outline: none;
@@ -281,12 +212,14 @@
     background-position: left center; }
   .mdc-select--theme-dark,
   .mdc-theme--dark .mdc-select {
+    /* @alternate */
     color: white;
     color: var(--mdc-theme-text-primary-on-dark, white);
     background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%23ffffff%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.54%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
     .mdc-select--theme-dark:focus,
     .mdc-theme--dark .mdc-select:focus {
+      /* @alternate */
       border-bottom-color: #3f51b5;
       border-bottom-color: var(--mdc-theme-primary, #3f51b5);
       background-color: rgba(255, 255, 255, 0.09); }
@@ -300,10 +233,10 @@
     overflow-y: scroll;
     z-index: 4; }
   .mdc-select__selected-text {
-    -webkit-transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 125ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 125ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 125ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 125ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 125ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 125ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     white-space: nowrap;
     overflow: hidden; }
 
@@ -318,6 +251,7 @@
 
 .mdc-select--disabled,
 .mdc-select[disabled] {
+  /* @alternate */
   color: rgba(0, 0, 0, 0.38);
   color: var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38));
   background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%230%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.38%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
@@ -331,6 +265,7 @@
 
 .mdc-select--theme-dark.mdc-select--disabled,
 .mdc-theme--dark .mdc-select--disabled {
+  /* @alternate */
   color: rgba(255, 255, 255, 0.5);
   color: var(--mdc-theme-text-disabled-on-dark, rgba(255, 255, 255, 0.5));
   background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%23ffffff%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.38%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
@@ -338,6 +273,7 @@
 
 .mdc-select--theme-dark.mdc-select[disabled],
 .mdc-theme--dark .mdc-select[disabled] {
+  /* @alternate */
   color: rgba(255, 255, 255, 0.5);
   color: var(--mdc-theme-text-disabled-on-dark, rgba(255, 255, 255, 0.5));
   background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%23ffffff%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.38%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E);
@@ -351,17 +287,23 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   line-height: 1.75rem;
+  text-decoration: inherit;
+  text-transform: inherit;
+  /* @alternate */
   color: rgba(0, 0, 0, 0.54);
   color: var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54)); }
   .mdc-select__menu .mdc-list-item[aria-selected="true"] {
+    /* @alternate */
     color: rgba(0, 0, 0, 0.87);
     color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
   .mdc-select--theme-dark .mdc-select__menu .mdc-list-item,
   .mdc-theme--dark .mdc-select__menu .mdc-list-item {
+    /* @alternate */
     color: rgba(255, 255, 255, 0.7);
     color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
     .mdc-select--theme-dark .mdc-select__menu .mdc-list-item[aria-selected="true"],
     .mdc-theme--dark .mdc-select__menu .mdc-list-item[aria-selected="true"] {
+      /* @alternate */
       color: white;
       color: var(--mdc-theme-text-primary-on-dark, white); }
 
@@ -370,19 +312,23 @@
   margin-top: 12px; }
 
 .mdc-select__menu .mdc-list-group {
+  /* @alternate */
   color: rgba(0, 0, 0, 0.38);
   color: var(--mdc-theme-text-hint-on-light, rgba(0, 0, 0, 0.38));
   font-weight: normal; }
   .mdc-select__menu .mdc-list-group .mdc-list-item {
+    /* @alternate */
     color: rgba(0, 0, 0, 0.87);
     color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
 
 .mdc-select--theme-dark .mdc-select__menu .mdc-list-group,
 .mdc-theme--dark .mdc-select__menu .mdc-list-group {
+  /* @alternate */
   color: rgba(255, 255, 255, 0.5);
   color: var(--mdc-theme-text-hint-on-dark, rgba(255, 255, 255, 0.5)); }
   .mdc-select--theme-dark .mdc-select__menu .mdc-list-group .mdc-list-item,
   .mdc-theme--dark .mdc-select__menu .mdc-list-group .mdc-list-item {
+    /* @alternate */
     color: white;
     color: var(--mdc-theme-text-primary-on-dark, white); }
 
@@ -393,21 +339,25 @@
   width: 250px;
   padding: 0;
   border: 1px solid;
+  /* @alternate */
   border-color: rgba(0, 0, 0, 0.38);
   border-color: var(--mdc-theme-text-hint-on-light, rgba(0, 0, 0, 0.38));
   outline: none; }
   .mdc-multi-select--theme-dark,
   .mdc-theme--dark .mdc-multi-select {
+    /* @alternate */
     border-color: rgba(255, 255, 255, 0.5);
     border-color: var(--mdc-theme-text-hint-on-dark, rgba(255, 255, 255, 0.5)); }
   .mdc-multi-select .mdc-list-group {
     margin: 16px 0 0;
     padding: 0 0 0 16px;
+    /* @alternate */
     color: rgba(0, 0, 0, 0.38);
     color: var(--mdc-theme-text-hint-on-light, rgba(0, 0, 0, 0.38));
     font-weight: normal; }
     .mdc-multi-select .mdc-list-group--theme-dark,
     .mdc-theme--dark .mdc-multi-select .mdc-list-group {
+      /* @alternate */
       color: rgba(255, 255, 255, 0.5);
       color: var(--mdc-theme-text-hint-on-dark, rgba(255, 255, 255, 0.5)); }
     .mdc-multi-select .mdc-list-group:last-child {
@@ -417,10 +367,12 @@
   .mdc-multi-select .mdc-list-item {
     margin: 0 0 0 -16px;
     padding: 0 16px;
+    /* @alternate */
     color: rgba(0, 0, 0, 0.87);
     color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
     .mdc-multi-select .mdc-list-item--theme-dark,
     .mdc-theme--dark .mdc-multi-select .mdc-list-item {
+      /* @alternate */
       color: white;
       color: var(--mdc-theme-text-primary-on-dark, white); }
     .mdc-multi-select .mdc-list-item:first-child {
@@ -429,10 +381,12 @@
       margin-bottom: 8px; }
   .mdc-multi-select .mdc-list-item:checked {
     background-color: rgba(0, 0, 0, 0.12);
+    /* @alternate */
     background-color: #fff;
     background-color: var(--mdc-theme-background, #fff); }
     .mdc-multi-select .mdc-list-item:checked--theme-dark,
     .mdc-theme--dark .mdc-multi-select .mdc-list-item:checked {
+      /* @alternate */
       background-color: white;
       background-color: var(--mdc-theme-text-primary-on-dark, white); }
   .mdc-multi-select .mdc-list-divider {
@@ -441,9 +395,11 @@
     font-size: 0; }
 
 .mdc-multi-select:focus .mdc-list-item:checked {
+  /* @alternate */
   background-color: #3f51b5;
   background-color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-multi-select:focus .mdc-list-item:checked--theme-dark,
   .mdc-theme--dark .mdc-multi-select:focus .mdc-list-item:checked {
+    /* @alternate */
     background-color: white;
     background-color: var(--mdc-theme-text-primary-on-dark, white); }

@@ -35,79 +35,6 @@
  * This mixin should be applied to elements whose elevation values will change depending on their
  * context (e.g. when active or disabled).
  */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /* TODO(sgomes): Figure out what to do about desktop font sizes. */
 /* TODO(sgomes): Figure out what to do about i18n and i18n font sizes. */
 /* postcss-bem-linter: define simple-menu */
@@ -213,7 +140,9 @@
     font-size: 1rem;
     font-weight: 400;
     letter-spacing: 0.04em;
-    line-height: 1.75rem; }
+    line-height: 1.75rem;
+    text-decoration: inherit;
+    text-transform: inherit; }
     .mdc-simple-menu--theme-dark.mdc-simple-menu .mdc-list-item,
     .mdc-theme--dark .mdc-simple-menu .mdc-list-item {
       color: white; }
@@ -227,6 +156,7 @@
       color: rgba(255, 255, 255, 0.54); }
   .mdc-simple-menu--selected.mdc-list-item,
   .mdc-simple-menu--selected.mdc-list-item .mdc-list-item__start-detail {
+    /* @alternate */
     color: #3f51b5;
     color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-simple-menu .mdc-list-item::before {
@@ -252,10 +182,12 @@
     opacity: .18; }
   .mdc-simple-menu .mdc-list-item[aria-disabled="true"] {
     cursor: default;
+    /* @alternate */
     color: rgba(0, 0, 0, 0.38);
     color: var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38)); }
     .mdc-select--theme-dark .mdc-simple-menu .mdc-list-item[aria-disabled="true"],
     .mdc-theme--dark .mdc-simple-menu .mdc-list-item[aria-disabled="true"] {
+      /* @alternate */
       color: rgba(255, 255, 255, 0.5);
       color: var(--mdc-theme-text-disabled-on-dark, rgba(255, 255, 255, 0.5)); }
   .mdc-simple-menu .mdc-list-item[aria-disabled="true"]:focus::before, .mdc-simple-menu .mdc-list-item[aria-disabled="true"]:active::before {

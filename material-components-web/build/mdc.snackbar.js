@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/assets/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 76);
+/******/ 	return __webpack_require__(__webpack_require__.s = 82);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -110,7 +110,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var MDCFoundation = function () {
   _createClass(MDCFoundation, null, [{
     key: "cssClasses",
-
 
     /** @return enum{cssClasses} */
     get: function get() {
@@ -218,7 +217,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var MDCComponent = function () {
   _createClass(MDCComponent, null, [{
     key: 'attachTo',
-
 
     /**
      * @param {!Element} root
@@ -357,14 +355,14 @@ var MDCComponent = function () {
 
 /***/ }),
 
-/***/ 2:
+/***/ 4:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__foundation__ = __webpack_require__(0);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCFoundation", function() { return __WEBPACK_IMPORTED_MODULE_0__foundation__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component__ = __webpack_require__(1);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCFoundation", function() { return __WEBPACK_IMPORTED_MODULE_0__foundation__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCComponent", function() { return __WEBPACK_IMPORTED_MODULE_1__component__["a"]; });
 /**
  * Copyright 2016 Google Inc.
@@ -385,414 +383,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/***/ }),
 
-/***/ 76:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(77);
-
-
-/***/ }),
-
-/***/ 77:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MDCSnackbar", function() { return MDCSnackbar; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__foundation__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__material_animation__ = __webpack_require__(8);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCSnackbarFoundation", function() { return __WEBPACK_IMPORTED_MODULE_1__foundation__["a"]; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-
-
-
-
-var MDCSnackbar = function (_MDCComponent) {
-  _inherits(MDCSnackbar, _MDCComponent);
-
-  function MDCSnackbar() {
-    _classCallCheck(this, MDCSnackbar);
-
-    return _possibleConstructorReturn(this, (MDCSnackbar.__proto__ || Object.getPrototypeOf(MDCSnackbar)).apply(this, arguments));
-  }
-
-  _createClass(MDCSnackbar, [{
-    key: 'show',
-    value: function show(data) {
-      this.foundation_.show(data);
-    }
-  }, {
-    key: 'getDefaultFoundation',
-    value: function getDefaultFoundation() {
-      var _this2 = this;
-
-      var _MDCSnackbarFoundatio = __WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */].strings,
-          TEXT_SELECTOR = _MDCSnackbarFoundatio.TEXT_SELECTOR,
-          ACTION_BUTTON_SELECTOR = _MDCSnackbarFoundatio.ACTION_BUTTON_SELECTOR;
-
-      var getText = function getText() {
-        return _this2.root_.querySelector(TEXT_SELECTOR);
-      };
-      var getActionButton = function getActionButton() {
-        return _this2.root_.querySelector(ACTION_BUTTON_SELECTOR);
-      };
-
-      /* eslint brace-style: "off" */
-      return new __WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */]({
-        addClass: function addClass(className) {
-          return _this2.root_.classList.add(className);
-        },
-        removeClass: function removeClass(className) {
-          return _this2.root_.classList.remove(className);
-        },
-        setAriaHidden: function setAriaHidden() {
-          return _this2.root_.setAttribute('aria-hidden', 'true');
-        },
-        unsetAriaHidden: function unsetAriaHidden() {
-          return _this2.root_.removeAttribute('aria-hidden');
-        },
-        setActionAriaHidden: function setActionAriaHidden() {
-          return getActionButton().setAttribute('aria-hidden', 'true');
-        },
-        unsetActionAriaHidden: function unsetActionAriaHidden() {
-          return getActionButton().removeAttribute('aria-hidden');
-        },
-        setActionText: function setActionText(text) {
-          getActionButton().textContent = text;
-        },
-        setMessageText: function setMessageText(text) {
-          getText().textContent = text;
-        },
-        registerActionClickHandler: function registerActionClickHandler(handler) {
-          return getActionButton().addEventListener('click', handler);
-        },
-        deregisterActionClickHandler: function deregisterActionClickHandler(handler) {
-          return getActionButton().removeEventListener('click', handler);
-        },
-        registerTransitionEndHandler: function registerTransitionEndHandler(handler) {
-          return _this2.root_.addEventListener(__WEBPACK_IMPORTED_MODULE_2__material_animation__["getCorrectEventName"](window, 'transitionend'), handler);
-        },
-        deregisterTransitionEndHandler: function deregisterTransitionEndHandler(handler) {
-          return _this2.root_.removeEventListener(__WEBPACK_IMPORTED_MODULE_2__material_animation__["getCorrectEventName"](window, 'transitionend'), handler);
-        }
-      });
-    }
-  }, {
-    key: 'dismissesOnAction',
-    get: function get() {
-      return this.foundation_.dismissesOnAction();
-    },
-    set: function set(dismissesOnAction) {
-      this.foundation_.setDismissOnAction(dismissesOnAction);
-    }
-  }], [{
-    key: 'attachTo',
-    value: function attachTo(root) {
-      return new MDCSnackbar(root);
-    }
-  }]);
-
-  return MDCSnackbar;
-}(__WEBPACK_IMPORTED_MODULE_0__material_base__["MDCComponent"]);
-
-/***/ }),
-
-/***/ 78:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(79);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-
-var MDCSnackbarFoundation = function (_MDCFoundation) {
-  _inherits(MDCSnackbarFoundation, _MDCFoundation);
-
-  _createClass(MDCSnackbarFoundation, [{
-    key: 'active',
-    get: function get() {
-      return this.active_;
-    }
-  }], [{
-    key: 'cssClasses',
-    get: function get() {
-      return __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */];
-    }
-  }, {
-    key: 'strings',
-    get: function get() {
-      return __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* strings */];
-    }
-  }, {
-    key: 'defaultAdapter',
-    get: function get() {
-      return {
-        addClass: function addClass() /* className: string */{},
-        removeClass: function removeClass() /* className: string */{},
-        setAriaHidden: function setAriaHidden() {},
-        unsetAriaHidden: function unsetAriaHidden() {},
-        setMessageText: function setMessageText() /* message: string */{},
-        setActionText: function setActionText() /* actionText: string */{},
-        setActionAriaHidden: function setActionAriaHidden() {},
-        unsetActionAriaHidden: function unsetActionAriaHidden() {},
-        registerActionClickHandler: function registerActionClickHandler() /* handler: EventListener */{},
-        deregisterActionClickHandler: function deregisterActionClickHandler() /* handler: EventListener */{},
-        registerTransitionEndHandler: function registerTransitionEndHandler() /* handler: EventListener */{},
-        deregisterTransitionEndHandler: function deregisterTransitionEndHandler() /* handler: EventListener */{}
-      };
-    }
-  }]);
-
-  function MDCSnackbarFoundation(adapter) {
-    _classCallCheck(this, MDCSnackbarFoundation);
-
-    var _this = _possibleConstructorReturn(this, (MDCSnackbarFoundation.__proto__ || Object.getPrototypeOf(MDCSnackbarFoundation)).call(this, _extends(MDCSnackbarFoundation.defaultAdapter, adapter)));
-
-    _this.active_ = false;
-    _this.dismissOnAction_ = true;
-    _this.queue_ = [];
-    _this.actionClickHandler_ = function () {
-      return _this.invokeAction_();
-    };
-    return _this;
-  }
-
-  _createClass(MDCSnackbarFoundation, [{
-    key: 'init',
-    value: function init() {
-      this.adapter_.registerActionClickHandler(this.actionClickHandler_);
-      this.adapter_.setAriaHidden();
-      this.adapter_.setActionAriaHidden();
-    }
-  }, {
-    key: 'destroy',
-    value: function destroy() {
-      this.adapter_.deregisterActionClickHandler(this.actionClickHandler_);
-    }
-  }, {
-    key: 'dismissesOnAction',
-    value: function dismissesOnAction() {
-      return this.dismissOnAction_;
-    }
-  }, {
-    key: 'setDismissOnAction',
-    value: function setDismissOnAction(dismissOnAction) {
-      this.dismissOnAction_ = !!dismissOnAction;
-    }
-  }, {
-    key: 'show',
-    value: function show(data) {
-      if (!data) {
-        throw new Error('Please provide a data object with at least a message to display.');
-      }
-      if (!data.message) {
-        throw new Error('Please provide a message to be displayed.');
-      }
-      if (data.actionHandler && !data.actionText) {
-        throw new Error('Please provide action text with the handler.');
-      }
-
-      if (this.active) {
-        this.queue_.push(data);
-        return;
-      }
-
-      var ACTIVE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTIVE,
-          MULTILINE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].MULTILINE,
-          ACTION_ON_BOTTOM = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTION_ON_BOTTOM;
-      var MESSAGE_TIMEOUT = __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* numbers */].MESSAGE_TIMEOUT;
-
-
-      this.adapter_.setMessageText(data.message);
-
-      if (data.multiline) {
-        this.adapter_.addClass(MULTILINE);
-        if (data.actionOnBottom) {
-          this.adapter_.addClass(ACTION_ON_BOTTOM);
-        }
-      }
-
-      if (data.actionHandler) {
-        this.adapter_.setActionText(data.actionText);
-        this.actionHandler_ = data.actionHandler;
-        this.setActionHidden_(false);
-      } else {
-        this.setActionHidden_(true);
-        this.actionHandler_ = null;
-        this.adapter_.setActionText(null);
-      }
-
-      this.active_ = true;
-      this.adapter_.addClass(ACTIVE);
-      this.adapter_.unsetAriaHidden();
-
-      this.timeoutId_ = setTimeout(this.cleanup_.bind(this), data.timeout || MESSAGE_TIMEOUT);
-    }
-  }, {
-    key: 'invokeAction_',
-    value: function invokeAction_() {
-      try {
-        if (!this.actionHandler_) {
-          return;
-        }
-
-        this.actionHandler_();
-      } finally {
-        if (this.dismissOnAction_) {
-          clearTimeout(this.timeoutId_);
-          this.cleanup_();
-        }
-      }
-    }
-  }, {
-    key: 'cleanup_',
-    value: function cleanup_() {
-      var _this2 = this;
-
-      var ACTIVE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTIVE,
-          MULTILINE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].MULTILINE,
-          ACTION_ON_BOTTOM = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTION_ON_BOTTOM;
-
-
-      this.adapter_.removeClass(ACTIVE);
-
-      var handler = function handler() {
-        _this2.adapter_.deregisterTransitionEndHandler(handler);
-        _this2.adapter_.removeClass(MULTILINE);
-        _this2.adapter_.removeClass(ACTION_ON_BOTTOM);
-        _this2.setActionHidden_(true);
-        _this2.adapter_.setMessageText(null);
-        _this2.adapter_.setActionText(null);
-        _this2.adapter_.setAriaHidden();
-        _this2.active_ = false;
-        _this2.showNext_();
-      };
-
-      this.adapter_.registerTransitionEndHandler(handler);
-    }
-  }, {
-    key: 'showNext_',
-    value: function showNext_() {
-      if (!this.queue_.length) {
-        return;
-      }
-
-      this.show(this.queue_.shift());
-    }
-  }, {
-    key: 'setActionHidden_',
-    value: function setActionHidden_(isHidden) {
-      if (isHidden) {
-        this.adapter_.setActionAriaHidden();
-      } else {
-        this.adapter_.unsetActionAriaHidden();
-      }
-    }
-  }]);
-
-  return MDCSnackbarFoundation;
-}(__WEBPACK_IMPORTED_MODULE_0__material_base__["MDCFoundation"]);
-
-/* harmony default export */ __webpack_exports__["a"] = (MDCSnackbarFoundation);
-
-/***/ }),
-
-/***/ 79:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return cssClasses; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return strings; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return numbers; });
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-var cssClasses = {
-  ROOT: 'mdc-snackbar',
-  TEXT: 'mdc-snackbar__text',
-  ACTION_WRAPPER: 'mdc-snackbar__action-wrapper',
-  ACTION_BUTTON: 'mdc-snackbar__action-button',
-  ACTIVE: 'mdc-snackbar--active',
-  MULTILINE: 'mdc-snackbar--multiline',
-  ACTION_ON_BOTTOM: 'mdc-snackbar--action-on-bottom'
-};
-
-var strings = {
-  TEXT_SELECTOR: '.mdc-snackbar__text',
-  ACTION_WRAPPER_SELECTOR: '.mdc-snackbar__action-wrapper',
-  ACTION_BUTTON_SELECTOR: '.mdc-snackbar__action-button'
-};
-
-var numbers = {
-  MESSAGE_TIMEOUT: 2750
-};
 
 /***/ }),
 
@@ -941,6 +532,514 @@ function getCorrectEventName(windowObj, eventType) {
 function getCorrectPropertyName(windowObj, eventType) {
   return getAnimationName(windowObj, eventType);
 }
+
+/***/ }),
+
+/***/ 82:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(83);
+
+
+/***/ }),
+
+/***/ 83:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MDCSnackbar", function() { return MDCSnackbar; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__foundation__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__material_animation__ = __webpack_require__(8);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCSnackbarFoundation", function() { return __WEBPACK_IMPORTED_MODULE_1__foundation__["a"]; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+
+
+
+
+
+var MDCSnackbar = function (_MDCComponent) {
+  _inherits(MDCSnackbar, _MDCComponent);
+
+  function MDCSnackbar() {
+    _classCallCheck(this, MDCSnackbar);
+
+    return _possibleConstructorReturn(this, (MDCSnackbar.__proto__ || Object.getPrototypeOf(MDCSnackbar)).apply(this, arguments));
+  }
+
+  _createClass(MDCSnackbar, [{
+    key: 'show',
+    value: function show(data) {
+      this.foundation_.show(data);
+    }
+  }, {
+    key: 'getDefaultFoundation',
+    value: function getDefaultFoundation() {
+      var _this2 = this;
+
+      var _MDCSnackbarFoundatio = __WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */].strings,
+          TEXT_SELECTOR = _MDCSnackbarFoundatio.TEXT_SELECTOR,
+          ACTION_BUTTON_SELECTOR = _MDCSnackbarFoundatio.ACTION_BUTTON_SELECTOR;
+
+      var getText = function getText() {
+        return _this2.root_.querySelector(TEXT_SELECTOR);
+      };
+      var getActionButton = function getActionButton() {
+        return _this2.root_.querySelector(ACTION_BUTTON_SELECTOR);
+      };
+
+      /* eslint brace-style: "off" */
+      return new __WEBPACK_IMPORTED_MODULE_1__foundation__["a" /* default */]({
+        addClass: function addClass(className) {
+          return _this2.root_.classList.add(className);
+        },
+        removeClass: function removeClass(className) {
+          return _this2.root_.classList.remove(className);
+        },
+        setAriaHidden: function setAriaHidden() {
+          return _this2.root_.setAttribute('aria-hidden', 'true');
+        },
+        unsetAriaHidden: function unsetAriaHidden() {
+          return _this2.root_.removeAttribute('aria-hidden');
+        },
+        setActionAriaHidden: function setActionAriaHidden() {
+          return getActionButton().setAttribute('aria-hidden', 'true');
+        },
+        unsetActionAriaHidden: function unsetActionAriaHidden() {
+          return getActionButton().removeAttribute('aria-hidden');
+        },
+        setActionText: function setActionText(text) {
+          getActionButton().textContent = text;
+        },
+        setMessageText: function setMessageText(text) {
+          getText().textContent = text;
+        },
+        setFocus: function setFocus() {
+          return getActionButton().focus();
+        },
+        visibilityIsHidden: function visibilityIsHidden() {
+          return document.hidden;
+        },
+        registerCapturedBlurHandler: function registerCapturedBlurHandler(handler) {
+          return getActionButton().addEventListener('blur', handler, true);
+        },
+        deregisterCapturedBlurHandler: function deregisterCapturedBlurHandler(handler) {
+          return getActionButton().removeEventListener('blur', handler, true);
+        },
+        registerVisibilityChangeHandler: function registerVisibilityChangeHandler(handler) {
+          return document.addEventListener('visibilitychange', handler);
+        },
+        deregisterVisibilityChangeHandler: function deregisterVisibilityChangeHandler(handler) {
+          return document.removeEventListener('visibilitychange', handler);
+        },
+        registerCapturedInteractionHandler: function registerCapturedInteractionHandler(evt, handler) {
+          return document.body.addEventListener(evt, handler, true);
+        },
+        deregisterCapturedInteractionHandler: function deregisterCapturedInteractionHandler(evt, handler) {
+          return document.body.removeEventListener(evt, handler, true);
+        },
+        registerActionClickHandler: function registerActionClickHandler(handler) {
+          return getActionButton().addEventListener('click', handler);
+        },
+        deregisterActionClickHandler: function deregisterActionClickHandler(handler) {
+          return getActionButton().removeEventListener('click', handler);
+        },
+        registerTransitionEndHandler: function registerTransitionEndHandler(handler) {
+          return _this2.root_.addEventListener(Object(__WEBPACK_IMPORTED_MODULE_2__material_animation__["getCorrectEventName"])(window, 'transitionend'), handler);
+        },
+        deregisterTransitionEndHandler: function deregisterTransitionEndHandler(handler) {
+          return _this2.root_.removeEventListener(Object(__WEBPACK_IMPORTED_MODULE_2__material_animation__["getCorrectEventName"])(window, 'transitionend'), handler);
+        }
+      });
+    }
+  }, {
+    key: 'dismissesOnAction',
+    get: function get() {
+      return this.foundation_.dismissesOnAction();
+    },
+    set: function set(dismissesOnAction) {
+      this.foundation_.setDismissOnAction(dismissesOnAction);
+    }
+  }], [{
+    key: 'attachTo',
+    value: function attachTo(root) {
+      return new MDCSnackbar(root);
+    }
+  }]);
+
+  return MDCSnackbar;
+}(__WEBPACK_IMPORTED_MODULE_0__material_base__["MDCComponent"]);
+
+/***/ }),
+
+/***/ 84:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(85);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+
+
+var MDCSnackbarFoundation = function (_MDCFoundation) {
+  _inherits(MDCSnackbarFoundation, _MDCFoundation);
+
+  _createClass(MDCSnackbarFoundation, [{
+    key: 'active',
+    get: function get() {
+      return this.active_;
+    }
+  }], [{
+    key: 'cssClasses',
+    get: function get() {
+      return __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */];
+    }
+  }, {
+    key: 'strings',
+    get: function get() {
+      return __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* strings */];
+    }
+  }, {
+    key: 'defaultAdapter',
+    get: function get() {
+      return {
+        addClass: function addClass() /* className: string */{},
+        removeClass: function removeClass() /* className: string */{},
+        setAriaHidden: function setAriaHidden() {},
+        unsetAriaHidden: function unsetAriaHidden() {},
+        setActionAriaHidden: function setActionAriaHidden() {},
+        unsetActionAriaHidden: function unsetActionAriaHidden() {},
+        setActionText: function setActionText() /* actionText: string */{},
+        setMessageText: function setMessageText() /* message: string */{},
+        setFocus: function setFocus() {},
+        visibilityIsHidden: function visibilityIsHidden() {
+          return (/* boolean */false
+          );
+        },
+        registerCapturedBlurHandler: function registerCapturedBlurHandler() /* handler: EventListener */{},
+        deregisterCapturedBlurHandler: function deregisterCapturedBlurHandler() /* handler: EventListener */{},
+        registerVisibilityChangeHandler: function registerVisibilityChangeHandler() /* handler: EventListener */{},
+        deregisterVisibilityChangeHandler: function deregisterVisibilityChangeHandler() /* handler: EventListener */{},
+        registerCapturedInteractionHandler: function registerCapturedInteractionHandler() /* evtType: string, handler: EventListener */{},
+        deregisterCapturedInteractionHandler: function deregisterCapturedInteractionHandler() /* evtType: string, handler: EventListener */{},
+        registerActionClickHandler: function registerActionClickHandler() /* handler: EventListener */{},
+        deregisterActionClickHandler: function deregisterActionClickHandler() /* handler: EventListener */{},
+        registerTransitionEndHandler: function registerTransitionEndHandler() /* handler: EventListener */{},
+        deregisterTransitionEndHandler: function deregisterTransitionEndHandler() /* handler: EventListener */{}
+      };
+    }
+  }]);
+
+  function MDCSnackbarFoundation(adapter) {
+    _classCallCheck(this, MDCSnackbarFoundation);
+
+    var _this = _possibleConstructorReturn(this, (MDCSnackbarFoundation.__proto__ || Object.getPrototypeOf(MDCSnackbarFoundation)).call(this, _extends(MDCSnackbarFoundation.defaultAdapter, adapter)));
+
+    _this.active_ = false;
+    _this.actionWasClicked_ = false;
+    _this.dismissOnAction_ = true;
+    _this.firstFocus_ = true;
+    _this.pointerDownRecognized_ = false;
+    _this.snackbarHasFocus_ = false;
+    _this.snackbarData_ = null;
+    _this.queue_ = [];
+    _this.actionClickHandler_ = function () {
+      _this.actionWasClicked_ = true;
+      _this.invokeAction_();
+    };
+    _this.visibilitychangeHandler_ = function () {
+      clearTimeout(_this.timeoutId_);
+      _this.snackbarHasFocus_ = true;
+
+      if (!_this.adapter_.visibilityIsHidden()) {
+        setTimeout(_this.cleanup_.bind(_this), _this.snackbarData_.timeout || __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* numbers */].MESSAGE_TIMEOUT);
+      }
+    };
+    _this.interactionHandler_ = function (evt) {
+      if (evt.type == 'touchstart' || evt.type == 'mousedown') {
+        _this.pointerDownRecognized_ = true;
+      }
+      _this.handlePossibleTabKeyboardFocus_(evt);
+
+      if (evt.type == 'focus') {
+        _this.pointerDownRecognized_ = false;
+      }
+    };
+    _this.blurHandler_ = function () {
+      clearTimeout(_this.timeoutId_);
+      _this.snackbarHasFocus_ = false;
+      _this.timeoutId_ = setTimeout(_this.cleanup_.bind(_this), _this.snackbarData_.timeout || __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* numbers */].MESSAGE_TIMEOUT);
+    };
+    return _this;
+  }
+
+  _createClass(MDCSnackbarFoundation, [{
+    key: 'init',
+    value: function init() {
+      this.adapter_.registerActionClickHandler(this.actionClickHandler_);
+      this.adapter_.setAriaHidden();
+      this.adapter_.setActionAriaHidden();
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      var _this2 = this;
+
+      this.adapter_.deregisterActionClickHandler(this.actionClickHandler_);
+      this.adapter_.deregisterCapturedBlurHandler(this.blurHandler_);
+      this.adapter_.deregisterVisibilityChangeHandler(this.visibilitychangeHandler_);
+      ['touchstart', 'mousedown', 'focus'].forEach(function (evtType) {
+        _this2.adapter_.deregisterCapturedInteractionHandler(evtType, _this2.interactionHandler_);
+      });
+    }
+  }, {
+    key: 'dismissesOnAction',
+    value: function dismissesOnAction() {
+      return this.dismissOnAction_;
+    }
+  }, {
+    key: 'setDismissOnAction',
+    value: function setDismissOnAction(dismissOnAction) {
+      this.dismissOnAction_ = !!dismissOnAction;
+    }
+  }, {
+    key: 'show',
+    value: function show(data) {
+      var _this3 = this;
+
+      if (!data) {
+        throw new Error('Please provide a data object with at least a message to display.');
+      }
+      if (!data.message) {
+        throw new Error('Please provide a message to be displayed.');
+      }
+      if (data.actionHandler && !data.actionText) {
+        throw new Error('Please provide action text with the handler.');
+      }
+      if (this.active) {
+        this.queue_.push(data);
+        return;
+      }
+      clearTimeout(this.timeoutId_);
+      this.snackbarData_ = data;
+      this.firstFocus_ = true;
+      this.adapter_.registerVisibilityChangeHandler(this.visibilitychangeHandler_);
+      this.adapter_.registerCapturedBlurHandler(this.blurHandler_);
+      ['touchstart', 'mousedown', 'focus'].forEach(function (evtType) {
+        _this3.adapter_.registerCapturedInteractionHandler(evtType, _this3.interactionHandler_);
+      });
+
+      var ACTIVE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTIVE,
+          MULTILINE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].MULTILINE,
+          ACTION_ON_BOTTOM = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTION_ON_BOTTOM;
+
+
+      this.adapter_.setMessageText(this.snackbarData_.message);
+
+      if (this.snackbarData_.multiline) {
+        this.adapter_.addClass(MULTILINE);
+        if (this.snackbarData_.actionOnBottom) {
+          this.adapter_.addClass(ACTION_ON_BOTTOM);
+        }
+      }
+
+      if (this.snackbarData_.actionHandler) {
+        this.adapter_.setActionText(this.snackbarData_.actionText);
+        this.actionHandler_ = this.snackbarData_.actionHandler;
+        this.setActionHidden_(false);
+      } else {
+        this.setActionHidden_(true);
+        this.actionHandler_ = null;
+        this.adapter_.setActionText(null);
+      }
+
+      this.active_ = true;
+      this.adapter_.addClass(ACTIVE);
+      this.adapter_.unsetAriaHidden();
+
+      this.timeoutId_ = setTimeout(this.cleanup_.bind(this), this.snackbarData_.timeout || __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* numbers */].MESSAGE_TIMEOUT);
+    }
+  }, {
+    key: 'handlePossibleTabKeyboardFocus_',
+    value: function handlePossibleTabKeyboardFocus_() {
+      var hijackFocus = this.firstFocus_ && !this.pointerDownRecognized_;
+
+      if (hijackFocus) {
+        this.setFocusOnAction_();
+      }
+
+      this.firstFocus_ = false;
+    }
+  }, {
+    key: 'setFocusOnAction_',
+    value: function setFocusOnAction_() {
+      this.adapter_.setFocus();
+      this.snackbarHasFocus_ = true;
+      this.firstFocus_ = false;
+    }
+  }, {
+    key: 'invokeAction_',
+    value: function invokeAction_() {
+      try {
+        if (!this.actionHandler_) {
+          return;
+        }
+
+        this.actionHandler_();
+      } finally {
+        if (this.dismissOnAction_) {
+          this.cleanup_();
+        }
+      }
+    }
+  }, {
+    key: 'cleanup_',
+    value: function cleanup_() {
+      var _this4 = this;
+
+      var allowDismissal = !this.snackbarHasFocus_ || this.actionWasClicked_;
+
+      if (allowDismissal) {
+        var ACTIVE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTIVE,
+            MULTILINE = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].MULTILINE,
+            ACTION_ON_BOTTOM = __WEBPACK_IMPORTED_MODULE_1__constants__["a" /* cssClasses */].ACTION_ON_BOTTOM;
+
+
+        this.adapter_.removeClass(ACTIVE);
+
+        var handler = function handler() {
+          clearTimeout(_this4.timeoutId_);
+          _this4.adapter_.deregisterTransitionEndHandler(handler);
+          _this4.adapter_.removeClass(MULTILINE);
+          _this4.adapter_.removeClass(ACTION_ON_BOTTOM);
+          _this4.setActionHidden_(true);
+          _this4.adapter_.setAriaHidden();
+          _this4.active_ = false;
+          _this4.snackbarHasFocus_ = false;
+          _this4.showNext_();
+        };
+
+        this.adapter_.registerTransitionEndHandler(handler);
+      }
+    }
+  }, {
+    key: 'showNext_',
+    value: function showNext_() {
+      if (!this.queue_.length) {
+        return;
+      }
+      this.show(this.queue_.shift());
+    }
+  }, {
+    key: 'setActionHidden_',
+    value: function setActionHidden_(isHidden) {
+      if (isHidden) {
+        this.adapter_.setActionAriaHidden();
+      } else {
+        this.adapter_.unsetActionAriaHidden();
+      }
+    }
+  }]);
+
+  return MDCSnackbarFoundation;
+}(__WEBPACK_IMPORTED_MODULE_0__material_base__["MDCFoundation"]);
+
+/* harmony default export */ __webpack_exports__["a"] = (MDCSnackbarFoundation);
+
+/***/ }),
+
+/***/ 85:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return cssClasses; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return strings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return numbers; });
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var cssClasses = {
+  ROOT: 'mdc-snackbar',
+  TEXT: 'mdc-snackbar__text',
+  ACTION_WRAPPER: 'mdc-snackbar__action-wrapper',
+  ACTION_BUTTON: 'mdc-snackbar__action-button',
+  ACTIVE: 'mdc-snackbar--active',
+  MULTILINE: 'mdc-snackbar--multiline',
+  ACTION_ON_BOTTOM: 'mdc-snackbar--action-on-bottom'
+};
+
+var strings = {
+  TEXT_SELECTOR: '.mdc-snackbar__text',
+  ACTION_WRAPPER_SELECTOR: '.mdc-snackbar__action-wrapper',
+  ACTION_BUTTON_SELECTOR: '.mdc-snackbar__action-button'
+};
+
+var numbers = {
+  MESSAGE_TIMEOUT: 2750
+};
 
 /***/ })
 

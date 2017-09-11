@@ -3,113 +3,6 @@
  Copyright (c) 2017 Google Inc.
  License: Apache-2.0
 */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
 /** MDC Ripple keyframes are split into their own file so that _mixins.scss can rely on them. */
 @-webkit-keyframes mdc-ripple-fg-radius-in {
   from {
@@ -198,6 +91,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -209,14 +103,19 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-ripple-surface.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -237,8 +136,10 @@
   .mdc-ripple-surface.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -250,12 +151,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-ripple-surface.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -273,9 +178,11 @@
   .mdc-ripple-surface[data-mdc-ripple-is-unbounded] {
     overflow: visible; }
   .mdc-ripple-surface--primary::before, .mdc-ripple-surface--primary::after {
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-ripple-surface--primary::before {
+    /* @alternate */
     background-color: rgba(63, 81, 181, 0.16);
     position: absolute;
     top: calc(50% - 100%);
@@ -296,6 +203,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -307,19 +215,25 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-ripple-surface--primary.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
             transform: scale(var(--mdc-ripple-fg-scale, 0)); }
   .mdc-ripple-surface--primary::after {
+    /* @alternate */
     background-color: rgba(63, 81, 181, 0.16);
     position: absolute;
     top: calc(50% - 100%);
@@ -338,8 +252,10 @@
   .mdc-ripple-surface--primary.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -351,12 +267,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-ripple-surface--primary.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -372,9 +292,11 @@
     -webkit-animation: 83ms mdc-ripple-fg-opacity-out;
             animation: 83ms mdc-ripple-fg-opacity-out; }
   .mdc-ripple-surface--accent::before, .mdc-ripple-surface--accent::after {
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-ripple-surface--accent::before {
+    /* @alternate */
     background-color: rgba(255, 64, 129, 0.16);
     position: absolute;
     top: calc(50% - 100%);
@@ -389,12 +311,13 @@
     content: ""; }
     @supports (background-color: color(green a(10%))) {
       .mdc-ripple-surface--accent::before {
-        background-color: color(var(--mdc-theme-accent, #ff4081) a(16%)); } }
+        background-color: color(var(--mdc-theme-secondary, #ff4081) a(16%)); } }
   .mdc-ripple-surface--accent.mdc-ripple-upgraded::before {
     top: calc(50% - 100%);
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -406,19 +329,25 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-ripple-surface--accent.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
             transform: scale(var(--mdc-ripple-fg-scale, 0)); }
   .mdc-ripple-surface--accent::after {
+    /* @alternate */
     background-color: rgba(255, 64, 129, 0.16);
     position: absolute;
     top: calc(50% - 100%);
@@ -433,12 +362,14 @@
     content: ""; }
     @supports (background-color: color(green a(10%))) {
       .mdc-ripple-surface--accent::after {
-        background-color: color(var(--mdc-theme-accent, #ff4081) a(16%)); } }
+        background-color: color(var(--mdc-theme-secondary, #ff4081) a(16%)); } }
   .mdc-ripple-surface--accent.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -450,12 +381,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-ripple-surface--accent.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);

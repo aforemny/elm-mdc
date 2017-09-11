@@ -3,40 +3,6 @@
  Copyright (c) 2017 Google Inc.
  License: Apache-2.0
 */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
 /** MDC Ripple keyframes are split into their own file so that _mixins.scss can rely on them. */
 @-webkit-keyframes mdc-ripple-fg-radius-in {
   from {
@@ -89,79 +55,6 @@
   to {
     opacity: 0; } }
 
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 .mdc-radio {
   --mdc-ripple-surface-width: 0;
   --mdc-ripple-surface-height: 0;
@@ -190,6 +83,7 @@
             transition-duration: 85ms;
     opacity: .6; }
   .mdc-radio::before {
+    /* @alternate */
     background-color: rgba(63, 81, 181, 0.14);
     position: absolute;
     top: calc(50% - 100%);
@@ -210,6 +104,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -221,19 +116,25 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-radio.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
             transform: scale(var(--mdc-ripple-fg-scale, 0)); }
   .mdc-radio::after {
+    /* @alternate */
     background-color: rgba(63, 81, 181, 0.14);
     position: absolute;
     top: calc(50% - 100%);
@@ -252,8 +153,10 @@
   .mdc-radio.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -265,12 +168,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-radio.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -301,6 +208,7 @@
     -webkit-box-sizing: border-box;
             box-sizing: border-box; }
     .mdc-radio__background::before {
+      /* @alternate */
       background-color: #3f51b5;
       background-color: var(--mdc-theme-primary, #3f51b5);
       position: absolute;
@@ -310,15 +218,16 @@
       height: 100%;
       -webkit-transform: scale(0, 0);
               transform: scale(0, 0);
-      -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-      transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-      transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-      transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
+      -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+      transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+      transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+      transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
       border-radius: 50%;
       content: "";
       opacity: 0;
       pointer-events: none; }
   .mdc-radio__outer-circle {
+    /* @alternate */
     border-color: rgba(0, 0, 0, 0.54);
     border-color: var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54));
     position: absolute;
@@ -326,8 +235,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    -webkit-transition: border-color 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: border-color 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: border-color 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: border-color 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     border-width: 2px;
     border-style: solid;
     border-radius: 50%;
@@ -335,9 +244,11 @@
             box-sizing: border-box; }
     .mdc-radio--theme-dark .mdc-radio__outer-circle,
     .mdc-theme--dark .mdc-radio__outer-circle {
+      /* @alternate */
       border-color: rgba(255, 255, 255, 0.7);
       border-color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
   .mdc-radio__inner-circle {
+    /* @alternate */
     background-color: rgba(0, 0, 0, 0.54);
     background-color: var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54));
     position: absolute;
@@ -347,15 +258,16 @@
     height: 100%;
     -webkit-transform: scale(0, 0);
             transform: scale(0, 0);
-    -webkit-transition: background-color 120ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: background-color 120ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1), background-color 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1), background-color 120ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: background-color 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: background-color 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), background-color 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), background-color 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     border-radius: 50%;
     -webkit-box-sizing: border-box;
             box-sizing: border-box; }
     .mdc-radio--theme-dark .mdc-radio__inner-circle,
     .mdc-theme--dark .mdc-radio__inner-circle {
+      /* @alternate */
       background-color: rgba(255, 255, 255, 0.7);
       background-color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
   .mdc-radio__native-control {
@@ -392,10 +304,12 @@
   pointer-events: none; }
 
 .mdc-radio__native-control:checked + .mdc-radio__background .mdc-radio__outer-circle {
+  /* @alternate */
   border-color: #3f51b5;
   border-color: var(--mdc-theme-primary, #3f51b5); }
 
 .mdc-radio__native-control:checked + .mdc-radio__background .mdc-radio__inner-circle {
+  /* @alternate */
   background-color: #3f51b5;
   background-color: var(--mdc-theme-primary, #3f51b5);
   -webkit-transform: scale(0.5);

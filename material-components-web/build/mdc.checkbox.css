@@ -3,40 +3,6 @@
  Copyright (c) 2017 Google Inc.
  License: Apache-2.0
 */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
 /** MDC Ripple keyframes are split into their own file so that _mixins.scss can rely on them. */
 @-webkit-keyframes mdc-ripple-fg-radius-in {
   from {
@@ -182,7 +148,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -241,87 +207,16 @@
  * An optional third $root-selector argument may also be given, which is passed to `mdc-rtl`.
  */
 /* Manual calculation done on SVG */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /* Manual calculation done on SVG */
 @-webkit-keyframes mdc-checkbox-fade-in-background {
   0% {
     border-color: rgba(0, 0, 0, 0.54);
     background-color: transparent; }
   50% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); } }
 @keyframes mdc-checkbox-fade-in-background {
@@ -329,16 +224,20 @@
     border-color: rgba(0, 0, 0, 0.54);
     background-color: transparent; }
   50% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); } }
 
 @-webkit-keyframes mdc-checkbox-fade-out-background {
   0%,
   80% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); }
   100% {
@@ -348,8 +247,10 @@
 @keyframes mdc-checkbox-fade-out-background {
   0%,
   80% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); }
   100% {
@@ -361,8 +262,10 @@
     border-color: white;
     background-color: transparent; }
   50% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); } }
 
@@ -371,16 +274,20 @@
     border-color: white;
     background-color: transparent; }
   50% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); } }
 
 @-webkit-keyframes mdc-checkbox-fade-out-background-dark {
   0%,
   80% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); }
   100% {
@@ -390,8 +297,10 @@
 @keyframes mdc-checkbox-fade-out-background-dark {
   0%,
   80% {
+    /* @alternate */
     border-color: #3f51b5;
     border-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); }
   100% {
@@ -614,6 +523,7 @@
             transition-duration: 85ms;
     opacity: .6; }
   .mdc-checkbox::before {
+    /* @alternate */
     background-color: rgba(63, 81, 181, 0.14);
     position: absolute;
     top: calc(50% - 100%);
@@ -634,6 +544,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -645,19 +556,25 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-checkbox.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
             transform: scale(var(--mdc-ripple-fg-scale, 0)); }
   .mdc-checkbox::after {
+    /* @alternate */
     background-color: rgba(63, 81, 181, 0.14);
     position: absolute;
     top: calc(50% - 100%);
@@ -676,8 +593,10 @@
   .mdc-checkbox.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -689,12 +608,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-checkbox.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -739,8 +662,8 @@
     pointer-events: none;
     width: 45%;
     height: 45%;
-    -webkit-transition: background-color 90ms 0ms cubic-bezier(0.4, 0, 1, 1), border-color 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: background-color 90ms 0ms cubic-bezier(0.4, 0, 1, 1), border-color 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: background-color 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), border-color 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: background-color 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), border-color 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     border: 2px solid rgba(0, 0, 0, 0.54);
     border-radius: 2px;
     background-color: transparent;
@@ -762,15 +685,16 @@
       height: 100%;
       -webkit-transform: scale(0, 0);
               transform: scale(0, 0);
-      -webkit-transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-      transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-      transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-      transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
+      -webkit-transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+      transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+      transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+      transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
       border-radius: 50%;
       content: "";
       opacity: 0;
       pointer-events: none;
       will-change: opacity, transform;
+      /* @alternate */
       background: #3f51b5;
       background: var(--mdc-theme-primary, #3f51b5); }
   .mdc-checkbox__native-control {
@@ -790,13 +714,13 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    -webkit-transition: opacity 180ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 180ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: opacity 180ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 180ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     opacity: 0;
     fill: white; }
     .mdc-checkbox__checkmark__path {
-      -webkit-transition: stroke-dashoffset 180ms 0ms cubic-bezier(0.4, 0, 1, 1);
-      transition: stroke-dashoffset 180ms 0ms cubic-bezier(0.4, 0, 1, 1);
+      -webkit-transition: stroke-dashoffset 180ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+      transition: stroke-dashoffset 180ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
       stroke: white !important;
       stroke-width: 3.12px;
       stroke-dashoffset: 29.78334;
@@ -806,10 +730,10 @@
     height: 2px;
     -webkit-transform: scaleX(0) rotate(0deg);
             transform: scaleX(0) rotate(0deg);
-    -webkit-transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     background-color: white;
     opacity: 0; }
 
@@ -825,8 +749,10 @@
 .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background {
   -webkit-transition: border-color 90ms 0ms cubic-bezier(0, 0, 0.2, 1), background-color 90ms 0ms cubic-bezier(0, 0, 0.2, 1);
   transition: border-color 90ms 0ms cubic-bezier(0, 0, 0.2, 1), background-color 90ms 0ms cubic-bezier(0, 0, 0.2, 1);
+  /* @alternate */
   border-color: #3f51b5;
   border-color: var(--mdc-theme-primary, #3f51b5);
+  /* @alternate */
   background-color: #3f51b5;
   background-color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background .mdc-checkbox__checkmark {
@@ -842,17 +768,19 @@
             transform: scaleX(1) rotate(-45deg); }
 
 .mdc-checkbox__native-control:indeterminate ~ .mdc-checkbox__background {
+  /* @alternate */
   border-color: #3f51b5;
   border-color: var(--mdc-theme-primary, #3f51b5);
+  /* @alternate */
   background-color: #3f51b5;
   background-color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-checkbox__native-control:indeterminate ~ .mdc-checkbox__background .mdc-checkbox__checkmark {
     -webkit-transform: rotate(45deg);
             transform: rotate(45deg);
-    -webkit-transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 1, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     opacity: 0; }
     .mdc-checkbox__native-control:indeterminate ~ .mdc-checkbox__background .mdc-checkbox__checkmark__path {
       stroke-dashoffset: 0; }

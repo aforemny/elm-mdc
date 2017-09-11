@@ -5,113 +5,6 @@
 */
 /* TODO(sgomes): Figure out what to do about desktop font sizes. */
 /* TODO(sgomes): Figure out what to do about i18n and i18n font sizes. */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
 /** MDC Ripple keyframes are split into their own file so that _mixins.scss can rely on them. */
 @-webkit-keyframes mdc-ripple-fg-radius-in {
   from {
@@ -257,7 +150,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -323,6 +216,8 @@
   font-weight: 500;
   letter-spacing: 0.04em;
   line-height: 1.5rem;
+  text-decoration: inherit;
+  text-transform: inherit;
   display: table-cell;
   position: relative;
   -webkit-box-sizing: border-box;
@@ -336,24 +231,30 @@
   cursor: pointer;
   overflow: hidden;
   vertical-align: middle;
+  /* @alternate */
   color: rgba(0, 0, 0, 0.54);
   color: var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54)); }
   .mdc-tab:hover {
+    /* @alternate */
     color: rgba(0, 0, 0, 0.87);
     color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
   .mdc-tab:focus {
+    /* @alternate */
     outline-color: rgba(0, 0, 0, 0.54);
     outline-color: var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54)); }
   .mdc-tab-bar--theme-dark .mdc-tab,
   .mdc-theme--dark .mdc-tab {
+    /* @alternate */
     color: rgba(255, 255, 255, 0.7);
     color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
     .mdc-tab-bar--theme-dark .mdc-tab:hover,
     .mdc-theme--dark .mdc-tab:hover {
+      /* @alternate */
       color: white;
       color: var(--mdc-theme-text-primary-on-dark, white); }
     .mdc-tab-bar--theme-dark .mdc-tab:focus,
     .mdc-theme--dark .mdc-tab:focus {
+      /* @alternate */
       outline-color: rgba(255, 255, 255, 0.7);
       outline-color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
   @media screen and (max-width: 600px) {
@@ -374,10 +275,12 @@
     padding-top: 6px; }
 
 .mdc-tab--active {
+  /* @alternate */
   color: rgba(0, 0, 0, 0.87);
   color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
   .mdc-tab-bar--theme-dark .mdc-tab--active,
   .mdc-theme--dark .mdc-tab--active {
+    /* @alternate */
     color: white;
     color: var(--mdc-theme-text-primary-on-dark, white); }
   .mdc-tab--active::before {
@@ -394,13 +297,16 @@
     height: 2px;
     content: "";
     pointer-events: none;
+    /* @alternate */
     background-color: rgba(0, 0, 0, 0.87);
     background-color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
     .mdc-tab-bar--theme-dark.mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab::after,
     .mdc-theme--dark .mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab::after {
+      /* @alternate */
       background-color: white;
       background-color: var(--mdc-theme-text-primary-on-dark, white); }
     .mdc-toolbar .mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab::after {
+      /* @alternate */
       background-color: white;
       background-color: var(--mdc-theme-text-primary-on-primary, white); }
   .mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab--active::after, .mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab:active::after, .mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab:hover::after {
@@ -444,8 +350,10 @@
   .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -457,12 +365,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -495,6 +407,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -506,14 +419,19 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -538,6 +456,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -552,14 +471,19 @@
     opacity: 1; }
   .mdc-tab-bar--theme-dark .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::before,
   .mdc-theme--dark .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -582,8 +506,10 @@
   .mdc-theme--dark .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -597,12 +523,16 @@
             transform-origin: center center; }
   .mdc-tab-bar--theme-dark .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::after,
   .mdc-theme--dark .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -637,6 +567,7 @@
     left: calc(50% - 100%);
     width: 200%;
     height: 200%;
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -648,14 +579,19 @@
             transition-duration: 120ms;
     opacity: 1; }
   .mdc-toolbar .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::before {
+    /* @alternate */
     top: calc(50% - 50%);
     top: var(--mdc-ripple-top, calc(50% - 50%));
+    /* @alternate */
     left: calc(50% - 50%);
     left: var(--mdc-ripple-left, calc(50% - 50%));
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     -webkit-transform: scale(0);
             transform: scale(0);
     -webkit-transform: scale(var(--mdc-ripple-fg-scale, 0));
@@ -676,8 +612,10 @@
   .mdc-toolbar .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded::after {
     top: 0;
     left: 0;
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -689,12 +627,16 @@
     -webkit-transform-origin: center center;
             transform-origin: center center; }
   .mdc-toolbar .mdc-tab.mdc-ripple-upgraded.mdc-ripple-upgraded--unbounded::after {
+    /* @alternate */
     top: 0;
     top: var(--mdc-ripple-top, 0);
+    /* @alternate */
     left: 0;
     left: var(--mdc-ripple-left, 0);
+    /* @alternate */
     width: 100%;
     width: var(--mdc-ripple-fg-size, 100%);
+    /* @alternate */
     height: 100%;
     height: var(--mdc-ripple-fg-size, 100%);
     -webkit-transform: scale(0);
@@ -712,79 +654,6 @@
   .mdc-tab.mdc-ripple-upgraded:focus {
     outline: none; }
 
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /**
  * Creates a rule that will be applied when an MDC-Web component is within the context of an RTL layout.
  *
@@ -878,7 +747,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -948,6 +817,7 @@
     left: 0;
     width: 100%;
     height: 2px;
+    /* @alternate */
     background-color: rgba(0, 0, 0, 0.87);
     background-color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87));
     -webkit-transform-origin: left top;
@@ -960,17 +830,21 @@
     visibility: hidden; }
     .mdc-tab-bar--theme-dark .mdc-tab-bar__indicator,
     .mdc-theme--dark .mdc-tab-bar__indicator {
+      /* @alternate */
       background-color: white;
       background-color: var(--mdc-theme-text-primary-on-dark, white); }
   .mdc-toolbar .mdc-tab-bar .mdc-tab {
+    /* @alternate */
     color: rgba(255, 255, 255, 0.7);
     color: var(--mdc-theme-text-secondary-on-primary, rgba(255, 255, 255, 0.7)); }
     .mdc-tab-bar--theme-dark .mdc-toolbar .mdc-tab-bar .mdc-tab,
     .mdc-theme--dark .mdc-toolbar .mdc-tab-bar .mdc-tab {
+      /* @alternate */
       color: rgba(255, 255, 255, 0.7);
       color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
   .mdc-toolbar .mdc-tab-bar .mdc-tab--active,
   .mdc-toolbar .mdc-tab-bar .mdc-tab:hover {
+    /* @alternate */
     color: white;
     color: var(--mdc-theme-text-primary-on-primary, white); }
     .mdc-tab-bar--theme-dark .mdc-toolbar .mdc-tab-bar .mdc-tab--active,
@@ -978,13 +852,16 @@
     .mdc-toolbar .mdc-tab-bar .mdc-tab:hover,
     .mdc-theme--dark
     .mdc-toolbar .mdc-tab-bar .mdc-tab:hover {
+      /* @alternate */
       color: white;
       color: var(--mdc-theme-text-primary-on-dark, white); }
   .mdc-toolbar .mdc-tab-bar .mdc-tab-bar__indicator {
+    /* @alternate */
     background-color: white;
     background-color: var(--mdc-theme-text-primary-on-primary, white); }
     .mdc-tab-bar--theme-dark .mdc-toolbar .mdc-tab-bar .mdc-tab-bar__indicator,
     .mdc-theme--dark .mdc-toolbar .mdc-tab-bar .mdc-tab-bar__indicator {
+      /* @alternate */
       background-color: white;
       background-color: var(--mdc-theme-text-primary-on-dark, white); }
 
@@ -993,6 +870,7 @@
 
 .mdc-tab-bar--indicator-primary .mdc-tab-bar__indicator,
 .mdc-toolbar .mdc-tab-bar--indicator-primary .mdc-tab-bar__indicator {
+  /* @alternate */
   background-color: #3f51b5;
   background-color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-tab-bar--theme-dark .mdc-tab-bar--indicator-primary .mdc-tab-bar__indicator,
@@ -1000,104 +878,36 @@
   .mdc-toolbar .mdc-tab-bar--indicator-primary .mdc-tab-bar__indicator,
   .mdc-theme--dark
   .mdc-toolbar .mdc-tab-bar--indicator-primary .mdc-tab-bar__indicator {
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5); }
 
 .mdc-tab-bar--indicator-primary.mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab::after,
 .mdc-toolbar .mdc-tab-bar--indicator-primary.mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab::after {
+  /* @alternate */
   background-color: #3f51b5;
   background-color: var(--mdc-theme-primary, #3f51b5); }
 
 .mdc-tab-bar--indicator-accent .mdc-tab-bar__indicator,
 .mdc-toolbar .mdc-tab-bar--indicator-accent .mdc-tab-bar__indicator {
+  /* @alternate */
   background-color: #ff4081;
-  background-color: var(--mdc-theme-accent, #ff4081); }
+  background-color: var(--mdc-theme-secondary, #ff4081); }
   .mdc-tab-bar--theme-dark .mdc-tab-bar--indicator-accent .mdc-tab-bar__indicator,
   .mdc-theme--dark .mdc-tab-bar--indicator-accent .mdc-tab-bar__indicator, .mdc-tab-bar--theme-dark
   .mdc-toolbar .mdc-tab-bar--indicator-accent .mdc-tab-bar__indicator,
   .mdc-theme--dark
   .mdc-toolbar .mdc-tab-bar--indicator-accent .mdc-tab-bar__indicator {
+    /* @alternate */
     background-color: #ff4081;
-    background-color: var(--mdc-theme-accent, #ff4081); }
+    background-color: var(--mdc-theme-secondary, #ff4081); }
 
 .mdc-tab-bar--indicator-accent.mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab::after,
 .mdc-toolbar .mdc-tab-bar--indicator-accent.mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab::after {
+  /* @alternate */
   background-color: #ff4081;
-  background-color: var(--mdc-theme-accent, #ff4081); }
+  background-color: var(--mdc-theme-secondary, #ff4081); }
 
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /**
  * Creates a rule that will be applied when an MDC-Web component is within the context of an RTL layout.
  *
@@ -1191,7 +1001,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -1292,17 +1102,21 @@
     width: 48px;
     cursor: pointer;
     visibility: hidden;
+    /* @alternate */
     color: rgba(0, 0, 0, 0.54);
     color: var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54)); }
     .mdc-tab-bar--theme-dark .mdc-tab-bar-scroller__indicator,
     .mdc-theme--dark .mdc-tab-bar-scroller__indicator {
+      /* @alternate */
       color: rgba(255, 255, 255, 0.7);
       color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
     .mdc-tab-bar-scroller__indicator:hover {
+      /* @alternate */
       color: rgba(0, 0, 0, 0.87);
       color: var(--mdc-theme-text-primary-on-light, rgba(0, 0, 0, 0.87)); }
       .mdc-tab-bar--theme-dark .mdc-tab-bar-scroller__indicator:hover,
       .mdc-theme--dark .mdc-tab-bar-scroller__indicator:hover {
+        /* @alternate */
         color: white;
         color: var(--mdc-theme-text-primary-on-dark, white); }
     .mdc-tab-bar-scroller__indicator__inner {
@@ -1319,6 +1133,7 @@
       color: inherit; }
       .mdc-tab-bar--theme-dark .mdc-tab-bar-scroller__indicator__inner:hover,
       .mdc-theme--dark .mdc-tab-bar-scroller__indicator__inner:hover {
+        /* @alternate */
         color: rgba(255, 255, 255, 0.7);
         color: var(--mdc-theme-text-secondary-on-dark, rgba(255, 255, 255, 0.7)); }
   .mdc-tab-bar-scroller__indicator--enabled {

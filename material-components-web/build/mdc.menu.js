@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/assets/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 63);
+/******/ 	return __webpack_require__(__webpack_require__.s = 67);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -110,7 +110,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var MDCFoundation = function () {
   _createClass(MDCFoundation, null, [{
     key: "cssClasses",
-
 
     /** @return enum{cssClasses} */
     get: function get() {
@@ -218,7 +217,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var MDCComponent = function () {
   _createClass(MDCComponent, null, [{
     key: 'attachTo',
-
 
     /**
      * @param {!Element} root
@@ -357,13 +355,181 @@ var MDCComponent = function () {
 
 /***/ }),
 
-/***/ 11:
+/***/ 10:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__simple__ = __webpack_require__(13);
+/* harmony export (immutable) */ __webpack_exports__["getTransformPropertyName"] = getTransformPropertyName;
+/* harmony export (immutable) */ __webpack_exports__["clamp"] = clamp;
+/* harmony export (immutable) */ __webpack_exports__["bezierProgress"] = bezierProgress;
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/** @type {string|undefined} */
+var storedTransformPropertyName_ = void 0;
+
+/**
+ * Returns the name of the correct transform property to use on the current browser.
+ * @param {!Window} globalObj
+ * @param {boolean=} forceRefresh
+ * @return {string}
+ */
+function getTransformPropertyName(globalObj) {
+  var forceRefresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (storedTransformPropertyName_ === undefined || forceRefresh) {
+    var el = globalObj.document.createElement('div');
+    var transformPropertyName = 'transform' in el.style ? 'transform' : 'webkitTransform';
+    storedTransformPropertyName_ = transformPropertyName;
+  }
+
+  return storedTransformPropertyName_;
+}
+
+/**
+ * Clamps a value between the minimum and the maximum, returning the clamped value.
+ * @param {number} value
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+function clamp(value) {
+  var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+  return Math.min(max, Math.max(min, value));
+}
+
+/**
+ * Returns the easing value to apply at time t, for a given cubic bezier curve.
+ * Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
+ * Parameters are as follows:
+ * - time: The current time in the animation, scaled between 0 and 1.
+ * - x1: The x value of control point P1.
+ * - y1: The y value of control point P1.
+ * - x2: The x value of control point P2.
+ * - y2: The y value of control point P2.
+ * @param {number} time
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @return {number}
+ */
+function bezierProgress(time, x1, y1, x2, y2) {
+  return getBezierCoordinate_(solvePositionFromXValue_(time, x1, x2), y1, y2);
+}
+
+/**
+ * Compute a single coordinate at a position point between 0 and 1.
+ * c1 and c2 are the matching coordinate on control points P1 and P2, respectively.
+ * Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
+ * Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
+ * @param {number} t
+ * @param {number} c1
+ * @param {number} c2
+ * @return {number}
+ */
+function getBezierCoordinate_(t, c1, c2) {
+  // Special case start and end.
+  if (t === 0 || t === 1) {
+    return t;
+  }
+
+  // Step one - from 4 points to 3
+  var ic0 = t * c1;
+  var ic1 = c1 + t * (c2 - c1);
+  var ic2 = c2 + t * (1 - c2);
+
+  // Step two - from 3 points to 2
+  ic0 += t * (ic1 - ic0);
+  ic1 += t * (ic2 - ic1);
+
+  // Final step - last point
+  return ic0 + t * (ic1 - ic0);
+}
+
+/**
+ * Project a point onto the Bezier curve, from a given X. Calculates the position t along the curve.
+ * Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
+ * @param {number} xVal
+ * @param {number} x1
+ * @param {number} x2
+ * @return {number}
+ */
+function solvePositionFromXValue_(xVal, x1, x2) {
+  var EPSILON = 1e-6;
+  var MAX_ITERATIONS = 8;
+
+  if (xVal <= 0) {
+    return 0;
+  } else if (xVal >= 1) {
+    return 1;
+  }
+
+  // Initial estimate of t using linear interpolation.
+  var t = xVal;
+
+  // Try gradient descent to solve for t. If it works, it is very fast.
+  var tMin = 0;
+  var tMax = 1;
+  var value = 0;
+  for (var i = 0; i < MAX_ITERATIONS; i++) {
+    value = getBezierCoordinate_(t, x1, x2);
+    var derivative = (getBezierCoordinate_(t + EPSILON, x1, x2) - value) / EPSILON;
+    if (Math.abs(value - xVal) < EPSILON) {
+      return t;
+    } else if (Math.abs(derivative) < EPSILON) {
+      break;
+    } else {
+      if (value < xVal) {
+        tMin = t;
+      } else {
+        tMax = t;
+      }
+      t -= (value - xVal) / derivative;
+    }
+  }
+
+  // If the gradient descent got stuck in a local minimum, e.g. because
+  // the derivative was close to 0, use a Dichotomy refinement instead.
+  // We limit the number of interations to 8.
+  for (var _i = 0; Math.abs(value - xVal) > EPSILON && _i < MAX_ITERATIONS; _i++) {
+    if (value < xVal) {
+      tMin = t;
+      t = (t + tMax) / 2;
+    } else {
+      tMax = t;
+      t = (t + tMin) / 2;
+    }
+    value = getBezierCoordinate_(t, x1, x2);
+  }
+  return t;
+}
+
+/***/ }),
+
+/***/ 12:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__simple__ = __webpack_require__(14);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCSimpleMenu", function() { return __WEBPACK_IMPORTED_MODULE_1__simple__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MDCSimpleMenuFoundation", function() { return __WEBPACK_IMPORTED_MODULE_1__simple__["b"]; });
 /* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "util", function() { return __WEBPACK_IMPORTED_MODULE_0__util__; });
@@ -389,14 +555,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MDCSimpleMenu; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base_component__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__foundation__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__foundation__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(10);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__foundation__["a"]; });
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -519,10 +685,10 @@ var MDCSimpleMenu = function (_MDCComponent) {
           return { width: window.innerWidth, height: window.innerHeight };
         },
         setScale: function setScale(x, y) {
-          _this2.root_.style[__WEBPACK_IMPORTED_MODULE_2__util__["getTransformPropertyName"](window)] = 'scale(' + x + ', ' + y + ')';
+          _this2.root_.style[Object(__WEBPACK_IMPORTED_MODULE_2__util__["getTransformPropertyName"])(window)] = 'scale(' + x + ', ' + y + ')';
         },
         setInnerScale: function setInnerScale(x, y) {
-          _this2.itemsContainer_.style[__WEBPACK_IMPORTED_MODULE_2__util__["getTransformPropertyName"](window)] = 'scale(' + x + ', ' + y + ')';
+          _this2.itemsContainer_.style[Object(__WEBPACK_IMPORTED_MODULE_2__util__["getTransformPropertyName"])(window)] = 'scale(' + x + ', ' + y + ')';
         },
         getNumberOfItems: function getNumberOfItems() {
           return _this2.items.length;
@@ -585,7 +751,7 @@ var MDCSimpleMenu = function (_MDCComponent) {
           return getComputedStyle(_this2.root_).getPropertyValue('direction') === 'rtl';
         },
         setTransformOrigin: function setTransformOrigin(origin) {
-          _this2.root_.style[__WEBPACK_IMPORTED_MODULE_2__util__["getTransformPropertyName"](window) + '-origin'] = origin;
+          _this2.root_.style[Object(__WEBPACK_IMPORTED_MODULE_2__util__["getTransformPropertyName"])(window) + '-origin'] = origin;
         },
         setPosition: function setPosition(position) {
           _this2.root_.style.left = 'left' in position ? position.left : null;
@@ -648,14 +814,14 @@ var MDCSimpleMenu = function (_MDCComponent) {
 
 /***/ }),
 
-/***/ 14:
+/***/ 15:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_base_foundation__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adapter__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constants__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__adapter__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constants__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util__ = __webpack_require__(10);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -948,10 +1114,10 @@ var MDCSimpleMenuFoundation = function (_MDCFoundation) {
           TRANSITION_SCALE_ADJUSTMENT_X = _MDCSimpleMenuFoundat3.TRANSITION_SCALE_ADJUSTMENT_X,
           TRANSITION_SCALE_ADJUSTMENT_Y = _MDCSimpleMenuFoundat3.TRANSITION_SCALE_ADJUSTMENT_Y;
 
-      var currentTime = __WEBPACK_IMPORTED_MODULE_3__util__["clamp"]((time - this.startTime_) / TRANSITION_DURATION_MS);
+      var currentTime = Object(__WEBPACK_IMPORTED_MODULE_3__util__["clamp"])((time - this.startTime_) / TRANSITION_DURATION_MS);
 
       // Animate X axis very slowly, so that only the Y axis animation is visible during fade-out.
-      var currentTimeX = __WEBPACK_IMPORTED_MODULE_3__util__["clamp"]((currentTime - TRANSITION_SCALE_ADJUSTMENT_X) / (1 - TRANSITION_SCALE_ADJUSTMENT_X));
+      var currentTimeX = Object(__WEBPACK_IMPORTED_MODULE_3__util__["clamp"])((currentTime - TRANSITION_SCALE_ADJUSTMENT_X) / (1 - TRANSITION_SCALE_ADJUSTMENT_X));
       // No time-shifting on the Y axis when closing.
       var currentTimeY = currentTime;
 
@@ -962,14 +1128,14 @@ var MDCSimpleMenuFoundation = function (_MDCFoundation) {
           startScaleY = Math.max(this.itemHeight_ / this.dimensions_.height, startScaleY);
         }
         // X axis moves faster, so time-shift forward.
-        currentTimeX = __WEBPACK_IMPORTED_MODULE_3__util__["clamp"](currentTime + TRANSITION_SCALE_ADJUSTMENT_X);
+        currentTimeX = Object(__WEBPACK_IMPORTED_MODULE_3__util__["clamp"])(currentTime + TRANSITION_SCALE_ADJUSTMENT_X);
         // Y axis moves slower, so time-shift backwards and adjust speed by the difference.
-        currentTimeY = __WEBPACK_IMPORTED_MODULE_3__util__["clamp"]((currentTime - TRANSITION_SCALE_ADJUSTMENT_Y) / (1 - TRANSITION_SCALE_ADJUSTMENT_Y));
+        currentTimeY = Object(__WEBPACK_IMPORTED_MODULE_3__util__["clamp"])((currentTime - TRANSITION_SCALE_ADJUSTMENT_Y) / (1 - TRANSITION_SCALE_ADJUSTMENT_Y));
       }
 
       // Apply cubic bezier easing independently to each axis.
-      var easeX = __WEBPACK_IMPORTED_MODULE_3__util__["bezierProgress"](currentTimeX, TRANSITION_X1, TRANSITION_Y1, TRANSITION_X2, TRANSITION_Y2);
-      var easeY = __WEBPACK_IMPORTED_MODULE_3__util__["bezierProgress"](currentTimeY, TRANSITION_X1, TRANSITION_Y1, TRANSITION_X2, TRANSITION_Y2);
+      var easeX = Object(__WEBPACK_IMPORTED_MODULE_3__util__["bezierProgress"])(currentTimeX, TRANSITION_X1, TRANSITION_Y1, TRANSITION_X2, TRANSITION_Y2);
+      var easeY = Object(__WEBPACK_IMPORTED_MODULE_3__util__["bezierProgress"])(currentTimeY, TRANSITION_X1, TRANSITION_Y1, TRANSITION_X2, TRANSITION_Y2);
 
       // Calculate the scales to apply to the outer container and inner container.
       this.scaleX_ = this.startScaleX_ + (this.targetScale_ - this.startScaleX_) * easeX;
@@ -1282,7 +1448,7 @@ var MDCSimpleMenuFoundation = function (_MDCFoundation) {
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1547,7 +1713,7 @@ var MDCSimpleMenuAdapter = function () {
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1609,179 +1775,11 @@ var numbers = {
 
 /***/ }),
 
-/***/ 63:
+/***/ 67:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(11);
+module.exports = __webpack_require__(12);
 
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["getTransformPropertyName"] = getTransformPropertyName;
-/* harmony export (immutable) */ __webpack_exports__["clamp"] = clamp;
-/* harmony export (immutable) */ __webpack_exports__["bezierProgress"] = bezierProgress;
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/** @type {string|undefined} */
-var storedTransformPropertyName_ = void 0;
-
-/**
- * Returns the name of the correct transform property to use on the current browser.
- * @param {!Window} globalObj
- * @param {boolean=} forceRefresh
- * @return {string}
- */
-function getTransformPropertyName(globalObj) {
-  var forceRefresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-  if (storedTransformPropertyName_ === undefined || forceRefresh) {
-    var el = globalObj.document.createElement('div');
-    var transformPropertyName = 'transform' in el.style ? 'transform' : 'webkitTransform';
-    storedTransformPropertyName_ = transformPropertyName;
-  }
-
-  return storedTransformPropertyName_;
-}
-
-/**
- * Clamps a value between the minimum and the maximum, returning the clamped value.
- * @param {number} value
- * @param {number} min
- * @param {number} max
- * @return {number}
- */
-function clamp(value) {
-  var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-
-  return Math.min(max, Math.max(min, value));
-}
-
-/**
- * Returns the easing value to apply at time t, for a given cubic bezier curve.
- * Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
- * Parameters are as follows:
- * - time: The current time in the animation, scaled between 0 and 1.
- * - x1: The x value of control point P1.
- * - y1: The y value of control point P1.
- * - x2: The x value of control point P2.
- * - y2: The y value of control point P2.
- * @param {number} time
- * @param {number} x1
- * @param {number} y1
- * @param {number} x2
- * @param {number} y2
- * @return {number}
- */
-function bezierProgress(time, x1, y1, x2, y2) {
-  return getBezierCoordinate_(solvePositionFromXValue_(time, x1, x2), y1, y2);
-}
-
-/**
- * Compute a single coordinate at a position point between 0 and 1.
- * c1 and c2 are the matching coordinate on control points P1 and P2, respectively.
- * Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
- * Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
- * @param {number} t
- * @param {number} c1
- * @param {number} c2
- * @return {number}
- */
-function getBezierCoordinate_(t, c1, c2) {
-  // Special case start and end.
-  if (t === 0 || t === 1) {
-    return t;
-  }
-
-  // Step one - from 4 points to 3
-  var ic0 = t * c1;
-  var ic1 = c1 + t * (c2 - c1);
-  var ic2 = c2 + t * (1 - c2);
-
-  // Step two - from 3 points to 2
-  ic0 += t * (ic1 - ic0);
-  ic1 += t * (ic2 - ic1);
-
-  // Final step - last point
-  return ic0 + t * (ic1 - ic0);
-}
-
-/**
- * Project a point onto the Bezier curve, from a given X. Calculates the position t along the curve.
- * Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
- * @param {number} xVal
- * @param {number} x1
- * @param {number} x2
- * @return {number}
- */
-function solvePositionFromXValue_(xVal, x1, x2) {
-  var EPSILON = 1e-6;
-  var MAX_ITERATIONS = 8;
-
-  if (xVal <= 0) {
-    return 0;
-  } else if (xVal >= 1) {
-    return 1;
-  }
-
-  // Initial estimate of t using linear interpolation.
-  var t = xVal;
-
-  // Try gradient descent to solve for t. If it works, it is very fast.
-  var tMin = 0;
-  var tMax = 1;
-  var value = 0;
-  for (var i = 0; i < MAX_ITERATIONS; i++) {
-    value = getBezierCoordinate_(t, x1, x2);
-    var derivative = (getBezierCoordinate_(t + EPSILON, x1, x2) - value) / EPSILON;
-    if (Math.abs(value - xVal) < EPSILON) {
-      return t;
-    } else if (Math.abs(derivative) < EPSILON) {
-      break;
-    } else {
-      if (value < xVal) {
-        tMin = t;
-      } else {
-        tMax = t;
-      }
-      t -= (value - xVal) / derivative;
-    }
-  }
-
-  // If the gradient descent got stuck in a local minimum, e.g. because
-  // the derivative was close to 0, use a Dichotomy refinement instead.
-  // We limit the number of interations to 8.
-  for (var _i = 0; Math.abs(value - xVal) > EPSILON && _i < MAX_ITERATIONS; _i++) {
-    if (value < xVal) {
-      tMin = t;
-      t = (t + tMax) / 2;
-    } else {
-      tMax = t;
-      t = (t + tMin) / 2;
-    }
-    value = getBezierCoordinate_(t, x1, x2);
-  }
-  return t;
-}
 
 /***/ })
 

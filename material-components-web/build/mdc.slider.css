@@ -3,79 +3,6 @@
  Copyright (c) 2017 Google Inc.
  License: Apache-2.0
 */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /* TODO(sgomes): Figure out what to do about desktop font sizes. */
 /* TODO(sgomes): Figure out what to do about i18n and i18n font sizes. */
 /**
@@ -171,7 +98,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -275,6 +202,7 @@
     .mdc-theme--dark .mdc-slider__track-container {
       background-color: #5c5c5c; }
   .mdc-slider__track {
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5);
     position: absolute;
@@ -328,10 +256,16 @@
     left: 0;
     width: 21px;
     height: 100%;
-    will-change: transform; }
+    will-change: transform;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
   .mdc-slider__thumb {
+    /* @alternate */
     fill: #3f51b5;
     fill: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     stroke: #3f51b5;
     stroke: var(--mdc-theme-primary, #3f51b5);
     position: absolute;
@@ -345,6 +279,7 @@
     transition: transform 100ms ease-out, fill 100ms ease-out, stroke 100ms ease-out, -webkit-transform 100ms ease-out;
     stroke-width: 3.5; }
   .mdc-slider__focus-ring {
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5);
     width: 21px;
@@ -356,8 +291,10 @@
     border-radius: 50%;
     opacity: 0; }
   .mdc-slider__pin {
+    /* @alternate */
     background-color: #3f51b5;
     background-color: var(--mdc-theme-primary, #3f51b5);
+    /* @alternate */
     color: white;
     color: var(--mdc-theme-text-primary-on-primary, white);
     display: -webkit-box;
@@ -396,6 +333,8 @@
     font-weight: 400;
     letter-spacing: 0.08em;
     line-height: 1.25rem;
+    text-decoration: inherit;
+    text-transform: inherit;
     -webkit-transform: rotate(45deg);
             transform: rotate(45deg); }
 

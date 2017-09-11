@@ -3,14 +3,18 @@
  Copyright (c) 2017 Google Inc.
  License: Apache-2.0
 */
-.mdc-animation-linear-out-slow-in {
+.mdc-animation-deceleration-curve {
   -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
           animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
 
-.mdc-animation-fast-out-slow-in {
+.mdc-animation-standard-curve {
   -webkit-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
 
-.mdc-animation-fast-out-linear-in {
+.mdc-animation-acceleration-curve {
   -webkit-animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
           animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+
+.mdc-animation-sharp-curve {
+  -webkit-animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+          animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }

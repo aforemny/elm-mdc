@@ -96,7 +96,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -154,169 +154,8 @@
  * ```
  * An optional third $root-selector argument may also be given, which is passed to `mdc-rtl`.
  */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /* TODO(sgomes): Figure out what to do about desktop font sizes. */
 /* TODO(sgomes): Figure out what to do about i18n and i18n font sizes. */
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 /**
  * Creates a rule that will be applied when an MDC-Web component is within the context of an RTL layout.
  *
@@ -410,7 +249,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -467,21 +306,6 @@
  *  }
  * ```
  * An optional third $root-selector argument may also be given, which is passed to `mdc-rtl`.
- */
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 :root {
   --mdc-persistent-drawer-dark-theme-bg-color: #212121; }
@@ -555,7 +379,9 @@
     font-size: 0.875rem;
     font-weight: 500;
     letter-spacing: 0.04em;
-    line-height: 1.5rem; }
+    line-height: 1.5rem;
+    text-decoration: inherit;
+    text-transform: inherit; }
     .mdc-persistent-drawer .mdc-list-item.mdc-ripple-upgraded {
       left: 0; }
   .mdc-persistent-drawer .mdc-list-item__start-detail {
@@ -565,6 +391,7 @@
       color: rgba(255, 255, 255, 0.54); }
   .mdc-persistent-drawer--selected.mdc-list-item,
   .mdc-persistent-drawer--selected.mdc-list-item .mdc-list-item__start-detail {
+    /* @alternate */
     color: #3f51b5;
     color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-persistent-drawer .mdc-list-item::before {
@@ -573,8 +400,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     border-radius: inherit;
     background: currentColor;
     content: "";
@@ -596,6 +423,7 @@
     -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
   .mdc-persistent-drawer__drawer {
+    /* @alternate */
     background: #fff;
     background: var(--mdc-theme-background, #fff);
     border-left: 0;
@@ -631,6 +459,7 @@
     .mdc-theme--dark .mdc-persistent-drawer__drawer {
       background-color: #212121;
       background-color: var(--mdc-persistent-drawer-dark-theme-bg-color, #212121);
+      /* @alternate */
       color: white;
       color: var(--mdc-theme-text-primary-on-dark, white);
       border-left: 0;
@@ -647,15 +476,15 @@
       -webkit-transform: translateX(calc(100% + 20px));
               transform: translateX(calc(100% + 20px)); }
   .mdc-persistent-drawer--animating .mdc-persistent-drawer__drawer {
-    -webkit-transition: -webkit-transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: -webkit-transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1); }
+    -webkit-transition: -webkit-transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: -webkit-transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1); }
   .mdc-persistent-drawer--animating.mdc-persistent-drawer--open .mdc-persistent-drawer__drawer {
-    -webkit-transition: -webkit-transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: -webkit-transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1); }
+    -webkit-transition: -webkit-transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1);
+    transition: -webkit-transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1);
+    transition: transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1);
+    transition: transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1); }
   .mdc-persistent-drawer--open {
     width: 240px;
     pointer-events: auto; }
@@ -759,7 +588,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -817,152 +646,6 @@
  * ```
  * An optional third $root-selector argument may also be given, which is passed to `mdc-rtl`.
  */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /* TODO(sgomes): Figure out what to do about desktop font sizes. */
 /* TODO(sgomes): Figure out what to do about i18n and i18n font sizes. */
 :root {
@@ -973,6 +656,7 @@
   /* stylelint-disable selector-no-qualifying-type */
   /* stylelint-enable selector-no-qualifying-type */
   /* TODO(sgomes): Revisit when we have interactive lists. */
+  /* @alternate */
   background: #fff;
   background: var(--mdc-theme-background, #fff);
   border-left: 0;
@@ -1056,7 +740,9 @@
     font-size: 0.875rem;
     font-weight: 500;
     letter-spacing: 0.04em;
-    line-height: 1.5rem; }
+    line-height: 1.5rem;
+    text-decoration: inherit;
+    text-transform: inherit; }
     .mdc-permanent-drawer .mdc-list-item.mdc-ripple-upgraded {
       left: 0; }
   .mdc-permanent-drawer .mdc-list-item__start-detail {
@@ -1066,6 +752,7 @@
       color: rgba(255, 255, 255, 0.54); }
   .mdc-permanent-drawer--selected.mdc-list-item,
   .mdc-permanent-drawer--selected.mdc-list-item .mdc-list-item__start-detail {
+    /* @alternate */
     color: #3f51b5;
     color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-permanent-drawer .mdc-list-item::before {
@@ -1074,8 +761,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     border-radius: inherit;
     background: currentColor;
     content: "";
@@ -1106,6 +793,7 @@
   .mdc-theme--dark .mdc-permanent-drawer {
     background-color: #212121;
     background-color: var(--mdc-permanent-drawer-dark-theme-bg-color, #212121);
+    /* @alternate */
     color: white;
     color: var(--mdc-theme-text-primary-on-dark, white);
     border-left: 0;
@@ -1258,7 +946,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -1316,169 +1004,8 @@
  * ```
  * An optional third $root-selector argument may also be given, which is passed to `mdc-rtl`.
  */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
-/*
-  Precomputed linear color channel values, for use in contrast calculations.
-  See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-
-  Algorithm, for c in 0 to 255:
-  f(c) {
-    c = c / 255;
-    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  }
-
-  This lookup table is needed since there is no `pow` in SASS.
-*/
-/**
- * Calculate the luminance for a color.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Calculate the contrast ratio between two colors.
- * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- */
-/**
- * Determine whether to use dark or light text on top of given color.
- * Returns "dark" for dark text and "light" for light text.
- */
-/*
-  Main theme colors.
-  If you're a user customizing your color scheme in SASS, these are probably the only variables you need to change.
-*/
-/* Indigo 500 */
-/* Pink A200 */
-/* White */
-/* Which set of text colors to use for each main theme color (light or dark) */
-/* Text colors according to light vs dark and text type */
-/* Primary text colors for each of the theme colors */
-/**
- * Applies the correct theme color style to the specified property.
- * $property is typically color or background-color, but can be any CSS property that accepts color values.
- * $style should be one of the map keys in $mdc-theme-property-values (_variables.scss).
- */
-/**
- * Creates a rule to be used in MDC-Web components for dark theming, and applies the provided contents.
- * Should provide the $root-selector option if applied to anything other than the root selector.
- * When used with a modifier class, provide a second argument of `true` for the $compound parameter
- * to specify that this should be attached as a compound class.
- *
- * Usage example:
- *
- * ```scss
- * .mdc-foo {
- *   color: black;
- *
- *   @include mdc-theme-dark {
- *     color: white;
- *   }
- *
- *   &__bar {
- *     background: black;
- *
- *     @include mdc-theme-dark(".mdc-foo") {
- *       background: white;
- *     }
- *   }
- * }
- *
- * .mdc-foo--disabled {
- *   opacity: .38;
- *
- *   @include mdc-theme-dark(".mdc-foo", true) {
- *     opacity: .5;
- *   }
- * }
- * ```
- */
 /* TODO(sgomes): Figure out what to do about desktop font sizes. */
 /* TODO(sgomes): Figure out what to do about i18n and i18n font sizes. */
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 /**
  * Creates a rule that will be applied when an MDC-Web component is within the context of an RTL layout.
  *
@@ -1572,7 +1099,7 @@
  * ```
  *
  * You can also pass a 4th optional $root-selector argument which will be forwarded to `mdc-rtl`,
- * e.g. `@include mdc-rtl-reflexive-box-property(margin, left, 8px, ".mdc-component")`.
+ * e.g. `@include mdc-rtl-reflexive-box(margin, left, 8px, ".mdc-component")`.
  *
  * Note that this function will always zero out the original value in an RTL context. If you're
  * trying to flip the values, use mdc-rtl-reflexive-property().
@@ -1630,21 +1157,6 @@
  * ```
  * An optional third $root-selector argument may also be given, which is passed to `mdc-rtl`.
  */
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 .mdc-temporary-drawer {
   /* Use aspect ratio trick to maintain 16:9 aspect ratio on the header */
   /* stylelint-disable selector-no-qualifying-type */
@@ -1660,7 +1172,7 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   contain: strict;
-  z-index: 3;
+  z-index: 5;
   /* Shaded background */ }
   .mdc-temporary-drawer__toolbar-spacer {
     display: -webkit-box;
@@ -1725,7 +1237,9 @@
     font-size: 0.875rem;
     font-weight: 500;
     letter-spacing: 0.04em;
-    line-height: 1.5rem; }
+    line-height: 1.5rem;
+    text-decoration: inherit;
+    text-transform: inherit; }
     .mdc-temporary-drawer .mdc-list-item.mdc-ripple-upgraded {
       left: 0; }
   .mdc-temporary-drawer .mdc-list-item__start-detail {
@@ -1735,6 +1249,7 @@
       color: rgba(255, 255, 255, 0.54); }
   .mdc-temporary-drawer--selected.mdc-list-item,
   .mdc-temporary-drawer--selected.mdc-list-item .mdc-list-item__start-detail {
+    /* @alternate */
     color: #3f51b5;
     color: var(--mdc-theme-primary, #3f51b5); }
   .mdc-temporary-drawer .mdc-list-item::before {
@@ -1743,8 +1258,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
-    transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 1, 1);
+    -webkit-transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: opacity 120ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
     border-radius: inherit;
     background: currentColor;
     content: "";
@@ -1780,6 +1295,7 @@
     -webkit-box-sizing: border-box;
             box-sizing: border-box; }
   .mdc-temporary-drawer__drawer {
+    /* @alternate */
     background: #fff;
     background: var(--mdc-theme-background, #fff);
     -webkit-box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
@@ -1814,6 +1330,7 @@
     .mdc-temporary-drawer--theme-dark .mdc-temporary-drawer__drawer,
     .mdc-theme--dark .mdc-temporary-drawer__drawer {
       background: #303030;
+      /* @alternate */
       color: white;
       color: var(--mdc-theme-text-primary-on-dark, white); }
     [dir="rtl"] .mdc-temporary-drawer .mdc-temporary-drawer__drawer,
@@ -1847,15 +1364,15 @@
     -webkit-transition: opacity 0.3s 0ms cubic-bezier(0, 0, 0.2, 1);
     transition: opacity 0.3s 0ms cubic-bezier(0, 0, 0.2, 1); }
   .mdc-temporary-drawer--animating.mdc-temporary-drawer--open .mdc-temporary-drawer__drawer {
-    -webkit-transition: -webkit-transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: -webkit-transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.33s 0ms cubic-bezier(0, 0, 0.2, 1); }
+    -webkit-transition: -webkit-transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1);
+    transition: -webkit-transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1);
+    transition: transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1);
+    transition: transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.225s 0ms cubic-bezier(0, 0, 0.2, 1); }
   .mdc-temporary-drawer--animating .mdc-temporary-drawer__drawer {
-    -webkit-transition: -webkit-transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: -webkit-transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1);
-    transition: transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.13s 0ms cubic-bezier(0, 0, 0.2, 1); }
+    -webkit-transition: -webkit-transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: -webkit-transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1);
+    transition: transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1), -webkit-transform 0.195s 0ms cubic-bezier(0.4, 0, 0.6, 1); }
   .mdc-temporary-drawer--open {
     pointer-events: auto; }
     .mdc-temporary-drawer--open::before {
