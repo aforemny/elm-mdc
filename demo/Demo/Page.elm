@@ -77,24 +77,40 @@ toolbar lift idx mdl setUrl url title =
       [ Toolbar.section
         [ Toolbar.alignStart
         ]
-        [ Toolbar.icon_
-          [ Toolbar.menu
+        [ styled Html.div
+          [ cs "catalog-back"
+          , css "padding-right" "24px"
           ]
-          [ case url of
-                StartPage ->
-                    Html.img
-                    [ Html.src "images/ic_component_24px_white.svg"
-                    ]
-                    []
-                _ ->
-                    styled Html.i
-                    [ cs "material-icons"
-                    , Options.onClick (setUrl StartPage)
-                    , css "cursor" "pointer"
-                    ]
-                    [ text "arrow_back" ]
+          [ Toolbar.icon_
+            [ Toolbar.menu
+            ]
+            [ case url of
+                  StartPage ->
+                      Html.img
+                      [ Html.src "images/ic_component_24px_white.svg"
+                      ]
+                      []
+                  _ ->
+                      styled Html.i
+                      [ cs "material-icons"
+                      , Options.onClick (setUrl StartPage)
+                      , css "cursor" "pointer"
+                      ]
+                      [ text "arrow_back"
+                      ]
+            ]
           ]
-        , Toolbar.title [] [ text title ]
+        , Toolbar.title
+          [ cs "cataloge-title"
+          , css "margin-left"
+            ( if url == StartPage then
+                  "8px"
+              else
+                  "24"
+            )
+          , css "font-family" "'Roboto Mono', monospace"
+          ]
+          [ text title ]
         ]
       ]
     ]

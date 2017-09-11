@@ -4,20 +4,20 @@ module Material.Button
           view
         , Property
         , disabled
+        , ripple
 
         , raised
-        , ripple
+        , unelevated
+        , stroked
 
         , compact
         , dense
-
         , primary
-        , accent
-        , colored
-        , darkTheme
-
-        , type_
+        , secondary
         , link
+
+        , darkTheme
+        , type_
 
           -- TEA
         , Model
@@ -45,11 +45,10 @@ Material Design button requirements.
 
 ## Properties
 @docs Property
-@docs disabled
-@docs raised, ripple
-@docs compact, dense
-@docs primary, accent, colored, darkTheme
-@docs type_, link
+@docs disabled, ripple
+@docs raised, unelevated, stroked
+@docs compact, dense, primary, secondary, link
+@docs darkTheme, type_
 
 ## TEA architecture
 @docs Model, defaultModel, Msg, update
@@ -145,14 +144,19 @@ primary =
     cs "mdc-button--primary"
 
 
-accent : Property m
-accent =
+secondary : Property m
+secondary =
     cs "mdc-button--accent"
 
 
-colored : Property m
-colored =
-    cs "mdc-button--colored"
+unelevated : Property m
+unelevated =
+    cs "mdc-button--unelevated"
+
+
+stroked : Property m
+stroked =
+    cs "mdc-button--stroked"
 
 
 darkTheme : Property m

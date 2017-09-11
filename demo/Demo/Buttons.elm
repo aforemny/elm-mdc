@@ -6,7 +6,6 @@ import Material
 import Material.Button as Button
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Typography as Typography
-import String
 
 
 type alias Model =
@@ -33,112 +32,111 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
-    page.body "Buttons"
+    let
+        textButtons idx =
+            example idx "Text Button"
+            [ Button.ripple
+            , css "margin" "16px"
+            ]
 
-    ( List.concat
-      [
-        [ Page.hero []
-          [ Button.render (Mdl >> lift) [0,0] model.mdl
-            [ Button.ripple
-            , css "margin-right" "32px"
+        raisedButtons idx =
+            example idx "Raised Button"
+            [ Button.raised
+            , Button.ripple
+            , css "margin" "16px"
             ]
-            [ text "Flat"
+
+        unelevatedButtons idx =
+            example idx "Unelevated Button"
+            [ Button.unelevated
+            , Button.ripple
+            , css "margin" "16px"
             ]
-          , Button.render (Mdl >> lift) [0,1] model.mdl
-            [ Button.ripple
-            , Button.raised
-            , Button.primary
-            , css "margin-left" "32px"
+
+        strokedButtons idx =
+            example idx "Stroked Button"
+            [ Button.stroked
+            , Button.ripple
+            , css "margin" "16px"
             ]
-            [ text "Raised"
+
+        example idx title options =
+            styled Html.div
+            [ css "padding" "0 24px 16px"
             ]
-          ]
+            [ styled Html.div
+              [ Typography.title
+              , css "padding" "48px 16px 24px"
+              ]
+              [ text title
+              ]
+            , styled Html.div []
+              [ Button.render (Mdl >> lift) (idx ++ [0]) model.mdl
+                ( options
+                )
+                [ text "Baseline" ]
+              , Button.render (Mdl >> lift) (idx ++ [1]) model.mdl
+                ( Button.compact
+                :: options
+                )
+                [ text "Compact" ]
+              , Button.render (Mdl >> lift) (idx ++ [2]) model.mdl
+                ( Button.dense
+                :: options
+                )
+                [ text "Dense" ]
+              , Button.render (Mdl >> lift) (idx ++ [3]) model.mdl
+                ( Button.primary
+                :: options
+                )
+                [ text "Primary" ]
+              , Button.render (Mdl >> lift) (idx ++ [4]) model.mdl
+                ( Button.secondary
+                :: options
+                )
+                [ text "Secondary" ]
+              , Button.render (Mdl >> lift) (idx ++ [6]) model.mdl
+                ( Button.link "#buttons"
+                :: options
+                )
+                [ text "Link" ]
+              ]
+            ]
+    in
+    page.body "Buttons"
+    [
+      Page.hero []
+      [ Button.render (Mdl >> lift) [0,0] model.mdl
+        [ Button.ripple
+        , css "margin-right" "32px"
         ]
-      ,
-        ( [ { headline = "Buttons", link = False, disabled = False, ripple = True }
-          , { headline = "Without ripple", link = False, disabled = False, ripple = False }
-          , { headline = "Links with Button Style", link = True, disabled = False, ripple = True }
-          , { headline = "Disabled", link = False, disabled = True, ripple = True }
-          ]
-          |> List.concat << List.indexedMap (\rowIdx row ->
-               ( List.concat
-                 [ [ styled Html.div
-                     [ Typography.title
-                     , css "padding" "64px 16px 24px"
-                     ]
-                     [ text row.headline
-                     ]
-                   ]
-                 , [ { dense = False, compact = False }
-                   , { dense = True, compact = False }
-                   , { dense = False, compact = True }
-                   ]
-                   |> List.map (\button ->
-                          [ { dense = button.dense
-                            , compact = button.compact
-                            , raised = False
-                            }
-                          , { dense = button.dense
-                            , compact = button.compact
-                            , raised = True
-                            }
-                          ]
-                      )
-                   |> List.concat
-                   |> List.indexedMap (\idx button ->
-                        Button.render (Mdl >> lift) [2*(rowIdx+1), idx] model.mdl
-                        [ css "margin" "16px"
-                        , Button.link "#buttons" |> when row.link
-                        , Button.disabled |> when row.disabled
-                        , Button.raised |> when button.raised
-                        , Button.ripple |> when row.ripple
-                        , Button.compact |> when button.compact
-                        , Button.dense |> when button.dense
-                        ]
-                        [ [ if button.dense then Just "Dense" else Nothing
-                          , if button.compact then Just "Compact" else Nothing
-                          , if button.raised then Just "Raised" else Just "Default"
-                          ]
-                          |> List.filterMap identity
-                          |> String.join " "
-                          |> text
-                        ]
-                      )
-                 , [ { primary = False }
-                   , { primary = True }
-                   ]
-                   |> List.map (\button ->
-                          [ { primary = button.primary
-                            , raised = False
-                            }
-                          , { primary = button.primary
-                            , raised = True
-                            }
-                          ]
-                      )
-                   |> List.concat
-                   |> List.indexedMap (\idx button ->
-                        Button.render (Mdl >> lift) [2*(rowIdx+1) + 1, idx] model.mdl
-                        [ css "margin" "16px"
-                        , Button.link "#buttons" |> when row.link
-                        , Button.disabled |> when row.disabled
-                        , Button.ripple |> when row.ripple
-                        , if button.primary then Button.primary
-                            else
-                              Button.accent
-                        , Button.raised |> when button.raised
-                        ]
-                        [ [ if button.raised then "Raised" else "Default"
-                          , "width"
-                          , if button.primary then "Primary" else "Accent"
-                          ]
-                          |> String.join " "
-                          |> text
-                        ]
-                      )
-                 ]
-               )
-             )
-        )
+        [ text "Flat"
+        ]
+      , Button.render (Mdl >> lift) [0,1] model.mdl
+        [ Button.ripple
+        , Button.raised
+        , Button.primary
+        , css "margin-left" "32px"
+        ]
+        [ text "Raised"
+        ]
       ]
-    )
+    ,
+      styled Html.div
+      [ cs "demo-wrapper"
+      ]
+      [ styled Html.h1
+        [ Typography.display2
+        , css "padding-left" "36px"
+        , css "padding-top" "64px"
+        , css "padding-bottom" "8px"
+        ]
+        [ text "Ripple Enabled"
+        ]
+
+      , textButtons [1]
+      , raisedButtons [2]
+      , unelevatedButtons [3]
+      , strokedButtons [4]
+      ]
+    ]

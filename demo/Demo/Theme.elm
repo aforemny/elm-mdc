@@ -45,7 +45,7 @@ view lift page model =
         ]
       , Button.render (Mdl >> lift) [0] model.mdl
         [ Button.raised
-        , Button.accent
+        , Button.secondary
         , css "margin" "24px"
         ]
         [ text "Secondary"
