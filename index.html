@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height: 100%;">
+<html style="height: 100%; font-size: 18px;">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,63 @@
     <link rel="stylesheet" href="material-components-web.css" />
 
   </head>
-  <body style="width: 100%; height: 100%;">
+<style type="text/css">
+:root {
+--mdc-theme-primary: #212121;
+--mdc-theme-primary-light: #686868;
+--mdc-theme-primary-dark: #454545;
+--mdc-theme-secondary: #64dd17;
+--mdc-theme-secondary-light: #8ced4f;
+--mdc-theme-secondary-dark: #479c10;
+--mdc-theme-background: #fff;
+--mdc-theme-text-primary-on-primary: white;
+--mdc-theme-text-secondary-on-primary: rgba(255, 255, 255, 0.7);
+--mdc-theme-text-hint-on-primary: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-disabled-on-primary: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-icon-on-primary: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-primary-on-primary-light: white;
+--mdc-theme-text-secondary-on-primary-light: rgba(255, 255, 255, 0.7);
+--mdc-theme-text-hint-on-primary-light: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-disabled-on-primary-light: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-icon-on-primary-light: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-primary-on-primary-dark: white;
+--mdc-theme-text-secondary-on-primary-dark: rgba(255, 255, 255, 0.7);
+--mdc-theme-text-hint-on-primary-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-disabled-on-primary-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-icon-on-primary-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-primary-on-secondary: rgba(0, 0, 0, 0.87);
+--mdc-theme-text-secondary-on-secondary: rgba(0, 0, 0, 0.54);
+--mdc-theme-text-hint-on-secondary: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-disabled-on-secondary: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-icon-on-secondary: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-primary-on-secondary-light: rgba(0, 0, 0, 0.87);
+--mdc-theme-text-secondary-on-secondary-light: rgba(0, 0, 0, 0.54);
+--mdc-theme-text-hint-on-secondary-light: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-disabled-on-secondary-light: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-icon-on-secondary-light: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-primary-on-secondary-dark: white;
+--mdc-theme-text-secondary-on-secondary-dark: rgba(255, 255, 255, 0.7);
+--mdc-theme-text-hint-on-secondary-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-disabled-on-secondary-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-icon-on-secondary-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-primary-on-background: rgba(0, 0, 0, 0.87);
+--mdc-theme-text-secondary-on-background: rgba(0, 0, 0, 0.54);
+--mdc-theme-text-hint-on-background: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-disabled-on-background: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-icon-on-background: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-primary-on-light: rgba(0, 0, 0, 0.87);
+--mdc-theme-text-secondary-on-light: rgba(0, 0, 0, 0.54);
+--mdc-theme-text-hint-on-light: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-disabled-on-light: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-icon-on-light: rgba(0, 0, 0, 0.38);
+--mdc-theme-text-primary-on-dark: white;
+--mdc-theme-text-secondary-on-dark: rgba(255, 255, 255, 0.7);
+--mdc-theme-text-hint-on-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-disabled-on-dark: rgba(255, 255, 255, 0.5);
+--mdc-theme-text-icon-on-dark: rgba(255, 255, 255, 0.5);
+}
+</style>
+  <body style="width: 100%; height: 100%; font-family: Roboto, Helvetica, Arial, sans-serif;">
     <!-- node insertion, credits (https://davidwalsh.name/detect-node-insertion): -->
     <script type="text/javascript">
       var insertListener = function(event) {
