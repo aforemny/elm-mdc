@@ -63,16 +63,22 @@ view lift page model =
           ]
           [ Toolbar.icon_
             [ Toolbar.menu
+            , Options.onClick (lift (Open [0]))
+            , css "cursor" "pointer"
             ]
             [ styled Html.i
                   [ cs "material-icons"
-                  , css "cursor" "pointer"
-                  , Options.onClick (lift (Open [0]))
+                  , css "pointer-events" "none"
                   ]
                   [ text "menu"
                   ]
             ]
-          , Toolbar.title [] [ text "Temporary Drawer" ]
+          , Toolbar.title
+            [ cs "catalog-menu"
+            , css "font-family" "'Roboto Mono', monospace"
+            , css "margin-left" "8px"
+            ]
+            [ text "Temporary Drawer" ]
           ]
         ]
       ]

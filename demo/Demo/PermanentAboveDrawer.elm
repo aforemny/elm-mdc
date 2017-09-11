@@ -135,15 +135,22 @@ view lift page model =
             ]
             [ Toolbar.icon_
               [ Toolbar.menu
+              , Options.onClick (page.setUrl StartPage)
+              , css "cursor" "pointer"
               ]
               [ styled Html.i
                 [ cs "material-icons"
-                , Options.onClick (page.setUrl StartPage)
-                , css "cursor" "pointer"
+                , css "pointer-events" "none"
                 ]
                 [ text "arrow_back" ]
               ]
-            , Toolbar.title [] [ text "Permanent Drawer Above Toolbar" ]
+            , Toolbar.title
+              [ cs "catalog-menu"
+              , css "font-family" "'Roboto Mono', monospace"
+              , css "margin-left" "8px"
+              ]
+              [ text "Permanent Drawer Above Toolbar"
+              ]
             ]
           ]
         ]

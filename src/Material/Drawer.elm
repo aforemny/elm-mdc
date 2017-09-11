@@ -154,9 +154,6 @@ view className lift model options nodes =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
-
---        persistent =
---            className == "mdc-persistent-drawer"
     in
     Internal.applyContainer summary Html.div
     [ cs className
@@ -166,7 +163,7 @@ view className lift model options nodes =
     [ styled Html.nav
       ( cs (element className "drawer")
       :: Options.onWithOptions "click"
-         { stopPropagation = False
+         { stopPropagation = True
          , preventDefault = False
          }
          (Json.succeed (lift NoOp))
