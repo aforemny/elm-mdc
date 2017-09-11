@@ -11779,7 +11779,7 @@ var _debois$elm_mdl$Material_Checkbox$view = F4(
 	});
 var _debois$elm_mdl$Material_Checkbox$update = F3(
 	function (_p2, msg, model) {
-		var _p3 = msg;
+		var _p3 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
 		if (_p3.ctor === 'SetFocus') {
 			return {
 				ctor: '_Tuple2',
@@ -19967,61 +19967,69 @@ var _debois$elm_mdl$Demo_Checkbox$update = F3(
 					_p0._0,
 					model);
 			case 'ToggleRtl':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{rtl: !model.rtl}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleAlignEnd':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{alignEnd: !model.alignEnd}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleIndeterminate':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{indeterminate: !model.indeterminate}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleChecked0':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{checked0: !model.checked0}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleChecked1':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{checked1: !model.checked1}),
-					{ctor: '[]'});
+						{checked1: !model.checked1, indeterminate: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleChecked2':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{checked2: !model.checked2}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'ToggleDisabled1':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{disabled1: !model.disabled1}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{disabled2: !model.disabled2}),
-					{ctor: '[]'});
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _debois$elm_mdl$Demo_Checkbox$view = F3(
