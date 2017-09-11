@@ -5,7 +5,7 @@ import Material
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (styled, cs, css)
 import Material.Ripple as Ripple
-import Demo.Page exposing (Page)
+import Demo.Page as Page exposing (Page)
 
 
 -- MODEL
@@ -65,11 +65,27 @@ view lift page model =
     in
     page.body "Ripple"
     [
+      Page.hero []
+      [
+        let
+            (rippleOptions, rippleStyles) =
+                Ripple.bounded (Mdl >> lift) [0] model.mdl () ()
+        in
+        styled Html.div
+        [ rippleOptions
+        , css "width" "100%"
+        , css "height" "100%"
+        ]
+        [ rippleStyles
+        ]
+      ]
+
+    ,
       example []
       [ Html.h2 [] [ text "Bounded" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded (Mdl >> lift) [0] model.mdl () ()
+                Ripple.bounded (Mdl >> lift) [1] model.mdl () ()
         in
         styled Html.div
         [ demoSurface
@@ -85,7 +101,7 @@ view lift page model =
       [ Html.h2 [] [ text "Unbounded" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.unbounded (Mdl >> lift) [1] model.mdl () ()
+                Ripple.unbounded (Mdl >> lift) [2] model.mdl () ()
         in
         styled Html.div
         [ cs "material-icons"
@@ -105,7 +121,7 @@ view lift page model =
       [ Html.h2 [] [ text "Theme Styles" ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded (Mdl >> lift) [2] model.mdl () ()
+                Ripple.bounded (Mdl >> lift) [3] model.mdl () ()
         in
         styled Html.div
         [ demoSurface
@@ -118,7 +134,7 @@ view lift page model =
         ]
       , let
             (rippleOptions, rippleStyles) =
-                Ripple.bounded (Mdl >> lift) [3] model.mdl () ()
+                Ripple.bounded (Mdl >> lift) [4] model.mdl () ()
         in
         styled Html.div
         [ demoSurface

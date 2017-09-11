@@ -16,6 +16,7 @@ import Html.Attributes as Html
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder, field, at)
 import Material.Component as Component exposing (Indexed)
+import Material.Helpers as Helpers
 import Material.Internal.Options as Internal exposing (Property)
 import Material.Internal.Ripple exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index)
@@ -28,16 +29,22 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model =
     { focus : Bool
-    , activated : Bool
+    , active : Bool
+    , animating : Bool
+    , deactivation : Bool
     , geometry : Geometry
+    , animation : Int
     }
 
 
 defaultModel : Model
 defaultModel =
     { focus = False
-    , activated = False
+    , active = False
+    , animating = False
+    , deactivation = False
     , geometry = defaultGeometry
+    , animation = 0
     }
 
 
@@ -52,36 +59,71 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
 
-        Focus geometry ->
-            { model
-                | focus = True
-                , geometry =
-                    if model.activated then
-                        model.geometry
-                    else
-                        geometry
-            }
-                ! []
+        Focus ->
+            ( { model | focus = True }, Cmd.none )
 
         Blur ->
-            { model
-                | focus = False
-            }
-                ! []
+            ( { model | focus = False }, Cmd.none)
 
-        Activate geometry ->
-            { model
-                | activated = True
-                , geometry = geometry
-            }
-                ! []
+        Activate event active_ geometry ->
+            let
+                isVisible =
+                    model.active || model.animating
+            in
+            if isVisible then
+                ( { model
+                      | active = False
+                      , animating = False
+                      , deactivation = True
+                  }
 
-        Deactivate ->
-            { model
-                | activated = False
-                , focus = False
-            }
-                ! []
+                , Helpers.delay 83 (Activate event Nothing geometry)
+                )
+            else
+                let
+                    active =
+                        active_
+                        |> Maybe.withDefault model.active
+
+                    animation =
+                        model.animation + 1
+                in
+                ( { model
+                      | active = active
+                      , animating = True
+                      , geometry = geometry
+                      , deactivation = False
+                      , animation = animation
+                  }
+                ,
+                  Helpers.delay 300 (AnimationEnd event animation)
+                )
+
+        Deactivate event ->
+            let
+                sameEvent =
+                    case model.geometry.event.type_ of
+                        "keydown" ->
+                            event == "keyup"
+                        "mousedown" ->
+                            event == "mouseup"
+                        "pointerdown" ->
+                            event == "pointerup"
+                        "touchstart" ->
+                            event == "touchend"
+                        _ -> False
+            in
+            if not sameEvent then
+                ( model, Cmd.none )
+            else
+                ( { model | active = False }, Cmd.none )
+
+        AnimationEnd event animation ->
+            if not (model.geometry.event.type_ == event)
+               || (animation /= model.animation) then
+                ( model, Cmd.none )
+            else
+                ( { model | animating = False }, Cmd.none )
 
 
 -- VIEW
@@ -192,23 +234,44 @@ view isUnbounded lift model _ _ =
 
         (selector, styleNode) =
             Internal.cssVariables summary
+
+        focusOn event =
+            Options.on event (Json.succeed (lift Focus))
+
+        blurOn event =
+            Options.on event (Json.succeed (lift Blur))
+
+        activateOn event =
+            Options.on event <|
+            Json.map (lift << Activate event (Just True)) (decodeGeometry event)
+
+        deactivateOn event =
+            Options.on event (Json.succeed (lift (Deactivate event)))
+
+        isVisible =
+            model.active || model.animating
     in
     (
       Options.many
-      [ Options.on "focus" (Json.map (Focus >> lift) (decodeGeometry "focus"))
-      , Options.on "blur" (Json.succeed (lift Blur))
-      , Options.on "keydown" (Json.map (Activate >> lift) (decodeGeometry "keydown"))
-      , Options.on "keyup" (Json.succeed (lift Deactivate))
-      , Options.on "mousedown" (Json.map (Activate >> lift) (decodeGeometry "mousedown"))
-      , Options.on "mouseup" (Json.succeed (lift Deactivate))
-      , Options.on "pointerdown" (Json.map (Activate >> lift) (decodeGeometry "pointerdown"))
-      , Options.on "pointerup" (Json.succeed (lift Deactivate))
-      , Options.on "touchstart" (Json.map (Activate >> lift) (decodeGeometry "touchstart"))
-      , Options.on "touchend" (Json.succeed (lift Deactivate))
+      [ focusOn "focus"
+      , blurOn "blur"
+      , Options.many <|
+        List.map activateOn
+        [ "keydown"
+        , "mousedown"
+        , "pointerdown"
+        , "touchstart"
+        ]
+      , Options.many <|
+        List.map deactivateOn
+        [ "keyup"
+        , "mouseup"
+        , "pointerup"
+        , "touchend"
+        ]
 
       , cs "mdc-ripple-surface"
       , cs "mdc-ripple-upgraded"
-      , Options.attribute (Html.tabindex 0)
 
       , when isUnbounded << Options.many <|
         [ cs "mdc-ripple-upgraded--unbounded"
@@ -216,19 +279,28 @@ view isUnbounded lift model _ _ =
         , Options.data "data-mdc-ripple-is-unbounded" ""
         ]
 
-      , when model.activated << Options.many <|
+      , when isVisible << Options.many <|
         [ cs "mdc-ripple-upgraded--background-active-fill"
         , cs "mdc-ripple-upgraded--foreground-activation"
         ]
+
+      , when model.deactivation <|
+        cs "mdc-ripple-upgraded--foreground-deactivation"
 
       , when model.focus <|
         cs "mdc-ripple-upgraded--background-focused"
 
       , -- CSS variable hack selector:
-        cs selector
+        when isVisible (cs selector)
       ]
 
-    , styleNode
+    , if isVisible then
+          styleNode
+      else
+          Html.node "style"
+          [ Html.type_ "text/css"
+          ]
+          []
     )
 
 

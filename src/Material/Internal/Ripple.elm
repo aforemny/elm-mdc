@@ -4,10 +4,11 @@ import DOM exposing (Rectangle)
 
 
 type Msg
-    = Focus Geometry
+    = Focus
     | Blur
-    | Activate Geometry
-    | Deactivate
+    | Activate String (Maybe Bool) Geometry
+    | Deactivate String
+    | AnimationEnd String Int
 
 
 type alias Geometry =
