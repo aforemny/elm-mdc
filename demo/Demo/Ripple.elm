@@ -91,6 +91,7 @@ view lift page model =
         [ demoSurface
         , Elevation.z2
         , rippleOptions
+        , cs "mdc-ripple-surface"
         ]
         [ text "Interact with me!"
         , rippleStyles
@@ -111,6 +112,7 @@ view lift page model =
         , css "border-radius" "50%"
         , demoSurface
         , rippleOptions
+        , cs "mdc-ripple-surface"
         ]
         [ text "favorite"
         , rippleStyles
@@ -127,7 +129,8 @@ view lift page model =
         [ demoSurface
         , Elevation.z2
         , rippleOptions
-        , Ripple.primary
+        , cs "mdc-ripple-surface"
+        , cs "mdc-ripple-surface--primary"
         ]
         [ text "Primary"
         , rippleStyles
@@ -141,6 +144,8 @@ view lift page model =
         , Elevation.z2
         , rippleOptions
         , Ripple.accent
+        , cs "mdc-ripple-surface"
+        , cs "mdc-ripple-surface--accent"
         ]
         [ text "Accent"
         , rippleStyles

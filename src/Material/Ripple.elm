@@ -141,12 +141,14 @@ unbounded lift index store options =
 
 accent : Property c m
 accent =
-    cs "mdc-ripple-surface--accent"
+    Options.nop
+    -- cs "mdc-ripple-surface--accent"
 
 
 primary : Property c m
 primary =
-    cs "mdc-ripple-surface--primary"
+    Options.nop
+    -- cs "mdc-ripple-surface--primary"
 
 
 view : Bool -> (Msg -> m) -> Model -> x -> y -> (Options.Property c m, Html m)
@@ -270,7 +272,7 @@ view isUnbounded lift model _ _ =
         , "touchend"
         ]
 
-      , cs "mdc-ripple-surface"
+      -- , cs "mdc-ripple-surface"
       , cs "mdc-ripple-upgraded"
 
       , when isUnbounded << Options.many <|
