@@ -8,6 +8,7 @@ import Material.Checkbox as Checkbox
 import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (div, styled, cs, css, when)
+import Material.Ripple as Ripple
 import Material.Typography as Typography
 
 
@@ -303,14 +304,14 @@ possible (since it's a block element)."""
       ,
         section []
         [ h3 [] [ Html.text "Example - Interactive List" ]
-        , interactiveList
+        , interactiveList lift [0] model
         ]
 
       , section
         [ cs "mdc-theme--dark"
         ]
         [ h3 [] [ Html.text "Example - Interactive List (Dark)" ]
-        , interactiveList
+        , interactiveList lift [1] model
         ]
       ]
     ]
@@ -747,20 +748,43 @@ groupsExample =
     |> Html.div []
 
 
-interactiveList : Html m
-interactiveList =
-    -- TODO: ripple
+interactiveList : (Msg msg -> msg) -> List Int -> Model -> Html msg
+interactiveList lift idx model =
     Lists.ul []
-    [ Lists.li []
+    [
+      let
+          ( rippleOptions, rippleStyle ) =
+              Ripple.bounded (lift << Mdl) (idx ++ [0]) model.mdl [] []
+      in
+      Lists.li
+      [ rippleOptions
+      ]
       [ Lists.startDetailIcon "network_wifi" []
       , Html.text "Wi-Fi"
+      , rippleStyle
       ]
-    , Lists.li []
+    ,
+      let
+          ( rippleOptions, rippleStyle ) =
+              Ripple.bounded (lift << Mdl) (idx ++ [1]) model.mdl [] []
+      in
+      Lists.li
+      [ rippleOptions
+      ]
       [ Lists.startDetailIcon "bluetooth" []
       , Html.text "Bluetooth"
+      , rippleStyle
       ]
-    , Lists.li []
+    ,
+      let
+          ( rippleOptions, rippleStyle ) =
+              Ripple.bounded (lift << Mdl) (idx ++ [2]) model.mdl [] []
+      in
+      Lists.li
+      [ rippleOptions
+      ]
       [ Lists.startDetailIcon "data_usage" []
       , Html.text "Data Usage"
+      , rippleStyle
       ]
     ]
