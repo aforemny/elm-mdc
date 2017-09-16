@@ -10898,68 +10898,64 @@ var _debois$elm_mdl$Material_Ripple$view = F5(
 										})),
 								_1: {
 									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface'),
+									_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded'),
 									_1: {
 										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded'),
+										_0: function (_p6) {
+											return A2(
+												_debois$elm_mdl$Material_Options$when,
+												isUnbounded,
+												_debois$elm_mdl$Material_Options$many(_p6));
+										}(
+											{
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--unbounded'),
+												_1: {
+													ctor: '::',
+													_0: A2(_debois$elm_mdl$Material_Options$css, 'overflow', 'visible'),
+													_1: {
+														ctor: '::',
+														_0: A2(_debois$elm_mdl$Material_Options$data, 'data-mdc-ripple-is-unbounded', ''),
+														_1: {ctor: '[]'}
+													}
+												}
+											}),
 										_1: {
 											ctor: '::',
-											_0: function (_p6) {
+											_0: function (_p7) {
 												return A2(
 													_debois$elm_mdl$Material_Options$when,
-													isUnbounded,
-													_debois$elm_mdl$Material_Options$many(_p6));
+													isVisible,
+													_debois$elm_mdl$Material_Options$many(_p7));
 											}(
 												{
 													ctor: '::',
-													_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--unbounded'),
+													_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-active-fill'),
 													_1: {
 														ctor: '::',
-														_0: A2(_debois$elm_mdl$Material_Options$css, 'overflow', 'visible'),
-														_1: {
-															ctor: '::',
-															_0: A2(_debois$elm_mdl$Material_Options$data, 'data-mdc-ripple-is-unbounded', ''),
-															_1: {ctor: '[]'}
-														}
+														_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--foreground-activation'),
+														_1: {ctor: '[]'}
 													}
 												}),
 											_1: {
 												ctor: '::',
-												_0: function (_p7) {
-													return A2(
-														_debois$elm_mdl$Material_Options$when,
-														isVisible,
-														_debois$elm_mdl$Material_Options$many(_p7));
-												}(
-													{
-														ctor: '::',
-														_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-active-fill'),
-														_1: {
-															ctor: '::',
-															_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--foreground-activation'),
-															_1: {ctor: '[]'}
-														}
-													}),
+												_0: A2(
+													_debois$elm_mdl$Material_Options$when,
+													model.deactivation,
+													_debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--foreground-deactivation')),
 												_1: {
 													ctor: '::',
 													_0: A2(
 														_debois$elm_mdl$Material_Options$when,
-														model.deactivation,
-														_debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--foreground-deactivation')),
+														model.focus,
+														_debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-focused')),
 													_1: {
 														ctor: '::',
 														_0: A2(
 															_debois$elm_mdl$Material_Options$when,
-															model.focus,
-															_debois$elm_mdl$Material_Options$cs('mdc-ripple-upgraded--background-focused')),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_debois$elm_mdl$Material_Options$when,
-																isVisible,
-																_debois$elm_mdl$Material_Options$cs(selector)),
-															_1: {ctor: '[]'}
-														}
+															isVisible,
+															_debois$elm_mdl$Material_Options$cs(selector)),
+														_1: {ctor: '[]'}
 													}
 												}
 											}
@@ -10981,8 +10977,8 @@ var _debois$elm_mdl$Material_Ripple$view = F5(
 				{ctor: '[]'})
 		};
 	});
-var _debois$elm_mdl$Material_Ripple$primary = _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--primary');
-var _debois$elm_mdl$Material_Ripple$accent = _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--accent');
+var _debois$elm_mdl$Material_Ripple$primary = _debois$elm_mdl$Material_Options$nop;
+var _debois$elm_mdl$Material_Ripple$accent = _debois$elm_mdl$Material_Options$nop;
 var _debois$elm_mdl$Material_Ripple$update = F2(
 	function (msg, model) {
 		var _p8 = msg;
@@ -25549,64 +25545,6 @@ var _debois$elm_mdl$Demo_LinearProgress$view = function (page) {
 		});
 };
 
-var _debois$elm_mdl$Demo_Lists$interactiveList = A2(
-	_debois$elm_mdl$Material_List$ul,
-	{ctor: '[]'},
-	{
-		ctor: '::',
-		_0: A2(
-			_debois$elm_mdl$Material_List$li,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_debois$elm_mdl$Material_List$startDetailIcon,
-					'network_wifi',
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Wi-Fi'),
-					_1: {ctor: '[]'}
-				}
-			}),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_debois$elm_mdl$Material_List$li,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: A2(
-						_debois$elm_mdl$Material_List$startDetailIcon,
-						'bluetooth',
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('Bluetooth'),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_debois$elm_mdl$Material_List$li,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_debois$elm_mdl$Material_List$startDetailIcon,
-							'data_usage',
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Data Usage'),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			}
-		}
-	});
 var _debois$elm_mdl$Demo_Lists$groupsExample = function () {
 	var item = F3(
 		function (icon, primary, secondary) {
@@ -26653,6 +26591,154 @@ var _debois$elm_mdl$Demo_Lists$update = F3(
 			};
 		}
 	});
+var _debois$elm_mdl$Demo_Lists$interactiveList = F3(
+	function (lift, idx, model) {
+		return A2(
+			_debois$elm_mdl$Material_List$ul,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: function () {
+					var _p2 = A5(
+						_debois$elm_mdl$Material_Ripple$bounded,
+						function (_p3) {
+							return lift(
+								_debois$elm_mdl$Demo_Lists$Mdl(_p3));
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							idx,
+							{
+								ctor: '::',
+								_0: 0,
+								_1: {ctor: '[]'}
+							}),
+						model.mdl,
+						{ctor: '[]'},
+						{ctor: '[]'});
+					var rippleOptions = _p2._0;
+					var rippleStyle = _p2._1;
+					return A2(
+						_debois$elm_mdl$Material_List$li,
+						{
+							ctor: '::',
+							_0: rippleOptions,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_List$startDetailIcon,
+								'network_wifi',
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Wi-Fi'),
+								_1: {
+									ctor: '::',
+									_0: rippleStyle,
+									_1: {ctor: '[]'}
+								}
+							}
+						});
+				}(),
+				_1: {
+					ctor: '::',
+					_0: function () {
+						var _p4 = A5(
+							_debois$elm_mdl$Material_Ripple$bounded,
+							function (_p5) {
+								return lift(
+									_debois$elm_mdl$Demo_Lists$Mdl(_p5));
+							},
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								idx,
+								{
+									ctor: '::',
+									_0: 1,
+									_1: {ctor: '[]'}
+								}),
+							model.mdl,
+							{ctor: '[]'},
+							{ctor: '[]'});
+						var rippleOptions = _p4._0;
+						var rippleStyle = _p4._1;
+						return A2(
+							_debois$elm_mdl$Material_List$li,
+							{
+								ctor: '::',
+								_0: rippleOptions,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_debois$elm_mdl$Material_List$startDetailIcon,
+									'bluetooth',
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Bluetooth'),
+									_1: {
+										ctor: '::',
+										_0: rippleStyle,
+										_1: {ctor: '[]'}
+									}
+								}
+							});
+					}(),
+					_1: {
+						ctor: '::',
+						_0: function () {
+							var _p6 = A5(
+								_debois$elm_mdl$Material_Ripple$bounded,
+								function (_p7) {
+									return lift(
+										_debois$elm_mdl$Demo_Lists$Mdl(_p7));
+								},
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									idx,
+									{
+										ctor: '::',
+										_0: 2,
+										_1: {ctor: '[]'}
+									}),
+								model.mdl,
+								{ctor: '[]'},
+								{ctor: '[]'});
+							var rippleOptions = _p6._0;
+							var rippleStyle = _p6._1;
+							return A2(
+								_debois$elm_mdl$Material_List$li,
+								{
+									ctor: '::',
+									_0: rippleOptions,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_debois$elm_mdl$Material_List$startDetailIcon,
+										'data_usage',
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Data Usage'),
+										_1: {
+											ctor: '::',
+											_0: rippleStyle,
+											_1: {ctor: '[]'}
+										}
+									}
+								});
+						}(),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
 var _debois$elm_mdl$Demo_Lists$view = F3(
 	function (lift, page, model) {
 		var demoWrapper = function (options) {
@@ -26782,9 +26868,9 @@ var _debois$elm_mdl$Demo_Lists$view = F3(
 											ctor: '::',
 											_0: A5(
 												_debois$elm_mdl$Material_Checkbox$render,
-												function (_p2) {
+												function (_p8) {
 													return lift(
-														_debois$elm_mdl$Demo_Lists$Mdl(_p2));
+														_debois$elm_mdl$Demo_Lists$Mdl(_p8));
 												},
 												{
 													ctor: '::',
@@ -27727,7 +27813,15 @@ var _debois$elm_mdl$Demo_Lists$view = F3(
 																	}),
 																_1: {
 																	ctor: '::',
-																	_0: _debois$elm_mdl$Demo_Lists$interactiveList,
+																	_0: A3(
+																		_debois$elm_mdl$Demo_Lists$interactiveList,
+																		lift,
+																		{
+																			ctor: '::',
+																			_0: 0,
+																			_1: {ctor: '[]'}
+																		},
+																		model),
 																	_1: {ctor: '[]'}
 																}
 															}),
@@ -27752,7 +27846,15 @@ var _debois$elm_mdl$Demo_Lists$view = F3(
 																		}),
 																	_1: {
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Demo_Lists$interactiveList,
+																		_0: A3(
+																			_debois$elm_mdl$Demo_Lists$interactiveList,
+																			lift,
+																			{
+																				ctor: '::',
+																				_0: 1,
+																				_1: {ctor: '[]'}
+																			},
+																			model),
 																		_1: {ctor: '[]'}
 																	}
 																}),
@@ -31184,7 +31286,11 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 												_1: {
 													ctor: '::',
 													_0: rippleOptions,
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface'),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										},
@@ -31259,7 +31365,11 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 																	_1: {
 																		ctor: '::',
 																		_0: rippleOptions,
-																		_1: {ctor: '[]'}
+																		_1: {
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface'),
+																			_1: {ctor: '[]'}
+																		}
 																	}
 																}
 															}
@@ -31328,8 +31438,12 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 															_0: rippleOptions,
 															_1: {
 																ctor: '::',
-																_0: _debois$elm_mdl$Material_Ripple$primary,
-																_1: {ctor: '[]'}
+																_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface'),
+																_1: {
+																	ctor: '::',
+																	_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--primary'),
+																	_1: {ctor: '[]'}
+																}
 															}
 														}
 													}
@@ -31378,7 +31492,15 @@ var _debois$elm_mdl$Demo_Ripple$view = F3(
 																_1: {
 																	ctor: '::',
 																	_0: _debois$elm_mdl$Material_Ripple$accent,
-																	_1: {ctor: '[]'}
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface'),
+																		_1: {
+																			ctor: '::',
+																			_0: _debois$elm_mdl$Material_Options$cs('mdc-ripple-surface--accent'),
+																			_1: {ctor: '[]'}
+																		}
+																	}
 																}
 															}
 														}
