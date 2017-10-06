@@ -14962,7 +14962,7 @@ var _debois$elm_mdl$Material_Slider$view = F4(
 	});
 var _debois$elm_mdl$Material_Slider$update = F3(
 	function (fwd, msg, model) {
-		var _p17 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		var _p17 = msg;
 		switch (_p17.ctor) {
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
@@ -17100,7 +17100,30 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 														}
 													}
 												}),
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: _debois$elm_mdl$Material_Options$many(
+													{
+														ctor: '::',
+														_0: A3(
+															_debois$elm_mdl$Material_Options$onWithOptions,
+															'keydown',
+															{preventDefault: false, stopPropagation: true},
+															_elm_lang$core$Json_Decode$succeed(
+																lift(_debois$elm_mdl$Material_Internal_Textfield$NoOp))),
+														_1: {
+															ctor: '::',
+															_0: A3(
+																_debois$elm_mdl$Material_Options$onWithOptions,
+																'keyup',
+																{preventDefault: false, stopPropagation: true},
+																_elm_lang$core$Json_Decode$succeed(
+																	lift(_debois$elm_mdl$Material_Internal_Textfield$NoOp))),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}
@@ -17159,7 +17182,19 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 	});
 var _debois$elm_mdl$Material_Textfield$render = F4(
 	function (lift, index, store, options) {
-		return A7(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Textfield$get, _debois$elm_mdl$Material_Textfield$view, _debois$elm_mdl$Material_Msg$TextfieldMsg, lift, index, store, options);
+		return A7(
+			_debois$elm_mdl$Material_Component$render,
+			_debois$elm_mdl$Material_Textfield$get,
+			_debois$elm_mdl$Material_Textfield$view,
+			_debois$elm_mdl$Material_Msg$TextfieldMsg,
+			lift,
+			index,
+			store,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Internal_Options$dispatch(lift),
+				_1: options
+			});
 	});
 var _debois$elm_mdl$Material_Textfield$Config = function (a) {
 	return function (b) {
