@@ -348,6 +348,19 @@ view lift model options _ =
                   , Html.value (Maybe.withDefault "" config.value)
                     |> if config.value /= Nothing then Just else always Nothing
                   ]
+                , -- Note: prevent ripple:
+                  Options.many
+                  [ Options.onWithOptions "keydown"
+                        { preventDefault = False
+                        , stopPropagation = True
+                        }
+                        (Decode.succeed (lift NoOp))
+                  , Options.onWithOptions "keyup"
+                        { preventDefault = False
+                        , stopPropagation = True
+                        }
+                        (Decode.succeed (lift NoOp))
+                  ]
                 ]
                 []
             , Options.styled Html.label
