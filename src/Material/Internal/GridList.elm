@@ -1,10 +1,7 @@
 module Material.Internal.GridList exposing (Msg(..), Geometry, defaultGeometry)
 
 type Msg m
-    = Resize
-    | ResizeDone Int
-    | Configure Geometry
-    | AnimationFrame
+    = Init Geometry
 
 
 type alias Geometry =

@@ -39,7 +39,7 @@ type alias Model =
     , open : Bool
     , opening : Bool
     , geometry : Maybe Geometry
-    , requestAnimation : Bool
+    , reconfigure : Bool
     , initialized : Bool
 
     -- animation:
@@ -60,7 +60,7 @@ defaultModel =
     , open = False
     , geometry = Nothing
     , initialized = False
-    , requestAnimation = False
+    , reconfigure = False
     , opening = False
 
     -- animation:
@@ -135,7 +135,7 @@ update fwd msg model =
                   | open = model.opening
                   , opening = False
                   , geometry = Just geometry
-                  , requestAnimation = False
+                  , reconfigure = False
                   , initialized = True
               }
             ,
@@ -147,7 +147,7 @@ update fwd msg model =
                 | open = False
                 , opening = True
                 , geometry = Nothing
-                , requestAnimation = True
+                , reconfigure = True
 
                 -- animation:
                 , animating = True
@@ -558,10 +558,8 @@ view lift model options ul =
     [ cs "mdc-simple-menu"
     , cs "mdc-simple-menu--open" |> when (model.open || config.open)
     , cs "mdc-simple-menu--animating" |> when model.animating
-    , when model.requestAnimation << Options.many <|
-      [ cs "elm-mdc-simple-menu--uninitialized"
-      ]
-    , initOn "elm-mdc-init"
+    , initOn "ElmMdcReconfigure"
+    , when model.reconfigure (cs "elm-mdc--reconfigure")
 
     , when (config.alignment /= Nothing) << cs <|
       case Maybe.withDefault OpenFromTopLeft config.alignment of

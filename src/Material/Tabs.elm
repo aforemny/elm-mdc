@@ -18,14 +18,12 @@ module Material.Tabs
         , iconLabel
 
           -- TEA
-        , subscriptions
         , Model
         , defaultModel
         , Msg
         , update
 
           -- RENDER
-        , subs
         , render
         , Store
         , react
@@ -66,7 +64,6 @@ module Material.Tabs
 @docs render, Store, react
 -}
 
-import AnimationFrame
 import Dict exposing (Dict)
 import DOM
 import Html exposing (Html, text)
@@ -79,7 +76,6 @@ import Material.Internal.Tabs exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, styled, cs, css, when)
 import Material.Ripple as Ripple
-import Window
 
 
 type alias Model =
@@ -90,8 +86,6 @@ type alias Model =
     , nextIndicator : Bool
     , backIndicator : Bool
     , ripples : Dict Int Ripple.Model
-    , initialized : Bool
-    , requestAnimation : Bool
     }
 
 
@@ -104,8 +98,6 @@ defaultModel =
     , nextIndicator = False
     , backIndicator = False
     , ripples = Dict.empty
-    , initialized = False
-    , requestAnimation = True
     }
 
 
@@ -236,26 +228,10 @@ update lift msg model =
                   , scale = computeScale geometry 0
                   , nextIndicator = totalTabsWidth > geometry.scrollFrame.width
                   , backIndicator = False
-                  , initialized = True
               }
             ,
               Cmd.none
             )
-
-        Resize ->
-            ( { model | requestAnimation = True }, Cmd.none )
-
-        AnimationFrame ->
-            if model.requestAnimation then
-                ( { model
-                    | requestAnimation = False
-                    , initialized = True
-                  }
-                ,
-                  Cmd.none
-                )
-            else
-                ( model, Cmd.none )
 
 
 type alias Config =
@@ -435,11 +411,12 @@ view lift model options nodes =
               [ cs "mdc-tab-bar-scroller__scroller-frame__tabs"
               , css "transform" tabBarTransform
               ]
-            , Options.on "elm-mdc-init"
+            , Options.on "ElmMdcInit"
                   (Json.map (Init >> lift)
                   (decodeGeometryOnTabBar config.indicator))
-            , cs "elm-mdc-tab-bar--uninitialized"
-                |> when model.requestAnimation
+            , Options.on "ElmMdcWindowResize"
+                  (Json.map (Init >> lift)
+                  (decodeGeometryOnTabBar config.indicator))
             ]
             [
             ]
@@ -470,7 +447,7 @@ view lift model options nodes =
               , if config.indicator then
                     [ styled Html.div
                       [ cs "mdc-tab-bar__indicator"
-                      , css "display" "none" |> when (not (hasIndicator && model.initialized))
+                      , css "display" "none" |> when (not hasIndicator)
                       , css "transform" indicatorTransform
                       , css "visibility" "visible" |> when (numTabs > 0)
                       ]
@@ -598,21 +575,3 @@ decodeGeometry hasIndicator =
         ( DOM.parentElement <| -- .mdc-tab-bar-scroller__scroll-frame
           Json.map (\width -> { width = width }) DOM.offsetWidth
         )
-
-
-subscriptions : Model -> Sub (Msg m)
-subscriptions model =
-    Sub.batch
-    [
-      Window.resizes (always Resize)
-    ,
-      if model.requestAnimation then
-          AnimationFrame.times (always AnimationFrame)
-      else
-          Sub.none
-    ]
-
-
-subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Component.subs Material.Msg.TabsMsg .tabs subscriptions

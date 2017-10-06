@@ -3,8 +3,6 @@ module Material.Internal.Toolbar exposing (Msg(..), Geometry, defaultGeometry)
 type Msg
     = NoOp
     | Init Geometry
-    | Resize
-    | AnimationFrame
 
 
 type alias Geometry =

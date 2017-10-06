@@ -456,4 +456,4 @@ fieldset options =
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    TabBar.subs (Mdl >> lift) model.mdl
+    Material.subscriptions (Mdl >> lift) model

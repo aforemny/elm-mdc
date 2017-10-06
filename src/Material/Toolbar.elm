@@ -22,20 +22,17 @@ module Material.Toolbar exposing
     , fixedAdjust
 
       -- TEA
-    , subscriptions
     , Model
     , defaultModel
     , Msg
     , update
 
       -- RENDER
-    , subs
     , render
     , Store
     , react
     )
 
-import AnimationFrame
 import DOM
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
@@ -44,14 +41,11 @@ import Material.Internal.Options as Internal
 import Material.Internal.Toolbar exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
-import Window
 
 
 type alias Model =
     { calculations : Calculations
     , geometry : Maybe Geometry
-    , initialized : Bool
-    , requestAnimation : Bool
     }
 
 
@@ -59,8 +53,6 @@ defaultModel : Model
 defaultModel =
     { calculations = defaultCalculations
     , geometry = Nothing
-    , initialized = False
-    , requestAnimation = True
     }
 
 
@@ -219,22 +211,7 @@ update msg model =
             ( model, Cmd.none )
 
         Init geometry ->
-            ( { model | geometry = Just geometry, initialized = True }, Cmd.none )
-
-        Resize ->
-            ( { model | requestAnimation = True }, Cmd.none )
-
-        AnimationFrame ->
-            if model.requestAnimation then
-                ( { model
-                    | requestAnimation = False
-                    , initialized = False
-                  }
-                ,
-                  Cmd.none
-                )
-            else
-                ( model, Cmd.none )
+            ( { model | geometry = Just geometry }, Cmd.none )
 
 
 type alias Config =
@@ -329,9 +306,8 @@ view lift model options nodes =
        )
     :: when (config.waterfall /= Nothing)
        ( cs "mdc-toolbar--waterfall" )
-    :: initOn "elm-mdc-init"
-    :: when (model.requestAnimation)
-       ( cs "elm-mdc-toolbar--uninitialized" )
+    :: initOn "ElmMdcInit"
+    :: initOn "ElmMdcWindowResize"
     :: flexibleBehavior
     :: options
     )
@@ -458,24 +434,6 @@ react :
     -> ( Maybe (Store s), Cmd m )
 react =
     Component.react get set Material.Msg.ToolbarMsg (Component.generalise update)
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.batch
-    [
-      Window.resizes (always Resize)
-
-    , if model.requestAnimation then
-          AnimationFrame.times (always AnimationFrame)
-      else
-          Sub.none
-    ]
-
-
-subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Component.subs Material.Msg.ToolbarMsg .toolbar subscriptions
 
 
 decodeGeometry : Decoder Geometry

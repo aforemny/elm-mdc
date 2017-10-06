@@ -15,14 +15,12 @@ module Material.Slider
         , targetValue
         
           -- TEA
-        , subscriptions
         , Model
         , defaultModel
         , Msg
         , update
           
           -- Featured render
-        , subs
         , render
         , Store
         , react
@@ -46,16 +44,13 @@ module Material.Slider
 @docs onChange, onInput, targetValue
 
 ## TEA
-@docs subscriptions
 @docs Model, defaultModel, Msg, update
 
 ## Featured render
-@docs subs
 @docs render
 @docs Store, react
 -}
 
-import AnimationFrame
 import DOM
 import Html as Html_
 import Html as Html exposing (Html, text)
@@ -69,7 +64,6 @@ import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
 import Svg
 import Svg.Attributes as Svg
-import Window
 
 
 type alias Model =
@@ -78,8 +72,6 @@ type alias Model =
     , geometry : Maybe Geometry
     , value : Maybe Float
     , inTransit : Bool
-    , initialized : Bool
-    , requestAnimation : Bool
     }
 
 
@@ -90,8 +82,6 @@ defaultModel =
     , geometry = Nothing
     , value = Nothing
     , inTransit = False
-    , initialized = False
-    , requestAnimation = True
     }
 
 
@@ -129,20 +119,22 @@ update fwd msg model =
             )
 
         Drag geometry ->
-            ( { model
-                | geometry = Just geometry
-                , inTransit = False
-                , value = Just (computeValue geometry)
-              }
-            ,
-              Cmd.none
-            )
+            if model.active then
+                ( { model
+                    | geometry = Just geometry
+                    , inTransit = False
+                    , value = Just (computeValue geometry)
+                  }
+                ,
+                  Cmd.none
+                )
+            else
+                ( model, Cmd.none )
 
         Init geometry ->
             ( { model
                 | geometry = Just geometry
                 , value = Just (computeValue geometry)
-                , initialized = True
               }
             ,
               Cmd.none
@@ -150,24 +142,6 @@ update fwd msg model =
 
         Up ->
             ( { model | active = False }, Cmd.none )
-
-        Resize ->
-            ( { model | requestAnimation = True }
-            ,
-                Cmd.none
-            )
-
-        AnimationFrame ->
-            if model.requestAnimation then
-                ( { model
-                    | requestAnimation = False
-                    , initialized = False
-                  }
-                ,
-                  Cmd.none
-                )
-            else
-                ( model, Cmd.none )
 
 
 type alias Config m =
@@ -295,9 +269,9 @@ view lift model options _ =
             Options.on event (Maybe.withDefault (Json.succeed (lift NoOp)) config.onChange)
 
         ups =
-          [ "mouseup"
-          , "touchend"
-          , "pointerup"
+          [ "ElmMdcMouseUp"
+          , "ElmMdcTouchEnd"
+          , "ElmMdcPointerUp"
           ]
 
         downs =
@@ -308,15 +282,9 @@ view lift model options _ =
             ]
 
         moves =
-          [ "mousemove"
-          , "touchmove"
-          , "pointermove"
-          ]
-
-        leaves =
-          [ "mouseleave"
-          , "touchleave" -- TODO
-          , "pointerleave" -- TODO
+          [ "ElmMdcMouseMove"
+          , "ElmMdcTouchMove"
+          , "ElmMdcPointerMove"
           ]
 
         activateOn_ event =
@@ -347,21 +315,22 @@ view lift model options _ =
         , Options.data "max" (toString config.max)
         , Options.data "steps" (toString config.steps)
 
-        , initOn "elm-mdc-init"
-        , cs "elm-mdc-slider--uninitialized"
-          |> when model.requestAnimation
+        , initOn "ElmMdcInit"
 
         , List.map activateOn downs
           |> Options.many
 
-        , List.map upOn (List.concat [ups, leaves, ["blur"]])
-          |> Options.many
+        , when model.active <|
+          Options.many << List.concat <|
+          [ (List.map upOn (List.concat [ups, ["blur"]]))
+          , (List.map dragOn moves)
+          ]
 
         , when (config.onChange /= Nothing) <|
-          Options.many (List.map changeOn ups)
-
-        , when model.active <|
-              Options.many (List.map dragOn moves)
+          if model.active then
+              Options.many (List.map changeOn ups)
+          else
+              Options.nop
 
         , when (config.onInput /= Nothing) <|
           if model.active then
@@ -395,12 +364,7 @@ view lift model options _ =
           [ cs "mdc-slider__thumb-container"
           , Options.many (List.map activateOn_ downs)
           , css "transform" ("translateX(" ++ toString translateX ++ "px) translateX(-50%)")
-          , Options.on "transitionend" -- TODO: dispatch
-              ( Json.map2
-                  (\tick onInput -> lift (Dispatch [tick, onInput]))
-                  (Json.succeed (lift Tick))
-                  (Maybe.withDefault (Json.succeed (lift NoOp)) config.onInput)
-              )
+          , Options.on "transitionend" (Json.succeed (lift Tick))
           ]
           [ Svg.svg
             [ Svg.class "mdc-slider__thumb"
@@ -579,21 +543,3 @@ steps =
 trackMarkers : Property m
 trackMarkers =
     Internal.option (\ config -> { config | trackMarkers = True } )
-
-
-subscriptions : Model -> Sub (Msg m)
-subscriptions model =
-    Sub.batch
-    [
-      Window.resizes (always Resize)
-
-    , if model.requestAnimation then
-          AnimationFrame.times (always AnimationFrame)
-      else
-          Sub.none
-    ]
-
-
-subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Component.subs Material.Msg.SliderMsg .slider subscriptions

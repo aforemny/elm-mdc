@@ -148,12 +148,8 @@ subscriptions : (Msg m -> m) -> { model | mdl : Model } -> Sub m
 subscriptions lift model =
     Sub.batch
         [ Drawer.subs lift model.mdl
-        , GridList.subs lift model.mdl
         , Menu.subs lift model.mdl
         , Select.subs lift model.mdl
-        , Slider.subs lift model.mdl
-        , Tabs.subs lift model.mdl
-        , Toolbar.subs lift model.mdl
         ]
 
 
@@ -172,6 +168,8 @@ init lift =
 --      )
 --      ( \_ -> Task.succeed () )
 
+
+-- TODO:
 
 top : Html a -> Html a
 top content =
@@ -200,43 +198,4 @@ top content =
       , Html.src "https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.js"
       ]
       []
-
-    , -- node insertion, credits (https://davidwalsh.name/detect-node-insertion):
-      Html.node "script"
-      [ Html.type_ "text/javascript"
-      ]
-      [ text """
-var insertListener = function(event) {
-  if (event.animationName == "nodeInserted") {
-    console.warn("Another node has been inserted! ", event, event.target);
-    event.target.dispatchEvent(new Event('elm-mdc-init'));
-  }
-}
-
-document.addEventListener("animationstart", insertListener, false); // standard + firefox
-document.addEventListener("MSAnimationStart", insertListener, false); // IE
-document.addEventListener("webkitAnimationStart", insertListener, false); // Chrome + Safari
-"""
-      ]
-
-    , Html.node "style"
-      [ Html.type_ "text/css"
-      ]
-      [ text """
-@keyframes nodeInserted {
-  from { opacity: 0.99; }
-  to { opacity: 1; }
-}
-
-.elm-mdc-slider--uninitialized,
-.elm-mdc-tab-bar--uninitialized,
-.elm-mdc-toolbar--uninitialized,
-.elm-mdc-simple-menu--uninitialized,
-.elm-mdc-grid-list--uninitialized
-{
-  animation-duration: 0.001s;
-  animation-name: nodeInserted;
-}
-"""
-      ]
     ]

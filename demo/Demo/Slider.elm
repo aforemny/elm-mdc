@@ -376,4 +376,4 @@ view lift page model =
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Slider.subs (Mdl >> lift) model.mdl
+    Material.subscriptions (Mdl >> lift) model

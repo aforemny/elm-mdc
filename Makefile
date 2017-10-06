@@ -5,6 +5,7 @@ all:
 	mkdir -p build
 	rsync -r material-components-web/demos/images build
 	cp demo/page.html build/index.html
+	cp elm-mdc.js build/elm-mdc.js
 	#cp material-components-web/build/material-components-web.css build
 	cp material-components-web.css build
 	(cd demo; $(ELM) Demo.elm --output ../build/elm.js)

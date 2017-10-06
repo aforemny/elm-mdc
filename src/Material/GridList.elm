@@ -29,14 +29,12 @@ module Material.GridList
         , primaryContent
 
           -- TEA
-        , subscriptions
         , Model
         , defaultModel
         , Msg
         , update
 
           -- RENDER
-        , subs
         , render
         , Store
         , react
@@ -72,18 +70,15 @@ Web](https://material.io/components/web/catalog/grid-lists/))
 -}
 
 
-import AnimationFrame
 import DOM
 import Html.Attributes as Html
 import Html exposing (Html)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed, Index)
-import Material.Helpers as Helpers
 import Material.Icon as Icon
 import Material.Internal.GridList exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
-import Window
 
 
 type alias Model =
@@ -112,29 +107,9 @@ type alias Msg m =
 update : Msg m -> Model -> ( Model, Cmd (Msg m) )
 update msg model =
     case msg of
-        Configure geometry ->
-            ( { model | configured = True, geometry = Just geometry }, Cmd.none )
+        Init geometry ->
+            ( { model | geometry = Just geometry }, Cmd.none )
 
-        Resize ->
-            let
-                lastResize =
-                    model.lastResize + 1
-            in
-            ( { model
-                    | resizing = True
-                    , lastResize = lastResize
-              }
-            , Helpers.delay 0 (ResizeDone lastResize)
-            )
-
-        ResizeDone resize ->
-            if resize /= model.lastResize then
-                ( model, Cmd.none )
-            else
-                ( { model | requestAnimationFrame = True }, Cmd.none )
-
-        AnimationFrame ->
-            ( { model | requestAnimationFrame = False, configured = False } , Cmd.none )
 
 view : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model options nodes =
@@ -149,8 +124,8 @@ view lift model options nodes =
     in
     styled Html.div
     ( cs "mdc-grid-list"
-    :: when (not model.configured) (cs "elm-mdc-grid-list--uninitialized")
-    :: Options.on "elm-mdc-init" (Json.map (lift << Configure) decodeGeometry)
+    :: Options.on "ElmMdcInit" (Json.map (lift << Init) decodeGeometry)
+    :: Options.on "ElmMdcWindowResize" (Json.map (lift << Init) decodeGeometry)
     :: options
     )
     [ styled Html.ul
@@ -283,22 +258,6 @@ react :
     -> ( Maybe (Store s), Cmd m )
 react =
     Component.react get set Material.Msg.GridListMsg (Component.generalise update)
-
-
-subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Component.subs Material.Msg.GridListMsg .gridList subscriptions
-
-
-subscriptions : Model -> Sub (Msg m)
-subscriptions model =
-    if model.requestAnimationFrame then
-        Sub.batch
-        [ AnimationFrame.times (\ _ -> AnimationFrame)
-        , Window.resizes (\ _ -> Resize)
-        ]
-    else
-        Window.resizes (\ _ -> Resize)
 
 
 type alias Property m =
