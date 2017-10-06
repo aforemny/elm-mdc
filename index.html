@@ -75,27 +75,7 @@
 }
 </style>
   <body style="width: 100%; height: 100%; font-family: Roboto, Helvetica, Arial, sans-serif;">
-    <!-- node insertion, credits (https://davidwalsh.name/detect-node-insertion): -->
-    <script type="text/javascript">
-      var insertListener = function(event) {
-        if (event.animationName == "nodeInserted") {
-          //console.warn("Another node has been inserted! ", event, event.target);
-          event.target.dispatchEvent(new Event('elm-mdc-init'));
-        }
-      }
-
-      document.addEventListener("animationstart", insertListener, false); // standard + firefox
-      document.addEventListener("MSAnimationStart", insertListener, false); // IE
-      document.addEventListener("webkitAnimationStart", insertListener, false); // Chrome + Safari
-    </script>
-    <style type="text/css">
-      @keyframes nodeInserted {
-        from { opacity: 0.99; }
-        to { opacity: 1; }
-      }
-    </style>
-
-    <!-- elm -->
+    <script src="elm-mdc.js"></script>
     <script src="elm.js"></script>
     <script>
       app = Elm.Main.fullscreen();
@@ -106,18 +86,5 @@
           app.ports.onScroll.send( { pageX: 0, pageY : window.pageYOffset } )
       });
     </script>
-
-    <style type="text/css">
-
-    .elm-mdc-slider--uninitialized,
-    .elm-mdc-tab-bar--uninitialized,
-    .elm-mdc-toolbar--uninitialized,
-    .elm-mdc-simple-menu--uninitialized,
-    .elm-mdc-grid-list--uninitialized
-    {
-      animation-duration: 0.001s;
-      animation-name: nodeInserted;
-    }
-    </style>
   </body>
 </html>
