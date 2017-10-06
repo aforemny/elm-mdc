@@ -270,7 +270,7 @@ view lift model options _ =
             Internal.collect defaultConfig options
 
         isDirty =
-            model.isDirty || config.value /= ""
+            model.isDirty || Maybe.withDefault False (Maybe.map ((/=) "") config.value)
 
         preventEnterWhenMaxRowsExceeded =
             Options.onWithOptions "keydown"
