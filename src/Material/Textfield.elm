@@ -413,4 +413,7 @@ render
     -> Html m       
 render lift index store options =
     Component.render get view Material.Msg.TextfieldMsg lift index store
-        options
+        (Internal.dispatch lift :: options)
+
+
+-- TODO: use inject ^^^^^
