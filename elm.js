@@ -16885,10 +16885,19 @@ var _debois$elm_mdl$Material_Textfield$view = F4(
 			{ctor: '[]'});
 		var rippleOptions = _p10._0;
 		var rippleStyle = _p10._1;
-		var isDirty = model.isDirty;
 		var _p12 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Textfield$defaultConfig, options);
 		var summary = _p12;
 		var config = _p12.config;
+		var isDirty = model.isDirty || A2(
+			_elm_lang$core$Maybe$withDefault,
+			false,
+			A2(
+				_elm_lang$core$Maybe$map,
+				F2(
+					function (x, y) {
+						return !_elm_lang$core$Native_Utils.eq(x, y);
+					})(''),
+				config.value));
 		var preventEnterWhenMaxRowsExceeded = A2(
 			_debois$elm_mdl$Material_Options$when,
 			config.multiline && (!_elm_lang$core$Native_Utils.eq(config.maxRows, _elm_lang$core$Maybe$Nothing)),
