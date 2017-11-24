@@ -75,7 +75,7 @@ var observer = new MutationObserver(function(mutations) {
       var mutation = mutations[i];
       var nodes = mutation.addedNodes;
       for (var j = 0; j < nodes.length; j++) {
-          traverse(nodes[i], dispatchElmMdcInit);
+          traverse(nodes[j], dispatchElmMdcInit);
       }
     }
 });
