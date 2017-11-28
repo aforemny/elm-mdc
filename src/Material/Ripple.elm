@@ -70,16 +70,7 @@ update msg model =
                 isVisible =
                     model.active || model.animating
             in
-            if isVisible then
-                ( { model
-                      | active = False
-                      , animating = False
-                      , deactivation = True
-                  }
-
-                , Helpers.delay 83 (Activate event Nothing geometry)
-                )
-            else
+            if not isVisible then
                 let
                     active =
                         active_
@@ -98,6 +89,8 @@ update msg model =
                 ,
                   Helpers.delay 300 (AnimationEnd event animation)
                 )
+            else
+                ( model, Cmd.none )
 
         Deactivate event ->
             let
@@ -113,17 +106,16 @@ update msg model =
                             event == "touchend"
                         _ -> False
             in
-            if not sameEvent then
-                ( model, Cmd.none )
-            else
+            if sameEvent then
                 ( { model | active = False }, Cmd.none )
+            else
+                ( model, Cmd.none )
 
         AnimationEnd event animation ->
-            if not (model.geometry.event.type_ == event)
-               || (animation /= model.animation) then
-                ( model, Cmd.none )
-            else
+            if (model.geometry.event.type_ == event) && (animation == model.animation) then
                 ( { model | animating = False }, Cmd.none )
+            else
+                ( model, Cmd.none )
 
 
 -- VIEW
@@ -183,8 +175,8 @@ view isUnbounded lift model _ _ =
 
         startPoint =
             if wasActivatedByPointer && not isUnbounded then
-                { x = geometry.event.pageX - geometry.frame.left - (initialSize / 2)
-                , y = geometry.event.pageY - geometry.frame.top - (initialSize / 2)
+                { x = geometry.event.pageX - (initialSize / 2)
+                , y = geometry.event.pageY - (initialSize / 2)
                 }
             else
                 { x = (geometry.frame.width - initialSize) / 2
@@ -323,46 +315,75 @@ react =
 decodeGeometry : String -> Decoder Geometry
 decodeGeometry type_ =
     let
-        traverseToContainer cont =
-            Json.oneOf
-            [ DOM.className
-              |> Json.andThen (\ className ->
-                     let
-                        hasClass class =
-                            String.contains (encaps class) << encaps
+        windowPageOffset =
+          Json.map2 (\ x y -> { x = x, y = y })
+            (Json.at ["pageXOffset"] Json.float)
+            (Json.at ["pageYOffset"] Json.float)
 
-                        encaps str =
-                            " " ++ str ++ " "
-                     in
-                     if hasClass "mdc-ripple-upgraded" className then
-                         cont
-                     else
-                         Json.fail "Material.Ripple.decodeGeometry"
-                 )
-            , DOM.parentElement (Json.lazy (\_ -> traverseToContainer cont))
-            ]
+        isSurfaceDisabled =
+          Json.oneOf
+          [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
+          , Json.succeed False
+          ]
+
+        boundingClientRect =
+          DOM.boundingClientRect
+
+        normalizeCoords pageOffset clientRect { pageX, pageY } =
+          let
+            documentX =
+              pageOffset.x + clientRect.left
+
+            documentY =
+              pageOffset.y + clientRect.top
+
+            x =
+              pageX - documentX
+
+            y =
+              pageY - documentY
+          in
+          { x = x, y = y }
+
+        changedTouches =
+          Json.at ["changedTouches"] (Json.list changedTouch)
+
+        changedTouch =
+          Json.map2 (\ pageX pageY -> { pageX = pageX, pageY = pageY })
+            (Json.at ["pageX"] Json.float)
+            (Json.at ["pageY"] Json.float)
+
+        currentTarget =
+          Json.at ["currentTarget"]
+
+        view =
+          Json.at ["view"]
     in
-    (
-      ( Json.map2 (\pageX pageY -> { type_ = type_, pageX = pageX, pageY = pageY })
-            (Json.at [ "pageX" ] Json.float)
-            (Json.at [ "pageY" ] Json.float)
+    Json.map4
+      (\ coords pageOffset clientRect isSurfaceDisabled ->
+          let
+            { x, y } =
+              normalizeCoords pageOffset clientRect coords
+            event =
+              { type_ = type_
+              , pageX = x
+              , pageY = y
+              }
+          in
+          { event = event
+          , isSurfaceDisabled = isSurfaceDisabled
+          , frame = clientRect
+          }
       )
-      |> Json.andThen (\ event ->
-            DOM.target          <| -- .mdc-ripple-upgraded [*]
-            traverseToContainer <| -- .mdc-ripple-upgraded
-            Json.map2
-                (\isSurfaceDisabled frame ->
-                    { event = event
-                    , isSurfaceDisabled = isSurfaceDisabled
-                    , frame = frame
-                    }
-                )
-                ( Json.oneOf
-                  [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
-                  , Json.succeed False
-                  ]
-                )
-                ( DOM.boundingClientRect
-                )
-         )
-     )
+      ( if type_ == "touchstart" then
+            changedTouches
+            |> Json.map List.head
+            |> Json.map (Maybe.withDefault { pageX = 0, pageY = 0 })
+        else
+            Json.map2 (\ pageX pageY -> { pageX = pageX, pageY = pageY })
+              (Json.at ["pageX"] Json.float)
+              (Json.at ["pageY"] Json.float)
+      )
+      (view windowPageOffset)
+      (currentTarget boundingClientRect)
+      (currentTarget isSurfaceDisabled)
