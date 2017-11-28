@@ -326,8 +326,15 @@ decodeGeometry type_ =
           , Json.succeed False
           ]
 
-        boundingClientRect =
+        boundingClientRect pageOffset =
           DOM.boundingClientRect
+          |> Json.map (\ { top, left, width, height } ->
+               { top = top - pageOffset.y
+               , left = left - pageOffset.x
+               , width = width
+               , height = height
+               }
+             )
 
         normalizeCoords pageOffset clientRect { pageX, pageY } =
           let
@@ -385,5 +392,7 @@ decodeGeometry type_ =
               (Json.at ["pageY"] Json.float)
       )
       (view windowPageOffset)
-      (currentTarget boundingClientRect)
+      ( view windowPageOffset
+        |> Json.andThen (currentTarget << boundingClientRect)
+      )
       (currentTarget isSurfaceDisabled)
