@@ -24,14 +24,6 @@ module Material.LayoutGrid exposing
   , span2Phone
   , span3Phone
   , span4Phone
-  , span5Phone
-  , span6Phone
-  , span7Phone
-  , span8Phone
-  , span9Phone
-  , span10Phone
-  , span11Phone
-  , span12Phone
 
   , span1Tablet
   , span2Tablet
@@ -41,10 +33,6 @@ module Material.LayoutGrid exposing
   , span6Tablet
   , span7Tablet
   , span8Tablet
-  , span9Tablet
-  , span10Tablet
-  , span11Tablet
-  , span12Tablet
 
   , span1Desktop
   , span2Desktop
@@ -75,8 +63,8 @@ module Material.LayoutGrid exposing
 
 ## Cell spans
 @docs span1, span2, span3, span4, span5, span6, span7, span8, span9, span10, span11, span12
-@docs span1Phone, span2Phone, span3Phone, span4Phone, span5Phone, span6Phone, span7Phone, span8Phone, span9Phone, span10Phone, span11Phone, span12Phone
-@docs span1Tablet, span2Tablet, span3Tablet, span4Tablet, span5Tablet, span6Tablet, span7Tablet, span8Tablet, span9Tablet, span10Tablet, span11Tablet, span12Tablet
+@docs span1Phone, span2Phone, span3Phone, span4Phone
+@docs span1Tablet, span2Tablet, span3Tablet, span4Tablet, span5Tablet, span6Tablet, span7Tablet, span8Tablet
 @docs span1Desktop, span2Desktop, span3Desktop, span4Desktop, span5Desktop, span6Desktop, span7Desktop, span8Desktop, span9Desktop, span10Desktop, span11Desktop, span12Desktop
 
 ## Properties
@@ -261,62 +249,6 @@ span4Phone =
     span (Just "phone") 4
 
 
-{-| Span 5 columns on a phone.
--}
-span5Phone : Property m
-span5Phone =
-    span (Just "phone") 5
-
-
-{-| Span 6 columns on a phone.
--}
-span6Phone : Property m
-span6Phone =
-    span (Just "phone") 6
-
-
-{-| Span 7 columns on a phone.
--}
-span7Phone : Property m
-span7Phone =
-    span (Just "phone") 7
-
-
-{-| Span 8 columns on a phone.
--}
-span8Phone : Property m
-span8Phone =
-    span (Just "phone") 8
-
-
-{-| Span 9 columns on a phone.
--}
-span9Phone : Property m
-span9Phone =
-    span (Just "phone") 9
-
-
-{-| Span 10 columns on a phone.
--}
-span10Phone : Property m
-span10Phone =
-    span (Just "phone") 10
-
-
-{-| Span 11 columns on a phone.
--}
-span11Phone : Property m
-span11Phone =
-    span (Just "phone") 11
-
-
-{-| Span 12 columns on a phone.
--}
-span12Phone : Property m
-span12Phone =
-    span (Just "phone") 12
-
-
 {-| Span 1 columns on a tablet.
 -}
 span1Tablet : Property m
@@ -371,34 +303,6 @@ span7Tablet =
 span8Tablet : Property m
 span8Tablet =
     span (Just "tablet") 8
-
-
-{-| Span 9 columns on a tablet.
--}
-span9Tablet : Property m
-span9Tablet =
-    span (Just "tablet") 9
-
-
-{-| Span 10 columns on a tablet.
--}
-span10Tablet : Property m
-span10Tablet =
-    span (Just "tablet") 10
-
-
-{-| Span 11 columns on a tablet.
--}
-span11Tablet : Property m
-span11Tablet =
-    span (Just "tablet") 11
-
-
-{-| Span 12 columns on a tablet.
--}
-span12Tablet : Property m
-span12Tablet =
-    span (Just "tablet") 12
 
 
 {-| Span 1 columns on a desktop.
