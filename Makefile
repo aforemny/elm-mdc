@@ -2,13 +2,16 @@ ELM=elm-make --yes --warn
 PAGES=../elm-mdc-gh-pages
 
 all:
-	mkdir -p build
-	rsync -r material-components-web/demos/images build
+	mkdir -p build/assets/dialog
+
+	rsync -r demo/images build
+	rsync -r demo/assets/dialog build/assets
+	cp node_modules/material-components-web/dist/material-components-web.css build
+
 	cp demo/page.html build/index.html
 	cp elm-mdc.js build/elm-mdc.js
-	#cp material-components-web/build/material-components-web.css build
-	cp material-components-web.css build
-	(cd demo; $(ELM) Demo.elm --output ../build/elm.js)
+
+	(cd demo; $(ELM) Demo.elm --output ../build/demo.js)
 
 docs:
 	$(ELM) --docs=documentation.json

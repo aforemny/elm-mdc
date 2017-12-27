@@ -17,7 +17,8 @@ before_install:
       cd ..;
     fi
 script:
-  - yarn elm-package install -y
-  - sysconfcpus/bin/sysconfcpus -n 2 yarn docs
+  - export PATH=$(npm bin):$PATH
+  - sysconfcpus/bin/sysconfcpus -n 2 make clean all
+  - sysconfcpus/bin/sysconfcpus -n 2 make docs
 notifications:
   email: false # TODO - remove this once build is passing consistently on CI
