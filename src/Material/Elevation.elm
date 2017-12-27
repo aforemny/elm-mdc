@@ -232,4 +232,4 @@ z v =
 -}
 transition : Property a m
 transition =
-    cs "mdc-elevation--transition"
+    cs "mdc-elevation-transition"
