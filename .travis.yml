@@ -1,0 +1,23 @@
+language: node_js
+dist: trusty
+node_js:
+  - "node"
+cache:
+  yarn: true
+  directories:
+    - sysconfcpus
+before_install:
+  - | # https://github.com/elm-lang/elm-compiler/issues/1473
+    if [ ! -d sysconfcpus/bin ];
+    then
+      git clone https://github.com/obmarg/libsysconfcpus.git;
+      cd libsysconfcpus;
+      ./configure --prefix=$TRAVIS_BUILD_DIR/sysconfcpus;
+      make && make install;
+      cd ..;
+    fi
+script:
+  - yarn elm-package install -y
+  - sysconfcpus/bin/sysconfcpus -n 2 yarn docs
+notifications:
+  email: false # TODO - remove this once build is passing consistently on CI
