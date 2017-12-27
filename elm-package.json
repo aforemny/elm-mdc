@@ -32,6 +32,7 @@
         "Material.Tabs",
         "Material.Textfield",
         "Material.Textfield.HelperText",
+        "Material.Toolbar",
         "Material.Theme",
         "Material.Typography"
     ],
