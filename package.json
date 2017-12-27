@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "docs": "elm-make --docs=documentation.json",
+    "start": "elm-reactor -p 8002"
+  },
+  "dependencies": {
+    "elm": "^0.18.0"
+  },
+  "engines": {
+    "node": ">= 4"
+  }
+}
