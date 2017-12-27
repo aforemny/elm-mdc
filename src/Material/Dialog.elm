@@ -26,13 +26,16 @@ module Material.Dialog
 Refer to [this site](http://debois.github.io/elm-mdl/#dialog)
 for a live demo.
 
-@docs view
+@docs view, open
 
 # Contents
-@docs title, content, actions, fullWidth
+@docs title, body, header, footer, scrollable
 
 # Opening & closing
 @docs openOn, closeOn
+
+# Buttons
+@docs acceptButton, cancelButton
 
 -}
 
@@ -204,6 +207,8 @@ view styling nodes =
         ]
 
 
+{-| TODO - can this be removed? It's not in the MDC docs : https://github.com/material-components/material-components-web/tree/master/packages/mdc-dialog
+-}
 open : Style a
 open =
     cs "mdc-dialog--open"
