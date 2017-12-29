@@ -6,7 +6,6 @@ module Material.LinearProgress
         , indeterminate
         , buffered
         , reversed
-        , accent
         )
 
 {-|
@@ -21,9 +20,9 @@ The MDC Linear Progress component is a spec-aligned linear progress indicator co
 @docs view
 
 ## Properties
+@docs Property
 @docs determinate, indeterminate, buffered
 @docs reversed
-@docs accent
 -}
 
 import Html exposing (Html)
@@ -52,36 +51,41 @@ defaultConfig =
     }
 
 
+{-| A LinearProgress property.
+-}
 type alias Property m =
     Options.Property Config m
 
 
+{-| Determinate indicators display how long an operation will take.
+-}
 determinate : Float -> Property m
 determinate value =
     Internal.option (\config -> { config | determinate = True, value = value })
 
 
+{-| Indeterminate indicators visualize an unspecified wait time.
+-}
 indeterminate : Property m
 indeterminate =
     Internal.option (\config -> { config | indeterminate = True })
 
 
+{-| Include a buffer indicator along with a regular determinate indicator.
+-}
 buffered : Float -> Float -> Property m
 buffered value buffer =
     Internal.option (\config -> { config | buffered = True, value = value, buffer = buffer })
 
 
+{-| Reverse the indicator
+-}
 reversed : Property m
 reversed =
     Internal.option (\config -> { config | reversed = True })
 
 
-accent : Property m
-accent =
-    cs "mdc-linear-progress--accent"
-
-
-{-| TODO
+{-| Component view.
 -}
 view : List (Property m) -> List (Html m) -> Html m
 view options _ =

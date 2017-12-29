@@ -94,14 +94,6 @@ view page =
             ]
             []
           ]
-
-        , linearProgressDemo "Accent" []
-          [ LinearProgress.view
-            [ LinearProgress.determinate 0.5
-            , LinearProgress.accent
-            ]
-            []
-          ]
         ]
       ]
     ]
