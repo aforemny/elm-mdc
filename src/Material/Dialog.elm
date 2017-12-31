@@ -1,7 +1,6 @@
 module Material.Dialog
     exposing
         ( view
-        , open
         , header
         , title
         , body
@@ -26,7 +25,7 @@ module Material.Dialog
 Refer to [this site](http://debois.github.io/elm-mdl/#dialog)
 for a live demo.
 
-@docs view, open
+@docs view
 
 # Contents
 @docs title, body, header, footer, scrollable
@@ -205,10 +204,3 @@ view styling nodes =
         [ Html.div [ Html.class "mdc-dialog__surface" ] nodes
         , Html.div [ Html.class "mdc-dialog__backdrop" ] []
         ]
-
-
-{-| TODO - can this be removed? It's not in the MDC docs : https://github.com/material-components/material-components-web/tree/master/packages/mdc-dialog
--}
-open : Style a
-open =
-    cs "mdc-dialog--open"
