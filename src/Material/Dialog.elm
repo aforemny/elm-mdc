@@ -195,7 +195,7 @@ polyfill](https://github.com/GoogleChrome/dialog-polyfill).
 - Using this polyfill [places
 restrictions](https://github.com/GoogleChrome/dialog-polyfill#limitations) on
 where in the DOM you can put the output of this function.
-- The elm-mdl library currently support only one dialog pr. application.
+- The elm-mdc library currently support only one dialog per application.
 Installing more than one dialog will result in a random one showing.
 -}
 view : List (Style a) -> List (Html a) -> Html a

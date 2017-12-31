@@ -76,14 +76,10 @@ element1 lift model =
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
   page.body "Dialog"
-  [ Button.render (Mdl >> lift) [0] model.mdl
+  [ element lift model
+  , Button.render (Mdl >> lift) [0] model.mdl
     [ Dialog.openOn "click"
     ]
     [ text "Show dialog"
-    ]
-  , Button.render (Mdl >> lift) [1] model.mdl
-    [ Dialog.openOn "click"
-    ]
-    [ text "Show scrolling dialog"
     ]
   ]
