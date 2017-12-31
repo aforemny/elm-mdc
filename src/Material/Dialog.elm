@@ -137,7 +137,7 @@ openOn =
       }
       catch (e)
       {
-        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new");
+        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new", e);
       }
       """
     in
@@ -176,7 +176,7 @@ closeOn =
       }
       catch (e)
       {
-        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new");
+        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new", e);
       }
       """
     in
