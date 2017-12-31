@@ -40,7 +40,7 @@ for a live demo.
 
 import Html exposing (..)
 import Html.Attributes as Html
-import Material.Options as Options exposing (Style, Property, cs)
+import Material.Options as Options exposing (Style, Property, cs, css)
 import Material.Internal.Options as Internal
 
 
@@ -134,6 +134,7 @@ openOn =
           }
         }
         dialog.showModal();
+        dialog.classList.add("mdc-dialog--open");
       }
       catch (e)
       {
@@ -173,6 +174,7 @@ closeOn =
           return;
         }
         dialog.close();
+        dialog.classList.remove("mdc-dialog--open");
       }
       catch (e)
       {
@@ -199,7 +201,7 @@ Installing more than one dialog will result in a random one showing.
 view : List (Style a) -> List (Html a) -> Html a
 view styling nodes =
     Options.styled_ (Html.node "dialog")
-        (cs "mdc-dialog" :: styling)
+        (css "display" "flex" :: cs "mdc-dialog" :: styling)
         [ Html.id theDialog ]
         [ Html.div [ Html.class "mdc-dialog__surface" ] nodes
         , Html.div [ Html.class "mdc-dialog__backdrop" ] []
