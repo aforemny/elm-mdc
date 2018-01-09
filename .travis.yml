@@ -18,7 +18,7 @@ before_install:
     fi
 script:
   - export PATH=$(npm bin):$PATH
-  - sysconfcpus/bin/sysconfcpus -n 2 make clean all
+  - sysconfcpus/bin/sysconfcpus -n 2 ./scripts/deploy-demo-master.sh
   - sysconfcpus/bin/sysconfcpus -n 2 make docs
 notifications:
   email: false # TODO - remove this once build is passing consistently on CI

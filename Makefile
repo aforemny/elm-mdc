@@ -1,7 +1,15 @@
 ELM=elm-make --yes --warn
-PAGES=../elm-mdc-gh-pages
 
-all:
+.PHONY: all demo docs pages cleanish clean distclean
+.DELETE_ON_ERROR:
+
+all: demo docs
+
+demo: build/demo.js
+
+docs: documentation.json
+
+build: demo/* node_modules/material-components-web/dist/material-components-web.css elm-mdc.js
 	mkdir -p build/assets/dialog
 
 	rsync -r demo/images build
@@ -11,14 +19,11 @@ all:
 	cp demo/page.html build/index.html
 	cp elm-mdc.js build/elm-mdc.js
 
+build/demo.js: build demo/*
 	(cd demo; $(ELM) Demo.elm --output ../build/demo.js)
 
-docs:
+documentation.json: src/*
 	$(ELM) --docs=documentation.json
-
-pages:
-	rsync -r build/ $(PAGES)
-	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
 
 cleanish:
 	rm -rf build
