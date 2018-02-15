@@ -698,21 +698,16 @@ decodeGeometry =
              }
          )
     )
-    ( -- Note: The original implementation reads window.{innerWidth,innerHeight}.
-      -- This is the best we can do:
-      let
-        traverseToRoot : Decoder a -> Decoder a
-        traverseToRoot decoder =
-            Json.oneOf
-            [ DOM.parentElement (Json.lazy (\_ -> traverseToRoot decoder))
-            , decoder
-            ]
-      in
-        traverseToRoot <|
-        Json.map2
-          (\clientWidth clientHeight -> { width = clientWidth, height = clientHeight })
-          DOM.offsetWidth
-          DOM.offsetHeight
+    ( Json.at [ "ownerDocument" ] <|
+      Json.at [ "defaultView" ]   <|
+      Json.map2
+        (\ innerWidth innerHeight ->
+          { width = toFloat innerWidth
+          , height = toFloat innerHeight
+          }
+        )
+        (Json.at ["innerWidth"] Json.int)
+        (Json.at ["innerHeight"] Json.int)
     )
 
 
