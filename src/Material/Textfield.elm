@@ -309,18 +309,18 @@ view lift model options _ =
     in
         Internal.applyContainer summary
             div
-            [ cs "mdc-textfield"
-            , cs "mdc-textfield--upgraded"
+            [ cs "mdc-text-field"
+            , cs "mdc-text-field--upgraded"
             , Internal.on1 "focus" lift Focus
             , Internal.on1 "blur" lift Blur
-            , cs "mdc-textfield--focused" |> when isFocused 
-            , cs "mdc-textfield--disabled" |> when config.disabled
-            , cs "mdc-textfield--dense" |> when config.dense
-            , cs "mdc-textfield--fullwidth" |> when config.fullWidth
-            , cs "mdc-textfield--invalid" |> when isInvalid
-            , cs "mdc-textfield--multiline" |> when config.multiline
+            , cs "mdc-text-field--focused" |> when isFocused
+            , cs "mdc-text-field--disabled" |> when config.disabled
+            , cs "mdc-text-field--dense" |> when config.dense
+            , cs "mdc-text-field--fullwidth" |> when config.fullWidth
+            , cs "mdc-text-field--invalid" |> when isInvalid
+            , cs "mdc-text-field--multiline" |> when config.multiline
             , when config.textfieldBox << Options.many <|
-              [ cs "mdc-textfield--box"
+              [ cs "mdc-text-field--box"
               , rippleOptions
               ]
             , preventEnterWhenMaxRowsExceeded
@@ -328,7 +328,7 @@ view lift model options _ =
             [ Internal.applyInput summary
                 (if config.multiline then Html.textarea else Html.input)
                 [
-                  cs "mdc-textfield__input"
+                  cs "mdc-text-field__input"
                 , css "outline" "none"
                 , Internal.on1 "focus" lift Focus
                 , Internal.on1 "blur" lift Blur
@@ -364,8 +364,8 @@ view lift model options _ =
                 ]
                 []
             , Options.styled Html.label
-                [ cs "mdc-textfield__label"
-                , cs "mdc-textfield__label--float-above" |> when (isFocused || isDirty)
+                [ cs "mdc-text-field__label"
+                , cs "mdc-text-field__label--float-above" |> when (isFocused || isDirty)
                 ]
                 ( case config.labelText of
                     Just str ->
@@ -375,7 +375,7 @@ view lift model options _ =
                         []
                 )
             , Options.styled div
-              [ cs "mdc-textfield__bottom-line"
+              [ cs "mdc-text-field__bottom-line"
               ]
               [
               ]
