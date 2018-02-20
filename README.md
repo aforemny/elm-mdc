@@ -9,6 +9,14 @@ CSS/JS implementation of the
 
 The implementation is based on [debois/elm-mdl](https://github.com/debois/elm-mdl).
 
+## Build instructions
+
+```sh
+$ npm i
+$ make
+$ open build/index.html
+```
+
 ## Using this library
 
 - TODO: page.html
