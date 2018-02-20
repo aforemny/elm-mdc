@@ -1,14 +1,16 @@
 module Demo.Cards exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Demo.Page as Page exposing (Page)
-import Html as Html_
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
 import Material.Card as Card
 import Material.Checkbox as Checkbox
+import Material.Icon as Icon
+import Material.IconToggle as IconToggle
 import Material.Options as Options exposing (styled, cs, css, when)
+import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 
@@ -39,6 +41,306 @@ update lift msg model =
             ( { model | rtl = not model.rtl }, Cmd.none )
 
 
+heroCard : (Msg m -> m) -> List Int -> Model -> Html m
+heroCard lift index model =
+  Card.view
+  [ css "width" "350px"
+  , css "margin" "48px"
+  ]
+  [
+    Card.media
+    [ Card.aspect16To9
+    , Card.backgroundImage "images/16-9.jpg"
+    ]
+    []
+  ,
+    styled Html.div
+    [ css "padding" "1rem"
+    ]
+    [
+      styled Html.h2
+      [ Typography.title
+      , css "margin" "0"
+      ]
+      [ text "Our Changing Planet"
+      ]
+
+    ,
+      styled Html.h3
+      [ Typography.subheading1
+      , css "margin" "0"
+      ]
+      [ text "by Kurt Wagner"
+      ]
+    ]
+  ,
+    styled Html.div
+    [ css "padding" "0 1rem 8px 1rem"
+    , css "color" "rgba(0, 0, 0, 0.54)"
+    , css "color" "var(--mdc-theme-text-secondary-on-background, rgba(0, 0, 0, 0.54))"
+    , Typography.body1
+    ]
+    [ text
+      """
+Visit ten places on our planet that are undergoing the biggest changes today.
+      """
+    ]
+  ,
+    Card.actions
+    [
+    ]
+    [
+      Card.actionButtons
+      [
+      ]
+      [
+        Button.render (lift << Mdl) (index ++ [0]) model.mdl
+        [ Card.actionButton
+        , Button.ripple
+        ]
+        [ text "Read"
+        ]
+      ,
+        Button.render (lift << Mdl) (index ++ [1]) model.mdl
+        [ Card.actionButton
+        , Button.ripple
+        ]
+        [ text "Bookmark"
+        ]
+      ]
+    ,
+      Card.actionIcons
+      [
+      ]
+      [
+        IconToggle.render (lift << Mdl) (index ++ [2]) model.mdl
+        [ Card.actionIcon
+        , IconToggle.icon "favorite" "favorite_border"
+        , IconToggle.label "Remove from favorites" "Add to favorites"
+        ]
+        []
+      ,
+        IconToggle.render (lift << Mdl) (index ++ [3]) model.mdl
+        [ Card.actionIcon
+        , IconToggle.icon "share" "share"
+        , IconToggle.label "Share" "Share"
+        ]
+        []
+      ,
+        IconToggle.render (lift << Mdl) (index ++ [4]) model.mdl
+        [ Card.actionIcon
+        , IconToggle.icon "more_vert" "more_vert"
+        , IconToggle.label "More options" "More options"
+        ]
+        []
+      ]
+    ]
+  ]
+
+
+headlinesCard : (Msg m -> m) -> List Int -> Model -> Html m
+headlinesCard lift index model =
+    let
+      listDivider =
+        styled Html.hr [ cs "mdc-list-divider" ] []
+
+      article title body =
+          styled Html.a
+          [ css "padding" "16px"
+          ]
+          [ styled Html.h2
+            [ Typography.headline
+            , css "margin" "0 0 4px 0"
+            ]
+            [ text title
+            ]
+          , styled Html.p
+            [ Typography.body1
+            , css "color" "rgba(0, 0, 0, 0.54)"
+            , css "color" "var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54))"
+            , css "margin" "0"
+            ]
+            [ text title
+            ]
+          ]
+    in
+    Card.view
+    [ Card.stroked
+    , css "margin" "48px"
+    ]
+    (
+      List.intersperse listDivider
+      [
+        styled Html.div
+        [ Typography.subheading2
+        , css "color" "rgba(0, 0, 0, 0.54)"
+        , css "color" "var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54))"
+        , css "padding" "8px 16px"
+        ]
+        [ text "Headlines"
+        ]
+      ,
+        article
+            "Copper on the rise"
+            "Copper price soars amid global market optimism and increased demand."
+      ,
+        article
+            "U.S. tech startups rebound"
+            "Favorable business conditions have allowed startups to secure more fundraising deals compared to last year."
+      ,
+        article
+            "Asia's clean energy ambitions"
+            "China plans to invest billions of dollars for the development of over 300 clean energy projects in Southeast Asia."
+      ,
+        Card.actions
+        [ Card.fullBleed
+        ]
+        [ Button.render (lift << Mdl) (index ++ [0]) model.mdl
+          [ Button.ripple
+          , Card.actionButton
+          , css "width" "100%"
+          , css "justify-content" "space-between"
+          , css "padding" "8px 16px"
+          , css "height" "auto"
+          ]
+          [ text "All Business Headlines"
+          , Icon.view "arrow_forward" []
+          ]
+        ]
+      ]
+    )
+
+
+photosCard : (Msg m -> m) -> List Int -> Model -> Html m
+photosCard lift index model =
+    Card.view
+    [ css "width" "200px"
+    , css "margin" "48px"
+    ]
+    [
+      Card.media
+      [ Card.square
+      , Card.backgroundImage "images/1-1.jpg"
+      ]
+      [ Card.mediaContent
+        [ css "display" "flex"
+        , css "flex-flow" "column"
+        , css "justify-content" "flex-end"
+        , css "color" "#fff"
+        ]
+        [ styled Html.div
+          [ Typography.subheading2
+          , css "background-image" "linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 100%)"
+          , css "padding" "8px 16px"
+          ]
+          [ text "Vacation Photos"
+          ]
+        ]
+      ]
+    ,
+      Card.actions
+      [
+      ]
+      [ Card.actionIcons []
+        [
+          IconToggle.render (lift << Mdl) (index ++ [0]) model.mdl
+          [ Card.actionIcon
+          , IconToggle.icon "favorite" "favorite_border"
+          , IconToggle.label "Remove from favorites" "Add to favorites"
+          ]
+          []
+        ,
+          IconToggle.render (lift << Mdl) (index ++ [1]) model.mdl
+          [ Card.actionIcon
+          , IconToggle.icon "bookmark" "bookmark_border"
+          , IconToggle.label "Remove bookmark" "Add bookmark"
+          ]
+          []
+        ,
+          IconToggle.render (lift << Mdl) (index ++ [2]) model.mdl
+          [ Card.actionIcon
+          , IconToggle.icon "share" "share"
+          , IconToggle.label "Share" "Share"
+          ]
+          []
+        ]
+      ]
+    ]
+
+
+albumCard : (Msg m -> m) -> List Int -> Model -> Html m
+albumCard lift index model =
+    Card.view
+    [ css "border-radius" "24px 4px"
+    , css "margin" "48px"
+    ]
+    [ styled Html.div
+      [ css "display" "flex"
+      , css "border-top-left-radius" "inherit"
+      ]
+      [
+        Card.media
+        [ Card.square
+        , Card.backgroundImage "images/1-1.jpg"
+        , css "width" "110px"
+        ]
+        []
+      ,
+        styled Html.div
+        [ css "padding" "8px 16px"
+        ]
+        [
+          styled Html.div
+          [ Typography.headline
+          ]
+          [ text "Rozes"
+          ]
+        ,
+          styled Html.div
+          [ Typography.body1
+          ]
+          [ text "Under the Grave"
+          ]
+        ,
+          styled Html.div
+          [ Typography.body1
+          ]
+          [ text "(2016)"
+          ]
+        ]
+      ]
+    ,
+      styled Html.hr [ cs "mdc-list-divider" ] []
+    ,
+      Card.actions []
+      [ Card.actionButtons []
+        [ text "Rate this album"
+        ]
+      ,
+        Card.actionIcons []
+        ( List.range 1 5
+          |> List.map (\ n ->
+               IconToggle.render (lift << Mdl) (index ++ [n]) model.mdl
+               [ Card.actionIcon
+               , IconToggle.icon "star_border" "star_border"
+               , IconToggle.label (toString n ++ " stars") (toString n ++ " stars")
+               ]
+               []
+             )
+        )
+      ]
+    ]
+
+--<div class="mdc-card demo-card demo-card--music">
+--          <div class="demo-card__music-row">
+--            <div class="mdc-card__media mdc-card__media--square demo-card__media demo-card__media--music"></div>
+--            <div class="demo-card__music-info">
+--              <div class="demo-card__music-title mdc-typography--headline">Rozes</div>
+--              <div class="demo-card__music-artist mdc-typography--body1">Under the Grave</div>
+--              <div class="demo-card__music-year mdc-typography--body1">(2016)</div>
+--            </div>
+
+
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     let
@@ -55,326 +357,24 @@ view lift page model =
             :: css "margin" "24px"
             :: css "flex-flow" "row wrap"
             :: css "align-content" "left"
-            :: css "justify-content" "left"
+            :: css "justify-content" "center"
             :: cs "mdc-typography"
             :: options
             )
                 << List.map (\card -> Html.div [] [ card ])
-
-
-        demoCard options =
-            Card.view
-            (  css "margin" "24px"
-            :: css "min-width" "320px"
-            :: css "max-width" "21.875rem"
-            :: options
-            )
-
-
-        demoSupportingText =
-            Card.supportingText []
-            [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor."
-            ]
-
-
-        card0 model =
-            demoCard
-            [
-            ]
-            [ Card.media
-              [ css "background-image" "url(images/16-9.jpg)"
-              , css "background-size" "cover"
-              , css "height" "12.313rem"
-              ]
-              [
-              ]
-            , demoSupportingText
-            ]
-
-
-        demoMedia options =
-            Card.media
-            ( css "background-size" "cover"
-            :: css "height" "12.313rem"
-            :: options
-            )
-
-
-        demoActions model options =
-            Card.actions
-            options
-            [
-              Button.render (Mdl >> lift) [1,1,0] model.mdl
-              [ Button.compact
-              ]
-              [ text "Action 1"
-              ]
-            , Button.render (Mdl >> lift) [1,1,1] model.mdl
-              [ Button.compact
-              ]
-              [ text "Action 2"
-              ]
-            ]
-
-
-        demoTitle0 =
-            Card.title [ Card.large ] [ text "Title" ]
-
-
-        demoSubtitle0 =
-            Card.subtitle [] [ text "Subehead" ]
-
-
-        demoTitle1 =
-            Card.title [ Card.large ] [ text "Title goes here" ]
-
-
-        demoSubtitle1 =
-            Card.subtitle [] [ text "Subtitle here" ]
-
-
-        demoTitle2 =
-            Card.title [ Card.large ] [ text "Title" ]
-
-
-        demoPrimary options =
-            Card.primary
-            (  css "position" "relative"
-            :: options
-            )
-            [ Options.div
-                  [ css "position" "absolute"
-                  , css "background" "#bdbdbd"
-                  , css "height" "2.5rem"
-                  , css "width" "2.5rem"
-                  , css "border-radius" "50%"
-                  ]
-                  []
-            , Card.title
-              [ if model.rtl then
-                    css "margin-right" "56px"
-                else
-                    css "margin-left" "56px"
-              ]
-              [ text "Title"
-              ]
-            , Card.subtitle
-              [ if model.rtl then
-                    css "margin-right" "56px"
-                else
-                    css "margin-left" "56px"
-              ]
-              [ text "Subhead"
-              ]
-            ]
-
-
-        card1 model =
-            demoCard []
-            [ demoPrimary []
-            , demoMedia
-              [ css "background-image" "url(images/16-9.jpg)"
-              ]
-              []
-            , demoSupportingText
-            , demoActions model []
-            ]
-
-
-        card2 model =
-            demoCard []
-            [ demoPrimary []
-            , demoMedia
-              [ css "background-image" "url(images/16-9.jpg)"
-              ]
-              []
-            , demoActions model [ Card.vertical ]
-            ]
-
-
-        demoPrimary2 options =
-            Card.primary
-            (  css "position" "relative"
-            :: options
-            )
-            [ demoTitle1
-            , demoSubtitle1
-            ]
-
-        card3 model =
-            demoCard []
-            [ demoMedia
-              [ css "background-image" "url(images/16-9.jpg)"
-              ]
-              []
-            , demoPrimary2 []
-            , demoActions model []
-            ]
-
-
-        card4 model =
-            demoCard []
-            [ Card.primary
-              [ css "position" "relative"
-              ]
-              [ demoTitle1
-              , demoSubtitle1
-              ]
-            , Card.supportingText []
-              [ text "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-              ]
-            , demoActions model []
-            ]
-
-
-        card5 model =
-            demoCard
-            [ Card.darkTheme
-            , css "background-image" "url(images/1-1.jpg"
-            , css "background-size" "cover"
-            , css "height" "21.875rem"
-            ]
-            [ demoPrimary2
-              [ css "background" "rgba(0,0,0,0.4)"
-              ]
-            , Card.actions
-              [ css "background" "rgba(0,0,0,0.4)"
-              ]
-              [ Button.render (Mdl >> lift) [1,1,0] model.mdl
-                [ Button.compact
-                , Button.darkTheme
-                ]
-                [ text "Action 1"
-                ]
-              , Button.render (Mdl >> lift) [1,1,1] model.mdl
-                [ Button.compact
-                , Button.darkTheme
-                ]
-                [ text "Action 2"
-                ]
-              ]
-            ]
-
-
-        card6 model =
-            demoCard []
-            [ demoMedia
-              [ css "background-image" "url(images/1-1.jpg)"
-              ]
-              [ Card.title [ Card.large ] [ text "Title" ]
-              ]
-            , Card.actions []
-              [ Button.render (Mdl >> lift) [1,6,0] model.mdl
-                [ Button.compact
-                ]
-                [ text "Action 1"
-                ]
-              ]
-            ]
-
-
-        mediaItem options =
-            Card.mediaItem options
-            [ Html.img
-              [ Html.src "images/1-1.jpg"
-              , Html.style
-                [ ("width", "auto")
-                , ("height", "100%")
-                ]
-              ]
-              []
-            ]
-
-
-        demoPrimary3 options =
-            Card.primary
-            (  css "position" "relative"
-            :: options
-            )
-            [ demoTitle3
-            , demoSubtitle3
-            ]
-
-
-        demoTitle3 =
-            Card.title [ Card.large ] [ text "Title here" ]
-
-
-        demoSubtitle3 =
-            Card.subtitle [] [ text "Subtitle here" ]
-
-
-        card7 model =
-            demoCard []
-            [ Card.horizontalBlock []
-              [ demoPrimary3 []
-              , mediaItem []
-              ]
-            , demoActions model []
-            ]
-
-
-        card8 model =
-            demoCard []
-            [ Card.horizontalBlock []
-              [ demoPrimary3 []
-              , mediaItem [ Card.x1dot5 ]
-              ]
-            , demoActions model []
-            ]
-
-
-        card9 model =
-            demoCard []
-            [ Card.horizontalBlock []
-              [ demoPrimary3 []
-              , mediaItem [ Card.x2 ]
-              ]
-            , demoActions model []
-            ]
-
-
-        card10 model =
-            demoCard
-            [
-            ]
-            [ Card.horizontalBlock []
-              [ mediaItem [ Card.x3 ]
-              , Card.actions
-                [ Card.vertical
-                ]
-                [ Button.render (Mdl >> lift) [1,10,0] model.mdl
-                  [ Button.compact
-                  ]
-                  [ text "A 1"
-                  ]
-                , Button.render (Mdl >> lift) [1,10,1] model.mdl
-                  [ Button.compact
-                  ]
-                  [ text "A 2"
-                  ]
-                ]
-              ]
-            ]
     in
     page.body "Card"
     [
       Page.hero
-      [ css "min-height" "480px"
+      [ css "height" "auto"
       ]
-      [ demoCard
-        [ css "background-color" "white"
-        ]
-        [ demoMedia
-          [ css "background-image" "url(images/16-9.jpg)"
-          ]
-          []
-        , demoPrimary2 []
-        , demoActions model []
-        ]
+      [
+        heroCard lift [0] model
       ]
 
-    , example []
+    , example
+      [ css "text-align" "center"
+      ]
       [ styled Html.div
         [ cs "mdc-form-field"
         ]
@@ -391,19 +391,13 @@ view lift page model =
       ]
     
     , demoWrapper
-      [ Html.dir "rtl"
-        |> when model.rtl << Options.attribute
+      [ Options.attribute (Html.dir "rtl") |> when model.rtl
       ]
-      [ card0 model
-      , card1 model
-      , card2 model
-      , card3 model
-      , card4 model
-      , card5 model
-      , card6 model
-      , card7 model
-      , card8 model
-      , card9 model
-      , card10 model
+      [
+        headlinesCard lift [1] model
+      ,
+        photosCard lift [2] model
+      ,
+        albumCard lift [3] model
       ]
     ]

@@ -71,12 +71,12 @@ headline =
 
 subheading1 : Property c m
 subheading1 =
-    cs "mdc-typography--subheading"
+    cs "mdc-typography--subheading1"
 
 
 subheading2 : Property c m
 subheading2 =
-    cs "mdc-typography--subheading"
+    cs "mdc-typography--subheading2"
 
 
 adjustMargin : Property c m

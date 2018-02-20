@@ -1,28 +1,20 @@
 module Material.Card
     exposing
-        ( -- VIEW
-          view
-
-        , primary
-        , title
-        , large
-        , subtitle
-
-        , supportingText
-
+        ( actionButton
+        , actionButtons
+        , actionIcon
+        , actionIcons
         , actions
-        , vertical
-
+        , aspect16To9
+        , fullBleed
         , media
-        , mediaItem
-        , x1dot5
-        , x2
-        , x3
-
-        , horizontalBlock
-
+        , backgroundImage
+        , mediaContent
+        , primaryAction
         , Property
-        , darkTheme
+        , square
+        , stroked
+        , view
         )
 
 {-| Card is a component that implements the Material Design card component.
@@ -32,21 +24,32 @@ module Material.Card
 - [Material Design guidelines: Cards](https://material.io/guidelines/components/cards.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#cards)
 
-@docs view
-
-## Elements
-@docs primary, title, large, subtitle
-@docs supportingText
-@docs actions, vertical
-@docs media, mediaItem, x1dot5, x2, x3
-@docs horizontalBlock
-
-## Properties
 @docs Property
-@docs darkTheme
+@docs view
+@docs stroked
+@docs primary
+@docs secondary
+@docs primaryAction
+
+### Card media
+@docs media
+@docs backgroundImage
+@docs square
+@docs aspect16-9
+@docs mediaContent
+
+### Card actions
+@docs actions
+@docs fullBleed
+@docs actionButtons
+@docs actionIcons
+@docs actionButton
+@docs actionIcon
 -}
 
 import Html exposing (Html)
+import Material.Button as Button
+import Material.IconToggle as IconToggle
 import Material.Options as Options exposing (cs, css, div)
 
 
@@ -65,13 +68,6 @@ type alias Property m =
     Options.Property Config m
 
 
-{-| Use a dark theme for this card.
--}
-darkTheme : Property m
-darkTheme =
-    cs "mdc-card--theme-dark"
-
-
 {-| Component view.
 -}
 view : List (Property m) -> List (Html m) -> Html m
@@ -79,92 +75,113 @@ view options =
     Options.div (cs "mdc-card" :: options)
 
 
-{-| Defines the primary text / title content block.
+{-| Removes the card's shadow and displays a hairline stroke instead
 -}
-primary : List (Property m) -> List (Html m) -> Html m
-primary options =
-    div (cs "mdc-card__primary"::options)
+stroked : Property m
+stroked =
+    cs "mdc-card--stroked"
 
 
-{-| A title block, to be contained in the primary section of the card.
+{-| The main tappable area of the card. Typically contains all card content,
+except `cardActions`. Only applicable to cards that have a primary action that
+the main surface should trigger.
 -}
-title : List (Property m) -> List (Html m) -> Html m
-title options =
-    div (cs "mdc-card__title"::options)
+primaryAction : List (Property m) -> List (Html m) -> Html m
+primaryAction options =
+    div (cs "mdc-card__primary-action"::options)
 
 
-{-| An option for the title, to make it larger.
--}
-large : Property m
-large =
-    cs "mdc-card__title--large"
-
-{-| A subtitle block, to be contained in the primary section of the card.
--}
-subtitle : List (Property m) -> List (Html m) -> Html m
-subtitle options =
-    div (cs "mdc-card__subtitle"::options)
-
-
-{-| This area is used for displaying the bulk of the textual content of the card.
--}
-supportingText : List (Property m) -> List (Html m) -> Html m
-supportingText options =
-    div (cs "mdc-card__supporting-text"::options)
-
-
-{-| Actions to include on a card.
--}
-actions : List (Property m) -> List (Html m) -> Html m
-actions options =
-    div (cs "mdc-card__actions"::options)
-
-
-{-| Option to lay actions out vertically instead of horizontally.
--}
-vertical : Property m
-vertical =
-    cs "mdc-card__actions--vertical"
-
-
-{-| Used for showing rich media in cards.
+{-| Media area that displays a custom `background-image` with `background-size: cover`
 -}
 media : List (Property m) -> List (Html m) -> Html m
 media options =
-    div (cs "mdc-card__media"::options)
+    div
+    ( cs "mdc-card__media"
+    :: options
+    )
 
 
-{-| Media items are designed to be used in horizontal blocks, taking up a fixed height,
-rather than stretching to the width of the card.
+backgroundImage : String -> Property m
+backgroundImage url =
+    css "background-image" ("url(" ++ url ++ ")")
+
+
+{-| Automatically scales the media area's height to equal its width
 -}
-mediaItem : List (Property m) -> List (Html m) -> Html m
-mediaItem options =
-    div (cs "mdc-card__media-item"::options)
+square : Property m
+square =
+    cs "mdc-card__media--square"
 
 
-{-| Predefined media item size - 120px.
+{-| Automatically scales the media area's height according to its width,
+maintaining a 16:9 aspect ratio
 -}
-x1dot5 : Property m
-x1dot5 =
-    cs "mdc-card__media-item--1dot5x"
+aspect16To9 : Property m
+aspect16To9 =
+    cs "mdc-card__media--16-9"
 
 
-{-| Predefined media item size - 160px.
+{-| An absolutely-positioned box the same size as the media area, for
+displaying a title or icon on top of the `background-image`
 -}
-x2 : Property m
-x2 =
-    cs "mdc-card__media-item--2x"
+mediaContent : List (Property m) -> List (Html m) -> Html m
+mediaContent options =
+    div
+    ( cs "mdc-card__media-content"
+    :: options
+    )
 
 
-{-| Predefined media item size - 240px.
+{-| Row containing action buttons and/or icons
 -}
-x3 : Property m
-x3 =
-    cs "mdc-card__media-item--3x"
+actions : List (Property m) -> List (Html m) -> Html m
+actions options =
+    div
+    ( cs "mdc-card__actions"
+    :: options
+    )
 
 
-{-| Stack multiple card blocks horizontally instead of vertically by placing in a `horizontalBlock`.
+{-| Removes the action area's padding and causes its only child (`actions`
+element) to consume 100% of the action area's width
 -}
-horizontalBlock : List (Property m) -> List (Html m) -> Html m
-horizontalBlock options =
-    Options.div (cs "mdc-card__horizontal-block"::options)
+fullBleed : Property m
+fullBleed =
+    cs "mdc-card__actions--full-bleed"
+
+
+{-| A group of action buttons, displayed on the left side of the card (in LTR),
+adjacent to `actionIcons`
+-}
+actionButtons : List (Property m) -> List (Html m) -> Html m
+actionButtons options =
+    div
+    ( cs "mdc-card__action-buttons"
+    :: options
+    )
+
+
+{-| A group of supplemental icons, displayed on the right side of the card (in
+LTR), adjacent to `actionButtons`
+-}
+actionIcons : List (Property m) -> List (Html m) -> Html m
+actionIcons options =
+    div
+    ( cs "mdc-card__action-icons"
+    :: options
+    )
+
+
+{-| An action button with text
+-}
+actionButton : Button.Property m
+actionButton =
+    cs "mdc-card__action mdc-card__action-button"
+
+
+
+{-| An action icon with text
+-}
+actionIcon : IconToggle.Property m
+actionIcon =
+    cs "mdc-card__action mdc-card__action-icon"
