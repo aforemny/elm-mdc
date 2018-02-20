@@ -368,7 +368,7 @@ startDetail : List (Options.Style m) -> Html m
 startDetail options =
     Lists.ul options
     ( Lists.li []
-      [ Lists.startDetail [ cs "gray-bg" ] []
+      [ Lists.graphic [ cs "gray-bg" ] []
       , Html.text "Single-line item"
       ]
         |> List.repeat 3
@@ -379,15 +379,15 @@ startDetailExample : Html m
 startDetailExample =
     Lists.ul []
     [ Lists.li []
-      [ Lists.startDetailIcon "network_wifi" []
+      [ Lists.graphicIcon [] "network_wifi"
       , Html.text "Wi-Fi"
       ]
     , Lists.li []
-      [ Lists.startDetailIcon "bluetooth" []
+      [ Lists.graphicIcon [] "bluetooth"
       , Html.text "Bluetooth"
       ]
     , Lists.li []
-      [ Lists.startDetailIcon "data_usage" []
+      [ Lists.graphicIcon [] "data_usage"
       , Html.text "Data Usage"
       ]
     ]
@@ -396,19 +396,19 @@ startDetailExample =
 avatarList : List (Options.Style m) -> Html m
 avatarList options =
     Lists.ul
-    ( Lists.avatar
+    ( Lists.avatarList
     :: options
     )
     [ Lists.li []
-      [ Lists.startDetail [ cs "gray-bg" ] []
+      [ Lists.graphic [ cs "gray-bg" ] []
       , Html.text "Single-line item"
       ]
     , Lists.li []
-      [ Lists.startDetail [ cs "gray-bg" ] []
+      [ Lists.graphic [ cs "gray-bg" ] []
       , Html.text "Single-line item"
       ]
     , Lists.li []
-      [ Lists.startDetail [ cs "gray-bg" ] []
+      [ Lists.graphic [ cs "gray-bg" ] []
       , Html.text "Single-line item"
       ]
     ]
@@ -417,18 +417,18 @@ avatarList options =
 avatarListExample : Html m
 avatarListExample =
     Lists.ul
-    [ Lists.avatar
+    [ Lists.avatarList
     ]
     [ Lists.li []
-      [ Lists.avatarImage "images/animal1.svg" []
+      [ Lists.graphicImage [] "images/animal1.svg"
       , Html.text "Panda"
       ]
     , Lists.li []
-      [ Lists.avatarImage "images/animal2.svg" []
+      [ Lists.graphicImage [] "images/animal2.svg"
       , Html.text "Sleuth"
       ]
     , Lists.li []
-      [ Lists.avatarImage "images/animal3.svg" []
+      [ Lists.graphicImage [] "images/animal3.svg"
       , Html.text "Brown Bear"
       ]
     ]
@@ -439,7 +439,7 @@ endDetail options =
     Lists.ul options
     ( Lists.li []
       [ Html.text "Single-line item"
-      , Lists.endDetail [ cs "gray-bg" ] []
+      , Lists.meta [ cs "gray-bg" ] []
       ]
         |> List.repeat 3
     )
@@ -448,13 +448,13 @@ endDetail options =
 avatarPlusEndDetail : List (Options.Style m) -> Html m
 avatarPlusEndDetail options =
     Lists.ul
-    ( Lists.avatar
+    ( Lists.avatarList
     :: options
     )
     ( Lists.li []
-      [ Lists.startDetail [ cs "gray-bg" ] []
+      [ Lists.graphic [ cs "gray-bg" ] []
       , Html.text "Single-line item"
-      , Lists.endDetail [ cs "gray-bg" ] []
+      , Lists.meta [ cs "gray-bg" ] []
       ]
         |> List.repeat 3
     )
@@ -469,16 +469,17 @@ avatarWithTextAndIconExample =
                     "images/" ++ src
             in
             Lists.li []
-            [ Lists.avatarImage url []
+            [ Lists.graphicImage [] url
             , Html.text text
-            , Lists.endDetailIcon icon
+            , Lists.metaIcon
               [ css "text-decoration" "none"
               , css "color" "#ff4081"
               ]
+              icon
             ]
     in
     Lists.ul
-    [ Lists.avatar
+    [ Lists.avatarList
     ]
     [ item "animal3.svg" "Brown Bear" "favorite"
     , item "animal1.svg" "Panda" "favorite_border"
@@ -495,7 +496,7 @@ twoLine options =
     ( Lists.li []
       [ Lists.text []
         [ Html.text "Two-line item"
-        , Lists.secondary []
+        , Lists.secondaryText []
           [ Html.text "Secondary text"
           ]
         ]
@@ -511,10 +512,10 @@ startDetail_ options =
     :: options
     )
     ( Lists.li []
-      [ Lists.startDetail [ cs "gray-bg" ] []
+      [ Lists.graphic [ cs "gray-bg" ] []
       , Lists.text []
         [ Html.text "Two-line item"
-        , Lists.secondary []
+        , Lists.secondaryText []
           [ Html.text "Secondary text"
           ]
         ]
@@ -527,14 +528,14 @@ avatarList_ : List (Options.Style m) -> Html m
 avatarList_ options =
     Lists.ul
     ( Lists.twoLine
-    :: Lists.avatar
+    :: Lists.avatarList
     :: options
     )
     ( Lists.li []
-      [ Lists.startDetail [ cs "gray-bg" ] []
+      [ Lists.graphic [ cs "gray-bg" ] []
       , Lists.text []
         [ Html.text "Two-line item"
-        , Lists.secondary []
+        , Lists.secondaryText []
           [ Html.text "Secondary text"
           ]
         ]
@@ -552,11 +553,11 @@ endDetail_ options =
     ( Lists.li []
       [ Lists.text []
         [ Html.text "Two-line item"
-        , Lists.secondary []
+        , Lists.secondaryText []
           [ Html.text "Secondary text"
           ]
         ]
-      , Lists.endDetail [ cs "gray-bg" ] []
+      , Lists.meta [ cs "gray-bg" ] []
       ]
       |> List.repeat 3
     )
@@ -567,16 +568,16 @@ twoLineAvatarPlusTextPlusIconExample =
     let
         item primary secondary =
             Lists.li []
-            [ Lists.startDetail []
+            [ Lists.graphic []
               [ Icon.view "folder" []
               ]
             , Lists.text []
               [ Html.text primary
-              , Lists.secondary []
+              , Lists.secondaryText []
                 [ Html.text secondary
                 ]
               ]
-            , Lists.endDetailIcon "info" []
+            , Lists.metaIcon [] "info"
             ]
     in
     styled Html.div
@@ -608,7 +609,7 @@ twoLineAvatarPlusTextPlusIconExample =
       ]
     , Lists.ul
       [ Lists.twoLine
-      , Lists.avatar
+      , Lists.avatarList
       , Options.id "two-line-avatar-text-icon-demo"
       ]
       [ item "Photos" "Jan 9, 2014"
@@ -635,18 +636,18 @@ fullWidthDividers =
 insetDividers : Html m
 insetDividers =
     Lists.ul
-    [ Lists.avatar
+    [ Lists.avatarList
     ]
     ( List.concat
       [ Lists.li []
-        [ Lists.startDetail [ cs "gray-bg" ] []
+        [ Lists.graphic [ cs "gray-bg" ] []
         , Html.text "Single-line item - section 1"
         ]
           |> List.repeat 3
       , [ Lists.divider [ Lists.inset ] []
         ]
       , Lists.li []
-        [ Lists.startDetail [ cs "gray-bg" ] []
+        [ Lists.graphic [ cs "gray-bg" ] []
         , Html.text "Single-line item - section 2"
         ]
           |> List.repeat 2
@@ -682,16 +683,16 @@ groupsExample =
 
         item icon primary secondary =
             Lists.li []
-            [ Lists.startDetail []
+            [ Lists.graphic []
               [ Icon.view icon []
               ]
             , Lists.text []
               [ Html.text primary
-              , Lists.secondary []
+              , Lists.secondaryText []
                 [ Html.text secondary
                 ]
               ]
-            , Lists.endDetailIcon "info" []
+            , Lists.metaIcon [] "info"
             ]
     in
     [ Html.node "style"
@@ -723,7 +724,7 @@ groupsExample =
         ]
       , Lists.ul
         [ Lists.twoLine
-        , Lists.avatar
+        , Lists.avatarList
         , cs "two-line-avatar-text-icon-demo"
         ]
         [ folder "Photos" "Jan 9, 2014"
@@ -736,7 +737,7 @@ groupsExample =
         ]
       , Lists.ul
         [ Lists.twoLine
-        , Lists.avatar
+        , Lists.avatarList
         , cs "two-line-avatar-text-icon-demo"
         ]
         [ file "Vacation Itinerary" "Jan 10, 2014"
@@ -759,7 +760,7 @@ interactiveList lift idx model =
       Lists.li
       [ rippleOptions
       ]
-      [ Lists.startDetailIcon "network_wifi" []
+      [ Lists.graphicIcon [] "network_wifi"
       , Html.text "Wi-Fi"
       , rippleStyle
       ]
@@ -771,7 +772,7 @@ interactiveList lift idx model =
       Lists.li
       [ rippleOptions
       ]
-      [ Lists.startDetailIcon "bluetooth" []
+      [ Lists.graphicIcon [] "bluetooth"
       , Html.text "Bluetooth"
       , rippleStyle
       ]
@@ -783,7 +784,7 @@ interactiveList lift idx model =
       Lists.li
       [ rippleOptions
       ]
-      [ Lists.startDetailIcon "data_usage" []
+      [ Lists.graphicIcon [] "data_usage"
       , Html.text "Data Usage"
       , rippleStyle
       ]

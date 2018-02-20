@@ -1,28 +1,29 @@
 module Material.List
     exposing
-        ( -- View
-          ul
-        , dense
-        , avatar
-        , twoLine
-
-        , li
-        , startDetail
-        , startDetailIcon
-        , avatarImage
-        , endDetail
-        , endDetailIcon
-        , listItem
-
-        , text
-        , secondary
-
-        , divider
-        , inset
-
-        , group
-        , subheader
-        )
+    ( activated
+    , avatarList
+    , dense
+    , divider
+    , graphic
+    , graphicIcon
+    , graphicImage
+    , group
+    , subheader
+    , inset
+    , li
+    , listItem
+    , meta
+    , metaIcon
+    , metaImage
+    , metaText
+    , nonInteractive
+    , padded
+    , secondaryText
+    , selected
+    , text
+    , twoLine
+    , ul
+    )
 
 {-|
 MDC List provides styles which implement Material Design Lists - “A single
@@ -35,130 +36,192 @@ are designed to be accessible and RTL aware.
 - [Material Design guidelines: Lists](https://material.io/guidelines/components/lists.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#lists)
 
-## View
-@docs ul, dense, avatar, twoLine
+### List element
+@docs ul, nonInteractive, dense, avatarList, twoLine
 
-## Elements
-@docs li, text, secondary
-@docs startDetail, startDetailIcon
-@docs endDetail, endDetailIcon
-@docs avatarImage, listItem
+### List items
+@docs li, listItem, text, secondaryText, selected, activated, graphic, graphicIcon, graphicImage, meta, metaText, metaIcon, metaImage
 
-## List dividers
-@docs divider, inset
-
-## List groups
+### List groups
 @docs group, subheader
+
+### List dividers
+@docs divider, padded, inset
 -}
 
-import Html exposing (Html, Attribute)
-import Html.Attributes
-import Material.Options as Options exposing (Property, Style, cs, css, nop)
+import Html.Attributes as Html
+import Html exposing (Html)
 import Material.Icon as Icon
+import Material.Options as Options exposing (Property, styled, cs)
 
 
-{-| Container for list items
+{-| The list element
 -}
 ul : List (Property c m) -> List (Html m) -> Html m
 ul options =
-    Options.styled Html.ul (cs "mdc-list" :: options)
+    styled Html.ul (cs "mdc-list" :: options)
 
 
-{-| Dense lists
+{-| Disables interactivity affordances
+-}
+nonInteractive : Property c m
+nonInteractive =
+    cs "mdc-list--non-interactive"
+
+
+{-| Make the list appear more compact
 -}
 dense : Property c m
 dense =
     cs "mdc-list--dense"
 
 
-{-| Avatar lists
+{-| Configure the leading tiles of each row to display images instead of icons
 -}
-avatar : Property c m
-avatar =
+avatarList : Property c m
+avatarList =
     cs "mdc-list--avatar-list"
 
 
-{-| Two-line lists
+{-| List items have primary and secondary lines
 -}
 twoLine : Property c m
 twoLine =
     cs "mdc-list--two-line"
 
 
-{-| List item
+{-| List item element
 -}
 li : List (Property c m) -> List (Html m) -> Html m
 li options =
-    Options.styled Html.li (cs "mdc-list-item" :: options)
+    styled Html.li (cs "mdc-list-item" :: options)
 
 
-{-| List item
+{-| List item element, a instead of li
 -}
 listItem : List (Property c m) -> List (Html m) -> Html m
 listItem options =
-    Options.styled Html.a (cs "mdc-list-item" :: options)
+    styled Html.a (cs "mdc-list-item" :: options)
 
 
-{-| List item's start detail
+{-| Primary text for the row
 -}
-startDetail : List (Property c m) -> List (Html m) -> Html m
-startDetail options =
-    Options.styled Html.span (cs "mdc-list-item__start-detail" :: options)
-
-
-{-| List item's start detail icon
--}
-startDetailIcon : String -> List (Property Icon.Config m) -> Html m
-startDetailIcon icon options =
-    Icon.view icon (cs "mdc-list-item__start-detail" :: options)
-
-
-{-| List item's end detail
--}
-endDetail : List (Property c m) -> List (Html m) -> Html m
-endDetail options =
-    Options.styled Html.span (cs "mdc-list-item__end-detail" :: options)
-
-
-{-| List item's end detail icon
--}
-endDetailIcon : String -> List (Property Icon.Config m) -> Html m
-endDetailIcon icon options =
-    Icon.view icon (cs "mdc-list-item__end-detail" :: options)
-
-
-{-| Set an avatar image. `src` is a value for `Html.Attributes.src`.
--}
-avatarImage : String -> List (Property a m) -> Html m
-avatarImage src options =
-    Options.styled_ Html.img (cs "mdc-list-item__start-detail"::options) [ Html.Attributes.src src ] []
-
-
 text : List (Property c m) -> List (Html m) -> Html m
 text options =
-    Options.styled Html.span (cs "mdc-list-item__text"::options)
+  styled Html.span (cs "mdc-list-item__text" :: options)
 
 
-secondary : List (Property c m) -> List (Html m) -> Html m
-secondary options =
-    Options.styled Html.span (cs "mdc-list-item__secondary-text"::options)
+{-| Secondary text for the row
+-}
+secondaryText : List (Property c m) -> List (Html m) -> Html m
+secondaryText options =
+  styled Html.span (cs "mdc-list-item__secondary-text" :: options)
 
 
+{-| Styles a row in selected state
+-}
+selected : Property c m
+selected =
+  cs "mdc-list-item--selected"
+
+
+{-| Styles a row in activated state
+-}
+activated : Property c m
+activated =
+  cs "mdc-list-item--activated"
+
+
+{-| The first tile in a row, typically an icon or image
+-}
+graphic : List (Property c m) -> List (Html m) -> Html m
+graphic options =
+    styled Html.span (cs "mdc-list-item__graphic" :: options)
+
+
+{-| The first tile in a row as an icon
+-}
+graphicIcon : List (Property Icon.Config m) -> String -> Html m
+graphicIcon options icon =
+    Icon.view icon (cs "mdc-list-item__graphic" :: options)
+
+
+{-| The first tile in a row as an image
+-}
+graphicImage : List (Property c m) -> String -> Html m
+graphicImage options url =
+    styled Html.img
+      ( cs "mdc-list-item__graphic"
+      :: Options.attribute (Html.src url)
+      :: options
+      )
+      []
+
+
+{-| The last tile in a row, typically small text, and icon or image.
+-}
+meta : List (Property c m) -> List (Html m) -> Html m
+meta options =
+    styled Html.span (cs "mdc-list-item__meta" :: options)
+
+
+{-| The last tile in a row as text
+-}
+metaText : List (Property c m) -> String -> Html m
+metaText options str =
+    styled Html.span (cs "mdc-list-item__meta" :: options) [ Html.text str ]
+
+
+{-| The last tile in a row as an icon
+-}
+metaIcon : List (Property Icon.Config m) -> String -> Html m
+metaIcon options icon =
+    Icon.view icon (cs "mdc-list-item__meta" :: options)
+
+
+{-| The last tile in a row as an image
+-}
+metaImage : List (Property c m) -> String -> Html m
+metaImage options url =
+    styled Html.img
+      ( cs "mdc-list-item__meta"
+      :: Options.attribute (Html.src url)
+      :: options
+      )
+      []
+
+
+{-| Wrapper around two or more list elements to be grouped together
+-}
+group : List (Property c m) -> List (Html m) -> Html m
+group options =
+    styled Html.div (cs "mdc-list-group"::options)
+
+
+{-| Heading text displayed above each list in a group
+-}
+subheader : List (Property c m) -> List (Html m) -> Html m
+subheader options =
+    styled Html.div (cs "mdc-list-group__subheader"::options)
+
+
+{-| List divider element
+-}
 divider : List (Property c m) -> List (Html m) -> Html m
 divider options _ =
-    Options.styled Html.hr (cs "mdc-list-divider"::options) []
+    styled Html.hr (cs "mdc-list-divider"::options) []
 
 
+{-| Leaves a gap on each side of the divider to match the padding of `meta`
+-}
+padded : Property c m
+padded =
+    cs "mdc-list-divier--padded"
+
+
+{-| Increases the leading margin of the divider so that it does not intersect
+the avatar column
+-}
 inset : Property c m
 inset =
     cs "mdc-list-divider--inset"
-
-
-group : List (Property c m) -> List (Html m) -> Html m
-group options =
-    Options.styled Html.div (cs "mdc-list-group"::options)
-
-
-subheader : List (Property c m) -> List (Html m) -> Html m
-subheader options =
-    Options.styled Html.div (cs "mdc-list-group__subheader"::options)

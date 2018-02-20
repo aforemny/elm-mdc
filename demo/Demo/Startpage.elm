@@ -1,4 +1,4 @@
-module Demo.Startpage exposing (view)
+module Demo.Startpage exposing (..)
 
 import Demo.Page exposing (Page, Url(..))
 import Html.Attributes as Html
@@ -20,8 +20,6 @@ view page =
       ]
       [ Lists.ul
         [ Lists.twoLine
-        , cs "catalog-list"
-        , css "padding-left" "26px"
         ]
         ( [ { url = Button, icon = "ic_button_24px.svg"
             , title = "Button", subtitle = "Raised and flat buttons" }
@@ -84,8 +82,8 @@ view page =
                , css "cursor" "pointer"
                , css "height" "72px"
                ]
-               [ Lists.startDetail
-                 [ cs "catalog-list-icon"
+               [ Lists.graphic
+                 [ cs "demo-catalog-list-icon"
                  ]
                  [ Html.img
                    [ Html.src ("images/" ++ icon)
@@ -94,7 +92,7 @@ view page =
                  ]
                , Lists.text []
                  [ text title
-                 , Lists.secondary []
+                 , Lists.secondaryText []
                    [ text subtitle
                    ]
                  ]

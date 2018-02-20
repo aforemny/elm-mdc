@@ -80,22 +80,22 @@ view lift page model =
         Drawer.toolbarSpacer [] []
       , Lists.listItem
         [ Options.attribute (Html.href "#permanent-drawer-above") ]
-        [ Lists.startDetailIcon "inbox" []
+        [ Lists.graphicIcon [] "inbox"
         , text "Inbox"
         ]
       , Lists.listItem
         [ Options.attribute (Html.href "#permanent-drawer-above") ]
-        [ Lists.startDetailIcon "star" []
+        [ Lists.graphicIcon [] "star"
         , text "Star"
         ]
       , Lists.listItem
         [ Options.attribute (Html.href "#permanent-drawer-above") ]
-        [ Lists.startDetailIcon "send" []
+        [ Lists.graphicIcon [] "send"
         , text "Sent Mail"
         ]
       , Lists.listItem
         [ Options.attribute (Html.href "#permanent-drawer-above") ]
-        [ Lists.startDetailIcon "drafts" []
+        [ Lists.graphicIcon [] "drafts"
         , text "Drafts"
         ]
 
@@ -103,17 +103,17 @@ view lift page model =
 
       , Lists.listItem
         [ Options.attribute (Html.href "#permanent-drawer-above") ]
-        [ Lists.startDetailIcon "email" []
+        [ Lists.graphicIcon [] "email"
         , text "All Mail"
         ]
       , Lists.listItem
         [ Options.attribute (Html.href "#permanent-drawer-above") ]
-        [ Lists.startDetailIcon "delete" []
+        [ Lists.graphicIcon [] "delete"
         , text "Trash"
         ]
       , Lists.listItem
         [ Options.attribute (Html.href "#permanent-drawer-above") ]
-        [ Lists.startDetailIcon "report" []
+        [ Lists.graphicIcon [] "report"
         , text "Spam"
         ]
       ]
