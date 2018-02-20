@@ -71,31 +71,37 @@ view lift page model =
               [ text title
               ]
             , styled Html.div []
-              [ Button.render (Mdl >> lift) (idx ++ [0]) model.mdl
+              [
+                Button.render (Mdl >> lift) (idx ++ [0]) model.mdl
                 ( options
                 )
                 [ text "Baseline" ]
-              , Button.render (Mdl >> lift) (idx ++ [1]) model.mdl
+              ,
+                Button.render (Mdl >> lift) (idx ++ [1]) model.mdl
                 ( Button.compact
                 :: options
                 )
                 [ text "Compact" ]
-              , Button.render (Mdl >> lift) (idx ++ [2]) model.mdl
+              ,
+                Button.render (Mdl >> lift) (idx ++ [2]) model.mdl
                 ( Button.dense
                 :: options
                 )
                 [ text "Dense" ]
-              , Button.render (Mdl >> lift) (idx ++ [3]) model.mdl
-                ( Button.primary
-                :: options
-                )
-                [ text "Primary" ]
-              , Button.render (Mdl >> lift) (idx ++ [4]) model.mdl
+              ,
+                Button.render (Mdl >> lift) (idx ++ [3]) model.mdl
                 ( Button.secondary
                 :: options
                 )
                 [ text "Secondary" ]
-              , Button.render (Mdl >> lift) (idx ++ [6]) model.mdl
+              ,
+                Button.render (Mdl >> lift) (idx ++ [4]) model.mdl
+                ( Button.icon "favorite"
+                :: options
+                )
+                [ text "Icon" ]
+              ,
+                Button.render (Mdl >> lift) (idx ++ [5]) model.mdl
                 ( Button.link "#buttons"
                 :: options
                 )
