@@ -399,9 +399,7 @@ react
     -> Store s
     -> ( Maybe (Store s), Cmd msg )
 react =
-    Component.react get
-        set
-        Material.Msg.TextfieldMsg update
+    Component.react get set Material.Msg.TextfieldMsg update
 
 
 render

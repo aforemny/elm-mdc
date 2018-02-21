@@ -1,15 +1,23 @@
 module Material.Dialog
     exposing
-        ( view
-        , header
-        , title
+        ( accept
+        , backdrop
         , body
-        , scrollable
+        , cancel
         , footer
-        , acceptButton
-        , cancelButton
+        , header
+        , open
+        , scrollable
+        , surface
+        , title
+        , view
+
         , openOn
-        , closeOn
+
+        , Model
+        , defaultModel
+        , react
+        , render
         )
 
 {-| From the [Material Design Lite documentation](https://getmdl.io/components/#cards-section):
@@ -26,183 +34,205 @@ Refer to [this site](http://debois.github.io/elm-mdl/#dialog)
 for a live demo.
 
 @docs view
-
-# Contents
-@docs title, body, header, footer, scrollable
-
-# Opening & closing
-@docs openOn, closeOn
-
-# Buttons
-@docs acceptButton, cancelButton
-
+@docs open
+@docs surface
+@docs backdrop
+@docs body
+@docs scrollable
+@docs header
+@docs title
+@docs footer
+@docs cancel
+@docs accept
 -}
 
+import DOM
 import Html exposing (..)
-import Html.Attributes as Html
-import Material.Options as Options exposing (Style, Property, cs, css)
+import Json.Decode as Json exposing (Decoder)
+import Material.Button as Button
+import Material.Component as Component exposing (Index, Indexed)
+import Material.Internal.Dialog exposing (Msg(..))
 import Material.Internal.Options as Internal
+import Material.Msg
+import Material.Options as Options exposing (styled, cs, css, when) 
 
 
-{-| Dialog header
+type alias Model =
+    { open : Bool
+    , animating : Bool
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { open = False
+    , animating = False
+    }
+
+
+update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
+update lift msg model =
+    case msg of
+        NoOp ->
+            ( Nothing, Cmd.none )
+
+        Open ->
+            ( Just { model | open = True, animating = True }, Cmd.none )
+
+        Close ->
+            ( Just { model | open = False, animating = True }, Cmd.none )
+
+        AnimationEnd ->
+            ( Just { model | animating = False }, Cmd.none )
+
+
+type alias Store s =
+    { s | dialog : Indexed Model }
+
+
+( get, set ) =
+    Component.indexed .dialog (\x c -> { c | dialog = x }) defaultModel
+
+
+react
+    : (Material.Msg.Msg m -> msg)
+    -> Msg
+    -> Index
+    -> Store s
+    -> ( Maybe (Store s), Cmd msg )
+react =
+    Component.react get set Material.Msg.DialogMsg update
+
+
+render
+    : (Material.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m       
+render lift index store options =
+    Component.render get view Material.Msg.DialogMsg lift index store
+        (Internal.dispatch lift :: options)
+
+
+{-| Dialog configuration options
 -}
-header : List (Style a) -> List (Html a) -> Html a
-header options =
-    Options.div (cs "mdc-dialog__header"::options)
+type alias Config =
+    {}
 
 
-{-| Dialog title
+{-| Default dialog configuration
 -}
-title : List (Style a) -> List (Html a) -> Html a
-title options =
-    Options.div (cs "mdc-dialog__header__title"::options)
+defaultConfig : Config
+defaultConfig =
+    {}
+
+
+{-| Dialog property
+-}
+type alias Property m =
+    Options.Property Config m
+
+
+{-| Dialog view
+-}
+view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+view lift model options =
+    styled Html.aside
+    ( cs "mdc-dialog"
+    :: when model.open (cs "mdc-dialog--open")
+    :: when model.animating (cs "mdc-dialog--animating")
+    :: Options.on "click" (Json.map lift close)
+    :: Options.on "transitionend" (Json.succeed (lift AnimationEnd))
+    :: options
+    )
+
+
+{-| Make the dialog visible
+-}
+open : Property m
+open =
+    cs "mdc-dialog--open"
+
+
+{-| Dialog surface
+-}
+surface : List (Property m) -> List (Html m) -> Html m
+surface options =
+    styled Html.div (cs "mdc-dialog__surface" :: options)
+
+
+{-| Dialog backdrop
+-}
+backdrop : List (Property m) -> List (Html m) -> Html m
+backdrop options =
+    styled Html.div (cs "mdc-dialog__backdrop" :: options)
 
 
 {-| Dialog body
 -}
-body : List (Style a) -> List (Html a) -> Html a
+body : List (Property m) -> List (Html m) -> Html m
 body options =
-    Options.div (cs "mdc-dialog__body"::options)
+    styled Html.div (cs "mdc-dialog__body"::options)
 
 
-{-| Make dialog body scrollable
+{-| Make the dialog's body scrollable
 -}
-scrollable : Style a
+scrollable : Property m
 scrollable =
     cs "mdc-dialog__body--scrollable"
 
 
-{-| Generate an actions content block
+{-| Dialog header
 -}
-footer : List (Style a) -> List (Html a) -> Html a
+header : List (Property m) -> List (Html m) -> Html m
+header options =
+    styled Html.div (cs "mdc-dialog__header"::options)
+
+
+{-| Dialog title
+-}
+title : Options.Property c m
+title =
+    cs "mdc-dialog__header__title"
+
+
+{-| Dialog footer
+-}
+footer : List (Property m) -> List (Html m) -> Html m
 footer options =
-    Options.div (cs "mdc-dialog__footer"::options)
+    styled Html.div (cs "mdc-dialog__footer"::options)
 
 
-{-| Dialog's accept button
--}
-acceptButton
-  : (List (Options.Property s a) -> List (Html a) -> Html a)
-  -> List (Options.Property s a)
-  -> List (Html a)
-  -> Html a
-acceptButton button options =
-    button (cs "mdc-dialog__footer__button"::cs "mdc-dialog__footer__button--accept"::options)
+cancel : Button.Property m
+cancel =
+    cs "mdc-dialog__footer__button mdc-dialog__footer__button--cancel"
 
 
-{-| Dialog's cancel button
--}
-cancelButton
-    : (List (Options.Property s a) -> List (Html a) -> Html a)
-    -> List (Options.Property s a)
-    -> List (Html a)
-    -> Html a
-cancelButton button options =
-    button (cs "mdc-dialog__footer__button"::cs "mdc-dialog__footer__button--cancel"::options)
+accept : Button.Property m
+accept =
+    cs "mdc-dialog__footer__button mdc-dialog__footer__button--accept"
 
 
-theDialog : String
-theDialog =
-    "elm-mdc-singleton-dialog"
+openOn : (Material.Msg.Msg m -> m) -> List Int -> String -> Options.Property c m
+openOn lift index event =
+    Options.on event (Json.succeed (lift (Material.Msg.DialogMsg index Open)))
 
 
-{-| Open dialog in response to given DOM event. The DOM must also contain a
-`dialog` produced using `Dialog.view`.  Use like this:
-
-    Button.render Mdl [0] model.mdl
-      [ Dialog.openOn "click" ]
-      [ text "Open dialog" ]
--}
-openOn : String -> Property c m
-openOn =
-    let
-        handler =
-            """
-      // Don't mess up the elm runtime.
-      try {
-        var dialog = document.getElementById('""" ++ theDialog ++ """');
-        if (! dialog) {
-          console.log ('Cannot display dialog: No dialog element. Use `Dialog.view` to construct one.');
-          return;
-        }
-        if (! dialog.showModal) {
-          if (typeof dialogPolyfill !== 'undefined' && dialogPolyfill.registerDialog) {
-            dialogPolyfill.registerDialog(dialog);
-          } else {
-            console.log ('Cannot display dialog: Your browser does not support the <dialog> element. Get a polyfill at:\\n\\nhttps://github.com/GoogleChrome/dialog-polyfill\\n');
-            return;
-          }
-        }
-        dialog.showModal();
-        dialog.classList.add("mdc-dialog--open");
-      }
-      catch (e)
-      {
-        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new", e);
-      }
-      """
-    in
-        \event ->
-            Html.attribute ("on" ++ event) handler
-                |> Internal.attribute
-
-
-{-| Close the dialog. The dialog must be open. Use like this:
-
-    Button.render Mdl [1] model.mdl
-      [ Dialog.closeOn "click" ]
-      [ text "Close" ]
--}
-closeOn : String -> Property c m
-closeOn =
-    let
-        handler =
-            """
-      // Don't mess up the elm runtime!
-      try {
-        var dialog = document.getElementById('""" ++ theDialog ++ """');
-        if (! dialog) {
-          console.log ('Cannot close dialog: No dialog element. Use `Dialog.view` to construct one.');
-          return;
-        }
-        if (! dialog.open) {
-          console.log ('Cannot close dialog: The dialog is not open. Use `Dialog.closeOn` only on components rendered inside the dialog.');
-          return;
-        }
-        if (! dialog.close) {
-          console.log ('Cannot close dialog: The dialog does not have a `close` method. Perhaps you forgot a polyfill? Get one at:\\n\\nhttps://github.com/GoogleChrome/dialog-polyfill\\n');
-          return;
-        }
-        dialog.close();
-        dialog.classList.remove("mdc-dialog--open");
-      }
-      catch (e)
-      {
-        console.log ("A dialog method threw an exception. This is not supposed to happen; likely you're using a broken polyfill. If not, please file an issue:\\n\\nhttps://github.com/debois/elm-mdl/issues/new", e);
-      }
-      """
-    in
-        \event ->
-            Html.attribute ("on" ++ event) handler
-                |> Internal.attribute
-
-
-{-| Construct a dialog.
-
-- If you target browser not supporting
-`<dialog>` natively, you will need to load [this
-polyfill](https://github.com/GoogleChrome/dialog-polyfill).
-- Using this polyfill [places
-restrictions](https://github.com/GoogleChrome/dialog-polyfill#limitations) on
-where in the DOM you can put the output of this function.
-- The elm-mdc library currently support only one dialog per application.
-Installing more than one dialog will result in a random one showing.
--}
-view : List (Style a) -> List (Html a) -> Html a
-view styling nodes =
-    Options.styled_ (Html.node "dialog")
-        (css "display" "flex" :: cs "mdc-dialog" :: styling)
-        [ Html.id theDialog ]
-        [ Html.div [ Html.class "mdc-dialog__surface" ] nodes
-        , Html.div [ Html.class "mdc-dialog__backdrop" ] []
-        ]
+close : Decoder Msg
+close =
+    DOM.target <|
+    Json.map (\ className ->
+         let
+           hasClass class =
+               String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
+         in
+         if hasClass "mdc-dialog__backdrop" then
+             Close
+         else if hasClass "mdc-dialog__footer__button" then
+             Close
+         else
+             NoOp
+       )
+       (Json.at ["className"] Json.string)

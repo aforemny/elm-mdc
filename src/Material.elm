@@ -18,6 +18,7 @@ import Material.Msg exposing (Msg(..))
 
 import Material.Button as Button
 import Material.Checkbox as Checkbox
+import Material.Dialog as Dialog
 import Material.Dispatch as Dispatch
 import Material.Drawer as Drawer
 import Material.Fab as Fab
@@ -38,6 +39,7 @@ import Material.Toolbar as Toolbar
 type alias Model = 
     { button : Indexed Button.Model
     , checkbox : Indexed Checkbox.Model
+    , dialog : Indexed Dialog.Model
     , drawer : Indexed Drawer.Model
     , fab : Indexed Fab.Model
     , gridList : Indexed GridList.Model
@@ -59,6 +61,7 @@ defaultModel : Model
 defaultModel = 
     { button = Dict.empty
     , checkbox = Dict.empty
+    , dialog = Dict.empty
     , drawer = Dict.empty
     , fab = Dict.empty
     , gridList = Dict.empty
@@ -92,7 +95,7 @@ update_ lift msg store =
     -- TODO: Make all components use react
     -- TODO: Make component Msgs uniform
     case msg of
-        Dispatch msgs -> 
+        Dispatch msgs ->
             (Nothing, Dispatch.forward msgs)
 
         ButtonMsg idx msg ->
@@ -100,6 +103,9 @@ update_ lift msg store =
 
         CheckboxMsg idx msg ->
             Checkbox.react lift msg idx store
+
+        DialogMsg idx msg ->
+            Dialog.react lift msg idx store
 
         DrawerMsg idx msg ->
             Drawer.react lift msg idx store
@@ -157,16 +163,6 @@ init : (Msg m -> m) -> Cmd m
 init lift =
     Cmd.none
     -- TODO: Layout init, etc.
-
---    Task.perform (\_ -> lift (Scroll { pageX = 0, pageY = 0 })) <|
---    Dom.onDocument
---      "scroll"
---      ( Json.map (Scroll >> lift) <|
---        Json.map2 (\pageX pageY -> { pageX = pageX, pageY = pageY })
---          ( Json.at [ "pageX" ] Json.int )
---          ( Json.at [ "pageY" ] Json.int )
---      )
---      ( \_ -> Task.succeed () )
 
 
 -- TODO:

@@ -1,8 +1,8 @@
-module Material.Msg
-  exposing (Msg(..), Index)
+module Material.Msg exposing (Msg(..), Index)
 
 import Material.Internal.Button as Button 
 import Material.Internal.Checkbox as Checkbox
+import Material.Internal.Dialog as Dialog
 import Material.Internal.Drawer as Drawer 
 import Material.Internal.Fab as Fab 
 import Material.Internal.GridList as GridList
@@ -27,6 +27,7 @@ type Msg m
     = Dispatch (List m)
     | ButtonMsg Index Button.Msg
     | CheckboxMsg Index Checkbox.Msg
+    | DialogMsg Index Dialog.Msg
     | DrawerMsg Index Drawer.Msg
     | FabMsg Index Fab.Msg
     | GridListMsg Index (GridList.Msg m)

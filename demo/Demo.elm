@@ -44,7 +44,6 @@ import RouteUrl as Routing
 
 port scrollTop : () -> Cmd msg
 
-
 port onScroll : ({ pageX : Float, pageY : Float } -> msg) -> Sub msg
 
 
@@ -606,6 +605,5 @@ subscriptions model =
         , Demo.Tabs.subscriptions TabsMsg model.tabs
         , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
         , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
-
         , onScroll Scroll
         ]
