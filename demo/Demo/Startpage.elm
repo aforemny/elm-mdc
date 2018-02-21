@@ -84,6 +84,7 @@ view page =
                ]
                [ Lists.graphic
                  [ cs "demo-catalog-list-icon"
+                 , css "margin" "0 24px 0 12px"
                  ]
                  [ Html.img
                    [ Html.src ("images/" ++ icon)

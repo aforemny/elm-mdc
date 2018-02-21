@@ -5,6 +5,7 @@
     "license": "Apache License, version 2.0",
     "source-directories": [
         "../src",
+        "../elm-global-events/src",
         "."
     ],
     "exposed-modules": [],

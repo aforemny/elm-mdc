@@ -1,76 +1,100 @@
 module Demo.Checkbox exposing (Model,defaultModel,Msg(Mdl),update,view)
 
-import Demo.Page as Page exposing (Page)
-import Html.Attributes as Html
-import Html.Events as Html
+import Dict exposing (Dict)
 import Html exposing (Html, text)
+import Json.Decode as Json
 import Material
+import Material.Button as Button
 import Material.Checkbox as Checkbox
 import Material.Options as Options exposing (styled, cs, css, when)
-import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
+
+import Demo.Page as Page exposing (Page)
 
 
 type alias Model =
     { mdl : Material.Model
-    , rtl : Bool
-    , alignEnd : Bool
-    , indeterminate : Bool
-    , checked0 : Bool
-    , checked1 : Bool
-    , checked2 : Bool
-    , disabled1 : Bool
-    , disabled2 : Bool
+    , checkboxes : Dict (List Int) Checkbox
     }
 
 
 defaultModel : Model
 defaultModel =
     { mdl = Material.defaultModel
-    , rtl = False
-    , alignEnd = False
+    , checkboxes =
+        Dict.singleton [2] { defaultCheckbox | indeterminate = True }
+    }
+
+
+type alias Checkbox =
+    { checked : Bool
+    , indeterminate : Bool
+    , disabled : Bool
+    }
+
+
+defaultCheckbox : Checkbox
+defaultCheckbox =
+    { checked = False
     , indeterminate = False
-    , checked0 = False
-    , checked1 = False
-    , checked2 = False
-    , disabled1 = False
-    , disabled2 = False
+    , disabled = False
     }
 
 
 type Msg m
     = Mdl (Material.Msg m)
-    | ToggleRtl
-    | ToggleAlignEnd
-    | ToggleIndeterminate
-    | ToggleChecked0
-    | ToggleChecked1
-    | ToggleChecked2
-    | ToggleDisabled1
-    | ToggleDisabled2
+    | ToggleIndeterminate (List Int)
+    | ToggleDisabled (List Int)
+    | ToggleChecked (List Int)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
-        ToggleRtl ->
-            ( { model | rtl = not model.rtl }, Cmd.none )
-        ToggleAlignEnd ->
-            ( { model | alignEnd = not model.alignEnd }, Cmd.none )
-        ToggleIndeterminate ->
-            ( { model | indeterminate = not model.indeterminate }, Cmd.none )
-        ToggleChecked0 ->
-            ( { model | checked0 = not model.checked0 }, Cmd.none )
-        ToggleChecked1 ->
-            ( { model | checked1 = not model.checked1, indeterminate = False }, Cmd.none )
-        ToggleChecked2 ->
-            ( { model | checked2 = not model.checked2 }, Cmd.none )
-        ToggleDisabled1 ->
-            ( { model | disabled1 = not model.disabled1 }, Cmd.none )
-        ToggleDisabled2 ->
-            ( { model | disabled2 = not model.disabled2 }, Cmd.none )
+            Material.update (lift << Mdl) msg_ model
+
+        ToggleIndeterminate index ->
+            let
+              checkbox =
+                Dict.get index model.checkboxes
+                |> Maybe.withDefault defaultCheckbox
+                |> \ checkbox ->
+                   { checkbox | indeterminate = not checkbox.indeterminate }
+
+              checkboxes =
+                Dict.insert index checkbox model.checkboxes
+            in
+            ( { model | checkboxes = checkboxes }, Cmd.none )
+
+        ToggleDisabled index ->
+            let
+              checkbox =
+                Dict.get index model.checkboxes
+                |> Maybe.withDefault defaultCheckbox
+                |> \ checkbox ->
+                   { checkbox | disabled = not checkbox.disabled }
+
+              checkboxes =
+                Dict.insert index checkbox model.checkboxes
+            in
+            ( { model | checkboxes = checkboxes }, Cmd.none )
+
+        ToggleChecked index ->
+            let
+              checkbox =
+                Dict.get index model.checkboxes
+                |> Maybe.withDefault defaultCheckbox
+                |> \ checkbox ->
+                   { checkbox
+                     | checked = not checkbox.checked
+                     , indeterminate = False
+                   }
+
+              checkboxes =
+                Dict.insert index checkbox model.checkboxes
+            in
+            ( { model | checkboxes = checkboxes }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
@@ -84,6 +108,20 @@ view lift page model =
             :: css "padding" "24px"
             :: options
             )
+
+        checkbox index =
+          let
+            checkbox =
+                Dict.get index model.checkboxes
+                |> Maybe.withDefault defaultCheckbox
+          in
+          Checkbox.render (lift << Mdl) index model.mdl
+          [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
+          , Checkbox.checked |> when checkbox.checked
+          , Checkbox.indeterminate |> when checkbox.indeterminate
+          , Checkbox.disabled |> when checkbox.disabled
+          ]
+          []
     in
     page.body "Checkbox"
     [
@@ -91,95 +129,75 @@ view lift page model =
       [
         styled Html.div
         [ cs "mdc-form-field"
-        , cs "mdc-form-field--align-end" |> when model.alignEnd
         ]
-        [ Checkbox.render (Mdl >> lift) [0] model.mdl
-          [ Options.onClick (lift ToggleChecked0)
-          , Checkbox.checked |> when model.checked0
-          ]
-          [
-          ]
+        [ checkbox [0]
         , Html.label [] [ text "Checkbox" ]
         ]
       ]
 
     ,
-      example
-      [ Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
-      ]
-      [ styled Html.h2
-        [ css "margin-left" "0"
-        , css "margin-top" "0"
-        ]
-        [ text "Checkbox" ]
-      , styled Html.div
-        [ cs "mdc-form-field"
-        , cs "mdc-form-field--align-end" |> when model.alignEnd
-        ]
-        [ Checkbox.render (Mdl >> lift) [1] model.mdl
-          [ Options.onClick (lift ToggleChecked1)
-          , Checkbox.checked |> when model.checked1
-          , Checkbox.indeterminate |> when model.indeterminate
-          , Checkbox.disabled |> when model.disabled1
-          ]
+      let
+        checkbox index label =
+          let
+            checkbox =
+                Dict.get index model.checkboxes
+                |> Maybe.withDefault defaultCheckbox
+          in
+          styled Html.div []
           [
+            styled Html.div
+            [ cs "mdc-form-field"
+            ]
+            [ 
+              Checkbox.render (lift << Mdl) index model.mdl
+              [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
+              , Checkbox.checked |> when checkbox.checked
+              , Checkbox.indeterminate |> when checkbox.indeterminate
+              , Checkbox.disabled |> when checkbox.disabled
+              ]
+              []
+            ,
+              Html.label [] [ text label ]
+            ]
+          ,
+            styled Html.div
+            [
+            ]
+            [
+              Button.render (lift << Mdl) (index ++ [0]) model.mdl
+              [ Options.on "click" (Json.succeed (lift (ToggleIndeterminate index)))
+              ]
+              [ text "Toggle "
+              , Html.code [] [ text "indeterminate" ]
+              ]
+            ,
+              Button.render (lift << Mdl) (index ++ [1]) model.mdl
+              [ Options.on "click" (Json.succeed (lift (ToggleDisabled index)))
+              ]
+              [ text "TOGGLE "
+              , Html.code [] [ text "disabled" ]
+              ]
+            ]
           ]
-        , Html.label [] [ text "This is my checkbox" ]
-        ]
-      , Html.span [] [ text " " ]
-      , Html.button
-        [ Html.onClick (lift ToggleIndeterminate)
-        ]
-        [ text "Make indeterminate"
-        ]
-      , Html.span [] [ text " " ]
-      , Html.button
-        [ Html.onClick (lift ToggleRtl)
-        ]
-        [ text "Toggle RTL"
-        ]
-      , Html.span [] [ text " " ]
-      , Html.button
-        [ Html.onClick (lift ToggleAlignEnd)
-        ]
-        [ text "Toggle Align End"
-        ]
-      , Html.span [] [ text " " ]
-      , Html.button
-        [ Html.onClick (lift ToggleDisabled1)
-        ]
-        [ text "Toggle Disabled"
-        ]
-      ]
-
-    , example
-      [ Theme.dark
-      , css "background-color" "#333"
-      ]
-      [ styled Html.h2
-        [ css "margin-left" "0"
-        , css "margin-top" "0"
-        , css "color" "white"
-        ]
-        [ text "Dark Theme"
-        ]
-      , styled Html.div
-        [ cs "mdc-form-field"
-        ]
-        [ Checkbox.render (Mdl >> lift) [2] model.mdl
-          [ Options.onClick (lift ToggleChecked2)
-          , Checkbox.checked |> when model.checked2
-          , Checkbox.disabled |> when model.disabled2
+      in
+      example []
+      ( List.concat
+        [
+          [ styled Html.h2
+            [ css "margin-left" "0"
+            , css "margin-top" "0"
+            ]
+            [ text "Checkbox" ]
           ]
-          [
+        ,
+          [ ( [1], "Default checkbox" )
+          , ( [2], "Indeterminate checkbox" )
+--          , ( [3], "Custom colored checkbox (stroke, fill, ripple and focus)" )
+--          , ( [4], "Custom colored checkbox (stroke and fill only)" )
           ]
-        , Html.label [] [ text "This is my checkbox" ]
+          |> List.map (\ ( index, label ) ->
+               checkbox index label
+             )
         ]
-      , Html.span [] [ text " " ]
-      , Html.button
-        [ Html.onClick (lift ToggleDisabled2)
-        ]
-        [ text "Toggle Disabled"
-        ]
-      ]
+      )
     ]
