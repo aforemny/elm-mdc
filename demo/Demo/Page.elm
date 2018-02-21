@@ -21,6 +21,7 @@ type Url
     | Card
     | Checkbox
     | Dialog
+    | Drawer
     | TemporaryDrawer
     | PersistentDrawer
     | PermanentAboveDrawer

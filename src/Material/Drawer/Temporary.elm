@@ -1,29 +1,20 @@
 module Material.Drawer.Temporary
     exposing
-        ( -- VIEW
-          view
-        , Property
-
+        ( content
+        , defaultModel
         , header
         , headerContent
-        , content
-        
-          -- TEA
-        , subscriptions
-        , open
-        , close
-        , toggle
         , Model
-        , defaultModel
         , Msg
-        , update
-
-          -- RENDER
-        , subs
-        , emit
+        , openOn
+        , Property
+        , react
         , render
         , Store
-        , react
+        , subs
+        , subscriptions
+        , update
+        , view
         )
 
 {-| The MDC Drawer component is a spec-aligned drawer component adhering to the
@@ -55,8 +46,11 @@ and temporary drawers.
 -}
 
 import Html exposing (Html, text)
+import Json.Decode as Json
 import Material.Drawer as Drawer
+import Material.Internal.Drawer
 import Material.Msg exposing (Index)
+import Material.Options as Options
 
 
 type alias Model =
@@ -77,11 +71,11 @@ update =
     Drawer.update
 
 
-type alias Config m =
-    Drawer.Config m
+type alias Config =
+    Drawer.Config
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
     Drawer.defaultConfig
 
@@ -97,17 +91,17 @@ view =
 
 header : List (Property m) -> List (Html m) -> Html m
 header =
-    Drawer.header className
+    Drawer.header
 
 
 headerContent : List (Property m) -> List (Html m) -> Html m
 headerContent =
-    Drawer.headerContent className
+    Drawer.headerContent
 
 
 content : List (Property m) -> List (Html m) -> Html m
 content =
-    Drawer.content className
+    Drawer.content
 
 
 type alias Store s =
@@ -145,26 +139,11 @@ subscriptions =
     Drawer.subscriptions
 
 
-open : Msg
-open =
-    Drawer.open False
-
-
-close : Msg
-close =
-    Drawer.close
-
-
-toggle : Msg
-toggle =
-    Drawer.toggle False
-
-
-emit : (Material.Msg.Msg m -> m) -> Index -> Msg -> Cmd m
-emit =
-    Drawer.emit
+openOn : (Material.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
+openOn lift index event =
+    Options.on event (Json.succeed (lift (Material.Msg.DrawerMsg index (Material.Internal.Drawer.Open False))))
 
 
 className : String
 className =
-    "mdc-temporary-drawer"
+    "mdc-drawer--temporary"

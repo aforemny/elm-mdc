@@ -4,14 +4,13 @@ import Demo.Buttons
 import Demo.Cards
 import Demo.Checkbox
 import Demo.Dialog
+import Demo.Drawer
 import Demo.Elevation
 import Demo.Fabs
 import Demo.GridList
 import Demo.IconToggle
 import Demo.LayoutGrid
-import Demo.LayoutGrid
 import Demo.LinearProgress
-import Demo.Lists
 import Demo.Lists
 import Demo.Menus
 import Demo.Page as Page exposing (Url(..), ToolbarPage(..))
@@ -54,11 +53,13 @@ type alias Model =
     , cards : Demo.Cards.Model
     , checkbox : Demo.Checkbox.Model
     , dialog : Demo.Dialog.Model
+    , drawer : Demo.Drawer.Model
     , elevation : Demo.Elevation.Model
     , fabs : Demo.Fabs.Model
     , gridList : Demo.GridList.Model
     , iconToggle : Demo.IconToggle.Model
     , layoutGrid : Demo.LayoutGrid.Model
+    , lists : Demo.Lists.Model
     , menus : Demo.Menus.Model
     , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model
     , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model
@@ -72,7 +73,6 @@ type alias Model =
     , tabs : Demo.Tabs.Model
     , temporaryDrawer : Demo.TemporaryDrawer.Model
     , textfields : Demo.Textfields.Model
-    , lists : Demo.Lists.Model
     , theme : Demo.Theme.Model
     , toolbar : Demo.Toolbar.Model
     }
@@ -86,9 +86,13 @@ defaultModel =
     , cards = Demo.Cards.defaultModel
     , checkbox = Demo.Checkbox.defaultModel
     , dialog = Demo.Dialog.defaultModel
+    , drawer = Demo.Drawer.defaultModel
     , elevation = Demo.Elevation.defaultModel
     , fabs = Demo.Fabs.defaultModel
+    , gridList = Demo.GridList.defaultModel
     , iconToggle = Demo.IconToggle.defaultModel
+    , layoutGrid = Demo.LayoutGrid.defaultModel
+    , lists = Demo.Lists.defaultModel
     , menus = Demo.Menus.defaultModel
     , permanentAboveDrawer = Demo.PermanentAboveDrawer.defaultModel
     , permanentBelowDrawer = Demo.PermanentBelowDrawer.defaultModel
@@ -102,9 +106,6 @@ defaultModel =
     , tabs = Demo.Tabs.defaultModel
     , temporaryDrawer = Demo.TemporaryDrawer.defaultModel
     , textfields = Demo.Textfields.defaultModel
-    , gridList = Demo.GridList.defaultModel
-    , layoutGrid = Demo.LayoutGrid.defaultModel
-    , lists = Demo.Lists.defaultModel
     , theme = Demo.Theme.defaultModel
     , toolbar = Demo.Toolbar.defaultModel
     }
@@ -120,25 +121,26 @@ type Msg
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
     | DialogMsg (Demo.Dialog.Msg Msg)
+    | DrawerMsg (Demo.Drawer.Msg Msg)
     | ElevationMsg (Demo.Elevation.Msg Msg)
     | FabsMsg (Demo.Fabs.Msg Msg)
+    | GridListMsg (Demo.GridList.Msg Msg)
     | IconToggleMsg (Demo.IconToggle.Msg Msg)
-    | SimpleMenuMsg (Demo.Menus.Msg Msg)
+    | LayoutGridMsg (Demo.LayoutGrid.Msg)
+    | ListsMsg (Demo.Lists.Msg Msg)
     | PermanentAboveDrawerMsg (Demo.PermanentAboveDrawer.Msg Msg)
     | PermanentBelowDrawerMsg (Demo.PermanentBelowDrawer.Msg Msg)
     | PersistentDrawerMsg (Demo.PersistentDrawer.Msg Msg)
     | RadioButtonsMsg (Demo.RadioButtons.Msg Msg)
     | RippleMsg (Demo.Ripple.Msg Msg)
     | SelectMsg (Demo.Selects.Msg Msg)
+    | SimpleMenuMsg (Demo.Menus.Msg Msg)
     | SliderMsg (Demo.Slider.Msg Msg)
     | SnackbarMsg (Demo.Snackbar.Msg Msg)
     | SwitchMsg (Demo.Switch.Msg Msg)
     | TabsMsg (Demo.Tabs.Msg Msg)
     | TemporaryDrawerMsg (Demo.TemporaryDrawer.Msg Msg)
     | TextfieldMsg (Demo.Textfields.Msg Msg)
-    | GridListMsg (Demo.GridList.Msg Msg)
-    | LayoutGridMsg (Demo.LayoutGrid.Msg)
-    | ListsMsg (Demo.Lists.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
     | ToolbarMsg (Demo.Toolbar.Msg Msg)
 
@@ -193,6 +195,13 @@ update msg model =
                     Demo.Elevation.update ElevationMsg msg_ model.elevation
             in
                 ( { model | elevation = elevation }, effects )
+
+        DrawerMsg msg_ ->
+            let
+                ( drawer, effects ) =
+                    Demo.Drawer.update DrawerMsg msg_ model.drawer
+            in
+                ( { model | drawer = drawer }, effects )
 
         TemporaryDrawerMsg msg_ ->
             let
@@ -381,6 +390,9 @@ view_ model =
         Dialog ->
             Demo.Dialog.view DialogMsg page model.dialog
 
+        Drawer ->
+            Demo.Drawer.view DrawerMsg page model.drawer
+
         TemporaryDrawer ->
             Demo.TemporaryDrawer.view TemporaryDrawerMsg page model.temporaryDrawer
 
@@ -469,6 +481,7 @@ urlOf model =
         Card -> "#cards"
         Checkbox -> "#checkbox"
         Dialog -> "#dialog"
+        Drawer -> "#drawer"
         TemporaryDrawer -> "#temporary-drawer"
         PersistentDrawer -> "#persistent-drawer"
         PermanentAboveDrawer -> "#permanent-drawer-above"
@@ -524,6 +537,7 @@ location2messages location =
           "#cards" -> Card
           "#checkbox" -> Checkbox
           "#dialog" -> Dialog
+          "#drawer" -> Drawer
           "#temporary-drawer" -> TemporaryDrawer
           "#persistent-drawer" -> PersistentDrawer
           "#permanent-drawer-above" -> PermanentAboveDrawer
@@ -593,7 +607,8 @@ subscriptions model =
     Sub.batch
         [
           Material.subscriptions Mdl model
-
+        , onScroll Scroll
+        , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.GridList.subscriptions GridListMsg model.gridList
         , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
         , Demo.Menus.subscriptions SimpleMenuMsg model.menus
@@ -605,5 +620,4 @@ subscriptions model =
         , Demo.Tabs.subscriptions TabsMsg model.tabs
         , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
         , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
-        , onScroll Scroll
         ]

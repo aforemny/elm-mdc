@@ -96,10 +96,13 @@ update fwd msg model =
             ( Nothing, Cmd.none )
 
         Tick ->
-            ( Just { model | state = Just model.open
-            , animating = False
-            }
-            , Cmd.none )
+            ( Just
+              { model | state = Just model.open
+              , animating = False
+              }
+            ,
+              Cmd.none
+            )
 
         Click ->
               if model.persistent then
@@ -108,20 +111,25 @@ update fwd msg model =
                   update fwd Close model
 
         Open persistent ->
-            ( Just { model
-            | open = True
-            , state = Nothing
-            , animating = True
-            , persistent = persistent
-            }
-            , Cmd.none )
+            ( Just
+              { model
+              | open = True
+              , state = Nothing
+              , animating = True
+              , persistent = persistent
+              }
+            , Cmd.none
+            )
 
         Close ->
-            ( Just { model | open = False
-            , state = Nothing
-            , animating = True
-            }
-            , Cmd.none )
+            ( Just
+              { model | open = False
+              , state = Nothing
+              , animating = True
+              }
+            ,
+              Cmd.none
+            )
 
         Toggle persistent ->
             if model.open then
@@ -130,23 +138,17 @@ update fwd msg model =
                 update fwd (Open persistent) model
 
 
-type alias Config m =
-    { input : List (Options.Style m)
-    , container : List (Options.Style m)
-    , value : Bool
-    }
+type alias Config =
+    {}
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
-    { input = []
-    , container = []
-    , value = False
-    }
+    {}
 
 
 type alias Property m =
-    Options.Property (Config m) m
+    Options.Property Config m
 
 
 view : String -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -155,13 +157,14 @@ view className lift model options nodes =
         ({ config } as summary) =
             Internal.collect defaultConfig options
     in
-    Internal.applyContainer summary Html.div
-    [ cs className
-    , cs (modifier className "open") |> when model.open
-    , cs (modifier className "animating") |> when model.animating
+    styled Html.aside
+    [ cs "mdc-drawer"
+    , cs className
+    , cs ("mdc-drawer--open") |> when model.open
+    , cs ("mdc-drawer--animating") |> when model.animating
     ]
     [ styled Html.nav
-      ( cs (element className "drawer")
+      ( cs "mdc-drawer__drawer"
       :: Options.onWithOptions "click"
          { stopPropagation = True
          , preventDefault = False
@@ -175,28 +178,19 @@ view className lift model options nodes =
     ]
 
 
-header : String -> List (Property m) -> List (Html m) -> Html m
-header className options =
-    styled Html.header
-    ( cs (element className "header")
-    :: options
-    )
+header : List (Property m) -> List (Html m) -> Html m
+header options =
+    styled Html.header (cs "mdc-drawer__header" :: options)
 
 
-headerContent : String -> List (Property m) -> List (Html m) -> Html m
-headerContent className options =
-    styled Html.div
-    ( cs (element className "header-content")
-    :: options
-    )
+headerContent : List (Property m) -> List (Html m) -> Html m
+headerContent options =
+    styled Html.div (cs "mdc-drawer__header-content" :: options)
 
 
-content : String -> List (Property m) -> List (Html m) -> Html m
-content className options =
-    styled Html.nav
-    ( cs (element className "content")
-    :: options
-    )
+content : List (Property m) -> List (Html m) -> Html m
+content options =
+    styled Html.nav (cs "mdc-drawer__content" :: options)
 
 
 toolbarSpacer : List (Property m) -> List (Html m) -> Html m
@@ -269,13 +263,3 @@ toggle persistent =
 emit : (Material.Msg.Msg m -> m) -> Index -> Msg -> Cmd m
 emit lift idx msg =
     Helpers.cmd (lift (Material.Msg.DrawerMsg idx msg))
-
-
-element : String -> String -> String
-element className name =
-    className ++ "__" ++ name
-
-
-modifier : String -> String -> String
-modifier className name =
-    className ++ "--" ++ name

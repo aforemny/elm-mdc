@@ -1,30 +1,21 @@
 module Material.Drawer.Persistent
     exposing
-        ( -- VIEW
-          view
-        , Property
-
+        ( content
+        , defaultModel
         , header
         , headerContent
-        , content
-        , toolbarSpacer
-
-          -- TEA
-        , subscriptions
-        , open
-        , close
-        , toggle
         , Model
-        , defaultModel
         , Msg
-        , update
-          
-          -- RENDER
-        , subs
-        , emit
+        , Property
+        , react
         , render
         , Store
-        , react
+        , subs
+        , subscriptions
+        , toggleOn
+        , toolbarSpacer
+        , update
+        , view
         )
 
 {-| The MDC Drawer component is a spec-aligned drawer component adhering to the
@@ -56,8 +47,11 @@ and temporary drawers.
 -}
 
 import Html exposing (Html, text)
+import Json.Decode as Json
 import Material.Drawer as Drawer
+import Material.Internal.Drawer
 import Material.Msg exposing (Index)
+import Material.Options as Options
 
 
 type alias Model =
@@ -78,11 +72,11 @@ update =
     Drawer.update
 
 
-type alias Config m =
-    Drawer.Config m
+type alias Config =
+    Drawer.Config
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
     Drawer.defaultConfig
 
@@ -98,17 +92,17 @@ view =
 
 header : List (Property m) -> List (Html m) -> Html m
 header =
-    Drawer.header className
+    Drawer.header
 
 
 headerContent : List (Property m) -> List (Html m) -> Html m
 headerContent =
-    Drawer.headerContent className
+    Drawer.headerContent
 
 
 content : List (Property m) -> List (Html m) -> Html m
 content =
-    Drawer.content className
+    Drawer.content
 
 
 toolbarSpacer : List (Property m) -> List (Html m) -> Html m
@@ -151,26 +145,11 @@ subscriptions =
     Drawer.subscriptions
 
 
-open : Msg
-open =
-    Drawer.open True
-
-
-close : Msg
-close =
-    Drawer.close
-
-
-toggle : Msg
-toggle =
-    Drawer.toggle True
-
-
-emit : (Material.Msg.Msg m -> m) -> Index -> Msg -> Cmd m
-emit =
-    Drawer.emit
+toggleOn : (Material.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
+toggleOn lift index event =
+    Options.on event (Json.succeed (lift (Material.Msg.DrawerMsg index (Material.Internal.Drawer.Toggle True))))
 
 
 className : String
 className =
-    "mdc-persistent-drawer"
+    "mdc-drawer--persistent"

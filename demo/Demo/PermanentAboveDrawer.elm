@@ -12,8 +12,11 @@ import Demo.Page as Page exposing (Page, Url(..))
 import Demo.Page exposing (Page)
 import Html as Html_
 import Html.Attributes as Html
-import Html exposing (Html, text, map)
+import Html exposing (Html, text)
+import Json.Decode as Json
+import Markdown
 import Material
+import Material.Button as Button
 import Material.Drawer
 import Material.Drawer.Permanent as Drawer
 import Material.Elevation as Elevation
@@ -21,16 +24,13 @@ import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Toolbar as Toolbar
 import Material.Typography as Typography
-import Platform.Cmd exposing (Cmd, none)
-
-
--- MODEL
 
 
 type alias Model =
     { mdl : Material.Model
     , toggle0 : Bool
     , toggle1 : Bool
+    , rtl : Bool
     }
 
 
@@ -39,6 +39,7 @@ defaultModel =
     { mdl = Material.defaultModel
     , toggle0 = False
     , toggle1 = False
+    , rtl = False
     }
 
 
@@ -46,6 +47,7 @@ type Msg m
     = Mdl (Material.Msg m)
     | Toggle0
     | Toggle1
+    | ToggleRtl
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
@@ -53,13 +55,15 @@ update lift msg model =
     case msg of
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
+
         Toggle0 ->
-            { model | toggle0 = not model.toggle0 } ! []
+            ( { model | toggle0 = not model.toggle0 }, Cmd.none )
+
         Toggle1 ->
-            { model | toggle1 = not model.toggle1 } ! []
+            ( { model | toggle1 = not model.toggle1 }, Cmd.none )
 
-
--- VIEW
+        ToggleRtl ->
+            ( { model | rtl = not model.rtl }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
@@ -73,6 +77,7 @@ view lift page model =
     , css "box-sizing" "border-box"
     , css "height" "100%"
     , css "width" "100%"
+    , Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [ 
       Drawer.render (Mdl >> lift) [0] model.mdl []
@@ -133,18 +138,7 @@ view lift page model =
           [ Toolbar.section
             [ Toolbar.alignStart
             ]
-            [ Toolbar.icon_
-              [ Toolbar.menu
-              , Options.onClick (page.setUrl StartPage)
-              , css "cursor" "pointer"
-              ]
-              [ styled Html.i
-                [ cs "material-icons"
-                , css "pointer-events" "none"
-                ]
-                [ text "arrow_back" ]
-              ]
-            , Toolbar.title
+            [ Toolbar.title
               [ cs "catalog-menu"
               , css "font-family" "'Roboto Mono', monospace"
               , css "margin-left" "8px"
@@ -159,50 +153,81 @@ view lift page model =
         [ cs "demo-main"
         , css "padding-left" "16px"
         ]
-        [ styled Html.h1
+        [
+          styled Html.h1
           [ Typography.display1
           ]
           [ text "Permanent Drawer"
           ]
-        , styled Html.p
+        ,
+          styled Html.p
           [ Typography.body2
           ]
           [ text "It sits to the left of this content."
           ]
-        , styled Html.div
+        ,
+          styled Html.div
           [ css "padding" "10px"
           ]
-          [ styled Html.button
-            [ Options.onClick (lift Toggle0)
+          [
+            Button.render (lift << Mdl) [2] model.mdl
+            [ Options.on "click" (Json.succeed (lift ToggleRtl))
+            ]
+            [ text "Toggle RTL"
+            ]
+          ]
+        ,
+          styled Html.div
+          [ css "padding" "10px"
+          ]
+          [
+            Button.render (lift << Mdl) [3] model.mdl
+            [ Options.on "click" (Json.succeed (lift Toggle0))
             ]
             [ text "Toggle extra-wide content"
             ]
-          , styled Html.div
+          ,
+            styled Html.div
             [ css "width" "200vw"
             , css "display" "none" |> when (not model.toggle0)
             , Elevation.z2
             ]
-            [ text "&nbsp;" ]
+            [ Markdown.toHtml [] "&nbsp;"
+            ]
           ]
-        , styled Html.div
+        ,
+          styled Html.div
           [ css "padding" "10px"
           ]
-          [ styled Html.button
-            [ Options.onClick (lift Toggle1)
+          [
+            Button.render (lift << Mdl) [4] model.mdl
+            [ Options.on "click" (Json.succeed (lift Toggle1))
             ]
             [ text "Toggle extra-tall content"
             ]
-          , styled Html.div
+          ,
+            styled Html.div
             [ css "height" "200vh"
             , css "display" "none" |> when (not model.toggle1)
             , Elevation.z2
             ]
-            [ text "&nbsp;" ]
+            [ Markdown.toHtml [] "&nbsp;"
+            ]
+          ]
+        ,
+          Html.node "style"
+          [ Html.type_ "text/css"
+          ]
+          [ text """
+html, body {
+  width: 100%;
+  height: 100%;
+}
+            """
           ]
         ]
       ]
     ]
-
 
 
 subscriptions : (Msg m -> m) -> Model -> Sub m

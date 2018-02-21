@@ -29,14 +29,8 @@ view page =
             , title = "Checkbox", subtitle = "Multi-selection controls" }
           , { url = Dialog, icon = "ic_dialog_24px.svg"
             , title = "Dialog", subtitle = "Secondary text" }
-          , { url = TemporaryDrawer, icon = "ic_side_navigation_24px.svg"
-            , title = "Drawer", subtitle = "Temporary" }
-          , { url = PersistentDrawer, icon = "ic_side_navigation_24px.svg"
-            , title = "Drawer", subtitle = "Persistent" }
-          , { url = PermanentAboveDrawer, icon = "ic_side_navigation_24px.svg"
-            , title = "Drawer", subtitle = "Permanent drawer above toolbar" }
-          , { url = PermanentBelowDrawer, icon = "ic_side_navigation_24px.svg"
-            , title = "Drawer", subtitle = "Permanent drawer below toolbar" }
+          , { url = Drawer, icon = "ic_side_navigation_24px.svg"
+            , title = "Drawer", subtitle = "Various drawer styles" }
           , { url = Elevation, icon = "ic_shadow_24px.svg"
             , title = "Elevation", subtitle = "Shadow for different elevations" }
           , { url = Fabs, icon = "ic_button_24px.svg"

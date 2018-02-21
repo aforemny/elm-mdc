@@ -1,30 +1,20 @@
 module Material.Drawer.Permanent
     exposing
-        ( -- VIEW
-          view
-        , Property
-
+        ( content
+        , defaultModel
         , header
         , headerContent
-        , content
-        , toolbarSpacer
-        
-          -- TEA
-        , subscriptions
-        , open
-        , close
-        , toggle
         , Model
-        , defaultModel
         , Msg
-        , update
-          
-          -- RENDER
-        , subs
-        , emit
+        , Property
+        , react
         , render
         , Store
-        , react
+        , subs
+        , subscriptions
+        , toolbarSpacer
+        , update
+        , view
         )
 
 {-| The MDC Drawer component is a spec-aligned drawer component adhering to the
@@ -78,11 +68,11 @@ update =
     Drawer.update
 
 
-type alias Config m =
-    Drawer.Config m
+type alias Config =
+    Drawer.Config
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
     Drawer.defaultConfig
 
@@ -98,17 +88,17 @@ view =
 
 header : List (Property m) -> List (Html m) -> Html m
 header =
-    Drawer.header className
+    Drawer.header
 
 
 headerContent : List (Property m) -> List (Html m) -> Html m
 headerContent =
-    Drawer.headerContent className
+    Drawer.headerContent
 
 
 content : List (Property m) -> List (Html m) -> Html m
 content =
-    Drawer.content className
+    Drawer.content
 
 
 toolbarSpacer : List (Property m) -> List (Html m) -> Html m
@@ -151,26 +141,6 @@ subscriptions =
     Drawer.subscriptions
 
 
-open : Msg
-open =
-    Drawer.open False
-
-
-close : Msg
-close =
-    Drawer.close
-
-
-toggle : Msg
-toggle =
-    Drawer.toggle False
-
-
-emit : (Material.Msg.Msg m -> m) -> Index -> Msg -> Cmd m
-emit =
-    Drawer.emit
-
-
 className : String
 className =
-    "mdc-permanent-drawer"
+    "mdc-drawer--permanent"

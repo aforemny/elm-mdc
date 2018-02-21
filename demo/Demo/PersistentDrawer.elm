@@ -11,8 +11,9 @@ module Demo.PersistentDrawer exposing
 import Demo.Page exposing (Page)
 import Html.Attributes as Html
 import Html exposing (Html, text)
+import Json.Decode as Json
 import Material
-import Material.Component exposing (Index)
+import Material.Button as Button
 import Material.Drawer
 import Material.Drawer.Persistent as Drawer
 import Material.List as Lists
@@ -24,20 +25,20 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model =
     { mdl : Material.Model
-    , open : Bool
+    , rtl : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
     { mdl = Material.defaultModel
-    , open = False
+    , rtl = False
     }
 
 
 type Msg m
     = Mdl (Material.Msg m)
-    | Open Index
+    | ToggleRtl
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
@@ -45,8 +46,9 @@ update lift msg model =
     case msg of
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
-        Open idx ->
-            model ! [ Drawer.emit (Mdl >> lift) idx Drawer.toggle ]
+
+        ToggleRtl ->
+            ( { model | rtl = not model.rtl }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
@@ -60,6 +62,7 @@ view lift page model =
     , css "box-sizing" "border-box"
     , css "width" "100%"
     , css "height" "100%"
+    , Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [
       Drawer.render (Mdl >> lift) [0] model.mdl []
@@ -122,8 +125,8 @@ view lift page model =
             ]
             [ Toolbar.icon_
               [ Toolbar.menu
-              , Options.onClick (lift (Open [0]))
               , css "cursor" "pointer"
+              , Drawer.toggleOn (lift << Mdl) [0] "click"
               ]
               [ styled Html.i
                     [ cs "material-icons"
@@ -148,10 +151,28 @@ view lift page model =
         ]
         [
           styled Html.h1 [ Typography.display1 ] [ text "Persistent Drawer" ]
-        , styled Html.p [ Typography.body1 ]
+        ,
+          styled Html.p [ Typography.body1 ]
           [ text "Click the menu icon above to open and close the drawer."
           ]
+        ,
+          Button.render (lift << Mdl) [2] model.mdl
+          [ Options.on "click" (Json.succeed (lift ToggleRtl))
+          ]
+          [ text "Toggle RTL"
+          ]
         ]
+      ]
+    ,
+      Html.node "style"
+      [ Html.type_ "text/css"
+      ]
+      [ text """
+html, body {
+  width: 100%;
+  height: 100%;
+}
+        """
       ]
     ]
 
