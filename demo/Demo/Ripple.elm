@@ -72,9 +72,10 @@ view lift page model =
                 Ripple.bounded (Mdl >> lift) [0] model.mdl () ()
         in
         styled Html.div
-        [ rippleOptions
-        , css "width" "100%"
+        [ css "width" "100%"
         , css "height" "100%"
+        , rippleOptions
+        , cs "mdc-ripple-surface"
         ]
         [ rippleStyles
         ]
@@ -106,9 +107,9 @@ view lift page model =
         in
         styled Html.div
         [ cs "material-icons"
-        , css "width" "40px"
-        , css "height" "40px"
-        , css "padding" "0"
+        , css "width" "24px"
+        , css "height" "24px"
+        , css "padding" "12px"
         , css "border-radius" "50%"
         , demoSurface
         , rippleOptions

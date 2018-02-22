@@ -121,26 +121,36 @@ update msg model =
 -- VIEW
 
 
-bounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> x -> y -> (Options.Property c m, Html m)
+bounded
+    : (Material.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> x
+    -> y
+    -> (Options.Property c m, Html m)
 bounded lift index store options =
     Component.render get (view False) Material.Msg.RippleMsg lift index store options
 
 
-unbounded : (Material.Msg.Msg m -> m) -> Index -> Store s -> x -> y -> (Options.Property c m, Html m)
+unbounded
+    : (Material.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> x
+    -> y
+    -> (Options.Property c m, Html m)
 unbounded lift index store options =
     Component.render get (view True) Material.Msg.RippleMsg lift index store options
 
 
-accent : Property c m
-accent =
-    Options.nop
-    -- cs "mdc-ripple-surface--accent"
-
-
 primary : Property c m
 primary =
-    Options.nop
-    -- cs "mdc-ripple-surface--primary"
+    cs "mdc-ripple-surface--primary"
+
+
+accent : Property c m
+accent =
+    cs "mdc-ripple-surface--accent"
 
 
 view : Bool -> (Msg -> m) -> Model -> x -> y -> (Options.Property c m, Html m)
@@ -162,7 +172,10 @@ view isUnbounded lift model _ _ =
             sqrt ((geometry.frame.width^2) + (geometry.frame.height^2))
 
         maxRadius =
-            surfaceDiameter + 10
+            if isUnbounded then
+              maxDimension
+            else
+              surfaceDiameter + 10
 
         fgScale =
             toString (maxRadius / initialSize)
@@ -179,8 +192,8 @@ view isUnbounded lift model _ _ =
                 , y = geometry.event.pageY - (initialSize / 2)
                 }
             else
-                { x = (geometry.frame.width - initialSize) / 2
-                , y = (geometry.frame.height - initialSize) / 2
+                { x = toFloat (round ((geometry.frame.width - initialSize) / 2))
+                , y = toFloat (round ((geometry.frame.height - initialSize) / 2))
                 }
 
         endPoint =
@@ -210,9 +223,8 @@ view isUnbounded lift model _ _ =
         summary =
           Internal.collect ()
           ( List.concat
-            [ [ Internal.variable "--mdc-ripple-surface-width" surfaceWidth
-              , Internal.variable "--mdc-ripple-surface-height" surfaceHeight
-              , Internal.variable "--mdc-ripple-fg-size" fgSize
+            [
+              [ Internal.variable "--mdc-ripple-fg-size" fgSize
               , Internal.variable "--mdc-ripple-fg-scale" fgScale
               ]
             , if isUnbounded then
@@ -269,7 +281,6 @@ view isUnbounded lift model _ _ =
 
       , when isUnbounded << Options.many <|
         [ cs "mdc-ripple-upgraded--unbounded"
-        , css "overflow" "visible"
         , Options.data "data-mdc-ripple-is-unbounded" ""
         ]
 
