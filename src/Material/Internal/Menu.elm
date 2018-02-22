@@ -17,11 +17,11 @@ module Material.Internal.Menu exposing
 -}
 type Msg m
     = NoOp
-    | Toggle
-    | Init Geometry
+    | Init { quickOpen : Bool } Geometry
     | AnimationEnd
     | Open
     | Close
+    | Toggle
     | CloseDelayed
     | DocumentClick
     | KeyDown Meta Key KeyCode

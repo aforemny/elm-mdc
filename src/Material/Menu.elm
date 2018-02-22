@@ -31,7 +31,7 @@ type alias Model =
     , open : Bool
     , animating : Bool
     , geometry : Maybe Geometry
-    , delayedClosing : Bool
+    , quickOpen : Maybe Bool
     }
 
 
@@ -41,7 +41,7 @@ defaultModel =
     , open = False
     , animating = False
     , geometry = Nothing
-    , delayedClosing = False
+    , quickOpen = Nothing
     }
 
 
@@ -103,13 +103,23 @@ update lift msg model =
         Toggle ->
             update lift (if model.open then Close else Open) model
 
-        Init geometry ->
-            ( { model | geometry = Just geometry }, Cmd.none )
+        Init { quickOpen } geometry ->
+            ( { model
+                | geometry = Just geometry
+                , quickOpen = Just quickOpen
+              }
+            ,
+              Cmd.none
+            )
 
         AnimationEnd ->
             ( { model | animating = False }, Cmd.none )
 
         Open ->
+            let
+                quickOpen =
+                    Maybe.withDefault False model.quickOpen
+            in
             if not model.open then
                 (
                   { model
@@ -118,20 +128,31 @@ update lift msg model =
                     , geometry = Nothing
                   }
                 ,
-                  Helpers.delay (120*Time.millisecond) (lift AnimationEnd)
+                  if not quickOpen then
+                      Helpers.delay (120*Time.millisecond) (lift AnimationEnd)
+                  else
+                      Helpers.cmd (lift AnimationEnd)
                 )
             else
                 ( model, Cmd.none )
 
         Close ->
+            let
+                quickOpen =
+                    Maybe.withDefault False model.quickOpen
+            in
             if model.open then
                 (
                   { model
                     | open = False
                     , animating = True
+                    , quickOpen = Nothing
                   }
                 ,
-                  Helpers.delay (70*Time.millisecond) (lift AnimationEnd)
+                  if not quickOpen then
+                      Helpers.delay (70*Time.millisecond) (lift AnimationEnd)
+                  else
+                      Helpers.cmd (lift AnimationEnd)
                 )
             else
                 ( model, Cmd.none )
@@ -143,7 +164,7 @@ update lift msg model =
             if model.open then
                 update lift Close model
             else
-                model ! []
+                ( model, Cmd.none )
 
         KeyDown { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
@@ -160,10 +181,10 @@ update lift msg model =
                     key == "Space" || keyCode == 32
             in
             if altKey || ctrlKey || metaKey then
-                model ! []
+                ( model, Cmd.none )
             else
                 -- TODO: focus handling
-                model ! []
+                ( model, Cmd.none )
 
         KeyUp { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
@@ -177,7 +198,7 @@ update lift msg model =
                     key == "Escape" || keyCode == 27
             in
             if altKey || ctrlKey || metaKey then
-                model ! []
+                ( model, Cmd.none )
             else
                 if isEnter || isSpace then
                     -- TODO: trigger selected
@@ -186,7 +207,7 @@ update lift msg model =
                     if isEscape then
                         update lift Close model
                     else
-                        model ! []
+                        ( model, Cmd.none )
 
 
 type alias Config =
@@ -194,6 +215,7 @@ type alias Config =
     , open : Bool
     , anchorCorner : Corner
     , anchorMargin : Margin
+    , quickOpen : Bool
     }
 
 
@@ -203,6 +225,7 @@ defaultConfig =
     , open = False
     , anchorCorner = topLeftCorner
     , anchorMargin = defaultMargin
+    , quickOpen = False
     }
 
 
@@ -247,6 +270,11 @@ anchorMargin anchorMargin =
     Internal.option (\ config -> { config | anchorMargin = anchorMargin })
 
 
+quickOpen : Property m
+quickOpen =
+    Internal.option (\ config -> { config | quickOpen = True })
+
+
 view
     : (Msg m -> m)
     -> Model
@@ -278,19 +306,27 @@ view lift model options ul =
     Internal.apply summary
     div
     [ cs "mdc-menu"
-    , cs "mdc-menu--animating-open" |> when (model.animating && model.open)
-    , cs "mdc-menu--animating-closed" |> when (model.animating && not model.open)
-    , when isOpen << Options.many <|
-      [ cs "mdc-menu--open" |> when isOpen
-      , Options.attribute (Html.onWithOptions
+    ,
+      when (model.animating && not (Maybe.withDefault False model.quickOpen)) <|
+      if model.open then
+          cs "mdc-menu--animating-open"
+      else
+          cs "mdc-menu--animating-closed"
+    ,
+      when isOpen << Options.many <|
+      [
+        cs "mdc-menu--open" |> when isOpen
+      , Options.onWithOptions
           "click" 
           { stopPropagation = True
           , preventDefault = False
           }
-          (Json.succeed (lift CloseDelayed)) )
+          (Json.succeed (lift (CloseDelayed)))
       ]
-    , when (isOpen || model.animating) << Options.many <|
-      [ css "position" "absolute"
+    ,
+      when (isOpen || model.animating) << Options.many <|
+      [
+        css "position" "absolute"
       , css "transform-origin" transformOrigin
       , css "top" (Maybe.withDefault "" position.top)
         |> when (position.top /= Nothing)
@@ -302,9 +338,11 @@ view lift model options ul =
         |> when (position.right /= Nothing)
       , css "max-height" maxHeight
       ]
-    , when (model.animating && model.geometry == Nothing) <|
+    ,
+      when (model.animating && model.geometry == Nothing) <|
       Options.many << List.map Options.attribute <|
-      GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
+      GlobalEvents.onTick <|
+      Json.map (lift << Init { quickOpen = config.quickOpen }) decodeGeometry
     ]
     []
     [ ul.node (cs "mdc-menu__items" :: ul.options)

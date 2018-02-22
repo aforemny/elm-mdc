@@ -213,6 +213,7 @@ menuAnchor lift model =
     , Menu.render (Mdl >> lift) [2] model.mdl
       [ Menu.anchorCorner model.anchorCorner
       , Menu.anchorMargin anchorMargin
+      , Menu.quickOpen |> when (not model.openAnimation)
       ]
       ( Menu.ul Lists.ul []
         ( menuItems model.menuSize
@@ -220,8 +221,13 @@ menuAnchor lift model =
                if label == "-" then
                    Menu.li Lists.divider [] []
                else
+                   let
+                       isSelected =
+                           Just ( index, label ) == model.selected
+                   in
                    Menu.li Lists.li
                    [ Menu.onSelect (lift (Select (index, label)))
+                   , Lists.selected |> when (model.rememberSelectedItem && isSelected)
                    , Options.attribute (Html.tabindex 0)
                    ]
                    [ text label
@@ -236,38 +242,41 @@ view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     page.body "Simple Menu"
     [
-      Page.hero [] []
---      [ Menu.render (Mdl >> lift) [0] model.mdl
---        [ -- Menu.open
---        ]
---        ( Menu.ul Lists.ul []
---          [ Menu.li Lists.li []
---            [ text "Back"
---            ]
---          , Menu.li Lists.li []
---            [ text "Forward"
---            ]
---          , Menu.li Lists.li []
---            [ text "Reload"
---            ]
---          , Menu.li Lists.divider [] []
---          , Menu.li Lists.li []
---            [ text "Help & Feedback"
---            ]
---          , Menu.li Lists.li []
---            [ text "Settings"
---            ]
---          ]
---        )
---      ]
-
-    , styled Html.div
+      Page.hero []
+      [ Menu.render (Mdl >> lift) [0] model.mdl
+        [ cs "mdc-menu--open"
+        ]
+        ( Menu.ul Lists.ul []
+          [ Menu.li Lists.li []
+            [ text "Back"
+            ]
+          , Menu.li Lists.li []
+            [ text "Forward"
+            ]
+          , Menu.li Lists.li []
+            [ text "Reload"
+            ]
+          , Menu.li Lists.divider [] []
+          , Menu.li Lists.li []
+            [ text "Help & Feedback"
+            ]
+          , Menu.li Lists.li []
+            [ text "Settings"
+            ]
+          ]
+        )
+      ]
+    ,
+      styled Html.div
       [ cs "demo-content"
       , css "position" "relative"
       , css "flex" "1"
       , css "top" "64px"
       ]
-      [ styled Html.div []
+      [ styled Html.div
+        [ cs "demo-wrapper"
+        , Options.attribute (Html.dir "rtl") |> when model.rtl
+        ]
         [
           menuAnchor lift model
         ]
@@ -354,7 +363,7 @@ demoControls lift model =
           ,
             text " "
           ,
-            text "Disable open animation"
+            text "Disable Open Animation"
           ]
         ]
       ,
