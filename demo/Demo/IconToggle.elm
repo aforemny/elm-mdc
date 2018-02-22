@@ -9,7 +9,6 @@ import Material.Component exposing (Index, Indexed)
 import Material.IconToggle as IconToggle
 import Material.Options as Options
 import Material.Options exposing (styled, cs, css, when)
-import Material.Theme as Theme
 
 
 type alias Model =
@@ -86,8 +85,7 @@ view lift page model =
                     |> Maybe.withDefault False
             in
             IconToggle.render (Mdl >> lift) idx model.mdl
-            ( css "margin-left" "1rem"
-            :: Options.onClick (lift (Toggle idx))
+            ( Options.onClick (lift (Toggle idx))
             :: when isOn IconToggle.on
             :: options
             )
@@ -125,11 +123,15 @@ view lift page model =
         in
         toggleExample []
         [ title [] [ text "Using Material Icons" ]
-        , iconToggle [1]
+        , styled Html.div
+          [ css "margin-left" "1rem"
+          ]
+          [ iconToggle [1]
               [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
               , IconToggle.icon  "favorite" "favorite_border"
               ]
               []
+          ]
         , styled Html.p
           [ css "margin-top" "20px"
           , css "margin-bottom" "20px"
@@ -144,144 +146,31 @@ view lift page model =
 
       , toggleExample []
         [ title [] [ text "Using Font Awesome" ]
-        , iconToggle [2]
-              [ IconToggle.label "Unstar this Icon" "Star this Icon"
-              , IconToggle.icon "fa-star" "fa-star-o"
-              , IconToggle.inner "fa"
-              ]
-              []
-        ]
-
-      , toggleExample
-        [ Theme.dark
-        , css "background-color" "#333"
-        ]
-        [ title [ css "color" "#fff" ] [ text "Dark Theme" ]
-        , iconToggle [3]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
-              , IconToggle.primary
-              ]
-              []
-        ]
-
-      , toggleExample []
-        [ title [] [ text "Primary Colored Icons" ]
-        , iconToggle [4]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
-              , IconToggle.primary
-              ]
-              []
-        ]
-
-      , toggleExample []
-        [ title [] [ text "Accent Colored Icons" ]
-        , iconToggle [5]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
-              , IconToggle.accent
-              ]
-              []
+        , styled Html.div
+          [ css "margin-left" "1rem"
+          ]
+          [
+            iconToggle [2]
+                [ IconToggle.label "Unstar this Icon" "Star this Icon"
+                , IconToggle.icon "fa-star" "fa-star-o"
+                , IconToggle.inner "fa"
+                ]
+                []
+          ]
         ]
 
       , toggleExample []
         [ title [] [ text "Disabled Icons" ]
-        , iconToggle [6]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
-              , IconToggle.disabled
-              ]
-              []
         , styled Html.div
-          [ Theme.dark
-          , css "background-color" "#303030"
-          , css "padding-bottom" "1rem"
-          ]
-          [ iconToggle [7]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
-              , IconToggle.disabled
-              ]
-              []
-          ]
-        ]
-
-      , let
-          demoColorCombo idx iconToggleOptions options nodes =
-              styled Html.div
-              ( cs "demo-color-combo"
-              :: css "width" "250px"
-              :: css "padding" "1rem"
-              :: css "border-radius" "4px"
-              :: css "display" "inline-flex"
-              :: css "flex-direction" "column"
-              :: css "align-items" "center"
-              :: css "justify-content" "center"
-              :: css "margin-right" "8px"
-              :: options
-              )
-              ( List.concat
-                [ [ let
-                        isOn =
-                            Dict.get idx model.iconToggles
-                            |> Maybe.withDefault False
-                    in
-                    IconToggle.render (Mdl >> lift) idx model.mdl
-                    ( Options.onClick (lift (Toggle idx))
-                    :: when isOn IconToggle.on
-                    :: IconToggle.label "Remove from Fravorites" "Add to Favorites"
-                    :: IconToggle.icon  "favorite" "favorite_border"
-                    :: options
-                    )
-                    []
-                  ]
-                , nodes
-                ]
-              )
-        in
-        toggleExample []
-        [ title [] [ text "Additional Color Combinations" ]
-        , styled Html.div
-          [ cs "demo-color-combos"
-          , css "display" "flex"
-          , css "align-items" "center"
-          , css "justify-content" "flex-start"
+          [ css "margin-left" "1rem"
           ]
           [
-            demoColorCombo [8]
-            [ Theme.textPrimaryOnPrimary
-            ]
-            [ css "background-color" "#3e82f7"
-            ]
-            [ styled Html.p
-              [ Theme.textPrimaryOnPrimary
+            iconToggle [3]
+              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
+              , IconToggle.icon  "favorite" "favorite_border"
+              , IconToggle.disabled
               ]
-              [ text "Light icon on background"
-              ]
-            ]
-
-          , demoColorCombo [9]
-            []
-            [ css "background-color" "#00bcd6"
-            ]
-            [ Html.p []
-              [ text "Light icon on background"
-              ]
-            ]
-
-          , demoColorCombo [10]
-            [ Theme.textPrimaryOnDark
-            ]
-            [ Theme.dark
-            , css "background-color" "#303030"
-            ]
-            [ styled Html.p
-              [ Theme.textPrimaryOnDark
-              ]
-              [ text "Light icon on background"
-              ]
-            ]
+              []
           ]
         ]
       ]
