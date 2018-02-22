@@ -6,7 +6,6 @@ import Html exposing (Html, text)
 import Material
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.RadioButton as RadioButton
-import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
 
 
@@ -79,7 +78,7 @@ view lift page model =
                 [0,0]
 
             name =
-                "Radio 1"
+                "Default Radio 1"
           in
           styled Html.div
           [ cs "mdc-form-field"
@@ -97,7 +96,7 @@ view lift page model =
                 [0,1]
 
             name =
-                "Radio 2"
+                "Default Radio 2"
           in
           styled Html.div
           [ cs "mdc-form-field"
@@ -168,65 +167,6 @@ view lift page model =
         ]
       ]
 
-    , let
-        group =
-            "ex1"
-
-        isSelected isDef name =
-          Dict.get group model.radios
-          |> Maybe.map ((==) name)
-          |> Maybe.withDefault isDef
-      in
-      example
-      [ Theme.dark
-      , css "background-color" "#333"
-      ]
-      [ styled Html.h2
-        [ css "margin-left" "0"
-        , css "margin-top" "0"
-        , css "color" "#fff"
-        ]
-        [ text "Dark Theme" ]
-
-      , let
-          idx =
-              [2,0]
-
-          name =
-              "Radio 1"
-        in
-        styled Html.div
-        [ cs "mdc-form-field"
-        ]
-        [ RadioButton.render (Mdl >> lift) idx model.mdl
-          [ Options.onClick (lift (Set group name))
-          , RadioButton.selected |> when (isSelected True name)
-          , RadioButton.name group
-          ]
-          []
-        , Html.label [] [ text name ]
-        ]
-
-      , let
-          idx =
-              [2,1]
-
-          name =
-              "Radio 2"
-        in
-        styled Html.div
-        [ cs "mdc-form-field"
-        ]
-        [ RadioButton.render (Mdl >> lift) idx model.mdl
-          [ Options.onClick (lift (Set group name))
-          , RadioButton.selected |> when (isSelected False name)
-          , RadioButton.name group
-          ]
-          []
-        , Html.label [] [ text name ]
-        ]
-      ]
-
     , example
       []
       [ styled Html.h2
@@ -258,46 +198,6 @@ view lift page model =
         , let
             idx =
                 [3,1]
-
-            name =
-                "Radio 2"
-          in
-          styled Html.div
-          [ cs "mdc-form-field"
-          ]
-          [ RadioButton.render (Mdl >> lift) idx model.mdl
-            [ RadioButton.disabled
-            ]
-            []
-          , Html.label [] [ text "Disabled Radio 2" ]
-          ]
-        ]
-
-      , styled Html.div
-        [ Theme.dark
-        , css "background-color" "#333"
-        ]
-        [ let
-            idx =
-                [4,0]
-
-            name =
-                "Radio 1"
-          in
-          styled Html.div
-          [ cs "mdc-form-field"
-          ]
-          [ RadioButton.render (Mdl >> lift) idx model.mdl
-            [ RadioButton.selected
-            , RadioButton.disabled
-            ]
-            []
-          , Html.label [] [ text "Disabled Radio 1" ]
-          ]
-
-        , let
-            idx =
-                [4,1]
 
             name =
                 "Radio 2"
