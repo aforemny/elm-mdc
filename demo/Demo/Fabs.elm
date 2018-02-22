@@ -47,29 +47,16 @@ view lift page model =
             :: options
             )
     in
-    page.body "Floating action buttons"
+    page.body "Floating Action Button"
     [
-      Page.hero []
-      [
-        fab 0 []
-      ]
-
+      Page.hero [] [ fab 0 [] ]
     ,
       Html.section []
       [ Html.div []
-        [ legend [] [ text "Normal FABs" ]
+        [
+          legend [] [ text "FABs" ]
         , fab 1 []
         , fab 2 [ Fab.mini ]
-        , fab 3 [ Fab.plain ]
-        , fab 4 [ Fab.plain, Fab.mini ]
-        ]
-
-      , Html.div []
-        [ legend [] [ text "Disabled FABs" ]
-        , fab 5 [ Fab.disabled ]
-        , fab 6 [ Fab.disabled, Fab.mini ]
-        , fab 7 [ Fab.disabled, Fab.plain ]
-        , fab 8 [ Fab.disabled, Fab.plain, Fab.mini ]
         ]
       ]
     ]

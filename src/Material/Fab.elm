@@ -1,24 +1,17 @@
 module Material.Fab
     exposing
-        ( -- VIEW
-          view
-        , Property
-        , disabled
-        , plain
+        ( defaultModel
+        , exited
         , mini
-        , ripple
-        
-          -- TEA
         , Model
-        , defaultModel
         , Msg
-        , update
-
-          -- RENDER
-
-        , render
-        , Store
+        , Property
         , react
+        , render
+        , ripple
+        , Store
+        , update
+        , view
         )
 
 {-| The MDC FAB component is a spec-aligned button component adhering to the
@@ -44,7 +37,6 @@ Material Design FAB requirements.
 @docs Store, react
 -}
 
-import Html.Attributes exposing (..)
 import Html exposing (..)
 import Material.Component as Component exposing (Indexed, Index)
 import Material.Internal.Fab exposing (Msg(..))
@@ -84,15 +76,13 @@ update msg model =
 
 
 type alias Config =
-    { disabled : Bool
-    , ripple : Bool
+    { ripple : Bool
     }
 
 
 defaultConfig : Config
 defaultConfig =
-    { disabled = False
-    , ripple = False
+    { ripple = False
     }
 
 
@@ -100,19 +90,14 @@ type alias Property m =
     Options.Property Config m
 
 
-disabled : Property m
-disabled =
-    Internal.option (\config -> { config | disabled = True })
-
-
-plain : Property m
-plain =
-    cs "mdc-fab--plain"
-
-
 mini : Property m
 mini =
     cs "mdc-fab--mini"
+
+
+exited : Property m
+exited =
+    cs "mdc-fab--exited"
 
 
 ripple : Property m
@@ -133,10 +118,6 @@ view lift model options icon =
             Html.button
             [ cs "mdc-fab"
             , cs "material-icons"
-            , Internal.attribute (Html.Attributes.disabled True)
-                |> when config.disabled
-            , cs "mdc-fab--disabled"
-                |> when config.disabled
             , rippleOptions |> when config.ripple
             ]
             []
