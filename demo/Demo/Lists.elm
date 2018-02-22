@@ -114,42 +114,30 @@ possible (since it's a block element)."""
     , demoWrapper []
       [ h2 [] [ Html.text "Single-Line list" ]
       , section []
-        [ h3 [] [ Html.text "Text only" ]
-        , singleLine []
+        [ h3 [] [ Html.text "Text only, non-interactive (no states)" ]
+        , singleLine
+          [ Lists.nonInteractive
+          ]
         ]
 
       , section []
-        [ h3 [] [ Html.text "Text only (Dense)" ]
+        [ h3 [] [ Html.text "Text only (dense)" ]
         , singleLine [ Lists.dense ]
         ]
 
-      , section
-        [ cs "mdc-theme--dark"
-        ]
-        [ h3 [] [ Html.text "Text only (dark)" ]
-        , singleLine []
-        ]
-
       , section []
-        [ h3 [] [ Html.text "Start Detail" ]
+        [ h3 [] [ Html.text "Graphic" ]
         , Html.aside [] [ Html.p [] [ Html.em [] [ Html.text "Note: The grey background is styled using demo placeholder styles" ] ] ]
         , startDetail []
         ]
 
       , section []
-        [ h3 [] [ Html.text "Start Detail (Dense)" ]
+        [ h3 [] [ Html.text "Graphic (dense)" ]
         , startDetail [ Lists.dense ]
         ]
 
       , section []
-        [ h3 [] [ Html.text "Start Detail Example - Icon with Text" ]
-        , startDetailExample
-        ]
-
-      , section
-        [ cs "mdc-theme--dark"
-        ]
-        [ h3 [] [ Html.text "Start Detail Example - Icon with Text (dark)" ]
+        [ h3 [] [ Html.text "Graphic Example - Icon with Text" ]
         , startDetailExample
         ]
 
@@ -159,7 +147,7 @@ possible (since it's a block element)."""
         ]
 
       , section []
-        [ h3 [] [ Html.text "Avatar List (Dense)" ]
+        [ h3 [] [ Html.text "Avatar List (dense)" ]
         , avatarList [ Lists.dense ]
         ]
 
@@ -168,42 +156,28 @@ possible (since it's a block element)."""
         , avatarListExample
         ]
 
-      , section
-        [ cs "mdc-theme--dark"
-        ]
-        [ h3 [] [ Html.text "Example - Avatar with Text (dark)" ]
-        , avatarListExample
-        ]
-
       , section []
-        [ h3 [] [ Html.text "End Detail" ]
+        [ h3 [] [ Html.text "Metadata" ]
         , endDetail []
         ]
 
       , section []
-        [ h3 [] [ Html.text "End Detail (Dense)" ]
+        [ h3 [] [ Html.text "Metadata (Dense)" ]
         , endDetail [ Lists.dense ]
         ]
 
       , section []
-        [ h3 [] [ Html.text "Avatar + End Detail" ]
+        [ h3 [] [ Html.text "Avatar + Metadata" ]
         , avatarPlusEndDetail []
         ]
 
       , section []
-        [ h3 [] [ Html.text "Avatar + End Detail (Dense)" ]
+        [ h3 [] [ Html.text "Avatar + Metadata (dense)" ]
         , avatarPlusEndDetail [ Lists.dense ]
         ]
 
       , section []
         [ h3 [] [ Html.text "Example - Avatar with Text and Icon" ]
-        , avatarWithTextAndIconExample
-        ]
-
-      , section
-        [ cs "mdc-theme--dark"
-        ]
-        [ h3 [] [ Html.text "Example - Avatar with Text and Icon (Dark)" ]
         , avatarWithTextAndIconExample
         ]
       ]
@@ -217,17 +191,17 @@ possible (since it's a block element)."""
         ]
 
       , section []
-        [ h3 [] [ Html.text "Text-Only (Dense)" ]
+        [ h3 [] [ Html.text "Text-Only (dense)" ]
         , twoLine [ Lists.dense ]
         ]
 
       , section []
-        [ h3 [] [ Html.text "Start Detail" ]
+        [ h3 [] [ Html.text "Graphic" ]
         , startDetail_ []
         ]
 
       , section []
-        [ h3 [] [ Html.text "Start Detail (Dense)" ]
+        [ h3 [] [ Html.text "Graphic (dense)" ]
         , startDetail_ [ Lists.dense ]
         ]
 
@@ -237,29 +211,22 @@ possible (since it's a block element)."""
         ]
 
       , section []
-        [ h3 [] [ Html.text "Avatar List (Dense)" ]
+        [ h3 [] [ Html.text "Avatar List (dense)" ]
         , avatarList_ [ Lists.dense ]
         ]
 
       , section []
-        [ h3 [] [ Html.text "End Detail" ]
+        [ h3 [] [ Html.text "Metadata" ]
         , endDetail_ []
         ]
 
       , section []
-        [ h3 [] [ Html.text "End Detail (Dense)" ]
+        [ h3 [] [ Html.text "Metadata (dense)" ]
         , endDetail_ [ Lists.dense ]
         ]
 
       , section []
         [ h3 [] [ Html.text "Example - Two-line avatar + text + icon" ]
-        , twoLineAvatarPlusTextPlusIconExample
-        ]
-
-      , section
-        [ cs "mdc-theme--dark"
-        ]
-        [ h3 [] [ Html.text "Example - Two-line avatar + text + icon (Dark)" ]
         , twoLineAvatarPlusTextPlusIconExample
         ]
       ]
@@ -287,14 +254,7 @@ possible (since it's a block element)."""
         ]
 
       , section []
-        [ h3 [] [ Html.text "Example - Two-line Lists, Avatars, end detail, inset dividers" ]
-        , groupsExample
-        ]
-
-      , section
-        [ cs "mdc-theme--dark"
-        ]
-        [ h3 [] [ Html.text "Example - Two-line Lists, Avatars, end detail, inset dividers (Dark)" ]
+        [ h3 [] [ Html.text "Example - Two-line Lists, Avatars, Metadata, Inset Dividers" ]
         , groupsExample
         ]
       ]
@@ -305,13 +265,6 @@ possible (since it's a block element)."""
         section []
         [ h3 [] [ Html.text "Example - Interactive List" ]
         , interactiveList lift [0] model
-        ]
-
-      , section
-        [ cs "mdc-theme--dark"
-        ]
-        [ h3 [] [ Html.text "Example - Interactive List (Dark)" ]
-        , interactiveList lift [1] model
         ]
       ]
     ]
@@ -335,23 +288,11 @@ inlineCss =
   max-width: auto;
   border: none;
 }
-.mdc-theme--dark .mdc-list {
-  border: none;
-}
-section.mdc-theme--dark {
-  background-color: #303030;
-}
-.mdc-theme--dark > h3 {
-  color: white;
-}
 .gray-bg {
   background-color: rgba(0,0,0,.26);
 }
-i.mdc-list-item__start-detail {
+.mdc-list-item__graphic {
   color: rgba(0,0,0,.54);
-}
-.mdc-theme--dark i.mdc-list-item__start-detail {
-  color: rgba(255,255,255,.7);
 }
 """ ]
 
@@ -437,12 +378,21 @@ avatarListExample =
 endDetail : List (Options.Style m) -> Html m
 endDetail options =
     Lists.ul options
-    ( Lists.li []
+    [ Lists.li []
       [ Html.text "Single-line item"
-      , Lists.meta [ cs "gray-bg" ] []
+      , Lists.meta [] [ text "$10.00" ]
       ]
-        |> List.repeat 3
-    )
+    ,
+      Lists.li []
+      [ Html.text "Single-line item"
+      , Lists.meta [] [ text "$20.00" ]
+      ]
+    ,
+      Lists.li []
+      [ Html.text "Single-line item"
+      , Lists.meta [] [ text "$30.00" ]
+      ]
+    ]
 
 
 avatarPlusEndDetail : List (Options.Style m) -> Html m
@@ -451,13 +401,22 @@ avatarPlusEndDetail options =
     ( Lists.avatarList
     :: options
     )
-    ( Lists.li []
+    [ Lists.li []
       [ Lists.graphic [ cs "gray-bg" ] []
       , Html.text "Single-line item"
-      , Lists.meta [ cs "gray-bg" ] []
+      , Lists.meta [] [ text "$10.00" ]
       ]
-        |> List.repeat 3
-    )
+    , Lists.li []
+      [ Lists.graphic [ cs "gray-bg" ] []
+      , Html.text "Single-line item"
+      , Lists.meta [] [ text "$20.00" ]
+      ]
+    , Lists.li []
+      [ Lists.graphic [ cs "gray-bg" ] []
+      , Html.text "Single-line item"
+      , Lists.meta [] [ text "$30.00" ]
+      ]
+    ]
 
 
 avatarWithTextAndIconExample : Html m
@@ -550,17 +509,34 @@ endDetail_ options =
     ( Lists.twoLine
     :: options
     )
-    ( Lists.li []
+    [ Lists.li []
       [ Lists.text []
         [ Html.text "Two-line item"
         , Lists.secondaryText []
           [ Html.text "Secondary text"
           ]
         ]
-      , Lists.meta [ cs "gray-bg" ] []
+      , Lists.meta [] [ text "$10.00" ]
       ]
-      |> List.repeat 3
-    )
+    , Lists.li []
+      [ Lists.text []
+        [ Html.text "Two-line item"
+        , Lists.secondaryText []
+          [ Html.text "Secondary text"
+          ]
+        ]
+      , Lists.meta [] [ text "$20.00" ]
+      ]
+    , Lists.li []
+      [ Lists.text []
+        [ Html.text "Two-line item"
+        , Lists.secondaryText []
+          [ Html.text "Secondary text"
+          ]
+        ]
+      , Lists.meta [] [ text "$30.00" ]
+      ]
+    ]
 
 
 twoLineAvatarPlusTextPlusIconExample : Html m
