@@ -1,27 +1,22 @@
 module Demo.Selects exposing (Model, defaultModel, Msg(Mdl), update, view, subscriptions)
 
 import Demo.Page as Page exposing (Page)
-import Dict
+import Dict exposing (Dict)
 import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (Html, text)
 import Material
-import Material.Component exposing (Index, Indexed)
 import Material.List as Lists
 import Material.Menu as Menu
 import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Select as Select
-import Material.Theme as Theme
 import Material.Typography as Typography
 
 
 type alias Model =
     { mdl : Material.Model
-    , selects : Indexed (Int, String)
-    , darkTheme : Bool
-    , rtl : Bool
-    , disabled : Bool
+    , selects : Dict (List Int) Select
     }
 
 
@@ -29,7 +24,19 @@ defaultModel : Model
 defaultModel =
     { mdl = Material.defaultModel
     , selects = Dict.empty
-    , darkTheme = False
+    }
+
+
+type alias Select =
+    { value : Maybe ( Int, String )
+    , rtl : Bool
+    , disabled : Bool
+    }
+
+
+defaultSelect : Select
+defaultSelect =
+    { value = Nothing
     , rtl = False
     , disabled = False
     }
@@ -37,10 +44,9 @@ defaultModel =
 
 type Msg m
     = Mdl (Material.Msg.Msg m)
-    | Select Index Int String
-    | ToggleDarkTheme
-    | ToggleRtl
-    | ToggleDisabled
+    | Pick (List Int) ( Int, String )
+    | ToggleRtl (List Int)
+    | ToggleDisabled (List Int)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
@@ -49,137 +55,206 @@ update lift msg model =
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
 
-        Select idx index value ->
-            { model | selects = Dict.insert idx (index, value) model.selects } ! []
+        Pick index value ->
+            let
+                select =
+                    Dict.get index model.selects
+                    |> Maybe.withDefault defaultSelect
+                    |> \ select -> { select | value = Just value }
 
-        ToggleDarkTheme ->
-            { model | darkTheme = not model.darkTheme } ! []
+                selects =
+                    Dict.insert index select model.selects
+            in
+            ( { model | selects = selects }, Cmd.none )
 
-        ToggleRtl ->
-            { model | rtl = not model.rtl } ! []
+        ToggleRtl index ->
+            let
+                select =
+                    Dict.get index model.selects
+                    |> Maybe.withDefault defaultSelect
+                    |> \ select -> { select | rtl = not select.rtl }
 
-        ToggleDisabled ->
-            { model | disabled = not model.disabled } ! []
+                selects =
+                    Dict.insert index select model.selects
+            in
+            ( { model | selects = selects }, Cmd.none )
+
+        ToggleDisabled index ->
+            let
+                select =
+                    Dict.get index model.selects
+                    |> Maybe.withDefault defaultSelect
+                    |> \ select -> { select | disabled = not select.disabled }
+
+                selects =
+                    Dict.insert index select model.selects
+            in
+            ( { model | selects = selects }, Cmd.none )
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
-view lift page model =
+heroSelect
+    : (Msg m -> m)
+    -> List Int
+    -> Model
+    -> List (Select.Property m)
+    -> List (Html m)
+    -> Html m
+heroSelect lift id model options _ =
+    Select.render (Mdl >> lift) id model.mdl options
+    ( [ "Bread, Cereal, Rice, and Pasta"
+      , "Vegetables"
+      , "Fruit"
+      , "Milk, Yogurt, and Cheese"
+      , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
+      , "Fats, Oils, and Sweets"
+      ]
+      |> List.indexedMap (\index label ->
+             Menu.li Lists.li
+             [ Menu.onSelect (lift (Pick id ( index, label )))
+             -- TODO:
+             -- , Menu.disabled |> when ((index == 0) || (index == 3))
+             ]
+             [ text label ]
+         )
+    )
+
+
+example : List (Options.Property c m) -> List (Html m) -> Html m
+example options =
+    styled Html.section
+      ( cs "example"
+      :: css "margin" "24px"
+      :: css "padding" "24px"
+      :: options
+      )
+
+
+select
+    : (Msg m -> m)
+    -> List Int
+    -> Model
+    -> List (Select.Property m)
+    -> List (Html m)
+    -> List (Html m)
+select lift id model options _ =
     let
-        exampleSelect id options _ =
-            Select.render (Mdl >> lift) id model.mdl options
-            ( [ "Pick a food group"
-              , "Bread, Cereal, Rice, and Pasta"
-              , "Vegetables"
-              , "Fruit"
-              , "Milk, Yogurt, and Cheese"
-              , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
-              , "Fats, Oils, and Sweets"
-              ]
-              |> List.indexedMap (\index label ->
-                     Menu.li Lists.li
-                     [ Menu.onSelect (lift (Select id index label))
-                     -- TODO:
-                     -- , Menu.disabled |> when ((index == 0) || (index == 3))
-                     ]
-                     [ text label ]
-                 )
-            )
+        state =
+            Dict.get id model.selects
+            |> Maybe.withDefault defaultSelect
+
+        (index, label) =
+            state.value
+            |> Maybe.withDefault (0, "Pick a food group")
     in
-    page.body "Select"
     [
-      let
-          (selectedIndex, selectedText) =
-              Dict.get [0] model.selects
-              |> Maybe.withDefault (0, "Pick a food group")
-      in
-      Page.hero []
-      [ exampleSelect [0]
-        [ Select.selectedText selectedText
-        , Select.index selectedIndex
-        , Select.disabled |> when model.disabled
-        ]
-        []
-      ]
-
-    , let
-          (selectedIndex, selectedText) =
-              Dict.get [1] model.selects
-              |> Maybe.withDefault (0, "Pick a food group")
-      in
       styled Html.section
-      [ cs "example"
-      , css "margin" "24px"
-      , css "padding" "24px"
+      [ cs "demo-wrapper"
+      , css "padding-top" "4px"
+      , css "padding-bottom" "4px"
+      , Options.attribute (Html.attribute "dir" "rtl") |> when state.rtl
       ]
-      [ styled Html.h2 [ Typography.title ] [ text "Select" ]
-      , styled Html.section
-        [ cs "demo-wrapper"
-        , css "padding-top" "4px"
-        , css "padding-bottom" "4px"
-        , when model.darkTheme <|
-          Options.many
-          [ Theme.dark
-          , css "background-color" "#303030"
+      [
+        Select.render (Mdl >> lift) id model.mdl
+        ( Select.label label
+        :: Select.index index
+        :: when state.disabled Select.disabled
+        :: options
+        )
+        ( [ "Fruit Roll Ups"
+          , "Candy (cotton)"
+          , "Vegetables"
+          , "Noodles"
           ]
-        , when model.rtl <|
-          Options.attribute (Html.attribute "dir" "rtl")
-        ]
-        [
-          exampleSelect [1]
-              [ Select.selectedText selectedText
-              , Select.index selectedIndex
-              , Select.disabled |> when model.disabled
-              ]
-              []
-        ]
-
-      , Html.p []
-        [ text "Currently selected:"
-        , Html.span [] [ text (selectedText ++ " at index " ++ toString selectedIndex) ]
-        ]
-
-      , Html.div
-        []
-        [ Html.label []
-          [ Html.input
-            [ Html.type_ "checkbox"
-            , Html.onClick (lift ToggleDarkTheme)
-            , Html.checked model.darkTheme
-            ]
-            []
-          , text " Dark theme"
+          |> List.indexedMap (\index label ->
+                 Menu.li Lists.li
+                 [ Menu.onSelect (lift (Pick id ( index, label )))
+                 -- TODO:
+                 -- , Menu.disabled |> when ((index == 0) || (index == 3))
+                 ]
+                 [ text label ]
+             )
+        )
+      ]
+    ,
+      Html.p []
+      [ text "Currently selected: "
+      , Html.span [] [ text (label ++ " at index " ++ toString index ++ " with value " ++ toString label) ]
+      ]
+    ,
+      Html.div []
+      [ Html.label []
+        [ Html.input
+          [ Html.type_ "checkbox"
+          , Html.onClick (lift (ToggleRtl id))
+          , Html.checked state.rtl
           ]
+          []
+        , text " RTL"
         ]
-
-      , Html.div
-        []
-        [ Html.label []
-          [ Html.input
-            [ Html.type_ "checkbox"
-            , Html.onClick (lift ToggleRtl)
-            , Html.checked model.rtl
-            ]
-            []
-          , text " RTL"
+      ]
+    ,
+      Html.div []
+      [ Html.label []
+        [ Html.input
+          [ Html.type_ "checkbox"
+          , Html.onClick (lift (ToggleDisabled id))
+          , Html.checked state.disabled
           ]
-        ]
-
-      , Html.div
-        []
-        [ Html.label []
-          [ Html.input
-            [ Html.type_ "checkbox"
-            , Html.onClick (lift ToggleDisabled)
-            , Html.checked model.disabled
-            ]
-            []
-          , text " Disabled"
-          ]
+          []
+        , text " Disabled"
         ]
       ]
     ]
 
 
+view : (Msg m -> m) -> Page m -> Model -> Html m
+view lift page model =
+    page.body "Select"
+    [
+      let
+          state =
+              Dict.get [0] model.selects
+              |> Maybe.withDefault defaultSelect
+
+          (index, label) =
+              state.value
+              |> Maybe.withDefault (0, "Pick a food group")
+      in
+      Page.hero []
+      [ heroSelect lift [0] model
+        [ Select.label label
+        , Select.index index
+        , Select.disabled |> when state.disabled
+        ]
+        []
+      ]
+    ,
+      example []
+      ( List.concat
+        [ [ styled Html.h2
+            [ Typography.title
+            ]
+            [ text "Select"
+            ]
+          ]
+        , select lift [1] model [] []
+        ]
+      )
+    ,
+      example []
+      ( List.concat
+        [ [ styled Html.h2
+            [ Typography.title
+            ]
+            [ text "Select box"
+            ]
+          ]
+        , select lift [1] model [ Select.box ] []
+        ]
+      )
+    ]
+
+
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Select.subs (Mdl >> lift) model.mdl
+    Select.subs (lift << Mdl) model.mdl

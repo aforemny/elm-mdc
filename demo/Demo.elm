@@ -134,7 +134,7 @@ type Msg
     | RadioButtonsMsg (Demo.RadioButtons.Msg Msg)
     | RippleMsg (Demo.Ripple.Msg Msg)
     | SelectMsg (Demo.Selects.Msg Msg)
-    | SimpleMenuMsg (Demo.Menus.Msg Msg)
+    | MenuMsg (Demo.Menus.Msg Msg)
     | SliderMsg (Demo.Slider.Msg Msg)
     | SnackbarMsg (Demo.Snackbar.Msg Msg)
     | SwitchMsg (Demo.Switch.Msg Msg)
@@ -245,10 +245,10 @@ update msg model =
             in
                 ( { model | iconToggle = iconToggle }, effects )
 
-        SimpleMenuMsg msg_ ->
+        MenuMsg msg_ ->
             let
                 (menus, effects) =
-                    Demo.Menus.update SimpleMenuMsg msg_ model.menus
+                    Demo.Menus.update MenuMsg msg_ model.menus
             in
                 ( { model | menus = menus }, effects )
 
@@ -426,8 +426,8 @@ view_ model =
         Select ->
             Demo.Selects.view SelectMsg page model.selects
 
-        SimpleMenu ->
-            Demo.Menus.view SimpleMenuMsg page model.menus
+        Menu ->
+            Demo.Menus.view MenuMsg page model.menus
 
         Slider ->
             Demo.Slider.view SliderMsg page model.slider
@@ -496,7 +496,7 @@ urlOf model =
         RadioButton -> "#radio-buttons"
         Ripple -> "#ripple"
         Select -> "#select"
-        SimpleMenu -> "#simple-menu"
+        Menu -> "#menu"
         Slider -> "#slider"
         Snackbar -> "#snackbar"
         Switch -> "#switch"
@@ -552,7 +552,7 @@ location2messages location =
           "#radio-buttons" -> RadioButton
           "#ripple" -> Ripple
           "#select" -> Select
-          "#simple-menu" -> SimpleMenu
+          "#menu" -> Menu
           "#slider" -> Slider
           "#snackbar" -> Snackbar
           "#switch" -> Switch
@@ -611,7 +611,7 @@ subscriptions model =
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.GridList.subscriptions GridListMsg model.gridList
         , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
-        , Demo.Menus.subscriptions SimpleMenuMsg model.menus
+        , Demo.Menus.subscriptions MenuMsg model.menus
         , Demo.PermanentAboveDrawer.subscriptions PermanentAboveDrawerMsg model.permanentAboveDrawer
         , Demo.PermanentBelowDrawer.subscriptions PermanentBelowDrawerMsg model.permanentBelowDrawer
         , Demo.PersistentDrawer.subscriptions PersistentDrawerMsg model.persistentDrawer

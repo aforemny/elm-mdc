@@ -1,34 +1,26 @@
 module Material.Menu exposing (..)
 
-import AnimationFrame
-import DOM exposing (Rectangle)
-import Html.Events as Html exposing (defaultOptions)
+import DOM
+import GlobalEvents
+import Html.Events as Html
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers as Helpers exposing (pure, map1st)
-import Material.Internal.Menu exposing (Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry)
+import Material.Helpers as Helpers exposing (map1st)
+import Material.Internal.Menu exposing (Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry, Viewport)
 import Material.Internal.Options as Internal
 import Material.Msg exposing (Index) 
-import Material.Options as Options exposing (Style, cs, css, styled, styled_, when)
+import Material.Options as Options exposing (cs, css, styled, when)
 import Mouse
-import String
+import Time
 
 
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
-    let
-        transitionDurationMs =
-            300 -- TODO: refactor `view'
-    in
     Sub.batch
     [
       if model.open then
-        Mouse.clicks Click
-      else
-        Sub.none
-    , if model.animating then
-        AnimationFrame.diffs (\dt -> Tick (dt / transitionDurationMs))
+        Mouse.clicks (\ _ -> DocumentClick)
       else
         Sub.none
     ]
@@ -37,20 +29,9 @@ subscriptions model =
 type alias Model =
     { index : Maybe Int
     , open : Bool
-    , opening : Bool
-    , geometry : Maybe Geometry
-    , reconfigure : Bool
-    , initialized : Bool
-
-    -- animation:
     , animating : Bool
-    , time : Float
-    , startScaleX : Float
-    , startScaleY : Float
-    , scaleX : Float
-    , scaleY : Float
-    , invScaleX : Float
-    , invScaleY : Float
+    , geometry : Maybe Geometry
+    , delayedClosing : Bool
     }
 
 
@@ -58,20 +39,9 @@ defaultModel : Model
 defaultModel =
     { index = Nothing
     , open = False
-    , geometry = Nothing
-    , initialized = False
-    , reconfigure = False
-    , opening = False
-
-    -- animation:
     , animating = False
-    , time = 0
-    , startScaleX = 0
-    , startScaleY = 0
-    , scaleX = 0
-    , scaleY = 0
-    , invScaleX = 1
-    , invScaleY = 1
+    , geometry = Nothing
+    , delayedClosing = False
     }
 
 
@@ -124,163 +94,56 @@ connect lift =
 
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Model, Cmd msg )
-update fwd msg model =
+update lift msg model =
     case msg of
 
+        NoOp ->
+            ( model, Cmd.none )
+
         Toggle ->
-            update fwd (if model.open then Close else Open) model
+            update lift (if model.open then Close else Open) model
 
         Init geometry ->
-            ( { model
-                  | open = model.opening
-                  , opening = False
-                  , geometry = Just geometry
-                  , reconfigure = False
-                  , initialized = True
-              }
-            ,
-              Cmd.none
-            )
+            ( { model | geometry = Just geometry }, Cmd.none )
+
+        AnimationEnd ->
+            ( { model | animating = False }, Cmd.none )
 
         Open ->
-            { model
-                | open = False
-                , opening = True
-                , geometry = Nothing
-                , reconfigure = True
-
-                -- animation:
-                , animating = True
-                , time = 0
-                , startScaleX = model.scaleX
-                , startScaleY = model.scaleY
-            }
-                ! []
+            if not model.open then
+                (
+                  { model
+                    | open = True
+                    , animating = True
+                    , geometry = Nothing
+                  }
+                ,
+                  Helpers.delay (120*Time.millisecond) (lift AnimationEnd)
+                )
+            else
+                ( model, Cmd.none )
 
         Close ->
-            { model
-                | open = False
-                , opening = False
-
-                -- animation:
-                , animating = True
-                , time = 0
-                , startScaleX = model.scaleX
-                , startScaleY = model.scaleY
-            }
-                ! []
-
-        Click { x, y } ->
             if model.open then
-                update fwd Close model
+                (
+                  { model
+                    | open = False
+                    , animating = True
+                  }
+                ,
+                  Helpers.delay (70*Time.millisecond) (lift AnimationEnd)
+                )
+            else
+                ( model, Cmd.none )
+
+        CloseDelayed ->
+            ( model, Helpers.delay (50*Time.millisecond) (lift Close) )
+
+        DocumentClick ->
+            if model.open then
+                update lift Close model
             else
                 model ! []
-
-        Tick dt ->
-            let
-                -- constants:
-
-                selectedTriggerDelay =
-                    50
-
-                transitionDurationMs =
-                    300
-
-                transitionScaleAdjustmentX =
-                    0.5
-
-                transitionScaleAdjustmentY =
-                    0.2
-
-                transitionX1 =
-                    0
-
-                transitionY1 =
-                    0
-
-                transitionX2 =
-                    0.2
-
-                transitionY2 =
-                    1
-
-                -- animation:
-
-                time =
-                    model.time + dt
-                    |> clamp 0 1
-
-
-                timeX =
-                    clamp 0 1 <|
-                    if model.open then
-                        time + transitionScaleAdjustmentX
-                    else
-                        (time - transitionScaleAdjustmentX) / (1 - transitionScaleAdjustmentX)
-
-                timeY =
-                    clamp 0 1 <|
-                    if model.open then
-                        (time - transitionScaleAdjustmentY) / (1 - transitionScaleAdjustmentY)
-                    else
-                        time
-
-                easeX =
-                    timeX -- TODO: bezierProgress
-
-                easeY =
-                    timeY -- TODO: bezierProgress
-
-                targetScale =
-                    if model.open then 1 else 0
-
-                startScaleX =
-                    model.startScaleX
-
-                startScaleY =
-                    model.startScaleY
---                    let
---                        geometry =
---                            Maybe.withDefault defaultGeometry model.geometry
---
---                        height =
---                            geometry.itemsContainer.height
---
---                        itemHeight =
---                            geometry.itemGeometries
---                            |> List.head
---                            |> Maybe.map .height
---                            |> Maybe.withDefault 0
---                    in
---                    if model.open then
---                        max (if height == 0 then 0 else itemHeight / height)
---                            (model.startScaleY)
---                    else
---                        model.startScaleY
-
-                scaleX =
-                    (startScaleX * (1 - easeX)) + (targetScale * easeX)
-
-                scaleY =
-                    (startScaleY * (1 - easeY)) + (targetScale * easeY)
-
-                invScaleX =
-                    1 / scaleX
-                    -- if scaleX == 0 then 1 else  1 / scaleX
-
-                invScaleY =
-                    1 / scaleY
-                    -- if scaleY == 0 then 1 else 1 / scaleY
-            in
-            { model
-                | time = time
-                , animating = time < 1
-                , scaleX = scaleX
-                , scaleY = scaleY
-                , invScaleX = invScaleX
-                , invScaleY = invScaleY
-            }
-                ! []
 
         KeyDown { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
@@ -318,53 +181,45 @@ update fwd msg model =
             else
                 if isEnter || isSpace then
                     -- TODO: trigger selected
-                    update fwd Close model
+                    update lift Close model
                 else
                     if isEscape then
-                        update fwd Close model
+                        update lift Close model
                     else
                         model ! []
 
 
 type alias Config =
     { index : Maybe Int
-    , alignment : Maybe Alignment
     , open : Bool
+    , anchorCorner : Corner
+    , anchorMargin : Margin
     }
-
-
-type Alignment
-    = OpenFromTopLeft
-    | OpenFromTopRight
-    | OpenFromBottomLeft
-    | OpenFromBottomRight
-
-
-openFromTopLeft : Property m
-openFromTopLeft =
-    Internal.option (\ config -> { config | alignment = Just OpenFromTopLeft })
-
-
-openFromTopRight : Property m
-openFromTopRight =
-    Internal.option (\ config -> { config | alignment = Just OpenFromTopRight })
-
-
-openFromBottomLeft : Property m
-openFromBottomLeft =
-    Internal.option (\ config -> { config | alignment = Just OpenFromBottomLeft })
-
-
-openFromBottomRight : Property m
-openFromBottomRight =
-    Internal.option (\ config -> { config | alignment = Just OpenFromBottomRight })
 
 
 defaultConfig : Config
 defaultConfig =
     { index = Nothing
-    , alignment = Nothing
     , open = False
+    , anchorCorner = topLeftCorner
+    , anchorMargin = defaultMargin
+    }
+
+
+type alias Margin =
+    { top : Float
+    , left : Float
+    , bottom : Float
+    , right : Float
+    }
+
+
+defaultMargin : Margin
+defaultMargin =
+    { top = 0
+    , left = 0
+    , bottom = 0
+    , right = 0
     }
 
 
@@ -372,34 +227,24 @@ type alias Property m =
     Options.Property Config m
 
 
---open : Property m
---open =
---    Internal.option (\config -> { config | open = True })
---
---
---openFromTopLeft : Property m
---openFromTopLeft =
---    Internal.option (\config -> { config | alignment = Just OpenFromTopLeft })
---
---
---openFromTopRight : Property m
---openFromTopRight =
---    Internal.option (\config -> { config | alignment = Just OpenFromTopRight })
---
---
---openFromBottomLeft : Property m
---openFromBottomLeft =
---    Internal.option (\config -> { config | alignment = Just OpenFromBottomLeft })
---
---
---openFromBottomRight : Property m
---openFromBottomRight =
---    Internal.option (\config -> { config | alignment = Just OpenFromBottomRight })
-
-
 index : Int -> Property m
-index =
-    Internal.option << (\index config -> { config | index = Just index })
+index index =
+    Internal.option (\config -> { config | index = Just index })
+
+
+--open : Bool -> Property m
+--open =
+--    Internal.option (\ config -> { config | open = open })
+
+
+anchorCorner : Corner -> Property m
+anchorCorner anchorCorner =
+    Internal.option (\ config -> { config | anchorCorner = anchorCorner })
+
+
+anchorMargin : Margin -> Property m
+anchorMargin anchorMargin =
+    Internal.option (\ config -> { config | anchorMargin = anchorMargin })
 
 
 view
@@ -419,192 +264,384 @@ view lift model options ul =
         geometry =
             Maybe.withDefault defaultGeometry model.geometry
 
-        transitionDelay i itemGeometry =
-            let
-                numItems =
-                    List.length ul.items
+        { position, transformOrigin, maxHeight } =
+            autoPosition config geometry
 
-                height =
-                    geometry.itemsContainer.height
-
-                transitionDuration =
-                    transitionDurationMs / 1000
-
-                transitionDurationMs = -- TODO: refactor `update'
-                    300
-
-                start =
-                    transitionScaleAdjustmentY
-
-                transitionScaleAdjustmentY = -- TODO: refactor `update'
-                    0.2
-
-                itemTop =
-                    itemGeometry.top
-
-                itemHeight =
-                    itemGeometry.height
-
-                itemDelayFraction =
-                    if height == 0 then
-                        0
-                    else
---                        if (config.alignment == Just OpenFromBottomLeft)
---                           || (config.alignment == Just OpenFromBottomRight) then
---                            (height - itemTop - itemHeight) / height
---                        else
-                            itemTop / height
-
-                itemDelay =
-                    (start + itemDelayFraction * (1 - start)) * transitionDuration
-
-                toFixed value =
-                    toFloat (floor (1000 * value)) / 1000
-            in
-                itemDelay |> toFixed
-
-        (position, transformOrigin) =
-            let
-                windowWidth =
-                    geometry.window.width
-
-                windowHeight =
-                    geometry.window.height
-
-                adapter =
-                    geometry.adapter
-
-                anchor =
-                    geometry.anchor
-
-                width =
-                    geometry.itemsContainer.width
-
-                height =
-                    geometry.itemsContainer.height
-
-                topOverflow =
-                    anchor.top + height - windowHeight
-
-                bottomOverflow =
-                    height - anchor.bottom
-
-                extendsBeyondTopBounds =
-                    topOverflow > 0
-
-                vertical =
-                    case config.alignment of
-                        Just OpenFromTopLeft ->
-                            "top"
-                        Just OpenFromTopRight ->
-                            "top"
-                        Just OpenFromBottomLeft ->
-                            "bottom"
-                        Just OpenFromBottomRight ->
-                            "bottom"
-                        Nothing ->
-                            if extendsBeyondTopBounds && (bottomOverflow < topOverflow) then
-                                "bottom"
-                            else
-                                "top"
-
-                leftOverflow =
-                    anchor.left + width - windowWidth
-
-                rightOverflow =
-                    width - anchor.right
-
-                extendsBeyondLeftBounds =
-                    leftOverflow > 0
-
-                extendsBeyondRightBounds =
-                    rightOverflow > 0
-
-                horizontal =
-                    case config.alignment of
-                        Just OpenFromTopLeft ->
-                            "left"
-                        Just OpenFromTopRight ->
-                            "right"
-                        Just OpenFromBottomLeft ->
-                            "left"
-                        Just OpenFromBottomRight ->
-                            "right"
-                        Nothing ->
-                            if adapter.isRtl then
-                                if extendsBeyondRightBounds && (leftOverflow < rightOverflow) then
-                                    "left"
-                                else
-                                    "right"
-                            else
-                                if extendsBeyondLeftBounds && (rightOverflow < leftOverflow) then
-                                    "right"
-                                else
-                                    "left"
-
-                transformOrigin =
-                    vertical ++ " " ++ horizontal
-
-                position =
-                    { horizontal = horizontal, vertical = vertical }
-            in
-            (position, transformOrigin)
-
-        initOn event =
-            Options.on event (Json.map (Init >> lift) decodeGeometry)
+        -- Note: .mdc-menu--open has to be added one frame after
+        -- .mdc-menu--animating-open has been set:
+        isOpen =
+            if model.animating then
+                model.open && (model.geometry /= Nothing)
+            else
+                model.open
     in
     Internal.apply summary
     div
-    [ cs "mdc-simple-menu"
-    , cs "mdc-simple-menu--open" |> when (model.open || config.open)
-    , cs "mdc-simple-menu--animating" |> when model.animating
-    , initOn "ElmMdcReconfigure"
-    , when model.reconfigure (cs "elm-mdc--reconfigure")
-
-    , when (config.alignment /= Nothing) << cs <|
-      case Maybe.withDefault OpenFromTopLeft config.alignment of
-          OpenFromTopLeft ->
-              "mdc-simple-menu--open-from-top-left"
-          OpenFromTopRight ->
-              "mdc-simple-menu--open-from-top-right"
-          OpenFromBottomLeft ->
-              "mdc-simple-menu--open-from-bottom-left"
-          OpenFromBottomRight ->
-              "mdc-simple-menu--open-from-bottom-right"
-
-    , when model.initialized << Options.many <|
-      [ css "position" "absolute"
-      , css position.horizontal "0"
-      , css position.vertical "0"
-      , css "transform-origin" transformOrigin
-      , css "transform"
-            ("scale(" ++ toString model.scaleX ++ "," ++ toString model.scaleY ++ ")")
+    [ cs "mdc-menu"
+    , cs "mdc-menu--animating-open" |> when (model.animating && model.open)
+    , cs "mdc-menu--animating-closed" |> when (model.animating && not model.open)
+    , when isOpen << Options.many <|
+      [ cs "mdc-menu--open" |> when isOpen
+      , Options.attribute (Html.onWithOptions
+          "click" 
+          { stopPropagation = True
+          , preventDefault = False
+          }
+          (Json.succeed (lift CloseDelayed)) )
       ]
+    , when (isOpen || model.animating) << Options.many <|
+      [ css "position" "absolute"
+      , css "transform-origin" transformOrigin
+      , css "top" (Maybe.withDefault "" position.top)
+        |> when (position.top /= Nothing)
+      , css "left" (Maybe.withDefault "" position.left)
+        |> when (position.left /= Nothing)
+      , css "bottom" (Maybe.withDefault "" position.bottom)
+        |> when (position.bottom /= Nothing)
+      , css "right" (Maybe.withDefault "" position.right)
+        |> when (position.right /= Nothing)
+      , css "max-height" maxHeight
+      ]
+    , when (model.animating && model.geometry == Nothing) <|
+      Options.many << List.map Options.attribute <|
+      GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
     ]
     []
-    [ ul.node
-      ( cs "mdc-simple-menu__items"
-      :: css "transform" ("scale(" ++ toString model.invScaleX ++ "," ++ toString model.invScaleY ++ ")")
-      :: ul.options
-      )
-      ( if model.open then
-            List.map2 (,) ul.items geometry.itemGeometries
-            |> List.indexedMap (\i (item, itemGeometry) ->
-                 item.node
-                 ( css "transition-delay" (toString (transitionDelay i itemGeometry) ++ "s")
-                 :: item.options
-                 )
-                 item.childs
-               )
-        else
-            ul.items
-            |> List.map (\item ->
-                 item.node
-                 item.options
-                 item.childs
-               )
+    [ ul.node (cs "mdc-menu__items" :: ul.options)
+      ( List.indexedMap (\i item ->
+             item.node item.options item.childs
+           )
+           ul.items
       )
     ]
+
+
+type alias Corner
+    = { bottom : Bool
+      , center : Bool
+      , right : Bool
+      , flipRtl : Bool
+      }
+
+
+topLeftCorner : Corner
+topLeftCorner =
+    { bottom = False
+    , center = False
+    , right = False
+    , flipRtl = False
+    }
+
+
+topRightCorner : Corner
+topRightCorner =
+    { bottom = False
+    , center = False
+    , right = True
+    , flipRtl = False
+    }
+
+
+bottomLeftCorner : Corner
+bottomLeftCorner =
+    { bottom = True
+    , center = False
+    , right = False
+    , flipRtl = False
+    }
+
+
+bottomRightCorner : Corner
+bottomRightCorner =
+    { bottom = True
+    , center = False
+    , right = True
+    , flipRtl = False
+    }
+
+
+topStartCorner : Corner
+topStartCorner =
+    { bottom = False
+    , center = False
+    , right = False
+    , flipRtl = True
+    }
+
+
+topEndCorner : Corner
+topEndCorner =
+    { bottom = False
+    , center = False
+    , right = True
+    , flipRtl = True
+    }
+
+
+bottomStartCorner : Corner
+bottomStartCorner =
+    { bottom = True
+    , center = False
+    , right = False
+    , flipRtl = True
+    }
+
+
+bottomEndCorner : Corner
+bottomEndCorner =
+    { bottom = True
+    , center = False
+    , right = True
+    , flipRtl = True
+    }
+
+
+originCorner : Config -> Geometry -> Corner
+originCorner { anchorCorner, anchorMargin } { viewportDistance, anchor, menu } =
+    let
+        isBottomAligned =
+            anchorCorner.bottom
+
+        availableTop =
+            if isBottomAligned then
+                viewportDistance.top + anchor.height + anchorMargin.bottom
+            else
+                viewportDistance.top + anchorMargin.top
+
+        availableBottom =
+            if isBottomAligned then
+                viewportDistance.bottom - anchorMargin.bottom
+            else
+                viewportDistance.bottom + anchor.height + anchorMargin.top
+
+        topOverflow =
+            menu.height - availableTop
+
+        bottomOverflow =
+            menu.height - availableBottom
+
+        bottom =
+            (bottomOverflow > 0) && (topOverflow < bottomOverflow)
+
+        isRtl =
+            False -- TODO
+
+        isFlipRtl =
+            anchorCorner.flipRtl
+
+        avoidHorizontalOverlap =
+            anchorCorner.right
+
+        isAlignedRight =
+            (avoidHorizontalOverlap && not isRtl) ||
+            (not avoidHorizontalOverlap && isFlipRtl && isRtl)
+
+        availableLeft =
+            if isAlignedRight then
+                viewportDistance.left + anchor.width + anchorMargin.right
+            else
+                viewportDistance.left + anchorMargin.left
+
+        availableRight =
+            if isAlignedRight then
+                viewportDistance.right - anchorMargin.right
+            else
+                viewportDistance.right + anchor.width - anchorMargin.left
+
+        leftOverflow =
+            menu.width - availableLeft
+
+        rightOverflow =
+            menu.width - availableRight
+
+        right =
+            ((leftOverflow < 0) && isAlignedRight && isRtl)
+            || (avoidHorizontalOverlap && not isAlignedRight && (leftOverflow < 0))
+            || ((rightOverflow > 0) && (leftOverflow < rightOverflow))
+
+        flipRtl =
+           False
+
+        center =
+           False
+    in
+    { bottom = bottom
+    , center = center
+    , right = right
+    , flipRtl = flipRtl
+    }
+
+
+horizontalOffset : Config -> Corner -> Geometry -> Float
+horizontalOffset { anchorCorner, anchorMargin } corner { anchor } =
+    let
+        isRightAligned =
+            corner.right
+
+        avoidHorizontalOverlap =
+            anchorCorner.right
+    in
+    if isRightAligned then
+        if avoidHorizontalOverlap then
+            anchor.width - anchorMargin.left
+        else
+            anchorMargin.right
+    else
+        if avoidHorizontalOverlap then
+            anchor.width - anchorMargin.right
+        else
+            anchorMargin.left
+
+
+verticalOffset : Config -> Corner -> Geometry -> Float
+verticalOffset { anchorCorner, anchorMargin } corner geometry =
+    let
+        { viewport
+        , viewportDistance
+        , anchor
+        , menu
+        } =
+            geometry
+
+        isBottomAligned =
+            corner.bottom
+
+        marginToEdge =
+            32
+
+        avoidVerticalOverlap =
+            anchorCorner.bottom
+
+        canOverlapVertically =
+            not avoidVerticalOverlap
+    in
+    if isBottomAligned then
+        if canOverlapVertically && (menu.height > viewportDistance.top + anchor.height) then
+            -(min menu.height (viewport.height - marginToEdge) - (viewportDistance.top + anchor.height))
+        else
+            if avoidVerticalOverlap then
+                anchor.height - anchorMargin.top
+            else
+                -anchorMargin.bottom
+    else
+        if canOverlapVertically && (menu.height > viewportDistance.bottom + anchor.height) then
+            -(min menu.height (viewport.height - marginToEdge) - (viewportDistance.top + anchor.height))
+            
+        else
+            if avoidVerticalOverlap then
+                anchor.height + anchorMargin.bottom
+            else
+                anchorMargin.top
+
+
+menuMaxHeight : Config -> Corner -> Geometry -> Float
+menuMaxHeight { anchorCorner, anchorMargin } corner { viewportDistance } =
+    let
+        isBottomAligned =
+            corner.bottom
+    in
+    if anchorCorner.bottom then
+        if isBottomAligned then
+            viewportDistance.top + anchorMargin.top
+        else
+            viewportDistance.bottom - anchorMargin.bottom
+    else
+        0
+
+
+autoPosition
+    : Config
+    -> Geometry
+    -> { transformOrigin : String
+       , position :
+           { top : Maybe String
+           , left : Maybe String
+           , bottom : Maybe String
+           , right : Maybe String
+           }
+       , maxHeight : String
+       }
+autoPosition config geometry =
+    let
+        corner =
+            originCorner config geometry
+
+        maxMenuHeight =
+            menuMaxHeight config corner geometry
+
+        verticalAlignment =
+            if corner.bottom then
+                "bottom"
+            else
+                "top"
+
+        horizontalAlignment =
+            if corner.right then
+                "right"
+            else
+                "left"
+
+        horizontalOffset_ =
+            horizontalOffset config corner geometry
+
+        verticalOffset_ =
+            verticalOffset config corner geometry
+
+        position =
+            { top =
+                if (verticalAlignment == "top") then
+                    Just (toString verticalOffset_ ++ "px")
+                else
+                    Nothing
+            , left =
+                if (horizontalAlignment == "left") then
+                    Just (toString horizontalOffset_ ++ "px")
+                else
+                    Nothing
+            , bottom =
+                if (verticalAlignment == "bottom") then
+                    Just (toString verticalOffset_ ++ "px")
+                else
+                    Nothing
+            , right =
+                if (horizontalAlignment == "right") then
+                    Just (toString horizontalOffset_ ++ "px")
+                else
+                    Nothing
+            }
+
+        { anchor, menu } =
+            geometry
+
+        horizontalAlignment_ =
+            if (anchor.width / menu.width) > 0.67 then
+                "center"
+            else
+                horizontalAlignment
+
+        { anchorCorner } =
+            config
+
+        verticalAlignment_ =
+            if (not anchorCorner.bottom) && (abs (verticalOffset_ / menu.height) > 0.1) then
+                let
+                    verticalOffsetPercent =
+                        abs (verticalOffset_ / menu.height) * 100
+
+                    originPercent =
+                        if corner.bottom then
+                            100 - verticalOffsetPercent
+                        else
+                            verticalOffsetPercent
+                in
+                toString (toFloat (round (originPercent * 100)) / 100) ++ "%"
+            else
+                verticalAlignment
+    in
+    { transformOrigin = horizontalAlignment_ ++ " " ++ verticalAlignment
+    , position = position
+    , maxHeight = if maxMenuHeight /= 0 then toString maxMenuHeight ++ "px" else ""
+    }
 
 
 type alias Store s =
@@ -672,63 +709,47 @@ decodeKeyCode =
 
 decodeGeometry : Decoder Geometry
 decodeGeometry =
-    DOM.target <|
-    Json.map5 Geometry
-    ( DOM.childNode 0 <| -- ".mdc-simple-menu__items.mdc-list"
-      Json.map2
-        (\offsetWidth offsetHeight -> { width = offsetWidth, height = offsetHeight })
-        DOM.offsetWidth DOM.offsetHeight
-    )
-    ( DOM.childNode 0 <| -- ".mdc-simple-menu__items.mdc-list"
-      DOM.childNodes  <|
-      Json.map2
-        (\offsetTop offsetHeight -> { top = offsetTop, height = offsetHeight })
-        DOM.offsetTop DOM.offsetHeight
-    )
-    ( Json.succeed { isRtl = False } -- TODO: RTL
-    )
-    ( ( DOM.parentElement <| -- ".parent"
-        DOM.boundingClientRect
-      )
-      |> Json.map (\rect ->
-             { top = rect.top
-             , left = rect.left
-             , bottom = rect.top + rect.height
-             , right = rect.left + rect.width
-             }
+    let
+        anchorRect =
+            DOM.parentElement DOM.boundingClientRect
+
+        viewport =
+            Json.at ["ownerDocument", "defaultView"] <|
+            Json.map2 Viewport
+              (Json.at ["innerWidth"] Json.float)
+              (Json.at ["innerHeight"] Json.float)
+
+        viewportDistance viewport anchorRect =
+            Json.succeed
+            { top = anchorRect.top
+            , right = viewport.width - anchorRect.left - anchorRect.width
+            , left = anchorRect.left
+            , bottom = viewport.height - anchorRect.top - anchorRect.height
+            }
+
+        anchor { width, height } =
+            Json.succeed { width = width, height = height }
+
+        menu =
+            Json.map2
+              (\ offsetWidth offsetHeight ->
+                  { width = offsetWidth, height = offsetHeight }
+              )
+              DOM.offsetWidth
+              DOM.offsetHeight
+    in
+    DOM.target
+    (
+      Json.map2 (,) viewport anchorRect
+      |> Json.andThen (\ ( viewport, anchorRect ) ->
+           Json.map3 (Geometry viewport)
+               (viewportDistance viewport anchorRect)
+               (anchor anchorRect)
+               menu
          )
     )
-    ( Json.at [ "ownerDocument" ] <|
-      Json.at [ "defaultView" ]   <|
-      Json.map2
-        (\ innerWidth innerHeight ->
-          { width = toFloat innerWidth
-          , height = toFloat innerHeight
-          }
-        )
-        (Json.at ["innerWidth"] Json.int)
-        (Json.at ["innerHeight"] Json.int)
-    )
-
-
-rect : Float -> Float -> Float -> Float -> String
-rect x y w h =
-    [ x, y, w, h ]
-        |> List.map toPx
-        |> String.join " "
-        |> (\coords -> "rect(" ++ coords ++ ")")
-
-
-toPx : Float -> String
-toPx =
-    toString >> flip (++) "px"
 
 
 onSelect : m -> Property m
 onSelect msg =
     Options.onClick msg
-
-
-themeDark : Property m
-themeDark =
-    cs "mdc-simple-menu--theme-dark"

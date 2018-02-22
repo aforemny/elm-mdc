@@ -29,6 +29,11 @@ subscriptions model =
 -- MODEL
 
 
+box : Property m
+box =
+    cs "mdc-select__box"
+
+
 {-| Component model
 -}
 type alias Model =
@@ -73,7 +78,7 @@ update fwd msg model =
 
 type alias Config =
     { index : Maybe Int
-    , selectedText : String
+    , label : String
     , disabled : Bool
     }
 
@@ -81,7 +86,7 @@ type alias Config =
 defaultConfig : Config
 defaultConfig =
     { index = Nothing
-    , selectedText = ""
+    , label = ""
     , disabled = False
     }
 
@@ -94,9 +99,9 @@ type alias Property m =
 
 {-| TODO
 -}
-selectedText : String -> Property m
-selectedText =
-    Internal.option << (\value config -> { config | selectedText = value })
+label : String -> Property m
+label =
+    Internal.option << (\value config -> { config | label = value })
 
 
 {-| TODO
@@ -134,39 +139,39 @@ view lift model options items =
             model.menu.geometry
             |> Maybe.withDefault Material.Internal.Menu.defaultGeometry
 
-        itemOffsetTop =
-            List.drop (Maybe.withDefault 0 config.index) geometry.itemGeometries
-            |> List.head
-            |> Maybe.map .top
-            |> Maybe.withDefault 0
+--        itemOffsetTop =
+--            List.drop (Maybe.withDefault 0 config.index) geometry.itemGeometries
+--            |> List.head
+--            |> Maybe.map .top
+--            |> Maybe.withDefault 0
 
-        left =
-            geometry.anchor.left
+--        left =
+--            geometry.anchor.left
+--
+--        top =
+--            geometry.anchor.top
 
-        top =
-            geometry.anchor.top
+--        adjustedTop =
+--            let
+--                adjustedTop_ =
+--                    top - itemOffsetTop
+--
+--                overflowsTop =
+--                    adjustedTop_ < 0
+--
+--                overflowsBottom =
+--                    adjustedTop_ + geometry.itemsContainer.height > geometry.window.height
+--            in
+--                if overflowsTop then
+--                    0
+--                else
+--                    if overflowsBottom then
+--                        max 0 (geometry.window.height - geometry.itemsContainer.height)
+--                    else
+--                        adjustedTop_
 
-        adjustedTop =
-            let
-                adjustedTop_ =
-                    top - itemOffsetTop
-
-                overflowsTop =
-                    adjustedTop_ < 0
-
-                overflowsBottom =
-                    adjustedTop_ + geometry.itemsContainer.height > geometry.window.height
-            in
-                if overflowsTop then
-                    0
-                else
-                    if overflowsBottom then
-                        max 0 (geometry.window.height - geometry.itemsContainer.height)
-                    else
-                        adjustedTop_
-
-        transformOrigin =
-            "center " ++ toString itemOffsetTop ++ "px"
+--        transformOrigin =
+--            "center " ++ toString itemOffsetTop ++ "px"
     in
     Internal.apply summary Html.div
     [ cs "mdc-select"
@@ -180,23 +185,41 @@ view lift model options items =
     , Html.tabindex 0
     ]
     [ styled Html.div
-      [ cs "mdc-select__selected-text"
-      , css "pointer-events" "none"
+      [ cs "mdc-select__surface"
       ]
-      [ text config.selectedText
-      ]
-    , Menu.view (MenuMsg >> lift) model.menu
-      [ cs "mdc-select__menu"
-      , when model.menu.initialized << Options.many <|
-        [ 
-          Menu.index (Maybe.withDefault 0 config.index)
-        , css "display" "block"
-        , css "transform-origin" transformOrigin
-        , css "left" (toString left ++ "px")
-        , css "top" (toString adjustedTop ++ "px")
-        , css "bottom" "unset"
-        , css "right" "unset"
+      [
+        styled Html.div
+        [ cs "mdc-select__label"
+        , cs "mdc-select__label--float-above" |> when model.menu.open
         ]
+        [ text config.label
+        ]
+      ,
+        styled Html.div
+        [ cs "mdc-select__selected-text"
+        , css "pointer-events" "none"
+        ]
+        []
+      ,
+        styled Html.div
+        [ cs "mdc-select__bottom-line"
+        , cs "mdc-select__bottom-line--active" |> when model.menu.open
+        ]
+        []
+      ]
+    ,
+      Menu.view (MenuMsg >> lift) model.menu
+      [ cs "mdc-select__menu"
+--      , when model.menu.initialized << Options.many <|
+--        [ 
+--          Menu.index (Maybe.withDefault 0 config.index)
+--        , css "display" "block"
+--        -- , css "transform-origin" transformOrigin
+--        -- , css "left" (toString left ++ "px")
+--        -- , css "top" (toString adjustedTop ++ "px")
+--        -- , css "bottom" "unset"
+--        -- , css "right" "unset"
+--        ]
       ]
       ( Menu.ul Lists.ul
         []
@@ -276,5 +299,5 @@ subs =
 decodeGeometry : Decoder Geometry
 decodeGeometry =
     DOM.target      <| -- .mdc-select
-    DOM.childNode 1 <| -- .mdc-simple-menu.mdc-select__menu
+    DOM.childNode 1 <| -- .mdc-select__menu
     Menu.decodeGeometry

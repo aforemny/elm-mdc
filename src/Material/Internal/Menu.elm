@@ -9,20 +9,21 @@ module Material.Internal.Menu exposing
 
     , Geometry
     , defaultGeometry
+    , Viewport
     )
-
-import Mouse
 
 
 {-| TODO
 -}
 type Msg m
-    = Toggle
+    = NoOp
+    | Toggle
     | Init Geometry
+    | AnimationEnd
     | Open
     | Close
-    | Tick Float
-    | Click Mouse.Position
+    | CloseDelayed
+    | DocumentClick
     | KeyDown Meta Key KeyCode
     | KeyUp Meta Key KeyCode
 
@@ -53,19 +54,31 @@ type alias KeyCode =
 
 
 type alias Geometry =
-    { itemsContainer : { width : Float, height : Float }
-    , itemGeometries : List ({ top : Float, height : Float })
-    , adapter : { isRtl : Bool }
-    , anchor : { top : Float, left : Float, bottom : Float, right : Float }
-    , window : { width : Float, height : Float }
+    { viewport : Viewport
+    , viewportDistance : ViewportDistance
+    , anchor : { width : Float, height : Float }
+    , menu : { width : Float, height : Float }
+    }
+
+
+type alias Viewport =
+    { width : Float
+    , height : Float
+    }
+
+
+type alias ViewportDistance =
+    { top : Float
+    , right : Float
+    , left : Float
+    , bottom : Float
     }
 
 
 defaultGeometry : Geometry
 defaultGeometry =
-    { itemsContainer = { width = 0, height = 0 }
-    , itemGeometries = []
-    , adapter = { isRtl = False }
-    , anchor = { top = 0, left = 0, bottom = 0, right = 0 }
-    , window = { width = 800, height = 600 }
+    { viewport = { width = 0, height = 0 }
+    , viewportDistance = { top = 0, right = 0, left = 0, bottom = 0 }
+    , anchor = { width = 0, height = 0 }
+    , menu = { width = 0, height = 0 }
     }

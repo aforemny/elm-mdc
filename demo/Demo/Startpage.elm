@@ -45,14 +45,14 @@ view page =
             , title = "Linear progress", subtitle = "Fills from 0% to 100%, represented by bars" }
           , { url = List, icon = "ic_list_24px.svg"
             , title = "List", subtitle = "Item layouts in lists" }
+          , { url = Menu, icon = "ic_menu_24px.svg"
+            , title = "Menu", subtitle = "Pop over menus" }
           , { url = RadioButton, icon = "ic_radio_button_24px.svg"
             , title = "Radio buttons", subtitle = "Single selection controls" }
           , { url = Ripple, icon = "ic_ripple_24px.svg"
             , title = "Ripple", subtitle = "Touch ripple" }
           , { url = Select, icon = "ic_menu_24px.svg"
             , title = "Select", subtitle = "Popover selection menus" }
-          , { url = SimpleMenu, icon = "ic_menu_24px.svg"
-            , title = "Simple Menu", subtitle = "Pop over menus" }
           , { url = Slider, icon = "slider.svg"
             , title = "Slider", subtitle = "Range Controls" }
           , { url = Snackbar, icon = "ic_toast_24px.svg"

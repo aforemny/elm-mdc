@@ -36,7 +36,7 @@ type Url
     | RadioButton
     | Ripple
     | Select
-    | SimpleMenu
+    | Menu
     | Slider
     | Snackbar
     | Switch
@@ -71,8 +71,6 @@ toolbar
 toolbar lift idx mdl setUrl url title =
     Toolbar.render lift idx mdl
     [ Toolbar.fixed
-    , when ( url == SimpleMenu ) <|
-      css "z-index" "10"
     ]
     [ Toolbar.row []
       [ Toolbar.section
