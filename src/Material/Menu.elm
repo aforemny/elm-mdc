@@ -81,16 +81,12 @@ ul node options items =
 
 attach : (Material.Msg.Msg m -> m) -> Index -> Options.Property c m
 attach lift idx =
-    Options.many
-    [ Options.onClick (lift (Material.Msg.MenuMsg idx Toggle))
-    ]
+    Options.onClick (lift (Material.Msg.MenuMsg idx Toggle))
 
 
 connect : (Material.Internal.Menu.Msg m -> m) -> Options.Property c m
 connect lift =
-    Options.many
-    [ Options.onClick (lift Toggle)
-    ]
+    Options.onClick (lift Toggle)
 
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Model, Cmd msg )

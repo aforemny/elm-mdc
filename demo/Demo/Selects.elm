@@ -100,7 +100,10 @@ heroSelect
     -> List (Html m)
     -> Html m
 heroSelect lift id model options _ =
-    Select.render (Mdl >> lift) id model.mdl options
+    Select.render (Mdl >> lift) id model.mdl
+    ( css "width" "377px"
+    :: options
+    )
     ( [ "Bread, Cereal, Rice, and Pasta"
       , "Vegetables"
       , "Fruit"
@@ -125,6 +128,7 @@ example options =
       ( cs "example"
       :: css "margin" "24px"
       :: css "padding" "24px"
+      :: css "max-width" "400px"
       :: options
       )
 
@@ -142,9 +146,11 @@ select lift id model options _ =
             Dict.get id model.selects
             |> Maybe.withDefault defaultSelect
 
-        (index, label) =
-            state.value
-            |> Maybe.withDefault (0, "Pick a food group")
+        index =
+            Maybe.map Tuple.first state.value
+
+        selectedText =
+            Maybe.map Tuple.second state.value
     in
     [
       styled Html.section
@@ -155,9 +161,13 @@ select lift id model options _ =
       ]
       [
         Select.render (Mdl >> lift) id model.mdl
-        ( Select.label label
-        :: Select.index index
+        ( Select.label "Food Group"
+        :: when (index /= Nothing)
+              (Select.index (Maybe.withDefault -1 index))
+        :: when (selectedText /= Nothing)
+              (Select.selectedText (Maybe.withDefault "" selectedText))
         :: when state.disabled Select.disabled
+        :: css "width" "140px"
         :: options
         )
         ( [ "Fruit Roll Ups"
@@ -178,7 +188,12 @@ select lift id model options _ =
     ,
       Html.p []
       [ text "Currently selected: "
-      , Html.span [] [ text (label ++ " at index " ++ toString index ++ " with value " ++ toString label) ]
+      , Html.span []
+        [ if index /= Nothing then
+            text (Maybe.withDefault "" selectedText ++ " at index " ++ toString (Maybe.withDefault -1 index) ++ " with value " ++ toString (Maybe.withDefault "" selectedText))
+          else
+            text "(none)"
+        ]
       ]
     ,
       Html.div []
@@ -216,14 +231,17 @@ view lift page model =
               Dict.get [0] model.selects
               |> Maybe.withDefault defaultSelect
 
-          (index, label) =
-              state.value
-              |> Maybe.withDefault (0, "Pick a food group")
+          index =
+              Maybe.map Tuple.first state.value
+
+          selectedText =
+              Maybe.map Tuple.second state.value
       in
       Page.hero []
       [ heroSelect lift [0] model
-        [ Select.label label
-        , Select.index index
+        [ Select.label "Pick a food group"
+        , Select.index (Maybe.withDefault -1 index) |> when (index /= Nothing)
+        , Select.selectedText (Maybe.withDefault "" selectedText) |> when (selectedText /= Nothing)
         , Select.disabled |> when state.disabled
         ]
         []
@@ -249,7 +267,7 @@ view lift page model =
             [ text "Select box"
             ]
           ]
-        , select lift [1] model [ Select.box ] []
+        , select lift [2] model [ Select.box ] []
         ]
       )
     ]

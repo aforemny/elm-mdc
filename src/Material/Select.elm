@@ -1,18 +1,18 @@
 module Material.Select exposing (..)
 
 import DOM
+import GlobalEvents
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
 import Material.Helpers as Helpers exposing (pure, map1st)
-import Material.Internal.Menu exposing (Geometry, KeyCode, Key, Meta)
 import Material.Internal.Options as Internal
-import Material.Internal.Select exposing (Msg(..))
+import Material.Internal.Select exposing (Msg(..), Geometry, defaultGeometry)
 import Material.List as Lists
 import Material.Menu as Menu
 import Material.Msg exposing (Index) 
-import Material.Options as Options exposing (Style, cs, css, styled, styled_, when)
+import Material.Options as Options exposing (cs, css, styled, when)
 
 
 -- SETUP
@@ -31,13 +31,14 @@ subscriptions model =
 
 box : Property m
 box =
-    cs "mdc-select__box"
+    cs "mdc-select--box"
 
 
 {-| Component model
 -}
 type alias Model =
     { menu : Menu.Model
+    , geometry : Maybe Geometry
     }
 
 
@@ -46,6 +47,7 @@ type alias Model =
 defaultModel : Model
 defaultModel =
     { menu = Menu.defaultModel
+    , geometry = Nothing
     }
 
 
@@ -61,15 +63,18 @@ type alias Msg m
 {-| Component update.
 -}
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Model, Cmd msg )
-update fwd msg model =
+update lift msg model =
     case msg of
 
         MenuMsg msg_ ->
             let
                 (menu, menuCmd) =
-                    Menu.update (MenuMsg >> fwd) msg_ model.menu
+                    Menu.update (lift << MenuMsg) msg_ model.menu
             in
-                { model | menu = menu } ! [ menuCmd ]
+            ( { model | menu = menu }, menuCmd )
+
+        Init geometry ->
+            ( { model | geometry = Just geometry }, Cmd.none )
 
 
 
@@ -77,16 +82,18 @@ update fwd msg model =
 
 
 type alias Config =
-    { index : Maybe Int
-    , label : String
+    { label : String
+    , index : Maybe Int
+    , selectedText : Maybe String
     , disabled : Bool
     }
 
 
 defaultConfig : Config
 defaultConfig =
-    { index = Nothing
-    , label = ""
+    { label = ""
+    , index = Nothing
+    , selectedText = Nothing
     , disabled = False
     }
 
@@ -107,8 +114,15 @@ label =
 {-| TODO
 -}
 index : Int -> Property m
-index =
-    Internal.option << (\index config -> { config | index = Just index })
+index index =
+    Internal.option (\config -> { config | index = Just index })
+
+
+{-| TODO
+-}
+selectedText : String -> Property m
+selectedText selectedText =
+    Internal.option (\ config -> { config | selectedText = Just selectedText })
 
 
 {-| TODO
@@ -136,50 +150,55 @@ view lift model options items =
             Internal.collect defaultConfig options
 
         geometry =
-            model.menu.geometry
-            |> Maybe.withDefault Material.Internal.Menu.defaultGeometry
+            Maybe.withDefault defaultGeometry model.geometry
 
---        itemOffsetTop =
---            List.drop (Maybe.withDefault 0 config.index) geometry.itemGeometries
---            |> List.head
---            |> Maybe.map .top
---            |> Maybe.withDefault 0
+        itemOffsetTop =
+            List.drop (Maybe.withDefault 0 config.index) geometry.itemOffsetTops
+            |> List.head
+            |> Maybe.withDefault 0
 
---        left =
---            geometry.anchor.left
---
---        top =
---            geometry.anchor.top
+        left =
+            geometry.boundingClientRect.left
 
---        adjustedTop =
---            let
---                adjustedTop_ =
---                    top - itemOffsetTop
---
---                overflowsTop =
---                    adjustedTop_ < 0
---
---                overflowsBottom =
---                    adjustedTop_ + geometry.itemsContainer.height > geometry.window.height
---            in
---                if overflowsTop then
---                    0
---                else
---                    if overflowsBottom then
---                        max 0 (geometry.window.height - geometry.itemsContainer.height)
---                    else
---                        adjustedTop_
+        top =
+            geometry.boundingClientRect.top
 
---        transformOrigin =
---            "center " ++ toString itemOffsetTop ++ "px"
+        adjustedTop =
+            let
+                adjustedTop_ =
+                    top - itemOffsetTop
+
+                overflowsTop =
+                    adjustedTop_ < 0
+
+                overflowsBottom =
+                    adjustedTop_ + geometry.menuHeight > geometry.windowInnerHeight
+            in
+                if overflowsTop then
+                    0
+                else
+                    if overflowsBottom then
+                        max 0 (geometry.windowInnerHeight - geometry.menuHeight)
+                    else
+                        adjustedTop_
+
+        transformOrigin =
+            "center " ++ toString itemOffsetTop ++ "px"
+
+        isOpen =
+          if model.menu.animating then
+              model.menu.open && (model.menu.geometry /= Nothing)
+          else
+              model.menu.open
     in
     Internal.apply summary Html.div
     [ cs "mdc-select"
-    , cs "mdc-select--open" |> when model.menu.open
-    , css "width" "439px"
-    , -- TODO: Menu.connect
-      when (not config.disabled) <|
-      Options.onClick (lift (MenuMsg (Material.Internal.Menu.Toggle)))
+    , cs "mdc-select--open" |> when isOpen
+    , when (model.menu.animating && model.menu.geometry == Nothing)
+      << Options.many << List.map Options.attribute <|
+      GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
+    , Menu.connect (lift << MenuMsg) |> when (not config.disabled)
+    , cs "mdc-select--disabled" |> when config.disabled
     ]
     [ Html.attribute "role" "listbox"
     , Html.tabindex 0
@@ -190,7 +209,7 @@ view lift model options items =
       [
         styled Html.div
         [ cs "mdc-select__label"
-        , cs "mdc-select__label--float-above" |> when model.menu.open
+        , cs "mdc-select__label--float-above" |> when (model.menu.open || (config.selectedText /= Nothing))
         ]
         [ text config.label
         ]
@@ -199,7 +218,8 @@ view lift model options items =
         [ cs "mdc-select__selected-text"
         , css "pointer-events" "none"
         ]
-        []
+        [ text (Maybe.withDefault "" config.selectedText)
+        ]
       ,
         styled Html.div
         [ cs "mdc-select__bottom-line"
@@ -210,20 +230,17 @@ view lift model options items =
     ,
       Menu.view (MenuMsg >> lift) model.menu
       [ cs "mdc-select__menu"
---      , when model.menu.initialized << Options.many <|
---        [ 
---          Menu.index (Maybe.withDefault 0 config.index)
---        , css "display" "block"
---        -- , css "transform-origin" transformOrigin
---        -- , css "left" (toString left ++ "px")
---        -- , css "top" (toString adjustedTop ++ "px")
---        -- , css "bottom" "unset"
---        -- , css "right" "unset"
---        ]
+      , Menu.index (Maybe.withDefault 0 config.index)
+      , when isOpen << Options.many <|
+        [ css "position" "fixed"
+        , css "transform-origin" transformOrigin
+        , css "left" (toString left ++ "px")
+        , css "top" (toString adjustedTop ++ "px")
+        , css "bottom" "unset"
+        , css "right" "unset"
+        ]
       ]
-      ( Menu.ul Lists.ul
-        []
-        items
+      ( Menu.ul Lists.ul [] items
       )
     ]
 
@@ -298,6 +315,46 @@ subs =
 
 decodeGeometry : Decoder Geometry
 decodeGeometry =
-    DOM.target      <| -- .mdc-select
-    DOM.childNode 1 <| -- .mdc-select__menu
-    Menu.decodeGeometry
+    let
+        windowScroll =
+            Json.at ["ownerDocument", "defaultView"] <|
+            Json.map2
+              (\ scrollX scrollY ->
+                { scrollX = scrollX
+                , scrollY = scrollY
+                }
+              )
+              (Json.at ["scrollX"] Json.float)
+              (Json.at ["scrollY"] Json.float)
+
+        windowInnerHeight =
+            Json.at ["ownerDocument", "defaultView"] (Json.at ["innerHeight"] Json.float)
+
+        boundingClientRect { scrollX, scrollY } =
+            DOM.boundingClientRect
+            |> Json.map (\ rectangle ->
+                 { top = rectangle.top - scrollY
+                 , left = rectangle.left - scrollX
+                 , width = rectangle.width
+                 , height = rectangle.height
+                 }
+               )
+
+        menuHeight =
+            DOM.childNode 1 DOM.offsetHeight
+
+        itemOffsetTops =
+            DOM.childNode 1 <|   -- .mdc-select__menu
+            DOM.childNode 0 <|   -- .mdc-menu__items
+            DOM.childNodes DOM.offsetTop
+    in
+    DOM.target
+    ( windowScroll
+      |> Json.andThen (\ windowScroll ->
+           Json.map4 Geometry
+               windowInnerHeight
+               (boundingClientRect windowScroll)
+               menuHeight
+               itemOffsetTops
+         )
+    )
