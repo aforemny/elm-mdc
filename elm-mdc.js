@@ -1,3 +1,24 @@
+// BEGIN: IE >=9 CustomEvent polyfill
+// from:
+// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+(function () {
+
+  if ( typeof window.CustomEvent === "function" ) return false;
+
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
+// END: IE >=9 CustomEvent polyfill
+
+
 var traverse = function(node, f) {
     var firstNode = node;
     var limit = 1000;
@@ -48,19 +69,19 @@ var dispatchElmMdcInit = function(node) {
     for  (var i = 0; i < node.classList.length; i++) {
         var cs = node.classList[i];
         if (cs === "mdc-slider") {
-            node.dispatchEvent(new Event("ElmMdcInit"));
+            node.dispatchEvent(new CustomEvent("ElmMdcInit"));
             break;
         }
         if (cs === "mdc-tab-bar") {
-            node.dispatchEvent(new Event("ElmMdcInit"));
+            node.dispatchEvent(new CustomEvent("ElmMdcInit"));
             break;
         }
         if (cs === "mdc-toolbar") {
-            node.dispatchEvent(new Event("ElmMdcInit"));
+            node.dispatchEvent(new CustomEvent("ElmMdcInit"));
             break;
         }
         if (cs === "mdc-grid-list") {
-            node.dispatchEvent(new Event("ElmMdcInit"));
+            node.dispatchEvent(new CustomEvent("ElmMdcInit"));
             break;
         }
     }
@@ -75,7 +96,7 @@ var observer = new MutationObserver(function(mutations) {
       var mutation = mutations[i];
       var nodes = mutation.addedNodes;
       for (var j = 0; j < nodes.length; j++) {
-          traverse(nodes[i], dispatchElmMdcInit);
+          traverse(nodes[j], dispatchElmMdcInit);
       }
     }
 });
@@ -98,19 +119,19 @@ var dispatchWindowResize = function(node) {
     for  (var i = 0; i < node.classList.length; i++) {
         var cs = node.classList[i];
         if (cs === "mdc-grid-list") {
-            node.dispatchEvent(new Event("ElmMdcWindowResize"));
+            node.dispatchEvent(new CustomEvent("ElmMdcWindowResize"));
             break;
         }
         if (cs === "mdc-tab-bar") {
-            node.dispatchEvent(new Event("ElmMdcWindowResize"));
+            node.dispatchEvent(new CustomEvent("ElmMdcWindowResize"));
             break;
         }
         if (cs === "mdc-toolbar") {
-            node.dispatchEvent(new Event("ElmMdcWindowResize"));
+            node.dispatchEvent(new CustomEvent("ElmMdcWindowResize"));
             break;
         }
     }
-    node.dispatchEvent(new Event("elm-mdc-resize"));
+    node.dispatchEvent(new CustomEvent("elm-mdc-resize"));
 };
 
 
@@ -119,7 +140,7 @@ window.addEventListener("resize", function() {
 });
 
 var dispatchReconfigure = function(node) {
-    node.dispatchEvent(new Event("ElmMdcReconfigure"));
+    node.dispatchEvent(new CustomEvent("ElmMdcReconfigure"));
 };
 
 var observer1 = new MutationObserver(function(mutations) {
@@ -156,7 +177,7 @@ var dispatchMouseMove = function(evtName, node, pageX) {
     for (var i = 0; i < node.classList.length; i++) {
         var cs = node.classList[i];
         if (cs === "mdc-slider") {
-            var event = new Event(evtName);
+            var event = new CustomEvent(evtName);
             event.pageX = pageX;
             node.dispatchEvent(event);
             break;
@@ -197,7 +218,7 @@ var dispatchMouseUp = function(evtName, node, pageX) {
     for (var i = 0; i < node.classList.length; i++) {
         var cs = node.classList[i];
         if (cs === "mdc-slider") {
-            var event = new Event(evtName);
+            var event = new CustomEvent(evtName);
             event.pageX = pageX;
             node.dispatchEvent(event);
             break;
