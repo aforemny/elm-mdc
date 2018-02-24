@@ -11,7 +11,6 @@ import Material.Checkbox as Checkbox
 import Material.Options as Options exposing (styled, cs, css, nop, when)
 import Material.Snackbar as Snackbar
 import Material.Textfield as Textfield
-import Material.Theme as Theme
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
@@ -21,7 +20,6 @@ type alias Model =
     , multiline : Bool
     , actionOnBottom : Bool
     , dismissOnAction : Bool
-    , darkTheme : Bool
     , messageText : String
     , actionText : String
     }
@@ -33,7 +31,6 @@ defaultModel =
     , multiline = False
     , actionOnBottom = False
     , dismissOnAction = True
-    , darkTheme = False
     , messageText = "Message deleted"
     , actionText = "Undo"
     }
@@ -44,7 +41,6 @@ type Msg m
     | ToggleMultiline
     | ToggleActionOnBottom
     | ToggleDismissOnAction
-    | ToggleDarkTheme
     | SetMessageText String
     | SetActionText String
     | Show (List Int)
@@ -65,8 +61,6 @@ update lift msg model =
             ( { model | actionOnBottom = not model.actionOnBottom }, Cmd.none )
         ToggleDismissOnAction ->
             ( { model | dismissOnAction = not model.dismissOnAction }, Cmd.none )
-        ToggleDarkTheme ->
-            ( { model | darkTheme = not model.darkTheme }, Cmd.none )
         SetMessageText messageText  ->
             ( { model | messageText = messageText }, Cmd.none )
         SetActionText actionText  ->
@@ -146,20 +140,13 @@ view lift page model =
       ]
 
     ,
-      styled Html.div
-      [ when model.darkTheme << Options.many <|
-        [ Theme.dark
-        , css "background-color" "#333"
-        , css "min-height" "100%"
-        ]
-      ]
-      [ example
-        [ css "min-height" "100%"
-        ]
+      styled Html.div []
+      [
+        example []
         [
           styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
-
-        , styled Html.div
+        ,
+          styled Html.div
           [ cs "mdc-form-field"
           ]
           [ Checkbox.render (Mdl >> lift) [0] model.mdl
@@ -169,9 +156,10 @@ view lift page model =
             []
           , Html.label [] [ text "Multiline" ]
           ]
-        , Html.br [] []
-
-        , styled Html.div
+        ,
+          Html.br [] []
+        ,
+          styled Html.div
           [ cs "mdc-form-field"
           ]
           [ Checkbox.render (Mdl >> lift) [1] model.mdl
@@ -182,9 +170,10 @@ view lift page model =
             []
           , Html.label [] [ text "Action on Bottom" ]
           ]
-        , Html.br [] []
-
-        , styled Html.div
+        ,
+          Html.br [] []
+        ,
+          styled Html.div
           [ cs "mdc-form-field"
           ]
           [ Checkbox.render (Mdl >> lift) [2] model.mdl
@@ -194,82 +183,82 @@ view lift page model =
             []
           , Html.label [] [ text "Dismiss On Action" ]
           ]
-        , Html.br [] []
-
-        , Button.render (Mdl >> lift) [3] model.mdl
-          [ Options.on "click" (Json.succeed (lift ToggleDarkTheme))
-          , Button.primary
-          , Button.raised
-          ]
-          [ text "Toggle Dark Theme"
-          ]
-        , Html.br [] []
-
-        , Textfield.render (Mdl >> lift) [4] model.mdl
+        ,
+          Html.br [] []
+        ,
+          Textfield.render (Mdl >> lift) [3] model.mdl
           [ Textfield.value model.messageText
           , Textfield.label "Message Text"
           , Options.on "input" (Json.map (SetMessageText >> lift) Html.targetValue)
           ]
           [
           ]
-        , Html.br [] []
-
-        , Textfield.render (Mdl >> lift) [5] model.mdl
+        ,
+          Html.br [] []
+        ,
+          Textfield.render (Mdl >> lift) [4] model.mdl
           [ Textfield.value model.actionText
           , Textfield.label "Action Text"
           , Options.on "input" (Json.map (SetActionText >> lift) Html.targetValue)
           ]
           [
           ]
-        , Html.br [] []
-
-        , Button.render (Mdl >> lift) [6] model.mdl
+        ,
+          Html.br [] []
+        ,
+          Button.render (Mdl >> lift) [5] model.mdl
+          [ Button.raised
+          , css "margin-top" "14px"
+          , Options.on "click" (Json.succeed (lift (Show [9])))
+          ]
+          [ text "Show"
+          ]
+        ,
+          text " "
+        ,
+          Button.render (Mdl >> lift) [6] model.mdl
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [10])))
           ]
-          [ text "Show"
+          [ text "Show Rtl"
           ]
-
-        , Button.render (Mdl >> lift) [7] model.mdl
+        ,
+          text " "
+        ,
+          Button.render (Mdl >> lift) [7] model.mdl
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [11])))
           ]
-          [ text "Show Rtl"
+          [ text "Show Start Aligned"
           ]
-
-        , Button.render (Mdl >> lift) [8] model.mdl
+        ,
+          text " "
+        ,
+          Button.render (Mdl >> lift) [8] model.mdl
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [12])))
           ]
-          [ text "Show Start Aligned"
-          ]
-
-        , Button.render (Mdl >> lift) [9] model.mdl
-          [ Button.raised
-          , css "margin-top" "14px"
-          , Options.on "click" (Json.succeed (lift (Show [13])))
-          ]
           [ text "Show Start Aligned (Rtl)"
           ]
-
-        , Snackbar.render (Mdl >> lift) [10] model.mdl
+        ,
+          Snackbar.render (Mdl >> lift) [9] model.mdl
           [ Snackbar.onDismiss (lift Dismiss)
           ]
           []
-
-        , Html.div
+        ,
+          Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.render (Mdl >> lift) [11] model.mdl
+          [ Snackbar.render (Mdl >> lift) [10] model.mdl
             [ Snackbar.onDismiss (lift Dismiss)
             ]
             []
           ]
 
-        , Snackbar.render (Mdl >> lift) [12] model.mdl
+        , Snackbar.render (Mdl >> lift) [11] model.mdl
           [ Snackbar.onDismiss (lift Dismiss)
           , Snackbar.alignStart
           ]
@@ -278,13 +267,12 @@ view lift page model =
         , Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.render (Mdl >> lift) [13] model.mdl
+          [ Snackbar.render (Mdl >> lift) [12] model.mdl
             [ Snackbar.onDismiss (lift Dismiss)
             , Snackbar.alignStart
             ]
             []
           ]
-
         ]
       ]
     ]

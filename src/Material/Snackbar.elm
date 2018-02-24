@@ -367,8 +367,7 @@ view lift model options _ =
       [ cs "mdc-snackbar__action-wrapper"
       ]
       [ Options.styled_ Html.button
-        [ cs "mdc-button"
-        , cs "mdc-snackbar__action-button"
+        [ cs "mdc-snackbar__action-button"
         , dismissHandler
         ]
         [ Html.type_ "button"
