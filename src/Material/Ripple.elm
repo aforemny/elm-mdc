@@ -9,6 +9,7 @@ module Material.Ripple exposing
     , primary
     , react
     , view
+    , surface
     )
 
 import DOM
@@ -118,6 +119,11 @@ update msg model =
                 ( model, Cmd.none )
 
 
+surface : Options.Property c m
+surface =
+    cs "mdc-ripple-surface"
+
+
 -- VIEW
 
 
@@ -127,7 +133,10 @@ bounded
     -> Store s
     -> x
     -> y
-    -> (Options.Property c m, Html m)
+    -> { interactionHandler : Options.Property c m
+       , properties : Options.Property c m
+       , style : Html m
+       }
 bounded lift index store options =
     Component.render get (view False) Material.Msg.RippleMsg lift index store options
 
@@ -138,7 +147,10 @@ unbounded
     -> Store s
     -> x
     -> y
-    -> (Options.Property c m, Html m)
+    -> { interactionHandler : Options.Property c m
+       , properties : Options.Property c m
+       , style : Html m
+       }
 unbounded lift index store options =
     Component.render get (view True) Material.Msg.RippleMsg lift index store options
 
@@ -153,7 +165,15 @@ accent =
     cs "mdc-ripple-surface--accent"
 
 
-view : Bool -> (Msg -> m) -> Model -> x -> y -> (Options.Property c m, Html m)
+view : Bool
+    -> (Msg -> m)
+    -> Model
+    -> x
+    -> y
+    -> { interactionHandler : Options.Property c m
+       , properties : Options.Property c m
+       , style : Html m
+       }
 view isUnbounded lift model _ _ =
     let
         geometry =
@@ -256,57 +276,66 @@ view isUnbounded lift model _ _ =
 
         isVisible =
             model.active || model.animating
+
+        interactionHandler =
+            Options.many
+            [ focusOn "focus"
+            , blurOn "blur"
+            , Options.many <|
+              List.map activateOn
+              [ "keydown"
+              , "mousedown"
+              , "pointerdown"
+              , "touchstart"
+              ]
+            , Options.many <|
+              List.map deactivateOn
+              [ "keyup"
+              , "mouseup"
+              , "pointerup"
+              , "touchend"
+              ]
+            ]
+
+        properties =
+            Options.many
+            [
+            -- , cs "mdc-ripple-surface"
+              cs "mdc-ripple-upgraded"
+
+            , when isUnbounded << Options.many <|
+              [ cs "mdc-ripple-upgraded--unbounded"
+              , Options.data "data-mdc-ripple-is-unbounded" ""
+              ]
+
+            , when isVisible << Options.many <|
+              [ cs "mdc-ripple-upgraded--background-active-fill"
+              , cs "mdc-ripple-upgraded--foreground-activation"
+              ]
+
+            , when model.deactivation <|
+              cs "mdc-ripple-upgraded--foreground-deactivation"
+
+            , when model.focus <|
+              cs "mdc-ripple-upgraded--background-focused"
+
+            , -- CSS variable hack selector:
+              when isVisible (cs selector)
+            ]
+
+        style =
+            if isVisible then
+                styleNode
+            else
+                Html.node "style"
+                [ Html.type_ "text/css"
+                ]
+                []
     in
-    (
-      Options.many
-      [ focusOn "focus"
-      , blurOn "blur"
-      , Options.many <|
-        List.map activateOn
-        [ "keydown"
-        , "mousedown"
-        , "pointerdown"
-        , "touchstart"
-        ]
-      , Options.many <|
-        List.map deactivateOn
-        [ "keyup"
-        , "mouseup"
-        , "pointerup"
-        , "touchend"
-        ]
-
-      -- , cs "mdc-ripple-surface"
-      , cs "mdc-ripple-upgraded"
-
-      , when isUnbounded << Options.many <|
-        [ cs "mdc-ripple-upgraded--unbounded"
-        , Options.data "data-mdc-ripple-is-unbounded" ""
-        ]
-
-      , when isVisible << Options.many <|
-        [ cs "mdc-ripple-upgraded--background-active-fill"
-        , cs "mdc-ripple-upgraded--foreground-activation"
-        ]
-
-      , when model.deactivation <|
-        cs "mdc-ripple-upgraded--foreground-deactivation"
-
-      , when model.focus <|
-        cs "mdc-ripple-upgraded--background-focused"
-
-      , -- CSS variable hack selector:
-        when isVisible (cs selector)
-      ]
-
-    , if isVisible then
-          styleNode
-      else
-          Html.node "style"
-          [ Html.type_ "text/css"
-          ]
-          []
-    )
+    { interactionHandler = interactionHandler
+    , properties = properties
+    , style = style
+    }
 
 
 type alias Store s =

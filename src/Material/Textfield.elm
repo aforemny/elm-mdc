@@ -6,7 +6,10 @@ module Material.Textfield
         
           -- OPTIONS
         , label
+        , leadingIcon
+        , trailingIcon
         , disabled
+        , outlined
         , dense
         , value
         , fullWidth
@@ -17,8 +20,8 @@ module Material.Textfield
         , pattern
         , required
 
-        , textfield
-        , multiline
+        , box
+        , textarea
         , rows
         , cols
         , maxRows
@@ -52,18 +55,21 @@ module Material.Textfield
 
 -}
 
+import DOM
 import Html.Attributes as Html exposing (class, type_, style)
 import Html.Events as Html exposing (defaultOptions)
 import Html exposing (div, span, Html, text)
-import Json.Decode as Decode
-import Json.Encode as Json
+import Json.Decode as Json exposing (Decoder)
+import Json.Encode as Encode
 import Material.Component as Component exposing (Indexed)
 import Material.Internal.Options as Internal
-import Material.Internal.Textfield exposing (Msg(..))
+import Material.Internal.Textfield exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index) 
-import Material.Options as Options exposing (cs, css, nop, Style, when)
+import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Ripple as Ripple
 import Regex
+import Svg
+import Svg.Attributes
 
 
 type alias Config m =
@@ -78,11 +84,15 @@ type alias Config m =
     , dense : Bool
     , required : Bool
     , type_ : Maybe String
-    , textfieldBox : Bool
+    , box : Bool
     , pattern : Maybe String
-    , multiline : Bool
+    , textarea : Bool
     , fullWidth : Bool
     , invalid : Bool
+    , outlined : Bool
+    , leadingIcon : Maybe String
+    , trailingIcon : Maybe String
+    , iconClickable : Bool
     }
 
 
@@ -99,12 +109,36 @@ defaultConfig =
     , dense = False
     , required = False
     , type_ = Just "text"
-    , textfieldBox = False
+    , box = False
     , pattern = Nothing
-    , multiline = False
+    , textarea = False
     , fullWidth = False
     , invalid = False
+    , outlined = False
+    , leadingIcon = Nothing
+    , trailingIcon = Nothing
+    , iconClickable = True
     }
+
+
+iconUnclickable : Property m
+iconUnclickable =
+    Internal.option (\ config -> { config | iconClickable = False })
+
+
+leadingIcon : String -> Property m
+leadingIcon icon =
+    Internal.option (\ config -> { config | leadingIcon = Just icon })
+
+
+trailingIcon : String -> Property m
+trailingIcon icon =
+    Internal.option (\ config -> { config | trailingIcon = Just icon })
+
+
+outlined : Property m
+outlined =
+    Internal.option (\ config -> { config | outlined = True })
 
 
 type alias Property m =
@@ -154,9 +188,9 @@ email =
     Internal.option (\config -> { config | type_ = Just "email" })
 
 
-textfield : Property m
-textfield =
-    Internal.option (\config -> { config | textfieldBox = True })
+box : Property m
+box =
+    Internal.option (\config -> { config | box = True })
 
 
 pattern : String -> Property m
@@ -204,9 +238,9 @@ invalid =
     Internal.option (\config -> { config | invalid = True })
 
 
-multiline : Property m
-multiline =
-    Internal.option (\config -> { config | multiline = True })
+textarea : Property m
+textarea =
+    Internal.option (\config -> { config | textarea = True })
 
 
 placeholder : String -> Property m
@@ -215,19 +249,21 @@ placeholder value =
 
 
 type alias Model =
-    { isFocused : Bool
+    { focused : Bool
     , isDirty : Bool
     , value : Maybe String
     , ripple : Ripple.Model
+    , geometry : Maybe Geometry
     }
 
 
 defaultModel : Model
 defaultModel =
-    { isFocused = False
+    { focused = False
     , isDirty = False
     , value = Nothing
     , ripple = Ripple.defaultModel
+    , geometry = Nothing
     }
 
 
@@ -246,10 +282,10 @@ update lift msg model =
             ( Just { model | value = Just str, isDirty = dirty }, Cmd.none )
 
         Blur ->
-            ( Just { model | isFocused = False }, Cmd.none )
+            ( Just { model | focused = False, geometry = Nothing }, Cmd.none )
 
-        Focus ->
-            ( Just { model | isFocused = True }, Cmd.none )
+        Focus geometry ->
+            ( Just { model | focused = True, geometry = Just geometry }, Cmd.none )
 
         NoOp ->
             ( Just model, Cmd.none )
@@ -277,8 +313,8 @@ view lift model options _ =
                 { defaultOptions
                   | preventDefault = True
                 }
-                ( Decode.map2 (,) Html.keyCode Html.targetValue
-                  |> Decode.andThen (\ (keyCode, value) ->
+                ( Json.map2 (,) Html.keyCode Html.targetValue
+                  |> Json.andThen (\ (keyCode, value) ->
                       let
                           rows =
                               value
@@ -286,17 +322,17 @@ view lift model options _ =
                               |> List.length
                       in
                       if (rows >= Maybe.withDefault 0 config.maxRows) && (keyCode == 13) then
-                            Decode.succeed (lift NoOp)
+                            Json.succeed (lift NoOp)
                           else
-                            Decode.fail ""
+                            Json.fail ""
                     )
                 )
-            |> when (config.multiline && (config.maxRows /= Nothing))
+            |> when (config.textarea && (config.maxRows /= Nothing))
 
-        isFocused =
-            model.isFocused && not config.disabled
+        focused =
+            model.focused && not config.disabled
 
-        ( rippleOptions, rippleStyle ) =
+        ripple =
             Ripple.view False (RippleMsg >> lift) model.ripple [] []
 
         isInvalid =
@@ -311,77 +347,234 @@ view lift model options _ =
             div
             [ cs "mdc-text-field"
             , cs "mdc-text-field--upgraded"
-            , Internal.on1 "focus" lift Focus
-            , Internal.on1 "blur" lift Blur
-            , cs "mdc-text-field--focused" |> when isFocused
+            , cs "mdc-text-field--focused" |> when focused
             , cs "mdc-text-field--disabled" |> when config.disabled
             , cs "mdc-text-field--dense" |> when config.dense
             , cs "mdc-text-field--fullwidth" |> when config.fullWidth
             , cs "mdc-text-field--invalid" |> when isInvalid
-            , cs "mdc-text-field--multiline" |> when config.multiline
-            , when config.textfieldBox << Options.many <|
+            , cs "mdc-text-field--textarea" |> when config.textarea
+            , cs "mdc-text-field--outlined" |> when config.outlined
+            , cs "mdc-text-field--with-leading-icon"
+              |> when ((config.leadingIcon /= Nothing) && (config.trailingIcon == Nothing))
+            , cs "mdc-text-field--with-trailing-icon"
+              |> when (config.trailingIcon /= Nothing)
+            , when (config.box || config.outlined) <|
+              ripple.interactionHandler
+            , when config.box << Options.many <|
               [ cs "mdc-text-field--box"
-              , rippleOptions
+              , ripple.properties
               ]
             , preventEnterWhenMaxRowsExceeded
             ]
-            [ Internal.applyInput summary
-                (if config.multiline then Html.textarea else Html.input)
-                [
-                  cs "mdc-text-field__input"
-                , css "outline" "none"
-                , Internal.on1 "focus" lift Focus
-                , Internal.on1 "blur" lift Blur
-                , Options.onInput (Input >> lift)
-                , Options.many << List.map Internal.attribute << List.filterMap identity <|
-                  [ Html.type_ (Maybe.withDefault "text" config.type_)
-                    |> if not config.multiline then Just else always Nothing
-                    -- TODO: ^^^^ can crash Elm runtime
-                  , Html.disabled True
-                    |> if config.disabled then Just else always Nothing
-                  , Html.property "required" (Json.bool True)
-                    |> if config.required then Just else always Nothing
-                  , Html.property "pattern" (Json.string (Maybe.withDefault "" config.pattern))
-                    |> if config.pattern /= Nothing then Just else always Nothing
-                  , Html.attribute "outline" "medium none"
-                    |> Just
-                  , Html.value (Maybe.withDefault "" config.value)
-                    |> if config.value /= Nothing then Just else always Nothing
-                  ]
-                , -- Note: prevent ripple:
-                  Options.many
-                  [ Options.onWithOptions "keydown"
-                        { preventDefault = False
-                        , stopPropagation = True
-                        }
-                        (Decode.succeed (lift NoOp))
-                  , Options.onWithOptions "keyup"
-                        { preventDefault = False
-                        , stopPropagation = True
-                        }
-                        (Decode.succeed (lift NoOp))
-                  ]
+            ( List.concat
+              [
+                [ Internal.applyInput summary
+                    (if config.textarea then Html.textarea else Html.input)
+                    [
+                      cs "mdc-text-field__input"
+                    , css "outline" "none"
+                    , if config.outlined then
+                          Options.on "focus" (Json.map (lift << Focus) decodeGeometry)
+                      else
+                          Options.on "focus" (Json.succeed (lift (Focus defaultGeometry)))
+                    , Options.on "blur" (Json.succeed (lift Blur))
+                    , Options.onInput (Input >> lift)
+                    , Options.many << List.map Internal.attribute << List.filterMap identity <|
+                      [ Html.type_ (Maybe.withDefault "text" config.type_)
+                        |> if not config.textarea then Just else always Nothing
+                      , Html.disabled True
+                        |> if config.disabled then Just else always Nothing
+                      , Html.property "required" (Encode.bool True)
+                        |> if config.required then Just else always Nothing
+                      , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
+                        |> if config.pattern /= Nothing then Just else always Nothing
+                      , Html.attribute "outline" "medium none"
+                        |> Just
+                      , Html.value (Maybe.withDefault "" config.value)
+                        |> if config.value /= Nothing then Just else always Nothing
+                      ]
+                    , -- Note: prevent ripple:
+                      Options.many
+                      [ Options.onWithOptions "keydown"
+                            { preventDefault = False
+                            , stopPropagation = True
+                            }
+                            (Json.succeed (lift NoOp))
+                      , Options.onWithOptions "keyup"
+                            { preventDefault = False
+                            , stopPropagation = True
+                            }
+                            (Json.succeed (lift NoOp))
+                      ]
+                    ]
+                    []
+                , styled Html.label
+                    [ cs "mdc-text-field__label"
+                    , cs "mdc-text-field__label--float-above" |> when (focused || isDirty)
+                    ]
+                    ( case config.labelText of
+                        Just str ->
+                            [ text str ]
+
+                        Nothing ->
+                            []
+                    )
                 ]
-                []
-            , Options.styled Html.label
-                [ cs "mdc-text-field__label"
-                , cs "mdc-text-field__label--float-above" |> when (isFocused || isDirty)
-                ]
-                ( case config.labelText of
-                    Just str ->
-                        [ text str ]
+              ,
+                if (not config.outlined) && (not config.textarea)then
+                    [ styled div
+                      [ cs "mdc-line-ripple"
+                      , cs "mdc-line-ripple--active" |> when model.focused
+                      ]
+                      []
+                    ]
+                else
+                    []
+              ,
+                if config.outlined then
+                    let
+                        isRtl =
+                            False
+
+                        d =
+                            let
+                                { labelWidth
+                                , width
+                                , height
+                                } =
+                                    model.geometry
+                                    |> Maybe.withDefault defaultGeometry
+
+                                radius =
+                                    4
+
+                                cornerWidth =
+                                    radius + 1.2
+
+                                leadingStrokeLength =
+                                    abs (11 - cornerWidth)
+
+                                labelScale =
+                                    if config.dense then
+                                        0.923
+                                    else
+                                        0.75
+
+                                scaledLabelWidth =
+                                    labelScale * labelWidth
+
+                                paddedLabelWidth =
+                                    scaledLabelWidth + 8
+
+                                pathMiddle =
+                                    [ "a"
+                                    , toString radius
+                                    , ","
+                                    , toString radius
+                                    , " 0 0 1 "
+                                    , toString radius
+                                    , ","
+                                    , toString radius
+                                    , "v"
+                                    , toString (height - (2*cornerWidth))
+                                    , "a"
+                                    , toString radius
+                                    , ","
+                                    , toString radius
+                                    , " 0 0 1 "
+                                    , toString (-radius)
+                                    , ","
+                                    , toString radius
+                                    , "h"
+                                    , toString (-width + (2*cornerWidth))
+                                    , "a"
+                                    , toString radius
+                                    , ","
+                                    , toString radius
+                                    , " 0 0 1 "
+                                    , toString (-radius)
+                                    , ","
+                                    , toString (-radius)
+                                    , "v"
+                                    , toString (-height + (2*cornerWidth))
+                                    , "a"
+                                    , toString radius
+                                    , ","
+                                    , toString radius
+                                    , " 0 0 1 "
+                                    , toString radius
+                                    , ","
+                                    , toString (-radius)
+                                    ]
+                                    |> String.join ""
+                            in
+                            if not isRtl then
+                                [ "M"
+                                , toString (cornerWidth + leadingStrokeLength + paddedLabelWidth)
+                                , ",1h"
+                                , toString (width - (2*cornerWidth) - paddedLabelWidth - leadingStrokeLength)
+                                , pathMiddle
+                                , "h"
+                                , toString leadingStrokeLength
+                                ]
+                                |> String.join ""
+                            else
+                                [ "M"
+                                , toString (width - cornerWidth - leadingStrokeLength)
+                                , ",1h"
+                                , toString leadingStrokeLength
+                                , pathMiddle
+                                , "h"
+                                , toString (width - (2*cornerWidth) - paddedLabelWidth - leadingStrokeLength)
+                                ]
+                                |> String.join ""
+                    in
+                    [ styled Html.div
+                      [ cs "mdc-text-field__outline"
+                      , ripple.properties
+                      ]
+                      [ Svg.svg []
+                        [ Svg.path
+                          [ Svg.Attributes.d d
+                          , Svg.Attributes.class "mdc-text-field__outline-path"
+                          ]
+                          []
+                        ]
+                      ]
+                    ,
+                      styled Html.div
+                      [ cs "mdc-text-field__idle-outline"
+                      ]
+                      []
+                    ]
+                else
+                    []
+
+              ,
+                let
+                    icon =
+                        config.leadingIcon
+                        |> Maybe.map Just
+                        |> Maybe.withDefault config.trailingIcon
+                in
+                case icon of
+                    Just icon ->
+                        [ styled Html.i
+                          [ cs "material-icons mdc-text-field__icon"
+                          , Options.attribute << Html.tabindex <|
+                            if config.iconClickable then 0 else -1
+                          ]
+                          [ text icon
+                          ]
+                        ]
 
                     Nothing ->
                         []
-                )
-            , Options.styled div
-              [ cs "mdc-text-field__bottom-line"
+              ,
+                [ ripple.style
+                ]
               ]
-              [
-              ]
-
-            , rippleStyle
-            ]
+            )
 
 
 type alias Store s =
@@ -415,3 +608,13 @@ render lift index store options =
 
 
 -- TODO: use inject ^^^^^
+
+
+decodeGeometry : Decoder Geometry
+decodeGeometry =
+    DOM.target <|   -- .mdc-text-field__input
+    DOM.parentElement <|   -- .mdc-text-field
+    Json.map3 Geometry
+        (DOM.childNode 2 DOM.offsetWidth)   -- .mdc-text-field__outline
+        (DOM.childNode 2 DOM.offsetHeight)   -- .mdc-text-field__outline
+        (DOM.childNode 1 DOM.offsetWidth)   -- .mdc-text-field__label

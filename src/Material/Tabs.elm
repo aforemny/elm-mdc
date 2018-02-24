@@ -390,17 +390,6 @@ view lift model options nodes =
 
         hasIndicator =
             config.indicator
-
-        rippleStyles =
-            nodes
-            |> List.indexedMap (\ index _ ->
-                 Ripple.view False (RippleMsg index >> lift)
-                   ( Dict.get index model.ripples
-                     |> Maybe.withDefault Ripple.defaultModel
-                   )
-                   () ()
-               )
-            |> List.map Tuple.second
     in
         (if config.scroller then tabBarScroller else identity) <|
         Internal.apply summary
@@ -424,7 +413,7 @@ view lift model options nodes =
               [ nodes
                 |> List.indexedMap (\index { node, options, childs }  ->
                        let
-                          ( rippleOptions, _ ) =
+                          ripple =
                               Ripple.view False (RippleMsg index >> lift)
                                 ( Dict.get index model.ripples
                                   |> Maybe.withDefault Ripple.defaultModel
@@ -436,10 +425,13 @@ view lift model options nodes =
                            :: when (model.index == index) (cs "mdc-tab--active")
                            :: Options.on "click" (Json.map (Select index >> lift) (decodeGeometryOnTab hasIndicator))
                            :: Options.dispatch (Dispatch >> lift)
-                           :: rippleOptions
+                           :: Options.many
+                              [ ripple.interactionHandler
+                              , ripple.properties
+                              ]
                            :: options
                            )
-                           childs
+                           (childs ++ [ ripple.style ])
                        ]
                    )
                 |> List.concat
@@ -455,8 +447,6 @@ view lift model options nodes =
                     ]
                 else
                     []
-
-              , rippleStyles
               ]
             )
 

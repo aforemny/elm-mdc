@@ -730,38 +730,41 @@ interactiveList lift idx model =
     Lists.ul []
     [
       let
-          ( rippleOptions, rippleStyle ) =
+          ripple =
               Ripple.bounded (lift << Mdl) (idx ++ [0]) model.mdl [] []
       in
       Lists.li
-      [ rippleOptions
+      [ ripple.interactionHandler
+      , ripple.properties
       ]
       [ Lists.graphicIcon [] "network_wifi"
       , Html.text "Wi-Fi"
-      , rippleStyle
+      , ripple.style
       ]
     ,
       let
-          ( rippleOptions, rippleStyle ) =
+          ripple =
               Ripple.bounded (lift << Mdl) (idx ++ [1]) model.mdl [] []
       in
       Lists.li
-      [ rippleOptions
+      [ ripple.interactionHandler
+      , ripple.properties
       ]
       [ Lists.graphicIcon [] "bluetooth"
       , Html.text "Bluetooth"
-      , rippleStyle
+      , ripple.style
       ]
     ,
       let
-          ( rippleOptions, rippleStyle ) =
+          ripple =
               Ripple.bounded (lift << Mdl) (idx ++ [2]) model.mdl [] []
       in
       Lists.li
-      [ rippleOptions
+      [ ripple.interactionHandler
+      , ripple.properties
       ]
       [ Lists.graphicIcon [] "data_usage"
       , Html.text "Data Usage"
-      , rippleStyle
+      , ripple.style
       ]
     ]

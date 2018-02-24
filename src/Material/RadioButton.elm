@@ -166,13 +166,16 @@ view lift model options _ =
         ({ config } as summary) =
             Internal.collect defaultConfig options
 
-        ( rippleOptions, rippleStyle ) =
+        ripple =
             Ripple.view True (RippleMsg >> lift) model.ripple [] []
     in
     Internal.applyContainer summary Html.div
     [ cs "mdc-radio"
     , Internal.attribute <| blurOn "mouseup"
-    , rippleOptions
+    , Options.many
+      [ ripple.interactionHandler
+      , ripple.properties
+      ]
     ]
     [ Internal.applyInput summary
         Html.input
@@ -195,7 +198,7 @@ view lift model options _ =
       , styled Html.div [ cs "mdc-radio__outer-circle" ] []
       ]
 
-    , rippleStyle
+    , ripple.style
     ]
 
 

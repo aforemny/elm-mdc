@@ -1,12 +1,11 @@
-module Material.Textfield.HelperText
-    exposing
-        ( helperText
-        , Property
-        , persistent
-        , validationMsg
-        , Config
-        , defaultConfig
-        )
+module Material.Textfield.HelperText exposing
+    ( helperText
+    , Property
+    , persistent
+    , validationMsg
+    , Config
+    , defaultConfig
+    )
 
 
 import Html exposing (Html)
@@ -66,8 +65,8 @@ helperText options =
             Internal.collect defaultConfig options
     in
     Options.styled Html.p
-    (  cs "mdc-textfield-helptext"
-    :: (cs "mdc-textfield-helptext--persistent" |> when config.persistent)
-    :: (cs "mdc-textfield-helptext--validation-msg" |> when config.validationMsg)
+    (  cs "mdc-text-field-helper-text"
+    :: (cs "mdc-text-field-helper-text--persistent" |> when config.persistent)
+    :: (cs "mdc-text-field-helper-text--validation-msg" |> when config.validationMsg)
     :: options
     )

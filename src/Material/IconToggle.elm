@@ -149,15 +149,17 @@ view lift model options _ =
         ({ config } as summary) =
             Internal.collect defaultConfig options
 
-        ( rippleOptions, rippleStyle ) =
+        ripple =
             Ripple.view True (RippleMsg >> lift) model.ripple [] []
-            -- ^^^^ TODO: Ripple.view type signature
     in
     Internal.apply summary (if config.inner == Nothing then Html.i else Html.span)
     ( cs "mdc-icon-toggle"
     :: when (config.inner == Nothing) (cs "material-icons")
     :: Options.aria "label" (if config.on then config.label.on else config.label.off)
-    :: rippleOptions
+    :: Options.many
+       [ ripple.interactionHandler
+       , ripple.properties
+       ]
     :: options
     )
     []
@@ -172,7 +174,8 @@ view lift model options _ =
           []
       else
           text (if config.on then config.icon.on else config.icon.off)
-    , rippleStyle
+    ,
+      ripple.style
     ]
 
 

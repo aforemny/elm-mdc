@@ -1,6 +1,7 @@
 module Demo.Textfields exposing (Model, defaultModel, Msg(Mdl), update, view)
 
 import Demo.Page as Page exposing (Page)
+import Dict exposing (Dict)
 import Html as Html_
 import Html.Attributes as Html
 import Html.Events as Html
@@ -15,18 +16,13 @@ import Material.Typography as Typography
 
 type alias Model =
     { mdl : Material.Model
-    , example0 : Example
-    , example1 : Example
-    , example2 : Example
-    , example3 : Example
-    , example4 : Example
+    , examples : Dict (List Int) Example
     }
 
 
 type alias Example =
     { disabled : Bool
     , rtl : Bool
-    , darkTheme : Bool
     , dense : Bool
     , required : Bool
     , helperText : Bool
@@ -39,7 +35,6 @@ defaultExample : Example
 defaultExample =
     { disabled = False
     , rtl = False
-    , darkTheme = False
     , dense = False
     , required = False
     , helperText = False
@@ -51,27 +46,18 @@ defaultExample =
 defaultModel : Model
 defaultModel =
     { mdl = Material.defaultModel
-    , example0 = defaultExample
-    , example1 = defaultExample
-    , example2 = defaultExample
-    , example3 = defaultExample
-    , example4 = defaultExample
+    , examples = Dict.empty
     }
 
 
 type Msg m
     = Mdl (Material.Msg m)
-    | Example0Msg ExampleMsg
-    | Example1Msg ExampleMsg
-    | Example2Msg ExampleMsg
-    | Example3Msg ExampleMsg
-    | Example4Msg ExampleMsg
+    | ExampleMsg (List Int) ExampleMsg
 
 
 type ExampleMsg
     = ToggleDisabled
     | ToggleRtl
-    | ToggleDarkTheme
     | ToggleDense
     | ToggleRequired
     | ToggleHelperText
@@ -85,20 +71,17 @@ update lift msg model =
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
 
-        Example0Msg msg_ ->
-            { model | example0 = updateExample msg_ model.example0 } ! []
+        ExampleMsg index msg_ ->
+            let
+                example =
+                    Dict.get index model.examples
+                    |> Maybe.withDefault defaultExample
+                    |> updateExample msg_
 
-        Example1Msg msg_ ->
-            { model | example1 = updateExample msg_ model.example1 } ! []
-
-        Example2Msg msg_ ->
-            { model | example2 = updateExample msg_ model.example2 } ! []
-
-        Example3Msg msg_ ->
-            { model | example3 = updateExample msg_ model.example3 } ! []
-
-        Example4Msg msg_ ->
-            { model | example4 = updateExample msg_ model.example4 } ! []
+                examples =
+                    Dict.insert index example model.examples
+            in
+            { model | examples = examples } ! []
 
 
 updateExample : ExampleMsg -> Example -> Example
@@ -109,9 +92,6 @@ updateExample msg model =
 
         ToggleRtl ->
             { model | rtl = not model.rtl }
-
-        ToggleDarkTheme ->
-            { model | darkTheme = not model.darkTheme }
 
         ToggleDense ->
             { model | dense = not model.dense }
@@ -134,49 +114,60 @@ view lift page model =
     page.body "Text fields"
     [
       Page.hero []
-      [ Textfield.render (Mdl >> lift) [0] model.mdl
-        [ Textfield.label "Text field"
-        ]
-        []
+      [ heroTextfield lift [0] model
       ]
-    , example0 lift model.mdl 1 (Example0Msg >> lift) model.example0
-    , example1 lift model.mdl 2 (Example1Msg >> lift) model.example1
-    , example2 lift model.mdl 3 (Example2Msg >> lift) model.example2
-    , example3 lift model.mdl 4 (Example3Msg >> lift) model.example3
-    , example4 lift model.mdl 5 (Example4Msg >> lift) model.example4
+    , textfield lift [1] model
+    , password lift [2] model
+    , outlinedTextfield lift [3] model
+    , boxTextfield lift [4] model
+    , iconsTextfield lift [5] model
+    , textarea lift [6] model
+    , fullWidth lift [7] model
     ]
 
 
-example0 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
-example0 fwd mdl idx lift model =
+heroTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+heroTextfield lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
+    Textfield.render (lift << Mdl) index model.mdl
+    [ Textfield.label "Text field"
+    ]
+    []
+
+
+textfield : (Msg m -> m) -> List Int -> Model -> Html m
+textfield lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
     example []
     [
       Html.h2 []
       [ Html.text
-        "Full Functionality Component (Floating Label, Validation, Autocomplete)"
+        "Full Functionality Component (Floating Label, Validation)"
       ]
 
     , styled Html.section
-      [ cs "mdc-theme--dark" |> when model.darkTheme
-      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
-      [ Html.div
-        ( if model.darkTheme then
-              [ Html.class "mdc-theme--dark" ]
-          else
-              []
-        )
-        [ Textfield.render (Mdl >> fwd) [idx] mdl
+      [ Html.div []
+        [ Textfield.render (lift << Mdl) index model.mdl
           [ Textfield.label "Email Address"
-          , Textfield.disabled |> when model.disabled
-          , Textfield.dense |> when model.dense
-          , Textfield.required |> when model.required
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
+          , Textfield.required |> when state.required
           ]
           []
         , Textfield.helperText
-          [ Textfield.persistent |> when model.persistent
-          , Textfield.validationMsg |> when model.validationMsg
-          , css "display" "none" |> when (not model.helperText)
+          [ Textfield.persistent |> when state.persistent
+          , Textfield.validationMsg |> when state.validationMsg
+          , css "display" "none" |> when (not state.helperText)
           ]
           [ Html.text "Help Text (possibly validation message)"
           ]
@@ -184,87 +175,96 @@ example0 fwd mdl idx lift model =
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDisabled)
+        [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
+        , Html.checked state.disabled
         ]
         []
       , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleRtl)
+        [ Html.onClick (lift (ExampleMsg index ToggleRtl))
+        , Html.checked state.rtl
         ]
         []
       , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDarkTheme)
-        ]
-        []
-      , Html.label [] [ Html.text " Dark Theme" ]
-      ]
-    , styled Html.div []
-      [ checkbox
-        [ Html.onClick (lift ToggleDense)
+        [ Html.onClick (lift (ExampleMsg index ToggleDense))
+        , Html.checked state.dense
         ]
         []
       , Html.label [] [ Html.text " Dense" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleRequired)
+        [ Html.onClick (lift (ExampleMsg index ToggleRequired))
+        , Html.checked state.required
         ]
         []
       , Html.label [] [ Html.text " Required" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleHelperText)
+        [ Html.onClick (lift (ExampleMsg index ToggleHelperText))
+        , Html.checked state.helperText
         ]
         []
       , Html.label [] [ Html.text " Use Helper Text" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift TogglePersistent)
-        , Html.disabled (not model.helperText)
+        [ Html.onClick (lift (ExampleMsg index TogglePersistent))
+        , Html.checked state.persistent
+        , Html.disabled (not state.helperText)
         ]
         []
-      , Html.label [] [ Html.text " Make helper text persistent" ]
+      , styled Html.label
+        [ css "opacity" ".4" |> when (not state.helperText)
+        ]
+        [ Html.text " Make helper text persistent"
+        ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleValidationMsg)
-        , Html.disabled (not model.helperText)
+        [ Html.onClick (lift (ExampleMsg index ToggleValidationMsg))
+        , Html.checked state.validationMsg
+        , Html.disabled (not state.helperText)
         ]
         []
-      , Html.label [] [ Html.text " Use helper text as validation message" ]
+      , styled Html.label
+        [ css "opacity" ".4" |> when (not state.helperText)
+        ]
+        [ Html.text " Use helper text as validation message"
+        ]
       ]
     ]
 
 
-example1 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
-example1 fwd mdl idx lift model =
+password : (Msg m -> m) -> List Int -> Model -> Html m
+password lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
     example []
     [ Html.h2 []
       [ Html.text "Password field with validation"
       ]
 
     , styled Html.section
-      [ cs "mdc-theme--dark" |> when model.darkTheme
-      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
-      [ Html.div
-        ( if model.darkTheme then
-              [ Html.class "mdc-theme--dark" ]
-          else
-              []
-        )
-        [ Textfield.render (Mdl >> fwd) [idx] mdl
+      [ Html.div []
+        [ Textfield.render (lift << Mdl) index model.mdl
           [ Textfield.label "Choose password"
           , Textfield.password
           , Textfield.pattern ".{8,}"
           , Textfield.required
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
           ]
           []
         , Textfield.helperText
@@ -278,31 +278,90 @@ example1 fwd mdl idx lift model =
     ]
 
 
-example2 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
-example2 fwd mdl idx lift model =
+outlinedTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+outlinedTextfield lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
+    example []
+    [ Html.h2 []
+      [ Html.text "Outlined Text Field"
+      ]
+
+    , styled Html.section
+      [ Options.attribute (Html.dir "rtl") |> when state.rtl
+      ]
+      [ Html.div []
+        [ Textfield.render (lift << Mdl) index model.mdl
+          [ Textfield.label "Your Name"
+          , Textfield.outlined
+          , Textfield.dense |> when state.dense
+          , Textfield.disabled |> when state.disabled
+          ]
+          []
+        , Textfield.helperText
+          [ Textfield.persistent |> when state.persistent
+          , Textfield.validationMsg |> when state.validationMsg
+          ]
+          [ Html.text "Must be at least 8 characters"
+          ]
+        ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
+        , Html.checked state.disabled
+        ]
+        []
+      , Html.label [] [ Html.text " Disabled" ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleRtl))
+        , Html.checked state.rtl
+        ]
+        []
+      , Html.label [] [ Html.text " RTL" ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleDense))
+        , Html.checked state.dense
+        ]
+        []
+      , Html.label [] [ Html.text " Dense" ]
+      ]
+    ]
+
+
+boxTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+boxTextfield lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
     example []
     [ Html.h2 []
       [ Html.text "Textfield box"
       ]
 
     , styled Html.section
-      [ cs "mdc-theme--dark" |> when model.darkTheme
-      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
-      [ Html.div
-        ( if model.darkTheme then
-              [ Html.class "mdc-theme--dark" ]
-          else
-              []
-        )
-        [ Textfield.render (Mdl >> fwd) [idx] mdl
+      [ Html.div []
+        [ Textfield.render (lift << Mdl) index model.mdl
           [ Textfield.label "Your Name"
-          , Textfield.textfield
+          , Textfield.box
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
           ]
           []
         , Textfield.helperText
-          [ Textfield.persistent |> when model.persistent
-          , Textfield.validationMsg |> when model.validationMsg
+          [ Textfield.persistent |> when state.persistent
+          , Textfield.validationMsg |> when state.validationMsg
           ]
           [ Html.text "Must provide a name"
           ]
@@ -310,28 +369,24 @@ example2 fwd mdl idx lift model =
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDisabled)
+        [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
+        , Html.checked state.disabled
         ]
         []
       , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleRtl)
+        [ Html.onClick (lift (ExampleMsg index ToggleRtl))
+        , Html.checked state.rtl
         ]
         []
       , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDarkTheme)
-        ]
-        []
-      , Html.label [] [ Html.text " Dark Theme" ]
-      ]
-    , styled Html.div []
-      [ checkbox
-        [ Html.onClick (lift ToggleDense)
+        [ Html.onClick (lift (ExampleMsg index ToggleDense))
+        , Html.checked state.dense
         ]
         []
       , Html.label [] [ Html.text " Dense" ]
@@ -339,56 +394,184 @@ example2 fwd mdl idx lift model =
     ]
 
 
-example3 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
-example3 fwd mdl idx lift model =
+iconsTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+iconsTextfield lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
     example []
-    [ Html.h2 []
-      [ Html.text "Multi-line Textfields"
+    [
+      Html.h2 []
+      [ Html.text
+        "Text Field - Leading/Trailing icons"
       ]
 
     , styled Html.section
-      [ cs "mdc-theme--dark" |> when model.darkTheme
-      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
-      [ Html.div
-        ( if model.darkTheme then
-              [ Html.class "mdc-theme--dark" ]
-          else
-              []
-        )
-        [ Textfield.render (Mdl >> fwd) [idx] mdl
-          [ Textfield.label "Multi-line Label"
-          , Textfield.multiline
-          , Textfield.rows 8
-          , Textfield.cols 40
+      [ Html.div []
+        [ Textfield.render (lift << Mdl) (index ++ [0]) model.mdl
+          [ Textfield.label "Your name"
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
+          , Textfield.required |> when state.required
+          , Textfield.box
+          , Textfield.leadingIcon "event"
+          ]
+          []
+        ]
+      , Html.div []
+        [ Textfield.render (lift << Mdl) (index ++ [1]) model.mdl
+          [ Textfield.label "Your other name"
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
+          , Textfield.required |> when state.required
+          , Textfield.box
+          , Textfield.trailingIcon "delete"
+          ]
+          []
+        ]
+      , Html.div []
+        [ Textfield.render (lift << Mdl) (index ++ [2]) model.mdl
+          [ Textfield.label "Your other name"
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
+          , Textfield.required |> when state.required
+          , Textfield.outlined
+          , Textfield.leadingIcon "event"
+          ]
+          []
+        ]
+      , Html.div []
+        [ Textfield.render (lift << Mdl) (index ++ [3]) model.mdl
+          [ Textfield.label "Your other name"
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
+          , Textfield.required |> when state.required
+          , Textfield.outlined
+          , Textfield.trailingIcon "delete"
           ]
           []
         ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDisabled)
+        [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
+        , Html.checked state.disabled
         ]
         []
       , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleRtl)
+        [ Html.onClick (lift (ExampleMsg index ToggleRtl))
+        , Html.checked state.rtl
         ]
         []
       , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDarkTheme)
+        [ Html.onClick (lift (ExampleMsg index ToggleDense))
+        , Html.checked state.dense
         ]
         []
-      , Html.label [] [ Html.text " Dark Theme" ]
+      , Html.label [] [ Html.text " Dense" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDense)
+        [ Html.onClick (lift (ExampleMsg index ToggleRequired))
+        , Html.checked state.required
+        ]
+        []
+      , Html.label [] [ Html.text " Required" ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleHelperText))
+        , Html.checked state.helperText
+        ]
+        []
+      , Html.label [] [ Html.text " Use Helper Text" ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index TogglePersistent))
+        , Html.checked state.persistent
+        , Html.disabled (not state.helperText)
+        ]
+        []
+      , styled Html.label
+        [ css "opacity" ".4" |> when (not state.helperText)
+        ]
+        [ Html.text " Make helper text persistent"
+        ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleValidationMsg))
+        , Html.checked state.validationMsg
+        , Html.disabled (not state.helperText)
+        ]
+        []
+      , styled Html.label
+        [ css "opacity" ".4" |> when (not state.helperText)
+        ]
+        [ Html.text " Use helper text as validation message"
+        ]
+      ]
+    ]
+
+
+textarea : (Msg m -> m) -> List Int -> Model -> Html m
+textarea lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
+    example []
+    [ Html.h2 []
+      [ Html.text "Textarea"
+      ]
+
+    , styled Html.section
+      [ Options.attribute (Html.dir "rtl") |> when state.rtl
+      ]
+      [ Html.div []
+        [ Textfield.render (lift << Mdl) index model.mdl
+          [ Textfield.label "Multi-line Label"
+          , Textfield.textarea
+          , Textfield.rows 8
+          , Textfield.cols 40
+          , Textfield.disabled |> when state.disabled
+          , Textfield.dense |> when state.dense
+          ]
+          []
+        ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
+        , Html.checked state.disabled
+        ]
+        []
+      , Html.label [] [ Html.text " Disabled" ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleRtl))
+        , Html.checked state.rtl
+        ]
+        []
+      , Html.label [] [ Html.text " RTL" ]
+      ]
+    , styled Html.div []
+      [ checkbox
+        [ Html.onClick (lift (ExampleMsg index ToggleDense))
+        , Html.checked state.dense
         ]
         []
       , Html.label [] [ Html.text " Dense" ]
@@ -396,62 +579,58 @@ example3 fwd mdl idx lift model =
     ]
 
 
-example4 : (Msg m -> m) -> Material.Model -> Int -> (ExampleMsg -> m) -> Example -> Html m
-example4 fwd mdl idx lift model =
+fullWidth : (Msg m -> m) -> List Int -> Model -> Html m
+fullWidth lift index model =
+    let
+        state =
+            Dict.get index model.examples
+            |> Maybe.withDefault defaultExample
+    in
     example []
     [ Html.h2 []
-      [ Html.text "Full-Width Textfields"
+      [ Html.text "Full-Width Text Field and Textarea"
       ]
 
     , styled Html.section
-      [ cs "mdc-theme--dark" |> when model.darkTheme
-      , Options.attribute (Html.dir "rtl") |> when model.rtl
+      [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
-      [ Html.div
-        ( if model.darkTheme then
-              [ Html.class "mdc-theme--dark" ]
-          else
-              []
-        )
-        [ Textfield.render (Mdl >> fwd) [idx,0] mdl
+      [ Html.div []
+        [ Textfield.render (lift << Mdl) (index ++ [0]) model.mdl
           [ Textfield.placeholder "Subject"
           , Textfield.fullWidth
           ]
           []
-        , Textfield.render (Mdl >> fwd) [idx,1] mdl
-          [ Textfield.placeholder "Message"
-          , Textfield.multiline
+        , Textfield.render (lift << Mdl) (index ++ [1]) model.mdl
+          [ Textfield.placeholder "Textrea Label"
+          , Textfield.textarea
           , Textfield.fullWidth
           , Textfield.rows 8
           , Textfield.cols 40
+          , css "margin-top" "16px"
           ]
           []
         ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDisabled)
+        [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
+        , Html.checked state.disabled
         ]
         []
       , Html.label [] [ Html.text " Disabled" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleRtl)
+        [ Html.onClick (lift (ExampleMsg index ToggleRtl))
+        , Html.checked state.rtl
         ]
         []
       , Html.label [] [ Html.text " RTL" ]
       ]
     , styled Html.div []
       [ checkbox
-        [ Html.onClick (lift ToggleDarkTheme)
-        ]
-        []
-      , Html.label [] [ Html.text " Dark Theme" ]
-      ]
-    , styled Html.div []
-      [ checkbox
-        [ Html.onClick (lift ToggleDense)
+        [ Html.onClick (lift (ExampleMsg index ToggleDense))
+        , Html.checked state.dense
         ]
         []
       , Html.label [] [ Html.text " Dense" ]

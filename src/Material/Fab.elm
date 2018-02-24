@@ -111,14 +111,17 @@ view lift model options icon =
         ({ config } as summary) =
             Internal.collect defaultConfig options
 
-        ( rippleOptions, rippleStyles ) =
+        ripple =
             Ripple.view False (RippleMsg >> lift) model.ripple () ()
     in
         Internal.apply summary
             Html.button
             [ cs "mdc-fab"
             , cs "material-icons"
-            , rippleOptions |> when config.ripple
+            , when config.ripple << Options.many <|
+              [ ripple.interactionHandler
+              , ripple.properties
+              ]
             ]
             []
             ( List.concat
@@ -130,7 +133,7 @@ view lift model options icon =
                 ]
               ,
                 if config.ripple then
-                    [ rippleStyles ]
+                    [ ripple.style ]
                 else
                     []
               ]

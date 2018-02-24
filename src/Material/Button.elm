@@ -181,7 +181,7 @@ view lift model options nodes =
         ({ config } as summary) =
             Internal.collect defaultConfig options
 
-        ( rippleOptions, rippleStyles ) =
+        ripple =
             Ripple.view False (RippleMsg >> lift) model.ripple () ()
     in
         Internal.apply summary
@@ -196,8 +196,10 @@ view lift model options nodes =
                 |> when config.disabled
             , cs "mdc-button--disabled"
                 |> when config.disabled
-            , rippleOptions
-              |> when config.ripple
+            , when config.ripple << Options.many <|
+              [ ripple.interactionHandler
+              , ripple.properties
+              ]
             ]
             [ Helpers.blurOn "mouseup"
             , Helpers.blurOn "mouseleave"
@@ -214,7 +216,7 @@ view lift model options nodes =
               ,
                 nodes
               ,
-                [ rippleStyles
+                [ ripple.style
                 ]
               ]
             )
