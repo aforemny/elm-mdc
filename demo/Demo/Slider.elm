@@ -33,13 +33,15 @@ defaultModel =
     { mdl = Material.defaultModel
     , values =
         Dict.fromList
-        [ ([0], 30)
-        , ([1], 30)
+        [ ([0], 20)
+        , ([1], 20)
+        , ([2], 20)
+        , ([3], 20)
         ]
     , inputs =
         Dict.empty
     , min = 0
-    , max = 100
+    , max = 50
     , steps = 1
     , darkTheme = False
     , disabled = False
@@ -242,7 +244,7 @@ view lift page model =
       in
       example []
       [
-        Html.h2 [] [ text "Discrete Slider with markers" ]
+        Html.h2 [] [ text "Discrete Slider with Tick Marks" ]
       , Html.div []
         [ Html.p []
           [ text "Select Value:"

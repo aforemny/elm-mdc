@@ -72,6 +72,7 @@ type alias Model =
     , geometry : Maybe Geometry
     , value : Maybe Float
     , inTransit : Bool
+    , preventFocus : Bool
     }
 
 
@@ -82,6 +83,7 @@ defaultModel =
     , geometry = Nothing
     , value = Nothing
     , inTransit = False
+    , preventFocus = False
     }
 
 
@@ -90,7 +92,7 @@ type alias Msg m =
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
-update fwd msg model =
+update lift msg model =
     case msg of
         NoOp ->
             ( model, Cmd.none )
@@ -99,10 +101,21 @@ update fwd msg model =
             ( model, Cmd.batch (List.map Helpers.cmd ms) )
 
         Focus ->
-            ( { model | focus = True }, Cmd.none )
+            if not model.preventFocus then
+                ( { model | focus = True }, Cmd.none )
+            else
+                ( model, Cmd.none )
 
         Blur ->
-            ( { model | focus = False, active = False }, Cmd.none )
+            (
+              { model
+                | focus = False
+                , active = False
+                , preventFocus = False
+              }
+            ,
+              Cmd.none
+            )
 
         Tick ->
             ( { model | inTransit = False }, Cmd.none )
@@ -113,6 +126,7 @@ update fwd msg model =
                 , geometry = Just geometry
                 , inTransit = inTransit
                 , value = Just (computeValue geometry)
+                , preventFocus = True
               }
             ,
               Cmd.none
@@ -270,15 +284,14 @@ view lift model options _ =
 
         ups =
           [ "ElmMdcMouseUp"
-          , "ElmMdcTouchEnd"
           , "ElmMdcPointerUp"
+          , "ElmMdcTouchEnd"
           ]
 
         downs =
             [ "mousedown"
-            , "touchstart"
-            , "keydown"
             , "pointerdown"
+            , "touchstart"
             ]
 
         moves =
@@ -314,6 +327,7 @@ view lift model options _ =
         , Options.data "min" (toString config.min)
         , Options.data "max" (toString config.max)
         , Options.data "steps" (toString config.steps)
+          |> when config.discrete
 
         , initOn "ElmMdcInit"
 
@@ -343,58 +357,76 @@ view lift model options _ =
           styled Html.div
           [ cs "mdc-slider__track-container"
           ]
-          [ styled Html.div
-            [ cs "mdc-slider__track"
-            , css "transform" ("scaleX(" ++ toString trackScale ++ ")")
-            ]
-            []
-          , styled Html.div
-            [ cs "mdc-slider__track-marker-container"
-            ]
-            ( List.repeat ((round (config.max  - config.min)) // config.steps) <|
-              styled Html.div
-              [ cs "mdc-slider__track-marker"
+          ( List.concat
+            [
+              [ styled Html.div
+                [ cs "mdc-slider__track"
+                , css "transform" ("scaleX(" ++ toString trackScale ++ ")")
+                ]
+                []
               ]
-              [
-              ]
-            )
-          ]
-
-        , styled Html.div
+            ,
+              if config.discrete then
+                [
+                  styled Html.div
+                  [ cs "mdc-slider__track-marker-container"
+                  ]
+                  ( List.repeat ((round (config.max  - config.min)) // config.steps) <|
+                    styled Html.div
+                    [ cs "mdc-slider__track-marker"
+                    ]
+                    [
+                    ]
+                  )
+                ]
+              else
+                []
+            ]
+          )
+        ,
+          styled Html.div
           [ cs "mdc-slider__thumb-container"
           , Options.many (List.map activateOn_ downs)
           , css "transform" ("translateX(" ++ toString translateX ++ "px) translateX(-50%)")
           , Options.on "transitionend" (Json.succeed (lift Tick))
           ]
-          [ Svg.svg
-            [ Svg.class "mdc-slider__thumb"
-            , Svg.width "21"
-            , Svg.height "21"
-            ]
-            [ Svg.circle
-              [ Svg.cx "10.5"
-              , Svg.cy "10.5"
-              , Svg.r "7.875"
+          ( List.concat
+            [ [ Svg.svg
+                [ Svg.class "mdc-slider__thumb"
+                , Svg.width "21"
+                , Svg.height "21"
+                ]
+                [ Svg.circle
+                  [ Svg.cx "10.5"
+                  , Svg.cy "10.5"
+                  , Svg.r "7.875"
+                  ]
+                  []
+                ]
+              ,
+                styled Html.div
+                [ cs "mdc-slider__focus-ring"
+                ]
+                []
               ]
-              []
+            ,
+              if config.discrete then
+                  [
+                    styled Html.div
+                    [ cs "mdc-slider__pin"
+                    ]
+                    [
+                      styled Html.div
+                      [ cs "mdc-slider__pin-value-marker"
+                      ]
+                      [ text (toString value)
+                      ]
+                    ]
+                  ]
+              else
+                  []
             ]
-
-          , styled Html.div
-            [ cs "mdc-slider__focus-ring"
-            ]
-            []
-
-          , styled Html.div
-            [ cs "mdc-slider__pin"
-            ]
-            [
-              styled Html.div
-              [ cs "mdc-slider__pin-value-marker"
-              ]
-              [ text (toString value)
-              ]
-            ]
-          ]
+          )
         ]
 
 
@@ -444,7 +476,7 @@ targetValue =
     Json.map
        (\ geometry ->
             if geometry.discrete then
-                discretize geometry.steps (computeValue geometry)
+                discretize (Maybe.withDefault 1 geometry.steps) (computeValue geometry)
             else
                 computeValue geometry
        )
@@ -496,7 +528,11 @@ decodeGeometry =
               ( hasClass "mdc-slider--discrete" )
               ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
               ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
-              ( data "steps" (Json.map (String.toInt >> Result.withDefault 1) Json.string) )
+              ( Json.oneOf
+                [ data "steps" (Json.map (Result.toMaybe << String.toInt) Json.string)
+                , Json.succeed Nothing
+                ]
+              )
           )
 
 

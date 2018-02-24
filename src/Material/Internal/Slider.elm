@@ -19,7 +19,7 @@ type alias Geometry =
     , x : Float
 
     , discrete : Bool
-    , steps : Int
+    , steps : Maybe Int
     , min : Float
     , max : Float
     }
@@ -34,5 +34,5 @@ defaultGeometry =
     , discrete = False
     , min = 0
     , max = 100
-    , steps = 1
+    , steps = Nothing
     }
