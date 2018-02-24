@@ -65,18 +65,10 @@ view lift page model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon_
-            [ Toolbar.menu
-            , Drawer.openOn (lift << Mdl) [0] "click"
-            , css "cursor" "pointer"
+          [ Toolbar.menuIcon
+            [ Drawer.openOn (lift << Mdl) [0] "click"
             ]
-            [ styled Html.i
-                  [ cs "material-icons"
-                  , css "pointer-events" "none"
-                  ]
-                  [ text "menu"
-                  ]
-            ]
+            "menu"
           , Toolbar.title
             [ cs "catalog-menu"
             , css "font-family" "'Roboto Mono', monospace"
@@ -140,7 +132,7 @@ view lift page model =
       ]
     ,
       styled Html.div
-      [ Toolbar.fixedAdjust
+      [ Toolbar.fixedAdjust [1] model.mdl
       , css "padding-left" "16px"
       , css "overflow" "auto"
       ]

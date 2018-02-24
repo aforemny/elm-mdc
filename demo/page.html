@@ -23,9 +23,6 @@
       app.ports.scrollTop.subscribe(function() {
           document.scrollingElement.scrollTop = 0;
       });
-      window.addEventListener("scroll", function(event) {
-          app.ports.onScroll.send( { pageX: 0, pageY : window.pageYOffset } )
-      });
     </script>
   </body>
 </html>

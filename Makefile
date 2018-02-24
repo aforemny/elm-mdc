@@ -2,9 +2,8 @@ ELM=elm-make --yes --warn
 PAGES=../elm-mdc-gh-pages
 
 all:
-	mkdir -p build/assets/dialog
+	mkdir -p build/assets
 	rsync -r demo/images build
-	rsync -r demo/assets/dialog build/assets
 	cp node_modules/material-components-web/dist/material-components-web.css build
 	cp demo/page.html build/index.html
 	cp elm-global-events/elm-global-events.js build/elm-global-events.js

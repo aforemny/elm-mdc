@@ -209,7 +209,7 @@ view lift model options nodes =
               [
                 config.icon
                 |> Maybe.map (\ icon ->
-                     [ Icon.view icon [ cs "mdc-button__icon" ]
+                     [ Icon.view [ cs "mdc-button__icon" ] icon
                      ]
                    )
                 |> Maybe.withDefault []

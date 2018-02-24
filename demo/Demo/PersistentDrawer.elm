@@ -123,18 +123,10 @@ view lift page model =
           [ Toolbar.section
             [ Toolbar.alignStart
             ]
-            [ Toolbar.icon_
-              [ Toolbar.menu
-              , css "cursor" "pointer"
-              , Drawer.toggleOn (lift << Mdl) [0] "click"
+            [ Toolbar.menuIcon
+              [ Drawer.toggleOn (lift << Mdl) [0] "click"
               ]
-              [ styled Html.i
-                    [ cs "material-icons"
-                    , css "pointer-events" "none"
-                    ]
-                    [ text "menu"
-                    ]
-              ]
+              "menu"
             , Toolbar.title
               [ cs "catalog-menu"
               , css "font-family" "'Roboto Mono', monospace"

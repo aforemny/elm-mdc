@@ -204,7 +204,7 @@ headlinesCard lift index model =
           , css "height" "auto"
           ]
           [ text "All Business Headlines"
-          , Icon.view "arrow_forward" []
+          , Icon.view [] "arrow_forward"
           ]
         ]
       ]

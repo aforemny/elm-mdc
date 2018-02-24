@@ -545,7 +545,7 @@ twoLineAvatarPlusTextPlusIconExample =
         item primary secondary =
             Lists.li []
             [ Lists.graphic []
-              [ Icon.view "folder" []
+              [ Icon.view [] "folder"
               ]
             , Lists.text []
               [ Html.text primary
@@ -660,7 +660,7 @@ groupsExample =
         item icon primary secondary =
             Lists.li []
             [ Lists.graphic []
-              [ Icon.view icon []
+              [ Icon.view [] icon
               ]
             , Lists.text []
               [ Html.text primary

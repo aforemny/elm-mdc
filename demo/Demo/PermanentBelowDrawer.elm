@@ -22,7 +22,6 @@ import Material.Drawer.Permanent as Drawer
 import Material.Elevation as Elevation
 import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
-import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 
 
@@ -88,7 +87,7 @@ view lift page model =
       , css "flex" "1 1 auto"
       , css "height" "100%"
       , css "box-sizing" "border-box"
-      , Toolbar.fixedAdjust
+      , page.fixedAdjust
       ]
       [ 
         Drawer.render (Mdl >> lift) [0] model.mdl []

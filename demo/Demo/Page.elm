@@ -1,4 +1,4 @@
-module Demo.Page exposing (Page, ToolbarPage(..), Url(..), toolbar, hero)
+module Demo.Page exposing (Page, ToolbarPage(..), Url(..), toolbar, fixedAdjust, hero)
 
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -10,6 +10,7 @@ import Material.Toolbar as Toolbar
 
 type alias Page m =
     { toolbar : String -> Html m
+    , fixedAdjust : Options.Property () m
     , setUrl : Url -> m
     , body : String -> List (Html m) -> Html m
     }
@@ -56,8 +57,6 @@ type ToolbarPage
     | DefaultFlexibleToolbar
     | WaterfallFlexibleToolbar
     | WaterfallToolbarFix
-    | CustomToolbar
-
 
 
 toolbar
@@ -80,24 +79,19 @@ toolbar lift idx mdl setUrl url title =
           [ cs "catalog-back"
           , css "padding-right" "24px"
           ]
-          [ Toolbar.icon_
-            [ Toolbar.menu
-            ]
-            [ case url of
-                  StartPage ->
-                      Html.img
-                      [ Html.src "images/ic_component_24px_white.svg"
-                      ]
-                      []
-                  _ ->
-                      styled Html.i
-                      [ cs "material-icons"
-                      , Options.onClick (setUrl StartPage)
-                      , css "cursor" "pointer"
-                      ]
-                      [ text "arrow_back"
-                      ]
-            ]
+          [ case url of
+              StartPage ->
+                  styled Html.img
+                  [ cs "mdc-toolbar__menu-icon"
+                  , Options.attribute (Html.src "images/ic_component_24px_white.svg")
+                  ]
+                  []
+
+              _ ->
+                  Toolbar.menuIcon
+                  [ Options.onClick (setUrl StartPage)
+                  ]
+                  "arrow_back"
           ]
         , Toolbar.title
           [ cs "cataloge-title"
@@ -113,6 +107,12 @@ toolbar lift idx mdl setUrl url title =
         ]
       ]
     ]
+
+
+
+fixedAdjust : List Int -> Material.Model -> Options.Property c m
+fixedAdjust idx mdl =
+    Toolbar.fixedAdjust idx mdl
 
 
 hero : List (Property c m) -> List (Html m) -> Html m

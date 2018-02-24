@@ -223,7 +223,7 @@ supportingText options =
 
 icon : List (Property m) -> String -> Html m
 icon options icon =
-    styled Html.div ( cs "mdc-grid-tile__icon" :: options ) [ Icon.view icon [] ]
+    styled Html.div ( cs "mdc-grid-tile__icon" :: options ) [ Icon.view [] icon ]
 
 
 primaryContent : List (Property m) -> List (Html m) -> Html m

@@ -5,7 +5,6 @@ module Material.Icon
         , size36
         , size48
         , view
-        , i
         , Property
         , Config
         , defaultConfig
@@ -73,35 +72,10 @@ size48 =
     css "font-size" "48px"
 
 
-{-| View function for icons. Supply the
-[Material Icons Library](https://design.google.com/icons/) name as
-the first argument (replace spaces with underscores). Set the size of the
-icon with the `size..` Styles (default is 24px).  Do not use this function to
-produce clickable icons; use icon buttons in Material.Button.icon for that.
-
-    import Material.Icon as Icon
-
-    icon : Html m
-    icon = Icon.view "trending_flat" [Icon.size48]
+{-| TODO
 -}
-view : String -> List (Property m) -> Html m
-view name options =
+view : List (Property m) -> String -> Html m
+view options name =
     Options.styled Html.i
         (cs "material-icons" :: options)
         [ text name ]
-
-
-{-| Render a default-sized icon with no behaviour. The
-`String` argument must be the name of a [Material Icon](https://design.google.com/icons/)
-(replace spaces with underscores).
-
-I.e., to produce a default size (24xp) "trending flat" icon:
-
-    import Material.Icon as Icon
-
-    icon : Html m
-    icon = Icon.i "trending_flat"
--}
-i : String -> Html m
-i name =
-    view name []

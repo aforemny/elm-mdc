@@ -1,9 +1,11 @@
 module Demo.Toolbar exposing (Model, defaultModel, Msg(..), update, view, subscriptions)
 
 import Demo.Page as Page exposing (Page, ToolbarPage(..))
+import Dict exposing (Dict)
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
+import Material.Button as Button
 import Material.List as Lists
 import Material.Menu as Menu
 import Material.Options as Options exposing (styled, cs, css)
@@ -13,20 +15,17 @@ import Material.Typography as Typography
 
 type alias Model =
     { mdl : Material.Model
-    , scroll : { pageX : Float, pageY : Float }
     }
 
 
 defaultModel : Model
 defaultModel =
     { mdl = Material.defaultModel
-    , scroll = { pageX = 0, pageY = 0 }
     }
 
 
 type Msg m
     = Mdl (Material.Msg m)
-    | Scroll { pageX : Float, pageY : Float }
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
@@ -34,8 +33,6 @@ update lift msg model =
     case msg of
         Mdl msg_ ->
             Material.update (Mdl >> lift) msg_ model
-        Scroll scroll ->
-            ( { model | scroll = scroll }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Maybe ToolbarPage -> Model -> Html m
@@ -61,9 +58,6 @@ view lift page toolbarPage model =
 
         Just WaterfallToolbarFix ->
             waterfallToolbarFix lift model
-
-        Just CustomToolbar ->
-            customToolbar lift model
 
         Nothing ->
             page.body "Toolbar"
@@ -102,20 +96,19 @@ view lift page toolbarPage model =
               , css "display" "flex"
               , css "flex-flow" "row wrap"
               ]
-              [ iframe "Normal Toolbar" "default-toolbar"
-              , iframe "Fixed Toolbar" "fixed-toolbar"
-              , iframe "Fixed Toolbar with Menu" "menu-toolbar"
-              , iframe "Waterfall Toolbar" "waterfall-toolbar"
-              , iframe "Default Flexible Toolbar" "default-flexible-toolbar"
-              , iframe "Waterfall Flexible Toolbar" "waterfall-flexible-toolbar"
-              , iframe "Waterfall Toolbar Fix Last Row" "waterfall-toolbar-fix-last-row"
-              , iframe "Waterfall Flexible Toolbar with Custom Style" "waterfall-flexible-toolbar-custom-style"
+              [ iframe lift [0] model "Normal Toolbar" "default-toolbar"
+              , iframe lift [1] model "Fixed Toolbar" "fixed-toolbar"
+              , iframe lift [2] model "Fixed Toolbar with Menu" "menu-toolbar"
+              , iframe lift [3] model "Waterfall Toolbar" "waterfall-toolbar"
+              , iframe lift [4] model "Default Flexible Toolbar" "default-flexible-toolbar"
+              , iframe lift [5] model "Waterfall Flexible Toolbar" "waterfall-flexible-toolbar"
+              , iframe lift [6] model "Waterfall Toolbar Fix Last Row" "waterfall-toolbar-fix-last-row"
               ]
             ]
 
 
-iframe : String -> String -> Html m
-iframe title sub =
+iframe : (Msg m -> m) -> List Int -> Model -> String -> String -> Html m
+iframe lift index model title sub =
     let
         url =
             "https://aforemny.github.io/elm-mdc/#toolbar/" ++ sub
@@ -129,15 +122,33 @@ iframe title sub =
     ]
     [
       styled Html.h2
-      [ css "font-size" "24px"
+      [ cs "demo-toolbar-example-heading"
+      , css "font-size" "24px"
       , css "margin-bottom" "16px"
+      , css "font-family" "Roboto, sans-serif"
+      , css "font-size" "2.8125rem"
+      , css "line-height" "3rem"
+      , css "font-weight" "400"
+      , css "letter-spacing" "normal"
+      , css "text-transform" "inherit"
       ]
-      [ text title
-      , Html.button [] [ text "Toggle RTL" ]
+      [
+        styled Html.span
+        [ cs "demo-toolbar-example-heading__text"
+        , css "flex-grow" "1"
+        , css "margin-right" "16px"
+        ]
+        [ text title ]
+      ,
+        Button.render (lift << Mdl) index model.mdl
+        [ Button.stroked
+        , Button.dense
+        ]
+        [ text "Toggle RTL"
+        ]
       ]
 
-    , Html.p
-      []
+    , Html.p []
       [ Html.a
         [ Html.href url
         , Html.target "_blank"
@@ -164,29 +175,26 @@ defaultToolbar lift model =
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
-      [
-      ]
-      [ Toolbar.row
-        [
-        ]
+    [
+      Toolbar.render (Mdl >> lift) [0] model.mdl []
+      [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          [ Toolbar.menuIcon [ Options.attribute (Html.href "#") ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+          [ Toolbar.icon [] "file_download"
+          , Toolbar.icon [] "print"
+          , Toolbar.icon [] "bookmark"
           ]
         ]
       ]
-
-    , body
+    ,
+      body [] model
     ]
 
 
@@ -196,28 +204,28 @@ fixedToolbar lift model =
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
+    [
+      Toolbar.render (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
       ]
-      [ Toolbar.row
-        [
-        ]
+      [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          [ Toolbar.menuIcon [] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+          [ Toolbar.icon [] "file_download"
+          , Toolbar.icon [] "print"
+          , Toolbar.icon [] "bookmark"
           ]
         ]
       ]
-    , body
+    ,
+      body [] model
     ]
 
 
@@ -227,41 +235,56 @@ menuToolbar lift model =
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
+    [
+      Toolbar.render (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
       ]
-      [ Toolbar.row
-        [
-        ]
+      [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          [ Toolbar.menuIcon [] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon
-            [ Options.attribute (Html.href "#")
-            , Menu.attach (Mdl >> lift) [0]
+          [ Toolbar.icon [] "file_download"
+          , Toolbar.icon [] "print"
+          ,
+             Toolbar.icon
+            [ Menu.attach (Mdl >> lift) [0]
             ]
             "more_vert"
-          , Menu.render (Mdl >> lift) [0] model.mdl []
-            ( Menu.ul Lists.ul []
-              [ Menu.li Lists.li
-                [
-                ]
-                [ text "Back"
-                ]
+          ,
+            styled Html.div
+            [ cs "menu-anchor"
+            , css "position" "relative"
+            , css "overflow" "visible"
+            ]
+            [ Menu.render (Mdl >> lift) [0] model.mdl
+              [ Menu.anchorCorner Menu.topEndCorner
+              , Menu.anchorMargin
+                  { top = 15
+                  , right = 15
+                  , bottom = 0
+                  , left = 0
+                  }
               ]
-            )
+              ( Menu.ul Lists.ul []
+                [ Menu.li Lists.li [] [ text "Back" ]
+                , Menu.li Lists.li [] [ text "Forward" ]
+                , Menu.li Lists.li [] [ text "Reload" ]
+                , Menu.li Lists.divider [] []
+                , Menu.li Lists.li [] [ text "Save as…" ]
+                ]
+              )
+            ]
           ]
         ]
       ]
-    , body
+    ,
+      body [] model
     ]
 
 
@@ -271,29 +294,32 @@ waterfallToolbar lift model =
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
+    [
+      Toolbar.render (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
-      , Toolbar.waterfall model.scroll.pageY
+      , Toolbar.waterfall
       ]
-      [ Toolbar.row
-        [
-        ]
+      [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          [ Toolbar.menuIcon [] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+          [ Toolbar.icon [] "file_download"
+          , Toolbar.icon [] "print"
+          , Toolbar.icon [] "bookmark"
           ]
         ]
       ]
-    , body
+    ,
+      body
+      [ Toolbar.fixedAdjust [0] model.mdl
+      ]
+      model
     ]
 
 
@@ -303,29 +329,32 @@ defaultFlexibleToolbar lift model =
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
-      [ Toolbar.flexible model.scroll.pageY
+    [
+      Toolbar.render (Mdl >> lift) [0] model.mdl
+      [ Toolbar.flexible
+      , Toolbar.flexibleDefaultBehavior
       , Toolbar.backgroundImage "images/4-3.jpg"
       ]
-      [ Toolbar.row
-        [ css "height" "224px"
-        ]
+      [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          [ Toolbar.menuIcon [] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+          [ Toolbar.icon [] "file_download"
+          , Toolbar.icon [] "print"
+          , Toolbar.icon [] "bookmark"
           ]
         ]
       ]
-    , body
+    ,
+      body [] model
+    ,
+      floatingFooter model
     ]
 
 
@@ -335,29 +364,37 @@ waterfallFlexibleToolbar lift model =
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
+    [
+      Toolbar.render (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
-      , Toolbar.flexible model.scroll.pageY
+      , Toolbar.flexible
+      , Toolbar.flexibleDefaultBehavior
+      , Toolbar.waterfall
       , Toolbar.backgroundImage "images/4-3.jpg"
-      , Toolbar.waterfall model.scroll.pageY
       ]
       [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          [ Toolbar.menuIcon [] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+          [ Toolbar.icon [] "file_download"
+          , Toolbar.icon [] "print"
+          , Toolbar.icon [] "bookmark"
           ]
         ]
       ]
-    , body
+    ,
+      body
+      [ Toolbar.fixedAdjust [0] model.mdl
+      ]
+      model
+    ,
+      floatingFooter model
     ]
 
 
@@ -367,19 +404,19 @@ waterfallToolbarFix lift model =
     [ Typography.typography
     , cs "mdc-toolbar-demo"
     ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
+    [
+      Toolbar.render (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
-      , Toolbar.flexible model.scroll.pageY
+      , Toolbar.flexible
+      , Toolbar.flexibleDefaultBehavior
+      , Toolbar.waterfall
       , Toolbar.backgroundImage "images/4-3.jpg"
-      , Toolbar.waterfall model.scroll.pageY
       ]
-      [ Toolbar.row
-        [ css "height" "224px"
-        ]
+      [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+          [ Toolbar.menuIcon [] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         ]
@@ -387,66 +424,70 @@ waterfallToolbarFix lift model =
         [ Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+          [ Toolbar.icon [] "file_download"
+          , Toolbar.icon [] "print"
+          , Toolbar.icon [] "more_vert"
           ]
         ]
       ]
-    , body
-    ]
-
-
-customToolbar : (Msg m -> m) -> Model -> Html m
-customToolbar lift model =
-    styled Html.div
-    [ Typography.typography
-    , cs "mdc-toolbar-demo"
-    ]
-    [ Toolbar.render (Mdl >> lift) [0] model.mdl
-      [ Toolbar.fixed
-      , Toolbar.waterfall model.scroll.pageY
-      , Toolbar.flexible model.scroll.pageY
-      , Toolbar.fixedLastRow
+    ,
+      body
+      [ Toolbar.fixedAdjust [0] model.mdl
       ]
-      [ Toolbar.row
-        [ css "height" "224px"
-        ]
-        [ Toolbar.section
-          [ Toolbar.alignStart
-          ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
-          , Toolbar.title [] [ text "Title" ]
-          ]
-        , Toolbar.section
-          [ Toolbar.alignEnd
-          ]
-          [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-          , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
-          ]
-        ]
-      ]
-    , body
+      model
     ]
 
 
-body : Html msg
-body =
-    Html.div []
+body : List (Options.Property c m) -> Model -> Html m
+body options model =
+    styled Html.div options
     ( styled Html.p
       [ cs "demo-paragraph"
+      , css "padding" "20px 28px"
+      , css "margin" "0"
       ]
-      [ text """Pellentesque habitant morbi tristique senectus et netus et
+      [ text """
+Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
+turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor
+sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
+mi vitae est. Pellentesque habitant morbi tristique senectus et netus et
 malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
 ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-semper. Aenean ultricies mi vitae est. Pellentesque habitant morbi tristique
-senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam,
-feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet
-quam egestas semper. Aenean ultricies mi vitae est."""
+semper. Aenean ultricies mi vitae est.
+        """
       ]
-      |> List.repeat 3
+      |> List.repeat 18
     )
+
+
+floatingFooter : Model -> Html m
+floatingFooter model =
+    let
+        flexibleExpansionRatio =
+            Dict.get [0] model.mdl.toolbar
+            |> Maybe.andThen (\ model ->
+                   Maybe.map ((,) model.scrollTop) model.calculations
+               )
+            |> Maybe.map (\ ( scrollTop, calculations ) ->
+                   Toolbar.flexibleExpansionRatio calculations scrollTop
+               )
+            |> Maybe.withDefault 1
+            |> (((*) 100) >> round >> toFloat >> (flip (/) 100))
+    in
+    styled Html.footer
+    [ cs "demo-toolbar-floating-footer"
+    , css "position" "fixed"
+    , css "bottom" "0"
+    , css "width" "100%"
+    , css "text-align" "center"
+    , css "padding" "8px"
+    , css "color" "white"
+    , css "background-color" "rgba(0, 0, 0, 0.7)"
+    ]
+    [ styled Html.span []
+      [ text ("Flexible Expansion Ratio: " ++ toString flexibleExpansionRatio)
+      ]
+    ]
 
 
 subscriptions : (Msg m -> m) -> Model -> Sub m

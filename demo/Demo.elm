@@ -43,8 +43,6 @@ import RouteUrl as Routing
 
 port scrollTop : () -> Cmd msg
 
-port onScroll : ({ pageX : Float, pageY : Float } -> msg) -> Sub msg
-
 
 type alias Model =
     { mdl : Material.Model
@@ -113,10 +111,7 @@ defaultModel =
 
 type Msg
     = Mdl (Material.Msg Msg)
-
     | SetUrl Url
-    | Scroll { pageX : Float, pageY : Float }
-
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -153,13 +148,6 @@ update msg model =
 
         SetUrl url ->
             { model | url = url } ! [ scrollTop () ]
-
-        Scroll scroll ->
-            let
-                ( toolbar, effects ) =
-                    Demo.Toolbar.update ToolbarMsg (Demo.Toolbar.Scroll scroll) model.toolbar
-            in
-            ( { model | toolbar = toolbar }, effects )
 
         ButtonsMsg msg_ ->
             let
@@ -355,6 +343,7 @@ view_ model =
     let
         page =
             { toolbar = Page.toolbar Mdl [0] model.mdl SetUrl model.url
+            , fixedAdjust = Page.fixedAdjust [0] model.mdl
             , setUrl = SetUrl
             , body =
                 \title nodes ->
@@ -367,7 +356,7 @@ view_ model =
                 ( List.concat
                   [ [ Page.toolbar Mdl [0] model.mdl SetUrl model.url title
                     ]
-                  , [ styled Html.div [ Toolbar.fixedAdjust ] []
+                  , [ styled Html.div [ Toolbar.fixedAdjust [0] model.mdl ] []
                     ]
                   , nodes
                   ]
@@ -511,7 +500,6 @@ urlOf model =
         Toolbar (Just DefaultFlexibleToolbar) -> "#toolbar/default-flexible-toolbar"
         Toolbar (Just WaterfallFlexibleToolbar) -> "#toolbar/waterfall-flexible-toolbar"
         Toolbar (Just WaterfallToolbarFix) -> "#toolbar/waterfall-toolbar-fix-last-row"
-        Toolbar (Just CustomToolbar) -> "#toolbar/waterfall-flexible-toolbar-custom-style"
         Typography -> "#typography"
         Error404 requestedHash -> requestedHash
 
@@ -567,7 +555,6 @@ location2messages location =
           "#toolbar/default-flexible-toolbar" -> Toolbar (Just DefaultFlexibleToolbar)
           "#toolbar/waterfall-flexible-toolbar" -> Toolbar (Just WaterfallFlexibleToolbar)
           "#toolbar/waterfall-toolbar-fix-last-row" -> Toolbar (Just WaterfallToolbarFix)
-          "#toolbar/waterfall-flexible-toolbar-custom-style" -> Toolbar (Just CustomToolbar)
           "#typography" -> Typography
           _ -> Error404 location.hash
     ]
@@ -607,7 +594,6 @@ subscriptions model =
     Sub.batch
         [
           Material.subscriptions Mdl model
-        , onScroll Scroll
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.GridList.subscriptions GridListMsg model.gridList
         , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid

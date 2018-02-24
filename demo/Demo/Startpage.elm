@@ -5,7 +5,6 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
-import Material.Toolbar as Toolbar
 
 
 view : Page m -> Html m
@@ -16,7 +15,7 @@ view page =
       page.toolbar "elm-mdc demo"
 
     , styled Html.nav
-      [ Toolbar.fixedAdjust
+      [ page.fixedAdjust
       ]
       [ Lists.ul
         [ Lists.twoLine
