@@ -177,10 +177,10 @@ top content =
       [ Html.type_ "text/css"
       ]
       [ [ "https://fonts.googleapis.com/css?family=Roboto+Mono"
-        , "https://fonts.googleapis.com/icon?family=Material+Icons"
         , "https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+        , "https://fonts.googleapis.com/icon?family=Material+Icons"
+        , "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
         , "https://aforemny.github.io/elm-mdc/material-components-web.css"
-        , "https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.css"
         ]
         |> List.map (\url ->
                "@import url(" ++ url ++ ");"
@@ -191,7 +191,13 @@ top content =
 
     , Html.node "script"
       [ Html.type_ "text/javascript"
-      , Html.src "https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.js"
+      , Html.src "https://aforemny.github.io/elm-mdc/elm-global-events.js"
+      ]
+      []
+
+    , Html.node "script"
+      [ Html.type_ "text/javascript"
+      , Html.src "https://aforemny.github.io/elm-mdc/elm-mdc.js"
       ]
       []
     ]
