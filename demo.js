@@ -9068,15 +9068,15 @@ var _debois$elm_mdl$Material_Internal_Textfield$Focus = function (a) {
 };
 var _debois$elm_mdl$Material_Internal_Textfield$Blur = {ctor: 'Blur'};
 
-var _debois$elm_mdl$Material_Internal_Toolbar$defaultConfig = {flexible: false, waterfall: false, backgroundImage: _elm_lang$core$Maybe$Nothing, fixedLastRow: false};
+var _debois$elm_mdl$Material_Internal_Toolbar$defaultConfig = {fixed: false, fixedLastRowOnly: false, flexible: false, waterfall: false, backgroundImage: _elm_lang$core$Maybe$Nothing, fixedLastRow: false};
 var _debois$elm_mdl$Material_Internal_Toolbar$defaultGeometry = {getRowHeight: 0, getFirstRowElementOffsetHeight: 0, getOffsetHeight: 0};
 var _debois$elm_mdl$Material_Internal_Toolbar$Geometry = F3(
 	function (a, b, c) {
 		return {getRowHeight: a, getFirstRowElementOffsetHeight: b, getOffsetHeight: c};
 	});
-var _debois$elm_mdl$Material_Internal_Toolbar$Config = F4(
-	function (a, b, c, d) {
-		return {flexible: a, waterfall: b, backgroundImage: c, fixedLastRow: d};
+var _debois$elm_mdl$Material_Internal_Toolbar$Config = F6(
+	function (a, b, c, d, e, f) {
+		return {fixed: a, fixedLastRowOnly: b, flexible: c, waterfall: d, backgroundImage: e, fixedLastRow: f};
 	});
 var _debois$elm_mdl$Material_Internal_Toolbar$Scroll = F2(
 	function (a, b) {
@@ -18308,13 +18308,24 @@ var _debois$elm_mdl$Material_Toolbar$flexible = _debois$elm_mdl$Material_Interna
 			config,
 			{flexible: true});
 	});
+var _debois$elm_mdl$Material_Toolbar$fixedLastRowOnly = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fixedLastRowOnly: true});
+	});
+var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fixed: true});
+	});
 var _debois$elm_mdl$Material_Toolbar$waterfall = _debois$elm_mdl$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{waterfall: true});
 	});
-var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Options$cs('mdc-toolbar--fixed');
 var _debois$elm_mdl$Material_Toolbar$defaultConfig = _debois$elm_mdl$Material_Internal_Toolbar$defaultConfig;
 var _debois$elm_mdl$Material_Toolbar$resize = F2(
 	function (geometry, calculations) {
@@ -18520,7 +18531,7 @@ var _debois$elm_mdl$Material_Toolbar$view = F4(
 						_elm_lang$core$String$split,
 						'.',
 						_elm_lang$core$Basics$toString(height))));
-			var fontSize = config.flexible ? (((maxTitleSize - minTitleSize) * flexibleExpansionRatio) + minTitleSize) : minTitleSize;
+			var fontSize = ((maxTitleSize - minTitleSize) * flexibleExpansionRatio) + minTitleSize;
 			var node = A3(
 				_elm_lang$html$Html$node,
 				'style',
@@ -18533,30 +18544,41 @@ var _debois$elm_mdl$Material_Toolbar$view = F4(
 					ctor: '::',
 					_0: _elm_lang$html$Html$text(
 						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'\n.',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								className,
-								A2(
+							_elm_lang$core$String$join,
+							'\n',
+							{
+								ctor: '::',
+								_0: config.fixed ? A2(
 									_elm_lang$core$Basics_ops['++'],
-									' .mdc-toolbar__row:nth-child(1) {\n    height: ',
+									'\n.',
 									A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(height),
+										className,
 										A2(
 											_elm_lang$core$Basics_ops['++'],
-											'px !important;\n}\n.',
+											' .mdc-toolbar__row:nth-child(1) {\n  height: ',
 											A2(
 												_elm_lang$core$Basics_ops['++'],
-												className,
+												_elm_lang$core$Basics$toString(height),
+												'px !important;\n}\n                          ')))) : '',
+								_1: {
+									ctor: '::',
+									_0: config.flexible ? A2(
+										_elm_lang$core$Basics_ops['++'],
+										'\n.',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											className,
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												' .mdc-toolbar__title {\n  font-size: ',
 												A2(
 													_elm_lang$core$Basics_ops['++'],
-													' .mdc-toolbar__title {\n    font-size: ',
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(fontSize),
-														'rem !important;\n}\n                    '))))))))),
+													_elm_lang$core$Basics$toString(fontSize),
+													'rem !important;\n}\n                          ')))) : '',
+									_1: {ctor: '[]'}
+								}
+							})),
 					_1: {ctor: '[]'}
 				});
 			return {className: className, node: node};
@@ -18578,44 +18600,51 @@ var _debois$elm_mdl$Material_Toolbar$view = F4(
 						ctor: '::',
 						_0: A2(
 							_debois$elm_mdl$Material_Options$when,
-							config.flexible,
-							_debois$elm_mdl$Material_Options$many(
-								{
-									ctor: '::',
-									_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible'),
-									_1: {
-										ctor: '::',
-										_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-default-behavior'),
-										_1: {ctor: '[]'}
-									}
-								})),
+							config.fixedLastRowOnly,
+							_debois$elm_mdl$Material_Options$cs('mdc-toolbar--fixed-last-row-only')),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_debois$elm_mdl$Material_Options$when,
-								config.waterfall,
-								_debois$elm_mdl$Material_Options$cs('mdc-toolbar--waterfall')),
+								config.flexible,
+								_debois$elm_mdl$Material_Options$many(
+									{
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible'),
+										_1: {
+											ctor: '::',
+											_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar--flexible-default-behavior'),
+											_1: {ctor: '[]'}
+										}
+									})),
 							_1: {
 								ctor: '::',
-								_0: initOn('ElmMdcInit'),
+								_0: A2(
+									_debois$elm_mdl$Material_Options$when,
+									config.waterfall,
+									_debois$elm_mdl$Material_Options$cs('mdc-toolbar--waterfall')),
 								_1: {
 									ctor: '::',
-									_0: initOn('ElmMdcWindowResize'),
+									_0: initOn('ElmMdcInit'),
 									_1: {
 										ctor: '::',
-										_0: function (_p9) {
-											return _debois$elm_mdl$Material_Options$many(
-												A2(_elm_lang$core$List$map, _debois$elm_mdl$Material_Options$attribute, _p9));
-										}(
-											_debois$elm_mdl$GlobalEvents$onScroll(
-												A2(
-													_elm_lang$core$Json_Decode$map,
-													function (_p10) {
-														return lift(
-															A2(_debois$elm_mdl$Material_Internal_Toolbar$Scroll, config, _p10));
-													},
-													_debois$elm_mdl$Material_Toolbar$decodeScrollTop))),
-										_1: {ctor: '::', _0: flexibleBehavior, _1: options}
+										_0: initOn('ElmMdcWindowResize'),
+										_1: {
+											ctor: '::',
+											_0: function (_p9) {
+												return _debois$elm_mdl$Material_Options$many(
+													A2(_elm_lang$core$List$map, _debois$elm_mdl$Material_Options$attribute, _p9));
+											}(
+												_debois$elm_mdl$GlobalEvents$onScroll(
+													A2(
+														_elm_lang$core$Json_Decode$map,
+														function (_p10) {
+															return lift(
+																A2(_debois$elm_mdl$Material_Internal_Toolbar$Scroll, config, _p10));
+														},
+														_debois$elm_mdl$Material_Toolbar$decodeScrollTop))),
+											_1: {ctor: '::', _0: flexibleBehavior, _1: options}
+										}
 									}
 								}
 							}
@@ -42641,14 +42670,18 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = F2(
 						_0: _debois$elm_mdl$Material_Toolbar$fixed,
 						_1: {
 							ctor: '::',
-							_0: _debois$elm_mdl$Material_Toolbar$flexible,
+							_0: _debois$elm_mdl$Material_Toolbar$fixedLastRowOnly,
 							_1: {
 								ctor: '::',
-								_0: _debois$elm_mdl$Material_Toolbar$backgroundImage('images/4-3.jpg'),
+								_0: _debois$elm_mdl$Material_Toolbar$flexible,
 								_1: {
 									ctor: '::',
 									_0: _debois$elm_mdl$Material_Toolbar$waterfall,
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _debois$elm_mdl$Material_Toolbar$backgroundImage('images/4-3.jpg'),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
