@@ -22341,7 +22341,8 @@ var _debois$elm_mdl$Demo_Drawer$example = F2(
 								_elm_lang$html$Html$a,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$href(url),
+									_0: _elm_lang$html$Html_Attributes$href(
+										A2(_elm_lang$core$Basics_ops['++'], '/elm-mdc', url)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$target('_blank'),
