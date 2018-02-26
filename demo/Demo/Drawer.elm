@@ -62,7 +62,7 @@ example label url =
       ]
     ,
       styled Html.iframe
-      [ Options.attribute (Html.src url)
+      [ Options.attribute (Html.src ("https://aforemny.github.io/elm-mdc" ++ url))
       , css "height" "600px"
       , css "width" "100vw"
       , css "max-width" "780px"
