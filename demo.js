@@ -9068,15 +9068,21 @@ var _debois$elm_mdl$Material_Internal_Textfield$Focus = function (a) {
 };
 var _debois$elm_mdl$Material_Internal_Textfield$Blur = {ctor: 'Blur'};
 
-var _debois$elm_mdl$Material_Internal_Toolbar$defaultConfig = {fixed: false, fixedLastrow: false, fixedLastRowOnly: false, flexible: false, useFlexibleDefaultBehavior: false, waterfall: false, backgroundImage: _elm_lang$core$Maybe$Nothing};
-var _debois$elm_mdl$Material_Internal_Toolbar$defaultGeometry = {getRowHeight: 0, getFirstRowElementOffsetHeight: 0, getOffsetHeight: 0};
-var _debois$elm_mdl$Material_Internal_Toolbar$Geometry = F3(
-	function (a, b, c) {
-		return {getRowHeight: a, getFirstRowElementOffsetHeight: b, getOffsetHeight: c};
+var _debois$elm_mdl$Material_Internal_Toolbar$Model = F4(
+	function (a, b, c, d) {
+		return {geometry: a, scrollTop: b, calculations: c, config: d};
+	});
+var _debois$elm_mdl$Material_Internal_Toolbar$Calculations = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {toolbarRowHeight: a, toolbarRatio: b, flexibleExpansionRatio: c, maxTranslateYRatio: d, scrollThresholdRatio: e, toolbarHeight: f, flexibleExpansionHeight: g, maxTranslateYDistance: h, scrollThreshold: i};
 	});
 var _debois$elm_mdl$Material_Internal_Toolbar$Config = F7(
 	function (a, b, c, d, e, f, g) {
 		return {fixed: a, fixedLastrow: b, fixedLastRowOnly: c, flexible: d, useFlexibleDefaultBehavior: e, waterfall: f, backgroundImage: g};
+	});
+var _debois$elm_mdl$Material_Internal_Toolbar$Geometry = F3(
+	function (a, b, c) {
+		return {getRowHeight: a, getFirstRowElementOffsetHeight: b, getOffsetHeight: c};
 	});
 var _debois$elm_mdl$Material_Internal_Toolbar$Scroll = F2(
 	function (a, b) {
@@ -18201,23 +18207,101 @@ var _debois$elm_mdl$Material_Textfield$Model = F5(
 		return {focused: a, isDirty: b, value: c, ripple: d, geometry: e};
 	});
 
-var _debois$elm_mdl$Material_Toolbar$decodeScrollTop = _debois$elm_dom$DOM$target(
-	A2(
-		_elm_lang$core$Json_Decode$at,
+var _debois$elm_mdl$Material_Toolbar$icon = F2(
+	function (options, icon) {
+		return A2(
+			_debois$elm_mdl$Material_Icon$view,
+			{
+				ctor: '::',
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__icon'),
+				_1: options
+			},
+			icon);
+	});
+var _debois$elm_mdl$Material_Toolbar$title = function (options) {
+	return A2(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$span,
 		{
 			ctor: '::',
-			_0: 'ownerDocument',
-			_1: {
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__title'),
+			_1: options
+		});
+};
+var _debois$elm_mdl$Material_Toolbar$menuIcon = F2(
+	function (options, icon) {
+		return A2(
+			_debois$elm_mdl$Material_Icon$view,
+			{
 				ctor: '::',
-				_0: 'defaultView',
-				_1: {
-					ctor: '::',
-					_0: 'scrollY',
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		_elm_lang$core$Json_Decode$float));
+				_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__menu-icon'),
+				_1: options
+			},
+			icon);
+	});
+var _debois$elm_mdl$Material_Toolbar$shrinkToFit = _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section--shrink-to-fit');
+var _debois$elm_mdl$Material_Toolbar$alignEnd = _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section--align-end');
+var _debois$elm_mdl$Material_Toolbar$alignStart = _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section--align-start');
+var _debois$elm_mdl$Material_Toolbar$section = function (options) {
+	return A2(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$section,
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section'),
+			_1: options
+		});
+};
+var _debois$elm_mdl$Material_Toolbar$row = function (options) {
+	return A2(
+		_debois$elm_mdl$Material_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__row'),
+			_1: options
+		});
+};
+var _debois$elm_mdl$Material_Toolbar$backgroundImage = function (backgroundImage) {
+	return _debois$elm_mdl$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					backgroundImage: _elm_lang$core$Maybe$Just(backgroundImage)
+				});
+		});
+};
+var _debois$elm_mdl$Material_Toolbar$fixedLastRow = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fixedLastrow: true});
+	});
+var _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{useFlexibleDefaultBehavior: true});
+	});
+var _debois$elm_mdl$Material_Toolbar$flexible = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{flexible: true});
+	});
+var _debois$elm_mdl$Material_Toolbar$waterfall = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{waterfall: true});
+	});
+var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fixed: true});
+	});
 var _debois$elm_mdl$Material_Toolbar$setKeyHeights = F2(
 	function (geometry, calculations) {
 		var toolbarRowHeight = geometry.getRowHeight;
@@ -18246,102 +18330,25 @@ var _debois$elm_mdl$Material_Toolbar$adjustElementStyles = F2(
 					_elm_lang$core$Basics$toString(marginTop),
 					'px'))) : _elm_lang$core$Maybe$Nothing;
 	});
-var _debois$elm_mdl$Material_Toolbar$flexibleDefaultBehavior = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{useFlexibleDefaultBehavior: true});
-	});
-var _debois$elm_mdl$Material_Toolbar$shrinkToFit = _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section--shrink-to-fit');
-var _debois$elm_mdl$Material_Toolbar$alignEnd = _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section--align-end');
-var _debois$elm_mdl$Material_Toolbar$alignStart = _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section--align-start');
-var _debois$elm_mdl$Material_Toolbar$section = function (options) {
-	return A2(
-		_debois$elm_mdl$Material_Options$styled,
-		_elm_lang$html$Html$section,
+var _debois$elm_mdl$Material_Toolbar$decodeScrollTop = _debois$elm_dom$DOM$target(
+	A2(
+		_elm_lang$core$Json_Decode$at,
 		{
 			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__section'),
-			_1: options
-		});
-};
-var _debois$elm_mdl$Material_Toolbar$row = function (options) {
-	return A2(
-		_debois$elm_mdl$Material_Options$styled,
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__row'),
-			_1: options
-		});
-};
-var _debois$elm_mdl$Material_Toolbar$title = function (options) {
-	return A2(
-		_debois$elm_mdl$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__title'),
-			_1: options
-		});
-};
-var _debois$elm_mdl$Material_Toolbar$menuIcon = F2(
-	function (options, icon) {
-		return A2(
-			_debois$elm_mdl$Material_Icon$view,
-			{
+			_0: 'ownerDocument',
+			_1: {
 				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__menu-icon'),
-				_1: options
-			},
-			icon);
-	});
-var _debois$elm_mdl$Material_Toolbar$icon = F2(
-	function (options, icon) {
-		return A2(
-			_debois$elm_mdl$Material_Icon$view,
-			{
-				ctor: '::',
-				_0: _debois$elm_mdl$Material_Options$cs('mdc-toolbar__icon'),
-				_1: options
-			},
-			icon);
-	});
-var _debois$elm_mdl$Material_Toolbar$fixedLastRow = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{fixedLastrow: true});
-	});
-var _debois$elm_mdl$Material_Toolbar$backgroundImage = function (backgroundImage) {
-	return _debois$elm_mdl$Material_Internal_Options$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{
-					backgroundImage: _elm_lang$core$Maybe$Just(backgroundImage)
-				});
-		});
-};
-var _debois$elm_mdl$Material_Toolbar$flexible = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{flexible: true});
-	});
-var _debois$elm_mdl$Material_Toolbar$fixed = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{fixed: true});
-	});
-var _debois$elm_mdl$Material_Toolbar$waterfall = _debois$elm_mdl$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{waterfall: true});
-	});
-var _debois$elm_mdl$Material_Toolbar$defaultConfig = _debois$elm_mdl$Material_Internal_Toolbar$defaultConfig;
+				_0: 'defaultView',
+				_1: {
+					ctor: '::',
+					_0: 'scrollY',
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		_elm_lang$core$Json_Decode$float));
+var _debois$elm_mdl$Material_Toolbar$defaultConfig = {fixed: false, fixedLastrow: false, fixedLastRowOnly: false, flexible: false, useFlexibleDefaultBehavior: false, waterfall: false, backgroundImage: _elm_lang$core$Maybe$Nothing};
+var _debois$elm_mdl$Material_Toolbar$defaultGeometry = {getRowHeight: 0, getFirstRowElementOffsetHeight: 0, getOffsetHeight: 0};
 var _debois$elm_mdl$Material_Toolbar$defaultCalculations = {toolbarRowHeight: 0, toolbarRatio: 0, flexibleExpansionRatio: 0, maxTranslateYRatio: 0, scrollThresholdRatio: 0, toolbarHeight: 0, flexibleExpansionHeight: 0, maxTranslateYDistance: 0, scrollThreshold: 0};
 var _debois$elm_mdl$Material_Toolbar$initKeyRatio = F2(
 	function (config, geometry) {
@@ -18408,6 +18415,26 @@ var _debois$elm_mdl$Material_Toolbar$update = F2(
 		}
 	});
 var _debois$elm_mdl$Material_Toolbar$defaultModel = {geometry: _elm_lang$core$Maybe$Nothing, scrollTop: 0, calculations: _elm_lang$core$Maybe$Nothing, config: _elm_lang$core$Maybe$Nothing};
+var _debois$elm_mdl$Material_Toolbar$_p4 = A3(
+	_debois$elm_mdl$Material_Component$indexed,
+	function (_) {
+		return _.toolbar;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{toolbar: x});
+		}),
+	_debois$elm_mdl$Material_Toolbar$defaultModel);
+var _debois$elm_mdl$Material_Toolbar$get = _debois$elm_mdl$Material_Toolbar$_p4._0;
+var _debois$elm_mdl$Material_Toolbar$set = _debois$elm_mdl$Material_Toolbar$_p4._1;
+var _debois$elm_mdl$Material_Toolbar$react = A4(
+	_debois$elm_mdl$Material_Component$react,
+	_debois$elm_mdl$Material_Toolbar$get,
+	_debois$elm_mdl$Material_Toolbar$set,
+	_debois$elm_mdl$Material_Msg$ToolbarMsg,
+	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Toolbar$update));
 var _debois$elm_mdl$Material_Toolbar$fixedAdjust = F2(
 	function (index, store) {
 		var model = A2(
@@ -18416,9 +18443,9 @@ var _debois$elm_mdl$Material_Toolbar$fixedAdjust = F2(
 			A2(_elm_lang$core$Dict$get, index, store.toolbar));
 		var styles = A2(
 			_elm_lang$core$Maybe$andThen,
-			function (_p4) {
-				var _p5 = _p4;
-				return A2(_debois$elm_mdl$Material_Toolbar$adjustElementStyles, _p5._0, _p5._1);
+			function (_p5) {
+				var _p6 = _p5;
+				return A2(_debois$elm_mdl$Material_Toolbar$adjustElementStyles, _p6._0, _p6._1);
 			},
 			A3(
 				_elm_lang$core$Maybe$map2,
@@ -18439,26 +18466,6 @@ var _debois$elm_mdl$Material_Toolbar$fixedAdjust = F2(
 				}
 			});
 	});
-var _debois$elm_mdl$Material_Toolbar$_p6 = A3(
-	_debois$elm_mdl$Material_Component$indexed,
-	function (_) {
-		return _.toolbar;
-	},
-	F2(
-		function (x, y) {
-			return _elm_lang$core$Native_Utils.update(
-				y,
-				{toolbar: x});
-		}),
-	_debois$elm_mdl$Material_Toolbar$defaultModel);
-var _debois$elm_mdl$Material_Toolbar$get = _debois$elm_mdl$Material_Toolbar$_p6._0;
-var _debois$elm_mdl$Material_Toolbar$set = _debois$elm_mdl$Material_Toolbar$_p6._1;
-var _debois$elm_mdl$Material_Toolbar$react = A4(
-	_debois$elm_mdl$Material_Component$react,
-	_debois$elm_mdl$Material_Toolbar$get,
-	_debois$elm_mdl$Material_Toolbar$set,
-	_debois$elm_mdl$Material_Msg$ToolbarMsg,
-	_debois$elm_mdl$Material_Component$generalise(_debois$elm_mdl$Material_Toolbar$update));
 var _debois$elm_mdl$Material_Toolbar$numbers = {maxTitleSize: 2.125, minTitleSize: 1.25, toolbarRowHeight: 64, toolbarRowMobileHeight: 56, toolbarMobileBreakpoint: 600};
 var _debois$elm_mdl$Material_Toolbar$decodeGeometry = function () {
 	var getOffsetHeight = _debois$elm_dom$DOM$target(_debois$elm_dom$DOM$offsetHeight);
@@ -18594,7 +18601,7 @@ var _debois$elm_mdl$Material_Toolbar$toolbarStyles = F4(
 			elementStylesDefaultBehavior: elementStylesDefaultBehavior
 		};
 	});
-var _debois$elm_mdl$Material_Toolbar$view = F4(
+var _debois$elm_mdl$Material_Toolbar$toolbar = F4(
 	function (lift, model, options, nodes) {
 		var _p9 = A2(_debois$elm_mdl$Material_Internal_Options$collect, _debois$elm_mdl$Material_Toolbar$defaultConfig, options);
 		var summary = _p9;
@@ -18901,15 +18908,7 @@ var _debois$elm_mdl$Material_Toolbar$view = F4(
 					_1: {ctor: '[]'}
 				}));
 	});
-var _debois$elm_mdl$Material_Toolbar$render = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Toolbar$get, _debois$elm_mdl$Material_Toolbar$view, _debois$elm_mdl$Material_Msg$ToolbarMsg);
-var _debois$elm_mdl$Material_Toolbar$Model = F4(
-	function (a, b, c, d) {
-		return {geometry: a, scrollTop: b, calculations: c, config: d};
-	});
-var _debois$elm_mdl$Material_Toolbar$Calculations = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {toolbarRowHeight: a, toolbarRatio: b, flexibleExpansionRatio: c, maxTranslateYRatio: d, scrollThresholdRatio: e, toolbarHeight: f, flexibleExpansionHeight: g, maxTranslateYDistance: h, scrollThreshold: i};
-	});
+var _debois$elm_mdl$Material_Toolbar$view = A3(_debois$elm_mdl$Material_Component$render, _debois$elm_mdl$Material_Toolbar$get, _debois$elm_mdl$Material_Toolbar$toolbar, _debois$elm_mdl$Material_Msg$ToolbarMsg);
 
 var _debois$elm_mdl$Material$top = function (content) {
 	return A2(
@@ -19290,7 +19289,7 @@ var _debois$elm_mdl$Demo_Page$StartPage = {ctor: 'StartPage'};
 var _debois$elm_mdl$Demo_Page$toolbar = F6(
 	function (lift, idx, mdl, setUrl, url, title) {
 		return A5(
-			_debois$elm_mdl$Material_Toolbar$render,
+			_debois$elm_mdl$Material_Toolbar$view,
 			lift,
 			idx,
 			mdl,
@@ -30867,7 +30866,7 @@ var _debois$elm_mdl$Demo_PermanentAboveDrawer$view = F3(
 						{
 							ctor: '::',
 							_0: A5(
-								_debois$elm_mdl$Material_Toolbar$render,
+								_debois$elm_mdl$Material_Toolbar$view,
 								function (_p3) {
 									return lift(
 										_debois$elm_mdl$Demo_PermanentAboveDrawer$Mdl(_p3));
@@ -32089,7 +32088,7 @@ var _debois$elm_mdl$Demo_PersistentDrawer$view = F3(
 						{
 							ctor: '::',
 							_0: A5(
-								_debois$elm_mdl$Material_Toolbar$render,
+								_debois$elm_mdl$Material_Toolbar$view,
 								function (_p3) {
 									return lift(
 										_debois$elm_mdl$Demo_PersistentDrawer$Mdl(_p3));
@@ -37173,7 +37172,7 @@ var _debois$elm_mdl$Demo_Tabs$example6 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_debois$elm_mdl$Material_Toolbar$render,
+								_debois$elm_mdl$Material_Toolbar$view,
 								function (_p9) {
 									return lift(
 										_debois$elm_mdl$Demo_Tabs$Mdl(_p9));
@@ -37309,7 +37308,7 @@ var _debois$elm_mdl$Demo_Tabs$example7 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_debois$elm_mdl$Material_Toolbar$render,
+								_debois$elm_mdl$Material_Toolbar$view,
 								function (_p11) {
 									return lift(
 										_debois$elm_mdl$Demo_Tabs$Mdl(_p11));
@@ -37453,7 +37452,7 @@ var _debois$elm_mdl$Demo_Tabs$example8 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_debois$elm_mdl$Material_Toolbar$render,
+								_debois$elm_mdl$Material_Toolbar$view,
 								function (_p13) {
 									return lift(
 										_debois$elm_mdl$Demo_Tabs$Mdl(_p13));
@@ -37597,7 +37596,7 @@ var _debois$elm_mdl$Demo_Tabs$example9 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_debois$elm_mdl$Material_Toolbar$render,
+								_debois$elm_mdl$Material_Toolbar$view,
 								function (_p15) {
 									return lift(
 										_debois$elm_mdl$Demo_Tabs$Mdl(_p15));
@@ -37754,7 +37753,7 @@ var _debois$elm_mdl$Demo_Tabs$example10 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_debois$elm_mdl$Material_Toolbar$render,
+								_debois$elm_mdl$Material_Toolbar$view,
 								function (_p17) {
 									return lift(
 										_debois$elm_mdl$Demo_Tabs$Mdl(_p17));
@@ -38232,7 +38231,7 @@ var _debois$elm_mdl$Demo_TemporaryDrawer$view = F3(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p2) {
 						return lift(
 							_debois$elm_mdl$Demo_TemporaryDrawer$Mdl(_p2));
@@ -41675,6 +41674,11 @@ var _debois$elm_mdl$Demo_Theme$view = F3(
 	});
 
 var _debois$elm_mdl$Demo_Toolbar$floatingFooter = function (model) {
+	var getFlexibleExpansionRatio = F2(
+		function (calculations, scrollTop) {
+			var delta = 1.0e-4;
+			return A2(_elm_lang$core$Basics$max, 0, 1 - (scrollTop / (calculations.flexibleExpansionHeight + delta)));
+		});
 	var flexibleExpansionRatio = function (_p0) {
 		return A3(
 			_elm_lang$core$Basics$flip,
@@ -41700,7 +41704,7 @@ var _debois$elm_mdl$Demo_Toolbar$floatingFooter = function (model) {
 				_elm_lang$core$Maybe$map,
 				function (_p1) {
 					var _p2 = _p1;
-					return A2(_debois$elm_mdl$Material_Toolbar$flexibleExpansionRatio, _p2._1, _p2._0);
+					return A2(getFlexibleExpansionRatio, _p2._1, _p2._0);
 				},
 				A2(
 					_elm_lang$core$Maybe$andThen,
@@ -42019,7 +42023,7 @@ var _debois$elm_mdl$Demo_Toolbar$defaultToolbar = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p6) {
 						return lift(
 							_debois$elm_mdl$Demo_Toolbar$Mdl(_p6));
@@ -42132,7 +42136,7 @@ var _debois$elm_mdl$Demo_Toolbar$fixedToolbar = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p7) {
 						return lift(
 							_debois$elm_mdl$Demo_Toolbar$Mdl(_p7));
@@ -42244,7 +42248,7 @@ var _debois$elm_mdl$Demo_Toolbar$menuToolbar = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p8) {
 						return lift(
 							_debois$elm_mdl$Demo_Toolbar$Mdl(_p8));
@@ -42476,7 +42480,7 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbar = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p11) {
 						return lift(
 							_debois$elm_mdl$Demo_Toolbar$Mdl(_p11));
@@ -42603,7 +42607,7 @@ var _debois$elm_mdl$Demo_Toolbar$defaultFlexibleToolbar = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p12) {
 						return lift(
 							_debois$elm_mdl$Demo_Toolbar$Mdl(_p12));
@@ -42727,7 +42731,7 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p13) {
 						return lift(
 							_debois$elm_mdl$Demo_Toolbar$Mdl(_p13));
@@ -42870,7 +42874,7 @@ var _debois$elm_mdl$Demo_Toolbar$waterfallToolbarFix = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_debois$elm_mdl$Material_Toolbar$render,
+					_debois$elm_mdl$Material_Toolbar$view,
 					function (_p14) {
 						return lift(
 							_debois$elm_mdl$Demo_Toolbar$Mdl(_p14));
@@ -43045,7 +43049,7 @@ var _debois$elm_mdl$Demo_Toolbar$view = F4(
 								{
 									ctor: '::',
 									_0: A5(
-										_debois$elm_mdl$Material_Toolbar$render,
+										_debois$elm_mdl$Material_Toolbar$view,
 										function (_p16) {
 											return lift(
 												_debois$elm_mdl$Demo_Toolbar$Mdl(_p16));
