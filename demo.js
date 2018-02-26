@@ -18947,16 +18947,16 @@ var _debois$elm_mdl$Material$top = function (content) {
 										_0: 'https://fonts.googleapis.com/css?family=Roboto+Mono',
 										_1: {
 											ctor: '::',
-											_0: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+											_0: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
 											_1: {
 												ctor: '::',
-												_0: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
+												_0: 'https://fonts.googleapis.com/icon?family=Material+Icons',
 												_1: {
 													ctor: '::',
-													_0: 'https://aforemny.github.io/elm-mdc/material-components-web.css',
+													_0: 'https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css',
 													_1: {
 														ctor: '::',
-														_0: 'https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.css',
+														_0: 'https://aforemny.github.io/elm-mdc/material-components-web.css',
 														_1: {ctor: '[]'}
 													}
 												}
@@ -18975,12 +18975,28 @@ var _debois$elm_mdl$Material$top = function (content) {
 							_0: _elm_lang$html$Html_Attributes$type_('text/javascript'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/assets/dialog/dialog-polyfill.js'),
+								_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/elm-global-events.js'),
 								_1: {ctor: '[]'}
 							}
 						},
 						{ctor: '[]'}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_elm_lang$html$Html$node,
+							'script',
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('text/javascript'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/elm-mdc.js'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		});
