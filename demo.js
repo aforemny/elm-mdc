@@ -22364,7 +22364,7 @@ var _debois$elm_mdl$Demo_Drawer$example = F2(
 								ctor: '::',
 								_0: _debois$elm_mdl$Material_Options$attribute(
 									_elm_lang$html$Html_Attributes$src(
-										A2(_elm_lang$core$Basics_ops['++'], 'https://aforemny.github.io/elm-mdc', url))),
+										A2(_elm_lang$core$Basics_ops['++'], '/elm-mdc', url))),
 								_1: {
 									ctor: '::',
 									_0: A2(_debois$elm_mdl$Material_Options$css, 'height', '600px'),
