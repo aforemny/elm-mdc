@@ -1,9 +1,9 @@
 ELM=elm-make --yes --warn
 PAGES=../elm-mdc-gh-pages
 
-all: build
+all: build-demo
 
-build:
+build-demo:
 	mkdir -p build
 	rsync -r demo/images build
 	cp node_modules/material-components-web/dist/material-components-web.css build
@@ -15,7 +15,7 @@ build:
 docs:
 	$(ELM) --docs=documentation.json
 
-pages: build
+pages: build-demo
 	rsync -r build/ $(PAGES)
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
 

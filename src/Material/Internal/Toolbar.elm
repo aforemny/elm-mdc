@@ -1,23 +1,31 @@
-module Material.Internal.Toolbar exposing (Msg(..), Geometry, defaultGeometry, Config, defaultConfig)
+module Material.Internal.Toolbar exposing
+    (
+      Calculations
+    , Config
+    , Geometry
+    , Model
+    , Msg(..)
+    )
 
-type Msg
-    = Init Config Geometry
-    | Resize Config Geometry
-    | Scroll Config Float
 
-
-type alias Geometry =
-    { getRowHeight : Float
-    , getFirstRowElementOffsetHeight : Float
-    , getOffsetHeight : Float
+type alias Model =
+    { geometry : Maybe Geometry
+    , scrollTop : Float
+    , calculations : Maybe Calculations
+    , config : Maybe Config
     }
 
 
-defaultGeometry : Geometry
-defaultGeometry =
-    { getRowHeight = 0
-    , getFirstRowElementOffsetHeight = 0
-    , getOffsetHeight = 0
+type alias Calculations =
+    { toolbarRowHeight : Float
+    , toolbarRatio : Float
+    , flexibleExpansionRatio : Float
+    , maxTranslateYRatio : Float
+    , scrollThresholdRatio : Float
+    , toolbarHeight : Float
+    , flexibleExpansionHeight : Float
+    , maxTranslateYDistance : Float
+    , scrollThreshold : Float
     }
 
 
@@ -32,13 +40,14 @@ type alias Config =
     }
 
 
-defaultConfig : Config
-defaultConfig =
-    { fixed = False
-    , fixedLastrow = False
-    , fixedLastRowOnly = False
-    , flexible = False
-    , useFlexibleDefaultBehavior = False
-    , waterfall = False
-    , backgroundImage = Nothing
+type alias Geometry =
+    { getRowHeight : Float
+    , getFirstRowElementOffsetHeight : Float
+    , getOffsetHeight : Float
     }
+
+
+type Msg
+    = Init Config Geometry
+    | Resize Config Geometry
+    | Scroll Config Float

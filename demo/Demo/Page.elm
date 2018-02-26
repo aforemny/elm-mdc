@@ -68,7 +68,7 @@ toolbar
   -> String
   -> Html m
 toolbar lift idx mdl setUrl url title =
-    Toolbar.render lift idx mdl
+    Toolbar.view lift idx mdl
     [ Toolbar.fixed
     ]
     [ Toolbar.row []

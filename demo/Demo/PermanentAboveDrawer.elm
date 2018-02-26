@@ -131,7 +131,7 @@ view lift page model =
       , css "height" "100%"
       , css "box-sizing" "border-box"
       ]
-      [ Toolbar.render (Mdl >> lift) [1] model.mdl
+      [ Toolbar.view (Mdl >> lift) [1] model.mdl
         [
         ]
         [ Toolbar.row []

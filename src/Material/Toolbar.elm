@@ -1,51 +1,76 @@
 module Material.Toolbar exposing
-    ( -- VIEW
-      view
-    , Property
-    , flexibleExpansionRatio -- TODO: demo only
-
+    (
+      alignEnd
+    , alignStart
+    , backgroundImage
     , fixed
-    , waterfall
+    , fixedAdjust
+    , fixedLastRow
     , flexible
     , flexibleDefaultBehavior
-    , backgroundImage
-    , shrinkToFit
-
+    , icon
+    , menuIcon
+    , Property
+    , react
     , row
     , section
-    , alignStart
-    , alignEnd
-
+    , shrinkToFit
     , title
-    , menuIcon
-    , icon
-
-    , fixedAdjust
-
-      -- TEA
-    , Model
-    , defaultModel
-    , Msg
-    , update
-
-      -- RENDER
-    , render
-    , Store
-    , react
+    , view
+    , waterfall
     )
 
+{-|
+# Toolbars
+
+A toolbar is a container for multiple rows that contain items such as the
+application's title, navigation menu and tabs, among other things.
+
+By default a toolbar scrolls with the view. You can change this using the
+`fixed` or `waterfall` properties. A `flexible` toolbar changes its height when
+the view is scrolled.
+
+## Documentation
+
+- [Material Design guidelines: Toolbars](https://material.io/guidelines/components/toolbars.html)
+- [Demo](https://aforemny.github.io/elm-mdc/#toolbar)
+
+## Usage
+
+@docs Property
+@docs view
+@docs fixed
+@docs waterfall
+@docs flexible
+@docs flexibleDefaultBehavior
+@docs fixedLastRow
+@docs backgroundImage
+@docs row
+@docs section
+@docs alignStart
+@docs alignEnd
+@docs shrinkToFit
+@docs menuIcon
+@docs title
+@docs icon
+@docs fixedAdjust
+-}
+
 import Dict exposing (Dict)
-import DOM
-import GlobalEvents
 import Html.Attributes as Html
 import Html exposing (Html, text)
-import Json.Decode as Json exposing (Decoder)
-import Material.Component as Component exposing (Indexed, Index)
+import Material.Component as Component exposing (Indexed)
 import Material.Icon as Icon
 import Material.Internal.Options as Internal
-import Material.Internal.Toolbar exposing (Msg(..), Geometry, defaultGeometry)
-import Material.Msg
-import Material.Options as Options exposing (styled, cs, css, when)
+import Material.Internal.Toolbar exposing (Calculations, Config, Geometry, Model, Msg(..))
+import Material.Msg exposing (Index)
+import Material.Options as Options exposing (styled, cs, css, when, nop)
+import GlobalEvents
+import Json.Decode as Json exposing (Decoder)
+import DOM
+
+
+-- CONSTANTS
 
 
 cssClasses
@@ -96,12 +121,7 @@ numbers =
     }
 
 
-type alias Model =
-    { geometry : Maybe Geometry
-    , scrollTop : Float
-    , calculations : Maybe Calculations
-    , config : Maybe Config
-    }
+-- MODEL
 
 
 defaultModel : Model
@@ -110,19 +130,6 @@ defaultModel =
     , scrollTop = 0
     , calculations = Nothing
     , config = Nothing
-    }
-
-
-type alias Calculations =
-    { toolbarRowHeight : Float
-    , toolbarRatio : Float
-    , flexibleExpansionRatio : Float
-    , maxTranslateYRatio : Float
-    , scrollThresholdRatio : Float
-    , toolbarHeight : Float
-    , flexibleExpansionHeight : Float
-    , maxTranslateYDistance : Float
-    , scrollThreshold : Float
     }
 
 
@@ -138,10 +145,6 @@ defaultCalculations =
     , maxTranslateYDistance = 0
     , scrollThreshold = 0
     }
-
-
-type alias Msg =
-    Material.Internal.Toolbar.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd m )
@@ -182,21 +185,80 @@ update msg model =
             ( { model | scrollTop = scrollTop, config = Just config }, Cmd.none )
 
 
-type alias Config =
-    Material.Internal.Toolbar.Config
+-- GEOMETRY
+
+
+defaultGeometry : Geometry
+defaultGeometry =
+    { getRowHeight = 0
+    , getFirstRowElementOffsetHeight = 0
+    , getOffsetHeight = 0
+    }
 
 
 defaultConfig : Config
 defaultConfig =
-    Material.Internal.Toolbar.defaultConfig
+    { fixed = False
+    , fixedLastrow = False
+    , fixedLastRowOnly = False
+    , flexible = False
+    , useFlexibleDefaultBehavior = False
+    , waterfall = False
+    , backgroundImage = Nothing
+    }
 
 
-type alias Property m =
-    Options.Property Config m
+decodeGeometry : Decoder Geometry
+decodeGeometry =
+    let
+      viewportWidth =
+          DOM.target <|
+          Json.at ["ownerDocument", "defaultView", "innerWidth"] Json.float
+
+      getRowHeight =
+          viewportWidth
+          |> Json.map (\ viewportWidth ->
+                 if viewportWidth < numbers.toolbarMobileBreakpoint then
+                     numbers.toolbarRowMobileHeight
+                 else
+                     numbers.toolbarRowHeight
+             )
+
+      getFirstRowElementOffsetHeight =
+          firstRowElement DOM.offsetHeight
+
+      firstRowElement decoder =
+          DOM.target <|
+          DOM.childNode 0 decoder
+
+      getOffsetHeight =
+          DOM.target <|
+          DOM.offsetHeight
+    in
+    Json.map3 (\ getRowHeight getFirstRowElementOffsetHeight getOffsetHeight ->
+          { getRowHeight = getRowHeight
+          , getFirstRowElementOffsetHeight = getFirstRowElementOffsetHeight
+          , getOffsetHeight = getOffsetHeight
+          }
+      )
+      getRowHeight
+      getFirstRowElementOffsetHeight
+      getOffsetHeight
 
 
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options nodes =
+decodeScrollTop : Decoder Float
+decodeScrollTop =
+    DOM.target <|
+    Json.at ["ownerDocument", "defaultView", "scrollY"] Json.float
+
+
+
+
+-- VIEW
+
+
+toolbar : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+toolbar lift model options nodes =
     let
         ({ config } as summary)=
             Internal.collect defaultConfig options
@@ -307,19 +369,19 @@ view lift model options nodes =
        )
     :: ( toolbarProperties
          |> Maybe.map Options.many
-         |> Maybe.withDefault Options.nop
+         |> Maybe.withDefault nop
        )
     :: ( flexibleRowElementStylesHack
          |> Maybe.map (.className >> cs)
-         |> Maybe.withDefault Options.nop
+         |> Maybe.withDefault nop
        )
     :: ( elementStylesDefaultBehaviorHack
          |> Maybe.map (.className >> cs)
-         |> Maybe.withDefault Options.nop
+         |> Maybe.withDefault nop
        )
     :: ( backgroundImageHack
          |> Maybe.map (.className >> cs)
-         |> Maybe.withDefault Options.nop
+         |> Maybe.withDefault nop
        )
     :: options
     )
@@ -338,112 +400,6 @@ view lift model options nodes =
           ]
        ]
     )
-
-
-waterfall : Property m
-waterfall =
-    Internal.option (\ config -> { config | waterfall = True } )
-
-
-fixed : Property m
-fixed =
-    Internal.option (\ config -> { config | fixed = True } )
-
-
-flexible : Property m
-flexible =
-    Internal.option (\ config -> { config | flexible = True } )
-
-
-backgroundImage : String -> Property m
-backgroundImage backgroundImage =
-    Internal.option (\ config -> { config | backgroundImage = Just backgroundImage } )
-
-
-fixedLastRow : Property m
-fixedLastRow =
-    Internal.option (\ config -> { config | fixedLastrow = True })
-
-
-icon : List (Icon.Property m) -> String -> Html m
-icon options icon =
-    Icon.view
-    ( cs "mdc-toolbar__icon"
-    :: options
-    )
-    icon
-
-
-menuIcon : List (Icon.Property m) -> String -> Html m
-menuIcon options icon =
-    Icon.view
-    ( cs "mdc-toolbar__menu-icon"
-    :: options
-    )
-    icon
-
-
-title : List (Property m) -> List (Html m) -> Html m
-title options =
-    styled Html.span
-    ( cs "mdc-toolbar__title"
-    :: options
-    )
-
-
-row : List (Property m) -> List (Html m) -> Html m
-row options =
-    styled Html.div
-    ( cs "mdc-toolbar__row"
-    :: options
-    )
-
-
-section : List (Property m) -> List (Html m) -> Html m
-section options =
-    styled Html.section
-    ( cs "mdc-toolbar__section"
-    :: options
-    )
-
-
-alignStart : Property m
-alignStart =
-    cs "mdc-toolbar__section--align-start"
-
-
-alignEnd : Property m
-alignEnd =
-    cs "mdc-toolbar__section--align-end"
-
-
-shrinkToFit : Property m
-shrinkToFit =
-    cs "mdc-toolbar__section--shrink-to-fit"
-
-
-flexibleDefaultBehavior : Property m
-flexibleDefaultBehavior =
-    Internal.option (\ config -> { config | useFlexibleDefaultBehavior = True })
-
-
-fixedAdjust : List Int -> Store s -> Options.Property c m
-fixedAdjust index store =
-    let
-        model =
-            Dict.get index store.toolbar
-            |> Maybe.withDefault defaultModel
-
-        styles =
-            Maybe.map2 (,) model.config model.calculations
-            |> Maybe.andThen (\ ( config, calculations ) ->
-                   adjustElementStyles config calculations
-               )
-    in
-    Options.many
-    [ cs "mdc-toolbar-fixed-adjust"
-    , Maybe.withDefault Options.nop styles
-    ]
 
 
 adjustElementStyles : Config -> Calculations -> Maybe (Options.Property c m)
@@ -558,7 +514,7 @@ toolbarStyles config geometry scrollTop calculations =
               0 ->
                   cs cssClasses.flexibleMin
               _ ->
-                  Options.nop
+                  nop
 
         toolbarFixedState =
             let
@@ -611,23 +567,15 @@ toolbarStyles config geometry scrollTop calculations =
     }
 
 
+-- COMPONENT
+
+
 type alias Store s =
     { s | toolbar : Indexed Model }
 
 
 ( get, set ) =
     Component.indexed .toolbar (\x y -> { y | toolbar = x }) defaultModel
-
-
-render :
-    (Material.Msg.Msg m -> m)
-    -> Index
-    -> Store s
-    -> List (Property m)
-    -> List (Html m)
-    -> Html m
-render =
-    Component.render get view Material.Msg.ToolbarMsg
 
 
 react :
@@ -640,45 +588,196 @@ react =
     Component.react get set Material.Msg.ToolbarMsg (Component.generalise update)
 
 
-decodeGeometry : Decoder Geometry
-decodeGeometry =
+-- API
+
+
+{-| Toolbar property
+-}
+type alias Property m =
+    Options.Property Config m
+
+
+{-| Toolbar view
+
+The first child of this function has to be a `row`.
+
+```elm
+Toolbar.view Mdl [0] model.mdl []
+    [ Toolbar.row []
+          [ Toolbar.section
+                [ Toolbar.alignStart
+                ]
+                [ Toolbar.menuIcon [] "menu"
+                , Toolbar.title [] [ text "Title" ]
+                ]
+          , Toolbar.section
+                [ Toolbar.alignEnd
+                ]
+                [ Toolbar.icon [] "file_download"
+                , Toolbar.icon [] "print"
+                , Toolbar.icon [] "bookmark"
+                ]
+          ]
+    ]
+```
+-}
+view :
+    (Material.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+view =
+    Component.render get toolbar Material.Msg.ToolbarMsg
+
+
+{-| Make the toolbar fixed to the top and apply a persistent elevation
+-}
+fixed : Property m
+fixed =
+    Internal.option (\ config -> { config | fixed = True } )
+
+
+{-| Make the toolbar gain elevation only when the window is scrolled
+-}
+waterfall : Property m
+waterfall =
+    Internal.option (\ config -> { config | waterfall = True } )
+
+
+{-| Make the height of the toolbar change as the window is scrolled
+
+You will likely want to specify `flexibleDefaultBehavior` as well.
+-}
+flexible : Property m
+flexible =
+    Internal.option (\ config -> { config | flexible = True } )
+
+
+{-| Make use of the flexible default behavior
+-}
+flexibleDefaultBehavior : Property m
+flexibleDefaultBehavior =
+    Internal.option (\ config -> { config | useFlexibleDefaultBehavior = True })
+
+
+{-| Make the last row of the toolbar fixed
+-}
+fixedLastRow : Property m
+fixedLastRow =
+    Internal.option (\ config -> { config | fixedLastrow = True })
+
+
+{-| Add a background image to the toolbar
+-}
+backgroundImage : String -> Property m
+backgroundImage backgroundImage =
+    Internal.option (\ config -> { config | backgroundImage = Just backgroundImage } )
+
+
+{-| Toolbar row
+
+A row is divided into several `section`s. There has to be at least one row as
+direct child of `view`.
+-}
+row : List (Property m) -> List (Html m) -> Html m
+row options =
+    styled Html.div
+    ( cs "mdc-toolbar__row"
+    :: options
+    )
+
+
+{-| Toolbar section
+
+By default sections share the available space of a row equally.
+-}
+section : List (Property m) -> List (Html m) -> Html m
+section options =
+    styled Html.section
+    ( cs "mdc-toolbar__section"
+    :: options
+    )
+
+
+{-| Make section align to the start
+-}
+alignStart : Property m
+alignStart =
+    cs "mdc-toolbar__section--align-start"
+
+
+{-| Make section align to the end
+-}
+alignEnd : Property m
+alignEnd =
+    cs "mdc-toolbar__section--align-end"
+
+
+{-| Make a section take the width of its contents
+-}
+shrinkToFit : Property m
+shrinkToFit =
+    cs "mdc-toolbar__section--shrink-to-fit"
+
+
+{-| Adds a menu icon to the start of the toolbar.
+
+Has to be a child of `section`.
+-}
+menuIcon : List (Icon.Property m) -> String -> Html m
+menuIcon options icon =
+    Icon.view
+    ( cs "mdc-toolbar__menu-icon"
+    :: options
+    )
+    icon
+
+
+{-| Add a title to the toolbar
+
+Has to be a child of `section`.
+-}
+title : List (Property m) -> List (Html m) -> Html m
+title options =
+    styled Html.span
+    ( cs "mdc-toolbar__title"
+    :: options
+    )
+
+
+{-| Add icons to the end of the toolbar
+
+Has to be a child of `section`.
+-}
+icon : List (Icon.Property m) -> String -> Html m
+icon options icon =
+    Icon.view
+    ( cs "mdc-toolbar__icon"
+    :: options
+    )
+    icon
+
+
+{-| Adds a top margin to the element so that it is not covered by the toolbar
+
+Should be applied to a direct sibling of `view`.
+-}
+fixedAdjust : Index -> Store s -> Options.Property c m
+fixedAdjust index store =
     let
-      viewportWidth =
-          DOM.target <|
-          Json.at ["ownerDocument", "defaultView", "innerWidth"] Json.float
+        model =
+            Dict.get index store.toolbar
+            |> Maybe.withDefault defaultModel
 
-      getRowHeight =
-          viewportWidth
-          |> Json.map (\ viewportWidth ->
-                 if viewportWidth < numbers.toolbarMobileBreakpoint then
-                     numbers.toolbarRowMobileHeight
-                 else
-                     numbers.toolbarRowHeight
-             )
-
-      getFirstRowElementOffsetHeight =
-          firstRowElement DOM.offsetHeight
-
-      firstRowElement decoder =
-          DOM.target <|
-          DOM.childNode 0 decoder
-
-      getOffsetHeight =
-          DOM.target <|
-          DOM.offsetHeight
+        styles =
+            Maybe.map2 (,) model.config model.calculations
+            |> Maybe.andThen (\ ( config, calculations ) ->
+                   adjustElementStyles config calculations
+               )
     in
-    Json.map3 (\ getRowHeight getFirstRowElementOffsetHeight getOffsetHeight ->
-          { getRowHeight = getRowHeight
-          , getFirstRowElementOffsetHeight = getFirstRowElementOffsetHeight
-          , getOffsetHeight = getOffsetHeight
-          }
-      )
-      getRowHeight
-      getFirstRowElementOffsetHeight
-      getOffsetHeight
-
-
-decodeScrollTop : Decoder Float
-decodeScrollTop =
-    DOM.target <|
-    Json.at ["ownerDocument", "defaultView", "scrollY"] Json.float
+    Options.many
+    [ cs "mdc-toolbar-fixed-adjust"
+    , Maybe.withDefault nop styles
+    ]

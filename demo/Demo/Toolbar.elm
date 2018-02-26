@@ -67,7 +67,7 @@ view lift page toolbarPage model =
                 [ css "width" "480px"
                 , css "height" "72px"
                 ]
-                [ Toolbar.render (Mdl >> lift) [0] model.mdl
+                [ Toolbar.view (Mdl >> lift) [0] model.mdl
                   [
                   ]
                   [ Toolbar.row
@@ -176,7 +176,7 @@ defaultToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.render (Mdl >> lift) [0] model.mdl []
+      Toolbar.view (Mdl >> lift) [0] model.mdl []
       [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
@@ -205,7 +205,7 @@ fixedToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.render (Mdl >> lift) [0] model.mdl
+      Toolbar.view (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
       ]
       [ Toolbar.row []
@@ -236,7 +236,7 @@ menuToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.render (Mdl >> lift) [0] model.mdl
+      Toolbar.view (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
       ]
       [ Toolbar.row []
@@ -295,7 +295,7 @@ waterfallToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.render (Mdl >> lift) [0] model.mdl
+      Toolbar.view (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
       , Toolbar.waterfall
       ]
@@ -330,7 +330,7 @@ defaultFlexibleToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.render (Mdl >> lift) [0] model.mdl
+      Toolbar.view (Mdl >> lift) [0] model.mdl
       [ Toolbar.flexible
       , Toolbar.flexibleDefaultBehavior
       , Toolbar.backgroundImage "images/4-3.jpg"
@@ -365,7 +365,7 @@ waterfallFlexibleToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.render (Mdl >> lift) [0] model.mdl
+      Toolbar.view (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
       , Toolbar.flexible
       , Toolbar.flexibleDefaultBehavior
@@ -405,7 +405,7 @@ waterfallToolbarFix lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.render (Mdl >> lift) [0] model.mdl
+      Toolbar.view (Mdl >> lift) [0] model.mdl
       [ Toolbar.fixed
       , Toolbar.flexible
       , Toolbar.flexibleDefaultBehavior
@@ -463,13 +463,19 @@ semper. Aenean ultricies mi vitae est.
 floatingFooter : Model -> Html m
 floatingFooter model =
     let
+        getFlexibleExpansionRatio calculations scrollTop =
+            let
+                delta = 0.0001
+            in
+            max 0 (1 - scrollTop / (calculations.flexibleExpansionHeight + delta))
+
         flexibleExpansionRatio =
             Dict.get [0] model.mdl.toolbar
             |> Maybe.andThen (\ model ->
                    Maybe.map ((,) model.scrollTop) model.calculations
                )
             |> Maybe.map (\ ( scrollTop, calculations ) ->
-                   Toolbar.flexibleExpansionRatio calculations scrollTop
+                   getFlexibleExpansionRatio calculations scrollTop
                )
             |> Maybe.withDefault 1
             |> (((*) 100) >> round >> toFloat >> (flip (/) 100))

@@ -212,7 +212,7 @@ example6 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar"
         ]
-      , Toolbar.render (Mdl >> lift) [2*index] mdl
+      , Toolbar.view (Mdl >> lift) [2*index] mdl
         [
         ]
         [ Toolbar.row []
@@ -245,7 +245,7 @@ example7 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar"
         ]
-      , Toolbar.render (Mdl >> lift) [2*index] mdl
+      , Toolbar.view (Mdl >> lift) [2*index] mdl
         [
         ]
         [ Toolbar.row []
@@ -281,7 +281,7 @@ example8 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar + primary indicator"
         ]
-      , Toolbar.render (Mdl >> lift) [2*index] mdl
+      , Toolbar.view (Mdl >> lift) [2*index] mdl
         [ Theme.secondaryBg
         ]
         [ Toolbar.row []
@@ -315,7 +315,7 @@ example9 lift mdl index model =
       [ legend []
         [ text "Within mdc-toolbar + accent indicator"
         ]
-      , Toolbar.render (Mdl >> lift) [2*index] mdl
+      , Toolbar.view (Mdl >> lift) [2*index] mdl
         [ Theme.primaryBg
         ]
         [ Toolbar.row []
@@ -353,7 +353,7 @@ example10 lift mdl index model =
       [ legend []
         [ text "Within Toolbar, Dynamic Content Control"
         ]
-      , Toolbar.render (Mdl >> lift) [2*index] mdl
+      , Toolbar.view (Mdl >> lift) [2*index] mdl
         [ Theme.primaryBg
         ]
         [ Toolbar.row []

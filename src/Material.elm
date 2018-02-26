@@ -24,6 +24,7 @@ import Material.Drawer as Drawer
 import Material.Fab as Fab
 import Material.GridList as GridList
 import Material.IconToggle as IconToggle
+import Material.Internal.Toolbar as Toolbar
 import Material.Menu as Menu
 import Material.RadioButton as RadioButton
 import Material.Ripple as Ripple

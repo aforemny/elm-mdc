@@ -58,7 +58,7 @@ view lift page model =
     [ Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [
-      Toolbar.render (Mdl >> lift) [1] model.mdl
+      Toolbar.view (Mdl >> lift) [1] model.mdl
       [ Toolbar.fixed
       ]
       [ Toolbar.row []
