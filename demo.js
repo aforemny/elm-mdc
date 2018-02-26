@@ -18357,7 +18357,7 @@ var _debois$elm_mdl$Material_Toolbar$initKeyRatio = F2(
 	});
 var _debois$elm_mdl$Material_Toolbar$update = F2(
 	function (msg, model) {
-		var _p0 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Init':
 				var _p2 = _p0._1;
@@ -18537,10 +18537,7 @@ var _debois$elm_mdl$Material_Toolbar$toolbarStyles = F4(
 					}
 				});
 		}();
-		var flexibleExpansionRatio_ = A2(
-			_elm_lang$core$Debug$log,
-			'flexibleExpansionRatio',
-			A2(_debois$elm_mdl$Material_Toolbar$flexibleExpansionRatio, calculations, scrollTop));
+		var flexibleExpansionRatio_ = A2(_debois$elm_mdl$Material_Toolbar$flexibleExpansionRatio, calculations, scrollTop);
 		var toolbarFlexibleState = function () {
 			var _p8 = flexibleExpansionRatio_;
 			switch (_p8) {
