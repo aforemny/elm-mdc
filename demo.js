@@ -42468,7 +42468,18 @@ var _debois$elm_mdl$Demo_Toolbar$menuToolbar = F2(
 					ctor: '::',
 					_0: A2(
 						_debois$elm_mdl$Demo_Toolbar$body,
-						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_debois$elm_mdl$Material_Toolbar$fixedAdjust,
+								{
+									ctor: '::',
+									_0: 0,
+									_1: {ctor: '[]'}
+								},
+								model.mdl),
+							_1: {ctor: '[]'}
+						},
 						model),
 					_1: {ctor: '[]'}
 				}
