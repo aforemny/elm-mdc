@@ -67,7 +67,7 @@ render1 :
     -> x
 render1 get_model view ctor =
     \lift store ->
-        view (ctor >> lift) (get_model store)
+        view (lift << ctor) (get_model store)
 
 
 {-| TODO
@@ -82,7 +82,7 @@ render :
     -> x
 render get_model view ctor =
     \lift idx store ->
-        view (ctor idx >> lift) (get_model idx store) 
+        view (lift << ctor idx) (get_model idx store) 
 
 
 type alias Update msg m model =
@@ -99,7 +99,7 @@ react1 :
     -> store
     -> ( Maybe store, Cmd m )
 react1 get set ctor update lift msg store =
-    update (ctor >> lift) msg (get store)
+    update (lift << ctor) msg (get store)
         |> Tuple.mapFirst (Maybe.map (set store))
 
 
@@ -114,7 +114,7 @@ react :
     -> store
     -> ( Maybe store, Cmd m )
 react get set ctor update lift msg idx store =
-    update (ctor idx >> lift) msg (get idx store)
+    update (lift << ctor idx) msg (get idx store)
         |> Tuple.mapFirst (Maybe.map (set idx store))
 
 
@@ -139,7 +139,7 @@ subs ctor get subscriptions lift model =
         |> get
         |> Dict.foldl
             (\idx model ss ->
-                Sub.map (ctor idx >> lift) (subscriptions model) :: ss
+                Sub.map (lift << ctor idx) (subscriptions model) :: ss
             )
             []
         |> Sub.batch

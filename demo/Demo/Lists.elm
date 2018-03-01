@@ -34,7 +34,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
@@ -99,7 +99,7 @@ possible (since it's a block element)."""
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.render (Mdc >> lift) [0] model.mdc
+        [ Checkbox.render (lift << Mdc) [0] model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked |> when model.rtl
           ]

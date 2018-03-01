@@ -28,7 +28,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
@@ -36,14 +36,14 @@ view lift page model =
     page.body "Theme"
     [
       Page.hero []
-      [ Button.render (Mdc >> lift) [0] model.mdc
+      [ Button.render (lift << Mdc) [0] model.mdc
         [ Button.raised
         , Button.primary
         , css "margin" "24px"
         ]
         [ text "Primary"
         ]
-      , Button.render (Mdc >> lift) [0] model.mdc
+      , Button.render (lift << Mdc) [0] model.mdc
         [ Button.raised
         , Button.secondary
         , css "margin" "24px"

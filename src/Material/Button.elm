@@ -182,7 +182,7 @@ view lift model options nodes =
             Internal.collect defaultConfig options
 
         ripple =
-            Ripple.view False (RippleMsg >> lift) model.ripple () ()
+            Ripple.view False (lift << RippleMsg) model.ripple () ()
     in
         Internal.apply summary
             (if config.link /= Nothing then Html.a else Html.button)

@@ -31,7 +31,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
         Toggle index ->
             let
@@ -72,7 +72,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (Mdc >> lift) index model.mdc
+          Switch.render (lift << Mdc) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.on |> when on
           ]
@@ -101,7 +101,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (Mdc >> lift) index model.mdc
+          Switch.render (lift << Mdc) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.on |> when on
           ]
@@ -136,7 +136,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (Mdc >> lift) index model.mdc
+          Switch.render (lift << Mdc) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.disabled
           ]

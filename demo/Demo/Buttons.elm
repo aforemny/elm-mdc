@@ -27,7 +27,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
@@ -72,36 +72,36 @@ view lift page model =
               ]
             , styled Html.div []
               [
-                Button.render (Mdc >> lift) (idx ++ [0]) model.mdc
+                Button.render (lift << Mdc) (idx ++ [0]) model.mdc
                 ( options
                 )
                 [ text "Baseline" ]
               ,
-                Button.render (Mdc >> lift) (idx ++ [1]) model.mdc
+                Button.render (lift << Mdc) (idx ++ [1]) model.mdc
                 ( Button.compact
                 :: options
                 )
                 [ text "Compact" ]
               ,
-                Button.render (Mdc >> lift) (idx ++ [2]) model.mdc
+                Button.render (lift << Mdc) (idx ++ [2]) model.mdc
                 ( Button.dense
                 :: options
                 )
                 [ text "Dense" ]
               ,
-                Button.render (Mdc >> lift) (idx ++ [3]) model.mdc
+                Button.render (lift << Mdc) (idx ++ [3]) model.mdc
                 ( Button.secondary
                 :: options
                 )
                 [ text "Secondary" ]
               ,
-                Button.render (Mdc >> lift) (idx ++ [4]) model.mdc
+                Button.render (lift << Mdc) (idx ++ [4]) model.mdc
                 ( Button.icon "favorite"
                 :: options
                 )
                 [ text "Icon" ]
               ,
-                Button.render (Mdc >> lift) (idx ++ [5]) model.mdc
+                Button.render (lift << Mdc) (idx ++ [5]) model.mdc
                 ( Button.link "#buttons"
                 :: options
                 )
@@ -112,13 +112,13 @@ view lift page model =
     page.body "Buttons"
     [
       Page.hero []
-      [ Button.render (Mdc >> lift) [0,0] model.mdc
+      [ Button.render (lift << Mdc) [0,0] model.mdc
         [ Button.ripple
         , css "margin-right" "32px"
         ]
         [ text "Flat"
         ]
-      , Button.render (Mdc >> lift) [0,1] model.mdc
+      , Button.render (lift << Mdc) [0,1] model.mdc
         [ Button.ripple
         , Button.raised
         , Button.primary

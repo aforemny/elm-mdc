@@ -67,7 +67,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
         Change idx value ->
             ( { model | values = Dict.insert idx value model.values }, Cmd.none )
@@ -140,10 +140,10 @@ view lift page model =
               idx =
                   [0]
           in
-          Slider.render (Mdc >> lift) idx model.mdc
+          Slider.render (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (Input idx >> lift) Slider.targetValue)
-          , Slider.onChange (Json.map (Change idx >> lift) Slider.targetValue)
+          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
+          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
           ]
           []
         ]
@@ -170,10 +170,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.render (Mdc >> lift) idx model.mdc
+        [ Slider.render (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (Input idx >> lift) Slider.targetValue)
-          , Slider.onChange (Json.map (Change idx >> lift) Slider.targetValue)
+          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
+          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
           , Slider.min model.min
           , Slider.max model.max
           , Slider.disabled |> when model.disabled
@@ -210,10 +210,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.render (Mdc >> lift) idx model.mdc
+        [ Slider.render (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (Input idx >> lift) Slider.targetValue)
-          , Slider.onChange (Json.map (Change idx >> lift) Slider.targetValue)
+          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
+          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
           , Slider.discrete
           , Slider.min model.min
           , Slider.max model.max
@@ -252,10 +252,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.render (Mdc >> lift) idx model.mdc
+        [ Slider.render (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (Input idx >> lift) Slider.targetValue)
-          , Slider.onChange (Json.map (Change idx >> lift) Slider.targetValue)
+          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
+          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
           , Slider.discrete
           , Slider.min model.min
           , Slider.max model.max
@@ -378,4 +378,4 @@ view lift page model =
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Material.subscriptions (Mdc >> lift) model
+    Material.subscriptions (lift << Mdc) model

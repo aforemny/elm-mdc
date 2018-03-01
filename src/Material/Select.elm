@@ -231,7 +231,7 @@ view lift model options items =
         []
       ]
     ,
-      Menu.view (MenuMsg >> lift) model.menu
+      Menu.view (lift << MenuMsg) model.menu
       [ cs "mdc-select__menu"
       , Menu.index (Maybe.withDefault 0 config.index)
       , when isOpen << Options.many <|

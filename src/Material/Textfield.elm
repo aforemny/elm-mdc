@@ -295,7 +295,7 @@ update lift msg model =
                 ( ripple, effects ) =
                     Ripple.update msg_ model.ripple
             in
-            ( Just { model | ripple = ripple }, Cmd.map (RippleMsg >> lift) effects )
+            ( Just { model | ripple = ripple }, Cmd.map (lift << RippleMsg) effects )
 
 
 
@@ -333,7 +333,7 @@ view lift model options _ =
             model.focused && not config.disabled
 
         ripple =
-            Ripple.view False (RippleMsg >> lift) model.ripple [] []
+            Ripple.view False (lift << RippleMsg) model.ripple [] []
 
         isInvalid =
             case config.pattern of
@@ -378,7 +378,7 @@ view lift model options _ =
                       else
                           Options.on "focus" (Json.succeed (lift (Focus defaultGeometry)))
                     , Options.on "blur" (Json.succeed (lift Blur))
-                    , Options.onInput (Input >> lift)
+                    , Options.onInput (lift << Input)
                     , Options.many << List.map Internal.attribute << List.filterMap identity <|
                       [ Html.type_ (Maybe.withDefault "text" config.type_)
                         |> if not config.textarea then Just else always Nothing

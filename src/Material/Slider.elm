@@ -269,16 +269,16 @@ view lift model options _ =
                 |> Maybe.withDefault 0
 
         activateOn event =
-            Options.on event (Json.map (Activate True >> lift) decodeGeometry)
+            Options.on event (Json.map (lift << Activate True) decodeGeometry)
 
         initOn event =
-            Options.on event (Json.map (Init >> lift) decodeGeometry)
+            Options.on event (Json.map (lift << Init) decodeGeometry)
 
         upOn event =
             Options.on event (Json.succeed (lift Up))
 
         dragOn event =
-            Options.on event (Json.map (Drag >> lift) decodeGeometry)
+            Options.on event (Json.map (lift << Drag) decodeGeometry)
 
         inputOn event =
             Options.on event (Maybe.withDefault (Json.succeed (lift NoOp)) config.onInput)
@@ -309,7 +309,7 @@ view lift model options _ =
                 { stopPropagation = True
                 , preventDefault = False
                 }
-                (Json.map (Activate False >> lift) decodeGeometry)
+                (Json.map (lift << Activate False) decodeGeometry)
 
         trackScale =
             if config.max - config.min == 0 then

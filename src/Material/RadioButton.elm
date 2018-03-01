@@ -97,7 +97,7 @@ update lift msg model =
             in
             ( Just { model | ripple = ripple }
             ,
-              Cmd.map (RippleMsg >> lift) effects
+              Cmd.map (lift << RippleMsg) effects
             )
 
         SetFocus focus ->
@@ -169,7 +169,7 @@ view lift model options _ =
             Internal.collect defaultConfig options
 
         ripple =
-            Ripple.view True (RippleMsg >> lift) model.ripple [] []
+            Ripple.view True (lift << RippleMsg) model.ripple [] []
     in
     Internal.applyContainer summary Html.div
     [ cs "mdc-radio"

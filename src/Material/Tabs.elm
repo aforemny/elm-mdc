@@ -117,7 +117,7 @@ update lift msg model =
             in
             ( Just { model | ripples = Dict.insert index ripple model.ripples }
             ,
-              Cmd.map (RippleMsg index >> lift) effects
+              Cmd.map (lift << RippleMsg index) effects
             )
 
         Dispatch msgs ->
@@ -359,7 +359,7 @@ view lift model options nodes =
               , cs "mdc-tab-bar-scroller__indicator--back"
               , cs "mdc-tab-bar-scroller__indicator--enabled"
               , css "display" "none" |> when (not model.backIndicator)
-              , Options.on "click" (Json.map (ScrollBackward >> lift) (decodeGeometryOnIndicator config.indicator))
+              , Options.on "click" (Json.map (lift << ScrollBackward) (decodeGeometryOnIndicator config.indicator))
               ]
               [ styled Html.a
                 [ cs "mdc-tab-bar__indicator__inner"
@@ -378,7 +378,7 @@ view lift model options nodes =
               [ cs "mdc-tab-bar-scroller__indicator"
               , cs "mdc-tab-bar-scroller__indicator--next"
               , cs "mdc-tab-bar-scroller__indicator--enabled"
-              , Options.on "click" (Json.map (ScrollForward >> lift) (decodeGeometryOnIndicator config.indicator))
+              , Options.on "click" (Json.map (lift << ScrollForward) (decodeGeometryOnIndicator config.indicator))
               , css "display" "none" |> when (not model.nextIndicator)
               ]
               [ styled Html.a
@@ -404,10 +404,10 @@ view lift model options nodes =
               , css "transform" tabBarTransform
               ]
             , Options.on "ElmMdcInit"
-                  (Json.map (Init >> lift)
+                  (Json.map (lift << Init)
                   (decodeGeometryOnTabBar config.indicator))
             , Options.on "ElmMdcWindowResize"
-                  (Json.map (Init >> lift)
+                  (Json.map (lift << Init)
                   (decodeGeometryOnTabBar config.indicator))
             ]
             [
@@ -417,7 +417,7 @@ view lift model options nodes =
                 |> List.indexedMap (\index { node, options, childs }  ->
                        let
                           ripple =
-                              Ripple.view False (RippleMsg index >> lift)
+                              Ripple.view False (lift << RippleMsg index)
                                 ( Dict.get index model.ripples
                                   |> Maybe.withDefault Ripple.defaultModel
                                 )
@@ -426,8 +426,8 @@ view lift model options nodes =
                        [ node
                            ( cs "mdc-tab"
                            :: when (model.index == index) (cs "mdc-tab--active")
-                           :: Options.on "click" (Json.map (Select index >> lift) (decodeGeometryOnTab hasIndicator))
-                           :: Options.dispatch (Dispatch >> lift)
+                           :: Options.on "click" (Json.map (lift << Select index) (decodeGeometryOnTab hasIndicator))
+                           :: Options.dispatch (lift << Dispatch)
                            :: Options.many
                               [ ripple.interactionHandler
                               , ripple.properties

@@ -479,4 +479,4 @@ Example use:
 -}
 dispatch : (List m -> m) -> Property c m
 dispatch =
-    Json.map >> Lift
+    Lift << Json.map

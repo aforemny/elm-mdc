@@ -45,7 +45,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
@@ -65,7 +65,7 @@ view lift page model =
     , Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [
-      Drawer.render (Mdc >> lift) [0] model.mdc []
+      Drawer.render (lift << Mdc) [0] model.mdc []
       [
         Drawer.toolbarSpacer [] []
       , Lists.listItem
@@ -117,7 +117,7 @@ view lift page model =
       , css "box-sizing" "border-box"
       ]
       [
-        Toolbar.view (Mdc >> lift) [1] model.mdc
+        Toolbar.view (lift << Mdc) [1] model.mdc
         []
         [ Toolbar.row []
           [ Toolbar.section
@@ -171,4 +171,4 @@ html, body {
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Material.Drawer.subs (Mdc >> lift) model.mdc
+    Material.Drawer.subs (lift << Mdc) model.mdc

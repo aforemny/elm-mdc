@@ -275,7 +275,7 @@ add lift idx contents model =
               Nothing ->
                   mdc_
     in
-        { model | mdc = mdc } ! [ Cmd.map (Material.Msg.SnackbarMsg idx >> lift) effects ]
+        { model | mdc = mdc } ! [ Cmd.map (lift << Material.Msg.SnackbarMsg idx) effects ]
 
 
 -- VIEW

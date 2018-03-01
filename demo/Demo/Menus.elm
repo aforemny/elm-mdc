@@ -79,7 +79,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
         Select value ->
             ( { model | selected = Just value }, Cmd.none )
@@ -193,10 +193,10 @@ menuAnchor lift model =
          )
       |> Options.many
     ]
-    [ Button.render (Mdc >> lift) [1] model.mdc
+    [ Button.render (lift << Mdc) [1] model.mdc
       [ Button.raised
       , Button.primary
-      , Menu.attach (Mdc >> lift) [2]
+      , Menu.attach (lift << Mdc) [2]
       ]
       [ text <|
         case model.anchorWidth of
@@ -210,7 +210,7 @@ menuAnchor lift model =
                 "Show Menu from here now!"
       ]
 
-    , Menu.render (Mdc >> lift) [2] model.mdc
+    , Menu.render (lift << Mdc) [2] model.mdc
       [ Menu.anchorCorner model.anchorCorner
       , Menu.anchorMargin anchorMargin
       , Menu.quickOpen |> when (not model.openAnimation)
@@ -243,7 +243,7 @@ view lift page model =
     page.body "Simple Menu"
     [
       Page.hero []
-      [ Menu.render (Mdc >> lift) [0] model.mdc
+      [ Menu.render (lift << Mdc) [0] model.mdc
         [ cs "mdc-menu--open"
         ]
         ( Menu.ul Lists.ul []
@@ -581,4 +581,4 @@ anchorWidths lift model =
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Menu.subs (Mdc >> lift) model.mdc
+    Menu.subs (lift << Mdc) model.mdc

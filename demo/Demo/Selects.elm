@@ -53,7 +53,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
         Pick index value ->
             let
@@ -100,7 +100,7 @@ heroSelect
     -> List (Html m)
     -> Html m
 heroSelect lift id model options _ =
-    Select.render (Mdc >> lift) id model.mdc
+    Select.render (lift << Mdc) id model.mdc
     ( css "width" "377px"
     :: options
     )
@@ -160,7 +160,7 @@ select lift id model options _ =
       , Options.attribute (Html.attribute "dir" "rtl") |> when state.rtl
       ]
       [
-        Select.render (Mdc >> lift) id model.mdc
+        Select.render (lift << Mdc) id model.mdc
         ( Select.label "Food Group"
         :: when (index /= Nothing)
               (Select.index (Maybe.withDefault -1 index))

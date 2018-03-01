@@ -197,7 +197,7 @@ view lift page model =
               ]
               [ text title
               , Html.select
-                [ Html.on "change" (Json.map (set >> lift) Html.targetValue)
+                [ Html.on "change" (Json.map (lift << set) Html.targetValue)
                 ]
                 ( options
                   |> List.map (\v ->
@@ -444,4 +444,4 @@ init lift =
 
 subscriptions : (Msg -> m) -> Model -> Sub m
 subscriptions lift model =
-    Window.resizes (Resize >> lift)
+    Window.resizes (lift << Resize)

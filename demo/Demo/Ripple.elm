@@ -30,7 +30,7 @@ update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
-            Material.update (Mdc >> lift) msg_ model
+            Material.update (lift << Mdc) msg_ model
 
 
 -- VIEW
@@ -69,7 +69,7 @@ view lift page model =
       [
         let
             ripple =
-                Ripple.bounded (Mdc >> lift) [0] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [0] model.mdc () ()
         in
         styled Html.div
         [ css "width" "100%"
@@ -87,7 +87,7 @@ view lift page model =
       [ Html.h2 [] [ text "Bounded" ]
       , let
             ripple =
-                Ripple.bounded (Mdc >> lift) [1] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [1] model.mdc () ()
         in
         styled Html.div
         [ demoSurface
@@ -105,7 +105,7 @@ view lift page model =
       [ Html.h2 [] [ text "Unbounded" ]
       , let
             ripple =
-                Ripple.unbounded (Mdc >> lift) [2] model.mdc () ()
+                Ripple.unbounded (lift << Mdc) [2] model.mdc () ()
         in
         styled Html.div
         [ cs "material-icons"
@@ -127,7 +127,7 @@ view lift page model =
       [ Html.h2 [] [ text "Theme Styles" ]
       , let
             ripple =
-                Ripple.bounded (Mdc >> lift) [3] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [3] model.mdc () ()
         in
         styled Html.div
         [ demoSurface
@@ -142,7 +142,7 @@ view lift page model =
         ]
       , let
             ripple =
-                Ripple.bounded (Mdc >> lift) [4] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [4] model.mdc () ()
         in
         styled Html.div
         [ demoSurface
