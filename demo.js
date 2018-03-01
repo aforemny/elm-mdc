@@ -8301,10 +8301,6 @@ var _aforemny$elm_mdc$Material_Internal_Button$RippleMsg = function (a) {
 	return {ctor: 'RippleMsg', _0: a};
 };
 
-var _aforemny$elm_mdc$Material_Internal_Checkbox$State = F2(
-	function (a, b) {
-		return {checked: a, indeterminate: b};
-	});
 var _aforemny$elm_mdc$Material_Internal_Checkbox$AnimationEnd = {ctor: 'AnimationEnd'};
 var _aforemny$elm_mdc$Material_Internal_Checkbox$SetFocus = function (a) {
 	return {ctor: 'SetFocus', _0: a};
@@ -8314,6 +8310,8 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox$Init = F2(
 		return {ctor: 'Init', _0: a, _1: b};
 	});
 var _aforemny$elm_mdc$Material_Internal_Checkbox$NoOp = {ctor: 'NoOp'};
+var _aforemny$elm_mdc$Material_Internal_Checkbox$Unchecked = {ctor: 'Unchecked'};
+var _aforemny$elm_mdc$Material_Internal_Checkbox$Checked = {ctor: 'Checked'};
 var _aforemny$elm_mdc$Material_Internal_Checkbox$IndeterminateUnchecked = {ctor: 'IndeterminateUnchecked'};
 var _aforemny$elm_mdc$Material_Internal_Checkbox$IndeterminateChecked = {ctor: 'IndeterminateChecked'};
 var _aforemny$elm_mdc$Material_Internal_Checkbox$CheckedIndeterminate = {ctor: 'CheckedIndeterminate'};
@@ -8402,10 +8400,10 @@ var _aforemny$elm_mdc$Material_Internal_Menu$Init = F2(
 	});
 var _aforemny$elm_mdc$Material_Internal_Menu$NoOp = {ctor: 'NoOp'};
 
-var _aforemny$elm_mdc$Material_Internal_RadioButton$NoOp = {ctor: 'NoOp'};
 var _aforemny$elm_mdc$Material_Internal_RadioButton$SetFocus = function (a) {
 	return {ctor: 'SetFocus', _0: a};
 };
+var _aforemny$elm_mdc$Material_Internal_RadioButton$NoOp = {ctor: 'NoOp'};
 var _aforemny$elm_mdc$Material_Internal_RadioButton$RippleMsg = function (a) {
 	return {ctor: 'RippleMsg', _0: a};
 };
@@ -10193,6 +10191,10 @@ var _aforemny$elm_mdc$Material_Options$styled = F2(
 var _aforemny$elm_mdc$Material_Options$div = _aforemny$elm_mdc$Material_Options$styled(_elm_lang$html$Html$div);
 var _aforemny$elm_mdc$Material_Options$span = _aforemny$elm_mdc$Material_Options$styled(_elm_lang$html$Html$span);
 
+var _aforemny$elm_mdc$Material_Icon$size48 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '48px');
+var _aforemny$elm_mdc$Material_Icon$size36 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '36px');
+var _aforemny$elm_mdc$Material_Icon$size24 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '24px');
+var _aforemny$elm_mdc$Material_Icon$size18 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '18px');
 var _aforemny$elm_mdc$Material_Icon$view = F2(
 	function (options, name) {
 		return A3(
@@ -10209,10 +10211,6 @@ var _aforemny$elm_mdc$Material_Icon$view = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _aforemny$elm_mdc$Material_Icon$size48 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '48px');
-var _aforemny$elm_mdc$Material_Icon$size36 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '36px');
-var _aforemny$elm_mdc$Material_Icon$size24 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '24px');
-var _aforemny$elm_mdc$Material_Icon$size18 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '18px');
 var _aforemny$elm_mdc$Material_Icon$defaultConfig = {};
 var _aforemny$elm_mdc$Material_Icon$Config = {};
 
@@ -10365,8 +10363,25 @@ var _aforemny$elm_mdc$Material_Ripple$decodeGeometry = function (type_) {
 			view(windowPageOffset)),
 		currentTarget(isSurfaceDisabled));
 };
-var _aforemny$elm_mdc$Material_Ripple$view = F5(
-	function (isUnbounded, lift, model, _p7, _p6) {
+var _aforemny$elm_mdc$Material_Ripple$accent = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{
+				color: _elm_lang$core$Maybe$Just('accent')
+			});
+	});
+var _aforemny$elm_mdc$Material_Ripple$primary = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{
+				color: _elm_lang$core$Maybe$Just('primary')
+			});
+	});
+var _aforemny$elm_mdc$Material_Ripple$defaultConfig = {color: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Material_Ripple$view = F4(
+	function (isUnbounded, lift, model, options) {
 		var isVisible = model.active || model.animating;
 		var deactivateOn = function (event) {
 			return A2(
@@ -10382,13 +10397,13 @@ var _aforemny$elm_mdc$Material_Ripple$view = F5(
 				event,
 				A2(
 					_elm_lang$core$Json_Decode$map,
-					function (_p8) {
+					function (_p6) {
 						return lift(
 							A3(
 								_aforemny$elm_mdc$Material_Internal_Ripple$Activate,
 								event,
 								_elm_lang$core$Maybe$Just(true),
-								_p8));
+								_p6));
 					},
 					_aforemny$elm_mdc$Material_Ripple$decodeGeometry(event)));
 		};
@@ -10571,72 +10586,9 @@ var _aforemny$elm_mdc$Material_Ripple$view = F5(
 						_1: {ctor: '[]'}
 					}
 				}));
-		var _p9 = _aforemny$elm_mdc$Material_Internal_Options$cssVariables(summary);
-		var selector = _p9._0;
-		var styleNode = _p9._1;
-		var properties = _aforemny$elm_mdc$Material_Options$many(
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded'),
-				_1: {
-					ctor: '::',
-					_0: function (_p10) {
-						return A2(
-							_aforemny$elm_mdc$Material_Options$when,
-							isUnbounded,
-							_aforemny$elm_mdc$Material_Options$many(_p10));
-					}(
-						{
-							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--unbounded'),
-							_1: {
-								ctor: '::',
-								_0: A2(_aforemny$elm_mdc$Material_Options$data, 'data-mdc-ripple-is-unbounded', ''),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {
-						ctor: '::',
-						_0: function (_p11) {
-							return A2(
-								_aforemny$elm_mdc$Material_Options$when,
-								isVisible,
-								_aforemny$elm_mdc$Material_Options$many(_p11));
-						}(
-							{
-								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--background-active-fill'),
-								_1: {
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--foreground-activation'),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_Options$when,
-								model.deactivation,
-								_aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--foreground-deactivation')),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_Options$when,
-									model.focus,
-									_aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--background-focused')),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Options$when,
-										isVisible,
-										_aforemny$elm_mdc$Material_Options$cs(selector)),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
-				}
-			});
+		var _p7 = _aforemny$elm_mdc$Material_Internal_Options$cssVariables(summary);
+		var selector = _p7._0;
+		var styleNode = _p7._1;
 		var style = isVisible ? styleNode : A3(
 			_elm_lang$html$Html$node,
 			'style',
@@ -10646,15 +10598,99 @@ var _aforemny$elm_mdc$Material_Ripple$view = F5(
 				_1: {ctor: '[]'}
 			},
 			{ctor: '[]'});
+		var _p8 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Ripple$defaultConfig, options);
+		var config = _p8.config;
+		var properties = _aforemny$elm_mdc$Material_Options$many(
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded'),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-surface'),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_Options$when,
+							_elm_lang$core$Native_Utils.eq(
+								config.color,
+								_elm_lang$core$Maybe$Just('primary')),
+							_aforemny$elm_mdc$Material_Options$cs('mdc-ripple-surface--primary')),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_Options$when,
+								_elm_lang$core$Native_Utils.eq(
+									config.color,
+									_elm_lang$core$Maybe$Just('accent')),
+								_aforemny$elm_mdc$Material_Options$cs('mdc-ripple-surface--accent')),
+							_1: {
+								ctor: '::',
+								_0: function (_p9) {
+									return A2(
+										_aforemny$elm_mdc$Material_Options$when,
+										isUnbounded,
+										_aforemny$elm_mdc$Material_Options$many(_p9));
+								}(
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--unbounded'),
+										_1: {
+											ctor: '::',
+											_0: A2(_aforemny$elm_mdc$Material_Options$data, 'data-mdc-ripple-is-unbounded', ''),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: function (_p10) {
+										return A2(
+											_aforemny$elm_mdc$Material_Options$when,
+											isVisible,
+											_aforemny$elm_mdc$Material_Options$many(_p10));
+									}(
+										{
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--background-active-fill'),
+											_1: {
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--foreground-activation'),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_Options$when,
+											model.deactivation,
+											_aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--foreground-deactivation')),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_aforemny$elm_mdc$Material_Options$when,
+												model.focus,
+												_aforemny$elm_mdc$Material_Options$cs('mdc-ripple-upgraded--background-focused')),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_aforemny$elm_mdc$Material_Options$when,
+													isVisible,
+													_aforemny$elm_mdc$Material_Options$cs(selector)),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
 		return {interactionHandler: interactionHandler, properties: properties, style: style};
 	});
-var _aforemny$elm_mdc$Material_Ripple$accent = _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-surface--accent');
-var _aforemny$elm_mdc$Material_Ripple$primary = _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-surface--primary');
-var _aforemny$elm_mdc$Material_Ripple$surface = _aforemny$elm_mdc$Material_Options$cs('mdc-ripple-surface');
 var _aforemny$elm_mdc$Material_Ripple$update = F2(
 	function (msg, model) {
-		var _p12 = msg;
-		switch (_p12.ctor) {
+		var _p11 = msg;
+		switch (_p11.ctor) {
 			case 'Focus':
 				return {
 					ctor: '_Tuple2',
@@ -10675,33 +10711,33 @@ var _aforemny$elm_mdc$Material_Ripple$update = F2(
 				var isVisible = model.active || model.animating;
 				if (!isVisible) {
 					var animation = model.animation + 1;
-					var active = A2(_elm_lang$core$Maybe$withDefault, model.active, _p12._1);
+					var active = A2(_elm_lang$core$Maybe$withDefault, model.active, _p11._1);
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{active: active, animating: true, geometry: _p12._2, deactivation: false, animation: animation}),
+							{active: active, animating: true, geometry: _p11._2, deactivation: false, animation: animation}),
 						_1: A2(
 							_aforemny$elm_mdc$Material_Helpers$delay,
 							300,
-							A2(_aforemny$elm_mdc$Material_Internal_Ripple$AnimationEnd, _p12._0, animation))
+							A2(_aforemny$elm_mdc$Material_Internal_Ripple$AnimationEnd, _p11._0, animation))
 					};
 				} else {
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 			case 'Deactivate':
-				var _p14 = _p12._0;
+				var _p13 = _p11._0;
 				var sameEvent = function () {
-					var _p13 = model.geometry.event.type_;
-					switch (_p13) {
+					var _p12 = model.geometry.event.type_;
+					switch (_p12) {
 						case 'keydown':
-							return _elm_lang$core$Native_Utils.eq(_p14, 'keyup');
+							return _elm_lang$core$Native_Utils.eq(_p13, 'keyup');
 						case 'mousedown':
-							return _elm_lang$core$Native_Utils.eq(_p14, 'mouseup');
+							return _elm_lang$core$Native_Utils.eq(_p13, 'mouseup');
 						case 'pointerdown':
-							return _elm_lang$core$Native_Utils.eq(_p14, 'pointerup');
+							return _elm_lang$core$Native_Utils.eq(_p13, 'pointerup');
 						case 'touchstart':
-							return _elm_lang$core$Native_Utils.eq(_p14, 'touchend');
+							return _elm_lang$core$Native_Utils.eq(_p13, 'touchend');
 						default:
 							return false;
 					}
@@ -10714,7 +10750,7 @@ var _aforemny$elm_mdc$Material_Ripple$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				return (_elm_lang$core$Native_Utils.eq(model.geometry.event.type_, _p12._0) && _elm_lang$core$Native_Utils.eq(_p12._1, model.animation)) ? {
+				return (_elm_lang$core$Native_Utils.eq(model.geometry.event.type_, _p11._0) && _elm_lang$core$Native_Utils.eq(_p11._1, model.animation)) ? {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
@@ -10724,7 +10760,7 @@ var _aforemny$elm_mdc$Material_Ripple$update = F2(
 		}
 	});
 var _aforemny$elm_mdc$Material_Ripple$defaultModel = {focus: false, active: false, animating: false, deactivation: false, geometry: _aforemny$elm_mdc$Material_Internal_Ripple$defaultGeometry, animation: 0};
-var _aforemny$elm_mdc$Material_Ripple$_p15 = A3(
+var _aforemny$elm_mdc$Material_Ripple$_p14 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.ripple;
@@ -10736,32 +10772,18 @@ var _aforemny$elm_mdc$Material_Ripple$_p15 = A3(
 				{ripple: x});
 		}),
 	_aforemny$elm_mdc$Material_Ripple$defaultModel);
-var _aforemny$elm_mdc$Material_Ripple$get = _aforemny$elm_mdc$Material_Ripple$_p15._0;
-var _aforemny$elm_mdc$Material_Ripple$set = _aforemny$elm_mdc$Material_Ripple$_p15._1;
-var _aforemny$elm_mdc$Material_Ripple$bounded = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Component$render,
-			_aforemny$elm_mdc$Material_Ripple$get,
-			_aforemny$elm_mdc$Material_Ripple$view(false),
-			_aforemny$elm_mdc$Material_Msg$RippleMsg,
-			lift,
-			index,
-			store,
-			options);
-	});
-var _aforemny$elm_mdc$Material_Ripple$unbounded = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Component$render,
-			_aforemny$elm_mdc$Material_Ripple$get,
-			_aforemny$elm_mdc$Material_Ripple$view(true),
-			_aforemny$elm_mdc$Material_Msg$RippleMsg,
-			lift,
-			index,
-			store,
-			options);
-	});
+var _aforemny$elm_mdc$Material_Ripple$get = _aforemny$elm_mdc$Material_Ripple$_p14._0;
+var _aforemny$elm_mdc$Material_Ripple$set = _aforemny$elm_mdc$Material_Ripple$_p14._1;
+var _aforemny$elm_mdc$Material_Ripple$bounded = A3(
+	_aforemny$elm_mdc$Material_Component$render,
+	_aforemny$elm_mdc$Material_Ripple$get,
+	_aforemny$elm_mdc$Material_Ripple$view(false),
+	_aforemny$elm_mdc$Material_Msg$RippleMsg);
+var _aforemny$elm_mdc$Material_Ripple$unbounded = A3(
+	_aforemny$elm_mdc$Material_Component$render,
+	_aforemny$elm_mdc$Material_Ripple$get,
+	_aforemny$elm_mdc$Material_Ripple$view(true),
+	_aforemny$elm_mdc$Material_Msg$RippleMsg);
 var _aforemny$elm_mdc$Material_Ripple$react = A4(
 	_aforemny$elm_mdc$Material_Component$react,
 	_aforemny$elm_mdc$Material_Ripple$get,
@@ -10772,6 +10794,9 @@ var _aforemny$elm_mdc$Material_Ripple$Model = F6(
 	function (a, b, c, d, e, f) {
 		return {focus: a, active: b, animating: c, deactivation: d, geometry: e, animation: f};
 	});
+var _aforemny$elm_mdc$Material_Ripple$Config = function (a) {
+	return {color: a};
+};
 
 var _aforemny$elm_mdc$Material_Button$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (options) {
@@ -10779,10 +10804,6 @@ var _aforemny$elm_mdc$Material_Button$disabled = _aforemny$elm_mdc$Material_Inte
 			options,
 			{disabled: true});
 	});
-var _aforemny$elm_mdc$Material_Button$type_ = function (_p0) {
-	return _aforemny$elm_mdc$Material_Internal_Options$attribute(
-		_elm_lang$html$Html_Attributes$type_(_p0));
-};
 var _aforemny$elm_mdc$Material_Button$link = function (href) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (options) {
@@ -10793,9 +10814,6 @@ var _aforemny$elm_mdc$Material_Button$link = function (href) {
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Button$darkTheme = _aforemny$elm_mdc$Material_Options$cs('mdc-button--dark-theme');
-var _aforemny$elm_mdc$Material_Button$secondary = _aforemny$elm_mdc$Material_Options$cs('mdc-button--accent');
-var _aforemny$elm_mdc$Material_Button$primary = _aforemny$elm_mdc$Material_Options$cs('mdc-button--primary');
 var _aforemny$elm_mdc$Material_Button$ripple = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (options) {
 		return _elm_lang$core$Native_Utils.update(
@@ -10818,21 +10836,20 @@ var _aforemny$elm_mdc$Material_Button$icon = function (str) {
 		});
 };
 var _aforemny$elm_mdc$Material_Button$defaultConfig = {ripple: false, link: _elm_lang$core$Maybe$Nothing, disabled: false, icon: _elm_lang$core$Maybe$Nothing};
-var _aforemny$elm_mdc$Material_Button$view = F4(
+var _aforemny$elm_mdc$Material_Button$button = F4(
 	function (lift, model, options, nodes) {
-		var ripple = A5(
+		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
 			false,
-			function (_p1) {
+			function (_p0) {
 				return lift(
-					_aforemny$elm_mdc$Material_Internal_Button$RippleMsg(_p1));
+					_aforemny$elm_mdc$Material_Internal_Button$RippleMsg(_p0));
 			},
 			model.ripple,
-			{ctor: '_Tuple0'},
-			{ctor: '_Tuple0'});
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Button$defaultConfig, options);
-		var summary = _p2;
-		var config = _p2.config;
+			{ctor: '[]'});
+		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Button$defaultConfig, options);
+		var summary = _p1;
+		var config = _p1.config;
 		return A5(
 			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
@@ -10875,11 +10892,11 @@ var _aforemny$elm_mdc$Material_Button$view = F4(
 											_aforemny$elm_mdc$Material_Options$cs('mdc-button--disabled')),
 										_1: {
 											ctor: '::',
-											_0: function (_p3) {
+											_0: function (_p2) {
 												return A2(
 													_aforemny$elm_mdc$Material_Options$when,
 													config.ripple,
-													_aforemny$elm_mdc$Material_Options$many(_p3));
+													_aforemny$elm_mdc$Material_Options$many(_p2));
 											}(
 												{
 													ctor: '::',
@@ -10952,10 +10969,10 @@ var _aforemny$elm_mdc$Material_Button$view = F4(
 	});
 var _aforemny$elm_mdc$Material_Button$update = F2(
 	function (msg, model) {
-		var _p4 = msg;
-		var _p5 = A2(_aforemny$elm_mdc$Material_Ripple$update, _p4._0, model.ripple);
-		var ripple = _p5._0;
-		var effects = _p5._1;
+		var _p3 = msg;
+		var _p4 = A2(_aforemny$elm_mdc$Material_Ripple$update, _p3._0, model.ripple);
+		var ripple = _p4._0;
+		var effects = _p4._1;
 		return {
 			ctor: '_Tuple2',
 			_0: _elm_lang$core$Native_Utils.update(
@@ -10965,7 +10982,7 @@ var _aforemny$elm_mdc$Material_Button$update = F2(
 		};
 	});
 var _aforemny$elm_mdc$Material_Button$defaultModel = {ripple: _aforemny$elm_mdc$Material_Ripple$defaultModel};
-var _aforemny$elm_mdc$Material_Button$_p6 = A3(
+var _aforemny$elm_mdc$Material_Button$_p5 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.button;
@@ -10977,9 +10994,9 @@ var _aforemny$elm_mdc$Material_Button$_p6 = A3(
 				{button: x});
 		}),
 	_aforemny$elm_mdc$Material_Button$defaultModel);
-var _aforemny$elm_mdc$Material_Button$get = _aforemny$elm_mdc$Material_Button$_p6._0;
-var _aforemny$elm_mdc$Material_Button$set = _aforemny$elm_mdc$Material_Button$_p6._1;
-var _aforemny$elm_mdc$Material_Button$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Button$get, _aforemny$elm_mdc$Material_Button$view, _aforemny$elm_mdc$Material_Msg$ButtonMsg);
+var _aforemny$elm_mdc$Material_Button$get = _aforemny$elm_mdc$Material_Button$_p5._0;
+var _aforemny$elm_mdc$Material_Button$set = _aforemny$elm_mdc$Material_Button$_p5._1;
+var _aforemny$elm_mdc$Material_Button$view = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Button$get, _aforemny$elm_mdc$Material_Button$button, _aforemny$elm_mdc$Material_Msg$ButtonMsg);
 var _aforemny$elm_mdc$Material_Button$react = A4(
 	_aforemny$elm_mdc$Material_Component$react,
 	_aforemny$elm_mdc$Material_Button$get,
@@ -11362,97 +11379,68 @@ var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom
 
 var _aforemny$elm_mdc$Material_Checkbox$animationState = F2(
 	function (oldState, state) {
-		var _p0 = {ctor: '_Tuple4', _0: oldState.indeterminate, _1: oldState.checked, _2: state.indeterminate, _3: state.checked};
+		var _p0 = {ctor: '_Tuple2', _0: oldState, _1: state};
 		_v0_6:
 		do {
-			_v0_3:
-			do {
-				_v0_2:
-				do {
-					_v0_1:
-					do {
-						_v0_0:
-						do {
-							if (_p0.ctor === '_Tuple4') {
-								if (_p0._1 === false) {
-									if (_p0._3 === false) {
-										if (_p0._2 === true) {
-											break _v0_0;
-										} else {
-											if (_p0._0 === true) {
-												break _v0_3;
-											} else {
-												break _v0_6;
-											}
-										}
-									} else {
-										if (_p0._2 === true) {
-											break _v0_0;
-										} else {
-											if (_p0._0 === true) {
-												break _v0_2;
-											} else {
-												return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$UncheckedChecked);
-											}
-										}
-									}
-								} else {
-									if (_p0._3 === true) {
-										if (_p0._2 === true) {
-											break _v0_1;
-										} else {
-											if (_p0._0 === true) {
-												break _v0_2;
-											} else {
-												break _v0_6;
-											}
-										}
-									} else {
-										if (_p0._2 === true) {
-											break _v0_1;
-										} else {
-											if (_p0._0 === true) {
-												break _v0_3;
-											} else {
-												return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$CheckedUnchecked);
-											}
-										}
-									}
-								}
+			if (_p0.ctor === '_Tuple2') {
+				if (_p0._0.ctor === 'Nothing') {
+					if (_p0._1.ctor === 'Just') {
+						if (_p0._1._0.ctor === 'Checked') {
+							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$IndeterminateChecked);
+						} else {
+							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$IndeterminateUnchecked);
+						}
+					} else {
+						break _v0_6;
+					}
+				} else {
+					if (_p0._0._0.ctor === 'Unchecked') {
+						if (_p0._1.ctor === 'Nothing') {
+							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$UncheckedIndeterminate);
+						} else {
+							if (_p0._1._0.ctor === 'Checked') {
+								return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$UncheckedChecked);
 							} else {
 								break _v0_6;
 							}
-						} while(false);
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$UncheckedIndeterminate);
-					} while(false);
-					return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$CheckedIndeterminate);
-				} while(false);
-				return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$IndeterminateChecked);
-			} while(false);
-			return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$IndeterminateUnchecked);
+						}
+					} else {
+						if (_p0._1.ctor === 'Nothing') {
+							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$CheckedIndeterminate);
+						} else {
+							if (_p0._1._0.ctor === 'Unchecked') {
+								return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$CheckedUnchecked);
+							} else {
+								break _v0_6;
+							}
+						}
+					}
+				}
+			} else {
+				break _v0_6;
+			}
 		} while(false);
 		return _elm_lang$core$Maybe$Nothing;
 	});
-var _aforemny$elm_mdc$Material_Checkbox$indeterminate = _aforemny$elm_mdc$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{indeterminate: true});
-	});
-var _aforemny$elm_mdc$Material_Checkbox$checked = _aforemny$elm_mdc$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{checked: true});
-	});
+var _aforemny$elm_mdc$Material_Checkbox$checked = function (value) {
+	var state = value ? _aforemny$elm_mdc$Material_Internal_Checkbox$Checked : _aforemny$elm_mdc$Material_Internal_Checkbox$Unchecked;
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					state: _elm_lang$core$Maybe$Just(state)
+				});
+		});
+};
 var _aforemny$elm_mdc$Material_Checkbox$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{disabled: true});
 	});
-var _aforemny$elm_mdc$Material_Checkbox$defaultConfig = {checked: false, indeterminate: false, disabled: false};
-var _aforemny$elm_mdc$Material_Checkbox$view = F4(
+var _aforemny$elm_mdc$Material_Checkbox$defaultConfig = {state: _elm_lang$core$Maybe$Nothing, disabled: false};
+var _aforemny$elm_mdc$Material_Checkbox$checkbox = F4(
 	function (lift, model, options, _p1) {
 		var animationClass = function (animation) {
 			var _p2 = animation;
@@ -11478,7 +11466,7 @@ var _aforemny$elm_mdc$Material_Checkbox$view = F4(
 		var _p3 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Checkbox$defaultConfig, options);
 		var summary = _p3;
 		var config = _p3.config;
-		var configState = {checked: config.checked, indeterminate: config.indeterminate};
+		var configState = config.state;
 		var currentState = A2(_elm_lang$core$Maybe$withDefault, configState, model.lastKnownState);
 		var stateChangedOrUninitialized = _elm_lang$core$Native_Utils.eq(model.lastKnownState, _elm_lang$core$Maybe$Nothing) || (!_elm_lang$core$Native_Utils.eq(currentState, configState));
 		return A5(
@@ -11492,13 +11480,15 @@ var _aforemny$elm_mdc$Material_Checkbox$view = F4(
 					ctor: '::',
 					_0: A2(
 						_aforemny$elm_mdc$Material_Options$when,
-						currentState.indeterminate,
+						_elm_lang$core$Native_Utils.eq(currentState, _elm_lang$core$Maybe$Nothing),
 						_aforemny$elm_mdc$Material_Options$cs('mdc-checkbox--indeterminate')),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_aforemny$elm_mdc$Material_Options$when,
-							currentState.checked,
+							_elm_lang$core$Native_Utils.eq(
+								currentState,
+								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$Checked)),
 							_aforemny$elm_mdc$Material_Options$cs('mdc-checkbox--checked')),
 						_1: {
 							ctor: '::',
@@ -11568,10 +11558,14 @@ var _aforemny$elm_mdc$Material_Checkbox$view = F4(
 										_0: A2(
 											_elm_lang$html$Html_Attributes$property,
 											'indeterminate',
-											_elm_lang$core$Json_Encode$bool(currentState.indeterminate)),
+											_elm_lang$core$Json_Encode$bool(
+												_elm_lang$core$Native_Utils.eq(currentState, _elm_lang$core$Maybe$Nothing))),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$checked(currentState.checked),
+											_0: _elm_lang$html$Html_Attributes$checked(
+												_elm_lang$core$Native_Utils.eq(
+													currentState,
+													_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Material_Internal_Checkbox$Checked))),
 											_1: {
 												ctor: '::',
 												_0: _elm_lang$html$Html_Attributes$disabled(config.disabled),
@@ -11741,12 +11735,12 @@ var _aforemny$elm_mdc$Material_Checkbox$_p9 = A3(
 	_aforemny$elm_mdc$Material_Checkbox$defaultModel);
 var _aforemny$elm_mdc$Material_Checkbox$get = _aforemny$elm_mdc$Material_Checkbox$_p9._0;
 var _aforemny$elm_mdc$Material_Checkbox$set = _aforemny$elm_mdc$Material_Checkbox$_p9._1;
-var _aforemny$elm_mdc$Material_Checkbox$render = F4(
+var _aforemny$elm_mdc$Material_Checkbox$view = F4(
 	function (lift, index, store, options) {
 		return A7(
 			_aforemny$elm_mdc$Material_Component$render,
 			_aforemny$elm_mdc$Material_Checkbox$get,
-			_aforemny$elm_mdc$Material_Checkbox$view,
+			_aforemny$elm_mdc$Material_Checkbox$checkbox,
 			_aforemny$elm_mdc$Material_Msg$CheckboxMsg,
 			lift,
 			index,
@@ -11762,9 +11756,9 @@ var _aforemny$elm_mdc$Material_Checkbox$Model = F3(
 	function (a, b, c) {
 		return {isFocused: a, lastKnownState: b, animation: c};
 	});
-var _aforemny$elm_mdc$Material_Checkbox$Config = F3(
-	function (a, b, c) {
-		return {checked: a, indeterminate: b, disabled: c};
+var _aforemny$elm_mdc$Material_Checkbox$Config = F2(
+	function (a, b) {
+		return {state: a, disabled: b};
 	});
 
 var _aforemny$elm_mdc$Material_Dialog$close = _debois$elm_dom$DOM$target(
@@ -12615,7 +12609,7 @@ var _aforemny$elm_mdc$Material_Fab$mini = _aforemny$elm_mdc$Material_Options$cs(
 var _aforemny$elm_mdc$Material_Fab$defaultConfig = {ripple: false};
 var _aforemny$elm_mdc$Material_Fab$view = F4(
 	function (lift, model, options, icon) {
-		var ripple = A5(
+		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
 			false,
 			function (_p0) {
@@ -12623,8 +12617,7 @@ var _aforemny$elm_mdc$Material_Fab$view = F4(
 					_aforemny$elm_mdc$Material_Internal_Fab$RippleMsg(_p0));
 			},
 			model.ripple,
-			{ctor: '_Tuple0'},
-			{ctor: '_Tuple0'});
+			{ctor: '[]'});
 		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Fab$defaultConfig, options);
 		var summary = _p1;
 		var config = _p1.config;
@@ -12974,41 +12967,32 @@ var _aforemny$elm_mdc$Material_GridList$Model = F5(
 var _aforemny$elm_mdc$Material_GridList$Config = {};
 
 var _aforemny$elm_mdc$Material_IconToggle$disabled = _aforemny$elm_mdc$Material_Options$cs('mdc-icon-toggle--disabled');
-var _aforemny$elm_mdc$Material_IconToggle$accent = _aforemny$elm_mdc$Material_Options$cs('mdc-icon-toggle--accent');
-var _aforemny$elm_mdc$Material_IconToggle$primary = _aforemny$elm_mdc$Material_Options$cs('mdc-icon-toggle--primary');
-var _aforemny$elm_mdc$Material_IconToggle$inner = function (_p0) {
+var _aforemny$elm_mdc$Material_IconToggle$label = function (label) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
-		F2(
-			function (value, config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						inner: _elm_lang$core$Maybe$Just(value)
-					});
-			})(_p0));
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{label: label});
+		});
 };
-var _aforemny$elm_mdc$Material_IconToggle$label = F2(
-	function (on, off) {
-		return _aforemny$elm_mdc$Material_Internal_Options$option(
-			function (config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						label: {on: on, off: off}
-					});
-			});
-	});
-var _aforemny$elm_mdc$Material_IconToggle$icon = F2(
-	function (on, off) {
-		return _aforemny$elm_mdc$Material_Internal_Options$option(
-			function (config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						icon: {on: on, off: off}
-					});
-			});
-	});
+var _aforemny$elm_mdc$Material_IconToggle$icon = function (icon) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{icon: icon});
+		});
+};
+var _aforemny$elm_mdc$Material_IconToggle$className = function (className) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					inner: _elm_lang$core$Maybe$Just(className)
+				});
+		});
+};
 var _aforemny$elm_mdc$Material_IconToggle$on = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
@@ -13021,21 +13005,20 @@ var _aforemny$elm_mdc$Material_IconToggle$defaultConfig = {
 	icon: {on: '', off: ''},
 	inner: _elm_lang$core$Maybe$Nothing
 };
-var _aforemny$elm_mdc$Material_IconToggle$view = F4(
-	function (lift, model, options, _p1) {
-		var ripple = A5(
+var _aforemny$elm_mdc$Material_IconToggle$iconToggle = F4(
+	function (lift, model, options, _p0) {
+		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
 			true,
-			function (_p2) {
+			function (_p1) {
 				return lift(
-					_aforemny$elm_mdc$Material_Internal_IconToggle$RippleMsg(_p2));
+					_aforemny$elm_mdc$Material_Internal_IconToggle$RippleMsg(_p1));
 			},
 			model.ripple,
-			{ctor: '[]'},
 			{ctor: '[]'});
-		var _p3 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_IconToggle$defaultConfig, options);
-		var summary = _p3;
-		var config = _p3.config;
+		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_IconToggle$defaultConfig, options);
+		var summary = _p2;
+		var config = _p2.config;
 		return A5(
 			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
@@ -13099,10 +13082,10 @@ var _aforemny$elm_mdc$Material_IconToggle$view = F4(
 	});
 var _aforemny$elm_mdc$Material_IconToggle$update = F2(
 	function (msg, model) {
-		var _p4 = msg;
-		var _p5 = A2(_aforemny$elm_mdc$Material_Ripple$update, _p4._0, model.ripple);
-		var ripple = _p5._0;
-		var effects = _p5._1;
+		var _p3 = msg;
+		var _p4 = A2(_aforemny$elm_mdc$Material_Ripple$update, _p3._0, model.ripple);
+		var ripple = _p4._0;
+		var effects = _p4._1;
 		return {
 			ctor: '_Tuple2',
 			_0: _elm_lang$core$Native_Utils.update(
@@ -13112,7 +13095,7 @@ var _aforemny$elm_mdc$Material_IconToggle$update = F2(
 		};
 	});
 var _aforemny$elm_mdc$Material_IconToggle$defaultModel = {on: false, ripple: _aforemny$elm_mdc$Material_Ripple$defaultModel};
-var _aforemny$elm_mdc$Material_IconToggle$_p6 = A3(
+var _aforemny$elm_mdc$Material_IconToggle$_p5 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.iconToggle;
@@ -13124,15 +13107,15 @@ var _aforemny$elm_mdc$Material_IconToggle$_p6 = A3(
 				{iconToggle: x});
 		}),
 	_aforemny$elm_mdc$Material_IconToggle$defaultModel);
-var _aforemny$elm_mdc$Material_IconToggle$get = _aforemny$elm_mdc$Material_IconToggle$_p6._0;
-var _aforemny$elm_mdc$Material_IconToggle$set = _aforemny$elm_mdc$Material_IconToggle$_p6._1;
+var _aforemny$elm_mdc$Material_IconToggle$get = _aforemny$elm_mdc$Material_IconToggle$_p5._0;
+var _aforemny$elm_mdc$Material_IconToggle$set = _aforemny$elm_mdc$Material_IconToggle$_p5._1;
 var _aforemny$elm_mdc$Material_IconToggle$react = A4(
 	_aforemny$elm_mdc$Material_Component$react,
 	_aforemny$elm_mdc$Material_IconToggle$get,
 	_aforemny$elm_mdc$Material_IconToggle$set,
 	_aforemny$elm_mdc$Material_Msg$IconToggleMsg,
 	_aforemny$elm_mdc$Material_Component$generalise(_aforemny$elm_mdc$Material_IconToggle$update));
-var _aforemny$elm_mdc$Material_IconToggle$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_IconToggle$get, _aforemny$elm_mdc$Material_IconToggle$view, _aforemny$elm_mdc$Material_Msg$IconToggleMsg);
+var _aforemny$elm_mdc$Material_IconToggle$view = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_IconToggle$get, _aforemny$elm_mdc$Material_IconToggle$iconToggle, _aforemny$elm_mdc$Material_Msg$IconToggleMsg);
 var _aforemny$elm_mdc$Material_IconToggle$Model = F2(
 	function (a, b) {
 		return {on: a, ripple: b};
@@ -13791,10 +13774,6 @@ var _aforemny$elm_mdc$Material_Menu$Corner = F4(
 		return {bottom: a, center: b, right: c, flipRtl: d};
 	});
 
-var _aforemny$elm_mdc$Material_RadioButton$name = function (value) {
-	return _aforemny$elm_mdc$Material_Internal_Options$attribute(
-		_elm_lang$html$Html_Attributes$name(value));
-};
 var _aforemny$elm_mdc$Material_RadioButton$selected = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
@@ -13822,9 +13801,9 @@ var _aforemny$elm_mdc$Material_RadioButton$defaultConfig = {
 	container: {ctor: '[]'},
 	value: false
 };
-var _aforemny$elm_mdc$Material_RadioButton$view = F4(
+var _aforemny$elm_mdc$Material_RadioButton$radioButton = F4(
 	function (lift, model, options, _p0) {
-		var ripple = A5(
+		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
 			true,
 			function (_p1) {
@@ -13832,7 +13811,6 @@ var _aforemny$elm_mdc$Material_RadioButton$view = F4(
 					_aforemny$elm_mdc$Material_Internal_RadioButton$RippleMsg(_p1));
 			},
 			model.ripple,
-			{ctor: '[]'},
 			{ctor: '[]'});
 		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_RadioButton$defaultConfig, options);
 		var summary = _p2;
@@ -13976,7 +13954,9 @@ var _aforemny$elm_mdc$Material_RadioButton$update = F3(
 						},
 						effects)
 				};
-			case 'SetFocus':
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+			default:
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
@@ -13985,8 +13965,6 @@ var _aforemny$elm_mdc$Material_RadioButton$update = F3(
 							{isFocused: _p3._0})),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
-				return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
 var _aforemny$elm_mdc$Material_RadioButton$defaultModel = {ripple: _aforemny$elm_mdc$Material_Ripple$defaultModel, isFocused: false};
@@ -14005,12 +13983,12 @@ var _aforemny$elm_mdc$Material_RadioButton$_p6 = A3(
 var _aforemny$elm_mdc$Material_RadioButton$get = _aforemny$elm_mdc$Material_RadioButton$_p6._0;
 var _aforemny$elm_mdc$Material_RadioButton$set = _aforemny$elm_mdc$Material_RadioButton$_p6._1;
 var _aforemny$elm_mdc$Material_RadioButton$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_RadioButton$get, _aforemny$elm_mdc$Material_RadioButton$set, _aforemny$elm_mdc$Material_Msg$RadioButtonMsg, _aforemny$elm_mdc$Material_RadioButton$update);
-var _aforemny$elm_mdc$Material_RadioButton$render = F4(
+var _aforemny$elm_mdc$Material_RadioButton$view = F4(
 	function (lift, index, store, options) {
 		return A7(
 			_aforemny$elm_mdc$Material_Component$render,
 			_aforemny$elm_mdc$Material_RadioButton$get,
-			_aforemny$elm_mdc$Material_RadioButton$view,
+			_aforemny$elm_mdc$Material_RadioButton$radioButton,
 			_aforemny$elm_mdc$Material_Msg$RadioButtonMsg,
 			lift,
 			index,
@@ -16010,7 +15988,7 @@ var _aforemny$elm_mdc$Material_Switch$defaultConfig = {
 	container: {ctor: '[]'},
 	value: false
 };
-var _aforemny$elm_mdc$Material_Switch$view = F4(
+var _aforemny$elm_mdc$Material_Switch$switch = F4(
 	function (lift, model, options, _p0) {
 		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Switch$defaultConfig, options);
 		var summary = _p1;
@@ -16135,12 +16113,12 @@ var _aforemny$elm_mdc$Material_Switch$_p4 = A3(
 var _aforemny$elm_mdc$Material_Switch$get = _aforemny$elm_mdc$Material_Switch$_p4._0;
 var _aforemny$elm_mdc$Material_Switch$set = _aforemny$elm_mdc$Material_Switch$_p4._1;
 var _aforemny$elm_mdc$Material_Switch$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Switch$get, _aforemny$elm_mdc$Material_Switch$set, _aforemny$elm_mdc$Material_Msg$SwitchMsg, _aforemny$elm_mdc$Material_Switch$update);
-var _aforemny$elm_mdc$Material_Switch$render = F4(
+var _aforemny$elm_mdc$Material_Switch$view = F4(
 	function (lift, index, store, options) {
 		return A7(
 			_aforemny$elm_mdc$Material_Component$render,
 			_aforemny$elm_mdc$Material_Switch$get,
-			_aforemny$elm_mdc$Material_Switch$view,
+			_aforemny$elm_mdc$Material_Switch$switch,
 			_aforemny$elm_mdc$Material_Msg$SwitchMsg,
 			lift,
 			index,
@@ -16612,7 +16590,7 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 								F2(
 									function (index, _p7) {
 										var _p8 = _p7;
-										var ripple = A5(
+										var ripple = A4(
 											_aforemny$elm_mdc$Material_Ripple$view,
 											false,
 											function (_p9) {
@@ -16623,8 +16601,7 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 												_elm_lang$core$Maybe$withDefault,
 												_aforemny$elm_mdc$Material_Ripple$defaultModel,
 												A2(_elm_lang$core$Dict$get, index, model.ripples)),
-											{ctor: '_Tuple0'},
-											{ctor: '_Tuple0'});
+											{ctor: '[]'});
 										return {
 											ctor: '::',
 											_0: A2(
@@ -17337,7 +17314,7 @@ var _aforemny$elm_mdc$Material_Textfield$defaultConfig = {
 };
 var _aforemny$elm_mdc$Material_Textfield$view = F4(
 	function (lift, model, options, _p9) {
-		var ripple = A5(
+		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
 			false,
 			function (_p10) {
@@ -17345,7 +17322,6 @@ var _aforemny$elm_mdc$Material_Textfield$view = F4(
 					_aforemny$elm_mdc$Material_Internal_Textfield$RippleMsg(_p10));
 			},
 			model.ripple,
-			{ctor: '[]'},
 			{ctor: '[]'});
 		var _p11 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Textfield$defaultConfig, options);
 		var summary = _p11;
@@ -19551,7 +19527,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Button$render,
+										_aforemny$elm_mdc$Material_Button$view,
 										function (_p2) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Buttons$Mdc(_p2));
@@ -19574,7 +19550,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 									_1: {
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_Button$render,
+											_aforemny$elm_mdc$Material_Button$view,
 											function (_p3) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Buttons$Mdc(_p3));
@@ -19597,7 +19573,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 										_1: {
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Button$render,
+												_aforemny$elm_mdc$Material_Button$view,
 												function (_p4) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Buttons$Mdc(_p4));
@@ -19620,7 +19596,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 											_1: {
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_Button$render,
+													_aforemny$elm_mdc$Material_Button$view,
 													function (_p5) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Buttons$Mdc(_p5));
@@ -19634,7 +19610,11 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 															_1: {ctor: '[]'}
 														}),
 													model.mdc,
-													{ctor: '::', _0: _aforemny$elm_mdc$Material_Button$secondary, _1: options},
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Options$cs('secondary-button'),
+														_1: options
+													},
 													{
 														ctor: '::',
 														_0: _elm_lang$html$Html$text('Secondary'),
@@ -19643,7 +19623,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 												_1: {
 													ctor: '::',
 													_0: A5(
-														_aforemny$elm_mdc$Material_Button$render,
+														_aforemny$elm_mdc$Material_Button$view,
 														function (_p6) {
 															return lift(
 																_aforemny$elm_mdc$Demo_Buttons$Mdc(_p6));
@@ -19670,7 +19650,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 													_1: {
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Button$render,
+															_aforemny$elm_mdc$Material_Button$view,
 															function (_p7) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_Buttons$Mdc(_p7));
@@ -19788,7 +19768,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 					{
 						ctor: '::',
 						_0: A5(
-							_aforemny$elm_mdc$Material_Button$render,
+							_aforemny$elm_mdc$Material_Button$view,
 							function (_p8) {
 								return lift(
 									_aforemny$elm_mdc$Demo_Buttons$Mdc(_p8));
@@ -19820,7 +19800,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Button$render,
+								_aforemny$elm_mdc$Material_Button$view,
 								function (_p9) {
 									return lift(
 										_aforemny$elm_mdc$Demo_Buttons$Mdc(_p9));
@@ -19843,12 +19823,8 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 										_0: _aforemny$elm_mdc$Material_Button$raised,
 										_1: {
 											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Button$primary,
-											_1: {
-												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin-left', '32px'),
-												_1: {ctor: '[]'}
-											}
+											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin-left', '32px'),
+											_1: {ctor: '[]'}
 										}
 									}
 								},
@@ -20163,7 +20139,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 										{
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Button$render,
+												_aforemny$elm_mdc$Material_Button$view,
 												function (_p2) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Cards$Mdc(_p2));
@@ -20194,7 +20170,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 											_1: {
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_Button$render,
+													_aforemny$elm_mdc$Material_Button$view,
 													function (_p3) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Cards$Mdc(_p3));
@@ -20233,7 +20209,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_IconToggle$render,
+													_aforemny$elm_mdc$Material_IconToggle$view,
 													function (_p4) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Cards$Mdc(_p4));
@@ -20252,10 +20228,12 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 														_0: _aforemny$elm_mdc$Material_Card$actionIcon,
 														_1: {
 															ctor: '::',
-															_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+															_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+																{on: 'favorite', off: 'favorite_border'}),
 															_1: {
 																ctor: '::',
-																_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Remove from favorites', 'Add to favorites'),
+																_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																	{on: 'Remove from favorites', off: 'Add to favorites'}),
 																_1: {ctor: '[]'}
 															}
 														}
@@ -20264,7 +20242,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 												_1: {
 													ctor: '::',
 													_0: A5(
-														_aforemny$elm_mdc$Material_IconToggle$render,
+														_aforemny$elm_mdc$Material_IconToggle$view,
 														function (_p5) {
 															return lift(
 																_aforemny$elm_mdc$Demo_Cards$Mdc(_p5));
@@ -20283,10 +20261,12 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 															_0: _aforemny$elm_mdc$Material_Card$actionIcon,
 															_1: {
 																ctor: '::',
-																_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'share', 'share'),
+																_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+																	{on: 'share', off: 'share'}),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Share', 'Share'),
+																	_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																		{on: 'Share', off: 'Share'}),
 																	_1: {ctor: '[]'}
 																}
 															}
@@ -20295,7 +20275,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 													_1: {
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_IconToggle$render,
+															_aforemny$elm_mdc$Material_IconToggle$view,
 															function (_p6) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_Cards$Mdc(_p6));
@@ -20314,10 +20294,12 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 																_0: _aforemny$elm_mdc$Material_Card$actionIcon,
 																_1: {
 																	ctor: '::',
-																	_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'more_vert', 'more_vert'),
+																	_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+																		{on: 'more_vert', off: 'more_vert'}),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'More options', 'More options'),
+																		_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																			{on: 'More options', off: 'More options'}),
 																		_1: {ctor: '[]'}
 																	}
 																}
@@ -20469,7 +20451,7 @@ var _aforemny$elm_mdc$Demo_Cards$headlinesCard = F3(
 										{
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Button$render,
+												_aforemny$elm_mdc$Material_Button$view,
 												function (_p7) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Cards$Mdc(_p7));
@@ -20616,7 +20598,7 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_IconToggle$render,
+										_aforemny$elm_mdc$Material_IconToggle$view,
 										function (_p8) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Cards$Mdc(_p8));
@@ -20635,10 +20617,12 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 											_0: _aforemny$elm_mdc$Material_Card$actionIcon,
 											_1: {
 												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+												_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+													{on: 'favorite', off: 'favorite_border'}),
 												_1: {
 													ctor: '::',
-													_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Remove from favorites', 'Add to favorites'),
+													_0: _aforemny$elm_mdc$Material_IconToggle$label(
+														{on: 'Remove from favorites', off: 'Add to favorites'}),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -20647,7 +20631,7 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 									_1: {
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_IconToggle$render,
+											_aforemny$elm_mdc$Material_IconToggle$view,
 											function (_p9) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Cards$Mdc(_p9));
@@ -20666,10 +20650,12 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 												_0: _aforemny$elm_mdc$Material_Card$actionIcon,
 												_1: {
 													ctor: '::',
-													_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'bookmark', 'bookmark_border'),
+													_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+														{on: 'bookmark', off: 'bookmark_border'}),
 													_1: {
 														ctor: '::',
-														_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Remove bookmark', 'Add bookmark'),
+														_0: _aforemny$elm_mdc$Material_IconToggle$label(
+															{on: 'Remove bookmark', off: 'Add bookmark'}),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -20678,7 +20664,7 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 										_1: {
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_IconToggle$render,
+												_aforemny$elm_mdc$Material_IconToggle$view,
 												function (_p10) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Cards$Mdc(_p10));
@@ -20697,10 +20683,12 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 													_0: _aforemny$elm_mdc$Material_Card$actionIcon,
 													_1: {
 														ctor: '::',
-														_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'share', 'share'),
+														_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+															{on: 'share', off: 'share'}),
 														_1: {
 															ctor: '::',
-															_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Share', 'Share'),
+															_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																{on: 'Share', off: 'Share'}),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -20858,7 +20846,7 @@ var _aforemny$elm_mdc$Demo_Cards$albumCard = F3(
 											_elm_lang$core$List$map,
 											function (n) {
 												return A5(
-													_aforemny$elm_mdc$Material_IconToggle$render,
+													_aforemny$elm_mdc$Material_IconToggle$view,
 													function (_p11) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Cards$Mdc(_p11));
@@ -20877,19 +20865,21 @@ var _aforemny$elm_mdc$Demo_Cards$albumCard = F3(
 														_0: _aforemny$elm_mdc$Material_Card$actionIcon,
 														_1: {
 															ctor: '::',
-															_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'star_border', 'star_border'),
+															_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+																{on: 'star_border', off: 'star_border'}),
 															_1: {
 																ctor: '::',
-																_0: A2(
-																	_aforemny$elm_mdc$Material_IconToggle$label,
-																	A2(
-																		_elm_lang$core$Basics_ops['++'],
-																		_elm_lang$core$Basics$toString(n),
-																		' stars'),
-																	A2(
-																		_elm_lang$core$Basics_ops['++'],
-																		_elm_lang$core$Basics$toString(n),
-																		' stars')),
+																_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																	{
+																		on: A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			_elm_lang$core$Basics$toString(n),
+																			' stars'),
+																		off: A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			_elm_lang$core$Basics$toString(n),
+																			' stars')
+																	}),
 																_1: {ctor: '[]'}
 															}
 														}
@@ -21012,7 +21002,7 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Checkbox$render,
+										_aforemny$elm_mdc$Material_Checkbox$view,
 										function (_p13) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Cards$Mdc(_p13));
@@ -21029,7 +21019,7 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 												lift(_aforemny$elm_mdc$Demo_Cards$ToggleRtl)),
 											_1: {
 												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Material_Options$when, model.rtl, _aforemny$elm_mdc$Material_Checkbox$checked),
+												_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.rtl),
 												_1: {ctor: '[]'}
 											}
 										},
@@ -21105,7 +21095,10 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 			});
 	});
 
-var _aforemny$elm_mdc$Demo_Checkbox$defaultCheckbox = {checked: false, indeterminate: false, disabled: false};
+var _aforemny$elm_mdc$Demo_Checkbox$defaultCheckbox = {
+	checked: _elm_lang$core$Maybe$Just(false),
+	disabled: false
+};
 var _aforemny$elm_mdc$Demo_Checkbox$defaultModel = {
 	mdc: _aforemny$elm_mdc$Material$defaultModel,
 	checkboxes: A2(
@@ -21117,15 +21110,15 @@ var _aforemny$elm_mdc$Demo_Checkbox$defaultModel = {
 		},
 		_elm_lang$core$Native_Utils.update(
 			_aforemny$elm_mdc$Demo_Checkbox$defaultCheckbox,
-			{indeterminate: true}))
+			{checked: _elm_lang$core$Maybe$Nothing}))
 };
 var _aforemny$elm_mdc$Demo_Checkbox$Model = F2(
 	function (a, b) {
 		return {mdc: a, checkboxes: b};
 	});
-var _aforemny$elm_mdc$Demo_Checkbox$Checkbox = F3(
-	function (a, b, c) {
-		return {checked: a, indeterminate: b, disabled: c};
+var _aforemny$elm_mdc$Demo_Checkbox$Checkbox = F2(
+	function (a, b) {
+		return {checked: a, disabled: b};
 	});
 var _aforemny$elm_mdc$Demo_Checkbox$ToggleChecked = function (a) {
 	return {ctor: 'ToggleChecked', _0: a};
@@ -21157,7 +21150,9 @@ var _aforemny$elm_mdc$Demo_Checkbox$update = F3(
 				var checkbox = function (checkbox) {
 					return _elm_lang$core$Native_Utils.update(
 						checkbox,
-						{indeterminate: !checkbox.indeterminate});
+						{
+							checked: _elm_lang$core$Native_Utils.eq(checkbox.checked, _elm_lang$core$Maybe$Nothing) ? _elm_lang$core$Maybe$Just(false) : _elm_lang$core$Maybe$Nothing
+						});
 				}(
 					A2(
 						_elm_lang$core$Maybe$withDefault,
@@ -21195,7 +21190,9 @@ var _aforemny$elm_mdc$Demo_Checkbox$update = F3(
 				var checkbox = function (checkbox) {
 					return _elm_lang$core$Native_Utils.update(
 						checkbox,
-						{checked: !checkbox.checked, indeterminate: false});
+						{
+							checked: _elm_lang$core$Native_Utils.eq(checkbox.checked, _elm_lang$core$Maybe$Nothing) ? _elm_lang$core$Maybe$Just(true) : A2(_elm_lang$core$Maybe$map, _elm_lang$core$Basics$not, checkbox.checked)
+						});
 				}(
 					A2(
 						_elm_lang$core$Maybe$withDefault,
@@ -21219,7 +21216,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 				_aforemny$elm_mdc$Demo_Checkbox$defaultCheckbox,
 				A2(_elm_lang$core$Dict$get, index, model.checkboxes));
 			return A5(
-				_aforemny$elm_mdc$Material_Checkbox$render,
+				_aforemny$elm_mdc$Material_Checkbox$view,
 				function (_p5) {
 					return lift(
 						_aforemny$elm_mdc$Demo_Checkbox$Mdc(_p5));
@@ -21236,15 +21233,15 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 								_aforemny$elm_mdc$Demo_Checkbox$ToggleChecked(index)))),
 					_1: {
 						ctor: '::',
-						_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.checked, _aforemny$elm_mdc$Material_Checkbox$checked),
+						_0: A2(
+							_aforemny$elm_mdc$Material_Options$when,
+							!_elm_lang$core$Native_Utils.eq(checkbox.checked, _elm_lang$core$Maybe$Nothing),
+							_aforemny$elm_mdc$Material_Checkbox$checked(
+								A2(_elm_lang$core$Maybe$withDefault, false, checkbox.checked))),
 						_1: {
 							ctor: '::',
-							_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.indeterminate, _aforemny$elm_mdc$Material_Checkbox$indeterminate),
-							_1: {
-								ctor: '::',
-								_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.disabled, _aforemny$elm_mdc$Material_Checkbox$disabled),
-								_1: {ctor: '[]'}
-							}
+							_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.disabled, _aforemny$elm_mdc$Material_Checkbox$disabled),
+							_1: {ctor: '[]'}
 						}
 					}
 				},
@@ -21339,7 +21336,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_Checkbox$render,
+													_aforemny$elm_mdc$Material_Checkbox$view,
 													function (_p6) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Checkbox$Mdc(_p6));
@@ -21356,15 +21353,15 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 																	_aforemny$elm_mdc$Demo_Checkbox$ToggleChecked(index)))),
 														_1: {
 															ctor: '::',
-															_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.checked, _aforemny$elm_mdc$Material_Checkbox$checked),
+															_0: A2(
+																_aforemny$elm_mdc$Material_Options$when,
+																!_elm_lang$core$Native_Utils.eq(checkbox.checked, _elm_lang$core$Maybe$Nothing),
+																_aforemny$elm_mdc$Material_Checkbox$checked(
+																	A2(_elm_lang$core$Maybe$withDefault, false, checkbox.checked))),
 															_1: {
 																ctor: '::',
-																_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.indeterminate, _aforemny$elm_mdc$Material_Checkbox$indeterminate),
-																_1: {
-																	ctor: '::',
-																	_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.disabled, _aforemny$elm_mdc$Material_Checkbox$disabled),
-																	_1: {ctor: '[]'}
-																}
+																_0: A2(_aforemny$elm_mdc$Material_Options$when, checkbox.disabled, _aforemny$elm_mdc$Material_Checkbox$disabled),
+																_1: {ctor: '[]'}
 															}
 														}
 													},
@@ -21391,7 +21388,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 												{
 													ctor: '::',
 													_0: A5(
-														_aforemny$elm_mdc$Material_Button$render,
+														_aforemny$elm_mdc$Material_Button$view,
 														function (_p7) {
 															return lift(
 																_aforemny$elm_mdc$Demo_Checkbox$Mdc(_p7));
@@ -21434,7 +21431,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 													_1: {
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Button$render,
+															_aforemny$elm_mdc$Material_Button$view,
 															function (_p8) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_Checkbox$Mdc(_p8));
@@ -21682,7 +21679,7 @@ var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
 									{
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_Button$render,
+											_aforemny$elm_mdc$Material_Button$view,
 											function (_p5) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p5));
@@ -21713,7 +21710,7 @@ var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
 										_1: {
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Button$render,
+												_aforemny$elm_mdc$Material_Button$view,
 												function (_p6) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Dialog$Mdc(_p6));
@@ -21813,7 +21810,7 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 									{
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_Button$render,
+											_aforemny$elm_mdc$Material_Button$view,
 											function (_p8) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p8));
@@ -21852,7 +21849,7 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 										_1: {
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Button$render,
+												_aforemny$elm_mdc$Material_Button$view,
 												function (_p9) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Dialog$Mdc(_p9));
@@ -22030,7 +22027,7 @@ var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 									{
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_Button$render,
+											_aforemny$elm_mdc$Material_Button$view,
 											function (_p11) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p11));
@@ -22069,7 +22066,7 @@ var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 										_1: {
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Button$render,
+												_aforemny$elm_mdc$Material_Button$view,
 												function (_p12) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Dialog$Mdc(_p12));
@@ -22225,7 +22222,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 							{
 								ctor: '::',
 								_0: A5(
-									_aforemny$elm_mdc$Material_Button$render,
+									_aforemny$elm_mdc$Material_Button$view,
 									function (_p13) {
 										return lift(
 											_aforemny$elm_mdc$Demo_Dialog$Mdc(_p13));
@@ -22271,7 +22268,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 									_1: {
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_Button$render,
+											_aforemny$elm_mdc$Material_Button$view,
 											function (_p15) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p15));
@@ -22327,7 +22324,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 													{
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Checkbox$render,
+															_aforemny$elm_mdc$Material_Checkbox$view,
 															function (_p17) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_Dialog$Mdc(_p17));
@@ -22340,7 +22337,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 															model.mdc,
 															{
 																ctor: '::',
-																_0: A2(_aforemny$elm_mdc$Material_Options$when, model.rtl, _aforemny$elm_mdc$Material_Checkbox$checked),
+																_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.rtl),
 																_1: {
 																	ctor: '::',
 																	_0: A2(
@@ -23082,7 +23079,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Checkbox$render,
+										_aforemny$elm_mdc$Material_Checkbox$view,
 										function (_p3) {
 											return lift(
 												_aforemny$elm_mdc$Demo_GridList$Mdc(_p3));
@@ -23099,7 +23096,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 												lift(_aforemny$elm_mdc$Demo_GridList$ToggleRtl)),
 											_1: {
 												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Material_Options$when, model.rtl, _aforemny$elm_mdc$Material_Checkbox$checked),
+												_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.rtl),
 												_1: {ctor: '[]'}
 											}
 										},
@@ -24059,7 +24056,7 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 					false,
 					A2(_elm_lang$core$Dict$get, idx, model.iconToggles));
 				return A4(
-					_aforemny$elm_mdc$Material_IconToggle$render,
+					_aforemny$elm_mdc$Material_IconToggle$view,
 					function (_p3) {
 						return lift(
 							_aforemny$elm_mdc$Demo_IconToggle$Mdc(_p3));
@@ -24192,10 +24189,12 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 										},
 										{
 											ctor: '::',
-											_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+											_0: _aforemny$elm_mdc$Material_IconToggle$label(
+												{on: 'Remove from Fravorites', off: 'Add to Favorites'}),
 											_1: {
 												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+												_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+													{on: 'favorite', off: 'favorite_border'}),
 												_1: {ctor: '[]'}
 											}
 										},
@@ -24273,10 +24272,12 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 															},
 															{
 																ctor: '::',
-																_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+																_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																	{on: 'Remove from Fravorites', off: 'Add to Favorites'}),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+																	_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+																		{on: 'favorite', off: 'favorite_border'}),
 																	_1: {ctor: '[]'}
 																}
 															},
@@ -24344,13 +24345,15 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 															},
 															{
 																ctor: '::',
-																_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Unstar this Icon', 'Star this Icon'),
+																_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																	{on: 'Unstar this Icon', off: 'Star this Icon'}),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'fa-star', 'fa-star-o'),
+																	_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+																		{on: 'fa-star', off: 'fa-star-o'}),
 																	_1: {
 																		ctor: '::',
-																		_0: _aforemny$elm_mdc$Material_IconToggle$inner('fa'),
+																		_0: _aforemny$elm_mdc$Material_IconToggle$className('fa'),
 																		_1: {ctor: '[]'}
 																	}
 																}
@@ -24397,10 +24400,12 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 																},
 																{
 																	ctor: '::',
-																	_0: A2(_aforemny$elm_mdc$Material_IconToggle$label, 'Remove from Fravorites', 'Add to Favorites'),
+																	_0: _aforemny$elm_mdc$Material_IconToggle$label(
+																		{on: 'Remove from Fravorites', off: 'Add to Favorites'}),
 																	_1: {
 																		ctor: '::',
-																		_0: A2(_aforemny$elm_mdc$Material_IconToggle$icon, 'favorite', 'favorite_border'),
+																		_0: _aforemny$elm_mdc$Material_IconToggle$icon(
+																			{on: 'favorite', off: 'favorite_border'}),
 																		_1: {
 																			ctor: '::',
 																			_0: _aforemny$elm_mdc$Material_IconToggle$disabled,
@@ -27799,7 +27804,7 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 			{
 				ctor: '::',
 				_0: function () {
-					var ripple = A5(
+					var ripple = A4(
 						_aforemny$elm_mdc$Material_Ripple$bounded,
 						function (_p2) {
 							return lift(
@@ -27814,7 +27819,6 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 								_1: {ctor: '[]'}
 							}),
 						model.mdc,
-						{ctor: '[]'},
 						{ctor: '[]'});
 					return A2(
 						_aforemny$elm_mdc$Material_List$li,
@@ -27847,7 +27851,7 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 				_1: {
 					ctor: '::',
 					_0: function () {
-						var ripple = A5(
+						var ripple = A4(
 							_aforemny$elm_mdc$Material_Ripple$bounded,
 							function (_p3) {
 								return lift(
@@ -27862,7 +27866,6 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 									_1: {ctor: '[]'}
 								}),
 							model.mdc,
-							{ctor: '[]'},
 							{ctor: '[]'});
 						return A2(
 							_aforemny$elm_mdc$Material_List$li,
@@ -27895,7 +27898,7 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 					_1: {
 						ctor: '::',
 						_0: function () {
-							var ripple = A5(
+							var ripple = A4(
 								_aforemny$elm_mdc$Material_Ripple$bounded,
 								function (_p4) {
 									return lift(
@@ -27910,7 +27913,6 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 										_1: {ctor: '[]'}
 									}),
 								model.mdc,
-								{ctor: '[]'},
 								{ctor: '[]'});
 							return A2(
 								_aforemny$elm_mdc$Material_List$li,
@@ -28073,7 +28075,7 @@ var _aforemny$elm_mdc$Demo_Lists$view = F3(
 										{
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Checkbox$render,
+												_aforemny$elm_mdc$Material_Checkbox$view,
 												function (_p5) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Lists$Mdc(_p5));
@@ -28090,7 +28092,7 @@ var _aforemny$elm_mdc$Demo_Lists$view = F3(
 														lift(_aforemny$elm_mdc$Demo_Lists$ToggleRtl)),
 													_1: {
 														ctor: '::',
-														_0: A2(_aforemny$elm_mdc$Material_Options$when, model.rtl, _aforemny$elm_mdc$Material_Checkbox$checked),
+														_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.rtl),
 														_1: {ctor: '[]'}
 													}
 												},
@@ -30170,7 +30172,7 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 			{
 				ctor: '::',
 				_0: A5(
-					_aforemny$elm_mdc$Material_Button$render,
+					_aforemny$elm_mdc$Material_Button$view,
 					function (_p20) {
 						return lift(
 							_aforemny$elm_mdc$Demo_Menus$Mdc(_p20));
@@ -30186,22 +30188,18 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 						_0: _aforemny$elm_mdc$Material_Button$raised,
 						_1: {
 							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Button$primary,
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_Menu$attach,
-									function (_p21) {
-										return lift(
-											_aforemny$elm_mdc$Demo_Menus$Mdc(_p21));
-									},
-									{
-										ctor: '::',
-										_0: 2,
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
+							_0: A2(
+								_aforemny$elm_mdc$Material_Menu$attach,
+								function (_p21) {
+									return lift(
+										_aforemny$elm_mdc$Demo_Menus$Mdc(_p21));
+								},
+								{
+									ctor: '::',
+									_0: 2,
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
 						}
 					},
 					{
@@ -31055,7 +31053,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 													{
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Button$render,
+															_aforemny$elm_mdc$Material_Button$view,
 															function (_p4) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p4));
@@ -31095,7 +31093,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 														{
 															ctor: '::',
 															_0: A5(
-																_aforemny$elm_mdc$Material_Button$render,
+																_aforemny$elm_mdc$Material_Button$view,
 																function (_p5) {
 																	return lift(
 																		_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p5));
@@ -31165,7 +31163,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 															{
 																ctor: '::',
 																_0: A5(
-																	_aforemny$elm_mdc$Material_Button$render,
+																	_aforemny$elm_mdc$Material_Button$view,
 																	function (_p6) {
 																		return lift(
 																			_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p6));
@@ -31632,7 +31630,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 													{
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Button$render,
+															_aforemny$elm_mdc$Material_Button$view,
 															function (_p3) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p3));
@@ -31672,7 +31670,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 														{
 															ctor: '::',
 															_0: A5(
-																_aforemny$elm_mdc$Material_Button$render,
+																_aforemny$elm_mdc$Material_Button$view,
 																function (_p4) {
 																	return lift(
 																		_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p4));
@@ -31742,7 +31740,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 															{
 																ctor: '::',
 																_0: A5(
-																	_aforemny$elm_mdc$Material_Button$render,
+																	_aforemny$elm_mdc$Material_Button$view,
 																	function (_p5) {
 																		return lift(
 																			_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p5));
@@ -32289,7 +32287,7 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 											_1: {
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_Button$render,
+													_aforemny$elm_mdc$Material_Button$view,
 													function (_p5) {
 														return lift(
 															_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p5));
@@ -32472,7 +32470,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_RadioButton$render,
+													_aforemny$elm_mdc$Material_RadioButton$view,
 													function (_p3) {
 														return lift(
 															_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p3));
@@ -32490,11 +32488,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 																_aforemny$elm_mdc$Material_Options$when,
 																A2(isSelected, true, name),
 																_aforemny$elm_mdc$Material_RadioButton$selected),
-															_1: {
-																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_RadioButton$name(group),
-																_1: {ctor: '[]'}
-															}
+															_1: {ctor: '[]'}
 														}
 													},
 													{ctor: '[]'}),
@@ -32525,7 +32519,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 												{
 													ctor: '::',
 													_0: A5(
-														_aforemny$elm_mdc$Material_RadioButton$render,
+														_aforemny$elm_mdc$Material_RadioButton$view,
 														function (_p4) {
 															return lift(
 																_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p4));
@@ -32543,11 +32537,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 																	_aforemny$elm_mdc$Material_Options$when,
 																	A2(isSelected, false, name),
 																	_aforemny$elm_mdc$Material_RadioButton$selected),
-																_1: {
-																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_RadioButton$name(group),
-																	_1: {ctor: '[]'}
-																}
+																_1: {ctor: '[]'}
 															}
 														},
 														{ctor: '[]'}),
@@ -32623,7 +32613,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_RadioButton$render,
+													_aforemny$elm_mdc$Material_RadioButton$view,
 													function (_p5) {
 														return lift(
 															_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p5));
@@ -32641,11 +32631,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 																_aforemny$elm_mdc$Material_Options$when,
 																A2(isSelected, true, name),
 																_aforemny$elm_mdc$Material_RadioButton$selected),
-															_1: {
-																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_RadioButton$name(group),
-																_1: {ctor: '[]'}
-															}
+															_1: {ctor: '[]'}
 														}
 													},
 													{ctor: '[]'}),
@@ -32687,7 +32673,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 												{
 													ctor: '::',
 													_0: A5(
-														_aforemny$elm_mdc$Material_RadioButton$render,
+														_aforemny$elm_mdc$Material_RadioButton$view,
 														function (_p6) {
 															return lift(
 																_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p6));
@@ -32705,11 +32691,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 																	_aforemny$elm_mdc$Material_Options$when,
 																	A2(isSelected, false, name),
 																	_aforemny$elm_mdc$Material_RadioButton$selected),
-																_1: {
-																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_RadioButton$name(group),
-																	_1: {ctor: '[]'}
-																}
+																_1: {ctor: '[]'}
 															}
 														},
 														{ctor: '[]'}),
@@ -32785,7 +32767,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 													{
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_RadioButton$render,
+															_aforemny$elm_mdc$Material_RadioButton$view,
 															function (_p7) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p7));
@@ -32840,7 +32822,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 														{
 															ctor: '::',
 															_0: A5(
-																_aforemny$elm_mdc$Material_RadioButton$render,
+																_aforemny$elm_mdc$Material_RadioButton$view,
 																function (_p8) {
 																	return lift(
 																		_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p8));
@@ -32979,7 +32961,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 					{
 						ctor: '::',
 						_0: function () {
-							var ripple = A5(
+							var ripple = A4(
 								_aforemny$elm_mdc$Material_Ripple$bounded,
 								function (_p2) {
 									return lift(
@@ -32991,8 +32973,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 									_1: {ctor: '[]'}
 								},
 								model.mdc,
-								{ctor: '_Tuple0'},
-								{ctor: '_Tuple0'});
+								{ctor: '[]'});
 							return A3(
 								_aforemny$elm_mdc$Material_Options$styled,
 								_elm_lang$html$Html$div,
@@ -33008,11 +32989,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 											_1: {
 												ctor: '::',
 												_0: ripple.properties,
-												_1: {
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Ripple$surface,
-													_1: {ctor: '[]'}
-												}
+												_1: {ctor: '[]'}
 											}
 										}
 									}
@@ -33043,7 +33020,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 							_1: {
 								ctor: '::',
 								_0: function () {
-									var ripple = A5(
+									var ripple = A4(
 										_aforemny$elm_mdc$Material_Ripple$bounded,
 										function (_p3) {
 											return lift(
@@ -33055,8 +33032,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 											_1: {ctor: '[]'}
 										},
 										model.mdc,
-										{ctor: '_Tuple0'},
-										{ctor: '_Tuple0'});
+										{ctor: '[]'});
 									return A3(
 										_aforemny$elm_mdc$Material_Options$styled,
 										_elm_lang$html$Html$div,
@@ -33072,11 +33048,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 													_1: {
 														ctor: '::',
 														_0: ripple.properties,
-														_1: {
-															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_Ripple$surface,
-															_1: {ctor: '[]'}
-														}
+														_1: {ctor: '[]'}
 													}
 												}
 											}
@@ -33112,7 +33084,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 								_1: {
 									ctor: '::',
 									_0: function () {
-										var ripple = A5(
+										var ripple = A4(
 											_aforemny$elm_mdc$Material_Ripple$unbounded,
 											function (_p4) {
 												return lift(
@@ -33124,8 +33096,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 												_1: {ctor: '[]'}
 											},
 											model.mdc,
-											{ctor: '_Tuple0'},
-											{ctor: '_Tuple0'});
+											{ctor: '[]'});
 										return A3(
 											_aforemny$elm_mdc$Material_Options$styled,
 											_elm_lang$html$Html$div,
@@ -33153,11 +33124,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 																		_1: {
 																			ctor: '::',
 																			_0: ripple.properties,
-																			_1: {
-																				ctor: '::',
-																				_0: _aforemny$elm_mdc$Material_Ripple$surface,
-																				_1: {ctor: '[]'}
-																			}
+																			_1: {ctor: '[]'}
 																		}
 																	}
 																}
@@ -33197,7 +33164,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 									_1: {
 										ctor: '::',
 										_0: function () {
-											var ripple = A5(
+											var ripple = A4(
 												_aforemny$elm_mdc$Material_Ripple$bounded,
 												function (_p5) {
 													return lift(
@@ -33209,8 +33176,11 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 													_1: {ctor: '[]'}
 												},
 												model.mdc,
-												{ctor: '_Tuple0'},
-												{ctor: '_Tuple0'});
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Ripple$primary,
+													_1: {ctor: '[]'}
+												});
 											return A3(
 												_aforemny$elm_mdc$Material_Options$styled,
 												_elm_lang$html$Html$div,
@@ -33226,15 +33196,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 															_1: {
 																ctor: '::',
 																_0: ripple.properties,
-																_1: {
-																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_Ripple$surface,
-																	_1: {
-																		ctor: '::',
-																		_0: _aforemny$elm_mdc$Material_Ripple$primary,
-																		_1: {ctor: '[]'}
-																	}
-																}
+																_1: {ctor: '[]'}
 															}
 														}
 													}
@@ -33252,7 +33214,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 										_1: {
 											ctor: '::',
 											_0: function () {
-												var ripple = A5(
+												var ripple = A4(
 													_aforemny$elm_mdc$Material_Ripple$bounded,
 													function (_p6) {
 														return lift(
@@ -33264,8 +33226,11 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 														_1: {ctor: '[]'}
 													},
 													model.mdc,
-													{ctor: '_Tuple0'},
-													{ctor: '_Tuple0'});
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Ripple$accent,
+														_1: {ctor: '[]'}
+													});
 												return A3(
 													_aforemny$elm_mdc$Material_Options$styled,
 													_elm_lang$html$Html$div,
@@ -33281,15 +33246,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 																_1: {
 																	ctor: '::',
 																	_0: ripple.properties,
-																	_1: {
-																		ctor: '::',
-																		_0: _aforemny$elm_mdc$Material_Ripple$surface,
-																		_1: {
-																			ctor: '::',
-																			_0: _aforemny$elm_mdc$Material_Ripple$accent,
-																			_1: {ctor: '[]'}
-																		}
-																	}
+																	_1: {ctor: '[]'}
 																}
 															}
 														}
@@ -35476,7 +35433,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_Checkbox$render,
+													_aforemny$elm_mdc$Material_Checkbox$view,
 													function (_p4) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p4));
@@ -35493,7 +35450,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 															lift(_aforemny$elm_mdc$Demo_Snackbar$ToggleMultiline)),
 														_1: {
 															ctor: '::',
-															_0: A2(_aforemny$elm_mdc$Material_Options$when, model.multiline, _aforemny$elm_mdc$Material_Checkbox$checked),
+															_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.multiline),
 															_1: {ctor: '[]'}
 														}
 													},
@@ -35530,7 +35487,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 													{
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Checkbox$render,
+															_aforemny$elm_mdc$Material_Checkbox$view,
 															function (_p5) {
 																return lift(
 																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p5));
@@ -35547,12 +35504,22 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																	lift(_aforemny$elm_mdc$Demo_Snackbar$ToggleActionOnBottom)),
 																_1: {
 																	ctor: '::',
-																	_0: A2(_aforemny$elm_mdc$Material_Options$when, model.actionOnBottom, _aforemny$elm_mdc$Material_Checkbox$checked),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(_aforemny$elm_mdc$Material_Options$when, !model.multiline, _aforemny$elm_mdc$Material_Checkbox$disabled),
-																		_1: {ctor: '[]'}
-																	}
+																	_0: function (_p6) {
+																		return A2(
+																			_aforemny$elm_mdc$Material_Options$when,
+																			!model.multiline,
+																			_aforemny$elm_mdc$Material_Options$many(_p6));
+																	}(
+																		{
+																			ctor: '::',
+																			_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.actionOnBottom),
+																			_1: {
+																				ctor: '::',
+																				_0: _aforemny$elm_mdc$Material_Checkbox$disabled,
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {ctor: '[]'}
 																}
 															},
 															{ctor: '[]'}),
@@ -35588,10 +35555,10 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 															{
 																ctor: '::',
 																_0: A5(
-																	_aforemny$elm_mdc$Material_Checkbox$render,
-																	function (_p6) {
+																	_aforemny$elm_mdc$Material_Checkbox$view,
+																	function (_p7) {
 																		return lift(
-																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p6));
+																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p7));
 																	},
 																	{
 																		ctor: '::',
@@ -35605,7 +35572,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																			lift(_aforemny$elm_mdc$Demo_Snackbar$ToggleDismissOnAction)),
 																		_1: {
 																			ctor: '::',
-																			_0: A2(_aforemny$elm_mdc$Material_Options$when, model.dismissOnAction, _aforemny$elm_mdc$Material_Checkbox$checked),
+																			_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.dismissOnAction),
 																			_1: {ctor: '[]'}
 																		}
 																	},
@@ -35633,9 +35600,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																ctor: '::',
 																_0: A5(
 																	_aforemny$elm_mdc$Material_Textfield$render,
-																	function (_p7) {
+																	function (_p8) {
 																		return lift(
-																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p7));
+																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p8));
 																	},
 																	{
 																		ctor: '::',
@@ -35656,9 +35623,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																					'input',
 																					A2(
 																						_elm_lang$core$Json_Decode$map,
-																						function (_p8) {
+																						function (_p9) {
 																							return lift(
-																								_aforemny$elm_mdc$Demo_Snackbar$SetMessageText(_p8));
+																								_aforemny$elm_mdc$Demo_Snackbar$SetMessageText(_p9));
 																						},
 																						_elm_lang$html$Html_Events$targetValue)),
 																				_1: {ctor: '[]'}
@@ -35676,9 +35643,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																		ctor: '::',
 																		_0: A5(
 																			_aforemny$elm_mdc$Material_Textfield$render,
-																			function (_p9) {
+																			function (_p10) {
 																				return lift(
-																					_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p9));
+																					_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p10));
 																			},
 																			{
 																				ctor: '::',
@@ -35699,9 +35666,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																							'input',
 																							A2(
 																								_elm_lang$core$Json_Decode$map,
-																								function (_p10) {
+																								function (_p11) {
 																									return lift(
-																										_aforemny$elm_mdc$Demo_Snackbar$SetActionText(_p10));
+																										_aforemny$elm_mdc$Demo_Snackbar$SetActionText(_p11));
 																								},
 																								_elm_lang$html$Html_Events$targetValue)),
 																						_1: {ctor: '[]'}
@@ -35718,10 +35685,10 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																			_1: {
 																				ctor: '::',
 																				_0: A5(
-																					_aforemny$elm_mdc$Material_Button$render,
-																					function (_p11) {
+																					_aforemny$elm_mdc$Material_Button$view,
+																					function (_p12) {
 																						return lift(
-																							_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p11));
+																							_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p12));
 																					},
 																					{
 																						ctor: '::',
@@ -35763,10 +35730,10 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																					_1: {
 																						ctor: '::',
 																						_0: A5(
-																							_aforemny$elm_mdc$Material_Button$render,
-																							function (_p12) {
+																							_aforemny$elm_mdc$Material_Button$view,
+																							function (_p13) {
 																								return lift(
-																									_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p12));
+																									_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p13));
 																							},
 																							{
 																								ctor: '::',
@@ -35808,10 +35775,10 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																							_1: {
 																								ctor: '::',
 																								_0: A5(
-																									_aforemny$elm_mdc$Material_Button$render,
-																									function (_p13) {
+																									_aforemny$elm_mdc$Material_Button$view,
+																									function (_p14) {
 																										return lift(
-																											_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p13));
+																											_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p14));
 																									},
 																									{
 																										ctor: '::',
@@ -35853,10 +35820,10 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																									_1: {
 																										ctor: '::',
 																										_0: A5(
-																											_aforemny$elm_mdc$Material_Button$render,
-																											function (_p14) {
+																											_aforemny$elm_mdc$Material_Button$view,
+																											function (_p15) {
 																												return lift(
-																													_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p14));
+																													_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p15));
 																											},
 																											{
 																												ctor: '::',
@@ -35896,9 +35863,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																											ctor: '::',
 																											_0: A5(
 																												_aforemny$elm_mdc$Material_Snackbar$render,
-																												function (_p15) {
+																												function (_p16) {
 																													return lift(
-																														_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p15));
+																														_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p16));
 																												},
 																												{
 																													ctor: '::',
@@ -35926,9 +35893,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																														ctor: '::',
 																														_0: A5(
 																															_aforemny$elm_mdc$Material_Snackbar$render,
-																															function (_p16) {
+																															function (_p17) {
 																																return lift(
-																																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p16));
+																																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p17));
 																															},
 																															{
 																																ctor: '::',
@@ -35949,9 +35916,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																													ctor: '::',
 																													_0: A5(
 																														_aforemny$elm_mdc$Material_Snackbar$render,
-																														function (_p17) {
+																														function (_p18) {
 																															return lift(
-																																_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p17));
+																																_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p18));
 																														},
 																														{
 																															ctor: '::',
@@ -35983,9 +35950,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																																ctor: '::',
 																																_0: A5(
 																																	_aforemny$elm_mdc$Material_Snackbar$render,
-																																	function (_p18) {
+																																	function (_p19) {
 																																		return lift(
-																																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p18));
+																																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p19));
 																																	},
 																																	{
 																																		ctor: '::',
@@ -36337,7 +36304,7 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 										false,
 										A2(_elm_lang$core$Dict$get, index, model.switches));
 									return A5(
-										_aforemny$elm_mdc$Material_Switch$render,
+										_aforemny$elm_mdc$Material_Switch$view,
 										function (_p3) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Switch$Mdc(_p3));
@@ -36412,7 +36379,7 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 												false,
 												A2(_elm_lang$core$Dict$get, index, model.switches));
 											return A5(
-												_aforemny$elm_mdc$Material_Switch$render,
+												_aforemny$elm_mdc$Material_Switch$view,
 												function (_p4) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Switch$Mdc(_p4));
@@ -36504,7 +36471,7 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 													false,
 													A2(_elm_lang$core$Dict$get, index, model.switches));
 												return A5(
-													_aforemny$elm_mdc$Material_Switch$render,
+													_aforemny$elm_mdc$Material_Switch$view,
 													function (_p5) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Switch$Mdc(_p5));
@@ -38667,7 +38634,7 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Button$render,
+								_aforemny$elm_mdc$Material_Button$view,
 								function (_p5) {
 									return lift(
 										_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p5));
@@ -41649,7 +41616,7 @@ var _aforemny$elm_mdc$Demo_Theme$view = F3(
 					{
 						ctor: '::',
 						_0: A5(
-							_aforemny$elm_mdc$Material_Button$render,
+							_aforemny$elm_mdc$Material_Button$view,
 							function (_p2) {
 								return lift(
 									_aforemny$elm_mdc$Demo_Theme$Mdc(_p2));
@@ -41665,12 +41632,8 @@ var _aforemny$elm_mdc$Demo_Theme$view = F3(
 								_0: _aforemny$elm_mdc$Material_Button$raised,
 								_1: {
 									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Button$primary,
-									_1: {
-										ctor: '::',
-										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin', '24px'),
-										_1: {ctor: '[]'}
-									}
+									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin', '24px'),
+									_1: {ctor: '[]'}
 								}
 							},
 							{
@@ -41681,7 +41644,7 @@ var _aforemny$elm_mdc$Demo_Theme$view = F3(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Button$render,
+								_aforemny$elm_mdc$Material_Button$view,
 								function (_p3) {
 									return lift(
 										_aforemny$elm_mdc$Demo_Theme$Mdc(_p3));
@@ -41697,12 +41660,8 @@ var _aforemny$elm_mdc$Demo_Theme$view = F3(
 									_0: _aforemny$elm_mdc$Material_Button$raised,
 									_1: {
 										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Button$secondary,
-										_1: {
-											ctor: '::',
-											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin', '24px'),
-											_1: {ctor: '[]'}
-										}
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin', '24px'),
+										_1: {ctor: '[]'}
 									}
 								},
 								{
@@ -42002,7 +41961,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$iframe = F5(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Button$render,
+								_aforemny$elm_mdc$Material_Button$view,
 								function (_p5) {
 									return lift(
 										_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p5));
