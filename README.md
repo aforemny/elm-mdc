@@ -40,17 +40,17 @@ import Material.Button as Button
 
 
 type alias Model
-    { mdl : Material.Model
+    { mdc : Material.Model
     }
 
 
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     }
 
 
 type Msg
-    = Mdl (Material.Msg Msg)
+    = Mdc (Material.Msg Msg)
 
 
 main =
@@ -67,7 +67,7 @@ init =
 
 
 subscriptions model =
-    Material.subscriptions Mdl
+    Material.subscriptions Mdc
 
 
 update msg model =
@@ -75,14 +75,14 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        Mdl msg_ ->
-            Material.update Mdl msg_ model
+        Mdc msg_ ->
+            Material.update Mdc msg_ model
 
 
 view model =
     Html.div []
         [
-          Button.render Mdl [0] model.mdl
+          Button.render Mdc [0] model.mdc
               []
               [ text "Click me!" ]
         ]
