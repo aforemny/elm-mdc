@@ -82,7 +82,7 @@ update msg model =
 view model =
     Html.div []
         [
-          Button.render Mdc [0] model.mdc
+          Button.view Mdc [0] model.mdc
               []
               [ text "Click me!" ]
         ]
