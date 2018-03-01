@@ -6,7 +6,7 @@ import Html.Events as Html
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers as Helpers exposing (map1st)
+import Material.Helpers as Helpers
 import Material.Internal.Menu exposing (Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry, Viewport)
 import Material.Internal.Options as Internal
 import Material.Msg exposing (Index) 

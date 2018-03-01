@@ -13,7 +13,6 @@ import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers exposing (map1st)
 import Material.Msg exposing (Msg(..))
 
 import Material.Button as Button
@@ -87,14 +86,12 @@ type alias Msg m =
 update : (Msg m -> m) -> Msg m -> { c | mdc : Model } -> (  { c | mdc : Model }, Cmd m )
 update lift msg container =
   update_ lift msg (.mdc container)
-      |> map1st (Maybe.map (\ mdc -> { container | mdc = mdc }))
-      |> map1st (Maybe.withDefault container)
+      |> Tuple.mapFirst (Maybe.map (\ mdc -> { container | mdc = mdc }))
+      |> Tuple.mapFirst (Maybe.withDefault container)
 
 
 update_ : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update_ lift msg store =
-    -- TODO: Make all components use react
-    -- TODO: Make component Msgs uniform
     case msg of
         Dispatch msgs ->
             (Nothing, Dispatch.forward msgs)

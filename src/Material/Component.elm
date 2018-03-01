@@ -18,7 +18,6 @@ module Material.Component
 -}
 
 import Dict exposing (Dict)
-import Material.Helpers exposing (map1st, map2nd)
 import Material.Msg exposing (Index, Msg(..))
 
 {-| Type of indices. An index has to be `comparable`
@@ -101,7 +100,7 @@ react1 :
     -> ( Maybe store, Cmd m )
 react1 get set ctor update lift msg store =
     update (ctor >> lift) msg (get store)
-        |> map1st (Maybe.map (set store))
+        |> Tuple.mapFirst (Maybe.map (set store))
 
 
 react :
@@ -116,7 +115,7 @@ react :
     -> ( Maybe store, Cmd m )
 react get set ctor update lift msg idx store =
     update (ctor idx >> lift) msg (get idx store)
-        |> map1st (Maybe.map (set idx store))
+        |> Tuple.mapFirst (Maybe.map (set idx store))
 
 
 generalise :
@@ -124,8 +123,8 @@ generalise :
     -> Update msg m model
 generalise update lift msg model =
     update msg model
-        |> map1st Just
-        |> map2nd (Cmd.map lift)
+        |> Tuple.mapFirst Just
+        |> Tuple.mapSecond (Cmd.map lift)
 
 
 subs :

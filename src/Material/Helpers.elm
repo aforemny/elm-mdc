@@ -2,15 +2,11 @@ module Material.Helpers
     exposing
         ( filter
         , blurOn
-        , map1st
-        , map2nd
         , delay
         , cmd
         , pure
         , effect
         , cssTransitionStep
---        , lift
---        , lift_
         , Update
         , Update_
         , noAttr
@@ -28,9 +24,6 @@ find some of them useful.
 
 # Cmd
 @docs pure, effect, delay, cmd, cssTransitionStep
-
-# Tuples
-@docs map1st, map2nd
 
 # Elm architecture
 @docs Update, Update_
@@ -83,27 +76,6 @@ blurOn : String -> Html.Attribute m
 blurOn evt =
     Html.Attributes.attribute ("on" ++ evt) <| "this.blur()"
 
-
-
--- TUPLES
-
-
-{-| Map the first element of a tuple.
-
-    map1st ((+) 1) (1, "foo") == (2, "foo")
--}
-map1st : (a -> c) -> ( a, b ) -> ( c, b )
-map1st f ( x, y ) =
-    ( f x, y )
-
-
-{-| Map the second element of a tuple
-
-    map2nd ((+) 1) ("bar", 3) == ("bar", 4)
--}
-map2nd : (b -> c) -> ( a, b ) -> ( a, c )
-map2nd f ( x, y ) =
-    ( x, f y )
 
 
 {-| Variant of EA update function type, where effects may be

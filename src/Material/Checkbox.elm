@@ -44,7 +44,7 @@ import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers exposing (map1st, map2nd, blurOn, filter, noAttr)
+import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Checkbox exposing (Msg(..), Animation(..), State)
 import Material.Internal.Options as Internal
 import Material.Msg exposing (Index)

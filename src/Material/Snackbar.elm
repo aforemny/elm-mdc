@@ -1,29 +1,28 @@
-module Material.Snackbar
-    exposing
-        ( -- VIEW
-          view
-        , Property
-        , alignStart
-        , alignEnd
-        , onDismiss
+module Material.Snackbar exposing
+    ( -- VIEW
+      view
+    , Property
+    , alignStart
+    , alignEnd
+    , onDismiss
 
-        , Contents
-        , toast
-        , snack
+    , Contents
+    , toast
+    , snack
 
-          -- TEA
-        , Model
-        , State(..)
-        , defaultModel
-        , Msg
-        , update
-        , add
+      -- TEA
+    , Model
+    , State(..)
+    , defaultModel
+    , Msg
+    , update
+    , add
 
-          -- RENDER
-        , render
-        , Store
-        , react
-        )
+      -- RENDER
+    , render
+    , Store
+    , react
+    )
 
 {-|
 > The MDC Snackbar component is a spec-aligned snackbar/toast component
@@ -57,7 +56,7 @@ import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers as Helpers exposing (map1st, delay, cmd)
+import Material.Helpers as Helpers exposing (delay, cmd)
 import Material.Internal.Options as Internal
 import Material.Internal.Snackbar exposing (Msg(..), Transition(..))
 import Material.Msg exposing (Index)
@@ -226,7 +225,7 @@ update fwd msg model =
         Move seq transition ->
             if seq == model.seq then
                 move transition model
-                |> Helpers.map2nd (Cmd.map fwd)
+                |> Tuple.mapSecond (Cmd.map fwd)
             else
                 Nothing ! []
 
@@ -245,7 +244,7 @@ update fwd msg model =
               else
                   Nothing ! []
             )
-                |> Helpers.map2nd (\cmd -> Cmd.batch [ cmd, fwdEffect ])
+                |> Tuple.mapSecond (\cmd -> Cmd.batch [ cmd, fwdEffect ])
 
 
 {-| Add a message to the snackbar. If another message is currently displayed,
