@@ -6,7 +6,6 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers as Helpers exposing (pure, map1st)
 import Material.Internal.Options as Internal
 import Material.Internal.Select exposing (Msg(..), Geometry, defaultGeometry)
 import Material.List as Lists
@@ -62,7 +61,7 @@ type alias Msg m
 
 {-| Component update.
 -}
-update : (Msg msg -> msg) -> Msg msg -> Model -> ( Model, Cmd msg )
+update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
     case msg of
 
@@ -71,10 +70,14 @@ update lift msg model =
                 (menu, menuCmd) =
                     Menu.update (lift << MenuMsg) msg_ model.menu
             in
-            ( { model | menu = menu }, menuCmd )
+            case menu of
+                Just menu ->
+                    ( Just { model | menu = menu }, menuCmd )
+                Nothing ->
+                    ( Nothing, menuCmd )
 
         Init geometry ->
-            ( { model | geometry = Just geometry }, Cmd.none )
+            ( Just { model | geometry = Just geometry }, Cmd.none )
 
 
 
@@ -259,14 +262,13 @@ type alias Store s =
 {-| Component react function. Internal use only.
 -}
 react :
-    (Msg m -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg m
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
-react lift msg idx store =
-    update lift msg (get idx store)
-        |> map1st (set idx store >> Just)
+react =
+    Component.react get set Material.Msg.SelectMsg update
 
 
 {-| Component render. Below is an example, assuming boilerplate setup as

@@ -153,32 +153,35 @@ next model =
     Cmd.map (Move model.seq)
 
 
-move : Transition -> Model -> ( Model, Cmd (Msg m) )
+move : Transition -> Model -> ( Maybe Model, Cmd (Msg m) )
 move transition model =
     case ( model.state, transition ) of
         ( Inert, Timeout ) ->
             tryDequeue model
 
         ( Active contents, Clicked ) ->
+            Just
             { model
                 | state = Fading contents
             }
                 ! [ delay contents.fade Timeout |> next model ]
 
         ( Active contents, Timeout ) ->
+            Just
             { model
                 | state = Fading contents
             }
                 ! [ delay contents.fade Timeout |> next model ]
 
         ( Fading contents, Timeout ) ->
+            Just
             { model
                 | state = Inert
             }
                 ! [ cmd Timeout |> next model ]
 
         _ ->
-            model ! []
+            Nothing ! []
 
 
 
@@ -192,11 +195,12 @@ enqueue contents model =
     }
 
 
-tryDequeue : Model -> ( Model, Cmd (Msg m) )
+tryDequeue : Model -> ( Maybe Model, Cmd (Msg m) )
 tryDequeue model =
     case ( model.state, model.queue ) of
         ( Inert, c :: cs ) ->
-            ( { model
+            ( Just
+              { model
                 | state = Active c
                 , queue = cs
                 , seq = model.seq + 1
@@ -207,7 +211,7 @@ tryDequeue model =
             )
 
         _ ->
-            model ! []
+            Nothing ! []
 
 
 
@@ -216,14 +220,15 @@ tryDequeue model =
 
 {-| Elm Architecture update function.
 -}
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update fwd msg model =
     case msg of
         Move seq transition ->
             if seq == model.seq then
-                move transition model |> Helpers.map2nd (Cmd.map fwd)
+                move transition model
+                |> Helpers.map2nd (Cmd.map fwd)
             else
-                model ! []
+                Nothing ! []
 
         Dismiss dismissOnAction actionOnDismiss ->
             let
@@ -238,7 +243,7 @@ update fwd msg model =
             ( if dismissOnAction then
                   update fwd (Move model.seq Clicked) model
               else
-                  model ! []
+                  Nothing ! []
             )
                 |> Helpers.map2nd (\cmd -> Cmd.batch [ cmd, fwdEffect ])
 
@@ -265,7 +270,11 @@ add lift idx contents model =
               mdc_ =
                   model.mdc
           in
-          { mdc_ | snackbar = Dict.insert idx component mdc_.snackbar }
+          case component of
+              Just component ->
+                  { mdc_ | snackbar = Dict.insert idx component mdc_.snackbar }
+              Nothing ->
+                  mdc_
     in
         { model | mdc = mdc } ! [ Cmd.map (Material.Msg.SnackbarMsg idx >> lift) effects ]
 
@@ -396,14 +405,13 @@ type alias Store s =
 {-| TODO
 -}
 react :
-    (Msg m -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg m
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
-react lift msg idx store =
-    update lift msg (get idx store)
-        |> map1st (set idx store >> Just)
+react =
+    Component.react get set Material.Msg.SnackbarMsg update
 
 
 {-| TODO

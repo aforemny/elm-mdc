@@ -91,23 +91,24 @@ type alias Msg m =
     Material.Internal.Slider.Msg m
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
     case msg of
         NoOp ->
-            ( model, Cmd.none )
+            ( Nothing, Cmd.none )
 
         Dispatch ms ->
-            ( model, Cmd.batch (List.map Helpers.cmd ms) )
+            ( Nothing, Cmd.batch (List.map Helpers.cmd ms) )
 
         Focus ->
             if not model.preventFocus then
-                ( { model | focus = True }, Cmd.none )
+                ( Just { model | focus = True }, Cmd.none )
             else
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
 
         Blur ->
             (
+              Just
               { model
                 | focus = False
                 , active = False
@@ -118,10 +119,11 @@ update lift msg model =
             )
 
         Tick ->
-            ( { model | inTransit = False }, Cmd.none )
+            ( Just { model | inTransit = False }, Cmd.none )
 
         Activate inTransit geometry ->
-            ( { model
+            ( Just
+              { model
                 | active = True
                 , geometry = Just geometry
                 , inTransit = inTransit
@@ -134,7 +136,8 @@ update lift msg model =
 
         Drag geometry ->
             if model.active then
-                ( { model
+                ( Just
+                  { model
                     | geometry = Just geometry
                     , inTransit = False
                     , value = Just (computeValue geometry)
@@ -143,10 +146,11 @@ update lift msg model =
                   Cmd.none
                 )
             else
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
 
         Init geometry ->
-            ( { model
+            ( Just
+              { model
                 | geometry = Just geometry
                 , value = Just (computeValue geometry)
               }
@@ -155,7 +159,7 @@ update lift msg model =
             )
 
         Up ->
-            ( { model | active = False }, Cmd.none )
+            ( Just { model | active = False }, Cmd.none )
 
 
 type alias Config m =
@@ -445,16 +449,13 @@ type alias Store s =
 {-| Component react function (update variant). Internal use only.
 -}
 react :
-    (Msg m -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg m
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
-react lift msg idx store =
-    update lift msg (get idx store)
-        |> Helpers.map1st (set idx store >> Just)
-
-        -- TODO: ^^^^^ react
+react =
+    Component.react get set Material.Msg.SliderMsg update
 
 
 {-|

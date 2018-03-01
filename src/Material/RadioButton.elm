@@ -99,8 +99,10 @@ update lift msg model =
             ,
               Cmd.map (RippleMsg >> lift) effects
             )
+
         SetFocus focus ->
             ( Just { model | isFocused = focus }, Cmd.none )
+
         NoOp ->
             ( Nothing, Cmd.none )
 

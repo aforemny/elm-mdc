@@ -89,18 +89,19 @@ connect lift =
     Options.onClick (lift Toggle)
 
 
-update : (Msg msg -> msg) -> Msg msg -> Model -> ( Model, Cmd msg )
+update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
     case msg of
 
         NoOp ->
-            ( model, Cmd.none )
+            ( Nothing, Cmd.none )
 
         Toggle ->
             update lift (if model.open then Close else Open) model
 
         Init { quickOpen } geometry ->
-            ( { model
+            ( Just
+              { model
                 | geometry = Just geometry
                 , quickOpen = Just quickOpen
               }
@@ -109,7 +110,7 @@ update lift msg model =
             )
 
         AnimationEnd ->
-            ( { model | animating = False }, Cmd.none )
+            ( Just { model | animating = False }, Cmd.none )
 
         Open ->
             let
@@ -118,6 +119,7 @@ update lift msg model =
             in
             if not model.open then
                 (
+                  Just
                   { model
                     | open = True
                     , animating = True
@@ -130,7 +132,7 @@ update lift msg model =
                       Helpers.cmd (lift AnimationEnd)
                 )
             else
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
 
         Close ->
             let
@@ -139,6 +141,7 @@ update lift msg model =
             in
             if model.open then
                 (
+                  Just
                   { model
                     | open = False
                     , animating = True
@@ -151,16 +154,16 @@ update lift msg model =
                       Helpers.cmd (lift AnimationEnd)
                 )
             else
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
 
         CloseDelayed ->
-            ( model, Helpers.delay (50*Time.millisecond) (lift Close) )
+            ( Nothing, Helpers.delay (50*Time.millisecond) (lift Close) )
 
         DocumentClick ->
             if model.open then
                 update lift Close model
             else
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
 
         KeyDown { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
@@ -177,10 +180,10 @@ update lift msg model =
                     key == "Space" || keyCode == 32
             in
             if altKey || ctrlKey || metaKey then
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
             else
                 -- TODO: focus handling
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
 
         KeyUp { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
@@ -194,7 +197,7 @@ update lift msg model =
                     key == "Escape" || keyCode == 27
             in
             if altKey || ctrlKey || metaKey then
-                ( model, Cmd.none )
+                ( Nothing, Cmd.none )
             else
                 if isEnter || isSpace then
                     -- TODO: trigger selected
@@ -203,7 +206,7 @@ update lift msg model =
                     if isEscape then
                         update lift Close model
                     else
-                        ( model, Cmd.none )
+                        ( Nothing, Cmd.none )
 
 
 type alias Config =
@@ -687,14 +690,13 @@ type alias Store s =
 
 
 react :
-    (Msg m -> m)
+    (Material.Msg.Msg m -> m)
     -> Msg m
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
-react lift msg idx store =
-    update lift msg (get idx store)
-        |> map1st (set idx store >> Just)
+react =
+    Component.react get set Material.Msg.MenuMsg update
 
 
 render :

@@ -121,7 +121,7 @@ update_ lift msg store =
             IconToggle.react lift msg idx store
 
         MenuMsg idx msg ->
-            Menu.react (MenuMsg idx >> lift) msg idx store
+            Menu.react lift msg idx store
 
         RadioButtonMsg idx msg ->
             RadioButton.react lift msg idx store
@@ -130,19 +130,19 @@ update_ lift msg store =
             Ripple.react lift msg idx store
 
         SelectMsg idx msg ->
-            Select.react (SelectMsg idx >> lift) msg idx store
+            Select.react lift msg idx store
 
         SliderMsg idx msg ->
-            Slider.react (SliderMsg idx >> lift) msg idx store
+            Slider.react lift msg idx store
 
         SnackbarMsg idx msg ->
-            Snackbar.react (SnackbarMsg idx >> lift) msg idx store
+            Snackbar.react lift msg idx store
 
         SwitchMsg idx msg ->
             Switch.react lift msg idx store
 
         TabsMsg idx msg ->
-            Tabs.react (TabsMsg idx >> lift) msg idx store
+            Tabs.react lift msg idx store
 
         TextfieldMsg idx msg ->
             Textfield.react lift msg idx store
