@@ -1,0 +1,2 @@
+all: app.js
+	webpack

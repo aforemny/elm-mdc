@@ -1,4 +1,9 @@
-module Demo.Page exposing (Page, ToolbarPage(..), Url(..), toolbar, fixedAdjust, hero)
+module Demo.Page exposing
+    ( fixedAdjust
+    , hero
+    , Page
+    , toolbar
+    )
 
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -7,56 +12,15 @@ import Material.Msg
 import Material.Options as Options exposing (Property, styled, cs, css, when)
 import Material.Toolbar as Toolbar
 
+import Demo.Url as Url exposing (Url)
+
 
 type alias Page m =
     { toolbar : String -> Html m
     , fixedAdjust : Options.Property () m
-    , setUrl : Url -> m
+    , navigate : Url -> m
     , body : String -> List (Html m) -> Html m
     }
-
-
-type Url
-    = StartPage
-    | Button
-    | Card
-    | Checkbox
-    | Dialog
-    | Drawer
-    | TemporaryDrawer
-    | PersistentDrawer
-    | PermanentAboveDrawer
-    | PermanentBelowDrawer
-    | Elevation
-    | Fabs
-    | GridList
-    | IconToggle
-    | LayoutGrid
-    | LinearProgress
-    | List
-    | RadioButton
-    | Ripple
-    | Select
-    | Menu
-    | Slider
-    | Snackbar
-    | Switch
-    | Tabs
-    | TextField
-    | Theme
-    | Toolbar (Maybe ToolbarPage)
-    | Typography
-    | Error404 String
-
-
-type ToolbarPage
-    = DefaultToolbar
-    | FixedToolbar
-    | MenuToolbar
-    | WaterfallToolbar
-    | DefaultFlexibleToolbar
-    | WaterfallFlexibleToolbar
-    | WaterfallToolbarFix
 
 
 toolbar
@@ -67,7 +31,7 @@ toolbar
   -> Url
   -> String
   -> Html m
-toolbar lift idx mdl setUrl url title =
+toolbar lift idx mdl navigate url title =
     Toolbar.view lift idx mdl
     [ Toolbar.fixed
     ]
@@ -80,7 +44,7 @@ toolbar lift idx mdl setUrl url title =
           , css "padding-right" "24px"
           ]
           [ case url of
-              StartPage ->
+              Url.StartPage ->
                   styled Html.img
                   [ cs "mdc-toolbar__menu-icon"
                   , Options.attribute (Html.src "images/ic_component_24px_white.svg")
@@ -89,14 +53,14 @@ toolbar lift idx mdl setUrl url title =
 
               _ ->
                   Toolbar.menuIcon
-                  [ Options.onClick (setUrl StartPage)
+                  [ Options.onClick (navigate Url.StartPage)
                   ]
                   "arrow_back"
           ]
         , Toolbar.title
           [ cs "cataloge-title"
           , css "margin-left"
-            ( if url == StartPage then
+            ( if url == Url.StartPage then
                   "8px"
               else
                   "24"

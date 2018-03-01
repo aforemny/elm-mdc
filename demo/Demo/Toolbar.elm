@@ -1,6 +1,7 @@
 module Demo.Toolbar exposing (Model, defaultModel, Msg(..), update, view, subscriptions)
 
-import Demo.Page as Page exposing (Page, ToolbarPage(..))
+import Demo.Page as Page exposing (Page)
+import Demo.Url exposing (ToolbarPage(..))
 import Dict exposing (Dict)
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -225,7 +226,10 @@ fixedToolbar lift model =
         ]
       ]
     ,
-      body [] model
+      body
+      [ Toolbar.fixedAdjust [0] model.mdl
+      ]
+      model
     ]
 
 
@@ -284,7 +288,10 @@ menuToolbar lift model =
         ]
       ]
     ,
-      body [] model
+      body
+      [ Toolbar.fixedAdjust [0] model.mdl
+      ]
+      model
     ]
 
 

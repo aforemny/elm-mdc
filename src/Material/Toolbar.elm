@@ -54,6 +54,9 @@ the view is scrolled.
 @docs title
 @docs icon
 @docs fixedAdjust
+
+## Internal
+@docs react
 -}
 
 import Dict exposing (Dict)
@@ -578,6 +581,8 @@ type alias Store s =
     Component.indexed .toolbar (\x y -> { y | toolbar = x }) defaultModel
 
 
+{-| Toolbar react
+-}
 react :
     (Material.Msg.Msg m -> m)
     -> Msg

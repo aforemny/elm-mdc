@@ -8,8 +8,7 @@ module Demo.PermanentAboveDrawer exposing
     , subscriptions
     )
 
-import Demo.Page as Page exposing (Page, Url(..))
-import Demo.Page exposing (Page)
+import Demo.Page as Page exposing (Page)
 import Html as Html_
 import Html.Attributes as Html
 import Html exposing (Html, text)

@@ -13,7 +13,7 @@ import Demo.LayoutGrid
 import Demo.LinearProgress
 import Demo.Lists
 import Demo.Menus
-import Demo.Page as Page exposing (Url(..), ToolbarPage(..))
+import Demo.Page as Page
 import Demo.PermanentAboveDrawer
 import Demo.PermanentBelowDrawer
 import Demo.PersistentDrawer
@@ -31,6 +31,7 @@ import Demo.Theme
 import Demo.Theme
 import Demo.Toolbar
 import Demo.Typography
+import Demo.Url as Url exposing (Url(..), ToolbarPage(..))
 import Html exposing (Html, text)
 import Material
 import Material.Options as Options exposing (styled, css, when)
@@ -38,7 +39,6 @@ import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 import Navigation
 import Platform.Cmd exposing (..)
-import RouteUrl as Routing
 
 
 port scrollTop : () -> Cmd msg
@@ -112,6 +112,7 @@ defaultModel =
 type Msg
     = Mdl (Material.Msg Msg)
     | SetUrl Url
+    | Navigate Url
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -146,8 +147,16 @@ update msg model =
         Mdl msg ->
             Material.update Mdl msg model
 
+        Navigate url ->
+            { model | url = url }
+            ! [ Navigation.newUrl (Url.toString url)
+              , scrollTop ()
+              ]
+
         SetUrl url ->
-            { model | url = url } ! [ scrollTop () ]
+            { model | url = url }
+            ! [ scrollTop ()
+              ]
 
         ButtonsMsg msg_ ->
             let
@@ -342,9 +351,9 @@ view_ : Model -> Html Msg
 view_ model =
     let
         page =
-            { toolbar = Page.toolbar Mdl [0] model.mdl SetUrl model.url
+            { toolbar = Page.toolbar Mdl [0] model.mdl Navigate model.url
             , fixedAdjust = Page.fixedAdjust [0] model.mdl
-            , setUrl = SetUrl
+            , navigate = Navigate
             , body =
                 \title nodes ->
                 styled Html.div
@@ -354,7 +363,7 @@ view_ model =
                 , Typography.typography
                 ]
                 ( List.concat
-                  [ [ Page.toolbar Mdl [0] model.mdl SetUrl model.url title
+                  [ [ Page.toolbar Mdl [0] model.mdl Navigate model.url title
                     ]
                   , [ styled Html.div [ Toolbar.fixedAdjust [0] model.mdl ] []
                     ]
@@ -464,122 +473,29 @@ view_ model =
 
 urlOf : Model -> String
 urlOf model =
-    case model.url of
-        StartPage -> "#"
-        Button -> "#buttons"
-        Card -> "#cards"
-        Checkbox -> "#checkbox"
-        Dialog -> "#dialog"
-        Drawer -> "#drawer"
-        TemporaryDrawer -> "#temporary-drawer"
-        PersistentDrawer -> "#persistent-drawer"
-        PermanentAboveDrawer -> "#permanent-drawer-above"
-        PermanentBelowDrawer -> "#permanent-drawer-below"
-        Elevation -> "#elevation"
-        Fabs -> "#fab"
-        GridList -> "#grid-list"
-        IconToggle -> "#icon-toggle"
-        LayoutGrid -> "#layout-grid"
-        LinearProgress -> "#linear-progress"
-        List -> "#lists"
-        RadioButton -> "#radio-buttons"
-        Ripple -> "#ripple"
-        Select -> "#select"
-        Menu -> "#menu"
-        Slider -> "#slider"
-        Snackbar -> "#snackbar"
-        Switch -> "#switch"
-        Tabs -> "#tabs"
-        TextField -> "#text-field"
-        Theme -> "#theme"
-        Toolbar Nothing -> "#toolbar"
-        Toolbar (Just DefaultToolbar) -> "#toolbar/default-toolbar"
-        Toolbar (Just FixedToolbar) -> "#toolbar/fixed-toolbar"
-        Toolbar (Just MenuToolbar) -> "#toolbar/menu-toolbar"
-        Toolbar (Just WaterfallToolbar) -> "#toolbar/waterfall-toolbar"
-        Toolbar (Just DefaultFlexibleToolbar) -> "#toolbar/default-flexible-toolbar"
-        Toolbar (Just WaterfallFlexibleToolbar) -> "#toolbar/waterfall-flexible-toolbar"
-        Toolbar (Just WaterfallToolbarFix) -> "#toolbar/waterfall-toolbar-fix-last-row"
-        Typography -> "#typography"
-        Error404 requestedHash -> requestedHash
+    Url.toString model.url
 
 
-delta2url : Model -> Model -> Maybe Routing.UrlChange
-delta2url model1 model2 =
-    if model1.url /= model2.url then
-        { entry = Routing.NewEntry
-        , url = urlOf model2
-        }
-            |> Just
-    else
-        Nothing
-
-
-location2messages : Navigation.Location -> List Msg
-location2messages location =
-    [ SetUrl <|
-      case location.hash of
-          "" -> StartPage
-          "#" -> StartPage
-          "#buttons" -> Button
-          "#cards" -> Card
-          "#checkbox" -> Checkbox
-          "#dialog" -> Dialog
-          "#drawer" -> Drawer
-          "#temporary-drawer" -> TemporaryDrawer
-          "#persistent-drawer" -> PersistentDrawer
-          "#permanent-drawer-above" -> PermanentAboveDrawer
-          "#permanent-drawer-below" -> PermanentBelowDrawer
-          "#elevation" -> Elevation
-          "#fab" -> Fabs
-          "#grid-list" -> GridList
-          "#icon-toggle" -> IconToggle
-          "#layout-grid" -> LayoutGrid
-          "#linear-progress" -> LinearProgress
-          "#lists" -> List
-          "#radio-buttons" -> RadioButton
-          "#ripple" -> Ripple
-          "#select" -> Select
-          "#menu" -> Menu
-          "#slider" -> Slider
-          "#snackbar" -> Snackbar
-          "#switch" -> Switch
-          "#tabs" -> Tabs
-          "#text-field" -> TextField
-          "#theme" -> Theme
-          "#toolbar" -> Toolbar Nothing
-          "#toolbar/default-toolbar" -> Toolbar (Just DefaultToolbar)
-          "#toolbar/fixed-toolbar" -> Toolbar (Just FixedToolbar)
-          "#toolbar/menu-toolbar" -> Toolbar (Just MenuToolbar)
-          "#toolbar/waterfall-toolbar" -> Toolbar (Just WaterfallToolbar)
-          "#toolbar/default-flexible-toolbar" -> Toolbar (Just DefaultFlexibleToolbar)
-          "#toolbar/waterfall-flexible-toolbar" -> Toolbar (Just WaterfallFlexibleToolbar)
-          "#toolbar/waterfall-toolbar-fix-last-row" -> Toolbar (Just WaterfallToolbarFix)
-          "#typography" -> Typography
-          _ -> Error404 location.hash
-    ]
-
-
-main : Routing.RouteUrlProgram Never Model Msg
+main : Program Never Model Msg
 main =
-    Routing.program
-        { delta2url = delta2url
-        , location2messages = location2messages
-        , init = init
+    Navigation.program
+        (.hash >> Url.fromString >> SetUrl)
+        { init = init
         , view = view
         , subscriptions = subscriptions
         , update = update
         }
 
 
-init : ( Model, Cmd Msg )
-init =
+init : Navigation.Location -> ( Model, Cmd Msg )
+init location =
     let
         ( layoutGrid, layoutGridEffects ) =
             Demo.LayoutGrid.init LayoutGridMsg
     in
     ( { defaultModel
           | layoutGrid = layoutGrid
+          , url = Url.fromString location.hash
       }
     ,
       Cmd.batch

@@ -9,86 +9,30 @@ CSS/JS implementation of the
 
 The implementation is based on [debois/elm-mdl](https://github.com/debois/elm-mdl).
 
-## Build instructions
+## Usage
 
-```sh
-$ npm i
-$ make
-$ open build/index.html
+Currently you will have to add the following scripts to your `index.html`
+before including `elm.js`.
+
+```html
+<script src="elm-focus-trap.js">
+<script src="elm-global-events.js">
+<script src="elm-mdc.js">
 ```
 
-## Using this library
+You will also want to include the following resources in your `head`:
 
-- TODO: page.html
-
-When using this library you have two options: each component is written as a
-TEA component and exposes `view` and `update` functions as well as `init` or
-`subscriptions` if necessary.
-
-In addition to that we offer an API which is based around `render` and
-`Material.Model` which aims reduce boilerplate if you have a lot of components
-or complex nesting.
-
-If you are just starting out using Elm you should use the API which follows TEA
-closely. Once you feel more comfortable, we encourage you to switch to using
-`render` functions and `Material.Model` as they reduce boiler-plate greatly.
-
-### Simple TEA
-
-Your standard TEA program looks like this:
-
-```
-module Main exposing (..)
-
-import Html
-
-
-type alias Model
-    {
-    }
-
-
-defaultModel =
-    {
-    }
-
-
-type Msg
-    = NoOp
-
-
-main =
-    Html.program
-    { init = init
-    , subscriptions = subscriptions
-    , update = update
-    , view = view
-    }
-
-
-init =
-    ( defaultModel, Cmd.none )
-
-
-subscriptions model =
-    Sub.none
-
-
-update msg model =
-    case msg of
-        NoOp ->
-            ( model, Cmd.none )
-
-
-view model =
-    Html.div []
-        [
-        ]
+```html
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500    ">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/nor    malize.min.css" />
+<link rel="stylesheet" href="material-components-web.css" />
 ```
 
-Suppose you want to add a `Material.Button`, your example extends to this:
+## Example application
 
-```
+```elm
 module Main exposing (..)
 
 import Html
@@ -96,90 +40,17 @@ import Material.Button as Button
 
 
 type alias Model
-    { myButton : Button.Model
+    { mdl : Material.Model
     }
 
 
 defaultModel =
-    { myButton = Button.defaultModel
+    { mdl = Material.defaultModel
     }
 
 
 type Msg
-    = NoOp
-    | MyButtonMsg Button.Msg
-
-
-main =
-    Html.program
-    { init = init
-    , subscriptions = subscriptions
-    , update = update
-    , view = view
-    }
-
-
-init =
-    ( defaultModel, Cmd.none )
-
-
-subscriptions model =
-    Sub.none
-
-
-update msg model =
-    case msg of
-        NoOp ->
-            ( model, Cmd.none )
-
-        MyButtonMsg msg_ ->
-            let
-                ( myButton, effects ) =
-                    Button.update msg_ model.myButton
-            in
-                ( { model | myButton = myButton }, Cmd.map MyButtonMsg effects )
-
-
-view model =
-    Html.div []
-        [
-          Button.view MyButtonMsg
-              []
-              [ text "Click me!" ]
-        ]
-```
-
-### Featured render
-
-Note that in our Simple TEA example the changes to `Model`, `update` and `view`
-will have to be performed for each other button you add.
-
-The render API is designed to mitigate this problem by maintaining a store of
-components `Material.Model` and by using numeric indices to reference
-components.
-
-The standard TEA program would become the following:
-
-```
-module Main exposing (..)
-
-import Html
-import Material.Button as Button
-
-
-type alias Model
-    { model : Material.Model
-    }
-
-
-defaultModel =
-    { model = Material.defaultModel
-    }
-
-
-type Msg
-    = NoOp
-    | MaterialMsg (Material.Msg Msg)
+    = Mdl (Material.Msg Msg)
 
 
 main =
@@ -204,7 +75,7 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        MaterialMsg msg_ ->
+        Mdl msg_ ->
             Material.update Mdl msg_ model
 
 
@@ -217,24 +88,14 @@ view model =
         ]
 ```
 
-Note that in this example, when adding another Button you do not have to touch
-`Model`, `Msg` or `update` again. Your view simply becomes:
+## Build instructions
 
-
+### Building the demo
+```sh
+$ make setup
+$ make build-demo
+$ open build/index.html
 ```
-view model =
-    Html.div []
-        [
-          Button.render Mdl [0] model.mdl
-              []
-              [ text "Click me!" ]
-
-        , Button.render Mdl [1] model.mdl
-              []
-              [ text "Click me!" ]
-        ]
-```
-
 
 ## Contribute
 

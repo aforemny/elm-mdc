@@ -141,7 +141,11 @@ view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 view lift model options =
     styled Html.aside
     ( cs "mdc-dialog"
-    :: when model.open (cs "mdc-dialog--open")
+    :: ( when model.open << Options.many <|
+         [ cs "mdc-dialog--open"
+         , Options.data "focustrap" "mdc-dialog__footer__button--accept"
+         ]
+       )
     :: when model.animating (cs "mdc-dialog--animating")
     :: Options.on "click" (Json.map lift close)
     :: Options.on "transitionend" (Json.succeed (lift AnimationEnd))
@@ -153,7 +157,9 @@ view lift model options =
 -}
 open : Property m
 open =
-    cs "mdc-dialog--open"
+    Options.many
+    [ cs "mdc-dialog--open"
+    ]
 
 
 {-| Dialog surface

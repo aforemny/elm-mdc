@@ -1,6 +1,7 @@
 module Demo.Startpage exposing (..)
 
-import Demo.Page exposing (Page, Url(..))
+import Demo.Page exposing (Page)
+import Demo.Url exposing (Url(..))
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.List as Lists
@@ -71,7 +72,7 @@ view page =
           ]
           |> List.map (\{ url, title, subtitle, icon } ->
                Lists.li
-               [ Options.onClick (page.setUrl url)
+               [ Options.onClick (page.navigate url)
                , css "cursor" "pointer"
                , css "height" "72px"
                ]

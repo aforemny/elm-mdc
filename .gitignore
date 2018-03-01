@@ -16,3 +16,9 @@ examples/counter1.html
 
 build
 node_modules
+
+elm-focus-trap.js
+elm-global-events.js
+material-components-web.css
+elm-focus-trap/bundle.js
+.sass-cache
