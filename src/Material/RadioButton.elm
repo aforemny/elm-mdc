@@ -1,47 +1,52 @@
-module Material.RadioButton
-    exposing
-        ( -- VIEWW
-          view
-        , Property
-        , disabled
-        , selected
-        , name
-        
-          -- TEA
-        , Model
-        , defaultModel
-        , Msg
-        , update
-
-          -- RENDER
-        , render
-        , Store
-        , react
-        )
+module Material.RadioButton exposing
+    ( disabled
+    , Model
+    , Property
+    , react
+    , selected
+    , view
+    )
 
 {-|
-The MDC Radio Button component provides a radio button adhering to the Material
-Design Specification. It requires no Javascript out of the box, but can be
-enhanced with Javascript to provide better interaction UX as well as a
-component-level API for state modification.
+The RadioButton component provides a radio button adhering to the Material
+Design Specification.
 
-## Design & API Documentation
+
+# Resources
 
 - [Material Design guidelines: Selection Controls – Radio buttons](https://material.io/guidelines/components/selection-controls.html#selection-controls-radio-button)
 - [Demo](https://aforemny.github.io/elm-mdc/#radio-buttons)
 
-## View
+
+# Example
+
+```elm
+Options.styled Html.div
+    [ Options.cs "mdc-form-field"
+    ]
+    [ RadioButton.view Mdc [0] model.mdc
+          [ RadioButton.selected
+          , Options.onClick Select
+          ]
+          []
+    , Html.label
+          [ Options.onClick Select
+          ]
+          [ text "Radio"
+          ]
+    ]
+```
+
+# Usage
+@docs Property
 @docs view
+@docs selected
+@docs disabled
 
-## Properties
-@docs Property, disabled, selected
 
-## TEA architecture
-@docs Model, defaultModel, Msg, update
-
-## Featured render
-@docs render
-@docs Store, react
+# Internal
+@docs Model
+@docs react
 -}
 
 import Html.Attributes as Html
@@ -56,7 +61,9 @@ import Material.Options as Options exposing (Style, cs, styled, many, when, mayb
 import Material.Ripple as Ripple
 
 
-{-| Component model.
+{-| RadioButton model.
+
+Internal use only.
 -}
 type alias Model =
     { ripple : Ripple.Model
@@ -64,8 +71,6 @@ type alias Model =
     }
 
 
-{-| Default component model.
--}
 defaultModel : Model
 defaultModel =
     { ripple = Ripple.defaultModel
@@ -73,18 +78,10 @@ defaultModel =
     }
 
 
-
--- ACTION, UPDATE
-
-
-{-| Component message.
--}
 type alias Msg
     = Material.Internal.RadioButton.Msg
 
 
-{-| Component update.
--}
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
     case msg of
@@ -105,9 +102,6 @@ update lift msg model =
             ( Just { model | isFocused = focus }, Cmd.none )
 
 
--- OPTIONS
-
-
 type alias Config m =
     { input : List (Options.Style m)
     , container : List (Options.Style m)
@@ -123,13 +117,13 @@ defaultConfig =
     }
 
 
-{-| TODO
+{-| RadioButton property.
 -}
 type alias Property m =
     Options.Property (Config m) m
 
 
-{-| TODO
+{-| Disable the radio button.
 -}
 disabled : Property m
 disabled =
@@ -141,27 +135,17 @@ disabled =
     ]
 
 
-{-| TODO
+{-| Make the radio button selected.
+
+Defaults to not selected. Use `Options.when` to make it interactive.
 -}
 selected : Property m
 selected =
     Internal.option (\config -> { config | value = True })
 
 
-{-| TODO
--}
-name : String -> Property m
-name value =
-    Internal.attribute (Html.name value)
-
-
--- VIEW
-
-
-{-| Component view.
--}
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options _ =
+radioButton : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+radioButton lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
@@ -202,9 +186,6 @@ view lift model options _ =
     ]
 
 
--- COMPONENT
-
-
 type alias Store s =
     { s | radio : Indexed Model }
 
@@ -213,7 +194,9 @@ type alias Store s =
     Component.indexed .radio (\x y -> { y | radio = x }) defaultModel
 
 
-{-| Component react function.
+{-| RadioButton react.
+
+Internal use only.
 -}
 react :
     (Material.Msg.Msg m -> m)
@@ -225,15 +208,15 @@ react =
     Component.react get set Material.Msg.RadioButtonMsg update
 
 
-{-| Component render (radio)
+{-| RadioButton view.
 -}
-render :
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render lift index store options =
-    Component.render get view Material.Msg.RadioButtonMsg lift index store
+view lift index store options =
+    Component.render get radioButton Material.Msg.RadioButtonMsg lift index store
         (Internal.dispatch lift :: options)

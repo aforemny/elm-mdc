@@ -22,18 +22,21 @@ Material Design Switch requirements.
 
 
 ```elm
-[
-  Switch.render Mdc [0] model.mdc
-      [ Switch.on
-      , Options.onClick Toggle
-      ]
-      []
-, Html.label
-      [ Options.onClick Toggle
-      ]
-      [ text "on/off"
-      ]
-]
+Options.styled Html.div
+    [ Options.cs "mdc-form-field"
+    ]
+    [
+      Switch.render Mdc [0] model.mdc
+          [ Switch.on
+          , Options.onClick Toggle
+          ]
+          []
+    , Html.label
+          [ Options.onClick Toggle
+          ]
+          [ text "on/off"
+          ]
+    ]
 ```
 
 

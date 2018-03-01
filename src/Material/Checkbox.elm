@@ -21,7 +21,9 @@ the Material Design checkbox requirements.
 
 
 ```elm
-Options.styled Html.div []
+Options.styled Html.div
+    [ Options.cs "mdc-form-field"
+    ]
     [ Checkbox.view Mdc [0] model.mdc
           [ Checkbox.checked True
           , Options.onClick Toggle

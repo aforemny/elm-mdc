@@ -83,10 +83,9 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (lift << Mdc) idx model.mdc
+          [ RadioButton.view (lift << Mdc) idx model.mdc
             [ Options.onClick (lift (Set group name))
             , RadioButton.selected |> when (isSelected True name)
-            , RadioButton.name group
             ]
             []
           ]
@@ -101,10 +100,9 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (lift << Mdc) idx model.mdc
+          [ RadioButton.view (lift << Mdc) idx model.mdc
             [ Options.onClick (lift (Set group name))
             , RadioButton.selected |> when (isSelected False name)
-            , RadioButton.name group
             ]
             []
           ]
@@ -138,10 +136,9 @@ view lift page model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ RadioButton.render (lift << Mdc) idx model.mdc
+        [ RadioButton.view (lift << Mdc) idx model.mdc
           [ Options.onClick (lift (Set group name))
           , RadioButton.selected |> when (isSelected True name)
-          , RadioButton.name group
           ]
           []
         , Html.label [] [ text name ]
@@ -157,10 +154,9 @@ view lift page model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ RadioButton.render (lift << Mdc) idx model.mdc
+        [ RadioButton.view (lift << Mdc) idx model.mdc
           [ Options.onClick (lift (Set group name))
           , RadioButton.selected |> when (isSelected False name)
-          , RadioButton.name group
           ]
           []
         , Html.label [] [ text name ]
@@ -187,7 +183,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (lift << Mdc) idx model.mdc
+          [ RadioButton.view (lift << Mdc) idx model.mdc
             [ RadioButton.selected
             , RadioButton.disabled
             ]
@@ -205,7 +201,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (lift << Mdc) idx model.mdc
+          [ RadioButton.view (lift << Mdc) idx model.mdc
             [ RadioButton.disabled
             ]
             []
