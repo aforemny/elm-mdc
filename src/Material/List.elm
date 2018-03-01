@@ -141,7 +141,7 @@ graphic options =
 
 {-| The first tile in a row as an icon
 -}
-graphicIcon : List (Property Icon.Config m) -> String -> Html m
+graphicIcon : List (Icon.Property m) -> String -> Html m
 graphicIcon options =
     Icon.view (cs "mdc-list-item__graphic" :: options)
 
@@ -174,7 +174,7 @@ metaText options str =
 
 {-| The last tile in a row as an icon
 -}
-metaIcon : List (Property Icon.Config m) -> String -> Html m
+metaIcon : List (Icon.Property m) -> String -> Html m
 metaIcon options =
     Icon.view (cs "mdc-list-item__meta" :: options)
 

@@ -22,8 +22,6 @@ module Material.Toolbar exposing
     )
 
 {-|
-# Toolbars
-
 A toolbar is a container for multiple rows that contain items such as the
 application's title, navigation menu and tabs, among other things.
 
@@ -31,12 +29,34 @@ By default a toolbar scrolls with the view. You can change this using the
 `fixed` or `waterfall` properties. A `flexible` toolbar changes its height when
 the view is scrolled.
 
-## Documentation
+# Resources
 
 - [Material Design guidelines: Toolbars](https://material.io/guidelines/components/toolbars.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#toolbar)
 
-## Usage
+# Example
+
+```elm
+Toolbar.view Mdc [0] model.mdc []
+    [ Toolbar.row []
+          [ Toolbar.section
+                [ Toolbar.alignStart
+                ]
+                [ Toolbar.menuIcon [] "menu"
+                , Toolbar.title [] [ text "Title" ]
+                ]
+          , Toolbar.section
+                [ Toolbar.alignEnd
+                ]
+                [ Toolbar.icon [] "file_download"
+                , Toolbar.icon [] "print"
+                , Toolbar.icon [] "bookmark"
+                ]
+          ]
+    ]
+```
+
+# Usage
 
 @docs Property
 @docs view
@@ -597,35 +617,15 @@ react =
 -- API
 
 
-{-| Toolbar property
+{-| Toolbar property.
 -}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Toolbar view
+{-| Toolbar view.
 
 The first child of this function has to be a `row`.
-
-```elm
-Toolbar.view Mdc [0] model.mdc []
-    [ Toolbar.row []
-          [ Toolbar.section
-                [ Toolbar.alignStart
-                ]
-                [ Toolbar.menuIcon [] "menu"
-                , Toolbar.title [] [ text "Title" ]
-                ]
-          , Toolbar.section
-                [ Toolbar.alignEnd
-                ]
-                [ Toolbar.icon [] "file_download"
-                , Toolbar.icon [] "print"
-                , Toolbar.icon [] "bookmark"
-                ]
-          ]
-    ]
-```
 -}
 view :
     (Material.Msg.Msg m -> m)
@@ -638,21 +638,21 @@ view =
     Component.render get toolbar Material.Msg.ToolbarMsg
 
 
-{-| Make the toolbar fixed to the top and apply a persistent elevation
+{-| Make the toolbar fixed to the top and apply a persistent elevation.
 -}
 fixed : Property m
 fixed =
     Internal.option (\ config -> { config | fixed = True } )
 
 
-{-| Make the toolbar gain elevation only when the window is scrolled
+{-| Make the toolbar gain elevation only when the window is scrolled.
 -}
 waterfall : Property m
 waterfall =
     Internal.option (\ config -> { config | waterfall = True } )
 
 
-{-| Make the height of the toolbar change as the window is scrolled
+{-| Make the height of the toolbar change as the window is scrolled.
 
 You will likely want to specify `flexibleDefaultBehavior` as well.
 -}
@@ -661,28 +661,28 @@ flexible =
     Internal.option (\ config -> { config | flexible = True } )
 
 
-{-| Make use of the flexible default behavior
+{-| Make use of the flexible default behavior.
 -}
 flexibleDefaultBehavior : Property m
 flexibleDefaultBehavior =
     Internal.option (\ config -> { config | useFlexibleDefaultBehavior = True })
 
 
-{-| Make the last row of the toolbar fixed
+{-| Make the last row of the toolbar fixed.
 -}
 fixedLastRow : Property m
 fixedLastRow =
     Internal.option (\ config -> { config | fixedLastrow = True })
 
 
-{-| Add a background image to the toolbar
+{-| Add a background image to the toolbar.
 -}
 backgroundImage : String -> Property m
 backgroundImage backgroundImage =
     Internal.option (\ config -> { config | backgroundImage = Just backgroundImage } )
 
 
-{-| Toolbar row
+{-| Toolbar row.
 
 A row is divided into several `section`s. There has to be at least one row as
 direct child of `view`.
@@ -695,9 +695,11 @@ row options =
     )
 
 
-{-| Toolbar section
+{-| Toolbar section.
 
 By default sections share the available space of a row equally.
+
+Has to be a child of `row`.
 -}
 section : List (Property m) -> List (Html m) -> Html m
 section options =
@@ -707,21 +709,21 @@ section options =
     )
 
 
-{-| Make section align to the start
+{-| Make section align to the start.
 -}
 alignStart : Property m
 alignStart =
     cs "mdc-toolbar__section--align-start"
 
 
-{-| Make section align to the end
+{-| Make section align to the end.
 -}
 alignEnd : Property m
 alignEnd =
     cs "mdc-toolbar__section--align-end"
 
 
-{-| Make a section take the width of its contents
+{-| Make a section take the width of its contents.
 -}
 shrinkToFit : Property m
 shrinkToFit =
@@ -741,7 +743,7 @@ menuIcon options icon =
     icon
 
 
-{-| Add a title to the toolbar
+{-| Add a title to the toolbar.
 
 Has to be a child of `section`.
 -}
@@ -753,7 +755,7 @@ title options =
     )
 
 
-{-| Add icons to the end of the toolbar
+{-| Add icons to the end of the toolbar.
 
 Has to be a child of `section`.
 -}
@@ -766,7 +768,7 @@ icon options icon =
     icon
 
 
-{-| Adds a top margin to the element so that it is not covered by the toolbar
+{-| Adds a top margin to the element so that it is not covered by the toolbar.
 
 Should be applied to a direct sibling of `view`.
 -}
