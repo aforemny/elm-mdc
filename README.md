@@ -99,5 +99,6 @@ $ open build/index.html
 
 ## Contribute
 
-Contributions are warmly encouraged - please [get in touch](TODO)! Use GitHub to
-[report bugs](TODO), too.
+Contributions are warmly encouraged - please
+[get in touch](https://github.com/aforemny/elm-mdc/issues)! Use GitHub to
+[report bugs](https://github.com/aforemny/elm-mdc/issues), too.
