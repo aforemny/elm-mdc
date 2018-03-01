@@ -1,54 +1,48 @@
-module Material.Button
-    exposing
-        (
-          Property
-        , icon
-        , raised
-        , unelevated
-        , stroked
-        , dense
-        , compact
-        , disabled
-
-        , ripple
-
-        , primary
-        , secondary
-        , link
-
-        , darkTheme
-        , type_
-
-        , render
-        , Model
-        , react
-        )
+module Material.Button exposing
+    ( compact
+    , dense
+    , disabled
+    , icon
+    , link
+    , primary
+    , Property
+    , raised
+    , react
+    , ripple
+    , secondary
+    , stroked
+    , type_
+    , unelevated
+    , Model
+    , render
+    )
 
 {-|
 The MDC Button component is a spec-aligned button component adhering to the
 Material Design button requirements.
 
-## Design & API Documentation
+# Resources
 
 - [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#buttons)
 
-## View
-@docs view
-
-## Properties
+# Usage
 @docs Property
-@docs disabled, ripple
-@docs raised, unelevated, stroked
-@docs compact, dense, primary, secondary, link
-@docs darkTheme, type_
+@docs view
+@docs ripple
+@docs raised
+@docs unelevated
+@docs stroked
+@docs dense
+@docs compact
+@docs link
+@docs disabled
 
-## TEA architecture
-@docs Model, defaultModel, Msg, update
+@docs primary, secondary, link
+@docs type_
 
-## Featured render
-@docs render
-@docs Store, react
+# Internal
+@docs react
 -}
 
 import Html.Attributes as Html
@@ -182,7 +176,7 @@ view lift model options nodes =
             Internal.collect defaultConfig options
 
         ripple =
-            Ripple.view False (lift << RippleMsg) model.ripple () ()
+            Ripple.view False (lift << RippleMsg) model.ripple []
     in
         Internal.apply summary
             (if config.link /= Nothing then Html.a else Html.button)

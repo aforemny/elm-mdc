@@ -55,8 +55,6 @@ import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
 import Material.Ripple as Ripple
 
--- MODEL
-
 
 {-| Component model.
 -}
@@ -100,11 +98,11 @@ update lift msg model =
               Cmd.map (lift << RippleMsg) effects
             )
 
-        SetFocus focus ->
-            ( Just { model | isFocused = focus }, Cmd.none )
-
         NoOp ->
             ( Nothing, Cmd.none )
+
+        SetFocus focus ->
+            ( Just { model | isFocused = focus }, Cmd.none )
 
 
 -- OPTIONS
@@ -169,7 +167,7 @@ view lift model options _ =
             Internal.collect defaultConfig options
 
         ripple =
-            Ripple.view True (lift << RippleMsg) model.ripple [] []
+            Ripple.view True (lift << RippleMsg) model.ripple []
     in
     Internal.applyContainer summary Html.div
     [ cs "mdc-radio"

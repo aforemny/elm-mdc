@@ -150,7 +150,7 @@ view lift model options _ =
             Internal.collect defaultConfig options
 
         ripple =
-            Ripple.view True (lift << RippleMsg) model.ripple [] []
+            Ripple.view True (lift << RippleMsg) model.ripple []
     in
     Internal.apply summary (if config.inner == Nothing then Html.i else Html.span)
     ( cs "mdc-icon-toggle"

@@ -1,16 +1,96 @@
 module Material.Ripple exposing
-    ( Model
-    , defaultModel
-    , Msg
-    , update
+    ( accent
     , bounded
-    , unbounded
-    , accent
+    , defaultModel
+    , Model
+    , Msg
     , primary
+    , Property
     , react
+    , unbounded
+    , update
     , view
-    , surface
     )
+
+{-|
+The Ripple component adds a material "ink ripple" interaction effect to
+HTML elements.
+
+The ripple comes in `bounded` and `unbounded` variants. The first works well
+for surfaces, the other works well for icons.
+
+The view functions `unbounded` and `bounded` return a record with fields
+
+- `interactionHandler` that has to be added to the HTML element that should be
+  interacted with,
+- `properties` that applies the ripple effect to the HTML element. This is
+  usually the same as the one `interactionHandler` is applied to, and
+- `style` which is a HTML `<style>` element which has to be added to the DOM.
+  It is recommended to make this a child of the element that is interacted
+  with.
+
+
+# Resources
+- [Material Design guidelines: Choreography](https://material.io/guidelines/motion/choreography.html#choreography-radial-reaction)
+- [Demo](https://aforemny.github.io/elm-mdc/#ripple)
+
+
+# Example
+
+## Bounded Ripple effect
+
+```elm
+let
+    { interactionHandler
+    , properties
+    , style
+    } =
+        Ripple.bounded Mdc [0] model.mdc
+in
+Options.styled Html.div
+    [ interactionHandler
+    , properties
+    ]
+    [ text "Interact with me!"
+    , style
+    ]
+```
+
+
+## Unbounded Ripple effect
+
+```elm
+let
+    { interactionHandler
+    , properties
+    , style
+    } =
+        Ripple.unbounded Mdc [0] model.mdc
+in
+Icon.view
+    [ interactionHandler
+    , properties
+    ]
+    "favorite"
+```
+
+
+# Usage
+@docs Property
+@docs unbounded
+@docs bounded
+@docs primary
+@docs accent
+
+
+# Internal
+@docs Model
+@docs defaultModel
+@docs Msg
+@docs update
+@docs view
+@docs react
+-}
 
 import DOM
 import Html.Attributes as Html
@@ -18,16 +98,17 @@ import Html exposing (..)
 import Json.Decode as Json exposing (Decoder, field, at)
 import Material.Component as Component exposing (Indexed)
 import Material.Helpers as Helpers
-import Material.Internal.Options as Internal exposing (Property)
+import Material.Internal.Options as Internal
 import Material.Internal.Ripple exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (styled, cs, css, when)
 import Platform.Cmd exposing (Cmd, none)
 
 
--- MODEL
+{-| Ripple model.
 
-
+Internal use only.
+-}
 type alias Model =
     { focus : Bool
     , active : Bool
@@ -38,6 +119,10 @@ type alias Model =
     }
 
 
+{-| Ripple default model.
+
+Internal use only.
+-}
 defaultModel : Model
 defaultModel =
     { focus = False
@@ -49,13 +134,18 @@ defaultModel =
     }
 
 
--- ACTION, UPDATE
+{-| Ripple message.
 
-
+Internal use only.
+-}
 type alias Msg
     = Material.Internal.Ripple.Msg
 
 
+{-| Ripple update function.
+
+Internal use only.
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -119,63 +209,84 @@ update msg model =
                 ( model, Cmd.none )
 
 
-surface : Options.Property c m
-surface =
-    cs "mdc-ripple-surface"
-
-
--- VIEW
-
-
+{-| Bounded view function.
+-}
 bounded
     : (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
-    -> x
-    -> y
+    -> List (Property m)
     -> { interactionHandler : Options.Property c m
        , properties : Options.Property c m
        , style : Html m
        }
-bounded lift index store options =
-    Component.render get (view False) Material.Msg.RippleMsg lift index store options
+bounded =
+    Component.render get (view False) Material.Msg.RippleMsg
 
 
+{-| Unbounded view function.
+-}
 unbounded
     : (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
-    -> x
-    -> y
+    -> List (Property m)
     -> { interactionHandler : Options.Property c m
        , properties : Options.Property c m
        , style : Html m
        }
-unbounded lift index store options =
-    Component.render get (view True) Material.Msg.RippleMsg lift index store options
+unbounded =
+    Component.render get (view True) Material.Msg.RippleMsg
 
 
-primary : Property c m
+type alias Config =
+    { color : Maybe String
+    }
+
+
+defaultConfig : Config
+defaultConfig =
+    { color = Nothing
+    }
+
+
+{-| Set ripple effect to the primary color.
+-}
+primary : Property m
 primary =
-    cs "mdc-ripple-surface--primary"
+    Internal.option (\ config -> { config | color = Just "primary" })
 
 
-accent : Property c m
+{-| Set ripple effect to the accent color.
+-}
+accent : Property m
 accent =
-    cs "mdc-ripple-surface--accent"
+    Internal.option (\ config -> { config | color = Just "accent" })
 
 
+{-| Ripple property.
+-}
+type alias Property m =
+    Options.Property Config m
+
+
+{-| Ripple view function.
+
+Internal use only. Use `bounded` or `unbounded` instead.
+-}
 view : Bool
     -> (Msg -> m)
     -> Model
-    -> x
-    -> y
+    -> List (Property m)
     -> { interactionHandler : Options.Property c m
        , properties : Options.Property c m
        , style : Html m
        }
-view isUnbounded lift model _ _ =
+view isUnbounded lift model options =
     let
+        { config } =
+            Internal.collect defaultConfig options
+
         geometry =
             model.geometry
 
@@ -300,8 +411,14 @@ view isUnbounded lift model _ _ =
         properties =
             Options.many
             [
-            -- , cs "mdc-ripple-surface"
               cs "mdc-ripple-upgraded"
+            , cs "mdc-ripple-surface"
+
+            , when (config.color == Just "primary") <|
+              cs "mdc-ripple-surface--primary"
+
+            , when (config.color == Just "accent") <|
+              cs "mdc-ripple-surface--accent"
 
             , when isUnbounded << Options.many <|
               [ cs "mdc-ripple-upgraded--unbounded"
@@ -347,6 +464,10 @@ type alias Store s =
     Component.indexed .ripple (\x y -> { y | ripple = x }) defaultModel
 
 
+{-| Ripple react.
+
+Internal use only.
+-}
 react : (Material.Msg.Msg m -> m) -> Msg -> Index -> Store s -> ( Maybe (Store s), Cmd m )
 react =
     Component.react get set Material.Msg.RippleMsg (Component.generalise update)

@@ -29,10 +29,12 @@ By default a toolbar scrolls with the view. You can change this using the
 `fixed` or `waterfall` properties. A `flexible` toolbar changes its height when
 the view is scrolled.
 
+
 # Resources
 
 - [Material Design guidelines: Toolbars](https://material.io/guidelines/components/toolbars.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#toolbar)
+
 
 # Example
 
@@ -56,6 +58,7 @@ Toolbar.view Mdc [0] model.mdc []
     ]
 ```
 
+
 # Usage
 
 @docs Property
@@ -76,7 +79,8 @@ Toolbar.view Mdc [0] model.mdc []
 @docs icon
 @docs fixedAdjust
 
-## Internal
+
+# Internal
 @docs react
 -}
 

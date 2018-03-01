@@ -333,7 +333,7 @@ view lift model options _ =
             model.focused && not config.disabled
 
         ripple =
-            Ripple.view False (lift << RippleMsg) model.ripple [] []
+            Ripple.view False (lift << RippleMsg) model.ripple []
 
         isInvalid =
             case config.pattern of

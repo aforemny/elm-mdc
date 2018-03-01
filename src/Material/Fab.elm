@@ -112,7 +112,7 @@ view lift model options icon =
             Internal.collect defaultConfig options
 
         ripple =
-            Ripple.view False (lift << RippleMsg) model.ripple () ()
+            Ripple.view False (lift << RippleMsg) model.ripple []
     in
         Internal.apply summary
             Html.button

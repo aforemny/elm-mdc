@@ -69,14 +69,13 @@ view lift page model =
       [
         let
             ripple =
-                Ripple.bounded (lift << Mdc) [0] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [0] model.mdc []
         in
         styled Html.div
         [ css "width" "100%"
         , css "height" "100%"
         , ripple.interactionHandler
         , ripple.properties
-        , Ripple.surface
         ]
         [ ripple.style
         ]
@@ -87,14 +86,13 @@ view lift page model =
       [ Html.h2 [] [ text "Bounded" ]
       , let
             ripple =
-                Ripple.bounded (lift << Mdc) [1] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [1] model.mdc []
         in
         styled Html.div
         [ demoSurface
         , Elevation.z2
         , ripple.interactionHandler
         , ripple.properties
-        , Ripple.surface
         ]
         [ text "Interact with me!"
         , ripple.style
@@ -105,7 +103,7 @@ view lift page model =
       [ Html.h2 [] [ text "Unbounded" ]
       , let
             ripple =
-                Ripple.unbounded (lift << Mdc) [2] model.mdc () ()
+                Ripple.unbounded (lift << Mdc) [2] model.mdc []
         in
         styled Html.div
         [ cs "material-icons"
@@ -116,7 +114,6 @@ view lift page model =
         , demoSurface
         , ripple.interactionHandler
         , ripple.properties
-        , Ripple.surface
         ]
         [ text "favorite"
         , ripple.style
@@ -127,30 +124,26 @@ view lift page model =
       [ Html.h2 [] [ text "Theme Styles" ]
       , let
             ripple =
-                Ripple.bounded (lift << Mdc) [3] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [3] model.mdc [ Ripple.primary ]
         in
         styled Html.div
         [ demoSurface
         , Elevation.z2
         , ripple.interactionHandler
         , ripple.properties
-        , Ripple.surface
-        , Ripple.primary
         ]
         [ text "Primary"
         , ripple.style
         ]
       , let
             ripple =
-                Ripple.bounded (lift << Mdc) [4] model.mdc () ()
+                Ripple.bounded (lift << Mdc) [4] model.mdc [ Ripple.accent ]
         in
         styled Html.div
         [ demoSurface
         , Elevation.z2
         , ripple.interactionHandler
         , ripple.properties
-        , Ripple.surface
-        , Ripple.accent
         ]
         [ text "Accent"
         , ripple.style

@@ -730,7 +730,7 @@ interactiveList lift idx model =
     [
       let
           ripple =
-              Ripple.bounded (lift << Mdc) (idx ++ [0]) model.mdc [] []
+              Ripple.bounded (lift << Mdc) (idx ++ [0]) model.mdc []
       in
       Lists.li
       [ ripple.interactionHandler
@@ -743,7 +743,7 @@ interactiveList lift idx model =
     ,
       let
           ripple =
-              Ripple.bounded (lift << Mdc) (idx ++ [1]) model.mdc [] []
+              Ripple.bounded (lift << Mdc) (idx ++ [1]) model.mdc []
       in
       Lists.li
       [ ripple.interactionHandler
@@ -756,7 +756,7 @@ interactiveList lift idx model =
     ,
       let
           ripple =
-              Ripple.bounded (lift << Mdc) (idx ++ [2]) model.mdc [] []
+              Ripple.bounded (lift << Mdc) (idx ++ [2]) model.mdc []
       in
       Lists.li
       [ ripple.interactionHandler

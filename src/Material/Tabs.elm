@@ -1,33 +1,32 @@
-module Material.Tabs
-    exposing
-        (
-          -- VIEW
-          view
+module Material.Tabs exposing
+    (
+      -- VIEW
+      view
 
-          -- PROPERTIES
-        , Property
-        , scroller
-        , indicatorPrimary
-        , indicatorAccent
-        , indicator
+      -- PROPERTIES
+    , Property
+    , scroller
+    , indicatorPrimary
+    , indicatorAccent
+    , indicator
 
-          -- TABS
-        , tab
-        , withIconAndText
-        , icon
-        , iconLabel
+      -- TABS
+    , tab
+    , withIconAndText
+    , icon
+    , iconLabel
 
-          -- TEA
-        , Model
-        , defaultModel
-        , Msg
-        , update
+      -- TEA
+    , Model
+    , defaultModel
+    , Msg
+    , update
 
-          -- RENDER
-        , render
-        , Store
-        , react
-        )
+      -- RENDER
+    , render
+    , Store
+    , react
+    )
 
 {-|
 > The MDC Tabs component contains components which are used to create
@@ -421,7 +420,7 @@ view lift model options nodes =
                                 ( Dict.get index model.ripples
                                   |> Maybe.withDefault Ripple.defaultModel
                                 )
-                                () ()
+                                []
                        in
                        [ node
                            ( cs "mdc-tab"
