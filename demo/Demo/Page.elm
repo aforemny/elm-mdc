@@ -31,8 +31,8 @@ toolbar
   -> Url
   -> String
   -> Html m
-toolbar lift idx mdl navigate url title =
-    Toolbar.view lift idx mdl
+toolbar lift idx mdc navigate url title =
+    Toolbar.view lift idx mdc
     [ Toolbar.fixed
     ]
     [ Toolbar.row []
@@ -75,8 +75,8 @@ toolbar lift idx mdl navigate url title =
 
 
 fixedAdjust : List Int -> Material.Model -> Options.Property c m
-fixedAdjust idx mdl =
-    Toolbar.fixedAdjust idx mdl
+fixedAdjust idx mdc =
+    Toolbar.fixedAdjust idx mdc
 
 
 hero : List (Property c m) -> List (Html m) -> Html m

@@ -1,4 +1,4 @@
-module Demo.Snackbar exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Snackbar exposing (Model, defaultModel, Msg(Mdc), update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
@@ -16,7 +16,7 @@ import Platform.Cmd exposing (Cmd, none)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , multiline : Bool
     , actionOnBottom : Bool
     , dismissOnAction : Bool
@@ -27,7 +27,7 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , multiline = False
     , actionOnBottom = False
     , dismissOnAction = True
@@ -37,7 +37,7 @@ defaultModel =
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | ToggleMultiline
     | ToggleActionOnBottom
     | ToggleDismissOnAction
@@ -51,8 +51,8 @@ type Msg m
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
         NoOp ->
             ( model, Cmd.none )
         ToggleMultiline ->
@@ -87,7 +87,7 @@ update lift msg model =
                             , action = Just "Hide"
                         }
             in
-            Snackbar.add (Mdl >> lift) idx contents model
+            Snackbar.add (Mdc >> lift) idx contents model
         Dismiss ->
             let
                 _ = Debug.log "msg" Dismiss
@@ -149,7 +149,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Checkbox.render (Mdl >> lift) [0] model.mdl
+          [ Checkbox.render (Mdc >> lift) [0] model.mdc
             [ Options.onClick (lift ToggleMultiline)
             , Checkbox.checked |> when model.multiline
             ]
@@ -162,7 +162,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Checkbox.render (Mdl >> lift) [1] model.mdl
+          [ Checkbox.render (Mdc >> lift) [1] model.mdc
             [ Options.onClick (lift ToggleActionOnBottom)
             , Checkbox.checked |> when model.actionOnBottom
             , Checkbox.disabled |> when (not model.multiline)
@@ -176,7 +176,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Checkbox.render (Mdl >> lift) [2] model.mdl
+          [ Checkbox.render (Mdc >> lift) [2] model.mdc
             [ Options.onClick (lift ToggleDismissOnAction)
             , Checkbox.checked |> when model.dismissOnAction
             ]
@@ -186,7 +186,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Textfield.render (Mdl >> lift) [3] model.mdl
+          Textfield.render (Mdc >> lift) [3] model.mdc
           [ Textfield.value model.messageText
           , Textfield.label "Message Text"
           , Options.on "input" (Json.map (SetMessageText >> lift) Html.targetValue)
@@ -196,7 +196,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Textfield.render (Mdl >> lift) [4] model.mdl
+          Textfield.render (Mdc >> lift) [4] model.mdc
           [ Textfield.value model.actionText
           , Textfield.label "Action Text"
           , Options.on "input" (Json.map (SetActionText >> lift) Html.targetValue)
@@ -206,7 +206,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Button.render (Mdl >> lift) [5] model.mdl
+          Button.render (Mdc >> lift) [5] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [9])))
@@ -216,7 +216,7 @@ view lift page model =
         ,
           text " "
         ,
-          Button.render (Mdl >> lift) [6] model.mdl
+          Button.render (Mdc >> lift) [6] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [10])))
@@ -226,7 +226,7 @@ view lift page model =
         ,
           text " "
         ,
-          Button.render (Mdl >> lift) [7] model.mdl
+          Button.render (Mdc >> lift) [7] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [11])))
@@ -236,7 +236,7 @@ view lift page model =
         ,
           text " "
         ,
-          Button.render (Mdl >> lift) [8] model.mdl
+          Button.render (Mdc >> lift) [8] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [12])))
@@ -244,7 +244,7 @@ view lift page model =
           [ text "Show Start Aligned (Rtl)"
           ]
         ,
-          Snackbar.render (Mdl >> lift) [9] model.mdl
+          Snackbar.render (Mdc >> lift) [9] model.mdc
           [ Snackbar.onDismiss (lift Dismiss)
           ]
           []
@@ -252,13 +252,13 @@ view lift page model =
           Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.render (Mdl >> lift) [10] model.mdl
+          [ Snackbar.render (Mdc >> lift) [10] model.mdc
             [ Snackbar.onDismiss (lift Dismiss)
             ]
             []
           ]
 
-        , Snackbar.render (Mdl >> lift) [11] model.mdl
+        , Snackbar.render (Mdc >> lift) [11] model.mdc
           [ Snackbar.onDismiss (lift Dismiss)
           , Snackbar.alignStart
           ]
@@ -267,7 +267,7 @@ view lift page model =
         , Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.render (Mdl >> lift) [12] model.mdl
+          [ Snackbar.render (Mdc >> lift) [12] model.mdc
             [ Snackbar.onDismiss (lift Dismiss)
             , Snackbar.alignStart
             ]

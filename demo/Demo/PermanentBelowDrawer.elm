@@ -2,7 +2,7 @@ module Demo.PermanentBelowDrawer exposing
     (
       Model
     , defaultModel
-    , Msg(Mdl)
+    , Msg(Mdc)
     , update
     , view
     , subscriptions
@@ -26,7 +26,7 @@ import Material.Typography as Typography
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , toggle0 : Bool
     , toggle1 : Bool
     , rtl : Bool
@@ -35,7 +35,7 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , toggle0 = False
     , toggle1 = False
     , rtl = False
@@ -43,7 +43,7 @@ defaultModel =
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | Toggle0
     | Toggle1
     | ToggleRtl
@@ -52,8 +52,8 @@ type Msg m
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
         Toggle0 ->
             ( { model | toggle0 = not model.toggle0 }, Cmd.none )
@@ -90,7 +90,7 @@ view lift page model =
       , page.fixedAdjust
       ]
       [ 
-        Drawer.render (Mdl >> lift) [0] model.mdl []
+        Drawer.render (Mdc >> lift) [0] model.mdc []
         [ Lists.listItem
           [ Options.attribute (Html.href "#permanent-drawer-below") ]
           [ Lists.graphicIcon [] "inbox"
@@ -152,7 +152,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.render (lift << Mdl) [2] model.mdl
+            Button.render (lift << Mdc) [2] model.mdc
             [ Options.on "click" (Json.succeed (lift ToggleRtl))
             ]
             [ text "Toggle RTL"
@@ -163,7 +163,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.render (lift << Mdl) [3] model.mdl
+            Button.render (lift << Mdc) [3] model.mdc
             [ Options.on "click" (Json.succeed (lift Toggle0))
             ]
             [ text "Toggle extra-wide content"
@@ -182,7 +182,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.render (lift << Mdl) [4] model.mdl
+            Button.render (lift << Mdc) [4] model.mdc
             [ Options.on "click" (Json.succeed (lift Toggle1))
             ]
             [ text "Toggle extra-tall content"
@@ -214,4 +214,4 @@ html, body {
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Material.Drawer.subs (Mdl >> lift) model.mdl
+    Material.Drawer.subs (Mdc >> lift) model.mdc

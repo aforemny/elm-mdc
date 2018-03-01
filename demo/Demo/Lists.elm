@@ -13,29 +13,28 @@ import Material.Typography as Typography
 
 
 type alias Model =
-    { mdl : Material.Model
-      -- ^^ TODO: use namespace `mdc`
+    { mdc : Material.Model
     , rtl : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , rtl = False
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | ToggleRtl
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
@@ -100,7 +99,7 @@ possible (since it's a block element)."""
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.render (Mdl >> lift) [0] model.mdl
+        [ Checkbox.render (Mdc >> lift) [0] model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked |> when model.rtl
           ]
@@ -731,7 +730,7 @@ interactiveList lift idx model =
     [
       let
           ripple =
-              Ripple.bounded (lift << Mdl) (idx ++ [0]) model.mdl [] []
+              Ripple.bounded (lift << Mdc) (idx ++ [0]) model.mdc [] []
       in
       Lists.li
       [ ripple.interactionHandler
@@ -744,7 +743,7 @@ interactiveList lift idx model =
     ,
       let
           ripple =
-              Ripple.bounded (lift << Mdl) (idx ++ [1]) model.mdl [] []
+              Ripple.bounded (lift << Mdc) (idx ++ [1]) model.mdc [] []
       in
       Lists.li
       [ ripple.interactionHandler
@@ -757,7 +756,7 @@ interactiveList lift idx model =
     ,
       let
           ripple =
-              Ripple.bounded (lift << Mdl) (idx ++ [2]) model.mdl [] []
+              Ripple.bounded (lift << Mdc) (idx ++ [2]) model.mdc [] []
       in
       Lists.li
       [ ripple.interactionHandler

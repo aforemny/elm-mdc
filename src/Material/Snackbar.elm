@@ -250,24 +250,24 @@ the provided message will be queued. You will be able to observe a `Begin` actio
 You must dispatch the returned effect for the Snackbar to begin displaying your
 message.
 -}
-add : (Material.Msg.Msg m -> m) -> Index -> Contents -> { a | mdl : Store s } -> ( { a | mdl : Store s }, Cmd m )
+add : (Material.Msg.Msg m -> m) -> Index -> Contents -> { a | mdc : Store s } -> ( { a | mdc : Store s }, Cmd m )
 add lift idx contents model =
     let
         component_ =
-            Dict.get idx model.mdl.snackbar
+            Dict.get idx model.mdc.snackbar
             |> Maybe.withDefault defaultModel
 
         (component, effects ) =
           enqueue contents component_ |> tryDequeue
 
-        mdl =
+        mdc =
           let
-              mdl_ =
-                  model.mdl
+              mdc_ =
+                  model.mdc
           in
-          { mdl_ | snackbar = Dict.insert idx component mdl_.snackbar }
+          { mdc_ | snackbar = Dict.insert idx component mdc_.snackbar }
     in
-        { model | mdl = mdl } ! [ Cmd.map (Material.Msg.SnackbarMsg idx >> lift) effects ]
+        { model | mdc = mdc } ! [ Cmd.map (Material.Msg.SnackbarMsg idx >> lift) effects ]
 
 
 -- VIEW

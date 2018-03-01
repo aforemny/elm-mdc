@@ -1,4 +1,4 @@
-module Demo.IconToggle exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.IconToggle exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Demo.Page as Page exposing (Page)
 import Dict
@@ -12,28 +12,28 @@ import Material.Options exposing (styled, cs, css, when)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , iconToggles : Indexed Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , iconToggles = Dict.empty
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | Toggle Index
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
         Toggle idx ->
             let
                 iconToggle =
@@ -84,7 +84,7 @@ view lift page model =
                     Dict.get idx model.iconToggles
                     |> Maybe.withDefault False
             in
-            IconToggle.render (Mdl >> lift) idx model.mdl
+            IconToggle.render (Mdc >> lift) idx model.mdc
             ( Options.onClick (lift (Toggle idx))
             :: when isOn IconToggle.on
             :: options

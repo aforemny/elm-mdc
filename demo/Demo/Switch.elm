@@ -1,4 +1,4 @@
-module Demo.Switch exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.Switch exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -10,28 +10,28 @@ import Platform.Cmd exposing (Cmd, none)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , switches : Dict (List Int) Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , switches = Dict.empty
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | Toggle (List Int)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
         Toggle index ->
             let
@@ -72,7 +72,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (Mdl >> lift) index model.mdl
+          Switch.render (Mdc >> lift) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.on |> when on
           ]
@@ -101,7 +101,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (Mdl >> lift) index model.mdl
+          Switch.render (Mdc >> lift) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.on |> when on
           ]
@@ -136,7 +136,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (Mdl >> lift) index model.mdl
+          Switch.render (Mdc >> lift) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.disabled
           ]

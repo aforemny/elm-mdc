@@ -271,22 +271,6 @@ react lift msg idx store =
 
 {-| Component render. Below is an example, assuming boilerplate setup as
 indicated in `Material`, and a user message `Select String`.
-
-    Select.render Mdl [idx] model.mdl
-      [ Select.topLeft, Select.ripple ]
-      [ Select.item
-        [ onSelect Select "Some item" ]
-        [ text "Some item" ]
-      , Select.item
-        [ onSelect "Another item", Select.divider ]
-        [ text "Another item" ]
-      , Select.item
-        [ onSelect "Disabled item", Select.disabled ]
-        [ text "Disabled item" ]
-      , Select.item
-        [ onSelect "Yet another item" ]
-        [ text "Yet another item" ]
-      ]
 -}
 render :
     (Material.Msg.Msg m -> m)

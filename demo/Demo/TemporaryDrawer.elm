@@ -2,7 +2,7 @@ module Demo.TemporaryDrawer exposing
     (
       Model
     , defaultModel
-    , Msg(Mdl)
+    , Msg(Mdc)
     , update
     , view
     , subscriptions
@@ -25,28 +25,28 @@ import Platform.Cmd exposing (Cmd, none)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , rtl : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , rtl = False
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | ToggleRtl
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
@@ -58,7 +58,7 @@ view lift page model =
     [ Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [
-      Toolbar.view (Mdl >> lift) [1] model.mdl
+      Toolbar.view (Mdc >> lift) [1] model.mdc
       [ Toolbar.fixed
       ]
       [ Toolbar.row []
@@ -66,7 +66,7 @@ view lift page model =
           [ Toolbar.alignStart
           ]
           [ Toolbar.menuIcon
-            [ Drawer.openOn (lift << Mdl) [0] "click"
+            [ Drawer.openOn (lift << Mdc) [0] "click"
             ]
             "menu"
           , Toolbar.title
@@ -79,7 +79,7 @@ view lift page model =
         ]
       ]
 
-    , Drawer.render (Mdl >> lift) [0] model.mdl []
+    , Drawer.render (Mdc >> lift) [0] model.mdc []
       [ Drawer.header
         [ Theme.primaryBg
         , Theme.textPrimaryOnPrimary
@@ -132,7 +132,7 @@ view lift page model =
       ]
     ,
       styled Html.div
-      [ Toolbar.fixedAdjust [1] model.mdl
+      [ Toolbar.fixedAdjust [1] model.mdc
       , css "padding-left" "16px"
       , css "overflow" "auto"
       ]
@@ -141,7 +141,7 @@ view lift page model =
       , styled Html.p [ Typography.body1 ] [ text "Click the menu icon above to open." ]
       ]
     ,
-      Button.render (lift << Mdl) [2] model.mdl
+      Button.render (lift << Mdc) [2] model.mdc
       [ Options.on "click" (Json.succeed (lift ToggleRtl))
       ]
       [ text "Toggle RTL"
@@ -151,4 +151,4 @@ view lift page model =
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Material.Drawer.subs (Mdl >> lift) model.mdl
+    Material.Drawer.subs (Mdc >> lift) model.mdc

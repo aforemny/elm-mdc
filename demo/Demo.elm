@@ -45,7 +45,7 @@ port scrollTop : () -> Cmd msg
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , url : Url
     , buttons : Demo.Buttons.Model
     , cards : Demo.Cards.Model
@@ -78,7 +78,7 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , url = StartPage
     , buttons = Demo.Buttons.defaultModel
     , cards = Demo.Cards.defaultModel
@@ -110,7 +110,7 @@ defaultModel =
 
 
 type Msg
-    = Mdl (Material.Msg Msg)
+    = Mdc (Material.Msg Msg)
     | SetUrl Url
     | Navigate Url
     | ButtonsMsg (Demo.Buttons.Msg Msg)
@@ -144,8 +144,8 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Mdl msg ->
-            Material.update Mdl msg model
+        Mdc msg ->
+            Material.update Mdc msg model
 
         Navigate url ->
             { model | url = url }
@@ -351,8 +351,8 @@ view_ : Model -> Html Msg
 view_ model =
     let
         page =
-            { toolbar = Page.toolbar Mdl [0] model.mdl Navigate model.url
-            , fixedAdjust = Page.fixedAdjust [0] model.mdl
+            { toolbar = Page.toolbar Mdc [0] model.mdc Navigate model.url
+            , fixedAdjust = Page.fixedAdjust [0] model.mdc
             , navigate = Navigate
             , body =
                 \title nodes ->
@@ -363,9 +363,9 @@ view_ model =
                 , Typography.typography
                 ]
                 ( List.concat
-                  [ [ Page.toolbar Mdl [0] model.mdl Navigate model.url title
+                  [ [ Page.toolbar Mdc [0] model.mdc Navigate model.url title
                     ]
-                  , [ styled Html.div [ Toolbar.fixedAdjust [0] model.mdl ] []
+                  , [ styled Html.div [ Toolbar.fixedAdjust [0] model.mdc ] []
                     ]
                   , nodes
                   ]
@@ -464,7 +464,7 @@ view_ model =
             Html.div
                 []
                 [ Options.styled Html.h1
-                    [ Options.cs "mdl-typography--display-4"
+                    [ Typography.display4
                     ]
                     [ text "404" ]
                 , text requestedHash
@@ -499,7 +499,7 @@ init location =
       }
     ,
       Cmd.batch
-      [ Material.init Mdl
+      [ Material.init Mdc
       , layoutGridEffects
       ]
     )
@@ -509,7 +509,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [
-          Material.subscriptions Mdl model
+          Material.subscriptions Mdc model
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.GridList.subscriptions GridListMsg model.gridList
         , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid

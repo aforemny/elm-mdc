@@ -84,10 +84,10 @@ type alias Msg m =
     Material.Msg.Msg m
 
 
-update : (Msg m -> m) -> Msg m -> { c | mdl : Model } -> (  { c | mdl : Model }, Cmd m )
+update : (Msg m -> m) -> Msg m -> { c | mdc : Model } -> (  { c | mdc : Model }, Cmd m )
 update lift msg container =
-  update_ lift msg (.mdl container)
-      |> map1st (Maybe.map (\mdl -> { container | mdl = mdl }))
+  update_ lift msg (.mdc container)
+      |> map1st (Maybe.map (\ mdc -> { container | mdc = mdc }))
       |> map1st (Maybe.withDefault container)
 
 
@@ -151,12 +151,12 @@ update_ lift msg store =
             Toolbar.react lift msg idx store
 
 
-subscriptions : (Msg m -> m) -> { model | mdl : Model } -> Sub m
+subscriptions : (Msg m -> m) -> { model | mdc : Model } -> Sub m
 subscriptions lift model =
     Sub.batch
-        [ Drawer.subs lift model.mdl
-        , Menu.subs lift model.mdl
-        , Select.subs lift model.mdl
+        [ Drawer.subs lift model.mdc
+        , Menu.subs lift model.mdc
+        , Select.subs lift model.mdc
         ]
 
 
@@ -193,6 +193,12 @@ top content =
     , Html.node "script"
       [ Html.type_ "text/javascript"
       , Html.src "https://aforemny.github.io/elm-mdc/elm-global-events.js"
+      ]
+      []
+
+    , Html.node "script"
+      [ Html.type_ "text/javascript"
+      , Html.src "https://aforemny.github.io/elm-mdc/elm-focus-trap.js"
       ]
       []
 

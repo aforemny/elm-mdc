@@ -1,4 +1,4 @@
-module Demo.Fabs exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Fabs exposing (Model, defaultModel, Msg(Mdc), update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
@@ -9,32 +9,32 @@ import Material.Options exposing (styled, css)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     }
 
 
 type Msg m
-    = Mdl (Material.Msg.Msg m)
+    = Mdc (Material.Msg.Msg m)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
     let
         fab idx options =
-            Fab.render (Mdl >> lift) [idx] model.mdl
+            Fab.render (Mdc >> lift) [idx] model.mdc
                 ( Fab.ripple
                 :: css "margin" "16px"
                 :: options

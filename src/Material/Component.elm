@@ -93,9 +93,9 @@ type alias Update msg m model =
 react1 :
     (store -> model)
     -> (store -> model -> store)
-    -> (msg -> mdlmsg)
+    -> (msg -> mdcmsg)
     -> Update msg m model
-    -> (mdlmsg -> m)
+    -> (mdcmsg -> m)
     -> msg
     -> store
     -> ( Maybe store, Cmd m )
@@ -107,9 +107,9 @@ react1 get set ctor update lift msg store =
 react :
     (Index -> store -> model)
     -> (Index -> store -> model -> store)
-    -> (Index -> msg -> mdlmsg)
+    -> (Index -> msg -> mdcmsg)
     -> Update msg m model
-    -> (mdlmsg -> m)
+    -> (mdcmsg -> m)
     -> msg
     -> Index
     -> store
@@ -129,10 +129,10 @@ generalise update lift msg model =
 
 
 subs :
-    (Index -> msg -> mdlmsg)
+    (Index -> msg -> mdcmsg)
     -> (store -> Indexed model)
     -> (model -> Sub msg)
-    -> (mdlmsg -> m)
+    -> (mdcmsg -> m)
     -> store
     -> Sub m
 subs ctor get subscriptions lift model =

@@ -1,4 +1,4 @@
-module Demo.Textfields exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Textfields exposing (Model, defaultModel, Msg(Mdc), update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -15,7 +15,7 @@ import Material.Typography as Typography
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , examples : Dict (List Int) Example
     }
 
@@ -45,13 +45,13 @@ defaultExample =
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , examples = Dict.empty
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | ExampleMsg (List Int) ExampleMsg
 
 
@@ -68,8 +68,8 @@ type ExampleMsg
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
         ExampleMsg index msg_ ->
             let
@@ -133,7 +133,7 @@ heroTextfield lift index model =
             Dict.get index model.examples
             |> Maybe.withDefault defaultExample
     in
-    Textfield.render (lift << Mdl) index model.mdl
+    Textfield.render (lift << Mdc) index model.mdc
     [ Textfield.label "Text field"
     ]
     []
@@ -157,7 +157,7 @@ textfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdl) index model.mdl
+        [ Textfield.render (lift << Mdc) index model.mdc
           [ Textfield.label "Email Address"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -258,7 +258,7 @@ password lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdl) index model.mdl
+        [ Textfield.render (lift << Mdc) index model.mdc
           [ Textfield.label "Choose password"
           , Textfield.password
           , Textfield.pattern ".{8,}"
@@ -294,7 +294,7 @@ outlinedTextfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdl) index model.mdl
+        [ Textfield.render (lift << Mdc) index model.mdc
           [ Textfield.label "Your Name"
           , Textfield.outlined
           , Textfield.dense |> when state.dense
@@ -352,7 +352,7 @@ boxTextfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdl) index model.mdl
+        [ Textfield.render (lift << Mdc) index model.mdc
           [ Textfield.label "Your Name"
           , Textfield.box
           , Textfield.disabled |> when state.disabled
@@ -412,7 +412,7 @@ iconsTextfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdl) (index ++ [0]) model.mdl
+        [ Textfield.render (lift << Mdc) (index ++ [0]) model.mdc
           [ Textfield.label "Your name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -423,7 +423,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.render (lift << Mdl) (index ++ [1]) model.mdl
+        [ Textfield.render (lift << Mdc) (index ++ [1]) model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -434,7 +434,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.render (lift << Mdl) (index ++ [2]) model.mdl
+        [ Textfield.render (lift << Mdc) (index ++ [2]) model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -445,7 +445,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.render (lift << Mdl) (index ++ [3]) model.mdl
+        [ Textfield.render (lift << Mdc) (index ++ [3]) model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -541,7 +541,7 @@ textarea lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdl) index model.mdl
+        [ Textfield.render (lift << Mdc) index model.mdc
           [ Textfield.label "Multi-line Label"
           , Textfield.textarea
           , Textfield.rows 8
@@ -595,12 +595,12 @@ fullWidth lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdl) (index ++ [0]) model.mdl
+        [ Textfield.render (lift << Mdc) (index ++ [0]) model.mdc
           [ Textfield.placeholder "Subject"
           , Textfield.fullWidth
           ]
           []
-        , Textfield.render (lift << Mdl) (index ++ [1]) model.mdl
+        , Textfield.render (lift << Mdc) (index ++ [1]) model.mdc
           [ Textfield.placeholder "Textrea Label"
           , Textfield.textarea
           , Textfield.fullWidth

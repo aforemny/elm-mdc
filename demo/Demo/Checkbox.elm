@@ -1,4 +1,4 @@
-module Demo.Checkbox exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.Checkbox exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Dict exposing (Dict)
 import Html exposing (Html, text)
@@ -13,14 +13,14 @@ import Demo.Page as Page exposing (Page)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , checkboxes : Dict (List Int) Checkbox
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , checkboxes =
         Dict.singleton [2] { defaultCheckbox | indeterminate = True }
     }
@@ -42,7 +42,7 @@ defaultCheckbox =
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | ToggleIndeterminate (List Int)
     | ToggleDisabled (List Int)
     | ToggleChecked (List Int)
@@ -51,8 +51,8 @@ type Msg m
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (lift << Mdl) msg_ model
+        Mdc msg_ ->
+            Material.update (lift << Mdc) msg_ model
 
         ToggleIndeterminate index ->
             let
@@ -115,7 +115,7 @@ view lift page model =
                 Dict.get index model.checkboxes
                 |> Maybe.withDefault defaultCheckbox
           in
-          Checkbox.render (lift << Mdl) index model.mdl
+          Checkbox.render (lift << Mdc) index model.mdc
           [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
           , Checkbox.checked |> when checkbox.checked
           , Checkbox.indeterminate |> when checkbox.indeterminate
@@ -149,7 +149,7 @@ view lift page model =
             [ cs "mdc-form-field"
             ]
             [ 
-              Checkbox.render (lift << Mdl) index model.mdl
+              Checkbox.render (lift << Mdc) index model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
               , Checkbox.checked |> when checkbox.checked
               , Checkbox.indeterminate |> when checkbox.indeterminate
@@ -164,14 +164,14 @@ view lift page model =
             [
             ]
             [
-              Button.render (lift << Mdl) (index ++ [0]) model.mdl
+              Button.render (lift << Mdc) (index ++ [0]) model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleIndeterminate index)))
               ]
               [ text "Toggle "
               , Html.code [] [ text "indeterminate" ]
               ]
             ,
-              Button.render (lift << Mdl) (index ++ [1]) model.mdl
+              Button.render (lift << Mdc) (index ++ [1]) model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleDisabled index)))
               ]
               [ text "TOGGLE "

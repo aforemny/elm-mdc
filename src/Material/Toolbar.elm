@@ -1,3 +1,4 @@
+
 module Material.Toolbar exposing
     (
       alignEnd
@@ -607,7 +608,7 @@ type alias Property m =
 The first child of this function has to be a `row`.
 
 ```elm
-Toolbar.view Mdl [0] model.mdl []
+Toolbar.view Mdc [0] model.mdc []
     [ Toolbar.row []
           [ Toolbar.section
                 [ Toolbar.alignStart

@@ -1,4 +1,4 @@
-module Demo.Menus exposing (Model, defaultModel, Msg(Mdl), view, update, subscriptions)
+module Demo.Menus exposing (Model, defaultModel, Msg(Mdc), view, update, subscriptions)
 
 import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
@@ -13,7 +13,7 @@ import Material.Options as Options exposing (styled, cs, css, nop, when)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , selected : Maybe ( Int, String )
     , position : List String
     , anchorCorner : Menu.Corner
@@ -31,7 +31,7 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , selected = Nothing
     , position = [ "top", "left" ]
     , anchorCorner = Menu.topStartCorner
@@ -60,7 +60,7 @@ type AnchorWidth
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | Select ( Int, String )
     | SetPosition ( List String )
     | SetAnchorCorner Menu.Corner
@@ -78,8 +78,8 @@ type Msg m
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
         Select value ->
             ( { model | selected = Just value }, Cmd.none )
@@ -193,10 +193,10 @@ menuAnchor lift model =
          )
       |> Options.many
     ]
-    [ Button.render (Mdl >> lift) [1] model.mdl
+    [ Button.render (Mdc >> lift) [1] model.mdc
       [ Button.raised
       , Button.primary
-      , Menu.attach (Mdl >> lift) [2]
+      , Menu.attach (Mdc >> lift) [2]
       ]
       [ text <|
         case model.anchorWidth of
@@ -210,7 +210,7 @@ menuAnchor lift model =
                 "Show Menu from here now!"
       ]
 
-    , Menu.render (Mdl >> lift) [2] model.mdl
+    , Menu.render (Mdc >> lift) [2] model.mdc
       [ Menu.anchorCorner model.anchorCorner
       , Menu.anchorMargin anchorMargin
       , Menu.quickOpen |> when (not model.openAnimation)
@@ -243,7 +243,7 @@ view lift page model =
     page.body "Simple Menu"
     [
       Page.hero []
-      [ Menu.render (Mdl >> lift) [0] model.mdl
+      [ Menu.render (Mdc >> lift) [0] model.mdc
         [ cs "mdc-menu--open"
         ]
         ( Menu.ul Lists.ul []
@@ -581,4 +581,4 @@ anchorWidths lift model =
 
 subscriptions : (Msg m -> m) -> Model -> Sub m
 subscriptions lift model =
-    Menu.subs (Mdl >> lift) model.mdl
+    Menu.subs (Mdc >> lift) model.mdc

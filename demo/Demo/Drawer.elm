@@ -2,7 +2,7 @@ module Demo.Drawer exposing
     (
       Model
     , defaultModel
-    , Msg(Mdl)
+    , Msg(Mdc)
     , update
     , view
     , subscriptions
@@ -17,25 +17,25 @@ import Material.Typography as Typography
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
 
 example : String -> String -> Html m

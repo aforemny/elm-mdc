@@ -1,4 +1,4 @@
-module Demo.Dialog exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.Dialog exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
@@ -16,14 +16,14 @@ import Material.Options as Options exposing (styled, cs, css, when)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , rtl : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , rtl = False
     }
 
@@ -33,7 +33,7 @@ defaultModel =
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | ToggleRtl
     | Accept
     | Cancel
@@ -48,8 +48,8 @@ type alias Ports m =
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (lift << Mdl) msg_ model
+        Mdc msg_ ->
+            Material.update (lift << Mdc) msg_ model
 
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
@@ -75,7 +75,7 @@ update lift msg model =
 
 heroDialog : (Msg m -> m) -> List Int -> Model -> Html m
 heroDialog lift index model =
-    Dialog.render (lift << Mdl) index model.mdl
+    Dialog.render (lift << Mdc) index model.mdc
     [ Dialog.open
     , css "position" "relative"
     , css "width" "320px"
@@ -102,14 +102,14 @@ heroDialog lift index model =
       ,
         Dialog.footer []
         [
-          Button.render (lift << Mdl) (index ++ [0]) model.mdl
+          Button.render (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
           ]
           [ text "Cancel"
           ]
         ,
-          Button.render (lift << Mdl) (index ++ [1]) model.mdl
+          Button.render (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
           ]
@@ -126,7 +126,7 @@ dialog lift index model =
       id =
           "dialog"
     in
-    Dialog.render (lift << Mdl) index model.mdl
+    Dialog.render (lift << Mdc) index model.mdc
     [ Options.attribute (Html.id id)
     ]
     [ Dialog.surface []
@@ -149,7 +149,7 @@ data to Google, even when no apps are running.
       ,
         Dialog.footer []
         [
-          Button.render (lift << Mdl) (index ++ [0]) model.mdl
+          Button.render (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
           , Options.on "click" (Json.succeed (lift Cancel))
@@ -157,7 +157,7 @@ data to Google, even when no apps are running.
           [ text "Decline"
           ]
         ,
-          Button.render (lift << Mdl) (index ++ [1]) model.mdl
+          Button.render (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
           , Options.on "click" (Json.succeed (lift Accept))
@@ -177,7 +177,7 @@ scrollableDialog lift index model =
         id =
             "scrollable-dialog"
     in
-    Dialog.render (lift << Mdl) index model.mdl
+    Dialog.render (lift << Mdc) index model.mdc
     [ Options.attribute (Html.id id)
     ]
     [ Dialog.surface []
@@ -217,7 +217,7 @@ scrollableDialog lift index model =
       ,
         Dialog.footer []
         [
-          Button.render (lift << Mdl) (index ++ [0]) model.mdl
+          Button.render (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
           , Options.on "click" (Json.succeed (lift Cancel))
@@ -225,7 +225,7 @@ scrollableDialog lift index model =
           [ text "Decline"
           ]
         ,
-          Button.render (lift << Mdl) (index ++ [1]) model.mdl
+          Button.render (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
           , Options.on "click" (Json.succeed (lift Accept))
@@ -268,20 +268,20 @@ view lift page model =
     , css "margin" "24px"
     ]
     [
-      Button.render (lift << Mdl) [3] model.mdl
+      Button.render (lift << Mdc) [3] model.mdc
       [ Button.raised
       , Button.ripple
-      , Dialog.openOn (lift << Mdl) [1] "click"
+      , Dialog.openOn (lift << Mdc) [1] "click"
       ]
       [ text "Show dialog"
       ]
     ,
       text " "
     ,
-      Button.render (lift << Mdl) [4] model.mdl
+      Button.render (lift << Mdc) [4] model.mdc
       [ Button.raised
       , Button.ripple
-      , Dialog.openOn (lift << Mdl) [2] "click"
+      , Dialog.openOn (lift << Mdc) [2] "click"
       ]
       [ text "Show scrolling dialog"
       ]
@@ -291,7 +291,7 @@ view lift page model =
       styled Html.div
       [ cs "mdc-form-field"
       ]
-      [ Checkbox.render (lift << Mdl) [5] model.mdl
+      [ Checkbox.render (lift << Mdc) [5] model.mdc
         [ Checkbox.checked |> when model.rtl
         , Options.on "click" (Json.succeed (lift ToggleRtl))
         ]

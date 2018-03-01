@@ -1,4 +1,4 @@
-module Demo.RadioButtons exposing (Model,defaultModel,Msg(Mdl),update,view)
+module Demo.RadioButtons exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -10,14 +10,14 @@ import Platform.Cmd exposing (Cmd, none)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     , radios : Dict String String
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     , radios =
         Dict.fromList
         [
@@ -26,15 +26,15 @@ defaultModel =
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | Set String String
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
         Set group value ->
             let
                 radio =
@@ -83,7 +83,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (Mdl >> lift) idx model.mdl
+          [ RadioButton.render (Mdc >> lift) idx model.mdc
             [ Options.onClick (lift (Set group name))
             , RadioButton.selected |> when (isSelected True name)
             , RadioButton.name group
@@ -101,7 +101,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (Mdl >> lift) idx model.mdl
+          [ RadioButton.render (Mdc >> lift) idx model.mdc
             [ Options.onClick (lift (Set group name))
             , RadioButton.selected |> when (isSelected False name)
             , RadioButton.name group
@@ -138,7 +138,7 @@ view lift page model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ RadioButton.render (Mdl >> lift) idx model.mdl
+        [ RadioButton.render (Mdc >> lift) idx model.mdc
           [ Options.onClick (lift (Set group name))
           , RadioButton.selected |> when (isSelected True name)
           , RadioButton.name group
@@ -157,7 +157,7 @@ view lift page model =
         styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ RadioButton.render (Mdl >> lift) idx model.mdl
+        [ RadioButton.render (Mdc >> lift) idx model.mdc
           [ Options.onClick (lift (Set group name))
           , RadioButton.selected |> when (isSelected False name)
           , RadioButton.name group
@@ -187,7 +187,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (Mdl >> lift) idx model.mdl
+          [ RadioButton.render (Mdc >> lift) idx model.mdc
             [ RadioButton.selected
             , RadioButton.disabled
             ]
@@ -205,7 +205,7 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ RadioButton.render (Mdl >> lift) idx model.mdl
+          [ RadioButton.render (Mdc >> lift) idx model.mdc
             [ RadioButton.disabled
             ]
             []

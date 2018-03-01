@@ -1,4 +1,4 @@
-module Demo.Ripple exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Ripple exposing (Model, defaultModel, Msg(Mdc), update, view)
 
 import Html exposing (Html, text)
 import Material
@@ -12,25 +12,25 @@ import Demo.Page as Page exposing (Page)
 
 
 type alias Model =
-    { mdl : Material.Model
+    { mdc : Material.Model
     }
 
 
 defaultModel : Model
 defaultModel =
-    { mdl = Material.defaultModel
+    { mdc = Material.defaultModel
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
 
 
 -- VIEW
@@ -69,7 +69,7 @@ view lift page model =
       [
         let
             ripple =
-                Ripple.bounded (Mdl >> lift) [0] model.mdl () ()
+                Ripple.bounded (Mdc >> lift) [0] model.mdc () ()
         in
         styled Html.div
         [ css "width" "100%"
@@ -87,7 +87,7 @@ view lift page model =
       [ Html.h2 [] [ text "Bounded" ]
       , let
             ripple =
-                Ripple.bounded (Mdl >> lift) [1] model.mdl () ()
+                Ripple.bounded (Mdc >> lift) [1] model.mdc () ()
         in
         styled Html.div
         [ demoSurface
@@ -105,7 +105,7 @@ view lift page model =
       [ Html.h2 [] [ text "Unbounded" ]
       , let
             ripple =
-                Ripple.unbounded (Mdl >> lift) [2] model.mdl () ()
+                Ripple.unbounded (Mdc >> lift) [2] model.mdc () ()
         in
         styled Html.div
         [ cs "material-icons"
@@ -127,7 +127,7 @@ view lift page model =
       [ Html.h2 [] [ text "Theme Styles" ]
       , let
             ripple =
-                Ripple.bounded (Mdl >> lift) [3] model.mdl () ()
+                Ripple.bounded (Mdc >> lift) [3] model.mdc () ()
         in
         styled Html.div
         [ demoSurface
@@ -142,7 +142,7 @@ view lift page model =
         ]
       , let
             ripple =
-                Ripple.bounded (Mdl >> lift) [4] model.mdl () ()
+                Ripple.bounded (Mdc >> lift) [4] model.mdc () ()
         in
         styled Html.div
         [ demoSurface

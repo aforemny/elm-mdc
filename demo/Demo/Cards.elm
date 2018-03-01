@@ -1,4 +1,4 @@
-module Demo.Cards exposing (Model, defaultModel, Msg(Mdl), update, view)
+module Demo.Cards exposing (Model, defaultModel, Msg(Mdc), update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
@@ -15,28 +15,28 @@ import Platform.Cmd exposing (Cmd, none)
 
 
 type alias Model =
-    { rtl : Bool
-    , mdl : Material.Model
+    { mdc : Material.Model
+    , rtl : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { rtl = False
-    , mdl = Material.defaultModel
+    { mdc = Material.defaultModel
+    , rtl = False
     }
 
 
 type Msg m
-    = Mdl (Material.Msg m)
+    = Mdc (Material.Msg m)
     | ToggleRtl
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
 update lift msg model =
     case msg of
-        Mdl msg_ ->
-            Material.update (Mdl >> lift) msg_ model
+        Mdc msg_ ->
+            Material.update (Mdc >> lift) msg_ model
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
 
@@ -94,14 +94,14 @@ Visit ten places on our planet that are undergoing the biggest changes today.
       [
       ]
       [
-        Button.render (lift << Mdl) (index ++ [0]) model.mdl
+        Button.render (lift << Mdc) (index ++ [0]) model.mdc
         [ Card.actionButton
         , Button.ripple
         ]
         [ text "Read"
         ]
       ,
-        Button.render (lift << Mdl) (index ++ [1]) model.mdl
+        Button.render (lift << Mdc) (index ++ [1]) model.mdc
         [ Card.actionButton
         , Button.ripple
         ]
@@ -113,21 +113,21 @@ Visit ten places on our planet that are undergoing the biggest changes today.
       [
       ]
       [
-        IconToggle.render (lift << Mdl) (index ++ [2]) model.mdl
+        IconToggle.render (lift << Mdc) (index ++ [2]) model.mdc
         [ Card.actionIcon
         , IconToggle.icon "favorite" "favorite_border"
         , IconToggle.label "Remove from favorites" "Add to favorites"
         ]
         []
       ,
-        IconToggle.render (lift << Mdl) (index ++ [3]) model.mdl
+        IconToggle.render (lift << Mdc) (index ++ [3]) model.mdc
         [ Card.actionIcon
         , IconToggle.icon "share" "share"
         , IconToggle.label "Share" "Share"
         ]
         []
       ,
-        IconToggle.render (lift << Mdl) (index ++ [4]) model.mdl
+        IconToggle.render (lift << Mdc) (index ++ [4]) model.mdc
         [ Card.actionIcon
         , IconToggle.icon "more_vert" "more_vert"
         , IconToggle.label "More options" "More options"
@@ -195,7 +195,7 @@ headlinesCard lift index model =
         Card.actions
         [ Card.fullBleed
         ]
-        [ Button.render (lift << Mdl) (index ++ [0]) model.mdl
+        [ Button.render (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Card.actionButton
           , css "width" "100%"
@@ -243,21 +243,21 @@ photosCard lift index model =
       ]
       [ Card.actionIcons []
         [
-          IconToggle.render (lift << Mdl) (index ++ [0]) model.mdl
+          IconToggle.render (lift << Mdc) (index ++ [0]) model.mdc
           [ Card.actionIcon
           , IconToggle.icon "favorite" "favorite_border"
           , IconToggle.label "Remove from favorites" "Add to favorites"
           ]
           []
         ,
-          IconToggle.render (lift << Mdl) (index ++ [1]) model.mdl
+          IconToggle.render (lift << Mdc) (index ++ [1]) model.mdc
           [ Card.actionIcon
           , IconToggle.icon "bookmark" "bookmark_border"
           , IconToggle.label "Remove bookmark" "Add bookmark"
           ]
           []
         ,
-          IconToggle.render (lift << Mdl) (index ++ [2]) model.mdl
+          IconToggle.render (lift << Mdc) (index ++ [2]) model.mdc
           [ Card.actionIcon
           , IconToggle.icon "share" "share"
           , IconToggle.label "Share" "Share"
@@ -320,7 +320,7 @@ albumCard lift index model =
         Card.actionIcons []
         ( List.range 1 5
           |> List.map (\ n ->
-               IconToggle.render (lift << Mdl) (index ++ [n]) model.mdl
+               IconToggle.render (lift << Mdc) (index ++ [n]) model.mdc
                [ Card.actionIcon
                , IconToggle.icon "star_border" "star_border"
                , IconToggle.label (toString n ++ " stars") (toString n ++ " stars")
@@ -378,7 +378,7 @@ view lift page model =
       [ styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.render (Mdl >> lift) [0] model.mdl
+        [ Checkbox.render (Mdc >> lift) [0] model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked |> when model.rtl
           ]
