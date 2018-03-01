@@ -72,7 +72,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (lift << Mdc) index model.mdc
+          Switch.view (lift << Mdc) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.on |> when on
           ]
@@ -101,7 +101,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (lift << Mdc) index model.mdc
+          Switch.view (lift << Mdc) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.on |> when on
           ]
@@ -136,7 +136,7 @@ view lift page model =
                   Dict.get index model.switches
                   |> Maybe.withDefault False
           in
-          Switch.render (lift << Mdc) index model.mdc
+          Switch.view (lift << Mdc) index model.mdc
           [ Options.onClick (lift (Toggle index))
           , Switch.disabled
           ]

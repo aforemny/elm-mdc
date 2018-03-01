@@ -1,43 +1,52 @@
-module Material.Switch
-    exposing
-        ( -- VIEW
-          view
-        , Property
-        , disabled
-        , on
-
-          -- TEA
-        , Model
-        , defaultModel
-        , Msg
-        , update
-
-          -- RENDER
-        , render
-        , Store
-        , react
-        )
+module Material.Switch exposing
+    ( disabled
+    , Model
+    , on
+    , Property
+    , react
+    , view
+    )
 
 {-|
-> The MDC Switch component is a spec-aligned switch component adhering to the
-> Material Design Switch requirements. It works without JavaScript.
+The MDC Switch component is a spec-aligned switch component adhering to the
+Material Design Switch requirements.
 
-## Design & API Documentation
+
+# Resources
 
 - [Material Design guidelines: Switches](https://material.io/guidelines/components/selection-controls.html#selection-controls-switch)
 - [Demo](https://aforemny.github.io/elm-mdc/#switch)
 
-## View
+
+# Example
+
+
+```elm
+[
+  Switch.render Mdc [0] model.mdc
+      [ Switch.on
+      , Options.onClick Toggle
+      ]
+      []
+, Html.label
+      [ Options.onClick Toggle
+      ]
+      [ text "on/off"
+      ]
+]
+```
+
+
+# Usage
+
+@docs Property
 @docs view
+@docs on
+@docs disabled
 
-## Properties
-@docs Property, disabled, on
-
-## TEA
-@docs Model, defaultModel, Msg, update
-
-## Featured render
-@docs render, Store, react
+# Internal
+@docs react
+@docs Model
 -}
 
 import Html.Attributes as Html
@@ -50,8 +59,6 @@ import Material.Internal.Switch exposing (Msg(..))
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
 
--- MODEL
-
 
 {-| Component model.
 -}
@@ -60,8 +67,6 @@ type alias Model =
     }
 
 
-{-| Default component model.
--}
 defaultModel : Model
 defaultModel =
     { isFocused = False
@@ -69,17 +74,10 @@ defaultModel =
 
 
 
--- ACTION, UPDATE
-
-
-{-| Component message.
--}
 type alias Msg
     = Material.Internal.Switch.Msg
 
 
-{-| Component update.
--}
 update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
 update _ msg model =
     case msg of
@@ -87,9 +85,6 @@ update _ msg model =
             ( Just { model | isFocused = focus }, Cmd.none )
         NoOp ->
             ( Nothing, Cmd.none )
-
-
--- OPTIONS
 
 
 type alias Config m =
@@ -107,13 +102,13 @@ defaultConfig =
     }
 
 
-{-| TODO
+{-| Switch property.
 -}
 type alias Property m =
     Options.Property (Config m) m
 
 
-{-| TODO
+{-| Disable the switch.
 -}
 disabled : Property m
 disabled =
@@ -125,20 +120,17 @@ disabled =
     ]
 
 
-{-| TODO
+{-| Make switch display its "on" state.
+
+Defaults to "off". Use `Options.when` to make it interactive.
 -}
 on : Property m
 on =
     Internal.option (\config -> { config | value = True })
 
 
--- VIEW
-
-
-{-| Component view.
--}
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options _ =
+switch : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+switch lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
@@ -173,9 +165,6 @@ view lift model options _ =
     ]
 
 
--- COMPONENT
-
-
 type alias Store s =
     { s | switch : Indexed Model }
 
@@ -196,15 +185,15 @@ react =
     Component.react get set Material.Msg.SwitchMsg update
 
 
-{-| Component render (checkbox)
+{-| Switch view.
 -}
-render :
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render lift index store options =
-    Component.render get view Material.Msg.SwitchMsg lift index store
+view lift index store options =
+    Component.render get switch Material.Msg.SwitchMsg lift index store
         (Internal.dispatch lift :: options)
