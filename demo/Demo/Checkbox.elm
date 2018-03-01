@@ -58,7 +58,13 @@ update lift msg model =
                 Dict.get index model.checkboxes
                 |> Maybe.withDefault defaultCheckbox
                 |> \ checkbox ->
-                   { checkbox | checked = Nothing }
+                   { checkbox
+                     | checked =
+                         if checkbox.checked == Nothing then
+                             Just False
+                         else
+                             Nothing
+                   }
 
               checkboxes =
                 Dict.insert index checkbox model.checkboxes
@@ -85,7 +91,11 @@ update lift msg model =
                 |> Maybe.withDefault defaultCheckbox
                 |> \ checkbox ->
                    { checkbox
-                     | checked = Maybe.map not checkbox.checked
+                     | checked =
+                         if checkbox.checked == Nothing then
+                             Just True
+                         else
+                             Maybe.map not checkbox.checked
                    }
 
               checkboxes =
