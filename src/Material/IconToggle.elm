@@ -1,53 +1,58 @@
 module Material.IconToggle exposing
-    ( -- VIEW
-      view
-    , Property
+    ( className
     , disabled
-    , on
-
     , icon
     , label
-
-    , primary
-    , accent
-
-    , inner
-    
-    -- TEA
     , Model
-    , defaultModel
-    , Msg
-    , update
-
-    -- RENDER
-    , render
-    , Store
+    , on
+    , Property
     , react
+    , view
     )
 
 {-|
-## Design & API Documentation
+IconToggle provides a Material Design icon toggle button. It is fully
+accessible, and is designed to work with any icon set.
+
+
+# Resources
 
 - [Material Design guidelines: Toggle buttons](https://material.io/guidelines/components/buttons.html#buttons-toggle-buttons)
 - [Demo](https://aforemny.github.io/elm-mdc/#icon-toggle)
 
-## View
-@docs view
 
-## Properties
+# Example
+
+```elm
+IconToggle.view Mdc [0] model.mdc
+    [ IconToggle.icon
+          { on = "favorite_border"
+          , off = "favorite"
+          }
+    , IconToggle.label
+          { on = "Remove from favorites"
+          , off "Add to favorites"
+          }
+    , IconToggle.on True
+    , IconToggle.onClick Toggle
+    ]
+    []
+```
+
+
+## Usage
 @docs Property
-@docs disabled
+@docs view
 @docs on
-@docs icon, label
-@docs primary, accent
-@docs inner
+@docs icon
+@docs label
+@docs disabled
+@docs className
 
-## TEA architecture
-@docs Model, defaultModel, Msg, update
 
-## Featured render
-@docs render
-@docs Store, react
+# Internal
+@docs Model
+@docs react
 -}
 
 import Html exposing (Html, text)
@@ -59,6 +64,10 @@ import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Ripple as Ripple
 
 
+{-| IconToggle model.
+
+Internal use only.
+-}
 type alias Model =
     { on : Bool
     , ripple : Ripple.Model
@@ -104,47 +113,58 @@ defaultConfig =
     }
 
 
+{-| IconToggle property.
+-}
 type alias Property m =
     Options.Property Config m
 
 
+{-| Make the icon toggle appear in its "on" state.
+
+Defaults to "off". Use `Options.when` to make it interactive.
+-}
 on : Property m
 on =
     Internal.option (\config -> { config | on = True })
 
 
-icon : String -> String -> Property m
-icon on off =
-    Internal.option (\config -> { config | icon = { on = on, off = off } })
+{-| Sets an alternate classname of the icon.
+
+Useful if you want to use a different icon set. For example use `"fa"` for
+FontAwesome.
+-}
+className : String -> Property m
+className className =
+    Internal.option (\ config -> { config | inner = Just className })
 
 
-label : String -> String -> Property m
-label on off =
-    Internal.option (\config -> { config | label = { on = on, off = off } })
+{-| Set the icon.
+
+Specify an icon for the icon toggle's "on" and "off" state.
+-}
+icon : { on : String, off : String } -> Property m
+icon icon =
+    Internal.option (\config -> { config | icon = icon })
 
 
-inner : String -> Property m
-inner =
-    Internal.option << (\value config -> { config | inner = Just value })
+{-| Set the icon toggle's label.
+
+Specify a label for the icon toggle's "on" and "off" state.
+-}
+label : { on : String, off : String } -> Property m
+label label =
+    Internal.option (\config -> { config | label = label })
 
 
-primary : Property m
-primary =
-    cs "mdc-icon-toggle--primary"
-
-
-accent : Property m
-accent =
-    cs "mdc-icon-toggle--accent"
-
-
+{-| Disable the icon toggle.
+-}
 disabled : Property m
 disabled =
     cs "mdc-icon-toggle--disabled"
 
 
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options _ =
+iconToggle : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+iconToggle lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
@@ -188,6 +208,10 @@ type alias Store s =
     Component.indexed .iconToggle (\x y -> { y | iconToggle = x }) defaultModel
 
 
+{-| IconToggle react.
+
+Internal use only.
+-}
 react :
     (Material.Msg.Msg m -> m)
     -> Msg
@@ -198,12 +222,14 @@ react =
     Component.react get set Material.Msg.IconToggleMsg (Component.generalise update)
 
 
-render :
+{-| IconToggle view.
+-}
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render =
-    Component.render get view Material.Msg.IconToggleMsg
+view =
+    Component.render get iconToggle Material.Msg.IconToggleMsg

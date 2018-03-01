@@ -101,8 +101,14 @@ view lift page model =
         in
         toggleExample []
         [ iconToggle [0]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
+              [ IconToggle.label
+                { on = "Remove from Fravorites"
+                , off =  "Add to Favorites"
+                }
+              , IconToggle.icon
+                { on = "favorite"
+                , off = "favorite_border"
+                }
               ]
               []
         ]
@@ -127,8 +133,14 @@ view lift page model =
           [ css "margin-left" "1rem"
           ]
           [ iconToggle [1]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
+              [ IconToggle.label
+                { on = "Remove from Fravorites"
+                , off = "Add to Favorites"
+                }
+              , IconToggle.icon
+                { on = "favorite"
+                , off = "favorite_border"
+                }
               ]
               []
           ]
@@ -151,9 +163,15 @@ view lift page model =
           ]
           [
             iconToggle [2]
-                [ IconToggle.label "Unstar this Icon" "Star this Icon"
-                , IconToggle.icon "fa-star" "fa-star-o"
-                , IconToggle.inner "fa"
+                [ IconToggle.label
+                  { on = "Unstar this Icon"
+                  , off = "Star this Icon"
+                  }
+                , IconToggle.icon
+                  { on = "fa-star"
+                  , off = "fa-star-o"
+                  }
+                , IconToggle.className "fa"
                 ]
                 []
           ]
@@ -166,8 +184,14 @@ view lift page model =
           ]
           [
             iconToggle [3]
-              [ IconToggle.label "Remove from Fravorites" "Add to Favorites"
-              , IconToggle.icon  "favorite" "favorite_border"
+              [ IconToggle.label
+                { on = "Remove from Fravorites"
+                , off = "Add to Favorites"
+                }
+              , IconToggle.icon
+                { on = "favorite"
+                , off = "favorite_border"
+                }
               , IconToggle.disabled
               ]
               []
