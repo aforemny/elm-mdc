@@ -141,7 +141,7 @@ iframe lift index model title sub =
         ]
         [ text title ]
       ,
-        Button.render (lift << Mdc) index model.mdc
+        Button.view (lift << Mdc) index model.mdc
         [ Button.stroked
         , Button.dense
         ]

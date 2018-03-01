@@ -193,9 +193,8 @@ menuAnchor lift model =
          )
       |> Options.many
     ]
-    [ Button.render (lift << Mdc) [1] model.mdc
+    [ Button.view (lift << Mdc) [1] model.mdc
       [ Button.raised
-      , Button.primary
       , Menu.attach (lift << Mdc) [2]
       ]
       [ text <|

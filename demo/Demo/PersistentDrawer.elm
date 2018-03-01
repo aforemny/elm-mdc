@@ -148,7 +148,7 @@ view lift page model =
           [ text "Click the menu icon above to open and close the drawer."
           ]
         ,
-          Button.render (lift << Mdc) [2] model.mdc
+          Button.view (lift << Mdc) [2] model.mdc
           [ Options.on "click" (Json.succeed (lift ToggleRtl))
           ]
           [ text "Toggle RTL"

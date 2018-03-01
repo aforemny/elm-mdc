@@ -169,7 +169,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.render (lift << Mdc) [2] model.mdc
+            Button.view (lift << Mdc) [2] model.mdc
             [ Options.on "click" (Json.succeed (lift ToggleRtl))
             ]
             [ text "Toggle RTL"
@@ -180,7 +180,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.render (lift << Mdc) [3] model.mdc
+            Button.view (lift << Mdc) [3] model.mdc
             [ Options.on "click" (Json.succeed (lift Toggle0))
             ]
             [ text "Toggle extra-wide content"
@@ -199,7 +199,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.render (lift << Mdc) [4] model.mdc
+            Button.view (lift << Mdc) [4] model.mdc
             [ Options.on "click" (Json.succeed (lift Toggle1))
             ]
             [ text "Toggle extra-tall content"

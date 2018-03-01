@@ -141,7 +141,7 @@ view lift page model =
       , styled Html.p [ Typography.body1 ] [ text "Click the menu icon above to open." ]
       ]
     ,
-      Button.render (lift << Mdc) [2] model.mdc
+      Button.view (lift << Mdc) [2] model.mdc
       [ Options.on "click" (Json.succeed (lift ToggleRtl))
       ]
       [ text "Toggle RTL"

@@ -94,14 +94,14 @@ Visit ten places on our planet that are undergoing the biggest changes today.
       [
       ]
       [
-        Button.render (lift << Mdc) (index ++ [0]) model.mdc
+        Button.view (lift << Mdc) (index ++ [0]) model.mdc
         [ Card.actionButton
         , Button.ripple
         ]
         [ text "Read"
         ]
       ,
-        Button.render (lift << Mdc) (index ++ [1]) model.mdc
+        Button.view (lift << Mdc) (index ++ [1]) model.mdc
         [ Card.actionButton
         , Button.ripple
         ]
@@ -195,7 +195,7 @@ headlinesCard lift index model =
         Card.actions
         [ Card.fullBleed
         ]
-        [ Button.render (lift << Mdc) (index ++ [0]) model.mdc
+        [ Button.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Card.actionButton
           , css "width" "100%"

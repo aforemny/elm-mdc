@@ -164,14 +164,14 @@ view lift page model =
             [
             ]
             [
-              Button.render (lift << Mdc) (index ++ [0]) model.mdc
+              Button.view (lift << Mdc) (index ++ [0]) model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleIndeterminate index)))
               ]
               [ text "Toggle "
               , Html.code [] [ text "indeterminate" ]
               ]
             ,
-              Button.render (lift << Mdc) (index ++ [1]) model.mdc
+              Button.view (lift << Mdc) (index ++ [1]) model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleDisabled index)))
               ]
               [ text "TOGGLE "

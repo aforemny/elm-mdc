@@ -36,16 +36,14 @@ view lift page model =
     page.body "Theme"
     [
       Page.hero []
-      [ Button.render (lift << Mdc) [0] model.mdc
+      [ Button.view (lift << Mdc) [0] model.mdc
         [ Button.raised
-        , Button.primary
         , css "margin" "24px"
         ]
         [ text "Primary"
         ]
-      , Button.render (lift << Mdc) [0] model.mdc
+      , Button.view (lift << Mdc) [0] model.mdc
         [ Button.raised
-        , Button.secondary
         , css "margin" "24px"
         ]
         [ text "Secondary"

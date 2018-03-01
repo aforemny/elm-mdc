@@ -206,7 +206,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Button.render (lift << Mdc) [5] model.mdc
+          Button.view (lift << Mdc) [5] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [9])))
@@ -216,7 +216,7 @@ view lift page model =
         ,
           text " "
         ,
-          Button.render (lift << Mdc) [6] model.mdc
+          Button.view (lift << Mdc) [6] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [10])))
@@ -226,7 +226,7 @@ view lift page model =
         ,
           text " "
         ,
-          Button.render (lift << Mdc) [7] model.mdc
+          Button.view (lift << Mdc) [7] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [11])))
@@ -236,7 +236,7 @@ view lift page model =
         ,
           text " "
         ,
-          Button.render (lift << Mdc) [8] model.mdc
+          Button.view (lift << Mdc) [8] model.mdc
           [ Button.raised
           , css "margin-top" "14px"
           , Options.on "click" (Json.succeed (lift (Show [12])))

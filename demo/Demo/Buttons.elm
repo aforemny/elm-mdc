@@ -72,36 +72,36 @@ view lift page model =
               ]
             , styled Html.div []
               [
-                Button.render (lift << Mdc) (idx ++ [0]) model.mdc
+                Button.view (lift << Mdc) (idx ++ [0]) model.mdc
                 ( options
                 )
                 [ text "Baseline" ]
               ,
-                Button.render (lift << Mdc) (idx ++ [1]) model.mdc
+                Button.view (lift << Mdc) (idx ++ [1]) model.mdc
                 ( Button.compact
                 :: options
                 )
                 [ text "Compact" ]
               ,
-                Button.render (lift << Mdc) (idx ++ [2]) model.mdc
+                Button.view (lift << Mdc) (idx ++ [2]) model.mdc
                 ( Button.dense
                 :: options
                 )
                 [ text "Dense" ]
               ,
-                Button.render (lift << Mdc) (idx ++ [3]) model.mdc
-                ( Button.secondary
+                Button.view (lift << Mdc) (idx ++ [3]) model.mdc
+                ( cs "secondary-button"
                 :: options
                 )
                 [ text "Secondary" ]
               ,
-                Button.render (lift << Mdc) (idx ++ [4]) model.mdc
+                Button.view (lift << Mdc) (idx ++ [4]) model.mdc
                 ( Button.icon "favorite"
                 :: options
                 )
                 [ text "Icon" ]
               ,
-                Button.render (lift << Mdc) (idx ++ [5]) model.mdc
+                Button.view (lift << Mdc) (idx ++ [5]) model.mdc
                 ( Button.link "#buttons"
                 :: options
                 )
@@ -112,16 +112,15 @@ view lift page model =
     page.body "Buttons"
     [
       Page.hero []
-      [ Button.render (lift << Mdc) [0,0] model.mdc
+      [ Button.view (lift << Mdc) [0,0] model.mdc
         [ Button.ripple
         , css "margin-right" "32px"
         ]
         [ text "Flat"
         ]
-      , Button.render (lift << Mdc) [0,1] model.mdc
+      , Button.view (lift << Mdc) [0,1] model.mdc
         [ Button.ripple
         , Button.raised
-        , Button.primary
         , css "margin-left" "32px"
         ]
         [ text "Raised"

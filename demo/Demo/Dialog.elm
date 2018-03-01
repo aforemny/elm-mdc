@@ -102,14 +102,14 @@ heroDialog lift index model =
       ,
         Dialog.footer []
         [
-          Button.render (lift << Mdc) (index ++ [0]) model.mdc
+          Button.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
           ]
           [ text "Cancel"
           ]
         ,
-          Button.render (lift << Mdc) (index ++ [1]) model.mdc
+          Button.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
           ]
@@ -149,7 +149,7 @@ data to Google, even when no apps are running.
       ,
         Dialog.footer []
         [
-          Button.render (lift << Mdc) (index ++ [0]) model.mdc
+          Button.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
           , Options.on "click" (Json.succeed (lift Cancel))
@@ -157,7 +157,7 @@ data to Google, even when no apps are running.
           [ text "Decline"
           ]
         ,
-          Button.render (lift << Mdc) (index ++ [1]) model.mdc
+          Button.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
           , Options.on "click" (Json.succeed (lift Accept))
@@ -217,7 +217,7 @@ scrollableDialog lift index model =
       ,
         Dialog.footer []
         [
-          Button.render (lift << Mdc) (index ++ [0]) model.mdc
+          Button.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
           , Options.on "click" (Json.succeed (lift Cancel))
@@ -225,7 +225,7 @@ scrollableDialog lift index model =
           [ text "Decline"
           ]
         ,
-          Button.render (lift << Mdc) (index ++ [1]) model.mdc
+          Button.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
           , Options.on "click" (Json.succeed (lift Accept))
@@ -268,7 +268,7 @@ view lift page model =
     , css "margin" "24px"
     ]
     [
-      Button.render (lift << Mdc) [3] model.mdc
+      Button.view (lift << Mdc) [3] model.mdc
       [ Button.raised
       , Button.ripple
       , Dialog.openOn (lift << Mdc) [1] "click"
@@ -278,7 +278,7 @@ view lift page model =
     ,
       text " "
     ,
-      Button.render (lift << Mdc) [4] model.mdc
+      Button.view (lift << Mdc) [4] model.mdc
       [ Button.raised
       , Button.ripple
       , Dialog.openOn (lift << Mdc) [2] "click"
