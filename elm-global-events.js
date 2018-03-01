@@ -66,10 +66,10 @@
         var nodes = mutation.addedNodes;
         for (var j = 0; j < nodes.length; j++) {
           var node = nodes[j];
-          if (!(node.dataset)) {
+          if (!node.dataset) {
             continue;
           }
-          if (typeof node.dataset.globalload !== undefined) {
+          if (typeof node.dataset.globalload !== "undefined") {
             var event = new CustomEvent("globalload");
             node.dispatchEvent(event);
           }
@@ -100,10 +100,10 @@
           var  nodes = mutation.addedNodes;
           for (var j = 0; j < nodes.length; j++) {
             var node = nodes[j];
-            if (!(node.dataset)) {
+            if (!node.dataset) {
               continue;
             }
-            if (typeof node.dataset.globaltick !== undefined) {
+            if (typeof node.dataset.globaltick !== "undefined") {
               var event = new CustomEvent("globaltick");
               node.dispatchEvent(event);
             }
@@ -118,10 +118,10 @@
         if (mutations[i].type === "attributes") {
           var mutation = mutations[i];
           var node = mutation.target;
-          if (!(node.dataset)) {
+          if (!node.dataset) {
             continue;
           }
-          if (!(node.dataset.globaltick)) {
+          if (typeof node.dataset.globaltick !== "undefined") {
             var event = new CustomEvent("globaltick");
             node.dispatchEvent(event);
           }
