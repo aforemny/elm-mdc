@@ -84,7 +84,7 @@ view lift page model =
                     Dict.get idx model.iconToggles
                     |> Maybe.withDefault False
             in
-            IconToggle.render (lift << Mdc) idx model.mdc
+            IconToggle.view (lift << Mdc) idx model.mdc
             ( Options.onClick (lift (Toggle idx))
             :: when isOn IconToggle.on
             :: options

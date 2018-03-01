@@ -113,24 +113,30 @@ Visit ten places on our planet that are undergoing the biggest changes today.
       [
       ]
       [
-        IconToggle.render (lift << Mdc) (index ++ [2]) model.mdc
+        IconToggle.view (lift << Mdc) (index ++ [2]) model.mdc
         [ Card.actionIcon
-        , IconToggle.icon "favorite" "favorite_border"
-        , IconToggle.label "Remove from favorites" "Add to favorites"
+        , IconToggle.icon
+          { on = "favorite"
+          , off = "favorite_border"
+          }
+        , IconToggle.label
+          { on = "Remove from favorites"
+          , off = "Add to favorites"
+          }
         ]
         []
       ,
-        IconToggle.render (lift << Mdc) (index ++ [3]) model.mdc
+        IconToggle.view (lift << Mdc) (index ++ [3]) model.mdc
         [ Card.actionIcon
-        , IconToggle.icon "share" "share"
-        , IconToggle.label "Share" "Share"
+        , IconToggle.icon { on = "share", off = "share" }
+        , IconToggle.label { on = "Share", off = "Share" }
         ]
         []
       ,
-        IconToggle.render (lift << Mdc) (index ++ [4]) model.mdc
+        IconToggle.view (lift << Mdc) (index ++ [4]) model.mdc
         [ Card.actionIcon
-        , IconToggle.icon "more_vert" "more_vert"
-        , IconToggle.label "More options" "More options"
+        , IconToggle.icon { on = "more_vert", off = "more_vert" }
+        , IconToggle.label { on = "More options", off = "More options" }
         ]
         []
       ]
@@ -243,24 +249,24 @@ photosCard lift index model =
       ]
       [ Card.actionIcons []
         [
-          IconToggle.render (lift << Mdc) (index ++ [0]) model.mdc
+          IconToggle.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Card.actionIcon
-          , IconToggle.icon "favorite" "favorite_border"
-          , IconToggle.label "Remove from favorites" "Add to favorites"
+          , IconToggle.icon { on = "favorite", off = "favorite_border" }
+          , IconToggle.label { on = "Remove from favorites", off = "Add to favorites" }
           ]
           []
         ,
-          IconToggle.render (lift << Mdc) (index ++ [1]) model.mdc
+          IconToggle.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Card.actionIcon
-          , IconToggle.icon "bookmark" "bookmark_border"
-          , IconToggle.label "Remove bookmark" "Add bookmark"
+          , IconToggle.icon { on = "bookmark", off = "bookmark_border" }
+          , IconToggle.label { on = "Remove bookmark", off = "Add bookmark" }
           ]
           []
         ,
-          IconToggle.render (lift << Mdc) (index ++ [2]) model.mdc
+          IconToggle.view (lift << Mdc) (index ++ [2]) model.mdc
           [ Card.actionIcon
-          , IconToggle.icon "share" "share"
-          , IconToggle.label "Share" "Share"
+          , IconToggle.icon { on = "share", off = "share" }
+          , IconToggle.label { on = "Share", off = "Share" }
           ]
           []
         ]
@@ -320,25 +326,19 @@ albumCard lift index model =
         Card.actionIcons []
         ( List.range 1 5
           |> List.map (\ n ->
-               IconToggle.render (lift << Mdc) (index ++ [n]) model.mdc
+               IconToggle.view (lift << Mdc) (index ++ [n]) model.mdc
                [ Card.actionIcon
-               , IconToggle.icon "star_border" "star_border"
-               , IconToggle.label (toString n ++ " stars") (toString n ++ " stars")
+               , IconToggle.icon { on = "star_border", off = "star_border" }
+               , IconToggle.label
+                 { on = (toString n ++ " stars")
+                 , off = (toString n ++ " stars")
+                 }
                ]
                []
              )
         )
       ]
     ]
-
---<div class="mdc-card demo-card demo-card--music">
---          <div class="demo-card__music-row">
---            <div class="mdc-card__media mdc-card__media--square demo-card__media demo-card__media--music"></div>
---            <div class="demo-card__music-info">
---              <div class="demo-card__music-title mdc-typography--headline">Rozes</div>
---              <div class="demo-card__music-artist mdc-typography--body1">Under the Grave</div>
---              <div class="demo-card__music-year mdc-typography--body1">(2016)</div>
---            </div>
 
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
