@@ -291,8 +291,8 @@ view lift page model =
       styled Html.div
       [ cs "mdc-form-field"
       ]
-      [ Checkbox.render (lift << Mdc) [5] model.mdc
-        [ Checkbox.checked |> when model.rtl
+      [ Checkbox.view (lift << Mdc) [5] model.mdc
+        [ Checkbox.checked model.rtl
         , Options.on "click" (Json.succeed (lift ToggleRtl))
         ]
         []

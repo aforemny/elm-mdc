@@ -99,9 +99,9 @@ possible (since it's a block element)."""
       , styled Html.div
         [ cs "mdc-form-field"
         ]
-        [ Checkbox.render (lift << Mdc) [0] model.mdc
+        [ Checkbox.view (lift << Mdc) [0] model.mdc
           [ Options.onClick (lift ToggleRtl)
-          , Checkbox.checked |> when model.rtl
+          , Checkbox.checked model.rtl
           ]
           []
         , Html.label []

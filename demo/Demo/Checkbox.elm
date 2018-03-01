@@ -22,21 +22,19 @@ defaultModel : Model
 defaultModel =
     { mdc = Material.defaultModel
     , checkboxes =
-        Dict.singleton [2] { defaultCheckbox | indeterminate = True }
+        Dict.singleton [2] { defaultCheckbox | checked = Nothing }
     }
 
 
 type alias Checkbox =
-    { checked : Bool
-    , indeterminate : Bool
+    { checked : Maybe Bool
     , disabled : Bool
     }
 
 
 defaultCheckbox : Checkbox
 defaultCheckbox =
-    { checked = False
-    , indeterminate = False
+    { checked = Just False
     , disabled = False
     }
 
@@ -60,7 +58,7 @@ update lift msg model =
                 Dict.get index model.checkboxes
                 |> Maybe.withDefault defaultCheckbox
                 |> \ checkbox ->
-                   { checkbox | indeterminate = not checkbox.indeterminate }
+                   { checkbox | checked = Nothing }
 
               checkboxes =
                 Dict.insert index checkbox model.checkboxes
@@ -87,8 +85,7 @@ update lift msg model =
                 |> Maybe.withDefault defaultCheckbox
                 |> \ checkbox ->
                    { checkbox
-                     | checked = not checkbox.checked
-                     , indeterminate = False
+                     | checked = Maybe.map not checkbox.checked
                    }
 
               checkboxes =
@@ -115,10 +112,10 @@ view lift page model =
                 Dict.get index model.checkboxes
                 |> Maybe.withDefault defaultCheckbox
           in
-          Checkbox.render (lift << Mdc) index model.mdc
+          Checkbox.view (lift << Mdc) index model.mdc
           [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
-          , Checkbox.checked |> when checkbox.checked
-          , Checkbox.indeterminate |> when checkbox.indeterminate
+          , when (checkbox.checked /= Nothing) <|
+            Checkbox.checked (Maybe.withDefault False checkbox.checked)
           , Checkbox.disabled |> when checkbox.disabled
           ]
           []
@@ -149,10 +146,10 @@ view lift page model =
             [ cs "mdc-form-field"
             ]
             [ 
-              Checkbox.render (lift << Mdc) index model.mdc
+              Checkbox.view (lift << Mdc) index model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
-              , Checkbox.checked |> when checkbox.checked
-              , Checkbox.indeterminate |> when checkbox.indeterminate
+              , when (checkbox.checked /= Nothing) <|
+                Checkbox.checked (Maybe.withDefault False checkbox.checked)
               , Checkbox.disabled |> when checkbox.disabled
               ]
               []

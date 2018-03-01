@@ -1,40 +1,52 @@
-module Material.Checkbox
-    exposing
-        ( checked
-        , defaultModel
-        , disabled
-        , indeterminate
-        , Model
-        , Msg
-        , Property
-        , react
-        , render
-        , Store
-        , update
-        , view
-        )
+module Material.Checkbox exposing
+    ( disabled
+    , Model
+    , Property
+    , react
+    , checked
+    , view
+    )
 
-{-| The MDC Checkbox component is a spec-aligned checkbox component adhering to
+{-|
+The MDC Checkbox component is a spec-aligned checkbox component adhering to
 the Material Design checkbox requirements.
 
-## Design & API Documentation
+# Resources
 
 - [Material Design guidelines: Selection Controls – Checkbox](https://material.io/guidelines/components/selection-controls.html#selection-controls-checkbox)
 - [Demo](https://aforemny.github.io/elm-mdc/#checkbox)
 
-## View
-@docs view
 
-## Properties
+# Example
+
+
+```elm
+Options.styled Html.div []
+    [ Checkbox.view Mdc [0] model.mdc
+          [ Checkbox.checked True
+          , Options.onClick Toggle
+          ]
+          []
+    , Html.label
+          [ Options.onClick Toggle
+          ]
+          [ text "My checkbox"
+          ]
+    ]
+```
+
+
+# Usage
+
 @docs Property
-@docs disabled, checked, indeterminate
+@docs view
+@docs checked
+@docs disabled
 
-## TEA architecture
-@docs Model, defaultModel, Msg, update
 
-## Featured render
-@docs render
-@docs Store, react
+# Internal
+@docs react
+@docs Model
 -}
 
 import GlobalEvents
@@ -45,7 +57,7 @@ import Json.Decode as Json exposing (Decoder)
 import Json.Encode
 import Material.Component as Component exposing (Indexed)
 import Material.Helpers exposing (blurOn, filter, noAttr)
-import Material.Internal.Checkbox exposing (Msg(..), Animation(..), State)
+import Material.Internal.Checkbox exposing (Msg(..), Animation(..), State(..))
 import Material.Internal.Options as Internal
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
@@ -53,9 +65,13 @@ import Svg.Attributes as Svg
 import Svg exposing (path)
 
 
+{-| Checkbox model.
+
+Internal use only.
+-}
 type alias Model =
     { isFocused : Bool
-    , lastKnownState : Maybe State
+    , lastKnownState : Maybe (Maybe State)
     , animation : Maybe Animation
     }
 
@@ -101,41 +117,50 @@ update _ msg model =
 
 
 type alias Config =
-    { checked : Bool
-    , indeterminate : Bool
+    { state : Maybe State
     , disabled : Bool
     }
 
 
 defaultConfig : Config
 defaultConfig =
-    { checked = False
-    , indeterminate = False
+    { state = Nothing
     , disabled = False
     }
 
 
+{-| Checkbox property.
+-}
 type alias Property m =
     Options.Property Config m
 
 
+{-| Disable the checkbox.
+-}
 disabled : Property m
 disabled =
     Internal.option (\ config -> { config | disabled = True })
 
 
-checked : Property m
-checked =
-    Internal.option (\ config -> { config | checked = True })
+type alias State =
+    Material.Internal.Checkbox.State
 
 
-indeterminate : Property m
-indeterminate =
-    Internal.option (\ config -> { config | indeterminate = True })
+{-| Set checked state to True or False.
+
+If not set, the checkbox will be in indeterminate state.
+-}
+checked : Bool -> Property m
+checked value =
+    let
+        state =
+            if value then Checked else Unchecked
+    in
+    Internal.option (\ config -> { config | state = Just state })
 
 
-view : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options _ =
+checkbox : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+checkbox lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
@@ -168,17 +193,15 @@ view lift model options _ =
           |> Maybe.withDefault configState
 
         configState =
-          { checked = config.checked
-          , indeterminate = config.indeterminate
-          }
+          config.state
 
         stateChangedOrUninitialized =
           (model.lastKnownState == Nothing) || (currentState /= configState)
     in
     Internal.apply summary Html.div
     [ cs "mdc-checkbox mdc-checkbox--upgraded"
-    , cs "mdc-checkbox--indeterminate" |> when currentState.indeterminate
-    , cs "mdc-checkbox--checked" |> when currentState.checked
+    , cs "mdc-checkbox--indeterminate" |> when (currentState == Nothing)
+    , cs "mdc-checkbox--checked" |> when (currentState == Just Checked)
     , cs "mdc-checkbox--disabled" |> when config.disabled
     , animationClass model.animation
     , Internal.attribute <| blurOn "mouseup"
@@ -194,8 +217,8 @@ view lift model options _ =
         [ cs "mdc-checkbox__native-control"
         , Options.many << List.map Internal.attribute <|
           [ Html.type_ "checkbox"
-          , Html.property "indeterminate" (Json.Encode.bool currentState.indeterminate)
-          , Html.checked currentState.checked
+          , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
+          , Html.checked (currentState == Just Checked)
           , Html.disabled config.disabled
           , Html.onWithOptions "click"
               { preventDefault = True
@@ -235,25 +258,25 @@ view lift model options _ =
       ]
     ]
 
-animationState : State -> State -> Maybe Animation
+animationState : Maybe State -> Maybe State -> Maybe Animation
 animationState oldState state =
-  case ( oldState.indeterminate, oldState.checked, state.indeterminate, state.checked ) of
-      ( _, False, True, _ ) ->
+  case ( oldState, state ) of
+      ( Just Unchecked, Nothing ) ->
         Just UncheckedIndeterminate
 
-      ( _, True, True, _ ) ->
+      ( Just Checked, Nothing ) ->
         Just CheckedIndeterminate
 
-      ( True, _, _, True ) ->
+      ( Nothing, Just Checked ) ->
         Just IndeterminateChecked
 
-      ( True, _, _, False ) ->
+      ( Nothing, Just Unchecked ) ->
         Just IndeterminateUnchecked
 
-      ( _, False, _, True ) ->
+      ( Just Unchecked, Just Checked ) ->
         Just UncheckedChecked
 
-      ( _, True, _, False ) ->
+      ( Just Checked, Just Unchecked ) ->
         Just CheckedUnchecked
       
       _ ->
@@ -268,18 +291,24 @@ type alias Store s =
     Component.indexed .checkbox (\x y -> { y | checkbox = x }) defaultModel
 
 
-render :
+{-| Checkbox view.
+-}
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render lift index store options =
-    Component.render get view Material.Msg.CheckboxMsg lift index store
+view lift index store options =
+    Component.render get checkbox Material.Msg.CheckboxMsg lift index store
         (Internal.dispatch lift :: options)
 
 
+{-| Checkbox react.
+
+Internal use only.
+-}
 react :
     (Material.Msg.Msg m -> m)
     -> Msg

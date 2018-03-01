@@ -149,9 +149,9 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Checkbox.render (lift << Mdc) [0] model.mdc
+          [ Checkbox.view (lift << Mdc) [0] model.mdc
             [ Options.onClick (lift ToggleMultiline)
-            , Checkbox.checked |> when model.multiline
+            , Checkbox.checked model.multiline
             ]
             []
           , Html.label [] [ text "Multiline" ]
@@ -162,10 +162,12 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Checkbox.render (lift << Mdc) [1] model.mdc
+          [ Checkbox.view (lift << Mdc) [1] model.mdc
             [ Options.onClick (lift ToggleActionOnBottom)
-            , Checkbox.checked |> when model.actionOnBottom
-            , Checkbox.disabled |> when (not model.multiline)
+            , when (not model.multiline) << Options.many <|
+              [ Checkbox.checked model.actionOnBottom
+              , Checkbox.disabled
+              ]
             ]
             []
           , Html.label [] [ text "Action on Bottom" ]
@@ -176,9 +178,9 @@ view lift page model =
           styled Html.div
           [ cs "mdc-form-field"
           ]
-          [ Checkbox.render (lift << Mdc) [2] model.mdc
+          [ Checkbox.view (lift << Mdc) [2] model.mdc
             [ Options.onClick (lift ToggleDismissOnAction)
-            , Checkbox.checked |> when model.dismissOnAction
+            , Checkbox.checked (model.dismissOnAction)
             ]
             []
           , Html.label [] [ text "Dismiss On Action" ]

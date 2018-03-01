@@ -1,17 +1,16 @@
-module Material.Internal.Checkbox exposing (Msg(..), Animation(..), State)
+module Material.Internal.Checkbox exposing (Msg(..), Animation(..), State(..))
 
 
 type Msg
     = NoOp
-    | Init (Maybe State) State
+    | Init (Maybe (Maybe State)) (Maybe State)
     | SetFocus Bool
     | AnimationEnd
 
 
-type alias State =
-    { checked : Bool
-    , indeterminate : Bool
-    }
+type State
+    = Checked
+    | Unchecked
 
 
 type Animation
