@@ -36,6 +36,7 @@ You will also want to include the following resources in your `head`:
 module Main exposing (..)
 
 import Html
+import Material
 import Material.Button as Button
 
 
@@ -51,6 +52,7 @@ defaultModel =
 
 type Msg
     = Mdc (Material.Msg Msg)
+    | Click
 
 
 main =
@@ -72,18 +74,20 @@ subscriptions model =
 
 update msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
-
         Mdc msg_ ->
             Material.update Mdc msg_ model
+
+        Click ->
+            ( model, Cmd.none )
 
 
 view model =
     Html.div []
         [
           Button.view Mdc [0] model.mdc
-              []
+              [ Button.ripple
+              , Options.onClick Click
+              ]
               [ text "Click me!" ]
         ]
 ```
