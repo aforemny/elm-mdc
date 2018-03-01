@@ -24,10 +24,10 @@ You will also want to include the following resources in your `head`:
 
 ```html
 <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500    ">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/nor    malize.min.css" />
-<link rel="stylesheet" href="material-components-web.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+<link rel="stylesheet" href="material-components-web.css">
 ```
 
 ## Example application
