@@ -196,7 +196,7 @@ content options =
 toolbarSpacer : List (Property m) -> List (Html m) -> Html m
 toolbarSpacer options =
     styled Html.div
-    ( cs "mdc-persistent-drawer__toolbar-spacer"
+    ( cs "mdc-drawer__toolbar-spacer"
     :: options
     )
 
