@@ -296,7 +296,7 @@ inlineCss =
 """ ]
 
 
-singleLine : List (Options.Style m) -> Html m
+singleLine : List (Lists.Property m) -> Html m
 singleLine options =
     Lists.ul options
     ( Lists.li [] [ Html.text "Single-line item" ]
@@ -304,7 +304,7 @@ singleLine options =
     )
 
 
-startDetail : List (Options.Style m) -> Html m
+startDetail : List (Lists.Property m) -> Html m
 startDetail options =
     Lists.ul options
     ( Lists.li []
@@ -333,7 +333,7 @@ startDetailExample =
     ]
 
 
-avatarList : List (Options.Style m) -> Html m
+avatarList : List (Lists.Property m) -> Html m
 avatarList options =
     Lists.ul
     ( Lists.avatarList
@@ -374,7 +374,7 @@ avatarListExample =
     ]
 
 
-endDetail : List (Options.Style m) -> Html m
+endDetail : List (Lists.Property m) -> Html m
 endDetail options =
     Lists.ul options
     [ Lists.li []
@@ -394,7 +394,7 @@ endDetail options =
     ]
 
 
-avatarPlusEndDetail : List (Options.Style m) -> Html m
+avatarPlusEndDetail : List (Lists.Property m) -> Html m
 avatarPlusEndDetail options =
     Lists.ul
     ( Lists.avatarList
@@ -445,7 +445,7 @@ avatarWithTextAndIconExample =
     ]
 
 
-twoLine : List (Options.Style m) -> Html m
+twoLine : List (Lists.Property m) -> Html m
 twoLine options =
     Lists.ul
     ( Lists.twoLine
@@ -463,7 +463,7 @@ twoLine options =
     )
 
 
-startDetail_ : List (Options.Style m) -> Html m
+startDetail_ : List (Lists.Property m) -> Html m
 startDetail_ options =
     Lists.ul
     ( Lists.twoLine
@@ -482,7 +482,7 @@ startDetail_ options =
     )
 
 
-avatarList_ : List (Options.Style m) -> Html m
+avatarList_ : List (Lists.Property m) -> Html m
 avatarList_ options =
     Lists.ul
     ( Lists.twoLine
@@ -502,7 +502,7 @@ avatarList_ options =
     )
 
 
-endDetail_ : List (Options.Style m) -> Html m
+endDetail_ : List (Lists.Property m) -> Html m
 endDetail_ options =
     Lists.ul
     ( Lists.twoLine

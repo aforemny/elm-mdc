@@ -209,25 +209,24 @@ menuAnchor lift model =
                 "Show Menu from here now!"
       ]
 
-    , Menu.render (lift << Mdc) [2] model.mdc
+    , Menu.view (lift << Mdc) [2] model.mdc
       [ Menu.anchorCorner model.anchorCorner
       , Menu.anchorMargin anchorMargin
       , Menu.quickOpen |> when (not model.openAnimation)
       ]
-      ( Menu.ul Lists.ul []
+      ( Menu.ul []
         ( menuItems model.menuSize
           |> List.map (\ ( index, label ) ->
                if label == "-" then
-                   Menu.li Lists.divider [] []
+                   Menu.divider [] []
                else
                    let
                        isSelected =
                            Just ( index, label ) == model.selected
                    in
-                   Menu.li Lists.li
+                   Menu.li
                    [ Menu.onSelect (lift (Select (index, label)))
                    , Lists.selected |> when (model.rememberSelectedItem && isSelected)
-                   , Options.attribute (Html.tabindex 0)
                    ]
                    [ text label
                    ]
@@ -239,27 +238,27 @@ menuAnchor lift model =
 
 view : (Msg m -> m) -> Page m -> Model -> Html m
 view lift page model =
-    page.body "Simple Menu"
+    page.body "Menu"
     [
       Page.hero []
-      [ Menu.render (lift << Mdc) [0] model.mdc
+      [ Menu.view (lift << Mdc) [0] model.mdc
         [ cs "mdc-menu--open"
         ]
-        ( Menu.ul Lists.ul []
-          [ Menu.li Lists.li []
+        ( Menu.ul []
+          [ Menu.li []
             [ text "Back"
             ]
-          , Menu.li Lists.li []
+          , Menu.li []
             [ text "Forward"
             ]
-          , Menu.li Lists.li []
+          , Menu.li []
             [ text "Reload"
             ]
-          , Menu.li Lists.divider [] []
-          , Menu.li Lists.li []
+          , Menu.divider [] []
+          , Menu.li []
             [ text "Help & Feedback"
             ]
-          , Menu.li Lists.li []
+          , Menu.li []
             [ text "Settings"
             ]
           ]

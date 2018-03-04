@@ -15,6 +15,7 @@ Currently you will have to add the following scripts to your `index.html`
 before including `elm.js`.
 
 ```html
+<script src="elm-autofocus.js"></script>
 <script src="elm-focus-trap.js"></script>
 <script src="elm-global-events.js"></script>
 <script src="elm-mdc.js"></script>

@@ -6,7 +6,6 @@ import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (Html, text)
 import Material
-import Material.List as Lists
 import Material.Menu as Menu
 import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
@@ -112,7 +111,7 @@ heroSelect lift id model options _ =
       , "Fats, Oils, and Sweets"
       ]
       |> List.indexedMap (\index label ->
-             Menu.li Lists.li
+             Menu.li
              [ Menu.onSelect (lift (Pick id ( index, label )))
              -- TODO:
              -- , Menu.disabled |> when ((index == 0) || (index == 3))
@@ -176,7 +175,7 @@ select lift id model options _ =
           , "Noodles"
           ]
           |> List.indexedMap (\index label ->
-                 Menu.li Lists.li
+                 Menu.li
                  [ Menu.onSelect (lift (Pick id ( index, label )))
                  -- TODO:
                  -- , Menu.disabled |> when ((index == 0) || (index == 3))

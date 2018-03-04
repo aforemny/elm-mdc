@@ -24,8 +24,9 @@ type Msg m
     | Toggle
     | CloseDelayed
     | DocumentClick
-    | KeyDown Meta Key KeyCode
+    | KeyDown Int Meta Key KeyCode
     | KeyUp Meta Key KeyCode
+    | SetFocus Int
 
 
 type alias Meta =

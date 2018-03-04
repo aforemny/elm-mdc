@@ -1,20 +1,133 @@
-module Material.Menu exposing (..)
+module Material.Menu exposing
+    ( anchorCorner
+    , anchorMargin
+    , attach
+    , bottomEndCorner
+    , bottomLeftCorner
+    , bottomRightCorner
+    , bottomStartCorner
+    , connect
+    , Corner
+    , defaultModel
+    , divider
+    , index
+    , Item
+    , li
+    , Margin
+    , menu
+    , Model
+    , onSelect
+    , Property
+    , quickOpen
+    , react
+    , subs
+    , subscriptions
+    , topEndCorner
+    , topLeftCorner
+    , topRightCorner
+    , topStartCorner
+    , ul
+    , update
+    , view
+    )
+
+{-|
+The MDC Menu component is a spec-aligned menu component adhering to the
+Material Design menu specification.
+
+
+# Resources
+- [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
+- [Demo](https://aforemny.github.io/elm-mdc/#menu)
+
+
+# Example
+
+```elm
+Options.styled Html.div
+[ Options.cs "mdc-menu-anchor"
+, Options.css "position" "relative"
+]
+[ Button.view Mdc [0] model.mdc
+      [ Menu.attach (lift << Mdc) [1]
+      ]
+      [ text "Show"
+      ]
+, Menu.render Mdc [1] model.mdc []
+      [ Menu.ul []
+            [ Menu.li
+                  [ Menu.onSelect (Select "Item 1")
+                  ]
+                  [ text "Item 1"
+                  ]
+            , Menu.li
+                  [ Menu.onSelect (Select "Item 2")
+                  ]
+                  [ text "Item 2"
+                  ]
+            ]
+      ]
+]
+```
+
+
+# Usage
+@docs Property
+@docs view
+@docs ul
+@docs Item
+@docs li
+@docs divider
+@docs onSelect
+@docs index
+@docs attach
+@docs anchorCorner
+@docs Corner
+@docs topStartCorner
+@docs topEndCorner
+@docs bottomStartCorner
+@docs bottomEndCorner
+@docs topLeftCorner
+@docs topRightCorner
+@docs bottomLeftCorner
+@docs bottomRightCorner
+@docs anchorMargin
+@docs Margin
+@docs quickOpen
+
+
+# Internal
+@docs react
+@docs update
+@docs Model, defaultModel
+@docs subscriptions
+@docs connect
+@docs menu
+@docs subs
+-}
 
 import DOM
 import GlobalEvents
+import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
 import Material.Helpers as Helpers
+import Material.Internal.Dispatch as Dispatch
 import Material.Internal.Menu exposing (Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry, Viewport)
 import Material.Internal.Options as Internal
+import Material.List as Lists
 import Material.Msg exposing (Index) 
 import Material.Options as Options exposing (cs, css, styled, when)
 import Mouse
 import Time
 
 
+{-| Menu subscriptions.
+
+Internal use only.
+-}
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
     Sub.batch
@@ -26,15 +139,25 @@ subscriptions model =
     ]
 
 
+{-| Menu model.
+
+Internal use only.
+-}
 type alias Model =
     { index : Maybe Int
     , open : Bool
     , animating : Bool
     , geometry : Maybe Geometry
     , quickOpen : Maybe Bool
+    , focusedItemAtIndex : Maybe Int
+    , keyDownWithinMenu : Bool
     }
 
 
+{-| Menu default model.
+
+Internal use only.
+-}
 defaultModel : Model
 defaultModel =
     { index = Nothing
@@ -42,53 +165,68 @@ defaultModel =
     , animating = False
     , geometry = Nothing
     , quickOpen = Nothing
+    , focusedItemAtIndex = Nothing
+    , keyDownWithinMenu = False
     }
 
 
-{-| TODO
+{-| Menu item.
 -}
-type alias Item c m =
-    { node : List (Options.Property c m) -> List (Html m) -> Html m
-    , options : List (Options.Property c m)
+type alias Item m =
+    { options : List (Lists.Property m)
     , childs : List (Html m)
+    , divider : Bool
     }
 
 
-{-| TODO
+{-| Menu item wrapper.
 -}
-li
-    : (List (Options.Property c m) -> List (Html m) -> Html m)
-    -> List (Options.Property c m)
-    -> List (Html m)
-    -> Item c m
-li node options childs =
-    { node = node, options = options, childs = childs }
+li : List (Lists.Property m) -> List (Html m) -> Item m
+li options childs =
+    { options = options, childs = childs, divider = False }
 
 
-{-| TODO
+
+{-| Menu item divider.
 -}
-ul
-    : (List (Options.Property c m) -> List (Html m) -> Html m)
-    -> List (Options.Property c m)
-    -> List (Item c m)
-    -> { node : (List (Options.Property c m) -> List (Html m) -> Html m)
-       , options : List (Options.Property c m)
-       , items : List (Item c m)
-       }
-ul node options items =
-    { node = node, options = options, items = items }
+divider : List (Lists.Property m) -> List (Html m) -> Item m
+divider options childs =
+    { options = options, childs = childs, divider = True }
 
 
+type alias Menu m =
+    { options: List (Lists.Property m)
+    , items : List (Item m)
+    }
+
+
+{-| Menu items wrapper.
+-}
+ul : List (Lists.Property m) -> List (Item m) -> Menu m
+ul options items =
+    { options = options, items = items }
+
+
+{-| Component property to attach the menu.
+-}
 attach : (Material.Msg.Msg m -> m) -> Index -> Options.Property c m
 attach lift idx =
     Options.onClick (lift (Material.Msg.MenuMsg idx Toggle))
 
 
+{-| Component property to attach the menu.
+
+Internal use only.
+-}
 connect : (Material.Internal.Menu.Msg m -> m) -> Options.Property c m
 connect lift =
     Options.onClick (lift Toggle)
 
 
+{-| Menu update.
+
+Internal use only.
+-}
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
     case msg of
@@ -98,19 +236,6 @@ update lift msg model =
 
         Toggle ->
             update lift (if model.open then Close else Open) model
-
-        Init { quickOpen } geometry ->
-            ( Just
-              { model
-                | geometry = Just geometry
-                , quickOpen = Just quickOpen
-              }
-            ,
-              Cmd.none
-            )
-
-        AnimationEnd ->
-            ( Just { model | animating = False }, Cmd.none )
 
         Open ->
             let
@@ -146,6 +271,7 @@ update lift msg model =
                     | open = False
                     , animating = True
                     , quickOpen = Nothing
+                    , focusedItemAtIndex = Nothing
                   }
                 ,
                   if not quickOpen then
@@ -159,13 +285,26 @@ update lift msg model =
         CloseDelayed ->
             ( Nothing, Helpers.delay (50*Time.millisecond) (lift Close) )
 
+        Init { quickOpen } geometry ->
+            ( Just
+              { model
+                | geometry = Just geometry
+                , quickOpen = Just quickOpen
+              }
+            ,
+              Cmd.none
+            )
+
+        AnimationEnd ->
+            ( Just { model | animating = False }, Cmd.none )
+
         DocumentClick ->
             if model.open then
                 update lift Close model
             else
                 ( Nothing, Cmd.none )
 
-        KeyDown { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
+        KeyDown numItems { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
                 isTab =
                     key == "Tab" || keyCode == 9
@@ -178,35 +317,78 @@ update lift msg model =
 
                 isSpace =
                     key == "Space" || keyCode == 32
+
+                isEnter =
+                    key == "Enter" || keyCode == 13
+
+                lastItemIndex =
+                    numItems - 1
+
+                keyDownWithinMenu =
+                    isEnter || isSpace
+
+                focusedItemIndex =
+                    model.focusedItemAtIndex
+                    |> Maybe.withDefault 0
             in
-            if altKey || ctrlKey || metaKey then
-                ( Nothing, Cmd.none )
-            else
-                -- TODO: focus handling
-                ( Nothing, Cmd.none )
+            ( if altKey || ctrlKey || metaKey then
+                  ( Nothing, Cmd.none )
+              else
+                  if isArrowUp then
+                      ( Just <|
+                        if focusedItemIndex == 0 then
+                            { model | focusedItemAtIndex = Just lastItemIndex }
+                        else
+                            { model | focusedItemAtIndex = Just (focusedItemIndex - 1) }
+                      ,
+                        Cmd.none
+                      )
+                  else if isArrowDown then
+                      (
+                        Just <|
+                        if focusedItemIndex == lastItemIndex then
+                            { model | focusedItemAtIndex = Just 0 }
+                        else
+                            { model | focusedItemAtIndex = Just (focusedItemIndex + 1) }
+                      ,
+                        Cmd.none
+                      )
+                  else if isSpace || isEnter then
+                      ( Just model, Cmd.none )
+                  else
+                      ( Nothing, Cmd.none )
+            )
+            |> Tuple.mapFirst (Maybe.map (\ model ->
+                   { model | keyDownWithinMenu = keyDownWithinMenu }
+               ))
 
         KeyUp { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
-                isEnter =
-                    key == "Enter" || keyCode == 13
+                isEscape =
+                    key == "Escape" || keyCode == 27
 
                 isSpace =
                     key == "Space" || keyCode == 32
 
-                isEscape =
-                    key == "Escape" || keyCode == 27
+                isEnter =
+                    key == "Enter" || keyCode == 13
             in
-            if altKey || ctrlKey || metaKey then
-                ( Nothing, Cmd.none )
-            else
-                if isEnter || isSpace then
-                    -- TODO: trigger selected
-                    update lift Close model
-                else
-                    if isEscape then
-                        update lift Close model
-                    else
-                        ( Nothing, Cmd.none )
+            ( if altKey || ctrlKey || metaKey then
+                  ( Nothing, Cmd.none )
+              else if isEscape || ((isSpace || isEnter) && model.keyDownWithinMenu) then
+                  update lift Close model
+              else
+                  ( Nothing, Cmd.none )
+            )
+            |> Tuple.mapFirst (Maybe.map (\ model ->
+                   if (isEnter || isSpace) && model.keyDownWithinMenu then
+                       { model | keyDownWithinMenu = False }
+                   else
+                       model
+               ))
+
+        SetFocus focusedItemAtIndex ->
+            ( Just { model | focusedItemAtIndex = Just focusedItemAtIndex }, Cmd.none )
 
 
 type alias Config =
@@ -228,6 +410,10 @@ defaultConfig =
     }
 
 
+{-| Menu margin from `anchorCorner`.
+
+Defaults to zero margin.
+-}
 type alias Margin =
     { top : Float
     , left : Float
@@ -245,45 +431,54 @@ defaultMargin =
     }
 
 
+{-| Menu property.
+-}
 type alias Property m =
     Options.Property Config m
 
 
+{-| Specify the menu item that has focus when the menu opens.
+-}
 index : Int -> Property m
 index index =
     Internal.option (\config -> { config | index = Just index })
 
 
---open : Bool -> Property m
---open =
---    Internal.option (\ config -> { config | open = open })
+{-| Hint to anchor the menu if space is available.
 
-
+The menu will auto-position itself if not enough space is available. Prefer
+RTL-aware corners when possible.
+-}
 anchorCorner : Corner -> Property m
 anchorCorner anchorCorner =
     Internal.option (\ config -> { config | anchorCorner = anchorCorner })
 
 
+{-| Set the menu's margin from the specified `anchorCorner`.
+-}
 anchorMargin : Margin -> Property m
 anchorMargin anchorMargin =
     Internal.option (\ config -> { config | anchorMargin = anchorMargin })
 
 
+{-| Open the menu without an animation.
+-}
 quickOpen : Property m
 quickOpen =
     Internal.option (\ config -> { config | quickOpen = True })
 
 
-view
+{-| Menu view function.
+
+Internal use only.
+-}
+menu
     : (Msg m -> m)
     -> Model
     -> List (Property m)
-    -> { node : (List (Options.Property c m) -> List (Html m) -> Html m)
-       , options : List (Options.Property c m)
-       , items : List (Item c m)
-       }
+    -> Menu m
     -> Html m
-view lift model options ul =
+menu lift model options ul =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
@@ -301,6 +496,47 @@ view lift model options ul =
                 model.open && (model.geometry /= Nothing)
             else
                 model.open
+
+        focusedItemAtIndex =
+            model.focusedItemAtIndex
+
+        numDividersBeforeIndex i =
+            ul.items
+            |> List.take (i + 1)
+            |> List.filter .divider
+            |> List.length
+
+        numItems =
+            ul.items
+            |> List.filter (not << .divider)
+            |> List.length
+
+        preventDefaultOnKeyDown { altKey, ctrlKey, metaKey, shiftKey } key keyCode =
+            let
+                isTab =
+                    key == "Tab" || keyCode == 9
+
+                isArrowUp =
+                    key == "ArrowUp" || keyCode == 38
+
+                isArrowDown =
+                    key == "ArrowDown" || keyCode == 40
+
+                isSpace =
+                    key == "Space" || keyCode == 32
+
+                lastItemIndex =
+                    numItems - 1
+            in
+            if altKey || ctrlKey || metaKey then
+                Json.fail ""
+            else if shiftKey && isTab
+                && (Maybe.withDefault 0 focusedItemAtIndex == lastItemIndex) then
+                Json.succeed (lift NoOp)
+            else if isArrowUp || isArrowDown || isSpace then
+                Json.succeed (lift NoOp)
+            else
+                Json.fail ""
     in
     Internal.apply summary
     div
@@ -315,6 +551,7 @@ view lift model options ul =
       when isOpen << Options.many <|
       [
         cs "mdc-menu--open" |> when isOpen
+      , Options.data "focustrap" ""
       , Options.onWithOptions
           "click" 
           { stopPropagation = True
@@ -342,17 +579,88 @@ view lift model options ul =
       Options.many << List.map Options.attribute <|
       GlobalEvents.onTick <|
       Json.map (lift << Init { quickOpen = config.quickOpen }) decodeGeometry
+    ,
+      Options.on "keyup" <| Json.map lift <|
+      Json.map3 KeyUp decodeMeta decodeKey decodeKeyCode
+    ,
+      let
+          numItems =
+              ul.items
+              |> List.filter (not << .divider)
+              |> List.length
+      in
+      Options.on "keydown" <| Json.map lift <|
+      Json.map3 (KeyDown numItems) decodeMeta decodeKey decodeKeyCode
     ]
     []
-    [ ul.node (cs "mdc-menu__items" :: ul.options)
+    [ Lists.ul
+      ( cs "mdc-menu__items"
+      :: ( Options.onWithOptions "keydown"
+               { stopPropagation = False, preventDefault = True }
+               ( Json.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
+                 |> Json.andThen identity
+               )
+         )
+      :: ul.options
+      )
       ( List.indexedMap (\i item ->
-             item.node item.options item.childs
+             let
+                 focusIndex =
+                     i - numDividersBeforeIndex i
+
+                 hasFocus =
+                     Just focusIndex == focusedItemAtIndex
+
+                 autoFocus =
+                     if hasFocus && model.open then
+                         Options.data "autofocus" ""
+                     else
+                         Options.nop
+
+                 summary =
+                     Internal.collect Lists.defaultConfig item.options
+                     |> \ summary ->
+                         if not model.keyDownWithinMenu then
+                             let
+                                 dispatch =
+                                     summary.dispatch
+                                     |> \ (Dispatch.Config ({ decoders } as dispatch)) ->
+                                          Dispatch.Config
+                                          { dispatch
+                                            | decoders =
+                                                  List.filter ((/=) "keyup" << Tuple.first)
+                                                  decoders
+                                          }
+                             in
+                             { summary | dispatch = dispatch }
+                         else
+                             summary
+             in
+             if item.divider then
+                 Internal.apply summary Html.hr
+                 [ cs "mdc-list-divider"
+                 ]
+                 []
+                 item.childs
+             else
+                 Internal.apply summary Html.li
+                 [ cs "mdc-list-item"
+                 , Options.attribute (Html.attribute "tabindex" "0")
+                 , Options.on "focus" (Json.succeed (lift (SetFocus focusIndex)))
+                 , autoFocus
+                 ]
+                 []
+                 item.childs
            )
            ul.items
       )
     ]
 
 
+{-| One of the four corners.
+
+Consider using RTL aware corners when possible.
+-}
 type alias Corner
     = { bottom : Bool
       , center : Bool
@@ -361,6 +669,8 @@ type alias Corner
       }
 
 
+{-| Top left corner.
+-}
 topLeftCorner : Corner
 topLeftCorner =
     { bottom = False
@@ -370,6 +680,8 @@ topLeftCorner =
     }
 
 
+{-| Top right corner.
+-}
 topRightCorner : Corner
 topRightCorner =
     { bottom = False
@@ -379,6 +691,8 @@ topRightCorner =
     }
 
 
+{-| Bottom left corner.
+-}
 bottomLeftCorner : Corner
 bottomLeftCorner =
     { bottom = True
@@ -388,6 +702,8 @@ bottomLeftCorner =
     }
 
 
+{-| Bottom right corner.
+-}
 bottomRightCorner : Corner
 bottomRightCorner =
     { bottom = True
@@ -397,6 +713,8 @@ bottomRightCorner =
     }
 
 
+{-| Top left corner in RTL and top right corner otherwise.
+-}
 topStartCorner : Corner
 topStartCorner =
     { bottom = False
@@ -406,6 +724,8 @@ topStartCorner =
     }
 
 
+{-| Top right corner in RTL and top left corner otherwise.
+-}
 topEndCorner : Corner
 topEndCorner =
     { bottom = False
@@ -415,6 +735,8 @@ topEndCorner =
     }
 
 
+{-| Bottom left corner in RTL and bottom right corner otherwise.
+-}
 bottomStartCorner : Corner
 bottomStartCorner =
     { bottom = True
@@ -424,6 +746,8 @@ bottomStartCorner =
     }
 
 
+{-| Bottom right corner in RTL and bottom left corner otherwise.
+-}
 bottomEndCorner : Corner
 bottomEndCorner =
     { bottom = True
@@ -689,6 +1013,10 @@ type alias Store s =
     Component.indexed .menu (\x y -> { y | menu = x }) defaultModel
 
 
+{-| Menu react.
+
+Internal use only.
+-}
 react :
     (Material.Msg.Msg m -> m)
     -> Msg m
@@ -699,20 +1027,23 @@ react =
     Component.react get set Material.Msg.MenuMsg update
 
 
-render :
+{-| Menu view.
+-}
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
-    -> { items : List (Item c m)
-       , node : List (Options.Property c m) -> List (Html m) -> Html m
-       , options : List (Options.Property c m)
-       }
+    -> Menu m
     -> Html m
-render =
-    Component.render get view Material.Msg.MenuMsg
+view =
+    Component.render get menu Material.Msg.MenuMsg
 
 
+{-| Menu subscriptions.
+
+Internal use only.
+-}
 subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
 subs =
     Component.subs Material.Msg.MenuMsg .menu subscriptions
@@ -786,6 +1117,31 @@ decodeGeometry =
     )
 
 
-onSelect : m -> Property m
+{-| Event listener for the menu's select event.
+
+Use this rather than `Options.onClick`, etc. so that it works with keyboard
+selection.
+-}
+onSelect : m -> Lists.Property m
 onSelect msg =
-    Options.onClick msg
+    let
+        trigger key keyCode =
+            let
+                isSpace =
+                    key == "Space" || keyCode == 32
+
+                isEnter =
+                    key == "Enter" || keyCode == 13
+            in
+            if isSpace || isEnter then
+                Json.succeed msg
+            else
+                Json.fail ""
+    in
+    Options.many
+    [ Options.onClick msg
+    , Options.on "keyup"
+          ( Json.map2 trigger decodeKey decodeKeyCode
+            |> Json.andThen identity
+          )
+    ]

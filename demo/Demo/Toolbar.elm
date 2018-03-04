@@ -7,7 +7,6 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
-import Material.List as Lists
 import Material.Menu as Menu
 import Material.Options as Options exposing (styled, cs, css)
 import Material.Toolbar as Toolbar
@@ -266,7 +265,7 @@ menuToolbar lift model =
             , css "position" "relative"
             , css "overflow" "visible"
             ]
-            [ Menu.render (lift << Mdc) [0] model.mdc
+            [ Menu.view (lift << Mdc) [0] model.mdc
               [ Menu.anchorCorner Menu.topEndCorner
               , Menu.anchorMargin
                   { top = 15
@@ -275,12 +274,12 @@ menuToolbar lift model =
                   , left = 0
                   }
               ]
-              ( Menu.ul Lists.ul []
-                [ Menu.li Lists.li [] [ text "Back" ]
-                , Menu.li Lists.li [] [ text "Forward" ]
-                , Menu.li Lists.li [] [ text "Reload" ]
-                , Menu.li Lists.divider [] []
-                , Menu.li Lists.li [] [ text "Save as…" ]
+              ( Menu.ul []
+                [ Menu.li [] [ text "Back" ]
+                , Menu.li [] [ text "Forward" ]
+                , Menu.li [] [ text "Reload" ]
+                , Menu.divider [] []
+                , Menu.li [] [ text "Save as…" ]
                 ]
               )
             ]

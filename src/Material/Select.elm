@@ -8,7 +8,6 @@ import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
 import Material.Internal.Options as Internal
 import Material.Internal.Select exposing (Msg(..), Geometry, defaultGeometry)
-import Material.List as Lists
 import Material.Menu as Menu
 import Material.Msg exposing (Index) 
 import Material.Options as Options exposing (cs, css, styled, when)
@@ -145,7 +144,7 @@ view
     : (Msg m -> m)
     -> Model
     -> List (Property m)
-    -> List (Menu.Item c m)
+    -> List (Menu.Item m)
     -> Html m
 view lift model options items =
     let
@@ -231,7 +230,7 @@ view lift model options items =
         []
       ]
     ,
-      Menu.view (lift << MenuMsg) model.menu
+      Menu.menu (lift << MenuMsg) model.menu
       [ cs "mdc-select__menu"
       , Menu.index (Maybe.withDefault 0 config.index)
       , when isOpen << Options.many <|
@@ -243,7 +242,7 @@ view lift model options items =
         , css "right" "unset"
         ]
       ]
-      ( Menu.ul Lists.ul [] items
+      ( Menu.ul [] items
       )
     ]
 
@@ -279,7 +278,7 @@ render :
     -> Index
     -> Store s
     -> List (Property m)
-    -> List (Menu.Item c m)
+    -> List (Menu.Item m)
     -> Html m
 render lift index store options =
     Component.render get view Material.Msg.SelectMsg lift index store
