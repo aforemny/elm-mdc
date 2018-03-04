@@ -8380,13 +8380,16 @@ var _aforemny$elm_mdc$Material_Internal_Menu$ViewportDistance = F4(
 	function (a, b, c, d) {
 		return {top: a, right: b, left: c, bottom: d};
 	});
+var _aforemny$elm_mdc$Material_Internal_Menu$SetFocus = function (a) {
+	return {ctor: 'SetFocus', _0: a};
+};
 var _aforemny$elm_mdc$Material_Internal_Menu$KeyUp = F3(
 	function (a, b, c) {
 		return {ctor: 'KeyUp', _0: a, _1: b, _2: c};
 	});
-var _aforemny$elm_mdc$Material_Internal_Menu$KeyDown = F3(
-	function (a, b, c) {
-		return {ctor: 'KeyDown', _0: a, _1: b, _2: c};
+var _aforemny$elm_mdc$Material_Internal_Menu$KeyDown = F4(
+	function (a, b, c, d) {
+		return {ctor: 'KeyDown', _0: a, _1: b, _2: c, _3: d};
 	});
 var _aforemny$elm_mdc$Material_Internal_Menu$DocumentClick = {ctor: 'DocumentClick'};
 var _aforemny$elm_mdc$Material_Internal_Menu$CloseDelayed = {ctor: 'CloseDelayed'};
@@ -13125,9 +13128,185 @@ var _aforemny$elm_mdc$Material_IconToggle$Config = F4(
 		return {on: a, label: b, icon: c, inner: d};
 	});
 
-var _aforemny$elm_mdc$Material_Menu$onSelect = function (msg) {
-	return _aforemny$elm_mdc$Material_Options$onClick(msg);
+var _aforemny$elm_mdc$Material_List$inset = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider--inset');
+var _aforemny$elm_mdc$Material_List$padded = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divier--padded');
+var _aforemny$elm_mdc$Material_List$divider = F2(
+	function (options, _p0) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$hr,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider'),
+				_1: options
+			},
+			{ctor: '[]'});
+	});
+var _aforemny$elm_mdc$Material_List$subheader = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group__subheader'),
+			_1: options
+		});
 };
+var _aforemny$elm_mdc$Material_List$group = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$metaImage = F2(
+	function (options, url) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$img,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Options$attribute(
+						_elm_lang$html$Html_Attributes$src(url)),
+					_1: options
+				}
+			},
+			{ctor: '[]'});
+	});
+var _aforemny$elm_mdc$Material_List$metaIcon = function (options) {
+	return _aforemny$elm_mdc$Material_Icon$view(
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$metaText = F2(
+	function (options, str) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$span,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+				_1: options
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(str),
+				_1: {ctor: '[]'}
+			});
+	});
+var _aforemny$elm_mdc$Material_List$meta = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$graphicImage = F2(
+	function (options, url) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$img,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Options$attribute(
+						_elm_lang$html$Html_Attributes$src(url)),
+					_1: options
+				}
+			},
+			{ctor: '[]'});
+	});
+var _aforemny$elm_mdc$Material_List$graphicIcon = function (options) {
+	return _aforemny$elm_mdc$Material_Icon$view(
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$graphic = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$activated = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--activated');
+var _aforemny$elm_mdc$Material_List$selected = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--selected');
+var _aforemny$elm_mdc$Material_List$secondaryText = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__secondary-text'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$text = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__text'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$listItem = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$li = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$li,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$twoLine = _aforemny$elm_mdc$Material_Options$cs('mdc-list--two-line');
+var _aforemny$elm_mdc$Material_List$avatarList = _aforemny$elm_mdc$Material_Options$cs('mdc-list--avatar-list');
+var _aforemny$elm_mdc$Material_List$dense = _aforemny$elm_mdc$Material_Options$cs('mdc-list--dense');
+var _aforemny$elm_mdc$Material_List$nonInteractive = _aforemny$elm_mdc$Material_Options$cs('mdc-list--non-interactive');
+var _aforemny$elm_mdc$Material_List$ul = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$ul,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$defaultConfig = {};
+var _aforemny$elm_mdc$Material_List$Config = {};
+
 var _aforemny$elm_mdc$Material_Menu$decodeGeometry = function () {
 	var menu = A3(
 		_elm_lang$core$Json_Decode$map2,
@@ -13210,6 +13389,30 @@ var _aforemny$elm_mdc$Material_Menu$decodeKey = A2(
 		_1: {ctor: '[]'}
 	},
 	_elm_lang$core$Json_Decode$string);
+var _aforemny$elm_mdc$Material_Menu$onSelect = function (msg) {
+	var trigger = F2(
+		function (key, keyCode) {
+			var isEnter = _elm_lang$core$Native_Utils.eq(key, 'Enter') || _elm_lang$core$Native_Utils.eq(keyCode, 13);
+			var isSpace = _elm_lang$core$Native_Utils.eq(key, 'Space') || _elm_lang$core$Native_Utils.eq(keyCode, 32);
+			return (isSpace || isEnter) ? _elm_lang$core$Json_Decode$succeed(msg) : _elm_lang$core$Json_Decode$fail('');
+		});
+	return _aforemny$elm_mdc$Material_Options$many(
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$onClick(msg),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_aforemny$elm_mdc$Material_Options$on,
+					'keyup',
+					A2(
+						_elm_lang$core$Json_Decode$andThen,
+						_elm_lang$core$Basics$identity,
+						A3(_elm_lang$core$Json_Decode$map2, trigger, _aforemny$elm_mdc$Material_Menu$decodeKey, _aforemny$elm_mdc$Material_Menu$decodeKeyCode))),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _aforemny$elm_mdc$Material_Menu$decodeMeta = A5(
 	_elm_lang$core$Json_Decode$map4,
 	F4(
@@ -13416,17 +13619,50 @@ var _aforemny$elm_mdc$Material_Menu$index = function (index) {
 };
 var _aforemny$elm_mdc$Material_Menu$defaultMargin = {top: 0, left: 0, bottom: 0, right: 0};
 var _aforemny$elm_mdc$Material_Menu$defaultConfig = {index: _elm_lang$core$Maybe$Nothing, open: false, anchorCorner: _aforemny$elm_mdc$Material_Menu$topLeftCorner, anchorMargin: _aforemny$elm_mdc$Material_Menu$defaultMargin, quickOpen: false};
-var _aforemny$elm_mdc$Material_Menu$view = F4(
+var _aforemny$elm_mdc$Material_Menu$menu = F4(
 	function (lift, model, options, ul) {
+		var numItems = _elm_lang$core$List$length(
+			A2(
+				_elm_lang$core$List$filter,
+				function (_p33) {
+					return !function (_) {
+						return _.divider;
+					}(_p33);
+				},
+				ul.items));
+		var numDividersBeforeIndex = function (i) {
+			return _elm_lang$core$List$length(
+				A2(
+					_elm_lang$core$List$filter,
+					function (_) {
+						return _.divider;
+					},
+					A2(_elm_lang$core$List$take, i + 1, ul.items)));
+		};
+		var focusedItemAtIndex = model.focusedItemAtIndex;
+		var preventDefaultOnKeyDown = F3(
+			function (_p34, key, keyCode) {
+				var _p35 = _p34;
+				var lastItemIndex = numItems - 1;
+				var isSpace = _elm_lang$core$Native_Utils.eq(key, 'Space') || _elm_lang$core$Native_Utils.eq(keyCode, 32);
+				var isArrowDown = _elm_lang$core$Native_Utils.eq(key, 'ArrowDown') || _elm_lang$core$Native_Utils.eq(keyCode, 40);
+				var isArrowUp = _elm_lang$core$Native_Utils.eq(key, 'ArrowUp') || _elm_lang$core$Native_Utils.eq(keyCode, 38);
+				var isTab = _elm_lang$core$Native_Utils.eq(key, 'Tab') || _elm_lang$core$Native_Utils.eq(keyCode, 9);
+				return (_p35.altKey || (_p35.ctrlKey || _p35.metaKey)) ? _elm_lang$core$Json_Decode$fail('') : ((_p35.shiftKey && (isTab && _elm_lang$core$Native_Utils.eq(
+					A2(_elm_lang$core$Maybe$withDefault, 0, focusedItemAtIndex),
+					lastItemIndex))) ? _elm_lang$core$Json_Decode$succeed(
+					lift(_aforemny$elm_mdc$Material_Internal_Menu$NoOp)) : ((isArrowUp || (isArrowDown || isSpace)) ? _elm_lang$core$Json_Decode$succeed(
+					lift(_aforemny$elm_mdc$Material_Internal_Menu$NoOp)) : _elm_lang$core$Json_Decode$fail('')));
+			});
 		var isOpen = model.animating ? (model.open && (!_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing))) : model.open;
 		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Menu$defaultGeometry, model.geometry);
-		var _p33 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Menu$defaultConfig, options);
-		var summary = _p33;
-		var config = _p33.config;
-		var _p34 = A2(_aforemny$elm_mdc$Material_Menu$autoPosition, config, geometry);
-		var position = _p34.position;
-		var transformOrigin = _p34.transformOrigin;
-		var maxHeight = _p34.maxHeight;
+		var _p36 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Menu$defaultConfig, options);
+		var summary = _p36;
+		var config = _p36.config;
+		var _p37 = A2(_aforemny$elm_mdc$Material_Menu$autoPosition, config, geometry);
+		var position = _p37.position;
+		var transformOrigin = _p37.transformOrigin;
+		var maxHeight = _p37.maxHeight;
 		return A5(
 			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
@@ -13442,11 +13678,11 @@ var _aforemny$elm_mdc$Material_Menu$view = F4(
 						model.open ? _aforemny$elm_mdc$Material_Options$cs('mdc-menu--animating-open') : _aforemny$elm_mdc$Material_Options$cs('mdc-menu--animating-closed')),
 					_1: {
 						ctor: '::',
-						_0: function (_p35) {
+						_0: function (_p38) {
 							return A2(
 								_aforemny$elm_mdc$Material_Options$when,
 								isOpen,
-								_aforemny$elm_mdc$Material_Options$many(_p35));
+								_aforemny$elm_mdc$Material_Options$many(_p38));
 						}(
 							{
 								ctor: '::',
@@ -13456,22 +13692,26 @@ var _aforemny$elm_mdc$Material_Menu$view = F4(
 									_aforemny$elm_mdc$Material_Options$cs('mdc-menu--open')),
 								_1: {
 									ctor: '::',
-									_0: A3(
-										_aforemny$elm_mdc$Material_Options$onWithOptions,
-										'click',
-										{stopPropagation: true, preventDefault: false},
-										_elm_lang$core$Json_Decode$succeed(
-											lift(_aforemny$elm_mdc$Material_Internal_Menu$CloseDelayed))),
-									_1: {ctor: '[]'}
+									_0: A2(_aforemny$elm_mdc$Material_Options$data, 'focustrap', ''),
+									_1: {
+										ctor: '::',
+										_0: A3(
+											_aforemny$elm_mdc$Material_Options$onWithOptions,
+											'click',
+											{stopPropagation: true, preventDefault: false},
+											_elm_lang$core$Json_Decode$succeed(
+												lift(_aforemny$elm_mdc$Material_Internal_Menu$CloseDelayed))),
+										_1: {ctor: '[]'}
+									}
 								}
 							}),
 						_1: {
 							ctor: '::',
-							_0: function (_p36) {
+							_0: function (_p39) {
 								return A2(
 									_aforemny$elm_mdc$Material_Options$when,
 									isOpen || model.animating,
-									_aforemny$elm_mdc$Material_Options$many(_p36));
+									_aforemny$elm_mdc$Material_Options$many(_p39));
 							}(
 								{
 									ctor: '::',
@@ -13531,22 +13771,58 @@ var _aforemny$elm_mdc$Material_Menu$view = F4(
 								_0: A2(
 									_aforemny$elm_mdc$Material_Options$when,
 									model.animating && _elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing),
-									function (_p37) {
+									function (_p40) {
 										return _aforemny$elm_mdc$Material_Options$many(
-											A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p37));
+											A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p40));
 									}(
 										_aforemny$elm_mdc$GlobalEvents$onTick(
 											A2(
 												_elm_lang$core$Json_Decode$map,
-												function (_p38) {
+												function (_p41) {
 													return lift(
 														A2(
 															_aforemny$elm_mdc$Material_Internal_Menu$Init,
 															{quickOpen: config.quickOpen},
-															_p38));
+															_p41));
 												},
 												_aforemny$elm_mdc$Material_Menu$decodeGeometry)))),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_Options$on,
+										'keyup',
+										A2(
+											_elm_lang$core$Json_Decode$map,
+											lift,
+											A4(_elm_lang$core$Json_Decode$map3, _aforemny$elm_mdc$Material_Internal_Menu$KeyUp, _aforemny$elm_mdc$Material_Menu$decodeMeta, _aforemny$elm_mdc$Material_Menu$decodeKey, _aforemny$elm_mdc$Material_Menu$decodeKeyCode))),
+									_1: {
+										ctor: '::',
+										_0: function () {
+											var numItems = _elm_lang$core$List$length(
+												A2(
+													_elm_lang$core$List$filter,
+													function (_p42) {
+														return !function (_) {
+															return _.divider;
+														}(_p42);
+													},
+													ul.items));
+											return A2(
+												_aforemny$elm_mdc$Material_Options$on,
+												'keydown',
+												A2(
+													_elm_lang$core$Json_Decode$map,
+													lift,
+													A4(
+														_elm_lang$core$Json_Decode$map3,
+														_aforemny$elm_mdc$Material_Internal_Menu$KeyDown(numItems),
+														_aforemny$elm_mdc$Material_Menu$decodeMeta,
+														_aforemny$elm_mdc$Material_Menu$decodeKey,
+														_aforemny$elm_mdc$Material_Menu$decodeKeyCode)));
+										}(),
+										_1: {ctor: '[]'}
+									}
+								}
 							}
 						}
 					}
@@ -13556,17 +13832,101 @@ var _aforemny$elm_mdc$Material_Menu$view = F4(
 			{
 				ctor: '::',
 				_0: A2(
-					ul.node,
+					_aforemny$elm_mdc$Material_List$ul,
 					{
 						ctor: '::',
 						_0: _aforemny$elm_mdc$Material_Options$cs('mdc-menu__items'),
-						_1: ul.options
+						_1: {
+							ctor: '::',
+							_0: A3(
+								_aforemny$elm_mdc$Material_Options$onWithOptions,
+								'keydown',
+								{stopPropagation: false, preventDefault: true},
+								A2(
+									_elm_lang$core$Json_Decode$andThen,
+									_elm_lang$core$Basics$identity,
+									A4(_elm_lang$core$Json_Decode$map3, preventDefaultOnKeyDown, _aforemny$elm_mdc$Material_Menu$decodeMeta, _aforemny$elm_mdc$Material_Menu$decodeKey, _aforemny$elm_mdc$Material_Menu$decodeKeyCode))),
+							_1: ul.options
+						}
 					},
 					A2(
 						_elm_lang$core$List$indexedMap,
 						F2(
 							function (i, item) {
-								return A2(item.node, item.options, item.childs);
+								var summary = function (summary) {
+									if (!model.keyDownWithinMenu) {
+										var dispatch = function (_p43) {
+											var _p44 = _p43;
+											return _aforemny$elm_mdc$Material_Internal_Dispatch$Config(
+												_elm_lang$core$Native_Utils.update(
+													_p44._0,
+													{
+														decoders: A2(
+															_elm_lang$core$List$filter,
+															function (_p45) {
+																return A2(
+																	F2(
+																		function (x, y) {
+																			return !_elm_lang$core$Native_Utils.eq(x, y);
+																		}),
+																	'keyup',
+																	_elm_lang$core$Tuple$first(_p45));
+															},
+															_p44._0.decoders)
+													}));
+										}(summary.dispatch);
+										return _elm_lang$core$Native_Utils.update(
+											summary,
+											{dispatch: dispatch});
+									} else {
+										return summary;
+									}
+								}(
+									A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_List$defaultConfig, item.options));
+								var focusIndex = i - numDividersBeforeIndex(i);
+								var hasFocus = _elm_lang$core$Native_Utils.eq(
+									_elm_lang$core$Maybe$Just(focusIndex),
+									focusedItemAtIndex);
+								var autoFocus = (hasFocus && model.open) ? A2(_aforemny$elm_mdc$Material_Options$data, 'autofocus', '') : _aforemny$elm_mdc$Material_Options$nop;
+								return item.divider ? A5(
+									_aforemny$elm_mdc$Material_Internal_Options$apply,
+									summary,
+									_elm_lang$html$Html$hr,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider'),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'},
+									item.childs) : A5(
+									_aforemny$elm_mdc$Material_Internal_Options$apply,
+									summary,
+									_elm_lang$html$Html$li,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
+										_1: {
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Options$attribute(
+												A2(_elm_lang$html$Html_Attributes$attribute, 'tabindex', '0')),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_aforemny$elm_mdc$Material_Options$on,
+													'focus',
+													_elm_lang$core$Json_Decode$succeed(
+														lift(
+															_aforemny$elm_mdc$Material_Internal_Menu$SetFocus(focusIndex)))),
+												_1: {
+													ctor: '::',
+													_0: autoFocus,
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									},
+									{ctor: '[]'},
+									item.childs);
 							}),
 						ul.items)),
 				_1: {ctor: '[]'}
@@ -13576,39 +13936,18 @@ var _aforemny$elm_mdc$Material_Menu$update = F3(
 	function (lift, msg, model) {
 		update:
 		while (true) {
-			var _p39 = msg;
-			switch (_p39.ctor) {
+			var _p46 = msg;
+			switch (_p46.ctor) {
 				case 'NoOp':
 					return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
 				case 'Toggle':
-					var _v10 = lift,
-						_v11 = model.open ? _aforemny$elm_mdc$Material_Internal_Menu$Close : _aforemny$elm_mdc$Material_Internal_Menu$Open,
-						_v12 = model;
-					lift = _v10;
-					msg = _v11;
-					model = _v12;
+					var _v12 = lift,
+						_v13 = model.open ? _aforemny$elm_mdc$Material_Internal_Menu$Close : _aforemny$elm_mdc$Material_Internal_Menu$Open,
+						_v14 = model;
+					lift = _v12;
+					msg = _v13;
+					model = _v14;
 					continue update;
-				case 'Init':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Maybe$Just(
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{
-									geometry: _elm_lang$core$Maybe$Just(_p39._1),
-									quickOpen: _elm_lang$core$Maybe$Just(_p39._0.quickOpen)
-								})),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				case 'AnimationEnd':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Maybe$Just(
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{animating: false})),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
 				case 'Open':
 					var quickOpen = A2(_elm_lang$core$Maybe$withDefault, false, model.quickOpen);
 					return (!model.open) ? {
@@ -13630,7 +13969,7 @@ var _aforemny$elm_mdc$Material_Menu$update = F3(
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
-								{open: false, animating: true, quickOpen: _elm_lang$core$Maybe$Nothing})),
+								{open: false, animating: true, quickOpen: _elm_lang$core$Maybe$Nothing, focusedItemAtIndex: _elm_lang$core$Maybe$Nothing})),
 						_1: (!quickOpen) ? A2(
 							_aforemny$elm_mdc$Material_Helpers$delay,
 							70 * _elm_lang$core$Time$millisecond,
@@ -13646,57 +13985,115 @@ var _aforemny$elm_mdc$Material_Menu$update = F3(
 							50 * _elm_lang$core$Time$millisecond,
 							lift(_aforemny$elm_mdc$Material_Internal_Menu$Close))
 					};
+				case 'Init':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									geometry: _elm_lang$core$Maybe$Just(_p46._1),
+									quickOpen: _elm_lang$core$Maybe$Just(_p46._0.quickOpen)
+								})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				case 'AnimationEnd':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{animating: false})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
 				case 'DocumentClick':
 					if (model.open) {
-						var _v13 = lift,
-							_v14 = _aforemny$elm_mdc$Material_Internal_Menu$Close,
-							_v15 = model;
-						lift = _v13;
-						msg = _v14;
-						model = _v15;
+						var _v15 = lift,
+							_v16 = _aforemny$elm_mdc$Material_Internal_Menu$Close,
+							_v17 = model;
+						lift = _v15;
+						msg = _v16;
+						model = _v17;
 						continue update;
 					} else {
 						return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
 					}
 				case 'KeyDown':
-					var _p41 = _p39._2;
-					var _p40 = _p39._1;
-					var isSpace = _elm_lang$core$Native_Utils.eq(_p40, 'Space') || _elm_lang$core$Native_Utils.eq(_p41, 32);
-					var isArrowDown = _elm_lang$core$Native_Utils.eq(_p40, 'ArrowDown') || _elm_lang$core$Native_Utils.eq(_p41, 40);
-					var isArrowUp = _elm_lang$core$Native_Utils.eq(_p40, 'ArrowUp') || _elm_lang$core$Native_Utils.eq(_p41, 38);
-					var isTab = _elm_lang$core$Native_Utils.eq(_p40, 'Tab') || _elm_lang$core$Native_Utils.eq(_p41, 9);
-					return (_p39._0.altKey || (_p39._0.ctrlKey || _p39._0.metaKey)) ? {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none} : {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+					var _p48 = _p46._3;
+					var _p47 = _p46._2;
+					var focusedItemIndex = A2(_elm_lang$core$Maybe$withDefault, 0, model.focusedItemAtIndex);
+					var lastItemIndex = _p46._0 - 1;
+					var isEnter = _elm_lang$core$Native_Utils.eq(_p47, 'Enter') || _elm_lang$core$Native_Utils.eq(_p48, 13);
+					var isSpace = _elm_lang$core$Native_Utils.eq(_p47, 'Space') || _elm_lang$core$Native_Utils.eq(_p48, 32);
+					var keyDownWithinMenu = isEnter || isSpace;
+					var isArrowDown = _elm_lang$core$Native_Utils.eq(_p47, 'ArrowDown') || _elm_lang$core$Native_Utils.eq(_p48, 40);
+					var isArrowUp = _elm_lang$core$Native_Utils.eq(_p47, 'ArrowUp') || _elm_lang$core$Native_Utils.eq(_p48, 38);
+					var isTab = _elm_lang$core$Native_Utils.eq(_p47, 'Tab') || _elm_lang$core$Native_Utils.eq(_p48, 9);
+					return A2(
+						_elm_lang$core$Tuple$mapFirst,
+						_elm_lang$core$Maybe$map(
+							function (model) {
+								return _elm_lang$core$Native_Utils.update(
+									model,
+									{keyDownWithinMenu: keyDownWithinMenu});
+							}),
+						(_p46._1.altKey || (_p46._1.ctrlKey || _p46._1.metaKey)) ? {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none} : (isArrowUp ? {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Maybe$Just(
+								_elm_lang$core$Native_Utils.eq(focusedItemIndex, 0) ? _elm_lang$core$Native_Utils.update(
+									model,
+									{
+										focusedItemAtIndex: _elm_lang$core$Maybe$Just(lastItemIndex)
+									}) : _elm_lang$core$Native_Utils.update(
+									model,
+									{
+										focusedItemAtIndex: _elm_lang$core$Maybe$Just(focusedItemIndex - 1)
+									})),
+							_1: _elm_lang$core$Platform_Cmd$none
+						} : (isArrowDown ? {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Maybe$Just(
+								_elm_lang$core$Native_Utils.eq(focusedItemIndex, lastItemIndex) ? _elm_lang$core$Native_Utils.update(
+									model,
+									{
+										focusedItemAtIndex: _elm_lang$core$Maybe$Just(0)
+									}) : _elm_lang$core$Native_Utils.update(
+									model,
+									{
+										focusedItemAtIndex: _elm_lang$core$Maybe$Just(focusedItemIndex + 1)
+									})),
+							_1: _elm_lang$core$Platform_Cmd$none
+						} : ((isSpace || isEnter) ? {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Maybe$Just(model),
+							_1: _elm_lang$core$Platform_Cmd$none
+						} : {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none}))));
+				case 'KeyUp':
+					var _p50 = _p46._2;
+					var _p49 = _p46._1;
+					var isEnter = _elm_lang$core$Native_Utils.eq(_p49, 'Enter') || _elm_lang$core$Native_Utils.eq(_p50, 13);
+					var isSpace = _elm_lang$core$Native_Utils.eq(_p49, 'Space') || _elm_lang$core$Native_Utils.eq(_p50, 32);
+					var isEscape = _elm_lang$core$Native_Utils.eq(_p49, 'Escape') || _elm_lang$core$Native_Utils.eq(_p50, 27);
+					return A2(
+						_elm_lang$core$Tuple$mapFirst,
+						_elm_lang$core$Maybe$map(
+							function (model) {
+								return ((isEnter || isSpace) && model.keyDownWithinMenu) ? _elm_lang$core$Native_Utils.update(
+									model,
+									{keyDownWithinMenu: false}) : model;
+							}),
+						(_p46._0.altKey || (_p46._0.ctrlKey || _p46._0.metaKey)) ? {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none} : ((isEscape || ((isSpace || isEnter) && model.keyDownWithinMenu)) ? A3(_aforemny$elm_mdc$Material_Menu$update, lift, _aforemny$elm_mdc$Material_Internal_Menu$Close, model) : {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none}));
 				default:
-					var _p43 = _p39._2;
-					var _p42 = _p39._1;
-					var isEscape = _elm_lang$core$Native_Utils.eq(_p42, 'Escape') || _elm_lang$core$Native_Utils.eq(_p43, 27);
-					var isSpace = _elm_lang$core$Native_Utils.eq(_p42, 'Space') || _elm_lang$core$Native_Utils.eq(_p43, 32);
-					var isEnter = _elm_lang$core$Native_Utils.eq(_p42, 'Enter') || _elm_lang$core$Native_Utils.eq(_p43, 13);
-					if (_p39._0.altKey || (_p39._0.ctrlKey || _p39._0.metaKey)) {
-						return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
-					} else {
-						if (isEnter || isSpace) {
-							var _v16 = lift,
-								_v17 = _aforemny$elm_mdc$Material_Internal_Menu$Close,
-								_v18 = model;
-							lift = _v16;
-							msg = _v17;
-							model = _v18;
-							continue update;
-						} else {
-							if (isEscape) {
-								var _v19 = lift,
-									_v20 = _aforemny$elm_mdc$Material_Internal_Menu$Close,
-									_v21 = model;
-								lift = _v19;
-								msg = _v20;
-								model = _v21;
-								continue update;
-							} else {
-								return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
-							}
-						}
-					}
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									focusedItemAtIndex: _elm_lang$core$Maybe$Just(_p46._0)
+								})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
 			}
 		}
 	});
@@ -13710,16 +14107,20 @@ var _aforemny$elm_mdc$Material_Menu$attach = F2(
 			lift(
 				A2(_aforemny$elm_mdc$Material_Msg$MenuMsg, idx, _aforemny$elm_mdc$Material_Internal_Menu$Toggle)));
 	});
-var _aforemny$elm_mdc$Material_Menu$ul = F3(
-	function (node, options, items) {
-		return {node: node, options: options, items: items};
+var _aforemny$elm_mdc$Material_Menu$ul = F2(
+	function (options, items) {
+		return {options: options, items: items};
 	});
-var _aforemny$elm_mdc$Material_Menu$li = F3(
-	function (node, options, childs) {
-		return {node: node, options: options, childs: childs};
+var _aforemny$elm_mdc$Material_Menu$divider = F2(
+	function (options, childs) {
+		return {options: options, childs: childs, divider: true};
 	});
-var _aforemny$elm_mdc$Material_Menu$defaultModel = {index: _elm_lang$core$Maybe$Nothing, open: false, animating: false, geometry: _elm_lang$core$Maybe$Nothing, quickOpen: _elm_lang$core$Maybe$Nothing};
-var _aforemny$elm_mdc$Material_Menu$_p44 = A3(
+var _aforemny$elm_mdc$Material_Menu$li = F2(
+	function (options, childs) {
+		return {options: options, childs: childs, divider: false};
+	});
+var _aforemny$elm_mdc$Material_Menu$defaultModel = {index: _elm_lang$core$Maybe$Nothing, open: false, animating: false, geometry: _elm_lang$core$Maybe$Nothing, quickOpen: _elm_lang$core$Maybe$Nothing, focusedItemAtIndex: _elm_lang$core$Maybe$Nothing, keyDownWithinMenu: false};
+var _aforemny$elm_mdc$Material_Menu$_p51 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.menu;
@@ -13731,16 +14132,16 @@ var _aforemny$elm_mdc$Material_Menu$_p44 = A3(
 				{menu: x});
 		}),
 	_aforemny$elm_mdc$Material_Menu$defaultModel);
-var _aforemny$elm_mdc$Material_Menu$get = _aforemny$elm_mdc$Material_Menu$_p44._0;
-var _aforemny$elm_mdc$Material_Menu$set = _aforemny$elm_mdc$Material_Menu$_p44._1;
+var _aforemny$elm_mdc$Material_Menu$get = _aforemny$elm_mdc$Material_Menu$_p51._0;
+var _aforemny$elm_mdc$Material_Menu$set = _aforemny$elm_mdc$Material_Menu$_p51._1;
 var _aforemny$elm_mdc$Material_Menu$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Menu$get, _aforemny$elm_mdc$Material_Menu$set, _aforemny$elm_mdc$Material_Msg$MenuMsg, _aforemny$elm_mdc$Material_Menu$update);
-var _aforemny$elm_mdc$Material_Menu$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Menu$get, _aforemny$elm_mdc$Material_Menu$view, _aforemny$elm_mdc$Material_Msg$MenuMsg);
+var _aforemny$elm_mdc$Material_Menu$view = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Menu$get, _aforemny$elm_mdc$Material_Menu$menu, _aforemny$elm_mdc$Material_Msg$MenuMsg);
 var _aforemny$elm_mdc$Material_Menu$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
 			_0: model.open ? _elm_lang$mouse$Mouse$clicks(
-				function (_p45) {
+				function (_p52) {
 					return _aforemny$elm_mdc$Material_Internal_Menu$DocumentClick;
 				}) : _elm_lang$core$Platform_Sub$none,
 			_1: {ctor: '[]'}
@@ -13753,13 +14154,17 @@ var _aforemny$elm_mdc$Material_Menu$subs = A3(
 		return _.menu;
 	},
 	_aforemny$elm_mdc$Material_Menu$subscriptions);
-var _aforemny$elm_mdc$Material_Menu$Model = F5(
-	function (a, b, c, d, e) {
-		return {index: a, open: b, animating: c, geometry: d, quickOpen: e};
+var _aforemny$elm_mdc$Material_Menu$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {index: a, open: b, animating: c, geometry: d, quickOpen: e, focusedItemAtIndex: f, keyDownWithinMenu: g};
 	});
 var _aforemny$elm_mdc$Material_Menu$Item = F3(
 	function (a, b, c) {
-		return {node: a, options: b, childs: c};
+		return {options: a, childs: b, divider: c};
+	});
+var _aforemny$elm_mdc$Material_Menu$Menu = F2(
+	function (a, b) {
+		return {options: a, items: b};
 	});
 var _aforemny$elm_mdc$Material_Menu$Config = F5(
 	function (a, b, c, d, e) {
@@ -14007,183 +14412,6 @@ var _aforemny$elm_mdc$Material_RadioButton$Config = F3(
 	function (a, b, c) {
 		return {input: a, container: b, value: c};
 	});
-
-var _aforemny$elm_mdc$Material_List$inset = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider--inset');
-var _aforemny$elm_mdc$Material_List$padded = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divier--padded');
-var _aforemny$elm_mdc$Material_List$divider = F2(
-	function (options, _p0) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$hr,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider'),
-				_1: options
-			},
-			{ctor: '[]'});
-	});
-var _aforemny$elm_mdc$Material_List$subheader = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group__subheader'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$group = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$metaImage = F2(
-	function (options, url) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$img,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$attribute(
-						_elm_lang$html$Html_Attributes$src(url)),
-					_1: options
-				}
-			},
-			{ctor: '[]'});
-	});
-var _aforemny$elm_mdc$Material_List$metaIcon = function (options) {
-	return _aforemny$elm_mdc$Material_Icon$view(
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$metaText = F2(
-	function (options, str) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-				_1: options
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(str),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Material_List$meta = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$graphicImage = F2(
-	function (options, url) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$img,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$attribute(
-						_elm_lang$html$Html_Attributes$src(url)),
-					_1: options
-				}
-			},
-			{ctor: '[]'});
-	});
-var _aforemny$elm_mdc$Material_List$graphicIcon = function (options) {
-	return _aforemny$elm_mdc$Material_Icon$view(
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$graphic = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$activated = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--activated');
-var _aforemny$elm_mdc$Material_List$selected = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--selected');
-var _aforemny$elm_mdc$Material_List$secondaryText = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__secondary-text'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$text = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__text'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$listItem = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$a,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$li = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$li,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$twoLine = _aforemny$elm_mdc$Material_Options$cs('mdc-list--two-line');
-var _aforemny$elm_mdc$Material_List$avatarList = _aforemny$elm_mdc$Material_Options$cs('mdc-list--avatar-list');
-var _aforemny$elm_mdc$Material_List$dense = _aforemny$elm_mdc$Material_Options$cs('mdc-list--dense');
-var _aforemny$elm_mdc$Material_List$nonInteractive = _aforemny$elm_mdc$Material_Options$cs('mdc-list--non-interactive');
-var _aforemny$elm_mdc$Material_List$ul = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$ul,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list'),
-			_1: options
-		});
-};
 
 var _aforemny$elm_mdc$Material_Select$decodeGeometry = function () {
 	var itemOffsetTops = A2(
@@ -14473,7 +14701,7 @@ var _aforemny$elm_mdc$Material_Select$view = F4(
 				_1: {
 					ctor: '::',
 					_0: A4(
-						_aforemny$elm_mdc$Material_Menu$view,
+						_aforemny$elm_mdc$Material_Menu$menu,
 						function (_p7) {
 							return lift(
 								_aforemny$elm_mdc$Material_Internal_Select$MenuMsg(_p7));
@@ -14535,9 +14763,8 @@ var _aforemny$elm_mdc$Material_Select$view = F4(
 								}
 							}
 						},
-						A3(
+						A2(
 							_aforemny$elm_mdc$Material_Menu$ul,
-							_aforemny$elm_mdc$Material_List$ul,
 							{ctor: '[]'},
 							items)),
 					_1: {ctor: '[]'}
@@ -30221,7 +30448,7 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 				_1: {
 					ctor: '::',
 					_0: A5(
-						_aforemny$elm_mdc$Material_Menu$render,
+						_aforemny$elm_mdc$Material_Menu$view,
 						function (_p23) {
 							return lift(
 								_aforemny$elm_mdc$Demo_Menus$Mdc(_p23));
@@ -30245,9 +30472,8 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 								}
 							}
 						},
-						A3(
+						A2(
 							_aforemny$elm_mdc$Material_Menu$ul,
-							_aforemny$elm_mdc$Material_List$ul,
 							{ctor: '[]'},
 							A2(
 								_elm_lang$core$List$map,
@@ -30256,9 +30482,8 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 									var _p27 = _p25._1;
 									var _p26 = _p25._0;
 									if (_elm_lang$core$Native_Utils.eq(_p27, '-')) {
-										return A3(
-											_aforemny$elm_mdc$Material_Menu$li,
-											_aforemny$elm_mdc$Material_List$divider,
+										return A2(
+											_aforemny$elm_mdc$Material_Menu$divider,
 											{ctor: '[]'},
 											{ctor: '[]'});
 									} else {
@@ -30266,9 +30491,8 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 											_elm_lang$core$Maybe$Just(
 												{ctor: '_Tuple2', _0: _p26, _1: _p27}),
 											model.selected);
-										return A3(
+										return A2(
 											_aforemny$elm_mdc$Material_Menu$li,
-											_aforemny$elm_mdc$Material_List$li,
 											{
 												ctor: '::',
 												_0: _aforemny$elm_mdc$Material_Menu$onSelect(
@@ -30278,12 +30502,7 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 												_1: {
 													ctor: '::',
 													_0: A2(_aforemny$elm_mdc$Material_Options$when, model.rememberSelectedItem && isSelected, _aforemny$elm_mdc$Material_List$selected),
-													_1: {
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Options$attribute(
-															_elm_lang$html$Html_Attributes$tabindex(0)),
-														_1: {ctor: '[]'}
-													}
+													_1: {ctor: '[]'}
 												}
 											},
 											{
@@ -30302,7 +30521,7 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 	function (lift, page, model) {
 		return A2(
 			page.body,
-			'Simple Menu',
+			'Menu',
 			{
 				ctor: '::',
 				_0: A2(
@@ -30311,7 +30530,7 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 					{
 						ctor: '::',
 						_0: A5(
-							_aforemny$elm_mdc$Material_Menu$render,
+							_aforemny$elm_mdc$Material_Menu$view,
 							function (_p28) {
 								return lift(
 									_aforemny$elm_mdc$Demo_Menus$Mdc(_p28));
@@ -30327,15 +30546,13 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 								_0: _aforemny$elm_mdc$Material_Options$cs('mdc-menu--open'),
 								_1: {ctor: '[]'}
 							},
-							A3(
+							A2(
 								_aforemny$elm_mdc$Material_Menu$ul,
-								_aforemny$elm_mdc$Material_List$ul,
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: A3(
+									_0: A2(
 										_aforemny$elm_mdc$Material_Menu$li,
-										_aforemny$elm_mdc$Material_List$li,
 										{ctor: '[]'},
 										{
 											ctor: '::',
@@ -30344,9 +30561,8 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 										}),
 									_1: {
 										ctor: '::',
-										_0: A3(
+										_0: A2(
 											_aforemny$elm_mdc$Material_Menu$li,
-											_aforemny$elm_mdc$Material_List$li,
 											{ctor: '[]'},
 											{
 												ctor: '::',
@@ -30355,9 +30571,8 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 											}),
 										_1: {
 											ctor: '::',
-											_0: A3(
+											_0: A2(
 												_aforemny$elm_mdc$Material_Menu$li,
-												_aforemny$elm_mdc$Material_List$li,
 												{ctor: '[]'},
 												{
 													ctor: '::',
@@ -30366,16 +30581,14 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 												}),
 											_1: {
 												ctor: '::',
-												_0: A3(
-													_aforemny$elm_mdc$Material_Menu$li,
-													_aforemny$elm_mdc$Material_List$divider,
+												_0: A2(
+													_aforemny$elm_mdc$Material_Menu$divider,
 													{ctor: '[]'},
 													{ctor: '[]'}),
 												_1: {
 													ctor: '::',
-													_0: A3(
+													_0: A2(
 														_aforemny$elm_mdc$Material_Menu$li,
-														_aforemny$elm_mdc$Material_List$li,
 														{ctor: '[]'},
 														{
 															ctor: '::',
@@ -30384,9 +30597,8 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 														}),
 													_1: {
 														ctor: '::',
-														_0: A3(
+														_0: A2(
 															_aforemny$elm_mdc$Material_Menu$li,
-															_aforemny$elm_mdc$Material_List$li,
 															{ctor: '[]'},
 															{
 																ctor: '::',
@@ -33410,9 +33622,8 @@ var _aforemny$elm_mdc$Demo_Selects$heroSelect = F5(
 				_elm_lang$core$List$indexedMap,
 				F2(
 					function (index, label) {
-						return A3(
+						return A2(
 							_aforemny$elm_mdc$Material_Menu$li,
-							_aforemny$elm_mdc$Material_List$li,
 							{
 								ctor: '::',
 								_0: _aforemny$elm_mdc$Material_Menu$onSelect(
@@ -33532,9 +33743,8 @@ var _aforemny$elm_mdc$Demo_Selects$select = F5(
 							_elm_lang$core$List$indexedMap,
 							F2(
 								function (index, label) {
-									return A3(
+									return A2(
 										_aforemny$elm_mdc$Material_Menu$li,
-										_aforemny$elm_mdc$Material_List$li,
 										{
 											ctor: '::',
 											_0: _aforemny$elm_mdc$Material_Menu$onSelect(
@@ -42407,7 +42617,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 															{
 																ctor: '::',
 																_0: A5(
-																	_aforemny$elm_mdc$Material_Menu$render,
+																	_aforemny$elm_mdc$Material_Menu$view,
 																	function (_p10) {
 																		return lift(
 																			_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p10));
@@ -42428,15 +42638,13 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 																			_1: {ctor: '[]'}
 																		}
 																	},
-																	A3(
+																	A2(
 																		_aforemny$elm_mdc$Material_Menu$ul,
-																		_aforemny$elm_mdc$Material_List$ul,
 																		{ctor: '[]'},
 																		{
 																			ctor: '::',
-																			_0: A3(
+																			_0: A2(
 																				_aforemny$elm_mdc$Material_Menu$li,
-																				_aforemny$elm_mdc$Material_List$li,
 																				{ctor: '[]'},
 																				{
 																					ctor: '::',
@@ -42445,9 +42653,8 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 																				}),
 																			_1: {
 																				ctor: '::',
-																				_0: A3(
+																				_0: A2(
 																					_aforemny$elm_mdc$Material_Menu$li,
-																					_aforemny$elm_mdc$Material_List$li,
 																					{ctor: '[]'},
 																					{
 																						ctor: '::',
@@ -42456,9 +42663,8 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 																					}),
 																				_1: {
 																					ctor: '::',
-																					_0: A3(
+																					_0: A2(
 																						_aforemny$elm_mdc$Material_Menu$li,
-																						_aforemny$elm_mdc$Material_List$li,
 																						{ctor: '[]'},
 																						{
 																							ctor: '::',
@@ -42467,16 +42673,14 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 																						}),
 																					_1: {
 																						ctor: '::',
-																						_0: A3(
-																							_aforemny$elm_mdc$Material_Menu$li,
-																							_aforemny$elm_mdc$Material_List$divider,
+																						_0: A2(
+																							_aforemny$elm_mdc$Material_Menu$divider,
 																							{ctor: '[]'},
 																							{ctor: '[]'}),
 																						_1: {
 																							ctor: '::',
-																							_0: A3(
+																							_0: A2(
 																								_aforemny$elm_mdc$Material_Menu$li,
-																								_aforemny$elm_mdc$Material_List$li,
 																								{ctor: '[]'},
 																								{
 																									ctor: '::',
