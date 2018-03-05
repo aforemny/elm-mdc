@@ -1,4 +1,4 @@
-Copyright 2017 Alexander Foremny and various contributors
+Copyright 2017-2018 Alexander Foremny and various contributors<br>
 Copyright 2016-2017 Søren Debois and various contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
