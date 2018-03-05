@@ -17360,7 +17360,7 @@ var _aforemny$elm_mdc$Material_Textfield$invalid = _aforemny$elm_mdc$Material_In
 			config,
 			{invalid: true});
 	});
-var _aforemny$elm_mdc$Material_Textfield$fullWidth = _aforemny$elm_mdc$Material_Internal_Options$option(
+var _aforemny$elm_mdc$Material_Textfield$fullwidth = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -17461,8 +17461,6 @@ var _aforemny$elm_mdc$Material_Textfield$maxlength = function (k) {
 	return _aforemny$elm_mdc$Material_Options$attribute(
 		_elm_lang$html$Html_Attributes$maxlength(k));
 };
-var _aforemny$elm_mdc$Material_Textfield$autofocus = _aforemny$elm_mdc$Material_Options$attribute(
-	_elm_lang$html$Html_Attributes$autofocus(true));
 var _aforemny$elm_mdc$Material_Textfield$value = function (_p7) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
@@ -17539,7 +17537,7 @@ var _aforemny$elm_mdc$Material_Textfield$defaultConfig = {
 	trailingIcon: _elm_lang$core$Maybe$Nothing,
 	iconClickable: true
 };
-var _aforemny$elm_mdc$Material_Textfield$view = F4(
+var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 	function (lift, model, options, _p9) {
 		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
@@ -18240,12 +18238,12 @@ var _aforemny$elm_mdc$Material_Textfield$view = F4(
 					}
 				}));
 	});
-var _aforemny$elm_mdc$Material_Textfield$render = F4(
+var _aforemny$elm_mdc$Material_Textfield$view = F4(
 	function (lift, index, store, options) {
 		return A7(
 			_aforemny$elm_mdc$Material_Component$render,
 			_aforemny$elm_mdc$Material_Textfield$get,
-			_aforemny$elm_mdc$Material_Textfield$view,
+			_aforemny$elm_mdc$Material_Textfield$textField,
 			_aforemny$elm_mdc$Material_Msg$TextfieldMsg,
 			lift,
 			index,
@@ -35810,7 +35808,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 															_1: {
 																ctor: '::',
 																_0: A5(
-																	_aforemny$elm_mdc$Material_Textfield$render,
+																	_aforemny$elm_mdc$Material_Textfield$view,
 																	function (_p8) {
 																		return lift(
 																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p8));
@@ -35853,7 +35851,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																	_1: {
 																		ctor: '::',
 																		_0: A5(
-																			_aforemny$elm_mdc$Material_Textfield$render,
+																			_aforemny$elm_mdc$Material_Textfield$view,
 																			function (_p10) {
 																				return lift(
 																					_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p10));
@@ -39056,7 +39054,7 @@ var _aforemny$elm_mdc$Demo_Textfields$heroTextfield = F3(
 			_aforemny$elm_mdc$Demo_Textfields$defaultExample,
 			A2(_elm_lang$core$Dict$get, index, model.examples));
 		return A5(
-			_aforemny$elm_mdc$Material_Textfield$render,
+			_aforemny$elm_mdc$Material_Textfield$view,
 			function (_p4) {
 				return lift(
 					_aforemny$elm_mdc$Demo_Textfields$Mdc(_p4));
@@ -39111,7 +39109,7 @@ var _aforemny$elm_mdc$Demo_Textfields$password = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Textfield$render,
+										_aforemny$elm_mdc$Material_Textfield$view,
 										function (_p5) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p5));
@@ -39219,7 +39217,7 @@ var _aforemny$elm_mdc$Demo_Textfields$textfield = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Textfield$render,
+										_aforemny$elm_mdc$Material_Textfield$view,
 										function (_p6) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p6));
@@ -39595,7 +39593,7 @@ var _aforemny$elm_mdc$Demo_Textfields$outlinedTextfield = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Textfield$render,
+										_aforemny$elm_mdc$Material_Textfield$view,
 										function (_p7) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p7));
@@ -39796,7 +39794,7 @@ var _aforemny$elm_mdc$Demo_Textfields$boxTextfield = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Textfield$render,
+										_aforemny$elm_mdc$Material_Textfield$view,
 										function (_p8) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p8));
@@ -39997,7 +39995,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Textfield$render,
+										_aforemny$elm_mdc$Material_Textfield$view,
 										function (_p9) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p9));
@@ -40047,7 +40045,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 									{
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_Textfield$render,
+											_aforemny$elm_mdc$Material_Textfield$view,
 											function (_p10) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Textfields$Mdc(_p10));
@@ -40097,7 +40095,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 										{
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_Textfield$render,
+												_aforemny$elm_mdc$Material_Textfield$view,
 												function (_p11) {
 													return lift(
 														_aforemny$elm_mdc$Demo_Textfields$Mdc(_p11));
@@ -40147,7 +40145,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 											{
 												ctor: '::',
 												_0: A5(
-													_aforemny$elm_mdc$Material_Textfield$render,
+													_aforemny$elm_mdc$Material_Textfield$view,
 													function (_p12) {
 														return lift(
 															_aforemny$elm_mdc$Demo_Textfields$Mdc(_p12));
@@ -40515,7 +40513,7 @@ var _aforemny$elm_mdc$Demo_Textfields$textarea = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Textfield$render,
+										_aforemny$elm_mdc$Material_Textfield$view,
 										function (_p13) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p13));
@@ -40664,7 +40662,7 @@ var _aforemny$elm_mdc$Demo_Textfields$textarea = F3(
 				}
 			});
 	});
-var _aforemny$elm_mdc$Demo_Textfields$fullWidth = F3(
+var _aforemny$elm_mdc$Demo_Textfields$fullwidth = F3(
 	function (lift, index, model) {
 		var state = A2(
 			_elm_lang$core$Maybe$withDefault,
@@ -40705,7 +40703,7 @@ var _aforemny$elm_mdc$Demo_Textfields$fullWidth = F3(
 								{
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_Textfield$render,
+										_aforemny$elm_mdc$Material_Textfield$view,
 										function (_p14) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p14));
@@ -40724,7 +40722,7 @@ var _aforemny$elm_mdc$Demo_Textfields$fullWidth = F3(
 											_0: _aforemny$elm_mdc$Material_Textfield$placeholder('Subject'),
 											_1: {
 												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Textfield$fullWidth,
+												_0: _aforemny$elm_mdc$Material_Textfield$fullwidth,
 												_1: {ctor: '[]'}
 											}
 										},
@@ -40732,7 +40730,7 @@ var _aforemny$elm_mdc$Demo_Textfields$fullWidth = F3(
 									_1: {
 										ctor: '::',
 										_0: A5(
-											_aforemny$elm_mdc$Material_Textfield$render,
+											_aforemny$elm_mdc$Material_Textfield$view,
 											function (_p15) {
 												return lift(
 													_aforemny$elm_mdc$Demo_Textfields$Mdc(_p15));
@@ -40754,7 +40752,7 @@ var _aforemny$elm_mdc$Demo_Textfields$fullWidth = F3(
 													_0: _aforemny$elm_mdc$Material_Textfield$textarea,
 													_1: {
 														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Textfield$fullWidth,
+														_0: _aforemny$elm_mdc$Material_Textfield$fullwidth,
 														_1: {
 															ctor: '::',
 															_0: _aforemny$elm_mdc$Material_Textfield$rows(8),
@@ -40981,7 +40979,7 @@ var _aforemny$elm_mdc$Demo_Textfields$view = F3(
 										_1: {
 											ctor: '::',
 											_0: A3(
-												_aforemny$elm_mdc$Demo_Textfields$fullWidth,
+												_aforemny$elm_mdc$Demo_Textfields$fullwidth,
 												lift,
 												{
 													ctor: '::',
