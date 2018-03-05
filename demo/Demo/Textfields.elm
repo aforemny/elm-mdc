@@ -122,7 +122,7 @@ view lift page model =
     , boxTextfield lift [4] model
     , iconsTextfield lift [5] model
     , textarea lift [6] model
-    , fullWidth lift [7] model
+    , fullwidth lift [7] model
     ]
 
 
@@ -133,7 +133,7 @@ heroTextfield lift index model =
             Dict.get index model.examples
             |> Maybe.withDefault defaultExample
     in
-    Textfield.render (lift << Mdc) index model.mdc
+    Textfield.view (lift << Mdc) index model.mdc
     [ Textfield.label "Text field"
     ]
     []
@@ -157,7 +157,7 @@ textfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdc) index model.mdc
+        [ Textfield.view (lift << Mdc) index model.mdc
           [ Textfield.label "Email Address"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -258,7 +258,7 @@ password lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdc) index model.mdc
+        [ Textfield.view (lift << Mdc) index model.mdc
           [ Textfield.label "Choose password"
           , Textfield.password
           , Textfield.pattern ".{8,}"
@@ -294,7 +294,7 @@ outlinedTextfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdc) index model.mdc
+        [ Textfield.view (lift << Mdc) index model.mdc
           [ Textfield.label "Your Name"
           , Textfield.outlined
           , Textfield.dense |> when state.dense
@@ -352,7 +352,7 @@ boxTextfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdc) index model.mdc
+        [ Textfield.view (lift << Mdc) index model.mdc
           [ Textfield.label "Your Name"
           , Textfield.box
           , Textfield.disabled |> when state.disabled
@@ -412,7 +412,7 @@ iconsTextfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdc) (index ++ [0]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Textfield.label "Your name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -423,7 +423,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.render (lift << Mdc) (index ++ [1]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -434,7 +434,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.render (lift << Mdc) (index ++ [2]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ [2]) model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -445,7 +445,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.render (lift << Mdc) (index ++ [3]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ [3]) model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -541,7 +541,7 @@ textarea lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdc) index model.mdc
+        [ Textfield.view (lift << Mdc) index model.mdc
           [ Textfield.label "Multi-line Label"
           , Textfield.textarea
           , Textfield.rows 8
@@ -579,8 +579,8 @@ textarea lift index model =
     ]
 
 
-fullWidth : (Msg m -> m) -> List Int -> Model -> Html m
-fullWidth lift index model =
+fullwidth : (Msg m -> m) -> List Int -> Model -> Html m
+fullwidth lift index model =
     let
         state =
             Dict.get index model.examples
@@ -595,15 +595,15 @@ fullWidth lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.render (lift << Mdc) (index ++ [0]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Textfield.placeholder "Subject"
-          , Textfield.fullWidth
+          , Textfield.fullwidth
           ]
           []
-        , Textfield.render (lift << Mdc) (index ++ [1]) model.mdc
+        , Textfield.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Textfield.placeholder "Textrea Label"
           , Textfield.textarea
-          , Textfield.fullWidth
+          , Textfield.fullwidth
           , Textfield.rows 8
           , Textfield.cols 40
           , css "margin-top" "16px"

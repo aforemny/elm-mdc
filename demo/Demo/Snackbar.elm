@@ -188,7 +188,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Textfield.render (lift << Mdc) [3] model.mdc
+          Textfield.view (lift << Mdc) [3] model.mdc
           [ Textfield.value model.messageText
           , Textfield.label "Message Text"
           , Options.on "input" (Json.map (lift << SetMessageText) Html.targetValue)
@@ -198,7 +198,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Textfield.render (lift << Mdc) [4] model.mdc
+          Textfield.view (lift << Mdc) [4] model.mdc
           [ Textfield.value model.actionText
           , Textfield.label "Action Text"
           , Options.on "input" (Json.map (lift << SetActionText) Html.targetValue)
