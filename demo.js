@@ -11853,13 +11853,8 @@ var _aforemny$elm_mdc$Material_Dialog$surface = function (options) {
 			_1: options
 		});
 };
-var _aforemny$elm_mdc$Material_Dialog$open = _aforemny$elm_mdc$Material_Options$many(
-	{
-		ctor: '::',
-		_0: _aforemny$elm_mdc$Material_Options$cs('mdc-dialog--open'),
-		_1: {ctor: '[]'}
-	});
-var _aforemny$elm_mdc$Material_Dialog$view = F3(
+var _aforemny$elm_mdc$Material_Dialog$open = _aforemny$elm_mdc$Material_Options$cs('mdc-dialog--open');
+var _aforemny$elm_mdc$Material_Dialog$dialog = F3(
 	function (lift, model, options) {
 		return A2(
 			_aforemny$elm_mdc$Material_Options$styled,
@@ -11962,12 +11957,12 @@ var _aforemny$elm_mdc$Material_Dialog$_p2 = A3(
 var _aforemny$elm_mdc$Material_Dialog$get = _aforemny$elm_mdc$Material_Dialog$_p2._0;
 var _aforemny$elm_mdc$Material_Dialog$set = _aforemny$elm_mdc$Material_Dialog$_p2._1;
 var _aforemny$elm_mdc$Material_Dialog$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Dialog$get, _aforemny$elm_mdc$Material_Dialog$set, _aforemny$elm_mdc$Material_Msg$DialogMsg, _aforemny$elm_mdc$Material_Dialog$update);
-var _aforemny$elm_mdc$Material_Dialog$render = F4(
+var _aforemny$elm_mdc$Material_Dialog$view = F4(
 	function (lift, index, store, options) {
 		return A7(
 			_aforemny$elm_mdc$Material_Component$render,
 			_aforemny$elm_mdc$Material_Dialog$get,
-			_aforemny$elm_mdc$Material_Dialog$view,
+			_aforemny$elm_mdc$Material_Dialog$dialog,
 			_aforemny$elm_mdc$Material_Msg$DialogMsg,
 			lift,
 			index,
@@ -21778,10 +21773,6 @@ var _aforemny$elm_mdc$Demo_Dialog$Model = F2(
 	function (a, b) {
 		return {mdc: a, rtl: b};
 	});
-var _aforemny$elm_mdc$Demo_Dialog$Ports = F2(
-	function (a, b) {
-		return {showDialog: a, closeDialog: b};
-	});
 var _aforemny$elm_mdc$Demo_Dialog$Cancel = {ctor: 'Cancel'};
 var _aforemny$elm_mdc$Demo_Dialog$Accept = {ctor: 'Accept'};
 var _aforemny$elm_mdc$Demo_Dialog$ToggleRtl = {ctor: 'ToggleRtl'};
@@ -21820,7 +21811,7 @@ var _aforemny$elm_mdc$Demo_Dialog$update = F3(
 var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
 	function (lift, index, model) {
 		return A5(
-			_aforemny$elm_mdc$Material_Dialog$render,
+			_aforemny$elm_mdc$Material_Dialog$view,
 			function (_p4) {
 				return lift(
 					_aforemny$elm_mdc$Demo_Dialog$Mdc(_p4));
@@ -21976,21 +21967,15 @@ var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
 	});
 var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 	function (lift, index, model) {
-		var id = 'dialog';
 		return A5(
-			_aforemny$elm_mdc$Material_Dialog$render,
+			_aforemny$elm_mdc$Material_Dialog$view,
 			function (_p7) {
 				return lift(
 					_aforemny$elm_mdc$Demo_Dialog$Mdc(_p7));
 			},
 			index,
 			model.mdc,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$attribute(
-					_elm_lang$html$Html_Attributes$id(id)),
-				_1: {ctor: '[]'}
-			},
+			{ctor: '[]'},
 			{
 				ctor: '::',
 				_0: A2(
@@ -22130,21 +22115,15 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 	});
 var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 	function (lift, index, model) {
-		var id = 'scrollable-dialog';
 		return A5(
-			_aforemny$elm_mdc$Material_Dialog$render,
+			_aforemny$elm_mdc$Material_Dialog$view,
 			function (_p10) {
 				return lift(
 					_aforemny$elm_mdc$Demo_Dialog$Mdc(_p10));
 			},
 			index,
 			model.mdc,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$attribute(
-					_elm_lang$html$Html_Attributes$id(id)),
-				_1: {ctor: '[]'}
-			},
+			{ctor: '[]'},
 			{
 				ctor: '::',
 				_0: A2(
