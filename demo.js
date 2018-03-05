@@ -26359,12 +26359,6 @@ var _aforemny$elm_mdc$Material_LinearProgress$buffered = F2(
 					{buffered: true, value: value, buffer: buffer});
 			});
 	});
-var _aforemny$elm_mdc$Material_LinearProgress$indeterminate = _aforemny$elm_mdc$Material_Internal_Options$option(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{indeterminate: true});
-	});
 var _aforemny$elm_mdc$Material_LinearProgress$determinate = function (value) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
@@ -26373,6 +26367,12 @@ var _aforemny$elm_mdc$Material_LinearProgress$determinate = function (value) {
 				{determinate: true, value: value});
 		});
 };
+var _aforemny$elm_mdc$Material_LinearProgress$indeterminate = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{indeterminate: true});
+	});
 var _aforemny$elm_mdc$Material_LinearProgress$defaultConfig = {value: 0, buffer: 0, determinate: false, indeterminate: false, buffered: false, reversed: false};
 var _aforemny$elm_mdc$Material_LinearProgress$view = F2(
 	function (options, _p0) {
