@@ -19682,12 +19682,13 @@ var _aforemny$elm_mdc$Demo_Page$Page = F4(
 	});
 
 var _aforemny$elm_mdc$Material_Typography$adjustMargin = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--adjust-margin');
+var _aforemny$elm_mdc$Material_Typography$button = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--button');
 var _aforemny$elm_mdc$Material_Typography$subheading2 = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--subheading2');
 var _aforemny$elm_mdc$Material_Typography$subheading1 = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--subheading1');
-var _aforemny$elm_mdc$Material_Typography$headline = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--headline');
 var _aforemny$elm_mdc$Material_Typography$body2 = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--body2');
 var _aforemny$elm_mdc$Material_Typography$body1 = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--body1');
 var _aforemny$elm_mdc$Material_Typography$caption = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--caption');
+var _aforemny$elm_mdc$Material_Typography$headline = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--headline');
 var _aforemny$elm_mdc$Material_Typography$title = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--title');
 var _aforemny$elm_mdc$Material_Typography$display4 = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--display4');
 var _aforemny$elm_mdc$Material_Typography$display3 = _aforemny$elm_mdc$Material_Options$cs('mdc-typography--display3');
