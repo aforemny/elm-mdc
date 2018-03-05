@@ -1,27 +1,42 @@
-module Material.LinearProgress
-    exposing
-        ( view
-        , Property
-        , determinate
-        , indeterminate
-        , buffered
-        , reversed
-        )
+module Material.LinearProgress exposing
+    ( buffered
+    , determinate
+    , indeterminate
+    , Property
+    , reversed
+    , view
+    )
 
 {-|
-The MDC Linear Progress component is a spec-aligned linear progress indicator component adhering to the Material Design progress & activity requirements.
+The MDC Linear Progress component is a spec-aligned linear progress indicator
+component adhering to the Material Design progress & activity requirements.
 
-## Design & API Documentation
 
-- [Guidelines](https://material.io/guidelines/components/progress-activity.html)
+# Resources
+
+- [Material Design guidelines: Progress & activity](https://material.io/guidelines/components/progress-activity.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#linear-progress)
 
-## View
-@docs view
 
-## Properties
+# Example
+
+```elm
+import Material.LinearProgress as LinearProgress
+
+LinearProgress.view
+    [ LinearProgress.indeterminate
+    ]
+    []
+```
+
+
+# Usage
+
 @docs Property
-@docs determinate, indeterminate, buffered
+@docs view
+@docs determinate
+@docs indeterminate
+@docs buffered
 @docs reversed
 -}
 
@@ -51,17 +66,10 @@ defaultConfig =
     }
 
 
-{-| A LinearProgress property.
+{-| LinearProgress property.
 -}
 type alias Property m =
     Options.Property Config m
-
-
-{-| Determinate indicators display how long an operation will take.
--}
-determinate : Float -> Property m
-determinate value =
-    Internal.option (\config -> { config | determinate = True, value = value })
 
 
 {-| Indeterminate indicators visualize an unspecified wait time.
@@ -71,21 +79,34 @@ indeterminate =
     Internal.option (\config -> { config | indeterminate = True })
 
 
+{-| Determinate indicators display how long an operation will take.
+
+The first argument is the determinate indicator as a floating point value
+between 0 and 1.
+-}
+determinate : Float -> Property m
+determinate value =
+    Internal.option (\config -> { config | determinate = True, value = value })
+
+
 {-| Include a buffer indicator along with a regular determinate indicator.
+
+The first value is the determinate indicator and the second value is the buffer
+indicator as a floating point value between 0 and 1.
 -}
 buffered : Float -> Float -> Property m
 buffered value buffer =
     Internal.option (\config -> { config | buffered = True, value = value, buffer = buffer })
 
 
-{-| Reverse the indicator
+{-| Reverse the indicator.
 -}
 reversed : Property m
 reversed =
     Internal.option (\config -> { config | reversed = True })
 
 
-{-| Component view.
+{-| LinearProgress view.
 -}
 view : List (Property m) -> List (Html m) -> Html m
 view options _ =
