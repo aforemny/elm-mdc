@@ -99,7 +99,7 @@ heroSelect
     -> List (Html m)
     -> Html m
 heroSelect lift id model options _ =
-    Select.render (lift << Mdc) id model.mdc
+    Select.view (lift << Mdc) id model.mdc
     ( css "width" "377px"
     :: options
     )
@@ -159,7 +159,7 @@ select lift id model options _ =
       , Options.attribute (Html.attribute "dir" "rtl") |> when state.rtl
       ]
       [
-        Select.render (lift << Mdc) id model.mdc
+        Select.view (lift << Mdc) id model.mdc
         ( Select.label "Food Group"
         :: when (index /= Nothing)
               (Select.index (Maybe.withDefault -1 index))
