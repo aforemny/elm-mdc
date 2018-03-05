@@ -12380,7 +12380,7 @@ var _aforemny$elm_mdc$Material_Drawer$toolbarSpacer = function (options) {
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-persistent-drawer__toolbar-spacer'),
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-drawer__toolbar-spacer'),
 			_1: options
 		});
 };
