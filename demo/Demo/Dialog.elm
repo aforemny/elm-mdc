@@ -12,9 +12,6 @@ import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 
 
--- MODEL
-
-
 type alias Model =
     { mdc : Material.Model
     , rtl : Bool
@@ -28,21 +25,11 @@ defaultModel =
     }
 
 
-
--- ACTION/UPDATE
-
-
 type Msg m
     = Mdc (Material.Msg m)
     | ToggleRtl
     | Accept
     | Cancel
-
-
-type alias Ports m =
-    { showDialog : String -> Cmd m
-    , closeDialog : String -> Cmd m
-    }
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
@@ -69,13 +56,9 @@ update lift msg model =
           ( model, Cmd.none )
 
 
-
--- VIEW
-
-
 heroDialog : (Msg m -> m) -> List Int -> Model -> Html m
 heroDialog lift index model =
-    Dialog.render (lift << Mdc) index model.mdc
+    Dialog.view (lift << Mdc) index model.mdc
     [ Dialog.open
     , css "position" "relative"
     , css "width" "320px"
@@ -122,13 +105,7 @@ heroDialog lift index model =
 
 dialog : (Msg m -> m) -> List Int -> Model -> Html m
 dialog lift index model =
-    let
-      id =
-          "dialog"
-    in
-    Dialog.render (lift << Mdc) index model.mdc
-    [ Options.attribute (Html.id id)
-    ]
+    Dialog.view (lift << Mdc) index model.mdc []
     [ Dialog.surface []
       [
         Dialog.header []
@@ -173,13 +150,7 @@ data to Google, even when no apps are running.
 
 scrollableDialog : (Msg m -> m) -> List Int -> Model -> Html m
 scrollableDialog lift index model =
-    let
-        id =
-            "scrollable-dialog"
-    in
-    Dialog.render (lift << Mdc) index model.mdc
-    [ Options.attribute (Html.id id)
-    ]
+    Dialog.view (lift << Mdc) index model.mdc []
     [ Dialog.surface []
       [
         Dialog.header []
