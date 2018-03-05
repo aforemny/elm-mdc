@@ -14533,7 +14533,7 @@ var _aforemny$elm_mdc$Material_Select$label = function (_p2) {
 			})(_p2));
 };
 var _aforemny$elm_mdc$Material_Select$defaultConfig = {label: '', index: _elm_lang$core$Maybe$Nothing, selectedText: _elm_lang$core$Maybe$Nothing, disabled: false};
-var _aforemny$elm_mdc$Material_Select$view = F4(
+var _aforemny$elm_mdc$Material_Select$select = F4(
 	function (lift, model, options, items) {
 		var isOpen = model.menu.animating ? (model.menu.open && (!_elm_lang$core$Native_Utils.eq(model.menu.geometry, _elm_lang$core$Maybe$Nothing))) : model.menu.open;
 		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Select$defaultGeometry, model.geometry);
@@ -14827,12 +14827,12 @@ var _aforemny$elm_mdc$Material_Select$_p13 = A3(
 var _aforemny$elm_mdc$Material_Select$get = _aforemny$elm_mdc$Material_Select$_p13._0;
 var _aforemny$elm_mdc$Material_Select$set = _aforemny$elm_mdc$Material_Select$_p13._1;
 var _aforemny$elm_mdc$Material_Select$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Select$get, _aforemny$elm_mdc$Material_Select$set, _aforemny$elm_mdc$Material_Msg$SelectMsg, _aforemny$elm_mdc$Material_Select$update);
-var _aforemny$elm_mdc$Material_Select$render = F4(
+var _aforemny$elm_mdc$Material_Select$view = F4(
 	function (lift, index, store, options) {
 		return A7(
 			_aforemny$elm_mdc$Material_Component$render,
 			_aforemny$elm_mdc$Material_Select$get,
-			_aforemny$elm_mdc$Material_Select$view,
+			_aforemny$elm_mdc$Material_Select$select,
 			_aforemny$elm_mdc$Material_Msg$SelectMsg,
 			lift,
 			index,
@@ -33606,7 +33606,7 @@ var _aforemny$elm_mdc$Demo_Selects$update = F3(
 var _aforemny$elm_mdc$Demo_Selects$heroSelect = F5(
 	function (lift, id, model, options, _p5) {
 		return A5(
-			_aforemny$elm_mdc$Material_Select$render,
+			_aforemny$elm_mdc$Material_Select$view,
 			function (_p6) {
 				return lift(
 					_aforemny$elm_mdc$Demo_Selects$Mdc(_p6));
@@ -33703,7 +33703,7 @@ var _aforemny$elm_mdc$Demo_Selects$select = F5(
 				{
 					ctor: '::',
 					_0: A5(
-						_aforemny$elm_mdc$Material_Select$render,
+						_aforemny$elm_mdc$Material_Select$view,
 						function (_p8) {
 							return lift(
 								_aforemny$elm_mdc$Demo_Selects$Mdc(_p8));
