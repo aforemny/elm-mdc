@@ -2,7 +2,7 @@ module Demo.Typography exposing ( view )
 
 import Demo.Page exposing (Page)
 import Html exposing (..)
-import Material.Options as Options exposing (Style, styled, cs, css, nop)
+import Material.Options as Options exposing (styled, cs, css, nop)
 import Material.Typography as Typography
 
 
@@ -15,7 +15,7 @@ view page =
     ]
 
 
-example : String -> Style m -> Html m
+example : String -> Options.Property c m -> Html m
 example title adjustMargin =
     styled Html.section
     [ cs "demo-typography--section"

@@ -57,7 +57,7 @@ import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Options as Internal
 import Material.Internal.RadioButton exposing (Msg(..))
 import Material.Msg exposing (Index)
-import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
+import Material.Options as Options exposing (cs, styled, when)
 import Material.Ripple as Ripple
 
 
@@ -102,37 +102,30 @@ update lift msg model =
             ( Just { model | isFocused = focus }, Cmd.none )
 
 
-type alias Config m =
-    { input : List (Options.Style m)
-    , container : List (Options.Style m)
-    , value : Bool
+type alias Config =
+    { value : Bool
+    , disabled : Bool
     }
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
-    { input = []
-    , container = []
-    , value = False
+    { value = False
+    , disabled = False
     }
 
 
 {-| RadioButton property.
 -}
 type alias Property m =
-    Options.Property (Config m) m
+    Options.Property Config m
 
 
 {-| Disable the radio button.
 -}
 disabled : Property m
 disabled =
-    Options.many
-    [ cs "mdc-radio--disabled"
-    , Internal.input
-      [ Internal.attribute <| Html.disabled True
-      ]
-    ]
+    Internal.option (\ config -> { config | disabled = True })
 
 
 {-| Make the radio button selected.
@@ -153,7 +146,7 @@ radioButton lift model options _ =
         ripple =
             Ripple.view True (lift << RippleMsg) model.ripple []
     in
-    Internal.applyContainer summary Html.div
+    Internal.apply summary Html.div
     [ cs "mdc-radio"
     , Internal.attribute <| blurOn "mouseup"
     , Options.many
@@ -161,8 +154,8 @@ radioButton lift model options _ =
       , ripple.properties
       ]
     ]
-    [ Internal.applyInput summary
-        Html.input
+    []
+    [ styled Html.input
         [ cs "mdc-radio__native-control"
         , Internal.attribute <| Html.type_ "radio"
         , Internal.attribute <| Html.checked config.value
@@ -173,6 +166,10 @@ radioButton lift model options _ =
             , stopPropagation = False
             }
             (Json.succeed (lift NoOp))
+        , when config.disabled << Options.many <|
+          [ cs "mdc-radio--disabled"
+          , Options.attribute <| Html.disabled True
+          ]
         ]
         []
     , styled Html.div

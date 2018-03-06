@@ -8,19 +8,8 @@ module Material.Options
         , data
         , aria
         , when
-        , maybe
-        , disabled
         , styled
-        , styled_
-        , stylesheet
-        , Style
-        , div
-        , span
-        , img
         , attribute
-        , center
-        , scrim
-        , id
         , input
         , container
         , onClick
@@ -37,19 +26,30 @@ module Material.Options
         , onFocus
         , onInput
         , on
-        , on1
         , onWithOptions
-        , dispatch
         )
 
 {-| Properties, styles, and event definitions.
 
-@docs Property, Style, styled, styled_
-@docs div, span, img
-@docs disabled, data, aria, id
+@docs Property, styled
+@docs data, aria, id
 @docs cs, css
-@docs attribute, center, container, input, many, maybe, nop, scrim, stylesheet, when
-@docs on, on1, onBlur, onCheck, onClick, onDoubleClick, onFocus, onInput, onMouseDown, onMouseEnter, onMouseLeave, onMouseOut, onMouseOver, onMouseUp, onToggle, onWithOptions
+@docs attribute, container, input, many, nop, stylesheet, when
+@docs on
+@docs onBlur
+@docs onCheck
+@docs onClick
+@docs onDoubleClick
+@docs onFocus
+@docs onInput
+@docs onMouseDown
+@docs onMouseEnter
+@docs onMouseLeave
+@docs onMouseOut
+@docs onMouseOver
+@docs onMouseUp
+@docs onToggle
+@docs onWithOptions
 @docs dispatch
 -}
 
@@ -98,65 +98,6 @@ styled ctor props =
             (collect_ props)
             []
         )
-
-
-{-| Apply properties and attributes to a standard Html element.
--}
-styled_ : (List (Attribute m) -> a) -> List (Property c m) -> List (Attribute m) -> a
-styled_ ctor props attrs =
-    ctor
-        (addAttributes
-            (collect_ props)
-            attrs
-        )
-
-
-{-| Convenience function for the ultra-common case of apply elm-mdl styling to a
-`div` element. Use like this:
-
-    myDiv : Html m
-    myDiv =
-      Options.div
-        [ Color.background Color.primary
-        , Color.text Color.accentContrast
-        ]
-        [ text "I'm in color!" ]
-
--}
-div : List (Property c m) -> List (Html m) -> Html m
-div =
-    styled Html.div
--- TODO REMOVE
-
-
-{-| Convenience function for the reasonably common case of setting attributes
-of a span element. See also `div`.
--}
-span : List (Property c m) -> List (Html m) -> Html m
-span =
-    styled Html.span
--- TODO REMOVE
-
-
-{-| Convenience function for the not unreasonably uncommon case of setting
-attributes of an img element. Use like this:
-
-    img
-      [ Options.css "height" "200px" ]
-      [ Html.Attributes.src "assets/image.jpg" ]
--}
-img : List (Property a b) -> List (Attribute b) -> Html b
-img options attrs =
-    styled_ Html.img options attrs []
--- TODO REMOVE
-
-
-{-| Set HTML disabled attribute.
--}
-disabled : Bool -> Property c m
-disabled v =
-    Attribute (Html.Attributes.disabled v)
--- TODO REMOVE
 
 
 {-| Add an HTML class to a component. (Name chosen to avoid clashing with
@@ -220,91 +161,23 @@ when guard prop  =
         nop
 
 
-{-| Apply a Maybe option when defined
--}
-maybe : Maybe (Property c m) -> Property c m
-maybe prop =
-    prop |> Maybe.withDefault nop
-
-
--- CONVENIENCE
-
-
-{-| Construct an Html element contributing to the global stylesheet.
-The resulting Html is a `<style>` element.  Remember to insert the resulting Html
-somewhere.
--}
-stylesheet : String -> Html m
-stylesheet css =
-    Html.node "style" [] [ Html.text css ]
-
-
--- STYLE
-
-
 {-| Install arbitrary `Html.Attribute`.
 
-    Options.div
-      [ Options.attribute <| Html.Attributes.title "title" ]
-      [ ... ]
+```elm
+import Html
+import Html.Attributes as Html
+import Material.Options as Options exposing (styled)
 
-**NB!** Do not install event handlers using `Options.attribute`.
-Instead use `Options.on` and variants.
+styled Html.div
+    [ Options.attribute <| Html.title "title"
+    ]
+    [ …
+    ]
+```
 -}
-attribute : Html.Attribute m -> Property c m
+attribute : Html.Attribute Never -> Property c m
 attribute =
-    Attribute
-
-
-{-| Install arbitrary `Html.Attribute`. Use like this:
-
-    Options.div
-      [ Options.attr <| Html.onClick MyClickEvent ]
-      [ ... ]
-
-**NOTE** Some attributes might be overridden by attributes
-used internally by *elm-mdl*. Such attributes often include
-`focus` and `blur` on certain elements, such as `Textfield`.
-In the case of `focus` and `blur` you may use `focusin` and `focusout`
-respectively instead (these attributes require polyfill on Firefox).
-
-See [Textfield.onBlur](http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-Textfield#onBlur) for more information regarding the polyfill.
--}
-attr : Html.Attribute m -> Property c m
-attr =
-    Attribute
-
-
-{-| Options installing css for element to be a flex-box container centering its
-elements.
--}
-center : Property c m
-center =
-    many
-        [ css "display" "flex"
-        , css "align-items" "center"
-        , css "justify-content" "center"
-        ]
--- TODO REMOVE
-
-
-{-| Scrim. Argument value indicates terminal opacity, the value of which should
-depend on the underlying image. `0.6` works well often.
--}
-scrim : Float -> Property c m
-scrim opacity =
-    css "background" <|
-        "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, "
-            ++ toString opacity
-            ++ "))"
--- TODO REMOVE
-
-
-{-| Sets the id attribute
--}
-id : String -> Property c m
-id =
-    Attribute << Html.Attributes.id
+    Attribute << Html.Attributes.map never
 
 
 {-| Apply argument options to `input` element in component implementation.
@@ -330,15 +203,6 @@ container =
 on : String -> Json.Decoder m -> Property c m
 on event =
     Listener event Nothing
-
-
-{-| Add a custom event handler that always succeeds.
-
-Equivalent to `Options.on event (Json.Decode.succeed msg)`
--}
-on1 : String -> m -> Property c m
-on1 event m =
-    on event (Json.succeed m)
 
 
 {-| -}
@@ -401,8 +265,8 @@ onCheck =
 
 {-| -}
 onToggle : msg -> Property c msg
-onToggle =
-    on1 "change"
+onToggle msg =
+    on "change" (Json.succeed msg)
 
 
 

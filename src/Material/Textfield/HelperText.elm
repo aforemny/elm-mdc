@@ -50,7 +50,7 @@ Html.div []
 
 import Html exposing (Html)
 import Material.Internal.Options as Internal
-import Material.Options as Options exposing (cs, css, nop, Style, when)
+import Material.Options as Options exposing (cs, css, when)
 
 
 type alias Config =

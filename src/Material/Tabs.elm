@@ -72,7 +72,7 @@ import Material.Dispatch as Dispatch
 import Material.Internal.Options as Internal
 import Material.Internal.Tabs exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index)
-import Material.Options as Options exposing (Style, styled, cs, css, when)
+import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Ripple as Ripple
 
 
@@ -289,7 +289,7 @@ tab options childs =
     }
 
 
-icon : List (Style m) -> String -> Html m
+icon : List (Options.Property c m) -> String -> Html m
 icon options icon =
     styled Html.i
     [ cs "mdc-tab__icon"
@@ -299,11 +299,12 @@ icon options icon =
     ]
 
 
-iconLabel : List (Style m) -> String -> Html m
+iconLabel : List (Options.Property c m) -> String -> Html m
 iconLabel options str =
     styled Html.span
-    [ cs "mdc-tab__icon-text"
-    ]
+    ( cs "mdc-tab__icon-text"
+    :: options
+    )
     [ text str
     ]
 
@@ -426,7 +427,8 @@ view lift model options nodes =
                            ( cs "mdc-tab"
                            :: when (model.index == index) (cs "mdc-tab--active")
                            :: Options.on "click" (Json.map (lift << Select index) (decodeGeometryOnTab hasIndicator))
-                           :: Options.dispatch (lift << Dispatch)
+                           -- :: Options.dispatch (lift << Dispatch)
+                           -- TODO: ^^^^^ is this needed?
                            :: Options.many
                               [ ripple.interactionHandler
                               , ripple.properties

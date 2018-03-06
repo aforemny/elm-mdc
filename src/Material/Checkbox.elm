@@ -62,7 +62,7 @@ import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Checkbox exposing (Msg(..), Animation(..), State(..))
 import Material.Internal.Options as Internal
 import Material.Msg exposing (Index)
-import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
+import Material.Options as Options exposing (cs, styled, many, when)
 import Svg.Attributes as Svg
 import Svg exposing (path)
 
@@ -208,7 +208,7 @@ checkbox lift model options _ =
     , animationClass model.animation
     , Internal.attribute <| blurOn "mouseup"
     , when stateChangedOrUninitialized <|
-      Options.many << List.map Options.attribute <|
+      Options.many << List.map Internal.attribute <|
       GlobalEvents.onTick (Json.succeed (lift (Init model.lastKnownState configState)))
     , when (model.animation /= Nothing) <|
       Options.on "animationend" (Json.succeed (lift AnimationEnd))

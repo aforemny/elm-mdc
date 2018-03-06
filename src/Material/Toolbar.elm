@@ -1,4 +1,3 @@
-
 module Material.Toolbar exposing
     (
       alignEnd
@@ -386,13 +385,13 @@ toolbar lift model options nodes =
          cs "mdc-toolbar--flexible-default-behavior"
        )
     :: ( when (model.geometry == Nothing) <|
-         Options.many << List.map Options.attribute <|
+         Options.many << List.map Internal.attribute <|
          GlobalEvents.onTick (Json.map (lift << Init config) decodeGeometry)
        )
-    :: ( Options.many << List.map Options.attribute <|
+    :: ( Options.many << List.map Internal.attribute <|
          GlobalEvents.onResize (Json.map (lift << Resize config) decodeGeometry)
        )
-    :: ( Options.many << List.map Options.attribute <|
+    :: ( Options.many << List.map Internal.attribute <|
          GlobalEvents.onScroll (Json.map (lift << Scroll config) decodeScrollTop)
        )
     :: ( toolbarProperties

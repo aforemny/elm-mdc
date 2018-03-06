@@ -107,7 +107,7 @@ module Material.Theme exposing
 
 
 import Html exposing (Html, text)
-import Material.Options exposing (Property, span, cs)
+import Material.Options as Options exposing (Property, styled, cs)
 
 
 -- THEME
@@ -236,7 +236,7 @@ textDisabledOnPrimary =
 -}
 textIconOnPrimary : List (Property c m) -> String -> Html m
 textIconOnPrimary options icon =
-    span
+    styled Html.span
     ( cs "mdc-theme--text-icon-on-primary"
     :: cs "material-icons"
     :: options
@@ -277,7 +277,7 @@ textDisabledOnSecondary =
 -}
 textIconOnSecondary : List (Property c m) -> String -> Html m
 textIconOnSecondary options icon =
-    span
+    styled Html.span
     ( cs "mdc-theme--text-icon-on-secondary"
     :: cs "material-icons"
     :: options
@@ -318,7 +318,7 @@ textDisabledOnBackground =
 -}
 textIconOnBackground : List (Property c m) -> String -> Html m
 textIconOnBackground options icon =
-    span
+    styled Html.span
     ( cs "mdc-theme--text-icon-on-background"
     :: cs "material-icons"
     :: options
@@ -359,7 +359,7 @@ textDisabledOnLight =
 -}
 textIconOnLight : List (Property c m) -> String -> Html m
 textIconOnLight options icon =
-    span
+    styled Html.span
     ( cs "mdc-theme--text-icon-on-light"
     :: cs "material-icons"
     :: options
@@ -400,7 +400,7 @@ textDisabledOnDark =
 -}
 textIconOnDark : List (Property c m) -> String -> Html m
 textIconOnDark options icon =
-    span
+    styled Html.span
     ( cs "mdc-theme--text-icon-on-dark"
     :: cs "material-icons"
     :: options

@@ -4,7 +4,7 @@ import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
-import Material.Options as Options exposing (when, styled, cs, css, div, span)
+import Material.Options as Options exposing (when, styled, cs, css)
 import Material.Theme as Theme
 import Material.Typography as Typography
 
@@ -172,7 +172,7 @@ themeColorsAsBackground =
 
 demoThemeColor : List (Options.Property c m) -> List (Html m) -> Html m
 demoThemeColor options =
-    div
+    styled Html.div
     ( cs "demo-theme__color"
     :: css "display" "inline-flex"
     :: css "flex-direction" "column"
@@ -182,7 +182,7 @@ demoThemeColor options =
 
 demoThemeColorBlock : List (Options.Property c m) -> List (Html m) -> Html m
 demoThemeColorBlock options =
-    div
+    styled Html.div
     ( cs "demo-theme__color__block"
     :: css "display" "inline-block"
     :: css "box-sizing" "border-box"
@@ -219,10 +219,10 @@ example1 =
       ]
 
     , demo Theme.background
-      [ \options -> span (Theme.textPrimaryOnBackground::options) [ Html.text "Primary" ]
-      , \options -> span (Theme.textSecondaryOnBackground::options) [ Html.text "Secondary" ]
-      , \options -> span (Theme.textHintOnBackground::options) [ Html.text "Hint" ]
-      , \options -> span (Theme.textHintOnBackground::options) [ Html.text "Disabled" ]
+      [ \options -> styled Html.span (Theme.textPrimaryOnBackground::options) [ Html.text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnBackground::options) [ Html.text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnBackground::options) [ Html.text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnBackground::options) [ Html.text "Disabled" ]
       , \options -> Theme.textIconOnBackground options "favorite"
       ]
 
@@ -231,10 +231,10 @@ example1 =
       ]
 
     , demo Theme.primaryBg
-      [ \options -> span (Theme.textPrimaryOnPrimary::options) [ Html.text "Primary" ]
-      , \options -> span (Theme.textSecondaryOnPrimary::options) [ Html.text "Secondary" ]
-      , \options -> span (Theme.textHintOnPrimary::options) [ Html.text "Hint" ]
-      , \options -> span (Theme.textHintOnPrimary::options) [ Html.text "Disabled" ]
+      [ \options -> styled Html.span (Theme.textPrimaryOnPrimary::options) [ Html.text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnPrimary::options) [ Html.text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnPrimary::options) [ Html.text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnPrimary::options) [ Html.text "Disabled" ]
       , \options -> Theme.textIconOnPrimary options "favorite"
       ]
 
@@ -243,10 +243,10 @@ example1 =
       ]
 
     , demo Theme.secondaryBg
-      [ \options -> span (Theme.textPrimaryOnSecondary::options) [ Html.text "Primary" ]
-      , \options -> span (Theme.textSecondaryOnSecondary::options) [ Html.text "Secondary" ]
-      , \options -> span (Theme.textHintOnSecondary::options) [ Html.text "Hint" ]
-      , \options -> span (Theme.textHintOnSecondary::options) [ Html.text "Disabled" ]
+      [ \options -> styled Html.span (Theme.textPrimaryOnSecondary::options) [ Html.text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnSecondary::options) [ Html.text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnSecondary::options) [ Html.text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnSecondary::options) [ Html.text "Disabled" ]
       , \options -> Theme.textIconOnSecondary options "favorite"
       ]
 
@@ -255,10 +255,10 @@ example1 =
       ]
 
     , demo (css "background-color" "#dddddd")
-      [ \options -> span (Theme.textPrimaryOnLight::options) [ Html.text "Primary" ]
-      , \options -> span (Theme.textSecondaryOnLight::options) [ Html.text "Secondary" ]
-      , \options -> span (Theme.textHintOnLight::options) [ Html.text "Hint" ]
-      , \options -> span (Theme.textHintOnLight::options) [ Html.text "Disabled" ]
+      [ \options -> styled Html.span (Theme.textPrimaryOnLight::options) [ Html.text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnLight::options) [ Html.text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnLight::options) [ Html.text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnLight::options) [ Html.text "Disabled" ]
       , \options -> Theme.textIconOnLight options "favorite"
       ]
 
@@ -267,10 +267,10 @@ example1 =
       ]
 
     , demo (css "background-color" "#1d1d1d")
-      [ \options -> span (Theme.textPrimaryOnDark::options) [ Html.text "Primary" ]
-      , \options -> span (Theme.textSecondaryOnDark::options) [ Html.text "Secondary" ]
-      , \options -> span (Theme.textHintOnDark::options) [ Html.text "Hint" ]
-      , \options -> span (Theme.textHintOnDark::options) [ Html.text "Disabled" ]
+      [ \options -> styled Html.span (Theme.textPrimaryOnDark::options) [ Html.text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnDark::options) [ Html.text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnDark::options) [ Html.text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnDark::options) [ Html.text "Disabled" ]
       , \options -> Theme.textIconOnDark options "favorite"
       ]
     ]
@@ -278,7 +278,7 @@ example1 =
 
 demoThemeTextStyles : List (Options.Property c m) -> List (Html m) -> Html m
 demoThemeTextStyles options =
-    div
+    styled Html.div
     ( cs "demo-theme__text--styles"
     :: css "display" "inline-flex"
     :: css "box-sizing" "border-box"

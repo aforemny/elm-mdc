@@ -30,7 +30,7 @@ import Material.Internal.Drawer exposing (Msg(..))
 import Material.Internal.Options as Internal
 import Material.List as Lists
 import Material.Msg exposing (Index)
-import Material.Options as Options exposing (Style, cs, css, styled, many, when, maybe)
+import Material.Options as Options exposing (cs, css, styled, many, when)
 import Mouse
 
 

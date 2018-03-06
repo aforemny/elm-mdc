@@ -1,21 +1,20 @@
-module Material.Card
-    exposing
-        ( actionButton
-        , actionButtons
-        , actionIcon
-        , actionIcons
-        , actions
-        , aspect16To9
-        , fullBleed
-        , media
-        , backgroundImage
-        , mediaContent
-        , primaryAction
-        , Property
-        , square
-        , stroked
-        , view
-        )
+module Material.Card exposing
+    ( actionButton
+    , actionButtons
+    , actionIcon
+    , actionIcons
+    , actions
+    , aspect16To9
+    , fullBleed
+    , media
+    , backgroundImage
+    , mediaContent
+    , primaryAction
+    , Property
+    , square
+    , stroked
+    , view
+    )
 
 {-|
 Card is a component that implements the Material Design card component.
@@ -34,7 +33,7 @@ import Html exposing (text)
 import Material.Button as Button
 import Material.Card as Card
 import Material.IconToggle as IconToggle
-import Material.Options exposing (styled, css)
+import Material.Options as Options exposing (styled, css)
 import Material.Typography as Typography
 
 
@@ -129,10 +128,10 @@ biggest changes today."""
 @docs actionIcon
 -}
 
-import Html exposing (Html)
+import Html exposing (Html, text)
 import Material.Button as Button
 import Material.IconToggle as IconToggle
-import Material.Options as Options exposing (cs, css, div)
+import Material.Options as Options exposing (styled, cs, css)
 
 
 type alias Config =
@@ -154,7 +153,7 @@ type alias Property m =
 -}
 view : List (Property m) -> List (Html m) -> Html m
 view options =
-    Options.div (cs "mdc-card" :: options)
+    styled Html.div (cs "mdc-card" :: options)
 
 
 {-| Removes the card's shadow and displays a hairline stroke instead.
@@ -172,7 +171,7 @@ should trigger.
 -}
 primaryAction : List (Property m) -> List (Html m) -> Html m
 primaryAction options =
-    div (cs "mdc-card__primary-action"::options)
+    styled Html.div (cs "mdc-card__primary-action"::options)
 
 
 {-| Media area that displays a custom `background-image` with `background-size:
@@ -180,10 +179,7 @@ cover`.
 -}
 media : List (Property m) -> List (Html m) -> Html m
 media options =
-    div
-    ( cs "mdc-card__media"
-    :: options
-    )
+    styled Html.div (cs "mdc-card__media" :: options)
 
 
 {-| Sets the background image url of the card's media area.
@@ -213,20 +209,14 @@ displaying a title or icon on top of the `background-image`.
 -}
 mediaContent : List (Property m) -> List (Html m) -> Html m
 mediaContent options =
-    div
-    ( cs "mdc-card__media-content"
-    :: options
-    )
+    styled Html.div (cs "mdc-card__media-content" :: options)
 
 
 {-| Row containing action buttons and/or icons.
 -}
 actions : List (Property m) -> List (Html m) -> Html m
 actions options =
-    div
-    ( cs "mdc-card__actions"
-    :: options
-    )
+    styled Html.div (cs "mdc-card__actions" :: options)
 
 
 {-| Removes the action area's padding and causes its only child (`actions`
@@ -242,10 +232,7 @@ adjacent to `actionIcons`.
 -}
 actionButtons : List (Property m) -> List (Html m) -> Html m
 actionButtons options =
-    div
-    ( cs "mdc-card__action-buttons"
-    :: options
-    )
+    styled Html.div (cs "mdc-card__action-buttons" :: options)
 
 
 {-| A group of supplemental icons, displayed on the right side of the card (in
@@ -253,10 +240,7 @@ LTR), adjacent to `actionButtons`.
 -}
 actionIcons : List (Property m) -> List (Html m) -> Html m
 actionIcons options =
-    div
-    ( cs "mdc-card__action-icons"
-    :: options
-    )
+    styled Html.div (cs "mdc-card__action-icons" :: options)
 
 
 {-| An action button with text.

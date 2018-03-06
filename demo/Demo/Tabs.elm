@@ -435,7 +435,7 @@ example10 lift mdc index model =
     ]
 
 
-legend : List (Options.Style m) -> List (Html m) -> Html m
+legend : List (Options.Property c m) -> List (Html m) -> Html m
 legend options =
     styled Html.legend
     ( css "display" "block"
@@ -445,7 +445,7 @@ legend options =
     )
 
 
-fieldset : List (Options.Style m) -> List (Html m) -> Html m
+fieldset : List (Options.Property c m) -> List (Html m) -> Html m
 fieldset options =
     styled Html.div
     ( css "display" "block"

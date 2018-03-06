@@ -352,7 +352,7 @@ view lift page model =
             )
 
         demoWrapper options =
-            Options.div
+            styled Html.div
             ( css "display" "flex"
             :: css "margin" "24px"
             :: css "flex-flow" "row wrap"

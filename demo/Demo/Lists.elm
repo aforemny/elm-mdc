@@ -7,7 +7,7 @@ import Material
 import Material.Checkbox as Checkbox
 import Material.Icon as Icon
 import Material.List as Lists
-import Material.Options as Options exposing (div, styled, cs, css, when)
+import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Ripple as Ripple
 import Material.Typography as Typography
 
@@ -585,7 +585,7 @@ twoLineAvatarPlusTextPlusIconExample =
     , Lists.ul
       [ Lists.twoLine
       , Lists.avatarList
-      , Options.id "two-line-avatar-text-icon-demo"
+      , Options.attribute (Html.id "two-line-avatar-text-icon-demo")
       ]
       [ item "Photos" "Jan 9, 2014"
       , item "Recipes" "Jan 17, 2014"

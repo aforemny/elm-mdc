@@ -245,7 +245,7 @@ select lift model options items =
     [ cs "mdc-select"
     , cs "mdc-select--open" |> when isOpen
     , when (model.menu.animating && model.menu.geometry == Nothing)
-      << Options.many << List.map Options.attribute <|
+      << Options.many << List.map Internal.attribute <|
       GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
     , Menu.connect (lift << MenuMsg) |> when (not config.disabled)
     , cs "mdc-select--disabled" |> when config.disabled

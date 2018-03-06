@@ -374,11 +374,10 @@ view lift model options _ =
     , styled Html.div
       [ cs "mdc-snackbar__action-wrapper"
       ]
-      [ Options.styled_ Html.button
+      [ Options.styled Html.button
         [ cs "mdc-snackbar__action-button"
+        , Options.attribute (Html.type_ "button")
         , dismissHandler
-        ]
-        [ Html.type_ "button"
         ]
         (action
             |> Maybe.map (\action -> [ text action ])

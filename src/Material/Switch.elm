@@ -60,7 +60,7 @@ import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Options as Internal
 import Material.Internal.Switch exposing (Msg(..))
 import Material.Msg exposing (Index)
-import Material.Options as Options exposing (Style, cs, styled, many, when, maybe)
+import Material.Options as Options exposing (cs, styled, many, when)
 
 
 {-| Component model.
@@ -90,37 +90,30 @@ update _ msg model =
             ( Nothing, Cmd.none )
 
 
-type alias Config m =
-    { input : List (Options.Style m)
-    , container : List (Options.Style m)
-    , value : Bool
+type alias Config =
+    { value : Bool
+    , disabled : Bool
     }
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
-    { input = []
-    , container = []
-    , value = False
+    { value = False
+    , disabled = False
     }
 
 
 {-| Switch property.
 -}
 type alias Property m =
-    Options.Property (Config m) m
+    Options.Property Config m
 
 
 {-| Disable the switch.
 -}
 disabled : Property m
 disabled =
-    Options.many
-    [ cs "mdc-checkbox--disabled"
-    , Internal.input
-      [ Internal.attribute <| Html.disabled True
-      ]
-    ]
+    Internal.option (\ config -> { config | disabled = True })
 
 
 {-| Make switch display its "on" state.
@@ -138,24 +131,28 @@ switch lift model options _ =
         ({ config } as summary) =
             Internal.collect defaultConfig options
     in
-    Internal.applyContainer summary Html.div
+    Internal.apply summary Html.div
     [ cs "mdc-switch"
     , Internal.attribute <| blurOn "mouseup"
     ]
-    [ Internal.applyInput summary
-        Html.input
-        [ cs "mdc-switch__native-control"
-        , Internal.attribute <| Html.type_ "checkbox"
-        , Internal.attribute <| Html.checked config.value
-        , Internal.on1 "focus" lift (SetFocus True)
-        , Internal.on1 "blur" lift (SetFocus False)
-        , Options.onWithOptions "click"
-            { preventDefault = True
-            , stopPropagation = False
-            }
-            (Json.succeed (lift NoOp))
+    []
+    [ styled Html.input
+      [ cs "mdc-switch__native-control"
+      , Internal.attribute <| Html.type_ "checkbox"
+      , Internal.attribute <| Html.checked config.value
+      , Internal.on1 "focus" lift (SetFocus True)
+      , Internal.on1 "blur" lift (SetFocus False)
+      , Options.onWithOptions "click"
+          { preventDefault = True
+          , stopPropagation = False
+          }
+          (Json.succeed (lift NoOp))
+      , when config.disabled << Options.many <|
+        [ cs "mdc-checkbox--disabled"
+        , Options.attribute <| Html.disabled True
         ]
-        []
+      ]
+      []
     , styled Html.div
       [ cs "mdc-switch__background"
       ]

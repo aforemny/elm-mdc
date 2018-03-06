@@ -576,7 +576,7 @@ menu lift model options ul =
       ]
     ,
       when (model.animating && model.geometry == Nothing) <|
-      Options.many << List.map Options.attribute <|
+      Options.many << List.map Internal.attribute <|
       GlobalEvents.onTick <|
       Json.map (lift << Init { quickOpen = config.quickOpen }) decodeGeometry
     ,
