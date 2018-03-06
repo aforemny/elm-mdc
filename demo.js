@@ -10004,14 +10004,6 @@ var _aforemny$elm_mdc$Material_Options$onWithOptions = F2(
 var _aforemny$elm_mdc$Material_Options$on = function (event) {
 	return A2(_aforemny$elm_mdc$Material_Internal_Options$Listener, event, _elm_lang$core$Maybe$Nothing);
 };
-var _aforemny$elm_mdc$Material_Options$on1 = F2(
-	function (event, m) {
-		return A2(
-			_aforemny$elm_mdc$Material_Options$on,
-			event,
-			_elm_lang$core$Json_Decode$succeed(m));
-	});
-var _aforemny$elm_mdc$Material_Options$onToggle = _aforemny$elm_mdc$Material_Options$on1('change');
 var _aforemny$elm_mdc$Material_Options$onClick = function (msg) {
 	return A2(
 		_aforemny$elm_mdc$Material_Options$on,
@@ -10066,6 +10058,12 @@ var _aforemny$elm_mdc$Material_Options$onCheck = function (_p1) {
 		'change',
 		A3(_elm_lang$core$Basics$flip, _elm_lang$core$Json_Decode$map, _elm_lang$html$Html_Events$targetChecked, _p1));
 };
+var _aforemny$elm_mdc$Material_Options$onToggle = function (msg) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$on,
+		'change',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
 var _aforemny$elm_mdc$Material_Options$onBlur = function (msg) {
 	return A2(
 		_aforemny$elm_mdc$Material_Options$on,
@@ -10086,22 +10084,9 @@ var _aforemny$elm_mdc$Material_Options$onInput = function (f) {
 };
 var _aforemny$elm_mdc$Material_Options$container = _aforemny$elm_mdc$Material_Internal_Options$container;
 var _aforemny$elm_mdc$Material_Options$input = _aforemny$elm_mdc$Material_Internal_Options$input;
-var _aforemny$elm_mdc$Material_Options$id = function (_p2) {
+var _aforemny$elm_mdc$Material_Options$attribute = function (_p2) {
 	return _aforemny$elm_mdc$Material_Internal_Options$Attribute(
-		_elm_lang$html$Html_Attributes$id(_p2));
-};
-var _aforemny$elm_mdc$Material_Options$attr = _aforemny$elm_mdc$Material_Internal_Options$Attribute;
-var _aforemny$elm_mdc$Material_Options$attribute = _aforemny$elm_mdc$Material_Internal_Options$Attribute;
-var _aforemny$elm_mdc$Material_Options$stylesheet = function (css) {
-	return A3(
-		_elm_lang$html$Html$node,
-		'style',
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(css),
-			_1: {ctor: '[]'}
-		});
+		A2(_elm_lang$html$Html_Attributes$map, _elm_lang$core$Basics$never, _p2));
 };
 var _aforemny$elm_mdc$Material_Options$aria = F2(
 	function (key, val) {
@@ -10124,65 +10109,15 @@ var _aforemny$elm_mdc$Material_Options$when = F2(
 	function (guard, prop) {
 		return guard ? prop : _aforemny$elm_mdc$Material_Options$nop;
 	});
-var _aforemny$elm_mdc$Material_Options$maybe = function (prop) {
-	return A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Options$nop, prop);
-};
 var _aforemny$elm_mdc$Material_Options$many = _aforemny$elm_mdc$Material_Internal_Options$Many;
 var _aforemny$elm_mdc$Material_Options$css = F2(
 	function (key, value) {
 		return _aforemny$elm_mdc$Material_Internal_Options$CSS(
 			{ctor: '_Tuple2', _0: key, _1: value});
 	});
-var _aforemny$elm_mdc$Material_Options$center = _aforemny$elm_mdc$Material_Options$many(
-	{
-		ctor: '::',
-		_0: A2(_aforemny$elm_mdc$Material_Options$css, 'display', 'flex'),
-		_1: {
-			ctor: '::',
-			_0: A2(_aforemny$elm_mdc$Material_Options$css, 'align-items', 'center'),
-			_1: {
-				ctor: '::',
-				_0: A2(_aforemny$elm_mdc$Material_Options$css, 'justify-content', 'center'),
-				_1: {ctor: '[]'}
-			}
-		}
-	});
-var _aforemny$elm_mdc$Material_Options$scrim = function (opacity) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$css,
-		'background',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			'linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, ',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(opacity),
-				'))')));
-};
 var _aforemny$elm_mdc$Material_Options$cs = function (c) {
 	return _aforemny$elm_mdc$Material_Internal_Options$Class(c);
 };
-var _aforemny$elm_mdc$Material_Options$disabled = function (v) {
-	return _aforemny$elm_mdc$Material_Internal_Options$Attribute(
-		_elm_lang$html$Html_Attributes$disabled(v));
-};
-var _aforemny$elm_mdc$Material_Options$styled_ = F3(
-	function (ctor, props, attrs) {
-		return ctor(
-			A2(
-				_aforemny$elm_mdc$Material_Internal_Options$addAttributes,
-				_aforemny$elm_mdc$Material_Internal_Options$collect_(props),
-				attrs));
-	});
-var _aforemny$elm_mdc$Material_Options$img = F2(
-	function (options, attrs) {
-		return A4(
-			_aforemny$elm_mdc$Material_Options$styled_,
-			_elm_lang$html$Html$img,
-			options,
-			attrs,
-			{ctor: '[]'});
-	});
 var _aforemny$elm_mdc$Material_Options$styled = F2(
 	function (ctor, props) {
 		return ctor(
@@ -10191,8 +10126,6 @@ var _aforemny$elm_mdc$Material_Options$styled = F2(
 				_aforemny$elm_mdc$Material_Internal_Options$collect_(props),
 				{ctor: '[]'}));
 	});
-var _aforemny$elm_mdc$Material_Options$div = _aforemny$elm_mdc$Material_Options$styled(_elm_lang$html$Html$div);
-var _aforemny$elm_mdc$Material_Options$span = _aforemny$elm_mdc$Material_Options$styled(_elm_lang$html$Html$span);
 
 var _aforemny$elm_mdc$Material_Icon$size48 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '48px');
 var _aforemny$elm_mdc$Material_Icon$size36 = A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '36px');
@@ -11513,7 +11446,7 @@ var _aforemny$elm_mdc$Material_Checkbox$checkbox = F4(
 											stateChangedOrUninitialized,
 											function (_p4) {
 												return _aforemny$elm_mdc$Material_Options$many(
-													A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p4));
+													A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p4));
 											}(
 												_aforemny$elm_mdc$GlobalEvents$onTick(
 													_elm_lang$core$Json_Decode$succeed(
@@ -11979,6 +11912,185 @@ var _aforemny$elm_mdc$Material_Dialog$Model = F2(
 	});
 var _aforemny$elm_mdc$Material_Dialog$Config = {};
 
+var _aforemny$elm_mdc$Material_List$inset = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider--inset');
+var _aforemny$elm_mdc$Material_List$padded = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divier--padded');
+var _aforemny$elm_mdc$Material_List$divider = F2(
+	function (options, _p0) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$hr,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider'),
+				_1: options
+			},
+			{ctor: '[]'});
+	});
+var _aforemny$elm_mdc$Material_List$subheader = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group__subheader'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$group = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$metaImage = F2(
+	function (options, url) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$img,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Options$attribute(
+						_elm_lang$html$Html_Attributes$src(url)),
+					_1: options
+				}
+			},
+			{ctor: '[]'});
+	});
+var _aforemny$elm_mdc$Material_List$metaIcon = function (options) {
+	return _aforemny$elm_mdc$Material_Icon$view(
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$metaText = F2(
+	function (options, str) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$span,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+				_1: options
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(str),
+				_1: {ctor: '[]'}
+			});
+	});
+var _aforemny$elm_mdc$Material_List$meta = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$graphicImage = F2(
+	function (options, url) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$img,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Options$attribute(
+						_elm_lang$html$Html_Attributes$src(url)),
+					_1: options
+				}
+			},
+			{ctor: '[]'});
+	});
+var _aforemny$elm_mdc$Material_List$graphicIcon = function (options) {
+	return _aforemny$elm_mdc$Material_Icon$view(
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$graphic = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$activated = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--activated');
+var _aforemny$elm_mdc$Material_List$selected = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--selected');
+var _aforemny$elm_mdc$Material_List$secondaryText = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__secondary-text'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$text = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__text'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$listItem = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$li = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$li,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$twoLine = _aforemny$elm_mdc$Material_Options$cs('mdc-list--two-line');
+var _aforemny$elm_mdc$Material_List$avatarList = _aforemny$elm_mdc$Material_Options$cs('mdc-list--avatar-list');
+var _aforemny$elm_mdc$Material_List$dense = _aforemny$elm_mdc$Material_Options$cs('mdc-list--dense');
+var _aforemny$elm_mdc$Material_List$nonInteractive = _aforemny$elm_mdc$Material_Options$cs('mdc-list--non-interactive');
+var _aforemny$elm_mdc$Material_List$ul = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$ul,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_List$defaultConfig = {};
+var _aforemny$elm_mdc$Material_List$Config = {};
+
 var _elm_lang$dom$Native_Dom = function() {
 
 var fakeNode = {
@@ -12384,16 +12496,7 @@ var _aforemny$elm_mdc$Material_Drawer$toolbarSpacer = function (options) {
 			_1: options
 		});
 };
-var _aforemny$elm_mdc$Material_Drawer$content = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$nav,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-drawer__content'),
-			_1: options
-		});
-};
+var _aforemny$elm_mdc$Material_Drawer$content = _aforemny$elm_mdc$Material_Options$cs('mdc-drawer__content');
 var _aforemny$elm_mdc$Material_Drawer$headerContent = function (options) {
 	return A2(
 		_aforemny$elm_mdc$Material_Options$styled,
@@ -13123,185 +13226,6 @@ var _aforemny$elm_mdc$Material_IconToggle$Config = F4(
 		return {on: a, label: b, icon: c, inner: d};
 	});
 
-var _aforemny$elm_mdc$Material_List$inset = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider--inset');
-var _aforemny$elm_mdc$Material_List$padded = _aforemny$elm_mdc$Material_Options$cs('mdc-list-divier--padded');
-var _aforemny$elm_mdc$Material_List$divider = F2(
-	function (options, _p0) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$hr,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-divider'),
-				_1: options
-			},
-			{ctor: '[]'});
-	});
-var _aforemny$elm_mdc$Material_List$subheader = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group__subheader'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$group = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-group'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$metaImage = F2(
-	function (options, url) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$img,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$attribute(
-						_elm_lang$html$Html_Attributes$src(url)),
-					_1: options
-				}
-			},
-			{ctor: '[]'});
-	});
-var _aforemny$elm_mdc$Material_List$metaIcon = function (options) {
-	return _aforemny$elm_mdc$Material_Icon$view(
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$metaText = F2(
-	function (options, str) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-				_1: options
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(str),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Material_List$meta = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__meta'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$graphicImage = F2(
-	function (options, url) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$img,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$attribute(
-						_elm_lang$html$Html_Attributes$src(url)),
-					_1: options
-				}
-			},
-			{ctor: '[]'});
-	});
-var _aforemny$elm_mdc$Material_List$graphicIcon = function (options) {
-	return _aforemny$elm_mdc$Material_Icon$view(
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$graphic = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__graphic'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$activated = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--activated');
-var _aforemny$elm_mdc$Material_List$selected = _aforemny$elm_mdc$Material_Options$cs('mdc-list-item--selected');
-var _aforemny$elm_mdc$Material_List$secondaryText = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__secondary-text'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$text = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$span,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item__text'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$listItem = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$a,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$li = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$li,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list-item'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$twoLine = _aforemny$elm_mdc$Material_Options$cs('mdc-list--two-line');
-var _aforemny$elm_mdc$Material_List$avatarList = _aforemny$elm_mdc$Material_Options$cs('mdc-list--avatar-list');
-var _aforemny$elm_mdc$Material_List$dense = _aforemny$elm_mdc$Material_Options$cs('mdc-list--dense');
-var _aforemny$elm_mdc$Material_List$nonInteractive = _aforemny$elm_mdc$Material_Options$cs('mdc-list--non-interactive');
-var _aforemny$elm_mdc$Material_List$ul = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$ul,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-list'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_List$defaultConfig = {};
-var _aforemny$elm_mdc$Material_List$Config = {};
-
 var _aforemny$elm_mdc$Material_Menu$decodeGeometry = function () {
 	var menu = A3(
 		_elm_lang$core$Json_Decode$map2,
@@ -13768,7 +13692,7 @@ var _aforemny$elm_mdc$Material_Menu$menu = F4(
 									model.animating && _elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing),
 									function (_p40) {
 										return _aforemny$elm_mdc$Material_Options$many(
-											A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p40));
+											A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p40));
 									}(
 										_aforemny$elm_mdc$GlobalEvents$onTick(
 											A2(
@@ -14180,27 +14104,13 @@ var _aforemny$elm_mdc$Material_RadioButton$selected = _aforemny$elm_mdc$Material
 			config,
 			{value: true});
 	});
-var _aforemny$elm_mdc$Material_RadioButton$disabled = _aforemny$elm_mdc$Material_Options$many(
-	{
-		ctor: '::',
-		_0: _aforemny$elm_mdc$Material_Options$cs('mdc-radio--disabled'),
-		_1: {
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Internal_Options$input(
-				{
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
-						_elm_lang$html$Html_Attributes$disabled(true)),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		}
+var _aforemny$elm_mdc$Material_RadioButton$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{disabled: true});
 	});
-var _aforemny$elm_mdc$Material_RadioButton$defaultConfig = {
-	input: {ctor: '[]'},
-	container: {ctor: '[]'},
-	value: false
-};
+var _aforemny$elm_mdc$Material_RadioButton$defaultConfig = {value: false, disabled: false};
 var _aforemny$elm_mdc$Material_RadioButton$radioButton = F4(
 	function (lift, model, options, _p0) {
 		var ripple = A4(
@@ -14215,8 +14125,8 @@ var _aforemny$elm_mdc$Material_RadioButton$radioButton = F4(
 		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_RadioButton$defaultConfig, options);
 		var summary = _p2;
 		var config = _p2.config;
-		return A4(
-			_aforemny$elm_mdc$Material_Internal_Options$applyContainer,
+		return A5(
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -14242,11 +14152,11 @@ var _aforemny$elm_mdc$Material_RadioButton$radioButton = F4(
 					}
 				}
 			},
+			{ctor: '[]'},
 			{
 				ctor: '::',
-				_0: A4(
-					_aforemny$elm_mdc$Material_Internal_Options$applyInput,
-					summary,
+				_0: A3(
+					_aforemny$elm_mdc$Material_Options$styled,
 					_elm_lang$html$Html$input,
 					{
 						ctor: '::',
@@ -14281,7 +14191,26 @@ var _aforemny$elm_mdc$Material_RadioButton$radioButton = F4(
 												{preventDefault: true, stopPropagation: false},
 												_elm_lang$core$Json_Decode$succeed(
 													lift(_aforemny$elm_mdc$Material_Internal_RadioButton$NoOp))),
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: function (_p3) {
+													return A2(
+														_aforemny$elm_mdc$Material_Options$when,
+														config.disabled,
+														_aforemny$elm_mdc$Material_Options$many(_p3));
+												}(
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Options$cs('mdc-radio--disabled'),
+														_1: {
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$disabled(true)),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}
@@ -14334,12 +14263,12 @@ var _aforemny$elm_mdc$Material_RadioButton$radioButton = F4(
 	});
 var _aforemny$elm_mdc$Material_RadioButton$update = F3(
 	function (lift, msg, model) {
-		var _p3 = msg;
-		switch (_p3.ctor) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
 			case 'RippleMsg':
-				var _p4 = A2(_aforemny$elm_mdc$Material_Ripple$update, _p3._0, model.ripple);
-				var ripple = _p4._0;
-				var effects = _p4._1;
+				var _p5 = A2(_aforemny$elm_mdc$Material_Ripple$update, _p4._0, model.ripple);
+				var ripple = _p5._0;
+				var effects = _p5._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
@@ -14348,9 +14277,9 @@ var _aforemny$elm_mdc$Material_RadioButton$update = F3(
 							{ripple: ripple})),
 					_1: A2(
 						_elm_lang$core$Platform_Cmd$map,
-						function (_p5) {
+						function (_p6) {
 							return lift(
-								_aforemny$elm_mdc$Material_Internal_RadioButton$RippleMsg(_p5));
+								_aforemny$elm_mdc$Material_Internal_RadioButton$RippleMsg(_p6));
 						},
 						effects)
 				};
@@ -14362,13 +14291,13 @@ var _aforemny$elm_mdc$Material_RadioButton$update = F3(
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{isFocused: _p3._0})),
+							{isFocused: _p4._0})),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
 	});
 var _aforemny$elm_mdc$Material_RadioButton$defaultModel = {ripple: _aforemny$elm_mdc$Material_Ripple$defaultModel, isFocused: false};
-var _aforemny$elm_mdc$Material_RadioButton$_p6 = A3(
+var _aforemny$elm_mdc$Material_RadioButton$_p7 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.radio;
@@ -14380,8 +14309,8 @@ var _aforemny$elm_mdc$Material_RadioButton$_p6 = A3(
 				{radio: x});
 		}),
 	_aforemny$elm_mdc$Material_RadioButton$defaultModel);
-var _aforemny$elm_mdc$Material_RadioButton$get = _aforemny$elm_mdc$Material_RadioButton$_p6._0;
-var _aforemny$elm_mdc$Material_RadioButton$set = _aforemny$elm_mdc$Material_RadioButton$_p6._1;
+var _aforemny$elm_mdc$Material_RadioButton$get = _aforemny$elm_mdc$Material_RadioButton$_p7._0;
+var _aforemny$elm_mdc$Material_RadioButton$set = _aforemny$elm_mdc$Material_RadioButton$_p7._1;
 var _aforemny$elm_mdc$Material_RadioButton$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_RadioButton$get, _aforemny$elm_mdc$Material_RadioButton$set, _aforemny$elm_mdc$Material_Msg$RadioButtonMsg, _aforemny$elm_mdc$Material_RadioButton$update);
 var _aforemny$elm_mdc$Material_RadioButton$view = F4(
 	function (lift, index, store, options) {
@@ -14403,9 +14332,9 @@ var _aforemny$elm_mdc$Material_RadioButton$Model = F2(
 	function (a, b) {
 		return {ripple: a, isFocused: b};
 	});
-var _aforemny$elm_mdc$Material_RadioButton$Config = F3(
-	function (a, b, c) {
-		return {input: a, container: b, value: c};
+var _aforemny$elm_mdc$Material_RadioButton$Config = F2(
+	function (a, b) {
+		return {value: a, disabled: b};
 	});
 
 var _aforemny$elm_mdc$Material_Select$decodeGeometry = function () {
@@ -14578,7 +14507,7 @@ var _aforemny$elm_mdc$Material_Select$select = F4(
 								_aforemny$elm_mdc$Material_Options$when,
 								model.menu.animating && _elm_lang$core$Native_Utils.eq(model.menu.geometry, _elm_lang$core$Maybe$Nothing),
 								_aforemny$elm_mdc$Material_Options$many(
-									A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p4)));
+									A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p4)));
 						}(
 							_aforemny$elm_mdc$GlobalEvents$onTick(
 								A2(
@@ -15882,22 +15811,22 @@ var _aforemny$elm_mdc$Material_Snackbar$view = F4(
 						},
 						{
 							ctor: '::',
-							_0: A4(
-								_aforemny$elm_mdc$Material_Options$styled_,
+							_0: A3(
+								_aforemny$elm_mdc$Material_Options$styled,
 								_elm_lang$html$Html$button,
 								{
 									ctor: '::',
 									_0: _aforemny$elm_mdc$Material_Options$cs('mdc-snackbar__action-button'),
 									_1: {
 										ctor: '::',
-										_0: dismissHandler,
-										_1: {ctor: '[]'}
+										_0: _aforemny$elm_mdc$Material_Options$attribute(
+											_elm_lang$html$Html_Attributes$type_('button')),
+										_1: {
+											ctor: '::',
+											_0: dismissHandler,
+											_1: {ctor: '[]'}
+										}
 									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('button'),
-									_1: {ctor: '[]'}
 								},
 								A2(
 									_elm_lang$core$Maybe$withDefault,
@@ -16189,34 +16118,20 @@ var _aforemny$elm_mdc$Material_Switch$on = _aforemny$elm_mdc$Material_Internal_O
 			config,
 			{value: true});
 	});
-var _aforemny$elm_mdc$Material_Switch$disabled = _aforemny$elm_mdc$Material_Options$many(
-	{
-		ctor: '::',
-		_0: _aforemny$elm_mdc$Material_Options$cs('mdc-checkbox--disabled'),
-		_1: {
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Internal_Options$input(
-				{
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
-						_elm_lang$html$Html_Attributes$disabled(true)),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		}
+var _aforemny$elm_mdc$Material_Switch$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{disabled: true});
 	});
-var _aforemny$elm_mdc$Material_Switch$defaultConfig = {
-	input: {ctor: '[]'},
-	container: {ctor: '[]'},
-	value: false
-};
+var _aforemny$elm_mdc$Material_Switch$defaultConfig = {value: false, disabled: false};
 var _aforemny$elm_mdc$Material_Switch$switch = F4(
 	function (lift, model, options, _p0) {
 		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Switch$defaultConfig, options);
 		var summary = _p1;
 		var config = _p1.config;
-		return A4(
-			_aforemny$elm_mdc$Material_Internal_Options$applyContainer,
+		return A5(
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -16229,11 +16144,11 @@ var _aforemny$elm_mdc$Material_Switch$switch = F4(
 					_1: {ctor: '[]'}
 				}
 			},
+			{ctor: '[]'},
 			{
 				ctor: '::',
-				_0: A4(
-					_aforemny$elm_mdc$Material_Internal_Options$applyInput,
-					summary,
+				_0: A3(
+					_aforemny$elm_mdc$Material_Options$styled,
 					_elm_lang$html$Html$input,
 					{
 						ctor: '::',
@@ -16268,7 +16183,26 @@ var _aforemny$elm_mdc$Material_Switch$switch = F4(
 												{preventDefault: true, stopPropagation: false},
 												_elm_lang$core$Json_Decode$succeed(
 													lift(_aforemny$elm_mdc$Material_Internal_Switch$NoOp))),
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: function (_p2) {
+													return A2(
+														_aforemny$elm_mdc$Material_Options$when,
+														config.disabled,
+														_aforemny$elm_mdc$Material_Options$many(_p2));
+												}(
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Options$cs('mdc-checkbox--disabled'),
+														_1: {
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$disabled(true)),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}
@@ -16304,15 +16238,15 @@ var _aforemny$elm_mdc$Material_Switch$switch = F4(
 			});
 	});
 var _aforemny$elm_mdc$Material_Switch$update = F3(
-	function (_p2, msg, model) {
-		var _p3 = msg;
-		if (_p3.ctor === 'SetFocus') {
+	function (_p3, msg, model) {
+		var _p4 = msg;
+		if (_p4.ctor === 'SetFocus') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Maybe$Just(
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{isFocused: _p3._0})),
+						{isFocused: _p4._0})),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
@@ -16320,7 +16254,7 @@ var _aforemny$elm_mdc$Material_Switch$update = F3(
 		}
 	});
 var _aforemny$elm_mdc$Material_Switch$defaultModel = {isFocused: false};
-var _aforemny$elm_mdc$Material_Switch$_p4 = A3(
+var _aforemny$elm_mdc$Material_Switch$_p5 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.$switch;
@@ -16332,8 +16266,8 @@ var _aforemny$elm_mdc$Material_Switch$_p4 = A3(
 				{$switch: x});
 		}),
 	_aforemny$elm_mdc$Material_Switch$defaultModel);
-var _aforemny$elm_mdc$Material_Switch$get = _aforemny$elm_mdc$Material_Switch$_p4._0;
-var _aforemny$elm_mdc$Material_Switch$set = _aforemny$elm_mdc$Material_Switch$_p4._1;
+var _aforemny$elm_mdc$Material_Switch$get = _aforemny$elm_mdc$Material_Switch$_p5._0;
+var _aforemny$elm_mdc$Material_Switch$set = _aforemny$elm_mdc$Material_Switch$_p5._1;
 var _aforemny$elm_mdc$Material_Switch$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Switch$get, _aforemny$elm_mdc$Material_Switch$set, _aforemny$elm_mdc$Material_Msg$SwitchMsg, _aforemny$elm_mdc$Material_Switch$update);
 var _aforemny$elm_mdc$Material_Switch$view = F4(
 	function (lift, index, store, options) {
@@ -16354,9 +16288,9 @@ var _aforemny$elm_mdc$Material_Switch$view = F4(
 var _aforemny$elm_mdc$Material_Switch$Model = function (a) {
 	return {isFocused: a};
 };
-var _aforemny$elm_mdc$Material_Switch$Config = F3(
-	function (a, b, c) {
-		return {input: a, container: b, value: c};
+var _aforemny$elm_mdc$Material_Switch$Config = F2(
+	function (a, b) {
+		return {value: a, disabled: b};
 	});
 
 var _aforemny$elm_mdc$Material_Tabs$decodeGeometry = function (hasIndicator) {
@@ -16490,7 +16424,7 @@ var _aforemny$elm_mdc$Material_Tabs$iconLabel = F2(
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-tab__icon-text'),
-				_1: {ctor: '[]'}
+				_1: options
 			},
 			{
 				ctor: '::',
@@ -16851,25 +16785,17 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 																	_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTab(hasIndicator))),
 															_1: {
 																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_Options$dispatch(
-																	function (_p11) {
-																		return lift(
-																			_aforemny$elm_mdc$Material_Internal_Tabs$Dispatch(_p11));
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_Options$many(
-																		{
+																_0: _aforemny$elm_mdc$Material_Options$many(
+																	{
+																		ctor: '::',
+																		_0: ripple.interactionHandler,
+																		_1: {
 																			ctor: '::',
-																			_0: ripple.interactionHandler,
-																			_1: {
-																				ctor: '::',
-																				_0: ripple.properties,
-																				_1: {ctor: '[]'}
-																			}
-																		}),
-																	_1: _p8.options
-																}
+																			_0: ripple.properties,
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: _p8.options
 															}
 														}
 													}
@@ -16925,32 +16851,32 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 	});
 var _aforemny$elm_mdc$Material_Tabs$update = F3(
 	function (lift, msg, model) {
-		var _p12 = msg;
-		switch (_p12.ctor) {
+		var _p11 = msg;
+		switch (_p11.ctor) {
 			case 'RippleMsg':
-				var _p15 = _p12._0;
-				var _p13 = A2(
+				var _p14 = _p11._0;
+				var _p12 = A2(
 					_aforemny$elm_mdc$Material_Ripple$update,
-					_p12._1,
+					_p11._1,
 					A2(
 						_elm_lang$core$Maybe$withDefault,
 						_aforemny$elm_mdc$Material_Ripple$defaultModel,
-						A2(_elm_lang$core$Dict$get, _p15, model.ripples)));
-				var ripple = _p13._0;
-				var effects = _p13._1;
+						A2(_elm_lang$core$Dict$get, _p14, model.ripples)));
+				var ripple = _p12._0;
+				var effects = _p12._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								ripples: A3(_elm_lang$core$Dict$insert, _p15, ripple, model.ripples)
+								ripples: A3(_elm_lang$core$Dict$insert, _p14, ripple, model.ripples)
 							})),
 					_1: A2(
 						_elm_lang$core$Platform_Cmd$map,
-						function (_p14) {
+						function (_p13) {
 							return lift(
-								A2(_aforemny$elm_mdc$Material_Internal_Tabs$RippleMsg, _p15, _p14));
+								A2(_aforemny$elm_mdc$Material_Internal_Tabs$RippleMsg, _p14, _p13));
 						},
 						effects)
 				};
@@ -16958,25 +16884,25 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Nothing,
-					_1: _aforemny$elm_mdc$Material_Dispatch$forward(_p12._0)
+					_1: _aforemny$elm_mdc$Material_Dispatch$forward(_p11._0)
 				};
 			case 'Select':
-				var _p16 = _p12._0;
+				var _p15 = _p11._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								index: _p16,
-								scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p12._1, _p16)
+								index: _p15,
+								scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p11._1, _p15)
 							})),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'ScrollBackward':
-				var _p23 = _p12._0;
-				var totalTabsWidth = _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth(_p23);
-				var scrollFrameWidth = _p23.scrollFrame.width;
+				var _p22 = _p11._0;
+				var totalTabsWidth = _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth(_p22);
+				var scrollFrameWidth = _p22.scrollFrame.width;
 				var concealedTabs = A2(
 					_elm_lang$core$List$filterMap,
 					_elm_lang$core$Basics$identity,
@@ -16988,18 +16914,18 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 								return (_elm_lang$core$Native_Utils.cmp(tabRight + model.translationOffset, 0) < 0) ? _elm_lang$core$Maybe$Just(
 									{ctor: '_Tuple2', _0: index, _1: tab}) : _elm_lang$core$Maybe$Nothing;
 							}),
-						_elm_lang$core$List$reverse(_p23.tabs)));
+						_elm_lang$core$List$reverse(_p22.tabs)));
 				var translationOffset = _elm_lang$core$Tuple$second(
 					A3(
 						_elm_lang$core$List$foldl,
 						F2(
-							function (_p18, _p17) {
-								var _p19 = _p18;
-								var _p22 = _p19._1;
-								var _p20 = _p17;
-								var _p21 = _p20._0;
-								var accum_ = _p21 + _p22.width;
-								return (_elm_lang$core$Native_Utils.cmp(accum_, scrollFrameWidth) > 0) ? {ctor: '_Tuple2', _0: _p21, _1: 0 - _p22.offsetLeft} : {ctor: '_Tuple2', _0: accum_, _1: 0 - _p22.offsetLeft};
+							function (_p17, _p16) {
+								var _p18 = _p17;
+								var _p21 = _p18._1;
+								var _p19 = _p16;
+								var _p20 = _p19._0;
+								var accum_ = _p20 + _p21.width;
+								return (_elm_lang$core$Native_Utils.cmp(accum_, scrollFrameWidth) > 0) ? {ctor: '_Tuple2', _0: _p20, _1: 0 - _p21.offsetLeft} : {ctor: '_Tuple2', _0: accum_, _1: 0 - _p21.offsetLeft};
 							}),
 						{ctor: '_Tuple2', _0: 0, _1: model.translationOffset},
 						concealedTabs));
@@ -17009,7 +16935,7 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								geometry: _p23,
+								geometry: _p22,
 								translationOffset: translationOffset,
 								nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth + translationOffset, scrollFrameWidth) > 0,
 								backIndicator: _elm_lang$core$Native_Utils.cmp(translationOffset, 0) < 0
@@ -17017,9 +16943,9 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'ScrollForward':
-				var _p26 = _p12._0;
-				var totalTabsWidth = _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth(_p26);
-				var scrollFrameWidth = _p26.scrollFrame.width;
+				var _p25 = _p11._0;
+				var totalTabsWidth = _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth(_p25);
+				var scrollFrameWidth = _p25.scrollFrame.width;
 				var concealedTabs = A2(
 					_elm_lang$core$List$filterMap,
 					_elm_lang$core$Basics$identity,
@@ -17031,15 +16957,15 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 								return (_elm_lang$core$Native_Utils.cmp(tabRight + model.translationOffset, scrollFrameWidth) > 0) ? _elm_lang$core$Maybe$Just(
 									{ctor: '_Tuple2', _0: index, _1: tab}) : _elm_lang$core$Maybe$Nothing;
 							}),
-						_p26.tabs));
+						_p25.tabs));
 				var translationOffset = A2(
 					_elm_lang$core$Maybe$withDefault,
 					model.translationOffset,
 					A2(
 						_elm_lang$core$Maybe$map,
-						function (_p24) {
-							var _p25 = _p24;
-							return 0 - _p25._1.offsetLeft;
+						function (_p23) {
+							var _p24 = _p23;
+							return 0 - _p24._1.offsetLeft;
 						},
 						_elm_lang$core$List$head(concealedTabs)));
 				return {
@@ -17048,7 +16974,7 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								geometry: _p26,
+								geometry: _p25,
 								translationOffset: translationOffset,
 								nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth + translationOffset, scrollFrameWidth) > 0,
 								backIndicator: _elm_lang$core$Native_Utils.cmp(translationOffset, 0) < 0
@@ -17056,7 +16982,7 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
-				var _p27 = _p12._0;
+				var _p26 = _p11._0;
 				return {
 					ctor: '_Tuple2',
 					_0: function () {
@@ -17067,14 +16993,14 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 									return tab.width + accum;
 								}),
 							0,
-							_p27.tabs);
+							_p26.tabs);
 						return _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									geometry: _p27,
-									scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p27, 0),
-									nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth, _p27.scrollFrame.width) > 0,
+									geometry: _p26,
+									scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p26, 0),
+									nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth, _p26.scrollFrame.width) > 0,
 									backIndicator: false
 								}));
 					}(),
@@ -17083,7 +17009,7 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 		}
 	});
 var _aforemny$elm_mdc$Material_Tabs$defaultModel = {index: 0, geometry: _aforemny$elm_mdc$Material_Internal_Tabs$defaultGeometry, translationOffset: 0, scale: 0, nextIndicator: false, backIndicator: false, ripples: _elm_lang$core$Dict$empty};
-var _aforemny$elm_mdc$Material_Tabs$_p28 = A3(
+var _aforemny$elm_mdc$Material_Tabs$_p27 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.tabs;
@@ -17095,8 +17021,8 @@ var _aforemny$elm_mdc$Material_Tabs$_p28 = A3(
 				{tabs: x});
 		}),
 	_aforemny$elm_mdc$Material_Tabs$defaultModel);
-var _aforemny$elm_mdc$Material_Tabs$get = _aforemny$elm_mdc$Material_Tabs$_p28._0;
-var _aforemny$elm_mdc$Material_Tabs$set = _aforemny$elm_mdc$Material_Tabs$_p28._1;
+var _aforemny$elm_mdc$Material_Tabs$get = _aforemny$elm_mdc$Material_Tabs$_p27._0;
+var _aforemny$elm_mdc$Material_Tabs$set = _aforemny$elm_mdc$Material_Tabs$_p27._1;
 var _aforemny$elm_mdc$Material_Tabs$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Tabs$get, _aforemny$elm_mdc$Material_Tabs$set, _aforemny$elm_mdc$Material_Msg$TabsMsg, _aforemny$elm_mdc$Material_Tabs$update);
 var _aforemny$elm_mdc$Material_Tabs$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Tabs$get, _aforemny$elm_mdc$Material_Tabs$view, _aforemny$elm_mdc$Material_Msg$TabsMsg);
 var _aforemny$elm_mdc$Material_Tabs$Model = F7(
@@ -17334,13 +17260,14 @@ var _aforemny$elm_mdc$Material_Textfield$_p4 = A3(
 var _aforemny$elm_mdc$Material_Textfield$get = _aforemny$elm_mdc$Material_Textfield$_p4._0;
 var _aforemny$elm_mdc$Material_Textfield$set = _aforemny$elm_mdc$Material_Textfield$_p4._1;
 var _aforemny$elm_mdc$Material_Textfield$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Textfield$get, _aforemny$elm_mdc$Material_Textfield$set, _aforemny$elm_mdc$Material_Msg$TextfieldMsg, _aforemny$elm_mdc$Material_Textfield$update);
-var _aforemny$elm_mdc$Material_Textfield$placeholder = function (value) {
-	return _aforemny$elm_mdc$Material_Internal_Options$input(
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$attribute(
-				A2(_elm_lang$html$Html_Attributes$attribute, 'placeholder', value)),
-			_1: {ctor: '[]'}
+var _aforemny$elm_mdc$Material_Textfield$placeholder = function (placeholder) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					placeholder: _elm_lang$core$Maybe$Just(placeholder)
+				});
 		});
 };
 var _aforemny$elm_mdc$Material_Textfield$textarea = _aforemny$elm_mdc$Material_Internal_Options$option(
@@ -17394,34 +17321,35 @@ var _aforemny$elm_mdc$Material_Textfield$maxRows = function (k) {
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Textfield$cols = function (k) {
-	return _aforemny$elm_mdc$Material_Internal_Options$input(
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$attribute(
-				_elm_lang$html$Html_Attributes$cols(k)),
-			_1: {ctor: '[]'}
-		});
-};
-var _aforemny$elm_mdc$Material_Textfield$rows = function (k) {
-	return _aforemny$elm_mdc$Material_Internal_Options$input(
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$attribute(
-				_elm_lang$html$Html_Attributes$rows(k)),
-			_1: {ctor: '[]'}
-		});
-};
-var _aforemny$elm_mdc$Material_Textfield$pattern = function (_p6) {
+var _aforemny$elm_mdc$Material_Textfield$cols = function (cols) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
-		F2(
-			function (value, config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						pattern: _elm_lang$core$Maybe$Just(value)
-					});
-			})(_p6));
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					cols: _elm_lang$core$Maybe$Just(cols)
+				});
+		});
+};
+var _aforemny$elm_mdc$Material_Textfield$rows = function (rows) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					rows: _elm_lang$core$Maybe$Just(rows)
+				});
+		});
+};
+var _aforemny$elm_mdc$Material_Textfield$pattern = function (pattern) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					pattern: _elm_lang$core$Maybe$Just(pattern)
+				});
+		});
 };
 var _aforemny$elm_mdc$Material_Textfield$box = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
@@ -17445,7 +17373,6 @@ var _aforemny$elm_mdc$Material_Textfield$password = _aforemny$elm_mdc$Material_I
 				type_: _elm_lang$core$Maybe$Just('password')
 			});
 	});
-var _aforemny$elm_mdc$Material_Textfield$input = _aforemny$elm_mdc$Material_Options$input;
 var _aforemny$elm_mdc$Material_Textfield$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17456,7 +17383,7 @@ var _aforemny$elm_mdc$Material_Textfield$maxlength = function (k) {
 	return _aforemny$elm_mdc$Material_Options$attribute(
 		_elm_lang$html$Html_Attributes$maxlength(k));
 };
-var _aforemny$elm_mdc$Material_Textfield$value = function (_p7) {
+var _aforemny$elm_mdc$Material_Textfield$value = function (_p6) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (str, config) {
@@ -17465,9 +17392,9 @@ var _aforemny$elm_mdc$Material_Textfield$value = function (_p7) {
 					{
 						value: _elm_lang$core$Maybe$Just(str)
 					});
-			})(_p7));
+			})(_p6));
 };
-var _aforemny$elm_mdc$Material_Textfield$label = function (_p8) {
+var _aforemny$elm_mdc$Material_Textfield$label = function (_p7) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (str, config) {
@@ -17476,7 +17403,7 @@ var _aforemny$elm_mdc$Material_Textfield$label = function (_p8) {
 					{
 						labelText: _elm_lang$core$Maybe$Just(str)
 					});
-			})(_p8));
+			})(_p7));
 };
 var _aforemny$elm_mdc$Material_Textfield$outlined = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
@@ -17516,8 +17443,6 @@ var _aforemny$elm_mdc$Material_Textfield$defaultConfig = {
 	value: _elm_lang$core$Maybe$Nothing,
 	defaultValue: _elm_lang$core$Maybe$Nothing,
 	disabled: false,
-	input: {ctor: '[]'},
-	container: {ctor: '[]'},
 	maxRows: _elm_lang$core$Maybe$Nothing,
 	dense: false,
 	required: false,
@@ -17530,22 +17455,25 @@ var _aforemny$elm_mdc$Material_Textfield$defaultConfig = {
 	outlined: false,
 	leadingIcon: _elm_lang$core$Maybe$Nothing,
 	trailingIcon: _elm_lang$core$Maybe$Nothing,
-	iconClickable: true
+	iconClickable: true,
+	placeholder: _elm_lang$core$Maybe$Nothing,
+	cols: _elm_lang$core$Maybe$Nothing,
+	rows: _elm_lang$core$Maybe$Nothing
 };
 var _aforemny$elm_mdc$Material_Textfield$textField = F4(
-	function (lift, model, options, _p9) {
+	function (lift, model, options, _p8) {
 		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
 			false,
-			function (_p10) {
+			function (_p9) {
 				return lift(
-					_aforemny$elm_mdc$Material_Internal_Textfield$RippleMsg(_p10));
+					_aforemny$elm_mdc$Material_Internal_Textfield$RippleMsg(_p9));
 			},
 			model.ripple,
 			{ctor: '[]'});
-		var _p11 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Textfield$defaultConfig, options);
-		var summary = _p11;
-		var config = _p11.config;
+		var _p10 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Textfield$defaultConfig, options);
+		var summary = _p10;
+		var config = _p10.config;
 		var isDirty = model.isDirty || A2(
 			_elm_lang$core$Maybe$withDefault,
 			false,
@@ -17562,18 +17490,16 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 			A3(
 				_aforemny$elm_mdc$Material_Options$onWithOptions,
 				'keydown',
-				_elm_lang$core$Native_Utils.update(
-					_elm_lang$html$Html_Events$defaultOptions,
-					{preventDefault: true}),
+				{stopPropagation: false, preventDefault: true},
 				A2(
 					_elm_lang$core$Json_Decode$andThen,
-					function (_p12) {
-						var _p13 = _p12;
+					function (_p11) {
+						var _p12 = _p11;
 						var rows = _elm_lang$core$List$length(
-							A2(_elm_lang$core$String$split, '\n', _p13._1));
+							A2(_elm_lang$core$String$split, '\n', _p12._1));
 						return ((_elm_lang$core$Native_Utils.cmp(
 							rows,
-							A2(_elm_lang$core$Maybe$withDefault, 0, config.maxRows)) > -1) && _elm_lang$core$Native_Utils.eq(_p13._0, 13)) ? _elm_lang$core$Json_Decode$succeed(
+							A2(_elm_lang$core$Maybe$withDefault, 0, config.maxRows)) > -1) && _elm_lang$core$Native_Utils.eq(_p12._0, 13)) ? _elm_lang$core$Json_Decode$succeed(
 							lift(_aforemny$elm_mdc$Material_Internal_Textfield$NoOp)) : _elm_lang$core$Json_Decode$fail('');
 					},
 					A3(
@@ -17586,30 +17512,30 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 						_elm_lang$html$Html_Events$targetValue))));
 		var focused = model.focused && (!config.disabled);
 		var isInvalid = function () {
-			var _p14 = config.pattern;
-			if (_p14.ctor === 'Just') {
+			var _p13 = config.pattern;
+			if (_p13.ctor === 'Just') {
 				return A2(
 					_elm_lang$core$Maybe$withDefault,
 					false,
 					A2(
 						_elm_lang$core$Maybe$map,
-						function (_p15) {
+						function (_p14) {
 							return !A2(
 								_elm_lang$core$Regex$contains,
 								_elm_lang$core$Regex$regex(
 									A2(
 										_elm_lang$core$Basics_ops['++'],
 										'^',
-										A2(_elm_lang$core$Basics_ops['++'], _p14._0, '$'))),
-								_p15);
+										A2(_elm_lang$core$Basics_ops['++'], _p13._0, '$'))),
+								_p14);
 						},
 						model.value));
 			} else {
 				return false;
 			}
 		}();
-		return A4(
-			_aforemny$elm_mdc$Material_Internal_Options$applyContainer,
+		return A5(
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -17677,11 +17603,11 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 															_0: A2(_aforemny$elm_mdc$Material_Options$when, config.box || config.outlined, ripple.interactionHandler),
 															_1: {
 																ctor: '::',
-																_0: function (_p16) {
+																_0: function (_p15) {
 																	return A2(
 																		_aforemny$elm_mdc$Material_Options$when,
 																		config.box,
-																		_aforemny$elm_mdc$Material_Options$many(_p16));
+																		_aforemny$elm_mdc$Material_Options$many(_p15));
 																}(
 																	{
 																		ctor: '::',
@@ -17710,14 +17636,14 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 					}
 				}
 			},
+			{ctor: '[]'},
 			_elm_lang$core$List$concat(
 				{
 					ctor: '::',
 					_0: {
 						ctor: '::',
-						_0: A4(
-							_aforemny$elm_mdc$Material_Internal_Options$applyInput,
-							summary,
+						_0: A3(
+							_aforemny$elm_mdc$Material_Options$styled,
 							config.textarea ? _elm_lang$html$Html$textarea : _elm_lang$html$Html$input,
 							{
 								ctor: '::',
@@ -17732,9 +17658,9 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 											'focus',
 											A2(
 												_elm_lang$core$Json_Decode$map,
-												function (_p17) {
+												function (_p16) {
 													return lift(
-														_aforemny$elm_mdc$Material_Internal_Textfield$Focus(_p17));
+														_aforemny$elm_mdc$Material_Internal_Textfield$Focus(_p16));
 												},
 												_aforemny$elm_mdc$Material_Textfield$decodeGeometry)) : A2(
 											_aforemny$elm_mdc$Material_Options$on,
@@ -17752,18 +17678,18 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 											_1: {
 												ctor: '::',
 												_0: _aforemny$elm_mdc$Material_Options$onInput(
-													function (_p18) {
+													function (_p17) {
 														return lift(
-															_aforemny$elm_mdc$Material_Internal_Textfield$Input(_p18));
+															_aforemny$elm_mdc$Material_Internal_Textfield$Input(_p17));
 													}),
 												_1: {
 													ctor: '::',
-													_0: function (_p19) {
+													_0: function (_p18) {
 														return _aforemny$elm_mdc$Material_Options$many(
 															A2(
 																_elm_lang$core$List$map,
 																_aforemny$elm_mdc$Material_Internal_Options$attribute,
-																A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p19)));
+																A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p18)));
 													}(
 														{
 															ctor: '::',
@@ -17827,7 +17753,34 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 																	_1: {ctor: '[]'}
 																}
 															}),
-														_1: {ctor: '[]'}
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_aforemny$elm_mdc$Material_Options$when,
+																!_elm_lang$core$Native_Utils.eq(config.placeholder, _elm_lang$core$Maybe$Nothing),
+																_aforemny$elm_mdc$Material_Options$attribute(
+																	_elm_lang$html$Html_Attributes$placeholder(
+																		A2(_elm_lang$core$Maybe$withDefault, '', config.placeholder)))),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_aforemny$elm_mdc$Material_Options$when,
+																	config.textarea && (!_elm_lang$core$Native_Utils.eq(config.rows, _elm_lang$core$Maybe$Nothing)),
+																	_aforemny$elm_mdc$Material_Options$attribute(
+																		_elm_lang$html$Html_Attributes$rows(
+																			A2(_elm_lang$core$Maybe$withDefault, 0, config.rows)))),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_aforemny$elm_mdc$Material_Options$when,
+																		config.textarea && (!_elm_lang$core$Native_Utils.eq(config.cols, _elm_lang$core$Maybe$Nothing)),
+																		_aforemny$elm_mdc$Material_Options$attribute(
+																			_elm_lang$html$Html_Attributes$cols(
+																				A2(_elm_lang$core$Maybe$withDefault, 0, config.cols)))),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
 													}
 												}
 											}
@@ -17854,11 +17807,11 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 									}
 								},
 								function () {
-									var _p20 = config.labelText;
-									if (_p20.ctor === 'Just') {
+									var _p19 = config.labelText;
+									if (_p19.ctor === 'Just') {
 										return {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text(_p20._0),
+											_0: _elm_lang$html$Html$text(_p19._0),
 											_1: {ctor: '[]'}
 										};
 									} else {
@@ -17900,10 +17853,10 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 										var radius = 4;
 										var cornerWidth = radius + 1.2;
 										var leadingStrokeLength = _elm_lang$core$Basics$abs(11 - cornerWidth);
-										var _p21 = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Textfield$defaultGeometry, model.geometry);
-										var labelWidth = _p21.labelWidth;
-										var width = _p21.width;
-										var height = _p21.height;
+										var _p20 = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Textfield$defaultGeometry, model.geometry);
+										var labelWidth = _p20.labelWidth;
+										var width = _p20.width;
+										var height = _p20.height;
 										var scaledLabelWidth = labelScale * labelWidth;
 										var paddedLabelWidth = scaledLabelWidth + 8;
 										var pathMiddle = A2(
@@ -18188,8 +18141,8 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 										_elm_lang$core$Maybe$withDefault,
 										config.trailingIcon,
 										A2(_elm_lang$core$Maybe$map, _elm_lang$core$Maybe$Just, config.leadingIcon));
-									var _p22 = icon;
-									if (_p22.ctor === 'Just') {
+									var _p21 = icon;
+									if (_p21.ctor === 'Just') {
 										return {
 											ctor: '::',
 											_0: A3(
@@ -18200,9 +18153,9 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 													_0: _aforemny$elm_mdc$Material_Options$cs('material-icons mdc-text-field__icon'),
 													_1: {
 														ctor: '::',
-														_0: function (_p23) {
+														_0: function (_p22) {
 															return _aforemny$elm_mdc$Material_Options$attribute(
-																_elm_lang$html$Html_Attributes$tabindex(_p23));
+																_elm_lang$html$Html_Attributes$tabindex(_p22));
 														}(
 															config.iconClickable ? 0 : -1),
 														_1: {ctor: '[]'}
@@ -18210,7 +18163,7 @@ var _aforemny$elm_mdc$Material_Textfield$textField = F4(
 												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text(_p22._0),
+													_0: _elm_lang$html$Html$text(_p21._0),
 													_1: {ctor: '[]'}
 												}),
 											_1: {ctor: '[]'}
@@ -18269,7 +18222,9 @@ var _aforemny$elm_mdc$Material_Textfield$Config = function (a) {
 																	return function (r) {
 																		return function (s) {
 																			return function (t) {
-																				return {labelText: a, labelFloat: b, value: c, defaultValue: d, disabled: e, input: f, container: g, maxRows: h, dense: i, required: j, type_: k, box: l, pattern: m, textarea: n, fullWidth: o, invalid: p, outlined: q, leadingIcon: r, trailingIcon: s, iconClickable: t};
+																				return function (u) {
+																					return {labelText: a, labelFloat: b, value: c, defaultValue: d, disabled: e, maxRows: f, dense: g, required: h, type_: i, box: j, pattern: k, textarea: l, fullWidth: m, invalid: n, outlined: o, leadingIcon: p, trailingIcon: q, iconClickable: r, placeholder: s, cols: t, rows: u};
+																				};
 																			};
 																		};
 																	};
@@ -18852,7 +18807,7 @@ var _aforemny$elm_mdc$Material_Toolbar$toolbar = F4(
 											_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing),
 											function (_p17) {
 												return _aforemny$elm_mdc$Material_Options$many(
-													A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p17));
+													A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p17));
 											}(
 												_aforemny$elm_mdc$GlobalEvents$onTick(
 													A2(
@@ -18866,7 +18821,7 @@ var _aforemny$elm_mdc$Material_Toolbar$toolbar = F4(
 											ctor: '::',
 											_0: function (_p19) {
 												return _aforemny$elm_mdc$Material_Options$many(
-													A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p19));
+													A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p19));
 											}(
 												_aforemny$elm_mdc$GlobalEvents$onResize(
 													A2(
@@ -18880,7 +18835,7 @@ var _aforemny$elm_mdc$Material_Toolbar$toolbar = F4(
 												ctor: '::',
 												_0: function (_p21) {
 													return _aforemny$elm_mdc$Material_Options$many(
-														A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Options$attribute, _p21));
+														A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p21));
 												}(
 													_aforemny$elm_mdc$GlobalEvents$onScroll(
 														A2(
@@ -20140,7 +20095,9 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 var _aforemny$elm_mdc$Material_Card$actionIcon = _aforemny$elm_mdc$Material_Options$cs('mdc-card__action mdc-card__action-icon');
 var _aforemny$elm_mdc$Material_Card$actionButton = _aforemny$elm_mdc$Material_Options$cs('mdc-card__action mdc-card__action-button');
 var _aforemny$elm_mdc$Material_Card$actionIcons = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-card__action-icons'),
@@ -20148,7 +20105,9 @@ var _aforemny$elm_mdc$Material_Card$actionIcons = function (options) {
 		});
 };
 var _aforemny$elm_mdc$Material_Card$actionButtons = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-card__action-buttons'),
@@ -20157,7 +20116,9 @@ var _aforemny$elm_mdc$Material_Card$actionButtons = function (options) {
 };
 var _aforemny$elm_mdc$Material_Card$fullBleed = _aforemny$elm_mdc$Material_Options$cs('mdc-card__actions--full-bleed');
 var _aforemny$elm_mdc$Material_Card$actions = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-card__actions'),
@@ -20165,7 +20126,9 @@ var _aforemny$elm_mdc$Material_Card$actions = function (options) {
 		});
 };
 var _aforemny$elm_mdc$Material_Card$mediaContent = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-card__media-content'),
@@ -20184,7 +20147,9 @@ var _aforemny$elm_mdc$Material_Card$backgroundImage = function (url) {
 			A2(_elm_lang$core$Basics_ops['++'], url, ')')));
 };
 var _aforemny$elm_mdc$Material_Card$media = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-card__media'),
@@ -20192,7 +20157,9 @@ var _aforemny$elm_mdc$Material_Card$media = function (options) {
 		});
 };
 var _aforemny$elm_mdc$Material_Card$primaryAction = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-card__primary-action'),
@@ -20201,7 +20168,9 @@ var _aforemny$elm_mdc$Material_Card$primaryAction = function (options) {
 };
 var _aforemny$elm_mdc$Material_Card$stroked = _aforemny$elm_mdc$Material_Options$cs('mdc-card--stroked');
 var _aforemny$elm_mdc$Material_Card$view = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-card'),
@@ -21120,8 +21089,9 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 	function (lift, page, model) {
 		var demoWrapper = function (options) {
 			return function (_p12) {
-				return A2(
-					_aforemny$elm_mdc$Material_Options$div,
+				return A3(
+					_aforemny$elm_mdc$Material_Options$styled,
+					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
 						_0: A2(_aforemny$elm_mdc$Material_Options$css, 'display', 'flex'),
@@ -22850,8 +22820,9 @@ var _aforemny$elm_mdc$Demo_Elevation$view = F3(
 					}),
 				_1: {
 					ctor: '::',
-					_0: A2(
-						_aforemny$elm_mdc$Material_Options$div,
+					_0: A3(
+						_aforemny$elm_mdc$Material_Options$styled,
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
 							_0: A2(_aforemny$elm_mdc$Material_Options$css, 'display', 'flex'),
@@ -27213,7 +27184,8 @@ var _aforemny$elm_mdc$Demo_Lists$twoLineAvatarPlusTextPlusIconExample = function
 							_0: _aforemny$elm_mdc$Material_List$avatarList,
 							_1: {
 								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Options$id('two-line-avatar-text-icon-demo'),
+								_0: _aforemny$elm_mdc$Material_Options$attribute(
+									_elm_lang$html$Html_Attributes$id('two-line-avatar-text-icon-demo')),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -30802,12 +30774,11 @@ var _aforemny$elm_mdc$Material_Drawer_Permanent$className = 'mdc-drawer--permane
 var _aforemny$elm_mdc$Material_Drawer_Permanent$subscriptions = _aforemny$elm_mdc$Material_Drawer$subscriptions;
 var _aforemny$elm_mdc$Material_Drawer_Permanent$subs = _aforemny$elm_mdc$Material_Drawer$subs;
 var _aforemny$elm_mdc$Material_Drawer_Permanent$react = _aforemny$elm_mdc$Material_Drawer$react;
-var _aforemny$elm_mdc$Material_Drawer_Permanent$render = _aforemny$elm_mdc$Material_Drawer$render(_aforemny$elm_mdc$Material_Drawer_Permanent$className);
+var _aforemny$elm_mdc$Material_Drawer_Permanent$view = _aforemny$elm_mdc$Material_Drawer$render(_aforemny$elm_mdc$Material_Drawer_Permanent$className);
 var _aforemny$elm_mdc$Material_Drawer_Permanent$toolbarSpacer = _aforemny$elm_mdc$Material_Drawer$toolbarSpacer;
 var _aforemny$elm_mdc$Material_Drawer_Permanent$content = _aforemny$elm_mdc$Material_Drawer$content;
 var _aforemny$elm_mdc$Material_Drawer_Permanent$headerContent = _aforemny$elm_mdc$Material_Drawer$headerContent;
 var _aforemny$elm_mdc$Material_Drawer_Permanent$header = _aforemny$elm_mdc$Material_Drawer$header;
-var _aforemny$elm_mdc$Material_Drawer_Permanent$view = _aforemny$elm_mdc$Material_Drawer$view(_aforemny$elm_mdc$Material_Drawer_Permanent$className);
 var _aforemny$elm_mdc$Material_Drawer_Permanent$defaultConfig = _aforemny$elm_mdc$Material_Drawer$defaultConfig;
 var _aforemny$elm_mdc$Material_Drawer_Permanent$update = _aforemny$elm_mdc$Material_Drawer$update;
 var _aforemny$elm_mdc$Material_Drawer_Permanent$defaultModel = _aforemny$elm_mdc$Material_Drawer$defaultModel;
@@ -30911,7 +30882,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 			{
 				ctor: '::',
 				_0: A5(
-					_aforemny$elm_mdc$Material_Drawer_Permanent$render,
+					_aforemny$elm_mdc$Material_Drawer_Permanent$view,
 					function (_p2) {
 						return lift(
 							_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p2));
@@ -30932,48 +30903,13 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_aforemny$elm_mdc$Material_List$listItem,
+								_aforemny$elm_mdc$Material_List$ul,
 								{
 									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Options$attribute(
-										_elm_lang$html$Html_Attributes$href('#permanent-drawer-above')),
+									_0: _aforemny$elm_mdc$Material_Drawer_Permanent$content,
 									_1: {ctor: '[]'}
 								},
 								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_List$graphicIcon,
-										{ctor: '[]'},
-										'inbox'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Inbox'),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_List$listItem,
-									{
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#permanent-drawer-above')),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: A2(
-											_aforemny$elm_mdc$Material_List$graphicIcon,
-											{ctor: '[]'},
-											'star'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Star'),
-											_1: {ctor: '[]'}
-										}
-									}),
-								_1: {
 									ctor: '::',
 									_0: A2(
 										_aforemny$elm_mdc$Material_List$listItem,
@@ -30988,10 +30924,10 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 											_0: A2(
 												_aforemny$elm_mdc$Material_List$graphicIcon,
 												{ctor: '[]'},
-												'send'),
+												'inbox'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Sent Mail'),
+												_0: _elm_lang$html$Html$text('Inbox'),
 												_1: {ctor: '[]'}
 											}
 										}),
@@ -31010,19 +30946,35 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 												_0: A2(
 													_aforemny$elm_mdc$Material_List$graphicIcon,
 													{ctor: '[]'},
-													'drafts'),
+													'star'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('Drafts'),
+													_0: _elm_lang$html$Html$text('Star'),
 													_1: {ctor: '[]'}
 												}
 											}),
 										_1: {
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_List$divider,
-												{ctor: '[]'},
-												{ctor: '[]'}),
+												_aforemny$elm_mdc$Material_List$listItem,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#permanent-drawer-above')),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_aforemny$elm_mdc$Material_List$graphicIcon,
+														{ctor: '[]'},
+														'send'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Sent Mail'),
+														_1: {ctor: '[]'}
+													}
+												}),
 											_1: {
 												ctor: '::',
 												_0: A2(
@@ -31038,35 +30990,19 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 														_0: A2(
 															_aforemny$elm_mdc$Material_List$graphicIcon,
 															{ctor: '[]'},
-															'email'),
+															'drafts'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('All Mail'),
+															_0: _elm_lang$html$Html$text('Drafts'),
 															_1: {ctor: '[]'}
 														}
 													}),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_List$listItem,
-														{
-															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_Options$attribute(
-																_elm_lang$html$Html_Attributes$href('#permanent-drawer-above')),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: A2(
-																_aforemny$elm_mdc$Material_List$graphicIcon,
-																{ctor: '[]'},
-																'delete'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Trash'),
-																_1: {ctor: '[]'}
-															}
-														}),
+														_aforemny$elm_mdc$Material_List$divider,
+														{ctor: '[]'},
+														{ctor: '[]'}),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -31082,21 +31018,67 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 																_0: A2(
 																	_aforemny$elm_mdc$Material_List$graphicIcon,
 																	{ctor: '[]'},
-																	'report'),
+																	'email'),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Spam'),
+																	_0: _elm_lang$html$Html$text('All Mail'),
 																	_1: {ctor: '[]'}
 																}
 															}),
-														_1: {ctor: '[]'}
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_aforemny$elm_mdc$Material_List$listItem,
+																{
+																	ctor: '::',
+																	_0: _aforemny$elm_mdc$Material_Options$attribute(
+																		_elm_lang$html$Html_Attributes$href('#permanent-drawer-above')),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_aforemny$elm_mdc$Material_List$graphicIcon,
+																		{ctor: '[]'},
+																		'delete'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Trash'),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_aforemny$elm_mdc$Material_List$listItem,
+																	{
+																		ctor: '::',
+																		_0: _aforemny$elm_mdc$Material_Options$attribute(
+																			_elm_lang$html$Html_Attributes$href('#permanent-drawer-above')),
+																		_1: {ctor: '[]'}
+																	},
+																	{
+																		ctor: '::',
+																		_0: A2(
+																			_aforemny$elm_mdc$Material_List$graphicIcon,
+																			{ctor: '[]'},
+																			'report'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Spam'),
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
 													}
 												}
 											}
 										}
 									}
-								}
-							}
+								}),
+							_1: {ctor: '[]'}
 						}
 					}),
 				_1: {
@@ -31582,7 +31564,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 						{
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Drawer_Permanent$render,
+								_aforemny$elm_mdc$Material_Drawer_Permanent$view,
 								function (_p2) {
 									return lift(
 										_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p2));
@@ -31597,48 +31579,13 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 								{
 									ctor: '::',
 									_0: A2(
-										_aforemny$elm_mdc$Material_List$listItem,
+										_aforemny$elm_mdc$Material_List$ul,
 										{
 											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#permanent-drawer-below')),
+											_0: _aforemny$elm_mdc$Material_Drawer_Permanent$content,
 											_1: {ctor: '[]'}
 										},
 										{
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_List$graphicIcon,
-												{ctor: '[]'},
-												'inbox'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Inbox'),
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_aforemny$elm_mdc$Material_List$listItem,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$attribute(
-													_elm_lang$html$Html_Attributes$href('#permanent-drawer-below')),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: A2(
-													_aforemny$elm_mdc$Material_List$graphicIcon,
-													{ctor: '[]'},
-													'star'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Star'),
-													_1: {ctor: '[]'}
-												}
-											}),
-										_1: {
 											ctor: '::',
 											_0: A2(
 												_aforemny$elm_mdc$Material_List$listItem,
@@ -31653,10 +31600,10 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 													_0: A2(
 														_aforemny$elm_mdc$Material_List$graphicIcon,
 														{ctor: '[]'},
-														'send'),
+														'inbox'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Sent Mail'),
+														_0: _elm_lang$html$Html$text('Inbox'),
 														_1: {ctor: '[]'}
 													}
 												}),
@@ -31675,19 +31622,35 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 														_0: A2(
 															_aforemny$elm_mdc$Material_List$graphicIcon,
 															{ctor: '[]'},
-															'drafts'),
+															'star'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('Drafts'),
+															_0: _elm_lang$html$Html$text('Star'),
 															_1: {ctor: '[]'}
 														}
 													}),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_List$divider,
-														{ctor: '[]'},
-														{ctor: '[]'}),
+														_aforemny$elm_mdc$Material_List$listItem,
+														{
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$href('#permanent-drawer-below')),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: A2(
+																_aforemny$elm_mdc$Material_List$graphicIcon,
+																{ctor: '[]'},
+																'send'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Sent Mail'),
+																_1: {ctor: '[]'}
+															}
+														}),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -31703,35 +31666,19 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 																_0: A2(
 																	_aforemny$elm_mdc$Material_List$graphicIcon,
 																	{ctor: '[]'},
-																	'email'),
+																	'drafts'),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('All Mail'),
+																	_0: _elm_lang$html$Html$text('Drafts'),
 																	_1: {ctor: '[]'}
 																}
 															}),
 														_1: {
 															ctor: '::',
 															_0: A2(
-																_aforemny$elm_mdc$Material_List$listItem,
-																{
-																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_Options$attribute(
-																		_elm_lang$html$Html_Attributes$href('#permanent-drawer-below')),
-																	_1: {ctor: '[]'}
-																},
-																{
-																	ctor: '::',
-																	_0: A2(
-																		_aforemny$elm_mdc$Material_List$graphicIcon,
-																		{ctor: '[]'},
-																		'delete'),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Trash'),
-																		_1: {ctor: '[]'}
-																	}
-																}),
+																_aforemny$elm_mdc$Material_List$divider,
+																{ctor: '[]'},
+																{ctor: '[]'}),
 															_1: {
 																ctor: '::',
 																_0: A2(
@@ -31747,21 +31694,67 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 																		_0: A2(
 																			_aforemny$elm_mdc$Material_List$graphicIcon,
 																			{ctor: '[]'},
-																			'report'),
+																			'email'),
 																		_1: {
 																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('Spam'),
+																			_0: _elm_lang$html$Html$text('All Mail'),
 																			_1: {ctor: '[]'}
 																		}
 																	}),
-																_1: {ctor: '[]'}
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_aforemny$elm_mdc$Material_List$listItem,
+																		{
+																			ctor: '::',
+																			_0: _aforemny$elm_mdc$Material_Options$attribute(
+																				_elm_lang$html$Html_Attributes$href('#permanent-drawer-below')),
+																			_1: {ctor: '[]'}
+																		},
+																		{
+																			ctor: '::',
+																			_0: A2(
+																				_aforemny$elm_mdc$Material_List$graphicIcon,
+																				{ctor: '[]'},
+																				'delete'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text('Trash'),
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_aforemny$elm_mdc$Material_List$listItem,
+																			{
+																				ctor: '::',
+																				_0: _aforemny$elm_mdc$Material_Options$attribute(
+																					_elm_lang$html$Html_Attributes$href('#permanent-drawer-below')),
+																				_1: {ctor: '[]'}
+																			},
+																			{
+																				ctor: '::',
+																				_0: A2(
+																					_aforemny$elm_mdc$Material_List$graphicIcon,
+																					{ctor: '[]'},
+																					'report'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text('Spam'),
+																					_1: {ctor: '[]'}
+																				}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
+																}
 															}
 														}
 													}
 												}
 											}
-										}
-									}
+										}),
+									_1: {ctor: '[]'}
 								}),
 							_1: {
 								ctor: '::',
@@ -32043,12 +32036,11 @@ var _aforemny$elm_mdc$Material_Drawer_Persistent$toggleOn = F3(
 var _aforemny$elm_mdc$Material_Drawer_Persistent$subscriptions = _aforemny$elm_mdc$Material_Drawer$subscriptions;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$subs = _aforemny$elm_mdc$Material_Drawer$subs;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$react = _aforemny$elm_mdc$Material_Drawer$react;
-var _aforemny$elm_mdc$Material_Drawer_Persistent$render = _aforemny$elm_mdc$Material_Drawer$render(_aforemny$elm_mdc$Material_Drawer_Persistent$className);
+var _aforemny$elm_mdc$Material_Drawer_Persistent$view = _aforemny$elm_mdc$Material_Drawer$render(_aforemny$elm_mdc$Material_Drawer_Persistent$className);
 var _aforemny$elm_mdc$Material_Drawer_Persistent$toolbarSpacer = _aforemny$elm_mdc$Material_Drawer$toolbarSpacer;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$content = _aforemny$elm_mdc$Material_Drawer$content;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$headerContent = _aforemny$elm_mdc$Material_Drawer$headerContent;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$header = _aforemny$elm_mdc$Material_Drawer$header;
-var _aforemny$elm_mdc$Material_Drawer_Persistent$view = _aforemny$elm_mdc$Material_Drawer$view(_aforemny$elm_mdc$Material_Drawer_Persistent$className);
 var _aforemny$elm_mdc$Material_Drawer_Persistent$defaultConfig = _aforemny$elm_mdc$Material_Drawer$defaultConfig;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$update = _aforemny$elm_mdc$Material_Drawer$update;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$defaultModel = _aforemny$elm_mdc$Material_Drawer$defaultModel;
@@ -32133,7 +32125,7 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 			{
 				ctor: '::',
 				_0: A5(
-					_aforemny$elm_mdc$Material_Drawer_Persistent$render,
+					_aforemny$elm_mdc$Material_Drawer_Persistent$view,
 					function (_p2) {
 						return lift(
 							_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p2));
@@ -32154,48 +32146,13 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_aforemny$elm_mdc$Material_List$listItem,
+								_aforemny$elm_mdc$Material_List$ul,
 								{
 									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Options$attribute(
-										_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
+									_0: _aforemny$elm_mdc$Material_Drawer_Persistent$content,
 									_1: {ctor: '[]'}
 								},
 								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_List$graphicIcon,
-										{ctor: '[]'},
-										'inbox'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Inbox'),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_List$listItem,
-									{
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Options$attribute(
-											_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: A2(
-											_aforemny$elm_mdc$Material_List$graphicIcon,
-											{ctor: '[]'},
-											'star'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Star'),
-											_1: {ctor: '[]'}
-										}
-									}),
-								_1: {
 									ctor: '::',
 									_0: A2(
 										_aforemny$elm_mdc$Material_List$listItem,
@@ -32210,10 +32167,10 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 											_0: A2(
 												_aforemny$elm_mdc$Material_List$graphicIcon,
 												{ctor: '[]'},
-												'send'),
+												'inbox'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Sent Mail'),
+												_0: _elm_lang$html$Html$text('Inbox'),
 												_1: {ctor: '[]'}
 											}
 										}),
@@ -32232,19 +32189,35 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 												_0: A2(
 													_aforemny$elm_mdc$Material_List$graphicIcon,
 													{ctor: '[]'},
-													'drafts'),
+													'star'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('Drafts'),
+													_0: _elm_lang$html$Html$text('Star'),
 													_1: {ctor: '[]'}
 												}
 											}),
 										_1: {
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_List$divider,
-												{ctor: '[]'},
-												{ctor: '[]'}),
+												_aforemny$elm_mdc$Material_List$listItem,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_aforemny$elm_mdc$Material_List$graphicIcon,
+														{ctor: '[]'},
+														'send'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Sent Mail'),
+														_1: {ctor: '[]'}
+													}
+												}),
 											_1: {
 												ctor: '::',
 												_0: A2(
@@ -32260,35 +32233,19 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 														_0: A2(
 															_aforemny$elm_mdc$Material_List$graphicIcon,
 															{ctor: '[]'},
-															'email'),
+															'drafts'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('All Mail'),
+															_0: _elm_lang$html$Html$text('Drafts'),
 															_1: {ctor: '[]'}
 														}
 													}),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_List$listItem,
-														{
-															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_Options$attribute(
-																_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: A2(
-																_aforemny$elm_mdc$Material_List$graphicIcon,
-																{ctor: '[]'},
-																'delete'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Trash'),
-																_1: {ctor: '[]'}
-															}
-														}),
+														_aforemny$elm_mdc$Material_List$divider,
+														{ctor: '[]'},
+														{ctor: '[]'}),
 													_1: {
 														ctor: '::',
 														_0: A2(
@@ -32304,21 +32261,67 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 																_0: A2(
 																	_aforemny$elm_mdc$Material_List$graphicIcon,
 																	{ctor: '[]'},
-																	'report'),
+																	'email'),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Spam'),
+																	_0: _elm_lang$html$Html$text('All Mail'),
 																	_1: {ctor: '[]'}
 																}
 															}),
-														_1: {ctor: '[]'}
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_aforemny$elm_mdc$Material_List$listItem,
+																{
+																	ctor: '::',
+																	_0: _aforemny$elm_mdc$Material_Options$attribute(
+																		_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_aforemny$elm_mdc$Material_List$graphicIcon,
+																		{ctor: '[]'},
+																		'delete'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Trash'),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_aforemny$elm_mdc$Material_List$listItem,
+																	{
+																		ctor: '::',
+																		_0: _aforemny$elm_mdc$Material_Options$attribute(
+																			_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
+																		_1: {ctor: '[]'}
+																	},
+																	{
+																		ctor: '::',
+																		_0: A2(
+																			_aforemny$elm_mdc$Material_List$graphicIcon,
+																			{ctor: '[]'},
+																			'report'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('Spam'),
+																			_1: {ctor: '[]'}
+																		}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
 													}
 												}
 											}
 										}
 									}
-								}
-							}
+								}),
+							_1: {ctor: '[]'}
 						}
 					}),
 				_1: {
@@ -34045,8 +34048,9 @@ var _aforemny$elm_mdc$Demo_Selects$subscriptions = F2(
 var _aforemny$elm_mdc$Material_Theme$dark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--dark');
 var _aforemny$elm_mdc$Material_Theme$textIconOnDark = F2(
 	function (options, icon) {
-		return A2(
-			_aforemny$elm_mdc$Material_Options$span,
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$span,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-dark'),
@@ -34068,8 +34072,9 @@ var _aforemny$elm_mdc$Material_Theme$textSecondaryOnDark = _aforemny$elm_mdc$Mat
 var _aforemny$elm_mdc$Material_Theme$textPrimaryOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-dark');
 var _aforemny$elm_mdc$Material_Theme$textIconOnLight = F2(
 	function (options, icon) {
-		return A2(
-			_aforemny$elm_mdc$Material_Options$span,
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$span,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-light'),
@@ -34091,8 +34096,9 @@ var _aforemny$elm_mdc$Material_Theme$textSecondaryOnLight = _aforemny$elm_mdc$Ma
 var _aforemny$elm_mdc$Material_Theme$textPrimaryOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-light');
 var _aforemny$elm_mdc$Material_Theme$textIconOnBackground = F2(
 	function (options, icon) {
-		return A2(
-			_aforemny$elm_mdc$Material_Options$span,
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$span,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-background'),
@@ -34114,8 +34120,9 @@ var _aforemny$elm_mdc$Material_Theme$textSecondaryOnBackground = _aforemny$elm_m
 var _aforemny$elm_mdc$Material_Theme$textPrimaryOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-background');
 var _aforemny$elm_mdc$Material_Theme$textIconOnSecondary = F2(
 	function (options, icon) {
-		return A2(
-			_aforemny$elm_mdc$Material_Options$span,
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$span,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-secondary'),
@@ -34137,8 +34144,9 @@ var _aforemny$elm_mdc$Material_Theme$textSecondaryOnSecondary = _aforemny$elm_md
 var _aforemny$elm_mdc$Material_Theme$textPrimaryOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-secondary');
 var _aforemny$elm_mdc$Material_Theme$textIconOnPrimary = F2(
 	function (options, icon) {
-		return A2(
-			_aforemny$elm_mdc$Material_Options$span,
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$span,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-primary'),
@@ -38397,21 +38405,23 @@ var _aforemny$elm_mdc$Material_Drawer_Temporary$openOn = F3(
 		return A2(
 			_aforemny$elm_mdc$Material_Options$on,
 			event,
-			_elm_lang$core$Json_Decode$succeed(
-				lift(
-					A2(
-						_aforemny$elm_mdc$Material_Msg$DrawerMsg,
-						index,
-						_aforemny$elm_mdc$Material_Internal_Drawer$Open(false)))));
+			function (_p0) {
+				return _elm_lang$core$Json_Decode$succeed(
+					lift(_p0));
+			}(
+				A2(
+					_aforemny$elm_mdc$Material_Msg$DrawerMsg,
+					index,
+					_aforemny$elm_mdc$Material_Internal_Drawer$Open(false))));
 	});
 var _aforemny$elm_mdc$Material_Drawer_Temporary$subscriptions = _aforemny$elm_mdc$Material_Drawer$subscriptions;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$subs = _aforemny$elm_mdc$Material_Drawer$subs;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$react = _aforemny$elm_mdc$Material_Drawer$react;
-var _aforemny$elm_mdc$Material_Drawer_Temporary$render = _aforemny$elm_mdc$Material_Drawer$render(_aforemny$elm_mdc$Material_Drawer_Temporary$className);
+var _aforemny$elm_mdc$Material_Drawer_Temporary$view = _aforemny$elm_mdc$Material_Drawer$render(_aforemny$elm_mdc$Material_Drawer_Temporary$className);
+var _aforemny$elm_mdc$Material_Drawer_Temporary$toolbarSpacer = _aforemny$elm_mdc$Material_Drawer$toolbarSpacer;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$content = _aforemny$elm_mdc$Material_Drawer$content;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$headerContent = _aforemny$elm_mdc$Material_Drawer$headerContent;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$header = _aforemny$elm_mdc$Material_Drawer$header;
-var _aforemny$elm_mdc$Material_Drawer_Temporary$view = _aforemny$elm_mdc$Material_Drawer$view(_aforemny$elm_mdc$Material_Drawer_Temporary$className);
 var _aforemny$elm_mdc$Material_Drawer_Temporary$defaultConfig = _aforemny$elm_mdc$Material_Drawer$defaultConfig;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$update = _aforemny$elm_mdc$Material_Drawer$update;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$defaultModel = _aforemny$elm_mdc$Material_Drawer$defaultModel;
@@ -38547,7 +38557,7 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 				_1: {
 					ctor: '::',
 					_0: A5(
-						_aforemny$elm_mdc$Material_Drawer_Temporary$render,
+						_aforemny$elm_mdc$Material_Drawer_Temporary$view,
 						function (_p4) {
 							return lift(
 								_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p4));
@@ -38587,8 +38597,12 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_aforemny$elm_mdc$Material_Drawer_Temporary$content,
-									{ctor: '[]'},
+									_aforemny$elm_mdc$Material_List$ul,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Drawer_Temporary$content,
+										_1: {ctor: '[]'}
+									},
 									{
 										ctor: '::',
 										_0: A2(
@@ -41012,7 +41026,9 @@ var _aforemny$elm_mdc$Demo_Theme$h2 = function (options) {
 		});
 };
 var _aforemny$elm_mdc$Demo_Theme$demoThemeTextStyles = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('demo-theme__text--styles'),
@@ -41096,8 +41112,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 					{
 						ctor: '::',
 						_0: function (options) {
-							return A2(
-								_aforemny$elm_mdc$Material_Options$span,
+							return A3(
+								_aforemny$elm_mdc$Material_Options$styled,
+								_elm_lang$html$Html$span,
 								{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textPrimaryOnBackground, _1: options},
 								{
 									ctor: '::',
@@ -41108,8 +41125,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 						_1: {
 							ctor: '::',
 							_0: function (options) {
-								return A2(
-									_aforemny$elm_mdc$Material_Options$span,
+								return A3(
+									_aforemny$elm_mdc$Material_Options$styled,
+									_elm_lang$html$Html$span,
 									{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textSecondaryOnBackground, _1: options},
 									{
 										ctor: '::',
@@ -41120,8 +41138,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 							_1: {
 								ctor: '::',
 								_0: function (options) {
-									return A2(
-										_aforemny$elm_mdc$Material_Options$span,
+									return A3(
+										_aforemny$elm_mdc$Material_Options$styled,
+										_elm_lang$html$Html$span,
 										{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnBackground, _1: options},
 										{
 											ctor: '::',
@@ -41132,8 +41151,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 								_1: {
 									ctor: '::',
 									_0: function (options) {
-										return A2(
-											_aforemny$elm_mdc$Material_Options$span,
+										return A3(
+											_aforemny$elm_mdc$Material_Options$styled,
+											_elm_lang$html$Html$span,
 											{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnBackground, _1: options},
 											{
 												ctor: '::',
@@ -41170,8 +41190,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 							{
 								ctor: '::',
 								_0: function (options) {
-									return A2(
-										_aforemny$elm_mdc$Material_Options$span,
+									return A3(
+										_aforemny$elm_mdc$Material_Options$styled,
+										_elm_lang$html$Html$span,
 										{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textPrimaryOnPrimary, _1: options},
 										{
 											ctor: '::',
@@ -41182,8 +41203,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 								_1: {
 									ctor: '::',
 									_0: function (options) {
-										return A2(
-											_aforemny$elm_mdc$Material_Options$span,
+										return A3(
+											_aforemny$elm_mdc$Material_Options$styled,
+											_elm_lang$html$Html$span,
 											{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textSecondaryOnPrimary, _1: options},
 											{
 												ctor: '::',
@@ -41194,8 +41216,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 									_1: {
 										ctor: '::',
 										_0: function (options) {
-											return A2(
-												_aforemny$elm_mdc$Material_Options$span,
+											return A3(
+												_aforemny$elm_mdc$Material_Options$styled,
+												_elm_lang$html$Html$span,
 												{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnPrimary, _1: options},
 												{
 													ctor: '::',
@@ -41206,8 +41229,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 										_1: {
 											ctor: '::',
 											_0: function (options) {
-												return A2(
-													_aforemny$elm_mdc$Material_Options$span,
+												return A3(
+													_aforemny$elm_mdc$Material_Options$styled,
+													_elm_lang$html$Html$span,
 													{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnPrimary, _1: options},
 													{
 														ctor: '::',
@@ -41244,8 +41268,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 									{
 										ctor: '::',
 										_0: function (options) {
-											return A2(
-												_aforemny$elm_mdc$Material_Options$span,
+											return A3(
+												_aforemny$elm_mdc$Material_Options$styled,
+												_elm_lang$html$Html$span,
 												{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textPrimaryOnSecondary, _1: options},
 												{
 													ctor: '::',
@@ -41256,8 +41281,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 										_1: {
 											ctor: '::',
 											_0: function (options) {
-												return A2(
-													_aforemny$elm_mdc$Material_Options$span,
+												return A3(
+													_aforemny$elm_mdc$Material_Options$styled,
+													_elm_lang$html$Html$span,
 													{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textSecondaryOnSecondary, _1: options},
 													{
 														ctor: '::',
@@ -41268,8 +41294,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 											_1: {
 												ctor: '::',
 												_0: function (options) {
-													return A2(
-														_aforemny$elm_mdc$Material_Options$span,
+													return A3(
+														_aforemny$elm_mdc$Material_Options$styled,
+														_elm_lang$html$Html$span,
 														{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnSecondary, _1: options},
 														{
 															ctor: '::',
@@ -41280,8 +41307,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 												_1: {
 													ctor: '::',
 													_0: function (options) {
-														return A2(
-															_aforemny$elm_mdc$Material_Options$span,
+														return A3(
+															_aforemny$elm_mdc$Material_Options$styled,
+															_elm_lang$html$Html$span,
 															{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnSecondary, _1: options},
 															{
 																ctor: '::',
@@ -41318,8 +41346,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 											{
 												ctor: '::',
 												_0: function (options) {
-													return A2(
-														_aforemny$elm_mdc$Material_Options$span,
+													return A3(
+														_aforemny$elm_mdc$Material_Options$styled,
+														_elm_lang$html$Html$span,
 														{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textPrimaryOnLight, _1: options},
 														{
 															ctor: '::',
@@ -41330,8 +41359,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 												_1: {
 													ctor: '::',
 													_0: function (options) {
-														return A2(
-															_aforemny$elm_mdc$Material_Options$span,
+														return A3(
+															_aforemny$elm_mdc$Material_Options$styled,
+															_elm_lang$html$Html$span,
 															{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textSecondaryOnLight, _1: options},
 															{
 																ctor: '::',
@@ -41342,8 +41372,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 													_1: {
 														ctor: '::',
 														_0: function (options) {
-															return A2(
-																_aforemny$elm_mdc$Material_Options$span,
+															return A3(
+																_aforemny$elm_mdc$Material_Options$styled,
+																_elm_lang$html$Html$span,
 																{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnLight, _1: options},
 																{
 																	ctor: '::',
@@ -41354,8 +41385,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 														_1: {
 															ctor: '::',
 															_0: function (options) {
-																return A2(
-																	_aforemny$elm_mdc$Material_Options$span,
+																return A3(
+																	_aforemny$elm_mdc$Material_Options$styled,
+																	_elm_lang$html$Html$span,
 																	{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnLight, _1: options},
 																	{
 																		ctor: '::',
@@ -41392,8 +41424,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 													{
 														ctor: '::',
 														_0: function (options) {
-															return A2(
-																_aforemny$elm_mdc$Material_Options$span,
+															return A3(
+																_aforemny$elm_mdc$Material_Options$styled,
+																_elm_lang$html$Html$span,
 																{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textPrimaryOnDark, _1: options},
 																{
 																	ctor: '::',
@@ -41404,8 +41437,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 														_1: {
 															ctor: '::',
 															_0: function (options) {
-																return A2(
-																	_aforemny$elm_mdc$Material_Options$span,
+																return A3(
+																	_aforemny$elm_mdc$Material_Options$styled,
+																	_elm_lang$html$Html$span,
 																	{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textSecondaryOnDark, _1: options},
 																	{
 																		ctor: '::',
@@ -41416,8 +41450,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 															_1: {
 																ctor: '::',
 																_0: function (options) {
-																	return A2(
-																		_aforemny$elm_mdc$Material_Options$span,
+																	return A3(
+																		_aforemny$elm_mdc$Material_Options$styled,
+																		_elm_lang$html$Html$span,
 																		{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnDark, _1: options},
 																		{
 																			ctor: '::',
@@ -41428,8 +41463,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 																_1: {
 																	ctor: '::',
 																	_0: function (options) {
-																		return A2(
-																			_aforemny$elm_mdc$Material_Options$span,
+																		return A3(
+																			_aforemny$elm_mdc$Material_Options$styled,
+																			_elm_lang$html$Html$span,
 																			{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textHintOnDark, _1: options},
 																			{
 																				ctor: '::',
@@ -41461,7 +41497,9 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 		});
 }();
 var _aforemny$elm_mdc$Demo_Theme$demoThemeColorBlock = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('demo-theme__color__block'),
@@ -41497,7 +41535,9 @@ var _aforemny$elm_mdc$Demo_Theme$demoThemeColorBlock = function (options) {
 		});
 };
 var _aforemny$elm_mdc$Demo_Theme$demoThemeColor = function (options) {
-	return _aforemny$elm_mdc$Material_Options$div(
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Options$cs('demo-theme__color'),
