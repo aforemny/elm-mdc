@@ -20,11 +20,13 @@ This implementation assumes that you have
 
 or an equivalent means of loading the icons in your HTML header.
 
-**Example:**
+
+# Example
 
 ```elm
 Icon.view [] "settings"
 ```
+
 
 # Usage
 
