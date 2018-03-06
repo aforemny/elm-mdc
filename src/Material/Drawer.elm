@@ -1,61 +1,26 @@
-module Material.Drawer
-    exposing
-        ( -- VIEW
-          view
-        , Property
-        , Config
-        , defaultConfig
-
-        , header
-        , headerContent
-        , content
-        , toolbarSpacer
-
-          -- TEA
-        , subscriptions
-        , open
-        , close
-        , toggle
-        , Model
-        , defaultModel
-        , Msg
-        , update
-
-          -- RENDER
-        , subs
-        , emit
-        , render
-        , Store
-        , react
-        )
-
-{-| The MDC Drawer component is a spec-aligned drawer component adhering to the
-Material Design navigation drawer pattern. It implements permanent, persistent,
-and temporary drawers.
-
-## Design & API Documentation
-
-- [Material Design guidelines: Navigation drawer](https://material.io/guidelines/patterns/navigation-drawer.html)
-- [Demo: Temporary Drawer](https://aforemny.github.io/elm-mdc/#temporary-drawer)
-- [Demo: Persistent Drawer](https://aforemny.github.io/elm-mdc/#persistent-drawer)
-- [Demo: Permanent Drawer Above Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-above)
-- [Demo: Permanent Drawer Below Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-below)
-
-## View
-@docs view
-@docs Property
-
-## Elements
-@docs header, headerContent, content
-
-## TEA architecture
-@docs subscriptions, Model, defaultModel, Msg, update
-@docs open, close, toggle
-
-## Featured render
-@docs subs, emit, render
-@docs Store, react
--}
+module Material.Drawer exposing
+    ( close
+    , Config
+    , content
+    , defaultConfig
+    , defaultModel
+    , emit
+    , header
+    , headerContent
+    , Model
+    , Msg
+    , open
+    , Property
+    , react
+    , render
+    , Store
+    , subs
+    , subscriptions
+    , toggle
+    , toolbarSpacer
+    , update
+    , view
+    )
 
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
@@ -63,6 +28,7 @@ import Material.Component as Component exposing (Indexed)
 import Material.Helpers as Helpers
 import Material.Internal.Drawer exposing (Msg(..))
 import Material.Internal.Options as Internal
+import Material.List as Lists
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (Style, cs, css, styled, many, when, maybe)
 import Mouse
@@ -188,17 +154,14 @@ headerContent options =
     styled Html.div (cs "mdc-drawer__header-content" :: options)
 
 
-content : List (Property m) -> List (Html m) -> Html m
-content options =
-    styled Html.nav (cs "mdc-drawer__content" :: options)
+content : Lists.Property m
+content =
+    cs "mdc-drawer__content"
 
 
 toolbarSpacer : List (Property m) -> List (Html m) -> Html m
 toolbarSpacer options =
-    styled Html.div
-    ( cs "mdc-drawer__toolbar-spacer"
-    :: options
-    )
+    styled Html.div (cs "mdc-drawer__toolbar-spacer" :: options)
 
 
 type alias Store s =

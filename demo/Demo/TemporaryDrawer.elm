@@ -79,7 +79,7 @@ view lift page model =
         ]
       ]
 
-    , Drawer.render (lift << Mdc) [0] model.mdc []
+    , Drawer.view (lift << Mdc) [0] model.mdc []
       [ Drawer.header
         [ Theme.primaryBg
         , Theme.textPrimaryOnPrimary
@@ -89,7 +89,9 @@ view lift page model =
           ]
         ]
 
-      , Drawer.content []
+      , Lists.ul
+        [ Drawer.content
+        ]
         [ Lists.listItem
           [ Options.attribute (Html.href "#temporary-drawer") ]
           [ Lists.graphicIcon [] "inbox"

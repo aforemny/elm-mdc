@@ -90,44 +90,48 @@ view lift page model =
       , page.fixedAdjust
       ]
       [ 
-        Drawer.render (lift << Mdc) [0] model.mdc []
-        [ Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-below") ]
-          [ Lists.graphicIcon [] "inbox"
-          , text "Inbox"
+        Drawer.view (lift << Mdc) [0] model.mdc []
+        [ Lists.ul
+          [ Drawer.content
           ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-below") ]
-          [ Lists.graphicIcon [] "star"
-          , text "Star"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-below") ]
-          [ Lists.graphicIcon [] "send"
-          , text "Sent Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-below") ]
-          [ Lists.graphicIcon [] "drafts"
-          , text "Drafts"
-          ]
+          [ Lists.listItem
+            [ Options.attribute (Html.href "#permanent-drawer-below") ]
+            [ Lists.graphicIcon [] "inbox"
+            , text "Inbox"
+            ]
+          , Lists.listItem
+            [ Options.attribute (Html.href "#permanent-drawer-below") ]
+            [ Lists.graphicIcon [] "star"
+            , text "Star"
+            ]
+          , Lists.listItem
+            [ Options.attribute (Html.href "#permanent-drawer-below") ]
+            [ Lists.graphicIcon [] "send"
+            , text "Sent Mail"
+            ]
+          , Lists.listItem
+            [ Options.attribute (Html.href "#permanent-drawer-below") ]
+            [ Lists.graphicIcon [] "drafts"
+            , text "Drafts"
+            ]
 
-        , Lists.divider [] []
+          , Lists.divider [] []
 
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-below") ]
-          [ Lists.graphicIcon [] "email"
-          , text "All Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-below") ]
-          [ Lists.graphicIcon [] "delete"
-          , text "Trash"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-below") ]
-          [ Lists.graphicIcon [] "report"
-          , text "Spam"
+          , Lists.listItem
+            [ Options.attribute (Html.href "#permanent-drawer-below") ]
+            [ Lists.graphicIcon [] "email"
+            , text "All Mail"
+            ]
+          , Lists.listItem
+            [ Options.attribute (Html.href "#permanent-drawer-below") ]
+            [ Lists.graphicIcon [] "delete"
+            , text "Trash"
+            ]
+          , Lists.listItem
+            [ Options.attribute (Html.href "#permanent-drawer-below") ]
+            [ Lists.graphicIcon [] "report"
+            , text "Spam"
+            ]
           ]
         ]
 
