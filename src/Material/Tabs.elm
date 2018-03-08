@@ -1,74 +1,80 @@
 module Material.Tabs exposing
-    (
-      -- VIEW
-      view
-
-      -- PROPERTIES
-    , Property
-    , scroller
-    , indicatorPrimary
-    , indicatorAccent
+    ( icon
+    , iconText
     , indicator
-
-      -- TABS
-    , tab
-    , withIconAndText
-    , icon
-    , iconLabel
-
-      -- TEA
     , Model
-    , defaultModel
-    , Msg
-    , update
-
-      -- RENDER
-    , render
-    , Store
+    , Property
     , react
+    , scrolling
+    , tab
+    , Tab
+    , view
+    , withIconAndText
     )
 
 {-|
-> The MDC Tabs component contains components which are used to create
-> spec-aligned tabbed navigation components adhering to the Material Design
-> tabs guidelines. These components are:
->
-> - mdc-tab: The individual tab elements
-> - mdc-tab-bar: The main component which is composed of mdc-tab elements
-> - mdc-tab-bar-scroller: The component which controls the horizontal scrolling behavior of an mdc-tab-bar that overflows its container
+The Tabs component contains components which are used to create spec-aligned
+tabbed navigation components adhering to the Material Design tabs guidelines.
 
-## Design & API Documentation
+This component consists of a TabBar containing Tabs. It supports scrolling of
+Tabs.
+
+# Resources
 
 - [Material Design guidelines: Tabs](https://material.io/guidelines/components/tabs.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#tabs)
 
-## View
-@docs view
 
-## Properties
+# Example
+
+```elm
+import Material.Tabs as TabBar
+
+TabBar.view Mdc [0] model.mdc
+    [ TabBar.indicator
+    ]
+    [ TabBar.tab [] [ text "Item One" ]
+    , TabBar.tab [] [ text "Item Two" ]
+    , TabBar.tab [] [ text "Item Three" ]
+    ]
+```
+
+
+# Usage
+
+## TabBar
+
 @docs Property
-@docs scroller
-@docs indicatorPrimary, indicatorAccent, indicator
+@docs view
+@docs scrolling
+@docs indicator
+
 
 ## Tabs
+
+@docs Tab
 @docs tab
 @docs withIconAndText
 @docs icon
-@docs iconLabel
+@docs iconText
 
-## TEA
-@docs Model, defaultModel, Msg, update
 
-## Render
-@docs render, Store, react
+# Internal
+@docs Model
+@docs react
 -}
 
 import Dict exposing (Dict)
 import DOM
+import GlobalEvents
+import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
+import Json.Encode
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
+import Material.Helpers as Helpers
+import Material.Icon as Icon
 import Material.Internal.Options as Internal
 import Material.Internal.Tabs exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg exposing (Index)
@@ -76,26 +82,34 @@ import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Ripple as Ripple
 
 
+{-| TabBar model.
+
+Internal use only.
+-}
 type alias Model =
-    { index : Int
-    , geometry : Geometry
-    , translationOffset : Float
+    { geometry : Maybe Geometry
+    , index : Int
+    , translateOffset : Float
     , scale : Float
-    , nextIndicator : Bool
-    , backIndicator : Bool
     , ripples : Dict Int Ripple.Model
+    , indicatorShown : Bool
+    , forwardIndicator : Bool
+    , backIndicator : Bool
+    , scrollLeftAmount : Int
     }
 
 
 defaultModel : Model
 defaultModel =
-    { index = 0
-    , geometry = defaultGeometry
-    , translationOffset = 0
+    { geometry = Nothing
+    , index = 0
+    , translateOffset = 0
     , scale = 0
-    , nextIndicator = False
-    , backIndicator = False
     , ripples = Dict.empty
+    , indicatorShown = False
+    , forwardIndicator = False
+    , backIndicator = False
+    , scrollLeftAmount = 0
     }
 
 
@@ -105,6 +119,59 @@ type alias Msg m
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
+    let
+        isRtl =
+            False -- TODO
+
+        scrollToTabAtIndex isRtl geometry i =
+            let
+                tab =
+                    geometry.tabs
+                    |> List.drop i
+                    |> List.head
+                    |> Maybe.withDefault
+                         { offsetLeft = 0
+                         , offsetWidth = 0
+                         }
+
+                tabBarWidth =
+                    geometry.tabBar.offsetWidth
+
+                scrollTargetOffsetLeft =
+                    tab.offsetLeft
+
+                scrollTargetOffsetWidth =
+                    tab.offsetWidth
+
+                normalizeForRtl left width =
+                    if isRtl then
+                        tabBarWidth - (left + width)
+                    else
+                        left
+            in
+            normalizeForRtl scrollTargetOffsetLeft scrollTargetOffsetWidth
+
+        indicatorEnabledStates geometry translateOffset =
+            let
+                backIndicator =
+                    translateOffset /= 0
+
+                tabBarWidth =
+                    geometry.tabBar.offsetWidth
+
+                remainingTabBarWidth =
+                    tabBarWidth - translateOffset
+
+                scrollFrameWidth =
+                    geometry.scrollFrame.offsetWidth
+
+                forwardIndicator =
+                    remainingTabBarWidth > scrollFrameWidth
+            in
+            { forwardIndicator = forwardIndicator
+            , backIndicator = backIndicator
+            }
+    in
     case msg of
         RippleMsg index msg_ ->
             let
@@ -120,7 +187,10 @@ update lift msg model =
             )
 
         Dispatch msgs ->
-            ( Nothing, Dispatch.forward msgs )
+            ( Nothing, Dispatch.forward msgs)
+
+        NoOp ->
+            ( Nothing, Cmd.none )
 
         Select index geometry ->
             ( Just
@@ -132,108 +202,232 @@ update lift msg model =
               Cmd.none
             )
 
-        ScrollBackward geometry ->
+        ScrollBack geometry ->
             let
-                concealedTabs =
-                    List.reverse geometry.tabs
-                    |> List.indexedMap (\index tab ->
-                           let
-                              tabRight =
-                                  tab.offsetLeft + tab.width
-                           in
-                           if tabRight + model.translationOffset < 0 then
-                               Just (index, tab)
-                           else
-                               Nothing
-                       )
-                    |> List.filterMap identity
+                tabBarWidth =
+                    geometry.tabBar.offsetWidth
 
                 scrollFrameWidth =
-                    geometry.scrollFrame.width
+                    geometry.scrollFrame.offsetWidth
 
-                translationOffset =
-                    concealedTabs
-                    |> List.foldl
-                       (\(_, tab) (accum, translationOffset) ->
-                             let
-                                accum_ =
-                                    accum + tab.width
-                             in
-                             if accum_ > scrollFrameWidth then
-                                 (accum, -tab.offsetLeft)
-                             else
-                                 (accum_, -tab.offsetLeft)
-                       )
-                       (0, model.translationOffset)
-                    |> Tuple.second
+                currentTranslateOffset =
+                    model.translateOffset
 
-                totalTabsWidth =
-                    computeTotalTabsWidth geometry
+                loop ( i, tab ) ({ scrollTargetIndex, tabWidthAccumulator } as result) =
+                    if scrollTargetIndex /= Nothing then
+                        result
+                    else
+                        let
+                            tabOffsetLeft =
+                                tab.offsetLeft
+
+                            tabBarWidthLessTabOffsetLeft =
+                                tabBarWidth - tabOffsetLeft
+
+                            tabIsNotOccluded =
+                                if not isRtl then
+                                    tabOffsetLeft > currentTranslateOffset
+                                else
+                                    tabBarWidthLessTabOffsetLeft > currentTranslateOffset
+                        in
+                        if tabIsNotOccluded then
+                            result
+                        else
+                            let
+                                newTabWidthAccumulator =
+                                    tabWidthAccumulator + tab.offsetWidth
+
+                                scrollTargetDetermined =
+                                    newTabWidthAccumulator > scrollFrameWidth
+
+                                newScrollTargetIndex =
+                                    if scrollTargetDetermined then
+                                        Just <|
+                                        if isRtl then
+                                            i + 1
+                                        else
+                                            i
+                                    else
+                                        Nothing
+                            in
+                            { scrollTargetIndex = newScrollTargetIndex
+                            , tabWidthAccumulator = newTabWidthAccumulator
+                            }
+
+                scrollTargetIndex =
+                    Maybe.withDefault 0 << .scrollTargetIndex <|
+                    List.foldl loop
+                        { scrollTargetIndex = Nothing
+                        , tabWidthAccumulator = 0
+                        }
+                        (List.reverse (List.indexedMap (,) geometry.tabs))
+
+                translateOffset =
+                    scrollToTabAtIndex isRtl geometry scrollTargetIndex
+
+                { forwardIndicator, backIndicator } =
+                    indicatorEnabledStates geometry translateOffset
             in
             ( Just
               { model
-                  | geometry = geometry
-                  , translationOffset = translationOffset
-                  , nextIndicator = totalTabsWidth + translationOffset > scrollFrameWidth
-                  , backIndicator = translationOffset < 0
+                  | geometry = Just geometry
+                  , translateOffset = translateOffset
+                  , forwardIndicator = forwardIndicator
+                  , backIndicator = backIndicator
               }
             ,
               Cmd.none
             )
+
         ScrollForward geometry ->
             let
-                concealedTabs =
-                    geometry.tabs
-                    |> List.indexedMap (\index tab ->
-                           let
-                              tabRight =
-                                  tab.offsetLeft + tab.width
-                           in
-                           if tabRight + model.translationOffset > scrollFrameWidth then
-                               Just (index, tab)
-                           else
-                               Nothing
-                       )
-                    |> List.filterMap identity
+                currentTranslationOffset =
+                    model.translateOffset
 
                 scrollFrameWidth =
-                    geometry.scrollFrame.width
+                    geometry.scrollFrame.offsetWidth + currentTranslationOffset
 
-                translationOffset =
-                    concealedTabs
-                    |> List.head
-                    |> Maybe.map (\(_, tab) -> -tab.offsetLeft)
-                    |> Maybe.withDefault model.translationOffset
+                loop ( i, tab ) ({ scrollTargetIndex } as result) =
+                    if scrollTargetIndex /= Nothing then
+                        result
+                    else
+                        let
+                            tabOffsetLeftAndWidth =
+                                tab.offsetLeft + tab.offsetWidth
 
-                totalTabsWidth =
-                    computeTotalTabsWidth geometry
+                            scrollTargetDetermined =
+                                if not isRtl then
+                                    tabOffsetLeftAndWidth > scrollFrameWidth
+                                else
+                                    let
+                                        frameOffsetAndTabWidth =
+                                            scrollFrameWidth - tab.offsetWidth
+
+                                        tabRightOffset =
+                                            tab.offsetWidth - tabOffsetLeftAndWidth
+                                    in
+                                    tabRightOffset > frameOffsetAndTabWidth
+                        in
+                        if scrollTargetDetermined then
+                            { scrollTargetIndex = Just i
+                            }
+                        else
+                            { scrollTargetIndex = Nothing
+                            }
+
+                scrollTargetIndex =
+                    Maybe.withDefault 0 << .scrollTargetIndex <|
+                    List.foldl loop
+                        { scrollTargetIndex = Nothing
+                        }
+                        (List.indexedMap (,) geometry.tabs)
+
+                translateOffset =
+                    scrollToTabAtIndex isRtl geometry scrollTargetIndex
+
+                { forwardIndicator, backIndicator } =
+                    indicatorEnabledStates geometry translateOffset
             in
             ( Just
               { model
-                  | geometry = geometry
-                  , translationOffset = translationOffset
-                  , nextIndicator = totalTabsWidth + translationOffset > scrollFrameWidth
-                  , backIndicator = translationOffset < 0
+                  | geometry = Just geometry
+                  , translateOffset = translateOffset
+                  , forwardIndicator = forwardIndicator
+                  , backIndicator = backIndicator
               }
             ,
               Cmd.none
             )
+
+        Focus i geometry ->
+            let
+                resetAmt =
+                    if isRtl then
+                        model.scrollLeftAmount
+                    else
+                        0
+
+                tab =
+                    geometry.tabs
+                    |> List.drop i
+                    |> List.head
+                    |> Maybe.withDefault
+                           { offsetLeft = 0
+                           , offsetWidth = 0
+                           }
+
+                scrollFrameWidth =
+                    geometry.scrollFrame.offsetWidth
+
+                tabBarWidth =
+                    geometry.tabBar.offsetWidth
+
+                leftEdge =
+                    tab.offsetLeft
+
+                rightEdge =
+                    leftEdge + tab.offsetWidth
+
+                normalizedLeftOffset =
+                    tabBarWidth - leftEdge
+
+                currentTranslateOffset =
+                    model.translateOffset
+
+                shouldScrollBack =
+                    if not isRtl then
+                        rightEdge <= currentTranslateOffset
+                    else
+                        leftEdge >= tabBarWidth - currentTranslateOffset
+
+                shouldScrollForward =
+                    if not isRtl then
+                        rightEdge > currentTranslateOffset + scrollFrameWidth
+                    else
+                        normalizedLeftOffset > scrollFrameWidth + currentTranslateOffset
+            in
+            if shouldScrollForward then
+                update lift (ScrollForward geometry) model
+            else if shouldScrollBack then
+                update lift (ScrollBack geometry) model
+            else
+                ( Nothing, Cmd.none )
 
         Init geometry ->
             ( let
-                  totalTabsWidth =
-                      List.foldl (\tab accum -> tab.width + accum) 0 geometry.tabs
+                  tabBarWidth =
+                      geometry.tabBar.offsetWidth
+
+                  scrollFrameWidth =
+                      geometry.scrollFrame.offsetWidth
+
+                  isOverflowing =
+                      tabBarWidth > scrollFrameWidth
+
+                  translateOffset =
+                      if not isOverflowing then
+                          0
+                      else
+                          model.translateOffset
+
+                  { forwardIndicator, backIndicator } =
+                      indicatorEnabledStates geometry translateOffset
               in
               Just
               { model
-                  | geometry = geometry
+                  | geometry = Just geometry
                   , scale = computeScale geometry 0
-                  , nextIndicator = totalTabsWidth > geometry.scrollFrame.width
-                  , backIndicator = False
+                  , forwardIndicator = forwardIndicator
+                  , backIndicator = backIndicator
+                  , translateOffset = translateOffset
+                  , indicatorShown = False
               }
             ,
-              Cmd.none
+              Helpers.delay 0 (lift SetIndicatorShown)
             )
+
+        SetIndicatorShown ->
+            ( Just { model | indicatorShown = True }, Cmd.none )
 
 
 type alias Config =
@@ -251,56 +445,65 @@ defaultConfig =
     }
 
 
-scroller : Property m
-scroller =
+{-| Make the TabBar scroll if its tabs do not fit inside.
+
+Displays forward and backward navigation arrows on either side if necessary and
+advances scroll on pressing the Tab key.
+-}
+scrolling : Property m
+scrolling =
     Internal.option (\config -> { config | scroller = True })
 
 
-withIconAndText : Property m
-withIconAndText =
-    cs "mdc-tab--with-icon-and-text"
-
-
-indicatorPrimary : Property m
-indicatorPrimary =
-    cs "mdc-tab-bar--indicator-primary"
-
-
-indicatorAccent : Property m
-indicatorAccent =
-    cs "mdc-tab-bar--indicator-accent"
-
-
+{-| Make the TabBar's tabs have an active indicator.
+-}
 indicator : Property m
 indicator =
     Internal.option (\config -> { config | indicator = True })
 
 
-tab : List (Property m)
-    -> List (Html m)
-    -> { node : List (Property m) -> List (Html m) -> Html m
-       , options : List (Property m)
-       , childs : List (Html m)
-       }
+{-| A TabBar's tab type.
+
+Use `tab` to construct.
+-}
+type alias Tab m =
+    { options : List (Property m)
+    , childs : List (Html m)
+    }
+
+
+{-| A TabBar's tab.
+-}
+tab : List (Property m) -> List (Html m) -> Tab m
 tab options childs =
-    { node = \options childs -> styled Html.div options childs
-    , options = options
+    { options = options
     , childs = childs
     }
 
 
+{-| Configure tab to show both an icon and a text.
+
+Use `icon` and `iconText` as children.
+-}
+withIconAndText : Property m
+withIconAndText =
+    cs "mdc-tab--with-icon-and-text"
+
+
+{-| A tab's icon.
+-}
 icon : List (Options.Property c m) -> String -> Html m
 icon options icon =
-    styled Html.i
+    Icon.view
     [ cs "mdc-tab__icon"
-    , cs "material-icons"
     ]
-    [ text icon
-    ]
+    icon
 
 
-iconLabel : List (Options.Property c m) -> String -> Html m
-iconLabel options str =
+{-| A tab's icon text.
+-}
+iconText : List (Options.Property c m) -> String -> Html m
+iconText options str =
     styled Html.span
     ( cs "mdc-tab__icon-text"
     :: options
@@ -309,20 +512,19 @@ iconLabel options str =
     ]
 
 
+{-| TabBar property.
+-}
 type alias Property m =
     Options.Property (Config) m
 
 
-view
+tabs
     : (Msg m -> m)
     -> Model
     -> List (Property m)
-    -> List { node : List (Property m) -> List (Html m) -> Html m
-            , options : List (Property m)
-            , childs : List (Html m)
-            }
+    -> List (Tab m)
     -> Html m
-view lift model options nodes =
+tabs lift model options nodes =
     let
         summary =
             Internal.collect defaultConfig options
@@ -333,13 +535,26 @@ view lift model options nodes =
         numTabs =
             List.length nodes
 
+        isRtl =
+            False -- TODO
+
         tabBarTransform =
-            "translateX(" ++ toString model.translationOffset ++ "px)"
+            let
+                shiftAmount =
+                    if isRtl then
+                        model.translateOffset
+                    else
+                        -model.translateOffset
+            in
+            "translateX(" ++ toString shiftAmount ++ "px)"
+
+        geometry =
+            Maybe.withDefault defaultGeometry model.geometry
 
         indicatorTransform =
             let
                 tabLeft =
-                    model.geometry.tabs
+                    geometry.tabs
                     |> List.drop model.index
                     |> List.head
                     |> Maybe.map .offsetLeft
@@ -359,7 +574,9 @@ view lift model options nodes =
               , cs "mdc-tab-bar-scroller__indicator--back"
               , cs "mdc-tab-bar-scroller__indicator--enabled"
               , css "display" "none" |> when (not model.backIndicator)
-              , Options.on "click" (Json.map (lift << ScrollBackward) (decodeGeometryOnIndicator config.indicator))
+              , Options.on "click" <|
+                Json.map (lift << ScrollBack) <|
+                decodeGeometryOnIndicator config.indicator
               ]
               [ styled Html.a
                 [ cs "mdc-tab-bar__indicator__inner"
@@ -371,6 +588,8 @@ view lift model options nodes =
               ]
             , styled Html.div
               [ cs "mdc-tab-bar-scroller__scroll-frame"
+              , Options.attribute << Html.property "scrollLeft" <|
+                Json.Encode.int model.scrollLeftAmount
               ]
               [ tabBar
               ]
@@ -378,8 +597,10 @@ view lift model options nodes =
               [ cs "mdc-tab-bar-scroller__indicator"
               , cs "mdc-tab-bar-scroller__indicator--next"
               , cs "mdc-tab-bar-scroller__indicator--enabled"
-              , Options.on "click" (Json.map (lift << ScrollForward) (decodeGeometryOnIndicator config.indicator))
-              , css "display" "none" |> when (not model.nextIndicator)
+              , Options.on "click" <|
+                Json.map (lift << ScrollForward) <|
+                decodeGeometryOnIndicator config.indicator
+              , css "display" "none" |> when (not model.forwardIndicator)
               ]
               [ styled Html.a
                 [ cs "mdc-tab-bar__indicator__inner"
@@ -390,9 +611,6 @@ view lift model options nodes =
                 ]
               ]
             ]
-
-        hasIndicator =
-            config.indicator
     in
         (if config.scroller then tabBarScroller else identity) <|
         Internal.apply summary
@@ -403,18 +621,19 @@ view lift model options nodes =
               [ cs "mdc-tab-bar-scroller__scroller-frame__tabs"
               , css "transform" tabBarTransform
               ]
-            , Options.on "ElmMdcInit"
-                  (Json.map (lift << Init)
-                  (decodeGeometryOnTabBar config.indicator))
-            , Options.on "ElmMdcWindowResize"
-                  (Json.map (lift << Init)
-                  (decodeGeometryOnTabBar config.indicator))
+            , when (model.geometry == Nothing) <|
+              Options.many << List.map Internal.attribute <|
+              GlobalEvents.onTick <| Json.map (lift << Init) <|
+              decodeGeometryOnTabBar config.indicator
+            , Options.many << List.map Internal.attribute <|
+              GlobalEvents.onResize <| Json.map (lift << Init) <|
+              decodeGeometryOnTabBar config.indicator
             ]
             [
             ]
             ( List.concat
               [ nodes
-                |> List.indexedMap (\index { node, options, childs }  ->
+                |> List.indexedMap (\index { options, childs }  ->
                        let
                           ripple =
                               Ripple.view False (lift << RippleMsg index)
@@ -423,16 +642,45 @@ view lift model options nodes =
                                 )
                                 []
                        in
-                       [ node
+                       [ styled Html.a
                            ( cs "mdc-tab"
                            :: when (model.index == index) (cs "mdc-tab--active")
-                           :: Options.on "click" (Json.map (lift << Select index) (decodeGeometryOnTab hasIndicator))
-                           -- :: Options.dispatch (lift << Dispatch)
-                           -- TODO: ^^^^^ is this needed?
+                           :: Options.attribute (Html.tabindex 0)
+                           :: ( Options.on "click" <|
+                                Json.map (lift << Select index) <|
+                                decodeGeometryOnTab config.indicator
+                              )
+                           :: ( Options.on "keydown" <|
+                                Json.map lift <|
+                                Json.map3 (\ key keyCode geometry ->
+                                        if (key == Just "Enter" || keyCode == 13) then
+                                            Select index geometry
+                                        else
+                                            NoOp
+                                    )
+                                    ( Json.oneOf
+                                      [ Json.map Just (Json.at ["key"] Json.string)
+                                      , Json.succeed Nothing
+                                      ]
+                                    )
+                                    (Json.at ["keyCode"] Json.int)
+                                    (decodeGeometryOnTab config.indicator)
+                              )
                            :: Options.many
                               [ ripple.interactionHandler
                               , ripple.properties
                               ]
+                           :: ( when config.scroller <|
+                                Options.on "focus" <|
+                                Json.map (lift << Focus index) <|
+                                decodeGeometryOnTab config.indicator
+                              )
+                           :: -- Note: We need to manually install event
+                              -- dispatching here, because both mdc-tab and
+                              -- ripple listen on focus events, and the global
+                              -- dispatch (see `view` below) only accounts for
+                              -- dispatching in mdc-tab-bar options.
+                              Options.dispatch (lift << Dispatch)
                            :: options
                            )
                            (childs ++ [ ripple.style ])
@@ -441,11 +689,17 @@ view lift model options nodes =
                 |> List.concat
 
               , if config.indicator then
+                    let
+                        indicatorFirstRender =
+                            not model.indicatorShown
+                    in
                     [ styled Html.div
                       [ cs "mdc-tab-bar__indicator"
-                      , css "display" "none" |> when (not hasIndicator)
                       , css "transform" indicatorTransform
-                      , css "visibility" "visible" |> when (numTabs > 0)
+                      , when (numTabs > 0) <|
+                        css "visibility" "visible"
+                      , when indicatorFirstRender <|
+                        css "transition" "none"
                       ]
                       []
                     ]
@@ -463,6 +717,10 @@ type alias Store s =
     Component.indexed .tabs (\x y -> { y | tabs = x }) defaultModel
 
 
+{-| TabBar react.
+
+Internal use only.
+-}
 react :
     (Material.Msg.Msg m -> m)
     -> Msg m
@@ -473,25 +731,25 @@ react =
     Component.react get set Material.Msg.TabsMsg update
 
 
-render :
+{-| TabBar view.
+-}
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
-    -> List { node : List (Property m) -> List (Html m) -> Html m
-            , options : List (Property m)
-            , childs : List (Html m)
-            }
+    -> List (Tab m)
     -> Html m
-render =
-    Component.render get view Material.Msg.TabsMsg
+view lift index store options =
+    Component.render get tabs Material.Msg.TabsMsg lift index store
+        (Internal.dispatch lift :: options)
 
 
 computeScale : Geometry -> Int -> Float
 computeScale geometry index =
     let
         totalTabsWidth =
-            computeTotalTabsWidth geometry
+            List.foldl (+) 0 (List.map .offsetWidth geometry.tabs)
     in
     case List.head (List.drop index geometry.tabs) of
         Nothing ->
@@ -500,12 +758,7 @@ computeScale geometry index =
             if totalTabsWidth == 0 then
                 1
             else
-                tab.width / totalTabsWidth
-
-
-computeTotalTabsWidth : Geometry -> Float
-computeTotalTabsWidth geometry =
-    List.foldl (\tab accum -> tab.width + accum) 0 geometry.tabs
+                tab.offsetWidth / totalTabsWidth
 
 
 decodeGeometryOnIndicator : Bool -> Decoder Geometry
@@ -545,8 +798,7 @@ decodeGeometryOnTabBar hasIndicator =
 
 decodeGeometry : Bool -> Decoder Geometry
 decodeGeometry hasIndicator =
-    Json.map2
-        (\tabs scrollFrame -> { tabs = tabs, scrollFrame = scrollFrame })
+    Json.map3 Geometry
         ( (Json.map (if hasIndicator then (\xs -> List.take ((List.length xs) - 1) xs) else identity)) <|
           Json.map (List.filterMap identity) <|
           DOM.childNodes
@@ -558,14 +810,18 @@ decodeGeometry hasIndicator =
                         _ ->
                             Json.map Just <|
                             Json.map2
-                                (\offsetLeft width ->
-                                    { offsetLeft = offsetLeft, width = width }
+                                (\offsetLeft offsetWidth ->
+                                    { offsetLeft = offsetLeft
+                                    , offsetWidth = offsetWidth
+                                    }
                                 )
                                 DOM.offsetLeft
                                 DOM.offsetWidth
                  )
             )
         )
+        ( Json.map (\ offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
+        )
         ( DOM.parentElement <| -- .mdc-tab-bar-scroller__scroll-frame
-          Json.map (\width -> { width = width }) DOM.offsetWidth
+          Json.map (\ offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )

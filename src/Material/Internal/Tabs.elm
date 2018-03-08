@@ -4,22 +4,27 @@ import Material.Internal.Ripple as Ripple
 
 
 type Msg m
-    = Select Int Geometry
+    = NoOp
     | Dispatch (List m)
+    | Select Int Geometry
     | ScrollForward Geometry
-    | ScrollBackward Geometry
+    | ScrollBack Geometry
     | RippleMsg Int Ripple.Msg
     | Init Geometry
+    | SetIndicatorShown
+    | Focus Int Geometry
 
 
 type alias Geometry =
-    { tabs : List { offsetLeft : Float, width : Float }
-    , scrollFrame : { width : Float }
+    { tabs : List { offsetLeft : Float, offsetWidth : Float }
+    , tabBar : { offsetWidth : Float }
+    , scrollFrame : { offsetWidth : Float }
     }
 
 
 defaultGeometry : Geometry
 defaultGeometry =
     { tabs = []
-    , scrollFrame = { width = 0 }
+    , tabBar = { offsetWidth = 0 }
+    , scrollFrame = { offsetWidth = 0 }
     }

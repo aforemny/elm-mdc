@@ -1,33 +1,33 @@
-module Material.Options
-    exposing
-        ( Property
-        , cs
-        , css
-        , many
-        , nop
-        , data
-        , aria
-        , when
-        , styled
-        , attribute
-        , input
-        , container
-        , onClick
-        , onDoubleClick
-        , onMouseDown
-        , onMouseUp
-        , onMouseEnter
-        , onMouseLeave
-        , onMouseOver
-        , onMouseOut
-        , onCheck
-        , onToggle
-        , onBlur
-        , onFocus
-        , onInput
-        , on
-        , onWithOptions
-        )
+module Material.Options exposing
+    ( aria
+    , attribute
+    , container
+    , cs
+    , css
+    , data
+    , dispatch
+    , input
+    , many
+    , nop
+    , on
+    , onBlur
+    , onCheck
+    , onClick
+    , onDoubleClick
+    , onFocus
+    , onInput
+    , onMouseDown
+    , onMouseEnter
+    , onMouseLeave
+    , onMouseOut
+    , onMouseOver
+    , onMouseUp
+    , onToggle
+    , onWithOptions
+    , Property
+    , styled
+    , when
+    )
 
 {-| Properties, styles, and event definitions.
 
@@ -50,6 +50,7 @@ module Material.Options
 @docs onMouseUp
 @docs onToggle
 @docs onWithOptions
+@docs dispatch
 -}
 
 import Html.Attributes
