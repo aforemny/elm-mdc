@@ -1,75 +1,124 @@
 module Material.LayoutGrid exposing
-  (
-    -- VIEW
-    view
-  , inner
-  , Property
-
-  , cell
-
-  , span1
-  , span2
-  , span3
-  , span4
-  , span5
-  , span6
-  , span7
-  , span8
-  , span9
-  , span10
-  , span11
-  , span12
-
-  , span1Phone
-  , span2Phone
-  , span3Phone
-  , span4Phone
-
-  , span1Tablet
-  , span2Tablet
-  , span3Tablet
-  , span4Tablet
-  , span5Tablet
-  , span6Tablet
-  , span7Tablet
-  , span8Tablet
-
-  , span1Desktop
-  , span2Desktop
-  , span3Desktop
-  , span4Desktop
-  , span5Desktop
-  , span6Desktop
-  , span7Desktop
-  , span8Desktop
-  , span9Desktop
-  , span10Desktop
-  , span11Desktop
-  , span12Desktop
-
-  , fixedColumnWidth
-  , alignRight
-  , alignLeft
-  )
+    ( alignLeft
+    , alignRight
+    , cell
+    , fixedColumnWidth
+    , inner
+    , Property
+    , span1
+    , span10
+    , span10Desktop
+    , span11
+    , span11Desktop
+    , span12
+    , span12Desktop
+    , span1Desktop
+    , span1Phone
+    , span1Tablet
+    , span2
+    , span2Desktop
+    , span2Phone
+    , span2Tablet
+    , span3
+    , span3Desktop
+    , span3Phone
+    , span3Tablet
+    , span4
+    , span4Desktop
+    , span4Phone
+    , span4Tablet
+    , span5
+    , span5Desktop
+    , span5Tablet
+    , span6
+    , span6Desktop
+    , span6Tablet
+    , span7
+    , span7Desktop
+    , span7Tablet
+    , span8
+    , span8Desktop
+    , span8Tablet
+    , span9
+    , span9Desktop
+    , view
+    )
 
 {-|
-## Design & API Documentation
+Material design’s responsive UI is based on a column-variate grid layout. It
+has 12 columns on desktop, 8 columns on tablet and 4 columns on phone.
+
+
+# Resources
 
 - [Material Design guidelines: Layout grid](https://material.io/guidelines/layout/responsive-ui.html#responsive-ui-grid)
 - [Demo](https://aforemny.github.io/elm-mdc/#layout-grid)
 
-## View
-@docs view, inner, cell
 
-## Cell spans
+# Example
+
+```elm
+import Material.LayoutGrid as LayoutGrid
+
+
+LayoutGrid.view []
+    [ LayoutGrid.cell
+          [ LayoutGrid.span6
+          , LayoutGrid.span8Tablet
+          ]
+          []
+    , LayoutGrid.cell
+          [ LayoutGrid.span4
+          , LayoutGrid.span6Tablet
+          ]
+          []
+    , LayoutGrid.cell
+          [ LayoutGrid.span2
+          , LayoutGrid.span4Phone
+          ]
+          []
+    ]
+```
+
+
+# Usage
+
+@docs Property
+@docs view
+@docs fixedColumnWidth
+@docs alignRight, alignLeft
+
+
+# Cells
+
+@docs cell
 @docs span1, span2, span3, span4, span5, span6, span7, span8, span9, span10, span11, span12
 @docs span1Phone, span2Phone, span3Phone, span4Phone
 @docs span1Tablet, span2Tablet, span3Tablet, span4Tablet, span5Tablet, span6Tablet, span7Tablet, span8Tablet
 @docs span1Desktop, span2Desktop, span3Desktop, span4Desktop, span5Desktop, span6Desktop, span7Desktop, span8Desktop, span9Desktop, span10Desktop, span11Desktop, span12Desktop
 
-## Properties
-@docs Property
-@docs fixedColumnWidth, alignRight, alignLeft
+
+# Nested LayoutGrids
+
+```elm
+import Material.LayoutGrid as LayoutGrid
+
+LayoutGrid.view []
+    [ LayoutGrid.cell
+          [ LayoutGrid.span4
+          ]
+          [ LayoutGrid.inner []
+                [ LayoutGrid.cell [ LayoutGrid.span4 ] []
+                , LayoutGrid.cell [ LayoutGrid.span4 ] []
+                , LayoutGrid.cell [ LayoutGrid.span4 ] []
+                ]
+          ]
+    , LayoutGrid.cell [ LayoutGrid.span4 ] []
+    , LayoutGrid.cell [ LayoutGrid.span4 ] []
+    ]
+```
+
+@docs inner
 -}
 
 import Html exposing (Html)
@@ -85,52 +134,50 @@ defaultConfig =
     {}
 
 
-{-| A LayoutGrid's property.
+{-| LayoutGrid property.
 -}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Component view.
+{-| LayoutGrid view.
 -}
 view : List (Property m) -> List (Html m) -> Html m
 view options =
-    styled Html.div (cs "mdc-layout-grid" :: options)
-
-{-| The grid is by default center aligned. This modifier changes this behaviour.
+    styled Html.div (cs "mdc-layout-grid" :: options) << List.singleton << inner []
 
 
-Note, this modifiers will have no effect when the grid already fills its container.
+{-| Make the LayoutGrid left aligned instead of center aligned.
 -}
 alignLeft : Property m
 alignLeft =
     cs "mdc-layout-grid--align-left"
 
-{-| The grid is by default center aligned. This modifier changes this behaviour.
 
-Note, this modifiers will have no effect when the grid already fills its container.
+{-| Make the LayoutGrid right aligned instead of center aligned.
 -}
 alignRight : Property m
 alignRight =
     cs "mdc-layout-grid--align-right"
 
 
-{-| Specifies the grid should have fixed column width.
+{-| Specifiy that the grid should have fixed column width.
 -}
 fixedColumnWidth : Property m
 fixedColumnWidth =
     cs "mdc-layout-grid--fixed-column-width"
 
 
-{-| When your contents need extra structure that cannot be supported by single layout grid,
-you can nest layout grid within each other. Use `inner` to nest layout grids, by wrapping around nested cell.
+{-| When your contents need extra structure that cannot be supported by single
+layout grid, you can nest layout grid within each other. Use `inner` to nest
+layout grids by wrapping around nested cell.
 -}
 inner : List (Property m) -> List (Html m) -> Html m
 inner options =
     styled Html.div (cs "mdc-layout-grid__inner" :: options)
 
 
-{-| Defines a layout grid cell.
+{-| LayoutGrid cell.
 -}
 cell : List (Property m) -> List (Html m) -> Html m
 cell options =

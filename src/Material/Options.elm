@@ -32,9 +32,9 @@ module Material.Options
 {-| Properties, styles, and event definitions.
 
 @docs Property, styled
-@docs data, aria, id
+@docs data, aria
 @docs cs, css
-@docs attribute, container, input, many, nop, stylesheet, when
+@docs attribute, container, input, many, nop, when
 @docs on
 @docs onBlur
 @docs onCheck
@@ -50,12 +50,11 @@ module Material.Options
 @docs onMouseUp
 @docs onToggle
 @docs onWithOptions
-@docs dispatch
 -}
 
-import Html exposing (Html, Attribute)
 import Html.Attributes
 import Html.Events
+import Html exposing (Html, Attribute)
 import Json.Decode as Json
 import Material.Internal.Options as Internal exposing (..)
 

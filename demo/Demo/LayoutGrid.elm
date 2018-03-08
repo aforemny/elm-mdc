@@ -168,16 +168,14 @@ view lift page model =
       [ LayoutGrid.view
         [ demoGrid
         ]
-        [ LayoutGrid.inner []
-          ( List.repeat 3 <|
-              LayoutGrid.cell
-              [ css "height" "60px"
-              , demoCell -- TODO: change order?
-              , LayoutGrid.span4
-              ]
-              []
-          )
-        ]
+        ( List.repeat 3 <|
+            LayoutGrid.cell
+            [ css "height" "60px"
+            , demoCell -- TODO: change order?
+            , LayoutGrid.span4
+            ]
+            []
+        )
       ]
 
     , let
@@ -223,10 +221,8 @@ view lift page model =
       , css "margin" "24px"
       ]
       [
-        LayoutGrid.view
-        [
-        ]
-        [ let
+        LayoutGrid.view []
+        ( let
               desktopControls =
                   controls "Desktop"
                       SetDesktopMargin .desktopMargin
@@ -242,150 +238,133 @@ view lift page model =
                       SetPhoneMargin .phoneMargin
                       SetPhoneGutter .phoneGutter
           in
-          LayoutGrid.inner []
           [
             desktopControls
           , tabletControls
           , phoneControls
           ]
-        ]
+        )
 
       , styled Html.div [ cs "demo-warning" ] []
 
       , demoGridLegend Html.div "Grid of default wide (4 columns) items"
       , LayoutGrid.view [ demoGrid ]
-        [ LayoutGrid.inner []
-          ( LayoutGrid.cell [ demoCell ] [ text "4" ]
-            |> List.repeat 3
-          )
-        ]
+        ( LayoutGrid.cell [ demoCell ] [ text "4" ]
+          |> List.repeat 3
+        )
 
       , demoGridLegend Html.div "Grid of 1 column wide items"
       , LayoutGrid.view [ demoGrid ]
-        [ LayoutGrid.inner []
-          ( LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] [ text "1" ]
-            |> List.repeat 12
-          )
-        ]
+        ( LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] [ text "1" ]
+          |> List.repeat 12
+        )
 
       , demoGridLegend Html.div "Grid of differently sized items"
       , LayoutGrid.view [ demoGrid ]
-        [ LayoutGrid.inner []
-          [ LayoutGrid.cell [ demoCell, LayoutGrid.span6 ] [ text "6" ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span2 ] [ text "2" ]
-          ]
+        [ LayoutGrid.cell [ demoCell, LayoutGrid.span6 ] [ text "6" ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span2 ] [ text "2" ]
         ]
 
       , demoGridLegend Html.div "Grid of items with tweaks at different screen sizes"
       , LayoutGrid.view [ demoGrid ]
-        [ LayoutGrid.inner []
-          [ LayoutGrid.cell
-            [ demoCell
-            , LayoutGrid.span6
-            , LayoutGrid.span8Tablet
-            ]
-            [ text "6 (8 tablet)"
-            ]
-          , LayoutGrid.cell
-            [ demoCell
-            , LayoutGrid.span4
-            , LayoutGrid.span6Tablet
-            ]
-            [ text "4 (6 tablet)"
-            ]
-          , LayoutGrid.cell
-            [ demoCell
-            , LayoutGrid.span2
-            , LayoutGrid.span4Phone
-            ]
-            [ text "2 (4 phone)"
-            ]
+        [ LayoutGrid.cell
+          [ demoCell
+          , LayoutGrid.span6
+          , LayoutGrid.span8Tablet
+          ]
+          [ text "6 (8 tablet)"
+          ]
+        , LayoutGrid.cell
+          [ demoCell
+          , LayoutGrid.span4
+          , LayoutGrid.span6Tablet
+          ]
+          [ text "4 (6 tablet)"
+          ]
+        , LayoutGrid.cell
+          [ demoCell
+          , LayoutGrid.span2
+          , LayoutGrid.span4Phone
+          ]
+          [ text "2 (4 phone)"
           ]
         ]
 
       , demoGridLegend Html.div "Grid nested within parent grid cell"
       , LayoutGrid.view [ demoGrid ]
-        [ LayoutGrid.inner []
-          [ LayoutGrid.cell [ demoParentCell, LayoutGrid.span4 ]
-            [ LayoutGrid.inner []
-              ( LayoutGrid.cell
-                [ demoChildCell, LayoutGrid.span4
-                ]
-                [ styled Html.span
-                  [ css "position" "absolute"
-                  , css "bottom" "8px"
-                  , css "right" "8px"
-                  , css "color" "#ddd"
-                  ]
-                  [ text "Child 4"
-                  ]
-                ]
-                |> List.repeat 3
-              )
-            , styled Html.span
-              [ css "position" "absolute"
-              , css "top" "8px"
-              , css "left" "8px"
-              , css "font-size" "1.5rem"
-              , css "color" "white"
+        [ LayoutGrid.cell [ demoParentCell, LayoutGrid.span4 ]
+          [ LayoutGrid.inner []
+            ( LayoutGrid.cell
+              [ demoChildCell, LayoutGrid.span4
               ]
-              [ text "Parent 4"
+              [ styled Html.span
+                [ css "position" "absolute"
+                , css "bottom" "8px"
+                , css "right" "8px"
+                , css "color" "#ddd"
+                ]
+                [ text "Child 4"
+                ]
               ]
+              |> List.repeat 3
+            )
+          , styled Html.span
+            [ css "position" "absolute"
+            , css "top" "8px"
+            , css "left" "8px"
+            , css "font-size" "1.5rem"
+            , css "color" "white"
             ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
+            [ text "Parent 4"
+            ]
           ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
         ]
 
       , demoGridLegend Html.h2 "Grid with max width"
       , demoGridLegend Html.div "Grid with max width (1280px) and center alignment by default"
       , LayoutGrid.view [ demoGrid, css "max-width" "1280px" ]
-        [ LayoutGrid.inner []
-          [ LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-          ]
+        [ LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
         ]
 
       , demoGridLegend Html.div "Grid with max width (1280px) and left alignment"
       , LayoutGrid.view [ demoGrid, css "max-width" "1280px", LayoutGrid.alignLeft ]
-        [ LayoutGrid.inner []
-          [ LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-          , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-          ]
+        [ LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
+        , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
         ]
 
       , demoGridLegend Html.div "Fixed column width layout grid"
 
       -- TODO: demoControls
       , LayoutGrid.view []
-        [ LayoutGrid.inner []
-          [ LayoutGrid.cell
-            [ demoControls
-            ]
-            [ control "Desktop Column Width:"
-                SetDesktopColumnWidth
-                .desktopColumnWidth
-                columnWidths
-            ]
-          , LayoutGrid.cell
-            [ demoControls
-            ]
-            [ control "Tablet Column Width:"
-                SetTabletColumnWidth  
-                .tabletColumnWidth
-                columnWidths
-            ]
-          , LayoutGrid.cell
-            [ demoControls
-            ]
-            [ control "Phone Column Width:"
-                SetPhoneColumnWidth
-                .phoneColumnWidth
-                columnWidths
-            ]
+        [ LayoutGrid.cell
+          [ demoControls
+          ]
+          [ control "Desktop Column Width:"
+              SetDesktopColumnWidth
+              .desktopColumnWidth
+              columnWidths
+          ]
+        , LayoutGrid.cell
+          [ demoControls
+          ]
+          [ control "Tablet Column Width:"
+              SetTabletColumnWidth  
+              .tabletColumnWidth
+              columnWidths
+          ]
+        , LayoutGrid.cell
+          [ demoControls
+          ]
+          [ control "Phone Column Width:"
+              SetPhoneColumnWidth
+              .phoneColumnWidth
+              columnWidths
           ]
         ]
 
@@ -394,11 +373,9 @@ view lift page model =
         [ demoGrid
         , LayoutGrid.fixedColumnWidth
         ]
-        [ LayoutGrid.inner []
-          ( LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
-            |> List.repeat 3
-          )
-        ]
+        ( LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
+          |> List.repeat 3
+        )
 
       , demoGridLegend Html.div "Fixed column width layout grid and right alignment"
       , LayoutGrid.view
@@ -406,11 +383,9 @@ view lift page model =
         , LayoutGrid.fixedColumnWidth
         , LayoutGrid.alignRight
         ]
-        [ LayoutGrid.inner []
-          ( LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
-            |> List.repeat 3
-          )
-        ]
+        ( LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
+          |> List.repeat 3
+        )
 
       , styled Html.div
         [ demoRuler
