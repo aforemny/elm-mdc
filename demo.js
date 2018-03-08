@@ -24757,14 +24757,21 @@ var _aforemny$elm_mdc$Material_LayoutGrid$fixedColumnWidth = _aforemny$elm_mdc$M
 var _aforemny$elm_mdc$Material_LayoutGrid$alignRight = _aforemny$elm_mdc$Material_Options$cs('mdc-layout-grid--align-right');
 var _aforemny$elm_mdc$Material_LayoutGrid$alignLeft = _aforemny$elm_mdc$Material_Options$cs('mdc-layout-grid--align-left');
 var _aforemny$elm_mdc$Material_LayoutGrid$view = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$styled,
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-layout-grid'),
-			_1: options
-		});
+	return function (_p1) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-layout-grid'),
+				_1: options
+			},
+			_elm_lang$core$List$singleton(
+				A2(
+					_aforemny$elm_mdc$Material_LayoutGrid$inner,
+					{ctor: '[]'},
+					_p1)));
+	};
 };
 var _aforemny$elm_mdc$Material_LayoutGrid$defaultConfig = {};
 var _aforemny$elm_mdc$Material_LayoutGrid$Config = {};
@@ -25294,32 +25301,25 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 									_0: demoGrid,
 									_1: {ctor: '[]'}
 								},
-								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_LayoutGrid$inner,
-										{ctor: '[]'},
-										A2(
-											_elm_lang$core$List$repeat,
-											3,
-											A2(
-												_aforemny$elm_mdc$Material_LayoutGrid$cell,
-												{
+								A2(
+									_elm_lang$core$List$repeat,
+									3,
+									A2(
+										_aforemny$elm_mdc$Material_LayoutGrid$cell,
+										{
+											ctor: '::',
+											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '60px'),
+											_1: {
+												ctor: '::',
+												_0: demoCell,
+												_1: {
 													ctor: '::',
-													_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '60px'),
-													_1: {
-														ctor: '::',
-														_0: demoCell,
-														_1: {
-															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-															_1: {ctor: '[]'}
-														}
-													}
-												},
-												{ctor: '[]'}))),
-									_1: {ctor: '[]'}
-								}),
+													_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'}))),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -25453,61 +25453,54 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 									_0: A2(
 										_aforemny$elm_mdc$Material_LayoutGrid$view,
 										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: function () {
-												var phoneControls = A5(
-													controls,
-													'Phone',
-													_aforemny$elm_mdc$Demo_LayoutGrid$SetPhoneMargin,
-													function (_) {
-														return _.phoneMargin;
-													},
-													_aforemny$elm_mdc$Demo_LayoutGrid$SetPhoneGutter,
-													function (_) {
-														return _.phoneGutter;
-													});
-												var tabletControls = A5(
-													controls,
-													'Tablet',
-													_aforemny$elm_mdc$Demo_LayoutGrid$SetTabletMargin,
-													function (_) {
-														return _.tabletMargin;
-													},
-													_aforemny$elm_mdc$Demo_LayoutGrid$SetTabletGutter,
-													function (_) {
-														return _.tabletGutter;
-													});
-												var desktopControls = A5(
-													controls,
-													'Desktop',
-													_aforemny$elm_mdc$Demo_LayoutGrid$SetDesktopMargin,
-													function (_) {
-														return _.desktopMargin;
-													},
-													_aforemny$elm_mdc$Demo_LayoutGrid$SetDesktopGutter,
-													function (_) {
-														return _.desktopGutter;
-													});
-												return A2(
-													_aforemny$elm_mdc$Material_LayoutGrid$inner,
-													{ctor: '[]'},
-													{
+										function () {
+											var phoneControls = A5(
+												controls,
+												'Phone',
+												_aforemny$elm_mdc$Demo_LayoutGrid$SetPhoneMargin,
+												function (_) {
+													return _.phoneMargin;
+												},
+												_aforemny$elm_mdc$Demo_LayoutGrid$SetPhoneGutter,
+												function (_) {
+													return _.phoneGutter;
+												});
+											var tabletControls = A5(
+												controls,
+												'Tablet',
+												_aforemny$elm_mdc$Demo_LayoutGrid$SetTabletMargin,
+												function (_) {
+													return _.tabletMargin;
+												},
+												_aforemny$elm_mdc$Demo_LayoutGrid$SetTabletGutter,
+												function (_) {
+													return _.tabletGutter;
+												});
+											var desktopControls = A5(
+												controls,
+												'Desktop',
+												_aforemny$elm_mdc$Demo_LayoutGrid$SetDesktopMargin,
+												function (_) {
+													return _.desktopMargin;
+												},
+												_aforemny$elm_mdc$Demo_LayoutGrid$SetDesktopGutter,
+												function (_) {
+													return _.desktopGutter;
+												});
+											return {
+												ctor: '::',
+												_0: desktopControls,
+												_1: {
+													ctor: '::',
+													_0: tabletControls,
+													_1: {
 														ctor: '::',
-														_0: desktopControls,
-														_1: {
-															ctor: '::',
-															_0: tabletControls,
-															_1: {
-																ctor: '::',
-																_0: phoneControls,
-																_1: {ctor: '[]'}
-															}
-														}
-													});
-											}(),
-											_1: {ctor: '[]'}
-										}),
+														_0: phoneControls,
+														_1: {ctor: '[]'}
+													}
+												}
+											};
+										}()),
 									_1: {
 										ctor: '::',
 										_0: A3(
@@ -25531,28 +25524,21 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 														_0: demoGrid,
 														_1: {ctor: '[]'}
 													},
-													{
-														ctor: '::',
-														_0: A2(
-															_aforemny$elm_mdc$Material_LayoutGrid$inner,
-															{ctor: '[]'},
-															A2(
-																_elm_lang$core$List$repeat,
-																3,
-																A2(
-																	_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																	{
-																		ctor: '::',
-																		_0: demoCell,
-																		_1: {ctor: '[]'}
-																	},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('4'),
-																		_1: {ctor: '[]'}
-																	}))),
-														_1: {ctor: '[]'}
-													}),
+													A2(
+														_elm_lang$core$List$repeat,
+														3,
+														A2(
+															_aforemny$elm_mdc$Material_LayoutGrid$cell,
+															{
+																ctor: '::',
+																_0: demoCell,
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('4'),
+																_1: {ctor: '[]'}
+															}))),
 												_1: {
 													ctor: '::',
 													_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of 1 column wide items'),
@@ -25565,32 +25551,25 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																_0: demoGrid,
 																_1: {ctor: '[]'}
 															},
-															{
-																ctor: '::',
-																_0: A2(
-																	_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																	{ctor: '[]'},
-																	A2(
-																		_elm_lang$core$List$repeat,
-																		12,
-																		A2(
-																			_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																			{
-																				ctor: '::',
-																				_0: demoCell,
-																				_1: {
-																					ctor: '::',
-																					_0: _aforemny$elm_mdc$Material_LayoutGrid$span1,
-																					_1: {ctor: '[]'}
-																				}
-																			},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('1'),
-																				_1: {ctor: '[]'}
-																			}))),
-																_1: {ctor: '[]'}
-															}),
+															A2(
+																_elm_lang$core$List$repeat,
+																12,
+																A2(
+																	_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																	{
+																		ctor: '::',
+																		_0: demoCell,
+																		_1: {
+																			ctor: '::',
+																			_0: _aforemny$elm_mdc$Material_LayoutGrid$span1,
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('1'),
+																		_1: {ctor: '[]'}
+																	}))),
 														_1: {
 															ctor: '::',
 															_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid of differently sized items'),
@@ -25606,9 +25585,40 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																	{
 																		ctor: '::',
 																		_0: A2(
-																			_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																			{ctor: '[]'},
+																			_aforemny$elm_mdc$Material_LayoutGrid$cell,
 																			{
+																				ctor: '::',
+																				_0: demoCell,
+																				_1: {
+																					ctor: '::',
+																					_0: _aforemny$elm_mdc$Material_LayoutGrid$span6,
+																					_1: {ctor: '[]'}
+																				}
+																			},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text('6'),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(
+																				_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																				{
+																					ctor: '::',
+																					_0: demoCell,
+																					_1: {
+																						ctor: '::',
+																						_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																						_1: {ctor: '[]'}
+																					}
+																				},
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text('4'),
+																					_1: {ctor: '[]'}
+																				}),
+																			_1: {
 																				ctor: '::',
 																				_0: A2(
 																					_aforemny$elm_mdc$Material_LayoutGrid$cell,
@@ -25617,56 +25627,18 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																						_0: demoCell,
 																						_1: {
 																							ctor: '::',
-																							_0: _aforemny$elm_mdc$Material_LayoutGrid$span6,
+																							_0: _aforemny$elm_mdc$Material_LayoutGrid$span2,
 																							_1: {ctor: '[]'}
 																						}
 																					},
 																					{
 																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('6'),
+																						_0: _elm_lang$html$Html$text('2'),
 																						_1: {ctor: '[]'}
 																					}),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(
-																						_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																						{
-																							ctor: '::',
-																							_0: demoCell,
-																							_1: {
-																								ctor: '::',
-																								_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																								_1: {ctor: '[]'}
-																							}
-																						},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('4'),
-																							_1: {ctor: '[]'}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(
-																							_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																							{
-																								ctor: '::',
-																								_0: demoCell,
-																								_1: {
-																									ctor: '::',
-																									_0: _aforemny$elm_mdc$Material_LayoutGrid$span2,
-																									_1: {ctor: '[]'}
-																								}
-																							},
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('2'),
-																								_1: {ctor: '[]'}
-																							}),
-																						_1: {ctor: '[]'}
-																					}
-																				}
-																			}),
-																		_1: {ctor: '[]'}
+																				_1: {ctor: '[]'}
+																			}
+																		}
 																	}),
 																_1: {
 																	ctor: '::',
@@ -25683,9 +25655,48 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																			{
 																				ctor: '::',
 																				_0: A2(
-																					_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																					{ctor: '[]'},
+																					_aforemny$elm_mdc$Material_LayoutGrid$cell,
 																					{
+																						ctor: '::',
+																						_0: demoCell,
+																						_1: {
+																							ctor: '::',
+																							_0: _aforemny$elm_mdc$Material_LayoutGrid$span6,
+																							_1: {
+																								ctor: '::',
+																								_0: _aforemny$elm_mdc$Material_LayoutGrid$span8Tablet,
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					},
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html$text('6 (8 tablet)'),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																						{
+																							ctor: '::',
+																							_0: demoCell,
+																							_1: {
+																								ctor: '::',
+																								_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																								_1: {
+																									ctor: '::',
+																									_0: _aforemny$elm_mdc$Material_LayoutGrid$span6Tablet,
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						},
+																						{
+																							ctor: '::',
+																							_0: _elm_lang$html$Html$text('4 (6 tablet)'),
+																							_1: {ctor: '[]'}
+																						}),
+																					_1: {
 																						ctor: '::',
 																						_0: A2(
 																							_aforemny$elm_mdc$Material_LayoutGrid$cell,
@@ -25694,68 +25705,22 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																								_0: demoCell,
 																								_1: {
 																									ctor: '::',
-																									_0: _aforemny$elm_mdc$Material_LayoutGrid$span6,
+																									_0: _aforemny$elm_mdc$Material_LayoutGrid$span2,
 																									_1: {
 																										ctor: '::',
-																										_0: _aforemny$elm_mdc$Material_LayoutGrid$span8Tablet,
+																										_0: _aforemny$elm_mdc$Material_LayoutGrid$span4Phone,
 																										_1: {ctor: '[]'}
 																									}
 																								}
 																							},
 																							{
 																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('6 (8 tablet)'),
+																								_0: _elm_lang$html$Html$text('2 (4 phone)'),
 																								_1: {ctor: '[]'}
 																							}),
-																						_1: {
-																							ctor: '::',
-																							_0: A2(
-																								_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																								{
-																									ctor: '::',
-																									_0: demoCell,
-																									_1: {
-																										ctor: '::',
-																										_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																										_1: {
-																											ctor: '::',
-																											_0: _aforemny$elm_mdc$Material_LayoutGrid$span6Tablet,
-																											_1: {ctor: '[]'}
-																										}
-																									}
-																								},
-																								{
-																									ctor: '::',
-																									_0: _elm_lang$html$Html$text('4 (6 tablet)'),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {
-																								ctor: '::',
-																								_0: A2(
-																									_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																									{
-																										ctor: '::',
-																										_0: demoCell,
-																										_1: {
-																											ctor: '::',
-																											_0: _aforemny$elm_mdc$Material_LayoutGrid$span2,
-																											_1: {
-																												ctor: '::',
-																												_0: _aforemny$elm_mdc$Material_LayoutGrid$span4Phone,
-																												_1: {ctor: '[]'}
-																											}
-																										}
-																									},
-																									{
-																										ctor: '::',
-																										_0: _elm_lang$html$Html$text('2 (4 phone)'),
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}
-																						}
-																					}),
-																				_1: {ctor: '[]'}
+																						_1: {ctor: '[]'}
+																					}
+																				}
 																			}),
 																		_1: {
 																			ctor: '::',
@@ -25772,128 +25737,29 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																					{
 																						ctor: '::',
 																						_0: A2(
-																							_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																							{ctor: '[]'},
+																							_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																							{
+																								ctor: '::',
+																								_0: demoParentCell,
+																								_1: {
+																									ctor: '::',
+																									_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																									_1: {ctor: '[]'}
+																								}
+																							},
 																							{
 																								ctor: '::',
 																								_0: A2(
-																									_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																									{
-																										ctor: '::',
-																										_0: demoParentCell,
-																										_1: {
-																											ctor: '::',
-																											_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																											_1: {ctor: '[]'}
-																										}
-																									},
-																									{
-																										ctor: '::',
-																										_0: A2(
-																											_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																											{ctor: '[]'},
-																											A2(
-																												_elm_lang$core$List$repeat,
-																												3,
-																												A2(
-																													_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																													{
-																														ctor: '::',
-																														_0: demoChildCell,
-																														_1: {
-																															ctor: '::',
-																															_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																															_1: {ctor: '[]'}
-																														}
-																													},
-																													{
-																														ctor: '::',
-																														_0: A3(
-																															_aforemny$elm_mdc$Material_Options$styled,
-																															_elm_lang$html$Html$span,
-																															{
-																																ctor: '::',
-																																_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'absolute'),
-																																_1: {
-																																	ctor: '::',
-																																	_0: A2(_aforemny$elm_mdc$Material_Options$css, 'bottom', '8px'),
-																																	_1: {
-																																		ctor: '::',
-																																		_0: A2(_aforemny$elm_mdc$Material_Options$css, 'right', '8px'),
-																																		_1: {
-																																			ctor: '::',
-																																			_0: A2(_aforemny$elm_mdc$Material_Options$css, 'color', '#ddd'),
-																																			_1: {ctor: '[]'}
-																																		}
-																																	}
-																																}
-																															},
-																															{
-																																ctor: '::',
-																																_0: _elm_lang$html$Html$text('Child 4'),
-																																_1: {ctor: '[]'}
-																															}),
-																														_1: {ctor: '[]'}
-																													}))),
-																										_1: {
-																											ctor: '::',
-																											_0: A3(
-																												_aforemny$elm_mdc$Material_Options$styled,
-																												_elm_lang$html$Html$span,
-																												{
-																													ctor: '::',
-																													_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'absolute'),
-																													_1: {
-																														ctor: '::',
-																														_0: A2(_aforemny$elm_mdc$Material_Options$css, 'top', '8px'),
-																														_1: {
-																															ctor: '::',
-																															_0: A2(_aforemny$elm_mdc$Material_Options$css, 'left', '8px'),
-																															_1: {
-																																ctor: '::',
-																																_0: A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '1.5rem'),
-																																_1: {
-																																	ctor: '::',
-																																	_0: A2(_aforemny$elm_mdc$Material_Options$css, 'color', 'white'),
-																																	_1: {ctor: '[]'}
-																																}
-																															}
-																														}
-																													}
-																												},
-																												{
-																													ctor: '::',
-																													_0: _elm_lang$html$Html$text('Parent 4'),
-																													_1: {ctor: '[]'}
-																												}),
-																											_1: {ctor: '[]'}
-																										}
-																									}),
-																								_1: {
-																									ctor: '::',
-																									_0: A2(
-																										_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																										{
-																											ctor: '::',
-																											_0: demoCell,
-																											_1: {
-																												ctor: '::',
-																												_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																												_1: {ctor: '[]'}
-																											}
-																										},
-																										{
-																											ctor: '::',
-																											_0: _elm_lang$html$Html$text('4'),
-																											_1: {ctor: '[]'}
-																										}),
-																									_1: {
-																										ctor: '::',
-																										_0: A2(
+																									_aforemny$elm_mdc$Material_LayoutGrid$inner,
+																									{ctor: '[]'},
+																									A2(
+																										_elm_lang$core$List$repeat,
+																										3,
+																										A2(
 																											_aforemny$elm_mdc$Material_LayoutGrid$cell,
 																											{
 																												ctor: '::',
-																												_0: demoCell,
+																												_0: demoChildCell,
 																												_1: {
 																													ctor: '::',
 																													_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
@@ -25902,14 +25768,106 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																											},
 																											{
 																												ctor: '::',
-																												_0: _elm_lang$html$Html$text('4'),
+																												_0: A3(
+																													_aforemny$elm_mdc$Material_Options$styled,
+																													_elm_lang$html$Html$span,
+																													{
+																														ctor: '::',
+																														_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'absolute'),
+																														_1: {
+																															ctor: '::',
+																															_0: A2(_aforemny$elm_mdc$Material_Options$css, 'bottom', '8px'),
+																															_1: {
+																																ctor: '::',
+																																_0: A2(_aforemny$elm_mdc$Material_Options$css, 'right', '8px'),
+																																_1: {
+																																	ctor: '::',
+																																	_0: A2(_aforemny$elm_mdc$Material_Options$css, 'color', '#ddd'),
+																																	_1: {ctor: '[]'}
+																																}
+																															}
+																														}
+																													},
+																													{
+																														ctor: '::',
+																														_0: _elm_lang$html$Html$text('Child 4'),
+																														_1: {ctor: '[]'}
+																													}),
 																												_1: {ctor: '[]'}
-																											}),
-																										_1: {ctor: '[]'}
-																									}
+																											}))),
+																								_1: {
+																									ctor: '::',
+																									_0: A3(
+																										_aforemny$elm_mdc$Material_Options$styled,
+																										_elm_lang$html$Html$span,
+																										{
+																											ctor: '::',
+																											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'absolute'),
+																											_1: {
+																												ctor: '::',
+																												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'top', '8px'),
+																												_1: {
+																													ctor: '::',
+																													_0: A2(_aforemny$elm_mdc$Material_Options$css, 'left', '8px'),
+																													_1: {
+																														ctor: '::',
+																														_0: A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '1.5rem'),
+																														_1: {
+																															ctor: '::',
+																															_0: A2(_aforemny$elm_mdc$Material_Options$css, 'color', 'white'),
+																															_1: {ctor: '[]'}
+																														}
+																													}
+																												}
+																											}
+																										},
+																										{
+																											ctor: '::',
+																											_0: _elm_lang$html$Html$text('Parent 4'),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {ctor: '[]'}
 																								}
 																							}),
-																						_1: {ctor: '[]'}
+																						_1: {
+																							ctor: '::',
+																							_0: A2(
+																								_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																								{
+																									ctor: '::',
+																									_0: demoCell,
+																									_1: {
+																										ctor: '::',
+																										_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																										_1: {ctor: '[]'}
+																									}
+																								},
+																								{
+																									ctor: '::',
+																									_0: _elm_lang$html$Html$text('4'),
+																									_1: {ctor: '[]'}
+																								}),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(
+																									_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																									{
+																										ctor: '::',
+																										_0: demoCell,
+																										_1: {
+																											ctor: '::',
+																											_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																											_1: {ctor: '[]'}
+																										}
+																									},
+																									{
+																										ctor: '::',
+																										_0: _elm_lang$html$Html$text('4'),
+																										_1: {ctor: '[]'}
+																									}),
+																								_1: {ctor: '[]'}
+																							}
+																						}
 																					}),
 																				_1: {
 																					ctor: '::',
@@ -25933,8 +25891,81 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																								{
 																									ctor: '::',
 																									_0: A2(
-																										_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																										{ctor: '[]'},
+																										_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																										{
+																											ctor: '::',
+																											_0: demoCell,
+																											_1: {
+																												ctor: '::',
+																												_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																												_1: {ctor: '[]'}
+																											}
+																										},
+																										{
+																											ctor: '::',
+																											_0: _elm_lang$html$Html$text(''),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {
+																										ctor: '::',
+																										_0: A2(
+																											_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																											{
+																												ctor: '::',
+																												_0: demoCell,
+																												_1: {
+																													ctor: '::',
+																													_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																													_1: {ctor: '[]'}
+																												}
+																											},
+																											{
+																												ctor: '::',
+																												_0: _elm_lang$html$Html$text(''),
+																												_1: {ctor: '[]'}
+																											}),
+																										_1: {
+																											ctor: '::',
+																											_0: A2(
+																												_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																												{
+																													ctor: '::',
+																													_0: demoCell,
+																													_1: {
+																														ctor: '::',
+																														_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
+																														_1: {ctor: '[]'}
+																													}
+																												},
+																												{
+																													ctor: '::',
+																													_0: _elm_lang$html$Html$text(''),
+																													_1: {ctor: '[]'}
+																												}),
+																											_1: {ctor: '[]'}
+																										}
+																									}
+																								}),
+																							_1: {
+																								ctor: '::',
+																								_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid with max width (1280px) and left alignment'),
+																								_1: {
+																									ctor: '::',
+																									_0: A2(
+																										_aforemny$elm_mdc$Material_LayoutGrid$view,
+																										{
+																											ctor: '::',
+																											_0: demoGrid,
+																											_1: {
+																												ctor: '::',
+																												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'max-width', '1280px'),
+																												_1: {
+																													ctor: '::',
+																													_0: _aforemny$elm_mdc$Material_LayoutGrid$alignLeft,
+																													_1: {ctor: '[]'}
+																												}
+																											}
+																										},
 																										{
 																											ctor: '::',
 																											_0: A2(
@@ -25993,93 +26024,6 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																												}
 																											}
 																										}),
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {
-																								ctor: '::',
-																								_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Grid with max width (1280px) and left alignment'),
-																								_1: {
-																									ctor: '::',
-																									_0: A2(
-																										_aforemny$elm_mdc$Material_LayoutGrid$view,
-																										{
-																											ctor: '::',
-																											_0: demoGrid,
-																											_1: {
-																												ctor: '::',
-																												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'max-width', '1280px'),
-																												_1: {
-																													ctor: '::',
-																													_0: _aforemny$elm_mdc$Material_LayoutGrid$alignLeft,
-																													_1: {ctor: '[]'}
-																												}
-																											}
-																										},
-																										{
-																											ctor: '::',
-																											_0: A2(
-																												_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																												{ctor: '[]'},
-																												{
-																													ctor: '::',
-																													_0: A2(
-																														_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																														{
-																															ctor: '::',
-																															_0: demoCell,
-																															_1: {
-																																ctor: '::',
-																																_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																																_1: {ctor: '[]'}
-																															}
-																														},
-																														{
-																															ctor: '::',
-																															_0: _elm_lang$html$Html$text(''),
-																															_1: {ctor: '[]'}
-																														}),
-																													_1: {
-																														ctor: '::',
-																														_0: A2(
-																															_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																															{
-																																ctor: '::',
-																																_0: demoCell,
-																																_1: {
-																																	ctor: '::',
-																																	_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																																	_1: {ctor: '[]'}
-																																}
-																															},
-																															{
-																																ctor: '::',
-																																_0: _elm_lang$html$Html$text(''),
-																																_1: {ctor: '[]'}
-																															}),
-																														_1: {
-																															ctor: '::',
-																															_0: A2(
-																																_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																																{
-																																	ctor: '::',
-																																	_0: demoCell,
-																																	_1: {
-																																		ctor: '::',
-																																		_0: _aforemny$elm_mdc$Material_LayoutGrid$span4,
-																																		_1: {ctor: '[]'}
-																																	}
-																																},
-																																{
-																																	ctor: '::',
-																																	_0: _elm_lang$html$Html$text(''),
-																																	_1: {ctor: '[]'}
-																																}),
-																															_1: {ctor: '[]'}
-																														}
-																													}
-																												}),
-																											_1: {ctor: '[]'}
-																										}),
 																									_1: {
 																										ctor: '::',
 																										_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid'),
@@ -26091,9 +26035,46 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																												{
 																													ctor: '::',
 																													_0: A2(
-																														_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																														{ctor: '[]'},
+																														_aforemny$elm_mdc$Material_LayoutGrid$cell,
 																														{
+																															ctor: '::',
+																															_0: demoControls,
+																															_1: {ctor: '[]'}
+																														},
+																														{
+																															ctor: '::',
+																															_0: A4(
+																																control,
+																																'Desktop Column Width:',
+																																_aforemny$elm_mdc$Demo_LayoutGrid$SetDesktopColumnWidth,
+																																function (_) {
+																																	return _.desktopColumnWidth;
+																																},
+																																columnWidths),
+																															_1: {ctor: '[]'}
+																														}),
+																													_1: {
+																														ctor: '::',
+																														_0: A2(
+																															_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																															{
+																																ctor: '::',
+																																_0: demoControls,
+																																_1: {ctor: '[]'}
+																															},
+																															{
+																																ctor: '::',
+																																_0: A4(
+																																	control,
+																																	'Tablet Column Width:',
+																																	_aforemny$elm_mdc$Demo_LayoutGrid$SetTabletColumnWidth,
+																																	function (_) {
+																																		return _.tabletColumnWidth;
+																																	},
+																																	columnWidths),
+																																_1: {ctor: '[]'}
+																															}),
+																														_1: {
 																															ctor: '::',
 																															_0: A2(
 																																_aforemny$elm_mdc$Material_LayoutGrid$cell,
@@ -26106,61 +26087,17 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																																	ctor: '::',
 																																	_0: A4(
 																																		control,
-																																		'Desktop Column Width:',
-																																		_aforemny$elm_mdc$Demo_LayoutGrid$SetDesktopColumnWidth,
+																																		'Phone Column Width:',
+																																		_aforemny$elm_mdc$Demo_LayoutGrid$SetPhoneColumnWidth,
 																																		function (_) {
-																																			return _.desktopColumnWidth;
+																																			return _.phoneColumnWidth;
 																																		},
 																																		columnWidths),
 																																	_1: {ctor: '[]'}
 																																}),
-																															_1: {
-																																ctor: '::',
-																																_0: A2(
-																																	_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																																	{
-																																		ctor: '::',
-																																		_0: demoControls,
-																																		_1: {ctor: '[]'}
-																																	},
-																																	{
-																																		ctor: '::',
-																																		_0: A4(
-																																			control,
-																																			'Tablet Column Width:',
-																																			_aforemny$elm_mdc$Demo_LayoutGrid$SetTabletColumnWidth,
-																																			function (_) {
-																																				return _.tabletColumnWidth;
-																																			},
-																																			columnWidths),
-																																		_1: {ctor: '[]'}
-																																	}),
-																																_1: {
-																																	ctor: '::',
-																																	_0: A2(
-																																		_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																																		{
-																																			ctor: '::',
-																																			_0: demoControls,
-																																			_1: {ctor: '[]'}
-																																		},
-																																		{
-																																			ctor: '::',
-																																			_0: A4(
-																																				control,
-																																				'Phone Column Width:',
-																																				_aforemny$elm_mdc$Demo_LayoutGrid$SetPhoneColumnWidth,
-																																				function (_) {
-																																					return _.phoneColumnWidth;
-																																				},
-																																				columnWidths),
-																																			_1: {ctor: '[]'}
-																																		}),
-																																	_1: {ctor: '[]'}
-																																}
-																															}
-																														}),
-																													_1: {ctor: '[]'}
+																															_1: {ctor: '[]'}
+																														}
+																													}
 																												}),
 																											_1: {
 																												ctor: '::',
@@ -26178,28 +26115,21 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																																_1: {ctor: '[]'}
 																															}
 																														},
-																														{
-																															ctor: '::',
-																															_0: A2(
-																																_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																																{ctor: '[]'},
-																																A2(
-																																	_elm_lang$core$List$repeat,
-																																	3,
-																																	A2(
-																																		_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																																		{
-																																			ctor: '::',
-																																			_0: demoCell,
-																																			_1: {
-																																				ctor: '::',
-																																				_0: _aforemny$elm_mdc$Material_LayoutGrid$span1,
-																																				_1: {ctor: '[]'}
-																																			}
-																																		},
-																																		{ctor: '[]'}))),
-																															_1: {ctor: '[]'}
-																														}),
+																														A2(
+																															_elm_lang$core$List$repeat,
+																															3,
+																															A2(
+																																_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																																{
+																																	ctor: '::',
+																																	_0: demoCell,
+																																	_1: {
+																																		ctor: '::',
+																																		_0: _aforemny$elm_mdc$Material_LayoutGrid$span1,
+																																		_1: {ctor: '[]'}
+																																	}
+																																},
+																																{ctor: '[]'}))),
 																													_1: {
 																														ctor: '::',
 																														_0: A2(demoGridLegend, _elm_lang$html$Html$div, 'Fixed column width layout grid and right alignment'),
@@ -26220,28 +26150,21 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 																																		}
 																																	}
 																																},
-																																{
-																																	ctor: '::',
-																																	_0: A2(
-																																		_aforemny$elm_mdc$Material_LayoutGrid$inner,
-																																		{ctor: '[]'},
-																																		A2(
-																																			_elm_lang$core$List$repeat,
-																																			3,
-																																			A2(
-																																				_aforemny$elm_mdc$Material_LayoutGrid$cell,
-																																				{
-																																					ctor: '::',
-																																					_0: demoCell,
-																																					_1: {
-																																						ctor: '::',
-																																						_0: _aforemny$elm_mdc$Material_LayoutGrid$span1,
-																																						_1: {ctor: '[]'}
-																																					}
-																																				},
-																																				{ctor: '[]'}))),
-																																	_1: {ctor: '[]'}
-																																}),
+																																A2(
+																																	_elm_lang$core$List$repeat,
+																																	3,
+																																	A2(
+																																		_aforemny$elm_mdc$Material_LayoutGrid$cell,
+																																		{
+																																			ctor: '::',
+																																			_0: demoCell,
+																																			_1: {
+																																				ctor: '::',
+																																				_0: _aforemny$elm_mdc$Material_LayoutGrid$span1,
+																																				_1: {ctor: '[]'}
+																																			}
+																																		},
+																																		{ctor: '[]'}))),
 																															_1: {
 																																ctor: '::',
 																																_0: A3(
