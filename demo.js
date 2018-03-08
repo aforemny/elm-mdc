@@ -8470,12 +8470,18 @@ var _aforemny$elm_mdc$Material_Internal_Switch$SetFocus = function (a) {
 
 var _aforemny$elm_mdc$Material_Internal_Tabs$defaultGeometry = {
 	tabs: {ctor: '[]'},
-	scrollFrame: {width: 0}
+	tabBar: {offsetWidth: 0},
+	scrollFrame: {offsetWidth: 0}
 };
-var _aforemny$elm_mdc$Material_Internal_Tabs$Geometry = F2(
-	function (a, b) {
-		return {tabs: a, scrollFrame: b};
+var _aforemny$elm_mdc$Material_Internal_Tabs$Geometry = F3(
+	function (a, b, c) {
+		return {tabs: a, tabBar: b, scrollFrame: c};
 	});
+var _aforemny$elm_mdc$Material_Internal_Tabs$Focus = F2(
+	function (a, b) {
+		return {ctor: 'Focus', _0: a, _1: b};
+	});
+var _aforemny$elm_mdc$Material_Internal_Tabs$SetIndicatorShown = {ctor: 'SetIndicatorShown'};
 var _aforemny$elm_mdc$Material_Internal_Tabs$Init = function (a) {
 	return {ctor: 'Init', _0: a};
 };
@@ -8483,19 +8489,20 @@ var _aforemny$elm_mdc$Material_Internal_Tabs$RippleMsg = F2(
 	function (a, b) {
 		return {ctor: 'RippleMsg', _0: a, _1: b};
 	});
-var _aforemny$elm_mdc$Material_Internal_Tabs$ScrollBackward = function (a) {
-	return {ctor: 'ScrollBackward', _0: a};
+var _aforemny$elm_mdc$Material_Internal_Tabs$ScrollBack = function (a) {
+	return {ctor: 'ScrollBack', _0: a};
 };
 var _aforemny$elm_mdc$Material_Internal_Tabs$ScrollForward = function (a) {
 	return {ctor: 'ScrollForward', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Tabs$Dispatch = function (a) {
-	return {ctor: 'Dispatch', _0: a};
 };
 var _aforemny$elm_mdc$Material_Internal_Tabs$Select = F2(
 	function (a, b) {
 		return {ctor: 'Select', _0: a, _1: b};
 	});
+var _aforemny$elm_mdc$Material_Internal_Tabs$Dispatch = function (a) {
+	return {ctor: 'Dispatch', _0: a};
+};
+var _aforemny$elm_mdc$Material_Internal_Tabs$NoOp = {ctor: 'NoOp'};
 
 var _aforemny$elm_mdc$Material_Internal_Textfield$defaultGeometry = {width: 0, height: 0, labelWidth: 0};
 var _aforemny$elm_mdc$Material_Internal_Textfield$Geometry = F3(
@@ -16294,12 +16301,9 @@ var _aforemny$elm_mdc$Material_Switch$Config = F2(
 	});
 
 var _aforemny$elm_mdc$Material_Tabs$decodeGeometry = function (hasIndicator) {
-	return A3(
-		_elm_lang$core$Json_Decode$map2,
-		F2(
-			function (tabs, scrollFrame) {
-				return {tabs: tabs, scrollFrame: scrollFrame};
-			}),
+	return A4(
+		_elm_lang$core$Json_Decode$map3,
+		_aforemny$elm_mdc$Material_Internal_Tabs$Geometry,
 		A2(
 			_elm_lang$core$Json_Decode$map,
 			hasIndicator ? function (xs) {
@@ -16325,8 +16329,8 @@ var _aforemny$elm_mdc$Material_Tabs$decodeGeometry = function (hasIndicator) {
 									A3(
 										_elm_lang$core$Json_Decode$map2,
 										F2(
-											function (offsetLeft, width) {
-												return {offsetLeft: offsetLeft, width: width};
+											function (offsetLeft, offsetWidth) {
+												return {offsetLeft: offsetLeft, offsetWidth: offsetWidth};
 											}),
 										_debois$elm_dom$DOM$offsetLeft,
 										_debois$elm_dom$DOM$offsetWidth));
@@ -16340,11 +16344,17 @@ var _aforemny$elm_mdc$Material_Tabs$decodeGeometry = function (hasIndicator) {
 								_1: {ctor: '[]'}
 							},
 							_elm_lang$core$Json_Decode$string))))),
+		A2(
+			_elm_lang$core$Json_Decode$map,
+			function (offsetWidth) {
+				return {offsetWidth: offsetWidth};
+			},
+			_debois$elm_dom$DOM$offsetWidth),
 		_debois$elm_dom$DOM$parentElement(
 			A2(
 				_elm_lang$core$Json_Decode$map,
-				function (width) {
-					return {width: width};
+				function (offsetWidth) {
+					return {offsetWidth: offsetWidth};
 				},
 				_debois$elm_dom$DOM$offsetWidth)));
 };
@@ -16395,28 +16405,30 @@ var _aforemny$elm_mdc$Material_Tabs$decodeGeometryOnIndicator = function (hasInd
 					0,
 					_aforemny$elm_mdc$Material_Tabs$decodeGeometry(hasIndicator)))));
 };
-var _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth = function (geometry) {
-	return A3(
-		_elm_lang$core$List$foldl,
-		F2(
-			function (tab, accum) {
-				return tab.width + accum;
-			}),
-		0,
-		geometry.tabs);
-};
 var _aforemny$elm_mdc$Material_Tabs$computeScale = F2(
 	function (geometry, index) {
-		var totalTabsWidth = _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth(geometry);
+		var totalTabsWidth = A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (x, y) {
+					return x + y;
+				}),
+			0,
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.offsetWidth;
+				},
+				geometry.tabs));
 		var _p2 = _elm_lang$core$List$head(
 			A2(_elm_lang$core$List$drop, index, geometry.tabs));
 		if (_p2.ctor === 'Nothing') {
 			return 1;
 		} else {
-			return _elm_lang$core$Native_Utils.eq(totalTabsWidth, 0) ? 1 : (_p2._0.width / totalTabsWidth);
+			return _elm_lang$core$Native_Utils.eq(totalTabsWidth, 0) ? 1 : (_p2._0.offsetWidth / totalTabsWidth);
 		}
 	});
-var _aforemny$elm_mdc$Material_Tabs$iconLabel = F2(
+var _aforemny$elm_mdc$Material_Tabs$iconText = F2(
 	function (options, str) {
 		return A3(
 			_aforemny$elm_mdc$Material_Options$styled,
@@ -16434,34 +16446,19 @@ var _aforemny$elm_mdc$Material_Tabs$iconLabel = F2(
 	});
 var _aforemny$elm_mdc$Material_Tabs$icon = F2(
 	function (options, icon) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$i,
+		return A2(
+			_aforemny$elm_mdc$Material_Icon$view,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-tab__icon'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$cs('material-icons'),
-					_1: {ctor: '[]'}
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
 				_1: {ctor: '[]'}
-			});
+			},
+			icon);
 	});
+var _aforemny$elm_mdc$Material_Tabs$withIconAndText = _aforemny$elm_mdc$Material_Options$cs('mdc-tab--with-icon-and-text');
 var _aforemny$elm_mdc$Material_Tabs$tab = F2(
 	function (options, childs) {
-		return {
-			node: F2(
-				function (options, childs) {
-					return A3(_aforemny$elm_mdc$Material_Options$styled, _elm_lang$html$Html$div, options, childs);
-				}),
-			options: options,
-			childs: childs
-		};
+		return {options: options, childs: childs};
 	});
 var _aforemny$elm_mdc$Material_Tabs$indicator = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
@@ -16469,18 +16466,16 @@ var _aforemny$elm_mdc$Material_Tabs$indicator = _aforemny$elm_mdc$Material_Inter
 			config,
 			{indicator: true});
 	});
-var _aforemny$elm_mdc$Material_Tabs$indicatorAccent = _aforemny$elm_mdc$Material_Options$cs('mdc-tab-bar--indicator-accent');
-var _aforemny$elm_mdc$Material_Tabs$indicatorPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-tab-bar--indicator-primary');
-var _aforemny$elm_mdc$Material_Tabs$withIconAndText = _aforemny$elm_mdc$Material_Options$cs('mdc-tab--with-icon-and-text');
-var _aforemny$elm_mdc$Material_Tabs$scroller = _aforemny$elm_mdc$Material_Internal_Options$option(
+var _aforemny$elm_mdc$Material_Tabs$scrolling = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{scroller: true});
 	});
 var _aforemny$elm_mdc$Material_Tabs$defaultConfig = {active: 0, scroller: false, indicator: false};
-var _aforemny$elm_mdc$Material_Tabs$view = F4(
+var _aforemny$elm_mdc$Material_Tabs$tabs = F4(
 	function (lift, model, options, nodes) {
+		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Tabs$defaultGeometry, model.geometry);
 		var indicatorTransform = function () {
 			var tabLeft = A2(
 				_elm_lang$core$Maybe$withDefault,
@@ -16491,7 +16486,7 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 						return _.offsetLeft;
 					},
 					_elm_lang$core$List$head(
-						A2(_elm_lang$core$List$drop, model.index, model.geometry.tabs))));
+						A2(_elm_lang$core$List$drop, model.index, geometry.tabs))));
 			return A2(
 				_elm_lang$core$String$join,
 				' ',
@@ -16517,13 +16512,17 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 					}
 				});
 		}();
-		var tabBarTransform = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'translateX(',
-			A2(
+		var isRtl = false;
+		var tabBarTransform = function () {
+			var shiftAmount = isRtl ? model.translateOffset : (0 - model.translateOffset);
+			return A2(
 				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(model.translationOffset),
-				'px)'));
+				'translateX(',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(shiftAmount),
+					'px)'));
+		}();
 		var numTabs = _elm_lang$core$List$length(nodes);
 		var summary = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Tabs$defaultConfig, options);
 		var config = summary.config;
@@ -16565,7 +16564,7 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 													_elm_lang$core$Json_Decode$map,
 													function (_p3) {
 														return lift(
-															_aforemny$elm_mdc$Material_Internal_Tabs$ScrollBackward(_p3));
+															_aforemny$elm_mdc$Material_Internal_Tabs$ScrollBack(_p3));
 													},
 													_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnIndicator(config.indicator))),
 											_1: {ctor: '[]'}
@@ -16607,7 +16606,15 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 							{
 								ctor: '::',
 								_0: _aforemny$elm_mdc$Material_Options$cs('mdc-tab-bar-scroller__scroll-frame'),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: function (_p4) {
+										return _aforemny$elm_mdc$Material_Options$attribute(
+											A2(_elm_lang$html$Html_Attributes$property, 'scrollLeft', _p4));
+									}(
+										_elm_lang$core$Json_Encode$int(model.scrollLeftAmount)),
+									_1: {ctor: '[]'}
+								}
 							},
 							{
 								ctor: '::',
@@ -16635,16 +16642,16 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 													'click',
 													A2(
 														_elm_lang$core$Json_Decode$map,
-														function (_p4) {
+														function (_p5) {
 															return lift(
-																_aforemny$elm_mdc$Material_Internal_Tabs$ScrollForward(_p4));
+																_aforemny$elm_mdc$Material_Internal_Tabs$ScrollForward(_p5));
 														},
 														_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnIndicator(config.indicator))),
 												_1: {
 													ctor: '::',
 													_0: A2(
 														_aforemny$elm_mdc$Material_Options$when,
-														!model.nextIndicator,
+														!model.forwardIndicator,
 														A2(_aforemny$elm_mdc$Material_Options$css, 'display', 'none')),
 													_1: {ctor: '[]'}
 												}
@@ -16682,7 +16689,6 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 					}
 				});
 		};
-		var hasIndicator = config.indicator;
 		return (config.scroller ? tabBarScroller : _elm_lang$core$Basics$identity)(
 			A5(
 				_aforemny$elm_mdc$Material_Internal_Options$apply,
@@ -16709,27 +16715,34 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_aforemny$elm_mdc$Material_Options$on,
-									'ElmMdcInit',
-									A2(
-										_elm_lang$core$Json_Decode$map,
-										function (_p5) {
-											return lift(
-												_aforemny$elm_mdc$Material_Internal_Tabs$Init(_p5));
-										},
-										_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTabBar(config.indicator))),
+									_aforemny$elm_mdc$Material_Options$when,
+									_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing),
+									function (_p6) {
+										return _aforemny$elm_mdc$Material_Options$many(
+											A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p6));
+									}(
+										_aforemny$elm_mdc$GlobalEvents$onTick(
+											A2(
+												_elm_lang$core$Json_Decode$map,
+												function (_p7) {
+													return lift(
+														_aforemny$elm_mdc$Material_Internal_Tabs$Init(_p7));
+												},
+												_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTabBar(config.indicator))))),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Options$on,
-										'ElmMdcWindowResize',
-										A2(
-											_elm_lang$core$Json_Decode$map,
-											function (_p6) {
-												return lift(
-													_aforemny$elm_mdc$Material_Internal_Tabs$Init(_p6));
-											},
-											_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTabBar(config.indicator))),
+									_0: function (_p8) {
+										return _aforemny$elm_mdc$Material_Options$many(
+											A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p8));
+									}(
+										_aforemny$elm_mdc$GlobalEvents$onResize(
+											A2(
+												_elm_lang$core$Json_Decode$map,
+												function (_p9) {
+													return lift(
+														_aforemny$elm_mdc$Material_Internal_Tabs$Init(_p9));
+												},
+												_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTabBar(config.indicator)))),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -16744,14 +16757,14 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 							A2(
 								_elm_lang$core$List$indexedMap,
 								F2(
-									function (index, _p7) {
-										var _p8 = _p7;
+									function (index, _p10) {
+										var _p11 = _p10;
 										var ripple = A4(
 											_aforemny$elm_mdc$Material_Ripple$view,
 											false,
-											function (_p9) {
+											function (_p12) {
 												return lift(
-													A2(_aforemny$elm_mdc$Material_Internal_Tabs$RippleMsg, index, _p9));
+													A2(_aforemny$elm_mdc$Material_Internal_Tabs$RippleMsg, index, _p12));
 											},
 											A2(
 												_elm_lang$core$Maybe$withDefault,
@@ -16760,8 +16773,9 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 											{ctor: '[]'});
 										return {
 											ctor: '::',
-											_0: A2(
-												_p8.node,
+											_0: A3(
+												_aforemny$elm_mdc$Material_Options$styled,
+												_elm_lang$html$Html$a,
 												{
 													ctor: '::',
 													_0: _aforemny$elm_mdc$Material_Options$cs('mdc-tab'),
@@ -16773,36 +16787,111 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 															_aforemny$elm_mdc$Material_Options$cs('mdc-tab--active')),
 														_1: {
 															ctor: '::',
-															_0: A2(
-																_aforemny$elm_mdc$Material_Options$on,
-																'click',
-																A2(
-																	_elm_lang$core$Json_Decode$map,
-																	function (_p10) {
-																		return lift(
-																			A2(_aforemny$elm_mdc$Material_Internal_Tabs$Select, index, _p10));
-																	},
-																	_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTab(hasIndicator))),
+															_0: _aforemny$elm_mdc$Material_Options$attribute(
+																_elm_lang$html$Html_Attributes$tabindex(0)),
 															_1: {
 																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_Options$many(
-																	{
+																_0: A2(
+																	_aforemny$elm_mdc$Material_Options$on,
+																	'click',
+																	A2(
+																		_elm_lang$core$Json_Decode$map,
+																		function (_p13) {
+																			return lift(
+																				A2(_aforemny$elm_mdc$Material_Internal_Tabs$Select, index, _p13));
+																		},
+																		_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTab(config.indicator))),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_aforemny$elm_mdc$Material_Options$on,
+																		'keydown',
+																		A2(
+																			_elm_lang$core$Json_Decode$map,
+																			lift,
+																			A4(
+																				_elm_lang$core$Json_Decode$map3,
+																				F3(
+																					function (key, keyCode, geometry) {
+																						return (_elm_lang$core$Native_Utils.eq(
+																							key,
+																							_elm_lang$core$Maybe$Just('Enter')) || _elm_lang$core$Native_Utils.eq(keyCode, 13)) ? A2(_aforemny$elm_mdc$Material_Internal_Tabs$Select, index, geometry) : _aforemny$elm_mdc$Material_Internal_Tabs$NoOp;
+																					}),
+																				_elm_lang$core$Json_Decode$oneOf(
+																					{
+																						ctor: '::',
+																						_0: A2(
+																							_elm_lang$core$Json_Decode$map,
+																							_elm_lang$core$Maybe$Just,
+																							A2(
+																								_elm_lang$core$Json_Decode$at,
+																								{
+																									ctor: '::',
+																									_0: 'key',
+																									_1: {ctor: '[]'}
+																								},
+																								_elm_lang$core$Json_Decode$string)),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
+																							_1: {ctor: '[]'}
+																						}
+																					}),
+																				A2(
+																					_elm_lang$core$Json_Decode$at,
+																					{
+																						ctor: '::',
+																						_0: 'keyCode',
+																						_1: {ctor: '[]'}
+																					},
+																					_elm_lang$core$Json_Decode$int),
+																				_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTab(config.indicator)))),
+																	_1: {
 																		ctor: '::',
-																		_0: ripple.interactionHandler,
+																		_0: _aforemny$elm_mdc$Material_Options$many(
+																			{
+																				ctor: '::',
+																				_0: ripple.interactionHandler,
+																				_1: {
+																					ctor: '::',
+																					_0: ripple.properties,
+																					_1: {ctor: '[]'}
+																				}
+																			}),
 																		_1: {
 																			ctor: '::',
-																			_0: ripple.properties,
-																			_1: {ctor: '[]'}
+																			_0: A2(
+																				_aforemny$elm_mdc$Material_Options$when,
+																				config.scroller,
+																				A2(
+																					_aforemny$elm_mdc$Material_Options$on,
+																					'focus',
+																					A2(
+																						_elm_lang$core$Json_Decode$map,
+																						function (_p14) {
+																							return lift(
+																								A2(_aforemny$elm_mdc$Material_Internal_Tabs$Focus, index, _p14));
+																						},
+																						_aforemny$elm_mdc$Material_Tabs$decodeGeometryOnTab(config.indicator)))),
+																			_1: {
+																				ctor: '::',
+																				_0: _aforemny$elm_mdc$Material_Options$dispatch(
+																					function (_p15) {
+																						return lift(
+																							_aforemny$elm_mdc$Material_Internal_Tabs$Dispatch(_p15));
+																					}),
+																				_1: _p11.options
+																			}
 																		}
-																	}),
-																_1: _p8.options
+																	}
+																}
 															}
 														}
 													}
 												},
 												A2(
 													_elm_lang$core$Basics_ops['++'],
-													_p8.childs,
+													_p11.childs,
 													{
 														ctor: '::',
 														_0: ripple.style,
@@ -16814,202 +16903,337 @@ var _aforemny$elm_mdc$Material_Tabs$view = F4(
 								nodes)),
 						_1: {
 							ctor: '::',
-							_0: config.indicator ? {
-								ctor: '::',
-								_0: A3(
-									_aforemny$elm_mdc$Material_Options$styled,
-									_elm_lang$html$Html$div,
-									{
+							_0: function () {
+								if (config.indicator) {
+									var indicatorFirstRender = !model.indicatorShown;
+									return {
 										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Options$cs('mdc-tab-bar__indicator'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Options$when,
-												!hasIndicator,
-												A2(_aforemny$elm_mdc$Material_Options$css, 'display', 'none')),
-											_1: {
+										_0: A3(
+											_aforemny$elm_mdc$Material_Options$styled,
+											_elm_lang$html$Html$div,
+											{
 												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'transform', indicatorTransform),
+												_0: _aforemny$elm_mdc$Material_Options$cs('mdc-tab-bar__indicator'),
 												_1: {
 													ctor: '::',
-													_0: A2(
-														_aforemny$elm_mdc$Material_Options$when,
-														_elm_lang$core$Native_Utils.cmp(numTabs, 0) > 0,
-														A2(_aforemny$elm_mdc$Material_Options$css, 'visibility', 'visible')),
-													_1: {ctor: '[]'}
+													_0: A2(_aforemny$elm_mdc$Material_Options$css, 'transform', indicatorTransform),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_aforemny$elm_mdc$Material_Options$when,
+															_elm_lang$core$Native_Utils.cmp(numTabs, 0) > 0,
+															A2(_aforemny$elm_mdc$Material_Options$css, 'visibility', 'visible')),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_aforemny$elm_mdc$Material_Options$when,
+																indicatorFirstRender,
+																A2(_aforemny$elm_mdc$Material_Options$css, 'transition', 'none')),
+															_1: {ctor: '[]'}
+														}
+													}
 												}
-											}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							} : {ctor: '[]'},
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									};
+								} else {
+									return {ctor: '[]'};
+								}
+							}(),
 							_1: {ctor: '[]'}
 						}
 					})));
 	});
 var _aforemny$elm_mdc$Material_Tabs$update = F3(
 	function (lift, msg, model) {
-		var _p11 = msg;
-		switch (_p11.ctor) {
-			case 'RippleMsg':
-				var _p14 = _p11._0;
-				var _p12 = A2(
-					_aforemny$elm_mdc$Material_Ripple$update,
-					_p11._1,
-					A2(
+		update:
+		while (true) {
+			var indicatorEnabledStates = F2(
+				function (geometry, translateOffset) {
+					var scrollFrameWidth = geometry.scrollFrame.offsetWidth;
+					var tabBarWidth = geometry.tabBar.offsetWidth;
+					var remainingTabBarWidth = tabBarWidth - translateOffset;
+					var forwardIndicator = _elm_lang$core$Native_Utils.cmp(remainingTabBarWidth, scrollFrameWidth) > 0;
+					var backIndicator = !_elm_lang$core$Native_Utils.eq(translateOffset, 0);
+					return {forwardIndicator: forwardIndicator, backIndicator: backIndicator};
+				});
+			var scrollToTabAtIndex = F3(
+				function (isRtl, geometry, i) {
+					var tabBarWidth = geometry.tabBar.offsetWidth;
+					var normalizeForRtl = F2(
+						function (left, width) {
+							return isRtl ? (tabBarWidth - (left + width)) : left;
+						});
+					var tab = A2(
 						_elm_lang$core$Maybe$withDefault,
-						_aforemny$elm_mdc$Material_Ripple$defaultModel,
-						A2(_elm_lang$core$Dict$get, _p14, model.ripples)));
-				var ripple = _p12._0;
-				var effects = _p12._1;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								ripples: A3(_elm_lang$core$Dict$insert, _p14, ripple, model.ripples)
-							})),
-					_1: A2(
-						_elm_lang$core$Platform_Cmd$map,
-						function (_p13) {
-							return lift(
-								A2(_aforemny$elm_mdc$Material_Internal_Tabs$RippleMsg, _p14, _p13));
-						},
-						effects)
-				};
-			case 'Dispatch':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Maybe$Nothing,
-					_1: _aforemny$elm_mdc$Material_Dispatch$forward(_p11._0)
-				};
-			case 'Select':
-				var _p15 = _p11._0;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								index: _p15,
-								scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p11._1, _p15)
-							})),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ScrollBackward':
-				var _p22 = _p11._0;
-				var totalTabsWidth = _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth(_p22);
-				var scrollFrameWidth = _p22.scrollFrame.width;
-				var concealedTabs = A2(
-					_elm_lang$core$List$filterMap,
-					_elm_lang$core$Basics$identity,
-					A2(
-						_elm_lang$core$List$indexedMap,
-						F2(
-							function (index, tab) {
-								var tabRight = tab.offsetLeft + tab.width;
-								return (_elm_lang$core$Native_Utils.cmp(tabRight + model.translationOffset, 0) < 0) ? _elm_lang$core$Maybe$Just(
-									{ctor: '_Tuple2', _0: index, _1: tab}) : _elm_lang$core$Maybe$Nothing;
-							}),
-						_elm_lang$core$List$reverse(_p22.tabs)));
-				var translationOffset = _elm_lang$core$Tuple$second(
-					A3(
-						_elm_lang$core$List$foldl,
-						F2(
-							function (_p17, _p16) {
-								var _p18 = _p17;
-								var _p21 = _p18._1;
-								var _p19 = _p16;
-								var _p20 = _p19._0;
-								var accum_ = _p20 + _p21.width;
-								return (_elm_lang$core$Native_Utils.cmp(accum_, scrollFrameWidth) > 0) ? {ctor: '_Tuple2', _0: _p20, _1: 0 - _p21.offsetLeft} : {ctor: '_Tuple2', _0: accum_, _1: 0 - _p21.offsetLeft};
-							}),
-						{ctor: '_Tuple2', _0: 0, _1: model.translationOffset},
-						concealedTabs));
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								geometry: _p22,
-								translationOffset: translationOffset,
-								nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth + translationOffset, scrollFrameWidth) > 0,
-								backIndicator: _elm_lang$core$Native_Utils.cmp(translationOffset, 0) < 0
-							})),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ScrollForward':
-				var _p25 = _p11._0;
-				var totalTabsWidth = _aforemny$elm_mdc$Material_Tabs$computeTotalTabsWidth(_p25);
-				var scrollFrameWidth = _p25.scrollFrame.width;
-				var concealedTabs = A2(
-					_elm_lang$core$List$filterMap,
-					_elm_lang$core$Basics$identity,
-					A2(
-						_elm_lang$core$List$indexedMap,
-						F2(
-							function (index, tab) {
-								var tabRight = tab.offsetLeft + tab.width;
-								return (_elm_lang$core$Native_Utils.cmp(tabRight + model.translationOffset, scrollFrameWidth) > 0) ? _elm_lang$core$Maybe$Just(
-									{ctor: '_Tuple2', _0: index, _1: tab}) : _elm_lang$core$Maybe$Nothing;
-							}),
-						_p25.tabs));
-				var translationOffset = A2(
-					_elm_lang$core$Maybe$withDefault,
-					model.translationOffset,
-					A2(
-						_elm_lang$core$Maybe$map,
-						function (_p23) {
-							var _p24 = _p23;
-							return 0 - _p24._1.offsetLeft;
-						},
-						_elm_lang$core$List$head(concealedTabs)));
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								geometry: _p25,
-								translationOffset: translationOffset,
-								nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth + translationOffset, scrollFrameWidth) > 0,
-								backIndicator: _elm_lang$core$Native_Utils.cmp(translationOffset, 0) < 0
-							})),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				var _p26 = _p11._0;
-				return {
-					ctor: '_Tuple2',
-					_0: function () {
-						var totalTabsWidth = A3(
-							_elm_lang$core$List$foldl,
-							F2(
-								function (tab, accum) {
-									return tab.width + accum;
-								}),
-							0,
-							_p26.tabs);
-						return _elm_lang$core$Maybe$Just(
+						{offsetLeft: 0, offsetWidth: 0},
+						_elm_lang$core$List$head(
+							A2(_elm_lang$core$List$drop, i, geometry.tabs)));
+					var scrollTargetOffsetLeft = tab.offsetLeft;
+					var scrollTargetOffsetWidth = tab.offsetWidth;
+					return A2(normalizeForRtl, scrollTargetOffsetLeft, scrollTargetOffsetWidth);
+				});
+			var isRtl = false;
+			var _p16 = msg;
+			switch (_p16.ctor) {
+				case 'RippleMsg':
+					var _p19 = _p16._0;
+					var _p17 = A2(
+						_aforemny$elm_mdc$Material_Ripple$update,
+						_p16._1,
+						A2(
+							_elm_lang$core$Maybe$withDefault,
+							_aforemny$elm_mdc$Material_Ripple$defaultModel,
+							A2(_elm_lang$core$Dict$get, _p19, model.ripples)));
+					var ripple = _p17._0;
+					var effects = _p17._1;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									geometry: _p26,
-									scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p26, 0),
-									nextIndicator: _elm_lang$core$Native_Utils.cmp(totalTabsWidth, _p26.scrollFrame.width) > 0,
-									backIndicator: false
-								}));
-					}(),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+									ripples: A3(_elm_lang$core$Dict$insert, _p19, ripple, model.ripples)
+								})),
+						_1: A2(
+							_elm_lang$core$Platform_Cmd$map,
+							function (_p18) {
+								return lift(
+									A2(_aforemny$elm_mdc$Material_Internal_Tabs$RippleMsg, _p19, _p18));
+							},
+							effects)
+					};
+				case 'Dispatch':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Nothing,
+						_1: _aforemny$elm_mdc$Material_Dispatch$forward(_p16._0)
+					};
+				case 'NoOp':
+					return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+				case 'Select':
+					var _p20 = _p16._0;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									index: _p20,
+									scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p16._1, _p20)
+								})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				case 'ScrollBack':
+					var _p30 = _p16._0;
+					var currentTranslateOffset = model.translateOffset;
+					var scrollFrameWidth = _p30.scrollFrame.offsetWidth;
+					var tabBarWidth = _p30.tabBar.offsetWidth;
+					var loop = F2(
+						function (_p22, _p21) {
+							var _p23 = _p22;
+							var _p27 = _p23._1;
+							var _p26 = _p23._0;
+							var _p24 = _p21;
+							var _p25 = _p24;
+							if (!_elm_lang$core$Native_Utils.eq(_p24.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
+								return _p25;
+							} else {
+								var tabOffsetLeft = _p27.offsetLeft;
+								var tabBarWidthLessTabOffsetLeft = tabBarWidth - tabOffsetLeft;
+								var tabIsNotOccluded = (!isRtl) ? (_elm_lang$core$Native_Utils.cmp(tabOffsetLeft, currentTranslateOffset) > 0) : (_elm_lang$core$Native_Utils.cmp(tabBarWidthLessTabOffsetLeft, currentTranslateOffset) > 0);
+								if (tabIsNotOccluded) {
+									return _p25;
+								} else {
+									var newTabWidthAccumulator = _p24.tabWidthAccumulator + _p27.offsetWidth;
+									var scrollTargetDetermined = _elm_lang$core$Native_Utils.cmp(newTabWidthAccumulator, scrollFrameWidth) > 0;
+									var newScrollTargetIndex = scrollTargetDetermined ? _elm_lang$core$Maybe$Just(
+										isRtl ? (_p26 + 1) : _p26) : _elm_lang$core$Maybe$Nothing;
+									return {scrollTargetIndex: newScrollTargetIndex, tabWidthAccumulator: newTabWidthAccumulator};
+								}
+							}
+						});
+					var scrollTargetIndex = function (_p28) {
+						return A2(
+							_elm_lang$core$Maybe$withDefault,
+							0,
+							function (_) {
+								return _.scrollTargetIndex;
+							}(_p28));
+					}(
+						A3(
+							_elm_lang$core$List$foldl,
+							loop,
+							{scrollTargetIndex: _elm_lang$core$Maybe$Nothing, tabWidthAccumulator: 0},
+							_elm_lang$core$List$reverse(
+								A2(
+									_elm_lang$core$List$indexedMap,
+									F2(
+										function (v0, v1) {
+											return {ctor: '_Tuple2', _0: v0, _1: v1};
+										}),
+									_p30.tabs))));
+					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p30, scrollTargetIndex);
+					var _p29 = A2(indicatorEnabledStates, _p30, translateOffset);
+					var forwardIndicator = _p29.forwardIndicator;
+					var backIndicator = _p29.backIndicator;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									geometry: _elm_lang$core$Maybe$Just(_p30),
+									translateOffset: translateOffset,
+									forwardIndicator: forwardIndicator,
+									backIndicator: backIndicator
+								})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				case 'ScrollForward':
+					var _p38 = _p16._0;
+					var currentTranslationOffset = model.translateOffset;
+					var scrollFrameWidth = _p38.scrollFrame.offsetWidth + currentTranslationOffset;
+					var loop = F2(
+						function (_p32, _p31) {
+							var _p33 = _p32;
+							var _p35 = _p33._1;
+							var _p34 = _p31;
+							if (!_elm_lang$core$Native_Utils.eq(_p34.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
+								return _p34;
+							} else {
+								var tabOffsetLeftAndWidth = _p35.offsetLeft + _p35.offsetWidth;
+								var scrollTargetDetermined = function () {
+									if (!isRtl) {
+										return _elm_lang$core$Native_Utils.cmp(tabOffsetLeftAndWidth, scrollFrameWidth) > 0;
+									} else {
+										var tabRightOffset = _p35.offsetWidth - tabOffsetLeftAndWidth;
+										var frameOffsetAndTabWidth = scrollFrameWidth - _p35.offsetWidth;
+										return _elm_lang$core$Native_Utils.cmp(tabRightOffset, frameOffsetAndTabWidth) > 0;
+									}
+								}();
+								return scrollTargetDetermined ? {
+									scrollTargetIndex: _elm_lang$core$Maybe$Just(_p33._0)
+								} : {scrollTargetIndex: _elm_lang$core$Maybe$Nothing};
+							}
+						});
+					var scrollTargetIndex = function (_p36) {
+						return A2(
+							_elm_lang$core$Maybe$withDefault,
+							0,
+							function (_) {
+								return _.scrollTargetIndex;
+							}(_p36));
+					}(
+						A3(
+							_elm_lang$core$List$foldl,
+							loop,
+							{scrollTargetIndex: _elm_lang$core$Maybe$Nothing},
+							A2(
+								_elm_lang$core$List$indexedMap,
+								F2(
+									function (v0, v1) {
+										return {ctor: '_Tuple2', _0: v0, _1: v1};
+									}),
+								_p38.tabs)));
+					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p38, scrollTargetIndex);
+					var _p37 = A2(indicatorEnabledStates, _p38, translateOffset);
+					var forwardIndicator = _p37.forwardIndicator;
+					var backIndicator = _p37.backIndicator;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{
+									geometry: _elm_lang$core$Maybe$Just(_p38),
+									translateOffset: translateOffset,
+									forwardIndicator: forwardIndicator,
+									backIndicator: backIndicator
+								})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				case 'Focus':
+					var _p39 = _p16._1;
+					var currentTranslateOffset = model.translateOffset;
+					var tabBarWidth = _p39.tabBar.offsetWidth;
+					var scrollFrameWidth = _p39.scrollFrame.offsetWidth;
+					var tab = A2(
+						_elm_lang$core$Maybe$withDefault,
+						{offsetLeft: 0, offsetWidth: 0},
+						_elm_lang$core$List$head(
+							A2(_elm_lang$core$List$drop, _p16._0, _p39.tabs)));
+					var leftEdge = tab.offsetLeft;
+					var normalizedLeftOffset = tabBarWidth - leftEdge;
+					var rightEdge = leftEdge + tab.offsetWidth;
+					var shouldScrollBack = (!isRtl) ? (_elm_lang$core$Native_Utils.cmp(rightEdge, currentTranslateOffset) < 1) : (_elm_lang$core$Native_Utils.cmp(leftEdge, tabBarWidth - currentTranslateOffset) > -1);
+					var shouldScrollForward = (!isRtl) ? (_elm_lang$core$Native_Utils.cmp(rightEdge, currentTranslateOffset + scrollFrameWidth) > 0) : (_elm_lang$core$Native_Utils.cmp(normalizedLeftOffset, scrollFrameWidth + currentTranslateOffset) > 0);
+					var resetAmt = isRtl ? model.scrollLeftAmount : 0;
+					if (shouldScrollForward) {
+						var _v8 = lift,
+							_v9 = _aforemny$elm_mdc$Material_Internal_Tabs$ScrollForward(_p39),
+							_v10 = model;
+						lift = _v8;
+						msg = _v9;
+						model = _v10;
+						continue update;
+					} else {
+						if (shouldScrollBack) {
+							var _v11 = lift,
+								_v12 = _aforemny$elm_mdc$Material_Internal_Tabs$ScrollBack(_p39),
+								_v13 = model;
+							lift = _v11;
+							msg = _v12;
+							model = _v13;
+							continue update;
+						} else {
+							return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+						}
+					}
+				case 'Init':
+					var _p41 = _p16._0;
+					return {
+						ctor: '_Tuple2',
+						_0: function () {
+							var scrollFrameWidth = _p41.scrollFrame.offsetWidth;
+							var tabBarWidth = _p41.tabBar.offsetWidth;
+							var isOverflowing = _elm_lang$core$Native_Utils.cmp(tabBarWidth, scrollFrameWidth) > 0;
+							var translateOffset = (!isOverflowing) ? 0 : model.translateOffset;
+							var _p40 = A2(indicatorEnabledStates, _p41, translateOffset);
+							var forwardIndicator = _p40.forwardIndicator;
+							var backIndicator = _p40.backIndicator;
+							return _elm_lang$core$Maybe$Just(
+								_elm_lang$core$Native_Utils.update(
+									model,
+									{
+										geometry: _elm_lang$core$Maybe$Just(_p41),
+										scale: A2(_aforemny$elm_mdc$Material_Tabs$computeScale, _p41, 0),
+										forwardIndicator: forwardIndicator,
+										backIndicator: backIndicator,
+										translateOffset: translateOffset,
+										indicatorShown: false
+									}));
+						}(),
+						_1: A2(
+							_aforemny$elm_mdc$Material_Helpers$delay,
+							0,
+							lift(_aforemny$elm_mdc$Material_Internal_Tabs$SetIndicatorShown))
+					};
+				default:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{indicatorShown: true})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+			}
 		}
 	});
-var _aforemny$elm_mdc$Material_Tabs$defaultModel = {index: 0, geometry: _aforemny$elm_mdc$Material_Internal_Tabs$defaultGeometry, translationOffset: 0, scale: 0, nextIndicator: false, backIndicator: false, ripples: _elm_lang$core$Dict$empty};
-var _aforemny$elm_mdc$Material_Tabs$_p27 = A3(
+var _aforemny$elm_mdc$Material_Tabs$defaultModel = {geometry: _elm_lang$core$Maybe$Nothing, index: 0, translateOffset: 0, scale: 0, ripples: _elm_lang$core$Dict$empty, indicatorShown: false, forwardIndicator: false, backIndicator: false, scrollLeftAmount: 0};
+var _aforemny$elm_mdc$Material_Tabs$_p42 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.tabs;
@@ -17021,17 +17245,36 @@ var _aforemny$elm_mdc$Material_Tabs$_p27 = A3(
 				{tabs: x});
 		}),
 	_aforemny$elm_mdc$Material_Tabs$defaultModel);
-var _aforemny$elm_mdc$Material_Tabs$get = _aforemny$elm_mdc$Material_Tabs$_p27._0;
-var _aforemny$elm_mdc$Material_Tabs$set = _aforemny$elm_mdc$Material_Tabs$_p27._1;
+var _aforemny$elm_mdc$Material_Tabs$get = _aforemny$elm_mdc$Material_Tabs$_p42._0;
+var _aforemny$elm_mdc$Material_Tabs$set = _aforemny$elm_mdc$Material_Tabs$_p42._1;
 var _aforemny$elm_mdc$Material_Tabs$react = A4(_aforemny$elm_mdc$Material_Component$react, _aforemny$elm_mdc$Material_Tabs$get, _aforemny$elm_mdc$Material_Tabs$set, _aforemny$elm_mdc$Material_Msg$TabsMsg, _aforemny$elm_mdc$Material_Tabs$update);
-var _aforemny$elm_mdc$Material_Tabs$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Tabs$get, _aforemny$elm_mdc$Material_Tabs$view, _aforemny$elm_mdc$Material_Msg$TabsMsg);
-var _aforemny$elm_mdc$Material_Tabs$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {index: a, geometry: b, translationOffset: c, scale: d, nextIndicator: e, backIndicator: f, ripples: g};
+var _aforemny$elm_mdc$Material_Tabs$view = F4(
+	function (lift, index, store, options) {
+		return A7(
+			_aforemny$elm_mdc$Material_Component$render,
+			_aforemny$elm_mdc$Material_Tabs$get,
+			_aforemny$elm_mdc$Material_Tabs$tabs,
+			_aforemny$elm_mdc$Material_Msg$TabsMsg,
+			lift,
+			index,
+			store,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Internal_Options$dispatch(lift),
+				_1: options
+			});
+	});
+var _aforemny$elm_mdc$Material_Tabs$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {geometry: a, index: b, translateOffset: c, scale: d, ripples: e, indicatorShown: f, forwardIndicator: g, backIndicator: h, scrollLeftAmount: i};
 	});
 var _aforemny$elm_mdc$Material_Tabs$Config = F3(
 	function (a, b, c) {
 		return {active: a, scroller: b, indicator: c};
+	});
+var _aforemny$elm_mdc$Material_Tabs$Tab = F2(
+	function (a, b) {
+		return {options: a, childs: b};
 	});
 
 //import Maybe, Native.List //
@@ -36717,7 +36960,7 @@ var _aforemny$elm_mdc$Demo_Tabs$update = F3(
 var _aforemny$elm_mdc$Demo_Tabs$heroTabs = F4(
 	function (lift, mdc, index, model) {
 		return A5(
-			_aforemny$elm_mdc$Material_Tabs$render,
+			_aforemny$elm_mdc$Material_Tabs$view,
 			function (_p3) {
 				return lift(
 					_aforemny$elm_mdc$Demo_Tabs$Mdc(_p3));
@@ -36820,7 +37063,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example1 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Tabs$render,
+								_aforemny$elm_mdc$Material_Tabs$view,
 								function (_p4) {
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p4));
@@ -36836,7 +37079,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example1 = F4(
 									_0: _aforemny$elm_mdc$Material_Tabs$indicator,
 									_1: {
 										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Tabs$scroller,
+										_0: _aforemny$elm_mdc$Material_Tabs$scrolling,
 										_1: {ctor: '[]'}
 									}
 								},
@@ -36969,7 +37212,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example2 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Tabs$render,
+								_aforemny$elm_mdc$Material_Tabs$view,
 								function (_p5) {
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p5));
@@ -37057,7 +37300,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example3 = F4(
 						_1: {
 							ctor: '::',
 							_0: A5(
-								_aforemny$elm_mdc$Material_Tabs$render,
+								_aforemny$elm_mdc$Material_Tabs$view,
 								function (_p6) {
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p6));
@@ -37091,7 +37334,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example3 = F4(
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Tabs$iconLabel,
+													_aforemny$elm_mdc$Material_Tabs$iconText,
 													{ctor: '[]'},
 													'Recents'),
 												_1: {ctor: '[]'}
@@ -37111,7 +37354,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example3 = F4(
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Tabs$iconLabel,
+														_aforemny$elm_mdc$Material_Tabs$iconText,
 														{ctor: '[]'},
 														'Favorites'),
 													_1: {ctor: '[]'}
@@ -37131,177 +37374,11 @@ var _aforemny$elm_mdc$Demo_Tabs$example3 = F4(
 													_1: {
 														ctor: '::',
 														_0: A2(
-															_aforemny$elm_mdc$Material_Tabs$iconLabel,
+															_aforemny$elm_mdc$Material_Tabs$iconText,
 															{ctor: '[]'},
 															'Nearby'),
 														_1: {ctor: '[]'}
 													}
-												}),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Demo_Tabs$example4 = F4(
-	function (lift, mdc, index, model) {
-		return A2(
-			_elm_lang$html$Html$section,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_aforemny$elm_mdc$Demo_Tabs$fieldset,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Demo_Tabs$legend,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Primary Color Indicator'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A5(
-								_aforemny$elm_mdc$Material_Tabs$render,
-								function (_p7) {
-									return lift(
-										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p7));
-								},
-								{
-									ctor: '::',
-									_0: index,
-									_1: {ctor: '[]'}
-								},
-								mdc,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Tabs$indicator,
-									_1: {
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Tabs$indicatorPrimary,
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Tabs$tab,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Item One'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_aforemny$elm_mdc$Material_Tabs$tab,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Item Two'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Tabs$tab,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Item Three'),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Demo_Tabs$example5 = F4(
-	function (lift, mdc, index, model) {
-		return A2(
-			_elm_lang$html$Html$section,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_aforemny$elm_mdc$Demo_Tabs$fieldset,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Demo_Tabs$legend,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Accent Color Indicator'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A5(
-								_aforemny$elm_mdc$Material_Tabs$render,
-								function (_p8) {
-									return lift(
-										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p8));
-								},
-								{
-									ctor: '::',
-									_0: index,
-									_1: {ctor: '[]'}
-								},
-								mdc,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Tabs$indicator,
-									_1: {
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Tabs$indicatorAccent,
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Tabs$tab,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Item One'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_aforemny$elm_mdc$Material_Tabs$tab,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Item Two'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Tabs$tab,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Item Three'),
-													_1: {ctor: '[]'}
 												}),
 											_1: {ctor: '[]'}
 										}
@@ -37337,9 +37414,9 @@ var _aforemny$elm_mdc$Demo_Tabs$example6 = F4(
 							ctor: '::',
 							_0: A5(
 								_aforemny$elm_mdc$Material_Toolbar$view,
-								function (_p9) {
+								function (_p7) {
 									return lift(
-										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p9));
+										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p7));
 								},
 								{
 									ctor: '::',
@@ -37386,10 +37463,10 @@ var _aforemny$elm_mdc$Demo_Tabs$example6 = F4(
 													{
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Tabs$render,
-															function (_p10) {
+															_aforemny$elm_mdc$Material_Tabs$view,
+															function (_p8) {
 																return lift(
-																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p10));
+																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p8));
 															},
 															{
 																ctor: '::',
@@ -37473,9 +37550,9 @@ var _aforemny$elm_mdc$Demo_Tabs$example7 = F4(
 							ctor: '::',
 							_0: A5(
 								_aforemny$elm_mdc$Material_Toolbar$view,
-								function (_p11) {
+								function (_p9) {
 									return lift(
-										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p11));
+										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p9));
 								},
 								{
 									ctor: '::',
@@ -37534,10 +37611,10 @@ var _aforemny$elm_mdc$Demo_Tabs$example7 = F4(
 													{
 														ctor: '::',
 														_0: A5(
-															_aforemny$elm_mdc$Material_Tabs$render,
-															function (_p12) {
+															_aforemny$elm_mdc$Material_Tabs$view,
+															function (_p10) {
 																return lift(
-																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p12));
+																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p10));
 															},
 															{
 																ctor: '::',
@@ -37546,294 +37623,6 @@ var _aforemny$elm_mdc$Demo_Tabs$example7 = F4(
 															},
 															mdc,
 															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: A2(
-																	_aforemny$elm_mdc$Material_Tabs$tab,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Item One'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_aforemny$elm_mdc$Material_Tabs$tab,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('Item Two'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_aforemny$elm_mdc$Material_Tabs$tab,
-																			{ctor: '[]'},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('Item Three'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Demo_Tabs$example8 = F4(
-	function (lift, mdc, index, model) {
-		return A2(
-			_elm_lang$html$Html$section,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_aforemny$elm_mdc$Demo_Tabs$fieldset,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Demo_Tabs$legend,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Within mdc-toolbar + primary indicator'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A5(
-								_aforemny$elm_mdc$Material_Toolbar$view,
-								function (_p13) {
-									return lift(
-										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p13));
-								},
-								{
-									ctor: '::',
-									_0: 2 * index,
-									_1: {ctor: '[]'}
-								},
-								mdc,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Theme$secondaryBg,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Toolbar$row,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$section,
-												{
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Toolbar$alignStart,
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$title,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Title'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$section,
-													{
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Toolbar$alignEnd,
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: A5(
-															_aforemny$elm_mdc$Material_Tabs$render,
-															function (_p14) {
-																return lift(
-																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p14));
-															},
-															{
-																ctor: '::',
-																_0: (2 * index) + 1,
-																_1: {ctor: '[]'}
-															},
-															mdc,
-															{
-																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_Tabs$indicator,
-																_1: {
-																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_Tabs$indicatorPrimary,
-																	_1: {ctor: '[]'}
-																}
-															},
-															{
-																ctor: '::',
-																_0: A2(
-																	_aforemny$elm_mdc$Material_Tabs$tab,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Item One'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_aforemny$elm_mdc$Material_Tabs$tab,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('Item Two'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_aforemny$elm_mdc$Material_Tabs$tab,
-																			{ctor: '[]'},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text('Item Three'),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Demo_Tabs$example9 = F4(
-	function (lift, mdc, index, model) {
-		return A2(
-			_elm_lang$html$Html$section,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_aforemny$elm_mdc$Demo_Tabs$fieldset,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Demo_Tabs$legend,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Within mdc-toolbar + accent indicator'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A5(
-								_aforemny$elm_mdc$Material_Toolbar$view,
-								function (_p15) {
-									return lift(
-										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p15));
-								},
-								{
-									ctor: '::',
-									_0: 2 * index,
-									_1: {ctor: '[]'}
-								},
-								mdc,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Theme$primaryBg,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Toolbar$row,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$section,
-												{
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Toolbar$alignStart,
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$title,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Title'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$section,
-													{
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Toolbar$alignEnd,
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: A5(
-															_aforemny$elm_mdc$Material_Tabs$render,
-															function (_p16) {
-																return lift(
-																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p16));
-															},
-															{
-																ctor: '::',
-																_0: (2 * index) + 1,
-																_1: {ctor: '[]'}
-															},
-															mdc,
-															{
-																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_Tabs$indicator,
-																_1: {
-																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_Tabs$indicatorAccent,
-																	_1: {ctor: '[]'}
-																}
-															},
 															{
 																ctor: '::',
 																_0: A2(
@@ -37918,9 +37707,9 @@ var _aforemny$elm_mdc$Demo_Tabs$example10 = F4(
 							ctor: '::',
 							_0: A5(
 								_aforemny$elm_mdc$Material_Toolbar$view,
-								function (_p17) {
+								function (_p11) {
 									return lift(
-										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p17));
+										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p11));
 								},
 								{
 									ctor: '::',
@@ -37950,10 +37739,10 @@ var _aforemny$elm_mdc$Demo_Tabs$example10 = F4(
 												{
 													ctor: '::',
 													_0: A5(
-														_aforemny$elm_mdc$Material_Tabs$render,
-														function (_p18) {
+														_aforemny$elm_mdc$Material_Tabs$view,
+														function (_p12) {
 															return lift(
-																_aforemny$elm_mdc$Demo_Tabs$Mdc(_p18));
+																_aforemny$elm_mdc$Demo_Tabs$Mdc(_p12));
 														},
 														{
 															ctor: '::',
@@ -38223,85 +38012,37 @@ var _aforemny$elm_mdc$Demo_Tabs$view = F3(
 								_1: {
 									ctor: '::',
 									_0: A4(
-										_aforemny$elm_mdc$Demo_Tabs$example4,
+										_aforemny$elm_mdc$Demo_Tabs$example6,
 										lift,
 										model.mdc,
-										5,
+										7,
 										A2(
 											_elm_lang$core$Maybe$withDefault,
 											_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-											A2(_elm_lang$core$Dict$get, 5, model.examples))),
+											A2(_elm_lang$core$Dict$get, 7, model.examples))),
 									_1: {
 										ctor: '::',
 										_0: A4(
-											_aforemny$elm_mdc$Demo_Tabs$example5,
+											_aforemny$elm_mdc$Demo_Tabs$example7,
 											lift,
 											model.mdc,
-											6,
+											8,
 											A2(
 												_elm_lang$core$Maybe$withDefault,
 												_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-												A2(_elm_lang$core$Dict$get, 6, model.examples))),
+												A2(_elm_lang$core$Dict$get, 8, model.examples))),
 										_1: {
 											ctor: '::',
 											_0: A4(
-												_aforemny$elm_mdc$Demo_Tabs$example6,
+												_aforemny$elm_mdc$Demo_Tabs$example10,
 												lift,
 												model.mdc,
-												7,
+												11,
 												A2(
 													_elm_lang$core$Maybe$withDefault,
 													_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-													A2(_elm_lang$core$Dict$get, 7, model.examples))),
-											_1: {
-												ctor: '::',
-												_0: A4(
-													_aforemny$elm_mdc$Demo_Tabs$example7,
-													lift,
-													model.mdc,
-													8,
-													A2(
-														_elm_lang$core$Maybe$withDefault,
-														_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-														A2(_elm_lang$core$Dict$get, 8, model.examples))),
-												_1: {
-													ctor: '::',
-													_0: A4(
-														_aforemny$elm_mdc$Demo_Tabs$example8,
-														lift,
-														model.mdc,
-														9,
-														A2(
-															_elm_lang$core$Maybe$withDefault,
-															_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-															A2(_elm_lang$core$Dict$get, 9, model.examples))),
-													_1: {
-														ctor: '::',
-														_0: A4(
-															_aforemny$elm_mdc$Demo_Tabs$example9,
-															lift,
-															model.mdc,
-															10,
-															A2(
-																_elm_lang$core$Maybe$withDefault,
-																_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-																A2(_elm_lang$core$Dict$get, 10, model.examples))),
-														_1: {
-															ctor: '::',
-															_0: A4(
-																_aforemny$elm_mdc$Demo_Tabs$example10,
-																lift,
-																model.mdc,
-																11,
-																A2(
-																	_elm_lang$core$Maybe$withDefault,
-																	_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-																	A2(_elm_lang$core$Dict$get, 11, model.examples))),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}
+													A2(_elm_lang$core$Dict$get, 11, model.examples))),
+											_1: {ctor: '[]'}
 										}
 									}
 								}
@@ -38315,9 +38056,9 @@ var _aforemny$elm_mdc$Demo_Tabs$subscriptions = F2(
 	function (lift, model) {
 		return A2(
 			_aforemny$elm_mdc$Material$subscriptions,
-			function (_p19) {
+			function (_p13) {
 				return lift(
-					_aforemny$elm_mdc$Demo_Tabs$Mdc(_p19));
+					_aforemny$elm_mdc$Demo_Tabs$Mdc(_p13));
 			},
 			model);
 	});
