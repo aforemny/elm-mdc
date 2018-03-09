@@ -202,5 +202,119 @@
     });
   });
 
+  // EVENT globalmouseup
+
+  document.addEventListener("mouseup", function(originalEvent) {
+      dispatch(document, "globalmouseup", function(target, event) {
+          event.pageX = originalEvent.pageX;
+          event.pageY = originalEvent.pageY;
+          event.detail = originalEvent.detail;
+          event.currentTarget = originalEvent.currentTarget;
+          event.relatedTarget = originalEvent.relatedTarget;
+          event.screenX = originalEvent.screenX;
+          event.screenY = originalEvent.screenY;
+          event.clientX = originalEvent.clientX;
+          event.clientY = originalEvent.clientY;
+          event.button = originalEvent.button;
+          event.buttons = originalEvent.buttons;
+          event.mozPressure = originalEvent.mozPressure;
+          event.ctrlKey = originalEvent.ctrlKey;
+          event.shiftKey = originalEvent.shiftKey;
+          event.altKey = originalEvent.altKey;
+          event.metaKey = originalEvent.metaKey;
+          return event;
+      });
+  });
+
+  // EVENT globalpointerup
+
+  document.addEventListener("pointerup", function(originalEvent) {
+      dispatch(document, "globalpointerup", function(target, event) {
+          event.detail = originalEvent.detail;
+          event.pointerId = originalEvent.pointerId;
+          event.width = originalEvent.width;
+          event.height = originalEvent.height;
+          event.pressure = originalEvent.pressure;
+          event.tiltX = originalEvent.tiltX;
+          event.tiltY = originalEvent.tiltY;
+          event.pointerType = originalEvent.pointerType;
+          event.isPrimary = originalEvent.isPrimary;
+          return event;
+      });
+  });
+
+  // EVENT globaltouchend
+
+  document.addEventListener("touchend", function(originalEvent) {
+      dispatch(document, "globaltouchend", function(target, event) {
+          event.detail = originalEvent.detail;
+          event.touches = originalEvent.touches;
+          event.targetTouches = originalEvent.targetTouches;
+          event.changedTouches = originalEvent.changedTouches;
+          event.ctrlKey = originalEvent.ctrlKey;
+          event.shiftKey = originalEvent.shiftKey;
+          event.altKey = originalEvent.altKey;
+          event.metaKey = originalEvent.metaKey;
+          return event;
+      });
+  });
+
+  // EVENT globalmousemove
+
+  document.addEventListener("mousemove", function(originalEvent) {
+      dispatch(document, "globalmousemove", function(target, event) {
+          event.pageX = originalEvent.pageX;
+          event.pageY = originalEvent.pageY;
+          event.detail = originalEvent.detail;
+          event.currentTarget = originalEvent.currentTarget;
+          event.relatedTarget = originalEvent.relatedTarget;
+          event.screenX = originalEvent.screenX;
+          event.screenY = originalEvent.screenY;
+          event.clientX = originalEvent.clientX;
+          event.clientY = originalEvent.clientY;
+          event.button = originalEvent.button;
+          event.buttons = originalEvent.buttons;
+          event.mozPressure = originalEvent.mozPressure;
+          event.ctrlKey = originalEvent.ctrlKey;
+          event.shiftKey = originalEvent.shiftKey;
+          event.altKey = originalEvent.altKey;
+          event.metaKey = originalEvent.metaKey;
+          return event;
+      });
+  });
+
+  // EVENT globalpointermove
+
+  document.addEventListener("pointermove", function(originalEvent) {
+      dispatch(document, "globalpointermove", function(target, event) {
+          event.detail = originalEvent.detail;
+          event.pointerId = originalEvent.pointerId;
+          event.width = originalEvent.width;
+          event.height = originalEvent.height;
+          event.pressure = originalEvent.pressure;
+          event.tiltX = originalEvent.tiltX;
+          event.tiltY = originalEvent.tiltY;
+          event.pointerType = originalEvent.pointerType;
+          event.isPrimary = originalEvent.isPrimary;
+          return event;
+      });
+  });
+
+  // EVENT globaltouchmove
+
+  document.addEventListener("touchmove", function(originalEvent) {
+      dispatch(document, "globaltouchmove", function(target, event) {
+          event.detail = originalEvent.detail;
+          event.touches = originalEvent.touches;
+          event.targetTouches = originalEvent.targetTouches;
+          event.changedTouches = originalEvent.changedTouches;
+          event.ctrlKey = originalEvent.ctrlKey;
+          event.shiftKey = originalEvent.shiftKey;
+          event.altKey = originalEvent.altKey;
+          event.metaKey = originalEvent.metaKey;
+          return event;
+      });
+  });
+
   window["ElmGlobalEvents"] = {};
 })();
