@@ -1,4 +1,4 @@
-module GlobalEvents exposing
+module Material.GlobalEvents exposing
   (
     onLoad
   , onLoad1
@@ -9,10 +9,17 @@ module GlobalEvents exposing
   , onPolledResize1
   , onScroll
   , onScroll1
+  , onMouseMove
+  , onTouchMove
+  , onPointerMove
+  , onMouseUp
+  , onTouchEnd
+  , onPointerUp
   )
 
 import Html.Attributes as Html
 import Html.Events as Html
+import Material.Options as Options exposing (Property)
 
 
 {-| Triggers on window's `load` event – after resources have loaded –  and as
@@ -74,7 +81,32 @@ onScroll1 =
   listener "globalscroll1"
 
 
+onMouseMove =
+    listener "globalmousemove"
+
+
+onTouchMove =
+    listener "globaltouchmove"
+
+
+onPointerMove =
+    listener "globalpointermove"
+
+
+onMouseUp =
+    listener "globalmouseup"
+
+
+onTouchEnd =
+    listener "globaltouchend"
+
+
+onPointerUp =
+    listener "globalpointerup"
+
+
 listener name decoder =
-  [ Html.on name decoder
-  , Html.attribute ("data-" ++ name) ""
+  Options.many
+  [ Options.on name decoder
+  , Options.data name ""
   ]

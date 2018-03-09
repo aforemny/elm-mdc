@@ -84,17 +84,17 @@ Toolbar.view Mdc [0] model.mdc []
 -}
 
 import Dict exposing (Dict)
+import DOM
 import Html.Attributes as Html
 import Html exposing (Html, text)
+import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
+import Material.GlobalEvents as GlobalEvents
 import Material.Icon as Icon
 import Material.Internal.Options as Internal
 import Material.Internal.Toolbar exposing (Calculations, Config, Geometry, Model, Msg(..))
 import Material.Msg exposing (Index)
 import Material.Options as Options exposing (styled, cs, css, when, nop)
-import GlobalEvents
-import Json.Decode as Json exposing (Decoder)
-import DOM
 
 
 -- CONSTANTS
@@ -385,14 +385,11 @@ toolbar lift model options nodes =
          cs "mdc-toolbar--flexible-default-behavior"
        )
     :: ( when (model.geometry == Nothing) <|
-         Options.many << List.map Internal.attribute <|
          GlobalEvents.onTick (Json.map (lift << Init config) decodeGeometry)
        )
-    :: ( Options.many << List.map Internal.attribute <|
-         GlobalEvents.onResize (Json.map (lift << Resize config) decodeGeometry)
+    :: ( GlobalEvents.onResize (Json.map (lift << Resize config) decodeGeometry)
        )
-    :: ( Options.many << List.map Internal.attribute <|
-         GlobalEvents.onScroll (Json.map (lift << Scroll config) decodeScrollTop)
+    :: ( GlobalEvents.onScroll (Json.map (lift << Scroll config) decodeScrollTop)
        )
     :: ( toolbarProperties
          |> Maybe.map Options.many

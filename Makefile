@@ -3,7 +3,7 @@ PAGES=../elm-mdc-gh-pages
 
 all: build-demo
 
-build-demo: elm-global-events.js elm-focus-trap.js elm-autofocus.js material-components-web.css
+build-demo: elm-focus-trap.js elm-autofocus.js material-components-web.css
 	mkdir -p build
 	rsync -r demo/images build
 	cp demo/page.html build/index.html
@@ -16,9 +16,6 @@ build-demo: elm-global-events.js elm-focus-trap.js elm-autofocus.js material-com
 
 setup:
 	npm i
-
-elm-global-events.js: elm-global-events/elm-global-events.js
-	cp elm-global-events/elm-global-events.js .
 
 elm-focus-trap.js:
 	(cd elm-focus-trap; make)

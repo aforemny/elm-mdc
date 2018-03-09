@@ -71,11 +71,11 @@ Select.view (lift << Mdc) id model.mdc
 -}
 
 import DOM
-import GlobalEvents
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
+import Material.GlobalEvents as GlobalEvents
 import Material.Internal.Options as Internal
 import Material.Internal.Select exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Menu as Menu
@@ -244,8 +244,7 @@ select lift model options items =
     Internal.apply summary Html.div
     [ cs "mdc-select"
     , cs "mdc-select--open" |> when isOpen
-    , when (model.menu.animating && model.menu.geometry == Nothing)
-      << Options.many << List.map Internal.attribute <|
+    , when (model.menu.animating && model.menu.geometry == Nothing) <|
       GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
     , Menu.connect (lift << MenuMsg) |> when (not config.disabled)
     , cs "mdc-select--disabled" |> when config.disabled

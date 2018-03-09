@@ -1,54 +1,69 @@
-module Material.Slider
-    exposing
-        ( -- VIEW
-          view
-        , Property
-        , disabled
-        , value
-        , min
-        , max
-        , discrete
-        , steps
-        , trackMarkers
-        , onChange
-        , onInput
-        , targetValue
-        
-          -- TEA
-        , Model
-        , defaultModel
-        , Msg
-        , update
-          
-          -- Featured render
-        , render
-        , Store
-        , react
-        )
+module Material.Slider exposing
+    ( disabled
+    , discrete
+    , max
+    , min
+    , Model
+    , onChange
+    , onInput
+    , Property
+    , react
+    , steps
+    , trackMarkers
+    , value
+    , view
+    )
 
 {-|
-## Design and API Documentation
+Slider provides an implementation of the Material Design slider component.
+
+Note that vertical sliders and range (multi-thumb) sliders are not supported,
+due to their absence from the material design spec.
+
+Slider uses custom `onChage` and `onInput` event handlers.
+
+
+# Resources
 
 - [Material Design guidelines: Sliders](https://material.io/guidelines/components/sliders.html)
 - [Demo](https://aforemny.github.io/elm-mdc/slider)
 
-## View
-@docs view
+
+# Example
+
+```elm
+import Material.Slider as Slider
+
+Slider.view Mdc [0] model.mdc
+    [ Slider.value 40
+    , Slider.onChange (Json.succeed << Change)
+    ]
+    []
+```
 
 
-## Properties
+# Usage
+
+
+## Slider
+
 @docs Property
-@docs disabeld
+@docs view
 @docs value, min, max
-@docs discrete, steps, trackMarkers
-@docs onChange, onInput, targetValue
+@docs disabled
+@docs onChange, onInput
 
-## TEA
-@docs Model, defaultModel, Msg, update
+## Discrete Slider
 
-## Featured render
-@docs render
-@docs Store, react
+@docs discrete
+@docs steps
+@docs trackMarkers
+
+
+# Internal
+
+@docs Model
+@docs react
 -}
 
 import DOM
@@ -57,7 +72,7 @@ import Html as Html exposing (Html, text)
 import Html.Attributes as Html
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Index, Indexed)
-import Material.Helpers as Helpers
+import Material.GlobalEvents as GlobalEvents
 import Material.Internal.Options as Internal
 import Material.Internal.Slider exposing (Msg(..), Geometry, defaultGeometry)
 import Material.Msg
@@ -66,11 +81,15 @@ import Svg
 import Svg.Attributes as Svg
 
 
+{-| Slider model.
+
+Internal use only.
+-}
 type alias Model =
     { focus : Bool
     , active : Bool
     , geometry : Maybe Geometry
-    , value : Maybe Float
+    , activeValue : Maybe Float
     , inTransit : Bool
     , preventFocus : Bool
     }
@@ -81,7 +100,7 @@ defaultModel =
     { focus = False
     , active = False
     , geometry = Nothing
-    , value = Nothing
+    , activeValue = Nothing
     , inTransit = False
     , preventFocus = False
     }
@@ -97,9 +116,6 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        Dispatch ms ->
-            ( Nothing, Cmd.batch (List.map Helpers.cmd ms) )
-
         Focus ->
             if not model.preventFocus then
                 ( Just { model | focus = True }, Cmd.none )
@@ -111,36 +127,66 @@ update lift msg model =
               Just
               { model
                 | focus = False
-                , active = False
                 , preventFocus = False
               }
             ,
               Cmd.none
             )
 
-        Tick ->
+        TransitionEnd ->
             ( Just { model | inTransit = False }, Cmd.none )
 
-        Activate inTransit geometry ->
+        InteractionStart { pageX } ->
+            let
+                geometry =
+                    Maybe.withDefault defaultGeometry model.geometry
+
+                activeValue =
+                    valueFromPageX geometry pageX
+            in
             ( Just
               { model
                 | active = True
-                , geometry = Just geometry
-                , inTransit = inTransit
-                , value = Just (computeValue geometry)
+                , inTransit = True
+                , activeValue = Just activeValue
                 , preventFocus = True
               }
             ,
               Cmd.none
             )
 
-        Drag geometry ->
+        ThumbContainerPointer { pageX } ->
+            let
+                geometry =
+                    Maybe.withDefault defaultGeometry model.geometry
+
+                activeValue =
+                    valueFromPageX geometry pageX
+            in
+            ( Just
+              { model
+                | active = True
+                , inTransit = False
+                , activeValue = Just activeValue
+                , preventFocus = True
+              }
+            ,
+              Cmd.none
+            )
+
+        Drag { pageX } ->
             if model.active then
+                let
+                    geometry =
+                        Maybe.withDefault defaultGeometry model.geometry
+
+                    activeValue =
+                        valueFromPageX geometry pageX
+                in
                 ( Just
                   { model
-                    | geometry = Just geometry
-                    , inTransit = False
-                    , value = Just (computeValue geometry)
+                    | inTransit = False
+                    , activeValue = Just activeValue
                   }
                 ,
                   Cmd.none
@@ -152,14 +198,105 @@ update lift msg model =
             ( Just
               { model
                 | geometry = Just geometry
-                , value = Just (computeValue geometry)
               }
             ,
               Cmd.none
             )
 
+        Resize geometry ->
+            update lift (Init geometry) model
+
+        KeyDown ->
+            ( Just { model | focus = True }, Cmd.none )
+
         Up ->
-            ( Just { model | active = False }, Cmd.none )
+            ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
+
+
+valueFromPageX : Geometry -> Float -> Float
+valueFromPageX geometry pageX =
+    let
+        isRtl =
+            False -- TODO
+
+        { max, min } =
+            geometry
+
+        xPos =
+            pageX - geometry.rect.left
+
+        pctComplete =
+            if isRtl then
+                1 - (xPos / geometry.rect.width)
+            else
+                xPos / geometry.rect.width
+    in
+    min + pctComplete * (max - min)
+
+
+valueForKey : Maybe String -> Int -> Geometry -> Float -> Maybe Float
+valueForKey key keyCode geometry value =
+    let
+        isRtl =
+            False -- TODO
+
+        { max, min, steps, discrete } =
+            geometry
+
+        delta =
+            ( if isRtl && (isArrowLeft || isArrowRight) then
+                  (*) -1
+              else
+                  identity
+            ) <|
+            ( if discrete then
+                  Maybe.withDefault 1 (Maybe.map toFloat steps)
+              else
+                  (max - min) / 100
+            )
+
+        isArrowLeft =
+            key == Just "ArrowLeft" || keyCode == 37
+
+        isArrowRight =
+            key == Just "ArrowRight" || keyCode == 39
+
+        isArrowUp =
+            key == Just "ArrowUp" || keyCode == 38
+
+        isArrowDown =
+            key == Just "ArrowDown" || keyCode == 40
+
+        isHome =
+            key == Just "Home" || keyCode == 36
+
+        isEnd =
+            key == Just "End" || keyCode == 35
+
+        isPageUp =
+            key == Just "PageUp" || keyCode == 33
+
+        isPageDown =
+            key == Just "PageDown" || keyCode == 34
+
+        pageFactor =
+            4
+    in
+    Maybe.map (clamp min max) <|
+    if isArrowLeft || isArrowDown then
+        Just (value - delta)
+    else if isArrowRight || isArrowUp then
+        Just (value + delta)
+    else if isHome then
+        Just min
+    else if isEnd then
+        Just max
+    else if isPageUp then
+        Just (value + delta * pageFactor)
+    else if isPageDown then
+        Just (value - delta * pageFactor)
+    else
+        Nothing
 
 
 type alias Config m =
@@ -168,8 +305,8 @@ type alias Config m =
     , max : Float
     , discrete : Bool
     , steps : Int
-    , onInput : Maybe (Decoder m)
-    , onChange : Maybe (Decoder m)
+    , onInput : Maybe (Float -> m)
+    , onChange : Maybe (Float -> m)
     , trackMarkers : Bool
     }
 
@@ -193,35 +330,37 @@ type alias Property m =
     Options.Property (Config m) m
 
 
-{-| TODO
+{-| Specify the slider's value.
+
+This will be clamped between `min` and `max`.
 -}
 value : Float -> Property m
 value =
     Internal.option << (\value config -> { config | value = value })
 
 
-{-| TODO
+{-| Specify the minimum value.
 -}
 min : Int -> Property m
 min =
     Internal.option << (\min config -> { config | min = toFloat min })
 
 
-{-| TODO
+{-| Specify the maximum value.
 -}
 max : Int -> Property m
 max =
     Internal.option << (\max config -> { config | max = toFloat max })
 
 
-{-| TODO
+{-| Make the slider only take integer values.
 -}
 discrete : Property m
 discrete =
     Internal.option (\config -> { config | discrete = True })
 
  
-{-| TODO
+{-| Disable the slider.
 -}
 disabled : Property m
 disabled =
@@ -231,24 +370,24 @@ disabled =
     ]
 
 
-view : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options _ =
+slider : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+slider lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
 
         continuousValue =
             if model.active then
-                model.value
+                model.activeValue
                 |> Maybe.withDefault config.value
             else
                 config.value
 
+        geometry =
+            Maybe.withDefault defaultGeometry model.geometry
+
         value =
-            if config.discrete then
-                discretize config.steps continuousValue
-            else
-                continuousValue
+            discretize geometry continuousValue
 
         translateX =
             let
@@ -263,34 +402,7 @@ view lift model options _ =
                     else
                         0
             in
-                model.geometry
-                |> Maybe.map .width
-                |> Maybe.map ((*) c)
-                |> Maybe.withDefault 0
-
-        activateOn event =
-            Options.on event (Json.map (lift << Activate True) decodeGeometry)
-
-        initOn event =
-            Options.on event (Json.map (lift << Init) decodeGeometry)
-
-        upOn event =
-            Options.on event (Json.succeed (lift Up))
-
-        dragOn event =
-            Options.on event (Json.map (lift << Drag) decodeGeometry)
-
-        inputOn event =
-            Options.on event (Maybe.withDefault (Json.succeed (lift NoOp)) config.onInput)
-
-        changeOn event =
-            Options.on event (Maybe.withDefault (Json.succeed (lift NoOp)) config.onChange)
-
-        ups =
-          [ "ElmMdcMouseUp"
-          , "ElmMdcPointerUp"
-          , "ElmMdcTouchEnd"
-          ]
+            c * geometry.rect.width
 
         downs =
             [ "mousedown"
@@ -298,18 +410,17 @@ view lift model options _ =
             , "touchstart"
             ]
 
-        moves =
-          [ "ElmMdcMouseMove"
-          , "ElmMdcTouchMove"
-          , "ElmMdcPointerMove"
-          ]
+        ups =
+            [ GlobalEvents.onMouseUp
+            , GlobalEvents.onPointerUp
+            , GlobalEvents.onTouchEnd
+            ]
 
-        activateOn_ event =
-            Options.onWithOptions event
-                { stopPropagation = True
-                , preventDefault = False
-                }
-                (Json.map (lift << Activate False) decodeGeometry)
+        moves =
+          [ GlobalEvents.onMouseMove
+          , GlobalEvents.onTouchMove
+          , GlobalEvents.onPointerMove
+          ]
 
         trackScale =
             if config.max - config.min == 0 then
@@ -317,6 +428,32 @@ view lift model options _ =
             else
                 (value - config.min) / (config.max - config.min)
     in
+    styled Html.div
+    [ cs "elm-mdc-slider-wrapper"
+    , Options.onWithOptions "keydown"
+      { preventDefault = True
+      , stopPropagation = False
+      } <|
+      Json.map lift <| Json.andThen identity <|
+      Json.map2
+          (\ key keyCode ->
+             let
+                 activeValue =
+                     valueForKey key keyCode geometry config.value
+             in
+             if activeValue /= Nothing then
+                 Json.succeed NoOp
+             else
+                 Json.fail ""
+          )
+          ( Json.oneOf
+            [ Json.map Just (Json.at ["key"] Json.string)
+            , Json.succeed Nothing
+            ]
+          )
+          (Json.at ["keyCode"] Json.int)
+    ]
+    [
         Internal.apply summary Html.div
         [ cs "mdc-slider"
         , cs "mdc-slider--focus" |> when model.focus
@@ -326,35 +463,185 @@ view lift model options _ =
         , cs "mdc-slider--in-transit" |> when model.inTransit
         , cs "mdc-slider--display-markers" |> when config.trackMarkers
         , Options.attribute (Html.tabindex 0)
-        , Options.on "focus" (Json.succeed (lift Focus))
-        , Options.on "blur" (Json.succeed (lift Blur))
+
         , Options.data "min" (toString config.min)
         , Options.data "max" (toString config.max)
         , Options.data "steps" (toString config.steps)
           |> when config.discrete
 
-        , initOn "ElmMdcInit"
+        , when (model.geometry == Nothing) <|
+          GlobalEvents.onTick <| Json.map (lift << Init) decodeGeometry
 
-        , List.map activateOn downs
-          |> Options.many
+        , GlobalEvents.onResize <| Json.map (lift << Resize) decodeGeometry
 
-        , when model.active <|
-          Options.many << List.concat <|
-          [ (List.map upOn (List.concat [ups, ["blur"]]))
-          , (List.map dragOn moves)
-          ]
+        , Options.on "keydown" <|
+          Json.map lift <|
+          Json.map2
+              (\ key keyCode ->
+                 let
+                     activeValue =
+                         valueForKey key keyCode geometry config.value
+                 in
+                 if activeValue /= Nothing then
+                     KeyDown
+                 else
+                     NoOp
+              )
+              ( Json.oneOf
+                [ Json.map Just (Json.at ["key"] Json.string)
+                , Json.succeed Nothing
+                ]
+              )
+              (Json.at ["keyCode"] Json.int)
 
         , when (config.onChange /= Nothing) <|
-          if model.active then
-              Options.many (List.map changeOn ups)
-          else
-              Options.nop
+          Options.on "keydown" <|
+          Json.map2
+              (\ key keyCode ->
+                 let
+                     activeValue =
+                         valueForKey key keyCode geometry config.value
+                         |> Maybe.map (discretize geometry)
+                 in
+                 Maybe.map2 (<|) config.onChange activeValue
+                 |> Maybe.withDefault (lift NoOp)
+              )
+              ( Json.oneOf
+                [ Json.map Just (Json.at ["key"] Json.string)
+                , Json.succeed Nothing
+                ]
+              )
+              (Json.at ["keyCode"] Json.int)
 
         , when (config.onInput /= Nothing) <|
-          if model.active then
-              Options.many (List.map inputOn (List.concat [downs, ups, moves]))
-          else
-              Options.many (List.map inputOn downs)
+          Options.on "keydown" <|
+          Json.map2
+              (\ key keyCode ->
+                 let
+                     activeValue =
+                         valueForKey key keyCode geometry config.value
+                         |> Maybe.map (discretize geometry)
+                 in
+                 Maybe.map2 (<|) config.onInput activeValue
+                 |> Maybe.withDefault (lift NoOp)
+              )
+              ( Json.oneOf
+                [ Json.map Just (Json.at ["key"] Json.string)
+                , Json.succeed Nothing
+                ]
+              )
+              (Json.at ["keyCode"] Json.int)
+
+        , Options.on "focus" (Json.succeed (lift Focus))
+        , Options.on "blur" (Json.succeed (lift Blur))
+
+        , Options.many <|
+          ( List.map (\ event ->
+                    Options.on event (Json.map (lift << InteractionStart) decodePageX)
+                )
+                downs
+          )
+
+        , when (config.onChange /= Nothing) <|
+          Options.many <|
+          ( List.map (\ event ->
+                    Options.on event <|
+                    Json.map (\ { pageX } ->
+                            let
+                                activeValue =
+                                    valueFromPageX geometry pageX
+                                    |> discretize geometry
+                            in
+                            Maybe.map (flip (<|) activeValue) config.onChange
+                            |> Maybe.withDefault (lift NoOp)
+                        )
+                        decodePageX
+                )
+                downs
+          )
+
+        , when (config.onInput /= Nothing) <|
+          Options.many <|
+          ( List.map (\ event ->
+                    Options.on event <|
+                    Json.map (\ { pageX } ->
+                            let
+                                activeValue =
+                                    valueFromPageX geometry pageX
+                                    |> discretize geometry
+                            in
+                            Maybe.map (flip (<|) activeValue) config.onInput
+                            |> Maybe.withDefault (lift NoOp)
+                        )
+                        decodePageX
+                )
+                downs
+          )
+
+        , when model.active <|
+          Options.many <|
+          List.map (\ handler ->
+                  handler (Json.succeed (lift Up))
+              )
+              ups
+
+        , when ((config.onChange /= Nothing) && model.active) <|
+          Options.many <|
+          List.map (\ handler ->
+                  handler <|
+                  Json.map (\ { pageX } ->
+                          let
+                              activeValue =
+                                  valueFromPageX geometry pageX
+                                  |> discretize geometry
+                          in
+                          Maybe.map (flip (<|) activeValue) config.onChange
+                          |> Maybe.withDefault (lift NoOp)
+                      )
+                      decodePageX
+              )
+              ups
+
+        , when ((config.onInput /= Nothing) && model.active) <|
+          Options.many <|
+          List.map (\ handler ->
+                  handler <|
+                  Json.map (\ { pageX } ->
+                          let
+                              activeValue =
+                                  valueFromPageX geometry pageX
+                                  |> discretize geometry
+                          in
+                          Maybe.map (flip (<|) activeValue) config.onInput
+                          |> Maybe.withDefault (lift NoOp)
+                      )
+                      decodePageX
+              )
+              ups
+
+        , when model.active <|
+          Options.many <|
+          List.map (\ handler ->
+                  handler (Json.map (lift << Drag) decodePageX)
+              )
+              moves
+
+        , when ((config.onInput /= Nothing) && model.active) <|
+          Options.many <|
+          List.map (\ handler ->
+                  handler <|
+                  Json.map (\ { pageX } ->
+                          let
+                              activeValue =
+                                  valueFromPageX geometry pageX
+                                  |> discretize geometry
+                          in
+                          Maybe.map (flip (<|) activeValue) config.onInput
+                          |> Maybe.withDefault (lift NoOp)
+                      )
+                      decodePageX
+              )
+              moves
         ]
         []
         [
@@ -379,8 +666,7 @@ view lift model options _ =
                     styled Html.div
                     [ cs "mdc-slider__track-marker"
                     ]
-                    [
-                    ]
+                    []
                   )
                 ]
               else
@@ -390,9 +676,19 @@ view lift model options _ =
         ,
           styled Html.div
           [ cs "mdc-slider__thumb-container"
-          , Options.many (List.map activateOn_ downs)
-          , css "transform" ("translateX(" ++ toString translateX ++ "px) translateX(-50%)")
-          , Options.on "transitionend" (Json.succeed (lift Tick))
+          , Options.many
+            ( downs
+              |> List.map (\ event ->
+                     Options.onWithOptions event
+                     { stopPropagation = True
+                     , preventDefault = False
+                     }
+                     (Json.map (lift << ThumbContainerPointer) decodePageX)
+                 )
+            )
+          , Options.on "transitionend" (Json.succeed (lift TransitionEnd))
+          , css "transform" <|
+            "translateX(" ++ toString translateX ++ "px) translateX(-50%)"
           ]
           ( List.concat
             [ [ Svg.svg
@@ -432,10 +728,7 @@ view lift model options _ =
             ]
           )
         ]
-
-
-
--- COMPONENT
+    ]
 
 
 type alias Store s =
@@ -446,7 +739,9 @@ type alias Store s =
     Component.indexed .slider (\x y -> { y | slider = x }) defaultModel
 
 
-{-| Component react function (update variant). Internal use only.
+{-| Slider react.
+
+Internal use only.
 -}
 react :
     (Material.Msg.Msg m -> m)
@@ -458,99 +753,97 @@ react =
     Component.react get set Material.Msg.SliderMsg update
 
 
-{-|
+{-| Slider view.
 -}
-render :
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render lift index store options =
-    Component.render get view Material.Msg.SliderMsg lift index store
+view lift index store options =
+    Component.render get slider Material.Msg.SliderMsg lift index store
         (Internal.dispatch lift :: options)
 
 
-targetValue : Decoder Float
-targetValue =
-    Json.map
-       (\ geometry ->
-            if geometry.discrete then
-                discretize (Maybe.withDefault 1 geometry.steps) (computeValue geometry)
-            else
-                computeValue geometry
-       )
-       decodeGeometry
-
-
-discretize : Int -> Float -> Float
-discretize steps continuousValue =
-    toFloat (steps * round (continuousValue / toFloat steps))
-
-
-computeValue : Geometry -> Float
-computeValue geometry =
+discretize : Geometry -> Float -> Float
+discretize geometry continuousValue =
     let
-        c =
-            if geometry.width /= 0 then
-                (geometry.x - geometry.left) / geometry.width
-            else
-                0
-            |> clamp 0 1
+        { discrete, min, max } =
+            geometry
 
+        steps =
+            geometry.steps
+            |> Maybe.map toFloat
+            |> Maybe.withDefault 1
+            |> \ steps ->
+               if steps == 0 then
+                   1
+               else
+                   steps
     in
-    geometry.min + c * (geometry.max - geometry.min)
-    |> clamp geometry.min geometry.max
+    clamp min max <|
+    if not discrete then
+        continuousValue
+    else
+        let
+            numSteps =
+                round (continuousValue / steps)
+
+            quantizedVal =
+                toFloat numSteps * steps
+        in
+        quantizedVal
+
+
+decodePageX : Decoder { pageX : Float }
+decodePageX =
+    Json.map (\ pageX -> { pageX = pageX }) <|
+    Json.oneOf
+    [ Json.at [ "targetTouches.0" ] (Json.at ["pageX"] Json.float)
+    , Json.at ["pageX"] Json.float
+    ]
 
 
 decodeGeometry : Decoder Geometry
 decodeGeometry =
-    Json.oneOf
-    [ Json.at [ "pageX" ] Json.float
-    , Json.succeed 0
-    ]
-    |> Json.andThen (\ x ->
-          DOM.target <|
-          traverseToContainer <|
-          Json.map6
-              ( \offsetWidth offsetLeft discrete min max steps ->
-                  { width = offsetWidth
-                  , left = offsetLeft
-                  , x = x
-                  , discrete = discrete
-                  , min = min
-                  , max = max
-                  , steps = steps
-                  }
-              )
-              DOM.offsetWidth
-              DOM.offsetLeft
-              ( hasClass "mdc-slider--discrete" )
-              ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
-              ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
-              ( Json.oneOf
-                [ data "steps" (Json.map (Result.toMaybe << String.toInt) Json.string)
-                , Json.succeed Nothing
-                ]
-              )
-          )
+    let
+        traverseToContainer decoder =
+            hasClass "mdc-slider"
+            |> Json.andThen (\ doesHaveClass ->
+                if doesHaveClass then
+                    decoder
+                else
+                    DOM.parentElement (Json.lazy (\_ -> traverseToContainer decoder))
+    )
+    in
+    DOM.target <|
+    traverseToContainer <|
+    Json.map6
+        ( \offsetWidth offsetLeft discrete min max steps ->
+            { rect = { width = offsetWidth, left = offsetLeft }
+            , discrete = discrete
+            , min = min
+            , max = max
+            , steps = steps
+            }
+        )
+        DOM.offsetWidth
+        DOM.offsetLeft
+        ( hasClass "mdc-slider--discrete" )
+        ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
+        ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
+        ( Json.oneOf
+          [ data "steps" (Json.map (Result.toMaybe << String.toInt) Json.string)
+          , Json.succeed Nothing
+          ]
+        )
 
 
 data : String -> Decoder a -> Decoder a
 data key decoder =
     Json.at [ "dataset", key ] decoder
-
-
-traverseToContainer : Decoder a -> Decoder a
-traverseToContainer decoder =
-    hasClass "mdc-slider"
-    |> Json.andThen (\ doesHaveClass ->
-        if doesHaveClass then
-            decoder
-        else
-            DOM.parentElement (Json.lazy (\_ -> traverseToContainer decoder))
-    )
 
 
 hasClass : String -> Decoder Bool
@@ -562,21 +855,31 @@ hasClass class =
       ( Json.at [ "className" ] Json.string )
 
 
-onChange : Decoder m -> Property m
+{-| Slider `onChange` event listener.
+-}
+onChange : (Float -> m) -> Property m
 onChange =
     Internal.option << (\ decoder config -> { config | onChange = Just decoder } )
 
 
-onInput : Decoder m -> Property m
+{-| Slider `onInput` event listener.
+-}
+onInput : (Float -> m) -> Property m
 onInput =
     Internal.option << (\ decoder config -> { config | onInput = Just decoder } )
 
 
+{-| Specify a number of steps that value will be a multiple of.
+
+Defaults to 1.
+-}
 steps : Int -> Property m
 steps =
     Internal.option << (\ steps config -> { config | steps = steps } )
 
 
+{-| Add track markers to the Slider every `step`.
+-}
 trackMarkers : Property m
 trackMarkers =
     Internal.option (\ config -> { config | trackMarkers = True } )

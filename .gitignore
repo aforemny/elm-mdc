@@ -19,7 +19,6 @@ node_modules
 
 elm-autofocus.js
 elm-focus-trap.js
-elm-global-events.js
 material-components-web.css
 elm-focus-trap/bundle.js
 .sass-cache

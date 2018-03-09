@@ -3,21 +3,21 @@ module Material.Internal.Slider exposing (Msg(..), Geometry, defaultGeometry)
 
 type Msg m
     = NoOp
+    | Init Geometry
+    | Resize Geometry
+    | InteractionStart { pageX : Float }
+    | KeyDown
     | Focus
     | Blur
-    | Activate Bool Geometry
-    | Drag Geometry
+    | ThumbContainerPointer { pageX : Float }
+    | TransitionEnd
+    | Drag { pageX : Float }
     | Up
-    | Tick
-    | Dispatch (List m)
-    | Init Geometry
+
 
 
 type alias Geometry =
-    { width : Float
-    , left : Float
-    , x : Float
-
+    { rect : Rect
     , discrete : Bool
     , steps : Maybe Int
     , min : Float
@@ -25,12 +25,15 @@ type alias Geometry =
     }
 
 
+type alias Rect =
+    { left : Float
+    , width : Float
+    }
+
+
 defaultGeometry : Geometry
 defaultGeometry =
-    { width = 0
-    , left = 0
-    , x = 0
-
+    { rect = { left = 0, width = 0 }
     , discrete = False
     , min = 0
     , max = 100

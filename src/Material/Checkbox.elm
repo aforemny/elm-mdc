@@ -51,13 +51,13 @@ Options.styled Html.div
 @docs Model
 -}
 
-import GlobalEvents
 import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode
 import Material.Component as Component exposing (Indexed)
+import Material.GlobalEvents as GlobalEvents
 import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Checkbox exposing (Msg(..), Animation(..), State(..))
 import Material.Internal.Options as Internal
@@ -208,7 +208,6 @@ checkbox lift model options _ =
     , animationClass model.animation
     , Internal.attribute <| blurOn "mouseup"
     , when stateChangedOrUninitialized <|
-      Options.many << List.map Internal.attribute <|
       GlobalEvents.onTick (Json.succeed (lift (Init model.lastKnownState configState)))
     , when (model.animation /= Nothing) <|
       Options.on "animationend" (Json.succeed (lift AnimationEnd))

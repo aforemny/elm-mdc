@@ -107,12 +107,12 @@ Options.styled Html.div
 -}
 
 import DOM
-import GlobalEvents
 import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Material.Component as Component exposing (Indexed)
+import Material.GlobalEvents as GlobalEvents
 import Material.Helpers as Helpers
 import Material.Internal.Dispatch as Dispatch
 import Material.Internal.Menu exposing (Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry, Viewport)
@@ -576,7 +576,6 @@ menu lift model options ul =
       ]
     ,
       when (model.animating && model.geometry == Nothing) <|
-      Options.many << List.map Internal.attribute <|
       GlobalEvents.onTick <|
       Json.map (lift << Init { quickOpen = config.quickOpen }) decodeGeometry
     ,

@@ -140,10 +140,10 @@ view lift page model =
               idx =
                   [0]
           in
-          Slider.render (lift << Mdc) idx model.mdc
+          Slider.view (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
-          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
+          , Slider.onInput (lift << Input idx)
+          , Slider.onChange (lift << Change idx)
           ]
           []
         ]
@@ -170,10 +170,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.render (lift << Mdc) idx model.mdc
+        [ Slider.view (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
-          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
+          , Slider.onInput (lift << Input idx)
+          , Slider.onChange (lift << Change idx)
           , Slider.min model.min
           , Slider.max model.max
           , Slider.disabled |> when model.disabled
@@ -210,10 +210,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.render (lift << Mdc) idx model.mdc
+        [ Slider.view (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
-          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
+          , Slider.onInput (lift << Input idx)
+          , Slider.onChange (lift << Change idx)
           , Slider.discrete
           , Slider.min model.min
           , Slider.max model.max
@@ -252,10 +252,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.render (lift << Mdc) idx model.mdc
+        [ Slider.view (lift << Mdc) idx model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (Json.map (lift << Input idx) Slider.targetValue)
-          , Slider.onChange (Json.map (lift << Change idx) Slider.targetValue)
+          , Slider.onInput (lift << Input idx)
+          , Slider.onChange (lift << Change idx)
           , Slider.discrete
           , Slider.min model.min
           , Slider.max model.max

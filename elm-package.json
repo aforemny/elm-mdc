@@ -4,7 +4,7 @@
     "repository": "https://github.com/aforemny/elm-mdc.git",
     "license": "Apache License, version 2.0",
     "source-directories": [
-        "src", "elm-global-events/src"
+        "src"
     ],
     "exposed-modules": [
         "Material",

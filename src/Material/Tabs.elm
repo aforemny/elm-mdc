@@ -66,13 +66,13 @@ TabBar.view Mdc [0] model.mdc
 
 import Dict exposing (Dict)
 import DOM
-import GlobalEvents
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode
 import Material.Component as Component exposing (Indexed)
 import Material.Dispatch as Dispatch
+import Material.GlobalEvents as GlobalEvents
 import Material.Helpers as Helpers
 import Material.Icon as Icon
 import Material.Internal.Options as Internal
@@ -622,11 +622,9 @@ tabs lift model options nodes =
               , css "transform" tabBarTransform
               ]
             , when (model.geometry == Nothing) <|
-              Options.many << List.map Internal.attribute <|
               GlobalEvents.onTick <| Json.map (lift << Init) <|
               decodeGeometryOnTabBar config.indicator
-            , Options.many << List.map Internal.attribute <|
-              GlobalEvents.onResize <| Json.map (lift << Init) <|
+            , GlobalEvents.onResize <| Json.map (lift << Init) <|
               decodeGeometryOnTabBar config.indicator
             ]
             [
