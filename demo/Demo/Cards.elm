@@ -14,13 +14,13 @@ import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , rtl : Bool
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , rtl = False
@@ -32,7 +32,7 @@ type Msg m
     | ToggleRtl
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -41,7 +41,7 @@ update lift msg model =
             ( { model | rtl = not model.rtl }, Cmd.none )
 
 
-heroCard : (Msg m -> m) -> List Int -> Model -> Html m
+heroCard : (Msg m -> m) -> List Int -> Model m -> Html m
 heroCard lift index model =
   Card.view
   [ css "width" "350px"
@@ -144,7 +144,7 @@ Visit ten places on our planet that are undergoing the biggest changes today.
   ]
 
 
-headlinesCard : (Msg m -> m) -> List Int -> Model -> Html m
+headlinesCard : (Msg m -> m) -> List Int -> Model m -> Html m
 headlinesCard lift index model =
     let
       listDivider =
@@ -217,7 +217,7 @@ headlinesCard lift index model =
     )
 
 
-photosCard : (Msg m -> m) -> List Int -> Model -> Html m
+photosCard : (Msg m -> m) -> List Int -> Model m -> Html m
 photosCard lift index model =
     Card.view
     [ css "width" "200px"
@@ -274,7 +274,7 @@ photosCard lift index model =
     ]
 
 
-albumCard : (Msg m -> m) -> List Int -> Model -> Html m
+albumCard : (Msg m -> m) -> List Int -> Model m -> Html m
 albumCard lift index model =
     Card.view
     [ css "border-radius" "24px 4px"
@@ -341,7 +341,7 @@ albumCard lift index model =
     ]
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
         example options =

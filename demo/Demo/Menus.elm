@@ -12,8 +12,8 @@ import Material.Menu as Menu
 import Material.Options as Options exposing (styled, cs, css, nop, when)
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , selected : Maybe ( Int, String )
     , position : List String
     , anchorCorner : Menu.Corner
@@ -29,7 +29,7 @@ type alias Model =
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , selected = Nothing
@@ -75,7 +75,7 @@ type Msg m
     | SetAnchorWidth AnchorWidth
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -166,7 +166,7 @@ menuItems menuSize =
             ]
 
 
-menuAnchor : (Msg m -> m) -> Model -> Html m
+menuAnchor : (Msg m -> m) -> Model m -> Html m
 menuAnchor lift model =
     let
         anchorMargin =
@@ -236,7 +236,7 @@ menuAnchor lift model =
     ]
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Menu"
     [
@@ -284,7 +284,7 @@ view lift page model =
     ]
 
 
-demoControls : (Msg m -> m) -> Model -> Html m
+demoControls : (Msg m -> m) -> Model m -> Html m
 demoControls lift model =
     styled Html.div
     [ cs "demo-controls-container"
@@ -392,7 +392,7 @@ demoControls lift model =
     ]
 
 
-buttonPositions : (Msg m -> m) -> Model -> Html m
+buttonPositions : (Msg m -> m) -> Model m -> Html m
 buttonPositions lift model =
     styled Html.div
     [ css "display" "inline-block"
@@ -430,7 +430,7 @@ buttonPositions lift model =
     )
 
 
-defaultMenuPosition : (Msg m -> m) -> Model -> Html m
+defaultMenuPosition : (Msg m -> m) -> Model m -> Html m
 defaultMenuPosition lift model =
     styled Html.div
     [ css "display" "inline-block"
@@ -467,7 +467,7 @@ defaultMenuPosition lift model =
     )
 
 
-marginInputs : (Msg m -> m) -> Model -> Html m
+marginInputs : (Msg m -> m) -> Model m -> Html m
 marginInputs lift model =
     styled Html.div []
     (
@@ -500,7 +500,7 @@ marginInputs lift model =
     )
 
 
-menuSizes : (Msg m -> m) -> Model -> Html m
+menuSizes : (Msg m -> m) -> Model m -> Html m
 menuSizes lift model =
     styled Html.div
     [ css "display" "inline-block"
@@ -538,7 +538,7 @@ menuSizes lift model =
     )
 
 
-anchorWidths : (Msg m -> m) -> Model -> Html m
+anchorWidths : (Msg m -> m) -> Model m -> Html m
 anchorWidths lift model =
     styled Html.div
     [ css "display" "inline-block"
@@ -577,6 +577,6 @@ anchorWidths lift model =
     )
 
 
-subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
     Menu.subs (lift << Mdc) model.mdc

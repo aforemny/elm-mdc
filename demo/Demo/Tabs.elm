@@ -15,8 +15,8 @@ import Demo.Page as Page exposing (Page)
 -- MODEL
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , examples : Dict Int Example
     }
 
@@ -32,7 +32,7 @@ defaultExample =
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , examples = Dict.empty
@@ -44,7 +44,7 @@ type Msg m
     | SelectTab Int Int
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -61,7 +61,7 @@ update lift msg model =
             { model | examples = Dict.insert index example model.examples } ! []
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Tabs"
     [
@@ -83,7 +83,7 @@ view lift page model =
     ]
 
 
-heroTabs : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+heroTabs : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 heroTabs lift mdc index model =
     TabBar.view (lift << Mdc) [index] mdc
     [ TabBar.indicator
@@ -94,7 +94,7 @@ heroTabs lift mdc index model =
     ]
 
 
-example0 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example0 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 example0 lift mdc index model =
     Html.section []
     [ fieldset []
@@ -106,7 +106,7 @@ example0 lift mdc index model =
     ]
 
 
-example1 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example1 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 example1 lift mdc index model =
     Html.section []
     [ fieldset []
@@ -131,7 +131,7 @@ example1 lift mdc index model =
     ]
 
 
-example2 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example2 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 example2 lift mdc index model =
     Html.section []
     [ fieldset []
@@ -149,7 +149,7 @@ example2 lift mdc index model =
     ]
 
 
-example3 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example3 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 example3 lift mdc index model =
     Html.section []
     [ fieldset []
@@ -167,7 +167,7 @@ example3 lift mdc index model =
     ]
 
 
---example4 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+--example4 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 --example4 lift mdc index model =
 --    Html.section []
 --    [ fieldset []
@@ -186,7 +186,7 @@ example3 lift mdc index model =
 --    ]
 --
 --
---example5 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+--example5 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 --example5 lift mdc index model =
 --    Html.section []
 --    [ fieldset []
@@ -205,7 +205,7 @@ example3 lift mdc index model =
 --    ]
 
 
-example6 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example6 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 example6 lift mdc index model =
     Html.section []
     [ fieldset []
@@ -238,7 +238,7 @@ example6 lift mdc index model =
     ]
 
 
-example7 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example7 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 example7 lift mdc index model =
     Html.section []
     [ fieldset []
@@ -274,7 +274,7 @@ example7 lift mdc index model =
     ]
 
 
---example8 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+--example8 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 --example8 lift mdc index model =
 --    Html.section []
 --    [ fieldset []
@@ -308,7 +308,7 @@ example7 lift mdc index model =
 --    ]
 
 
---example9 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+--example9 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 --example9 lift mdc index model =
 --    Html.section []
 --    [ fieldset []
@@ -342,7 +342,7 @@ example7 lift mdc index model =
 --    ]
 
 
-example10 : (Msg m -> m) -> Material.Model -> Int -> Example -> Html m
+example10 : (Msg m -> m) -> Material.Model m -> Int -> Example -> Html m
 example10 lift mdc index model =
     let
         items =
@@ -454,6 +454,6 @@ fieldset options =
     )
 
 
-subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
     Material.subscriptions (lift << Mdc) model

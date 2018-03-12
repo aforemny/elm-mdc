@@ -43,7 +43,7 @@ import Material.Options as Options
 
 
 type alias Model
-    { mdc : Material.Model
+    { mdc : Material.Model Msg
     }
 
 

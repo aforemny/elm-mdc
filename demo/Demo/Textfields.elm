@@ -14,8 +14,8 @@ import Material.Textfield.HelperText as Textfield
 import Material.Typography as Typography
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , examples : Dict (List Int) Example
     }
 
@@ -43,7 +43,7 @@ defaultExample =
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , examples = Dict.empty
@@ -65,7 +65,7 @@ type ExampleMsg
     | ToggleValidationMsg
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -109,7 +109,7 @@ updateExample msg model =
             { model | validationMsg = not model.validationMsg }
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Text fields"
     [
@@ -126,7 +126,7 @@ view lift page model =
     ]
 
 
-heroTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+heroTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
 heroTextfield lift index model =
     let
         state =
@@ -139,7 +139,7 @@ heroTextfield lift index model =
     []
 
 
-textfield : (Msg m -> m) -> List Int -> Model -> Html m
+textfield : (Msg m -> m) -> List Int -> Model m -> Html m
 textfield lift index model =
     let
         state =
@@ -242,7 +242,7 @@ textfield lift index model =
     ]
 
 
-password : (Msg m -> m) -> List Int -> Model -> Html m
+password : (Msg m -> m) -> List Int -> Model m -> Html m
 password lift index model =
     let
         state =
@@ -278,7 +278,7 @@ password lift index model =
     ]
 
 
-outlinedTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+outlinedTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
 outlinedTextfield lift index model =
     let
         state =
@@ -336,7 +336,7 @@ outlinedTextfield lift index model =
     ]
 
 
-boxTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+boxTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
 boxTextfield lift index model =
     let
         state =
@@ -394,7 +394,7 @@ boxTextfield lift index model =
     ]
 
 
-iconsTextfield : (Msg m -> m) -> List Int -> Model -> Html m
+iconsTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
 iconsTextfield lift index model =
     let
         state =
@@ -525,7 +525,7 @@ iconsTextfield lift index model =
     ]
 
 
-textarea : (Msg m -> m) -> List Int -> Model -> Html m
+textarea : (Msg m -> m) -> List Int -> Model m -> Html m
 textarea lift index model =
     let
         state =
@@ -579,7 +579,7 @@ textarea lift index model =
     ]
 
 
-fullwidth : (Msg m -> m) -> List Int -> Model -> Html m
+fullwidth : (Msg m -> m) -> List Int -> Model m -> Html m
 fullwidth lift index model =
     let
         state =

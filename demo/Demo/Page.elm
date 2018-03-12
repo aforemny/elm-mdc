@@ -26,7 +26,7 @@ type alias Page m =
 toolbar
   : (Material.Msg.Msg m -> m)
   -> Material.Msg.Index
-  -> Material.Model
+  -> Material.Model m
   -> (Url -> m)
   -> Url
   -> String
@@ -74,7 +74,7 @@ toolbar lift idx mdc navigate url title =
 
 
 
-fixedAdjust : List Int -> Material.Model -> Options.Property c m
+fixedAdjust : List Int -> Material.Model m -> Options.Property c m
 fixedAdjust idx mdc =
     Toolbar.fixedAdjust idx mdc
 

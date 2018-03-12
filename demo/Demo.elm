@@ -45,34 +45,34 @@ port scrollTop : () -> Cmd msg
 
 
 type alias Model =
-    { mdc : Material.Model
+    { mdc : Material.Model Msg
     , url : Url
-    , buttons : Demo.Buttons.Model
-    , cards : Demo.Cards.Model
-    , checkbox : Demo.Checkbox.Model
-    , dialog : Demo.Dialog.Model
-    , drawer : Demo.Drawer.Model
-    , elevation : Demo.Elevation.Model
-    , fabs : Demo.Fabs.Model
-    , gridList : Demo.GridList.Model
-    , iconToggle : Demo.IconToggle.Model
+    , buttons : Demo.Buttons.Model Msg
+    , cards : Demo.Cards.Model Msg
+    , checkbox : Demo.Checkbox.Model Msg
+    , dialog : Demo.Dialog.Model Msg
+    , drawer : Demo.Drawer.Model Msg
+    , elevation : Demo.Elevation.Model Msg
+    , fabs : Demo.Fabs.Model Msg
+    , gridList : Demo.GridList.Model Msg
+    , iconToggle : Demo.IconToggle.Model Msg
     , layoutGrid : Demo.LayoutGrid.Model
-    , lists : Demo.Lists.Model
-    , menus : Demo.Menus.Model
-    , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model
-    , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model
-    , persistentDrawer : Demo.PersistentDrawer.Model
-    , radio : Demo.RadioButtons.Model
-    , ripple : Demo.Ripple.Model
-    , selects : Demo.Selects.Model
-    , slider : Demo.Slider.Model
-    , snackbar : Demo.Snackbar.Model
-    , switch : Demo.Switch.Model
-    , tabs : Demo.Tabs.Model
-    , temporaryDrawer : Demo.TemporaryDrawer.Model
-    , textfields : Demo.Textfields.Model
-    , theme : Demo.Theme.Model
-    , toolbar : Demo.Toolbar.Model
+    , lists : Demo.Lists.Model Msg
+    , menus : Demo.Menus.Model Msg
+    , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model Msg
+    , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model Msg
+    , persistentDrawer : Demo.PersistentDrawer.Model Msg
+    , radio : Demo.RadioButtons.Model Msg
+    , ripple : Demo.Ripple.Model Msg
+    , selects : Demo.Selects.Model Msg
+    , slider : Demo.Slider.Model Msg
+    , snackbar : Demo.Snackbar.Model Msg
+    , switch : Demo.Switch.Model Msg
+    , tabs : Demo.Tabs.Model Msg
+    , temporaryDrawer : Demo.TemporaryDrawer.Model Msg
+    , textfields : Demo.Textfields.Model Msg
+    , theme : Demo.Theme.Model Msg
+    , toolbar : Demo.Toolbar.Model Msg
     }
 
 

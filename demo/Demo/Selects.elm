@@ -13,13 +13,13 @@ import Material.Select as Select
 import Material.Typography as Typography
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , selects : Dict (List Int) Select
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , selects = Dict.empty
@@ -48,7 +48,7 @@ type Msg m
     | ToggleDisabled (List Int)
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -94,7 +94,7 @@ update lift msg model =
 heroSelect
     : (Msg m -> m)
     -> List Int
-    -> Model
+    -> Model m
     -> List (Select.Property m)
     -> List (Html m)
     -> Html m
@@ -135,7 +135,7 @@ example options =
 select
     : (Msg m -> m)
     -> List Int
-    -> Model
+    -> Model m
     -> List (Select.Property m)
     -> List (Html m)
     -> List (Html m)
@@ -221,7 +221,7 @@ select lift id model options _ =
     ]
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Select"
     [
@@ -272,6 +272,6 @@ view lift page model =
     ]
 
 
-subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
     Select.subs (lift << Mdc) model.mdc

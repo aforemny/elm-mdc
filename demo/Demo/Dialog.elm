@@ -12,13 +12,13 @@ import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , rtl : Bool
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , rtl = False
@@ -32,7 +32,7 @@ type Msg m
     | Cancel
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -56,7 +56,7 @@ update lift msg model =
           ( model, Cmd.none )
 
 
-heroDialog : (Msg m -> m) -> List Int -> Model -> Html m
+heroDialog : (Msg m -> m) -> List Int -> Model m -> Html m
 heroDialog lift index model =
     Dialog.view (lift << Mdc) index model.mdc
     [ Dialog.open
@@ -103,7 +103,7 @@ heroDialog lift index model =
     ]
 
 
-dialog : (Msg m -> m) -> List Int -> Model -> Html m
+dialog : (Msg m -> m) -> List Int -> Model m -> Html m
 dialog lift index model =
     Dialog.view (lift << Mdc) index model.mdc []
     [ Dialog.surface []
@@ -148,7 +148,7 @@ data to Google, even when no apps are running.
     ]
 
 
-scrollableDialog : (Msg m -> m) -> List Int -> Model -> Html m
+scrollableDialog : (Msg m -> m) -> List Int -> Model m -> Html m
 scrollableDialog lift index model =
     Dialog.view (lift << Mdc) index model.mdc []
     [ Dialog.surface []
@@ -210,7 +210,7 @@ scrollableDialog lift index model =
     ]
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
   page.body "Dialog"
   [

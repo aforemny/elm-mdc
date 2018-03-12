@@ -15,8 +15,8 @@ import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , multiline : Bool
     , actionOnBottom : Bool
     , dismissOnAction : Bool
@@ -25,7 +25,7 @@ type alias Model =
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , multiline = False
@@ -44,11 +44,11 @@ type Msg m
     | SetMessageText String
     | SetActionText String
     | Show (List Int)
-    | Dismiss
+    | Dismiss String
     | NoOp
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -71,7 +71,10 @@ update lift msg model =
                     if model.multiline then
                         let
                             snack =
-                                Snackbar.snack model.messageText model.actionText
+                                Snackbar.snack
+                                    (Just (lift (Dismiss model.messageText)))
+                                    model.messageText
+                                    model.actionText
                         in
                         { snack
                             | dismissOnAction = model.dismissOnAction
@@ -80,7 +83,9 @@ update lift msg model =
                     else
                         let
                             toast =
-                                Snackbar.toast model.messageText
+                                Snackbar.toast
+                                    (Just (lift (Dismiss model.messageText)))
+                                    model.messageText
                         in
                         { toast
                             | dismissOnAction = model.dismissOnAction
@@ -88,14 +93,15 @@ update lift msg model =
                         }
             in
             Snackbar.add (lift << Mdc) idx contents model
-        Dismiss ->
+
+        Dismiss str ->
             let
-                _ = Debug.log "msg" Dismiss
+                _ = Debug.log "Dismiss" str
             in
             ( model, Cmd.none )
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
         example options =
@@ -111,32 +117,22 @@ view lift page model =
 
       Page.hero []
       [
-        let
-            demoSnackbar =
-                let
-                    def =
-                        Snackbar.defaultModel
-
-                    snack =
-                        Snackbar.snack "Message sent" "Undo"
-
-                    contents =
-                        { snack
-                            | multiline = False
-                        }
-                in
-                { def
-                    | queue = []
-                    , state = Snackbar.Active contents
-                    , seq = 0
-                }
-        in
-        Snackbar.view (always (lift NoOp)) demoSnackbar
+        styled Html.div
         [ css "position" "relative"
         , css "left" "0"
         , css "transform" "none"
+        , cs "mdc-snackbar mdc-snackbar--active"
         ]
-        []
+        [ styled Html.div [ cs "mdc-snackbar__text" ] [ text "Message sent" ]
+        , styled Html.div [ cs "mdc-snackbar__action-wrapper" ]
+          [ styled Html.button
+            [ Options.attribute (Html.type_ "button")
+            , cs "mdc-snackbar__action-button"
+            ]
+            [ text "Undo"
+            ]
+          ]
+        ]
       ]
 
     ,
@@ -246,32 +242,24 @@ view lift page model =
           [ text "Show Start Aligned (Rtl)"
           ]
         ,
-          Snackbar.render (lift << Mdc) [9] model.mdc
-          [ Snackbar.onDismiss (lift Dismiss)
-          ]
-          []
+          Snackbar.view (lift << Mdc) [9] model.mdc [] []
         ,
           Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.render (lift << Mdc) [10] model.mdc
-            [ Snackbar.onDismiss (lift Dismiss)
-            ]
-            []
+          [ Snackbar.view (lift << Mdc) [10] model.mdc [] []
           ]
 
-        , Snackbar.render (lift << Mdc) [11] model.mdc
-          [ Snackbar.onDismiss (lift Dismiss)
-          , Snackbar.alignStart
+        , Snackbar.view (lift << Mdc) [11] model.mdc
+          [ Snackbar.alignStart
           ]
           []
 
         , Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.render (lift << Mdc) [12] model.mdc
-            [ Snackbar.onDismiss (lift Dismiss)
-            , Snackbar.alignStart
+          [ Snackbar.view (lift << Mdc) [12] model.mdc
+            [ Snackbar.alignStart
             ]
             []
           ]

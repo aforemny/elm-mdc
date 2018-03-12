@@ -36,7 +36,7 @@ import Material.Textfield as Textfield
 import Material.Toolbar as Toolbar
 
 
-type alias Model = 
+type alias Model m =
     { button : Indexed Button.Model
     , checkbox : Indexed Checkbox.Model
     , dialog : Indexed Dialog.Model
@@ -49,7 +49,7 @@ type alias Model =
     , ripple : Indexed Ripple.Model
     , select : Indexed Select.Model
     , slider : Indexed Slider.Model
-    , snackbar : Indexed Snackbar.Model
+    , snackbar : Indexed (Snackbar.Model m)
     , switch : Indexed Switch.Model
     , tabs : Indexed Tabs.Model
     , textfield : Indexed Textfield.Model
@@ -57,7 +57,7 @@ type alias Model =
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel = 
     { button = Dict.empty
     , checkbox = Dict.empty
@@ -83,14 +83,17 @@ type alias Msg m =
     Material.Msg.Msg m
 
 
-update : (Msg m -> m) -> Msg m -> { c | mdc : Model } -> (  { c | mdc : Model }, Cmd m )
+update : (Msg m -> m)
+    -> Msg m
+    -> { c | mdc : Model m }
+    -> ( { c | mdc : Model m }, Cmd m )
 update lift msg container =
   update_ lift msg (.mdc container)
       |> Tuple.mapFirst (Maybe.map (\ mdc -> { container | mdc = mdc }))
       |> Tuple.mapFirst (Maybe.withDefault container)
 
 
-update_ : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
+update_ : (Msg m -> m) -> Msg m -> Model m -> ( Maybe (Model m), Cmd m )
 update_ lift msg store =
     case msg of
         Dispatch msgs ->
@@ -148,7 +151,7 @@ update_ lift msg store =
             Toolbar.react lift msg idx store
 
 
-subscriptions : (Msg m -> m) -> { model | mdc : Model } -> Sub m
+subscriptions : (Msg m -> m) -> { model | mdc : Model m } -> Sub m
 subscriptions lift model =
     Sub.batch
         [ Drawer.subs lift model.mdc

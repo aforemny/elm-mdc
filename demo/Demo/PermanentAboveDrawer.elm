@@ -25,15 +25,15 @@ import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , toggle0 : Bool
     , toggle1 : Bool
     , rtl : Bool
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , toggle0 = False
@@ -49,7 +49,7 @@ type Msg m
     | ToggleRtl
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -65,7 +65,7 @@ update lift msg model =
             ( { model | rtl = not model.rtl }, Cmd.none )
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     styled Html.div
     [ cs "demo-body"
@@ -233,6 +233,6 @@ html, body {
     ]
 
 
-subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
     Material.Drawer.subs (lift << Mdc) model.mdc

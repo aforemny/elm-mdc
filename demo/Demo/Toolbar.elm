@@ -13,12 +13,12 @@ import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     }
@@ -28,14 +28,14 @@ type Msg m
     = Mdc (Material.Msg m)
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
 
-view : (Msg m -> m) -> Page m -> Maybe ToolbarPage -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Maybe ToolbarPage -> Model m -> Html m
 view lift page toolbarPage model =
     case toolbarPage of
         Just DefaultToolbar ->
@@ -107,7 +107,7 @@ view lift page toolbarPage model =
             ]
 
 
-iframe : (Msg m -> m) -> List Int -> Model -> String -> String -> Html m
+iframe : (Msg m -> m) -> List Int -> Model m -> String -> String -> Html m
 iframe lift index model title sub =
     let
         url =
@@ -169,7 +169,7 @@ iframe lift index model title sub =
     ]
 
 
-defaultToolbar : (Msg m -> m) -> Model -> Html m
+defaultToolbar : (Msg m -> m) -> Model m -> Html m
 defaultToolbar lift model =
     styled Html.div
     [ Typography.typography
@@ -198,7 +198,7 @@ defaultToolbar lift model =
     ]
 
 
-fixedToolbar : (Msg m -> m) -> Model -> Html m
+fixedToolbar : (Msg m -> m) -> Model m -> Html m
 fixedToolbar lift model =
     styled Html.div
     [ Typography.typography
@@ -232,7 +232,7 @@ fixedToolbar lift model =
     ]
 
 
-menuToolbar : (Msg m -> m) -> Model -> Html m
+menuToolbar : (Msg m -> m) -> Model m -> Html m
 menuToolbar lift model =
     styled Html.div
     [ Typography.typography
@@ -294,7 +294,7 @@ menuToolbar lift model =
     ]
 
 
-waterfallToolbar : (Msg m -> m) -> Model -> Html m
+waterfallToolbar : (Msg m -> m) -> Model m -> Html m
 waterfallToolbar lift model =
     styled Html.div
     [ Typography.typography
@@ -329,7 +329,7 @@ waterfallToolbar lift model =
     ]
 
 
-defaultFlexibleToolbar : (Msg m -> m) -> Model -> Html m
+defaultFlexibleToolbar : (Msg m -> m) -> Model m -> Html m
 defaultFlexibleToolbar lift model =
     styled Html.div
     [ Typography.typography
@@ -364,7 +364,7 @@ defaultFlexibleToolbar lift model =
     ]
 
 
-waterfallFlexibleToolbar : (Msg m -> m) -> Model -> Html m
+waterfallFlexibleToolbar : (Msg m -> m) -> Model m -> Html m
 waterfallFlexibleToolbar lift model =
     styled Html.div
     [ Typography.typography
@@ -404,7 +404,7 @@ waterfallFlexibleToolbar lift model =
     ]
 
 
-waterfallToolbarFix : (Msg m -> m) -> Model -> Html m
+waterfallToolbarFix : (Msg m -> m) -> Model m -> Html m
 waterfallToolbarFix lift model =
     styled Html.div
     [ Typography.typography
@@ -444,7 +444,7 @@ waterfallToolbarFix lift model =
     ]
 
 
-body : List (Options.Property c m) -> Model -> Html m
+body : List (Options.Property c m) -> Model m -> Html m
 body options model =
     styled Html.div options
     ( styled Html.p
@@ -466,7 +466,7 @@ semper. Aenean ultricies mi vitae est.
     )
 
 
-floatingFooter : Model -> Html m
+floatingFooter : Model m -> Html m
 floatingFooter model =
     let
         getFlexibleExpansionRatio calculations scrollTop =
@@ -502,6 +502,6 @@ floatingFooter model =
     ]
 
 
-subscriptions : (Msg m -> m) -> Model -> Sub m
+subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
     Material.subscriptions (lift << Mdc) model

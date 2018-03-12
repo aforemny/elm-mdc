@@ -1,60 +1,59 @@
 module Material.Snackbar exposing
-    ( -- VIEW
-      view
-    , Property
-    , alignStart
+    ( add
     , alignEnd
-    , onDismiss
-
+    , alignStart
     , Contents
-    , toast
-    , snack
-
-      -- TEA
     , Model
-    , State(..)
-    , defaultModel
-    , Msg
-    , update
-    , add
-
-      -- RENDER
-    , render
-    , Store
+    , Property
     , react
+    , snack
+    , toast
+    , view
     )
 
 {-|
-> The MDC Snackbar component is a spec-aligned snackbar/toast component
-> adhering to the Material Design snackbars & toasts requirements. It requires
-> JavaScript to show and hide itself.
+The Snackbar component is a spec-aligned snackbar/toast component adhering to
+the Material Design snackbars & toasts requirements.
 
-## Design & API Documentation
+
+# Resources
 
 - [Material Design guidelines: Snackbars & toasts](https://material.io/guidelines/components/snackbars-toasts.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#snackbar)
 
-## View
-@docs view
+
+# Example
+
+```elm
+import Material.Snackbar as Snackbar
+
+Snackbar.view Mdc [0] model.mdc [] []
+```
+
+
+# Usage
+
 @docs Property
-@docs alignStart, alignEnd, onDismiss
+@docs view
+@docs alignStart, alignEnd
+
 
 ## Contents
+
+@docs add
 @docs Contents
 @docs toast
 @docs snack
 
-## TEA
-@docs Model, defaultModel, Msg, update, add
 
-## Render
-@docs render
-@docs Store, react
+# Internal
+@docs Model, react
 -}
 
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
+import Json.Decode as Json
 import Material.Component as Component exposing (Indexed)
 import Material.Helpers as Helpers exposing (delay, cmd)
 import Material.Internal.Options as Internal
@@ -66,12 +65,11 @@ import Platform.Cmd exposing (Cmd)
 import Time exposing (Time)
 
 
--- MODEL
+{-| Snackbar model.
 
-
-{-| TODO
+Internal use only.
 -}
-type alias Contents =
+type alias Contents m =
     { message : String
     , action : Maybe String
     , timeout : Time
@@ -79,21 +77,22 @@ type alias Contents =
     , multiline : Bool
     , actionOnBottom : Bool
     , dismissOnAction : Bool
+    , onDismiss : Maybe m
     }
 
 
 {-| Do not construct this yourself; use `model` below.
 -}
-type alias Model =
-    { queue : List Contents
-    , state : State
+type alias Model m =
+    { queue : List (Contents m)
+    , state : State m
     , seq : Int
     }
 
 
 {-| Default snackbar model.
 -}
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { queue = []
     , state = Inert
@@ -107,8 +106,8 @@ type alias Msg m =
 
 {-| Generate toast with given message. Timeout is 2750ms, fade 250ms.
 -}
-toast : String -> Contents
-toast message =
+toast : Maybe m -> String -> Contents m
+toast onDismiss message =
     { message = message
     , action = Nothing
     , timeout = 2750
@@ -116,14 +115,15 @@ toast message =
     , multiline = False
     , actionOnBottom = False
     , dismissOnAction = True
+    , onDismiss = onDismiss
     }
 
 
 {-| Generate snack with given message and label.
 Timeout is 2750ms, fade 250ms.
 -}
-snack : String -> String -> Contents
-snack message label =
+snack : Maybe m -> String -> String -> Contents m
+snack onDismiss message label =
     { message = message
     , action = Just label
     , timeout = 2750
@@ -131,28 +131,26 @@ snack message label =
     , multiline = True
     , actionOnBottom = False
     , dismissOnAction = True
+    , onDismiss = onDismiss
     }
-
-
--- SNACKBAR STATE MACHINE
 
 
 type alias Transition =
     Material.Internal.Snackbar.Transition
 
 
-type State
+type State m
     = Inert
-    | Active (Contents)
-    | Fading (Contents)
+    | Active (Contents m)
+    | Fading (Contents m)
 
 
-next : Model -> Cmd Transition -> Cmd (Msg m)
+next : Model m -> Cmd Transition -> Cmd (Msg m)
 next model =
     Cmd.map (Move model.seq)
 
 
-move : Transition -> Model -> ( Maybe Model, Cmd (Msg m) )
+move : Transition -> Model m -> ( Maybe (Model m), Cmd (Msg m) )
 move transition model =
     case ( model.state, transition ) of
         ( Inert, Timeout ) ->
@@ -183,18 +181,14 @@ move transition model =
             Nothing ! []
 
 
-
--- NOTIFICATION QUEUE
-
-
-enqueue : Contents -> Model -> Model
+enqueue : Contents m -> Model m -> Model m
 enqueue contents model =
     { model
         | queue = List.append model.queue [ contents ]
     }
 
 
-tryDequeue : Model -> ( Maybe Model, Cmd (Msg m) )
+tryDequeue : Model m -> ( Maybe (Model m), Cmd (Msg m) )
 tryDequeue model =
     case ( model.state, model.queue ) of
         ( Inert, c :: cs ) ->
@@ -213,13 +207,9 @@ tryDequeue model =
             Nothing ! []
 
 
-
--- ACTIONS, UPDATE
-
-
 {-| Elm Architecture update function.
 -}
-update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Maybe (Model m), Cmd m )
 update fwd msg model =
     case msg of
         Move seq transition ->
@@ -248,13 +238,13 @@ update fwd msg model =
 
 
 {-| Add a message to the snackbar. If another message is currently displayed,
-the provided message will be queued. You will be able to observe a `Begin` action
-(see `Msg` above) once the action begins displaying.
-
-You must dispatch the returned effect for the Snackbar to begin displaying your
-message.
+the provided message will be queued.
 -}
-add : (Material.Msg.Msg m -> m) -> Index -> Contents -> { a | mdc : Store s } -> ( { a | mdc : Store s }, Cmd m )
+add : (Material.Msg.Msg m -> m)
+    -> Index
+    -> Contents m
+    -> { a | mdc : Store m s }
+    -> ( { a | mdc : Store m s }, Cmd m )
 add lift idx contents model =
     let
         component_ =
@@ -278,39 +268,37 @@ add lift idx contents model =
         { model | mdc = mdc } ! [ Cmd.map (lift << Material.Msg.SnackbarMsg idx) effects ]
 
 
--- VIEW
+type alias Config =
+    {}
 
 
-type alias Config m =
-    { onDismiss : Maybe m
-    }
-
-
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
-    { onDismiss = Nothing
-    }
+    {}
 
 
-onDismiss : m -> Property m
-onDismiss =
-    Internal.option << (\msg config -> { config | onDismiss = Just msg })
+{-| Start-align the Snackbar.
 
-
+By default Snackbars are center aligned. This is only configurable on tablet
+and desktops creens.
+-}
 alignStart : Property m
 alignStart =
     Options.cs "mdc-snackbar--align-start"
 
 
+{-| End-align the Snackbar.
+
+By default Snackbars are center aligned. This is only configurable on tablet
+and desktops creens.
+-}
 alignEnd : Property m
 alignEnd =
     Options.cs "mdc-snackbar--align-end"
 
 
-{-| TODO
--}
-view : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-view lift model options _ =
+snackbar : (Msg m -> m) -> Model m -> List (Property m) -> List (Html m) -> Html m
+snackbar lift model options _ =
     let
         contents =
             case model.state of
@@ -337,19 +325,15 @@ view lift model options _ =
         action =
             contents |> Maybe.andThen .action
 
+        onDismiss =
+            contents |> Maybe.andThen .onDismiss
+
         multiline =
             (Maybe.map .multiline contents == Just True)
 
         actionOnBottom =
             (Maybe.map .actionOnBottom contents == Just True)
             && multiline
-
-        dismissHandler =
-            case (contents, config.onDismiss) of
-                ( Just content, Just _ ) ->
-                    Options.onClick (lift (Dismiss content.dismissOnAction config.onDismiss))
-                _ ->
-                    Options.nop
 
         ({ config } as summary) =
             Internal.collect defaultConfig options
@@ -377,7 +361,11 @@ view lift model options _ =
       [ Options.styled Html.button
         [ cs "mdc-snackbar__action-button"
         , Options.attribute (Html.type_ "button")
-        , dismissHandler
+        , case onDismiss of
+              Just onDismiss ->
+                  Options.on "click" (Json.succeed onDismiss)
+              Nothing ->
+                  Options.nop
         ]
         (action
             |> Maybe.map (\action -> [ text action ])
@@ -387,39 +375,43 @@ view lift model options _ =
     ]
 
 
+{-| Snackbar property.
+-}
 type alias Property m =
-    Options.Property (Config m) m
+    Options.Property Config m
 
 
 ( get, set ) =
     Component.indexed .snackbar (\x y -> { y | snackbar = x }) defaultModel
 
 
-type alias Store s =
-    { s | snackbar : Indexed Model
+type alias Store m s =
+    { s | snackbar : Indexed (Model m)
     }
 
 
-{-| TODO
+{-| Snackbar react.
+
+Internal use only.
 -}
 react :
     (Material.Msg.Msg m -> m)
     -> Msg m
     -> Index
-    -> Store s
-    -> ( Maybe (Store s), Cmd m )
+    -> Store m s
+    -> ( Maybe (Store m s), Cmd m )
 react =
     Component.react get set Material.Msg.SnackbarMsg update
 
 
-{-| TODO
+{-| Snackbar view.
 -}
-render :
+view :
     (Material.Msg.Msg m -> m)
     -> Index
-    -> Store s
+    -> Store m s
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render =
-    Component.render get view Material.Msg.SnackbarMsg
+view =
+    Component.render get snackbar Material.Msg.SnackbarMsg

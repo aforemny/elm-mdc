@@ -12,13 +12,13 @@ import Platform.Cmd exposing (Cmd, none)
 import Demo.Page as Page exposing (Page)
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , checkboxes : Dict (List Int) Checkbox
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , checkboxes =
@@ -46,7 +46,7 @@ type Msg m
     | ToggleChecked (List Int)
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -104,7 +104,7 @@ update lift msg model =
             ( { model | checkboxes = checkboxes }, Cmd.none )
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
         example options =

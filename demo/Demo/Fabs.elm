@@ -10,13 +10,13 @@ import Material.Msg
 import Material.Options as Options exposing (when, styled, cs, css)
 
 
-type alias Model =
-    { mdc : Material.Model
+type alias Model m =
+    { mdc : Material.Model m
     , exited : Bool
     }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , exited = False
@@ -28,7 +28,7 @@ type Msg m
     | ToggleExited
 
 
-update : (Msg m -> m) -> Msg m -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
         Mdc msg_ ->
@@ -38,7 +38,7 @@ update lift msg model =
             ( { model | exited = not model.exited }, Cmd.none )
 
 
-view : (Msg m -> m) -> Page m -> Model -> Html m
+view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
         fab idx options =

@@ -1,4 +1,12 @@
-module Demo.LayoutGrid exposing ( Model, defaultModel, Msg(..), update, init, subscriptions, view )
+module Demo.LayoutGrid exposing
+    ( defaultModel
+    , init
+    , Model
+    , Msg(..)
+    , subscriptions
+    , update
+    , view
+    )
 
 import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
