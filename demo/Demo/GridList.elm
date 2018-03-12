@@ -50,7 +50,7 @@ view lift page model =
     page.body "Grid list"
     [
       Page.hero []
-      [ GridList.render (lift << Mdc) [0] model.mdc
+      [ GridList.view (lift << Mdc) [0] model.mdc
         [ css "width" "340px"
         ]
         ( List.repeat 12 <|
@@ -94,10 +94,10 @@ view lift page model =
       ]
       [
         h2 [] [ text "Grid List (Default): empty grid" ]
-      , GridList.render (lift << Mdc) [1] model.mdc [] []
+      , GridList.view (lift << Mdc) [1] model.mdc [] []
 
       , h2 [] [ text "Grid List (Default): tile aspect ratio 1x1 with oneline footer caption" ]
-      , GridList.render (lift << Mdc) [2] model.mdc []
+      , GridList.view (lift << Mdc) [2] model.mdc []
         ( ( GridList.tile []
             [ GridList.primary []
               [ GridList.image [] "images/1-1.jpg"
@@ -113,7 +113,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with 1px gutter" ]
-      , GridList.render (lift << Mdc) [3] model.mdc
+      , GridList.view (lift << Mdc) [3] model.mdc
         [ GridList.gutter1
         ]
         ( ( GridList.tile
@@ -133,7 +133,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 image only" ]
-      , GridList.render (lift << Mdc) [4] model.mdc []
+      , GridList.view (lift << Mdc) [4] model.mdc []
         ( ( GridList.tile []
             [ GridList.primary []
               [ GridList.image [] "images/1-1.jpg"
@@ -144,7 +144,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with oneline header caption" ]
-      , GridList.render (lift << Mdc) [5] model.mdc
+      , GridList.view (lift << Mdc) [5] model.mdc
         [ GridList.headerCaption
         ]
         ( ( GridList.tile []
@@ -162,7 +162,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with twoline footer caption" ]
-      , GridList.render (lift << Mdc) [6] model.mdc
+      , GridList.view (lift << Mdc) [6] model.mdc
         [ GridList.twolineCaption
         ]
         ( ( GridList.tile []
@@ -183,7 +183,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with oneline footer caption and icon at start of the caption" ]
-      , GridList.render (lift << Mdc) [7] model.mdc
+      , GridList.view (lift << Mdc) [7] model.mdc
         [ GridList.iconAlignStart
         ]
         ( ( GridList.tile []
@@ -202,7 +202,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with twoline footer caption and icon at start of the caption" ]
-      , GridList.render (lift << Mdc) [8] model.mdc
+      , GridList.view (lift << Mdc) [8] model.mdc
         [ GridList.iconAlignStart
         , GridList.twolineCaption
         ]
@@ -225,7 +225,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with oneline footer caption and icon at end of the caption" ]
-      , GridList.render (lift << Mdc) [9] model.mdc
+      , GridList.view (lift << Mdc) [9] model.mdc
         [ GridList.iconAlignEnd
         ]
         ( ( GridList.tile []
@@ -244,7 +244,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 1x1 with twoline footer caption and icon at end of the caption" ]
-      , GridList.render (lift << Mdc) [10] model.mdc
+      , GridList.view (lift << Mdc) [10] model.mdc
         [ GridList.twolineCaption
         , GridList.iconAlignEnd
         ]
@@ -267,7 +267,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: tile aspect ratio 16x9 with oneline footer caption (Support: 16:9, 4:3, 3:4, 2:3, 3:2 as well)" ]
-      , GridList.render (lift << Mdc) [11] model.mdc
+      , GridList.view (lift << Mdc) [11] model.mdc
         [ GridList.tileAspect16x9
         ]
         ( ( GridList.tile []
@@ -285,7 +285,7 @@ view lift page model =
         )
 
       , h2 [] [ text "Grid List: use div's background instead of img tag (useful when image ratio cannot be ensured)" ]
-      , GridList.render (lift << Mdc) [12] model.mdc
+      , GridList.view (lift << Mdc) [12] model.mdc
         [ GridList.headerCaption
         ]
         ( ( GridList.tile []
