@@ -25275,9 +25275,18 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 										_1: {ctor: '[]'}
 									},
 									model.iconToggles));
-							return A2(
-								toggleExample,
-								{ctor: '[]'},
+							return A3(
+								_aforemny$elm_mdc$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Options$cs('demo-wrapper'),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin-left', '1rem'),
+										_1: {ctor: '[]'}
+									}
+								},
 								{
 									ctor: '::',
 									_0: A3(
@@ -34892,141 +34901,6 @@ var _aforemny$elm_mdc$Demo_Selects$subscriptions = F2(
 			model.mdc);
 	});
 
-var _aforemny$elm_mdc$Material_Theme$dark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--dark');
-var _aforemny$elm_mdc$Material_Theme$textIconOnDark = F2(
-	function (options, icon) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-dark'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Material_Theme$textDisabledOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-dark');
-var _aforemny$elm_mdc$Material_Theme$textHintOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-dark');
-var _aforemny$elm_mdc$Material_Theme$textSecondaryOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-dark');
-var _aforemny$elm_mdc$Material_Theme$textPrimaryOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-dark');
-var _aforemny$elm_mdc$Material_Theme$textIconOnLight = F2(
-	function (options, icon) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-light'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Material_Theme$textDisabledOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-light');
-var _aforemny$elm_mdc$Material_Theme$textHintOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-light');
-var _aforemny$elm_mdc$Material_Theme$textSecondaryOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-light');
-var _aforemny$elm_mdc$Material_Theme$textPrimaryOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-light');
-var _aforemny$elm_mdc$Material_Theme$textIconOnBackground = F2(
-	function (options, icon) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-background'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Material_Theme$textDisabledOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-background');
-var _aforemny$elm_mdc$Material_Theme$textHintOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-background');
-var _aforemny$elm_mdc$Material_Theme$textSecondaryOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-background');
-var _aforemny$elm_mdc$Material_Theme$textPrimaryOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-background');
-var _aforemny$elm_mdc$Material_Theme$textIconOnSecondary = F2(
-	function (options, icon) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-secondary'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Material_Theme$textDisabledOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-secondary');
-var _aforemny$elm_mdc$Material_Theme$textHintOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-secondary');
-var _aforemny$elm_mdc$Material_Theme$textSecondaryOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-secondary');
-var _aforemny$elm_mdc$Material_Theme$textPrimaryOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-secondary');
-var _aforemny$elm_mdc$Material_Theme$textIconOnPrimary = F2(
-	function (options, icon) {
-		return A3(
-			_aforemny$elm_mdc$Material_Options$styled,
-			_elm_lang$html$Html$span,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-primary'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Options$cs('material-icons'),
-					_1: options
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
-				_1: {ctor: '[]'}
-			});
-	});
-var _aforemny$elm_mdc$Material_Theme$textDisabledOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-primary');
-var _aforemny$elm_mdc$Material_Theme$textHintOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-primary');
-var _aforemny$elm_mdc$Material_Theme$textSecondaryOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-primary');
-var _aforemny$elm_mdc$Material_Theme$textPrimaryOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-primary');
-var _aforemny$elm_mdc$Material_Theme$background = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--background');
-var _aforemny$elm_mdc$Material_Theme$secondaryDarkBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-dark-bg');
-var _aforemny$elm_mdc$Material_Theme$primaryDarkBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-dark-bg');
-var _aforemny$elm_mdc$Material_Theme$secondaryLightBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-light-bg');
-var _aforemny$elm_mdc$Material_Theme$primaryLightBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-light-bg');
-var _aforemny$elm_mdc$Material_Theme$secondaryBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-bg');
-var _aforemny$elm_mdc$Material_Theme$primaryBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-bg');
-var _aforemny$elm_mdc$Material_Theme$secondaryDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-dark');
-var _aforemny$elm_mdc$Material_Theme$primaryDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-dark');
-var _aforemny$elm_mdc$Material_Theme$secondaryLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-light');
-var _aforemny$elm_mdc$Material_Theme$primaryLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-light');
-var _aforemny$elm_mdc$Material_Theme$secondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary');
-var _aforemny$elm_mdc$Material_Theme$primary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary');
-
 var _aforemny$elm_mdc$Demo_Slider$defaultModel = {
 	mdc: _aforemny$elm_mdc$Material$defaultModel,
 	values: _elm_lang$core$Dict$fromList(
@@ -35240,15 +35114,11 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 					}(
 						{
 							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Theme$dark,
+							_0: A2(_aforemny$elm_mdc$Material_Options$css, 'background-color', '#333'),
 							_1: {
 								ctor: '::',
-								_0: A2(_aforemny$elm_mdc$Material_Options$css, 'background-color', '#333'),
-								_1: {
-									ctor: '::',
-									_0: A2(_aforemny$elm_mdc$Material_Options$css, '--mdc-theme-primary', '#64dd17'),
-									_1: {ctor: '[]'}
-								}
+								_0: A2(_aforemny$elm_mdc$Material_Options$css, '--mdc-theme-primary', '#64dd17'),
+								_1: {ctor: '[]'}
 							}
 						}),
 					_1: {
@@ -37536,6 +37406,45 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 				}
 			});
 	});
+
+var _aforemny$elm_mdc$Material_Theme$textIconOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-dark');
+var _aforemny$elm_mdc$Material_Theme$textDisabledOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-dark');
+var _aforemny$elm_mdc$Material_Theme$textHintOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-dark');
+var _aforemny$elm_mdc$Material_Theme$textSecondaryOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-dark');
+var _aforemny$elm_mdc$Material_Theme$textPrimaryOnDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-dark');
+var _aforemny$elm_mdc$Material_Theme$textIconOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-light');
+var _aforemny$elm_mdc$Material_Theme$textDisabledOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-light');
+var _aforemny$elm_mdc$Material_Theme$textHintOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-light');
+var _aforemny$elm_mdc$Material_Theme$textSecondaryOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-light');
+var _aforemny$elm_mdc$Material_Theme$textPrimaryOnLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-light');
+var _aforemny$elm_mdc$Material_Theme$textIconOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-background');
+var _aforemny$elm_mdc$Material_Theme$textDisabledOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-background');
+var _aforemny$elm_mdc$Material_Theme$textHintOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-background');
+var _aforemny$elm_mdc$Material_Theme$textSecondaryOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-background');
+var _aforemny$elm_mdc$Material_Theme$textPrimaryOnBackground = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-background');
+var _aforemny$elm_mdc$Material_Theme$textIconOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-secondary');
+var _aforemny$elm_mdc$Material_Theme$textDisabledOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-secondary');
+var _aforemny$elm_mdc$Material_Theme$textHintOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-secondary');
+var _aforemny$elm_mdc$Material_Theme$textSecondaryOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-secondary');
+var _aforemny$elm_mdc$Material_Theme$textPrimaryOnSecondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-secondary');
+var _aforemny$elm_mdc$Material_Theme$textIconOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-icon-on-primary');
+var _aforemny$elm_mdc$Material_Theme$textDisabledOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-disabled-on-primary');
+var _aforemny$elm_mdc$Material_Theme$textHintOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-hint-on-primary');
+var _aforemny$elm_mdc$Material_Theme$textSecondaryOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-secondary-on-primary');
+var _aforemny$elm_mdc$Material_Theme$textPrimaryOnPrimary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--text-primary-on-primary');
+var _aforemny$elm_mdc$Material_Theme$background = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--background');
+var _aforemny$elm_mdc$Material_Theme$secondaryDarkBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-dark-bg');
+var _aforemny$elm_mdc$Material_Theme$primaryDarkBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-dark-bg');
+var _aforemny$elm_mdc$Material_Theme$secondaryLightBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-light-bg');
+var _aforemny$elm_mdc$Material_Theme$primaryLightBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-light-bg');
+var _aforemny$elm_mdc$Material_Theme$secondaryBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-bg');
+var _aforemny$elm_mdc$Material_Theme$primaryBg = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-bg');
+var _aforemny$elm_mdc$Material_Theme$secondaryDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-dark');
+var _aforemny$elm_mdc$Material_Theme$primaryDark = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-dark');
+var _aforemny$elm_mdc$Material_Theme$secondaryLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary-light');
+var _aforemny$elm_mdc$Material_Theme$primaryLight = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary-light');
+var _aforemny$elm_mdc$Material_Theme$secondary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--secondary');
+var _aforemny$elm_mdc$Material_Theme$primary = _aforemny$elm_mdc$Material_Options$cs('mdc-theme--primary');
 
 var _aforemny$elm_mdc$Demo_Tabs$fieldset = function (options) {
 	return A2(
@@ -41485,7 +41394,15 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 									_1: {
 										ctor: '::',
 										_0: function (options) {
-											return A2(_aforemny$elm_mdc$Material_Theme$textIconOnBackground, options, 'favorite');
+											return A3(
+												_aforemny$elm_mdc$Material_Options$styled,
+												_elm_lang$html$Html$span,
+												{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textIconOnBackground, _1: options},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('favorite'),
+													_1: {ctor: '[]'}
+												});
 										},
 										_1: {ctor: '[]'}
 									}
@@ -41563,7 +41480,15 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 											_1: {
 												ctor: '::',
 												_0: function (options) {
-													return A2(_aforemny$elm_mdc$Material_Theme$textIconOnPrimary, options, 'favorite');
+													return A3(
+														_aforemny$elm_mdc$Material_Options$styled,
+														_elm_lang$html$Html$span,
+														{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textIconOnPrimary, _1: options},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('favorite'),
+															_1: {ctor: '[]'}
+														});
 												},
 												_1: {ctor: '[]'}
 											}
@@ -41641,7 +41566,15 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 													_1: {
 														ctor: '::',
 														_0: function (options) {
-															return A2(_aforemny$elm_mdc$Material_Theme$textIconOnSecondary, options, 'favorite');
+															return A3(
+																_aforemny$elm_mdc$Material_Options$styled,
+																_elm_lang$html$Html$span,
+																{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textIconOnSecondary, _1: options},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('favorite'),
+																	_1: {ctor: '[]'}
+																});
 														},
 														_1: {ctor: '[]'}
 													}
@@ -41719,7 +41652,15 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 															_1: {
 																ctor: '::',
 																_0: function (options) {
-																	return A2(_aforemny$elm_mdc$Material_Theme$textIconOnLight, options, 'favorite');
+																	return A3(
+																		_aforemny$elm_mdc$Material_Options$styled,
+																		_elm_lang$html$Html$span,
+																		{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textIconOnLight, _1: options},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('favorite'),
+																			_1: {ctor: '[]'}
+																		});
 																},
 																_1: {ctor: '[]'}
 															}
@@ -41797,7 +41738,15 @@ var _aforemny$elm_mdc$Demo_Theme$example1 = function () {
 																	_1: {
 																		ctor: '::',
 																		_0: function (options) {
-																			return A2(_aforemny$elm_mdc$Material_Theme$textIconOnDark, options, 'favorite');
+																			return A3(
+																				_aforemny$elm_mdc$Material_Options$styled,
+																				_elm_lang$html$Html$span,
+																				{ctor: '::', _0: _aforemny$elm_mdc$Material_Theme$textIconOnDark, _1: options},
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text('favorite'),
+																					_1: {ctor: '[]'}
+																				});
 																		},
 																		_1: {ctor: '[]'}
 																	}

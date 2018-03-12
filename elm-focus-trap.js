@@ -356,7 +356,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         continue;
       }
       if (typeof node.dataset.focustrap === "undefined") {
-        console.log("deactivating…")
         if (window["ElmFocusTrap"].activeTrap === null) {
           continue;
         }
