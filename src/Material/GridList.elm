@@ -41,8 +41,7 @@ Tiles maintain consistent width, height, and padding across screen sizes.
 ```elm
 import Material.GridList as GridList
 
-GridList.view Mdc [0] model.mdc
-    []
+GridList.view Mdc [0] model.mdc []
     ( List.repeat 6 <|
       GridList.tile []
           [ GridList.primary []
@@ -50,8 +49,8 @@ GridList.view Mdc [0] model.mdc
                 ]
           , GridList.secondary []
                 [ GridList.title []
-                  [ text "Single Very Long Grid Title Line"
-                  ]
+                      [ text "Tile Title"
+                      ]
                 ]
           ]
     )

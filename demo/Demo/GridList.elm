@@ -173,7 +173,7 @@ view lift page model =
               [ GridList.title []
                 [ text "Single Very Long Grid Title Line"
                 ]
-              , GridList.supportingText []
+              , GridList.supportText []
                 [ text "Support text"
                 ]
               ]
@@ -215,7 +215,7 @@ view lift page model =
               , GridList.title []
                 [ text "Single Very Long Grid Title Line"
                 ]
-              , GridList.supportingText []
+              , GridList.supportText []
                 [ text "Support text"
                 ]
               ]
@@ -257,7 +257,7 @@ view lift page model =
               , GridList.title []
                 [ text "Single Very Long Grid Title Line"
                 ]
-              , GridList.supportingText []
+              , GridList.supportText []
                 [ text "Support text"
                 ]
               ]
