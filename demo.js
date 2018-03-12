@@ -8448,15 +8448,17 @@ var _aforemny$elm_mdc$Material_Internal_Slider$Drag = function (a) {
 	return {ctor: 'Drag', _0: a};
 };
 var _aforemny$elm_mdc$Material_Internal_Slider$TransitionEnd = {ctor: 'TransitionEnd'};
-var _aforemny$elm_mdc$Material_Internal_Slider$ThumbContainerPointer = function (a) {
-	return {ctor: 'ThumbContainerPointer', _0: a};
-};
+var _aforemny$elm_mdc$Material_Internal_Slider$ThumbContainerPointer = F2(
+	function (a, b) {
+		return {ctor: 'ThumbContainerPointer', _0: a, _1: b};
+	});
 var _aforemny$elm_mdc$Material_Internal_Slider$Blur = {ctor: 'Blur'};
 var _aforemny$elm_mdc$Material_Internal_Slider$Focus = {ctor: 'Focus'};
 var _aforemny$elm_mdc$Material_Internal_Slider$KeyDown = {ctor: 'KeyDown'};
-var _aforemny$elm_mdc$Material_Internal_Slider$InteractionStart = function (a) {
-	return {ctor: 'InteractionStart', _0: a};
-};
+var _aforemny$elm_mdc$Material_Internal_Slider$InteractionStart = F2(
+	function (a, b) {
+		return {ctor: 'InteractionStart', _0: a, _1: b};
+	});
 var _aforemny$elm_mdc$Material_Internal_Slider$Resize = function (a) {
 	return {ctor: 'Resize', _0: a};
 };
@@ -14964,17 +14966,18 @@ var _aforemny$elm_mdc$Material_Slider$decodePageX = A2(
 				_elm_lang$core$Json_Decode$at,
 				{
 					ctor: '::',
-					_0: 'targetTouches.0',
-					_1: {ctor: '[]'}
-				},
-				A2(
-					_elm_lang$core$Json_Decode$at,
-					{
+					_0: 'targetTouches',
+					_1: {
 						ctor: '::',
-						_0: 'pageX',
-						_1: {ctor: '[]'}
-					},
-					_elm_lang$core$Json_Decode$float)),
+						_0: '0',
+						_1: {
+							ctor: '::',
+							_0: 'pageX',
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				_elm_lang$core$Json_Decode$float),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -15504,7 +15507,7 @@ var _aforemny$elm_mdc$Material_Slider$slider = F4(
 																													_elm_lang$core$Json_Decode$map,
 																													function (_p17) {
 																														return lift(
-																															_aforemny$elm_mdc$Material_Internal_Slider$InteractionStart(_p17));
+																															A2(_aforemny$elm_mdc$Material_Internal_Slider$InteractionStart, event, _p17));
 																													},
 																													_aforemny$elm_mdc$Material_Slider$decodePageX));
 																										},
@@ -15839,7 +15842,7 @@ var _aforemny$elm_mdc$Material_Slider$slider = F4(
 															_elm_lang$core$Json_Decode$map,
 															function (_p29) {
 																return lift(
-																	_aforemny$elm_mdc$Material_Internal_Slider$ThumbContainerPointer(_p29));
+																	A2(_aforemny$elm_mdc$Material_Internal_Slider$ThumbContainerPointer, event, _p29));
 															},
 															_aforemny$elm_mdc$Material_Slider$decodePageX));
 												},
@@ -16000,7 +16003,7 @@ var _aforemny$elm_mdc$Material_Slider$update = F3(
 					};
 				case 'InteractionStart':
 					var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Slider$defaultGeometry, model.geometry);
-					var activeValue = A2(_aforemny$elm_mdc$Material_Slider$valueFromPageX, geometry, _p30._0.pageX);
+					var activeValue = A2(_aforemny$elm_mdc$Material_Slider$valueFromPageX, geometry, _p30._1.pageX);
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
@@ -16016,7 +16019,7 @@ var _aforemny$elm_mdc$Material_Slider$update = F3(
 					};
 				case 'ThumbContainerPointer':
 					var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Slider$defaultGeometry, model.geometry);
-					var activeValue = A2(_aforemny$elm_mdc$Material_Slider$valueFromPageX, geometry, _p30._0.pageX);
+					var activeValue = A2(_aforemny$elm_mdc$Material_Slider$valueFromPageX, geometry, _p30._1.pageX);
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
@@ -34884,7 +34887,7 @@ var _aforemny$elm_mdc$Demo_Slider$Mdc = function (a) {
 };
 var _aforemny$elm_mdc$Demo_Slider$update = F3(
 	function (lift, msg, model) {
-		var _p0 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Mdc':
 				return A3(
