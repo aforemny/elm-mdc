@@ -98,7 +98,6 @@ view model =
 
 ### Building the demo
 ```sh
-$ make setup
 $ make build-demo
 $ open build/index.html
 ```

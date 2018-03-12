@@ -14,9 +14,6 @@ build-demo: elm-focus-trap.js elm-autofocus.js material-components-web.css
 	cp elm-autofocus.js build/
 	(cd demo; $(ELM) Demo.elm --output ../build/demo.js)
 
-setup:
-	npm i
-
 elm-focus-trap.js:
 	(cd elm-focus-trap; make)
 	cp elm-focus-trap/bundle.js elm-focus-trap.js
@@ -25,6 +22,7 @@ elm-autofocus.js:
 	cp elm-autofocus/elm-autofocus.js .
 
 material-components-web.css:
+	npm i
 	cp node_modules/material-components-web/dist/material-components-web.css .
 
 docs:
@@ -34,13 +32,14 @@ pages: build-demo
 	rsync -r build/ $(PAGES)
 	(cd $(PAGES); git commit -am "Update."; git push origin gh-pages)
 
-cleanish:
-	rm -rf build
-
 clean:
 	rm -rf build
 	rm -rf elm-stuff/build-artifacts demo/elm-stuff/build-artifacts
 
 distclean:
+	(cd elm-focus-trap; make distclean)
 	rm -rf build
 	rm -rf elm-stuff demo/elm-stuff
+	rm -f elm-autofocus.js elm-focus-trap.js
+	rm -f material-components-web.css
+	rm -rf node_modules
