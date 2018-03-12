@@ -72,10 +72,6 @@ var dispatchElmMdcInit = function(node) {
             node.dispatchEvent(new CustomEvent("ElmMdcInit"));
             break;
         }
-        if (cs === "mdc-grid-list") {
-            node.dispatchEvent(new CustomEvent("ElmMdcInit"));
-            break;
-        }
     }
 };
 
@@ -110,10 +106,6 @@ var dispatchWindowResize = function(node) {
     }
     for  (var i = 0; i < node.classList.length; i++) {
         var cs = node.classList[i];
-        if (cs === "mdc-grid-list") {
-            node.dispatchEvent(new CustomEvent("ElmMdcWindowResize"));
-            break;
-        }
     }
     node.dispatchEvent(new CustomEvent("elm-mdc-resize"));
 };

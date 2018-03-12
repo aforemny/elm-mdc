@@ -12893,13 +12893,13 @@ var _aforemny$elm_mdc$Material_GridList$icon = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _aforemny$elm_mdc$Material_GridList$supportingText = function (options) {
+var _aforemny$elm_mdc$Material_GridList$supportText = function (options) {
 	return A2(
 		_aforemny$elm_mdc$Material_Options$styled,
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-grid-tile__supporting-text'),
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-grid-tile__support-text'),
 			_1: options
 		});
 };
@@ -12970,7 +12970,7 @@ var _aforemny$elm_mdc$Material_GridList$iconAlignEnd = _aforemny$elm_mdc$Materia
 var _aforemny$elm_mdc$Material_GridList$iconAlignStart = _aforemny$elm_mdc$Material_Options$cs('mdc-grid-list--with-icon-align-start');
 var _aforemny$elm_mdc$Material_GridList$twolineCaption = _aforemny$elm_mdc$Material_Options$cs('mdc-grid-list--twoline-caption');
 var _aforemny$elm_mdc$Material_GridList$headerCaption = _aforemny$elm_mdc$Material_Options$cs('mdc-grid-list--header-caption');
-var _aforemny$elm_mdc$Material_GridList$view = F4(
+var _aforemny$elm_mdc$Material_GridList$gridList = F4(
 	function (lift, model, options, nodes) {
 		var width = A2(
 			_elm_lang$core$Maybe$withDefault,
@@ -13005,20 +13005,19 @@ var _aforemny$elm_mdc$Material_GridList$view = F4(
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_aforemny$elm_mdc$Material_Options$on,
-						'ElmMdcInit',
-						A2(
-							_elm_lang$core$Json_Decode$map,
-							function (_p4) {
-								return lift(
-									_aforemny$elm_mdc$Material_Internal_GridList$Init(_p4));
-							},
-							_aforemny$elm_mdc$Material_GridList$decodeGeometry)),
+						_aforemny$elm_mdc$Material_Options$when,
+						_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing),
+						_aforemny$elm_mdc$Material_GlobalEvents$onTick(
+							A2(
+								_elm_lang$core$Json_Decode$map,
+								function (_p4) {
+									return lift(
+										_aforemny$elm_mdc$Material_Internal_GridList$Init(_p4));
+								},
+								_aforemny$elm_mdc$Material_GridList$decodeGeometry))),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Material_Options$on,
-							'ElmMdcWindowResize',
+						_0: _aforemny$elm_mdc$Material_GlobalEvents$onResize(
 							A2(
 								_elm_lang$core$Json_Decode$map,
 								function (_p5) {
@@ -13076,7 +13075,7 @@ var _aforemny$elm_mdc$Material_GridList$_p7 = A3(
 	_aforemny$elm_mdc$Material_GridList$defaultModel);
 var _aforemny$elm_mdc$Material_GridList$get = _aforemny$elm_mdc$Material_GridList$_p7._0;
 var _aforemny$elm_mdc$Material_GridList$set = _aforemny$elm_mdc$Material_GridList$_p7._1;
-var _aforemny$elm_mdc$Material_GridList$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_GridList$get, _aforemny$elm_mdc$Material_GridList$view, _aforemny$elm_mdc$Material_Msg$GridListMsg);
+var _aforemny$elm_mdc$Material_GridList$view = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_GridList$get, _aforemny$elm_mdc$Material_GridList$gridList, _aforemny$elm_mdc$Material_Msg$GridListMsg);
 var _aforemny$elm_mdc$Material_GridList$react = A4(
 	_aforemny$elm_mdc$Material_Component$react,
 	_aforemny$elm_mdc$Material_GridList$get,
@@ -24105,7 +24104,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 					{
 						ctor: '::',
 						_0: A5(
-							_aforemny$elm_mdc$Material_GridList$render,
+							_aforemny$elm_mdc$Material_GridList$view,
 							function (_p2) {
 								return lift(
 									_aforemny$elm_mdc$Demo_GridList$Mdc(_p2));
@@ -24260,7 +24259,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 								_1: {
 									ctor: '::',
 									_0: A5(
-										_aforemny$elm_mdc$Material_GridList$render,
+										_aforemny$elm_mdc$Material_GridList$view,
 										function (_p4) {
 											return lift(
 												_aforemny$elm_mdc$Demo_GridList$Mdc(_p4));
@@ -24286,7 +24285,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 										_1: {
 											ctor: '::',
 											_0: A5(
-												_aforemny$elm_mdc$Material_GridList$render,
+												_aforemny$elm_mdc$Material_GridList$view,
 												function (_p5) {
 													return lift(
 														_aforemny$elm_mdc$Demo_GridList$Mdc(_p5));
@@ -24350,7 +24349,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 												_1: {
 													ctor: '::',
 													_0: A5(
-														_aforemny$elm_mdc$Material_GridList$render,
+														_aforemny$elm_mdc$Material_GridList$view,
 														function (_p6) {
 															return lift(
 																_aforemny$elm_mdc$Demo_GridList$Mdc(_p6));
@@ -24418,7 +24417,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 														_1: {
 															ctor: '::',
 															_0: A5(
-																_aforemny$elm_mdc$Material_GridList$render,
+																_aforemny$elm_mdc$Material_GridList$view,
 																function (_p7) {
 																	return lift(
 																		_aforemny$elm_mdc$Demo_GridList$Mdc(_p7));
@@ -24464,7 +24463,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																_1: {
 																	ctor: '::',
 																	_0: A5(
-																		_aforemny$elm_mdc$Material_GridList$render,
+																		_aforemny$elm_mdc$Material_GridList$view,
 																		function (_p8) {
 																			return lift(
 																				_aforemny$elm_mdc$Demo_GridList$Mdc(_p8));
@@ -24532,7 +24531,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																		_1: {
 																			ctor: '::',
 																			_0: A5(
-																				_aforemny$elm_mdc$Material_GridList$render,
+																				_aforemny$elm_mdc$Material_GridList$view,
 																				function (_p9) {
 																					return lift(
 																						_aforemny$elm_mdc$Demo_GridList$Mdc(_p9));
@@ -24585,7 +24584,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																										_1: {
 																											ctor: '::',
 																											_0: A2(
-																												_aforemny$elm_mdc$Material_GridList$supportingText,
+																												_aforemny$elm_mdc$Material_GridList$supportText,
 																												{ctor: '[]'},
 																												{
 																													ctor: '::',
@@ -24611,7 +24610,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																				_1: {
 																					ctor: '::',
 																					_0: A5(
-																						_aforemny$elm_mdc$Material_GridList$render,
+																						_aforemny$elm_mdc$Material_GridList$view,
 																						function (_p10) {
 																							return lift(
 																								_aforemny$elm_mdc$Demo_GridList$Mdc(_p10));
@@ -24686,7 +24685,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																						_1: {
 																							ctor: '::',
 																							_0: A5(
-																								_aforemny$elm_mdc$Material_GridList$render,
+																								_aforemny$elm_mdc$Material_GridList$view,
 																								function (_p11) {
 																									return lift(
 																										_aforemny$elm_mdc$Demo_GridList$Mdc(_p11));
@@ -24749,7 +24748,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																															_1: {
 																																ctor: '::',
 																																_0: A2(
-																																	_aforemny$elm_mdc$Material_GridList$supportingText,
+																																	_aforemny$elm_mdc$Material_GridList$supportText,
 																																	{ctor: '[]'},
 																																	{
 																																		ctor: '::',
@@ -24776,7 +24775,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																								_1: {
 																									ctor: '::',
 																									_0: A5(
-																										_aforemny$elm_mdc$Material_GridList$render,
+																										_aforemny$elm_mdc$Material_GridList$view,
 																										function (_p12) {
 																											return lift(
 																												_aforemny$elm_mdc$Demo_GridList$Mdc(_p12));
@@ -24851,7 +24850,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																										_1: {
 																											ctor: '::',
 																											_0: A5(
-																												_aforemny$elm_mdc$Material_GridList$render,
+																												_aforemny$elm_mdc$Material_GridList$view,
 																												function (_p13) {
 																													return lift(
 																														_aforemny$elm_mdc$Demo_GridList$Mdc(_p13));
@@ -24914,7 +24913,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																																			_1: {
 																																				ctor: '::',
 																																				_0: A2(
-																																					_aforemny$elm_mdc$Material_GridList$supportingText,
+																																					_aforemny$elm_mdc$Material_GridList$supportText,
 																																					{ctor: '[]'},
 																																					{
 																																						ctor: '::',
@@ -24941,7 +24940,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																												_1: {
 																													ctor: '::',
 																													_0: A5(
-																														_aforemny$elm_mdc$Material_GridList$render,
+																														_aforemny$elm_mdc$Material_GridList$view,
 																														function (_p14) {
 																															return lift(
 																																_aforemny$elm_mdc$Demo_GridList$Mdc(_p14));
@@ -25009,7 +25008,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																														_1: {
 																															ctor: '::',
 																															_0: A5(
-																																_aforemny$elm_mdc$Material_GridList$render,
+																																_aforemny$elm_mdc$Material_GridList$view,
 																																function (_p15) {
 																																	return lift(
 																																		_aforemny$elm_mdc$Demo_GridList$Mdc(_p15));
