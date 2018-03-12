@@ -36,7 +36,7 @@ You will also want to include the following resources in your `head`:
 ```elm
 module Main exposing (..)
 
-import Html
+import Html exposing (text)
 import Material
 import Material.Button as Button
 import Material.Options as Options
