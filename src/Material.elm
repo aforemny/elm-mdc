@@ -1,13 +1,145 @@
-module Material
-    exposing
-        ( Model
-        , defaultModel
-        , Msg
-        , update
-        , subscriptions
-        , init
-        , top
-        )
+module Material exposing
+    ( defaultModel
+    , init
+    , Model
+    , Msg
+    , subscriptions
+    , top
+    , update
+    )
+
+{-|
+Material is a re-implementation of Google's Material Components for Web (MDC
+Web) library in pure Elm, with resorting to JavaScript assets only when
+absolutely necessary.
+
+This module defines the basic boilerplate that you will have to set up to use
+this library, with individual components living in their respective modules.
+
+Have a look at the following example to get you started. Most parts should
+correspond to your basic TEA program.
+
+Some things of note are:
+
+- `Material.Model` and `Material.Msg` have to know your top-level message type
+  `Msg` for technical reasons.
+- Your message constructor `Mdc : Material.Msg Msg -> Msg` *lifts* internal
+  component messages to your top-level message type and appears throughout the
+  library.
+- To distinguish components, ie. one button from another, this library uses a
+  list of integers as indices. Those indices must be unique within a
+  `Material.Model`, but you can have as many `Material.Model`s as you like.
+
+Have a look at the demo's source code for an example of how to structure large
+applications using this library.
+
+You are expected to have a `index.html` set up and include the following
+resources:
+
+```html
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet">
+<script src="elm-autofocus.js"></script>
+<script src="elm-focus-trap.js"></script>
+<script src="elm-global-events.js"></script>
+<script src="elm-mdc.js"></script>
+```
+
+# Resources
+
+- [Demo](https://aforemny.github.io/elm-mdc)
+
+
+# Example
+
+```elm
+import Html exposing (Html, text)
+import Material
+import Material.Button as Button
+import Material.Options as Options
+
+
+type alias Model
+    { mdc : Material.Model Msg
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { mdc = Material.defaultModel
+    }
+
+
+type Msg
+    = Mdc (Material.Msg Msg)
+    | Click
+
+
+main : Program Never Model Msg
+main =
+    Html.program
+    { init = init
+    , subscriptions = subscriptions
+    , update = update
+    , view = view
+    }
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( defaultModel, Material.init Mdc )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Material.subscriptions Mdc
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        Mdc msg_ ->
+            Material.update Mdc msg_ model
+
+        Click ->
+            let
+                _ =
+                    Debug.log "Msg" "Click"
+            in
+            ( model, Cmd.none )
+
+
+view : Model -> Html Msg
+view model =
+    Material.top <|
+    Html.div []
+        [
+          Button.view Mdc [0] model.mdc
+              [ Button.ripple
+              , Options.onClick Click
+              ]
+              [ text "Click me!" ]
+        ]
+```
+
+
+# Usage
+
+## The Elm Architecture
+
+@docs Model
+@docs defaultModel
+@docs Msg
+@docs init
+@docs subscriptions
+@docs update
+
+## Prototyping
+
+@docs top
+-}
 
 import Dict
 import Html.Attributes as Html
@@ -36,6 +168,17 @@ import Material.Textfield as Textfield
 import Material.Toolbar as Toolbar
 
 
+{-| Material model.
+
+This takes as argument a reference to your top-level message type `Msg`.
+
+```elm
+type alias Model =
+    { mdc : Material.Model Msg
+    , …
+    }
+```
+-}
 type alias Model m =
     { button : Indexed Button.Model
     , checkbox : Indexed Checkbox.Model
@@ -57,6 +200,15 @@ type alias Model m =
     }
 
 
+{-| Material default model.
+
+```elm
+defaultModel =
+    { mdc = Material.defaultModel
+    , …
+    }
+```
+-}
 defaultModel : Model m
 defaultModel = 
     { button = Dict.empty
@@ -79,10 +231,31 @@ defaultModel =
     }
 
 
+{-| Material message type.
+
+This takes as argument a reference to your top-level message type `Msg`.
+
+```elm
+type Msg
+    = Mdc (Material.Msg Msg)
+    | …
+```
+-}
 type alias Msg m =
     Material.Msg.Msg m
 
 
+{-| Material update.
+
+```elm
+    update msg model =
+        case msg of
+            Mdc msg_ ->
+                Material.update Mdc msg_ model
+
+            …
+```
+-}
 update : (Msg m -> m)
     -> Msg m
     -> { c | mdc : Model m }
@@ -151,6 +324,16 @@ update_ lift msg store =
             Toolbar.react lift msg idx store
 
 
+{-| Material subscriptions.
+
+```elm
+subscriptions model =
+    Sub.batch
+    [ Material.subscriptions Mdc model.mdc
+    , …
+    ]
+```
+-}
 subscriptions : (Msg m -> m) -> { model | mdc : Model m } -> Sub m
 subscriptions lift model =
     Sub.batch
@@ -160,14 +343,34 @@ subscriptions lift model =
         ]
 
 
+{-| Material init.
+
+```elm
+init =
+    let
+        defaultModel =
+            …
+
+        effects =
+            Cmd.map
+            [ Material.init Mdc
+            , …
+            ]
+    in
+    ( defaultModel, effects )
+```
+-}
 init : (Msg m -> m) -> Cmd m
 init lift =
     Cmd.none
-    -- TODO: Layout init, etc.
 
 
--- TODO:
+{-| A top-level wrapper for quick prototyping. This wraps your HTML content and
+adds the necessary CSS and JavaScript imports.
 
+For production use, you will want to do this yourself in `index.html` to
+prevent an unstyled flash of content and to properly manage assets.
+-}
 top : Html a -> Html a
 top content =
     Html.div []

@@ -13,6 +13,7 @@ import String
 type Property c m
     = Class String
     | CSS ( String, String )
+    -- TODO: remove Var (CSS variables)
     | Var ( String, String )
     | Attribute (Html.Attribute m)
     | Internal (Html.Attribute m)
@@ -36,17 +37,13 @@ type alias Summary c m =
     }
 
 
-{-| We've seen examples of users inadverdently overriding event handlers / html
-classes / css styling with this function, causing malfunctions in the library.
-So we hide it away here.
--}
 attribute : Html.Attribute m -> Property c m
 attribute =
     Internal
 
 
 {- `collect` and variants are called multiple times by nearly every use of
-   any elm-mdl component. Carefully consider performance implications before
+   any elm-mdc component. Carefully consider performance implications before
    modifying. In particular:
 
    - Avoid closures. They are slow to create and cause subsequent GC.
@@ -55,8 +52,6 @@ attribute =
    Earlier versions of `collect`, violating these rules, consumed ~20% of
    execution time for `Cards.view` and `Textfield.view`.
 -}
-
-
 collect1 : Property c m -> Summary c m -> Summary c m
 collect1 option acc =
     case option of
@@ -159,7 +154,7 @@ addAttributes summary attrs =
         ++ Dispatch.toAttributes summary.dispatch
 
 
-{-| TODO
+{-| TODO: remove
 -}
 cssVariables : Summary c m -> (String, Html m)
 cssVariables summary =
@@ -190,6 +185,7 @@ cssVariables summary =
     ( class, styleNode )
 
 
+-- TODO: remove
 variable : String -> String -> Property c m
 variable k v =
     Var (k, v)
@@ -256,14 +252,9 @@ option =
     Set
 
 
-input : List (Property () m) -> Property { a | input : List (Property () m) } m
-input =
-    option << (\style config -> { config | input = Many style :: config.input })
-
-
-container : List (Property () m) -> Property { a | container : List (Property () m) } m
-container =
-    option << (\style config -> { config | container = Many style :: config.container })
+input : List (Property c m) -> Property { a | input : List (Property c m) } m
+input options =
+    option (\config -> { config | input = Many options :: config.input })
 
 
 dispatch : (Msg m -> m) -> Property c m 

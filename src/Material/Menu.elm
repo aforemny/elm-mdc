@@ -44,30 +44,36 @@ Material Design menu specification.
 # Example
 
 ```elm
-Options.styled Html.div
-[ Options.cs "mdc-menu-anchor"
-, Options.css "position" "relative"
-]
-[ Button.view Mdc [0] model.mdc
-      [ Menu.attach (lift << Mdc) [1]
-      ]
-      [ text "Show"
-      ]
-, Menu.render Mdc [1] model.mdc []
-      [ Menu.ul []
-            [ Menu.li
-                  [ Menu.onSelect (Select "Item 1")
-                  ]
-                  [ text "Item 1"
-                  ]
-            , Menu.li
-                  [ Menu.onSelect (Select "Item 2")
-                  ]
-                  [ text "Item 2"
-                  ]
-            ]
-      ]
-]
+import Html exposing (text)
+import Material.Button as Button
+import Material.Menu as Menu
+import Material.Options exposing (styled, cs, css)
+
+
+styled Html.div
+    [ Options.cs "mdc-menu-anchor"
+    , Options.css "position" "relative"
+    ]
+    [ Button.view Mdc [0] model.mdc
+          [ Menu.attach (lift << Mdc) [1]
+          ]
+          [ text "Show"
+          ]
+    , Menu.view Mdc [1] model.mdc []
+          [ Menu.ul []
+                [ Menu.li
+                      [ Menu.onSelect (Select "Item 1")
+                      ]
+                      [ text "Item 1"
+                      ]
+                , Menu.li
+                      [ Menu.onSelect (Select "Item 2")
+                      ]
+                      [ text "Item 2"
+                      ]
+                ]
+          ]
+    ]
 ```
 
 

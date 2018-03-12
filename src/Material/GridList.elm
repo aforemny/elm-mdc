@@ -39,7 +39,9 @@ Tiles maintain consistent width, height, and padding across screen sizes.
 # Example
 
 ```elm
+import Html exposing (text)
 import Material.GridList as GridList
+
 
 GridList.view Mdc [0] model.mdc []
     ( List.repeat 6 <|

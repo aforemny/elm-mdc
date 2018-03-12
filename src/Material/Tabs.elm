@@ -28,7 +28,9 @@ Tabs.
 # Example
 
 ```elm
+import Html exposing (text)
 import Material.Tabs as TabBar
+
 
 TabBar.view Mdc [0] model.mdc
     [ TabBar.indicator

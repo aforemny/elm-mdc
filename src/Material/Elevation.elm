@@ -46,7 +46,7 @@ shadow. The elevation values are mapped out in a "z-space" and range from 0 to
 # Example
 
 ```elm
-import Html
+import Html exposing (text)
 import Material.Elevation as Elevation
 import Material.Options exposing (styled)
 

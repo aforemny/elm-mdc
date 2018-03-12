@@ -40,8 +40,8 @@ Snackbar.view Mdc [0] model.mdc [] []
 
 ## Contents
 
-@docs add
 @docs Contents
+@docs add
 @docs toast
 @docs snack
 
@@ -65,9 +65,7 @@ import Platform.Cmd exposing (Cmd)
 import Time exposing (Time)
 
 
-{-| Snackbar model.
-
-Internal use only.
+{-| Snackbar Contents.
 -}
 type alias Contents m =
     { message : String
@@ -81,7 +79,9 @@ type alias Contents m =
     }
 
 
-{-| Do not construct this yourself; use `model` below.
+{-| Snackbar model.
+
+Internal use only.
 -}
 type alias Model m =
     { queue : List (Contents m)

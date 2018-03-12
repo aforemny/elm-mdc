@@ -33,6 +33,7 @@ import Material.Menu as Menu
 import Material.Options exposing (css)
 import Material.Select as Select
 
+
 Select.view (lift << Mdc) id model.mdc
     [ Select.label "Food Group"
     , css "width" "377px"

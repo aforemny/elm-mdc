@@ -24,6 +24,9 @@ accessible, and is designed to work with any icon set.
 # Example
 
 ```elm
+import Material.IconToggle as IconToggle
+
+
 IconToggle.view Mdc [0] model.mdc
     [ IconToggle.icon
           { on = "favorite_border"
@@ -40,7 +43,8 @@ IconToggle.view Mdc [0] model.mdc
 ```
 
 
-## Usage
+# Usage
+
 @docs Property
 @docs view
 @docs on

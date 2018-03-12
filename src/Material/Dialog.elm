@@ -37,7 +37,7 @@ The current implementation requires that a dialog has as first child a
 import Html exposing (text)
 import Material.Button as Button
 import Material.Dialog as Dialog
-import Material.Options as Options
+import Material.Options as Options exposing (styled)
 
 
 Dialog.view Mdc [0] model.mdc

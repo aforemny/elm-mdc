@@ -40,6 +40,11 @@ The view functions `unbounded` and `bounded` return a record with fields
 ## Bounded Ripple effect
 
 ```elm
+import Html exposing (text)
+import Material.Options as Options exposing (styled)
+import Material.Ripple as Ripple
+
+
 let
     { interactionHandler
     , properties

@@ -1,7 +1,6 @@
 module Material.Options exposing
     ( aria
     , attribute
-    , container
     , cs
     , css
     , data
@@ -32,9 +31,14 @@ module Material.Options exposing
 {-| Properties, styles, and event definitions.
 
 @docs Property, styled
-@docs data, aria
 @docs cs, css
-@docs attribute, container, input, many, nop, when
+@docs many
+@docs when
+@docs nop
+@docs attribute
+@docs data, aria
+@docs input
+
 @docs on
 @docs onBlur
 @docs onCheck
@@ -64,29 +68,10 @@ import Material.Internal.Options as Internal exposing (..)
 -- PROPERTIES
 
 
-{-|
-Type of elm-mdl optional properties. (Do not confuse these with Html properties
-or `Html.Attributes.property`.)
-
-The type variable `c` identifies the component the property is for. You never
-have to set it yourself. The type variable `m` is the type of your messages
-carried by the optional property, if applicable. You should set this yourself.
-
-The elements of the penultimate argument in the above call to
-`Textfield.render` has this type, specifically:
-
-    List (Property (Textfield.Config) Msg)
+{-| Generic component property.
 -}
 type alias Property c m =
     Internal.Property c m
-
-
-{-| Universally applicable elm-mdl properties, e.g., `Options.css`,
-`Typography.*`, or `Options.onClick`, may be applied to ordinary `Html` values
-such as `Html.h4` using `styled` below.
--}
-type alias Style m = -- TODO: remove
-    Property () m
 
 
 {-| Apply properties to a standard Html element.
@@ -141,7 +126,7 @@ data key val =
     Attribute (Html.Attributes.attribute ("data-" ++ key) val)
 
 
-{-| TODO
+{-| HTML aria-* attributes. Prefix "aria-" is added automatically.
 -}
 aria : String -> String -> Property c m
 aria key val =
@@ -181,21 +166,12 @@ attribute =
 
 
 {-| Apply argument options to `input` element in component implementation.
+
+TODO: re-implement
 -}
-input : List (Style m) -> Property (Input c m) m
+input : List (Property c m) -> Property ({ c | input : List (Property c m) }) m
 input =
     Internal.input
-
-
-{-| Apply argument options to container element in component implementation.
--}
-container : List (Style m) -> Property (Container c m) m
-container =
-    Internal.container
-
-
-
--- EVENTS
 
 
 {-| Add custom event handlers
@@ -269,10 +245,6 @@ onToggle msg =
     on "change" (Json.succeed msg)
 
 
-
--- FOCUS EVENTS
-
-
 {-| -}
 onBlur : msg -> Property c msg
 onBlur msg =
@@ -298,48 +270,9 @@ onWithOptions evt options =
     Listener evt (Just options)
 
 
-
--- DISPATCH
-
-
 {-| No-shorthand multiple-event dispatch.
 
-NB! You are _extremely_ unlikely to need this.
-
-You need this optional property in exactly these circumstances:
-1. You are using an elm-mdl component which has a `render` function.
-2. You are not using this `render` function, instead calling `view`.
-3. You installed an `on*` handler on the component, but that handler does not
-seem to take effect.
-
-What's happening in this case is that elm-mdl has an internal handler for the
-same event as your custom handler; e.g., you install `onBlur` on
-`Textfield`, but `Textfield`'s has an internal `onBlur` handler.
-
-In this case you need to tell the component how to dispatch multiple messages
-(one for you, one for itself) in response to a single DOM event. You do so by
-providing a means of folding a list of messages into a single message. (See
-the [Dispatch](https://github.com/vipentti/elm-dispatch) library for one way to define such a function.)
-
-The `render` function does all this automatically. If you are calling `render`,
-you do not need this property.
-
-Example use:
-
-
-    type Msg =
-      ...
-      | Textfield (Textfield.Msg)
-      | MyBlurMsg
-      | Batch (List Msg)
-
-    ...
-
-      Textfield.view Textfield model.textfield
-        [ Options.dispatch Batch
-        , Options.onBlur MyBlurMsg
-        ]
-        [ ]
+You are *extremely* unlikely to need this.
 -}
 dispatch : (List m -> m) -> Property c m
 dispatch =

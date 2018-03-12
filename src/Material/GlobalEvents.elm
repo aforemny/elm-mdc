@@ -1,110 +1,65 @@
 module Material.GlobalEvents exposing
-  (
-    onLoad
-  , onLoad1
-  , onTick
-  , onResize
-  , onResize1
-  , onPolledResize
-  , onPolledResize1
-  , onScroll
-  , onScroll1
-  , onMouseMove
-  , onTouchMove
-  , onPointerMove
-  , onMouseUp
-  , onTouchEnd
-  , onPointerUp
-  )
+    ( onMouseMove
+    , onMouseUp
+    , onPointerMove
+    , onPointerUp
+    , onResize
+    , onScroll
+    , onTick
+    , onTouchEnd
+    , onTouchMove
+    )
 
-import Html.Attributes as Html
-import Html.Events as Html
+import Json.Decode exposing (Decoder)
 import Material.Options as Options exposing (Property)
 
 
-{-| Triggers on window's `load` event – after resources have loaded –  and as
-well on insertion of the HTML element.  Might trigger more than once for the
-same HTML element
--}
-onLoad =
-  listener "globalload"
-
-
-{-|  Same as `onLoad` but one animation frame later.
--}
-onLoad1 =
-  listener "globalload1"
-
-
-{-| Triggers an event the first time the listener is installed. Treat this as a
-more reliable node insertion event.
--}
+onTick : Decoder m -> Property c m
 onTick =
   listener "globaltick"
 
 
-{-| Triggers on window's `resize` event.
--}
+onResize : Decoder m -> Property c m
 onResize =
   listener "globalresize"
 
 
-{-| Same as `onResize` but one animation frame later.
--}
-onResize1 =
-  listener "globalresize1"
-
-
-{-| TODO
--}
-onPolledResize =
-  listener "globalpolledresize"
-
-
-{-| Same as `onPolledResize` but one animation frame later.
--}
-onPolledResize1 =
-  listener "globalpolledresize1"
-
-
-{-| Triggers on document's `scroll` event.
-
-The event contains `pageX` and `pageY` properties.
--}
+onScroll : Decoder m -> Property c m
 onScroll =
   listener "globalscroll"
 
 
-{-| Same as `onScroll` but one animation frame later.
--}
-onScroll1 =
-  listener "globalscroll1"
-
-
+onMouseMove : Decoder m -> Property c m
 onMouseMove =
     listener "globalmousemove"
 
 
+onTouchMove : Decoder m -> Property c m
 onTouchMove =
     listener "globaltouchmove"
 
 
+onPointerMove : Decoder m -> Property c m
 onPointerMove =
     listener "globalpointermove"
 
 
+onMouseUp : Decoder m -> Property c m
 onMouseUp =
     listener "globalmouseup"
 
 
+onTouchEnd : Decoder m -> Property c m
 onTouchEnd =
     listener "globaltouchend"
 
 
+onPointerUp : Decoder m -> Property c m
 onPointerUp =
     listener "globalpointerup"
 
 
+listener : String -> Decoder m -> Property c m
 listener name decoder =
   Options.many
   [ Options.on name decoder

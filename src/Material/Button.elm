@@ -28,6 +28,11 @@ Material Design button requirements.
 # Example
 
 ```elm
+import Html exposing (text)
+import Material.Button as Button
+import Material.Options as Options
+
+
 Button.view Mdc [0] model.mdc
     [ Button.ripple
     , Options.onClick Click

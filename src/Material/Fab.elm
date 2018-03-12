@@ -24,6 +24,7 @@ A floating action button represents the primary action in an application.
 import Material.Fab as Fab
 import Material.Options as Options
 
+
 Fab.view Mdc [0] model.mdc
     [ Fab.ripple
     , Options.onClick Click

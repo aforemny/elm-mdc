@@ -4,9 +4,7 @@ module Material.Component
         , Indexed
         , indexed
         , render
-        , render1
         , subs
-        , react1
         , react
         , generalise
         )
@@ -20,20 +18,10 @@ module Material.Component
 import Dict exposing (Dict)
 import Material.Msg exposing (Index, Msg(..))
 
-{-| Type of indices. An index has to be `comparable`
-
-For example:
-An index can be a list of `Int` rather than just an `Int` to
-support nested dynamically constructed elements: Use indices `[0]`, `[1]`, ...
-for statically known top-level components, then use `[0,0]`, `[0,1]`, ...
-for a dynamically generated list of components.
--}
 type alias Index
     = Material.Msg.Index
 
 
-{-| Indexed families of things.
--}
 type alias Indexed x =
     Dict Index x
 
@@ -56,22 +44,6 @@ indexed get_model set_model model0 =
         ( get_, set_ )
 
 
-{-| TODO
--}
-render1 :
-    (store -> model)
-    -> ((msg -> m) -> model -> x)
-    -> (msg -> Msg m)
-    -> (Msg m -> m)
-    -> store
-    -> x
-render1 get_model view ctor =
-    \lift store ->
-        view (lift << ctor) (get_model store)
-
-
-{-| TODO
--}
 render :
     (Index -> store -> model)
     -> ((msg -> m) -> model -> x)
@@ -81,26 +53,12 @@ render :
     -> store
     -> x
 render get_model view ctor =
-    \lift idx store ->
+    \ lift idx store ->
         view (lift << ctor idx) (get_model idx store) 
 
 
 type alias Update msg m model =
     (msg -> m) -> msg -> model -> ( Maybe model, Cmd m )
-
-
-react1 :
-    (store -> model)
-    -> (store -> model -> store)
-    -> (msg -> mdcmsg)
-    -> Update msg m model
-    -> (mdcmsg -> m)
-    -> msg
-    -> store
-    -> ( Maybe store, Cmd m )
-react1 get set ctor update lift msg store =
-    update (lift << ctor) msg (get store)
-        |> Tuple.mapFirst (Maybe.map (set store))
 
 
 react :

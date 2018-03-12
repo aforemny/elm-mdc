@@ -24,6 +24,9 @@ or an equivalent means of loading the icons in your HTML header.
 # Example
 
 ```elm
+import Material.Icon as Icon
+
+
 Icon.view [] "settings"
 ```
 

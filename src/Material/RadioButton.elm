@@ -21,8 +21,13 @@ Design Specification.
 # Example
 
 ```elm
-Options.styled Html.div
-    [ Options.cs "mdc-form-field"
+import Html exposing (text)
+import Material.Options as Options exposing (styled, cs)
+import Material.RadioButton as RadioButton
+
+
+styled Html.div
+    [ cs "mdc-form-field"
     ]
     [ RadioButton.view Mdc [0] model.mdc
           [ RadioButton.selected

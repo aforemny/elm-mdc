@@ -21,8 +21,13 @@ the Material Design checkbox requirements.
 
 
 ```elm
-Options.styled Html.div
-    [ Options.cs "mdc-form-field"
+import Html exposing (text)
+import Material.Checkbox as Checkbox
+import Material.Options as Options exposing (styled, cs)
+
+
+styled Html.div
+    [ cs "mdc-form-field"
     ]
     [ Checkbox.view Mdc [0] model.mdc
           [ Checkbox.checked True

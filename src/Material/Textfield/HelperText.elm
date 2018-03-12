@@ -19,6 +19,7 @@ used. It should be visible either persistently or only on focus.
 # Example
 
 ```elm
+import Html exposing (text)
 import Material.Textfield as Textfield
 import Material.Textfield.HelperText as Textfield
 

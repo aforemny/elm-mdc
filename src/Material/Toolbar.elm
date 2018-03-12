@@ -38,6 +38,10 @@ the view is scrolled.
 # Example
 
 ```elm
+import Html exposing (text)
+import Material.Toolbar as Toolbar
+
+
 Toolbar.view Mdc [0] model.mdc []
     [ Toolbar.row []
           [ Toolbar.section

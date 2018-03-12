@@ -36,7 +36,7 @@ import Material.Slider as Slider
 
 Slider.view Mdc [0] model.mdc
     [ Slider.value 40
-    , Slider.onChange (Json.succeed << Change)
+    , Slider.onChange Change
     ]
     []
 ```
