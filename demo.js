@@ -16133,26 +16133,15 @@ var _aforemny$elm_mdc$Material_Slider$Config = F8(
 
 var _aforemny$elm_mdc$Material_Snackbar$alignEnd = _aforemny$elm_mdc$Material_Options$cs('mdc-snackbar--align-end');
 var _aforemny$elm_mdc$Material_Snackbar$alignStart = _aforemny$elm_mdc$Material_Options$cs('mdc-snackbar--align-start');
-var _aforemny$elm_mdc$Material_Snackbar$onDismiss = function (_p0) {
-	return _aforemny$elm_mdc$Material_Internal_Options$option(
-		F2(
-			function (msg, config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						onDismiss: _elm_lang$core$Maybe$Just(msg)
-					});
-			})(_p0));
-};
-var _aforemny$elm_mdc$Material_Snackbar$defaultConfig = {onDismiss: _elm_lang$core$Maybe$Nothing};
-var _aforemny$elm_mdc$Material_Snackbar$view = F4(
-	function (lift, model, options, _p1) {
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Snackbar$defaultConfig, options);
-		var summary = _p2;
-		var config = _p2.config;
+var _aforemny$elm_mdc$Material_Snackbar$defaultConfig = {};
+var _aforemny$elm_mdc$Material_Snackbar$snackbar = F4(
+	function (lift, model, options, _p0) {
+		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Snackbar$defaultConfig, options);
+		var summary = _p1;
+		var config = _p1.config;
 		var isActive = function () {
-			var _p3 = model.state;
-			switch (_p3.ctor) {
+			var _p2 = model.state;
+			switch (_p2.ctor) {
 				case 'Inert':
 					return false;
 				case 'Active':
@@ -16162,20 +16151,26 @@ var _aforemny$elm_mdc$Material_Snackbar$view = F4(
 			}
 		}();
 		var contents = function () {
-			var _p4 = model.state;
-			switch (_p4.ctor) {
+			var _p3 = model.state;
+			switch (_p3.ctor) {
 				case 'Inert':
 					return _elm_lang$core$Maybe$Nothing;
 				case 'Active':
-					return _elm_lang$core$Maybe$Just(_p4._0);
+					return _elm_lang$core$Maybe$Just(_p3._0);
 				default:
-					return _elm_lang$core$Maybe$Just(_p4._0);
+					return _elm_lang$core$Maybe$Just(_p3._0);
 			}
 		}();
 		var action = A2(
 			_elm_lang$core$Maybe$andThen,
 			function (_) {
 				return _.action;
+			},
+			contents);
+		var onDismiss = A2(
+			_elm_lang$core$Maybe$andThen,
+			function (_) {
+				return _.onDismiss;
 			},
 			contents);
 		var multiline = _elm_lang$core$Native_Utils.eq(
@@ -16194,16 +16189,6 @@ var _aforemny$elm_mdc$Material_Snackbar$view = F4(
 				},
 				contents),
 			_elm_lang$core$Maybe$Just(true)) && multiline;
-		var dismissHandler = function () {
-			var _p5 = {ctor: '_Tuple2', _0: contents, _1: config.onDismiss};
-			if (((_p5.ctor === '_Tuple2') && (_p5._0.ctor === 'Just')) && (_p5._1.ctor === 'Just')) {
-				return _aforemny$elm_mdc$Material_Options$onClick(
-					lift(
-						A2(_aforemny$elm_mdc$Material_Internal_Snackbar$Dismiss, _p5._0._0.dismissOnAction, config.onDismiss)));
-			} else {
-				return _aforemny$elm_mdc$Material_Options$nop;
-			}
-		}();
 		return A5(
 			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
@@ -16282,7 +16267,17 @@ var _aforemny$elm_mdc$Material_Snackbar$view = F4(
 											_elm_lang$html$Html_Attributes$type_('button')),
 										_1: {
 											ctor: '::',
-											_0: dismissHandler,
+											_0: function () {
+												var _p4 = onDismiss;
+												if (_p4.ctor === 'Just') {
+													return A2(
+														_aforemny$elm_mdc$Material_Options$on,
+														'click',
+														_elm_lang$core$Json_Decode$succeed(_p4._0));
+												} else {
+													return _aforemny$elm_mdc$Material_Options$nop;
+												}
+											}(),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -16325,8 +16320,8 @@ var _aforemny$elm_mdc$Material_Snackbar$next = function (model) {
 	return _elm_lang$core$Platform_Cmd$map(
 		_aforemny$elm_mdc$Material_Internal_Snackbar$Move(model.seq));
 };
-var _aforemny$elm_mdc$Material_Snackbar$snack = F2(
-	function (message, label) {
+var _aforemny$elm_mdc$Material_Snackbar$snack = F3(
+	function (onDismiss, message, label) {
 		return {
 			message: message,
 			action: _elm_lang$core$Maybe$Just(label),
@@ -16334,23 +16329,23 @@ var _aforemny$elm_mdc$Material_Snackbar$snack = F2(
 			fade: 250,
 			multiline: true,
 			actionOnBottom: false,
-			dismissOnAction: true
+			dismissOnAction: true,
+			onDismiss: onDismiss
 		};
 	});
-var _aforemny$elm_mdc$Material_Snackbar$toast = function (message) {
-	return {message: message, action: _elm_lang$core$Maybe$Nothing, timeout: 2750, fade: 250, multiline: false, actionOnBottom: false, dismissOnAction: true};
-};
-var _aforemny$elm_mdc$Material_Snackbar$Contents = F7(
-	function (a, b, c, d, e, f, g) {
-		return {message: a, action: b, timeout: c, fade: d, multiline: e, actionOnBottom: f, dismissOnAction: g};
+var _aforemny$elm_mdc$Material_Snackbar$toast = F2(
+	function (onDismiss, message) {
+		return {message: message, action: _elm_lang$core$Maybe$Nothing, timeout: 2750, fade: 250, multiline: false, actionOnBottom: false, dismissOnAction: true, onDismiss: onDismiss};
+	});
+var _aforemny$elm_mdc$Material_Snackbar$Contents = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {message: a, action: b, timeout: c, fade: d, multiline: e, actionOnBottom: f, dismissOnAction: g, onDismiss: h};
 	});
 var _aforemny$elm_mdc$Material_Snackbar$Model = F3(
 	function (a, b, c) {
 		return {queue: a, state: b, seq: c};
 	});
-var _aforemny$elm_mdc$Material_Snackbar$Config = function (a) {
-	return {onDismiss: a};
-};
+var _aforemny$elm_mdc$Material_Snackbar$Config = {};
 var _aforemny$elm_mdc$Material_Snackbar$Fading = function (a) {
 	return {ctor: 'Fading', _0: a};
 };
@@ -16358,17 +16353,17 @@ var _aforemny$elm_mdc$Material_Snackbar$Active = function (a) {
 	return {ctor: 'Active', _0: a};
 };
 var _aforemny$elm_mdc$Material_Snackbar$tryDequeue = function (model) {
-	var _p6 = {ctor: '_Tuple2', _0: model.state, _1: model.queue};
-	if (((_p6.ctor === '_Tuple2') && (_p6._0.ctor === 'Inert')) && (_p6._1.ctor === '::')) {
-		var _p7 = _p6._1._0;
+	var _p5 = {ctor: '_Tuple2', _0: model.state, _1: model.queue};
+	if (((_p5.ctor === '_Tuple2') && (_p5._0.ctor === 'Inert')) && (_p5._1.ctor === '::')) {
+		var _p6 = _p5._1._0;
 		return {
 			ctor: '_Tuple2',
 			_0: _elm_lang$core$Maybe$Just(
 				_elm_lang$core$Native_Utils.update(
 					model,
 					{
-						state: _aforemny$elm_mdc$Material_Snackbar$Active(_p7),
-						queue: _p6._1._1,
+						state: _aforemny$elm_mdc$Material_Snackbar$Active(_p6),
+						queue: _p5._1._1,
 						seq: model.seq + 1
 					})),
 			_1: _elm_lang$core$Platform_Cmd$batch(
@@ -16377,7 +16372,7 @@ var _aforemny$elm_mdc$Material_Snackbar$tryDequeue = function (model) {
 					_0: A2(
 						_elm_lang$core$Platform_Cmd$map,
 						_aforemny$elm_mdc$Material_Internal_Snackbar$Move(model.seq + 1),
-						A2(_aforemny$elm_mdc$Material_Helpers$delay, _p7.timeout, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
+						A2(_aforemny$elm_mdc$Material_Helpers$delay, _p6.timeout, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
 					_1: {ctor: '[]'}
 				})
 		};
@@ -16400,18 +16395,18 @@ var _aforemny$elm_mdc$Material_Snackbar$add = F4(
 			_elm_lang$core$Maybe$withDefault,
 			_aforemny$elm_mdc$Material_Snackbar$defaultModel,
 			A2(_elm_lang$core$Dict$get, idx, model.mdc.snackbar));
-		var _p8 = _aforemny$elm_mdc$Material_Snackbar$tryDequeue(
+		var _p7 = _aforemny$elm_mdc$Material_Snackbar$tryDequeue(
 			A2(_aforemny$elm_mdc$Material_Snackbar$enqueue, contents, component_));
-		var component = _p8._0;
-		var effects = _p8._1;
+		var component = _p7._0;
+		var effects = _p7._1;
 		var mdc = function () {
 			var mdc_ = model.mdc;
-			var _p9 = component;
-			if (_p9.ctor === 'Just') {
+			var _p8 = component;
+			if (_p8.ctor === 'Just') {
 				return _elm_lang$core$Native_Utils.update(
 					mdc_,
 					{
-						snackbar: A3(_elm_lang$core$Dict$insert, idx, _p9._0, mdc_.snackbar)
+						snackbar: A3(_elm_lang$core$Dict$insert, idx, _p8._0, mdc_.snackbar)
 					});
 			} else {
 				return mdc_;
@@ -16426,15 +16421,15 @@ var _aforemny$elm_mdc$Material_Snackbar$add = F4(
 				ctor: '::',
 				_0: A2(
 					_elm_lang$core$Platform_Cmd$map,
-					function (_p10) {
+					function (_p9) {
 						return lift(
-							A2(_aforemny$elm_mdc$Material_Msg$SnackbarMsg, idx, _p10));
+							A2(_aforemny$elm_mdc$Material_Msg$SnackbarMsg, idx, _p9));
 					},
 					effects),
 				_1: {ctor: '[]'}
 			});
 	});
-var _aforemny$elm_mdc$Material_Snackbar$_p11 = A3(
+var _aforemny$elm_mdc$Material_Snackbar$_p10 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.snackbar;
@@ -16446,57 +16441,57 @@ var _aforemny$elm_mdc$Material_Snackbar$_p11 = A3(
 				{snackbar: x});
 		}),
 	_aforemny$elm_mdc$Material_Snackbar$defaultModel);
-var _aforemny$elm_mdc$Material_Snackbar$get = _aforemny$elm_mdc$Material_Snackbar$_p11._0;
-var _aforemny$elm_mdc$Material_Snackbar$set = _aforemny$elm_mdc$Material_Snackbar$_p11._1;
-var _aforemny$elm_mdc$Material_Snackbar$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Snackbar$get, _aforemny$elm_mdc$Material_Snackbar$view, _aforemny$elm_mdc$Material_Msg$SnackbarMsg);
+var _aforemny$elm_mdc$Material_Snackbar$get = _aforemny$elm_mdc$Material_Snackbar$_p10._0;
+var _aforemny$elm_mdc$Material_Snackbar$set = _aforemny$elm_mdc$Material_Snackbar$_p10._1;
+var _aforemny$elm_mdc$Material_Snackbar$view = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Snackbar$get, _aforemny$elm_mdc$Material_Snackbar$snackbar, _aforemny$elm_mdc$Material_Msg$SnackbarMsg);
 var _aforemny$elm_mdc$Material_Snackbar$move = F2(
 	function (transition, model) {
-		var _p12 = {ctor: '_Tuple2', _0: model.state, _1: transition};
+		var _p11 = {ctor: '_Tuple2', _0: model.state, _1: transition};
 		_v5_4:
 		do {
-			if (_p12.ctor === '_Tuple2') {
-				if (_p12._1.ctor === 'Clicked') {
-					if (_p12._0.ctor === 'Active') {
-						var _p13 = _p12._0._0;
+			if (_p11.ctor === '_Tuple2') {
+				if (_p11._1.ctor === 'Clicked') {
+					if (_p11._0.ctor === 'Active') {
+						var _p12 = _p11._0._0;
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
 							_elm_lang$core$Maybe$Just(
 								_elm_lang$core$Native_Utils.update(
 									model,
 									{
-										state: _aforemny$elm_mdc$Material_Snackbar$Fading(_p13)
+										state: _aforemny$elm_mdc$Material_Snackbar$Fading(_p12)
 									})),
 							{
 								ctor: '::',
 								_0: A2(
 									_aforemny$elm_mdc$Material_Snackbar$next,
 									model,
-									A2(_aforemny$elm_mdc$Material_Helpers$delay, _p13.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
+									A2(_aforemny$elm_mdc$Material_Helpers$delay, _p12.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
 								_1: {ctor: '[]'}
 							});
 					} else {
 						break _v5_4;
 					}
 				} else {
-					switch (_p12._0.ctor) {
+					switch (_p11._0.ctor) {
 						case 'Inert':
 							return _aforemny$elm_mdc$Material_Snackbar$tryDequeue(model);
 						case 'Active':
-							var _p14 = _p12._0._0;
+							var _p13 = _p11._0._0;
 							return A2(
 								_elm_lang$core$Platform_Cmd_ops['!'],
 								_elm_lang$core$Maybe$Just(
 									_elm_lang$core$Native_Utils.update(
 										model,
 										{
-											state: _aforemny$elm_mdc$Material_Snackbar$Fading(_p14)
+											state: _aforemny$elm_mdc$Material_Snackbar$Fading(_p13)
 										})),
 								{
 									ctor: '::',
 									_0: A2(
 										_aforemny$elm_mdc$Material_Snackbar$next,
 										model,
-										A2(_aforemny$elm_mdc$Material_Helpers$delay, _p14.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
+										A2(_aforemny$elm_mdc$Material_Helpers$delay, _p13.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
 									_1: {ctor: '[]'}
 								});
 						default:
@@ -16527,20 +16522,20 @@ var _aforemny$elm_mdc$Material_Snackbar$move = F2(
 	});
 var _aforemny$elm_mdc$Material_Snackbar$update = F3(
 	function (fwd, msg, model) {
-		var _p15 = msg;
-		if (_p15.ctor === 'Move') {
-			return _elm_lang$core$Native_Utils.eq(_p15._0, model.seq) ? A2(
+		var _p14 = msg;
+		if (_p14.ctor === 'Move') {
+			return _elm_lang$core$Native_Utils.eq(_p14._0, model.seq) ? A2(
 				_elm_lang$core$Tuple$mapSecond,
 				_elm_lang$core$Platform_Cmd$map(fwd),
-				A2(_aforemny$elm_mdc$Material_Snackbar$move, _p15._1, model)) : A2(
+				A2(_aforemny$elm_mdc$Material_Snackbar$move, _p14._1, model)) : A2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
 				_elm_lang$core$Maybe$Nothing,
 				{ctor: '[]'});
 		} else {
 			var fwdEffect = function () {
-				var _p16 = _p15._1;
-				if (_p16.ctor === 'Just') {
-					return _aforemny$elm_mdc$Material_Helpers$cmd(_p16._0);
+				var _p15 = _p14._1;
+				if (_p15.ctor === 'Just') {
+					return _aforemny$elm_mdc$Material_Helpers$cmd(_p15._0);
 				} else {
 					return _elm_lang$core$Platform_Cmd$none;
 				}
@@ -16559,7 +16554,7 @@ var _aforemny$elm_mdc$Material_Snackbar$update = F3(
 							}
 						});
 				},
-				_p15._0 ? A3(
+				_p14._0 ? A3(
 					_aforemny$elm_mdc$Material_Snackbar$update,
 					fwd,
 					A2(_aforemny$elm_mdc$Material_Internal_Snackbar$Move, model.seq, _aforemny$elm_mdc$Material_Internal_Snackbar$Clicked),
@@ -23656,7 +23651,7 @@ var _aforemny$elm_mdc$Demo_Elevation$view = F3(
 var _aforemny$elm_mdc$Demo_Elevation$defaultModel = {transition: false, elevation: 1, mdc: _aforemny$elm_mdc$Material$defaultModel};
 var _aforemny$elm_mdc$Demo_Elevation$Model = F3(
 	function (a, b, c) {
-		return {transition: a, elevation: b, mdc: c};
+		return {mdc: a, transition: b, elevation: c};
 	});
 var _aforemny$elm_mdc$Demo_Elevation$Mdc = function (a) {
 	return {ctor: 'Mdc', _0: a};
@@ -36114,7 +36109,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$Model = F6(
 		return {mdc: a, multiline: b, actionOnBottom: c, dismissOnAction: d, messageText: e, actionText: f};
 	});
 var _aforemny$elm_mdc$Demo_Snackbar$NoOp = {ctor: 'NoOp'};
-var _aforemny$elm_mdc$Demo_Snackbar$Dismiss = {ctor: 'Dismiss'};
+var _aforemny$elm_mdc$Demo_Snackbar$Dismiss = function (a) {
+	return {ctor: 'Dismiss', _0: a};
+};
 var _aforemny$elm_mdc$Demo_Snackbar$Show = function (a) {
 	return {ctor: 'Show', _0: a};
 };
@@ -36188,12 +36185,23 @@ var _aforemny$elm_mdc$Demo_Snackbar$update = F3(
 			case 'Show':
 				var contents = function () {
 					if (model.multiline) {
-						var snack = A2(_aforemny$elm_mdc$Material_Snackbar$snack, model.messageText, model.actionText);
+						var snack = A3(
+							_aforemny$elm_mdc$Material_Snackbar$snack,
+							_elm_lang$core$Maybe$Just(
+								lift(
+									_aforemny$elm_mdc$Demo_Snackbar$Dismiss(model.messageText))),
+							model.messageText,
+							model.actionText);
 						return _elm_lang$core$Native_Utils.update(
 							snack,
 							{dismissOnAction: model.dismissOnAction, actionOnBottom: model.actionOnBottom});
 					} else {
-						var toast = _aforemny$elm_mdc$Material_Snackbar$toast(model.messageText);
+						var toast = A2(
+							_aforemny$elm_mdc$Material_Snackbar$toast,
+							_elm_lang$core$Maybe$Just(
+								lift(
+									_aforemny$elm_mdc$Demo_Snackbar$Dismiss(model.messageText))),
+							model.messageText);
 						return _elm_lang$core$Native_Utils.update(
 							toast,
 							{
@@ -36212,7 +36220,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$update = F3(
 					contents,
 					model);
 			default:
-				var _p3 = A2(_elm_lang$core$Debug$log, 'msg', _aforemny$elm_mdc$Demo_Snackbar$Dismiss);
+				var _p3 = A2(_elm_lang$core$Debug$log, 'Dismiss', _p0._0);
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
@@ -36246,41 +36254,76 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: function () {
-							var demoSnackbar = function () {
-								var snack = A2(_aforemny$elm_mdc$Material_Snackbar$snack, 'Message sent', 'Undo');
-								var contents = _elm_lang$core$Native_Utils.update(
-									snack,
-									{multiline: false});
-								var def = _aforemny$elm_mdc$Material_Snackbar$defaultModel;
-								return _elm_lang$core$Native_Utils.update(
-									def,
-									{
-										queue: {ctor: '[]'},
-										state: _aforemny$elm_mdc$Material_Snackbar$Active(contents),
-										seq: 0
-									});
-							}();
-							return A4(
-								_aforemny$elm_mdc$Material_Snackbar$view,
-								_elm_lang$core$Basics$always(
-									lift(_aforemny$elm_mdc$Demo_Snackbar$NoOp)),
-								demoSnackbar,
-								{
+						_0: A3(
+							_aforemny$elm_mdc$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'relative'),
+								_1: {
 									ctor: '::',
-									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'relative'),
+									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'left', '0'),
 									_1: {
 										ctor: '::',
-										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'left', '0'),
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'transform', 'none'),
 										_1: {
 											ctor: '::',
-											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'transform', 'none'),
+											_0: _aforemny$elm_mdc$Material_Options$cs('mdc-snackbar mdc-snackbar--active'),
 											_1: {ctor: '[]'}
 										}
 									}
-								},
-								{ctor: '[]'});
-						}(),
+								}
+							},
+							{
+								ctor: '::',
+								_0: A3(
+									_aforemny$elm_mdc$Material_Options$styled,
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$cs('mdc-snackbar__text'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Message sent'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A3(
+										_aforemny$elm_mdc$Material_Options$styled,
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Options$cs('mdc-snackbar__action-wrapper'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A3(
+												_aforemny$elm_mdc$Material_Options$styled,
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$type_('button')),
+													_1: {
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Options$cs('mdc-snackbar__action-button'),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Undo'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -36751,7 +36794,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																										_1: {
 																											ctor: '::',
 																											_0: A5(
-																												_aforemny$elm_mdc$Material_Snackbar$render,
+																												_aforemny$elm_mdc$Material_Snackbar$view,
 																												function (_p16) {
 																													return lift(
 																														_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p16));
@@ -36762,12 +36805,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																													_1: {ctor: '[]'}
 																												},
 																												model.mdc,
-																												{
-																													ctor: '::',
-																													_0: _aforemny$elm_mdc$Material_Snackbar$onDismiss(
-																														lift(_aforemny$elm_mdc$Demo_Snackbar$Dismiss)),
-																													_1: {ctor: '[]'}
-																												},
+																												{ctor: '[]'},
 																												{ctor: '[]'}),
 																											_1: {
 																												ctor: '::',
@@ -36781,7 +36819,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																													{
 																														ctor: '::',
 																														_0: A5(
-																															_aforemny$elm_mdc$Material_Snackbar$render,
+																															_aforemny$elm_mdc$Material_Snackbar$view,
 																															function (_p17) {
 																																return lift(
 																																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p17));
@@ -36792,19 +36830,14 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																																_1: {ctor: '[]'}
 																															},
 																															model.mdc,
-																															{
-																																ctor: '::',
-																																_0: _aforemny$elm_mdc$Material_Snackbar$onDismiss(
-																																	lift(_aforemny$elm_mdc$Demo_Snackbar$Dismiss)),
-																																_1: {ctor: '[]'}
-																															},
+																															{ctor: '[]'},
 																															{ctor: '[]'}),
 																														_1: {ctor: '[]'}
 																													}),
 																												_1: {
 																													ctor: '::',
 																													_0: A5(
-																														_aforemny$elm_mdc$Material_Snackbar$render,
+																														_aforemny$elm_mdc$Material_Snackbar$view,
 																														function (_p18) {
 																															return lift(
 																																_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p18));
@@ -36817,13 +36850,8 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																														model.mdc,
 																														{
 																															ctor: '::',
-																															_0: _aforemny$elm_mdc$Material_Snackbar$onDismiss(
-																																lift(_aforemny$elm_mdc$Demo_Snackbar$Dismiss)),
-																															_1: {
-																																ctor: '::',
-																																_0: _aforemny$elm_mdc$Material_Snackbar$alignStart,
-																																_1: {ctor: '[]'}
-																															}
+																															_0: _aforemny$elm_mdc$Material_Snackbar$alignStart,
+																															_1: {ctor: '[]'}
 																														},
 																														{ctor: '[]'}),
 																													_1: {
@@ -36838,7 +36866,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																															{
 																																ctor: '::',
 																																_0: A5(
-																																	_aforemny$elm_mdc$Material_Snackbar$render,
+																																	_aforemny$elm_mdc$Material_Snackbar$view,
 																																	function (_p19) {
 																																		return lift(
 																																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p19));
@@ -36851,13 +36879,8 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																																	model.mdc,
 																																	{
 																																		ctor: '::',
-																																		_0: _aforemny$elm_mdc$Material_Snackbar$onDismiss(
-																																			lift(_aforemny$elm_mdc$Demo_Snackbar$Dismiss)),
-																																		_1: {
-																																			ctor: '::',
-																																			_0: _aforemny$elm_mdc$Material_Snackbar$alignStart,
-																																			_1: {ctor: '[]'}
-																																		}
+																																		_0: _aforemny$elm_mdc$Material_Snackbar$alignStart,
+																																		_1: {ctor: '[]'}
 																																	},
 																																	{ctor: '[]'}),
 																																_1: {ctor: '[]'}
