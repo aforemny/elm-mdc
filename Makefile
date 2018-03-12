@@ -19,7 +19,7 @@ setup:
 
 elm-focus-trap.js:
 	(cd elm-focus-trap; make)
-	cp elm-focus-trap/bundle.js elm-focus-trap.js
+	cp elm-focus-trap/dist/bundle.js elm-focus-trap.js
 
 elm-autofocus.js:
 	cp elm-autofocus/elm-autofocus.js .
