@@ -99,7 +99,10 @@ view lift page model =
               Dict.get [0] model.iconToggles
               |> Maybe.withDefault False
         in
-        toggleExample []
+        styled Html.div
+        [ cs "demo-wrapper"
+        , css "margin-left" "1rem"
+        ]
         [ iconToggle [0]
               [ IconToggle.label
                 { on = "Remove from Fravorites"
