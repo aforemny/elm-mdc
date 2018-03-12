@@ -10,7 +10,6 @@ import Material
 import Material.Component exposing (Index)
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Slider as Slider
-import Material.Theme as Theme
 import Platform.Cmd exposing (Cmd, none)
 
 
@@ -111,8 +110,7 @@ view lift page model =
         sliderWrapper options =
           styled Html.div
           ( ( when model.darkTheme << Options.many <|
-              [ Theme.dark
-              , css "background-color" "#333"
+              [ css "background-color" "#333"
               , css "--mdc-theme-primary" "#64dd17" -- TODO
               ]
             )

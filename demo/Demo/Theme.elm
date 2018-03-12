@@ -51,13 +51,13 @@ view lift page model =
       ]
       
     , h2 []
-      [ Html.text "Theme colors"
+      [ text "Theme colors"
       ]
     , themeColorsAsText
     , themeColorsAsBackground
 
     , h2 []
-      [ Html.text "Text colors for contrast"
+      [ text "Text colors for contrast"
       ]
 
     , example1
@@ -68,26 +68,26 @@ themeColorsAsText : Html m
 themeColorsAsText =
     example []
     [ h3 []
-      [ Html.text "Theme colors as text"
+      [ text "Theme colors as text"
       ]
     , demoThemeColor []
       [
         demoThemeColorBlock
         [ Theme.primary
         ]
-        [ Html.text "Primary"
+        [ text "Primary"
         ]
 
       , demoThemeColorBlock
         [ Theme.primaryLight
         ]
-        [ Html.text "Primary Light"
+        [ text "Primary Light"
         ]
 
       , demoThemeColorBlock
         [ Theme.primaryDark
         ]
-        [ Html.text "Primary Dark"
+        [ text "Primary Dark"
         ]
       ]
     , demoThemeColor []
@@ -95,19 +95,19 @@ themeColorsAsText =
         demoThemeColorBlock
         [ Theme.secondary
         ]
-        [ Html.text "Secondary"
+        [ text "Secondary"
         ]
 
       , demoThemeColorBlock
         [ Theme.secondaryLight
         ]
-        [ Html.text "Secondary Light"
+        [ text "Secondary Light"
         ]
 
       , demoThemeColorBlock
         [ Theme.secondaryDark
         ]
-        [ Html.text "Secondary Dark"
+        [ text "Secondary Dark"
         ]
       ]
     ]
@@ -117,26 +117,26 @@ themeColorsAsBackground : Html m
 themeColorsAsBackground =
     example []
     [ h3 []
-      [ Html.text "Theme colors as background"
+      [ text "Theme colors as background"
       ]
     , demoThemeColor []
       [
         demoThemeColorBlock
         [ Theme.primaryBg
         ]
-        [ Html.text "Primary"
+        [ text "Primary"
         ]
 
       , demoThemeColorBlock
         [ Theme.primaryLightBg
         ]
-        [ Html.text "Primary Light"
+        [ text "Primary Light"
         ]
 
       , demoThemeColorBlock
         [ Theme.primaryDarkBg
         ]
-        [ Html.text "Primary Dark"
+        [ text "Primary Dark"
         ]
       ]
     , demoThemeColor []
@@ -144,19 +144,19 @@ themeColorsAsBackground =
         demoThemeColorBlock
         [ Theme.secondaryBg
         ]
-        [ Html.text "Secondary"
+        [ text "Secondary"
         ]
 
       , demoThemeColorBlock
         [ Theme.secondaryLightBg
         ]
-        [ Html.text "Secondary Light"
+        [ text "Secondary Light"
         ]
 
       , demoThemeColorBlock
         [ Theme.secondaryDarkBg
         ]
-        [ Html.text "Secondary Dark"
+        [ text "Secondary Dark"
         ]
       ]
     , demoThemeColor []
@@ -164,7 +164,7 @@ themeColorsAsBackground =
         demoThemeColorBlock
         [ Theme.background
         ]
-        [ Html.text "Background"
+        [ text "Background"
         ]
       ]
     ]
@@ -215,63 +215,63 @@ example1 =
     in
     example []
     [ h3 []
-      [ Html.text "Text on background"
+      [ text "Text on background"
       ]
 
     , demo Theme.background
-      [ \options -> styled Html.span (Theme.textPrimaryOnBackground::options) [ Html.text "Primary" ]
-      , \options -> styled Html.span (Theme.textSecondaryOnBackground::options) [ Html.text "Secondary" ]
-      , \options -> styled Html.span (Theme.textHintOnBackground::options) [ Html.text "Hint" ]
-      , \options -> styled Html.span (Theme.textHintOnBackground::options) [ Html.text "Disabled" ]
-      , \options -> Theme.textIconOnBackground options "favorite"
+      [ \options -> styled Html.span (Theme.textPrimaryOnBackground::options) [ text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnBackground::options) [ text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnBackground::options) [ text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnBackground::options) [ text "Disabled" ]
+      , \options -> styled Html.span (Theme.textIconOnBackground::options) [ text "favorite" ]
       ]
 
     , h3 []
-      [ Html.text "Text on primary"
+      [ text "Text on primary"
       ]
 
     , demo Theme.primaryBg
-      [ \options -> styled Html.span (Theme.textPrimaryOnPrimary::options) [ Html.text "Primary" ]
-      , \options -> styled Html.span (Theme.textSecondaryOnPrimary::options) [ Html.text "Secondary" ]
-      , \options -> styled Html.span (Theme.textHintOnPrimary::options) [ Html.text "Hint" ]
-      , \options -> styled Html.span (Theme.textHintOnPrimary::options) [ Html.text "Disabled" ]
-      , \options -> Theme.textIconOnPrimary options "favorite"
+      [ \options -> styled Html.span (Theme.textPrimaryOnPrimary::options) [ text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnPrimary::options) [ text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnPrimary::options) [ text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnPrimary::options) [ text "Disabled" ]
+      , \options -> styled Html.span (Theme.textIconOnPrimary::options) [ text "favorite" ]
       ]
 
     , h3 []
-      [ Html.text "Text on secondary"
+      [ text "Text on secondary"
       ]
 
     , demo Theme.secondaryBg
-      [ \options -> styled Html.span (Theme.textPrimaryOnSecondary::options) [ Html.text "Primary" ]
-      , \options -> styled Html.span (Theme.textSecondaryOnSecondary::options) [ Html.text "Secondary" ]
-      , \options -> styled Html.span (Theme.textHintOnSecondary::options) [ Html.text "Hint" ]
-      , \options -> styled Html.span (Theme.textHintOnSecondary::options) [ Html.text "Disabled" ]
-      , \options -> Theme.textIconOnSecondary options "favorite"
+      [ \options -> styled Html.span (Theme.textPrimaryOnSecondary::options) [ text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnSecondary::options) [ text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnSecondary::options) [ text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnSecondary::options) [ text "Disabled" ]
+      , \options -> styled Html.span (Theme.textIconOnSecondary::options) [ text "favorite" ]
       ]
 
     , h3 []
-      [ Html.text "Text on user-defined light background"
+      [ text "Text on user-defined light background"
       ]
 
     , demo (css "background-color" "#dddddd")
-      [ \options -> styled Html.span (Theme.textPrimaryOnLight::options) [ Html.text "Primary" ]
-      , \options -> styled Html.span (Theme.textSecondaryOnLight::options) [ Html.text "Secondary" ]
-      , \options -> styled Html.span (Theme.textHintOnLight::options) [ Html.text "Hint" ]
-      , \options -> styled Html.span (Theme.textHintOnLight::options) [ Html.text "Disabled" ]
-      , \options -> Theme.textIconOnLight options "favorite"
+      [ \options -> styled Html.span (Theme.textPrimaryOnLight::options) [ text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnLight::options) [ text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnLight::options) [ text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnLight::options) [ text "Disabled" ]
+      , \options -> styled Html.span (Theme.textIconOnLight::options) [ text "favorite" ]
       ]
 
     , h3 []
-      [ Html.text "Text on user-defined dark background"
+      [ text "Text on user-defined dark background"
       ]
 
     , demo (css "background-color" "#1d1d1d")
-      [ \options -> styled Html.span (Theme.textPrimaryOnDark::options) [ Html.text "Primary" ]
-      , \options -> styled Html.span (Theme.textSecondaryOnDark::options) [ Html.text "Secondary" ]
-      , \options -> styled Html.span (Theme.textHintOnDark::options) [ Html.text "Hint" ]
-      , \options -> styled Html.span (Theme.textHintOnDark::options) [ Html.text "Disabled" ]
-      , \options -> Theme.textIconOnDark options "favorite"
+      [ \options -> styled Html.span (Theme.textPrimaryOnDark::options) [ text "Primary" ]
+      , \options -> styled Html.span (Theme.textSecondaryOnDark::options) [ text "Secondary" ]
+      , \options -> styled Html.span (Theme.textHintOnDark::options) [ text "Hint" ]
+      , \options -> styled Html.span (Theme.textHintOnDark::options) [ text "Disabled" ]
+      , \options -> styled Html.span (Theme.textIconOnDark::options) [ text "favorite" ]
       ]
     ]
 
