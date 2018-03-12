@@ -1,40 +1,49 @@
-module Material.Fab
-    exposing
-        ( defaultModel
-        , exited
-        , mini
-        , Model
-        , Msg
-        , Property
-        , react
-        , render
-        , ripple
-        , Store
-        , update
-        , view
-        )
+module Material.Fab exposing
+    ( exited
+    , mini
+    , Model
+    , Property
+    , react
+    , ripple
+    , view
+    )
 
-{-| The MDC FAB component is a spec-aligned button component adhering to the
-Material Design FAB requirements.
+{-|
+A floating action button represents the primary action in an application.
 
-## Design & API Documentation
+
+# Resources
 
 - [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons-floating-action-button.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#fab)
 
-## View
-@docs view
 
-## Properties
+# Example
+
+```elm
+import Material.Fab as Fab
+import Material.Options as Options
+
+Fab.view Mdc [0] model.mdc
+    [ Fab.ripple
+    , Options.onClick Click
+    ]
+    "favorite_border"
+```
+
+
+# Usage
 @docs Property
-@docs disabled, plain, mini, ripple
+@docs view
+@docs Property
+@docs mini
+@docs ripple
+@docs exited
 
-## TEA architecture
-@docs Model, defaultModel, Msg, update
 
-## Featured render
-@docs render
-@docs Store, react
+# Internal
+@docs Model
+@docs react
 -}
 
 import Html exposing (..)
@@ -46,6 +55,10 @@ import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Ripple as Ripple
 
 
+{-| Fab model.
+
+Internal use only.
+-}
 type alias Model =
     { ripple : Ripple.Model
     }
@@ -86,27 +99,37 @@ defaultConfig =
     }
 
 
+{-| Fab property.
+-}
 type alias Property m =
     Options.Property Config m
 
 
+{-| Make the Fab smaller than regular size.
+-}
 mini : Property m
 mini =
     cs "mdc-fab--mini"
 
 
+{-| Animates the Fab out of view when this property is set.
+
+It returns to view when this property is removed.
+-}
 exited : Property m
 exited =
     cs "mdc-fab--exited"
 
 
+{-| Enable ripple effect on interaction.
+-}
 ripple : Property m
 ripple =
     Internal.option (\config -> { config | ripple = True })
 
 
-view : (Msg -> m) -> Model -> List (Property m) -> String -> Html m
-view lift model options icon =
+fab : (Msg -> m) -> Model -> List (Property m) -> String -> Html m
+fab lift model options icon =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
@@ -148,17 +171,23 @@ type alias Store s =
     Component.indexed .fab (\x y -> { y | fab = x }) defaultModel
 
 
-render :
+{-| Fab view.
+-}
+view :
     (Material.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> String
     -> Html m
-render =
-    Component.render get view Material.Msg.FabMsg
+view =
+    Component.render get fab Material.Msg.FabMsg
 
 
+{-| Fab react.
+
+Internal use only.
+-}
 react :
     (Material.Msg.Msg m -> m)
     -> Msg
