@@ -12730,7 +12730,7 @@ var _aforemny$elm_mdc$Material_Fab$ripple = _aforemny$elm_mdc$Material_Internal_
 var _aforemny$elm_mdc$Material_Fab$exited = _aforemny$elm_mdc$Material_Options$cs('mdc-fab--exited');
 var _aforemny$elm_mdc$Material_Fab$mini = _aforemny$elm_mdc$Material_Options$cs('mdc-fab--mini');
 var _aforemny$elm_mdc$Material_Fab$defaultConfig = {ripple: false};
-var _aforemny$elm_mdc$Material_Fab$view = F4(
+var _aforemny$elm_mdc$Material_Fab$fab = F4(
 	function (lift, model, options, icon) {
 		var ripple = A4(
 			_aforemny$elm_mdc$Material_Ripple$view,
@@ -12840,7 +12840,7 @@ var _aforemny$elm_mdc$Material_Fab$_p5 = A3(
 	_aforemny$elm_mdc$Material_Fab$defaultModel);
 var _aforemny$elm_mdc$Material_Fab$get = _aforemny$elm_mdc$Material_Fab$_p5._0;
 var _aforemny$elm_mdc$Material_Fab$set = _aforemny$elm_mdc$Material_Fab$_p5._1;
-var _aforemny$elm_mdc$Material_Fab$render = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Fab$get, _aforemny$elm_mdc$Material_Fab$view, _aforemny$elm_mdc$Material_Msg$FabMsg);
+var _aforemny$elm_mdc$Material_Fab$view = A3(_aforemny$elm_mdc$Material_Component$render, _aforemny$elm_mdc$Material_Fab$get, _aforemny$elm_mdc$Material_Fab$fab, _aforemny$elm_mdc$Material_Msg$FabMsg);
 var _aforemny$elm_mdc$Material_Fab$react = A4(
 	_aforemny$elm_mdc$Material_Component$react,
 	_aforemny$elm_mdc$Material_Fab$get,
@@ -23675,24 +23675,36 @@ var _aforemny$elm_mdc$Demo_Elevation$update = F3(
 			model);
 	});
 
-var _aforemny$elm_mdc$Demo_Fabs$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel};
-var _aforemny$elm_mdc$Demo_Fabs$Model = function (a) {
-	return {mdc: a};
-};
+var _aforemny$elm_mdc$Demo_Fabs$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, exited: false};
+var _aforemny$elm_mdc$Demo_Fabs$Model = F2(
+	function (a, b) {
+		return {mdc: a, exited: b};
+	});
+var _aforemny$elm_mdc$Demo_Fabs$ToggleExited = {ctor: 'ToggleExited'};
 var _aforemny$elm_mdc$Demo_Fabs$Mdc = function (a) {
 	return {ctor: 'Mdc', _0: a};
 };
 var _aforemny$elm_mdc$Demo_Fabs$update = F3(
 	function (lift, msg, model) {
 		var _p0 = msg;
-		return A3(
-			_aforemny$elm_mdc$Material$update,
-			function (_p1) {
-				return lift(
-					_aforemny$elm_mdc$Demo_Fabs$Mdc(_p1));
-			},
-			_p0._0,
-			model);
+		if (_p0.ctor === 'Mdc') {
+			return A3(
+				_aforemny$elm_mdc$Material$update,
+				function (_p1) {
+					return lift(
+						_aforemny$elm_mdc$Demo_Fabs$Mdc(_p1));
+				},
+				_p0._0,
+				model);
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{exited: !model.exited}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
 	});
 var _aforemny$elm_mdc$Demo_Fabs$view = F3(
 	function (lift, page, model) {
@@ -23709,7 +23721,7 @@ var _aforemny$elm_mdc$Demo_Fabs$view = F3(
 		var fab = F2(
 			function (idx, options) {
 				return A5(
-					_aforemny$elm_mdc$Material_Fab$render,
+					_aforemny$elm_mdc$Material_Fab$view,
 					function (_p2) {
 						return lift(
 							_aforemny$elm_mdc$Demo_Fabs$Mdc(_p2));
@@ -23789,7 +23801,244 @@ var _aforemny$elm_mdc$Demo_Fabs$view = F3(
 								}),
 							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: function () {
+							var fabMotionContainerView = function (options) {
+								return A2(
+									_aforemny$elm_mdc$Material_Options$styled,
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$cs('fab-motion-container__view'),
+										_1: {
+											ctor: '::',
+											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'background-color', '#fff'),
+											_1: {
+												ctor: '::',
+												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'box-sizing', 'border-box'),
+												_1: {
+													ctor: '::',
+													_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'absolute'),
+													_1: {
+														ctor: '::',
+														_0: A2(_aforemny$elm_mdc$Material_Options$css, 'transition', 'transform 375ms cubic-bezier(0.0, 0.0, 0.2, 1)'),
+														_1: {
+															ctor: '::',
+															_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '100%'),
+															_1: {
+																ctor: '::',
+																_0: A2(_aforemny$elm_mdc$Material_Options$css, 'width', '100%'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_aforemny$elm_mdc$Material_Options$css, 'will-change', 'transform'),
+																	_1: options
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									});
+							};
+							var fabMotionContainer = function (options) {
+								return A2(
+									_aforemny$elm_mdc$Material_Options$styled,
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$cs('fab-motion-container'),
+										_1: {
+											ctor: '::',
+											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'border', '1px solid #ccc'),
+											_1: {
+												ctor: '::',
+												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin', '1rem'),
+												_1: {
+													ctor: '::',
+													_0: A2(_aforemny$elm_mdc$Material_Options$css, 'padding', '0 1rem'),
+													_1: {
+														ctor: '::',
+														_0: A2(_aforemny$elm_mdc$Material_Options$css, 'overflow', 'hidden'),
+														_1: {
+															ctor: '::',
+															_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'relative'),
+															_1: {
+																ctor: '::',
+																_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '10rem'),
+																_1: {
+																	ctor: '::',
+																	_0: A2(_aforemny$elm_mdc$Material_Options$css, 'width', '20rem'),
+																	_1: options
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									});
+							};
+							return A2(
+								_elm_lang$html$Html$section,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												legend,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Example of Enter and Exit Motions'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													fabMotionContainer,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															fabMotionContainerView,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$p,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('View one (with FAB)'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																fabMotionContainerView,
+																{
+																	ctor: '::',
+																	_0: function (_p3) {
+																		return A2(
+																			_aforemny$elm_mdc$Material_Options$when,
+																			!model.exited,
+																			_aforemny$elm_mdc$Material_Options$many(_p3));
+																	}(
+																		{
+																			ctor: '::',
+																			_0: A2(_aforemny$elm_mdc$Material_Options$css, 'transition-timing-function', 'cubic-bezier(.4, 0, 1, 1)'),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_aforemny$elm_mdc$Material_Options$css, 'transform', 'translateY(100%)'),
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$p,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text('View two (without FAB)'),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$p,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: A2(
+																					_elm_lang$html$Html$button,
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$type_('button'),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$html$Html_Attributes$disabled(!model.exited),
+																							_1: {
+																								ctor: '::',
+																								_0: _elm_lang$html$Html_Events$onClick(
+																									lift(_aforemny$elm_mdc$Demo_Fabs$ToggleExited)),
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					},
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html$text('Go back'),
+																						_1: {ctor: '[]'}
+																					}),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A5(
+																	_aforemny$elm_mdc$Material_Fab$view,
+																	function (_p4) {
+																		return lift(
+																			_aforemny$elm_mdc$Demo_Fabs$Mdc(_p4));
+																	},
+																	{
+																		ctor: '::',
+																		_0: 3,
+																		_1: {ctor: '[]'}
+																	},
+																	model.mdc,
+																	{
+																		ctor: '::',
+																		_0: A2(_aforemny$elm_mdc$Material_Options$when, model.exited, _aforemny$elm_mdc$Material_Fab$exited),
+																		_1: {
+																			ctor: '::',
+																			_0: _aforemny$elm_mdc$Material_Options$onClick(
+																				lift(_aforemny$elm_mdc$Demo_Fabs$ToggleExited)),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'absolute'),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(_aforemny$elm_mdc$Material_Options$css, 'right', '1rem'),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(_aforemny$elm_mdc$Material_Options$css, 'bottom', '1rem'),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_aforemny$elm_mdc$Material_Options$css, 'z-index', '1'),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	},
+																	'add'),
+																_1: {ctor: '[]'}
+															}
+														}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								});
+						}(),
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});
