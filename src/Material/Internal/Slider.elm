@@ -5,11 +5,11 @@ type Msg m
     = NoOp
     | Init Geometry
     | Resize Geometry
-    | InteractionStart { pageX : Float }
+    | InteractionStart String { pageX : Float }
     | KeyDown
     | Focus
     | Blur
-    | ThumbContainerPointer { pageX : Float }
+    | ThumbContainerPointer String { pageX : Float }
     | TransitionEnd
     | Drag { pageX : Float }
     | Up

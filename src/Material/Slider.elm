@@ -136,7 +136,7 @@ update lift msg model =
         TransitionEnd ->
             ( Just { model | inTransit = False }, Cmd.none )
 
-        InteractionStart { pageX } ->
+        InteractionStart _ { pageX } ->
             let
                 geometry =
                     Maybe.withDefault defaultGeometry model.geometry
@@ -155,7 +155,7 @@ update lift msg model =
               Cmd.none
             )
 
-        ThumbContainerPointer { pageX } ->
+        ThumbContainerPointer _ { pageX } ->
             let
                 geometry =
                     Maybe.withDefault defaultGeometry model.geometry
@@ -537,7 +537,7 @@ slider lift model options _ =
 
         , Options.many <|
           ( List.map (\ event ->
-                    Options.on event (Json.map (lift << InteractionStart) decodePageX)
+                    Options.on event (Json.map (lift << InteractionStart event) decodePageX)
                 )
                 downs
           )
@@ -683,7 +683,7 @@ slider lift model options _ =
                      { stopPropagation = True
                      , preventDefault = False
                      }
-                     (Json.map (lift << ThumbContainerPointer) decodePageX)
+                     (Json.map (lift << ThumbContainerPointer event) decodePageX)
                  )
             )
           , Options.on "transitionend" (Json.succeed (lift TransitionEnd))
@@ -801,7 +801,7 @@ decodePageX : Decoder { pageX : Float }
 decodePageX =
     Json.map (\ pageX -> { pageX = pageX }) <|
     Json.oneOf
-    [ Json.at [ "targetTouches.0" ] (Json.at ["pageX"] Json.float)
+    [ Json.at [ "targetTouches", "0", "pageX" ] Json.float
     , Json.at ["pageX"] Json.float
     ]
 
