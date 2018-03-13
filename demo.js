@@ -12840,11 +12840,11 @@ var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tile = function 
 			_1: options
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3x2 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-3x2');
-var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect2x3 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-2x3');
-var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3x4 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-3x4');
-var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect4x3 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-4x3');
-var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect16x9 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-16x9');
+var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3To2 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-3To2');
+var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect2To3 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-2To3');
+var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3To4 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-3To4');
+var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect4To3 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-4To3');
+var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect16To9 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-aspect-16To9');
 var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$gutter1 = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--tile-gutter-1');
 var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$iconAlignEnd = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--with-icon-align-end');
 var _aforemny$elm_mdc$Material_Internal_GridList_Implementation$iconAlignStart = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-grid-list--with-icon-align-start');
@@ -17873,16 +17873,6 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$dense = _aforem
 			config,
 			{dense: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$maxRows = function (k) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{
-					maxRows: _elm_lang$core$Maybe$Just(k)
-				});
-		});
-};
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$cols = function (cols) {
 	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
 		function (config) {
@@ -17941,10 +17931,6 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$disabled = _afo
 			config,
 			{disabled: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$maxlength = function (k) {
-	return _aforemny$elm_mdc$Material_Internal_Options$attribute(
-		_elm_lang$html$Html_Attributes$maxlength(k));
-};
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$value = function (_p6) {
 	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
 		F2(
@@ -18005,7 +17991,6 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$defaultConfig =
 	value: _elm_lang$core$Maybe$Nothing,
 	defaultValue: _elm_lang$core$Maybe$Nothing,
 	disabled: false,
-	maxRows: _elm_lang$core$Maybe$Nothing,
 	dense: false,
 	required: false,
 	type_: _elm_lang$core$Maybe$Just('text'),
@@ -18046,50 +18031,24 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 						return !_elm_lang$core$Native_Utils.eq(x, y);
 					})(''),
 				config.value));
-		var preventEnterWhenMaxRowsExceeded = A2(
-			_aforemny$elm_mdc$Material_Internal_Options$when,
-			config.textarea && (!_elm_lang$core$Native_Utils.eq(config.maxRows, _elm_lang$core$Maybe$Nothing)),
-			A3(
-				_aforemny$elm_mdc$Material_Internal_Options$onWithOptions,
-				'keydown',
-				{stopPropagation: false, preventDefault: true},
-				A2(
-					_elm_lang$core$Json_Decode$andThen,
-					function (_p11) {
-						var _p12 = _p11;
-						var rows = _elm_lang$core$List$length(
-							A2(_elm_lang$core$String$split, '\n', _p12._1));
-						return ((_elm_lang$core$Native_Utils.cmp(
-							rows,
-							A2(_elm_lang$core$Maybe$withDefault, 0, config.maxRows)) > -1) && _elm_lang$core$Native_Utils.eq(_p12._0, 13)) ? _elm_lang$core$Json_Decode$succeed(
-							lift(_aforemny$elm_mdc$Material_Internal_Textfield_Model$NoOp)) : _elm_lang$core$Json_Decode$fail('');
-					},
-					A3(
-						_elm_lang$core$Json_Decode$map2,
-						F2(
-							function (v0, v1) {
-								return {ctor: '_Tuple2', _0: v0, _1: v1};
-							}),
-						_elm_lang$html$Html_Events$keyCode,
-						_elm_lang$html$Html_Events$targetValue))));
 		var focused = model.focused && (!config.disabled);
 		var isInvalid = function () {
-			var _p13 = config.pattern;
-			if (_p13.ctor === 'Just') {
+			var _p11 = config.pattern;
+			if (_p11.ctor === 'Just') {
 				return A2(
 					_elm_lang$core$Maybe$withDefault,
 					false,
 					A2(
 						_elm_lang$core$Maybe$map,
-						function (_p14) {
+						function (_p12) {
 							return !A2(
 								_elm_lang$core$Regex$contains,
 								_elm_lang$core$Regex$regex(
 									A2(
 										_elm_lang$core$Basics_ops['++'],
 										'^',
-										A2(_elm_lang$core$Basics_ops['++'], _p13._0, '$'))),
-								_p14);
+										A2(_elm_lang$core$Basics_ops['++'], _p11._0, '$'))),
+								_p12);
 						},
 						model.value));
 			} else {
@@ -18165,11 +18124,11 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 															_0: A2(_aforemny$elm_mdc$Material_Internal_Options$when, config.box || config.outlined, ripple.interactionHandler),
 															_1: {
 																ctor: '::',
-																_0: function (_p15) {
+																_0: function (_p13) {
 																	return A2(
 																		_aforemny$elm_mdc$Material_Internal_Options$when,
 																		config.box,
-																		_aforemny$elm_mdc$Material_Internal_Options$many(_p15));
+																		_aforemny$elm_mdc$Material_Internal_Options$many(_p13));
 																}(
 																	{
 																		ctor: '::',
@@ -18180,11 +18139,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 																			_1: {ctor: '[]'}
 																		}
 																	}),
-																_1: {
-																	ctor: '::',
-																	_0: preventEnterWhenMaxRowsExceeded,
-																	_1: {ctor: '[]'}
-																}
+																_1: {ctor: '[]'}
 															}
 														}
 													}
@@ -18220,9 +18175,9 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 											'focus',
 											A2(
 												_elm_lang$core$Json_Decode$map,
-												function (_p16) {
+												function (_p14) {
 													return lift(
-														_aforemny$elm_mdc$Material_Internal_Textfield_Model$Focus(_p16));
+														_aforemny$elm_mdc$Material_Internal_Textfield_Model$Focus(_p14));
 												},
 												_aforemny$elm_mdc$Material_Internal_Textfield_Implementation$decodeGeometry)) : A2(
 											_aforemny$elm_mdc$Material_Internal_Options$on,
@@ -18240,18 +18195,18 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 											_1: {
 												ctor: '::',
 												_0: _aforemny$elm_mdc$Material_Internal_Options$onInput(
-													function (_p17) {
+													function (_p15) {
 														return lift(
-															_aforemny$elm_mdc$Material_Internal_Textfield_Model$Input(_p17));
+															_aforemny$elm_mdc$Material_Internal_Textfield_Model$Input(_p15));
 													}),
 												_1: {
 													ctor: '::',
-													_0: function (_p18) {
+													_0: function (_p16) {
 														return _aforemny$elm_mdc$Material_Internal_Options$many(
 															A2(
 																_elm_lang$core$List$map,
 																_aforemny$elm_mdc$Material_Internal_Options_Internal$attribute,
-																A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p18)));
+																A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p16)));
 													}(
 														{
 															ctor: '::',
@@ -18369,11 +18324,11 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 									}
 								},
 								function () {
-									var _p19 = config.labelText;
-									if (_p19.ctor === 'Just') {
+									var _p17 = config.labelText;
+									if (_p17.ctor === 'Just') {
 										return {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text(_p19._0),
+											_0: _elm_lang$html$Html$text(_p17._0),
 											_1: {ctor: '[]'}
 										};
 									} else {
@@ -18415,10 +18370,10 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 										var radius = 4;
 										var cornerWidth = radius + 1.2;
 										var leadingStrokeLength = _elm_lang$core$Basics$abs(11 - cornerWidth);
-										var _p20 = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Textfield_Model$defaultGeometry, model.geometry);
-										var labelWidth = _p20.labelWidth;
-										var width = _p20.width;
-										var height = _p20.height;
+										var _p18 = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Textfield_Model$defaultGeometry, model.geometry);
+										var labelWidth = _p18.labelWidth;
+										var width = _p18.width;
+										var height = _p18.height;
 										var scaledLabelWidth = labelScale * labelWidth;
 										var paddedLabelWidth = scaledLabelWidth + 8;
 										var pathMiddle = A2(
@@ -18703,8 +18658,8 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 										_elm_lang$core$Maybe$withDefault,
 										config.trailingIcon,
 										A2(_elm_lang$core$Maybe$map, _elm_lang$core$Maybe$Just, config.leadingIcon));
-									var _p21 = icon;
-									if (_p21.ctor === 'Just') {
+									var _p19 = icon;
+									if (_p19.ctor === 'Just') {
 										return {
 											ctor: '::',
 											_0: A3(
@@ -18715,9 +18670,9 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 													_0: _aforemny$elm_mdc$Material_Internal_Options$cs('material-icons mdc-text-field__icon'),
 													_1: {
 														ctor: '::',
-														_0: function (_p22) {
+														_0: function (_p20) {
 															return _aforemny$elm_mdc$Material_Internal_Options$attribute(
-																_elm_lang$html$Html_Attributes$tabindex(_p22));
+																_elm_lang$html$Html_Attributes$tabindex(_p20));
 														}(
 															config.iconClickable ? 0 : -1),
 														_1: {ctor: '[]'}
@@ -18725,7 +18680,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text(_p21._0),
+													_0: _elm_lang$html$Html$text(_p19._0),
 													_1: {ctor: '[]'}
 												}),
 											_1: {ctor: '[]'}
@@ -18784,9 +18739,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$Config = functi
 																	return function (r) {
 																		return function (s) {
 																			return function (t) {
-																				return function (u) {
-																					return {labelText: a, labelFloat: b, value: c, defaultValue: d, disabled: e, maxRows: f, dense: g, required: h, type_: i, box: j, pattern: k, textarea: l, fullWidth: m, invalid: n, outlined: o, leadingIcon: p, trailingIcon: q, iconClickable: r, placeholder: s, cols: t, rows: u};
-																				};
+																				return {labelText: a, labelFloat: b, value: c, defaultValue: d, disabled: e, dense: f, required: g, type_: h, box: i, pattern: j, textarea: k, fullWidth: l, invalid: m, outlined: n, leadingIcon: o, trailingIcon: p, iconClickable: q, placeholder: r, cols: s, rows: t};
 																			};
 																		};
 																	};
@@ -24066,11 +24019,11 @@ var _aforemny$elm_mdc$Material_GridList$image = _aforemny$elm_mdc$Material_Inter
 var _aforemny$elm_mdc$Material_GridList$secondary = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$secondary;
 var _aforemny$elm_mdc$Material_GridList$primary = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$primary;
 var _aforemny$elm_mdc$Material_GridList$tile = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tile;
-var _aforemny$elm_mdc$Material_GridList$tileAspect3x2 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3x2;
-var _aforemny$elm_mdc$Material_GridList$tileAspect2x3 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect2x3;
-var _aforemny$elm_mdc$Material_GridList$tileAspect3x4 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3x4;
-var _aforemny$elm_mdc$Material_GridList$tileAspect4x3 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect4x3;
-var _aforemny$elm_mdc$Material_GridList$tileAspect16x9 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect16x9;
+var _aforemny$elm_mdc$Material_GridList$tileAspect3To2 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3To2;
+var _aforemny$elm_mdc$Material_GridList$tileAspect2To3 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect2To3;
+var _aforemny$elm_mdc$Material_GridList$tileAspect3To4 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect3To4;
+var _aforemny$elm_mdc$Material_GridList$tileAspect4To3 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect4To3;
+var _aforemny$elm_mdc$Material_GridList$tileAspect16To9 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$tileAspect16To9;
 var _aforemny$elm_mdc$Material_GridList$gutter1 = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$gutter1;
 var _aforemny$elm_mdc$Material_GridList$iconAlignEnd = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$iconAlignEnd;
 var _aforemny$elm_mdc$Material_GridList$iconAlignStart = _aforemny$elm_mdc$Material_Internal_GridList_Implementation$iconAlignStart;
@@ -24984,7 +24937,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																														model.mdc,
 																														{
 																															ctor: '::',
-																															_0: _aforemny$elm_mdc$Material_GridList$tileAspect16x9,
+																															_0: _aforemny$elm_mdc$Material_GridList$tileAspect16To9,
 																															_1: {ctor: '[]'}
 																														},
 																														A2(
