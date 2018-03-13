@@ -723,7 +723,7 @@ groupsExample =
     |> Html.div []
 
 
-interactiveList : (Msg msg -> msg) -> List Int -> Model m -> Html msg
+interactiveList : (Msg m -> m) -> List Int -> Model m -> Html m
 interactiveList lift idx model =
     Lists.ul []
     [

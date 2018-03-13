@@ -102,10 +102,10 @@ no apps are running.
 -}
 
 import Html exposing (Html)
+import Material
 import Material.Button as Button
-import Material.Component exposing (Indexed, Index)
+import Material.Component exposing (Index)
 import Material.Internal.Dialog.Implementation as Dialog
-import Material.Msg
 import Material.Options as Options
 
 
@@ -115,16 +115,12 @@ type alias Property m =
     Dialog.Property m
 
 
-type alias Store s =
-    { s | dialog : Indexed Dialog.Model }
-
-
 {-| Dialog view.
 -}
 view
-    : (Material.Msg.Msg m -> m)
+    : (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> List (Html m)
     -> Html m       
@@ -221,6 +217,6 @@ Button.view Mdc [1] model.mdc
     ]
 ```
 -}
-openOn : (Material.Msg.Msg m -> m) -> List Int -> String -> Options.Property c m
+openOn : (Material.Msg m -> m) -> List Int -> String -> Options.Property c m
 openOn =
     Dialog.openOn

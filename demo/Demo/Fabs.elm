@@ -6,7 +6,6 @@ import Html.Events as Html
 import Html exposing (Html, text)
 import Material
 import Material.Fab as Fab
-import Material.Msg
 import Material.Options as Options exposing (when, styled, cs, css)
 
 
@@ -24,7 +23,7 @@ defaultModel =
 
 
 type Msg m
-    = Mdc (Material.Msg.Msg m)
+    = Mdc (Material.Msg m)
     | ToggleExited
 
 

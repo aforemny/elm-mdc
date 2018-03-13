@@ -95,10 +95,10 @@ styled Html.div
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
+import Material
+import Material.Component exposing (Index)
 import Material.Internal.Menu.Implementation as Menu
 import Material.List as Lists
-import Material.Msg
 import Material.Options as Options
 
 
@@ -108,16 +108,12 @@ type alias Property m =
     Menu.Property m
 
 
-type alias Store s =
-    { s | menu : Indexed Menu.Model }
-
-
 {-| Menu view.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> Menu m
     -> Html m
@@ -159,7 +155,7 @@ ul =
 
 {-| Component property to attach the menu.
 -}
-attach : (Material.Msg.Msg m -> m) -> Index -> Options.Property c m
+attach : (Material.Msg m -> m) -> Index -> Options.Property c m
 attach =
     Menu.attach
 

@@ -7,7 +7,6 @@ import Html.Events as Html
 import Html exposing (Html, text)
 import Material
 import Material.Menu as Menu
-import Material.Msg
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Select as Select
 import Material.Typography as Typography
@@ -42,7 +41,7 @@ defaultSelect =
 
 
 type Msg m
-    = Mdc (Material.Msg.Msg m)
+    = Mdc (Material.Msg m)
     | Pick (List Int) ( Int, String )
     | ToggleRtl (List Int)
     | ToggleDisabled (List Int)

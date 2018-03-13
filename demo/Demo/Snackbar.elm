@@ -92,8 +92,10 @@ update lift msg model =
                             | dismissOnAction = model.dismissOnAction
                             , action = Just "Hide"
                         }
+                ( mdc, effects ) =
+                    Snackbar.add (lift << Mdc) idx contents model.mdc
             in
-            Snackbar.add (lift << Mdc) idx contents model
+            ( { model | mdc = mdc }, effects )
 
         Dismiss str ->
             let

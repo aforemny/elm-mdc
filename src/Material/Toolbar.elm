@@ -82,10 +82,10 @@ Toolbar.view Mdc [0] model.mdc []
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
+import Material
+import Material.Component exposing (Index)
 import Material.Icon as Icon
 import Material.Internal.Toolbar.Implementation as Toolbar
-import Material.Msg
 import Material.Options as Options
 
 
@@ -95,18 +95,14 @@ type alias Property m =
     Toolbar.Property m
 
 
-type alias Store s =
-    { s | toolbar : Indexed Toolbar.Model }
-
-
 {-| Toolbar view.
 
 The first child of this function has to be a `row`.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> List (Html m)
     -> Html m
@@ -231,6 +227,6 @@ icon =
 
 Should be applied to a direct sibling of `view`.
 -}
-fixedAdjust : Index -> Store s -> Options.Property c m
+fixedAdjust : Index -> Material.Model m -> Options.Property c m
 fixedAdjust =
     Toolbar.fixedAdjust

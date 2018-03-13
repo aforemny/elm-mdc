@@ -49,9 +49,9 @@ FormField.view []
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
+import Material
+import Material.Component exposing (Index)
 import Material.Internal.Checkbox.Implementation as Checkbox
-import Material.Msg
 
 
 {-| Checkbox property.
@@ -60,16 +60,12 @@ type alias Property m =
     Checkbox.Property m
 
 
-type alias Store s =
-    { s | checkbox : Indexed Checkbox.Model }
-
-
 {-| Checkbox view.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> List (Html m)
     -> Html m

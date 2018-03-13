@@ -69,11 +69,10 @@ Drawer.view Mdc [0] model.mdc []
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
-import Material.Internal.Drawer.Implementation
+import Material
+import Material.Component exposing (Index)
 import Material.Internal.Drawer.Temporary.Implementation as Drawer
 import Material.List as Lists
-import Material.Msg
 import Material.Options as Options
 
 
@@ -83,17 +82,12 @@ type alias Property m =
     Drawer.Property m
 
 
-type alias Store s =
-    { s | drawer : Indexed Material.Internal.Drawer.Implementation.Model
-    }
-
-
 {-| Drawer view.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> List (Html m)
     -> Html m
@@ -142,6 +136,6 @@ Button.view Mdc [0] model.mdc
     ]
 ```
 -}
-openOn : (Material.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
+openOn : (Material.Msg m -> m) -> Index -> String -> Options.Property c m
 openOn =
     Drawer.openOn

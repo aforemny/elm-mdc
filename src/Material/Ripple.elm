@@ -83,9 +83,9 @@ Icon.view
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
+import Material
+import Material.Component exposing (Index)
 import Material.Internal.Ripple.Implementation as Ripple
-import Material.Msg
 import Material.Options as Options
 
 
@@ -95,17 +95,12 @@ type alias Property m =
     Ripple.Property m
 
 
-type alias Store s =
-    { s | ripple : Indexed Ripple.Model
-    }
-
-
 {-| Bounded view function.
 -}
 bounded
-    : (Material.Msg.Msg m -> m)
+    : (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> { interactionHandler : Options.Property c m
        , properties : Options.Property c m
@@ -118,9 +113,9 @@ bounded =
 {-| Unbounded view function.
 -}
 unbounded
-    : (Material.Msg.Msg m -> m)
+    : (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> { interactionHandler : Options.Property c m
        , properties : Options.Property c m

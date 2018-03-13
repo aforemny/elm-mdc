@@ -50,9 +50,9 @@ FormField.view []
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
+import Material
+import Material.Component exposing (Index)
 import Material.Internal.Switch.Implementation as Switch
-import Material.Msg
 
 
 {-| Switch property.
@@ -61,16 +61,12 @@ type alias Property m =
     Switch.Property m
 
 
-type alias Store s =
-    { s | switch : Indexed Switch.Model }
-
-
 {-| Switch view.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> List (Html m)
     -> Html m

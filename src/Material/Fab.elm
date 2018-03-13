@@ -41,9 +41,9 @@ Fab.view Mdc [0] model.mdc
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
+import Material
+import Material.Component exposing (Index)
 import Material.Internal.Fab.Implementation as Fab
-import Material.Msg
 
 
 {-| Fab property.
@@ -52,16 +52,12 @@ type alias Property m =
     Fab.Property m
 
 
-type alias Store s =
-    { s | fab : Indexed Fab.Model }
-
-
 {-| Fab view.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> String
     -> Html m

@@ -241,29 +241,28 @@ the provided message will be queued.
 add : (Material.Internal.Msg.Msg m -> m)
     -> Index
     -> Contents m
-    -> { a | mdc : Store m s }
-    -> ( { a | mdc : Store m s }, Cmd m )
-add lift idx contents model =
+    -> Store m s
+    -> ( Store m s, Cmd m )
+add lift idx contents store =
     let
         component_ =
-            Dict.get idx model.mdc.snackbar
+            Dict.get idx store.snackbar
             |> Maybe.withDefault defaultModel
 
         (component, effects ) =
-          enqueue contents component_ |> tryDequeue
+          enqueue contents component_
+          |> tryDequeue
+          |> Tuple.mapSecond (Cmd.map (lift << Material.Internal.Msg.SnackbarMsg idx))
 
-        mdc =
-          let
-              mdc_ =
-                  model.mdc
-          in
+        updatedStore =
           case component of
               Just component ->
-                  { mdc_ | snackbar = Dict.insert idx component mdc_.snackbar }
+                  { store | snackbar = Dict.insert idx component store.snackbar }
+
               Nothing ->
-                  mdc_
+                  store
     in
-        { model | mdc = mdc } ! [ Cmd.map (lift << Material.Internal.Msg.SnackbarMsg idx) effects ]
+        ( updatedStore, effects )
 
 
 type alias Config =

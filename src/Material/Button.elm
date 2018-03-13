@@ -56,9 +56,9 @@ Button.view Mdc [0] model.mdc
 -}
 
 import Html exposing (Html)
-import Material.Component as Component exposing (Indexed, Index)
+import Material
+import Material.Component as Component exposing (Index)
 import Material.Internal.Button.Implementation as Button
-import Material.Msg
 
 
 {-| Button property.
@@ -67,16 +67,12 @@ type alias Property m =
     Button.Property m
 
 
-type alias Store s =
-    { s | button : Indexed Button.Model }
-
-
 {-| Button view.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store s
+    -> Material.Model m
     -> List (Property m)
     -> List (Html m)
     -> Html m

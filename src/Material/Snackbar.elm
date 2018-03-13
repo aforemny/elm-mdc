@@ -45,9 +45,9 @@ Snackbar.view Mdc [0] model.mdc [] []
 -}
 
 import Html exposing (Html)
-import Material.Component exposing (Indexed, Index)
+import Material
+import Material.Component exposing (Index)
 import Material.Internal.Snackbar.Implementation as Snackbar
-import Material.Msg
 
 
 {-| Snackbar property.
@@ -56,17 +56,12 @@ type alias Property m =
     Snackbar.Property m
 
 
-type alias Store m s =
-    { s | snackbar : Indexed (Snackbar.Model m)
-    }
-
-
 {-| Snackbar view.
 -}
 view :
-    (Material.Msg.Msg m -> m)
+    (Material.Msg m -> m)
     -> Index
-    -> Store m s
+    -> Material.Model m
     -> List (Property m)
     -> List (Html m)
     -> Html m
@@ -98,11 +93,11 @@ snack =
 {-| Add a message to the snackbar. If another message is currently displayed,
 the provided message will be queued.
 -}
-add : (Material.Msg.Msg m -> m)
+add : (Material.Msg m -> m)
     -> Index
     -> Contents m
-    -> { a | mdc : Store m s }
-    -> ( { a | mdc : Store m s }, Cmd m )
+    -> Material.Model m
+    -> ( Material.Model m, Cmd m )
 add =
     Snackbar.add
 

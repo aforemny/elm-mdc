@@ -154,8 +154,7 @@ import Material.Internal.Fab.Implementation as Fab
 import Material.Internal.GridList.Implementation as GridList
 import Material.Internal.IconToggle.Implementation as IconToggle
 import Material.Internal.Menu.Implementation as Menu
-import Material.Internal.Msg
-import Material.Internal.Msg exposing (..)
+import Material.Internal.Msg exposing (Msg(..))
 import Material.Internal.RadioButton.Implementation as RadioButton
 import Material.Internal.Ripple.Implementation as Ripple
 import Material.Internal.Select.Implementation as Select
@@ -166,7 +165,6 @@ import Material.Internal.Tabs.Implementation as Tabs
 import Material.Internal.Textfield.Implementation as Textfield
 import Material.Internal.Toolbar.Implementation as Toolbar
 import Material.Internal.Toolbar.Implementation as Toolbar
-import Material.Msg
 
 
 {-| Material model.
@@ -243,7 +241,7 @@ type Msg
 ```
 -}
 type alias Msg m =
-    Material.Msg.Msg m
+    Material.Internal.Msg.Msg m
 
 
 {-| Material update.
