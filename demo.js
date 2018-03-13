@@ -9637,6 +9637,13 @@ var _aforemny$elm_mdc$Material_Options$onWithOptions = F2(
 			evt,
 			_elm_lang$core$Maybe$Just(options));
 	});
+var _aforemny$elm_mdc$Material_Options$onSubmit = function (f) {
+	return A3(
+		_aforemny$elm_mdc$Material_Options$onWithOptions,
+		'submit',
+		{preventDefault: true, stopPropagation: false},
+		A2(_elm_lang$core$Json_Decode$map, f, _elm_lang$html$Html_Events$targetValue));
+};
 var _aforemny$elm_mdc$Material_Options$on = function (event) {
 	return A2(_aforemny$elm_mdc$Material_Internal_Options$Listener, event, _elm_lang$core$Maybe$Nothing);
 };
@@ -9693,12 +9700,6 @@ var _aforemny$elm_mdc$Material_Options$onCheck = function (_p1) {
 		_aforemny$elm_mdc$Material_Options$on,
 		'change',
 		A3(_elm_lang$core$Basics$flip, _elm_lang$core$Json_Decode$map, _elm_lang$html$Html_Events$targetChecked, _p1));
-};
-var _aforemny$elm_mdc$Material_Options$onToggle = function (msg) {
-	return A2(
-		_aforemny$elm_mdc$Material_Options$on,
-		'change',
-		_elm_lang$core$Json_Decode$succeed(msg));
 };
 var _aforemny$elm_mdc$Material_Options$onBlur = function (msg) {
 	return A2(
