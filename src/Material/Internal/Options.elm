@@ -161,53 +161,15 @@ apply summary ctor options attrs =
         )
 
 
-type alias Container c m =
-    { c | container : List (Property () m) }
-
-
-type alias Input c m =
-    { c | input : List (Property () m) }
-
-
-applyContainer :
-    Summary (Container c m) m
-    -> (List (Attribute m) -> a)
-    -> List (Property () m)
-    -> a
-applyContainer summary ctor options =
-    apply
-        { summary
-            | dispatch = Dispatch.clear summary.dispatch
-            , attrs = []
-            , internal = []
-            , config = ()
-        }
-        ctor
-        (Many summary.config.container :: options)
-        []
-
-
-applyInput :
-    Summary (Input c m) m
-    -> (List (Attribute m) -> a)
-    -> List (Property () m)
-    -> a
-applyInput summary ctor options =
-    apply
-        { summary | classes = [], css = [], config = () }
-        ctor
-        (Many summary.config.input :: options)
-        []
-
-
 option : (c -> c) -> Property c m
 option =
     Set
 
 
-input : List (Property c m) -> Property { a | input : List (Property c m) } m
-input options =
-    option (\config -> { config | input = Many options :: config.input })
+nativeControl : List (Property c m)
+    -> Property { a | nativeControl : List (Property c m) } m
+nativeControl options =
+    option (\config -> { config | nativeControl = config.nativeControl ++ options })
 
 
 dispatch : (Msg m -> m) -> Property c m 

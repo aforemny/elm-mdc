@@ -5,8 +5,8 @@ module Material.Options exposing
     , css
     , data
     , dispatch
-    , input
     , many
+    , nativeControl
     , nop
     , on
     , onBlur
@@ -21,14 +21,16 @@ module Material.Options exposing
     , onMouseOut
     , onMouseOver
     , onMouseUp
-    , onToggle
+    , onSubmit
     , onWithOptions
     , Property
     , styled
     , when
     )
 
-{-| Properties, styles, and event definitions.
+{-|
+
+# Properties
 
 @docs Property, styled
 @docs cs, css
@@ -37,23 +39,34 @@ module Material.Options exposing
 @docs nop
 @docs attribute
 @docs data, aria
-@docs input
+
+@docs nativeControl
+
+
+# Events
 
 @docs on
-@docs onBlur
-@docs onCheck
+@docs onWithOptions
+
 @docs onClick
 @docs onDoubleClick
-@docs onFocus
-@docs onInput
 @docs onMouseDown
+@docs onMouseUp
 @docs onMouseEnter
 @docs onMouseLeave
-@docs onMouseOut
 @docs onMouseOver
-@docs onMouseUp
-@docs onToggle
-@docs onWithOptions
+@docs onMouseOut
+
+@docs onInput
+@docs onCheck
+@docs onSubmit
+
+@docs onBlur
+@docs onFocus
+
+
+# Dispatch
+
 @docs dispatch
 -}
 
@@ -64,29 +77,34 @@ import Json.Decode as Json
 import Material.Internal.Options as Internal exposing (..)
 
 
-
--- PROPERTIES
-
-
 {-| Generic component property.
+
+The `c` stands for a component's configuration type, and each component exports
+its own `Property`.
 -}
 type alias Property c m =
     Internal.Property c m
 
 
-{-| Apply properties to a standard Html element.
+{-| Make a standard Html element take properties instead of attributes.
+
+```
+styled Html.div
+    [ css "margin" "0 auto"
+    ]
+    [ text ""
+    ]
+```
 -}
-styled : (List (Attribute m) -> a) -> List (Property c m) -> a
+styled : (List (Attribute m) -> List (Html m) -> Html m)
+    -> List (Property c m)
+    -> List (Html m)
+    -> Html m
 styled ctor props =
-    ctor
-        (addAttributes
-            (collect_ props)
-            []
-        )
+    ctor (addAttributes (collect_ props) [])
 
 
-{-| Add an HTML class to a component. (Name chosen to avoid clashing with
-Html.Attributes.class.)
+{-| Add a HTML class to a component.
 -}
 cs : String -> Property c m
 cs c =
@@ -110,13 +128,28 @@ many =
 {-| Do nothing. Convenient when the absence or
 presence of Options depends dynamically on other values, e.g.,
 
-    Options.div
-      [ if model.isActive then cs "active" else nop ]
-      [ ... ]
+```elm
+Html.div
+    [ if isActive then cs "active" else nop ]
+    [ … ]
+```
 -}
 nop : Property c m
 nop =
     None
+
+
+{-| Conditional option. When the guard evaluates to `true`, the option is
+applied; otherwise it is ignored. Use like this:
+
+    Button.disabled |> when (not model.isRunning)
+-}
+when : Bool -> Property c m -> Property c m
+when guard prop  =
+    if guard then
+        prop
+    else
+        nop
 
 
 {-| HTML data-* attributes. Prefix "data-" is added automatically.
@@ -133,31 +166,12 @@ aria key val =
     Attribute (Html.Attributes.attribute ("aria-" ++ key) val)
 
 
-{-| Conditional option. When the guard evaluates to `true`, the option is
-applied; otherwise it is ignored. Use like this:
-
-    Button.disabled |> when (not model.isRunning)
--}
-when : Bool -> Property c m -> Property c m
-when guard prop  =
-    if guard then
-        prop
-    else
-        nop
-
-
-{-| Install arbitrary `Html.Attribute`.
+{-| Install arbitrary `Html.Attribute`s.
 
 ```elm
-import Html
-import Html.Attributes as Html
-import Material.Options as Options exposing (styled)
-
 styled Html.div
-    [ Options.attribute <| Html.title "title"
-    ]
-    [ …
-    ]
+    [ Options.attribute <| Html.title "title" ]
+    [ … ]
 ```
 -}
 attribute : Html.Attribute Never -> Property c m
@@ -165,17 +179,15 @@ attribute =
     Attribute << Html.Attributes.map never
 
 
-{-| Apply argument options to `input` element in component implementation.
-
-TODO: re-implement
+{-| Apply properties to a component's native control element, ie.  `input`.
 -}
-input : List (Property c m) -> Property ({ c | input : List (Property c m) }) m
-input =
-    Internal.input
+nativeControl : List (Property c m)
+    -> Property ({ c | nativeControl : List (Property c m) }) m
+nativeControl =
+    Internal.nativeControl
 
 
-{-| Add custom event handlers
--}
+{-| -}
 on : String -> Json.Decoder m -> Property c m
 on event =
     Listener event Nothing
@@ -229,20 +241,10 @@ onMouseOut msg =
     on "mouseout" (Json.succeed msg)
 
 
-{-| Capture [change](https://developer.mozilla.org/en-US/docs/Web/Events/change)
-events on checkboxes. It will grab the boolean value from `event.target.checked`
-on any input event.
-Check out [targetChecked](#targetChecked) for more details on how this works.
--}
+{-| -}
 onCheck : (Bool -> msg) -> Property c msg
 onCheck =
     (flip Json.map Html.Events.targetChecked) >> on "change"
-
-
-{-| -}
-onToggle : msg -> Property c msg
-onToggle msg =
-    on "change" (Json.succeed msg)
 
 
 {-| -}
@@ -263,8 +265,17 @@ onInput f =
     on "input" (Json.map f Html.Events.targetValue)
 
 
-{-| Add custom event handlers with options
--}
+{-| -}
+onSubmit : (String -> m) -> Property c m
+onSubmit f =
+    onWithOptions "submit"
+        { preventDefault = True
+        , stopPropagation = False
+        }
+        (Json.map f Html.Events.targetValue)
+
+
+{-| -}
 onWithOptions : String -> Html.Events.Options -> Json.Decoder m -> Property c m
 onWithOptions evt options =
     Listener evt (Just options)
