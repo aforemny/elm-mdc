@@ -9619,62 +9619,6 @@ var _aforemny$elm_mdc$Material_Dispatch$defaultConfig = _aforemny$elm_mdc$Materi
 		lift: _elm_lang$core$Maybe$Nothing
 	});
 
-var _aforemny$elm_mdc$Material_Internal_Options$cssVariables = function (summary) {
-	var styleNodeBlock = A2(
-		_elm_lang$core$String$join,
-		'\n',
-		A2(
-			_elm_lang$core$List$map,
-			function (_p0) {
-				var _p1 = _p0;
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					_p1._0,
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						': ',
-						A2(_elm_lang$core$Basics_ops['++'], _p1._1, ' !important;')));
-			},
-			summary.vars));
-	var hash = function (str) {
-		return A2(
-			F2(
-				function (x, y) {
-					return A2(_elm_lang$core$Basics_ops['++'], x, y);
-				}),
-			'elm-mdc-ripple-style--',
-			_elm_lang$core$String$fromList(
-				A2(
-					_elm_lang$core$List$filter,
-					_elm_lang$core$Char$isDigit,
-					_elm_lang$core$String$toList(str))));
-	};
-	var $class = hash(styleNodeBlock);
-	var styleNodeText = A2(
-		_elm_lang$core$Basics_ops['++'],
-		'.',
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			$class,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				' {',
-				A2(_elm_lang$core$Basics_ops['++'], styleNodeBlock, ' }'))));
-	var styleNode = A3(
-		_elm_lang$html$Html$node,
-		'style',
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$type_('text/css'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(styleNodeText),
-			_1: {ctor: '[]'}
-		});
-	return {ctor: '_Tuple2', _0: $class, _1: styleNode};
-};
 var _aforemny$elm_mdc$Material_Internal_Options$addAttributes = F2(
 	function (summary, attrs) {
 		return A2(
@@ -9702,51 +9646,45 @@ var _aforemny$elm_mdc$Material_Internal_Options$addAttributes = F2(
 	});
 var _aforemny$elm_mdc$Material_Internal_Options$collect1_ = F2(
 	function (options, acc) {
-		var _p2 = options;
-		switch (_p2.ctor) {
+		var _p0 = options;
+		switch (_p0.ctor) {
 			case 'Class':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						classes: {ctor: '::', _0: _p2._0, _1: acc.classes}
+						classes: {ctor: '::', _0: _p0._0, _1: acc.classes}
 					});
 			case 'CSS':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						css: {ctor: '::', _0: _p2._0, _1: acc.css}
-					});
-			case 'Var':
-				return _elm_lang$core$Native_Utils.update(
-					acc,
-					{
-						vars: {ctor: '::', _0: _p2._0, _1: acc.vars}
+						css: {ctor: '::', _0: _p0._0, _1: acc.css}
 					});
 			case 'Attribute':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						attrs: {ctor: '::', _0: _p2._0, _1: acc.attrs}
+						attrs: {ctor: '::', _0: _p0._0, _1: acc.attrs}
 					});
 			case 'Internal':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						internal: {ctor: '::', _0: _p2._0, _1: acc.internal}
+						internal: {ctor: '::', _0: _p0._0, _1: acc.internal}
 					});
 			case 'Listener':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						dispatch: A4(_aforemny$elm_mdc$Material_Dispatch$add, _p2._0, _p2._1, _p2._2, acc.dispatch)
+						dispatch: A4(_aforemny$elm_mdc$Material_Dispatch$add, _p0._0, _p0._1, _p0._2, acc.dispatch)
 					});
 			case 'Many':
-				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options$collect1_, acc, _p2._0);
+				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options$collect1_, acc, _p0._0);
 			case 'Lift':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						dispatch: A2(_aforemny$elm_mdc$Material_Dispatch$setDecoder, _p2._0, acc.dispatch)
+						dispatch: A2(_aforemny$elm_mdc$Material_Dispatch$setDecoder, _p0._0, acc.dispatch)
 					});
 			case 'Set':
 				return acc;
@@ -9756,57 +9694,51 @@ var _aforemny$elm_mdc$Material_Internal_Options$collect1_ = F2(
 	});
 var _aforemny$elm_mdc$Material_Internal_Options$collect1 = F2(
 	function (option, acc) {
-		var _p3 = option;
-		switch (_p3.ctor) {
+		var _p1 = option;
+		switch (_p1.ctor) {
 			case 'Class':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						classes: {ctor: '::', _0: _p3._0, _1: acc.classes}
+						classes: {ctor: '::', _0: _p1._0, _1: acc.classes}
 					});
 			case 'CSS':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						css: {ctor: '::', _0: _p3._0, _1: acc.css}
-					});
-			case 'Var':
-				return _elm_lang$core$Native_Utils.update(
-					acc,
-					{
-						vars: {ctor: '::', _0: _p3._0, _1: acc.vars}
+						css: {ctor: '::', _0: _p1._0, _1: acc.css}
 					});
 			case 'Attribute':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						attrs: {ctor: '::', _0: _p3._0, _1: acc.attrs}
+						attrs: {ctor: '::', _0: _p1._0, _1: acc.attrs}
 					});
 			case 'Internal':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						internal: {ctor: '::', _0: _p3._0, _1: acc.internal}
+						internal: {ctor: '::', _0: _p1._0, _1: acc.internal}
 					});
 			case 'Many':
-				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options$collect1, acc, _p3._0);
+				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options$collect1, acc, _p1._0);
 			case 'Set':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						config: _p3._0(acc.config)
+						config: _p1._0(acc.config)
 					});
 			case 'Listener':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						dispatch: A4(_aforemny$elm_mdc$Material_Dispatch$add, _p3._0, _p3._1, _p3._2, acc.dispatch)
+						dispatch: A4(_aforemny$elm_mdc$Material_Dispatch$add, _p1._0, _p1._1, _p1._2, acc.dispatch)
 					});
 			case 'Lift':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
 					{
-						dispatch: A2(_aforemny$elm_mdc$Material_Dispatch$setDecoder, _p3._0, acc.dispatch)
+						dispatch: A2(_aforemny$elm_mdc$Material_Dispatch$setDecoder, _p1._0, acc.dispatch)
 					});
 			default:
 				return acc;
@@ -9821,28 +9753,26 @@ var _aforemny$elm_mdc$Material_Internal_Options$apply = F4(
 				A2(_aforemny$elm_mdc$Material_Internal_Options$recollect, summary, options),
 				attrs));
 	});
-var _aforemny$elm_mdc$Material_Internal_Options$Summary = F7(
-	function (a, b, c, d, e, f, g) {
-		return {classes: a, css: b, vars: c, attrs: d, internal: e, dispatch: f, config: g};
+var _aforemny$elm_mdc$Material_Internal_Options$Summary = F6(
+	function (a, b, c, d, e, f) {
+		return {classes: a, css: b, attrs: c, internal: d, dispatch: e, config: f};
 	});
-var _aforemny$elm_mdc$Material_Internal_Options$collect = function (_p4) {
+var _aforemny$elm_mdc$Material_Internal_Options$collect = function (_p2) {
 	return _aforemny$elm_mdc$Material_Internal_Options$recollect(
-		A7(
+		A6(
 			_aforemny$elm_mdc$Material_Internal_Options$Summary,
 			{ctor: '[]'},
 			{ctor: '[]'},
 			{ctor: '[]'},
 			{ctor: '[]'},
-			{ctor: '[]'},
 			_aforemny$elm_mdc$Material_Dispatch$defaultConfig,
-			_p4));
+			_p2));
 };
 var _aforemny$elm_mdc$Material_Internal_Options$collect_ = A2(
 	_elm_lang$core$List$foldl,
 	_aforemny$elm_mdc$Material_Internal_Options$collect1_,
-	A7(
+	A6(
 		_aforemny$elm_mdc$Material_Internal_Options$Summary,
-		{ctor: '[]'},
 		{ctor: '[]'},
 		{ctor: '[]'},
 		{ctor: '[]'},
@@ -9855,11 +9785,11 @@ var _aforemny$elm_mdc$Material_Internal_Options$Lift = function (a) {
 };
 var _aforemny$elm_mdc$Material_Internal_Options$dispatch = function (lift) {
 	return _aforemny$elm_mdc$Material_Internal_Options$Lift(
-		function (_p5) {
+		function (_p3) {
 			return A2(
 				_elm_lang$core$Json_Decode$map,
 				lift,
-				A2(_elm_lang$core$Json_Decode$map, _aforemny$elm_mdc$Material_Msg$Dispatch, _p5));
+				A2(_elm_lang$core$Json_Decode$map, _aforemny$elm_mdc$Material_Msg$Dispatch, _p3));
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Options$inject = F5(
@@ -9956,14 +9886,6 @@ var _aforemny$elm_mdc$Material_Internal_Options$attribute = _aforemny$elm_mdc$Ma
 var _aforemny$elm_mdc$Material_Internal_Options$Attribute = function (a) {
 	return {ctor: 'Attribute', _0: a};
 };
-var _aforemny$elm_mdc$Material_Internal_Options$Var = function (a) {
-	return {ctor: 'Var', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Options$variable = F2(
-	function (k, v) {
-		return _aforemny$elm_mdc$Material_Internal_Options$Var(
-			{ctor: '_Tuple2', _0: k, _1: v});
-	});
 var _aforemny$elm_mdc$Material_Internal_Options$CSS = function (a) {
 	return {ctor: 'CSS', _0: a};
 };
@@ -10395,6 +10317,8 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 					}
 				}
 			});
+		var summary = _aforemny$elm_mdc$Material_Internal_Options$collect(
+			{ctor: '_Tuple0'});
 		var geometry = model.geometry;
 		var surfaceWidth = A2(
 			_elm_lang$core$Basics_ops['++'],
@@ -10465,47 +10389,121 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 			_elm_lang$core$Basics_ops['++'],
 			_elm_lang$core$Basics$toString(startPoint.x),
 			'px');
-		var summary = A2(
-			_aforemny$elm_mdc$Material_Internal_Options$collect,
-			{ctor: '_Tuple0'},
-			_elm_lang$core$List$concat(
-				{
-					ctor: '::',
-					_0: {
+		var cssVariableHack = function () {
+			var className = A2(
+				F2(
+					function (x, y) {
+						return A2(_elm_lang$core$Basics_ops['++'], x, y);
+					}),
+				'mdc-ripple-style-hack--',
+				function (_p7) {
+					return _elm_lang$core$String$fromList(
+						A2(
+							_elm_lang$core$List$filter,
+							_elm_lang$core$Char$isDigit,
+							_elm_lang$core$String$toList(
+								_elm_lang$core$String$concat(_p7))));
+				}(
+					{
 						ctor: '::',
-						_0: A2(_aforemny$elm_mdc$Material_Internal_Options$variable, '--mdc-ripple-fg-size', fgSize),
+						_0: fgSize,
 						_1: {
 							ctor: '::',
-							_0: A2(_aforemny$elm_mdc$Material_Internal_Options$variable, '--mdc-ripple-fg-scale', fgScale),
-							_1: {ctor: '[]'}
+							_0: fgScale,
+							_1: {
+								ctor: '::',
+								_0: top,
+								_1: {
+									ctor: '::',
+									_0: left,
+									_1: {
+										ctor: '::',
+										_0: translateStart,
+										_1: {
+											ctor: '::',
+											_0: translateEnd,
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
 						}
-					},
-					_1: {
-						ctor: '::',
-						_0: isUnbounded ? {
+					}));
+			var text = function (_p8) {
+				return A3(
+					_elm_lang$core$Basics$flip,
+					F2(
+						function (x, y) {
+							return A2(_elm_lang$core$Basics_ops['++'], x, y);
+						}),
+					'}',
+					A2(
+						F2(
+							function (x, y) {
+								return A2(_elm_lang$core$Basics_ops['++'], x, y);
+							}),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'.',
+							A2(_elm_lang$core$Basics_ops['++'], className, '{')),
+						_p8));
+			}(
+				function (_p9) {
+					return _elm_lang$core$String$concat(
+						A2(
+							_elm_lang$core$List$map,
+							function (_p10) {
+								var _p11 = _p10;
+								return A2(
+									_elm_lang$core$Basics_ops['++'],
+									'--mdc-ripple-',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_p11._0,
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											':',
+											A2(_elm_lang$core$Basics_ops['++'], _p11._1, ' !important;'))));
+							},
+							_p9));
+				}(
+					_elm_lang$core$List$concat(
+						{
 							ctor: '::',
-							_0: A2(_aforemny$elm_mdc$Material_Internal_Options$variable, '--mdc-ripple-top', top),
+							_0: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'fg-size', _1: fgSize},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'fg-scale', _1: fgScale},
+									_1: {ctor: '[]'}
+								}
+							},
 							_1: {
 								ctor: '::',
-								_0: A2(_aforemny$elm_mdc$Material_Internal_Options$variable, '--mdc-ripple-left', left),
+								_0: isUnbounded ? {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'top', _1: top},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'left', _1: left},
+										_1: {ctor: '[]'}
+									}
+								} : {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'fg-translate-start', _1: translateStart},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'fg-translate-end', _1: translateEnd},
+										_1: {ctor: '[]'}
+									}
+								},
 								_1: {ctor: '[]'}
 							}
-						} : {
-							ctor: '::',
-							_0: A2(_aforemny$elm_mdc$Material_Internal_Options$variable, '--mdc-ripple-fg-translate-start', translateStart),
-							_1: {
-								ctor: '::',
-								_0: A2(_aforemny$elm_mdc$Material_Internal_Options$variable, '--mdc-ripple-fg-translate-end', translateEnd),
-								_1: {ctor: '[]'}
-							}
-						},
-						_1: {ctor: '[]'}
-					}
-				}));
-		var _p7 = _aforemny$elm_mdc$Material_Internal_Options$cssVariables(summary);
-		var selector = _p7._0;
-		var styleNode = _p7._1;
-		var style = isVisible ? styleNode : A3(
+						})));
+			return {className: className, text: text};
+		}();
+		var style = A3(
 			_elm_lang$html$Html$node,
 			'style',
 			{
@@ -10513,9 +10511,13 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 				_0: _elm_lang$html$Html_Attributes$type_('text/css'),
 				_1: {ctor: '[]'}
 			},
-			{ctor: '[]'});
-		var _p8 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Ripple$defaultConfig, options);
-		var config = _p8.config;
+			{
+				ctor: '::',
+				_0: isVisible ? _elm_lang$html$Html$text(cssVariableHack.text) : _elm_lang$html$Html$text(''),
+				_1: {ctor: '[]'}
+			});
+		var _p12 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Ripple$defaultConfig, options);
+		var config = _p12.config;
 		var properties = _aforemny$elm_mdc$Material_Options$many(
 			{
 				ctor: '::',
@@ -10541,11 +10543,11 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 								_aforemny$elm_mdc$Material_Options$cs('mdc-ripple-surface--accent')),
 							_1: {
 								ctor: '::',
-								_0: function (_p9) {
+								_0: function (_p13) {
 									return A2(
 										_aforemny$elm_mdc$Material_Options$when,
 										isUnbounded,
-										_aforemny$elm_mdc$Material_Options$many(_p9));
+										_aforemny$elm_mdc$Material_Options$many(_p13));
 								}(
 									{
 										ctor: '::',
@@ -10558,11 +10560,11 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 									}),
 								_1: {
 									ctor: '::',
-									_0: function (_p10) {
+									_0: function (_p14) {
 										return A2(
 											_aforemny$elm_mdc$Material_Options$when,
 											isVisible,
-											_aforemny$elm_mdc$Material_Options$many(_p10));
+											_aforemny$elm_mdc$Material_Options$many(_p14));
 									}(
 										{
 											ctor: '::',
@@ -10590,7 +10592,7 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 												_0: A2(
 													_aforemny$elm_mdc$Material_Options$when,
 													isVisible,
-													_aforemny$elm_mdc$Material_Options$cs(selector)),
+													_aforemny$elm_mdc$Material_Options$cs(cssVariableHack.className)),
 												_1: {ctor: '[]'}
 											}
 										}
@@ -10605,8 +10607,8 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 	});
 var _aforemny$elm_mdc$Material_Ripple$update = F2(
 	function (msg, model) {
-		var _p11 = msg;
-		switch (_p11.ctor) {
+		var _p15 = msg;
+		switch (_p15.ctor) {
 			case 'Focus':
 				return {
 					ctor: '_Tuple2',
@@ -10627,33 +10629,33 @@ var _aforemny$elm_mdc$Material_Ripple$update = F2(
 				var isVisible = model.active || model.animating;
 				if (!isVisible) {
 					var animation = model.animation + 1;
-					var active = A2(_elm_lang$core$Maybe$withDefault, model.active, _p11._1);
+					var active = A2(_elm_lang$core$Maybe$withDefault, model.active, _p15._1);
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{active: active, animating: true, geometry: _p11._2, deactivation: false, animation: animation}),
+							{active: active, animating: true, geometry: _p15._2, deactivation: false, animation: animation}),
 						_1: A2(
 							_aforemny$elm_mdc$Material_Helpers$delay,
 							300,
-							A2(_aforemny$elm_mdc$Material_Internal_Ripple$AnimationEnd, _p11._0, animation))
+							A2(_aforemny$elm_mdc$Material_Internal_Ripple$AnimationEnd, _p15._0, animation))
 					};
 				} else {
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 			case 'Deactivate':
-				var _p13 = _p11._0;
+				var _p17 = _p15._0;
 				var sameEvent = function () {
-					var _p12 = model.geometry.event.type_;
-					switch (_p12) {
+					var _p16 = model.geometry.event.type_;
+					switch (_p16) {
 						case 'keydown':
-							return _elm_lang$core$Native_Utils.eq(_p13, 'keyup');
+							return _elm_lang$core$Native_Utils.eq(_p17, 'keyup');
 						case 'mousedown':
-							return _elm_lang$core$Native_Utils.eq(_p13, 'mouseup');
+							return _elm_lang$core$Native_Utils.eq(_p17, 'mouseup');
 						case 'pointerdown':
-							return _elm_lang$core$Native_Utils.eq(_p13, 'pointerup');
+							return _elm_lang$core$Native_Utils.eq(_p17, 'pointerup');
 						case 'touchstart':
-							return _elm_lang$core$Native_Utils.eq(_p13, 'touchend');
+							return _elm_lang$core$Native_Utils.eq(_p17, 'touchend');
 						default:
 							return false;
 					}
@@ -10666,7 +10668,7 @@ var _aforemny$elm_mdc$Material_Ripple$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				return (_elm_lang$core$Native_Utils.eq(model.geometry.event.type_, _p11._0) && _elm_lang$core$Native_Utils.eq(_p11._1, model.animation)) ? {
+				return (_elm_lang$core$Native_Utils.eq(model.geometry.event.type_, _p15._0) && _elm_lang$core$Native_Utils.eq(_p15._1, model.animation)) ? {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
@@ -10676,7 +10678,7 @@ var _aforemny$elm_mdc$Material_Ripple$update = F2(
 		}
 	});
 var _aforemny$elm_mdc$Material_Ripple$defaultModel = {focus: false, active: false, animating: false, deactivation: false, geometry: _aforemny$elm_mdc$Material_Internal_Ripple$defaultGeometry, animation: 0};
-var _aforemny$elm_mdc$Material_Ripple$_p14 = A3(
+var _aforemny$elm_mdc$Material_Ripple$_p18 = A3(
 	_aforemny$elm_mdc$Material_Component$indexed,
 	function (_) {
 		return _.ripple;
@@ -10688,8 +10690,8 @@ var _aforemny$elm_mdc$Material_Ripple$_p14 = A3(
 				{ripple: x});
 		}),
 	_aforemny$elm_mdc$Material_Ripple$defaultModel);
-var _aforemny$elm_mdc$Material_Ripple$get = _aforemny$elm_mdc$Material_Ripple$_p14._0;
-var _aforemny$elm_mdc$Material_Ripple$set = _aforemny$elm_mdc$Material_Ripple$_p14._1;
+var _aforemny$elm_mdc$Material_Ripple$get = _aforemny$elm_mdc$Material_Ripple$_p18._0;
+var _aforemny$elm_mdc$Material_Ripple$set = _aforemny$elm_mdc$Material_Ripple$_p18._1;
 var _aforemny$elm_mdc$Material_Ripple$bounded = A3(
 	_aforemny$elm_mdc$Material_Component$render,
 	_aforemny$elm_mdc$Material_Ripple$get,
