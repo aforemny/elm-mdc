@@ -267,7 +267,7 @@ view lift page model =
 
       , h2 [] [ text "Grid List: tile aspect ratio 16x9 with oneline footer caption (Support: 16:9, 4:3, 3:4, 2:3, 3:2 as well)" ]
       , GridList.view (lift << Mdc) [11] model.mdc
-        [ GridList.tileAspect16x9
+        [ GridList.tileAspect16To9
         ]
         ( ( GridList.tile []
             [ GridList.primary []

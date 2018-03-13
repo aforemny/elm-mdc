@@ -165,7 +165,7 @@ accept =
     cs "mdc-dialog__footer__button mdc-dialog__footer__button--accept"
 
 
-openOn : (Material.Internal.Msg.Msg m -> m) -> List Int -> String -> Options.Property c m
+openOn : (Material.Internal.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
 openOn lift index event =
     Options.on event (Json.succeed (lift (Material.Internal.Msg.DialogMsg index Open)))
 

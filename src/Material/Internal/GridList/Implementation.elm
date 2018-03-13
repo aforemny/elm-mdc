@@ -13,11 +13,11 @@ module Material.Internal.GridList.Implementation exposing
     , secondary
     , supportText
     , tile
-    , tileAspect16x9
-    , tileAspect2x3
-    , tileAspect3x2
-    , tileAspect3x4
-    , tileAspect4x3
+    , tileAspect16To9
+    , tileAspect2To3
+    , tileAspect3To2
+    , tileAspect3To4
+    , tileAspect4To3
     , title
     , twolineCaption
     , view
@@ -117,29 +117,29 @@ gutter1 =
     cs "mdc-grid-list--tile-gutter-1"
 
 
-tileAspect16x9 : Property m
-tileAspect16x9 =
-    cs "mdc-grid-list--tile-aspect-16x9"
+tileAspect16To9 : Property m
+tileAspect16To9 =
+    cs "mdc-grid-list--tile-aspect-16To9"
 
 
-tileAspect4x3 : Property m
-tileAspect4x3 =
-    cs "mdc-grid-list--tile-aspect-4x3"
+tileAspect4To3 : Property m
+tileAspect4To3 =
+    cs "mdc-grid-list--tile-aspect-4To3"
 
 
-tileAspect3x4 : Property m
-tileAspect3x4 =
-    cs "mdc-grid-list--tile-aspect-3x4"
+tileAspect3To4 : Property m
+tileAspect3To4 =
+    cs "mdc-grid-list--tile-aspect-3To4"
 
 
-tileAspect2x3 : Property m
-tileAspect2x3 =
-    cs "mdc-grid-list--tile-aspect-2x3"
+tileAspect2To3 : Property m
+tileAspect2To3 =
+    cs "mdc-grid-list--tile-aspect-2To3"
 
 
-tileAspect3x2 : Property m
-tileAspect3x2 =
-    cs "mdc-grid-list--tile-aspect-3x2"
+tileAspect3To2 : Property m
+tileAspect3To2 =
+    cs "mdc-grid-list--tile-aspect-3To2"
 
 
 tile : List (Property m) -> List (Html m) -> Html m

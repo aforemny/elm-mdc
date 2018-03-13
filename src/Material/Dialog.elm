@@ -34,6 +34,7 @@ The current implementation requires that a dialog has as first child a
 ```elm
 import Html exposing (text)
 import Material.Button as Button
+import Material.Component exposing (Index)
 import Material.Dialog as Dialog
 import Material.Options as Options exposing (styled)
 
@@ -217,6 +218,6 @@ Button.view Mdc [1] model.mdc
     ]
 ```
 -}
-openOn : (Material.Msg m -> m) -> List Int -> String -> Options.Property c m
+openOn : (Material.Msg m -> m) -> Index -> String -> Options.Property c m
 openOn =
     Dialog.openOn

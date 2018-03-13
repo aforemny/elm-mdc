@@ -11,11 +11,11 @@ module Material.GridList exposing
     , secondary
     , supportText
     , tile
-    , tileAspect16x9
-    , tileAspect2x3
-    , tileAspect3x2
-    , tileAspect3x4
-    , tileAspect4x3
+    , tileAspect16To9
+    , tileAspect2To3
+    , tileAspect3To2
+    , tileAspect3To4
+    , tileAspect4To3
     , title
     , twolineCaption
     , view
@@ -67,7 +67,7 @@ GridList.view Mdc [0] model.mdc []
 @docs headerCaption, twolineCaption
 @docs gutter1
 @docs iconAlignStart, iconAlignEnd
-@docs tileAspect16x9, tileAspect4x3, tileAspect3x4, tileAspect2x3, tileAspect3x2
+@docs tileAspect16To9, tileAspect4To3, tileAspect3To4, tileAspect2To3, tileAspect3To2
 
 
 ## Tiles
@@ -152,41 +152,41 @@ gutter1 =
 {-| Style a GridList so that its tiles `primary` content preserves a 16 to 9
 aspect ratio.
 -}
-tileAspect16x9 : Property m
-tileAspect16x9 =
-    GridList.tileAspect16x9
+tileAspect16To9 : Property m
+tileAspect16To9 =
+    GridList.tileAspect16To9
 
 
 {-| Style a GridList so that its tiles `primary` content preserves a 4 to 3
 aspect ratio.
 -}
-tileAspect4x3 : Property m
-tileAspect4x3 =
-    GridList.tileAspect4x3
+tileAspect4To3 : Property m
+tileAspect4To3 =
+    GridList.tileAspect4To3
 
 
 {-| Style a GridList so that its tiles `primary` content preserves a 3 to 4
 aspect ratio.
 -}
-tileAspect3x4 : Property m
-tileAspect3x4 =
-    GridList.tileAspect3x4
+tileAspect3To4 : Property m
+tileAspect3To4 =
+    GridList.tileAspect3To4
 
 
 {-| Style a GridList so that its tiles `primary` content preserves a 2 to 3
 aspect ratio.
 -}
-tileAspect2x3 : Property m
-tileAspect2x3 =
-    GridList.tileAspect2x3
+tileAspect2To3 : Property m
+tileAspect2To3 =
+    GridList.tileAspect2To3
 
 
 {-| Style a GridList so that its tiles `primary` content preserves a 3 to 2
 aspect ratio.
 -}
-tileAspect3x2 : Property m
-tileAspect3x2 =
-    GridList.tileAspect3x2
+tileAspect3To2 : Property m
+tileAspect3To2 =
+    GridList.tileAspect3To2
 
 
 {-| GridList tile.
