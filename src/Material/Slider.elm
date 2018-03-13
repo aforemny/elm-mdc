@@ -802,6 +802,7 @@ decodePageX =
     Json.map (\ pageX -> { pageX = pageX }) <|
     Json.oneOf
     [ Json.at [ "targetTouches", "0", "pageX" ] Json.float
+    , Json.at [ "changedTouches", "0", "pageX" ] Json.float
     , Json.at ["pageX"] Json.float
     ]
 
