@@ -7,6 +7,7 @@ import Material
 import Material.Button as Button
 import Material.Card as Card
 import Material.Checkbox as Checkbox
+import Material.FormField as FormField
 import Material.Icon as Icon
 import Material.IconToggle as IconToggle
 import Material.Options as Options exposing (styled, cs, css, when)
@@ -375,9 +376,7 @@ view lift page model =
     , example
       [ css "text-align" "center"
       ]
-      [ styled Html.div
-        [ cs "mdc-form-field"
-        ]
+      [ FormField.view []
         [ Checkbox.view (lift << Mdc) [0] model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked model.rtl

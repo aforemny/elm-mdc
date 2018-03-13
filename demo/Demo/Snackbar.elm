@@ -8,6 +8,7 @@ import Json.Decode as Json
 import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
+import Material.FormField as FormField
 import Material.Options as Options exposing (styled, cs, css, nop, when)
 import Material.Snackbar as Snackbar
 import Material.Textfield as Textfield
@@ -142,9 +143,7 @@ view lift page model =
         [
           styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
         ,
-          styled Html.div
-          [ cs "mdc-form-field"
-          ]
+          FormField.view []
           [ Checkbox.view (lift << Mdc) [0] model.mdc
             [ Options.onClick (lift ToggleMultiline)
             , Checkbox.checked model.multiline
@@ -155,9 +154,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          styled Html.div
-          [ cs "mdc-form-field"
-          ]
+          FormField.view []
           [ Checkbox.view (lift << Mdc) [1] model.mdc
             [ Options.onClick (lift ToggleActionOnBottom)
             , when (not model.multiline) << Options.many <|
@@ -171,9 +168,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          styled Html.div
-          [ cs "mdc-form-field"
-          ]
+          FormField.view []
           [ Checkbox.view (lift << Mdc) [2] model.mdc
             [ Options.onClick (lift ToggleDismissOnAction)
             , Checkbox.checked (model.dismissOnAction)

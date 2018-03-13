@@ -26,7 +26,7 @@ material-components-web.css:
 	cp node_modules/material-components-web/dist/material-components-web.css .
 
 docs:
-	$(ELM) --docs=documentation.json
+	$(ELM) --docs=docs.json
 
 pages: build-demo
 	rsync -r build/ $(PAGES)

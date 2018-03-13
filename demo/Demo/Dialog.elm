@@ -8,6 +8,7 @@ import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
 import Material.Dialog as Dialog
+import Material.FormField as FormField
 import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 
@@ -259,9 +260,7 @@ view lift page model =
     ,
       text " "
     ,
-      styled Html.div
-      [ cs "mdc-form-field"
-      ]
+      FormField.view []
       [ Checkbox.view (lift << Mdc) [5] model.mdc
         [ Checkbox.checked model.rtl
         , Options.on "click" (Json.succeed (lift ToggleRtl))

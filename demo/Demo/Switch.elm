@@ -4,6 +4,7 @@ import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Material
+import Material.FormField as FormField
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Switch as Switch
 import Platform.Cmd exposing (Cmd, none)
@@ -61,9 +62,7 @@ view lift page model =
     page.body "Switches"
     [
       Page.hero []
-      [ styled Html.div
-        [ cs "mdc-form-field"
-        ]
+      [ FormField.view []
         [ let
               index =
                   [0]
@@ -90,9 +89,7 @@ view lift page model =
         ]
         [ text "Enabled" ]
       ,
-        styled Html.div
-        [ cs "mdc-form-field"
-        ]
+        FormField.view []
         [ let
               index =
                   [1]
@@ -125,9 +122,7 @@ view lift page model =
         ]
         [ text "Disabled"
         ]
-      , styled Html.div
-        [ cs "mdc-form-field"
-        ]
+      , FormField.view []
         [ let
               index =
                   [2]

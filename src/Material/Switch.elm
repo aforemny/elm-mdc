@@ -23,13 +23,12 @@ Material Design Switch requirements.
 
 ```elm
 import Html exposing (text)
+import Material.FormField as FormField
 import Material.Options as Options exposing (styled)
 import Material.Switch as Switch
 
 
-styled Html.div
-    [ cs "mdc-form-field"
-    ]
+FormField.view []
     [ Switch.view Mdc [0] model.mdc
           [ Switch.on
           , Options.onClick Toggle

@@ -5,6 +5,7 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.Checkbox as Checkbox
+import Material.FormField as FormField
 import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
@@ -96,9 +97,7 @@ not included in the base css, which has the list take up as much width as
 possible (since it's a block element)."""
         ]
 
-      , styled Html.div
-        [ cs "mdc-form-field"
-        ]
+      , FormField.view []
         [ Checkbox.view (lift << Mdc) [0] model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked model.rtl

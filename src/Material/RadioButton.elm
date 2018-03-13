@@ -22,13 +22,12 @@ Design Specification.
 
 ```elm
 import Html exposing (text)
+import Material.FormField as FormField
 import Material.Options as Options exposing (styled, cs)
 import Material.RadioButton as RadioButton
 
 
-styled Html.div
-    [ cs "mdc-form-field"
-    ]
+FormField.view []
     [ RadioButton.view Mdc [0] model.mdc
           [ RadioButton.selected
           , Options.onClick Select

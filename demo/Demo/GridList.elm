@@ -1,10 +1,11 @@
 module Demo.GridList exposing (Model, defaultModel, Msg, subscriptions, update, view)
 
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
 import Html.Attributes as Html
+import Html exposing (Html, text)
 import Material
 import Material.Checkbox as Checkbox
+import Material.FormField as FormField
 import Material.GridList as GridList
 import Material.Options as Options exposing (styled, css, cs, when)
 
@@ -71,9 +72,7 @@ view lift page model =
       , css "padding" "24px"
       , css "marign" "24px"
       ]
-      [ styled Html.div
-        [ cs "mdc-form-field"
-        ]
+      [ FormField.view []
         [ Checkbox.view (lift << Mdc) [0] model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked model.rtl

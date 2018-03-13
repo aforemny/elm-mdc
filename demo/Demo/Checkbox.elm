@@ -1,15 +1,15 @@
 module Demo.Checkbox exposing (Model,defaultModel,Msg(Mdc),update,view)
 
+import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Json.Decode as Json
 import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
+import Material.FormField as FormField
 import Material.Options as Options exposing (styled, cs, css, when)
 import Platform.Cmd exposing (Cmd, none)
-
-import Demo.Page as Page exposing (Page)
 
 
 type alias Model m =
@@ -134,9 +134,7 @@ view lift page model =
     [
       Page.hero []
       [
-        styled Html.div
-        [ cs "mdc-form-field"
-        ]
+        FormField.view []
         [ checkbox [0]
         , Html.label [] [ text "Checkbox" ]
         ]
@@ -152,9 +150,7 @@ view lift page model =
           in
           styled Html.div []
           [
-            styled Html.div
-            [ cs "mdc-form-field"
-            ]
+            FormField.view []
             [ 
               Checkbox.view (lift << Mdc) index model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))

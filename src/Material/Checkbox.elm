@@ -23,12 +23,11 @@ the Material Design checkbox requirements.
 ```elm
 import Html exposing (text)
 import Material.Checkbox as Checkbox
+import Material.FormField as FormField
 import Material.Options as Options exposing (styled, cs)
 
 
-styled Html.div
-    [ cs "mdc-form-field"
-    ]
+FormField.view []
     [ Checkbox.view Mdc [0] model.mdc
           [ Checkbox.checked True
           , Options.onClick Toggle
