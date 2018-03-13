@@ -14,7 +14,6 @@ import Html exposing (Html, text)
 import Json.Decode as Json
 import Material
 import Material.Button as Button
-import Material.Drawer
 import Material.Drawer.Persistent as Drawer
 import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
@@ -175,4 +174,4 @@ html, body {
 
 subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
-    Material.Drawer.subs (lift << Mdc) model.mdc
+    Material.subscriptions (lift << Mdc) model

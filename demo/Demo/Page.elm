@@ -8,6 +8,7 @@ module Demo.Page exposing
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
+import Material.Component exposing (Index)
 import Material.Msg
 import Material.Options as Options exposing (Property, styled, cs, css, when)
 import Material.Toolbar as Toolbar
@@ -25,7 +26,7 @@ type alias Page m =
 
 toolbar
   : (Material.Msg.Msg m -> m)
-  -> Material.Msg.Index
+  -> Index
   -> Material.Model m
   -> (Url -> m)
   -> Url

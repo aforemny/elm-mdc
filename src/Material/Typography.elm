@@ -60,98 +60,99 @@ styled Html.div
 -}
 
 
-import Material.Options as Options exposing (Property, styled, cs, css)
+import Material.Options exposing (Property)
+import Material.Internal.Typography.Implementation as Typography
 
 
 {-| Sets the font to Roboto.
 -}
 typography : Property c m
 typography =
-    cs "mdc-typography"
+    Typography.typography
 
 
 {-| Sets font properties as Display 1.
 -}
 display1 : Property c m
 display1 =
-    cs "mdc-typography--display1"
+    Typography.display1
 
 
 {-| Sets font properties as Display 2.
 -}
 display2 : Property c m
 display2 =
-    cs "mdc-typography--display2"
+    Typography.display2
 
 
 {-| Sets font properties as Display 3.
 -}
 display3 : Property c m
 display3 =
-    cs "mdc-typography--display3"
+    Typography.display3
 
 
 {-| Sets font properties as Display 4.
 -}
 display4 : Property c m
 display4 =
-    cs "mdc-typography--display4"
+    Typography.display4
 
 
 {-| Sets font properties as Title.
 -}
 title : Property c m
 title =
-    cs "mdc-typography--title"
+    Typography.title
 
 
 {-| Sets font properties as Headline.
 -}
 headline : Property c m
 headline =
-    cs "mdc-typography--headline"
+    Typography.headline
 
 
 {-| Sets font properties as Caption.
 -}
 caption : Property c m
 caption =
-    cs "mdc-typography--caption"
+    Typography.caption
 
 
 {-| Sets font properties as Body 1.
 -}
 body1 : Property c m
 body1 =
-    cs "mdc-typography--body1"
+    Typography.body1
 
 
 {-| Sets font properties as Body 2.
 -}
 body2 : Property c m
 body2 =
-    cs "mdc-typography--body2"
+    Typography.body2
 
 
 {-| Sets font properties as Subheading 1.
 -}
 subheading1 : Property c m
 subheading1 =
-    cs "mdc-typography--subheading1"
+    Typography.subheading1
 
 
 {-| Sets font properties as Subheading 2.
 -}
 subheading2 : Property c m
 subheading2 =
-    cs "mdc-typography--subheading2"
+    Typography.subheading2
 
 
 {-| Sets font properties as Button.
 -}
 button : Property c m
 button =
-    cs "mdc-typography--button"
+    Typography.button
 
 
 {-| Positions text, used in conjunction with font classes above.
@@ -163,4 +164,4 @@ incorrectly.
 -}
 adjustMargin : Property c m
 adjustMargin =
-    cs "mdc-typography--adjust-margin"
+    Typography.adjustMargin

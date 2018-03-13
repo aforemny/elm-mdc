@@ -116,98 +116,99 @@ and five text styles:
 @docs textIconOnDark
 -}
 
-import Material.Options as Options exposing (Property, cs)
+import Material.Internal.Theme.Implementation as Theme
+import Material.Options exposing (Property)
 
 
 {-| Sets the text color to the theme primary color.
 -}
 primary : Property c m
 primary =
-    cs "mdc-theme--primary"
+    Theme.primary
 
 
 {-| Sets the text color to the theme secondary color.
 -}
 secondary : Property c m
 secondary =
-    cs "mdc-theme--secondary"
+    Theme.secondary
 
 
 {-| Sets the text color to the theme primary color (light variant).
 -}
 primaryLight : Property c m
 primaryLight =
-    cs "mdc-theme--primary-light"
+    Theme.primaryLight
 
 
 {-| Sets the text color to the theme secondary color (light variant).
 -}
 secondaryLight : Property c m
 secondaryLight =
-    cs "mdc-theme--secondary-light"
+    Theme.secondaryLight
 
 
 {-| Sets the text color to the theme primary color (dark variant).
 -}
 primaryDark : Property c m
 primaryDark =
-    cs "mdc-theme--primary-dark"
+    Theme.primaryDark
 
 
 {-| Sets the text color to the theme secondary color (dark variant).
 -}
 secondaryDark : Property c m
 secondaryDark =
-    cs "mdc-theme--secondary-dark"
+    Theme.secondaryDark
 
 
 {-| Sets the background color to the theme primary color.
 -}
 primaryBg : Property c m
 primaryBg =
-    cs "mdc-theme--primary-bg"
+    Theme.primaryBg
 
 
 {-| Sets the background color to the theme secondary color.
 -}
 secondaryBg : Property c m
 secondaryBg =
-    cs "mdc-theme--secondary-bg"
+    Theme.secondaryBg
 
 
 {-| Sets the background color to the theme primary color (light variant).
 -}
 primaryLightBg : Property c m
 primaryLightBg =
-    cs "mdc-theme--primary-light-bg"
+    Theme.primaryLightBg
 
 
 {-| Sets the background color to the theme secondary color (light variant).
 -}
 secondaryLightBg : Property c m
 secondaryLightBg =
-    cs "mdc-theme--secondary-light-bg"
+    Theme.secondaryLightBg
 
 
 {-| Sets the background color to the theme primary color (dark variant).
 -}
 primaryDarkBg : Property c m
 primaryDarkBg =
-    cs "mdc-theme--primary-dark-bg"
+    Theme.primaryDarkBg
 
 
 {-| Sets the background color to the theme secondary color (dark variant).
 -}
 secondaryDarkBg : Property c m
 secondaryDarkBg =
-    cs "mdc-theme--secondary-dark-bg"
+    Theme.secondaryDarkBg
 
 
 {-| Sets the background color to the theme background color.
 -}
 background : Property c m
 background =
-    cs "mdc-theme--background"
+    Theme.background
 
 
 {-| Sets text to a suitable color for primary text on top of primary color
@@ -215,7 +216,7 @@ background.
 -}
 textPrimaryOnPrimary : Property c m
 textPrimaryOnPrimary =
-    cs "mdc-theme--text-primary-on-primary"
+    Theme.textPrimaryOnPrimary
 
 
 {-| Sets text to a suitable color for secondary text on top of primary color
@@ -223,7 +224,7 @@ background.
 -}
 textSecondaryOnPrimary : Property c m
 textSecondaryOnPrimary =
-    cs "mdc-theme--text-secondary-on-primary"
+    Theme.textSecondaryOnPrimary
 
 
 {-| Sets text to a suitable color for hint text on top of primary color
@@ -231,7 +232,7 @@ background.
 -}
 textHintOnPrimary : Property c m
 textHintOnPrimary =
-    cs "mdc-theme--text-hint-on-primary"
+    Theme.textHintOnPrimary
 
 
 {-| Sets text to a suitable color for disabled text on top of primary color
@@ -239,7 +240,7 @@ background.
 -}
 textDisabledOnPrimary : Property c m
 textDisabledOnPrimary =
-    cs "mdc-theme--text-disabled-on-primary"
+    Theme.textDisabledOnPrimary
 
 
 {-| Sets text to a suitable color for icons on top of primary color
@@ -247,7 +248,7 @@ background.
 -}
 textIconOnPrimary : Property c m
 textIconOnPrimary =
-    cs "mdc-theme--text-icon-on-primary"
+    Theme.textIconOnPrimary
 
 
 {-| Sets text to a suitable color for primary text on top of secondary color
@@ -255,7 +256,7 @@ background.
 -}
 textPrimaryOnSecondary : Property c m
 textPrimaryOnSecondary =
-    cs "mdc-theme--text-primary-on-secondary"
+    Theme.textPrimaryOnSecondary
 
 
 {-| Sets text to a suitable color for secondary text on top of secondary color
@@ -263,7 +264,7 @@ background.
 -}
 textSecondaryOnSecondary : Property c m
 textSecondaryOnSecondary =
-    cs "mdc-theme--text-secondary-on-secondary"
+    Theme.textSecondaryOnSecondary
 
 
 {-| Sets text to a suitable color for hint text on top of secondary color
@@ -271,7 +272,7 @@ background.
 -}
 textHintOnSecondary : Property c m
 textHintOnSecondary =
-    cs "mdc-theme--text-hint-on-secondary"
+    Theme.textHintOnSecondary
 
 
 {-| Sets text to a suitable color for disabled text on top of secondary color
@@ -279,7 +280,7 @@ background.
 -}
 textDisabledOnSecondary : Property c m
 textDisabledOnSecondary =
-    cs "mdc-theme--text-disabled-on-secondary"
+    Theme.textDisabledOnSecondary
 
 
 {-| Sets text to a suitable color for icons on top of secondary color
@@ -287,49 +288,49 @@ background.
 -}
 textIconOnSecondary : Property c m
 textIconOnSecondary =
-    cs "mdc-theme--text-icon-on-secondary"
+    Theme.textIconOnSecondary
 
 
 {-| Sets text to a suitable color for primary text on top of background.
 -}
 textPrimaryOnBackground : Property c m
 textPrimaryOnBackground =
-    cs "mdc-theme--text-primary-on-background"
+    Theme.textPrimaryOnBackground
 
 
 {-| Sets text to a suitable color for secondary text on top of background.
 -}
 textSecondaryOnBackground : Property c m
 textSecondaryOnBackground =
-    cs "mdc-theme--text-secondary-on-background"
+    Theme.textSecondaryOnBackground
 
 
 {-| Sets text to a suitable color for hint text on top of background.
 -}
 textHintOnBackground : Property c m
 textHintOnBackground =
-    cs "mdc-theme--text-hint-on-background"
+    Theme.textHintOnBackground
 
 
 {-| Sets text to a suitable color for disabled text on top of background.
 -}
 textDisabledOnBackground : Property c m
 textDisabledOnBackground =
-    cs "mdc-theme--text-disabled-on-background"
+    Theme.textDisabledOnBackground
 
 
 {-| Sets text to a suitable color for icons on top of background.
 -}
 textIconOnBackground : Property c m
 textIconOnBackground =
-    cs "mdc-theme--text-icon-on-background"
+    Theme.textIconOnBackground
 
 
 {-| Sets text to a suitable color for primary text on top of light background.
 -}
 textPrimaryOnLight : Property c m
 textPrimaryOnLight =
-    cs "mdc-theme--text-primary-on-light"
+    Theme.textPrimaryOnLight
 
 
 {-| Sets text to a suitable color for secondary text on top of light
@@ -337,60 +338,60 @@ background.
 -}
 textSecondaryOnLight : Property c m
 textSecondaryOnLight =
-    cs "mdc-theme--text-secondary-on-light"
+    Theme.textSecondaryOnLight
 
 
 {-| Sets text to a suitable color for hint text on top of light background.
 -}
 textHintOnLight : Property c m
 textHintOnLight =
-    cs "mdc-theme--text-hint-on-light"
+    Theme.textHintOnLight
 
 
 {-| Sets text to a suitable color for disabled text on top of light background.
 -}
 textDisabledOnLight : Property c m
 textDisabledOnLight =
-    cs "mdc-theme--text-disabled-on-light"
+    Theme.textDisabledOnLight
 
 
 {-| Sets text to a suitable color for icons on top of light background.
 -}
 textIconOnLight : Property c m
 textIconOnLight =
-    cs "mdc-theme--text-icon-on-light"
+    Theme.textIconOnLight
 
 
 {-| Sets text to a suitable color for primary text on top of dark background.
 -}
 textPrimaryOnDark : Property c m
 textPrimaryOnDark =
-    cs "mdc-theme--text-primary-on-dark"
+    Theme.textPrimaryOnDark
 
 
 {-| Sets text to a suitable color for secondary text on top of dark background.
 -}
 textSecondaryOnDark : Property c m
 textSecondaryOnDark =
-    cs "mdc-theme--text-secondary-on-dark"
+    Theme.textSecondaryOnDark
 
 
 {-| Sets text to a suitable color for hint text on top of dark background.
 -}
 textHintOnDark : Property c m
 textHintOnDark =
-    cs "mdc-theme--text-hint-on-dark"
+    Theme.textHintOnDark
 
 
 {-| Sets text to a suitable color for disabled text on top of dark background.
 -}
 textDisabledOnDark : Property c m
 textDisabledOnDark =
-    cs "mdc-theme--text-disabled-on-dark"
+    Theme.textDisabledOnDark
 
 
 {-| Sets text to a suitable color for icons on top of dark background.
 -}
 textIconOnDark : Property c m
 textIconOnDark =
-    cs "mdc-theme--text-icon-on-dark"
+    Theme.textIconOnDark

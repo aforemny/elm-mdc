@@ -579,4 +579,4 @@ anchorWidths lift model =
 
 subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
-    Menu.subs (lift << Mdc) model.mdc
+    Material.subscriptions (lift << Mdc) model

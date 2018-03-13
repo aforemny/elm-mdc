@@ -1,12 +1,11 @@
-module Material.Icon
-    exposing
-        ( Property
-        , size18
-        , size24
-        , size36
-        , size48
-        , view
-        )
+module Material.Icon exposing
+    ( Property
+    , size18
+    , size24
+    , size36
+    , size48
+    , view
+    )
 
 {-| Convenience functions for producing Material Design Icons. Refer to the
 [Material Design Icons page](https://google.github.io/material-design-icons),
@@ -41,55 +40,46 @@ Icon.view [] "settings"
 @docs size48
 -}
 
-import Html exposing (i, text, Html, Attribute)
-import Material.Options as Options exposing (Property, cs, css, styled)
-
-
-type alias Config =
-    {}
-
-
-defaultConfig : Config
-defaultConfig =
-    {}
+import Html exposing (Html)
+import Material.Internal.Icon.Implementation as Icon
 
 
 {-| Icon property.
 -}
 type alias Property m =
-    Options.Property Config m
+    Icon.Property m
 
 
 {-| Icon view.
 -}
 view : List (Property m) -> String -> Html m
-view options name =
-    styled Html.i (cs "material-icons" :: options) [ text name ]
+view =
+    Icon.view
 
 
 {-| Set icon to have size 18px.
 -}
 size18 : Property m
 size18 =
-    css "font-size" "18px"
+    Icon.size18
 
 
 {-| Set icon to have size 24px.
 -}
 size24 : Property m
 size24 =
-    css "font-size" "24px"
+    Icon.size24
 
 
 {-| Set icon to have size 36px.
 -}
 size36 : Property m
 size36 =
-    css "font-size" "36px"
+    Icon.size36
 
 
 {-| Set icon to have size 48px.
 -}
 size48 : Property m
 size48 =
-    css "font-size" "48px"
+    Icon.size48

@@ -122,50 +122,41 @@ LayoutGrid.view []
 -}
 
 import Html exposing (Html)
-import Material.Options as Options exposing (styled, cs, css, when)
-
-
-type alias Config =
-    {}
-
-
-defaultConfig : Config
-defaultConfig =
-    {}
+import Material.Internal.LayoutGrid.Implementation as LayoutGrid
 
 
 {-| LayoutGrid property.
 -}
 type alias Property m =
-    Options.Property Config m
+    LayoutGrid.Property m
 
 
 {-| LayoutGrid view.
 -}
 view : List (Property m) -> List (Html m) -> Html m
-view options =
-    styled Html.div (cs "mdc-layout-grid" :: options) << List.singleton << inner []
+view =
+    LayoutGrid.view
 
 
 {-| Make the LayoutGrid left aligned instead of center aligned.
 -}
 alignLeft : Property m
 alignLeft =
-    cs "mdc-layout-grid--align-left"
+    LayoutGrid.alignLeft
 
 
 {-| Make the LayoutGrid right aligned instead of center aligned.
 -}
 alignRight : Property m
 alignRight =
-    cs "mdc-layout-grid--align-right"
+    LayoutGrid.alignRight
 
 
 {-| Specifiy that the grid should have fixed column width.
 -}
 fixedColumnWidth : Property m
 fixedColumnWidth =
-    cs "mdc-layout-grid--fixed-column-width"
+    LayoutGrid.fixedColumnWidth
 
 
 {-| When your contents need extra structure that cannot be supported by single
@@ -173,273 +164,264 @@ layout grid, you can nest layout grid within each other. Use `inner` to nest
 layout grids by wrapping around nested cell.
 -}
 inner : List (Property m) -> List (Html m) -> Html m
-inner options =
-    styled Html.div (cs "mdc-layout-grid__inner" :: options)
+inner =
+    LayoutGrid.inner
 
 
 {-| LayoutGrid cell.
 -}
 cell : List (Property m) -> List (Html m) -> Html m
-cell options =
-    styled Html.div (cs "mdc-layout-grid__cell" :: options)
+cell =
+    LayoutGrid.cell
 
 
 {-| Span 1 columns.
 -}
 span1 : Property m
 span1 =
-    span Nothing 1
+    LayoutGrid.span1
 
 
 {-| Span 2 columns.
 -}
 span2 : Property m
 span2 =
-    span Nothing 2
+    LayoutGrid.span2
 
 
 {-| Span 3 columns.
 -}
 span3 : Property m
 span3 =
-    span Nothing 3
+    LayoutGrid.span3
 
 
 {-| Span 4 columns.
 -}
 span4 : Property m
 span4 =
-    span Nothing 4
+    LayoutGrid.span4
 
 
 {-| Span 5 columns.
 -}
 span5 : Property m
 span5 =
-    span Nothing 5
+    LayoutGrid.span5
 
 
 {-| Span 6 columns.
 -}
 span6 : Property m
 span6 =
-    span Nothing 6
+    LayoutGrid.span6
 
 
 {-| Span 7 columns.
 -}
 span7 : Property m
 span7 =
-    span Nothing 7
+    LayoutGrid.span7
 
 
 {-| Span 8 columns.
 -}
 span8 : Property m
 span8 =
-    span Nothing 8
+    LayoutGrid.span8
 
 
 {-| Span 9 columns.
 -}
 span9 : Property m
 span9 =
-    span Nothing 9
+    LayoutGrid.span9
 
 
 {-| Span 10 columns.
 -}
 span10 : Property m
 span10 =
-    span Nothing 10
+    LayoutGrid.span10
 
 
 {-| Span 11 columns.
 -}
 span11 : Property m
 span11 =
-    span Nothing 11
+    LayoutGrid.span11
 
 
 {-| Span 12 columns.
 -}
 span12 : Property m
 span12 =
-    span Nothing 12
+    LayoutGrid.span12
 
 
 {-| Span 1 columns on a phone.
 -}
 span1Phone : Property m
 span1Phone =
-    span (Just "phone") 1
+    LayoutGrid.span1Phone
 
 
 {-| Span 2 columns on a phone.
 -}
 span2Phone : Property m
 span2Phone =
-    span (Just "phone") 2
+    LayoutGrid.span2Phone
 
 
 {-| Span 3 columns on a phone.
 -}
 span3Phone : Property m
 span3Phone =
-    span (Just "phone") 3
+    LayoutGrid.span3Phone
 
 
 {-| Span 4 columns on a phone.
 -}
 span4Phone : Property m
 span4Phone =
-    span (Just "phone") 4
+    LayoutGrid.span4Phone
 
 
 {-| Span 1 columns on a tablet.
 -}
 span1Tablet : Property m
 span1Tablet =
-    span (Just "tablet") 1
+    LayoutGrid.span1Tablet
 
 
 {-| Span 2 columns on a tablet.
 -}
 span2Tablet : Property m
 span2Tablet =
-    span (Just "tablet") 2
+    LayoutGrid.span2Tablet
 
 
 {-| Span 3 columns on a tablet.
 -}
 span3Tablet : Property m
 span3Tablet =
-    span (Just "tablet") 3
+    LayoutGrid.span3Tablet
 
 
 {-| Span 4 columns on a tablet.
 -}
 span4Tablet : Property m
 span4Tablet =
-    span (Just "tablet") 4
+    LayoutGrid.span4Tablet
 
 
 {-| Span 5 columns on a tablet.
 -}
 span5Tablet : Property m
 span5Tablet =
-    span (Just "tablet") 5
+    LayoutGrid.span5Tablet
 
 
 {-| Span 6 columns on a tablet.
 -}
 span6Tablet : Property m
 span6Tablet =
-    span (Just "tablet") 6
+    LayoutGrid.span6Tablet
 
 
 {-| Span 7 columns on a tablet.
 -}
 span7Tablet : Property m
 span7Tablet =
-    span (Just "tablet") 7
+    LayoutGrid.span7Tablet
 
 
 {-| Span 8 columns on a tablet.
 -}
 span8Tablet : Property m
 span8Tablet =
-    span (Just "tablet") 8
+    LayoutGrid.span8Tablet
 
 
 {-| Span 1 columns on a desktop.
 -}
 span1Desktop : Property m
 span1Desktop =
-    span (Just "desktop") 1
+    LayoutGrid.span1Desktop
 
 
 {-| Span 2 columns on a desktop.
 -}
 span2Desktop : Property m
 span2Desktop =
-    span (Just "desktop") 2
+    LayoutGrid.span2Desktop
 
 
 {-| Span 3 columns on a desktop.
 -}
 span3Desktop : Property m
 span3Desktop =
-    span (Just "desktop") 3
+    LayoutGrid.span3Desktop
 
 
 {-| Span 4 columns on a desktop.
 -}
 span4Desktop : Property m
 span4Desktop =
-    span (Just "desktop") 4
+    LayoutGrid.span4Desktop
 
 
 {-| Span 5 columns on a desktop.
 -}
 span5Desktop : Property m
 span5Desktop =
-    span (Just "desktop") 5
+    LayoutGrid.span5Desktop
 
 
 {-| Span 6 columns on a desktop.
 -}
 span6Desktop : Property m
 span6Desktop =
-    span (Just "desktop") 6
+    LayoutGrid.span6Desktop
 
 
 {-| Span 7 columns on a desktop.
 -}
 span7Desktop : Property m
 span7Desktop =
-    span (Just "desktop") 7
+    LayoutGrid.span7Desktop
 
 
 {-| Span 8 columns on a desktop.
 -}
 span8Desktop : Property m
 span8Desktop =
-    span (Just "desktop") 8
+    LayoutGrid.span8Desktop
 
 
 {-| Span 9 columns on a desktop.
 -}
 span9Desktop : Property m
 span9Desktop =
-    span (Just "desktop") 9
+    LayoutGrid.span9Desktop
 
 
 {-| Span 10 columns on a desktop.
 -}
 span10Desktop : Property m
 span10Desktop =
-    span (Just "desktop") 10
+    LayoutGrid.span10Desktop
 
 
 {-| Span 11 columns on a desktop.
 -}
 span11Desktop : Property m
 span11Desktop =
-    span (Just "desktop") 11
+    LayoutGrid.span11Desktop
 
 
 {-| Span 12 columns on a desktop.
 -}
 span12Desktop : Property m
 span12Desktop =
-    span (Just "desktop") 12
-
-
-span : Maybe String -> Int -> Property m
-span device value =
-    case device of
-        Just device ->
-            cs ("mdc-layout-grid__cell--span-" ++ toString value ++ "-" ++ device)
-        Nothing ->
-            cs ("mdc-layout-grid__cell--span-" ++ toString value)
+    LayoutGrid.span12Desktop

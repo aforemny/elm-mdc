@@ -50,54 +50,31 @@ Html.div []
 
 
 import Html exposing (Html)
-import Material.Internal.Options as Internal
-import Material.Options as Options exposing (cs, css, when)
-
-
-type alias Config =
-    { persistent : Bool
-    , validationMsg : Bool
-    }
-
-
-defaultConfig : Config
-defaultConfig =
-    { persistent = False
-    , validationMsg = False
-    }
+import Material.Internal.Textfield.HelperText.Implementation as HelperText
 
 
 {-| HelperText property.
 -}
 type alias Property m =
-    Options.Property Config m
+    HelperText.Property m
+
+
+{-| HelperText view.
+-}
+helperText : List (Property m) -> List (Html m) -> Html m
+helperText =
+    HelperText.helperText
 
 
 {-| Make the helper text permanently visible.
 -}
 persistent : Property m
 persistent =
-    Internal.option (\config -> { config | persistent = True })
+    HelperText.persistent
 
 
 {-| Indicates the helper text is a validation message.
 -}
 validationMsg : Property m
 validationMsg =
-    Internal.option (\config -> { config | validationMsg = True })
-
-
-{-| HelperText view.
--}
-helperText : List (Property m) -> List (Html m) -> Html m
-helperText options =
-    let
-        ({ config } as summary) =
-            Internal.collect defaultConfig options
-    in
-    Options.styled Html.p
-    (  cs "mdc-text-field-helper-text"
-    :: (cs "mdc-text-field-helper-text--persistent" |> when config.persistent)
-    :: (cs "mdc-text-field-helper-text--validation-msg" |> when config.validationMsg)
-    :: options
-    )
+    HelperText.validationMsg

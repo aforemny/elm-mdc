@@ -17,7 +17,6 @@ import Json.Decode as Json
 import Markdown
 import Material
 import Material.Button as Button
-import Material.Drawer
 import Material.Drawer.Permanent as Drawer
 import Material.Elevation as Elevation
 import Material.List as Lists
@@ -218,4 +217,4 @@ html, body {
 
 subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
-    Material.Drawer.subs (lift << Mdc) model.mdc
+    Material.subscriptions (lift << Mdc) model

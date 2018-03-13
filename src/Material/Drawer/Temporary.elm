@@ -68,46 +68,37 @@ Drawer.view Mdc [0] model.mdc []
 @docs openOn
 -}
 
-import Html exposing (Html, text)
-import Json.Decode as Json
-import Material.Drawer as Drawer
-import Material.Internal.Drawer
+import Html exposing (Html)
+import Material.Component exposing (Indexed, Index)
+import Material.Internal.Drawer.Implementation
+import Material.Internal.Drawer.Temporary.Implementation as Drawer
 import Material.List as Lists
-import Material.Msg exposing (Index)
+import Material.Msg
 import Material.Options as Options
-
-
-type alias Model =
-    Drawer.Model
-
-
-defaultModel : Model
-defaultModel =
-    Drawer.defaultModel
-
-
-type alias Msg
-    = Drawer.Msg
-
-
-update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
-update =
-    Drawer.update
-
-
-type alias Config =
-    Drawer.Config
-
-
-defaultConfig : Config
-defaultConfig =
-    Drawer.defaultConfig
 
 
 {-| Drawer property.
 -}
 type alias Property m =
     Drawer.Property m
+
+
+type alias Store s =
+    { s | drawer : Indexed Material.Internal.Drawer.Implementation.Model
+    }
+
+
+{-| Drawer view.
+-}
+view :
+    (Material.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+view =
+    Drawer.view
 
 
 {-| Container to create a 16:9 drawer header.
@@ -138,43 +129,6 @@ toolbarSpacer =
     Drawer.toolbarSpacer
 
 
-type alias Store s =
-    Drawer.Store s
-
-
-{-| Drawer view.
--}
-view :
-    (Material.Msg.Msg m -> m)
-    -> Index
-    -> Store s
-    -> List (Property m)
-    -> List (Html m)
-    -> Html m
-view =
-    Drawer.render className
-
-
-react :
-    (Material.Msg.Msg m -> m)
-    -> Msg
-    -> Index
-    -> Store s
-    -> ( Maybe (Store s), Cmd m )
-react =
-    Drawer.react
-
-
-subs : (Material.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Drawer.subs
-
-
-subscriptions : Model -> Sub Msg
-subscriptions =
-    Drawer.subscriptions
-
-
 {-| Opens the drawer on interaction.
 
 ```elm
@@ -189,11 +143,5 @@ Button.view Mdc [0] model.mdc
 ```
 -}
 openOn : (Material.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
-openOn lift index event =
-    Options.on event <| Json.succeed << lift <|
-    Material.Msg.DrawerMsg index (Material.Internal.Drawer.Open False)
-
-
-className : String
-className =
-    "mdc-drawer--temporary"
+openOn =
+    Drawer.openOn

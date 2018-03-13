@@ -144,28 +144,29 @@ view model =
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
-import Material.Component as Component exposing (Indexed)
-import Material.Msg exposing (Msg(..))
-
-import Material.Button as Button
-import Material.Checkbox as Checkbox
-import Material.Dialog as Dialog
-import Material.Dispatch as Dispatch
-import Material.Drawer as Drawer
-import Material.Fab as Fab
-import Material.GridList as GridList
-import Material.IconToggle as IconToggle
-import Material.Internal.Toolbar as Toolbar
-import Material.Menu as Menu
-import Material.RadioButton as RadioButton
-import Material.Ripple as Ripple
-import Material.Select as Select
-import Material.Slider as Slider
-import Material.Snackbar as Snackbar
-import Material.Switch as Switch
-import Material.Tabs as Tabs
-import Material.Textfield as Textfield
-import Material.Toolbar as Toolbar
+import Material.Internal.Button.Implementation as Button
+import Material.Internal.Checkbox.Implementation as Checkbox
+import Material.Internal.Component as Component exposing (Indexed)
+import Material.Internal.Dialog.Implementation as Dialog
+import Material.Internal.Dispatch as Dispatch
+import Material.Internal.Drawer.Implementation as Drawer
+import Material.Internal.Fab.Implementation as Fab
+import Material.Internal.GridList.Implementation as GridList
+import Material.Internal.IconToggle.Implementation as IconToggle
+import Material.Internal.Menu.Implementation as Menu
+import Material.Internal.Msg
+import Material.Internal.Msg exposing (..)
+import Material.Internal.RadioButton.Implementation as RadioButton
+import Material.Internal.Ripple.Implementation as Ripple
+import Material.Internal.Select.Implementation as Select
+import Material.Internal.Slider.Implementation as Slider
+import Material.Internal.Snackbar.Implementation as Snackbar
+import Material.Internal.Switch.Implementation as Switch
+import Material.Internal.Tabs.Implementation as Tabs
+import Material.Internal.Textfield.Implementation as Textfield
+import Material.Internal.Toolbar.Implementation as Toolbar
+import Material.Internal.Toolbar.Implementation as Toolbar
+import Material.Msg
 
 
 {-| Material model.

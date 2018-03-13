@@ -39,24 +39,20 @@ FormField.view []
 -}
 
 import Html exposing (Html)
-import Material.Options as Options exposing (styled, cs)
-
-
-type alias Config =
-    {}
+import Material.Internal.FormField.Implementation as FormField
 
 
 {-| FormField property.
 -}
 type alias Property m =
-    Options.Property Config m
+    FormField.Property m
 
 
 {-| FormField view.
 -}
 view : List (Property m) -> List (Html m) -> Html m
-view options =
-    styled Html.div (cs "mdc-form-field" :: options)
+view =
+    FormField.view
 
 
 {-| Position the label before the input.
@@ -65,4 +61,4 @@ By default, the label is positioned after the input.
 -}
 alignEnd : Property m
 alignEnd =
-    cs "mdc-form-field--align-end"
+    FormField.alignEnd

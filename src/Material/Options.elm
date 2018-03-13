@@ -70,11 +70,10 @@ module Material.Options exposing
 @docs dispatch
 -}
 
-import Html.Attributes
-import Html.Events
+import Html.Events exposing (Options)
 import Html exposing (Html, Attribute)
-import Json.Decode as Json
-import Material.Internal.Options as Internal exposing (..)
+import Json.Decode exposing (Decoder)
+import Material.Internal.Options
 
 
 {-| Generic component property.
@@ -83,7 +82,7 @@ The `c` stands for a component's configuration type, and each component exports
 its own `Property`.
 -}
 type alias Property c m =
-    Internal.Property c m
+    Material.Internal.Options.Property c m
 
 
 {-| Make a standard Html element take properties instead of attributes.
@@ -100,29 +99,29 @@ styled : (List (Attribute m) -> List (Html m) -> Html m)
     -> List (Property c m)
     -> List (Html m)
     -> Html m
-styled ctor props =
-    ctor (addAttributes (collect_ props) [])
+styled =
+    Material.Internal.Options.styled
 
 
 {-| Add a HTML class to a component.
 -}
 cs : String -> Property c m
-cs c =
-    Class c
+cs =
+    Material.Internal.Options.cs
 
 
 {-| Add a CSS style to a component.
 -}
 css : String -> String -> Property c m
-css key value =
-    CSS ( key, value )
+css =
+    Material.Internal.Options.css
 
 
 {-| Multiple options.
 -}
 many : List (Property c m) -> Property c m
 many =
-    Many
+    Material.Internal.Options.many
 
 
 {-| Do nothing. Convenient when the absence or
@@ -136,7 +135,7 @@ Html.div
 -}
 nop : Property c m
 nop =
-    None
+    Material.Internal.Options.nop
 
 
 {-| Conditional option. When the guard evaluates to `true`, the option is
@@ -145,25 +144,22 @@ applied; otherwise it is ignored. Use like this:
     Button.disabled |> when (not model.isRunning)
 -}
 when : Bool -> Property c m -> Property c m
-when guard prop  =
-    if guard then
-        prop
-    else
-        nop
+when =
+    Material.Internal.Options.when
 
 
 {-| HTML data-* attributes. Prefix "data-" is added automatically.
 -}
 data : String -> String -> Property c m
-data key val =
-    Attribute (Html.Attributes.attribute ("data-" ++ key) val)
+data =
+    Material.Internal.Options.data
 
 
 {-| HTML aria-* attributes. Prefix "aria-" is added automatically.
 -}
 aria : String -> String -> Property c m
-aria key val =
-    Attribute (Html.Attributes.attribute ("aria-" ++ key) val)
+aria =
+    Material.Internal.Options.aria
 
 
 {-| Install arbitrary `Html.Attribute`s.
@@ -176,7 +172,7 @@ styled Html.div
 -}
 attribute : Html.Attribute Never -> Property c m
 attribute =
-    Attribute << Html.Attributes.map never
+    Material.Internal.Options.attribute
 
 
 {-| Apply properties to a component's native control element, ie.  `input`.
@@ -184,107 +180,103 @@ attribute =
 nativeControl : List (Property c m)
     -> Property ({ c | nativeControl : List (Property c m) }) m
 nativeControl =
-    Internal.nativeControl
+    Material.Internal.Options.nativeControl
 
 
 {-| -}
-on : String -> Json.Decoder m -> Property c m
-on event =
-    Listener event Nothing
+on : String -> Decoder m -> Property c m
+on =
+    Material.Internal.Options.on
 
 
 {-| -}
 onClick : msg -> Property c msg
-onClick msg =
-    on "click" (Json.succeed msg)
+onClick =
+    Material.Internal.Options.onClick
 
 
 {-| -}
 onDoubleClick : msg -> Property c msg
-onDoubleClick msg =
-    on "dblclick" (Json.succeed msg)
+onDoubleClick =
+    Material.Internal.Options.onDoubleClick
 
 
 {-| -}
 onMouseDown : msg -> Property c msg
-onMouseDown msg =
-    on "mousedown" (Json.succeed msg)
+onMouseDown =
+    Material.Internal.Options.onMouseDown
 
 
 {-| -}
 onMouseUp : msg -> Property c msg
-onMouseUp msg =
-    on "mouseup" (Json.succeed msg)
+onMouseUp =
+    Material.Internal.Options.onMouseUp
 
 
 {-| -}
 onMouseEnter : msg -> Property c msg
-onMouseEnter msg =
-    on "mouseenter" (Json.succeed msg)
+onMouseEnter =
+    Material.Internal.Options.onMouseEnter
 
 
 {-| -}
 onMouseLeave : msg -> Property c msg
-onMouseLeave msg =
-    on "mouseleave" (Json.succeed msg)
+onMouseLeave =
+    Material.Internal.Options.onMouseLeave
 
 
 {-| -}
 onMouseOver : msg -> Property c msg
-onMouseOver msg =
-    on "mouseover" (Json.succeed msg)
+onMouseOver =
+    Material.Internal.Options.onMouseOver
 
 
 {-| -}
 onMouseOut : msg -> Property c msg
-onMouseOut msg =
-    on "mouseout" (Json.succeed msg)
+onMouseOut =
+    Material.Internal.Options.onMouseOut
 
 
 {-| -}
 onCheck : (Bool -> msg) -> Property c msg
 onCheck =
-    (flip Json.map Html.Events.targetChecked) >> on "change"
+    Material.Internal.Options.onCheck
 
 
 {-| -}
 onBlur : msg -> Property c msg
-onBlur msg =
-    on "blur" (Json.succeed msg)
+onBlur =
+    Material.Internal.Options.onBlur
 
 
 {-| -}
 onFocus : msg -> Property c msg
-onFocus msg =
-    on "focus" (Json.succeed msg)
+onFocus =
+    Material.Internal.Options.onFocus
 
 
 {-| -}
 onInput : (String -> m) -> Property c m
-onInput f =
-    on "input" (Json.map f Html.Events.targetValue)
+onInput =
+    Material.Internal.Options.onInput
 
 
 {-| -}
 onSubmit : (String -> m) -> Property c m
-onSubmit f =
-    onWithOptions "submit"
-        { preventDefault = True
-        , stopPropagation = False
-        }
-        (Json.map f Html.Events.targetValue)
+onSubmit =
+    Material.Internal.Options.onSubmit
 
 
 {-| -}
-onWithOptions : String -> Html.Events.Options -> Json.Decoder m -> Property c m
-onWithOptions evt options =
-    Listener evt (Just options)
+onWithOptions : String -> Options -> Decoder m -> Property c m
+onWithOptions =
+    Material.Internal.Options.onWithOptions
 
 
 {-| No-shorthand multiple-event dispatch.
 
-You are *extremely* unlikely to need this.
+You are very unlikely to need this.
 -}
 dispatch : (List m -> m) -> Property c m
 dispatch =
-    Lift << Json.map
+    Material.Internal.Options.dispatch

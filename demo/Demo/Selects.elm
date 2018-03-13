@@ -274,4 +274,4 @@ view lift page model =
 
 subscriptions : (Msg m -> m) -> Model m -> Sub m
 subscriptions lift model =
-    Select.subs (lift << Mdc) model.mdc
+    Material.subscriptions (lift << Mdc) model
