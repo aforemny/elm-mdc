@@ -8720,33 +8720,125 @@ var _aforemny$elm_mdc$Material_Component$indexed = F3(
 		return {ctor: '_Tuple2', _0: get_, _1: set_};
 	});
 
-//import Native.Scheduler //
-
-var _elm_lang$core$Native_Time = function() {
-
-var now = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
-{
-	callback(_elm_lang$core$Native_Scheduler.succeed(Date.now()));
-});
-
-function setInterval_(interval, task)
-{
-	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
 	{
-		var id = setInterval(function() {
-			_elm_lang$core$Native_Scheduler.rawSpawn(task);
-		}, interval);
-
-		return function() { clearInterval(id); };
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
 	});
-}
 
-return {
-	now: now,
-	setInterval_: F2(setInterval_)
+var _aforemny$elm_mdc$Material_Internal_Dispatch$Config = function (a) {
+	return {ctor: 'Config', _0: a};
 };
 
-}();
 var _elm_lang$core$Task$onError = _elm_lang$core$Native_Scheduler.onError;
 var _elm_lang$core$Task$andThen = _elm_lang$core$Native_Scheduler.andThen;
 var _elm_lang$core$Task$spawnCmd = F2(
@@ -8943,365 +9035,6 @@ var _elm_lang$core$Task$cmdMap = F2(
 			A2(_elm_lang$core$Task$map, tagger, _p11._0));
 	});
 _elm_lang$core$Native_Platform.effectManagers['Task'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Task$init, onEffects: _elm_lang$core$Task$onEffects, onSelfMsg: _elm_lang$core$Task$onSelfMsg, tag: 'cmd', cmdMap: _elm_lang$core$Task$cmdMap};
-
-var _elm_lang$core$Time$setInterval = _elm_lang$core$Native_Time.setInterval_;
-var _elm_lang$core$Time$spawnHelp = F3(
-	function (router, intervals, processes) {
-		var _p0 = intervals;
-		if (_p0.ctor === '[]') {
-			return _elm_lang$core$Task$succeed(processes);
-		} else {
-			var _p1 = _p0._0;
-			var spawnRest = function (id) {
-				return A3(
-					_elm_lang$core$Time$spawnHelp,
-					router,
-					_p0._1,
-					A3(_elm_lang$core$Dict$insert, _p1, id, processes));
-			};
-			var spawnTimer = _elm_lang$core$Native_Scheduler.spawn(
-				A2(
-					_elm_lang$core$Time$setInterval,
-					_p1,
-					A2(_elm_lang$core$Platform$sendToSelf, router, _p1)));
-			return A2(_elm_lang$core$Task$andThen, spawnRest, spawnTimer);
-		}
-	});
-var _elm_lang$core$Time$addMySub = F2(
-	function (_p2, state) {
-		var _p3 = _p2;
-		var _p6 = _p3._1;
-		var _p5 = _p3._0;
-		var _p4 = A2(_elm_lang$core$Dict$get, _p5, state);
-		if (_p4.ctor === 'Nothing') {
-			return A3(
-				_elm_lang$core$Dict$insert,
-				_p5,
-				{
-					ctor: '::',
-					_0: _p6,
-					_1: {ctor: '[]'}
-				},
-				state);
-		} else {
-			return A3(
-				_elm_lang$core$Dict$insert,
-				_p5,
-				{ctor: '::', _0: _p6, _1: _p4._0},
-				state);
-		}
-	});
-var _elm_lang$core$Time$inMilliseconds = function (t) {
-	return t;
-};
-var _elm_lang$core$Time$millisecond = 1;
-var _elm_lang$core$Time$second = 1000 * _elm_lang$core$Time$millisecond;
-var _elm_lang$core$Time$minute = 60 * _elm_lang$core$Time$second;
-var _elm_lang$core$Time$hour = 60 * _elm_lang$core$Time$minute;
-var _elm_lang$core$Time$inHours = function (t) {
-	return t / _elm_lang$core$Time$hour;
-};
-var _elm_lang$core$Time$inMinutes = function (t) {
-	return t / _elm_lang$core$Time$minute;
-};
-var _elm_lang$core$Time$inSeconds = function (t) {
-	return t / _elm_lang$core$Time$second;
-};
-var _elm_lang$core$Time$now = _elm_lang$core$Native_Time.now;
-var _elm_lang$core$Time$onSelfMsg = F3(
-	function (router, interval, state) {
-		var _p7 = A2(_elm_lang$core$Dict$get, interval, state.taggers);
-		if (_p7.ctor === 'Nothing') {
-			return _elm_lang$core$Task$succeed(state);
-		} else {
-			var tellTaggers = function (time) {
-				return _elm_lang$core$Task$sequence(
-					A2(
-						_elm_lang$core$List$map,
-						function (tagger) {
-							return A2(
-								_elm_lang$core$Platform$sendToApp,
-								router,
-								tagger(time));
-						},
-						_p7._0));
-			};
-			return A2(
-				_elm_lang$core$Task$andThen,
-				function (_p8) {
-					return _elm_lang$core$Task$succeed(state);
-				},
-				A2(_elm_lang$core$Task$andThen, tellTaggers, _elm_lang$core$Time$now));
-		}
-	});
-var _elm_lang$core$Time$subscription = _elm_lang$core$Native_Platform.leaf('Time');
-var _elm_lang$core$Time$State = F2(
-	function (a, b) {
-		return {taggers: a, processes: b};
-	});
-var _elm_lang$core$Time$init = _elm_lang$core$Task$succeed(
-	A2(_elm_lang$core$Time$State, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty));
-var _elm_lang$core$Time$onEffects = F3(
-	function (router, subs, _p9) {
-		var _p10 = _p9;
-		var rightStep = F3(
-			function (_p12, id, _p11) {
-				var _p13 = _p11;
-				return {
-					ctor: '_Tuple3',
-					_0: _p13._0,
-					_1: _p13._1,
-					_2: A2(
-						_elm_lang$core$Task$andThen,
-						function (_p14) {
-							return _p13._2;
-						},
-						_elm_lang$core$Native_Scheduler.kill(id))
-				};
-			});
-		var bothStep = F4(
-			function (interval, taggers, id, _p15) {
-				var _p16 = _p15;
-				return {
-					ctor: '_Tuple3',
-					_0: _p16._0,
-					_1: A3(_elm_lang$core$Dict$insert, interval, id, _p16._1),
-					_2: _p16._2
-				};
-			});
-		var leftStep = F3(
-			function (interval, taggers, _p17) {
-				var _p18 = _p17;
-				return {
-					ctor: '_Tuple3',
-					_0: {ctor: '::', _0: interval, _1: _p18._0},
-					_1: _p18._1,
-					_2: _p18._2
-				};
-			});
-		var newTaggers = A3(_elm_lang$core$List$foldl, _elm_lang$core$Time$addMySub, _elm_lang$core$Dict$empty, subs);
-		var _p19 = A6(
-			_elm_lang$core$Dict$merge,
-			leftStep,
-			bothStep,
-			rightStep,
-			newTaggers,
-			_p10.processes,
-			{
-				ctor: '_Tuple3',
-				_0: {ctor: '[]'},
-				_1: _elm_lang$core$Dict$empty,
-				_2: _elm_lang$core$Task$succeed(
-					{ctor: '_Tuple0'})
-			});
-		var spawnList = _p19._0;
-		var existingDict = _p19._1;
-		var killTask = _p19._2;
-		return A2(
-			_elm_lang$core$Task$andThen,
-			function (newProcesses) {
-				return _elm_lang$core$Task$succeed(
-					A2(_elm_lang$core$Time$State, newTaggers, newProcesses));
-			},
-			A2(
-				_elm_lang$core$Task$andThen,
-				function (_p20) {
-					return A3(_elm_lang$core$Time$spawnHelp, router, spawnList, existingDict);
-				},
-				killTask));
-	});
-var _elm_lang$core$Time$Every = F2(
-	function (a, b) {
-		return {ctor: 'Every', _0: a, _1: b};
-	});
-var _elm_lang$core$Time$every = F2(
-	function (interval, tagger) {
-		return _elm_lang$core$Time$subscription(
-			A2(_elm_lang$core$Time$Every, interval, tagger));
-	});
-var _elm_lang$core$Time$subMap = F2(
-	function (f, _p21) {
-		var _p22 = _p21;
-		return A2(
-			_elm_lang$core$Time$Every,
-			_p22._0,
-			function (_p23) {
-				return f(
-					_p22._1(_p23));
-			});
-	});
-_elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
-
-var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
-var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
-var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
-
-var _aforemny$elm_mdc$Material_Helpers$noAttr = A2(_elm_lang$html$Html_Attributes$attribute, 'data-elm-mdc-noop', '');
-var _aforemny$elm_mdc$Material_Helpers$aria = F2(
-	function (name, value) {
-		return value ? A2(
-			_elm_lang$html$Html_Attributes$attribute,
-			A2(_elm_lang$core$Basics_ops['++'], 'aria-', name),
-			'true') : _aforemny$elm_mdc$Material_Helpers$noAttr;
-	});
-var _aforemny$elm_mdc$Material_Helpers$delay = F2(
-	function (t, x) {
-		return A2(
-			_elm_lang$core$Task$perform,
-			_elm_lang$core$Basics$always(x),
-			_elm_lang$core$Process$sleep(t));
-	});
-var _aforemny$elm_mdc$Material_Helpers$cssTransitionStep = function (x) {
-	return A2(_aforemny$elm_mdc$Material_Helpers$delay, 50, x);
-};
-var _aforemny$elm_mdc$Material_Helpers$cmd = function (msg) {
-	return A2(
-		_elm_lang$core$Task$perform,
-		_elm_lang$core$Basics$always(msg),
-		_elm_lang$core$Task$succeed(msg));
-};
-var _aforemny$elm_mdc$Material_Helpers$blurOn = function (evt) {
-	return A2(
-		_elm_lang$html$Html_Attributes$attribute,
-		A2(_elm_lang$core$Basics_ops['++'], 'on', evt),
-		'this.blur()');
-};
-var _aforemny$elm_mdc$Material_Helpers$effect = F2(
-	function (e, x) {
-		return {ctor: '_Tuple2', _0: x, _1: e};
-	});
-var _aforemny$elm_mdc$Material_Helpers$pure = _aforemny$elm_mdc$Material_Helpers$effect(_elm_lang$core$Platform_Cmd$none);
-var _aforemny$elm_mdc$Material_Helpers$filter = F3(
-	function (elem, attr, html) {
-		return A2(
-			elem,
-			attr,
-			A2(
-				_elm_lang$core$List$filterMap,
-				function (x) {
-					return x;
-				},
-				html));
-	});
-
-var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
-var _elm_lang$html$Html_Events$targetChecked = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'checked',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$bool);
-var _elm_lang$html$Html_Events$targetValue = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'value',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$string);
-var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
-var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
-var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
-var _elm_lang$html$Html_Events$onFocus = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'focus',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onBlur = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'blur',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
-	_elm_lang$html$Html_Events$defaultOptions,
-	{preventDefault: true});
-var _elm_lang$html$Html_Events$onSubmit = function (msg) {
-	return A3(
-		_elm_lang$html$Html_Events$onWithOptions,
-		'submit',
-		_elm_lang$html$Html_Events$onSubmitOptions,
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onCheck = function (tagger) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'change',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
-};
-var _elm_lang$html$Html_Events$onInput = function (tagger) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'input',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
-};
-var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseout',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseover',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseleave',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseenter',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseup',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mousedown',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'dblclick',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onClick = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'click',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$Options = F2(
-	function (a, b) {
-		return {stopPropagation: a, preventDefault: b};
-	});
-
-var _aforemny$elm_mdc$Material_Internal_Dispatch$Config = function (a) {
-	return {ctor: 'Config', _0: a};
-};
 
 var _aforemny$elm_mdc$Material_Dispatch$split = F4(
 	function (k0, same, differ, xs) {
@@ -10052,6 +9785,239 @@ var _aforemny$elm_mdc$Material_Icon$view = F2(
 var _aforemny$elm_mdc$Material_Icon$defaultConfig = {};
 var _aforemny$elm_mdc$Material_Icon$Config = {};
 
+//import Native.Scheduler //
+
+var _elm_lang$core$Native_Time = function() {
+
+var now = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+{
+	callback(_elm_lang$core$Native_Scheduler.succeed(Date.now()));
+});
+
+function setInterval_(interval, task)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		var id = setInterval(function() {
+			_elm_lang$core$Native_Scheduler.rawSpawn(task);
+		}, interval);
+
+		return function() { clearInterval(id); };
+	});
+}
+
+return {
+	now: now,
+	setInterval_: F2(setInterval_)
+};
+
+}();
+var _elm_lang$core$Time$setInterval = _elm_lang$core$Native_Time.setInterval_;
+var _elm_lang$core$Time$spawnHelp = F3(
+	function (router, intervals, processes) {
+		var _p0 = intervals;
+		if (_p0.ctor === '[]') {
+			return _elm_lang$core$Task$succeed(processes);
+		} else {
+			var _p1 = _p0._0;
+			var spawnRest = function (id) {
+				return A3(
+					_elm_lang$core$Time$spawnHelp,
+					router,
+					_p0._1,
+					A3(_elm_lang$core$Dict$insert, _p1, id, processes));
+			};
+			var spawnTimer = _elm_lang$core$Native_Scheduler.spawn(
+				A2(
+					_elm_lang$core$Time$setInterval,
+					_p1,
+					A2(_elm_lang$core$Platform$sendToSelf, router, _p1)));
+			return A2(_elm_lang$core$Task$andThen, spawnRest, spawnTimer);
+		}
+	});
+var _elm_lang$core$Time$addMySub = F2(
+	function (_p2, state) {
+		var _p3 = _p2;
+		var _p6 = _p3._1;
+		var _p5 = _p3._0;
+		var _p4 = A2(_elm_lang$core$Dict$get, _p5, state);
+		if (_p4.ctor === 'Nothing') {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				_p5,
+				{
+					ctor: '::',
+					_0: _p6,
+					_1: {ctor: '[]'}
+				},
+				state);
+		} else {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				_p5,
+				{ctor: '::', _0: _p6, _1: _p4._0},
+				state);
+		}
+	});
+var _elm_lang$core$Time$inMilliseconds = function (t) {
+	return t;
+};
+var _elm_lang$core$Time$millisecond = 1;
+var _elm_lang$core$Time$second = 1000 * _elm_lang$core$Time$millisecond;
+var _elm_lang$core$Time$minute = 60 * _elm_lang$core$Time$second;
+var _elm_lang$core$Time$hour = 60 * _elm_lang$core$Time$minute;
+var _elm_lang$core$Time$inHours = function (t) {
+	return t / _elm_lang$core$Time$hour;
+};
+var _elm_lang$core$Time$inMinutes = function (t) {
+	return t / _elm_lang$core$Time$minute;
+};
+var _elm_lang$core$Time$inSeconds = function (t) {
+	return t / _elm_lang$core$Time$second;
+};
+var _elm_lang$core$Time$now = _elm_lang$core$Native_Time.now;
+var _elm_lang$core$Time$onSelfMsg = F3(
+	function (router, interval, state) {
+		var _p7 = A2(_elm_lang$core$Dict$get, interval, state.taggers);
+		if (_p7.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var tellTaggers = function (time) {
+				return _elm_lang$core$Task$sequence(
+					A2(
+						_elm_lang$core$List$map,
+						function (tagger) {
+							return A2(
+								_elm_lang$core$Platform$sendToApp,
+								router,
+								tagger(time));
+						},
+						_p7._0));
+			};
+			return A2(
+				_elm_lang$core$Task$andThen,
+				function (_p8) {
+					return _elm_lang$core$Task$succeed(state);
+				},
+				A2(_elm_lang$core$Task$andThen, tellTaggers, _elm_lang$core$Time$now));
+		}
+	});
+var _elm_lang$core$Time$subscription = _elm_lang$core$Native_Platform.leaf('Time');
+var _elm_lang$core$Time$State = F2(
+	function (a, b) {
+		return {taggers: a, processes: b};
+	});
+var _elm_lang$core$Time$init = _elm_lang$core$Task$succeed(
+	A2(_elm_lang$core$Time$State, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty));
+var _elm_lang$core$Time$onEffects = F3(
+	function (router, subs, _p9) {
+		var _p10 = _p9;
+		var rightStep = F3(
+			function (_p12, id, _p11) {
+				var _p13 = _p11;
+				return {
+					ctor: '_Tuple3',
+					_0: _p13._0,
+					_1: _p13._1,
+					_2: A2(
+						_elm_lang$core$Task$andThen,
+						function (_p14) {
+							return _p13._2;
+						},
+						_elm_lang$core$Native_Scheduler.kill(id))
+				};
+			});
+		var bothStep = F4(
+			function (interval, taggers, id, _p15) {
+				var _p16 = _p15;
+				return {
+					ctor: '_Tuple3',
+					_0: _p16._0,
+					_1: A3(_elm_lang$core$Dict$insert, interval, id, _p16._1),
+					_2: _p16._2
+				};
+			});
+		var leftStep = F3(
+			function (interval, taggers, _p17) {
+				var _p18 = _p17;
+				return {
+					ctor: '_Tuple3',
+					_0: {ctor: '::', _0: interval, _1: _p18._0},
+					_1: _p18._1,
+					_2: _p18._2
+				};
+			});
+		var newTaggers = A3(_elm_lang$core$List$foldl, _elm_lang$core$Time$addMySub, _elm_lang$core$Dict$empty, subs);
+		var _p19 = A6(
+			_elm_lang$core$Dict$merge,
+			leftStep,
+			bothStep,
+			rightStep,
+			newTaggers,
+			_p10.processes,
+			{
+				ctor: '_Tuple3',
+				_0: {ctor: '[]'},
+				_1: _elm_lang$core$Dict$empty,
+				_2: _elm_lang$core$Task$succeed(
+					{ctor: '_Tuple0'})
+			});
+		var spawnList = _p19._0;
+		var existingDict = _p19._1;
+		var killTask = _p19._2;
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (newProcesses) {
+				return _elm_lang$core$Task$succeed(
+					A2(_elm_lang$core$Time$State, newTaggers, newProcesses));
+			},
+			A2(
+				_elm_lang$core$Task$andThen,
+				function (_p20) {
+					return A3(_elm_lang$core$Time$spawnHelp, router, spawnList, existingDict);
+				},
+				killTask));
+	});
+var _elm_lang$core$Time$Every = F2(
+	function (a, b) {
+		return {ctor: 'Every', _0: a, _1: b};
+	});
+var _elm_lang$core$Time$every = F2(
+	function (interval, tagger) {
+		return _elm_lang$core$Time$subscription(
+			A2(_elm_lang$core$Time$Every, interval, tagger));
+	});
+var _elm_lang$core$Time$subMap = F2(
+	function (f, _p21) {
+		var _p22 = _p21;
+		return A2(
+			_elm_lang$core$Time$Every,
+			_p22._0,
+			function (_p23) {
+				return f(
+					_p22._1(_p23));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
+
+var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
+var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
+var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
+
+var _aforemny$elm_mdc$Material_Helpers$delayedCmd = F2(
+	function (time, msg) {
+		return A2(
+			_elm_lang$core$Task$perform,
+			_elm_lang$core$Basics$always(msg),
+			_elm_lang$core$Process$sleep(time));
+	});
+var _aforemny$elm_mdc$Material_Helpers$cmd = function (msg) {
+	return A2(
+		_elm_lang$core$Task$perform,
+		_elm_lang$core$Basics$identity,
+		_elm_lang$core$Task$succeed(msg));
+};
+
 var _aforemny$elm_mdc$Material_Ripple$decodeGeometry = function (type_) {
 	var view = _elm_lang$core$Json_Decode$at(
 		{
@@ -10274,18 +10240,14 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 								activateOn,
 								{
 									ctor: '::',
-									_0: 'keydown',
+									_0: 'mousedown',
 									_1: {
 										ctor: '::',
-										_0: 'mousedown',
+										_0: 'pointerdown',
 										_1: {
 											ctor: '::',
-											_0: 'pointerdown',
-											_1: {
-												ctor: '::',
-												_0: 'touchstart',
-												_1: {ctor: '[]'}
-											}
+											_0: 'touchstart',
+											_1: {ctor: '[]'}
 										}
 									}
 								})),
@@ -10297,18 +10259,14 @@ var _aforemny$elm_mdc$Material_Ripple$view = F4(
 									deactivateOn,
 									{
 										ctor: '::',
-										_0: 'keyup',
+										_0: 'mouseup',
 										_1: {
 											ctor: '::',
-											_0: 'mouseup',
+											_0: 'pointerup',
 											_1: {
 												ctor: '::',
-												_0: 'pointerup',
-												_1: {
-													ctor: '::',
-													_0: 'touchend',
-													_1: {ctor: '[]'}
-												}
+												_0: 'touchend',
+												_1: {ctor: '[]'}
 											}
 										}
 									})),
@@ -10636,7 +10594,7 @@ var _aforemny$elm_mdc$Material_Ripple$update = F2(
 							model,
 							{active: active, animating: true, geometry: _p15._2, deactivation: false, animation: animation}),
 						_1: A2(
-							_aforemny$elm_mdc$Material_Helpers$delay,
+							_aforemny$elm_mdc$Material_Helpers$delayedCmd,
 							300,
 							A2(_aforemny$elm_mdc$Material_Internal_Ripple$AnimationEnd, _p15._0, animation))
 					};
@@ -10834,19 +10792,7 @@ var _aforemny$elm_mdc$Material_Button$button = F4(
 					}
 				}
 			},
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Helpers$blurOn('mouseup'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Helpers$blurOn('mouseleave'),
-					_1: {
-						ctor: '::',
-						_0: _aforemny$elm_mdc$Material_Helpers$blurOn('touchend'),
-						_1: {ctor: '[]'}
-					}
-				}
-			},
+			{ctor: '[]'},
 			_elm_lang$core$List$concat(
 				{
 					ctor: '::',
@@ -11417,29 +11363,24 @@ var _aforemny$elm_mdc$Material_Checkbox$checkbox = F4(
 								_0: animationClass(model.animation),
 								_1: {
 									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
-										_aforemny$elm_mdc$Material_Helpers$blurOn('mouseup')),
+									_0: A2(
+										_aforemny$elm_mdc$Material_Options$when,
+										stateChangedOrUninitialized,
+										_aforemny$elm_mdc$Material_GlobalEvents$onTick(
+											_elm_lang$core$Json_Decode$succeed(
+												lift(
+													A2(_aforemny$elm_mdc$Material_Internal_Checkbox$Init, model.lastKnownState, configState))))),
 									_1: {
 										ctor: '::',
 										_0: A2(
 											_aforemny$elm_mdc$Material_Options$when,
-											stateChangedOrUninitialized,
-											_aforemny$elm_mdc$Material_GlobalEvents$onTick(
+											!_elm_lang$core$Native_Utils.eq(model.animation, _elm_lang$core$Maybe$Nothing),
+											A2(
+												_aforemny$elm_mdc$Material_Options$on,
+												'animationend',
 												_elm_lang$core$Json_Decode$succeed(
-													lift(
-														A2(_aforemny$elm_mdc$Material_Internal_Checkbox$Init, model.lastKnownState, configState))))),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Options$when,
-												!_elm_lang$core$Native_Utils.eq(model.animation, _elm_lang$core$Maybe$Nothing),
-												A2(
-													_aforemny$elm_mdc$Material_Options$on,
-													'animationend',
-													_elm_lang$core$Json_Decode$succeed(
-														lift(_aforemny$elm_mdc$Material_Internal_Checkbox$AnimationEnd)))),
-											_1: {ctor: '[]'}
-										}
+													lift(_aforemny$elm_mdc$Material_Internal_Checkbox$AnimationEnd)))),
+										_1: {ctor: '[]'}
 									}
 								}
 							}
@@ -13847,7 +13788,7 @@ var _aforemny$elm_mdc$Material_Menu$update = F3(
 								model,
 								{open: true, animating: true, geometry: _elm_lang$core$Maybe$Nothing})),
 						_1: (!quickOpen) ? A2(
-							_aforemny$elm_mdc$Material_Helpers$delay,
+							_aforemny$elm_mdc$Material_Helpers$delayedCmd,
 							120 * _elm_lang$core$Time$millisecond,
 							lift(_aforemny$elm_mdc$Material_Internal_Menu$AnimationEnd)) : _aforemny$elm_mdc$Material_Helpers$cmd(
 							lift(_aforemny$elm_mdc$Material_Internal_Menu$AnimationEnd))
@@ -13861,7 +13802,7 @@ var _aforemny$elm_mdc$Material_Menu$update = F3(
 								model,
 								{open: false, animating: true, quickOpen: _elm_lang$core$Maybe$Nothing, focusedItemAtIndex: _elm_lang$core$Maybe$Nothing})),
 						_1: (!quickOpen) ? A2(
-							_aforemny$elm_mdc$Material_Helpers$delay,
+							_aforemny$elm_mdc$Material_Helpers$delayedCmd,
 							70 * _elm_lang$core$Time$millisecond,
 							lift(_aforemny$elm_mdc$Material_Internal_Menu$AnimationEnd)) : _aforemny$elm_mdc$Material_Helpers$cmd(
 							lift(_aforemny$elm_mdc$Material_Internal_Menu$AnimationEnd))
@@ -13871,7 +13812,7 @@ var _aforemny$elm_mdc$Material_Menu$update = F3(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Nothing,
 						_1: A2(
-							_aforemny$elm_mdc$Material_Helpers$delay,
+							_aforemny$elm_mdc$Material_Helpers$delayedCmd,
 							50 * _elm_lang$core$Time$millisecond,
 							lift(_aforemny$elm_mdc$Material_Internal_Menu$Close))
 					};
@@ -14105,22 +14046,17 @@ var _aforemny$elm_mdc$Material_RadioButton$radioButton = F4(
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-radio'),
 				_1: {
 					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
-						_aforemny$elm_mdc$Material_Helpers$blurOn('mouseup')),
-					_1: {
-						ctor: '::',
-						_0: _aforemny$elm_mdc$Material_Options$many(
-							{
+					_0: _aforemny$elm_mdc$Material_Options$many(
+						{
+							ctor: '::',
+							_0: ripple.interactionHandler,
+							_1: {
 								ctor: '::',
-								_0: ripple.interactionHandler,
-								_1: {
-									ctor: '::',
-									_0: ripple.properties,
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}
+								_0: ripple.properties,
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
 				}
 			},
 			{ctor: '[]'},
@@ -16345,7 +16281,7 @@ var _aforemny$elm_mdc$Material_Snackbar$tryDequeue = function (model) {
 					_0: A2(
 						_elm_lang$core$Platform_Cmd$map,
 						_aforemny$elm_mdc$Material_Internal_Snackbar$Move(model.seq + 1),
-						A2(_aforemny$elm_mdc$Material_Helpers$delay, _p6.timeout, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
+						A2(_aforemny$elm_mdc$Material_Helpers$delayedCmd, _p6.timeout, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
 					_1: {ctor: '[]'}
 				})
 		};
@@ -16439,7 +16375,7 @@ var _aforemny$elm_mdc$Material_Snackbar$move = F2(
 								_0: A2(
 									_aforemny$elm_mdc$Material_Snackbar$next,
 									model,
-									A2(_aforemny$elm_mdc$Material_Helpers$delay, _p12.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
+									A2(_aforemny$elm_mdc$Material_Helpers$delayedCmd, _p12.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
 								_1: {ctor: '[]'}
 							});
 					} else {
@@ -16464,7 +16400,7 @@ var _aforemny$elm_mdc$Material_Snackbar$move = F2(
 									_0: A2(
 										_aforemny$elm_mdc$Material_Snackbar$next,
 										model,
-										A2(_aforemny$elm_mdc$Material_Helpers$delay, _p13.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
+										A2(_aforemny$elm_mdc$Material_Helpers$delayedCmd, _p13.fade, _aforemny$elm_mdc$Material_Internal_Snackbar$Timeout)),
 									_1: {ctor: '[]'}
 								});
 						default:
@@ -16564,12 +16500,7 @@ var _aforemny$elm_mdc$Material_Switch$switch = F4(
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-switch'),
-				_1: {
-					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
-						_aforemny$elm_mdc$Material_Helpers$blurOn('mouseup')),
-					_1: {ctor: '[]'}
-				}
+				_1: {ctor: '[]'}
 			},
 			{ctor: '[]'},
 			{
@@ -17628,7 +17559,7 @@ var _aforemny$elm_mdc$Material_Tabs$update = F3(
 									}));
 						}(),
 						_1: A2(
-							_aforemny$elm_mdc$Material_Helpers$delay,
+							_aforemny$elm_mdc$Material_Helpers$delayedCmd,
 							0,
 							lift(_aforemny$elm_mdc$Material_Internal_Tabs$SetIndicatorShown))
 					};
@@ -20823,6 +20754,19 @@ var _aforemny$elm_mdc$Material_Card$view = function (options) {
 var _aforemny$elm_mdc$Material_Card$defaultConfig = {};
 var _aforemny$elm_mdc$Material_Card$Config = {};
 
+var _aforemny$elm_mdc$Material_FormField$alignEnd = _aforemny$elm_mdc$Material_Options$cs('mdc-form-field--align-end');
+var _aforemny$elm_mdc$Material_FormField$view = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_FormField$Config = {};
+
 var _aforemny$elm_mdc$Demo_Cards$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false};
 var _aforemny$elm_mdc$Demo_Cards$Model = F2(
 	function (a, b) {
@@ -21825,14 +21769,9 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 						},
 						{
 							ctor: '::',
-							_0: A3(
-								_aforemny$elm_mdc$Material_Options$styled,
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-									_1: {ctor: '[]'}
-								},
+							_0: A2(
+								_aforemny$elm_mdc$Material_FormField$view,
+								{ctor: '[]'},
 								{
 									ctor: '::',
 									_0: A5(
@@ -22113,14 +22052,9 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: A3(
-							_aforemny$elm_mdc$Material_Options$styled,
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-								_1: {ctor: '[]'}
-							},
+						_0: A2(
+							_aforemny$elm_mdc$Material_FormField$view,
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: checkbox(
@@ -22159,14 +22093,9 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: A3(
-											_aforemny$elm_mdc$Material_Options$styled,
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-												_1: {ctor: '[]'}
-											},
+										_0: A2(
+											_aforemny$elm_mdc$Material_FormField$view,
+											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A5(
@@ -23131,14 +23060,9 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 											_0: _elm_lang$html$Html$text(' '),
 											_1: {
 												ctor: '::',
-												_0: A3(
-													_aforemny$elm_mdc$Material_Options$styled,
-													_elm_lang$html$Html$div,
-													{
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-														_1: {ctor: '[]'}
-													},
+												_0: A2(
+													_aforemny$elm_mdc$Material_FormField$view,
+													{ctor: '[]'},
 													{
 														ctor: '::',
 														_0: A5(
@@ -24136,14 +24060,9 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 						},
 						{
 							ctor: '::',
-							_0: A3(
-								_aforemny$elm_mdc$Material_Options$styled,
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-									_1: {ctor: '[]'}
-								},
+							_0: A2(
+								_aforemny$elm_mdc$Material_FormField$view,
+								{ctor: '[]'},
 								{
 									ctor: '::',
 									_0: A5(
@@ -29065,14 +28984,9 @@ var _aforemny$elm_mdc$Demo_Lists$view = F3(
 									}),
 								_1: {
 									ctor: '::',
-									_0: A3(
-										_aforemny$elm_mdc$Material_Options$styled,
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-											_1: {ctor: '[]'}
-										},
+									_0: A2(
+										_aforemny$elm_mdc$Material_FormField$view,
+										{ctor: '[]'},
 										{
 											ctor: '::',
 											_0: A5(
@@ -33476,14 +33390,9 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 												_1: {ctor: '[]'}
 											}
 										};
-										return A3(
-											_aforemny$elm_mdc$Material_Options$styled,
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-												_1: {ctor: '[]'}
-											},
+										return A2(
+											_aforemny$elm_mdc$Material_FormField$view,
+											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A5(
@@ -33525,14 +33434,9 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 													_1: {ctor: '[]'}
 												}
 											};
-											return A3(
-												_aforemny$elm_mdc$Material_Options$styled,
-												_elm_lang$html$Html$div,
-												{
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-													_1: {ctor: '[]'}
-												},
+											return A2(
+												_aforemny$elm_mdc$Material_FormField$view,
+												{ctor: '[]'},
 												{
 													ctor: '::',
 													_0: A5(
@@ -33619,14 +33523,9 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 												_1: {ctor: '[]'}
 											}
 										};
-										return A3(
-											_aforemny$elm_mdc$Material_Options$styled,
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-												_1: {ctor: '[]'}
-											},
+										return A2(
+											_aforemny$elm_mdc$Material_FormField$view,
+											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A5(
@@ -33679,14 +33578,9 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 													_1: {ctor: '[]'}
 												}
 											};
-											return A3(
-												_aforemny$elm_mdc$Material_Options$styled,
-												_elm_lang$html$Html$div,
-												{
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-													_1: {ctor: '[]'}
-												},
+											return A2(
+												_aforemny$elm_mdc$Material_FormField$view,
+												{ctor: '[]'},
 												{
 													ctor: '::',
 													_0: A5(
@@ -33773,14 +33667,9 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 														_1: {ctor: '[]'}
 													}
 												};
-												return A3(
-													_aforemny$elm_mdc$Material_Options$styled,
-													_elm_lang$html$Html$div,
-													{
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-														_1: {ctor: '[]'}
-													},
+												return A2(
+													_aforemny$elm_mdc$Material_FormField$view,
+													{ctor: '[]'},
 													{
 														ctor: '::',
 														_0: A5(
@@ -33828,14 +33717,9 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 															_1: {ctor: '[]'}
 														}
 													};
-													return A3(
-														_aforemny$elm_mdc$Material_Options$styled,
-														_elm_lang$html$Html$div,
-														{
-															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-															_1: {ctor: '[]'}
-														},
+													return A2(
+														_aforemny$elm_mdc$Material_FormField$view,
+														{ctor: '[]'},
 														{
 															ctor: '::',
 															_0: A5(
@@ -36327,14 +36211,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 										}),
 									_1: {
 										ctor: '::',
-										_0: A3(
-											_aforemny$elm_mdc$Material_Options$styled,
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-												_1: {ctor: '[]'}
-											},
+										_0: A2(
+											_aforemny$elm_mdc$Material_FormField$view,
+											{ctor: '[]'},
 											{
 												ctor: '::',
 												_0: A5(
@@ -36381,14 +36260,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 												{ctor: '[]'}),
 											_1: {
 												ctor: '::',
-												_0: A3(
-													_aforemny$elm_mdc$Material_Options$styled,
-													_elm_lang$html$Html$div,
-													{
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-														_1: {ctor: '[]'}
-													},
+												_0: A2(
+													_aforemny$elm_mdc$Material_FormField$view,
+													{ctor: '[]'},
 													{
 														ctor: '::',
 														_0: A5(
@@ -36449,14 +36323,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 														{ctor: '[]'}),
 													_1: {
 														ctor: '::',
-														_0: A3(
-															_aforemny$elm_mdc$Material_Options$styled,
-															_elm_lang$html$Html$div,
-															{
-																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-																_1: {ctor: '[]'}
-															},
+														_0: A2(
+															_aforemny$elm_mdc$Material_FormField$view,
+															{ctor: '[]'},
 															{
 																ctor: '::',
 																_0: A5(
@@ -37168,14 +37037,9 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: A3(
-							_aforemny$elm_mdc$Material_Options$styled,
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-								_1: {ctor: '[]'}
-							},
+						_0: A2(
+							_aforemny$elm_mdc$Material_FormField$view,
+							{ctor: '[]'},
 							{
 								ctor: '::',
 								_0: function () {
@@ -37243,14 +37107,9 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 								}),
 							_1: {
 								ctor: '::',
-								_0: A3(
-									_aforemny$elm_mdc$Material_Options$styled,
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-										_1: {ctor: '[]'}
-									},
+								_0: A2(
+									_aforemny$elm_mdc$Material_FormField$view,
+									{ctor: '[]'},
 									{
 										ctor: '::',
 										_0: function () {
@@ -37335,14 +37194,9 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 									}),
 								_1: {
 									ctor: '::',
-									_0: A3(
-										_aforemny$elm_mdc$Material_Options$styled,
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Options$cs('mdc-form-field'),
-											_1: {ctor: '[]'}
-										},
+									_0: A2(
+										_aforemny$elm_mdc$Material_FormField$view,
+										{ctor: '[]'},
 										{
 											ctor: '::',
 											_0: function () {
