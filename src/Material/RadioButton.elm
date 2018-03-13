@@ -58,7 +58,6 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Options as Internal
 import Material.Internal.RadioButton exposing (Msg(..))
 import Material.Msg exposing (Index)
@@ -153,7 +152,6 @@ radioButton lift model options _ =
     in
     Internal.apply summary Html.div
     [ cs "mdc-radio"
-    , Internal.attribute <| blurOn "mouseup"
     , Options.many
       [ ripple.interactionHandler
       , ripple.properties

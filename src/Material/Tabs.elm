@@ -425,7 +425,7 @@ update lift msg model =
                   , indicatorShown = False
               }
             ,
-              Helpers.delay 0 (lift SetIndicatorShown)
+              Helpers.delayedCmd 0 (lift SetIndicatorShown)
             )
 
         SetIndicatorShown ->

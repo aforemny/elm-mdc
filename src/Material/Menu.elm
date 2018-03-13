@@ -258,7 +258,7 @@ update lift msg model =
                   }
                 ,
                   if not quickOpen then
-                      Helpers.delay (120*Time.millisecond) (lift AnimationEnd)
+                      Helpers.delayedCmd (120*Time.millisecond) (lift AnimationEnd)
                   else
                       Helpers.cmd (lift AnimationEnd)
                 )
@@ -281,7 +281,7 @@ update lift msg model =
                   }
                 ,
                   if not quickOpen then
-                      Helpers.delay (70*Time.millisecond) (lift AnimationEnd)
+                      Helpers.delayedCmd (70*Time.millisecond) (lift AnimationEnd)
                   else
                       Helpers.cmd (lift AnimationEnd)
                 )
@@ -289,7 +289,7 @@ update lift msg model =
                 ( Nothing, Cmd.none )
 
         CloseDelayed ->
-            ( Nothing, Helpers.delay (50*Time.millisecond) (lift Close) )
+            ( Nothing, Helpers.delayedCmd (50*Time.millisecond) (lift Close) )
 
         Init { quickOpen } geometry ->
             ( Just

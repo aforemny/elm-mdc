@@ -60,7 +60,6 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Options as Internal
 import Material.Internal.Switch exposing (Msg(..))
 import Material.Msg exposing (Index)
@@ -137,7 +136,6 @@ switch lift model options _ =
     in
     Internal.apply summary Html.div
     [ cs "mdc-switch"
-    , Internal.attribute <| blurOn "mouseup"
     ]
     []
     [ styled Html.input

@@ -55,7 +55,7 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
 import Material.Component as Component exposing (Indexed)
-import Material.Helpers as Helpers exposing (delay, cmd)
+import Material.Helpers as Helpers
 import Material.Internal.Options as Internal
 import Material.Internal.Snackbar exposing (Msg(..), Transition(..))
 import Material.Msg exposing (Index)
@@ -161,21 +161,21 @@ move transition model =
             { model
                 | state = Fading contents
             }
-                ! [ delay contents.fade Timeout |> next model ]
+                ! [ Helpers.delayedCmd contents.fade Timeout |> next model ]
 
         ( Active contents, Timeout ) ->
             Just
             { model
                 | state = Fading contents
             }
-                ! [ delay contents.fade Timeout |> next model ]
+                ! [ Helpers.delayedCmd contents.fade Timeout |> next model ]
 
         ( Fading contents, Timeout ) ->
             Just
             { model
                 | state = Inert
             }
-                ! [ cmd Timeout |> next model ]
+                ! [ Helpers.cmd Timeout |> next model ]
 
         _ ->
             Nothing ! []
@@ -199,7 +199,7 @@ tryDequeue model =
                 , seq = model.seq + 1
               }
             , Cmd.batch
-                [ delay c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
+                [ Helpers.delayedCmd c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
                 ]
             )
 
@@ -224,7 +224,7 @@ update fwd msg model =
                 fwdEffect =
                     case actionOnDismiss of
                         Just msg_ ->
-                            cmd msg_
+                            Helpers.cmd msg_
                         Nothing ->
                             Cmd.none
 

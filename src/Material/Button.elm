@@ -66,7 +66,6 @@ Button.view Mdc [0] model.mdc
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.Component as Component exposing (Indexed, Index)
-import Material.Helpers as Helpers
 import Material.Icon as Icon
 import Material.Internal.Button exposing (Msg(..))
 import Material.Internal.Options as Internal
@@ -217,10 +216,7 @@ button lift model options nodes =
               , ripple.properties
               ]
             ]
-            [ Helpers.blurOn "mouseup"
-            , Helpers.blurOn "mouseleave"
-            , Helpers.blurOn "touchend"
-            ]
+            []
             ( List.concat
               [
                 config.icon

@@ -63,7 +63,6 @@ import Json.Decode as Json exposing (Decoder)
 import Json.Encode
 import Material.Component as Component exposing (Indexed)
 import Material.GlobalEvents as GlobalEvents
-import Material.Helpers exposing (blurOn, filter, noAttr)
 import Material.Internal.Checkbox exposing (Msg(..), Animation(..), State(..))
 import Material.Internal.Options as Internal
 import Material.Msg exposing (Index)
@@ -211,7 +210,6 @@ checkbox lift model options _ =
     , cs "mdc-checkbox--checked" |> when (currentState == Just Checked)
     , cs "mdc-checkbox--disabled" |> when config.disabled
     , animationClass model.animation
-    , Internal.attribute <| blurOn "mouseup"
     , when stateChangedOrUninitialized <|
       GlobalEvents.onTick (Json.succeed (lift (Init model.lastKnownState configState)))
     , when (model.animation /= Nothing) <|

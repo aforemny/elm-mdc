@@ -154,7 +154,7 @@ Internal use only.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
+    case Debug.log "Msg" msg of
 
         Focus ->
             ( { model | focus = True }, Cmd.none )
@@ -184,7 +184,7 @@ update msg model =
                       , animation = animation
                   }
                 ,
-                  Helpers.delay 300 (AnimationEnd event animation)
+                  Helpers.delayedCmd 300 (AnimationEnd event animation)
                 )
             else
                 ( model, Cmd.none )
