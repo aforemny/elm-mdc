@@ -154,7 +154,7 @@ Internal use only.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "Msg" msg of
+    case msg of
 
         Focus ->
             ( { model | focus = True }, Cmd.none )
@@ -421,15 +421,15 @@ view isUnbounded lift model options =
             , blurOn "blur"
             , Options.many <|
               List.map activateOn
-              [ "keydown"
-              , "mousedown"
+              [ -- "keydown"
+                "mousedown"
               , "pointerdown"
               , "touchstart"
               ]
             , Options.many <|
               List.map deactivateOn
-              [ "keyup"
-              , "mouseup"
+              [ -- "keyup"
+                "mouseup"
               , "pointerup"
               , "touchend"
               ]
