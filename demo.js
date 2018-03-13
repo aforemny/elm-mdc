@@ -16284,44 +16284,35 @@ var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$defaultModel = {
 	seq: -1
 };
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$add = F4(
-	function (lift, idx, contents, model) {
+	function (lift, idx, contents, store) {
 		var component_ = A2(
 			_elm_lang$core$Maybe$withDefault,
 			_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$defaultModel,
-			A2(_elm_lang$core$Dict$get, idx, model.mdc.snackbar));
-		var _p7 = _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$tryDequeue(
-			A2(_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$enqueue, contents, component_));
+			A2(_elm_lang$core$Dict$get, idx, store.snackbar));
+		var _p7 = A2(
+			_elm_lang$core$Tuple$mapSecond,
+			_elm_lang$core$Platform_Cmd$map(
+				function (_p8) {
+					return lift(
+						A2(_aforemny$elm_mdc$Material_Internal_Msg$SnackbarMsg, idx, _p8));
+				}),
+			_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$tryDequeue(
+				A2(_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$enqueue, contents, component_)));
 		var component = _p7._0;
 		var effects = _p7._1;
-		var mdc = function () {
-			var mdc_ = model.mdc;
-			var _p8 = component;
-			if (_p8.ctor === 'Just') {
+		var updatedStore = function () {
+			var _p9 = component;
+			if (_p9.ctor === 'Just') {
 				return _elm_lang$core$Native_Utils.update(
-					mdc_,
+					store,
 					{
-						snackbar: A3(_elm_lang$core$Dict$insert, idx, _p8._0, mdc_.snackbar)
+						snackbar: A3(_elm_lang$core$Dict$insert, idx, _p9._0, store.snackbar)
 					});
 			} else {
-				return mdc_;
+				return store;
 			}
 		}();
-		return A2(
-			_elm_lang$core$Platform_Cmd_ops['!'],
-			_elm_lang$core$Native_Utils.update(
-				model,
-				{mdc: mdc}),
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$core$Platform_Cmd$map,
-					function (_p9) {
-						return lift(
-							A2(_aforemny$elm_mdc$Material_Internal_Msg$SnackbarMsg, idx, _p9));
-					},
-					effects),
-				_1: {ctor: '[]'}
-			});
+		return {ctor: '_Tuple2', _0: updatedStore, _1: effects};
 	});
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$_p10 = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$indexed,
@@ -19511,7 +19502,6 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$toolbar = F4(
 				}));
 	});
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$get, _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$toolbar, _aforemny$elm_mdc$Material_Internal_Msg$ToolbarMsg);
-
 
 var _aforemny$elm_mdc$Material$top = function (content) {
 	return A2(
@@ -36358,17 +36348,26 @@ var _aforemny$elm_mdc$Demo_Snackbar$update = F3(
 							});
 					}
 				}();
-				return A4(
+				var _p2 = A4(
 					_aforemny$elm_mdc$Material_Snackbar$add,
-					function (_p2) {
+					function (_p3) {
 						return lift(
-							_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p2));
+							_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p3));
 					},
 					_p0._0,
 					contents,
-					model);
+					model.mdc);
+				var mdc = _p2._0;
+				var effects = _p2._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{mdc: mdc}),
+					_1: effects
+				};
 			default:
-				var _p3 = A2(_elm_lang$core$Debug$log, 'Dismiss', _p0._0);
+				var _p4 = A2(_elm_lang$core$Debug$log, 'Dismiss', _p0._0);
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
@@ -36509,9 +36508,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 												ctor: '::',
 												_0: A5(
 													_aforemny$elm_mdc$Material_Checkbox$view,
-													function (_p4) {
+													function (_p5) {
 														return lift(
-															_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p4));
+															_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p5));
 													},
 													{
 														ctor: '::',
@@ -36558,9 +36557,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 														ctor: '::',
 														_0: A5(
 															_aforemny$elm_mdc$Material_Checkbox$view,
-															function (_p5) {
+															function (_p6) {
 																return lift(
-																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p5));
+																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p6));
 															},
 															{
 																ctor: '::',
@@ -36574,11 +36573,11 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																	lift(_aforemny$elm_mdc$Demo_Snackbar$ToggleActionOnBottom)),
 																_1: {
 																	ctor: '::',
-																	_0: function (_p6) {
+																	_0: function (_p7) {
 																		return A2(
 																			_aforemny$elm_mdc$Material_Options$when,
 																			!model.multiline,
-																			_aforemny$elm_mdc$Material_Options$many(_p6));
+																			_aforemny$elm_mdc$Material_Options$many(_p7));
 																	}(
 																		{
 																			ctor: '::',
@@ -36621,9 +36620,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																ctor: '::',
 																_0: A5(
 																	_aforemny$elm_mdc$Material_Checkbox$view,
-																	function (_p7) {
+																	function (_p8) {
 																		return lift(
-																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p7));
+																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p8));
 																	},
 																	{
 																		ctor: '::',
@@ -36665,9 +36664,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																ctor: '::',
 																_0: A5(
 																	_aforemny$elm_mdc$Material_Textfield$view,
-																	function (_p8) {
+																	function (_p9) {
 																		return lift(
-																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p8));
+																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p9));
 																	},
 																	{
 																		ctor: '::',
@@ -36688,9 +36687,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																					'input',
 																					A2(
 																						_elm_lang$core$Json_Decode$map,
-																						function (_p9) {
+																						function (_p10) {
 																							return lift(
-																								_aforemny$elm_mdc$Demo_Snackbar$SetMessageText(_p9));
+																								_aforemny$elm_mdc$Demo_Snackbar$SetMessageText(_p10));
 																						},
 																						_elm_lang$html$Html_Events$targetValue)),
 																				_1: {ctor: '[]'}
@@ -36708,9 +36707,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																		ctor: '::',
 																		_0: A5(
 																			_aforemny$elm_mdc$Material_Textfield$view,
-																			function (_p10) {
+																			function (_p11) {
 																				return lift(
-																					_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p10));
+																					_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p11));
 																			},
 																			{
 																				ctor: '::',
@@ -36731,9 +36730,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																							'input',
 																							A2(
 																								_elm_lang$core$Json_Decode$map,
-																								function (_p11) {
+																								function (_p12) {
 																									return lift(
-																										_aforemny$elm_mdc$Demo_Snackbar$SetActionText(_p11));
+																										_aforemny$elm_mdc$Demo_Snackbar$SetActionText(_p12));
 																								},
 																								_elm_lang$html$Html_Events$targetValue)),
 																						_1: {ctor: '[]'}
@@ -36751,9 +36750,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																				ctor: '::',
 																				_0: A5(
 																					_aforemny$elm_mdc$Material_Button$view,
-																					function (_p12) {
+																					function (_p13) {
 																						return lift(
-																							_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p12));
+																							_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p13));
 																					},
 																					{
 																						ctor: '::',
@@ -36796,9 +36795,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																						ctor: '::',
 																						_0: A5(
 																							_aforemny$elm_mdc$Material_Button$view,
-																							function (_p13) {
+																							function (_p14) {
 																								return lift(
-																									_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p13));
+																									_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p14));
 																							},
 																							{
 																								ctor: '::',
@@ -36841,9 +36840,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																								ctor: '::',
 																								_0: A5(
 																									_aforemny$elm_mdc$Material_Button$view,
-																									function (_p14) {
+																									function (_p15) {
 																										return lift(
-																											_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p14));
+																											_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p15));
 																									},
 																									{
 																										ctor: '::',
@@ -36886,9 +36885,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																										ctor: '::',
 																										_0: A5(
 																											_aforemny$elm_mdc$Material_Button$view,
-																											function (_p15) {
+																											function (_p16) {
 																												return lift(
-																													_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p15));
+																													_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p16));
 																											},
 																											{
 																												ctor: '::',
@@ -36928,9 +36927,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																											ctor: '::',
 																											_0: A5(
 																												_aforemny$elm_mdc$Material_Snackbar$view,
-																												function (_p16) {
+																												function (_p17) {
 																													return lift(
-																														_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p16));
+																														_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p17));
 																												},
 																												{
 																													ctor: '::',
@@ -36953,9 +36952,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																														ctor: '::',
 																														_0: A5(
 																															_aforemny$elm_mdc$Material_Snackbar$view,
-																															function (_p17) {
+																															function (_p18) {
 																																return lift(
-																																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p17));
+																																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p18));
 																															},
 																															{
 																																ctor: '::',
@@ -36971,9 +36970,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																													ctor: '::',
 																													_0: A5(
 																														_aforemny$elm_mdc$Material_Snackbar$view,
-																														function (_p18) {
+																														function (_p19) {
 																															return lift(
-																																_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p18));
+																																_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p19));
 																														},
 																														{
 																															ctor: '::',
@@ -37000,9 +36999,9 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																																ctor: '::',
 																																_0: A5(
 																																	_aforemny$elm_mdc$Material_Snackbar$view,
-																																	function (_p19) {
+																																	function (_p20) {
 																																		return lift(
-																																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p19));
+																																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p20));
 																																	},
 																																	{
 																																		ctor: '::',
