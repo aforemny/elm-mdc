@@ -8,45 +8,6 @@ module Material.Internal.Fab.Implementation exposing
     , view
     )
 
-{-|
-A floating action button represents the primary action in an application.
-
-
-# Resources
-
-- [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons-floating-action-button.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#fab)
-
-
-# Example
-
-```elm
-import Material.Fab as Fab
-import Material.Options as Options
-
-
-Fab.view Mdc [0] model.mdc
-    [ Fab.ripple
-    , Options.onClick Click
-    ]
-    "favorite_border"
-```
-
-
-# Usage
-@docs Property
-@docs view
-@docs Property
-@docs mini
-@docs ripple
-@docs exited
-
-
-# Internal
-@docs Model
-@docs react
--}
-
 import Html exposing (Html, text)
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Fab.Model exposing (Msg(..))
@@ -56,10 +17,6 @@ import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 
 
-{-| Fab model.
-
-Internal use only.
--}
 type alias Model =
     { ripple : Ripple.Model
     }
@@ -100,30 +57,20 @@ defaultConfig =
     }
 
 
-{-| Fab property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Make the Fab smaller than regular size.
--}
 mini : Property m
 mini =
     cs "mdc-fab--mini"
 
 
-{-| Animates the Fab out of view when this property is set.
-
-It returns to view when this property is removed.
--}
 exited : Property m
 exited =
     cs "mdc-fab--exited"
 
 
-{-| Enable ripple effect on interaction.
--}
 ripple : Property m
 ripple =
     Internal.option (\config -> { config | ripple = True })
@@ -172,8 +119,6 @@ type alias Store s =
     Component.indexed .fab (\x y -> { y | fab = x }) defaultModel
 
 
-{-| Fab view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -185,10 +130,6 @@ view =
     Component.render get fab Material.Internal.Msg.FabMsg
 
 
-{-| Fab react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg

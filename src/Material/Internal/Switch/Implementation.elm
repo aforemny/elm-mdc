@@ -7,54 +7,6 @@ module Material.Internal.Switch.Implementation exposing
     , view
     )
 
-{-|
-The MDC Switch component is a spec-aligned switch component adhering to the
-Material Design Switch requirements.
-
-
-# Resources
-
-- [Material Design guidelines: Switches](https://material.io/guidelines/components/selection-controls.html#selection-controls-switch)
-- [Demo](https://aforemny.github.io/elm-mdc/#switch)
-
-
-# Example
-
-
-```elm
-import Html exposing (text)
-import Material.FormField as FormField
-import Material.Options as Options exposing (styled)
-import Material.Switch as Switch
-
-
-FormField.view []
-    [ Switch.view Mdc [0] model.mdc
-          [ Switch.on
-          , Options.onClick Toggle
-          ]
-          []
-    , Html.label
-          [ Options.onClick Toggle
-          ]
-          [ text "on/off"
-          ]
-    ]
-```
-
-
-# Usage
-
-@docs Property
-@docs view
-@docs on
-@docs disabled
-
-# Internal
-@docs react
-@docs Model
--}
-
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
@@ -65,8 +17,6 @@ import Material.Internal.Options.Internal as Internal
 import Material.Internal.Switch.Model exposing (Msg(..))
 
 
-{-| Component model.
--}
 type alias Model =
     { isFocused : Bool
     }
@@ -105,23 +55,15 @@ defaultConfig =
     }
 
 
-{-| Switch property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Disable the switch.
--}
 disabled : Property m
 disabled =
     Internal.option (\ config -> { config | disabled = True })
 
 
-{-| Make switch display its "on" state.
-
-Defaults to "off". Use `Options.when` to make it interactive.
--}
 on : Property m
 on =
     Internal.option (\config -> { config | value = True })
@@ -174,8 +116,6 @@ type alias Store s =
     Component.indexed .switch (\x y -> { y | switch = x }) defaultModel
 
 
-{-| Component react function.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg
@@ -186,8 +126,6 @@ react =
     Component.react get set Material.Internal.Msg.SwitchMsg update
 
 
-{-| Switch view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index

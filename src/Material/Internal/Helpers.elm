@@ -3,12 +3,6 @@ module Material.Internal.Helpers exposing
     , delayedCmd
     )
 
-{-| Convenience functions.
-
-# Cmd
-@docs cmd, delayedCmd
--}
-
 import Platform.Cmd exposing (Cmd)
 import Process
 import Task

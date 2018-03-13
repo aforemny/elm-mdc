@@ -14,55 +14,6 @@ module Material.Internal.Button.Implementation exposing
     , view
     )
 
-{-|
-The MDC Button component is a spec-aligned button component adhering to the
-Material Design button requirements.
-
-
-# Resources
-
-- [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#buttons)
-
-
-# Example
-
-```elm
-import Html exposing (text)
-import Material.Button as Button
-import Material.Options as Options
-
-
-Button.view Mdc [0] model.mdc
-    [ Button.ripple
-    , Options.onClick Click
-    ]
-    [ text "Button"
-    ]
-```
-
-
-# Usage
-
-@docs Property
-@docs view
-@docs ripple
-@docs raised
-@docs unelevated
-@docs stroked
-@docs dense
-@docs compact
-@docs icon
-@docs disabled
-@docs link
-
-
-# Internal
-
-@docs Model
-@docs react
--}
-
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.Internal.Button.Model exposing (Msg(..))
@@ -74,10 +25,6 @@ import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 
 
-{-| Button model.
-
-Internal use only.
--}
 type alias Model =
     { ripple : Ripple.Model
     }
@@ -121,70 +68,50 @@ defaultConfig =
     }
 
 
-{-| Button property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Give the button an icon.
--}
 icon : String -> Property m
 icon str =
     Internal.option (\ config -> { config | icon = Just str })
 
 
-{-| Make the  button elevated upon the surface.
--}
 raised : Property m
 raised =
     cs "mdc-button--raised"
 
 
-{-| Make the button flush with the surface.
--}
 unelevated : Property m
 unelevated =
     cs "mdc-button--unelevated"
 
 
-{-| Make the button flush with the surface, but have a visible border.
--}
 stroked : Property m
 stroked =
     cs "mdc-button--stroked"
 
 
-{-| Make button's text slightly smaller.
--}
 dense : Property m
 dense =
     cs "mdc-button--dense"
 
 
-{-| Reduce the amount of horizontal padding in the button.
--}
 compact : Property m
 compact =
     cs "mdc-button--compact"
 
 
-{-| Enable ripple ink effect for the button.
--}
 ripple : Property m
 ripple =
     Internal.option (\options -> { options | ripple = True })
 
 
-{-| Make the button be an anchor tag instead of a div.
--}
 link : String -> Property m
 link href =
     Internal.option (\options -> { options | link = Just href })
 
 
-{-| Disable the button.
--}
 disabled : Property m
 disabled =
     Internal.option (\options -> { options | disabled = True })
@@ -242,8 +169,6 @@ type alias Store s =
     Component.indexed .button (\x y -> { y | button = x }) defaultModel
 
 
-{-| Button view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -255,10 +180,6 @@ view =
     Component.render get button Material.Internal.Msg.ButtonMsg
 
 
-{-| Button react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg

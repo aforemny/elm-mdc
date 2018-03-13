@@ -8,8 +8,6 @@ import DOM
 import Material.Internal.Menu.Model as Menu
 
 
-{-| TODO
--}
 type Msg m
     = MenuMsg (Menu.Msg m)
     | Init Geometry

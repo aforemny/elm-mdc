@@ -10,8 +10,6 @@ module Material.Internal.Menu.Model exposing
     )
 
 
-{-| TODO
--}
 type Msg m
     = NoOp
     | Init { quickOpen : Bool } Geometry

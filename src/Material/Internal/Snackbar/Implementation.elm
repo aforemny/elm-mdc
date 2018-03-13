@@ -11,45 +11,6 @@ module Material.Internal.Snackbar.Implementation exposing
     , view
     )
 
-{-|
-The Snackbar component is a spec-aligned snackbar/toast component adhering to
-the Material Design snackbars & toasts requirements.
-
-
-# Resources
-
-- [Material Design guidelines: Snackbars & toasts](https://material.io/guidelines/components/snackbars-toasts.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#snackbar)
-
-
-# Example
-
-```elm
-import Material.Snackbar as Snackbar
-
-Snackbar.view Mdc [0] model.mdc [] []
-```
-
-
-# Usage
-
-@docs Property
-@docs view
-@docs alignStart, alignEnd
-
-
-## Contents
-
-@docs Contents
-@docs add
-@docs toast
-@docs snack
-
-
-# Internal
-@docs Model, react
--}
-
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -63,8 +24,6 @@ import Material.Internal.Snackbar.Model exposing (Msg(..), Transition(..))
 import Time exposing (Time)
 
 
-{-| Snackbar Contents.
--}
 type alias Contents m =
     { message : String
     , action : Maybe String
@@ -77,10 +36,6 @@ type alias Contents m =
     }
 
 
-{-| Snackbar model.
-
-Internal use only.
--}
 type alias Model m =
     { queue : List (Contents m)
     , state : State m
@@ -88,8 +43,6 @@ type alias Model m =
     }
 
 
-{-| Default snackbar model.
--}
 defaultModel : Model m
 defaultModel =
     { queue = []
@@ -102,8 +55,6 @@ type alias Msg m =
     Material.Internal.Snackbar.Model.Msg m
 
 
-{-| Generate toast with given message. Timeout is 2750ms, fade 250ms.
--}
 toast : Maybe m -> String -> Contents m
 toast onDismiss message =
     { message = message
@@ -117,9 +68,6 @@ toast onDismiss message =
     }
 
 
-{-| Generate snack with given message and label.
-Timeout is 2750ms, fade 250ms.
--}
 snack : Maybe m -> String -> String -> Contents m
 snack onDismiss message label =
     { message = message
@@ -205,8 +153,6 @@ tryDequeue model =
             Nothing ! []
 
 
-{-| Elm Architecture update function.
--}
 update : (Msg m -> m) -> Msg m -> Model m -> ( Maybe (Model m), Cmd m )
 update fwd msg model =
     case msg of
@@ -235,9 +181,6 @@ update fwd msg model =
                 |> Tuple.mapSecond (\cmd -> Cmd.batch [ cmd, fwdEffect ])
 
 
-{-| Add a message to the snackbar. If another message is currently displayed,
-the provided message will be queued.
--}
 add : (Material.Internal.Msg.Msg m -> m)
     -> Index
     -> Contents m
@@ -274,21 +217,11 @@ defaultConfig =
     {}
 
 
-{-| Start-align the Snackbar.
-
-By default Snackbars are center aligned. This is only configurable on tablet
-and desktops creens.
--}
 alignStart : Property m
 alignStart =
     Options.cs "mdc-snackbar--align-start"
 
 
-{-| End-align the Snackbar.
-
-By default Snackbars are center aligned. This is only configurable on tablet
-and desktops creens.
--}
 alignEnd : Property m
 alignEnd =
     Options.cs "mdc-snackbar--align-end"
@@ -372,8 +305,6 @@ snackbar lift model options _ =
     ]
 
 
-{-| Snackbar property.
--}
 type alias Property m =
     Options.Property Config m
 
@@ -387,10 +318,6 @@ type alias Store m s =
     }
 
 
-{-| Snackbar react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg m
@@ -401,8 +328,6 @@ react =
     Component.react get set Material.Internal.Msg.SnackbarMsg update
 
 
-{-| Snackbar view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index

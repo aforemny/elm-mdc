@@ -10,55 +10,6 @@ module Material.Internal.IconToggle.Implementation exposing
     , view
     )
 
-{-|
-IconToggle provides a Material Design icon toggle button. It is fully
-accessible, and is designed to work with any icon set.
-
-
-# Resources
-
-- [Material Design guidelines: Toggle buttons](https://material.io/guidelines/components/buttons.html#buttons-toggle-buttons)
-- [Demo](https://aforemny.github.io/elm-mdc/#icon-toggle)
-
-
-# Example
-
-```elm
-import Material.IconToggle as IconToggle
-
-
-IconToggle.view Mdc [0] model.mdc
-    [ IconToggle.icon
-          { on = "favorite_border"
-          , off = "favorite"
-          }
-    , IconToggle.label
-          { on = "Remove from favorites"
-          , off "Add to favorites"
-          }
-    , IconToggle.on True
-    , IconToggle.onClick Toggle
-    ]
-    []
-```
-
-
-# Usage
-
-@docs Property
-@docs view
-@docs on
-@docs icon
-@docs label
-@docs disabled
-@docs className
-
-
-# Internal
-@docs Model
-@docs react
--}
-
 import Html exposing (Html, text)
 import Material.Internal.Component as Component exposing (Index, Indexed)
 import Material.Internal.IconToggle.Model exposing (Msg(..))
@@ -68,10 +19,6 @@ import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 
 
-{-| IconToggle model.
-
-Internal use only.
--}
 type alias Model =
     { on : Bool
     , ripple : Ripple.Model
@@ -117,51 +64,30 @@ defaultConfig =
     }
 
 
-{-| IconToggle property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Make the icon toggle appear in its "on" state.
-
-Defaults to "off". Use `Options.when` to make it interactive.
--}
 on : Property m
 on =
     Internal.option (\config -> { config | on = True })
 
 
-{-| Sets an alternate classname of the icon.
-
-Useful if you want to use a different icon set. For example use `"fa"` for
-FontAwesome.
--}
 className : String -> Property m
 className className =
     Internal.option (\ config -> { config | inner = Just className })
 
 
-{-| Set the icon.
-
-Specify an icon for the icon toggle's "on" and "off" state.
--}
 icon : { on : String, off : String } -> Property m
 icon icon =
     Internal.option (\config -> { config | icon = icon })
 
 
-{-| Set the icon toggle's label.
-
-Specify a label for the icon toggle's "on" and "off" state.
--}
 label : { on : String, off : String } -> Property m
 label label =
     Internal.option (\config -> { config | label = label })
 
 
-{-| Disable the icon toggle.
--}
 disabled : Property m
 disabled =
     cs "mdc-icon-toggle--disabled"
@@ -212,10 +138,6 @@ type alias Store s =
     Component.indexed .iconToggle (\x y -> { y | iconToggle = x }) defaultModel
 
 
-{-| IconToggle react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg
@@ -226,8 +148,6 @@ react =
     Component.react get set Material.Internal.Msg.IconToggleMsg (Component.generalise update)
 
 
-{-| IconToggle view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index

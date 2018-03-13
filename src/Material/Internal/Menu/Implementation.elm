@@ -32,87 +32,6 @@ module Material.Internal.Menu.Implementation exposing
     , view
     )
 
-{-|
-The MDC Menu component is a spec-aligned menu component adhering to the
-Material Design menu specification.
-
-
-# Resources
-- [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#menu)
-
-
-# Example
-
-```elm
-import Html exposing (text)
-import Material.Button as Button
-import Material.Menu as Menu
-import Material.Options exposing (styled, cs, css)
-
-
-styled Html.div
-    [ Options.cs "mdc-menu-anchor"
-    , Options.css "position" "relative"
-    ]
-    [ Button.view Mdc [0] model.mdc
-          [ Menu.attach (lift << Mdc) [1]
-          ]
-          [ text "Show"
-          ]
-    , Menu.view Mdc [1] model.mdc []
-          [ Menu.ul []
-                [ Menu.li
-                      [ Menu.onSelect (Select "Item 1")
-                      ]
-                      [ text "Item 1"
-                      ]
-                , Menu.li
-                      [ Menu.onSelect (Select "Item 2")
-                      ]
-                      [ text "Item 2"
-                      ]
-                ]
-          ]
-    ]
-```
-
-
-# Usage
-@docs Property
-@docs view
-@docs ul
-@docs Item
-@docs li
-@docs divider
-@docs onSelect
-@docs index
-@docs attach
-@docs anchorCorner
-@docs Corner
-@docs topStartCorner
-@docs topEndCorner
-@docs bottomStartCorner
-@docs bottomEndCorner
-@docs topLeftCorner
-@docs topRightCorner
-@docs bottomLeftCorner
-@docs bottomRightCorner
-@docs anchorMargin
-@docs Margin
-@docs quickOpen
-
-
-# Internal
-@docs react
-@docs update
-@docs Model, defaultModel
-@docs subscriptions
-@docs connect
-@docs menu
-@docs subs
--}
-
 import DOM
 import Html.Attributes as Html
 import Html.Events as Html
@@ -131,10 +50,6 @@ import Mouse
 import Time
 
 
-{-| Menu subscriptions.
-
-Internal use only.
--}
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
     Sub.batch
@@ -146,10 +61,6 @@ subscriptions model =
     ]
 
 
-{-| Menu model.
-
-Internal use only.
--}
 type alias Model =
     { index : Maybe Int
     , open : Bool
@@ -161,10 +72,6 @@ type alias Model =
     }
 
 
-{-| Menu default model.
-
-Internal use only.
--}
 defaultModel : Model
 defaultModel =
     { index = Nothing
@@ -177,8 +84,6 @@ defaultModel =
     }
 
 
-{-| Menu item.
--}
 type alias Item m =
     { options : List (Lists.Property m)
     , childs : List (Html m)
@@ -186,16 +91,12 @@ type alias Item m =
     }
 
 
-{-| Menu item wrapper.
--}
 li : List (Lists.Property m) -> List (Html m) -> Item m
 li options childs =
     { options = options, childs = childs, divider = False }
 
 
 
-{-| Menu item divider.
--}
 divider : List (Lists.Property m) -> List (Html m) -> Item m
 divider options childs =
     { options = options, childs = childs, divider = True }
@@ -207,33 +108,21 @@ type alias Menu m =
     }
 
 
-{-| Menu items wrapper.
--}
 ul : List (Lists.Property m) -> List (Item m) -> Menu m
 ul options items =
     { options = options, items = items }
 
 
-{-| Component property to attach the menu.
--}
 attach : (Material.Internal.Msg.Msg m -> m) -> Index -> Options.Property c m
 attach lift idx =
     Options.onClick (lift (Material.Internal.Msg.MenuMsg idx Toggle))
 
 
-{-| Component property to attach the menu.
-
-Internal use only.
--}
 connect : (Material.Internal.Menu.Model.Msg m -> m) -> Options.Property c m
 connect lift =
     Options.onClick (lift Toggle)
 
 
-{-| Menu update.
-
-Internal use only.
--}
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
     case msg of
@@ -417,10 +306,6 @@ defaultConfig =
     }
 
 
-{-| Menu margin from `anchorCorner`.
-
-Defaults to zero margin.
--}
 type alias Margin =
     { top : Float
     , left : Float
@@ -438,47 +323,30 @@ defaultMargin =
     }
 
 
-{-| Menu property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Specify the menu item that has focus when the menu opens.
--}
 index : Int -> Property m
 index index =
     Internal.option (\config -> { config | index = Just index })
 
 
-{-| Hint to anchor the menu if space is available.
-
-The menu will auto-position itself if not enough space is available. Prefer
-RTL-aware corners when possible.
--}
 anchorCorner : Corner -> Property m
 anchorCorner anchorCorner =
     Internal.option (\ config -> { config | anchorCorner = anchorCorner })
 
 
-{-| Set the menu's margin from the specified `anchorCorner`.
--}
 anchorMargin : Margin -> Property m
 anchorMargin anchorMargin =
     Internal.option (\ config -> { config | anchorMargin = anchorMargin })
 
 
-{-| Open the menu without an animation.
--}
 quickOpen : Property m
 quickOpen =
     Internal.option (\ config -> { config | quickOpen = True })
 
 
-{-| Menu view function.
-
-Internal use only.
--}
 menu
     : (Msg m -> m)
     -> Model
@@ -662,10 +530,6 @@ menu lift model options ul =
     ]
 
 
-{-| One of the four corners.
-
-Consider using RTL aware corners when possible.
--}
 type alias Corner
     = { bottom : Bool
       , center : Bool
@@ -674,8 +538,6 @@ type alias Corner
       }
 
 
-{-| Top left corner.
--}
 topLeftCorner : Corner
 topLeftCorner =
     { bottom = False
@@ -685,8 +547,6 @@ topLeftCorner =
     }
 
 
-{-| Top right corner.
--}
 topRightCorner : Corner
 topRightCorner =
     { bottom = False
@@ -696,8 +556,6 @@ topRightCorner =
     }
 
 
-{-| Bottom left corner.
--}
 bottomLeftCorner : Corner
 bottomLeftCorner =
     { bottom = True
@@ -707,8 +565,6 @@ bottomLeftCorner =
     }
 
 
-{-| Bottom right corner.
--}
 bottomRightCorner : Corner
 bottomRightCorner =
     { bottom = True
@@ -718,8 +574,6 @@ bottomRightCorner =
     }
 
 
-{-| Top left corner in RTL and top right corner otherwise.
--}
 topStartCorner : Corner
 topStartCorner =
     { bottom = False
@@ -729,8 +583,6 @@ topStartCorner =
     }
 
 
-{-| Top right corner in RTL and top left corner otherwise.
--}
 topEndCorner : Corner
 topEndCorner =
     { bottom = False
@@ -740,8 +592,6 @@ topEndCorner =
     }
 
 
-{-| Bottom left corner in RTL and bottom right corner otherwise.
--}
 bottomStartCorner : Corner
 bottomStartCorner =
     { bottom = True
@@ -751,8 +601,6 @@ bottomStartCorner =
     }
 
 
-{-| Bottom right corner in RTL and bottom left corner otherwise.
--}
 bottomEndCorner : Corner
 bottomEndCorner =
     { bottom = True
@@ -1018,10 +866,6 @@ type alias Store s =
     Component.indexed .menu (\x y -> { y | menu = x }) defaultModel
 
 
-{-| Menu react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg m
@@ -1032,8 +876,6 @@ react =
     Component.react get set Material.Internal.Msg.MenuMsg update
 
 
-{-| Menu view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -1045,10 +887,6 @@ view =
     Component.render get menu Material.Internal.Msg.MenuMsg
 
 
-{-| Menu subscriptions.
-
-Internal use only.
--}
 subs : (Material.Internal.Msg.Msg m -> m) -> Store s -> Sub m
 subs =
     Component.subs Material.Internal.Msg.MenuMsg .menu subscriptions
@@ -1122,11 +960,6 @@ decodeGeometry =
     )
 
 
-{-| Event listener for the menu's select event.
-
-Use this rather than `Options.onClick`, etc. so that it works with keyboard
-selection.
--}
 onSelect : m -> Lists.Property m
 onSelect msg =
     let

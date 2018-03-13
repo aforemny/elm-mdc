@@ -94,7 +94,7 @@ init =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Material.subscriptions Mdc
+    Material.subscriptions Mdc model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -328,7 +328,7 @@ update_ lift msg store =
 ```elm
 subscriptions model =
     Sub.batch
-    [ Material.subscriptions Mdc model.mdc
+    [ Material.subscriptions Mdc model
     , …
     ]
 ```

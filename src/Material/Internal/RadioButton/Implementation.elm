@@ -7,52 +7,6 @@ module Material.Internal.RadioButton.Implementation exposing
     , view
     )
 
-{-|
-The RadioButton component provides a radio button adhering to the Material
-Design Specification.
-
-
-# Resources
-
-- [Material Design guidelines: Selection Controls – Radio buttons](https://material.io/guidelines/components/selection-controls.html#selection-controls-radio-button)
-- [Demo](https://aforemny.github.io/elm-mdc/#radio-buttons)
-
-
-# Example
-
-```elm
-import Html exposing (text)
-import Material.FormField as FormField
-import Material.Options as Options exposing (styled, cs)
-import Material.RadioButton as RadioButton
-
-
-FormField.view []
-    [ RadioButton.view Mdc [0] model.mdc
-          [ RadioButton.selected
-          , Options.onClick Select
-          ]
-          []
-    , Html.label
-          [ Options.onClick Select
-          ]
-          [ text "Radio"
-          ]
-    ]
-```
-
-# Usage
-@docs Property
-@docs view
-@docs selected
-@docs disabled
-
-
-# Internal
-@docs Model
-@docs react
--}
-
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
@@ -64,10 +18,6 @@ import Material.Internal.RadioButton.Model exposing (Msg(..))
 import Material.Internal.Ripple.Implementation as Ripple
 
 
-{-| RadioButton model.
-
-Internal use only.
--}
 type alias Model =
     { ripple : Ripple.Model
     , isFocused : Bool
@@ -118,23 +68,15 @@ defaultConfig =
     }
 
 
-{-| RadioButton property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Disable the radio button.
--}
 disabled : Property m
 disabled =
     Internal.option (\ config -> { config | disabled = True })
 
 
-{-| Make the radio button selected.
-
-Defaults to not selected. Use `Options.when` to make it interactive.
--}
 selected : Property m
 selected =
     Internal.option (\config -> { config | value = True })
@@ -193,10 +135,6 @@ type alias Store s =
     Component.indexed .radio (\x y -> { y | radio = x }) defaultModel
 
 
-{-| RadioButton react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg
@@ -207,8 +145,6 @@ react =
     Component.react get set Material.Internal.Msg.RadioButtonMsg update
 
 
-{-| RadioButton view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index

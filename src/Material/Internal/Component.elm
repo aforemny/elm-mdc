@@ -8,12 +8,6 @@ module Material.Internal.Component exposing
     , generalise
     )
 
-{-|
-@docs Indexed, Store
-@docs indexed, render
-@docs subs
--}
-
 import Dict exposing (Dict)
 import Material.Internal.Msg exposing (Msg(..))
 

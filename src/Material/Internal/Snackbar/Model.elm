@@ -4,8 +4,6 @@ module Material.Internal.Snackbar.Model exposing
     )
 
 
-{-| TODO
--}
 type Msg m
     = Move Int Transition
     | Dismiss Bool (Maybe m)

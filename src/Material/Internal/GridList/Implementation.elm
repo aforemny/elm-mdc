@@ -23,74 +23,6 @@ module Material.Internal.GridList.Implementation exposing
     , view
     )
 
-{-|
-Grid List provides a RTL-aware Material Design Grid list component adhering to
-the Material Design Grid list spec. Grid Lists are best suited for presenting
-homogeneous data, typically images. Each item in a grid list is called a tile.
-Tiles maintain consistent width, height, and padding across screen sizes.
-
-
-# Resources
-
-- [Material Design guidelines: Grid lists](https://material.io/guidelines/components/grid-lists.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#grid-list)
-
-
-# Example
-
-```elm
-import Html exposing (text)
-import Material.GridList as GridList
-
-
-GridList.view Mdc [0] model.mdc []
-    ( List.repeat 6 <|
-      GridList.tile []
-          [ GridList.primary []
-                [ GridList.image [] "images/1-1.jpg"
-                ]
-          , GridList.secondary []
-                [ GridList.title []
-                      [ text "Tile Title"
-                      ]
-                ]
-          ]
-    )
-```
-
-
-# Usage
-
-
-## Grid List
-
-@docs Property
-@docs view
-@docs headerCaption, twolineCaption
-@docs gutter1
-@docs iconAlignStart, iconAlignEnd
-@docs tileAspect16x9, tileAspect4x3, tileAspect3x4, tileAspect2x3, tileAspect3x2
-
-
-## Tiles
-
-@docs tile
-@docs primary
-@docs secondary
-@docs image
-@docs icon
-@docs title
-@docs supportText
-@docs primaryContent
-
-
-# Internal
-
-@docs Model
-@docs react
--}
-
-
 import DOM
 import Html.Attributes as Html
 import Html exposing (Html)
@@ -103,10 +35,6 @@ import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
 
 
-{-| GridList model.
-
-Internal use only.
--}
 type alias Model =
     { configured : Bool
     , geometry : Maybe Geometry
@@ -164,114 +92,71 @@ gridList lift model options nodes =
     ]
 
 
-{-| Style a GridList so that its tiles have a header caption.
-
-By default GridList tile's have a footer caption.
--}
 headerCaption : Property m
 headerCaption =
     cs "mdc-grid-list--header-caption"
 
 
-{-| Style a GridList so that tile's captions have two lines.
-
-By default a tile's caption is single line.
--}
 twolineCaption : Property m
 twolineCaption =
     cs "mdc-grid-list--twoline-caption"
 
 
-{-| Configure a GridList tile's icon to be aligned to the start.
--}
 iconAlignStart : Property m
 iconAlignStart =
     cs "mdc-grid-list--with-icon-align-start"
 
 
-{-| Configure a GridList tile's icon to be aligned to the end.
--}
 iconAlignEnd : Property m
 iconAlignEnd =
     cs "mdc-grid-list--with-icon-align-end"
 
 
-{-| Style a GridList to have a 1px padding.
-
-By default a GridList has a 4px padding.
--}
 gutter1 : Property m
 gutter1 =
     cs "mdc-grid-list--tile-gutter-1"
 
 
-{-| Style a GridList so that its tiles `primary` content preserves a 16 to 9
-aspect ratio.
--}
 tileAspect16x9 : Property m
 tileAspect16x9 =
     cs "mdc-grid-list--tile-aspect-16x9"
 
 
-{-| Style a GridList so that its tiles `primary` content preserves a 4 to 3
-aspect ratio.
--}
 tileAspect4x3 : Property m
 tileAspect4x3 =
     cs "mdc-grid-list--tile-aspect-4x3"
 
 
-{-| Style a GridList so that its tiles `primary` content preserves a 3 to 4
-aspect ratio.
--}
 tileAspect3x4 : Property m
 tileAspect3x4 =
     cs "mdc-grid-list--tile-aspect-3x4"
 
 
-{-| Style a GridList so that its tiles `primary` content preserves a 2 to 3
-aspect ratio.
--}
 tileAspect2x3 : Property m
 tileAspect2x3 =
     cs "mdc-grid-list--tile-aspect-2x3"
 
 
-{-| Style a GridList so that its tiles `primary` content preserves a 3 to 2
-aspect ratio.
--}
 tileAspect3x2 : Property m
 tileAspect3x2 =
     cs "mdc-grid-list--tile-aspect-3x2"
 
 
-{-| GridList tile.
--}
 tile : List (Property m) -> List (Html m) -> Html m
 tile options =
     styled Html.div ( cs "mdc-grid-tile" :: options)
 
 
-{-| GridList tile's primary block.
-
-Contains `primaryContent` or `image`.
--}
 primary : List (Property m) -> List (Html m) -> Html m
 primary options =
     styled Html.div ( cs "mdc-grid-tile__primary" :: options )
 
 
-{-| GridList tile's secondary block.
-
-This contains the caption made up of `title`, `icon` and/or `supportText`.
--}
 secondary : List (Property m) -> List (Html m) -> Html m
 secondary options =
     styled Html.div ( cs "mdc-grid-tile__secondary" :: options )
 
 
-{-| Specify an image as a GridList tile's primary content.
--}
 image : List (Property m) -> String -> Html m
 image options src =
     styled Html.img
@@ -282,37 +167,21 @@ image options src =
     []
 
 
-{-| Add a title caption to the tile.
-
-Should be a direct child of `secondary`.
--}
 title : List (Property m) -> List (Html m) -> Html m
 title options =
     styled Html.div ( cs "mdc-grid-tile__title" :: options )
 
 
-{-| Add supporting text to a tile's caption.
-
-Should be a direct child of `secondary`.
--}
 supportText : List (Property m) -> List (Html m) -> Html m
 supportText options =
     styled Html.div ( cs "mdc-grid-tile__support-text" :: options )
 
 
-{-| Add an icon to a tile's caption.
-
-Should be a direct child of `secondary`.
--}
 icon : List (Property m) -> String -> Html m
 icon options icon =
     styled Html.div ( cs "mdc-grid-tile__icon" :: options ) [ Icon.view [] icon ]
 
 
-{-| GridList tile's primary content wrapper.
-
-Should be a d direct child of `primary`.
--}
 primaryContent : List (Property m) -> List (Html m) -> Html m
 primaryContent options =
     styled Html.div ( cs "mdc-grid-tile__primary-content" :: options )
@@ -326,8 +195,6 @@ type alias Store s =
     Component.indexed .gridList (\x y -> { y | gridList = x }) defaultModel
 
 
-{-| GridList view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -339,10 +206,6 @@ view =
     Component.render get gridList Material.Internal.Msg.GridListMsg
 
 
-{-| GridList react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg m
@@ -353,8 +216,6 @@ react =
     Component.react get set Material.Internal.Msg.GridListMsg (Component.generalise update)
 
 
-{-| GridList property.
--}
 type alias Property m =
     Options.Property Config m
 

@@ -12,91 +12,6 @@ module Material.Internal.Ripple.Implementation exposing
     , view
     )
 
-{-|
-The Ripple component adds a material "ink ripple" interaction effect to
-HTML elements.
-
-The ripple comes in `bounded` and `unbounded` variants. The first works well
-for surfaces, the other works well for icons.
-
-The view functions `unbounded` and `bounded` return a record with fields
-
-- `interactionHandler` that has to be added to the HTML element that should be
-  interacted with,
-- `properties` that applies the ripple effect to the HTML element. This is
-  usually the same as the one `interactionHandler` is applied to, and
-- `style` which is a HTML `<style>` element which has to be added to the DOM.
-  It is recommended to make this a child of the element that is interacted
-  with.
-
-
-# Resources
-- [Material Design guidelines: Choreography](https://material.io/guidelines/motion/choreography.html#choreography-radial-reaction)
-- [Demo](https://aforemny.github.io/elm-mdc/#ripple)
-
-
-# Example
-
-## Bounded Ripple effect
-
-```elm
-import Html exposing (text)
-import Material.Options as Options exposing (styled)
-import Material.Ripple as Ripple
-
-
-let
-    { interactionHandler
-    , properties
-    , style
-    } =
-        Ripple.bounded Mdc [0] model.mdc
-in
-Options.styled Html.div
-    [ interactionHandler
-    , properties
-    ]
-    [ text "Interact with me!"
-    , style
-    ]
-```
-
-
-## Unbounded Ripple effect
-
-```elm
-let
-    { interactionHandler
-    , properties
-    , style
-    } =
-        Ripple.unbounded Mdc [0] model.mdc
-in
-Icon.view
-    [ interactionHandler
-    , properties
-    ]
-    "favorite"
-```
-
-
-# Usage
-@docs Property
-@docs unbounded
-@docs bounded
-@docs primary
-@docs accent
-
-
-# Internal
-@docs Model
-@docs defaultModel
-@docs Msg
-@docs update
-@docs view
-@docs react
--}
-
 import Char
 import DOM
 import Html.Attributes as Html
@@ -110,10 +25,6 @@ import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Model exposing (Msg(..), Geometry, defaultGeometry)
 
 
-{-| Ripple model.
-
-Internal use only.
--}
 type alias Model =
     { focus : Bool
     , active : Bool
@@ -124,10 +35,6 @@ type alias Model =
     }
 
 
-{-| Ripple default model.
-
-Internal use only.
--}
 defaultModel : Model
 defaultModel =
     { focus = False
@@ -139,18 +46,10 @@ defaultModel =
     }
 
 
-{-| Ripple message.
-
-Internal use only.
--}
 type alias Msg
     = Material.Internal.Ripple.Model.Msg
 
 
-{-| Ripple update function.
-
-Internal use only.
--}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -214,8 +113,6 @@ update msg model =
                 ( model, Cmd.none )
 
 
-{-| Bounded view function.
--}
 bounded
     : (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -229,8 +126,6 @@ bounded =
     Component.render get (view False) Material.Internal.Msg.RippleMsg
 
 
-{-| Unbounded view function.
--}
 unbounded
     : (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -255,30 +150,20 @@ defaultConfig =
     }
 
 
-{-| Set ripple effect to the primary color.
--}
 primary : Property m
 primary =
     Internal.option (\ config -> { config | color = Just "primary" })
 
 
-{-| Set ripple effect to the accent color.
--}
 accent : Property m
 accent =
     Internal.option (\ config -> { config | color = Just "accent" })
 
 
-{-| Ripple property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Ripple view function.
-
-Internal use only. Use `bounded` or `unbounded` instead.
--}
 view : Bool
     -> (Msg -> m)
     -> Model
@@ -491,10 +376,6 @@ type alias Store s =
     Component.indexed .ripple (\x y -> { y | ripple = x }) defaultModel
 
 
-{-| Ripple react.
-
-Internal use only.
--}
 react : (Material.Internal.Msg.Msg m -> m)
     -> Msg
     -> Index

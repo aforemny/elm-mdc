@@ -4,6 +4,7 @@ module Material.Internal.Fab.Model exposing
 
 import Material.Internal.Ripple.Model as Ripple
 
+
 type Msg
     = RippleMsg Ripple.Msg
     | NoOp

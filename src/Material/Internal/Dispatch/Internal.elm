@@ -1,5 +1,6 @@
-module Material.Internal.Dispatch.Internal exposing (Config(..))
-
+module Material.Internal.Dispatch.Internal exposing
+    ( Config(..)
+    )
 
 import Html.Events
 import Json.Decode exposing (Decoder)

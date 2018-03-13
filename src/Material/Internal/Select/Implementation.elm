@@ -11,66 +11,6 @@ module Material.Internal.Select.Implementation exposing
     , view
     )
 
-{-|
-MDC Select provides Material Design single-option select menus. It functions
-analogously to the browser's native `<select>` element
-
-Because of limitations of the current implementation, you have to set a `width`
-manually.
-
-
-# Resources
-
-- [Material Design guidelines: Text Fields](https://material.io/guidelines/components/text-fields.html)
-- [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#select)
-
-
-# Example
-
-```elm
-import Material.Menu as Menu
-import Material.Options exposing (css)
-import Material.Select as Select
-
-
-Select.view (lift << Mdc) id model.mdc
-    [ Select.label "Food Group"
-    , css "width" "377px"
-    ]
-    [ Menu.li
-          [ Menu.onSelect (Select "Fruit Roll Ups")
-          ]
-          [ text "Fruit Roll Ups"
-          ]
-    , Menu.li
-          [ Menu.onSelect (Select "Candy (cotton)")
-          ]
-          [ text "Candy (cotton)"
-          ]
-    ]
-```
-
-
-# Usage
-
-@docs Property
-@docs view
-@docs label
-@docs selectedText
-@docs index
-@docs disabled
-@docs box
-
-
-# Internal
-
-@docs react
-@docs Model
-@docs subs
-
--}
-
 import DOM
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -84,22 +24,16 @@ import Material.Internal.Options.Internal as Internal
 import Material.Internal.Select.Model exposing (Msg(..), Geometry, defaultGeometry)
 
 
-{-| Component subscriptions.
--}
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
     Sub.map MenuMsg (Menu.subscriptions model.menu)
 
 
-{-| Style the select as a box select.
--}
 box : Property m
 box =
     cs "mdc-select--box"
 
 
-{-| Select model.
--}
 type alias Model =
     { menu : Menu.Model
     , geometry : Maybe Geometry
@@ -154,35 +88,25 @@ defaultConfig =
     }
 
 
-{-| Select property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Set the select's label.
--}
 label : String -> Property m
 label =
     Internal.option << (\value config -> { config | label = value })
 
 
-{-| Set the index of the selected item.
--}
 index : Int -> Property m
 index index =
     Internal.option (\config -> { config | index = Just index })
 
 
-{-| Set the textual representation of the selected item.
--}
 selectedText : String -> Property m
 selectedText selectedText =
     Internal.option (\ config -> { config | selectedText = Just selectedText })
 
 
-{-| Disable the select.
--}
 disabled : Property m
 disabled =
     Internal.option (\config -> { config | disabled = True })
@@ -303,10 +227,6 @@ type alias Store s =
     Component.indexed .select (\x y -> { y | select = x }) defaultModel
 
 
-{-| Select react function.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg m
@@ -317,8 +237,6 @@ react =
     Component.react get set Material.Internal.Msg.SelectMsg update
 
 
-{-| Select view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -329,15 +247,9 @@ view :
 view lift index store options =
     Component.render get select Material.Internal.Msg.SelectMsg lift index store
         (Internal.dispatch lift :: options)
-
-
 -- TODO: use inject ^^^^^
 
 
-{-| Select subscriptions.
-
-Internal use only.
--}
 subs : (Material.Internal.Msg.Msg m -> m) -> Store s -> Sub m
 subs =
     Component.subs Material.Internal.Msg.SelectMsg .select subscriptions

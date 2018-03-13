@@ -16,99 +16,6 @@ module Material.Internal.Dialog.Implementation exposing
     , react
     )
 
-{-|
-The Dialog component is a spec-aligned dialog component adhering to the
-Material Design dialog pattern. It implements a modal dialog window that traps
-focus when opening and restores focus when closing.  
-
-The current implementation requires that a dialog has as first child a
-`surface` element and as second child a `backdrop` element.
-
-
-# Resources
-
-- [Material Design guidelines: Dialogs](https://material.io/guidelines/components/dialogs.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#dialog)
-
-
-# Example
-
-```elm
-import Html exposing (text)
-import Material.Button as Button
-import Material.Dialog as Dialog
-import Material.Options as Options exposing (styled)
-
-
-Dialog.view Mdc [0] model.mdc
-    [ Dialog.open
-    ]
-    [ Dialog.surface []
-          [
-            Dialog.header []
-            [ styled Html.h2
-                  [ Dialog.title
-                  ]
-                  [ text "Use Google's location service?"
-                  ]
-            ]
-          ,
-            Dialog.body []
-                [ text
-                    """
-Let Google help apps determine location. This means
-sending anonymous location data to Google, even when
-no apps are running.
-                    """
-                ]
-          ,
-            Dialog.footer []
-                [
-                  Button.view Mdc [0,0] model.mdc
-                      [ Button.ripple
-                      , Dialog.cancel
-                      , Options.onClick Cancel
-                      ]
-                      [ text "Decline"
-                      ]
-                ,
-                  Button.view Mdc [0,1] model.mdc
-                      [ Button.ripple
-                      , Dialog.accept
-                      , Options.onClick Accept
-                      ]
-                      [ text "Continue"
-                      ]
-                ]
-          ]
-    , Dialog.backdrop [] []
-    ]
-```
-
-
-# Usage
-
-@docs Property
-@docs view
-@docs open
-@docs openOn
-@docs surface
-@docs backdrop
-@docs header
-@docs title
-@docs body
-@docs scrollable
-@docs footer
-@docs cancel
-@docs accept
-
-
-# Internal
-
-@docs Model
-@docs react
--}
-
 import DOM
 import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
@@ -120,10 +27,6 @@ import Material.Internal.Options as Options exposing (styled, cs, css, when)
 import Material.Internal.Options.Internal as Internal
 
 
-{-| Dialog model.
-
-Internal use only.
--}
 type alias Model =
     { open : Bool
     , animating : Bool
@@ -161,10 +64,6 @@ type alias Store s =
     Component.indexed .dialog (\x c -> { c | dialog = x }) defaultModel
 
 
-{-| Dialog react.
-
-Internal use only.
--}
 react
     : (Material.Internal.Msg.Msg m -> msg)
     -> Msg
@@ -175,8 +74,6 @@ react =
     Component.react get set Material.Internal.Msg.DialogMsg update
 
 
-{-| Dialog view.
--}
 view
     : (Material.Internal.Msg.Msg m -> m)
     -> Index
@@ -198,8 +95,6 @@ defaultConfig =
     {}
 
 
-{-| Dialog property.
--}
 type alias Property m =
     Options.Property Config m
 
@@ -220,95 +115,56 @@ dialog lift model options =
     )
 
 
-{-| Make the dialog visible.
--}
 open : Property m
 open =
     cs "mdc-dialog--open"
 
 
-{-| Dialog surface.
-
-This element is required to be the first child of `view` and wraps all the
-dialog's content such as the `header`, `body` and `footer`.
--}
 surface : List (Property m) -> List (Html m) -> Html m
 surface options =
     styled Html.div (cs "mdc-dialog__surface" :: options)
 
 
-{-| Dialog backdrop.
-
-This element is required to be the second child of `view` and adds a backdrop
-to the dialog.
--}
 backdrop : List (Property m) -> List (Html m) -> Html m
 backdrop options =
     styled Html.div (cs "mdc-dialog__backdrop" :: options)
 
 
-{-| Dialog body.
-
-This element wraps the dialog's content except for `header` and `footer`
-content.
--}
 body : List (Property m) -> List (Html m) -> Html m
 body options =
     styled Html.div (cs "mdc-dialog__body"::options)
 
 
-{-| Make the dialog's body scrollable.
--}
 scrollable : Property m
 scrollable =
     cs "mdc-dialog__body--scrollable"
 
 
-{-| Dialog header.
--}
 header : List (Property m) -> List (Html m) -> Html m
 header options =
     styled Html.div (cs "mdc-dialog__header"::options)
 
 
-{-| Dialog title.
--}
 title : Options.Property c m
 title =
     cs "mdc-dialog__header__title"
 
 
-{-| Dialog footer.
--}
 footer : List (Property m) -> List (Html m) -> Html m
 footer options =
     styled Html.div (cs "mdc-dialog__footer"::options)
 
 
-{-| Style the button as cancel button.
--}
 cancel : Button.Property m
 cancel =
     cs "mdc-dialog__footer__button mdc-dialog__footer__button--cancel"
 
 
-{-| Style the button as accept button.
--}
 accept : Button.Property m
 accept =
     cs "mdc-dialog__footer__button mdc-dialog__footer__button--accept"
 
 
-{-| Opens the dialog on an event on another component.
-
-```elm
-Button.view Mdc [1] model.mdc
-    [ Dialog.openOn Mdc [0] "click"
-    ]
-    [ text "Show Dialog with index [0]"
-    ]
-```
--}
 openOn : (Material.Internal.Msg.Msg m -> m) -> List Int -> String -> Options.Property c m
 openOn lift index event =
     Options.on event (Json.succeed (lift (Material.Internal.Msg.DialogMsg index Open)))

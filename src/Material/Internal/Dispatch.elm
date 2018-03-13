@@ -1,38 +1,17 @@
 module Material.Internal.Dispatch exposing
-  ( Config, toAttributes, add, setMsg, setDecoder, getDecoder, defaultConfig
-  , clear
-  , on, onWithOptions
-  , update
-  , forward
-  )
-
-{-| Dispatch multiple messages in response to a single `Html.Event`.
-
-## Dispatch
-
-@docs forward
-@docs update
-
-## Events
-
-@docs on
-@docs onWithOptions
-
-## Configuration
-
-These are tailored for writing UI component libraries
-with stateful components, such as `elm-mdl`. These are mostly useful
-only if you want to have an API where users specify
-options as lists of things and we want to accumulate event-handlers
-for various events.
-
-To see how they are used in [elm-mdl](http://package.elm-lang.org/packages/debois/elm-mdl/latest) see [collecting the handlers](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Internal.Options.elm#L70-L73) and [adding them as attributes](https://github.com/vipentti/elm-mdl/blob/78ab6b6dc0a8e5044a06d2a3c07fa7d900093585/src/Material/Internal.Options.elm#L112-L125)
-
-@docs Config, defaultConfig, setDecoder, getDecoder, setMsg, toAttributes
-@docs add
-@docs clear
-
--}
+    ( add
+    , clear
+    , Config
+    , defaultConfig
+    , forward
+    , getDecoder
+    , on
+    , onWithOptions
+    , setDecoder
+    , setMsg
+    , toAttributes
+    , update
+    )
 
 import Html
 import Html.Events
@@ -41,16 +20,10 @@ import Material.Internal.Dispatch.Internal exposing (Config(..))
 import Task
 
 
--- CONFIG
-
-{-| Dispatch configuration type
- -}
 type alias Config msg
     = Material.Internal.Dispatch.Internal.Config msg
 
 
-{-| Empty configuration
- -}
 defaultConfig : Config msg
 defaultConfig =
   Config
@@ -59,47 +32,33 @@ defaultConfig =
     }
 
 
-{-| Tell Dispatch how to convert a list of decoders into a decoder for a single message.
--}
 setDecoder : (Decoder (List msg) -> Decoder msg) -> Config msg -> Config msg
 setDecoder f (Config config) =
   Config { config | lift = Just f }
 
 
-{-| Tell Dispatch how to convert a list of messages into a single message. Alternative
-to `setDecoder`.
--}
 setMsg : (List msg -> msg) -> Config msg -> Config msg
 setMsg =
   Json.map >> setDecoder
 
 
-{-| Get the Dispatch message constructor
--}
 getDecoder : Config msg -> Maybe (Decoder (List msg) -> Decoder msg)
 getDecoder (Config config) =
   config.lift
 
 
-{-| Add an event-handler to the current configuration
- -}
 add : String -> Maybe Html.Events.Options -> Decoder msg -> Config msg -> Config msg
 add event options decoder (Config config) =
   Config
     { config | decoders = (event, (decoder, options)) :: config.decoders }
 
 
-{-| Clear event handlers in current configuration
--}
 clear : Config msg -> Config msg
 clear (Config config) =
   Config
     { config | decoders = [] }
 
 
-{-| Returns a list of `Html.Attribute` containing handlers that
-dispatch multiple decoders on a single `Html.Event`
- -}
 toAttributes : Config msg -> List (Html.Attribute msg)
 toAttributes (Config config) =
   case config.lift of
@@ -109,27 +68,16 @@ toAttributes (Config config) =
       List.map onSingle config.decoders
 
 
-{-| Promote `msg` to `Cmd msg`
--}
 cmd : msg -> Cmd msg
 cmd msg =
   Task.perform (always msg) (Task.succeed msg)
 
 
--- UPDATE
-
-
-{-| Maps messages to commands
--}
 forward : (List msg) -> Cmd msg
 forward messages =
   List.map cmd messages |> Cmd.batch
 
 
-{-| Map the second element of a tuple
-
-    map2nd ((+) 1) ("bar", 3) == ("bar", 4)
--}
 map2nd : (b -> c) -> ( a, b ) -> ( a, c )
 map2nd f ( x, y ) =
   ( x, f y )
@@ -141,10 +89,6 @@ update1 update cmd ( m, gs ) =
     |> map2nd (flip (::) gs)
 
 
-{-| Runs the given `update` on all the messages and
-returns the updated model including batching of
-any commands returned by running the `update`.
--}
 update : (msg -> model -> (model, Cmd obs)) -> (List msg) -> model -> (model, Cmd obs)
 update update msg model =
   List.foldl (update1 update) (model, []) msg
@@ -154,9 +98,6 @@ update update msg model =
 -- VIEW
 
 
-{-| Applies given decoders to the same initial value
-   and return the applied results as a list
--}
 flatten : List (Decoder m) -> Decoder (List m)
 flatten decoders =
   Json.value 
@@ -167,8 +108,6 @@ flatten decoders =
 
         
 
-{-| Dispatch multiple decoders for a single event.
- -}
 on
   : String
   -> (List msg -> msg)
@@ -178,9 +117,6 @@ on event lift =
   onWithOptions event lift Html.Events.defaultOptions
 
 
-{-| Dispatch multiple decoders for a single event.
-Options apply to the whole event.
- -}
 onWithOptions
   : String
   -> (List msg -> msg)
@@ -193,9 +129,6 @@ onWithOptions event lift options decoders =
     |> Html.Events.onWithOptions event options
 
 
-{-| Run multiple decoders on a single Html Event with
-the given options
--}
 onMany
   : (Decoder (List m) -> Decoder m)
   -> ( String, List ( Decoder m, Maybe Html.Events.Options ) )
@@ -230,12 +163,6 @@ onSingle (event, (decoder, option)) =
       decoder
 
 
--- UTILITIES
-
-
-{-| Group a list of pairs based on the first item. Optimised for lists of size
-< 10 with < 3 overlaps.
--}
 group : List ( a, b ) -> List ( a, List b )
 group =
   group_ []

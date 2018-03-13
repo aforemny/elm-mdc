@@ -12,60 +12,6 @@ module Material.Internal.Tabs.Implementation exposing
     , withIconAndText
     )
 
-{-|
-The Tabs component contains components which are used to create spec-aligned
-tabbed navigation components adhering to the Material Design tabs guidelines.
-
-This component consists of a TabBar containing Tabs. It supports scrolling of
-Tabs.
-
-# Resources
-
-- [Material Design guidelines: Tabs](https://material.io/guidelines/components/tabs.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#tabs)
-
-
-# Example
-
-```elm
-import Html exposing (text)
-import Material.Tabs as TabBar
-
-
-TabBar.view Mdc [0] model.mdc
-    [ TabBar.indicator
-    ]
-    [ TabBar.tab [] [ text "Item One" ]
-    , TabBar.tab [] [ text "Item Two" ]
-    , TabBar.tab [] [ text "Item Three" ]
-    ]
-```
-
-
-# Usage
-
-## TabBar
-
-@docs Property
-@docs view
-@docs scrolling
-@docs indicator
-
-
-## Tabs
-
-@docs Tab
-@docs tab
-@docs withIconAndText
-@docs icon
-@docs iconText
-
-
-# Internal
-@docs Model
-@docs react
--}
-
 import Dict exposing (Dict)
 import DOM
 import Html.Attributes as Html
@@ -84,10 +30,6 @@ import Material.Internal.Ripple.Implementation as Ripple
 import Material.Internal.Tabs.Model exposing (Msg(..), Geometry, defaultGeometry)
 
 
-{-| TabBar model.
-
-Internal use only.
--}
 type alias Model =
     { geometry : Maybe Geometry
     , index : Int
@@ -447,35 +389,22 @@ defaultConfig =
     }
 
 
-{-| Make the TabBar scroll if its tabs do not fit inside.
-
-Displays forward and backward navigation arrows on either side if necessary and
-advances scroll on pressing the Tab key.
--}
 scrolling : Property m
 scrolling =
     Internal.option (\config -> { config | scroller = True })
 
 
-{-| Make the TabBar's tabs have an active indicator.
--}
 indicator : Property m
 indicator =
     Internal.option (\config -> { config | indicator = True })
 
 
-{-| A TabBar's tab type.
-
-Use `tab` to construct.
--}
 type alias Tab m =
     { options : List (Property m)
     , childs : List (Html m)
     }
 
 
-{-| A TabBar's tab.
--}
 tab : List (Property m) -> List (Html m) -> Tab m
 tab options childs =
     { options = options
@@ -483,17 +412,11 @@ tab options childs =
     }
 
 
-{-| Configure tab to show both an icon and a text.
-
-Use `icon` and `iconText` as children.
--}
 withIconAndText : Property m
 withIconAndText =
     cs "mdc-tab--with-icon-and-text"
 
 
-{-| A tab's icon.
--}
 icon : List (Options.Property c m) -> String -> Html m
 icon options icon =
     Icon.view
@@ -502,8 +425,6 @@ icon options icon =
     icon
 
 
-{-| A tab's icon text.
--}
 iconText : List (Options.Property c m) -> String -> Html m
 iconText options str =
     styled Html.span
@@ -514,8 +435,6 @@ iconText options str =
     ]
 
 
-{-| TabBar property.
--}
 type alias Property m =
     Options.Property (Config) m
 
@@ -717,10 +636,6 @@ type alias Store s =
     Component.indexed .tabs (\x y -> { y | tabs = x }) defaultModel
 
 
-{-| TabBar react.
-
-Internal use only.
--}
 react :
     (Material.Internal.Msg.Msg m -> m)
     -> Msg m
@@ -731,8 +646,6 @@ react =
     Component.react get set Material.Internal.Msg.TabsMsg update
 
 
-{-| TabBar view.
--}
 view :
     (Material.Internal.Msg.Msg m -> m)
     -> Index

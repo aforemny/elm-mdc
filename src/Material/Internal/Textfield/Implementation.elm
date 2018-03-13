@@ -9,8 +9,6 @@ module Material.Internal.Textfield.Implementation exposing
     , invalid
     , label
     , leadingIcon
-    , maxlength
-    , maxRows
     , Model
     , outlined
     , password
@@ -26,65 +24,9 @@ module Material.Internal.Textfield.Implementation exposing
     , value
     , view
     )
-{-|
-Text fields allow users to input, edit, and select text.
-
-
-# Resources
-
-- [Material Design guidelines: Text Fields](https://material.io/guidelines/components/text-fields.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#text-field)
-
-
-# Example
-
-```elm
-import Material.Textfield as Textfield
-
-Textfield.view Mdc [0] model.mdc
-    [ Textfield.label "Text field"
-    ]
-    []
-```
-
-
-# Usage
-
-@docs Property
-@docs view
-@docs label
-@docs value
-@docs placeholder
-@docs box
-@docs outlined
-@docs fullwidth
-@docs disabled
-@docs dense
-@docs email
-@docs password
-@docs type_
-@docs textarea
-@docs rows
-@docs cols
-@docs maxRows
-@docs leadingIcon
-@docs trailingIcon
-@docs iconUnclickable
-@docs required
-@docs invalid
-@docs pattern
-@docs maxlength
-
-
-# Internal
-@docs react
-@docs Model
-
--}
 
 import DOM
 import Html.Attributes as Html
-import Html.Events as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode as Encode
@@ -105,7 +47,6 @@ type alias Config =
     , value : Maybe String
     , defaultValue : Maybe String
     , disabled : Bool
-    , maxRows : Maybe Int
     , dense : Bool
     , required : Bool
     , type_ : Maybe String
@@ -131,7 +72,6 @@ defaultConfig =
     , value = Nothing
     , defaultValue = Nothing
     , disabled = False
-    , maxRows = Nothing
     , dense = False
     , required = False
     , type_ = Just "text"
@@ -150,177 +90,113 @@ defaultConfig =
     }
 
 
-{-| Make textfield icons unclickable.
--}
 iconUnclickable : Property m
 iconUnclickable =
     Internal.option (\ config -> { config | iconClickable = False })
 
 
-{-| Add a leading icon to the textfield.
--}
 leadingIcon : String -> Property m
 leadingIcon icon =
     Internal.option (\ config -> { config | leadingIcon = Just icon })
 
 
-{-| Add a trailing icon to the textfield.
--}
 trailingIcon : String -> Property m
 trailingIcon icon =
     Internal.option (\ config -> { config | trailingIcon = Just icon })
 
 
-{-| Style the textfield as an outlined textfield.
--}
 outlined : Property m
 outlined =
     Internal.option (\ config -> { config | outlined = True })
 
 
-{-| Textfield property.
--}
 type alias Property m =
     Options.Property Config m
 
 
-{-| Set a label for the textfield.
--}
 label : String -> Property m
 label =
     Internal.option
         << (\str config -> { config | labelText = Just str })
 
 
-{-| Set the textfield's value.
--}
 value : String -> Property m
 value =
     Internal.option
         << (\str config -> { config | value = Just str })
 
 
-{-| Set the maximum length of input text in characters.
--}
-maxlength : Int -> Property m
-maxlength k =
-    Options.attribute <| Html.maxlength k
-
-
-{-| Disable the textfield.
--}
 disabled : Property m
 disabled =
     Internal.option
         (\config -> { config | disabled = True })
 
 
-{-| Set the textfield's `type` to `password`.
--}
 password : Property m
 password =
     Internal.option (\config -> { config | type_ = Just "password" })
 
 
-{-| Set the textfield's `type` to `email`.
--}
 email : Property m
 email =
     Internal.option (\config -> { config | type_ = Just "email" })
 
 
-{-| Style the textfield as a box textfield.
--}
 box : Property m
 box =
     Internal.option (\config -> { config | box = True })
 
 
-{-| Set a pattern to validate the textfield's input against.
--}
 pattern : String -> Property m
 pattern pattern =
     Internal.option (\ config -> { config | pattern = Just pattern })
 
 
-{-| Set the number of rows in a `textarea` textfield.
--}
 rows : Int -> Property m
 rows rows =
     Internal.option (\ config -> { config | rows = Just rows })
 
 
-{-| Set the number of columns in a `textarea` textfield.
--}
 cols : Int -> Property m
 cols cols =
     Internal.option (\ config -> { config | cols = Just cols })
 
 
-{-| Set the number of maximum rows in a `textarea` textfield that a user can
-input.
-
-The implementation prevents pressing enter when the maximum number of rows
-would be exceeded.
--}
-maxRows : Int -> Property m
-maxRows k =
-    Internal.option (\config -> { config | maxRows = Just k })
-
-
-{-| Style the textfield as a dense textfield.
--}
 dense : Property m
 dense =
     Internal.option (\config -> { config | dense = True })
 
 
-{-| Mark the textfield as required.
--}
 required : Property m
 required =
     Internal.option (\config -> { config | required = True })
 
 
-{-| Set the textfield's type.
--}
 type_ : String -> Property m
 type_ =
     Internal.option << (\value config -> { config | type_ = Just value })
 
 
-{-| Make the textfield take up all the available horizontal space.
--}
 fullwidth : Property m
 fullwidth =
     Internal.option (\config -> { config | fullWidth = True })
 
 
-{-| Mark the textfield as invalid.
--}
 invalid : Property m
 invalid =
     Internal.option (\config -> { config | invalid = True })
 
 
-{-| Make the textfield a `textarea` element instead of `input`.
--}
 textarea : Property m
 textarea =
     Internal.option (\config -> { config | textarea = True })
 
 
-{-| Sets the placeholder of the textfield.
--}
 placeholder : String -> Property m
 placeholder placeholder =
     Internal.option (\ config -> { config | placeholder = Just placeholder })
 
 
-{-| Textfield model.
-
-Internal use only.
--}
 type alias Model =
     { focused : Bool
     , isDirty : Bool
@@ -381,27 +257,6 @@ textField lift model options _ =
         isDirty =
             model.isDirty || Maybe.withDefault False (Maybe.map ((/=) "") config.value)
 
-        preventEnterWhenMaxRowsExceeded =
-            Options.onWithOptions "keydown"
-                { stopPropagation = False
-                , preventDefault = True
-                }
-                ( Json.map2 (,) Html.keyCode Html.targetValue
-                  |> Json.andThen (\ (keyCode, value) ->
-                      let
-                          rows =
-                              value
-                              |> String.split "\n"
-                              |> List.length
-                      in
-                      if (rows >= Maybe.withDefault 0 config.maxRows) && (keyCode == 13) then
-                            Json.succeed (lift NoOp)
-                          else
-                            Json.fail ""
-                    )
-                )
-            |> when (config.textarea && (config.maxRows /= Nothing))
-
         focused =
             model.focused && not config.disabled
 
@@ -436,7 +291,6 @@ textField lift model options _ =
           [ cs "mdc-text-field--box"
           , ripple.properties
           ]
-        , preventEnterWhenMaxRowsExceeded
         ]
         []
         ( List.concat
@@ -664,10 +518,6 @@ type alias Store s =
     Component.indexed .textfield (\x c -> { c | textfield = x }) defaultModel
 
 
-{-| Textfield react.
-
-Internal use only.
--}
 react
     : (Material.Internal.Msg.Msg m -> msg)
     -> Msg
@@ -678,8 +528,6 @@ react =
     Component.react get set Material.Internal.Msg.TextfieldMsg update
 
 
-{-| Textfield view.
--}
 view
     : (Material.Internal.Msg.Msg m -> m)
     -> Index
