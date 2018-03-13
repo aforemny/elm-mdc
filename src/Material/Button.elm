@@ -13,7 +13,7 @@ module Material.Button exposing
     )
 
 {-|
-The MDC Button component is a spec-aligned button component adhering to the
+The Button component is a spec-aligned button component adhering to the
 Material Design button requirements.
 
 

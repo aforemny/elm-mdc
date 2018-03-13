@@ -9,7 +9,7 @@ module Material.Select exposing
     )
 
 {-|
-MDC Select provides Material Design single-option select menus. It functions
+Select provides Material Design single-option select menus. It functions
 analogously to the browser's native `<select>` element
 
 Because of limitations of the current implementation, you have to set a `width`

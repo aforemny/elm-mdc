@@ -8,7 +8,7 @@ module Material.LinearProgress exposing
     )
 
 {-|
-The MDC Linear Progress component is a spec-aligned linear progress indicator
+The Linear Progress component is a spec-aligned linear progress indicator
 component adhering to the Material Design progress & activity requirements.
 
 

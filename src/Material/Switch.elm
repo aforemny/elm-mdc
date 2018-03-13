@@ -6,7 +6,7 @@ module Material.Switch exposing
     )
 
 {-|
-The MDC Switch component is a spec-aligned switch component adhering to the
+The Switch component is a spec-aligned switch component adhering to the
 Material Design Switch requirements.
 
 

@@ -6,8 +6,8 @@ module Material.Checkbox exposing
     )
 
 {-|
-The MDC Checkbox component is a spec-aligned checkbox component adhering to
-the Material Design checkbox requirements.
+The Checkbox component is a spec-aligned checkbox component adhering to the
+Material Design checkbox requirements.
 
 # Resources
 

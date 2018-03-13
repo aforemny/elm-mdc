@@ -24,8 +24,8 @@ module Material.Menu exposing
     )
 
 {-|
-The MDC Menu component is a spec-aligned menu component adhering to the
-Material Design menu specification.
+The Menu component is a spec-aligned menu component adhering to the Material
+Design menu specification.
 
 
 # Resources
