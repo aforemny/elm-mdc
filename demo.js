@@ -8684,40 +8684,15 @@ var _aforemny$elm_mdc$Material_Component$react = F8(
 				msg,
 				A2(get, idx, store)));
 	});
-var _aforemny$elm_mdc$Material_Component$react1 = F7(
-	function (get, set, ctor, update, lift, msg, store) {
-		return A2(
-			_elm_lang$core$Tuple$mapFirst,
-			_elm_lang$core$Maybe$map(
-				set(store)),
-			A3(
-				update,
-				function (_p2) {
-					return lift(
-						ctor(_p2));
-				},
-				msg,
-				get(store)));
-	});
 var _aforemny$elm_mdc$Material_Component$render = F6(
 	function (get_model, view, ctor, lift, idx, store) {
 		return A2(
 			view,
-			function (_p3) {
+			function (_p2) {
 				return lift(
-					A2(ctor, idx, _p3));
+					A2(ctor, idx, _p2));
 			},
 			A2(get_model, idx, store));
-	});
-var _aforemny$elm_mdc$Material_Component$render1 = F5(
-	function (get_model, view, ctor, lift, store) {
-		return A2(
-			view,
-			function (_p4) {
-				return lift(
-					ctor(_p4));
-			},
-			get_model(store));
 	});
 var _aforemny$elm_mdc$Material_Component$indexed = F3(
 	function (get_model, set_model, model0) {
@@ -9960,35 +9935,19 @@ var _aforemny$elm_mdc$Material_Internal_Options$applyInput = F3(
 			},
 			{ctor: '[]'});
 	});
-var _aforemny$elm_mdc$Material_Internal_Options$input = function (_p6) {
+var _aforemny$elm_mdc$Material_Internal_Options$input = function (options) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
-		F2(
-			function (style, config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						input: {
-							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Internal_Options$Many(style),
-							_1: config.input
-						}
-					});
-			})(_p6));
-};
-var _aforemny$elm_mdc$Material_Internal_Options$container = function (_p7) {
-	return _aforemny$elm_mdc$Material_Internal_Options$option(
-		F2(
-			function (style, config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						container: {
-							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Internal_Options$Many(style),
-							_1: config.container
-						}
-					});
-			})(_p7));
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					input: {
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_Internal_Options$Many(options),
+						_1: config.input
+					}
+				});
+		});
 };
 var _aforemny$elm_mdc$Material_Internal_Options$Internal = function (a) {
 	return {ctor: 'Internal', _0: a};
@@ -10104,7 +10063,6 @@ var _aforemny$elm_mdc$Material_Options$onInput = function (f) {
 		'input',
 		A2(_elm_lang$core$Json_Decode$map, f, _elm_lang$html$Html_Events$targetValue));
 };
-var _aforemny$elm_mdc$Material_Options$container = _aforemny$elm_mdc$Material_Internal_Options$container;
 var _aforemny$elm_mdc$Material_Options$input = _aforemny$elm_mdc$Material_Internal_Options$input;
 var _aforemny$elm_mdc$Material_Options$attribute = function (_p2) {
 	return _aforemny$elm_mdc$Material_Internal_Options$Attribute(
@@ -10988,15 +10946,9 @@ var _aforemny$elm_mdc$Material_GlobalEvents$onMouseUp = _aforemny$elm_mdc$Materi
 var _aforemny$elm_mdc$Material_GlobalEvents$onPointerMove = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalpointermove');
 var _aforemny$elm_mdc$Material_GlobalEvents$onTouchMove = _aforemny$elm_mdc$Material_GlobalEvents$listener('globaltouchmove');
 var _aforemny$elm_mdc$Material_GlobalEvents$onMouseMove = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalmousemove');
-var _aforemny$elm_mdc$Material_GlobalEvents$onScroll1 = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalscroll1');
 var _aforemny$elm_mdc$Material_GlobalEvents$onScroll = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalscroll');
-var _aforemny$elm_mdc$Material_GlobalEvents$onPolledResize1 = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalpolledresize1');
-var _aforemny$elm_mdc$Material_GlobalEvents$onPolledResize = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalpolledresize');
-var _aforemny$elm_mdc$Material_GlobalEvents$onResize1 = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalresize1');
 var _aforemny$elm_mdc$Material_GlobalEvents$onResize = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalresize');
 var _aforemny$elm_mdc$Material_GlobalEvents$onTick = _aforemny$elm_mdc$Material_GlobalEvents$listener('globaltick');
-var _aforemny$elm_mdc$Material_GlobalEvents$onLoad1 = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalload1');
-var _aforemny$elm_mdc$Material_GlobalEvents$onLoad = _aforemny$elm_mdc$Material_GlobalEvents$listener('globalload');
 
 var _elm_lang$svg$Svg$map = _elm_lang$virtual_dom$VirtualDom$map;
 var _elm_lang$svg$Svg$text = _elm_lang$virtual_dom$VirtualDom$text;
@@ -14983,11 +14935,30 @@ var _aforemny$elm_mdc$Material_Slider$decodePageX = A2(
 					_elm_lang$core$Json_Decode$at,
 					{
 						ctor: '::',
-						_0: 'pageX',
-						_1: {ctor: '[]'}
+						_0: 'changedTouches',
+						_1: {
+							ctor: '::',
+							_0: '0',
+							_1: {
+								ctor: '::',
+								_0: 'pageX',
+								_1: {ctor: '[]'}
+							}
+						}
 					},
 					_elm_lang$core$Json_Decode$float),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Json_Decode$at,
+						{
+							ctor: '::',
+							_0: 'pageX',
+							_1: {ctor: '[]'}
+						},
+						_elm_lang$core$Json_Decode$float),
+					_1: {ctor: '[]'}
+				}
 			}
 		}));
 var _aforemny$elm_mdc$Material_Slider$discretize = F2(
