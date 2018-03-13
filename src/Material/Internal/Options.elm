@@ -1,6 +1,5 @@
 module Material.Internal.Options exposing (..)
 
-import Char
 import Html.Attributes
 import Html.Events
 import Html exposing (Html, Attribute)
@@ -13,8 +12,6 @@ import String
 type Property c m
     = Class String
     | CSS ( String, String )
-    -- TODO: remove Var (CSS variables)
-    | Var ( String, String )
     | Attribute (Html.Attribute m)
     | Internal (Html.Attribute m)
     | Many (List (Property c m))
@@ -29,7 +26,6 @@ type Property c m
 type alias Summary c m =
     { classes : List String
     , css : List ( String, String )
-    , vars : List ( String, String )
     , attrs : List (Attribute m)
     , internal : List (Attribute m)
     , dispatch : Dispatch.Config m
@@ -60,9 +56,6 @@ collect1 option acc =
 
         CSS x ->
             { acc | css = x :: acc.css }
-
-        Var x ->
-            { acc | vars = x :: acc.vars }
 
         Attribute x ->
             { acc | attrs = x :: acc.attrs }
@@ -96,7 +89,7 @@ over options; first two arguments are folding function and initial value.
 -}
 collect : c -> List (Property c m) -> Summary c m
 collect =
-    Summary [] [] [] [] [] Dispatch.defaultConfig >> recollect
+    Summary [] [] [] [] Dispatch.defaultConfig >> recollect
 
 
 {-| Special-casing of collect for `Property c ()`.
@@ -109,9 +102,6 @@ collect1_ options acc =
 
         CSS x ->
             { acc | css = x :: acc.css }
-
-        Var x ->
-            { acc | vars = x :: acc.vars }
 
         Attribute x ->
             { acc | attrs = x :: acc.attrs }
@@ -137,7 +127,7 @@ collect1_ options acc =
 
 collect_ : List (Property c m) -> Summary () m
 collect_ =
-    List.foldl collect1_ (Summary [] [] [] [] [] Dispatch.defaultConfig ())
+    List.foldl collect1_ (Summary [] [] [] [] Dispatch.defaultConfig ())
 
 
 addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
@@ -152,43 +142,6 @@ addAttributes summary attrs =
         ++ attrs
         ++ summary.internal
         ++ Dispatch.toAttributes summary.dispatch
-
-
-{-| TODO: remove
--}
-cssVariables : Summary c m -> (String, Html m)
-cssVariables summary =
-    let
-        class =
-          hash styleNodeBlock
-
-        hash str =
-            str
-            |> String.toList
-            |> List.filter Char.isDigit
-            |> String.fromList
-            |> (++) "elm-mdc-ripple-style--"
-
-        styleNodeBlock =
-            summary.vars
-            |> List.map (\( key, value ) -> key ++ ": " ++ value ++ " !important;")
-            |> String.join "\n"
-
-            -- ^^^^ TODO: important
-
-        styleNodeText =
-            "." ++ class ++ " {" ++ styleNodeBlock ++ " }" 
-
-        styleNode =
-            Html.node "style" [ Html.Attributes.type_ "text/css" ] [ Html.text styleNodeText ]
-    in
-    ( class, styleNode )
-
-
--- TODO: remove
-variable : String -> String -> Property c m
-variable k v =
-    Var (k, v)
 
 
 {-| Apply a `Summary m`, extra properties, and optional attributes

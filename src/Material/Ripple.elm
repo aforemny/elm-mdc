@@ -97,6 +97,7 @@ Icon.view
 @docs react
 -}
 
+import Char
 import DOM
 import Html.Attributes as Html
 import Html exposing (..)
@@ -358,24 +359,45 @@ view isUnbounded lift model options =
 
         summary =
           Internal.collect ()
-          ( List.concat
-            [
-              [ Internal.variable "--mdc-ripple-fg-size" fgSize
-              , Internal.variable "--mdc-ripple-fg-scale" fgScale
-              ]
-            , if isUnbounded then
-                  [ Internal.variable "--mdc-ripple-top" top
-                  , Internal.variable "--mdc-ripple-left" left
-                  ]
-              else
-                  [ Internal.variable "--mdc-ripple-fg-translate-start" translateStart
-                  , Internal.variable "--mdc-ripple-fg-translate-end" translateEnd
-                  ]
-            ]
-          )
 
-        (selector, styleNode) =
-            Internal.cssVariables summary
+        cssVariableHack =
+            let
+                className =
+                    (++) "mdc-ripple-style-hack--" <|
+                    String.fromList
+                    << List.filter Char.isDigit
+                    << String.toList
+                    << String.concat <|
+                    [ fgSize
+                    , fgScale
+                    , top
+                    , left
+                    , translateStart
+                    , translateEnd
+                    ]
+
+                text =
+                    flip (++) ("}") << (++) ("." ++ className ++ "{") <|
+                    String.concat << List.map (\ ( k, v ) ->
+                            "--mdc-ripple-" ++ k ++ ":" ++ v ++ " !important;"
+                        ) <|
+                        List.concat
+                        [ [ ( "fg-size", fgSize )
+                          , ( "fg-scale", fgScale )
+                          ]
+                        , if isUnbounded then
+                              [ ( "top", top )
+                              , ( "left", left )
+                              ]
+                          else
+                              [ ( "fg-translate-start", translateStart )
+                              , ( "fg-translate-end", translateEnd )
+                              ]
+                        ]
+            in
+            { className = className
+            , text = text
+            }
 
         focusOn event =
             Options.on event (Json.succeed (lift Focus))
@@ -441,18 +463,19 @@ view isUnbounded lift model options =
             , when model.focus <|
               cs "mdc-ripple-upgraded--background-focused"
 
-            , -- CSS variable hack selector:
-              when isVisible (cs selector)
+            , when isVisible <|
+              cs cssVariableHack.className
             ]
 
         style =
-            if isVisible then
-                styleNode
-            else
-                Html.node "style"
-                [ Html.type_ "text/css"
-                ]
-                []
+            Html.node "style"
+            [ Html.type_ "text/css"
+            ]
+            [ if isVisible then
+                  text cssVariableHack.text
+              else
+                  text ""
+            ]
     in
     { interactionHandler = interactionHandler
     , properties = properties
