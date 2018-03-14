@@ -9,7 +9,6 @@ module Material.Internal.Textfield.Implementation exposing
     , invalid
     , label
     , leadingIcon
-    , Model
     , outlined
     , password
     , pattern
@@ -35,7 +34,7 @@ import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
 import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
-import Material.Internal.Textfield.Model exposing (Msg(..), Geometry, defaultGeometry)
+import Material.Internal.Textfield.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 import Regex
 import Svg
 import Svg.Attributes
@@ -195,29 +194,6 @@ textarea =
 placeholder : String -> Property m
 placeholder placeholder =
     Internal.option (\ config -> { config | placeholder = Just placeholder })
-
-
-type alias Model =
-    { focused : Bool
-    , isDirty : Bool
-    , value : Maybe String
-    , ripple : Ripple.Model
-    , geometry : Maybe Geometry
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { focused = False
-    , isDirty = False
-    , value = Nothing
-    , ripple = Ripple.defaultModel
-    , geometry = Nothing
-    }
-
-
-type alias Msg
-    = Material.Internal.Textfield.Model.Msg
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )

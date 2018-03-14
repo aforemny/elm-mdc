@@ -1,8 +1,27 @@
 module Material.Internal.Drawer.Model exposing
-    ( Msg(..)
+    ( defaultGeometry
+    , defaultModel
     , Geometry
-    , defaultGeometry
+    , Model
+    , Msg(..)
     )
+
+
+type alias Model =
+    { open : Bool
+    , state : Maybe Bool
+    , animating : Bool
+    , persistent : Bool
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { open = False
+    , state = Nothing
+    , animating = False
+    , persistent = False
+    }
 
 
 type Msg

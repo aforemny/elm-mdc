@@ -1,6 +1,5 @@
 module Material.Internal.RadioButton.Implementation exposing
     ( disabled
-    , Model
     , Property
     , react
     , selected
@@ -14,25 +13,8 @@ import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, styled, when)
 import Material.Internal.Options.Internal as Internal
-import Material.Internal.RadioButton.Model exposing (Msg(..))
+import Material.Internal.RadioButton.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Ripple.Implementation as Ripple
-
-
-type alias Model =
-    { ripple : Ripple.Model
-    , isFocused : Bool
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { ripple = Ripple.defaultModel
-    , isFocused = False
-    }
-
-
-type alias Msg
-    = Material.Internal.RadioButton.Model.Msg
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )

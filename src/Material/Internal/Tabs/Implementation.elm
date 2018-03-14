@@ -2,7 +2,6 @@ module Material.Internal.Tabs.Implementation exposing
     ( icon
     , iconText
     , indicator
-    , Model
     , Property
     , react
     , scrolling
@@ -27,38 +26,8 @@ import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
 import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
-import Material.Internal.Tabs.Model exposing (Msg(..), Geometry, defaultGeometry)
-
-
-type alias Model =
-    { geometry : Maybe Geometry
-    , index : Int
-    , translateOffset : Float
-    , scale : Float
-    , ripples : Dict Int Ripple.Model
-    , indicatorShown : Bool
-    , forwardIndicator : Bool
-    , backIndicator : Bool
-    , scrollLeftAmount : Int
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { geometry = Nothing
-    , index = 0
-    , translateOffset = 0
-    , scale = 0
-    , ripples = Dict.empty
-    , indicatorShown = False
-    , forwardIndicator = False
-    , backIndicator = False
-    , scrollLeftAmount = 0
-    }
-
-
-type alias Msg m
-    = Material.Internal.Tabs.Model.Msg m
+import Material.Internal.Ripple.Model as Ripple
+import Material.Internal.Tabs.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )

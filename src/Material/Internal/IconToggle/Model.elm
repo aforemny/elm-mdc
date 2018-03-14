@@ -1,8 +1,23 @@
 module Material.Internal.IconToggle.Model exposing
-    ( Msg(..)
+    ( defaultModel
+    , Model
+    , Msg(..)
     )
 
 import Material.Internal.Ripple.Model as Ripple
+
+
+type alias Model =
+    { on : Bool
+    , ripple : Ripple.Model
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { on = False
+    , ripple = Ripple.defaultModel
+    }
 
 
 type Msg

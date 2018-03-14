@@ -1,7 +1,6 @@
 module Material.Internal.Fab.Implementation exposing
     ( exited
     , mini
-    , Model
     , Property
     , react
     , ripple
@@ -10,26 +9,11 @@ module Material.Internal.Fab.Implementation exposing
 
 import Html exposing (Html, text)
 import Material.Internal.Component as Component exposing (Indexed, Index)
-import Material.Internal.Fab.Model exposing (Msg(..))
+import Material.Internal.Fab.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
 import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
-
-
-type alias Model =
-    { ripple : Ripple.Model
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { ripple = Ripple.defaultModel
-    }
-
-
-type alias Msg =
-    Material.Internal.Fab.Model.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

@@ -48,6 +48,7 @@ import Html exposing (Html)
 import Material
 import Material.Component exposing (Index)
 import Material.Internal.Snackbar.Implementation as Snackbar
+import Time exposing (Time)
 
 
 {-| Snackbar property.
@@ -72,7 +73,15 @@ view =
 {-| Snackbar Contents.
 -}
 type alias Contents m =
-    Snackbar.Contents m
+    { message : String
+    , action : Maybe String
+    , timeout : Time
+    , fade : Time
+    , multiline : Bool
+    , actionOnBottom : Bool
+    , dismissOnAction : Bool
+    , onDismiss : Maybe m
+    }
 
 
 {-| Generate toast with given message. Timeout is 2750ms, fade 250ms.

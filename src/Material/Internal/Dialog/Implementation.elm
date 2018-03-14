@@ -10,7 +10,6 @@ module Material.Internal.Dialog.Implementation exposing
     , scrollable
     , surface
     , title
-    , Model
     , view
     , openOn
     , react
@@ -21,23 +20,10 @@ import Html exposing (..)
 import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Button.Implementation as Button
 import Material.Internal.Component as Component exposing (Index, Indexed)
-import Material.Internal.Dialog.Model exposing (Msg(..))
+import Material.Internal.Dialog.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when) 
 import Material.Internal.Options.Internal as Internal
-
-
-type alias Model =
-    { open : Bool
-    , animating : Bool
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { open = False
-    , animating = False
-    }
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )

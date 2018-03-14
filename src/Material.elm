@@ -145,26 +145,45 @@ import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.Internal.Button.Implementation as Button
+import Material.Internal.Button.Model as Button
 import Material.Internal.Checkbox.Implementation as Checkbox
+import Material.Internal.Checkbox.Model as Checkbox
+import Material.Internal.Component as Component exposing (Indexed)
 import Material.Internal.Component as Component exposing (Indexed)
 import Material.Internal.Dialog.Implementation as Dialog
+import Material.Internal.Dialog.Model as Dialog
+import Material.Internal.Dispatch as Dispatch
 import Material.Internal.Dispatch as Dispatch
 import Material.Internal.Drawer.Implementation as Drawer
+import Material.Internal.Drawer.Model as Drawer
 import Material.Internal.Fab.Implementation as Fab
+import Material.Internal.Fab.Model as Fab
 import Material.Internal.GridList.Implementation as GridList
+import Material.Internal.GridList.Model as GridList
 import Material.Internal.IconToggle.Implementation as IconToggle
+import Material.Internal.IconToggle.Model as IconToggle
 import Material.Internal.Menu.Implementation as Menu
+import Material.Internal.Menu.Model as Menu
+import Material.Internal.Msg exposing (Msg(..))
 import Material.Internal.Msg exposing (Msg(..))
 import Material.Internal.RadioButton.Implementation as RadioButton
+import Material.Internal.RadioButton.Model as RadioButton
 import Material.Internal.Ripple.Implementation as Ripple
+import Material.Internal.Ripple.Model as Ripple
 import Material.Internal.Select.Implementation as Select
+import Material.Internal.Select.Model as Select
 import Material.Internal.Slider.Implementation as Slider
+import Material.Internal.Slider.Model as Slider
 import Material.Internal.Snackbar.Implementation as Snackbar
+import Material.Internal.Snackbar.Model as Snackbar
 import Material.Internal.Switch.Implementation as Switch
+import Material.Internal.Switch.Model as Switch
 import Material.Internal.Tabs.Implementation as Tabs
+import Material.Internal.Tabs.Model as Tabs
 import Material.Internal.Textfield.Implementation as Textfield
+import Material.Internal.Textfield.Model as Textfield
 import Material.Internal.Toolbar.Implementation as Toolbar
-import Material.Internal.Toolbar.Implementation as Toolbar
+import Material.Internal.Toolbar.Model as Toolbar
 
 
 {-| Material model.

@@ -1,6 +1,5 @@
 module Material.Internal.Switch.Implementation exposing
     ( disabled
-    , Model
     , on
     , Property
     , react
@@ -14,23 +13,7 @@ import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, styled, many, when)
 import Material.Internal.Options.Internal as Internal
-import Material.Internal.Switch.Model exposing (Msg(..))
-
-
-type alias Model =
-    { isFocused : Bool
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { isFocused = False
-    }
-
-
-
-type alias Msg
-    = Material.Internal.Switch.Model.Msg
+import Material.Internal.Switch.Model exposing (Model, defaultModel, Msg(..))
 
 
 update : x -> Msg -> Model -> ( Maybe Model, Cmd m )

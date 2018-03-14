@@ -1,6 +1,19 @@
 module Material.Internal.Switch.Model exposing
-    ( Msg(..)
+    ( defaultModel
+    , Model
+    , Msg(..)
     )
+
+
+type alias Model =
+    { isFocused : Bool
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { isFocused = False
+    }
 
 
 type Msg

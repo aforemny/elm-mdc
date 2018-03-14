@@ -1,8 +1,29 @@
 module Material.Internal.GridList.Model exposing
-    ( Msg(..)
+    ( defaultGeometry
+    , defaultModel
     , Geometry
-    , defaultGeometry
+    , Model
+    , Msg(..)
     )
+
+
+type alias Model =
+    { configured : Bool
+    , geometry : Maybe Geometry
+    , resizing : Bool
+    , lastResize : Int
+    , requestAnimationFrame : Bool
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { configured = False
+    , geometry = Nothing
+    , resizing = False
+    , lastResize = 0
+    , requestAnimationFrame = True
+    }
 
 
 type Msg m

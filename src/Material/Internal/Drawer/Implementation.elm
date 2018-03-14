@@ -3,12 +3,9 @@ module Material.Internal.Drawer.Implementation exposing
     , Config
     , content
     , defaultConfig
-    , defaultModel
     , emit
     , header
     , headerContent
-    , Model
-    , Msg
     , open
     , Property
     , react
@@ -25,7 +22,7 @@ module Material.Internal.Drawer.Implementation exposing
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Component as Component exposing (Indexed, Index)
-import Material.Internal.Drawer.Model exposing (Msg(..))
+import Material.Internal.Drawer.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Helpers as Helpers
 import Material.Internal.List.Implementation as Lists
 import Material.Internal.Msg
@@ -34,29 +31,8 @@ import Material.Internal.Options.Internal as Internal
 import Mouse
 
 
-type alias Model =
-    { open : Bool
-    , state : Maybe Bool
-    , animating : Bool
-    , persistent : Bool
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { open = False
-    , state = Nothing
-    , animating = False
-    , persistent = False
-    }
-
-
-type alias Msg
-    = Material.Internal.Drawer.Model.Msg
-
-
-update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
-update fwd msg model =
+update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
+update lift msg model =
     case msg of
         NoOp ->
             ( Nothing, Cmd.none )
@@ -74,7 +50,7 @@ update fwd msg model =
               if model.persistent then
                   ( Nothing, Cmd.none )
               else
-                  update fwd Close model
+                  update lift Close model
 
         Open persistent ->
             ( Just
@@ -99,9 +75,9 @@ update fwd msg model =
 
         Toggle persistent ->
             if model.open then
-                update fwd Close model
+                update lift Close model
             else
-                update fwd (Open persistent) model
+                update lift (Open persistent) model
 
 
 type alias Config =

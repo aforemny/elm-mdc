@@ -1,9 +1,6 @@
 module Material.Internal.Ripple.Implementation exposing
     ( accent
     , bounded
-    , defaultModel
-    , Model
-    , Msg
     , primary
     , Property
     , react
@@ -22,32 +19,7 @@ import Material.Internal.Helpers as Helpers
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
 import Material.Internal.Options.Internal as Internal
-import Material.Internal.Ripple.Model exposing (Msg(..), Geometry, defaultGeometry)
-
-
-type alias Model =
-    { focus : Bool
-    , active : Bool
-    , animating : Bool
-    , deactivation : Bool
-    , geometry : Geometry
-    , animation : Int
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { focus = False
-    , active = False
-    , animating = False
-    , deactivation = False
-    , geometry = defaultGeometry
-    , animation = 0
-    }
-
-
-type alias Msg
-    = Material.Internal.Ripple.Model.Msg
+import Material.Internal.Ripple.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

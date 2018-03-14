@@ -4,7 +4,6 @@ module Material.Internal.Button.Implementation exposing
     , disabled
     , icon
     , link
-    , Model
     , Property
     , raised
     , react
@@ -16,28 +15,13 @@ module Material.Internal.Button.Implementation exposing
 
 import Html.Attributes as Html
 import Html exposing (Html, text)
-import Material.Internal.Button.Model exposing (Msg(..))
+import Material.Internal.Button.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, when)
 import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
-
-
-type alias Model =
-    { ripple : Ripple.Model
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { ripple = Ripple.defaultModel
-    }
-
-
-type alias Msg =
-    Material.Internal.Button.Model.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

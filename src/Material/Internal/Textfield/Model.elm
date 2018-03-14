@@ -1,10 +1,31 @@
 module Material.Internal.Textfield.Model exposing
-    ( Msg(..)
+    ( defaultGeometry
+    , defaultModel
     , Geometry
-    , defaultGeometry
+    , Model
+    , Msg(..)
     )
 
 import Material.Internal.Ripple.Model as Ripple
+
+
+type alias Model =
+    { focused : Bool
+    , isDirty : Bool
+    , value : Maybe String
+    , ripple : Ripple.Model
+    , geometry : Maybe Geometry
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { focused = False
+    , isDirty = False
+    , value = Nothing
+    , ripple = Ripple.defaultModel
+    , geometry = Nothing
+    }
 
 
 type Msg

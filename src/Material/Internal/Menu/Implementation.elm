@@ -8,7 +8,6 @@ module Material.Internal.Menu.Implementation exposing
     , bottomStartCorner
     , connect
     , Corner
-    , defaultModel
     , divider
     , index
     , Item
@@ -16,7 +15,6 @@ module Material.Internal.Menu.Implementation exposing
     , Margin
     , menu
     , Menu
-    , Model
     , onSelect
     , Property
     , quickOpen
@@ -42,7 +40,7 @@ import Material.Internal.Dispatch.Internal as Dispatch
 import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Helpers as Helpers
 import Material.Internal.List.Implementation as Lists
-import Material.Internal.Menu.Model exposing (Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry, Viewport)
+import Material.Internal.Menu.Model exposing (Model, defaultModel, Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry, Viewport)
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, styled, when)
 import Material.Internal.Options.Internal as Internal
@@ -59,29 +57,6 @@ subscriptions model =
       else
         Sub.none
     ]
-
-
-type alias Model =
-    { index : Maybe Int
-    , open : Bool
-    , animating : Bool
-    , geometry : Maybe Geometry
-    , quickOpen : Maybe Bool
-    , focusedItemAtIndex : Maybe Int
-    , keyDownWithinMenu : Bool
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { index = Nothing
-    , open = False
-    , animating = False
-    , geometry = Nothing
-    , quickOpen = Nothing
-    , focusedItemAtIndex = Nothing
-    , keyDownWithinMenu = False
-    }
 
 
 type alias Item m =

@@ -1,9 +1,8 @@
 module Material.Internal.Checkbox.Implementation exposing
-    ( disabled
-    , Model
+    ( checked
+    , disabled
     , Property
     , react
-    , checked
     , view
     )
 
@@ -12,7 +11,7 @@ import Html.Events as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode
-import Material.Internal.Checkbox.Model exposing (Msg(..), Animation(..), State(..))
+import Material.Internal.Checkbox.Model exposing (Model, defaultModel, Msg(..), Animation(..), State(..))
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Msg
@@ -20,25 +19,6 @@ import Material.Internal.Options as Options exposing (cs, styled, many, when)
 import Material.Internal.Options.Internal as Internal
 import Svg.Attributes as Svg
 import Svg exposing (path)
-
-
-type alias Model =
-    { isFocused : Bool
-    , lastKnownState : Maybe (Maybe State)
-    , animation : Maybe Animation
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { isFocused = False
-    , lastKnownState = Nothing
-    , animation = Nothing
-    }
-
-
-type alias Msg
-    = Material.Internal.Checkbox.Model.Msg
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )

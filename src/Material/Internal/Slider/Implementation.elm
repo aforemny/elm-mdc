@@ -1,10 +1,8 @@
 module Material.Internal.Slider.Implementation exposing
-    ( defaultModel
-    , disabled
+    ( disabled
     , discrete
     , max
     , min
-    , Model
     , onChange
     , onInput
     , Property
@@ -76,38 +74,9 @@ import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
 import Material.Internal.Options.Internal as Internal
-import Material.Internal.Slider.Model exposing (Msg(..), Geometry, defaultGeometry)
+import Material.Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 import Svg
 import Svg.Attributes as Svg
-
-
-{-| Slider model.
-
-Internal use only.
--}
-type alias Model =
-    { focus : Bool
-    , active : Bool
-    , geometry : Maybe Geometry
-    , activeValue : Maybe Float
-    , inTransit : Bool
-    , preventFocus : Bool
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { focus = False
-    , active = False
-    , geometry = Nothing
-    , activeValue = Nothing
-    , inTransit = False
-    , preventFocus = False
-    }
-
-
-type alias Msg m =
-    Material.Internal.Slider.Model.Msg m
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )

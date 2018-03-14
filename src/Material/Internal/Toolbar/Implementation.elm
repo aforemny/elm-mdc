@@ -9,7 +9,6 @@ module Material.Internal.Toolbar.Implementation exposing
     , flexibleDefaultBehavior
     , icon
     , menuIcon
-    , Model
     , Property
     , react
     , row
@@ -31,10 +30,7 @@ import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when, nop)
 import Material.Internal.Options.Internal as Internal
-import Material.Internal.Toolbar.Model exposing (Calculations, Config, Geometry, Msg(..))
-
-
--- CONSTANTS
+import Material.Internal.Toolbar.Model exposing (Model, defaultModel, Calculations, defaultCalculations, Config, defaultConfig, Geometry, Msg(..))
 
 
 cssClasses
@@ -85,33 +81,6 @@ numbers =
     }
 
 
-type alias Model =
-    Material.Internal.Toolbar.Model.Model
-
-
-defaultModel : Model
-defaultModel =
-    { geometry = Nothing
-    , scrollTop = 0
-    , calculations = Nothing
-    , config = Nothing
-    }
-
-
-defaultCalculations : Calculations
-defaultCalculations =
-    { toolbarRowHeight = 0
-    , toolbarRatio = 0
-    , flexibleExpansionRatio = 0
-    , maxTranslateYRatio = 0
-    , scrollThresholdRatio = 0
-    , toolbarHeight = 0
-    , flexibleExpansionHeight = 0
-    , maxTranslateYDistance = 0
-    , scrollThreshold = 0
-    }
-
-
 update : Msg -> Model -> ( Model, Cmd m )
 update msg model =
     case msg of
@@ -148,29 +117,6 @@ update msg model =
 
         Scroll config scrollTop ->
             ( { model | scrollTop = scrollTop, config = Just config }, Cmd.none )
-
-
--- GEOMETRY
-
-
-defaultGeometry : Geometry
-defaultGeometry =
-    { getRowHeight = 0
-    , getFirstRowElementOffsetHeight = 0
-    , getOffsetHeight = 0
-    }
-
-
-defaultConfig : Config
-defaultConfig =
-    { fixed = False
-    , fixedLastrow = False
-    , fixedLastRowOnly = False
-    , flexible = False
-    , useFlexibleDefaultBehavior = False
-    , waterfall = False
-    , backgroundImage = Nothing
-    }
 
 
 decodeGeometry : Decoder Geometry

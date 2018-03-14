@@ -1,8 +1,31 @@
 module Material.Internal.Slider.Model exposing
-    ( Msg(..)
+    ( defaultGeometry
+    , defaultModel
     , Geometry
-    , defaultGeometry
+    , Model
+    , Msg(..)
     )
+
+
+type alias Model =
+    { focus : Bool
+    , active : Bool
+    , geometry : Maybe Geometry
+    , activeValue : Maybe Float
+    , inTransit : Bool
+    , preventFocus : Bool
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { focus = False
+    , active = False
+    , geometry = Nothing
+    , activeValue = Nothing
+    , inTransit = False
+    , preventFocus = False
+    }
 
 
 type Msg m
@@ -17,7 +40,6 @@ type Msg m
     | TransitionEnd
     | Drag { pageX : Float }
     | Up
-
 
 
 type alias Geometry =

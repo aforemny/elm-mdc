@@ -2,8 +2,6 @@ module Material.Internal.Snackbar.Implementation exposing
     ( add
     , alignEnd
     , alignStart
-    , Contents
-    , Model
     , Property
     , react
     , snack
@@ -20,39 +18,7 @@ import Material.Internal.Helpers as Helpers
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, when)
 import Material.Internal.Options.Internal as Internal
-import Material.Internal.Snackbar.Model exposing (Msg(..), Transition(..))
-import Time exposing (Time)
-
-
-type alias Contents m =
-    { message : String
-    , action : Maybe String
-    , timeout : Time
-    , fade : Time
-    , multiline : Bool
-    , actionOnBottom : Bool
-    , dismissOnAction : Bool
-    , onDismiss : Maybe m
-    }
-
-
-type alias Model m =
-    { queue : List (Contents m)
-    , state : State m
-    , seq : Int
-    }
-
-
-defaultModel : Model m
-defaultModel =
-    { queue = []
-    , state = Inert
-    , seq = -1
-    }
-
-
-type alias Msg m =
-    Material.Internal.Snackbar.Model.Msg m
+import Material.Internal.Snackbar.Model exposing (Model, defaultModel, Contents, Msg(..), Transition(..), State(..))
 
 
 toast : Maybe m -> String -> Contents m
@@ -79,16 +45,6 @@ snack onDismiss message label =
     , dismissOnAction = True
     , onDismiss = onDismiss
     }
-
-
-type alias Transition =
-    Material.Internal.Snackbar.Model.Transition
-
-
-type State m
-    = Inert
-    | Active (Contents m)
-    | Fading (Contents m)
 
 
 next : Model m -> Cmd Transition -> Cmd (Msg m)

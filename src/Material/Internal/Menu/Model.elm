@@ -1,13 +1,38 @@
 module Material.Internal.Menu.Model exposing
     ( defaultGeometry
     , defaultMeta
+    , defaultModel
     , Geometry
     , Key
     , KeyCode
     , Meta
+    , Model
     , Msg(..)
     , Viewport
     )
+
+
+type alias Model =
+    { index : Maybe Int
+    , open : Bool
+    , animating : Bool
+    , geometry : Maybe Geometry
+    , quickOpen : Maybe Bool
+    , focusedItemAtIndex : Maybe Int
+    , keyDownWithinMenu : Bool
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { index = Nothing
+    , open = False
+    , animating = False
+    , geometry = Nothing
+    , quickOpen = Nothing
+    , focusedItemAtIndex = Nothing
+    , keyDownWithinMenu = False
+    }
 
 
 type Msg m

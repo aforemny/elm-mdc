@@ -1,10 +1,40 @@
 module Material.Internal.Tabs.Model exposing
-    ( Msg(..)
+    ( defaultGeometry
+    , defaultModel
     , Geometry
-    , defaultGeometry
+    , Model
+    , Msg(..)
     )
 
+import Dict exposing (Dict)
 import Material.Internal.Ripple.Model as Ripple
+
+
+type alias Model =
+    { geometry : Maybe Geometry
+    , index : Int
+    , translateOffset : Float
+    , scale : Float
+    , ripples : Dict Int Ripple.Model
+    , indicatorShown : Bool
+    , forwardIndicator : Bool
+    , backIndicator : Bool
+    , scrollLeftAmount : Int
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { geometry = Nothing
+    , index = 0
+    , translateOffset = 0
+    , scale = 0
+    , ripples = Dict.empty
+    , indicatorShown = False
+    , forwardIndicator = False
+    , backIndicator = False
+    , scrollLeftAmount = 0
+    }
 
 
 type Msg m

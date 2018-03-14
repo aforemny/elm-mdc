@@ -1,11 +1,26 @@
 module Material.Internal.Select.Model exposing
-    ( Msg(..)
+    ( defaultGeometry
+    , defaultModel
     , Geometry
-    , defaultGeometry
+    , Model
+    , Msg(..)
     )
 
 import DOM
 import Material.Internal.Menu.Model as Menu
+
+
+type alias Model =
+    { menu : Menu.Model
+    , geometry : Maybe Geometry
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { menu = Menu.defaultModel
+    , geometry = Nothing
+    }
 
 
 type Msg m

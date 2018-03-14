@@ -3,7 +3,6 @@ module Material.Internal.Select.Implementation exposing
     , disabled
     , index
     , label
-    , Model
     , Property
     , react
     , selectedText
@@ -21,34 +20,12 @@ import Material.Internal.Menu.Implementation as Menu
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, styled, when)
 import Material.Internal.Options.Internal as Internal
-import Material.Internal.Select.Model exposing (Msg(..), Geometry, defaultGeometry)
+import Material.Internal.Select.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 
 
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
     Sub.map MenuMsg (Menu.subscriptions model.menu)
-
-
-box : Property m
-box =
-    cs "mdc-select--box"
-
-
-type alias Model =
-    { menu : Menu.Model
-    , geometry : Maybe Geometry
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { menu = Menu.defaultModel
-    , geometry = Nothing
-    }
-
-
-type alias Msg m
-    = Material.Internal.Select.Model.Msg m
 
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
@@ -111,6 +88,10 @@ disabled : Property m
 disabled =
     Internal.option (\config -> { config | disabled = True })
 
+
+box : Property m
+box =
+    cs "mdc-select--box"
 
 
 select

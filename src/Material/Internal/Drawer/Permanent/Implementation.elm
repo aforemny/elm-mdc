@@ -10,26 +10,9 @@ module Material.Internal.Drawer.Permanent.Implementation exposing
 import Html exposing (Html, text)
 import Material.Internal.Component exposing (Indexed, Index)
 import Material.Internal.Drawer.Implementation as Drawer
+import Material.Internal.Drawer.Model exposing (Model, Msg)
 import Material.Internal.List.Implementation as Lists
 import Material.Internal.Msg
-
-
-type alias Model =
-    Drawer.Model
-
-
-defaultModel : Model
-defaultModel =
-    Drawer.defaultModel
-
-
-type alias Msg
-    = Drawer.Msg
-
-
-update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
-update =
-    Drawer.update
 
 
 type alias Config =

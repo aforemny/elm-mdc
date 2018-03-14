@@ -1,10 +1,33 @@
 module Material.Internal.Ripple.Model exposing
-    ( Msg(..)
+    ( defaultModel
+    , Model
+    , Msg(..)
     , Geometry
     , defaultGeometry
     )
 
 import DOM exposing (Rectangle)
+
+
+type alias Model =
+    { focus : Bool
+    , active : Bool
+    , animating : Bool
+    , deactivation : Bool
+    , geometry : Geometry
+    , animation : Int
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { focus = False
+    , active = False
+    , animating = False
+    , deactivation = False
+    , geometry = defaultGeometry
+    , animation = 0
+    }
 
 
 type Msg

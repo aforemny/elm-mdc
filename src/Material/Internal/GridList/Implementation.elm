@@ -5,7 +5,6 @@ module Material.Internal.GridList.Implementation exposing
     , iconAlignEnd
     , iconAlignStart
     , image
-    , Model
     , primary
     , primaryContent
     , Property
@@ -29,33 +28,10 @@ import Html exposing (Html)
 import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.GlobalEvents as GlobalEvents
-import Material.Internal.GridList.Model exposing (Msg(..), Geometry, defaultGeometry)
+import Material.Internal.GridList.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-
-
-type alias Model =
-    { configured : Bool
-    , geometry : Maybe Geometry
-    , resizing : Bool
-    , lastResize : Int
-    , requestAnimationFrame : Bool
-    }
-
-
-defaultModel : Model
-defaultModel =
-    { configured = False
-    , geometry = Nothing
-    , resizing = False
-    , lastResize = 0
-    , requestAnimationFrame = True
-    }
-
-
-type alias Msg m =
-    Material.Internal.GridList.Model.Msg m
 
 
 update : Msg m -> Model -> ( Model, Cmd (Msg m) )

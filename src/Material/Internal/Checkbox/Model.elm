@@ -1,8 +1,25 @@
 module Material.Internal.Checkbox.Model exposing
-    ( Msg(..)
-    , Animation(..)
+    ( Animation(..)
+    , defaultModel
+    , Model
+    , Msg(..)
     , State(..)
     )
+
+
+type alias Model =
+    { isFocused : Bool
+    , lastKnownState : Maybe (Maybe State)
+    , animation : Maybe Animation
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { isFocused = False
+    , lastKnownState = Nothing
+    , animation = Nothing
+    }
 
 
 type Msg

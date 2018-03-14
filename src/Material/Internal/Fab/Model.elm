@@ -1,8 +1,21 @@
 module Material.Internal.Fab.Model exposing
-    ( Msg(..)
+    ( defaultModel
+    , Model
+    , Msg(..)
     )
 
 import Material.Internal.Ripple.Model as Ripple
+
+
+type alias Model =
+    { ripple : Ripple.Model
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { ripple = Ripple.defaultModel
+    }
 
 
 type Msg
