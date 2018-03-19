@@ -147,10 +147,19 @@ onMany lift decoders =
 
 pickOptions : List ( a, Maybe Html.Events.Options ) -> Html.Events.Options
 pickOptions decoders =
-  case decoders of
-    (_, Just options) :: _ -> options
-    _ :: rest -> pickOptions rest
-    [] -> Html.Events.defaultOptions
+  let
+      pick ( _, options ) pickedOptions =
+        Maybe.withDefault pickedOptions <|
+        Maybe.map (\ options ->
+                { preventDefault =
+                      pickedOptions.preventDefault || options.preventDefault
+                , stopPropagation =
+                      pickedOptions.stopPropagation || options.stopPropagation
+                }
+            )
+            options
+  in
+  List.foldl pick Html.Events.defaultOptions decoders
 
 
 onSingle
