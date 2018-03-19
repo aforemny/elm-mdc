@@ -177,8 +177,8 @@ attribute =
 
 {-| Apply properties to a component's native control element, ie.  `input`.
 -}
-nativeControl : List (Property c m)
-    -> Property ({ c | nativeControl : List (Property c m) }) m
+nativeControl : List (Property () m)
+    -> Property ({ c | nativeControl : List (Property () m) }) m
 nativeControl =
     Material.Internal.Options.nativeControl
 

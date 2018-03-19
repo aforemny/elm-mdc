@@ -90,8 +90,8 @@ attribute =
     Attribute << Html.Attributes.map never
 
 
-nativeControl : List (Property c m)
-    -> Property ({ c | nativeControl : List (Property c m) }) m
+nativeControl : List (Property () m)
+    -> Property ({ c | nativeControl : List (Property () m) }) m
 nativeControl =
     Internal.nativeControl
 

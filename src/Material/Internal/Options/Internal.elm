@@ -154,11 +154,31 @@ apply :
     -> List (Attribute m)
     -> a
 apply summary ctor options attrs =
+    ctor (addAttributes (recollect summary options) attrs)
+
+
+applyNativeControl :
+    Summary (NativeControl c m) m
+    -> (List (Attribute m) -> List (Html m) -> Html m)
+    -> List (Property () m)
+    -> List (Html m)
+    -> Html m
+applyNativeControl summary ctor options =
     ctor
-        (addAttributes
-            (recollect summary options)
-            attrs
+      ( addAttributes
+        ( recollect
+            { summary
+              | classes = []
+              , css = []
+              , attrs = []
+              , internal = []
+              , config = ()
+              , dispatch = Dispatch.clear summary.dispatch
+            }
+            (summary.config.nativeControl ++ options)
         )
+        []
+      )
 
 
 option : (c -> c) -> Property c m
@@ -166,8 +186,12 @@ option =
     Set
 
 
-nativeControl : List (Property c m)
-    -> Property { a | nativeControl : List (Property c m) } m
+type alias NativeControl c m =
+    { c | nativeControl : List (Property () m) }
+
+
+nativeControl : List (Property () m)
+    -> Property (NativeControl c m) m
 nativeControl options =
     option (\config -> { config | nativeControl = config.nativeControl ++ options })
 
