@@ -1,5 +1,6 @@
 module Material.Internal.Switch.Implementation exposing
     ( disabled
+    , nativeControl
     , on
     , Property
     , react
@@ -25,21 +26,23 @@ update _ msg model =
             ( Nothing, Cmd.none )
 
 
-type alias Config =
+type alias Config m =
     { value : Bool
     , disabled : Bool
+    , nativeControl : List (Options.Property () m)
     }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     { value = False
     , disabled = False
+    , nativeControl = []
     }
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 disabled : Property m
@@ -52,27 +55,34 @@ on =
     Internal.option (\config -> { config | value = True })
 
 
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    Internal.nativeControl
+
+
 switch : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 switch lift model options _ =
     let
         ({ config } as summary) =
             Internal.collect defaultConfig options
+
+        preventDefault =
+          { preventDefault = True
+          , stopPropagation = False
+          }
     in
     Internal.apply summary Html.div
     [ cs "mdc-switch"
     ]
     []
-    [ styled Html.input
+    [ Internal.applyNativeControl summary
+      Html.input
       [ cs "mdc-switch__native-control"
       , Internal.attribute <| Html.type_ "checkbox"
       , Internal.attribute <| Html.checked config.value
-      , Internal.on1 "focus" lift (SetFocus True)
-      , Internal.on1 "blur" lift (SetFocus False)
-      , Options.onWithOptions "click"
-          { preventDefault = True
-          , stopPropagation = False
-          }
-          (Json.succeed (lift NoOp))
+      , Options.onFocus (lift (SetFocus True))
+      , Options.onBlur (lift (SetFocus False))
+      , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
       , when config.disabled << Options.many <|
         [ cs "mdc-checkbox--disabled"
         , Options.attribute <| Html.disabled True

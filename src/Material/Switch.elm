@@ -1,5 +1,6 @@
 module Material.Switch exposing
     ( disabled
+    , nativeControl
     , on
     , Property
     , view
@@ -47,12 +48,14 @@ FormField.view []
 @docs view
 @docs on
 @docs disabled
+@docs nativeControl
 -}
 
 import Html exposing (Html)
 import Material
 import Material.Component exposing (Index)
 import Material.Internal.Switch.Implementation as Switch
+import Material.Options as Options
 
 
 {-| Switch property.
@@ -88,3 +91,9 @@ on =
 disabled : Property m
 disabled =
     Switch.disabled
+
+{-| Apply properties to underlying native control element.
+-}
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    Switch.nativeControl

@@ -1,5 +1,6 @@
 module Material.Internal.RadioButton.Implementation exposing
     ( disabled
+    , nativeControl
     , Property
     , react
     , selected
@@ -37,21 +38,23 @@ update lift msg model =
             ( Just { model | isFocused = focus }, Cmd.none )
 
 
-type alias Config =
+type alias Config m =
     { value : Bool
     , disabled : Bool
+    , nativeControl : List (Options.Property () m)
     }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     { value = False
     , disabled = False
+    , nativeControl = []
     }
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 disabled : Property m
@@ -64,6 +67,11 @@ selected =
     Internal.option (\config -> { config | value = True })
 
 
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    Internal.nativeControl
+
+
 radioButton : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 radioButton lift model options _ =
     let
@@ -72,6 +80,11 @@ radioButton lift model options _ =
 
         ripple =
             Ripple.view True (lift << RippleMsg) model.ripple []
+
+        preventDefault =
+          { preventDefault = True
+          , stopPropagation = False
+          }
     in
     Internal.apply summary Html.div
     [ cs "mdc-radio"
@@ -81,23 +94,19 @@ radioButton lift model options _ =
       ]
     ]
     []
-    [ styled Html.input
-        [ cs "mdc-radio__native-control"
-        , Internal.attribute <| Html.type_ "radio"
-        , Internal.attribute <| Html.checked config.value
-        , Internal.on1 "focus" lift (SetFocus True)
-        , Internal.on1 "blur" lift (SetFocus False)
-        , Options.onWithOptions "click"
-            { preventDefault = True
-            , stopPropagation = False
-            }
-            (Json.succeed (lift NoOp))
-        , when config.disabled << Options.many <|
-          [ cs "mdc-radio--disabled"
-          , Options.attribute <| Html.disabled True
-          ]
+    [ Internal.applyNativeControl summary Html.input
+      [ cs "mdc-radio__native-control"
+      , Internal.attribute <| Html.type_ "radio"
+      , Internal.attribute <| Html.checked config.value
+      , Options.onFocus (lift (SetFocus True))
+      , Options.onBlur (lift (SetFocus False))
+      , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
+      , when config.disabled << Options.many <|
+        [ cs "mdc-radio--disabled"
+        , Options.attribute <| Html.disabled True
         ]
-        []
+      ]
+      []
     , styled Html.div
       [ cs "mdc-radio__background"
       ]

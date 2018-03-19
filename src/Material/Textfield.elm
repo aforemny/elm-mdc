@@ -9,6 +9,7 @@ module Material.Textfield exposing
     , invalid
     , label
     , leadingIcon
+    , nativeControl
     , outlined
     , password
     , pattern
@@ -68,12 +69,14 @@ Textfield.view Mdc [0] model.mdc
 @docs required
 @docs invalid
 @docs pattern
+@docs nativeControl
 -}
 
 import Html exposing (Html)
 import Material
 import Material.Component exposing (Index)
 import Material.Internal.Textfield.Implementation as Textfield
+import Material.Options as Options
 
 
 {-| Textfield property.
@@ -233,3 +236,11 @@ textarea =
 placeholder : String -> Property m
 placeholder =
     Textfield.placeholder
+
+
+{-| Apply properties to underlying native control element.
+-}
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    Textfield.nativeControl
+

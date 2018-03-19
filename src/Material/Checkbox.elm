@@ -1,6 +1,7 @@
 module Material.Checkbox exposing
     ( checked
     , disabled
+    , nativeControl
     , Property
     , view
     )
@@ -46,12 +47,14 @@ FormField.view []
 @docs view
 @docs checked
 @docs disabled
+@docs nativeControl
 -}
 
 import Html exposing (Html)
 import Material
 import Material.Component exposing (Index)
 import Material.Internal.Checkbox.Implementation as Checkbox
+import Material.Options as Options
 
 
 {-| Checkbox property.
@@ -87,3 +90,10 @@ If not set, the checkbox will be in indeterminate state.
 checked : Bool -> Property m
 checked =
     Checkbox.checked
+
+
+{-| Apply properties to underlying native control element.
+-}
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    Checkbox.nativeControl

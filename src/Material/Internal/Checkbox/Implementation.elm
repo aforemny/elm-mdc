@@ -1,13 +1,13 @@
 module Material.Internal.Checkbox.Implementation exposing
     ( checked
     , disabled
+    , nativeControl
     , Property
     , react
     , view
     )
 
 import Html.Attributes as Html
-import Html.Events as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode
@@ -49,21 +49,23 @@ update _ msg model =
             ( Just { model | animation = Nothing }, Cmd.none )
 
 
-type alias Config =
+type alias Config m =
     { state : Maybe State
     , disabled : Bool
+    , nativeControl : List (Options.Property () m)
     }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     { state = Nothing
     , disabled = False
+    , nativeControl = []
     }
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 disabled : Property m
@@ -82,6 +84,11 @@ checked value =
             if value then Checked else Unchecked
     in
     Internal.option (\ config -> { config | state = Just state })
+
+
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    Internal.nativeControl
 
 
 checkbox : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -122,6 +129,11 @@ checkbox lift model options _ =
 
         stateChangedOrUninitialized =
           (model.lastKnownState == Nothing) || (currentState /= configState)
+
+        preventDefault =
+            { preventDefault = True
+            , stopPropagation = False
+            }
     in
     Internal.apply summary Html.div
     [ cs "mdc-checkbox mdc-checkbox--upgraded"
@@ -135,29 +147,22 @@ checkbox lift model options _ =
       Options.on "animationend" (Json.succeed (lift AnimationEnd))
     ]
     []
-    [
-        styled Html.input
-        [ cs "mdc-checkbox__native-control"
-        , Options.many << List.map Internal.attribute <|
-          [ Html.type_ "checkbox"
-          , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
-          , Html.checked (currentState == Just Checked)
-          , Html.disabled config.disabled
-          , Html.onWithOptions "click"
-              { preventDefault = True
-              , stopPropagation = False
-              }
-              (Json.succeed (lift NoOp))
-          , Html.onWithOptions "change"
-              { preventDefault = True
-              , stopPropagation = False
-              }
-              (Json.succeed (lift NoOp))
-          ]
-        , Internal.on1 "focus" lift (SetFocus True)
-        , Internal.on1 "blur" lift (SetFocus False)
+    [ Internal.applyNativeControl summary
+      -- styled
+      Html.input
+      [ cs "mdc-checkbox__native-control"
+      , Options.many << List.map Internal.attribute <|
+        [ Html.type_ "checkbox"
+        , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
+        , Html.checked (currentState == Just Checked)
+        , Html.disabled config.disabled
         ]
-        []
+      , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
+      , Options.onWithOptions "change" preventDefault (Json.succeed (lift NoOp))
+      , Options.onFocus (lift (SetFocus True))
+      , Options.onBlur (lift (SetFocus False))
+      ]
+      []
     , styled Html.div
       [ cs "mdc-checkbox__background"
       ]

@@ -9,6 +9,7 @@ module Material.Internal.Textfield.Implementation exposing
     , invalid
     , label
     , leadingIcon
+    , nativeControl
     , outlined
     , password
     , pattern
@@ -40,7 +41,7 @@ import Svg
 import Svg.Attributes
 
 
-type alias Config =
+type alias Config m =
     { labelText : Maybe String
     , labelFloat : Bool
     , value : Maybe String
@@ -61,10 +62,11 @@ type alias Config =
     , placeholder : Maybe String
     , cols : Maybe Int
     , rows : Maybe Int
+    , nativeControl : List (Options.Property () m)
     }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     { labelText = Nothing
     , labelFloat = False
@@ -86,6 +88,7 @@ defaultConfig =
     , placeholder = Nothing
     , cols = Nothing
     , rows = Nothing
+    , nativeControl = []
     }
 
 
@@ -110,7 +113,7 @@ outlined =
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 label : String -> Property m
@@ -196,6 +199,11 @@ placeholder placeholder =
     Internal.option (\ config -> { config | placeholder = Just placeholder })
 
 
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    Internal.nativeControl
+
+
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
     case msg of
@@ -271,7 +279,7 @@ textField lift model options _ =
         []
         ( List.concat
           [
-            [ styled
+            [ Internal.applyNativeControl summary
                 (if config.textarea then Html.textarea else Html.input)
                 [
                   cs "mdc-text-field__input"
@@ -280,7 +288,7 @@ textField lift model options _ =
                       Options.on "focus" (Json.map (lift << Focus) decodeGeometry)
                   else
                       Options.on "focus" (Json.succeed (lift (Focus defaultGeometry)))
-                , Options.on "blur" (Json.succeed (lift Blur))
+                , Options.onBlur (lift Blur)
                 , Options.onInput (lift << Input)
                 , Options.many << List.map Internal.attribute << List.filterMap identity <|
                   [ Html.type_ (Maybe.withDefault "text" config.type_)

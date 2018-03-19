@@ -1,5 +1,6 @@
 module Material.RadioButton exposing
     ( disabled
+    , nativeControl
     , Property
     , selected
     , view
@@ -44,12 +45,14 @@ FormField.view []
 @docs view
 @docs selected
 @docs disabled
+@docs nativeControl
 -}
 
 import Html exposing (Html)
 import Material
 import Material.Component exposing (Index)
 import Material.Internal.RadioButton.Implementation as RadioButton
+import Material.Options as Options
 
 
 {-| RadioButton property.
@@ -85,3 +88,10 @@ selected =
 disabled : Property m
 disabled =
     RadioButton.disabled
+
+
+{-| Apply properties to underlying native control element.
+-}
+nativeControl : List (Options.Property () m) -> Property m
+nativeControl =
+    RadioButton.nativeControl
