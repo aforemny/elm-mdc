@@ -24,7 +24,6 @@ import Material.Internal.Helpers as Helpers
 import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 import Material.Internal.Ripple.Model as Ripple
 import Material.Internal.Tabs.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
@@ -360,12 +359,12 @@ defaultConfig =
 
 scrolling : Property m
 scrolling =
-    Internal.option (\config -> { config | scroller = True })
+    Options.option (\config -> { config | scroller = True })
 
 
 indicator : Property m
 indicator =
-    Internal.option (\config -> { config | indicator = True })
+    Options.option (\config -> { config | indicator = True })
 
 
 type alias Tab m =
@@ -417,7 +416,7 @@ tabs
 tabs lift model options nodes =
     let
         summary =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         config =
             summary.config
@@ -503,7 +502,7 @@ tabs lift model options nodes =
             ]
     in
         (if config.scroller then tabBarScroller else identity) <|
-        Internal.apply summary
+        Options.apply summary
             Html.nav
             [ cs "mdc-tab-bar"
             , cs "mdc-tab-bar-upgraded"
@@ -530,48 +529,62 @@ tabs lift model options nodes =
                                 )
                                 []
                        in
-                       [ styled Html.a
-                           ( cs "mdc-tab"
-                           :: when (model.index == index) (cs "mdc-tab--active")
-                           :: Options.attribute (Html.tabindex 0)
-                           :: ( Options.on "click" <|
-                                Json.map (lift << Select index) <|
-                                decodeGeometryOnTab config.indicator
-                              )
-                           :: ( Options.on "keydown" <|
-                                Json.map lift <|
-                                Json.map3 (\ key keyCode geometry ->
-                                        if (key == Just "Enter" || keyCode == 13) then
-                                            Select index geometry
-                                        else
-                                            NoOp
-                                    )
-                                    ( Json.oneOf
-                                      [ Json.map Just (Json.at ["key"] Json.string)
-                                      , Json.succeed Nothing
-                                      ]
-                                    )
-                                    (Json.at ["keyCode"] Json.int)
-                                    (decodeGeometryOnTab config.indicator)
-                              )
-                           :: Options.many
-                              [ ripple.interactionHandler
-                              , ripple.properties
-                              ]
-                           :: ( when config.scroller <|
-                                Options.on "focus" <|
-                                Json.map (lift << Focus index) <|
-                                decodeGeometryOnTab config.indicator
-                              )
-                           :: -- Note: We need to manually install event
-                              -- dispatching here, because both mdc-tab and
-                              -- ripple listen on focus events, and the global
-                              -- dispatch (see `view` below) only accounts for
-                              -- dispatching in mdc-tab-bar options.
-                              Options.dispatch (lift << Dispatch)
-                           :: options
+                       [
+                         -- Note: We need to manually install event
+                         -- dispatching here, because both mdc-tab and
+                         -- ripple listen on focus events, and the global
+                         -- dispatch only accounts for dispatching in
+                         -- mdc-tab-bar options.
+
+                         Html.a
+                         ( Options.addAttributes
+                           ( Options.recollect
+                               { summary
+                                 | classes = []
+                                 , css = []
+                                 , attrs = []
+                                 , internal = []
+                                 , config = defaultConfig
+                                 , dispatch = Dispatch.clear summary.dispatch
+                               }
+                               ( cs "mdc-tab"
+                               :: when (model.index == index) (cs "mdc-tab--active")
+                               :: Options.attribute (Html.tabindex 0)
+                               :: ( Options.on "click" <|
+                                    Json.map (lift << Select index) <|
+                                    decodeGeometryOnTab config.indicator
+                                  )
+                               :: ( Options.on "keydown" <|
+                                    Json.map lift <|
+                                    Json.map3 (\ key keyCode geometry ->
+                                            if (key == Just "Enter" || keyCode == 13) then
+                                                Select index geometry
+                                            else
+                                                NoOp
+                                        )
+                                        ( Json.oneOf
+                                          [ Json.map Just (Json.at ["key"] Json.string)
+                                          , Json.succeed Nothing
+                                          ]
+                                        )
+                                        (Json.at ["keyCode"] Json.int)
+                                        (decodeGeometryOnTab config.indicator)
+                                  )
+                               :: Options.many
+                                  [ ripple.interactionHandler
+                                  , ripple.properties
+                                  ]
+                               :: ( when config.scroller <|
+                                    Options.on "focus" <|
+                                    Json.map (lift << Focus index) <|
+                                    decodeGeometryOnTab config.indicator
+                                  )
+                               :: options
+                               )
                            )
-                           (childs ++ [ ripple.style ])
+                           []
+                         )
+                         (childs ++ [ ripple.style ])
                        ]
                    )
                 |> List.concat
@@ -622,9 +635,8 @@ view :
     -> List (Property m)
     -> List (Tab m)
     -> Html m
-view lift index store options =
-    Component.render get tabs Material.Internal.Msg.TabsMsg lift index store
-        (Internal.dispatch lift :: options)
+view =
+    Component.render get tabs Material.Internal.Msg.TabsMsg
 
 
 computeScale : Geometry -> Int -> Float

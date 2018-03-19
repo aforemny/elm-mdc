@@ -9,7 +9,6 @@ module Material.Internal.LinearProgress.Implementation exposing
 
 import Html exposing (Html)
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-import Material.Internal.Options.Internal as Internal
 
 
 type alias Config =
@@ -39,31 +38,31 @@ type alias Property m =
 
 indeterminate : Property m
 indeterminate =
-    Internal.option (\config -> { config | indeterminate = True })
+    Options.option (\config -> { config | indeterminate = True })
 
 
 determinate : Float -> Property m
 determinate value =
-    Internal.option (\config -> { config | determinate = True, value = value })
+    Options.option (\config -> { config | determinate = True, value = value })
 
 
 buffered : Float -> Float -> Property m
 buffered value buffer =
-    Internal.option (\config -> { config | buffered = True, value = value, buffer = buffer })
+    Options.option (\config -> { config | buffered = True, value = value, buffer = buffer })
 
 
 reversed : Property m
 reversed =
-    Internal.option (\config -> { config | reversed = True })
+    Options.option (\config -> { config | reversed = True })
 
 
 view : List (Property m) -> List (Html m) -> Html m
 view options _ =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
     in
-    Internal.apply summary Html.div
+    Options.apply summary Html.div
     [ cs "mdc-linear-progress"
     , cs "mdc-linear-progress--indeterminate" |> when config.indeterminate
     , cs "mdc-linear-progress--reversed" |> when config.reversed

@@ -43,7 +43,6 @@ import Material.Internal.List.Implementation as Lists
 import Material.Internal.Menu.Model exposing (Model, defaultModel, Msg(..), KeyCode, Key, Meta, Geometry, defaultGeometry, Viewport)
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, styled, when)
-import Material.Internal.Options.Internal as Internal
 import Mouse
 import Time
 
@@ -304,22 +303,22 @@ type alias Property m =
 
 index : Int -> Property m
 index index =
-    Internal.option (\config -> { config | index = Just index })
+    Options.option (\config -> { config | index = Just index })
 
 
 anchorCorner : Corner -> Property m
 anchorCorner anchorCorner =
-    Internal.option (\ config -> { config | anchorCorner = anchorCorner })
+    Options.option (\ config -> { config | anchorCorner = anchorCorner })
 
 
 anchorMargin : Margin -> Property m
 anchorMargin anchorMargin =
-    Internal.option (\ config -> { config | anchorMargin = anchorMargin })
+    Options.option (\ config -> { config | anchorMargin = anchorMargin })
 
 
 quickOpen : Property m
 quickOpen =
-    Internal.option (\ config -> { config | quickOpen = True })
+    Options.option (\ config -> { config | quickOpen = True })
 
 
 menu
@@ -331,7 +330,7 @@ menu
 menu lift model options ul =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         geometry =
             Maybe.withDefault defaultGeometry model.geometry
@@ -388,7 +387,7 @@ menu lift model options ul =
             else
                 Json.fail ""
     in
-    Internal.apply summary Html.div
+    Options.apply summary Html.div
     [ cs "mdc-menu"
     ,
       when (model.animating && not (Maybe.withDefault False model.quickOpen)) <|
@@ -466,7 +465,7 @@ menu lift model options ul =
                          Options.nop
 
                  summary =
-                     Internal.collect Lists.defaultConfig item.options
+                     Options.collect Lists.defaultConfig item.options
                      |> \ summary ->
                          if not model.keyDownWithinMenu then
                              let
@@ -485,13 +484,13 @@ menu lift model options ul =
                              summary
              in
              if item.divider then
-                 Internal.apply summary Html.hr
+                 Options.apply summary Html.hr
                  [ cs "mdc-list-divider"
                  ]
                  []
                  item.childs
              else
-                 Internal.apply summary Html.li
+                 Options.apply summary Html.li
                  [ cs "mdc-list-item"
                  , Options.attribute (Html.attribute "tabindex" "0")
                  , Options.on "focus" (Json.succeed (lift (SetFocus focusIndex)))

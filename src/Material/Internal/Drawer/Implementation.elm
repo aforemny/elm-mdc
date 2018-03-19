@@ -27,7 +27,6 @@ import Material.Internal.Helpers as Helpers
 import Material.Internal.List.Implementation as Lists
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, styled, many, when)
-import Material.Internal.Options.Internal as Internal
 import Mouse
 
 
@@ -97,7 +96,7 @@ view : String -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Ht
 view className lift model options nodes =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
     in
     styled Html.aside
     [ cs "mdc-drawer"
@@ -156,9 +155,8 @@ render :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-render className lift index store options =
-    Component.render get (view className) Material.Internal.Msg.DrawerMsg lift index store
-        (Internal.dispatch lift :: options)
+render className =
+    Component.render get (view className) Material.Internal.Msg.DrawerMsg
 
 
 react :

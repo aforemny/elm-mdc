@@ -16,7 +16,6 @@ import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, styled, many, when)
-import Material.Internal.Options.Internal as Internal
 import Svg.Attributes as Svg
 import Svg exposing (path)
 
@@ -70,7 +69,7 @@ type alias Property m =
 
 disabled : Property m
 disabled =
-    Internal.option (\ config -> { config | disabled = True })
+    Options.option (\ config -> { config | disabled = True })
 
 
 type alias State =
@@ -83,19 +82,19 @@ checked value =
         state =
             if value then Checked else Unchecked
     in
-    Internal.option (\ config -> { config | state = Just state })
+    Options.option (\ config -> { config | state = Just state })
 
 
 nativeControl : List (Options.Property () m) -> Property m
 nativeControl =
-    Internal.nativeControl
+    Options.nativeControl
 
 
 checkbox : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 checkbox lift model options _ =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         animationClass animation =
           case animation of
@@ -135,7 +134,7 @@ checkbox lift model options _ =
             , stopPropagation = False
             }
     in
-    Internal.apply summary Html.div
+    Options.apply summary Html.div
     [ cs "mdc-checkbox mdc-checkbox--upgraded"
     , cs "mdc-checkbox--indeterminate" |> when (currentState == Nothing)
     , cs "mdc-checkbox--checked" |> when (currentState == Just Checked)
@@ -147,11 +146,10 @@ checkbox lift model options _ =
       Options.on "animationend" (Json.succeed (lift AnimationEnd))
     ]
     []
-    [ Internal.applyNativeControl summary
-      -- styled
+    [ Options.applyNativeControl summary
       Html.input
       [ cs "mdc-checkbox__native-control"
-      , Options.many << List.map Internal.attribute <|
+      , Options.many << List.map Options.attribute <|
         [ Html.type_ "checkbox"
         , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
         , Html.checked (currentState == Just Checked)
@@ -226,9 +224,8 @@ view :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-view lift index store options =
-    Component.render get checkbox Material.Internal.Msg.CheckboxMsg lift index store
-        (Internal.dispatch lift :: options)
+view =
+    Component.render get checkbox Material.Internal.Msg.CheckboxMsg
 
 
 react :

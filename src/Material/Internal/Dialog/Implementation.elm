@@ -23,7 +23,6 @@ import Material.Internal.Component as Component exposing (Index, Indexed)
 import Material.Internal.Dialog.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when) 
-import Material.Internal.Options.Internal as Internal
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -67,9 +66,8 @@ view
     -> List (Property m)
     -> List (Html m)
     -> Html m       
-view lift index store options =
-    Component.render get dialog Material.Internal.Msg.DialogMsg lift index store
-        (Internal.dispatch lift :: options)
+view =
+    Component.render get dialog Material.Internal.Msg.DialogMsg
 
 
 type alias Config =

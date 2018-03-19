@@ -10,6 +10,7 @@ module Material.Internal.Component exposing
 
 import Dict exposing (Dict)
 import Material.Internal.Msg exposing (Msg(..))
+import Material.Internal.Options as Options exposing (Property)
 
 
 type alias Index
@@ -40,15 +41,16 @@ indexed get_model set_model model0 =
 
 render :
     (Index -> store -> model)
-    -> ((msg -> m) -> model -> x)
+    -> ((msg -> m) -> model -> List (Property c m) -> a)
     -> (Index -> msg -> Msg m)
     -> (Msg m -> m)
     -> Index
     -> store
-    -> x
+    -> List (Property c m)
+    -> a
 render get_model view ctor =
-    \ lift idx store ->
-        view (lift << ctor idx) (get_model idx store) 
+    \ lift idx store options ->
+        view (lift << ctor idx) (get_model idx store) (Options.dispatch lift :: options)
 
 
 type alias Update msg m model =

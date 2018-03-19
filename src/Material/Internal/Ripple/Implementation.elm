@@ -18,7 +18,6 @@ import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Helpers as Helpers
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 
 
@@ -124,12 +123,12 @@ defaultConfig =
 
 primary : Property m
 primary =
-    Internal.option (\ config -> { config | color = Just "primary" })
+    Options.option (\ config -> { config | color = Just "primary" })
 
 
 accent : Property m
 accent =
-    Internal.option (\ config -> { config | color = Just "accent" })
+    Options.option (\ config -> { config | color = Just "accent" })
 
 
 type alias Property m =
@@ -147,7 +146,7 @@ view : Bool
 view isUnbounded lift model options =
     let
         { config } =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         geometry =
             model.geometry
@@ -214,7 +213,7 @@ view isUnbounded lift model options =
             toString startPoint.x ++ "px"
 
         summary =
-          Internal.collect ()
+          Options.collect ()
 
         cssVariableHack =
             let

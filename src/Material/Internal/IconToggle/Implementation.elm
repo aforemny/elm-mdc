@@ -14,7 +14,6 @@ import Material.Internal.Component as Component exposing (Index, Indexed)
 import Material.Internal.IconToggle.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 
 
@@ -52,22 +51,22 @@ type alias Property m =
 
 on : Property m
 on =
-    Internal.option (\config -> { config | on = True })
+    Options.option (\config -> { config | on = True })
 
 
 className : String -> Property m
 className className =
-    Internal.option (\ config -> { config | inner = Just className })
+    Options.option (\ config -> { config | inner = Just className })
 
 
 icon : { on : String, off : String } -> Property m
 icon icon =
-    Internal.option (\config -> { config | icon = icon })
+    Options.option (\config -> { config | icon = icon })
 
 
 label : { on : String, off : String } -> Property m
 label label =
-    Internal.option (\config -> { config | label = label })
+    Options.option (\config -> { config | label = label })
 
 
 disabled : Property m
@@ -79,12 +78,12 @@ iconToggle : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 iconToggle lift model options _ =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         ripple =
             Ripple.view True (lift << RippleMsg) model.ripple []
     in
-    Internal.apply summary (if config.inner == Nothing then Html.i else Html.span)
+    Options.apply summary (if config.inner == Nothing then Html.i else Html.span)
     ( cs "mdc-icon-toggle"
     :: when (config.inner == Nothing) (cs "material-icons")
     :: Options.aria "label" (if config.on then config.label.on else config.label.off)

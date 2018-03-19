@@ -29,7 +29,6 @@ import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when, nop)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Toolbar.Model exposing (Model, defaultModel, Calculations, defaultCalculations, Config, defaultConfig, Geometry, Msg(..))
 
 
@@ -172,7 +171,7 @@ toolbar : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 toolbar lift model options nodes =
     let
         ({ config } as summary)=
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         { toolbarProperties
         , flexibleRowElementStyles
@@ -249,8 +248,7 @@ toolbar lift model options nodes =
                    { className = className, text = text }
                )
     in
-    Internal.apply summary
-    Html.header
+    Options.apply summary Html.header
     (
       cs "mdc-toolbar"
     :: ( when config.fixed <|
@@ -516,32 +514,32 @@ view =
 
 fixed : Property m
 fixed =
-    Internal.option (\ config -> { config | fixed = True } )
+    Options.option (\ config -> { config | fixed = True } )
 
 
 waterfall : Property m
 waterfall =
-    Internal.option (\ config -> { config | waterfall = True } )
+    Options.option (\ config -> { config | waterfall = True } )
 
 
 flexible : Property m
 flexible =
-    Internal.option (\ config -> { config | flexible = True } )
+    Options.option (\ config -> { config | flexible = True } )
 
 
 flexibleDefaultBehavior : Property m
 flexibleDefaultBehavior =
-    Internal.option (\ config -> { config | useFlexibleDefaultBehavior = True })
+    Options.option (\ config -> { config | useFlexibleDefaultBehavior = True })
 
 
 fixedLastRow : Property m
 fixedLastRow =
-    Internal.option (\ config -> { config | fixedLastrow = True })
+    Options.option (\ config -> { config | fixedLastrow = True })
 
 
 backgroundImage : String -> Property m
 backgroundImage backgroundImage =
-    Internal.option (\ config -> { config | backgroundImage = Just backgroundImage } )
+    Options.option (\ config -> { config | backgroundImage = Just backgroundImage } )
 
 
 row : List (Property m) -> List (Html m) -> Html m

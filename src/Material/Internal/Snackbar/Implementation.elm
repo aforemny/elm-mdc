@@ -17,7 +17,6 @@ import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Helpers as Helpers
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Snackbar.Model exposing (Model, defaultModel, Contents, Msg(..), Transition(..), State(..))
 
 
@@ -222,9 +221,9 @@ snackbar lift model options _ =
             && multiline
 
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
     in
-    Internal.apply summary Html.div
+    Options.apply summary Html.div
     [ cs "mdc-snackbar"
     , cs "mdc-snackbar--active"
       |> when isActive

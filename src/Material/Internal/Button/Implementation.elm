@@ -20,7 +20,6 @@ import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 
 
@@ -58,7 +57,7 @@ type alias Property m =
 
 icon : String -> Property m
 icon str =
-    Internal.option (\ config -> { config | icon = Just str })
+    Options.option (\ config -> { config | icon = Just str })
 
 
 raised : Property m
@@ -88,37 +87,37 @@ compact =
 
 ripple : Property m
 ripple =
-    Internal.option (\options -> { options | ripple = True })
+    Options.option (\options -> { options | ripple = True })
 
 
 link : String -> Property m
 link href =
-    Internal.option (\options -> { options | link = Just href })
+    Options.option (\options -> { options | link = Just href })
 
 
 disabled : Property m
 disabled =
-    Internal.option (\options -> { options | disabled = True })
+    Options.option (\options -> { options | disabled = True })
 
 
 button : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 button lift model options nodes =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         ripple =
             Ripple.view False (lift << RippleMsg) model.ripple []
     in
-        Internal.apply summary
+        Options.apply summary
             (if config.link /= Nothing then Html.a else Html.button)
             [ cs "mdc-button"
             , cs "mdc-js-button"
             , cs "mdc-js-ripple-effect" |> when summary.config.ripple
             , css "box-sizing" "border-box"
-            , Internal.attribute (Html.href (Maybe.withDefault "" config.link) )
+            , Options.attribute (Html.href (Maybe.withDefault "" config.link) )
                 |> when ((config.link /= Nothing) && not config.disabled)
-            , Internal.attribute (Html.disabled True)
+            , Options.attribute (Html.disabled True)
                 |> when config.disabled
             , cs "mdc-button--disabled"
                 |> when config.disabled

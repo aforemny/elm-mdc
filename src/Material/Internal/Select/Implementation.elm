@@ -19,7 +19,6 @@ import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Menu.Implementation as Menu
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, styled, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Select.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 
 
@@ -71,22 +70,22 @@ type alias Property m =
 
 label : String -> Property m
 label =
-    Internal.option << (\value config -> { config | label = value })
+    Options.option << (\value config -> { config | label = value })
 
 
 index : Int -> Property m
 index index =
-    Internal.option (\config -> { config | index = Just index })
+    Options.option (\config -> { config | index = Just index })
 
 
 selectedText : String -> Property m
 selectedText selectedText =
-    Internal.option (\ config -> { config | selectedText = Just selectedText })
+    Options.option (\ config -> { config | selectedText = Just selectedText })
 
 
 disabled : Property m
 disabled =
-    Internal.option (\config -> { config | disabled = True })
+    Options.option (\config -> { config | disabled = True })
 
 
 box : Property m
@@ -103,7 +102,7 @@ select
 select lift model options items =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         geometry =
             Maybe.withDefault defaultGeometry model.geometry
@@ -147,7 +146,7 @@ select lift model options items =
           else
               model.menu.open
     in
-    Internal.apply summary Html.div
+    Options.apply summary Html.div
     [ cs "mdc-select"
     , cs "mdc-select--open" |> when isOpen
     , when (model.menu.animating && model.menu.geometry == Nothing) <|
@@ -225,10 +224,8 @@ view :
     -> List (Property m)
     -> List (Menu.Item m)
     -> Html m
-view lift index store options =
-    Component.render get select Material.Internal.Msg.SelectMsg lift index store
-        (Internal.dispatch lift :: options)
--- TODO: use inject ^^^^^
+view =
+    Component.render get select Material.Internal.Msg.SelectMsg
 
 
 subs : (Material.Internal.Msg.Msg m -> m) -> Store s -> Sub m

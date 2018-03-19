@@ -4,7 +4,6 @@ module Material.Options exposing
     , cs
     , css
     , data
-    , dispatch
     , many
     , nop
     , on
@@ -60,11 +59,6 @@ module Material.Options exposing
 
 @docs onBlur
 @docs onFocus
-
-
-# Dispatch
-
-@docs dispatch
 -}
 
 import Html.Events exposing (Options)
@@ -260,12 +254,3 @@ onSubmit =
 onWithOptions : String -> Options -> Decoder m -> Property c m
 onWithOptions =
     Material.Internal.Options.onWithOptions
-
-
-{-| No-shorthand multiple-event dispatch.
-
-You are very unlikely to need this.
--}
-dispatch : (List m -> m) -> Property c m
-dispatch =
-    Material.Internal.Options.dispatch

@@ -13,7 +13,6 @@ import Json.Decode as Json
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, styled, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.RadioButton.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Ripple.Implementation as Ripple
 
@@ -59,24 +58,24 @@ type alias Property m =
 
 disabled : Property m
 disabled =
-    Internal.option (\ config -> { config | disabled = True })
+    Options.option (\ config -> { config | disabled = True })
 
 
 selected : Property m
 selected =
-    Internal.option (\config -> { config | value = True })
+    Options.option (\config -> { config | value = True })
 
 
 nativeControl : List (Options.Property () m) -> Property m
 nativeControl =
-    Internal.nativeControl
+    Options.nativeControl
 
 
 radioButton : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 radioButton lift model options _ =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         ripple =
             Ripple.view True (lift << RippleMsg) model.ripple []
@@ -86,7 +85,7 @@ radioButton lift model options _ =
           , stopPropagation = False
           }
     in
-    Internal.apply summary Html.div
+    Options.apply summary Html.div
     [ cs "mdc-radio"
     , Options.many
       [ ripple.interactionHandler
@@ -94,10 +93,10 @@ radioButton lift model options _ =
       ]
     ]
     []
-    [ Internal.applyNativeControl summary Html.input
+    [ Options.applyNativeControl summary Html.input
       [ cs "mdc-radio__native-control"
-      , Internal.attribute <| Html.type_ "radio"
-      , Internal.attribute <| Html.checked config.value
+      , Options.attribute <| Html.type_ "radio"
+      , Options.attribute <| Html.checked config.value
       , Options.onFocus (lift (SetFocus True))
       , Options.onBlur (lift (SetFocus False))
       , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
@@ -143,6 +142,5 @@ view :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-view lift index store options =
-    Component.render get radioButton Material.Internal.Msg.RadioButtonMsg lift index store
-        (Internal.dispatch lift :: options)
+view =
+    Component.render get radioButton Material.Internal.Msg.RadioButtonMsg

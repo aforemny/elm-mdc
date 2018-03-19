@@ -7,7 +7,6 @@ module Material.Internal.Textfield.HelperText.Implementation exposing
 
 import Html exposing (Html)
 import Material.Internal.Options as Options exposing (cs, css, when)
-import Material.Internal.Options.Internal as Internal
 
 
 type alias Config =
@@ -29,19 +28,19 @@ type alias Property m =
 
 persistent : Property m
 persistent =
-    Internal.option (\config -> { config | persistent = True })
+    Options.option (\config -> { config | persistent = True })
 
 
 validationMsg : Property m
 validationMsg =
-    Internal.option (\config -> { config | validationMsg = True })
+    Options.option (\config -> { config | validationMsg = True })
 
 
 helperText : List (Property m) -> List (Html m) -> Html m
 helperText options =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
     in
     Options.styled Html.p
     (  cs "mdc-text-field-helper-text"

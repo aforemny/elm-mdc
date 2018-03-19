@@ -13,7 +13,6 @@ import Json.Decode as Json
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, styled, many, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Switch.Model exposing (Model, defaultModel, Msg(..))
 
 
@@ -47,39 +46,39 @@ type alias Property m =
 
 disabled : Property m
 disabled =
-    Internal.option (\ config -> { config | disabled = True })
+    Options.option (\ config -> { config | disabled = True })
 
 
 on : Property m
 on =
-    Internal.option (\config -> { config | value = True })
+    Options.option (\config -> { config | value = True })
 
 
 nativeControl : List (Options.Property () m) -> Property m
 nativeControl =
-    Internal.nativeControl
+    Options.nativeControl
 
 
 switch : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 switch lift model options _ =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         preventDefault =
           { preventDefault = True
           , stopPropagation = False
           }
     in
-    Internal.apply summary Html.div
+    Options.apply summary Html.div
     [ cs "mdc-switch"
     ]
     []
-    [ Internal.applyNativeControl summary
+    [ Options.applyNativeControl summary
       Html.input
       [ cs "mdc-switch__native-control"
-      , Internal.attribute <| Html.type_ "checkbox"
-      , Internal.attribute <| Html.checked config.value
+      , Options.attribute <| Html.type_ "checkbox"
+      , Options.attribute <| Html.checked config.value
       , Options.onFocus (lift (SetFocus True))
       , Options.onBlur (lift (SetFocus False))
       , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
@@ -126,6 +125,5 @@ view :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-view lift index store options =
-    Component.render get switch Material.Internal.Msg.SwitchMsg lift index store
-        (Internal.dispatch lift :: options)
+view =
+    Component.render get switch Material.Internal.Msg.SwitchMsg

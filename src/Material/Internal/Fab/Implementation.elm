@@ -12,7 +12,6 @@ import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Fab.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 
 
@@ -57,19 +56,19 @@ exited =
 
 ripple : Property m
 ripple =
-    Internal.option (\config -> { config | ripple = True })
+    Options.option (\config -> { config | ripple = True })
 
 
 fab : (Msg -> m) -> Model -> List (Property m) -> String -> Html m
 fab lift model options icon =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         ripple =
             Ripple.view False (lift << RippleMsg) model.ripple []
     in
-        Internal.apply summary
+        Options.apply summary
             Html.button
             [ cs "mdc-fab"
             , cs "material-icons"

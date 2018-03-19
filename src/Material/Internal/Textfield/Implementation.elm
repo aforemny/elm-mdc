@@ -33,7 +33,6 @@ import Json.Encode as Encode
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Ripple.Implementation as Ripple
 import Material.Internal.Textfield.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 import Regex
@@ -94,22 +93,22 @@ defaultConfig =
 
 iconUnclickable : Property m
 iconUnclickable =
-    Internal.option (\ config -> { config | iconClickable = False })
+    Options.option (\ config -> { config | iconClickable = False })
 
 
 leadingIcon : String -> Property m
 leadingIcon icon =
-    Internal.option (\ config -> { config | leadingIcon = Just icon })
+    Options.option (\ config -> { config | leadingIcon = Just icon })
 
 
 trailingIcon : String -> Property m
 trailingIcon icon =
-    Internal.option (\ config -> { config | trailingIcon = Just icon })
+    Options.option (\ config -> { config | trailingIcon = Just icon })
 
 
 outlined : Property m
 outlined =
-    Internal.option (\ config -> { config | outlined = True })
+    Options.option (\ config -> { config | outlined = True })
 
 
 type alias Property m =
@@ -118,90 +117,90 @@ type alias Property m =
 
 label : String -> Property m
 label =
-    Internal.option
+    Options.option
         << (\str config -> { config | labelText = Just str })
 
 
 value : String -> Property m
 value =
-    Internal.option
+    Options.option
         << (\str config -> { config | value = Just str })
 
 
 disabled : Property m
 disabled =
-    Internal.option
+    Options.option
         (\config -> { config | disabled = True })
 
 
 password : Property m
 password =
-    Internal.option (\config -> { config | type_ = Just "password" })
+    Options.option (\config -> { config | type_ = Just "password" })
 
 
 email : Property m
 email =
-    Internal.option (\config -> { config | type_ = Just "email" })
+    Options.option (\config -> { config | type_ = Just "email" })
 
 
 box : Property m
 box =
-    Internal.option (\config -> { config | box = True })
+    Options.option (\config -> { config | box = True })
 
 
 pattern : String -> Property m
 pattern pattern =
-    Internal.option (\ config -> { config | pattern = Just pattern })
+    Options.option (\ config -> { config | pattern = Just pattern })
 
 
 rows : Int -> Property m
 rows rows =
-    Internal.option (\ config -> { config | rows = Just rows })
+    Options.option (\ config -> { config | rows = Just rows })
 
 
 cols : Int -> Property m
 cols cols =
-    Internal.option (\ config -> { config | cols = Just cols })
+    Options.option (\ config -> { config | cols = Just cols })
 
 
 dense : Property m
 dense =
-    Internal.option (\config -> { config | dense = True })
+    Options.option (\config -> { config | dense = True })
 
 
 required : Property m
 required =
-    Internal.option (\config -> { config | required = True })
+    Options.option (\config -> { config | required = True })
 
 
 type_ : String -> Property m
 type_ =
-    Internal.option << (\value config -> { config | type_ = Just value })
+    Options.option << (\value config -> { config | type_ = Just value })
 
 
 fullwidth : Property m
 fullwidth =
-    Internal.option (\config -> { config | fullWidth = True })
+    Options.option (\config -> { config | fullWidth = True })
 
 
 invalid : Property m
 invalid =
-    Internal.option (\config -> { config | invalid = True })
+    Options.option (\config -> { config | invalid = True })
 
 
 textarea : Property m
 textarea =
-    Internal.option (\config -> { config | textarea = True })
+    Options.option (\config -> { config | textarea = True })
 
 
 placeholder : String -> Property m
 placeholder placeholder =
-    Internal.option (\ config -> { config | placeholder = Just placeholder })
+    Options.option (\ config -> { config | placeholder = Just placeholder })
 
 
 nativeControl : List (Options.Property () m) -> Property m
 nativeControl =
-    Internal.nativeControl
+    Options.nativeControl
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -236,7 +235,7 @@ textField : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 textField lift model options _ =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         isDirty =
             model.isDirty || Maybe.withDefault False (Maybe.map ((/=) "") config.value)
@@ -255,7 +254,7 @@ textField lift model options _ =
                     |> Maybe.withDefault False
                 Nothing -> False
     in
-        Internal.apply summary Html.div
+        Options.apply summary Html.div
         [ cs "mdc-text-field"
         , cs "mdc-text-field--upgraded"
         , cs "mdc-text-field--focused" |> when focused
@@ -279,7 +278,7 @@ textField lift model options _ =
         []
         ( List.concat
           [
-            [ Internal.applyNativeControl summary
+            [ Options.applyNativeControl summary
                 (if config.textarea then Html.textarea else Html.input)
                 [
                   cs "mdc-text-field__input"
@@ -290,7 +289,7 @@ textField lift model options _ =
                       Options.on "focus" (Json.succeed (lift (Focus defaultGeometry)))
                 , Options.onBlur (lift Blur)
                 , Options.onInput (lift << Input)
-                , Options.many << List.map Internal.attribute << List.filterMap identity <|
+                , Options.many << List.map Options.attribute << List.filterMap identity <|
                   [ Html.type_ (Maybe.withDefault "text" config.type_)
                     |> if not config.textarea then Just else always Nothing
                   , Html.disabled True
@@ -519,12 +518,8 @@ view
     -> List (Property m)
     -> List (Html m)
     -> Html m       
-view lift index store options =
-    Component.render get textField Material.Internal.Msg.TextfieldMsg lift index store
-        (Internal.dispatch lift :: options)
-
-
--- TODO: use inject ^^^^^
+view =
+    Component.render get textField Material.Internal.Msg.TextfieldMsg
 
 
 decodeGeometry : Decoder Geometry

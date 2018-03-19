@@ -73,7 +73,6 @@ import Material.Internal.Component as Component exposing (Index, Indexed)
 import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when)
-import Material.Internal.Options.Internal as Internal
 import Material.Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 import Svg
 import Svg.Attributes as Svg
@@ -305,28 +304,28 @@ This will be clamped between `min` and `max`.
 -}
 value : Float -> Property m
 value =
-    Internal.option << (\value config -> { config | value = value })
+    Options.option << (\value config -> { config | value = value })
 
 
 {-| Specify the minimum value.
 -}
 min : Int -> Property m
 min =
-    Internal.option << (\min config -> { config | min = toFloat min })
+    Options.option << (\min config -> { config | min = toFloat min })
 
 
 {-| Specify the maximum value.
 -}
 max : Int -> Property m
 max =
-    Internal.option << (\max config -> { config | max = toFloat max })
+    Options.option << (\max config -> { config | max = toFloat max })
 
 
 {-| Make the slider only take integer values.
 -}
 discrete : Property m
 discrete =
-    Internal.option (\config -> { config | discrete = True })
+    Options.option (\config -> { config | discrete = True })
 
  
 {-| Disable the slider.
@@ -335,7 +334,7 @@ disabled : Property m
 disabled =
     Options.many
     [ cs "mdc-slider--disabled"
-    , Internal.attribute <| Html.disabled True
+    , Options.attribute <| Html.disabled True
     ]
 
 
@@ -343,7 +342,7 @@ slider : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 slider lift model options _ =
     let
         ({ config } as summary) =
-            Internal.collect defaultConfig options
+            Options.collect defaultConfig options
 
         continuousValue =
             if model.active then
@@ -423,7 +422,7 @@ slider lift model options _ =
           (Json.at ["keyCode"] Json.int)
     ]
     [
-        Internal.apply summary Html.div
+        Options.apply summary Html.div
         [ cs "mdc-slider"
         , cs "mdc-slider--focus" |> when model.focus
         , cs "mdc-slider--active" |> when model.active
@@ -731,9 +730,8 @@ view :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-view lift index store options =
-    Component.render get slider Material.Internal.Msg.SliderMsg lift index store
-        (Internal.dispatch lift :: options)
+view =
+    Component.render get slider Material.Internal.Msg.SliderMsg
 
 
 discretize : Geometry -> Float -> Float
@@ -829,14 +827,14 @@ hasClass class =
 -}
 onChange : (Float -> m) -> Property m
 onChange =
-    Internal.option << (\ decoder config -> { config | onChange = Just decoder } )
+    Options.option << (\ decoder config -> { config | onChange = Just decoder } )
 
 
 {-| Slider `onInput` event listener.
 -}
 onInput : (Float -> m) -> Property m
 onInput =
-    Internal.option << (\ decoder config -> { config | onInput = Just decoder } )
+    Options.option << (\ decoder config -> { config | onInput = Just decoder } )
 
 
 {-| Specify a number of steps that value will be a multiple of.
@@ -845,11 +843,11 @@ Defaults to 1.
 -}
 steps : Int -> Property m
 steps =
-    Internal.option << (\ steps config -> { config | steps = steps } )
+    Options.option << (\ steps config -> { config | steps = steps } )
 
 
 {-| Add track markers to the Slider every `step`.
 -}
 trackMarkers : Property m
 trackMarkers =
-    Internal.option (\ config -> { config | trackMarkers = True } )
+    Options.option (\ config -> { config | trackMarkers = True } )
