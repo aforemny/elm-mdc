@@ -9,6 +9,7 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.Component exposing (Index)
+import Material.Icon as Icon
 import Material.Options as Options exposing (Property, styled, cs, css, when)
 import Material.Toolbar as Toolbar
 
@@ -52,8 +53,9 @@ toolbar lift idx mdc navigate url title =
                   []
 
               _ ->
-                  Toolbar.menuIcon
+                  Icon.view
                   [ Options.onClick (navigate Url.StartPage)
+                  , Toolbar.menuIcon
                   ]
                   "arrow_back"
           ]

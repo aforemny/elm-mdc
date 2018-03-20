@@ -573,13 +573,9 @@ shrinkToFit =
     cs "mdc-toolbar__section--shrink-to-fit"
 
 
-menuIcon : List (Icon.Property m) -> String -> Html m
-menuIcon options icon =
-    Icon.view
-    ( cs "mdc-toolbar__menu-icon"
-    :: options
-    )
-    icon
+menuIcon : Icon.Property m
+menuIcon =
+    cs "mdc-toolbar__menu-icon"
 
 
 title : List (Property m) -> List (Html m) -> Html m
@@ -590,13 +586,9 @@ title options =
     )
 
 
-icon : List (Icon.Property m) -> String -> Html m
-icon options icon =
-    Icon.view
-    ( cs "mdc-toolbar__icon"
-    :: options
-    )
-    icon
+icon : Icon.Property m
+icon =
+    cs "mdc-toolbar__icon"
 
 
 fixedAdjust : Index -> Store s -> Options.Property c m

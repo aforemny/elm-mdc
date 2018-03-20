@@ -15,6 +15,7 @@ import Json.Decode as Json
 import Material
 import Material.Button as Button
 import Material.Drawer.Persistent as Drawer
+import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Toolbar as Toolbar
@@ -126,8 +127,9 @@ view lift page model =
           [ Toolbar.section
             [ Toolbar.alignStart
             ]
-            [ Toolbar.menuIcon
+            [ Icon.view
               [ Drawer.toggleOn (lift << Mdc) [0] "click"
+              , Toolbar.menuIcon
               ]
               "menu"
             , Toolbar.title

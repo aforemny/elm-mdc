@@ -1,9 +1,12 @@
 module Material.Icon exposing
-    ( Property
+    ( anchor
+    , button
+    , Property
     , size18
     , size24
     , size36
     , size48
+    , span
     , view
     )
 
@@ -34,10 +37,21 @@ Icon.view [] "settings"
 
 @docs Property
 @docs view
+
+
+## Icon sizes
+
 @docs size18
 @docs size24
 @docs size36
 @docs size48
+
+
+## Html node
+
+@docs anchor
+@docs button
+@docs span
 -}
 
 import Html exposing (Html)
@@ -51,6 +65,8 @@ type alias Property m =
 
 
 {-| Icon view.
+
+Renders a HTML `i` node by default.
 -}
 view : List (Property m) -> String -> Html m
 view =
@@ -83,3 +99,24 @@ size36 =
 size48 : Property m
 size48 =
     Icon.size48
+
+
+{-| Icon will be a HTML `a` element.
+-}
+anchor : Property m
+anchor =
+    Icon.button
+
+
+{-| Icon will be a HTML `button` element.
+-}
+button : Property m
+button =
+    Icon.button
+
+
+{-| Icon will be a HTML `span` element.
+-}
+span : Property m
+span =
+    Icon.span

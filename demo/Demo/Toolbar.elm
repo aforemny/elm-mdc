@@ -7,6 +7,7 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
+import Material.Icon as Icon
 import Material.Menu as Menu
 import Material.Options as Options exposing (styled, cs, css)
 import Material.Toolbar as Toolbar
@@ -76,15 +77,15 @@ view lift page toolbarPage model =
                     [ Toolbar.section
                       [ Toolbar.alignStart
                       ]
-                      [ Toolbar.icon [ Options.attribute (Html.href "#") ] "menu"
+                      [ Icon.view [ Toolbar.icon, Options.attribute (Html.href "#") ] "menu"
                       , Toolbar.title [] [ text "Title" ]
                       ]
                     , Toolbar.section
                       [ Toolbar.alignEnd
                       ]
-                      [ Toolbar.icon [ Options.attribute (Html.href "#") ] "file_download"
-                      , Toolbar.icon [ Options.attribute (Html.href "#") ] "print"
-                      , Toolbar.icon [ Options.attribute (Html.href "#") ] "more_vert"
+                      [ Icon.view [ Toolbar.icon, Options.attribute (Html.href "#") ] "file_download"
+                      , Icon.view [ Toolbar.icon, Options.attribute (Html.href "#") ] "print"
+                      , Icon.view [ Toolbar.icon, Options.attribute (Html.href "#") ] "more_vert"
                       ]
                     ]
                   ]
@@ -181,15 +182,15 @@ defaultToolbar lift model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.menuIcon [ Options.attribute (Html.href "#") ] "menu"
+          [ Icon.view [ Toolbar.menuIcon, Options.attribute (Html.href "#") ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [] "file_download"
-          , Toolbar.icon [] "print"
-          , Toolbar.icon [] "bookmark"
+          [ Icon.view [ Toolbar.icon ] "file_download"
+          , Icon.view [ Toolbar.icon ] "print"
+          , Icon.view [ Toolbar.icon ] "bookmark"
           ]
         ]
       ]
@@ -212,15 +213,15 @@ fixedToolbar lift model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.menuIcon [] "menu"
+          [ Icon.view [ Toolbar.menuIcon ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [] "file_download"
-          , Toolbar.icon [] "print"
-          , Toolbar.icon [] "bookmark"
+          [ Icon.view [ Toolbar.icon ] "file_download"
+          , Icon.view [ Toolbar.icon ] "print"
+          , Icon.view [ Toolbar.icon ] "bookmark"
           ]
         ]
       ]
@@ -246,17 +247,18 @@ menuToolbar lift model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.menuIcon [] "menu"
+          [ Icon.view [ Toolbar.menuIcon ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [] "file_download"
-          , Toolbar.icon [] "print"
+          [ Icon.view [ Toolbar.icon ] "file_download"
+          , Icon.view [ Toolbar.icon ] "print"
           ,
-             Toolbar.icon
-            [ Menu.attach (lift << Mdc) [0]
+            Icon.view
+            [ Toolbar.icon
+            , Menu.attach (lift << Mdc) [0]
             ]
             "more_vert"
           ,
@@ -309,15 +311,15 @@ waterfallToolbar lift model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.menuIcon [] "menu"
+          [ Icon.view [ Toolbar.menuIcon ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [] "file_download"
-          , Toolbar.icon [] "print"
-          , Toolbar.icon [] "bookmark"
+          [ Icon.view [ Toolbar.icon ] "file_download"
+          , Icon.view [ Toolbar.icon ] "print"
+          , Icon.view [ Toolbar.icon ] "bookmark"
           ]
         ]
       ]
@@ -345,15 +347,15 @@ defaultFlexibleToolbar lift model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.menuIcon [] "menu"
+          [ Icon.view [ Toolbar.menuIcon ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [] "file_download"
-          , Toolbar.icon [] "print"
-          , Toolbar.icon [] "bookmark"
+          [ Icon.view [ Toolbar.icon ] "file_download"
+          , Icon.view [ Toolbar.icon ] "print"
+          , Icon.view [ Toolbar.icon ] "bookmark"
           ]
         ]
       ]
@@ -382,15 +384,15 @@ waterfallFlexibleToolbar lift model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.menuIcon [] "menu"
+          [ Icon.view [ Toolbar.menuIcon ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         , Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [] "file_download"
-          , Toolbar.icon [] "print"
-          , Toolbar.icon [] "bookmark"
+          [ Icon.view [ Toolbar.icon ] "file_download"
+          , Icon.view [ Toolbar.icon ] "print"
+          , Icon.view [ Toolbar.icon ] "bookmark"
           ]
         ]
       ]
@@ -422,7 +424,7 @@ waterfallToolbarFix lift model =
         [ Toolbar.section
           [ Toolbar.alignStart
           ]
-          [ Toolbar.menuIcon [] "menu"
+          [ Icon.view [ Toolbar.menuIcon ] "menu"
           , Toolbar.title [] [ text "Title" ]
           ]
         ]
@@ -430,9 +432,9 @@ waterfallToolbarFix lift model =
         [ Toolbar.section
           [ Toolbar.alignEnd
           ]
-          [ Toolbar.icon [] "file_download"
-          , Toolbar.icon [] "print"
-          , Toolbar.icon [] "more_vert"
+          [ Icon.view [ Toolbar.icon ] "file_download"
+          , Icon.view [ Toolbar.icon ] "print"
+          , Icon.view [ Toolbar.icon ] "more_vert"
           ]
         ]
       ]

@@ -196,11 +196,9 @@ shrinkToFit =
     Toolbar.shrinkToFit
 
 
-{-| Adds a menu icon to the start of the toolbar.
-
-Has to be a child of `section`.
+{-| Style an icon to be the menu icon of the toolbar.
 -}
-menuIcon : List (Icon.Property m) -> String -> Html m
+menuIcon : Icon.Property m
 menuIcon =
     Toolbar.menuIcon
 
@@ -214,11 +212,11 @@ title =
     Toolbar.title
 
 
-{-| Add icons to the end of the toolbar.
+{-| Style an icon as an icon at the end of the toolbar.
 
-Has to be a child of `section`.
+Should be applied to a `Icon.view`.
 -}
-icon : List (Icon.Property m) -> String -> Html m
+icon : Icon.Property m
 icon =
     Toolbar.icon
 
