@@ -9145,89 +9145,6 @@ var _aforemny$elm_mdc$Material_Internal_Msg$Dispatch = function (a) {
 	return {ctor: 'Dispatch', _0: a};
 };
 
-var _aforemny$elm_mdc$Material_Internal_Component$subs = F5(
-	function (ctor, get, subscriptions, lift, model) {
-		return _elm_lang$core$Platform_Sub$batch(
-			A3(
-				_elm_lang$core$Dict$foldl,
-				F3(
-					function (idx, model, ss) {
-						return {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Platform_Sub$map,
-								function (_p0) {
-									return lift(
-										A2(ctor, idx, _p0));
-								},
-								subscriptions(model)),
-							_1: ss
-						};
-					}),
-				{ctor: '[]'},
-				get(model)));
-	});
-var _aforemny$elm_mdc$Material_Internal_Component$generalise = F4(
-	function (update, lift, msg, model) {
-		return A2(
-			_elm_lang$core$Tuple$mapSecond,
-			_elm_lang$core$Platform_Cmd$map(lift),
-			A2(
-				_elm_lang$core$Tuple$mapFirst,
-				_elm_lang$core$Maybe$Just,
-				A2(update, msg, model)));
-	});
-var _aforemny$elm_mdc$Material_Internal_Component$react = F8(
-	function (get, set, ctor, update, lift, msg, idx, store) {
-		return A2(
-			_elm_lang$core$Tuple$mapFirst,
-			_elm_lang$core$Maybe$map(
-				A2(set, idx, store)),
-			A3(
-				update,
-				function (_p1) {
-					return lift(
-						A2(ctor, idx, _p1));
-				},
-				msg,
-				A2(get, idx, store)));
-	});
-var _aforemny$elm_mdc$Material_Internal_Component$render = F6(
-	function (get_model, view, ctor, lift, idx, store) {
-		return A2(
-			view,
-			function (_p2) {
-				return lift(
-					A2(ctor, idx, _p2));
-			},
-			A2(get_model, idx, store));
-	});
-var _aforemny$elm_mdc$Material_Internal_Component$indexed = F3(
-	function (get_model, set_model, model0) {
-		var set_ = F3(
-			function (idx, store, model) {
-				return A2(
-					set_model,
-					A3(
-						_elm_lang$core$Dict$insert,
-						idx,
-						model,
-						get_model(store)),
-					store);
-			});
-		var get_ = F2(
-			function (idx, store) {
-				return A2(
-					_elm_lang$core$Maybe$withDefault,
-					model0,
-					A2(
-						_elm_lang$core$Dict$get,
-						idx,
-						get_model(store)));
-			});
-		return {ctor: '_Tuple2', _0: get_, _1: set_};
-	});
-
 var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
 var _elm_lang$html$Html_Events$targetChecked = A2(
 	_elm_lang$core$Json_Decode$at,
@@ -9662,7 +9579,7 @@ var _aforemny$elm_mdc$Material_Internal_Dispatch$defaultConfig = _aforemny$elm_m
 		lift: _elm_lang$core$Maybe$Nothing
 	});
 
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$addAttributes = F2(
+var _aforemny$elm_mdc$Material_Internal_Options$addAttributes = F2(
 	function (summary, attrs) {
 		return A2(
 			_elm_lang$core$Basics_ops['++'],
@@ -9687,7 +9604,7 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$addAttributes = F2(
 						summary.internal,
 						_aforemny$elm_mdc$Material_Internal_Dispatch$toAttributes(summary.dispatch)))));
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1_ = F2(
+var _aforemny$elm_mdc$Material_Internal_Options$collect1_ = F2(
 	function (options, acc) {
 		var _p0 = options;
 		switch (_p0.ctor) {
@@ -9722,7 +9639,7 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1_ = F2(
 						dispatch: A4(_aforemny$elm_mdc$Material_Internal_Dispatch$add, _p0._0, _p0._1, _p0._2, acc.dispatch)
 					});
 			case 'Many':
-				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1_, acc, _p0._0);
+				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options$collect1_, acc, _p0._0);
 			case 'Lift':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
@@ -9735,7 +9652,7 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1_ = F2(
 				return acc;
 		}
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1 = F2(
+var _aforemny$elm_mdc$Material_Internal_Options$collect1 = F2(
 	function (option, acc) {
 		var _p1 = option;
 		switch (_p1.ctor) {
@@ -9764,7 +9681,7 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1 = F2(
 						internal: {ctor: '::', _0: _p1._0, _1: acc.internal}
 					});
 			case 'Many':
-				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1, acc, _p1._0);
+				return A3(_elm_lang$core$List$foldl, _aforemny$elm_mdc$Material_Internal_Options$collect1, acc, _p1._0);
 			case 'Set':
 				return _elm_lang$core$Native_Utils.update(
 					acc,
@@ -9787,22 +9704,22 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect1 = F2(
 				return acc;
 		}
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$recollect = _elm_lang$core$List$foldl(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect1);
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$apply = F4(
+var _aforemny$elm_mdc$Material_Internal_Options$recollect = _elm_lang$core$List$foldl(_aforemny$elm_mdc$Material_Internal_Options$collect1);
+var _aforemny$elm_mdc$Material_Internal_Options$apply = F4(
 	function (summary, ctor, options, attrs) {
 		return ctor(
 			A2(
-				_aforemny$elm_mdc$Material_Internal_Options_Internal$addAttributes,
-				A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$recollect, summary, options),
+				_aforemny$elm_mdc$Material_Internal_Options$addAttributes,
+				A2(_aforemny$elm_mdc$Material_Internal_Options$recollect, summary, options),
 				attrs));
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$applyNativeControl = F3(
+var _aforemny$elm_mdc$Material_Internal_Options$applyNativeControl = F3(
 	function (summary, ctor, options) {
 		return ctor(
 			A2(
-				_aforemny$elm_mdc$Material_Internal_Options_Internal$addAttributes,
+				_aforemny$elm_mdc$Material_Internal_Options$addAttributes,
 				A2(
-					_aforemny$elm_mdc$Material_Internal_Options_Internal$recollect,
+					_aforemny$elm_mdc$Material_Internal_Options$recollect,
 					_elm_lang$core$Native_Utils.update(
 						summary,
 						{
@@ -9816,14 +9733,14 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$applyNativeControl = F3
 					A2(_elm_lang$core$Basics_ops['++'], summary.config.nativeControl, options)),
 				{ctor: '[]'}));
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Summary = F6(
+var _aforemny$elm_mdc$Material_Internal_Options$Summary = F6(
 	function (a, b, c, d, e, f) {
 		return {classes: a, css: b, attrs: c, internal: d, dispatch: e, config: f};
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect = function (_p2) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$recollect(
+var _aforemny$elm_mdc$Material_Internal_Options$collect = function (_p2) {
+	return _aforemny$elm_mdc$Material_Internal_Options$recollect(
 		A6(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$Summary,
+			_aforemny$elm_mdc$Material_Internal_Options$Summary,
 			{ctor: '[]'},
 			{ctor: '[]'},
 			{ctor: '[]'},
@@ -9831,23 +9748,36 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect = function (_p2
 			_aforemny$elm_mdc$Material_Internal_Dispatch$defaultConfig,
 			_p2));
 };
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$collect_ = A2(
+var _aforemny$elm_mdc$Material_Internal_Options$collect_ = A2(
 	_elm_lang$core$List$foldl,
-	_aforemny$elm_mdc$Material_Internal_Options_Internal$collect1_,
+	_aforemny$elm_mdc$Material_Internal_Options$collect1_,
 	A6(
-		_aforemny$elm_mdc$Material_Internal_Options_Internal$Summary,
+		_aforemny$elm_mdc$Material_Internal_Options$Summary,
 		{ctor: '[]'},
 		{ctor: '[]'},
 		{ctor: '[]'},
 		{ctor: '[]'},
 		_aforemny$elm_mdc$Material_Internal_Dispatch$defaultConfig,
 		{ctor: '_Tuple0'}));
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$None = {ctor: 'None'};
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Lift = function (a) {
+var _aforemny$elm_mdc$Material_Internal_Options$styled = F2(
+	function (ctor, props) {
+		return ctor(
+			A2(
+				_aforemny$elm_mdc$Material_Internal_Options$addAttributes,
+				_aforemny$elm_mdc$Material_Internal_Options$collect_(props),
+				{ctor: '[]'}));
+	});
+var _aforemny$elm_mdc$Material_Internal_Options$None = {ctor: 'None'};
+var _aforemny$elm_mdc$Material_Internal_Options$nop = _aforemny$elm_mdc$Material_Internal_Options$None;
+var _aforemny$elm_mdc$Material_Internal_Options$when = F2(
+	function (guard, prop) {
+		return guard ? prop : _aforemny$elm_mdc$Material_Internal_Options$nop;
+	});
+var _aforemny$elm_mdc$Material_Internal_Options$Lift = function (a) {
 	return {ctor: 'Lift', _0: a};
 };
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch = function (lift) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$Lift(
+var _aforemny$elm_mdc$Material_Internal_Options$dispatch = function (lift) {
+	return _aforemny$elm_mdc$Material_Internal_Options$Lift(
 		function (_p3) {
 			return A2(
 				_elm_lang$core$Json_Decode$map,
@@ -9855,26 +9785,14 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch = function (li
 				A2(_elm_lang$core$Json_Decode$map, _aforemny$elm_mdc$Material_Internal_Msg$Dispatch, _p3));
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$inject = F5(
-	function (view, lift, a, b, c) {
-		return A3(
-			view,
-			a,
-			b,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: c
-			});
-	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Listener = F3(
+var _aforemny$elm_mdc$Material_Internal_Options$Listener = F3(
 	function (a, b, c) {
 		return {ctor: 'Listener', _0: a, _1: b, _2: c};
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$on1 = F3(
+var _aforemny$elm_mdc$Material_Internal_Options$on1 = F3(
 	function (event, lift, m) {
 		return A3(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$Listener,
+			_aforemny$elm_mdc$Material_Internal_Options$Listener,
 			event,
 			_elm_lang$core$Maybe$Nothing,
 			A2(
@@ -9882,57 +9800,8 @@ var _aforemny$elm_mdc$Material_Internal_Options_Internal$on1 = F3(
 				lift,
 				_elm_lang$core$Json_Decode$succeed(m)));
 	});
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Set = function (a) {
-	return {ctor: 'Set', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$option = _aforemny$elm_mdc$Material_Internal_Options_Internal$Set;
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$nativeControl = function (options) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{
-					nativeControl: A2(_elm_lang$core$Basics_ops['++'], config.nativeControl, options)
-				});
-		});
-};
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Many = function (a) {
-	return {ctor: 'Many', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Internal = function (a) {
-	return {ctor: 'Internal', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$attribute = _aforemny$elm_mdc$Material_Internal_Options_Internal$Internal;
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Attribute = function (a) {
-	return {ctor: 'Attribute', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$CSS = function (a) {
-	return {ctor: 'CSS', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Options_Internal$Class = function (a) {
-	return {ctor: 'Class', _0: a};
-};
-
-var _aforemny$elm_mdc$Material_Internal_Options$dispatch = function (_p0) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$Lift(
-		_elm_lang$core$Json_Decode$map(_p0));
-};
-var _aforemny$elm_mdc$Material_Internal_Options$onWithOptions = F2(
-	function (evt, options) {
-		return A2(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$Listener,
-			evt,
-			_elm_lang$core$Maybe$Just(options));
-	});
-var _aforemny$elm_mdc$Material_Internal_Options$onSubmit = function (f) {
-	return A3(
-		_aforemny$elm_mdc$Material_Internal_Options$onWithOptions,
-		'submit',
-		{preventDefault: true, stopPropagation: false},
-		A2(_elm_lang$core$Json_Decode$map, f, _elm_lang$html$Html_Events$targetValue));
-};
 var _aforemny$elm_mdc$Material_Internal_Options$on = function (event) {
-	return A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$Listener, event, _elm_lang$core$Maybe$Nothing);
+	return A2(_aforemny$elm_mdc$Material_Internal_Options$Listener, event, _elm_lang$core$Maybe$Nothing);
 };
 var _aforemny$elm_mdc$Material_Internal_Options$onClick = function (msg) {
 	return A2(
@@ -9982,11 +9851,11 @@ var _aforemny$elm_mdc$Material_Internal_Options$onMouseOut = function (msg) {
 		'mouseout',
 		_elm_lang$core$Json_Decode$succeed(msg));
 };
-var _aforemny$elm_mdc$Material_Internal_Options$onCheck = function (_p1) {
+var _aforemny$elm_mdc$Material_Internal_Options$onCheck = function (_p4) {
 	return A2(
 		_aforemny$elm_mdc$Material_Internal_Options$on,
 		'change',
-		A3(_elm_lang$core$Basics$flip, _elm_lang$core$Json_Decode$map, _elm_lang$html$Html_Events$targetChecked, _p1));
+		A3(_elm_lang$core$Basics$flip, _elm_lang$core$Json_Decode$map, _elm_lang$html$Html_Events$targetChecked, _p4));
 };
 var _aforemny$elm_mdc$Material_Internal_Options$onBlur = function (msg) {
 	return A2(
@@ -10006,72 +9875,207 @@ var _aforemny$elm_mdc$Material_Internal_Options$onInput = function (f) {
 		'input',
 		A2(_elm_lang$core$Json_Decode$map, f, _elm_lang$html$Html_Events$targetValue));
 };
-var _aforemny$elm_mdc$Material_Internal_Options$nativeControl = _aforemny$elm_mdc$Material_Internal_Options_Internal$nativeControl;
-var _aforemny$elm_mdc$Material_Internal_Options$attribute = function (_p2) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$Attribute(
-		A2(_elm_lang$html$Html_Attributes$map, _elm_lang$core$Basics$never, _p2));
-};
-var _aforemny$elm_mdc$Material_Internal_Options$aria = F2(
-	function (key, val) {
-		return _aforemny$elm_mdc$Material_Internal_Options_Internal$Attribute(
-			A2(
-				_elm_lang$html$Html_Attributes$attribute,
-				A2(_elm_lang$core$Basics_ops['++'], 'aria-', key),
-				val));
+var _aforemny$elm_mdc$Material_Internal_Options$onWithOptions = F2(
+	function (evt, options) {
+		return A2(
+			_aforemny$elm_mdc$Material_Internal_Options$Listener,
+			evt,
+			_elm_lang$core$Maybe$Just(options));
 	});
+var _aforemny$elm_mdc$Material_Internal_Options$onSubmit = function (f) {
+	return A3(
+		_aforemny$elm_mdc$Material_Internal_Options$onWithOptions,
+		'submit',
+		{preventDefault: true, stopPropagation: false},
+		A2(_elm_lang$core$Json_Decode$map, f, _elm_lang$html$Html_Events$targetValue));
+};
+var _aforemny$elm_mdc$Material_Internal_Options$Set = function (a) {
+	return {ctor: 'Set', _0: a};
+};
+var _aforemny$elm_mdc$Material_Internal_Options$option = _aforemny$elm_mdc$Material_Internal_Options$Set;
+var _aforemny$elm_mdc$Material_Internal_Options$nativeControl = function (options) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					nativeControl: A2(_elm_lang$core$Basics_ops['++'], config.nativeControl, options)
+				});
+		});
+};
+var _aforemny$elm_mdc$Material_Internal_Options$Many = function (a) {
+	return {ctor: 'Many', _0: a};
+};
+var _aforemny$elm_mdc$Material_Internal_Options$many = _aforemny$elm_mdc$Material_Internal_Options$Many;
+var _aforemny$elm_mdc$Material_Internal_Options$Internal = function (a) {
+	return {ctor: 'Internal', _0: a};
+};
+var _aforemny$elm_mdc$Material_Internal_Options$Attribute = function (a) {
+	return {ctor: 'Attribute', _0: a};
+};
 var _aforemny$elm_mdc$Material_Internal_Options$data = F2(
 	function (key, val) {
-		return _aforemny$elm_mdc$Material_Internal_Options_Internal$Attribute(
+		return _aforemny$elm_mdc$Material_Internal_Options$Attribute(
 			A2(
 				_elm_lang$html$Html_Attributes$attribute,
 				A2(_elm_lang$core$Basics_ops['++'], 'data-', key),
 				val));
 	});
-var _aforemny$elm_mdc$Material_Internal_Options$nop = _aforemny$elm_mdc$Material_Internal_Options_Internal$None;
-var _aforemny$elm_mdc$Material_Internal_Options$when = F2(
-	function (guard, prop) {
-		return guard ? prop : _aforemny$elm_mdc$Material_Internal_Options$nop;
+var _aforemny$elm_mdc$Material_Internal_Options$aria = F2(
+	function (key, val) {
+		return _aforemny$elm_mdc$Material_Internal_Options$Attribute(
+			A2(
+				_elm_lang$html$Html_Attributes$attribute,
+				A2(_elm_lang$core$Basics_ops['++'], 'aria-', key),
+				val));
 	});
-var _aforemny$elm_mdc$Material_Internal_Options$many = _aforemny$elm_mdc$Material_Internal_Options_Internal$Many;
+var _aforemny$elm_mdc$Material_Internal_Options$attribute = function (_p5) {
+	return _aforemny$elm_mdc$Material_Internal_Options$Attribute(
+		A2(_elm_lang$html$Html_Attributes$map, _elm_lang$core$Basics$never, _p5));
+};
+var _aforemny$elm_mdc$Material_Internal_Options$CSS = function (a) {
+	return {ctor: 'CSS', _0: a};
+};
 var _aforemny$elm_mdc$Material_Internal_Options$css = F2(
 	function (key, value) {
-		return _aforemny$elm_mdc$Material_Internal_Options_Internal$CSS(
+		return _aforemny$elm_mdc$Material_Internal_Options$CSS(
 			{ctor: '_Tuple2', _0: key, _1: value});
 	});
-var _aforemny$elm_mdc$Material_Internal_Options$cs = function (c) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$Class(c);
+var _aforemny$elm_mdc$Material_Internal_Options$Class = function (a) {
+	return {ctor: 'Class', _0: a};
 };
-var _aforemny$elm_mdc$Material_Internal_Options$styled = F2(
-	function (ctor, props) {
-		return ctor(
+var _aforemny$elm_mdc$Material_Internal_Options$cs = function (c) {
+	return _aforemny$elm_mdc$Material_Internal_Options$Class(c);
+};
+
+var _aforemny$elm_mdc$Material_Internal_Component$subs = F5(
+	function (ctor, get, subscriptions, lift, model) {
+		return _elm_lang$core$Platform_Sub$batch(
+			A3(
+				_elm_lang$core$Dict$foldl,
+				F3(
+					function (idx, model, ss) {
+						return {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Platform_Sub$map,
+								function (_p0) {
+									return lift(
+										A2(ctor, idx, _p0));
+								},
+								subscriptions(model)),
+							_1: ss
+						};
+					}),
+				{ctor: '[]'},
+				get(model)));
+	});
+var _aforemny$elm_mdc$Material_Internal_Component$generalise = F4(
+	function (update, lift, msg, model) {
+		return A2(
+			_elm_lang$core$Tuple$mapSecond,
+			_elm_lang$core$Platform_Cmd$map(lift),
 			A2(
-				_aforemny$elm_mdc$Material_Internal_Options_Internal$addAttributes,
-				_aforemny$elm_mdc$Material_Internal_Options_Internal$collect_(props),
-				{ctor: '[]'}));
+				_elm_lang$core$Tuple$mapFirst,
+				_elm_lang$core$Maybe$Just,
+				A2(update, msg, model)));
+	});
+var _aforemny$elm_mdc$Material_Internal_Component$react = F8(
+	function (get, set, ctor, update, lift, msg, idx, store) {
+		return A2(
+			_elm_lang$core$Tuple$mapFirst,
+			_elm_lang$core$Maybe$map(
+				A2(set, idx, store)),
+			A3(
+				update,
+				function (_p1) {
+					return lift(
+						A2(ctor, idx, _p1));
+				},
+				msg,
+				A2(get, idx, store)));
+	});
+var _aforemny$elm_mdc$Material_Internal_Component$render = F7(
+	function (get_model, view, ctor, lift, idx, store, options) {
+		return A3(
+			view,
+			function (_p2) {
+				return lift(
+					A2(ctor, idx, _p2));
+			},
+			A2(get_model, idx, store),
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Internal_Options$dispatch(lift),
+				_1: options
+			});
+	});
+var _aforemny$elm_mdc$Material_Internal_Component$indexed = F3(
+	function (get_model, set_model, model0) {
+		var set_ = F3(
+			function (idx, store, model) {
+				return A2(
+					set_model,
+					A3(
+						_elm_lang$core$Dict$insert,
+						idx,
+						model,
+						get_model(store)),
+					store);
+			});
+		var get_ = F2(
+			function (idx, store) {
+				return A2(
+					_elm_lang$core$Maybe$withDefault,
+					model0,
+					A2(
+						_elm_lang$core$Dict$get,
+						idx,
+						get_model(store)));
+			});
+		return {ctor: '_Tuple2', _0: get_, _1: set_};
 	});
 
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size48 = A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'font-size', '48px');
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size36 = A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'font-size', '36px');
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size24 = A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'font-size', '24px');
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size18 = A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'font-size', '18px');
+var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$node = function (ctor) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{node: ctor});
+		});
+};
+var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$anchor = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$node('a');
+var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$button = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$node('button');
+var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$span = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$node('span');
+var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$defaultConfig = {node: 'i'};
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$view = F2(
 	function (options, name) {
-		return A3(
-			_aforemny$elm_mdc$Material_Internal_Options$styled,
-			_elm_lang$html$Html$i,
+		var _p0 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Icon_Implementation$defaultConfig, options);
+		var summary = _p0;
+		var config = _p0.config;
+		return A5(
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
+			summary,
+			_elm_lang$html$Html$node(config.node),
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('material-icons'),
 				_1: options
 			},
+			{ctor: '[]'},
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(name),
 				_1: {ctor: '[]'}
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$defaultConfig = {};
-var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$Config = {};
+var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$Config = function (a) {
+	return {node: a};
+};
 
 var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
 var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
@@ -10254,7 +10258,7 @@ var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$_p6 = A3(
 	_aforemny$elm_mdc$Material_Internal_Ripple_Model$defaultModel);
 var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$get = _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$_p6._0;
 var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$set = _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$_p6._1;
-var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$accent = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$accent = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -10262,7 +10266,7 @@ var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$accent = _aforemny
 				color: _elm_lang$core$Maybe$Just('accent')
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$primary = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$primary = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -10362,7 +10366,7 @@ var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$view = F4(
 					}
 				}
 			});
-		var summary = _aforemny$elm_mdc$Material_Internal_Options_Internal$collect(
+		var summary = _aforemny$elm_mdc$Material_Internal_Options$collect(
 			{ctor: '_Tuple0'});
 		var geometry = model.geometry;
 		var surfaceWidth = A2(
@@ -10561,7 +10565,7 @@ var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$view = F4(
 				_0: isVisible ? _elm_lang$html$Html$text(cssVariableHack.text) : _elm_lang$html$Html$text(''),
 				_1: {ctor: '[]'}
 			});
-		var _p13 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$defaultConfig, options);
+		var _p13 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$defaultConfig, options);
 		var config = _p13.config;
 		var properties = _aforemny$elm_mdc$Material_Internal_Options$many(
 			{
@@ -10756,14 +10760,14 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_Button_Model$defaultModel);
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$get = _aforemny$elm_mdc$Material_Internal_Button_Implementation$_p0._0;
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$set = _aforemny$elm_mdc$Material_Internal_Button_Implementation$_p0._1;
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (options) {
 		return _elm_lang$core$Native_Utils.update(
 			options,
 			{disabled: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$link = function (href) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (options) {
 			return _elm_lang$core$Native_Utils.update(
 				options,
@@ -10772,7 +10776,7 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$link = function (h
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$ripple = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$ripple = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (options) {
 		return _elm_lang$core$Native_Utils.update(
 			options,
@@ -10784,7 +10788,7 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$stroked = _aforemn
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$unelevated = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--unelevated');
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$raised = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--raised');
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$icon = function (str) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -10805,11 +10809,11 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$button = F4(
 			},
 			model.ripple,
 			{ctor: '[]'});
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Button_Implementation$defaultConfig, options);
+		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Button_Implementation$defaultConfig, options);
 		var summary = _p2;
 		var config = _p2.config;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			(!_elm_lang$core$Native_Utils.eq(config.link, _elm_lang$core$Maybe$Nothing)) ? _elm_lang$html$Html$a : _elm_lang$html$Html$button,
 			{
@@ -10832,7 +10836,7 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$button = F4(
 								_0: A2(
 									_aforemny$elm_mdc$Material_Internal_Options$when,
 									(!_elm_lang$core$Native_Utils.eq(config.link, _elm_lang$core$Maybe$Nothing)) && (!config.disabled),
-									_aforemny$elm_mdc$Material_Internal_Options_Internal$attribute(
+									_aforemny$elm_mdc$Material_Internal_Options$attribute(
 										_elm_lang$html$Html_Attributes$href(
 											A2(_elm_lang$core$Maybe$withDefault, '', config.link)))),
 								_1: {
@@ -10840,7 +10844,7 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$button = F4(
 									_0: A2(
 										_aforemny$elm_mdc$Material_Internal_Options$when,
 										config.disabled,
-										_aforemny$elm_mdc$Material_Internal_Options_Internal$attribute(
+										_aforemny$elm_mdc$Material_Internal_Options$attribute(
 											_elm_lang$html$Html_Attributes$disabled(true))),
 									_1: {
 										ctor: '::',
@@ -10939,7 +10943,6 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$Config = F4(
 		return {ripple: a, link: b, disabled: c, icon: d};
 	});
 
-var _aforemny$elm_mdc$Material_Options$dispatch = _aforemny$elm_mdc$Material_Internal_Options$dispatch;
 var _aforemny$elm_mdc$Material_Options$onWithOptions = _aforemny$elm_mdc$Material_Internal_Options$onWithOptions;
 var _aforemny$elm_mdc$Material_Options$onSubmit = _aforemny$elm_mdc$Material_Internal_Options$onSubmit;
 var _aforemny$elm_mdc$Material_Options$onInput = _aforemny$elm_mdc$Material_Internal_Options$onInput;
@@ -10955,7 +10958,6 @@ var _aforemny$elm_mdc$Material_Options$onMouseDown = _aforemny$elm_mdc$Material_
 var _aforemny$elm_mdc$Material_Options$onDoubleClick = _aforemny$elm_mdc$Material_Internal_Options$onDoubleClick;
 var _aforemny$elm_mdc$Material_Options$onClick = _aforemny$elm_mdc$Material_Internal_Options$onClick;
 var _aforemny$elm_mdc$Material_Options$on = _aforemny$elm_mdc$Material_Internal_Options$on;
-var _aforemny$elm_mdc$Material_Options$nativeControl = _aforemny$elm_mdc$Material_Internal_Options$nativeControl;
 var _aforemny$elm_mdc$Material_Options$attribute = _aforemny$elm_mdc$Material_Internal_Options$attribute;
 var _aforemny$elm_mdc$Material_Options$aria = _aforemny$elm_mdc$Material_Internal_Options$aria;
 var _aforemny$elm_mdc$Material_Options$data = _aforemny$elm_mdc$Material_Internal_Options$data;
@@ -11389,10 +11391,10 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$animationState =
 		} while(false);
 		return _elm_lang$core$Maybe$Nothing;
 	});
-var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options_Internal$nativeControl;
+var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options$nativeControl;
 var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checked = function (value) {
 	var state = value ? _aforemny$elm_mdc$Material_Internal_Checkbox_Model$Checked : _aforemny$elm_mdc$Material_Internal_Checkbox_Model$Unchecked;
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -11401,7 +11403,7 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checked = functi
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -11436,14 +11438,14 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checkbox = F4(
 				return _aforemny$elm_mdc$Material_Internal_Options$nop;
 			}
 		};
-		var _p4 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$defaultConfig, options);
+		var _p4 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$defaultConfig, options);
 		var summary = _p4;
 		var config = _p4.config;
 		var configState = config.state;
 		var currentState = A2(_elm_lang$core$Maybe$withDefault, configState, model.lastKnownState);
 		var stateChangedOrUninitialized = _elm_lang$core$Native_Utils.eq(model.lastKnownState, _elm_lang$core$Maybe$Nothing) || (!_elm_lang$core$Native_Utils.eq(currentState, configState));
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -11503,7 +11505,7 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checkbox = F4(
 			{
 				ctor: '::',
 				_0: A4(
-					_aforemny$elm_mdc$Material_Internal_Options_Internal$applyNativeControl,
+					_aforemny$elm_mdc$Material_Internal_Options$applyNativeControl,
 					summary,
 					_elm_lang$html$Html$input,
 					{
@@ -11513,7 +11515,7 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checkbox = F4(
 							ctor: '::',
 							_0: function (_p5) {
 								return _aforemny$elm_mdc$Material_Internal_Options$many(
-									A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options_Internal$attribute, _p5));
+									A2(_elm_lang$core$List$map, _aforemny$elm_mdc$Material_Internal_Options$attribute, _p5));
 							}(
 								{
 									ctor: '::',
@@ -11638,22 +11640,7 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checkbox = F4(
 				}
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checkbox,
-			_aforemny$elm_mdc$Material_Internal_Msg$CheckboxMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$get, _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$checkbox, _aforemny$elm_mdc$Material_Internal_Msg$CheckboxMsg);
 var _aforemny$elm_mdc$Material_Internal_Checkbox_Implementation$update = F3(
 	function (_p6, msg, model) {
 		var _p7 = msg;
@@ -11859,22 +11846,7 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p1 = A3(
 	_aforemny$elm_mdc$Material_Internal_Dialog_Model$defaultModel);
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p1._0;
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$set = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p1._1;
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog,
-			_aforemny$elm_mdc$Material_Internal_Msg$DialogMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog, _aforemny$elm_mdc$Material_Internal_Msg$DialogMsg);
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$update = F3(
 	function (lift, msg, model) {
 		var _p2 = msg;
@@ -12535,7 +12507,7 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$header = function 
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig = {};
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$view = F5(
 	function (className, lift, model, options, nodes) {
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig, options);
+		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig, options);
 		var summary = _p2;
 		var config = _p2.config;
 		return A3(
@@ -12605,22 +12577,13 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$view = F5(
 				_1: {ctor: '[]'}
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$render = F5(
-	function (className, lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Drawer_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Drawer_Implementation$view(className),
-			_aforemny$elm_mdc$Material_Internal_Msg$DrawerMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$render = function (className) {
+	return A3(
+		_aforemny$elm_mdc$Material_Internal_Component$render,
+		_aforemny$elm_mdc$Material_Internal_Drawer_Implementation$get,
+		_aforemny$elm_mdc$Material_Internal_Drawer_Implementation$view(className),
+		_aforemny$elm_mdc$Material_Internal_Msg$DrawerMsg);
+};
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$update = F3(
 	function (lift, msg, model) {
 		update:
@@ -12709,7 +12672,7 @@ var _aforemny$elm_mdc$Material_Internal_Fab_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_Fab_Model$defaultModel);
 var _aforemny$elm_mdc$Material_Internal_Fab_Implementation$get = _aforemny$elm_mdc$Material_Internal_Fab_Implementation$_p0._0;
 var _aforemny$elm_mdc$Material_Internal_Fab_Implementation$set = _aforemny$elm_mdc$Material_Internal_Fab_Implementation$_p0._1;
-var _aforemny$elm_mdc$Material_Internal_Fab_Implementation$ripple = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Fab_Implementation$ripple = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -12729,11 +12692,11 @@ var _aforemny$elm_mdc$Material_Internal_Fab_Implementation$fab = F4(
 			},
 			model.ripple,
 			{ctor: '[]'});
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Fab_Implementation$defaultConfig, options);
+		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Fab_Implementation$defaultConfig, options);
 		var summary = _p2;
 		var config = _p2.config;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$button,
 			{
@@ -13069,7 +13032,7 @@ var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$get = _aforemn
 var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$set = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$_p0._1;
 var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-icon-toggle--disabled');
 var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$label = function (label) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -13077,7 +13040,7 @@ var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$label = functi
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$icon = function (icon) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -13085,7 +13048,7 @@ var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$icon = functio
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$className = function (className) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -13094,7 +13057,7 @@ var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$className = fu
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$on = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$on = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -13117,11 +13080,11 @@ var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$iconToggle = F
 			},
 			model.ripple,
 			{ctor: '[]'});
-		var _p3 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$defaultConfig, options);
+		var _p3 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$defaultConfig, options);
 		var summary = _p3;
 		var config = _p3.config;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$core$Native_Utils.eq(config.inner, _elm_lang$core$Maybe$Nothing) ? _elm_lang$html$Html$i : _elm_lang$html$Html$span,
 			{
@@ -13499,14 +13462,14 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$bottomRightCorner = 
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$bottomLeftCorner = {bottom: true, center: false, right: false, flipRtl: false};
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$topRightCorner = {bottom: false, center: false, right: true, flipRtl: false};
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$topLeftCorner = {bottom: false, center: false, right: false, flipRtl: false};
-var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$quickOpen = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$quickOpen = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{quickOpen: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$anchorMargin = function (anchorMargin) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -13514,7 +13477,7 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$anchorMargin = funct
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$anchorCorner = function (anchorCorner) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -13522,7 +13485,7 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$anchorCorner = funct
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$index = function (index) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -13570,7 +13533,7 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu = F4(
 			});
 		var isOpen = model.animating ? (model.open && (!_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing))) : model.open;
 		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Menu_Model$defaultGeometry, model.geometry);
-		var _p37 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Menu_Implementation$defaultConfig, options);
+		var _p37 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Menu_Implementation$defaultConfig, options);
 		var summary = _p37;
 		var config = _p37.config;
 		var _p38 = A2(_aforemny$elm_mdc$Material_Internal_Menu_Implementation$autoPosition, config, geometry);
@@ -13578,7 +13541,7 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu = F4(
 		var transformOrigin = _p38.transformOrigin;
 		var maxHeight = _p38.maxHeight;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -13792,14 +13755,14 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu = F4(
 										return summary;
 									}
 								}(
-									A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, item.options));
+									A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, item.options));
 								var focusIndex = i - numDividersBeforeIndex(i);
 								var hasFocus = _elm_lang$core$Native_Utils.eq(
 									_elm_lang$core$Maybe$Just(focusIndex),
 									focusedItemAtIndex);
 								var autoFocus = (hasFocus && model.open) ? A2(_aforemny$elm_mdc$Material_Internal_Options$data, 'autofocus', '') : _aforemny$elm_mdc$Material_Internal_Options$nop;
 								return item.divider ? A5(
-									_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+									_aforemny$elm_mdc$Material_Internal_Options$apply,
 									summary,
 									_elm_lang$html$Html$hr,
 									{
@@ -13809,7 +13772,7 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu = F4(
 									},
 									{ctor: '[]'},
 									item.childs) : A5(
-									_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+									_aforemny$elm_mdc$Material_Internal_Options$apply,
 									summary,
 									_elm_lang$html$Html$li,
 									{
@@ -14084,14 +14047,14 @@ var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_RadioButton_Model$defaultModel);
 var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$get = _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$_p0._0;
 var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$set = _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$_p0._1;
-var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options_Internal$nativeControl;
-var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$selected = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options$nativeControl;
+var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$selected = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{value: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -14114,11 +14077,11 @@ var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$radioButton =
 			},
 			model.ripple,
 			{ctor: '[]'});
-		var _p3 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$defaultConfig, options);
+		var _p3 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$defaultConfig, options);
 		var summary = _p3;
 		var config = _p3.config;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -14143,7 +14106,7 @@ var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$radioButton =
 			{
 				ctor: '::',
 				_0: A4(
-					_aforemny$elm_mdc$Material_Internal_Options_Internal$applyNativeControl,
+					_aforemny$elm_mdc$Material_Internal_Options$applyNativeControl,
 					summary,
 					_elm_lang$html$Html$input,
 					{
@@ -14151,11 +14114,11 @@ var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$radioButton =
 						_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-radio__native-control'),
 						_1: {
 							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$attribute(
+							_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
 								_elm_lang$html$Html_Attributes$type_('radio')),
 							_1: {
 								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$attribute(
+								_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
 									_elm_lang$html$Html_Attributes$checked(config.value)),
 								_1: {
 									ctor: '::',
@@ -14245,22 +14208,7 @@ var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$radioButton =
 				}
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$radioButton,
-			_aforemny$elm_mdc$Material_Internal_Msg$RadioButtonMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$get, _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$radioButton, _aforemny$elm_mdc$Material_Internal_Msg$RadioButtonMsg);
 var _aforemny$elm_mdc$Material_Internal_RadioButton_Implementation$update = F3(
 	function (lift, msg, model) {
 		var _p5 = msg;
@@ -14401,14 +14349,14 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p2 = A3(
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$get = _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p2._0;
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$set = _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p2._1;
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$box = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-select--box');
-var _aforemny$elm_mdc$Material_Internal_Select_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Select_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{disabled: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$selectedText = function (selectedText) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -14418,7 +14366,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$selectedText = fun
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$index = function (index) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -14428,7 +14376,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$index = function (
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$label = function (_p3) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (value, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -14443,7 +14391,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Select_Model$defaultGeometry, model.geometry);
 		var left = geometry.boundingClientRect.left;
 		var top = geometry.boundingClientRect.top;
-		var _p4 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Select_Implementation$defaultConfig, options);
+		var _p4 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Select_Implementation$defaultConfig, options);
 		var summary = _p4;
 		var config = _p4.config;
 		var itemOffsetTop = A2(
@@ -14468,7 +14416,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 				_elm_lang$core$Basics$toString(itemOffsetTop),
 				'px'));
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -14671,22 +14619,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 				}
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Select_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Select_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Select_Implementation$select,
-			_aforemny$elm_mdc$Material_Internal_Msg$SelectMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Select_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Select_Implementation$get, _aforemny$elm_mdc$Material_Internal_Select_Implementation$select, _aforemny$elm_mdc$Material_Internal_Msg$SelectMsg);
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$update = F3(
 	function (lift, msg, model) {
 		var _p9 = msg;
@@ -14746,14 +14679,14 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$Config = F4(
 		return {label: a, index: b, selectedText: c, disabled: d};
 	});
 
-var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$trackMarkers = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$trackMarkers = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{trackMarkers: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$steps = function (_p0) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (steps, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -14762,7 +14695,7 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$steps = function (
 			})(_p0));
 };
 var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$onInput = function (_p1) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (decoder, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -14773,7 +14706,7 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$onInput = function
 			})(_p1));
 };
 var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$onChange = function (_p2) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (decoder, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -14999,19 +14932,19 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$disabled = _aforem
 		_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-slider--disabled'),
 		_1: {
 			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$attribute(
+			_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
 				_elm_lang$html$Html_Attributes$disabled(true)),
 			_1: {ctor: '[]'}
 		}
 	});
-var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$discrete = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$discrete = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{discrete: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$max = function (_p9) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (max, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -15022,7 +14955,7 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$max = function (_p
 			})(_p9));
 };
 var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$min = function (_p10) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (min, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -15033,7 +14966,7 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$min = function (_p
 			})(_p10));
 };
 var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$value = function (_p11) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (value, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -15140,7 +15073,7 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$slider = F4(
 			}
 		};
 		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Slider_Model$defaultGeometry, model.geometry);
-		var _p15 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Slider_Implementation$defaultConfig, options);
+		var _p15 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Slider_Implementation$defaultConfig, options);
 		var summary = _p15;
 		var config = _p15.config;
 		var continuousValue = model.active ? A2(_elm_lang$core$Maybe$withDefault, config.value, model.activeValue) : config.value;
@@ -15210,7 +15143,7 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$slider = F4(
 			{
 				ctor: '::',
 				_0: A5(
-					_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+					_aforemny$elm_mdc$Material_Internal_Options$apply,
 					summary,
 					_elm_lang$html$Html$div,
 					{
@@ -15941,22 +15874,7 @@ var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$slider = F4(
 				_1: {ctor: '[]'}
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Slider_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Slider_Implementation$slider,
-			_aforemny$elm_mdc$Material_Internal_Msg$SliderMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Slider_Implementation$get, _aforemny$elm_mdc$Material_Internal_Slider_Implementation$slider, _aforemny$elm_mdc$Material_Internal_Msg$SliderMsg);
 var _aforemny$elm_mdc$Material_Internal_Slider_Implementation$update = F3(
 	function (lift, msg, model) {
 		update:
@@ -16107,7 +16025,7 @@ var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$alignStart = _af
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$defaultConfig = {};
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$snackbar = F4(
 	function (lift, model, options, _p1) {
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$defaultConfig, options);
+		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$defaultConfig, options);
 		var summary = _p2;
 		var config = _p2.config;
 		var isActive = function () {
@@ -16161,7 +16079,7 @@ var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$snackbar = F4(
 				contents),
 			_elm_lang$core$Maybe$Just(true)) && multiline;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -16508,14 +16426,14 @@ var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_Switch_Model$defaultModel);
 var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$get = _aforemny$elm_mdc$Material_Internal_Switch_Implementation$_p0._0;
 var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$set = _aforemny$elm_mdc$Material_Internal_Switch_Implementation$_p0._1;
-var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options_Internal$nativeControl;
-var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$on = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options$nativeControl;
+var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$on = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{value: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -16529,11 +16447,11 @@ var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$defaultConfig = {
 var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$switch = F4(
 	function (lift, model, options, _p1) {
 		var preventDefault = {preventDefault: true, stopPropagation: false};
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Switch_Implementation$defaultConfig, options);
+		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Switch_Implementation$defaultConfig, options);
 		var summary = _p2;
 		var config = _p2.config;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -16545,7 +16463,7 @@ var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$switch = F4(
 			{
 				ctor: '::',
 				_0: A4(
-					_aforemny$elm_mdc$Material_Internal_Options_Internal$applyNativeControl,
+					_aforemny$elm_mdc$Material_Internal_Options$applyNativeControl,
 					summary,
 					_elm_lang$html$Html$input,
 					{
@@ -16553,11 +16471,11 @@ var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$switch = F4(
 						_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-switch__native-control'),
 						_1: {
 							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$attribute(
+							_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
 								_elm_lang$html$Html_Attributes$type_('checkbox')),
 							_1: {
 								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$attribute(
+								_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
 									_elm_lang$html$Html_Attributes$checked(config.value)),
 								_1: {
 									ctor: '::',
@@ -16631,22 +16549,7 @@ var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$switch = F4(
 				}
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Switch_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Switch_Implementation$switch,
-			_aforemny$elm_mdc$Material_Internal_Msg$SwitchMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Switch_Implementation$get, _aforemny$elm_mdc$Material_Internal_Switch_Implementation$switch, _aforemny$elm_mdc$Material_Internal_Msg$SwitchMsg);
 var _aforemny$elm_mdc$Material_Internal_Switch_Implementation$update = F3(
 	function (_p4, msg, model) {
 		var _p5 = msg;
@@ -16843,13 +16746,13 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tab = F2(
 	function (options, childs) {
 		return {options: options, childs: childs};
 	});
-var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$indicator = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$indicator = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{indicator: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$scrolling = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$scrolling = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -16907,7 +16810,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tabs = F4(
 					'px)'));
 		}();
 		var numTabs = _elm_lang$core$List$length(nodes);
-		var summary = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$defaultConfig, options);
+		var summary = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$defaultConfig, options);
 		var config = summary.config;
 		var tabBarScroller = function (tabBar) {
 			return A3(
@@ -17074,7 +16977,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tabs = F4(
 		};
 		return (config.scroller ? tabBarScroller : _elm_lang$core$Basics$identity)(
 			A5(
-				_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+				_aforemny$elm_mdc$Material_Internal_Options$apply,
 				summary,
 				_elm_lang$html$Html$nav,
 				{
@@ -17148,122 +17051,128 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tabs = F4(
 											{ctor: '[]'});
 										return {
 											ctor: '::',
-											_0: A3(
-												_aforemny$elm_mdc$Material_Internal_Options$styled,
+											_0: A2(
 												_elm_lang$html$Html$a,
-												{
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-tab'),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_aforemny$elm_mdc$Material_Internal_Options$when,
-															_elm_lang$core$Native_Utils.eq(model.index, index),
-															_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-tab--active')),
-														_1: {
+												A2(
+													_aforemny$elm_mdc$Material_Internal_Options$addAttributes,
+													A2(
+														_aforemny$elm_mdc$Material_Internal_Options$recollect,
+														_elm_lang$core$Native_Utils.update(
+															summary,
+															{
+																classes: {ctor: '[]'},
+																css: {ctor: '[]'},
+																attrs: {ctor: '[]'},
+																internal: {ctor: '[]'},
+																config: _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$defaultConfig,
+																dispatch: _aforemny$elm_mdc$Material_Internal_Dispatch$clear(summary.dispatch)
+															}),
+														{
 															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
-																_elm_lang$html$Html_Attributes$tabindex(0)),
+															_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-tab'),
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_aforemny$elm_mdc$Material_Internal_Options$on,
-																	'click',
-																	A2(
-																		_elm_lang$core$Json_Decode$map,
-																		function (_p12) {
-																			return lift(
-																				A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$Select, index, _p12));
-																		},
-																		_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$decodeGeometryOnTab(config.indicator))),
+																	_aforemny$elm_mdc$Material_Internal_Options$when,
+																	_elm_lang$core$Native_Utils.eq(model.index, index),
+																	_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-tab--active')),
 																_1: {
 																	ctor: '::',
-																	_0: A2(
-																		_aforemny$elm_mdc$Material_Internal_Options$on,
-																		'keydown',
-																		A2(
-																			_elm_lang$core$Json_Decode$map,
-																			lift,
-																			A4(
-																				_elm_lang$core$Json_Decode$map3,
-																				F3(
-																					function (key, keyCode, geometry) {
-																						return (_elm_lang$core$Native_Utils.eq(
-																							key,
-																							_elm_lang$core$Maybe$Just('Enter')) || _elm_lang$core$Native_Utils.eq(keyCode, 13)) ? A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$Select, index, geometry) : _aforemny$elm_mdc$Material_Internal_Tabs_Model$NoOp;
-																					}),
-																				_elm_lang$core$Json_Decode$oneOf(
-																					{
-																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$core$Json_Decode$map,
-																							_elm_lang$core$Maybe$Just,
-																							A2(
-																								_elm_lang$core$Json_Decode$at,
-																								{
-																									ctor: '::',
-																									_0: 'key',
-																									_1: {ctor: '[]'}
-																								},
-																								_elm_lang$core$Json_Decode$string)),
-																						_1: {
-																							ctor: '::',
-																							_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
-																							_1: {ctor: '[]'}
-																						}
-																					}),
-																				A2(
-																					_elm_lang$core$Json_Decode$at,
-																					{
-																						ctor: '::',
-																						_0: 'keyCode',
-																						_1: {ctor: '[]'}
-																					},
-																					_elm_lang$core$Json_Decode$int),
-																				_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$decodeGeometryOnTab(config.indicator)))),
+																	_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
+																		_elm_lang$html$Html_Attributes$tabindex(0)),
 																	_1: {
 																		ctor: '::',
-																		_0: _aforemny$elm_mdc$Material_Internal_Options$many(
-																			{
-																				ctor: '::',
-																				_0: ripple.interactionHandler,
-																				_1: {
-																					ctor: '::',
-																					_0: ripple.properties,
-																					_1: {ctor: '[]'}
-																				}
-																			}),
+																		_0: A2(
+																			_aforemny$elm_mdc$Material_Internal_Options$on,
+																			'click',
+																			A2(
+																				_elm_lang$core$Json_Decode$map,
+																				function (_p12) {
+																					return lift(
+																						A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$Select, index, _p12));
+																				},
+																				_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$decodeGeometryOnTab(config.indicator))),
 																		_1: {
 																			ctor: '::',
 																			_0: A2(
-																				_aforemny$elm_mdc$Material_Internal_Options$when,
-																				config.scroller,
+																				_aforemny$elm_mdc$Material_Internal_Options$on,
+																				'keydown',
 																				A2(
-																					_aforemny$elm_mdc$Material_Internal_Options$on,
-																					'focus',
-																					A2(
-																						_elm_lang$core$Json_Decode$map,
-																						function (_p13) {
-																							return lift(
-																								A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$Focus, index, _p13));
-																						},
+																					_elm_lang$core$Json_Decode$map,
+																					lift,
+																					A4(
+																						_elm_lang$core$Json_Decode$map3,
+																						F3(
+																							function (key, keyCode, geometry) {
+																								return (_elm_lang$core$Native_Utils.eq(
+																									key,
+																									_elm_lang$core$Maybe$Just('Enter')) || _elm_lang$core$Native_Utils.eq(keyCode, 13)) ? A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$Select, index, geometry) : _aforemny$elm_mdc$Material_Internal_Tabs_Model$NoOp;
+																							}),
+																						_elm_lang$core$Json_Decode$oneOf(
+																							{
+																								ctor: '::',
+																								_0: A2(
+																									_elm_lang$core$Json_Decode$map,
+																									_elm_lang$core$Maybe$Just,
+																									A2(
+																										_elm_lang$core$Json_Decode$at,
+																										{
+																											ctor: '::',
+																											_0: 'key',
+																											_1: {ctor: '[]'}
+																										},
+																										_elm_lang$core$Json_Decode$string)),
+																								_1: {
+																									ctor: '::',
+																									_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
+																									_1: {ctor: '[]'}
+																								}
+																							}),
+																						A2(
+																							_elm_lang$core$Json_Decode$at,
+																							{
+																								ctor: '::',
+																								_0: 'keyCode',
+																								_1: {ctor: '[]'}
+																							},
+																							_elm_lang$core$Json_Decode$int),
 																						_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$decodeGeometryOnTab(config.indicator)))),
 																			_1: {
 																				ctor: '::',
-																				_0: _aforemny$elm_mdc$Material_Internal_Options$dispatch(
-																					function (_p14) {
-																						return lift(
-																							_aforemny$elm_mdc$Material_Internal_Tabs_Model$Dispatch(_p14));
+																				_0: _aforemny$elm_mdc$Material_Internal_Options$many(
+																					{
+																						ctor: '::',
+																						_0: ripple.interactionHandler,
+																						_1: {
+																							ctor: '::',
+																							_0: ripple.properties,
+																							_1: {ctor: '[]'}
+																						}
 																					}),
-																				_1: _p10.options
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						_aforemny$elm_mdc$Material_Internal_Options$when,
+																						config.scroller,
+																						A2(
+																							_aforemny$elm_mdc$Material_Internal_Options$on,
+																							'focus',
+																							A2(
+																								_elm_lang$core$Json_Decode$map,
+																								function (_p13) {
+																									return lift(
+																										A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$Focus, index, _p13));
+																								},
+																								_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$decodeGeometryOnTab(config.indicator)))),
+																					_1: _p10.options
+																				}
 																			}
 																		}
 																	}
 																}
 															}
-														}
-													}
-												},
+														}),
+													{ctor: '[]'}),
 												A2(
 													_elm_lang$core$Basics_ops['++'],
 													_p10.childs,
@@ -17320,22 +17229,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tabs = F4(
 						}
 					})));
 	});
-var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tabs,
-			_aforemny$elm_mdc$Material_Internal_Msg$TabsMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$get, _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tabs, _aforemny$elm_mdc$Material_Internal_Msg$TabsMsg);
 var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 	function (lift, msg, model) {
 		update:
@@ -17366,32 +17260,32 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 					return A2(normalizeForRtl, scrollTargetOffsetLeft, scrollTargetOffsetWidth);
 				});
 			var isRtl = false;
-			var _p15 = msg;
-			switch (_p15.ctor) {
+			var _p14 = msg;
+			switch (_p14.ctor) {
 				case 'RippleMsg':
-					var _p18 = _p15._0;
-					var _p16 = A2(
+					var _p17 = _p14._0;
+					var _p15 = A2(
 						_aforemny$elm_mdc$Material_Internal_Ripple_Implementation$update,
-						_p15._1,
+						_p14._1,
 						A2(
 							_elm_lang$core$Maybe$withDefault,
 							_aforemny$elm_mdc$Material_Internal_Ripple_Model$defaultModel,
-							A2(_elm_lang$core$Dict$get, _p18, model.ripples)));
-					var ripple = _p16._0;
-					var effects = _p16._1;
+							A2(_elm_lang$core$Dict$get, _p17, model.ripples)));
+					var ripple = _p15._0;
+					var effects = _p15._1;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									ripples: A3(_elm_lang$core$Dict$insert, _p18, ripple, model.ripples)
+									ripples: A3(_elm_lang$core$Dict$insert, _p17, ripple, model.ripples)
 								})),
 						_1: A2(
 							_elm_lang$core$Platform_Cmd$map,
-							function (_p17) {
+							function (_p16) {
 								return lift(
-									A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$RippleMsg, _p18, _p17));
+									A2(_aforemny$elm_mdc$Material_Internal_Tabs_Model$RippleMsg, _p17, _p16));
 							},
 							effects)
 					};
@@ -17399,59 +17293,59 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Nothing,
-						_1: _aforemny$elm_mdc$Material_Internal_Dispatch$forward(_p15._0)
+						_1: _aforemny$elm_mdc$Material_Internal_Dispatch$forward(_p14._0)
 					};
 				case 'NoOp':
 					return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
 				case 'Select':
-					var _p19 = _p15._0;
+					var _p18 = _p14._0;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									index: _p19,
-									scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p15._1, _p19)
+									index: _p18,
+									scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p14._1, _p18)
 								})),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				case 'ScrollBack':
-					var _p29 = _p15._0;
+					var _p28 = _p14._0;
 					var currentTranslateOffset = model.translateOffset;
-					var scrollFrameWidth = _p29.scrollFrame.offsetWidth;
-					var tabBarWidth = _p29.tabBar.offsetWidth;
+					var scrollFrameWidth = _p28.scrollFrame.offsetWidth;
+					var tabBarWidth = _p28.tabBar.offsetWidth;
 					var loop = F2(
-						function (_p21, _p20) {
-							var _p22 = _p21;
-							var _p26 = _p22._1;
-							var _p25 = _p22._0;
-							var _p23 = _p20;
-							var _p24 = _p23;
-							if (!_elm_lang$core$Native_Utils.eq(_p23.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
-								return _p24;
+						function (_p20, _p19) {
+							var _p21 = _p20;
+							var _p25 = _p21._1;
+							var _p24 = _p21._0;
+							var _p22 = _p19;
+							var _p23 = _p22;
+							if (!_elm_lang$core$Native_Utils.eq(_p22.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
+								return _p23;
 							} else {
-								var tabOffsetLeft = _p26.offsetLeft;
+								var tabOffsetLeft = _p25.offsetLeft;
 								var tabBarWidthLessTabOffsetLeft = tabBarWidth - tabOffsetLeft;
 								var tabIsNotOccluded = (!isRtl) ? (_elm_lang$core$Native_Utils.cmp(tabOffsetLeft, currentTranslateOffset) > 0) : (_elm_lang$core$Native_Utils.cmp(tabBarWidthLessTabOffsetLeft, currentTranslateOffset) > 0);
 								if (tabIsNotOccluded) {
-									return _p24;
+									return _p23;
 								} else {
-									var newTabWidthAccumulator = _p23.tabWidthAccumulator + _p26.offsetWidth;
+									var newTabWidthAccumulator = _p22.tabWidthAccumulator + _p25.offsetWidth;
 									var scrollTargetDetermined = _elm_lang$core$Native_Utils.cmp(newTabWidthAccumulator, scrollFrameWidth) > 0;
 									var newScrollTargetIndex = scrollTargetDetermined ? _elm_lang$core$Maybe$Just(
-										isRtl ? (_p25 + 1) : _p25) : _elm_lang$core$Maybe$Nothing;
+										isRtl ? (_p24 + 1) : _p24) : _elm_lang$core$Maybe$Nothing;
 									return {scrollTargetIndex: newScrollTargetIndex, tabWidthAccumulator: newTabWidthAccumulator};
 								}
 							}
 						});
-					var scrollTargetIndex = function (_p27) {
+					var scrollTargetIndex = function (_p26) {
 						return A2(
 							_elm_lang$core$Maybe$withDefault,
 							0,
 							function (_) {
 								return _.scrollTargetIndex;
-							}(_p27));
+							}(_p26));
 					}(
 						A3(
 							_elm_lang$core$List$foldl,
@@ -17464,18 +17358,18 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 										function (v0, v1) {
 											return {ctor: '_Tuple2', _0: v0, _1: v1};
 										}),
-									_p29.tabs))));
-					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p29, scrollTargetIndex);
-					var _p28 = A2(indicatorEnabledStates, _p29, translateOffset);
-					var forwardIndicator = _p28.forwardIndicator;
-					var backIndicator = _p28.backIndicator;
+									_p28.tabs))));
+					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p28, scrollTargetIndex);
+					var _p27 = A2(indicatorEnabledStates, _p28, translateOffset);
+					var forwardIndicator = _p27.forwardIndicator;
+					var backIndicator = _p27.backIndicator;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									geometry: _elm_lang$core$Maybe$Just(_p29),
+									geometry: _elm_lang$core$Maybe$Just(_p28),
 									translateOffset: translateOffset,
 									forwardIndicator: forwardIndicator,
 									backIndicator: backIndicator
@@ -17483,39 +17377,39 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				case 'ScrollForward':
-					var _p37 = _p15._0;
+					var _p36 = _p14._0;
 					var currentTranslationOffset = model.translateOffset;
-					var scrollFrameWidth = _p37.scrollFrame.offsetWidth + currentTranslationOffset;
+					var scrollFrameWidth = _p36.scrollFrame.offsetWidth + currentTranslationOffset;
 					var loop = F2(
-						function (_p31, _p30) {
-							var _p32 = _p31;
-							var _p34 = _p32._1;
-							var _p33 = _p30;
-							if (!_elm_lang$core$Native_Utils.eq(_p33.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
-								return _p33;
+						function (_p30, _p29) {
+							var _p31 = _p30;
+							var _p33 = _p31._1;
+							var _p32 = _p29;
+							if (!_elm_lang$core$Native_Utils.eq(_p32.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
+								return _p32;
 							} else {
-								var tabOffsetLeftAndWidth = _p34.offsetLeft + _p34.offsetWidth;
+								var tabOffsetLeftAndWidth = _p33.offsetLeft + _p33.offsetWidth;
 								var scrollTargetDetermined = function () {
 									if (!isRtl) {
 										return _elm_lang$core$Native_Utils.cmp(tabOffsetLeftAndWidth, scrollFrameWidth) > 0;
 									} else {
-										var tabRightOffset = _p34.offsetWidth - tabOffsetLeftAndWidth;
-										var frameOffsetAndTabWidth = scrollFrameWidth - _p34.offsetWidth;
+										var tabRightOffset = _p33.offsetWidth - tabOffsetLeftAndWidth;
+										var frameOffsetAndTabWidth = scrollFrameWidth - _p33.offsetWidth;
 										return _elm_lang$core$Native_Utils.cmp(tabRightOffset, frameOffsetAndTabWidth) > 0;
 									}
 								}();
 								return scrollTargetDetermined ? {
-									scrollTargetIndex: _elm_lang$core$Maybe$Just(_p32._0)
+									scrollTargetIndex: _elm_lang$core$Maybe$Just(_p31._0)
 								} : {scrollTargetIndex: _elm_lang$core$Maybe$Nothing};
 							}
 						});
-					var scrollTargetIndex = function (_p35) {
+					var scrollTargetIndex = function (_p34) {
 						return A2(
 							_elm_lang$core$Maybe$withDefault,
 							0,
 							function (_) {
 								return _.scrollTargetIndex;
-							}(_p35));
+							}(_p34));
 					}(
 						A3(
 							_elm_lang$core$List$foldl,
@@ -17527,18 +17421,18 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 									function (v0, v1) {
 										return {ctor: '_Tuple2', _0: v0, _1: v1};
 									}),
-								_p37.tabs)));
-					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p37, scrollTargetIndex);
-					var _p36 = A2(indicatorEnabledStates, _p37, translateOffset);
-					var forwardIndicator = _p36.forwardIndicator;
-					var backIndicator = _p36.backIndicator;
+								_p36.tabs)));
+					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p36, scrollTargetIndex);
+					var _p35 = A2(indicatorEnabledStates, _p36, translateOffset);
+					var forwardIndicator = _p35.forwardIndicator;
+					var backIndicator = _p35.backIndicator;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									geometry: _elm_lang$core$Maybe$Just(_p37),
+									geometry: _elm_lang$core$Maybe$Just(_p36),
 									translateOffset: translateOffset,
 									forwardIndicator: forwardIndicator,
 									backIndicator: backIndicator
@@ -17546,15 +17440,15 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				case 'Focus':
-					var _p38 = _p15._1;
+					var _p37 = _p14._1;
 					var currentTranslateOffset = model.translateOffset;
-					var tabBarWidth = _p38.tabBar.offsetWidth;
-					var scrollFrameWidth = _p38.scrollFrame.offsetWidth;
+					var tabBarWidth = _p37.tabBar.offsetWidth;
+					var scrollFrameWidth = _p37.scrollFrame.offsetWidth;
 					var tab = A2(
 						_elm_lang$core$Maybe$withDefault,
 						{offsetLeft: 0, offsetWidth: 0},
 						_elm_lang$core$List$head(
-							A2(_elm_lang$core$List$drop, _p15._0, _p38.tabs)));
+							A2(_elm_lang$core$List$drop, _p14._0, _p37.tabs)));
 					var leftEdge = tab.offsetLeft;
 					var normalizedLeftOffset = tabBarWidth - leftEdge;
 					var rightEdge = leftEdge + tab.offsetWidth;
@@ -17563,7 +17457,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 					var resetAmt = isRtl ? model.scrollLeftAmount : 0;
 					if (shouldScrollForward) {
 						var _v8 = lift,
-							_v9 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollForward(_p38),
+							_v9 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollForward(_p37),
 							_v10 = model;
 						lift = _v8;
 						msg = _v9;
@@ -17572,7 +17466,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 					} else {
 						if (shouldScrollBack) {
 							var _v11 = lift,
-								_v12 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollBack(_p38),
+								_v12 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollBack(_p37),
 								_v13 = model;
 							lift = _v11;
 							msg = _v12;
@@ -17583,23 +17477,23 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 						}
 					}
 				case 'Init':
-					var _p40 = _p15._0;
+					var _p39 = _p14._0;
 					return {
 						ctor: '_Tuple2',
 						_0: function () {
-							var scrollFrameWidth = _p40.scrollFrame.offsetWidth;
-							var tabBarWidth = _p40.tabBar.offsetWidth;
+							var scrollFrameWidth = _p39.scrollFrame.offsetWidth;
+							var tabBarWidth = _p39.tabBar.offsetWidth;
 							var isOverflowing = _elm_lang$core$Native_Utils.cmp(tabBarWidth, scrollFrameWidth) > 0;
 							var translateOffset = (!isOverflowing) ? 0 : model.translateOffset;
-							var _p39 = A2(indicatorEnabledStates, _p40, translateOffset);
-							var forwardIndicator = _p39.forwardIndicator;
-							var backIndicator = _p39.backIndicator;
+							var _p38 = A2(indicatorEnabledStates, _p39, translateOffset);
+							var forwardIndicator = _p38.forwardIndicator;
+							var backIndicator = _p38.backIndicator;
 							return _elm_lang$core$Maybe$Just(
 								_elm_lang$core$Native_Utils.update(
 									model,
 									{
-										geometry: _elm_lang$core$Maybe$Just(_p40),
-										scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p40, 0),
+										geometry: _elm_lang$core$Maybe$Just(_p39),
+										scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p39, 0),
 										forwardIndicator: forwardIndicator,
 										backIndicator: backIndicator,
 										translateOffset: translateOffset,
@@ -17858,9 +17752,9 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$update = F3(
 		}
 	});
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$react = A4(_aforemny$elm_mdc$Material_Internal_Component$react, _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$get, _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$set, _aforemny$elm_mdc$Material_Internal_Msg$TextfieldMsg, _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$update);
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options_Internal$nativeControl;
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$nativeControl = _aforemny$elm_mdc$Material_Internal_Options$nativeControl;
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$placeholder = function (placeholder) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -17869,26 +17763,26 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$placeholder = f
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textarea = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textarea = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{textarea: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$invalid = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$invalid = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{invalid: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$fullwidth = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$fullwidth = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{fullWidth: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$type_ = function (_p5) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (value, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -17898,20 +17792,20 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$type_ = functio
 					});
 			})(_p5));
 };
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$required = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$required = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{required: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$dense = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$dense = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{dense: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$cols = function (cols) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -17921,7 +17815,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$cols = function
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$rows = function (rows) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -17931,7 +17825,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$rows = function
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$pattern = function (pattern) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -17940,13 +17834,13 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$pattern = funct
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$box = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$box = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{box: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$email = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$email = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -17954,7 +17848,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$email = _aforem
 				type_: _elm_lang$core$Maybe$Just('email')
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$password = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$password = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -17962,14 +17856,14 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$password = _afo
 				type_: _elm_lang$core$Maybe$Just('password')
 			});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{disabled: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$value = function (_p6) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (str, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -17980,7 +17874,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$value = functio
 			})(_p6));
 };
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$label = function (_p7) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (str, config) {
 				return _elm_lang$core$Native_Utils.update(
@@ -17990,14 +17884,14 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$label = functio
 					});
 			})(_p7));
 };
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$outlined = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$outlined = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{outlined: true});
 	});
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$trailingIcon = function (icon) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -18007,7 +17901,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$trailingIcon = 
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$leadingIcon = function (icon) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -18016,7 +17910,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$leadingIcon = f
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$iconUnclickable = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$iconUnclickable = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -18056,7 +17950,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 			},
 			model.ripple,
 			{ctor: '[]'});
-		var _p10 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$defaultConfig, options);
+		var _p10 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$defaultConfig, options);
 		var summary = _p10;
 		var config = _p10.config;
 		var isDirty = model.isDirty || A2(
@@ -18094,7 +17988,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 			}
 		}();
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -18198,7 +18092,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 					_0: {
 						ctor: '::',
 						_0: A4(
-							_aforemny$elm_mdc$Material_Internal_Options_Internal$applyNativeControl,
+							_aforemny$elm_mdc$Material_Internal_Options$applyNativeControl,
 							summary,
 							config.textarea ? _elm_lang$html$Html$textarea : _elm_lang$html$Html$input,
 							{
@@ -18241,7 +18135,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 														return _aforemny$elm_mdc$Material_Internal_Options$many(
 															A2(
 																_elm_lang$core$List$map,
-																_aforemny$elm_mdc$Material_Internal_Options_Internal$attribute,
+																_aforemny$elm_mdc$Material_Internal_Options$attribute,
 																A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p16)));
 													}(
 														{
@@ -18739,22 +18633,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 					}
 				}));
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$view = F4(
-	function (lift, index, store, options) {
-		return A7(
-			_aforemny$elm_mdc$Material_Internal_Component$render,
-			_aforemny$elm_mdc$Material_Internal_Textfield_Implementation$get,
-			_aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField,
-			_aforemny$elm_mdc$Material_Internal_Msg$TextfieldMsg,
-			lift,
-			index,
-			store,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options_Internal$dispatch(lift),
-				_1: options
-			});
-	});
+var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$get, _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField, _aforemny$elm_mdc$Material_Internal_Msg$TextfieldMsg);
 var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$Config = function (a) {
 	return function (b) {
 		return function (c) {
@@ -18799,17 +18678,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$Config = functi
 	};
 };
 
-var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$icon = F2(
-	function (options, icon) {
-		return A2(
-			_aforemny$elm_mdc$Material_Internal_Icon_Implementation$view,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__icon'),
-				_1: options
-			},
-			icon);
-	});
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$icon = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__icon');
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$title = function (options) {
 	return A2(
 		_aforemny$elm_mdc$Material_Internal_Options$styled,
@@ -18820,17 +18689,7 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$title = function 
 			_1: options
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$menuIcon = F2(
-	function (options, icon) {
-		return A2(
-			_aforemny$elm_mdc$Material_Internal_Icon_Implementation$view,
-			{
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__menu-icon'),
-				_1: options
-			},
-			icon);
-	});
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$menuIcon = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__menu-icon');
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$shrinkToFit = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__section--shrink-to-fit');
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$alignEnd = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__section--align-end');
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$alignStart = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__section--align-start');
@@ -18855,7 +18714,7 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$row = function (o
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$backgroundImage = function (backgroundImage) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
@@ -18864,31 +18723,31 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$backgroundImage =
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$fixedLastRow = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$fixedLastRow = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{fixedLastrow: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$flexibleDefaultBehavior = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$flexibleDefaultBehavior = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{useFlexibleDefaultBehavior: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$flexible = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$flexible = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{flexible: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$waterfall = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$waterfall = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{waterfall: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$fixed = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$fixed = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -19191,7 +19050,7 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$toolbarStyles = F
 	});
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$toolbar = F4(
 	function (lift, model, options, nodes) {
-		var _p9 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Toolbar_Model$defaultConfig, options);
+		var _p9 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Toolbar_Model$defaultConfig, options);
 		var summary = _p9;
 		var config = _p9.config;
 		var _p10 = A2(
@@ -19309,7 +19168,7 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$toolbar = F4(
 			},
 			config.backgroundImage);
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$header,
 			{
@@ -19717,6 +19576,9 @@ var _aforemny$elm_mdc$Material$Model = function (a) {
 };
 
 
+var _aforemny$elm_mdc$Material_Icon$span = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$span;
+var _aforemny$elm_mdc$Material_Icon$button = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$button;
+var _aforemny$elm_mdc$Material_Icon$anchor = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$button;
 var _aforemny$elm_mdc$Material_Icon$size48 = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size48;
 var _aforemny$elm_mdc$Material_Icon$size36 = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size36;
 var _aforemny$elm_mdc$Material_Icon$size24 = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size24;
@@ -20136,12 +19998,16 @@ var _aforemny$elm_mdc$Demo_Page$toolbar = F6(
 													{ctor: '[]'});
 											} else {
 												return A2(
-													_aforemny$elm_mdc$Material_Toolbar$menuIcon,
+													_aforemny$elm_mdc$Material_Icon$view,
 													{
 														ctor: '::',
 														_0: _aforemny$elm_mdc$Material_Options$onClick(
 															navigate(_aforemny$elm_mdc$Demo_Url$StartPage)),
-														_1: {ctor: '[]'}
+														_1: {
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+															_1: {ctor: '[]'}
+														}
 													},
 													'arrow_back');
 											}
@@ -27229,7 +27095,7 @@ var _aforemny$elm_mdc$Demo_LayoutGrid$view = F3(
 			});
 	});
 
-var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$reversed = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$reversed = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -27237,7 +27103,7 @@ var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$reversed =
 	});
 var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$buffered = F2(
 	function (value, buffer) {
-		return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+		return _aforemny$elm_mdc$Material_Internal_Options$option(
 			function (config) {
 				return _elm_lang$core$Native_Utils.update(
 					config,
@@ -27245,14 +27111,14 @@ var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$buffered =
 			});
 	});
 var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$determinate = function (value) {
-	return _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
 			return _elm_lang$core$Native_Utils.update(
 				config,
 				{determinate: true, value: value});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$indeterminate = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$indeterminate = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -27261,11 +27127,11 @@ var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$indetermin
 var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$defaultConfig = {value: 0, buffer: 0, determinate: false, indeterminate: false, buffered: false, reversed: false};
 var _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$view = F2(
 	function (options, _p0) {
-		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$defaultConfig, options);
+		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_LinearProgress_Implementation$defaultConfig, options);
 		var summary = _p1;
 		var config = _p1.config;
 		return A5(
-			_aforemny$elm_mdc$Material_Internal_Options_Internal$apply,
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
 			_elm_lang$html$Html$div,
 			{
@@ -33334,7 +33200,7 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 												{
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$menuIcon,
+														_aforemny$elm_mdc$Material_Icon$view,
 														{
 															ctor: '::',
 															_0: A3(
@@ -33349,7 +33215,11 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 																	_1: {ctor: '[]'}
 																},
 																'click'),
-															_1: {ctor: '[]'}
+															_1: {
+																ctor: '::',
+																_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+																_1: {ctor: '[]'}
+															}
 														},
 														'menu'),
 													_1: {
@@ -38920,22 +38790,26 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
+											_aforemny$elm_mdc$Material_Icon$view,
 											{
 												ctor: '::',
-												_0: A3(
-													_aforemny$elm_mdc$Material_Drawer_Temporary$openOn,
-													function (_p3) {
-														return lift(
-															_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p3));
-													},
-													{
-														ctor: '::',
-														_0: 0,
-														_1: {ctor: '[]'}
-													},
-													'click'),
-												_1: {ctor: '[]'}
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {
+													ctor: '::',
+													_0: A3(
+														_aforemny$elm_mdc$Material_Drawer_Temporary$openOn,
+														function (_p3) {
+															return lift(
+																_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p3));
+														},
+														{
+															ctor: '::',
+															_0: 0,
+															_1: {ctor: '[]'}
+														},
+														'click'),
+													_1: {ctor: '[]'}
+												}
 											},
 											'menu'),
 										_1: {
@@ -39291,13 +39165,13 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$subscriptions = F2(
 			model);
 	});
 
-var _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$validationMsg = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$validationMsg = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
 			{validationMsg: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$persistent = _aforemny$elm_mdc$Material_Internal_Options_Internal$option(
+var _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$persistent = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
 			config,
@@ -39305,7 +39179,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$pers
 	});
 var _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$defaultConfig = {persistent: false, validationMsg: false};
 var _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$helperText = function (options) {
-	var _p0 = A2(_aforemny$elm_mdc$Material_Internal_Options_Internal$collect, _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$defaultConfig, options);
+	var _p0 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Textfield_HelperText_Implementation$defaultConfig, options);
 	var summary = _p0;
 	var config = _p0.config;
 	return A2(
@@ -42774,12 +42648,16 @@ var _aforemny$elm_mdc$Demo_Toolbar$defaultToolbar = F2(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
+											_aforemny$elm_mdc$Material_Icon$view,
 											{
 												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$attribute(
-													_elm_lang$html$Html_Attributes$href('#')),
-												_1: {ctor: '[]'}
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#')),
+													_1: {ctor: '[]'}
+												}
 											},
 											'menu'),
 										_1: {
@@ -42807,20 +42685,32 @@ var _aforemny$elm_mdc$Demo_Toolbar$defaultToolbar = F2(
 										{
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$icon,
-												{ctor: '[]'},
+												_aforemny$elm_mdc$Material_Icon$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+													_1: {ctor: '[]'}
+												},
 												'file_download'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$icon,
-													{ctor: '[]'},
+													_aforemny$elm_mdc$Material_Icon$view,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+														_1: {ctor: '[]'}
+													},
 													'print'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$icon,
-														{ctor: '[]'},
+														_aforemny$elm_mdc$Material_Icon$view,
+														{
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+															_1: {ctor: '[]'}
+														},
 														'bookmark'),
 													_1: {ctor: '[]'}
 												}
@@ -42891,8 +42781,12 @@ var _aforemny$elm_mdc$Demo_Toolbar$fixedToolbar = F2(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
-											{ctor: '[]'},
+											_aforemny$elm_mdc$Material_Icon$view,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {ctor: '[]'}
+											},
 											'menu'),
 										_1: {
 											ctor: '::',
@@ -42919,20 +42813,32 @@ var _aforemny$elm_mdc$Demo_Toolbar$fixedToolbar = F2(
 										{
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$icon,
-												{ctor: '[]'},
+												_aforemny$elm_mdc$Material_Icon$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+													_1: {ctor: '[]'}
+												},
 												'file_download'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$icon,
-													{ctor: '[]'},
+													_aforemny$elm_mdc$Material_Icon$view,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+														_1: {ctor: '[]'}
+													},
 													'print'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$icon,
-														{ctor: '[]'},
+														_aforemny$elm_mdc$Material_Icon$view,
+														{
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+															_1: {ctor: '[]'}
+														},
 														'bookmark'),
 													_1: {ctor: '[]'}
 												}
@@ -43014,8 +42920,12 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
-											{ctor: '[]'},
+											_aforemny$elm_mdc$Material_Icon$view,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {ctor: '[]'}
+											},
 											'menu'),
 										_1: {
 											ctor: '::',
@@ -43042,33 +42952,45 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 										{
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$icon,
-												{ctor: '[]'},
+												_aforemny$elm_mdc$Material_Icon$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+													_1: {ctor: '[]'}
+												},
 												'file_download'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$icon,
-													{ctor: '[]'},
+													_aforemny$elm_mdc$Material_Icon$view,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+														_1: {ctor: '[]'}
+													},
 													'print'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$icon,
+														_aforemny$elm_mdc$Material_Icon$view,
 														{
 															ctor: '::',
-															_0: A2(
-																_aforemny$elm_mdc$Material_Menu$attach,
-																function (_p9) {
-																	return lift(
-																		_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p9));
-																},
-																{
-																	ctor: '::',
-																	_0: 0,
-																	_1: {ctor: '[]'}
-																}),
-															_1: {ctor: '[]'}
+															_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_aforemny$elm_mdc$Material_Menu$attach,
+																	function (_p9) {
+																		return lift(
+																			_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p9));
+																	},
+																	{
+																		ctor: '::',
+																		_0: 0,
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
 														},
 														'more_vert'),
 													_1: {
@@ -43255,8 +43177,12 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbar = F2(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
-											{ctor: '[]'},
+											_aforemny$elm_mdc$Material_Icon$view,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {ctor: '[]'}
+											},
 											'menu'),
 										_1: {
 											ctor: '::',
@@ -43283,20 +43209,32 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbar = F2(
 										{
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$icon,
-												{ctor: '[]'},
+												_aforemny$elm_mdc$Material_Icon$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+													_1: {ctor: '[]'}
+												},
 												'file_download'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$icon,
-													{ctor: '[]'},
+													_aforemny$elm_mdc$Material_Icon$view,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+														_1: {ctor: '[]'}
+													},
 													'print'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$icon,
-														{ctor: '[]'},
+														_aforemny$elm_mdc$Material_Icon$view,
+														{
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+															_1: {ctor: '[]'}
+														},
 														'bookmark'),
 													_1: {ctor: '[]'}
 												}
@@ -43386,8 +43324,12 @@ var _aforemny$elm_mdc$Demo_Toolbar$defaultFlexibleToolbar = F2(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
-											{ctor: '[]'},
+											_aforemny$elm_mdc$Material_Icon$view,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {ctor: '[]'}
+											},
 											'menu'),
 										_1: {
 											ctor: '::',
@@ -43414,20 +43356,32 @@ var _aforemny$elm_mdc$Demo_Toolbar$defaultFlexibleToolbar = F2(
 										{
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$icon,
-												{ctor: '[]'},
+												_aforemny$elm_mdc$Material_Icon$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+													_1: {ctor: '[]'}
+												},
 												'file_download'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$icon,
-													{ctor: '[]'},
+													_aforemny$elm_mdc$Material_Icon$view,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+														_1: {ctor: '[]'}
+													},
 													'print'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$icon,
-														{ctor: '[]'},
+														_aforemny$elm_mdc$Material_Icon$view,
+														{
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+															_1: {ctor: '[]'}
+														},
 														'bookmark'),
 													_1: {ctor: '[]'}
 												}
@@ -43518,8 +43472,12 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
-											{ctor: '[]'},
+											_aforemny$elm_mdc$Material_Icon$view,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {ctor: '[]'}
+											},
 											'menu'),
 										_1: {
 											ctor: '::',
@@ -43546,20 +43504,32 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 										{
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$icon,
-												{ctor: '[]'},
+												_aforemny$elm_mdc$Material_Icon$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+													_1: {ctor: '[]'}
+												},
 												'file_download'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$icon,
-													{ctor: '[]'},
+													_aforemny$elm_mdc$Material_Icon$view,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+														_1: {ctor: '[]'}
+													},
 													'print'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$icon,
-														{ctor: '[]'},
+														_aforemny$elm_mdc$Material_Icon$view,
+														{
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+															_1: {ctor: '[]'}
+														},
 														'bookmark'),
 													_1: {ctor: '[]'}
 												}
@@ -43661,8 +43631,12 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbarFix = F2(
 									{
 										ctor: '::',
 										_0: A2(
-											_aforemny$elm_mdc$Material_Toolbar$menuIcon,
-											{ctor: '[]'},
+											_aforemny$elm_mdc$Material_Icon$view,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
+												_1: {ctor: '[]'}
+											},
 											'menu'),
 										_1: {
 											ctor: '::',
@@ -43696,20 +43670,32 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbarFix = F2(
 										{
 											ctor: '::',
 											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$icon,
-												{ctor: '[]'},
+												_aforemny$elm_mdc$Material_Icon$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+													_1: {ctor: '[]'}
+												},
 												'file_download'),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_aforemny$elm_mdc$Material_Toolbar$icon,
-													{ctor: '[]'},
+													_aforemny$elm_mdc$Material_Icon$view,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+														_1: {ctor: '[]'}
+													},
 													'print'),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_aforemny$elm_mdc$Material_Toolbar$icon,
-														{ctor: '[]'},
+														_aforemny$elm_mdc$Material_Icon$view,
+														{
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+															_1: {ctor: '[]'}
+														},
 														'more_vert'),
 													_1: {ctor: '[]'}
 												}
@@ -43816,12 +43802,16 @@ var _aforemny$elm_mdc$Demo_Toolbar$view = F4(
 														{
 															ctor: '::',
 															_0: A2(
-																_aforemny$elm_mdc$Material_Toolbar$icon,
+																_aforemny$elm_mdc$Material_Icon$view,
 																{
 																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Material_Options$attribute(
-																		_elm_lang$html$Html_Attributes$href('#')),
-																	_1: {ctor: '[]'}
+																	_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+																	_1: {
+																		ctor: '::',
+																		_0: _aforemny$elm_mdc$Material_Options$attribute(
+																			_elm_lang$html$Html_Attributes$href('#')),
+																		_1: {ctor: '[]'}
+																	}
 																},
 																'menu'),
 															_1: {
@@ -43849,34 +43839,46 @@ var _aforemny$elm_mdc$Demo_Toolbar$view = F4(
 															{
 																ctor: '::',
 																_0: A2(
-																	_aforemny$elm_mdc$Material_Toolbar$icon,
+																	_aforemny$elm_mdc$Material_Icon$view,
 																	{
 																		ctor: '::',
-																		_0: _aforemny$elm_mdc$Material_Options$attribute(
-																			_elm_lang$html$Html_Attributes$href('#')),
-																		_1: {ctor: '[]'}
+																		_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+																		_1: {
+																			ctor: '::',
+																			_0: _aforemny$elm_mdc$Material_Options$attribute(
+																				_elm_lang$html$Html_Attributes$href('#')),
+																			_1: {ctor: '[]'}
+																		}
 																	},
 																	'file_download'),
 																_1: {
 																	ctor: '::',
 																	_0: A2(
-																		_aforemny$elm_mdc$Material_Toolbar$icon,
+																		_aforemny$elm_mdc$Material_Icon$view,
 																		{
 																			ctor: '::',
-																			_0: _aforemny$elm_mdc$Material_Options$attribute(
-																				_elm_lang$html$Html_Attributes$href('#')),
-																			_1: {ctor: '[]'}
+																			_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+																			_1: {
+																				ctor: '::',
+																				_0: _aforemny$elm_mdc$Material_Options$attribute(
+																					_elm_lang$html$Html_Attributes$href('#')),
+																				_1: {ctor: '[]'}
+																			}
 																		},
 																		'print'),
 																	_1: {
 																		ctor: '::',
 																		_0: A2(
-																			_aforemny$elm_mdc$Material_Toolbar$icon,
+																			_aforemny$elm_mdc$Material_Icon$view,
 																			{
 																				ctor: '::',
-																				_0: _aforemny$elm_mdc$Material_Options$attribute(
-																					_elm_lang$html$Html_Attributes$href('#')),
-																				_1: {ctor: '[]'}
+																				_0: _aforemny$elm_mdc$Material_Toolbar$icon,
+																				_1: {
+																					ctor: '::',
+																					_0: _aforemny$elm_mdc$Material_Options$attribute(
+																						_elm_lang$html$Html_Attributes$href('#')),
+																					_1: {ctor: '[]'}
+																				}
 																			},
 																			'more_vert'),
 																		_1: {ctor: '[]'}
