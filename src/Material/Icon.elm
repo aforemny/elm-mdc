@@ -105,7 +105,7 @@ size48 =
 -}
 anchor : Property m
 anchor =
-    Icon.button
+    Icon.anchor
 
 
 {-| Icon will be a HTML `button` element.
