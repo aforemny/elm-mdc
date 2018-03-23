@@ -2,16 +2,16 @@ module Material.Dialog exposing
     ( accept
     , backdrop
     , body
-    , Property
     , cancel
     , footer
     , header
+    , onClose
     , open
+    , Property
     , scrollable
     , surface
     , title
     , view
-    , openOn
     )
 
 {-|
@@ -41,6 +41,7 @@ import Material.Options as Options exposing (styled)
 
 Dialog.view Mdc [0] model.mdc
     [ Dialog.open
+    , Dialog.onClose Cancel
     ]
     [ Dialog.surface []
           [
@@ -90,7 +91,7 @@ no apps are running.
 @docs Property
 @docs view
 @docs open
-@docs openOn
+@docs onClose
 @docs surface
 @docs backdrop
 @docs header
@@ -134,6 +135,13 @@ view =
 open : Property m
 open =
     Dialog.open
+
+
+{-| Sends an event when user clicks on the dialog's backdrop.
+-}
+onClose : m -> Property m
+onClose =
+    Dialog.onClose
 
 
 {-| Dialog surface.
@@ -206,18 +214,3 @@ cancel =
 accept : Button.Property m
 accept =
     Dialog.accept
-
-
-{-| Opens the dialog on an event on another component.
-
-```elm
-Button.view Mdc [1] model.mdc
-    [ Dialog.openOn Mdc [0] "click"
-    ]
-    [ text "Show Dialog with index [0]"
-    ]
-```
--}
-openOn : (Material.Msg m -> m) -> Index -> String -> Options.Property c m
-openOn =
-    Dialog.openOn

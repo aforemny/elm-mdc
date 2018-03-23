@@ -2,17 +2,17 @@ module Material.Internal.Dialog.Implementation exposing
     ( accept
     , backdrop
     , body
-    , Property
     , cancel
     , footer
     , header
+    , onClose
     , open
+    , Property
+    , react
     , scrollable
     , surface
     , title
     , view
-    , openOn
-    , react
     )
 
 import DOM
@@ -70,22 +70,28 @@ view =
     Component.render get dialog Material.Internal.Msg.DialogMsg
 
 
-type alias Config =
-    {}
+type alias Config m =
+    { onClose : Maybe m
+    }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
-    {}
+    { onClose = Nothing
+    }
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 dialog : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-dialog lift model options =
-    styled Html.aside
+dialog lift model options nodes =
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
+    Options.apply summary Html.aside
     ( cs "mdc-dialog"
     :: ( when model.open << Options.many <|
          [ cs "mdc-dialog--open"
@@ -93,10 +99,20 @@ dialog lift model options =
          ]
        )
     :: when model.animating (cs "mdc-dialog--animating")
-    :: Options.on "click" (Json.map lift close)
+    :: ( Options.on "click" <|
+         Json.map (\ doClose ->
+              if doClose then
+                  Maybe.withDefault (lift NoOp) config.onClose
+              else
+                  lift NoOp
+           )
+            close
+       )
     :: Options.on "transitionend" (Json.succeed (lift AnimationEnd))
     :: options
     )
+    []
+    nodes
 
 
 open : Property m
@@ -149,12 +165,12 @@ accept =
     cs "mdc-dialog__footer__button mdc-dialog__footer__button--accept"
 
 
-openOn : (Material.Internal.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
-openOn lift index event =
-    Options.on event (Json.succeed (lift (Material.Internal.Msg.DialogMsg index Open)))
+onClose : m -> Property m
+onClose onClose =
+    Options.option (\ config -> { config | onClose = Just onClose })
 
 
-close : Decoder Msg
+close : Decoder Bool
 close =
     DOM.target <|
     Json.map (\ className ->
@@ -163,10 +179,8 @@ close =
                String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
          in
          if hasClass "mdc-dialog__backdrop" then
-             Close
-         else if hasClass "mdc-dialog__footer__button" then
-             Close
+             True
          else
-             NoOp
+             False
        )
        (Json.at ["className"] Json.string)

@@ -16,6 +16,8 @@ import Material.Options as Options exposing (styled, cs, css, when)
 type alias Model m =
     { mdc : Material.Model m
     , rtl : Bool
+    , showDialog : Bool
+    , showScrollingDialog : Bool
     }
 
 
@@ -23,6 +25,8 @@ defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , rtl = False
+    , showDialog = False
+    , showScrollingDialog = False
     }
 
 
@@ -31,6 +35,8 @@ type Msg m
     | ToggleRtl
     | Accept
     | Cancel
+    | ShowDialog
+    | ShowScrollingDialog
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -47,14 +53,20 @@ update lift msg model =
             _ =
               Debug.log "click" "accept"
           in
-          ( model, Cmd.none )
+          ( { model | showDialog = False, showScrollingDialog = False }, Cmd.none )
 
         Cancel ->
           let
             _ =
               Debug.log "click" "cancel"
           in
-          ( model, Cmd.none )
+          ( { model | showDialog = False, showScrollingDialog = False }, Cmd.none )
+
+        ShowDialog ->
+           ( { model | showDialog = True }, Cmd.none )
+
+        ShowScrollingDialog ->
+           ( { model | showScrollingDialog = True }, Cmd.none )
 
 
 heroDialog : (Msg m -> m) -> List Int -> Model m -> Html m
@@ -243,7 +255,8 @@ view lift page model =
       Button.view (lift << Mdc) [3] model.mdc
       [ Button.raised
       , Button.ripple
-      , Dialog.openOn (lift << Mdc) [1] "click"
+      -- TODO:
+      -- Dialog.openOn (lift << Mdc) [1] "click"
       ]
       [ text "Show dialog"
       ]
@@ -253,7 +266,8 @@ view lift page model =
       Button.view (lift << Mdc) [4] model.mdc
       [ Button.raised
       , Button.ripple
-      , Dialog.openOn (lift << Mdc) [2] "click"
+      -- TODO
+      -- Dialog.openOn (lift << Mdc) [2] "click"
       ]
       [ text "Show scrolling dialog"
       ]
