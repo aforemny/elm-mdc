@@ -8,9 +8,9 @@ module Material.Internal.List.Implementation exposing
     , graphicIcon
     , graphicImage
     , group
+    , groupDivider
     , inset
     , li
-    , listItem
     , meta
     , metaIcon
     , metaImage
@@ -73,11 +73,6 @@ twoLine =
 li : List (Property m) -> List (Html m) -> Html m
 li options =
     styled Html.li (cs "mdc-list-item" :: options)
-
-
-listItem : List (Property m) -> List (Html m) -> Html m
-listItem options =
-    styled Html.a (cs "mdc-list-item" :: options)
 
 
 text : List (Property m) -> List (Html m) -> Html m
@@ -156,8 +151,17 @@ subheader options =
 
 
 divider : List (Property m) -> List (Html m) -> Html m
-divider options _ =
-    styled Html.hr (cs "mdc-list-divider"::options) []
+divider options =
+    styled Html.li
+    ( cs "mdc-list-divider"
+    :: Options.attribute (Html.attribute "role" "separator")
+    :: options
+    )
+
+
+groupDivider : List (Property m) -> List (Html m) -> Html m
+groupDivider options =
+    styled Html.hr (cs "mdc-list-divider" :: options)
 
 
 padded : Property m

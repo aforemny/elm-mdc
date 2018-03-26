@@ -7,9 +7,9 @@ module Material.List exposing
     , graphicIcon
     , graphicImage
     , group
+    , groupDivider
     , inset
     , li
-    , listItem
     , meta
     , metaIcon
     , metaImage
@@ -100,7 +100,7 @@ Lists.ul
 
 ## List Items
 
-@docs li, listItem
+@docs li
 @docs text
 @docs secondaryText
 @docs selected
@@ -118,6 +118,7 @@ Lists.ul
 ## Dividers
 
 @docs divider
+@docs groupDivider
 @docs padded
 @docs inset
 -}
@@ -173,13 +174,6 @@ twoLine =
 li : List (Property m) -> List (Html m) -> Html m
 li =
     List.li
-
-
-{-| List item element, anchor tag instead of li tag.
--}
-listItem : List (Property m) -> List (Html m) -> Html m
-listItem =
-    List.listItem
 
 
 {-| Primary text for the row.
@@ -286,6 +280,13 @@ subheader =
 divider : List (Property m) -> List (Html m) -> Html m
 divider =
     List.divider
+
+
+{-| List divider element for groups.
+-}
+groupDivider : List (Property m) -> List (Html m) -> Html m
+groupDivider =
+    List.groupDivider
 
 
 {-| Leaves a gap on each side of the divider to match the padding of `meta`.

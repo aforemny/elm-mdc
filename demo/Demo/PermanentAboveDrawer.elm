@@ -9,6 +9,7 @@ module Demo.PermanentAboveDrawer exposing
     )
 
 import Demo.Page as Page exposing (Page)
+import Demo.PersistentDrawer
 import Html as Html_
 import Html.Attributes as Html
 import Html exposing (Html, text)
@@ -18,7 +19,6 @@ import Material
 import Material.Button as Button
 import Material.Drawer.Permanent as Drawer
 import Material.Elevation as Elevation
-import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Toolbar as Toolbar
 import Material.Typography as Typography
@@ -79,50 +79,8 @@ view lift page model =
     ]
     [ 
       Drawer.view (lift << Mdc) [0] model.mdc []
-      [
-        Drawer.toolbarSpacer [] []
-      , Lists.ul
-        [ Drawer.content
-        ]
-        [ Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-above") ]
-          [ Lists.graphicIcon [] "inbox"
-          , text "Inbox"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-above") ]
-          [ Lists.graphicIcon [] "star"
-          , text "Star"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-above") ]
-          [ Lists.graphicIcon [] "send"
-          , text "Sent Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-above") ]
-          [ Lists.graphicIcon [] "drafts"
-          , text "Drafts"
-          ]
-
-        , Lists.divider [] []
-
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-above") ]
-          [ Lists.graphicIcon [] "email"
-          , text "All Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-above") ]
-          [ Lists.graphicIcon [] "delete"
-          , text "Trash"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#permanent-drawer-above") ]
-          [ Lists.graphicIcon [] "report"
-          , text "Spam"
-          ]
-        ]
+      [ Drawer.toolbarSpacer [] []
+      , Demo.PersistentDrawer.drawerItems
       ]
 
     , styled Html.div

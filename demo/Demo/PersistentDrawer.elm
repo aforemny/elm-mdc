@@ -6,6 +6,7 @@ module Demo.PersistentDrawer exposing
     , update
     , view
     , subscriptions
+    , drawerItems
     )
 
 import Demo.Page exposing (Page)
@@ -51,6 +52,73 @@ update lift msg model =
             ( { model | rtl = not model.rtl }, Cmd.none )
 
 
+drawerItems : Html m
+drawerItems =
+    Lists.ul
+    [ Drawer.content
+    ]
+    [ Lists.li []
+      [ Html.a
+        [ Html.href "#persistent-drawer"
+        ]
+        [ Lists.graphicIcon [] "inbox"
+        , text "Inbox"
+        ]
+      ]
+    , Lists.li []
+      [ Html.a
+        [ Html.href "#persistent-drawer"
+        ]
+        [ Lists.graphicIcon [] "star"
+        , text "Star"
+        ]
+      ]
+    , Lists.li []
+      [ Html.a
+        [ Html.href "#persistent-drawer"
+        ]
+        [ Lists.graphicIcon [] "send"
+        , text "Sent Mail"
+        ]
+      ]
+    , Lists.li []
+      [ Html.a
+        [ Html.href "#persistent-drawer"
+        ]
+        [ Lists.graphicIcon [] "drafts"
+        , text "Drafts"
+        ]
+      ]
+
+    , Lists.divider [] []
+
+    , Lists.li []
+      [ Html.a
+        [ Html.href "#persistent-drawer"
+        ]
+        [ Lists.graphicIcon [] "email"
+        , text "All Mail"
+        ]
+      ]
+    , Lists.li []
+      [ Html.a
+        [ Html.href "#persistent-drawer"
+        ]
+        [ Lists.graphicIcon [] "delete"
+        , text "Trash"
+        ]
+      ]
+    , Lists.li []
+      [ Html.a
+        [ Html.href "#persistent-drawer"
+        ]
+        [ Lists.graphicIcon [] "report"
+        , text "Spam"
+        ]
+      ]
+    ]
+
+
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     styled Html.div
@@ -68,48 +136,7 @@ view lift page model =
       Drawer.view (lift << Mdc) [0] model.mdc []
       [
         Drawer.toolbarSpacer [] []
-      , Lists.ul
-        [ Drawer.content
-        ]
-        [ Lists.listItem
-          [ Options.attribute (Html.href "#persistent-drawer") ]
-          [ Lists.graphicIcon [] "inbox"
-          , text "Inbox"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#persistent-drawer") ]
-          [ Lists.graphicIcon [] "star"
-          , text "Star"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#persistent-drawer") ]
-          [ Lists.graphicIcon [] "send"
-          , text "Sent Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#persistent-drawer") ]
-          [ Lists.graphicIcon [] "drafts"
-          , text "Drafts"
-          ]
-
-        , Lists.divider [] []
-
-        , Lists.listItem
-          [ Options.attribute (Html.href "#persistent-drawer") ]
-          [ Lists.graphicIcon [] "email"
-          , text "All Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#persistent-drawer") ]
-          [ Lists.graphicIcon [] "delete"
-          , text "Trash"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#persistent-drawer") ]
-          [ Lists.graphicIcon [] "report"
-          , text "Spam"
-          ]
-        ]
+      , drawerItems
       ]
 
     , styled Html.div

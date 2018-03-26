@@ -9,6 +9,7 @@ module Demo.TemporaryDrawer exposing
     )
 
 import Demo.Page exposing (Page)
+import Demo.PersistentDrawer
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
@@ -16,7 +17,6 @@ import Material
 import Material.Button as Button
 import Material.Drawer.Temporary as Drawer
 import Material.Icon as Icon
-import Material.List as Lists
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Theme as Theme
 import Material.Toolbar as Toolbar
@@ -89,49 +89,8 @@ view lift page model =
           [ text "Header here"
           ]
         ]
-
-      , Lists.ul
-        [ Drawer.content
-        ]
-        [ Lists.listItem
-          [ Options.attribute (Html.href "#temporary-drawer") ]
-          [ Lists.graphicIcon [] "inbox"
-          , text "Inbox"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#temporary-drawer") ]
-          [ Lists.graphicIcon [] "star"
-          , text "Star"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#temporary-drawer") ]
-          [ Lists.graphicIcon [] "send"
-          , text "Sent Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#temporary-drawer") ]
-          [ Lists.graphicIcon [] "drafts"
-          , text "Drafts"
-          ]
-
-        , Lists.divider [] []
-
-        , Lists.listItem
-          [ Options.attribute (Html.href "#temporary-drawer") ]
-          [ Lists.graphicIcon [] "email"
-          , text "All Mail"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#temporary-drawer") ]
-          [ Lists.graphicIcon [] "delete"
-          , text "Trash"
-          ]
-        , Lists.listItem
-          [ Options.attribute (Html.href "#temporary-drawer") ]
-          [ Lists.graphicIcon [] "report"
-          , text "Spam"
-          ]
-        ]
+      ,
+        Demo.PersistentDrawer.drawerItems
       ]
     ,
       styled Html.div
