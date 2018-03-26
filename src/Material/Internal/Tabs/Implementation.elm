@@ -449,10 +449,10 @@ tabs lift model options nodes =
                     |> Maybe.map .offsetLeft
                     |> Maybe.withDefault 0
             in
+            String.join " "
             [ "translateX(" ++ toString tabLeft ++ "px)"
             , "scale(" ++ toString model.scale ++ ",1)"
             ]
-            |> String.join " "
 
         tabBarScroller tabBar =
             styled Html.div
@@ -599,8 +599,10 @@ tabs lift model options nodes =
                       , css "transform" indicatorTransform
                       , when (numTabs > 0) <|
                         css "visibility" "visible"
-                      , when indicatorFirstRender <|
-                        css "transition" "none"
+                      , when indicatorFirstRender << Options.many <|
+                        [ css "display" "none"
+                        , css "transition" "none"
+                        ]
                       ]
                       []
                     ]
