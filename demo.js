@@ -10152,7 +10152,7 @@ var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$decodeGeometry = f
 			_elm_lang$core$Json_Decode$map,
 			function (_p2) {
 				var _p3 = _p2;
-				return {top: _p3.top - pageOffset.y, left: _p3.left - pageOffset.x, width: _p3.width, height: _p3.height};
+				return {top: _p3.top, left: _p3.left, width: _p3.width, height: _p3.height};
 			},
 			_debois$elm_dom$DOM$boundingClientRect);
 	};
@@ -11706,7 +11706,7 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close = _debois$el
 						' ',
 						A2(_elm_lang$core$Basics_ops['++'], className, ' ')));
 			};
-			return hasClass('mdc-dialog__backdrop') ? _aforemny$elm_mdc$Material_Internal_Dialog_Model$Close : (hasClass('mdc-dialog__footer__button') ? _aforemny$elm_mdc$Material_Internal_Dialog_Model$Close : _aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp);
+			return hasClass('mdc-dialog__backdrop') ? true : false;
 		},
 		A2(
 			_elm_lang$core$Json_Decode$at,
@@ -11716,15 +11716,16 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close = _debois$el
 				_1: {ctor: '[]'}
 			},
 			_elm_lang$core$Json_Decode$string)));
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$openOn = F3(
-	function (lift, index, event) {
-		return A2(
-			_aforemny$elm_mdc$Material_Internal_Options$on,
-			event,
-			_elm_lang$core$Json_Decode$succeed(
-				lift(
-					A2(_aforemny$elm_mdc$Material_Internal_Msg$DialogMsg, index, _aforemny$elm_mdc$Material_Internal_Dialog_Model$Open))));
-	});
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$onClose = function (onClose) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					onClose: _elm_lang$core$Maybe$Just(onClose)
+				});
+		});
+};
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$accept = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog__footer__button mdc-dialog__footer__button--accept');
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$cancel = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog__footer__button mdc-dialog__footer__button--cancel');
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$footer = function (options) {
@@ -11780,21 +11781,26 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$surface = function
 		});
 };
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$open = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog--open');
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F3(
-	function (lift, model, options) {
-		return A2(
-			_aforemny$elm_mdc$Material_Internal_Options$styled,
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$defaultConfig = {onClose: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F4(
+	function (lift, model, options, nodes) {
+		var _p0 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$defaultConfig, options);
+		var summary = _p0;
+		var config = _p0.config;
+		return A5(
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
+			summary,
 			_elm_lang$html$Html$aside,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog'),
 				_1: {
 					ctor: '::',
-					_0: function (_p0) {
+					_0: function (_p1) {
 						return A2(
 							_aforemny$elm_mdc$Material_Internal_Options$when,
 							model.open,
-							_aforemny$elm_mdc$Material_Internal_Options$many(_p0));
+							_aforemny$elm_mdc$Material_Internal_Options$many(_p1));
 					}(
 						{
 							ctor: '::',
@@ -11816,7 +11822,15 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F3(
 							_0: A2(
 								_aforemny$elm_mdc$Material_Internal_Options$on,
 								'click',
-								A2(_elm_lang$core$Json_Decode$map, lift, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close)),
+								A2(
+									_elm_lang$core$Json_Decode$map,
+									function (doClose) {
+										return doClose ? A2(
+											_elm_lang$core$Maybe$withDefault,
+											lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp),
+											config.onClose) : lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp);
+									},
+									_aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close)),
 							_1: {
 								ctor: '::',
 								_0: A2(
@@ -11829,10 +11843,11 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F3(
 						}
 					}
 				}
-			});
+			},
+			{ctor: '[]'},
+			nodes);
 	});
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$defaultConfig = {};
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p1 = A3(
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p2 = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$indexed,
 	function (_) {
 		return _.dialog;
@@ -11844,13 +11859,13 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p1 = A3(
 				{dialog: x});
 		}),
 	_aforemny$elm_mdc$Material_Internal_Dialog_Model$defaultModel);
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p1._0;
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$set = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p1._1;
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p2._0;
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$set = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p2._1;
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog, _aforemny$elm_mdc$Material_Internal_Msg$DialogMsg);
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$update = F3(
 	function (lift, msg, model) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
+		var _p3 = msg;
+		switch (_p3.ctor) {
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'Open':
@@ -11883,7 +11898,9 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$update = F3(
 		}
 	});
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$react = A4(_aforemny$elm_mdc$Material_Internal_Component$react, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$set, _aforemny$elm_mdc$Material_Internal_Msg$DialogMsg, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$update);
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$Config = {};
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$Config = function (a) {
+	return {onClose: a};
+};
 
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$inset = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divider--inset');
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$padded = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divier--padded');
@@ -17215,7 +17232,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$tabs = F4(
 															_0: A2(
 																_aforemny$elm_mdc$Material_Internal_Options$when,
 																indicatorFirstRender,
-																A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'transition', 'none')),
+																A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'display', 'none')),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -17301,54 +17318,56 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 				case 'NoOp':
 					return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
 				case 'Select':
-					var _p18 = _p14._0;
+					var _p19 = _p14._0;
+					var _p18 = _p14._1;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									index: _p18,
-									scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p14._1, _p18)
+									index: _p19,
+									scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p18, _p19),
+									geometry: _elm_lang$core$Maybe$Just(_p18)
 								})),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				case 'ScrollBack':
-					var _p28 = _p14._0;
+					var _p29 = _p14._0;
 					var currentTranslateOffset = model.translateOffset;
-					var scrollFrameWidth = _p28.scrollFrame.offsetWidth;
-					var tabBarWidth = _p28.tabBar.offsetWidth;
+					var scrollFrameWidth = _p29.scrollFrame.offsetWidth;
+					var tabBarWidth = _p29.tabBar.offsetWidth;
 					var loop = F2(
-						function (_p20, _p19) {
-							var _p21 = _p20;
-							var _p25 = _p21._1;
-							var _p24 = _p21._0;
-							var _p22 = _p19;
-							var _p23 = _p22;
-							if (!_elm_lang$core$Native_Utils.eq(_p22.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
-								return _p23;
+						function (_p21, _p20) {
+							var _p22 = _p21;
+							var _p26 = _p22._1;
+							var _p25 = _p22._0;
+							var _p23 = _p20;
+							var _p24 = _p23;
+							if (!_elm_lang$core$Native_Utils.eq(_p23.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
+								return _p24;
 							} else {
-								var tabOffsetLeft = _p25.offsetLeft;
+								var tabOffsetLeft = _p26.offsetLeft;
 								var tabBarWidthLessTabOffsetLeft = tabBarWidth - tabOffsetLeft;
 								var tabIsNotOccluded = (!isRtl) ? (_elm_lang$core$Native_Utils.cmp(tabOffsetLeft, currentTranslateOffset) > 0) : (_elm_lang$core$Native_Utils.cmp(tabBarWidthLessTabOffsetLeft, currentTranslateOffset) > 0);
 								if (tabIsNotOccluded) {
-									return _p23;
+									return _p24;
 								} else {
-									var newTabWidthAccumulator = _p22.tabWidthAccumulator + _p25.offsetWidth;
+									var newTabWidthAccumulator = _p23.tabWidthAccumulator + _p26.offsetWidth;
 									var scrollTargetDetermined = _elm_lang$core$Native_Utils.cmp(newTabWidthAccumulator, scrollFrameWidth) > 0;
 									var newScrollTargetIndex = scrollTargetDetermined ? _elm_lang$core$Maybe$Just(
-										isRtl ? (_p24 + 1) : _p24) : _elm_lang$core$Maybe$Nothing;
+										isRtl ? (_p25 + 1) : _p25) : _elm_lang$core$Maybe$Nothing;
 									return {scrollTargetIndex: newScrollTargetIndex, tabWidthAccumulator: newTabWidthAccumulator};
 								}
 							}
 						});
-					var scrollTargetIndex = function (_p26) {
+					var scrollTargetIndex = function (_p27) {
 						return A2(
 							_elm_lang$core$Maybe$withDefault,
 							0,
 							function (_) {
 								return _.scrollTargetIndex;
-							}(_p26));
+							}(_p27));
 					}(
 						A3(
 							_elm_lang$core$List$foldl,
@@ -17361,18 +17380,18 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 										function (v0, v1) {
 											return {ctor: '_Tuple2', _0: v0, _1: v1};
 										}),
-									_p28.tabs))));
-					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p28, scrollTargetIndex);
-					var _p27 = A2(indicatorEnabledStates, _p28, translateOffset);
-					var forwardIndicator = _p27.forwardIndicator;
-					var backIndicator = _p27.backIndicator;
+									_p29.tabs))));
+					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p29, scrollTargetIndex);
+					var _p28 = A2(indicatorEnabledStates, _p29, translateOffset);
+					var forwardIndicator = _p28.forwardIndicator;
+					var backIndicator = _p28.backIndicator;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									geometry: _elm_lang$core$Maybe$Just(_p28),
+									geometry: _elm_lang$core$Maybe$Just(_p29),
 									translateOffset: translateOffset,
 									forwardIndicator: forwardIndicator,
 									backIndicator: backIndicator
@@ -17380,39 +17399,39 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				case 'ScrollForward':
-					var _p36 = _p14._0;
+					var _p37 = _p14._0;
 					var currentTranslationOffset = model.translateOffset;
-					var scrollFrameWidth = _p36.scrollFrame.offsetWidth + currentTranslationOffset;
+					var scrollFrameWidth = _p37.scrollFrame.offsetWidth + currentTranslationOffset;
 					var loop = F2(
-						function (_p30, _p29) {
-							var _p31 = _p30;
-							var _p33 = _p31._1;
-							var _p32 = _p29;
-							if (!_elm_lang$core$Native_Utils.eq(_p32.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
-								return _p32;
+						function (_p31, _p30) {
+							var _p32 = _p31;
+							var _p34 = _p32._1;
+							var _p33 = _p30;
+							if (!_elm_lang$core$Native_Utils.eq(_p33.scrollTargetIndex, _elm_lang$core$Maybe$Nothing)) {
+								return _p33;
 							} else {
-								var tabOffsetLeftAndWidth = _p33.offsetLeft + _p33.offsetWidth;
+								var tabOffsetLeftAndWidth = _p34.offsetLeft + _p34.offsetWidth;
 								var scrollTargetDetermined = function () {
 									if (!isRtl) {
 										return _elm_lang$core$Native_Utils.cmp(tabOffsetLeftAndWidth, scrollFrameWidth) > 0;
 									} else {
-										var tabRightOffset = _p33.offsetWidth - tabOffsetLeftAndWidth;
-										var frameOffsetAndTabWidth = scrollFrameWidth - _p33.offsetWidth;
+										var tabRightOffset = _p34.offsetWidth - tabOffsetLeftAndWidth;
+										var frameOffsetAndTabWidth = scrollFrameWidth - _p34.offsetWidth;
 										return _elm_lang$core$Native_Utils.cmp(tabRightOffset, frameOffsetAndTabWidth) > 0;
 									}
 								}();
 								return scrollTargetDetermined ? {
-									scrollTargetIndex: _elm_lang$core$Maybe$Just(_p31._0)
+									scrollTargetIndex: _elm_lang$core$Maybe$Just(_p32._0)
 								} : {scrollTargetIndex: _elm_lang$core$Maybe$Nothing};
 							}
 						});
-					var scrollTargetIndex = function (_p34) {
+					var scrollTargetIndex = function (_p35) {
 						return A2(
 							_elm_lang$core$Maybe$withDefault,
 							0,
 							function (_) {
 								return _.scrollTargetIndex;
-							}(_p34));
+							}(_p35));
 					}(
 						A3(
 							_elm_lang$core$List$foldl,
@@ -17424,18 +17443,18 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 									function (v0, v1) {
 										return {ctor: '_Tuple2', _0: v0, _1: v1};
 									}),
-								_p36.tabs)));
-					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p36, scrollTargetIndex);
-					var _p35 = A2(indicatorEnabledStates, _p36, translateOffset);
-					var forwardIndicator = _p35.forwardIndicator;
-					var backIndicator = _p35.backIndicator;
+								_p37.tabs)));
+					var translateOffset = A3(scrollToTabAtIndex, isRtl, _p37, scrollTargetIndex);
+					var _p36 = A2(indicatorEnabledStates, _p37, translateOffset);
+					var forwardIndicator = _p36.forwardIndicator;
+					var backIndicator = _p36.backIndicator;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
 								model,
 								{
-									geometry: _elm_lang$core$Maybe$Just(_p36),
+									geometry: _elm_lang$core$Maybe$Just(_p37),
 									translateOffset: translateOffset,
 									forwardIndicator: forwardIndicator,
 									backIndicator: backIndicator
@@ -17443,15 +17462,15 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				case 'Focus':
-					var _p37 = _p14._1;
+					var _p38 = _p14._1;
 					var currentTranslateOffset = model.translateOffset;
-					var tabBarWidth = _p37.tabBar.offsetWidth;
-					var scrollFrameWidth = _p37.scrollFrame.offsetWidth;
+					var tabBarWidth = _p38.tabBar.offsetWidth;
+					var scrollFrameWidth = _p38.scrollFrame.offsetWidth;
 					var tab = A2(
 						_elm_lang$core$Maybe$withDefault,
 						{offsetLeft: 0, offsetWidth: 0},
 						_elm_lang$core$List$head(
-							A2(_elm_lang$core$List$drop, _p14._0, _p37.tabs)));
+							A2(_elm_lang$core$List$drop, _p14._0, _p38.tabs)));
 					var leftEdge = tab.offsetLeft;
 					var normalizedLeftOffset = tabBarWidth - leftEdge;
 					var rightEdge = leftEdge + tab.offsetWidth;
@@ -17460,7 +17479,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 					var resetAmt = isRtl ? model.scrollLeftAmount : 0;
 					if (shouldScrollForward) {
 						var _v8 = lift,
-							_v9 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollForward(_p37),
+							_v9 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollForward(_p38),
 							_v10 = model;
 						lift = _v8;
 						msg = _v9;
@@ -17469,7 +17488,7 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 					} else {
 						if (shouldScrollBack) {
 							var _v11 = lift,
-								_v12 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollBack(_p37),
+								_v12 = _aforemny$elm_mdc$Material_Internal_Tabs_Model$ScrollBack(_p38),
 								_v13 = model;
 							lift = _v11;
 							msg = _v12;
@@ -17480,27 +17499,27 @@ var _aforemny$elm_mdc$Material_Internal_Tabs_Implementation$update = F3(
 						}
 					}
 				case 'Init':
-					var _p39 = _p14._0;
+					var _p40 = _p14._0;
 					return {
 						ctor: '_Tuple2',
 						_0: function () {
-							var scrollFrameWidth = _p39.scrollFrame.offsetWidth;
-							var tabBarWidth = _p39.tabBar.offsetWidth;
+							var scrollFrameWidth = _p40.scrollFrame.offsetWidth;
+							var tabBarWidth = _p40.tabBar.offsetWidth;
 							var isOverflowing = _elm_lang$core$Native_Utils.cmp(tabBarWidth, scrollFrameWidth) > 0;
 							var translateOffset = (!isOverflowing) ? 0 : model.translateOffset;
-							var _p38 = A2(indicatorEnabledStates, _p39, translateOffset);
-							var forwardIndicator = _p38.forwardIndicator;
-							var backIndicator = _p38.backIndicator;
+							var _p39 = A2(indicatorEnabledStates, _p40, translateOffset);
+							var forwardIndicator = _p39.forwardIndicator;
+							var backIndicator = _p39.backIndicator;
 							return _elm_lang$core$Maybe$Just(
 								_elm_lang$core$Native_Utils.update(
 									model,
 									{
-										geometry: _elm_lang$core$Maybe$Just(_p39),
-										scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p39, 0),
+										geometry: _elm_lang$core$Maybe$Just(_p40),
+										scale: A2(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$computeScale, _p40, 0),
 										forwardIndicator: forwardIndicator,
 										backIndicator: backIndicator,
 										translateOffset: translateOffset,
-										indicatorShown: false
+										indicatorShown: false || model.indicatorShown
 									}));
 						}(),
 						_1: A2(
@@ -19581,7 +19600,7 @@ var _aforemny$elm_mdc$Material$Model = function (a) {
 
 var _aforemny$elm_mdc$Material_Icon$span = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$span;
 var _aforemny$elm_mdc$Material_Icon$button = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$button;
-var _aforemny$elm_mdc$Material_Icon$anchor = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$button;
+var _aforemny$elm_mdc$Material_Icon$anchor = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$anchor;
 var _aforemny$elm_mdc$Material_Icon$size48 = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size48;
 var _aforemny$elm_mdc$Material_Icon$size36 = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size36;
 var _aforemny$elm_mdc$Material_Icon$size24 = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size24;
@@ -22218,7 +22237,6 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 			});
 	});
 
-var _aforemny$elm_mdc$Material_Dialog$openOn = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$openOn;
 var _aforemny$elm_mdc$Material_Dialog$accept = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$accept;
 var _aforemny$elm_mdc$Material_Dialog$cancel = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$cancel;
 var _aforemny$elm_mdc$Material_Dialog$footer = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$footer;
@@ -22228,6 +22246,7 @@ var _aforemny$elm_mdc$Material_Dialog$scrollable = _aforemny$elm_mdc$Material_In
 var _aforemny$elm_mdc$Material_Dialog$body = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$body;
 var _aforemny$elm_mdc$Material_Dialog$backdrop = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$backdrop;
 var _aforemny$elm_mdc$Material_Dialog$surface = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$surface;
+var _aforemny$elm_mdc$Material_Dialog$onClose = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$onClose;
 var _aforemny$elm_mdc$Material_Dialog$open = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$open;
 var _aforemny$elm_mdc$Material_Dialog$view = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$view;
 
@@ -22255,11 +22274,13 @@ var _aforemny$elm_mdc$Material_List$dense = _aforemny$elm_mdc$Material_Internal_
 var _aforemny$elm_mdc$Material_List$nonInteractive = _aforemny$elm_mdc$Material_Internal_List_Implementation$nonInteractive;
 var _aforemny$elm_mdc$Material_List$ul = _aforemny$elm_mdc$Material_Internal_List_Implementation$ul;
 
-var _aforemny$elm_mdc$Demo_Dialog$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false};
-var _aforemny$elm_mdc$Demo_Dialog$Model = F2(
-	function (a, b) {
-		return {mdc: a, rtl: b};
+var _aforemny$elm_mdc$Demo_Dialog$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false, showDialog: false, showScrollingDialog: false};
+var _aforemny$elm_mdc$Demo_Dialog$Model = F4(
+	function (a, b, c, d) {
+		return {mdc: a, rtl: b, showDialog: c, showScrollingDialog: d};
 	});
+var _aforemny$elm_mdc$Demo_Dialog$ShowScrollingDialog = {ctor: 'ShowScrollingDialog'};
+var _aforemny$elm_mdc$Demo_Dialog$ShowDialog = {ctor: 'ShowDialog'};
 var _aforemny$elm_mdc$Demo_Dialog$Cancel = {ctor: 'Cancel'};
 var _aforemny$elm_mdc$Demo_Dialog$Accept = {ctor: 'Accept'};
 var _aforemny$elm_mdc$Demo_Dialog$ToggleRtl = {ctor: 'ToggleRtl'};
@@ -22289,10 +22310,38 @@ var _aforemny$elm_mdc$Demo_Dialog$update = F3(
 				};
 			case 'Accept':
 				var _p2 = A2(_elm_lang$core$Debug$log, 'click', 'accept');
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{showDialog: false, showScrollingDialog: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Cancel':
 				var _p3 = A2(_elm_lang$core$Debug$log, 'click', 'cancel');
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{showDialog: false, showScrollingDialog: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ShowDialog':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{showDialog: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{showScrollingDialog: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
@@ -22931,22 +22980,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 										_1: {
 											ctor: '::',
 											_0: _aforemny$elm_mdc$Material_Button$ripple,
-											_1: {
-												ctor: '::',
-												_0: A3(
-													_aforemny$elm_mdc$Material_Dialog$openOn,
-													function (_p14) {
-														return lift(
-															_aforemny$elm_mdc$Demo_Dialog$Mdc(_p14));
-													},
-													{
-														ctor: '::',
-														_0: 1,
-														_1: {ctor: '[]'}
-													},
-													'click'),
-												_1: {ctor: '[]'}
-											}
+											_1: {ctor: '[]'}
 										}
 									},
 									{
@@ -22961,9 +22995,9 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 										ctor: '::',
 										_0: A5(
 											_aforemny$elm_mdc$Material_Button$view,
-											function (_p15) {
+											function (_p14) {
 												return lift(
-													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p15));
+													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p14));
 											},
 											{
 												ctor: '::',
@@ -22977,22 +23011,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 												_1: {
 													ctor: '::',
 													_0: _aforemny$elm_mdc$Material_Button$ripple,
-													_1: {
-														ctor: '::',
-														_0: A3(
-															_aforemny$elm_mdc$Material_Dialog$openOn,
-															function (_p16) {
-																return lift(
-																	_aforemny$elm_mdc$Demo_Dialog$Mdc(_p16));
-															},
-															{
-																ctor: '::',
-																_0: 2,
-																_1: {ctor: '[]'}
-															},
-															'click'),
-														_1: {ctor: '[]'}
-													}
+													_1: {ctor: '[]'}
 												}
 											},
 											{
@@ -23012,9 +23031,9 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 														ctor: '::',
 														_0: A5(
 															_aforemny$elm_mdc$Material_Checkbox$view,
-															function (_p17) {
+															function (_p15) {
 																return lift(
-																	_aforemny$elm_mdc$Demo_Dialog$Mdc(_p17));
+																	_aforemny$elm_mdc$Demo_Dialog$Mdc(_p15));
 															},
 															{
 																ctor: '::',
