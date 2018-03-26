@@ -109,6 +109,7 @@ update lift msg model =
               { model
                   | index = index
                   , scale = computeScale geometry index
+                  , geometry = Just geometry
               }
             ,
               Cmd.none
@@ -332,7 +333,7 @@ update lift msg model =
                   , forwardIndicator = forwardIndicator
                   , backIndicator = backIndicator
                   , translateOffset = translateOffset
-                  , indicatorShown = False
+                  , indicatorShown = False || model.indicatorShown
               }
             ,
               Helpers.delayedCmd 0 (lift SetIndicatorShown)
@@ -597,12 +598,10 @@ tabs lift model options nodes =
                     [ styled Html.div
                       [ cs "mdc-tab-bar__indicator"
                       , css "transform" indicatorTransform
-                      , when (numTabs > 0) <|
+                      , when ((numTabs > 0)) <|
                         css "visibility" "visible"
-                      , when indicatorFirstRender << Options.many <|
-                        [ css "display" "none"
-                        , css "transition" "none"
-                        ]
+                      , when indicatorFirstRender <|
+                        css "display" "none"
                       ]
                       []
                     ]
