@@ -32,7 +32,7 @@ IconToggle.view Mdc [0] model.mdc
           }
     , IconToggle.label
           { on = "Remove from favorites"
-          , off "Add to favorites"
+          , off = "Add to favorites"
           }
     , IconToggle.on True
     , IconToggle.onClick Toggle
