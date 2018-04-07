@@ -8,6 +8,7 @@ module Material.Internal.Toolbar.Implementation exposing
     , flexible
     , flexibleDefaultBehavior
     , icon
+    , iconToggle
     , menuIcon
     , Property
     , react
@@ -27,6 +28,7 @@ import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Icon.Implementation as Icon
+import Material.Internal.IconToggle.Implementation as IconToggle
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when, nop)
 import Material.Internal.Toolbar.Model exposing (Model, defaultModel, Calculations, defaultCalculations, Config, defaultConfig, Geometry, Msg(..))
@@ -588,6 +590,11 @@ title options =
 
 icon : Icon.Property m
 icon =
+    cs "mdc-toolbar__icon"
+
+
+iconToggle : IconToggle.Property m
+iconToggle =
     cs "mdc-toolbar__icon"
 
 

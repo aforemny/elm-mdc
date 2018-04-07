@@ -8,6 +8,7 @@ module Material.Toolbar exposing
     , flexible
     , flexibleDefaultBehavior
     , icon
+    , iconToggle
     , menuIcon
     , Property
     , row
@@ -85,6 +86,7 @@ import Html exposing (Html)
 import Material
 import Material.Component exposing (Index)
 import Material.Icon as Icon
+import Material.IconToggle as IconToggle
 import Material.Internal.Toolbar.Implementation as Toolbar
 import Material.Options as Options
 
@@ -219,6 +221,15 @@ Should be applied to a `Icon.view`.
 icon : Icon.Property m
 icon =
     Toolbar.icon
+
+
+{-| Style an icon toggle  as an icon at the end of the toolbar.
+
+Should be applied to a `IconToggle.view`.
+-}
+iconToggle : IconToggle.Property m
+iconToggle =
+    Toolbar.iconToggle
 
 
 {-| Adds a top margin to the element so that it is not covered by the toolbar.
