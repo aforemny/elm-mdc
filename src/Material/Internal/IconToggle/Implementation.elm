@@ -84,15 +84,14 @@ iconToggle lift model options _ =
             Ripple.view True (lift << RippleMsg) model.ripple []
     in
     Options.apply summary (if config.inner == Nothing then Html.i else Html.span)
-    ( cs "mdc-icon-toggle"
-    :: when (config.inner == Nothing) (cs "material-icons")
-    :: Options.aria "label" (if config.on then config.label.on else config.label.off)
-    :: Options.many
+    [ cs "mdc-icon-toggle"
+    , when (config.inner == Nothing) (cs "material-icons")
+    , Options.aria "label" (if config.on then config.label.on else config.label.off)
+    , Options.many
        [ ripple.interactionHandler
        , ripple.properties
        ]
-    :: options
-    )
+    ]
     []
     [ if config.inner /= Nothing then
           styled Html.i
