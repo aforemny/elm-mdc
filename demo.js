@@ -13134,7 +13134,7 @@ var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$iconToggle = F
 										_1: {ctor: '[]'}
 									}
 								}),
-							_1: options
+							_1: {ctor: '[]'}
 						}
 					}
 				}
@@ -18700,6 +18700,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$Config = functi
 	};
 };
 
+var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$iconToggle = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__icon');
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$icon = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-toolbar__icon');
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$title = function (options) {
 	return A2(
@@ -19607,7 +19608,15 @@ var _aforemny$elm_mdc$Material_Icon$size24 = _aforemny$elm_mdc$Material_Internal
 var _aforemny$elm_mdc$Material_Icon$size18 = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size18;
 var _aforemny$elm_mdc$Material_Icon$view = _aforemny$elm_mdc$Material_Internal_Icon_Implementation$view;
 
+var _aforemny$elm_mdc$Material_IconToggle$disabled = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$disabled;
+var _aforemny$elm_mdc$Material_IconToggle$label = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$label;
+var _aforemny$elm_mdc$Material_IconToggle$icon = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$icon;
+var _aforemny$elm_mdc$Material_IconToggle$className = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$className;
+var _aforemny$elm_mdc$Material_IconToggle$on = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$on;
+var _aforemny$elm_mdc$Material_IconToggle$view = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$view;
+
 var _aforemny$elm_mdc$Material_Toolbar$fixedAdjust = _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$fixedAdjust;
+var _aforemny$elm_mdc$Material_Toolbar$iconToggle = _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$iconToggle;
 var _aforemny$elm_mdc$Material_Toolbar$icon = _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$icon;
 var _aforemny$elm_mdc$Material_Toolbar$title = _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$title;
 var _aforemny$elm_mdc$Material_Toolbar$menuIcon = _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$menuIcon;
@@ -20562,13 +20571,6 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 				}
 			});
 	});
-
-var _aforemny$elm_mdc$Material_IconToggle$disabled = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$disabled;
-var _aforemny$elm_mdc$Material_IconToggle$label = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$label;
-var _aforemny$elm_mdc$Material_IconToggle$icon = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$icon;
-var _aforemny$elm_mdc$Material_IconToggle$className = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$className;
-var _aforemny$elm_mdc$Material_IconToggle$on = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$on;
-var _aforemny$elm_mdc$Material_IconToggle$view = _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$view;
 
 var _aforemny$elm_mdc$Material_Internal_Card_Implementation$actionIcon = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-card__action mdc-card__action-icon');
 var _aforemny$elm_mdc$Material_Internal_Card_Implementation$actionButton = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-card__action mdc-card__action-button');
