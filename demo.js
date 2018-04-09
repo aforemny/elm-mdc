@@ -17998,29 +17998,35 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 					})(''),
 				config.value));
 		var focused = model.focused && (!config.disabled);
-		var isInvalid = function () {
-			var _p11 = config.pattern;
-			if (_p11.ctor === 'Just') {
-				return A2(
-					_elm_lang$core$Maybe$withDefault,
-					false,
-					A2(
-						_elm_lang$core$Maybe$map,
-						function (_p12) {
-							return !A2(
-								_elm_lang$core$Regex$contains,
-								_elm_lang$core$Regex$regex(
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										'^',
-										A2(_elm_lang$core$Basics_ops['++'], _p11._0, '$'))),
-								_p12);
-						},
-						model.value));
-			} else {
-				return false;
-			}
-		}();
+		var isInvalid = A2(
+			F2(
+				function (x, y) {
+					return x || y;
+				}),
+			config.invalid,
+			function () {
+				var _p11 = config.pattern;
+				if (_p11.ctor === 'Just') {
+					return A2(
+						_elm_lang$core$Maybe$withDefault,
+						false,
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (_p12) {
+								return !A2(
+									_elm_lang$core$Regex$contains,
+									_elm_lang$core$Regex$regex(
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'^',
+											A2(_elm_lang$core$Basics_ops['++'], _p11._0, '$'))),
+									_p12);
+							},
+							model.value));
+				} else {
+					return false;
+				}
+			}());
 		return A5(
 			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
