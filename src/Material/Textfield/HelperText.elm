@@ -74,6 +74,9 @@ persistent =
 
 
 {-| Indicates the helper text is a validation message.
+
+It will only show when the text field is marked as invalid or if it is
+`persistent`.
 -}
 validationMsg : Property m
 validationMsg =

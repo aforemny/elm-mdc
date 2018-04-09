@@ -169,6 +169,9 @@ box =
 
 
 {-| Set a pattern to validate the textfield's input against.
+
+The text field is automatically marked invalid if the pattern does not match
+its input.
 -}
 pattern : String -> Property m
 pattern =

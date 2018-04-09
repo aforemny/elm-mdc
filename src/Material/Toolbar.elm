@@ -78,7 +78,7 @@ Toolbar.view Mdc [0] model.mdc []
 @docs shrinkToFit
 @docs menuIcon
 @docs title
-@docs icon
+@docs icon, iconToggle
 @docs fixedAdjust
 -}
 

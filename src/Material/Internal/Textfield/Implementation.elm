@@ -247,6 +247,7 @@ textField lift model options _ =
             Ripple.view False (lift << RippleMsg) model.ripple []
 
         isInvalid =
+            (||) config.invalid <|
             case config.pattern of
                 Just pattern ->
                     model.value
