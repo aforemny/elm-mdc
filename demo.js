@@ -8333,14 +8333,18 @@ var _aforemny$elm_mdc$Material_Internal_Checkbox_Model$CheckedUnchecked = {ctor:
 var _aforemny$elm_mdc$Material_Internal_Checkbox_Model$UncheckedIndeterminate = {ctor: 'UncheckedIndeterminate'};
 var _aforemny$elm_mdc$Material_Internal_Checkbox_Model$UncheckedChecked = {ctor: 'UncheckedChecked'};
 
-var _aforemny$elm_mdc$Material_Internal_Dialog_Model$defaultModel = {open: false, animating: false};
+var _aforemny$elm_mdc$Material_Internal_Dialog_Model$defaultModel = {animating: false, open: false};
 var _aforemny$elm_mdc$Material_Internal_Dialog_Model$Model = F2(
 	function (a, b) {
-		return {open: a, animating: b};
+		return {animating: a, open: b};
 	});
 var _aforemny$elm_mdc$Material_Internal_Dialog_Model$AnimationEnd = {ctor: 'AnimationEnd'};
-var _aforemny$elm_mdc$Material_Internal_Dialog_Model$Close = {ctor: 'Close'};
-var _aforemny$elm_mdc$Material_Internal_Dialog_Model$Open = {ctor: 'Open'};
+var _aforemny$elm_mdc$Material_Internal_Dialog_Model$SetOpen = function (a) {
+	return {ctor: 'SetOpen', _0: a};
+};
+var _aforemny$elm_mdc$Material_Internal_Dialog_Model$SetState = function (a) {
+	return {ctor: 'SetState', _0: a};
+};
 var _aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp = {ctor: 'NoOp'};
 
 var _aforemny$elm_mdc$Material_Internal_Drawer_Model$defaultGeometry = {width: 0};
@@ -11716,6 +11720,22 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close = _debois$el
 				_1: {ctor: '[]'}
 			},
 			_elm_lang$core$Json_Decode$string)));
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$transitionend = function () {
+	var hasClass = F2(
+		function (cs, className) {
+			return A2(
+				_elm_lang$core$List$member,
+				cs,
+				A2(_elm_lang$core$String$split, ' ', className));
+		});
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (className) {
+			return A2(hasClass, 'mdc-dialog__surface', className) ? _elm_lang$core$Json_Decode$succeed(
+				{ctor: '_Tuple0'}) : _elm_lang$core$Json_Decode$fail('');
+		},
+		_debois$elm_dom$DOM$target(_debois$elm_dom$DOM$className));
+}();
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$onClose = function (onClose) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		function (config) {
@@ -11780,13 +11800,19 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$surface = function
 			_1: options
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$open = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog--open');
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$defaultConfig = {onClose: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$open = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{open: true});
+	});
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$defaultConfig = {onClose: _elm_lang$core$Maybe$Nothing, open: false};
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F4(
 	function (lift, model, options, nodes) {
 		var _p0 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$defaultConfig, options);
 		var summary = _p0;
 		var config = _p0.config;
+		var stateChanged = !_elm_lang$core$Native_Utils.eq(config.open, model.open);
 		return A5(
 			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
@@ -11796,49 +11822,63 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F4(
 				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog'),
 				_1: {
 					ctor: '::',
-					_0: function (_p1) {
-						return A2(
-							_aforemny$elm_mdc$Material_Internal_Options$when,
-							model.open,
-							_aforemny$elm_mdc$Material_Internal_Options$many(_p1));
-					}(
-						{
-							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog--open'),
-							_1: {
-								ctor: '::',
-								_0: A2(_aforemny$elm_mdc$Material_Internal_Options$data, 'focustrap', 'mdc-dialog__footer__button--accept'),
-								_1: {ctor: '[]'}
-							}
-						}),
+					_0: A2(
+						_aforemny$elm_mdc$Material_Internal_Options$when,
+						stateChanged,
+						_aforemny$elm_mdc$Material_Internal_GlobalEvents$onTick(
+							_elm_lang$core$Json_Decode$succeed(
+								lift(
+									_aforemny$elm_mdc$Material_Internal_Dialog_Model$SetState(config.open))))),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Material_Internal_Options$when,
-							model.animating,
-							_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog--animating')),
+						_0: function (_p1) {
+							return A2(
+								_aforemny$elm_mdc$Material_Internal_Options$when,
+								model.open,
+								_aforemny$elm_mdc$Material_Internal_Options$many(_p1));
+						}(
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog--open'),
+								_1: {
+									ctor: '::',
+									_0: A2(_aforemny$elm_mdc$Material_Internal_Options$data, 'focustrap', ''),
+									_1: {ctor: '[]'}
+								}
+							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_aforemny$elm_mdc$Material_Internal_Options$on,
-								'click',
-								A2(
-									_elm_lang$core$Json_Decode$map,
-									function (doClose) {
-										return doClose ? A2(
-											_elm_lang$core$Maybe$withDefault,
-											lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp),
-											config.onClose) : lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp);
-									},
-									_aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close)),
+								_aforemny$elm_mdc$Material_Internal_Options$when,
+								model.animating,
+								_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-dialog--animating')),
 							_1: {
 								ctor: '::',
 								_0: A2(
 									_aforemny$elm_mdc$Material_Internal_Options$on,
 									'transitionend',
-									_elm_lang$core$Json_Decode$succeed(
-										lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$AnimationEnd))),
-								_1: options
+									A2(
+										_elm_lang$core$Json_Decode$map,
+										function (_p2) {
+											return lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$AnimationEnd);
+										},
+										_aforemny$elm_mdc$Material_Internal_Dialog_Implementation$transitionend)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_Internal_Options$on,
+										'click',
+										A2(
+											_elm_lang$core$Json_Decode$map,
+											function (doClose) {
+												return doClose ? A2(
+													_elm_lang$core$Maybe$withDefault,
+													lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp),
+													config.onClose) : lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp);
+											},
+											_aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close)),
+									_1: options
+								}
 							}
 						}
 					}
@@ -11847,7 +11887,7 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F4(
 			{ctor: '[]'},
 			nodes);
 	});
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p2 = A3(
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p3 = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$indexed,
 	function (_) {
 		return _.dialog;
@@ -11859,31 +11899,32 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p2 = A3(
 				{dialog: x});
 		}),
 	_aforemny$elm_mdc$Material_Internal_Dialog_Model$defaultModel);
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p2._0;
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$set = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p2._1;
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p3._0;
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$set = _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$_p3._1;
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog, _aforemny$elm_mdc$Material_Internal_Msg$DialogMsg);
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$update = F3(
 	function (lift, msg, model) {
-		var _p3 = msg;
-		switch (_p3.ctor) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
-			case 'Open':
-				return {
+			case 'SetState':
+				var _p5 = _p4._0;
+				return (!_elm_lang$core$Native_Utils.eq(_p5, model.open)) ? {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{open: true, animating: true})),
+							{animating: true, open: _p5})),
 					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'Close':
+				} : {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'SetOpen':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{open: false, animating: true})),
+							{open: _p4._0})),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
@@ -11898,9 +11939,10 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$update = F3(
 		}
 	});
 var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$react = A4(_aforemny$elm_mdc$Material_Internal_Component$react, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$get, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$set, _aforemny$elm_mdc$Material_Internal_Msg$DialogMsg, _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$update);
-var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$Config = function (a) {
-	return {onClose: a};
-};
+var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$Config = F2(
+	function (a, b) {
+		return {onClose: a, open: b};
+	});
 
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$inset = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divider--inset');
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$padded = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divier--padded');
@@ -22358,7 +22400,7 @@ var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
 			model.mdc,
 			{
 				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Dialog$open,
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-dialog--open'),
 				_1: {
 					ctor: '::',
 					_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'relative'),
@@ -22513,7 +22555,16 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 			},
 			index,
 			model.mdc,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(_aforemny$elm_mdc$Material_Options$when, model.showDialog, _aforemny$elm_mdc$Material_Dialog$open),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Dialog$onClose(
+						lift(_aforemny$elm_mdc$Demo_Dialog$Cancel)),
+					_1: {ctor: '[]'}
+				}
+			},
 			{
 				ctor: '::',
 				_0: A2(
@@ -22581,11 +22632,8 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 													_0: _aforemny$elm_mdc$Material_Dialog$cancel,
 													_1: {
 														ctor: '::',
-														_0: A2(
-															_aforemny$elm_mdc$Material_Options$on,
-															'click',
-															_elm_lang$core$Json_Decode$succeed(
-																lift(_aforemny$elm_mdc$Demo_Dialog$Cancel))),
+														_0: _aforemny$elm_mdc$Material_Options$onClick(
+															lift(_aforemny$elm_mdc$Demo_Dialog$Cancel)),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -22620,11 +22668,8 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 														_0: _aforemny$elm_mdc$Material_Dialog$accept,
 														_1: {
 															ctor: '::',
-															_0: A2(
-																_aforemny$elm_mdc$Material_Options$on,
-																'click',
-																_elm_lang$core$Json_Decode$succeed(
-																	lift(_aforemny$elm_mdc$Demo_Dialog$Accept))),
+															_0: _aforemny$elm_mdc$Material_Options$onClick(
+																lift(_aforemny$elm_mdc$Demo_Dialog$Accept)),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -22661,7 +22706,16 @@ var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 			},
 			index,
 			model.mdc,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(_aforemny$elm_mdc$Material_Options$when, model.showScrollingDialog, _aforemny$elm_mdc$Material_Dialog$open),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Dialog$onClose(
+						lift(_aforemny$elm_mdc$Demo_Dialog$Cancel)),
+					_1: {ctor: '[]'}
+				}
+			},
 			{
 				ctor: '::',
 				_0: A2(
@@ -22792,11 +22846,8 @@ var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 													_0: _aforemny$elm_mdc$Material_Dialog$cancel,
 													_1: {
 														ctor: '::',
-														_0: A2(
-															_aforemny$elm_mdc$Material_Options$on,
-															'click',
-															_elm_lang$core$Json_Decode$succeed(
-																lift(_aforemny$elm_mdc$Demo_Dialog$Cancel))),
+														_0: _aforemny$elm_mdc$Material_Options$onClick(
+															lift(_aforemny$elm_mdc$Demo_Dialog$Cancel)),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -22831,11 +22882,8 @@ var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 														_0: _aforemny$elm_mdc$Material_Dialog$accept,
 														_1: {
 															ctor: '::',
-															_0: A2(
-																_aforemny$elm_mdc$Material_Options$on,
-																'click',
-																_elm_lang$core$Json_Decode$succeed(
-																	lift(_aforemny$elm_mdc$Demo_Dialog$Accept))),
+															_0: _aforemny$elm_mdc$Material_Options$onClick(
+																lift(_aforemny$elm_mdc$Demo_Dialog$Accept)),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -22982,7 +23030,12 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 										_1: {
 											ctor: '::',
 											_0: _aforemny$elm_mdc$Material_Button$ripple,
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Options$onClick(
+													lift(_aforemny$elm_mdc$Demo_Dialog$ShowDialog)),
+												_1: {ctor: '[]'}
+											}
 										}
 									},
 									{
@@ -23013,7 +23066,12 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 												_1: {
 													ctor: '::',
 													_0: _aforemny$elm_mdc$Material_Button$ripple,
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Options$onClick(
+															lift(_aforemny$elm_mdc$Demo_Dialog$ShowScrollingDialog)),
+														_1: {ctor: '[]'}
+													}
 												}
 											},
 											{
@@ -23048,11 +23106,8 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 																_0: _aforemny$elm_mdc$Material_Checkbox$checked(model.rtl),
 																_1: {
 																	ctor: '::',
-																	_0: A2(
-																		_aforemny$elm_mdc$Material_Options$on,
-																		'click',
-																		_elm_lang$core$Json_Decode$succeed(
-																			lift(_aforemny$elm_mdc$Demo_Dialog$ToggleRtl))),
+																	_0: _aforemny$elm_mdc$Material_Options$onClick(
+																		lift(_aforemny$elm_mdc$Demo_Dialog$ToggleRtl)),
 																	_1: {ctor: '[]'}
 																}
 															},

@@ -364,6 +364,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
         window["ElmFocusTrap"].activeTrap.focusTrap.deactivate();
         window["ElmFocusTrap"].activeTrap = null;
+        document.body.classList.remove("mdc-dialog-scroll-lock");
       } else {
         if (window["ElmFocusTrap"].activeTrap !== null) {
           continue;
@@ -376,12 +377,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
         var focusTrap = __WEBPACK_IMPORTED_MODULE_0_focus_trap___default()(node, {
           initialFocus: initialFocusElement,
-          clickOutsideDeactivates: true
+          clickOutsideDeactivates: false,
+          escapeDeactivates: false
         }).activate();
         window["ElmFocusTrap"].activeTrap = {
           node: node,
           focusTrap: focusTrap
         };
+        document.body.classList.add("mdc-dialog-scroll-lock");
       }
     }
   });
