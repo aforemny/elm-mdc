@@ -3,7 +3,6 @@ module Demo.Dialog exposing (Model,defaultModel,Msg(Mdc),update,view)
 import Demo.Page as Page exposing (Page)
 import Html.Attributes as Html
 import Html exposing (Html, text)
-import Json.Decode as Json
 import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
@@ -72,7 +71,7 @@ update lift msg model =
 heroDialog : (Msg m -> m) -> List Int -> Model m -> Html m
 heroDialog lift index model =
     Dialog.view (lift << Mdc) index model.mdc
-    [ Dialog.open
+    [ cs "mdc-dialog--open"
     , css "position" "relative"
     , css "width" "320px"
     , css "z-index" "auto"
@@ -118,7 +117,10 @@ heroDialog lift index model =
 
 dialog : (Msg m -> m) -> List Int -> Model m -> Html m
 dialog lift index model =
-    Dialog.view (lift << Mdc) index model.mdc []
+    Dialog.view (lift << Mdc) index model.mdc
+    [ Dialog.open |> when model.showDialog
+    , Dialog.onClose (lift Cancel)
+    ]
     [ Dialog.surface []
       [
         Dialog.header []
@@ -142,7 +144,7 @@ data to Google, even when no apps are running.
           Button.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
-          , Options.on "click" (Json.succeed (lift Cancel))
+          , Options.onClick (lift Cancel)
           ]
           [ text "Decline"
           ]
@@ -150,7 +152,7 @@ data to Google, even when no apps are running.
           Button.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
-          , Options.on "click" (Json.succeed (lift Accept))
+          , Options.onClick (lift Accept)
           ]
           [ text "Continue"
           ]
@@ -163,7 +165,10 @@ data to Google, even when no apps are running.
 
 scrollableDialog : (Msg m -> m) -> List Int -> Model m -> Html m
 scrollableDialog lift index model =
-    Dialog.view (lift << Mdc) index model.mdc []
+    Dialog.view (lift << Mdc) index model.mdc
+    [ Dialog.open |> when model.showScrollingDialog
+    , Dialog.onClose (lift Cancel)
+    ]
     [ Dialog.surface []
       [
         Dialog.header []
@@ -204,7 +209,7 @@ scrollableDialog lift index model =
           Button.view (lift << Mdc) (index ++ [0]) model.mdc
           [ Button.ripple
           , Dialog.cancel
-          , Options.on "click" (Json.succeed (lift Cancel))
+          , Options.onClick (lift Cancel)
           ]
           [ text "Decline"
           ]
@@ -212,7 +217,7 @@ scrollableDialog lift index model =
           Button.view (lift << Mdc) (index ++ [1]) model.mdc
           [ Button.ripple
           , Dialog.accept
-          , Options.on "click" (Json.succeed (lift Accept))
+          , Options.onClick (lift Accept)
           ]
           [ text "Continue"
           ]
@@ -231,8 +236,7 @@ view lift page model =
     [ css "justify-content" "center"
     , Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
     ]
-    [
-      heroDialog lift [0] model
+    [ heroDialog lift [0] model
     ]
   ,
     styled Html.div
@@ -255,8 +259,7 @@ view lift page model =
       Button.view (lift << Mdc) [3] model.mdc
       [ Button.raised
       , Button.ripple
-      -- TODO:
-      -- Dialog.openOn (lift << Mdc) [1] "click"
+      , Options.onClick (lift ShowDialog)
       ]
       [ text "Show dialog"
       ]
@@ -266,8 +269,7 @@ view lift page model =
       Button.view (lift << Mdc) [4] model.mdc
       [ Button.raised
       , Button.ripple
-      -- TODO
-      -- Dialog.openOn (lift << Mdc) [2] "click"
+      , Options.onClick (lift ShowScrollingDialog)
       ]
       [ text "Show scrolling dialog"
       ]
@@ -277,7 +279,7 @@ view lift page model =
       FormField.view []
       [ Checkbox.view (lift << Mdc) [5] model.mdc
         [ Checkbox.checked model.rtl
-        , Options.on "click" (Json.succeed (lift ToggleRtl))
+        , Options.onClick (lift ToggleRtl)
         ]
         []
       ,

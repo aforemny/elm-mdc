@@ -17,7 +17,7 @@ module Material.Dialog exposing
 {-|
 The Dialog component is a spec-aligned dialog component adhering to the
 Material Design dialog pattern. It implements a modal dialog window that traps
-focus when opening and restores focus when closing.  
+focus when opening and restores focus when closing.
 
 The current implementation requires that a dialog has as first child a
 `surface` element and as second child a `backdrop` element.

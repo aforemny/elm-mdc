@@ -16,11 +16,12 @@ module Material.Internal.Dialog.Implementation exposing
     )
 
 import DOM
-import Html exposing (..)
+import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Button.Implementation as Button
 import Material.Internal.Component as Component exposing (Index, Indexed)
 import Material.Internal.Dialog.Model exposing (Model, defaultModel, Msg(..))
+import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (styled, cs, css, when) 
 
@@ -31,11 +32,14 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        Open ->
-            ( Just { model | open = True, animating = True }, Cmd.none )
+        SetState open ->
+            if open /= model.open then
+                ( Just { model | animating = True, open = open }, Cmd.none )
+            else
+                ( Nothing, Cmd.none )
 
-        Close ->
-            ( Just { model | open = False, animating = True }, Cmd.none )
+        SetOpen open ->
+            ( Just { model | open = open }, Cmd.none )
 
         AnimationEnd ->
             ( Just { model | animating = False }, Cmd.none )
@@ -72,12 +76,14 @@ view =
 
 type alias Config m =
     { onClose : Maybe m
+    , open : Bool
     }
 
 
 defaultConfig : Config m
 defaultConfig =
     { onClose = Nothing
+    , open = False
     }
 
 
@@ -90,15 +96,22 @@ dialog lift model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
+
+        stateChanged =
+            config.open /= model.open
     in
     Options.apply summary Html.aside
     ( cs "mdc-dialog"
+    :: ( when stateChanged <|
+         GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
+       )
     :: ( when model.open << Options.many <|
          [ cs "mdc-dialog--open"
-         , Options.data "focustrap" "mdc-dialog__footer__button--accept"
+         , Options.data "focustrap" ""
          ]
        )
     :: when model.animating (cs "mdc-dialog--animating")
+    :: Options.on "transitionend" (Json.map (\ _ -> lift AnimationEnd) transitionend)
     :: ( Options.on "click" <|
          Json.map (\ doClose ->
               if doClose then
@@ -106,9 +119,8 @@ dialog lift model options nodes =
               else
                   lift NoOp
            )
-            close
+           close
        )
-    :: Options.on "transitionend" (Json.succeed (lift AnimationEnd))
     :: options
     )
     []
@@ -117,7 +129,7 @@ dialog lift model options nodes =
 
 open : Property m
 open =
-    cs "mdc-dialog--open"
+    Options.option (\ config -> { config | open = True })
 
 
 surface : List (Property m) -> List (Html m) -> Html m
@@ -168,6 +180,21 @@ accept =
 onClose : m -> Property m
 onClose onClose =
     Options.option (\ config -> { config | onClose = Just onClose })
+
+
+transitionend : Decoder ()
+transitionend =
+    let
+        hasClass cs className =
+            List.member cs (String.split " " className)
+    in
+    Json.andThen (\ className ->
+            if hasClass "mdc-dialog__surface" className then
+                Json.succeed ()
+            else
+                Json.fail ""
+        )
+        (DOM.target DOM.className)
 
 
 close : Decoder Bool

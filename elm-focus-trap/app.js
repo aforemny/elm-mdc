@@ -27,6 +27,7 @@ import createFocusTrap from 'focus-trap';
         }
         window["ElmFocusTrap"].activeTrap.focusTrap.deactivate();
         window["ElmFocusTrap"].activeTrap = null;
+        document.body.classList.remove("mdc-dialog-scroll-lock");
       } else {
         if (window["ElmFocusTrap"].activeTrap !== null) {
           continue;
@@ -39,12 +40,14 @@ import createFocusTrap from 'focus-trap';
         }
         var focusTrap = createFocusTrap(node, {
           initialFocus: initialFocusElement,
-          clickOutsideDeactivates: true
+          clickOutsideDeactivates: false,
+          escapeDeactivates: false
         }).activate();
         window["ElmFocusTrap"].activeTrap = {
           node: node,
           focusTrap: focusTrap
         };
+        document.body.classList.add("mdc-dialog-scroll-lock");
       }
     }
   });

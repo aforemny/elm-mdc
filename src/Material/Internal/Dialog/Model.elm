@@ -6,20 +6,20 @@ module Material.Internal.Dialog.Model exposing
 
 
 type alias Model =
-    { open : Bool
-    , animating : Bool
+    { animating : Bool
+    , open : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { open = False
-    , animating = False
+    { animating = False
+    , open = False
     }
 
 
 type Msg
     = NoOp
-    | Open
-    | Close
+    | SetState Bool
+    | SetOpen Bool
     | AnimationEnd
