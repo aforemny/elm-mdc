@@ -10577,77 +10577,73 @@ var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$view = F4(
 				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded'),
 				_1: {
 					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-surface'),
+					_0: A2(
+						_aforemny$elm_mdc$Material_Internal_Options$when,
+						_elm_lang$core$Native_Utils.eq(
+							config.color,
+							_elm_lang$core$Maybe$Just('primary')),
+						_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-surface--primary')),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_aforemny$elm_mdc$Material_Internal_Options$when,
 							_elm_lang$core$Native_Utils.eq(
 								config.color,
-								_elm_lang$core$Maybe$Just('primary')),
-							_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-surface--primary')),
+								_elm_lang$core$Maybe$Just('accent')),
+							_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-surface--accent')),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_Internal_Options$when,
-								_elm_lang$core$Native_Utils.eq(
-									config.color,
-									_elm_lang$core$Maybe$Just('accent')),
-								_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-surface--accent')),
+							_0: function (_p14) {
+								return A2(
+									_aforemny$elm_mdc$Material_Internal_Options$when,
+									isUnbounded,
+									_aforemny$elm_mdc$Material_Internal_Options$many(_p14));
+							}(
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--unbounded'),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Material_Internal_Options$data, 'data-mdc-ripple-is-unbounded', ''),
+										_1: {ctor: '[]'}
+									}
+								}),
 							_1: {
 								ctor: '::',
-								_0: function (_p14) {
+								_0: function (_p15) {
 									return A2(
 										_aforemny$elm_mdc$Material_Internal_Options$when,
-										isUnbounded,
-										_aforemny$elm_mdc$Material_Internal_Options$many(_p14));
+										isVisible,
+										_aforemny$elm_mdc$Material_Internal_Options$many(_p15));
 								}(
 									{
 										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--unbounded'),
+										_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--background-active-fill'),
 										_1: {
 											ctor: '::',
-											_0: A2(_aforemny$elm_mdc$Material_Internal_Options$data, 'data-mdc-ripple-is-unbounded', ''),
+											_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--foreground-activation'),
 											_1: {ctor: '[]'}
 										}
 									}),
 								_1: {
 									ctor: '::',
-									_0: function (_p15) {
-										return A2(
-											_aforemny$elm_mdc$Material_Internal_Options$when,
-											isVisible,
-											_aforemny$elm_mdc$Material_Internal_Options$many(_p15));
-									}(
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--background-active-fill'),
-											_1: {
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--foreground-activation'),
-												_1: {ctor: '[]'}
-											}
-										}),
+									_0: A2(
+										_aforemny$elm_mdc$Material_Internal_Options$when,
+										model.deactivation,
+										_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--foreground-deactivation')),
 									_1: {
 										ctor: '::',
 										_0: A2(
 											_aforemny$elm_mdc$Material_Internal_Options$when,
-											model.deactivation,
-											_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--foreground-deactivation')),
+											model.focus,
+											_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--background-focused')),
 										_1: {
 											ctor: '::',
 											_0: A2(
 												_aforemny$elm_mdc$Material_Internal_Options$when,
-												model.focus,
-												_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-ripple-upgraded--background-focused')),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_aforemny$elm_mdc$Material_Internal_Options$when,
-													isVisible,
-													_aforemny$elm_mdc$Material_Internal_Options$cs(cssVariableHack.className)),
-												_1: {ctor: '[]'}
-											}
+												isVisible,
+												_aforemny$elm_mdc$Material_Internal_Options$cs(cssVariableHack.className)),
+											_1: {ctor: '[]'}
 										}
 									}
 								}
@@ -16259,29 +16255,20 @@ var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$tryDequeue = fun
 		var _p7 = _p6._1._0;
 		return {
 			ctor: '_Tuple2',
-			_0: _elm_lang$core$Maybe$Just(
-				_elm_lang$core$Native_Utils.update(
-					model,
-					{
-						state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Active(_p7),
-						queue: _p6._1._1,
-						seq: model.seq + 1
-					})),
-			_1: _elm_lang$core$Platform_Cmd$batch(
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
 				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Platform_Cmd$map,
-						_aforemny$elm_mdc$Material_Internal_Snackbar_Model$Move(model.seq + 1),
-						A2(_aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd, _p7.timeout, _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout)),
-					_1: {ctor: '[]'}
-				})
+					state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Active(_p7),
+					queue: _p6._1._1,
+					seq: model.seq + 1
+				}),
+			_1: A2(
+				_elm_lang$core$Platform_Cmd$map,
+				_aforemny$elm_mdc$Material_Internal_Snackbar_Model$Move(model.seq + 1),
+				A2(_aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd, _p7.timeout, _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout))
 		};
 	} else {
-		return A2(
-			_elm_lang$core$Platform_Cmd_ops['!'],
-			_elm_lang$core$Maybe$Nothing,
-			{ctor: '[]'});
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	}
 };
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$enqueue = F2(
@@ -16316,18 +16303,11 @@ var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$add = F4(
 				A2(_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$enqueue, contents, component_)));
 		var component = _p8._0;
 		var effects = _p8._1;
-		var updatedStore = function () {
-			var _p10 = component;
-			if (_p10.ctor === 'Just') {
-				return _elm_lang$core$Native_Utils.update(
-					store,
-					{
-						snackbar: A3(_elm_lang$core$Dict$insert, idx, _p10._0, store.snackbar)
-					});
-			} else {
-				return store;
-			}
-		}();
+		var updatedStore = _elm_lang$core$Native_Utils.update(
+			store,
+			{
+				snackbar: A3(_elm_lang$core$Dict$insert, idx, component, store.snackbar)
+			});
 		return {ctor: '_Tuple2', _0: updatedStore, _1: effects};
 	});
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next = function (model) {
@@ -16336,96 +16316,78 @@ var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next = function 
 };
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$move = F2(
 	function (transition, model) {
-		var _p11 = {ctor: '_Tuple2', _0: model.state, _1: transition};
-		_v5_4:
+		var _p10 = {ctor: '_Tuple2', _0: model.state, _1: transition};
+		_v4_4:
 		do {
-			if (_p11.ctor === '_Tuple2') {
-				if (_p11._1.ctor === 'Clicked') {
-					if (_p11._0.ctor === 'Active') {
-						var _p12 = _p11._0._0;
-						return A2(
-							_elm_lang$core$Platform_Cmd_ops['!'],
-							_elm_lang$core$Maybe$Just(
-								_elm_lang$core$Native_Utils.update(
-									model,
-									{
-										state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Fading(_p12)
-									})),
-							{
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next,
-									model,
-									A2(_aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd, _p12.fade, _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout)),
-								_1: {ctor: '[]'}
-							});
+			if (_p10.ctor === '_Tuple2') {
+				if (_p10._1.ctor === 'Clicked') {
+					if (_p10._0.ctor === 'Active') {
+						var _p11 = _p10._0._0;
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{
+									state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Fading(_p11)
+								}),
+							_1: A2(
+								_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next,
+								model,
+								A2(_aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd, _p11.fade, _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout))
+						};
 					} else {
-						break _v5_4;
+						break _v4_4;
 					}
 				} else {
-					switch (_p11._0.ctor) {
+					switch (_p10._0.ctor) {
 						case 'Inert':
 							return _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$tryDequeue(model);
 						case 'Active':
-							var _p13 = _p11._0._0;
-							return A2(
-								_elm_lang$core$Platform_Cmd_ops['!'],
-								_elm_lang$core$Maybe$Just(
-									_elm_lang$core$Native_Utils.update(
-										model,
-										{
-											state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Fading(_p13)
-										})),
-								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next,
-										model,
-										A2(_aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd, _p13.fade, _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout)),
-									_1: {ctor: '[]'}
-								});
+							var _p12 = _p10._0._0;
+							return {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Native_Utils.update(
+									model,
+									{
+										state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Fading(_p12)
+									}),
+								_1: A2(
+									_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next,
+									model,
+									A2(_aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd, _p12.fade, _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout))
+							};
 						default:
-							return A2(
-								_elm_lang$core$Platform_Cmd_ops['!'],
-								_elm_lang$core$Maybe$Just(
-									_elm_lang$core$Native_Utils.update(
-										model,
-										{state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Inert})),
-								{
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next,
-										model,
-										_aforemny$elm_mdc$Material_Internal_Helpers$cmd(_aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout)),
-									_1: {ctor: '[]'}
-								});
+							return {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Native_Utils.update(
+									model,
+									{state: _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Inert}),
+								_1: A2(
+									_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$next,
+									model,
+									_aforemny$elm_mdc$Material_Internal_Helpers$cmd(_aforemny$elm_mdc$Material_Internal_Snackbar_Model$Timeout))
+							};
 					}
 				}
 			} else {
-				break _v5_4;
+				break _v4_4;
 			}
 		} while(false);
-		return A2(
-			_elm_lang$core$Platform_Cmd_ops['!'],
-			_elm_lang$core$Maybe$Nothing,
-			{ctor: '[]'});
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	});
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$update = F3(
 	function (fwd, msg, model) {
-		var _p14 = msg;
-		if (_p14.ctor === 'Move') {
-			return _elm_lang$core$Native_Utils.eq(_p14._0, model.seq) ? A2(
+		var _p13 = msg;
+		if (_p13.ctor === 'Move') {
+			return _elm_lang$core$Native_Utils.eq(_p13._0, model.seq) ? A2(
 				_elm_lang$core$Tuple$mapSecond,
 				_elm_lang$core$Platform_Cmd$map(fwd),
-				A2(_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$move, _p14._1, model)) : A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				_elm_lang$core$Maybe$Nothing,
-				{ctor: '[]'});
+				A2(_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$move, _p13._1, model)) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		} else {
 			var fwdEffect = function () {
-				var _p15 = _p14._1;
-				if (_p15.ctor === 'Just') {
-					return _aforemny$elm_mdc$Material_Internal_Helpers$cmd(_p15._0);
+				var _p14 = _p13._1;
+				if (_p14.ctor === 'Just') {
+					return _aforemny$elm_mdc$Material_Internal_Helpers$cmd(_p14._0);
 				} else {
 					return _elm_lang$core$Platform_Cmd$none;
 				}
@@ -16444,17 +16406,25 @@ var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$update = F3(
 							}
 						});
 				},
-				_p14._0 ? A3(
+				_p13._0 ? A3(
 					_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$update,
 					fwd,
 					A2(_aforemny$elm_mdc$Material_Internal_Snackbar_Model$Move, model.seq, _aforemny$elm_mdc$Material_Internal_Snackbar_Model$Clicked),
-					model) : A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Maybe$Nothing,
-					{ctor: '[]'}));
+					model) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none});
 		}
 	});
-var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$react = A4(_aforemny$elm_mdc$Material_Internal_Component$react, _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$get, _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$set, _aforemny$elm_mdc$Material_Internal_Msg$SnackbarMsg, _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$update);
+var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$react = A4(
+	_aforemny$elm_mdc$Material_Internal_Component$react,
+	_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$get,
+	_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$set,
+	_aforemny$elm_mdc$Material_Internal_Msg$SnackbarMsg,
+	F3(
+		function (fwd, msg, model) {
+			return A2(
+				_elm_lang$core$Tuple$mapFirst,
+				_elm_lang$core$Maybe$Just,
+				A3(_aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$update, fwd, msg, model));
+		}));
 var _aforemny$elm_mdc$Material_Internal_Snackbar_Implementation$snack = F3(
 	function (onDismiss, message, label) {
 		return {
