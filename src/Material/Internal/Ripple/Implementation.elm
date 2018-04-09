@@ -294,7 +294,8 @@ view isUnbounded lift model options =
             Options.many
             [
               cs "mdc-ripple-upgraded"
-            , cs "mdc-ripple-surface"
+            -- Note: Buttons can't have mdc-ripple-surface.
+            -- , cs "mdc-ripple-surface"
 
             , when (config.color == Just "primary") <|
               cs "mdc-ripple-surface--primary"
