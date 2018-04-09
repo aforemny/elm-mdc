@@ -51,35 +51,29 @@ next model =
     Cmd.map (Move model.seq)
 
 
-move : Transition -> Model m -> ( Maybe (Model m), Cmd (Msg m) )
+move : Transition -> Model m -> ( Model m, Cmd (Msg m) )
 move transition model =
     case ( model.state, transition ) of
         ( Inert, Timeout ) ->
             tryDequeue model
 
         ( Active contents, Clicked ) ->
-            Just
-            { model
-                | state = Fading contents
-            }
-                ! [ Helpers.delayedCmd contents.fade Timeout |> next model ]
+            ( { model | state = Fading contents }
+            , Helpers.delayedCmd contents.fade Timeout |> next model
+            )
 
         ( Active contents, Timeout ) ->
-            Just
-            { model
-                | state = Fading contents
-            }
-                ! [ Helpers.delayedCmd contents.fade Timeout |> next model ]
+            ( { model | state = Fading contents }
+            , Helpers.delayedCmd contents.fade Timeout |> next model
+            )
 
         ( Fading contents, Timeout ) ->
-            Just
-            { model
-                | state = Inert
-            }
-                ! [ Helpers.cmd Timeout |> next model ]
+            ( { model | state = Inert }
+            , Helpers.cmd Timeout |> next model
+            )
 
         _ ->
-            Nothing ! []
+            ( model, Cmd.none )
 
 
 enqueue : Contents m -> Model m -> Model m
@@ -89,26 +83,23 @@ enqueue contents model =
     }
 
 
-tryDequeue : Model m -> ( Maybe (Model m), Cmd (Msg m) )
+tryDequeue : Model m -> ( Model m, Cmd (Msg m) )
 tryDequeue model =
     case ( model.state, model.queue ) of
         ( Inert, c :: cs ) ->
-            ( Just
-              { model
+            ( { model
                 | state = Active c
                 , queue = cs
                 , seq = model.seq + 1
               }
-            , Cmd.batch
-                [ Helpers.delayedCmd c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
-                ]
+            , Helpers.delayedCmd c.timeout Timeout |> Cmd.map (Move (model.seq + 1))
             )
 
         _ ->
-            Nothing ! []
+            ( model, Cmd.none )
 
 
-update : (Msg m -> m) -> Msg m -> Model m -> ( Maybe (Model m), Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update fwd msg model =
     case msg of
         Move seq transition ->
@@ -116,7 +107,7 @@ update fwd msg model =
                 move transition model
                 |> Tuple.mapSecond (Cmd.map fwd)
             else
-                Nothing ! []
+                ( model, Cmd.none )
 
         Dismiss dismissOnAction actionOnDismiss ->
             let
@@ -131,7 +122,7 @@ update fwd msg model =
             ( if dismissOnAction then
                   update fwd (Move model.seq Clicked) model
               else
-                  Nothing ! []
+                  ( model, Cmd.none )
             )
                 |> Tuple.mapSecond (\cmd -> Cmd.batch [ cmd, fwdEffect ])
 
@@ -148,17 +139,12 @@ add lift idx contents store =
             |> Maybe.withDefault defaultModel
 
         (component, effects ) =
-          enqueue contents component_
-          |> tryDequeue
-          |> Tuple.mapSecond (Cmd.map (lift << Material.Internal.Msg.SnackbarMsg idx))
+            enqueue contents component_
+            |> tryDequeue
+            |> Tuple.mapSecond (Cmd.map (lift << Material.Internal.Msg.SnackbarMsg idx))
 
         updatedStore =
-          case component of
-              Just component ->
-                  { store | snackbar = Dict.insert idx component store.snackbar }
-
-              Nothing ->
-                  store
+            { store | snackbar = Dict.insert idx component store.snackbar }
     in
         ( updatedStore, effects )
 
@@ -280,7 +266,8 @@ react :
     -> Store m s
     -> ( Maybe (Store m s), Cmd m )
 react =
-    Component.react get set Material.Internal.Msg.SnackbarMsg update
+    Component.react get set Material.Internal.Msg.SnackbarMsg
+        (\ fwd msg model -> Tuple.mapFirst Just (update fwd msg model))
 
 
 view :
