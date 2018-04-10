@@ -101,28 +101,24 @@ dialog lift model options nodes =
             config.open /= model.open
     in
     Options.apply summary Html.aside
-    ( cs "mdc-dialog"
-    :: ( when stateChanged <|
-         GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
-       )
-    :: ( when model.open << Options.many <|
+    [ cs "mdc-dialog"
+    , when stateChanged <|
+        GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
+    , when model.open << Options.many <|
          [ cs "mdc-dialog--open"
          , Options.data "focustrap" ""
          ]
-       )
-    :: when model.animating (cs "mdc-dialog--animating")
-    :: Options.on "transitionend" (Json.map (\ _ -> lift AnimationEnd) transitionend)
-    :: ( Options.on "click" <|
-         Json.map (\ doClose ->
-              if doClose then
-                  Maybe.withDefault (lift NoOp) config.onClose
-              else
-                  lift NoOp
-           )
-           close
-       )
-    :: options
-    )
+    , when model.animating (cs "mdc-dialog--animating")
+    , Options.on "transitionend" (Json.map (\ _ -> lift AnimationEnd) transitionend)
+    , Options.on "click" <|
+       Json.map (\ doClose ->
+            if doClose then
+                Maybe.withDefault (lift NoOp) config.onClose
+            else
+                lift NoOp
+         )
+         close
+    ]
     []
     nodes
 
