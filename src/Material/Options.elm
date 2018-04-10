@@ -78,18 +78,30 @@ type alias Property c m =
 
 {-| Make a standard Html element take properties instead of attributes.
 
-```
+```elm
 styled Html.div
     [ css "margin" "0 auto"
     ]
     [ text ""
     ]
 ```
--}
-styled : (List (Attribute m) -> List (Html m) -> Html m)
+
+Note: Most frequently you use styled with a more specialize type on `Html.*`
+elements, 
+
+```elm
+styled
+    : (List (Attribute m) -> List (Html m) -> Html m)
     -> List (Property c m)
-    -> List (Html m)
-    -> Html m
+    -> List (Html m) -> Html m
+```
+
+The type annotation for `styled` is more general so that it also works with
+`Markdown.toHtml`, etc.
+-}
+styled : (List (Attribute m) -> a)
+    -> List (Property c m)
+    -> a
 styled =
     Material.Internal.Options.styled
 

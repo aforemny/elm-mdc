@@ -233,10 +233,9 @@ applyNativeControl summary ctor options =
       )
 
 
-styled : (List (Attribute m) -> List (Html m) -> Html m)
+styled : (List (Attribute m) -> a)
     -> List (Property c m)
-    -> List (Html m)
-    -> Html m
+    -> a
 styled ctor props =
     ctor (addAttributes (collect_ props) [])
 
