@@ -13,6 +13,7 @@ module Material.Options exposing
     , onDoubleClick
     , onFocus
     , onInput
+    , onChange
     , onMouseDown
     , onMouseEnter
     , onMouseLeave
@@ -53,7 +54,7 @@ module Material.Options exposing
 @docs onMouseOver
 @docs onMouseOut
 
-@docs onInput
+@docs onInput, onChange
 @docs onCheck
 @docs onSubmit
 
@@ -254,6 +255,12 @@ onFocus =
 onInput : (String -> m) -> Property c m
 onInput =
     Material.Internal.Options.onInput
+
+
+{-| -}
+onChange : (String -> m) -> Property c m
+onChange =
+    Material.Internal.Options.onChange
 
 
 {-| -}

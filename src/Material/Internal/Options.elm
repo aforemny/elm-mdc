@@ -19,6 +19,7 @@ module Material.Internal.Options exposing
     , onDoubleClick
     , onFocus
     , onInput
+    , onChange
     , onMouseDown
     , onMouseEnter
     , onMouseLeave
@@ -346,6 +347,11 @@ onFocus msg =
 onInput : (String -> m) -> Property c m
 onInput f =
     on "input" (Json.map f Html.Events.targetValue)
+
+
+onChange : (String -> m) -> Property c m
+onChange f =
+    on "change" (Json.map f Html.Events.targetValue)
 
 
 onSubmit : (String -> m) -> Property c m
