@@ -149,10 +149,8 @@ import Material.Internal.Button.Model as Button
 import Material.Internal.Checkbox.Implementation as Checkbox
 import Material.Internal.Checkbox.Model as Checkbox
 import Material.Internal.Component as Component exposing (Indexed)
-import Material.Internal.Component as Component exposing (Indexed)
 import Material.Internal.Dialog.Implementation as Dialog
 import Material.Internal.Dialog.Model as Dialog
-import Material.Internal.Dispatch as Dispatch
 import Material.Internal.Dispatch as Dispatch
 import Material.Internal.Drawer.Implementation as Drawer
 import Material.Internal.Drawer.Model as Drawer
@@ -164,7 +162,6 @@ import Material.Internal.IconToggle.Implementation as IconToggle
 import Material.Internal.IconToggle.Model as IconToggle
 import Material.Internal.Menu.Implementation as Menu
 import Material.Internal.Menu.Model as Menu
-import Material.Internal.Msg exposing (Msg(..))
 import Material.Internal.Msg exposing (Msg(..))
 import Material.Internal.RadioButton.Implementation as RadioButton
 import Material.Internal.RadioButton.Model as RadioButton
