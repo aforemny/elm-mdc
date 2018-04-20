@@ -253,8 +253,8 @@ decodeGeometry =
         boundingClientRect { scrollX, scrollY } =
             DOM.boundingClientRect
             |> Json.map (\ rectangle ->
-                 { top = rectangle.top - scrollY
-                 , left = rectangle.left - scrollX
+                 { top = rectangle.top
+                 , left = rectangle.left
                  , width = rectangle.width
                  , height = rectangle.height
                  }
