@@ -11,13 +11,10 @@ The implementation is based on [debois/elm-mdl](https://github.com/debois/elm-md
 
 ## Usage
 
-Currently you will have to add the following scripts to your `index.html`
-before including `elm.js`.
+This library depends on an external JavaScript asset `elm-mdc.js` which you
+have to require in your `index.html`.
 
 ```html
-<script src="elm-autofocus.js"></script>
-<script src="elm-focus-trap.js"></script>
-<script src="elm-global-events.js"></script>
 <script src="elm-mdc.js"></script>
 ```
 

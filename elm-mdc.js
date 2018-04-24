@@ -1,222 +1,319 @@
-// BEGIN: IE >=9 CustomEvent polyfill
-// from:
-// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
-(function () {
+let createFocusTrap = require('focus-trap');
+let CustomEvent = require('custom-event');
 
-  if ( typeof window.CustomEvent === "function" ) return false;
-
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    var evt = document.createEvent("CustomEvent");
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-   }
-
-  CustomEvent.prototype = window.Event.prototype;
-
-  window.CustomEvent = CustomEvent;
-})();
-// END: IE >=9 CustomEvent polyfill
-
-
-var traverse = function(node, f) {
-    var firstNode = node;
-    var limit = 1000;
-    while (node) {
-        f(node);
-        if (!limit--) {
-            break;
-        }
-        if (node.firstChild) {
-            node = node.firstChild;
-            continue;
-        }
-        if (node.nextSibling) {
-            node = node.nextSibling;
-            continue;
-        }
-        node = node.parentElement;
-        while (node) {
-            if (node === firstNode) {
-                node = null;
-                break;
-            }
-            if (node && node.nextSibling) {
-                node = node.nextSibling;
-                break;
-            }
-            if (node.parentElement) {
-                node = node.parentElement;
-                continue;
-            }
-            node = null;
-        }
-        if (!node) {
-            break;
-        }
-    };
-};
-
-
-var dispatchElmMdcInit = function(node) {
-    if (!node) {
-        console.log("WARN: should not happen!");
-        return;
-    }
-    if (!node.classList) {
-        return;
-    }
-    for  (var i = 0; i < node.classList.length; i++) {
-        var cs = node.classList[i];
-        if (cs === "mdc-slider") {
-            node.dispatchEvent(new CustomEvent("ElmMdcInit"));
-            break;
-        }
-    }
-};
-
-
-var observer = new MutationObserver(function(mutations) {
-    for (var i = 0; i < mutations.length; i++) {
-      if (mutations[i].type !== "childList") {
-          continue;
+// attribute "data-autofocus":
+(() => {
+  new MutationObserver((mutations) => {
+    for (let i = 0; i < mutations.length; i++) {
+      if (mutations[i].type !== "attributes") {
+        continue
       }
-      var mutation = mutations[i];
-      var nodes = mutation.addedNodes;
-      for (var j = 0; j < nodes.length; j++) {
-          traverse(nodes[j], dispatchElmMdcInit);
+      let mutation = mutations[i]
+      let node = mutation.target
+      if (!node.dataset) {
+        continue
+      }
+      if (typeof node.dataset.autofocus !== "undefined") {
+        node.focus()
       }
     }
-});
-
-
-observer.observe(document.body, {
+  }).observe(document.body, {
     childList: true,
-    subtree: true
-});
-
-
-var dispatchWindowResize = function(node) {
-    if (!node) {
-        console.log("WARN: should not happen!");
-        return;
-    }
-    if (!node.classList) {
-        return;
-    }
-    for  (var i = 0; i < node.classList.length; i++) {
-        var cs = node.classList[i];
-    }
-    node.dispatchEvent(new CustomEvent("elm-mdc-resize"));
-};
-
-
-window.addEventListener("resize", function() {
-    traverse(document.body, dispatchWindowResize);
-});
-
-var dispatchReconfigure = function(node) {
-    node.dispatchEvent(new CustomEvent("ElmMdcReconfigure"));
-};
-
-var observer1 = new MutationObserver(function(mutations) {
-    for (var i = 0; i < mutations.length; i++) {
-        var target = mutations[i].target;
-        if (!target) {
-            break;
-        }
-        if (!target.classList) {
-            break;
-        }
-        if (target.classList.contains("elm-mdc--reconfigure")) {
-            dispatchReconfigure(target);
-        }
-    }
-});
-
-
-observer1.observe(document.body, {
     subtree: true,
     attributes: true,
-    attributeFilter: [ "class" ]
-});
+    attributeFilter: [ "data-autofocus" ]
+  })
+})();
 
 
-var dispatchMouseMove = function(evtName, node, pageX) {
-    if (!node) {
-        console.log("WARN: should not happen!");
-        return;
-    }
-    if (!node.classList) {
-        return;
-    }
-    for (var i = 0; i < node.classList.length; i++) {
-        var cs = node.classList[i];
-        if (cs === "mdc-slider") {
-            var event = new CustomEvent(evtName);
-            event.pageX = pageX;
-            node.dispatchEvent(event);
-            break;
+// attribute "data-autofocus":
+(() => {
+  if (window["ElmFocusTrap"]) return
+
+  window["ElmFocusTrap"] = { activeTrap: null }
+
+  new MutationObserver((mutations) => {
+    for (let i = 0; i < mutations.length; i++) {
+      let mutation = mutations[i]
+      if (mutation.type !== "attributes") {
+        continue
+      }
+      let node = mutation.target
+      if (!node.dataset) {
+        continue
+      }
+      if (typeof node.dataset.focustrap === "undefined") {
+        if (window["ElmFocusTrap"].activeTrap === null) {
+          continue
         }
-    }
-};
-
-
-document.body.addEventListener("mousemove", function(event) {
-    traverse(document.body, function(node) {
-        dispatchMouseMove("ElmMdcMouseMove", node, event.pageX);
-    });
-});
-
-
-document.body.addEventListener("touchmove", function(event) {
-    traverse(document.body, function(node) {
-        dispatchMouseMove("ElmMdcTouchMove", node, event.pageX);
-    });
-});
-
-
-document.body.addEventListener("pointermove", function(event) {
-    traverse(document.body, function(node) {
-        dispatchMouseMove("ElmMdcPointerMove", node, event.pageX);
-    });
-});
-
-
-var dispatchMouseUp = function(evtName, node, pageX) {
-    if (!node) {
-        console.log("WARN: should not happen!");
-        return;
-    }
-    if (!node.classList) {
-        return;
-    }
-    for (var i = 0; i < node.classList.length; i++) {
-        var cs = node.classList[i];
-        if (cs === "mdc-slider") {
-            var event = new CustomEvent(evtName);
-            event.pageX = pageX;
-            node.dispatchEvent(event);
-            break;
+        if (window["ElmFocusTrap"].activeTrap.node !== node) {
+          continue
         }
+        window["ElmFocusTrap"].activeTrap.focusTrap.deactivate()
+        window["ElmFocusTrap"].activeTrap = null
+        document.body.classList.remove("mdc-dialog-scroll-lock")
+      } else {
+        if (window["ElmFocusTrap"].activeTrap !== null) {
+          continue
+        }
+        let initialFocusElement = null
+        if (node.querySelector && (node.dataset.focustrap !== "")) {
+          try {
+            initialFocusElement = node.querySelector("." + node.dataset.focustrap)
+          } catch (e) {}
+        }
+        try {
+          let focusTrap = createFocusTrap(node, {
+            initialFocus: initialFocusElement,
+            // Note: It is necessary for Menu to set clickOutsideDeactivates to
+            // true.
+            clickOutsideDeactivates: true,
+            escapeDeactivates: false
+          }).activate()
+          window["ElmFocusTrap"].activeTrap = {
+            node: node,
+            focusTrap: focusTrap
+          }
+          document.body.classList.add("mdc-dialog-scroll-lock")
+        } catch (e) {
+          // TODO: find out why createFocusTrap is called twice on menu
+          //console.log(e)
+        }
+      }
     }
-};
+  }).observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: [ "data-focustrap" ]
+  })
+})();
 
 
-document.body.addEventListener("mouseup", function(event) {
-    traverse(document.body, function(node) {
-        dispatchMouseUp("ElmMdcMouseUp", node, event.pageX);
-    });
-});
+// custom events:
+(() => {
+  let select = (document, eventName) => {
+    return document.querySelectorAll("[data-" + eventName + "]")
+  }
 
-document.body.addEventListener("touchend", function(event) {
-    traverse(document.body, function(node) {
-        dispatchMouseUp("ElmMdcTouchEnd", node, event.pageX);
-    });
-});
+  let dispatch = (document, eventName, extend) => {
+    let targets = select(document, eventName)
+    for (let i = 0; i < targets.length; i++) {
+      let event = new CustomEvent(eventName)
+      event = extend(targets[i], event)
+      targets[i].dispatchEvent(event)
+    }
+  }
 
-document.body.addEventListener("pointerup", function(event) {
-    traverse(document.body, function(node) {
-        dispatchMouseUp("ElmMdcPointerUp", node, event.pageX);
-    });
-});
+  // custom event "globalload":
+  window.addEventListener("load", (originalEvent) => {
+    dispatch(document, "globalload", (target, event) => {
+      return event
+    })
+  });
+
+  (() => {
+    new MutationObserver((mutations) => {
+      for (let i = 0; i < mutations.length; i++) {
+        if (mutations[i].type !== "childList") {
+          continue
+        }
+        let mutation = mutations[i]
+        let nodes = mutation.addedNodes
+        for (let j = 0; j < nodes.length; j++) {
+          let node = nodes[j]
+          if (!node.dataset) {
+            continue
+          }
+          if (typeof node.dataset.globalload !== "undefined") {
+            let event = new CustomEvent("globalload")
+            node.dispatchEvent(event)
+          }
+          if (!(node.querySelector)) {
+            continue
+          }
+          dispatch(node, "globalload", (target, event) => {
+            return event
+          })
+        }
+      }
+    }).observe(document.body, {
+      childList: true,
+      subtree: true
+    })
+  })()
+  
+
+  // custom event "globalload1"
+  window.addEventListener("load", (originalEvent) => {
+    window.requestAnimationFrame(() => {
+      dispatch(document, "globalload1", (target, event) => {
+        return event
+      })
+    })
+  });
+
+  // custom event "globaltick"
+  (() => {
+    new MutationObserver((mutations) => {
+      for (let i = 0; i < mutations.length; i++) {
+        if (mutations[i].type === "childList") {
+          let mutation = mutations[i]
+          let  nodes = mutation.addedNodes
+          for (let j = 0; j < nodes.length; j++) {
+            let node = nodes[j]
+            if (!node.dataset) {
+              continue
+            }
+            if (typeof node.dataset.globaltick !== "undefined") {
+              let event = new CustomEvent("globaltick")
+              node.dispatchEvent(event)
+            }
+            if (!(node.querySelector)) {
+              continue
+            }
+            dispatch(node, "globaltick", (target, event) => {
+              return event
+            })
+          }
+        }
+        if (mutations[i].type === "attributes") {
+          let mutation = mutations[i]
+          let node = mutation.target
+          if (!node.dataset) {
+            continue
+          }
+          if (typeof node.dataset.globaltick !== "undefined") {
+            let event = new CustomEvent("globaltick")
+            node.dispatchEvent(event)
+          }
+        }
+      }
+    }).observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: [ "data-globaltick" ]
+    })
+  })()
+
+
+  // custom event "globalscroll"
+  document.addEventListener("scroll", (originalEvent) => {
+    dispatch(document, "globalscroll", (target, event) => {
+      return event
+    })
+  })
+
+
+  // custom event "globalresize"
+  window.addEventListener("resize", (originalEvent) => {
+    dispatch(document, "globalresize", (target, event) => {
+      return event
+    })
+  });
+
+  window.addEventListener("resize", (originalEvent) => {
+    window.requestAnimationFrame(() => {
+      dispatch(document, "globalresize1", (target, event) => {
+        return event
+      })
+    })
+  });
+
+
+  // custom event "globalpolledresize"
+  window.addEventListener("resize", (originalEvent) => {
+    let running = false
+    window.requestAnimationFrame(() => {
+      if (running) {
+        return
+      }
+      running = true
+      window.requestAnimationFrame(() => {
+        dispatch(document, "globalpolledresize", (target, event) => {
+          return event
+        })
+        running = false
+      })
+    })
+  });
+
+
+  // custom event "globalpolledresize1"
+  window.addEventListener("resize", (originalEvent) => {
+    let running = false
+    window.requestAnimationFrame(() => {
+      if (running) {
+        return
+      }
+      running = true
+      window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        dispatch(document, "globalpolledresize1", (target, event) => {
+          return event
+        })
+        running = false
+      })
+      })
+    })
+  });
+
+
+  // custom event "globalmouseup"
+  document.addEventListener("mouseup", (originalEvent) => {
+      dispatch(document, "globalmouseup", (target, event) => {
+          event.pageX = originalEvent.pageX
+          event.pageY = originalEvent.pageY
+          return event
+      })
+  })
+
+
+  // custom event "globalpointerup"
+  document.addEventListener("pointerup", (originalEvent) => {
+      dispatch(document, "globalpointerup", (target, event) => {
+          event.pageX = originalEvent.pageX
+          event.pageY = originalEvent.pageY
+          return event
+      })
+  })
+
+
+  // custom event "globaltouchend"
+  document.addEventListener("touchend", (originalEvent) => {
+      dispatch(document, "globaltouchend", (target, event) => {
+          event.changedTouches = originalEvent.changedTouches
+          return event
+      })
+  })
+
+
+  // custom event "globalmousemove"
+  document.addEventListener("mousemove", (originalEvent) => {
+      dispatch(document, "globalmousemove", (target, event) => {
+          event.pageX = originalEvent.pageX
+          event.pageY = originalEvent.pageY
+          return event
+      })
+  })
+
+
+  // custom event "globalpointermove"
+  document.addEventListener("pointermove", (originalEvent) => {
+      dispatch(document, "globalpointermove", (target, event) => {
+          event.pageX = originalEvent.pageX
+          event.pageY = originalEvent.pageY
+          return event
+      })
+  })
+
+
+  // custom event "globaltouchmove"
+  document.addEventListener("touchmove", (originalEvent) => {
+      dispatch(document, "globaltouchmove", (target, event) => {
+          event.targetTouches = originalEvent.targetTouches
+          return event
+      })
+  })
+})();

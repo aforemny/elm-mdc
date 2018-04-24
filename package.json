@@ -1,9 +1,17 @@
 {
-  "dependencies": {
-    "elm": "^0.18.0",
+  "name": "elm-mdc",
+  "description": "",
+  "version": "1.0.0",
+  "main": "elm-mdc.js",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "custom-event": "^1.0.1",
     "material-components-web": "^0.30.0"
   },
   "engines": {
     "node": ">= 4"
-  }
+  },
+  "author": "Alexander Foremny <aforemny@posteo.de>",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/aforemny/elm-mdc"
 }

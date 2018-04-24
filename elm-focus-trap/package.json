@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "focus-trap": "^2.4.3"
-  },
-  "engines": {
-    "node": ">= 4"
-  }
-}
