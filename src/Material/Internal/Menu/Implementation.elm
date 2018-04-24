@@ -155,11 +155,12 @@ update lift msg model =
         CloseDelayed ->
             ( Nothing, Helpers.delayedCmd (50*Time.millisecond) (lift Close) )
 
-        Init { quickOpen } geometry ->
+        Init { quickOpen, index } geometry ->
             ( Just
               { model
                 | geometry = Just geometry
                 , quickOpen = Just quickOpen
+                , focusedItemAtIndex = Debug.log "index" index
               }
             ,
               Cmd.none
@@ -421,7 +422,7 @@ menu lift model options ul =
     ,
       when (model.animating && model.geometry == Nothing) <|
       GlobalEvents.onTick <|
-      Json.map (lift << Init { quickOpen = config.quickOpen }) decodeGeometry
+      Json.map (lift << Init { quickOpen = config.quickOpen, index = config.index }) decodeGeometry
     ,
       Options.on "keyup" <| Json.map lift <|
       Json.map3 KeyUp decodeMeta decodeKey decodeKeyCode

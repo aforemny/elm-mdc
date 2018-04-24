@@ -37,7 +37,7 @@ defaultModel =
 
 type Msg m
     = NoOp
-    | Init { quickOpen : Bool } Geometry
+    | Init { quickOpen : Bool, index : Maybe Int } Geometry
     | AnimationEnd
     | Open
     | Close
