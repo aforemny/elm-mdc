@@ -49,13 +49,10 @@ import Time
 
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
-    Sub.batch
-    [
-      if model.open then
-        Mouse.clicks (\ _ -> DocumentClick)
-      else
-        Sub.none
-    ]
+    if model.open then
+      Mouse.clicks (\ _ -> DocumentClick)
+    else
+      Sub.none
 
 
 type alias Item m =
@@ -397,11 +394,10 @@ menu lift model options ul =
           cs "mdc-menu--animating-closed"
     ,
       when isOpen << Options.many <|
-      [
-        cs "mdc-menu--open" |> when isOpen
+      [ cs "mdc-menu--open"
       , Options.data "focustrap" ""
       , Options.onWithOptions
-          "click" 
+          "click"
           { stopPropagation = True
           , preventDefault = False
           }
@@ -714,7 +710,7 @@ verticalOffset { anchorCorner, anchorMargin } corner geometry =
     else
         if canOverlapVertically && (menu.height > viewportDistance.bottom + anchor.height) then
             -(min menu.height (viewport.height - marginToEdge) - (viewportDistance.top + anchor.height))
-            
+
         else
             if avoidVerticalOverlap then
                 anchor.height + anchorMargin.bottom
