@@ -49,7 +49,10 @@ import Time
 
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
-    if model.open then
+    -- Note: Clicking to open a Menu immediately triggers a click on document.
+    -- To prevent the Menu from closing immediately, we ignore Document clicks
+    -- in the first animation frame after Open by watching model.geometry.
+    if model.open && (model.geometry /= Nothing) then
       Mouse.clicks (\ _ -> DocumentClick)
     else
       Sub.none
@@ -166,10 +169,7 @@ update lift msg model =
             ( Just { model | animating = False }, Cmd.none )
 
         DocumentClick ->
-            if model.open then
-                update lift Close model
-            else
-                ( Nothing, Cmd.none )
+            update lift Close model
 
         KeyDown numItems { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
