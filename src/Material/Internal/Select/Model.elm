@@ -13,6 +13,7 @@ import Material.Internal.Menu.Model as Menu
 type alias Model =
     { menu : Menu.Model
     , geometry : Maybe Geometry
+    , index : Maybe Int
     }
 
 
@@ -20,11 +21,12 @@ defaultModel : Model
 defaultModel =
     { menu = Menu.defaultModel
     , geometry = Nothing
+    , index = Nothing
     }
 
 
 type Msg m
-    = MenuMsg (Menu.Msg m)
+    = MenuMsg (Maybe Int) (Menu.Msg m)
     | Init Geometry
 
 

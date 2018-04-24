@@ -17,6 +17,7 @@ import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Menu.Implementation as Menu
+import Material.Internal.Menu.Model as Menu
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, styled, when)
 import Material.Internal.Select.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
@@ -24,21 +25,35 @@ import Material.Internal.Select.Model exposing (Model, defaultModel, Msg(..), Ge
 
 subscriptions : Model -> Sub (Msg m)
 subscriptions model =
-    Sub.map MenuMsg (Menu.subscriptions model.menu)
+    Sub.map (MenuMsg Nothing) (Menu.subscriptions model.menu)
 
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
     case msg of
 
-        MenuMsg msg_ ->
+        MenuMsg index msg_ ->
             let
                 (menu, menuCmd) =
-                    Menu.update (lift << MenuMsg) msg_ model.menu
+                    Menu.update (lift << MenuMsg index) msg_ model.menu
             in
             case menu of
                 Just menu ->
-                    ( Just { model | menu = menu }, menuCmd )
+                    ( Just
+                        { model
+                            | menu = menu
+                            , index =
+                                case msg_ of
+                                    Menu.Toggle ->
+                                        if not model.menu.open then
+                                            index
+                                        else
+                                            Nothing
+                                    _ ->
+                                        model.index
+                        }
+                    , menuCmd
+                    )
                 Nothing ->
                     ( Nothing, menuCmd )
 
@@ -108,8 +123,16 @@ select lift model options items =
             Maybe.withDefault defaultGeometry model.geometry
 
         itemOffsetTop =
-            List.drop (Maybe.withDefault 0 config.index) geometry.itemOffsetTops
-            |> List.head
+            model.index
+            |> Maybe.andThen (\index ->
+                List.drop (Maybe.withDefault 0 model.index) geometry.itemOffsetTops
+                |> List.head
+               )
+            |> Maybe.map Just
+            |> Maybe.withDefault (
+                List.drop (Maybe.withDefault 0 config.index) geometry.itemOffsetTops
+                |> List.head
+               )
             |> Maybe.withDefault 0
 
         left =
@@ -151,7 +174,7 @@ select lift model options items =
     , cs "mdc-select--open" |> when isOpen
     , when (model.menu.animating && model.menu.geometry == Nothing) <|
       GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
-    , Menu.connect (lift << MenuMsg) |> when (not config.disabled)
+    , Menu.connect (lift << MenuMsg config.index) |> when (not config.disabled)
     , cs "mdc-select--disabled" |> when config.disabled
     ]
     [ Html.attribute "role" "listbox"
@@ -182,7 +205,7 @@ select lift model options items =
         []
       ]
     ,
-      Menu.menu (lift << MenuMsg) model.menu
+      Menu.menu (lift << MenuMsg config.index) model.menu
       [ cs "mdc-select__menu"
       , Menu.index (Maybe.withDefault 0 config.index)
       , when isOpen << Options.many <|
