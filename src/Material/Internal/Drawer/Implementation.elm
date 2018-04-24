@@ -107,7 +107,7 @@ view className lift model options nodes =
     [ styled Html.nav
       ( cs "mdc-drawer__drawer"
       :: Options.onWithOptions "click"
-         { stopPropagation = True
+         { stopPropagation = (className == "mdc-drawer--temporary")
          , preventDefault = False
          }
          (Json.succeed (lift NoOp))
