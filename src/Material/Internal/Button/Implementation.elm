@@ -4,6 +4,7 @@ module Material.Internal.Button.Implementation exposing
     , disabled
     , icon
     , link
+    , onClick
     , Property
     , raised
     , react
@@ -17,42 +18,48 @@ import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material.Internal.Button.Model exposing (Model, defaultModel, Msg(..))
 import Material.Internal.Component as Component exposing (Indexed, Index)
+import Material.Internal.Helpers as Helpers
 import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, when)
 import Material.Internal.Ripple.Implementation as Ripple
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
+update lift msg model =
     case msg of
         RippleMsg msg_ ->
             let
-                ( ripple, effects ) =
+                ( ripple, cmd ) =
                     Ripple.update msg_ model.ripple
             in
-            ( { model | ripple = ripple }, Cmd.map RippleMsg effects )
+            ( Just { model | ripple = ripple }, Cmd.map (lift << RippleMsg) cmd )
+
+        Click ripple msg_ ->
+            ( Nothing, Helpers.delayedCmd (if ripple then 150 else 0) msg_ )
 
 
-type alias Config =
+type alias Config m =
     { ripple : Bool
     , link : Maybe String
     , disabled : Bool
     , icon : Maybe String
+    , onClick : Maybe m
     }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     { ripple = False
     , link = Nothing
     , disabled = False
     , icon = Nothing
+    , onClick = Nothing
     }
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 icon : String -> Property m
@@ -100,7 +107,12 @@ disabled =
     Options.option (\options -> { options | disabled = True })
 
 
-button : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+onClick : m -> Property m
+onClick onClick =
+    Options.option (\options -> { options | onClick = Just onClick })
+
+
+button : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 button lift model options nodes =
     let
         ({ config } as summary) =
@@ -125,6 +137,9 @@ button lift model options nodes =
               [ ripple.interactionHandler
               , ripple.properties
               ]
+            , config.onClick
+              |> Maybe.map (Options.onClick << lift << Click config.ripple)
+              |> Maybe.withDefault Options.nop
             ]
             []
             ( List.concat
@@ -165,9 +180,9 @@ view =
 
 react :
     (Material.Internal.Msg.Msg m -> m)
-    -> Msg
+    -> Msg m
     -> Index
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Material.Internal.Msg.ButtonMsg (Component.generalise update)
+    Component.react get set Material.Internal.Msg.ButtonMsg update

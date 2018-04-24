@@ -14,5 +14,6 @@ defaultModel =
     }
 
 
-type Msg =
-    RippleMsg Ripple.Msg
+type Msg m
+    = RippleMsg Ripple.Msg
+    | Click Bool m

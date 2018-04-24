@@ -4,6 +4,7 @@ module Material.Button exposing
     , disabled
     , icon
     , link
+    , onClick
     , Property
     , raised
     , ripple
@@ -53,6 +54,7 @@ Button.view Mdc [0] model.mdc
 @docs icon
 @docs disabled
 @docs link
+@docs onClick
 -}
 
 import Html exposing (Html)
@@ -141,3 +143,13 @@ link =
 disabled : Property m
 disabled =
     Button.disabled
+
+
+{-| Click handler that respects `ripple`.
+
+The event will be raised only after the ripple animation finished playing. If
+the button does not ripple, it is identical to `Options.onClick`.
+-}
+onClick : m -> Property m
+onClick =
+    Button.onClick
