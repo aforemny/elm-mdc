@@ -2,7 +2,7 @@ module Material.Drawer.Persistent exposing
     ( content
     , header
     , headerContent
-    , toggleOn
+    , open
     , Property
     , toolbarSpacer
     , view
@@ -69,7 +69,7 @@ Drawer.view Mdc [0] model.mdc []
 @docs toolbarSpacer
 @docs header
 @docs headerContent
-@docs toggleOn
+@docs open
 -}
 
 import Html exposing (Html)
@@ -77,7 +77,6 @@ import Material
 import Material.Component exposing (Index)
 import Material.Internal.Drawer.Persistent.Implementation as Drawer
 import Material.List as Lists
-import Material.Options as Options
 
 
 {-| Drawer property.
@@ -127,19 +126,8 @@ toolbarSpacer =
     Drawer.toolbarSpacer
 
 
-{-| Toggles the drawer on interaction.
-
-```elm
-import Html exposing (text)
-import Material.Button as Button
-
-Button.view Mdc [0] model.mdc
-    [ Drawer.toggleOn Mdc [1] "click"
-    ]
-    [ text "Toggle Drawer with ID [1]"
-    ]
-```
+{-| When present, makes the drawer open.
 -}
-toggleOn : (Material.Msg m -> m) -> Index -> String -> Options.Property c m
-toggleOn =
-    Drawer.toggleOn
+open : Property m
+open =
+    Drawer.open

@@ -1,11 +1,11 @@
 module Material.Internal.Drawer.Implementation exposing
-    ( close
-    , Config
+    ( Config
     , content
     , defaultConfig
     , emit
     , header
     , headerContent
+    , onClose
     , open
     , Property
     , react
@@ -13,7 +13,6 @@ module Material.Internal.Drawer.Implementation exposing
     , Store
     , subs
     , subscriptions
-    , toggle
     , toolbarSpacer
     , update
     , view
@@ -23,11 +22,11 @@ import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Drawer.Model exposing (Model, defaultModel, Msg(..))
+import Material.Internal.GlobalEvents as GlobalEvents
 import Material.Internal.Helpers as Helpers
 import Material.Internal.List.Implementation as Lists
 import Material.Internal.Msg
 import Material.Internal.Options as Options exposing (cs, css, styled, many, when)
-import Mouse
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -45,16 +44,10 @@ update lift msg model =
               Cmd.none
             )
 
-        Click ->
-              if model.persistent then
-                  ( Nothing, Cmd.none )
-              else
-                  update lift Close model
-
-        Open persistent ->
+        SetOpen (open, persistent) ->
             ( Just
               { model
-              | open = True
+              | open = open
               , state = Nothing
               , animating = True
               , persistent = persistent
@@ -62,34 +55,22 @@ update lift msg model =
             , Cmd.none
             )
 
-        Close ->
-            ( Just
-              { model | open = False
-              , state = Nothing
-              , animating = True
-              }
-            ,
-              Cmd.none
-            )
 
-        Toggle persistent ->
-            if model.open then
-                update lift Close model
-            else
-                update lift (Open persistent) model
+type alias Config m =
+    { onClose : Maybe m
+    , open : Bool
+    }
 
 
-type alias Config =
-    {}
-
-
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
-    {}
+    { onClose = Nothing
+    , open = False
+    }
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 view : String -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -97,12 +78,18 @@ view className lift model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
+
+        stateChanged =
+            config.open /= model.open
     in
     styled Html.aside
     [ cs "mdc-drawer"
     , cs className
+    , when stateChanged <|
+        GlobalEvents.onTick (Json.succeed (lift (SetOpen (config.open, model.persistent))))
     , cs ("mdc-drawer--open") |> when model.open
     , cs ("mdc-drawer--animating") |> when model.animating
+    , Options.onClick (Maybe.withDefault (lift NoOp) config.onClose)
     ]
     [ styled Html.nav
       ( cs "mdc-drawer__drawer"
@@ -176,25 +163,17 @@ subs =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    if model.open then
-        Mouse.clicks (\_ -> Click)
-    else
-        Sub.none
+    Sub.none
 
 
-open : Bool -> Msg
-open persistent =
-    Open persistent
+onClose : m -> Property m
+onClose onClose =
+    Options.option (\config -> {config | onClose = Just onClose})
 
 
-close : Msg
-close =
-    Close
-
-
-toggle : Bool -> Msg
-toggle persistent =
-    Toggle persistent
+open : Property m
+open =
+    Options.option (\config -> {config | open = True})
 
 
 emit : (Material.Internal.Msg.Msg m -> m) -> Index -> Msg -> Cmd m
