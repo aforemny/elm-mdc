@@ -2,7 +2,8 @@ module Material.Drawer.Temporary exposing
     ( content
     , header
     , headerContent
-    , openOn
+    , onClose
+    , open
     , Property
     , toolbarSpacer
     , view
@@ -65,7 +66,8 @@ Drawer.view Mdc [0] model.mdc []
 @docs toolbarSpacer
 @docs header
 @docs headerContent
-@docs openOn
+@docs onClose
+@docs open
 -}
 
 import Html exposing (Html)
@@ -73,7 +75,6 @@ import Material
 import Material.Component exposing (Index)
 import Material.Internal.Drawer.Temporary.Implementation as Drawer
 import Material.List as Lists
-import Material.Options as Options
 
 
 {-| Drawer property.
@@ -123,19 +124,15 @@ toolbarSpacer =
     Drawer.toolbarSpacer
 
 
-{-| Opens the drawer on interaction.
-
-```elm
-import Html exposing (text)
-import Material.Button as Button
-
-Button.view Mdc [0] model.mdc
-    [ Drawer.openOn Mdc [1] "click"
-    ]
-    [ text "Open Drawer with ID [1]"
-    ]
-```
+{-| Message that must be sent when the drawer wants to be close
 -}
-openOn : (Material.Msg m -> m) -> Index -> String -> Options.Property c m
-openOn =
-    Drawer.openOn
+onClose : m -> Property m
+onClose =
+    Drawer.onClose
+
+
+{-| When present, makes the drawer open.
+-}
+open : Property m
+open =
+    Drawer.open

@@ -2,27 +2,26 @@ module Material.Internal.Drawer.Temporary.Implementation exposing
     ( content
     , header
     , headerContent
-    , openOn
+    , onClose
+    , open
     , Property
     , toolbarSpacer
     , view
     )
 
 import Html exposing (Html, text)
-import Json.Decode as Json
 import Material.Internal.Component exposing (Indexed, Index)
 import Material.Internal.Drawer.Implementation as Drawer
 import Material.Internal.Drawer.Model exposing (Model, Msg)
 import Material.Internal.List.Implementation as Lists
 import Material.Internal.Msg
-import Material.Internal.Options as Options
 
 
-type alias Config =
-    Drawer.Config
+type alias Config m =
+    Drawer.Config m
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     Drawer.defaultConfig
 
@@ -86,10 +85,14 @@ subscriptions =
     Drawer.subscriptions
 
 
-openOn : (Material.Internal.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
-openOn lift index event =
-    Options.on event <| Json.succeed << lift <|
-    Material.Internal.Msg.DrawerMsg index (Material.Internal.Drawer.Model.Open False)
+onClose : m -> Property m
+onClose =
+    Drawer.onClose
+
+
+open : Property m
+open =
+    Drawer.open
 
 
 className : String

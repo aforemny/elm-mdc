@@ -15,11 +15,11 @@ import Material.Internal.List.Implementation as Lists
 import Material.Internal.Msg
 
 
-type alias Config =
-    Drawer.Config
+type alias Config m =
+    Drawer.Config m
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     Drawer.defaultConfig
 
