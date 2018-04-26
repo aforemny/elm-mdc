@@ -27,11 +27,8 @@ defaultModel =
 type Msg
     = NoOp
     | Tick
-    | Click
 
-    | Open Bool
-    | Close
-    | Toggle Bool
+    | SetOpen (Bool, Bool)
 
 
 type alias Geometry =

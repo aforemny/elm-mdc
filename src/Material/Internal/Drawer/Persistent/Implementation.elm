@@ -2,27 +2,25 @@ module Material.Internal.Drawer.Persistent.Implementation exposing
     ( content
     , header
     , headerContent
-    , toggleOn
+    , open
     , Property
     , toolbarSpacer
     , view
     )
 
 import Html exposing (Html, text)
-import Json.Decode as Json
 import Material.Internal.Component exposing (Indexed, Index)
 import Material.Internal.Drawer.Implementation as Drawer
 import Material.Internal.Drawer.Model exposing (Model, Msg)
 import Material.Internal.List.Implementation as Lists
 import Material.Internal.Msg
-import Material.Internal.Options as Options
 
 
-type alias Config =
-    Drawer.Config
+type alias Config m=
+    Drawer.Config m
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     Drawer.defaultConfig
 
@@ -86,9 +84,9 @@ subscriptions =
     Drawer.subscriptions
 
 
-toggleOn : (Material.Internal.Msg.Msg m -> m) -> Index -> String -> Options.Property c m
-toggleOn lift index event =
-    Options.on event (Json.succeed (lift (Material.Internal.Msg.DrawerMsg index (Material.Internal.Drawer.Model.Toggle True))))
+open : Property m
+open =
+    Drawer.open
 
 
 className : String

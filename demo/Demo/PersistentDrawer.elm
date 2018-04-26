@@ -27,6 +27,7 @@ import Platform.Cmd exposing (Cmd, none)
 type alias Model m =
     { mdc : Material.Model m
     , rtl : Bool
+    , drawerOpen: Bool
     }
 
 
@@ -34,12 +35,14 @@ defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , rtl = False
+    , drawerOpen = False
     }
 
 
 type Msg m
     = Mdc (Material.Msg m)
     | ToggleRtl
+    | ToggleDrawer
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -50,6 +53,9 @@ update lift msg model =
 
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
+
+        ToggleDrawer ->
+            ( {model | drawerOpen = not model.drawerOpen}, Cmd.none )
 
 
 drawerItems : Html m
@@ -133,7 +139,8 @@ view lift page model =
     , Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [
-      Drawer.view (lift << Mdc) [0] model.mdc []
+      Drawer.view (lift << Mdc) [0] model.mdc
+      [ Drawer.open |> when model.drawerOpen]
       [
         Drawer.toolbarSpacer [] []
       , drawerItems
@@ -155,7 +162,7 @@ view lift page model =
             [ Toolbar.alignStart
             ]
             [ Icon.view
-              [ Drawer.toggleOn (lift << Mdc) [0] "click"
+              [ Options.onClick (lift ToggleDrawer)
               , Toolbar.menuIcon
               ]
               "menu"
