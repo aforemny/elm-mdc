@@ -5,7 +5,6 @@
   "main": "elm-mdc.js",
   "devDependencies": {
     "babel": "^6.23.0",
-    "custom-event": "^1.0.1",
     "material-components-web": "^0.30.0"
   },
   "engines": {
@@ -13,5 +12,9 @@
   },
   "author": "Alexander Foremny <aforemny@posteo.de>",
   "license": "Apache-2.0",
-  "repository": "https://github.com/aforemny/elm-mdc"
+  "repository": "https://github.com/aforemny/elm-mdc",
+  "dependencies": {
+    "focus-trap": "^2.4.3",
+    "custom-event": "^1.0.1"
+  }
 }

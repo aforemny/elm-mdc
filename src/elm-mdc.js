@@ -1,5 +1,5 @@
-let createFocusTrap = require('focus-trap');
-let CustomEvent = require('custom-event');
+import createFocusTrap from 'focus-trap';
+import CustomEvent from 'custom-event';
 
 // attribute "data-autofocus":
 (() => {

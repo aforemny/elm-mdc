@@ -3,7 +3,7 @@ PAGES=../elm-mdc-gh-pages
 
 all: build-demo
 
-build-demo: material-components-web.css
+build-demo: material-components-web.css elm-mdc.js
 	mkdir -p build
 	rsync -r demo/images build
 	cp demo/page.html build/index.html
@@ -14,6 +14,9 @@ build-demo: material-components-web.css
 material-components-web.css:
 	npm i
 	cp node_modules/material-components-web/dist/material-components-web.css .
+
+elm-mdc.js: src/elm-mdc.js
+	webpack
 
 docs:
 	$(ELM) --docs=docs.json

@@ -14,6 +14,9 @@ The implementation is based on [debois/elm-mdl](https://github.com/debois/elm-md
 This library depends on an external JavaScript asset `elm-mdc.js` which you
 have to require in your `index.html`.
 
+The file `src/elm-mdc.js` is in ES6 JavaScript, to transpile it for use in a
+Browser, run `make elm-mdc.js`.
+
 ```html
 <script src="elm-mdc.js"></script>
 ```
