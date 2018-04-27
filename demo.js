@@ -8306,6 +8306,10 @@ var _aforemny$elm_mdc$Material_Internal_Button_Model$defaultModel = {ripple: _af
 var _aforemny$elm_mdc$Material_Internal_Button_Model$Model = function (a) {
 	return {ripple: a};
 };
+var _aforemny$elm_mdc$Material_Internal_Button_Model$Click = F2(
+	function (a, b) {
+		return {ctor: 'Click', _0: a, _1: b};
+	});
 var _aforemny$elm_mdc$Material_Internal_Button_Model$RippleMsg = function (a) {
 	return {ctor: 'RippleMsg', _0: a};
 };
@@ -8356,14 +8360,9 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Model$Model = F4(
 var _aforemny$elm_mdc$Material_Internal_Drawer_Model$Geometry = function (a) {
 	return {width: a};
 };
-var _aforemny$elm_mdc$Material_Internal_Drawer_Model$Toggle = function (a) {
-	return {ctor: 'Toggle', _0: a};
+var _aforemny$elm_mdc$Material_Internal_Drawer_Model$SetOpen = function (a) {
+	return {ctor: 'SetOpen', _0: a};
 };
-var _aforemny$elm_mdc$Material_Internal_Drawer_Model$Close = {ctor: 'Close'};
-var _aforemny$elm_mdc$Material_Internal_Drawer_Model$Open = function (a) {
-	return {ctor: 'Open', _0: a};
-};
-var _aforemny$elm_mdc$Material_Internal_Drawer_Model$Click = {ctor: 'Click'};
 var _aforemny$elm_mdc$Material_Internal_Drawer_Model$Tick = {ctor: 'Tick'};
 var _aforemny$elm_mdc$Material_Internal_Drawer_Model$NoOp = {ctor: 'NoOp'};
 
@@ -8469,10 +8468,10 @@ var _aforemny$elm_mdc$Material_Internal_Select_Model$defaultGeometry = {
 	menuHeight: 0,
 	itemOffsetTops: {ctor: '[]'}
 };
-var _aforemny$elm_mdc$Material_Internal_Select_Model$defaultModel = {menu: _aforemny$elm_mdc$Material_Internal_Menu_Model$defaultModel, geometry: _elm_lang$core$Maybe$Nothing};
-var _aforemny$elm_mdc$Material_Internal_Select_Model$Model = F2(
-	function (a, b) {
-		return {menu: a, geometry: b};
+var _aforemny$elm_mdc$Material_Internal_Select_Model$defaultModel = {menu: _aforemny$elm_mdc$Material_Internal_Menu_Model$defaultModel, geometry: _elm_lang$core$Maybe$Nothing, index: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Material_Internal_Select_Model$Model = F3(
+	function (a, b, c) {
+		return {menu: a, geometry: b, index: c};
 	});
 var _aforemny$elm_mdc$Material_Internal_Select_Model$Geometry = F4(
 	function (a, b, c, d) {
@@ -8481,9 +8480,10 @@ var _aforemny$elm_mdc$Material_Internal_Select_Model$Geometry = F4(
 var _aforemny$elm_mdc$Material_Internal_Select_Model$Init = function (a) {
 	return {ctor: 'Init', _0: a};
 };
-var _aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg = function (a) {
-	return {ctor: 'MenuMsg', _0: a};
-};
+var _aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg = F2(
+	function (a, b) {
+		return {ctor: 'MenuMsg', _0: a, _1: b};
+	});
 
 var _aforemny$elm_mdc$Material_Internal_Slider_Model$defaultGeometry = {
 	rect: {left: 0, width: 0},
@@ -9879,6 +9879,12 @@ var _aforemny$elm_mdc$Material_Internal_Options$onInput = function (f) {
 		'input',
 		A2(_elm_lang$core$Json_Decode$map, f, _elm_lang$html$Html_Events$targetValue));
 };
+var _aforemny$elm_mdc$Material_Internal_Options$onChange = function (f) {
+	return A2(
+		_aforemny$elm_mdc$Material_Internal_Options$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, f, _elm_lang$html$Html_Events$targetValue));
+};
 var _aforemny$elm_mdc$Material_Internal_Options$onWithOptions = F2(
 	function (evt, options) {
 		return A2(
@@ -10040,6 +10046,24 @@ var _aforemny$elm_mdc$Material_Internal_Component$indexed = F3(
 		return {ctor: '_Tuple2', _0: get_, _1: set_};
 	});
 
+var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
+var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
+var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
+
+var _aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd = F2(
+	function (time, msg) {
+		return A2(
+			_elm_lang$core$Task$perform,
+			_elm_lang$core$Basics$always(msg),
+			_elm_lang$core$Process$sleep(time));
+	});
+var _aforemny$elm_mdc$Material_Internal_Helpers$cmd = function (msg) {
+	return A2(
+		_elm_lang$core$Task$perform,
+		_elm_lang$core$Basics$identity,
+		_elm_lang$core$Task$succeed(msg));
+};
+
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size48 = A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'font-size', '48px');
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size36 = A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'font-size', '36px');
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$size24 = A2(_aforemny$elm_mdc$Material_Internal_Options$css, 'font-size', '24px');
@@ -10079,24 +10103,6 @@ var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$view = F2(
 	});
 var _aforemny$elm_mdc$Material_Internal_Icon_Implementation$Config = function (a) {
 	return {node: a};
-};
-
-var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
-var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
-var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
-
-var _aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd = F2(
-	function (time, msg) {
-		return A2(
-			_elm_lang$core$Task$perform,
-			_elm_lang$core$Basics$always(msg),
-			_elm_lang$core$Process$sleep(time));
-	});
-var _aforemny$elm_mdc$Material_Internal_Helpers$cmd = function (msg) {
-	return A2(
-		_elm_lang$core$Task$perform,
-		_elm_lang$core$Basics$identity,
-		_elm_lang$core$Task$succeed(msg));
 };
 
 var _aforemny$elm_mdc$Material_Internal_Ripple_Implementation$decodeGeometry = function (type_) {
@@ -10760,6 +10766,16 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_Button_Model$defaultModel);
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$get = _aforemny$elm_mdc$Material_Internal_Button_Implementation$_p0._0;
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$set = _aforemny$elm_mdc$Material_Internal_Button_Implementation$_p0._1;
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$onClick = function (onClick) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (options) {
+			return _elm_lang$core$Native_Utils.update(
+				options,
+				{
+					onClick: _elm_lang$core$Maybe$Just(onClick)
+				});
+		});
+};
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (options) {
 		return _elm_lang$core$Native_Utils.update(
@@ -10797,7 +10813,7 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$icon = function (s
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$defaultConfig = {ripple: false, link: _elm_lang$core$Maybe$Nothing, disabled: false, icon: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$defaultConfig = {ripple: false, link: _elm_lang$core$Maybe$Nothing, disabled: false, icon: _elm_lang$core$Maybe$Nothing, onClick: _elm_lang$core$Maybe$Nothing};
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$button = F4(
 	function (lift, model, options, nodes) {
 		var ripple = A4(
@@ -10869,7 +10885,21 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$button = F4(
 														_1: {ctor: '[]'}
 													}
 												}),
-											_1: {ctor: '[]'}
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$core$Maybe$withDefault,
+													_aforemny$elm_mdc$Material_Internal_Options$nop,
+													A2(
+														_elm_lang$core$Maybe$map,
+														function (_p4) {
+															return _aforemny$elm_mdc$Material_Internal_Options$onClick(
+																lift(
+																	A2(_aforemny$elm_mdc$Material_Internal_Button_Model$Click, config.ripple, _p4)));
+														},
+														config.onClick)),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}
@@ -10918,33 +10948,47 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$button = F4(
 				}));
 	});
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Button_Implementation$get, _aforemny$elm_mdc$Material_Internal_Button_Implementation$button, _aforemny$elm_mdc$Material_Internal_Msg$ButtonMsg);
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$update = F2(
-	function (msg, model) {
-		var _p4 = msg;
-		var _p5 = A2(_aforemny$elm_mdc$Material_Internal_Ripple_Implementation$update, _p4._0, model.ripple);
-		var ripple = _p5._0;
-		var effects = _p5._1;
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Native_Utils.update(
-				model,
-				{ripple: ripple}),
-			_1: A2(_elm_lang$core$Platform_Cmd$map, _aforemny$elm_mdc$Material_Internal_Button_Model$RippleMsg, effects)
-		};
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$update = F3(
+	function (lift, msg, model) {
+		var _p5 = msg;
+		if (_p5.ctor === 'RippleMsg') {
+			var _p6 = A2(_aforemny$elm_mdc$Material_Internal_Ripple_Implementation$update, _p5._0, model.ripple);
+			var ripple = _p6._0;
+			var cmd = _p6._1;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Just(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{ripple: ripple})),
+				_1: A2(
+					_elm_lang$core$Platform_Cmd$map,
+					function (_p7) {
+						return lift(
+							_aforemny$elm_mdc$Material_Internal_Button_Model$RippleMsg(_p7));
+					},
+					cmd)
+			};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Nothing,
+				_1: A2(
+					_aforemny$elm_mdc$Material_Internal_Helpers$delayedCmd,
+					_p5._0 ? 150 : 0,
+					_p5._1)
+			};
+		}
 	});
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$react = A4(
-	_aforemny$elm_mdc$Material_Internal_Component$react,
-	_aforemny$elm_mdc$Material_Internal_Button_Implementation$get,
-	_aforemny$elm_mdc$Material_Internal_Button_Implementation$set,
-	_aforemny$elm_mdc$Material_Internal_Msg$ButtonMsg,
-	_aforemny$elm_mdc$Material_Internal_Component$generalise(_aforemny$elm_mdc$Material_Internal_Button_Implementation$update));
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$Config = F4(
-	function (a, b, c, d) {
-		return {ripple: a, link: b, disabled: c, icon: d};
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$react = A4(_aforemny$elm_mdc$Material_Internal_Component$react, _aforemny$elm_mdc$Material_Internal_Button_Implementation$get, _aforemny$elm_mdc$Material_Internal_Button_Implementation$set, _aforemny$elm_mdc$Material_Internal_Msg$ButtonMsg, _aforemny$elm_mdc$Material_Internal_Button_Implementation$update);
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$Config = F5(
+	function (a, b, c, d, e) {
+		return {ripple: a, link: b, disabled: c, icon: d, onClick: e};
 	});
 
 var _aforemny$elm_mdc$Material_Options$onWithOptions = _aforemny$elm_mdc$Material_Internal_Options$onWithOptions;
 var _aforemny$elm_mdc$Material_Options$onSubmit = _aforemny$elm_mdc$Material_Internal_Options$onSubmit;
+var _aforemny$elm_mdc$Material_Options$onChange = _aforemny$elm_mdc$Material_Internal_Options$onChange;
 var _aforemny$elm_mdc$Material_Options$onInput = _aforemny$elm_mdc$Material_Internal_Options$onInput;
 var _aforemny$elm_mdc$Material_Options$onFocus = _aforemny$elm_mdc$Material_Internal_Options$onFocus;
 var _aforemny$elm_mdc$Material_Options$onBlur = _aforemny$elm_mdc$Material_Internal_Options$onBlur;
@@ -11873,7 +11917,7 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$dialog = F4(
 													config.onClose) : lift(_aforemny$elm_mdc$Material_Internal_Dialog_Model$NoOp);
 											},
 											_aforemny$elm_mdc$Material_Internal_Dialog_Implementation$close)),
-									_1: options
+									_1: {ctor: '[]'}
 								}
 							}
 						}
@@ -12122,393 +12166,30 @@ var _aforemny$elm_mdc$Material_Internal_List_Implementation$ul = function (optio
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig = {};
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$Config = {};
 
-var _elm_lang$dom$Native_Dom = function() {
-
-var fakeNode = {
-	addEventListener: function() {},
-	removeEventListener: function() {}
-};
-
-var onDocument = on(typeof document !== 'undefined' ? document : fakeNode);
-var onWindow = on(typeof window !== 'undefined' ? window : fakeNode);
-
-function on(node)
-{
-	return function(eventName, decoder, toTask)
-	{
-		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
-
-			function performTask(event)
-			{
-				var result = A2(_elm_lang$core$Json_Decode$decodeValue, decoder, event);
-				if (result.ctor === 'Ok')
-				{
-					_elm_lang$core$Native_Scheduler.rawSpawn(toTask(result._0));
-				}
-			}
-
-			node.addEventListener(eventName, performTask);
-
-			return function()
-			{
-				node.removeEventListener(eventName, performTask);
-			};
-		});
-	};
-}
-
-var rAF = typeof requestAnimationFrame !== 'undefined'
-	? requestAnimationFrame
-	: function(callback) { callback(); };
-
-function withNode(id, doStuff)
-{
-	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
-	{
-		rAF(function()
-		{
-			var node = document.getElementById(id);
-			if (node === null)
-			{
-				callback(_elm_lang$core$Native_Scheduler.fail({ ctor: 'NotFound', _0: id }));
-				return;
-			}
-			callback(_elm_lang$core$Native_Scheduler.succeed(doStuff(node)));
-		});
-	});
-}
-
-
-// FOCUS
-
-function focus(id)
-{
-	return withNode(id, function(node) {
-		node.focus();
-		return _elm_lang$core$Native_Utils.Tuple0;
-	});
-}
-
-function blur(id)
-{
-	return withNode(id, function(node) {
-		node.blur();
-		return _elm_lang$core$Native_Utils.Tuple0;
-	});
-}
-
-
-// SCROLLING
-
-function getScrollTop(id)
-{
-	return withNode(id, function(node) {
-		return node.scrollTop;
-	});
-}
-
-function setScrollTop(id, desiredScrollTop)
-{
-	return withNode(id, function(node) {
-		node.scrollTop = desiredScrollTop;
-		return _elm_lang$core$Native_Utils.Tuple0;
-	});
-}
-
-function toBottom(id)
-{
-	return withNode(id, function(node) {
-		node.scrollTop = node.scrollHeight;
-		return _elm_lang$core$Native_Utils.Tuple0;
-	});
-}
-
-function getScrollLeft(id)
-{
-	return withNode(id, function(node) {
-		return node.scrollLeft;
-	});
-}
-
-function setScrollLeft(id, desiredScrollLeft)
-{
-	return withNode(id, function(node) {
-		node.scrollLeft = desiredScrollLeft;
-		return _elm_lang$core$Native_Utils.Tuple0;
-	});
-}
-
-function toRight(id)
-{
-	return withNode(id, function(node) {
-		node.scrollLeft = node.scrollWidth;
-		return _elm_lang$core$Native_Utils.Tuple0;
-	});
-}
-
-
-// SIZE
-
-function width(options, id)
-{
-	return withNode(id, function(node) {
-		switch (options.ctor)
-		{
-			case 'Content':
-				return node.scrollWidth;
-			case 'VisibleContent':
-				return node.clientWidth;
-			case 'VisibleContentWithBorders':
-				return node.offsetWidth;
-			case 'VisibleContentWithBordersAndMargins':
-				var rect = node.getBoundingClientRect();
-				return rect.right - rect.left;
-		}
-	});
-}
-
-function height(options, id)
-{
-	return withNode(id, function(node) {
-		switch (options.ctor)
-		{
-			case 'Content':
-				return node.scrollHeight;
-			case 'VisibleContent':
-				return node.clientHeight;
-			case 'VisibleContentWithBorders':
-				return node.offsetHeight;
-			case 'VisibleContentWithBordersAndMargins':
-				var rect = node.getBoundingClientRect();
-				return rect.bottom - rect.top;
-		}
-	});
-}
-
-return {
-	onDocument: F3(onDocument),
-	onWindow: F3(onWindow),
-
-	focus: focus,
-	blur: blur,
-
-	getScrollTop: getScrollTop,
-	setScrollTop: F2(setScrollTop),
-	getScrollLeft: getScrollLeft,
-	setScrollLeft: F2(setScrollLeft),
-	toBottom: toBottom,
-	toRight: toRight,
-
-	height: F2(height),
-	width: F2(width)
-};
-
-}();
-
-var _elm_lang$dom$Dom_LowLevel$onWindow = _elm_lang$dom$Native_Dom.onWindow;
-var _elm_lang$dom$Dom_LowLevel$onDocument = _elm_lang$dom$Native_Dom.onDocument;
-
-var _elm_lang$mouse$Mouse_ops = _elm_lang$mouse$Mouse_ops || {};
-_elm_lang$mouse$Mouse_ops['&>'] = F2(
-	function (t1, t2) {
-		return A2(
-			_elm_lang$core$Task$andThen,
-			function (_p0) {
-				return t2;
-			},
-			t1);
-	});
-var _elm_lang$mouse$Mouse$onSelfMsg = F3(
-	function (router, _p1, state) {
-		var _p2 = _p1;
-		var _p3 = A2(_elm_lang$core$Dict$get, _p2.category, state);
-		if (_p3.ctor === 'Nothing') {
-			return _elm_lang$core$Task$succeed(state);
-		} else {
-			var send = function (tagger) {
-				return A2(
-					_elm_lang$core$Platform$sendToApp,
-					router,
-					tagger(_p2.position));
-			};
-			return A2(
-				_elm_lang$mouse$Mouse_ops['&>'],
-				_elm_lang$core$Task$sequence(
-					A2(_elm_lang$core$List$map, send, _p3._0.taggers)),
-				_elm_lang$core$Task$succeed(state));
-		}
-	});
-var _elm_lang$mouse$Mouse$init = _elm_lang$core$Task$succeed(_elm_lang$core$Dict$empty);
-var _elm_lang$mouse$Mouse$categorizeHelpHelp = F2(
-	function (value, maybeValues) {
-		var _p4 = maybeValues;
-		if (_p4.ctor === 'Nothing') {
-			return _elm_lang$core$Maybe$Just(
-				{
-					ctor: '::',
-					_0: value,
-					_1: {ctor: '[]'}
-				});
-		} else {
-			return _elm_lang$core$Maybe$Just(
-				{ctor: '::', _0: value, _1: _p4._0});
-		}
-	});
-var _elm_lang$mouse$Mouse$categorizeHelp = F2(
-	function (subs, subDict) {
-		categorizeHelp:
-		while (true) {
-			var _p5 = subs;
-			if (_p5.ctor === '[]') {
-				return subDict;
-			} else {
-				var _v4 = _p5._1,
-					_v5 = A3(
-					_elm_lang$core$Dict$update,
-					_p5._0._0,
-					_elm_lang$mouse$Mouse$categorizeHelpHelp(_p5._0._1),
-					subDict);
-				subs = _v4;
-				subDict = _v5;
-				continue categorizeHelp;
-			}
-		}
-	});
-var _elm_lang$mouse$Mouse$categorize = function (subs) {
-	return A2(_elm_lang$mouse$Mouse$categorizeHelp, subs, _elm_lang$core$Dict$empty);
-};
-var _elm_lang$mouse$Mouse$subscription = _elm_lang$core$Native_Platform.leaf('Mouse');
-var _elm_lang$mouse$Mouse$Position = F2(
-	function (a, b) {
-		return {x: a, y: b};
-	});
-var _elm_lang$mouse$Mouse$position = A3(
-	_elm_lang$core$Json_Decode$map2,
-	_elm_lang$mouse$Mouse$Position,
-	A2(_elm_lang$core$Json_Decode$field, 'pageX', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'pageY', _elm_lang$core$Json_Decode$int));
-var _elm_lang$mouse$Mouse$Watcher = F2(
-	function (a, b) {
-		return {taggers: a, pid: b};
-	});
-var _elm_lang$mouse$Mouse$Msg = F2(
-	function (a, b) {
-		return {category: a, position: b};
-	});
-var _elm_lang$mouse$Mouse$onEffects = F3(
-	function (router, newSubs, oldState) {
-		var rightStep = F3(
-			function (category, taggers, task) {
-				var tracker = A3(
-					_elm_lang$dom$Dom_LowLevel$onDocument,
-					category,
-					_elm_lang$mouse$Mouse$position,
-					function (_p6) {
-						return A2(
-							_elm_lang$core$Platform$sendToSelf,
-							router,
-							A2(_elm_lang$mouse$Mouse$Msg, category, _p6));
-					});
-				return A2(
-					_elm_lang$core$Task$andThen,
-					function (state) {
-						return A2(
-							_elm_lang$core$Task$andThen,
-							function (pid) {
-								return _elm_lang$core$Task$succeed(
-									A3(
-										_elm_lang$core$Dict$insert,
-										category,
-										A2(_elm_lang$mouse$Mouse$Watcher, taggers, pid),
-										state));
-							},
-							_elm_lang$core$Process$spawn(tracker));
-					},
-					task);
-			});
-		var bothStep = F4(
-			function (category, _p7, taggers, task) {
-				var _p8 = _p7;
-				return A2(
-					_elm_lang$core$Task$andThen,
-					function (state) {
-						return _elm_lang$core$Task$succeed(
-							A3(
-								_elm_lang$core$Dict$insert,
-								category,
-								A2(_elm_lang$mouse$Mouse$Watcher, taggers, _p8.pid),
-								state));
-					},
-					task);
-			});
-		var leftStep = F3(
-			function (category, _p9, task) {
-				var _p10 = _p9;
-				return A2(
-					_elm_lang$mouse$Mouse_ops['&>'],
-					_elm_lang$core$Process$kill(_p10.pid),
-					task);
-			});
-		return A6(
-			_elm_lang$core$Dict$merge,
-			leftStep,
-			bothStep,
-			rightStep,
-			oldState,
-			_elm_lang$mouse$Mouse$categorize(newSubs),
-			_elm_lang$core$Task$succeed(_elm_lang$core$Dict$empty));
-	});
-var _elm_lang$mouse$Mouse$MySub = F2(
-	function (a, b) {
-		return {ctor: 'MySub', _0: a, _1: b};
-	});
-var _elm_lang$mouse$Mouse$clicks = function (tagger) {
-	return _elm_lang$mouse$Mouse$subscription(
-		A2(_elm_lang$mouse$Mouse$MySub, 'click', tagger));
-};
-var _elm_lang$mouse$Mouse$moves = function (tagger) {
-	return _elm_lang$mouse$Mouse$subscription(
-		A2(_elm_lang$mouse$Mouse$MySub, 'mousemove', tagger));
-};
-var _elm_lang$mouse$Mouse$downs = function (tagger) {
-	return _elm_lang$mouse$Mouse$subscription(
-		A2(_elm_lang$mouse$Mouse$MySub, 'mousedown', tagger));
-};
-var _elm_lang$mouse$Mouse$ups = function (tagger) {
-	return _elm_lang$mouse$Mouse$subscription(
-		A2(_elm_lang$mouse$Mouse$MySub, 'mouseup', tagger));
-};
-var _elm_lang$mouse$Mouse$subMap = F2(
-	function (func, _p11) {
-		var _p12 = _p11;
-		return A2(
-			_elm_lang$mouse$Mouse$MySub,
-			_p12._0,
-			function (_p13) {
-				return func(
-					_p12._1(_p13));
-			});
-	});
-_elm_lang$core$Native_Platform.effectManagers['Mouse'] = {pkg: 'elm-lang/mouse', init: _elm_lang$mouse$Mouse$init, onEffects: _elm_lang$mouse$Mouse$onEffects, onSelfMsg: _elm_lang$mouse$Mouse$onSelfMsg, tag: 'sub', subMap: _elm_lang$mouse$Mouse$subMap};
-
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$emit = F3(
 	function (lift, idx, msg) {
 		return _aforemny$elm_mdc$Material_Internal_Helpers$cmd(
 			lift(
 				A2(_aforemny$elm_mdc$Material_Internal_Msg$DrawerMsg, idx, msg)));
 	});
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$toggle = function (persistent) {
-	return _aforemny$elm_mdc$Material_Internal_Drawer_Model$Toggle(persistent);
-};
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$close = _aforemny$elm_mdc$Material_Internal_Drawer_Model$Close;
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$open = function (persistent) {
-	return _aforemny$elm_mdc$Material_Internal_Drawer_Model$Open(persistent);
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$open = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{open: true});
+	});
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$onClose = function (onClose) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					onClose: _elm_lang$core$Maybe$Just(onClose)
+				});
+		});
 };
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subscriptions = function (model) {
-	return model.open ? _elm_lang$mouse$Mouse$clicks(
-		function (_p0) {
-			return _aforemny$elm_mdc$Material_Internal_Drawer_Model$Click;
-		}) : _elm_lang$core$Platform_Sub$none;
+	return _elm_lang$core$Platform_Sub$none;
 };
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subs = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$subs,
@@ -12517,7 +12198,7 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subs = A3(
 		return _.drawer;
 	},
 	_aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subscriptions);
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$_p1 = A3(
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$indexed,
 	function (_) {
 		return _.drawer;
@@ -12529,8 +12210,8 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$_p1 = A3(
 				{drawer: x});
 		}),
 	_aforemny$elm_mdc$Material_Internal_Drawer_Model$defaultModel);
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$get = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$_p1._0;
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$set = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$_p1._1;
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$get = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$_p0._0;
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$set = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$_p0._1;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$toolbarSpacer = function (options) {
 	return A2(
 		_aforemny$elm_mdc$Material_Internal_Options$styled,
@@ -12562,12 +12243,13 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$header = function 
 			_1: options
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig = {};
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig = {onClose: _elm_lang$core$Maybe$Nothing, open: false};
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$view = F5(
 	function (className, lift, model, options, nodes) {
-		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig, options);
-		var summary = _p2;
-		var config = _p2.config;
+		var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig, options);
+		var summary = _p1;
+		var config = _p1.config;
+		var stateChanged = !_elm_lang$core$Native_Utils.eq(config.open, model.open);
 		return A3(
 			_aforemny$elm_mdc$Material_Internal_Options$styled,
 			_elm_lang$html$Html$aside,
@@ -12581,15 +12263,34 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$view = F5(
 						ctor: '::',
 						_0: A2(
 							_aforemny$elm_mdc$Material_Internal_Options$when,
-							model.open,
-							_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-drawer--open')),
+							stateChanged,
+							_aforemny$elm_mdc$Material_Internal_GlobalEvents$onTick(
+								_elm_lang$core$Json_Decode$succeed(
+									lift(
+										_aforemny$elm_mdc$Material_Internal_Drawer_Model$SetOpen(
+											{ctor: '_Tuple2', _0: config.open, _1: model.persistent}))))),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_aforemny$elm_mdc$Material_Internal_Options$when,
-								model.animating,
-								_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-drawer--animating')),
-							_1: {ctor: '[]'}
+								model.open,
+								_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-drawer--open')),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_Internal_Options$when,
+									model.animating,
+									_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-drawer--animating')),
+								_1: {
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Internal_Options$onClick(
+										A2(
+											_elm_lang$core$Maybe$withDefault,
+											lift(_aforemny$elm_mdc$Material_Internal_Drawer_Model$NoOp),
+											config.onClose)),
+									_1: {ctor: '[]'}
+								}
+							}
 						}
 					}
 				}
@@ -12607,7 +12308,10 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$view = F5(
 							_0: A3(
 								_aforemny$elm_mdc$Material_Internal_Options$onWithOptions,
 								'click',
-								{stopPropagation: true, preventDefault: false},
+								{
+									stopPropagation: _elm_lang$core$Native_Utils.eq(className, 'mdc-drawer--temporary'),
+									preventDefault: false
+								},
 								_elm_lang$core$Json_Decode$succeed(
 									lift(_aforemny$elm_mdc$Material_Internal_Drawer_Model$NoOp))),
 							_1: {
@@ -12644,77 +12348,38 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$render = function 
 };
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$update = F3(
 	function (lift, msg, model) {
-		update:
-		while (true) {
-			var _p3 = msg;
-			switch (_p3.ctor) {
-				case 'NoOp':
-					return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
-				case 'Tick':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Maybe$Just(
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{
-									state: _elm_lang$core$Maybe$Just(model.open),
-									animating: false
-								})),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				case 'Click':
-					if (model.persistent) {
-						return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
-					} else {
-						var _v1 = lift,
-							_v2 = _aforemny$elm_mdc$Material_Internal_Drawer_Model$Close,
-							_v3 = model;
-						lift = _v1;
-						msg = _v2;
-						model = _v3;
-						continue update;
-					}
-				case 'Open':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Maybe$Just(
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{open: true, state: _elm_lang$core$Maybe$Nothing, animating: true, persistent: _p3._0})),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				case 'Close':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Maybe$Just(
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{open: false, state: _elm_lang$core$Maybe$Nothing, animating: true})),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				default:
-					if (model.open) {
-						var _v4 = lift,
-							_v5 = _aforemny$elm_mdc$Material_Internal_Drawer_Model$Close,
-							_v6 = model;
-						lift = _v4;
-						msg = _v5;
-						model = _v6;
-						continue update;
-					} else {
-						var _v7 = lift,
-							_v8 = _aforemny$elm_mdc$Material_Internal_Drawer_Model$Open(_p3._0),
-							_v9 = model;
-						lift = _v7;
-						msg = _v8;
-						model = _v9;
-						continue update;
-					}
-			}
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'Tick':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								state: _elm_lang$core$Maybe$Just(model.open),
+								animating: false
+							})),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{open: _p2._0._0, state: _elm_lang$core$Maybe$Nothing, animating: true, persistent: _p2._0._1})),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$react = A4(_aforemny$elm_mdc$Material_Internal_Component$react, _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$get, _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$set, _aforemny$elm_mdc$Material_Internal_Msg$DrawerMsg, _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$update);
-var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$Config = {};
+var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$Config = F2(
+	function (a, b) {
+		return {onClose: a, open: b};
+	});
 
 var _aforemny$elm_mdc$Material_Internal_Fab_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$indexed,
@@ -13228,6 +12893,375 @@ var _aforemny$elm_mdc$Material_Internal_IconToggle_Implementation$Config = F4(
 		return {on: a, label: b, icon: c, inner: d};
 	});
 
+var _elm_lang$dom$Native_Dom = function() {
+
+var fakeNode = {
+	addEventListener: function() {},
+	removeEventListener: function() {}
+};
+
+var onDocument = on(typeof document !== 'undefined' ? document : fakeNode);
+var onWindow = on(typeof window !== 'undefined' ? window : fakeNode);
+
+function on(node)
+{
+	return function(eventName, decoder, toTask)
+	{
+		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+
+			function performTask(event)
+			{
+				var result = A2(_elm_lang$core$Json_Decode$decodeValue, decoder, event);
+				if (result.ctor === 'Ok')
+				{
+					_elm_lang$core$Native_Scheduler.rawSpawn(toTask(result._0));
+				}
+			}
+
+			node.addEventListener(eventName, performTask);
+
+			return function()
+			{
+				node.removeEventListener(eventName, performTask);
+			};
+		});
+	};
+}
+
+var rAF = typeof requestAnimationFrame !== 'undefined'
+	? requestAnimationFrame
+	: function(callback) { callback(); };
+
+function withNode(id, doStuff)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		rAF(function()
+		{
+			var node = document.getElementById(id);
+			if (node === null)
+			{
+				callback(_elm_lang$core$Native_Scheduler.fail({ ctor: 'NotFound', _0: id }));
+				return;
+			}
+			callback(_elm_lang$core$Native_Scheduler.succeed(doStuff(node)));
+		});
+	});
+}
+
+
+// FOCUS
+
+function focus(id)
+{
+	return withNode(id, function(node) {
+		node.focus();
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function blur(id)
+{
+	return withNode(id, function(node) {
+		node.blur();
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+
+// SCROLLING
+
+function getScrollTop(id)
+{
+	return withNode(id, function(node) {
+		return node.scrollTop;
+	});
+}
+
+function setScrollTop(id, desiredScrollTop)
+{
+	return withNode(id, function(node) {
+		node.scrollTop = desiredScrollTop;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function toBottom(id)
+{
+	return withNode(id, function(node) {
+		node.scrollTop = node.scrollHeight;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function getScrollLeft(id)
+{
+	return withNode(id, function(node) {
+		return node.scrollLeft;
+	});
+}
+
+function setScrollLeft(id, desiredScrollLeft)
+{
+	return withNode(id, function(node) {
+		node.scrollLeft = desiredScrollLeft;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+function toRight(id)
+{
+	return withNode(id, function(node) {
+		node.scrollLeft = node.scrollWidth;
+		return _elm_lang$core$Native_Utils.Tuple0;
+	});
+}
+
+
+// SIZE
+
+function width(options, id)
+{
+	return withNode(id, function(node) {
+		switch (options.ctor)
+		{
+			case 'Content':
+				return node.scrollWidth;
+			case 'VisibleContent':
+				return node.clientWidth;
+			case 'VisibleContentWithBorders':
+				return node.offsetWidth;
+			case 'VisibleContentWithBordersAndMargins':
+				var rect = node.getBoundingClientRect();
+				return rect.right - rect.left;
+		}
+	});
+}
+
+function height(options, id)
+{
+	return withNode(id, function(node) {
+		switch (options.ctor)
+		{
+			case 'Content':
+				return node.scrollHeight;
+			case 'VisibleContent':
+				return node.clientHeight;
+			case 'VisibleContentWithBorders':
+				return node.offsetHeight;
+			case 'VisibleContentWithBordersAndMargins':
+				var rect = node.getBoundingClientRect();
+				return rect.bottom - rect.top;
+		}
+	});
+}
+
+return {
+	onDocument: F3(onDocument),
+	onWindow: F3(onWindow),
+
+	focus: focus,
+	blur: blur,
+
+	getScrollTop: getScrollTop,
+	setScrollTop: F2(setScrollTop),
+	getScrollLeft: getScrollLeft,
+	setScrollLeft: F2(setScrollLeft),
+	toBottom: toBottom,
+	toRight: toRight,
+
+	height: F2(height),
+	width: F2(width)
+};
+
+}();
+
+var _elm_lang$dom$Dom_LowLevel$onWindow = _elm_lang$dom$Native_Dom.onWindow;
+var _elm_lang$dom$Dom_LowLevel$onDocument = _elm_lang$dom$Native_Dom.onDocument;
+
+var _elm_lang$mouse$Mouse_ops = _elm_lang$mouse$Mouse_ops || {};
+_elm_lang$mouse$Mouse_ops['&>'] = F2(
+	function (t1, t2) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (_p0) {
+				return t2;
+			},
+			t1);
+	});
+var _elm_lang$mouse$Mouse$onSelfMsg = F3(
+	function (router, _p1, state) {
+		var _p2 = _p1;
+		var _p3 = A2(_elm_lang$core$Dict$get, _p2.category, state);
+		if (_p3.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var send = function (tagger) {
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					tagger(_p2.position));
+			};
+			return A2(
+				_elm_lang$mouse$Mouse_ops['&>'],
+				_elm_lang$core$Task$sequence(
+					A2(_elm_lang$core$List$map, send, _p3._0.taggers)),
+				_elm_lang$core$Task$succeed(state));
+		}
+	});
+var _elm_lang$mouse$Mouse$init = _elm_lang$core$Task$succeed(_elm_lang$core$Dict$empty);
+var _elm_lang$mouse$Mouse$categorizeHelpHelp = F2(
+	function (value, maybeValues) {
+		var _p4 = maybeValues;
+		if (_p4.ctor === 'Nothing') {
+			return _elm_lang$core$Maybe$Just(
+				{
+					ctor: '::',
+					_0: value,
+					_1: {ctor: '[]'}
+				});
+		} else {
+			return _elm_lang$core$Maybe$Just(
+				{ctor: '::', _0: value, _1: _p4._0});
+		}
+	});
+var _elm_lang$mouse$Mouse$categorizeHelp = F2(
+	function (subs, subDict) {
+		categorizeHelp:
+		while (true) {
+			var _p5 = subs;
+			if (_p5.ctor === '[]') {
+				return subDict;
+			} else {
+				var _v4 = _p5._1,
+					_v5 = A3(
+					_elm_lang$core$Dict$update,
+					_p5._0._0,
+					_elm_lang$mouse$Mouse$categorizeHelpHelp(_p5._0._1),
+					subDict);
+				subs = _v4;
+				subDict = _v5;
+				continue categorizeHelp;
+			}
+		}
+	});
+var _elm_lang$mouse$Mouse$categorize = function (subs) {
+	return A2(_elm_lang$mouse$Mouse$categorizeHelp, subs, _elm_lang$core$Dict$empty);
+};
+var _elm_lang$mouse$Mouse$subscription = _elm_lang$core$Native_Platform.leaf('Mouse');
+var _elm_lang$mouse$Mouse$Position = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
+var _elm_lang$mouse$Mouse$position = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_elm_lang$mouse$Mouse$Position,
+	A2(_elm_lang$core$Json_Decode$field, 'pageX', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'pageY', _elm_lang$core$Json_Decode$int));
+var _elm_lang$mouse$Mouse$Watcher = F2(
+	function (a, b) {
+		return {taggers: a, pid: b};
+	});
+var _elm_lang$mouse$Mouse$Msg = F2(
+	function (a, b) {
+		return {category: a, position: b};
+	});
+var _elm_lang$mouse$Mouse$onEffects = F3(
+	function (router, newSubs, oldState) {
+		var rightStep = F3(
+			function (category, taggers, task) {
+				var tracker = A3(
+					_elm_lang$dom$Dom_LowLevel$onDocument,
+					category,
+					_elm_lang$mouse$Mouse$position,
+					function (_p6) {
+						return A2(
+							_elm_lang$core$Platform$sendToSelf,
+							router,
+							A2(_elm_lang$mouse$Mouse$Msg, category, _p6));
+					});
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (state) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (pid) {
+								return _elm_lang$core$Task$succeed(
+									A3(
+										_elm_lang$core$Dict$insert,
+										category,
+										A2(_elm_lang$mouse$Mouse$Watcher, taggers, pid),
+										state));
+							},
+							_elm_lang$core$Process$spawn(tracker));
+					},
+					task);
+			});
+		var bothStep = F4(
+			function (category, _p7, taggers, task) {
+				var _p8 = _p7;
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (state) {
+						return _elm_lang$core$Task$succeed(
+							A3(
+								_elm_lang$core$Dict$insert,
+								category,
+								A2(_elm_lang$mouse$Mouse$Watcher, taggers, _p8.pid),
+								state));
+					},
+					task);
+			});
+		var leftStep = F3(
+			function (category, _p9, task) {
+				var _p10 = _p9;
+				return A2(
+					_elm_lang$mouse$Mouse_ops['&>'],
+					_elm_lang$core$Process$kill(_p10.pid),
+					task);
+			});
+		return A6(
+			_elm_lang$core$Dict$merge,
+			leftStep,
+			bothStep,
+			rightStep,
+			oldState,
+			_elm_lang$mouse$Mouse$categorize(newSubs),
+			_elm_lang$core$Task$succeed(_elm_lang$core$Dict$empty));
+	});
+var _elm_lang$mouse$Mouse$MySub = F2(
+	function (a, b) {
+		return {ctor: 'MySub', _0: a, _1: b};
+	});
+var _elm_lang$mouse$Mouse$clicks = function (tagger) {
+	return _elm_lang$mouse$Mouse$subscription(
+		A2(_elm_lang$mouse$Mouse$MySub, 'click', tagger));
+};
+var _elm_lang$mouse$Mouse$moves = function (tagger) {
+	return _elm_lang$mouse$Mouse$subscription(
+		A2(_elm_lang$mouse$Mouse$MySub, 'mousemove', tagger));
+};
+var _elm_lang$mouse$Mouse$downs = function (tagger) {
+	return _elm_lang$mouse$Mouse$subscription(
+		A2(_elm_lang$mouse$Mouse$MySub, 'mousedown', tagger));
+};
+var _elm_lang$mouse$Mouse$ups = function (tagger) {
+	return _elm_lang$mouse$Mouse$subscription(
+		A2(_elm_lang$mouse$Mouse$MySub, 'mouseup', tagger));
+};
+var _elm_lang$mouse$Mouse$subMap = F2(
+	function (func, _p11) {
+		var _p12 = _p11;
+		return A2(
+			_elm_lang$mouse$Mouse$MySub,
+			_p12._0,
+			function (_p13) {
+				return func(
+					_p12._1(_p13));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Mouse'] = {pkg: 'elm-lang/mouse', init: _elm_lang$mouse$Mouse$init, onEffects: _elm_lang$mouse$Mouse$onEffects, onSelfMsg: _elm_lang$mouse$Mouse$onSelfMsg, tag: 'sub', subMap: _elm_lang$mouse$Mouse$subMap};
+
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$decodeGeometry = function () {
 	var menu = A3(
 		_elm_lang$core$Json_Decode$map2,
@@ -13621,10 +13655,7 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu = F4(
 						}(
 							{
 								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_Internal_Options$when,
-									isOpen,
-									_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-menu--open')),
+								_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-menu--open'),
 								_1: {
 									ctor: '::',
 									_0: A2(_aforemny$elm_mdc$Material_Internal_Options$data, 'focustrap', ''),
@@ -13713,7 +13744,7 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu = F4(
 												return lift(
 													A2(
 														_aforemny$elm_mdc$Material_Internal_Menu_Model$Init,
-														{quickOpen: config.quickOpen},
+														{quickOpen: config.quickOpen, index: config.index},
 														_p41));
 											},
 											_aforemny$elm_mdc$Material_Internal_Menu_Implementation$decodeGeometry))),
@@ -13925,7 +13956,8 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$update = F3(
 								model,
 								{
 									geometry: _elm_lang$core$Maybe$Just(_p46._1),
-									quickOpen: _elm_lang$core$Maybe$Just(_p46._0.quickOpen)
+									quickOpen: _elm_lang$core$Maybe$Just(_p46._0.quickOpen),
+									focusedItemAtIndex: A2(_elm_lang$core$Debug$log, 'index', _p46._0.index)
 								})),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -13939,17 +13971,13 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$update = F3(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				case 'DocumentClick':
-					if (model.open) {
-						var _v15 = lift,
-							_v16 = _aforemny$elm_mdc$Material_Internal_Menu_Model$Close,
-							_v17 = model;
-						lift = _v15;
-						msg = _v16;
-						model = _v17;
-						continue update;
-					} else {
-						return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: _elm_lang$core$Platform_Cmd$none};
-					}
+					var _v15 = lift,
+						_v16 = _aforemny$elm_mdc$Material_Internal_Menu_Model$Close,
+						_v17 = model;
+					lift = _v15;
+					msg = _v16;
+					model = _v17;
+					continue update;
 				case 'KeyDown':
 					var _p48 = _p46._3;
 					var _p47 = _p46._2;
@@ -14053,15 +14081,10 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$li = F2(
 		return {options: options, childs: childs, divider: false};
 	});
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$batch(
-		{
-			ctor: '::',
-			_0: model.open ? _elm_lang$mouse$Mouse$clicks(
-				function (_p51) {
-					return _aforemny$elm_mdc$Material_Internal_Menu_Model$DocumentClick;
-				}) : _elm_lang$core$Platform_Sub$none,
-			_1: {ctor: '[]'}
-		});
+	return (model.open && (!_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing))) ? _elm_lang$mouse$Mouse$clicks(
+		function (_p51) {
+			return _aforemny$elm_mdc$Material_Internal_Menu_Model$DocumentClick;
+		}) : _elm_lang$core$Platform_Sub$none;
 };
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$subs = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$subs,
@@ -14322,7 +14345,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$decodeGeometry = f
 		return A2(
 			_elm_lang$core$Json_Decode$map,
 			function (rectangle) {
-				return {top: rectangle.top - _p1.scrollY, left: rectangle.left - _p1.scrollX, width: rectangle.width, height: rectangle.height};
+				return {top: rectangle.top, left: rectangle.left, width: rectangle.width, height: rectangle.height};
 			},
 			_debois$elm_dom$DOM$boundingClientRect);
 	};
@@ -14455,11 +14478,26 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 		var itemOffsetTop = A2(
 			_elm_lang$core$Maybe$withDefault,
 			0,
-			_elm_lang$core$List$head(
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				_elm_lang$core$List$head(
+					A2(
+						_elm_lang$core$List$drop,
+						A2(_elm_lang$core$Maybe$withDefault, 0, config.index),
+						geometry.itemOffsetTops)),
 				A2(
-					_elm_lang$core$List$drop,
-					A2(_elm_lang$core$Maybe$withDefault, 0, config.index),
-					geometry.itemOffsetTops)));
+					_elm_lang$core$Maybe$map,
+					_elm_lang$core$Maybe$Just,
+					A2(
+						_elm_lang$core$Maybe$andThen,
+						function (index) {
+							return _elm_lang$core$List$head(
+								A2(
+									_elm_lang$core$List$drop,
+									A2(_elm_lang$core$Maybe$withDefault, 0, model.index),
+									geometry.itemOffsetTops));
+						},
+						model.index))));
 		var adjustedTop = function () {
 			var adjustedTop_ = top - itemOffsetTop;
 			var overflowsTop = _elm_lang$core$Native_Utils.cmp(adjustedTop_, 0) < 0;
@@ -14507,7 +14545,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 								_aforemny$elm_mdc$Material_Internal_Menu_Implementation$connect(
 									function (_p6) {
 										return lift(
-											_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg(_p6));
+											A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, config.index, _p6));
 									})),
 							_1: {
 								ctor: '::',
@@ -14610,7 +14648,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 						_aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu,
 						function (_p7) {
 							return lift(
-								_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg(_p7));
+								A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, config.index, _p7));
 						},
 						model.menu,
 						{
@@ -14682,13 +14720,15 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$update = F3(
 	function (lift, msg, model) {
 		var _p9 = msg;
 		if (_p9.ctor === 'MenuMsg') {
+			var _p15 = _p9._1;
+			var _p14 = _p9._0;
 			var _p10 = A3(
 				_aforemny$elm_mdc$Material_Internal_Menu_Implementation$update,
 				function (_p11) {
 					return lift(
-						_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg(_p11));
+						A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, _p14, _p11));
 				},
-				_p9._0,
+				_p15,
 				model.menu);
 			var menu = _p10._0;
 			var menuCmd = _p10._1;
@@ -14699,7 +14739,17 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$update = F3(
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{menu: _p12._0})),
+							{
+								menu: _p12._0,
+								index: function () {
+									var _p13 = _p15;
+									if (_p13.ctor === 'Toggle') {
+										return (!model.menu.open) ? _p14 : _elm_lang$core$Maybe$Nothing;
+									} else {
+										return model.index;
+									}
+								}()
+							})),
 					_1: menuCmd
 				};
 			} else {
@@ -14722,7 +14772,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$react = A4(_aforem
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$subscriptions = function (model) {
 	return A2(
 		_elm_lang$core$Platform_Sub$map,
-		_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg,
+		_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg(_elm_lang$core$Maybe$Nothing),
 		_aforemny$elm_mdc$Material_Internal_Menu_Implementation$subscriptions(model.menu));
 };
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$subs = A3(
@@ -20101,6 +20151,7 @@ var _aforemny$elm_mdc$Demo_Page$Page = F4(
 		return {toolbar: a, fixedAdjust: b, navigate: c, body: d};
 	});
 
+var _aforemny$elm_mdc$Material_Button$onClick = _aforemny$elm_mdc$Material_Internal_Button_Implementation$onClick;
 var _aforemny$elm_mdc$Material_Button$disabled = _aforemny$elm_mdc$Material_Internal_Button_Implementation$disabled;
 var _aforemny$elm_mdc$Material_Button$link = _aforemny$elm_mdc$Material_Internal_Button_Implementation$link;
 var _aforemny$elm_mdc$Material_Button$ripple = _aforemny$elm_mdc$Material_Internal_Button_Implementation$ripple;
@@ -31491,18 +31542,7 @@ var _aforemny$elm_mdc$Demo_Menus$subscriptions = F2(
 	});
 
 var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$className = 'mdc-drawer--persistent';
-var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$toggleOn = F3(
-	function (lift, index, event) {
-		return A2(
-			_aforemny$elm_mdc$Material_Internal_Options$on,
-			event,
-			_elm_lang$core$Json_Decode$succeed(
-				lift(
-					A2(
-						_aforemny$elm_mdc$Material_Internal_Msg$DrawerMsg,
-						index,
-						_aforemny$elm_mdc$Material_Internal_Drawer_Model$Toggle(true)))));
-	});
+var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$open = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$open;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$subscriptions = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subscriptions;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$subs = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subs;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$react = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$react;
@@ -31513,7 +31553,7 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$headerC
 var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$header = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$header;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$defaultConfig = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig;
 
-var _aforemny$elm_mdc$Material_Drawer_Persistent$toggleOn = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$toggleOn;
+var _aforemny$elm_mdc$Material_Drawer_Persistent$open = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$open;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$toolbarSpacer = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$toolbarSpacer;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$content = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$content;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$headerContent = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$headerContent;
@@ -31738,11 +31778,12 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 			}
 		}
 	});
-var _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false};
-var _aforemny$elm_mdc$Demo_PersistentDrawer$Model = F2(
-	function (a, b) {
-		return {mdc: a, rtl: b};
+var _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false, drawerOpen: false};
+var _aforemny$elm_mdc$Demo_PersistentDrawer$Model = F3(
+	function (a, b, c) {
+		return {mdc: a, rtl: b, drawerOpen: c};
 	});
+var _aforemny$elm_mdc$Demo_PersistentDrawer$ToggleDrawer = {ctor: 'ToggleDrawer'};
 var _aforemny$elm_mdc$Demo_PersistentDrawer$ToggleRtl = {ctor: 'ToggleRtl'};
 var _aforemny$elm_mdc$Demo_PersistentDrawer$Mdc = function (a) {
 	return {ctor: 'Mdc', _0: a};
@@ -31750,23 +31791,32 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$Mdc = function (a) {
 var _aforemny$elm_mdc$Demo_PersistentDrawer$update = F3(
 	function (lift, msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'Mdc') {
-			return A3(
-				_aforemny$elm_mdc$Material$update,
-				function (_p1) {
-					return lift(
-						_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p1));
-				},
-				_p0._0,
-				model);
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{rtl: !model.rtl}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
+		switch (_p0.ctor) {
+			case 'Mdc':
+				return A3(
+					_aforemny$elm_mdc$Material$update,
+					function (_p1) {
+						return lift(
+							_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p1));
+					},
+					_p0._0,
+					model);
+			case 'ToggleRtl':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{rtl: !model.rtl}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{drawerOpen: !model.drawerOpen}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
@@ -31829,7 +31879,11 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 						_1: {ctor: '[]'}
 					},
 					model.mdc,
-					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(_aforemny$elm_mdc$Material_Options$when, model.drawerOpen, _aforemny$elm_mdc$Material_Drawer_Persistent$open),
+						_1: {ctor: '[]'}
+					},
 					{
 						ctor: '::',
 						_0: A2(
@@ -31907,18 +31961,8 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 														_aforemny$elm_mdc$Material_Icon$view,
 														{
 															ctor: '::',
-															_0: A3(
-																_aforemny$elm_mdc$Material_Drawer_Persistent$toggleOn,
-																function (_p4) {
-																	return lift(
-																		_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p4));
-																},
-																{
-																	ctor: '::',
-																	_0: 0,
-																	_1: {ctor: '[]'}
-																},
-																'click'),
+															_0: _aforemny$elm_mdc$Material_Options$onClick(
+																lift(_aforemny$elm_mdc$Demo_PersistentDrawer$ToggleDrawer)),
 															_1: {
 																ctor: '::',
 																_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
@@ -32003,9 +32047,9 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 												ctor: '::',
 												_0: A5(
 													_aforemny$elm_mdc$Material_Button$view,
-													function (_p5) {
+													function (_p4) {
 														return lift(
-															_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p5));
+															_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p4));
 													},
 													{
 														ctor: '::',
@@ -32058,9 +32102,9 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$subscriptions = F2(
 	function (lift, model) {
 		return A2(
 			_aforemny$elm_mdc$Material$subscriptions,
-			function (_p6) {
+			function (_p5) {
 				return lift(
-					_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p6));
+					_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p5));
 			},
 			model);
 	});
@@ -38426,20 +38470,8 @@ var _aforemny$elm_mdc$Demo_Tabs$subscriptions = F2(
 	});
 
 var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$className = 'mdc-drawer--temporary';
-var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$openOn = F3(
-	function (lift, index, event) {
-		return A2(
-			_aforemny$elm_mdc$Material_Internal_Options$on,
-			event,
-			function (_p0) {
-				return _elm_lang$core$Json_Decode$succeed(
-					lift(_p0));
-			}(
-				A2(
-					_aforemny$elm_mdc$Material_Internal_Msg$DrawerMsg,
-					index,
-					_aforemny$elm_mdc$Material_Internal_Drawer_Model$Open(false))));
-	});
+var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$open = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$open;
+var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$onClose = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$onClose;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$subscriptions = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subscriptions;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$subs = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$subs;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$react = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$react;
@@ -38450,42 +38482,62 @@ var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$headerCo
 var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$header = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$header;
 var _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$defaultConfig = _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$defaultConfig;
 
-var _aforemny$elm_mdc$Material_Drawer_Temporary$openOn = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$openOn;
+var _aforemny$elm_mdc$Material_Drawer_Temporary$open = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$open;
+var _aforemny$elm_mdc$Material_Drawer_Temporary$onClose = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$onClose;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$toolbarSpacer = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$toolbarSpacer;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$content = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$content;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$headerContent = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$headerContent;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$header = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$header;
 var _aforemny$elm_mdc$Material_Drawer_Temporary$view = _aforemny$elm_mdc$Material_Internal_Drawer_Temporary_Implementation$view;
 
-var _aforemny$elm_mdc$Demo_TemporaryDrawer$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false};
-var _aforemny$elm_mdc$Demo_TemporaryDrawer$Model = F2(
-	function (a, b) {
-		return {mdc: a, rtl: b};
+var _aforemny$elm_mdc$Demo_TemporaryDrawer$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false, drawerOpen: false};
+var _aforemny$elm_mdc$Demo_TemporaryDrawer$Model = F3(
+	function (a, b, c) {
+		return {mdc: a, rtl: b, drawerOpen: c};
 	});
+var _aforemny$elm_mdc$Demo_TemporaryDrawer$CloseDrawer = {ctor: 'CloseDrawer'};
+var _aforemny$elm_mdc$Demo_TemporaryDrawer$OpenDrawer = {ctor: 'OpenDrawer'};
 var _aforemny$elm_mdc$Demo_TemporaryDrawer$ToggleRtl = {ctor: 'ToggleRtl'};
 var _aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc = function (a) {
 	return {ctor: 'Mdc', _0: a};
 };
 var _aforemny$elm_mdc$Demo_TemporaryDrawer$update = F3(
 	function (lift, msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'Mdc') {
-			return A3(
-				_aforemny$elm_mdc$Material$update,
-				function (_p1) {
-					return lift(
-						_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p1));
-				},
-				_p0._0,
-				model);
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{rtl: !model.rtl}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
+		var _p0 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		switch (_p0.ctor) {
+			case 'Mdc':
+				return A3(
+					_aforemny$elm_mdc$Material$update,
+					function (_p1) {
+						return lift(
+							_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p1));
+					},
+					_p0._0,
+					model);
+			case 'ToggleRtl':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{rtl: !model.rtl}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'OpenDrawer':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{drawerOpen: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{drawerOpen: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
@@ -38544,18 +38596,8 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 												_0: _aforemny$elm_mdc$Material_Toolbar$menuIcon,
 												_1: {
 													ctor: '::',
-													_0: A3(
-														_aforemny$elm_mdc$Material_Drawer_Temporary$openOn,
-														function (_p3) {
-															return lift(
-																_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p3));
-														},
-														{
-															ctor: '::',
-															_0: 0,
-															_1: {ctor: '[]'}
-														},
-														'click'),
+													_0: _aforemny$elm_mdc$Material_Options$onClick(
+														lift(_aforemny$elm_mdc$Demo_TemporaryDrawer$OpenDrawer)),
 													_1: {ctor: '[]'}
 												}
 											},
@@ -38593,9 +38635,9 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 					ctor: '::',
 					_0: A5(
 						_aforemny$elm_mdc$Material_Drawer_Temporary$view,
-						function (_p4) {
+						function (_p3) {
 							return lift(
-								_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p4));
+								_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p3));
 						},
 						{
 							ctor: '::',
@@ -38603,7 +38645,16 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 							_1: {ctor: '[]'}
 						},
 						model.mdc,
-						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(_aforemny$elm_mdc$Material_Options$when, model.drawerOpen, _aforemny$elm_mdc$Material_Drawer_Temporary$open),
+							_1: {
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Drawer_Temporary$onClose(
+									lift(_aforemny$elm_mdc$Demo_TemporaryDrawer$CloseDrawer)),
+								_1: {ctor: '[]'}
+							}
+						},
 						{
 							ctor: '::',
 							_0: A2(
@@ -38697,9 +38748,9 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 							ctor: '::',
 							_0: A5(
 								_aforemny$elm_mdc$Material_Button$view,
-								function (_p5) {
+								function (_p4) {
 									return lift(
-										_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p5));
+										_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p4));
 								},
 								{
 									ctor: '::',
@@ -38731,9 +38782,9 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$subscriptions = F2(
 	function (lift, model) {
 		return A2(
 			_aforemny$elm_mdc$Material$subscriptions,
-			function (_p6) {
+			function (_p5) {
 				return lift(
-					_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p6));
+					_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p5));
 			},
 			model);
 	});
