@@ -107,3 +107,9 @@ $ open build/index.html
 Contributions are warmly encouraged - please
 [get in touch](https://github.com/aforemny/elm-mdc/issues)! Use GitHub to
 [report bugs](https://github.com/aforemny/elm-mdc/issues), too.
+
+
+### Useful links
+
++ Explanation about the underlying architecture used in elm-mdc
+[mdl component architecture](https://medium.com/@debois/elm-components-3d9c00c6c612)
