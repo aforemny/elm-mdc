@@ -5,7 +5,9 @@
   "main": "elm-mdc.js",
   "devDependencies": {
     "babel": "^6.23.0",
-    "material-components-web": "^0.30.0"
+    "material-components-web": "^0.30.0",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15"
   },
   "engines": {
     "node": ">= 4"
