@@ -2,6 +2,8 @@ module Material.Internal.Drawer.Temporary.Implementation exposing
     ( content
     , header
     , headerContent
+    , items
+    , listItem
     , onClose
     , open
     , Property
@@ -38,6 +40,16 @@ header =
 headerContent : List (Property m) -> List (Html m) -> Html m
 headerContent =
     Drawer.headerContent
+
+
+items : List (Property m) -> List (Html m) -> Html m
+items =
+    Drawer.items
+
+
+listItem : Html.Attribute msg
+listItem =
+    Drawer.listItem
 
 
 content : Lists.Property m

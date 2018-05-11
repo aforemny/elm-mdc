@@ -11,6 +11,7 @@ module Material.Internal.List.Implementation exposing
     , groupDivider
     , inset
     , li
+    , listItem
     , meta
     , metaIcon
     , metaImage
@@ -83,6 +84,11 @@ text options =
 secondaryText : List (Property m) -> List (Html m) -> Html m
 secondaryText options =
   styled Html.span (cs "mdc-list-item__secondary-text" :: options)
+
+
+listItem : Property m
+listItem =
+    cs "mdc-list-item"
 
 
 selected : Property m

@@ -101,8 +101,7 @@ view lift page model =
           [ text "Header here"
           ]
         ]
-      ,
-        Demo.PersistentDrawer.drawerItems
+      , Demo.PersistentDrawer.drawerItems
       ]
     ,
       styled Html.div

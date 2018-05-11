@@ -10,6 +10,7 @@ module Material.List exposing
     , groupDivider
     , inset
     , li
+    , listItem
     , meta
     , metaIcon
     , metaImage
@@ -174,6 +175,13 @@ twoLine =
 li : List (Property m) -> List (Html m) -> Html m
 li =
     List.li
+
+
+{-| Class that indicates this is a list item.
+-}
+listItem : Property m
+listItem =
+    List.listItem
 
 
 {-| Primary text for the row.

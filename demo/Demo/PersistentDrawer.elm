@@ -60,69 +60,58 @@ update lift msg model =
 
 drawerItems : Html m
 drawerItems =
-    Lists.ul
-    [ Drawer.content
-    ]
-    [ Lists.li []
-      [ Html.a
-        [ Html.href "#persistent-drawer"
+    Drawer.items []
+        [ Html.a
+            [ Drawer.listItem
+            , Html.href "#persistent-drawer"
+            ]
+            [ Lists.graphicIcon [] "inbox"
+            , text "Inbox"
+            ]
+        , Html.a
+            [ Drawer.listItem
+            , Html.href "#persistent-drawer"
+            ]
+            [ Lists.graphicIcon [] "star"
+            , text "Star"
+            ]
+        , Html.a
+            [ Drawer.listItem
+            , Html.href "#persistent-drawer"
+            ]
+            [ Lists.graphicIcon [] "send"
+            , text "Sent Mail"
+            ]
+        , Html.a
+            [ Drawer.listItem
+            , Html.href "#persistent-drawer"
+            ]
+            [ Lists.graphicIcon [] "drafts"
+            , text "Drafts"
+            ]
+        , Lists.divider [ ] []
+        , Html.a
+            [ Drawer.listItem
+            , Html.href "#persistent-drawer"
+            ]
+            [ Lists.graphicIcon [] "email"
+            , text "All Mail"
+            ]
+        , Html.a
+            [ Drawer.listItem
+            , Html.href "#persistent-drawer"
+            ]
+            [ Lists.graphicIcon [] "delete"
+            , text "Trash"
+            ]
+        , Html.a
+            [ Drawer.listItem
+            , Html.href "#persistent-drawer"
+            ]
+            [ Lists.graphicIcon [] "report"
+            , text "Spam"
+            ]
         ]
-        [ Lists.graphicIcon [] "inbox"
-        , text "Inbox"
-        ]
-      ]
-    , Lists.li []
-      [ Html.a
-        [ Html.href "#persistent-drawer"
-        ]
-        [ Lists.graphicIcon [] "star"
-        , text "Star"
-        ]
-      ]
-    , Lists.li []
-      [ Html.a
-        [ Html.href "#persistent-drawer"
-        ]
-        [ Lists.graphicIcon [] "send"
-        , text "Sent Mail"
-        ]
-      ]
-    , Lists.li []
-      [ Html.a
-        [ Html.href "#persistent-drawer"
-        ]
-        [ Lists.graphicIcon [] "drafts"
-        , text "Drafts"
-        ]
-      ]
-
-    , Lists.divider [] []
-
-    , Lists.li []
-      [ Html.a
-        [ Html.href "#persistent-drawer"
-        ]
-        [ Lists.graphicIcon [] "email"
-        , text "All Mail"
-        ]
-      ]
-    , Lists.li []
-      [ Html.a
-        [ Html.href "#persistent-drawer"
-        ]
-        [ Lists.graphicIcon [] "delete"
-        , text "Trash"
-        ]
-      ]
-    , Lists.li []
-      [ Html.a
-        [ Html.href "#persistent-drawer"
-        ]
-        [ Lists.graphicIcon [] "report"
-        , text "Spam"
-        ]
-      ]
-    ]
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
