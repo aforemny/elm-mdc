@@ -42,7 +42,7 @@ import Material.Button as Button
 import Material.Options as Options
 
 
-type alias Model
+type alias Model =
     { mdc : Material.Model Msg
     }
 
@@ -60,14 +60,14 @@ type Msg
 main =
     Html.program
     { init = init
-    , subscriptions = subscriptions
+    , subscriptions = subscriptions defaultModel
     , update = update
     , view = view
     }
 
 
 init =
-    ( defaultModel, Material.init )
+    ( defaultModel, Material.init Mdc )
 
 
 subscriptions model =
