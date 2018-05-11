@@ -64,7 +64,7 @@ main : Program Never Model Msg
 main =
     Html.program
     { init = init
-    , subscriptions = subscriptions
+    , subscriptions = subscriptions defaultModel
     , update = update
     , view = view
     }
