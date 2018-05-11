@@ -33,20 +33,23 @@ You will also want to include the following resources in your `head`:
 
 ## Example application
 
+See `examples/hello-world/` for a full example.
+
 ```elm
 module Main exposing (..)
 
-import Html exposing (text)
+import Html exposing (Html, text)
 import Material
 import Material.Button as Button
 import Material.Options as Options
 
 
-type alias Model
+type alias Model =
     { mdc : Material.Model Msg
     }
 
 
+defaultModel : Model
 defaultModel =
     { mdc = Material.defaultModel
     }
@@ -57,6 +60,7 @@ type Msg
     | Click
 
 
+main : Program Never Model Msg
 main =
     Html.program
     { init = init
@@ -66,14 +70,17 @@ main =
     }
 
 
+init : ( Model, Cmd Msg )
 init =
-    ( defaultModel, Material.init )
+    ( defaultModel, Material.init Mdc )
 
 
+subscriptions : Model -> Sub Msg
 subscriptions model =
-    Material.subscriptions Mdc
+    Material.subscriptions Mdc model
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Mdc msg_ ->
@@ -83,6 +90,7 @@ update msg model =
             ( model, Cmd.none )
 
 
+view : Model -> Html Msg
 view model =
     Html.div []
         [
