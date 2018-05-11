@@ -16,8 +16,7 @@ examples/counter1.html
 
 build
 node_modules
-
-elm-autofocus.js
-elm-focus-trap.js
-elm-focus-trap/bundle.js
 .sass-cache
+
+elm-mdc.js
+material-components-web.css

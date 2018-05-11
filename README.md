@@ -14,6 +14,8 @@ The implementation is based on [debois/elm-mdl](https://github.com/debois/elm-md
 This library depends on an external JavaScript asset `elm-mdc.js` which you
 have to require in your `index.html`.
 
+You have to create it by running `make`.
+
 The file `src/elm-mdc.js` is in ES6 JavaScript, to transpile it for use in a
 Browser, run `make elm-mdc.js`.
 
@@ -22,6 +24,8 @@ Browser, run `make elm-mdc.js`.
 ```
 
 You will also want to include the following resources in your `head`:
+
+Run `make` to generate `material-components-web.css`.
 
 ```html
 <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
@@ -33,7 +37,9 @@ You will also want to include the following resources in your `head`:
 
 ## Example application
 
-See `examples/hello-world/` for a full example.
+See `examples/hello-world/` for a full example. You have to run `make` in the
+root repository before to create the files `elm-mdc.js` and
+`material-components-web.css`.
 
 ```elm
 module Main exposing (..)
