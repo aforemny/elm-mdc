@@ -11,12 +11,14 @@ build-demo: material-components-web.css elm-mdc.js
 	cp elm-mdc.js build/
 	(cd demo; $(ELM) Demo.elm --output ../build/demo.js)
 
-material-components-web.css:
+node_modules:
 	npm i
+
+material-components-web.css: node_modules
 	cp node_modules/material-components-web/dist/material-components-web.css .
 
-elm-mdc.js: src/elm-mdc.js
-	webpack
+elm-mdc.js: node_modules src/elm-mdc.js
+	./node_modules/.bin/webpack
 
 docs:
 	$(ELM) --docs=docs.json
