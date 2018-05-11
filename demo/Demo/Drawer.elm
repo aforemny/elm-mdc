@@ -54,7 +54,7 @@ example label url =
       [
       ]
       [ Html.a
-        [ Html.href ("/elm-mdc" ++ url)
+        [ Html.href ("." ++ url)
         , Html.target "_blank"
         ]
         [ text "View in separate window"
@@ -62,7 +62,7 @@ example label url =
       ]
     ,
       styled Html.iframe
-      [ Options.attribute (Html.src ("/elm-mdc" ++ url))
+      [ Options.attribute (Html.src ("." ++ url))
       , css "height" "600px"
       , css "width" "100vw"
       , css "max-width" "780px"
