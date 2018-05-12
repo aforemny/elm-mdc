@@ -1,6 +1,9 @@
 module Material.LayoutGrid exposing
-    ( alignLeft
+    ( alignBottom
+    , alignLeft
+    , alignMiddle
     , alignRight
+    , alignTop
     , cell
     , fixedColumnWidth
     , inner
@@ -157,6 +160,27 @@ alignRight =
 fixedColumnWidth : Property m
 fixedColumnWidth =
     LayoutGrid.fixedColumnWidth
+
+
+{-| Specifiy that the cell should be top aligned.
+-}
+alignTop : Property m
+alignTop =
+    LayoutGrid.alignTop
+
+
+{-| Specifiy that the cell should be middle aligned.
+-}
+alignMiddle : Property m
+alignMiddle =
+    LayoutGrid.alignMiddle
+
+
+{-| Specifiy that the cell should be bottom aligned.
+-}
+alignBottom : Property m
+alignBottom =
+    LayoutGrid.alignBottom
 
 
 {-| When your contents need extra structure that cannot be supported by single
