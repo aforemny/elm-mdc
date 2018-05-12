@@ -1,6 +1,9 @@
 module Material.Internal.LayoutGrid.Implementation exposing
-    ( alignLeft
+    ( alignBottom
+    , alignLeft
+    , alignMiddle
     , alignRight
+    , alignTop
     , cell
     , fixedColumnWidth
     , inner
@@ -79,6 +82,21 @@ alignRight =
 fixedColumnWidth : Property m
 fixedColumnWidth =
     cs "mdc-layout-grid--fixed-column-width"
+
+
+alignTop : Property m
+alignTop =
+    cs "mdc-layout-grid__cell--align-top"
+
+
+alignMiddle : Property m
+alignMiddle =
+    cs "mdc-layout-grid__cell--align-middle"
+
+
+alignBottom : Property m
+alignBottom =
+    cs "mdc-layout-grid__cell--align-bottom"
 
 
 inner : List (Property m) -> List (Html m) -> Html m

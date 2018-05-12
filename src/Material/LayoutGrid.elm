@@ -1,6 +1,9 @@
 module Material.LayoutGrid exposing
-    ( alignLeft
+    ( alignBottom
+    , alignLeft
+    , alignMiddle
     , alignRight
+    , alignTop
     , cell
     , fixedColumnWidth
     , inner
@@ -96,6 +99,7 @@ LayoutGrid.view []
 @docs span1Phone, span2Phone, span3Phone, span4Phone
 @docs span1Tablet, span2Tablet, span3Tablet, span4Tablet, span5Tablet, span6Tablet, span7Tablet, span8Tablet
 @docs span1Desktop, span2Desktop, span3Desktop, span4Desktop, span5Desktop, span6Desktop, span7Desktop, span8Desktop, span9Desktop, span10Desktop, span11Desktop, span12Desktop
+@docs alignTop, alignMiddle, alignBottom
 
 
 # Nested LayoutGrids
@@ -157,6 +161,27 @@ alignRight =
 fixedColumnWidth : Property m
 fixedColumnWidth =
     LayoutGrid.fixedColumnWidth
+
+
+{-| Specifiy that the cell should be top aligned.
+-}
+alignTop : Property m
+alignTop =
+    LayoutGrid.alignTop
+
+
+{-| Specifiy that the cell should be middle aligned.
+-}
+alignMiddle : Property m
+alignMiddle =
+    LayoutGrid.alignMiddle
+
+
+{-| Specifiy that the cell should be bottom aligned.
+-}
+alignBottom : Property m
+alignBottom =
+    LayoutGrid.alignBottom
 
 
 {-| When your contents need extra structure that cannot be supported by single
