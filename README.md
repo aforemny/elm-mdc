@@ -35,6 +35,15 @@ Run `make` to generate `material-components-web.css`.
 <link href="material-components-web.css" rel="stylesheet">
 ```
 
+Your body element should have the mdc-typography class.
+
+````
+<body class="mdc-typography">
+ ...
+</body>
+````
+
+
 ## Example application
 
 See `examples/hello-world/` for a full example. You have to run `make` in the
