@@ -23206,7 +23206,7 @@ var _aforemny$elm_mdc$Demo_Drawer$example = F2(
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$href(
-										A2(_elm_lang$core$Basics_ops['++'], '/elm-mdc', url)),
+										A2(_elm_lang$core$Basics_ops['++'], '.', url)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$target('_blank'),
@@ -23229,7 +23229,7 @@ var _aforemny$elm_mdc$Demo_Drawer$example = F2(
 								ctor: '::',
 								_0: _aforemny$elm_mdc$Material_Options$attribute(
 									_elm_lang$html$Html_Attributes$src(
-										A2(_elm_lang$core$Basics_ops['++'], '/elm-mdc', url))),
+										A2(_elm_lang$core$Basics_ops['++'], '.', url))),
 								_1: {
 									ctor: '::',
 									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '600px'),
