@@ -1,5 +1,5 @@
 language: node_js
-dist: trusty
+dist: xenial
 node_js:
   - "node"
 cache:
@@ -16,6 +16,7 @@ before_install:
       make && make install;
       cd ..;
     fi
+  - npm install -g elm
 script:
   - export PATH=$(npm bin):$PATH
   - sysconfcpus/bin/sysconfcpus -n 2 make clean all
