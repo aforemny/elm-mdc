@@ -2,6 +2,8 @@ module Material.Drawer.Temporary exposing
     ( content
     , header
     , headerContent
+    , items
+    , listItem
     , onClose
     , open
     , Property
@@ -110,7 +112,21 @@ headerContent =
     Drawer.headerContent
 
 
-{-| Should be set on the list of items inside the drawer.
+{-| Container for the list items in a drawer
+-}
+items : List (Property m) -> List (Html m) -> Html m
+items =
+    Drawer.items
+
+
+{-| Class to use for individual items in items
+-}
+listItem : Html.Attribute msg
+listItem =
+    Drawer.listItem
+
+
+{-| Class to set on the list of items inside the drawer.
 -}
 content : Lists.Property m
 content =

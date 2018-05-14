@@ -5,6 +5,8 @@ module Material.Internal.Drawer.Implementation exposing
     , emit
     , header
     , headerContent
+    , items
+    , listItem
     , onClose
     , open
     , Property
@@ -19,6 +21,7 @@ module Material.Internal.Drawer.Implementation exposing
     )
 
 import Html exposing (Html, text)
+import Html.Attributes as Html
 import Json.Decode as Json exposing (Decoder)
 import Material.Internal.Component as Component exposing (Indexed, Index)
 import Material.Internal.Drawer.Model exposing (Model, defaultModel, Msg(..))
@@ -116,9 +119,19 @@ headerContent options =
     styled Html.div (cs "mdc-drawer__header-content" :: options)
 
 
+items : List (Property m) -> List (Html m) -> Html m
+items options items =
+    styled Html.nav (cs "mdc-drawer__content" :: options) items
+
+
 content : Lists.Property m
 content =
     cs "mdc-drawer__content"
+
+
+listItem : Html.Attribute msg
+listItem =
+    Html.class "mdc-list-item"
 
 
 toolbarSpacer : List (Property m) -> List (Html m) -> Html m
