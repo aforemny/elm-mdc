@@ -12139,6 +12139,16 @@ var _aforemny$elm_mdc$Material_Internal_List_Implementation$text = function (opt
 			_1: options
 		});
 };
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$a = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Internal_Options$styled,
+		_elm_lang$html$Html$a,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-item'),
+			_1: options
+		});
+};
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$li = function (options) {
 	return A2(
 		_aforemny$elm_mdc$Material_Internal_Options$styled,
@@ -22338,6 +22348,7 @@ var _aforemny$elm_mdc$Material_List$activated = _aforemny$elm_mdc$Material_Inter
 var _aforemny$elm_mdc$Material_List$selected = _aforemny$elm_mdc$Material_Internal_List_Implementation$selected;
 var _aforemny$elm_mdc$Material_List$secondaryText = _aforemny$elm_mdc$Material_Internal_List_Implementation$secondaryText;
 var _aforemny$elm_mdc$Material_List$text = _aforemny$elm_mdc$Material_Internal_List_Implementation$text;
+var _aforemny$elm_mdc$Material_List$a = _aforemny$elm_mdc$Material_Internal_List_Implementation$a;
 var _aforemny$elm_mdc$Material_List$li = _aforemny$elm_mdc$Material_Internal_List_Implementation$li;
 var _aforemny$elm_mdc$Material_List$twoLine = _aforemny$elm_mdc$Material_Internal_List_Implementation$twoLine;
 var _aforemny$elm_mdc$Material_List$avatarList = _aforemny$elm_mdc$Material_Internal_List_Implementation$avatarList;
@@ -31566,8 +31577,9 @@ var _aforemny$elm_mdc$Material_Drawer_Persistent$headerContent = _aforemny$elm_m
 var _aforemny$elm_mdc$Material_Drawer_Persistent$header = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$header;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$view = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$view;
 
-var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
-	_aforemny$elm_mdc$Material_List$ul,
+var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A3(
+	_aforemny$elm_mdc$Material_Options$styled,
+	_elm_lang$html$Html$div,
 	{
 		ctor: '::',
 		_0: _aforemny$elm_mdc$Material_Drawer_Persistent$content,
@@ -31576,15 +31588,16 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 	{
 		ctor: '::',
 		_0: A2(
-			_aforemny$elm_mdc$Material_List$li,
+			_aforemny$elm_mdc$Material_List$ul,
 			{ctor: '[]'},
 			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$a,
+					_aforemny$elm_mdc$Material_List$a,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$href('#persistent-drawer'),
+						_0: _aforemny$elm_mdc$Material_Options$attribute(
+							_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
 						_1: {ctor: '[]'}
 					},
 					{
@@ -31599,20 +31612,14 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 							_1: {ctor: '[]'}
 						}
 					}),
-				_1: {ctor: '[]'}
-			}),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_aforemny$elm_mdc$Material_List$li,
-				{ctor: '[]'},
-				{
+				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$a,
+						_aforemny$elm_mdc$Material_List$a,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$href('#persistent-drawer'),
+							_0: _aforemny$elm_mdc$Material_Options$attribute(
+								_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
 							_1: {ctor: '[]'}
 						},
 						{
@@ -31627,20 +31634,14 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 								_1: {ctor: '[]'}
 							}
 						}),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_aforemny$elm_mdc$Material_List$li,
-					{ctor: '[]'},
-					{
+					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$a,
+							_aforemny$elm_mdc$Material_List$a,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$href('#persistent-drawer'),
+								_0: _aforemny$elm_mdc$Material_Options$attribute(
+									_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
 								_1: {ctor: '[]'}
 							},
 							{
@@ -31655,20 +31656,14 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 									_1: {ctor: '[]'}
 								}
 							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_aforemny$elm_mdc$Material_List$li,
-						{ctor: '[]'},
-						{
+						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$a,
+								_aforemny$elm_mdc$Material_List$a,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$href('#persistent-drawer'),
+									_0: _aforemny$elm_mdc$Material_Options$attribute(
+										_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -31683,26 +31678,20 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 										_1: {ctor: '[]'}
 									}
 								}),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Material_List$divider,
-							{ctor: '[]'},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_List$li,
-								{ctor: '[]'},
-								{
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_List$divider,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$a,
+										_aforemny$elm_mdc$Material_List$a,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$href('#persistent-drawer'),
+											_0: _aforemny$elm_mdc$Material_Options$attribute(
+												_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
 											_1: {ctor: '[]'}
 										},
 										{
@@ -31717,20 +31706,14 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 												_1: {ctor: '[]'}
 											}
 										}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_List$li,
-									{ctor: '[]'},
-									{
+									_1: {
 										ctor: '::',
 										_0: A2(
-											_elm_lang$html$Html$a,
+											_aforemny$elm_mdc$Material_List$a,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$href('#persistent-drawer'),
+												_0: _aforemny$elm_mdc$Material_Options$attribute(
+													_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
 												_1: {ctor: '[]'}
 											},
 											{
@@ -31745,20 +31728,14 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 													_1: {ctor: '[]'}
 												}
 											}),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_List$li,
-										{ctor: '[]'},
-										{
+										_1: {
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$a,
+												_aforemny$elm_mdc$Material_List$a,
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$href('#persistent-drawer'),
+													_0: _aforemny$elm_mdc$Material_Options$attribute(
+														_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
 													_1: {ctor: '[]'}
 												},
 												{
@@ -31774,15 +31751,15 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
 													}
 												}),
 											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
+										}
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		}
+			}),
+		_1: {ctor: '[]'}
 	});
 var _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false, drawerOpen: false};
 var _aforemny$elm_mdc$Demo_PersistentDrawer$Model = F3(
