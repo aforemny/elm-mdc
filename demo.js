@@ -25673,6 +25673,9 @@ var _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$inner = functi
 			_1: options
 		});
 };
+var _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignBottom = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-layout-grid__cell--align-bottom');
+var _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignMiddle = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-layout-grid__cell--align-middle');
+var _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignTop = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-layout-grid__cell--align-top');
 var _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$fixedColumnWidth = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-layout-grid--fixed-column-width');
 var _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignRight = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-layout-grid--align-right');
 var _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignLeft = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-layout-grid--align-left');
@@ -25734,6 +25737,9 @@ var _aforemny$elm_mdc$Material_LayoutGrid$span2 = _aforemny$elm_mdc$Material_Int
 var _aforemny$elm_mdc$Material_LayoutGrid$span1 = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$span1;
 var _aforemny$elm_mdc$Material_LayoutGrid$cell = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$cell;
 var _aforemny$elm_mdc$Material_LayoutGrid$inner = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$inner;
+var _aforemny$elm_mdc$Material_LayoutGrid$alignBottom = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignBottom;
+var _aforemny$elm_mdc$Material_LayoutGrid$alignMiddle = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignMiddle;
+var _aforemny$elm_mdc$Material_LayoutGrid$alignTop = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignTop;
 var _aforemny$elm_mdc$Material_LayoutGrid$fixedColumnWidth = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$fixedColumnWidth;
 var _aforemny$elm_mdc$Material_LayoutGrid$alignRight = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignRight;
 var _aforemny$elm_mdc$Material_LayoutGrid$alignLeft = _aforemny$elm_mdc$Material_Internal_LayoutGrid_Implementation$alignLeft;
