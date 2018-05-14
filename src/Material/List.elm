@@ -10,6 +10,7 @@ module Material.List exposing
     , groupDivider
     , inset
     , li
+    , a
     , meta
     , metaIcon
     , metaImage
@@ -107,6 +108,7 @@ Lists.ul
 @docs activated
 @docs graphic, graphicIcon, graphicImage
 @docs meta, metaText, metaIcon, metaImage
+@docs a
 
 
 ## List Groups
@@ -174,6 +176,13 @@ twoLine =
 li : List (Property m) -> List (Html m) -> Html m
 li =
     List.li
+
+
+{-| List item element as anchor element `<a>`.
+-}
+a : List (Property m) -> List (Html m) -> Html m
+a =
+    List.a
 
 
 {-| Primary text for the row.

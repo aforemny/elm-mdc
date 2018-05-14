@@ -11,6 +11,7 @@ module Material.Internal.List.Implementation exposing
     , groupDivider
     , inset
     , li
+    , a
     , meta
     , metaIcon
     , metaImage
@@ -73,6 +74,11 @@ twoLine =
 li : List (Property m) -> List (Html m) -> Html m
 li options =
     styled Html.li (cs "mdc-list-item" :: options)
+
+
+a : List (Property m) -> List (Html m) -> Html m
+a options =
+    styled Html.a (cs "mdc-list-item" :: options)
 
 
 text : List (Property m) -> List (Html m) -> Html m
