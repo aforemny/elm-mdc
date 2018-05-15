@@ -7,7 +7,7 @@ CSS/JS implementation of the
 
 [Live demo](https://aforemny.github.io/elm-mdc/) & [package documentation](http://package.elm-lang.org/packages/aforemny/elm-mdc/latest).
 
-The implementation is based on [debois/elm-mdl](https://github.com/debois/elm-mdl).
+The implementation is based on [debois/elm-mdl](https://github.com/debois/elm-mdl), which uses the now [abandoned Material Design Light framework](https://github.com/google/material-design-lite).
 
 ## Usage
 
