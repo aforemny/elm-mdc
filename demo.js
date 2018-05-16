@@ -11986,31 +11986,6 @@ var _aforemny$elm_mdc$Material_Internal_Dialog_Implementation$Config = F2(
 
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$inset = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divider--inset');
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$padded = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divier--padded');
-var _aforemny$elm_mdc$Material_Internal_List_Implementation$groupDivider = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Internal_Options$styled,
-		_elm_lang$html$Html$hr,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divider'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_Internal_List_Implementation$divider = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Internal_Options$styled,
-		_elm_lang$html$Html$li,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divider'),
-			_1: {
-				ctor: '::',
-				_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
-					A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'separator')),
-				_1: options
-			}
-		});
-};
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$subheader = function (options) {
 	return A2(
 		_aforemny$elm_mdc$Material_Internal_Options$styled,
@@ -12139,42 +12114,119 @@ var _aforemny$elm_mdc$Material_Internal_List_Implementation$text = function (opt
 			_1: options
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_List_Implementation$a = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Internal_Options$styled,
-		_elm_lang$html$Html$a,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-item'),
-			_1: options
-		});
-};
-var _aforemny$elm_mdc$Material_Internal_List_Implementation$li = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Internal_Options$styled,
-		_elm_lang$html$Html$li,
-		{
-			ctor: '::',
-			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-item'),
-			_1: options
-		});
-};
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$twoLine = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list--two-line');
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$avatarList = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list--avatar-list');
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$dense = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list--dense');
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$nonInteractive = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list--non-interactive');
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$node = function (node) {
+	return _aforemny$elm_mdc$Material_Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					node: _elm_lang$core$Maybe$Just(node)
+				});
+		});
+};
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig = {node: _elm_lang$core$Maybe$Nothing};
 var _aforemny$elm_mdc$Material_Internal_List_Implementation$ul = function (options) {
-	return A2(
-		_aforemny$elm_mdc$Material_Internal_Options$styled,
-		_elm_lang$html$Html$ul,
+	var _p0 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, options);
+	var summary = _p0;
+	var config = _p0.config;
+	return A4(
+		_aforemny$elm_mdc$Material_Internal_Options$apply,
+		summary,
+		A2(_elm_lang$core$Maybe$withDefault, _elm_lang$html$Html$ul, config.node),
 		{
 			ctor: '::',
 			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list'),
-			_1: options
-		});
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
 };
-var _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig = {};
-var _aforemny$elm_mdc$Material_Internal_List_Implementation$Config = {};
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$nav = function (options) {
+	var _p1 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, options);
+	var summary = _p1;
+	var config = _p1.config;
+	return A4(
+		_aforemny$elm_mdc$Material_Internal_Options$apply,
+		summary,
+		A2(_elm_lang$core$Maybe$withDefault, _elm_lang$html$Html$nav, config.node),
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list'),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+};
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$li = function (options) {
+	var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, options);
+	var summary = _p2;
+	var config = _p2.config;
+	return A4(
+		_aforemny$elm_mdc$Material_Internal_Options$apply,
+		summary,
+		A2(_elm_lang$core$Maybe$withDefault, _elm_lang$html$Html$li, config.node),
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-item'),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+};
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$a = function (options) {
+	var _p3 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, options);
+	var summary = _p3;
+	var config = _p3.config;
+	return A4(
+		_aforemny$elm_mdc$Material_Internal_Options$apply,
+		summary,
+		A2(_elm_lang$core$Maybe$withDefault, _elm_lang$html$Html$a, config.node),
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-item'),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+};
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$divider = function (options) {
+	var _p4 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, options);
+	var summary = _p4;
+	var config = _p4.config;
+	return A4(
+		_aforemny$elm_mdc$Material_Internal_Options$apply,
+		summary,
+		A2(_elm_lang$core$Maybe$withDefault, _elm_lang$html$Html$li, config.node),
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divider'),
+			_1: {
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Internal_Options$attribute(
+					A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'separator')),
+				_1: {ctor: '[]'}
+			}
+		},
+		{ctor: '[]'});
+};
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$groupDivider = function (options) {
+	var _p5 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_List_Implementation$defaultConfig, options);
+	var summary = _p5;
+	var config = _p5.config;
+	return A4(
+		_aforemny$elm_mdc$Material_Internal_Options$apply,
+		summary,
+		A2(_elm_lang$core$Maybe$withDefault, _elm_lang$html$Html$hr, config.node),
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-list-divider'),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+};
+var _aforemny$elm_mdc$Material_Internal_List_Implementation$Config = function (a) {
+	return {node: a};
+};
 
 var _aforemny$elm_mdc$Material_Internal_Drawer_Implementation$emit = F3(
 	function (lift, idx, msg) {
@@ -22354,6 +22406,7 @@ var _aforemny$elm_mdc$Material_List$twoLine = _aforemny$elm_mdc$Material_Interna
 var _aforemny$elm_mdc$Material_List$avatarList = _aforemny$elm_mdc$Material_Internal_List_Implementation$avatarList;
 var _aforemny$elm_mdc$Material_List$dense = _aforemny$elm_mdc$Material_Internal_List_Implementation$dense;
 var _aforemny$elm_mdc$Material_List$nonInteractive = _aforemny$elm_mdc$Material_Internal_List_Implementation$nonInteractive;
+var _aforemny$elm_mdc$Material_List$nav = _aforemny$elm_mdc$Material_Internal_List_Implementation$nav;
 var _aforemny$elm_mdc$Material_List$ul = _aforemny$elm_mdc$Material_Internal_List_Implementation$ul;
 
 var _aforemny$elm_mdc$Demo_Dialog$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false, showDialog: false, showScrollingDialog: false};
@@ -31577,9 +31630,8 @@ var _aforemny$elm_mdc$Material_Drawer_Persistent$headerContent = _aforemny$elm_m
 var _aforemny$elm_mdc$Material_Drawer_Persistent$header = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$header;
 var _aforemny$elm_mdc$Material_Drawer_Persistent$view = _aforemny$elm_mdc$Material_Internal_Drawer_Persistent_Implementation$view;
 
-var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A3(
-	_aforemny$elm_mdc$Material_Options$styled,
-	_elm_lang$html$Html$div,
+var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A2(
+	_aforemny$elm_mdc$Material_List$group,
 	{
 		ctor: '::',
 		_0: _aforemny$elm_mdc$Material_Drawer_Persistent$content,
@@ -31588,7 +31640,7 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A3(
 	{
 		ctor: '::',
 		_0: A2(
-			_aforemny$elm_mdc$Material_List$ul,
+			_aforemny$elm_mdc$Material_List$nav,
 			{ctor: '[]'},
 			{
 				ctor: '::',
@@ -31678,88 +31730,95 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$drawerItems = A3(
 										_1: {ctor: '[]'}
 									}
 								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_List$divider,
-									{ctor: '[]'},
-									{ctor: '[]'}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_List$a,
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Options$attribute(
-												_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_List$graphicIcon,
-												{ctor: '[]'},
-												'email'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('All Mail'),
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_aforemny$elm_mdc$Material_List$a,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$attribute(
-													_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: A2(
-													_aforemny$elm_mdc$Material_List$graphicIcon,
-													{ctor: '[]'},
-													'delete'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Trash'),
-													_1: {ctor: '[]'}
-												}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_List$a,
-												{
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Options$attribute(
-														_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: A2(
-														_aforemny$elm_mdc$Material_List$graphicIcon,
-														{ctor: '[]'},
-														'report'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Spam'),
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
+							_1: {ctor: '[]'}
 						}
 					}
 				}
 			}),
-		_1: {ctor: '[]'}
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_aforemny$elm_mdc$Material_List$groupDivider,
+				{ctor: '[]'},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_aforemny$elm_mdc$Material_List$nav,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_List$a,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Options$attribute(
+									_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_List$graphicIcon,
+									{ctor: '[]'},
+									'email'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('All Mail'),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_List$a,
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Options$attribute(
+										_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_List$graphicIcon,
+										{ctor: '[]'},
+										'delete'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Trash'),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_List$a,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$attribute(
+											_elm_lang$html$Html_Attributes$href('#persistent-drawer')),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_List$graphicIcon,
+											{ctor: '[]'},
+											'report'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Spam'),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
 	});
 var _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, rtl: false, drawerOpen: false};
 var _aforemny$elm_mdc$Demo_PersistentDrawer$Model = F3(
