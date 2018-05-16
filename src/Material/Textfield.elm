@@ -40,6 +40,7 @@ import Material.Textfield as Textfield
 
 Textfield.view Mdc [0] model.mdc
     [ Textfield.label "Text field"
+    , Options.onChange UpdateTextField
     ]
     []
 ```
