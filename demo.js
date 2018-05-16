@@ -8463,8 +8463,8 @@ var _aforemny$elm_mdc$Material_Internal_RadioButton_Model$RippleMsg = function (
 };
 
 var _aforemny$elm_mdc$Material_Internal_Select_Model$defaultGeometry = {
-	windowInnerHeight: 0,
 	boundingClientRect: {top: 0, left: 0, width: 0, height: 0},
+	windowInnerHeight: 0,
 	menuHeight: 0,
 	itemOffsetTops: {ctor: '[]'}
 };
@@ -8475,7 +8475,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Model$Model = F3(
 	});
 var _aforemny$elm_mdc$Material_Internal_Select_Model$Geometry = F4(
 	function (a, b, c, d) {
-		return {windowInnerHeight: a, boundingClientRect: b, menuHeight: c, itemOffsetTops: d};
+		return {boundingClientRect: a, windowInnerHeight: b, menuHeight: c, itemOffsetTops: d};
 	});
 var _aforemny$elm_mdc$Material_Internal_Select_Model$Init = function (a) {
 	return {ctor: 'Init', _0: a};
@@ -11012,6 +11012,22 @@ var _aforemny$elm_mdc$Material_Options$css = _aforemny$elm_mdc$Material_Internal
 var _aforemny$elm_mdc$Material_Options$cs = _aforemny$elm_mdc$Material_Internal_Options$cs;
 var _aforemny$elm_mdc$Material_Options$styled = _aforemny$elm_mdc$Material_Internal_Options$styled;
 
+var _aforemny$elm_mdc$Material_Internal_GlobalEvents$listenerWithValue = F3(
+	function (name, value, decoder) {
+		return _aforemny$elm_mdc$Material_Options$many(
+			{
+				ctor: '::',
+				_0: A2(_aforemny$elm_mdc$Material_Options$on, name, decoder),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_Options$data,
+						name,
+						A2(_elm_lang$core$Json_Encode$encode, 0, value)),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 var _aforemny$elm_mdc$Material_Internal_GlobalEvents$listener = F2(
 	function (name, decoder) {
 		return _aforemny$elm_mdc$Material_Options$many(
@@ -11020,7 +11036,7 @@ var _aforemny$elm_mdc$Material_Internal_GlobalEvents$listener = F2(
 				_0: A2(_aforemny$elm_mdc$Material_Options$on, name, decoder),
 				_1: {
 					ctor: '::',
-					_0: A2(_aforemny$elm_mdc$Material_Options$data, name, ''),
+					_0: A2(_aforemny$elm_mdc$Material_Options$data, name, '{}'),
 					_1: {ctor: '[]'}
 				}
 			});
@@ -11034,6 +11050,36 @@ var _aforemny$elm_mdc$Material_Internal_GlobalEvents$onMouseMove = _aforemny$elm
 var _aforemny$elm_mdc$Material_Internal_GlobalEvents$onScroll = _aforemny$elm_mdc$Material_Internal_GlobalEvents$listener('globalscroll');
 var _aforemny$elm_mdc$Material_Internal_GlobalEvents$onResize = _aforemny$elm_mdc$Material_Internal_GlobalEvents$listener('globalresize');
 var _aforemny$elm_mdc$Material_Internal_GlobalEvents$onTick = _aforemny$elm_mdc$Material_Internal_GlobalEvents$listener('globaltick');
+var _aforemny$elm_mdc$Material_Internal_GlobalEvents$encodeTickConfig = function (tickConfig) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'targetRect',
+				_1: _elm_lang$core$Json_Encode$bool(tickConfig.targetRect)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'parentRect',
+					_1: _elm_lang$core$Json_Encode$bool(tickConfig.parentRect)
+				},
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _aforemny$elm_mdc$Material_Internal_GlobalEvents$onTickWith = function (config) {
+	return A2(
+		_aforemny$elm_mdc$Material_Internal_GlobalEvents$listenerWithValue,
+		'globaltick',
+		_aforemny$elm_mdc$Material_Internal_GlobalEvents$encodeTickConfig(config));
+};
+var _aforemny$elm_mdc$Material_Internal_GlobalEvents$TickConfig = F2(
+	function (a, b) {
+		return {targetRect: a, parentRect: b};
+	});
 
 var _elm_lang$svg$Svg$map = _elm_lang$virtual_dom$VirtualDom$map;
 var _elm_lang$svg$Svg$text = _elm_lang$virtual_dom$VirtualDom$text;
@@ -13343,25 +13389,55 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$decodeGeometry = fun
 			return _elm_lang$core$Json_Decode$succeed(
 				{top: anchorRect.top, right: (viewport.width - anchorRect.left) - anchorRect.width, left: anchorRect.left, bottom: (viewport.height - anchorRect.top) - anchorRect.height});
 		});
-	var viewport = A2(
+	var viewport = _debois$elm_dom$DOM$target(
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'ownerDocument',
+				_1: {
+					ctor: '::',
+					_0: 'defaultView',
+					_1: {ctor: '[]'}
+				}
+			},
+			A3(
+				_elm_lang$core$Json_Decode$map2,
+				_aforemny$elm_mdc$Material_Internal_Menu_Model$Viewport,
+				A2(
+					_elm_lang$core$Json_Decode$at,
+					{
+						ctor: '::',
+						_0: 'innerWidth',
+						_1: {ctor: '[]'}
+					},
+					_elm_lang$core$Json_Decode$float),
+				A2(
+					_elm_lang$core$Json_Decode$at,
+					{
+						ctor: '::',
+						_0: 'innerHeight',
+						_1: {ctor: '[]'}
+					},
+					_elm_lang$core$Json_Decode$float))));
+	var anchorRect = A2(
 		_elm_lang$core$Json_Decode$at,
 		{
 			ctor: '::',
-			_0: 'ownerDocument',
-			_1: {
-				ctor: '::',
-				_0: 'defaultView',
-				_1: {ctor: '[]'}
-			}
+			_0: 'parentRect',
+			_1: {ctor: '[]'}
 		},
-		A3(
-			_elm_lang$core$Json_Decode$map2,
-			_aforemny$elm_mdc$Material_Internal_Menu_Model$Viewport,
+		A5(
+			_elm_lang$core$Json_Decode$map4,
+			F4(
+				function (top, left, width, height) {
+					return {top: top, left: left, width: width, height: height};
+				}),
 			A2(
 				_elm_lang$core$Json_Decode$at,
 				{
 					ctor: '::',
-					_0: 'innerWidth',
+					_0: 'top',
 					_1: {ctor: '[]'}
 				},
 				_elm_lang$core$Json_Decode$float),
@@ -13369,33 +13445,48 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$decodeGeometry = fun
 				_elm_lang$core$Json_Decode$at,
 				{
 					ctor: '::',
-					_0: 'innerHeight',
+					_0: 'left',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'width',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'height',
 					_1: {ctor: '[]'}
 				},
 				_elm_lang$core$Json_Decode$float)));
-	var anchorRect = _debois$elm_dom$DOM$parentElement(_debois$elm_dom$DOM$boundingClientRect);
-	return _debois$elm_dom$DOM$target(
-		A2(
-			_elm_lang$core$Json_Decode$andThen,
-			function (_p2) {
-				var _p3 = _p2;
-				var _p5 = _p3._0;
-				var _p4 = _p3._1;
-				return A4(
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (_p2) {
+			var _p3 = _p2;
+			var _p5 = _p3._0;
+			var _p4 = _p3._1;
+			return _debois$elm_dom$DOM$target(
+				A4(
 					_elm_lang$core$Json_Decode$map3,
 					_aforemny$elm_mdc$Material_Internal_Menu_Model$Geometry(_p5),
 					A2(viewportDistance, _p5, _p4),
 					anchor(_p4),
-					menu);
-			},
-			A3(
-				_elm_lang$core$Json_Decode$map2,
-				F2(
-					function (v0, v1) {
-						return {ctor: '_Tuple2', _0: v0, _1: v1};
-					}),
-				viewport,
-				anchorRect)));
+					menu));
+		},
+		A3(
+			_elm_lang$core$Json_Decode$map2,
+			F2(
+				function (v0, v1) {
+					return {ctor: '_Tuple2', _0: v0, _1: v1};
+				}),
+			viewport,
+			anchorRect));
 }();
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$decodeKeyCode = _elm_lang$html$Html_Events$keyCode;
 var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$decodeKey = A2(
@@ -13799,7 +13890,9 @@ var _aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu = F4(
 								_0: A2(
 									_aforemny$elm_mdc$Material_Internal_Options$when,
 									model.animating && _elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing),
-									_aforemny$elm_mdc$Material_Internal_GlobalEvents$onTick(
+									A2(
+										_aforemny$elm_mdc$Material_Internal_GlobalEvents$onTickWith,
+										{targetRect: false, parentRect: true},
 										A2(
 											_elm_lang$core$Json_Decode$map,
 											function (_p41) {
@@ -14402,15 +14495,51 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$decodeGeometry = f
 			0,
 			_debois$elm_dom$DOM$childNodes(_debois$elm_dom$DOM$offsetTop)));
 	var menuHeight = A2(_debois$elm_dom$DOM$childNode, 1, _debois$elm_dom$DOM$offsetHeight);
-	var boundingClientRect = function (_p0) {
-		var _p1 = _p0;
-		return A2(
-			_elm_lang$core$Json_Decode$map,
-			function (rectangle) {
-				return {top: rectangle.top, left: rectangle.left, width: rectangle.width, height: rectangle.height};
-			},
-			_debois$elm_dom$DOM$boundingClientRect);
-	};
+	var boundingClientRect = A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'targetRect',
+			_1: {ctor: '[]'}
+		},
+		A5(
+			_elm_lang$core$Json_Decode$map4,
+			F4(
+				function (top, left, width, height) {
+					return {top: top, left: left, width: width, height: height};
+				}),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'top',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'left',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'width',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'height',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$float)));
 	var windowInnerHeight = A2(
 		_elm_lang$core$Json_Decode$at,
 		{
@@ -14430,54 +14559,19 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$decodeGeometry = f
 				_1: {ctor: '[]'}
 			},
 			_elm_lang$core$Json_Decode$float));
-	var windowScroll = A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'ownerDocument',
-			_1: {
-				ctor: '::',
-				_0: 'defaultView',
-				_1: {ctor: '[]'}
-			}
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (boundingClientRect) {
+			return A4(
+				_elm_lang$core$Json_Decode$map3,
+				_aforemny$elm_mdc$Material_Internal_Select_Model$Geometry(boundingClientRect),
+				_debois$elm_dom$DOM$target(windowInnerHeight),
+				_debois$elm_dom$DOM$target(menuHeight),
+				_debois$elm_dom$DOM$target(itemOffsetTops));
 		},
-		A3(
-			_elm_lang$core$Json_Decode$map2,
-			F2(
-				function (scrollX, scrollY) {
-					return {scrollX: scrollX, scrollY: scrollY};
-				}),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'scrollX',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'scrollY',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float)));
-	return _debois$elm_dom$DOM$target(
-		A2(
-			_elm_lang$core$Json_Decode$andThen,
-			function (windowScroll) {
-				return A5(
-					_elm_lang$core$Json_Decode$map4,
-					_aforemny$elm_mdc$Material_Internal_Select_Model$Geometry,
-					windowInnerHeight,
-					boundingClientRect(windowScroll),
-					menuHeight,
-					itemOffsetTops);
-			},
-			windowScroll));
+		boundingClientRect);
 }();
-var _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p2 = A3(
+var _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Material_Internal_Component$indexed,
 	function (_) {
 		return _.select;
@@ -14489,8 +14583,8 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p2 = A3(
 				{select: x});
 		}),
 	_aforemny$elm_mdc$Material_Internal_Select_Model$defaultModel);
-var _aforemny$elm_mdc$Material_Internal_Select_Implementation$get = _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p2._0;
-var _aforemny$elm_mdc$Material_Internal_Select_Implementation$set = _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p2._1;
+var _aforemny$elm_mdc$Material_Internal_Select_Implementation$get = _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p0._0;
+var _aforemny$elm_mdc$Material_Internal_Select_Implementation$set = _aforemny$elm_mdc$Material_Internal_Select_Implementation$_p0._1;
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$box = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-select--box');
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$disabled = _aforemny$elm_mdc$Material_Internal_Options$option(
 	function (config) {
@@ -14518,14 +14612,14 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$index = function (
 				});
 		});
 };
-var _aforemny$elm_mdc$Material_Internal_Select_Implementation$label = function (_p3) {
+var _aforemny$elm_mdc$Material_Internal_Select_Implementation$label = function (_p1) {
 	return _aforemny$elm_mdc$Material_Internal_Options$option(
 		F2(
 			function (value, config) {
 				return _elm_lang$core$Native_Utils.update(
 					config,
 					{label: value});
-			})(_p3));
+			})(_p1));
 };
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$defaultConfig = {label: '', index: _elm_lang$core$Maybe$Nothing, selectedText: _elm_lang$core$Maybe$Nothing, disabled: false};
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
@@ -14534,9 +14628,9 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Material_Internal_Select_Model$defaultGeometry, model.geometry);
 		var left = geometry.boundingClientRect.left;
 		var top = geometry.boundingClientRect.top;
-		var _p4 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Select_Implementation$defaultConfig, options);
-		var summary = _p4;
-		var config = _p4.config;
+		var _p2 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_Select_Implementation$defaultConfig, options);
+		var summary = _p2;
+		var config = _p2.config;
 		var itemOffsetTop = A2(
 			_elm_lang$core$Maybe$withDefault,
 			0,
@@ -14591,12 +14685,14 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 						_0: A2(
 							_aforemny$elm_mdc$Material_Internal_Options$when,
 							model.menu.animating && _elm_lang$core$Native_Utils.eq(model.menu.geometry, _elm_lang$core$Maybe$Nothing),
-							_aforemny$elm_mdc$Material_Internal_GlobalEvents$onTick(
+							A2(
+								_aforemny$elm_mdc$Material_Internal_GlobalEvents$onTickWith,
+								{targetRect: true, parentRect: false},
 								A2(
 									_elm_lang$core$Json_Decode$map,
-									function (_p5) {
+									function (_p3) {
 										return lift(
-											_aforemny$elm_mdc$Material_Internal_Select_Model$Init(_p5));
+											_aforemny$elm_mdc$Material_Internal_Select_Model$Init(_p3));
 									},
 									_aforemny$elm_mdc$Material_Internal_Select_Implementation$decodeGeometry))),
 						_1: {
@@ -14605,9 +14701,9 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 								_aforemny$elm_mdc$Material_Internal_Options$when,
 								!config.disabled,
 								_aforemny$elm_mdc$Material_Internal_Menu_Implementation$connect(
-									function (_p6) {
+									function (_p4) {
 										return lift(
-											A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, config.index, _p6));
+											A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, config.index, _p4));
 									})),
 							_1: {
 								ctor: '::',
@@ -14708,9 +14804,9 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 					ctor: '::',
 					_0: A4(
 						_aforemny$elm_mdc$Material_Internal_Menu_Implementation$menu,
-						function (_p7) {
+						function (_p5) {
 							return lift(
-								A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, config.index, _p7));
+								A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, config.index, _p5));
 						},
 						model.menu,
 						{
@@ -14722,11 +14818,11 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 									A2(_elm_lang$core$Maybe$withDefault, 0, config.index)),
 								_1: {
 									ctor: '::',
-									_0: function (_p8) {
+									_0: function (_p6) {
 										return A2(
 											_aforemny$elm_mdc$Material_Internal_Options$when,
 											isOpen,
-											_aforemny$elm_mdc$Material_Internal_Options$many(_p8));
+											_aforemny$elm_mdc$Material_Internal_Options$many(_p6));
 									}(
 										{
 											ctor: '::',
@@ -14780,33 +14876,33 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Select_Implementation$get, _aforemny$elm_mdc$Material_Internal_Select_Implementation$select, _aforemny$elm_mdc$Material_Internal_Msg$SelectMsg);
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$update = F3(
 	function (lift, msg, model) {
-		var _p9 = msg;
-		if (_p9.ctor === 'MenuMsg') {
-			var _p15 = _p9._1;
-			var _p14 = _p9._0;
-			var _p10 = A3(
+		var _p7 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		if (_p7.ctor === 'MenuMsg') {
+			var _p13 = _p7._1;
+			var _p12 = _p7._0;
+			var _p8 = A3(
 				_aforemny$elm_mdc$Material_Internal_Menu_Implementation$update,
-				function (_p11) {
+				function (_p9) {
 					return lift(
-						A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, _p14, _p11));
+						A2(_aforemny$elm_mdc$Material_Internal_Select_Model$MenuMsg, _p12, _p9));
 				},
-				_p15,
+				_p13,
 				model.menu);
-			var menu = _p10._0;
-			var menuCmd = _p10._1;
-			var _p12 = menu;
-			if (_p12.ctor === 'Just') {
+			var menu = _p8._0;
+			var menuCmd = _p8._1;
+			var _p10 = menu;
+			if (_p10.ctor === 'Just') {
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								menu: _p12._0,
+								menu: _p10._0,
 								index: function () {
-									var _p13 = _p15;
-									if (_p13.ctor === 'Toggle') {
-										return (!model.menu.open) ? _p14 : _elm_lang$core$Maybe$Nothing;
+									var _p11 = _p13;
+									if (_p11.ctor === 'Toggle') {
+										return (!model.menu.open) ? _p12 : _elm_lang$core$Maybe$Nothing;
 									} else {
 										return model.index;
 									}
@@ -14824,7 +14920,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$update = F3(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							geometry: _elm_lang$core$Maybe$Just(_p9._0)
+							geometry: _elm_lang$core$Maybe$Just(_p7._0)
 						})),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
