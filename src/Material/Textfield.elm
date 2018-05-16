@@ -36,10 +36,12 @@ Text fields allow users to input, edit, and select text.
 # Example
 
 ```elm
+import Material.Options as Options
 import Material.Textfield as Textfield
 
 Textfield.view Mdc [0] model.mdc
     [ Textfield.label "Text field"
+    , Options.onChange UpdateTextField
     ]
     []
 ```
@@ -93,7 +95,7 @@ view
     -> Material.Model m
     -> List (Property m)
     -> List (Html m)
-    -> Html m       
+    -> Html m
 view =
     Textfield.view
 
