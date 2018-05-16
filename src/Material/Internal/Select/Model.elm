@@ -31,8 +31,8 @@ type Msg m
 
 
 type alias Geometry =
-    { windowInnerHeight : Float
-    , boundingClientRect : DOM.Rectangle
+    { boundingClientRect : DOM.Rectangle
+    , windowInnerHeight : Float
     , menuHeight : Float
     , itemOffsetTops : List Float
     }
@@ -40,8 +40,8 @@ type alias Geometry =
 
 defaultGeometry : Geometry
 defaultGeometry =
-    { windowInnerHeight = 0
-    , boundingClientRect = { top = 0, left = 0, width = 0, height = 0 }
+    { boundingClientRect = { top = 0, left = 0, width = 0, height = 0 }
+    , windowInnerHeight = 0
     , menuHeight = 0
     , itemOffsetTops = []
     }

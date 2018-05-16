@@ -173,6 +173,12 @@ import CustomEvent from 'custom-event';
               continue
             }
             dispatch(node, "globaltick", (target, event) => {
+              if (JSON.parse(node.dataset.globaltick || "{}").targetRect || false) {
+                event.targetRect = target.getBoundingClientRect()
+              }
+              if (JSON.parse(node.dataset.globaltick || "{}").parentRect || false) {
+                event.parentRect = target.parentElement.getBoundingClientRect()
+              }
               return event
             })
           }
@@ -185,6 +191,12 @@ import CustomEvent from 'custom-event';
           }
           if (typeof node.dataset.globaltick !== "undefined") {
             let event = new CustomEvent("globaltick")
+            if (JSON.parse(node.dataset.globaltick || "{}").targetRect || false) {
+              event.targetRect = node.getBoundingClientRect()
+            }
+            if (JSON.parse(node.dataset.globaltick || "{}").parentRect || false) {
+              event.parentRect = node.parentElement.getBoundingClientRect()
+            }
             node.dispatchEvent(event)
           }
         }
