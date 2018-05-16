@@ -421,8 +421,13 @@ menu lift model options ul =
       ]
     ,
       when (model.animating && model.geometry == Nothing) <|
-      GlobalEvents.onTick <|
-      Json.map (lift << Init { quickOpen = config.quickOpen, index = config.index }) decodeGeometry
+      GlobalEvents.onTickWith
+          { targetRect = False
+          , parentRect = True
+          }
+          <|
+          Json.map (lift << Init { quickOpen = config.quickOpen, index = config.index })
+              decodeGeometry
     ,
       Options.on "keyup" <| Json.map lift <|
       Json.map3 KeyUp decodeMeta decodeKey decodeKeyCode
@@ -892,9 +897,21 @@ decodeGeometry : Decoder Geometry
 decodeGeometry =
     let
         anchorRect =
-            DOM.parentElement DOM.boundingClientRect
+            Json.at ["parentRect"] <|
+            Json.map4 (\top left width height ->
+                 { top = top
+                 , left = left
+                 , width = width
+                 , height = height
+                 }
+               )
+            (Json.at ["top"] Json.float)
+            (Json.at ["left"] Json.float)
+            (Json.at ["width"] Json.float)
+            (Json.at ["height"] Json.float)
 
         viewport =
+            DOM.target <|
             Json.at ["ownerDocument", "defaultView"] <|
             Json.map2 Viewport
               (Json.at ["innerWidth"] Json.float)
@@ -919,16 +936,14 @@ decodeGeometry =
               DOM.offsetWidth
               DOM.offsetHeight
     in
-    DOM.target
-    (
-      Json.map2 (,) viewport anchorRect
-      |> Json.andThen (\ ( viewport, anchorRect ) ->
+    Json.map2 (,) viewport anchorRect
+    |> Json.andThen (\ ( viewport, anchorRect ) ->
+           DOM.target <|
            Json.map3 (Geometry viewport)
                (viewportDistance viewport anchorRect)
                (anchor anchorRect)
                menu
-         )
-    )
+        )
 
 
 onSelect : m -> Lists.Property m

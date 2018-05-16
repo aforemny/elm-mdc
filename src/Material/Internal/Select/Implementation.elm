@@ -173,7 +173,11 @@ select lift model options items =
     [ cs "mdc-select"
     , cs "mdc-select--open" |> when isOpen
     , when (model.menu.animating && model.menu.geometry == Nothing) <|
-      GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
+      GlobalEvents.onTickWith
+          { targetRect = True
+          , parentRect = False
+          }
+          (Json.map (lift << Init) decodeGeometry)
     , Menu.connect (lift << MenuMsg config.index) |> when (not config.disabled)
     , cs "mdc-select--disabled" |> when config.disabled
     ]
@@ -259,29 +263,22 @@ subs =
 decodeGeometry : Decoder Geometry
 decodeGeometry =
     let
-        windowScroll =
-            Json.at ["ownerDocument", "defaultView"] <|
-            Json.map2
-              (\ scrollX scrollY ->
-                { scrollX = scrollX
-                , scrollY = scrollY
-                }
-              )
-              (Json.at ["scrollX"] Json.float)
-              (Json.at ["scrollY"] Json.float)
-
         windowInnerHeight =
             Json.at ["ownerDocument", "defaultView"] (Json.at ["innerHeight"] Json.float)
 
-        boundingClientRect { scrollX, scrollY } =
-            DOM.boundingClientRect
-            |> Json.map (\ rectangle ->
-                 { top = rectangle.top
-                 , left = rectangle.left
-                 , width = rectangle.width
-                 , height = rectangle.height
+        boundingClientRect =
+            Json.at ["targetRect"] <|
+            Json.map4 (\top left width height ->
+                 { top = top
+                 , left = left
+                 , width = width
+                 , height = height
                  }
                )
+            (Json.at ["top"] Json.float)
+            (Json.at ["left"] Json.float)
+            (Json.at ["width"] Json.float)
+            (Json.at ["height"] Json.float)
 
         menuHeight =
             DOM.childNode 1 DOM.offsetHeight
@@ -291,13 +288,10 @@ decodeGeometry =
             DOM.childNode 0 <|   -- .mdc-menu__items
             DOM.childNodes DOM.offsetTop
     in
-    DOM.target
-    ( windowScroll
-      |> Json.andThen (\ windowScroll ->
-           Json.map4 Geometry
-               windowInnerHeight
-               (boundingClientRect windowScroll)
-               menuHeight
-               itemOffsetTops
-         )
-    )
+    boundingClientRect
+    |> Json.andThen (\boundingClientRect ->
+    Json.map3 (Geometry boundingClientRect)
+        (DOM.target windowInnerHeight)
+        (DOM.target menuHeight)
+        (DOM.target itemOffsetTops)
+      )
