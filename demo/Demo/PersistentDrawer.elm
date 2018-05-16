@@ -60,58 +60,56 @@ update lift msg model =
 
 drawerItems : Html m
 drawerItems =
-    styled Html.div
+    Lists.group
     [ Drawer.content
     ]
-    [ Lists.ul
-      [
-      ]
-      [ Lists.a
-        [ Options.attribute (Html.href "#persistent-drawer")
+    [ Lists.nav []
+        [ Lists.a
+          [ Options.attribute (Html.href "#persistent-drawer")
+          ]
+          [ Lists.graphicIcon [] "inbox"
+          , text "Inbox"
+          ]
+        , Lists.a
+          [ Options.attribute (Html.href "#persistent-drawer")
+          ]
+          [ Lists.graphicIcon [] "star"
+          , text "Star"
+          ]
+        , Lists.a
+          [ Options.attribute (Html.href "#persistent-drawer")
+          ]
+          [ Lists.graphicIcon [] "send"
+          , text "Sent Mail"
+          ]
+        , Lists.a
+          [ Options.attribute (Html.href "#persistent-drawer")
+          ]
+          [ Lists.graphicIcon [] "drafts"
+          , text "Drafts"
+          ]
         ]
-        [ Lists.graphicIcon [] "inbox"
-        , text "Inbox"
+    , Lists.groupDivider [] []
+    , Lists.nav []
+        [ Lists.a
+          [ Options.attribute (Html.href "#persistent-drawer")
+          ]
+          [ Lists.graphicIcon [] "email"
+          , text "All Mail"
+          ]
+        , Lists.a
+          [ Options.attribute (Html.href "#persistent-drawer")
+          ]
+          [ Lists.graphicIcon [] "delete"
+          , text "Trash"
+          ]
+        , Lists.a
+          [ Options.attribute (Html.href "#persistent-drawer")
+          ]
+          [ Lists.graphicIcon [] "report"
+          , text "Spam"
+          ]
         ]
-      , Lists.a
-        [ Options.attribute (Html.href "#persistent-drawer")
-        ]
-        [ Lists.graphicIcon [] "star"
-        , text "Star"
-        ]
-      , Lists.a
-        [ Options.attribute (Html.href "#persistent-drawer")
-        ]
-        [ Lists.graphicIcon [] "send"
-        , text "Sent Mail"
-        ]
-      , Lists.a
-        [ Options.attribute (Html.href "#persistent-drawer")
-        ]
-        [ Lists.graphicIcon [] "drafts"
-        , text "Drafts"
-        ]
-
-      , Lists.divider [] []
-
-      , Lists.a
-        [ Options.attribute (Html.href "#persistent-drawer")
-        ]
-        [ Lists.graphicIcon [] "email"
-        , text "All Mail"
-        ]
-      , Lists.a
-        [ Options.attribute (Html.href "#persistent-drawer")
-        ]
-        [ Lists.graphicIcon [] "delete"
-        , text "Trash"
-        ]
-      , Lists.a
-        [ Options.attribute (Html.href "#persistent-drawer")
-        ]
-        [ Lists.graphicIcon [] "report"
-        , text "Spam"
-        ]
-      ]
     ]
 
 

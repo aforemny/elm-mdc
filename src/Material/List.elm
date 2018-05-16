@@ -1,5 +1,6 @@
 module Material.List exposing
-    ( activated
+    ( a
+    , activated
     , avatarList
     , dense
     , divider
@@ -10,11 +11,11 @@ module Material.List exposing
     , groupDivider
     , inset
     , li
-    , a
     , meta
     , metaIcon
     , metaImage
     , metaText
+    , nav
     , nonInteractive
     , padded
     , Property
@@ -97,6 +98,7 @@ Lists.ul
 @docs dense
 @docs avatarList
 @docs twoLine
+@docs nav
 
 
 ## List Items
@@ -141,6 +143,13 @@ type alias Property m =
 ul : List (Property m) -> List (Html m) -> Html m
 ul =
     List.ul
+
+
+{-| The list element rendered as `<nav>`.
+-}
+nav : List (Property m) -> List (Html m) -> Html m
+nav =
+    List.nav
 
 
 {-| Disables interactivity affordances.

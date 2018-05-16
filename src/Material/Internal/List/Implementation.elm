@@ -1,5 +1,6 @@
 module Material.Internal.List.Implementation exposing
-    ( activated
+    ( a
+    , activated
     , avatarList
     , defaultConfig
     , dense
@@ -11,11 +12,12 @@ module Material.Internal.List.Implementation exposing
     , groupDivider
     , inset
     , li
-    , a
     , meta
     , metaIcon
     , metaImage
     , metaText
+    , nav
+    , node
     , nonInteractive
     , padded
     , Property
@@ -33,22 +35,48 @@ import Material.Internal.Icon.Implementation as Icon
 import Material.Internal.Options as Options exposing (styled, cs)
 
 
-type alias Config =
-    {}
+type alias Config m =
+    { node : Maybe (List (Html.Attribute m) -> List (Html m) -> Html m)
+    }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
-    {}
+    { node = Nothing
+    }
 
 
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 ul : List (Property m) -> List (Html m) -> Html m
 ul options =
-    styled Html.ul (cs "mdc-list" :: options)
+    let
+        ({ config } as summary) =
+          Options.collect defaultConfig options
+    in
+    Options.apply summary
+        (Maybe.withDefault Html.ul config.node)
+        [cs "mdc-list"]
+        []
+
+
+nav : List (Property m) -> List (Html m) -> Html m
+nav options =
+    let
+        ({ config } as summary) =
+          Options.collect defaultConfig options
+    in
+    Options.apply summary
+        (Maybe.withDefault Html.nav config.node)
+        [cs "mdc-list"]
+        []
+
+
+node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
+node node =
+  Options.option (\config -> { config | node = Just node })
 
 
 nonInteractive : Property m
@@ -73,12 +101,26 @@ twoLine =
 
 li : List (Property m) -> List (Html m) -> Html m
 li options =
-    styled Html.li (cs "mdc-list-item" :: options)
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
+    Options.apply summary
+      (Maybe.withDefault Html.li config.node)
+      [cs "mdc-list-item"]
+      []
 
 
 a : List (Property m) -> List (Html m) -> Html m
 a options =
-    styled Html.a (cs "mdc-list-item" :: options)
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
+    Options.apply summary
+      (Maybe.withDefault Html.a config.node)
+      [cs "mdc-list-item"]
+      []
 
 
 text : List (Property m) -> List (Html m) -> Html m
@@ -158,16 +200,29 @@ subheader options =
 
 divider : List (Property m) -> List (Html m) -> Html m
 divider options =
-    styled Html.li
-    ( cs "mdc-list-divider"
-    :: Options.attribute (Html.attribute "role" "separator")
-    :: options
-    )
+    let
+        ( { config } as summary ) =
+          Options.collect defaultConfig options
+    in
+    Options.apply summary
+        (Maybe.withDefault Html.li config.node)
+        [ cs "mdc-list-divider"
+        , Options.attribute (Html.attribute "role" "separator")
+        ]
+        []
 
 
 groupDivider : List (Property m) -> List (Html m) -> Html m
 groupDivider options =
-    styled Html.hr (cs "mdc-list-divider" :: options)
+    let
+        ( { config } as summary ) =
+          Options.collect defaultConfig options
+    in
+    Options.apply summary
+        (Maybe.withDefault Html.hr config.node)
+        [ cs "mdc-list-divider"
+        ]
+        []
 
 
 padded : Property m
