@@ -46,6 +46,20 @@ Textfield.view Mdc [0] model.mdc
     []
 ```
 
+When supplying an initial value, use `Options.onInput` instead of
+`Options.onChange` in order to track the value while it changes:
+
+```elm
+import Material.Options as Options
+import Material.Textfield as Textfield
+
+Textfield.view Mdc [0] model.mdc
+    [ Textfield.label "Text field"
+    , Options.onInput UpdateValueInModel
+    , Textfield.value model.textfieldValue
+    ]
+    []
+```
 
 # Usage
 
