@@ -22,9 +22,13 @@ focus when opening and restores focus when closing.
 The current implementation requires that a dialog has as first child a
 `surface` element and as second child a `backdrop` element.
 
+Because a Dialog animates when closing, it should not be removed from DOM. Use
+`Dialog.open` conditionally instead.
+
 
 # Resources
 
+- [Dialogs - Material Components for the Web](https://material.io/develop/web/components/dialogs/)
 - [Material Design guidelines: Dialogs](https://material.io/guidelines/components/dialogs.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#dialog)
 
@@ -125,7 +129,7 @@ view
     -> Material.Model m
     -> List (Property m)
     -> List (Html m)
-    -> Html m       
+    -> Html m
 view =
     Dialog.view
 
