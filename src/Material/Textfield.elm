@@ -47,6 +47,38 @@ Textfield.view Mdc [0] model.mdc
 ```
 
 
+When supplying an initial value, use `Options.onInput` instead of
+`Options.onChange` in order to track the value while it changes:
+
+```elm
+import Material.Options as Options
+import Material.Textfield as Textfield
+
+Textfield.view Mdc [0] model.mdc
+    [ Textfield.label "Text field"
+    , Options.onInput UpdateValueInModel
+    , Textfield.value model.textfieldValue
+    ]
+    []
+```
+
+
+The underlying input field does not have a name or id attribute. You
+can set the id attribute of the input field as follows:
+
+```elm
+import Material.Options as Options
+import Material.Textfield as Textfield
+
+Textfield.view Mdc [0] model.mdc
+    [ Textfield.label "Email"
+    , Options.onChange UpdateTextField
+    , Textfield.nativeControl [ Options.attribute (id "Email") ]
+    ]
+    []
+```
+
+
 # Usage
 
 @docs Property
