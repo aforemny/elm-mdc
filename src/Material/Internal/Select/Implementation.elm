@@ -30,7 +30,7 @@ subscriptions model =
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
-    case msg of
+    case Debug.log "Msg" msg of
 
         MenuMsg index msg_ ->
             let

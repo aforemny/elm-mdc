@@ -22,9 +22,19 @@ focus when opening and restores focus when closing.
 The current implementation requires that a dialog has as first child a
 `surface` element and as second child a `backdrop` element.
 
+The current implementation also assumed that the dialog remains part
+of the DOM. So this won't work:
+
+````elm
+if isOpen then Dialog.view [] [] else text ""
+````
+
+Use when isOpen Dialog.open to show and hide the dialog.
+
 
 # Resources
 
+- [Dialogs - Material Components for the Web](https://material.io/develop/web/components/dialogs/)
 - [Material Design guidelines: Dialogs](https://material.io/guidelines/components/dialogs.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#dialog)
 
