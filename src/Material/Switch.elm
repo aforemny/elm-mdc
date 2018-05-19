@@ -22,6 +22,7 @@ Material Design Switch requirements.
 
 ```elm
 import Html exposing (text)
+import Html.Events
 import Material.FormField as FormField
 import Material.Options as Options exposing (styled)
 import Material.Switch as Switch
@@ -34,7 +35,7 @@ FormField.view []
           ]
           []
     , Html.label
-          [ Options.onClick Toggle
+          [ Html.Events.onClick Toggle
           ]
           [ text "on/off"
           ]
