@@ -255,7 +255,7 @@ textField lift model options _ =
                     |> Maybe.withDefault False
                 Nothing -> False
     in
-        Options.apply summary Html.div
+        Options.apply summary Html.label
         [ cs "mdc-text-field"
         , cs "mdc-text-field--upgraded"
         , cs "mdc-text-field--focused" |> when focused
@@ -325,7 +325,7 @@ textField lift model options _ =
                   Options.attribute <| Html.cols (Maybe.withDefault 0 config.cols)
                 ]
                 []
-            , styled Html.label
+            , styled Html.span
                 [ cs "mdc-floating-label"
                 , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
                 ]
