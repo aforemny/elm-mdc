@@ -303,8 +303,7 @@ prominentTopAppBar lift model =
             ]
       ]
     , styled div [ TopAppBar.fixedAdjust, css "padding-top" "56px", css "margin-top" "0" ]
-        [ p [] [ text "There should be a shadow when scrolling under bar, but doesn't happen." ]
-        , body [ ] model
+        [ body [ ] model
         ]
     ]
 
@@ -332,8 +331,7 @@ shortTopAppBar lift model =
             ]
       ]
     , styled div [ TopAppBar.fixedAdjust, css "padding-top" "56px", css "margin-top" "0" ]
-        [ p [] [ text "There should be a shadow when scrolling under bar, but doesn't happen." ]
-        , body [ ] model
+        [ body [ ] model
         ]
     ]
 
