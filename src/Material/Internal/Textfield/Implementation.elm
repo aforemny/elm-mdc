@@ -447,20 +447,20 @@ textField lift model options _ =
                             |> String.join ""
                 in
                 [ styled Html.div
-                  [ cs "mdc-text-field__outline"
-                  , ripple.properties
+                  [ cs "mdc-notched-outline"
+                  , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
                   ]
                   [ Svg.svg []
                     [ Svg.path
-                      [ Svg.Attributes.d d
-                      , Svg.Attributes.class "mdc-text-field__outline-path"
+                      [ Svg.Attributes.class "mdc-notched-outline__path"
+                      , Svg.Attributes.d d
                       ]
                       []
                     ]
                   ]
                 ,
                   styled Html.div
-                  [ cs "mdc-text-field__idle-outline"
+                  [ cs "mdc-notched-outline__idle"
                   ]
                   []
                 ]
