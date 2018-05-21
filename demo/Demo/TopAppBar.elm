@@ -185,8 +185,7 @@ defaultTopAppBar lift model =
             ]
       ]
     , styled div [ TopAppBar.fixedAdjust, css "padding-top" "56px", css "margin-top" "0" ]
-        [ p [] [ text "Due to a bug, the top app bar is always fixed" ]
-        , body [] model
+        [ body [] model
         ]
     ]
 
