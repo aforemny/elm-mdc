@@ -41,10 +41,15 @@ resources:
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet">
-<script src="elm-autofocus.js"></script>
-<script src="elm-focus-trap.js"></script>
-<script src="elm-global-events.js"></script>
 <script src="elm-mdc.js"></script>
+```
+
+Set the `mdc-typography` class in the body:
+
+```html
+<body class="mdc-typography">
+  ...
+</body>
 ```
 
 # Resources
@@ -181,6 +186,8 @@ import Material.Internal.Textfield.Implementation as Textfield
 import Material.Internal.Textfield.Model as Textfield
 import Material.Internal.Toolbar.Implementation as Toolbar
 import Material.Internal.Toolbar.Model as Toolbar
+import Material.Internal.TopAppBar.Implementation as TopAppBar
+import Material.Internal.TopAppBar.Model as TopAppBar
 
 
 {-| Material model.
@@ -212,6 +219,7 @@ type alias Model m =
     , tabs : Indexed Tabs.Model
     , textfield : Indexed Textfield.Model
     , toolbar : Indexed Toolbar.Model
+    , topAppBar : Indexed TopAppBar.Model
     }
 
 
@@ -243,6 +251,7 @@ defaultModel =
     , tabs = Dict.empty
     , textfield = Dict.empty
     , toolbar = Dict.empty
+    , topAppBar = Dict.empty
     }
 
 
@@ -337,6 +346,9 @@ update_ lift msg store =
 
         ToolbarMsg idx msg ->
             Toolbar.react lift msg idx store
+
+        TopAppBarMsg idx msg ->
+            TopAppBar.react lift msg idx store
 
 
 {-| Material subscriptions.
