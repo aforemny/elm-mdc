@@ -411,7 +411,7 @@ body options lift index model =
         (Button.view (lift << Mdc)
             index
             model.mdc
-            [ Button.stroked
+            [ Button.outlined
             , Button.dense
             , Options.onClick (lift (ExampleMsg index ToggleRtl))
             ]
