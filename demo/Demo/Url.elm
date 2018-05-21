@@ -1,6 +1,7 @@
 module Demo.Url exposing
   ( fromString
   , ToolbarPage(..)
+  , TopAppBarPage(..)
   , toString
   , Url(..)
   )
@@ -35,6 +36,7 @@ type Url
     | TextField
     | Theme
     | Toolbar (Maybe ToolbarPage)
+    | TopAppBar (Maybe TopAppBarPage)
     | Typography
     | Error404 String
 
@@ -49,8 +51,67 @@ type ToolbarPage
     | WaterfallToolbarFix
 
 
+type TopAppBarPage
+    = StandardTopAppBar
+    | FixedTopAppBar
+    | DenseTopAppBar
+    | ProminentTopAppBar
+    | ShortTopAppBar
+    | ShortCollapsedTopAppBar
+
+
 toString : Url -> String
 toString url =
+    let
+        toolbarCase toolbar =
+            case toolbar of
+                Nothing ->
+                    "#toolbar"
+
+                Just DefaultToolbar ->
+                    "#toolbar/default-toolbar"
+
+                Just FixedToolbar ->
+                    "#toolbar/fixed-toolbar"
+
+                Just MenuToolbar ->
+                    "#toolbar/menu-toolbar"
+
+                Just WaterfallToolbar ->
+                    "#toolbar/waterfall-toolbar"
+
+                Just DefaultFlexibleToolbar ->
+                    "#toolbar/default-flexible-toolbar"
+
+                Just WaterfallFlexibleToolbar ->
+                    "#toolbar/waterfall-flexible-toolbar"
+
+                Just WaterfallToolbarFix ->
+                    "#toolbar/waterfall-toolbar-fix-last-row"
+
+        topAppBarCase topAppBar =
+            case topAppBar of
+                Nothing ->
+                    "#top-app-bar"
+
+                Just StandardTopAppBar ->
+                   "#top-app-bar/standard"
+
+                Just FixedTopAppBar ->
+                    "#top-app-bar/fixed"
+
+                Just DenseTopAppBar ->
+                    "#top-app-bar/dense"
+
+                Just ProminentTopAppBar ->
+                    "#top-app-bar/prominent"
+
+                Just ShortTopAppBar ->
+                    "#top-app-bar/short"
+
+                Just ShortCollapsedTopAppBar ->
+                    "#top-app-bar/short-collapsed"
+    in
     case url of
         StartPage ->
             "#"
@@ -133,29 +194,11 @@ toString url =
         Theme ->
             "#theme"
 
-        Toolbar Nothing ->
-            "#toolbar"
+        Toolbar toolbar ->
+          toolbarCase toolbar
 
-        Toolbar (Just DefaultToolbar) ->
-            "#toolbar/default-toolbar"
-
-        Toolbar (Just FixedToolbar) ->
-            "#toolbar/fixed-toolbar"
-
-        Toolbar (Just MenuToolbar) ->
-            "#toolbar/menu-toolbar"
-
-        Toolbar (Just WaterfallToolbar) ->
-            "#toolbar/waterfall-toolbar"
-
-        Toolbar (Just DefaultFlexibleToolbar) ->
-            "#toolbar/default-flexible-toolbar"
-
-        Toolbar (Just WaterfallFlexibleToolbar) ->
-            "#toolbar/waterfall-flexible-toolbar"
-
-        Toolbar (Just WaterfallToolbarFix) ->
-            "#toolbar/waterfall-toolbar-fix-last-row"
+        TopAppBar topAppBar ->
+          topAppBarCase topAppBar
 
         Typography ->
             "#typography"
@@ -258,6 +301,11 @@ fromString str =
                 Just ( '#', "theme" ) ->
                     Just <| Theme
 
+                _ ->
+                    Nothing
+
+        case3 str =
+            case String.uncons str of
                 Just ( '#',  "toolbar" ) ->
                     Just <| Toolbar Nothing
 
@@ -279,6 +327,27 @@ fromString str =
                 Just ( '#', "toolbar/waterfall-toolbar-fix-last-row" ) ->
                     Just <| Toolbar (Just WaterfallToolbarFix)
 
+                Just ( '#',  "top-app-bar" ) ->
+                    Just <| TopAppBar Nothing
+
+                Just ( '#', "top-app-bar/standard" ) ->
+                    Just <| TopAppBar (Just StandardTopAppBar)
+
+                Just ( '#', "top-app-bar/fixed" ) ->
+                    Just <| TopAppBar (Just FixedTopAppBar)
+
+                Just ( '#', "top-app-bar/dense" ) ->
+                    Just <| TopAppBar (Just DenseTopAppBar)
+
+                Just ( '#', "top-app-bar/prominent" ) ->
+                    Just <| TopAppBar (Just ProminentTopAppBar)
+
+                Just ( '#', "top-app-bar/short" ) ->
+                    Just <| TopAppBar (Just ShortTopAppBar)
+
+                Just ( '#', "top-app-bar/short-collapsed" ) ->
+                    Just <| TopAppBar (Just ShortCollapsedTopAppBar)
+
                 Just ( '#', "typography" ) ->
                     Just Typography
 
@@ -286,14 +355,10 @@ fromString str =
                     Nothing
 
     in
-    case case1 str of
-        Just url ->
-            url
-
-        Nothing ->
-            case case2 str of
-                Just url ->
-                    url
-
-                Nothing ->
-                    Error404 str
+    [ case1 str
+    , case2 str
+    , case3 str
+    ]
+    |> List.filterMap identity
+    |> List.head
+    |> Maybe.withDefault (Error404 str)

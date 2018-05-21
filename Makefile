@@ -32,9 +32,8 @@ clean:
 	rm -rf elm-stuff/build-artifacts demo/elm-stuff/build-artifacts
 
 distclean:
-	(cd elm-focus-trap; make distclean)
 	rm -rf build
 	rm -rf elm-stuff demo/elm-stuff
-	rm -f elm-autofocus.js elm-focus-trap.js
-	rm -f material-components-web.css
 	rm -rf node_modules
+	rm -f material-components-web.css
+	rm -f elm-mdc.js

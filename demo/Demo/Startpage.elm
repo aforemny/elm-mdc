@@ -67,6 +67,8 @@ view page =
             , title = "Theme", subtitle = "Using primary and accent colors" }
           , { url = Toolbar Nothing, icon = "ic_toolbar_24px.svg"
             , title = "Toolbar", subtitle = "Header and footers" }
+          , { url = TopAppBar Nothing, icon = "ic_toolbar_24px.svg"
+            , title = "Top App Bar", subtitle = "Container for items such as application title, navigation icon, and action items." }
           , { url = Typography, icon = "ic_typography_24px.svg"
             , title = "Typography", subtitle = "Type hierarchy" }
           ]
