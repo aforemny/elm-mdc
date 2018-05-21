@@ -6,7 +6,6 @@ import Html.Attributes as Html
 import Html exposing (Html, text, div, p)
 import Material
 import Material.Button as Button
-import Material.Menu as Menu
 import Material.Options as Options exposing (styled, cs, css)
 import Material.TopAppBar as TopAppBar
 
