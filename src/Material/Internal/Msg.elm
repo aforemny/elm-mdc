@@ -19,6 +19,7 @@ import Material.Internal.Switch.Model as Switch
 import Material.Internal.Tabs.Model as Tabs
 import Material.Internal.Textfield.Model as Textfield
 import Material.Internal.Toolbar.Model as Toolbar
+import Material.Internal.TopAppBar.Model as TopAppBar
 
 
 type alias Index =
@@ -44,3 +45,4 @@ type Msg m
     | TabsMsg Index (Tabs.Msg m)
     | TextfieldMsg Index Textfield.Msg
     | ToolbarMsg Index Toolbar.Msg
+    | TopAppBarMsg Index TopAppBar.Msg

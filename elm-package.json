@@ -37,6 +37,7 @@
         "Material.Textfield.HelperText",
         "Material.Theme",
         "Material.Toolbar",
+        "Material.TopAppBar",
         "Material.Typography"
     ],
     "dependencies": {
