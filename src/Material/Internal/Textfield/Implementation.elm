@@ -255,7 +255,7 @@ textField lift model options _ =
                     |> Maybe.withDefault False
                 Nothing -> False
     in
-        Options.apply summary Html.label
+        Options.apply summary (if not config.fullWidth then Html.label else Html.div)
         [ cs "mdc-text-field"
         , cs "mdc-text-field--upgraded"
         , cs "mdc-text-field--focused" |> when focused
@@ -325,20 +325,23 @@ textField lift model options _ =
                   Options.attribute <| Html.cols (Maybe.withDefault 0 config.cols)
                 ]
                 []
-            , styled Html.span
-                [ cs "mdc-floating-label"
-                , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
-                ]
-                ( case config.labelText of
-                    Just str ->
-                        [ text str ]
+            , if not config.fullWidth then
+                  styled Html.span
+                      [ cs "mdc-floating-label"
+                      , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
+                      ]
+                  ( case config.labelText of
+                        Just str ->
+                            [ text str ]
 
-                    Nothing ->
-                        []
-                )
+                        Nothing ->
+                            []
+                  )
+              else
+                  text ""
             ]
           ,
-            if (not config.outlined) && (not config.textarea)then
+            if (not config.outlined) && (not config.textarea) && (not config.fullWidth) then
                 [ styled Html.div
                   [ cs "mdc-line-ripple"
                   , cs "mdc-line-ripple--active" |> when model.focused
