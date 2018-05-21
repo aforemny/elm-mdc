@@ -77,12 +77,6 @@ view lift page model =
                 )
                 [ text "Baseline" ]
               ,
-                Button.view (lift << Mdc) (idx ++ [1]) model.mdc
-                ( Button.compact
-                :: options
-                )
-                [ text "Compact" ]
-              ,
                 Button.view (lift << Mdc) (idx ++ [2]) model.mdc
                 ( Button.dense
                 :: options

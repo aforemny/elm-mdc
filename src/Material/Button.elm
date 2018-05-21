@@ -1,6 +1,5 @@
 module Material.Button exposing
-    ( compact
-    , dense
+    ( dense
     , disabled
     , icon
     , link
@@ -50,7 +49,6 @@ Button.view Mdc [0] model.mdc
 @docs unelevated
 @docs stroked
 @docs dense
-@docs compact
 @docs icon
 @docs disabled
 @docs link
@@ -115,13 +113,6 @@ stroked =
 dense : Property m
 dense =
     Button.dense
-
-
-{-| Reduce the amount of horizontal padding in the button.
--}
-compact : Property m
-compact =
-    Button.compact
 
 
 {-| Enable ripple ink effect for the button.

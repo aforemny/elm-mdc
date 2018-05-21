@@ -1,6 +1,5 @@
 module Material.Internal.Button.Implementation exposing
-    ( compact
-    , dense
+    ( dense
     , disabled
     , icon
     , link
@@ -85,11 +84,6 @@ stroked =
 dense : Property m
 dense =
     cs "mdc-button--dense"
-
-
-compact : Property m
-compact =
-    cs "mdc-button--compact"
 
 
 ripple : Property m
