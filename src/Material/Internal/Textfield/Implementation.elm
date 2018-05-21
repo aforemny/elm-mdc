@@ -326,8 +326,8 @@ textField lift model options _ =
                 ]
                 []
             , styled Html.label
-                [ cs "mdc-text-field__label"
-                , cs "mdc-text-field__label--float-above" |> when (focused || isDirty)
+                [ cs "mdc-floating-label"
+                , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
                 ]
                 ( case config.labelText of
                     Just str ->
