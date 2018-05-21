@@ -8,7 +8,7 @@ module Material.Internal.Button.Implementation exposing
     , raised
     , react
     , ripple
-    , stroked
+    , outlined
     , unelevated
     , view
     )
@@ -76,9 +76,9 @@ unelevated =
     cs "mdc-button--unelevated"
 
 
-stroked : Property m
-stroked =
-    cs "mdc-button--stroked"
+outlined : Property m
+outlined =
+    cs "mdc-button--outlined"
 
 
 dense : Property m
