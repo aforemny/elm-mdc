@@ -14876,7 +14876,7 @@ var _aforemny$elm_mdc$Material_Internal_Select_Implementation$select = F4(
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Select_Implementation$get, _aforemny$elm_mdc$Material_Internal_Select_Implementation$select, _aforemny$elm_mdc$Material_Internal_Msg$SelectMsg);
 var _aforemny$elm_mdc$Material_Internal_Select_Implementation$update = F3(
 	function (lift, msg, model) {
-		var _p7 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		var _p7 = msg;
 		if (_p7.ctor === 'MenuMsg') {
 			var _p13 = _p7._1;
 			var _p12 = _p7._0;
