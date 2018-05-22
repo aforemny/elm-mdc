@@ -32,52 +32,73 @@ import CustomEvent from 'custom-event';
 
   window["ElmFocusTrap"] = { activeTrap: null }
 
+  let setUp = (node) => {
+    if (window["ElmFocusTrap"].activeTrap !== null) {
+      return
+    }
+    let initialFocusElement = null
+    if (node.querySelector && (node.dataset.focustrap !== "")) {
+      try {
+        initialFocusElement = node.querySelector("." + node.dataset.focustrap)
+      } catch (e) {}
+    }
+    try {
+      let focusTrap = createFocusTrap(node, {
+        initialFocus: initialFocusElement,
+        // Note: It is necessary for Menu to set clickOutsideDeactivates to
+        // true.
+        clickOutsideDeactivates: true,
+        escapeDeactivates: false
+      }).activate()
+      window["ElmFocusTrap"].activeTrap = {
+        node: node,
+        focusTrap: focusTrap
+      }
+      document.body.classList.add("mdc-dialog-scroll-lock")
+    } catch (e) {
+      // TODO: find out why createFocusTrap is called twice on menu
+      //console.log(e)
+    }
+  }
+
+  let tearDown = (node) => {
+    if (window["ElmFocusTrap"].activeTrap === null) {
+      return
+    }
+    if (window["ElmFocusTrap"].activeTrap.node !== node) {
+      return
+    }
+    window["ElmFocusTrap"].activeTrap.focusTrap.deactivate()
+    window["ElmFocusTrap"].activeTrap = null
+    document.body.classList.remove("mdc-dialog-scroll-lock")
+  }
+
   new MutationObserver((mutations) => {
     for (let i = 0; i < mutations.length; i++) {
       let mutation = mutations[i]
-      if (mutation.type !== "attributes") {
-        continue
-      }
-      let node = mutation.target
-      if (!node.dataset) {
-        continue
-      }
-      if (typeof node.dataset.focustrap === "undefined") {
-        if (window["ElmFocusTrap"].activeTrap === null) {
-          continue
-        }
-        if (window["ElmFocusTrap"].activeTrap.node !== node) {
-          continue
-        }
-        window["ElmFocusTrap"].activeTrap.focusTrap.deactivate()
-        window["ElmFocusTrap"].activeTrap = null
-        document.body.classList.remove("mdc-dialog-scroll-lock")
-      } else {
-        if (window["ElmFocusTrap"].activeTrap !== null) {
-          continue
-        }
-        let initialFocusElement = null
-        if (node.querySelector && (node.dataset.focustrap !== "")) {
-          try {
-            initialFocusElement = node.querySelector("." + node.dataset.focustrap)
-          } catch (e) {}
-        }
-        try {
-          let focusTrap = createFocusTrap(node, {
-            initialFocus: initialFocusElement,
-            // Note: It is necessary for Menu to set clickOutsideDeactivates to
-            // true.
-            clickOutsideDeactivates: true,
-            escapeDeactivates: false
-          }).activate()
-          window["ElmFocusTrap"].activeTrap = {
-            node: node,
-            focusTrap: focusTrap
+
+      if (mutation.type === "childList") {
+        for (let i = 0; i < mutation.removedNodes.length; i++) {
+          let node = mutation.removedNodes[i]
+          if (!node.dataset) {
+            continue
           }
-          document.body.classList.add("mdc-dialog-scroll-lock")
-        } catch (e) {
-          // TODO: find out why createFocusTrap is called twice on menu
-          //console.log(e)
+          if (typeof node.dataset.focustrap === "undefined") {
+            continue
+          }
+          tearDown(node)
+        }
+      }
+
+      if (mutation.type === "attributes") {
+        let node = mutation.target
+        if (!node.dataset) {
+          continue
+        }
+        if (typeof node.dataset.focustrap === "undefined") {
+          tearDown(node)
+        } else {
+          setUp(node)
         }
       }
     }
