@@ -26,7 +26,7 @@ navigation icon, and action items.
 
 - [Top App Bar - Material Components for the Web](https://material.io/develop/web/components/top-app-bar/)
 - [Material Design guidelines: Top app bar](https://material.io/go/design-app-bar-top)
-- [Demo](https://aforemny.github.io/elm-mdc/#toolbar)
+- [Demo](https://aforemny.github.io/elm-mdc/#topappbar)
 
 
 # Example
