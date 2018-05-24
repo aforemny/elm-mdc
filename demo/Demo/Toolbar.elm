@@ -142,7 +142,7 @@ iframe lift index model title sub =
         [ text title ]
       ,
         Button.view (lift << Mdc) index model.mdc
-        [ Button.stroked
+        [ Button.outlined
         , Button.dense
         ]
         [ text "Toggle RTL"

@@ -1,6 +1,5 @@
 module Material.Button exposing
-    ( compact
-    , dense
+    ( dense
     , disabled
     , icon
     , link
@@ -8,7 +7,7 @@ module Material.Button exposing
     , Property
     , raised
     , ripple
-    , stroked
+    , outlined
     , unelevated
     , view
     )
@@ -20,6 +19,7 @@ Material Design button requirements.
 
 # Resources
 
+- [Buttons - Material Components for the Web](https://material.io/develop/web/components/buttons/)
 - [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#buttons)
 
@@ -48,9 +48,8 @@ Button.view Mdc [0] model.mdc
 @docs ripple
 @docs raised
 @docs unelevated
-@docs stroked
+@docs outlined
 @docs dense
-@docs compact
 @docs icon
 @docs disabled
 @docs link
@@ -105,9 +104,9 @@ unelevated =
 
 {-| Make the button flush with the surface, but have a visible border.
 -}
-stroked : Property m
-stroked =
-    Button.stroked
+outlined : Property m
+outlined =
+    Button.outlined
 
 
 {-| Make button's text slightly smaller.
@@ -115,13 +114,6 @@ stroked =
 dense : Property m
 dense =
     Button.dense
-
-
-{-| Reduce the amount of horizontal padding in the button.
--}
-compact : Property m
-compact =
-    Button.compact
 
 
 {-| Enable ripple ink effect for the button.
