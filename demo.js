@@ -44338,7 +44338,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$iframe = F4(
 				function (x, y) {
 					return A2(_elm_lang$core$Basics_ops['++'], x, y);
 				}),
-			'https://aforemny.github.io/elm-mdc/index.html',
+			'https://aforemny.github.io/elm-mdc/',
 			_aforemny$elm_mdc$Demo_Url$toString(
 				_aforemny$elm_mdc$Demo_Url$TopAppBar(
 					_elm_lang$core$Maybe$Just(topAppBarPage))));
