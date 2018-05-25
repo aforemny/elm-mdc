@@ -9,6 +9,7 @@ import Material.Internal.Drawer.Model as Drawer
 import Material.Internal.Fab.Model as Fab
 import Material.Internal.GridList.Model as GridList
 import Material.Internal.IconToggle.Model as IconToggle
+import Material.Internal.ImageList.Model as ImageList
 import Material.Internal.Menu.Model as Menu
 import Material.Internal.RadioButton.Model as RadioButton
 import Material.Internal.Ripple.Model as Ripple
@@ -19,6 +20,7 @@ import Material.Internal.Switch.Model as Switch
 import Material.Internal.Tabs.Model as Tabs
 import Material.Internal.Textfield.Model as Textfield
 import Material.Internal.Toolbar.Model as Toolbar
+import Material.Internal.TopAppBar.Model as TopAppBar
 
 
 type alias Index =
@@ -34,6 +36,7 @@ type Msg m
     | FabMsg Index Fab.Msg
     | GridListMsg Index (GridList.Msg m)
     | IconToggleMsg Index IconToggle.Msg
+    | ImageListMsg Index ImageList.Msg
     | MenuMsg Index (Menu.Msg m)
     | RadioButtonMsg Index RadioButton.Msg
     | RippleMsg Index Ripple.Msg
@@ -44,3 +47,4 @@ type Msg m
     | TabsMsg Index (Tabs.Msg m)
     | TextfieldMsg Index Textfield.Msg
     | ToolbarMsg Index Toolbar.Msg
+    | TopAppBarMsg Index TopAppBar.Msg

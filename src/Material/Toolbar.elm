@@ -20,6 +20,9 @@ module Material.Toolbar exposing
     )
 
 {-|
+The toolbar component has been deprecated by the Google Team. Some of
+its functionality will be available in TopAppBar.
+
 A toolbar is a container for multiple rows that contain items such as the
 application's title, navigation menu and tabs, among other things.
 

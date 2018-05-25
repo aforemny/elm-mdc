@@ -21,6 +21,7 @@
         "Material.GridList",
         "Material.Icon",
         "Material.IconToggle",
+        "Material.ImageList",
         "Material.LayoutGrid",
         "Material.LinearProgress",
         "Material.List",
@@ -37,6 +38,7 @@
         "Material.Textfield.HelperText",
         "Material.Theme",
         "Material.Toolbar",
+        "Material.TopAppBar",
         "Material.Typography"
     ],
     "dependencies": {

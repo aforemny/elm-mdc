@@ -1,6 +1,7 @@
 module Demo.Url exposing
   ( fromString
   , ToolbarPage(..)
+  , TopAppBarPage(..)
   , toString
   , Url(..)
   )
@@ -21,6 +22,7 @@ type Url
     | Fabs
     | GridList
     | IconToggle
+    | ImageList
     | LayoutGrid
     | LinearProgress
     | List
@@ -35,6 +37,7 @@ type Url
     | TextField
     | Theme
     | Toolbar (Maybe ToolbarPage)
+    | TopAppBar (Maybe TopAppBarPage)
     | Typography
     | Error404 String
 
@@ -47,6 +50,16 @@ type ToolbarPage
     | DefaultFlexibleToolbar
     | WaterfallFlexibleToolbar
     | WaterfallToolbarFix
+
+
+type TopAppBarPage
+    = DefaultTopAppBar
+    | FixedTopAppBar
+    | MenuTopAppBar
+    | DenseTopAppBar
+    | ProminentTopAppBar
+    | ShortTopAppBar
+    | ShortAlwaysClosedTopAppBar
 
 
 toString : Url -> String
@@ -93,6 +106,9 @@ toString url =
 
         IconToggle ->
             "#icon-toggle"
+
+        ImageList ->
+            "#image-list"
 
         LayoutGrid ->
             "#layout-grid"
@@ -157,6 +173,30 @@ toString url =
         Toolbar (Just WaterfallToolbarFix) ->
             "#toolbar/waterfall-toolbar-fix-last-row"
 
+        TopAppBar Nothing ->
+            "#topappbar"
+
+        TopAppBar (Just DefaultTopAppBar) ->
+            "#topappbar/default-topappbar"
+
+        TopAppBar (Just FixedTopAppBar) ->
+            "#topappbar/fixed-topappbar"
+
+        TopAppBar (Just MenuTopAppBar) ->
+            "#topappbar/menu-topappbar"
+
+        TopAppBar (Just DenseTopAppBar) ->
+            "#topappbar/dense-topappbar"
+
+        TopAppBar (Just ProminentTopAppBar) ->
+            "#topappbar/prominent-topappbar"
+
+        TopAppBar (Just ShortTopAppBar) ->
+            "#topappbar/short-topappbar"
+
+        TopAppBar (Just ShortAlwaysClosedTopAppBar) ->
+            "#topappbar/short-always-closed-topappbar"
+
         Typography ->
             "#typography"
 
@@ -213,6 +253,9 @@ fromString str =
 
                 Just ( '#', "icon-toggle" ) ->
                     Just <| IconToggle
+
+                Just ( '#', "image-list" ) ->
+                    Just <| ImageList
 
                 Just ( '#', "layout-grid" ) ->
                     Just <| LayoutGrid
@@ -278,6 +321,30 @@ fromString str =
 
                 Just ( '#', "toolbar/waterfall-toolbar-fix-last-row" ) ->
                     Just <| Toolbar (Just WaterfallToolbarFix)
+
+                Just ( '#',  "topappbar" ) ->
+                    Just <| TopAppBar Nothing
+
+                Just ( '#', "topappbar/default-topappbar" ) ->
+                    Just <| TopAppBar (Just DefaultTopAppBar)
+
+                Just ( '#', "topappbar/fixed-topappbar" ) ->
+                    Just <| TopAppBar (Just FixedTopAppBar)
+
+                Just ( '#', "topappbar/menu-topappbar" ) ->
+                    Just <| TopAppBar (Just MenuTopAppBar)
+
+                Just ( '#', "topappbar/dense-topappbar" ) ->
+                    Just <| TopAppBar (Just DenseTopAppBar)
+
+                Just ( '#', "topappbar/prominent-topappbar" ) ->
+                    Just <| TopAppBar (Just ProminentTopAppBar)
+
+                Just ( '#', "topappbar/short-topappbar" ) ->
+                    Just <| TopAppBar (Just ShortTopAppBar)
+
+                Just ( '#', "topappbar/short-always-closed-topappbar" ) ->
+                    Just <| TopAppBar (Just ShortAlwaysClosedTopAppBar)
 
                 Just ( '#', "typography" ) ->
                     Just Typography

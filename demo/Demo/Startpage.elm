@@ -39,6 +39,8 @@ view page =
             , title = "Grid list", subtitle = "2D grid layouts" }
           , { url = IconToggle, icon = "ic_component_24px.svg"
             , title = "Icon toggle", subtitle = "Toggling icon states" }
+          , { url = ImageList, icon = "ic_card_24px.svg"
+            , title = "Image List", subtitle = "An Image List consists of several items, each containing an image and optionally supporting content (i.e. a text label)" }
           , { url = LayoutGrid, icon = "ic_card_24px.svg"
             , title = "Layout grid", subtitle = "Grid and gutter support" }
           , { url = LinearProgress, icon = "ic_progress_activity.svg"
@@ -67,6 +69,8 @@ view page =
             , title = "Theme", subtitle = "Using primary and accent colors" }
           , { url = Toolbar Nothing, icon = "ic_toolbar_24px.svg"
             , title = "Toolbar", subtitle = "Header and footers" }
+          , { url = TopAppBar Nothing, icon = "ic_toolbar_24px.svg"
+            , title = "Top App Bar", subtitle = "container for items such as application title, navigation icon, and action items." }
           , { url = Typography, icon = "ic_typography_24px.svg"
             , title = "Typography", subtitle = "Type hierarchy" }
           ]

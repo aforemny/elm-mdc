@@ -41,10 +41,15 @@ resources:
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet">
-<script src="elm-autofocus.js"></script>
-<script src="elm-focus-trap.js"></script>
-<script src="elm-global-events.js"></script>
 <script src="elm-mdc.js"></script>
+```
+
+Set the `mdc-typography` class in the body:
+
+```html
+<body class="mdc-typography">
+  ...
+</body>
 ```
 
 # Resources
@@ -160,6 +165,8 @@ import Material.Internal.GridList.Implementation as GridList
 import Material.Internal.GridList.Model as GridList
 import Material.Internal.IconToggle.Implementation as IconToggle
 import Material.Internal.IconToggle.Model as IconToggle
+import Material.Internal.ImageList.Implementation as ImageList
+import Material.Internal.ImageList.Model as ImageList
 import Material.Internal.Menu.Implementation as Menu
 import Material.Internal.Menu.Model as Menu
 import Material.Internal.Msg exposing (Msg(..))
@@ -181,6 +188,8 @@ import Material.Internal.Textfield.Implementation as Textfield
 import Material.Internal.Textfield.Model as Textfield
 import Material.Internal.Toolbar.Implementation as Toolbar
 import Material.Internal.Toolbar.Model as Toolbar
+import Material.Internal.TopAppBar.Implementation as TopAppBar
+import Material.Internal.TopAppBar.Model as TopAppBar
 
 
 {-| Material model.
@@ -202,6 +211,7 @@ type alias Model m =
     , fab : Indexed Fab.Model
     , gridList : Indexed GridList.Model
     , iconToggle : Indexed IconToggle.Model
+    , imageList : Indexed ImageList.Model
     , menu : Indexed Menu.Model
     , radio : Indexed RadioButton.Model
     , ripple : Indexed Ripple.Model
@@ -212,6 +222,7 @@ type alias Model m =
     , tabs : Indexed Tabs.Model
     , textfield : Indexed Textfield.Model
     , toolbar : Indexed Toolbar.Model
+    , topAppBar : Indexed TopAppBar.Model
     }
 
 
@@ -233,6 +244,7 @@ defaultModel =
     , fab = Dict.empty
     , gridList = Dict.empty
     , iconToggle = Dict.empty
+    , imageList = Dict.empty
     , menu = Dict.empty
     , radio = Dict.empty
     , ripple = Dict.empty
@@ -243,6 +255,7 @@ defaultModel =
     , tabs = Dict.empty
     , textfield = Dict.empty
     , toolbar = Dict.empty
+    , topAppBar = Dict.empty
     }
 
 
@@ -308,6 +321,9 @@ update_ lift msg store =
         IconToggleMsg idx msg ->
             IconToggle.react lift msg idx store
 
+        ImageListMsg idx msg ->
+            ImageList.react lift msg idx store
+
         MenuMsg idx msg ->
             Menu.react lift msg idx store
 
@@ -337,6 +353,9 @@ update_ lift msg store =
 
         ToolbarMsg idx msg ->
             Toolbar.react lift msg idx store
+
+        TopAppBarMsg idx msg ->
+            TopAppBar.react lift msg idx store
 
 
 {-| Material subscriptions.

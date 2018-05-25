@@ -9,6 +9,7 @@ import Demo.Elevation
 import Demo.Fabs
 import Demo.GridList
 import Demo.IconToggle
+import Demo.ImageList
 import Demo.LayoutGrid
 import Demo.LinearProgress
 import Demo.Lists
@@ -30,8 +31,9 @@ import Demo.Textfields
 import Demo.Theme
 import Demo.Theme
 import Demo.Toolbar
+import Demo.TopAppBar
 import Demo.Typography
-import Demo.Url as Url exposing (Url(..), ToolbarPage(..))
+import Demo.Url as Url exposing (Url(..), ToolbarPage(..), TopAppBarPage(..))
 import Html exposing (Html, text)
 import Material
 import Material.Options as Options exposing (styled, css, when)
@@ -56,6 +58,7 @@ type alias Model =
     , fabs : Demo.Fabs.Model Msg
     , gridList : Demo.GridList.Model Msg
     , iconToggle : Demo.IconToggle.Model Msg
+    , imageList : Demo.ImageList.Model Msg
     , layoutGrid : Demo.LayoutGrid.Model
     , lists : Demo.Lists.Model Msg
     , menus : Demo.Menus.Model Msg
@@ -73,6 +76,7 @@ type alias Model =
     , textfields : Demo.Textfields.Model Msg
     , theme : Demo.Theme.Model Msg
     , toolbar : Demo.Toolbar.Model Msg
+    , topAppBar : Demo.TopAppBar.Model Msg
     }
 
 
@@ -89,6 +93,7 @@ defaultModel =
     , fabs = Demo.Fabs.defaultModel
     , gridList = Demo.GridList.defaultModel
     , iconToggle = Demo.IconToggle.defaultModel
+    , imageList = Demo.ImageList.defaultModel
     , layoutGrid = Demo.LayoutGrid.defaultModel
     , lists = Demo.Lists.defaultModel
     , menus = Demo.Menus.defaultModel
@@ -106,6 +111,7 @@ defaultModel =
     , textfields = Demo.Textfields.defaultModel
     , theme = Demo.Theme.defaultModel
     , toolbar = Demo.Toolbar.defaultModel
+    , topAppBar = Demo.TopAppBar.defaultModel
     }
 
 
@@ -122,6 +128,7 @@ type Msg
     | FabsMsg (Demo.Fabs.Msg Msg)
     | GridListMsg (Demo.GridList.Msg Msg)
     | IconToggleMsg (Demo.IconToggle.Msg Msg)
+    | ImageListMsg (Demo.ImageList.Msg Msg)
     | LayoutGridMsg (Demo.LayoutGrid.Msg)
     | ListsMsg (Demo.Lists.Msg Msg)
     | PermanentAboveDrawerMsg (Demo.PermanentAboveDrawer.Msg Msg)
@@ -139,6 +146,7 @@ type Msg
     | TextfieldMsg (Demo.Textfields.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
     | ToolbarMsg (Demo.Toolbar.Msg Msg)
+    | TopAppBarMsg (Demo.TopAppBar.Msg Msg)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -242,6 +250,13 @@ update msg model =
             in
                 ( { model | iconToggle = iconToggle }, effects )
 
+        ImageListMsg msg_ ->
+            let
+                (imageList, effects) =
+                    Demo.ImageList.update ImageListMsg msg_ model.imageList
+            in
+                ( { model | imageList = imageList }, effects )
+
         MenuMsg msg_ ->
             let
                 (menus, effects) =
@@ -340,6 +355,13 @@ update msg model =
             in
                 ( { model | toolbar = toolbar }, effects )
 
+        TopAppBarMsg msg_ ->
+            let
+                (topAppBar, effects) =
+                    Demo.TopAppBar.update TopAppBarMsg msg_ model.topAppBar
+            in
+                ( { model | topAppBar = topAppBar }, effects )
+
 
 view : Model -> Html Msg
 view =
@@ -412,6 +434,9 @@ view_ model =
         IconToggle ->
             Demo.IconToggle.view IconToggleMsg page model.iconToggle
 
+        ImageList ->
+            Demo.ImageList.view ImageListMsg page model.imageList
+
         LinearProgress ->
             Demo.LinearProgress.view page
 
@@ -445,8 +470,11 @@ view_ model =
         Theme ->
             Demo.Theme.view ThemeMsg page model.theme
 
-        Toolbar toolparPage ->
-            Demo.Toolbar.view ToolbarMsg page toolparPage model.toolbar
+        Toolbar toolbarPage ->
+            Demo.Toolbar.view ToolbarMsg page toolbarPage model.toolbar
+
+        TopAppBar topAppBarPage ->
+            Demo.TopAppBar.view TopAppBarMsg page topAppBarPage model.topAppBar
 
         GridList ->
             Demo.GridList.view GridListMsg page model.gridList
@@ -522,4 +550,5 @@ subscriptions model =
         , Demo.Tabs.subscriptions TabsMsg model.tabs
         , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
         , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
+        , Demo.TopAppBar.subscriptions TopAppBarMsg model.topAppBar
         ]

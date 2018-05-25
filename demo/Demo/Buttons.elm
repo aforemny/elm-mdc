@@ -53,9 +53,9 @@ view lift page model =
             , css "margin" "16px"
             ]
 
-        strokedButtons idx =
-            example idx "Stroked Button"
-            [ Button.stroked
+        outlinedButtons idx =
+            example idx "Outlined Button"
+            [ Button.outlined
             , Button.ripple
             , css "margin" "16px"
             ]
@@ -76,12 +76,6 @@ view lift page model =
                 ( options
                 )
                 [ text "Baseline" ]
-              ,
-                Button.view (lift << Mdc) (idx ++ [1]) model.mdc
-                ( Button.compact
-                :: options
-                )
-                [ text "Compact" ]
               ,
                 Button.view (lift << Mdc) (idx ++ [2]) model.mdc
                 ( Button.dense
@@ -142,6 +136,6 @@ view lift page model =
       , textButtons [1]
       , raisedButtons [2]
       , unelevatedButtons [3]
-      , strokedButtons [4]
+      , outlinedButtons [4]
       ]
     ]
