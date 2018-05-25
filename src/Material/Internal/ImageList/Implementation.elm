@@ -124,7 +124,9 @@ container options image =
 label : List (Property m) -> List (Html m) -> Html m
 label options text =
     styled Html.span
-        [ cs "mdc-image-list__label" ]
+        ( cs "mdc-image-list__label"
+        :: options
+        )
         text
 
 
