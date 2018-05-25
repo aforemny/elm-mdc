@@ -44333,9 +44333,12 @@ var _aforemny$elm_mdc$Material_TopAppBar$view = _aforemny$elm_mdc$Material_Inter
 
 var _aforemny$elm_mdc$Demo_TopAppBar$iframe = F4(
 	function (lift, model, title, topAppBarPage) {
-		var url = _aforemny$elm_mdc$Demo_Url$toString(
-			_aforemny$elm_mdc$Demo_Url$TopAppBar(
-				_elm_lang$core$Maybe$Just(topAppBarPage)));
+		var url = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'/elm-mdc/',
+			_aforemny$elm_mdc$Demo_Url$toString(
+				_aforemny$elm_mdc$Demo_Url$TopAppBar(
+					_elm_lang$core$Maybe$Just(topAppBarPage))));
 		return A3(
 			_aforemny$elm_mdc$Material_Options$styled,
 			_elm_lang$html$Html$div,
