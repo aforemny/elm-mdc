@@ -9077,6 +9077,30 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Model$Init = F2(
 		return {ctor: 'Init', _0: a, _1: b};
 	});
 
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$defaultConfig = {dense: false, fixed: false, prominent: false, $short: false, collapsed: false};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$defaultModel = {lastScrollPosition: _elm_lang$core$Maybe$Nothing, topAppBarHeight: _elm_lang$core$Maybe$Nothing, wasDocked: true, isDockedShowing: true, currentAppBarOffsetTop: 0, styleTop: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {lastScrollPosition: a, topAppBarHeight: b, wasDocked: c, isDockedShowing: d, currentAppBarOffsetTop: e, styleTop: f};
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Config = F5(
+	function (a, b, c, d, e) {
+		return {dense: a, fixed: b, prominent: c, $short: d, collapsed: e};
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Scroll = function (a) {
+	return {ctor: 'Scroll', _0: a};
+};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Resize = function (a) {
+	return {ctor: 'Resize', _0: a};
+};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Init = function (a) {
+	return {ctor: 'Init', _0: a};
+};
+
+var _aforemny$elm_mdc$Material_Internal_Msg$TopAppBarMsg = F2(
+	function (a, b) {
+		return {ctor: 'TopAppBarMsg', _0: a, _1: b};
+	});
 var _aforemny$elm_mdc$Material_Internal_Msg$ToolbarMsg = F2(
 	function (a, b) {
 		return {ctor: 'ToolbarMsg', _0: a, _1: b};
@@ -10798,9 +10822,8 @@ var _aforemny$elm_mdc$Material_Internal_Button_Implementation$ripple = _aforemny
 			options,
 			{ripple: true});
 	});
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$compact = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--compact');
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$dense = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--dense');
-var _aforemny$elm_mdc$Material_Internal_Button_Implementation$stroked = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--stroked');
+var _aforemny$elm_mdc$Material_Internal_Button_Implementation$outlined = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--outlined');
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$unelevated = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--unelevated');
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$raised = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-button--raised');
 var _aforemny$elm_mdc$Material_Internal_Button_Implementation$icon = function (str) {
@@ -18238,7 +18261,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 		return A5(
 			_aforemny$elm_mdc$Material_Internal_Options$apply,
 			summary,
-			_elm_lang$html$Html$div,
+			(!config.fullWidth) ? _elm_lang$html$Html$label : _elm_lang$html$Html$div,
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-text-field'),
@@ -18486,18 +18509,18 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
-							_0: A3(
+							_0: (!config.fullWidth) ? A3(
 								_aforemny$elm_mdc$Material_Internal_Options$styled,
-								_elm_lang$html$Html$label,
+								_elm_lang$html$Html$span,
 								{
 									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-text-field__label'),
+									_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-floating-label'),
 									_1: {
 										ctor: '::',
 										_0: A2(
 											_aforemny$elm_mdc$Material_Internal_Options$when,
 											focused || isDirty,
-											_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-text-field__label--float-above')),
+											_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-floating-label--float-above')),
 										_1: {ctor: '[]'}
 									}
 								},
@@ -18512,13 +18535,13 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 									} else {
 										return {ctor: '[]'};
 									}
-								}()),
+								}()) : _elm_lang$html$Html$text(''),
 							_1: {ctor: '[]'}
 						}
 					},
 					_1: {
 						ctor: '::',
-						_0: ((!config.outlined) && (!config.textarea)) ? {
+						_0: ((!config.outlined) && ((!config.textarea) && (!config.fullWidth))) ? {
 							ctor: '::',
 							_0: A3(
 								_aforemny$elm_mdc$Material_Internal_Options$styled,
@@ -18781,10 +18804,13 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 											_elm_lang$html$Html$div,
 											{
 												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-text-field__outline'),
+												_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-notched-outline'),
 												_1: {
 													ctor: '::',
-													_0: ripple.properties,
+													_0: A2(
+														_aforemny$elm_mdc$Material_Internal_Options$when,
+														focused || isDirty,
+														_aforemny$elm_mdc$Material_Internal_Options$cs('mdc-notched-outline--notched')),
 													_1: {ctor: '[]'}
 												}
 											},
@@ -18799,10 +18825,10 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 															_elm_lang$svg$Svg$path,
 															{
 																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$d(d),
+																_0: _elm_lang$svg$Svg_Attributes$class('mdc-notched-outline__path'),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$class('mdc-text-field__outline-path'),
+																	_0: _elm_lang$svg$Svg_Attributes$d(d),
 																	_1: {ctor: '[]'}
 																}
 															},
@@ -18818,7 +18844,7 @@ var _aforemny$elm_mdc$Material_Internal_Textfield_Implementation$textField = F4(
 												_elm_lang$html$Html$div,
 												{
 													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-text-field__idle-outline'),
+													_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-notched-outline__idle'),
 													_1: {ctor: '[]'}
 												},
 												{ctor: '[]'}),
@@ -19594,6 +19620,427 @@ var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$toolbar = F4(
 	});
 var _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$get, _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$toolbar, _aforemny$elm_mdc$Material_Internal_Msg$ToolbarMsg);
 
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$prominentFixedAdjust = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar--prominent-fixed-adjust');
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$denseFixedAdjust = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar--dense-fixed-adjust');
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$fixedAdjust = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar--fixed-adjust');
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$actionItem = F2(
+	function (options, name) {
+		return A2(
+			_aforemny$elm_mdc$Material_Internal_Icon_Implementation$view,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar__action-item'),
+				_1: {ctor: '::', _0: _aforemny$elm_mdc$Material_Internal_Icon_Implementation$anchor, _1: options}
+			},
+			name);
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$title = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Internal_Options$styled,
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar__title'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$section = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Internal_Options$styled,
+		_elm_lang$html$Html$section,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar__section'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$navigationIcon = F2(
+	function (options, name) {
+		return A2(
+			_aforemny$elm_mdc$Material_Internal_Icon_Implementation$view,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar__navigation-icon'),
+				_1: {ctor: '::', _0: _aforemny$elm_mdc$Material_Internal_Icon_Implementation$anchor, _1: options}
+			},
+			name);
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$alignEnd = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar__section--align-end');
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$alignStart = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar__section--align-start');
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$hasActionItem = _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar--short-has-action-item');
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$collapsed = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{collapsed: true});
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$short = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{$short: true});
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$prominent = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{prominent: true});
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$fixed = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{fixed: true});
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$dense = _aforemny$elm_mdc$Material_Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{dense: true});
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$_p0 = A3(
+	_aforemny$elm_mdc$Material_Internal_Component$indexed,
+	function (_) {
+		return _.topAppBar;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{topAppBar: x});
+		}),
+	_aforemny$elm_mdc$Material_Internal_TopAppBar_Model$defaultModel);
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$get = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$_p0._0;
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$set = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$_p0._1;
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$row = function (options) {
+	return A2(
+		_aforemny$elm_mdc$Material_Internal_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar__row'),
+			_1: options
+		});
+};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$checkForUpdate = function (model) {
+	return A2(
+		_elm_lang$core$Maybe$map,
+		function (topAppBarHeight) {
+			var hasAnyPixelsOffscreen = _elm_lang$core$Native_Utils.cmp(model.currentAppBarOffsetTop, 0) < 0;
+			var offscreenBoundaryTop = 0 - topAppBarHeight;
+			var hasAnyPixelsOnscreen = _elm_lang$core$Native_Utils.cmp(model.currentAppBarOffsetTop, offscreenBoundaryTop) > 0;
+			var partiallyShowing = hasAnyPixelsOffscreen && hasAnyPixelsOnscreen;
+			return partiallyShowing ? {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{wasDocked: false}),
+				_1: true
+			} : ((!model.wasDocked) ? {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{wasDocked: true}),
+				_1: true
+			} : ((!_elm_lang$core$Native_Utils.eq(model.isDockedShowing, hasAnyPixelsOnscreen)) ? {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{isDockedShowing: hasAnyPixelsOnscreen}),
+				_1: true
+			} : {ctor: '_Tuple2', _0: model, _1: false}));
+		},
+		model.topAppBarHeight);
+};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$moveTopAppBar = function (model) {
+	return A2(
+		_elm_lang$core$Maybe$andThen,
+		function (_p1) {
+			var _p2 = _p1;
+			var _p3 = _p2._0;
+			return _p2._1 ? A2(
+				_elm_lang$core$Maybe$map,
+				function (topAppBarHeight) {
+					var styleTop = function () {
+						var maxTopAppBarHeight = 128;
+						return (_elm_lang$core$Native_Utils.cmp(
+							_elm_lang$core$Basics$abs(_p3.currentAppBarOffsetTop),
+							topAppBarHeight) > 0) ? (0 - maxTopAppBarHeight) : _p3.currentAppBarOffsetTop;
+					}();
+					return _elm_lang$core$Native_Utils.update(
+						_p3,
+						{
+							styleTop: _elm_lang$core$Maybe$Just(styleTop)
+						});
+				},
+				_p3.topAppBarHeight) : _elm_lang$core$Maybe$Just(_p3);
+		},
+		_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$checkForUpdate(model));
+};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$getAppBarHeight = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'clientHeight',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$float);
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$getViewportScrollY = _debois$elm_dom$DOM$target(
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'ownerDocument',
+			_1: {
+				ctor: '::',
+				_0: 'defaultView',
+				_1: {
+					ctor: '::',
+					_0: 'scrollY',
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		_elm_lang$core$Json_Decode$float));
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$topAppBarScrollHandler = F2(
+	function (scrollPosition, model) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			model,
+			A2(
+				_elm_lang$core$Maybe$andThen,
+				_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$moveTopAppBar,
+				A2(
+					_elm_lang$core$Maybe$map,
+					function (_p4) {
+						var _p5 = _p4;
+						var _p6 = _p5._0;
+						var isCurrentlyBeingResized = false;
+						var currentScrollPosition = A2(_elm_lang$core$Basics$max, scrollPosition, 0);
+						var diff = currentScrollPosition - _p5._1;
+						var currentAppBarOffsetTop = model.currentAppBarOffsetTop - diff;
+						var updatedAppBarOffsetTop = (!isCurrentlyBeingResized) ? ((_elm_lang$core$Native_Utils.cmp(currentAppBarOffsetTop, 0) > 0) ? 0 : ((_elm_lang$core$Native_Utils.cmp(
+							_elm_lang$core$Basics$abs(currentAppBarOffsetTop),
+							_p6) > 0) ? (0 - _p6) : currentAppBarOffsetTop)) : model.currentAppBarOffsetTop;
+						var updatedModel = _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								lastScrollPosition: _elm_lang$core$Maybe$Just(currentScrollPosition),
+								currentAppBarOffsetTop: updatedAppBarOffsetTop
+							});
+						return A2(
+							_elm_lang$core$Maybe$withDefault,
+							updatedModel,
+							_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$moveTopAppBar(updatedModel));
+					},
+					A3(
+						_elm_lang$core$Maybe$map2,
+						F2(
+							function (v0, v1) {
+								return {ctor: '_Tuple2', _0: v0, _1: v1};
+							}),
+						model.topAppBarHeight,
+						model.lastScrollPosition))));
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$update = F2(
+	function (msg, model) {
+		var _p7 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		switch (_p7.ctor) {
+			case 'Init':
+				var _p8 = _p7._0.scrollPosition;
+				return {
+					ctor: '_Tuple2',
+					_0: A2(
+						_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$topAppBarScrollHandler,
+						_p8,
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								lastScrollPosition: _elm_lang$core$Maybe$Just(_p8),
+								topAppBarHeight: _elm_lang$core$Maybe$Just(_p7._0.topAppBarHeight)
+							})),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Scroll':
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$topAppBarScrollHandler, _p7._0.scrollPosition, model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				var _p9 = _p7._0.topAppBarHeight;
+				var currentHeight = _p9;
+				var currentAppBarOffsetTop = model.currentAppBarOffsetTop - (_p9 - currentHeight);
+				var updatedModel = (!_elm_lang$core$Native_Utils.eq(
+					_elm_lang$core$Maybe$Just(_p9),
+					model.topAppBarHeight)) ? _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						wasDocked: false,
+						currentAppBarOffsetTop: currentAppBarOffsetTop,
+						topAppBarHeight: _elm_lang$core$Maybe$Just(currentHeight)
+					}) : model;
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$topAppBarScrollHandler, _p7._0.scrollPosition, updatedModel),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$react = A4(
+	_aforemny$elm_mdc$Material_Internal_Component$react,
+	_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$get,
+	_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$set,
+	_aforemny$elm_mdc$Material_Internal_Msg$TopAppBarMsg,
+	_aforemny$elm_mdc$Material_Internal_Component$generalise(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$update));
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$cssClasses = {dense: 'mdc-top-app-bar--dense', fixed: 'mdc-top-app-bar--fixed', scrolled: 'mdc-top-app-bar--fixed-scrolled', prominent: 'mdc-top-app-bar--prominent', $short: 'mdc-top-app-bar--short', collapsed: 'mdc-top-app-bar--short-collapsed'};
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$topAppBar = F4(
+	function (lift, model, options, sections) {
+		var top = A2(_elm_lang$core$Maybe$withDefault, 0, model.styleTop);
+		var lastScrollPosition = A2(_elm_lang$core$Maybe$withDefault, 0, model.lastScrollPosition);
+		var _p10 = A2(_aforemny$elm_mdc$Material_Internal_Options$collect, _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$defaultConfig, options);
+		var summary = _p10;
+		var config = _p10.config;
+		return A5(
+			_aforemny$elm_mdc$Material_Internal_Options$apply,
+			summary,
+			_elm_lang$html$Html$header,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Internal_Options$cs('mdc-top-app-bar'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_Internal_Options$when,
+						config.dense,
+						_aforemny$elm_mdc$Material_Internal_Options$cs(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$cssClasses.dense)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_Internal_Options$when,
+							config.fixed,
+							_aforemny$elm_mdc$Material_Internal_Options$cs(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$cssClasses.fixed)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_Internal_Options$when,
+								config.fixed && (_elm_lang$core$Native_Utils.cmp(lastScrollPosition, 0) > 0),
+								_aforemny$elm_mdc$Material_Internal_Options$cs(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$cssClasses.scrolled)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_Internal_Options$when,
+									config.prominent,
+									_aforemny$elm_mdc$Material_Internal_Options$cs(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$cssClasses.prominent)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_Internal_Options$when,
+										config.$short,
+										_aforemny$elm_mdc$Material_Internal_Options$cs(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$cssClasses.$short)),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_Internal_Options$when,
+											config.collapsed || (config.$short && (_elm_lang$core$Native_Utils.cmp(lastScrollPosition, 0) > 0)),
+											_aforemny$elm_mdc$Material_Internal_Options$cs(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$cssClasses.collapsed)),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_aforemny$elm_mdc$Material_Internal_Options$when,
+												(!config.fixed) && (!config.$short),
+												A2(
+													_aforemny$elm_mdc$Material_Internal_Options$css,
+													'top',
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														_elm_lang$core$Basics$toString(top),
+														'px'))),
+											_1: {
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Internal_GlobalEvents$onScroll(
+													A2(
+														_elm_lang$core$Json_Decode$map,
+														lift,
+														A2(
+															_elm_lang$core$Json_Decode$map,
+															function (scrollPosition) {
+																return _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Scroll(
+																	{scrollPosition: scrollPosition});
+															},
+															_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$getViewportScrollY))),
+												_1: {
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Internal_GlobalEvents$onResize(
+														A2(
+															_elm_lang$core$Json_Decode$map,
+															lift,
+															A3(
+																_elm_lang$core$Json_Decode$map2,
+																F2(
+																	function (scrollPosition, topAppBarHeight) {
+																		return _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Resize(
+																			{scrollPosition: scrollPosition, topAppBarHeight: topAppBarHeight});
+																	}),
+																_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$getViewportScrollY,
+																_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$getAppBarHeight))),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_aforemny$elm_mdc$Material_Internal_Options$when,
+															A2(
+																_elm_lang$core$List$any,
+																_elm_lang$core$Basics$identity,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$core$Native_Utils.eq(model.lastScrollPosition, _elm_lang$core$Maybe$Nothing),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$core$Native_Utils.eq(model.topAppBarHeight, _elm_lang$core$Maybe$Nothing),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_aforemny$elm_mdc$Material_Internal_GlobalEvents$onTick(
+																A2(
+																	_elm_lang$core$Json_Decode$map,
+																	lift,
+																	A3(
+																		_elm_lang$core$Json_Decode$map2,
+																		F2(
+																			function (scrollPosition, topAppBarHeight) {
+																				return _aforemny$elm_mdc$Material_Internal_TopAppBar_Model$Init(
+																					{scrollPosition: scrollPosition, topAppBarHeight: topAppBarHeight});
+																			}),
+																		_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$getViewportScrollY,
+																		_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$getAppBarHeight)))),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$row,
+					{ctor: '[]'},
+					sections),
+				_1: {ctor: '[]'}
+			});
+	});
+var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$view = A3(_aforemny$elm_mdc$Material_Internal_Component$render, _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$get, _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$topAppBar, _aforemny$elm_mdc$Material_Internal_Msg$TopAppBarMsg);
+
 var _aforemny$elm_mdc$Material$top = function (content) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -19762,8 +20209,10 @@ var _aforemny$elm_mdc$Material$update_ = F3(
 				return A4(_aforemny$elm_mdc$Material_Internal_Tabs_Implementation$react, lift, _p0._1, _p0._0, store);
 			case 'TextfieldMsg':
 				return A4(_aforemny$elm_mdc$Material_Internal_Textfield_Implementation$react, lift, _p0._1, _p0._0, store);
-			default:
+			case 'ToolbarMsg':
 				return A4(_aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$react, lift, _p0._1, _p0._0, store);
+			default:
+				return A4(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$react, lift, _p0._1, _p0._0, store);
 		}
 	});
 var _aforemny$elm_mdc$Material$update = F3(
@@ -19787,7 +20236,7 @@ var _aforemny$elm_mdc$Material$update = F3(
 						return _.mdc;
 					}(container))));
 	});
-var _aforemny$elm_mdc$Material$defaultModel = {button: _elm_lang$core$Dict$empty, checkbox: _elm_lang$core$Dict$empty, dialog: _elm_lang$core$Dict$empty, drawer: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, gridList: _elm_lang$core$Dict$empty, iconToggle: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, radio: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, slider: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty, $switch: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, toolbar: _elm_lang$core$Dict$empty};
+var _aforemny$elm_mdc$Material$defaultModel = {button: _elm_lang$core$Dict$empty, checkbox: _elm_lang$core$Dict$empty, dialog: _elm_lang$core$Dict$empty, drawer: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, gridList: _elm_lang$core$Dict$empty, iconToggle: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, radio: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, slider: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty, $switch: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, toolbar: _elm_lang$core$Dict$empty, topAppBar: _elm_lang$core$Dict$empty};
 var _aforemny$elm_mdc$Material$Model = function (a) {
 	return function (b) {
 		return function (c) {
@@ -19805,7 +20254,9 @@ var _aforemny$elm_mdc$Material$Model = function (a) {
 														return function (o) {
 															return function (p) {
 																return function (q) {
-																	return {button: a, checkbox: b, dialog: c, drawer: d, fab: e, gridList: f, iconToggle: g, menu: h, radio: i, ripple: j, select: k, slider: l, snackbar: m, $switch: n, tabs: o, textfield: p, toolbar: q};
+																	return function (r) {
+																		return {button: a, checkbox: b, dialog: c, drawer: d, fab: e, gridList: f, iconToggle: g, menu: h, radio: i, ripple: j, select: k, slider: l, snackbar: m, $switch: n, tabs: o, textfield: p, toolbar: q, topAppBar: r};
+																	};
 																};
 															};
 														};
@@ -19860,8 +20311,52 @@ var _aforemny$elm_mdc$Material_Toolbar$fixed = _aforemny$elm_mdc$Material_Intern
 var _aforemny$elm_mdc$Material_Toolbar$view = _aforemny$elm_mdc$Material_Internal_Toolbar_Implementation$view;
 
 var _aforemny$elm_mdc$Demo_Url$toString = function (url) {
-	var _p0 = url;
-	switch (_p0.ctor) {
+	var topAppBarCase = function (topAppBar) {
+		var _p0 = topAppBar;
+		if (_p0.ctor === 'Nothing') {
+			return '#top-app-bar';
+		} else {
+			switch (_p0._0.ctor) {
+				case 'StandardTopAppBar':
+					return '#top-app-bar/standard';
+				case 'FixedTopAppBar':
+					return '#top-app-bar/fixed';
+				case 'DenseTopAppBar':
+					return '#top-app-bar/dense';
+				case 'ProminentTopAppBar':
+					return '#top-app-bar/prominent';
+				case 'ShortTopAppBar':
+					return '#top-app-bar/short';
+				default:
+					return '#top-app-bar/short-collapsed';
+			}
+		}
+	};
+	var toolbarCase = function (toolbar) {
+		var _p1 = toolbar;
+		if (_p1.ctor === 'Nothing') {
+			return '#toolbar';
+		} else {
+			switch (_p1._0.ctor) {
+				case 'DefaultToolbar':
+					return '#toolbar/default-toolbar';
+				case 'FixedToolbar':
+					return '#toolbar/fixed-toolbar';
+				case 'MenuToolbar':
+					return '#toolbar/menu-toolbar';
+				case 'WaterfallToolbar':
+					return '#toolbar/waterfall-toolbar';
+				case 'DefaultFlexibleToolbar':
+					return '#toolbar/default-flexible-toolbar';
+				case 'WaterfallFlexibleToolbar':
+					return '#toolbar/waterfall-flexible-toolbar';
+				default:
+					return '#toolbar/waterfall-toolbar-fix-last-row';
+			}
+		}
+	};
+	var _p2 = url;
+	switch (_p2.ctor) {
 		case 'StartPage':
 			return '#';
 		case 'Button':
@@ -19917,36 +20412,22 @@ var _aforemny$elm_mdc$Demo_Url$toString = function (url) {
 		case 'Theme':
 			return '#theme';
 		case 'Toolbar':
-			if (_p0._0.ctor === 'Nothing') {
-				return '#toolbar';
-			} else {
-				switch (_p0._0._0.ctor) {
-					case 'DefaultToolbar':
-						return '#toolbar/default-toolbar';
-					case 'FixedToolbar':
-						return '#toolbar/fixed-toolbar';
-					case 'MenuToolbar':
-						return '#toolbar/menu-toolbar';
-					case 'WaterfallToolbar':
-						return '#toolbar/waterfall-toolbar';
-					case 'DefaultFlexibleToolbar':
-						return '#toolbar/default-flexible-toolbar';
-					case 'WaterfallFlexibleToolbar':
-						return '#toolbar/waterfall-flexible-toolbar';
-					default:
-						return '#toolbar/waterfall-toolbar-fix-last-row';
-				}
-			}
+			return toolbarCase(_p2._0);
+		case 'TopAppBar':
+			return topAppBarCase(_p2._0);
 		case 'Typography':
 			return '#typography';
 		default:
-			return _p0._0;
+			return _p2._0;
 	}
 };
 var _aforemny$elm_mdc$Demo_Url$Error404 = function (a) {
 	return {ctor: 'Error404', _0: a};
 };
 var _aforemny$elm_mdc$Demo_Url$Typography = {ctor: 'Typography'};
+var _aforemny$elm_mdc$Demo_Url$TopAppBar = function (a) {
+	return {ctor: 'TopAppBar', _0: a};
+};
 var _aforemny$elm_mdc$Demo_Url$Toolbar = function (a) {
 	return {ctor: 'Toolbar', _0: a};
 };
@@ -19984,33 +20465,19 @@ var _aforemny$elm_mdc$Demo_Url$WaterfallToolbar = {ctor: 'WaterfallToolbar'};
 var _aforemny$elm_mdc$Demo_Url$MenuToolbar = {ctor: 'MenuToolbar'};
 var _aforemny$elm_mdc$Demo_Url$FixedToolbar = {ctor: 'FixedToolbar'};
 var _aforemny$elm_mdc$Demo_Url$DefaultToolbar = {ctor: 'DefaultToolbar'};
+var _aforemny$elm_mdc$Demo_Url$ShortCollapsedTopAppBar = {ctor: 'ShortCollapsedTopAppBar'};
+var _aforemny$elm_mdc$Demo_Url$ShortTopAppBar = {ctor: 'ShortTopAppBar'};
+var _aforemny$elm_mdc$Demo_Url$ProminentTopAppBar = {ctor: 'ProminentTopAppBar'};
+var _aforemny$elm_mdc$Demo_Url$DenseTopAppBar = {ctor: 'DenseTopAppBar'};
+var _aforemny$elm_mdc$Demo_Url$FixedTopAppBar = {ctor: 'FixedTopAppBar'};
+var _aforemny$elm_mdc$Demo_Url$StandardTopAppBar = {ctor: 'StandardTopAppBar'};
 var _aforemny$elm_mdc$Demo_Url$fromString = function (str) {
-	var case2 = function (str) {
-		var _p1 = _elm_lang$core$String$uncons(str);
-		_v1_18:
+	var case3 = function (str) {
+		var _p3 = _elm_lang$core$String$uncons(str);
+		_v3_15:
 		do {
-			if (((_p1.ctor === 'Just') && (_p1._0.ctor === '_Tuple2')) && (_p1._0._0.valueOf() === '#')) {
-				switch (_p1._0._1) {
-					case 'radio-buttons':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$RadioButton);
-					case 'ripple':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Ripple);
-					case 'select':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Select);
-					case 'menu':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Menu);
-					case 'slider':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Slider);
-					case 'snackbar':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Snackbar);
-					case 'switch':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Switch);
-					case 'tabs':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Tabs);
-					case 'text-field':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$TextField);
-					case 'theme':
-						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Theme);
+			if (((_p3.ctor === 'Just') && (_p3._0.ctor === '_Tuple2')) && (_p3._0._0.valueOf() === '#')) {
+				switch (_p3._0._1) {
 					case 'toolbar':
 						return _elm_lang$core$Maybe$Just(
 							_aforemny$elm_mdc$Demo_Url$Toolbar(_elm_lang$core$Maybe$Nothing));
@@ -20038,26 +20505,88 @@ var _aforemny$elm_mdc$Demo_Url$fromString = function (str) {
 						return _elm_lang$core$Maybe$Just(
 							_aforemny$elm_mdc$Demo_Url$Toolbar(
 								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$WaterfallToolbarFix)));
+					case 'top-app-bar':
+						return _elm_lang$core$Maybe$Just(
+							_aforemny$elm_mdc$Demo_Url$TopAppBar(_elm_lang$core$Maybe$Nothing));
+					case 'top-app-bar/standard':
+						return _elm_lang$core$Maybe$Just(
+							_aforemny$elm_mdc$Demo_Url$TopAppBar(
+								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$StandardTopAppBar)));
+					case 'top-app-bar/fixed':
+						return _elm_lang$core$Maybe$Just(
+							_aforemny$elm_mdc$Demo_Url$TopAppBar(
+								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$FixedTopAppBar)));
+					case 'top-app-bar/dense':
+						return _elm_lang$core$Maybe$Just(
+							_aforemny$elm_mdc$Demo_Url$TopAppBar(
+								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$DenseTopAppBar)));
+					case 'top-app-bar/prominent':
+						return _elm_lang$core$Maybe$Just(
+							_aforemny$elm_mdc$Demo_Url$TopAppBar(
+								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$ProminentTopAppBar)));
+					case 'top-app-bar/short':
+						return _elm_lang$core$Maybe$Just(
+							_aforemny$elm_mdc$Demo_Url$TopAppBar(
+								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$ShortTopAppBar)));
+					case 'top-app-bar/short-collapsed':
+						return _elm_lang$core$Maybe$Just(
+							_aforemny$elm_mdc$Demo_Url$TopAppBar(
+								_elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$ShortCollapsedTopAppBar)));
 					case 'typography':
 						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Typography);
 					default:
-						break _v1_18;
+						break _v3_15;
 				}
 			} else {
-				break _v1_18;
+				break _v3_15;
+			}
+		} while(false);
+		return _elm_lang$core$Maybe$Nothing;
+	};
+	var case2 = function (str) {
+		var _p4 = _elm_lang$core$String$uncons(str);
+		_v4_10:
+		do {
+			if (((_p4.ctor === 'Just') && (_p4._0.ctor === '_Tuple2')) && (_p4._0._0.valueOf() === '#')) {
+				switch (_p4._0._1) {
+					case 'radio-buttons':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$RadioButton);
+					case 'ripple':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Ripple);
+					case 'select':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Select);
+					case 'menu':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Menu);
+					case 'slider':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Slider);
+					case 'snackbar':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Snackbar);
+					case 'switch':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Switch);
+					case 'tabs':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Tabs);
+					case 'text-field':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$TextField);
+					case 'theme':
+						return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Theme);
+					default:
+						break _v4_10;
+				}
+			} else {
+				break _v4_10;
 			}
 		} while(false);
 		return _elm_lang$core$Maybe$Nothing;
 	};
 	var case1 = function (str) {
-		var _p2 = _elm_lang$core$String$uncons(str);
-		_v2_18:
+		var _p5 = _elm_lang$core$String$uncons(str);
+		_v5_18:
 		do {
-			if (_p2.ctor === 'Nothing') {
+			if (_p5.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$StartPage);
 			} else {
-				if ((_p2._0.ctor === '_Tuple2') && (_p2._0._0.valueOf() === '#')) {
-					switch (_p2._0._1) {
+				if ((_p5._0.ctor === '_Tuple2') && (_p5._0._0.valueOf() === '#')) {
+					switch (_p5._0._1) {
 						case '':
 							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$StartPage);
 						case 'buttons':
@@ -20093,26 +20622,35 @@ var _aforemny$elm_mdc$Demo_Url$fromString = function (str) {
 						case 'lists':
 							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$List);
 						default:
-							break _v2_18;
+							break _v5_18;
 					}
 				} else {
-					break _v2_18;
+					break _v5_18;
 				}
 			}
 		} while(false);
 		return _elm_lang$core$Maybe$Nothing;
 	};
-	var _p3 = case1(str);
-	if (_p3.ctor === 'Just') {
-		return _p3._0;
-	} else {
-		var _p4 = case2(str);
-		if (_p4.ctor === 'Just') {
-			return _p4._0;
-		} else {
-			return _aforemny$elm_mdc$Demo_Url$Error404(str);
-		}
-	}
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		_aforemny$elm_mdc$Demo_Url$Error404(str),
+		_elm_lang$core$List$head(
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: case1(str),
+					_1: {
+						ctor: '::',
+						_0: case2(str),
+						_1: {
+							ctor: '::',
+							_0: case3(str),
+							_1: {ctor: '[]'}
+						}
+					}
+				})));
 };
 
 var _aforemny$elm_mdc$Demo_Page$hero = function (options) {
@@ -20313,9 +20851,8 @@ var _aforemny$elm_mdc$Material_Button$onClick = _aforemny$elm_mdc$Material_Inter
 var _aforemny$elm_mdc$Material_Button$disabled = _aforemny$elm_mdc$Material_Internal_Button_Implementation$disabled;
 var _aforemny$elm_mdc$Material_Button$link = _aforemny$elm_mdc$Material_Internal_Button_Implementation$link;
 var _aforemny$elm_mdc$Material_Button$ripple = _aforemny$elm_mdc$Material_Internal_Button_Implementation$ripple;
-var _aforemny$elm_mdc$Material_Button$compact = _aforemny$elm_mdc$Material_Internal_Button_Implementation$compact;
 var _aforemny$elm_mdc$Material_Button$dense = _aforemny$elm_mdc$Material_Internal_Button_Implementation$dense;
-var _aforemny$elm_mdc$Material_Button$stroked = _aforemny$elm_mdc$Material_Internal_Button_Implementation$stroked;
+var _aforemny$elm_mdc$Material_Button$outlined = _aforemny$elm_mdc$Material_Internal_Button_Implementation$outlined;
 var _aforemny$elm_mdc$Material_Button$unelevated = _aforemny$elm_mdc$Material_Internal_Button_Implementation$unelevated;
 var _aforemny$elm_mdc$Material_Button$raised = _aforemny$elm_mdc$Material_Internal_Button_Implementation$raised;
 var _aforemny$elm_mdc$Material_Button$icon = _aforemny$elm_mdc$Material_Internal_Button_Implementation$icon;
@@ -20443,14 +20980,14 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 												idx,
 												{
 													ctor: '::',
-													_0: 1,
+													_0: 2,
 													_1: {ctor: '[]'}
 												}),
 											model.mdc,
-											{ctor: '::', _0: _aforemny$elm_mdc$Material_Button$compact, _1: options},
+											{ctor: '::', _0: _aforemny$elm_mdc$Material_Button$dense, _1: options},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Compact'),
+												_0: _elm_lang$html$Html$text('Dense'),
 												_1: {ctor: '[]'}
 											}),
 										_1: {
@@ -20466,14 +21003,18 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 													idx,
 													{
 														ctor: '::',
-														_0: 2,
+														_0: 3,
 														_1: {ctor: '[]'}
 													}),
 												model.mdc,
-												{ctor: '::', _0: _aforemny$elm_mdc$Material_Button$dense, _1: options},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text('Dense'),
+													_0: _aforemny$elm_mdc$Material_Options$cs('secondary-button'),
+													_1: options
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Secondary'),
 													_1: {ctor: '[]'}
 												}),
 											_1: {
@@ -20489,18 +21030,18 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 														idx,
 														{
 															ctor: '::',
-															_0: 3,
+															_0: 4,
 															_1: {ctor: '[]'}
 														}),
 													model.mdc,
 													{
 														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Options$cs('secondary-button'),
+														_0: _aforemny$elm_mdc$Material_Button$icon('favorite'),
 														_1: options
 													},
 													{
 														ctor: '::',
-														_0: _elm_lang$html$Html$text('Secondary'),
+														_0: _elm_lang$html$Html$text('Icon'),
 														_1: {ctor: '[]'}
 													}),
 												_1: {
@@ -20516,49 +21057,21 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 															idx,
 															{
 																ctor: '::',
-																_0: 4,
+																_0: 5,
 																_1: {ctor: '[]'}
 															}),
 														model.mdc,
 														{
 															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_Button$icon('favorite'),
+															_0: _aforemny$elm_mdc$Material_Button$link('#buttons'),
 															_1: options
 														},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text('Icon'),
+															_0: _elm_lang$html$Html$text('Link'),
 															_1: {ctor: '[]'}
 														}),
-													_1: {
-														ctor: '::',
-														_0: A5(
-															_aforemny$elm_mdc$Material_Button$view,
-															function (_p7) {
-																return lift(
-																	_aforemny$elm_mdc$Demo_Buttons$Mdc(_p7));
-															},
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																idx,
-																{
-																	ctor: '::',
-																	_0: 5,
-																	_1: {ctor: '[]'}
-																}),
-															model.mdc,
-															{
-																ctor: '::',
-																_0: _aforemny$elm_mdc$Material_Button$link('#buttons'),
-																_1: options
-															},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Link'),
-																_1: {ctor: '[]'}
-															}),
-														_1: {ctor: '[]'}
-													}
+													_1: {ctor: '[]'}
 												}
 											}
 										}
@@ -20568,14 +21081,14 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 						}
 					});
 			});
-		var strokedButtons = function (idx) {
+		var outlinedButtons = function (idx) {
 			return A3(
 				example,
 				idx,
-				'Stroked Button',
+				'Outlined Button',
 				{
 					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Button$stroked,
+					_0: _aforemny$elm_mdc$Material_Button$outlined,
 					_1: {
 						ctor: '::',
 						_0: _aforemny$elm_mdc$Material_Button$ripple,
@@ -20652,9 +21165,9 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 						ctor: '::',
 						_0: A5(
 							_aforemny$elm_mdc$Material_Button$view,
-							function (_p8) {
+							function (_p7) {
 								return lift(
-									_aforemny$elm_mdc$Demo_Buttons$Mdc(_p8));
+									_aforemny$elm_mdc$Demo_Buttons$Mdc(_p7));
 							},
 							{
 								ctor: '::',
@@ -20684,9 +21197,9 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 							ctor: '::',
 							_0: A5(
 								_aforemny$elm_mdc$Material_Button$view,
-								function (_p9) {
+								function (_p8) {
 									return lift(
-										_aforemny$elm_mdc$Demo_Buttons$Mdc(_p9));
+										_aforemny$elm_mdc$Demo_Buttons$Mdc(_p8));
 								},
 								{
 									ctor: '::',
@@ -20782,7 +21295,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 											}),
 										_1: {
 											ctor: '::',
-											_0: strokedButtons(
+											_0: outlinedButtons(
 												{
 													ctor: '::',
 													_0: 4,
@@ -37007,8 +37520,17 @@ var _aforemny$elm_mdc$Demo_Startpage$view = function (page) {
 																															},
 																															_1: {
 																																ctor: '::',
-																																_0: {url: _aforemny$elm_mdc$Demo_Url$Typography, icon: 'ic_typography_24px.svg', title: 'Typography', subtitle: 'Type hierarchy'},
-																																_1: {ctor: '[]'}
+																																_0: {
+																																	url: _aforemny$elm_mdc$Demo_Url$TopAppBar(_elm_lang$core$Maybe$Nothing),
+																																	icon: 'ic_toolbar_24px.svg',
+																																	title: 'Top App Bar',
+																																	subtitle: 'Container for items such as application title, navigation icon, and action items.'
+																																},
+																																_1: {
+																																	ctor: '::',
+																																	_0: {url: _aforemny$elm_mdc$Demo_Url$Typography, icon: 'ic_typography_24px.svg', title: 'Typography', subtitle: 'Type hierarchy'},
+																																	_1: {ctor: '[]'}
+																																}
 																															}
 																														}
 																													}
@@ -40792,7 +41314,7 @@ var _aforemny$elm_mdc$Demo_Textfields$fullwidth = F3(
 											model.mdc,
 											{
 												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Textfield$placeholder('Textrea Label'),
+												_0: _aforemny$elm_mdc$Material_Textfield$placeholder('Textarea Label'),
 												_1: {
 													ctor: '::',
 													_0: _aforemny$elm_mdc$Material_Textfield$textarea,
@@ -42291,7 +42813,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$iframe = F5(
 								model.mdc,
 								{
 									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Button$stroked,
+									_0: _aforemny$elm_mdc$Material_Button$outlined,
 									_1: {
 										ctor: '::',
 										_0: _aforemny$elm_mdc$Material_Button$dense,
@@ -43789,6 +44311,1189 @@ var _aforemny$elm_mdc$Demo_Toolbar$subscriptions = F2(
 			model);
 	});
 
+var _aforemny$elm_mdc$Material_TopAppBar$prominentFixedAdjust = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$prominentFixedAdjust;
+var _aforemny$elm_mdc$Material_TopAppBar$denseFixedAdjust = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$denseFixedAdjust;
+var _aforemny$elm_mdc$Material_TopAppBar$fixedAdjust = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$fixedAdjust;
+var _aforemny$elm_mdc$Material_TopAppBar$hasActionItem = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$hasActionItem;
+var _aforemny$elm_mdc$Material_TopAppBar$collapsed = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$collapsed;
+var _aforemny$elm_mdc$Material_TopAppBar$short = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$short;
+var _aforemny$elm_mdc$Material_TopAppBar$prominent = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$prominent;
+var _aforemny$elm_mdc$Material_TopAppBar$dense = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$dense;
+var _aforemny$elm_mdc$Material_TopAppBar$fixed = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$fixed;
+var _aforemny$elm_mdc$Material_TopAppBar$navigationIcon = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$navigationIcon;
+var _aforemny$elm_mdc$Material_TopAppBar$alignEnd = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$alignEnd;
+var _aforemny$elm_mdc$Material_TopAppBar$alignStart = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$alignStart;
+var _aforemny$elm_mdc$Material_TopAppBar$actionItem = F2(
+	function (options, name) {
+		return A2(_aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$actionItem, options, name);
+	});
+var _aforemny$elm_mdc$Material_TopAppBar$title = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$title;
+var _aforemny$elm_mdc$Material_TopAppBar$section = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$section;
+var _aforemny$elm_mdc$Material_TopAppBar$view = _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$view;
+
+var _aforemny$elm_mdc$Demo_TopAppBar$iframe = F4(
+	function (lift, model, title, topAppBarPage) {
+		var url = _aforemny$elm_mdc$Demo_Url$toString(
+			_aforemny$elm_mdc$Demo_Url$TopAppBar(
+				_elm_lang$core$Maybe$Just(topAppBarPage)));
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: A2(_aforemny$elm_mdc$Material_Options$css, 'display', 'flex'),
+				_1: {
+					ctor: '::',
+					_0: A2(_aforemny$elm_mdc$Material_Options$css, 'flex-flow', 'column'),
+					_1: {
+						ctor: '::',
+						_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin', '24px'),
+						_1: {
+							ctor: '::',
+							_0: A2(_aforemny$elm_mdc$Material_Options$css, 'width', '320px'),
+							_1: {
+								ctor: '::',
+								_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '600px'),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A3(
+					_aforemny$elm_mdc$Material_Options$styled,
+					_elm_lang$html$Html$h2,
+					{
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_Options$cs('demo-topappbar-example-heading'),
+						_1: {
+							ctor: '::',
+							_0: A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '24px'),
+							_1: {
+								ctor: '::',
+								_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin-bottom', '16px'),
+								_1: {
+									ctor: '::',
+									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'font-family', 'Roboto, sans-serif'),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '2.8125rem'),
+										_1: {
+											ctor: '::',
+											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'line-height', '3rem'),
+											_1: {
+												ctor: '::',
+												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'font-weight', '400'),
+												_1: {
+													ctor: '::',
+													_0: A2(_aforemny$elm_mdc$Material_Options$css, 'letter-spacing', 'normal'),
+													_1: {
+														ctor: '::',
+														_0: A2(_aforemny$elm_mdc$Material_Options$css, 'text-transform', 'inherit'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A3(
+							_aforemny$elm_mdc$Material_Options$styled,
+							_elm_lang$html$Html$span,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Options$cs('demo-topappbar-example-heading__text'),
+								_1: {
+									ctor: '::',
+									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'flex-grow', '1'),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'margin-right', '16px'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(title),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$href(url),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$target('_blank'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('View in separate window'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_aforemny$elm_mdc$Material_Options$styled,
+							_elm_lang$html$Html$iframe,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Options$attribute(
+									_elm_lang$html$Html_Attributes$src(url)),
+								_1: {
+									ctor: '::',
+									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'border', '1px solid #eee'),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '500px'),
+										_1: {
+											ctor: '::',
+											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'font-size', '16px'),
+											_1: {
+												ctor: '::',
+												_0: A2(_aforemny$elm_mdc$Material_Options$css, 'overflow', 'scroll'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$updateExample = F2(
+	function (msg, model) {
+		var _p0 = A2(_elm_lang$core$Debug$log, 'updateExample', msg);
+		if (_p0.ctor === 'ToggleRtl') {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{rtl: !model.rtl});
+		} else {
+			return model;
+		}
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, examples: _elm_lang$core$Dict$empty};
+var _aforemny$elm_mdc$Demo_TopAppBar$defaultExample = {rtl: false};
+var _aforemny$elm_mdc$Demo_TopAppBar$Model = F2(
+	function (a, b) {
+		return {mdc: a, examples: b};
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$Example = function (a) {
+	return {rtl: a};
+};
+var _aforemny$elm_mdc$Demo_TopAppBar$ExampleMsg = F2(
+	function (a, b) {
+		return {ctor: 'ExampleMsg', _0: a, _1: b};
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$Mdc = function (a) {
+	return {ctor: 'Mdc', _0: a};
+};
+var _aforemny$elm_mdc$Demo_TopAppBar$update = F3(
+	function (lift, msg, model) {
+		var _p1 = msg;
+		if (_p1.ctor === 'Mdc') {
+			return A3(
+				_aforemny$elm_mdc$Material$update,
+				function (_p2) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p2));
+				},
+				_p1._0,
+				model);
+		} else {
+			var _p3 = _p1._0;
+			var example = A2(
+				_aforemny$elm_mdc$Demo_TopAppBar$updateExample,
+				_p1._1,
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					_aforemny$elm_mdc$Demo_TopAppBar$defaultExample,
+					A2(
+						_elm_lang$core$Dict$get,
+						A2(_elm_lang$core$Debug$log, 'index', _p3),
+						model.examples)));
+			var examples = A3(_elm_lang$core$Dict$insert, _p3, example, model.examples);
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{examples: examples}),
+				{ctor: '[]'});
+		}
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$subscriptions = F2(
+	function (lift, model) {
+		return A2(
+			_aforemny$elm_mdc$Material$subscriptions,
+			function (_p4) {
+				return lift(
+					_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p4));
+			},
+			model);
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$OpenDrawer = {ctor: 'OpenDrawer'};
+var _aforemny$elm_mdc$Demo_TopAppBar$ToggleRtl = {ctor: 'ToggleRtl'};
+var _aforemny$elm_mdc$Demo_TopAppBar$body = F4(
+	function (options, lift, index, model) {
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			options,
+			_elm_lang$core$List$concat(
+				{
+					ctor: '::',
+					_0: {
+						ctor: '::',
+						_0: A5(
+							_aforemny$elm_mdc$Material_Button$view,
+							function (_p5) {
+								return lift(
+									_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p5));
+							},
+							index,
+							model.mdc,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Button$outlined,
+								_1: {
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Button$dense,
+									_1: {
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$onClick(
+											lift(
+												A2(_aforemny$elm_mdc$Demo_TopAppBar$ExampleMsg, index, _aforemny$elm_mdc$Demo_TopAppBar$ToggleRtl))),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Toggle RTL'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					},
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$List$repeat,
+							18,
+							A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('\nPellentesque habitant morbi tristique senectus et netus et malesuada fames ac\nturpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor\nsit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies\nmi vitae est. Pellentesque habitant morbi tristique senectus et netus et\nmalesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,\nultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas\nsemper. Aenean ultricies mi vitae est.\n    '),
+									_1: {ctor: '[]'}
+								})),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper = F5(
+	function (lift, index, model, options, topappbar) {
+		var state = A2(
+			_elm_lang$core$Maybe$withDefault,
+			_aforemny$elm_mdc$Demo_TopAppBar$defaultExample,
+			A2(_elm_lang$core$Dict$get, index, model.examples));
+		return A3(
+			_aforemny$elm_mdc$Material_Options$styled,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Options$cs('mdc-topappbar-demo'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_Options$when,
+						state.rtl,
+						_aforemny$elm_mdc$Material_Options$attribute(
+							_elm_lang$html$Html_Attributes$dir('rtl'))),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: topappbar,
+				_1: {
+					ctor: '::',
+					_0: A4(_aforemny$elm_mdc$Demo_TopAppBar$body, options, lift, index, model),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$standardTopAppBar = F3(
+	function (lift, index, model) {
+		return A5(
+			_aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper,
+			lift,
+			index,
+			model,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_TopAppBar$fixedAdjust,
+				_1: {ctor: '[]'}
+			},
+			A5(
+				_aforemny$elm_mdc$Material_TopAppBar$view,
+				function (_p6) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p6));
+				},
+				{
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				model.mdc,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_TopAppBar$section,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+								{ctor: '[]'},
+								'menu'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$title,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Title'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_TopAppBar$section,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+									{ctor: '[]'},
+									'file_download'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+										{ctor: '[]'},
+										'print'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+											{ctor: '[]'},
+											'bookmark'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$fixedTopAppBar = F3(
+	function (lift, index, model) {
+		return A5(
+			_aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper,
+			lift,
+			index,
+			model,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_TopAppBar$fixedAdjust,
+				_1: {ctor: '[]'}
+			},
+			A5(
+				_aforemny$elm_mdc$Material_TopAppBar$view,
+				function (_p7) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p7));
+				},
+				{
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				model.mdc,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_TopAppBar$fixed,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_TopAppBar$section,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+								{ctor: '[]'},
+								'menu'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$title,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Title'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_TopAppBar$section,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+									{ctor: '[]'},
+									'file_download'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+										{ctor: '[]'},
+										'print'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+											{ctor: '[]'},
+											'bookmark'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$menuTopAppBar = F3(
+	function (lift, index, model) {
+		return A5(
+			_aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper,
+			lift,
+			index,
+			model,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_TopAppBar$fixedAdjust,
+				_1: {ctor: '[]'}
+			},
+			A5(
+				_aforemny$elm_mdc$Material_TopAppBar$view,
+				function (_p8) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p8));
+				},
+				{
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				model.mdc,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_TopAppBar$fixed,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_TopAppBar$section,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+								{ctor: '[]'},
+								'menu'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$title,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Title'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_TopAppBar$section,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+									{ctor: '[]'},
+									'file_download'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+										{ctor: '[]'},
+										'print'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+											{ctor: '[]'},
+											'bookmark'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$denseTopAppBar = F3(
+	function (lift, index, model) {
+		return A5(
+			_aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper,
+			lift,
+			index,
+			model,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_TopAppBar$denseFixedAdjust,
+				_1: {ctor: '[]'}
+			},
+			A5(
+				_aforemny$elm_mdc$Material_TopAppBar$view,
+				function (_p9) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p9));
+				},
+				{
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				model.mdc,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_TopAppBar$dense,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_TopAppBar$section,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+								{ctor: '[]'},
+								'menu'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$title,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Title'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_TopAppBar$section,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+									{ctor: '[]'},
+									'file_download'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+										{ctor: '[]'},
+										'print'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+											{ctor: '[]'},
+											'bookmark'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$prominentTopAppBar = F3(
+	function (lift, index, model) {
+		return A5(
+			_aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper,
+			lift,
+			index,
+			model,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_TopAppBar$prominentFixedAdjust,
+				_1: {ctor: '[]'}
+			},
+			A5(
+				_aforemny$elm_mdc$Material_TopAppBar$view,
+				function (_p10) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p10));
+				},
+				{
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				model.mdc,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_TopAppBar$prominent,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_TopAppBar$section,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+								{ctor: '[]'},
+								'menu'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$title,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Title'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_TopAppBar$section,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+									{ctor: '[]'},
+									'file_download'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+										{ctor: '[]'},
+										'print'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+											{ctor: '[]'},
+											'bookmark'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$shortTopAppBar = F3(
+	function (lift, index, model) {
+		return A5(
+			_aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper,
+			lift,
+			index,
+			model,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_TopAppBar$fixedAdjust,
+				_1: {ctor: '[]'}
+			},
+			A5(
+				_aforemny$elm_mdc$Material_TopAppBar$view,
+				function (_p11) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p11));
+				},
+				{
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				model.mdc,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_TopAppBar$short,
+					_1: {
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_TopAppBar$hasActionItem,
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_TopAppBar$section,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+								{ctor: '[]'},
+								'menu'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$title,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Title'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_TopAppBar$section,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+									{ctor: '[]'},
+									'file_download'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$shortCollapsedTopAppBar = F3(
+	function (lift, index, model) {
+		return A5(
+			_aforemny$elm_mdc$Demo_TopAppBar$topAppBarWrapper,
+			lift,
+			index,
+			model,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_TopAppBar$fixedAdjust,
+				_1: {ctor: '[]'}
+			},
+			A5(
+				_aforemny$elm_mdc$Material_TopAppBar$view,
+				function (_p12) {
+					return lift(
+						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p12));
+				},
+				{
+					ctor: '::',
+					_0: 0,
+					_1: {ctor: '[]'}
+				},
+				model.mdc,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_TopAppBar$short,
+					_1: {
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_TopAppBar$collapsed,
+						_1: {
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$hasActionItem,
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Material_TopAppBar$section,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+								{ctor: '[]'},
+								'menu'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$title,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Title'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_aforemny$elm_mdc$Material_TopAppBar$section,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+									{ctor: '[]'},
+									'file_download'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Demo_TopAppBar$view = F4(
+	function (lift, page, topAppBarPage, model) {
+		var _p13 = topAppBarPage;
+		if (_p13.ctor === 'Just') {
+			switch (_p13._0.ctor) {
+				case 'StandardTopAppBar':
+					return A3(
+						_aforemny$elm_mdc$Demo_TopAppBar$standardTopAppBar,
+						lift,
+						{
+							ctor: '::',
+							_0: 0,
+							_1: {ctor: '[]'}
+						},
+						model);
+				case 'FixedTopAppBar':
+					return A3(
+						_aforemny$elm_mdc$Demo_TopAppBar$fixedTopAppBar,
+						lift,
+						{
+							ctor: '::',
+							_0: 1,
+							_1: {ctor: '[]'}
+						},
+						model);
+				case 'DenseTopAppBar':
+					return A3(
+						_aforemny$elm_mdc$Demo_TopAppBar$denseTopAppBar,
+						lift,
+						{
+							ctor: '::',
+							_0: 2,
+							_1: {ctor: '[]'}
+						},
+						model);
+				case 'ProminentTopAppBar':
+					return A3(
+						_aforemny$elm_mdc$Demo_TopAppBar$prominentTopAppBar,
+						lift,
+						{
+							ctor: '::',
+							_0: 3,
+							_1: {ctor: '[]'}
+						},
+						model);
+				case 'ShortTopAppBar':
+					return A3(
+						_aforemny$elm_mdc$Demo_TopAppBar$shortTopAppBar,
+						lift,
+						{
+							ctor: '::',
+							_0: 4,
+							_1: {ctor: '[]'}
+						},
+						model);
+				default:
+					return A3(
+						_aforemny$elm_mdc$Demo_TopAppBar$shortCollapsedTopAppBar,
+						lift,
+						{
+							ctor: '::',
+							_0: 5,
+							_1: {ctor: '[]'}
+						},
+						model);
+			}
+		} else {
+			return A2(
+				page.body,
+				'TopAppBar',
+				{
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Demo_Page$hero,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A3(
+								_aforemny$elm_mdc$Material_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'width', '480px'),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'height', '72px'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A5(
+										_aforemny$elm_mdc$Material_TopAppBar$view,
+										function (_p14) {
+											return lift(
+												_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p14));
+										},
+										{
+											ctor: '::',
+											_0: 0,
+											_1: {ctor: '[]'}
+										},
+										model.mdc,
+										{
+											ctor: '::',
+											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'position', 'static'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_aforemny$elm_mdc$Material_TopAppBar$section,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_TopAppBar$alignStart,
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_aforemny$elm_mdc$Material_TopAppBar$navigationIcon,
+														{ctor: '[]'},
+														'menu'),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_aforemny$elm_mdc$Material_TopAppBar$title,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Title'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_aforemny$elm_mdc$Material_TopAppBar$section,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_TopAppBar$alignEnd,
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+															{ctor: '[]'},
+															'file_download'),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+																{ctor: '[]'},
+																'print'),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_aforemny$elm_mdc$Material_TopAppBar$actionItem,
+																	{ctor: '[]'},
+																	'more_vert'),
+																_1: {ctor: '[]'}
+															}
+														}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_aforemny$elm_mdc$Material_Options$styled,
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Options$cs('mdc-topappbar-demo'),
+								_1: {
+									ctor: '::',
+									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'display', 'flex'),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Material_Options$css, 'flex-flow', 'row wrap'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A4(_aforemny$elm_mdc$Demo_TopAppBar$iframe, lift, model, 'Standard TopAppBar', _aforemny$elm_mdc$Demo_Url$StandardTopAppBar),
+								_1: {
+									ctor: '::',
+									_0: A4(_aforemny$elm_mdc$Demo_TopAppBar$iframe, lift, model, 'Fixed TopAppBar', _aforemny$elm_mdc$Demo_Url$FixedTopAppBar),
+									_1: {
+										ctor: '::',
+										_0: A4(_aforemny$elm_mdc$Demo_TopAppBar$iframe, lift, model, 'Dense TopAppBar', _aforemny$elm_mdc$Demo_Url$DenseTopAppBar),
+										_1: {
+											ctor: '::',
+											_0: A4(_aforemny$elm_mdc$Demo_TopAppBar$iframe, lift, model, 'Prominent TopAppBar', _aforemny$elm_mdc$Demo_Url$ProminentTopAppBar),
+											_1: {
+												ctor: '::',
+												_0: A4(_aforemny$elm_mdc$Demo_TopAppBar$iframe, lift, model, 'Short TopAppBar', _aforemny$elm_mdc$Demo_Url$ShortTopAppBar),
+												_1: {
+													ctor: '::',
+													_0: A4(_aforemny$elm_mdc$Demo_TopAppBar$iframe, lift, model, 'Short - Always Closed TopAppBar', _aforemny$elm_mdc$Demo_Url$ShortCollapsedTopAppBar),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				});
+		}
+	});
+
 var _aforemny$elm_mdc$Demo_Typography$example = F2(
 	function (title, adjustMargin) {
 		return A3(
@@ -44473,7 +46178,7 @@ _elm_lang$core$Native_Platform.effectManagers['Navigation'] = {pkg: 'elm-lang/na
 var _aforemny$elm_mdc$Main$urlOf = function (model) {
 	return _aforemny$elm_mdc$Demo_Url$toString(model.url);
 };
-var _aforemny$elm_mdc$Main$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, url: _aforemny$elm_mdc$Demo_Url$StartPage, buttons: _aforemny$elm_mdc$Demo_Buttons$defaultModel, cards: _aforemny$elm_mdc$Demo_Cards$defaultModel, checkbox: _aforemny$elm_mdc$Demo_Checkbox$defaultModel, dialog: _aforemny$elm_mdc$Demo_Dialog$defaultModel, drawer: _aforemny$elm_mdc$Demo_Drawer$defaultModel, elevation: _aforemny$elm_mdc$Demo_Elevation$defaultModel, fabs: _aforemny$elm_mdc$Demo_Fabs$defaultModel, gridList: _aforemny$elm_mdc$Demo_GridList$defaultModel, iconToggle: _aforemny$elm_mdc$Demo_IconToggle$defaultModel, layoutGrid: _aforemny$elm_mdc$Demo_LayoutGrid$defaultModel, lists: _aforemny$elm_mdc$Demo_Lists$defaultModel, menus: _aforemny$elm_mdc$Demo_Menus$defaultModel, permanentAboveDrawer: _aforemny$elm_mdc$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _aforemny$elm_mdc$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel, radio: _aforemny$elm_mdc$Demo_RadioButtons$defaultModel, ripple: _aforemny$elm_mdc$Demo_Ripple$defaultModel, selects: _aforemny$elm_mdc$Demo_Selects$defaultModel, slider: _aforemny$elm_mdc$Demo_Slider$defaultModel, snackbar: _aforemny$elm_mdc$Demo_Snackbar$defaultModel, $switch: _aforemny$elm_mdc$Demo_Switch$defaultModel, tabs: _aforemny$elm_mdc$Demo_Tabs$defaultModel, temporaryDrawer: _aforemny$elm_mdc$Demo_TemporaryDrawer$defaultModel, textfields: _aforemny$elm_mdc$Demo_Textfields$defaultModel, theme: _aforemny$elm_mdc$Demo_Theme$defaultModel, toolbar: _aforemny$elm_mdc$Demo_Toolbar$defaultModel};
+var _aforemny$elm_mdc$Main$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, url: _aforemny$elm_mdc$Demo_Url$StartPage, buttons: _aforemny$elm_mdc$Demo_Buttons$defaultModel, cards: _aforemny$elm_mdc$Demo_Cards$defaultModel, checkbox: _aforemny$elm_mdc$Demo_Checkbox$defaultModel, dialog: _aforemny$elm_mdc$Demo_Dialog$defaultModel, drawer: _aforemny$elm_mdc$Demo_Drawer$defaultModel, elevation: _aforemny$elm_mdc$Demo_Elevation$defaultModel, fabs: _aforemny$elm_mdc$Demo_Fabs$defaultModel, gridList: _aforemny$elm_mdc$Demo_GridList$defaultModel, iconToggle: _aforemny$elm_mdc$Demo_IconToggle$defaultModel, layoutGrid: _aforemny$elm_mdc$Demo_LayoutGrid$defaultModel, lists: _aforemny$elm_mdc$Demo_Lists$defaultModel, menus: _aforemny$elm_mdc$Demo_Menus$defaultModel, permanentAboveDrawer: _aforemny$elm_mdc$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _aforemny$elm_mdc$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel, radio: _aforemny$elm_mdc$Demo_RadioButtons$defaultModel, ripple: _aforemny$elm_mdc$Demo_Ripple$defaultModel, selects: _aforemny$elm_mdc$Demo_Selects$defaultModel, slider: _aforemny$elm_mdc$Demo_Slider$defaultModel, snackbar: _aforemny$elm_mdc$Demo_Snackbar$defaultModel, $switch: _aforemny$elm_mdc$Demo_Switch$defaultModel, tabs: _aforemny$elm_mdc$Demo_Tabs$defaultModel, temporaryDrawer: _aforemny$elm_mdc$Demo_TemporaryDrawer$defaultModel, textfields: _aforemny$elm_mdc$Demo_Textfields$defaultModel, theme: _aforemny$elm_mdc$Demo_Theme$defaultModel, toolbar: _aforemny$elm_mdc$Demo_Toolbar$defaultModel, topAppBar: _aforemny$elm_mdc$Demo_TopAppBar$defaultModel};
 var _aforemny$elm_mdc$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -44507,7 +46212,9 @@ var _aforemny$elm_mdc$Main$Model = function (a) {
 																									return function (z) {
 																										return function (_1) {
 																											return function (_2) {
-																												return {mdc: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, drawer: g, elevation: h, fabs: i, gridList: j, iconToggle: k, layoutGrid: l, lists: m, menus: n, permanentAboveDrawer: o, permanentBelowDrawer: p, persistentDrawer: q, radio: r, ripple: s, selects: t, slider: u, snackbar: v, $switch: w, tabs: x, temporaryDrawer: y, textfields: z, theme: _1, toolbar: _2};
+																												return function (_3) {
+																													return {mdc: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, drawer: g, elevation: h, fabs: i, gridList: j, iconToggle: k, layoutGrid: l, lists: m, menus: n, permanentAboveDrawer: o, permanentBelowDrawer: p, persistentDrawer: q, radio: r, ripple: s, selects: t, slider: u, snackbar: v, $switch: w, tabs: x, temporaryDrawer: y, textfields: z, theme: _1, toolbar: _2, topAppBar: _3};
+																												};
 																											};
 																										};
 																									};
@@ -44535,6 +46242,9 @@ var _aforemny$elm_mdc$Main$Model = function (a) {
 			};
 		};
 	};
+};
+var _aforemny$elm_mdc$Main$TopAppBarMsg = function (a) {
+	return {ctor: 'TopAppBarMsg', _0: a};
 };
 var _aforemny$elm_mdc$Main$ToolbarMsg = function (a) {
 	return {ctor: 'ToolbarMsg', _0: a};
@@ -44934,7 +46644,7 @@ var _aforemny$elm_mdc$Main$update = F2(
 						{theme: theme}),
 					_1: effects
 				};
-			default:
+			case 'ToolbarMsg':
 				var _p27 = A3(_aforemny$elm_mdc$Demo_Toolbar$update, _aforemny$elm_mdc$Main$ToolbarMsg, _p0._0, model.toolbar);
 				var toolbar = _p27._0;
 				var effects = _p27._1;
@@ -44943,6 +46653,17 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{toolbar: toolbar}),
+					_1: effects
+				};
+			default:
+				var _p28 = A3(_aforemny$elm_mdc$Demo_TopAppBar$update, _aforemny$elm_mdc$Main$TopAppBarMsg, _p0._0, model.topAppBar);
+				var topAppBar = _p28._0;
+				var effects = _p28._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{topAppBar: topAppBar}),
 					_1: effects
 				};
 		}
@@ -45041,8 +46762,8 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 						}));
 			})
 	};
-	var _p28 = model.url;
-	switch (_p28.ctor) {
+	var _p29 = model.url;
+	switch (_p29.ctor) {
 		case 'StartPage':
 			return _aforemny$elm_mdc$Demo_Startpage$view(page);
 		case 'Button':
@@ -45092,7 +46813,9 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 		case 'Theme':
 			return A3(_aforemny$elm_mdc$Demo_Theme$view, _aforemny$elm_mdc$Main$ThemeMsg, page, model.theme);
 		case 'Toolbar':
-			return A4(_aforemny$elm_mdc$Demo_Toolbar$view, _aforemny$elm_mdc$Main$ToolbarMsg, page, _p28._0, model.toolbar);
+			return A4(_aforemny$elm_mdc$Demo_Toolbar$view, _aforemny$elm_mdc$Main$ToolbarMsg, page, _p29._0, model.toolbar);
+		case 'TopAppBar':
+			return A4(_aforemny$elm_mdc$Demo_TopAppBar$view, _aforemny$elm_mdc$Main$TopAppBarMsg, page, _p29._0, model.topAppBar);
 		case 'GridList':
 			return A3(_aforemny$elm_mdc$Demo_GridList$view, _aforemny$elm_mdc$Main$GridListMsg, page, model.gridList);
 		case 'LayoutGrid':
@@ -45122,7 +46845,7 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 						}),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(_p28._0),
+						_0: _elm_lang$html$Html$text(_p29._0),
 						_1: {ctor: '[]'}
 					}
 				});
@@ -45130,9 +46853,9 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 };
 var _aforemny$elm_mdc$Main$view = _aforemny$elm_mdc$Main$view_;
 var _aforemny$elm_mdc$Main$init = function (location) {
-	var _p29 = _aforemny$elm_mdc$Demo_LayoutGrid$init(_aforemny$elm_mdc$Main$LayoutGridMsg);
-	var layoutGrid = _p29._0;
-	var layoutGridEffects = _p29._1;
+	var _p30 = _aforemny$elm_mdc$Demo_LayoutGrid$init(_aforemny$elm_mdc$Main$LayoutGridMsg);
+	var layoutGrid = _p30._0;
+	var layoutGridEffects = _p30._1;
 	return {
 		ctor: '_Tuple2',
 		_0: _elm_lang$core$Native_Utils.update(
@@ -45194,7 +46917,11 @@ var _aforemny$elm_mdc$Main$subscriptions = function (model) {
 														_1: {
 															ctor: '::',
 															_0: A2(_aforemny$elm_mdc$Demo_Toolbar$subscriptions, _aforemny$elm_mdc$Main$ToolbarMsg, model.toolbar),
-															_1: {ctor: '[]'}
+															_1: {
+																ctor: '::',
+																_0: A2(_aforemny$elm_mdc$Demo_TopAppBar$subscriptions, _aforemny$elm_mdc$Main$TopAppBarMsg, model.topAppBar),
+																_1: {ctor: '[]'}
+															}
 														}
 													}
 												}
@@ -45211,12 +46938,12 @@ var _aforemny$elm_mdc$Main$subscriptions = function (model) {
 };
 var _aforemny$elm_mdc$Main$main = A2(
 	_elm_lang$navigation$Navigation$program,
-	function (_p30) {
+	function (_p31) {
 		return _aforemny$elm_mdc$Main$SetUrl(
 			_aforemny$elm_mdc$Demo_Url$fromString(
 				function (_) {
 					return _.hash;
-				}(_p30)));
+				}(_p31)));
 	},
 	{init: _aforemny$elm_mdc$Main$init, view: _aforemny$elm_mdc$Main$view, subscriptions: _aforemny$elm_mdc$Main$subscriptions, update: _aforemny$elm_mdc$Main$update})();
 
