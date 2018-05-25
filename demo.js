@@ -19848,7 +19848,7 @@ var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$topAppBarScroll
 	});
 var _aforemny$elm_mdc$Material_Internal_TopAppBar_Implementation$update = F2(
 	function (msg, model) {
-		var _p7 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		var _p7 = msg;
 		switch (_p7.ctor) {
 			case 'Init':
 				var _p8 = _p7._0.scrollPosition;
