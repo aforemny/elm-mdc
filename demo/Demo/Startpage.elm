@@ -39,6 +39,8 @@ view page =
             , title = "Grid list", subtitle = "2D grid layouts" }
           , { url = IconToggle, icon = "ic_component_24px.svg"
             , title = "Icon toggle", subtitle = "Toggling icon states" }
+          , { url = ImageList, icon = "ic_card_24px.svg"
+            , title = "Image List", subtitle = "An Image List consists of several items, each containing an image and optionally supporting content (i.e. a text label)" }
           , { url = LayoutGrid, icon = "ic_card_24px.svg"
             , title = "Layout grid", subtitle = "Grid and gutter support" }
           , { url = LinearProgress, icon = "ic_progress_activity.svg"
