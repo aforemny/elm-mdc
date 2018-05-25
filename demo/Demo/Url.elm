@@ -22,6 +22,7 @@ type Url
     | Fabs
     | GridList
     | IconToggle
+    | ImageList
     | LayoutGrid
     | LinearProgress
     | List
@@ -105,6 +106,9 @@ toString url =
 
         IconToggle ->
             "#icon-toggle"
+
+        ImageList ->
+            "#image-list"
 
         LayoutGrid ->
             "#layout-grid"
@@ -249,6 +253,9 @@ fromString str =
 
                 Just ( '#', "icon-toggle" ) ->
                     Just <| IconToggle
+
+                Just ( '#', "image-list" ) ->
+                    Just <| ImageList
 
                 Just ( '#', "layout-grid" ) ->
                     Just <| LayoutGrid

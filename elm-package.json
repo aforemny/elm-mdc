@@ -21,6 +21,7 @@
         "Material.GridList",
         "Material.Icon",
         "Material.IconToggle",
+        "Material.ImageList",
         "Material.LayoutGrid",
         "Material.LinearProgress",
         "Material.List",
