@@ -1,21 +1,22 @@
 module Material.Internal.ImageList.Implementation
     exposing
-        ( container
+        ( divImage
         , image
+        , imageAspectContainer
         , item
         , label
         , masonry
-        , overlayLabel
         , Property
-        , react
+        , src
+        , supporting
         , view
+        , withTextProtection
         )
 
+import Html.Attributes as Html
 import Html exposing (Html, text)
-import Material.Internal.Component as Component exposing (Indexed, Index)
-import Material.Internal.Msg
-import Material.Internal.Options as Options exposing (styled, cs, css, when, nop)
-import Material.Internal.ImageList.Model exposing (Model, defaultModel, Config, defaultConfig, Msg(..))
+import Material.Internal.ImageList.Model exposing (Config, defaultConfig)
+import Material.Internal.Options as Options exposing (styled, cs, css, when)
 
 
 cssClasses :
@@ -28,54 +29,22 @@ cssClasses =
     }
 
 
-update : Msg -> Model -> ( Model, Cmd m )
-update msg model =
-    case msg of
-        Init config ->
-            ( { model | config = Just config }, Cmd.none )
-
-
-
 -- VIEW
 
 
-imageList : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-imageList lift model options items =
+imageList : List (Property m) -> List (Html m) -> Html m
+imageList options =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
     in
         Options.apply summary
             Html.ul
-            (cs "mdc-image-list"
-                :: (cs cssClasses.masonry |> when config.masonry)
-                :: (cs cssClasses.withTextProtection |> when config.overlayLabel)
-                :: options
-            )
+            [ cs "mdc-image-list"
+            , when config.masonry (cs cssClasses.masonry)
+            , when config.withTextProtection (cs cssClasses.withTextProtection)
+            ]
             []
-            (items)
-
-
-
--- COMPONENT
-
-
-type alias Store s =
-    { s | imageList : Indexed Model }
-
-
-( get, set ) =
-    Component.indexed .imageList (\x y -> { y | imageList = x }) defaultModel
-
-
-react :
-    (Material.Internal.Msg.Msg m -> m)
-    -> Msg
-    -> Index
-    -> Store s
-    -> ( Maybe (Store s), Cmd m )
-react =
-    Component.react get set Material.Internal.Msg.ImageListMsg (Component.generalise update)
 
 
 
@@ -86,53 +55,34 @@ type alias Property m =
     Options.Property Config m
 
 
-view :
-    (Material.Internal.Msg.Msg m -> m)
-    -> Index
-    -> Store s
-    -> List (Property m)
-    -> List (Html m)
-    -> Html m
+view : List (Property m) -> List (Html m) -> Html m
 view =
-    Component.render get imageList Material.Internal.Msg.ImageListMsg
+    imageList
 
 
-item : List (Property m) -> Html m -> List (Html m) -> Html m
-item options container supporting =
-    styled Html.li
-        (cs "mdc-image-list__item"
-            :: options
-        )
-        [ container
-        , if List.isEmpty supporting then
-            text ""
-          else
-            styled Html.div
-                [ cs "mdc-image-list__supporting" ]
-                supporting
-        ]
+item : List (Property m) -> List (Html m) -> Html m
+item options =
+    styled Html.li (cs "mdc-image-list__item" :: options)
 
 
-container : List (Property m) -> List (Html m) -> Html m
-container options image =
-    styled Html.div
-        (cs "mdc-image-list__image-aspect-container"
-        :: options )
-        image
+imageAspectContainer : List (Property m) -> List (Html m) -> Html m
+imageAspectContainer options =
+    styled Html.div (cs "mdc-image-list__image-aspect-container" :: options)
+
+
+supporting : List (Property m) -> List (Html m) -> Html m
+supporting options =
+    styled Html.div (cs "mdc-image-list__supporting" :: options)
 
 
 label : List (Property m) -> List (Html m) -> Html m
-label options text =
-    styled Html.span
-        ( cs "mdc-image-list__label"
-        :: options
-        )
-        text
+label options =
+    styled Html.span (cs "mdc-image-list__label" :: options)
 
 
-overlayLabel : Property m
-overlayLabel =
-    Options.option (\config -> { config | overlayLabel = True })
+withTextProtection : Property m
+withTextProtection =
+    Options.option (\config -> { config | withTextProtection = True })
 
 
 masonry : Property m
@@ -140,6 +90,16 @@ masonry =
     Options.option (\config -> { config | masonry = True })
 
 
-image : Property m
-image =
-    cs "mdc-image-list__image"
+image : List (Property m) -> List (Html m) -> Html m
+image options =
+    styled Html.img (cs "mdc-image-list__image" :: options)
+
+
+divImage : List (Property m) -> List (Html m) -> Html m
+divImage options =
+    styled Html.div (cs "mdc-image-list__image" :: options)
+
+
+src : String -> Property m
+src url =
+    Options.attribute (Html.src url)

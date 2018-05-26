@@ -165,8 +165,6 @@ import Material.Internal.GridList.Implementation as GridList
 import Material.Internal.GridList.Model as GridList
 import Material.Internal.IconToggle.Implementation as IconToggle
 import Material.Internal.IconToggle.Model as IconToggle
-import Material.Internal.ImageList.Implementation as ImageList
-import Material.Internal.ImageList.Model as ImageList
 import Material.Internal.Menu.Implementation as Menu
 import Material.Internal.Menu.Model as Menu
 import Material.Internal.Msg exposing (Msg(..))
@@ -211,7 +209,6 @@ type alias Model m =
     , fab : Indexed Fab.Model
     , gridList : Indexed GridList.Model
     , iconToggle : Indexed IconToggle.Model
-    , imageList : Indexed ImageList.Model
     , menu : Indexed Menu.Model
     , radio : Indexed RadioButton.Model
     , ripple : Indexed Ripple.Model
@@ -236,7 +233,7 @@ defaultModel =
 ```
 -}
 defaultModel : Model m
-defaultModel = 
+defaultModel =
     { button = Dict.empty
     , checkbox = Dict.empty
     , dialog = Dict.empty
@@ -244,7 +241,6 @@ defaultModel =
     , fab = Dict.empty
     , gridList = Dict.empty
     , iconToggle = Dict.empty
-    , imageList = Dict.empty
     , menu = Dict.empty
     , radio = Dict.empty
     , ripple = Dict.empty
@@ -320,9 +316,6 @@ update_ lift msg store =
 
         IconToggleMsg idx msg ->
             IconToggle.react lift msg idx store
-
-        ImageListMsg idx msg ->
-            ImageList.react lift msg idx store
 
         MenuMsg idx msg ->
             Menu.react lift msg idx store

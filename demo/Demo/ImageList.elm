@@ -2,10 +2,9 @@ module Demo.ImageList exposing (Model, defaultModel, Msg(Mdc), update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
-import Html.Attributes as Attributes
 import Material
 import Material.ImageList as ImageList
-import Material.Options as Options exposing (styled, cs, css, when, attribute)
+import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Typography as Typography
 
 
@@ -39,16 +38,13 @@ view lift page model =
                 [ css "width" "calc(100% / 5 - 4.2px)"
                 , css "margin" "2px"
                 ]
-                ( ImageList.container
-                    []
-                    [ styled Html.div
-                          [ ImageList.image
-                          , css "background-color" "black"
+                [ ImageList.imageAspectContainer []
+                    [ ImageList.divImage
+                          [ css "background-color" "black"
                           ]
                           []
                     ]
-                )
-                []
+                ]
 
         standardImages =
             [ "https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg"
@@ -95,39 +91,41 @@ view lift page model =
                 [ css "width" "calc(100% / 5 - 4.2px)"
                 , css "margin" "2px"
                 ]
-                ( ImageList.container
-                    [ css "padding-bottom" "66.66667%" ]
-                    [ styled Html.img
-                          [ ImageList.image
-                          , attribute (Attributes.src url)
+                [ ImageList.imageAspectContainer
+                    [ css "padding-bottom" "66.66667%"
+                    ]
+                    [ ImageList.image
+                          [ ImageList.src url
                           ]
                           []
-                    ] )
-                [ ImageList.label [] [ text "Text label" ] ]
+                    , ImageList.supporting []
+                        [ ImageList.label [] [ text "Text label" ]
+                        ]
+                    ]
+                ]
 
         masonryItem url =
-            ImageList.item
-                [ ]
-                ( styled Html.img
-                          [ ImageList.image
-                          , attribute (Attributes.src url)
-                          ]
-                          []
-                )
-                [ ImageList.label [] [ text "Text label" ] ]
+            ImageList.item []
+                [ ImageList.image
+                      [ ImageList.src url
+                      ]
+                      []
+                , ImageList.label [] [ text "Text label" ]
+                ]
 
         standardImageList index =
-            example "Standard Image List with Text Protection"
-                (ImageList.view (lift << Mdc) index model.mdc
-                    [ ImageList.overlayLabel
+            example "Standard Image List with Text Protection" <|
+                ImageList.view
+                    [ ImageList.withTextProtection
                     , css "max-width" "900px"
                     ]
-                    (List.map standardItem standardImages)
-                )
+                    ( List.map standardItem standardImages
+                    )
+
 
         masonryImageList index =
             example "Masonry Image List"
-                (ImageList.view (lift << Mdc) index model.mdc
+                (ImageList.view
                     [ ImageList.masonry
                     , css "max-width" "900px"
                     , css "column-count" "5"
@@ -150,11 +148,11 @@ view lift page model =
     in
         page.body "Image List"
             [ Page.hero []
-                [ ImageList.view (lift << Mdc)
-                    [ 0, 0 ]
-                    model.mdc
-                    [ css "width" "300px" ]
-                    (List.repeat 15 imageListHeroItem)
+                [ ImageList.view
+                    [ css "width" "300px"
+                    ]
+                    ( List.repeat 15 imageListHeroItem
+                    )
                 ]
             , styled Html.div
                 [ cs "demo-wrapper"
