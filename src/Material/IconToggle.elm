@@ -23,6 +23,7 @@ accessible, and is designed to work with any icon set.
 
 ```elm
 import Material.IconToggle as IconToggle
+import Material.Options as Options
 
 
 IconToggle.view Mdc [0] model.mdc
@@ -34,8 +35,8 @@ IconToggle.view Mdc [0] model.mdc
           { on = "Remove from favorites"
           , off = "Add to favorites"
           }
-    , IconToggle.on True
-    , IconToggle.onClick Toggle
+    , IconToggle.on                 -- Provide when you want the icon toggle to have the on status
+    , Options.onClick Toggle
     ]
     []
 ```
