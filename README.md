@@ -6,7 +6,8 @@ CSS/JS implementation of the
 [Material Design Specification](https://www.google.com/design/spec/material-design/introduction.html).
 
 [Live demo](https://aforemny.github.io/elm-mdc/) &
-[package documentation](http://package.elm-lang.org/packages/aforemny/elm-mdc/latest).
+~package documentation~ (not released on package.elm-lang.org yet, see Building
+the documentation below).
 
 The implementation is based on
 [debois/elm-mdl](https://github.com/debois/elm-mdl),
@@ -129,6 +130,12 @@ view model =
 ```sh
 $ make build-demo
 $ open build/index.html
+```
+
+## Building the documentation
+
+```sh
+$ make docs
 ```
 
 ## Contribute
