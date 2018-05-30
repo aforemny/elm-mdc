@@ -17,8 +17,9 @@
   <body class="mdc-typography">
     <script src="elm-mdc.js"></script>
     <script src="demo.js"></script>
+    <div id="app"></div>
     <script>
-      app = Elm.Main.fullscreen();
+      app = Elm.Main.embed(document.querySelector("#app"));
       app.ports.scrollTop.subscribe(function() {
           document.scrollingElement.scrollTop = 0;
       });
