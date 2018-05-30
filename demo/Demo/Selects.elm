@@ -14,7 +14,7 @@ import Material.Typography as Typography
 
 type alias Model m =
     { mdc : Material.Model m
-    , selects : Dict (List Int) Select
+    , selects : Dict Material.Index Select
     }
 
 
@@ -42,9 +42,9 @@ defaultSelect =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | Pick (List Int) String
-    | ToggleRtl (List Int)
-    | ToggleDisabled (List Int)
+    | Pick Material.Index String
+    | ToggleRtl Material.Index
+    | ToggleDisabled Material.Index
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -95,7 +95,7 @@ update lift msg model =
 
 heroSelect
     : (Msg m -> m)
-    -> List Int
+    -> Material.Index
     -> Model m
     -> List (Select.Property m)
     -> List (Html m)
@@ -131,7 +131,7 @@ example options =
 
 select
     : (Msg m -> m)
-    -> List Int
+    -> Material.Index
     -> Model m
     -> Maybe Int
     -> List (Select.Property m)
@@ -238,12 +238,12 @@ view lift page model =
     [
       let
           state =
-              Dict.get [0] model.selects
+              Dict.get "selects-hero-select" model.selects
               |> Maybe.withDefault defaultSelect
 
       in
       Page.hero []
-      [ heroSelect lift [0] model
+      [ heroSelect lift "selects-hero-select" model
         [ Select.label "Pick a food group"
         , Select.disabled |> when state.disabled
         ]
@@ -258,7 +258,7 @@ view lift page model =
             [ text "Select"
             ]
           ]
-        , select lift [1] model (Just 2) [ ] []
+        , select lift "selects-select" model (Just 2) [] []
         ]
       )
     ,
@@ -270,7 +270,7 @@ view lift page model =
             [ text "Select box"
             ]
           ]
-        , select lift [2] model Nothing [ Select.box ] []
+        , select lift "selects-box-select" model Nothing [ Select.box ] []
         ]
       )
     ]

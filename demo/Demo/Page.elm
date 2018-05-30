@@ -75,7 +75,7 @@ toolbar lift idx mdc navigate url title =
 
 
 
-fixedAdjust : List Int -> Material.Model m -> Options.Property c m
+fixedAdjust : Material.Index -> Material.Model m -> Options.Property c m
 fixedAdjust idx mdc =
     Toolbar.fixedAdjust idx mdc
 

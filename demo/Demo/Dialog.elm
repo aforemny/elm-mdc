@@ -68,7 +68,7 @@ update lift msg model =
            ( { model | showScrollingDialog = True }, Cmd.none )
 
 
-heroDialog : (Msg m -> m) -> List Int -> Model m -> Html m
+heroDialog : (Msg m -> m) -> Material.Index -> Model m -> Html m
 heroDialog lift index model =
     Dialog.view (lift << Mdc) index model.mdc
     [ cs "mdc-dialog--open"
@@ -97,14 +97,14 @@ heroDialog lift index model =
       ,
         Dialog.footer []
         [
-          Button.view (lift << Mdc) (index ++ [0]) model.mdc
+          Button.view (lift << Mdc) (index ++ "-button-cancel") model.mdc
           [ Button.ripple
           , Dialog.cancel
           ]
           [ text "Cancel"
           ]
         ,
-          Button.view (lift << Mdc) (index ++ [1]) model.mdc
+          Button.view (lift << Mdc) (index ++ "button-accept") model.mdc
           [ Button.ripple
           , Dialog.accept
           ]
@@ -115,7 +115,7 @@ heroDialog lift index model =
     ]
 
 
-dialog : (Msg m -> m) -> List Int -> Model m -> Html m
+dialog : (Msg m -> m) -> Material.Index -> Model m -> Html m
 dialog lift index model =
     Dialog.view (lift << Mdc) index model.mdc
     [ Dialog.open |> when model.showDialog
@@ -141,7 +141,7 @@ data to Google, even when no apps are running.
       ,
         Dialog.footer []
         [
-          Button.view (lift << Mdc) (index ++ [0]) model.mdc
+          Button.view (lift << Mdc) (index ++ "-button-cancel") model.mdc
           [ Button.ripple
           , Dialog.cancel
           , Options.onClick (lift Cancel)
@@ -149,7 +149,7 @@ data to Google, even when no apps are running.
           [ text "Decline"
           ]
         ,
-          Button.view (lift << Mdc) (index ++ [1]) model.mdc
+          Button.view (lift << Mdc) (index ++ "-button-accept") model.mdc
           [ Button.ripple
           , Dialog.accept
           , Options.onClick (lift Accept)
@@ -163,7 +163,7 @@ data to Google, even when no apps are running.
     ]
 
 
-scrollableDialog : (Msg m -> m) -> List Int -> Model m -> Html m
+scrollableDialog : (Msg m -> m) -> Material.Index -> Model m -> Html m
 scrollableDialog lift index model =
     Dialog.view (lift << Mdc) index model.mdc
     [ Dialog.open |> when model.showScrollingDialog
@@ -206,7 +206,7 @@ scrollableDialog lift index model =
       ,
         Dialog.footer []
         [
-          Button.view (lift << Mdc) (index ++ [0]) model.mdc
+          Button.view (lift << Mdc) (index ++ "-button-cancel") model.mdc
           [ Button.ripple
           , Dialog.cancel
           , Options.onClick (lift Cancel)
@@ -214,7 +214,7 @@ scrollableDialog lift index model =
           [ text "Decline"
           ]
         ,
-          Button.view (lift << Mdc) (index ++ [1]) model.mdc
+          Button.view (lift << Mdc) (index ++ "-button-accept") model.mdc
           [ Button.ripple
           , Dialog.accept
           , Options.onClick (lift Accept)
@@ -236,7 +236,7 @@ view lift page model =
     [ css "justify-content" "center"
     , Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
     ]
-    [ heroDialog lift [0] model
+    [ heroDialog lift "dialog-hero-dialog" model
     ]
   ,
     styled Html.div
@@ -246,9 +246,9 @@ view lift page model =
     , Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
     ]
     [
-      dialog lift [1] model
+      dialog lift "dialog-dialog" model
     ,
-      scrollableDialog lift [2] model
+      scrollableDialog lift "dialog-scrollable-dialog" model
     ]
   ,
     styled Html.div
@@ -256,7 +256,7 @@ view lift page model =
     , css "margin" "24px"
     ]
     [
-      Button.view (lift << Mdc) [3] model.mdc
+      Button.view (lift << Mdc) "dialog-show-dialog" model.mdc
       [ Button.raised
       , Button.ripple
       , Options.onClick (lift ShowDialog)
@@ -266,7 +266,7 @@ view lift page model =
     ,
       text " "
     ,
-      Button.view (lift << Mdc) [4] model.mdc
+      Button.view (lift << Mdc) "dialog-show-scrollable-dialog" model.mdc
       [ Button.raised
       , Button.ripple
       , Options.onClick (lift ShowScrollingDialog)
@@ -277,7 +277,7 @@ view lift page model =
       text " "
     ,
       FormField.view []
-      [ Checkbox.view (lift << Mdc) [5] model.mdc
+      [ Checkbox.view (lift << Mdc) "dialog-toggle-rtl" model.mdc
         [ Checkbox.checked model.rtl
         , Options.onClick (lift ToggleRtl)
         ]

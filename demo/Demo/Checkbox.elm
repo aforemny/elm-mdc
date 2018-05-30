@@ -14,7 +14,7 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model m =
     { mdc : Material.Model m
-    , checkboxes : Dict (List Int) Checkbox
+    , checkboxes : Dict Material.Index Checkbox
     }
 
 
@@ -22,7 +22,7 @@ defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , checkboxes =
-        Dict.singleton [2] { defaultCheckbox | checked = Nothing }
+        Dict.singleton "checkbox-indeterminate-checkbox" { defaultCheckbox | checked = Nothing }
     }
 
 
@@ -41,9 +41,9 @@ defaultCheckbox =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ToggleIndeterminate (List Int)
-    | ToggleDisabled (List Int)
-    | ToggleChecked (List Int)
+    | ToggleIndeterminate Material.Index
+    | ToggleDisabled Material.Index
+    | ToggleChecked Material.Index
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -135,7 +135,7 @@ view lift page model =
       Page.hero []
       [
         FormField.view []
-        [ checkbox [0]
+        [ checkbox "checkbox-hero-checkbox"
         , Html.label [] [ text "Checkbox" ]
         ]
       ]
@@ -151,7 +151,7 @@ view lift page model =
           styled Html.div []
           [
             FormField.view []
-            [ 
+            [
               Checkbox.view (lift << Mdc) index model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
               , when (checkbox.checked /= Nothing) <|
@@ -167,14 +167,14 @@ view lift page model =
             [
             ]
             [
-              Button.view (lift << Mdc) (index ++ [0]) model.mdc
+              Button.view (lift << Mdc) (index ++ "button-toggle-indeterminate") model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleIndeterminate index)))
               ]
               [ text "Toggle "
               , Html.code [] [ text "indeterminate" ]
               ]
             ,
-              Button.view (lift << Mdc) (index ++ [1]) model.mdc
+              Button.view (lift << Mdc) (index ++ "button-toggle-disabled") model.mdc
               [ Options.on "click" (Json.succeed (lift (ToggleDisabled index)))
               ]
               [ text "TOGGLE "
@@ -193,10 +193,8 @@ view lift page model =
             [ text "Checkbox" ]
           ]
         ,
-          [ ( [1], "Default checkbox" )
-          , ( [2], "Indeterminate checkbox" )
---          , ( [3], "Custom colored checkbox (stroke, fill, ripple and focus)" )
---          , ( [4], "Custom colored checkbox (stroke and fill only)" )
+          [ ( "checkbox-default-checkbox", "Default checkbox" )
+          , ( "checkbox-indeterminate-checkbox", "Indeterminate checkbox" )
           ]
           |> List.map (\ ( index, label ) ->
                checkbox index label

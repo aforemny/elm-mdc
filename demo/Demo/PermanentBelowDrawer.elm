@@ -77,7 +77,7 @@ view lift page model =
     , css "width" "100%"
     , Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
-    [ 
+    [
       page.toolbar "Permanent Drawer Below Toolbar"
 
     , styled Html.div
@@ -88,8 +88,8 @@ view lift page model =
       , css "box-sizing" "border-box"
       , page.fixedAdjust
       ]
-      [ 
-        Drawer.view (lift << Mdc) [0] model.mdc []
+      [
+        Drawer.view (lift << Mdc) "permanent-below-drawer-drawer" model.mdc []
         [ Demo.PersistentDrawer.drawerItems
         ]
 
@@ -114,7 +114,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.view (lift << Mdc) [2] model.mdc
+            Button.view (lift << Mdc) "permanent-below-drawer-toggle-rtl" model.mdc
             [ Options.on "click" (Json.succeed (lift ToggleRtl))
             ]
             [ text "Toggle RTL"
@@ -125,7 +125,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.view (lift << Mdc) [3] model.mdc
+            Button.view (lift << Mdc) "permanent-below-drawer-toggle-extra-wide-content" model.mdc
             [ Options.on "click" (Json.succeed (lift Toggle0))
             ]
             [ text "Toggle extra-wide content"
@@ -144,7 +144,7 @@ view lift page model =
           [ css "padding" "10px"
           ]
           [
-            Button.view (lift << Mdc) [4] model.mdc
+            Button.view (lift << Mdc) "permanent-below-drawer-toggle-extra-tall-content" model.mdc
             [ Options.on "click" (Json.succeed (lift Toggle1))
             ]
             [ text "Toggle extra-tall content"

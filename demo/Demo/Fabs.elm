@@ -41,7 +41,7 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
         fab idx options =
-            Fab.view (lift << Mdc) [idx] model.mdc
+            Fab.view (lift << Mdc) idx model.mdc
                 ( Fab.ripple
                 :: css "margin" "16px"
                 :: options
@@ -56,14 +56,14 @@ view lift page model =
     in
     page.body "Floating Action Button"
     [
-      Page.hero [] [ fab 0 [] ]
+      Page.hero [] [ fab "fabs-hero-fab" [] ]
     ,
       Html.section []
       [ Html.div []
         [
           legend [] [ text "FABs" ]
-        , fab 1 []
-        , fab 2 [ Fab.mini ]
+        , fab "fabs-fab" []
+        , fab "fabs-mini-fab" [ Fab.mini ]
         ]
       ]
     ,
@@ -118,7 +118,7 @@ view lift page model =
                 ]
               ]
             ]
-          , Fab.view (lift << Mdc) [3] model.mdc
+          , Fab.view (lift << Mdc) "fabs-motion-fab" model.mdc
                 [ Fab.exited |> when model.exited
                 , Options.onClick (lift ToggleExited)
                 , css "position" "absolute"

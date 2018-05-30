@@ -68,7 +68,7 @@ view lift page toolbarPage model =
                 [ css "width" "480px"
                 , css "height" "72px"
                 ]
-                [ Toolbar.view (lift << Mdc) [0] model.mdc
+                [ Toolbar.view (lift << Mdc) "toolbar-toolbar" model.mdc
                   [
                   ]
                   [ Toolbar.row
@@ -141,7 +141,7 @@ iframe lift index model title sub =
         ]
         [ text title ]
       ,
-        Button.view (lift << Mdc) index model.mdc
+        Button.view (lift << Mdc) "toolbar-toggle-rtl" model.mdc
         [ Button.outlined
         , Button.dense
         ]
@@ -177,7 +177,7 @@ defaultToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.view (lift << Mdc) [0] model.mdc []
+      Toolbar.view (lift << Mdc) "default-toolbar-toolbar" model.mdc []
       [ Toolbar.row []
         [ Toolbar.section
           [ Toolbar.alignStart
@@ -206,7 +206,7 @@ fixedToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.view (lift << Mdc) [0] model.mdc
+      Toolbar.view (lift << Mdc) "fixed-toolbar-toolbar" model.mdc
       [ Toolbar.fixed
       ]
       [ Toolbar.row []
@@ -227,7 +227,7 @@ fixedToolbar lift model =
       ]
     ,
       body
-      [ Toolbar.fixedAdjust [0] model.mdc
+      [ Toolbar.fixedAdjust "fixed-toolbar-toolbar" model.mdc
       ]
       model
     ]
@@ -240,7 +240,7 @@ menuToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.view (lift << Mdc) [0] model.mdc
+      Toolbar.view (lift << Mdc) "menu-toolbar-toolbar" model.mdc
       [ Toolbar.fixed
       ]
       [ Toolbar.row []
@@ -258,7 +258,7 @@ menuToolbar lift model =
           ,
             Icon.view
             [ Toolbar.icon
-            , Menu.attach (lift << Mdc) [0]
+            , Menu.attach (lift << Mdc) "menu-toolbar-menu"
             ]
             "more_vert"
           ,
@@ -267,7 +267,7 @@ menuToolbar lift model =
             , css "position" "relative"
             , css "overflow" "visible"
             ]
-            [ Menu.view (lift << Mdc) [0] model.mdc
+            [ Menu.view (lift << Mdc) "menu-toolbar-menu" model.mdc
               [ Menu.anchorCorner Menu.topEndCorner
               , Menu.anchorMargin
                   { top = 15
@@ -290,7 +290,7 @@ menuToolbar lift model =
       ]
     ,
       body
-      [ Toolbar.fixedAdjust [0] model.mdc
+      [ Toolbar.fixedAdjust "menu-toolbar-toolbar" model.mdc
       ]
       model
     ]
@@ -303,7 +303,7 @@ waterfallToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.view (lift << Mdc) [0] model.mdc
+      Toolbar.view (lift << Mdc) "waterfall-toolbar-toolbar" model.mdc
       [ Toolbar.fixed
       , Toolbar.waterfall
       ]
@@ -325,7 +325,7 @@ waterfallToolbar lift model =
       ]
     ,
       body
-      [ Toolbar.fixedAdjust [0] model.mdc
+      [ Toolbar.fixedAdjust "waterfall-toolbar-toolbar" model.mdc
       ]
       model
     ]
@@ -338,7 +338,7 @@ defaultFlexibleToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.view (lift << Mdc) [0] model.mdc
+      Toolbar.view (lift << Mdc) "default-flexible-toolbar-toolbar" model.mdc
       [ Toolbar.flexible
       , Toolbar.flexibleDefaultBehavior
       , Toolbar.backgroundImage "images/4-3.jpg"
@@ -373,7 +373,7 @@ waterfallFlexibleToolbar lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.view (lift << Mdc) [0] model.mdc
+      Toolbar.view (lift << Mdc) "waterfall-flexible-toolbar-toolbar" model.mdc
       [ Toolbar.fixed
       , Toolbar.flexible
       , Toolbar.flexibleDefaultBehavior
@@ -398,7 +398,7 @@ waterfallFlexibleToolbar lift model =
       ]
     ,
       body
-      [ Toolbar.fixedAdjust [0] model.mdc
+      [ Toolbar.fixedAdjust "waterfall-flexible-toolbar" model.mdc
       ]
       model
     ,
@@ -413,7 +413,7 @@ waterfallToolbarFix lift model =
     , cs "mdc-toolbar-demo"
     ]
     [
-      Toolbar.view (lift << Mdc) [0] model.mdc
+      Toolbar.view (lift << Mdc) "waterfall-toolbar-fix-last-row-toolbar" model.mdc
       [ Toolbar.fixed
       , Toolbar.flexible
       , Toolbar.flexibleDefaultBehavior
@@ -440,7 +440,7 @@ waterfallToolbarFix lift model =
       ]
     ,
       body
-      [ Toolbar.fixedAdjust [0] model.mdc
+      [ Toolbar.fixedAdjust "waterfall-toolbar-fix-last-row-toolbar" model.mdc
       ]
       model
     ]
@@ -478,7 +478,7 @@ floatingFooter model =
             max 0 (1 - scrollTop / (calculations.flexibleExpansionHeight + delta))
 
         flexibleExpansionRatio =
-            Dict.get [0] model.mdc.toolbar
+            Dict.get "toolbar-toolbar" model.mdc.toolbar
             |> Maybe.andThen (\ model ->
                    Maybe.map ((,) model.scrollTop) model.calculations
                )

@@ -297,56 +297,56 @@ update msg model =
                 (snackbar, effects) =
                     Demo.Snackbar.update SnackbarMsg msg_ model.snackbar
             in
-                ( { model | snackbar = snackbar }, effects ) 
+                ( { model | snackbar = snackbar }, effects )
 
         SwitchMsg msg_ ->
             let
                 (switch, effects) =
                     Demo.Switch.update SwitchMsg msg_ model.switch
             in
-                ( { model | switch = switch }, effects ) 
+                ( { model | switch = switch }, effects )
 
         TextfieldMsg msg_ ->
             let
                 (textfields, effects) =
                     Demo.Textfields.update TextfieldMsg msg_ model.textfields
             in
-                ( { model | textfields = textfields }, effects ) 
+                ( { model | textfields = textfields }, effects )
 
         TabsMsg msg_ ->
             let
                 (tabs, effects) =
                     Demo.Tabs.update TabsMsg msg_ model.tabs
             in
-                ( { model | tabs = tabs }, effects ) 
+                ( { model | tabs = tabs }, effects )
 
         GridListMsg msg_ ->
             let
                 (gridList, effects) =
                     Demo.GridList.update GridListMsg msg_ model.gridList
             in
-                ( { model | gridList = gridList }, effects ) 
+                ( { model | gridList = gridList }, effects )
 
         LayoutGridMsg msg_ ->
             let
                 (layoutGrid, effects) =
                     Demo.LayoutGrid.update LayoutGridMsg msg_ model.layoutGrid
             in
-                ( { model | layoutGrid = layoutGrid }, effects ) 
+                ( { model | layoutGrid = layoutGrid }, effects )
 
         ListsMsg msg_ ->
             let
                 (lists, effects) =
                     Demo.Lists.update ListsMsg msg_ model.lists
             in
-                ( { model | lists = lists }, effects ) 
+                ( { model | lists = lists }, effects )
 
         ThemeMsg msg_ ->
             let
                 (theme, effects) =
                     Demo.Theme.update ThemeMsg msg_ model.theme
             in
-                ( { model | theme = theme }, effects ) 
+                ( { model | theme = theme }, effects )
 
         ToolbarMsg msg_ ->
             let
@@ -373,8 +373,8 @@ view_ : Model -> Html Msg
 view_ model =
     let
         page =
-            { toolbar = Page.toolbar Mdc [0] model.mdc Navigate model.url
-            , fixedAdjust = Page.fixedAdjust [0] model.mdc
+            { toolbar = Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url
+            , fixedAdjust = Page.fixedAdjust "page-toolbar" model.mdc
             , navigate = Navigate
             , body =
                 \title nodes ->
@@ -385,9 +385,9 @@ view_ model =
                 , Typography.typography
                 ]
                 ( List.concat
-                  [ [ Page.toolbar Mdc [0] model.mdc Navigate model.url title
+                  [ [ Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url title
                     ]
-                  , [ styled Html.div [ Toolbar.fixedAdjust [0] model.mdc ] []
+                  , [ styled Html.div [ Toolbar.fixedAdjust "page-toolbar" model.mdc ] []
                     ]
                   , nodes
                   ]

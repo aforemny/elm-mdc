@@ -16,7 +16,7 @@ import Material.Typography as Typography
 
 type alias Model m =
     { mdc : Material.Model m
-    , examples : Dict (List Int) Example
+    , examples : Dict Material.Index Example
     }
 
 
@@ -52,7 +52,7 @@ defaultModel =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ExampleMsg (List Int) ExampleMsg
+    | ExampleMsg Material.Index ExampleMsg
 
 
 type ExampleMsg
@@ -114,19 +114,19 @@ view lift page model =
     page.body "Text fields"
     [
       Page.hero []
-      [ heroTextfield lift [0] model
+      [ heroTextfield lift "text-fields-hero" model
       ]
-    , textfield lift [1] model
-    , password lift [2] model
-    , outlinedTextfield lift [3] model
-    , boxTextfield lift [4] model
-    , iconsTextfield lift [5] model
-    , textarea lift [6] model
-    , fullwidth lift [7] model
+    , textfield lift "text-fields-default" model
+    , password lift "text-fields-password" model
+    , outlinedTextfield lift "text-fields-outlined" model
+    , boxTextfield lift "text-fields-box" model
+    , iconsTextfield lift "text-fields-icons" model
+    , textarea lift "text-fields-textarea" model
+    , fullwidth lift "text-fields-full-width" model
     ]
 
 
-heroTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
+heroTextfield : (Msg m -> m) -> Material.Index -> Model m -> Html m
 heroTextfield lift index model =
     let
         state =
@@ -139,7 +139,7 @@ heroTextfield lift index model =
     []
 
 
-textfield : (Msg m -> m) -> List Int -> Model m -> Html m
+textfield : (Msg m -> m) -> Material.Index -> Model m -> Html m
 textfield lift index model =
     let
         state =
@@ -242,7 +242,7 @@ textfield lift index model =
     ]
 
 
-password : (Msg m -> m) -> List Int -> Model m -> Html m
+password : (Msg m -> m) -> Material.Index -> Model m -> Html m
 password lift index model =
     let
         state =
@@ -278,7 +278,7 @@ password lift index model =
     ]
 
 
-outlinedTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
+outlinedTextfield : (Msg m -> m) -> Material.Index -> Model m -> Html m
 outlinedTextfield lift index model =
     let
         state =
@@ -336,7 +336,7 @@ outlinedTextfield lift index model =
     ]
 
 
-boxTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
+boxTextfield : (Msg m -> m) -> Material.Index -> Model m -> Html m
 boxTextfield lift index model =
     let
         state =
@@ -394,7 +394,7 @@ boxTextfield lift index model =
     ]
 
 
-iconsTextfield : (Msg m -> m) -> List Int -> Model m -> Html m
+iconsTextfield : (Msg m -> m) -> Material.Index -> Model m -> Html m
 iconsTextfield lift index model =
     let
         state =
@@ -412,7 +412,7 @@ iconsTextfield lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.view (lift << Mdc) (index ++ [0]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ "-your-name") model.mdc
           [ Textfield.label "Your name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -423,7 +423,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.view (lift << Mdc) (index ++ [1]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ "-your-other-name") model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -434,7 +434,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.view (lift << Mdc) (index ++ [2]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ "-your-other-name-2") model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -445,7 +445,7 @@ iconsTextfield lift index model =
           []
         ]
       , Html.div []
-        [ Textfield.view (lift << Mdc) (index ++ [3]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ "-your-other-name-3") model.mdc
           [ Textfield.label "Your other name"
           , Textfield.disabled |> when state.disabled
           , Textfield.dense |> when state.dense
@@ -525,7 +525,7 @@ iconsTextfield lift index model =
     ]
 
 
-textarea : (Msg m -> m) -> List Int -> Model m -> Html m
+textarea : (Msg m -> m) -> Material.Index -> Model m -> Html m
 textarea lift index model =
     let
         state =
@@ -579,7 +579,7 @@ textarea lift index model =
     ]
 
 
-fullwidth : (Msg m -> m) -> List Int -> Model m -> Html m
+fullwidth : (Msg m -> m) -> Material.Index -> Model m -> Html m
 fullwidth lift index model =
     let
         state =
@@ -595,12 +595,12 @@ fullwidth lift index model =
       [ Options.attribute (Html.dir "rtl") |> when state.rtl
       ]
       [ Html.div []
-        [ Textfield.view (lift << Mdc) (index ++ [0]) model.mdc
+        [ Textfield.view (lift << Mdc) (index ++ "-subject") model.mdc
           [ Textfield.placeholder "Subject"
           , Textfield.fullwidth
           ]
           []
-        , Textfield.view (lift << Mdc) (index ++ [1]) model.mdc
+        , Textfield.view (lift << Mdc) (index ++ "-textarea") model.mdc
           [ Textfield.placeholder "Textarea Label"
           , Textfield.textarea
           , Textfield.fullwidth

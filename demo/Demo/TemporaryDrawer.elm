@@ -67,7 +67,7 @@ view lift page model =
     [ Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [
-      Toolbar.view (lift << Mdc) [1] model.mdc
+      Toolbar.view (lift << Mdc) "temporary-drawer-toolbar" model.mdc
       [ Toolbar.fixed
       ]
       [ Toolbar.row []
@@ -89,7 +89,7 @@ view lift page model =
         ]
       ]
 
-    , Drawer.view (lift << Mdc) [0] model.mdc
+    , Drawer.view (lift << Mdc) "temporary-drawer-drawer" model.mdc
       [ Drawer.open |> when model.drawerOpen
       , Drawer.onClose (lift CloseDrawer)
       ]
@@ -106,7 +106,7 @@ view lift page model =
       ]
     ,
       styled Html.div
-      [ Toolbar.fixedAdjust [1] model.mdc
+      [ Toolbar.fixedAdjust "temporary-drawer-toolbar" model.mdc
       , css "padding-left" "16px"
       , css "overflow" "auto"
       ]
@@ -115,7 +115,7 @@ view lift page model =
       , styled Html.p [ Typography.body1 ] [ text "Click the menu icon above to open." ]
       ]
     ,
-      Button.view (lift << Mdc) [2] model.mdc
+      Button.view (lift << Mdc) "temporary-drawer-toggle-rtl" model.mdc
       [ Options.on "click" (Json.succeed (lift ToggleRtl))
       ]
       [ text "Toggle RTL"

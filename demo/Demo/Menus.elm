@@ -193,9 +193,9 @@ menuAnchor lift model =
          )
       |> Options.many
     ]
-    [ Button.view (lift << Mdc) [1] model.mdc
+    [ Button.view (lift << Mdc) "menus-menu-button" model.mdc
       [ Button.raised
-      , Menu.attach (lift << Mdc) [2]
+      , Menu.attach (lift << Mdc) "menus-menu"
       ]
       [ text <|
         case model.anchorWidth of
@@ -209,7 +209,7 @@ menuAnchor lift model =
                 "Show Menu from here now!"
       ]
 
-    , Menu.view (lift << Mdc) [2] model.mdc
+    , Menu.view (lift << Mdc) "menus-menu" model.mdc
       [ Menu.anchorCorner model.anchorCorner
       , Menu.anchorMargin anchorMargin
       , Menu.quickOpen |> when (not model.openAnimation)
@@ -241,7 +241,7 @@ view lift page model =
     page.body "Menu"
     [
       Page.hero []
-      [ Menu.view (lift << Mdc) [0] model.mdc
+      [ Menu.view (lift << Mdc) "menus-hero-menu" model.mdc
         [ cs "mdc-menu--open"
         ]
         ( Menu.ul []

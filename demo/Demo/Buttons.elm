@@ -72,30 +72,30 @@ view lift page model =
               ]
             , styled Html.div []
               [
-                Button.view (lift << Mdc) (idx ++ [0]) model.mdc
+                Button.view (lift << Mdc) (idx ++ "-baseline-button") model.mdc
                 ( options
                 )
                 [ text "Baseline" ]
               ,
-                Button.view (lift << Mdc) (idx ++ [2]) model.mdc
+                Button.view (lift << Mdc) (idx ++ "-dense-button") model.mdc
                 ( Button.dense
                 :: options
                 )
                 [ text "Dense" ]
               ,
-                Button.view (lift << Mdc) (idx ++ [3]) model.mdc
+                Button.view (lift << Mdc) (idx ++ "-secondary-button") model.mdc
                 ( cs "secondary-button"
                 :: options
                 )
                 [ text "Secondary" ]
               ,
-                Button.view (lift << Mdc) (idx ++ [4]) model.mdc
+                Button.view (lift << Mdc) (idx ++ "-icon-button") model.mdc
                 ( Button.icon "favorite"
                 :: options
                 )
                 [ text "Icon" ]
               ,
-                Button.view (lift << Mdc) (idx ++ [5]) model.mdc
+                Button.view (lift << Mdc) (idx ++ "-link-button") model.mdc
                 ( Button.link "#buttons"
                 :: options
                 )
@@ -106,13 +106,13 @@ view lift page model =
     page.body "Buttons"
     [
       Page.hero []
-      [ Button.view (lift << Mdc) [0,0] model.mdc
+      [ Button.view (lift << Mdc) "buttons-hero-button-flat" model.mdc
         [ Button.ripple
         , css "margin-right" "32px"
         ]
         [ text "Flat"
         ]
-      , Button.view (lift << Mdc) [0,1] model.mdc
+      , Button.view (lift << Mdc) "buttons-hero-button-raised" model.mdc
         [ Button.ripple
         , Button.raised
         , css "margin-left" "32px"
@@ -133,9 +133,9 @@ view lift page model =
         [ text "Ripple Enabled"
         ]
 
-      , textButtons [1]
-      , raisedButtons [2]
-      , unelevatedButtons [3]
-      , outlinedButtons [4]
+      , textButtons "buttons-text-buttons"
+      , raisedButtons "buttons-raised-buttons"
+      , unelevatedButtons "buttons-unelevated-buttons"
+      , outlinedButtons "buttons-outlined-buttons"
       ]
     ]

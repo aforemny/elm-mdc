@@ -98,7 +98,7 @@ possible (since it's a block element)."""
         ]
 
       , FormField.view []
-        [ Checkbox.view (lift << Mdc) [0] model.mdc
+        [ Checkbox.view (lift << Mdc) "lists-interactive-lists-toggle-rtl" model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked model.rtl
           ]
@@ -262,7 +262,7 @@ possible (since it's a block element)."""
       ,
         section []
         [ h3 [] [ Html.text "Example - Interactive List" ]
-        , interactiveList lift [0] model
+        , interactiveList lift "lists-interactive-list" model
         ]
       ]
     ]
@@ -723,13 +723,13 @@ groupsExample =
     |> Html.div []
 
 
-interactiveList : (Msg m -> m) -> List Int -> Model m -> Html m
-interactiveList lift idx model =
+interactiveList : (Msg m -> m) -> Material.Index -> Model m -> Html m
+interactiveList lift index model =
     Lists.ul []
     [
       let
           ripple =
-              Ripple.bounded (lift << Mdc) (idx ++ [0]) model.mdc []
+              Ripple.bounded (lift << Mdc) (index ++ "-ripple-0") model.mdc []
       in
       Lists.li
       [ ripple.interactionHandler
@@ -742,7 +742,7 @@ interactiveList lift idx model =
     ,
       let
           ripple =
-              Ripple.bounded (lift << Mdc) (idx ++ [1]) model.mdc []
+              Ripple.bounded (lift << Mdc) (index ++ "-ripple-1") model.mdc []
       in
       Lists.li
       [ ripple.interactionHandler
@@ -755,7 +755,7 @@ interactiveList lift idx model =
     ,
       let
           ripple =
-              Ripple.bounded (lift << Mdc) (idx ++ [2]) model.mdc []
+              Ripple.bounded (lift << Mdc) (index ++ "-ripple-2") model.mdc []
       in
       Lists.li
       [ ripple.interactionHandler

@@ -31,10 +31,10 @@ defaultModel =
     { mdc = Material.defaultModel
     , values =
         Dict.fromList
-        [ ([0], 20)
-        , ([1], 20)
-        , ([2], 20)
-        , ([3], 20)
+        [ ("slider-hero-slider", 20)
+        , ("slider-continuous-slider", 20)
+        , ("slider-discrete-slider", 20)
+        , ("slider-dicrete-slider-with-tick-marks", 20)
         ]
     , inputs =
         Dict.empty
@@ -67,11 +67,11 @@ update lift msg model =
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
-        Change idx value ->
-            ( { model | values = Dict.insert idx value model.values }, Cmd.none )
+        Change id value ->
+            ( { model | values = Dict.insert id value model.values }, Cmd.none )
 
-        Input idx value ->
-            ( { model | inputs = Dict.insert idx value model.inputs }, Cmd.none )
+        Input id value ->
+            ( { model | inputs = Dict.insert id value model.inputs }, Cmd.none )
 
         SetMin min ->
             ( { model | min = min }, Cmd.none )
@@ -134,13 +134,13 @@ view lift page model =
         , css "--mdc-slider-bg-color-behind-component" "#f2f2f2"
         ]
         [ let
-              idx =
-                  [0]
+              id =
+                  "slider-hero-slider"
           in
-          Slider.view (lift << Mdc) idx model.mdc
-          [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (lift << Input idx)
-          , Slider.onChange (lift << Change idx)
+          Slider.view (lift << Mdc) id model.mdc
+          [ Slider.value (Maybe.withDefault 0 (Dict.get id model.values))
+          , Slider.onInput (lift << Input id)
+          , Slider.onChange (lift << Change id)
           ]
           []
         ]
@@ -154,8 +154,8 @@ view lift page model =
       ]
 
     , let
-          idx =
-              [1]
+          id =
+              "slider-continuous-slider"
       in
       example []
       [
@@ -167,10 +167,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.view (lift << Mdc) idx model.mdc
-          [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (lift << Input idx)
-          , Slider.onChange (lift << Change idx)
+        [ Slider.view (lift << Mdc) id model.mdc
+          [ Slider.value (Maybe.withDefault 0 (Dict.get id model.values))
+          , Slider.onInput (lift << Input id)
+          , Slider.onChange (lift << Change id)
           , Slider.min model.min
           , Slider.max model.max
           , Slider.disabled |> when model.disabled
@@ -181,21 +181,21 @@ view lift page model =
       , Html.p []
         [ text "Value from Slider.onInput: "
         , Html.span []
-          [ text (toString (Maybe.withDefault 0 (Dict.get idx model.inputs)))
+          [ text (toString (Maybe.withDefault 0 (Dict.get id model.inputs)))
           ]
         ]
 
       , Html.p []
         [ text "Value from Slider.onChange: "
         , Html.span []
-          [ text (toString (Maybe.withDefault 0 (Dict.get idx model.values)))
+          [ text (toString (Maybe.withDefault 0 (Dict.get id model.values)))
           ]
         ]
       ]
 
     , let
-          idx =
-              [2]
+          id =
+              "slider-discrete-slider"
       in
       example []
       [
@@ -207,10 +207,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.view (lift << Mdc) idx model.mdc
-          [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (lift << Input idx)
-          , Slider.onChange (lift << Change idx)
+        [ Slider.view (lift << Mdc) id model.mdc
+          [ Slider.value (Maybe.withDefault 0 (Dict.get id model.values))
+          , Slider.onInput (lift << Input id)
+          , Slider.onChange (lift << Change id)
           , Slider.discrete
           , Slider.min model.min
           , Slider.max model.max
@@ -223,21 +223,21 @@ view lift page model =
       , Html.p []
         [ text "Value from Slider.onInput: "
         , Html.span []
-          [ text (toString (Maybe.withDefault 0 (Dict.get idx model.inputs)))
+          [ text (toString (Maybe.withDefault 0 (Dict.get id model.inputs)))
           ]
         ]
 
       , Html.p []
         [ text "Value from Slider.onChange: "
         , Html.span []
-          [ text (toString (Maybe.withDefault 0 (Dict.get idx model.values)))
+          [ text (toString (Maybe.withDefault 0 (Dict.get id model.values)))
           ]
         ]
       ]
 
     , let
-          idx =
-              [3]
+          id =
+              "slider-discrete-slider-with-tick-marks"
       in
       example []
       [
@@ -249,10 +249,10 @@ view lift page model =
         ]
 
       , sliderWrapper []
-        [ Slider.view (lift << Mdc) idx model.mdc
-          [ Slider.value (Maybe.withDefault 0 (Dict.get idx model.values))
-          , Slider.onInput (lift << Input idx)
-          , Slider.onChange (lift << Change idx)
+        [ Slider.view (lift << Mdc) id model.mdc
+          [ Slider.value (Maybe.withDefault 0 (Dict.get id model.values))
+          , Slider.onInput (lift << Input id)
+          , Slider.onChange (lift << Change id)
           , Slider.discrete
           , Slider.min model.min
           , Slider.max model.max
@@ -266,14 +266,14 @@ view lift page model =
       , Html.p []
         [ text "Value from Slider.onInput: "
         , Html.span []
-          [ text (toString (Maybe.withDefault 0 (Dict.get idx model.inputs)))
+          [ text (toString (Maybe.withDefault 0 (Dict.get id model.inputs)))
           ]
         ]
 
       , Html.p []
         [ text "Value from Slider.onChange: "
         , Html.span []
-          [ text (toString (Maybe.withDefault 0 (Dict.get idx model.values)))
+          [ text (toString (Maybe.withDefault 0 (Dict.get id model.values)))
           ]
         ]
       ]

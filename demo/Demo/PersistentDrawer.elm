@@ -127,7 +127,7 @@ view lift page model =
     , Options.attribute (Html.dir "rtl") |> when model.rtl
     ]
     [
-      Drawer.view (lift << Mdc) [0] model.mdc
+      Drawer.view (lift << Mdc) "persistent-drawer-drawer" model.mdc
       [ Drawer.open |> when model.drawerOpen]
       [
         Drawer.toolbarSpacer [] []
@@ -143,7 +143,7 @@ view lift page model =
       , css "box-sizing" "border-box"
       ]
       [
-        Toolbar.view (lift << Mdc) [1] model.mdc
+        Toolbar.view (lift << Mdc) "persistent-drawer-toolbar" model.mdc
         []
         [ Toolbar.row []
           [ Toolbar.section
@@ -175,7 +175,7 @@ view lift page model =
           [ text "Click the menu icon above to open and close the drawer."
           ]
         ,
-          Button.view (lift << Mdc) [2] model.mdc
+          Button.view (lift << Mdc) "persistent-drawer-toggle-rtl" model.mdc
           [ Options.on "click" (Json.succeed (lift ToggleRtl))
           ]
           [ text "Toggle RTL"

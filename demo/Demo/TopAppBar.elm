@@ -78,22 +78,22 @@ view : (Msg m -> m) -> Page m -> Maybe TopAppBarPage -> Model m -> Html m
 view lift page topAppBarPage model =
     case topAppBarPage of
         Just Url.StandardTopAppBar ->
-            standardTopAppBar lift [0] model
+            standardTopAppBar lift "top-app-bar-standard" model
 
         Just Url.FixedTopAppBar ->
-            fixedTopAppBar lift [1] model
+            fixedTopAppBar lift "top-app-bar-fixed" model
 
         Just Url.DenseTopAppBar ->
-            denseTopAppBar lift [2] model
+            denseTopAppBar lift "top-app-bar-dense" model
 
         Just Url.ProminentTopAppBar ->
-            prominentTopAppBar lift [3] model
+            prominentTopAppBar lift "top-app-bar-prominent" model
 
         Just Url.ShortTopAppBar ->
-            shortTopAppBar lift [4] model
+            shortTopAppBar lift "top-app-bar-short" model
 
         Just Url.ShortCollapsedTopAppBar ->
-            shortCollapsedTopAppBar lift [5] model
+            shortCollapsedTopAppBar lift "top-app-bar-short-collapsed" model
 
         Nothing ->
             page.body "TopAppBar"
@@ -103,7 +103,7 @@ view lift page topAppBarPage model =
                         , css "height" "72px"
                         ]
                         [ TopAppBar.view (lift << Mdc)
-                            [ 0 ]
+                            "top-app-bar-default-top-app-bar"
                             model.mdc
                             [ css "position" "static"
                             ]
@@ -218,9 +218,7 @@ standardTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            [ 0 ]
-            model.mdc
+        (TopAppBar.view (lift << Mdc) index model.mdc
             []
             [ TopAppBar.section
                 [ TopAppBar.alignStart
@@ -246,9 +244,7 @@ fixedTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            [ 0 ]
-            model.mdc
+        (TopAppBar.view (lift << Mdc) index model.mdc
             [ TopAppBar.fixed
             ]
             [ TopAppBar.section
@@ -275,9 +271,7 @@ menuTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            [ 0 ]
-            model.mdc
+        (TopAppBar.view (lift << Mdc) index model.mdc
             [ TopAppBar.fixed
             ]
             [ TopAppBar.section
@@ -308,9 +302,7 @@ denseTopAppBar lift index model =
         model
         [ TopAppBar.denseFixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            [ 0 ]
-            model.mdc
+        (TopAppBar.view (lift << Mdc) index model.mdc
             [ TopAppBar.dense
             ]
             [ TopAppBar.section
@@ -337,9 +329,7 @@ prominentTopAppBar lift index model =
         model
         [ TopAppBar.prominentFixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            [ 0 ]
-            model.mdc
+        (TopAppBar.view (lift << Mdc) index model.mdc
             [ TopAppBar.prominent
             ]
             [ TopAppBar.section
@@ -366,9 +356,7 @@ shortTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            [ 0 ]
-            model.mdc
+        (TopAppBar.view (lift << Mdc) index model.mdc
             [ TopAppBar.short
             , TopAppBar.hasActionItem
             ]
@@ -394,9 +382,7 @@ shortCollapsedTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            [ 0 ]
-            model.mdc
+        (TopAppBar.view (lift << Mdc) index model.mdc
             [ TopAppBar.short
             , TopAppBar.collapsed
             , TopAppBar.hasActionItem
@@ -421,11 +407,11 @@ body options lift index model =
     styled Html.div options
         ( List.concat
             [ [ Button.view (lift << Mdc)
-                    index
+                    (index ++ "-toggle-rtl")
                     model.mdc
                     [ Button.outlined
                     , Button.dense
-                    , Options.onClick (lift (ExampleMsg index ToggleRtl))
+                    , Options.onClick (lift (ExampleMsg (index ++ "-toggle-rtl") ToggleRtl))
                     ]
                     [ text "Toggle RTL"
                     ]

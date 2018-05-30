@@ -66,40 +66,34 @@ view lift page model =
         group =
             "hero"
 
-        isSelected isDef name =
+        isSelected isDef id =
           Dict.get group model.radios
-          |> Maybe.map ((==) name)
+          |> Maybe.map ((==) id)
           |> Maybe.withDefault isDef
       in
       Page.hero []
       [
         example []
         [ let
-            idx =
-                [0,0]
-
-            name =
-                "Default Radio 1"
+            id =
+                "radio-buttons-hero-radio-1"
           in
           FormField.view []
-          [ RadioButton.view (lift << Mdc) idx model.mdc
-            [ Options.onClick (lift (Set group name))
-            , RadioButton.selected |> when (isSelected True name)
+          [ RadioButton.view (lift << Mdc) id model.mdc
+            [ Options.onClick (lift (Set group id))
+            , RadioButton.selected |> when (isSelected True id)
             ]
             []
           ]
 
         , let
-            idx =
-                [0,1]
-
-            name =
-                "Default Radio 2"
+            id =
+                "radio-buttons-hero-radio-2"
           in
           FormField.view []
-          [ RadioButton.view (lift << Mdc) idx model.mdc
-            [ Options.onClick (lift (Set group name))
-            , RadioButton.selected |> when (isSelected False name)
+          [ RadioButton.view (lift << Mdc) id model.mdc
+            [ Options.onClick (lift (Set group id))
+            , RadioButton.selected |> when (isSelected False id)
             ]
             []
           ]
@@ -111,9 +105,9 @@ view lift page model =
         group =
             "ex0"
 
-        isSelected isDef name =
+        isSelected isDef id =
           Dict.get group model.radios
-          |> Maybe.map ((==) name)
+          |> Maybe.map ((==) id)
           |> Maybe.withDefault isDef
       in
       example []
@@ -124,35 +118,29 @@ view lift page model =
         [ text "Radio" ]
 
       , let
-          idx =
-              [1,0]
-
-          name =
-              "Radio 1"
+          id =
+              "radio-buttons-default-radio-1"
         in
         FormField.view []
-        [ RadioButton.view (lift << Mdc) idx model.mdc
-          [ Options.onClick (lift (Set group name))
-          , RadioButton.selected |> when (isSelected True name)
+        [ RadioButton.view (lift << Mdc) id model.mdc
+          [ Options.onClick (lift (Set group id))
+          , RadioButton.selected |> when (isSelected True id)
           ]
           []
-        , Html.label [] [ text name ]
+        , Html.label [] [ text "Radio 1" ]
         ]
 
       , let
-          idx =
-              [1,1]
-
-          name =
-              "Radio 2"
+          id =
+              "radio-buttons-default-radio-2"
         in
         FormField.view []
-        [ RadioButton.view (lift << Mdc) idx model.mdc
-          [ Options.onClick (lift (Set group name))
-          , RadioButton.selected |> when (isSelected False name)
+        [ RadioButton.view (lift << Mdc) id model.mdc
+          [ Options.onClick (lift (Set group id))
+          , RadioButton.selected |> when (isSelected False id)
           ]
           []
-        , Html.label [] [ text name ]
+        , Html.label [] [ text "Radio 2" ]
         ]
       ]
 
@@ -167,14 +155,11 @@ view lift page model =
       , Html.div
         []
         [ let
-            idx =
-                [3,0]
-
-            name =
-                "Radio 1"
+            id =
+                "radio-buttons-disabled-radio-1"
           in
           FormField.view []
-          [ RadioButton.view (lift << Mdc) idx model.mdc
+          [ RadioButton.view (lift << Mdc) id model.mdc
             [ RadioButton.selected
             , RadioButton.disabled
             ]
@@ -183,14 +168,11 @@ view lift page model =
           ]
 
         , let
-            idx =
-                [3,1]
-
-            name =
-                "Radio 2"
+            id =
+                "radio-buttons-disabled-radio-2"
           in
           FormField.view []
-          [ RadioButton.view (lift << Mdc) idx model.mdc
+          [ RadioButton.view (lift << Mdc) id model.mdc
             [ RadioButton.disabled
             ]
             []

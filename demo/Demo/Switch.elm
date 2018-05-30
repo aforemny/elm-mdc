@@ -12,7 +12,7 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model m =
     { mdc : Material.Model m
-    , switches : Dict (List Int) Bool
+    , switches : Dict Material.Index Bool
     }
 
 
@@ -25,7 +25,7 @@ defaultModel =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | Toggle (List Int)
+    | Toggle Material.Index
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -65,7 +65,7 @@ view lift page model =
       [ FormField.view []
         [ let
               index =
-                  [0]
+                  "switch-hero-switch"
 
               on =
                   Dict.get index model.switches
@@ -92,7 +92,7 @@ view lift page model =
         FormField.view []
         [ let
               index =
-                  [1]
+                  "switch-default-switch"
 
               on =
                   Dict.get index model.switches
@@ -125,7 +125,7 @@ view lift page model =
       , FormField.view []
         [ let
               index =
-                  [2]
+                  "switch-disabled-switch"
 
               on =
                   Dict.get index model.switches

@@ -95,14 +95,14 @@ view lift page model =
       [
         let
             isOn =
-              Dict.get [0] model.iconToggles
+              Dict.get "icon-toggle-hero-icon-toggle" model.iconToggles
               |> Maybe.withDefault False
         in
         styled Html.div
         [ cs "demo-wrapper"
         , css "margin-left" "1rem"
         ]
-        [ iconToggle [0]
+        [ iconToggle "icon-toggle-hero-icon-toggle"
               [ IconToggle.label
                 { on = "Remove from Fravorites"
                 , off =  "Add to Favorites"
@@ -126,7 +126,7 @@ view lift page model =
       [
         let
             isOn =
-              Dict.get [1] model.iconToggles
+              Dict.get "icon-toggle-default-icon-toggle" model.iconToggles
               |> Maybe.withDefault False
         in
         toggleExample []
@@ -134,7 +134,7 @@ view lift page model =
         , styled Html.div
           [ css "margin-left" "1rem"
           ]
-          [ iconToggle [1]
+          [ iconToggle "icon-toggle-default-icon-toggle"
               [ IconToggle.label
                 { on = "Remove from Fravorites"
                 , off = "Add to Favorites"
@@ -164,7 +164,7 @@ view lift page model =
           [ css "margin-left" "1rem"
           ]
           [
-            iconToggle [2]
+            iconToggle "icon-toggle-fa-icon-toggle"
                 [ IconToggle.label
                   { on = "Unstar this Icon"
                   , off = "Star this Icon"
@@ -185,7 +185,7 @@ view lift page model =
           [ css "margin-left" "1rem"
           ]
           [
-            iconToggle [3]
+            iconToggle "icon-toggle-disabled-icon-toggle"
               [ IconToggle.label
                 { on = "Remove from Fravorites"
                 , off = "Add to Favorites"

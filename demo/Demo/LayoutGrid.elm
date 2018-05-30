@@ -362,7 +362,7 @@ view lift page model =
           [ demoControls
           ]
           [ control "Tablet Column Width:"
-              SetTabletColumnWidth  
+              SetTabletColumnWidth
               .tabletColumnWidth
               columnWidths
           ]

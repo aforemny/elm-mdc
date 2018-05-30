@@ -67,7 +67,7 @@ view lift page model =
         ]
         [ text "RAISED 4dp" ]
       ]
-      
+
     , styled Html.div
       [ css "display" "flex"
       , css "flex-flow" "row wrap"

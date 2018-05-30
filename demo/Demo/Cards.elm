@@ -42,7 +42,7 @@ update lift msg model =
             ( { model | rtl = not model.rtl }, Cmd.none )
 
 
-heroCard : (Msg m -> m) -> List Int -> Model m -> Html m
+heroCard : (Msg m -> m) -> Material.Index -> Model m -> Html m
 heroCard lift index model =
   Card.view
   [ css "width" "350px"
@@ -95,14 +95,14 @@ Visit ten places on our planet that are undergoing the biggest changes today.
       [
       ]
       [
-        Button.view (lift << Mdc) (index ++ [0]) model.mdc
+        Button.view (lift << Mdc) (index ++ "-action-button-read") model.mdc
         [ Card.actionButton
         , Button.ripple
         ]
         [ text "Read"
         ]
       ,
-        Button.view (lift << Mdc) (index ++ [1]) model.mdc
+        Button.view (lift << Mdc) (index ++ "-action-button-bookmark") model.mdc
         [ Card.actionButton
         , Button.ripple
         ]
@@ -114,7 +114,7 @@ Visit ten places on our planet that are undergoing the biggest changes today.
       [
       ]
       [
-        IconToggle.view (lift << Mdc) (index ++ [2]) model.mdc
+        IconToggle.view (lift << Mdc) (index ++ "-action-icon-favorite") model.mdc
         [ Card.actionIcon
         , IconToggle.icon
           { on = "favorite"
@@ -127,14 +127,14 @@ Visit ten places on our planet that are undergoing the biggest changes today.
         ]
         []
       ,
-        IconToggle.view (lift << Mdc) (index ++ [3]) model.mdc
+        IconToggle.view (lift << Mdc) (index ++ "-action-icon-share") model.mdc
         [ Card.actionIcon
         , IconToggle.icon { on = "share", off = "share" }
         , IconToggle.label { on = "Share", off = "Share" }
         ]
         []
       ,
-        IconToggle.view (lift << Mdc) (index ++ [4]) model.mdc
+        IconToggle.view (lift << Mdc) (index ++ "-action-icon-more-options") model.mdc
         [ Card.actionIcon
         , IconToggle.icon { on = "more_vert", off = "more_vert" }
         , IconToggle.label { on = "More options", off = "More options" }
@@ -145,7 +145,7 @@ Visit ten places on our planet that are undergoing the biggest changes today.
   ]
 
 
-headlinesCard : (Msg m -> m) -> List Int -> Model m -> Html m
+headlinesCard : (Msg m -> m) -> Material.Index -> Model m -> Html m
 headlinesCard lift index model =
     let
       listDivider =
@@ -202,7 +202,7 @@ headlinesCard lift index model =
         Card.actions
         [ Card.fullBleed
         ]
-        [ Button.view (lift << Mdc) (index ++ [0]) model.mdc
+        [ Button.view (lift << Mdc) (index ++ "-action-button") model.mdc
           [ Button.ripple
           , Card.actionButton
           , css "width" "100%"
@@ -218,7 +218,7 @@ headlinesCard lift index model =
     )
 
 
-photosCard : (Msg m -> m) -> List Int -> Model m -> Html m
+photosCard : (Msg m -> m) -> Material.Index -> Model m -> Html m
 photosCard lift index model =
     Card.view
     [ css "width" "200px"
@@ -250,21 +250,21 @@ photosCard lift index model =
       ]
       [ Card.actionIcons []
         [
-          IconToggle.view (lift << Mdc) (index ++ [0]) model.mdc
+          IconToggle.view (lift << Mdc) (index ++ "-action-icon-favorite") model.mdc
           [ Card.actionIcon
           , IconToggle.icon { on = "favorite", off = "favorite_border" }
           , IconToggle.label { on = "Remove from favorites", off = "Add to favorites" }
           ]
           []
         ,
-          IconToggle.view (lift << Mdc) (index ++ [1]) model.mdc
+          IconToggle.view (lift << Mdc) (index ++ "-action-icon-bookmark") model.mdc
           [ Card.actionIcon
           , IconToggle.icon { on = "bookmark", off = "bookmark_border" }
           , IconToggle.label { on = "Remove bookmark", off = "Add bookmark" }
           ]
           []
         ,
-          IconToggle.view (lift << Mdc) (index ++ [2]) model.mdc
+          IconToggle.view (lift << Mdc) (index ++ "-action-icon-share") model.mdc
           [ Card.actionIcon
           , IconToggle.icon { on = "share", off = "share" }
           , IconToggle.label { on = "Share", off = "Share" }
@@ -275,7 +275,7 @@ photosCard lift index model =
     ]
 
 
-albumCard : (Msg m -> m) -> List Int -> Model m -> Html m
+albumCard : (Msg m -> m) -> Material.Index -> Model m -> Html m
 albumCard lift index model =
     Card.view
     [ css "border-radius" "24px 4px"
@@ -327,7 +327,7 @@ albumCard lift index model =
         Card.actionIcons []
         ( List.range 1 5
           |> List.map (\ n ->
-               IconToggle.view (lift << Mdc) (index ++ [n]) model.mdc
+               IconToggle.view (lift << Mdc) (index ++ "-action-icon-star-" ++ toString n) model.mdc
                [ Card.actionIcon
                , IconToggle.icon { on = "star_border", off = "star_border" }
                , IconToggle.label
@@ -370,14 +370,14 @@ view lift page model =
       [ css "height" "auto"
       ]
       [
-        heroCard lift [0] model
+        heroCard lift "card-hero-card" model
       ]
 
     , example
       [ css "text-align" "center"
       ]
       [ FormField.view []
-        [ Checkbox.view (lift << Mdc) [0] model.mdc
+        [ Checkbox.view (lift << Mdc) "cards-toggle-rtl" model.mdc
           [ Options.onClick (lift ToggleRtl)
           , Checkbox.checked model.rtl
           ]
@@ -388,15 +388,15 @@ view lift page model =
           ]
         ]
       ]
-    
+
     , demoWrapper
       [ Options.attribute (Html.dir "rtl") |> when model.rtl
       ]
       [
-        headlinesCard lift [1] model
+        headlinesCard lift "cards-headlines-card" model
       ,
-        photosCard lift [2] model
+        photosCard lift "cards-photos-card" model
       ,
-        albumCard lift [3] model
+        albumCard lift "cards-album-cards" model
       ]
     ]

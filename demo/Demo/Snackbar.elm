@@ -44,7 +44,7 @@ type Msg m
     | ToggleDismissOnAction
     | SetMessageText String
     | SetActionText String
-    | Show (List Int)
+    | Show Material.Index
     | Dismiss String
     | NoOp
 
@@ -146,7 +146,7 @@ view lift page model =
           styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
         ,
           FormField.view []
-          [ Checkbox.view (lift << Mdc) [0] model.mdc
+          [ Checkbox.view (lift << Mdc) "snackbar-multiline-checkbox" model.mdc
             [ Options.onClick (lift ToggleMultiline)
             , Checkbox.checked model.multiline
             ]
@@ -157,7 +157,7 @@ view lift page model =
           Html.br [] []
         ,
           FormField.view []
-          [ Checkbox.view (lift << Mdc) [1] model.mdc
+          [ Checkbox.view (lift << Mdc) "snackbar-toggle-action-on-bottom-checkbox" model.mdc
             [ Options.onClick (lift ToggleActionOnBottom)
             , when (not model.multiline) << Options.many <|
               [ Checkbox.checked model.actionOnBottom
@@ -171,7 +171,7 @@ view lift page model =
           Html.br [] []
         ,
           FormField.view []
-          [ Checkbox.view (lift << Mdc) [2] model.mdc
+          [ Checkbox.view (lift << Mdc) "snackbar-dismiss-on-action-button" model.mdc
             [ Options.onClick (lift ToggleDismissOnAction)
             , Checkbox.checked (model.dismissOnAction)
             ]
@@ -181,7 +181,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Textfield.view (lift << Mdc) [3] model.mdc
+          Textfield.view (lift << Mdc) "snackbar-message-text-field" model.mdc
           [ Textfield.value model.messageText
           , Textfield.label "Message Text"
           , Options.on "input" (Json.map (lift << SetMessageText) Html.targetValue)
@@ -191,7 +191,7 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Textfield.view (lift << Mdc) [4] model.mdc
+          Textfield.view (lift << Mdc) "snackbar-action-text-field" model.mdc
           [ Textfield.value model.actionText
           , Textfield.label "Action Text"
           , Options.on "input" (Json.map (lift << SetActionText) Html.targetValue)
@@ -201,53 +201,53 @@ view lift page model =
         ,
           Html.br [] []
         ,
-          Button.view (lift << Mdc) [5] model.mdc
+          Button.view (lift << Mdc) "snackbar-show-button" model.mdc
           [ Button.raised
           , css "margin-top" "14px"
-          , Options.on "click" (Json.succeed (lift (Show [9])))
+          , Options.on "click" (Json.succeed (lift (Show "snackbar-default-snackbar")))
           ]
           [ text "Show"
           ]
         ,
           text " "
         ,
-          Button.view (lift << Mdc) [6] model.mdc
+          Button.view (lift << Mdc) "snackbar-show-button-rtl" model.mdc
           [ Button.raised
           , css "margin-top" "14px"
-          , Options.on "click" (Json.succeed (lift (Show [10])))
+          , Options.on "click" (Json.succeed (lift (Show "snackbar-default-snackbar-rtl")))
           ]
           [ text "Show Rtl"
           ]
         ,
           text " "
         ,
-          Button.view (lift << Mdc) [7] model.mdc
+          Button.view (lift << Mdc) "snackbar-show-start-aligned-button" model.mdc
           [ Button.raised
           , css "margin-top" "14px"
-          , Options.on "click" (Json.succeed (lift (Show [11])))
+          , Options.on "click" (Json.succeed (lift (Show "snackbar-start-aligned-snackbar")))
           ]
           [ text "Show Start Aligned"
           ]
         ,
           text " "
         ,
-          Button.view (lift << Mdc) [8] model.mdc
+          Button.view (lift << Mdc) "snackbar-show-start-aligned-button-rtl" model.mdc
           [ Button.raised
           , css "margin-top" "14px"
-          , Options.on "click" (Json.succeed (lift (Show [12])))
+          , Options.on "click" (Json.succeed (lift (Show "snackbar-start-aligned-snackbar-rtl")))
           ]
           [ text "Show Start Aligned (Rtl)"
           ]
         ,
-          Snackbar.view (lift << Mdc) [9] model.mdc [] []
+          Snackbar.view (lift << Mdc) "snackbar-default-snackbar" model.mdc [] []
         ,
           Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.view (lift << Mdc) [10] model.mdc [] []
+          [ Snackbar.view (lift << Mdc) "snackbar-default-snackbar-rtl" model.mdc [] []
           ]
 
-        , Snackbar.view (lift << Mdc) [11] model.mdc
+        , Snackbar.view (lift << Mdc) "snackbar-align-start-snackbar" model.mdc
           [ Snackbar.alignStart
           ]
           []
@@ -255,7 +255,7 @@ view lift page model =
         , Html.div
           [ Html.attribute "dir" "rtl"
           ]
-          [ Snackbar.view (lift << Mdc) [12] model.mdc
+          [ Snackbar.view (lift << Mdc) "snackbar-align-start-snackbar-rtl" model.mdc
             [ Snackbar.alignStart
             ]
             []
