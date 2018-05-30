@@ -14,7 +14,7 @@ import Internal.Options as Options exposing (Property)
 
 
 type alias Index
-    = List Int
+    = String
 
 
 type alias Indexed x =

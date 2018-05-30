@@ -23,7 +23,7 @@ import Internal.TopAppBar.Model as TopAppBar
 
 
 type alias Index =
-    List Int
+    String
 
 
 type Msg m

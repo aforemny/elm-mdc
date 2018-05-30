@@ -192,6 +192,15 @@ import Internal.TopAppBar.Implementation as TopAppBar
 import Internal.TopAppBar.Model as TopAppBar
 
 
+{-| Different instances of components are differentiated by an `Index`.
+
+This is a string and is expected to be globally unique within your program. It
+coincides with `Html.id`.
+-}
+type alias Index =
+    Internal.Component.Index
+
+
 {-| Material model.
 
 This takes as argument a reference to your top-level message type `Msg`.
@@ -439,9 +448,3 @@ top content =
       ]
       []
     ]
-
-
-{-| TODO
--}
-type alias Index =
-    Internal.Component.Index

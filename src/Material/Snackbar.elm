@@ -45,9 +45,8 @@ Snackbar.view Mdc [0] model.mdc [] []
 -}
 
 import Html exposing (Html)
-import Material
-import Internal.Component exposing (Index)
 import Internal.Snackbar.Implementation as Snackbar
+import Material
 import Time exposing (Time)
 
 
@@ -61,7 +60,7 @@ type alias Property m =
 -}
 view :
     (Material.Msg m -> m)
-    -> Index
+    -> Material.Index
     -> Material.Model m
     -> List (Property m)
     -> List (Html m)
@@ -103,7 +102,7 @@ snack =
 the provided message will be queued.
 -}
 add : (Material.Msg m -> m)
-    -> Index
+    -> Material.Index
     -> Contents m
     -> Material.Model m
     -> ( Material.Model m, Cmd m )
