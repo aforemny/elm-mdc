@@ -87,10 +87,10 @@ Toolbar.view Mdc [0] model.mdc []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
+import Internal.Component exposing (Index)
 import Material.Icon as Icon
 import Material.IconToggle as IconToggle
-import Material.Internal.Toolbar.Implementation as Toolbar
+import Internal.Toolbar.Implementation as Toolbar
 import Material.Options as Options
 
 

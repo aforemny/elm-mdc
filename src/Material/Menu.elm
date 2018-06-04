@@ -96,8 +96,8 @@ styled Html.div
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Menu.Implementation as Menu
+import Internal.Component exposing (Index)
+import Internal.Menu.Implementation as Menu
 import Material.List as Lists
 import Material.Options as Options
 

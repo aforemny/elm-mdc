@@ -7,7 +7,6 @@ import Html.Events as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
 import Material
-import Material.Component exposing (Index)
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Slider as Slider
 import Platform.Cmd exposing (Cmd, none)
@@ -15,8 +14,8 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model m =
     { mdc : Material.Model m
-    , values : Dict Index Float
-    , inputs : Dict Index Float
+    , values : Dict Material.Index Float
+    , inputs : Dict Material.Index Float
     , min : Int
     , max : Int
     , steps : Int
@@ -51,8 +50,8 @@ defaultModel =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | Change Index Float
-    | Input Index Float
+    | Change Material.Index Float
+    | Input Material.Index Float
     | SetMin Int
     | SetMax Int
     | SetSteps Int

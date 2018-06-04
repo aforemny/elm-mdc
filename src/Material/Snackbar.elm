@@ -46,8 +46,8 @@ Snackbar.view Mdc [0] model.mdc [] []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Snackbar.Implementation as Snackbar
+import Internal.Component exposing (Index)
+import Internal.Snackbar.Implementation as Snackbar
 import Time exposing (Time)
 
 

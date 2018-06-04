@@ -128,8 +128,8 @@ Lists.ul
 -}
 
 import Html exposing (Html)
-import Material.Internal.Icon.Implementation as Icon
-import Material.Internal.List.Implementation as List
+import Internal.Icon.Implementation as Icon
+import Internal.List.Implementation as List
 
 
 {-| List property.

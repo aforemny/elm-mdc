@@ -39,7 +39,7 @@ FormField.view []
 -}
 
 import Html exposing (Html)
-import Material.Internal.FormField.Implementation as FormField
+import Internal.FormField.Implementation as FormField
 
 
 {-| FormField property.

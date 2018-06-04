@@ -54,8 +54,8 @@ FormField.view []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Switch.Implementation as Switch
+import Internal.Component exposing (Index)
+import Internal.Switch.Implementation as Switch
 import Material.Options as Options
 
 

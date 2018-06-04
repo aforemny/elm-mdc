@@ -85,8 +85,8 @@ GridList.view Mdc [0] model.mdc []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.GridList.Implementation as GridList
+import Internal.Component exposing (Index)
+import Internal.GridList.Implementation as GridList
 
 
 {-| GridList property.

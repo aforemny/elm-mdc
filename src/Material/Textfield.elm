@@ -76,8 +76,8 @@ Textfield.view Mdc [0] model.mdc
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Textfield.Implementation as Textfield
+import Internal.Component exposing (Index)
+import Internal.Textfield.Implementation as Textfield
 import Material.Options as Options
 
 

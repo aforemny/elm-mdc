@@ -7,14 +7,13 @@ import Html.Attributes as Html
 import Html exposing (Html, text, div, p)
 import Material
 import Material.Button as Button
-import Material.Component as Component exposing (Index)
 import Material.Options as Options exposing (Property, styled, cs, css, when)
 import Material.TopAppBar as TopAppBar
 
 
 type alias Model m =
     { mdc : Material.Model m
-    , examples : Dict Index Example
+    , examples : Dict Material.Index Example
     }
 
 
@@ -38,7 +37,7 @@ defaultModel =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ExampleMsg Index ExampleMsg
+    | ExampleMsg Material.Index ExampleMsg
 
 
 type ExampleMsg
@@ -192,7 +191,7 @@ iframe lift model title topAppBarPage =
 
 
 topAppBarWrapper : (Msg m -> m)
-      -> Index
+      -> Material.Index
       -> Model m
       -> List (Property c m)
       -> Html m
@@ -212,7 +211,7 @@ topAppBarWrapper lift index model options topappbar =
             ]
 
 
-standardTopAppBar : (Msg m -> m) -> Index -> Model m -> Html m
+standardTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 standardTopAppBar lift index model =
     topAppBarWrapper lift
         index
@@ -240,7 +239,7 @@ standardTopAppBar lift index model =
         )
 
 
-fixedTopAppBar : (Msg m -> m) -> Index -> Model m -> Html m
+fixedTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 fixedTopAppBar lift index model =
     topAppBarWrapper lift
         index
@@ -269,7 +268,7 @@ fixedTopAppBar lift index model =
         )
 
 
-menuTopAppBar : (Msg m -> m) -> Index -> Model m -> Html m
+menuTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 menuTopAppBar lift index model =
     topAppBarWrapper lift
         index
@@ -302,7 +301,7 @@ menuTopAppBar lift index model =
 -- , viewDrawer
 
 
-denseTopAppBar : (Msg m -> m) -> Index -> Model m -> Html m
+denseTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 denseTopAppBar lift index model =
     topAppBarWrapper lift
         index
@@ -331,7 +330,7 @@ denseTopAppBar lift index model =
         )
 
 
-prominentTopAppBar : (Msg m -> m) -> Index -> Model m -> Html m
+prominentTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 prominentTopAppBar lift index model =
     topAppBarWrapper lift
         index
@@ -360,7 +359,7 @@ prominentTopAppBar lift index model =
         )
 
 
-shortTopAppBar : (Msg m -> m) -> Index -> Model m -> Html m
+shortTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 shortTopAppBar lift index model =
     topAppBarWrapper lift
         index
@@ -388,7 +387,7 @@ shortTopAppBar lift index model =
         )
 
 
-shortCollapsedTopAppBar : (Msg m -> m) -> Index -> Model m -> Html m
+shortCollapsedTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 shortCollapsedTopAppBar lift index model =
     topAppBarWrapper lift
         index
@@ -417,7 +416,7 @@ shortCollapsedTopAppBar lift index model =
         )
 
 
-body : List (Options.Property c m) -> (Msg m -> m) -> Index -> Model m -> Html m
+body : List (Options.Property c m) -> (Msg m -> m) -> Material.Index -> Model m -> Html m
 body options lift index model =
     styled Html.div options
         ( List.concat

@@ -55,8 +55,8 @@ IconToggle.view Mdc [0] model.mdc
 
 import Html exposing (Html)
 import Material
-import Material.Component as Component exposing (Index)
-import Material.Internal.IconToggle.Implementation as IconToggle
+import Internal.Component as Component exposing (Index)
+import Internal.IconToggle.Implementation as IconToggle
 
 
 {-| IconToggle property.

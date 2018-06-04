@@ -61,7 +61,7 @@ styled Html.div
 
 
 import Material.Options exposing (Property)
-import Material.Internal.Typography.Implementation as Typography
+import Internal.Typography.Implementation as Typography
 
 
 {-| Sets the font to Roboto.

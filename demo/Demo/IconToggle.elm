@@ -1,11 +1,10 @@
 module Demo.IconToggle exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Demo.Page as Page exposing (Page)
-import Dict
+import Dict exposing (Dict)
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
-import Material.Component exposing (Index, Indexed)
 import Material.IconToggle as IconToggle
 import Material.Options as Options
 import Material.Options exposing (styled, cs, css, when)
@@ -13,7 +12,7 @@ import Material.Options exposing (styled, cs, css, when)
 
 type alias Model m =
     { mdc : Material.Model m
-    , iconToggles : Indexed Bool
+    , iconToggles : Dict Material.Index Bool
     }
 
 
@@ -26,7 +25,7 @@ defaultModel =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | Toggle Index
+    | Toggle Material.Index
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -122,7 +121,7 @@ view lift page model =
       [ Html.type_ "text/css"
       ]
       [ text "@import url(\"https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css\");" ]
-    
+
     , example []
       [
         let

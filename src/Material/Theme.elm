@@ -116,7 +116,7 @@ and five text styles:
 @docs textIconOnDark
 -}
 
-import Material.Internal.Theme.Implementation as Theme
+import Internal.Theme.Implementation as Theme
 import Material.Options exposing (Property)
 
 

@@ -67,8 +67,8 @@ Drawer.view Mdc [0] model.mdc []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Drawer.Permanent.Implementation as Drawer
+import Internal.Component exposing (Index)
+import Internal.Drawer.Permanent.Implementation as Drawer
 import Material.List as Lists
 
 

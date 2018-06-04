@@ -65,7 +65,7 @@ module Material.Options exposing
 import Html.Events exposing (Options)
 import Html exposing (Html, Attribute)
 import Json.Decode exposing (Decoder)
-import Material.Internal.Options
+import Internal.Options
 
 
 {-| Generic component property.
@@ -74,7 +74,7 @@ The `c` stands for a component's configuration type, and each component exports
 its own `Property`.
 -}
 type alias Property c m =
-    Material.Internal.Options.Property c m
+    Internal.Options.Property c m
 
 
 {-| Make a standard Html element take properties instead of attributes.
@@ -104,28 +104,28 @@ styled : (List (Attribute m) -> a)
     -> List (Property c m)
     -> a
 styled =
-    Material.Internal.Options.styled
+    Internal.Options.styled
 
 
 {-| Add a HTML class to a component.
 -}
 cs : String -> Property c m
 cs =
-    Material.Internal.Options.cs
+    Internal.Options.cs
 
 
 {-| Add a CSS style to a component.
 -}
 css : String -> String -> Property c m
 css =
-    Material.Internal.Options.css
+    Internal.Options.css
 
 
 {-| Multiple options.
 -}
 many : List (Property c m) -> Property c m
 many =
-    Material.Internal.Options.many
+    Internal.Options.many
 
 
 {-| Do nothing. Convenient when the absence or
@@ -139,7 +139,7 @@ Html.div
 -}
 nop : Property c m
 nop =
-    Material.Internal.Options.nop
+    Internal.Options.nop
 
 
 {-| Conditional option. When the guard evaluates to `true`, the option is
@@ -149,21 +149,21 @@ applied; otherwise it is ignored. Use like this:
 -}
 when : Bool -> Property c m -> Property c m
 when =
-    Material.Internal.Options.when
+    Internal.Options.when
 
 
 {-| HTML data-* attributes. Prefix "data-" is added automatically.
 -}
 data : String -> String -> Property c m
 data =
-    Material.Internal.Options.data
+    Internal.Options.data
 
 
 {-| HTML aria-* attributes. Prefix "aria-" is added automatically.
 -}
 aria : String -> String -> Property c m
 aria =
-    Material.Internal.Options.aria
+    Internal.Options.aria
 
 
 {-| Install arbitrary `Html.Attribute`s.
@@ -176,100 +176,100 @@ styled Html.div
 -}
 attribute : Html.Attribute Never -> Property c m
 attribute =
-    Material.Internal.Options.attribute
+    Internal.Options.attribute
 
 
 {-| -}
 on : String -> Decoder m -> Property c m
 on =
-    Material.Internal.Options.on
+    Internal.Options.on
 
 
 {-| -}
 onClick : msg -> Property c msg
 onClick =
-    Material.Internal.Options.onClick
+    Internal.Options.onClick
 
 
 {-| -}
 onDoubleClick : msg -> Property c msg
 onDoubleClick =
-    Material.Internal.Options.onDoubleClick
+    Internal.Options.onDoubleClick
 
 
 {-| -}
 onMouseDown : msg -> Property c msg
 onMouseDown =
-    Material.Internal.Options.onMouseDown
+    Internal.Options.onMouseDown
 
 
 {-| -}
 onMouseUp : msg -> Property c msg
 onMouseUp =
-    Material.Internal.Options.onMouseUp
+    Internal.Options.onMouseUp
 
 
 {-| -}
 onMouseEnter : msg -> Property c msg
 onMouseEnter =
-    Material.Internal.Options.onMouseEnter
+    Internal.Options.onMouseEnter
 
 
 {-| -}
 onMouseLeave : msg -> Property c msg
 onMouseLeave =
-    Material.Internal.Options.onMouseLeave
+    Internal.Options.onMouseLeave
 
 
 {-| -}
 onMouseOver : msg -> Property c msg
 onMouseOver =
-    Material.Internal.Options.onMouseOver
+    Internal.Options.onMouseOver
 
 
 {-| -}
 onMouseOut : msg -> Property c msg
 onMouseOut =
-    Material.Internal.Options.onMouseOut
+    Internal.Options.onMouseOut
 
 
 {-| -}
 onCheck : (Bool -> msg) -> Property c msg
 onCheck =
-    Material.Internal.Options.onCheck
+    Internal.Options.onCheck
 
 
 {-| -}
 onBlur : msg -> Property c msg
 onBlur =
-    Material.Internal.Options.onBlur
+    Internal.Options.onBlur
 
 
 {-| -}
 onFocus : msg -> Property c msg
 onFocus =
-    Material.Internal.Options.onFocus
+    Internal.Options.onFocus
 
 
 {-| -}
 onInput : (String -> m) -> Property c m
 onInput =
-    Material.Internal.Options.onInput
+    Internal.Options.onInput
 
 
 {-| -}
 onChange : (String -> m) -> Property c m
 onChange =
-    Material.Internal.Options.onChange
+    Internal.Options.onChange
 
 
 {-| -}
 onSubmit : (String -> m) -> Property c m
 onSubmit =
-    Material.Internal.Options.onSubmit
+    Internal.Options.onSubmit
 
 
 {-| -}
 onWithOptions : String -> Options -> Decoder m -> Property c m
 onWithOptions =
-    Material.Internal.Options.onWithOptions
+    Internal.Options.onWithOptions

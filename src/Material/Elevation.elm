@@ -65,7 +65,7 @@ styled Html.div
 @docs transition
 -}
 
-import Material.Internal.Elevation.Implementation as Elevation
+import Internal.Elevation.Implementation as Elevation
 import Material.Options exposing (Property)
 
 

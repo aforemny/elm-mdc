@@ -20,7 +20,7 @@ optionally supporting content (i.e. a text label).
 
 # Resources
 
-- [Image List - Material Components for the Web](https://material.io/develop/web/components/image-lists/)
+- [Image List - Internal.Components for the Web](https://material.io/develop/web/components/image-lists/)
 - [Material Design guidelines: Image lists](https://material.io/design/components/image-lists.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#image-list)
 
@@ -75,7 +75,7 @@ ImageList.view []
 
 
 import Html exposing (Html)
-import Material.Internal.ImageList.Implementation as ImageList
+import Internal.ImageList.Implementation as ImageList
 
 
 

@@ -60,8 +60,8 @@ Slider.view Mdc [0] model.mdc
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Slider.Implementation as Slider
+import Internal.Component exposing (Index)
+import Internal.Slider.Implementation as Slider
 
 
 {-| Properties for Slider options.

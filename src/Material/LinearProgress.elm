@@ -41,7 +41,7 @@ LinearProgress.view
 -}
 
 import Html exposing (Html)
-import Material.Internal.LinearProgress.Implementation as LinearProgress
+import Internal.LinearProgress.Implementation as LinearProgress
 
 
 {-| LinearProgress property.

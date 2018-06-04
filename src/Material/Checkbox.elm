@@ -52,8 +52,8 @@ FormField.view []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Checkbox.Implementation as Checkbox
+import Internal.Component exposing (Index)
+import Internal.Checkbox.Implementation as Checkbox
 import Material.Options as Options
 
 

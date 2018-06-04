@@ -131,7 +131,7 @@ biggest changes today."""
 import Html exposing (Html)
 import Material.Button as Button
 import Material.IconToggle as IconToggle
-import Material.Internal.Card.Implementation as Card
+import Internal.Card.Implementation as Card
 
 
 {-| Card property.

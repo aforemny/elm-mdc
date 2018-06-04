@@ -50,7 +50,7 @@ Html.div []
 
 
 import Html exposing (Html)
-import Material.Internal.Textfield.HelperText.Implementation as HelperText
+import Internal.Textfield.HelperText.Implementation as HelperText
 
 
 {-| HelperText property.

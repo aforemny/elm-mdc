@@ -28,7 +28,7 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
 
 # Resources
 
-- [Dialogs - Material Components for the Web](https://material.io/develop/web/components/dialogs/)
+- [Dialogs - Internal.Components for the Web](https://material.io/develop/web/components/dialogs/)
 - [Material Design guidelines: Dialogs](https://material.io/guidelines/components/dialogs.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#dialog)
 
@@ -38,7 +38,7 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
 ```elm
 import Html exposing (text)
 import Material.Button as Button
-import Material.Component exposing (Index)
+import Internal.Component exposing (Index)
 import Material.Dialog as Dialog
 import Material.Options as Options exposing (styled)
 
@@ -110,8 +110,8 @@ no apps are running.
 import Html exposing (Html)
 import Material
 import Material.Button as Button
-import Material.Component exposing (Index)
-import Material.Internal.Dialog.Implementation as Dialog
+import Internal.Component exposing (Index)
+import Internal.Dialog.Implementation as Dialog
 import Material.Options as Options
 
 

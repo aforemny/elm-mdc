@@ -55,7 +55,7 @@ Icon.view [] "settings"
 -}
 
 import Html exposing (Html)
-import Material.Internal.Icon.Implementation as Icon
+import Internal.Icon.Implementation as Icon
 
 
 {-| Icon property.

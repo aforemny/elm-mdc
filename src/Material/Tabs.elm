@@ -61,8 +61,8 @@ TabBar.view Mdc [0] model.mdc
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Tabs.Implementation as Tabs
+import Internal.Component exposing (Index)
+import Internal.Tabs.Implementation as Tabs
 import Material.Options as Options
 
 

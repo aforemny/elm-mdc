@@ -62,8 +62,8 @@ Select.view (lift << Mdc) id model.mdc
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Select.Implementation as Select
+import Internal.Component exposing (Index)
+import Internal.Select.Implementation as Select
 import Material.Menu as Menu
 
 

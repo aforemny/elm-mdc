@@ -19,7 +19,7 @@ Material Design button requirements.
 
 # Resources
 
-- [Buttons - Material Components for the Web](https://material.io/develop/web/components/buttons/)
+- [Buttons - Internal.Components for the Web](https://material.io/develop/web/components/buttons/)
 - [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#buttons)
 
@@ -58,8 +58,8 @@ Button.view Mdc [0] model.mdc
 
 import Html exposing (Html)
 import Material
-import Material.Component as Component exposing (Index)
-import Material.Internal.Button.Implementation as Button
+import Internal.Component as Component exposing (Index)
+import Internal.Button.Implementation as Button
 
 
 {-| Button property.

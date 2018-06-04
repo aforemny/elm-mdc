@@ -126,7 +126,7 @@ LayoutGrid.view []
 -}
 
 import Html exposing (Html)
-import Material.Internal.LayoutGrid.Implementation as LayoutGrid
+import Internal.LayoutGrid.Implementation as LayoutGrid
 
 
 {-| LayoutGrid property.

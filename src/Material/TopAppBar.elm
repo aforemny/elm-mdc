@@ -26,7 +26,7 @@ navigation icon, and action items.
 
 # Resources
 
-- [Top App Bar - Material Components for the Web](https://material.io/develop/web/components/top-app-bar/)
+- [Top App Bar - Internal.Components for the Web](https://material.io/develop/web/components/top-app-bar/)
 - [Material Design guidelines: Top app bar](https://material.io/go/design-app-bar-top)
 - [Demo](https://aforemny.github.io/elm-mdc/#top-app-bar)
 
@@ -102,9 +102,9 @@ TopAppBar.view Mdc [0] model.mdc []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
+import Internal.Component exposing (Index)
 import Material.Icon as Icon
-import Material.Internal.TopAppBar.Implementation as TopAppBar
+import Internal.TopAppBar.Implementation as TopAppBar
 import Material.Options as Options
 
 

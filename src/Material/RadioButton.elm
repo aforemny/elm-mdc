@@ -50,8 +50,8 @@ FormField.view []
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.RadioButton.Implementation as RadioButton
+import Internal.Component exposing (Index)
+import Internal.RadioButton.Implementation as RadioButton
 import Material.Options as Options
 
 

@@ -1,5 +1,6 @@
 module Material exposing
     ( defaultModel
+    , Index
     , init
     , Model
     , Msg
@@ -9,7 +10,7 @@ module Material exposing
     )
 
 {-|
-Material is a re-implementation of Google's Material Components for Web (MDC
+Material is a re-implementation of Google's Internal.Components for Web (MDC
 Web) library in pure Elm, with resorting to JavaScript assets only when
 absolutely necessary.
 
@@ -140,6 +141,7 @@ view model =
 @docs init
 @docs subscriptions
 @docs update
+@docs Index
 
 ## Prototyping
 
@@ -149,45 +151,45 @@ view model =
 import Dict
 import Html.Attributes as Html
 import Html exposing (Html, text)
-import Material.Internal.Button.Implementation as Button
-import Material.Internal.Button.Model as Button
-import Material.Internal.Checkbox.Implementation as Checkbox
-import Material.Internal.Checkbox.Model as Checkbox
-import Material.Internal.Component as Component exposing (Indexed)
-import Material.Internal.Dialog.Implementation as Dialog
-import Material.Internal.Dialog.Model as Dialog
-import Material.Internal.Dispatch as Dispatch
-import Material.Internal.Drawer.Implementation as Drawer
-import Material.Internal.Drawer.Model as Drawer
-import Material.Internal.Fab.Implementation as Fab
-import Material.Internal.Fab.Model as Fab
-import Material.Internal.GridList.Implementation as GridList
-import Material.Internal.GridList.Model as GridList
-import Material.Internal.IconToggle.Implementation as IconToggle
-import Material.Internal.IconToggle.Model as IconToggle
-import Material.Internal.Menu.Implementation as Menu
-import Material.Internal.Menu.Model as Menu
-import Material.Internal.Msg exposing (Msg(..))
-import Material.Internal.RadioButton.Implementation as RadioButton
-import Material.Internal.RadioButton.Model as RadioButton
-import Material.Internal.Ripple.Implementation as Ripple
-import Material.Internal.Ripple.Model as Ripple
-import Material.Internal.Select.Implementation as Select
-import Material.Internal.Select.Model as Select
-import Material.Internal.Slider.Implementation as Slider
-import Material.Internal.Slider.Model as Slider
-import Material.Internal.Snackbar.Implementation as Snackbar
-import Material.Internal.Snackbar.Model as Snackbar
-import Material.Internal.Switch.Implementation as Switch
-import Material.Internal.Switch.Model as Switch
-import Material.Internal.Tabs.Implementation as Tabs
-import Material.Internal.Tabs.Model as Tabs
-import Material.Internal.Textfield.Implementation as Textfield
-import Material.Internal.Textfield.Model as Textfield
-import Material.Internal.Toolbar.Implementation as Toolbar
-import Material.Internal.Toolbar.Model as Toolbar
-import Material.Internal.TopAppBar.Implementation as TopAppBar
-import Material.Internal.TopAppBar.Model as TopAppBar
+import Internal.Button.Implementation as Button
+import Internal.Button.Model as Button
+import Internal.Checkbox.Implementation as Checkbox
+import Internal.Checkbox.Model as Checkbox
+import Internal.Component exposing (Indexed)
+import Internal.Dialog.Implementation as Dialog
+import Internal.Dialog.Model as Dialog
+import Internal.Dispatch as Dispatch
+import Internal.Drawer.Implementation as Drawer
+import Internal.Drawer.Model as Drawer
+import Internal.Fab.Implementation as Fab
+import Internal.Fab.Model as Fab
+import Internal.GridList.Implementation as GridList
+import Internal.GridList.Model as GridList
+import Internal.IconToggle.Implementation as IconToggle
+import Internal.IconToggle.Model as IconToggle
+import Internal.Menu.Implementation as Menu
+import Internal.Menu.Model as Menu
+import Internal.Msg exposing (Msg(..))
+import Internal.RadioButton.Implementation as RadioButton
+import Internal.RadioButton.Model as RadioButton
+import Internal.Ripple.Implementation as Ripple
+import Internal.Ripple.Model as Ripple
+import Internal.Select.Implementation as Select
+import Internal.Select.Model as Select
+import Internal.Slider.Implementation as Slider
+import Internal.Slider.Model as Slider
+import Internal.Snackbar.Implementation as Snackbar
+import Internal.Snackbar.Model as Snackbar
+import Internal.Switch.Implementation as Switch
+import Internal.Switch.Model as Switch
+import Internal.Tabs.Implementation as Tabs
+import Internal.Tabs.Model as Tabs
+import Internal.Textfield.Implementation as Textfield
+import Internal.Textfield.Model as Textfield
+import Internal.Toolbar.Implementation as Toolbar
+import Internal.Toolbar.Model as Toolbar
+import Internal.TopAppBar.Implementation as TopAppBar
+import Internal.TopAppBar.Model as TopAppBar
 
 
 {-| Material model.
@@ -266,7 +268,7 @@ type Msg
 ```
 -}
 type alias Msg m =
-    Material.Internal.Msg.Msg m
+    Internal.Msg.Msg m
 
 
 {-| Material update.
@@ -438,3 +440,9 @@ top content =
       ]
       []
     ]
+
+
+{-| TODO
+-}
+type alias Index =
+    Internal.Component.Index

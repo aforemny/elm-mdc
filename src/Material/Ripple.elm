@@ -84,8 +84,8 @@ Icon.view
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Ripple.Implementation as Ripple
+import Internal.Component exposing (Index)
+import Internal.Ripple.Implementation as Ripple
 import Material.Options as Options
 
 

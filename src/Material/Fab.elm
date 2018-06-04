@@ -42,8 +42,8 @@ Fab.view Mdc [0] model.mdc
 
 import Html exposing (Html)
 import Material
-import Material.Component exposing (Index)
-import Material.Internal.Fab.Implementation as Fab
+import Internal.Component exposing (Index)
+import Internal.Fab.Implementation as Fab
 
 
 {-| Fab property.
