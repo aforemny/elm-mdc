@@ -32,7 +32,7 @@ import Html exposing (text)
 import Material.ImageList as ImageList
 
 
-ImageList.view
+ImageList.view []
     [ ImageList.item []
         [ ImageList.imageAspectContainer
             []
