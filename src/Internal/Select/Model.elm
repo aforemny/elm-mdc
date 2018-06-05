@@ -7,33 +7,39 @@ module Internal.Select.Model exposing
     )
 
 import DOM
-import Internal.Menu.Model as Menu
+import Material.Internal.Ripple.Model as Ripple
 
 
 type alias Model =
-    { menu : Menu.Model
-    , geometry : Maybe Geometry
-    , index : Maybe Int
+    { geometry : Maybe Geometry
+    , focused : Bool
+    , isDirty : Bool
+    , value : Maybe String
+    , ripple : Ripple.Model
     }
 
 
 defaultModel : Model
 defaultModel =
-    { menu = Menu.defaultModel
-    , geometry = Nothing
-    , index = Nothing
+    { geometry = Nothing
+    , focused = False
+    , isDirty = False
+    , value = Nothing
+    , ripple = Ripple.defaultModel
     }
 
 
 type Msg m
-    = MenuMsg (Maybe Int) (Menu.Msg m)
-    | Init Geometry
+    = Blur
+    | Focus Geometry
+    | Input String
+    | NoOp
+    | RippleMsg Ripple.Msg
 
 
 type alias Geometry =
     { boundingClientRect : DOM.Rectangle
     , windowInnerHeight : Float
-    , menuHeight : Float
     , itemOffsetTops : List Float
     }
 
@@ -42,6 +48,5 @@ defaultGeometry : Geometry
 defaultGeometry =
     { boundingClientRect = { top = 0, left = 0, width = 0, height = 0 }
     , windowInnerHeight = 0
-    , menuHeight = 0
     , itemOffsetTops = []
     }

@@ -1,10 +1,9 @@
 module Material.Select exposing
     ( box
     , disabled
-    , index
     , label
+    , preselected
     , Property
-    , selectedText
     , view
     )
 
@@ -18,7 +17,7 @@ manually.
 
 # Resources
 
-- [Material Design guidelines: Text Fields](https://material.io/guidelines/components/text-fields.html)
+- [Material Design guidelines: Select Menus](https://material.io/develop/web/components/input-controls/select-menus/)
 - [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
 - [Demo](https://aforemny.github.io/elm-mdc/#select)
 
@@ -26,25 +25,25 @@ manually.
 # Example
 
 ```elm
-import Material.Menu as Menu
+import Html exposing (..)
 import Material.Options exposing (css)
 import Material.Select as Select
 
 
 Select.view (lift << Mdc) id model.mdc
     [ Select.label "Food Group"
+    , Select.preselected
+    , Options.onChange ProcessMyChange
     , css "width" "377px"
     ]
-    [ Menu.li
-          [ Menu.onSelect (Select "Fruit Roll Ups")
+    [ Html.option
+          [ Html.value "Fruit Roll Ups"
+          , Html.selected True
           ]
-          [ text "Fruit Roll Ups"
-          ]
-    , Menu.li
-          [ Menu.onSelect (Select "Candy (cotton)")
-          ]
-          [ text "Candy (cotton)"
-          ]
+          [ text "Fruit Roll Ups" ]
+    , Html.option
+          [ Html.value "Candy (cotton)" ]
+          [ text "Candy (cotton)" ]
     ]
 ```
 
@@ -54,17 +53,15 @@ Select.view (lift << Mdc) id model.mdc
 @docs Property
 @docs view
 @docs label
-@docs selectedText
-@docs index
+@docs preselected
 @docs disabled
 @docs box
 -}
 
 import Html exposing (Html)
 import Material
-import Internal.Component exposing (Index)
-import Internal.Select.Implementation as Select
-import Material.Menu as Menu
+import Material.Component exposing (Index)
+import Material.Internal.Select.Implementation as Select
 
 
 {-| Select property.
@@ -80,7 +77,7 @@ view :
     -> Index
     -> Material.Model m
     -> List (Property m)
-    -> List (Menu.Item m)
+    -> List (Html m)
     -> Html m
 view =
     Select.view
@@ -100,18 +97,11 @@ label =
     Select.label
 
 
-{-| Set the index of the selected item.
+{-| Use this if an option has been preselected.
 -}
-index : Int -> Property m
-index =
-    Select.index
-
-
-{-| Set the textual representation of the selected item.
--}
-selectedText : String -> Property m
-selectedText =
-    Select.selectedText
+preselected : Property m
+preselected =
+    Select.preselected
 
 
 {-| Disable the select.
