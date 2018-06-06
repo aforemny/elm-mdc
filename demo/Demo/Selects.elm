@@ -189,9 +189,9 @@ select lift id model selectedIndex options _ =
                      , Html.selected
                          (case selectedIndex of
                               Nothing ->
-                              False
+                                  False
                               Just i ->
-                              index == i
+                                  index == i
                          )
                      ]
                      [ text label ]
