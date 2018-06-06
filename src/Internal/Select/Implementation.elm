@@ -34,9 +34,6 @@ update lift msg model =
         Focus geometry ->
             ( Just { model | focused = True }, Cmd.none )
 
-        NoOp ->
-            ( Just model, Cmd.none )
-
         RippleMsg msg_ ->
             let
                 ( ripple, effects ) =

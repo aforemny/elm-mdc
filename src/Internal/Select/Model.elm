@@ -33,7 +33,6 @@ type Msg m
     = Blur
     | Focus Geometry
     | Input String
-    | NoOp
     | RippleMsg Ripple.Msg
 
 
