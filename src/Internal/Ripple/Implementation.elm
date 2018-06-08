@@ -1,35 +1,35 @@
-module Internal.Ripple.Implementation exposing
-    ( accent
-    , bounded
-    , primary
-    , Property
-    , react
-    , unbounded
-    , update
-    , view
-    )
+module Internal.Ripple.Implementation
+    exposing
+        ( Property
+        , accent
+        , bounded
+        , primary
+        , react
+        , unbounded
+        , update
+        , view
+        )
 
 import Char
 import DOM
-import Html.Attributes as Html
 import Html exposing (Html, text)
-import Json.Decode as Json exposing (Decoder, field, at)
-import Internal.Component as Component exposing (Indexed, Index)
+import Html.Attributes as Html
+import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Helpers as Helpers
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, css, when)
-import Internal.Ripple.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
+import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Ripple.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
+import Json.Decode as Json exposing (Decoder, at, field)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-
         Focus ->
             ( { model | focus = True }, Cmd.none )
 
         Blur ->
-            ( { model | focus = False }, Cmd.none)
+            ( { model | focus = False }, Cmd.none )
 
         Activate event active_ geometry ->
             let
@@ -40,20 +40,19 @@ update msg model =
                 let
                     active =
                         active_
-                        |> Maybe.withDefault model.active
+                            |> Maybe.withDefault model.active
 
                     animation =
                         model.animation + 1
                 in
                 ( { model
-                      | active = active
-                      , animating = True
-                      , geometry = geometry
-                      , deactivation = False
-                      , animation = animation
+                    | active = active
+                    , animating = True
+                    , geometry = geometry
+                    , deactivation = False
+                    , animation = animation
                   }
-                ,
-                  Helpers.delayedCmd 300 (AnimationEnd event animation)
+                , Helpers.delayedCmd 300 (AnimationEnd event animation)
                 )
             else
                 ( model, Cmd.none )
@@ -64,13 +63,18 @@ update msg model =
                     case model.geometry.event.type_ of
                         "keydown" ->
                             event == "keyup"
+
                         "mousedown" ->
                             event == "mouseup"
+
                         "pointerdown" ->
                             event == "pointerup"
+
                         "touchstart" ->
                             event == "touchend"
-                        _ -> False
+
+                        _ ->
+                            False
             in
             if sameEvent then
                 ( { model | active = False }, Cmd.none )
@@ -84,28 +88,30 @@ update msg model =
                 ( model, Cmd.none )
 
 
-bounded
-    : (Internal.Msg.Msg m -> m)
+bounded :
+    (Internal.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
-    -> { interactionHandler : Options.Property c m
-       , properties : Options.Property c m
-       , style : Html m
-       }
+    ->
+        { interactionHandler : Options.Property c m
+        , properties : Options.Property c m
+        , style : Html m
+        }
 bounded =
     Component.render get (view False) Internal.Msg.RippleMsg
 
 
-unbounded
-    : (Internal.Msg.Msg m -> m)
+unbounded :
+    (Internal.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
-    -> { interactionHandler : Options.Property c m
-       , properties : Options.Property c m
-       , style : Html m
-       }
+    ->
+        { interactionHandler : Options.Property c m
+        , properties : Options.Property c m
+        , style : Html m
+        }
 unbounded =
     Component.render get (view True) Internal.Msg.RippleMsg
 
@@ -123,26 +129,28 @@ defaultConfig =
 
 primary : Property m
 primary =
-    Options.option (\ config -> { config | color = Just "primary" })
+    Options.option (\config -> { config | color = Just "primary" })
 
 
 accent : Property m
 accent =
-    Options.option (\ config -> { config | color = Just "accent" })
+    Options.option (\config -> { config | color = Just "accent" })
 
 
 type alias Property m =
     Options.Property Config m
 
 
-view : Bool
+view :
+    Bool
     -> (Msg -> m)
     -> Model
     -> List (Property m)
-    -> { interactionHandler : Options.Property c m
-       , properties : Options.Property c m
-       , style : Html m
-       }
+    ->
+        { interactionHandler : Options.Property c m
+        , properties : Options.Property c m
+        , style : Html m
+        }
 view isUnbounded lift model options =
     let
         { config } =
@@ -161,13 +169,13 @@ view isUnbounded lift model options =
             toString initialSize ++ "px"
 
         surfaceDiameter =
-            sqrt ((geometry.frame.width^2) + (geometry.frame.height^2))
+            sqrt ((geometry.frame.width ^ 2) + (geometry.frame.height ^ 2))
 
         maxRadius =
             if isUnbounded then
-              maxDimension
+                maxDimension
             else
-              surfaceDiameter + 10
+                surfaceDiameter + 10
 
         fgScale =
             toString (maxRadius / initialSize)
@@ -201,10 +209,10 @@ view isUnbounded lift model options =
 
         wasActivatedByPointer =
             List.member geometry.event.type_
-            [ "mousedown"
-            , "touchstart"
-            , "pointerdown"
-            ]
+                [ "mousedown"
+                , "touchstart"
+                , "pointerdown"
+                ]
 
         top =
             toString startPoint.y ++ "px"
@@ -213,42 +221,48 @@ view isUnbounded lift model options =
             toString startPoint.x ++ "px"
 
         summary =
-          Options.collect ()
+            Options.collect ()
 
         cssVariableHack =
             let
                 className =
                     (++) "mdc-ripple-style-hack--" <|
-                    String.fromList
-                    << List.filter Char.isDigit
-                    << String.toList
-                    << String.concat <|
-                    [ fgSize
-                    , fgScale
-                    , top
-                    , left
-                    , translateStart
-                    , translateEnd
-                    ]
+                        String.fromList
+                            << List.filter Char.isDigit
+                            << String.toList
+                            << String.concat
+                        <|
+                            [ fgSize
+                            , fgScale
+                            , top
+                            , left
+                            , translateStart
+                            , translateEnd
+                            ]
 
                 text =
-                    flip (++) ("}") << (++) ("." ++ className ++ "{") <|
-                    String.concat << List.map (\ ( k, v ) ->
-                            "--mdc-ripple-" ++ k ++ ":" ++ v ++ " !important;"
-                        ) <|
-                        List.concat
-                        [ [ ( "fg-size", fgSize )
-                          , ( "fg-scale", fgScale )
-                          ]
-                        , if isUnbounded then
-                              [ ( "top", top )
-                              , ( "left", left )
-                              ]
-                          else
-                              [ ( "fg-translate-start", translateStart )
-                              , ( "fg-translate-end", translateEnd )
-                              ]
-                        ]
+                    flip (++) "}"
+                        << (++) ("." ++ className ++ "{")
+                    <|
+                        String.concat
+                            << List.map
+                                (\( k, v ) ->
+                                    "--mdc-ripple-" ++ k ++ ":" ++ v ++ " !important;"
+                                )
+                        <|
+                            List.concat
+                                [ [ ( "fg-size", fgSize )
+                                  , ( "fg-scale", fgScale )
+                                  ]
+                                , if isUnbounded then
+                                    [ ( "top", top )
+                                    , ( "left", left )
+                                    ]
+                                  else
+                                    [ ( "fg-translate-start", translateStart )
+                                    , ( "fg-translate-end", translateEnd )
+                                    ]
+                                ]
             in
             { className = className
             , text = text
@@ -262,7 +276,7 @@ view isUnbounded lift model options =
 
         activateOn event =
             Options.on event <|
-            Json.map (lift << Activate event (Just True)) (decodeGeometry event)
+                Json.map (lift << Activate event (Just True)) (decodeGeometry event)
 
         deactivateOn event =
             Options.on event (Json.succeed (lift (Deactivate event)))
@@ -272,66 +286,63 @@ view isUnbounded lift model options =
 
         interactionHandler =
             Options.many
-            [ focusOn "focus"
-            , blurOn "blur"
-            , Options.many <|
-              List.map activateOn
-              [ -- "keydown"
-                "mousedown"
-              , "pointerdown"
-              , "touchstart"
-              ]
-            , Options.many <|
-              List.map deactivateOn
-              [ -- "keyup"
-                "mouseup"
-              , "pointerup"
-              , "touchend"
-              ]
-            ]
+                [ focusOn "focus"
+                , blurOn "blur"
+                , Options.many <|
+                    List.map activateOn
+                        [ -- "keydown"
+                          "mousedown"
+                        , "pointerdown"
+                        , "touchstart"
+                        ]
+                , Options.many <|
+                    List.map deactivateOn
+                        [ -- "keyup"
+                          "mouseup"
+                        , "pointerup"
+                        , "touchend"
+                        ]
+                ]
 
         properties =
             Options.many
-            [
-              cs "mdc-ripple-upgraded"
-            -- Note: Buttons can't have mdc-ripple-surface.
-            -- , cs "mdc-ripple-surface"
+                [ cs "mdc-ripple-upgraded"
 
-            , when (config.color == Just "primary") <|
-              cs "mdc-ripple-surface--primary"
-
-            , when (config.color == Just "accent") <|
-              cs "mdc-ripple-surface--accent"
-
-            , when isUnbounded << Options.many <|
-              [ cs "mdc-ripple-upgraded--unbounded"
-              , Options.data "data-mdc-ripple-is-unbounded" ""
-              ]
-
-            , when isVisible << Options.many <|
-              [ cs "mdc-ripple-upgraded--background-active-fill"
-              , cs "mdc-ripple-upgraded--foreground-activation"
-              ]
-
-            , when model.deactivation <|
-              cs "mdc-ripple-upgraded--foreground-deactivation"
-
-            , when model.focus <|
-              cs "mdc-ripple-upgraded--background-focused"
-
-            , when isVisible <|
-              cs cssVariableHack.className
-            ]
+                -- Note: Buttons can't have mdc-ripple-surface.
+                -- , cs "mdc-ripple-surface"
+                , when (config.color == Just "primary") <|
+                    cs "mdc-ripple-surface--primary"
+                , when (config.color == Just "accent") <|
+                    cs "mdc-ripple-surface--accent"
+                , when isUnbounded
+                    << Options.many
+                  <|
+                    [ cs "mdc-ripple-upgraded--unbounded"
+                    , Options.data "data-mdc-ripple-is-unbounded" ""
+                    ]
+                , when isVisible
+                    << Options.many
+                  <|
+                    [ cs "mdc-ripple-upgraded--background-active-fill"
+                    , cs "mdc-ripple-upgraded--foreground-activation"
+                    ]
+                , when model.deactivation <|
+                    cs "mdc-ripple-upgraded--foreground-deactivation"
+                , when model.focus <|
+                    cs "mdc-ripple-upgraded--background-focused"
+                , when isVisible <|
+                    cs cssVariableHack.className
+                ]
 
         style =
             Html.node "style"
-            [ Html.type_ "text/css"
-            ]
-            [ if isVisible then
-                  text cssVariableHack.text
-              else
-                  text ""
-            ]
+                [ Html.type_ "text/css"
+                ]
+                [ if isVisible then
+                    text cssVariableHack.text
+                  else
+                    text ""
+                ]
     in
     { interactionHandler = interactionHandler
     , properties = properties
@@ -340,7 +351,8 @@ view isUnbounded lift model options =
 
 
 type alias Store s =
-    { s | ripple : Indexed Model
+    { s
+        | ripple : Indexed Model
     }
 
 
@@ -348,7 +360,8 @@ type alias Store s =
     Component.indexed .ripple (\x y -> { y | ripple = x }) defaultModel
 
 
-react : (Internal.Msg.Msg m -> m)
+react :
+    (Internal.Msg.Msg m -> m)
     -> Msg
     -> Index
     -> Store s
@@ -361,83 +374,85 @@ decodeGeometry : String -> Decoder Geometry
 decodeGeometry type_ =
     let
         windowPageOffset =
-          Json.map2 (\ x y -> { x = x, y = y })
-            (Json.at ["pageXOffset"] Json.float)
-            (Json.at ["pageYOffset"] Json.float)
+            Json.map2 (\x y -> { x = x, y = y })
+                (Json.at [ "pageXOffset" ] Json.float)
+                (Json.at [ "pageYOffset" ] Json.float)
 
         isSurfaceDisabled =
-          Json.oneOf
-          [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
-          , Json.succeed False
-          ]
+            Json.oneOf
+                [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
+                , Json.succeed False
+                ]
 
         boundingClientRect pageOffset =
-          DOM.boundingClientRect
-          |> Json.map (\ { top, left, width, height } ->
-               { top = top
-               , left = left
-               , width = width
-               , height = height
-               }
-             )
+            DOM.boundingClientRect
+                |> Json.map
+                    (\{ top, left, width, height } ->
+                        { top = top
+                        , left = left
+                        , width = width
+                        , height = height
+                        }
+                    )
 
         normalizeCoords pageOffset clientRect { pageX, pageY } =
-          let
-            documentX =
-              pageOffset.x + clientRect.left
+            let
+                documentX =
+                    pageOffset.x + clientRect.left
 
-            documentY =
-              pageOffset.y + clientRect.top
+                documentY =
+                    pageOffset.y + clientRect.top
 
-            x =
-              pageX - documentX
+                x =
+                    pageX - documentX
 
-            y =
-              pageY - documentY
-          in
-          { x = x, y = y }
+                y =
+                    pageY - documentY
+            in
+            { x = x, y = y }
 
         changedTouches =
-          Json.at ["changedTouches"] (Json.list changedTouch)
+            Json.at [ "changedTouches" ] (Json.list changedTouch)
 
         changedTouch =
-          Json.map2 (\ pageX pageY -> { pageX = pageX, pageY = pageY })
-            (Json.at ["pageX"] Json.float)
-            (Json.at ["pageY"] Json.float)
+            Json.map2 (\pageX pageY -> { pageX = pageX, pageY = pageY })
+                (Json.at [ "pageX" ] Json.float)
+                (Json.at [ "pageY" ] Json.float)
 
         currentTarget =
-          Json.at ["currentTarget"]
+            Json.at [ "currentTarget" ]
 
         view =
-          Json.at ["view"]
+            Json.at [ "view" ]
     in
     Json.map4
-      (\ coords pageOffset clientRect isSurfaceDisabled ->
-          let
-            { x, y } =
-              normalizeCoords pageOffset clientRect coords
-            event =
-              { type_ = type_
-              , pageX = x
-              , pageY = y
-              }
-          in
-          { event = event
-          , isSurfaceDisabled = isSurfaceDisabled
-          , frame = clientRect
-          }
-      )
-      ( if type_ == "touchstart" then
+        (\coords pageOffset clientRect isSurfaceDisabled ->
+            let
+                { x, y } =
+                    normalizeCoords pageOffset clientRect coords
+
+                event =
+                    { type_ = type_
+                    , pageX = x
+                    , pageY = y
+                    }
+            in
+            { event = event
+            , isSurfaceDisabled = isSurfaceDisabled
+            , frame = clientRect
+            }
+        )
+        (if type_ == "touchstart" then
             changedTouches
-            |> Json.map List.head
-            |> Json.map (Maybe.withDefault { pageX = 0, pageY = 0 })
-        else
-            Json.map2 (\ pageX pageY -> { pageX = pageX, pageY = pageY })
-              (Json.at ["pageX"] Json.float)
-              (Json.at ["pageY"] Json.float)
-      )
-      (view windowPageOffset)
-      ( view windowPageOffset
-        |> Json.andThen (currentTarget << boundingClientRect)
-      )
-      (currentTarget isSurfaceDisabled)
+                |> Json.map List.head
+                |> Json.map (Maybe.withDefault { pageX = 0, pageY = 0 })
+         else
+            Json.map2 (\pageX pageY -> { pageX = pageX, pageY = pageY })
+                (Json.at [ "pageX" ] Json.float)
+                (Json.at [ "pageY" ] Json.float)
+        )
+        (view windowPageOffset)
+        (view windowPageOffset
+            |> Json.andThen (currentTarget << boundingClientRect)
+        )
+        (currentTarget isSurfaceDisabled)

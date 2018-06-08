@@ -1,16 +1,16 @@
-module Material exposing
-    ( defaultModel
-    , Index
-    , init
-    , Model
-    , Msg
-    , subscriptions
-    , top
-    , update
-    )
+module Material
+    exposing
+        ( Index
+        , Model
+        , Msg
+        , defaultModel
+        , init
+        , subscriptions
+        , top
+        , update
+        )
 
-{-|
-Material is a re-implementation of Google's Internal.Components for Web (MDC
+{-| Material is a re-implementation of Google's Internal.Components for Web (MDC
 Web) library in pure Elm, with resorting to JavaScript assets only when
 absolutely necessary.
 
@@ -22,14 +22,14 @@ correspond to your basic TEA program.
 
 Some things of note are:
 
-- `Material.Model` and `Material.Msg` have to know your top-level message type
-  `Msg` for technical reasons.
-- Your message constructor `Mdc : Material.Msg Msg -> Msg` *lifts* internal
-  component messages to your top-level message type and appears throughout the
-  library.
-- To distinguish components, ie. one button from another, this library uses a
-  list of integers as indices. Those indices must be unique within a
-  `Material.Model`, but you can have as many `Material.Model`s as you like.
+  - `Material.Model` and `Material.Msg` have to know your top-level message type
+    `Msg` for technical reasons.
+  - Your message constructor `Mdc : Material.Msg Msg -> Msg` _lifts_ internal
+    component messages to your top-level message type and appears throughout the
+    library.
+  - To distinguish components, ie. one button from another, this library uses a
+    list of integers as indices. Those indices must be unique within a
+    `Material.Model`, but you can have as many `Material.Model`s as you like.
 
 Have a look at the demo's source code for an example of how to structure large
 applications using this library.
@@ -53,85 +53,85 @@ Set the `mdc-typography` class in the body:
 </body>
 ```
 
+
 # Resources
 
-- [Demo](https://aforemny.github.io/elm-mdc)
+  - [Demo](https://aforemny.github.io/elm-mdc)
 
 
 # Example
 
-```elm
-import Html exposing (Html, text)
-import Material
-import Material.Button as Button
-import Material.Options as Options
+    import Html exposing (Html, text)
+    import Material
+    import Material.Button as Button
+    import Material.Options as Options
 
 
-type alias Model
-    { mdc : Material.Model Msg
-    }
+    type alias Model
+        { mdc : Material.Model Msg
+        }
 
 
-defaultModel : Model
-defaultModel =
-    { mdc = Material.defaultModel
-    }
+    defaultModel : Model
+    defaultModel =
+        { mdc = Material.defaultModel
+        }
 
 
-type Msg
-    = Mdc (Material.Msg Msg)
-    | Click
+    type Msg
+        = Mdc (Material.Msg Msg)
+        | Click
 
 
-main : Program Never Model Msg
-main =
-    Html.program
-    { init = init
-    , subscriptions = subscriptions
-    , update = update
-    , view = view
-    }
+    main : Program Never Model Msg
+    main =
+        Html.program
+        { init = init
+        , subscriptions = subscriptions
+        , update = update
+        , view = view
+        }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( defaultModel, Material.init Mdc )
+    init : ( Model, Cmd Msg )
+    init =
+        ( defaultModel, Material.init Mdc )
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Material.subscriptions Mdc model
+    subscriptions : Model -> Sub Msg
+    subscriptions model =
+        Material.subscriptions Mdc model
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Mdc msg_ ->
-            Material.update Mdc msg_ model
+    update : Msg -> Model -> ( Model, Cmd Msg )
+    update msg model =
+        case msg of
+            Mdc msg_ ->
+                Material.update Mdc msg_ model
 
-        Click ->
-            let
-                _ =
-                    Debug.log "Msg" "Click"
-            in
-            ( model, Cmd.none )
+            Click ->
+                let
+                    _ =
+                        Debug.log "Msg" "Click"
+                in
+                ( model, Cmd.none )
 
 
-view : Model -> Html Msg
-view model =
-    Material.top <|
-    Html.div []
-        [
-          Button.view Mdc [0] model.mdc
-              [ Button.ripple
-              , Options.onClick Click
-              ]
-              [ text "Click me!" ]
-        ]
-```
+    view : Model -> Html Msg
+    view model =
+        Material.top <|
+        Html.div []
+            [
+              Button.view Mdc [0] model.mdc
+                  [ Button.ripple
+                  , Options.onClick Click
+                  ]
+                  [ text "Click me!" ]
+            ]
 
 
 # Usage
+
 
 ## The Elm Architecture
 
@@ -143,18 +143,22 @@ view model =
 @docs update
 @docs Index
 
+
 ## Prototyping
 
 @docs top
+
 -}
 
 import Dict
-import Html.Attributes as Html
 import Html exposing (Html, text)
+import Html.Attributes as Html
 import Internal.Button.Implementation as Button
 import Internal.Button.Model as Button
 import Internal.Checkbox.Implementation as Checkbox
 import Internal.Checkbox.Model as Checkbox
+import Internal.Chip.Implementation as Chip
+import Internal.Chip.Model as Chip
 import Internal.Component exposing (Indexed)
 import Internal.Dialog.Implementation as Dialog
 import Internal.Dialog.Model as Dialog
@@ -205,16 +209,16 @@ type alias Index =
 
 This takes as argument a reference to your top-level message type `Msg`.
 
-```elm
-type alias Model =
-    { mdc : Material.Model Msg
-    , …
-    }
-```
+    type alias Model =
+        { mdc : Material.Model Msg
+        , …
+        }
+
 -}
 type alias Model m =
     { button : Indexed Button.Model
     , checkbox : Indexed Checkbox.Model
+    , chip : Indexed Chip.Model
     , dialog : Indexed Dialog.Model
     , drawer : Indexed Drawer.Model
     , fab : Indexed Fab.Model
@@ -236,17 +240,17 @@ type alias Model m =
 
 {-| Material default model.
 
-```elm
-defaultModel =
-    { mdc = Material.defaultModel
-    , …
-    }
-```
+    defaultModel =
+        { mdc = Material.defaultModel
+        , …
+        }
+
 -}
 defaultModel : Model m
 defaultModel =
     { button = Dict.empty
     , checkbox = Dict.empty
+    , chip = Dict.empty
     , dialog = Dict.empty
     , drawer = Dict.empty
     , fab = Dict.empty
@@ -270,11 +274,10 @@ defaultModel =
 
 This takes as argument a reference to your top-level message type `Msg`.
 
-```elm
-type Msg
-    = Mdc (Material.Msg Msg)
-    | …
-```
+    type Msg
+        = Mdc (Material.Msg Msg)
+        | …
+
 -}
 type alias Msg m =
     Internal.Msg.Msg m
@@ -282,36 +285,39 @@ type alias Msg m =
 
 {-| Material update.
 
-```elm
-    update msg model =
-        case msg of
-            Mdc msg_ ->
-                Material.update Mdc msg_ model
+        update msg model =
+            case msg of
+                Mdc msg_ ->
+                    Material.update Mdc msg_ model
 
-            …
-```
+                …
+
 -}
-update : (Msg m -> m)
+update :
+    (Msg m -> m)
     -> Msg m
     -> { c | mdc : Model m }
     -> ( { c | mdc : Model m }, Cmd m )
 update lift msg container =
-  update_ lift msg (.mdc container)
-      |> Tuple.mapFirst (Maybe.map (\ mdc -> { container | mdc = mdc }))
-      |> Tuple.mapFirst (Maybe.withDefault container)
+    update_ lift msg (.mdc container)
+        |> Tuple.mapFirst (Maybe.map (\mdc -> { container | mdc = mdc }))
+        |> Tuple.mapFirst (Maybe.withDefault container)
 
 
 update_ : (Msg m -> m) -> Msg m -> Model m -> ( Maybe (Model m), Cmd m )
 update_ lift msg store =
     case msg of
         Dispatch msgs ->
-            (Nothing, Dispatch.forward msgs)
+            ( Nothing, Dispatch.forward msgs )
 
         ButtonMsg idx msg ->
             Button.react lift msg idx store
 
         CheckboxMsg idx msg ->
             Checkbox.react lift msg idx store
+
+        ChipMsg idx msg ->
+            Chip.react lift msg idx store
 
         DialogMsg idx msg ->
             Dialog.react lift msg idx store
@@ -364,13 +370,12 @@ update_ lift msg store =
 
 {-| Material subscriptions.
 
-```elm
-subscriptions model =
-    Sub.batch
-    [ Material.subscriptions Mdc model
-    , …
-    ]
-```
+    subscriptions model =
+        Sub.batch
+        [ Material.subscriptions Mdc model
+        , …
+        ]
+
 -}
 subscriptions : (Msg m -> m) -> { model | mdc : Model m } -> Sub m
 subscriptions lift model =
@@ -382,20 +387,19 @@ subscriptions lift model =
 
 {-| Material init.
 
-```elm
-init =
-    let
-        defaultModel =
-            …
+    init =
+        let
+            defaultModel =
+                …
 
-        effects =
-            Cmd.map
-            [ Material.init Mdc
-            , …
-            ]
-    in
-    ( defaultModel, effects )
-```
+            effects =
+                Cmd.map
+                [ Material.init Mdc
+                , …
+                ]
+        in
+        ( defaultModel, effects )
+
 -}
 init : (Msg m -> m) -> Cmd m
 init lift =
@@ -407,44 +411,41 @@ adds the necessary CSS and JavaScript imports.
 
 For production use, you will want to do this yourself in `index.html` to
 prevent an unstyled flash of content and to properly manage assets.
+
 -}
 top : Html a -> Html a
 top content =
     Html.div []
-    [
-      content
-
-    , Html.node "style"
-      [ Html.type_ "text/css"
-      ]
-      [ [ "https://fonts.googleapis.com/css?family=Roboto+Mono"
-        , "https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-        , "https://fonts.googleapis.com/icon?family=Material+Icons"
-        , "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
-        , "https://aforemny.github.io/elm-mdc/material-components-web.css"
+        [ content
+        , Html.node "style"
+            [ Html.type_ "text/css"
+            ]
+            [ [ "https://fonts.googleapis.com/css?family=Roboto+Mono"
+              , "https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+              , "https://fonts.googleapis.com/icon?family=Material+Icons"
+              , "https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
+              , "https://aforemny.github.io/elm-mdc/material-components-web.css"
+              ]
+                |> List.map
+                    (\url ->
+                        "@import url(" ++ url ++ ");"
+                    )
+                |> String.join "\n"
+                |> text
+            ]
+        , Html.node "script"
+            [ Html.type_ "text/javascript"
+            , Html.src "https://aforemny.github.io/elm-mdc/elm-global-events.js"
+            ]
+            []
+        , Html.node "script"
+            [ Html.type_ "text/javascript"
+            , Html.src "https://aforemny.github.io/elm-mdc/elm-focus-trap.js"
+            ]
+            []
+        , Html.node "script"
+            [ Html.type_ "text/javascript"
+            , Html.src "https://aforemny.github.io/elm-mdc/elm-mdc.js"
+            ]
+            []
         ]
-        |> List.map (\url ->
-               "@import url(" ++ url ++ ");"
-           )
-        |> String.join "\n"
-        |> text
-      ]
-
-    , Html.node "script"
-      [ Html.type_ "text/javascript"
-      , Html.src "https://aforemny.github.io/elm-mdc/elm-global-events.js"
-      ]
-      []
-
-    , Html.node "script"
-      [ Html.type_ "text/javascript"
-      , Html.src "https://aforemny.github.io/elm-mdc/elm-focus-trap.js"
-      ]
-      []
-
-    , Html.node "script"
-      [ Html.type_ "text/javascript"
-      , Html.src "https://aforemny.github.io/elm-mdc/elm-mdc.js"
-      ]
-      []
-    ]

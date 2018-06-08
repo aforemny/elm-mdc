@@ -1,9 +1,11 @@
-module Internal.Msg exposing
-    ( Msg(..)
-    )
+module Internal.Msg
+    exposing
+        ( Msg(..)
+        )
 
 import Internal.Button.Model as Button
 import Internal.Checkbox.Model as Checkbox
+import Internal.Chip.Model as Chip
 import Internal.Dialog.Model as Dialog
 import Internal.Drawer.Model as Drawer
 import Internal.Fab.Model as Fab
@@ -30,6 +32,7 @@ type Msg m
     = Dispatch (List m)
     | ButtonMsg Index (Button.Msg m)
     | CheckboxMsg Index Checkbox.Msg
+    | ChipMsg Index (Chip.Msg m)
     | DialogMsg Index Dialog.Msg
     | DrawerMsg Index Drawer.Msg
     | FabMsg Index Fab.Msg
