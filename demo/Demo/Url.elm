@@ -1,10 +1,11 @@
-module Demo.Url exposing
-  ( fromString
-  , ToolbarPage(..)
-  , TopAppBarPage(..)
-  , toString
-  , Url(..)
-  )
+module Demo.Url
+    exposing
+        ( ToolbarPage(..)
+        , TopAppBarPage(..)
+        , Url(..)
+        , fromString
+        , toString
+        )
 
 
 type Url
@@ -12,6 +13,7 @@ type Url
     | Button
     | Card
     | Checkbox
+    | Chips
     | Dialog
     | Drawer
     | TemporaryDrawer
@@ -96,7 +98,7 @@ toString url =
                     "#top-app-bar"
 
                 Just StandardTopAppBar ->
-                   "#top-app-bar/standard"
+                    "#top-app-bar/standard"
 
                 Just FixedTopAppBar ->
                     "#top-app-bar/fixed"
@@ -125,6 +127,9 @@ toString url =
 
         Checkbox ->
             "#checkbox"
+
+        Chips ->
+            "#chips"
 
         Dialog ->
             "#dialog"
@@ -199,10 +204,10 @@ toString url =
             "#theme"
 
         Toolbar toolbar ->
-          toolbarCase toolbar
+            toolbarCase toolbar
 
         TopAppBar topAppBar ->
-          topAppBarCase topAppBar
+            topAppBarCase topAppBar
 
         Typography ->
             "#typography"
@@ -230,6 +235,9 @@ fromString str =
 
                 Just ( '#', "checkbox" ) ->
                     Just <| Checkbox
+
+                Just ( '#', "chips" ) ->
+                    Just <| Chips
 
                 Just ( '#', "dialog" ) ->
                     Just <| Dialog
@@ -313,7 +321,7 @@ fromString str =
 
         case3 str =
             case String.uncons str of
-                Just ( '#',  "toolbar" ) ->
+                Just ( '#', "toolbar" ) ->
                     Just <| Toolbar Nothing
 
                 Just ( '#', "toolbar/default-toolbar" ) ->
@@ -334,7 +342,7 @@ fromString str =
                 Just ( '#', "toolbar/waterfall-toolbar-fix-last-row" ) ->
                     Just <| Toolbar (Just WaterfallToolbarFix)
 
-                Just ( '#',  "top-app-bar" ) ->
+                Just ( '#', "top-app-bar" ) ->
                     Just <| TopAppBar Nothing
 
                 Just ( '#', "top-app-bar/standard" ) ->
@@ -360,12 +368,11 @@ fromString str =
 
                 _ ->
                     Nothing
-
     in
     [ case1 str
     , case2 str
     , case3 str
     ]
-    |> List.filterMap identity
-    |> List.head
-    |> Maybe.withDefault (Error404 str)
+        |> List.filterMap identity
+        |> List.head
+        |> Maybe.withDefault (Error404 str)
