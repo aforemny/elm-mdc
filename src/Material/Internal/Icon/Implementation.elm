@@ -37,7 +37,7 @@ view options name =
     in
     Options.apply summary
         (Html.node config.node)
-        (cs "material-icons" :: options)
+        (cs "material-icons" :: (Options.aria "hidden" "true") :: options)
         []
         [ text name ]
 
