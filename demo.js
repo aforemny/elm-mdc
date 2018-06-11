@@ -20725,14 +20725,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_Buttons$Mdc(_p2));
 										},
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											idx,
-											{
-												ctor: '::',
-												_0: 0,
-												_1: {ctor: '[]'}
-											}),
+										A2(_elm_lang$core$Basics_ops['++'], idx, '-baseline-button'),
 										model.mdc,
 										options,
 										{
@@ -20748,14 +20741,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Buttons$Mdc(_p3));
 											},
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												idx,
-												{
-													ctor: '::',
-													_0: 2,
-													_1: {ctor: '[]'}
-												}),
+											A2(_elm_lang$core$Basics_ops['++'], idx, '-dense-button'),
 											model.mdc,
 											{ctor: '::', _0: _aforemny$elm_mdc$Material_Button$dense, _1: options},
 											{
@@ -20771,14 +20757,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Buttons$Mdc(_p4));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													idx,
-													{
-														ctor: '::',
-														_0: 3,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], idx, '-secondary-button'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -20798,14 +20777,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_Buttons$Mdc(_p5));
 													},
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														idx,
-														{
-															ctor: '::',
-															_0: 4,
-															_1: {ctor: '[]'}
-														}),
+													A2(_elm_lang$core$Basics_ops['++'], idx, '-icon-button'),
 													model.mdc,
 													{
 														ctor: '::',
@@ -20825,14 +20797,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 															return lift(
 																_aforemny$elm_mdc$Demo_Buttons$Mdc(_p6));
 														},
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															idx,
-															{
-																ctor: '::',
-																_0: 5,
-																_1: {ctor: '[]'}
-															}),
+														A2(_elm_lang$core$Basics_ops['++'], idx, '-link-button'),
 														model.mdc,
 														{
 															ctor: '::',
@@ -20942,15 +20907,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 								return lift(
 									_aforemny$elm_mdc$Demo_Buttons$Mdc(_p7));
 							},
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								}
-							},
+							'buttons-hero-button-flat',
 							model.mdc,
 							{
 								ctor: '::',
@@ -20974,15 +20931,7 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_Buttons$Mdc(_p8));
 								},
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {
-										ctor: '::',
-										_0: 1,
-										_1: {ctor: '[]'}
-									}
-								},
+								'buttons-hero-button-raised',
 								model.mdc,
 								{
 									ctor: '::',
@@ -21044,36 +20993,16 @@ var _aforemny$elm_mdc$Demo_Buttons$view = F3(
 								}),
 							_1: {
 								ctor: '::',
-								_0: textButtons(
-									{
-										ctor: '::',
-										_0: 1,
-										_1: {ctor: '[]'}
-									}),
+								_0: textButtons('buttons-text-buttons'),
 								_1: {
 									ctor: '::',
-									_0: raisedButtons(
-										{
-											ctor: '::',
-											_0: 2,
-											_1: {ctor: '[]'}
-										}),
+									_0: raisedButtons('buttons-raised-buttons'),
 									_1: {
 										ctor: '::',
-										_0: unelevatedButtons(
-											{
-												ctor: '::',
-												_0: 3,
-												_1: {ctor: '[]'}
-											}),
+										_0: unelevatedButtons('buttons-unelevated-buttons'),
 										_1: {
 											ctor: '::',
-											_0: outlinedButtons(
-												{
-													ctor: '::',
-													_0: 4,
-													_1: {ctor: '[]'}
-												}),
+											_0: outlinedButtons('buttons-outlined-buttons'),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -21363,14 +21292,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Cards$Mdc(_p2));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													index,
-													{
-														ctor: '::',
-														_0: 0,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], index, '-action-button-read'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -21394,14 +21316,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_Cards$Mdc(_p3));
 													},
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														index,
-														{
-															ctor: '::',
-															_0: 1,
-															_1: {ctor: '[]'}
-														}),
+													A2(_elm_lang$core$Basics_ops['++'], index, '-action-button-bookmark'),
 													model.mdc,
 													{
 														ctor: '::',
@@ -21433,14 +21348,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_Cards$Mdc(_p4));
 													},
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														index,
-														{
-															ctor: '::',
-															_0: 2,
-															_1: {ctor: '[]'}
-														}),
+													A2(_elm_lang$core$Basics_ops['++'], index, '-action-icon-favorite'),
 													model.mdc,
 													{
 														ctor: '::',
@@ -21466,14 +21374,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 															return lift(
 																_aforemny$elm_mdc$Demo_Cards$Mdc(_p5));
 														},
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															index,
-															{
-																ctor: '::',
-																_0: 3,
-																_1: {ctor: '[]'}
-															}),
+														A2(_elm_lang$core$Basics_ops['++'], index, '-action-icon-share'),
 														model.mdc,
 														{
 															ctor: '::',
@@ -21499,14 +21400,7 @@ var _aforemny$elm_mdc$Demo_Cards$heroCard = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_Cards$Mdc(_p6));
 															},
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																index,
-																{
-																	ctor: '::',
-																	_0: 4,
-																	_1: {ctor: '[]'}
-																}),
+															A2(_elm_lang$core$Basics_ops['++'], index, '-action-icon-more-options'),
 															model.mdc,
 															{
 																ctor: '::',
@@ -21675,14 +21569,7 @@ var _aforemny$elm_mdc$Demo_Cards$headlinesCard = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Cards$Mdc(_p7));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													index,
-													{
-														ctor: '::',
-														_0: 0,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], index, '-action-button'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -21822,14 +21709,7 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_Cards$Mdc(_p8));
 										},
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											index,
-											{
-												ctor: '::',
-												_0: 0,
-												_1: {ctor: '[]'}
-											}),
+										A2(_elm_lang$core$Basics_ops['++'], index, '-action-icon-favorite'),
 										model.mdc,
 										{
 											ctor: '::',
@@ -21855,14 +21735,7 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Cards$Mdc(_p9));
 											},
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												index,
-												{
-													ctor: '::',
-													_0: 1,
-													_1: {ctor: '[]'}
-												}),
+											A2(_elm_lang$core$Basics_ops['++'], index, '-action-icon-bookmark'),
 											model.mdc,
 											{
 												ctor: '::',
@@ -21888,14 +21761,7 @@ var _aforemny$elm_mdc$Demo_Cards$photosCard = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Cards$Mdc(_p10));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													index,
-													{
-														ctor: '::',
-														_0: 2,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], index, '-action-icon-share'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -22073,11 +21939,10 @@ var _aforemny$elm_mdc$Demo_Cards$albumCard = F3(
 													A2(
 														_elm_lang$core$Basics_ops['++'],
 														index,
-														{
-															ctor: '::',
-															_0: n,
-															_1: {ctor: '[]'}
-														}),
+														A2(
+															_elm_lang$core$Basics_ops['++'],
+															'-action-icon-star-',
+															_elm_lang$core$Basics$toString(n))),
 													model.mdc,
 													{
 														ctor: '::',
@@ -22189,15 +22054,7 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 					},
 					{
 						ctor: '::',
-						_0: A3(
-							_aforemny$elm_mdc$Demo_Cards$heroCard,
-							lift,
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							},
-							model),
+						_0: A3(_aforemny$elm_mdc$Demo_Cards$heroCard, lift, 'card-hero-card', model),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -22222,11 +22079,7 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_Cards$Mdc(_p13));
 										},
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
+										'cards-toggle-rtl',
 										model.mdc,
 										{
 											ctor: '::',
@@ -22269,37 +22122,13 @@ var _aforemny$elm_mdc$Demo_Cards$view = F3(
 							},
 							{
 								ctor: '::',
-								_0: A3(
-									_aforemny$elm_mdc$Demo_Cards$headlinesCard,
-									lift,
-									{
-										ctor: '::',
-										_0: 1,
-										_1: {ctor: '[]'}
-									},
-									model),
+								_0: A3(_aforemny$elm_mdc$Demo_Cards$headlinesCard, lift, 'cards-headlines-card', model),
 								_1: {
 									ctor: '::',
-									_0: A3(
-										_aforemny$elm_mdc$Demo_Cards$photosCard,
-										lift,
-										{
-											ctor: '::',
-											_0: 2,
-											_1: {ctor: '[]'}
-										},
-										model),
+									_0: A3(_aforemny$elm_mdc$Demo_Cards$photosCard, lift, 'cards-photos-card', model),
 									_1: {
 										ctor: '::',
-										_0: A3(
-											_aforemny$elm_mdc$Demo_Cards$albumCard,
-											lift,
-											{
-												ctor: '::',
-												_0: 3,
-												_1: {ctor: '[]'}
-											},
-											model),
+										_0: A3(_aforemny$elm_mdc$Demo_Cards$albumCard, lift, 'cards-album-cards', model),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -22318,11 +22147,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$defaultModel = {
 	mdc: _aforemny$elm_mdc$Material$defaultModel,
 	checkboxes: A2(
 		_elm_lang$core$Dict$singleton,
-		{
-			ctor: '::',
-			_0: 2,
-			_1: {ctor: '[]'}
-		},
+		'checkbox-indeterminate-checkbox',
 		_elm_lang$core$Native_Utils.update(
 			_aforemny$elm_mdc$Demo_Checkbox$defaultCheckbox,
 			{checked: _elm_lang$core$Maybe$Nothing}))
@@ -22499,12 +22324,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: checkbox(
-									{
-										ctor: '::',
-										_0: 0,
-										_1: {ctor: '[]'}
-									}),
+								_0: checkbox('checkbox-hero-checkbox'),
 								_1: {
 									ctor: '::',
 									_0: A2(
@@ -22598,14 +22418,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 															return lift(
 																_aforemny$elm_mdc$Demo_Checkbox$Mdc(_p7));
 														},
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															index,
-															{
-																ctor: '::',
-																_0: 0,
-																_1: {ctor: '[]'}
-															}),
+														A2(_elm_lang$core$Basics_ops['++'], index, 'button-toggle-indeterminate'),
 														model.mdc,
 														{
 															ctor: '::',
@@ -22641,14 +22454,7 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_Checkbox$Mdc(_p8));
 															},
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																index,
-																{
-																	ctor: '::',
-																	_0: 1,
-																	_1: {ctor: '[]'}
-																}),
+															A2(_elm_lang$core$Basics_ops['++'], index, 'button-toggle-disabled'),
 															model.mdc,
 															{
 																ctor: '::',
@@ -22720,26 +22526,10 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 											},
 											{
 												ctor: '::',
-												_0: {
-													ctor: '_Tuple2',
-													_0: {
-														ctor: '::',
-														_0: 1,
-														_1: {ctor: '[]'}
-													},
-													_1: 'Default checkbox'
-												},
+												_0: {ctor: '_Tuple2', _0: 'checkbox-default-checkbox', _1: 'Default checkbox'},
 												_1: {
 													ctor: '::',
-													_0: {
-														ctor: '_Tuple2',
-														_0: {
-															ctor: '::',
-															_0: 2,
-															_1: {ctor: '[]'}
-														},
-														_1: 'Indeterminate checkbox'
-													},
+													_0: {ctor: '_Tuple2', _0: 'checkbox-indeterminate-checkbox', _1: 'Indeterminate checkbox'},
 													_1: {ctor: '[]'}
 												}
 											}),
@@ -22954,14 +22744,7 @@ var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p5));
 											},
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												index,
-												{
-													ctor: '::',
-													_0: 0,
-													_1: {ctor: '[]'}
-												}),
+											A2(_elm_lang$core$Basics_ops['++'], index, '-button-cancel'),
 											model.mdc,
 											{
 												ctor: '::',
@@ -22985,14 +22768,7 @@ var _aforemny$elm_mdc$Demo_Dialog$heroDialog = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Dialog$Mdc(_p6));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													index,
-													{
-														ctor: '::',
-														_0: 1,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], index, 'button-accept'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -23088,14 +22864,7 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p8));
 											},
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												index,
-												{
-													ctor: '::',
-													_0: 0,
-													_1: {ctor: '[]'}
-												}),
+											A2(_elm_lang$core$Basics_ops['++'], index, '-button-cancel'),
 											model.mdc,
 											{
 												ctor: '::',
@@ -23124,14 +22893,7 @@ var _aforemny$elm_mdc$Demo_Dialog$dialog = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Dialog$Mdc(_p9));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													index,
-													{
-														ctor: '::',
-														_0: 1,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], index, '-button-accept'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -23302,14 +23064,7 @@ var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p11));
 											},
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												index,
-												{
-													ctor: '::',
-													_0: 0,
-													_1: {ctor: '[]'}
-												}),
+											A2(_elm_lang$core$Basics_ops['++'], index, '-button-cancel'),
 											model.mdc,
 											{
 												ctor: '::',
@@ -23338,14 +23093,7 @@ var _aforemny$elm_mdc$Demo_Dialog$scrollableDialog = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Dialog$Mdc(_p12));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													index,
-													{
-														ctor: '::',
-														_0: 1,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], index, '-button-accept'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -23407,15 +23155,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 					},
 					{
 						ctor: '::',
-						_0: A3(
-							_aforemny$elm_mdc$Demo_Dialog$heroDialog,
-							lift,
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							},
-							model),
+						_0: A3(_aforemny$elm_mdc$Demo_Dialog$heroDialog, lift, 'dialog-hero-dialog', model),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -23446,26 +23186,10 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 						},
 						{
 							ctor: '::',
-							_0: A3(
-								_aforemny$elm_mdc$Demo_Dialog$dialog,
-								lift,
-								{
-									ctor: '::',
-									_0: 1,
-									_1: {ctor: '[]'}
-								},
-								model),
+							_0: A3(_aforemny$elm_mdc$Demo_Dialog$dialog, lift, 'dialog-dialog', model),
 							_1: {
 								ctor: '::',
-								_0: A3(
-									_aforemny$elm_mdc$Demo_Dialog$scrollableDialog,
-									lift,
-									{
-										ctor: '::',
-										_0: 2,
-										_1: {ctor: '[]'}
-									},
-									model),
+								_0: A3(_aforemny$elm_mdc$Demo_Dialog$scrollableDialog, lift, 'dialog-scrollable-dialog', model),
 								_1: {ctor: '[]'}
 							}
 						}),
@@ -23491,11 +23215,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 										return lift(
 											_aforemny$elm_mdc$Demo_Dialog$Mdc(_p13));
 									},
-									{
-										ctor: '::',
-										_0: 3,
-										_1: {ctor: '[]'}
-									},
+									'dialog-show-dialog',
 									model.mdc,
 									{
 										ctor: '::',
@@ -23527,11 +23247,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Dialog$Mdc(_p14));
 											},
-											{
-												ctor: '::',
-												_0: 4,
-												_1: {ctor: '[]'}
-											},
+											'dialog-show-scrollable-dialog',
 											model.mdc,
 											{
 												ctor: '::',
@@ -23568,11 +23284,7 @@ var _aforemny$elm_mdc$Demo_Dialog$view = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_Dialog$Mdc(_p15));
 															},
-															{
-																ctor: '::',
-																_0: 5,
-																_1: {ctor: '[]'}
-															},
+															'dialog-toggle-rtl',
 															model.mdc,
 															{
 																ctor: '::',
@@ -24143,11 +23855,7 @@ var _aforemny$elm_mdc$Demo_Fabs$view = F3(
 						return lift(
 							_aforemny$elm_mdc$Demo_Fabs$Mdc(_p2));
 					},
-					{
-						ctor: '::',
-						_0: idx,
-						_1: {ctor: '[]'}
-					},
+					idx,
 					model.mdc,
 					{
 						ctor: '::',
@@ -24172,7 +23880,7 @@ var _aforemny$elm_mdc$Demo_Fabs$view = F3(
 						ctor: '::',
 						_0: A2(
 							fab,
-							0,
+							'fabs-hero-fab',
 							{ctor: '[]'}),
 						_1: {ctor: '[]'}
 					}),
@@ -24200,13 +23908,13 @@ var _aforemny$elm_mdc$Demo_Fabs$view = F3(
 										ctor: '::',
 										_0: A2(
 											fab,
-											1,
+											'fabs-fab',
 											{ctor: '[]'}),
 										_1: {
 											ctor: '::',
 											_0: A2(
 												fab,
-												2,
+												'fabs-mini-fab',
 												{
 													ctor: '::',
 													_0: _aforemny$elm_mdc$Material_Fab$mini,
@@ -24411,11 +24119,7 @@ var _aforemny$elm_mdc$Demo_Fabs$view = F3(
 																		return lift(
 																			_aforemny$elm_mdc$Demo_Fabs$Mdc(_p4));
 																	},
-																	{
-																		ctor: '::',
-																		_0: 3,
-																		_1: {ctor: '[]'}
-																	},
+																	'fabs-motion-fab',
 																	model.mdc,
 																	{
 																		ctor: '::',
@@ -24547,11 +24251,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 								return lift(
 									_aforemny$elm_mdc$Demo_GridList$Mdc(_p2));
 							},
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							},
+							'grid-list-hero-grid-list',
 							model.mdc,
 							{
 								ctor: '::',
@@ -24617,11 +24317,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_GridList$Mdc(_p3));
 										},
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
+										'grid-list-toggle-rtl',
 										model.mdc,
 										{
 											ctor: '::',
@@ -24697,11 +24393,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_GridList$Mdc(_p4));
 										},
-										{
-											ctor: '::',
-											_0: 1,
-											_1: {ctor: '[]'}
-										},
+										'grid-list-default-grid-list',
 										model.mdc,
 										{ctor: '[]'},
 										{ctor: '[]'}),
@@ -24723,11 +24415,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_GridList$Mdc(_p5));
 												},
-												{
-													ctor: '::',
-													_0: 2,
-													_1: {ctor: '[]'}
-												},
+												'grid-list-online-footer-grid-list',
 												model.mdc,
 												{ctor: '[]'},
 												A2(
@@ -24787,11 +24475,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 															return lift(
 																_aforemny$elm_mdc$Demo_GridList$Mdc(_p6));
 														},
-														{
-															ctor: '::',
-															_0: 3,
-															_1: {ctor: '[]'}
-														},
+														'grid-list-gutter-grid-list',
 														model.mdc,
 														{
 															ctor: '::',
@@ -24855,11 +24539,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																	return lift(
 																		_aforemny$elm_mdc$Demo_GridList$Mdc(_p7));
 																},
-																{
-																	ctor: '::',
-																	_0: 4,
-																	_1: {ctor: '[]'}
-																},
+																'grid-list-image-only-grid-list',
 																model.mdc,
 																{ctor: '[]'},
 																A2(
@@ -24901,11 +24581,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																			return lift(
 																				_aforemny$elm_mdc$Demo_GridList$Mdc(_p8));
 																		},
-																		{
-																			ctor: '::',
-																			_0: 5,
-																			_1: {ctor: '[]'}
-																		},
+																		'grid-list-oneline-header-grid-list',
 																		model.mdc,
 																		{
 																			ctor: '::',
@@ -24969,11 +24645,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																					return lift(
 																						_aforemny$elm_mdc$Demo_GridList$Mdc(_p9));
 																				},
-																				{
-																					ctor: '::',
-																					_0: 6,
-																					_1: {ctor: '[]'}
-																				},
+																				'grid-list-two-line-footer-grid-list',
 																				model.mdc,
 																				{
 																					ctor: '::',
@@ -25048,11 +24720,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																							return lift(
 																								_aforemny$elm_mdc$Demo_GridList$Mdc(_p10));
 																						},
-																						{
-																							ctor: '::',
-																							_0: 7,
-																							_1: {ctor: '[]'}
-																						},
+																						'grid-list-footer-oneline-footer-grid-list-with-icon',
 																						model.mdc,
 																						{
 																							ctor: '::',
@@ -25123,11 +24791,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																									return lift(
 																										_aforemny$elm_mdc$Demo_GridList$Mdc(_p11));
 																								},
-																								{
-																									ctor: '::',
-																									_0: 8,
-																									_1: {ctor: '[]'}
-																								},
+																								'grid-list-twoline-footer-grid-list-with-icon',
 																								model.mdc,
 																								{
 																									ctor: '::',
@@ -25213,11 +24877,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																											return lift(
 																												_aforemny$elm_mdc$Demo_GridList$Mdc(_p12));
 																										},
-																										{
-																											ctor: '::',
-																											_0: 9,
-																											_1: {ctor: '[]'}
-																										},
+																										'grid-list-online-footer-grid-list-with-icon-at-end',
 																										model.mdc,
 																										{
 																											ctor: '::',
@@ -25288,11 +24948,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																													return lift(
 																														_aforemny$elm_mdc$Demo_GridList$Mdc(_p13));
 																												},
-																												{
-																													ctor: '::',
-																													_0: 10,
-																													_1: {ctor: '[]'}
-																												},
+																												'grid-list-twoline-footer-gridlist-with-icon-at-end',
 																												model.mdc,
 																												{
 																													ctor: '::',
@@ -25378,11 +25034,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																															return lift(
 																																_aforemny$elm_mdc$Demo_GridList$Mdc(_p14));
 																														},
-																														{
-																															ctor: '::',
-																															_0: 11,
-																															_1: {ctor: '[]'}
-																														},
+																														'grid-list-16-9-grid-list',
 																														model.mdc,
 																														{
 																															ctor: '::',
@@ -25446,11 +25098,7 @@ var _aforemny$elm_mdc$Demo_GridList$view = F3(
 																																	return lift(
 																																		_aforemny$elm_mdc$Demo_GridList$Mdc(_p15));
 																																},
-																																{
-																																	ctor: '::',
-																																	_0: 12,
-																																	_1: {ctor: '[]'}
-																																},
+																																'grid-list-background-image-grid-list',
 																																model.mdc,
 																																{
 																																	ctor: '::',
@@ -25700,14 +25348,7 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 							var isOn = A2(
 								_elm_lang$core$Maybe$withDefault,
 								false,
-								A2(
-									_elm_lang$core$Dict$get,
-									{
-										ctor: '::',
-										_0: 0,
-										_1: {ctor: '[]'}
-									},
-									model.iconToggles));
+								A2(_elm_lang$core$Dict$get, 'icon-toggle-hero-icon-toggle', model.iconToggles));
 							return A3(
 								_aforemny$elm_mdc$Material_Options$styled,
 								_elm_lang$html$Html$div,
@@ -25724,11 +25365,7 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 									ctor: '::',
 									_0: A3(
 										iconToggle,
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
+										'icon-toggle-hero-icon-toggle',
 										{
 											ctor: '::',
 											_0: _aforemny$elm_mdc$Material_IconToggle$label(
@@ -25772,14 +25409,7 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 									var isOn = A2(
 										_elm_lang$core$Maybe$withDefault,
 										false,
-										A2(
-											_elm_lang$core$Dict$get,
-											{
-												ctor: '::',
-												_0: 1,
-												_1: {ctor: '[]'}
-											},
-											model.iconToggles));
+										A2(_elm_lang$core$Dict$get, 'icon-toggle-default-icon-toggle', model.iconToggles));
 									return A2(
 										toggleExample,
 										{ctor: '[]'},
@@ -25807,11 +25437,7 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 														ctor: '::',
 														_0: A3(
 															iconToggle,
-															{
-																ctor: '::',
-																_0: 1,
-																_1: {ctor: '[]'}
-															},
+															'icon-toggle-default-icon-toggle',
 															{
 																ctor: '::',
 																_0: _aforemny$elm_mdc$Material_IconToggle$label(
@@ -25880,11 +25506,7 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 														ctor: '::',
 														_0: A3(
 															iconToggle,
-															{
-																ctor: '::',
-																_0: 2,
-																_1: {ctor: '[]'}
-															},
+															'icon-toggle-fa-icon-toggle',
 															{
 																ctor: '::',
 																_0: _aforemny$elm_mdc$Material_IconToggle$label(
@@ -25935,11 +25557,7 @@ var _aforemny$elm_mdc$Demo_IconToggle$view = F3(
 															ctor: '::',
 															_0: A3(
 																iconToggle,
-																{
-																	ctor: '::',
-																	_0: 3,
-																	_1: {ctor: '[]'}
-																},
+																'icon-toggle-disabled-icon-toggle',
 																{
 																	ctor: '::',
 																	_0: _aforemny$elm_mdc$Material_IconToggle$label(
@@ -29863,7 +29481,7 @@ var _aforemny$elm_mdc$Demo_Lists$update = F3(
 		}
 	});
 var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
-	function (lift, idx, model) {
+	function (lift, index, model) {
 		return A2(
 			_aforemny$elm_mdc$Material_List$ul,
 			{ctor: '[]'},
@@ -29876,14 +29494,7 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 							return lift(
 								_aforemny$elm_mdc$Demo_Lists$Mdc(_p2));
 						},
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							idx,
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							}),
+						A2(_elm_lang$core$Basics_ops['++'], index, '-ripple-0'),
 						model.mdc,
 						{ctor: '[]'});
 					return A2(
@@ -29923,14 +29534,7 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 								return lift(
 									_aforemny$elm_mdc$Demo_Lists$Mdc(_p3));
 							},
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								idx,
-								{
-									ctor: '::',
-									_0: 1,
-									_1: {ctor: '[]'}
-								}),
+							A2(_elm_lang$core$Basics_ops['++'], index, '-ripple-1'),
 							model.mdc,
 							{ctor: '[]'});
 						return A2(
@@ -29970,14 +29574,7 @@ var _aforemny$elm_mdc$Demo_Lists$interactiveList = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_Lists$Mdc(_p4));
 								},
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									idx,
-									{
-										ctor: '::',
-										_0: 2,
-										_1: {ctor: '[]'}
-									}),
+								A2(_elm_lang$core$Basics_ops['++'], index, '-ripple-2'),
 								model.mdc,
 								{ctor: '[]'});
 							return A2(
@@ -30141,11 +29738,7 @@ var _aforemny$elm_mdc$Demo_Lists$view = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Lists$Mdc(_p5));
 												},
-												{
-													ctor: '::',
-													_0: 0,
-													_1: {ctor: '[]'}
-												},
+												'lists-interactive-lists-toggle-rtl',
 												model.mdc,
 												{
 													ctor: '::',
@@ -30929,15 +30522,7 @@ var _aforemny$elm_mdc$Demo_Lists$view = F3(
 																	}),
 																_1: {
 																	ctor: '::',
-																	_0: A3(
-																		_aforemny$elm_mdc$Demo_Lists$interactiveList,
-																		lift,
-																		{
-																			ctor: '::',
-																			_0: 0,
-																			_1: {ctor: '[]'}
-																		},
-																		model),
+																	_0: A3(_aforemny$elm_mdc$Demo_Lists$interactiveList, lift, 'lists-interactive-list', model),
 																	_1: {ctor: '[]'}
 																}
 															}),
@@ -32257,11 +31842,7 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Menus$Mdc(_p20));
 					},
-					{
-						ctor: '::',
-						_0: 1,
-						_1: {ctor: '[]'}
-					},
+					'menus-menu-button',
 					model.mdc,
 					{
 						ctor: '::',
@@ -32274,11 +31855,7 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 									return lift(
 										_aforemny$elm_mdc$Demo_Menus$Mdc(_p21));
 								},
-								{
-									ctor: '::',
-									_0: 2,
-									_1: {ctor: '[]'}
-								}),
+								'menus-menu'),
 							_1: {ctor: '[]'}
 						}
 					},
@@ -32306,11 +31883,7 @@ var _aforemny$elm_mdc$Demo_Menus$menuAnchor = F2(
 							return lift(
 								_aforemny$elm_mdc$Demo_Menus$Mdc(_p23));
 						},
-						{
-							ctor: '::',
-							_0: 2,
-							_1: {ctor: '[]'}
-						},
+						'menus-menu',
 						model.mdc,
 						{
 							ctor: '::',
@@ -32388,11 +31961,7 @@ var _aforemny$elm_mdc$Demo_Menus$view = F3(
 								return lift(
 									_aforemny$elm_mdc$Demo_Menus$Mdc(_p28));
 							},
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							},
+							'menus-hero-menu',
 							model.mdc,
 							{
 								ctor: '::',
@@ -32837,11 +32406,7 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 						return lift(
 							_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p2));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'persistent-drawer-drawer',
 					model.mdc,
 					{
 						ctor: '::',
@@ -32898,11 +32463,7 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p3));
 								},
-								{
-									ctor: '::',
-									_0: 1,
-									_1: {ctor: '[]'}
-								},
+								'persistent-drawer-toolbar',
 								model.mdc,
 								{ctor: '[]'},
 								{
@@ -33015,11 +32576,7 @@ var _aforemny$elm_mdc$Demo_PersistentDrawer$view = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_PersistentDrawer$Mdc(_p4));
 													},
-													{
-														ctor: '::',
-														_0: 2,
-														_1: {ctor: '[]'}
-													},
+													'persistent-drawer-toggle-rtl',
 													model.mdc,
 													{
 														ctor: '::',
@@ -33334,11 +32891,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 						return lift(
 							_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p2));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'permanent-above-drawer-drawer',
 					model.mdc,
 					{ctor: '[]'},
 					{
@@ -33391,11 +32944,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p3));
 								},
-								{
-									ctor: '::',
-									_0: 1,
-									_1: {ctor: '[]'}
-								},
+								'permanent-above-drawer-toolbar',
 								model.mdc,
 								{ctor: '[]'},
 								{
@@ -33502,11 +33051,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p4));
 															},
-															{
-																ctor: '::',
-																_0: 2,
-																_1: {ctor: '[]'}
-															},
+															'permanent-above-drawer-toggle-rtl',
 															model.mdc,
 															{
 																ctor: '::',
@@ -33542,11 +33087,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 																	return lift(
 																		_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p5));
 																},
-																{
-																	ctor: '::',
-																	_0: 3,
-																	_1: {ctor: '[]'}
-																},
+																'permanent-above-drawer-toggle-extra-wide-content',
 																model.mdc,
 																{
 																	ctor: '::',
@@ -33612,11 +33153,7 @@ var _aforemny$elm_mdc$Demo_PermanentAboveDrawer$view = F3(
 																		return lift(
 																			_aforemny$elm_mdc$Demo_PermanentAboveDrawer$Mdc(_p6));
 																	},
-																	{
-																		ctor: '::',
-																		_0: 4,
-																		_1: {ctor: '[]'}
-																	},
+																	'permanent-above-drawer-toggle-extra-tall-content',
 																	model.mdc,
 																	{
 																		ctor: '::',
@@ -33841,11 +33378,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p2));
 								},
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
+								'permanent-below-drawer-drawer',
 								model.mdc,
 								{ctor: '[]'},
 								{
@@ -33915,11 +33448,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p3));
 															},
-															{
-																ctor: '::',
-																_0: 2,
-																_1: {ctor: '[]'}
-															},
+															'permanent-below-drawer-toggle-rtl',
 															model.mdc,
 															{
 																ctor: '::',
@@ -33955,11 +33484,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 																	return lift(
 																		_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p4));
 																},
-																{
-																	ctor: '::',
-																	_0: 3,
-																	_1: {ctor: '[]'}
-																},
+																'permanent-below-drawer-toggle-extra-wide-content',
 																model.mdc,
 																{
 																	ctor: '::',
@@ -34025,11 +33550,7 @@ var _aforemny$elm_mdc$Demo_PermanentBelowDrawer$view = F3(
 																		return lift(
 																			_aforemny$elm_mdc$Demo_PermanentBelowDrawer$Mdc(_p5));
 																	},
-																	{
-																		ctor: '::',
-																		_0: 4,
-																		_1: {ctor: '[]'}
-																	},
+																	'permanent-below-drawer-toggle-extra-tall-content',
 																	model.mdc,
 																	{
 																		ctor: '::',
@@ -34198,7 +33719,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 				_0: function () {
 					var group = 'hero';
 					var isSelected = F2(
-						function (isDef, name) {
+						function (isDef, id) {
 							return A2(
 								_elm_lang$core$Maybe$withDefault,
 								isDef,
@@ -34207,7 +33728,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 									F2(
 										function (x, y) {
 											return _elm_lang$core$Native_Utils.eq(x, y);
-										})(name),
+										})(id),
 									A2(_elm_lang$core$Dict$get, group, model.radios)));
 						});
 					return A2(
@@ -34221,16 +33742,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 								{
 									ctor: '::',
 									_0: function () {
-										var name = 'Default Radio 1';
-										var idx = {
-											ctor: '::',
-											_0: 0,
-											_1: {
-												ctor: '::',
-												_0: 0,
-												_1: {ctor: '[]'}
-											}
-										};
+										var id = 'radio-buttons-hero-radio-1';
 										return A2(
 											_aforemny$elm_mdc$Material_FormField$view,
 											{ctor: '[]'},
@@ -34242,18 +33754,18 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p3));
 													},
-													idx,
+													id,
 													model.mdc,
 													{
 														ctor: '::',
 														_0: _aforemny$elm_mdc$Material_Options$onClick(
 															lift(
-																A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, name))),
+																A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, id))),
 														_1: {
 															ctor: '::',
 															_0: A2(
 																_aforemny$elm_mdc$Material_Options$when,
-																A2(isSelected, true, name),
+																A2(isSelected, true, id),
 																_aforemny$elm_mdc$Material_RadioButton$selected),
 															_1: {ctor: '[]'}
 														}
@@ -34265,16 +33777,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 									_1: {
 										ctor: '::',
 										_0: function () {
-											var name = 'Default Radio 2';
-											var idx = {
-												ctor: '::',
-												_0: 0,
-												_1: {
-													ctor: '::',
-													_0: 1,
-													_1: {ctor: '[]'}
-												}
-											};
+											var id = 'radio-buttons-hero-radio-2';
 											return A2(
 												_aforemny$elm_mdc$Material_FormField$view,
 												{ctor: '[]'},
@@ -34286,18 +33789,18 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 															return lift(
 																_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p4));
 														},
-														idx,
+														id,
 														model.mdc,
 														{
 															ctor: '::',
 															_0: _aforemny$elm_mdc$Material_Options$onClick(
 																lift(
-																	A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, name))),
+																	A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, id))),
 															_1: {
 																ctor: '::',
 																_0: A2(
 																	_aforemny$elm_mdc$Material_Options$when,
-																	A2(isSelected, false, name),
+																	A2(isSelected, false, id),
 																	_aforemny$elm_mdc$Material_RadioButton$selected),
 																_1: {ctor: '[]'}
 															}
@@ -34317,7 +33820,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 					_0: function () {
 						var group = 'ex0';
 						var isSelected = F2(
-							function (isDef, name) {
+							function (isDef, id) {
 								return A2(
 									_elm_lang$core$Maybe$withDefault,
 									isDef,
@@ -34326,7 +33829,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 										F2(
 											function (x, y) {
 												return _elm_lang$core$Native_Utils.eq(x, y);
-											})(name),
+											})(id),
 										A2(_elm_lang$core$Dict$get, group, model.radios)));
 							});
 						return A2(
@@ -34354,16 +33857,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 								_1: {
 									ctor: '::',
 									_0: function () {
-										var name = 'Radio 1';
-										var idx = {
-											ctor: '::',
-											_0: 1,
-											_1: {
-												ctor: '::',
-												_0: 0,
-												_1: {ctor: '[]'}
-											}
-										};
+										var id = 'radio-buttons-default-radio-1';
 										return A2(
 											_aforemny$elm_mdc$Material_FormField$view,
 											{ctor: '[]'},
@@ -34375,18 +33869,18 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p5));
 													},
-													idx,
+													id,
 													model.mdc,
 													{
 														ctor: '::',
 														_0: _aforemny$elm_mdc$Material_Options$onClick(
 															lift(
-																A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, name))),
+																A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, id))),
 														_1: {
 															ctor: '::',
 															_0: A2(
 																_aforemny$elm_mdc$Material_Options$when,
-																A2(isSelected, true, name),
+																A2(isSelected, true, id),
 																_aforemny$elm_mdc$Material_RadioButton$selected),
 															_1: {ctor: '[]'}
 														}
@@ -34399,7 +33893,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 														{ctor: '[]'},
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html$text(name),
+															_0: _elm_lang$html$Html$text('Radio 1'),
 															_1: {ctor: '[]'}
 														}),
 													_1: {ctor: '[]'}
@@ -34409,16 +33903,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 									_1: {
 										ctor: '::',
 										_0: function () {
-											var name = 'Radio 2';
-											var idx = {
-												ctor: '::',
-												_0: 1,
-												_1: {
-													ctor: '::',
-													_0: 1,
-													_1: {ctor: '[]'}
-												}
-											};
+											var id = 'radio-buttons-default-radio-2';
 											return A2(
 												_aforemny$elm_mdc$Material_FormField$view,
 												{ctor: '[]'},
@@ -34430,18 +33915,18 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 															return lift(
 																_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p6));
 														},
-														idx,
+														id,
 														model.mdc,
 														{
 															ctor: '::',
 															_0: _aforemny$elm_mdc$Material_Options$onClick(
 																lift(
-																	A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, name))),
+																	A2(_aforemny$elm_mdc$Demo_RadioButtons$Set, group, id))),
 															_1: {
 																ctor: '::',
 																_0: A2(
 																	_aforemny$elm_mdc$Material_Options$when,
-																	A2(isSelected, false, name),
+																	A2(isSelected, false, id),
 																	_aforemny$elm_mdc$Material_RadioButton$selected),
 																_1: {ctor: '[]'}
 															}
@@ -34454,7 +33939,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 															{ctor: '[]'},
 															{
 																ctor: '::',
-																_0: _elm_lang$html$Html$text(name),
+																_0: _elm_lang$html$Html$text('Radio 2'),
 																_1: {ctor: '[]'}
 															}),
 														_1: {ctor: '[]'}
@@ -34498,16 +33983,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 										{
 											ctor: '::',
 											_0: function () {
-												var name = 'Radio 1';
-												var idx = {
-													ctor: '::',
-													_0: 3,
-													_1: {
-														ctor: '::',
-														_0: 0,
-														_1: {ctor: '[]'}
-													}
-												};
+												var id = 'radio-buttons-disabled-radio-1';
 												return A2(
 													_aforemny$elm_mdc$Material_FormField$view,
 													{ctor: '[]'},
@@ -34519,7 +33995,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p7));
 															},
-															idx,
+															id,
 															model.mdc,
 															{
 																ctor: '::',
@@ -34548,16 +34024,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 											_1: {
 												ctor: '::',
 												_0: function () {
-													var name = 'Radio 2';
-													var idx = {
-														ctor: '::',
-														_0: 3,
-														_1: {
-															ctor: '::',
-															_0: 1,
-															_1: {ctor: '[]'}
-														}
-													};
+													var id = 'radio-buttons-disabled-radio-2';
 													return A2(
 														_aforemny$elm_mdc$Material_FormField$view,
 														{ctor: '[]'},
@@ -34569,7 +34036,7 @@ var _aforemny$elm_mdc$Demo_RadioButtons$view = F3(
 																	return lift(
 																		_aforemny$elm_mdc$Demo_RadioButtons$Mdc(_p8));
 																},
-																idx,
+																id,
 																model.mdc,
 																{
 																	ctor: '::',
@@ -34709,11 +34176,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_Ripple$Mdc(_p2));
 								},
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
+								'ripple-hero-ripple',
 								model.mdc,
 								{ctor: '[]'});
 							return A3(
@@ -34768,11 +34231,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_Ripple$Mdc(_p3));
 										},
-										{
-											ctor: '::',
-											_0: 1,
-											_1: {ctor: '[]'}
-										},
+										'ripple-bounded-ripple',
 										model.mdc,
 										{ctor: '[]'});
 									return A3(
@@ -34832,11 +34291,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Ripple$Mdc(_p4));
 											},
-											{
-												ctor: '::',
-												_0: 2,
-												_1: {ctor: '[]'}
-											},
+											'ripple-unbounded-ripple',
 											model.mdc,
 											{ctor: '[]'});
 										return A3(
@@ -34912,11 +34367,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Ripple$Mdc(_p5));
 												},
-												{
-													ctor: '::',
-													_0: 3,
-													_1: {ctor: '[]'}
-												},
+												'ripple-primary-ripple',
 												model.mdc,
 												{
 													ctor: '::',
@@ -34962,11 +34413,7 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_Ripple$Mdc(_p6));
 													},
-													{
-														ctor: '::',
-														_0: 4,
-														_1: {ctor: '[]'}
-													},
+													'ripple-accent-ripple',
 													model.mdc,
 													{
 														ctor: '::',
@@ -35446,14 +34893,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 					var state = A2(
 						_elm_lang$core$Maybe$withDefault,
 						_aforemny$elm_mdc$Demo_Selects$defaultSelect,
-						A2(
-							_elm_lang$core$Dict$get,
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							},
-							model.selects));
+						A2(_elm_lang$core$Dict$get, 'selects-hero-select', model.selects));
 					return A2(
 						_aforemny$elm_mdc$Demo_Page$hero,
 						{ctor: '[]'},
@@ -35462,11 +34902,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 							_0: A5(
 								_aforemny$elm_mdc$Demo_Selects$heroSelect,
 								lift,
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
+								'selects-hero-select',
 								model,
 								{
 									ctor: '::',
@@ -35511,11 +34947,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 									_0: A6(
 										_aforemny$elm_mdc$Demo_Selects$select,
 										lift,
-										{
-											ctor: '::',
-											_0: 1,
-											_1: {ctor: '[]'}
-										},
+										'selects-select',
 										model,
 										_elm_lang$core$Maybe$Just(2),
 										{ctor: '[]'},
@@ -35553,11 +34985,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 										_0: A6(
 											_aforemny$elm_mdc$Demo_Selects$select,
 											lift,
-											{
-												ctor: '::',
-												_0: 2,
-												_1: {ctor: '[]'}
-											},
+											'selects-box-select',
 											model,
 											_elm_lang$core$Maybe$Nothing,
 											{
@@ -35601,48 +35029,16 @@ var _aforemny$elm_mdc$Demo_Slider$defaultModel = {
 	values: _elm_lang$core$Dict$fromList(
 		{
 			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
-				_0: {
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
-				_1: 20
-			},
+			_0: {ctor: '_Tuple2', _0: 'slider-hero-slider', _1: 20},
 			_1: {
 				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: {
-						ctor: '::',
-						_0: 1,
-						_1: {ctor: '[]'}
-					},
-					_1: 20
-				},
+				_0: {ctor: '_Tuple2', _0: 'slider-continuous-slider', _1: 20},
 				_1: {
 					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: {
-							ctor: '::',
-							_0: 2,
-							_1: {ctor: '[]'}
-						},
-						_1: 20
-					},
+					_0: {ctor: '_Tuple2', _0: 'slider-discrete-slider', _1: 20},
 					_1: {
 						ctor: '::',
-						_0: {
-							ctor: '_Tuple2',
-							_0: {
-								ctor: '::',
-								_0: 3,
-								_1: {ctor: '[]'}
-							},
-							_1: 20
-						},
+						_0: {ctor: '_Tuple2', _0: 'slider-dicrete-slider-with-tick-marks', _1: 20},
 						_1: {ctor: '[]'}
 					}
 				}
@@ -35900,18 +35296,14 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 							{
 								ctor: '::',
 								_0: function () {
-									var idx = {
-										ctor: '::',
-										_0: 0,
-										_1: {ctor: '[]'}
-									};
+									var id = 'slider-hero-slider';
 									return A5(
 										_aforemny$elm_mdc$Material_Slider$view,
 										function (_p4) {
 											return lift(
 												_aforemny$elm_mdc$Demo_Slider$Mdc(_p4));
 										},
-										idx,
+										id,
 										model.mdc,
 										{
 											ctor: '::',
@@ -35919,20 +35311,20 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 												A2(
 													_elm_lang$core$Maybe$withDefault,
 													0,
-													A2(_elm_lang$core$Dict$get, idx, model.values))),
+													A2(_elm_lang$core$Dict$get, id, model.values))),
 											_1: {
 												ctor: '::',
 												_0: _aforemny$elm_mdc$Material_Slider$onInput(
 													function (_p5) {
 														return lift(
-															A2(_aforemny$elm_mdc$Demo_Slider$Input, idx, _p5));
+															A2(_aforemny$elm_mdc$Demo_Slider$Input, id, _p5));
 													}),
 												_1: {
 													ctor: '::',
 													_0: _aforemny$elm_mdc$Material_Slider$onChange(
 														function (_p6) {
 															return lift(
-																A2(_aforemny$elm_mdc$Demo_Slider$Change, idx, _p6));
+																A2(_aforemny$elm_mdc$Demo_Slider$Change, id, _p6));
 														}),
 													_1: {ctor: '[]'}
 												}
@@ -35964,11 +35356,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 					_1: {
 						ctor: '::',
 						_0: function () {
-							var idx = {
-								ctor: '::',
-								_0: 1,
-								_1: {ctor: '[]'}
-							};
+							var id = 'slider-continuous-slider';
 							return A2(
 								example,
 								{ctor: '[]'},
@@ -36012,7 +35400,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 															return lift(
 																_aforemny$elm_mdc$Demo_Slider$Mdc(_p7));
 														},
-														idx,
+														id,
 														model.mdc,
 														{
 															ctor: '::',
@@ -36020,20 +35408,20 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																A2(
 																	_elm_lang$core$Maybe$withDefault,
 																	0,
-																	A2(_elm_lang$core$Dict$get, idx, model.values))),
+																	A2(_elm_lang$core$Dict$get, id, model.values))),
 															_1: {
 																ctor: '::',
 																_0: _aforemny$elm_mdc$Material_Slider$onInput(
 																	function (_p8) {
 																		return lift(
-																			A2(_aforemny$elm_mdc$Demo_Slider$Input, idx, _p8));
+																			A2(_aforemny$elm_mdc$Demo_Slider$Input, id, _p8));
 																	}),
 																_1: {
 																	ctor: '::',
 																	_0: _aforemny$elm_mdc$Material_Slider$onChange(
 																		function (_p9) {
 																			return lift(
-																				A2(_aforemny$elm_mdc$Demo_Slider$Change, idx, _p9));
+																				A2(_aforemny$elm_mdc$Demo_Slider$Change, id, _p9));
 																		}),
 																	_1: {
 																		ctor: '::',
@@ -36074,7 +35462,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																			A2(
 																				_elm_lang$core$Maybe$withDefault,
 																				0,
-																				A2(_elm_lang$core$Dict$get, idx, model.inputs)))),
+																				A2(_elm_lang$core$Dict$get, id, model.inputs)))),
 																	_1: {ctor: '[]'}
 																}),
 															_1: {ctor: '[]'}
@@ -36100,7 +35488,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																				A2(
 																					_elm_lang$core$Maybe$withDefault,
 																					0,
-																					A2(_elm_lang$core$Dict$get, idx, model.values)))),
+																					A2(_elm_lang$core$Dict$get, id, model.values)))),
 																		_1: {ctor: '[]'}
 																	}),
 																_1: {ctor: '[]'}
@@ -36116,11 +35504,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 						_1: {
 							ctor: '::',
 							_0: function () {
-								var idx = {
-									ctor: '::',
-									_0: 2,
-									_1: {ctor: '[]'}
-								};
+								var id = 'slider-discrete-slider';
 								return A2(
 									example,
 									{ctor: '[]'},
@@ -36164,7 +35548,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_Slider$Mdc(_p10));
 															},
-															idx,
+															id,
 															model.mdc,
 															{
 																ctor: '::',
@@ -36172,20 +35556,20 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																	A2(
 																		_elm_lang$core$Maybe$withDefault,
 																		0,
-																		A2(_elm_lang$core$Dict$get, idx, model.values))),
+																		A2(_elm_lang$core$Dict$get, id, model.values))),
 																_1: {
 																	ctor: '::',
 																	_0: _aforemny$elm_mdc$Material_Slider$onInput(
 																		function (_p11) {
 																			return lift(
-																				A2(_aforemny$elm_mdc$Demo_Slider$Input, idx, _p11));
+																				A2(_aforemny$elm_mdc$Demo_Slider$Input, id, _p11));
 																		}),
 																	_1: {
 																		ctor: '::',
 																		_0: _aforemny$elm_mdc$Material_Slider$onChange(
 																			function (_p12) {
 																				return lift(
-																					A2(_aforemny$elm_mdc$Demo_Slider$Change, idx, _p12));
+																					A2(_aforemny$elm_mdc$Demo_Slider$Change, id, _p12));
 																			}),
 																		_1: {
 																			ctor: '::',
@@ -36234,7 +35618,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																				A2(
 																					_elm_lang$core$Maybe$withDefault,
 																					0,
-																					A2(_elm_lang$core$Dict$get, idx, model.inputs)))),
+																					A2(_elm_lang$core$Dict$get, id, model.inputs)))),
 																		_1: {ctor: '[]'}
 																	}),
 																_1: {ctor: '[]'}
@@ -36260,7 +35644,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																					A2(
 																						_elm_lang$core$Maybe$withDefault,
 																						0,
-																						A2(_elm_lang$core$Dict$get, idx, model.values)))),
+																						A2(_elm_lang$core$Dict$get, id, model.values)))),
 																			_1: {ctor: '[]'}
 																		}),
 																	_1: {ctor: '[]'}
@@ -36276,11 +35660,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 							_1: {
 								ctor: '::',
 								_0: function () {
-									var idx = {
-										ctor: '::',
-										_0: 3,
-										_1: {ctor: '[]'}
-									};
+									var id = 'slider-discrete-slider-with-tick-marks';
 									return A2(
 										example,
 										{ctor: '[]'},
@@ -36324,7 +35704,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																	return lift(
 																		_aforemny$elm_mdc$Demo_Slider$Mdc(_p13));
 																},
-																idx,
+																id,
 																model.mdc,
 																{
 																	ctor: '::',
@@ -36332,20 +35712,20 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																		A2(
 																			_elm_lang$core$Maybe$withDefault,
 																			0,
-																			A2(_elm_lang$core$Dict$get, idx, model.values))),
+																			A2(_elm_lang$core$Dict$get, id, model.values))),
 																	_1: {
 																		ctor: '::',
 																		_0: _aforemny$elm_mdc$Material_Slider$onInput(
 																			function (_p14) {
 																				return lift(
-																					A2(_aforemny$elm_mdc$Demo_Slider$Input, idx, _p14));
+																					A2(_aforemny$elm_mdc$Demo_Slider$Input, id, _p14));
 																			}),
 																		_1: {
 																			ctor: '::',
 																			_0: _aforemny$elm_mdc$Material_Slider$onChange(
 																				function (_p15) {
 																					return lift(
-																						A2(_aforemny$elm_mdc$Demo_Slider$Change, idx, _p15));
+																						A2(_aforemny$elm_mdc$Demo_Slider$Change, id, _p15));
 																				}),
 																			_1: {
 																				ctor: '::',
@@ -36398,7 +35778,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																					A2(
 																						_elm_lang$core$Maybe$withDefault,
 																						0,
-																						A2(_elm_lang$core$Dict$get, idx, model.inputs)))),
+																						A2(_elm_lang$core$Dict$get, id, model.inputs)))),
 																			_1: {ctor: '[]'}
 																		}),
 																	_1: {ctor: '[]'}
@@ -36424,7 +35804,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																						A2(
 																							_elm_lang$core$Maybe$withDefault,
 																							0,
-																							A2(_elm_lang$core$Dict$get, idx, model.values)))),
+																							A2(_elm_lang$core$Dict$get, id, model.values)))),
 																				_1: {ctor: '[]'}
 																			}),
 																		_1: {ctor: '[]'}
@@ -37108,11 +36488,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p5));
 													},
-													{
-														ctor: '::',
-														_0: 0,
-														_1: {ctor: '[]'}
-													},
+													'snackbar-multiline-checkbox',
 													model.mdc,
 													{
 														ctor: '::',
@@ -37157,11 +36533,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																return lift(
 																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p6));
 															},
-															{
-																ctor: '::',
-																_0: 1,
-																_1: {ctor: '[]'}
-															},
+															'snackbar-toggle-action-on-bottom-checkbox',
 															model.mdc,
 															{
 																ctor: '::',
@@ -37220,11 +36592,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																		return lift(
 																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p8));
 																	},
-																	{
-																		ctor: '::',
-																		_0: 2,
-																		_1: {ctor: '[]'}
-																	},
+																	'snackbar-dismiss-on-action-button',
 																	model.mdc,
 																	{
 																		ctor: '::',
@@ -37264,11 +36632,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																		return lift(
 																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p9));
 																	},
-																	{
-																		ctor: '::',
-																		_0: 3,
-																		_1: {ctor: '[]'}
-																	},
+																	'snackbar-message-text-field',
 																	model.mdc,
 																	{
 																		ctor: '::',
@@ -37307,11 +36671,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																				return lift(
 																					_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p11));
 																			},
-																			{
-																				ctor: '::',
-																				_0: 4,
-																				_1: {ctor: '[]'}
-																			},
+																			'snackbar-action-text-field',
 																			model.mdc,
 																			{
 																				ctor: '::',
@@ -37350,11 +36710,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																						return lift(
 																							_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p13));
 																					},
-																					{
-																						ctor: '::',
-																						_0: 5,
-																						_1: {ctor: '[]'}
-																					},
+																					'snackbar-show-button',
 																					model.mdc,
 																					{
 																						ctor: '::',
@@ -37369,12 +36725,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																									'click',
 																									_elm_lang$core$Json_Decode$succeed(
 																										lift(
-																											_aforemny$elm_mdc$Demo_Snackbar$Show(
-																												{
-																													ctor: '::',
-																													_0: 9,
-																													_1: {ctor: '[]'}
-																												})))),
+																											_aforemny$elm_mdc$Demo_Snackbar$Show('snackbar-default-snackbar')))),
 																								_1: {ctor: '[]'}
 																							}
 																						}
@@ -37395,11 +36746,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																								return lift(
 																									_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p14));
 																							},
-																							{
-																								ctor: '::',
-																								_0: 6,
-																								_1: {ctor: '[]'}
-																							},
+																							'snackbar-show-button-rtl',
 																							model.mdc,
 																							{
 																								ctor: '::',
@@ -37414,12 +36761,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																											'click',
 																											_elm_lang$core$Json_Decode$succeed(
 																												lift(
-																													_aforemny$elm_mdc$Demo_Snackbar$Show(
-																														{
-																															ctor: '::',
-																															_0: 10,
-																															_1: {ctor: '[]'}
-																														})))),
+																													_aforemny$elm_mdc$Demo_Snackbar$Show('snackbar-default-snackbar-rtl')))),
 																										_1: {ctor: '[]'}
 																									}
 																								}
@@ -37440,11 +36782,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																										return lift(
 																											_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p15));
 																									},
-																									{
-																										ctor: '::',
-																										_0: 7,
-																										_1: {ctor: '[]'}
-																									},
+																									'snackbar-show-start-aligned-button',
 																									model.mdc,
 																									{
 																										ctor: '::',
@@ -37459,12 +36797,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																													'click',
 																													_elm_lang$core$Json_Decode$succeed(
 																														lift(
-																															_aforemny$elm_mdc$Demo_Snackbar$Show(
-																																{
-																																	ctor: '::',
-																																	_0: 11,
-																																	_1: {ctor: '[]'}
-																																})))),
+																															_aforemny$elm_mdc$Demo_Snackbar$Show('snackbar-start-aligned-snackbar')))),
 																												_1: {ctor: '[]'}
 																											}
 																										}
@@ -37485,11 +36818,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																												return lift(
 																													_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p16));
 																											},
-																											{
-																												ctor: '::',
-																												_0: 8,
-																												_1: {ctor: '[]'}
-																											},
+																											'snackbar-show-start-aligned-button-rtl',
 																											model.mdc,
 																											{
 																												ctor: '::',
@@ -37504,12 +36833,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																															'click',
 																															_elm_lang$core$Json_Decode$succeed(
 																																lift(
-																																	_aforemny$elm_mdc$Demo_Snackbar$Show(
-																																		{
-																																			ctor: '::',
-																																			_0: 12,
-																																			_1: {ctor: '[]'}
-																																		})))),
+																																	_aforemny$elm_mdc$Demo_Snackbar$Show('snackbar-start-aligned-snackbar-rtl')))),
 																														_1: {ctor: '[]'}
 																													}
 																												}
@@ -37527,11 +36851,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																													return lift(
 																														_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p17));
 																												},
-																												{
-																													ctor: '::',
-																													_0: 9,
-																													_1: {ctor: '[]'}
-																												},
+																												'snackbar-default-snackbar',
 																												model.mdc,
 																												{ctor: '[]'},
 																												{ctor: '[]'}),
@@ -37552,11 +36872,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																																return lift(
 																																	_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p18));
 																															},
-																															{
-																																ctor: '::',
-																																_0: 10,
-																																_1: {ctor: '[]'}
-																															},
+																															'snackbar-default-snackbar-rtl',
 																															model.mdc,
 																															{ctor: '[]'},
 																															{ctor: '[]'}),
@@ -37570,11 +36886,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																															return lift(
 																																_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p19));
 																														},
-																														{
-																															ctor: '::',
-																															_0: 11,
-																															_1: {ctor: '[]'}
-																														},
+																														'snackbar-align-start-snackbar',
 																														model.mdc,
 																														{
 																															ctor: '::',
@@ -37599,11 +36911,7 @@ var _aforemny$elm_mdc$Demo_Snackbar$view = F3(
 																																		return lift(
 																																			_aforemny$elm_mdc$Demo_Snackbar$Mdc(_p20));
 																																	},
-																																	{
-																																		ctor: '::',
-																																		_0: 12,
-																																		_1: {ctor: '[]'}
-																																	},
+																																	'snackbar-align-start-snackbar-rtl',
 																																	model.mdc,
 																																	{
 																																		ctor: '::',
@@ -37947,11 +37255,7 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 							{
 								ctor: '::',
 								_0: function () {
-									var index = {
-										ctor: '::',
-										_0: 0,
-										_1: {ctor: '[]'}
-									};
+									var index = 'switch-hero-switch';
 									var on = A2(
 										_elm_lang$core$Maybe$withDefault,
 										false,
@@ -38017,11 +37321,7 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 									{
 										ctor: '::',
 										_0: function () {
-											var index = {
-												ctor: '::',
-												_0: 1,
-												_1: {ctor: '[]'}
-											};
+											var index = 'switch-default-switch';
 											var on = A2(
 												_elm_lang$core$Maybe$withDefault,
 												false,
@@ -38104,11 +37404,7 @@ var _aforemny$elm_mdc$Demo_Switch$view = F3(
 										{
 											ctor: '::',
 											_0: function () {
-												var index = {
-													ctor: '::',
-													_0: 2,
-													_1: {ctor: '[]'}
-												};
+												var index = 'switch-disabled-switch';
 												var on = A2(
 													_elm_lang$core$Maybe$withDefault,
 													false,
@@ -38332,11 +37628,7 @@ var _aforemny$elm_mdc$Demo_Tabs$heroTabs = F4(
 				return lift(
 					_aforemny$elm_mdc$Demo_Tabs$Mdc(_p3));
 			},
-			{
-				ctor: '::',
-				_0: index,
-				_1: {ctor: '[]'}
-			},
+			index,
 			mdc,
 			{
 				ctor: '::',
@@ -38435,11 +37727,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example1 = F4(
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p4));
 								},
-								{
-									ctor: '::',
-									_0: index,
-									_1: {ctor: '[]'}
-								},
+								index,
 								mdc,
 								{
 									ctor: '::',
@@ -38584,11 +37872,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example2 = F4(
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p5));
 								},
-								{
-									ctor: '::',
-									_0: index,
-									_1: {ctor: '[]'}
-								},
+								index,
 								mdc,
 								{
 									ctor: '::',
@@ -38672,11 +37956,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example3 = F4(
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p6));
 								},
-								{
-									ctor: '::',
-									_0: index,
-									_1: {ctor: '[]'}
-								},
+								index,
 								mdc,
 								{
 									ctor: '::',
@@ -38785,11 +38065,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example6 = F4(
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p7));
 								},
-								{
-									ctor: '::',
-									_0: 2 * index,
-									_1: {ctor: '[]'}
-								},
+								A2(_elm_lang$core$Basics_ops['++'], index, '-toolbar'),
 								mdc,
 								{ctor: '[]'},
 								{
@@ -38835,11 +38111,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example6 = F4(
 																return lift(
 																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p8));
 															},
-															{
-																ctor: '::',
-																_0: (2 * index) + 1,
-																_1: {ctor: '[]'}
-															},
+															A2(_elm_lang$core$Basics_ops['++'], index, 'tab-bar'),
 															mdc,
 															{
 																ctor: '::',
@@ -38921,11 +38193,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example7 = F4(
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p9));
 								},
-								{
-									ctor: '::',
-									_0: 2 * index,
-									_1: {ctor: '[]'}
-								},
+								A2(_elm_lang$core$Basics_ops['++'], index, '-toolbar'),
 								mdc,
 								{ctor: '[]'},
 								{
@@ -38983,11 +38251,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example7 = F4(
 																return lift(
 																	_aforemny$elm_mdc$Demo_Tabs$Mdc(_p10));
 															},
-															{
-																ctor: '::',
-																_0: (2 * index) + 1,
-																_1: {ctor: '[]'}
-															},
+															A2(_elm_lang$core$Basics_ops['++'], index, '-tab-bar'),
 															mdc,
 															{ctor: '[]'},
 															{
@@ -39078,11 +38342,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example10 = F4(
 									return lift(
 										_aforemny$elm_mdc$Demo_Tabs$Mdc(_p11));
 								},
-								{
-									ctor: '::',
-									_0: 2 * index,
-									_1: {ctor: '[]'}
-								},
+								A2(_elm_lang$core$Basics_ops['++'], index, '-toolbar'),
 								mdc,
 								{
 									ctor: '::',
@@ -39111,11 +38371,7 @@ var _aforemny$elm_mdc$Demo_Tabs$example10 = F4(
 															return lift(
 																_aforemny$elm_mdc$Demo_Tabs$Mdc(_p12));
 														},
-														{
-															ctor: '::',
-															_0: (2 * index) + 1,
-															_1: {ctor: '[]'}
-														},
+														A2(_elm_lang$core$Basics_ops['++'], index, '-tab-bar'),
 														mdc,
 														{
 															ctor: '::',
@@ -39325,11 +38581,11 @@ var _aforemny$elm_mdc$Demo_Tabs$view = F3(
 							_aforemny$elm_mdc$Demo_Tabs$heroTabs,
 							lift,
 							model.mdc,
-							0,
+							'tabs-hero-tabs',
 							A2(
 								_elm_lang$core$Maybe$withDefault,
 								_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-								A2(_elm_lang$core$Dict$get, 0, model.examples))),
+								A2(_elm_lang$core$Dict$get, 'tabs-hero-tabs', model.examples))),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -39338,77 +38594,77 @@ var _aforemny$elm_mdc$Demo_Tabs$view = F3(
 						_aforemny$elm_mdc$Demo_Tabs$example0,
 						lift,
 						model.mdc,
-						1,
+						'tabs-example-0-tabs',
 						A2(
 							_elm_lang$core$Maybe$withDefault,
 							_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-							A2(_elm_lang$core$Dict$get, 1, model.examples))),
+							A2(_elm_lang$core$Dict$get, 'tabs-example-0-tabs', model.examples))),
 					_1: {
 						ctor: '::',
 						_0: A4(
 							_aforemny$elm_mdc$Demo_Tabs$example1,
 							lift,
 							model.mdc,
-							2,
+							'tabs-example-1-tabs',
 							A2(
 								_elm_lang$core$Maybe$withDefault,
 								_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-								A2(_elm_lang$core$Dict$get, 2, model.examples))),
+								A2(_elm_lang$core$Dict$get, 'tabs-example-1-tabs', model.examples))),
 						_1: {
 							ctor: '::',
 							_0: A4(
 								_aforemny$elm_mdc$Demo_Tabs$example2,
 								lift,
 								model.mdc,
-								3,
+								'tabs-example-2-tabs',
 								A2(
 									_elm_lang$core$Maybe$withDefault,
 									_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-									A2(_elm_lang$core$Dict$get, 3, model.examples))),
+									A2(_elm_lang$core$Dict$get, 'tabs-example-2-tabs', model.examples))),
 							_1: {
 								ctor: '::',
 								_0: A4(
 									_aforemny$elm_mdc$Demo_Tabs$example3,
 									lift,
 									model.mdc,
-									4,
+									'tabs-example-3-tabs',
 									A2(
 										_elm_lang$core$Maybe$withDefault,
 										_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-										A2(_elm_lang$core$Dict$get, 4, model.examples))),
+										A2(_elm_lang$core$Dict$get, 'tabs-example-3-tabs', model.examples))),
 								_1: {
 									ctor: '::',
 									_0: A4(
 										_aforemny$elm_mdc$Demo_Tabs$example6,
 										lift,
 										model.mdc,
-										7,
+										'tabs-example-7-tabs',
 										A2(
 											_elm_lang$core$Maybe$withDefault,
 											_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-											A2(_elm_lang$core$Dict$get, 7, model.examples))),
+											A2(_elm_lang$core$Dict$get, 'tabs-example-7-tabs', model.examples))),
 									_1: {
 										ctor: '::',
 										_0: A4(
 											_aforemny$elm_mdc$Demo_Tabs$example7,
 											lift,
 											model.mdc,
-											8,
+											'tabs-example-8-tabs',
 											A2(
 												_elm_lang$core$Maybe$withDefault,
 												_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-												A2(_elm_lang$core$Dict$get, 8, model.examples))),
+												A2(_elm_lang$core$Dict$get, 'tabs-example-8-tabs', model.examples))),
 										_1: {
 											ctor: '::',
 											_0: A4(
 												_aforemny$elm_mdc$Demo_Tabs$example10,
 												lift,
 												model.mdc,
-												11,
+												'tabs-example-11-tabs',
 												A2(
 													_elm_lang$core$Maybe$withDefault,
 													_aforemny$elm_mdc$Demo_Tabs$defaultExample,
-													A2(_elm_lang$core$Dict$get, 11, model.examples))),
+													A2(_elm_lang$core$Dict$get, 'tabs-example-11-tabs', model.examples))),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -39523,11 +38779,7 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 						return lift(
 							_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p2));
 					},
-					{
-						ctor: '::',
-						_0: 1,
-						_1: {ctor: '[]'}
-					},
+					'temporary-drawer-toolbar',
 					model.mdc,
 					{
 						ctor: '::',
@@ -39600,11 +38852,7 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 							return lift(
 								_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p3));
 						},
-						{
-							ctor: '::',
-							_0: 0,
-							_1: {ctor: '[]'}
-						},
+						'temporary-drawer-drawer',
 						model.mdc,
 						{
 							ctor: '::',
@@ -39654,14 +38902,7 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_Toolbar$fixedAdjust,
-									{
-										ctor: '::',
-										_0: 1,
-										_1: {ctor: '[]'}
-									},
-									model.mdc),
+								_0: A2(_aforemny$elm_mdc$Material_Toolbar$fixedAdjust, 'temporary-drawer-toolbar', model.mdc),
 								_1: {
 									ctor: '::',
 									_0: A2(_aforemny$elm_mdc$Material_Options$css, 'padding-left', '16px'),
@@ -39713,11 +38954,7 @@ var _aforemny$elm_mdc$Demo_TemporaryDrawer$view = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_TemporaryDrawer$Mdc(_p4));
 								},
-								{
-									ctor: '::',
-									_0: 2,
-									_1: {ctor: '[]'}
-								},
+								'temporary-drawer-toggle-rtl',
 								model.mdc,
 								{
 									ctor: '::',
@@ -40869,14 +40106,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p9));
 										},
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											index,
-											{
-												ctor: '::',
-												_0: 0,
-												_1: {ctor: '[]'}
-											}),
+										A2(_elm_lang$core$Basics_ops['++'], index, '-your-name'),
 										model.mdc,
 										{
 											ctor: '::',
@@ -40919,14 +40149,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Textfields$Mdc(_p10));
 											},
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												index,
-												{
-													ctor: '::',
-													_0: 1,
-													_1: {ctor: '[]'}
-												}),
+											A2(_elm_lang$core$Basics_ops['++'], index, '-your-other-name'),
 											model.mdc,
 											{
 												ctor: '::',
@@ -40969,14 +40192,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 													return lift(
 														_aforemny$elm_mdc$Demo_Textfields$Mdc(_p11));
 												},
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													index,
-													{
-														ctor: '::',
-														_0: 2,
-														_1: {ctor: '[]'}
-													}),
+												A2(_elm_lang$core$Basics_ops['++'], index, '-your-other-name-2'),
 												model.mdc,
 												{
 													ctor: '::',
@@ -41019,14 +40235,7 @@ var _aforemny$elm_mdc$Demo_Textfields$iconsTextfield = F3(
 														return lift(
 															_aforemny$elm_mdc$Demo_Textfields$Mdc(_p12));
 													},
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														index,
-														{
-															ctor: '::',
-															_0: 3,
-															_1: {ctor: '[]'}
-														}),
+													A2(_elm_lang$core$Basics_ops['++'], index, '-your-other-name-3'),
 													model.mdc,
 													{
 														ctor: '::',
@@ -41577,14 +40786,7 @@ var _aforemny$elm_mdc$Demo_Textfields$fullwidth = F3(
 											return lift(
 												_aforemny$elm_mdc$Demo_Textfields$Mdc(_p14));
 										},
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											index,
-											{
-												ctor: '::',
-												_0: 0,
-												_1: {ctor: '[]'}
-											}),
+										A2(_elm_lang$core$Basics_ops['++'], index, '-subject'),
 										model.mdc,
 										{
 											ctor: '::',
@@ -41604,14 +40806,7 @@ var _aforemny$elm_mdc$Demo_Textfields$fullwidth = F3(
 												return lift(
 													_aforemny$elm_mdc$Demo_Textfields$Mdc(_p15));
 											},
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												index,
-												{
-													ctor: '::',
-													_0: 1,
-													_1: {ctor: '[]'}
-												}),
+											A2(_elm_lang$core$Basics_ops['++'], index, '-textarea'),
 											model.mdc,
 											{
 												ctor: '::',
@@ -41768,94 +40963,30 @@ var _aforemny$elm_mdc$Demo_Textfields$view = F3(
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: A3(
-							_aforemny$elm_mdc$Demo_Textfields$heroTextfield,
-							lift,
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							},
-							model),
+						_0: A3(_aforemny$elm_mdc$Demo_Textfields$heroTextfield, lift, 'text-fields-hero', model),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
-					_0: A3(
-						_aforemny$elm_mdc$Demo_Textfields$textfield,
-						lift,
-						{
-							ctor: '::',
-							_0: 1,
-							_1: {ctor: '[]'}
-						},
-						model),
+					_0: A3(_aforemny$elm_mdc$Demo_Textfields$textfield, lift, 'text-fields-default', model),
 					_1: {
 						ctor: '::',
-						_0: A3(
-							_aforemny$elm_mdc$Demo_Textfields$password,
-							lift,
-							{
-								ctor: '::',
-								_0: 2,
-								_1: {ctor: '[]'}
-							},
-							model),
+						_0: A3(_aforemny$elm_mdc$Demo_Textfields$password, lift, 'text-fields-password', model),
 						_1: {
 							ctor: '::',
-							_0: A3(
-								_aforemny$elm_mdc$Demo_Textfields$outlinedTextfield,
-								lift,
-								{
-									ctor: '::',
-									_0: 3,
-									_1: {ctor: '[]'}
-								},
-								model),
+							_0: A3(_aforemny$elm_mdc$Demo_Textfields$outlinedTextfield, lift, 'text-fields-outlined', model),
 							_1: {
 								ctor: '::',
-								_0: A3(
-									_aforemny$elm_mdc$Demo_Textfields$boxTextfield,
-									lift,
-									{
-										ctor: '::',
-										_0: 4,
-										_1: {ctor: '[]'}
-									},
-									model),
+								_0: A3(_aforemny$elm_mdc$Demo_Textfields$boxTextfield, lift, 'text-fields-box', model),
 								_1: {
 									ctor: '::',
-									_0: A3(
-										_aforemny$elm_mdc$Demo_Textfields$iconsTextfield,
-										lift,
-										{
-											ctor: '::',
-											_0: 5,
-											_1: {ctor: '[]'}
-										},
-										model),
+									_0: A3(_aforemny$elm_mdc$Demo_Textfields$iconsTextfield, lift, 'text-fields-icons', model),
 									_1: {
 										ctor: '::',
-										_0: A3(
-											_aforemny$elm_mdc$Demo_Textfields$textarea,
-											lift,
-											{
-												ctor: '::',
-												_0: 6,
-												_1: {ctor: '[]'}
-											},
-											model),
+										_0: A3(_aforemny$elm_mdc$Demo_Textfields$textarea, lift, 'text-fields-textarea', model),
 										_1: {
 											ctor: '::',
-											_0: A3(
-												_aforemny$elm_mdc$Demo_Textfields$fullwidth,
-												lift,
-												{
-													ctor: '::',
-													_0: 7,
-													_1: {ctor: '[]'}
-												},
-												model),
+											_0: A3(_aforemny$elm_mdc$Demo_Textfields$fullwidth, lift, 'text-fields-full-width', model),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -42765,11 +41896,7 @@ var _aforemny$elm_mdc$Demo_Theme$view = F3(
 								return lift(
 									_aforemny$elm_mdc$Demo_Theme$Mdc(_p2));
 							},
-							{
-								ctor: '::',
-								_0: 0,
-								_1: {ctor: '[]'}
-							},
+							'theme-button-primary',
 							model.mdc,
 							{
 								ctor: '::',
@@ -42793,11 +41920,7 @@ var _aforemny$elm_mdc$Demo_Theme$view = F3(
 									return lift(
 										_aforemny$elm_mdc$Demo_Theme$Mdc(_p3));
 								},
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
+								'theme-button-secondary',
 								model.mdc,
 								{
 									ctor: '::',
@@ -42898,14 +42021,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$floatingFooter = function (model) {
 								})(model.scrollTop),
 							model.calculations);
 					},
-					A2(
-						_elm_lang$core$Dict$get,
-						{
-							ctor: '::',
-							_0: 0,
-							_1: {ctor: '[]'}
-						},
-						model.mdc.toolbar)))));
+					A2(_elm_lang$core$Dict$get, 'toolbar-toolbar', model.mdc.toolbar)))));
 	return A3(
 		_aforemny$elm_mdc$Material_Options$styled,
 		_elm_lang$html$Html$footer,
@@ -43110,7 +42226,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$iframe = F5(
 									return lift(
 										_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p5));
 								},
-								index,
+								'toolbar-toggle-rtl',
 								model.mdc,
 								{
 									ctor: '::',
@@ -43209,11 +42325,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$defaultToolbar = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p6));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'default-toolbar-toolbar',
 					model.mdc,
 					{ctor: '[]'},
 					{
@@ -43338,11 +42450,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$fixedToolbar = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p7));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'fixed-toolbar-toolbar',
 					model.mdc,
 					{
 						ctor: '::',
@@ -43440,14 +42548,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$fixedToolbar = F2(
 						_aforemny$elm_mdc$Demo_Toolbar$body,
 						{
 							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_Toolbar$fixedAdjust,
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
-								model.mdc),
+							_0: A2(_aforemny$elm_mdc$Material_Toolbar$fixedAdjust, 'fixed-toolbar-toolbar', model.mdc),
 							_1: {ctor: '[]'}
 						},
 						model),
@@ -43477,11 +42578,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p8));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'menu-toolbar-toolbar',
 					model.mdc,
 					{
 						ctor: '::',
@@ -43569,11 +42666,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 																		return lift(
 																			_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p9));
 																	},
-																	{
-																		ctor: '::',
-																		_0: 0,
-																		_1: {ctor: '[]'}
-																	}),
+																	'menu-toolbar-menu'),
 																_1: {ctor: '[]'}
 															}
 														},
@@ -43604,11 +42697,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 																		return lift(
 																			_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p10));
 																	},
-																	{
-																		ctor: '::',
-																		_0: 0,
-																		_1: {ctor: '[]'}
-																	},
+																	'menu-toolbar-menu',
 																	model.mdc,
 																	{
 																		ctor: '::',
@@ -43693,14 +42782,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$menuToolbar = F2(
 						_aforemny$elm_mdc$Demo_Toolbar$body,
 						{
 							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_Toolbar$fixedAdjust,
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
-								model.mdc),
+							_0: A2(_aforemny$elm_mdc$Material_Toolbar$fixedAdjust, 'menu-toolbar-toolbar', model.mdc),
 							_1: {ctor: '[]'}
 						},
 						model),
@@ -43730,11 +42812,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbar = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p11));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'waterfall-toolbar-toolbar',
 					model.mdc,
 					{
 						ctor: '::',
@@ -43836,14 +42914,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbar = F2(
 						_aforemny$elm_mdc$Demo_Toolbar$body,
 						{
 							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_Toolbar$fixedAdjust,
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
-								model.mdc),
+							_0: A2(_aforemny$elm_mdc$Material_Toolbar$fixedAdjust, 'waterfall-toolbar-toolbar', model.mdc),
 							_1: {ctor: '[]'}
 						},
 						model),
@@ -43873,11 +42944,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$defaultFlexibleToolbar = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p12));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'default-flexible-toolbar-toolbar',
 					model.mdc,
 					{
 						ctor: '::',
@@ -44013,11 +43080,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p13));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'waterfall-flexible-toolbar-toolbar',
 					model.mdc,
 					{
 						ctor: '::',
@@ -44131,14 +43194,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallFlexibleToolbar = F2(
 						_aforemny$elm_mdc$Demo_Toolbar$body,
 						{
 							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_Toolbar$fixedAdjust,
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
-								model.mdc),
+							_0: A2(_aforemny$elm_mdc$Material_Toolbar$fixedAdjust, 'waterfall-flexible-toolbar', model.mdc),
 							_1: {ctor: '[]'}
 						},
 						model),
@@ -44172,11 +43228,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbarFix = F2(
 						return lift(
 							_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p14));
 					},
-					{
-						ctor: '::',
-						_0: 0,
-						_1: {ctor: '[]'}
-					},
+					'waterfall-toolbar-fix-last-row-toolbar',
 					model.mdc,
 					{
 						ctor: '::',
@@ -44297,14 +43349,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$waterfallToolbarFix = F2(
 						_aforemny$elm_mdc$Demo_Toolbar$body,
 						{
 							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Material_Toolbar$fixedAdjust,
-								{
-									ctor: '::',
-									_0: 0,
-									_1: {ctor: '[]'}
-								},
-								model.mdc),
+							_0: A2(_aforemny$elm_mdc$Material_Toolbar$fixedAdjust, 'waterfall-toolbar-fix-last-row-toolbar', model.mdc),
 							_1: {ctor: '[]'}
 						},
 						model),
@@ -44363,11 +43408,7 @@ var _aforemny$elm_mdc$Demo_Toolbar$view = F4(
 											return lift(
 												_aforemny$elm_mdc$Demo_Toolbar$Mdc(_p16));
 										},
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
+										'toolbar-toolbar',
 										model.mdc,
 										{ctor: '[]'},
 										{
@@ -44881,7 +43922,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$body = F4(
 								return lift(
 									_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p5));
 							},
-							index,
+							A2(_elm_lang$core$Basics_ops['++'], index, '-toggle-rtl'),
 							model.mdc,
 							{
 								ctor: '::',
@@ -44893,7 +43934,10 @@ var _aforemny$elm_mdc$Demo_TopAppBar$body = F4(
 										ctor: '::',
 										_0: _aforemny$elm_mdc$Material_Options$onClick(
 											lift(
-												A2(_aforemny$elm_mdc$Demo_TopAppBar$ExampleMsg, index, _aforemny$elm_mdc$Demo_TopAppBar$ToggleRtl))),
+												A2(
+													_aforemny$elm_mdc$Demo_TopAppBar$ExampleMsg,
+													A2(_elm_lang$core$Basics_ops['++'], index, '-toggle-rtl'),
+													_aforemny$elm_mdc$Demo_TopAppBar$ToggleRtl))),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -44972,11 +44016,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$standardTopAppBar = F3(
 					return lift(
 						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p6));
 				},
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
+				index,
 				model.mdc,
 				{ctor: '[]'},
 				{
@@ -45060,11 +44100,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$fixedTopAppBar = F3(
 					return lift(
 						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p7));
 				},
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
+				index,
 				model.mdc,
 				{
 					ctor: '::',
@@ -45152,11 +44188,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$menuTopAppBar = F3(
 					return lift(
 						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p8));
 				},
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
+				index,
 				model.mdc,
 				{
 					ctor: '::',
@@ -45244,11 +44276,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$denseTopAppBar = F3(
 					return lift(
 						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p9));
 				},
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
+				index,
 				model.mdc,
 				{
 					ctor: '::',
@@ -45336,11 +44364,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$prominentTopAppBar = F3(
 					return lift(
 						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p10));
 				},
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
+				index,
 				model.mdc,
 				{
 					ctor: '::',
@@ -45428,11 +44452,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$shortTopAppBar = F3(
 					return lift(
 						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p11));
 				},
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
+				index,
 				model.mdc,
 				{
 					ctor: '::',
@@ -45510,11 +44530,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$shortCollapsedTopAppBar = F3(
 					return lift(
 						_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p12));
 				},
-				{
-					ctor: '::',
-					_0: 0,
-					_1: {ctor: '[]'}
-				},
+				index,
 				model.mdc,
 				{
 					ctor: '::',
@@ -45584,65 +44600,17 @@ var _aforemny$elm_mdc$Demo_TopAppBar$view = F4(
 		if (_p13.ctor === 'Just') {
 			switch (_p13._0.ctor) {
 				case 'StandardTopAppBar':
-					return A3(
-						_aforemny$elm_mdc$Demo_TopAppBar$standardTopAppBar,
-						lift,
-						{
-							ctor: '::',
-							_0: 0,
-							_1: {ctor: '[]'}
-						},
-						model);
+					return A3(_aforemny$elm_mdc$Demo_TopAppBar$standardTopAppBar, lift, 'top-app-bar-standard', model);
 				case 'FixedTopAppBar':
-					return A3(
-						_aforemny$elm_mdc$Demo_TopAppBar$fixedTopAppBar,
-						lift,
-						{
-							ctor: '::',
-							_0: 1,
-							_1: {ctor: '[]'}
-						},
-						model);
+					return A3(_aforemny$elm_mdc$Demo_TopAppBar$fixedTopAppBar, lift, 'top-app-bar-fixed', model);
 				case 'DenseTopAppBar':
-					return A3(
-						_aforemny$elm_mdc$Demo_TopAppBar$denseTopAppBar,
-						lift,
-						{
-							ctor: '::',
-							_0: 2,
-							_1: {ctor: '[]'}
-						},
-						model);
+					return A3(_aforemny$elm_mdc$Demo_TopAppBar$denseTopAppBar, lift, 'top-app-bar-dense', model);
 				case 'ProminentTopAppBar':
-					return A3(
-						_aforemny$elm_mdc$Demo_TopAppBar$prominentTopAppBar,
-						lift,
-						{
-							ctor: '::',
-							_0: 3,
-							_1: {ctor: '[]'}
-						},
-						model);
+					return A3(_aforemny$elm_mdc$Demo_TopAppBar$prominentTopAppBar, lift, 'top-app-bar-prominent', model);
 				case 'ShortTopAppBar':
-					return A3(
-						_aforemny$elm_mdc$Demo_TopAppBar$shortTopAppBar,
-						lift,
-						{
-							ctor: '::',
-							_0: 4,
-							_1: {ctor: '[]'}
-						},
-						model);
+					return A3(_aforemny$elm_mdc$Demo_TopAppBar$shortTopAppBar, lift, 'top-app-bar-short', model);
 				default:
-					return A3(
-						_aforemny$elm_mdc$Demo_TopAppBar$shortCollapsedTopAppBar,
-						lift,
-						{
-							ctor: '::',
-							_0: 5,
-							_1: {ctor: '[]'}
-						},
-						model);
+					return A3(_aforemny$elm_mdc$Demo_TopAppBar$shortCollapsedTopAppBar, lift, 'top-app-bar-short-collapsed', model);
 			}
 		} else {
 			return A2(
@@ -45675,11 +44643,7 @@ var _aforemny$elm_mdc$Demo_TopAppBar$view = F4(
 											return lift(
 												_aforemny$elm_mdc$Demo_TopAppBar$Mdc(_p14));
 										},
-										{
-											ctor: '::',
-											_0: 0,
-											_1: {ctor: '[]'}
-										},
+										'top-app-bar-default-top-app-bar',
 										model.mdc,
 										{
 											ctor: '::',
@@ -46993,25 +45957,8 @@ var _aforemny$elm_mdc$Main$update = F2(
 	});
 var _aforemny$elm_mdc$Main$view_ = function (model) {
 	var page = {
-		toolbar: A5(
-			_aforemny$elm_mdc$Demo_Page$toolbar,
-			_aforemny$elm_mdc$Main$Mdc,
-			{
-				ctor: '::',
-				_0: 0,
-				_1: {ctor: '[]'}
-			},
-			model.mdc,
-			_aforemny$elm_mdc$Main$Navigate,
-			model.url),
-		fixedAdjust: A2(
-			_aforemny$elm_mdc$Demo_Page$fixedAdjust,
-			{
-				ctor: '::',
-				_0: 0,
-				_1: {ctor: '[]'}
-			},
-			model.mdc),
+		toolbar: A5(_aforemny$elm_mdc$Demo_Page$toolbar, _aforemny$elm_mdc$Main$Mdc, 'page-toolbar', model.mdc, _aforemny$elm_mdc$Main$Navigate, model.url),
+		fixedAdjust: A2(_aforemny$elm_mdc$Demo_Page$fixedAdjust, 'page-toolbar', model.mdc),
 		navigate: _aforemny$elm_mdc$Main$Navigate,
 		body: F2(
 			function (title, nodes) {
@@ -47040,18 +45987,7 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 							ctor: '::',
 							_0: {
 								ctor: '::',
-								_0: A6(
-									_aforemny$elm_mdc$Demo_Page$toolbar,
-									_aforemny$elm_mdc$Main$Mdc,
-									{
-										ctor: '::',
-										_0: 0,
-										_1: {ctor: '[]'}
-									},
-									model.mdc,
-									_aforemny$elm_mdc$Main$Navigate,
-									model.url,
-									title),
+								_0: A6(_aforemny$elm_mdc$Demo_Page$toolbar, _aforemny$elm_mdc$Main$Mdc, 'page-toolbar', model.mdc, _aforemny$elm_mdc$Main$Navigate, model.url, title),
 								_1: {ctor: '[]'}
 							},
 							_1: {
@@ -47063,14 +45999,7 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 										_elm_lang$html$Html$div,
 										{
 											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Toolbar$fixedAdjust,
-												{
-													ctor: '::',
-													_0: 0,
-													_1: {ctor: '[]'}
-												},
-												model.mdc),
+											_0: A2(_aforemny$elm_mdc$Material_Toolbar$fixedAdjust, 'page-toolbar', model.mdc),
 											_1: {ctor: '[]'}
 										},
 										{ctor: '[]'}),
