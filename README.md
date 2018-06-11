@@ -50,7 +50,6 @@ on `<body>`:
 </body>
 ```
 
-
 ## Example application
 
 See `examples/hello-world/` for a full example. You have to run `make` in the
@@ -127,15 +126,29 @@ view model =
 ## Build instructions
 
 ### Building the demo
+
 ```sh
 $ make build-demo
 $ open build/index.html
+```
+
+### Building the demo on Windows
+
+```sh
+$ build.cmd build-demo
+$ build/index.html
 ```
 
 ## Building the documentation
 
 ```sh
 $ make docs
+```
+
+## Building the documentation on Windows
+
+```sh
+$ build.cmd docs
 ```
 
 ## Contribute
