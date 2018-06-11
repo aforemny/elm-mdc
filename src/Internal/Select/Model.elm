@@ -7,7 +7,7 @@ module Internal.Select.Model exposing
     )
 
 import DOM
-import Material.Internal.Ripple.Model as Ripple
+import Internal.Ripple.Model as Ripple
 
 
 type alias Model =

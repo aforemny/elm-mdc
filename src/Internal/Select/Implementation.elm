@@ -11,11 +11,11 @@ module Internal.Select.Implementation exposing
 import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json exposing (Decoder)
-import Material.Internal.Component as Component exposing (Indexed, Index)
-import Material.Internal.Msg
-import Material.Internal.Options as Options exposing (cs, css, styled, when)
-import Material.Internal.Ripple.Implementation as Ripple
-import Material.Internal.Select.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
+import Internal.Component as Component exposing (Indexed, Index)
+import Internal.Msg
+import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Ripple.Implementation as Ripple
+import Internal.Select.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
@@ -167,4 +167,4 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get select Material.Internal.Msg.SelectMsg
+    Component.render get select Internal.Msg.SelectMsg
