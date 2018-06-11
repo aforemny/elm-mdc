@@ -2,8 +2,11 @@ module Material.Select exposing
     ( box
     , disabled
     , label
+    , option
     , preselected
     , Property
+    , selected
+    , value
     , view
     )
 
@@ -34,15 +37,14 @@ Select.view (lift << Mdc) id model.mdc
     [ Select.label "Food Group"
     , Select.preselected
     , Options.onChange ProcessMyChange
-    , css "width" "377px"
     ]
-    [ Html.option
-          [ Html.value "Fruit Roll Ups"
-          , Html.selected True
+    [ Select.option
+          [ Select.value "Fruit Roll Ups"
+          , Select.selected True
           ]
           [ text "Fruit Roll Ups" ]
-    , Html.option
-          [ Html.value "Candy (cotton)" ]
+    , Select.option
+          [ Select.value "Candy (cotton)" ]
           [ text "Candy (cotton)" ]
     ]
 ```
@@ -56,6 +58,10 @@ Select.view (lift << Mdc) id model.mdc
 @docs preselected
 @docs disabled
 @docs box
+
+@docs option
+@docs value
+@docs selected
 -}
 
 import Html exposing (Html)
@@ -109,3 +115,26 @@ preselected =
 disabled : Property m
 disabled =
     Select.disabled
+
+
+{-| A select's option.
+-}
+option : List (Property m) -> List (Html m) -> Html m
+option =
+    Select.option
+
+
+{-| Set an option's value.
+-}
+value : String -> Property m
+value =
+    Select.value
+
+
+{-| Make an option selected.
+
+See `preselected`.
+-}
+selected : Property m
+selected =
+    Select.selected

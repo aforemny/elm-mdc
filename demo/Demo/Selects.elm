@@ -101,10 +101,7 @@ heroSelect
     -> List (Html m)
     -> Html m
 heroSelect lift id model options _ =
-    Select.view (lift << Mdc) id model.mdc
-    ( css "width" "377px"
-    :: options
-    )
+    Select.view (lift << Mdc) id model.mdc options
     ( [ "Bread, Cereal, Rice, and Pasta"
       , "Vegetables"
       , "Fruit"
@@ -113,8 +110,9 @@ heroSelect lift id model options _ =
       , "Fats, Oils, and Sweets"
       ]
       |> List.indexedMap (\index label ->
-             Html.option
-             [ Html.value (toString index) ]
+             Select.option
+             [ Select.value (toString index)
+             ]
              [ text label ]
          )
     )
@@ -177,22 +175,21 @@ select lift id model selectedIndex options _ =
               , Options.onChange (lift << Pick id)
               , Select.preselected |> when (selectedIndex /= Nothing)
               , Select.disabled |> when state.disabled
-              , css "width" "160px"
               ]
               ++ options
             )
             ( fruits
               |> Array.toList
               |> List.indexedMap (\index label ->
-                     Html.option
-                     [ Html.value label
-                     , Html.selected
+                     Select.option
+                     [ Select.value label
+                     , when
                          (case selectedIndex of
                               Nothing ->
                                   False
                               Just i ->
                                   index == i
-                         )
+                         ) Select.selected
                      ]
                      [ text label ]
                  )

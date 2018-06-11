@@ -2,36 +2,38 @@ module Internal.Select.Implementation exposing
     ( box
     , disabled
     , label
+    , option
     , preselected
     , Property
     , react
+    , value
     , view
+    , selected
     )
 
 import Html.Attributes as Html
 import Html exposing (Html, text)
-import Json.Decode as Json exposing (Decoder)
 import Internal.Component as Component exposing (Indexed, Index)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
-import Internal.Select.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
+import Internal.Select.Model exposing (Model, defaultModel, Msg(..))
 
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
     case msg of
-        Input value ->
+        Change value ->
             let
                 dirty =
                     value /= ""
             in
-            ( Just { model | value = Just value, isDirty = dirty }, Cmd.none )
+            ( Just { model | isDirty = dirty }, Cmd.none )
 
         Blur ->
             ( Just { model | focused = False }, Cmd.none )
 
-        Focus geometry ->
+        Focus ->
             ( Just { model | focused = True }, Cmd.none )
 
         RippleMsg msg_ ->
@@ -55,7 +57,7 @@ defaultConfig =
     { label = ""
     , box = False
     , disabled = False
-    , preselected= False
+    , preselected = False
     }
 
 
@@ -89,56 +91,73 @@ select
     -> List (Property m)
     -> List (Html m)
     -> Html m
-select lift model options items =
+select lift model options items_ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        isDirty = model.isDirty
+        isDirty =
+            model.isDirty
 
         focused =
             model.focused && not config.disabled
 
-        isOpen = False -- TODO
-
-        myItems =
+        items =
             if config.preselected then
-                items
+                items_
             else
                 Html.option
                     [ Html.value ""
                     , Html.disabled True
-                    , Html.selected True ]
+                    , Html.selected True
+                    ]
                 []
-                :: items
+                :: items_
 
     in
     Options.apply summary Html.div
     [ cs "mdc-select"
-    , cs "mdc-select--disabled" |> when config.disabled
+    , when config.disabled (cs "mdc-select--disabled")
     ]
     [ Html.attribute "role" "listbox"
     , Html.tabindex 0
     ]
     [ styled Html.select
           [ cs "mdc-select__native-control"
-          , Options.on "focus" (Json.succeed (lift (Focus defaultGeometry)))
+          , Options.onFocus (lift Focus)
           , Options.onBlur (lift Blur)
-          , Options.onInput (lift << Input)
+          , Options.onChange (lift << Change)
+          , when config.disabled (Options.attribute (Html.disabled True))
           ]
-          myItems
+          items
     , styled Html.label
         [ cs "mdc-floating-label"
-        , cs "mdc-floating-label--float-above" |> when (focused || isDirty || config.preselected)
+        , when (focused || isDirty || config.preselected)
+            (cs "mdc-floating-label--float-above")
         ]
         [ text config.label
         ]
     , styled Html.div
         [ cs "mdc-line-ripple"
-        , cs "mdc-line-ripple--active" |> when focused
+        , when focused (cs "mdc-line-ripple--active")
         ]
         []
     ]
+
+
+option : List (Property m) -> List (Html m) -> Html m
+option =
+    styled Html.option
+
+
+value : String -> Property m
+value =
+    Options.attribute << Html.value
+
+
+selected : Property m
+selected =
+    Options.attribute (Html.selected True)
 
 
 type alias Store s =
