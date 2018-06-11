@@ -10107,7 +10107,11 @@ var _aforemny$elm_mdc$Internal_Icon_Implementation$view = F2(
 			{
 				ctor: '::',
 				_0: _aforemny$elm_mdc$Internal_Options$cs('material-icons'),
-				_1: options
+				_1: {
+					ctor: '::',
+					_0: A2(_aforemny$elm_mdc$Internal_Options$aria, 'hidden', 'true'),
+					_1: {ctor: '[]'}
+				}
 			},
 			{ctor: '[]'},
 			{
