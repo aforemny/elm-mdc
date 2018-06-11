@@ -368,7 +368,6 @@ subscriptions lift model =
     Sub.batch
         [ Drawer.subs lift model.mdc
         , Menu.subs lift model.mdc
-        , Select.subs lift model.mdc
         ]
 
 
