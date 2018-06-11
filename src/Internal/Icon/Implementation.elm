@@ -35,9 +35,10 @@ view options name =
       ({ config } as summary) =
           Options.collect defaultConfig options
     in
-    Options.apply summary
-        (Html.node config.node)
-        (cs "material-icons" :: options)
+    Options.apply summary (Html.node config.node)
+        [ cs "material-icons"
+        , Options.aria "hidden" "true"
+        ]
         []
         [ text name ]
 

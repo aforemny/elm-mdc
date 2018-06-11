@@ -23,6 +23,11 @@ This implementation assumes that you have
 or an equivalent means of loading the icons in your HTML header.
 
 
+The icon will have the aria-hidden attribute set to true to ensure
+that screen readers produce the correct output when reading this
+element.
+
+
 # Example
 
 ```elm
