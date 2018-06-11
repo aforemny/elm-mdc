@@ -1,12 +1,12 @@
 module Demo.Selects exposing (Model, defaultModel, Msg(Mdc), update, view, subscriptions)
 
+import Array
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html.Attributes as Html
 import Html.Events as Html
 import Html exposing (Html, text)
 import Material
-import Material.Menu as Menu
 import Material.Options as Options exposing (styled, cs, css, when)
 import Material.Select as Select
 import Material.Typography as Typography
@@ -26,7 +26,7 @@ defaultModel =
 
 
 type alias Select =
-    { value : Maybe ( Int, String )
+    { value : Maybe String
     , rtl : Bool
     , disabled : Bool
     }
@@ -42,7 +42,7 @@ defaultSelect =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | Pick (List Int) ( Int, String )
+    | Pick (List Int) String
     | ToggleRtl (List Int)
     | ToggleDisabled (List Int)
 
@@ -64,6 +64,9 @@ update lift msg model =
                     Dict.insert index select model.selects
             in
             ( { model | selects = selects }, Cmd.none )
+
+        -- Pick index value ->
+        --     ( model, Cmd.none )
 
         ToggleRtl index ->
             let
@@ -110,11 +113,8 @@ heroSelect lift id model options _ =
       , "Fats, Oils, and Sweets"
       ]
       |> List.indexedMap (\index label ->
-             Menu.li
-             [ Menu.onSelect (lift (Pick id ( index, label )))
-             -- TODO:
-             -- , Menu.disabled |> when ((index == 0) || (index == 3))
-             ]
+             Html.option
+             [ Html.value (toString index) ]
              [ text label ]
          )
     )
@@ -135,20 +135,34 @@ select
     : (Msg m -> m)
     -> List Int
     -> Model m
+    -> Maybe Int
     -> List (Select.Property m)
     -> List (Html m)
     -> List (Html m)
-select lift id model options _ =
+select lift id model selectedIndex options _ =
     let
         state =
             Dict.get id model.selects
             |> Maybe.withDefault defaultSelect
 
-        index =
-            Maybe.map Tuple.first state.value
+        fruits = Array.fromList
+            [ "Fruit Roll Ups"
+            , "Candy (cotton)"
+            , "Vegetables"
+            , "Noodles"
+            ]
 
-        selectedText =
-            Maybe.map Tuple.second state.value
+        selectedValue =
+            case state.value of
+                Nothing ->
+                    case selectedIndex of
+                        Nothing ->
+                            Nothing
+                        Just i ->
+                            Array.get i fruits
+                Just v ->
+                    state.value
+
     in
     [
       styled Html.section
@@ -159,36 +173,37 @@ select lift id model options _ =
       ]
       [
         Select.view (lift << Mdc) id model.mdc
-        ( Select.label "Food Group"
-        :: when (index /= Nothing)
-              (Select.index (Maybe.withDefault -1 index))
-        :: when (selectedText /= Nothing)
-              (Select.selectedText (Maybe.withDefault "" selectedText))
-        :: when state.disabled Select.disabled
-        :: css "width" "140px"
-        :: options
-        )
-        ( [ "Fruit Roll Ups"
-          , "Candy (cotton)"
-          , "Vegetables"
-          , "Noodles"
-          ]
-          |> List.indexedMap (\index label ->
-                 Menu.li
-                 [ Menu.onSelect (lift (Pick id ( index, label )))
-                 -- TODO:
-                 -- , Menu.disabled |> when ((index == 0) || (index == 3))
-                 ]
-                 [ text label ]
-             )
-        )
+            ( [ Select.label "Food Group"
+              , Options.onChange (lift << Pick id)
+              , Select.preselected |> when (selectedIndex /= Nothing)
+              , Select.disabled |> when state.disabled
+              , css "width" "160px"
+              ]
+              ++ options
+            )
+            ( fruits
+              |> Array.toList
+              |> List.indexedMap (\index label ->
+                     Html.option
+                     [ Html.value label
+                     , Html.selected
+                         (case selectedIndex of
+                              Nothing ->
+                                  False
+                              Just i ->
+                                  index == i
+                         )
+                     ]
+                     [ text label ]
+                 )
+            )
       ]
     ,
       Html.p []
       [ text "Currently selected: "
       , Html.span []
-        [ if index /= Nothing then
-            text (Maybe.withDefault "" selectedText ++ " at index " ++ toString (Maybe.withDefault -1 index) ++ " with value " ++ toString (Maybe.withDefault "" selectedText))
+        [ if selectedValue /= Nothing then
+            text (Maybe.withDefault "" selectedValue)
           else
             text "(none)"
         ]
@@ -229,17 +244,10 @@ view lift page model =
               Dict.get [0] model.selects
               |> Maybe.withDefault defaultSelect
 
-          index =
-              Maybe.map Tuple.first state.value
-
-          selectedText =
-              Maybe.map Tuple.second state.value
       in
       Page.hero []
       [ heroSelect lift [0] model
         [ Select.label "Pick a food group"
-        , Select.index (Maybe.withDefault -1 index) |> when (index /= Nothing)
-        , Select.selectedText (Maybe.withDefault "" selectedText) |> when (selectedText /= Nothing)
         , Select.disabled |> when state.disabled
         ]
         []
@@ -253,7 +261,7 @@ view lift page model =
             [ text "Select"
             ]
           ]
-        , select lift [1] model [] []
+        , select lift [1] model (Just 2) [ ] []
         ]
       )
     ,
@@ -265,7 +273,7 @@ view lift page model =
             [ text "Select box"
             ]
           ]
-        , select lift [2] model [ Select.box ] []
+        , select lift [2] model Nothing [ Select.box ] []
         ]
       )
     ]
