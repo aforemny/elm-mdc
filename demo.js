@@ -8462,28 +8462,19 @@ var _aforemny$elm_mdc$Internal_RadioButton_Model$RippleMsg = function (a) {
 	return {ctor: 'RippleMsg', _0: a};
 };
 
-var _aforemny$elm_mdc$Internal_Select_Model$defaultGeometry = {
-	boundingClientRect: {top: 0, left: 0, width: 0, height: 0},
-	windowInnerHeight: 0,
-	menuHeight: 0,
-	itemOffsetTops: {ctor: '[]'}
-};
-var _aforemny$elm_mdc$Internal_Select_Model$defaultModel = {menu: _aforemny$elm_mdc$Internal_Menu_Model$defaultModel, geometry: _elm_lang$core$Maybe$Nothing, index: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Internal_Select_Model$defaultModel = {focused: false, isDirty: false, ripple: _aforemny$elm_mdc$Internal_Ripple_Model$defaultModel};
 var _aforemny$elm_mdc$Internal_Select_Model$Model = F3(
 	function (a, b, c) {
-		return {menu: a, geometry: b, index: c};
+		return {focused: a, isDirty: b, ripple: c};
 	});
-var _aforemny$elm_mdc$Internal_Select_Model$Geometry = F4(
-	function (a, b, c, d) {
-		return {boundingClientRect: a, windowInnerHeight: b, menuHeight: c, itemOffsetTops: d};
-	});
-var _aforemny$elm_mdc$Internal_Select_Model$Init = function (a) {
-	return {ctor: 'Init', _0: a};
+var _aforemny$elm_mdc$Internal_Select_Model$RippleMsg = function (a) {
+	return {ctor: 'RippleMsg', _0: a};
 };
-var _aforemny$elm_mdc$Internal_Select_Model$MenuMsg = F2(
-	function (a, b) {
-		return {ctor: 'MenuMsg', _0: a, _1: b};
-	});
+var _aforemny$elm_mdc$Internal_Select_Model$Change = function (a) {
+	return {ctor: 'Change', _0: a};
+};
+var _aforemny$elm_mdc$Internal_Select_Model$Focus = {ctor: 'Focus'};
+var _aforemny$elm_mdc$Internal_Select_Model$Blur = {ctor: 'Blur'};
 
 var _aforemny$elm_mdc$Internal_Slider_Model$defaultGeometry = {
 	rect: {left: 0, width: 0},
@@ -14509,91 +14500,6 @@ var _aforemny$elm_mdc$Internal_RadioButton_Implementation$Config = F3(
 		return {value: a, disabled: b, nativeControl: c};
 	});
 
-var _aforemny$elm_mdc$Internal_Select_Implementation$decodeGeometry = function () {
-	var itemOffsetTops = A2(
-		_debois$elm_dom$DOM$childNode,
-		1,
-		A2(
-			_debois$elm_dom$DOM$childNode,
-			0,
-			_debois$elm_dom$DOM$childNodes(_debois$elm_dom$DOM$offsetTop)));
-	var menuHeight = A2(_debois$elm_dom$DOM$childNode, 1, _debois$elm_dom$DOM$offsetHeight);
-	var boundingClientRect = A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'targetRect',
-			_1: {ctor: '[]'}
-		},
-		A5(
-			_elm_lang$core$Json_Decode$map4,
-			F4(
-				function (top, left, width, height) {
-					return {top: top, left: left, width: width, height: height};
-				}),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'top',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'left',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'width',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float),
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'height',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$float)));
-	var windowInnerHeight = A2(
-		_elm_lang$core$Json_Decode$at,
-		{
-			ctor: '::',
-			_0: 'ownerDocument',
-			_1: {
-				ctor: '::',
-				_0: 'defaultView',
-				_1: {ctor: '[]'}
-			}
-		},
-		A2(
-			_elm_lang$core$Json_Decode$at,
-			{
-				ctor: '::',
-				_0: 'innerHeight',
-				_1: {ctor: '[]'}
-			},
-			_elm_lang$core$Json_Decode$float));
-	return A2(
-		_elm_lang$core$Json_Decode$andThen,
-		function (boundingClientRect) {
-			return A4(
-				_elm_lang$core$Json_Decode$map3,
-				_aforemny$elm_mdc$Internal_Select_Model$Geometry(boundingClientRect),
-				_debois$elm_dom$DOM$target(windowInnerHeight),
-				_debois$elm_dom$DOM$target(menuHeight),
-				_debois$elm_dom$DOM$target(itemOffsetTops));
-		},
-		boundingClientRect);
-}();
 var _aforemny$elm_mdc$Internal_Select_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Internal_Component$indexed,
 	function (_) {
@@ -14608,6 +14514,13 @@ var _aforemny$elm_mdc$Internal_Select_Implementation$_p0 = A3(
 	_aforemny$elm_mdc$Internal_Select_Model$defaultModel);
 var _aforemny$elm_mdc$Internal_Select_Implementation$get = _aforemny$elm_mdc$Internal_Select_Implementation$_p0._0;
 var _aforemny$elm_mdc$Internal_Select_Implementation$set = _aforemny$elm_mdc$Internal_Select_Implementation$_p0._1;
+var _aforemny$elm_mdc$Internal_Select_Implementation$selected = _aforemny$elm_mdc$Internal_Options$attribute(
+	_elm_lang$html$Html_Attributes$selected(true));
+var _aforemny$elm_mdc$Internal_Select_Implementation$value = function (_p1) {
+	return _aforemny$elm_mdc$Internal_Options$attribute(
+		_elm_lang$html$Html_Attributes$value(_p1));
+};
+var _aforemny$elm_mdc$Internal_Select_Implementation$option = _aforemny$elm_mdc$Internal_Options$styled(_elm_lang$html$Html$option);
 var _aforemny$elm_mdc$Internal_Select_Implementation$box = _aforemny$elm_mdc$Internal_Options$cs('mdc-select--box');
 var _aforemny$elm_mdc$Internal_Select_Implementation$disabled = _aforemny$elm_mdc$Internal_Options$option(
 	function (config) {
@@ -14615,81 +14528,49 @@ var _aforemny$elm_mdc$Internal_Select_Implementation$disabled = _aforemny$elm_md
 			config,
 			{disabled: true});
 	});
-var _aforemny$elm_mdc$Internal_Select_Implementation$selectedText = function (selectedText) {
-	return _aforemny$elm_mdc$Internal_Options$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{
-					selectedText: _elm_lang$core$Maybe$Just(selectedText)
-				});
-		});
-};
-var _aforemny$elm_mdc$Internal_Select_Implementation$index = function (index) {
-	return _aforemny$elm_mdc$Internal_Options$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{
-					index: _elm_lang$core$Maybe$Just(index)
-				});
-		});
-};
-var _aforemny$elm_mdc$Internal_Select_Implementation$label = function (_p1) {
+var _aforemny$elm_mdc$Internal_Select_Implementation$preselected = _aforemny$elm_mdc$Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{preselected: true});
+	});
+var _aforemny$elm_mdc$Internal_Select_Implementation$label = function (_p2) {
 	return _aforemny$elm_mdc$Internal_Options$option(
 		F2(
 			function (value, config) {
 				return _elm_lang$core$Native_Utils.update(
 					config,
 					{label: value});
-			})(_p1));
+			})(_p2));
 };
-var _aforemny$elm_mdc$Internal_Select_Implementation$defaultConfig = {label: '', index: _elm_lang$core$Maybe$Nothing, selectedText: _elm_lang$core$Maybe$Nothing, disabled: false};
+var _aforemny$elm_mdc$Internal_Select_Implementation$defaultConfig = {label: '', box: false, disabled: false, preselected: false};
 var _aforemny$elm_mdc$Internal_Select_Implementation$select = F4(
-	function (lift, model, options, items) {
-		var isOpen = model.menu.animating ? (model.menu.open && (!_elm_lang$core$Native_Utils.eq(model.menu.geometry, _elm_lang$core$Maybe$Nothing))) : model.menu.open;
-		var geometry = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Internal_Select_Model$defaultGeometry, model.geometry);
-		var left = geometry.boundingClientRect.left;
-		var top = geometry.boundingClientRect.top;
-		var _p2 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_Select_Implementation$defaultConfig, options);
-		var summary = _p2;
-		var config = _p2.config;
-		var itemOffsetTop = A2(
-			_elm_lang$core$Maybe$withDefault,
-			0,
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				_elm_lang$core$List$head(
-					A2(
-						_elm_lang$core$List$drop,
-						A2(_elm_lang$core$Maybe$withDefault, 0, config.index),
-						geometry.itemOffsetTops)),
-				A2(
-					_elm_lang$core$Maybe$map,
-					_elm_lang$core$Maybe$Just,
-					A2(
-						_elm_lang$core$Maybe$andThen,
-						function (index) {
-							return _elm_lang$core$List$head(
-								A2(
-									_elm_lang$core$List$drop,
-									A2(_elm_lang$core$Maybe$withDefault, 0, model.index),
-									geometry.itemOffsetTops));
-						},
-						model.index))));
-		var adjustedTop = function () {
-			var adjustedTop_ = top - itemOffsetTop;
-			var overflowsTop = _elm_lang$core$Native_Utils.cmp(adjustedTop_, 0) < 0;
-			var overflowsBottom = _elm_lang$core$Native_Utils.cmp(adjustedTop_ + geometry.menuHeight, geometry.windowInnerHeight) > 0;
-			return overflowsTop ? 0 : (overflowsBottom ? A2(_elm_lang$core$Basics$max, 0, geometry.windowInnerHeight - geometry.menuHeight) : adjustedTop_);
-		}();
-		var transformOrigin = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'center ',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(itemOffsetTop),
-				'px'));
+	function (lift, model, options, items_) {
+		var isDirty = model.isDirty;
+		var _p3 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_Select_Implementation$defaultConfig, options);
+		var summary = _p3;
+		var config = _p3.config;
+		var focused = model.focused && (!config.disabled);
+		var items = config.preselected ? items_ : {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$option,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$value(''),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$disabled(true),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$selected(true),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: items_
+		};
 		return A5(
 			_aforemny$elm_mdc$Internal_Options$apply,
 			summary,
@@ -14701,43 +14582,9 @@ var _aforemny$elm_mdc$Internal_Select_Implementation$select = F4(
 					ctor: '::',
 					_0: A2(
 						_aforemny$elm_mdc$Internal_Options$when,
-						isOpen,
-						_aforemny$elm_mdc$Internal_Options$cs('mdc-select--open')),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_aforemny$elm_mdc$Internal_Options$when,
-							model.menu.animating && _elm_lang$core$Native_Utils.eq(model.menu.geometry, _elm_lang$core$Maybe$Nothing),
-							A2(
-								_aforemny$elm_mdc$Internal_GlobalEvents$onTickWith,
-								{targetRect: true, parentRect: false},
-								A2(
-									_elm_lang$core$Json_Decode$map,
-									function (_p3) {
-										return lift(
-											_aforemny$elm_mdc$Internal_Select_Model$Init(_p3));
-									},
-									_aforemny$elm_mdc$Internal_Select_Implementation$decodeGeometry))),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_aforemny$elm_mdc$Internal_Options$when,
-								!config.disabled,
-								_aforemny$elm_mdc$Internal_Menu_Implementation$connect(
-									function (_p4) {
-										return lift(
-											A2(_aforemny$elm_mdc$Internal_Select_Model$MenuMsg, config.index, _p4));
-									})),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Internal_Options$when,
-									config.disabled,
-									_aforemny$elm_mdc$Internal_Options$cs('mdc-select--disabled')),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
+						config.disabled,
+						_aforemny$elm_mdc$Internal_Options$cs('mdc-select--disabled')),
+					_1: {ctor: '[]'}
 				}
 			},
 			{
@@ -14753,219 +14600,141 @@ var _aforemny$elm_mdc$Internal_Select_Implementation$select = F4(
 				ctor: '::',
 				_0: A3(
 					_aforemny$elm_mdc$Internal_Options$styled,
-					_elm_lang$html$Html$div,
+					_elm_lang$html$Html$select,
 					{
 						ctor: '::',
-						_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-select__surface'),
-						_1: {ctor: '[]'}
+						_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-select__native-control'),
+						_1: {
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Internal_Options$onFocus(
+								lift(_aforemny$elm_mdc$Internal_Select_Model$Focus)),
+							_1: {
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Internal_Options$onBlur(
+									lift(_aforemny$elm_mdc$Internal_Select_Model$Blur)),
+								_1: {
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Internal_Options$onChange(
+										function (_p4) {
+											return lift(
+												_aforemny$elm_mdc$Internal_Select_Model$Change(_p4));
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_aforemny$elm_mdc$Internal_Options$when,
+											config.disabled,
+											_aforemny$elm_mdc$Internal_Options$attribute(
+												_elm_lang$html$Html_Attributes$disabled(true))),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
 					},
-					{
+					items),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_aforemny$elm_mdc$Internal_Options$styled,
+						_elm_lang$html$Html$label,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-floating-label'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Internal_Options$when,
+									focused || (isDirty || config.preselected),
+									_aforemny$elm_mdc$Internal_Options$cs('mdc-floating-label--float-above')),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(config.label),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
 						ctor: '::',
 						_0: A3(
 							_aforemny$elm_mdc$Internal_Options$styled,
 							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-select__label'),
+								_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-line-ripple'),
 								_1: {
 									ctor: '::',
 									_0: A2(
 										_aforemny$elm_mdc$Internal_Options$when,
-										model.menu.open || (!_elm_lang$core$Native_Utils.eq(config.selectedText, _elm_lang$core$Maybe$Nothing)),
-										_aforemny$elm_mdc$Internal_Options$cs('mdc-select__label--float-above')),
+										focused,
+										_aforemny$elm_mdc$Internal_Options$cs('mdc-line-ripple--active')),
 									_1: {ctor: '[]'}
 								}
 							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(config.label),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A3(
-								_aforemny$elm_mdc$Internal_Options$styled,
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-select__selected-text'),
-									_1: {
-										ctor: '::',
-										_0: A2(_aforemny$elm_mdc$Internal_Options$css, 'pointer-events', 'none'),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										A2(_elm_lang$core$Maybe$withDefault, '', config.selectedText)),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A3(
-									_aforemny$elm_mdc$Internal_Options$styled,
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-select__bottom-line'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Internal_Options$when,
-												model.menu.open,
-												_aforemny$elm_mdc$Internal_Options$cs('mdc-select__bottom-line--active')),
-											_1: {ctor: '[]'}
-										}
-									},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A4(
-						_aforemny$elm_mdc$Internal_Menu_Implementation$menu,
-						function (_p5) {
-							return lift(
-								A2(_aforemny$elm_mdc$Internal_Select_Model$MenuMsg, config.index, _p5));
-						},
-						model.menu,
-						{
-							ctor: '::',
-							_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-select__menu'),
-							_1: {
-								ctor: '::',
-								_0: _aforemny$elm_mdc$Internal_Menu_Implementation$index(
-									A2(_elm_lang$core$Maybe$withDefault, 0, config.index)),
-								_1: {
-									ctor: '::',
-									_0: function (_p6) {
-										return A2(
-											_aforemny$elm_mdc$Internal_Options$when,
-											isOpen,
-											_aforemny$elm_mdc$Internal_Options$many(_p6));
-									}(
-										{
-											ctor: '::',
-											_0: A2(_aforemny$elm_mdc$Internal_Options$css, 'position', 'fixed'),
-											_1: {
-												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Internal_Options$css, 'transform-origin', transformOrigin),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_aforemny$elm_mdc$Internal_Options$css,
-														'left',
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(left),
-															'px')),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_aforemny$elm_mdc$Internal_Options$css,
-															'top',
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																_elm_lang$core$Basics$toString(adjustedTop),
-																'px')),
-														_1: {
-															ctor: '::',
-															_0: A2(_aforemny$elm_mdc$Internal_Options$css, 'bottom', 'unset'),
-															_1: {
-																ctor: '::',
-																_0: A2(_aforemny$elm_mdc$Internal_Options$css, 'right', 'unset'),
-																_1: {ctor: '[]'}
-															}
-														}
-													}
-												}
-											}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}
-						},
-						A2(
-							_aforemny$elm_mdc$Internal_Menu_Implementation$ul,
-							{ctor: '[]'},
-							items)),
-					_1: {ctor: '[]'}
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});
 var _aforemny$elm_mdc$Internal_Select_Implementation$view = A3(_aforemny$elm_mdc$Internal_Component$render, _aforemny$elm_mdc$Internal_Select_Implementation$get, _aforemny$elm_mdc$Internal_Select_Implementation$select, _aforemny$elm_mdc$Internal_Msg$SelectMsg);
 var _aforemny$elm_mdc$Internal_Select_Implementation$update = F3(
 	function (lift, msg, model) {
-		var _p7 = msg;
-		if (_p7.ctor === 'MenuMsg') {
-			var _p13 = _p7._1;
-			var _p12 = _p7._0;
-			var _p8 = A3(
-				_aforemny$elm_mdc$Internal_Menu_Implementation$update,
-				function (_p9) {
-					return lift(
-						A2(_aforemny$elm_mdc$Internal_Select_Model$MenuMsg, _p12, _p9));
-				},
-				_p13,
-				model.menu);
-			var menu = _p8._0;
-			var menuCmd = _p8._1;
-			var _p10 = menu;
-			if (_p10.ctor === 'Just') {
+		var _p5 = msg;
+		switch (_p5.ctor) {
+			case 'Change':
+				var dirty = !_elm_lang$core$Native_Utils.eq(_p5._0, '');
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{
-								menu: _p10._0,
-								index: function () {
-									var _p11 = _p13;
-									if (_p11.ctor === 'Toggle') {
-										return (!model.menu.open) ? _p12 : _elm_lang$core$Maybe$Nothing;
-									} else {
-										return model.index;
-									}
-								}()
-							})),
-					_1: menuCmd
+							{isDirty: dirty})),
+					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			} else {
-				return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: menuCmd};
-			}
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Maybe$Just(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							geometry: _elm_lang$core$Maybe$Just(_p7._0)
-						})),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
+			case 'Blur':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{focused: false})),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Focus':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{focused: true})),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				var _p6 = A2(_aforemny$elm_mdc$Internal_Ripple_Implementation$update, _p5._0, model.ripple);
+				var ripple = _p6._0;
+				var effects = _p6._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{ripple: ripple})),
+					_1: A2(
+						_elm_lang$core$Platform_Cmd$map,
+						function (_p7) {
+							return lift(
+								_aforemny$elm_mdc$Internal_Select_Model$RippleMsg(_p7));
+						},
+						effects)
+				};
 		}
 	});
 var _aforemny$elm_mdc$Internal_Select_Implementation$react = A4(_aforemny$elm_mdc$Internal_Component$react, _aforemny$elm_mdc$Internal_Select_Implementation$get, _aforemny$elm_mdc$Internal_Select_Implementation$set, _aforemny$elm_mdc$Internal_Msg$SelectMsg, _aforemny$elm_mdc$Internal_Select_Implementation$update);
-var _aforemny$elm_mdc$Internal_Select_Implementation$subscriptions = function (model) {
-	return A2(
-		_elm_lang$core$Platform_Sub$map,
-		_aforemny$elm_mdc$Internal_Select_Model$MenuMsg(_elm_lang$core$Maybe$Nothing),
-		_aforemny$elm_mdc$Internal_Menu_Implementation$subscriptions(model.menu));
-};
-var _aforemny$elm_mdc$Internal_Select_Implementation$subs = A3(
-	_aforemny$elm_mdc$Internal_Component$subs,
-	_aforemny$elm_mdc$Internal_Msg$SelectMsg,
-	function (_) {
-		return _.select;
-	},
-	_aforemny$elm_mdc$Internal_Select_Implementation$subscriptions);
 var _aforemny$elm_mdc$Internal_Select_Implementation$Config = F4(
 	function (a, b, c, d) {
-		return {label: a, index: b, selectedText: c, disabled: d};
+		return {label: a, box: b, disabled: c, preselected: d};
 	});
 
 var _aforemny$elm_mdc$Internal_Slider_Implementation$trackMarkers = _aforemny$elm_mdc$Internal_Options$option(
@@ -20159,11 +19928,7 @@ var _aforemny$elm_mdc$Material$subscriptions = F2(
 				_1: {
 					ctor: '::',
 					_0: A2(_aforemny$elm_mdc$Internal_Menu_Implementation$subs, lift, model.mdc),
-					_1: {
-						ctor: '::',
-						_0: A2(_aforemny$elm_mdc$Internal_Select_Implementation$subs, lift, model.mdc),
-						_1: {ctor: '[]'}
-					}
+					_1: {ctor: '[]'}
 				}
 			});
 	});
@@ -35245,9 +35010,11 @@ var _aforemny$elm_mdc$Demo_Ripple$view = F3(
 			});
 	});
 
+var _aforemny$elm_mdc$Material_Select$selected = _aforemny$elm_mdc$Internal_Select_Implementation$selected;
+var _aforemny$elm_mdc$Material_Select$value = _aforemny$elm_mdc$Internal_Select_Implementation$value;
+var _aforemny$elm_mdc$Material_Select$option = _aforemny$elm_mdc$Internal_Select_Implementation$option;
 var _aforemny$elm_mdc$Material_Select$disabled = _aforemny$elm_mdc$Internal_Select_Implementation$disabled;
-var _aforemny$elm_mdc$Material_Select$selectedText = _aforemny$elm_mdc$Internal_Select_Implementation$selectedText;
-var _aforemny$elm_mdc$Material_Select$index = _aforemny$elm_mdc$Internal_Select_Implementation$index;
+var _aforemny$elm_mdc$Material_Select$preselected = _aforemny$elm_mdc$Internal_Select_Implementation$preselected;
 var _aforemny$elm_mdc$Material_Select$label = _aforemny$elm_mdc$Internal_Select_Implementation$label;
 var _aforemny$elm_mdc$Material_Select$box = _aforemny$elm_mdc$Internal_Select_Implementation$box;
 var _aforemny$elm_mdc$Material_Select$view = _aforemny$elm_mdc$Internal_Select_Implementation$view;
@@ -35381,25 +35148,17 @@ var _aforemny$elm_mdc$Demo_Selects$heroSelect = F5(
 			},
 			id,
 			model.mdc,
-			{
-				ctor: '::',
-				_0: A2(_aforemny$elm_mdc$Material_Options$css, 'width', '377px'),
-				_1: options
-			},
+			options,
 			A2(
 				_elm_lang$core$List$indexedMap,
 				F2(
 					function (index, label) {
 						return A2(
-							_aforemny$elm_mdc$Material_Menu$li,
+							_aforemny$elm_mdc$Material_Select$option,
 							{
 								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Menu$onSelect(
-									lift(
-										A2(
-											_aforemny$elm_mdc$Demo_Selects$Pick,
-											id,
-											{ctor: '_Tuple2', _0: index, _1: label}))),
+								_0: _aforemny$elm_mdc$Material_Select$value(
+									_elm_lang$core$Basics$toString(index)),
 								_1: {ctor: '[]'}
 							},
 							{
@@ -35434,14 +35193,43 @@ var _aforemny$elm_mdc$Demo_Selects$heroSelect = F5(
 					}
 				}));
 	});
-var _aforemny$elm_mdc$Demo_Selects$select = F5(
-	function (lift, id, model, options, _p7) {
+var _aforemny$elm_mdc$Demo_Selects$select = F6(
+	function (lift, id, model, selectedIndex, options, _p7) {
+		var fruits = _elm_lang$core$Array$fromList(
+			{
+				ctor: '::',
+				_0: 'Fruit Roll Ups',
+				_1: {
+					ctor: '::',
+					_0: 'Candy (cotton)',
+					_1: {
+						ctor: '::',
+						_0: 'Vegetables',
+						_1: {
+							ctor: '::',
+							_0: 'Noodles',
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
 		var state = A2(
 			_elm_lang$core$Maybe$withDefault,
 			_aforemny$elm_mdc$Demo_Selects$defaultSelect,
 			A2(_elm_lang$core$Dict$get, id, model.selects));
-		var index = A2(_elm_lang$core$Maybe$map, _elm_lang$core$Tuple$first, state.value);
-		var selectedText = A2(_elm_lang$core$Maybe$map, _elm_lang$core$Tuple$second, state.value);
+		var selectedValue = function () {
+			var _p8 = state.value;
+			if (_p8.ctor === 'Nothing') {
+				var _p9 = selectedIndex;
+				if (_p9.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					return A2(_elm_lang$core$Array$get, _p9._0, fruits);
+				}
+			} else {
+				return state.value;
+			}
+		}();
 		return {
 			ctor: '::',
 			_0: A3(
@@ -35472,56 +35260,63 @@ var _aforemny$elm_mdc$Demo_Selects$select = F5(
 					ctor: '::',
 					_0: A5(
 						_aforemny$elm_mdc$Material_Select$view,
-						function (_p8) {
+						function (_p10) {
 							return lift(
-								_aforemny$elm_mdc$Demo_Selects$Mdc(_p8));
+								_aforemny$elm_mdc$Demo_Selects$Mdc(_p10));
 						},
 						id,
 						model.mdc,
-						{
-							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Select$label('Food Group'),
-							_1: {
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							{
 								ctor: '::',
-								_0: A2(
-									_aforemny$elm_mdc$Material_Options$when,
-									!_elm_lang$core$Native_Utils.eq(index, _elm_lang$core$Maybe$Nothing),
-									_aforemny$elm_mdc$Material_Select$index(
-										A2(_elm_lang$core$Maybe$withDefault, -1, index))),
+								_0: _aforemny$elm_mdc$Material_Select$label('Food Group'),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Options$when,
-										!_elm_lang$core$Native_Utils.eq(selectedText, _elm_lang$core$Maybe$Nothing),
-										_aforemny$elm_mdc$Material_Select$selectedText(
-											A2(_elm_lang$core$Maybe$withDefault, '', selectedText))),
+									_0: _aforemny$elm_mdc$Material_Options$onChange(
+										function (_p11) {
+											return lift(
+												A2(_aforemny$elm_mdc$Demo_Selects$Pick, id, _p11));
+										}),
 									_1: {
 										ctor: '::',
-										_0: A2(_aforemny$elm_mdc$Material_Options$when, state.disabled, _aforemny$elm_mdc$Material_Select$disabled),
+										_0: A2(
+											_aforemny$elm_mdc$Material_Options$when,
+											!_elm_lang$core$Native_Utils.eq(selectedIndex, _elm_lang$core$Maybe$Nothing),
+											_aforemny$elm_mdc$Material_Select$preselected),
 										_1: {
 											ctor: '::',
-											_0: A2(_aforemny$elm_mdc$Material_Options$css, 'width', '140px'),
-											_1: options
+											_0: A2(_aforemny$elm_mdc$Material_Options$when, state.disabled, _aforemny$elm_mdc$Material_Select$disabled),
+											_1: {ctor: '[]'}
 										}
 									}
 								}
-							}
-						},
+							},
+							options),
 						A2(
 							_elm_lang$core$List$indexedMap,
 							F2(
 								function (index, label) {
 									return A2(
-										_aforemny$elm_mdc$Material_Menu$li,
+										_aforemny$elm_mdc$Material_Select$option,
 										{
 											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Menu$onSelect(
-												lift(
-													A2(
-														_aforemny$elm_mdc$Demo_Selects$Pick,
-														id,
-														{ctor: '_Tuple2', _0: index, _1: label}))),
-											_1: {ctor: '[]'}
+											_0: _aforemny$elm_mdc$Material_Select$value(label),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_aforemny$elm_mdc$Material_Options$when,
+													function () {
+														var _p12 = selectedIndex;
+														if (_p12.ctor === 'Nothing') {
+															return false;
+														} else {
+															return _elm_lang$core$Native_Utils.eq(index, _p12._0);
+														}
+													}(),
+													_aforemny$elm_mdc$Material_Select$selected),
+												_1: {ctor: '[]'}
+											}
 										},
 										{
 											ctor: '::',
@@ -35529,23 +35324,7 @@ var _aforemny$elm_mdc$Demo_Selects$select = F5(
 											_1: {ctor: '[]'}
 										});
 								}),
-							{
-								ctor: '::',
-								_0: 'Fruit Roll Ups',
-								_1: {
-									ctor: '::',
-									_0: 'Candy (cotton)',
-									_1: {
-										ctor: '::',
-										_0: 'Vegetables',
-										_1: {
-											ctor: '::',
-											_0: 'Noodles',
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							})),
+							_elm_lang$core$Array$toList(fruits))),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
@@ -35563,22 +35342,8 @@ var _aforemny$elm_mdc$Demo_Selects$select = F5(
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: (!_elm_lang$core$Native_Utils.eq(index, _elm_lang$core$Maybe$Nothing)) ? _elm_lang$html$Html$text(
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											A2(_elm_lang$core$Maybe$withDefault, '', selectedText),
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												' at index ',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(
-														A2(_elm_lang$core$Maybe$withDefault, -1, index)),
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														' with value ',
-														_elm_lang$core$Basics$toString(
-															A2(_elm_lang$core$Maybe$withDefault, '', selectedText))))))) : _elm_lang$html$Html$text('(none)'),
+									_0: (!_elm_lang$core$Native_Utils.eq(selectedValue, _elm_lang$core$Maybe$Nothing)) ? _elm_lang$html$Html$text(
+										A2(_elm_lang$core$Maybe$withDefault, '', selectedValue)) : _elm_lang$html$Html$text('(none)'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -35685,8 +35450,6 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 								_1: {ctor: '[]'}
 							},
 							model.selects));
-					var index = A2(_elm_lang$core$Maybe$map, _elm_lang$core$Tuple$first, state.value);
-					var selectedText = A2(_elm_lang$core$Maybe$map, _elm_lang$core$Tuple$second, state.value);
 					return A2(
 						_aforemny$elm_mdc$Demo_Page$hero,
 						{ctor: '[]'},
@@ -35706,24 +35469,8 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 									_0: _aforemny$elm_mdc$Material_Select$label('Pick a food group'),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_aforemny$elm_mdc$Material_Options$when,
-											!_elm_lang$core$Native_Utils.eq(index, _elm_lang$core$Maybe$Nothing),
-											_aforemny$elm_mdc$Material_Select$index(
-												A2(_elm_lang$core$Maybe$withDefault, -1, index))),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_aforemny$elm_mdc$Material_Options$when,
-												!_elm_lang$core$Native_Utils.eq(selectedText, _elm_lang$core$Maybe$Nothing),
-												_aforemny$elm_mdc$Material_Select$selectedText(
-													A2(_elm_lang$core$Maybe$withDefault, '', selectedText))),
-											_1: {
-												ctor: '::',
-												_0: A2(_aforemny$elm_mdc$Material_Options$when, state.disabled, _aforemny$elm_mdc$Material_Select$disabled),
-												_1: {ctor: '[]'}
-											}
-										}
+										_0: A2(_aforemny$elm_mdc$Material_Options$when, state.disabled, _aforemny$elm_mdc$Material_Select$disabled),
+										_1: {ctor: '[]'}
 									}
 								},
 								{ctor: '[]'}),
@@ -35757,7 +35504,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 								},
 								_1: {
 									ctor: '::',
-									_0: A5(
+									_0: A6(
 										_aforemny$elm_mdc$Demo_Selects$select,
 										lift,
 										{
@@ -35766,6 +35513,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 											_1: {ctor: '[]'}
 										},
 										model,
+										_elm_lang$core$Maybe$Just(2),
 										{ctor: '[]'},
 										{ctor: '[]'}),
 									_1: {ctor: '[]'}
@@ -35798,7 +35546,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 									},
 									_1: {
 										ctor: '::',
-										_0: A5(
+										_0: A6(
 											_aforemny$elm_mdc$Demo_Selects$select,
 											lift,
 											{
@@ -35807,6 +35555,7 @@ var _aforemny$elm_mdc$Demo_Selects$view = F3(
 												_1: {ctor: '[]'}
 											},
 											model,
+											_elm_lang$core$Maybe$Nothing,
 											{
 												ctor: '::',
 												_0: _aforemny$elm_mdc$Material_Select$box,
@@ -35825,9 +35574,9 @@ var _aforemny$elm_mdc$Demo_Selects$subscriptions = F2(
 	function (lift, model) {
 		return A2(
 			_aforemny$elm_mdc$Material$subscriptions,
-			function (_p9) {
+			function (_p13) {
 				return lift(
-					_aforemny$elm_mdc$Demo_Selects$Mdc(_p9));
+					_aforemny$elm_mdc$Demo_Selects$Mdc(_p13));
 			},
 			model);
 	});
