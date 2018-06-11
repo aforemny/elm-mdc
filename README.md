@@ -132,20 +132,20 @@ $ make build-demo
 $ open build/index.html
 ```
 
-### Building the demo on Windows
+#### Building the demo on Windows
 
 ```sh
 $ build.cmd build-demo
 $ build/index.html
 ```
 
-## Building the documentation
+### Building the documentation
 
 ```sh
 $ make docs
 ```
 
-## Building the documentation on Windows
+#### Building the documentation on Windows
 
 ```sh
 $ build.cmd docs
