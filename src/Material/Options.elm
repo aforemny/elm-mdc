@@ -88,7 +88,7 @@ styled Html.div
 ```
 
 Note: Most frequently you use styled with a more specialize type on `Html.*`
-elements, 
+elements,
 
 ```elm
 styled
@@ -239,13 +239,27 @@ onCheck =
     Internal.Options.onCheck
 
 
-{-| -}
+{-| See `onFocus` for additional information.
+-}
 onBlur : msg -> Property c msg
 onBlur =
     Internal.Options.onBlur
 
 
-{-| -}
+{-| Since the `"focus"` (and `"blur"`) event does not bubble, be sure to use
+this on `nativeControl` if the component exposes that.
+
+```elm
+import Material.Textfield as Textfield
+
+Textfield.view Mdc "my-text-field" model.mdc
+    [ Textfield.nativeControl
+        [ Options.onFocus Focus
+        ]
+    ]
+    []
+```
+-}
 onFocus : msg -> Property c msg
 onFocus =
     Internal.Options.onFocus
