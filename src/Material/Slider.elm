@@ -134,11 +134,17 @@ onInput =
     Slider.onInput
 
 
-{-| Specify a number of steps that value will be a multiple of.
+{-| Specify the steps the value will be a multiple of.
+
+For example by specyfing 2 the allowed values will only be 0, 2, 4, 6,
+etc. if your initial value is 0. By specifying 0.25 the sequence is 0,
+0.25, 0.5, 0.75, 1, 1.25, etc.
 
 Defaults to 1.
+
+This value cannot be changed dynamically.
 -}
-steps : Int -> Property m
+steps : Float -> Property m
 steps =
     Slider.steps
 

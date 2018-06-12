@@ -45,7 +45,7 @@ type Msg m
 type alias Geometry =
     { rect : Rect
     , discrete : Bool
-    , steps : Maybe Int
+    , steps : Maybe Float
     , min : Float
     , max : Float
     }

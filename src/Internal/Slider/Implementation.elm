@@ -218,7 +218,7 @@ valueForKey key keyCode geometry value =
                   identity
             ) <|
             ( if discrete then
-                  Maybe.withDefault 1 (Maybe.map toFloat steps)
+                  Maybe.withDefault 1 steps
               else
                   (max - min) / 100
             )
@@ -272,7 +272,7 @@ type alias Config m =
     , min : Float
     , max : Float
     , discrete : Bool
-    , steps : Int
+    , steps : Float
     , onInput : Maybe (Float -> m)
     , onChange : Maybe (Float -> m)
     , trackMarkers : Bool
@@ -630,7 +630,7 @@ slider lift model options _ =
                   styled Html.div
                   [ cs "mdc-slider__track-marker-container"
                   ]
-                  ( List.repeat ((round (config.max  - config.min)) // config.steps) <|
+                  ( List.repeat (round ((config.max - config.min) / config.steps)) <|
                     styled Html.div
                     [ cs "mdc-slider__track-marker"
                     ]
@@ -742,7 +742,6 @@ discretize geometry continuousValue =
 
         steps =
             geometry.steps
-            |> Maybe.map toFloat
             |> Maybe.withDefault 1
             |> \ steps ->
                if steps == 0 then
@@ -803,7 +802,7 @@ decodeGeometry =
         ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( Json.oneOf
-          [ data "steps" (Json.map (Result.toMaybe << String.toInt) Json.string)
+          [ data "steps" (Json.map (Result.toMaybe << String.toFloat) Json.string)
           , Json.succeed Nothing
           ]
         )
@@ -837,11 +836,7 @@ onInput =
     Options.option << (\ decoder config -> { config | onInput = Just decoder } )
 
 
-{-| Specify a number of steps that value will be a multiple of.
-
-Defaults to 1.
--}
-steps : Int -> Property m
+steps : Float -> Property m
 steps =
     Options.option << (\ steps config -> { config | steps = steps } )
 
