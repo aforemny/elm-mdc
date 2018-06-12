@@ -166,7 +166,7 @@ valueForKey key keyCode geometry value =
                   identity
             ) <|
             ( if discrete then
-                  Maybe.withDefault 1 step
+                  Maybe.withDefault 1 steps
               else
                   (max - min) / 100
             )
@@ -220,7 +220,7 @@ type alias Config m =
     , min : Float
     , max : Float
     , discrete : Bool
-    , step : Float
+    , steps : Float
     , onInput : Maybe (Float -> m)
     , onChange : Maybe (Float -> m)
     , trackMarkers : Bool
@@ -571,7 +571,7 @@ slider lift model options _ =
                   styled Html.div
                   [ cs "mdc-slider__track-marker-container"
                   ]
-                  ( List.repeat (round ((config.max - config.min) / config.step)) <|
+                  ( List.repeat (round ((config.max - config.min) / config.steps)) <|
                     styled Html.div
                     [ cs "mdc-slider__track-marker"
                     ]
@@ -679,7 +679,7 @@ discretize geometry continuousValue =
             not discrete
 
         steps =
-            geometry.step
+            geometry.steps
             |> Maybe.withDefault 1
             |> \ steps ->
                if steps == 0 then
@@ -740,7 +740,7 @@ decodeGeometry =
         ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( Json.oneOf
-          [ data "step" (Json.map (Result.toMaybe << String.toFloat) Json.string)
+          [ data "steps" (Json.map (Result.toMaybe << String.toFloat) Json.string)
           , Json.succeed Nothing
           ]
         )
@@ -770,9 +770,9 @@ onInput =
     Options.option << (\ decoder config -> { config | onInput = Just decoder } )
 
 
-step : Float -> Property m
-step =
-    Options.option << (\ step config -> { config | step = step } )
+steps : Float -> Property m
+steps =
+    Options.option << (\ steps config -> { config | steps = steps } )
 
 
 trackMarkers : Property m

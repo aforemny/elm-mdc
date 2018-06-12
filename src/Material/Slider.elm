@@ -144,10 +144,9 @@ Defaults to 1.
 
 This value cannot be changed dynamically.
 -}
-step : Float -> Property m
-step =
-    Slider.step
-
+steps : Float -> Property m
+steps =
+    Slider.steps
 
 
 {-| Discrete sliders support display markers on their tracks. A marker is displayed every `step`.
