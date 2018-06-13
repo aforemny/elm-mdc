@@ -8337,6 +8337,18 @@ var _aforemny$elm_mdc$Internal_Checkbox_Model$CheckedUnchecked = {ctor: 'Checked
 var _aforemny$elm_mdc$Internal_Checkbox_Model$UncheckedIndeterminate = {ctor: 'UncheckedIndeterminate'};
 var _aforemny$elm_mdc$Internal_Checkbox_Model$UncheckedChecked = {ctor: 'UncheckedChecked'};
 
+var _aforemny$elm_mdc$Internal_Chip_Model$defaultModel = {ripple: _aforemny$elm_mdc$Internal_Ripple_Model$defaultModel};
+var _aforemny$elm_mdc$Internal_Chip_Model$Model = function (a) {
+	return {ripple: a};
+};
+var _aforemny$elm_mdc$Internal_Chip_Model$Click = F2(
+	function (a, b) {
+		return {ctor: 'Click', _0: a, _1: b};
+	});
+var _aforemny$elm_mdc$Internal_Chip_Model$RippleMsg = function (a) {
+	return {ctor: 'RippleMsg', _0: a};
+};
+
 var _aforemny$elm_mdc$Internal_Dialog_Model$defaultModel = {animating: false, open: false};
 var _aforemny$elm_mdc$Internal_Dialog_Model$Model = F2(
 	function (a, b) {
@@ -9151,6 +9163,10 @@ var _aforemny$elm_mdc$Internal_Msg$DrawerMsg = F2(
 var _aforemny$elm_mdc$Internal_Msg$DialogMsg = F2(
 	function (a, b) {
 		return {ctor: 'DialogMsg', _0: a, _1: b};
+	});
+var _aforemny$elm_mdc$Internal_Msg$ChipMsg = F2(
+	function (a, b) {
+		return {ctor: 'ChipMsg', _0: a, _1: b};
 	});
 var _aforemny$elm_mdc$Internal_Msg$CheckboxMsg = F2(
 	function (a, b) {
@@ -11796,6 +11812,254 @@ var _aforemny$elm_mdc$Internal_Checkbox_Implementation$react = A4(_aforemny$elm_
 var _aforemny$elm_mdc$Internal_Checkbox_Implementation$Config = F3(
 	function (a, b, c) {
 		return {state: a, disabled: b, nativeControl: c};
+	});
+
+var _aforemny$elm_mdc$Internal_Chip_Implementation$_p0 = A3(
+	_aforemny$elm_mdc$Internal_Component$indexed,
+	function (_) {
+		return _.chip;
+	},
+	F2(
+		function (x, y) {
+			return _elm_lang$core$Native_Utils.update(
+				y,
+				{chip: x});
+		}),
+	_aforemny$elm_mdc$Internal_Chip_Model$defaultModel);
+var _aforemny$elm_mdc$Internal_Chip_Implementation$get = _aforemny$elm_mdc$Internal_Chip_Implementation$_p0._0;
+var _aforemny$elm_mdc$Internal_Chip_Implementation$set = _aforemny$elm_mdc$Internal_Chip_Implementation$_p0._1;
+var _aforemny$elm_mdc$Internal_Chip_Implementation$chipset = function (nodes) {
+	return A3(
+		_aforemny$elm_mdc$Internal_Options$styled,
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-chip-set'),
+			_1: {ctor: '[]'}
+		},
+		nodes);
+};
+var _aforemny$elm_mdc$Internal_Chip_Implementation$onClick = function (onClick) {
+	return _aforemny$elm_mdc$Internal_Options$option(
+		function (options) {
+			return _elm_lang$core$Native_Utils.update(
+				options,
+				{
+					onClick: _elm_lang$core$Maybe$Just(onClick)
+				});
+		});
+};
+var _aforemny$elm_mdc$Internal_Chip_Implementation$ripple = _aforemny$elm_mdc$Internal_Options$option(
+	function (options) {
+		return _elm_lang$core$Native_Utils.update(
+			options,
+			{ripple: true});
+	});
+var _aforemny$elm_mdc$Internal_Chip_Implementation$selected = _aforemny$elm_mdc$Internal_Options$cs('mdc-chip--selected');
+var _aforemny$elm_mdc$Internal_Chip_Implementation$trailingIcon = function (str) {
+	return _aforemny$elm_mdc$Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					trailingIcon: _elm_lang$core$Maybe$Just(str)
+				});
+		});
+};
+var _aforemny$elm_mdc$Internal_Chip_Implementation$leadingIcon = function (str) {
+	return _aforemny$elm_mdc$Internal_Options$option(
+		function (config) {
+			return _elm_lang$core$Native_Utils.update(
+				config,
+				{
+					leadingIcon: _elm_lang$core$Maybe$Just(str)
+				});
+		});
+};
+var _aforemny$elm_mdc$Internal_Chip_Implementation$defaultConfig = {ripple: false, leadingIcon: _elm_lang$core$Maybe$Nothing, trailingIcon: _elm_lang$core$Maybe$Nothing, onClick: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Internal_Chip_Implementation$chip = F4(
+	function (lift, model, options, nodes) {
+		var ripple = A4(
+			_aforemny$elm_mdc$Internal_Ripple_Implementation$view,
+			false,
+			function (_p1) {
+				return lift(
+					_aforemny$elm_mdc$Internal_Chip_Model$RippleMsg(_p1));
+			},
+			model.ripple,
+			{ctor: '[]'});
+		var _p2 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_Chip_Implementation$defaultConfig, options);
+		var summary = _p2;
+		var config = _p2.config;
+		return A5(
+			_aforemny$elm_mdc$Internal_Options$apply,
+			summary,
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-chip'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_aforemny$elm_mdc$Internal_Options$when,
+						summary.config.ripple,
+						_aforemny$elm_mdc$Internal_Options$cs('mdc-js-ripple-effect')),
+					_1: {
+						ctor: '::',
+						_0: function (_p3) {
+							return A2(
+								_aforemny$elm_mdc$Internal_Options$when,
+								config.ripple,
+								_aforemny$elm_mdc$Internal_Options$many(_p3));
+						}(
+							{
+								ctor: '::',
+								_0: ripple.interactionHandler,
+								_1: {
+									ctor: '::',
+									_0: ripple.properties,
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$withDefault,
+								_aforemny$elm_mdc$Internal_Options$nop,
+								A2(
+									_elm_lang$core$Maybe$map,
+									function (_p4) {
+										return _aforemny$elm_mdc$Internal_Options$onClick(
+											lift(
+												A2(_aforemny$elm_mdc$Internal_Chip_Model$Click, config.ripple, _p4)));
+									},
+									config.onClick)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			},
+			{ctor: '[]'},
+			_elm_lang$core$List$concat(
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$withDefault,
+						{ctor: '[]'},
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (icon) {
+								return {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Internal_Icon_Implementation$view,
+										{
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-chip__icon mdc-chip__icon--leading'),
+											_1: {ctor: '[]'}
+										},
+										icon),
+									_1: {ctor: '[]'}
+								};
+							},
+							config.leadingIcon)),
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '::',
+							_0: A3(
+								_aforemny$elm_mdc$Internal_Options$styled,
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-chip__text'),
+									_1: {ctor: '[]'}
+								},
+								nodes),
+							_1: {ctor: '[]'}
+						},
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$withDefault,
+								{ctor: '[]'},
+								A2(
+									_elm_lang$core$Maybe$map,
+									function (icon) {
+										return {
+											ctor: '::',
+											_0: A2(
+												_aforemny$elm_mdc$Internal_Icon_Implementation$view,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-chip__icon mdc-chip__icon--trailing'),
+													_1: {
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Internal_Options$attribute(
+															_elm_lang$html$Html_Attributes$tabindex(0)),
+														_1: {
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Internal_Options$attribute(
+																A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'button')),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												icon),
+											_1: {ctor: '[]'}
+										};
+									},
+									config.trailingIcon)),
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '::',
+									_0: ripple.style,
+									_1: {ctor: '[]'}
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}));
+	});
+var _aforemny$elm_mdc$Internal_Chip_Implementation$view = A3(_aforemny$elm_mdc$Internal_Component$render, _aforemny$elm_mdc$Internal_Chip_Implementation$get, _aforemny$elm_mdc$Internal_Chip_Implementation$chip, _aforemny$elm_mdc$Internal_Msg$ChipMsg);
+var _aforemny$elm_mdc$Internal_Chip_Implementation$update = F3(
+	function (lift, msg, model) {
+		var _p5 = msg;
+		if (_p5.ctor === 'RippleMsg') {
+			var _p6 = A2(_aforemny$elm_mdc$Internal_Ripple_Implementation$update, _p5._0, model.ripple);
+			var ripple = _p6._0;
+			var cmd = _p6._1;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Just(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{ripple: ripple})),
+				_1: A2(
+					_elm_lang$core$Platform_Cmd$map,
+					function (_p7) {
+						return lift(
+							_aforemny$elm_mdc$Internal_Chip_Model$RippleMsg(_p7));
+					},
+					cmd)
+			};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Nothing,
+				_1: A2(
+					_aforemny$elm_mdc$Internal_Helpers$delayedCmd,
+					_p5._0 ? 150 : 0,
+					_p5._1)
+			};
+		}
+	});
+var _aforemny$elm_mdc$Internal_Chip_Implementation$react = A4(_aforemny$elm_mdc$Internal_Component$react, _aforemny$elm_mdc$Internal_Chip_Implementation$get, _aforemny$elm_mdc$Internal_Chip_Implementation$set, _aforemny$elm_mdc$Internal_Msg$ChipMsg, _aforemny$elm_mdc$Internal_Chip_Implementation$update);
+var _aforemny$elm_mdc$Internal_Chip_Implementation$Config = F4(
+	function (a, b, c, d) {
+		return {ripple: a, leadingIcon: b, trailingIcon: c, onClick: d};
 	});
 
 var _aforemny$elm_mdc$Internal_Dialog_Implementation$close = _debois$elm_dom$DOM$target(
@@ -19950,6 +20214,8 @@ var _aforemny$elm_mdc$Material$update_ = F3(
 				return A4(_aforemny$elm_mdc$Internal_Button_Implementation$react, lift, _p0._1, _p0._0, store);
 			case 'CheckboxMsg':
 				return A4(_aforemny$elm_mdc$Internal_Checkbox_Implementation$react, lift, _p0._1, _p0._0, store);
+			case 'ChipMsg':
+				return A4(_aforemny$elm_mdc$Internal_Chip_Implementation$react, lift, _p0._1, _p0._0, store);
 			case 'DialogMsg':
 				return A4(_aforemny$elm_mdc$Internal_Dialog_Implementation$react, lift, _p0._1, _p0._0, store);
 			case 'DrawerMsg':
@@ -20005,7 +20271,7 @@ var _aforemny$elm_mdc$Material$update = F3(
 						return _.mdc;
 					}(container))));
 	});
-var _aforemny$elm_mdc$Material$defaultModel = {button: _elm_lang$core$Dict$empty, checkbox: _elm_lang$core$Dict$empty, dialog: _elm_lang$core$Dict$empty, drawer: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, gridList: _elm_lang$core$Dict$empty, iconToggle: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, radio: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, slider: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty, $switch: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, toolbar: _elm_lang$core$Dict$empty, topAppBar: _elm_lang$core$Dict$empty};
+var _aforemny$elm_mdc$Material$defaultModel = {button: _elm_lang$core$Dict$empty, checkbox: _elm_lang$core$Dict$empty, chip: _elm_lang$core$Dict$empty, dialog: _elm_lang$core$Dict$empty, drawer: _elm_lang$core$Dict$empty, fab: _elm_lang$core$Dict$empty, gridList: _elm_lang$core$Dict$empty, iconToggle: _elm_lang$core$Dict$empty, menu: _elm_lang$core$Dict$empty, radio: _elm_lang$core$Dict$empty, ripple: _elm_lang$core$Dict$empty, select: _elm_lang$core$Dict$empty, slider: _elm_lang$core$Dict$empty, snackbar: _elm_lang$core$Dict$empty, $switch: _elm_lang$core$Dict$empty, tabs: _elm_lang$core$Dict$empty, textfield: _elm_lang$core$Dict$empty, toolbar: _elm_lang$core$Dict$empty, topAppBar: _elm_lang$core$Dict$empty};
 var _aforemny$elm_mdc$Material$Model = function (a) {
 	return function (b) {
 		return function (c) {
@@ -20024,7 +20290,9 @@ var _aforemny$elm_mdc$Material$Model = function (a) {
 															return function (p) {
 																return function (q) {
 																	return function (r) {
-																		return {button: a, checkbox: b, dialog: c, drawer: d, fab: e, gridList: f, iconToggle: g, menu: h, radio: i, ripple: j, select: k, slider: l, snackbar: m, $switch: n, tabs: o, textfield: p, toolbar: q, topAppBar: r};
+																		return function (s) {
+																			return {button: a, checkbox: b, chip: c, dialog: d, drawer: e, fab: f, gridList: g, iconToggle: h, menu: i, radio: j, ripple: k, select: l, slider: m, snackbar: n, $switch: o, tabs: p, textfield: q, toolbar: r, topAppBar: s};
+																		};
 																	};
 																};
 															};
@@ -20133,6 +20401,8 @@ var _aforemny$elm_mdc$Demo_Url$toString = function (url) {
 			return '#cards';
 		case 'Checkbox':
 			return '#checkbox';
+		case 'Chips':
+			return '#chips';
 		case 'Dialog':
 			return '#dialog';
 		case 'Drawer':
@@ -20225,6 +20495,7 @@ var _aforemny$elm_mdc$Demo_Url$PersistentDrawer = {ctor: 'PersistentDrawer'};
 var _aforemny$elm_mdc$Demo_Url$TemporaryDrawer = {ctor: 'TemporaryDrawer'};
 var _aforemny$elm_mdc$Demo_Url$Drawer = {ctor: 'Drawer'};
 var _aforemny$elm_mdc$Demo_Url$Dialog = {ctor: 'Dialog'};
+var _aforemny$elm_mdc$Demo_Url$Chips = {ctor: 'Chips'};
 var _aforemny$elm_mdc$Demo_Url$Checkbox = {ctor: 'Checkbox'};
 var _aforemny$elm_mdc$Demo_Url$Card = {ctor: 'Card'};
 var _aforemny$elm_mdc$Demo_Url$Button = {ctor: 'Button'};
@@ -20351,7 +20622,7 @@ var _aforemny$elm_mdc$Demo_Url$fromString = function (str) {
 	};
 	var case1 = function (str) {
 		var _p5 = _elm_lang$core$String$uncons(str);
-		_v5_19:
+		_v5_20:
 		do {
 			if (_p5.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$StartPage);
@@ -20366,6 +20637,8 @@ var _aforemny$elm_mdc$Demo_Url$fromString = function (str) {
 							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Card);
 						case 'checkbox':
 							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Checkbox);
+						case 'chips':
+							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Chips);
 						case 'dialog':
 							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$Dialog);
 						case 'drawer':
@@ -20395,10 +20668,10 @@ var _aforemny$elm_mdc$Demo_Url$fromString = function (str) {
 						case 'lists':
 							return _elm_lang$core$Maybe$Just(_aforemny$elm_mdc$Demo_Url$List);
 						default:
-							break _v5_19;
+							break _v5_20;
 					}
 				} else {
-					break _v5_19;
+					break _v5_20;
 				}
 			}
 		} while(false);
@@ -22537,6 +22810,748 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 									}
 								}));
 					}(),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+
+var _aforemny$elm_mdc$Material_Chip$onClick = _aforemny$elm_mdc$Internal_Chip_Implementation$onClick;
+var _aforemny$elm_mdc$Material_Chip$chipset = _aforemny$elm_mdc$Internal_Chip_Implementation$chipset;
+var _aforemny$elm_mdc$Material_Chip$ripple = _aforemny$elm_mdc$Internal_Chip_Implementation$ripple;
+var _aforemny$elm_mdc$Material_Chip$selected = _aforemny$elm_mdc$Internal_Chip_Implementation$selected;
+var _aforemny$elm_mdc$Material_Chip$trailingIcon = _aforemny$elm_mdc$Internal_Chip_Implementation$trailingIcon;
+var _aforemny$elm_mdc$Material_Chip$leadingIcon = _aforemny$elm_mdc$Internal_Chip_Implementation$leadingIcon;
+var _aforemny$elm_mdc$Material_Chip$view = _aforemny$elm_mdc$Internal_Chip_Implementation$view;
+
+var _aforemny$elm_mdc$Demo_Chips$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, selectedIndex: _elm_lang$core$Maybe$Nothing};
+var _aforemny$elm_mdc$Demo_Chips$Model = F2(
+	function (a, b) {
+		return {mdc: a, selectedIndex: b};
+	});
+var _aforemny$elm_mdc$Demo_Chips$ChipClick = function (a) {
+	return {ctor: 'ChipClick', _0: a};
+};
+var _aforemny$elm_mdc$Demo_Chips$Mdc = function (a) {
+	return {ctor: 'Mdc', _0: a};
+};
+var _aforemny$elm_mdc$Demo_Chips$update = F3(
+	function (lift, msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Mdc') {
+			return A3(
+				_aforemny$elm_mdc$Material$update,
+				function (_p1) {
+					return lift(
+						_aforemny$elm_mdc$Demo_Chips$Mdc(_p1));
+				},
+				_p0._0,
+				model);
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						selectedIndex: _elm_lang$core$Maybe$Just(_p0._0)
+					}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
+	});
+var _aforemny$elm_mdc$Demo_Chips$heroChips = F2(
+	function (lift, model) {
+		return _aforemny$elm_mdc$Material_Chip$chipset(
+			{
+				ctor: '::',
+				_0: A5(
+					_aforemny$elm_mdc$Material_Chip$view,
+					function (_p2) {
+						return lift(
+							_aforemny$elm_mdc$Demo_Chips$Mdc(_p2));
+					},
+					'chips-hero-one',
+					model.mdc,
+					{
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_Chip$ripple,
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Chip One'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A5(
+						_aforemny$elm_mdc$Material_Chip$view,
+						function (_p3) {
+							return lift(
+								_aforemny$elm_mdc$Demo_Chips$Mdc(_p3));
+						},
+						'chips-hero-two',
+						model.mdc,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_Chip$ripple,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Chip Two'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A5(
+							_aforemny$elm_mdc$Material_Chip$view,
+							function (_p4) {
+								return lift(
+									_aforemny$elm_mdc$Demo_Chips$Mdc(_p4));
+							},
+							'chips-hero-three',
+							model.mdc,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Chip$ripple,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Chip Three'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A5(
+								_aforemny$elm_mdc$Material_Chip$view,
+								function (_p5) {
+									return lift(
+										_aforemny$elm_mdc$Demo_Chips$Mdc(_p5));
+								},
+								'chips-hero-four',
+								model.mdc,
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Chip$ripple,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Chip Four'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			});
+	});
+var _aforemny$elm_mdc$Demo_Chips$choiceChips = F2(
+	function (lift, model) {
+		var selected = function (index) {
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				_aforemny$elm_mdc$Material_Options$nop,
+				A2(
+					_elm_lang$core$Maybe$map,
+					function (i) {
+						return _elm_lang$core$Native_Utils.eq(i, index) ? _aforemny$elm_mdc$Material_Chip$selected : _aforemny$elm_mdc$Material_Options$nop;
+					},
+					model.selectedIndex));
+		};
+		return {
+			ctor: '::',
+			_0: A3(
+				_aforemny$elm_mdc$Material_Options$styled,
+				_elm_lang$html$Html$h2,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Typography$subheading1,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Choice Chips'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Chip$chipset(
+					{
+						ctor: '::',
+						_0: A5(
+							_aforemny$elm_mdc$Material_Chip$view,
+							function (_p6) {
+								return lift(
+									_aforemny$elm_mdc$Demo_Chips$Mdc(_p6));
+							},
+							'chips-choice-extra-small',
+							model.mdc,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Chip$ripple,
+								_1: {
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Options$onClick(
+										lift(
+											_aforemny$elm_mdc$Demo_Chips$ChipClick(0))),
+									_1: {
+										ctor: '::',
+										_0: selected(0),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Extra Small'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A5(
+								_aforemny$elm_mdc$Material_Chip$view,
+								function (_p7) {
+									return lift(
+										_aforemny$elm_mdc$Demo_Chips$Mdc(_p7));
+								},
+								'chips-choice-small',
+								model.mdc,
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Chip$ripple,
+									_1: {
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Options$onClick(
+											lift(
+												_aforemny$elm_mdc$Demo_Chips$ChipClick(1))),
+										_1: {
+											ctor: '::',
+											_0: selected(1),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Small'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A5(
+									_aforemny$elm_mdc$Material_Chip$view,
+									function (_p8) {
+										return lift(
+											_aforemny$elm_mdc$Demo_Chips$Mdc(_p8));
+									},
+									'chips-choice-medium',
+									model.mdc,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Chip$ripple,
+										_1: {
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Options$onClick(
+												lift(
+													_aforemny$elm_mdc$Demo_Chips$ChipClick(2))),
+											_1: {
+												ctor: '::',
+												_0: selected(2),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Medium'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A5(
+										_aforemny$elm_mdc$Material_Chip$view,
+										function (_p9) {
+											return lift(
+												_aforemny$elm_mdc$Demo_Chips$Mdc(_p9));
+										},
+										'chips-choice-large',
+										model.mdc,
+										{
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Chip$ripple,
+											_1: {
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Options$onClick(
+													lift(
+														_aforemny$elm_mdc$Demo_Chips$ChipClick(3))),
+												_1: {
+													ctor: '::',
+													_0: selected(3),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Large'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A5(
+											_aforemny$elm_mdc$Material_Chip$view,
+											function (_p10) {
+												return lift(
+													_aforemny$elm_mdc$Demo_Chips$Mdc(_p10));
+											},
+											'chips-choice-extra-large',
+											model.mdc,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Chip$ripple,
+												_1: {
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Options$onClick(
+														lift(
+															_aforemny$elm_mdc$Demo_Chips$ChipClick(4))),
+													_1: {
+														ctor: '::',
+														_0: selected(4),
+														_1: {ctor: '[]'}
+													}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Extra Large'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _aforemny$elm_mdc$Demo_Chips$filterChips = F2(
+	function (lift, model) {
+		return {
+			ctor: '::',
+			_0: A3(
+				_aforemny$elm_mdc$Material_Options$styled,
+				_elm_lang$html$Html$h2,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Typography$subheading1,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Filter Chips'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A3(
+					_aforemny$elm_mdc$Material_Options$styled,
+					_elm_lang$html$Html$h3,
+					{
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_Typography$body2,
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('No leading icon'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Chip$chipset(
+						{
+							ctor: '::',
+							_0: A5(
+								_aforemny$elm_mdc$Material_Chip$view,
+								function (_p11) {
+									return lift(
+										_aforemny$elm_mdc$Demo_Chips$Mdc(_p11));
+								},
+								'chips-filter-chips-tops',
+								model.mdc,
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Chip$ripple,
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Tops'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A5(
+									_aforemny$elm_mdc$Material_Chip$view,
+									function (_p12) {
+										return lift(
+											_aforemny$elm_mdc$Demo_Chips$Mdc(_p12));
+									},
+									'chips-filter-chips-bottoms',
+									model.mdc,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Chip$ripple,
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Bottoms'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A5(
+										_aforemny$elm_mdc$Material_Chip$view,
+										function (_p13) {
+											return lift(
+												_aforemny$elm_mdc$Demo_Chips$Mdc(_p13));
+										},
+										'chips-filter-chips-shoes',
+										model.mdc,
+										{
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Chip$ripple,
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Shoes'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A5(
+											_aforemny$elm_mdc$Material_Chip$view,
+											function (_p14) {
+												return lift(
+													_aforemny$elm_mdc$Demo_Chips$Mdc(_p14));
+											},
+											'chips-filter-chips-accessories',
+											model.mdc,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Chip$ripple,
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Accessories'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_aforemny$elm_mdc$Material_Options$styled,
+							_elm_lang$html$Html$h3,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Typography$body2,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('With leading icon'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_Chip$chipset(
+								{
+									ctor: '::',
+									_0: A5(
+										_aforemny$elm_mdc$Material_Chip$view,
+										function (_p15) {
+											return lift(
+												_aforemny$elm_mdc$Demo_Chips$Mdc(_p15));
+										},
+										'chips-filter-chips-alice',
+										model.mdc,
+										{
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Chip$ripple,
+											_1: {
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Alice'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A5(
+											_aforemny$elm_mdc$Material_Chip$view,
+											function (_p16) {
+												return lift(
+													_aforemny$elm_mdc$Demo_Chips$Mdc(_p16));
+											},
+											'chips-filter-chips-bob',
+											model.mdc,
+											{
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Chip$ripple,
+												_1: {
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Bob'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A5(
+												_aforemny$elm_mdc$Material_Chip$view,
+												function (_p17) {
+													return lift(
+														_aforemny$elm_mdc$Demo_Chips$Mdc(_p17));
+												},
+												'chips-filter-chips-charlie',
+												model.mdc,
+												{
+													ctor: '::',
+													_0: _aforemny$elm_mdc$Material_Chip$ripple,
+													_1: {
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Charlie'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A5(
+													_aforemny$elm_mdc$Material_Chip$view,
+													function (_p18) {
+														return lift(
+															_aforemny$elm_mdc$Demo_Chips$Mdc(_p18));
+													},
+													'chips-filter-chips-danielle',
+													model.mdc,
+													{
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Chip$ripple,
+														_1: {
+															ctor: '::',
+															_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Danielle'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		};
+	});
+var _aforemny$elm_mdc$Demo_Chips$actionChips = F2(
+	function (lift, model) {
+		return {
+			ctor: '::',
+			_0: A3(
+				_aforemny$elm_mdc$Material_Options$styled,
+				_elm_lang$html$Html$h2,
+				{
+					ctor: '::',
+					_0: _aforemny$elm_mdc$Material_Typography$subheading1,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Action Chips'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _aforemny$elm_mdc$Material_Chip$chipset(
+					{
+						ctor: '::',
+						_0: A5(
+							_aforemny$elm_mdc$Material_Chip$view,
+							function (_p19) {
+								return lift(
+									_aforemny$elm_mdc$Demo_Chips$Mdc(_p19));
+							},
+							'chips-action-chips-add-to-calendar',
+							model.mdc,
+							{
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Chip$ripple,
+								_1: {
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('event'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Add to calendar'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A5(
+								_aforemny$elm_mdc$Material_Chip$view,
+								function (_p20) {
+									return lift(
+										_aforemny$elm_mdc$Demo_Chips$Mdc(_p20));
+								},
+								'chips-action-chips-bookmark',
+								model.mdc,
+								{
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Material_Chip$ripple,
+									_1: {
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('bookmark'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Bookmark'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A5(
+									_aforemny$elm_mdc$Material_Chip$view,
+									function (_p21) {
+										return lift(
+											_aforemny$elm_mdc$Demo_Chips$Mdc(_p21));
+									},
+									'chips-action-chips-set-alarm',
+									model.mdc,
+									{
+										ctor: '::',
+										_0: _aforemny$elm_mdc$Material_Chip$ripple,
+										_1: {
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('alarm'),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Set alarm'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A5(
+										_aforemny$elm_mdc$Material_Chip$view,
+										function (_p22) {
+											return lift(
+												_aforemny$elm_mdc$Demo_Chips$Mdc(_p22));
+										},
+										'chips-action-chips-get-directions',
+										model.mdc,
+										{
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Chip$ripple,
+											_1: {
+												ctor: '::',
+												_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('directions'),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Get directions'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _aforemny$elm_mdc$Demo_Chips$view = F3(
+	function (lift, page, model) {
+		return A2(
+			page.body,
+			'Chips',
+			{
+				ctor: '::',
+				_0: A2(
+					_aforemny$elm_mdc$Demo_Page$hero,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(_aforemny$elm_mdc$Demo_Chips$heroChips, lift, model),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_aforemny$elm_mdc$Material_Options$styled,
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_Options$cs('demo-wrapper'),
+							_1: {
+								ctor: '::',
+								_0: A2(_aforemny$elm_mdc$Material_Options$css, 'padding', '48px'),
+								_1: {ctor: '[]'}
+							}
+						},
+						_elm_lang$core$List$concat(
+							{
+								ctor: '::',
+								_0: A2(_aforemny$elm_mdc$Demo_Chips$choiceChips, lift, model),
+								_1: {
+									ctor: '::',
+									_0: A2(_aforemny$elm_mdc$Demo_Chips$filterChips, lift, model),
+									_1: {
+										ctor: '::',
+										_0: A2(_aforemny$elm_mdc$Demo_Chips$actionChips, lift, model),
+										_1: {ctor: '[]'}
+									}
+								}
+							})),
 					_1: {ctor: '[]'}
 				}
 			});
@@ -37060,84 +38075,88 @@ var _aforemny$elm_mdc$Demo_Startpage$view = function (page) {
 											_0: {url: _aforemny$elm_mdc$Demo_Url$Checkbox, icon: 'ic_selection_control_24px.svg', title: 'Checkbox', subtitle: 'Multi-selection controls'},
 											_1: {
 												ctor: '::',
-												_0: {url: _aforemny$elm_mdc$Demo_Url$Dialog, icon: 'ic_dialog_24px.svg', title: 'Dialog', subtitle: 'Secondary text'},
+												_0: {url: _aforemny$elm_mdc$Demo_Url$Chips, icon: 'ic_component_24px.svg', title: 'Chips', subtitle: 'Chips'},
 												_1: {
 													ctor: '::',
-													_0: {url: _aforemny$elm_mdc$Demo_Url$Drawer, icon: 'ic_side_navigation_24px.svg', title: 'Drawer', subtitle: 'Various drawer styles'},
+													_0: {url: _aforemny$elm_mdc$Demo_Url$Dialog, icon: 'ic_dialog_24px.svg', title: 'Dialog', subtitle: 'Secondary text'},
 													_1: {
 														ctor: '::',
-														_0: {url: _aforemny$elm_mdc$Demo_Url$Elevation, icon: 'ic_shadow_24px.svg', title: 'Elevation', subtitle: 'Shadow for different elevations'},
+														_0: {url: _aforemny$elm_mdc$Demo_Url$Drawer, icon: 'ic_side_navigation_24px.svg', title: 'Drawer', subtitle: 'Various drawer styles'},
 														_1: {
 															ctor: '::',
-															_0: {url: _aforemny$elm_mdc$Demo_Url$Fabs, icon: 'ic_button_24px.svg', title: 'Floating action button', subtitle: 'The primary action in an application'},
+															_0: {url: _aforemny$elm_mdc$Demo_Url$Elevation, icon: 'ic_shadow_24px.svg', title: 'Elevation', subtitle: 'Shadow for different elevations'},
 															_1: {
 																ctor: '::',
-																_0: {url: _aforemny$elm_mdc$Demo_Url$GridList, icon: 'ic_card_24px.svg', title: 'Grid list', subtitle: '2D grid layouts'},
+																_0: {url: _aforemny$elm_mdc$Demo_Url$Fabs, icon: 'ic_button_24px.svg', title: 'Floating action button', subtitle: 'The primary action in an application'},
 																_1: {
 																	ctor: '::',
-																	_0: {url: _aforemny$elm_mdc$Demo_Url$IconToggle, icon: 'ic_component_24px.svg', title: 'Icon toggle', subtitle: 'Toggling icon states'},
+																	_0: {url: _aforemny$elm_mdc$Demo_Url$GridList, icon: 'ic_card_24px.svg', title: 'Grid list', subtitle: '2D grid layouts'},
 																	_1: {
 																		ctor: '::',
-																		_0: {url: _aforemny$elm_mdc$Demo_Url$ImageList, icon: 'ic_card_24px.svg', title: 'Image List', subtitle: 'An Image List consists of several items, each containing an image and optionally supporting content (i.e. a text label)'},
+																		_0: {url: _aforemny$elm_mdc$Demo_Url$IconToggle, icon: 'ic_component_24px.svg', title: 'Icon toggle', subtitle: 'Toggling icon states'},
 																		_1: {
 																			ctor: '::',
-																			_0: {url: _aforemny$elm_mdc$Demo_Url$LayoutGrid, icon: 'ic_card_24px.svg', title: 'Layout grid', subtitle: 'Grid and gutter support'},
+																			_0: {url: _aforemny$elm_mdc$Demo_Url$ImageList, icon: 'ic_card_24px.svg', title: 'Image List', subtitle: 'An Image List consists of several items, each containing an image and optionally supporting content (i.e. a text label)'},
 																			_1: {
 																				ctor: '::',
-																				_0: {url: _aforemny$elm_mdc$Demo_Url$LinearProgress, icon: 'ic_progress_activity.svg', title: 'Linear progress', subtitle: 'Fills from 0% to 100%, represented by bars'},
+																				_0: {url: _aforemny$elm_mdc$Demo_Url$LayoutGrid, icon: 'ic_card_24px.svg', title: 'Layout grid', subtitle: 'Grid and gutter support'},
 																				_1: {
 																					ctor: '::',
-																					_0: {url: _aforemny$elm_mdc$Demo_Url$List, icon: 'ic_list_24px.svg', title: 'List', subtitle: 'Item layouts in lists'},
+																					_0: {url: _aforemny$elm_mdc$Demo_Url$LinearProgress, icon: 'ic_progress_activity.svg', title: 'Linear progress', subtitle: 'Fills from 0% to 100%, represented by bars'},
 																					_1: {
 																						ctor: '::',
-																						_0: {url: _aforemny$elm_mdc$Demo_Url$Menu, icon: 'ic_menu_24px.svg', title: 'Menu', subtitle: 'Pop over menus'},
+																						_0: {url: _aforemny$elm_mdc$Demo_Url$List, icon: 'ic_list_24px.svg', title: 'List', subtitle: 'Item layouts in lists'},
 																						_1: {
 																							ctor: '::',
-																							_0: {url: _aforemny$elm_mdc$Demo_Url$RadioButton, icon: 'ic_radio_button_24px.svg', title: 'Radio buttons', subtitle: 'Single selection controls'},
+																							_0: {url: _aforemny$elm_mdc$Demo_Url$Menu, icon: 'ic_menu_24px.svg', title: 'Menu', subtitle: 'Pop over menus'},
 																							_1: {
 																								ctor: '::',
-																								_0: {url: _aforemny$elm_mdc$Demo_Url$Ripple, icon: 'ic_ripple_24px.svg', title: 'Ripple', subtitle: 'Touch ripple'},
+																								_0: {url: _aforemny$elm_mdc$Demo_Url$RadioButton, icon: 'ic_radio_button_24px.svg', title: 'Radio buttons', subtitle: 'Single selection controls'},
 																								_1: {
 																									ctor: '::',
-																									_0: {url: _aforemny$elm_mdc$Demo_Url$Select, icon: 'ic_menu_24px.svg', title: 'Select', subtitle: 'Popover selection menus'},
+																									_0: {url: _aforemny$elm_mdc$Demo_Url$Ripple, icon: 'ic_ripple_24px.svg', title: 'Ripple', subtitle: 'Touch ripple'},
 																									_1: {
 																										ctor: '::',
-																										_0: {url: _aforemny$elm_mdc$Demo_Url$Slider, icon: 'slider.svg', title: 'Slider', subtitle: 'Range Controls'},
+																										_0: {url: _aforemny$elm_mdc$Demo_Url$Select, icon: 'ic_menu_24px.svg', title: 'Select', subtitle: 'Popover selection menus'},
 																										_1: {
 																											ctor: '::',
-																											_0: {url: _aforemny$elm_mdc$Demo_Url$Snackbar, icon: 'ic_toast_24px.svg', title: 'Snackbar', subtitle: 'Transient messages'},
+																											_0: {url: _aforemny$elm_mdc$Demo_Url$Slider, icon: 'slider.svg', title: 'Slider', subtitle: 'Range Controls'},
 																											_1: {
 																												ctor: '::',
-																												_0: {url: _aforemny$elm_mdc$Demo_Url$Switch, icon: 'ic_switch_24px.svg', title: 'Switch', subtitle: 'On off switches'},
+																												_0: {url: _aforemny$elm_mdc$Demo_Url$Snackbar, icon: 'ic_toast_24px.svg', title: 'Snackbar', subtitle: 'Transient messages'},
 																												_1: {
 																													ctor: '::',
-																													_0: {url: _aforemny$elm_mdc$Demo_Url$Tabs, icon: 'ic_tabs_24px.svg', title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
+																													_0: {url: _aforemny$elm_mdc$Demo_Url$Switch, icon: 'ic_switch_24px.svg', title: 'Switch', subtitle: 'On off switches'},
 																													_1: {
 																														ctor: '::',
-																														_0: {url: _aforemny$elm_mdc$Demo_Url$TextField, icon: 'ic_text_field_24px.svg', title: 'Text field', subtitle: 'Single and multiline text fields'},
+																														_0: {url: _aforemny$elm_mdc$Demo_Url$Tabs, icon: 'ic_tabs_24px.svg', title: 'Tabs', subtitle: 'Tabs with support for icon and text labels'},
 																														_1: {
 																															ctor: '::',
-																															_0: {url: _aforemny$elm_mdc$Demo_Url$Theme, icon: 'ic_theme_24px.svg', title: 'Theme', subtitle: 'Using primary and accent colors'},
+																															_0: {url: _aforemny$elm_mdc$Demo_Url$TextField, icon: 'ic_text_field_24px.svg', title: 'Text field', subtitle: 'Single and multiline text fields'},
 																															_1: {
 																																ctor: '::',
-																																_0: {
-																																	url: _aforemny$elm_mdc$Demo_Url$Toolbar(_elm_lang$core$Maybe$Nothing),
-																																	icon: 'ic_toolbar_24px.svg',
-																																	title: 'Toolbar',
-																																	subtitle: 'Header and footers'
-																																},
+																																_0: {url: _aforemny$elm_mdc$Demo_Url$Theme, icon: 'ic_theme_24px.svg', title: 'Theme', subtitle: 'Using primary and accent colors'},
 																																_1: {
 																																	ctor: '::',
 																																	_0: {
-																																		url: _aforemny$elm_mdc$Demo_Url$TopAppBar(_elm_lang$core$Maybe$Nothing),
+																																		url: _aforemny$elm_mdc$Demo_Url$Toolbar(_elm_lang$core$Maybe$Nothing),
 																																		icon: 'ic_toolbar_24px.svg',
-																																		title: 'Top App Bar',
-																																		subtitle: 'Container for items such as application title, navigation icon, and action items.'
+																																		title: 'Toolbar',
+																																		subtitle: 'Header and footers'
 																																	},
 																																	_1: {
 																																		ctor: '::',
-																																		_0: {url: _aforemny$elm_mdc$Demo_Url$Typography, icon: 'ic_typography_24px.svg', title: 'Typography', subtitle: 'Type hierarchy'},
-																																		_1: {ctor: '[]'}
+																																		_0: {
+																																			url: _aforemny$elm_mdc$Demo_Url$TopAppBar(_elm_lang$core$Maybe$Nothing),
+																																			icon: 'ic_toolbar_24px.svg',
+																																			title: 'Top App Bar',
+																																			subtitle: 'Container for items such as application title, navigation icon, and action items.'
+																																		},
+																																		_1: {
+																																			ctor: '::',
+																																			_0: {url: _aforemny$elm_mdc$Demo_Url$Typography, icon: 'ic_typography_24px.svg', title: 'Typography', subtitle: 'Type hierarchy'},
+																																			_1: {ctor: '[]'}
+																																		}
 																																	}
 																																}
 																															}
@@ -45449,7 +46468,7 @@ _elm_lang$core$Native_Platform.effectManagers['Navigation'] = {pkg: 'elm-lang/na
 var _aforemny$elm_mdc$Main$urlOf = function (model) {
 	return _aforemny$elm_mdc$Demo_Url$toString(model.url);
 };
-var _aforemny$elm_mdc$Main$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, url: _aforemny$elm_mdc$Demo_Url$StartPage, buttons: _aforemny$elm_mdc$Demo_Buttons$defaultModel, cards: _aforemny$elm_mdc$Demo_Cards$defaultModel, checkbox: _aforemny$elm_mdc$Demo_Checkbox$defaultModel, dialog: _aforemny$elm_mdc$Demo_Dialog$defaultModel, drawer: _aforemny$elm_mdc$Demo_Drawer$defaultModel, elevation: _aforemny$elm_mdc$Demo_Elevation$defaultModel, fabs: _aforemny$elm_mdc$Demo_Fabs$defaultModel, gridList: _aforemny$elm_mdc$Demo_GridList$defaultModel, iconToggle: _aforemny$elm_mdc$Demo_IconToggle$defaultModel, imageList: _aforemny$elm_mdc$Demo_ImageList$defaultModel, layoutGrid: _aforemny$elm_mdc$Demo_LayoutGrid$defaultModel, lists: _aforemny$elm_mdc$Demo_Lists$defaultModel, menus: _aforemny$elm_mdc$Demo_Menus$defaultModel, permanentAboveDrawer: _aforemny$elm_mdc$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _aforemny$elm_mdc$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel, radio: _aforemny$elm_mdc$Demo_RadioButtons$defaultModel, ripple: _aforemny$elm_mdc$Demo_Ripple$defaultModel, selects: _aforemny$elm_mdc$Demo_Selects$defaultModel, slider: _aforemny$elm_mdc$Demo_Slider$defaultModel, snackbar: _aforemny$elm_mdc$Demo_Snackbar$defaultModel, $switch: _aforemny$elm_mdc$Demo_Switch$defaultModel, tabs: _aforemny$elm_mdc$Demo_Tabs$defaultModel, temporaryDrawer: _aforemny$elm_mdc$Demo_TemporaryDrawer$defaultModel, textfields: _aforemny$elm_mdc$Demo_Textfields$defaultModel, theme: _aforemny$elm_mdc$Demo_Theme$defaultModel, toolbar: _aforemny$elm_mdc$Demo_Toolbar$defaultModel, topAppBar: _aforemny$elm_mdc$Demo_TopAppBar$defaultModel};
+var _aforemny$elm_mdc$Main$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, url: _aforemny$elm_mdc$Demo_Url$StartPage, buttons: _aforemny$elm_mdc$Demo_Buttons$defaultModel, cards: _aforemny$elm_mdc$Demo_Cards$defaultModel, checkbox: _aforemny$elm_mdc$Demo_Checkbox$defaultModel, chips: _aforemny$elm_mdc$Demo_Chips$defaultModel, dialog: _aforemny$elm_mdc$Demo_Dialog$defaultModel, drawer: _aforemny$elm_mdc$Demo_Drawer$defaultModel, elevation: _aforemny$elm_mdc$Demo_Elevation$defaultModel, fabs: _aforemny$elm_mdc$Demo_Fabs$defaultModel, gridList: _aforemny$elm_mdc$Demo_GridList$defaultModel, iconToggle: _aforemny$elm_mdc$Demo_IconToggle$defaultModel, imageList: _aforemny$elm_mdc$Demo_ImageList$defaultModel, layoutGrid: _aforemny$elm_mdc$Demo_LayoutGrid$defaultModel, lists: _aforemny$elm_mdc$Demo_Lists$defaultModel, menus: _aforemny$elm_mdc$Demo_Menus$defaultModel, permanentAboveDrawer: _aforemny$elm_mdc$Demo_PermanentAboveDrawer$defaultModel, permanentBelowDrawer: _aforemny$elm_mdc$Demo_PermanentBelowDrawer$defaultModel, persistentDrawer: _aforemny$elm_mdc$Demo_PersistentDrawer$defaultModel, radio: _aforemny$elm_mdc$Demo_RadioButtons$defaultModel, ripple: _aforemny$elm_mdc$Demo_Ripple$defaultModel, selects: _aforemny$elm_mdc$Demo_Selects$defaultModel, slider: _aforemny$elm_mdc$Demo_Slider$defaultModel, snackbar: _aforemny$elm_mdc$Demo_Snackbar$defaultModel, $switch: _aforemny$elm_mdc$Demo_Switch$defaultModel, tabs: _aforemny$elm_mdc$Demo_Tabs$defaultModel, temporaryDrawer: _aforemny$elm_mdc$Demo_TemporaryDrawer$defaultModel, textfields: _aforemny$elm_mdc$Demo_Textfields$defaultModel, theme: _aforemny$elm_mdc$Demo_Theme$defaultModel, toolbar: _aforemny$elm_mdc$Demo_Toolbar$defaultModel, topAppBar: _aforemny$elm_mdc$Demo_TopAppBar$defaultModel};
 var _aforemny$elm_mdc$Main$scrollTop = _elm_lang$core$Native_Platform.outgoingPort(
 	'scrollTop',
 	function (v) {
@@ -45485,7 +46504,9 @@ var _aforemny$elm_mdc$Main$Model = function (a) {
 																											return function (_2) {
 																												return function (_3) {
 																													return function (_4) {
-																														return {mdc: a, url: b, buttons: c, cards: d, checkbox: e, dialog: f, drawer: g, elevation: h, fabs: i, gridList: j, iconToggle: k, imageList: l, layoutGrid: m, lists: n, menus: o, permanentAboveDrawer: p, permanentBelowDrawer: q, persistentDrawer: r, radio: s, ripple: t, selects: u, slider: v, snackbar: w, $switch: x, tabs: y, temporaryDrawer: z, textfields: _1, theme: _2, toolbar: _3, topAppBar: _4};
+																														return function (_5) {
+																															return {mdc: a, url: b, buttons: c, cards: d, checkbox: e, chips: f, dialog: g, drawer: h, elevation: i, fabs: j, gridList: k, iconToggle: l, imageList: m, layoutGrid: n, lists: o, menus: p, permanentAboveDrawer: q, permanentBelowDrawer: r, persistentDrawer: s, radio: t, ripple: u, selects: v, slider: w, snackbar: x, $switch: y, tabs: z, temporaryDrawer: _1, textfields: _2, theme: _3, toolbar: _4, topAppBar: _5};
+																														};
 																													};
 																												};
 																											};
@@ -45591,6 +46612,9 @@ var _aforemny$elm_mdc$Main$DrawerMsg = function (a) {
 var _aforemny$elm_mdc$Main$DialogMsg = function (a) {
 	return {ctor: 'DialogMsg', _0: a};
 };
+var _aforemny$elm_mdc$Main$ChipsMsg = function (a) {
+	return {ctor: 'ChipsMsg', _0: a};
+};
 var _aforemny$elm_mdc$Main$CheckboxMsg = function (a) {
 	return {ctor: 'CheckboxMsg', _0: a};
 };
@@ -45678,10 +46702,21 @@ var _aforemny$elm_mdc$Main$update = F2(
 						{checkbox: checkbox}),
 					_1: effects
 				};
-			case 'DialogMsg':
-				var _p5 = A3(_aforemny$elm_mdc$Demo_Dialog$update, _aforemny$elm_mdc$Main$DialogMsg, _p0._0, model.dialog);
-				var dialog = _p5._0;
+			case 'ChipsMsg':
+				var _p5 = A3(_aforemny$elm_mdc$Demo_Chips$update, _aforemny$elm_mdc$Main$ChipsMsg, _p0._0, model.chips);
+				var chips = _p5._0;
 				var effects = _p5._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{chips: chips}),
+					_1: effects
+				};
+			case 'DialogMsg':
+				var _p6 = A3(_aforemny$elm_mdc$Demo_Dialog$update, _aforemny$elm_mdc$Main$DialogMsg, _p0._0, model.dialog);
+				var dialog = _p6._0;
+				var effects = _p6._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45690,9 +46725,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'ElevationMsg':
-				var _p6 = A3(_aforemny$elm_mdc$Demo_Elevation$update, _aforemny$elm_mdc$Main$ElevationMsg, _p0._0, model.elevation);
-				var elevation = _p6._0;
-				var effects = _p6._1;
+				var _p7 = A3(_aforemny$elm_mdc$Demo_Elevation$update, _aforemny$elm_mdc$Main$ElevationMsg, _p0._0, model.elevation);
+				var elevation = _p7._0;
+				var effects = _p7._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45701,9 +46736,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'DrawerMsg':
-				var _p7 = A3(_aforemny$elm_mdc$Demo_Drawer$update, _aforemny$elm_mdc$Main$DrawerMsg, _p0._0, model.drawer);
-				var drawer = _p7._0;
-				var effects = _p7._1;
+				var _p8 = A3(_aforemny$elm_mdc$Demo_Drawer$update, _aforemny$elm_mdc$Main$DrawerMsg, _p0._0, model.drawer);
+				var drawer = _p8._0;
+				var effects = _p8._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45712,9 +46747,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'TemporaryDrawerMsg':
-				var _p8 = A3(_aforemny$elm_mdc$Demo_TemporaryDrawer$update, _aforemny$elm_mdc$Main$TemporaryDrawerMsg, _p0._0, model.temporaryDrawer);
-				var temporaryDrawer = _p8._0;
-				var effects = _p8._1;
+				var _p9 = A3(_aforemny$elm_mdc$Demo_TemporaryDrawer$update, _aforemny$elm_mdc$Main$TemporaryDrawerMsg, _p0._0, model.temporaryDrawer);
+				var temporaryDrawer = _p9._0;
+				var effects = _p9._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45723,9 +46758,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'PersistentDrawerMsg':
-				var _p9 = A3(_aforemny$elm_mdc$Demo_PersistentDrawer$update, _aforemny$elm_mdc$Main$PersistentDrawerMsg, _p0._0, model.persistentDrawer);
-				var persistentDrawer = _p9._0;
-				var effects = _p9._1;
+				var _p10 = A3(_aforemny$elm_mdc$Demo_PersistentDrawer$update, _aforemny$elm_mdc$Main$PersistentDrawerMsg, _p0._0, model.persistentDrawer);
+				var persistentDrawer = _p10._0;
+				var effects = _p10._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45734,9 +46769,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'PermanentAboveDrawerMsg':
-				var _p10 = A3(_aforemny$elm_mdc$Demo_PermanentAboveDrawer$update, _aforemny$elm_mdc$Main$PermanentAboveDrawerMsg, _p0._0, model.permanentAboveDrawer);
-				var permanentAboveDrawer = _p10._0;
-				var effects = _p10._1;
+				var _p11 = A3(_aforemny$elm_mdc$Demo_PermanentAboveDrawer$update, _aforemny$elm_mdc$Main$PermanentAboveDrawerMsg, _p0._0, model.permanentAboveDrawer);
+				var permanentAboveDrawer = _p11._0;
+				var effects = _p11._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45745,9 +46780,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'PermanentBelowDrawerMsg':
-				var _p11 = A3(_aforemny$elm_mdc$Demo_PermanentBelowDrawer$update, _aforemny$elm_mdc$Main$PermanentBelowDrawerMsg, _p0._0, model.permanentBelowDrawer);
-				var permanentBelowDrawer = _p11._0;
-				var effects = _p11._1;
+				var _p12 = A3(_aforemny$elm_mdc$Demo_PermanentBelowDrawer$update, _aforemny$elm_mdc$Main$PermanentBelowDrawerMsg, _p0._0, model.permanentBelowDrawer);
+				var permanentBelowDrawer = _p12._0;
+				var effects = _p12._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45756,9 +46791,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'FabsMsg':
-				var _p12 = A3(_aforemny$elm_mdc$Demo_Fabs$update, _aforemny$elm_mdc$Main$FabsMsg, _p0._0, model.fabs);
-				var fabs = _p12._0;
-				var effects = _p12._1;
+				var _p13 = A3(_aforemny$elm_mdc$Demo_Fabs$update, _aforemny$elm_mdc$Main$FabsMsg, _p0._0, model.fabs);
+				var fabs = _p13._0;
+				var effects = _p13._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45767,9 +46802,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'IconToggleMsg':
-				var _p13 = A3(_aforemny$elm_mdc$Demo_IconToggle$update, _aforemny$elm_mdc$Main$IconToggleMsg, _p0._0, model.iconToggle);
-				var iconToggle = _p13._0;
-				var effects = _p13._1;
+				var _p14 = A3(_aforemny$elm_mdc$Demo_IconToggle$update, _aforemny$elm_mdc$Main$IconToggleMsg, _p0._0, model.iconToggle);
+				var iconToggle = _p14._0;
+				var effects = _p14._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45778,9 +46813,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'ImageListMsg':
-				var _p14 = A3(_aforemny$elm_mdc$Demo_ImageList$update, _aforemny$elm_mdc$Main$ImageListMsg, _p0._0, model.imageList);
-				var imageList = _p14._0;
-				var effects = _p14._1;
+				var _p15 = A3(_aforemny$elm_mdc$Demo_ImageList$update, _aforemny$elm_mdc$Main$ImageListMsg, _p0._0, model.imageList);
+				var imageList = _p15._0;
+				var effects = _p15._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45789,9 +46824,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'MenuMsg':
-				var _p15 = A3(_aforemny$elm_mdc$Demo_Menus$update, _aforemny$elm_mdc$Main$MenuMsg, _p0._0, model.menus);
-				var menus = _p15._0;
-				var effects = _p15._1;
+				var _p16 = A3(_aforemny$elm_mdc$Demo_Menus$update, _aforemny$elm_mdc$Main$MenuMsg, _p0._0, model.menus);
+				var menus = _p16._0;
+				var effects = _p16._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45800,9 +46835,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'RadioButtonsMsg':
-				var _p16 = A3(_aforemny$elm_mdc$Demo_RadioButtons$update, _aforemny$elm_mdc$Main$RadioButtonsMsg, _p0._0, model.radio);
-				var radio = _p16._0;
-				var effects = _p16._1;
+				var _p17 = A3(_aforemny$elm_mdc$Demo_RadioButtons$update, _aforemny$elm_mdc$Main$RadioButtonsMsg, _p0._0, model.radio);
+				var radio = _p17._0;
+				var effects = _p17._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45811,9 +46846,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'RippleMsg':
-				var _p17 = A3(_aforemny$elm_mdc$Demo_Ripple$update, _aforemny$elm_mdc$Main$RippleMsg, _p0._0, model.ripple);
-				var ripple = _p17._0;
-				var effects = _p17._1;
+				var _p18 = A3(_aforemny$elm_mdc$Demo_Ripple$update, _aforemny$elm_mdc$Main$RippleMsg, _p0._0, model.ripple);
+				var ripple = _p18._0;
+				var effects = _p18._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45822,9 +46857,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'SelectMsg':
-				var _p18 = A3(_aforemny$elm_mdc$Demo_Selects$update, _aforemny$elm_mdc$Main$SelectMsg, _p0._0, model.selects);
-				var selects = _p18._0;
-				var effects = _p18._1;
+				var _p19 = A3(_aforemny$elm_mdc$Demo_Selects$update, _aforemny$elm_mdc$Main$SelectMsg, _p0._0, model.selects);
+				var selects = _p19._0;
+				var effects = _p19._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45833,9 +46868,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'SliderMsg':
-				var _p19 = A3(_aforemny$elm_mdc$Demo_Slider$update, _aforemny$elm_mdc$Main$SliderMsg, _p0._0, model.slider);
-				var slider = _p19._0;
-				var effects = _p19._1;
+				var _p20 = A3(_aforemny$elm_mdc$Demo_Slider$update, _aforemny$elm_mdc$Main$SliderMsg, _p0._0, model.slider);
+				var slider = _p20._0;
+				var effects = _p20._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45844,9 +46879,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'SnackbarMsg':
-				var _p20 = A3(_aforemny$elm_mdc$Demo_Snackbar$update, _aforemny$elm_mdc$Main$SnackbarMsg, _p0._0, model.snackbar);
-				var snackbar = _p20._0;
-				var effects = _p20._1;
+				var _p21 = A3(_aforemny$elm_mdc$Demo_Snackbar$update, _aforemny$elm_mdc$Main$SnackbarMsg, _p0._0, model.snackbar);
+				var snackbar = _p21._0;
+				var effects = _p21._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45855,9 +46890,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'SwitchMsg':
-				var _p21 = A3(_aforemny$elm_mdc$Demo_Switch$update, _aforemny$elm_mdc$Main$SwitchMsg, _p0._0, model.$switch);
-				var $switch = _p21._0;
-				var effects = _p21._1;
+				var _p22 = A3(_aforemny$elm_mdc$Demo_Switch$update, _aforemny$elm_mdc$Main$SwitchMsg, _p0._0, model.$switch);
+				var $switch = _p22._0;
+				var effects = _p22._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45866,9 +46901,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'TextfieldMsg':
-				var _p22 = A3(_aforemny$elm_mdc$Demo_Textfields$update, _aforemny$elm_mdc$Main$TextfieldMsg, _p0._0, model.textfields);
-				var textfields = _p22._0;
-				var effects = _p22._1;
+				var _p23 = A3(_aforemny$elm_mdc$Demo_Textfields$update, _aforemny$elm_mdc$Main$TextfieldMsg, _p0._0, model.textfields);
+				var textfields = _p23._0;
+				var effects = _p23._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45877,9 +46912,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'TabsMsg':
-				var _p23 = A3(_aforemny$elm_mdc$Demo_Tabs$update, _aforemny$elm_mdc$Main$TabsMsg, _p0._0, model.tabs);
-				var tabs = _p23._0;
-				var effects = _p23._1;
+				var _p24 = A3(_aforemny$elm_mdc$Demo_Tabs$update, _aforemny$elm_mdc$Main$TabsMsg, _p0._0, model.tabs);
+				var tabs = _p24._0;
+				var effects = _p24._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45888,9 +46923,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'GridListMsg':
-				var _p24 = A3(_aforemny$elm_mdc$Demo_GridList$update, _aforemny$elm_mdc$Main$GridListMsg, _p0._0, model.gridList);
-				var gridList = _p24._0;
-				var effects = _p24._1;
+				var _p25 = A3(_aforemny$elm_mdc$Demo_GridList$update, _aforemny$elm_mdc$Main$GridListMsg, _p0._0, model.gridList);
+				var gridList = _p25._0;
+				var effects = _p25._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45899,9 +46934,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'LayoutGridMsg':
-				var _p25 = A3(_aforemny$elm_mdc$Demo_LayoutGrid$update, _aforemny$elm_mdc$Main$LayoutGridMsg, _p0._0, model.layoutGrid);
-				var layoutGrid = _p25._0;
-				var effects = _p25._1;
+				var _p26 = A3(_aforemny$elm_mdc$Demo_LayoutGrid$update, _aforemny$elm_mdc$Main$LayoutGridMsg, _p0._0, model.layoutGrid);
+				var layoutGrid = _p26._0;
+				var effects = _p26._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45910,9 +46945,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'ListsMsg':
-				var _p26 = A3(_aforemny$elm_mdc$Demo_Lists$update, _aforemny$elm_mdc$Main$ListsMsg, _p0._0, model.lists);
-				var lists = _p26._0;
-				var effects = _p26._1;
+				var _p27 = A3(_aforemny$elm_mdc$Demo_Lists$update, _aforemny$elm_mdc$Main$ListsMsg, _p0._0, model.lists);
+				var lists = _p27._0;
+				var effects = _p27._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45921,9 +46956,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'ThemeMsg':
-				var _p27 = A3(_aforemny$elm_mdc$Demo_Theme$update, _aforemny$elm_mdc$Main$ThemeMsg, _p0._0, model.theme);
-				var theme = _p27._0;
-				var effects = _p27._1;
+				var _p28 = A3(_aforemny$elm_mdc$Demo_Theme$update, _aforemny$elm_mdc$Main$ThemeMsg, _p0._0, model.theme);
+				var theme = _p28._0;
+				var effects = _p28._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45932,9 +46967,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			case 'ToolbarMsg':
-				var _p28 = A3(_aforemny$elm_mdc$Demo_Toolbar$update, _aforemny$elm_mdc$Main$ToolbarMsg, _p0._0, model.toolbar);
-				var toolbar = _p28._0;
-				var effects = _p28._1;
+				var _p29 = A3(_aforemny$elm_mdc$Demo_Toolbar$update, _aforemny$elm_mdc$Main$ToolbarMsg, _p0._0, model.toolbar);
+				var toolbar = _p29._0;
+				var effects = _p29._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -45943,9 +46978,9 @@ var _aforemny$elm_mdc$Main$update = F2(
 					_1: effects
 				};
 			default:
-				var _p29 = A3(_aforemny$elm_mdc$Demo_TopAppBar$update, _aforemny$elm_mdc$Main$TopAppBarMsg, _p0._0, model.topAppBar);
-				var topAppBar = _p29._0;
-				var effects = _p29._1;
+				var _p30 = A3(_aforemny$elm_mdc$Demo_TopAppBar$update, _aforemny$elm_mdc$Main$TopAppBarMsg, _p0._0, model.topAppBar);
+				var topAppBar = _p30._0;
+				var effects = _p30._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -46014,8 +47049,8 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 						}));
 			})
 	};
-	var _p30 = model.url;
-	switch (_p30.ctor) {
+	var _p31 = model.url;
+	switch (_p31.ctor) {
 		case 'StartPage':
 			return _aforemny$elm_mdc$Demo_Startpage$view(page);
 		case 'Button':
@@ -46024,6 +47059,8 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 			return A3(_aforemny$elm_mdc$Demo_Cards$view, _aforemny$elm_mdc$Main$CardsMsg, page, model.cards);
 		case 'Checkbox':
 			return A3(_aforemny$elm_mdc$Demo_Checkbox$view, _aforemny$elm_mdc$Main$CheckboxMsg, page, model.checkbox);
+		case 'Chips':
+			return A3(_aforemny$elm_mdc$Demo_Chips$view, _aforemny$elm_mdc$Main$ChipsMsg, page, model.chips);
 		case 'Dialog':
 			return A3(_aforemny$elm_mdc$Demo_Dialog$view, _aforemny$elm_mdc$Main$DialogMsg, page, model.dialog);
 		case 'Drawer':
@@ -46067,9 +47104,9 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 		case 'Theme':
 			return A3(_aforemny$elm_mdc$Demo_Theme$view, _aforemny$elm_mdc$Main$ThemeMsg, page, model.theme);
 		case 'Toolbar':
-			return A4(_aforemny$elm_mdc$Demo_Toolbar$view, _aforemny$elm_mdc$Main$ToolbarMsg, page, _p30._0, model.toolbar);
+			return A4(_aforemny$elm_mdc$Demo_Toolbar$view, _aforemny$elm_mdc$Main$ToolbarMsg, page, _p31._0, model.toolbar);
 		case 'TopAppBar':
-			return A4(_aforemny$elm_mdc$Demo_TopAppBar$view, _aforemny$elm_mdc$Main$TopAppBarMsg, page, _p30._0, model.topAppBar);
+			return A4(_aforemny$elm_mdc$Demo_TopAppBar$view, _aforemny$elm_mdc$Main$TopAppBarMsg, page, _p31._0, model.topAppBar);
 		case 'GridList':
 			return A3(_aforemny$elm_mdc$Demo_GridList$view, _aforemny$elm_mdc$Main$GridListMsg, page, model.gridList);
 		case 'LayoutGrid':
@@ -46099,7 +47136,7 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 						}),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(_p30._0),
+						_0: _elm_lang$html$Html$text(_p31._0),
 						_1: {ctor: '[]'}
 					}
 				});
@@ -46107,9 +47144,9 @@ var _aforemny$elm_mdc$Main$view_ = function (model) {
 };
 var _aforemny$elm_mdc$Main$view = _aforemny$elm_mdc$Main$view_;
 var _aforemny$elm_mdc$Main$init = function (location) {
-	var _p31 = _aforemny$elm_mdc$Demo_LayoutGrid$init(_aforemny$elm_mdc$Main$LayoutGridMsg);
-	var layoutGrid = _p31._0;
-	var layoutGridEffects = _p31._1;
+	var _p32 = _aforemny$elm_mdc$Demo_LayoutGrid$init(_aforemny$elm_mdc$Main$LayoutGridMsg);
+	var layoutGrid = _p32._0;
+	var layoutGridEffects = _p32._1;
 	return {
 		ctor: '_Tuple2',
 		_0: _elm_lang$core$Native_Utils.update(
@@ -46192,12 +47229,12 @@ var _aforemny$elm_mdc$Main$subscriptions = function (model) {
 };
 var _aforemny$elm_mdc$Main$main = A2(
 	_elm_lang$navigation$Navigation$program,
-	function (_p32) {
+	function (_p33) {
 		return _aforemny$elm_mdc$Main$SetUrl(
 			_aforemny$elm_mdc$Demo_Url$fromString(
 				function (_) {
 					return _.hash;
-				}(_p32)));
+				}(_p33)));
 	},
 	{init: _aforemny$elm_mdc$Main$init, view: _aforemny$elm_mdc$Main$view, subscriptions: _aforemny$elm_mdc$Main$subscriptions, update: _aforemny$elm_mdc$Main$update})();
 
