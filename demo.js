@@ -22823,13 +22823,164 @@ var _aforemny$elm_mdc$Material_Chip$trailingIcon = _aforemny$elm_mdc$Internal_Ch
 var _aforemny$elm_mdc$Material_Chip$leadingIcon = _aforemny$elm_mdc$Internal_Chip_Implementation$leadingIcon;
 var _aforemny$elm_mdc$Material_Chip$view = _aforemny$elm_mdc$Internal_Chip_Implementation$view;
 
-var _aforemny$elm_mdc$Demo_Chips$defaultModel = {mdc: _aforemny$elm_mdc$Material$defaultModel, selectedIndex: _elm_lang$core$Maybe$Nothing};
+var _elm_lang$core$Set$foldr = F3(
+	function (f, b, _p0) {
+		var _p1 = _p0;
+		return A3(
+			_elm_lang$core$Dict$foldr,
+			F3(
+				function (k, _p2, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p1._0);
+	});
+var _elm_lang$core$Set$foldl = F3(
+	function (f, b, _p3) {
+		var _p4 = _p3;
+		return A3(
+			_elm_lang$core$Dict$foldl,
+			F3(
+				function (k, _p5, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p4._0);
+	});
+var _elm_lang$core$Set$toList = function (_p6) {
+	var _p7 = _p6;
+	return _elm_lang$core$Dict$keys(_p7._0);
+};
+var _elm_lang$core$Set$size = function (_p8) {
+	var _p9 = _p8;
+	return _elm_lang$core$Dict$size(_p9._0);
+};
+var _elm_lang$core$Set$member = F2(
+	function (k, _p10) {
+		var _p11 = _p10;
+		return A2(_elm_lang$core$Dict$member, k, _p11._0);
+	});
+var _elm_lang$core$Set$isEmpty = function (_p12) {
+	var _p13 = _p12;
+	return _elm_lang$core$Dict$isEmpty(_p13._0);
+};
+var _elm_lang$core$Set$Set_elm_builtin = function (a) {
+	return {ctor: 'Set_elm_builtin', _0: a};
+};
+var _elm_lang$core$Set$empty = _elm_lang$core$Set$Set_elm_builtin(_elm_lang$core$Dict$empty);
+var _elm_lang$core$Set$singleton = function (k) {
+	return _elm_lang$core$Set$Set_elm_builtin(
+		A2(
+			_elm_lang$core$Dict$singleton,
+			k,
+			{ctor: '_Tuple0'}));
+};
+var _elm_lang$core$Set$insert = F2(
+	function (k, _p14) {
+		var _p15 = _p14;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A3(
+				_elm_lang$core$Dict$insert,
+				k,
+				{ctor: '_Tuple0'},
+				_p15._0));
+	});
+var _elm_lang$core$Set$fromList = function (xs) {
+	return A3(_elm_lang$core$List$foldl, _elm_lang$core$Set$insert, _elm_lang$core$Set$empty, xs);
+};
+var _elm_lang$core$Set$map = F2(
+	function (f, s) {
+		return _elm_lang$core$Set$fromList(
+			A2(
+				_elm_lang$core$List$map,
+				f,
+				_elm_lang$core$Set$toList(s)));
+	});
+var _elm_lang$core$Set$remove = F2(
+	function (k, _p16) {
+		var _p17 = _p16;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$remove, k, _p17._0));
+	});
+var _elm_lang$core$Set$union = F2(
+	function (_p19, _p18) {
+		var _p20 = _p19;
+		var _p21 = _p18;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$union, _p20._0, _p21._0));
+	});
+var _elm_lang$core$Set$intersect = F2(
+	function (_p23, _p22) {
+		var _p24 = _p23;
+		var _p25 = _p22;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$intersect, _p24._0, _p25._0));
+	});
+var _elm_lang$core$Set$diff = F2(
+	function (_p27, _p26) {
+		var _p28 = _p27;
+		var _p29 = _p26;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$diff, _p28._0, _p29._0));
+	});
+var _elm_lang$core$Set$filter = F2(
+	function (p, _p30) {
+		var _p31 = _p30;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(
+				_elm_lang$core$Dict$filter,
+				F2(
+					function (k, _p32) {
+						return p(k);
+					}),
+				_p31._0));
+	});
+var _elm_lang$core$Set$partition = F2(
+	function (p, _p33) {
+		var _p34 = _p33;
+		var _p35 = A2(
+			_elm_lang$core$Dict$partition,
+			F2(
+				function (k, _p36) {
+					return p(k);
+				}),
+			_p34._0);
+		var p1 = _p35._0;
+		var p2 = _p35._1;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Set$Set_elm_builtin(p1),
+			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
+		};
+	});
+
+var _aforemny$elm_mdc$Demo_Chips$defaultModel = {
+	mdc: _aforemny$elm_mdc$Material$defaultModel,
+	selectedChips: _elm_lang$core$Set$fromList(
+		{
+			ctor: '::',
+			_0: 'chips-choice-medium',
+			_1: {
+				ctor: '::',
+				_0: 'chips-filter-chips-tops',
+				_1: {
+					ctor: '::',
+					_0: 'chips-filter-chips-bottoms',
+					_1: {
+						ctor: '::',
+						_0: 'chips-filter-chips-alice',
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		})
+};
 var _aforemny$elm_mdc$Demo_Chips$Model = F2(
 	function (a, b) {
-		return {mdc: a, selectedIndex: b};
+		return {mdc: a, selectedChips: b};
 	});
-var _aforemny$elm_mdc$Demo_Chips$ChipClick = function (a) {
-	return {ctor: 'ChipClick', _0: a};
+var _aforemny$elm_mdc$Demo_Chips$ToggleChip = function (a) {
+	return {ctor: 'ToggleChip', _0: a};
 };
 var _aforemny$elm_mdc$Demo_Chips$Mdc = function (a) {
 	return {ctor: 'Mdc', _0: a};
@@ -22847,13 +22998,13 @@ var _aforemny$elm_mdc$Demo_Chips$update = F3(
 				_p0._0,
 				model);
 		} else {
+			var _p2 = _p0._0;
+			var selectedChips = (A2(_elm_lang$core$Set$member, _p2, model.selectedChips) ? _elm_lang$core$Set$remove(_p2) : _elm_lang$core$Set$insert(_p2))(model.selectedChips);
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{
-						selectedIndex: _elm_lang$core$Maybe$Just(_p0._0)
-					}),
+					{selectedChips: selectedChips}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		}
@@ -22865,9 +23016,9 @@ var _aforemny$elm_mdc$Demo_Chips$heroChips = F2(
 				ctor: '::',
 				_0: A5(
 					_aforemny$elm_mdc$Material_Chip$view,
-					function (_p2) {
+					function (_p3) {
 						return lift(
-							_aforemny$elm_mdc$Demo_Chips$Mdc(_p2));
+							_aforemny$elm_mdc$Demo_Chips$Mdc(_p3));
 					},
 					'chips-hero-one',
 					model.mdc,
@@ -22885,9 +23036,9 @@ var _aforemny$elm_mdc$Demo_Chips$heroChips = F2(
 					ctor: '::',
 					_0: A5(
 						_aforemny$elm_mdc$Material_Chip$view,
-						function (_p3) {
+						function (_p4) {
 							return lift(
-								_aforemny$elm_mdc$Demo_Chips$Mdc(_p3));
+								_aforemny$elm_mdc$Demo_Chips$Mdc(_p4));
 						},
 						'chips-hero-two',
 						model.mdc,
@@ -22905,9 +23056,9 @@ var _aforemny$elm_mdc$Demo_Chips$heroChips = F2(
 						ctor: '::',
 						_0: A5(
 							_aforemny$elm_mdc$Material_Chip$view,
-							function (_p4) {
+							function (_p5) {
 								return lift(
-									_aforemny$elm_mdc$Demo_Chips$Mdc(_p4));
+									_aforemny$elm_mdc$Demo_Chips$Mdc(_p5));
 							},
 							'chips-hero-three',
 							model.mdc,
@@ -22925,9 +23076,9 @@ var _aforemny$elm_mdc$Demo_Chips$heroChips = F2(
 							ctor: '::',
 							_0: A5(
 								_aforemny$elm_mdc$Material_Chip$view,
-								function (_p5) {
+								function (_p6) {
 									return lift(
-										_aforemny$elm_mdc$Demo_Chips$Mdc(_p5));
+										_aforemny$elm_mdc$Demo_Chips$Mdc(_p6));
 								},
 								'chips-hero-four',
 								model.mdc,
@@ -22949,17 +23100,40 @@ var _aforemny$elm_mdc$Demo_Chips$heroChips = F2(
 	});
 var _aforemny$elm_mdc$Demo_Chips$choiceChips = F2(
 	function (lift, model) {
-		var selected = function (index) {
-			return A2(
-				_elm_lang$core$Maybe$withDefault,
-				_aforemny$elm_mdc$Material_Options$nop,
-				A2(
-					_elm_lang$core$Maybe$map,
-					function (i) {
-						return _elm_lang$core$Native_Utils.eq(i, index) ? _aforemny$elm_mdc$Material_Chip$selected : _aforemny$elm_mdc$Material_Options$nop;
+		var chip = F2(
+			function (index, label) {
+				return A5(
+					_aforemny$elm_mdc$Material_Chip$view,
+					function (_p7) {
+						return lift(
+							_aforemny$elm_mdc$Demo_Chips$Mdc(_p7));
 					},
-					model.selectedIndex));
-		};
+					index,
+					model.mdc,
+					{
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_Chip$ripple,
+						_1: {
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_Chip$onClick(
+								lift(
+									_aforemny$elm_mdc$Demo_Chips$ToggleChip(index))),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_aforemny$elm_mdc$Material_Options$when,
+									A2(_elm_lang$core$Set$member, index, model.selectedChips),
+									_aforemny$elm_mdc$Material_Chip$selected),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(label),
+						_1: {ctor: '[]'}
+					});
+			});
 		return {
 			ctor: '::',
 			_0: A3(
@@ -22980,154 +23154,19 @@ var _aforemny$elm_mdc$Demo_Chips$choiceChips = F2(
 				_0: _aforemny$elm_mdc$Material_Chip$chipset(
 					{
 						ctor: '::',
-						_0: A5(
-							_aforemny$elm_mdc$Material_Chip$view,
-							function (_p6) {
-								return lift(
-									_aforemny$elm_mdc$Demo_Chips$Mdc(_p6));
-							},
-							'chips-choice-extra-small',
-							model.mdc,
-							{
-								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Chip$ripple,
-								_1: {
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Options$onClick(
-										lift(
-											_aforemny$elm_mdc$Demo_Chips$ChipClick(0))),
-									_1: {
-										ctor: '::',
-										_0: selected(0),
-										_1: {ctor: '[]'}
-									}
-								}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Extra Small'),
-								_1: {ctor: '[]'}
-							}),
+						_0: A2(chip, 'chips-choice-extra-small', 'Extra Small'),
 						_1: {
 							ctor: '::',
-							_0: A5(
-								_aforemny$elm_mdc$Material_Chip$view,
-								function (_p7) {
-									return lift(
-										_aforemny$elm_mdc$Demo_Chips$Mdc(_p7));
-								},
-								'chips-choice-small',
-								model.mdc,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Chip$ripple,
-									_1: {
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Options$onClick(
-											lift(
-												_aforemny$elm_mdc$Demo_Chips$ChipClick(1))),
-										_1: {
-											ctor: '::',
-											_0: selected(1),
-											_1: {ctor: '[]'}
-										}
-									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Small'),
-									_1: {ctor: '[]'}
-								}),
+							_0: A2(chip, 'chips-choice-small', 'Small'),
 							_1: {
 								ctor: '::',
-								_0: A5(
-									_aforemny$elm_mdc$Material_Chip$view,
-									function (_p8) {
-										return lift(
-											_aforemny$elm_mdc$Demo_Chips$Mdc(_p8));
-									},
-									'chips-choice-medium',
-									model.mdc,
-									{
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Chip$ripple,
-										_1: {
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Options$onClick(
-												lift(
-													_aforemny$elm_mdc$Demo_Chips$ChipClick(2))),
-											_1: {
-												ctor: '::',
-												_0: selected(2),
-												_1: {ctor: '[]'}
-											}
-										}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Medium'),
-										_1: {ctor: '[]'}
-									}),
+								_0: A2(chip, 'chips-choice-medium', 'Medium'),
 								_1: {
 									ctor: '::',
-									_0: A5(
-										_aforemny$elm_mdc$Material_Chip$view,
-										function (_p9) {
-											return lift(
-												_aforemny$elm_mdc$Demo_Chips$Mdc(_p9));
-										},
-										'chips-choice-large',
-										model.mdc,
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Chip$ripple,
-											_1: {
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Options$onClick(
-													lift(
-														_aforemny$elm_mdc$Demo_Chips$ChipClick(3))),
-												_1: {
-													ctor: '::',
-													_0: selected(3),
-													_1: {ctor: '[]'}
-												}
-											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Large'),
-											_1: {ctor: '[]'}
-										}),
+									_0: A2(chip, 'chips-choice-large', 'Large'),
 									_1: {
 										ctor: '::',
-										_0: A5(
-											_aforemny$elm_mdc$Material_Chip$view,
-											function (_p10) {
-												return lift(
-													_aforemny$elm_mdc$Demo_Chips$Mdc(_p10));
-											},
-											'chips-choice-extra-large',
-											model.mdc,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Chip$ripple,
-												_1: {
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Options$onClick(
-														lift(
-															_aforemny$elm_mdc$Demo_Chips$ChipClick(4))),
-													_1: {
-														ctor: '::',
-														_0: selected(4),
-														_1: {ctor: '[]'}
-													}
-												}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Extra Large'),
-												_1: {ctor: '[]'}
-											}),
+										_0: A2(chip, 'chips-choice-extra-large', 'Extra Large'),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -23172,92 +23211,60 @@ var _aforemny$elm_mdc$Demo_Chips$filterChips = F2(
 					}),
 				_1: {
 					ctor: '::',
-					_0: _aforemny$elm_mdc$Material_Chip$chipset(
-						{
-							ctor: '::',
-							_0: A5(
-								_aforemny$elm_mdc$Material_Chip$view,
-								function (_p11) {
-									return lift(
-										_aforemny$elm_mdc$Demo_Chips$Mdc(_p11));
-								},
-								'chips-filter-chips-tops',
-								model.mdc,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Chip$ripple,
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Tops'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A5(
+					_0: function () {
+						var chip = F2(
+							function (index, label) {
+								return A5(
 									_aforemny$elm_mdc$Material_Chip$view,
-									function (_p12) {
+									function (_p8) {
 										return lift(
-											_aforemny$elm_mdc$Demo_Chips$Mdc(_p12));
+											_aforemny$elm_mdc$Demo_Chips$Mdc(_p8));
 									},
-									'chips-filter-chips-bottoms',
+									index,
 									model.mdc,
 									{
 										ctor: '::',
 										_0: _aforemny$elm_mdc$Material_Chip$ripple,
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: _aforemny$elm_mdc$Material_Chip$onClick(
+												lift(
+													_aforemny$elm_mdc$Demo_Chips$ToggleChip(index))),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_aforemny$elm_mdc$Material_Options$when,
+													A2(_elm_lang$core$Set$member, index, model.selectedChips),
+													_aforemny$elm_mdc$Material_Chip$selected),
+												_1: {ctor: '[]'}
+											}
+										}
 									},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('Bottoms'),
+										_0: _elm_lang$html$Html$text(label),
 										_1: {ctor: '[]'}
-									}),
+									});
+							});
+						return _aforemny$elm_mdc$Material_Chip$chipset(
+							{
+								ctor: '::',
+								_0: A2(chip, 'chips-filter-chips-tops', 'Tops'),
 								_1: {
 									ctor: '::',
-									_0: A5(
-										_aforemny$elm_mdc$Material_Chip$view,
-										function (_p13) {
-											return lift(
-												_aforemny$elm_mdc$Demo_Chips$Mdc(_p13));
-										},
-										'chips-filter-chips-shoes',
-										model.mdc,
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Chip$ripple,
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Shoes'),
-											_1: {ctor: '[]'}
-										}),
+									_0: A2(chip, 'chips-filter-chips-bottoms', 'Bottoms'),
 									_1: {
 										ctor: '::',
-										_0: A5(
-											_aforemny$elm_mdc$Material_Chip$view,
-											function (_p14) {
-												return lift(
-													_aforemny$elm_mdc$Demo_Chips$Mdc(_p14));
-											},
-											'chips-filter-chips-accessories',
-											model.mdc,
-											{
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Chip$ripple,
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Accessories'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
+										_0: A2(chip, 'chips-filter-chips-shoes', 'Shoes'),
+										_1: {
+											ctor: '::',
+											_0: A2(chip, 'chips-filter-chips-accessories', 'Accessories'),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
-							}
-						}),
+							});
+					}(),
 					_1: {
 						ctor: '::',
 						_0: A3(
@@ -23275,108 +23282,64 @@ var _aforemny$elm_mdc$Demo_Chips$filterChips = F2(
 							}),
 						_1: {
 							ctor: '::',
-							_0: _aforemny$elm_mdc$Material_Chip$chipset(
-								{
-									ctor: '::',
-									_0: A5(
-										_aforemny$elm_mdc$Material_Chip$view,
-										function (_p15) {
-											return lift(
-												_aforemny$elm_mdc$Demo_Chips$Mdc(_p15));
-										},
-										'chips-filter-chips-alice',
-										model.mdc,
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Chip$ripple,
-											_1: {
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
-												_1: {ctor: '[]'}
-											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Alice'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A5(
+							_0: function () {
+								var chip = F2(
+									function (index, label) {
+										return A5(
 											_aforemny$elm_mdc$Material_Chip$view,
-											function (_p16) {
+											function (_p9) {
 												return lift(
-													_aforemny$elm_mdc$Demo_Chips$Mdc(_p16));
+													_aforemny$elm_mdc$Demo_Chips$Mdc(_p9));
 											},
-											'chips-filter-chips-bob',
+											index,
 											model.mdc,
 											{
 												ctor: '::',
 												_0: _aforemny$elm_mdc$Material_Chip$ripple,
 												_1: {
 													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
-													_1: {ctor: '[]'}
+													_0: _aforemny$elm_mdc$Material_Chip$onClick(
+														lift(
+															_aforemny$elm_mdc$Demo_Chips$ToggleChip(index))),
+													_1: {
+														ctor: '::',
+														_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_aforemny$elm_mdc$Material_Options$when,
+																A2(_elm_lang$core$Set$member, index, model.selectedChips),
+																_aforemny$elm_mdc$Material_Chip$selected),
+															_1: {ctor: '[]'}
+														}
+													}
 												}
 											},
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html$text('Bob'),
+												_0: _elm_lang$html$Html$text(label),
 												_1: {ctor: '[]'}
-											}),
+											});
+									});
+								return _aforemny$elm_mdc$Material_Chip$chipset(
+									{
+										ctor: '::',
+										_0: A2(chip, 'chips-filter-chips-alice', 'Alice'),
 										_1: {
 											ctor: '::',
-											_0: A5(
-												_aforemny$elm_mdc$Material_Chip$view,
-												function (_p17) {
-													return lift(
-														_aforemny$elm_mdc$Demo_Chips$Mdc(_p17));
-												},
-												'chips-filter-chips-charlie',
-												model.mdc,
-												{
-													ctor: '::',
-													_0: _aforemny$elm_mdc$Material_Chip$ripple,
-													_1: {
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
-														_1: {ctor: '[]'}
-													}
-												},
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html$text('Charlie'),
-													_1: {ctor: '[]'}
-												}),
+											_0: A2(chip, 'chips-filter-chips-bob', 'Bob'),
 											_1: {
 												ctor: '::',
-												_0: A5(
-													_aforemny$elm_mdc$Material_Chip$view,
-													function (_p18) {
-														return lift(
-															_aforemny$elm_mdc$Demo_Chips$Mdc(_p18));
-													},
-													'chips-filter-chips-danielle',
-													model.mdc,
-													{
-														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Chip$ripple,
-														_1: {
-															ctor: '::',
-															_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
-															_1: {ctor: '[]'}
-														}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Danielle'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {ctor: '[]'}
+												_0: A2(chip, 'chips-filter-chips-charlie', 'Charlie'),
+												_1: {
+													ctor: '::',
+													_0: A2(chip, 'chips-filter-chips-danielle', 'Danielle'),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
-									}
-								}),
+									});
+							}(),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -23386,6 +23349,45 @@ var _aforemny$elm_mdc$Demo_Chips$filterChips = F2(
 	});
 var _aforemny$elm_mdc$Demo_Chips$actionChips = F2(
 	function (lift, model) {
+		var chip = F2(
+			function (index, _p10) {
+				var _p11 = _p10;
+				return A5(
+					_aforemny$elm_mdc$Material_Chip$view,
+					function (_p12) {
+						return lift(
+							_aforemny$elm_mdc$Demo_Chips$Mdc(_p12));
+					},
+					index,
+					model.mdc,
+					{
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Material_Chip$ripple,
+						_1: {
+							ctor: '::',
+							_0: _aforemny$elm_mdc$Material_Chip$onClick(
+								lift(
+									_aforemny$elm_mdc$Demo_Chips$ToggleChip(index))),
+							_1: {
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Material_Chip$leadingIcon(_p11._0),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_aforemny$elm_mdc$Material_Options$when,
+										A2(_elm_lang$core$Set$member, index, model.selectedChips),
+										_aforemny$elm_mdc$Material_Chip$selected),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p11._1),
+						_1: {ctor: '[]'}
+					});
+			});
 		return {
 			ctor: '::',
 			_0: A3(
@@ -23406,100 +23408,28 @@ var _aforemny$elm_mdc$Demo_Chips$actionChips = F2(
 				_0: _aforemny$elm_mdc$Material_Chip$chipset(
 					{
 						ctor: '::',
-						_0: A5(
-							_aforemny$elm_mdc$Material_Chip$view,
-							function (_p19) {
-								return lift(
-									_aforemny$elm_mdc$Demo_Chips$Mdc(_p19));
-							},
+						_0: A2(
+							chip,
 							'chips-action-chips-add-to-calendar',
-							model.mdc,
-							{
-								ctor: '::',
-								_0: _aforemny$elm_mdc$Material_Chip$ripple,
-								_1: {
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('event'),
-									_1: {ctor: '[]'}
-								}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Add to calendar'),
-								_1: {ctor: '[]'}
-							}),
+							{ctor: '_Tuple2', _0: 'event', _1: 'Add to calendar'}),
 						_1: {
 							ctor: '::',
-							_0: A5(
-								_aforemny$elm_mdc$Material_Chip$view,
-								function (_p20) {
-									return lift(
-										_aforemny$elm_mdc$Demo_Chips$Mdc(_p20));
-								},
+							_0: A2(
+								chip,
 								'chips-action-chips-bookmark',
-								model.mdc,
-								{
-									ctor: '::',
-									_0: _aforemny$elm_mdc$Material_Chip$ripple,
-									_1: {
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('bookmark'),
-										_1: {ctor: '[]'}
-									}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Bookmark'),
-									_1: {ctor: '[]'}
-								}),
+								{ctor: '_Tuple2', _0: 'bookmark', _1: 'Bookmark'}),
 							_1: {
 								ctor: '::',
-								_0: A5(
-									_aforemny$elm_mdc$Material_Chip$view,
-									function (_p21) {
-										return lift(
-											_aforemny$elm_mdc$Demo_Chips$Mdc(_p21));
-									},
+								_0: A2(
+									chip,
 									'chips-action-chips-set-alarm',
-									model.mdc,
-									{
-										ctor: '::',
-										_0: _aforemny$elm_mdc$Material_Chip$ripple,
-										_1: {
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('alarm'),
-											_1: {ctor: '[]'}
-										}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Set alarm'),
-										_1: {ctor: '[]'}
-									}),
+									{ctor: '_Tuple2', _0: 'alarm', _1: 'Set alarm'}),
 								_1: {
 									ctor: '::',
-									_0: A5(
-										_aforemny$elm_mdc$Material_Chip$view,
-										function (_p22) {
-											return lift(
-												_aforemny$elm_mdc$Demo_Chips$Mdc(_p22));
-										},
+									_0: A2(
+										chip,
 										'chips-action-chips-get-directions',
-										model.mdc,
-										{
-											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Chip$ripple,
-											_1: {
-												ctor: '::',
-												_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('directions'),
-												_1: {ctor: '[]'}
-											}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('Get directions'),
-											_1: {ctor: '[]'}
-										}),
+										{ctor: '_Tuple2', _0: 'directions', _1: 'Get directions'}),
 									_1: {ctor: '[]'}
 								}
 							}
