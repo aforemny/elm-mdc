@@ -11,6 +11,7 @@
         "Material.Button",
         "Material.Card",
         "Material.Checkbox",
+        "Material.Chip",
         "Material.Dialog",
         "Material.Drawer.Permanent",
         "Material.Drawer.Persistent",

@@ -117,6 +117,7 @@ chip lift model options nodes =
         , config.onClick
             |> Maybe.map (Options.onClick << lift << Click config.ripple)
             |> Maybe.withDefault Options.nop
+        , Options.attribute (Html.tabindex 0)
         ]
         []
         (List.concat
