@@ -11934,7 +11934,12 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$chip = F4(
 												A2(_aforemny$elm_mdc$Internal_Chip_Model$Click, config.ripple, _p4)));
 									},
 									config.onClick)),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _aforemny$elm_mdc$Internal_Options$attribute(
+									_elm_lang$html$Html_Attributes$tabindex(0)),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -23371,14 +23376,7 @@ var _aforemny$elm_mdc$Demo_Chips$actionChips = F2(
 							_1: {
 								ctor: '::',
 								_0: _aforemny$elm_mdc$Material_Chip$leadingIcon(_p11._0),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_aforemny$elm_mdc$Material_Options$when,
-										A2(_elm_lang$core$Set$member, index, model.selectedChips),
-										_aforemny$elm_mdc$Material_Chip$selected),
-									_1: {ctor: '[]'}
-								}
+								_1: {ctor: '[]'}
 							}
 						}
 					},
