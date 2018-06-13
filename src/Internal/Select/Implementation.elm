@@ -130,13 +130,15 @@ select lift model options items_ =
           , when config.disabled (Options.attribute (Html.disabled True))
           ]
           items
-    , styled Html.label
-        [ cs "mdc-floating-label"
-        , when (focused || isDirty || config.preselected)
-            (cs "mdc-floating-label--float-above")
-        ]
-        [ text config.label
-        ]
+    , if String.isEmpty config.label then
+          text ""
+      else
+          styled Html.label
+              [ cs "mdc-floating-label"
+              , when (focused || isDirty || config.preselected)
+                  (cs "mdc-floating-label--float-above")
+              ]
+              [ text config.label ]
     , styled Html.div
         [ cs "mdc-line-ripple"
         , when focused (cs "mdc-line-ripple--active")
