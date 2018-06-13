@@ -2,29 +2,35 @@ module Demo.Chips exposing (Model, Msg(Mdc), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
-import Html.Attributes as Html
 import Material
 import Material.Chip as Chip
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.Typography as Typography
+import Set exposing (Set)
 
 
 type alias Model m =
     { mdc : Material.Model m
-    , selectedIndex : Maybe Int
+    , selectedChips : Set Material.Index
     }
 
 
 defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
-    , selectedIndex = Nothing
+    , selectedChips =
+        Set.fromList
+            [ "chips-choice-medium"
+            , "chips-filter-chips-tops"
+            , "chips-filter-chips-bottoms"
+            , "chips-filter-chips-alice"
+            ]
     }
 
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ChipClick Int
+    | ToggleChip Material.Index
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -33,144 +39,169 @@ update lift msg model =
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
-        ChipClick index ->
-            ( { model | selectedIndex = Just index }, Cmd.none )
+        ToggleChip index ->
+            let
+                selectedChips =
+                    model.selectedChips
+                    |> if Set.member index model.selectedChips then
+                          Set.remove index
+                       else
+                          Set.insert index
+            in
+            ( { model | selectedChips = selectedChips }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    let
-        selected index =
-            Maybe.map
-                (\i ->
-                    if i == index then
-                        Chip.selected
-                    else
-                        Options.nop
-                )
-                model.selectedIndex
-                |> Maybe.withDefault Options.nop
-    in
     page.body "Chips"
         [ Page.hero []
-            [ Chip.view (lift << Mdc)
-                [ 0, 0 ]
-                model.mdc
-                [ Chip.ripple
-                , css "margin-right" "32px"
-                ]
-                [ text "Example"
-                ]
+            [ heroChips lift model
             ]
         , styled Html.div
             [ cs "demo-wrapper"
+            , css "padding" "48px"
             ]
-            [ styled Html.h1
-                [ Typography.display2
-                , css "padding-left" "36px"
-                , css "padding-top" "64px"
-                , css "padding-bottom" "8px"
+            ( List.concat
+                [ choiceChips lift model
+                , filterChips lift model
+                , actionChips lift model
                 ]
-                [ text "Choice Chips"
-                ]
-            , styled Html.div
-                [ css "padding" "0 24px 16px"
-                ]
-                [ Chip.chipset
-                    [ Chip.view (lift << Mdc)
-                        [ 0 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.onClick (lift <| ChipClick 0)
-                        , Options.attribute (Html.tabindex 0)
-                        , selected 0
-                        ]
-                        [ text "Extra Small" ]
-                    , Chip.view (lift << Mdc)
-                        [ 1 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.onClick (lift <| ChipClick 1)
-                        , Options.attribute (Html.tabindex 1)
-                        , selected 1
-                        ]
-                        [ text "Small" ]
-                    , Chip.view (lift << Mdc)
-                        [ 2 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.onClick (lift <| ChipClick 2)
-                        , Options.attribute (Html.tabindex 2)
-                        , selected 2
-                        ]
-                        [ text "Medium" ]
-                    , Chip.view (lift << Mdc)
-                        [ 3 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.onClick (lift <| ChipClick 3)
-                        , Options.attribute (Html.tabindex 3)
-                        , selected 3
-                        ]
-                        [ text "Large" ]
-                    , Chip.view (lift << Mdc)
-                        [ 4 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.onClick (lift <| ChipClick 4)
-                        , Options.attribute (Html.tabindex 4)
-                        , selected 4
-                        ]
-                        [ text "Extra Large" ]
-                    ]
-                , styled Html.div
-                    [ Typography.title
-                    , css "padding" "48px 16px 24px"
-                    ]
-                    [ text "With leading icon"
-                    ]
-                , Chip.chipset
-                    [ Chip.view (lift << Mdc)
-                        [ 5 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.attribute (Html.tabindex 5)
-                        , Chip.leadingIcon "event"
-                        ]
-                        [ text "Add to calendar" ]
-                    , Chip.view (lift << Mdc)
-                        [ 6 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.attribute (Html.tabindex 6)
-                        , Chip.leadingIcon "bookmark"
-                        ]
-                        [ text "Bookmark" ]
-                    ]
-                , styled Html.div
-                    [ Typography.title
-                    , css "padding" "48px 16px 24px"
-                    ]
-                    [ text "With trailing icon"
-                    ]
-                , Chip.chipset
-                    [ Chip.view (lift << Mdc)
-                        [ 7 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.attribute (Html.tabindex 7)
-                        , Chip.trailingIcon "cancel"
-                        ]
-                        [ text "Anna" ]
-                    , Chip.view (lift << Mdc)
-                        [ 8 ]
-                        model.mdc
-                        [ Chip.ripple
-                        , Options.attribute (Html.tabindex 8)
-                        , Chip.trailingIcon "cancel"
-                        ]
-                        [ text "Bob" ]
-                    ]
-                ]
-            ]
+            )
         ]
+
+
+heroChips : (Msg m -> m) -> Model m -> Html m
+heroChips lift model =
+    Chip.chipset
+      [ Chip.view (lift << Mdc) "chips-hero-one" model.mdc
+          [ Chip.ripple
+          ]
+          [ text "Chip One"
+          ]
+      , Chip.view (lift << Mdc) "chips-hero-two" model.mdc
+          [ Chip.ripple
+          ]
+          [ text "Chip Two"
+          ]
+      , Chip.view (lift << Mdc) "chips-hero-three" model.mdc
+          [ Chip.ripple
+          ]
+          [ text "Chip Three"
+          ]
+      , Chip.view (lift << Mdc) "chips-hero-four" model.mdc
+          [ Chip.ripple
+          ]
+          [ text "Chip Four"
+          ]
+      ]
+
+
+choiceChips : (Msg m -> m) -> Model m -> List (Html m)
+choiceChips lift model =
+    let
+        chip index label =
+            Chip.view (lift << Mdc)
+                index
+                model.mdc
+                [ Chip.ripple
+                , Chip.onClick (lift (ToggleChip index))
+                , when (Set.member index model.selectedChips) Chip.selected
+                ]
+                [ text label
+                ]
+    in
+    [ styled Html.h2
+        [ Typography.subheading1
+        ]
+        [ text "Choice Chips"
+        ]
+    , Chip.chipset
+        [ chip "chips-choice-extra-small" "Extra Small"
+        , chip "chips-choice-small" "Small"
+        , chip "chips-choice-medium" "Medium"
+        , chip "chips-choice-large" "Large"
+        , chip "chips-choice-extra-large" "Extra Large"
+        ]
+    ]
+
+
+filterChips : (Msg m -> m) -> Model m -> List (Html m)
+filterChips lift model =
+    [ styled Html.h2
+        [ Typography.subheading1
+        ]
+        [ text "Filter Chips"
+        ]
+    , styled Html.h3
+        [ Typography.body2 ]
+        [ text "No leading icon" ]
+    ,
+      let
+          chip index label =
+              Chip.view (lift << Mdc)
+                  index
+                  model.mdc
+                  [ Chip.ripple
+                  , Chip.onClick (lift (ToggleChip index))
+                  , when (Set.member index model.selectedChips) Chip.selected
+                  ]
+                  [ text label
+                  ]
+      in
+      Chip.chipset
+        [ chip "chips-filter-chips-tops" "Tops"
+        , chip "chips-filter-chips-bottoms" "Bottoms"
+        , chip "chips-filter-chips-shoes" "Shoes"
+        , chip "chips-filter-chips-accessories" "Accessories"
+        ]
+    , styled Html.h3
+        [ Typography.body2 ]
+        [ text "With leading icon" ]
+    , let
+          chip index label =
+              Chip.view (lift << Mdc)
+                  index
+                  model.mdc
+                  [ Chip.ripple
+                  , Chip.onClick (lift (ToggleChip index))
+                  , Chip.leadingIcon "face"
+                  , when (Set.member index model.selectedChips) Chip.selected
+                  ]
+                  [ text label
+                  ]
+      in
+      Chip.chipset
+        [ chip "chips-filter-chips-alice" "Alice"
+        , chip "chips-filter-chips-bob" "Bob"
+        , chip "chips-filter-chips-charlie" "Charlie"
+        , chip "chips-filter-chips-danielle" "Danielle"
+        ]
+    ]
+
+
+actionChips : (Msg m -> m) -> Model m -> List (Html m)
+actionChips lift model =
+    let
+        chip index ( leadingIcon, label ) =
+            Chip.view (lift << Mdc)
+                index
+                model.mdc
+                [ Chip.ripple
+                , Chip.onClick (lift (ToggleChip index))
+                , Chip.leadingIcon leadingIcon
+                ]
+                [ text label
+                ]
+    in
+    [ styled Html.h2
+        [ Typography.subheading1
+        ]
+        [ text "Action Chips"
+        ]
+    , Chip.chipset
+        [ chip "chips-action-chips-add-to-calendar" ( "event", "Add to calendar" )
+        , chip "chips-action-chips-bookmark" ( "bookmark", "Bookmark" )
+        , chip "chips-action-chips-set-alarm" ( "alarm", "Set alarm" )
+        , chip "chips-action-chips-get-directions" ( "directions", "Get directions" )
+        ]
+      ]
