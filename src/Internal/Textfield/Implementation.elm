@@ -231,8 +231,8 @@ update lift msg model =
 
 
 
-textField : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-textField lift model options _ =
+textField : (Msg -> m) -> Index -> Model -> List (Property m) -> List (Html m) -> Html m
+textField lift index model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -284,6 +284,7 @@ textField lift model options _ =
                 [
                   cs "mdc-text-field__input"
                 , css "outline" "none"
+                , Options.attribute (Html.id index)
                 , if config.outlined then
                       Options.on "focus" (Json.map (lift << Focus) decodeGeometry)
                   else
@@ -523,7 +524,7 @@ view
     -> List (Html m)
     -> Html m       
 view =
-    Component.render get textField Internal.Msg.TextfieldMsg
+    Component.render2 get textField Internal.Msg.TextfieldMsg
 
 
 decodeGeometry : Decoder Geometry

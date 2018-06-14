@@ -87,11 +87,12 @@ box =
 
 select
     : (Msg m -> m)
+    -> Index
     -> Model
     -> List (Property m)
     -> List (Html m)
     -> Html m
-select lift model options items_ =
+select lift index model options items_ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -128,6 +129,7 @@ select lift model options items_ =
           , Options.onBlur (lift Blur)
           , Options.onChange (lift << Change)
           , when config.disabled (Options.attribute (Html.disabled True))
+          , Options.attribute (Html.id index)
           ]
           items
     , styled Html.label
@@ -186,4 +188,4 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get select Internal.Msg.SelectMsg
+    Component.render2 get select Internal.Msg.SelectMsg

@@ -3,6 +3,7 @@ module Internal.Component exposing
     , Indexed
     , indexed
     , render
+    , render2
     , subs
     , react
     , generalise
@@ -51,6 +52,20 @@ render :
 render get_model view ctor =
     \ lift idx store options ->
         view (lift << ctor idx) (get_model idx store) (Options.dispatch lift :: options)
+
+
+render2 :
+    (Index -> store -> model)
+    -> ((msg -> m) -> Index -> model -> List (Property c m) -> a)
+    -> (Index -> msg -> Msg m)
+    -> (Msg m -> m)
+    -> Index
+    -> store
+    -> List (Property c m)
+    -> a
+render2 get_model view ctor =
+    \ lift idx store options ->
+        view (lift << ctor idx) idx (get_model idx store) (Options.dispatch lift :: options)
 
 
 type alias Update msg m model =
