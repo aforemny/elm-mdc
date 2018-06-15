@@ -106,8 +106,8 @@ onClick onClick =
     Options.option (\options -> { options | onClick = Just onClick })
 
 
-button : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-button lift model options nodes =
+button : (Msg m -> m) -> Index -> Model -> List (Property m) -> List (Html m) -> Html m
+button lift index model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -121,6 +121,7 @@ button lift model options nodes =
             , cs "mdc-js-button"
             , cs "mdc-js-ripple-effect" |> when summary.config.ripple
             , css "box-sizing" "border-box"
+            , Options.attribute (Html.id index)
             , Options.attribute (Html.href (Maybe.withDefault "" config.link) )
                 |> when ((config.link /= Nothing) && not config.disabled)
             , Options.attribute (Html.disabled True)
@@ -169,7 +170,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get button Internal.Msg.ButtonMsg
+    Component.render2 get button Internal.Msg.ButtonMsg
 
 
 react :
