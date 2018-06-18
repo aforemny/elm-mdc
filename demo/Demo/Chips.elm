@@ -43,10 +43,11 @@ update lift msg model =
             let
                 selectedChips =
                     model.selectedChips
-                    |> if Set.member index model.selectedChips then
-                          Set.remove index
-                       else
-                          Set.insert index
+                        |> (if Set.member index model.selectedChips then
+                                Set.remove index
+                            else
+                                Set.insert index
+                           )
             in
             ( { model | selectedChips = selectedChips }, Cmd.none )
 
@@ -61,7 +62,7 @@ view lift page model =
             [ cs "demo-wrapper"
             , css "padding" "48px"
             ]
-            ( List.concat
+            (List.concat
                 [ choiceChips lift model
                 , filterChips lift model
                 , actionChips lift model
@@ -73,27 +74,35 @@ view lift page model =
 heroChips : (Msg m -> m) -> Model m -> Html m
 heroChips lift model =
     Chip.chipset
-      [ Chip.view (lift << Mdc) "chips-hero-one" model.mdc
-          [ Chip.ripple
-          ]
-          [ text "Chip One"
-          ]
-      , Chip.view (lift << Mdc) "chips-hero-two" model.mdc
-          [ Chip.ripple
-          ]
-          [ text "Chip Two"
-          ]
-      , Chip.view (lift << Mdc) "chips-hero-three" model.mdc
-          [ Chip.ripple
-          ]
-          [ text "Chip Three"
-          ]
-      , Chip.view (lift << Mdc) "chips-hero-four" model.mdc
-          [ Chip.ripple
-          ]
-          [ text "Chip Four"
-          ]
-      ]
+        [ Chip.view (lift << Mdc)
+            "chips-hero-one"
+            model.mdc
+            [ Chip.ripple
+            ]
+            [ text "Chip One"
+            ]
+        , Chip.view (lift << Mdc)
+            "chips-hero-two"
+            model.mdc
+            [ Chip.ripple
+            ]
+            [ text "Chip Two"
+            ]
+        , Chip.view (lift << Mdc)
+            "chips-hero-three"
+            model.mdc
+            [ Chip.ripple
+            ]
+            [ text "Chip Three"
+            ]
+        , Chip.view (lift << Mdc)
+            "chips-hero-four"
+            model.mdc
+            [ Chip.ripple
+            ]
+            [ text "Chip Four"
+            ]
+        ]
 
 
 choiceChips : (Msg m -> m) -> Model m -> List (Html m)
@@ -135,18 +144,17 @@ filterChips lift model =
     , styled Html.h3
         [ Typography.body2 ]
         [ text "No leading icon" ]
-    ,
-      let
-          chip index label =
-              Chip.view (lift << Mdc)
-                  index
-                  model.mdc
-                  [ Chip.ripple
-                  , Chip.onClick (lift (ToggleChip index))
-                  , when (Set.member index model.selectedChips) Chip.selected
-                  ]
-                  [ text label
-                  ]
+    , let
+        chip index label =
+            Chip.view (lift << Mdc)
+                index
+                model.mdc
+                [ Chip.ripple
+                , Chip.onClick (lift (ToggleChip index))
+                , when (Set.member index model.selectedChips) Chip.selected
+                ]
+                [ text label
+                ]
       in
       Chip.chipset
         [ chip "chips-filter-chips-tops" "Tops"
@@ -158,17 +166,18 @@ filterChips lift model =
         [ Typography.body2 ]
         [ text "With leading icon" ]
     , let
-          chip index label =
-              Chip.view (lift << Mdc)
-                  index
-                  model.mdc
-                  [ Chip.ripple
-                  , Chip.onClick (lift (ToggleChip index))
-                  , Chip.leadingIcon "face"
-                  , when (Set.member index model.selectedChips) Chip.selected
-                  ]
-                  [ text label
-                  ]
+        chip index label =
+            Chip.view (lift << Mdc)
+                index
+                model.mdc
+                [ Chip.ripple
+                , Chip.onClick (lift (ToggleChip index))
+                , Chip.leadingIcon "face"
+                , Chip.withCheckmark True
+                , when (Set.member index model.selectedChips) Chip.selected
+                ]
+                [ text label
+                ]
       in
       Chip.chipset
         [ chip "chips-filter-chips-alice" "Alice"
@@ -204,4 +213,4 @@ actionChips lift model =
         , chip "chips-action-chips-set-alarm" ( "alarm", "Set alarm" )
         , chip "chips-action-chips-get-directions" ( "directions", "Get directions" )
         ]
-      ]
+    ]

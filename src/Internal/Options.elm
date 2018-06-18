@@ -1,7 +1,6 @@
 module Internal.Options
     exposing
-        ( Property
-        , addAttributes
+        ( addAttributes
         , apply
         , applyNativeControl
         , aria
@@ -33,6 +32,7 @@ module Internal.Options
         , onSubmit
         , onWithOptions
         , option
+        , Property
         , recollect
         , role
         , styled

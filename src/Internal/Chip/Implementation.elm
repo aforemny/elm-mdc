@@ -9,17 +9,22 @@ module Internal.Chip.Implementation
         , selected
         , trailingIcon
         , view
+        , withCheckmark
         )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
-import Internal.Chip.Model exposing (Model, Msg(..), defaultModel)
+import Html.Events as Html
+import Internal.Chip.Model exposing (Key, KeyCode, Model, Msg(..), defaultModel)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Helpers as Helpers
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
+import Json.Decode as Json exposing (Decoder)
+import Svg exposing (path)
+import Svg.Attributes as Svg
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
@@ -49,6 +54,7 @@ type alias Config m =
     , leadingIcon : Maybe String
     , trailingIcon : Maybe String
     , onClick : Maybe m
+    , withCheckmark : Bool
     }
 
 
@@ -58,6 +64,7 @@ defaultConfig =
     , leadingIcon = Nothing
     , trailingIcon = Nothing
     , onClick = Nothing
+    , withCheckmark = False
     }
 
 
@@ -80,19 +87,51 @@ selected =
     cs "mdc-chip--selected"
 
 
+withCheckmark : Bool -> Property m
+withCheckmark value =
+    Options.option (\config -> { config | withCheckmark = value })
+
+
 ripple : Property m
 ripple =
     Options.option (\options -> { options | ripple = True })
 
 
 onClick : m -> Property m
-onClick onClick =
-    Options.option (\options -> { options | onClick = Just onClick })
+onClick msg =
+    let
+        trigger key keyCode =
+            let
+                isEnter =
+                    key == "Enter" || keyCode == 13
+            in
+            if isEnter then
+                Json.succeed msg
+            else
+                Json.fail ""
+    in
+    Options.many
+        [ Options.onClick msg
+        , Options.on "keyup"
+            (Json.map2 trigger decodeKey decodeKeyCode
+                |> Json.andThen identity
+            )
+        ]
+
+
+decodeKey : Decoder Key
+decodeKey =
+    Json.at [ "key" ] Json.string
+
+
+decodeKeyCode : Decoder KeyCode
+decodeKeyCode =
+    Html.keyCode
 
 
 chipset : List (Html m) -> Html m
 chipset nodes =
-    styled Html.div [ cs "mdc-chip-set" ] nodes
+    styled Html.div [ cs "mdc-chip-set mdc-chip-set--filter" ] nodes
 
 
 chip : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -103,6 +142,9 @@ chip lift model options nodes =
 
         ripple =
             Ripple.view False (lift << RippleMsg) model.ripple []
+
+        hasSelection =
+            List.member selected options
     in
     Options.apply summary
         Html.div
@@ -125,11 +167,36 @@ chip lift model options nodes =
                 |> Maybe.map
                     (\icon ->
                         [ Icon.view
-                            [ cs "mdc-chip__icon mdc-chip__icon--leading" ]
+                            [ cs "mdc-chip__icon mdc-chip__icon--leading"
+                            , when (config.withCheckmark && hasSelection) <|
+                                cs "mdc-chip__icon--leading-hidden"
+
+                            -- Make icon size fixed during animation
+                            , css "font-size" "20px"
+                            ]
                             icon
                         ]
                     )
                 |> Maybe.withDefault []
+            , [ if config.withCheckmark then
+                    styled Html.div
+                        [ cs "mdc-chip__checkmark" ]
+                        [ Svg.svg
+                            [ Svg.class "mdc-chip__checkmark-svg"
+                            , Svg.viewBox "-2 -3 30 30"
+                            ]
+                            [ path
+                                [ Svg.class "mdc-chip__checkmark-path"
+                                , Svg.fill "none"
+                                , Svg.stroke "white"
+                                , Svg.d "M1.73,12.91 8.1,19.28 22.79,4.59"
+                                ]
+                                []
+                            ]
+                        ]
+                else
+                    text ""
+              ]
             , [ styled Html.div [ cs "mdc-chip__text" ] nodes ]
             , config.trailingIcon
                 |> Maybe.map
