@@ -6,6 +6,7 @@ module Material.Slider exposing
     , onChange
     , onInput
     , Property
+    , step
     , steps
     , trackMarkers
     , value
@@ -50,6 +51,7 @@ Slider.view Mdc [0] model.mdc
 @docs value, min, max
 @docs disabled
 @docs onChange, onInput
+@docs step
 
 ## Discrete Slider
 
@@ -144,12 +146,19 @@ Defaults to 1.
 
 This value cannot be changed dynamically.
 -}
+step : Float -> Property m
+step =
+    Slider.step
+
+
+{-| Obsolete alias for step.
+-}
 steps : Float -> Property m
 steps =
-    Slider.steps
+    step
 
 
-{-| Add track markers to the Slider every `step`.
+{-| Discrete sliders support display markers on their tracks. A marker is displayed every `step`.
 -}
 trackMarkers : Property m
 trackMarkers =
