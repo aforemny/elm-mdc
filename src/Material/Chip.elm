@@ -8,32 +8,32 @@ module Material.Chip
         , selected
         , trailingIcon
         , view
+        , withCheckmark
         )
 
 {-| The Chip component is a spec-aligned chip component adhering to the
 Material Design chip requirements.
 
+
 # Resources
 
-- [Chips - Internal.Components for the Web](https://material.io/develop/web/components/chips/)
-- [Material Design guidelines: Chips](https://material.io/guidelines/components/chips.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#chips)
+  - [Chips - Internal.Components for the Web](https://material.io/develop/web/components/chips/)
+  - [Material Design guidelines: Chips](https://material.io/guidelines/components/chips.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#chips)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.Chip as Chip
-import Material.Options as Options
+    import Html exposing (text)
+    import Material.Chip as Chip
+    import Material.Options as Options
 
-Chip.view Mdc "my-chip" model.mdc
-    [ Chip.ripple
-    , Chip.onClick Click
-    ]
-    [ text "Chip"
-    ]
-```
+    Chip.view Mdc "my-chip" model.mdc
+        [ Chip.ripple
+        , Chip.onClick Click
+        ]
+        [ text "Chip"
+        ]
 
 
 # Usage
@@ -45,9 +45,11 @@ Chip.view Mdc "my-chip" model.mdc
 
 @docs leadingIcon
 @docs trailingIcon
+@docs withCheckmark
 @docs selected
 @docs ripple
 @docs onClick
+
 -}
 
 import Html exposing (Html)
@@ -94,6 +96,13 @@ trailingIcon =
 selected : Property m
 selected =
     Chip.selected
+
+
+{-| Give the chip a check mark
+-}
+withCheckmark : Bool -> Property m
+withCheckmark =
+    Chip.withCheckmark
 
 
 {-| Enable ripple ink effect for the chip.
