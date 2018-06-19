@@ -9970,6 +9970,10 @@ var _aforemny$elm_mdc$Internal_Options$aria = F2(
 				A2(_elm_lang$core$Basics_ops['++'], 'aria-', key),
 				val));
 	});
+var _aforemny$elm_mdc$Internal_Options$autocomplete = function (autocomplete) {
+	return _aforemny$elm_mdc$Internal_Options$Attribute(
+		A2(_elm_lang$html$Html_Attributes$attribute, 'autocomplete', autocomplete));
+};
 var _aforemny$elm_mdc$Internal_Options$role = function (role) {
 	return _aforemny$elm_mdc$Internal_Options$Attribute(
 		A2(_elm_lang$html$Html_Attributes$attribute, 'role', role));
@@ -20175,44 +20179,12 @@ var _aforemny$elm_mdc$Material$top = function (content) {
 							_0: _elm_lang$html$Html_Attributes$type_('text/javascript'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/elm-global-events.js'),
+								_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/elm-mdc.js'),
 								_1: {ctor: '[]'}
 							}
 						},
 						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A3(
-							_elm_lang$html$Html$node,
-							'script',
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$type_('text/javascript'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/elm-focus-trap.js'),
-									_1: {ctor: '[]'}
-								}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A3(
-								_elm_lang$html$Html$node,
-								'script',
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('text/javascript'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$src('https://aforemny.github.io/elm-mdc/elm-mdc.js'),
-										_1: {ctor: '[]'}
-									}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						}
-					}
+					_1: {ctor: '[]'}
 				}
 			}
 		});
@@ -37159,6 +37131,11 @@ var _aforemny$elm_mdc$Material_Snackbar$Contents = F8(
 	});
 
 var _aforemny$elm_mdc$Material_Textfield$nativeControl = _aforemny$elm_mdc$Internal_Textfield_Implementation$nativeControl;
+var _aforemny$elm_mdc$Material_Textfield$autocomplete = function (_p0) {
+	return _aforemny$elm_mdc$Material_Textfield$nativeControl(
+		_elm_lang$core$List$singleton(
+			_aforemny$elm_mdc$Internal_Options$autocomplete(_p0)));
+};
 var _aforemny$elm_mdc$Material_Textfield$placeholder = _aforemny$elm_mdc$Internal_Textfield_Implementation$placeholder;
 var _aforemny$elm_mdc$Material_Textfield$textarea = _aforemny$elm_mdc$Internal_Textfield_Implementation$textarea;
 var _aforemny$elm_mdc$Material_Textfield$invalid = _aforemny$elm_mdc$Internal_Textfield_Implementation$invalid;
