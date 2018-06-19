@@ -9970,6 +9970,10 @@ var _aforemny$elm_mdc$Internal_Options$aria = F2(
 				A2(_elm_lang$core$Basics_ops['++'], 'aria-', key),
 				val));
 	});
+var _aforemny$elm_mdc$Internal_Options$role = function (role) {
+	return _aforemny$elm_mdc$Internal_Options$Attribute(
+		A2(_elm_lang$html$Html_Attributes$attribute, 'role', role));
+};
 var _aforemny$elm_mdc$Internal_Options$attribute = function (_p5) {
 	return _aforemny$elm_mdc$Internal_Options$Attribute(
 		A2(_elm_lang$html$Html_Attributes$map, _elm_lang$core$Basics$never, _p5));
@@ -12004,8 +12008,7 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$chip = F4(
 															_elm_lang$html$Html_Attributes$tabindex(0)),
 														_1: {
 															ctor: '::',
-															_0: _aforemny$elm_mdc$Internal_Options$attribute(
-																A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'button')),
+															_0: _aforemny$elm_mdc$Internal_Options$role('button'),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -12535,8 +12538,7 @@ var _aforemny$elm_mdc$Internal_List_Implementation$divider = function (options) 
 			_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-list-divider'),
 			_1: {
 				ctor: '::',
-				_0: _aforemny$elm_mdc$Internal_Options$attribute(
-					A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'separator')),
+				_0: _aforemny$elm_mdc$Internal_Options$role('separator'),
 				_1: {ctor: '[]'}
 			}
 		},
@@ -14857,17 +14859,17 @@ var _aforemny$elm_mdc$Internal_Select_Implementation$select = F4(
 						_aforemny$elm_mdc$Internal_Options$when,
 						config.disabled,
 						_aforemny$elm_mdc$Internal_Options$cs('mdc-select--disabled')),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _aforemny$elm_mdc$Internal_Options$role('listbox'),
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{
 				ctor: '::',
-				_0: A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'listbox'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$tabindex(0),
-					_1: {ctor: '[]'}
-				}
+				_0: _elm_lang$html$Html_Attributes$tabindex(0),
+				_1: {ctor: '[]'}
 			},
 			{
 				ctor: '::',
@@ -15544,8 +15546,7 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$slider = F4(
 																	_elm_lang$core$Basics$toString(config.step)),
 																_1: {
 																	ctor: '::',
-																	_0: _aforemny$elm_mdc$Internal_Options$attribute(
-																		A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'slider')),
+																	_0: _aforemny$elm_mdc$Internal_Options$role('slider'),
 																	_1: {
 																		ctor: '::',
 																		_0: A2(
