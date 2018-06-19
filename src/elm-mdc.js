@@ -102,54 +102,6 @@ import CustomEvent from 'custom-event';
     }
   }
 
-  // custom event "globalload":
-  window.addEventListener("load", (originalEvent) => {
-    dispatch(document, "globalload", (target, event) => {
-      return event
-    })
-  });
-
-  (() => {
-    new MutationObserver((mutations) => {
-      for (let i = 0; i < mutations.length; i++) {
-        if (mutations[i].type !== "childList") {
-          continue
-        }
-        let mutation = mutations[i]
-        let nodes = mutation.addedNodes
-        for (let j = 0; j < nodes.length; j++) {
-          let node = nodes[j]
-          if (!node.dataset) {
-            continue
-          }
-          if (typeof node.dataset.globalload !== "undefined") {
-            let event = new CustomEvent("globalload")
-            node.dispatchEvent(event)
-          }
-          if (!(node.querySelector)) {
-            continue
-          }
-          dispatch(node, "globalload", (target, event) => {
-            return event
-          })
-        }
-      }
-    }).observe(document.body, {
-      childList: true,
-      subtree: true
-    })
-  })()
-  
-
-  // custom event "globalload1"
-  window.addEventListener("load", (originalEvent) => {
-    window.requestAnimationFrame(() => {
-      dispatch(document, "globalload1", (target, event) => {
-        return event
-      })
-    })
-  });
-
   // custom event "globaltick"
   (() => {
     new MutationObserver((mutations) => {
