@@ -411,7 +411,6 @@ adds the necessary CSS and JavaScript imports.
 
 For production use, you will want to do this yourself in `index.html` to
 prevent an unstyled flash of content and to properly manage assets.
-
 -}
 top : Html a -> Html a
 top content =
@@ -433,16 +432,6 @@ top content =
                 |> String.join "\n"
                 |> text
             ]
-        , Html.node "script"
-            [ Html.type_ "text/javascript"
-            , Html.src "https://aforemny.github.io/elm-mdc/elm-global-events.js"
-            ]
-            []
-        , Html.node "script"
-            [ Html.type_ "text/javascript"
-            , Html.src "https://aforemny.github.io/elm-mdc/elm-focus-trap.js"
-            ]
-            []
         , Html.node "script"
             [ Html.type_ "text/javascript"
             , Html.src "https://aforemny.github.io/elm-mdc/elm-mdc.js"
