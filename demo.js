@@ -14405,7 +14405,7 @@ var _aforemny$elm_mdc$Internal_Menu_Implementation$update = F3(
 								{
 									geometry: _elm_lang$core$Maybe$Just(_p46._1),
 									quickOpen: _elm_lang$core$Maybe$Just(_p46._0.quickOpen),
-									focusedItemAtIndex: A2(_elm_lang$core$Debug$log, 'index', _p46._0.index)
+									focusedItemAtIndex: _p46._0.index
 								})),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
