@@ -1,32 +1,8 @@
 import createFocusTrap from 'focus-trap';
 import CustomEvent from 'custom-event';
 
-// attribute "data-autofocus":
-(() => {
-  new MutationObserver((mutations) => {
-    for (let i = 0; i < mutations.length; i++) {
-      if (mutations[i].type !== "attributes") {
-        continue
-      }
-      let mutation = mutations[i]
-      let node = mutation.target
-      if (!node.dataset) {
-        continue
-      }
-      if (typeof node.dataset.autofocus !== "undefined") {
-        node.focus()
-      }
-    }
-  }).observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: [ "data-autofocus" ]
-  })
-})();
 
-
-// attribute "data-autofocus":
+// attribute "data-focustrap":
 (() => {
   if (window["ElmFocusTrap"]) return
 
