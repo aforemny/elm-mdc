@@ -8493,7 +8493,7 @@ var _aforemny$elm_mdc$Internal_Slider_Model$defaultGeometry = {
 	discrete: false,
 	min: 0,
 	max: 100,
-	steps: _elm_lang$core$Maybe$Nothing
+	step: _elm_lang$core$Maybe$Nothing
 };
 var _aforemny$elm_mdc$Internal_Slider_Model$defaultModel = {focus: false, active: false, geometry: _elm_lang$core$Maybe$Nothing, activeValue: _elm_lang$core$Maybe$Nothing, inTransit: false, preventFocus: false};
 var _aforemny$elm_mdc$Internal_Slider_Model$Model = F6(
@@ -8502,7 +8502,7 @@ var _aforemny$elm_mdc$Internal_Slider_Model$Model = F6(
 	});
 var _aforemny$elm_mdc$Internal_Slider_Model$Geometry = F5(
 	function (a, b, c, d, e) {
-		return {rect: a, discrete: b, steps: c, min: d, max: e};
+		return {rect: a, discrete: b, step: c, min: d, max: e};
 	});
 var _aforemny$elm_mdc$Internal_Slider_Model$Rect = F2(
 	function (a, b) {
@@ -15016,13 +15016,13 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$trackMarkers = _aforemny$el
 			config,
 			{trackMarkers: true});
 	});
-var _aforemny$elm_mdc$Internal_Slider_Implementation$steps = function (_p0) {
+var _aforemny$elm_mdc$Internal_Slider_Implementation$step = function (_p0) {
 	return _aforemny$elm_mdc$Internal_Options$option(
 		F2(
-			function (steps, config) {
+			function (step, config) {
 				return _elm_lang$core$Native_Utils.update(
 					config,
-					{steps: steps});
+					{step: step});
 			})(_p0));
 };
 var _aforemny$elm_mdc$Internal_Slider_Implementation$onInput = function (_p1) {
@@ -15104,13 +15104,13 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$decodeGeometry = function (
 			A7(
 				_elm_lang$core$Json_Decode$map6,
 				F6(
-					function (offsetWidth, offsetLeft, discrete, min, max, steps) {
+					function (offsetWidth, offsetLeft, discrete, min, max, step) {
 						return {
 							rect: {width: offsetWidth, left: offsetLeft},
 							discrete: discrete,
 							min: min,
 							max: max,
-							steps: steps
+							step: step
 						};
 					}),
 				_debois$elm_dom$DOM$offsetWidth,
@@ -15145,12 +15145,12 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$decodeGeometry = function (
 						ctor: '::',
 						_0: A2(
 							_aforemny$elm_mdc$Internal_Slider_Implementation$data,
-							'steps',
+							'step',
 							A2(
 								_elm_lang$core$Json_Decode$map,
 								function (_p6) {
 									return _elm_lang$core$Result$toMaybe(
-										_elm_lang$core$String$toInt(_p6));
+										_elm_lang$core$String$toFloat(_p6));
 								},
 								_elm_lang$core$Json_Decode$string)),
 						_1: {
@@ -15221,20 +15221,19 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$discretize = F2(
 		var steps = function (steps) {
 			return _elm_lang$core$Native_Utils.eq(steps, 0) ? 1 : steps;
 		}(
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				1,
-				A2(_elm_lang$core$Maybe$map, _elm_lang$core$Basics$toFloat, geometry.steps)));
+			A2(_elm_lang$core$Maybe$withDefault, 1, geometry.step));
 		var _p7 = geometry;
 		var discrete = _p7.discrete;
+		var step = _p7.step;
 		var min = _p7.min;
 		var max = _p7.max;
+		var continuous = !discrete;
 		return A3(
 			_elm_lang$core$Basics$clamp,
 			min,
 			max,
 			function () {
-				if (!discrete) {
+				if (continuous) {
 					return continuousValue;
 				} else {
 					var numSteps = _elm_lang$core$Basics$round(continuousValue / steps);
@@ -15305,7 +15304,7 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$value = function (_p11) {
 					{value: value});
 			})(_p11));
 };
-var _aforemny$elm_mdc$Internal_Slider_Implementation$defaultConfig = {value: 0, min: 0, max: 100, steps: 1, discrete: false, onInput: _elm_lang$core$Maybe$Nothing, onChange: _elm_lang$core$Maybe$Nothing, trackMarkers: false};
+var _aforemny$elm_mdc$Internal_Slider_Implementation$defaultConfig = {value: 0, min: 0, max: 100, step: 1, discrete: false, onInput: _elm_lang$core$Maybe$Nothing, onChange: _elm_lang$core$Maybe$Nothing, trackMarkers: false};
 var _aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey = F4(
 	function (key, keyCode, geometry, value) {
 		var pageFactor = 4;
@@ -15336,17 +15335,14 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey = F4(
 		var _p12 = geometry;
 		var max = _p12.max;
 		var min = _p12.min;
-		var steps = _p12.steps;
+		var step = _p12.step;
 		var discrete = _p12.discrete;
 		var isRtl = false;
 		var delta = ((isRtl && (isArrowLeft || isArrowRight)) ? F2(
 			function (x, y) {
 				return x * y;
 			})(-1) : _elm_lang$core$Basics$identity)(
-			discrete ? A2(
-				_elm_lang$core$Maybe$withDefault,
-				1,
-				A2(_elm_lang$core$Maybe$map, _elm_lang$core$Basics$toFloat, steps)) : ((max - min) / 100));
+			discrete ? A2(_elm_lang$core$Maybe$withDefault, 1, step) : ((max - min) / 100));
 		return A2(
 			_elm_lang$core$Maybe$map,
 			A2(_elm_lang$core$Basics$clamp, min, max),
@@ -15415,6 +15411,14 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$slider = F4(
 			return c * geometry.rect.width;
 		}();
 		var trackScale = _elm_lang$core$Native_Utils.eq(config.max - config.min, 0) ? 0 : ((value - config.min) / (config.max - config.min));
+		var stepChanged = !_elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$Maybe$Just(config.step),
+			A2(
+				_elm_lang$core$Maybe$andThen,
+				function (_) {
+					return _.step;
+				},
+				model.geometry));
 		return A3(
 			_aforemny$elm_mdc$Internal_Options$styled,
 			_elm_lang$html$Html$div,
@@ -15535,363 +15539,261 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$slider = F4(
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_aforemny$elm_mdc$Internal_Options$when,
-																	config.discrete,
-																	A2(
-																		_aforemny$elm_mdc$Internal_Options$data,
-																		'steps',
-																		_elm_lang$core$Basics$toString(config.steps))),
+																	_aforemny$elm_mdc$Internal_Options$data,
+																	'step',
+																	_elm_lang$core$Basics$toString(config.step)),
 																_1: {
 																	ctor: '::',
-																	_0: A2(
-																		_aforemny$elm_mdc$Internal_Options$when,
-																		_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing),
-																		_aforemny$elm_mdc$Internal_GlobalEvents$onTick(
-																			A2(
-																				_elm_lang$core$Json_Decode$map,
-																				function (_p16) {
-																					return lift(
-																						_aforemny$elm_mdc$Internal_Slider_Model$Init(_p16));
-																				},
-																				_aforemny$elm_mdc$Internal_Slider_Implementation$decodeGeometry))),
+																	_0: _aforemny$elm_mdc$Internal_Options$attribute(
+																		A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'slider')),
 																	_1: {
 																		ctor: '::',
-																		_0: _aforemny$elm_mdc$Internal_GlobalEvents$onResize(
-																			A2(
-																				_elm_lang$core$Json_Decode$map,
-																				function (_p17) {
-																					return lift(
-																						_aforemny$elm_mdc$Internal_Slider_Model$Resize(_p17));
-																				},
-																				_aforemny$elm_mdc$Internal_Slider_Implementation$decodeGeometry)),
+																		_0: A2(
+																			_aforemny$elm_mdc$Internal_Options$aria,
+																			'valuemin',
+																			_elm_lang$core$Basics$toString(config.min)),
 																		_1: {
 																			ctor: '::',
 																			_0: A2(
-																				_aforemny$elm_mdc$Internal_Options$on,
-																				'keydown',
-																				A2(
-																					_elm_lang$core$Json_Decode$map,
-																					lift,
-																					A3(
-																						_elm_lang$core$Json_Decode$map2,
-																						F2(
-																							function (key, keyCode) {
-																								var activeValue = A4(_aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey, key, keyCode, geometry, config.value);
-																								return (!_elm_lang$core$Native_Utils.eq(activeValue, _elm_lang$core$Maybe$Nothing)) ? _aforemny$elm_mdc$Internal_Slider_Model$KeyDown : _aforemny$elm_mdc$Internal_Slider_Model$NoOp;
-																							}),
-																						_elm_lang$core$Json_Decode$oneOf(
-																							{
-																								ctor: '::',
-																								_0: A2(
-																									_elm_lang$core$Json_Decode$map,
-																									_elm_lang$core$Maybe$Just,
-																									A2(
-																										_elm_lang$core$Json_Decode$at,
-																										{
-																											ctor: '::',
-																											_0: 'key',
-																											_1: {ctor: '[]'}
-																										},
-																										_elm_lang$core$Json_Decode$string)),
-																								_1: {
-																									ctor: '::',
-																									_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
-																									_1: {ctor: '[]'}
-																								}
-																							}),
-																						A2(
-																							_elm_lang$core$Json_Decode$at,
-																							{
-																								ctor: '::',
-																								_0: 'keyCode',
-																								_1: {ctor: '[]'}
-																							},
-																							_elm_lang$core$Json_Decode$int)))),
+																				_aforemny$elm_mdc$Internal_Options$aria,
+																				'valuemax',
+																				_elm_lang$core$Basics$toString(config.min)),
 																			_1: {
 																				ctor: '::',
 																				_0: A2(
-																					_aforemny$elm_mdc$Internal_Options$when,
-																					!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing),
-																					A2(
-																						_aforemny$elm_mdc$Internal_Options$on,
-																						'keydown',
-																						A3(
-																							_elm_lang$core$Json_Decode$map2,
-																							F2(
-																								function (key, keyCode) {
-																									var activeValue = A2(
-																										_elm_lang$core$Maybe$map,
-																										_aforemny$elm_mdc$Internal_Slider_Implementation$discretize(geometry),
-																										A4(_aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey, key, keyCode, geometry, config.value));
-																									return A2(
-																										_elm_lang$core$Maybe$withDefault,
-																										lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
-																										A3(
-																											_elm_lang$core$Maybe$map2,
-																											F2(
-																												function (x, y) {
-																													return x(y);
-																												}),
-																											config.onChange,
-																											activeValue));
-																								}),
-																							_elm_lang$core$Json_Decode$oneOf(
-																								{
-																									ctor: '::',
-																									_0: A2(
-																										_elm_lang$core$Json_Decode$map,
-																										_elm_lang$core$Maybe$Just,
-																										A2(
-																											_elm_lang$core$Json_Decode$at,
-																											{
-																												ctor: '::',
-																												_0: 'key',
-																												_1: {ctor: '[]'}
-																											},
-																											_elm_lang$core$Json_Decode$string)),
-																									_1: {
-																										ctor: '::',
-																										_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
-																										_1: {ctor: '[]'}
-																									}
-																								}),
-																							A2(
-																								_elm_lang$core$Json_Decode$at,
-																								{
-																									ctor: '::',
-																									_0: 'keyCode',
-																									_1: {ctor: '[]'}
-																								},
-																								_elm_lang$core$Json_Decode$int)))),
+																					_aforemny$elm_mdc$Internal_Options$aria,
+																					'valuenow',
+																					_elm_lang$core$Basics$toString(value)),
 																				_1: {
 																					ctor: '::',
 																					_0: A2(
 																						_aforemny$elm_mdc$Internal_Options$when,
-																						!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing),
-																						A2(
-																							_aforemny$elm_mdc$Internal_Options$on,
-																							'keydown',
-																							A3(
-																								_elm_lang$core$Json_Decode$map2,
-																								F2(
-																									function (key, keyCode) {
-																										var activeValue = A2(
-																											_elm_lang$core$Maybe$map,
-																											_aforemny$elm_mdc$Internal_Slider_Implementation$discretize(geometry),
-																											A4(_aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey, key, keyCode, geometry, config.value));
-																										return A2(
-																											_elm_lang$core$Maybe$withDefault,
-																											lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
-																											A3(
-																												_elm_lang$core$Maybe$map2,
-																												F2(
-																													function (x, y) {
-																														return x(y);
-																													}),
-																												config.onInput,
-																												activeValue));
-																									}),
-																								_elm_lang$core$Json_Decode$oneOf(
-																									{
-																										ctor: '::',
-																										_0: A2(
-																											_elm_lang$core$Json_Decode$map,
-																											_elm_lang$core$Maybe$Just,
-																											A2(
-																												_elm_lang$core$Json_Decode$at,
-																												{
-																													ctor: '::',
-																													_0: 'key',
-																													_1: {ctor: '[]'}
-																												},
-																												_elm_lang$core$Json_Decode$string)),
-																										_1: {
-																											ctor: '::',
-																											_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
-																											_1: {ctor: '[]'}
-																										}
-																									}),
-																								A2(
-																									_elm_lang$core$Json_Decode$at,
-																									{
-																										ctor: '::',
-																										_0: 'keyCode',
-																										_1: {ctor: '[]'}
-																									},
-																									_elm_lang$core$Json_Decode$int)))),
+																						_elm_lang$core$Native_Utils.eq(model.geometry, _elm_lang$core$Maybe$Nothing) || stepChanged,
+																						_aforemny$elm_mdc$Internal_GlobalEvents$onTick(
+																							A2(
+																								_elm_lang$core$Json_Decode$map,
+																								function (_p16) {
+																									return lift(
+																										_aforemny$elm_mdc$Internal_Slider_Model$Init(_p16));
+																								},
+																								_aforemny$elm_mdc$Internal_Slider_Implementation$decodeGeometry))),
 																					_1: {
 																						ctor: '::',
-																						_0: A2(
-																							_aforemny$elm_mdc$Internal_Options$on,
-																							'focus',
-																							_elm_lang$core$Json_Decode$succeed(
-																								lift(_aforemny$elm_mdc$Internal_Slider_Model$Focus))),
+																						_0: _aforemny$elm_mdc$Internal_GlobalEvents$onResize(
+																							A2(
+																								_elm_lang$core$Json_Decode$map,
+																								function (_p17) {
+																									return lift(
+																										_aforemny$elm_mdc$Internal_Slider_Model$Resize(_p17));
+																								},
+																								_aforemny$elm_mdc$Internal_Slider_Implementation$decodeGeometry)),
 																						_1: {
 																							ctor: '::',
 																							_0: A2(
 																								_aforemny$elm_mdc$Internal_Options$on,
-																								'blur',
-																								_elm_lang$core$Json_Decode$succeed(
-																									lift(_aforemny$elm_mdc$Internal_Slider_Model$Blur))),
+																								'keydown',
+																								A2(
+																									_elm_lang$core$Json_Decode$map,
+																									lift,
+																									A3(
+																										_elm_lang$core$Json_Decode$map2,
+																										F2(
+																											function (key, keyCode) {
+																												var activeValue = A4(_aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey, key, keyCode, geometry, config.value);
+																												return (!_elm_lang$core$Native_Utils.eq(activeValue, _elm_lang$core$Maybe$Nothing)) ? _aforemny$elm_mdc$Internal_Slider_Model$KeyDown : _aforemny$elm_mdc$Internal_Slider_Model$NoOp;
+																											}),
+																										_elm_lang$core$Json_Decode$oneOf(
+																											{
+																												ctor: '::',
+																												_0: A2(
+																													_elm_lang$core$Json_Decode$map,
+																													_elm_lang$core$Maybe$Just,
+																													A2(
+																														_elm_lang$core$Json_Decode$at,
+																														{
+																															ctor: '::',
+																															_0: 'key',
+																															_1: {ctor: '[]'}
+																														},
+																														_elm_lang$core$Json_Decode$string)),
+																												_1: {
+																													ctor: '::',
+																													_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
+																													_1: {ctor: '[]'}
+																												}
+																											}),
+																										A2(
+																											_elm_lang$core$Json_Decode$at,
+																											{
+																												ctor: '::',
+																												_0: 'keyCode',
+																												_1: {ctor: '[]'}
+																											},
+																											_elm_lang$core$Json_Decode$int)))),
 																							_1: {
 																								ctor: '::',
-																								_0: _aforemny$elm_mdc$Internal_Options$many(
+																								_0: A2(
+																									_aforemny$elm_mdc$Internal_Options$when,
+																									!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing),
 																									A2(
-																										_elm_lang$core$List$map,
-																										function (event) {
-																											return A2(
-																												_aforemny$elm_mdc$Internal_Options$on,
-																												event,
-																												A2(
-																													_elm_lang$core$Json_Decode$map,
-																													function (_p18) {
-																														return lift(
-																															A2(_aforemny$elm_mdc$Internal_Slider_Model$InteractionStart, event, _p18));
-																													},
-																													_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
-																										},
-																										downs)),
+																										_aforemny$elm_mdc$Internal_Options$on,
+																										'keydown',
+																										A3(
+																											_elm_lang$core$Json_Decode$map2,
+																											F2(
+																												function (key, keyCode) {
+																													var activeValue = A2(
+																														_elm_lang$core$Maybe$map,
+																														_aforemny$elm_mdc$Internal_Slider_Implementation$discretize(geometry),
+																														A4(_aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey, key, keyCode, geometry, config.value));
+																													return A2(
+																														_elm_lang$core$Maybe$withDefault,
+																														lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
+																														A3(
+																															_elm_lang$core$Maybe$map2,
+																															F2(
+																																function (x, y) {
+																																	return x(y);
+																																}),
+																															config.onChange,
+																															activeValue));
+																												}),
+																											_elm_lang$core$Json_Decode$oneOf(
+																												{
+																													ctor: '::',
+																													_0: A2(
+																														_elm_lang$core$Json_Decode$map,
+																														_elm_lang$core$Maybe$Just,
+																														A2(
+																															_elm_lang$core$Json_Decode$at,
+																															{
+																																ctor: '::',
+																																_0: 'key',
+																																_1: {ctor: '[]'}
+																															},
+																															_elm_lang$core$Json_Decode$string)),
+																													_1: {
+																														ctor: '::',
+																														_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
+																														_1: {ctor: '[]'}
+																													}
+																												}),
+																											A2(
+																												_elm_lang$core$Json_Decode$at,
+																												{
+																													ctor: '::',
+																													_0: 'keyCode',
+																													_1: {ctor: '[]'}
+																												},
+																												_elm_lang$core$Json_Decode$int)))),
 																								_1: {
 																									ctor: '::',
 																									_0: A2(
 																										_aforemny$elm_mdc$Internal_Options$when,
-																										!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing),
-																										_aforemny$elm_mdc$Internal_Options$many(
-																											A2(
-																												_elm_lang$core$List$map,
-																												function (event) {
-																													return A2(
-																														_aforemny$elm_mdc$Internal_Options$on,
-																														event,
-																														A2(
+																										!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing),
+																										A2(
+																											_aforemny$elm_mdc$Internal_Options$on,
+																											'keydown',
+																											A3(
+																												_elm_lang$core$Json_Decode$map2,
+																												F2(
+																													function (key, keyCode) {
+																														var activeValue = A2(
+																															_elm_lang$core$Maybe$map,
+																															_aforemny$elm_mdc$Internal_Slider_Implementation$discretize(geometry),
+																															A4(_aforemny$elm_mdc$Internal_Slider_Implementation$valueForKey, key, keyCode, geometry, config.value));
+																														return A2(
+																															_elm_lang$core$Maybe$withDefault,
+																															lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
+																															A3(
+																																_elm_lang$core$Maybe$map2,
+																																F2(
+																																	function (x, y) {
+																																		return x(y);
+																																	}),
+																																config.onInput,
+																																activeValue));
+																													}),
+																												_elm_lang$core$Json_Decode$oneOf(
+																													{
+																														ctor: '::',
+																														_0: A2(
 																															_elm_lang$core$Json_Decode$map,
-																															function (_p19) {
-																																var _p20 = _p19;
-																																var activeValue = A2(
-																																	_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
-																																	geometry,
-																																	A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p20.pageX));
-																																return A2(
-																																	_elm_lang$core$Maybe$withDefault,
-																																	lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
-																																	A2(
-																																		_elm_lang$core$Maybe$map,
-																																		A2(
-																																			_elm_lang$core$Basics$flip,
-																																			F2(
-																																				function (x, y) {
-																																					return x(y);
-																																				}),
-																																			activeValue),
-																																		config.onChange));
-																															},
-																															_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
-																												},
-																												downs))),
+																															_elm_lang$core$Maybe$Just,
+																															A2(
+																																_elm_lang$core$Json_Decode$at,
+																																{
+																																	ctor: '::',
+																																	_0: 'key',
+																																	_1: {ctor: '[]'}
+																																},
+																																_elm_lang$core$Json_Decode$string)),
+																														_1: {
+																															ctor: '::',
+																															_0: _elm_lang$core$Json_Decode$succeed(_elm_lang$core$Maybe$Nothing),
+																															_1: {ctor: '[]'}
+																														}
+																													}),
+																												A2(
+																													_elm_lang$core$Json_Decode$at,
+																													{
+																														ctor: '::',
+																														_0: 'keyCode',
+																														_1: {ctor: '[]'}
+																													},
+																													_elm_lang$core$Json_Decode$int)))),
 																									_1: {
 																										ctor: '::',
 																										_0: A2(
-																											_aforemny$elm_mdc$Internal_Options$when,
-																											!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing),
-																											_aforemny$elm_mdc$Internal_Options$many(
-																												A2(
-																													_elm_lang$core$List$map,
-																													function (event) {
-																														return A2(
-																															_aforemny$elm_mdc$Internal_Options$on,
-																															event,
-																															A2(
-																																_elm_lang$core$Json_Decode$map,
-																																function (_p21) {
-																																	var _p22 = _p21;
-																																	var activeValue = A2(
-																																		_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
-																																		geometry,
-																																		A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p22.pageX));
-																																	return A2(
-																																		_elm_lang$core$Maybe$withDefault,
-																																		lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
-																																		A2(
-																																			_elm_lang$core$Maybe$map,
-																																			A2(
-																																				_elm_lang$core$Basics$flip,
-																																				F2(
-																																					function (x, y) {
-																																						return x(y);
-																																					}),
-																																				activeValue),
-																																			config.onInput));
-																																},
-																																_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
-																													},
-																													downs))),
+																											_aforemny$elm_mdc$Internal_Options$on,
+																											'focus',
+																											_elm_lang$core$Json_Decode$succeed(
+																												lift(_aforemny$elm_mdc$Internal_Slider_Model$Focus))),
 																										_1: {
 																											ctor: '::',
 																											_0: A2(
-																												_aforemny$elm_mdc$Internal_Options$when,
-																												model.active,
-																												_aforemny$elm_mdc$Internal_Options$many(
-																													A2(
-																														_elm_lang$core$List$map,
-																														function (handler) {
-																															return handler(
-																																_elm_lang$core$Json_Decode$succeed(
-																																	lift(_aforemny$elm_mdc$Internal_Slider_Model$Up)));
-																														},
-																														ups))),
+																												_aforemny$elm_mdc$Internal_Options$on,
+																												'blur',
+																												_elm_lang$core$Json_Decode$succeed(
+																													lift(_aforemny$elm_mdc$Internal_Slider_Model$Blur))),
 																											_1: {
 																												ctor: '::',
-																												_0: A2(
-																													_aforemny$elm_mdc$Internal_Options$when,
-																													(!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing)) && model.active,
-																													_aforemny$elm_mdc$Internal_Options$many(
-																														A2(
-																															_elm_lang$core$List$map,
-																															function (handler) {
-																																return handler(
-																																	A2(
-																																		_elm_lang$core$Json_Decode$map,
-																																		function (_p23) {
-																																			var _p24 = _p23;
-																																			var activeValue = A2(
-																																				_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
-																																				geometry,
-																																				A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p24.pageX));
-																																			return A2(
-																																				_elm_lang$core$Maybe$withDefault,
-																																				lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
-																																				A2(
-																																					_elm_lang$core$Maybe$map,
-																																					A2(
-																																						_elm_lang$core$Basics$flip,
-																																						F2(
-																																							function (x, y) {
-																																								return x(y);
-																																							}),
-																																						activeValue),
-																																					config.onChange));
-																																		},
-																																		_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
-																															},
-																															ups))),
+																												_0: _aforemny$elm_mdc$Internal_Options$many(
+																													A2(
+																														_elm_lang$core$List$map,
+																														function (event) {
+																															return A2(
+																																_aforemny$elm_mdc$Internal_Options$on,
+																																event,
+																																A2(
+																																	_elm_lang$core$Json_Decode$map,
+																																	function (_p18) {
+																																		return lift(
+																																			A2(_aforemny$elm_mdc$Internal_Slider_Model$InteractionStart, event, _p18));
+																																	},
+																																	_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
+																														},
+																														downs)),
 																												_1: {
 																													ctor: '::',
 																													_0: A2(
 																														_aforemny$elm_mdc$Internal_Options$when,
-																														(!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing)) && model.active,
+																														!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing),
 																														_aforemny$elm_mdc$Internal_Options$many(
 																															A2(
 																																_elm_lang$core$List$map,
-																																function (handler) {
-																																	return handler(
+																																function (event) {
+																																	return A2(
+																																		_aforemny$elm_mdc$Internal_Options$on,
+																																		event,
 																																		A2(
 																																			_elm_lang$core$Json_Decode$map,
-																																			function (_p25) {
-																																				var _p26 = _p25;
+																																			function (_p19) {
+																																				var _p20 = _p19;
 																																				var activeValue = A2(
 																																					_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
 																																					geometry,
-																																					A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p26.pageX));
+																																					A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p20.pageX));
 																																				return A2(
 																																					_elm_lang$core$Maybe$withDefault,
 																																					lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
@@ -15904,66 +15806,191 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$slider = F4(
 																																									return x(y);
 																																								}),
 																																							activeValue),
-																																						config.onInput));
+																																						config.onChange));
 																																			},
 																																			_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
 																																},
-																																ups))),
+																																downs))),
 																													_1: {
 																														ctor: '::',
 																														_0: A2(
 																															_aforemny$elm_mdc$Internal_Options$when,
-																															model.active,
+																															!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing),
 																															_aforemny$elm_mdc$Internal_Options$many(
 																																A2(
 																																	_elm_lang$core$List$map,
-																																	function (handler) {
-																																		return handler(
+																																	function (event) {
+																																		return A2(
+																																			_aforemny$elm_mdc$Internal_Options$on,
+																																			event,
 																																			A2(
 																																				_elm_lang$core$Json_Decode$map,
-																																				function (_p27) {
-																																					return lift(
-																																						_aforemny$elm_mdc$Internal_Slider_Model$Drag(_p27));
+																																				function (_p21) {
+																																					var _p22 = _p21;
+																																					var activeValue = A2(
+																																						_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
+																																						geometry,
+																																						A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p22.pageX));
+																																					return A2(
+																																						_elm_lang$core$Maybe$withDefault,
+																																						lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
+																																						A2(
+																																							_elm_lang$core$Maybe$map,
+																																							A2(
+																																								_elm_lang$core$Basics$flip,
+																																								F2(
+																																									function (x, y) {
+																																										return x(y);
+																																									}),
+																																								activeValue),
+																																							config.onInput));
 																																				},
 																																				_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
 																																	},
-																																	moves))),
+																																	downs))),
 																														_1: {
 																															ctor: '::',
 																															_0: A2(
 																																_aforemny$elm_mdc$Internal_Options$when,
-																																(!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing)) && model.active,
+																																model.active,
 																																_aforemny$elm_mdc$Internal_Options$many(
 																																	A2(
 																																		_elm_lang$core$List$map,
 																																		function (handler) {
 																																			return handler(
-																																				A2(
-																																					_elm_lang$core$Json_Decode$map,
-																																					function (_p28) {
-																																						var _p29 = _p28;
-																																						var activeValue = A2(
-																																							_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
-																																							geometry,
-																																							A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p29.pageX));
-																																						return A2(
-																																							_elm_lang$core$Maybe$withDefault,
-																																							lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
-																																							A2(
-																																								_elm_lang$core$Maybe$map,
-																																								A2(
-																																									_elm_lang$core$Basics$flip,
-																																									F2(
-																																										function (x, y) {
-																																											return x(y);
-																																										}),
-																																									activeValue),
-																																								config.onInput));
-																																					},
-																																					_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
+																																				_elm_lang$core$Json_Decode$succeed(
+																																					lift(_aforemny$elm_mdc$Internal_Slider_Model$Up)));
 																																		},
-																																		moves))),
-																															_1: {ctor: '[]'}
+																																		ups))),
+																															_1: {
+																																ctor: '::',
+																																_0: A2(
+																																	_aforemny$elm_mdc$Internal_Options$when,
+																																	(!_elm_lang$core$Native_Utils.eq(config.onChange, _elm_lang$core$Maybe$Nothing)) && model.active,
+																																	_aforemny$elm_mdc$Internal_Options$many(
+																																		A2(
+																																			_elm_lang$core$List$map,
+																																			function (handler) {
+																																				return handler(
+																																					A2(
+																																						_elm_lang$core$Json_Decode$map,
+																																						function (_p23) {
+																																							var _p24 = _p23;
+																																							var activeValue = A2(
+																																								_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
+																																								geometry,
+																																								A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p24.pageX));
+																																							return A2(
+																																								_elm_lang$core$Maybe$withDefault,
+																																								lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
+																																								A2(
+																																									_elm_lang$core$Maybe$map,
+																																									A2(
+																																										_elm_lang$core$Basics$flip,
+																																										F2(
+																																											function (x, y) {
+																																												return x(y);
+																																											}),
+																																										activeValue),
+																																									config.onChange));
+																																						},
+																																						_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
+																																			},
+																																			ups))),
+																																_1: {
+																																	ctor: '::',
+																																	_0: A2(
+																																		_aforemny$elm_mdc$Internal_Options$when,
+																																		(!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing)) && model.active,
+																																		_aforemny$elm_mdc$Internal_Options$many(
+																																			A2(
+																																				_elm_lang$core$List$map,
+																																				function (handler) {
+																																					return handler(
+																																						A2(
+																																							_elm_lang$core$Json_Decode$map,
+																																							function (_p25) {
+																																								var _p26 = _p25;
+																																								var activeValue = A2(
+																																									_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
+																																									geometry,
+																																									A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p26.pageX));
+																																								return A2(
+																																									_elm_lang$core$Maybe$withDefault,
+																																									lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
+																																									A2(
+																																										_elm_lang$core$Maybe$map,
+																																										A2(
+																																											_elm_lang$core$Basics$flip,
+																																											F2(
+																																												function (x, y) {
+																																													return x(y);
+																																												}),
+																																											activeValue),
+																																										config.onInput));
+																																							},
+																																							_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
+																																				},
+																																				ups))),
+																																	_1: {
+																																		ctor: '::',
+																																		_0: A2(
+																																			_aforemny$elm_mdc$Internal_Options$when,
+																																			model.active,
+																																			_aforemny$elm_mdc$Internal_Options$many(
+																																				A2(
+																																					_elm_lang$core$List$map,
+																																					function (handler) {
+																																						return handler(
+																																							A2(
+																																								_elm_lang$core$Json_Decode$map,
+																																								function (_p27) {
+																																									return lift(
+																																										_aforemny$elm_mdc$Internal_Slider_Model$Drag(_p27));
+																																								},
+																																								_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
+																																					},
+																																					moves))),
+																																		_1: {
+																																			ctor: '::',
+																																			_0: A2(
+																																				_aforemny$elm_mdc$Internal_Options$when,
+																																				(!_elm_lang$core$Native_Utils.eq(config.onInput, _elm_lang$core$Maybe$Nothing)) && model.active,
+																																				_aforemny$elm_mdc$Internal_Options$many(
+																																					A2(
+																																						_elm_lang$core$List$map,
+																																						function (handler) {
+																																							return handler(
+																																								A2(
+																																									_elm_lang$core$Json_Decode$map,
+																																									function (_p28) {
+																																										var _p29 = _p28;
+																																										var activeValue = A2(
+																																											_aforemny$elm_mdc$Internal_Slider_Implementation$discretize,
+																																											geometry,
+																																											A2(_aforemny$elm_mdc$Internal_Slider_Implementation$valueFromPageX, geometry, _p29.pageX));
+																																										return A2(
+																																											_elm_lang$core$Maybe$withDefault,
+																																											lift(_aforemny$elm_mdc$Internal_Slider_Model$NoOp),
+																																											A2(
+																																												_elm_lang$core$Maybe$map,
+																																												A2(
+																																													_elm_lang$core$Basics$flip,
+																																													F2(
+																																														function (x, y) {
+																																															return x(y);
+																																														}),
+																																													activeValue),
+																																												config.onInput));
+																																									},
+																																									_aforemny$elm_mdc$Internal_Slider_Implementation$decodePageX));
+																																						},
+																																						moves))),
+																																			_1: {ctor: '[]'}
+																																		}
+																																	}
+																																}
+																															}
 																														}
 																													}
 																												}
@@ -16044,7 +16071,7 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$slider = F4(
 												},
 												A2(
 													_elm_lang$core$List$repeat,
-													(_elm_lang$core$Basics$round(config.max - config.min) / config.steps) | 0,
+													_elm_lang$core$Basics$round((config.max - config.min) / config.step),
 													A3(
 														_aforemny$elm_mdc$Internal_Options$styled,
 														_elm_lang$html$Html$div,
@@ -16334,7 +16361,7 @@ var _aforemny$elm_mdc$Internal_Slider_Implementation$update = F3(
 var _aforemny$elm_mdc$Internal_Slider_Implementation$react = A4(_aforemny$elm_mdc$Internal_Component$react, _aforemny$elm_mdc$Internal_Slider_Implementation$get, _aforemny$elm_mdc$Internal_Slider_Implementation$set, _aforemny$elm_mdc$Internal_Msg$SliderMsg, _aforemny$elm_mdc$Internal_Slider_Implementation$update);
 var _aforemny$elm_mdc$Internal_Slider_Implementation$Config = F8(
 	function (a, b, c, d, e, f, g, h) {
-		return {value: a, min: b, max: c, discrete: d, steps: e, onInput: f, onChange: g, trackMarkers: h};
+		return {value: a, min: b, max: c, discrete: d, step: e, onInput: f, onChange: g, trackMarkers: h};
 	});
 
 var _aforemny$elm_mdc$Internal_Snackbar_Implementation$_p0 = A3(
@@ -35957,7 +35984,7 @@ var _aforemny$elm_mdc$Demo_Selects$subscriptions = F2(
 	});
 
 var _aforemny$elm_mdc$Material_Slider$trackMarkers = _aforemny$elm_mdc$Internal_Slider_Implementation$trackMarkers;
-var _aforemny$elm_mdc$Material_Slider$steps = _aforemny$elm_mdc$Internal_Slider_Implementation$steps;
+var _aforemny$elm_mdc$Material_Slider$step = _aforemny$elm_mdc$Internal_Slider_Implementation$step;
 var _aforemny$elm_mdc$Material_Slider$onInput = _aforemny$elm_mdc$Internal_Slider_Implementation$onInput;
 var _aforemny$elm_mdc$Material_Slider$onChange = _aforemny$elm_mdc$Internal_Slider_Implementation$onChange;
 var _aforemny$elm_mdc$Material_Slider$disabled = _aforemny$elm_mdc$Internal_Slider_Implementation$disabled;
@@ -35990,7 +36017,7 @@ var _aforemny$elm_mdc$Demo_Slider$defaultModel = {
 	inputs: _elm_lang$core$Dict$empty,
 	min: 0,
 	max: 50,
-	steps: 1,
+	step: 0.25,
 	darkTheme: false,
 	disabled: false,
 	customBg: false,
@@ -36006,7 +36033,7 @@ var _aforemny$elm_mdc$Demo_Slider$Model = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {mdc: a, values: b, inputs: c, min: d, max: e, steps: f, darkTheme: g, disabled: h, customBg: i, rtl: j};
+										return {mdc: a, values: b, inputs: c, min: d, max: e, step: f, darkTheme: g, disabled: h, customBg: i, rtl: j};
 									};
 								};
 							};
@@ -36021,8 +36048,8 @@ var _aforemny$elm_mdc$Demo_Slider$ToggleRtl = {ctor: 'ToggleRtl'};
 var _aforemny$elm_mdc$Demo_Slider$ToggleCustomBg = {ctor: 'ToggleCustomBg'};
 var _aforemny$elm_mdc$Demo_Slider$ToggleDisabled = {ctor: 'ToggleDisabled'};
 var _aforemny$elm_mdc$Demo_Slider$ToggleDarkTheme = {ctor: 'ToggleDarkTheme'};
-var _aforemny$elm_mdc$Demo_Slider$SetSteps = function (a) {
-	return {ctor: 'SetSteps', _0: a};
+var _aforemny$elm_mdc$Demo_Slider$SetStep = function (a) {
+	return {ctor: 'SetStep', _0: a};
 };
 var _aforemny$elm_mdc$Demo_Slider$SetMax = function (a) {
 	return {ctor: 'SetMax', _0: a};
@@ -36090,12 +36117,12 @@ var _aforemny$elm_mdc$Demo_Slider$update = F3(
 						{max: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'SetSteps':
+			case 'SetStep':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{steps: _p0._0}),
+						{step: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'ToggleDarkTheme':
@@ -36525,7 +36552,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																					_0: _aforemny$elm_mdc$Material_Slider$max(model.max),
 																					_1: {
 																						ctor: '::',
-																						_0: _aforemny$elm_mdc$Material_Slider$steps(model.steps),
+																						_0: _aforemny$elm_mdc$Material_Slider$step(model.step),
 																						_1: {
 																							ctor: '::',
 																							_0: A2(_aforemny$elm_mdc$Material_Options$when, model.disabled, _aforemny$elm_mdc$Material_Slider$disabled),
@@ -36681,7 +36708,7 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																						_0: _aforemny$elm_mdc$Material_Slider$max(model.max),
 																						_1: {
 																							ctor: '::',
-																							_0: _aforemny$elm_mdc$Material_Slider$steps(model.steps),
+																							_0: _aforemny$elm_mdc$Material_Slider$step(model.step),
 																							_1: {
 																								ctor: '::',
 																								_0: _aforemny$elm_mdc$Material_Slider$trackMarkers,
@@ -36900,36 +36927,29 @@ var _aforemny$elm_mdc$Demo_Slider$view = F3(
 																			_elm_lang$html$Html$input,
 																			{
 																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$type_('number'),
+																				_0: _elm_lang$html$Html_Attributes$type_('text'),
 																				_1: {
 																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$min('0'),
+																					_0: _elm_lang$html$Html_Attributes$defaultValue(
+																						_elm_lang$core$Basics$toString(model.step)),
 																					_1: {
 																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$max('100'),
-																						_1: {
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$defaultValue('1'),
-																							_1: {
-																								ctor: '::',
-																								_0: A2(
-																									_elm_lang$html$Html_Events$on,
-																									'input',
-																									A2(
-																										_elm_lang$core$Json_Decode$map,
-																										function (_p18) {
-																											return lift(
-																												_aforemny$elm_mdc$Demo_Slider$SetSteps(
-																													A2(
-																														_elm_lang$core$Maybe$withDefault,
-																														1,
-																														_elm_lang$core$Result$toMaybe(
-																															_elm_lang$core$String$toInt(_p18)))));
-																										},
-																										_elm_lang$html$Html_Events$targetValue)),
-																								_1: {ctor: '[]'}
-																							}
-																						}
+																						_0: A2(
+																							_elm_lang$html$Html_Events$on,
+																							'input',
+																							A2(
+																								_elm_lang$core$Json_Decode$map,
+																								function (_p18) {
+																									return lift(
+																										_aforemny$elm_mdc$Demo_Slider$SetStep(
+																											A2(
+																												_elm_lang$core$Maybe$withDefault,
+																												1,
+																												_elm_lang$core$Result$toMaybe(
+																													_elm_lang$core$String$toFloat(_p18)))));
+																								},
+																								_elm_lang$html$Html_Events$targetValue)),
+																						_1: {ctor: '[]'}
 																					}
 																				}
 																			},
