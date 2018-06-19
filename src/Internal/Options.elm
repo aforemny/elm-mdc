@@ -14,12 +14,12 @@ module Internal.Options exposing
     , nop
     , on
     , onBlur
+    , onChange
     , onCheck
     , onClick
     , onDoubleClick
     , onFocus
     , onInput
-    , onChange
     , onMouseDown
     , onMouseEnter
     , onMouseLeave
@@ -31,6 +31,7 @@ module Internal.Options exposing
     , option
     , Property
     , recollect
+    , role
     , styled
     , when
     )
@@ -279,6 +280,11 @@ aria key val =
     Attribute (Html.Attributes.attribute ("aria-" ++ key) val)
 
 
+role : String -> Property c m
+role role =
+    Attribute (Html.Attributes.attribute "role" role)
+
+
 attribute : Html.Attribute Never -> Property c m
 attribute =
     Attribute << Html.Attributes.map never
@@ -368,6 +374,6 @@ onWithOptions evt options =
     Listener evt (Just options)
 
 
-dispatch : (Msg m -> m) -> Property c m 
+dispatch : (Msg m -> m) -> Property c m
 dispatch lift =
     Lift (Json.map Dispatch >> Json.map lift)

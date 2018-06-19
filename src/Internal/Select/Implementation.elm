@@ -118,9 +118,9 @@ select lift model options items_ =
     Options.apply summary Html.div
     [ cs "mdc-select"
     , when config.disabled (cs "mdc-select--disabled")
+    , Options.role "listbox"
     ]
-    [ Html.attribute "role" "listbox"
-    , Html.tabindex 0
+    [ Html.tabindex 0
     ]
     [ styled Html.select
           [ cs "mdc-select__native-control"

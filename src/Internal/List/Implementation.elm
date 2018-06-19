@@ -207,7 +207,7 @@ divider options =
     Options.apply summary
         (Maybe.withDefault Html.li config.node)
         [ cs "mdc-list-divider"
-        , Options.attribute (Html.attribute "role" "separator")
+        , Options.role "separator"
         ]
         []
 

@@ -439,7 +439,7 @@ slider lift model options _ =
         , Options.data "max" (toString config.max)
         , Options.data "step" (toString config.step)
 
-        , Options.attribute (Html.attribute "role" "slider")
+        , Options.role "slider"
         , Options.aria "valuemin" (toString config.min)
         , Options.aria "valuemax" (toString config.min)
         , Options.aria "valuenow" (toString value)
