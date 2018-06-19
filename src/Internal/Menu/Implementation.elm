@@ -160,7 +160,7 @@ update lift msg model =
               { model
                 | geometry = Just geometry
                 , quickOpen = Just quickOpen
-                , focusedItemAtIndex = Debug.log "index" index
+                , focusedItemAtIndex = index
               }
             ,
               Cmd.none
