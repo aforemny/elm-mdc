@@ -59,10 +59,15 @@ import CustomEvent from 'custom-event';
           if (!node.dataset) {
             continue
           }
-          if (typeof node.dataset.focustrap === "undefined") {
-            continue
+          if (typeof node.dataset.focustrap !== "undefined") {
+            tearDown(node)
+          } else {
+            let childNode = node.querySelector("[data-focustrap]")
+            if (typeof childNode === "undefined") {
+              continue;
+            }
+            tearDown(childNode)
           }
-          tearDown(node)
         }
       }
 
