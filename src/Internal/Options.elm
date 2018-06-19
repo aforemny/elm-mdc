@@ -4,6 +4,7 @@ module Internal.Options exposing
     , applyNativeControl
     , aria
     , attribute
+    , autocomplete
     , collect
     , cs
     , css
@@ -278,6 +279,11 @@ data key val =
 aria : String -> String -> Property c m
 aria key val =
     Attribute (Html.Attributes.attribute ("aria-" ++ key) val)
+
+
+autocomplete : String -> Property c m
+autocomplete autocomplete =
+    Attribute (Html.Attributes.attribute "autocomplete" autocomplete)
 
 
 role : String -> Property c m
