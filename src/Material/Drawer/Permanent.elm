@@ -30,7 +30,7 @@ import Material.Drawer.Permanent as Drawer
 import Material.List as Lists
 
 
-Drawer.view Mdc [0] model.mdc []
+Drawer.view Mdc "my-drawer" model.mdc []
     [ Lists.ul
           [ Drawer.content
           ]

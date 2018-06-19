@@ -41,7 +41,7 @@ import Html exposing (text)
 import Material.GridList as GridList
 
 
-GridList.view Mdc [0] model.mdc []
+GridList.view Mdc "my-grid-list" model.mdc []
     ( List.repeat 6 <|
       GridList.tile []
           [ GridList.primary []

@@ -25,7 +25,7 @@ the Material Design snackbars & toasts requirements.
 ```elm
 import Material.Snackbar as Snackbar
 
-Snackbar.view Mdc [0] model.mdc [] []
+Snackbar.view Mdc "my-snackbar" model.mdc [] []
 ```
 
 

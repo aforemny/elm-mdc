@@ -38,7 +38,7 @@ import Html exposing (text)
 import Material.TopAppBar as TopAppBar
 
 
-TopAppBar.view Mdc [0] model.mdc []
+TopAppBar.view Mdc "my-top-app-bar" model.mdc []
     [ TopAppBar.fixed ]
     [ TopAppBar.section [ TopAppBar.alignStart ]
           [ TopAppBar.navigationIcon [ Options.onClick OpenDrawer ] "menu"

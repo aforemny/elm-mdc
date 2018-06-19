@@ -31,7 +31,7 @@ import Material.Drawer.Persistent as Drawer
 import Material.List as Lists
 
 
-Drawer.view Mdc [0] model.mdc []
+Drawer.view Mdc "my-drawer" model.mdc []
     [ Drawer.header []
           [ Drawer.headerContent []
                 [ text "Header here"

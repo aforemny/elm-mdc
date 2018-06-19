@@ -72,7 +72,7 @@ biggest changes today."""
           ]
     , Card.actions []
           [ Card.actionButtons []
-                [ Button.view Mdc [0] model.mdc
+                [ Button.view Mdc "my-read-action" model.mdc
                       [ Card.actionButton
                       , Button.ripple
                       ]
@@ -80,7 +80,7 @@ biggest changes today."""
                       ]
                 ]
           , Card.actionIcons []
-                [ IconToggle.view Mdc [1] model.mdc
+                [ IconToggle.view Mdc "my-favorite-action" model.mdc
                       [ Card.actionIcon
                       , IconToggle.icon
                         { on = "favorite"

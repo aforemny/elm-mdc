@@ -32,7 +32,7 @@ Slider uses custom `onChage` and `onInput` event handlers.
 ```elm
 import Material.Slider as Slider
 
-Slider.view Mdc [0] model.mdc
+Slider.view Mdc "my-slider" model.mdc
     [ Slider.value 40
     , Slider.onChange Change
     ]

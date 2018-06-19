@@ -32,7 +32,7 @@ import Material.Button as Button
 import Material.Options as Options
 
 
-Button.view Mdc [0] model.mdc
+Button.view Mdc "my-button" model.mdc
     [ Button.ripple
     , Options.onClick Click
     ]

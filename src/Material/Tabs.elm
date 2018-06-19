@@ -30,7 +30,7 @@ import Html exposing (text)
 import Material.Tabs as TabBar
 
 
-TabBar.view Mdc [0] model.mdc
+TabBar.view Mdc "my-tab-bar" model.mdc
     [ TabBar.indicator
     ]
     [ TabBar.tab [] [ text "Item One" ]

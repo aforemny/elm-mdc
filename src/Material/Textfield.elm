@@ -40,7 +40,7 @@ Text fields allow users to input, edit, and select text.
 import Material.Options as Options
 import Material.Textfield as Textfield
 
-Textfield.view Mdc [0] model.mdc
+Textfield.view Mdc "my-text-field" model.mdc
     [ Textfield.label "Text field"
     , Options.onChange UpdateTextField
     ]

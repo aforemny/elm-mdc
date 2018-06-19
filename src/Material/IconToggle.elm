@@ -26,7 +26,7 @@ import Material.IconToggle as IconToggle
 import Material.Options as Options
 
 
-IconToggle.view Mdc [0] model.mdc
+IconToggle.view Mdc "my-icon-toggle" model.mdc
     [ IconToggle.icon
           { on = "favorite_border"
           , off = "favorite"

@@ -122,7 +122,7 @@ Set the `mdc-typography` class in the body:
         Material.top <|
         Html.div []
             [
-              Button.view Mdc [0] model.mdc
+              Button.view Mdc "my-button" model.mdc
                   [ Button.ripple
                   , Options.onClick Click
                   ]

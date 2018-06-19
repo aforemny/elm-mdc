@@ -27,7 +27,7 @@ import Material.RadioButton as RadioButton
 
 
 FormField.view []
-    [ RadioButton.view Mdc [0] model.mdc
+    [ RadioButton.view Mdc "my-radio-button" model.mdc
           [ RadioButton.selected
           , Options.onClick Select
           ]
