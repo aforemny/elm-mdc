@@ -13,58 +13,6 @@ module Internal.Slider.Implementation exposing
     , view
     )
 
-{-|
-Slider provides an implementation of the Material Design slider component.
-
-Note that vertical sliders and range (multi-thumb) sliders are not supported,
-due to their absence from the material design spec.
-
-Slider uses custom `onChage` and `onInput` event handlers.
-
-
-# Resources
-
-- [Material Design guidelines: Sliders](https://material.io/guidelines/components/sliders.html)
-- [Demo](https://aforemny.github.io/elm-mdc/slider)
-
-
-# Example
-
-```elm
-import Material.Slider as Slider
-
-Slider.view Mdc [0] model.mdc
-    [ Slider.value 40
-    , Slider.onChange Change
-    ]
-    []
-```
-
-
-# Usage
-
-
-## Slider
-
-@docs Property
-@docs view
-@docs value, min, max
-@docs disabled
-@docs onChange, onInput
-
-## Discrete Slider
-
-@docs discrete
-@docs step
-@docs trackMarkers
-
-
-# Internal
-
-@docs Model
-@docs react
--}
-
 import DOM
 import Html as Html exposing (Html, text)
 import Html.Attributes as Html
@@ -292,44 +240,30 @@ defaultConfig =
     }
 
 
-{-| Properties for Slider options.
--}
 type alias Property m =
     Options.Property (Config m) m
 
 
-{-| Specify the slider's value.
-
-This will be clamped between `min` and `max`.
--}
 value : Float -> Property m
 value =
     Options.option << (\value config -> { config | value = value })
 
 
-{-| Specify the minimum value.
--}
 min : Int -> Property m
 min =
     Options.option << (\min config -> { config | min = toFloat min })
 
 
-{-| Specify the maximum value.
--}
 max : Int -> Property m
 max =
     Options.option << (\max config -> { config | max = toFloat max })
 
 
-{-| Make the slider only take integer values.
--}
 discrete : Property m
 discrete =
     Options.option (\config -> { config | discrete = True })
 
 
-{-| Disable the slider.
--}
 disabled : Property m
 disabled =
     Options.many
@@ -714,10 +648,6 @@ type alias Store s =
     Component.indexed .slider (\x y -> { y | slider = x }) defaultModel
 
 
-{-| Slider react.
-
-Internal use only.
--}
 react :
     (Internal.Msg.Msg m -> m)
     -> Msg m
@@ -728,8 +658,6 @@ react =
     Component.react get set Internal.Msg.SliderMsg update
 
 
-{-| Slider view.
--}
 view :
     (Internal.Msg.Msg m -> m)
     -> Index
@@ -832,15 +760,11 @@ hasClass class =
       ( Json.at [ "className" ] Json.string )
 
 
-{-| Slider `onChange` event listener.
--}
 onChange : (Float -> m) -> Property m
 onChange =
     Options.option << (\ decoder config -> { config | onChange = Just decoder } )
 
 
-{-| Slider `onInput` event listener.
--}
 onInput : (Float -> m) -> Property m
 onInput =
     Options.option << (\ decoder config -> { config | onInput = Just decoder } )
@@ -851,8 +775,6 @@ step =
     Options.option << (\ step config -> { config | step = step } )
 
 
-{-| Add track markers to the Slider every `step`.
--}
 trackMarkers : Property m
 trackMarkers =
     Options.option (\ config -> { config | trackMarkers = True } )
