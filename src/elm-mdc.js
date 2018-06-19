@@ -222,52 +222,6 @@ import CustomEvent from 'custom-event';
     })
   });
 
-  window.addEventListener("resize", (originalEvent) => {
-    window.requestAnimationFrame(() => {
-      dispatch(document, "globalresize1", (target, event) => {
-        return event
-      })
-    })
-  });
-
-
-  // custom event "globalpolledresize"
-  window.addEventListener("resize", (originalEvent) => {
-    let running = false
-    window.requestAnimationFrame(() => {
-      if (running) {
-        return
-      }
-      running = true
-      window.requestAnimationFrame(() => {
-        dispatch(document, "globalpolledresize", (target, event) => {
-          return event
-        })
-        running = false
-      })
-    })
-  });
-
-
-  // custom event "globalpolledresize1"
-  window.addEventListener("resize", (originalEvent) => {
-    let running = false
-    window.requestAnimationFrame(() => {
-      if (running) {
-        return
-      }
-      running = true
-      window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        dispatch(document, "globalpolledresize1", (target, event) => {
-          return event
-        })
-        running = false
-      })
-      })
-    })
-  });
-
 
   // custom event "globalmouseup"
   document.addEventListener("mouseup", (originalEvent) => {
