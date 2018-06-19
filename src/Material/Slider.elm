@@ -7,7 +7,6 @@ module Material.Slider exposing
     , onInput
     , Property
     , step
-    , steps
     , trackMarkers
     , value
     , view
@@ -56,7 +55,6 @@ Slider.view Mdc [0] model.mdc
 ## Discrete Slider
 
 @docs discrete
-@docs steps
 @docs trackMarkers
 -}
 
@@ -114,7 +112,7 @@ discrete : Property m
 discrete =
     Slider.discrete
 
- 
+
 {-| Disable the slider.
 -}
 disabled : Property m
@@ -150,12 +148,6 @@ step : Float -> Property m
 step =
     Slider.step
 
-
-{-| Obsolete alias for step.
--}
-steps : Float -> Property m
-steps =
-    step
 
 
 {-| Discrete sliders support display markers on their tracks. A marker is displayed every `step`.

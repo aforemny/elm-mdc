@@ -72,7 +72,7 @@ import Json.Decode as Json exposing (Decoder)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, css, when, aria)
+import Internal.Options as Options exposing (styled, cs, css, when)
 import Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 import Svg
 import Svg.Attributes as Svg
@@ -327,7 +327,7 @@ discrete : Property m
 discrete =
     Options.option (\config -> { config | discrete = True })
 
- 
+
 {-| Disable the slider.
 -}
 disabled : Property m
@@ -395,6 +395,9 @@ slider lift model options _ =
                 0
             else
                 (value - config.min) / (config.max - config.min)
+
+        stepChanged =
+            Just config.step /= Maybe.andThen .step model.geometry
     in
     styled Html.div
     [ cs "elm-mdc-slider-wrapper"
@@ -437,11 +440,11 @@ slider lift model options _ =
         , Options.data "step" (toString config.step)
 
         , Options.attribute (Html.attribute "role" "slider")
-        , aria "valuemin" (toString config.min)
-        , aria "valuemax" (toString config.min)
-        , aria "valuenow" (toString value)
+        , Options.aria "valuemin" (toString config.min)
+        , Options.aria "valuemax" (toString config.min)
+        , Options.aria "valuenow" (toString value)
 
-        , when (model.geometry == Nothing) <|
+        , when ((model.geometry == Nothing) || stepChanged) <|
           GlobalEvents.onTick <| Json.map (lift << Init) decodeGeometry
 
         , GlobalEvents.onResize <| Json.map (lift << Resize) decodeGeometry
@@ -741,13 +744,11 @@ view =
 discretize : Geometry -> Float -> Float
 discretize geometry continuousValue =
     let
-        { step, min, max } =
+        { discrete, step, min, max } =
             geometry
 
         continuous =
-            case step of
-                Nothing -> True
-                Just v -> False
+            not discrete
 
         steps =
             geometry.step
