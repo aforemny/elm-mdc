@@ -7,7 +7,7 @@ module Internal.Slider.Implementation exposing
     , onInput
     , Property
     , react
-    , steps
+    , step
     , trackMarkers
     , value
     , view
@@ -55,7 +55,7 @@ Slider.view Mdc [0] model.mdc
 ## Discrete Slider
 
 @docs discrete
-@docs steps
+@docs step
 @docs trackMarkers
 
 
@@ -72,7 +72,7 @@ import Json.Decode as Json exposing (Decoder)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, css, when)
+import Internal.Options as Options exposing (styled, cs, css, when, aria)
 import Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
 import Svg
 import Svg.Attributes as Svg
@@ -208,7 +208,7 @@ valueForKey key keyCode geometry value =
         isRtl =
             False -- TODO
 
-        { max, min, steps, discrete } =
+        { max, min, step, discrete } =
             geometry
 
         delta =
@@ -218,7 +218,7 @@ valueForKey key keyCode geometry value =
                   identity
             ) <|
             ( if discrete then
-                  Maybe.withDefault 1 (Maybe.map toFloat steps)
+                  Maybe.withDefault 1 step
               else
                   (max - min) / 100
             )
@@ -272,7 +272,7 @@ type alias Config m =
     , min : Float
     , max : Float
     , discrete : Bool
-    , steps : Int
+    , step : Float
     , onInput : Maybe (Float -> m)
     , onChange : Maybe (Float -> m)
     , trackMarkers : Bool
@@ -284,7 +284,7 @@ defaultConfig =
     { value = 0
     , min = 0
     , max = 100
-    , steps = 1
+    , step = 1
     , discrete = False
     , onInput = Nothing
     , onChange = Nothing
@@ -434,8 +434,12 @@ slider lift model options _ =
 
         , Options.data "min" (toString config.min)
         , Options.data "max" (toString config.max)
-        , Options.data "steps" (toString config.steps)
-          |> when config.discrete
+        , Options.data "step" (toString config.step)
+
+        , Options.attribute (Html.attribute "role" "slider")
+        , aria "valuemin" (toString config.min)
+        , aria "valuemax" (toString config.min)
+        , aria "valuenow" (toString value)
 
         , when (model.geometry == Nothing) <|
           GlobalEvents.onTick <| Json.map (lift << Init) decodeGeometry
@@ -630,7 +634,7 @@ slider lift model options _ =
                   styled Html.div
                   [ cs "mdc-slider__track-marker-container"
                   ]
-                  ( List.repeat ((round (config.max  - config.min)) // config.steps) <|
+                  ( List.repeat (round ((config.max - config.min) / config.step)) <|
                     styled Html.div
                     [ cs "mdc-slider__track-marker"
                     ]
@@ -737,12 +741,16 @@ view =
 discretize : Geometry -> Float -> Float
 discretize geometry continuousValue =
     let
-        { discrete, min, max } =
+        { step, min, max } =
             geometry
 
+        continuous =
+            case step of
+                Nothing -> True
+                Just v -> False
+
         steps =
-            geometry.steps
-            |> Maybe.map toFloat
+            geometry.step
             |> Maybe.withDefault 1
             |> \ steps ->
                if steps == 0 then
@@ -751,7 +759,7 @@ discretize geometry continuousValue =
                    steps
     in
     clamp min max <|
-    if not discrete then
+    if continuous then
         continuousValue
     else
         let
@@ -789,12 +797,12 @@ decodeGeometry =
     DOM.target <|
     traverseToContainer <|
     Json.map6
-        ( \offsetWidth offsetLeft discrete min max steps ->
+        ( \offsetWidth offsetLeft discrete min max step ->
             { rect = { width = offsetWidth, left = offsetLeft }
             , discrete = discrete
             , min = min
             , max = max
-            , steps = steps
+            , step = step
             }
         )
         DOM.offsetWidth
@@ -803,7 +811,7 @@ decodeGeometry =
         ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( Json.oneOf
-          [ data "steps" (Json.map (Result.toMaybe << String.toInt) Json.string)
+          [ data "step" (Json.map (Result.toMaybe << String.toFloat) Json.string)
           , Json.succeed Nothing
           ]
         )
@@ -837,13 +845,9 @@ onInput =
     Options.option << (\ decoder config -> { config | onInput = Just decoder } )
 
 
-{-| Specify a number of steps that value will be a multiple of.
-
-Defaults to 1.
--}
-steps : Int -> Property m
-steps =
-    Options.option << (\ steps config -> { config | steps = steps } )
+step : Float -> Property m
+step =
+    Options.option << (\ step config -> { config | step = step } )
 
 
 {-| Add track markers to the Slider every `step`.
