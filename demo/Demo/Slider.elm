@@ -18,7 +18,7 @@ type alias Model m =
     , inputs : Dict Material.Index Float
     , min : Int
     , max : Int
-    , steps : Float
+    , step : Float
     , darkTheme : Bool
     , disabled : Bool
     , customBg : Bool
@@ -40,7 +40,7 @@ defaultModel =
         Dict.empty
     , min = 0
     , max = 50
-    , steps = 0.25
+    , step = 0.25
     , darkTheme = False
     , disabled = False
     , customBg = False
@@ -54,7 +54,7 @@ type Msg m
     | Input Material.Index Float
     | SetMin Int
     | SetMax Int
-    | SetSteps Float
+    | SetStep Float
     | ToggleDarkTheme
     | ToggleDisabled
     | ToggleCustomBg
@@ -310,13 +310,11 @@ view lift page model =
 
       , Html.div []
         [ Html.label []
-          [ text "Step (change has no effect): "
+          [ text "Step: "
           , Html.input
-            [ Html.type_ "number"
-            , Html.min "0"
-            , Html.max "100"
-            , Html.defaultValue (toString model.steps)
-            , Html.on "input" (Json.map (String.toFloat >> Result.toMaybe >> Maybe.withDefault 1 >> SetSteps >> lift) (Html.targetValue))
+            [ Html.type_ "text"
+            , Html.defaultValue (toString model.step)
+            , Html.on "input" (Json.map (String.toFloat >> Result.toMaybe >> Maybe.withDefault 1 >> SetStep >> lift) Html.targetValue)
             ]
             []
           ]
