@@ -21,7 +21,7 @@ import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (styled, cs, css, when)
-import Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
+import Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry, XY)
 import Svg
 import Svg.Attributes as Svg
 
@@ -90,22 +90,25 @@ update lift msg model =
               Cmd.none
             )
 
-        Drag { pageX } ->
+        Drag { pageX, pageY } ->
             if model.active then
                 let
                     geometry =
                         Maybe.withDefault defaultGeometry model.geometry
 
+                    insideSlider = isMousePositionInsideSlider geometry pageY
+
                     activeValue =
                         valueFromPageX geometry pageX
+
+                    newModel =
+                        if insideSlider then
+                            { model | inTransit = False, activeValue = Just activeValue }
+                        else
+                            { model | inTransit = False }
                 in
-                ( Just
-                  { model
-                    | inTransit = False
-                    , activeValue = Just activeValue
-                  }
-                ,
-                  Cmd.none
+                ( Just newModel
+                , Cmd.none
                 )
             else
                 ( Nothing, Cmd.none )
@@ -148,6 +151,19 @@ valueFromPageX geometry pageX =
                 xPos / geometry.rect.width
     in
     min + pctComplete * (max - min)
+
+
+{-- Mobile browsers do not send a touchend in certain cases,
+meaning dragging slider continues when it should not. Fix that here.
+More here: https://github.com/material-components/material-components-web/issues/2973
+--}
+isMousePositionInsideSlider : Geometry -> Float -> Bool
+isMousePositionInsideSlider geometry pageY =
+    let
+        rect = geometry.rect
+        insideArea = pageY >= rect.top && pageY <= rect.top + rect.height
+    in
+        insideArea
 
 
 valueForKey : Maybe String -> Int -> Geometry -> Float -> Maybe Float
@@ -455,16 +471,21 @@ slider lift model options _ =
           Options.many <|
           ( List.map (\ event ->
                     Options.on event <|
-                    Json.map (\ { pageX } ->
+                    Json.map (\ { pageX, pageY } ->
                             let
-                                activeValue =
-                                    valueFromPageX geometry pageX
-                                    |> discretize geometry
+                              insideSlider = isMousePositionInsideSlider geometry pageY
+
+                              activeValue =
+                                  if insideSlider then
+                                      valueFromPageX geometry pageX
+                                      |> discretize geometry
+                                  else
+                                      value
                             in
                             Maybe.map (flip (<|) activeValue) config.onChange
                             |> Maybe.withDefault (lift NoOp)
                         )
-                        decodePageX
+                        decodePageXY
                 )
                 downs
           )
@@ -473,16 +494,21 @@ slider lift model options _ =
           Options.many <|
           ( List.map (\ event ->
                     Options.on event <|
-                    Json.map (\ { pageX } ->
+                    Json.map (\ { pageX, pageY } ->
                             let
-                                activeValue =
-                                    valueFromPageX geometry pageX
-                                    |> discretize geometry
+                              insideSlider = isMousePositionInsideSlider geometry pageY
+
+                              activeValue =
+                                  if insideSlider then
+                                      valueFromPageX geometry pageX
+                                      |> discretize geometry
+                                  else
+                                      value
                             in
                             Maybe.map (flip (<|) activeValue) config.onInput
                             |> Maybe.withDefault (lift NoOp)
                         )
-                        decodePageX
+                        decodePageXY
                 )
                 downs
           )
@@ -498,16 +524,21 @@ slider lift model options _ =
           Options.many <|
           List.map (\ handler ->
                   handler <|
-                  Json.map (\ { pageX } ->
+                  Json.map (\ { pageX, pageY } ->
                           let
+                              insideSlider = isMousePositionInsideSlider geometry pageY
+
                               activeValue =
-                                  valueFromPageX geometry pageX
-                                  |> discretize geometry
+                                  if insideSlider then
+                                      valueFromPageX geometry pageX
+                                      |> discretize geometry
+                                  else
+                                      value
                           in
                           Maybe.map (flip (<|) activeValue) config.onChange
                           |> Maybe.withDefault (lift NoOp)
                       )
-                      decodePageX
+                      decodePageXY
               )
               ups
 
@@ -515,23 +546,28 @@ slider lift model options _ =
           Options.many <|
           List.map (\ handler ->
                   handler <|
-                  Json.map (\ { pageX } ->
+                  Json.map (\ { pageX, pageY } ->
                           let
+                              insideSlider = isMousePositionInsideSlider geometry pageY
+
                               activeValue =
-                                  valueFromPageX geometry pageX
-                                  |> discretize geometry
+                                if insideSlider then
+                                    valueFromPageX geometry pageX
+                                    |> discretize geometry
+                                else
+                                    value
                           in
                           Maybe.map (flip (<|) activeValue) config.onInput
                           |> Maybe.withDefault (lift NoOp)
                       )
-                      decodePageX
+                      decodePageXY
               )
               ups
 
         , when model.active <|
           Options.many <|
           List.map (\ handler ->
-                  handler (Json.map (lift << Drag) decodePageX)
+                  handler (Json.map (lift << Drag) decodePageXY)
               )
               moves
 
@@ -539,16 +575,21 @@ slider lift model options _ =
           Options.many <|
           List.map (\ handler ->
                   handler <|
-                  Json.map (\ { pageX } ->
+                  Json.map (\ { pageX, pageY } ->
                           let
+                              insideSlider = isMousePositionInsideSlider geometry pageY
+
                               activeValue =
-                                  valueFromPageX geometry pageX
-                                  |> discretize geometry
+                                  if insideSlider then
+                                      valueFromPageX geometry pageX
+                                      |> discretize geometry
+                                  else
+                                      value
                           in
                           Maybe.map (flip (<|) activeValue) config.onInput
                           |> Maybe.withDefault (lift NoOp)
                       )
-                      decodePageX
+                      decodePageXY
               )
               moves
         ]
@@ -711,6 +752,16 @@ decodePageX =
     ]
 
 
+decodePageXY : Decoder XY
+decodePageXY =
+    Json.map (\ {pageX, pageY} -> { pageX = pageX, pageY = pageY }) <|
+    Json.oneOf
+    [ Json.map2 XY (Json.at [ "targetTouches", "0", "pageX" ] Json.float) (Json.at [ "targetTouches", "0", "pageY" ] Json.float)
+    , Json.map2 XY (Json.at [ "changedTouches", "0", "pageX" ] Json.float) (Json.at [ "changedTouches", "0", "pageY" ] Json.float)
+    , Json.map2 XY (Json.at ["pageX"] Json.float) (Json.at ["pageY"] Json.float)
+    ]
+
+
 decodeGeometry : Decoder Geometry
 decodeGeometry =
     let
@@ -725,9 +776,9 @@ decodeGeometry =
     in
     DOM.target <|
     traverseToContainer <|
-    Json.map6
-        ( \offsetWidth offsetLeft discrete min max step ->
-            { rect = { width = offsetWidth, left = offsetLeft }
+    Json.map8
+        ( \offsetWidth offsetHeight offsetLeft offsetTop discrete min max step ->
+            { rect = { width = offsetWidth, height = offsetHeight, left = offsetLeft, top = offsetTop }
             , discrete = discrete
             , min = min
             , max = max
@@ -735,7 +786,9 @@ decodeGeometry =
             }
         )
         DOM.offsetWidth
+        DOM.offsetHeight
         DOM.offsetLeft
+        DOM.offsetTop
         ( hasClass "mdc-slider--discrete" )
         ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
