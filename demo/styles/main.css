@@ -1,0 +1,12 @@
+#catalog-image-list {
+    max-width: 900px;
+    padding-top: 128px;
+    padding-bottom: 100px;
+}
+.catalog-image-list-label {
+    font-weight: 500;
+    color: #212121;
+}
+.catalog-top-app-bar {
+    background-color: #212121;
+}
