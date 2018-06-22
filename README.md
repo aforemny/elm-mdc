@@ -115,7 +115,7 @@ view : Model -> Html Msg
 view model =
     Html.div []
         [
-          Button.view Mdc "my-button"" model.mdc
+          Button.view Mdc "my-button" model.mdc
               [ Button.ripple
               , Options.onClick Click
               ]
