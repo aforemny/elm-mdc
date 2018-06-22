@@ -1,48 +1,50 @@
-module Internal.Options exposing
-    ( addAttributes
-    , apply
-    , applyNativeControl
-    , aria
-    , attribute
-    , autocomplete
-    , collect
-    , cs
-    , css
-    , data
-    , dispatch
-    , many
-    , nativeControl
-    , nop
-    , on
-    , onBlur
-    , onChange
-    , onCheck
-    , onClick
-    , onDoubleClick
-    , onFocus
-    , onInput
-    , onMouseDown
-    , onMouseEnter
-    , onMouseLeave
-    , onMouseOut
-    , onMouseOver
-    , onMouseUp
-    , onSubmit
-    , onWithOptions
-    , option
-    , Property
-    , recollect
-    , role
-    , styled
-    , when
-    )
+module Internal.Options
+    exposing
+        ( Property
+        , addAttributes
+        , apply
+        , applyNativeControl
+        , aria
+        , attribute
+        , autocomplete
+        , collect
+        , cs
+        , css
+        , data
+        , dispatch
+        , id
+        , many
+        , nativeControl
+        , nop
+        , on
+        , onBlur
+        , onChange
+        , onCheck
+        , onClick
+        , onDoubleClick
+        , onFocus
+        , onInput
+        , onMouseDown
+        , onMouseEnter
+        , onMouseLeave
+        , onMouseOut
+        , onMouseOver
+        , onMouseUp
+        , onSubmit
+        , onWithOptions
+        , option
+        , recollect
+        , role
+        , styled
+        , when
+        )
 
+import Html exposing (Attribute, Html)
 import Html.Attributes
 import Html.Events
-import Html exposing (Html, Attribute)
-import Json.Decode as Json exposing (Decoder)
 import Internal.Dispatch as Dispatch
 import Internal.Msg exposing (Msg(Dispatch))
+import Json.Decode as Json exposing (Decoder)
 import String
 
 
@@ -168,7 +170,8 @@ type alias NativeControl c m =
     { c | nativeControl : List (Property () m) }
 
 
-nativeControl : List (Property () m)
+nativeControl :
+    List (Property () m)
     -> Property (NativeControl c m) m
 nativeControl options =
     option (\config -> { config | nativeControl = config.nativeControl ++ options })
@@ -195,7 +198,8 @@ will be taken apart as part of vdoms equality check; vdom _can_ in this case
 tell that the previous and current decoder is the same.
 
 See #221 / this thread on elm-discuss:
-https://groups.google.com/forum/#!topic/elm-discuss/Q6mTrF4T7EU
+<https://groups.google.com/forum/#!topic/elm-discuss/Q6mTrF4T7EU>
+
 -}
 on1 : String -> (a -> b) -> a -> Property c b
 on1 event lift m =
@@ -220,23 +224,24 @@ applyNativeControl :
     -> Html m
 applyNativeControl summary ctor options =
     ctor
-      ( addAttributes
-        ( recollect
-            { summary
-              | classes = []
-              , css = []
-              , attrs = []
-              , internal = []
-              , config = ()
-              , dispatch = Dispatch.clear summary.dispatch
-            }
-            (summary.config.nativeControl ++ options)
+        (addAttributes
+            (recollect
+                { summary
+                    | classes = []
+                    , css = []
+                    , attrs = []
+                    , internal = []
+                    , config = ()
+                    , dispatch = Dispatch.clear summary.dispatch
+                }
+                (summary.config.nativeControl ++ options)
+            )
+            []
         )
-        []
-      )
 
 
-styled : (List (Attribute m) -> a)
+styled :
+    (List (Attribute m) -> a)
     -> List (Property c m)
     -> a
 styled ctor props =
@@ -264,7 +269,7 @@ nop =
 
 
 when : Bool -> Property c m -> Property c m
-when guard prop  =
+when guard prop =
     if guard then
         prop
     else
@@ -299,6 +304,11 @@ attribute =
 on : String -> Json.Decoder m -> Property c m
 on event =
     Listener event Nothing
+
+
+id : String -> Property c m
+id =
+    Attribute << Html.Attributes.id
 
 
 onClick : msg -> Property c msg
@@ -343,7 +353,7 @@ onMouseOut msg =
 
 onCheck : (Bool -> msg) -> Property c msg
 onCheck =
-    (flip Json.map Html.Events.targetChecked) >> on "change"
+    flip Json.map Html.Events.targetChecked >> on "change"
 
 
 onBlur : msg -> Property c msg
