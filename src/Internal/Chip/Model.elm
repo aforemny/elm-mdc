@@ -24,4 +24,4 @@ type alias KeyCode =
 
 type Msg m
     = RippleMsg Ripple.Msg
-    | Click Bool m
+    | Click m

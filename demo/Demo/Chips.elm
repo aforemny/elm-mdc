@@ -86,33 +86,29 @@ view lift page model =
 
 heroChips : (Msg m -> m) -> Model m -> Html m
 heroChips lift model =
-    Chip.chipset
+    Chip.chipset []
         [ Chip.view (lift << Mdc)
             "chips-hero-one"
             model.mdc
-            [ Chip.ripple
-            ]
+            []
             [ text "Chip One"
             ]
         , Chip.view (lift << Mdc)
             "chips-hero-two"
             model.mdc
-            [ Chip.ripple
-            ]
+            []
             [ text "Chip Two"
             ]
         , Chip.view (lift << Mdc)
             "chips-hero-three"
             model.mdc
-            [ Chip.ripple
-            ]
+            []
             [ text "Chip Three"
             ]
         , Chip.view (lift << Mdc)
             "chips-hero-four"
             model.mdc
-            [ Chip.ripple
-            ]
+            []
             [ text "Chip Four"
             ]
         ]
@@ -125,8 +121,7 @@ choiceChips lift model =
             Chip.view (lift << Mdc)
                 index
                 model.mdc
-                [ Chip.ripple
-                , Chip.onClick (lift (ToggleChip Choice index))
+                [ Chip.onClick (lift (ToggleChip Choice index))
                 , when (index == model.choiceChip) Chip.selected
                 ]
                 [ text label
@@ -138,6 +133,8 @@ choiceChips lift model =
         [ text "Choice Chips"
         ]
     , Chip.chipset
+        [ Chip.choice
+        ]
         [ chip "chips-choice-extra-small" "Extra Small"
         , chip "chips-choice-small" "Small"
         , chip "chips-choice-medium" "Medium"
@@ -162,15 +159,15 @@ filterChips lift model =
             Chip.view (lift << Mdc)
                 index
                 model.mdc
-                [ Chip.ripple
-                , Chip.onClick (lift (ToggleChip Filter index))
-                , Chip.withCheckmark True
+                [ Chip.onClick (lift (ToggleChip Filter index))
                 , when (Set.member index model.selectedChips) Chip.selected
                 ]
                 [ text label
                 ]
       in
       Chip.chipset
+        [ Chip.filter
+        ]
         [ chip "chips-filter-chips-tops" "Tops"
         , chip "chips-filter-chips-bottoms" "Bottoms"
         , chip "chips-filter-chips-shoes" "Shoes"
@@ -184,16 +181,15 @@ filterChips lift model =
             Chip.view (lift << Mdc)
                 index
                 model.mdc
-                [ Chip.ripple
-                , Chip.onClick (lift (ToggleChip Filter index))
+                [ Chip.onClick (lift (ToggleChip Filter index))
                 , Chip.leadingIcon "face"
-                , Chip.withCheckmark True
+                , Chip.checkmark
                 , when (Set.member index model.selectedChips) Chip.selected
                 ]
                 [ text label
                 ]
       in
-      Chip.chipset
+      Chip.chipset []
         [ chip "chips-filter-chips-alice" "Alice"
         , chip "chips-filter-chips-bob" "Bob"
         , chip "chips-filter-chips-charlie" "Charlie"
@@ -209,8 +205,7 @@ actionChips lift model =
             Chip.view (lift << Mdc)
                 index
                 model.mdc
-                [ Chip.ripple
-                , Chip.onClick (lift (ToggleChip Action index))
+                [ Chip.onClick (lift (ToggleChip Action index))
                 , Chip.leadingIcon leadingIcon
                 ]
                 [ text label
@@ -221,7 +216,7 @@ actionChips lift model =
         ]
         [ text "Action Chips"
         ]
-    , Chip.chipset
+    , Chip.chipset []
         [ chip "chips-action-chips-add-to-calendar" ( "event", "Add to calendar" )
         , chip "chips-action-chips-bookmark" ( "bookmark", "Bookmark" )
         , chip "chips-action-chips-set-alarm" ( "alarm", "Set alarm" )

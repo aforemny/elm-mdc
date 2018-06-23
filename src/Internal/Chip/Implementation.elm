@@ -1,15 +1,17 @@
 module Internal.Chip.Implementation
     exposing
-        ( Property
+        ( checkmark
         , chipset
+        , choice
+        , filter
+        , input
         , leadingIcon
         , onClick
+        , Property
         , react
-        , ripple
         , selected
         , trailingIcon
         , view
-        , withCheckmark
         )
 
 import Html exposing (Html, text)
@@ -37,34 +39,26 @@ update lift msg model =
             in
             ( Just { model | ripple = ripple }, Cmd.map (lift << RippleMsg) cmd )
 
-        Click ripple msg_ ->
-            ( Nothing
-            , Helpers.delayedCmd
-                (if ripple then
-                    150
-                 else
-                    0
-                )
-                msg_
-            )
+        Click msg_ ->
+            ( Nothing, Helpers.delayedCmd 150 msg_ )
 
 
 type alias Config m =
-    { ripple : Bool
-    , leadingIcon : Maybe String
+    { leadingIcon : Maybe String
     , trailingIcon : Maybe String
     , onClick : Maybe m
-    , withCheckmark : Bool
+    , selected : Bool
+    , checkmark : Bool
     }
 
 
 defaultConfig : Config m
 defaultConfig =
-    { ripple = False
-    , leadingIcon = Nothing
+    { leadingIcon = Nothing
     , trailingIcon = Nothing
     , onClick = Nothing
-    , withCheckmark = False
+    , selected = False
+    , checkmark = False
     }
 
 
@@ -84,17 +78,12 @@ trailingIcon str =
 
 selected : Property m
 selected =
-    cs "mdc-chip--selected"
+    Options.option (\config -> { config | selected = True })
 
 
-withCheckmark : Bool -> Property m
-withCheckmark value =
-    Options.option (\config -> { config | withCheckmark = value })
-
-
-ripple : Property m
-ripple =
-    Options.option (\options -> { options | ripple = True })
+checkmark : Property m
+checkmark =
+    Options.option (\config -> { config | checkmark = True })
 
 
 onClick : m -> Property m
@@ -112,10 +101,7 @@ onClick msg =
     in
     Options.many
         [ Options.onClick msg
-        , Options.on "keyup"
-            (Json.map2 trigger decodeKey decodeKeyCode
-                |> Json.andThen identity
-            )
+        , Options.on "keyup" (Json.map2 trigger decodeKey decodeKeyCode |> Json.andThen identity)
         ]
 
 
@@ -129,9 +115,33 @@ decodeKeyCode =
     Html.keyCode
 
 
-chipset : List (Html m) -> Html m
-chipset nodes =
-    styled Html.div [ cs "mdc-chip-set mdc-chip-set--filter" ] nodes
+chipset : List (Property m) -> List (Html m) -> Html m
+chipset options nodes =
+  let
+      ({ config } as summary) =
+        Options.collect defaultConfig options
+  in
+    Options.apply summary
+        Html.div
+        [ cs "mdc-chip-set"
+        ]
+        []
+        nodes
+
+
+filter : Property m
+filter =
+    cs "mdc-chip-set--filter"
+
+
+choice : Property m
+choice =
+    cs "mdc-chip-set--choice"
+
+
+input : Property m
+input =
+    cs "mdc-chip-set--input"
 
 
 chip : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -142,22 +152,18 @@ chip lift model options nodes =
 
         ripple =
             Ripple.view False (lift << RippleMsg) model.ripple []
-
-        hasSelection =
-            List.member selected options
     in
     Options.apply summary
         Html.div
         [ cs "mdc-chip"
-        , cs "mdc-js-ripple-effect" |> when summary.config.ripple
-        , when config.ripple
-            << Options.many
-          <|
+        , when config.selected (cs "mdc-chip--selected")
+        , cs "mdc-js-ripple-effect"
+        , Options.many
             [ ripple.interactionHandler
             , ripple.properties
             ]
         , config.onClick
-            |> Maybe.map (Options.onClick << lift << Click config.ripple)
+            |> Maybe.map (Options.onClick << lift << Click)
             |> Maybe.withDefault Options.nop
         , Options.attribute (Html.tabindex 0)
         ]
@@ -168,17 +174,16 @@ chip lift model options nodes =
                     (\icon ->
                         [ Icon.view
                             [ cs "mdc-chip__icon mdc-chip__icon--leading"
-                            , when (config.withCheckmark && hasSelection) <|
+                            , when (config.selected && config.checkmark) <|
                                 cs "mdc-chip__icon--leading-hidden"
-
-                            -- Make icon size fixed during animation
-                            , css "font-size" "20px"
+                            , -- Make icon size fixed during animation
+                              css "font-size" "20px"
                             ]
                             icon
                         ]
                     )
                 |> Maybe.withDefault []
-            , [ if config.withCheckmark then
+            , [ if config.checkmark then
                     styled Html.div
                         [ cs "mdc-chip__checkmark" ]
                         [ Svg.svg

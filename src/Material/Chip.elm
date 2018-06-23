@@ -1,14 +1,16 @@
 module Material.Chip
     exposing
-        ( Property
+        ( checkmark
         , chipset
+        , choice
+        , filter
+        , input
         , leadingIcon
         , onClick
-        , ripple
+        , Property
         , selected
         , trailingIcon
         , view
-        , withCheckmark
         )
 
 {-| The Chip component is a spec-aligned chip component adhering to the
@@ -40,16 +42,22 @@ Material Design chip requirements.
 
 @docs Property
 @docs view
+@docs selected
+@docs onClick
+@docs checkmark
 
-@docs chipset
+
+### Leading and trailing icon
 
 @docs leadingIcon
 @docs trailingIcon
-@docs withCheckmark
-@docs selected
-@docs ripple
-@docs onClick
 
+# Chip sets
+
+@docs chipset
+@docs choice
+@docs filter
+@docs input
 -}
 
 import Html exposing (Html)
@@ -98,33 +106,45 @@ selected =
     Chip.selected
 
 
-{-| Give the chip a check mark
--}
-withCheckmark : Bool -> Property m
-withCheckmark =
-    Chip.withCheckmark
+{-| Click handler that respects the chip's ripple ink effect.
 
-
-{-| Enable ripple ink effect for the chip.
--}
-ripple : Property m
-ripple =
-    Chip.ripple
-
-
-{-| Container of chips
--}
-chipset : List (Html m) -> Html m
-chipset =
-    Chip.chipset
-
-
-{-| Click handler that respects `ripple`.
-
-The event will be raised only after the ripple animation finished playing. If
-the chip does not ripple, it is identical to `Options.onClick`.
-
+The event will be raised only after the ripple animation finished playing.
 -}
 onClick : m -> Property m
 onClick =
     Chip.onClick
+
+
+{-| Container of chips
+-}
+chipset : List (Property m) -> List (Html m) -> Html m
+chipset =
+    Chip.chipset
+
+
+{-| Use this property when you allow multiple selection from a collection.
+-}
+filter : Property m
+filter =
+    Chip.filter
+
+
+{-| Use this property when you allow single selection from a collection.
+-}
+choice : Property m
+choice =
+    Chip.choice
+
+
+{-| Use this property if you are conveing user input into a collection.
+-}
+input : Property m
+input =
+    Chip.input
+
+
+{-| Show a checkmark if the chip is selected.
+-}
+checkmark : Property m
+checkmark =
+    Chip.checkmark
