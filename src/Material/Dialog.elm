@@ -43,7 +43,7 @@ import Material.Dialog as Dialog
 import Material.Options as Options exposing (styled)
 
 
-Dialog.view Mdc [0] model.mdc
+Dialog.view Mdc "my-dialog" model.mdc
     [ Dialog.open
     , Dialog.onClose Cancel
     ]
@@ -68,7 +68,7 @@ no apps are running.
           ,
             Dialog.footer []
                 [
-                  Button.view Mdc [0,0] model.mdc
+                  Button.view Mdc "my-cancel-button" model.mdc
                       [ Button.ripple
                       , Dialog.cancel
                       , Options.onClick Cancel
@@ -76,7 +76,7 @@ no apps are running.
                       [ text "Decline"
                       ]
                 ,
-                  Button.view Mdc [0,1] model.mdc
+                  Button.view Mdc "my-accept-button" model.mdc
                       [ Button.ripple
                       , Dialog.accept
                       , Options.onClick Accept

@@ -224,7 +224,7 @@ view lift page model =
           Button.view (lift << Mdc) "snackbar-show-start-aligned-button" model.mdc
           [ Button.raised
           , css "margin-top" "14px"
-          , Options.on "click" (Json.succeed (lift (Show "snackbar-start-aligned-snackbar")))
+          , Options.on "click" (Json.succeed (lift (Show "snackbar-align-start-snackbar")))
           ]
           [ text "Show Start Aligned"
           ]
@@ -234,7 +234,7 @@ view lift page model =
           Button.view (lift << Mdc) "snackbar-show-start-aligned-button-rtl" model.mdc
           [ Button.raised
           , css "margin-top" "14px"
-          , Options.on "click" (Json.succeed (lift (Show "snackbar-start-aligned-snackbar-rtl")))
+          , Options.on "click" (Json.succeed (lift (Show "snackbar-align-start-snackbar-rtl")))
           ]
           [ text "Show Start Aligned (Rtl)"
           ]

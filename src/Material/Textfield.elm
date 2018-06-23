@@ -1,5 +1,6 @@
 module Material.Textfield exposing
-    ( box
+    ( autocomplete
+    , box
     , cols
     , dense
     , disabled
@@ -39,7 +40,7 @@ Text fields allow users to input, edit, and select text.
 import Material.Options as Options
 import Material.Textfield as Textfield
 
-Textfield.view Mdc [0] model.mdc
+Textfield.view Mdc "my-text-field" model.mdc
     [ Textfield.label "Text field"
     , Options.onChange UpdateTextField
     ]
@@ -51,34 +52,65 @@ Textfield.view Mdc [0] model.mdc
 
 @docs Property
 @docs view
+
+
+## Properties
+
 @docs label
 @docs value
 @docs placeholder
-@docs box
-@docs outlined
-@docs fullwidth
-@docs disabled
 @docs dense
-@docs email
-@docs password
-@docs type_
-@docs textarea
-@docs rows
-@docs cols
+@docs disabled
+
+### Icon properties
+
 @docs leadingIcon
 @docs trailingIcon
 @docs iconUnclickable
+
+
+### Validation properties
+
 @docs required
 @docs invalid
 @docs pattern
+
+
+## Variants
+
+@docs box
+@docs outlined
+@docs fullwidth
+
+
+### Multiline
+
+@docs textarea
+@docs rows
+@docs cols
+
+## Type
+
+@docs email
+@docs password
+@docs type_
+
+
+## Autocomplete
+
 @docs nativeControl
+
+
+## Native control
+
+@docs autocomplete
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
+import Internal.Options as Options
 import Internal.Textfield.Implementation as Textfield
-import Material.Options as Options
+import Material
 
 
 {-| Textfield property.
@@ -249,3 +281,9 @@ nativeControl : List (Options.Property () m) -> Property m
 nativeControl =
     Textfield.nativeControl
 
+
+{-| Set a text field's HTML `autocomplete` attribute.
+-}
+autocomplete : String -> Property m
+autocomplete =
+    nativeControl << List.singleton << Options.autocomplete

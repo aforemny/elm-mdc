@@ -19,7 +19,7 @@ import Material.Options as Options
 
 
 FormField.view []
-    [ Checkbox.view Mdc [0] model.mdc
+    [ Checkbox.view Mdc "my-checkbox" model.mdc
           [ Options.onClick Toggle
           ]
           []

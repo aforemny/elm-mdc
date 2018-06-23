@@ -33,7 +33,7 @@ import Material.Options exposing (css)
 import Material.Select as Select
 
 
-Select.view (lift << Mdc) id model.mdc
+Select.view Mdc "my-select" model.mdc
     [ Select.label "Food Group"
     , Select.preselected
     , Options.onChange ProcessMyChange

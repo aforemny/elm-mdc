@@ -6,11 +6,13 @@ module Internal.Options
         , applyNativeControl
         , aria
         , attribute
+        , autocomplete
         , collect
         , cs
         , css
         , data
         , dispatch
+        , id
         , many
         , nativeControl
         , nop
@@ -32,6 +34,7 @@ module Internal.Options
         , onWithOptions
         , option
         , recollect
+        , role
         , styled
         , when
         )
@@ -283,6 +286,16 @@ aria key val =
     Attribute (Html.Attributes.attribute ("aria-" ++ key) val)
 
 
+autocomplete : String -> Property c m
+autocomplete autocomplete =
+    Attribute (Html.Attributes.attribute "autocomplete" autocomplete)
+
+
+role : String -> Property c m
+role role =
+    Attribute (Html.Attributes.attribute "role" role)
+
+
 attribute : Html.Attribute Never -> Property c m
 attribute =
     Attribute << Html.Attributes.map never
@@ -291,6 +304,11 @@ attribute =
 on : String -> Json.Decoder m -> Property c m
 on event =
     Listener event Nothing
+
+
+id : String -> Property c m
+id =
+    Attribute << Html.Attributes.id
 
 
 onClick : msg -> Property c msg

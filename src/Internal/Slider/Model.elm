@@ -40,12 +40,13 @@ type Msg m
     | TransitionEnd
     | Drag { pageX : Float }
     | Up
+    | ActualUp
 
 
 type alias Geometry =
     { rect : Rect
     , discrete : Bool
-    , steps : Maybe Int
+    , step : Maybe Float
     , min : Float
     , max : Float
     }
@@ -63,5 +64,5 @@ defaultGeometry =
     , discrete = False
     , min = 0
     , max = 100
-    , steps = Nothing
+    , step = Nothing
     }

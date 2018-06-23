@@ -23,7 +23,7 @@ import Material.Fab as Fab
 import Material.Options as Options
 
 
-Fab.view Mdc [0] model.mdc
+Fab.view Mdc "my-fab" model.mdc
     [ Fab.ripple
     , Options.onClick Click
     ]

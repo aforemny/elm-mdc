@@ -46,12 +46,12 @@ styled Html.div
     [ Options.cs "mdc-menu-anchor"
     , Options.css "position" "relative"
     ]
-    [ Button.view Mdc [0] model.mdc
-          [ Menu.attach (lift << Mdc) [1]
+    [ Button.view Mdc "my-button" model.mdc
+          [ Menu.attach (lift << Mdc) "my-menu"
           ]
           [ text "Show"
           ]
-    , Menu.view Mdc [1] model.mdc []
+    , Menu.view Mdc "my-menu" model.mdc []
           [ Menu.ul []
                 [ Menu.li
                       [ Menu.onSelect (Select "Item 1")

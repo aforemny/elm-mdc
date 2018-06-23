@@ -204,7 +204,7 @@ chip lift model options nodes =
                         [ Icon.view
                             [ cs "mdc-chip__icon mdc-chip__icon--trailing"
                             , Options.attribute (Html.tabindex 0)
-                            , Options.attribute (Html.attribute "role" "button")
+                            , Options.role "button"
                             ]
                             icon
                         ]

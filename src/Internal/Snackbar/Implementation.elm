@@ -16,7 +16,7 @@ import Json.Decode as Json
 import Internal.Component as Component exposing (Indexed, Index)
 import Internal.Helpers as Helpers
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, when)
+import Internal.Options as Options exposing (styled, cs, when, aria)
 import Internal.Snackbar.Model exposing (Model, defaultModel, Contents, Msg(..), Transition(..), State(..))
 
 
@@ -217,6 +217,9 @@ snackbar lift model options _ =
       |> when multiline
     , cs "mdc-snackbar--action-on-bottom"
       |> when actionOnBottom
+    , aria "live" "assertive"
+    , aria "atomic" "true"
+    , aria "hidden" "true"
     ]
     []
     [ styled Html.div

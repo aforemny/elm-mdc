@@ -44,7 +44,7 @@ import Html exposing (text)
 import Material.Toolbar as Toolbar
 
 
-Toolbar.view Mdc [0] model.mdc []
+Toolbar.view Mdc "my-toolbar" model.mdc []
     [ Toolbar.row []
           [ Toolbar.section
                 [ Toolbar.alignStart

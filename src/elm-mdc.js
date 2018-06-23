@@ -1,32 +1,8 @@
 import createFocusTrap from 'focus-trap';
 import CustomEvent from 'custom-event';
 
-// attribute "data-autofocus":
-(() => {
-  new MutationObserver((mutations) => {
-    for (let i = 0; i < mutations.length; i++) {
-      if (mutations[i].type !== "attributes") {
-        continue
-      }
-      let mutation = mutations[i]
-      let node = mutation.target
-      if (!node.dataset) {
-        continue
-      }
-      if (typeof node.dataset.autofocus !== "undefined") {
-        node.focus()
-      }
-    }
-  }).observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: [ "data-autofocus" ]
-  })
-})();
 
-
-// attribute "data-autofocus":
+// attribute "data-focustrap":
 (() => {
   if (window["ElmFocusTrap"]) return
 
@@ -83,10 +59,15 @@ import CustomEvent from 'custom-event';
           if (!node.dataset) {
             continue
           }
-          if (typeof node.dataset.focustrap === "undefined") {
-            continue
+          if (typeof node.dataset.focustrap !== "undefined") {
+            tearDown(node)
+          } else {
+            let childNode = node.querySelector("[data-focustrap]")
+            if (typeof childNode === "undefined") {
+              continue;
+            }
+            tearDown(childNode)
           }
-          tearDown(node)
         }
       }
 
@@ -125,54 +106,6 @@ import CustomEvent from 'custom-event';
       targets[i].dispatchEvent(event)
     }
   }
-
-  // custom event "globalload":
-  window.addEventListener("load", (originalEvent) => {
-    dispatch(document, "globalload", (target, event) => {
-      return event
-    })
-  });
-
-  (() => {
-    new MutationObserver((mutations) => {
-      for (let i = 0; i < mutations.length; i++) {
-        if (mutations[i].type !== "childList") {
-          continue
-        }
-        let mutation = mutations[i]
-        let nodes = mutation.addedNodes
-        for (let j = 0; j < nodes.length; j++) {
-          let node = nodes[j]
-          if (!node.dataset) {
-            continue
-          }
-          if (typeof node.dataset.globalload !== "undefined") {
-            let event = new CustomEvent("globalload")
-            node.dispatchEvent(event)
-          }
-          if (!(node.querySelector)) {
-            continue
-          }
-          dispatch(node, "globalload", (target, event) => {
-            return event
-          })
-        }
-      }
-    }).observe(document.body, {
-      childList: true,
-      subtree: true
-    })
-  })()
-  
-
-  // custom event "globalload1"
-  window.addEventListener("load", (originalEvent) => {
-    window.requestAnimationFrame(() => {
-      dispatch(document, "globalload1", (target, event) => {
-        return event
-      })
-    })
-  });
 
   // custom event "globaltick"
   (() => {
@@ -243,52 +176,6 @@ import CustomEvent from 'custom-event';
   window.addEventListener("resize", (originalEvent) => {
     dispatch(document, "globalresize", (target, event) => {
       return event
-    })
-  });
-
-  window.addEventListener("resize", (originalEvent) => {
-    window.requestAnimationFrame(() => {
-      dispatch(document, "globalresize1", (target, event) => {
-        return event
-      })
-    })
-  });
-
-
-  // custom event "globalpolledresize"
-  window.addEventListener("resize", (originalEvent) => {
-    let running = false
-    window.requestAnimationFrame(() => {
-      if (running) {
-        return
-      }
-      running = true
-      window.requestAnimationFrame(() => {
-        dispatch(document, "globalpolledresize", (target, event) => {
-          return event
-        })
-        running = false
-      })
-    })
-  });
-
-
-  // custom event "globalpolledresize1"
-  window.addEventListener("resize", (originalEvent) => {
-    let running = false
-    window.requestAnimationFrame(() => {
-      if (running) {
-        return
-      }
-      running = true
-      window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        dispatch(document, "globalpolledresize1", (target, event) => {
-          return event
-        })
-        running = false
-      })
-      })
     })
   });
 

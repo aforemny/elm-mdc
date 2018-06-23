@@ -29,7 +29,7 @@ import Material.Switch as Switch
 
 
 FormField.view []
-    [ Switch.view Mdc [0] model.mdc
+    [ Switch.view Mdc "my-switch" model.mdc
           [ Switch.on
           , Options.onClick Toggle
           ]

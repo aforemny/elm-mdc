@@ -7,75 +7,24 @@ module Internal.Slider.Implementation exposing
     , onInput
     , Property
     , react
-    , steps
+    , step
     , trackMarkers
     , value
     , view
     )
 
-{-|
-Slider provides an implementation of the Material Design slider component.
-
-Note that vertical sliders and range (multi-thumb) sliders are not supported,
-due to their absence from the material design spec.
-
-Slider uses custom `onChage` and `onInput` event handlers.
-
-
-# Resources
-
-- [Material Design guidelines: Sliders](https://material.io/guidelines/components/sliders.html)
-- [Demo](https://aforemny.github.io/elm-mdc/slider)
-
-
-# Example
-
-```elm
-import Material.Slider as Slider
-
-Slider.view Mdc [0] model.mdc
-    [ Slider.value 40
-    , Slider.onChange Change
-    ]
-    []
-```
-
-
-# Usage
-
-
-## Slider
-
-@docs Property
-@docs view
-@docs value, min, max
-@docs disabled
-@docs onChange, onInput
-
-## Discrete Slider
-
-@docs discrete
-@docs steps
-@docs trackMarkers
-
-
-# Internal
-
-@docs Model
-@docs react
--}
-
 import DOM
 import Html as Html exposing (Html, text)
 import Html.Attributes as Html
-import Json.Decode as Json exposing (Decoder)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (styled, cs, css, when)
 import Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
+import Json.Decode as Json exposing (Decoder)
 import Svg
 import Svg.Attributes as Svg
+import Task exposing (Task)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
@@ -178,6 +127,11 @@ update lift msg model =
             ( Just { model | focus = True }, Cmd.none )
 
         Up ->
+            -- Note: In some instances `Up` fires before `InteractionStart`.
+            -- (TODO)
+            ( Just model, Task.perform lift (Task.succeed ActualUp) )
+
+        ActualUp ->
             ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
 
 
@@ -208,7 +162,7 @@ valueForKey key keyCode geometry value =
         isRtl =
             False -- TODO
 
-        { max, min, steps, discrete } =
+        { max, min, step, discrete } =
             geometry
 
         delta =
@@ -218,7 +172,7 @@ valueForKey key keyCode geometry value =
                   identity
             ) <|
             ( if discrete then
-                  Maybe.withDefault 1 (Maybe.map toFloat steps)
+                  Maybe.withDefault 1 step
               else
                   (max - min) / 100
             )
@@ -272,7 +226,7 @@ type alias Config m =
     , min : Float
     , max : Float
     , discrete : Bool
-    , steps : Int
+    , step : Float
     , onInput : Maybe (Float -> m)
     , onChange : Maybe (Float -> m)
     , trackMarkers : Bool
@@ -284,7 +238,7 @@ defaultConfig =
     { value = 0
     , min = 0
     , max = 100
-    , steps = 1
+    , step = 1
     , discrete = False
     , onInput = Nothing
     , onChange = Nothing
@@ -292,44 +246,30 @@ defaultConfig =
     }
 
 
-{-| Properties for Slider options.
--}
 type alias Property m =
     Options.Property (Config m) m
 
 
-{-| Specify the slider's value.
-
-This will be clamped between `min` and `max`.
--}
 value : Float -> Property m
 value =
     Options.option << (\value config -> { config | value = value })
 
 
-{-| Specify the minimum value.
--}
 min : Int -> Property m
 min =
     Options.option << (\min config -> { config | min = toFloat min })
 
 
-{-| Specify the maximum value.
--}
 max : Int -> Property m
 max =
     Options.option << (\max config -> { config | max = toFloat max })
 
 
-{-| Make the slider only take integer values.
--}
 discrete : Property m
 discrete =
     Options.option (\config -> { config | discrete = True })
 
- 
-{-| Disable the slider.
--}
+
 disabled : Property m
 disabled =
     Options.many
@@ -395,6 +335,9 @@ slider lift model options _ =
                 0
             else
                 (value - config.min) / (config.max - config.min)
+
+        stepChanged =
+            Just config.step /= Maybe.andThen .step model.geometry
     in
     styled Html.div
     [ cs "elm-mdc-slider-wrapper"
@@ -434,10 +377,14 @@ slider lift model options _ =
 
         , Options.data "min" (toString config.min)
         , Options.data "max" (toString config.max)
-        , Options.data "steps" (toString config.steps)
-          |> when config.discrete
+        , Options.data "step" (toString config.step)
 
-        , when (model.geometry == Nothing) <|
+        , Options.role "slider"
+        , Options.aria "valuemin" (toString config.min)
+        , Options.aria "valuemax" (toString config.min)
+        , Options.aria "valuenow" (toString value)
+
+        , when ((model.geometry == Nothing) || stepChanged) <|
           GlobalEvents.onTick <| Json.map (lift << Init) decodeGeometry
 
         , GlobalEvents.onResize <| Json.map (lift << Resize) decodeGeometry
@@ -546,7 +493,8 @@ slider lift model options _ =
                 downs
           )
 
-        , when model.active <|
+        , -- Note: In some instances `Up` fires before `InteractionStart`.
+          -- (TODO)
           Options.many <|
           List.map (\ handler ->
                   handler (Json.succeed (lift Up))
@@ -630,7 +578,7 @@ slider lift model options _ =
                   styled Html.div
                   [ cs "mdc-slider__track-marker-container"
                   ]
-                  ( List.repeat ((round (config.max  - config.min)) // config.steps) <|
+                  ( List.repeat (round ((config.max - config.min) / config.step)) <|
                     styled Html.div
                     [ cs "mdc-slider__track-marker"
                     ]
@@ -707,10 +655,6 @@ type alias Store s =
     Component.indexed .slider (\x y -> { y | slider = x }) defaultModel
 
 
-{-| Slider react.
-
-Internal use only.
--}
 react :
     (Internal.Msg.Msg m -> m)
     -> Msg m
@@ -721,8 +665,6 @@ react =
     Component.react get set Internal.Msg.SliderMsg update
 
 
-{-| Slider view.
--}
 view :
     (Internal.Msg.Msg m -> m)
     -> Index
@@ -737,12 +679,14 @@ view =
 discretize : Geometry -> Float -> Float
 discretize geometry continuousValue =
     let
-        { discrete, min, max } =
+        { discrete, step, min, max } =
             geometry
 
+        continuous =
+            not discrete
+
         steps =
-            geometry.steps
-            |> Maybe.map toFloat
+            geometry.step
             |> Maybe.withDefault 1
             |> \ steps ->
                if steps == 0 then
@@ -751,7 +695,7 @@ discretize geometry continuousValue =
                    steps
     in
     clamp min max <|
-    if not discrete then
+    if continuous then
         continuousValue
     else
         let
@@ -789,12 +733,12 @@ decodeGeometry =
     DOM.target <|
     traverseToContainer <|
     Json.map6
-        ( \offsetWidth offsetLeft discrete min max steps ->
+        ( \offsetWidth offsetLeft discrete min max step ->
             { rect = { width = offsetWidth, left = offsetLeft }
             , discrete = discrete
             , min = min
             , max = max
-            , steps = steps
+            , step = step
             }
         )
         DOM.offsetWidth
@@ -803,7 +747,7 @@ decodeGeometry =
         ( data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string) )
         ( Json.oneOf
-          [ data "steps" (Json.map (Result.toMaybe << String.toInt) Json.string)
+          [ data "step" (Json.map (Result.toMaybe << String.toFloat) Json.string)
           , Json.succeed Nothing
           ]
         )
@@ -823,31 +767,21 @@ hasClass class =
       ( Json.at [ "className" ] Json.string )
 
 
-{-| Slider `onChange` event listener.
--}
 onChange : (Float -> m) -> Property m
 onChange =
     Options.option << (\ decoder config -> { config | onChange = Just decoder } )
 
 
-{-| Slider `onInput` event listener.
--}
 onInput : (Float -> m) -> Property m
 onInput =
     Options.option << (\ decoder config -> { config | onInput = Just decoder } )
 
 
-{-| Specify a number of steps that value will be a multiple of.
-
-Defaults to 1.
--}
-steps : Int -> Property m
-steps =
-    Options.option << (\ steps config -> { config | steps = steps } )
+step : Float -> Property m
+step =
+    Options.option << (\ step config -> { config | step = step } )
 
 
-{-| Add track markers to the Slider every `step`.
--}
 trackMarkers : Property m
 trackMarkers =
     Options.option (\ config -> { config | trackMarkers = True } )

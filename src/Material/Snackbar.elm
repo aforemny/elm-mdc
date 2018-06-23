@@ -10,8 +10,7 @@ module Material.Snackbar exposing
     )
 
 {-|
-The Snackbar component is a spec-aligned snackbar/toast component adhering to
-the Material Design snackbars & toasts requirements.
+Snackbars provide brief messages about app processes at the bottom of the screen.
 
 
 # Resources
@@ -22,11 +21,32 @@ the Material Design snackbars & toasts requirements.
 
 # Example
 
+Put the snackbar in your main content, so it's available to display
+when needed. It's invisible by default.
+
 ```elm
 import Material.Snackbar as Snackbar
 
-Snackbar.view Mdc [0] model.mdc [] []
+Snackbar.view Mdc "my-snackbar" model.mdc [] []
 ```
+
+You would then need to show it in your update action.
+
+Sketch of the code (see the Demo for more details):
+
+```elm
+update msg model =
+        Login (Err _) ->
+            let
+                contents =
+                    Snackbar.toast Nothing "Login failed"
+                ( mdc, effects ) =
+                    Snackbar.add Mdc "my-snackbar" contents model.mdc
+            in
+                ( { model | state = LoginFailed, mdc = mdc }, effects )
+```
+
+This would display a message without an action.
 
 
 # Usage

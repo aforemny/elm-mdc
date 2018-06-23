@@ -12,7 +12,7 @@ import Set exposing (Set)
 type alias Model m =
     { mdc : Material.Model m
     , selectedChips : Set Material.Index
-    , choiceChip : Material.Index
+    , choiceChip : Maybe Material.Index
     }
 
 
@@ -26,7 +26,7 @@ defaultModel =
             , "chips-filter-chips-bottoms"
             , "chips-filter-chips-alice"
             ]
-    , choiceChip = "chips-choice-medium"
+    , choiceChip = Just "chips-choice-medium"
     }
 
 
@@ -50,7 +50,19 @@ update lift msg model =
         ToggleChip chipType index ->
             case chipType of
                 Choice ->
-                    ( { model | choiceChip = index }, Cmd.none )
+                    let
+                        choiceChip =
+                            case model.choiceChip of
+                                Nothing ->
+                                    Just index
+
+                                Just a ->
+                                    if a == index then
+                                        Nothing
+                                    else
+                                        Just index
+                    in
+                    ( { model | choiceChip = choiceChip }, Cmd.none )
 
                 _ ->
                     let
@@ -127,7 +139,11 @@ choiceChips lift model =
                 model.mdc
                 [ Chip.ripple
                 , Chip.onClick (lift (ToggleChip Choice index))
-                , when (index == model.choiceChip) Chip.selected
+                , when
+                    (Maybe.map ((==) index) model.choiceChip
+                        |> Maybe.withDefault False
+                    )
+                    Chip.selected
                 ]
                 [ text label
                 ]

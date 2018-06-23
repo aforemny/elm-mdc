@@ -44,7 +44,7 @@ let
     , properties
     , style
     } =
-        Ripple.bounded Mdc [0] model.mdc
+        Ripple.bounded Mdc "my-ripple" model.mdc
 in
 Options.styled Html.div
     [ interactionHandler
@@ -64,7 +64,7 @@ let
     , properties
     , style
     } =
-        Ripple.unbounded Mdc [0] model.mdc
+        Ripple.unbounded Mdc "my-ripple" model.mdc
 in
 Icon.view
     [ interactionHandler
