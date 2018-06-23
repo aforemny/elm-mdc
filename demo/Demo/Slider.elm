@@ -97,34 +97,25 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    let
-        example options =
-            styled Html.section
-            ( cs "example"
-            :: css "margin" "24px"
-            :: css "padding" "24px"
-            :: options
-            )
-
-        sliderWrapper options =
-          styled Html.div
-          ( ( when model.darkTheme << Options.many <|
-              [ css "background-color" "#333"
-              , css "--mdc-theme-primary" "#64dd17" -- TODO
-              ]
-            )
-          :: ( when model.customBg << Options.many <|
-               [ css "background-color" "#eee"
-               , css "--mdc-slider-bg-color-behind-component" "#eee" -- TODO
-               ]
-             )
-          :: when model.rtl (Options.attribute (Html.attribute "dir" "rtl"))
-          :: css "padding" "0 16px"
-          :: options
-          )
-    in
     page.body "Slider"
-    [
+    [ heroSlider lift model
+    , example []
+        [ Html.em []
+          [ text """
+Note that in browsers that support custom properties, we alter theme's primary
+color when using the dark theme toggle so that the slider appears more visible"
+            """
+          ]
+        ]
+    , continuousSlider lift model
+    , discreteSlider lift model
+    , discreteSliderWithTickMarks lift model
+    , controls lift model
+    ]
+
+
+heroSlider : (Msg m -> m) -> Model m -> Html m
+heroSlider lift model =
       Page.hero []
       [
         styled Html.div
@@ -146,14 +137,39 @@ view lift page model =
         ]
       ]
 
-    , example []
-      [
-        Html.em []
-        [ text "Note that in browsers that support custom properties, we alter theme's primary color when using the dark theme toggle so that the slider appears more visible"
-        ]
-      ]
 
-    , let
+example : List (Options.Property c m) -> List (Html m) -> Html m
+example options =
+    styled Html.section
+    ( cs "example"
+    :: css "margin" "24px"
+    :: css "padding" "24px"
+    :: options
+    )
+
+
+sliderWrapper : Model m -> List (Options.Property c m) -> List (Html m) -> Html m
+sliderWrapper model options =
+  styled Html.div
+  ( ( when model.darkTheme << Options.many <|
+      [ css "background-color" "#333"
+      , css "--mdc-theme-primary" "#64dd17" -- TODO
+      ]
+    )
+  :: ( when model.customBg << Options.many <|
+       [ css "background-color" "#eee"
+       , css "--mdc-slider-bg-color-behind-component" "#eee" -- TODO
+       ]
+     )
+  :: when model.rtl (Options.attribute (Html.attribute "dir" "rtl"))
+  :: css "padding" "0 16px"
+  :: options
+  )
+
+
+continuousSlider : (Msg m -> m) -> Model m -> Html m
+continuousSlider lift model =
+      let
           id =
               "slider-continuous-slider"
       in
@@ -166,7 +182,7 @@ view lift page model =
           ]
         ]
 
-      , sliderWrapper []
+      , sliderWrapper model []
         [ Slider.view (lift << Mdc) id model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get id model.values))
           , Slider.onInput (lift << Input id)
@@ -193,7 +209,10 @@ view lift page model =
         ]
       ]
 
-    , let
+
+discreteSlider : (Msg m -> m) -> Model m -> Html m
+discreteSlider lift model =
+      let
           id =
               "slider-discrete-slider"
       in
@@ -206,7 +225,7 @@ view lift page model =
           ]
         ]
 
-      , sliderWrapper []
+      , sliderWrapper model []
         [ Slider.view (lift << Mdc) id model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get id model.values))
           , Slider.onInput (lift << Input id)
@@ -235,7 +254,10 @@ view lift page model =
         ]
       ]
 
-    , let
+
+discreteSliderWithTickMarks : (Msg m -> m) -> Model m -> Html m
+discreteSliderWithTickMarks lift model =
+      let
           id =
               "slider-discrete-slider-with-tick-marks"
       in
@@ -248,7 +270,7 @@ view lift page model =
           ]
         ]
 
-      , sliderWrapper []
+      , sliderWrapper model []
         [ Slider.view (lift << Mdc) id model.mdc
           [ Slider.value (Maybe.withDefault 0 (Dict.get id model.values))
           , Slider.onInput (lift << Input id)
@@ -278,7 +300,10 @@ view lift page model =
         ]
       ]
 
-    , example []
+
+controls : (Msg m -> m) -> Model m -> Html m
+controls lift model =
+      example []
       [
         Html.div []
         [ Html.label []
@@ -368,7 +393,6 @@ view lift page model =
           ]
         ]
       ]
-    ]
 
 
 subscriptions : (Msg m -> m) -> Model m -> Sub m
