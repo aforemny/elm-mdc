@@ -8,6 +8,7 @@ build-demo: material-components-web.css elm-mdc.js
 	rsync -r demo/images build
 	cp demo/page.html build/index.html
 	cp material-components-web.css build/
+	cp demo/styles/main.css build/main.css
 	cp elm-mdc.js build/
 	(cd demo; $(ELM) Demo.elm --output ../build/demo.js)
 

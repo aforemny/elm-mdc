@@ -1,38 +1,42 @@
-module Material.Options exposing
-    ( aria
-    , attribute
-    , cs
-    , css
-    , data
-    , many
-    , nop
-    , on
-    , onBlur
-    , onCheck
-    , onClick
-    , onDoubleClick
-    , onFocus
-    , onInput
-    , onChange
-    , onMouseDown
-    , onMouseEnter
-    , onMouseLeave
-    , onMouseOut
-    , onMouseOver
-    , onMouseUp
-    , onSubmit
-    , onWithOptions
-    , Property
-    , styled
-    , when
-    )
+module Material.Options
+    exposing
+        ( Property
+        , aria
+        , attribute
+        , cs
+        , css
+        , data
+        , id
+        , many
+        , nop
+        , on
+        , onBlur
+        , onChange
+        , onCheck
+        , onClick
+        , onDoubleClick
+        , onFocus
+        , onInput
+        , onMouseDown
+        , onMouseEnter
+        , onMouseLeave
+        , onMouseOut
+        , onMouseOver
+        , onMouseUp
+        , onSubmit
+        , onWithOptions
+        , styled
+        , when
+        )
 
 {-|
+
 
 # Properties
 
 @docs Property, styled
 @docs cs, css
+@docs id
 @docs many
 @docs when
 @docs nop
@@ -60,18 +64,20 @@ module Material.Options exposing
 
 @docs onBlur
 @docs onFocus
+
 -}
 
+import Html exposing (Attribute, Html)
 import Html.Events exposing (Options)
-import Html exposing (Html, Attribute)
-import Json.Decode exposing (Decoder)
 import Internal.Options
+import Json.Decode exposing (Decoder)
 
 
 {-| Generic component property.
 
 The `c` stands for a component's configuration type, and each component exports
 its own `Property`.
+
 -}
 type alias Property c m =
     Internal.Options.Property c m
@@ -79,28 +85,27 @@ type alias Property c m =
 
 {-| Make a standard Html element take properties instead of attributes.
 
-```elm
-styled Html.div
-    [ css "margin" "0 auto"
-    ]
-    [ text ""
-    ]
-```
+    styled Html.div
+        [ css "margin" "0 auto"
+        ]
+        [ text ""
+        ]
 
 Note: Most frequently you use styled with a more specialize type on `Html.*`
 elements,
 
-```elm
-styled
-    : (List (Attribute m) -> List (Html m) -> Html m)
-    -> List (Property c m)
-    -> List (Html m) -> Html m
-```
+    styled :
+        (List (Attribute m) -> List (Html m) -> Html m)
+        -> List (Property c m)
+        -> List (Html m)
+        -> Html m
 
 The type annotation for `styled` is more general so that it also works with
 `Markdown.toHtml`, etc.
+
 -}
-styled : (List (Attribute m) -> a)
+styled :
+    (List (Attribute m) -> a)
     -> List (Property c m)
     -> a
 styled =
@@ -131,11 +136,10 @@ many =
 {-| Do nothing. Convenient when the absence or
 presence of Options depends dynamically on other values, e.g.,
 
-```elm
-Html.div
-    [ if isActive then cs "active" else nop ]
-    [ … ]
-```
+    Html.div
+        [ if isActive then cs "active" else nop ]
+        [ … ]
+
 -}
 nop : Property c m
 nop =
@@ -146,6 +150,7 @@ nop =
 applied; otherwise it is ignored. Use like this:
 
     Button.disabled |> when (not model.isRunning)
+
 -}
 when : Bool -> Property c m -> Property c m
 when =
@@ -168,11 +173,10 @@ aria =
 
 {-| Install arbitrary `Html.Attribute`s.
 
-```elm
-styled Html.div
-    [ Options.attribute <| Html.title "title" ]
-    [ … ]
-```
+    styled Html.div
+        [ Options.attribute <| Html.title "title" ]
+        [ … ]
+
 -}
 attribute : Html.Attribute Never -> Property c m
 attribute =
@@ -249,16 +253,15 @@ onBlur =
 {-| Since the `"focus"` (and `"blur"`) event does not bubble, be sure to use
 this on `nativeControl` if the component exposes that.
 
-```elm
-import Material.Textfield as Textfield
+    import Material.Textfield as Textfield
 
-Textfield.view Mdc "my-text-field" model.mdc
-    [ Textfield.nativeControl
-        [ Options.onFocus Focus
+    Textfield.view Mdc "my-text-field" model.mdc
+        [ Textfield.nativeControl
+            [ Options.onFocus Focus
+            ]
         ]
-    ]
-    []
-```
+        []
+
 -}
 onFocus : msg -> Property c msg
 onFocus =
@@ -287,3 +290,10 @@ onSubmit =
 onWithOptions : String -> Options -> Decoder m -> Property c m
 onWithOptions =
     Internal.Options.onWithOptions
+
+
+{-| Sets the id attribute
+-}
+id : String -> Property c m
+id =
+    Internal.Options.id
