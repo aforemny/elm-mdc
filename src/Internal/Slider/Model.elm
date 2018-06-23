@@ -40,6 +40,7 @@ type Msg m
     | TransitionEnd
     | Drag { pageX : Float }
     | Up
+    | ActualUp
 
 
 type alias Geometry =

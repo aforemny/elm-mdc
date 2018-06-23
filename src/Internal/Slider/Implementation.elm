@@ -16,14 +16,15 @@ module Internal.Slider.Implementation exposing
 import DOM
 import Html as Html exposing (Html, text)
 import Html.Attributes as Html
-import Json.Decode as Json exposing (Decoder)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (styled, cs, css, when)
 import Internal.Slider.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
+import Json.Decode as Json exposing (Decoder)
 import Svg
 import Svg.Attributes as Svg
+import Task exposing (Task)
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
@@ -126,6 +127,11 @@ update lift msg model =
             ( Just { model | focus = True }, Cmd.none )
 
         Up ->
+            -- Note: In some instances `Up` fires before `InteractionStart`.
+            -- (TODO)
+            ( Just model, Task.perform lift (Task.succeed ActualUp) )
+
+        ActualUp ->
             ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
 
 
@@ -487,7 +493,8 @@ slider lift model options _ =
                 downs
           )
 
-        , when model.active <|
+        , -- Note: In some instances `Up` fires before `InteractionStart`.
+          -- (TODO)
           Options.many <|
           List.map (\ handler ->
                   handler (Json.succeed (lift Up))
