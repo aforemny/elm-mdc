@@ -10,3 +10,24 @@
 .catalog-top-app-bar {
     background-color: #212121;
 }
+
+.demo-content--animating-open {
+  transition: 200ms transform cubic-bezier(.4, 0, .2, 1) 50ms;
+}
+
+.demo-content--animating-close {
+  transition: 125ms transform cubic-bezier(.4, 0, .2, 1);
+}
+
+/* demo-content */
+.demo-wrapper {
+  width: 900px;
+  margin: 0 auto;
+  padding: 40px 16px 100px;
+}
+
+.catalog-top-app-bar__title {
+  text-transform: uppercase;
+  font-family: Roboto Mono, serif;
+  font-weight: 400;
+}
