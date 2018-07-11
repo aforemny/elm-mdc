@@ -1,14 +1,15 @@
-module Demo.Views.Hero exposing (view)
+module Demo.Helper.Hero exposing (view)
 
 import Html exposing (Html)
-import Material.Options as Options exposing (Property, css, styled, cs)
+import Material.Options as Options exposing (Property, styled, cs, css)
 
 
 view : List (Property c m) -> List (Html m) -> Html m
 view options =
     styled Html.section
         (List.reverse
-            -- TODO: dang it
+            -- TODO: It seems that elm-mdc is applying `css` (and probably all)
+            -- attributes on reverse order. That should be fixed in elm-mdc.
             (cs "hero"
                 :: css "display" "-webkit-box"
                 :: css "display" "-ms-flexbox"
