@@ -49,6 +49,7 @@ type alias Config =
     , box : Bool
     , disabled : Bool
     , preselected : Bool
+    , id_ : String
     }
 
 
@@ -58,6 +59,7 @@ defaultConfig =
     , box = False
     , disabled = False
     , preselected = False
+    , id_ = ""
     }
 
 
@@ -124,6 +126,7 @@ select lift model options items_ =
     ]
     [ styled Html.select
           [ cs "mdc-select__native-control"
+          , Options.id config.id_
           , Options.onFocus (lift Focus)
           , Options.onBlur (lift Blur)
           , Options.onChange (lift << Change)
@@ -132,6 +135,7 @@ select lift model options items_ =
           items
     , styled Html.label
         [ cs "mdc-floating-label"
+        , Options.for config.id_
         , when (focused || isDirty || config.preselected)
             (cs "mdc-floating-label--float-above")
         ]
@@ -186,4 +190,6 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get select Internal.Msg.SelectMsg
+    \lift index store options ->
+        Component.render get select Internal.Msg.SelectMsg lift index store
+            (Options.id_ index :: options)

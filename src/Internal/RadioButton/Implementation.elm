@@ -41,6 +41,7 @@ type alias Config m =
     { value : Bool
     , disabled : Bool
     , nativeControl : List (Options.Property () m)
+    , id_ : String
     }
 
 
@@ -49,6 +50,7 @@ defaultConfig =
     { value = False
     , disabled = False
     , nativeControl = []
+    , id_ = ""
     }
 
 
@@ -95,6 +97,7 @@ radioButton lift model options _ =
     []
     [ Options.applyNativeControl summary Html.input
       [ cs "mdc-radio__native-control"
+      , Options.id config.id_
       , Options.attribute <| Html.type_ "radio"
       , Options.attribute <| Html.checked config.value
       , Options.onFocus (lift (SetFocus True))
@@ -143,4 +146,6 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get radioButton Internal.Msg.RadioButtonMsg
+    \lift index store options ->
+        Component.render get radioButton Internal.Msg.RadioButtonMsg lift index store
+            (Options.id_ index :: options)

@@ -11,7 +11,9 @@ module Internal.Options
         , css
         , data
         , dispatch
+        , for
         , id
+        , id_
         , many
         , nativeControl
         , nop
@@ -39,10 +41,11 @@ module Internal.Options
         , when
         )
 
-import Html exposing (Attribute, Html)
 import Html.Attributes
 import Html.Events
+import Html exposing (Attribute, Html)
 import Internal.Dispatch as Dispatch
+import Internal.Index exposing (Index)
 import Internal.Msg exposing (Msg(Dispatch))
 import Json.Decode as Json exposing (Decoder)
 import String
@@ -175,6 +178,16 @@ nativeControl :
     -> Property (NativeControl c m) m
 nativeControl options =
     option (\config -> { config | nativeControl = config.nativeControl ++ options })
+
+
+id_ : Index -> Property { c | id_ : Index } m
+id_ id_ =
+    option (\config -> { config | id_ = id_ })
+
+
+for : String -> Property c m
+for =
+    Attribute << Html.Attributes.for
 
 
 {-| Construct lifted handler with trivial decoder in a manner that

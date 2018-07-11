@@ -11,6 +11,7 @@ import Internal.Drawer.Model as Drawer
 import Internal.Fab.Model as Fab
 import Internal.GridList.Model as GridList
 import Internal.IconToggle.Model as IconToggle
+import Internal.Index exposing (Index)
 import Internal.Menu.Model as Menu
 import Internal.RadioButton.Model as RadioButton
 import Internal.Ripple.Model as Ripple
@@ -22,10 +23,6 @@ import Internal.Tabs.Model as Tabs
 import Internal.Textfield.Model as Textfield
 import Internal.Toolbar.Model as Toolbar
 import Internal.TopAppBar.Model as TopAppBar
-
-
-type alias Index =
-    String
 
 
 type Msg m

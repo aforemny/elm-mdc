@@ -62,6 +62,7 @@ type alias Config m =
     , cols : Maybe Int
     , rows : Maybe Int
     , nativeControl : List (Options.Property () m)
+    , id_ : String
     }
 
 
@@ -88,6 +89,7 @@ defaultConfig =
     , cols = Nothing
     , rows = Nothing
     , nativeControl = []
+    , id_ = ""
     }
 
 
@@ -255,7 +257,7 @@ textField lift model options _ =
                     |> Maybe.withDefault False
                 Nothing -> False
     in
-        Options.apply summary (if not config.fullWidth then Html.label else Html.div)
+        Options.apply summary Html.div
         [ cs "mdc-text-field"
         , cs "mdc-text-field--upgraded"
         , cs "mdc-text-field--focused" |> when focused
@@ -284,6 +286,7 @@ textField lift model options _ =
                 [
                   cs "mdc-text-field__input"
                 , css "outline" "none"
+                , Options.id config.id_
                 , if config.outlined then
                       Options.on "focus" (Json.map (lift << Focus) decodeGeometry)
                   else
@@ -326,9 +329,10 @@ textField lift model options _ =
                 ]
                 []
             , if not config.fullWidth then
-                  styled Html.span
+                  styled Html.label
                       [ cs "mdc-floating-label"
                       , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
+                      , Options.for config.id_
                       ]
                   ( case config.labelText of
                         Just str ->
@@ -521,9 +525,11 @@ view
     -> Store s
     -> List (Property m)
     -> List (Html m)
-    -> Html m       
+    -> Html m
 view =
-    Component.render get textField Internal.Msg.TextfieldMsg
+  \lift index store options ->
+    Component.render get textField Internal.Msg.TextfieldMsg lift index store
+      (Options.id_ index :: options)
 
 
 decodeGeometry : Decoder Geometry

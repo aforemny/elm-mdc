@@ -29,6 +29,7 @@ type alias Config m =
     { value : Bool
     , disabled : Bool
     , nativeControl : List (Options.Property () m)
+    , id_ : String
     }
 
 
@@ -37,6 +38,7 @@ defaultConfig =
     { value = False
     , disabled = False
     , nativeControl = []
+    , id_ = ""
     }
 
 
@@ -77,6 +79,7 @@ switch lift model options _ =
     [ Options.applyNativeControl summary
       Html.input
       [ cs "mdc-switch__native-control"
+      , Options.id config.id_
       , Options.attribute <| Html.type_ "checkbox"
       , Options.attribute <| Html.checked config.value
       , Options.onFocus (lift (SetFocus True))
@@ -126,4 +129,6 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get switch Internal.Msg.SwitchMsg
+    \lift index store options ->
+        Component.render get switch Internal.Msg.SwitchMsg lift index store
+            (Options.id_ index :: options)

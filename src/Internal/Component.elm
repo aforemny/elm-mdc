@@ -9,12 +9,13 @@ module Internal.Component exposing
     )
 
 import Dict exposing (Dict)
+import Internal.Index
 import Internal.Msg exposing (Msg(..))
 import Internal.Options as Options exposing (Property)
 
 
 type alias Index
-    = String
+    = Internal.Index.Index
 
 
 type alias Indexed x =

@@ -199,7 +199,9 @@ import Internal.TopAppBar.Model as TopAppBar
 {-| Different instances of components are differentiated by an `Index`.
 
 This is a string and is expected to be globally unique within your program. It
-coincides with `Html.id`.
+coincides with `Html.id`, and we may set it as `Html.id` on a component's
+native control (`<input>`) element, ie. Checkbox, Radio, Select, Switch, and
+Textfield.
 -}
 type alias Index =
     Internal.Component.Index

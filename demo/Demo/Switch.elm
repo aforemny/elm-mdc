@@ -75,8 +75,7 @@ view lift page model =
           [ Options.onClick (lift (Toggle index))
           , Switch.on |> when on
           ]
-          [
-          ]
+          []
         ]
       ]
 
@@ -89,24 +88,24 @@ view lift page model =
         ]
         [ text "Enabled" ]
       ,
-        FormField.view []
-        [ let
-              index =
-                  "switch-default-switch"
+        let
+            id =
+                "switch-default-switch"
 
-              on =
-                  Dict.get index model.switches
-                  |> Maybe.withDefault False
-          in
-          Switch.view (lift << Mdc) index model.mdc
-          [ Options.onClick (lift (Toggle index))
+            on =
+                Dict.get id model.switches
+                |> Maybe.withDefault False
+        in
+        FormField.view []
+        [ Switch.view (lift << Mdc) id model.mdc
+          [ Options.onClick (lift (Toggle id))
           , Switch.on |> when on
           ]
-          [
-          ]
+          []
         ,
           styled Html.label
-          [ css "font-size" "16px"
+          [ Options.for id
+          , css "font-size" "16px"
           ]
           [ text "off/on"
           ]
@@ -122,24 +121,24 @@ view lift page model =
         ]
         [ text "Disabled"
         ]
-      , FormField.view []
-        [ let
-              index =
-                  "switch-disabled-switch"
+      , let
+            id =
+                "switch-disabled-switch"
 
-              on =
-                  Dict.get index model.switches
-                  |> Maybe.withDefault False
-          in
-          Switch.view (lift << Mdc) index model.mdc
-          [ Options.onClick (lift (Toggle index))
+            on =
+                Dict.get id model.switches
+                |> Maybe.withDefault False
+        in
+        FormField.view []
+        [ Switch.view (lift << Mdc) id model.mdc
+          [ Options.onClick (lift (Toggle id))
           , Switch.disabled
           ]
-          [
-          ]
+          []
         ,
           styled Html.label
-          [ css "font-size" "16px"
+          [ Options.for "id"
+          , css "font-size" "16px"
           ]
           [ text "off/on"
           ]

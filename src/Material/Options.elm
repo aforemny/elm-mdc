@@ -1,11 +1,11 @@
 module Material.Options
     exposing
-        ( Property
-        , aria
+        ( aria
         , attribute
         , cs
         , css
         , data
+        , for
         , id
         , many
         , nop
@@ -25,6 +25,7 @@ module Material.Options
         , onMouseUp
         , onSubmit
         , onWithOptions
+        , Property
         , styled
         , when
         )
@@ -42,6 +43,7 @@ module Material.Options
 @docs nop
 @docs attribute
 @docs data, aria
+@docs for
 
 
 # Events
@@ -169,6 +171,13 @@ data =
 aria : String -> String -> Property c m
 aria =
     Internal.Options.aria
+
+
+{-| HTML for attribute.
+-}
+for : String -> Property c m
+for =
+    Internal.Options.for
 
 
 {-| Install arbitrary `Html.Attribute`s.

@@ -2,6 +2,7 @@ module Demo.RadioButtons exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
+import Html.Attributes as Html
 import Html exposing (Html, text)
 import Material
 import Material.FormField as FormField
@@ -127,7 +128,7 @@ view lift page model =
           , RadioButton.selected |> when (isSelected True id)
           ]
           []
-        , Html.label [] [ text "Radio 1" ]
+        , Html.label [ Html.for id ] [ text "Radio 1" ]
         ]
 
       , let
@@ -140,7 +141,7 @@ view lift page model =
           , RadioButton.selected |> when (isSelected False id)
           ]
           []
-        , Html.label [] [ text "Radio 2" ]
+        , Html.label [ Html.for id ] [ text "Radio 2" ]
         ]
       ]
 
@@ -164,7 +165,7 @@ view lift page model =
             , RadioButton.disabled
             ]
             []
-          , Html.label [] [ text "Disabled Radio 1" ]
+          , Html.label [ Html.for id ] [ text "Disabled Radio 1" ]
           ]
 
         , let
@@ -176,7 +177,7 @@ view lift page model =
             [ RadioButton.disabled
             ]
             []
-          , Html.label [] [ text "Disabled Radio 2" ]
+          , Html.label [ Html.for id ] [ text "Disabled Radio 2" ]
           ]
         ]
       ]

@@ -52,6 +52,7 @@ type alias Config m =
     { state : Maybe State
     , disabled : Bool
     , nativeControl : List (Options.Property () m)
+    , id_ : String
     }
 
 
@@ -60,6 +61,7 @@ defaultConfig =
     { state = Nothing
     , disabled = False
     , nativeControl = []
+    , id_ = ""
     }
 
 
@@ -151,6 +153,7 @@ checkbox lift model options _ =
       [ cs "mdc-checkbox__native-control"
       , Options.many << List.map Options.attribute <|
         [ Html.type_ "checkbox"
+        , Html.id config.id_
         , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
         , Html.checked (currentState == Just Checked)
         , Html.disabled config.disabled
@@ -204,7 +207,7 @@ animationState oldState state =
 
       ( Just Checked, Just Unchecked ) ->
         Just CheckedUnchecked
-      
+
       _ ->
         Nothing
 
@@ -225,7 +228,9 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get checkbox Internal.Msg.CheckboxMsg
+  \lift index store options ->
+    Component.render get checkbox Internal.Msg.CheckboxMsg lift index store
+        (Options.id_ index :: options)
 
 
 react :

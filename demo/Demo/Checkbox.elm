@@ -2,6 +2,7 @@ module Demo.Checkbox exposing (Model,defaultModel,Msg(Mdc),update,view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
+import Html.Attributes as Html
 import Html exposing (Html, text)
 import Json.Decode as Json
 import Material
@@ -21,8 +22,8 @@ type alias Model m =
 defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
-    , checkboxes =
-        Dict.singleton "checkbox-indeterminate-checkbox" { defaultCheckbox | checked = Nothing }
+    , checkboxes = Dict.singleton "checkbox-indeterminate-checkbox"
+        { defaultCheckbox | checked = Nothing }
     }
 
 
@@ -136,7 +137,7 @@ view lift page model =
       [
         FormField.view []
         [ checkbox "checkbox-hero-checkbox"
-        , Html.label [] [ text "Checkbox" ]
+        , Html.label [ Html.for "checkbox-hero-checkbox" ] [ text "Checkbox" ]
         ]
       ]
 
@@ -160,7 +161,7 @@ view lift page model =
               ]
               []
             ,
-              Html.label [] [ text label ]
+              Html.label [ Html.for index ] [ text label ]
             ]
           ,
             styled Html.div
