@@ -12229,15 +12229,18 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$onClick = function (msg) {
 			}
 		});
 };
-var _aforemny$elm_mdc$Internal_Chip_Implementation$withCheckmark = function (value) {
-	return _aforemny$elm_mdc$Internal_Options$option(
-		function (config) {
-			return _elm_lang$core$Native_Utils.update(
-				config,
-				{withCheckmark: value});
-		});
-};
-var _aforemny$elm_mdc$Internal_Chip_Implementation$selected = _aforemny$elm_mdc$Internal_Options$cs('mdc-chip--selected');
+var _aforemny$elm_mdc$Internal_Chip_Implementation$checkmark = _aforemny$elm_mdc$Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{checkmark: true});
+	});
+var _aforemny$elm_mdc$Internal_Chip_Implementation$selected = _aforemny$elm_mdc$Internal_Options$option(
+	function (config) {
+		return _elm_lang$core$Native_Utils.update(
+			config,
+			{selected: true});
+	});
 var _aforemny$elm_mdc$Internal_Chip_Implementation$trailingIcon = function (str) {
 	return _aforemny$elm_mdc$Internal_Options$option(
 		function (config) {
@@ -12258,7 +12261,7 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$leadingIcon = function (str) 
 				});
 		});
 };
-var _aforemny$elm_mdc$Internal_Chip_Implementation$defaultConfig = {leadingIcon: _elm_lang$core$Maybe$Nothing, trailingIcon: _elm_lang$core$Maybe$Nothing, onClick: _elm_lang$core$Maybe$Nothing, withCheckmark: false};
+var _aforemny$elm_mdc$Internal_Chip_Implementation$defaultConfig = {leadingIcon: _elm_lang$core$Maybe$Nothing, trailingIcon: _elm_lang$core$Maybe$Nothing, onClick: _elm_lang$core$Maybe$Nothing, selected: false, checkmark: false};
 var _aforemny$elm_mdc$Internal_Chip_Implementation$chipset = F2(
 	function (options, nodes) {
 		var _p1 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_Chip_Implementation$defaultConfig, options);
@@ -12278,7 +12281,6 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$chipset = F2(
 	});
 var _aforemny$elm_mdc$Internal_Chip_Implementation$chip = F4(
 	function (lift, model, options, nodes) {
-		var hasSelection = A2(_elm_lang$core$List$member, _aforemny$elm_mdc$Internal_Chip_Implementation$selected, options);
 		var ripple = A4(
 			_aforemny$elm_mdc$Internal_Ripple_Implementation$view,
 			false,
@@ -12300,37 +12302,44 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$chip = F4(
 				_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-chip'),
 				_1: {
 					ctor: '::',
-					_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-js-ripple-effect'),
+					_0: A2(
+						_aforemny$elm_mdc$Internal_Options$when,
+						config.selected,
+						_aforemny$elm_mdc$Internal_Options$cs('mdc-chip--selected')),
 					_1: {
 						ctor: '::',
-						_0: _aforemny$elm_mdc$Internal_Options$many(
-							{
-								ctor: '::',
-								_0: ripple.interactionHandler,
-								_1: {
-									ctor: '::',
-									_0: ripple.properties,
-									_1: {ctor: '[]'}
-								}
-							}),
+						_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-js-ripple-effect'),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$core$Maybe$withDefault,
-								_aforemny$elm_mdc$Internal_Options$nop,
-								A2(
-									_elm_lang$core$Maybe$map,
-									function (_p4) {
-										return _aforemny$elm_mdc$Internal_Options$onClick(
-											lift(
-												_aforemny$elm_mdc$Internal_Chip_Model$Click(_p4)));
-									},
-									config.onClick)),
+							_0: _aforemny$elm_mdc$Internal_Options$many(
+								{
+									ctor: '::',
+									_0: ripple.interactionHandler,
+									_1: {
+										ctor: '::',
+										_0: ripple.properties,
+										_1: {ctor: '[]'}
+									}
+								}),
 							_1: {
 								ctor: '::',
-								_0: _aforemny$elm_mdc$Internal_Options$attribute(
-									_elm_lang$html$Html_Attributes$tabindex(0)),
-								_1: {ctor: '[]'}
+								_0: A2(
+									_elm_lang$core$Maybe$withDefault,
+									_aforemny$elm_mdc$Internal_Options$nop,
+									A2(
+										_elm_lang$core$Maybe$map,
+										function (_p4) {
+											return _aforemny$elm_mdc$Internal_Options$onClick(
+												lift(
+													_aforemny$elm_mdc$Internal_Chip_Model$Click(_p4)));
+										},
+										config.onClick)),
+								_1: {
+									ctor: '::',
+									_0: _aforemny$elm_mdc$Internal_Options$attribute(
+										_elm_lang$html$Html_Attributes$tabindex(0)),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}
@@ -12357,7 +12366,7 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$chip = F4(
 												ctor: '::',
 												_0: A2(
 													_aforemny$elm_mdc$Internal_Options$when,
-													config.withCheckmark && hasSelection,
+													config.selected && config.checkmark,
 													_aforemny$elm_mdc$Internal_Options$cs('mdc-chip__icon--leading-hidden')),
 												_1: {
 													ctor: '::',
@@ -12375,7 +12384,7 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$chip = F4(
 						ctor: '::',
 						_0: {
 							ctor: '::',
-							_0: config.withCheckmark ? A3(
+							_0: config.checkmark ? A3(
 								_aforemny$elm_mdc$Internal_Options$styled,
 								_elm_lang$html$Html$div,
 								{
@@ -12515,9 +12524,9 @@ var _aforemny$elm_mdc$Internal_Chip_Implementation$update = F3(
 		}
 	});
 var _aforemny$elm_mdc$Internal_Chip_Implementation$react = A4(_aforemny$elm_mdc$Internal_Component$react, _aforemny$elm_mdc$Internal_Chip_Implementation$get, _aforemny$elm_mdc$Internal_Chip_Implementation$set, _aforemny$elm_mdc$Internal_Msg$ChipMsg, _aforemny$elm_mdc$Internal_Chip_Implementation$update);
-var _aforemny$elm_mdc$Internal_Chip_Implementation$Config = F4(
-	function (a, b, c, d) {
-		return {leadingIcon: a, trailingIcon: b, onClick: c, withCheckmark: d};
+var _aforemny$elm_mdc$Internal_Chip_Implementation$Config = F5(
+	function (a, b, c, d, e) {
+		return {leadingIcon: a, trailingIcon: b, onClick: c, selected: d, checkmark: e};
 	});
 
 var _aforemny$elm_mdc$Internal_Dialog_Implementation$close = _debois$elm_dom$DOM$target(
@@ -22935,12 +22944,12 @@ var _aforemny$elm_mdc$Demo_Checkbox$view = F3(
 			});
 	});
 
+var _aforemny$elm_mdc$Material_Chip$checkmark = _aforemny$elm_mdc$Internal_Chip_Implementation$checkmark;
 var _aforemny$elm_mdc$Material_Chip$input = _aforemny$elm_mdc$Internal_Chip_Implementation$input;
 var _aforemny$elm_mdc$Material_Chip$choice = _aforemny$elm_mdc$Internal_Chip_Implementation$choice;
 var _aforemny$elm_mdc$Material_Chip$filter = _aforemny$elm_mdc$Internal_Chip_Implementation$filter;
 var _aforemny$elm_mdc$Material_Chip$chipset = _aforemny$elm_mdc$Internal_Chip_Implementation$chipset;
 var _aforemny$elm_mdc$Material_Chip$onClick = _aforemny$elm_mdc$Internal_Chip_Implementation$onClick;
-var _aforemny$elm_mdc$Material_Chip$withCheckmark = _aforemny$elm_mdc$Internal_Chip_Implementation$withCheckmark;
 var _aforemny$elm_mdc$Material_Chip$selected = _aforemny$elm_mdc$Internal_Chip_Implementation$selected;
 var _aforemny$elm_mdc$Material_Chip$trailingIcon = _aforemny$elm_mdc$Internal_Chip_Implementation$trailingIcon;
 var _aforemny$elm_mdc$Material_Chip$leadingIcon = _aforemny$elm_mdc$Internal_Chip_Implementation$leadingIcon;
@@ -23357,15 +23366,11 @@ var _aforemny$elm_mdc$Demo_Chips$filterChips = F2(
 												A2(_aforemny$elm_mdc$Demo_Chips$ToggleChip, _aforemny$elm_mdc$Demo_Chips$Filter, index))),
 										_1: {
 											ctor: '::',
-											_0: _aforemny$elm_mdc$Material_Chip$withCheckmark(true),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_aforemny$elm_mdc$Material_Options$when,
-													A2(_elm_lang$core$Set$member, index, model.selectedChips),
-													_aforemny$elm_mdc$Material_Chip$selected),
-												_1: {ctor: '[]'}
-											}
+											_0: A2(
+												_aforemny$elm_mdc$Material_Options$when,
+												A2(_elm_lang$core$Set$member, index, model.selectedChips),
+												_aforemny$elm_mdc$Material_Chip$selected),
+											_1: {ctor: '[]'}
 										}
 									},
 									{
@@ -23437,7 +23442,7 @@ var _aforemny$elm_mdc$Demo_Chips$filterChips = F2(
 													_0: _aforemny$elm_mdc$Material_Chip$leadingIcon('face'),
 													_1: {
 														ctor: '::',
-														_0: _aforemny$elm_mdc$Material_Chip$withCheckmark(true),
+														_0: _aforemny$elm_mdc$Material_Chip$checkmark,
 														_1: {
 															ctor: '::',
 															_0: A2(
