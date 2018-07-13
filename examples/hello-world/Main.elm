@@ -25,11 +25,11 @@ type Msg
 main : Program Never Model Msg
 main =
     Html.program
-    { init = init
-    , subscriptions = subscriptions
-    , update = update
-    , view = view
-    }
+        { init = init
+        , subscriptions = subscriptions
+        , update = update
+        , view = view
+        }
 
 
 init : ( Model, Cmd Msg )
@@ -55,10 +55,11 @@ update msg model =
 view : Model -> Html Msg
 view model =
     Html.div []
-        [
-          Button.view Mdc [0] model.mdc
-              [ Button.ripple
-              , Options.onClick Click
-              ]
-              [ text "Click me!" ]
+        [ Button.view Mdc
+            "my-button"
+            model.mdc
+            [ Button.ripple
+            , Options.onClick Click
+            ]
+            [ text "Click me!" ]
         ]
