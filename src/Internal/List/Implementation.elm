@@ -19,6 +19,7 @@ module Internal.List.Implementation exposing
     , nav
     , node
     , nonInteractive
+    , ol
     , padded
     , Property
     , secondaryText
@@ -58,6 +59,18 @@ ul options =
     in
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
+        [cs "mdc-list"]
+        []
+
+
+ol : List (Property m) -> List (Html m) -> Html m
+ol options =
+    let
+        ({ config } as summary) =
+          Options.collect defaultConfig options
+    in
+    Options.apply summary
+        (Maybe.withDefault Html.ol config.node)
         [cs "mdc-list"]
         []
 

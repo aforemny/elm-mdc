@@ -17,6 +17,7 @@ module Material.List exposing
     , metaText
     , nav
     , nonInteractive
+    , ol
     , padded
     , Property
     , secondaryText
@@ -93,7 +94,7 @@ Lists.ul
 ## Lists
 
 @docs Property
-@docs ul
+@docs ul, ol
 @docs nonInteractive
 @docs dense
 @docs avatarList
@@ -143,6 +144,13 @@ type alias Property m =
 ul : List (Property m) -> List (Html m) -> Html m
 ul =
     List.ul
+
+
+{-| The list element.
+-}
+ol : List (Property m) -> List (Html m) -> Html m
+ol =
+    List.ol
 
 
 {-| The list element rendered as `<nav>`.
