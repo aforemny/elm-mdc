@@ -52,7 +52,7 @@ styled Html.div
           [ text "Show"
           ]
     , Menu.view Mdc "my-menu" model.mdc []
-          [ Menu.ul []
+          ( Menu.ul []
                 [ Menu.li
                       [ Menu.onSelect (Select "Item 1")
                       ]
@@ -64,7 +64,7 @@ styled Html.div
                       [ text "Item 2"
                       ]
                 ]
-          ]
+          )
     ]
 ```
 
