@@ -12973,10 +12973,25 @@ var _aforemny$elm_mdc$Internal_List_Implementation$ul = function (options) {
 		},
 		{ctor: '[]'});
 };
-var _aforemny$elm_mdc$Internal_List_Implementation$nav = function (options) {
+var _aforemny$elm_mdc$Internal_List_Implementation$ol = function (options) {
 	var _p1 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
 	var summary = _p1;
 	var config = _p1.config;
+	return A4(
+		_aforemny$elm_mdc$Internal_Options$apply,
+		summary,
+		A2(_elm_lang$core$Maybe$withDefault, _elm_lang$html$Html$ol, config.node),
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Internal_Options$cs('mdc-list'),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+};
+var _aforemny$elm_mdc$Internal_List_Implementation$nav = function (options) {
+	var _p2 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
+	var summary = _p2;
+	var config = _p2.config;
 	return A4(
 		_aforemny$elm_mdc$Internal_Options$apply,
 		summary,
@@ -12989,9 +13004,9 @@ var _aforemny$elm_mdc$Internal_List_Implementation$nav = function (options) {
 		{ctor: '[]'});
 };
 var _aforemny$elm_mdc$Internal_List_Implementation$li = function (options) {
-	var _p2 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
-	var summary = _p2;
-	var config = _p2.config;
+	var _p3 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
+	var summary = _p3;
+	var config = _p3.config;
 	return A4(
 		_aforemny$elm_mdc$Internal_Options$apply,
 		summary,
@@ -13004,9 +13019,9 @@ var _aforemny$elm_mdc$Internal_List_Implementation$li = function (options) {
 		{ctor: '[]'});
 };
 var _aforemny$elm_mdc$Internal_List_Implementation$a = function (options) {
-	var _p3 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
-	var summary = _p3;
-	var config = _p3.config;
+	var _p4 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
+	var summary = _p4;
+	var config = _p4.config;
 	return A4(
 		_aforemny$elm_mdc$Internal_Options$apply,
 		summary,
@@ -13019,9 +13034,9 @@ var _aforemny$elm_mdc$Internal_List_Implementation$a = function (options) {
 		{ctor: '[]'});
 };
 var _aforemny$elm_mdc$Internal_List_Implementation$divider = function (options) {
-	var _p4 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
-	var summary = _p4;
-	var config = _p4.config;
+	var _p5 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
+	var summary = _p5;
+	var config = _p5.config;
 	return A4(
 		_aforemny$elm_mdc$Internal_Options$apply,
 		summary,
@@ -13038,9 +13053,9 @@ var _aforemny$elm_mdc$Internal_List_Implementation$divider = function (options) 
 		{ctor: '[]'});
 };
 var _aforemny$elm_mdc$Internal_List_Implementation$groupDivider = function (options) {
-	var _p5 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
-	var summary = _p5;
-	var config = _p5.config;
+	var _p6 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_List_Implementation$defaultConfig, options);
+	var summary = _p6;
+	var config = _p6.config;
 	return A4(
 		_aforemny$elm_mdc$Internal_Options$apply,
 		summary,
@@ -21291,6 +21306,7 @@ var _aforemny$elm_mdc$Material_List$avatarList = _aforemny$elm_mdc$Internal_List
 var _aforemny$elm_mdc$Material_List$dense = _aforemny$elm_mdc$Internal_List_Implementation$dense;
 var _aforemny$elm_mdc$Material_List$nonInteractive = _aforemny$elm_mdc$Internal_List_Implementation$nonInteractive;
 var _aforemny$elm_mdc$Material_List$nav = _aforemny$elm_mdc$Internal_List_Implementation$nav;
+var _aforemny$elm_mdc$Material_List$ol = _aforemny$elm_mdc$Internal_List_Implementation$ol;
 var _aforemny$elm_mdc$Material_List$ul = _aforemny$elm_mdc$Internal_List_Implementation$ul;
 
 var _aforemny$elm_mdc$Demo_Helper_ResourceLink$view = function (_p0) {
