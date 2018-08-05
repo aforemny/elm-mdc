@@ -14,8 +14,6 @@ module Internal.Typography.Implementation
         , overline
         , subtitle1
         , subtitle2
-        , subheading1
-        , subheading2
         , title
         , typography
         )
@@ -91,16 +89,6 @@ body1 =
 body2 : Property c m
 body2 =
     cs "mdc-typography--body2"
-
-
-subheading1 : Property c m
-subheading1 =
-    cs "mdc-typography--subheading1"
-
-
-subheading2 : Property c m
-subheading2 =
-    cs "mdc-typography--subheading2"
 
 
 button : Property c m
