@@ -174,203 +174,203 @@ update msg model =
                 ( buttons, effects ) =
                     Demo.Buttons.update ButtonsMsg msg_ model.buttons
             in
-                ( { model | buttons = buttons }, effects )
+            ( { model | buttons = buttons }, effects )
 
         CardsMsg msg_ ->
             let
                 ( cards, effects ) =
                     Demo.Cards.update CardsMsg msg_ model.cards
             in
-                ( { model | cards = cards }, effects )
+            ( { model | cards = cards }, effects )
 
         CheckboxMsg msg_ ->
             let
                 ( checkbox, effects ) =
                     Demo.Checkbox.update CheckboxMsg msg_ model.checkbox
             in
-                ( { model | checkbox = checkbox }, effects )
+            ( { model | checkbox = checkbox }, effects )
 
         ChipsMsg msg_ ->
             let
                 ( chips, effects ) =
                     Demo.Chips.update ChipsMsg msg_ model.chips
             in
-                ( { model | chips = chips }, effects )
+            ( { model | chips = chips }, effects )
 
         DialogMsg msg_ ->
             let
                 ( dialog, effects ) =
                     Demo.Dialog.update DialogMsg msg_ model.dialog
             in
-                ( { model | dialog = dialog }, effects )
+            ( { model | dialog = dialog }, effects )
 
         ElevationMsg msg_ ->
             let
                 ( elevation, effects ) =
                     Demo.Elevation.update ElevationMsg msg_ model.elevation
             in
-                ( { model | elevation = elevation }, effects )
+            ( { model | elevation = elevation }, effects )
 
         DrawerMsg msg_ ->
             let
                 ( drawer, effects ) =
                     Demo.Drawer.update DrawerMsg msg_ model.drawer
             in
-                ( { model | drawer = drawer }, effects )
+            ( { model | drawer = drawer }, effects )
 
         TemporaryDrawerMsg msg_ ->
             let
                 ( temporaryDrawer, effects ) =
                     Demo.TemporaryDrawer.update TemporaryDrawerMsg msg_ model.temporaryDrawer
             in
-                ( { model | temporaryDrawer = temporaryDrawer }, effects )
+            ( { model | temporaryDrawer = temporaryDrawer }, effects )
 
         PersistentDrawerMsg msg_ ->
             let
                 ( persistentDrawer, effects ) =
                     Demo.PersistentDrawer.update PersistentDrawerMsg msg_ model.persistentDrawer
             in
-                ( { model | persistentDrawer = persistentDrawer }, effects )
+            ( { model | persistentDrawer = persistentDrawer }, effects )
 
         PermanentAboveDrawerMsg msg_ ->
             let
                 ( permanentAboveDrawer, effects ) =
                     Demo.PermanentAboveDrawer.update PermanentAboveDrawerMsg msg_ model.permanentAboveDrawer
             in
-                ( { model | permanentAboveDrawer = permanentAboveDrawer }, effects )
+            ( { model | permanentAboveDrawer = permanentAboveDrawer }, effects )
 
         PermanentBelowDrawerMsg msg_ ->
             let
                 ( permanentBelowDrawer, effects ) =
                     Demo.PermanentBelowDrawer.update PermanentBelowDrawerMsg msg_ model.permanentBelowDrawer
             in
-                ( { model | permanentBelowDrawer = permanentBelowDrawer }, effects )
+            ( { model | permanentBelowDrawer = permanentBelowDrawer }, effects )
 
         FabsMsg msg_ ->
             let
                 ( fabs, effects ) =
                     Demo.Fabs.update FabsMsg msg_ model.fabs
             in
-                ( { model | fabs = fabs }, effects )
+            ( { model | fabs = fabs }, effects )
 
         IconToggleMsg msg_ ->
             let
                 ( iconToggle, effects ) =
                     Demo.IconToggle.update IconToggleMsg msg_ model.iconToggle
             in
-                ( { model | iconToggle = iconToggle }, effects )
+            ( { model | iconToggle = iconToggle }, effects )
 
         ImageListMsg msg_ ->
             let
                 ( imageList, effects ) =
                     Demo.ImageList.update ImageListMsg msg_ model.imageList
             in
-                ( { model | imageList = imageList }, effects )
+            ( { model | imageList = imageList }, effects )
 
         MenuMsg msg_ ->
             let
                 ( menus, effects ) =
                     Demo.Menus.update MenuMsg msg_ model.menus
             in
-                ( { model | menus = menus }, effects )
+            ( { model | menus = menus }, effects )
 
         RadioButtonsMsg msg_ ->
             let
                 ( radio, effects ) =
                     Demo.RadioButtons.update RadioButtonsMsg msg_ model.radio
             in
-                ( { model | radio = radio }, effects )
+            ( { model | radio = radio }, effects )
 
         RippleMsg msg_ ->
             let
                 ( ripple, effects ) =
                     Demo.Ripple.update RippleMsg msg_ model.ripple
             in
-                ( { model | ripple = ripple }, effects )
+            ( { model | ripple = ripple }, effects )
 
         SelectMsg msg_ ->
             let
                 ( selects, effects ) =
                     Demo.Selects.update SelectMsg msg_ model.selects
             in
-                ( { model | selects = selects }, effects )
+            ( { model | selects = selects }, effects )
 
         SliderMsg msg_ ->
             let
                 ( slider, effects ) =
                     Demo.Slider.update SliderMsg msg_ model.slider
             in
-                ( { model | slider = slider }, effects )
+            ( { model | slider = slider }, effects )
 
         SnackbarMsg msg_ ->
             let
                 ( snackbar, effects ) =
                     Demo.Snackbar.update SnackbarMsg msg_ model.snackbar
             in
-                ( { model | snackbar = snackbar }, effects )
+            ( { model | snackbar = snackbar }, effects )
 
         SwitchMsg msg_ ->
             let
                 ( switch, effects ) =
                     Demo.Switch.update SwitchMsg msg_ model.switch
             in
-                ( { model | switch = switch }, effects )
+            ( { model | switch = switch }, effects )
 
         TextfieldMsg msg_ ->
             let
                 ( textfields, effects ) =
                     Demo.Textfields.update TextfieldMsg msg_ model.textfields
             in
-                ( { model | textfields = textfields }, effects )
+            ( { model | textfields = textfields }, effects )
 
         TabsMsg msg_ ->
             let
                 ( tabs, effects ) =
                     Demo.Tabs.update TabsMsg msg_ model.tabs
             in
-                ( { model | tabs = tabs }, effects )
+            ( { model | tabs = tabs }, effects )
 
         GridListMsg msg_ ->
             let
                 ( gridList, effects ) =
                     Demo.GridList.update GridListMsg msg_ model.gridList
             in
-                ( { model | gridList = gridList }, effects )
+            ( { model | gridList = gridList }, effects )
 
         LayoutGridMsg msg_ ->
             let
                 ( layoutGrid, effects ) =
                     Demo.LayoutGrid.update LayoutGridMsg msg_ model.layoutGrid
             in
-                ( { model | layoutGrid = layoutGrid }, effects )
+            ( { model | layoutGrid = layoutGrid }, effects )
 
         ListsMsg msg_ ->
             let
                 ( lists, effects ) =
                     Demo.Lists.update ListsMsg msg_ model.lists
             in
-                ( { model | lists = lists }, effects )
+            ( { model | lists = lists }, effects )
 
         ThemeMsg msg_ ->
             let
                 ( theme, effects ) =
                     Demo.Theme.update ThemeMsg msg_ model.theme
             in
-                ( { model | theme = theme }, effects )
+            ( { model | theme = theme }, effects )
 
         ToolbarMsg msg_ ->
             let
                 ( toolbar, effects ) =
                     Demo.Toolbar.update ToolbarMsg msg_ model.toolbar
             in
-                ( { model | toolbar = toolbar }, effects )
+            ( { model | toolbar = toolbar }, effects )
 
         TopAppBarMsg msg_ ->
             let
                 ( topAppBar, effects ) =
                     Demo.TopAppBar.update TopAppBarMsg msg_ model.topAppBar
             in
-                ( { model | topAppBar = topAppBar }, effects )
+            ( { model | topAppBar = topAppBar }, effects )
 
 
 view : Model -> Html Msg
@@ -407,112 +407,112 @@ view_ model =
                         )
             }
     in
-        case model.url of
-            StartPage ->
-                Demo.Startpage.view page
+    case model.url of
+        StartPage ->
+            Demo.Startpage.view page
 
-            Button ->
-                Demo.Buttons.view ButtonsMsg page model.buttons
+        Button ->
+            Demo.Buttons.view ButtonsMsg page model.buttons
 
-            Card ->
-                Demo.Cards.view CardsMsg page model.cards
+        Card ->
+            Demo.Cards.view CardsMsg page model.cards
 
-            Checkbox ->
-                Demo.Checkbox.view CheckboxMsg page model.checkbox
+        Checkbox ->
+            Demo.Checkbox.view CheckboxMsg page model.checkbox
 
-            Chips ->
-                Demo.Chips.view ChipsMsg page model.chips
+        Chips ->
+            Demo.Chips.view ChipsMsg page model.chips
 
-            Dialog ->
-                Demo.Dialog.view DialogMsg page model.dialog
+        Dialog ->
+            Demo.Dialog.view DialogMsg page model.dialog
 
-            Drawer ->
-                Demo.Drawer.view DrawerMsg page model.drawer
+        Drawer ->
+            Demo.Drawer.view DrawerMsg page model.drawer
 
-            TemporaryDrawer ->
-                Demo.TemporaryDrawer.view TemporaryDrawerMsg page model.temporaryDrawer
+        TemporaryDrawer ->
+            Demo.TemporaryDrawer.view TemporaryDrawerMsg page model.temporaryDrawer
 
-            PersistentDrawer ->
-                Demo.PersistentDrawer.view PersistentDrawerMsg page model.persistentDrawer
+        PersistentDrawer ->
+            Demo.PersistentDrawer.view PersistentDrawerMsg page model.persistentDrawer
 
-            PermanentAboveDrawer ->
-                Demo.PermanentAboveDrawer.view PermanentAboveDrawerMsg page model.permanentAboveDrawer
+        PermanentAboveDrawer ->
+            Demo.PermanentAboveDrawer.view PermanentAboveDrawerMsg page model.permanentAboveDrawer
 
-            PermanentBelowDrawer ->
-                Demo.PermanentBelowDrawer.view PermanentBelowDrawerMsg page model.permanentBelowDrawer
+        PermanentBelowDrawer ->
+            Demo.PermanentBelowDrawer.view PermanentBelowDrawerMsg page model.permanentBelowDrawer
 
-            Elevation ->
-                Demo.Elevation.view ElevationMsg page model.elevation
+        Elevation ->
+            Demo.Elevation.view ElevationMsg page model.elevation
 
-            Fabs ->
-                Demo.Fabs.view FabsMsg page model.fabs
+        Fabs ->
+            Demo.Fabs.view FabsMsg page model.fabs
 
-            IconToggle ->
-                Demo.IconToggle.view IconToggleMsg page model.iconToggle
+        IconToggle ->
+            Demo.IconToggle.view IconToggleMsg page model.iconToggle
 
-            ImageList ->
-                Demo.ImageList.view ImageListMsg page model.imageList
+        ImageList ->
+            Demo.ImageList.view ImageListMsg page model.imageList
 
-            LinearProgress ->
-                Demo.LinearProgress.view page
+        LinearProgress ->
+            Demo.LinearProgress.view page
 
-            List ->
-                Demo.Lists.view ListsMsg page model.lists
+        List ->
+            Demo.Lists.view ListsMsg page model.lists
 
-            RadioButton ->
-                Demo.RadioButtons.view RadioButtonsMsg page model.radio
+        RadioButton ->
+            Demo.RadioButtons.view RadioButtonsMsg page model.radio
 
-            Select ->
-                Demo.Selects.view SelectMsg page model.selects
+        Select ->
+            Demo.Selects.view SelectMsg page model.selects
 
-            Menu ->
-                Demo.Menus.view MenuMsg page model.menus
+        Menu ->
+            Demo.Menus.view MenuMsg page model.menus
 
-            Slider ->
-                Demo.Slider.view SliderMsg page model.slider
+        Slider ->
+            Demo.Slider.view SliderMsg page model.slider
 
-            Snackbar ->
-                Demo.Snackbar.view SnackbarMsg page model.snackbar
+        Snackbar ->
+            Demo.Snackbar.view SnackbarMsg page model.snackbar
 
-            Switch ->
-                Demo.Switch.view SwitchMsg page model.switch
+        Switch ->
+            Demo.Switch.view SwitchMsg page model.switch
 
-            Tabs ->
-                Demo.Tabs.view TabsMsg page model.tabs
+        Tabs ->
+            Demo.Tabs.view TabsMsg page model.tabs
 
-            TextField ->
-                Demo.Textfields.view TextfieldMsg page model.textfields
+        TextField ->
+            Demo.Textfields.view TextfieldMsg page model.textfields
 
-            Theme ->
-                Demo.Theme.view ThemeMsg page model.theme
+        Theme ->
+            Demo.Theme.view ThemeMsg page model.theme
 
-            Toolbar toolbarPage ->
-                Demo.Toolbar.view ToolbarMsg page toolbarPage model.toolbar
+        Toolbar toolbarPage ->
+            Demo.Toolbar.view ToolbarMsg page toolbarPage model.toolbar
 
-            TopAppBar topAppBarPage ->
-                Demo.TopAppBar.view TopAppBarMsg page topAppBarPage model.topAppBar
+        TopAppBar topAppBarPage ->
+            Demo.TopAppBar.view TopAppBarMsg page topAppBarPage model.topAppBar
 
-            GridList ->
-                Demo.GridList.view GridListMsg page model.gridList
+        GridList ->
+            Demo.GridList.view GridListMsg page model.gridList
 
-            LayoutGrid ->
-                Demo.LayoutGrid.view LayoutGridMsg page model.layoutGrid
+        LayoutGrid ->
+            Demo.LayoutGrid.view LayoutGridMsg page model.layoutGrid
 
-            Ripple ->
-                Demo.Ripple.view RippleMsg page model.ripple
+        Ripple ->
+            Demo.Ripple.view RippleMsg page model.ripple
 
-            Typography ->
-                Demo.Typography.view page
+        Typography ->
+            Demo.Typography.view page
 
-            Error404 requestedHash ->
-                Html.div
-                    []
-                    [ Options.styled Html.h1
-                        [ Typography.display4
-                        ]
-                        [ text "404" ]
-                    , text requestedHash
+        Error404 requestedHash ->
+            Html.div
+                []
+                [ Options.styled Html.h1
+                    [ Typography.display4
                     ]
+                    [ text "404" ]
+                , text requestedHash
+                ]
 
 
 urlOf : Model -> String
@@ -537,15 +537,15 @@ init location =
         ( layoutGrid, layoutGridEffects ) =
             Demo.LayoutGrid.init LayoutGridMsg
     in
-        ( { defaultModel
-            | layoutGrid = layoutGrid
-            , url = Url.fromString location.hash
-          }
-        , Cmd.batch
-            [ Material.init Mdc
-            , layoutGridEffects
-            ]
-        )
+    ( { defaultModel
+        | layoutGrid = layoutGrid
+        , url = Url.fromString location.hash
+      }
+    , Cmd.batch
+        [ Material.init Mdc
+        , layoutGridEffects
+        ]
+    )
 
 
 subscriptions : Model -> Sub Msg

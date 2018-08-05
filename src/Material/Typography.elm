@@ -17,10 +17,10 @@ module Material.Typography
         , headline5
         , headline6
         , overline
-        , subtitle1
-        , subtitle2
         , subheading1
         , subheading2
+        , subtitle1
+        , subtitle2
         , title
         , typography
         )
@@ -45,7 +45,7 @@ density and reading comfort under typical usage conditions.
         [ Typography.typography
         ]
         [ styled Html.h1
-              [ Typography.display4
+              [ Typography.headline1
               ]
               [ text "Big header"
               ]
@@ -55,13 +55,16 @@ density and reading comfort under typical usage conditions.
 # Usage
 
 @docs typography
-@docs display4, display3, display2, display1
-@docs headline
+@docs display4, display3, display2, display1 (deprecated)
+@docs headline6, headline5, headline4, headline3, headline2, headline1
+@docs headline (deprecated)
 @docs title
-@docs subheading2, subheading1
+@docs subtitle2, subtitle1
+@docs subheading2, subheading1 (deprecated)
 @docs body2, body1
 @docs caption
 @docs button
+@docs overline
 @docs adjustMargin
 
 -}

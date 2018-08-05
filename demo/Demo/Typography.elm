@@ -1,12 +1,11 @@
 module Demo.Typography exposing (view)
 
-import Demo.Page exposing (Page)
-import Html exposing (..)
-import Material
-import Material.Options as Options exposing (styled, cs, css, nop)
-import Material.Typography as Typography
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
+import Demo.Page exposing (Page)
+import Html exposing (..)
+import Material.Options as Options exposing (cs, css, nop, styled)
+import Material.Typography as Typography
 
 
 view : Page m -> Html m

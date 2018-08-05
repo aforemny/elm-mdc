@@ -34,7 +34,6 @@ between surfaces. An object’s elevation determines the appearance of its
 shadow. The elevation values are mapped out in a "z-space" and range from 0 to
 
 
-
 # Resources
 
   - [Material Design guidelines: Shadows & elevation](https://material.io/components/web/catalog/elevation/)
