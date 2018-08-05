@@ -5,11 +5,15 @@ module Internal.Typography.Implementation
         , body2
         , button
         , caption
-        , display1
-        , display2
-        , display3
-        , display4
-        , headline
+        , headline1
+        , headline2
+        , headline3
+        , headline4
+        , headline5
+        , headline6
+        , overline
+        , subtitle1
+        , subtitle2
         , subheading1
         , subheading2
         , title
@@ -24,34 +28,54 @@ typography =
     cs "mdc-typography"
 
 
-display1 : Property c m
-display1 =
-    cs "mdc-typography--display1"
-
-
-display2 : Property c m
-display2 =
-    cs "mdc-typography--display2"
-
-
-display3 : Property c m
-display3 =
-    cs "mdc-typography--display3"
-
-
-display4 : Property c m
-display4 =
-    cs "mdc-typography--display4"
-
-
 title : Property c m
 title =
     cs "mdc-typography--title"
 
 
-headline : Property c m
-headline =
-    cs "mdc-typography--headline"
+headline1 : Property c m
+headline1 =
+    cs "mdc-typography--headline1"
+
+
+headline2 : Property c m
+headline2 =
+    cs "mdc-typography--headline2"
+
+
+headline3 : Property c m
+headline3 =
+    cs "mdc-typography--headline3"
+
+
+headline4 : Property c m
+headline4 =
+    cs "mdc-typography--headline4"
+
+
+headline5 : Property c m
+headline5 =
+    cs "mdc-typography--headline5"
+
+
+headline6 : Property c m
+headline6 =
+    cs "mdc-typography--headline6"
+
+
+subtitle1 : Property c m
+subtitle1 =
+    cs "mdc-typography--subtitle1"
+
+
+subtitle2 : Property c m
+subtitle2 =
+    cs "mdc-typography--subtitle2"
+
+
+overline : Property c m
+overline =
+    cs "mdc-typography--overline"
 
 
 caption : Property c m
