@@ -87,8 +87,7 @@ view lift page model =
                 [ cs "demo-wrapper"
                 ]
                 [ styled Html.h1
-                    [ cs "mdc-typography--headline5"
-                      -- TODO: Typography.headline5?
+                    [ Typography.headline5
                     ]
                     [ text "Button"
                     ]
@@ -140,8 +139,7 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                         ]
                     ]
                 , styled Html.h2
-                    [ cs "mdc-typography--headline6"
-                      -- TODO: Typography.headline6?
+                    [ Typography.headline6
                     , css "border-bottom" "1px solid rgba(0,0,0,.87)"
                     ]
                     [ text "Resources"
@@ -165,7 +163,7 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                     , altText = "Source Code"
                     }
                 , styled Html.h2
-                    [ cs "mdc-typography--headline6"
+                    [ Typography.headline6
                     , css "border-bottom" "1px solid rgba(0,0,0,.87)"
                     ]
                     [ text "Demos"
@@ -182,15 +180,16 @@ example :
     String
     -> (Msg m -> m)
     -> { a | mdc : Material.Model m }
-    -> { title : String
-       , additionalOptions : List (Button.Property m)
-       }
+    ->
+        { title : String
+        , additionalOptions : List (Button.Property m)
+        }
     -> Html m
 example idx lift model { title, additionalOptions } =
     styled Html.div
         []
         [ styled Html.h3
-            [ cs "mdc-typography--subtitle1"
+            [ Typography.subtitle1
             ]
             [ text title
             ]

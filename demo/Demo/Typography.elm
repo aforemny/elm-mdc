@@ -1,64 +1,103 @@
-module Demo.Typography exposing ( view )
+module Demo.Typography exposing (view)
 
 import Demo.Page exposing (Page)
 import Html exposing (..)
+import Material
 import Material.Options as Options exposing (styled, cs, css, nop)
 import Material.Typography as Typography
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 
 
 view : Page m -> Html m
 view page =
     page.body "Typography"
-    [
-      example "Styles" nop
-    , example "Styles with margin adjustments" Typography.adjustMargin
-    ]
+        [ styled Html.div
+            [ cs "demo-wrapper"
+            ]
+            [ styled Html.h1 [ Typography.headline5 ] [ text "Typography" ]
+            , styled Html.p
+                [ Typography.body1
+                ]
+                [ text """
+Roboto is the standard typeface on Android and Chrome.
+                       """
+                ]
+            , Hero.view []
+                [ styled Html.h1 [ Typography.headline1 ] [ text "Typography" ]
+                ]
+            , styled Html.h2
+                [ Typography.headline6
+                , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+                ]
+                [ text "Resources"
+                ]
+            , ResourceLink.view
+                { link = "https://material.io/go/design-typography"
+                , title = "Material Design Guidelines"
+                , icon = "images/material.svg"
+                , altText = "Material Design Guidelines icon"
+                }
+            , ResourceLink.view
+                { link = "https://material.io/components/web/catalog/typography/"
+                , title = "Documentation"
+                , icon = "images/ic_drive_document_24px.svg"
+                , altText = "Documentation icon"
+                }
+            , ResourceLink.view
+                { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-typography"
+                , title = "Source Code (Material Components Web)"
+                , icon = "images/ic_code_24px.svg"
+                , altText = "Source Code"
+                }
+            , styled Html.h2
+                [ Typography.headline6
+                , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+                ]
+                [ text "Demos"
+                ]
+            , example
+            ]
+        ]
 
 
-example : String -> Options.Property c m -> Html m
-example title adjustMargin =
+example : Html m
+example =
     styled Html.section
-    [ cs "demo-typography--section"
-    , css "margin" "24px"
-    , css "padding" "24px"
-    , css "border" "1px solid #ddd"
-    , Typography.typography
-    ]
-    [ styled Html.h2
-      [ Typography.display1
-      ]
-      [ text title
-      ]
-
-    , styled Html.h1 [ Typography.display4, adjustMargin ] [ text "Display 4" ]
-    , styled Html.h1 [ Typography.display3, adjustMargin ] [ text "Display 3" ]
-    , styled Html.h1 [ Typography.display2, adjustMargin ] [ text "Display 2" ]
-    , styled Html.h1 [ Typography.display1, adjustMargin ] [ text "Display 1" ]
-    , styled Html.h1 [ Typography.headline, adjustMargin ] [ text "Headline" ]
-
-    , styled Html.h2 [ Typography.title, adjustMargin ]
-      [ text "Title"
-      , styled Html.span [ Typography.caption, adjustMargin ] [ text "Caption." ]
-      ]
-
-    , styled Html.h3 [ Typography.subheading2, adjustMargin ] [ text "Subheading 2" ]
-    , styled Html.h4 [ Typography.subheading1, adjustMargin ] [ text "Subheading 1" ]
-
-    , styled Html.p
-      [ Typography.body2
-      , adjustMargin
-      ]
-      [ text """Body 1 paragraph. Lorem ipsum dolor sit amet, consectetur
-      adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-      reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-      pariatur."""
-      ]
-    , styled Html.aside
-      [ Typography.body2
-      , adjustMargin
-      ]
-      [ text "Body 2 text, calling something out."
-      ]
-    ]
+        [ cs "demo-typography--section"
+        , Typography.typography
+        ]
+        [ styled Html.h1 [ Typography.headline1 ] [ text "Headline 1" ]
+        , styled Html.h2 [ Typography.headline2 ] [ text "Headline 2" ]
+        , styled Html.h3 [ Typography.headline3 ] [ text "Headline 3" ]
+        , styled Html.h4 [ Typography.headline4 ] [ text "Headline 4" ]
+        , styled Html.h5 [ Typography.headline5 ] [ text "Headline 5" ]
+        , styled Html.h6 [ Typography.headline6 ] [ text "Headline 6" ]
+        , styled Html.h6 [ Typography.subtitle1 ] [ text "Subtitle 1" ]
+        , styled Html.h6 [ Typography.subtitle2 ] [ text "Subtitle 2" ]
+        , styled Html.p
+            [ Typography.body1
+            ]
+            [ text "Body 1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam."
+            ]
+        , styled Html.p
+            [ Typography.body2
+            ]
+            [ text "Body 2. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate aliquid ad quas sunt voluptatum officia dolorum cumque, possimus nihil molestias sapiente necessitatibus dolor saepe inventore, soluta id accusantium voluptas beatae."
+            ]
+        , styled Html.div
+            [ Typography.button
+            ]
+            [ text "Button text"
+            ]
+        , styled Html.div
+            [ Typography.caption
+            ]
+            [ text "Caption text"
+            ]
+        , styled Html.div
+            [ Typography.overline
+            ]
+            [ text "Overline text"
+            ]
+        ]
