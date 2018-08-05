@@ -91,12 +91,15 @@ view lift page model =
 
                 -- TODO: Typography.headline5?
                 ]
-                [ text "Button"
-                ]
-            , styled Html.p
-                [ Typography.body1
-                ]
-                [ text """
+                [ styled Html.h1
+                    [ Typography.headline5
+                    ]
+                    [ text "Button"
+                    ]
+                , styled Html.p
+                    [ Typography.body1
+                    ]
+                    [ text """
 Buttons communicate an action a user can take. They are typically placed
 throughout your UI, in places like dialogs, forms, cards, and toolbars.
                         """
@@ -110,32 +113,33 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                     ]
                     [ text "Flat"
                     ]
-                , Button.view (lift << Mdc)
-                    "buttons-hero-button-raised"
-                    model.mdc
-                    [ Button.ripple
-                    , Button.raised
-                    , css "margin-left" "32px"
-                    , css "margin-right" "32px"
+                , styled Html.h2
+                    [ Typography.headline6
+                    , css "border-bottom" "1px solid rgba(0,0,0,.87)"
                     ]
                     [ text "Raised"
                     ]
-                , Button.view (lift << Mdc)
-                    "buttons-hero-button-unelevated"
-                    model.mdc
-                    [ Button.ripple
-                    , Button.unelevated
-                    , css "margin-left" "32px"
-                    , css "margin-right" "32px"
-                    ]
-                    [ text "Unelevated"
-                    ]
-                , Button.view (lift << Mdc)
-                    "buttons-hero-button-outlined"
-                    model.mdc
-                    [ Button.ripple
-                    , Button.outlined
-                    , css "margin-left" "32px"
+                , ResourceLink.view
+                    { link = "https://material.io/go/design-buttons"
+                    , title = "Material Design Guidelines"
+                    , icon = "images/material.svg"
+                    , altText = "Material Design Guidelines icon"
+                    }
+                , ResourceLink.view
+                    { link = "https://material.io/components/web/catalog/buttons/"
+                    , title = "Documentation"
+                    , icon = "images/ic_drive_document_24px.svg"
+                    , altText = "Documentation icon"
+                    }
+                , ResourceLink.view
+                    { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-button"
+                    , title = "Source Code (Material Components Web)"
+                    , icon = "images/ic_code_24px.svg"
+                    , altText = "Source Code"
+                    }
+                , styled Html.h2
+                    [ Typography.headline6
+                    , css "border-bottom" "1px solid rgba(0,0,0,.87)"
                     ]
                     [ text "Outlined"
                     ]
@@ -193,7 +197,7 @@ example idx lift model { title, additionalOptions } =
     styled Html.div
         []
         [ styled Html.h3
-            [ cs "mdc-typography--subtitle1"
+            [ Typography.subtitle1
             ]
             [ text title
             ]

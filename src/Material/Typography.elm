@@ -202,10 +202,19 @@ body2 =
 
 
 {-| Sets font properties as Subheading 1.
+Deprecated - use subtitle1 instead
 -}
 subheading1 : Property c m
 subheading1 =
-    Typography.subheading1
+    subtitle1
+
+
+{-| Sets font properties as Subheading 2.
+Deprecated - use subtitle2 instead
+-}
+subheading2 : Property c m
+subheading2 =
+    subtitle2
 
 
 {-| Sets font properties as Overline.
@@ -213,13 +222,6 @@ subheading1 =
 overline : Property c m
 overline =
     Typography.overline
-
-
-{-| Sets font properties as Subheading 2.
--}
-subheading2 : Property c m
-subheading2 =
-    Typography.subheading2
 
 
 {-| Sets font properties as Button.
