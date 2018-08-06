@@ -1,28 +1,28 @@
-module Material.GridList exposing
-    ( gutter1
-    , headerCaption
-    , icon
-    , iconAlignEnd
-    , iconAlignStart
-    , image
-    , primary
-    , primaryContent
-    , Property
-    , secondary
-    , supportText
-    , tile
-    , tileAspect16To9
-    , tileAspect2To3
-    , tileAspect3To2
-    , tileAspect3To4
-    , tileAspect4To3
-    , title
-    , twolineCaption
-    , view
-    )
+module Material.GridList
+    exposing
+        ( Property
+        , gutter1
+        , headerCaption
+        , icon
+        , iconAlignEnd
+        , iconAlignStart
+        , image
+        , primary
+        , primaryContent
+        , secondary
+        , supportText
+        , tile
+        , tileAspect16To9
+        , tileAspect2To3
+        , tileAspect3To2
+        , tileAspect3To4
+        , tileAspect4To3
+        , title
+        , twolineCaption
+        , view
+        )
 
-{-|
-Grid List provides a RTL-aware Material Design Grid list component adhering to
+{-| Grid List provides a RTL-aware Material Design Grid list component adhering to
 the Material Design Grid list spec. Grid Lists are best suited for presenting
 homogeneous data, typically images. Each item in a grid list is called a tile.
 Tiles maintain consistent width, height, and padding across screen sizes.
@@ -30,31 +30,29 @@ Tiles maintain consistent width, height, and padding across screen sizes.
 
 # Resources
 
-- [Material Design guidelines: Grid lists](https://material.io/guidelines/components/grid-lists.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#grid-list)
+  - [Material Design guidelines: Grid lists](https://material.io/guidelines/components/grid-lists.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#grid-list)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.GridList as GridList
+    import Html exposing (text)
+    import Material.GridList as GridList
 
 
-GridList.view Mdc "my-grid-list" model.mdc []
-    ( List.repeat 6 <|
-      GridList.tile []
-          [ GridList.primary []
-                [ GridList.image [] "images/1-1.jpg"
-                ]
-          , GridList.secondary []
-                [ GridList.title []
-                      [ text "Tile Title"
-                      ]
-                ]
-          ]
-    )
-```
+    GridList.view Mdc "my-grid-list" model.mdc []
+        ( List.repeat 6 <|
+          GridList.tile []
+              [ GridList.primary []
+                    [ GridList.image [] "images/1-1.jpg"
+                    ]
+              , GridList.secondary []
+                    [ GridList.title []
+                          [ text "Tile Title"
+                          ]
+                    ]
+              ]
+        )
 
 
 # Usage
@@ -80,13 +78,13 @@ GridList.view Mdc "my-grid-list" model.mdc []
 @docs title
 @docs supportText
 @docs primaryContent
+
 -}
 
-
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.GridList.Implementation as GridList
+import Material
 
 
 {-| GridList property.
@@ -111,6 +109,7 @@ view =
 {-| Style a GridList so that its tiles have a header caption.
 
 By default GridList tile's have a footer caption.
+
 -}
 headerCaption : Property m
 headerCaption =
@@ -120,6 +119,7 @@ headerCaption =
 {-| Style a GridList so that tile's captions have two lines.
 
 By default a tile's caption is single line.
+
 -}
 twolineCaption : Property m
 twolineCaption =
@@ -143,6 +143,7 @@ iconAlignEnd =
 {-| Style a GridList to have a 1px padding.
 
 By default a GridList has a 4px padding.
+
 -}
 gutter1 : Property m
 gutter1 =
@@ -199,6 +200,7 @@ tile =
 {-| GridList tile's primary block.
 
 Contains `primaryContent` or `image`.
+
 -}
 primary : List (Property m) -> List (Html m) -> Html m
 primary =
@@ -208,6 +210,7 @@ primary =
 {-| GridList tile's secondary block.
 
 This contains the caption made up of `title`, `icon` and/or `supportText`.
+
 -}
 secondary : List (Property m) -> List (Html m) -> Html m
 secondary =
@@ -224,6 +227,7 @@ image =
 {-| Add a title caption to the tile.
 
 Should be a direct child of `secondary`.
+
 -}
 title : List (Property m) -> List (Html m) -> Html m
 title =
@@ -233,6 +237,7 @@ title =
 {-| Add supporting text to a tile's caption.
 
 Should be a direct child of `secondary`.
+
 -}
 supportText : List (Property m) -> List (Html m) -> Html m
 supportText =
@@ -242,6 +247,7 @@ supportText =
 {-| Add an icon to a tile's caption.
 
 Should be a direct child of `secondary`.
+
 -}
 icon : List (Property m) -> String -> Html m
 icon =
@@ -251,6 +257,7 @@ icon =
 {-| GridList tile's primary content wrapper.
 
 Should be a d direct child of `primary`.
+
 -}
 primaryContent : List (Property m) -> List (Html m) -> Html m
 primaryContent =

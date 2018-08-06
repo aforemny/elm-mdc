@@ -1,17 +1,18 @@
-module Internal.Fab.Implementation exposing
-    ( exited
-    , mini
-    , Property
-    , react
-    , ripple
-    , view
-    )
+module Internal.Fab.Implementation
+    exposing
+        ( Property
+        , exited
+        , mini
+        , react
+        , ripple
+        , view
+        )
 
 import Html exposing (Html, text)
-import Internal.Component as Component exposing (Indexed, Index)
-import Internal.Fab.Model exposing (Model, defaultModel, Msg(..))
+import Internal.Component as Component exposing (Index, Indexed)
+import Internal.Fab.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, css, when)
+import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
 
 
@@ -68,30 +69,31 @@ fab lift model options icon =
         ripple =
             Ripple.view False (lift << RippleMsg) model.ripple []
     in
-        Options.apply summary
-            Html.button
-            [ cs "mdc-fab"
-            , cs "material-icons"
-            , when config.ripple << Options.many <|
-              [ ripple.interactionHandler
-              , ripple.properties
-              ]
+    Options.apply summary
+        Html.button
+        [ cs "mdc-fab"
+        , cs "material-icons"
+        , when config.ripple
+            << Options.many
+          <|
+            [ ripple.interactionHandler
+            , ripple.properties
             ]
-            []
-            ( List.concat
-              [ [ styled Html.span
-                  [ cs "mdc-fab__icon"
-                  ]
-                  [ text icon
-                  ]
-                ]
-              ,
-                if config.ripple then
-                    [ ripple.style ]
-                else
-                    []
+        ]
+        []
+        (List.concat
+            [ [ styled Html.span
+                    [ cs "mdc-fab__icon"
+                    ]
+                    [ text icon
+                    ]
               ]
-            )
+            , if config.ripple then
+                [ ripple.style ]
+              else
+                []
+            ]
+        )
 
 
 type alias Store s =

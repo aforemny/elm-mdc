@@ -1,43 +1,44 @@
-module Internal.TopAppBar.Implementation exposing
-    ( actionItem
-    , alignEnd
-    , alignStart
-    , collapsed
-    , dense
-    , denseFixedAdjust
-    , fixed
-    , fixedAdjust
-    , hasActionItem
-    , navigationIcon
-    , prominent
-    , prominentFixedAdjust
-    , Property
-    , react
-    , section
-    , short
-    , title
-    , view
-    )
+module Internal.TopAppBar.Implementation
+    exposing
+        ( Property
+        , actionItem
+        , alignEnd
+        , alignStart
+        , collapsed
+        , dense
+        , denseFixedAdjust
+        , fixed
+        , fixedAdjust
+        , hasActionItem
+        , navigationIcon
+        , prominent
+        , prominentFixedAdjust
+        , react
+        , section
+        , short
+        , title
+        , view
+        )
 
 import DOM
 import Html exposing (Html, text)
-import Json.Decode as Json exposing (Decoder)
-import Internal.Component as Component exposing (Indexed, Index)
+import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, css, when, nop)
-import Internal.TopAppBar.Model exposing (Model, defaultModel, Config, defaultConfig, Msg(..))
+import Internal.Options as Options exposing (cs, css, nop, styled, when)
+import Internal.TopAppBar.Model exposing (Config, Model, Msg(..), defaultConfig, defaultModel)
+import Json.Decode as Json exposing (Decoder)
 
 
-cssClasses
-    : { dense : String
-      , fixed : String
-      , scrolled: String
-      , prominent : String
-      , short: String
-      , collapsed: String
-      }
+cssClasses :
+    { dense : String
+    , fixed : String
+    , scrolled : String
+    , prominent : String
+    , short : String
+    , collapsed : String
+    }
 cssClasses =
     { dense = "mdc-top-app-bar--dense"
     , fixed = "mdc-top-app-bar--fixed"
@@ -54,14 +55,14 @@ update msg model =
         Init { scrollPosition, topAppBarHeight } ->
             ( topAppBarScrollHandler scrollPosition
                 { model
-                  | lastScrollPosition = Just scrollPosition
-                  , topAppBarHeight = Just topAppBarHeight
+                    | lastScrollPosition = Just scrollPosition
+                    , topAppBarHeight = Just topAppBarHeight
                 }
             , Cmd.none
             )
 
         Scroll { scrollPosition } ->
-          ( topAppBarScrollHandler scrollPosition model, Cmd.none )
+            ( topAppBarScrollHandler scrollPosition model, Cmd.none )
 
         Resize { scrollPosition, topAppBarHeight } ->
             -- TODO: upstream implements resize trottling to 10 p/s.
@@ -85,113 +86,116 @@ update msg model =
             ( topAppBarScrollHandler scrollPosition updatedModel, Cmd.none )
 
 
-
-
 topAppBarScrollHandler : Float -> Model -> Model
 topAppBarScrollHandler scrollPosition model =
     Maybe.map2 (,)
         model.topAppBarHeight
         model.lastScrollPosition
-    |> Maybe.map (\( topAppBarHeight, lastScrollPosition ) ->
-        let
-            currentScrollPosition =
-                max scrollPosition 0
+        |> Maybe.map
+            (\( topAppBarHeight, lastScrollPosition ) ->
+                let
+                    currentScrollPosition =
+                        max scrollPosition 0
 
-            diff =
-                currentScrollPosition - lastScrollPosition
+                    diff =
+                        currentScrollPosition - lastScrollPosition
 
-            currentAppBarOffsetTop =
-                model.currentAppBarOffsetTop - diff
+                    currentAppBarOffsetTop =
+                        model.currentAppBarOffsetTop - diff
 
-            updatedAppBarOffsetTop =
-                if not isCurrentlyBeingResized then
-                    if currentAppBarOffsetTop > 0 then
-                        0
-                    else if abs currentAppBarOffsetTop > topAppBarHeight then
-                        -topAppBarHeight
-                    else
-                        currentAppBarOffsetTop
-                else
-                    model.currentAppBarOffsetTop
+                    updatedAppBarOffsetTop =
+                        if not isCurrentlyBeingResized then
+                            if currentAppBarOffsetTop > 0 then
+                                0
+                            else if abs currentAppBarOffsetTop > topAppBarHeight then
+                                -topAppBarHeight
+                            else
+                                currentAppBarOffsetTop
+                        else
+                            model.currentAppBarOffsetTop
 
-            isCurrentlyBeingResized =
-                False -- TODO: resize throttling
+                    isCurrentlyBeingResized =
+                        False
 
-            updatedModel =
-                { model
-                  | lastScrollPosition = Just currentScrollPosition
-                  , currentAppBarOffsetTop = updatedAppBarOffsetTop
-                }
-        in
-        Maybe.withDefault updatedModel (moveTopAppBar updatedModel)
-      )
-    |> Maybe.andThen moveTopAppBar
-    |> Maybe.withDefault model
+                    -- TODO: resize throttling
+                    updatedModel =
+                        { model
+                            | lastScrollPosition = Just currentScrollPosition
+                            , currentAppBarOffsetTop = updatedAppBarOffsetTop
+                        }
+                in
+                Maybe.withDefault updatedModel (moveTopAppBar updatedModel)
+            )
+        |> Maybe.andThen moveTopAppBar
+        |> Maybe.withDefault model
 
 
 getViewportScrollY : Decoder Float
 getViewportScrollY =
     DOM.target <|
-    Json.at ["ownerDocument", "defaultView", "scrollY"] Json.float
+        Json.at [ "ownerDocument", "defaultView", "scrollY" ] Json.float
 
 
 getAppBarHeight : Decoder Float
 getAppBarHeight =
-    Json.at ["target", "clientHeight"] Json.float
+    Json.at [ "target", "clientHeight" ] Json.float
 
 
 checkForUpdate : Model -> Maybe ( Model, Bool )
 checkForUpdate model =
     model.topAppBarHeight
-    |> Maybe.map (\topAppBarHeight ->
-        let
-            offscreenBoundaryTop =
-                -topAppBarHeight
+        |> Maybe.map
+            (\topAppBarHeight ->
+                let
+                    offscreenBoundaryTop =
+                        -topAppBarHeight
 
-            hasAnyPixelsOffscreen =
-                model.currentAppBarOffsetTop < 0
+                    hasAnyPixelsOffscreen =
+                        model.currentAppBarOffsetTop < 0
 
-            hasAnyPixelsOnscreen =
-                model.currentAppBarOffsetTop > offscreenBoundaryTop
+                    hasAnyPixelsOnscreen =
+                        model.currentAppBarOffsetTop > offscreenBoundaryTop
 
-            partiallyShowing =
-                hasAnyPixelsOffscreen && hasAnyPixelsOnscreen
-        in
-            if partiallyShowing then
-                ( { model | wasDocked = False }, True )
-            else
-                if not model.wasDocked then
+                    partiallyShowing =
+                        hasAnyPixelsOffscreen && hasAnyPixelsOnscreen
+                in
+                if partiallyShowing then
+                    ( { model | wasDocked = False }, True )
+                else if not model.wasDocked then
                     ( { model | wasDocked = True }, True )
                 else if model.isDockedShowing /= hasAnyPixelsOnscreen then
                     ( { model | isDockedShowing = hasAnyPixelsOnscreen }, True )
                 else
                     ( model, False )
-      )
+            )
 
 
 moveTopAppBar : Model -> Maybe Model
 moveTopAppBar model =
     checkForUpdate model
-    |> Maybe.andThen (\( updatedModel, partiallyShowing ) ->
-        if partiallyShowing then
-            updatedModel.topAppBarHeight
-            |> Maybe.map (\topAppBarHeight ->
-              let
-                  styleTop =
-                      let
-                          maxTopAppBarHeight =
-                              128
-                      in
-                          if abs updatedModel.currentAppBarOffsetTop > topAppBarHeight then
-                              -maxTopAppBarHeight
-                          else
-                              updatedModel.currentAppBarOffsetTop
-              in
-                { updatedModel | styleTop = Just styleTop }
-              )
-        else
-            Just updatedModel
-      )
+        |> Maybe.andThen
+            (\( updatedModel, partiallyShowing ) ->
+                if partiallyShowing then
+                    updatedModel.topAppBarHeight
+                        |> Maybe.map
+                            (\topAppBarHeight ->
+                                let
+                                    styleTop =
+                                        let
+                                            maxTopAppBarHeight =
+                                                128
+                                        in
+                                        if abs updatedModel.currentAppBarOffsetTop > topAppBarHeight then
+                                            -maxTopAppBarHeight
+                                        else
+                                            updatedModel.currentAppBarOffsetTop
+                                in
+                                { updatedModel | styleTop = Just styleTop }
+                            )
+                else
+                    Just updatedModel
+            )
+
 
 
 -- VIEW
@@ -200,7 +204,7 @@ moveTopAppBar model =
 topAppBar : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 topAppBar lift model options sections =
     let
-        ({ config } as summary)=
+        ({ config } as summary) =
             Options.collect defaultConfig options
 
         lastScrollPosition =
@@ -209,57 +213,65 @@ topAppBar lift model options sections =
         top =
             Maybe.withDefault 0 model.styleTop
     in
-    Options.apply summary Html.header
-    [ cs "mdc-top-app-bar"
-    , when config.dense (cs cssClasses.dense)
-    , when config.fixed (cs cssClasses.fixed)
-    , when (config.fixed && lastScrollPosition > 0) <|
-        cs cssClasses.scrolled
-    , when config.prominent (cs cssClasses.prominent)
-    , when config.short (cs cssClasses.short)
-    , when (config.collapsed || (config.short && lastScrollPosition > 0)) <|
-        cs cssClasses.collapsed
-    , when (not config.fixed && not config.short) <|
-        css "top" (toString top ++ "px")
-    , GlobalEvents.onScroll <|
-          Json.map lift <|
-              Json.map (\scrollPosition ->
-                    Scroll
-                        { scrollPosition = scrollPosition }
-                  )
-                  getViewportScrollY
-    , GlobalEvents.onResize <| Json.map lift <|
-        Json.map2 (\scrollPosition topAppBarHeight ->
-                Resize
-                    { scrollPosition = scrollPosition
-                    , topAppBarHeight = topAppBarHeight
-                    }
+    Options.apply summary
+        Html.header
+        [ cs "mdc-top-app-bar"
+        , when config.dense (cs cssClasses.dense)
+        , when config.fixed (cs cssClasses.fixed)
+        , when (config.fixed && lastScrollPosition > 0) <|
+            cs cssClasses.scrolled
+        , when config.prominent (cs cssClasses.prominent)
+        , when config.short (cs cssClasses.short)
+        , when (config.collapsed || (config.short && lastScrollPosition > 0)) <|
+            cs cssClasses.collapsed
+        , when (not config.fixed && not config.short) <|
+            css "top" (toString top ++ "px")
+        , GlobalEvents.onScroll <|
+            Json.map lift <|
+                Json.map
+                    (\scrollPosition ->
+                        Scroll
+                            { scrollPosition = scrollPosition }
+                    )
+                    getViewportScrollY
+        , GlobalEvents.onResize <|
+            Json.map lift <|
+                Json.map2
+                    (\scrollPosition topAppBarHeight ->
+                        Resize
+                            { scrollPosition = scrollPosition
+                            , topAppBarHeight = topAppBarHeight
+                            }
+                    )
+                    getViewportScrollY
+                    getAppBarHeight
+        , when
+            (List.any identity
+                [ model.lastScrollPosition == Nothing
+                , model.topAppBarHeight == Nothing
+                ]
             )
-            getViewportScrollY
-            getAppBarHeight
-    , when
-        ( List.any identity
-          [ model.lastScrollPosition == Nothing
-          , model.topAppBarHeight == Nothing
-          ]
-        ) <|
-        GlobalEvents.onTick <| Json.map lift <|
-            Json.map2 (\scrollPosition topAppBarHeight ->
-                    Init
-                        { scrollPosition = scrollPosition
-                        , topAppBarHeight = topAppBarHeight
-                        }
-                )
-                getViewportScrollY
-                getAppBarHeight
-    ]
-    []
-    [ row [] sections ]
+          <|
+            GlobalEvents.onTick <|
+                Json.map lift <|
+                    Json.map2
+                        (\scrollPosition topAppBarHeight ->
+                            Init
+                                { scrollPosition = scrollPosition
+                                , topAppBarHeight = topAppBarHeight
+                                }
+                        )
+                        getViewportScrollY
+                        getAppBarHeight
+        ]
+        []
+        [ row [] sections ]
 
 
 row : List (Property m) -> List (Html m) -> Html m
 row options =
     styled Html.div (cs "mdc-top-app-bar__row" :: options)
+
 
 
 -- COMPONENT
@@ -283,6 +295,7 @@ react =
     Component.react get set Internal.Msg.TopAppBarMsg (Component.generalise update)
 
 
+
 -- API
 
 
@@ -303,27 +316,27 @@ view =
 
 dense : Property m
 dense =
-    Options.option (\ config -> { config | dense = True } )
+    Options.option (\config -> { config | dense = True })
 
 
 fixed : Property m
 fixed =
-    Options.option (\ config -> { config | fixed = True } )
+    Options.option (\config -> { config | fixed = True })
 
 
 prominent : Property m
 prominent =
-    Options.option (\ config -> { config | prominent = True } )
+    Options.option (\config -> { config | prominent = True })
 
 
 short : Property m
 short =
-    Options.option (\ config -> { config | short = True } )
+    Options.option (\config -> { config | short = True })
 
 
 collapsed : Property m
 collapsed =
-    Options.option (\ config -> { config | collapsed = True } )
+    Options.option (\config -> { config | collapsed = True })
 
 
 hasActionItem : Property m
@@ -344,34 +357,36 @@ alignEnd =
 navigationIcon : List (Icon.Property m) -> String -> Html m
 navigationIcon options name =
     Icon.view
-        ( cs "mdc-top-app-bar__navigation-icon"
-        :: Icon.anchor
-        :: options )
+        (cs "mdc-top-app-bar__navigation-icon"
+            :: Icon.anchor
+            :: options
+        )
         name
 
 
 section : List (Property m) -> List (Html m) -> Html m
 section options =
     styled Html.section
-    ( cs "mdc-top-app-bar__section"
-    :: options
-    )
+        (cs "mdc-top-app-bar__section"
+            :: options
+        )
 
 
 title : List (Property m) -> List (Html m) -> Html m
 title options =
     styled Html.span
-    ( cs "mdc-top-app-bar__title"
-    :: options
-    )
+        (cs "mdc-top-app-bar__title"
+            :: options
+        )
 
 
 actionItem : List (Icon.Property m) -> String -> Html m
 actionItem options name =
     Icon.view
-        ( cs "mdc-top-app-bar__action-item"
-        :: Icon.anchor
-        :: options )
+        (cs "mdc-top-app-bar__action-item"
+            :: Icon.anchor
+            :: options
+        )
         name
 
 

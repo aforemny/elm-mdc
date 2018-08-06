@@ -1,70 +1,70 @@
-module Material.Theme exposing
-    ( background
-    , primary
-    , primaryBg
-    , primaryDark
-    , primaryDarkBg
-    , primaryLight
-    , primaryLightBg
-    , secondary
-    , secondaryBg
-    , secondaryDark
-    , secondaryDarkBg
-    , secondaryLight
-    , secondaryLightBg
-    , textDisabledOnBackground
-    , textDisabledOnDark
-    , textDisabledOnLight
-    , textDisabledOnPrimary
-    , textDisabledOnSecondary
-    , textHintOnBackground
-    , textHintOnDark
-    , textHintOnLight
-    , textHintOnPrimary
-    , textHintOnSecondary
-    , textIconOnBackground
-    , textIconOnDark
-    , textIconOnLight
-    , textIconOnPrimary
-    , textIconOnSecondary
-    , textPrimaryOnBackground
-    , textPrimaryOnDark
-    , textPrimaryOnLight
-    , textPrimaryOnPrimary
-    , textPrimaryOnSecondary
-    , textSecondaryOnBackground
-    , textSecondaryOnDark
-    , textSecondaryOnLight
-    , textSecondaryOnPrimary
-    , textSecondaryOnSecondary
-    )
+module Material.Theme
+    exposing
+        ( background
+        , primary
+        , primaryBg
+        , primaryDark
+        , primaryDarkBg
+        , primaryLight
+        , primaryLightBg
+        , secondary
+        , secondaryBg
+        , secondaryDark
+        , secondaryDarkBg
+        , secondaryLight
+        , secondaryLightBg
+        , textDisabledOnBackground
+        , textDisabledOnDark
+        , textDisabledOnLight
+        , textDisabledOnPrimary
+        , textDisabledOnSecondary
+        , textHintOnBackground
+        , textHintOnDark
+        , textHintOnLight
+        , textHintOnPrimary
+        , textHintOnSecondary
+        , textIconOnBackground
+        , textIconOnDark
+        , textIconOnLight
+        , textIconOnPrimary
+        , textIconOnSecondary
+        , textPrimaryOnBackground
+        , textPrimaryOnDark
+        , textPrimaryOnLight
+        , textPrimaryOnPrimary
+        , textPrimaryOnSecondary
+        , textSecondaryOnBackground
+        , textSecondaryOnDark
+        , textSecondaryOnLight
+        , textSecondaryOnPrimary
+        , textSecondaryOnSecondary
+        )
 
-{-|
-This color palette comprises primary and secondary colors that can be used for
+{-| This color palette comprises primary and secondary colors that can be used for
 illustration or to develop your brand colors.
 
 The colors in this module are derived from three theme colors:
 
-- Primary: the primary color used in your application, applies to a number of
-  UI elements.
-- Secondary: the secondary color used in your application, applies to a number
-  of UI elements. (Previously called "accent".)
-- Background: the background color for your application, aka the color on top
-  of which your UI is drawn.
+  - Primary: the primary color used in your application, applies to a number of
+    UI elements.
+  - Secondary: the secondary color used in your application, applies to a number
+    of UI elements. (Previously called "accent".)
+  - Background: the background color for your application, aka the color on top
+    of which your UI is drawn.
 
 and five text styles:
 
-- Primary: used for most text
-- Secondary: used for text which is lower in the visual hierarchy
-- Hint: used for text hints, such as those in text fields and labels
-- Disabled: used for text in disabled components and content
-- Icon: used for icons
+  - Primary: used for most text
+  - Secondary: used for text which is lower in the visual hierarchy
+  - Hint: used for text hints, such as those in text fields and labels
+  - Disabled: used for text in disabled components and content
+  - Icon: used for icons
 
 
 # Resources
 
-- [Material Design guidelines: Color](https://material.io/guidelines/style/color.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#theme)
+  - [Material Design guidelines: Color](https://material.io/guidelines/style/color.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#theme)
 
 
 # Usage
@@ -114,6 +114,7 @@ and five text styles:
 @docs textHintOnDark
 @docs textDisabledOnDark
 @docs textIconOnDark
+
 -}
 
 import Internal.Theme.Implementation as Theme

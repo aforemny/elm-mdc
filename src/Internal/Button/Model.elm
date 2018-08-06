@@ -1,4 +1,4 @@
-module Internal.Button.Model exposing (Model, defaultModel, Msg(..))
+module Internal.Button.Model exposing (Model, Msg(..), defaultModel)
 
 import Internal.Ripple.Model as Ripple
 

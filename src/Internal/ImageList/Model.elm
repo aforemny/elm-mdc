@@ -1,7 +1,8 @@
-module Internal.ImageList.Model exposing
-    ( Config
-    , defaultConfig
-    )
+module Internal.ImageList.Model
+    exposing
+        ( Config
+        , defaultConfig
+        )
 
 
 type alias Config =

@@ -1,12 +1,13 @@
-module Internal.Component exposing
-    ( Index
-    , Indexed
-    , indexed
-    , render
-    , subs
-    , react
-    , generalise
-    )
+module Internal.Component
+    exposing
+        ( Index
+        , Indexed
+        , generalise
+        , indexed
+        , react
+        , render
+        , subs
+        )
 
 import Dict exposing (Dict)
 import Internal.Index
@@ -14,8 +15,8 @@ import Internal.Msg exposing (Msg(..))
 import Internal.Options as Options exposing (Property)
 
 
-type alias Index
-    = Internal.Index.Index
+type alias Index =
+    Internal.Index.Index
 
 
 type alias Indexed x =
@@ -37,7 +38,7 @@ indexed get_model set_model model0 =
         set_ idx store model =
             set_model (Dict.insert idx model (get_model store)) store
     in
-        ( get_, set_ )
+    ( get_, set_ )
 
 
 render :
@@ -50,7 +51,7 @@ render :
     -> List (Property c m)
     -> a
 render get_model view ctor =
-    \ lift idx store options ->
+    \lift idx store options ->
         view (lift << ctor idx) (get_model idx store) (Options.dispatch lift :: options)
 
 

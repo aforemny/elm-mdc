@@ -1,6 +1,7 @@
 module Internal.Options
     exposing
-        ( addAttributes
+        ( Property
+        , addAttributes
         , apply
         , applyNativeControl
         , aria
@@ -34,16 +35,15 @@ module Internal.Options
         , onSubmit
         , onWithOptions
         , option
-        , Property
         , recollect
         , role
         , styled
         , when
         )
 
+import Html exposing (Attribute, Html)
 import Html.Attributes
 import Html.Events
-import Html exposing (Attribute, Html)
 import Internal.Dispatch as Dispatch
 import Internal.Index exposing (Index)
 import Internal.Msg exposing (Msg(Dispatch))

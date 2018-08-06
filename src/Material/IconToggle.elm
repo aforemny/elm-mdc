@@ -1,45 +1,43 @@
-module Material.IconToggle exposing
-    ( className
-    , disabled
-    , icon
-    , label
-    , on
-    , Property
-    , view
-    )
+module Material.IconToggle
+    exposing
+        ( Property
+        , className
+        , disabled
+        , icon
+        , label
+        , on
+        , view
+        )
 
-{-|
-IconToggle provides a Material Design icon toggle button. It is fully
+{-| IconToggle provides a Material Design icon toggle button. It is fully
 accessible, and is designed to work with any icon set.
 
 
 # Resources
 
-- [Material Design guidelines: Toggle buttons](https://material.io/guidelines/components/buttons.html#buttons-toggle-buttons)
-- [Demo](https://aforemny.github.io/elm-mdc/#icon-toggle)
+  - [Material Design guidelines: Toggle buttons](https://material.io/guidelines/components/buttons.html#buttons-toggle-buttons)
+  - [Demo](https://aforemny.github.io/elm-mdc/#icon-toggle)
 
 
 # Example
 
-```elm
-import Material.IconToggle as IconToggle
-import Material.Options as Options
+    import Material.IconToggle as IconToggle
+    import Material.Options as Options
 
 
-IconToggle.view Mdc "my-icon-toggle" model.mdc
-    [ IconToggle.icon
-          { on = "favorite_border"
-          , off = "favorite"
-          }
-    , IconToggle.label
-          { on = "Remove from favorites"
-          , off = "Add to favorites"
-          }
-    , IconToggle.on
-    , Options.onClick Toggle
-    ]
-    []
-```
+    IconToggle.view Mdc "my-icon-toggle" model.mdc
+        [ IconToggle.icon
+              { on = "favorite_border"
+              , off = "favorite"
+              }
+        , IconToggle.label
+              { on = "Remove from favorites"
+              , off = "Add to favorites"
+              }
+        , IconToggle.on
+        , Options.onClick Toggle
+        ]
+        []
 
 
 # Usage
@@ -51,12 +49,13 @@ IconToggle.view Mdc "my-icon-toggle" model.mdc
 @docs label
 @docs disabled
 @docs className
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component as Component exposing (Index)
 import Internal.IconToggle.Implementation as IconToggle
+import Material
 
 
 {-| IconToggle property.
@@ -81,6 +80,7 @@ view =
 {-| Make the icon toggle appear in its "on" state.
 
 Defaults to "off". Use `Options.when` to make it interactive.
+
 -}
 on : Property m
 on =
@@ -91,6 +91,7 @@ on =
 
 Useful if you want to use a different icon set. For example use `"fa"` for
 FontAwesome.
+
 -}
 className : String -> Property m
 className =
@@ -100,6 +101,7 @@ className =
 {-| Set the icon.
 
 Specify an icon for the icon toggle's "on" and "off" state.
+
 -}
 icon : { on : String, off : String } -> Property m
 icon =
@@ -109,6 +111,7 @@ icon =
 {-| Set the icon toggle's label.
 
 Specify a label for the icon toggle's "on" and "off" state.
+
 -}
 label : { on : String, off : String } -> Property m
 label =

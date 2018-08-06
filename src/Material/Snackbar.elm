@@ -1,22 +1,22 @@
-module Material.Snackbar exposing
-    ( add
-    , alignEnd
-    , alignStart
-    , Contents
-    , Property
-    , snack
-    , toast
-    , view
-    )
+module Material.Snackbar
+    exposing
+        ( Contents
+        , Property
+        , add
+        , alignEnd
+        , alignStart
+        , snack
+        , toast
+        , view
+        )
 
-{-|
-Snackbars provide brief messages about app processes at the bottom of the screen.
+{-| Snackbars provide brief messages about app processes at the bottom of the screen.
 
 
 # Resources
 
-- [Material Design guidelines: Snackbars & toasts](https://material.io/guidelines/components/snackbars-toasts.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#snackbar)
+  - [Material Design guidelines: Snackbars & toasts](https://material.io/guidelines/components/snackbars-toasts.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#snackbar)
 
 
 # Example
@@ -24,27 +24,23 @@ Snackbars provide brief messages about app processes at the bottom of the screen
 Put the snackbar in your main content, so it's available to display
 when needed. It's invisible by default.
 
-```elm
-import Material.Snackbar as Snackbar
+    import Material.Snackbar as Snackbar
 
-Snackbar.view Mdc "my-snackbar" model.mdc [] []
-```
+    Snackbar.view Mdc "my-snackbar" model.mdc [] []
 
 You would then need to show it in your update action.
 
 Sketch of the code (see the Demo for more details):
 
-```elm
-update msg model =
-        Login (Err _) ->
-            let
-                contents =
-                    Snackbar.toast Nothing "Login failed"
-                ( mdc, effects ) =
-                    Snackbar.add Mdc "my-snackbar" contents model.mdc
-            in
-                ( { model | state = LoginFailed, mdc = mdc }, effects )
-```
+    update msg model =
+            Login (Err _) ->
+                let
+                    contents =
+                        Snackbar.toast Nothing "Login failed"
+                    ( mdc, effects ) =
+                        Snackbar.add Mdc "my-snackbar" contents model.mdc
+                in
+                    ( { model | state = LoginFailed, mdc = mdc }, effects )
 
 This would display a message without an action.
 
@@ -62,6 +58,7 @@ This would display a message without an action.
 @docs add
 @docs toast
 @docs snack
+
 -}
 
 import Html exposing (Html)
@@ -121,7 +118,8 @@ snack =
 {-| Add a message to the snackbar. If another message is currently displayed,
 the provided message will be queued.
 -}
-add : (Material.Msg m -> m)
+add :
+    (Material.Msg m -> m)
     -> Material.Index
     -> Contents m
     -> Material.Model m
@@ -134,6 +132,7 @@ add =
 
 By default Snackbars are center aligned. This is only configurable on tablet
 and desktops creens.
+
 -}
 alignStart : Property m
 alignStart =
@@ -144,6 +143,7 @@ alignStart =
 
 By default Snackbars are center aligned. This is only configurable on tablet
 and desktops creens.
+
 -}
 alignEnd : Property m
 alignEnd =

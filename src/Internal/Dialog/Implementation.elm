@@ -1,29 +1,30 @@
-module Internal.Dialog.Implementation exposing
-    ( accept
-    , backdrop
-    , body
-    , cancel
-    , footer
-    , header
-    , onClose
-    , open
-    , Property
-    , react
-    , scrollable
-    , surface
-    , title
-    , view
-    )
+module Internal.Dialog.Implementation
+    exposing
+        ( Property
+        , accept
+        , backdrop
+        , body
+        , cancel
+        , footer
+        , header
+        , onClose
+        , open
+        , react
+        , scrollable
+        , surface
+        , title
+        , view
+        )
 
 import DOM
 import Html exposing (Html, text)
-import Json.Decode as Json exposing (Decoder)
 import Internal.Button.Implementation as Button
 import Internal.Component as Component exposing (Index, Indexed)
-import Internal.Dialog.Model exposing (Model, defaultModel, Msg(..))
+import Internal.Dialog.Model exposing (Model, Msg(..), defaultModel)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, css, when) 
+import Internal.Options as Options exposing (cs, css, styled, when)
+import Json.Decode as Json exposing (Decoder)
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -53,8 +54,8 @@ type alias Store s =
     Component.indexed .dialog (\x c -> { c | dialog = x }) defaultModel
 
 
-react
-    : (Internal.Msg.Msg m -> msg)
+react :
+    (Internal.Msg.Msg m -> msg)
     -> Msg
     -> Index
     -> Store s
@@ -63,13 +64,13 @@ react =
     Component.react get set Internal.Msg.DialogMsg update
 
 
-view
-    : (Internal.Msg.Msg m -> m)
+view :
+    (Internal.Msg.Msg m -> m)
     -> Index
     -> Store s
     -> List (Property m)
     -> List (Html m)
-    -> Html m       
+    -> Html m
 view =
     Component.render get dialog Internal.Msg.DialogMsg
 
@@ -100,32 +101,36 @@ dialog lift model options nodes =
         stateChanged =
             config.open /= model.open
     in
-    Options.apply summary Html.aside
-    [ cs "mdc-dialog"
-    , when stateChanged <|
-        GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
-    , when model.open << Options.many <|
-         [ cs "mdc-dialog--open"
-         , Options.data "focustrap" ""
-         ]
-    , when model.animating (cs "mdc-dialog--animating")
-    , Options.on "transitionend" (Json.map (\ _ -> lift AnimationEnd) transitionend)
-    , Options.on "click" <|
-       Json.map (\ doClose ->
-            if doClose then
-                Maybe.withDefault (lift NoOp) config.onClose
-            else
-                lift NoOp
-         )
-         close
-    ]
-    []
-    nodes
+    Options.apply summary
+        Html.aside
+        [ cs "mdc-dialog"
+        , when stateChanged <|
+            GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
+        , when model.open
+            << Options.many
+          <|
+            [ cs "mdc-dialog--open"
+            , Options.data "focustrap" ""
+            ]
+        , when model.animating (cs "mdc-dialog--animating")
+        , Options.on "transitionend" (Json.map (\_ -> lift AnimationEnd) transitionend)
+        , Options.on "click" <|
+            Json.map
+                (\doClose ->
+                    if doClose then
+                        Maybe.withDefault (lift NoOp) config.onClose
+                    else
+                        lift NoOp
+                )
+                close
+        ]
+        []
+        nodes
 
 
 open : Property m
 open =
-    Options.option (\ config -> { config | open = True })
+    Options.option (\config -> { config | open = True })
 
 
 surface : List (Property m) -> List (Html m) -> Html m
@@ -140,7 +145,7 @@ backdrop options =
 
 body : List (Property m) -> List (Html m) -> Html m
 body options =
-    styled Html.div (cs "mdc-dialog__body"::options)
+    styled Html.div (cs "mdc-dialog__body" :: options)
 
 
 scrollable : Property m
@@ -150,7 +155,7 @@ scrollable =
 
 header : List (Property m) -> List (Html m) -> Html m
 header options =
-    styled Html.div (cs "mdc-dialog__header"::options)
+    styled Html.div (cs "mdc-dialog__header" :: options)
 
 
 title : Options.Property c m
@@ -160,7 +165,7 @@ title =
 
 footer : List (Property m) -> List (Html m) -> Html m
 footer options =
-    styled Html.div (cs "mdc-dialog__footer"::options)
+    styled Html.div (cs "mdc-dialog__footer" :: options)
 
 
 cancel : Button.Property m
@@ -175,7 +180,7 @@ accept =
 
 onClose : m -> Property m
 onClose onClose =
-    Options.option (\ config -> { config | onClose = Just onClose })
+    Options.option (\config -> { config | onClose = Just onClose })
 
 
 transitionend : Decoder ()
@@ -184,7 +189,8 @@ transitionend =
         hasClass cs className =
             List.member cs (String.split " " className)
     in
-    Json.andThen (\ className ->
+    Json.andThen
+        (\className ->
             if hasClass "mdc-dialog__surface" className then
                 Json.succeed ()
             else
@@ -196,14 +202,15 @@ transitionend =
 close : Decoder Bool
 close =
     DOM.target <|
-    Json.map (\ className ->
-         let
-           hasClass class =
-               String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
-         in
-         if hasClass "mdc-dialog__backdrop" then
-             True
-         else
-             False
-       )
-       (Json.at ["className"] Json.string)
+        Json.map
+            (\className ->
+                let
+                    hasClass class =
+                        String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
+                in
+                if hasClass "mdc-dialog__backdrop" then
+                    True
+                else
+                    False
+            )
+            (Json.at [ "className" ] Json.string)

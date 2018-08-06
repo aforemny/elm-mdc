@@ -1,19 +1,19 @@
-module Material.Slider exposing
-    ( disabled
-    , discrete
-    , max
-    , min
-    , onChange
-    , onInput
-    , Property
-    , step
-    , trackMarkers
-    , value
-    , view
-    )
+module Material.Slider
+    exposing
+        ( Property
+        , disabled
+        , discrete
+        , max
+        , min
+        , onChange
+        , onInput
+        , step
+        , trackMarkers
+        , value
+        , view
+        )
 
-{-|
-Slider provides an implementation of the Material Design slider component.
+{-| Slider provides an implementation of the Material Design slider component.
 
 Note that vertical sliders and range (multi-thumb) sliders are not supported,
 due to their absence from the material design spec.
@@ -23,21 +23,19 @@ Slider uses custom `onChage` and `onInput` event handlers.
 
 # Resources
 
-- [Material Design guidelines: Sliders](https://material.io/guidelines/components/sliders.html)
-- [Demo](https://aforemny.github.io/elm-mdc/slider)
+  - [Material Design guidelines: Sliders](https://material.io/guidelines/components/sliders.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/slider)
 
 
 # Example
 
-```elm
-import Material.Slider as Slider
+    import Material.Slider as Slider
 
-Slider.view Mdc "my-slider" model.mdc
-    [ Slider.value 40
-    , Slider.onChange Change
-    ]
-    []
-```
+    Slider.view Mdc "my-slider" model.mdc
+        [ Slider.value 40
+        , Slider.onChange Change
+        ]
+        []
 
 
 # Usage
@@ -52,16 +50,18 @@ Slider.view Mdc "my-slider" model.mdc
 @docs onChange, onInput
 @docs step
 
+
 ## Discrete Slider
 
 @docs discrete
 @docs trackMarkers
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.Slider.Implementation as Slider
+import Material
 
 
 {-| Properties for Slider options.
@@ -86,6 +86,7 @@ view =
 {-| Specify the slider's value.
 
 This will be clamped between `min` and `max`.
+
 -}
 value : Float -> Property m
 value =
@@ -143,11 +144,11 @@ etc. if your initial value is 0. By specifying 0.25 the sequence is 0,
 Defaults to 1.
 
 This value cannot be changed dynamically.
+
 -}
 step : Float -> Property m
 step =
     Slider.step
-
 
 
 {-| Discrete sliders support display markers on their tracks. A marker is displayed every `step`.

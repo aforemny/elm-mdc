@@ -391,20 +391,20 @@ view_ model =
             , navigate = Navigate
             , body =
                 \title nodes ->
-                styled Html.div
-                [ css "display" "flex"
-                , css "flex-flow" "column"
-                , css "height" "100%"
-                , Typography.typography
-                ]
-                ( List.concat
-                  [ [ Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url title
-                    ]
-                  , [ styled Html.div [ Toolbar.fixedAdjust "page-toolbar" model.mdc ] []
-                    ]
-                  , nodes
-                  ]
-                )
+                    styled Html.div
+                        [ css "display" "flex"
+                        , css "flex-flow" "column"
+                        , css "height" "100%"
+                        , Typography.typography
+                        ]
+                        (List.concat
+                            [ [ Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url title
+                              ]
+                            , [ styled Html.div [ Toolbar.fixedAdjust "page-toolbar" model.mdc ] []
+                              ]
+                            , nodes
+                            ]
+                        )
             }
     in
     case model.url of

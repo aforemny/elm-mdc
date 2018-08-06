@@ -1,33 +1,31 @@
-module Material.LinearProgress exposing
-    ( buffered
-    , determinate
-    , indeterminate
-    , Property
-    , reversed
-    , view
-    )
+module Material.LinearProgress
+    exposing
+        ( Property
+        , buffered
+        , determinate
+        , indeterminate
+        , reversed
+        , view
+        )
 
-{-|
-The Linear Progress component is a spec-aligned linear progress indicator
+{-| The Linear Progress component is a spec-aligned linear progress indicator
 component adhering to the Material Design progress & activity requirements.
 
 
 # Resources
 
-- [Material Design guidelines: Progress & activity](https://material.io/guidelines/components/progress-activity.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#linear-progress)
+  - [Material Design guidelines: Progress & activity](https://material.io/guidelines/components/progress-activity.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#linear-progress)
 
 
 # Example
 
-```elm
-import Material.LinearProgress as LinearProgress
+    import Material.LinearProgress as LinearProgress
 
-LinearProgress.view
-    [ LinearProgress.indeterminate
-    ]
-    []
-```
+    LinearProgress.view
+        [ LinearProgress.indeterminate
+        ]
+        []
 
 
 # Usage
@@ -38,6 +36,7 @@ LinearProgress.view
 @docs indeterminate
 @docs buffered
 @docs reversed
+
 -}
 
 import Html exposing (Html)
@@ -68,6 +67,7 @@ indeterminate =
 
 The first argument is the determinate indicator as a floating point value
 between 0 and 1.
+
 -}
 determinate : Float -> Property m
 determinate =
@@ -78,6 +78,7 @@ determinate =
 
 The first value is the determinate indicator and the second value is the buffer
 indicator as a floating point value between 0 and 1.
+
 -}
 buffered : Float -> Float -> Property m
 buffered =

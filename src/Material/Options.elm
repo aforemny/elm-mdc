@@ -1,6 +1,7 @@
 module Material.Options
     exposing
-        ( aria
+        ( Property
+        , aria
         , attribute
         , cs
         , css
@@ -25,7 +26,6 @@ module Material.Options
         , onMouseUp
         , onSubmit
         , onWithOptions
-        , Property
         , styled
         , when
         )

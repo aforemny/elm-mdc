@@ -1,13 +1,13 @@
 module Material.Chip
     exposing
-        ( checkmark
+        ( Property
+        , checkmark
         , chipset
         , choice
         , filter
         , input
         , leadingIcon
         , onClick
-        , Property
         , selected
         , trailingIcon
         , view
@@ -52,12 +52,14 @@ Material Design chip requirements.
 @docs leadingIcon
 @docs trailingIcon
 
+
 # Chip sets
 
 @docs chipset
 @docs choice
 @docs filter
 @docs input
+
 -}
 
 import Html exposing (Html)
@@ -109,6 +111,7 @@ selected =
 {-| Click handler that respects the chip's ripple ink effect.
 
 The event will be raised only after the ripple animation finished playing.
+
 -}
 onClick : m -> Property m
 onClick =

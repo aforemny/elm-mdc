@@ -1,13 +1,13 @@
-module Demo.Selects exposing (Model, defaultModel, Msg(Mdc), update, view, subscriptions)
+module Demo.Selects exposing (Model, Msg(Mdc), defaultModel, subscriptions, update, view)
 
 import Array
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
+import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
-import Html exposing (Html, text)
 import Material
-import Material.Options as Options exposing (styled, cs, css, when)
+import Material.Options as Options exposing (cs, css, styled, when)
 import Material.Select as Select
 import Material.Typography as Typography
 
@@ -57,8 +57,8 @@ update lift msg model =
             let
                 select =
                     Dict.get index model.selects
-                    |> Maybe.withDefault defaultSelect
-                    |> \ select -> { select | value = Just value }
+                        |> Maybe.withDefault defaultSelect
+                        |> (\select -> { select | value = Just value })
 
                 selects =
                     Dict.insert index select model.selects
@@ -67,13 +67,12 @@ update lift msg model =
 
         -- Pick index value ->
         --     ( model, Cmd.none )
-
         ToggleRtl index ->
             let
                 select =
                     Dict.get index model.selects
-                    |> Maybe.withDefault defaultSelect
-                    |> \ select -> { select | rtl = not select.rtl }
+                        |> Maybe.withDefault defaultSelect
+                        |> (\select -> { select | rtl = not select.rtl })
 
                 selects =
                     Dict.insert index select model.selects
@@ -84,8 +83,8 @@ update lift msg model =
             let
                 select =
                     Dict.get index model.selects
-                    |> Maybe.withDefault defaultSelect
-                    |> \ select -> { select | disabled = not select.disabled }
+                        |> Maybe.withDefault defaultSelect
+                        |> (\select -> { select | disabled = not select.disabled })
 
                 selects =
                     Dict.insert index select model.selects
@@ -93,44 +92,48 @@ update lift msg model =
             ( { model | selects = selects }, Cmd.none )
 
 
-heroSelect
-    : (Msg m -> m)
+heroSelect :
+    (Msg m -> m)
     -> Material.Index
     -> Model m
     -> List (Select.Property m)
     -> List (Html m)
     -> Html m
 heroSelect lift id model options _ =
-    Select.view (lift << Mdc) id model.mdc options
-    ( [ "Bread, Cereal, Rice, and Pasta"
-      , "Vegetables"
-      , "Fruit"
-      , "Milk, Yogurt, and Cheese"
-      , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
-      , "Fats, Oils, and Sweets"
-      ]
-      |> List.indexedMap (\index label ->
-             Select.option
-             [ Select.value (toString index)
-             ]
-             [ text label ]
-         )
-    )
+    Select.view (lift << Mdc)
+        id
+        model.mdc
+        options
+        ([ "Bread, Cereal, Rice, and Pasta"
+         , "Vegetables"
+         , "Fruit"
+         , "Milk, Yogurt, and Cheese"
+         , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
+         , "Fats, Oils, and Sweets"
+         ]
+            |> List.indexedMap
+                (\index label ->
+                    Select.option
+                        [ Select.value (toString index)
+                        ]
+                        [ text label ]
+                )
+        )
 
 
 example : List (Options.Property c m) -> List (Html m) -> Html m
 example options =
     styled Html.section
-      ( cs "example"
-      :: css "margin" "24px"
-      :: css "padding" "24px"
-      :: css "max-width" "400px"
-      :: options
-      )
+        (cs "example"
+            :: css "margin" "24px"
+            :: css "padding" "24px"
+            :: css "max-width" "400px"
+            :: options
+        )
 
 
-select
-    : (Msg m -> m)
+select :
+    (Msg m -> m)
     -> Material.Index
     -> Model m
     -> Maybe Int
@@ -141,14 +144,15 @@ select lift id model selectedIndex options _ =
     let
         state =
             Dict.get id model.selects
-            |> Maybe.withDefault defaultSelect
+                |> Maybe.withDefault defaultSelect
 
-        fruits = Array.fromList
-            [ "Fruit Roll Ups"
-            , "Candy (cotton)"
-            , "Vegetables"
-            , "Noodles"
-            ]
+        fruits =
+            Array.fromList
+                [ "Fruit Roll Ups"
+                , "Candy (cotton)"
+                , "Vegetables"
+                , "Noodles"
+                ]
 
         selectedValue =
             case state.value of
@@ -156,124 +160,123 @@ select lift id model selectedIndex options _ =
                     case selectedIndex of
                         Nothing ->
                             Nothing
+
                         Just i ->
                             Array.get i fruits
+
                 Just v ->
                     state.value
-
     in
-    [
-      styled Html.section
-      [ cs "demo-wrapper"
-      , css "padding-top" "4px"
-      , css "padding-bottom" "4px"
-      , Options.attribute (Html.attribute "dir" "rtl") |> when state.rtl
-      ]
-      [
-        Select.view (lift << Mdc) id model.mdc
-            ( [ Select.label "Food Group"
-              , Options.onChange (lift << Pick id)
-              , Select.preselected |> when (selectedIndex /= Nothing)
-              , Select.disabled |> when state.disabled
-              ]
-              ++ options
+    [ styled Html.section
+        [ cs "demo-wrapper"
+        , css "padding-top" "4px"
+        , css "padding-bottom" "4px"
+        , Options.attribute (Html.attribute "dir" "rtl") |> when state.rtl
+        ]
+        [ Select.view (lift << Mdc)
+            id
+            model.mdc
+            ([ Select.label "Food Group"
+             , Options.onChange (lift << Pick id)
+             , Select.preselected |> when (selectedIndex /= Nothing)
+             , Select.disabled |> when state.disabled
+             ]
+                ++ options
             )
-            ( fruits
-              |> Array.toList
-              |> List.indexedMap (\index label ->
-                     Select.option
-                     [ Select.value label
-                     , when
-                         (case selectedIndex of
-                              Nothing ->
-                                  False
-                              Just i ->
-                                  index == i
-                         ) Select.selected
-                     ]
-                     [ text label ]
-                 )
+            (fruits
+                |> Array.toList
+                |> List.indexedMap
+                    (\index label ->
+                        Select.option
+                            [ Select.value label
+                            , when
+                                (case selectedIndex of
+                                    Nothing ->
+                                        False
+
+                                    Just i ->
+                                        index == i
+                                )
+                                Select.selected
+                            ]
+                            [ text label ]
+                    )
             )
-      ]
-    ,
-      Html.p []
-      [ text "Currently selected: "
-      , Html.span []
-        [ if selectedValue /= Nothing then
-            text (Maybe.withDefault "" selectedValue)
-          else
-            text "(none)"
         ]
-      ]
-    ,
-      Html.div []
-      [ Html.label []
-        [ Html.input
-          [ Html.type_ "checkbox"
-          , Html.onClick (lift (ToggleRtl id))
-          , Html.checked state.rtl
-          ]
-          []
-        , text " RTL"
+    , Html.p []
+        [ text "Currently selected: "
+        , Html.span []
+            [ if selectedValue /= Nothing then
+                text (Maybe.withDefault "" selectedValue)
+              else
+                text "(none)"
+            ]
         ]
-      ]
-    ,
-      Html.div []
-      [ Html.label []
-        [ Html.input
-          [ Html.type_ "checkbox"
-          , Html.onClick (lift (ToggleDisabled id))
-          , Html.checked state.disabled
-          ]
-          []
-        , text " Disabled"
+    , Html.div []
+        [ Html.label []
+            [ Html.input
+                [ Html.type_ "checkbox"
+                , Html.onClick (lift (ToggleRtl id))
+                , Html.checked state.rtl
+                ]
+                []
+            , text " RTL"
+            ]
         ]
-      ]
+    , Html.div []
+        [ Html.label []
+            [ Html.input
+                [ Html.type_ "checkbox"
+                , Html.onClick (lift (ToggleDisabled id))
+                , Html.checked state.disabled
+                ]
+                []
+            , text " Disabled"
+            ]
+        ]
     ]
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Select"
-    [
-      let
-          state =
-              Dict.get "selects-hero-select" model.selects
-              |> Maybe.withDefault defaultSelect
-
-      in
-      Page.hero []
-      [ heroSelect lift "selects-hero-select" model
-        [ Select.label "Pick a food group"
-        , Select.disabled |> when state.disabled
+        [ let
+            state =
+                Dict.get "selects-hero-select" model.selects
+                    |> Maybe.withDefault defaultSelect
+          in
+          Page.hero []
+            [ heroSelect lift
+                "selects-hero-select"
+                model
+                [ Select.label "Pick a food group"
+                , Select.disabled |> when state.disabled
+                ]
+                []
+            ]
+        , example []
+            (List.concat
+                [ [ styled Html.h2
+                        [ Typography.title
+                        ]
+                        [ text "Select"
+                        ]
+                  ]
+                , select lift "selects-select" model (Just 2) [] []
+                ]
+            )
+        , example []
+            (List.concat
+                [ [ styled Html.h2
+                        [ Typography.title
+                        ]
+                        [ text "Select box"
+                        ]
+                  ]
+                , select lift "selects-box-select" model Nothing [ Select.box ] []
+                ]
+            )
         ]
-        []
-      ]
-    ,
-      example []
-      ( List.concat
-        [ [ styled Html.h2
-            [ Typography.title
-            ]
-            [ text "Select"
-            ]
-          ]
-        , select lift "selects-select" model (Just 2) [] []
-        ]
-      )
-    ,
-      example []
-      ( List.concat
-        [ [ styled Html.h2
-            [ Typography.title
-            ]
-            [ text "Select box"
-            ]
-          ]
-        , select lift "selects-box-select" model Nothing [ Select.box ] []
-        ]
-      )
-    ]
 
 
 subscriptions : (Msg m -> m) -> Model m -> Sub m

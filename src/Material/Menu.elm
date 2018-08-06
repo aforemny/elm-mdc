@@ -1,75 +1,75 @@
-module Material.Menu exposing
-    ( anchorCorner
-    , anchorMargin
-    , attach
-    , bottomEndCorner
-    , bottomLeftCorner
-    , bottomRightCorner
-    , bottomStartCorner
-    , Corner
-    , divider
-    , index
-    , Item
-    , li
-    , Margin
-    , onSelect
-    , Property
-    , quickOpen
-    , topEndCorner
-    , topLeftCorner
-    , topRightCorner
-    , topStartCorner
-    , ul
-    , view
-    )
+module Material.Menu
+    exposing
+        ( Corner
+        , Item
+        , Margin
+        , Property
+        , anchorCorner
+        , anchorMargin
+        , attach
+        , bottomEndCorner
+        , bottomLeftCorner
+        , bottomRightCorner
+        , bottomStartCorner
+        , divider
+        , index
+        , li
+        , onSelect
+        , quickOpen
+        , topEndCorner
+        , topLeftCorner
+        , topRightCorner
+        , topStartCorner
+        , ul
+        , view
+        )
 
-{-|
-The Menu component is a spec-aligned menu component adhering to the Material
+{-| The Menu component is a spec-aligned menu component adhering to the Material
 Design menu specification.
 
 
 # Resources
-- [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#menu)
+
+  - [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#menu)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.Button as Button
-import Material.Menu as Menu
-import Material.Options exposing (styled, cs, css)
+    import Html exposing (text)
+    import Material.Button as Button
+    import Material.Menu as Menu
+    import Material.Options exposing (styled, cs, css)
 
 
-styled Html.div
-    [ Options.cs "mdc-menu-anchor"
-    , Options.css "position" "relative"
-    ]
-    [ Button.view Mdc "my-button" model.mdc
-          [ Menu.attach (lift << Mdc) "my-menu"
-          ]
-          [ text "Show"
-          ]
-    , Menu.view Mdc "my-menu" model.mdc []
-          ( Menu.ul []
-                [ Menu.li
-                      [ Menu.onSelect (Select "Item 1")
-                      ]
-                      [ text "Item 1"
-                      ]
-                , Menu.li
-                      [ Menu.onSelect (Select "Item 2")
-                      ]
-                      [ text "Item 2"
-                      ]
-                ]
-          )
-    ]
-```
+    styled Html.div
+        [ Options.cs "mdc-menu-anchor"
+        , Options.css "position" "relative"
+        ]
+        [ Button.view Mdc "my-button" model.mdc
+              [ Menu.attach (lift << Mdc) "my-menu"
+              ]
+              [ text "Show"
+              ]
+        , Menu.view Mdc "my-menu" model.mdc []
+              ( Menu.ul []
+                    [ Menu.li
+                          [ Menu.onSelect (Select "Item 1")
+                          ]
+                          [ text "Item 1"
+                          ]
+                    , Menu.li
+                          [ Menu.onSelect (Select "Item 2")
+                          ]
+                          [ text "Item 2"
+                          ]
+                    ]
+              )
+        ]
 
 
 # Usage
+
 @docs Property
 @docs view
 @docs ul
@@ -92,12 +92,13 @@ styled Html.div
 @docs anchorMargin
 @docs Margin
 @docs quickOpen
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.Menu.Implementation as Menu
+import Material
 import Material.List as Lists
 import Material.Options as Options
 
@@ -134,7 +135,6 @@ li =
     Menu.li
 
 
-
 {-| Menu item divider.
 -}
 divider : List (Lists.Property m) -> List (Html m) -> Item m
@@ -163,6 +163,7 @@ attach =
 {-| Menu margin from `anchorCorner`.
 
 Defaults to zero margin.
+
 -}
 type alias Margin =
     Menu.Margin
@@ -179,6 +180,7 @@ index =
 
 The menu will auto-position itself if not enough space is available. Prefer
 RTL-aware corners when possible.
+
 -}
 anchorCorner : Corner -> Property m
 anchorCorner =
@@ -202,6 +204,7 @@ quickOpen =
 {-| One of the four corners.
 
 Consider using RTL aware corners when possible.
+
 -}
 type alias Corner =
     Menu.Corner
@@ -267,6 +270,7 @@ bottomEndCorner =
 
 Use this rather than `Options.onClick`, etc. so that it works with keyboard
 selection.
+
 -}
 onSelect : m -> Lists.Property m
 onSelect =

@@ -1,54 +1,55 @@
-module Internal.LayoutGrid.Implementation exposing
-    ( alignBottom
-    , alignLeft
-    , alignMiddle
-    , alignRight
-    , alignTop
-    , cell
-    , fixedColumnWidth
-    , inner
-    , Property
-    , span1
-    , span10
-    , span10Desktop
-    , span11
-    , span11Desktop
-    , span12
-    , span12Desktop
-    , span1Desktop
-    , span1Phone
-    , span1Tablet
-    , span2
-    , span2Desktop
-    , span2Phone
-    , span2Tablet
-    , span3
-    , span3Desktop
-    , span3Phone
-    , span3Tablet
-    , span4
-    , span4Desktop
-    , span4Phone
-    , span4Tablet
-    , span5
-    , span5Desktop
-    , span5Tablet
-    , span6
-    , span6Desktop
-    , span6Tablet
-    , span7
-    , span7Desktop
-    , span7Tablet
-    , span8
-    , span8Desktop
-    , span8Tablet
-    , span9
-    , span9Desktop
-    , view
-    )
+module Internal.LayoutGrid.Implementation
+    exposing
+        ( Property
+        , alignBottom
+        , alignLeft
+        , alignMiddle
+        , alignRight
+        , alignTop
+        , cell
+        , fixedColumnWidth
+        , inner
+        , span1
+        , span10
+        , span10Desktop
+        , span11
+        , span11Desktop
+        , span12
+        , span12Desktop
+        , span1Desktop
+        , span1Phone
+        , span1Tablet
+        , span2
+        , span2Desktop
+        , span2Phone
+        , span2Tablet
+        , span3
+        , span3Desktop
+        , span3Phone
+        , span3Tablet
+        , span4
+        , span4Desktop
+        , span4Phone
+        , span4Tablet
+        , span5
+        , span5Desktop
+        , span5Tablet
+        , span6
+        , span6Desktop
+        , span6Tablet
+        , span7
+        , span7Desktop
+        , span7Tablet
+        , span8
+        , span8Desktop
+        , span8Tablet
+        , span9
+        , span9Desktop
+        , view
+        )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (styled, cs, css, when)
+import Internal.Options as Options exposing (cs, css, styled, when)
 
 
 type alias Config =
@@ -294,5 +295,6 @@ span device value =
     case device of
         Just device ->
             cs ("mdc-layout-grid__cell--span-" ++ toString value ++ "-" ++ device)
+
         Nothing ->
             cs ("mdc-layout-grid__cell--span-" ++ toString value)

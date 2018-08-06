@@ -1,21 +1,21 @@
-module Material.Dialog exposing
-    ( accept
-    , backdrop
-    , body
-    , cancel
-    , footer
-    , header
-    , onClose
-    , open
-    , Property
-    , scrollable
-    , surface
-    , title
-    , view
-    )
+module Material.Dialog
+    exposing
+        ( Property
+        , accept
+        , backdrop
+        , body
+        , cancel
+        , footer
+        , header
+        , onClose
+        , open
+        , scrollable
+        , surface
+        , title
+        , view
+        )
 
-{-|
-The Dialog component is a spec-aligned dialog component adhering to the
+{-| The Dialog component is a spec-aligned dialog component adhering to the
 Material Design dialog pattern. It implements a modal dialog window that traps
 focus when opening and restores focus when closing.
 
@@ -28,66 +28,64 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
 
 # Resources
 
-- [Dialogs - Internal.Components for the Web](https://material.io/develop/web/components/dialogs/)
-- [Material Design guidelines: Dialogs](https://material.io/guidelines/components/dialogs.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#dialog)
+  - [Dialogs - Internal.Components for the Web](https://material.io/develop/web/components/dialogs/)
+  - [Material Design guidelines: Dialogs](https://material.io/guidelines/components/dialogs.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#dialog)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.Button as Button
-import Internal.Component exposing (Index)
-import Material.Dialog as Dialog
-import Material.Options as Options exposing (styled)
+    import Html exposing (text)
+    import Material.Button as Button
+    import Internal.Component exposing (Index)
+    import Material.Dialog as Dialog
+    import Material.Options as Options exposing (styled)
 
 
-Dialog.view Mdc "my-dialog" model.mdc
-    [ Dialog.open
-    , Dialog.onClose Cancel
-    ]
-    [ Dialog.surface []
-          [
-            Dialog.header []
-            [ styled Html.h2
-                  [ Dialog.title
-                  ]
-                  [ text "Use Google's location service?"
-                  ]
-            ]
-          ,
-            Dialog.body []
-                [ text
-                    """
-Let Google help apps determine location. This means
-sending anonymous location data to Google, even when
-no apps are running.
-                    """
-                ]
-          ,
-            Dialog.footer []
-                [
-                  Button.view Mdc "my-cancel-button" model.mdc
-                      [ Button.ripple
-                      , Dialog.cancel
-                      , Options.onClick Cancel
+    Dialog.view Mdc "my-dialog" model.mdc
+        [ Dialog.open
+        , Dialog.onClose Cancel
+        ]
+        [ Dialog.surface []
+              [
+                Dialog.header []
+                [ styled Html.h2
+                      [ Dialog.title
                       ]
-                      [ text "Decline"
-                      ]
-                ,
-                  Button.view Mdc "my-accept-button" model.mdc
-                      [ Button.ripple
-                      , Dialog.accept
-                      , Options.onClick Accept
-                      ]
-                      [ text "Continue"
+                      [ text "Use Google's location service?"
                       ]
                 ]
-          ]
-    , Dialog.backdrop [] []
-    ]
-```
+              ,
+                Dialog.body []
+                    [ text
+                        """
+    Let Google help apps determine location. This means
+    sending anonymous location data to Google, even when
+    no apps are running.
+                        """
+                    ]
+              ,
+                Dialog.footer []
+                    [
+                      Button.view Mdc "my-cancel-button" model.mdc
+                          [ Button.ripple
+                          , Dialog.cancel
+                          , Options.onClick Cancel
+                          ]
+                          [ text "Decline"
+                          ]
+                    ,
+                      Button.view Mdc "my-accept-button" model.mdc
+                          [ Button.ripple
+                          , Dialog.accept
+                          , Options.onClick Accept
+                          ]
+                          [ text "Continue"
+                          ]
+                    ]
+              ]
+        , Dialog.backdrop [] []
+        ]
 
 
 # Usage
@@ -105,13 +103,14 @@ no apps are running.
 @docs footer
 @docs cancel
 @docs accept
+
 -}
 
 import Html exposing (Html)
-import Material
-import Material.Button as Button
 import Internal.Component exposing (Index)
 import Internal.Dialog.Implementation as Dialog
+import Material
+import Material.Button as Button
 import Material.Options as Options
 
 
@@ -123,8 +122,8 @@ type alias Property m =
 
 {-| Dialog view.
 -}
-view
-    : (Material.Msg m -> m)
+view :
+    (Material.Msg m -> m)
     -> Index
     -> Material.Model m
     -> List (Property m)
@@ -152,6 +151,7 @@ onClose =
 
 This element is required to be the first child of `view` and wraps all the
 dialog's content such as the `header`, `body` and `footer`.
+
 -}
 surface : List (Property m) -> List (Html m) -> Html m
 surface =
@@ -162,6 +162,7 @@ surface =
 
 This element is required to be the second child of `view` and adds a backdrop
 to the dialog.
+
 -}
 backdrop : List (Property m) -> List (Html m) -> Html m
 backdrop =
@@ -172,6 +173,7 @@ backdrop =
 
 This element wraps the dialog's content except for `header` and `footer`
 content.
+
 -}
 body : List (Property m) -> List (Html m) -> Html m
 body =

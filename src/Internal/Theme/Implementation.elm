@@ -1,43 +1,44 @@
-module Internal.Theme.Implementation exposing
-    ( background
-    , primary
-    , primaryBg
-    , primaryDark
-    , primaryDarkBg
-    , primaryLight
-    , primaryLightBg
-    , secondary
-    , secondaryBg
-    , secondaryDark
-    , secondaryDarkBg
-    , secondaryLight
-    , secondaryLightBg
-    , textDisabledOnBackground
-    , textDisabledOnDark
-    , textDisabledOnLight
-    , textDisabledOnPrimary
-    , textDisabledOnSecondary
-    , textHintOnBackground
-    , textHintOnDark
-    , textHintOnLight
-    , textHintOnPrimary
-    , textHintOnSecondary
-    , textIconOnBackground
-    , textIconOnDark
-    , textIconOnLight
-    , textIconOnPrimary
-    , textIconOnSecondary
-    , textPrimaryOnBackground
-    , textPrimaryOnDark
-    , textPrimaryOnLight
-    , textPrimaryOnPrimary
-    , textPrimaryOnSecondary
-    , textSecondaryOnBackground
-    , textSecondaryOnDark
-    , textSecondaryOnLight
-    , textSecondaryOnPrimary
-    , textSecondaryOnSecondary
-    )
+module Internal.Theme.Implementation
+    exposing
+        ( background
+        , primary
+        , primaryBg
+        , primaryDark
+        , primaryDarkBg
+        , primaryLight
+        , primaryLightBg
+        , secondary
+        , secondaryBg
+        , secondaryDark
+        , secondaryDarkBg
+        , secondaryLight
+        , secondaryLightBg
+        , textDisabledOnBackground
+        , textDisabledOnDark
+        , textDisabledOnLight
+        , textDisabledOnPrimary
+        , textDisabledOnSecondary
+        , textHintOnBackground
+        , textHintOnDark
+        , textHintOnLight
+        , textHintOnPrimary
+        , textHintOnSecondary
+        , textIconOnBackground
+        , textIconOnDark
+        , textIconOnLight
+        , textIconOnPrimary
+        , textIconOnSecondary
+        , textPrimaryOnBackground
+        , textPrimaryOnDark
+        , textPrimaryOnLight
+        , textPrimaryOnPrimary
+        , textPrimaryOnSecondary
+        , textSecondaryOnBackground
+        , textSecondaryOnDark
+        , textSecondaryOnLight
+        , textSecondaryOnPrimary
+        , textSecondaryOnSecondary
+        )
 
 import Internal.Options exposing (Property, cs)
 

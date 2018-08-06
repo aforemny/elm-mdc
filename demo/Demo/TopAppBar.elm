@@ -1,13 +1,13 @@
-module Demo.TopAppBar exposing (Model, defaultModel, Msg(..), update, view, subscriptions)
+module Demo.TopAppBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Demo.Url as Url exposing (TopAppBarPage)
 import Dict exposing (Dict)
+import Html exposing (Html, div, p, text)
 import Html.Attributes as Html
-import Html exposing (Html, text, div, p)
 import Material
 import Material.Button as Button
-import Material.Options as Options exposing (Property, styled, cs, css, when)
+import Material.Options as Options exposing (Property, cs, css, styled, when)
 import Material.TopAppBar as TopAppBar
 
 
@@ -61,7 +61,7 @@ update lift msg model =
                 examples =
                     Dict.insert index example model.examples
             in
-                { model | examples = examples } ! []
+            { model | examples = examples } ! []
 
 
 updateExample : ExampleMsg -> Example -> Example
@@ -133,7 +133,9 @@ view lift page topAppBarPage model =
                     , iframe lift model "Dense TopAppBar" Url.DenseTopAppBar
                     , iframe lift model "Prominent TopAppBar" Url.ProminentTopAppBar
                     , iframe lift model "Short TopAppBar" Url.ShortTopAppBar
-                    , iframe lift model "Short - Always Closed TopAppBar"
+                    , iframe lift
+                        model
+                        "Short - Always Closed TopAppBar"
                         Url.ShortCollapsedTopAppBar
                     ]
                 ]
@@ -146,69 +148,70 @@ iframe lift model title topAppBarPage =
             (++) "https://aforemny.github.io/elm-mdc/" <|
                 Url.toString (Url.TopAppBar (Just topAppBarPage))
     in
-        styled Html.div
-            [ css "display" "flex"
-            , css "flex-flow" "column"
-            , css "margin" "24px"
-            , css "width" "320px"
-            , css "height" "600px"
+    styled Html.div
+        [ css "display" "flex"
+        , css "flex-flow" "column"
+        , css "margin" "24px"
+        , css "width" "320px"
+        , css "height" "600px"
+        ]
+        [ styled Html.h2
+            [ cs "demo-topappbar-example-heading"
+            , css "font-size" "24px"
+            , css "margin-bottom" "16px"
+            , css "font-family" "Roboto, sans-serif"
+            , css "font-size" "2.8125rem"
+            , css "line-height" "3rem"
+            , css "font-weight" "400"
+            , css "letter-spacing" "normal"
+            , css "text-transform" "inherit"
             ]
-            [ styled Html.h2
-                [ cs "demo-topappbar-example-heading"
-                , css "font-size" "24px"
-                , css "margin-bottom" "16px"
-                , css "font-family" "Roboto, sans-serif"
-                , css "font-size" "2.8125rem"
-                , css "line-height" "3rem"
-                , css "font-weight" "400"
-                , css "letter-spacing" "normal"
-                , css "text-transform" "inherit"
+            [ styled Html.span
+                [ cs "demo-topappbar-example-heading__text"
+                , css "flex-grow" "1"
+                , css "margin-right" "16px"
                 ]
-                [ styled Html.span
-                    [ cs "demo-topappbar-example-heading__text"
-                    , css "flex-grow" "1"
-                    , css "margin-right" "16px"
-                    ]
-                    [ text title ]
-                ]
-            , Html.p []
-                [ Html.a
-                    [ Html.href url
-                    , Html.target "_blank"
-                    ]
-                    [ text "View in separate window"
-                    ]
-                ]
-            , styled Html.iframe
-                [ Options.attribute (Html.src url)
-                , css "border" "1px solid #eee"
-                , css "height" "500px"
-                , css "font-size" "16px"
-                , css "overflow" "scroll"
-                ]
-                []
+                [ text title ]
             ]
+        , Html.p []
+            [ Html.a
+                [ Html.href url
+                , Html.target "_blank"
+                ]
+                [ text "View in separate window"
+                ]
+            ]
+        , styled Html.iframe
+            [ Options.attribute (Html.src url)
+            , css "border" "1px solid #eee"
+            , css "height" "500px"
+            , css "font-size" "16px"
+            , css "overflow" "scroll"
+            ]
+            []
+        ]
 
 
-topAppBarWrapper : (Msg m -> m)
-      -> Material.Index
-      -> Model m
-      -> List (Property c m)
-      -> Html m
-      -> Html m
+topAppBarWrapper :
+    (Msg m -> m)
+    -> Material.Index
+    -> Model m
+    -> List (Property c m)
+    -> Html m
+    -> Html m
 topAppBarWrapper lift index model options topappbar =
     let
         state =
             Dict.get index model.examples
                 |> Maybe.withDefault defaultExample
     in
-        styled Html.div
-            [ cs "mdc-topappbar-demo"
-            , Options.attribute (Html.dir "rtl") |> when state.rtl
-            ]
-            [ topappbar
-            , body options lift index model
-            ]
+    styled Html.div
+        [ cs "mdc-topappbar-demo"
+        , Options.attribute (Html.dir "rtl") |> when state.rtl
+        ]
+        [ topappbar
+        , body options lift index model
+        ]
 
 
 standardTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -218,7 +221,9 @@ standardTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc) index model.mdc
+        (TopAppBar.view (lift << Mdc)
+            index
+            model.mdc
             []
             [ TopAppBar.section
                 [ TopAppBar.alignStart
@@ -244,7 +249,9 @@ fixedTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc) index model.mdc
+        (TopAppBar.view (lift << Mdc)
+            index
+            model.mdc
             [ TopAppBar.fixed
             ]
             [ TopAppBar.section
@@ -271,7 +278,9 @@ menuTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc) index model.mdc
+        (TopAppBar.view (lift << Mdc)
+            index
+            model.mdc
             [ TopAppBar.fixed
             ]
             [ TopAppBar.section
@@ -302,7 +311,9 @@ denseTopAppBar lift index model =
         model
         [ TopAppBar.denseFixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc) index model.mdc
+        (TopAppBar.view (lift << Mdc)
+            index
+            model.mdc
             [ TopAppBar.dense
             ]
             [ TopAppBar.section
@@ -329,7 +340,9 @@ prominentTopAppBar lift index model =
         model
         [ TopAppBar.prominentFixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc) index model.mdc
+        (TopAppBar.view (lift << Mdc)
+            index
+            model.mdc
             [ TopAppBar.prominent
             ]
             [ TopAppBar.section
@@ -356,7 +369,9 @@ shortTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc) index model.mdc
+        (TopAppBar.view (lift << Mdc)
+            index
+            model.mdc
             [ TopAppBar.short
             , TopAppBar.hasActionItem
             ]
@@ -382,7 +397,9 @@ shortCollapsedTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc) index model.mdc
+        (TopAppBar.view (lift << Mdc)
+            index
+            model.mdc
             [ TopAppBar.short
             , TopAppBar.collapsed
             , TopAppBar.hasActionItem
@@ -404,8 +421,9 @@ shortCollapsedTopAppBar lift index model =
 
 body : List (Options.Property c m) -> (Msg m -> m) -> Material.Index -> Model m -> Html m
 body options lift index model =
-    styled Html.div options
-        ( List.concat
+    styled Html.div
+        options
+        (List.concat
             [ [ Button.view (lift << Mdc)
                     (index ++ "-toggle-rtl")
                     model.mdc
@@ -417,8 +435,8 @@ body options lift index model =
                     ]
               ]
             , List.repeat 18 <|
-              Html.p []
-                [ text """
+                Html.p []
+                    [ text """
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
 turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor
 sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
@@ -427,8 +445,8 @@ malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
 ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
 semper. Aenean ultricies mi vitae est.
     """
-                ]
-             ]
+                    ]
+            ]
         )
 
 

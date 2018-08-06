@@ -1,23 +1,24 @@
-module Internal.Select.Implementation exposing
-    ( box
-    , disabled
-    , label
-    , option
-    , preselected
-    , Property
-    , react
-    , value
-    , view
-    , selected
-    )
+module Internal.Select.Implementation
+    exposing
+        ( Property
+        , box
+        , disabled
+        , label
+        , option
+        , preselected
+        , react
+        , selected
+        , value
+        , view
+        )
 
-import Html.Attributes as Html
 import Html exposing (Html, text)
-import Internal.Component as Component exposing (Indexed, Index)
+import Html.Attributes as Html
+import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
-import Internal.Select.Model exposing (Model, defaultModel, Msg(..))
+import Internal.Select.Model exposing (Model, Msg(..), defaultModel)
 
 
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
@@ -87,8 +88,8 @@ box =
     cs "mdc-select--box"
 
 
-select
-    : (Msg m -> m)
+select :
+    (Msg m -> m)
     -> Model
     -> List (Property m)
     -> List (Html m)
@@ -113,40 +114,40 @@ select lift model options items_ =
                     , Html.disabled True
                     , Html.selected True
                     ]
-                []
-                :: items_
-
+                    []
+                    :: items_
     in
-    Options.apply summary Html.div
-    [ cs "mdc-select"
-    , when config.disabled (cs "mdc-select--disabled")
-    , Options.role "listbox"
-    ]
-    [ Html.tabindex 0
-    ]
-    [ styled Html.select
-          [ cs "mdc-select__native-control"
-          , Options.id config.id_
-          , Options.onFocus (lift Focus)
-          , Options.onBlur (lift Blur)
-          , Options.onChange (lift << Change)
-          , when config.disabled (Options.attribute (Html.disabled True))
-          ]
-          items
-    , styled Html.label
-        [ cs "mdc-floating-label"
-        , Options.for config.id_
-        , when (focused || isDirty || config.preselected)
-            (cs "mdc-floating-label--float-above")
+    Options.apply summary
+        Html.div
+        [ cs "mdc-select"
+        , when config.disabled (cs "mdc-select--disabled")
+        , Options.role "listbox"
         ]
-        [ text config.label
+        [ Html.tabindex 0
         ]
-    , styled Html.div
-        [ cs "mdc-line-ripple"
-        , when focused (cs "mdc-line-ripple--active")
+        [ styled Html.select
+            [ cs "mdc-select__native-control"
+            , Options.id config.id_
+            , Options.onFocus (lift Focus)
+            , Options.onBlur (lift Blur)
+            , Options.onChange (lift << Change)
+            , when config.disabled (Options.attribute (Html.disabled True))
+            ]
+            items
+        , styled Html.label
+            [ cs "mdc-floating-label"
+            , Options.for config.id_
+            , when (focused || isDirty || config.preselected)
+                (cs "mdc-floating-label--float-above")
+            ]
+            [ text config.label
+            ]
+        , styled Html.div
+            [ cs "mdc-line-ripple"
+            , when focused (cs "mdc-line-ripple--active")
+            ]
+            []
         ]
-        []
-    ]
 
 
 option : List (Property m) -> List (Html m) -> Html m
@@ -191,5 +192,10 @@ view :
     -> Html m
 view =
     \lift index store options ->
-        Component.render get select Internal.Msg.SelectMsg lift index store
+        Component.render get
+            select
+            Internal.Msg.SelectMsg
+            lift
+            index
+            store
             (Options.id_ index :: options)

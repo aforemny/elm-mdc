@@ -1,35 +1,35 @@
-module Material.List exposing
-    ( a
-    , activated
-    , avatarList
-    , dense
-    , divider
-    , graphic
-    , graphicIcon
-    , graphicImage
-    , group
-    , groupDivider
-    , inset
-    , li
-    , meta
-    , metaIcon
-    , metaImage
-    , metaText
-    , nav
-    , nonInteractive
-    , ol
-    , padded
-    , Property
-    , secondaryText
-    , selected
-    , subheader
-    , text
-    , twoLine
-    , ul
-    )
+module Material.List
+    exposing
+        ( Property
+        , a
+        , activated
+        , avatarList
+        , dense
+        , divider
+        , graphic
+        , graphicIcon
+        , graphicImage
+        , group
+        , groupDivider
+        , inset
+        , li
+        , meta
+        , metaIcon
+        , metaImage
+        , metaText
+        , nav
+        , nonInteractive
+        , ol
+        , padded
+        , secondaryText
+        , selected
+        , subheader
+        , text
+        , twoLine
+        , ul
+        )
 
-{-|
-List provides styles which implement Material Design Lists - “A single
+{-| List provides styles which implement Material Design Lists - “A single
 continuous column of tessellated subdivisions of equal width.” Both single-line
 and two-line lists are supported.
 
@@ -39,57 +39,55 @@ imported qualified as `Lists`.
 
 # Resources
 
-- [Material Design guidelines: Lists](https://material.io/guidelines/components/lists.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#lists)
+  - [Material Design guidelines: Lists](https://material.io/guidelines/components/lists.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#lists)
 
 
 # Example
 
-
-```elm
-import Html exposing (text)
-import Material.List as Lists
+    import Html exposing (text)
+    import Material.List as Lists
 
 
-Lists.ul
-    [ Lists.twoLine
-    , Lists.avatarList
-    ]
-    [ Lists.li []
-          [ Lists.graphicIcon [] "folder"
-          , Lists.text []
-                [ text "Photos"
-                , Lists.secondaryText []
-                      [ text "Jan 9, 2014"
-                      ]
-                ]
-          , Lists.metaIcon [] "info"
-          ]
-    , Lists.li []
-          [ Lists.graphicIcon [] "folder"
-          , Lists.text []
-                [ text "Recipes"
-                , Lists.secondaryText []
-                      [ text "Jan 17, 2014"
-                      ]
-                ]
-          , Lists.metaIcon [] "info"
-          ]
-    , Lists.li []
-          [ Lists.graphicIcon [] "folder"
-          , Lists.text []
-                [ text "Work"
-                , Lists.secondaryText []
-                      [ text "Jan 28, 2014"
-                      ]
-                ]
-          , Lists.metaIcon [] "info"
-          ]
-    ]
-```
+    Lists.ul
+        [ Lists.twoLine
+        , Lists.avatarList
+        ]
+        [ Lists.li []
+              [ Lists.graphicIcon [] "folder"
+              , Lists.text []
+                    [ text "Photos"
+                    , Lists.secondaryText []
+                          [ text "Jan 9, 2014"
+                          ]
+                    ]
+              , Lists.metaIcon [] "info"
+              ]
+        , Lists.li []
+              [ Lists.graphicIcon [] "folder"
+              , Lists.text []
+                    [ text "Recipes"
+                    , Lists.secondaryText []
+                          [ text "Jan 17, 2014"
+                          ]
+                    ]
+              , Lists.metaIcon [] "info"
+              ]
+        , Lists.li []
+              [ Lists.graphicIcon [] "folder"
+              , Lists.text []
+                    [ text "Work"
+                    , Lists.secondaryText []
+                          [ text "Jan 28, 2014"
+                          ]
+                    ]
+              , Lists.metaIcon [] "info"
+              ]
+        ]
 
 
 # Usage
+
 
 ## Lists
 
@@ -126,6 +124,7 @@ Lists.ul
 @docs groupDivider
 @docs padded
 @docs inset
+
 -}
 
 import Html exposing (Html)
@@ -240,6 +239,7 @@ graphic =
 {-| The first tile in a row as an icon.
 
 The second argument is a Material Icon identifier.
+
 -}
 graphicIcon : List (Icon.Property m) -> String -> Html m
 graphicIcon =
@@ -249,6 +249,7 @@ graphicIcon =
 {-| The first tile in a row as an image.
 
 The second argument is the URL of the image.
+
 -}
 graphicImage : List (Property m) -> String -> Html m
 graphicImage =
@@ -272,6 +273,7 @@ metaText =
 {-| The last tile in a row as an icon.
 
 The second argument is a Material Icon identifier.
+
 -}
 metaIcon : List (Icon.Property m) -> String -> Html m
 metaIcon =
@@ -281,6 +283,7 @@ metaIcon =
 {-| The last tile in a row as an image.
 
 The second argument is the url of the image.
+
 -}
 metaImage : List (Property m) -> String -> Html m
 metaImage =

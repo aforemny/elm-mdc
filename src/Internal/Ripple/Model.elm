@@ -1,10 +1,11 @@
-module Internal.Ripple.Model exposing
-    ( defaultModel
-    , Model
-    , Msg(..)
-    , Geometry
-    , defaultGeometry
-    )
+module Internal.Ripple.Model
+    exposing
+        ( Geometry
+        , Model
+        , Msg(..)
+        , defaultGeometry
+        , defaultModel
+        )
 
 import DOM exposing (Rectangle)
 

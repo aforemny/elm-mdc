@@ -1,44 +1,42 @@
-module Material.Button exposing
-    ( dense
-    , disabled
-    , icon
-    , link
-    , onClick
-    , Property
-    , raised
-    , ripple
-    , outlined
-    , unelevated
-    , view
-    )
+module Material.Button
+    exposing
+        ( Property
+        , dense
+        , disabled
+        , icon
+        , link
+        , onClick
+        , outlined
+        , raised
+        , ripple
+        , unelevated
+        , view
+        )
 
-{-|
-The Button component is a spec-aligned button component adhering to the
+{-| The Button component is a spec-aligned button component adhering to the
 Material Design button requirements.
 
 
 # Resources
 
-- [Buttons - Internal.Components for the Web](https://material.io/develop/web/components/buttons/)
-- [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#buttons)
+  - [Buttons - Internal.Components for the Web](https://material.io/develop/web/components/buttons/)
+  - [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#buttons)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.Button as Button
-import Material.Options as Options
+    import Html exposing (text)
+    import Material.Button as Button
+    import Material.Options as Options
 
 
-Button.view Mdc "my-button" model.mdc
-    [ Button.ripple
-    , Options.onClick Click
-    ]
-    [ text "Button"
-    ]
-```
+    Button.view Mdc "my-button" model.mdc
+        [ Button.ripple
+        , Options.onClick Click
+        ]
+        [ text "Button"
+        ]
 
 
 # Usage
@@ -54,12 +52,13 @@ Button.view Mdc "my-button" model.mdc
 @docs disabled
 @docs link
 @docs onClick
+
 -}
 
 import Html exposing (Html)
-import Material
-import Internal.Component as Component exposing (Index)
 import Internal.Button.Implementation as Button
+import Internal.Component as Component exposing (Index)
+import Material
 
 
 {-| Button property.
@@ -88,7 +87,7 @@ icon =
     Button.icon
 
 
-{-| Make the  button elevated upon the surface.
+{-| Make the button elevated upon the surface.
 -}
 raised : Property m
 raised =
@@ -141,6 +140,7 @@ disabled =
 
 The event will be raised only after the ripple animation finished playing. If
 the button does not ripple, it is identical to `Options.onClick`.
+
 -}
 onClick : m -> Property m
 onClick =

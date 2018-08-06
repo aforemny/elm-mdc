@@ -1,12 +1,13 @@
-module Material.Drawer.Persistent exposing
-    ( content
-    , header
-    , headerContent
-    , open
-    , Property
-    , toolbarSpacer
-    , view
-    )
+module Material.Drawer.Persistent
+    exposing
+        ( Property
+        , content
+        , header
+        , headerContent
+        , open
+        , toolbarSpacer
+        , view
+        )
 
 {-| The Drawer component is a spec-aligned drawer component adhering to the
 Material Design navigation drawer pattern. It implements permanent, persistent,
@@ -15,50 +16,47 @@ and temporary drawers.
 
 # Resources
 
-- [Material Design guidelines: Navigation drawer](https://material.io/guidelines/patterns/navigation-drawer.html)
-- [Demo: Temporary Drawer](https://aforemny.github.io/elm-mdc/#temporary-drawer)
-- [Demo: Persistent Drawer](https://aforemny.github.io/elm-mdc/#persistent-drawer)
-- [Demo: Permanent Drawer Above Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-above)
-- [Demo: Permanent Drawer Below Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-below)
+  - [Material Design guidelines: Navigation drawer](https://material.io/guidelines/patterns/navigation-drawer.html)
+  - [Demo: Temporary Drawer](https://aforemny.github.io/elm-mdc/#temporary-drawer)
+  - [Demo: Persistent Drawer](https://aforemny.github.io/elm-mdc/#persistent-drawer)
+  - [Demo: Permanent Drawer Above Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-above)
+  - [Demo: Permanent Drawer Below Toolbar](https://aforemny.github.io/elm-mdc/#permanent-drawer-below)
 
 
 # Example
 
-
-```elm
-import Html exposing (text)
-import Material.Drawer.Persistent as Drawer
-import Material.List as Lists
+    import Html exposing (text)
+    import Material.Drawer.Persistent as Drawer
+    import Material.List as Lists
 
 
-Drawer.view Mdc "my-drawer" model.mdc []
-    [ Drawer.header []
-          [ Drawer.headerContent []
-                [ text "Header here"
-                ]
-          ]
-    , Lists.ul
-          [ Drawer.content
-          ]
-          [ Lists.li []
-                [ Lists.graphicIcon [] "inbox"
-                , text "Inbox"
-                ]
-          , Lists.li []
-                [ Lists.graphicIcon [] "star"
-                , text "Star"
-                ]
-          , Lists.li []
-                [ Lists.graphicIcon [] "send"
-                , text "Sent Mail"
-                ]
-          , Lists.li []
-                [ Lists.graphicIcon [] "drafts"
-                , text "Drafts"
-                ]
-          ]
-    ]
-```
+    Drawer.view Mdc "my-drawer" model.mdc []
+        [ Drawer.header []
+              [ Drawer.headerContent []
+                    [ text "Header here"
+                    ]
+              ]
+        , Lists.ul
+              [ Drawer.content
+              ]
+              [ Lists.li []
+                    [ Lists.graphicIcon [] "inbox"
+                    , text "Inbox"
+                    ]
+              , Lists.li []
+                    [ Lists.graphicIcon [] "star"
+                    , text "Star"
+                    ]
+              , Lists.li []
+                    [ Lists.graphicIcon [] "send"
+                    , text "Sent Mail"
+                    ]
+              , Lists.li []
+                    [ Lists.graphicIcon [] "drafts"
+                    , text "Drafts"
+                    ]
+              ]
+        ]
 
 
 # Usage
@@ -70,12 +68,13 @@ Drawer.view Mdc "my-drawer" model.mdc []
 @docs header
 @docs headerContent
 @docs open
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.Drawer.Persistent.Implementation as Drawer
+import Material
 import Material.List as Lists
 
 

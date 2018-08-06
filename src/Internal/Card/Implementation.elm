@@ -1,25 +1,26 @@
-module Internal.Card.Implementation exposing
-    ( actionButton
-    , actionButtons
-    , actionIcon
-    , actionIcons
-    , actions
-    , aspect16To9
-    , fullBleed
-    , media
-    , backgroundImage
-    , mediaContent
-    , primaryAction
-    , Property
-    , square
-    , stroked
-    , view
-    )
+module Internal.Card.Implementation
+    exposing
+        ( Property
+        , actionButton
+        , actionButtons
+        , actionIcon
+        , actionIcons
+        , actions
+        , aspect16To9
+        , backgroundImage
+        , fullBleed
+        , media
+        , mediaContent
+        , primaryAction
+        , square
+        , stroked
+        , view
+        )
 
 import Html exposing (Html, text)
 import Internal.Button.Implementation as Button
 import Internal.IconToggle.Implementation as IconToggle
-import Internal.Options as Options exposing (styled, cs, css)
+import Internal.Options as Options exposing (cs, css, styled)
 
 
 type alias Config =
@@ -47,7 +48,7 @@ stroked =
 
 primaryAction : List (Property m) -> List (Html m) -> Html m
 primaryAction options =
-    styled Html.div (cs "mdc-card__primary-action"::options)
+    styled Html.div (cs "mdc-card__primary-action" :: options)
 
 
 media : List (Property m) -> List (Html m) -> Html m

@@ -1,8 +1,9 @@
-module Internal.Fab.Model exposing
-    ( defaultModel
-    , Model
-    , Msg(..)
-    )
+module Internal.Fab.Model
+    exposing
+        ( Model
+        , Msg(..)
+        , defaultModel
+        )
 
 import Internal.Ripple.Model as Ripple
 

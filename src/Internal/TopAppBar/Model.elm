@@ -1,10 +1,11 @@
-module Internal.TopAppBar.Model exposing
-    ( Config
-    , defaultConfig
-    , defaultModel
-    , Model
-    , Msg(..)
-    )
+module Internal.TopAppBar.Model
+    exposing
+        ( Config
+        , Model
+        , Msg(..)
+        , defaultConfig
+        , defaultModel
+        )
 
 
 type alias Model =
@@ -14,6 +15,7 @@ type alias Model =
     , isDockedShowing : Bool
     , currentAppBarOffsetTop : Float
     , styleTop : Maybe Float
+
     -- Note: Resize throttling is not implemented.
     -- , isCurrentlyBeingResized : Bool
     -- , resizeThrottleId : Int

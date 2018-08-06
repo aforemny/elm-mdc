@@ -1,14 +1,15 @@
-module Internal.Icon.Implementation exposing
-    ( anchor
-    , button
-    , Property
-    , size18
-    , size24
-    , size36
-    , size48
-    , span
-    , view
-    )
+module Internal.Icon.Implementation
+    exposing
+        ( Property
+        , anchor
+        , button
+        , size18
+        , size24
+        , size36
+        , size48
+        , span
+        , view
+        )
 
 import Html exposing (Html, text)
 import Internal.Options as Options exposing (Property, cs, css, styled)
@@ -32,10 +33,11 @@ type alias Property m =
 view : List (Property m) -> String -> Html m
 view options name =
     let
-      ({ config } as summary) =
-          Options.collect defaultConfig options
+        ({ config } as summary) =
+            Options.collect defaultConfig options
     in
-    Options.apply summary (Html.node config.node)
+    Options.apply summary
+        (Html.node config.node)
         [ cs "material-icons"
         , Options.aria "hidden" "true"
         ]
@@ -45,7 +47,7 @@ view options name =
 
 node : String -> Property m
 node ctor =
-    Options.option (\ config -> { config | node = ctor })
+    Options.option (\config -> { config | node = ctor })
 
 
 anchor : Property m

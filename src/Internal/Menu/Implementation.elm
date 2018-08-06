@@ -158,13 +158,12 @@ update lift msg model =
 
         Init { quickOpen, index } geometry ->
             ( Just
-              { model
-                | geometry = Just geometry
-                , quickOpen = Just quickOpen
-                , focusedItemAtIndex = index
-              }
-            ,
-              Cmd.none
+                { model
+                    | geometry = Just geometry
+                    , quickOpen = Just quickOpen
+                    , focusedItemAtIndex = index
+                }
+            , Cmd.none
             )
 
         AnimationEnd ->

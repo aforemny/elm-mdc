@@ -1,11 +1,11 @@
-module Demo.Ripple exposing (Model, defaultModel, Msg(Mdc), update, view)
+module Demo.Ripple exposing (Model, Msg(Mdc), defaultModel, update, view)
 
+import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Elevation as Elevation
-import Material.Options as Options exposing (styled, cs, css)
+import Material.Options as Options exposing (cs, css, styled)
 import Material.Ripple as Ripple
-import Demo.Page as Page exposing (Page)
 
 
 -- MODEL
@@ -33,6 +33,7 @@ update lift msg model =
             Material.update (lift << Mdc) msg_ model
 
 
+
 -- VIEW
 
 
@@ -41,112 +42,106 @@ view lift page model =
     let
         demoSurface =
             Options.many
-            [ cs "demo-surface"
-            , css "display" "flex"
-            , css "align-items" "center"
-            , css "justify-content" "center"
-            , css "width" "200px"
-            , css "height" "100px"
-            , css "padding" "1rem"
-            , css "cursor" "pointer"
-            , css "user-select" "none"
-            , css "-webkit-user-select" "none"
-            ]
+                [ cs "demo-surface"
+                , css "display" "flex"
+                , css "align-items" "center"
+                , css "justify-content" "center"
+                , css "width" "200px"
+                , css "height" "100px"
+                , css "padding" "1rem"
+                , css "cursor" "pointer"
+                , css "user-select" "none"
+                , css "-webkit-user-select" "none"
+                ]
 
         example options =
             styled Html.section
-            ( cs "example"
-            :: css "display" "flex"
-            :: css "flex-flow" "column"
-            :: css "margin" "24px"
-            :: css "padding" "24px"
-            :: options
-            )
+                (cs "example"
+                    :: css "display" "flex"
+                    :: css "flex-flow" "column"
+                    :: css "margin" "24px"
+                    :: css "padding" "24px"
+                    :: options
+                )
     in
     page.body "Ripple"
-    [
-      Page.hero []
-      [
-        let
-            ripple =
-                Ripple.bounded (lift << Mdc) "ripple-hero-ripple" model.mdc []
-        in
-        styled Html.div
-        [ css "width" "100%"
-        , css "height" "100%"
-        , ripple.interactionHandler
-        , ripple.properties
+        [ Page.hero []
+            [ let
+                ripple =
+                    Ripple.bounded (lift << Mdc) "ripple-hero-ripple" model.mdc []
+              in
+              styled Html.div
+                [ css "width" "100%"
+                , css "height" "100%"
+                , ripple.interactionHandler
+                , ripple.properties
+                ]
+                [ ripple.style
+                ]
+            ]
+        , example []
+            [ Html.h2 [] [ text "Bounded" ]
+            , let
+                ripple =
+                    Ripple.bounded (lift << Mdc) "ripple-bounded-ripple" model.mdc []
+              in
+              styled Html.div
+                [ demoSurface
+                , Elevation.z2
+                , ripple.interactionHandler
+                , ripple.properties
+                ]
+                [ text "Interact with me!"
+                , ripple.style
+                ]
+            ]
+        , example []
+            [ Html.h2 [] [ text "Unbounded" ]
+            , let
+                ripple =
+                    Ripple.unbounded (lift << Mdc) "ripple-unbounded-ripple" model.mdc []
+              in
+              styled Html.div
+                [ cs "material-icons"
+                , css "width" "24px"
+                , css "height" "24px"
+                , css "padding" "12px"
+                , css "border-radius" "50%"
+                , demoSurface
+                , ripple.interactionHandler
+                , ripple.properties
+                ]
+                [ text "favorite"
+                , ripple.style
+                ]
+            ]
+        , example []
+            [ Html.h2 [] [ text "Theme Styles" ]
+            , let
+                ripple =
+                    Ripple.bounded (lift << Mdc) "ripple-primary-ripple" model.mdc [ Ripple.primary ]
+              in
+              styled Html.div
+                [ demoSurface
+                , Elevation.z2
+                , ripple.interactionHandler
+                , ripple.properties
+                ]
+                [ text "Primary"
+                , ripple.style
+                ]
+            , let
+                ripple =
+                    Ripple.bounded (lift << Mdc) "ripple-accent-ripple" model.mdc [ Ripple.accent ]
+              in
+              styled Html.div
+                [ demoSurface
+                , Elevation.z2
+                , ripple.interactionHandler
+                , ripple.properties
+                ]
+                [ text "Accent"
+                , ripple.style
+                ]
+            ]
         ]
-        [ ripple.style
-        ]
-      ]
-
-    ,
-      example []
-      [ Html.h2 [] [ text "Bounded" ]
-      , let
-            ripple =
-                Ripple.bounded (lift << Mdc) "ripple-bounded-ripple" model.mdc []
-        in
-        styled Html.div
-        [ demoSurface
-        , Elevation.z2
-        , ripple.interactionHandler
-        , ripple.properties
-        ]
-        [ text "Interact with me!"
-        , ripple.style
-        ]
-      ]
-
-    , example []
-      [ Html.h2 [] [ text "Unbounded" ]
-      , let
-            ripple =
-                Ripple.unbounded (lift << Mdc) "ripple-unbounded-ripple" model.mdc []
-        in
-        styled Html.div
-        [ cs "material-icons"
-        , css "width" "24px"
-        , css "height" "24px"
-        , css "padding" "12px"
-        , css "border-radius" "50%"
-        , demoSurface
-        , ripple.interactionHandler
-        , ripple.properties
-        ]
-        [ text "favorite"
-        , ripple.style
-        ]
-      ]
-
-    , example []
-      [ Html.h2 [] [ text "Theme Styles" ]
-      , let
-            ripple =
-                Ripple.bounded (lift << Mdc) "ripple-primary-ripple" model.mdc [ Ripple.primary ]
-        in
-        styled Html.div
-        [ demoSurface
-        , Elevation.z2
-        , ripple.interactionHandler
-        , ripple.properties
-        ]
-        [ text "Primary"
-        , ripple.style
-        ]
-      , let
-            ripple =
-                Ripple.bounded (lift << Mdc) "ripple-accent-ripple" model.mdc [ Ripple.accent ]
-        in
-        styled Html.div
-        [ demoSurface
-        , Elevation.z2
-        , ripple.interactionHandler
-        , ripple.properties
-        ]
-        [ text "Accent"
-        , ripple.style
-        ]
-      ]
-    ]

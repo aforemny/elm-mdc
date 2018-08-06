@@ -1,7 +1,7 @@
 module Demo.Helper.Hero exposing (view)
 
 import Html exposing (Html)
-import Material.Options as Options exposing (Property, styled, cs, css)
+import Material.Options as Options exposing (Property, cs, css, styled)
 
 
 view : List (Property c m) -> List (Html m) -> Html m

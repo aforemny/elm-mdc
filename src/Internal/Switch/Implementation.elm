@@ -1,19 +1,20 @@
-module Internal.Switch.Implementation exposing
-    ( disabled
-    , nativeControl
-    , on
-    , Property
-    , react
-    , view
-    )
+module Internal.Switch.Implementation
+    exposing
+        ( Property
+        , disabled
+        , nativeControl
+        , on
+        , react
+        , view
+        )
 
-import Html.Attributes as Html
 import Html exposing (Html, text)
-import Json.Decode as Json
-import Internal.Component as Component exposing (Indexed, Index)
+import Html.Attributes as Html
+import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, styled, many, when)
-import Internal.Switch.Model exposing (Model, defaultModel, Msg(..))
+import Internal.Options as Options exposing (cs, many, styled, when)
+import Internal.Switch.Model exposing (Model, Msg(..), defaultModel)
+import Json.Decode as Json
 
 
 update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -21,6 +22,7 @@ update _ msg model =
     case msg of
         SetFocus focus ->
             ( Just { model | isFocused = focus }, Cmd.none )
+
         NoOp ->
             ( Nothing, Cmd.none )
 
@@ -48,7 +50,7 @@ type alias Property m =
 
 disabled : Property m
 disabled =
-    Options.option (\ config -> { config | disabled = True })
+    Options.option (\config -> { config | disabled = True })
 
 
 on : Property m
@@ -68,39 +70,41 @@ switch lift model options _ =
             Options.collect defaultConfig options
 
         preventDefault =
-          { preventDefault = True
-          , stopPropagation = False
-          }
+            { preventDefault = True
+            , stopPropagation = False
+            }
     in
-    Options.apply summary Html.div
-    [ cs "mdc-switch"
-    ]
-    []
-    [ Options.applyNativeControl summary
-      Html.input
-      [ cs "mdc-switch__native-control"
-      , Options.id config.id_
-      , Options.attribute <| Html.type_ "checkbox"
-      , Options.attribute <| Html.checked config.value
-      , Options.onFocus (lift (SetFocus True))
-      , Options.onBlur (lift (SetFocus False))
-      , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
-      , when config.disabled << Options.many <|
-        [ cs "mdc-checkbox--disabled"
-        , Options.attribute <| Html.disabled True
+    Options.apply summary
+        Html.div
+        [ cs "mdc-switch"
         ]
-      ]
-      []
-    , styled Html.div
-      [ cs "mdc-switch__background"
-      ]
-      [ styled Html.div
-        [ cs "mdc-switch__knob"
+        []
+        [ Options.applyNativeControl summary
+            Html.input
+            [ cs "mdc-switch__native-control"
+            , Options.id config.id_
+            , Options.attribute <| Html.type_ "checkbox"
+            , Options.attribute <| Html.checked config.value
+            , Options.onFocus (lift (SetFocus True))
+            , Options.onBlur (lift (SetFocus False))
+            , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
+            , when config.disabled
+                << Options.many
+              <|
+                [ cs "mdc-checkbox--disabled"
+                , Options.attribute <| Html.disabled True
+                ]
+            ]
+            []
+        , styled Html.div
+            [ cs "mdc-switch__background"
+            ]
+            [ styled Html.div
+                [ cs "mdc-switch__knob"
+                ]
+                []
+            ]
         ]
-        [
-        ]
-      ]
-    ]
 
 
 type alias Store s =
@@ -130,5 +134,10 @@ view :
     -> Html m
 view =
     \lift index store options ->
-        Component.render get switch Internal.Msg.SwitchMsg lift index store
+        Component.render get
+            switch
+            Internal.Msg.SwitchMsg
+            lift
+            index
+            store
             (Options.id_ index :: options)

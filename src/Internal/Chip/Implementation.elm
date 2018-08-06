@@ -1,13 +1,13 @@
 module Internal.Chip.Implementation
     exposing
-        ( checkmark
+        ( Property
+        , checkmark
         , chipset
         , choice
         , filter
         , input
         , leadingIcon
         , onClick
-        , Property
         , react
         , selected
         , trailingIcon
@@ -117,10 +117,10 @@ decodeKeyCode =
 
 chipset : List (Property m) -> List (Html m) -> Html m
 chipset options nodes =
-  let
-      ({ config } as summary) =
-        Options.collect defaultConfig options
-  in
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
     Options.apply summary
         Html.div
         [ cs "mdc-chip-set"

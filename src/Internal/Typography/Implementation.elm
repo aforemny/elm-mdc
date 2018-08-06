@@ -1,19 +1,20 @@
-module Internal.Typography.Implementation exposing
-    ( adjustMargin
-    , body1
-    , body2
-    , button
-    , caption
-    , display1
-    , display2
-    , display3
-    , display4
-    , headline
-    , subheading1
-    , subheading2
-    , title
-    , typography
-    )
+module Internal.Typography.Implementation
+    exposing
+        ( adjustMargin
+        , body1
+        , body2
+        , button
+        , caption
+        , display1
+        , display2
+        , display3
+        , display4
+        , headline
+        , subheading1
+        , subheading2
+        , title
+        , typography
+        )
 
 import Internal.Options exposing (Property, cs)
 

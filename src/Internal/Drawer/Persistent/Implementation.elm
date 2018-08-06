@@ -1,22 +1,23 @@
-module Internal.Drawer.Persistent.Implementation exposing
-    ( content
-    , header
-    , headerContent
-    , open
-    , Property
-    , toolbarSpacer
-    , view
-    )
+module Internal.Drawer.Persistent.Implementation
+    exposing
+        ( Property
+        , content
+        , header
+        , headerContent
+        , open
+        , toolbarSpacer
+        , view
+        )
 
 import Html exposing (Html, text)
-import Internal.Component exposing (Indexed, Index)
+import Internal.Component exposing (Index, Indexed)
 import Internal.Drawer.Implementation as Drawer
 import Internal.Drawer.Model exposing (Model, Msg)
 import Internal.List.Implementation as Lists
 import Internal.Msg
 
 
-type alias Config m=
+type alias Config m =
     Drawer.Config m
 
 

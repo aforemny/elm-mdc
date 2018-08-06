@@ -1,7 +1,8 @@
-module Internal.Helpers exposing
-    ( cmd
-    , delayedCmd
-    )
+module Internal.Helpers
+    exposing
+        ( cmd
+        , delayedCmd
+        )
 
 import Platform.Cmd exposing (Cmd)
 import Process

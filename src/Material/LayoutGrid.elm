@@ -1,87 +1,85 @@
-module Material.LayoutGrid exposing
-    ( alignBottom
-    , alignLeft
-    , alignMiddle
-    , alignRight
-    , alignTop
-    , cell
-    , fixedColumnWidth
-    , inner
-    , Property
-    , span1
-    , span10
-    , span10Desktop
-    , span11
-    , span11Desktop
-    , span12
-    , span12Desktop
-    , span1Desktop
-    , span1Phone
-    , span1Tablet
-    , span2
-    , span2Desktop
-    , span2Phone
-    , span2Tablet
-    , span3
-    , span3Desktop
-    , span3Phone
-    , span3Tablet
-    , span4
-    , span4Desktop
-    , span4Phone
-    , span4Tablet
-    , span5
-    , span5Desktop
-    , span5Tablet
-    , span6
-    , span6Desktop
-    , span6Tablet
-    , span7
-    , span7Desktop
-    , span7Tablet
-    , span8
-    , span8Desktop
-    , span8Tablet
-    , span9
-    , span9Desktop
-    , view
-    )
+module Material.LayoutGrid
+    exposing
+        ( Property
+        , alignBottom
+        , alignLeft
+        , alignMiddle
+        , alignRight
+        , alignTop
+        , cell
+        , fixedColumnWidth
+        , inner
+        , span1
+        , span10
+        , span10Desktop
+        , span11
+        , span11Desktop
+        , span12
+        , span12Desktop
+        , span1Desktop
+        , span1Phone
+        , span1Tablet
+        , span2
+        , span2Desktop
+        , span2Phone
+        , span2Tablet
+        , span3
+        , span3Desktop
+        , span3Phone
+        , span3Tablet
+        , span4
+        , span4Desktop
+        , span4Phone
+        , span4Tablet
+        , span5
+        , span5Desktop
+        , span5Tablet
+        , span6
+        , span6Desktop
+        , span6Tablet
+        , span7
+        , span7Desktop
+        , span7Tablet
+        , span8
+        , span8Desktop
+        , span8Tablet
+        , span9
+        , span9Desktop
+        , view
+        )
 
-{-|
-Material design’s responsive UI is based on a column-variate grid layout. It
+{-| Material design’s responsive UI is based on a column-variate grid layout. It
 has 12 columns on desktop, 8 columns on tablet and 4 columns on phone.
 
 
 # Resources
 
-- [Material Design guidelines: Layout grid](https://material.io/guidelines/layout/responsive-ui.html#responsive-ui-grid)
-- [Demo](https://aforemny.github.io/elm-mdc/#layout-grid)
+  - [Material Design guidelines: Layout grid](https://material.io/guidelines/layout/responsive-ui.html#responsive-ui-grid)
+  - [Demo](https://aforemny.github.io/elm-mdc/#layout-grid)
 
 
 # Example
 
-```elm
-import Material.LayoutGrid as LayoutGrid
+    import Material.LayoutGrid as LayoutGrid
 
 
-LayoutGrid.view []
-    [ LayoutGrid.cell
-          [ LayoutGrid.span6
-          , LayoutGrid.span8Tablet
-          ]
-          []
-    , LayoutGrid.cell
-          [ LayoutGrid.span4
-          , LayoutGrid.span6Tablet
-          ]
-          []
-    , LayoutGrid.cell
-          [ LayoutGrid.span2
-          , LayoutGrid.span4Phone
-          ]
-          []
-    ]
-```
+    LayoutGrid.view []
+        [ LayoutGrid.cell
+              [ LayoutGrid.span6
+              , LayoutGrid.span8Tablet
+              ]
+              []
+        , LayoutGrid.cell
+              [ LayoutGrid.span4
+              , LayoutGrid.span6Tablet
+              ]
+              []
+        , LayoutGrid.cell
+              [ LayoutGrid.span2
+              , LayoutGrid.span4Phone
+              ]
+              []
+        ]
 
 
 # Usage
@@ -104,25 +102,24 @@ LayoutGrid.view []
 
 # Nested LayoutGrids
 
-```elm
-import Material.LayoutGrid as LayoutGrid
+    import Material.LayoutGrid as LayoutGrid
 
-LayoutGrid.view []
-    [ LayoutGrid.cell
-          [ LayoutGrid.span4
-          ]
-          [ LayoutGrid.inner []
-                [ LayoutGrid.cell [ LayoutGrid.span4 ] []
-                , LayoutGrid.cell [ LayoutGrid.span4 ] []
-                , LayoutGrid.cell [ LayoutGrid.span4 ] []
-                ]
-          ]
-    , LayoutGrid.cell [ LayoutGrid.span4 ] []
-    , LayoutGrid.cell [ LayoutGrid.span4 ] []
-    ]
-```
+    LayoutGrid.view []
+        [ LayoutGrid.cell
+              [ LayoutGrid.span4
+              ]
+              [ LayoutGrid.inner []
+                    [ LayoutGrid.cell [ LayoutGrid.span4 ] []
+                    , LayoutGrid.cell [ LayoutGrid.span4 ] []
+                    , LayoutGrid.cell [ LayoutGrid.span4 ] []
+                    ]
+              ]
+        , LayoutGrid.cell [ LayoutGrid.span4 ] []
+        , LayoutGrid.cell [ LayoutGrid.span4 ] []
+        ]
 
 @docs inner
+
 -}
 
 import Html exposing (Html)

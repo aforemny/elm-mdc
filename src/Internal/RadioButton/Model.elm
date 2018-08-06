@@ -1,8 +1,9 @@
-module Internal.RadioButton.Model exposing
-    ( defaultModel
-    , Model
-    , Msg(..)
-    )
+module Internal.RadioButton.Model
+    exposing
+        ( Model
+        , Msg(..)
+        , defaultModel
+        )
 
 import Internal.Ripple.Model as Ripple
 

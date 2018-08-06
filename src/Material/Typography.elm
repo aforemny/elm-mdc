@@ -1,49 +1,46 @@
-module Material.Typography exposing
-    ( adjustMargin
-    , body1
-    , body2
-    , button
-    , caption
-    , display1
-    , display2
-    , display3
-    , display4
-    , headline
-    , subheading1
-    , subheading2
-    , title
-    , typography
-    )
+module Material.Typography
+    exposing
+        ( adjustMargin
+        , body1
+        , body2
+        , button
+        , caption
+        , display1
+        , display2
+        , display3
+        , display4
+        , headline
+        , subheading1
+        , subheading2
+        , title
+        , typography
+        )
 
-
-{-|
-Material Design's text sizes and styles were developed to balance content
+{-| Material Design's text sizes and styles were developed to balance content
 density and reading comfort under typical usage conditions.
 
 
 # Resources
 
-- [Material Design guidelines: Typography](https://material.io/guidelines/style/typography.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#typography)
+  - [Material Design guidelines: Typography](https://material.io/guidelines/style/typography.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#typography)
 
 
 # Example
 
-```
-import Html exposing (text)
-import Material.Options exposing (styled)
-import Material.Typography as Typography
+    import Html exposing (text)
+    import Material.Options exposing (styled)
+    import Material.Typography as Typography
 
-styled Html.div
-    [ Typography.typography
-    ]
-    [ styled Html.h1
-          [ Typography.display4
-          ]
-          [ text "Big header"
-          ]
-    ]
-```
+    styled Html.div
+        [ Typography.typography
+        ]
+        [ styled Html.h1
+              [ Typography.display4
+              ]
+              [ text "Big header"
+              ]
+        ]
 
 
 # Usage
@@ -57,11 +54,11 @@ styled Html.div
 @docs caption
 @docs button
 @docs adjustMargin
+
 -}
 
-
-import Material.Options exposing (Property)
 import Internal.Typography.Implementation as Typography
+import Material.Options exposing (Property)
 
 
 {-| Sets the font to Roboto.
@@ -161,6 +158,7 @@ This property will change the margin properties of the element it is applied
 to, to align text correctly. It should only be used in a text context; using
 this property on UI elements such as buttons may cause them to be positioned
 incorrectly.
+
 -}
 adjustMargin : Property c m
 adjustMargin =

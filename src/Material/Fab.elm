@@ -1,49 +1,49 @@
-module Material.Fab exposing
-    ( exited
-    , mini
-    , Property
-    , ripple
-    , view
-    )
+module Material.Fab
+    exposing
+        ( Property
+        , exited
+        , mini
+        , ripple
+        , view
+        )
 
-{-|
-A floating action button represents the primary action in an application.
+{-| A floating action button represents the primary action in an application.
 
 
 # Resources
 
-- [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons-floating-action-button.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#fab)
+  - [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons-floating-action-button.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#fab)
 
 
 # Example
 
-```elm
-import Material.Fab as Fab
-import Material.Options as Options
+    import Material.Fab as Fab
+    import Material.Options as Options
 
 
-Fab.view Mdc "my-fab" model.mdc
-    [ Fab.ripple
-    , Options.onClick Click
-    ]
-    "favorite_border"
-```
+    Fab.view Mdc "my-fab" model.mdc
+        [ Fab.ripple
+        , Options.onClick Click
+        ]
+        "favorite_border"
 
 
 # Usage
+
 @docs Property
 @docs view
 @docs Property
 @docs mini
 @docs ripple
 @docs exited
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.Fab.Implementation as Fab
+import Material
 
 
 {-| Fab property.
@@ -75,6 +75,7 @@ mini =
 {-| Animates the Fab out of view when this property is set.
 
 It returns to view when this property is removed.
+
 -}
 exited : Property m
 exited =
