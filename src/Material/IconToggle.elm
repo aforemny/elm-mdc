@@ -4,7 +4,9 @@ module Material.IconToggle
         , className
         , disabled
         , icon
+        , icon1
         , label
+        , label1
         , on
         , view
         )
@@ -45,8 +47,8 @@ accessible, and is designed to work with any icon set.
 @docs Property
 @docs view
 @docs on
-@docs icon
-@docs label
+@docs icon, icon1
+@docs label, label1
 @docs disabled
 @docs className
 
@@ -108,6 +110,16 @@ icon =
     IconToggle.icon
 
 
+{-| Set the icon.
+
+Uses the same icon for the icon toggle's "on" and "off" state.
+
+-}
+icon1 : String -> Property m
+icon1 =
+    IconToggle.icon1
+
+
 {-| Set the icon toggle's label.
 
 Specify a label for the icon toggle's "on" and "off" state.
@@ -116,6 +128,16 @@ Specify a label for the icon toggle's "on" and "off" state.
 label : { on : String, off : String } -> Property m
 label =
     IconToggle.label
+
+
+{-| Set the label.
+
+Uses the same label for the icon toggle's "on" and "off" state.
+
+-}
+label1 : String -> Property m
+label1 =
+    IconToggle.label1
 
 
 {-| Disable the icon toggle.

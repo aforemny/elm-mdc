@@ -4,7 +4,9 @@ module Internal.IconToggle.Implementation
         , className
         , disabled
         , icon
+        , icon1
         , label
+        , label1
         , on
         , react
         , view
@@ -65,9 +67,19 @@ icon icon =
     Options.option (\config -> { config | icon = icon })
 
 
+icon1 : String -> Property m
+icon1 value =
+    icon { on = value, off = value }
+
+
 label : { on : String, off : String } -> Property m
 label label =
     Options.option (\config -> { config | label = label })
+
+
+label1 : String -> Property m
+label1 value =
+    label { on = value, off = value }
 
 
 disabled : Property m
