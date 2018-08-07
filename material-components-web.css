@@ -273,12 +273,9 @@
 .mdc-button--outlined {
   border-style: solid;
   padding: 0 14px 0 14px;
-  border-width: 2px;
-  line-height: 32px; }
+  border-width: 2px; }
   .mdc-button--outlined:disabled {
     border-color: rgba(0, 0, 0, 0.37); }
-  .mdc-button--outlined.mdc-button--dense {
-    line-height: 27px; }
   .mdc-button--outlined:not(:disabled) {
     border-color: #6200ee;
     /* @alternate */
@@ -286,8 +283,7 @@
 
 .mdc-button--dense {
   height: 32px;
-  font-size: .8125rem;
-  line-height: 32px; }
+  font-size: .8125rem; }
 
 .mdc-card {
   background-color: #fff;
@@ -1991,6 +1987,48 @@
   width: 40px;
   height: 40px; }
 
+.mdc-fab--extended {
+  font-family: Roboto, sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-size: 0.875rem;
+  line-height: 2.25rem;
+  font-weight: 500;
+  letter-spacing: 0.08929em;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 0 20px;
+  width: auto;
+  max-width: 100%;
+  height: 48px;
+  border-radius: 24px; }
+  .mdc-fab--extended .mdc-fab__icon {
+    /* @noflip */
+    margin-left: -8px;
+    /* @noflip */
+    margin-right: 12px; }
+    [dir="rtl"] .mdc-fab--extended .mdc-fab__icon, .mdc-fab--extended .mdc-fab__icon[dir="rtl"] {
+      /* @noflip */
+      margin-left: 12px;
+      /* @noflip */
+      margin-right: -8px; }
+  .mdc-fab--extended .mdc-fab__label + .mdc-fab__icon {
+    /* @noflip */
+    margin-left: 12px;
+    /* @noflip */
+    margin-right: -8px; }
+    [dir="rtl"] .mdc-fab--extended .mdc-fab__label + .mdc-fab__icon, .mdc-fab--extended .mdc-fab__label + .mdc-fab__icon[dir="rtl"] {
+      /* @noflip */
+      margin-left: -8px;
+      /* @noflip */
+      margin-right: 12px; }
+
+.mdc-fab__label {
+  justify-content: flex-start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; }
+
 .mdc-fab__icon {
   transition: -webkit-transform 180ms 90ms cubic-bezier(0, 0, 0.2, 1);
   transition: transform 180ms 90ms cubic-bezier(0, 0, 0.2, 1);
@@ -2402,12 +2440,6 @@
     opacity: 0.16; }
   .mdc-icon-button.mdc-ripple-upgraded {
     --mdc-ripple-fg-opacity: 0.16; }
-
-.mdc-icon-button--disabled {
-  color: rgba(0, 0, 0, 0.38);
-  /* @alternate */
-  color: var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38));
-  pointer-events: none; }
 
 .mdc-icon-toggle {
   --mdc-ripple-fg-size: 0;
@@ -4299,8 +4331,7 @@ a.mdc-list-item {
   box-sizing: border-box;
   height: 52px;
   background-repeat: no-repeat;
-  background-position: right 8px bottom 12px;
-  overflow: hidden; }
+  background-position: right 8px bottom 12px; }
   .mdc-select:not(.mdc-select--disabled) {
     background-color: transparent; }
   .mdc-select:not(.mdc-select--disabled) .mdc-select__native-control {
@@ -4375,7 +4406,8 @@ a.mdc-list-item {
   will-change: transform, opacity;
   height: 56px;
   border-radius: 4px 4px 0 0;
-  background-position: right 10px center; }
+  background-position: right 10px center;
+  overflow: hidden; }
   .mdc-select--box:not(.mdc-select--disabled) {
     background-color: whitesmoke; }
   .mdc-select--box::before, .mdc-select--box::after {
@@ -4456,19 +4488,84 @@ a.mdc-list-item {
       -webkit-transform: translateY(-40%) scale(0.75, 0.75);
               transform: translateY(-40%) scale(0.75, 0.75); }
 
+.mdc-select--outlined {
+  height: 56px;
+  border: none;
+  background-position: right 10px center; }
+  .mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__idle {
+    border-color: rgba(0, 0, 0, 0.24); }
+  .mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__path {
+    stroke: rgba(0, 0, 0, 0.24); }
+  .mdc-select--outlined:not(.mdc-select--disabled):not(.mdc-select__native-control:focus) .mdc-select__native-control:hover ~ .mdc-notched-outline__idle {
+    border-color: rgba(0, 0, 0, 0.87); }
+  .mdc-select--outlined:not(.mdc-select--disabled):not(.mdc-select__native-control:focus) .mdc-select__native-control:hover ~ .mdc-notched-outline .mdc-notched-outline__path {
+    stroke: rgba(0, 0, 0, 0.87); }
+  .mdc-select--outlined:not(.mdc-select--disabled) .mdc-select__native-control:focus ~ .mdc-notched-outline .mdc-notched-outline__path {
+    stroke-width: 2px; }
+  .mdc-select--outlined:not(.mdc-select--disabled) .mdc-select__native-control:focus ~ .mdc-notched-outline .mdc-notched-outline__path {
+    stroke: #6200ee;
+    /* @alternate */
+    stroke: var(--mdc-theme-primary, #6200ee); }
+  .mdc-select--outlined .mdc-floating-label--float-above {
+    -webkit-transform: translateY(-130%) scale(0.75);
+            transform: translateY(-130%) scale(0.75); }
+  .mdc-select--outlined .mdc-floating-label--shake {
+    -webkit-animation: mdc-floating-label-shake-float-above-text-field-outlined 250ms 1;
+            animation: mdc-floating-label-shake-float-above-text-field-outlined 250ms 1; }
+  .mdc-select--outlined .mdc-notched-outline {
+    border-radius: 4px; }
+  .mdc-select--outlined .mdc-notched-outline__idle {
+    border-radius: 4px; }
+  [dir="rtl"] .mdc-select--outlined, .mdc-select--outlined[dir="rtl"] {
+    background-position: left 10px center; }
+  .mdc-select--outlined .mdc-select__native-control {
+    /* @noflip */
+    padding-left: 16px;
+    /* @noflip */
+    padding-right: 26px;
+    display: flex;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border: none;
+    background-color: transparent;
+    z-index: 1; }
+    [dir="rtl"] .mdc-select--outlined .mdc-select__native-control, .mdc-select--outlined .mdc-select__native-control[dir="rtl"] {
+      /* @noflip */
+      padding-left: 26px;
+      /* @noflip */
+      padding-right: 16px; }
+  .mdc-select--outlined .mdc-floating-label {
+    /* @noflip */
+    left: 16px;
+    /* @noflip */
+    right: initial;
+    position: absolute;
+    bottom: 20px; }
+    [dir="rtl"] .mdc-select--outlined .mdc-floating-label, .mdc-select--outlined .mdc-floating-label[dir="rtl"] {
+      /* @noflip */
+      left: initial;
+      /* @noflip */
+      right: 16px; }
+
 .mdc-select--disabled {
   background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2210px%22%20height%3D%225px%22%20viewBox%3D%227%2010%2010%205%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%0A%20%20%20%20%3Cpolygon%20id%3D%22Shape%22%20stroke%3D%22none%22%20fill%3D%22%23#000%22%20fill-rule%3D%22evenodd%22%20opacity%3D%220.54%22%20points%3D%227%2010%2012%2015%2017%2010%22%3E%3C%2Fpolygon%3E%0A%3C%2Fsvg%3E");
   opacity: .38;
   cursor: default;
   pointer-events: none; }
-  .mdc-select--disabled.mdc-select--box {
-    background-color: #fafafa; }
   .mdc-select--disabled .mdc-floating-label {
     color: rgba(0, 0, 0, 0.37); }
   .mdc-select--disabled .mdc-line-ripple {
     display: none; }
   .mdc-select--disabled .mdc-select__native-control {
     border-bottom-style: dotted; }
+  .mdc-select--disabled.mdc-select--box {
+    background-color: #fafafa; }
+  .mdc-select--disabled.mdc-select--outlined .mdc-select__native-control {
+    border-bottom-style: none; }
+  .mdc-select--disabled.mdc-select--outlined .mdc-notched-outline__idle {
+    border-color: rgba(0, 0, 0, 0.16); }
+  .mdc-select--disabled.mdc-select--outlined .mdc-notched-outline__path {
+    stroke: rgba(0, 0, 0, 0.16); }
 
 .mdc-shape-container {
   display: inline-block;
@@ -5353,6 +5450,10 @@ a.mdc-list-item {
     border-bottom-color: rgba(0, 0, 0, 0.12); }
   .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__icon {
     color: rgba(0, 0, 0, 0.54); }
+  .mdc-text-field .mdc-text-field__input {
+    caret-color: #6200ee;
+    /* @alternate */
+    caret-color: var(--mdc-theme-primary, #6200ee); }
 
 .mdc-text-field__input {
   font-family: Roboto, sans-serif;
@@ -5910,6 +6011,9 @@ a.mdc-list-item {
 
 .mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--invalid + .mdc-text-field-helper-text--validation-msg {
   color: #b00020; }
+
+.mdc-text-field--invalid .mdc-text-field__input {
+  caret-color: #b00020; }
 
 .mdc-text-field--invalid.mdc-text-field--with-trailing-icon:not(.mdc-text-field--disabled) .mdc-text-field__icon {
   color: #b00020; }

@@ -13821,6 +13821,10 @@ var _aforemny$elm_mdc$Internal_IconToggle_Implementation$label = function (label
 				{label: label});
 		});
 };
+var _aforemny$elm_mdc$Internal_IconToggle_Implementation$label1 = function (value) {
+	return _aforemny$elm_mdc$Internal_IconToggle_Implementation$label(
+		{on: value, off: value});
+};
 var _aforemny$elm_mdc$Internal_IconToggle_Implementation$icon = function (icon) {
 	return _aforemny$elm_mdc$Internal_Options$option(
 		function (config) {
@@ -13828,6 +13832,10 @@ var _aforemny$elm_mdc$Internal_IconToggle_Implementation$icon = function (icon) 
 				config,
 				{icon: icon});
 		});
+};
+var _aforemny$elm_mdc$Internal_IconToggle_Implementation$icon1 = function (value) {
+	return _aforemny$elm_mdc$Internal_IconToggle_Implementation$icon(
+		{on: value, off: value});
 };
 var _aforemny$elm_mdc$Internal_IconToggle_Implementation$className = function (className) {
 	return _aforemny$elm_mdc$Internal_Options$option(
@@ -21092,7 +21100,9 @@ var _aforemny$elm_mdc$Material_Icon$size18 = _aforemny$elm_mdc$Internal_Icon_Imp
 var _aforemny$elm_mdc$Material_Icon$view = _aforemny$elm_mdc$Internal_Icon_Implementation$view;
 
 var _aforemny$elm_mdc$Material_IconToggle$disabled = _aforemny$elm_mdc$Internal_IconToggle_Implementation$disabled;
+var _aforemny$elm_mdc$Material_IconToggle$label1 = _aforemny$elm_mdc$Internal_IconToggle_Implementation$label1;
 var _aforemny$elm_mdc$Material_IconToggle$label = _aforemny$elm_mdc$Internal_IconToggle_Implementation$label;
+var _aforemny$elm_mdc$Material_IconToggle$icon1 = _aforemny$elm_mdc$Internal_IconToggle_Implementation$icon1;
 var _aforemny$elm_mdc$Material_IconToggle$icon = _aforemny$elm_mdc$Internal_IconToggle_Implementation$icon;
 var _aforemny$elm_mdc$Material_IconToggle$className = _aforemny$elm_mdc$Internal_IconToggle_Implementation$className;
 var _aforemny$elm_mdc$Material_IconToggle$on = _aforemny$elm_mdc$Internal_IconToggle_Implementation$on;
