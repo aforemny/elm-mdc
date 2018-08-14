@@ -14,6 +14,8 @@ module Material.Textfield
         , label
         , leadingIcon
         , nativeControl
+        , onBlur
+        , onFocus
         , outlined
         , password
         , pattern
@@ -107,7 +109,8 @@ module Material.Textfield
 
 @docs autocomplete
 @docs autofocus
-
+@docs onFocus
+@docs onBlur
 -}
 
 import Html exposing (Html)
@@ -298,4 +301,24 @@ autocomplete =
 -}
 autofocus : Property m
 autofocus =
-    nativeControl [Options.autofocus True]
+    nativeControl [ Options.autofocus True ]
+
+
+{-| Sets a text field's onFocus handler.
+
+This is here for convenience, because the onFocus handler has to be set on the
+`nativeControl`. For other events, see `Material.Options`.
+-}
+onFocus : m -> Property m
+onFocus handler =
+    nativeControl [ Options.onFocus handler ]
+
+
+{-| Sets a text field's onBlur handler.
+
+This is here for convenience, because the onBlur handler has to be set on the
+`nativeControl`. For other events, see `Material.Options`.
+-}
+onBlur : m -> Property m
+onBlur handler =
+    nativeControl [ Options.onBlur handler ]
