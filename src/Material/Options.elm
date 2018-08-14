@@ -2,6 +2,7 @@ module Material.Options
     exposing
         ( Property
         , aria
+        , tabindex
         , attribute
         , cs
         , css
@@ -42,8 +43,10 @@ module Material.Options
 @docs when
 @docs nop
 @docs attribute
-@docs data, aria
+@docs data
+@docs aria
 @docs for
+@docs tabindex
 
 
 # Events
@@ -171,6 +174,13 @@ data =
 aria : String -> String -> Property c m
 aria =
     Internal.Options.aria
+
+
+{-| HTML tabindex attribute.
+-}
+tabindex : Int -> Property c m
+tabindex =
+    Internal.Options.tabindex
 
 
 {-| HTML for attribute.

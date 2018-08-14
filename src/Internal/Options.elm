@@ -3,11 +3,11 @@ module Internal.Options
         ( Property
         , addAttributes
         , apply
-        , autofocus
         , applyNativeControl
         , aria
         , attribute
         , autocomplete
+        , autofocus
         , collect
         , cs
         , css
@@ -39,6 +39,7 @@ module Internal.Options
         , recollect
         , role
         , styled
+        , tabindex
         , when
         )
 
@@ -303,6 +304,11 @@ aria key val =
 autocomplete : String -> Property c m
 autocomplete autocomplete =
     Attribute (Html.Attributes.attribute "autocomplete" autocomplete)
+
+
+tabindex : Int -> Property c m
+tabindex tabindex =
+    Attribute (Html.Attributes.tabindex tabindex)
 
 
 autofocus : Bool -> Property c m
