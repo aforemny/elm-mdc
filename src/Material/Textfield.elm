@@ -2,6 +2,7 @@ module Material.Textfield
     exposing
         ( Property
         , autocomplete
+        , autofocus
         , box
         , cols
         , dense
@@ -105,6 +106,7 @@ module Material.Textfield
 ## Native control
 
 @docs autocomplete
+@docs autofocus
 
 -}
 
@@ -290,3 +292,10 @@ nativeControl =
 autocomplete : String -> Property m
 autocomplete =
     nativeControl << List.singleton << Options.autocomplete
+
+
+{-| Set a text field's HTML `autofocus` attribute.
+-}
+autofocus : Property m
+autofocus =
+    nativeControl [Options.autofocus True]

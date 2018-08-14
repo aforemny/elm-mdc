@@ -3,6 +3,7 @@ module Internal.Options
         ( Property
         , addAttributes
         , apply
+        , autofocus
         , applyNativeControl
         , aria
         , attribute
@@ -302,6 +303,11 @@ aria key val =
 autocomplete : String -> Property c m
 autocomplete autocomplete =
     Attribute (Html.Attributes.attribute "autocomplete" autocomplete)
+
+
+autofocus : Bool -> Property c m
+autofocus autofocus =
+    Attribute (Html.Attributes.autofocus autofocus)
 
 
 role : String -> Property c m
