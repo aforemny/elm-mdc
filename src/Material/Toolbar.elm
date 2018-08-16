@@ -41,6 +41,7 @@ the view is scrolled.
 
     import Html exposing (text)
     import Material.Toolbar as Toolbar
+    import Material.Icon as Icon
 
 
     Toolbar.view Mdc "my-toolbar" model.mdc []
@@ -48,15 +49,15 @@ the view is scrolled.
               [ Toolbar.section
                     [ Toolbar.alignStart
                     ]
-                    [ Toolbar.menuIcon [] "menu"
+                    [ Icon.view [ Toolbar.menuIcon ] "menu"
                     , Toolbar.title [] [ text "Title" ]
                     ]
               , Toolbar.section
                     [ Toolbar.alignEnd
                     ]
-                    [ Toolbar.icon [] "file_download"
-                    , Toolbar.icon [] "print"
-                    , Toolbar.icon [] "bookmark"
+                    [ Icon.view [ Toolbar.icon ] "file_download"
+                    , Icon.view [ Toolbar.icon ] "print"
+                    , Icon.view [ Toolbar.icon ] "bookmark"
                     ]
               ]
         ]
