@@ -9987,6 +9987,14 @@ var _aforemny$elm_mdc$Internal_Options$autocomplete = function (autocomplete) {
 	return _aforemny$elm_mdc$Internal_Options$Attribute(
 		A2(_elm_lang$html$Html_Attributes$attribute, 'autocomplete', autocomplete));
 };
+var _aforemny$elm_mdc$Internal_Options$tabindex = function (tabindex) {
+	return _aforemny$elm_mdc$Internal_Options$Attribute(
+		_elm_lang$html$Html_Attributes$tabindex(tabindex));
+};
+var _aforemny$elm_mdc$Internal_Options$autofocus = function (autofocus) {
+	return _aforemny$elm_mdc$Internal_Options$Attribute(
+		_elm_lang$html$Html_Attributes$autofocus(autofocus));
+};
 var _aforemny$elm_mdc$Internal_Options$role = function (role) {
 	return _aforemny$elm_mdc$Internal_Options$Attribute(
 		A2(_elm_lang$html$Html_Attributes$attribute, 'role', role));
@@ -10033,6 +10041,7 @@ var _aforemny$elm_mdc$Material_Options$onClick = _aforemny$elm_mdc$Internal_Opti
 var _aforemny$elm_mdc$Material_Options$on = _aforemny$elm_mdc$Internal_Options$on;
 var _aforemny$elm_mdc$Material_Options$attribute = _aforemny$elm_mdc$Internal_Options$attribute;
 var _aforemny$elm_mdc$Material_Options$for = _aforemny$elm_mdc$Internal_Options$for;
+var _aforemny$elm_mdc$Material_Options$tabindex = _aforemny$elm_mdc$Internal_Options$tabindex;
 var _aforemny$elm_mdc$Material_Options$aria = _aforemny$elm_mdc$Internal_Options$aria;
 var _aforemny$elm_mdc$Material_Options$data = _aforemny$elm_mdc$Internal_Options$data;
 var _aforemny$elm_mdc$Material_Options$when = _aforemny$elm_mdc$Internal_Options$when;
@@ -11015,7 +11024,7 @@ var _aforemny$elm_mdc$Internal_Ripple_Implementation$decodeGeometry = function (
 			_elm_lang$core$Json_Decode$map,
 			function (_p2) {
 				var _p3 = _p2;
-				return {top: _p3.top, left: _p3.left, width: _p3.width, height: _p3.height};
+				return {top: _p3.top - pageOffset.y, left: _p3.left, width: _p3.width, height: _p3.height};
 			},
 			_debois$elm_dom$DOM$boundingClientRect);
 	};
@@ -37709,6 +37718,28 @@ var _aforemny$elm_mdc$Material_Textfield$autocomplete = function (_p0) {
 	return _aforemny$elm_mdc$Material_Textfield$nativeControl(
 		_elm_lang$core$List$singleton(
 			_aforemny$elm_mdc$Internal_Options$autocomplete(_p0)));
+};
+var _aforemny$elm_mdc$Material_Textfield$autofocus = _aforemny$elm_mdc$Material_Textfield$nativeControl(
+	{
+		ctor: '::',
+		_0: _aforemny$elm_mdc$Internal_Options$autofocus(true),
+		_1: {ctor: '[]'}
+	});
+var _aforemny$elm_mdc$Material_Textfield$onFocus = function (handler) {
+	return _aforemny$elm_mdc$Material_Textfield$nativeControl(
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Internal_Options$onFocus(handler),
+			_1: {ctor: '[]'}
+		});
+};
+var _aforemny$elm_mdc$Material_Textfield$onBlur = function (handler) {
+	return _aforemny$elm_mdc$Material_Textfield$nativeControl(
+		{
+			ctor: '::',
+			_0: _aforemny$elm_mdc$Internal_Options$onBlur(handler),
+			_1: {ctor: '[]'}
+		});
 };
 var _aforemny$elm_mdc$Material_Textfield$placeholder = _aforemny$elm_mdc$Internal_Textfield_Implementation$placeholder;
 var _aforemny$elm_mdc$Material_Textfield$textarea = _aforemny$elm_mdc$Internal_Textfield_Implementation$textarea;
