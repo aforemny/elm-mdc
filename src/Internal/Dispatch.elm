@@ -1,225 +1,122 @@
 module Internal.Dispatch
     exposing
         ( Config
+        , Custom
+        , Lift
         , add
         , clear
         , defaultConfig
         , forward
-        , getDecoder
-        , on
-        , onWithOptions
-        , setDecoder
-        , setMsg
+        , setLift
         , toAttributes
-        , update
         )
 
+import Dict exposing (Dict)
 import Html
 import Html.Events
-import Internal.Dispatch.Internal exposing (Config(..))
-import Json.Decode as Json exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder)
 import Task
 
 
-type alias Config msg =
-    Internal.Dispatch.Internal.Config msg
+type Config msg
+    = Config
+        { decoders : Dict String (List (Decoder (Custom msg)))
+        , lift : Maybe (Lift msg)
+        }
+
+
+type alias Lift msg =
+    Decoder (Custom (List msg)) -> Decoder (Custom msg)
 
 
 defaultConfig : Config msg
 defaultConfig =
     Config
-        { decoders = []
+        { decoders = Dict.empty
         , lift = Nothing
         }
 
 
-setDecoder : (Decoder (List msg) -> Decoder msg) -> Config msg -> Config msg
-setDecoder f (Config config) =
-    Config { config | lift = Just f }
-
-
-setMsg : (List msg -> msg) -> Config msg -> Config msg
-setMsg =
-    Json.map >> setDecoder
-
-
-getDecoder : Config msg -> Maybe (Decoder (List msg) -> Decoder msg)
-getDecoder (Config config) =
-    config.lift
-
-
-add : String -> Maybe Html.Events.Options -> Decoder msg -> Config msg -> Config msg
-add event options decoder (Config config) =
+setLift : Lift msg -> Config msg -> Config msg
+setLift lift (Config { decoders }) =
     Config
-        { config | decoders = ( event, ( decoder, options ) ) :: config.decoders }
+        { decoders = decoders
+        , lift = Just lift
+        }
 
 
+type alias Custom msg =
+    { message : msg
+    , stopPropagation : Bool
+    , preventDefault : Bool
+    }
+
+
+{-| TODO: name `inherit`
+-}
 clear : Config msg -> Config msg
 clear (Config config) =
+    Config { config | decoders = Dict.empty }
+
+
+add : String -> Decoder (Custom msg) -> Config msg -> Config msg
+add event decoder (Config config) =
     Config
-        { config | decoders = [] }
+        { config
+            | decoders =
+                Dict.update event
+                    (Maybe.map ((::) decoder) >> Maybe.withDefault [ decoder ] >> Just)
+                    config.decoders
+        }
 
 
 toAttributes : Config msg -> List (Html.Attribute msg)
 toAttributes (Config config) =
     case config.lift of
-        Just f ->
-            List.map (onMany f) (group config.decoders)
+        Just lift ->
+            config.decoders
+                |> Dict.map (\_ -> flatten)
+                |> Dict.toList
+                |> List.map
+                    (\( event, flatDecoder ) ->
+                        Html.Events.custom event (lift flatDecoder)
+                    )
 
         Nothing ->
-            List.map onSingle config.decoders
-
-
-cmd : msg -> Cmd msg
-cmd msg =
-    Task.perform (always msg) (Task.succeed msg)
+            config.decoders
+                |> Dict.toList
+                |> List.concatMap
+                    (\( event, decoders ) ->
+                        List.map (Html.Events.custom event) decoders
+                    )
 
 
 forward : List msg -> Cmd msg
-forward messages =
-    List.map cmd messages |> Cmd.batch
+forward msgs =
+    Cmd.batch (List.map (Task.perform identity << Task.succeed) msgs)
 
 
-map2nd : (b -> c) -> ( a, b ) -> ( a, c )
-map2nd f ( x, y ) =
-    ( x, f y )
-
-
-update1 : (m -> model -> ( model, d )) -> m -> ( model, List d ) -> ( model, List d )
-update1 update cmd ( m, gs ) =
-    update cmd m
-        |> map2nd (flip (::) gs)
-
-
-update : (msg -> model -> ( model, Cmd obs )) -> List msg -> model -> ( model, Cmd obs )
-update update msg model =
-    List.foldl (update1 update) ( model, [] ) msg
-        |> map2nd Cmd.batch
-
-
-
--- VIEW
-
-
-flatten : List (Decoder m) -> Decoder (List m)
+flatten : List (Decoder (Custom m)) -> Decoder (Custom (List m))
 flatten decoders =
-    Json.value
-        |> Json.map
-            (\value ->
-                List.filterMap
-                    (\decoder ->
-                        Json.decodeValue decoder value |> Result.toMaybe
-                    )
-                    decoders
-            )
-
-
-on :
-    String
-    -> (List msg -> msg)
-    -> List (Decoder msg)
-    -> Html.Attribute msg
-on event lift =
-    onWithOptions event lift Html.Events.defaultOptions
-
-
-onWithOptions :
-    String
-    -> (List msg -> msg)
-    -> Html.Events.Options
-    -> List (Decoder msg)
-    -> Html.Attribute msg
-onWithOptions event lift options decoders =
-    flatten decoders
-        |> Json.map lift
-        |> Html.Events.onWithOptions event options
-
-
-onMany :
-    (Decoder (List m) -> Decoder m)
-    -> ( String, List ( Decoder m, Maybe Html.Events.Options ) )
-    -> Html.Attribute m
-onMany lift decoders =
-    case decoders of
-        -- Install direct handler for singleton case
-        ( event, [ decoder ] ) ->
-            onSingle ( event, decoder )
-
-        ( event, decoders ) ->
-            flatten (List.map Tuple.first decoders)
-                |> lift
-                |> Html.Events.onWithOptions event (pickOptions decoders)
-
-
-pickOptions : List ( a, Maybe Html.Events.Options ) -> Html.Events.Options
-pickOptions decoders =
     let
-        pick ( _, options ) pickedOptions =
-            Maybe.withDefault pickedOptions <|
-                Maybe.map
-                    (\options ->
-                        { preventDefault =
-                            pickedOptions.preventDefault || options.preventDefault
-                        , stopPropagation =
-                            pickedOptions.stopPropagation || options.stopPropagation
+        tryMerge value =
+            List.foldl (tryMergeStep value)
+                { message = []
+                , preventDefault = False
+                , stopPropagation = False
+                }
+                decoders
+
+        tryMergeStep value decoder result =
+            Decode.decodeValue decoder value
+                |> Result.toMaybe
+                |> Maybe.map
+                    (\{ message, stopPropagation, preventDefault } ->
+                        { message = message :: result.message
+                        , stopPropagation = stopPropagation || result.stopPropagation
+                        , preventDefault = preventDefault || result.preventDefault
                         }
                     )
-                    options
+                |> Maybe.withDefault result
     in
-    List.foldl pick Html.Events.defaultOptions decoders
-
-
-onSingle :
-    ( String, ( Decoder m, Maybe Html.Events.Options ) )
-    -> Html.Attribute m
-onSingle ( event, ( decoder, option ) ) =
-    Html.Events.onWithOptions
-        event
-        (Maybe.withDefault Html.Events.defaultOptions option)
-        decoder
-
-
-group : List ( a, b ) -> List ( a, List b )
-group =
-    group_ []
-
-
-split :
-    a
-    -> List b
-    -> List ( a, b )
-    -> List ( a, b )
-    -> ( List b, List ( a, b ) )
-split k0 same differ xs =
-    case xs of
-        [] ->
-            ( same, differ )
-
-        (( k, v ) as x) :: xs ->
-            if k == k0 then
-                split k0 (v :: same) differ xs
-            else
-                split k0 same (x :: differ) xs
-
-
-group_ : List ( a, List b ) -> List ( a, b ) -> List ( a, List b )
-group_ acc items =
-    case items of
-        [] ->
-            acc
-
-        [ ( k, v ) ] ->
-            ( k, [ v ] ) :: acc
-
-        [ ( k1, v1 ), ( k2, v2 ) ] ->
-            if k1 == k2 then
-                ( k1, [ v2, v1 ] ) :: acc
-            else
-                ( k2, [ v2 ] ) :: ( k1, [ v1 ] ) :: acc
-
-        ( k, v ) :: xs ->
-            let
-                ( same, different ) =
-                    split k [ v ] [] xs
-            in
-            group_ (( k, same ) :: acc) different
+    Decode.map tryMerge Decode.value

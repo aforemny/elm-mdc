@@ -64,7 +64,6 @@ This would display a message without an action.
 import Html exposing (Html)
 import Internal.Snackbar.Implementation as Snackbar
 import Material
-import Time exposing (Time)
 
 
 {-| Snackbar property.
@@ -91,8 +90,8 @@ view =
 type alias Contents m =
     { message : String
     , action : Maybe String
-    , timeout : Time
-    , fade : Time
+    , timeout : Float
+    , fade : Float
     , multiline : Bool
     , actionOnBottom : Bool
     , dismissOnAction : Bool

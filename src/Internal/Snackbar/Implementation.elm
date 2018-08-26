@@ -239,14 +239,14 @@ snackbar lift model options _ =
                 [ cs "mdc-snackbar__action-button"
                 , Options.attribute (Html.type_ "button")
                 , case onDismiss of
-                    Just onDismiss ->
-                        Options.on "click" (Json.succeed onDismiss)
+                    Just dismissHandler ->
+                        Options.on "click" (Json.succeed dismissHandler)
 
                     Nothing ->
                         Options.nop
                 ]
                 (action
-                    |> Maybe.map (\action -> [ text action ])
+                    |> Maybe.map (\actionString -> [ text actionString ])
                     |> Maybe.withDefault []
                 )
             ]
@@ -257,7 +257,7 @@ type alias Property m =
     Options.Property Config m
 
 
-( get, set ) =
+getSet =
     Component.indexed .snackbar (\x y -> { y | snackbar = x }) defaultModel
 
 
@@ -274,8 +274,8 @@ react :
     -> Store m s
     -> ( Maybe (Store m s), Cmd m )
 react =
-    Component.react get
-        set
+    Component.react getSet.get
+        getSet.set
         Internal.Msg.SnackbarMsg
         (\fwd msg model -> Tuple.mapFirst Just (update fwd msg model))
 
@@ -288,4 +288,4 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get snackbar Internal.Msg.SnackbarMsg
+    Component.render getSet.get snackbar Internal.Msg.SnackbarMsg

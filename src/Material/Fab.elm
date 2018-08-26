@@ -33,7 +33,6 @@ module Material.Fab
 
 @docs Property
 @docs view
-@docs Property
 @docs mini
 @docs ripple
 @docs exited

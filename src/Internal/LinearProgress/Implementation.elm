@@ -77,13 +77,13 @@ view options _ =
         , styled Html.div
             [ cs "mdc-linear-progress__buffer"
             , when config.buffered <|
-                css "transform" ("scaleX(" ++ toString config.buffer ++ ")")
+                css "transform" ("scaleX(" ++ String.fromFloat config.buffer ++ ")")
             ]
             []
         , styled Html.div
             [ cs "mdc-linear-progress__bar mdc-linear-progress__primary-bar"
             , when (not config.indeterminate) <|
-                css "transform" ("scaleX(" ++ toString config.value ++ ")")
+                css "transform" ("scaleX(" ++ String.fromFloat config.value ++ ")")
             ]
             [ styled Html.span [ cs "mdc-linear-progress__bar-inner" ] []
             ]

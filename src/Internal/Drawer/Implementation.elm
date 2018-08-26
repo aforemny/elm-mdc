@@ -27,7 +27,7 @@ import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, many, styled, when)
-import Json.Decode as Json exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder)
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -45,10 +45,10 @@ update lift msg model =
             , Cmd.none
             )
 
-        SetOpen ( open, persistent ) ->
+        SetOpen ( isOpen, persistent ) ->
             ( Just
                 { model
-                    | open = open
+                    | open = isOpen
                     , state = Nothing
                     , animating = True
                     , persistent = persistent
@@ -87,7 +87,7 @@ view className lift model options nodes =
         [ cs "mdc-drawer"
         , cs className
         , when stateChanged <|
-            GlobalEvents.onTick (Json.succeed (lift (SetOpen ( config.open, model.persistent ))))
+            GlobalEvents.onTick (Decode.succeed (lift (SetOpen ( config.open, model.persistent ))))
         , cs "mdc-drawer--open" |> when model.open
         , cs "mdc-drawer--animating" |> when model.animating
         , Options.onClick (Maybe.withDefault (lift NoOp) config.onClose)
@@ -95,12 +95,14 @@ view className lift model options nodes =
         [ styled Html.nav
             (cs "mdc-drawer__drawer"
                 :: Options.onWithOptions "click"
-                    { stopPropagation = className == "mdc-drawer--temporary"
-                    , preventDefault = False
-                    }
-                    (Json.succeed (lift NoOp))
+                    (Decode.succeed
+                        { message = lift NoOp
+                        , stopPropagation = className == "mdc-drawer--temporary"
+                        , preventDefault = False
+                        }
+                    )
                 :: when model.open (css "transform" "translateX(0)")
-                :: when model.animating (Options.on "transitionend" (Json.succeed (lift Tick)))
+                :: when model.animating (Options.on "transitionend" (Decode.succeed (lift Tick)))
                 :: options
             )
             nodes
@@ -131,7 +133,7 @@ type alias Store s =
     { s | drawer : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .drawer (\x y -> { y | drawer = x }) defaultModel
 
 
@@ -144,7 +146,7 @@ render :
     -> List (Html m)
     -> Html m
 render className =
-    Component.render get (view className) Internal.Msg.DrawerMsg
+    Component.render getSet.get (view className) Internal.Msg.DrawerMsg
 
 
 react :
@@ -154,7 +156,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.DrawerMsg update
+    Component.react getSet.get getSet.set Internal.Msg.DrawerMsg update
 
 
 subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
@@ -168,8 +170,8 @@ subscriptions model =
 
 
 onClose : m -> Property m
-onClose onClose =
-    Options.option (\config -> { config | onClose = Just onClose })
+onClose handler =
+    Options.option (\config -> { config | onClose = Just handler })
 
 
 open : Property m

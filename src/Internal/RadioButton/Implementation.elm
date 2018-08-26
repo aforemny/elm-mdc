@@ -15,7 +15,7 @@ import Internal.Msg
 import Internal.Options as Options exposing (cs, styled, when)
 import Internal.RadioButton.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Ripple.Implementation as Ripple
-import Json.Decode as Json
+import Json.Decode as Decode
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -81,11 +81,6 @@ radioButton lift model options _ =
 
         ripple =
             Ripple.view True (lift << RippleMsg) model.ripple []
-
-        preventDefault =
-            { preventDefault = True
-            , stopPropagation = False
-            }
     in
     Options.apply summary
         Html.div
@@ -104,7 +99,13 @@ radioButton lift model options _ =
             , Options.attribute <| Html.checked config.value
             , Options.onFocus (lift (SetFocus True))
             , Options.onBlur (lift (SetFocus False))
-            , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
+            , Options.onWithOptions "click"
+                (Decode.succeed
+                    { message = lift NoOp
+                    , preventDefault = True
+                    , stopPropagation = False
+                    }
+                )
             , when config.disabled
                 << Options.many
               <|
@@ -127,7 +128,7 @@ type alias Store s =
     { s | radio : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .radio (\x y -> { y | radio = x }) defaultModel
 
 
@@ -138,7 +139,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.RadioButtonMsg update
+    Component.react getSet.get getSet.set Internal.Msg.RadioButtonMsg update
 
 
 view :
@@ -150,10 +151,10 @@ view :
     -> Html m
 view =
     \lift index store options ->
-        Component.render get
+        Component.render getSet.get
             radioButton
             Internal.Msg.RadioButtonMsg
             lift
             index
             store
-            (Options.id_ index :: options)
+            (Options.internalId index :: options)

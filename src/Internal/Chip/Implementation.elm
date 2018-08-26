@@ -225,7 +225,7 @@ type alias Store s =
     { s | chip : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .chip (\x y -> { y | chip = x }) defaultModel
 
 
@@ -237,7 +237,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get chip Internal.Msg.ChipMsg
+    Component.render getSet.get chip Internal.Msg.ChipMsg
 
 
 react :
@@ -247,4 +247,4 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.ChipMsg update
+    Component.react getSet.get getSet.set Internal.Msg.ChipMsg update

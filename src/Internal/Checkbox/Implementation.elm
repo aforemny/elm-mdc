@@ -15,8 +15,8 @@ import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (cs, many, styled, when)
-import Json.Decode as Json exposing (Decoder)
-import Json.Encode
+import Json.Decode as Decode exposing (Decoder)
+import Json.Encode as Encode
 import Svg exposing (path)
 import Svg.Attributes as Svg
 
@@ -34,7 +34,10 @@ update _ msg model =
             let
                 animation =
                     lastKnownState
-                        |> Maybe.andThen (flip animationState state)
+                        |> Maybe.andThen
+                            (\lastKnownState_ ->
+                                animationState lastKnownState_ state
+                            )
             in
             ( Just
                 { model
@@ -133,11 +136,6 @@ checkbox lift model options _ =
 
         stateChangedOrUninitialized =
             (model.lastKnownState == Nothing) || (currentState /= configState)
-
-        preventDefault =
-            { preventDefault = True
-            , stopPropagation = False
-            }
     in
     Options.apply summary
         Html.div
@@ -147,9 +145,9 @@ checkbox lift model options _ =
         , cs "mdc-checkbox--disabled" |> when config.disabled
         , animationClass model.animation
         , when stateChangedOrUninitialized <|
-            GlobalEvents.onTick (Json.succeed (lift (Init model.lastKnownState configState)))
+            GlobalEvents.onTick (Decode.succeed (lift (Init model.lastKnownState configState)))
         , when (model.animation /= Nothing) <|
-            Options.on "animationend" (Json.succeed (lift AnimationEnd))
+            Options.on "animationend" (Decode.succeed (lift AnimationEnd))
         ]
         []
         [ Options.applyNativeControl summary
@@ -160,12 +158,24 @@ checkbox lift model options _ =
               <|
                 [ Html.type_ "checkbox"
                 , Html.id config.id_
-                , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
+                , Html.property "indeterminate" (Encode.bool (currentState == Nothing))
                 , Html.checked (currentState == Just Checked)
                 , Html.disabled config.disabled
                 ]
-            , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
-            , Options.onWithOptions "change" preventDefault (Json.succeed (lift NoOp))
+            , Options.onWithOptions "click"
+                (Decode.succeed
+                    { message = lift NoOp
+                    , preventDefault = True
+                    , stopPropagation = False
+                    }
+                )
+            , Options.onWithOptions "change"
+                (Decode.succeed
+                    { message = lift NoOp
+                    , preventDefault = True
+                    , stopPropagation = False
+                    }
+                )
             , Options.onFocus (lift (SetFocus True))
             , Options.onBlur (lift (SetFocus False))
             ]
@@ -222,7 +232,7 @@ type alias Store s =
     { s | checkbox : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .checkbox (\x y -> { y | checkbox = x }) defaultModel
 
 
@@ -235,13 +245,13 @@ view :
     -> Html m
 view =
     \lift index store options ->
-        Component.render get
+        Component.render getSet.get
             checkbox
             Internal.Msg.CheckboxMsg
             lift
             index
             store
-            (Options.id_ index :: options)
+            (Options.internalId index :: options)
 
 
 react :
@@ -251,7 +261,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.CheckboxMsg update
+    Component.react getSet.get getSet.set Internal.Msg.CheckboxMsg update
 
 
 

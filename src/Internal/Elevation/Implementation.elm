@@ -158,7 +158,7 @@ z24 =
 
 z : Int -> Property c m
 z v =
-    cs <| "mdc-elevation--z" ++ toString v
+    cs <| "mdc-elevation--z" ++ String.fromInt v
 
 
 transition : Property c m

@@ -8,8 +8,6 @@ module Internal.Snackbar.Model
         , defaultModel
         )
 
-import Time exposing (Time)
-
 
 type alias Model m =
     { queue : List (Contents m)
@@ -21,8 +19,8 @@ type alias Model m =
 type alias Contents m =
     { message : String
     , action : Maybe String
-    , timeout : Time
-    , fade : Time
+    , timeout : Float
+    , fade : Float
     , multiline : Bool
     , actionOnBottom : Bool
     , dismissOnAction : Bool

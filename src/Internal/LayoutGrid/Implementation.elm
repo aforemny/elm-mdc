@@ -293,8 +293,8 @@ span12Desktop =
 span : Maybe String -> Int -> Property m
 span device value =
     case device of
-        Just device ->
-            cs ("mdc-layout-grid__cell--span-" ++ toString value ++ "-" ++ device)
+        Just device_ ->
+            cs ("mdc-layout-grid__cell--span-" ++ String.fromInt value ++ "-" ++ device_)
 
         Nothing ->
-            cs ("mdc-layout-grid__cell--span-" ++ toString value)
+            cs ("mdc-layout-grid__cell--span-" ++ String.fromInt value)
