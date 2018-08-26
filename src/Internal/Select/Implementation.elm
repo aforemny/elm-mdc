@@ -24,10 +24,10 @@ import Internal.Select.Model exposing (Model, Msg(..), defaultModel)
 update : (Msg msg -> msg) -> Msg msg -> Model -> ( Maybe Model, Cmd msg )
 update lift msg model =
     case msg of
-        Change value ->
+        Change changedValue ->
             let
                 dirty =
-                    value /= ""
+                    changedValue /= ""
             in
             ( Just { model | isDirty = dirty }, Cmd.none )
 
@@ -69,8 +69,8 @@ type alias Property m =
 
 
 label : String -> Property m
-label =
-    Options.option << (\value config -> { config | label = value })
+label stringLabel =
+    Options.option (\config -> { config | label = stringLabel })
 
 
 preselected : Property m
@@ -169,7 +169,7 @@ type alias Store s =
     { s | select : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .select (\x y -> { y | select = x }) defaultModel
 
 
@@ -180,7 +180,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.SelectMsg update
+    Component.react getSet.get getSet.set Internal.Msg.SelectMsg update
 
 
 view :
@@ -192,10 +192,10 @@ view :
     -> Html m
 view =
     \lift index store options ->
-        Component.render get
+        Component.render getSet.get
             select
             Internal.Msg.SelectMsg
             lift
             index
             store
-            (Options.id_ index :: options)
+            (Options.internalId index :: options)

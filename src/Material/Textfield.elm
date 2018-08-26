@@ -111,6 +111,7 @@ module Material.Textfield
 @docs autofocus
 @docs onFocus
 @docs onBlur
+
 -}
 
 import Html exposing (Html)
@@ -308,6 +309,7 @@ autofocus =
 
 This is here for convenience, because the onFocus handler has to be set on the
 `nativeControl`. For other events, see `Material.Options`.
+
 -}
 onFocus : m -> Property m
 onFocus handler =
@@ -318,6 +320,7 @@ onFocus handler =
 
 This is here for convenience, because the onBlur handler has to be set on the
 `nativeControl`. For other events, see `Material.Options`.
+
 -}
 onBlur : m -> Property m
 onBlur handler =

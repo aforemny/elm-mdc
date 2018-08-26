@@ -89,8 +89,8 @@ nav options =
 
 
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
-node node =
-    Options.option (\config -> { config | node = Just node })
+node nodeFunc =
+    Options.option (\config -> { config | node = Just nodeFunc })
 
 
 nonInteractive : Property m

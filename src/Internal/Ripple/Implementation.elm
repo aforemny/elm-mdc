@@ -99,7 +99,7 @@ bounded :
         , style : Html m
         }
 bounded =
-    Component.render get (view False) Internal.Msg.RippleMsg
+    Component.render getSet.get (view False) Internal.Msg.RippleMsg
 
 
 unbounded :
@@ -113,7 +113,7 @@ unbounded :
         , style : Html m
         }
 unbounded =
-    Component.render get (view True) Internal.Msg.RippleMsg
+    Component.render getSet.get (view True) Internal.Msg.RippleMsg
 
 
 type alias Config =
@@ -160,13 +160,13 @@ view isUnbounded lift model options =
             model.geometry
 
         surfaceWidth =
-            toString geometry.frame.width ++ "px"
+            String.fromFloat geometry.frame.width ++ "px"
 
         surfaceHeight =
-            toString geometry.frame.height ++ "px"
+            String.fromFloat geometry.frame.height ++ "px"
 
         fgSize =
-            toString initialSize ++ "px"
+            String.fromFloat initialSize ++ "px"
 
         surfaceDiameter =
             sqrt ((geometry.frame.width ^ 2) + (geometry.frame.height ^ 2))
@@ -178,7 +178,7 @@ view isUnbounded lift model options =
                 surfaceDiameter + 10
 
         fgScale =
-            toString (maxRadius / initialSize)
+            String.fromFloat (maxRadius / initialSize)
 
         maxDimension =
             Basics.max geometry.frame.width geometry.frame.height
@@ -202,10 +202,10 @@ view isUnbounded lift model options =
             }
 
         translateStart =
-            toString startPoint.x ++ "px, " ++ toString startPoint.y ++ "px"
+            String.fromFloat startPoint.x ++ "px, " ++ String.fromFloat startPoint.y ++ "px"
 
         translateEnd =
-            toString endPoint.x ++ "px, " ++ toString endPoint.y ++ "px"
+            String.fromFloat endPoint.x ++ "px, " ++ String.fromFloat endPoint.y ++ "px"
 
         wasActivatedByPointer =
             List.member geometry.event.type_
@@ -215,10 +215,10 @@ view isUnbounded lift model options =
                 ]
 
         top =
-            toString startPoint.y ++ "px"
+            String.fromFloat startPoint.y ++ "px"
 
         left =
-            toString startPoint.x ++ "px"
+            String.fromFloat startPoint.x ++ "px"
 
         summary =
             Options.collect ()
@@ -241,9 +241,7 @@ view isUnbounded lift model options =
                             ]
 
                 text =
-                    flip (++) "}"
-                        << (++) ("." ++ className ++ "{")
-                    <|
+                    (\someString -> "." ++ className ++ "{" ++ someString ++ "}") <|
                         String.concat
                             << List.map
                                 (\( k, v ) ->
@@ -356,7 +354,7 @@ type alias Store s =
     }
 
 
-( get, set ) =
+getSet =
     Component.indexed .ripple (\x y -> { y | ripple = x }) defaultModel
 
 
@@ -367,7 +365,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.RippleMsg (Component.generalise update)
+    Component.react getSet.get getSet.set Internal.Msg.RippleMsg (Component.generalise update)
 
 
 decodeGeometry : String -> Decoder Geometry
@@ -378,7 +376,7 @@ decodeGeometry type_ =
                 (Json.at [ "pageXOffset" ] Json.float)
                 (Json.at [ "pageYOffset" ] Json.float)
 
-        isSurfaceDisabled =
+        decodeIsSurfaceDisabled =
             Json.oneOf
                 [ Json.map (always True) (Json.at [ "disabled" ] Json.string)
                 , Json.succeed False
@@ -422,11 +420,11 @@ decodeGeometry type_ =
         currentTarget =
             Json.at [ "currentTarget" ]
 
-        view =
+        atView =
             Json.at [ "view" ]
     in
     Json.map4
-        (\coords pageOffset clientRect isSurfaceDisabled ->
+        (\coords pageOffset clientRect decodedIsSurfaceDisabled ->
             let
                 { x, y } =
                     normalizeCoords pageOffset clientRect coords
@@ -438,7 +436,7 @@ decodeGeometry type_ =
                     }
             in
             { event = event
-            , isSurfaceDisabled = isSurfaceDisabled
+            , isSurfaceDisabled = decodedIsSurfaceDisabled
             , frame = clientRect
             }
         )
@@ -451,8 +449,8 @@ decodeGeometry type_ =
                 (Json.at [ "pageX" ] Json.float)
                 (Json.at [ "pageY" ] Json.float)
         )
-        (view windowPageOffset)
-        (view windowPageOffset
+        (atView windowPageOffset)
+        (atView windowPageOffset
             |> Json.andThen (currentTarget << boundingClientRect)
         )
-        (currentTarget isSurfaceDisabled)
+        (currentTarget decodeIsSurfaceDisabled)

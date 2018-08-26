@@ -313,62 +313,62 @@ update_ lift msg store =
         Dispatch msgs ->
             ( Nothing, Dispatch.forward msgs )
 
-        ButtonMsg idx msg ->
-            Button.react lift msg idx store
+        ButtonMsg idx msg_ ->
+            Button.react lift msg_ idx store
 
-        CheckboxMsg idx msg ->
-            Checkbox.react lift msg idx store
+        CheckboxMsg idx msg_ ->
+            Checkbox.react lift msg_ idx store
 
-        ChipMsg idx msg ->
-            Chip.react lift msg idx store
+        ChipMsg idx msg_ ->
+            Chip.react lift msg_ idx store
 
-        DialogMsg idx msg ->
-            Dialog.react lift msg idx store
+        DialogMsg idx msg_ ->
+            Dialog.react lift msg_ idx store
 
-        DrawerMsg idx msg ->
-            Drawer.react lift msg idx store
+        DrawerMsg idx msg_ ->
+            Drawer.react lift msg_ idx store
 
-        FabMsg idx msg ->
-            Fab.react lift msg idx store
+        FabMsg idx msg_ ->
+            Fab.react lift msg_ idx store
 
-        GridListMsg idx msg ->
-            GridList.react lift msg idx store
+        GridListMsg idx msg_ ->
+            GridList.react lift msg_ idx store
 
-        IconToggleMsg idx msg ->
-            IconToggle.react lift msg idx store
+        IconToggleMsg idx msg_ ->
+            IconToggle.react lift msg_ idx store
 
-        MenuMsg idx msg ->
-            Menu.react lift msg idx store
+        MenuMsg idx msg_ ->
+            Menu.react lift msg_ idx store
 
-        RadioButtonMsg idx msg ->
-            RadioButton.react lift msg idx store
+        RadioButtonMsg idx msg_ ->
+            RadioButton.react lift msg_ idx store
 
-        RippleMsg idx msg ->
-            Ripple.react lift msg idx store
+        RippleMsg idx msg_ ->
+            Ripple.react lift msg_ idx store
 
-        SelectMsg idx msg ->
-            Select.react lift msg idx store
+        SelectMsg idx msg_ ->
+            Select.react lift msg_ idx store
 
-        SliderMsg idx msg ->
-            Slider.react lift msg idx store
+        SliderMsg idx msg_ ->
+            Slider.react lift msg_ idx store
 
-        SnackbarMsg idx msg ->
-            Snackbar.react lift msg idx store
+        SnackbarMsg idx msg_ ->
+            Snackbar.react lift msg_ idx store
 
-        SwitchMsg idx msg ->
-            Switch.react lift msg idx store
+        SwitchMsg idx msg_ ->
+            Switch.react lift msg_ idx store
 
-        TabsMsg idx msg ->
-            Tabs.react lift msg idx store
+        TabsMsg idx msg_ ->
+            Tabs.react lift msg_ idx store
 
-        TextfieldMsg idx msg ->
-            Textfield.react lift msg idx store
+        TextfieldMsg idx msg_ ->
+            Textfield.react lift msg_ idx store
 
-        ToolbarMsg idx msg ->
-            Toolbar.react lift msg idx store
+        ToolbarMsg idx msg_ ->
+            Toolbar.react lift msg_ idx store
 
-        TopAppBarMsg idx msg ->
-            TopAppBar.react lift msg idx store
+        TopAppBarMsg idx msg_ ->
+            TopAppBar.react lift msg_ idx store
 
 
 {-| Material subscriptions.

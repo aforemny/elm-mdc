@@ -22,7 +22,7 @@ import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Slider.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
-import Json.Decode as Json exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder)
 import Svg
 import Svg.Attributes as Svg
 import Task exposing (Task)
@@ -136,10 +136,6 @@ valueFromPageX geometry pageX =
         isRtl =
             False
 
-        -- TODO
-        { max, min } =
-            geometry
-
         xPos =
             pageX - geometry.rect.left
 
@@ -149,18 +145,14 @@ valueFromPageX geometry pageX =
             else
                 xPos / geometry.rect.width
     in
-    min + pctComplete * (max - min)
+    geometry.min + pctComplete * (geometry.max - geometry.min)
 
 
 valueForKey : Maybe String -> Int -> Geometry -> Float -> Maybe Float
-valueForKey key keyCode geometry value =
+valueForKey key keyCode geometry currentValue =
     let
         isRtl =
             False
-
-        -- TODO
-        { max, min, step, discrete } =
-            geometry
 
         delta =
             (if isRtl && (isArrowLeft || isArrowRight) then
@@ -169,10 +161,10 @@ valueForKey key keyCode geometry value =
                 identity
             )
             <|
-                if discrete then
-                    Maybe.withDefault 1 step
+                if geometry.discrete then
+                    Maybe.withDefault 1 geometry.step
                 else
-                    (max - min) / 100
+                    (geometry.max - geometry.min) / 100
 
         isArrowLeft =
             key == Just "ArrowLeft" || keyCode == 37
@@ -201,19 +193,19 @@ valueForKey key keyCode geometry value =
         pageFactor =
             4
     in
-    Maybe.map (clamp min max) <|
+    Maybe.map (clamp geometry.min geometry.max) <|
         if isArrowLeft || isArrowDown then
-            Just (value - delta)
+            Just (currentValue - delta)
         else if isArrowRight || isArrowUp then
-            Just (value + delta)
+            Just (currentValue + delta)
         else if isHome then
-            Just min
+            Just geometry.min
         else if isEnd then
-            Just max
+            Just geometry.max
         else if isPageUp then
-            Just (value + delta * pageFactor)
+            Just (currentValue + delta * pageFactor)
         else if isPageDown then
-            Just (value - delta * pageFactor)
+            Just (currentValue - delta * pageFactor)
         else
             Nothing
 
@@ -248,18 +240,18 @@ type alias Property m =
 
 
 value : Float -> Property m
-value =
-    Options.option << (\value config -> { config | value = value })
+value value_ =
+    Options.option (\config -> { config | value = value_ })
 
 
 min : Int -> Property m
-min =
-    Options.option << (\min config -> { config | min = toFloat min })
+min value_ =
+    Options.option (\config -> { config | min = toFloat value_ })
 
 
 max : Int -> Property m
-max =
-    Options.option << (\max config -> { config | max = toFloat max })
+max value_ =
+    Options.option (\config -> { config | max = toFloat value_ })
 
 
 discrete : Property m
@@ -291,13 +283,13 @@ slider lift model options _ =
         geometry =
             Maybe.withDefault defaultGeometry model.geometry
 
-        value =
+        discreteValue =
             discretize geometry continuousValue
 
         translateX =
             let
                 v =
-                    value
+                    discreteValue
                         |> clamp config.min config.max
 
                 c =
@@ -332,7 +324,7 @@ slider lift model options _ =
             if config.max - config.min == 0 then
                 0
             else
-                (value - config.min) / (config.max - config.min)
+                (discreteValue - config.min) / (config.max - config.min)
 
         stepChanged =
             Just config.step /= Maybe.andThen .step model.geometry
@@ -340,54 +332,59 @@ slider lift model options _ =
     styled Html.div
         [ cs "elm-mdc-slider-wrapper"
         , Options.onWithOptions "keydown"
-            { preventDefault = True
-            , stopPropagation = False
-            }
-          <|
-            Json.map lift <|
-                Json.andThen identity <|
-                    Json.map2
-                        (\key keyCode ->
-                            let
-                                activeValue =
-                                    valueForKey key keyCode geometry config.value
-                            in
-                            if activeValue /= Nothing then
-                                Json.succeed NoOp
-                            else
-                                Json.fail ""
-                        )
-                        (Json.oneOf
-                            [ Json.map Just (Json.at [ "key" ] Json.string)
-                            , Json.succeed Nothing
-                            ]
-                        )
-                        (Json.at [ "keyCode" ] Json.int)
+            (Decode.map
+                (\message ->
+                    { message = message
+                    , preventDefault = True
+                    , stopPropagation = False
+                    }
+                )
+                (Decode.map lift <|
+                    Decode.andThen identity <|
+                        Decode.map2
+                            (\key keyCode ->
+                                let
+                                    activeValue =
+                                        valueForKey key keyCode geometry config.value
+                                in
+                                if activeValue /= Nothing then
+                                    Decode.succeed NoOp
+                                else
+                                    Decode.fail ""
+                            )
+                            (Decode.oneOf
+                                [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                                , Decode.succeed Nothing
+                                ]
+                            )
+                            (Decode.at [ "keyCode" ] Decode.int)
+                )
+            )
         ]
         [ Options.apply summary
             Html.div
             [ cs "mdc-slider"
             , cs "mdc-slider--focus" |> when model.focus
             , cs "mdc-slider--active" |> when model.active
-            , cs "mdc-slider--off" |> when (value <= config.min)
+            , cs "mdc-slider--off" |> when (discreteValue <= config.min)
             , cs "mdc-slider--discrete" |> when config.discrete
             , cs "mdc-slider--in-transit" |> when model.inTransit
             , cs "mdc-slider--display-markers" |> when config.trackMarkers
             , Options.attribute (Html.tabindex 0)
-            , Options.data "min" (toString config.min)
-            , Options.data "max" (toString config.max)
-            , Options.data "step" (toString config.step)
+            , Options.data "min" (String.fromFloat config.min)
+            , Options.data "max" (String.fromFloat config.max)
+            , Options.data "step" (String.fromFloat config.step)
             , Options.role "slider"
-            , Options.aria "valuemin" (toString config.min)
-            , Options.aria "valuemax" (toString config.min)
-            , Options.aria "valuenow" (toString value)
+            , Options.aria "valuemin" (String.fromFloat config.min)
+            , Options.aria "valuemax" (String.fromFloat config.min)
+            , Options.aria "valuenow" (String.fromFloat discreteValue)
             , when ((model.geometry == Nothing) || stepChanged) <|
                 GlobalEvents.onTick <|
-                    Json.map (lift << Init) decodeGeometry
-            , GlobalEvents.onResize <| Json.map (lift << Resize) decodeGeometry
+                    Decode.map (lift << Init) decodeGeometry
+            , GlobalEvents.onResize <| Decode.map (lift << Resize) decodeGeometry
             , Options.on "keydown" <|
-                Json.map lift <|
-                    Json.map2
+                Decode.map lift <|
+                    Decode.map2
                         (\key keyCode ->
                             let
                                 activeValue =
@@ -398,15 +395,15 @@ slider lift model options _ =
                             else
                                 NoOp
                         )
-                        (Json.oneOf
-                            [ Json.map Just (Json.at [ "key" ] Json.string)
-                            , Json.succeed Nothing
+                        (Decode.oneOf
+                            [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                            , Decode.succeed Nothing
                             ]
                         )
-                        (Json.at [ "keyCode" ] Json.int)
+                        (Decode.at [ "keyCode" ] Decode.int)
             , when (config.onChange /= Nothing) <|
                 Options.on "keydown" <|
-                    Json.map2
+                    Decode.map2
                         (\key keyCode ->
                             let
                                 activeValue =
@@ -416,15 +413,15 @@ slider lift model options _ =
                             Maybe.map2 (<|) config.onChange activeValue
                                 |> Maybe.withDefault (lift NoOp)
                         )
-                        (Json.oneOf
-                            [ Json.map Just (Json.at [ "key" ] Json.string)
-                            , Json.succeed Nothing
+                        (Decode.oneOf
+                            [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                            , Decode.succeed Nothing
                             ]
                         )
-                        (Json.at [ "keyCode" ] Json.int)
+                        (Decode.at [ "keyCode" ] Decode.int)
             , when (config.onInput /= Nothing) <|
                 Options.on "keydown" <|
-                    Json.map2
+                    Decode.map2
                         (\key keyCode ->
                             let
                                 activeValue =
@@ -434,18 +431,18 @@ slider lift model options _ =
                             Maybe.map2 (<|) config.onInput activeValue
                                 |> Maybe.withDefault (lift NoOp)
                         )
-                        (Json.oneOf
-                            [ Json.map Just (Json.at [ "key" ] Json.string)
-                            , Json.succeed Nothing
+                        (Decode.oneOf
+                            [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                            , Decode.succeed Nothing
                             ]
                         )
-                        (Json.at [ "keyCode" ] Json.int)
-            , Options.on "focus" (Json.succeed (lift Focus))
-            , Options.on "blur" (Json.succeed (lift Blur))
+                        (Decode.at [ "keyCode" ] Decode.int)
+            , Options.on "focus" (Decode.succeed (lift Focus))
+            , Options.on "blur" (Decode.succeed (lift Blur))
             , Options.many <|
                 List.map
                     (\event ->
-                        Options.on event (Json.map (lift << InteractionStart event) decodePageX)
+                        Options.on event (Decode.map (lift << InteractionStart event) decodePageX)
                     )
                     downs
             , when (config.onChange /= Nothing) <|
@@ -453,14 +450,16 @@ slider lift model options _ =
                     List.map
                         (\event ->
                             Options.on event <|
-                                Json.map
+                                Decode.map
                                     (\{ pageX } ->
                                         let
                                             activeValue =
                                                 valueFromPageX geometry pageX
                                                     |> discretize geometry
                                         in
-                                        Maybe.map (flip (<|) activeValue) config.onChange
+                                        Maybe.map
+                                            (\changeHandler -> changeHandler activeValue)
+                                            config.onChange
                                             |> Maybe.withDefault (lift NoOp)
                                     )
                                     decodePageX
@@ -471,14 +470,16 @@ slider lift model options _ =
                     List.map
                         (\event ->
                             Options.on event <|
-                                Json.map
+                                Decode.map
                                     (\{ pageX } ->
                                         let
                                             activeValue =
                                                 valueFromPageX geometry pageX
                                                     |> discretize geometry
                                         in
-                                        Maybe.map (flip (<|) activeValue) config.onInput
+                                        Maybe.map
+                                            (\inputHandler -> inputHandler activeValue)
+                                            config.onInput
                                             |> Maybe.withDefault (lift NoOp)
                                     )
                                     decodePageX
@@ -489,7 +490,7 @@ slider lift model options _ =
               Options.many <|
                 List.map
                     (\handler ->
-                        handler (Json.succeed (lift Up))
+                        handler (Decode.succeed (lift Up))
                     )
                     ups
             , when ((config.onChange /= Nothing) && model.active) <|
@@ -497,14 +498,14 @@ slider lift model options _ =
                     List.map
                         (\handler ->
                             handler <|
-                                Json.map
+                                Decode.map
                                     (\{ pageX } ->
                                         let
                                             activeValue =
                                                 valueFromPageX geometry pageX
                                                     |> discretize geometry
                                         in
-                                        Maybe.map (flip (<|) activeValue) config.onChange
+                                        Maybe.map (\changeHandler -> changeHandler activeValue) config.onChange
                                             |> Maybe.withDefault (lift NoOp)
                                     )
                                     decodePageX
@@ -515,14 +516,16 @@ slider lift model options _ =
                     List.map
                         (\handler ->
                             handler <|
-                                Json.map
+                                Decode.map
                                     (\{ pageX } ->
                                         let
                                             activeValue =
                                                 valueFromPageX geometry pageX
                                                     |> discretize geometry
                                         in
-                                        Maybe.map (flip (<|) activeValue) config.onInput
+                                        Maybe.map
+                                            (\inputHandler -> inputHandler activeValue)
+                                            config.onInput
                                             |> Maybe.withDefault (lift NoOp)
                                     )
                                     decodePageX
@@ -532,7 +535,7 @@ slider lift model options _ =
                 Options.many <|
                     List.map
                         (\handler ->
-                            handler (Json.map (lift << Drag) decodePageX)
+                            handler (Decode.map (lift << Drag) decodePageX)
                         )
                         moves
             , when ((config.onInput /= Nothing) && model.active) <|
@@ -540,14 +543,16 @@ slider lift model options _ =
                     List.map
                         (\handler ->
                             handler <|
-                                Json.map
+                                Decode.map
                                     (\{ pageX } ->
                                         let
                                             activeValue =
                                                 valueFromPageX geometry pageX
                                                     |> discretize geometry
                                         in
-                                        Maybe.map (flip (<|) activeValue) config.onInput
+                                        Maybe.map
+                                            (\inputHandler -> inputHandler activeValue)
+                                            config.onInput
                                             |> Maybe.withDefault (lift NoOp)
                                     )
                                     decodePageX
@@ -561,7 +566,7 @@ slider lift model options _ =
                 (List.concat
                     [ [ styled Html.div
                             [ cs "mdc-slider__track"
-                            , css "transform" ("scaleX(" ++ toString trackScale ++ ")")
+                            , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
                             ]
                             []
                       ]
@@ -587,16 +592,21 @@ slider lift model options _ =
                         |> List.map
                             (\event ->
                                 Options.onWithOptions event
-                                    { stopPropagation = True
-                                    , preventDefault = False
-                                    }
-                                    (Json.map (lift << ThumbContainerPointer event) decodePageX)
+                                    (Decode.map
+                                        (\message ->
+                                            { message = lift message
+                                            , stopPropagation = True
+                                            , preventDefault = False
+                                            }
+                                        )
+                                        (Decode.map (ThumbContainerPointer event) decodePageX)
+                                    )
                             )
                     )
-                , Options.on "transitionend" (Json.succeed (lift TransitionEnd))
+                , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
                 , css "transform" <|
                     "translateX("
-                        ++ toString translateX
+                        ++ String.fromFloat translateX
                         ++ "px) translateX(-50%)"
                 ]
                 (List.concat
@@ -624,7 +634,7 @@ slider lift model options _ =
                             [ styled Html.div
                                 [ cs "mdc-slider__pin-value-marker"
                                 ]
-                                [ text (toString value)
+                                [ text (String.fromFloat discreteValue)
                                 ]
                             ]
                         ]
@@ -640,7 +650,7 @@ type alias Store s =
     { s | slider : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .slider (\x y -> { y | slider = x }) defaultModel
 
 
@@ -651,7 +661,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.SliderMsg update
+    Component.react getSet.get getSet.set Internal.Msg.SliderMsg update
 
 
 view :
@@ -662,29 +672,26 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get slider Internal.Msg.SliderMsg
+    Component.render getSet.get slider Internal.Msg.SliderMsg
 
 
 discretize : Geometry -> Float -> Float
 discretize geometry continuousValue =
     let
-        { discrete, step, min, max } =
-            geometry
-
         continuous =
-            not discrete
+            not geometry.discrete
 
         steps =
             geometry.step
                 |> Maybe.withDefault 1
-                |> (\steps ->
-                        if steps == 0 then
+                |> (\steps_ ->
+                        if steps_ == 0 then
                             1
                         else
-                            steps
+                            steps_
                    )
     in
-    clamp min max <|
+    clamp geometry.min geometry.max <|
         if continuous then
             continuousValue
         else
@@ -700,11 +707,11 @@ discretize geometry continuousValue =
 
 decodePageX : Decoder { pageX : Float }
 decodePageX =
-    Json.map (\pageX -> { pageX = pageX }) <|
-        Json.oneOf
-            [ Json.at [ "targetTouches", "0", "pageX" ] Json.float
-            , Json.at [ "changedTouches", "0", "pageX" ] Json.float
-            , Json.at [ "pageX" ] Json.float
+    Decode.map (\pageX -> { pageX = pageX }) <|
+        Decode.oneOf
+            [ Decode.at [ "targetTouches", "0", "pageX" ] Decode.float
+            , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
+            , Decode.at [ "pageX" ] Decode.float
             ]
 
 
@@ -713,64 +720,64 @@ decodeGeometry =
     let
         traverseToContainer decoder =
             hasClass "mdc-slider"
-                |> Json.andThen
+                |> Decode.andThen
                     (\doesHaveClass ->
                         if doesHaveClass then
                             decoder
                         else
-                            DOM.parentElement (Json.lazy (\_ -> traverseToContainer decoder))
+                            DOM.parentElement (Decode.lazy (\_ -> traverseToContainer decoder))
                     )
     in
     DOM.target <|
         traverseToContainer <|
-            Json.map6
-                (\offsetWidth offsetLeft discrete min max step ->
+            Decode.map6
+                (\offsetWidth offsetLeft decodedDiscrete decodedMin decodedMax decodedStep ->
                     { rect = { width = offsetWidth, left = offsetLeft }
-                    , discrete = discrete
-                    , min = min
-                    , max = max
-                    , step = step
+                    , discrete = decodedDiscrete
+                    , min = decodedMin
+                    , max = decodedMax
+                    , step = decodedStep
                     }
                 )
                 DOM.offsetWidth
                 DOM.offsetLeft
                 (hasClass "mdc-slider--discrete")
-                (data "min" (Json.map (String.toFloat >> Result.withDefault 1) Json.string))
-                (data "max" (Json.map (String.toFloat >> Result.withDefault 1) Json.string))
-                (Json.oneOf
-                    [ data "step" (Json.map (Result.toMaybe << String.toFloat) Json.string)
-                    , Json.succeed Nothing
+                (data "min" (Decode.map (String.toFloat >> Maybe.withDefault 1) Decode.string))
+                (data "max" (Decode.map (String.toFloat >> Maybe.withDefault 1) Decode.string))
+                (Decode.oneOf
+                    [ data "step" (Decode.map String.toFloat Decode.string)
+                    , Decode.succeed Nothing
                     ]
                 )
 
 
 data : String -> Decoder a -> Decoder a
 data key decoder =
-    Json.at [ "dataset", key ] decoder
+    Decode.at [ "dataset", key ] decoder
 
 
 hasClass : String -> Decoder Bool
 hasClass class =
-    Json.map
+    Decode.map
         (\className ->
             String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
         )
-        (Json.at [ "className" ] Json.string)
+        (Decode.at [ "className" ] Decode.string)
 
 
 onChange : (Float -> m) -> Property m
-onChange =
-    Options.option << (\decoder config -> { config | onChange = Just decoder })
+onChange handler =
+    Options.option (\config -> { config | onChange = Just handler })
 
 
 onInput : (Float -> m) -> Property m
-onInput =
-    Options.option << (\decoder config -> { config | onInput = Just decoder })
+onInput handler =
+    Options.option (\config -> { config | onInput = Just handler })
 
 
 step : Float -> Property m
-step =
-    Options.option << (\step config -> { config | step = step })
+step value_ =
+    Options.option (\config -> { config | step = value_ })
 
 
 trackMarkers : Property m

@@ -88,7 +88,10 @@ update msg model =
 
 topAppBarScrollHandler : Float -> Model -> Model
 topAppBarScrollHandler scrollPosition model =
-    Maybe.map2 (,)
+    Maybe.map2
+        (\topAppBarHeight lastScrollPosition ->
+            ( topAppBarHeight, lastScrollPosition )
+        )
         model.topAppBarHeight
         model.lastScrollPosition
         |> Maybe.map
@@ -225,7 +228,7 @@ topAppBar lift model options sections =
         , when (config.collapsed || (config.short && lastScrollPosition > 0)) <|
             cs cssClasses.collapsed
         , when (not config.fixed && not config.short) <|
-            css "top" (toString top ++ "px")
+            css "top" (String.fromFloat top ++ "px")
         , GlobalEvents.onScroll <|
             Json.map lift <|
                 Json.map
@@ -281,7 +284,7 @@ type alias Store s =
     { s | topAppBar : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .topAppBar (\x y -> { y | topAppBar = x }) defaultModel
 
 
@@ -292,7 +295,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.TopAppBarMsg (Component.generalise update)
+    Component.react getSet.get getSet.set Internal.Msg.TopAppBarMsg (Component.generalise update)
 
 
 
@@ -311,7 +314,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get topAppBar Internal.Msg.TopAppBarMsg
+    Component.render getSet.get topAppBar Internal.Msg.TopAppBarMsg
 
 
 dense : Property m

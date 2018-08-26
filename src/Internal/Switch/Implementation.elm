@@ -14,7 +14,7 @@ import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, many, styled, when)
 import Internal.Switch.Model exposing (Model, Msg(..), defaultModel)
-import Json.Decode as Json
+import Json.Decode as Decode
 
 
 update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -68,11 +68,6 @@ switch lift model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
-
-        preventDefault =
-            { preventDefault = True
-            , stopPropagation = False
-            }
     in
     Options.apply summary
         Html.div
@@ -87,7 +82,13 @@ switch lift model options _ =
             , Options.attribute <| Html.checked config.value
             , Options.onFocus (lift (SetFocus True))
             , Options.onBlur (lift (SetFocus False))
-            , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
+            , Options.onWithOptions "click"
+                (Decode.succeed
+                    { message = lift NoOp
+                    , preventDefault = True
+                    , stopPropagation = False
+                    }
+                )
             , when config.disabled
                 << Options.many
               <|
@@ -111,7 +112,7 @@ type alias Store s =
     { s | switch : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .switch (\x y -> { y | switch = x }) defaultModel
 
 
@@ -122,7 +123,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.SwitchMsg update
+    Component.react getSet.get getSet.set Internal.Msg.SwitchMsg update
 
 
 view :
@@ -134,10 +135,10 @@ view :
     -> Html m
 view =
     \lift index store options ->
-        Component.render get
+        Component.render getSet.get
             switch
             Internal.Msg.SwitchMsg
             lift
             index
             store
-            (Options.id_ index :: options)
+            (Options.internalId index :: options)

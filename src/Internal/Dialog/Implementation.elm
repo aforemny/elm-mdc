@@ -33,14 +33,14 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        SetState open ->
-            if open /= model.open then
-                ( Just { model | animating = True, open = open }, Cmd.none )
+        SetState isOpen ->
+            if isOpen /= model.open then
+                ( Just { model | animating = True, open = isOpen }, Cmd.none )
             else
                 ( Nothing, Cmd.none )
 
-        SetOpen open ->
-            ( Just { model | open = open }, Cmd.none )
+        SetOpen isOpen ->
+            ( Just { model | open = isOpen }, Cmd.none )
 
         AnimationEnd ->
             ( Just { model | animating = False }, Cmd.none )
@@ -50,7 +50,7 @@ type alias Store s =
     { s | dialog : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .dialog (\x c -> { c | dialog = x }) defaultModel
 
 
@@ -61,7 +61,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd msg )
 react =
-    Component.react get set Internal.Msg.DialogMsg update
+    Component.react getSet.get getSet.set Internal.Msg.DialogMsg update
 
 
 view :
@@ -72,7 +72,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get dialog Internal.Msg.DialogMsg
+    Component.render getSet.get dialog Internal.Msg.DialogMsg
 
 
 type alias Config m =
@@ -179,8 +179,8 @@ accept =
 
 
 onClose : m -> Property m
-onClose onClose =
-    Options.option (\config -> { config | onClose = Just onClose })
+onClose handler =
+    Options.option (\config -> { config | onClose = Just handler })
 
 
 transitionend : Decoder ()

@@ -34,7 +34,7 @@ import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Textfield.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
-import Json.Decode as Json exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
 import Regex
 import Svg
@@ -125,9 +125,8 @@ label =
 
 
 value : String -> Property m
-value =
-    Options.option
-        << (\str config -> { config | value = Just str })
+value value_ =
+    Options.option (\config -> { config | value = Just value_ })
 
 
 disabled : Property m
@@ -152,18 +151,18 @@ box =
 
 
 pattern : String -> Property m
-pattern pattern =
-    Options.option (\config -> { config | pattern = Just pattern })
+pattern pattern_ =
+    Options.option (\config -> { config | pattern = Just pattern_ })
 
 
 rows : Int -> Property m
-rows rows =
-    Options.option (\config -> { config | rows = Just rows })
+rows value_ =
+    Options.option (\config -> { config | rows = Just value_ })
 
 
 cols : Int -> Property m
-cols cols =
-    Options.option (\config -> { config | cols = Just cols })
+cols cols_ =
+    Options.option (\config -> { config | cols = Just cols_ })
 
 
 dense : Property m
@@ -177,8 +176,8 @@ required =
 
 
 type_ : String -> Property m
-type_ =
-    Options.option << (\value config -> { config | type_ = Just value })
+type_ value_ =
+    Options.option (\config -> { config | type_ = Just value_ })
 
 
 fullwidth : Property m
@@ -197,8 +196,8 @@ textarea =
 
 
 placeholder : String -> Property m
-placeholder placeholder =
-    Options.option (\config -> { config | placeholder = Just placeholder })
+placeholder value_ =
+    Options.option (\config -> { config | placeholder = Just value_ })
 
 
 nativeControl : List (Options.Property () m) -> Property m
@@ -260,9 +259,10 @@ textField lift model options _ =
         isInvalid =
             (||) config.invalid <|
                 case config.pattern of
-                    Just pattern ->
+                    Just pattern_ ->
                         model.value
-                            |> Maybe.map (not << Regex.contains (Regex.regex ("^" ++ pattern ++ "$")))
+                            |> Maybe.map2 (\regex -> not << Regex.contains regex)
+                                (Regex.fromString ("^" ++ pattern_ ++ "$"))
                             |> Maybe.withDefault False
 
                     Nothing ->
@@ -304,9 +304,9 @@ textField lift model options _ =
                     , css "outline" "none"
                     , Options.id config.id_
                     , if config.outlined then
-                        Options.on "focus" (Json.map (lift << Focus) decodeGeometry)
+                        Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
                       else
-                        Options.on "focus" (Json.succeed (lift (Focus defaultGeometry)))
+                        Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
                     , Options.onBlur (lift Blur)
                     , Options.onInput (lift << Input)
                     , Options.many
@@ -346,18 +346,22 @@ textField lift model options _ =
                                     always Nothing
                                )
                         ]
-                    , -- Note: prevent ripple:
+                    , -- Note: prevent ripple: TODO
                       Options.many
                         [ Options.onWithOptions "keydown"
-                            { preventDefault = False
-                            , stopPropagation = True
-                            }
-                            (Json.succeed (lift NoOp))
+                            (Decode.succeed
+                                { message = lift NoOp
+                                , preventDefault = False
+                                , stopPropagation = True
+                                }
+                            )
                         , Options.onWithOptions "keyup"
-                            { preventDefault = False
-                            , stopPropagation = True
-                            }
-                            (Json.succeed (lift NoOp))
+                            (Decode.succeed
+                                { message = lift NoOp
+                                , preventDefault = False
+                                , stopPropagation = True
+                                }
+                            )
                         ]
                     , when (config.placeholder /= Nothing) <|
                         Options.attribute <|
@@ -429,64 +433,64 @@ textField lift model options _ =
 
                             pathMiddle =
                                 [ "a"
-                                , toString radius
+                                , String.fromFloat radius
                                 , ","
-                                , toString radius
+                                , String.fromFloat radius
                                 , " 0 0 1 "
-                                , toString radius
+                                , String.fromFloat radius
                                 , ","
-                                , toString radius
+                                , String.fromFloat radius
                                 , "v"
-                                , toString (height - (2 * cornerWidth))
+                                , String.fromFloat (height - (2 * cornerWidth))
                                 , "a"
-                                , toString radius
+                                , String.fromFloat radius
                                 , ","
-                                , toString radius
+                                , String.fromFloat radius
                                 , " 0 0 1 "
-                                , toString -radius
+                                , String.fromFloat -radius
                                 , ","
-                                , toString radius
+                                , String.fromFloat radius
                                 , "h"
-                                , toString (-width + (2 * cornerWidth))
+                                , String.fromFloat (-width + (2 * cornerWidth))
                                 , "a"
-                                , toString radius
+                                , String.fromFloat radius
                                 , ","
-                                , toString radius
+                                , String.fromFloat radius
                                 , " 0 0 1 "
-                                , toString -radius
+                                , String.fromFloat -radius
                                 , ","
-                                , toString -radius
+                                , String.fromFloat -radius
                                 , "v"
-                                , toString (-height + (2 * cornerWidth))
+                                , String.fromFloat (-height + (2 * cornerWidth))
                                 , "a"
-                                , toString radius
+                                , String.fromFloat radius
                                 , ","
-                                , toString radius
+                                , String.fromFloat radius
                                 , " 0 0 1 "
-                                , toString radius
+                                , String.fromFloat radius
                                 , ","
-                                , toString -radius
+                                , String.fromFloat -radius
                                 ]
                                     |> String.join ""
                         in
                         if not isRtl then
                             [ "M"
-                            , toString (cornerWidth + leadingStrokeLength + paddedLabelWidth)
+                            , String.fromFloat (cornerWidth + leadingStrokeLength + paddedLabelWidth)
                             , ",1h"
-                            , toString (width - (2 * cornerWidth) - paddedLabelWidth - leadingStrokeLength)
+                            , String.fromFloat (width - (2 * cornerWidth) - paddedLabelWidth - leadingStrokeLength)
                             , pathMiddle
                             , "h"
-                            , toString leadingStrokeLength
+                            , String.fromFloat leadingStrokeLength
                             ]
                                 |> String.join ""
                         else
                             [ "M"
-                            , toString (width - cornerWidth - leadingStrokeLength)
+                            , String.fromFloat (width - cornerWidth - leadingStrokeLength)
                             , ",1h"
-                            , toString leadingStrokeLength
+                            , String.fromFloat leadingStrokeLength
                             , pathMiddle
                             , "h"
-                            , toString (width - (2 * cornerWidth) - paddedLabelWidth - leadingStrokeLength)
+                            , String.fromFloat (width - (2 * cornerWidth) - paddedLabelWidth - leadingStrokeLength)
                             ]
                                 |> String.join ""
                 in
@@ -516,7 +520,7 @@ textField lift model options _ =
                         |> Maybe.withDefault config.trailingIcon
               in
               case icon of
-                Just icon ->
+                Just icon_ ->
                     [ styled Html.i
                         [ cs "material-icons mdc-text-field__icon"
                         , Options.attribute
@@ -527,7 +531,7 @@ textField lift model options _ =
                             else
                                 -1
                         ]
-                        [ text icon
+                        [ text icon_
                         ]
                     ]
 
@@ -543,7 +547,7 @@ type alias Store s =
     { s | textfield : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .textfield (\x c -> { c | textfield = x }) defaultModel
 
 
@@ -554,7 +558,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd msg )
 react =
-    Component.react get set Internal.Msg.TextfieldMsg update
+    Component.react getSet.get getSet.set Internal.Msg.TextfieldMsg update
 
 
 view :
@@ -566,13 +570,13 @@ view :
     -> Html m
 view =
     \lift index store options ->
-        Component.render get
+        Component.render getSet.get
             textField
             Internal.Msg.TextfieldMsg
             lift
             index
             store
-            (Options.id_ index :: options)
+            (Options.internalId index :: options)
 
 
 decodeGeometry : Decoder Geometry
@@ -582,7 +586,7 @@ decodeGeometry =
         DOM.parentElement
         <|
             -- .mdc-text-field
-            Json.map3 Geometry
+            Decode.map3 Geometry
                 (DOM.childNode 2 DOM.offsetWidth)
                 -- .mdc-text-field__outline
                 (DOM.childNode 2 DOM.offsetHeight)

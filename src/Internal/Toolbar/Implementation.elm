@@ -127,8 +127,8 @@ decodeGeometry =
         getRowHeight =
             viewportWidth
                 |> Json.map
-                    (\viewportWidth ->
-                        if viewportWidth < numbers.toolbarMobileBreakpoint then
+                    (\decodedViewportWidth ->
+                        if decodedViewportWidth < numbers.toolbarMobileBreakpoint then
                             numbers.toolbarRowMobileHeight
                         else
                             numbers.toolbarRowHeight
@@ -146,10 +146,10 @@ decodeGeometry =
                 DOM.offsetHeight
     in
     Json.map3
-        (\getRowHeight getFirstRowElementOffsetHeight getOffsetHeight ->
-            { getRowHeight = getRowHeight
-            , getFirstRowElementOffsetHeight = getFirstRowElementOffsetHeight
-            , getOffsetHeight = getOffsetHeight
+        (\decodedRowHeight decodedFirstRowElementOffsetHeight decodedOffsetHeight ->
+            { getRowHeight = decodedRowHeight
+            , getFirstRowElementOffsetHeight = decodedFirstRowElementOffsetHeight
+            , getOffsetHeight = decodedOffsetHeight
             }
         )
         getRowHeight
@@ -234,11 +234,11 @@ toolbar lift model options nodes =
         backgroundImageHack =
             config.backgroundImage
                 |> Maybe.map
-                    (\backgroundImage ->
+                    (\bgImage ->
                         let
                             className =
                                 (++) "mdc-toolbar-background-image-back-"
-                                    (backgroundImage
+                                    (bgImage
                                         |> String.split "."
                                         |> String.join "-"
                                         |> String.split "/"
@@ -250,7 +250,7 @@ toolbar lift model options nodes =
                                     ++ className
                                     ++ " .mdc-toolbar__row:first-child::after {"
                                     ++ "background-image:url("
-                                    ++ backgroundImage
+                                    ++ bgImage
                                     ++ ");"
                                     ++ "background-position:center;"
                                     ++ "background-size:cover;}"
@@ -323,7 +323,7 @@ adjustElementStyles config calculations =
             calculations.toolbarHeight
     in
     if config.fixed then
-        Just (css "margin-top" (toString marginTop ++ "px"))
+        Just (css "margin-top" (String.fromFloat marginTop ++ "px"))
     else
         Nothing
 
@@ -355,7 +355,7 @@ initKeyRatio config geometry =
             else
                 geometry.getOffsetHeight / toolbarRowHeight
 
-        flexibleExpansionRatio =
+        flexibleExpansionRatio_ =
             firstRowMaxRatio - 1
 
         maxTranslateYRatio =
@@ -372,7 +372,7 @@ initKeyRatio config geometry =
     in
     { defaultCalculations
         | toolbarRatio = toolbarRatio
-        , flexibleExpansionRatio = flexibleExpansionRatio
+        , flexibleExpansionRatio = flexibleExpansionRatio_
         , maxTranslateYRatio = maxTranslateYRatio
         , scrollThresholdRatio = scrollThresholdRatio
     }
@@ -424,15 +424,12 @@ toolbarStyles config geometry scrollTop calculations =
             flexibleExpansionRatio calculations scrollTop
 
         toolbarFlexibleState =
-            case flexibleExpansionRatio_ of
-                1 ->
-                    cs cssClasses.flexibleMax
-
-                0 ->
-                    cs cssClasses.flexibleMin
-
-                _ ->
-                    nop
+            if flexibleExpansionRatio_ >= 1.0 then
+                cs cssClasses.flexibleMax
+            else if flexibleExpansionRatio_ <= 0.0 then
+                cs cssClasses.flexibleMin
+            else
+                nop
 
         toolbarFixedState =
             let
@@ -444,7 +441,7 @@ toolbarStyles config geometry scrollTop calculations =
             when config.fixedLastrow
                 << Options.many
             <|
-                [ css "transform" ("translateY(-" ++ toString translateDistance ++ "px)")
+                [ css "transform" ("translateY(-" ++ String.fromFloat translateDistance ++ "px)")
                 , when (translateDistance == calculations.maxTranslateYDistance) <|
                     cs cssClasses.fixedAtLastRow
                 ]
@@ -455,7 +452,7 @@ toolbarStyles config geometry scrollTop calculations =
                     height =
                         calculations.flexibleExpansionHeight * flexibleExpansionRatio_
                 in
-                Just { height = toString (height + calculations.toolbarRowHeight) ++ "px" }
+                Just { height = String.fromFloat (height + calculations.toolbarRowHeight) ++ "px" }
             else
                 Nothing
 
@@ -473,7 +470,7 @@ toolbarStyles config geometry scrollTop calculations =
                             * flexibleExpansionRatio_
                             + minTitleSize
                 in
-                Just { fontSize = toString currentTitleSize ++ "rem" }
+                Just { fontSize = String.fromFloat currentTitleSize ++ "rem" }
             else
                 Nothing
     in
@@ -496,7 +493,7 @@ type alias Store s =
     { s | toolbar : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .toolbar (\x y -> { y | toolbar = x }) defaultModel
 
 
@@ -507,7 +504,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.ToolbarMsg (Component.generalise update)
+    Component.react getSet.get getSet.set Internal.Msg.ToolbarMsg (Component.generalise update)
 
 
 
@@ -526,7 +523,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get toolbar Internal.Msg.ToolbarMsg
+    Component.render getSet.get toolbar Internal.Msg.ToolbarMsg
 
 
 fixed : Property m
@@ -555,8 +552,8 @@ fixedLastRow =
 
 
 backgroundImage : String -> Property m
-backgroundImage backgroundImage =
-    Options.option (\config -> { config | backgroundImage = Just backgroundImage })
+backgroundImage value =
+    Options.option (\config -> { config | backgroundImage = Just value })
 
 
 row : List (Property m) -> List (Html m) -> Html m
@@ -621,7 +618,7 @@ fixedAdjust index store =
                 |> Maybe.withDefault defaultModel
 
         styles =
-            Maybe.map2 (,) model.config model.calculations
+            Maybe.map2 (\config calculations -> ( config, calculations )) model.config model.calculations
                 |> Maybe.andThen
                     (\( config, calculations ) ->
                         adjustElementStyles config calculations

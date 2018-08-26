@@ -2,7 +2,6 @@ module Material.Options
     exposing
         ( Property
         , aria
-        , tabindex
         , attribute
         , cs
         , css
@@ -28,10 +27,11 @@ module Material.Options
         , onSubmit
         , onWithOptions
         , styled
+        , tabindex
         , when
         )
 
-{-|
+{-| TODO: Update to elm/html
 
 
 # Properties
@@ -73,7 +73,7 @@ module Material.Options
 -}
 
 import Html exposing (Attribute, Html)
-import Html.Events exposing (Options)
+import Html.Events
 import Internal.Options
 import Json.Decode exposing (Decoder)
 
@@ -306,7 +306,7 @@ onSubmit =
 
 
 {-| -}
-onWithOptions : String -> Options -> Decoder m -> Property c m
+onWithOptions : String -> Decoder { message : m, stopPropagation : Bool, preventDefault : Bool } -> Property c m
 onWithOptions =
     Internal.Options.onWithOptions
 

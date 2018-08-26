@@ -21,10 +21,10 @@ update msg model =
     case msg of
         RippleMsg msg_ ->
             let
-                ( ripple, effects ) =
+                ( rippleState, rippleCmd ) =
                     Ripple.update msg_ model.ripple
             in
-            ( { model | ripple = ripple }, Cmd.map RippleMsg effects )
+            ( { model | ripple = rippleState }, Cmd.map RippleMsg rippleCmd )
 
         NoOp ->
             ( model, Cmd.none )
@@ -66,7 +66,7 @@ fab lift model options icon =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        ripple =
+        rippleInterface =
             Ripple.view False (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
@@ -76,8 +76,8 @@ fab lift model options icon =
         , when config.ripple
             << Options.many
           <|
-            [ ripple.interactionHandler
-            , ripple.properties
+            [ rippleInterface.interactionHandler
+            , rippleInterface.properties
             ]
         ]
         []
@@ -89,7 +89,7 @@ fab lift model options icon =
                     ]
               ]
             , if config.ripple then
-                [ ripple.style ]
+                [ rippleInterface.style ]
               else
                 []
             ]
@@ -100,7 +100,7 @@ type alias Store s =
     { s | fab : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .fab (\x y -> { y | fab = x }) defaultModel
 
 
@@ -112,7 +112,7 @@ view :
     -> String
     -> Html m
 view =
-    Component.render get fab Internal.Msg.FabMsg
+    Component.render getSet.get fab Internal.Msg.FabMsg
 
 
 react :
@@ -122,4 +122,4 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.FabMsg (Component.generalise update)
+    Component.react getSet.get getSet.set Internal.Msg.FabMsg (Component.generalise update)

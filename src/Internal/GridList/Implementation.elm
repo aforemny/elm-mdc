@@ -48,10 +48,11 @@ gridList lift model options nodes =
         width =
             model.geometry
                 |> Maybe.map
-                    (\{ width, tileWidth } ->
-                        tileWidth * toFloat (floor (width / tileWidth))
+                    (\geometry ->
+                        geometry.tileWidth
+                            * toFloat (floor (geometry.width / geometry.tileWidth))
                     )
-                |> Maybe.map (toString >> flip (++) "px")
+                |> Maybe.map (\floatWidth -> String.fromFloat floatWidth ++ "px")
                 |> Maybe.withDefault "auto"
     in
     styled Html.div
@@ -156,8 +157,8 @@ supportText options =
 
 
 icon : List (Property m) -> String -> Html m
-icon options icon =
-    styled Html.div (cs "mdc-grid-tile__icon" :: options) [ Icon.view [] icon ]
+icon options value =
+    styled Html.div (cs "mdc-grid-tile__icon" :: options) [ Icon.view [] value ]
 
 
 primaryContent : List (Property m) -> List (Html m) -> Html m
@@ -169,7 +170,7 @@ type alias Store s =
     { s | gridList : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .gridList (\x y -> { y | gridList = x }) defaultModel
 
 
@@ -181,7 +182,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get gridList Internal.Msg.GridListMsg
+    Component.render getSet.get gridList Internal.Msg.GridListMsg
 
 
 react :
@@ -191,7 +192,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.GridListMsg (Component.generalise update)
+    Component.react getSet.get getSet.set Internal.Msg.GridListMsg (Component.generalise update)
 
 
 type alias Property m =

@@ -30,15 +30,17 @@ update lift msg model =
     case msg of
         RippleMsg msg_ ->
             let
-                ( ripple, cmd ) =
+                ( rippleState, rippleCmd ) =
                     Ripple.update msg_ model.ripple
             in
-            ( Just { model | ripple = ripple }, Cmd.map (lift << RippleMsg) cmd )
+            ( Just { model | ripple = rippleState }
+            , Cmd.map (lift << RippleMsg) rippleCmd
+            )
 
-        Click ripple msg_ ->
+        Click doRipple msg_ ->
             ( Nothing
             , Helpers.delayedCmd
-                (if ripple then
+                (if doRipple then
                     150
                  else
                     0
@@ -111,8 +113,8 @@ disabled =
 
 
 onClick : m -> Property m
-onClick onClick =
-    Options.option (\options -> { options | onClick = Just onClick })
+onClick handler =
+    Options.option (\options -> { options | onClick = Just handler })
 
 
 button : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -121,7 +123,7 @@ button lift model options nodes =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        ripple =
+        rippleInterface =
             Ripple.view False (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
@@ -143,8 +145,8 @@ button lift model options nodes =
         , when config.ripple
             << Options.many
           <|
-            [ ripple.interactionHandler
-            , ripple.properties
+            [ rippleInterface.interactionHandler
+            , rippleInterface.properties
             ]
         , config.onClick
             |> Maybe.map (Options.onClick << lift << Click config.ripple)
@@ -154,13 +156,10 @@ button lift model options nodes =
         (List.concat
             [ config.icon
                 |> Maybe.map
-                    (\icon ->
-                        [ Icon.view [ cs "mdc-button__icon" ] icon
-                        ]
-                    )
+                    (\icon_ -> [ Icon.view [ cs "mdc-button__icon" ] icon_ ])
                 |> Maybe.withDefault []
             , nodes
-            , [ ripple.style
+            , [ rippleInterface.style
               ]
             ]
         )
@@ -170,7 +169,7 @@ type alias Store s =
     { s | button : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .button (\x y -> { y | button = x }) defaultModel
 
 
@@ -182,7 +181,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get button Internal.Msg.ButtonMsg
+    Component.render getSet.get button Internal.Msg.ButtonMsg
 
 
 react :
@@ -192,4 +191,4 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.ButtonMsg update
+    Component.react getSet.get getSet.set Internal.Msg.ButtonMsg update

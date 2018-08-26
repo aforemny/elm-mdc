@@ -7,6 +7,7 @@ import Internal.Button.Model as Button
 import Internal.Checkbox.Model as Checkbox
 import Internal.Chip.Model as Chip
 import Internal.Dialog.Model as Dialog
+import Internal.Dispatch as Dispatch
 import Internal.Drawer.Model as Drawer
 import Internal.Fab.Model as Fab
 import Internal.GridList.Model as GridList

@@ -58,13 +58,13 @@ on =
 
 
 className : String -> Property m
-className className =
-    Options.option (\config -> { config | inner = Just className })
+className value =
+    Options.option (\config -> { config | inner = Just value })
 
 
 icon : { on : String, off : String } -> Property m
-icon icon =
-    Options.option (\config -> { config | icon = icon })
+icon value =
+    Options.option (\config -> { config | icon = value })
 
 
 icon1 : String -> Property m
@@ -73,8 +73,8 @@ icon1 value =
 
 
 label : { on : String, off : String } -> Property m
-label label =
-    Options.option (\config -> { config | label = label })
+label value =
+    Options.option (\config -> { config | label = value })
 
 
 label1 : String -> Property m
@@ -142,7 +142,7 @@ type alias Store s =
     }
 
 
-( get, set ) =
+getSet =
     Component.indexed .iconToggle (\x y -> { y | iconToggle = x }) defaultModel
 
 
@@ -153,7 +153,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.IconToggleMsg (Component.generalise update)
+    Component.react getSet.get getSet.set Internal.Msg.IconToggleMsg (Component.generalise update)
 
 
 view :
@@ -164,4 +164,4 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render get iconToggle Internal.Msg.IconToggleMsg
+    Component.render getSet.get iconToggle Internal.Msg.IconToggleMsg

@@ -476,7 +476,7 @@ floatingFooter model =
             Dict.get "toolbar-toolbar" model.mdc.toolbar
                 |> Maybe.andThen
                     (\model ->
-                        Maybe.map ((,) model.scrollTop) model.calculations
+                        Maybe.map (\calculation -> ( calculation, model.scrollTop )) model.calculations
                     )
                 |> Maybe.map
                     (\( scrollTop, calculations ) ->

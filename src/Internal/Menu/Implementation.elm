@@ -31,21 +31,21 @@ module Internal.Menu.Implementation
         , view
         )
 
+import Browser
+import Browser.Events
 import DOM
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Internal.Component as Component exposing (Index, Indexed)
-import Internal.Dispatch.Internal as Dispatch
+import Internal.Dispatch as Dispatch
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
-import Json.Decode as Json exposing (Decoder)
-import Mouse
-import Time
+import Json.Decode as Decode exposing (Decoder)
 
 
 subscriptions : Model -> Sub (Msg m)
@@ -54,7 +54,7 @@ subscriptions model =
     -- To prevent the Menu from closing immediately, we ignore Document clicks
     -- in the first animation frame after Open by watching model.geometry.
     if model.open && (model.geometry /= Nothing) then
-        Mouse.clicks (\_ -> DocumentClick)
+        Browser.Events.onClick (Decode.succeed DocumentClick)
     else
         Sub.none
 
@@ -114,7 +114,7 @@ update lift msg model =
 
         Open ->
             let
-                quickOpen =
+                doQuickOpen =
                     Maybe.withDefault False model.quickOpen
             in
             if not model.open then
@@ -124,8 +124,8 @@ update lift msg model =
                         , animating = True
                         , geometry = Nothing
                     }
-                , if not quickOpen then
-                    Helpers.delayedCmd (120 * Time.millisecond) (lift AnimationEnd)
+                , if not doQuickOpen then
+                    Helpers.delayedCmd 120 (lift AnimationEnd)
                   else
                     Helpers.cmd (lift AnimationEnd)
                 )
@@ -134,7 +134,7 @@ update lift msg model =
 
         Close ->
             let
-                quickOpen =
+                doQuickOpen =
                     Maybe.withDefault False model.quickOpen
             in
             if model.open then
@@ -145,8 +145,8 @@ update lift msg model =
                         , quickOpen = Nothing
                         , focusedItemAtIndex = Nothing
                     }
-                , if not quickOpen then
-                    Helpers.delayedCmd (70 * Time.millisecond) (lift AnimationEnd)
+                , if not doQuickOpen then
+                    Helpers.delayedCmd 70 (lift AnimationEnd)
                   else
                     Helpers.cmd (lift AnimationEnd)
                 )
@@ -154,14 +154,14 @@ update lift msg model =
                 ( Nothing, Cmd.none )
 
         CloseDelayed ->
-            ( Nothing, Helpers.delayedCmd (50 * Time.millisecond) (lift Close) )
+            ( Nothing, Helpers.delayedCmd 50 (lift Close) )
 
-        Init { quickOpen, index } geometry ->
+        Init config geometry ->
             ( Just
                 { model
                     | geometry = Just geometry
-                    , quickOpen = Just quickOpen
-                    , focusedItemAtIndex = index
+                    , quickOpen = Just config.quickOpen
+                    , focusedItemAtIndex = config.index
                 }
             , Cmd.none
             )
@@ -224,8 +224,8 @@ update lift msg model =
             )
                 |> Tuple.mapFirst
                     (Maybe.map
-                        (\model ->
-                            { model | keyDownWithinMenu = keyDownWithinMenu }
+                        (\updatedModel ->
+                            { updatedModel | keyDownWithinMenu = keyDownWithinMenu }
                         )
                     )
 
@@ -249,11 +249,11 @@ update lift msg model =
             )
                 |> Tuple.mapFirst
                     (Maybe.map
-                        (\model ->
-                            if (isEnter || isSpace) && model.keyDownWithinMenu then
-                                { model | keyDownWithinMenu = False }
+                        (\updatedModel ->
+                            if (isEnter || isSpace) && updatedModel.keyDownWithinMenu then
+                                { updatedModel | keyDownWithinMenu = False }
                             else
-                                model
+                                updatedModel
                         )
                     )
 
@@ -302,18 +302,18 @@ type alias Property m =
 
 
 index : Int -> Property m
-index index =
-    Options.option (\config -> { config | index = Just index })
+index value =
+    Options.option (\config -> { config | index = Just value })
 
 
 anchorCorner : Corner -> Property m
-anchorCorner anchorCorner =
-    Options.option (\config -> { config | anchorCorner = anchorCorner })
+anchorCorner value =
+    Options.option (\config -> { config | anchorCorner = value })
 
 
 anchorMargin : Margin -> Property m
-anchorMargin anchorMargin =
-    Options.option (\config -> { config | anchorMargin = anchorMargin })
+anchorMargin value =
+    Options.option (\config -> { config | anchorMargin = value })
 
 
 quickOpen : Property m
@@ -327,7 +327,7 @@ menu :
     -> List (Property m)
     -> Menu m
     -> Html m
-menu lift model options ul =
+menu lift model options ulNode =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -350,13 +350,13 @@ menu lift model options ul =
             model.focusedItemAtIndex
 
         numDividersBeforeIndex i =
-            ul.items
+            ulNode.items
                 |> List.take (i + 1)
                 |> List.filter .divider
                 |> List.length
 
         numItems =
-            ul.items
+            ulNode.items
                 |> List.filter (not << .divider)
                 |> List.length
 
@@ -378,17 +378,17 @@ menu lift model options ul =
                     numItems - 1
             in
             if altKey || ctrlKey || metaKey then
-                Json.fail ""
+                Decode.fail ""
             else if
                 shiftKey
                     && isTab
                     && (Maybe.withDefault 0 focusedItemAtIndex == lastItemIndex)
             then
-                Json.succeed (lift NoOp)
+                Decode.succeed (lift NoOp)
             else if isArrowUp || isArrowDown || isSpace then
-                Json.succeed (lift NoOp)
+                Decode.succeed (lift NoOp)
             else
-                Json.fail ""
+                Decode.fail ""
     in
     Options.apply summary
         Html.div
@@ -403,12 +403,13 @@ menu lift model options ul =
           <|
             [ cs "mdc-menu--open"
             , Options.data "focustrap" ""
-            , Options.onWithOptions
-                "click"
-                { stopPropagation = True
-                , preventDefault = False
-                }
-                (Json.succeed (lift CloseDelayed))
+            , Options.onWithOptions "click"
+                (Decode.succeed
+                    { message = lift CloseDelayed
+                    , stopPropagation = True
+                    , preventDefault = False
+                    }
+                )
             ]
         , when (isOpen || model.animating)
             << Options.many
@@ -431,30 +432,25 @@ menu lift model options ul =
                 , parentRect = True
                 }
             <|
-                Json.map (lift << Init { quickOpen = config.quickOpen, index = config.index })
+                Decode.map (lift << Init { quickOpen = config.quickOpen, index = config.index })
                     decodeGeometry
         , Options.on "keyup" <|
-            Json.map lift <|
-                Json.map3 KeyUp decodeMeta decodeKey decodeKeyCode
-        , let
-            numItems =
-                ul.items
-                    |> List.filter (not << .divider)
-                    |> List.length
-          in
-          Options.on "keydown" <|
-            Json.map lift <|
-                Json.map3 (KeyDown numItems) decodeMeta decodeKey decodeKeyCode
+            Decode.map lift <|
+                Decode.map3 KeyUp decodeMeta decodeKey decodeKeyCode
+        , Options.on "keydown" <|
+            Decode.map lift <|
+                Decode.map3 (KeyDown numItems) decodeMeta decodeKey decodeKeyCode
         ]
         []
         [ Lists.ul
             (cs "mdc-menu__items"
-                :: Options.onWithOptions "keydown"
-                    { stopPropagation = False, preventDefault = True }
-                    (Json.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
-                        |> Json.andThen identity
-                    )
-                :: ul.options
+                -- TODO:
+                --            :: Options.onWithOptions "keydown"
+                --            { stopPropagation = False, preventDefault = True }
+                --            (Decode.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
+                --            |> Decode.andThen identity
+                --            )
+                :: ulNode.options
             )
             (List.indexedMap
                 (\i item ->
@@ -471,46 +467,48 @@ menu lift model options ul =
                             else
                                 Options.nop
 
-                        summary =
+                        itemSummary =
+                            -- TODO:
                             Options.collect Lists.defaultConfig item.options
-                                |> (\summary ->
-                                        if not model.keyDownWithinMenu then
-                                            let
-                                                dispatch =
-                                                    summary.dispatch
-                                                        |> (\(Dispatch.Config ({ decoders } as dispatch)) ->
-                                                                Dispatch.Config
-                                                                    { dispatch
-                                                                        | decoders =
-                                                                            List.filter ((/=) "keyup" << Tuple.first)
-                                                                                decoders
-                                                                    }
-                                                           )
-                                            in
-                                            { summary | dispatch = dispatch }
-                                        else
-                                            summary
-                                   )
+
+                        --                                |> (\freshItemSummary ->
+                        --                                        if not model.keyDownWithinMenu then
+                        --                                            let
+                        --                                                dispatch =
+                        --                                                    freshItemSummary.dispatch
+                        --                                                        |> (\(Dispatch.Config ({ decoders } as dispatch)) ->
+                        --                                                                Dispatch.Config
+                        --                                                                    { dispatch
+                        --                                                                        | decoders =
+                        --                                                                            List.filter ((/=) "keyup" << Tuple.first)
+                        --                                                                                decoders
+                        --                                                                    }
+                        --                                                           )
+                        --                                            in
+                        --                                            { freshItemSummary | dispatch = dispatch }
+                        --                                        else
+                        --                                            freshItemSummary
+                        --                                   )
                     in
                     if item.divider then
-                        Options.apply summary
+                        Options.apply itemSummary
                             Html.hr
                             [ cs "mdc-list-divider"
                             ]
                             []
                             item.childs
                     else
-                        Options.apply summary
+                        Options.apply itemSummary
                             Html.li
                             [ cs "mdc-list-item"
                             , Options.attribute (Html.attribute "tabindex" "0")
-                            , Options.on "focus" (Json.succeed (lift (SetFocus focusIndex)))
+                            , Options.on "focus" (Decode.succeed (lift (SetFocus focusIndex)))
                             , autoFocus
                             ]
                             []
                             item.childs
                 )
-                ul.items
+                ulNode.items
             )
         ]
 
@@ -596,41 +594,41 @@ bottomEndCorner =
 
 
 originCorner : Config -> Geometry -> Corner
-originCorner { anchorCorner, anchorMargin } { viewportDistance, anchor, menu } =
+originCorner config geometry =
     let
         isBottomAligned =
-            anchorCorner.bottom
+            config.anchorCorner.bottom
 
         availableTop =
             if isBottomAligned then
-                viewportDistance.top + anchor.height + anchorMargin.bottom
+                geometry.viewportDistance.top + geometry.anchor.height + config.anchorMargin.bottom
             else
-                viewportDistance.top + anchorMargin.top
+                geometry.viewportDistance.top + config.anchorMargin.top
 
         availableBottom =
             if isBottomAligned then
-                viewportDistance.bottom - anchorMargin.bottom
+                geometry.viewportDistance.bottom - config.anchorMargin.bottom
             else
-                viewportDistance.bottom + anchor.height + anchorMargin.top
+                geometry.viewportDistance.bottom + geometry.anchor.height + config.anchorMargin.top
 
         topOverflow =
-            menu.height - availableTop
+            geometry.menu.height - availableTop
 
         bottomOverflow =
-            menu.height - availableBottom
+            geometry.menu.height - availableBottom
 
         bottom =
             (bottomOverflow > 0) && (topOverflow < bottomOverflow)
 
+        -- TODO:
         isRtl =
             False
 
-        -- TODO
         isFlipRtl =
-            anchorCorner.flipRtl
+            config.anchorCorner.flipRtl
 
         avoidHorizontalOverlap =
-            anchorCorner.right
+            config.anchorCorner.right
 
         isAlignedRight =
             (avoidHorizontalOverlap && not isRtl)
@@ -638,21 +636,21 @@ originCorner { anchorCorner, anchorMargin } { viewportDistance, anchor, menu } =
 
         availableLeft =
             if isAlignedRight then
-                viewportDistance.left + anchor.width + anchorMargin.right
+                geometry.viewportDistance.left + geometry.anchor.width + config.anchorMargin.right
             else
-                viewportDistance.left + anchorMargin.left
+                geometry.viewportDistance.left + config.anchorMargin.left
 
         availableRight =
             if isAlignedRight then
-                viewportDistance.right - anchorMargin.right
+                geometry.viewportDistance.right - config.anchorMargin.right
             else
-                viewportDistance.right + anchor.width - anchorMargin.left
+                geometry.viewportDistance.right + geometry.anchor.width - config.anchorMargin.left
 
         leftOverflow =
-            menu.width - availableLeft
+            geometry.menu.width - availableLeft
 
         rightOverflow =
-            menu.width - availableRight
+            geometry.menu.width - availableRight
 
         right =
             ((leftOverflow < 0) && isAlignedRight && isRtl)
@@ -673,31 +671,28 @@ originCorner { anchorCorner, anchorMargin } { viewportDistance, anchor, menu } =
 
 
 horizontalOffset : Config -> Corner -> Geometry -> Float
-horizontalOffset { anchorCorner, anchorMargin } corner { anchor } =
+horizontalOffset config corner geometry =
     let
         isRightAligned =
             corner.right
 
         avoidHorizontalOverlap =
-            anchorCorner.right
+            config.anchorCorner.right
     in
     if isRightAligned then
         if avoidHorizontalOverlap then
-            anchor.width - anchorMargin.left
+            geometry.anchor.width - config.anchorMargin.left
         else
-            anchorMargin.right
+            config.anchorMargin.right
     else if avoidHorizontalOverlap then
-        anchor.width - anchorMargin.right
+        geometry.anchor.width - config.anchorMargin.right
     else
-        anchorMargin.left
+        config.anchorMargin.left
 
 
 verticalOffset : Config -> Corner -> Geometry -> Float
-verticalOffset { anchorCorner, anchorMargin } corner geometry =
+verticalOffset config corner geometry =
     let
-        { viewport, viewportDistance, anchor, menu } =
-            geometry
-
         isBottomAligned =
             corner.bottom
 
@@ -705,37 +700,37 @@ verticalOffset { anchorCorner, anchorMargin } corner geometry =
             32
 
         avoidVerticalOverlap =
-            anchorCorner.bottom
+            config.anchorCorner.bottom
 
         canOverlapVertically =
             not avoidVerticalOverlap
     in
     if isBottomAligned then
-        if canOverlapVertically && (menu.height > viewportDistance.top + anchor.height) then
-            -(min menu.height (viewport.height - marginToEdge) - (viewportDistance.top + anchor.height))
+        if canOverlapVertically && (geometry.menu.height > geometry.viewportDistance.top + geometry.anchor.height) then
+            -(min geometry.menu.height (geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))
         else if avoidVerticalOverlap then
-            anchor.height - anchorMargin.top
+            geometry.anchor.height - config.anchorMargin.top
         else
-            -anchorMargin.bottom
-    else if canOverlapVertically && (menu.height > viewportDistance.bottom + anchor.height) then
-        -(min menu.height (viewport.height - marginToEdge) - (viewportDistance.top + anchor.height))
+            -config.anchorMargin.bottom
+    else if canOverlapVertically && (geometry.menu.height > geometry.viewportDistance.bottom + geometry.anchor.height) then
+        -(min geometry.menu.height (geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))
     else if avoidVerticalOverlap then
-        anchor.height + anchorMargin.bottom
+        geometry.anchor.height + config.anchorMargin.bottom
     else
-        anchorMargin.top
+        config.anchorMargin.top
 
 
 menuMaxHeight : Config -> Corner -> Geometry -> Float
-menuMaxHeight { anchorCorner, anchorMargin } corner { viewportDistance } =
+menuMaxHeight config corner geometry =
     let
         isBottomAligned =
             corner.bottom
     in
-    if anchorCorner.bottom then
+    if config.anchorCorner.bottom then
         if isBottomAligned then
-            viewportDistance.top + anchorMargin.top
+            geometry.viewportDistance.top + config.anchorMargin.top
         else
-            viewportDistance.bottom - anchorMargin.bottom
+            geometry.viewportDistance.bottom - config.anchorMargin.bottom
     else
         0
 
@@ -782,43 +777,37 @@ autoPosition config geometry =
         position =
             { top =
                 if verticalAlignment == "top" then
-                    Just (toString verticalOffset_ ++ "px")
+                    Just (String.fromFloat verticalOffset_ ++ "px")
                 else
                     Nothing
             , left =
                 if horizontalAlignment == "left" then
-                    Just (toString horizontalOffset_ ++ "px")
+                    Just (String.fromFloat horizontalOffset_ ++ "px")
                 else
                     Nothing
             , bottom =
                 if verticalAlignment == "bottom" then
-                    Just (toString verticalOffset_ ++ "px")
+                    Just (String.fromFloat verticalOffset_ ++ "px")
                 else
                     Nothing
             , right =
                 if horizontalAlignment == "right" then
-                    Just (toString horizontalOffset_ ++ "px")
+                    Just (String.fromFloat horizontalOffset_ ++ "px")
                 else
                     Nothing
             }
 
-        { anchor, menu } =
-            geometry
-
         horizontalAlignment_ =
-            if (anchor.width / menu.width) > 0.67 then
+            if (geometry.anchor.width / geometry.menu.width) > 0.67 then
                 "center"
             else
                 horizontalAlignment
 
-        { anchorCorner } =
-            config
-
         verticalAlignment_ =
-            if not anchorCorner.bottom && (abs (verticalOffset_ / menu.height) > 0.1) then
+            if not config.anchorCorner.bottom && (abs (verticalOffset_ / geometry.menu.height) > 0.1) then
                 let
                     verticalOffsetPercent =
-                        abs (verticalOffset_ / menu.height) * 100
+                        abs (verticalOffset_ / geometry.menu.height) * 100
 
                     originPercent =
                         if corner.bottom then
@@ -826,7 +815,7 @@ autoPosition config geometry =
                         else
                             verticalOffsetPercent
                 in
-                toString (toFloat (round (originPercent * 100)) / 100) ++ "%"
+                String.fromFloat (toFloat (round (originPercent * 100)) / 100) ++ "%"
             else
                 verticalAlignment
     in
@@ -834,7 +823,7 @@ autoPosition config geometry =
     , position = position
     , maxHeight =
         if maxMenuHeight /= 0 then
-            toString maxMenuHeight ++ "px"
+            String.fromFloat maxMenuHeight ++ "px"
         else
             ""
     }
@@ -844,7 +833,7 @@ type alias Store s =
     { s | menu : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .menu (\x y -> { y | menu = x }) defaultModel
 
 
@@ -855,7 +844,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.MenuMsg update
+    Component.react getSet.get getSet.set Internal.Msg.MenuMsg update
 
 
 view :
@@ -866,7 +855,7 @@ view :
     -> Menu m
     -> Html m
 view =
-    Component.render get menu Internal.Msg.MenuMsg
+    Component.render getSet.get menu Internal.Msg.MenuMsg
 
 
 subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
@@ -876,7 +865,7 @@ subs =
 
 decodeMeta : Decoder Meta
 decodeMeta =
-    Json.map4
+    Decode.map4
         (\altKey ctrlKey metaKey shiftKey ->
             { altKey = altKey
             , ctrlKey = ctrlKey
@@ -884,15 +873,15 @@ decodeMeta =
             , shiftKey = shiftKey
             }
         )
-        (Json.at [ "altKey" ] Json.bool)
-        (Json.at [ "ctrlKey" ] Json.bool)
-        (Json.at [ "metaKey" ] Json.bool)
-        (Json.at [ "shiftKey" ] Json.bool)
+        (Decode.at [ "altKey" ] Decode.bool)
+        (Decode.at [ "ctrlKey" ] Decode.bool)
+        (Decode.at [ "metaKey" ] Decode.bool)
+        (Decode.at [ "shiftKey" ] Decode.bool)
 
 
 decodeKey : Decoder Key
 decodeKey =
-    Json.at [ "key" ] Json.string
+    Decode.at [ "key" ] Decode.string
 
 
 decodeKeyCode : Decoder KeyCode
@@ -904,8 +893,8 @@ decodeGeometry : Decoder Geometry
 decodeGeometry =
     let
         anchorRect =
-            Json.at [ "parentRect" ] <|
-                Json.map4
+            Decode.at [ "parentRect" ] <|
+                Decode.map4
                     (\top left width height ->
                         { top = top
                         , left = left
@@ -913,45 +902,45 @@ decodeGeometry =
                         , height = height
                         }
                     )
-                    (Json.at [ "top" ] Json.float)
-                    (Json.at [ "left" ] Json.float)
-                    (Json.at [ "width" ] Json.float)
-                    (Json.at [ "height" ] Json.float)
+                    (Decode.at [ "top" ] Decode.float)
+                    (Decode.at [ "left" ] Decode.float)
+                    (Decode.at [ "width" ] Decode.float)
+                    (Decode.at [ "height" ] Decode.float)
 
-        viewport =
+        decodeViewport =
             DOM.target <|
-                Json.at [ "ownerDocument", "defaultView" ] <|
-                    Json.map2 Viewport
-                        (Json.at [ "innerWidth" ] Json.float)
-                        (Json.at [ "innerHeight" ] Json.float)
+                Decode.at [ "ownerDocument", "defaultView" ] <|
+                    Decode.map2 Viewport
+                        (Decode.at [ "innerWidth" ] Decode.float)
+                        (Decode.at [ "innerHeight" ] Decode.float)
 
-        viewportDistance viewport anchorRect =
-            Json.succeed
-                { top = anchorRect.top
-                , right = viewport.width - anchorRect.left - anchorRect.width
-                , left = anchorRect.left
-                , bottom = viewport.height - anchorRect.top - anchorRect.height
+        decodeViewportDistance decodedViewport decodedAnchorRect =
+            Decode.succeed
+                { top = decodedAnchorRect.top
+                , right = decodedViewport.width - decodedAnchorRect.left - decodedAnchorRect.width
+                , left = decodedAnchorRect.left
+                , bottom = decodedViewport.height - decodedAnchorRect.top - decodedAnchorRect.height
                 }
 
         anchor { width, height } =
-            Json.succeed { width = width, height = height }
+            Decode.succeed { width = width, height = height }
 
-        menu =
-            Json.map2
+        decodeMenu =
+            Decode.map2
                 (\offsetWidth offsetHeight ->
                     { width = offsetWidth, height = offsetHeight }
                 )
                 DOM.offsetWidth
                 DOM.offsetHeight
     in
-    Json.map2 (,) viewport anchorRect
-        |> Json.andThen
-            (\( viewport, anchorRect ) ->
+    Decode.map2 (\x y -> ( x, y )) decodeViewport anchorRect
+        |> Decode.andThen
+            (\( decodedViewport, decodedeAnchorRect ) ->
                 DOM.target <|
-                    Json.map3 (Geometry viewport)
-                        (viewportDistance viewport anchorRect)
-                        (anchor anchorRect)
-                        menu
+                    Decode.map3 (Geometry decodedViewport)
+                        (decodeViewportDistance decodedViewport decodedeAnchorRect)
+                        (anchor decodedeAnchorRect)
+                        decodeMenu
             )
 
 
@@ -967,14 +956,14 @@ onSelect msg =
                     key == "Enter" || keyCode == 13
             in
             if isSpace || isEnter then
-                Json.succeed msg
+                Decode.succeed msg
             else
-                Json.fail ""
+                Decode.fail ""
     in
     Options.many
         [ Options.onClick msg
         , Options.on "keyup"
-            (Json.map2 trigger decodeKey decodeKeyCode
-                |> Json.andThen identity
+            (Decode.map2 trigger decodeKey decodeKeyCode
+                |> Decode.andThen identity
             )
         ]

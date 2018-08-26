@@ -27,7 +27,7 @@ indexed :
     (store -> Indexed model)
     -> (Indexed model -> store -> store)
     -> model
-    -> ( Index -> store -> model, Index -> store -> model -> store )
+    -> { get : Index -> store -> model, set : Index -> store -> model -> store }
 indexed get_model set_model model0 =
     let
         get_ idx store =
@@ -38,7 +38,7 @@ indexed get_model set_model model0 =
         set_ idx store model =
             set_model (Dict.insert idx model (get_model store)) store
     in
-    ( get_, set_ )
+    { get = get_, set = set_ }
 
 
 render :
@@ -94,8 +94,8 @@ subs ctor get subscriptions lift model =
     model
         |> get
         |> Dict.foldl
-            (\idx model ss ->
-                Sub.map (lift << ctor idx) (subscriptions model) :: ss
+            (\idx state ss ->
+                Sub.map (lift << ctor idx) (subscriptions state) :: ss
             )
             []
         |> Sub.batch

@@ -37,9 +37,9 @@ update lift msg model =
             False
 
         -- TODO
-        scrollToTabAtIndex isRtl geometry i =
+        scrollToTabAtIndex geometry i =
             let
-                tab =
+                tab_ =
                     geometry.tabs
                         |> List.drop i
                         |> List.head
@@ -52,10 +52,10 @@ update lift msg model =
                     geometry.tabBar.offsetWidth
 
                 scrollTargetOffsetLeft =
-                    tab.offsetLeft
+                    tab_.offsetLeft
 
                 scrollTargetOffsetWidth =
-                    tab.offsetWidth
+                    tab_.offsetWidth
 
                 normalizeForRtl left width =
                     if isRtl then
@@ -126,13 +126,13 @@ update lift msg model =
                 currentTranslateOffset =
                     model.translateOffset
 
-                loop ( i, tab ) ({ scrollTargetIndex, tabWidthAccumulator } as result) =
-                    if scrollTargetIndex /= Nothing then
+                loop ( i, tab_ ) result =
+                    if result.scrollTargetIndex /= Nothing then
                         result
                     else
                         let
                             tabOffsetLeft =
-                                tab.offsetLeft
+                                tab_.offsetLeft
 
                             tabBarWidthLessTabOffsetLeft =
                                 tabBarWidth - tabOffsetLeft
@@ -148,7 +148,7 @@ update lift msg model =
                         else
                             let
                                 newTabWidthAccumulator =
-                                    tabWidthAccumulator + tab.offsetWidth
+                                    result.tabWidthAccumulator + tab_.offsetWidth
 
                                 scrollTargetDetermined =
                                     newTabWidthAccumulator > scrollFrameWidth
@@ -175,10 +175,10 @@ update lift msg model =
                             { scrollTargetIndex = Nothing
                             , tabWidthAccumulator = 0
                             }
-                            (List.reverse (List.indexedMap (,) geometry.tabs))
+                            (List.reverse (List.indexedMap (\index tab_ -> ( index, tab_ )) geometry.tabs))
 
                 translateOffset =
-                    scrollToTabAtIndex isRtl geometry scrollTargetIndex
+                    scrollToTabAtIndex geometry scrollTargetIndex
 
                 { forwardIndicator, backIndicator } =
                     indicatorEnabledStates geometry translateOffset
@@ -201,13 +201,13 @@ update lift msg model =
                 scrollFrameWidth =
                     geometry.scrollFrame.offsetWidth + currentTranslationOffset
 
-                loop ( i, tab ) ({ scrollTargetIndex } as result) =
-                    if scrollTargetIndex /= Nothing then
+                loop ( i, tab_ ) result =
+                    if result.scrollTargetIndex /= Nothing then
                         result
                     else
                         let
                             tabOffsetLeftAndWidth =
-                                tab.offsetLeft + tab.offsetWidth
+                                tab_.offsetLeft + tab_.offsetWidth
 
                             scrollTargetDetermined =
                                 if not isRtl then
@@ -215,10 +215,10 @@ update lift msg model =
                                 else
                                     let
                                         frameOffsetAndTabWidth =
-                                            scrollFrameWidth - tab.offsetWidth
+                                            scrollFrameWidth - tab_.offsetWidth
 
                                         tabRightOffset =
-                                            tab.offsetWidth - tabOffsetLeftAndWidth
+                                            tab_.offsetWidth - tabOffsetLeftAndWidth
                                     in
                                     tabRightOffset > frameOffsetAndTabWidth
                         in
@@ -236,10 +236,10 @@ update lift msg model =
                         List.foldl loop
                             { scrollTargetIndex = Nothing
                             }
-                            (List.indexedMap (,) geometry.tabs)
+                            (List.indexedMap (\index tab_ -> ( index, tab_ )) geometry.tabs)
 
                 translateOffset =
-                    scrollToTabAtIndex isRtl geometry scrollTargetIndex
+                    scrollToTabAtIndex geometry scrollTargetIndex
 
                 { forwardIndicator, backIndicator } =
                     indicatorEnabledStates geometry translateOffset
@@ -262,7 +262,7 @@ update lift msg model =
                     else
                         0
 
-                tab =
+                tab_ =
                     geometry.tabs
                         |> List.drop i
                         |> List.head
@@ -278,10 +278,10 @@ update lift msg model =
                     geometry.tabBar.offsetWidth
 
                 leftEdge =
-                    tab.offsetLeft
+                    tab_.offsetLeft
 
                 rightEdge =
-                    leftEdge + tab.offsetWidth
+                    leftEdge + tab_.offsetWidth
 
                 normalizedLeftOffset =
                     tabBarWidth - leftEdge
@@ -388,11 +388,11 @@ withIconAndText =
 
 
 icon : List (Options.Property c m) -> String -> Html m
-icon options icon =
+icon options value =
     Icon.view
         [ cs "mdc-tab__icon"
         ]
-        icon
+        value
 
 
 iconText : List (Options.Property c m) -> String -> Html m
@@ -438,7 +438,7 @@ tabs lift model options nodes =
                     else
                         -model.translateOffset
             in
-            "translateX(" ++ toString shiftAmount ++ "px)"
+            "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
 
         geometry =
             Maybe.withDefault defaultGeometry model.geometry
@@ -453,8 +453,8 @@ tabs lift model options nodes =
                         |> Maybe.withDefault 0
             in
             String.join " "
-                [ "translateX(" ++ toString tabLeft ++ "px)"
-                , "scale(" ++ toString model.scale ++ ",1)"
+                [ "translateX(" ++ String.fromFloat tabLeft ++ "px)"
+                , "scale(" ++ String.fromFloat model.scale ++ ",1)"
                 ]
 
         tabBarScroller tabBar =
@@ -532,7 +532,7 @@ tabs lift model options nodes =
             (List.concat
                 [ nodes
                     |> List.indexedMap
-                        (\index { options, childs } ->
+                        (\index node ->
                             let
                                 ripple =
                                     Ripple.view False
@@ -568,9 +568,9 @@ tabs lift model options nodes =
                                             :: (Options.on "keydown" <|
                                                     Json.map lift <|
                                                         Json.map3
-                                                            (\key keyCode geometry ->
+                                                            (\key keyCode geometry_ ->
                                                                 if key == Just "Enter" || keyCode == 13 then
-                                                                    Select index geometry
+                                                                    Select index geometry_
                                                                 else
                                                                     NoOp
                                                             )
@@ -591,12 +591,12 @@ tabs lift model options nodes =
                                                         Json.map (lift << Focus index) <|
                                                             decodeGeometryOnTab config.indicator
                                                )
-                                            :: options
+                                            :: node.options
                                         )
                                     )
                                     []
                                 )
-                                (childs ++ [ ripple.style ])
+                                (node.childs ++ [ ripple.style ])
                             ]
                         )
                     |> List.concat
@@ -625,7 +625,7 @@ type alias Store s =
     { s | tabs : Indexed Model }
 
 
-( get, set ) =
+getSet =
     Component.indexed .tabs (\x y -> { y | tabs = x }) defaultModel
 
 
@@ -636,7 +636,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react get set Internal.Msg.TabsMsg update
+    Component.react getSet.get getSet.set Internal.Msg.TabsMsg update
 
 
 view :
@@ -647,7 +647,7 @@ view :
     -> List (Tab m)
     -> Html m
 view =
-    Component.render get tabs Internal.Msg.TabsMsg
+    Component.render getSet.get tabs Internal.Msg.TabsMsg
 
 
 computeScale : Geometry -> Int -> Float
@@ -660,11 +660,11 @@ computeScale geometry index =
         Nothing ->
             1
 
-        Just tab ->
+        Just tab_ ->
             if totalTabsWidth == 0 then
                 1
             else
-                tab.offsetWidth / totalTabsWidth
+                tab_.offsetWidth / totalTabsWidth
 
 
 decodeGeometryOnIndicator : Bool -> Decoder Geometry
