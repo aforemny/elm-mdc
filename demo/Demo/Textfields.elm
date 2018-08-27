@@ -1,4 +1,4 @@
-module Demo.Textfields exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.Textfields exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -71,15 +71,16 @@ update lift msg model =
 
         ExampleMsg index msg_ ->
             let
-                example =
+                examples =
                     Dict.get index model.examples
                         |> Maybe.withDefault defaultExample
-                        |> updateExample msg_
-
-                examples =
-                    Dict.insert index example model.examples
+                        |> (\exampleState ->
+                                Dict.insert index
+                                    (updateExample msg_ exampleState)
+                                    model.examples
+                           )
             in
-            { model | examples = examples } ! []
+            ( { model | examples = examples }, Cmd.none )
 
 
 updateExample : ExampleMsg -> Example -> Example

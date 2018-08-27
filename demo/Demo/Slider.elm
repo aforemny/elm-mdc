@@ -1,4 +1,4 @@
-module Demo.Slider exposing (Model, Msg(Mdc), defaultModel, subscriptions, update, view)
+module Demo.Slider exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -202,13 +202,13 @@ continuousSlider lift model =
         , Html.p []
             [ text "Value from Slider.onInput: "
             , Html.span []
-                [ text (toString (Maybe.withDefault 0 (Dict.get id model.inputs)))
+                [ text (String.fromFloat (Maybe.withDefault 0 (Dict.get id model.inputs)))
                 ]
             ]
         , Html.p []
             [ text "Value from Slider.onChange: "
             , Html.span []
-                [ text (toString (Maybe.withDefault 0 (Dict.get id model.values)))
+                [ text (String.fromFloat (Maybe.withDefault 0 (Dict.get id model.values)))
                 ]
             ]
         ]
@@ -246,13 +246,13 @@ discreteSlider lift model =
         , Html.p []
             [ text "Value from Slider.onInput: "
             , Html.span []
-                [ text (toString (Maybe.withDefault 0 (Dict.get id model.inputs)))
+                [ text (String.fromFloat (Maybe.withDefault 0 (Dict.get id model.inputs)))
                 ]
             ]
         , Html.p []
             [ text "Value from Slider.onChange: "
             , Html.span []
-                [ text (toString (Maybe.withDefault 0 (Dict.get id model.values)))
+                [ text (String.fromFloat (Maybe.withDefault 0 (Dict.get id model.values)))
                 ]
             ]
         ]
@@ -291,13 +291,13 @@ discreteSliderWithTickMarks lift model =
         , Html.p []
             [ text "Value from Slider.onInput: "
             , Html.span []
-                [ text (toString (Maybe.withDefault 0 (Dict.get id model.inputs)))
+                [ text (String.fromFloat (Maybe.withDefault 0 (Dict.get id model.inputs)))
                 ]
             ]
         , Html.p []
             [ text "Value from Slider.onChange: "
             , Html.span []
-                [ text (toString (Maybe.withDefault 0 (Dict.get id model.values)))
+                [ text (String.fromFloat (Maybe.withDefault 0 (Dict.get id model.values)))
                 ]
             ]
         ]
@@ -313,8 +313,8 @@ controls lift model =
                     [ Html.type_ "number"
                     , Html.min "0"
                     , Html.max "100"
-                    , Html.defaultValue "0"
-                    , Html.on "input" (Json.map (String.toInt >> Result.toMaybe >> Maybe.withDefault 0 >> SetMin >> lift) Html.targetValue)
+                    , Html.value "0"
+                    , Html.on "input" (Json.map (String.toInt >> Maybe.withDefault 0 >> SetMin >> lift) Html.targetValue)
                     ]
                     []
                 ]
@@ -326,8 +326,8 @@ controls lift model =
                     [ Html.type_ "number"
                     , Html.min "0"
                     , Html.max "100"
-                    , Html.defaultValue "100"
-                    , Html.on "input" (Json.map (String.toInt >> Result.toMaybe >> Maybe.withDefault 100 >> SetMax >> lift) Html.targetValue)
+                    , Html.value "100"
+                    , Html.on "input" (Json.map (String.toInt >> Maybe.withDefault 100 >> SetMax >> lift) Html.targetValue)
                     ]
                     []
                 ]
@@ -337,8 +337,8 @@ controls lift model =
                 [ text "Step: "
                 , Html.input
                     [ Html.type_ "text"
-                    , Html.defaultValue (toString model.step)
-                    , Html.on "input" (Json.map (String.toFloat >> Result.toMaybe >> Maybe.withDefault 1 >> SetStep >> lift) Html.targetValue)
+                    , Html.value (String.fromFloat model.step)
+                    , Html.on "input" (Json.map (String.toFloat >> Maybe.withDefault 1 >> SetStep >> lift) Html.targetValue)
                     ]
                     []
                 ]

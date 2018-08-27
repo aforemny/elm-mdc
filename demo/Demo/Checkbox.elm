@@ -1,4 +1,4 @@
-module Demo.Checkbox exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.Checkbox exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -56,55 +56,52 @@ update lift msg model =
 
         ToggleIndeterminate index ->
             let
-                checkbox =
+                checkboxes =
                     Dict.get index model.checkboxes
                         |> Maybe.withDefault defaultCheckbox
-                        |> (\checkbox ->
-                                { checkbox
-                                    | checked =
-                                        if checkbox.checked == Nothing then
-                                            Just False
-                                        else
-                                            Nothing
-                                }
+                        |> (\checkboxState ->
+                                Dict.insert index
+                                    { checkboxState
+                                        | checked =
+                                            if checkboxState.checked == Nothing then
+                                                Just False
+                                            else
+                                                Nothing
+                                    }
+                                    model.checkboxes
                            )
-
-                checkboxes =
-                    Dict.insert index checkbox model.checkboxes
             in
             ( { model | checkboxes = checkboxes }, Cmd.none )
 
         ToggleDisabled index ->
             let
-                checkbox =
+                checkboxes =
                     Dict.get index model.checkboxes
                         |> Maybe.withDefault defaultCheckbox
-                        |> (\checkbox ->
-                                { checkbox | disabled = not checkbox.disabled }
+                        |> (\checkboxState ->
+                                Dict.insert index
+                                    { checkboxState | disabled = not checkboxState.disabled }
+                                    model.checkboxes
                            )
-
-                checkboxes =
-                    Dict.insert index checkbox model.checkboxes
             in
             ( { model | checkboxes = checkboxes }, Cmd.none )
 
         ToggleChecked index ->
             let
-                checkbox =
+                checkboxes =
                     Dict.get index model.checkboxes
                         |> Maybe.withDefault defaultCheckbox
-                        |> (\checkbox ->
-                                { checkbox
-                                    | checked =
-                                        if checkbox.checked == Nothing then
-                                            Just True
-                                        else
-                                            Maybe.map not checkbox.checked
-                                }
+                        |> (\checkboxState ->
+                                Dict.insert index
+                                    { checkboxState
+                                        | checked =
+                                            if checkboxState.checked == Nothing then
+                                                Just True
+                                            else
+                                                Maybe.map not checkboxState.checked
+                                    }
+                                    model.checkboxes
                            )
-
-                checkboxes =
-                    Dict.insert index checkbox model.checkboxes
             in
             ( { model | checkboxes = checkboxes }, Cmd.none )
 
@@ -120,32 +117,33 @@ view lift page model =
                     :: css "padding" "24px"
                     :: options
                 )
-
-        checkbox index =
-            let
-                checkbox =
-                    Dict.get index model.checkboxes
-                        |> Maybe.withDefault defaultCheckbox
-            in
-            Checkbox.view (lift << Mdc)
-                index
-                model.mdc
-                [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
-                , when (checkbox.checked /= Nothing) <|
-                    Checkbox.checked (Maybe.withDefault False checkbox.checked)
-                , Checkbox.disabled |> when checkbox.disabled
-                ]
-                []
     in
     page.body "Checkbox"
-        [ Page.hero []
+        [ let
+            viewCheckbox index =
+                let
+                    checkbox =
+                        Dict.get index model.checkboxes
+                            |> Maybe.withDefault defaultCheckbox
+                in
+                Checkbox.view (lift << Mdc)
+                    index
+                    model.mdc
+                    [ Options.on "click" (Json.succeed (lift (ToggleChecked index)))
+                    , when (checkbox.checked /= Nothing) <|
+                        Checkbox.checked (Maybe.withDefault False checkbox.checked)
+                    , Checkbox.disabled |> when checkbox.disabled
+                    ]
+                    []
+          in
+          Page.hero []
             [ FormField.view []
-                [ checkbox "checkbox-hero-checkbox"
+                [ viewCheckbox "checkbox-hero-checkbox"
                 , Html.label [ Html.for "checkbox-hero-checkbox" ] [ text "Checkbox" ]
                 ]
             ]
         , let
-            checkbox index label =
+            viewCheckbox index label =
                 let
                     checkbox =
                         Dict.get index model.checkboxes
@@ -199,7 +197,7 @@ view lift page model =
                   ]
                     |> List.map
                         (\( index, label ) ->
-                            checkbox index label
+                            viewCheckbox index label
                         )
                 ]
             )

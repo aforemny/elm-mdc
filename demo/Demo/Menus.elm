@@ -1,4 +1,4 @@
-module Demo.Menus exposing (Model, Msg(Mdc), defaultModel, subscriptions, update, view)
+module Demo.Menus exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
@@ -170,14 +170,10 @@ menuAnchor : (Msg m -> m) -> Model m -> Html m
 menuAnchor lift model =
     let
         anchorMargin =
-            { top =
-                Maybe.withDefault 0 (Result.toMaybe (String.toFloat model.topMargin))
-            , left =
-                Maybe.withDefault 0 (Result.toMaybe (String.toFloat model.leftMargin))
-            , bottom =
-                Maybe.withDefault 0 (Result.toMaybe (String.toFloat model.bottomMargin))
-            , right =
-                Maybe.withDefault 0 (Result.toMaybe (String.toFloat model.rightMargin))
+            { top = Maybe.withDefault 0 (String.toFloat model.topMargin)
+            , left = Maybe.withDefault 0 (String.toFloat model.leftMargin)
+            , bottom = Maybe.withDefault 0 (String.toFloat model.bottomMargin)
+            , right = Maybe.withDefault 0 (String.toFloat model.rightMargin)
             }
     in
     styled Html.div
@@ -360,7 +356,7 @@ demoControls lift model =
                     [ text <|
                         case model.selected of
                             Just ( index, label ) ->
-                                "\"" ++ label ++ "\" at index " ++ toString index
+                                "\"" ++ label ++ "\" at index " ++ String.fromInt index
 
                             Nothing ->
                                 "<none selected>"

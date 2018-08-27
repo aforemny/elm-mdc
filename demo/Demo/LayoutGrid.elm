@@ -9,6 +9,8 @@ module Demo.LayoutGrid
         , view
         )
 
+import Browser.Dom
+import Browser.Events
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -17,7 +19,6 @@ import Json.Decode as Json
 import Material.LayoutGrid as LayoutGrid
 import Material.Options as Options exposing (cs, css, styled, when)
 import Task
-import Window
 
 
 type alias Model =
@@ -30,7 +31,7 @@ type alias Model =
     , phoneMargin : String
     , phoneGutter : String
     , phoneColumnWidth : String
-    , windowWidth : Maybe Int
+    , windowWidth : Maybe Float
     }
 
 
@@ -59,7 +60,7 @@ type Msg
     | SetPhoneMargin String
     | SetPhoneGutter String
     | SetPhoneColumnWidth String
-    | Resize Window.Size
+    | Resize { width : Float, height : Float }
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Model, Cmd m )
@@ -417,7 +418,7 @@ view lift page model =
                   in
                   Html.div []
                     [ text <|
-                        toString (Maybe.withDefault 0 model.windowWidth)
+                        String.fromFloat (Maybe.withDefault 0 model.windowWidth)
                             ++ "px ("
                             ++ device
                             ++ ")"
@@ -429,9 +430,21 @@ view lift page model =
 
 init : (Msg -> m) -> ( Model, Cmd m )
 init lift =
-    ( defaultModel, Task.perform (lift << Resize) Window.size )
+    ( defaultModel
+    , Task.perform
+        (\{ viewport } ->
+            lift
+                (Resize
+                    { width = viewport.width, height = viewport.height }
+                )
+        )
+        Browser.Dom.getViewport
+    )
 
 
 subscriptions : (Msg -> m) -> Model -> Sub m
 subscriptions lift model =
-    Window.resizes (lift << Resize)
+    Browser.Events.onResize
+        (\width height ->
+            lift (Resize { width = toFloat width, height = toFloat height })
+        )

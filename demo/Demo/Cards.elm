@@ -1,4 +1,4 @@
-module Demo.Cards exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.Cards exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
@@ -311,13 +311,13 @@ albumCard lift index model =
                     |> List.map
                         (\n ->
                             IconToggle.view (lift << Mdc)
-                                (index ++ "-action-icon-star-" ++ toString n)
+                                (index ++ "-action-icon-star-" ++ String.fromInt n)
                                 model.mdc
                                 [ Card.actionIcon
                                 , IconToggle.icon { on = "star_border", off = "star_border" }
                                 , IconToggle.label
-                                    { on = toString n ++ " stars"
-                                    , off = toString n ++ " stars"
+                                    { on = String.fromInt n ++ " stars"
+                                    , off = String.fromInt n ++ " stars"
                                     }
                                 ]
                                 []

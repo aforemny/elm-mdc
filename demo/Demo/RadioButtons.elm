@@ -1,4 +1,4 @@
-module Demo.RadioButtons exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.RadioButtons exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -43,10 +43,11 @@ update lift msg model =
                     Dict.get group model.radios
                         |> Maybe.withDefault ""
             in
-            { model
+            ( { model
                 | radios = Dict.insert group value model.radios
-            }
-                ! []
+              }
+            , Cmd.none
+            )
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m

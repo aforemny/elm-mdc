@@ -475,15 +475,17 @@ floatingFooter model =
         flexibleExpansionRatio =
             Dict.get "toolbar-toolbar" model.mdc.toolbar
                 |> Maybe.andThen
-                    (\model ->
-                        Maybe.map (\calculation -> ( calculation, model.scrollTop )) model.calculations
+                    (\toolbarState ->
+                        Maybe.map
+                            (\calculations -> ( toolbarState.scrollTop, calculations ))
+                            toolbarState.calculations
                     )
                 |> Maybe.map
                     (\( scrollTop, calculations ) ->
                         getFlexibleExpansionRatio calculations scrollTop
                     )
                 |> Maybe.withDefault 1
-                |> ((*) 100 >> round >> toFloat >> flip (/) 100)
+                |> ((*) 100 >> round >> toFloat >> (\fract -> fract / 100))
     in
     styled Html.footer
         [ cs "demo-toolbar-floating-footer"
@@ -497,7 +499,7 @@ floatingFooter model =
         ]
         [ styled Html.span
             []
-            [ text ("Flexible Expansion Ratio: " ++ toString flexibleExpansionRatio)
+            [ text ("Flexible Expansion Ratio: " ++ String.fromFloat flexibleExpansionRatio)
             ]
         ]
 

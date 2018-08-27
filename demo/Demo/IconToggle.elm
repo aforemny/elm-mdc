@@ -1,4 +1,4 @@
-module Demo.IconToggle exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.IconToggle exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -40,8 +40,9 @@ update lift msg model =
                         |> Maybe.withDefault False
                         |> not
             in
-            { model | iconToggles = Dict.insert idx iconToggle model.iconToggles }
-                ! []
+            ( { model | iconToggles = Dict.insert idx iconToggle model.iconToggles }
+            , Cmd.none
+            )
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m

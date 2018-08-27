@@ -1,4 +1,4 @@
-module Demo.Tabs exposing (Model, Msg(Mdc), defaultModel, subscriptions, update, view)
+module Demo.Tabs exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -52,14 +52,16 @@ update lift msg model =
 
         SelectTab index tabIndex ->
             let
-                example =
+                examples =
                     Dict.get index model.examples
                         |> Maybe.withDefault defaultExample
-                        |> (\example ->
-                                { example | tab = tabIndex }
+                        |> (\exampleState ->
+                                Dict.insert index
+                                    { exampleState | tab = tabIndex }
+                                    model.examples
                            )
             in
-            { model | examples = Dict.insert index example model.examples } ! []
+            ( { model | examples = examples }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m

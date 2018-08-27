@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>The elm-mdc library</title>
-
     <!-- mdc -->
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
@@ -18,11 +16,9 @@
   <body class="mdc-typography">
     <script src="elm-mdc.js"></script>
     <script src="demo.js"></script>
+    <div id="elm"></div>
     <script>
-      app = Elm.Main.fullscreen();
-      app.ports.scrollTop.subscribe(function() {
-          document.scrollingElement.scrollTop = 0;
-      });
+      Elm.Main.init({ node: document.getElementById('elm') });
     </script>
   </body>
 </html>

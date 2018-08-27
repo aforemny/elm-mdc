@@ -1,4 +1,4 @@
-module Demo.Selects exposing (Model, Msg(Mdc), defaultModel, subscriptions, update, view)
+module Demo.Selects exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
 import Array
 import Demo.Page as Page exposing (Page)
@@ -55,39 +55,40 @@ update lift msg model =
 
         Pick index value ->
             let
-                select =
+                selects =
                     Dict.get index model.selects
                         |> Maybe.withDefault defaultSelect
-                        |> (\select -> { select | value = Just value })
-
-                selects =
-                    Dict.insert index select model.selects
+                        |> (\selectState ->
+                                Dict.insert index
+                                    { selectState | value = Just value }
+                                    model.selects
+                           )
             in
             ( { model | selects = selects }, Cmd.none )
 
-        -- Pick index value ->
-        --     ( model, Cmd.none )
         ToggleRtl index ->
             let
-                select =
+                selects =
                     Dict.get index model.selects
                         |> Maybe.withDefault defaultSelect
-                        |> (\select -> { select | rtl = not select.rtl })
-
-                selects =
-                    Dict.insert index select model.selects
+                        |> (\selectState ->
+                                Dict.insert index
+                                    { selectState | rtl = not selectState.rtl }
+                                    model.selects
+                           )
             in
             ( { model | selects = selects }, Cmd.none )
 
         ToggleDisabled index ->
             let
-                select =
+                selects =
                     Dict.get index model.selects
                         |> Maybe.withDefault defaultSelect
-                        |> (\select -> { select | disabled = not select.disabled })
-
-                selects =
-                    Dict.insert index select model.selects
+                        |> (\selectState ->
+                                Dict.insert index
+                                    { selectState | disabled = not selectState.disabled }
+                                    model.selects
+                           )
             in
             ( { model | selects = selects }, Cmd.none )
 
@@ -114,7 +115,7 @@ heroSelect lift id model options _ =
             |> List.indexedMap
                 (\index label ->
                     Select.option
-                        [ Select.value (toString index)
+                        [ Select.value (String.fromInt index)
                         ]
                         [ text label ]
                 )
