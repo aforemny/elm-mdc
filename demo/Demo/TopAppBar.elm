@@ -61,7 +61,7 @@ update lift msg model =
                 examples =
                     Dict.insert index example model.examples
             in
-            { model | examples = examples } ! []
+            ( { model | examples = examples }, Cmd.none )
 
 
 updateExample : ExampleMsg -> Example -> Example

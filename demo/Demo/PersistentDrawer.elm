@@ -1,7 +1,7 @@
 module Demo.PersistentDrawer
     exposing
         ( Model
-        , Msg(Mdc)
+        , Msg(..)
         , defaultModel
         , drawerItems
         , subscriptions

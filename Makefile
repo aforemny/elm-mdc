@@ -10,8 +10,7 @@ build-demo: material-components-web.css elm-mdc.js
 	cp material-components-web.css build/
 	cp demo/styles/main.css build/main.css
 	cp elm-mdc.js build/
-	$(ELM) src/Material.elm
-	#(cd demo; $(ELM) Demo.elm --output ../build/demo.js)
+	(cd demo; $(ELM) Demo.elm --output ../build/demo.js)
 
 node_modules:
 	npm i

@@ -1,7 +1,7 @@
 module Demo.PermanentBelowDrawer
     exposing
         ( Model
-        , Msg(Mdc)
+        , Msg(..)
         , defaultModel
         , subscriptions
         , update

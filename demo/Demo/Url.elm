@@ -4,8 +4,11 @@ module Demo.Url
         , TopAppBarPage(..)
         , Url(..)
         , fromString
+        , fromUrl
         , toString
         )
+
+import Url
 
 
 type Url
@@ -216,163 +219,145 @@ toString url =
             requestedHash
 
 
+fromUrl : Url.Url -> Url
+fromUrl url =
+    fromString (Maybe.withDefault "" url.fragment)
+
+
 fromString : String -> Url
-fromString str =
-    let
-        case1 str =
-            case String.uncons str of
-                Nothing ->
-                    Just <| StartPage
+fromString url =
+    case url of
+        "" ->
+            StartPage
 
-                Just ( '#', "" ) ->
-                    Just <| StartPage
+        "buttons" ->
+            Button
 
-                Just ( '#', "buttons" ) ->
-                    Just <| Button
+        "cards" ->
+            Card
 
-                Just ( '#', "cards" ) ->
-                    Just <| Card
+        "checkbox" ->
+            Checkbox
 
-                Just ( '#', "checkbox" ) ->
-                    Just <| Checkbox
+        "chips" ->
+            Chips
 
-                Just ( '#', "chips" ) ->
-                    Just <| Chips
+        "dialog" ->
+            Dialog
 
-                Just ( '#', "dialog" ) ->
-                    Just <| Dialog
+        "drawer" ->
+            Drawer
 
-                Just ( '#', "drawer" ) ->
-                    Just <| Drawer
+        "temporary-drawer" ->
+            TemporaryDrawer
 
-                Just ( '#', "temporary-drawer" ) ->
-                    Just <| TemporaryDrawer
+        "persistent-drawer" ->
+            PersistentDrawer
 
-                Just ( '#', "persistent-drawer" ) ->
-                    Just <| PersistentDrawer
+        "permanent-drawer-above" ->
+            PermanentAboveDrawer
 
-                Just ( '#', "permanent-drawer-above" ) ->
-                    Just <| PermanentAboveDrawer
+        "permanent-drawer-below" ->
+            PermanentBelowDrawer
 
-                Just ( '#', "permanent-drawer-below" ) ->
-                    Just <| PermanentBelowDrawer
+        "elevation" ->
+            Elevation
 
-                Just ( '#', "elevation" ) ->
-                    Just <| Elevation
+        "fab" ->
+            Fabs
 
-                Just ( '#', "fab" ) ->
-                    Just <| Fabs
+        "grid-list" ->
+            GridList
 
-                Just ( '#', "grid-list" ) ->
-                    Just <| GridList
+        "icon-toggle" ->
+            IconToggle
 
-                Just ( '#', "icon-toggle" ) ->
-                    Just <| IconToggle
+        "image-list" ->
+            ImageList
 
-                Just ( '#', "image-list" ) ->
-                    Just <| ImageList
+        "layout-grid" ->
+            LayoutGrid
 
-                Just ( '#', "layout-grid" ) ->
-                    Just <| LayoutGrid
+        "linear-progress" ->
+            LinearProgress
 
-                Just ( '#', "linear-progress" ) ->
-                    Just <| LinearProgress
+        "lists" ->
+            List
 
-                Just ( '#', "lists" ) ->
-                    Just <| List
+        "radio-buttons" ->
+            RadioButton
 
-                _ ->
-                    Nothing
+        "ripple" ->
+            Ripple
 
-        case2 str =
-            case String.uncons str of
-                Just ( '#', "radio-buttons" ) ->
-                    Just <| RadioButton
+        "select" ->
+            Select
 
-                Just ( '#', "ripple" ) ->
-                    Just <| Ripple
+        "menu" ->
+            Menu
 
-                Just ( '#', "select" ) ->
-                    Just <| Select
+        "slider" ->
+            Slider
 
-                Just ( '#', "menu" ) ->
-                    Just <| Menu
+        "snackbar" ->
+            Snackbar
 
-                Just ( '#', "slider" ) ->
-                    Just <| Slider
+        "switch" ->
+            Switch
 
-                Just ( '#', "snackbar" ) ->
-                    Just <| Snackbar
+        "tabs" ->
+            Tabs
 
-                Just ( '#', "switch" ) ->
-                    Just <| Switch
+        "text-field" ->
+            TextField
 
-                Just ( '#', "tabs" ) ->
-                    Just <| Tabs
+        "theme" ->
+            Theme
 
-                Just ( '#', "text-field" ) ->
-                    Just <| TextField
+        "toolbar" ->
+            Toolbar Nothing
 
-                Just ( '#', "theme" ) ->
-                    Just <| Theme
+        "toolbar/default-toolbar" ->
+            Toolbar (Just DefaultToolbar)
 
-                _ ->
-                    Nothing
+        "toolbar/fixed-toolbar" ->
+            Toolbar (Just FixedToolbar)
 
-        case3 str =
-            case String.uncons str of
-                Just ( '#', "toolbar" ) ->
-                    Just <| Toolbar Nothing
+        "toolbar/waterfall-toolbar" ->
+            Toolbar (Just WaterfallToolbar)
 
-                Just ( '#', "toolbar/default-toolbar" ) ->
-                    Just <| Toolbar (Just DefaultToolbar)
+        "toolbar/default-flexible-toolbar" ->
+            Toolbar (Just DefaultFlexibleToolbar)
 
-                Just ( '#', "toolbar/fixed-toolbar" ) ->
-                    Just <| Toolbar (Just FixedToolbar)
+        "toolbar/waterfall-flexible-toolbar" ->
+            Toolbar (Just WaterfallFlexibleToolbar)
 
-                Just ( '#', "toolbar/waterfall-toolbar" ) ->
-                    Just <| Toolbar (Just WaterfallToolbar)
+        "toolbar/waterfall-toolbar-fix-last-row" ->
+            Toolbar (Just WaterfallToolbarFix)
 
-                Just ( '#', "toolbar/default-flexible-toolbar" ) ->
-                    Just <| Toolbar (Just DefaultFlexibleToolbar)
+        "top-app-bar" ->
+            TopAppBar Nothing
 
-                Just ( '#', "toolbar/waterfall-flexible-toolbar" ) ->
-                    Just <| Toolbar (Just WaterfallFlexibleToolbar)
+        "top-app-bar/standard" ->
+            TopAppBar (Just StandardTopAppBar)
 
-                Just ( '#', "toolbar/waterfall-toolbar-fix-last-row" ) ->
-                    Just <| Toolbar (Just WaterfallToolbarFix)
+        "top-app-bar/fixed" ->
+            TopAppBar (Just FixedTopAppBar)
 
-                Just ( '#', "top-app-bar" ) ->
-                    Just <| TopAppBar Nothing
+        "top-app-bar/dense" ->
+            TopAppBar (Just DenseTopAppBar)
 
-                Just ( '#', "top-app-bar/standard" ) ->
-                    Just <| TopAppBar (Just StandardTopAppBar)
+        "top-app-bar/prominent" ->
+            TopAppBar (Just ProminentTopAppBar)
 
-                Just ( '#', "top-app-bar/fixed" ) ->
-                    Just <| TopAppBar (Just FixedTopAppBar)
+        "top-app-bar/short" ->
+            TopAppBar (Just ShortTopAppBar)
 
-                Just ( '#', "top-app-bar/dense" ) ->
-                    Just <| TopAppBar (Just DenseTopAppBar)
+        "top-app-bar/short-collapsed" ->
+            TopAppBar (Just ShortCollapsedTopAppBar)
 
-                Just ( '#', "top-app-bar/prominent" ) ->
-                    Just <| TopAppBar (Just ProminentTopAppBar)
+        "typography" ->
+            Typography
 
-                Just ( '#', "top-app-bar/short" ) ->
-                    Just <| TopAppBar (Just ShortTopAppBar)
-
-                Just ( '#', "top-app-bar/short-collapsed" ) ->
-                    Just <| TopAppBar (Just ShortCollapsedTopAppBar)
-
-                Just ( '#', "typography" ) ->
-                    Just Typography
-
-                _ ->
-                    Nothing
-    in
-    [ case1 str
-    , case2 str
-    , case3 str
-    ]
-        |> List.filterMap identity
-        |> List.head
-        |> Maybe.withDefault (Error404 str)
+        _ ->
+            Error404 url

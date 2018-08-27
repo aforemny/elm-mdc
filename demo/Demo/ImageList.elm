@@ -1,4 +1,4 @@
-module Demo.ImageList exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.ImageList exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)

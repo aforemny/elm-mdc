@@ -1,4 +1,4 @@
-module Demo.Buttons exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.Buttons exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink

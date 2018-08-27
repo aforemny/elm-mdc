@@ -1,7 +1,7 @@
 module Demo.TemporaryDrawer
     exposing
         ( Model
-        , Msg(Mdc)
+        , Msg(..)
         , defaultModel
         , subscriptions
         , update

@@ -1,4 +1,4 @@
-module Demo.Switch exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.Switch exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)

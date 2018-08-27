@@ -1,4 +1,4 @@
-module Demo.Elevation exposing (Model, Msg(Mdc), defaultModel, update, view)
+module Demo.Elevation exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
@@ -162,9 +162,9 @@ view lift page model =
                         [ styled Html.figcaption
                             [ css "display" "flex"
                             ]
-                            [ text (toString z ++ "dp")
+                            [ text (String.fromInt z ++ "dp")
                             , Html.br [] []
-                            , text ("(Material.Elevation.z" ++ toString z ++ ")")
+                            , text ("(Material.Elevation.z" ++ String.fromInt z ++ ")")
                             ]
                         ]
                 )

@@ -1,5 +1,7 @@
-port module Main exposing (..)
+module Main exposing (..)
 
+import Browser
+import Browser.Navigation
 import Demo.Buttons
 import Demo.Cards
 import Demo.Checkbox
@@ -33,22 +35,20 @@ import Demo.Theme
 import Demo.Toolbar
 import Demo.TopAppBar
 import Demo.Typography
-import Demo.Url as Url exposing (ToolbarPage(..), TopAppBarPage(..), Url(..))
+import Demo.Url exposing (ToolbarPage(..), TopAppBarPage(..))
 import Html exposing (Html, text)
 import Material
 import Material.Options as Options exposing (css, styled, when)
 import Material.Toolbar as Toolbar
 import Material.Typography as Typography
-import Navigation
 import Platform.Cmd exposing (..)
-
-
-port scrollTop : () -> Cmd msg
+import Url
 
 
 type alias Model =
     { mdc : Material.Model Msg
-    , url : Url
+    , key : Browser.Navigation.Key
+    , url : Demo.Url.Url
     , buttons : Demo.Buttons.Model Msg
     , cards : Demo.Cards.Model Msg
     , checkbox : Demo.Checkbox.Model Msg
@@ -81,10 +81,11 @@ type alias Model =
     }
 
 
-defaultModel : Model
-defaultModel =
+defaultModel : Browser.Navigation.Key -> Model
+defaultModel key =
     { mdc = Material.defaultModel
-    , url = StartPage
+    , key = key
+    , url = Demo.Url.StartPage
     , buttons = Demo.Buttons.defaultModel
     , cards = Demo.Cards.defaultModel
     , checkbox = Demo.Checkbox.defaultModel
@@ -117,10 +118,14 @@ defaultModel =
     }
 
 
+{-| TODO: Remove Navigate
+-}
 type Msg
     = Mdc (Material.Msg Msg)
-    | SetUrl Url
-    | Navigate Url
+    | NoOp
+    | UrlChanged Url.Url
+    | UrlRequested Browser.UrlRequest
+    | Navigate Demo.Url.Url
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -155,19 +160,30 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Mdc msg ->
-            Material.update Mdc msg model
+        Mdc msg_ ->
+            Material.update Mdc msg_ model
+
+        NoOp ->
+            ( model, Cmd.none )
 
         Navigate url ->
-            { model | url = url }
-                ! [ Navigation.newUrl (Url.toString url)
-                  , scrollTop ()
-                  ]
+            ( { model | url = url }
+            , Cmd.batch
+                [ Browser.Navigation.pushUrl model.key (Demo.Url.toString url)
+                -- , scrollTop () TODO
+                ]
+            )
 
-        SetUrl url ->
-            { model | url = url }
-                ! [ scrollTop ()
-                  ]
+        UrlRequested (Browser.Internal url) ->
+            ( { model | url = Demo.Url.fromUrl url }
+            , Browser.Navigation.load (Demo.Url.toString (Demo.Url.fromUrl url))
+            )
+
+        UrlRequested (Browser.External string) ->
+            ( model, Cmd.none )
+
+        UrlChanged url ->
+            ( { model | url = Demo.Url.fromUrl url } , Cmd.none ) -- TODO: scrollTop ())
 
         ButtonsMsg msg_ ->
             let
@@ -373,15 +389,15 @@ update msg model =
             ( { model | topAppBar = topAppBar }, effects )
 
 
-view : Model -> Html Msg
-view =
-    view_
+view : Model -> Browser.Document Msg
+view model =
+    { title = "The elm-mdc library"
+    , body = [ view_ model ]
+    }
 
 
-
--- TODO: Should be: Html.Lazy.lazy view_, but triggers virtual-dom bug #110
-
-
+{-| TODO: Should be: Html.Lazy.lazy view_, but triggers virtual-dom bug #110
+-}
 view_ : Model -> Html Msg
 view_ model =
     let
@@ -398,9 +414,16 @@ view_ model =
                         , Typography.typography
                         ]
                         (List.concat
-                            [ [ Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url title
+                            [ [ Page.toolbar Mdc
+                                    "page-toolbar"
+                                    model.mdc
+                                    Navigate
+                                    model.url
+                                    title
                               ]
-                            , [ styled Html.div [ Toolbar.fixedAdjust "page-toolbar" model.mdc ] []
+                            , [ styled Html.div
+                                    [ Toolbar.fixedAdjust "page-toolbar" model.mdc ]
+                                    []
                               ]
                             , nodes
                             ]
@@ -408,103 +431,103 @@ view_ model =
             }
     in
     case model.url of
-        StartPage ->
+        Demo.Url.StartPage ->
             Demo.Startpage.view page
 
-        Button ->
+        Demo.Url.Button ->
             Demo.Buttons.view ButtonsMsg page model.buttons
 
-        Card ->
+        Demo.Url.Card ->
             Demo.Cards.view CardsMsg page model.cards
 
-        Checkbox ->
+        Demo.Url.Checkbox ->
             Demo.Checkbox.view CheckboxMsg page model.checkbox
 
-        Chips ->
+        Demo.Url.Chips ->
             Demo.Chips.view ChipsMsg page model.chips
 
-        Dialog ->
+        Demo.Url.Dialog ->
             Demo.Dialog.view DialogMsg page model.dialog
 
-        Drawer ->
+        Demo.Url.Drawer ->
             Demo.Drawer.view DrawerMsg page model.drawer
 
-        TemporaryDrawer ->
+        Demo.Url.TemporaryDrawer ->
             Demo.TemporaryDrawer.view TemporaryDrawerMsg page model.temporaryDrawer
 
-        PersistentDrawer ->
+        Demo.Url.PersistentDrawer ->
             Demo.PersistentDrawer.view PersistentDrawerMsg page model.persistentDrawer
 
-        PermanentAboveDrawer ->
+        Demo.Url.PermanentAboveDrawer ->
             Demo.PermanentAboveDrawer.view PermanentAboveDrawerMsg page model.permanentAboveDrawer
 
-        PermanentBelowDrawer ->
+        Demo.Url.PermanentBelowDrawer ->
             Demo.PermanentBelowDrawer.view PermanentBelowDrawerMsg page model.permanentBelowDrawer
 
-        Elevation ->
+        Demo.Url.Elevation ->
             Demo.Elevation.view ElevationMsg page model.elevation
 
-        Fabs ->
+        Demo.Url.Fabs ->
             Demo.Fabs.view FabsMsg page model.fabs
 
-        IconToggle ->
+        Demo.Url.IconToggle ->
             Demo.IconToggle.view IconToggleMsg page model.iconToggle
 
-        ImageList ->
+        Demo.Url.ImageList ->
             Demo.ImageList.view ImageListMsg page model.imageList
 
-        LinearProgress ->
+        Demo.Url.LinearProgress ->
             Demo.LinearProgress.view page
 
-        List ->
+        Demo.Url.List ->
             Demo.Lists.view ListsMsg page model.lists
 
-        RadioButton ->
+        Demo.Url.RadioButton ->
             Demo.RadioButtons.view RadioButtonsMsg page model.radio
 
-        Select ->
+        Demo.Url.Select ->
             Demo.Selects.view SelectMsg page model.selects
 
-        Menu ->
+        Demo.Url.Menu ->
             Demo.Menus.view MenuMsg page model.menus
 
-        Slider ->
+        Demo.Url.Slider ->
             Demo.Slider.view SliderMsg page model.slider
 
-        Snackbar ->
+        Demo.Url.Snackbar ->
             Demo.Snackbar.view SnackbarMsg page model.snackbar
 
-        Switch ->
+        Demo.Url.Switch ->
             Demo.Switch.view SwitchMsg page model.switch
 
-        Tabs ->
+        Demo.Url.Tabs ->
             Demo.Tabs.view TabsMsg page model.tabs
 
-        TextField ->
+        Demo.Url.TextField ->
             Demo.Textfields.view TextfieldMsg page model.textfields
 
-        Theme ->
+        Demo.Url.Theme ->
             Demo.Theme.view ThemeMsg page model.theme
 
-        Toolbar toolbarPage ->
+        Demo.Url.Toolbar toolbarPage ->
             Demo.Toolbar.view ToolbarMsg page toolbarPage model.toolbar
 
-        TopAppBar topAppBarPage ->
+        Demo.Url.TopAppBar topAppBarPage ->
             Demo.TopAppBar.view TopAppBarMsg page topAppBarPage model.topAppBar
 
-        GridList ->
+        Demo.Url.GridList ->
             Demo.GridList.view GridListMsg page model.gridList
 
-        LayoutGrid ->
+        Demo.Url.LayoutGrid ->
             Demo.LayoutGrid.view LayoutGridMsg page model.layoutGrid
 
-        Ripple ->
+        Demo.Url.Ripple ->
             Demo.Ripple.view RippleMsg page model.ripple
 
-        Typography ->
+        Demo.Url.Typography ->
             Demo.Typography.view page
 
-        Error404 requestedHash ->
+        Demo.Url.Error404 requestedHash ->
             Html.div
                 []
                 [ Options.styled Html.h1
@@ -517,29 +540,34 @@ view_ model =
 
 urlOf : Model -> String
 urlOf model =
-    Url.toString model.url
+    Demo.Url.toString model.url
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Navigation.program
-        (.hash >> Url.fromString >> SetUrl)
+    Browser.application
         { init = init
         , view = view
         , subscriptions = subscriptions
         , update = update
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
         }
 
 
-init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
+init : () -> Url.Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
+init flags url key =
     let
         ( layoutGrid, layoutGridEffects ) =
             Demo.LayoutGrid.init LayoutGridMsg
+
+        model =
+            defaultModel key
     in
-    ( { defaultModel
+    ( { model
         | layoutGrid = layoutGrid
-        , url = Url.fromString location.hash
+        , key = key
+        , url = Demo.Url.fromUrl url
       }
     , Cmd.batch
         [ Material.init Mdc
