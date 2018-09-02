@@ -1,22 +1,22 @@
 module Internal.ImageList.Implementation
     exposing
-        ( divImage
+        ( Property
+        , divImage
         , image
         , imageAspectContainer
         , item
         , label
         , masonry
-        , Property
         , src
         , supporting
         , view
         , withTextProtection
         )
 
-import Html.Attributes as Html
 import Html exposing (Html, text)
+import Html.Attributes as Html
 import Internal.ImageList.Model exposing (Config, defaultConfig)
-import Internal.Options as Options exposing (styled, cs, css, when)
+import Internal.Options as Options exposing (cs, css, styled, when)
 
 
 cssClasses :
@@ -29,6 +29,7 @@ cssClasses =
     }
 
 
+
 -- VIEW
 
 
@@ -38,13 +39,13 @@ imageList options =
         ({ config } as summary) =
             Options.collect defaultConfig options
     in
-        Options.apply summary
-            Html.ul
-            [ cs "mdc-image-list"
-            , when config.masonry (cs cssClasses.masonry)
-            , when config.withTextProtection (cs cssClasses.withTextProtection)
-            ]
-            []
+    Options.apply summary
+        Html.ul
+        [ cs "mdc-image-list"
+        , when config.masonry (cs cssClasses.masonry)
+        , when config.withTextProtection (cs cssClasses.withTextProtection)
+        ]
+        []
 
 
 

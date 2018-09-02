@@ -145,7 +145,13 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                         ]
                     ]
                 , styled Html.h2
+<<<<<<< HEAD
                     [ Typography.headline6
+=======
+                    [ cs "mdc-typography--headline6"
+
+                    -- TODO: Typography.headline6?
+>>>>>>> 23f632a14628d9ce0434af6d4764aa7cd3de6180
                     , css "border-bottom" "1px solid rgba(0,0,0,.87)"
                     ]
                     [ text "Resources"

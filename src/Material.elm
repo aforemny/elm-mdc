@@ -202,6 +202,7 @@ This is a string and is expected to be globally unique within your program. It
 coincides with `Html.id`, and we may set it as `Html.id` on a component's
 native control (`<input>`) element, ie. Checkbox, Radio, Select, Switch, and
 Textfield.
+
 -}
 type alias Index =
     Internal.Component.Index
@@ -413,6 +414,7 @@ adds the necessary CSS and JavaScript imports.
 
 For production use, you will want to do this yourself in `index.html` to
 prevent an unstyled flash of content and to properly manage assets.
+
 -}
 top : Html a -> Html a
 top content =

@@ -1,10 +1,11 @@
-module Internal.Textfield.Model exposing
-    ( defaultGeometry
-    , defaultModel
-    , Geometry
-    , Model
-    , Msg(..)
-    )
+module Internal.Textfield.Model
+    exposing
+        ( Geometry
+        , Model
+        , Msg(..)
+        , defaultGeometry
+        , defaultModel
+        )
 
 import Internal.Ripple.Model as Ripple
 

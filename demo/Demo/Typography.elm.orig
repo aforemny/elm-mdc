@@ -4,8 +4,15 @@ import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page exposing (Page)
 import Html exposing (..)
+<<<<<<< HEAD
+import Material
+import Material.Options as Options exposing (styled, cs, css, nop)
+=======
 import Material.Options as Options exposing (cs, css, nop, styled)
+>>>>>>> 23f632a14628d9ce0434af6d4764aa7cd3de6180
 import Material.Typography as Typography
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 
 
 view : Page m -> Html m

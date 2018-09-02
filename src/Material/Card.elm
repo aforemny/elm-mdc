@@ -1,101 +1,99 @@
-module Material.Card exposing
-    ( actionButton
-    , actionButtons
-    , actionIcon
-    , actionIcons
-    , actions
-    , aspect16To9
-    , fullBleed
-    , media
-    , backgroundImage
-    , mediaContent
-    , primaryAction
-    , Property
-    , square
-    , stroked
-    , view
-    )
+module Material.Card
+    exposing
+        ( Property
+        , actionButton
+        , actionButtons
+        , actionIcon
+        , actionIcons
+        , actions
+        , aspect16To9
+        , backgroundImage
+        , fullBleed
+        , media
+        , mediaContent
+        , primaryAction
+        , square
+        , stroked
+        , view
+        )
 
-{-|
-Card is a component that implements the Material Design card component.
+{-| Card is a component that implements the Material Design card component.
 
 
 # Resources
 
-- [Material Design guidelines: Cards](https://material.io/guidelines/components/cards.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#cards)
+  - [Material Design guidelines: Cards](https://material.io/guidelines/components/cards.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#cards)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.Button as Button
-import Material.Card as Card
-import Material.IconToggle as IconToggle
-import Material.Options as Options exposing (styled, css)
-import Material.Typography as Typography
+    import Html exposing (text)
+    import Material.Button as Button
+    import Material.Card as Card
+    import Material.IconToggle as IconToggle
+    import Material.Options as Options exposing (styled, css)
+    import Material.Typography as Typography
 
 
-Card.view
-    [ css "width" "350px"
-    ]
-    [ Card.media
-          [ Card.aspect16To9
-          , Card.backgroundImage "images/16-9.jpg"
-          ]
-          []
-    , styled Html.div
-          [ css "padding" "1rem"
-          ]
-          [ styled Html.h2
-            [ Typography.title
-            , css "margin" "0"
-            ]
-            [ text "Our Changing Planet"
-            ]
-          , styled Html.h3
-            [ Typography.subheading1
-            , css "margin" "0"
-            ]
-            [ text "by Kurt Wagner"
-            ]
-          ]
-    , styled Html.div
-          [ css "padding" "0 1rem 8px 1rem"
-          , css "color" "rgba(0, 0, 0, 0.54)"
-          , Typography.body1
-          ]
-          [ text """
-Visit ten places on our planet that are undergoing the
-biggest changes today."""
-          ]
-    , Card.actions []
-          [ Card.actionButtons []
-                [ Button.view Mdc "my-read-action" model.mdc
-                      [ Card.actionButton
-                      , Button.ripple
-                      ]
-                      [ text "Read"
-                      ]
+    Card.view
+        [ css "width" "350px"
+        ]
+        [ Card.media
+              [ Card.aspect16To9
+              , Card.backgroundImage "images/16-9.jpg"
+              ]
+              []
+        , styled Html.div
+              [ css "padding" "1rem"
+              ]
+              [ styled Html.h2
+                [ Typography.title
+                , css "margin" "0"
                 ]
-          , Card.actionIcons []
-                [ IconToggle.view Mdc "my-favorite-action" model.mdc
-                      [ Card.actionIcon
-                      , IconToggle.icon
-                        { on = "favorite"
-                        , off = "favorite_border"
-                        }
-                      , IconToggle.label
-                        { on = "Remove from favorites"
-                        , off = "Add to favorites"
-                        }
-                      ]
-                      []
+                [ text "Our Changing Planet"
                 ]
-          ]
-    ]
-```
+              , styled Html.h3
+                [ Typography.subheading1
+                , css "margin" "0"
+                ]
+                [ text "by Kurt Wagner"
+                ]
+              ]
+        , styled Html.div
+              [ css "padding" "0 1rem 8px 1rem"
+              , css "color" "rgba(0, 0, 0, 0.54)"
+              , Typography.body1
+              ]
+              [ text """
+    Visit ten places on our planet that are undergoing the
+    biggest changes today."""
+              ]
+        , Card.actions []
+              [ Card.actionButtons []
+                    [ Button.view Mdc "my-read-action" model.mdc
+                          [ Card.actionButton
+                          , Button.ripple
+                          ]
+                          [ text "Read"
+                          ]
+                    ]
+              , Card.actionIcons []
+                    [ IconToggle.view Mdc "my-favorite-action" model.mdc
+                          [ Card.actionIcon
+                          , IconToggle.icon
+                            { on = "favorite"
+                            , off = "favorite_border"
+                            }
+                          , IconToggle.label
+                            { on = "Remove from favorites"
+                            , off = "Add to favorites"
+                            }
+                          ]
+                          []
+                    ]
+              ]
+        ]
 
 
 # Usage
@@ -126,12 +124,13 @@ biggest changes today."""
 @docs actionIcons
 @docs actionButton
 @docs actionIcon
+
 -}
 
 import Html exposing (Html)
+import Internal.Card.Implementation as Card
 import Material.Button as Button
 import Material.IconToggle as IconToggle
-import Internal.Card.Implementation as Card
 
 
 {-| Card property.
@@ -159,6 +158,7 @@ except `cardActions`.
 
 Only applicable to cards that have a primary action that the main surface
 should trigger.
+
 -}
 primaryAction : List (Property m) -> List (Html m) -> Html m
 primaryAction =

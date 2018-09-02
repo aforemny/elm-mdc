@@ -1,11 +1,12 @@
-module Internal.Snackbar.Model exposing
-    ( Contents
-    , defaultModel
-    , Model
-    , Msg(..)
-    , State(..)
-    , Transition(..)
-    )
+module Internal.Snackbar.Model
+    exposing
+        ( Contents
+        , Model
+        , Msg(..)
+        , State(..)
+        , Transition(..)
+        , defaultModel
+        )
 
 import Time exposing (Time)
 

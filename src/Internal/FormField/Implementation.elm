@@ -1,11 +1,12 @@
-module Internal.FormField.Implementation exposing
-    ( alignEnd
-    , Property
-    , view
-    )
+module Internal.FormField.Implementation
+    exposing
+        ( Property
+        , alignEnd
+        , view
+        )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (styled, cs)
+import Internal.Options as Options exposing (cs, styled)
 
 
 type alias Config =

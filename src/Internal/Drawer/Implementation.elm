@@ -1,32 +1,33 @@
-module Internal.Drawer.Implementation exposing
-    ( Config
-    , content
-    , defaultConfig
-    , emit
-    , header
-    , headerContent
-    , onClose
-    , open
-    , Property
-    , react
-    , render
-    , Store
-    , subs
-    , subscriptions
-    , toolbarSpacer
-    , update
-    , view
-    )
+module Internal.Drawer.Implementation
+    exposing
+        ( Config
+        , Property
+        , Store
+        , content
+        , defaultConfig
+        , emit
+        , header
+        , headerContent
+        , onClose
+        , open
+        , react
+        , render
+        , subs
+        , subscriptions
+        , toolbarSpacer
+        , update
+        , view
+        )
 
 import Html exposing (Html, text)
-import Json.Decode as Json exposing (Decoder)
-import Internal.Component as Component exposing (Indexed, Index)
-import Internal.Drawer.Model exposing (Model, defaultModel, Msg(..))
+import Internal.Component as Component exposing (Index, Indexed)
+import Internal.Drawer.Model exposing (Model, Msg(..), defaultModel)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, many, when)
+import Internal.Options as Options exposing (cs, css, many, styled, when)
+import Json.Decode as Json exposing (Decoder)
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -37,21 +38,21 @@ update lift msg model =
 
         Tick ->
             ( Just
-              { model | state = Just model.open
-              , animating = False
-              }
-            ,
-              Cmd.none
+                { model
+                    | state = Just model.open
+                    , animating = False
+                }
+            , Cmd.none
             )
 
-        SetOpen (open, persistent) ->
+        SetOpen ( open, persistent ) ->
             ( Just
-              { model
-              | open = open
-              , state = Nothing
-              , animating = True
-              , persistent = persistent
-              }
+                { model
+                    | open = open
+                    , state = Nothing
+                    , animating = True
+                    , persistent = persistent
+                }
             , Cmd.none
             )
 
@@ -83,27 +84,27 @@ view className lift model options nodes =
             config.open /= model.open
     in
     styled Html.aside
-    [ cs "mdc-drawer"
-    , cs className
-    , when stateChanged <|
-        GlobalEvents.onTick (Json.succeed (lift (SetOpen (config.open, model.persistent))))
-    , cs ("mdc-drawer--open") |> when model.open
-    , cs ("mdc-drawer--animating") |> when model.animating
-    , Options.onClick (Maybe.withDefault (lift NoOp) config.onClose)
-    ]
-    [ styled Html.nav
-      ( cs "mdc-drawer__drawer"
-      :: Options.onWithOptions "click"
-         { stopPropagation = (className == "mdc-drawer--temporary")
-         , preventDefault = False
-         }
-         (Json.succeed (lift NoOp))
-      :: when model.open (css "transform" "translateX(0)")
-      :: when model.animating ( Options.on "transitionend" (Json.succeed (lift Tick)) )
-      :: options
-      )
-      nodes
-    ]
+        [ cs "mdc-drawer"
+        , cs className
+        , when stateChanged <|
+            GlobalEvents.onTick (Json.succeed (lift (SetOpen ( config.open, model.persistent ))))
+        , cs "mdc-drawer--open" |> when model.open
+        , cs "mdc-drawer--animating" |> when model.animating
+        , Options.onClick (Maybe.withDefault (lift NoOp) config.onClose)
+        ]
+        [ styled Html.nav
+            (cs "mdc-drawer__drawer"
+                :: Options.onWithOptions "click"
+                    { stopPropagation = className == "mdc-drawer--temporary"
+                    , preventDefault = False
+                    }
+                    (Json.succeed (lift NoOp))
+                :: when model.open (css "transform" "translateX(0)")
+                :: when model.animating (Options.on "transitionend" (Json.succeed (lift Tick)))
+                :: options
+            )
+            nodes
+        ]
 
 
 header : List (Property m) -> List (Html m) -> Html m
@@ -168,12 +169,12 @@ subscriptions model =
 
 onClose : m -> Property m
 onClose onClose =
-    Options.option (\config -> {config | onClose = Just onClose})
+    Options.option (\config -> { config | onClose = Just onClose })
 
 
 open : Property m
 open =
-    Options.option (\config -> {config | open = True})
+    Options.option (\config -> { config | open = True })
 
 
 emit : (Internal.Msg.Msg m -> m) -> Index -> Msg -> Cmd m

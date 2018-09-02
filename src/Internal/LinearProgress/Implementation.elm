@@ -1,14 +1,15 @@
-module Internal.LinearProgress.Implementation exposing
-    ( buffered
-    , determinate
-    , indeterminate
-    , Property
-    , reversed
-    , view
-    )
+module Internal.LinearProgress.Implementation
+    exposing
+        ( Property
+        , buffered
+        , determinate
+        , indeterminate
+        , reversed
+        , view
+        )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (styled, cs, css, when)
+import Internal.Options as Options exposing (cs, css, styled, when)
 
 
 type alias Config =
@@ -62,32 +63,33 @@ view options _ =
         ({ config } as summary) =
             Options.collect defaultConfig options
     in
-    Options.apply summary Html.div
-    [ cs "mdc-linear-progress"
-    , cs "mdc-linear-progress--indeterminate" |> when config.indeterminate
-    , cs "mdc-linear-progress--reversed" |> when config.reversed
-    ]
-    []
-    [ styled Html.div
-      [ cs "mdc-linear-progress__buffering-dots"
-      ]
-      []
-    , styled Html.div
-      [ cs "mdc-linear-progress__buffer"
-      , when config.buffered <|
-        css "transform" ("scaleX(" ++ toString config.buffer ++ ")")
-      ]
-      []
-    , styled Html.div
-      [ cs "mdc-linear-progress__bar mdc-linear-progress__primary-bar"
-      , when (not config.indeterminate) <|
-        css "transform" ("scaleX(" ++ toString config.value ++ ")")
-      ]
-      [ styled Html.span [ cs "mdc-linear-progress__bar-inner" ] []
-      ]
-    , styled Html.div
-      [ cs "mdc-linear-progress__bar mdc-linear-progress__secondary-bar"
-      ]
-      [ styled Html.span [ cs "mdc-linear-progress__bar-inner" ] []
-      ]
-    ]
+    Options.apply summary
+        Html.div
+        [ cs "mdc-linear-progress"
+        , cs "mdc-linear-progress--indeterminate" |> when config.indeterminate
+        , cs "mdc-linear-progress--reversed" |> when config.reversed
+        ]
+        []
+        [ styled Html.div
+            [ cs "mdc-linear-progress__buffering-dots"
+            ]
+            []
+        , styled Html.div
+            [ cs "mdc-linear-progress__buffer"
+            , when config.buffered <|
+                css "transform" ("scaleX(" ++ toString config.buffer ++ ")")
+            ]
+            []
+        , styled Html.div
+            [ cs "mdc-linear-progress__bar mdc-linear-progress__primary-bar"
+            , when (not config.indeterminate) <|
+                css "transform" ("scaleX(" ++ toString config.value ++ ")")
+            ]
+            [ styled Html.span [ cs "mdc-linear-progress__bar-inner" ] []
+            ]
+        , styled Html.div
+            [ cs "mdc-linear-progress__bar mdc-linear-progress__secondary-bar"
+            ]
+            [ styled Html.span [ cs "mdc-linear-progress__bar-inner" ] []
+            ]
+        ]

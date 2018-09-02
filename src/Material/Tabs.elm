@@ -1,46 +1,46 @@
-module Material.Tabs exposing
-    ( icon
-    , iconText
-    , indicator
-    , Property
-    , scrolling
-    , tab
-    , Tab
-    , view
-    , withIconAndText
-    )
+module Material.Tabs
+    exposing
+        ( Property
+        , Tab
+        , icon
+        , iconText
+        , indicator
+        , scrolling
+        , tab
+        , view
+        , withIconAndText
+        )
 
-{-|
-The Tabs component contains components which are used to create spec-aligned
+{-| The Tabs component contains components which are used to create spec-aligned
 tabbed navigation components adhering to the Material Design tabs guidelines.
 
 This component consists of a TabBar containing Tabs. It supports scrolling of
 Tabs.
 
+
 # Resources
 
-- [Material Design guidelines: Tabs](https://material.io/guidelines/components/tabs.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#tabs)
+  - [Material Design guidelines: Tabs](https://material.io/guidelines/components/tabs.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#tabs)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.Tabs as TabBar
+    import Html exposing (text)
+    import Material.Tabs as TabBar
 
 
-TabBar.view Mdc "my-tab-bar" model.mdc
-    [ TabBar.indicator
-    ]
-    [ TabBar.tab [] [ text "Item One" ]
-    , TabBar.tab [] [ text "Item Two" ]
-    , TabBar.tab [] [ text "Item Three" ]
-    ]
-```
+    TabBar.view Mdc "my-tab-bar" model.mdc
+        [ TabBar.indicator
+        ]
+        [ TabBar.tab [] [ text "Item One" ]
+        , TabBar.tab [] [ text "Item Two" ]
+        , TabBar.tab [] [ text "Item Three" ]
+        ]
 
 
 # Usage
+
 
 ## TabBar
 
@@ -57,12 +57,13 @@ TabBar.view Mdc "my-tab-bar" model.mdc
 @docs withIconAndText
 @docs icon
 @docs iconText
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.Tabs.Implementation as Tabs
+import Material
 import Material.Options as Options
 
 
@@ -89,6 +90,7 @@ view =
 
 Displays forward and backward navigation arrows on either side if necessary and
 advances scroll on pressing the Tab key.
+
 -}
 scrolling : Property m
 scrolling =
@@ -105,6 +107,7 @@ indicator =
 {-| A TabBar's tab type.
 
 Use `tab` to construct.
+
 -}
 type alias Tab m =
     Tabs.Tab m
@@ -120,6 +123,7 @@ tab =
 {-| Configure tab to show both an icon and a text.
 
 Use `icon` and `iconText` as children.
+
 -}
 withIconAndText : Property m
 withIconAndText =

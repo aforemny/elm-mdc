@@ -1,10 +1,11 @@
-module Internal.Checkbox.Model exposing
-    ( Animation(..)
-    , defaultModel
-    , Model
-    , Msg(..)
-    , State(..)
-    )
+module Internal.Checkbox.Model
+    exposing
+        ( Animation(..)
+        , Model
+        , Msg(..)
+        , State(..)
+        , defaultModel
+        )
 
 
 type alias Model =
@@ -35,9 +36,9 @@ type State
 
 
 type Animation
-  = UncheckedChecked
-  | UncheckedIndeterminate
-  | CheckedUnchecked
-  | CheckedIndeterminate
-  | IndeterminateChecked
-  | IndeterminateUnchecked
+    = UncheckedChecked
+    | UncheckedIndeterminate
+    | CheckedUnchecked
+    | CheckedIndeterminate
+    | IndeterminateChecked
+    | IndeterminateUnchecked

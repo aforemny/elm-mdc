@@ -1,46 +1,43 @@
-module Material.Switch exposing
-    ( disabled
-    , nativeControl
-    , on
-    , Property
-    , view
-    )
+module Material.Switch
+    exposing
+        ( Property
+        , disabled
+        , nativeControl
+        , on
+        , view
+        )
 
-{-|
-The Switch component is a spec-aligned switch component adhering to the
+{-| The Switch component is a spec-aligned switch component adhering to the
 Material Design Switch requirements.
 
 
 # Resources
 
-- [Material Design guidelines: Switches](https://material.io/guidelines/components/selection-controls.html#selection-controls-switch)
-- [Demo](https://aforemny.github.io/elm-mdc/#switch)
+  - [Material Design guidelines: Switches](https://material.io/guidelines/components/selection-controls.html#selection-controls-switch)
+  - [Demo](https://aforemny.github.io/elm-mdc/#switch)
 
 
 # Example
 
-
-```elm
-import Html exposing (text)
-import Html.Events
-import Material.FormField as FormField
-import Material.Options as Options exposing (styled)
-import Material.Switch as Switch
+    import Html exposing (text)
+    import Html.Events
+    import Material.FormField as FormField
+    import Material.Options as Options exposing (styled)
+    import Material.Switch as Switch
 
 
-FormField.view []
-    [ Switch.view Mdc "my-switch" model.mdc
-          [ Switch.on
-          , Options.onClick Toggle
-          ]
-          []
-    , Html.label
-          [ Html.Events.onClick Toggle
-          ]
-          [ text "on/off"
-          ]
-    ]
-```
+    FormField.view []
+        [ Switch.view Mdc "my-switch" model.mdc
+              [ Switch.on
+              , Options.onClick Toggle
+              ]
+              []
+        , Html.label
+              [ Html.Events.onClick Toggle
+              ]
+              [ text "on/off"
+              ]
+        ]
 
 
 # Usage
@@ -50,12 +47,13 @@ FormField.view []
 @docs on
 @docs disabled
 @docs nativeControl
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.Switch.Implementation as Switch
+import Material
 import Material.Options as Options
 
 
@@ -81,6 +79,7 @@ view =
 {-| Make switch display its "on" state.
 
 Defaults to "off". Use `Options.when` to make it interactive.
+
 -}
 on : Property m
 on =
@@ -92,6 +91,7 @@ on =
 disabled : Property m
 disabled =
     Switch.disabled
+
 
 {-| Apply properties to underlying native control element.
 -}

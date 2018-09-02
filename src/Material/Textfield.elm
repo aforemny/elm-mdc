@@ -1,51 +1,53 @@
-module Material.Textfield exposing
-    ( autocomplete
-    , box
-    , cols
-    , dense
-    , disabled
-    , email
-    , fullwidth
-    , iconUnclickable
-    , invalid
-    , label
-    , leadingIcon
-    , nativeControl
-    , outlined
-    , password
-    , pattern
-    , placeholder
-    , Property
-    , required
-    , rows
-    , textarea
-    , trailingIcon
-    , type_
-    , value
-    , view
-    )
-{-|
-Text fields allow users to input, edit, and select text.
+module Material.Textfield
+    exposing
+        ( Property
+        , autocomplete
+        , autofocus
+        , box
+        , cols
+        , dense
+        , disabled
+        , email
+        , fullwidth
+        , iconUnclickable
+        , invalid
+        , label
+        , leadingIcon
+        , nativeControl
+        , onBlur
+        , onFocus
+        , outlined
+        , password
+        , pattern
+        , placeholder
+        , required
+        , rows
+        , textarea
+        , trailingIcon
+        , type_
+        , value
+        , view
+        )
+
+{-| Text fields allow users to input, edit, and select text.
 
 
 # Resources
 
-- [Material Design guidelines: Text Fields](https://material.io/guidelines/components/text-fields.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#text-field)
+  - [Material Design guidelines: Text Fields](https://material.io/guidelines/components/text-fields.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#text-field)
 
 
 # Example
 
-```elm
-import Material.Options as Options
-import Material.Textfield as Textfield
+    import Material.Options as Options
+    import Material.Textfield as Textfield
 
-Textfield.view Mdc "my-text-field" model.mdc
-    [ Textfield.label "Text field"
-    , Options.onChange UpdateTextField
-    ]
-    []
-```
+    Textfield.view Mdc "my-text-field" model.mdc
+        [ Textfield.label "Text field"
+        , Options.onChange UpdateTextField
+        ]
+        []
 
 
 # Usage
@@ -61,6 +63,7 @@ Textfield.view Mdc "my-text-field" model.mdc
 @docs placeholder
 @docs dense
 @docs disabled
+
 
 ### Icon properties
 
@@ -89,6 +92,7 @@ Textfield.view Mdc "my-text-field" model.mdc
 @docs rows
 @docs cols
 
+
 ## Type
 
 @docs email
@@ -104,6 +108,9 @@ Textfield.view Mdc "my-text-field" model.mdc
 ## Native control
 
 @docs autocomplete
+@docs autofocus
+@docs onFocus
+@docs onBlur
 -}
 
 import Html exposing (Html)
@@ -121,8 +128,8 @@ type alias Property m =
 
 {-| Textfield view.
 -}
-view
-    : (Material.Msg m -> m)
+view :
+    (Material.Msg m -> m)
     -> Index
     -> Material.Model m
     -> List (Property m)
@@ -206,6 +213,7 @@ box =
 
 The text field is automatically marked invalid if the pattern does not match
 its input.
+
 -}
 pattern : String -> Property m
 pattern =
@@ -287,3 +295,30 @@ nativeControl =
 autocomplete : String -> Property m
 autocomplete =
     nativeControl << List.singleton << Options.autocomplete
+
+
+{-| Set a text field's HTML `autofocus` attribute.
+-}
+autofocus : Property m
+autofocus =
+    nativeControl [ Options.autofocus True ]
+
+
+{-| Sets a text field's onFocus handler.
+
+This is here for convenience, because the onFocus handler has to be set on the
+`nativeControl`. For other events, see `Material.Options`.
+-}
+onFocus : m -> Property m
+onFocus handler =
+    nativeControl [ Options.onFocus handler ]
+
+
+{-| Sets a text field's onBlur handler.
+
+This is here for convenience, because the onBlur handler has to be set on the
+`nativeControl`. For other events, see `Material.Options`.
+-}
+onBlur : m -> Property m
+onBlur handler =
+    nativeControl [ Options.onBlur handler ]

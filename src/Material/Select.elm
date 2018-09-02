@@ -1,17 +1,17 @@
-module Material.Select exposing
-    ( box
-    , disabled
-    , label
-    , option
-    , preselected
-    , Property
-    , selected
-    , value
-    , view
-    )
+module Material.Select
+    exposing
+        ( Property
+        , box
+        , disabled
+        , label
+        , option
+        , preselected
+        , selected
+        , value
+        , view
+        )
 
-{-|
-Select provides Material Design single-option select menus. It functions
+{-| Select provides Material Design single-option select menus. It functions
 analogously to the browser's native `<select>` element
 
 Because of limitations of the current implementation, you have to set a `width`
@@ -20,34 +20,32 @@ manually.
 
 # Resources
 
-- [Material Design guidelines: Select Menus](https://material.io/develop/web/components/input-controls/select-menus/)
-- [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#select)
+  - [Material Design guidelines: Select Menus](https://material.io/develop/web/components/input-controls/select-menus/)
+  - [Material Design guidelines: Menus](https://material.io/guidelines/components/menus.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#select)
 
 
 # Example
 
-```elm
-import Html exposing (..)
-import Material.Options exposing (css)
-import Material.Select as Select
+    import Html exposing (..)
+    import Material.Options exposing (css)
+    import Material.Select as Select
 
 
-Select.view Mdc "my-select" model.mdc
-    [ Select.label "Food Group"
-    , Select.preselected
-    , Options.onChange ProcessMyChange
-    ]
-    [ Select.option
-          [ Select.value "Fruit Roll Ups"
-          , Select.selected True
-          ]
-          [ text "Fruit Roll Ups" ]
-    , Select.option
-          [ Select.value "Candy (cotton)" ]
-          [ text "Candy (cotton)" ]
-    ]
-```
+    Select.view Mdc "my-select" model.mdc
+        [ Select.label "Food Group"
+        , Select.preselected
+        , Options.onChange ProcessMyChange
+        ]
+        [ Select.option
+              [ Select.value "Fruit Roll Ups"
+              , Select.selected True
+              ]
+              [ text "Fruit Roll Ups" ]
+        , Select.option
+              [ Select.value "Candy (cotton)" ]
+              [ text "Candy (cotton)" ]
+        ]
 
 
 # Usage
@@ -62,12 +60,13 @@ Select.view Mdc "my-select" model.mdc
 @docs option
 @docs value
 @docs selected
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.Select.Implementation as Select
+import Material
 
 
 {-| Select property.
@@ -134,6 +133,7 @@ value =
 {-| Make an option selected.
 
 See `preselected`.
+
 -}
 selected : Property m
 selected =

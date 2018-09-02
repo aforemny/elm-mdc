@@ -1,57 +1,58 @@
-module Material.RadioButton exposing
-    ( disabled
-    , nativeControl
-    , Property
-    , selected
-    , view
-    )
+module Material.RadioButton
+    exposing
+        ( Property
+        , disabled
+        , nativeControl
+        , selected
+        , view
+        )
 
-{-|
-The RadioButton component provides a radio button adhering to the Material
+{-| The RadioButton component provides a radio button adhering to the Material
 Design Specification.
 
 
 # Resources
 
-- [Material Design guidelines: Selection Controls – Radio buttons](https://material.io/guidelines/components/selection-controls.html#selection-controls-radio-button)
-- [Demo](https://aforemny.github.io/elm-mdc/#radio-buttons)
+  - [Material Design guidelines: Selection Controls – Radio buttons](https://material.io/guidelines/components/selection-controls.html#selection-controls-radio-button)
+  - [Demo](https://aforemny.github.io/elm-mdc/#radio-buttons)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.FormField as FormField
-import Material.Options as Options exposing (styled, cs)
-import Material.RadioButton as RadioButton
+    import Html exposing (text)
+    import Material.FormField as FormField
+    import Material.Options as Options exposing (styled, cs)
+    import Material.RadioButton as RadioButton
 
 
-FormField.view []
-    [ RadioButton.view Mdc "my-radio-button" model.mdc
-          [ RadioButton.selected
-          , Options.onClick Select
-          ]
-          []
-    , Html.label
-          [ Options.onClick Select
-          ]
-          [ text "Radio"
-          ]
-    ]
-```
+    FormField.view []
+        [ RadioButton.view Mdc "my-radio-button" model.mdc
+              [ RadioButton.selected
+              , Options.onClick Select
+              ]
+              []
+        , Html.label
+              [ Options.onClick Select
+              ]
+              [ text "Radio"
+              ]
+        ]
+
 
 # Usage
+
 @docs Property
 @docs view
 @docs selected
 @docs disabled
 @docs nativeControl
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
 import Internal.RadioButton.Implementation as RadioButton
+import Material
 import Material.Options as Options
 
 
@@ -77,6 +78,7 @@ view =
 {-| Make the radio button selected.
 
 Defaults to not selected. Use `Options.when` to make it interactive.
+
 -}
 selected : Property m
 selected =

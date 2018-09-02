@@ -1,37 +1,38 @@
-module Internal.GridList.Implementation exposing
-    ( gutter1
-    , headerCaption
-    , icon
-    , iconAlignEnd
-    , iconAlignStart
-    , image
-    , primary
-    , primaryContent
-    , Property
-    , react
-    , secondary
-    , supportText
-    , tile
-    , tileAspect16To9
-    , tileAspect2To3
-    , tileAspect3To2
-    , tileAspect3To4
-    , tileAspect4To3
-    , title
-    , twolineCaption
-    , view
-    )
+module Internal.GridList.Implementation
+    exposing
+        ( Property
+        , gutter1
+        , headerCaption
+        , icon
+        , iconAlignEnd
+        , iconAlignStart
+        , image
+        , primary
+        , primaryContent
+        , react
+        , secondary
+        , supportText
+        , tile
+        , tileAspect16To9
+        , tileAspect2To3
+        , tileAspect3To2
+        , tileAspect3To4
+        , tileAspect4To3
+        , title
+        , twolineCaption
+        , view
+        )
 
 import DOM
-import Html.Attributes as Html
 import Html exposing (Html)
-import Json.Decode as Json exposing (Decoder)
-import Internal.Component as Component exposing (Indexed, Index)
+import Html.Attributes as Html
+import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
-import Internal.GridList.Model exposing (Model, defaultModel, Msg(..), Geometry, defaultGeometry)
+import Internal.GridList.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
-import Internal.Options as Options exposing (styled, cs, css, when)
+import Internal.Options as Options exposing (cs, css, styled, when)
+import Json.Decode as Json exposing (Decoder)
 
 
 update : Msg m -> Model -> ( Model, Cmd (Msg m) )
@@ -46,26 +47,27 @@ gridList lift model options nodes =
     let
         width =
             model.geometry
-            |> Maybe.map (\ { width, tileWidth } ->
-                  tileWidth * toFloat (floor (width / tileWidth))
-               )
-            |> Maybe.map (toString >> flip (++) "px")
-            |> Maybe.withDefault "auto"
+                |> Maybe.map
+                    (\{ width, tileWidth } ->
+                        tileWidth * toFloat (floor (width / tileWidth))
+                    )
+                |> Maybe.map (toString >> flip (++) "px")
+                |> Maybe.withDefault "auto"
     in
     styled Html.div
-    ( cs "mdc-grid-list"
-    :: ( when (model.geometry == Nothing) <|
-         GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
-       )
-    :: GlobalEvents.onResize (Json.map (lift << Init) decodeGeometry)
-    :: options
-    )
-    [ styled Html.ul
-      [ cs "mdc-grid-list__tiles"
-      , css "width" width
-      ]
-      nodes
-    ]
+        (cs "mdc-grid-list"
+            :: (when (model.geometry == Nothing) <|
+                    GlobalEvents.onTick (Json.map (lift << Init) decodeGeometry)
+               )
+            :: GlobalEvents.onResize (Json.map (lift << Init) decodeGeometry)
+            :: options
+        )
+        [ styled Html.ul
+            [ cs "mdc-grid-list__tiles"
+            , css "width" width
+            ]
+            nodes
+        ]
 
 
 headerCaption : Property m
@@ -120,47 +122,47 @@ tileAspect3To2 =
 
 tile : List (Property m) -> List (Html m) -> Html m
 tile options =
-    styled Html.div ( cs "mdc-grid-tile" :: options)
+    styled Html.div (cs "mdc-grid-tile" :: options)
 
 
 primary : List (Property m) -> List (Html m) -> Html m
 primary options =
-    styled Html.div ( cs "mdc-grid-tile__primary" :: options )
+    styled Html.div (cs "mdc-grid-tile__primary" :: options)
 
 
 secondary : List (Property m) -> List (Html m) -> Html m
 secondary options =
-    styled Html.div ( cs "mdc-grid-tile__secondary" :: options )
+    styled Html.div (cs "mdc-grid-tile__secondary" :: options)
 
 
 image : List (Property m) -> String -> Html m
 image options src =
     styled Html.img
-    ( cs "mdc-grid-tile__primary-content"
-    :: Options.attribute (Html.src src)
-    :: options
-    )
-    []
+        (cs "mdc-grid-tile__primary-content"
+            :: Options.attribute (Html.src src)
+            :: options
+        )
+        []
 
 
 title : List (Property m) -> List (Html m) -> Html m
 title options =
-    styled Html.div ( cs "mdc-grid-tile__title" :: options )
+    styled Html.div (cs "mdc-grid-tile__title" :: options)
 
 
 supportText : List (Property m) -> List (Html m) -> Html m
 supportText options =
-    styled Html.div ( cs "mdc-grid-tile__support-text" :: options )
+    styled Html.div (cs "mdc-grid-tile__support-text" :: options)
 
 
 icon : List (Property m) -> String -> Html m
 icon options icon =
-    styled Html.div ( cs "mdc-grid-tile__icon" :: options ) [ Icon.view [] icon ]
+    styled Html.div (cs "mdc-grid-tile__icon" :: options) [ Icon.view [] icon ]
 
 
 primaryContent : List (Property m) -> List (Html m) -> Html m
 primaryContent options =
-    styled Html.div ( cs "mdc-grid-tile__primary-content" :: options )
+    styled Html.div (cs "mdc-grid-tile__primary-content" :: options)
 
 
 type alias Store s =
@@ -197,23 +199,20 @@ type alias Property m =
 
 
 type alias Config =
-    {
-    }
+    {}
 
 
 defaultConfig : Config
 defaultConfig =
-    {
-    }
+    {}
 
 
 decodeGeometry : Decoder Geometry
 decodeGeometry =
     DOM.target <|
-    Json.map2 Geometry
-    ( DOM.offsetWidth
-    )
-    ( DOM.childNode 0 <|
-      DOM.childNode 0 <|
-      DOM.offsetWidth
-    )
+        Json.map2 Geometry
+            DOM.offsetWidth
+            (DOM.childNode 0 <|
+                DOM.childNode 0 <|
+                    DOM.offsetWidth
+            )

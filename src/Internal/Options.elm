@@ -1,11 +1,13 @@
 module Internal.Options
     exposing
-        ( addAttributes
+        ( Property
+        , addAttributes
         , apply
         , applyNativeControl
         , aria
         , attribute
         , autocomplete
+        , autofocus
         , collect
         , cs
         , css
@@ -34,16 +36,16 @@ module Internal.Options
         , onSubmit
         , onWithOptions
         , option
-        , Property
         , recollect
         , role
         , styled
+        , tabindex
         , when
         )
 
+import Html exposing (Attribute, Html)
 import Html.Attributes
 import Html.Events
-import Html exposing (Attribute, Html)
 import Internal.Dispatch as Dispatch
 import Internal.Index exposing (Index)
 import Internal.Msg exposing (Msg(Dispatch))
@@ -302,6 +304,16 @@ aria key val =
 autocomplete : String -> Property c m
 autocomplete autocomplete =
     Attribute (Html.Attributes.attribute "autocomplete" autocomplete)
+
+
+tabindex : Int -> Property c m
+tabindex tabindex =
+    Attribute (Html.Attributes.tabindex tabindex)
+
+
+autofocus : Bool -> Property c m
+autofocus autofocus =
+    Attribute (Html.Attributes.autofocus autofocus)
 
 
 role : String -> Property c m

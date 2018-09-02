@@ -1,53 +1,50 @@
-module Material.ImageList exposing
-    ( divImage
-    , image
-    , imageAspectContainer
-    , item
-    , label
-    , masonry
-    , Property
-    , src
-    , supporting
-    , view
-    , withTextProtection
-    )
+module Material.ImageList
+    exposing
+        ( Property
+        , divImage
+        , image
+        , imageAspectContainer
+        , item
+        , label
+        , masonry
+        , src
+        , supporting
+        , view
+        , withTextProtection
+        )
 
-
-{-|
-An Image List consists of several items, each containing an image and
+{-| An Image List consists of several items, each containing an image and
 optionally supporting content (i.e. a text label).
 
 
 # Resources
 
-- [Image List - Internal.Components for the Web](https://material.io/develop/web/components/image-lists/)
-- [Material Design guidelines: Image lists](https://material.io/design/components/image-lists.html)
-- [Demo](https://aforemny.github.io/elm-mdc/#image-list)
+  - [Image List - Internal.Components for the Web](https://material.io/develop/web/components/image-lists/)
+  - [Material Design guidelines: Image lists](https://material.io/design/components/image-lists.html)
+  - [Demo](https://aforemny.github.io/elm-mdc/#image-list)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.ImageList as ImageList
+    import Html exposing (text)
+    import Material.ImageList as ImageList
 
 
-ImageList.view []
-    [ ImageList.item []
-        [ ImageList.imageAspectContainer
-            []
-            [ ImageList.image
-                [ ImageList.src "…"
-                ]
+    ImageList.view []
+        [ ImageList.item []
+            [ ImageList.imageAspectContainer
                 []
-            ]
-        , ImageList.supporting
-            []
-            [ ImageList.label [] [ text "Text label" ]
+                [ ImageList.image
+                    [ ImageList.src "…"
+                    ]
+                    []
+                ]
+            , ImageList.supporting
+                []
+                [ ImageList.label [] [ text "Text label" ]
+                ]
             ]
         ]
-    ]
-```
 
 
 # Usage
@@ -71,12 +68,11 @@ ImageList.view []
 
 @docs supporting
 @docs label
--}
 
+-}
 
 import Html exposing (Html)
 import Internal.ImageList.Implementation as ImageList
-
 
 
 {-| ImageList property.
@@ -94,7 +90,6 @@ view =
 
 {-| Item in an image list.
 -}
-
 item : List (Property m) -> List (Html m) -> Html m
 item =
     ImageList.item
@@ -103,6 +98,7 @@ item =
 {-| Container of image inside an item.
 
 Do not use containers for a masonry image list.
+
 -}
 imageAspectContainer : List (Property m) -> List (Html m) -> Html m
 imageAspectContainer =
@@ -157,6 +153,7 @@ supporting =
 {-| An image's HTML `src` attribute.
 
 For `divImage` use `Options.css "background-image"`.
+
 -}
 src : String -> Property m
 src =

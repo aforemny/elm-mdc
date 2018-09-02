@@ -1,9 +1,9 @@
 module Demo.Helper.ResourceLink exposing (view)
 
-import Html.Attributes as Html
 import Html exposing (Html, text)
+import Html.Attributes as Html
 import Material.List as Lists
-import Material.Options as Options exposing (styled, cs)
+import Material.Options as Options exposing (cs, styled)
 
 
 view :

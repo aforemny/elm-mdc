@@ -1,22 +1,23 @@
-module Internal.Button.Implementation exposing
-    ( dense
-    , disabled
-    , icon
-    , link
-    , onClick
-    , Property
-    , raised
-    , react
-    , ripple
-    , outlined
-    , unelevated
-    , view
-    )
+module Internal.Button.Implementation
+    exposing
+        ( Property
+        , dense
+        , disabled
+        , icon
+        , link
+        , onClick
+        , outlined
+        , raised
+        , react
+        , ripple
+        , unelevated
+        , view
+        )
 
-import Html.Attributes as Html
 import Html exposing (Html, text)
-import Internal.Button.Model exposing (Model, defaultModel, Msg(..))
-import Internal.Component as Component exposing (Indexed, Index)
+import Html.Attributes as Html
+import Internal.Button.Model exposing (Model, Msg(..), defaultModel)
+import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Helpers as Helpers
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
@@ -35,7 +36,15 @@ update lift msg model =
             ( Just { model | ripple = ripple }, Cmd.map (lift << RippleMsg) cmd )
 
         Click ripple msg_ ->
-            ( Nothing, Helpers.delayedCmd (if ripple then 150 else 0) msg_ )
+            ( Nothing
+            , Helpers.delayedCmd
+                (if ripple then
+                    150
+                 else
+                    0
+                )
+                msg_
+            )
 
 
 type alias Config m =
@@ -63,7 +72,7 @@ type alias Property m =
 
 icon : String -> Property m
 icon str =
-    Options.option (\ config -> { config | icon = Just str })
+    Options.option (\config -> { config | icon = Just str })
 
 
 raised : Property m
@@ -115,42 +124,46 @@ button lift model options nodes =
         ripple =
             Ripple.view False (lift << RippleMsg) model.ripple []
     in
-        Options.apply summary
-            (if config.link /= Nothing then Html.a else Html.button)
-            [ cs "mdc-button"
-            , cs "mdc-js-button"
-            , cs "mdc-js-ripple-effect" |> when summary.config.ripple
-            , css "box-sizing" "border-box"
-            , Options.attribute (Html.href (Maybe.withDefault "" config.link) )
-                |> when ((config.link /= Nothing) && not config.disabled)
-            , Options.attribute (Html.disabled True)
-                |> when config.disabled
-            , cs "mdc-button--disabled"
-                |> when config.disabled
-            , when config.ripple << Options.many <|
-              [ ripple.interactionHandler
-              , ripple.properties
-              ]
-            , config.onClick
-              |> Maybe.map (Options.onClick << lift << Click config.ripple)
-              |> Maybe.withDefault Options.nop
+    Options.apply summary
+        (if config.link /= Nothing then
+            Html.a
+         else
+            Html.button
+        )
+        [ cs "mdc-button"
+        , cs "mdc-js-button"
+        , cs "mdc-js-ripple-effect" |> when summary.config.ripple
+        , css "box-sizing" "border-box"
+        , Options.attribute (Html.href (Maybe.withDefault "" config.link))
+            |> when ((config.link /= Nothing) && not config.disabled)
+        , Options.attribute (Html.disabled True)
+            |> when config.disabled
+        , cs "mdc-button--disabled"
+            |> when config.disabled
+        , when config.ripple
+            << Options.many
+          <|
+            [ ripple.interactionHandler
+            , ripple.properties
             ]
-            []
-            ( List.concat
-              [
-                config.icon
-                |> Maybe.map (\ icon ->
-                     [ Icon.view [ cs "mdc-button__icon" ] icon
-                     ]
-                   )
+        , config.onClick
+            |> Maybe.map (Options.onClick << lift << Click config.ripple)
+            |> Maybe.withDefault Options.nop
+        ]
+        []
+        (List.concat
+            [ config.icon
+                |> Maybe.map
+                    (\icon ->
+                        [ Icon.view [ cs "mdc-button__icon" ] icon
+                        ]
+                    )
                 |> Maybe.withDefault []
-              ,
-                nodes
-              ,
-                [ ripple.style
-                ]
+            , nodes
+            , [ ripple.style
               ]
-            )
+            ]
+        )
 
 
 type alias Store s =

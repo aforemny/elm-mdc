@@ -1,15 +1,16 @@
-module Internal.Menu.Model exposing
-    ( defaultGeometry
-    , defaultMeta
-    , defaultModel
-    , Geometry
-    , Key
-    , KeyCode
-    , Meta
-    , Model
-    , Msg(..)
-    , Viewport
-    )
+module Internal.Menu.Model
+    exposing
+        ( Geometry
+        , Key
+        , KeyCode
+        , Meta
+        , Model
+        , Msg(..)
+        , Viewport
+        , defaultGeometry
+        , defaultMeta
+        , defaultModel
+        )
 
 
 type alias Model =

@@ -388,7 +388,7 @@ decodeGeometry type_ =
             DOM.boundingClientRect
                 |> Json.map
                     (\{ top, left, width, height } ->
-                        { top = top
+                        { top = top - pageOffset.y
                         , left = left
                         , width = width
                         , height = height

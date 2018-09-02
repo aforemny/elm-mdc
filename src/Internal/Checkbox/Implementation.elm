@@ -1,23 +1,24 @@
-module Internal.Checkbox.Implementation exposing
-    ( checked
-    , disabled
-    , nativeControl
-    , Property
-    , react
-    , view
-    )
+module Internal.Checkbox.Implementation
+    exposing
+        ( Property
+        , checked
+        , disabled
+        , nativeControl
+        , react
+        , view
+        )
 
-import Html.Attributes as Html
 import Html exposing (Html, text)
-import Json.Decode as Json exposing (Decoder)
-import Json.Encode
-import Internal.Checkbox.Model exposing (Model, defaultModel, Msg(..), Animation(..), State(..))
-import Internal.Component as Component exposing (Indexed, Index)
+import Html.Attributes as Html
+import Internal.Checkbox.Model exposing (Animation(..), Model, Msg(..), State(..), defaultModel)
+import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
-import Internal.Options as Options exposing (cs, styled, many, when)
-import Svg.Attributes as Svg
+import Internal.Options as Options exposing (cs, many, styled, when)
+import Json.Decode as Json exposing (Decoder)
+import Json.Encode
 import Svg exposing (path)
+import Svg.Attributes as Svg
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -31,17 +32,16 @@ update _ msg model =
 
         Init lastKnownState state ->
             let
-              animation =
-                lastKnownState
-                |> Maybe.andThen (flip animationState state)
+                animation =
+                    lastKnownState
+                        |> Maybe.andThen (flip animationState state)
             in
             ( Just
-              { model
-                | lastKnownState = Just state
-                , animation = animation
-              }
-            ,
-              Cmd.none
+                { model
+                    | lastKnownState = Just state
+                    , animation = animation
+                }
+            , Cmd.none
             )
 
         AnimationEnd ->
@@ -71,7 +71,7 @@ type alias Property m =
 
 disabled : Property m
 disabled =
-    Options.option (\ config -> { config | disabled = True })
+    Options.option (\config -> { config | disabled = True })
 
 
 type alias State =
@@ -82,9 +82,12 @@ checked : Bool -> Property m
 checked value =
     let
         state =
-            if value then Checked else Unchecked
+            if value then
+                Checked
+            else
+                Unchecked
     in
-    Options.option (\ config -> { config | state = Just state })
+    Options.option (\config -> { config | state = Just state })
 
 
 nativeControl : List (Options.Property () m) -> Property m
@@ -99,117 +102,120 @@ checkbox lift model options _ =
             Options.collect defaultConfig options
 
         animationClass animation =
-          case animation of
-            Just UncheckedChecked ->
-              cs "mdc-checkbox--anim-unchecked-checked"
+            case animation of
+                Just UncheckedChecked ->
+                    cs "mdc-checkbox--anim-unchecked-checked"
 
-            Just UncheckedIndeterminate ->
-              cs "mdc-checkbox--anim-unchecked-indeterminate"
+                Just UncheckedIndeterminate ->
+                    cs "mdc-checkbox--anim-unchecked-indeterminate"
 
-            Just CheckedUnchecked ->
-              cs "mdc-checkbox--anim-checked-unchecked"
+                Just CheckedUnchecked ->
+                    cs "mdc-checkbox--anim-checked-unchecked"
 
-            Just CheckedIndeterminate ->
-              cs "mdc-checkbox--anim-checked-indeterminate"
+                Just CheckedIndeterminate ->
+                    cs "mdc-checkbox--anim-checked-indeterminate"
 
-            Just IndeterminateChecked ->
-              cs "mdc-checkbox--anim-indeterminate-checked"
+                Just IndeterminateChecked ->
+                    cs "mdc-checkbox--anim-indeterminate-checked"
 
-            Just IndeterminateUnchecked ->
-              cs "mdc-checkbox--anim-indeterminate-unchecked"
+                Just IndeterminateUnchecked ->
+                    cs "mdc-checkbox--anim-indeterminate-unchecked"
 
-            Nothing ->
-              Options.nop
+                Nothing ->
+                    Options.nop
 
         currentState =
-          model.lastKnownState
-          |> Maybe.withDefault configState
+            model.lastKnownState
+                |> Maybe.withDefault configState
 
         configState =
-          config.state
+            config.state
 
         stateChangedOrUninitialized =
-          (model.lastKnownState == Nothing) || (currentState /= configState)
+            (model.lastKnownState == Nothing) || (currentState /= configState)
 
         preventDefault =
             { preventDefault = True
             , stopPropagation = False
             }
     in
-    Options.apply summary Html.div
-    [ cs "mdc-checkbox mdc-checkbox--upgraded"
-    , cs "mdc-checkbox--indeterminate" |> when (currentState == Nothing)
-    , cs "mdc-checkbox--checked" |> when (currentState == Just Checked)
-    , cs "mdc-checkbox--disabled" |> when config.disabled
-    , animationClass model.animation
-    , when stateChangedOrUninitialized <|
-      GlobalEvents.onTick (Json.succeed (lift (Init model.lastKnownState configState)))
-    , when (model.animation /= Nothing) <|
-      Options.on "animationend" (Json.succeed (lift AnimationEnd))
-    ]
-    []
-    [ Options.applyNativeControl summary
-      Html.input
-      [ cs "mdc-checkbox__native-control"
-      , Options.many << List.map Options.attribute <|
-        [ Html.type_ "checkbox"
-        , Html.id config.id_
-        , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
-        , Html.checked (currentState == Just Checked)
-        , Html.disabled config.disabled
-        ]
-      , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
-      , Options.onWithOptions "change" preventDefault (Json.succeed (lift NoOp))
-      , Options.onFocus (lift (SetFocus True))
-      , Options.onBlur (lift (SetFocus False))
-      ]
-      []
-    , styled Html.div
-      [ cs "mdc-checkbox__background"
-      ]
-      [ Svg.svg
-        [ Svg.class "mdc-checkbox__checkmark"
-        , Svg.viewBox "0 0 24 24"
-        ]
-        [ path
-          [ Svg.class "mdc-checkbox__checkmark-path"
-          , Svg.fill "none"
-          , Svg.stroke "white"
-          , Svg.d "M1.73,12.91 8.1,19.28 22.79,4.59"
-          ]
-          [
-          ]
-        ]
-      , styled Html.div
-        [ cs "mdc-checkbox__mixedmark"
+    Options.apply summary
+        Html.div
+        [ cs "mdc-checkbox mdc-checkbox--upgraded"
+        , cs "mdc-checkbox--indeterminate" |> when (currentState == Nothing)
+        , cs "mdc-checkbox--checked" |> when (currentState == Just Checked)
+        , cs "mdc-checkbox--disabled" |> when config.disabled
+        , animationClass model.animation
+        , when stateChangedOrUninitialized <|
+            GlobalEvents.onTick (Json.succeed (lift (Init model.lastKnownState configState)))
+        , when (model.animation /= Nothing) <|
+            Options.on "animationend" (Json.succeed (lift AnimationEnd))
         ]
         []
-      ]
-    ]
+        [ Options.applyNativeControl summary
+            Html.input
+            [ cs "mdc-checkbox__native-control"
+            , Options.many
+                << List.map Options.attribute
+              <|
+                [ Html.type_ "checkbox"
+                , Html.id config.id_
+                , Html.property "indeterminate" (Json.Encode.bool (currentState == Nothing))
+                , Html.checked (currentState == Just Checked)
+                , Html.disabled config.disabled
+                ]
+            , Options.onWithOptions "click" preventDefault (Json.succeed (lift NoOp))
+            , Options.onWithOptions "change" preventDefault (Json.succeed (lift NoOp))
+            , Options.onFocus (lift (SetFocus True))
+            , Options.onBlur (lift (SetFocus False))
+            ]
+            []
+        , styled Html.div
+            [ cs "mdc-checkbox__background"
+            ]
+            [ Svg.svg
+                [ Svg.class "mdc-checkbox__checkmark"
+                , Svg.viewBox "0 0 24 24"
+                ]
+                [ path
+                    [ Svg.class "mdc-checkbox__checkmark-path"
+                    , Svg.fill "none"
+                    , Svg.stroke "white"
+                    , Svg.d "M1.73,12.91 8.1,19.28 22.79,4.59"
+                    ]
+                    []
+                ]
+            , styled Html.div
+                [ cs "mdc-checkbox__mixedmark"
+                ]
+                []
+            ]
+        ]
+
 
 animationState : Maybe State -> Maybe State -> Maybe Animation
 animationState oldState state =
-  case ( oldState, state ) of
-      ( Just Unchecked, Nothing ) ->
-        Just UncheckedIndeterminate
+    case ( oldState, state ) of
+        ( Just Unchecked, Nothing ) ->
+            Just UncheckedIndeterminate
 
-      ( Just Checked, Nothing ) ->
-        Just CheckedIndeterminate
+        ( Just Checked, Nothing ) ->
+            Just CheckedIndeterminate
 
-      ( Nothing, Just Checked ) ->
-        Just IndeterminateChecked
+        ( Nothing, Just Checked ) ->
+            Just IndeterminateChecked
 
-      ( Nothing, Just Unchecked ) ->
-        Just IndeterminateUnchecked
+        ( Nothing, Just Unchecked ) ->
+            Just IndeterminateUnchecked
 
-      ( Just Unchecked, Just Checked ) ->
-        Just UncheckedChecked
+        ( Just Unchecked, Just Checked ) ->
+            Just UncheckedChecked
 
-      ( Just Checked, Just Unchecked ) ->
-        Just CheckedUnchecked
+        ( Just Checked, Just Unchecked ) ->
+            Just CheckedUnchecked
 
-      _ ->
-        Nothing
+        _ ->
+            Nothing
 
 
 type alias Store s =
@@ -228,9 +234,14 @@ view :
     -> List (Html m)
     -> Html m
 view =
-  \lift index store options ->
-    Component.render get checkbox Internal.Msg.CheckboxMsg lift index store
-        (Options.id_ index :: options)
+    \lift index store options ->
+        Component.render get
+            checkbox
+            Internal.Msg.CheckboxMsg
+            lift
+            index
+            store
+            (Options.id_ index :: options)
 
 
 react :
@@ -241,4 +252,7 @@ react :
     -> ( Maybe (Store s), Cmd m )
 react =
     Component.react get set Internal.Msg.CheckboxMsg update
-    -- TODO: make react always like this ^^^^, don't use generalise?
+
+
+
+-- TODO: make react always like this ^^^^, don't use generalise?

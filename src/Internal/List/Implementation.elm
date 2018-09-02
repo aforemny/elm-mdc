@@ -1,39 +1,40 @@
-module Internal.List.Implementation exposing
-    ( a
-    , activated
-    , avatarList
-    , defaultConfig
-    , dense
-    , divider
-    , graphic
-    , graphicIcon
-    , graphicImage
-    , group
-    , groupDivider
-    , inset
-    , li
-    , meta
-    , metaIcon
-    , metaImage
-    , metaText
-    , nav
-    , node
-    , nonInteractive
-    , ol
-    , padded
-    , Property
-    , secondaryText
-    , selected
-    , subheader
-    , text
-    , twoLine
-    , ul
-    )
+module Internal.List.Implementation
+    exposing
+        ( Property
+        , a
+        , activated
+        , avatarList
+        , defaultConfig
+        , dense
+        , divider
+        , graphic
+        , graphicIcon
+        , graphicImage
+        , group
+        , groupDivider
+        , inset
+        , li
+        , meta
+        , metaIcon
+        , metaImage
+        , metaText
+        , nav
+        , node
+        , nonInteractive
+        , ol
+        , padded
+        , secondaryText
+        , selected
+        , subheader
+        , text
+        , twoLine
+        , ul
+        )
 
-import Html.Attributes as Html
 import Html exposing (Html)
+import Html.Attributes as Html
 import Internal.Icon.Implementation as Icon
-import Internal.Options as Options exposing (styled, cs)
+import Internal.Options as Options exposing (cs, styled)
 
 
 type alias Config m =
@@ -55,11 +56,11 @@ ul : List (Property m) -> List (Html m) -> Html m
 ul options =
     let
         ({ config } as summary) =
-          Options.collect defaultConfig options
+            Options.collect defaultConfig options
     in
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
-        [cs "mdc-list"]
+        [ cs "mdc-list" ]
         []
 
 
@@ -67,11 +68,11 @@ ol : List (Property m) -> List (Html m) -> Html m
 ol options =
     let
         ({ config } as summary) =
-          Options.collect defaultConfig options
+            Options.collect defaultConfig options
     in
     Options.apply summary
         (Maybe.withDefault Html.ol config.node)
-        [cs "mdc-list"]
+        [ cs "mdc-list" ]
         []
 
 
@@ -79,17 +80,17 @@ nav : List (Property m) -> List (Html m) -> Html m
 nav options =
     let
         ({ config } as summary) =
-          Options.collect defaultConfig options
+            Options.collect defaultConfig options
     in
     Options.apply summary
         (Maybe.withDefault Html.nav config.node)
-        [cs "mdc-list"]
+        [ cs "mdc-list" ]
         []
 
 
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
 node node =
-  Options.option (\config -> { config | node = Just node })
+    Options.option (\config -> { config | node = Just node })
 
 
 nonInteractive : Property m
@@ -119,9 +120,9 @@ li options =
             Options.collect defaultConfig options
     in
     Options.apply summary
-      (Maybe.withDefault Html.li config.node)
-      [cs "mdc-list-item"]
-      []
+        (Maybe.withDefault Html.li config.node)
+        [ cs "mdc-list-item" ]
+        []
 
 
 a : List (Property m) -> List (Html m) -> Html m
@@ -131,29 +132,29 @@ a options =
             Options.collect defaultConfig options
     in
     Options.apply summary
-      (Maybe.withDefault Html.a config.node)
-      [cs "mdc-list-item"]
-      []
+        (Maybe.withDefault Html.a config.node)
+        [ cs "mdc-list-item" ]
+        []
 
 
 text : List (Property m) -> List (Html m) -> Html m
 text options =
-  styled Html.span (cs "mdc-list-item__text" :: options)
+    styled Html.span (cs "mdc-list-item__text" :: options)
 
 
 secondaryText : List (Property m) -> List (Html m) -> Html m
 secondaryText options =
-  styled Html.span (cs "mdc-list-item__secondary-text" :: options)
+    styled Html.span (cs "mdc-list-item__secondary-text" :: options)
 
 
 selected : Property m
 selected =
-  cs "mdc-list-item--selected"
+    cs "mdc-list-item--selected"
 
 
 activated : Property m
 activated =
-  cs "mdc-list-item--activated"
+    cs "mdc-list-item--activated"
 
 
 graphic : List (Property m) -> List (Html m) -> Html m
@@ -169,11 +170,11 @@ graphicIcon options =
 graphicImage : List (Property m) -> String -> Html m
 graphicImage options url =
     styled Html.img
-      ( cs "mdc-list-item__graphic"
-      :: Options.attribute (Html.src url)
-      :: options
-      )
-      []
+        (cs "mdc-list-item__graphic"
+            :: Options.attribute (Html.src url)
+            :: options
+        )
+        []
 
 
 meta : List (Property m) -> List (Html m) -> Html m
@@ -194,28 +195,28 @@ metaIcon options =
 metaImage : List (Property m) -> String -> Html m
 metaImage options url =
     styled Html.img
-      ( cs "mdc-list-item__meta"
-      :: Options.attribute (Html.src url)
-      :: options
-      )
-      []
+        (cs "mdc-list-item__meta"
+            :: Options.attribute (Html.src url)
+            :: options
+        )
+        []
 
 
 group : List (Property m) -> List (Html m) -> Html m
 group options =
-    styled Html.div (cs "mdc-list-group"::options)
+    styled Html.div (cs "mdc-list-group" :: options)
 
 
 subheader : List (Property m) -> List (Html m) -> Html m
 subheader options =
-    styled Html.div (cs "mdc-list-group__subheader"::options)
+    styled Html.div (cs "mdc-list-group__subheader" :: options)
 
 
 divider : List (Property m) -> List (Html m) -> Html m
 divider options =
     let
-        ( { config } as summary ) =
-          Options.collect defaultConfig options
+        ({ config } as summary) =
+            Options.collect defaultConfig options
     in
     Options.apply summary
         (Maybe.withDefault Html.li config.node)
@@ -228,8 +229,8 @@ divider options =
 groupDivider : List (Property m) -> List (Html m) -> Html m
 groupDivider options =
     let
-        ( { config } as summary ) =
-          Options.collect defaultConfig options
+        ({ config } as summary) =
+            Options.collect defaultConfig options
     in
     Options.apply summary
         (Maybe.withDefault Html.hr config.node)

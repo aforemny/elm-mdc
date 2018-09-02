@@ -1,60 +1,57 @@
-module Material.Elevation exposing
-    ( z0
-    , z1
-    , z2
-    , z3
-    , z4
-    , z5
-    , z6
-    , z7
-    , z8
-    , z9
-    , z10
-    , z11
-    , z12
-    , z13
-    , z14
-    , z15
-    , z16
-    , z17
-    , z18
-    , z19
-    , z20
-    , z21
-    , z22
-    , z23
-    , z24
-    , transition
-    )
+module Material.Elevation
+    exposing
+        ( transition
+        , z0
+        , z1
+        , z10
+        , z11
+        , z12
+        , z13
+        , z14
+        , z15
+        , z16
+        , z17
+        , z18
+        , z19
+        , z2
+        , z20
+        , z21
+        , z22
+        , z23
+        , z24
+        , z3
+        , z4
+        , z5
+        , z6
+        , z7
+        , z8
+        , z9
+        )
 
-{-|
-Shadows provide important visual cues about objects’ depth and directional
+{-| Shadows provide important visual cues about objects’ depth and directional
 movement. They are the only visual cue indicating the amount of separation
 between surfaces. An object’s elevation determines the appearance of its
 shadow. The elevation values are mapped out in a "z-space" and range from 0 to
-24.
 
 
 # Resources
 
-- [Material Design guidelines: Shadows & elevation](https://material.io/components/web/catalog/elevation/)
-- [Demo](https://aforemny.github.io/elm-mdc/#elevation)
+  - [Material Design guidelines: Shadows & elevation](https://material.io/components/web/catalog/elevation/)
+  - [Demo](https://aforemny.github.io/elm-mdc/#elevation)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.Elevation as Elevation
-import Material.Options exposing (styled)
+    import Html exposing (text)
+    import Material.Elevation as Elevation
+    import Material.Options exposing (styled)
 
 
-styled Html.div
-    [ Elevation.z8
-    ]
-    [ text "Hello"
-    ]
-```
+    styled Html.div
+        [ Elevation.z8
+        ]
+        [ text "Hello"
+        ]
 
 
 # Usage
@@ -63,6 +60,7 @@ styled Html.div
 @docs z9, z10, z11, z12, z13, z14, z15, z16
 @docs z17, z18, z19, z20, z21, z22, z23, z24
 @docs transition
+
 -}
 
 import Internal.Elevation.Implementation as Elevation

@@ -1,56 +1,53 @@
-module Material.TopAppBar exposing
-    ( actionItem
-    , alignEnd
-    , alignStart
-    , collapsed
-    , dense
-    , denseFixedAdjust
-    , fixed
-    , fixedAdjust
-    , hasActionItem
-    , navigationIcon
-    , prominent
-    , prominentFixedAdjust
-    , Property
-    , section
-    , short
-    , title
-    , view
-    )
+module Material.TopAppBar
+    exposing
+        ( Property
+        , actionItem
+        , alignEnd
+        , alignStart
+        , collapsed
+        , dense
+        , denseFixedAdjust
+        , fixed
+        , fixedAdjust
+        , hasActionItem
+        , navigationIcon
+        , prominent
+        , prominentFixedAdjust
+        , section
+        , short
+        , title
+        , view
+        )
 
-
-{-|
-A top app bar is a container for items such as application title,
+{-| A top app bar is a container for items such as application title,
 navigation icon, and action items.
 
 
 # Resources
 
-- [Top App Bar - Internal.Components for the Web](https://material.io/develop/web/components/top-app-bar/)
-- [Material Design guidelines: Top app bar](https://material.io/go/design-app-bar-top)
-- [Demo](https://aforemny.github.io/elm-mdc/#top-app-bar)
+  - [Top App Bar - Internal.Components for the Web](https://material.io/develop/web/components/top-app-bar/)
+  - [Material Design guidelines: Top app bar](https://material.io/go/design-app-bar-top)
+  - [Demo](https://aforemny.github.io/elm-mdc/#top-app-bar)
 
 
 # Example
 
-```elm
-import Html exposing (text)
-import Material.TopAppBar as TopAppBar
+    import Html exposing (text)
+    import Material.TopAppBar as TopAppBar
 
 
-TopAppBar.view Mdc "my-top-app-bar" model.mdc []
-    [ TopAppBar.fixed ]
-    [ TopAppBar.section [ TopAppBar.alignStart ]
-          [ TopAppBar.navigationIcon [ Options.onClick OpenDrawer ] "menu"
-          , TopAppBar.title [] [ text title ]
-          ]
-      , TopAppBar.section [ TopAppBar.alignEnd ]
-          [ TopAppBar.actionItem [] "file_download"
-          , TopAppBar.actionItem [] "print"
-          , TopAppBar.actionItem [] "bookmark"
-          ]
-    ]
-```
+    TopAppBar.view Mdc "my-top-app-bar" model.mdc []
+        [ TopAppBar.fixed ]
+        [ TopAppBar.section [ TopAppBar.alignStart ]
+              [ TopAppBar.navigationIcon [ Options.onClick OpenDrawer ] "menu"
+              , TopAppBar.title [] [ text title ]
+              ]
+          , TopAppBar.section [ TopAppBar.alignEnd ]
+              [ TopAppBar.actionItem [] "file_download"
+              , TopAppBar.actionItem [] "print"
+              , TopAppBar.actionItem [] "bookmark"
+              ]
+        ]
 
 
 # Usage
@@ -80,11 +77,13 @@ TopAppBar.view Mdc "my-top-app-bar" model.mdc []
 @docs collapsed
 @docs hasActionItem
 
+
 ## Sections
 
 @docs section
 @docs alignStart
 @docs alignEnd
+
 
 ## Section elements
 
@@ -98,13 +97,14 @@ TopAppBar.view Mdc "my-top-app-bar" model.mdc []
 @docs fixedAdjust
 @docs denseFixedAdjust
 @docs prominentFixedAdjust
+
 -}
 
 import Html exposing (Html)
-import Material
 import Internal.Component exposing (Index)
-import Material.Icon as Icon
 import Internal.TopAppBar.Implementation as TopAppBar
+import Material
+import Material.Icon as Icon
 import Material.Options as Options
 
 
@@ -146,7 +146,6 @@ title =
 
 {-| Action item placed on the side opposite of the navigation icon.
 -}
-
 actionItem : List (Icon.Property m) -> String -> Html m
 actionItem options name =
     TopAppBar.actionItem options name
@@ -218,17 +217,16 @@ hasActionItem =
     TopAppBar.hasActionItem
 
 
-
 {-| Adds a top margin to the element so that it is not covered by a top app
 bar.
 
 Not only the `fixed` TopAppBar requires this, but also the standard variant.
 See below for special `dense` and `prominent` variants.
+
 -}
 fixedAdjust : Options.Property c m
 fixedAdjust =
     TopAppBar.fixedAdjust
-
 
 
 {-| Adds a top margin to the element so that it is not covered by a dense top
@@ -237,7 +235,6 @@ app bar.
 denseFixedAdjust : Options.Property c m
 denseFixedAdjust =
     TopAppBar.denseFixedAdjust
-
 
 
 {-| Adds a top margin to the element so that it is not covered by a prominent

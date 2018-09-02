@@ -1,44 +1,42 @@
-module Material.Checkbox exposing
-    ( checked
-    , disabled
-    , nativeControl
-    , Property
-    , view
-    )
+module Material.Checkbox
+    exposing
+        ( Property
+        , checked
+        , disabled
+        , nativeControl
+        , view
+        )
 
-{-|
-The Checkbox component is a spec-aligned checkbox component adhering to the
+{-| The Checkbox component is a spec-aligned checkbox component adhering to the
 Material Design checkbox requirements.
+
 
 # Resources
 
-- [Material Design guidelines: Selection Controls – Checkbox](https://material.io/guidelines/components/selection-controls.html#selection-controls-checkbox)
-- [Demo](https://aforemny.github.io/elm-mdc/#checkbox)
+  - [Material Design guidelines: Selection Controls – Checkbox](https://material.io/guidelines/components/selection-controls.html#selection-controls-checkbox)
+  - [Demo](https://aforemny.github.io/elm-mdc/#checkbox)
 
 
 # Example
 
-
-```elm
-import Html exposing (text)
-import Material.Checkbox as Checkbox
-import Material.FormField as FormField
-import Material.Options as Options exposing (styled, cs)
+    import Html exposing (text)
+    import Material.Checkbox as Checkbox
+    import Material.FormField as FormField
+    import Material.Options as Options exposing (styled, cs)
 
 
-FormField.view []
-    [ Checkbox.view Mdc "my-checkbox" model.mdc
-          [ Checkbox.checked True
-          , Options.onClick Toggle
-          ]
-          []
-    , Html.label
-          [ Options.onClick Toggle
-          ]
-          [ text "My checkbox"
-          ]
-    ]
-```
+    FormField.view []
+        [ Checkbox.view Mdc "my-checkbox" model.mdc
+              [ Checkbox.checked True
+              , Options.onClick Toggle
+              ]
+              []
+        , Html.label
+              [ Options.onClick Toggle
+              ]
+              [ text "My checkbox"
+              ]
+        ]
 
 
 # Usage
@@ -48,12 +46,13 @@ FormField.view []
 @docs checked
 @docs disabled
 @docs nativeControl
+
 -}
 
 import Html exposing (Html)
-import Material
-import Internal.Component exposing (Index)
 import Internal.Checkbox.Implementation as Checkbox
+import Internal.Component exposing (Index)
+import Material
 import Material.Options as Options
 
 
@@ -86,6 +85,7 @@ disabled =
 {-| Set checked state to True or False.
 
 If not set, the checkbox will be in indeterminate state.
+
 -}
 checked : Bool -> Property m
 checked =
