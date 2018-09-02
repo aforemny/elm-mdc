@@ -216,7 +216,16 @@ update lift msg model =
             ( Just { model | value = Just str, isDirty = dirty }, Cmd.none )
 
         Blur ->
-            ( Just { model | focused = False, geometry = Nothing }, Cmd.none )
+            let
+                geometry =
+                    case model.value of
+                        Nothing ->
+                            Nothing
+
+                        Just _ ->
+                            model.geometry
+            in
+            ( Just { model | focused = False, geometry = geometry }, Cmd.none )
 
         Focus geometry ->
             ( Just { model | focused = True, geometry = Just geometry }, Cmd.none )
