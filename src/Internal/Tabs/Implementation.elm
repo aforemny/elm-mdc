@@ -331,7 +331,7 @@ update lift msg model =
               Just
                 { model
                     | geometry = Just geometry
-                    , scale = computeScale geometry 0
+                    , scale = computeScale geometry model.index
                     , forwardIndicator = forwardIndicator
                     , backIndicator = backIndicator
                     , translateOffset = translateOffset
