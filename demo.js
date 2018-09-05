@@ -18588,7 +18588,7 @@ var _aforemny$elm_mdc$Internal_Tabs_Implementation$update = F3(
 									model,
 									{
 										geometry: _elm_lang$core$Maybe$Just(_p40),
-										scale: A2(_aforemny$elm_mdc$Internal_Tabs_Implementation$computeScale, _p40, 0),
+										scale: A2(_aforemny$elm_mdc$Internal_Tabs_Implementation$computeScale, _p40, model.index),
 										forwardIndicator: forwardIndicator,
 										backIndicator: backIndicator,
 										translateOffset: translateOffset,
@@ -18800,12 +18800,20 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$update = F3(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Blur':
+				var geometry = function () {
+					var _p3 = model.value;
+					if (_p3.ctor === 'Nothing') {
+						return _elm_lang$core$Maybe$Nothing;
+					} else {
+						return model.geometry;
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{focused: false, geometry: _elm_lang$core$Maybe$Nothing})),
+							{focused: false, geometry: geometry})),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Focus':
@@ -18827,9 +18835,9 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$update = F3(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
-				var _p3 = A2(_aforemny$elm_mdc$Internal_Ripple_Implementation$update, _p1._0, model.ripple);
-				var ripple = _p3._0;
-				var effects = _p3._1;
+				var _p4 = A2(_aforemny$elm_mdc$Internal_Ripple_Implementation$update, _p1._0, model.ripple);
+				var ripple = _p4._0;
+				var effects = _p4._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Maybe$Just(
@@ -18838,9 +18846,9 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$update = F3(
 							{ripple: ripple})),
 					_1: A2(
 						_elm_lang$core$Platform_Cmd$map,
-						function (_p4) {
+						function (_p5) {
 							return lift(
-								_aforemny$elm_mdc$Internal_Textfield_Model$RippleMsg(_p4));
+								_aforemny$elm_mdc$Internal_Textfield_Model$RippleMsg(_p5));
 						},
 						effects)
 				};
@@ -18876,7 +18884,7 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$fullwidth = _aforemny$el
 			config,
 			{fullWidth: true});
 	});
-var _aforemny$elm_mdc$Internal_Textfield_Implementation$type_ = function (_p5) {
+var _aforemny$elm_mdc$Internal_Textfield_Implementation$type_ = function (_p6) {
 	return _aforemny$elm_mdc$Internal_Options$option(
 		F2(
 			function (value, config) {
@@ -18885,7 +18893,7 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$type_ = function (_p5) {
 					{
 						type_: _elm_lang$core$Maybe$Just(value)
 					});
-			})(_p5));
+			})(_p6));
 };
 var _aforemny$elm_mdc$Internal_Textfield_Implementation$required = _aforemny$elm_mdc$Internal_Options$option(
 	function (config) {
@@ -18957,7 +18965,7 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$disabled = _aforemny$elm
 			config,
 			{disabled: true});
 	});
-var _aforemny$elm_mdc$Internal_Textfield_Implementation$value = function (_p6) {
+var _aforemny$elm_mdc$Internal_Textfield_Implementation$value = function (_p7) {
 	return _aforemny$elm_mdc$Internal_Options$option(
 		F2(
 			function (str, config) {
@@ -18966,9 +18974,9 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$value = function (_p6) {
 					{
 						value: _elm_lang$core$Maybe$Just(str)
 					});
-			})(_p6));
+			})(_p7));
 };
-var _aforemny$elm_mdc$Internal_Textfield_Implementation$label = function (_p7) {
+var _aforemny$elm_mdc$Internal_Textfield_Implementation$label = function (_p8) {
 	return _aforemny$elm_mdc$Internal_Options$option(
 		F2(
 			function (str, config) {
@@ -18977,7 +18985,7 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$label = function (_p7) {
 					{
 						labelText: _elm_lang$core$Maybe$Just(str)
 					});
-			})(_p7));
+			})(_p8));
 };
 var _aforemny$elm_mdc$Internal_Textfield_Implementation$outlined = _aforemny$elm_mdc$Internal_Options$option(
 	function (config) {
@@ -19036,19 +19044,19 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$defaultConfig = {
 	id_: ''
 };
 var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
-	function (lift, model, options, _p8) {
+	function (lift, model, options, _p9) {
 		var ripple = A4(
 			_aforemny$elm_mdc$Internal_Ripple_Implementation$view,
 			false,
-			function (_p9) {
+			function (_p10) {
 				return lift(
-					_aforemny$elm_mdc$Internal_Textfield_Model$RippleMsg(_p9));
+					_aforemny$elm_mdc$Internal_Textfield_Model$RippleMsg(_p10));
 			},
 			model.ripple,
 			{ctor: '[]'});
-		var _p10 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_Textfield_Implementation$defaultConfig, options);
-		var summary = _p10;
-		var config = _p10.config;
+		var _p11 = A2(_aforemny$elm_mdc$Internal_Options$collect, _aforemny$elm_mdc$Internal_Textfield_Implementation$defaultConfig, options);
+		var summary = _p11;
+		var config = _p11.config;
 		var isDirty = model.isDirty || A2(
 			_elm_lang$core$Maybe$withDefault,
 			false,
@@ -19067,22 +19075,22 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 				}),
 			config.invalid,
 			function () {
-				var _p11 = config.pattern;
-				if (_p11.ctor === 'Just') {
+				var _p12 = config.pattern;
+				if (_p12.ctor === 'Just') {
 					return A2(
 						_elm_lang$core$Maybe$withDefault,
 						false,
 						A2(
 							_elm_lang$core$Maybe$map,
-							function (_p12) {
+							function (_p13) {
 								return !A2(
 									_elm_lang$core$Regex$contains,
 									_elm_lang$core$Regex$regex(
 										A2(
 											_elm_lang$core$Basics_ops['++'],
 											'^',
-											A2(_elm_lang$core$Basics_ops['++'], _p11._0, '$'))),
-									_p12);
+											A2(_elm_lang$core$Basics_ops['++'], _p12._0, '$'))),
+									_p13);
 							},
 							model.value));
 				} else {
@@ -19158,11 +19166,11 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 															_0: A2(_aforemny$elm_mdc$Internal_Options$when, config.box || config.outlined, ripple.interactionHandler),
 															_1: {
 																ctor: '::',
-																_0: function (_p13) {
+																_0: function (_p14) {
 																	return A2(
 																		_aforemny$elm_mdc$Internal_Options$when,
 																		config.box,
-																		_aforemny$elm_mdc$Internal_Options$many(_p13));
+																		_aforemny$elm_mdc$Internal_Options$many(_p14));
 																}(
 																	{
 																		ctor: '::',
@@ -19213,9 +19221,9 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 												'focus',
 												A2(
 													_elm_lang$core$Json_Decode$map,
-													function (_p14) {
+													function (_p15) {
 														return lift(
-															_aforemny$elm_mdc$Internal_Textfield_Model$Focus(_p14));
+															_aforemny$elm_mdc$Internal_Textfield_Model$Focus(_p15));
 													},
 													_aforemny$elm_mdc$Internal_Textfield_Implementation$decodeGeometry)) : A2(
 												_aforemny$elm_mdc$Internal_Options$on,
@@ -19230,18 +19238,18 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 												_1: {
 													ctor: '::',
 													_0: _aforemny$elm_mdc$Internal_Options$onInput(
-														function (_p15) {
+														function (_p16) {
 															return lift(
-																_aforemny$elm_mdc$Internal_Textfield_Model$Input(_p15));
+																_aforemny$elm_mdc$Internal_Textfield_Model$Input(_p16));
 														}),
 													_1: {
 														ctor: '::',
-														_0: function (_p16) {
+														_0: function (_p17) {
 															return _aforemny$elm_mdc$Internal_Options$many(
 																A2(
 																	_elm_lang$core$List$map,
 																	_aforemny$elm_mdc$Internal_Options$attribute,
-																	A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p16)));
+																	A2(_elm_lang$core$List$filterMap, _elm_lang$core$Basics$identity, _p17)));
 														}(
 															{
 																ctor: '::',
@@ -19364,11 +19372,11 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 									}
 								},
 								function () {
-									var _p17 = config.labelText;
-									if (_p17.ctor === 'Just') {
+									var _p18 = config.labelText;
+									if (_p18.ctor === 'Just') {
 										return {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text(_p17._0),
+											_0: _elm_lang$html$Html$text(_p18._0),
 											_1: {ctor: '[]'}
 										};
 									} else {
@@ -19410,10 +19418,10 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 										var radius = 4;
 										var cornerWidth = radius + 1.2;
 										var leadingStrokeLength = _elm_lang$core$Basics$abs(11 - cornerWidth);
-										var _p18 = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Internal_Textfield_Model$defaultGeometry, model.geometry);
-										var labelWidth = _p18.labelWidth;
-										var width = _p18.width;
-										var height = _p18.height;
+										var _p19 = A2(_elm_lang$core$Maybe$withDefault, _aforemny$elm_mdc$Internal_Textfield_Model$defaultGeometry, model.geometry);
+										var labelWidth = _p19.labelWidth;
+										var width = _p19.width;
+										var height = _p19.height;
 										var scaledLabelWidth = labelScale * labelWidth;
 										var paddedLabelWidth = scaledLabelWidth + 8;
 										var pathMiddle = A2(
@@ -19701,8 +19709,8 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 										_elm_lang$core$Maybe$withDefault,
 										config.trailingIcon,
 										A2(_elm_lang$core$Maybe$map, _elm_lang$core$Maybe$Just, config.leadingIcon));
-									var _p19 = icon;
-									if (_p19.ctor === 'Just') {
+									var _p20 = icon;
+									if (_p20.ctor === 'Just') {
 										return {
 											ctor: '::',
 											_0: A3(
@@ -19713,9 +19721,9 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 													_0: _aforemny$elm_mdc$Internal_Options$cs('material-icons mdc-text-field__icon'),
 													_1: {
 														ctor: '::',
-														_0: function (_p20) {
+														_0: function (_p21) {
 															return _aforemny$elm_mdc$Internal_Options$attribute(
-																_elm_lang$html$Html_Attributes$tabindex(_p20));
+																_elm_lang$html$Html_Attributes$tabindex(_p21));
 														}(
 															config.iconClickable ? 0 : -1),
 														_1: {ctor: '[]'}
@@ -19723,7 +19731,7 @@ var _aforemny$elm_mdc$Internal_Textfield_Implementation$textField = F4(
 												},
 												{
 													ctor: '::',
-													_0: _elm_lang$html$Html$text(_p19._0),
+													_0: _elm_lang$html$Html$text(_p20._0),
 													_1: {ctor: '[]'}
 												}),
 											_1: {ctor: '[]'}
