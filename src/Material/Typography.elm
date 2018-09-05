@@ -1,29 +1,17 @@
-module Material.Typography
-    exposing
-        ( adjustMargin
-        , body1
-        , body2
-        , button
-        , caption
-        , display1
-        , display2
-        , display3
-        , display4
-        , headline
-        , headline1
-        , headline2
-        , headline3
-        , headline4
-        , headline5
-        , headline6
-        , overline
-        , subheading1
-        , subheading2
-        , subtitle1
-        , subtitle2
-        , title
-        , typography
-        )
+module Material.Typography exposing
+    ( typography
+    , display4, display3, display2
+    , headline6, headline5, headline4, headline3, headline2, headline1
+    , title
+    , subtitle2, subtitle1
+    , subheading2
+    , body2, body1
+    , caption
+    , button
+    , overline
+    , adjustMargin
+    , display1, headline, subheading1
+    )
 
 {-| Material Design's text sizes and styles were developed to balance content
 density and reading comfort under typical usage conditions.

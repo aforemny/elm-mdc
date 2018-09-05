@@ -145,9 +145,7 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                         ]
                     ]
                 , styled Html.h2
-                    [ cs "mdc-typography--headline6"
-
-                    -- TODO: Typography.headline6?
+                    [ Typography.headline6
                     , css "border-bottom" "1px solid rgba(0,0,0,.87)"
                     ]
                     [ text "Resources"
@@ -171,7 +169,7 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                     , altText = "Source Code"
                     }
                 , styled Html.h2
-                    [ cs "mdc-typography--headline6"
+                    [ Typography.headline6
                     , css "border-bottom" "1px solid rgba(0,0,0,.87)"
                     ]
                     [ text "Demos"
