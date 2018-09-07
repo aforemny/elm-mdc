@@ -22,4 +22,5 @@ script:
   - sysconfcpus/bin/sysconfcpus -n 2 make clean all
   - sysconfcpus/bin/sysconfcpus -n 2 make docs
   - cd examples/hello-world
-  - sysconfcpus/bin/sysconfcpus -n 2 make
+  - ../../sysconfcpus/bin/sysconfcpus -n 2 make
+  - cd ../..
