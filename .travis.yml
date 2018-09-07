@@ -16,10 +16,10 @@ before_install:
       make && make install;
       cd ..;
     fi
-  - npm install -g elm
+  - npm install -g elm@0.18
 script:
   - export PATH=$(npm bin):$PATH
   - sysconfcpus/bin/sysconfcpus -n 2 make clean all
   - sysconfcpus/bin/sysconfcpus -n 2 make docs
-notifications:
-  email: false # TODO - remove this once build is passing consistently on CI
+  - cd examples/hello-world
+  - sysconfcpus/bin/sysconfcpus -n 2 make
