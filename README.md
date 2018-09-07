@@ -1,5 +1,7 @@
 # Material Components for the Web for Elm
 
+[![Build Status](https://api.travis-ci.org/aforemny/elm-mdc.svg?branch=master)](https://travis-ci.org/aforemny/elm-mdc/)
+
 Port of Google's
 [Material Components for the Web](https://material.io/components/web/)
 CSS/JS implementation of the
