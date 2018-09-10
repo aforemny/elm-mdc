@@ -31,3 +31,16 @@
   font-family: Roboto Mono, serif;
   font-weight: 400;
 }
+
+.catalog-top-app-bar__title--small-screen {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .catalog-top-app-bar__title--small-screen {
+    display: inline-block;
+  }
+  .catalog-top-app-bar__title--large-screen {
+    display: none;
+  }
+}

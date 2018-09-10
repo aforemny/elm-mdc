@@ -7,7 +7,7 @@ module Demo.Page
         )
 
 import Demo.Url as Url exposing (Url)
-import Html exposing (Html, text)
+import Html exposing (Html, text, span)
 import Html.Attributes as Html
 import Material
 import Material.Icon as Icon
@@ -62,14 +62,14 @@ toolbar lift idx mdc navigate url title =
                 ]
             , TopAppBar.title
                 [ cs "catalog-top-app-bar__title"
-                , css "margin-left"
-                    (if url == Url.StartPage then
-                        "8px"
-                     else
-                        "24"
-                    )
                 ]
-                [ text title ]
+                [ styled span
+                      [ cs "catalog-top-app-bar__title--small-screen" ]
+                      [ text (if url == Url.StartPage then "MDC Web" else title) ]
+                , styled span
+                      [ cs "catalog-top-app-bar__title--large-screen" ]
+                      [ text title ]
+                ]
             ]
         ]
 
