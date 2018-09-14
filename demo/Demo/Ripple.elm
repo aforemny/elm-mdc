@@ -43,6 +43,7 @@ view lift page model =
         demoSurface =
             Options.many
                 [ cs "demo-surface"
+                , cs "mdc-ripple-surface"
                 , css "display" "flex"
                 , css "align-items" "center"
                 , css "justify-content" "center"
@@ -53,6 +54,7 @@ view lift page model =
                 , css "user-select" "none"
                 , css "-webkit-user-select" "none"
                 , cs "mdc-ripple-surface"
+                , Options.tabindex 0
                 ]
 
         example options =

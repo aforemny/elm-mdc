@@ -7,14 +7,11 @@ module Internal.Textfield.Model
         , defaultModel
         )
 
-import Internal.Ripple.Model as Ripple
-
 
 type alias Model =
     { focused : Bool
     , isDirty : Bool
     , value : Maybe String
-    , ripple : Ripple.Model
     , geometry : Maybe Geometry
     }
 
@@ -24,7 +21,6 @@ defaultModel =
     { focused = False
     , isDirty = False
     , value = Nothing
-    , ripple = Ripple.defaultModel
     , geometry = Nothing
     }
 
@@ -34,7 +30,6 @@ type Msg
     | Focus Geometry
     | Input String
     | NoOp
-    | RippleMsg Ripple.Msg
 
 
 type alias Geometry =

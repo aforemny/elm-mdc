@@ -73,14 +73,14 @@ nativeControl =
     Options.nativeControl
 
 
-radioButton : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-radioButton lift model options _ =
+radioButton : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+radioButton domId lift model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
         ripple =
-            Ripple.view True (lift << RippleMsg) model.ripple []
+            Ripple.view True domId (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
         Html.div
@@ -150,11 +150,11 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    \lift index store options ->
+    \lift domId store options ->
         Component.render getSet.get
-            radioButton
+            (radioButton domId)
             Internal.Msg.RadioButtonMsg
             lift
-            index
+            domId
             store
-            (Options.internalId index :: options)
+            (Options.internalId domId :: options)

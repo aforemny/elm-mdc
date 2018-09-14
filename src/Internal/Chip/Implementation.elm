@@ -144,14 +144,14 @@ input =
     cs "mdc-chip-set--input"
 
 
-chip : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-chip lift model options nodes =
+chip : Index -> (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+chip domId lift model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
         ripple =
-            Ripple.view False (lift << RippleMsg) model.ripple []
+            Ripple.view False domId (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
         Html.div
@@ -237,7 +237,8 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render getSet.get chip Internal.Msg.ChipMsg
+    \lift domId ->
+        Component.render getSet.get (chip domId) Internal.Msg.ChipMsg lift domId
 
 
 react :

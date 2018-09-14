@@ -32,7 +32,6 @@ import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
-import Internal.Ripple.Implementation as Ripple
 import Internal.Textfield.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
@@ -233,16 +232,9 @@ update lift msg model =
         NoOp ->
             ( Just model, Cmd.none )
 
-        RippleMsg msg_ ->
-            let
-                ( ripple, effects ) =
-                    Ripple.update msg_ model.ripple
-            in
-            ( Just { model | ripple = ripple }, Cmd.map (lift << RippleMsg) effects )
 
-
-textField : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-textField lift model options _ =
+textField : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+textField domId lift model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -252,9 +244,6 @@ textField lift model options _ =
 
         focused =
             model.focused && not config.disabled
-
-        ripple =
-            Ripple.view False (lift << RippleMsg) model.ripple []
 
         isInvalid =
             (||) config.invalid <|
@@ -283,14 +272,7 @@ textField lift model options _ =
             |> when ((config.leadingIcon /= Nothing) && (config.trailingIcon == Nothing))
         , cs "mdc-text-field--with-trailing-icon"
             |> when (config.trailingIcon /= Nothing)
-        , when (config.box || config.outlined) <|
-            ripple.interactionHandler
-        , when config.box
-            << Options.many
-          <|
-            [ cs "mdc-text-field--box"
-            , ripple.properties
-            ]
+        , when config.box (cs "mdc-text-field--box")
         ]
         []
         (List.concat
@@ -345,23 +327,6 @@ textField lift model options _ =
                                 else
                                     always Nothing
                                )
-                        ]
-                    , -- Note: prevent ripple: TODO
-                      Options.many
-                        [ Options.onWithOptions "keydown"
-                            (Decode.succeed
-                                { message = lift NoOp
-                                , preventDefault = False
-                                , stopPropagation = True
-                                }
-                            )
-                        , Options.onWithOptions "keyup"
-                            (Decode.succeed
-                                { message = lift NoOp
-                                , preventDefault = False
-                                , stopPropagation = True
-                                }
-                            )
                         ]
                     , when (config.placeholder /= Nothing) <|
                         Options.attribute <|
@@ -537,8 +502,6 @@ textField lift model options _ =
 
                 Nothing ->
                     []
-            , [ ripple.style
-              ]
             ]
         )
 
@@ -569,14 +532,14 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    \lift index store options ->
+    \lift domId store options ->
         Component.render getSet.get
-            textField
+            (textField domId)
             Internal.Msg.TextfieldMsg
             lift
-            index
+            domId
             store
-            (Options.internalId index :: options)
+            (Options.internalId domId :: options)
 
 
 decodeGeometry : Decoder Geometry

@@ -117,14 +117,14 @@ onClick handler =
     Options.option (\options -> { options | onClick = Just handler })
 
 
-button : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-button lift model options nodes =
+button : Index -> (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+button domId lift model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
         rippleInterface =
-            Ripple.view False (lift << RippleMsg) model.ripple []
+            Ripple.view False domId (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
         (if config.link /= Nothing then
@@ -181,7 +181,8 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render getSet.get button Internal.Msg.ButtonMsg
+    \lift index ->
+        Component.render getSet.get (button index) Internal.Msg.ButtonMsg lift index
 
 
 react :
