@@ -87,14 +87,14 @@ disabled =
     cs "mdc-icon-toggle--disabled"
 
 
-iconToggle : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-iconToggle lift model options _ =
+iconToggle : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+iconToggle domId lift model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
         ripple =
-            Ripple.view True (lift << RippleMsg) model.ripple []
+            Ripple.view True domId (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
         (if config.inner == Nothing then
@@ -164,4 +164,5 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render getSet.get iconToggle Internal.Msg.IconToggleMsg
+    \lift index ->
+      Component.render getSet.get (iconToggle index) Internal.Msg.IconToggleMsg lift index

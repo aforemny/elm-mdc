@@ -60,14 +60,14 @@ ripple =
     Options.option (\config -> { config | ripple = True })
 
 
-fab : (Msg -> m) -> Model -> List (Property m) -> String -> Html m
-fab lift model options icon =
+fab : Index -> (Msg -> m) -> Model -> List (Property m) -> String -> Html m
+fab domId lift model options icon =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
         rippleInterface =
-            Ripple.view False (lift << RippleMsg) model.ripple []
+            Ripple.view False domId (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
         Html.button
@@ -112,7 +112,8 @@ view :
     -> String
     -> Html m
 view =
-    Component.render getSet.get fab Internal.Msg.FabMsg
+  \lift domId ->
+    Component.render getSet.get (fab domId) Internal.Msg.FabMsg lift domId
 
 
 react :

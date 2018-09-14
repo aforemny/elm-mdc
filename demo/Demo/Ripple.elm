@@ -43,6 +43,7 @@ view lift page model =
         demoSurface =
             Options.many
                 [ cs "demo-surface"
+                , cs "mdc-ripple-surface"
                 , css "display" "flex"
                 , css "align-items" "center"
                 , css "justify-content" "center"
@@ -52,6 +53,7 @@ view lift page model =
                 , css "cursor" "pointer"
                 , css "user-select" "none"
                 , css "-webkit-user-select" "none"
+                , Options.tabindex 0
                 ]
 
         example options =
@@ -73,6 +75,7 @@ view lift page model =
               styled Html.div
                 [ css "width" "100%"
                 , css "height" "100%"
+                , cs "mdc-ripple-surface"
                 , ripple.interactionHandler
                 , ripple.properties
                 ]

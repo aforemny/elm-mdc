@@ -410,12 +410,13 @@ type alias Property m =
 
 
 tabs :
-    (Msg m -> m)
+    Index
+    -> (Msg m -> m)
     -> Model
     -> List (Property m)
     -> List (Tab m)
     -> Html m
-tabs lift model options nodes =
+tabs domId lift model options nodes =
     let
         summary =
             Options.collect defaultConfig options
@@ -534,8 +535,12 @@ tabs lift model options nodes =
                     |> List.indexedMap
                         (\index node ->
                             let
+                                tabDomId =
+                                    domId ++ "--" ++ String.fromInt index
+
                                 ripple =
                                     Ripple.view False
+                                        tabDomId
                                         (lift << RippleMsg index)
                                         (Dict.get index model.ripples
                                             |> Maybe.withDefault Ripple.defaultModel
@@ -647,7 +652,8 @@ view :
     -> List (Tab m)
     -> Html m
 view =
-    Component.render getSet.get tabs Internal.Msg.TabsMsg
+    \lift domId ->
+        Component.render getSet.get (tabs domId) Internal.Msg.TabsMsg lift domId
 
 
 computeScale : Geometry -> Int -> Float
