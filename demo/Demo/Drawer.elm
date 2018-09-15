@@ -59,9 +59,10 @@ example label url =
             ]
         , styled Html.iframe
             [ Options.attribute (Html.src ("." ++ url))
-            , css "height" "600px"
+            , css "height" "400px"
             , css "width" "100vw"
-            , css "max-width" "780px"
+            , css "min-width" "400px"
+            , css "max-width" "870px"
             ]
             []
         ]
@@ -74,10 +75,9 @@ view lift page model =
             [ css "display" "flex"
             , css "flex-wrap" "wrap"
             ]
-            [ example "Temporary Drawer" "/#temporary-drawer"
-            , example "Persistent Drawer" "/#persistent-drawer"
-            , example "Permanent Drawer above toolbar" "/#permanent-drawer-above"
-            , example "Permanent Drawer below toolbar" "/#permanent-drawer-below"
+            [ example "Drawer" "/#permanent-drawer"
+            , example "Dismissible Drawer" "/#dismissible-drawer"
+            , example "Modal Drawer" "/#modal-drawer"
             ]
         ]
 

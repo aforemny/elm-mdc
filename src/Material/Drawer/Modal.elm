@@ -1,14 +1,18 @@
-module Material.Drawer.Permanent
+module Material.Drawer.Modal
     exposing
         ( Property
         , content
         , header
         , headerContent
+        , onClose
+        , open
+        , scrim
         , view
         )
 
 {-| The navigation drawer slides in from the left and contains the
-navigation destinations for your app.
+navigation destinations for your app. Modal drawers are elevated above
+most of the app’s UI and don’t affect the screen’s layout grid.
 
 
 # Resources
@@ -22,7 +26,7 @@ navigation destinations for your app.
 # Example
 
     import Html exposing (text)
-    import Material.Drawer.Permanent as Drawer
+    import Material.Drawer.Modal as Drawer
     import Material.List as Lists
 
 
@@ -58,12 +62,15 @@ navigation destinations for your app.
 @docs content
 @docs header
 @docs headerContent
+@docs onClose
+@docs open
+@docs scrim
 
 -}
 
 import Html exposing (Html)
 import Internal.Component exposing (Index)
-import Internal.Drawer.Permanent.Implementation as Drawer
+import Internal.Drawer.Modal.Implementation as Drawer
 import Material
 import Material.List as Lists
 
@@ -106,3 +113,25 @@ headerContent =
 content : Lists.Property m
 content =
     Drawer.content
+
+
+{-| Message that must be sent when the drawer wants to be close
+-}
+onClose : m -> Property m
+onClose =
+    Drawer.onClose
+
+
+{-| When present, makes the drawer open.
+-}
+open : Property m
+open =
+    Drawer.open
+
+
+{-| The mdc-drawer-scrim next sibling element protects the app’s UI
+from interactions while the drawer is open.
+-}
+scrim : m -> Html m
+scrim click =
+    Drawer.scrim click

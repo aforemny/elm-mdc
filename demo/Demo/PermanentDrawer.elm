@@ -1,4 +1,4 @@
-module Demo.PermanentBelowDrawer
+module Demo.PermanentDrawer
     exposing
         ( Model
         , Msg(Mdc)
@@ -9,7 +9,7 @@ module Demo.PermanentBelowDrawer
         )
 
 import Demo.Page as Page exposing (Page)
-import Demo.PersistentDrawer
+import Demo.DismissibleDrawer
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Json.Decode as Json
@@ -19,6 +19,7 @@ import Material.Button as Button
 import Material.Drawer.Permanent as Drawer
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (cs, css, styled, when)
+import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
 
 
@@ -65,7 +66,7 @@ update lift msg model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     styled Html.div
-        [ cs "demo-body"
+        [ cs "drawer-frame-root"
         , css "display" "flex"
         , css "flex-direction" "row"
         , css "padding" "0"
@@ -75,24 +76,28 @@ view lift page model =
         , css "width" "100%"
         , Options.attribute (Html.dir "rtl") |> when model.rtl
         ]
-        [ page.toolbar "Permanent Drawer Below Toolbar"
-        , styled Html.div
-            [ cs "demo-content"
-            , css "display" "flex"
-            , css "flex" "1 1 auto"
-            , css "height" "100%"
-            , css "box-sizing" "border-box"
-            , page.fixedAdjust
+        [ Drawer.view (lift << Mdc)
+            "permanent-drawer-drawer"
+            model.mdc
+            []
+            [ Demo.DismissibleDrawer.drawerHeader
+            , Demo.DismissibleDrawer.drawerItems
             ]
-            [ Drawer.view (lift << Mdc)
-                "permanent-below-drawer-drawer"
-                model.mdc
-                []
-                [ Demo.PersistentDrawer.drawerItems
-                ]
+        , styled Html.div
+            [ cs "drawer-frame-app-content" ]
+            [ TopAppBar.view (lift << Mdc)
+                  "permanent-drawer-topappbar"
+                  model.mdc
+                  [ cs "drawer-top-app-bar" ]
+                  [ TopAppBar.section [ TopAppBar.alignStart ]
+                        [ TopAppBar.title [] [ text "Permanent Drawer" ]
+                        ]
+                  ]
             , styled Html.div
-                [ cs "demo-main"
-                , css "padding-left" "16px"
+                [ cs "drawer-main-content"
+                , css "padding" "0 18px"
+                , css "overflow" "auto"
+                , css "height" "100%"
                 ]
                 [ styled Html.h1
                     [ Typography.display1
@@ -108,7 +113,7 @@ view lift page model =
                     [ css "padding" "10px"
                     ]
                     [ Button.view (lift << Mdc)
-                        "permanent-below-drawer-toggle-rtl"
+                        "permanent-above-drawer-toggle-rtl"
                         model.mdc
                         [ Options.on "click" (Json.succeed (lift ToggleRtl))
                         ]
@@ -119,7 +124,7 @@ view lift page model =
                     [ css "padding" "10px"
                     ]
                     [ Button.view (lift << Mdc)
-                        "permanent-below-drawer-toggle-extra-wide-content"
+                        "permanent-above-drawer-toggle-extra-wide-content"
                         model.mdc
                         [ Options.on "click" (Json.succeed (lift Toggle0))
                         ]
@@ -137,7 +142,7 @@ view lift page model =
                     [ css "padding" "10px"
                     ]
                     [ Button.view (lift << Mdc)
-                        "permanent-below-drawer-toggle-extra-tall-content"
+                        "permanent-above-drawer-toggle-extra-tall-content"
                         model.mdc
                         [ Options.on "click" (Json.succeed (lift Toggle1))
                         ]

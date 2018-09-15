@@ -1,12 +1,10 @@
-module Internal.Drawer.Temporary.Implementation
+module Internal.Drawer.Dismissible.Implementation
     exposing
         ( Property
         , content
         , header
         , headerContent
-        , onClose
         , open
-        , toolbarSpacer
         , view
         )
 
@@ -46,11 +44,6 @@ content =
     Drawer.content
 
 
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer =
-    Drawer.toolbarSpacer
-
-
 type alias Store s =
     Drawer.Store s
 
@@ -86,11 +79,6 @@ subscriptions =
     Drawer.subscriptions
 
 
-onClose : m -> Property m
-onClose =
-    Drawer.onClose
-
-
 open : Property m
 open =
     Drawer.open
@@ -98,4 +86,4 @@ open =
 
 className : String
 className =
-    "mdc-drawer--temporary"
+    "mdc-drawer--dismissible"

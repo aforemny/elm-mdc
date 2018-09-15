@@ -1,4 +1,4 @@
-module Demo.TemporaryDrawer
+module Demo.ModalDrawer
     exposing
         ( Model
         , Msg(Mdc)
@@ -9,17 +9,15 @@ module Demo.TemporaryDrawer
         )
 
 import Demo.Page exposing (Page)
-import Demo.PersistentDrawer
+import Demo.DismissibleDrawer
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Json.Decode as Json
 import Material
 import Material.Button as Button
-import Material.Drawer.Temporary as Drawer
-import Material.Icon as Icon
+import Material.Drawer.Modal as Drawer
 import Material.Options as Options exposing (cs, css, styled, when)
-import Material.Theme as Theme
-import Material.Toolbar as Toolbar
+import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
@@ -66,56 +64,39 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     styled Html.div
         [ Options.attribute (Html.dir "rtl") |> when model.rtl
+        , cs "drawer-frame-root"
         ]
-        [ Toolbar.view (lift << Mdc)
-            "temporary-drawer-toolbar"
-            model.mdc
-            [ Toolbar.fixed
-            ]
-            [ Toolbar.row []
-                [ Toolbar.section
-                    [ Toolbar.alignStart
-                    ]
-                    [ Icon.view
-                        [ Toolbar.menuIcon
-                        , Options.onClick (lift OpenDrawer)
-                        ]
-                        "menu"
-                    , Toolbar.title
-                        [ cs "catalog-menu"
-                        , css "font-family" "'Roboto Mono', monospace"
-                        , css "margin-left" "8px"
-                        ]
-                        [ text "Temporary Drawer" ]
-                    ]
-                ]
-            ]
-        , Drawer.view (lift << Mdc)
-            "temporary-drawer-drawer"
+        [ Drawer.view (lift << Mdc)
+            "modal-drawer-drawer"
             model.mdc
             [ Drawer.open |> when model.drawerOpen
             , Drawer.onClose (lift CloseDrawer)
             ]
-            [ Drawer.header
-                [ Theme.primaryBg
-                , Theme.textPrimaryOnPrimary
+            [ Demo.DismissibleDrawer.drawerHeader
+            , Demo.DismissibleDrawer.drawerItems
+            ]
+        , Drawer.scrim (lift CloseDrawer)
+
+        , TopAppBar.view (lift << Mdc)
+            "modal-drawer-topappbar"
+            model.mdc
+            [ ]
+            [ TopAppBar.section [ TopAppBar.alignStart ]
+                [ TopAppBar.navigationIcon [ Options.onClick (lift OpenDrawer) ] "menu"
+                , TopAppBar.title [] [ text "Modal Drawer" ]
                 ]
-                [ Drawer.headerContent []
-                    [ text "Header here"
-                    ]
-                ]
-            , Demo.PersistentDrawer.drawerItems
             ]
         , styled Html.div
-            [ Toolbar.fixedAdjust "temporary-drawer-toolbar" model.mdc
+            [ TopAppBar.fixedAdjust
+            , cs "drawer-main-content"
             , css "padding-left" "16px"
             , css "overflow" "auto"
             ]
-            [ styled Html.h1 [ Typography.display1 ] [ text "Temporary Drawer" ]
+            [ styled Html.h1 [ Typography.display1 ] [ text "Modal Drawer" ]
             , styled Html.p [ Typography.body1 ] [ text "Click the menu icon above to open." ]
             ]
         , Button.view (lift << Mdc)
-            "temporary-drawer-toggle-rtl"
+            "modal-drawer-toggle-rtl"
             model.mdc
             [ Options.on "click" (Json.succeed (lift ToggleRtl))
             ]

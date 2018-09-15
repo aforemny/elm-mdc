@@ -16,9 +16,8 @@ import Demo.LinearProgress
 import Demo.Lists
 import Demo.Menus
 import Demo.Page as Page
-import Demo.PermanentAboveDrawer
-import Demo.PermanentBelowDrawer
-import Demo.PersistentDrawer
+import Demo.PermanentDrawer
+import Demo.DismissibleDrawer
 import Demo.RadioButtons
 import Demo.Ripple
 import Demo.Selects
@@ -27,7 +26,7 @@ import Demo.Snackbar
 import Demo.Startpage
 import Demo.Switch
 import Demo.Tabs
-import Demo.TemporaryDrawer
+import Demo.ModalDrawer
 import Demo.Textfields
 import Demo.Theme
 import Demo.Toolbar
@@ -63,9 +62,8 @@ type alias Model =
     , layoutGrid : Demo.LayoutGrid.Model
     , lists : Demo.Lists.Model Msg
     , menus : Demo.Menus.Model Msg
-    , permanentAboveDrawer : Demo.PermanentAboveDrawer.Model Msg
-    , permanentBelowDrawer : Demo.PermanentBelowDrawer.Model Msg
-    , persistentDrawer : Demo.PersistentDrawer.Model Msg
+    , permanentAboveDrawer : Demo.PermanentDrawer.Model Msg
+    , persistentDrawer : Demo.DismissibleDrawer.Model Msg
     , radio : Demo.RadioButtons.Model Msg
     , ripple : Demo.Ripple.Model Msg
     , selects : Demo.Selects.Model Msg
@@ -73,7 +71,7 @@ type alias Model =
     , snackbar : Demo.Snackbar.Model Msg
     , switch : Demo.Switch.Model Msg
     , tabs : Demo.Tabs.Model Msg
-    , temporaryDrawer : Demo.TemporaryDrawer.Model Msg
+    , temporaryDrawer : Demo.ModalDrawer.Model Msg
     , textfields : Demo.Textfields.Model Msg
     , theme : Demo.Theme.Model Msg
     , toolbar : Demo.Toolbar.Model Msg
@@ -99,9 +97,8 @@ defaultModel =
     , layoutGrid = Demo.LayoutGrid.defaultModel
     , lists = Demo.Lists.defaultModel
     , menus = Demo.Menus.defaultModel
-    , permanentAboveDrawer = Demo.PermanentAboveDrawer.defaultModel
-    , permanentBelowDrawer = Demo.PermanentBelowDrawer.defaultModel
-    , persistentDrawer = Demo.PersistentDrawer.defaultModel
+    , permanentAboveDrawer = Demo.PermanentDrawer.defaultModel
+    , persistentDrawer = Demo.DismissibleDrawer.defaultModel
     , radio = Demo.RadioButtons.defaultModel
     , ripple = Demo.Ripple.defaultModel
     , selects = Demo.Selects.defaultModel
@@ -109,7 +106,7 @@ defaultModel =
     , snackbar = Demo.Snackbar.defaultModel
     , switch = Demo.Switch.defaultModel
     , tabs = Demo.Tabs.defaultModel
-    , temporaryDrawer = Demo.TemporaryDrawer.defaultModel
+    , temporaryDrawer = Demo.ModalDrawer.defaultModel
     , textfields = Demo.Textfields.defaultModel
     , theme = Demo.Theme.defaultModel
     , toolbar = Demo.Toolbar.defaultModel
@@ -134,9 +131,8 @@ type Msg
     | ImageListMsg (Demo.ImageList.Msg Msg)
     | LayoutGridMsg Demo.LayoutGrid.Msg
     | ListsMsg (Demo.Lists.Msg Msg)
-    | PermanentAboveDrawerMsg (Demo.PermanentAboveDrawer.Msg Msg)
-    | PermanentBelowDrawerMsg (Demo.PermanentBelowDrawer.Msg Msg)
-    | PersistentDrawerMsg (Demo.PersistentDrawer.Msg Msg)
+    | PermanentDrawerMsg (Demo.PermanentDrawer.Msg Msg)
+    | DismissibleDrawerMsg (Demo.DismissibleDrawer.Msg Msg)
     | RadioButtonsMsg (Demo.RadioButtons.Msg Msg)
     | RippleMsg (Demo.Ripple.Msg Msg)
     | SelectMsg (Demo.Selects.Msg Msg)
@@ -145,7 +141,7 @@ type Msg
     | SnackbarMsg (Demo.Snackbar.Msg Msg)
     | SwitchMsg (Demo.Switch.Msg Msg)
     | TabsMsg (Demo.Tabs.Msg Msg)
-    | TemporaryDrawerMsg (Demo.TemporaryDrawer.Msg Msg)
+    | ModalDrawerMsg (Demo.ModalDrawer.Msg Msg)
     | TextfieldMsg (Demo.Textfields.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
     | ToolbarMsg (Demo.Toolbar.Msg Msg)
@@ -218,33 +214,26 @@ update msg model =
             in
             ( { model | drawer = drawer }, effects )
 
-        TemporaryDrawerMsg msg_ ->
+        ModalDrawerMsg msg_ ->
             let
                 ( temporaryDrawer, effects ) =
-                    Demo.TemporaryDrawer.update TemporaryDrawerMsg msg_ model.temporaryDrawer
+                    Demo.ModalDrawer.update ModalDrawerMsg msg_ model.temporaryDrawer
             in
             ( { model | temporaryDrawer = temporaryDrawer }, effects )
 
-        PersistentDrawerMsg msg_ ->
+        DismissibleDrawerMsg msg_ ->
             let
                 ( persistentDrawer, effects ) =
-                    Demo.PersistentDrawer.update PersistentDrawerMsg msg_ model.persistentDrawer
+                    Demo.DismissibleDrawer.update DismissibleDrawerMsg msg_ model.persistentDrawer
             in
             ( { model | persistentDrawer = persistentDrawer }, effects )
 
-        PermanentAboveDrawerMsg msg_ ->
+        PermanentDrawerMsg msg_ ->
             let
                 ( permanentAboveDrawer, effects ) =
-                    Demo.PermanentAboveDrawer.update PermanentAboveDrawerMsg msg_ model.permanentAboveDrawer
+                    Demo.PermanentDrawer.update PermanentDrawerMsg msg_ model.permanentAboveDrawer
             in
             ( { model | permanentAboveDrawer = permanentAboveDrawer }, effects )
-
-        PermanentBelowDrawerMsg msg_ ->
-            let
-                ( permanentBelowDrawer, effects ) =
-                    Demo.PermanentBelowDrawer.update PermanentBelowDrawerMsg msg_ model.permanentBelowDrawer
-            in
-            ( { model | permanentBelowDrawer = permanentBelowDrawer }, effects )
 
         FabsMsg msg_ ->
             let
@@ -429,17 +418,14 @@ view_ model =
         Drawer ->
             Demo.Drawer.view DrawerMsg page model.drawer
 
-        TemporaryDrawer ->
-            Demo.TemporaryDrawer.view TemporaryDrawerMsg page model.temporaryDrawer
+        ModalDrawer ->
+            Demo.ModalDrawer.view ModalDrawerMsg page model.temporaryDrawer
 
-        PersistentDrawer ->
-            Demo.PersistentDrawer.view PersistentDrawerMsg page model.persistentDrawer
+        DismissibleDrawer ->
+            Demo.DismissibleDrawer.view DismissibleDrawerMsg page model.persistentDrawer
 
-        PermanentAboveDrawer ->
-            Demo.PermanentAboveDrawer.view PermanentAboveDrawerMsg page model.permanentAboveDrawer
-
-        PermanentBelowDrawer ->
-            Demo.PermanentBelowDrawer.view PermanentBelowDrawerMsg page model.permanentBelowDrawer
+        PermanentDrawer ->
+            Demo.PermanentDrawer.view PermanentDrawerMsg page model.permanentAboveDrawer
 
         Elevation ->
             Demo.Elevation.view ElevationMsg page model.elevation
@@ -556,13 +542,12 @@ subscriptions model =
         , Demo.GridList.subscriptions GridListMsg model.gridList
         , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
         , Demo.Menus.subscriptions MenuMsg model.menus
-        , Demo.PermanentAboveDrawer.subscriptions PermanentAboveDrawerMsg model.permanentAboveDrawer
-        , Demo.PermanentBelowDrawer.subscriptions PermanentBelowDrawerMsg model.permanentBelowDrawer
-        , Demo.PersistentDrawer.subscriptions PersistentDrawerMsg model.persistentDrawer
+        , Demo.PermanentDrawer.subscriptions PermanentDrawerMsg model.permanentAboveDrawer
+        , Demo.DismissibleDrawer.subscriptions DismissibleDrawerMsg model.persistentDrawer
         , Demo.Selects.subscriptions SelectMsg model.selects
         , Demo.Slider.subscriptions SliderMsg model.slider
         , Demo.Tabs.subscriptions TabsMsg model.tabs
-        , Demo.TemporaryDrawer.subscriptions TemporaryDrawerMsg model.temporaryDrawer
+        , Demo.ModalDrawer.subscriptions ModalDrawerMsg model.temporaryDrawer
         , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
         , Demo.TopAppBar.subscriptions TopAppBarMsg model.topAppBar
         ]

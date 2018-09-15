@@ -4,7 +4,6 @@ module Internal.Drawer.Permanent.Implementation
         , content
         , header
         , headerContent
-        , toolbarSpacer
         , view
         )
 
@@ -44,11 +43,6 @@ content =
     Drawer.content
 
 
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer =
-    Drawer.toolbarSpacer
-
-
 type alias Store s =
     Drawer.Store s
 
@@ -61,7 +55,7 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Drawer.render className
+    Drawer.render ""
 
 
 react :
@@ -82,8 +76,3 @@ subs =
 subscriptions : Model -> Sub Msg
 subscriptions =
     Drawer.subscriptions
-
-
-className : String
-className =
-    "mdc-drawer--permanent"

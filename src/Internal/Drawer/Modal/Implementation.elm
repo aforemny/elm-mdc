@@ -1,20 +1,22 @@
-module Internal.Drawer.Persistent.Implementation
+module Internal.Drawer.Modal.Implementation
     exposing
         ( Property
         , content
         , header
         , headerContent
+        , onClose
         , open
-        , toolbarSpacer
+        , scrim
         , view
         )
 
 import Html exposing (Html, text)
 import Internal.Component exposing (Index, Indexed)
 import Internal.Drawer.Implementation as Drawer
-import Internal.Drawer.Model exposing (Model, Msg)
+import Internal.Drawer.Model exposing (Model, Msg(..))
 import Internal.List.Implementation as Lists
 import Internal.Msg
+import Internal.Options as Options exposing (cs, styled)
 
 
 type alias Config m =
@@ -43,11 +45,6 @@ headerContent =
 content : Lists.Property m
 content =
     Drawer.content
-
-
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer =
-    Drawer.toolbarSpacer
 
 
 type alias Store s =
@@ -85,6 +82,11 @@ subscriptions =
     Drawer.subscriptions
 
 
+onClose : m -> Property m
+onClose =
+    Drawer.onClose
+
+
 open : Property m
 open =
     Drawer.open
@@ -92,4 +94,13 @@ open =
 
 className : String
 className =
-    "mdc-drawer--persistent"
+    "mdc-drawer--modal"
+
+
+scrim : m -> Html m
+scrim click =
+    styled Html.div
+        [ cs "mdc-drawer-scrim"
+        , Options.onClick click
+        ]
+        []
