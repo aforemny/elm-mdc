@@ -3,7 +3,6 @@ module Material.Textfield
         ( Property
         , autocomplete
         , autofocus
-        , box
         , cols
         , dense
         , disabled
@@ -200,13 +199,6 @@ password =
 email : Property m
 email =
     Textfield.email
-
-
-{-| Style the textfield as a box textfield.
--}
-box : Property m
-box =
-    Textfield.box
 
 
 {-| Set a pattern to validate the textfield's input against.
