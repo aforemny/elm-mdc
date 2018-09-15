@@ -271,7 +271,6 @@ textField lift model options _ =
     Options.apply summary
         Html.div
         [ cs "mdc-text-field"
-        , cs "mdc-text-field--upgraded"
         , cs "mdc-text-field--focused" |> when focused
         , cs "mdc-text-field--disabled" |> when config.disabled
         , cs "mdc-text-field--dense" |> when config.dense
