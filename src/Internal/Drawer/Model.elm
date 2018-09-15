@@ -12,7 +12,6 @@ type alias Model =
     { open : Bool
     , state : Maybe Bool
     , animating : Bool
-    , persistent : Bool
     }
 
 
@@ -21,14 +20,14 @@ defaultModel =
     { open = False
     , state = Nothing
     , animating = False
-    , persistent = False
     }
 
 
 type Msg
     = NoOp
     | Tick
-    | SetOpen ( Bool, Bool )
+    | SetOpen ( Bool )
+    | SetClose
 
 
 type alias Geometry =

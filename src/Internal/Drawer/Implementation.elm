@@ -14,7 +14,6 @@ module Internal.Drawer.Implementation
         , render
         , subs
         , subscriptions
-        , toolbarSpacer
         , update
         , view
         )
@@ -45,14 +44,18 @@ update lift msg model =
             , Cmd.none
             )
 
-        SetOpen ( open, persistent ) ->
+        SetOpen ( open ) ->
             ( Just
                 { model
                     | open = open
                     , state = Nothing
                     , animating = True
-                    , persistent = persistent
                 }
+            , Cmd.none
+            )
+
+        SetClose ->
+            ( Just { model | open = False, state = Nothing, animating = False }
             , Cmd.none
             )
 
@@ -82,29 +85,34 @@ view className lift model options nodes =
 
         stateChanged =
             config.open /= model.open
+
     in
     styled Html.aside
         [ cs "mdc-drawer"
-        , cs className
+        , cs className |> when (not ( String.isEmpty className ))
         , when stateChanged <|
-            GlobalEvents.onTick (Json.succeed (lift (SetOpen ( config.open, model.persistent ))))
+            GlobalEvents.onTick (Json.succeed (lift (SetOpen ( config.open ))))
         , cs "mdc-drawer--open" |> when model.open
-        , cs "mdc-drawer--animating" |> when model.animating
+        , Options.data "focustrap" "" |> when model.open
+        , cs "mdc-drawer--opening" |> when model.animating
         , Options.onClick (Maybe.withDefault (lift NoOp) config.onClose)
+        , Options.on "keydown" <|
+            Json.map lift <|
+                Json.map2
+                    (\key keyCode ->
+                         if key == Just "Escape" || keyCode == 27 then
+                             SetClose
+                         else
+                             NoOp
+                    )
+                (Json.oneOf
+                     [ Json.map Just (Json.at [ "key" ] Json.string)
+                     , Json.succeed Nothing
+                     ]
+                )
+            (Json.at [ "keyCode" ] Json.int)
         ]
-        [ styled Html.nav
-            (cs "mdc-drawer__drawer"
-                :: Options.onWithOptions "click"
-                    { stopPropagation = className == "mdc-drawer--temporary"
-                    , preventDefault = False
-                    }
-                    (Json.succeed (lift NoOp))
-                :: when model.open (css "transform" "translateX(0)")
-                :: when model.animating (Options.on "transitionend" (Json.succeed (lift Tick)))
-                :: options
-            )
-            nodes
-        ]
+        nodes
 
 
 header : List (Property m) -> List (Html m) -> Html m
@@ -120,11 +128,6 @@ headerContent options =
 content : Lists.Property m
 content =
     cs "mdc-drawer__content"
-
-
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer options =
-    styled Html.div (cs "mdc-drawer__toolbar-spacer" :: options)
 
 
 type alias Store s =

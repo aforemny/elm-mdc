@@ -1,14 +1,18 @@
-module Material.Drawer.Permanent
+module Material.Drawer.Dismissible
     exposing
         ( Property
         , content
         , header
         , headerContent
+        , open
         , view
         )
 
 {-| The navigation drawer slides in from the left and contains the
-navigation destinations for your app.
+navigation destinations for your app. Dismissible drawers are by
+default hidden off screen, and can slide into view. Dismissible
+drawers should be used when navigation is not common, and the main app
+content is prioritized.
 
 
 # Resources
@@ -22,12 +26,14 @@ navigation destinations for your app.
 # Example
 
     import Html exposing (text)
-    import Material.Drawer.Permanent as Drawer
+    import Material.Drawer.Dismissible as Drawer
     import Material.List as Lists
 
 
     Drawer.view Mdc "my-drawer" model.mdc []
-        [ styled Html.div
+        [ Drawer.header []
+              [ text "Header here" ]
+        , styled Html.div
               [ Drawer.content ]
               [ Lists.nav []
                   [ Lists.li []
@@ -51,6 +57,10 @@ navigation destinations for your app.
         ]
 
 
+Apply the mdc-drawer-app-content class to the sibling element after
+the drawer for the open/close animations to work.
+
+
 # Usage
 
 @docs Property
@@ -58,12 +68,13 @@ navigation destinations for your app.
 @docs content
 @docs header
 @docs headerContent
+@docs open
 
 -}
 
 import Html exposing (Html)
 import Internal.Component exposing (Index)
-import Internal.Drawer.Permanent.Implementation as Drawer
+import Internal.Drawer.Dismissible.Implementation as Drawer
 import Material
 import Material.List as Lists
 
@@ -106,3 +117,10 @@ headerContent =
 content : Lists.Property m
 content =
     Drawer.content
+
+
+{-| When present, makes the drawer open.
+-}
+open : Property m
+open =
+    Drawer.open
