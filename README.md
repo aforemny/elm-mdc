@@ -156,3 +156,8 @@ $ build.cmd docs
 Contributions are warmly encouraged - please
 [get in touch](https://github.com/aforemny/elm-mdc/issues)! Use GitHub to
 [report bugs](https://github.com/aforemny/elm-mdc/issues), too.
+
+
+# Build status #
+
+[![Build Status](https://api.travis-ci.org/aforemny/elm-mdc.svg?branch=master)](https://travis-ci.org/aforemny/elm-mdc/)
