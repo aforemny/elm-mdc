@@ -52,6 +52,7 @@ view lift page model =
                 , css "cursor" "pointer"
                 , css "user-select" "none"
                 , css "-webkit-user-select" "none"
+                , cs "mdc-ripple-surface"
                 ]
 
         example options =
@@ -73,6 +74,7 @@ view lift page model =
               styled Html.div
                 [ css "width" "100%"
                 , css "height" "100%"
+                , cs "mdc-ripple-surface"
                 , ripple.interactionHandler
                 , ripple.properties
                 ]
