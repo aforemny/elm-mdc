@@ -80,7 +80,6 @@ module Material.Textfield
 
 ## Variants
 
-@docs box
 @docs outlined
 @docs fullwidth
 
