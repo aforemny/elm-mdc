@@ -1,5 +1,5 @@
 @echo off
-SET ELM=elm-make --yes --warn
+SET ELM=elm make
 SET PAGES=../elm-mdc-gh-pages
 SET BUILD_PARAM=%~1
 
