@@ -414,7 +414,7 @@ update msg model =
 
         ( Activate0 domId activateData, Idle ) ->
             ( model
-            , Task.attempt (Activate activateData) (Browser.Dom.getElement (Debug.log "domId" domId))
+            , Task.attempt (Activate activateData) (Browser.Dom.getElement domId)
             )
 
         ( Activate0 domId activateData, _ ) ->
