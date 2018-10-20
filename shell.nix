@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> {} }:
 let
-  nixpkgs-unstable = (import (fetchTarball "https://github.com/NixOS/nixpkgs-channels/archive/nixpkgs-unstable.tar.gz")) {};
+  nixpkgs-unstable = import /home/aforemny/src/nixpkgs/default.nix {};
 in
 with pkgs;
 with stdenv;
