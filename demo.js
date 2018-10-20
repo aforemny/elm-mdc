@@ -23225,6 +23225,7 @@ var author$project$Demo$Ripple$view = F3(
 					A2(author$project$Material$Options$css, 'cursor', 'pointer'),
 					A2(author$project$Material$Options$css, 'user-select', 'none'),
 					A2(author$project$Material$Options$css, '-webkit-user-select', 'none'),
+					author$project$Material$Options$cs('mdc-ripple-surface'),
 					author$project$Material$Options$tabindex(0)
 				]));
 		return A2(
