@@ -1,2 +1,2 @@
 build:
-	elm make Main.elm --output elm.js
+	elm make --optimize Main.elm --output elm.js
