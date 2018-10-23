@@ -48,17 +48,9 @@ update lift msg model =
             ( { model | rtl = not model.rtl }, Cmd.none )
 
         Accept ->
-            let
-                _ =
-                    Debug.log "click" "accept"
-            in
             ( { model | showDialog = False, showScrollingDialog = False }, Cmd.none )
 
         Cancel ->
-            let
-                _ =
-                    Debug.log "click" "cancel"
-            in
             ( { model | showDialog = False, showScrollingDialog = False }, Cmd.none )
 
         ShowDialog ->

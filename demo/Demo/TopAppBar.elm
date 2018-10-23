@@ -54,7 +54,7 @@ update lift msg model =
         ExampleMsg index msg_ ->
             let
                 example =
-                    Dict.get (Debug.log "index" index) model.examples
+                    Dict.get index model.examples
                         |> Maybe.withDefault defaultExample
                         |> updateExample msg_
 
@@ -66,7 +66,7 @@ update lift msg model =
 
 updateExample : ExampleMsg -> Example -> Example
 updateExample msg model =
-    case Debug.log "updateExample" msg of
+    case msg of
         ToggleRtl ->
             { model | rtl = not model.rtl }
 

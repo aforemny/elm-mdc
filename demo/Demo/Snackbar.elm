@@ -106,10 +106,6 @@ update lift msg model =
             ( { model | mdc = mdc }, effects )
 
         Dismiss str ->
-            let
-                _ =
-                    Debug.log "Dismiss" str
-            in
             ( model, Cmd.none )
 
 
