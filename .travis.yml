@@ -19,6 +19,7 @@ before_install:
   - npm install -g elm@0.19
 script:
   - export PATH=$(npm bin):$PATH
+  - git submodule update --init
   - sysconfcpus/bin/sysconfcpus -n 2 make clean all
   - sysconfcpus/bin/sysconfcpus -n 2 make docs
   - cd examples/hello-world
