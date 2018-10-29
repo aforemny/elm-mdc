@@ -61,6 +61,7 @@ root repository before to create the files `elm-mdc.js` and
 ```elm
 module Main exposing (..)
 
+import Browser
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
@@ -83,14 +84,14 @@ type Msg
     | Click
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    Html.program
-    { init = init
-    , subscriptions = subscriptions
-    , update = update
-    , view = view
-    }
+    Browser.element
+        { init = \_ -> init
+        , subscriptions = subscriptions
+        , update = update
+        , view = view
+        }
 
 
 init : ( Model, Cmd Msg )
