@@ -30,8 +30,7 @@ Material Design chip requirements.
     import Material.Options as Options
 
     Chip.view Mdc "my-chip" model.mdc
-        [ Chip.ripple
-        , Chip.onClick Click
+        [ Chip.onClick Click
         ]
         [ text "Chip"
         ]
