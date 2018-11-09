@@ -32,7 +32,7 @@ Material Design checkbox requirements.
               ]
               []
         , Html.label
-              [ Options.onClick Toggle
+              [ Html.Events.onClick Toggle
               ]
               [ text "My checkbox"
               ]
