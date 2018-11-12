@@ -486,7 +486,7 @@ tabs domId lift model options nodes =
                         Json.map (lift << ScrollBack) <|
                             decodeGeometryOnIndicator config.indicator
                     ]
-                    [ styled Html.a
+                    [ styled Html.span
                         [ cs "mdc-tab-bar__indicator__inner"
                         , cs "material-icons"
                         , css "pointer-events" "none"
@@ -512,7 +512,7 @@ tabs domId lift model options nodes =
                             decodeGeometryOnIndicator config.indicator
                     , css "display" "none" |> when (not model.forwardIndicator)
                     ]
-                    [ styled Html.a
+                    [ styled Html.span
                         [ cs "mdc-tab-bar__indicator__inner"
                         , cs "material-icons"
                         , css "pointer-events" "none"
@@ -568,7 +568,7 @@ tabs domId lift model options nodes =
                               -- ripple listen on focus events, and the global
                               -- dispatch only accounts for dispatching in
                               -- mdc-tab-bar options.
-                              Html.a
+                              Html.span
                                 (Options.addAttributes
                                     (Options.recollect
                                         { summary
