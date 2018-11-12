@@ -1,28 +1,27 @@
-module Material.Menu
-    exposing
-        ( Corner
-        , Item
-        , Margin
-        , Property
-        , anchorCorner
-        , anchorMargin
-        , attach
-        , bottomEndCorner
-        , bottomLeftCorner
-        , bottomRightCorner
-        , bottomStartCorner
-        , divider
-        , index
-        , li
-        , onSelect
-        , quickOpen
-        , topEndCorner
-        , topLeftCorner
-        , topRightCorner
-        , topStartCorner
-        , ul
-        , view
-        )
+module Material.Menu exposing
+    ( Property
+    , view
+    , ul
+    , Item
+    , li
+    , divider
+    , onSelect
+    , index
+    , attach
+    , anchorCorner
+    , Corner
+    , topStartCorner
+    , topEndCorner
+    , bottomStartCorner
+    , bottomEndCorner
+    , topLeftCorner
+    , topRightCorner
+    , bottomLeftCorner
+    , bottomRightCorner
+    , anchorMargin
+    , Margin
+    , quickOpen
+    )
 
 {-| The Menu component is a spec-aligned menu component adhering to the Material
 Design menu specification.

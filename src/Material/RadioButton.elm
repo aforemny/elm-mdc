@@ -1,11 +1,10 @@
-module Material.RadioButton
-    exposing
-        ( Property
-        , disabled
-        , nativeControl
-        , selected
-        , view
-        )
+module Material.RadioButton exposing
+    ( Property
+    , view
+    , selected
+    , disabled
+    , nativeControl
+    )
 
 {-| The RadioButton component provides a radio button adhering to the Material
 Design Specification.

@@ -209,6 +209,7 @@ select lift id model selectedIndex options _ =
         , Html.span []
             [ if selectedValue /= Nothing then
                 text (Maybe.withDefault "" selectedValue)
+
               else
                 text "(none)"
             ]

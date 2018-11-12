@@ -1,18 +1,17 @@
-module Internal.Button.Implementation
-    exposing
-        ( Property
-        , dense
-        , disabled
-        , icon
-        , link
-        , onClick
-        , outlined
-        , raised
-        , react
-        , ripple
-        , unelevated
-        , view
-        )
+module Internal.Button.Implementation exposing
+    ( Property
+    , dense
+    , disabled
+    , icon
+    , link
+    , onClick
+    , outlined
+    , raised
+    , react
+    , ripple
+    , unelevated
+    , view
+    )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -42,6 +41,7 @@ update lift msg model =
             , Helpers.delayedCmd
                 (if doRipple then
                     150
+
                  else
                     0
                 )
@@ -129,6 +129,7 @@ button domId lift model options nodes =
     Options.apply summary
         (if config.link /= Nothing then
             Html.a
+
          else
             Html.button
         )

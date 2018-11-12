@@ -1,11 +1,10 @@
-module Internal.Drawer.Model
-    exposing
-        ( Geometry
-        , Model
-        , Msg(..)
-        , defaultGeometry
-        , defaultModel
-        )
+module Internal.Drawer.Model exposing
+    ( Geometry
+    , Model
+    , Msg(..)
+    , defaultGeometry
+    , defaultModel
+    )
 
 
 type alias Model =

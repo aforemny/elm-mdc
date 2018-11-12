@@ -1,14 +1,13 @@
-module Material.Drawer.Temporary
-    exposing
-        ( Property
-        , content
-        , header
-        , headerContent
-        , onClose
-        , open
-        , toolbarSpacer
-        , view
-        )
+module Material.Drawer.Temporary exposing
+    ( Property
+    , view
+    , content
+    , toolbarSpacer
+    , header
+    , headerContent
+    , onClose
+    , open
+    )
 
 {-| The Drawer component is a spec-aligned drawer component adhering to the
 Material Design navigation drawer pattern. It implements permanent, persistent,

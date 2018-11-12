@@ -1,23 +1,22 @@
-module Internal.Drawer.Implementation
-    exposing
-        ( Config
-        , Property
-        , Store
-        , content
-        , defaultConfig
-        , emit
-        , header
-        , headerContent
-        , onClose
-        , open
-        , react
-        , render
-        , subs
-        , subscriptions
-        , toolbarSpacer
-        , update
-        , view
-        )
+module Internal.Drawer.Implementation exposing
+    ( Config
+    , Property
+    , Store
+    , content
+    , defaultConfig
+    , emit
+    , header
+    , headerContent
+    , onClose
+    , open
+    , react
+    , render
+    , subs
+    , subscriptions
+    , toolbarSpacer
+    , update
+    , view
+    )
 
 import Html exposing (Html, text)
 import Internal.Component as Component exposing (Index, Indexed)

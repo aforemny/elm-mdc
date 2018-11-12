@@ -1,26 +1,26 @@
-module Internal.Ripple.Model
-    exposing
-        ( ActivateData
-        , ActivatedData
-        , AnimateDeactivationData
-        , AnimationState(..)
-        , ClientRect
-        , Event
-        , Geometry
-        , Model
-        , Msg(..)
-        , Point
-        , activationEventTypes
-        , cssClasses
-        , defaultGeometry
-        , defaultModel
-        , numbers
-        , pointerDeactivationEvents
-        , strings
-        )
+module Internal.Ripple.Model exposing
+    ( ActivateData
+    , ActivatedData
+    , AnimateDeactivationData
+    , AnimationState(..)
+    , ClientRect
+    , Event
+    , Geometry
+    , Model
+    , Msg(..)
+    , Point
+    , activationEventTypes
+    , cssClasses
+    , defaultGeometry
+    , defaultModel
+    , numbers
+    , pointerDeactivationEvents
+    , strings
+    )
 
 import Browser.Dom
 import DOM exposing (Rectangle)
+
 
 
 -- CONSTANTS
@@ -80,10 +80,10 @@ numbers =
 -- FOUNDATION
 
 
-type alias Event
-    = { eventType : String
-      , pagePoint : { pageX : Float, pageY : Float }
-      }
+type alias Event =
+    { eventType : String
+    , pagePoint : { pageX : Float, pageY : Float }
+    }
 
 
 type alias Point =

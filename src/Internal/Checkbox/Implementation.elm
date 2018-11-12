@@ -1,12 +1,11 @@
-module Internal.Checkbox.Implementation
-    exposing
-        ( Property
-        , checked
-        , disabled
-        , nativeControl
-        , react
-        , view
-        )
+module Internal.Checkbox.Implementation exposing
+    ( Property
+    , checked
+    , disabled
+    , nativeControl
+    , react
+    , view
+    )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -87,6 +86,7 @@ checked value =
         state =
             if value then
                 Checked
+
             else
                 Unchecked
     in

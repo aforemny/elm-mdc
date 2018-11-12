@@ -1,15 +1,12 @@
-module Material.IconToggle
-    exposing
-        ( Property
-        , className
-        , disabled
-        , icon
-        , icon1
-        , label
-        , label1
-        , on
-        , view
-        )
+module Material.IconToggle exposing
+    ( Property
+    , view
+    , on
+    , icon, icon1
+    , label, label1
+    , disabled
+    , className
+    )
 
 {-| IconToggle provides a Material Design icon toggle button. It is fully
 accessible, and is designed to work with any icon set.

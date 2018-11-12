@@ -1,11 +1,10 @@
-module Material.Ripple
-    exposing
-        ( Property
-        , accent
-        , bounded
-        , primary
-        , unbounded
-        )
+module Material.Ripple exposing
+    ( Property
+    , unbounded
+    , bounded
+    , primary
+    , accent
+    )
 
 {-| The Ripple component adds a material "ink ripple" interaction effect to
 HTML elements.
@@ -59,10 +58,7 @@ The view functions `unbounded` and `bounded` return a record with fields
 ## Unbounded Ripple effect
 
     let
-        { interactionHandler
-        , properties
-        , style
-        } =
+        { interactionHandler, properties, style } =
             Ripple.unbounded Mdc "my-ripple" model.mdc
     in
     Icon.view

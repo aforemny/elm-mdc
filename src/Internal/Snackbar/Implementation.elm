@@ -1,14 +1,13 @@
-module Internal.Snackbar.Implementation
-    exposing
-        ( Property
-        , add
-        , alignEnd
-        , alignStart
-        , react
-        , snack
-        , toast
-        , view
-        )
+module Internal.Snackbar.Implementation exposing
+    ( Property
+    , add
+    , alignEnd
+    , alignStart
+    , react
+    , snack
+    , toast
+    , view
+    )
 
 import Dict
 import Html exposing (Html, text)
@@ -107,6 +106,7 @@ update fwd msg model =
             if seq == model.seq then
                 move transition model
                     |> Tuple.mapSecond (Cmd.map fwd)
+
             else
                 ( model, Cmd.none )
 
@@ -122,6 +122,7 @@ update fwd msg model =
             in
             (if dismissOnAction then
                 update fwd (Move model.seq Clicked) model
+
              else
                 ( model, Cmd.none )
             )

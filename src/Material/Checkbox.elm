@@ -1,11 +1,10 @@
-module Material.Checkbox
-    exposing
-        ( Property
-        , checked
-        , disabled
-        , nativeControl
-        , view
-        )
+module Material.Checkbox exposing
+    ( Property
+    , view
+    , checked
+    , disabled
+    , nativeControl
+    )
 
 {-| The Checkbox component is a spec-aligned checkbox component adhering to the
 Material Design checkbox requirements.

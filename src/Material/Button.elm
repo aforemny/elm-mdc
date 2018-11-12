@@ -1,17 +1,16 @@
-module Material.Button
-    exposing
-        ( Property
-        , dense
-        , disabled
-        , icon
-        , link
-        , onClick
-        , outlined
-        , raised
-        , ripple
-        , unelevated
-        , view
-        )
+module Material.Button exposing
+    ( Property
+    , view
+    , ripple
+    , raised
+    , unelevated
+    , outlined
+    , dense
+    , icon
+    , disabled
+    , link
+    , onClick
+    )
 
 {-| The Button component is a spec-aligned button component adhering to the
 Material Design button requirements.

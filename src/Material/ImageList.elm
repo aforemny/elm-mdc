@@ -1,17 +1,16 @@
-module Material.ImageList
-    exposing
-        ( Property
-        , divImage
-        , image
-        , imageAspectContainer
-        , item
-        , label
-        , masonry
-        , src
-        , supporting
-        , view
-        , withTextProtection
-        )
+module Material.ImageList exposing
+    ( Property
+    , view
+    , masonry
+    , withTextProtection
+    , item
+    , imageAspectContainer
+    , image
+    , src
+    , divImage
+    , supporting
+    , label
+    )
 
 {-| An Image List consists of several items, each containing an image and
 optionally supporting content (i.e. a text label).

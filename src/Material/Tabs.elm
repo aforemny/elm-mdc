@@ -1,15 +1,14 @@
-module Material.Tabs
-    exposing
-        ( Property
-        , Tab
-        , icon
-        , iconText
-        , indicator
-        , scrolling
-        , tab
-        , view
-        , withIconAndText
-        )
+module Material.Tabs exposing
+    ( Property
+    , view
+    , scrolling
+    , indicator
+    , Tab
+    , tab
+    , withIconAndText
+    , icon
+    , iconText
+    )
 
 {-| The Tabs component contains components which are used to create spec-aligned
 tabbed navigation components adhering to the Material Design tabs guidelines.

@@ -1,12 +1,11 @@
-module Internal.RadioButton.Implementation
-    exposing
-        ( Property
-        , disabled
-        , nativeControl
-        , react
-        , selected
-        , view
-        )
+module Internal.RadioButton.Implementation exposing
+    ( Property
+    , disabled
+    , nativeControl
+    , react
+    , selected
+    , view
+    )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html

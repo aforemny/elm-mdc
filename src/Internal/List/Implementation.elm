@@ -1,35 +1,34 @@
-module Internal.List.Implementation
-    exposing
-        ( Property
-        , a
-        , activated
-        , avatarList
-        , defaultConfig
-        , dense
-        , divider
-        , graphic
-        , graphicIcon
-        , graphicImage
-        , group
-        , groupDivider
-        , inset
-        , li
-        , meta
-        , metaIcon
-        , metaImage
-        , metaText
-        , nav
-        , node
-        , nonInteractive
-        , ol
-        , padded
-        , secondaryText
-        , selected
-        , subheader
-        , text
-        , twoLine
-        , ul
-        )
+module Internal.List.Implementation exposing
+    ( Property
+    , a
+    , activated
+    , avatarList
+    , defaultConfig
+    , dense
+    , divider
+    , graphic
+    , graphicIcon
+    , graphicImage
+    , group
+    , groupDivider
+    , inset
+    , li
+    , meta
+    , metaIcon
+    , metaImage
+    , metaText
+    , nav
+    , node
+    , nonInteractive
+    , ol
+    , padded
+    , secondaryText
+    , selected
+    , subheader
+    , text
+    , twoLine
+    , ul
+    )
 
 import Html exposing (Html)
 import Html.Attributes as Html

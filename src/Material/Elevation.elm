@@ -1,32 +1,9 @@
-module Material.Elevation
-    exposing
-        ( transition
-        , z0
-        , z1
-        , z10
-        , z11
-        , z12
-        , z13
-        , z14
-        , z15
-        , z16
-        , z17
-        , z18
-        , z19
-        , z2
-        , z20
-        , z21
-        , z22
-        , z23
-        , z24
-        , z3
-        , z4
-        , z5
-        , z6
-        , z7
-        , z8
-        , z9
-        )
+module Material.Elevation exposing
+    ( z0, z1, z2, z3, z4, z5, z6, z7, z8
+    , z9, z10, z11, z12, z13, z14, z15, z16
+    , z17, z18, z19, z20, z21, z22, z23, z24
+    , transition
+    )
 
 {-| Shadows provide important visual cues about objects’ depth and directional
 movement. They are the only visual cue indicating the amount of separation

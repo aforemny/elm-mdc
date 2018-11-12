@@ -1,12 +1,11 @@
-module Internal.Drawer.Permanent.Implementation
-    exposing
-        ( Property
-        , content
-        , header
-        , headerContent
-        , toolbarSpacer
-        , view
-        )
+module Internal.Drawer.Permanent.Implementation exposing
+    ( Property
+    , content
+    , header
+    , headerContent
+    , toolbarSpacer
+    , view
+    )
 
 import Html exposing (Html, text)
 import Internal.Component exposing (Index, Indexed)

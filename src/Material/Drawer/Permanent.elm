@@ -1,12 +1,11 @@
-module Material.Drawer.Permanent
-    exposing
-        ( Property
-        , content
-        , header
-        , headerContent
-        , toolbarSpacer
-        , view
-        )
+module Material.Drawer.Permanent exposing
+    ( Property
+    , view
+    , content
+    , toolbarSpacer
+    , header
+    , headerContent
+    )
 
 {-| The Drawer component is a spec-aligned drawer component adhering to the
 Material Design navigation drawer pattern. It implements permanent, persistent,

@@ -150,6 +150,7 @@ view lift page model =
                     [ text <|
                         if isOn then
                             "Favorited? yes"
+
                         else
                             "Favorited? no"
                     ]

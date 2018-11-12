@@ -1,12 +1,11 @@
-module Internal.Snackbar.Model
-    exposing
-        ( Contents
-        , Model
-        , Msg(..)
-        , State(..)
-        , Transition(..)
-        , defaultModel
-        )
+module Internal.Snackbar.Model exposing
+    ( Contents
+    , Model
+    , Msg(..)
+    , State(..)
+    , Transition(..)
+    , defaultModel
+    )
 
 
 type alias Model m =

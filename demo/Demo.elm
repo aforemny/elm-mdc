@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (Model, Msg(..), defaultModel, init, main, subscriptions, update, urlOf, view, view_)
 
 import Browser
 import Browser.Navigation
@@ -170,6 +170,7 @@ update msg model =
             ( { model | url = url }
             , Cmd.batch
                 [ Browser.Navigation.pushUrl model.key (Demo.Url.toString url)
+
                 -- , scrollTop () TODO
                 ]
             )
@@ -183,8 +184,9 @@ update msg model =
             ( model, Cmd.none )
 
         UrlChanged url ->
-            ( { model | url = Demo.Url.fromUrl url } , Cmd.none ) -- TODO: scrollTop ())
+            ( { model | url = Demo.Url.fromUrl url }, Cmd.none )
 
+        -- TODO: scrollTop ())
         ButtonsMsg msg_ ->
             let
                 ( buttons, effects ) =
@@ -396,7 +398,7 @@ view model =
     }
 
 
-{-| TODO: Should be: Html.Lazy.lazy view_, but triggers virtual-dom bug #110
+{-| TODO: Should be: Html.Lazy.lazy view\_, but triggers virtual-dom bug #110
 -}
 view_ : Model -> Html Msg
 view_ model =

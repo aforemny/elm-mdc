@@ -1,52 +1,16 @@
-module Material.LayoutGrid
-    exposing
-        ( Property
-        , alignBottom
-        , alignLeft
-        , alignMiddle
-        , alignRight
-        , alignTop
-        , cell
-        , fixedColumnWidth
-        , inner
-        , span1
-        , span10
-        , span10Desktop
-        , span11
-        , span11Desktop
-        , span12
-        , span12Desktop
-        , span1Desktop
-        , span1Phone
-        , span1Tablet
-        , span2
-        , span2Desktop
-        , span2Phone
-        , span2Tablet
-        , span3
-        , span3Desktop
-        , span3Phone
-        , span3Tablet
-        , span4
-        , span4Desktop
-        , span4Phone
-        , span4Tablet
-        , span5
-        , span5Desktop
-        , span5Tablet
-        , span6
-        , span6Desktop
-        , span6Tablet
-        , span7
-        , span7Desktop
-        , span7Tablet
-        , span8
-        , span8Desktop
-        , span8Tablet
-        , span9
-        , span9Desktop
-        , view
-        )
+module Material.LayoutGrid exposing
+    ( Property
+    , view
+    , fixedColumnWidth
+    , alignRight, alignLeft
+    , cell
+    , span1, span2, span3, span4, span5, span6, span7, span8, span9, span10, span11, span12
+    , span1Phone, span2Phone, span3Phone, span4Phone
+    , span1Tablet, span2Tablet, span3Tablet, span4Tablet, span5Tablet, span6Tablet, span7Tablet, span8Tablet
+    , span1Desktop, span2Desktop, span3Desktop, span4Desktop, span5Desktop, span6Desktop, span7Desktop, span8Desktop, span9Desktop, span10Desktop, span11Desktop, span12Desktop
+    , alignTop, alignMiddle, alignBottom
+    , inner
+    )
 
 {-| Material design’s responsive UI is based on a column-variate grid layout. It
 has 12 columns on desktop, 8 columns on tablet and 4 columns on phone.

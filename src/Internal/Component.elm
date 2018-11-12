@@ -1,13 +1,12 @@
-module Internal.Component
-    exposing
-        ( Index
-        , Indexed
-        , generalise
-        , indexed
-        , react
-        , render
-        , subs
-        )
+module Internal.Component exposing
+    ( Index
+    , Indexed
+    , generalise
+    , indexed
+    , react
+    , render
+    , subs
+    )
 
 import Dict exposing (Dict)
 import Internal.Index

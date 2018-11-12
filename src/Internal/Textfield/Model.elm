@@ -1,11 +1,10 @@
-module Internal.Textfield.Model
-    exposing
-        ( Geometry
-        , Model
-        , Msg(..)
-        , defaultGeometry
-        , defaultModel
-        )
+module Internal.Textfield.Model exposing
+    ( Geometry
+    , Model
+    , Msg(..)
+    , defaultGeometry
+    , defaultModel
+    )
 
 
 type alias Model =

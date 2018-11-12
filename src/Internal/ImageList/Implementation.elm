@@ -1,17 +1,16 @@
-module Internal.ImageList.Implementation
-    exposing
-        ( Property
-        , divImage
-        , image
-        , imageAspectContainer
-        , item
-        , label
-        , masonry
-        , src
-        , supporting
-        , view
-        , withTextProtection
-        )
+module Internal.ImageList.Implementation exposing
+    ( Property
+    , divImage
+    , image
+    , imageAspectContainer
+    , item
+    , label
+    , masonry
+    , src
+    , supporting
+    , view
+    , withTextProtection
+    )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html

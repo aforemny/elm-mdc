@@ -1,21 +1,20 @@
-module Material.Card
-    exposing
-        ( Property
-        , actionButton
-        , actionButtons
-        , actionIcon
-        , actionIcons
-        , actions
-        , aspect16To9
-        , backgroundImage
-        , fullBleed
-        , media
-        , mediaContent
-        , primaryAction
-        , square
-        , stroked
-        , view
-        )
+module Material.Card exposing
+    ( Property
+    , view
+    , stroked
+    , primaryAction
+    , media
+    , backgroundImage
+    , square
+    , aspect16To9
+    , mediaContent
+    , actions
+    , fullBleed
+    , actionButtons
+    , actionIcons
+    , actionButton
+    , actionIcon
+    )
 
 {-| Card is a component that implements the Material Design card component.
 

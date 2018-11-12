@@ -1,44 +1,35 @@
-module Material.Theme
-    exposing
-        ( background
-        , primary
-        , primaryBg
-        , primaryDark
-        , primaryDarkBg
-        , primaryLight
-        , primaryLightBg
-        , secondary
-        , secondaryBg
-        , secondaryDark
-        , secondaryDarkBg
-        , secondaryLight
-        , secondaryLightBg
-        , textDisabledOnBackground
-        , textDisabledOnDark
-        , textDisabledOnLight
-        , textDisabledOnPrimary
-        , textDisabledOnSecondary
-        , textHintOnBackground
-        , textHintOnDark
-        , textHintOnLight
-        , textHintOnPrimary
-        , textHintOnSecondary
-        , textIconOnBackground
-        , textIconOnDark
-        , textIconOnLight
-        , textIconOnPrimary
-        , textIconOnSecondary
-        , textPrimaryOnBackground
-        , textPrimaryOnDark
-        , textPrimaryOnLight
-        , textPrimaryOnPrimary
-        , textPrimaryOnSecondary
-        , textSecondaryOnBackground
-        , textSecondaryOnDark
-        , textSecondaryOnLight
-        , textSecondaryOnPrimary
-        , textSecondaryOnSecondary
-        )
+module Material.Theme exposing
+    ( primary, primaryLight, primaryDark
+    , secondary, secondaryLight, secondaryDark
+    , background
+    , primaryBg, primaryLightBg, primaryDarkBg
+    , secondaryBg, secondaryLightBg, secondaryDarkBg
+    , textPrimaryOnPrimary
+    , textSecondaryOnPrimary
+    , textHintOnPrimary
+    , textDisabledOnPrimary
+    , textIconOnPrimary
+    , textPrimaryOnSecondary
+    , textSecondaryOnSecondary
+    , textHintOnSecondary
+    , textDisabledOnSecondary
+    , textIconOnSecondary
+    , textPrimaryOnBackground
+    , textSecondaryOnBackground
+    , textHintOnBackground
+    , textDisabledOnBackground
+    , textIconOnBackground
+    , textPrimaryOnLight
+    , textSecondaryOnLight
+    , textHintOnLight
+    , textDisabledOnLight
+    , textIconOnLight
+    , textPrimaryOnDark
+    , textSecondaryOnDark
+    , textHintOnDark
+    , textDisabledOnDark
+    , textIconOnDark
+    )
 
 {-| This color palette comprises primary and secondary colors that can be used for
 illustration or to develop your brand colors.

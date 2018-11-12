@@ -1,17 +1,16 @@
-module Internal.GlobalEvents
-    exposing
-        ( TickConfig
-        , onMouseMove
-        , onMouseUp
-        , onPointerMove
-        , onPointerUp
-        , onResize
-        , onScroll
-        , onTick
-        , onTickWith
-        , onTouchEnd
-        , onTouchMove
-        )
+module Internal.GlobalEvents exposing
+    ( TickConfig
+    , onMouseMove
+    , onMouseUp
+    , onPointerMove
+    , onPointerUp
+    , onResize
+    , onScroll
+    , onTick
+    , onTickWith
+    , onTouchEnd
+    , onTouchMove
+    )
 
 import Json.Decode exposing (Decoder, Value)
 import Json.Encode as Encode

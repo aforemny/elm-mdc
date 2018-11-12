@@ -1,4 +1,4 @@
-module Demo.Startpage exposing (..)
+module Demo.Startpage exposing (view)
 
 import Demo.Page exposing (Page)
 import Demo.Startpage.Svg.Button as ButtonSvg

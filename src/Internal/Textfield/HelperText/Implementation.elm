@@ -1,10 +1,9 @@
-module Internal.Textfield.HelperText.Implementation
-    exposing
-        ( Property
-        , helperText
-        , persistent
-        , validationMsg
-        )
+module Internal.Textfield.HelperText.Implementation exposing
+    ( Property
+    , helperText
+    , persistent
+    , validationMsg
+    )
 
 import Html exposing (Html)
 import Internal.Options as Options exposing (cs, css, when)

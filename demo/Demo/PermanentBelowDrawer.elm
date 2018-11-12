@@ -1,12 +1,11 @@
-module Demo.PermanentBelowDrawer
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        , subscriptions
-        , update
-        , view
-        )
+module Demo.PermanentBelowDrawer exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    , subscriptions
+    , update
+    , view
+    )
 
 import Demo.Page as Page exposing (Page)
 import Demo.PersistentDrawer

@@ -1,11 +1,10 @@
-module Internal.TopAppBar.Model
-    exposing
-        ( Config
-        , Model
-        , Msg(..)
-        , defaultConfig
-        , defaultModel
-        )
+module Internal.TopAppBar.Model exposing
+    ( Config
+    , Model
+    , Msg(..)
+    , defaultConfig
+    , defaultModel
+    )
 
 
 type alias Model =

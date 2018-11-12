@@ -1,16 +1,15 @@
-module Internal.Select.Implementation
-    exposing
-        ( Property
-        , box
-        , disabled
-        , label
-        , option
-        , preselected
-        , react
-        , selected
-        , value
-        , view
-        )
+module Internal.Select.Implementation exposing
+    ( Property
+    , box
+    , disabled
+    , label
+    , option
+    , preselected
+    , react
+    , selected
+    , value
+    , view
+    )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -108,6 +107,7 @@ select lift model options items_ =
         items =
             if config.preselected then
                 items_
+
             else
                 Html.option
                     [ Html.value ""

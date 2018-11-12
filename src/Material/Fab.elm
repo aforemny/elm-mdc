@@ -1,11 +1,10 @@
-module Material.Fab
-    exposing
-        ( Property
-        , exited
-        , mini
-        , ripple
-        , view
-        )
+module Material.Fab exposing
+    ( Property
+    , view
+    , mini
+    , ripple
+    , exited
+    )
 
 {-| A floating action button represents the primary action in an application.
 

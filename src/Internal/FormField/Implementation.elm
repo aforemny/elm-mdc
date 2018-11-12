@@ -1,9 +1,8 @@
-module Internal.FormField.Implementation
-    exposing
-        ( Property
-        , alignEnd
-        , view
-        )
+module Internal.FormField.Implementation exposing
+    ( Property
+    , alignEnd
+    , view
+    )
 
 import Html exposing (Html)
 import Internal.Options as Options exposing (cs, styled)

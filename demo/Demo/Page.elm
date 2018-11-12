@@ -1,10 +1,9 @@
-module Demo.Page
-    exposing
-        ( Page
-        , fixedAdjust
-        , hero
-        , toolbar
-        )
+module Demo.Page exposing
+    ( Page
+    , fixedAdjust
+    , hero
+    , toolbar
+    )
 
 import Demo.Url as Url exposing (Url)
 import Html exposing (Html, text)
@@ -65,6 +64,7 @@ toolbar lift idx mdc navigate url title =
                 , css "margin-left"
                     (if url == Url.StartPage then
                         "8px"
+
                      else
                         "24"
                     )

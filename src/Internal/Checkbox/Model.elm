@@ -1,11 +1,10 @@
-module Internal.Checkbox.Model
-    exposing
-        ( Animation(..)
-        , Model
-        , Msg(..)
-        , State(..)
-        , defaultModel
-        )
+module Internal.Checkbox.Model exposing
+    ( Animation(..)
+    , Model
+    , Msg(..)
+    , State(..)
+    , defaultModel
+    )
 
 
 type alias Model =

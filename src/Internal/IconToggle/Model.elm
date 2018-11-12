@@ -1,9 +1,8 @@
-module Internal.IconToggle.Model
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        )
+module Internal.IconToggle.Model exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    )
 
 import Internal.Ripple.Model as Ripple
 

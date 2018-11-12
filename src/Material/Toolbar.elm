@@ -1,24 +1,22 @@
-module Material.Toolbar
-    exposing
-        ( Property
-        , alignEnd
-        , alignStart
-        , backgroundImage
-        , fixed
-        , fixedAdjust
-        , fixedLastRow
-        , flexible
-        , flexibleDefaultBehavior
-        , icon
-        , iconToggle
-        , menuIcon
-        , row
-        , section
-        , shrinkToFit
-        , title
-        , view
-        , waterfall
-        )
+module Material.Toolbar exposing
+    ( Property
+    , view
+    , fixed
+    , waterfall
+    , flexible
+    , flexibleDefaultBehavior
+    , fixedLastRow
+    , backgroundImage
+    , row
+    , section
+    , alignStart
+    , alignEnd
+    , shrinkToFit
+    , menuIcon
+    , title
+    , icon, iconToggle
+    , fixedAdjust
+    )
 
 {-| The toolbar component has been deprecated by the Google Team. Some of
 its functionality will be available in TopAppBar.

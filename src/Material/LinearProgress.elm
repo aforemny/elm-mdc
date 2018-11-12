@@ -1,12 +1,11 @@
-module Material.LinearProgress
-    exposing
-        ( Property
-        , buffered
-        , determinate
-        , indeterminate
-        , reversed
-        , view
-        )
+module Material.LinearProgress exposing
+    ( Property
+    , view
+    , determinate
+    , indeterminate
+    , buffered
+    , reversed
+    )
 
 {-| The Linear Progress component is a spec-aligned linear progress indicator
 component adhering to the Material Design progress & activity requirements.

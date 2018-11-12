@@ -1,9 +1,8 @@
-module Internal.Select.Model
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        )
+module Internal.Select.Model exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    )
 
 import Internal.Ripple.Model as Ripple
 

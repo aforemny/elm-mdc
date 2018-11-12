@@ -1,33 +1,32 @@
-module Material.Textfield
-    exposing
-        ( Property
-        , autocomplete
-        , autofocus
-        , box
-        , cols
-        , dense
-        , disabled
-        , email
-        , fullwidth
-        , iconUnclickable
-        , invalid
-        , label
-        , leadingIcon
-        , nativeControl
-        , onBlur
-        , onFocus
-        , outlined
-        , password
-        , pattern
-        , placeholder
-        , required
-        , rows
-        , textarea
-        , trailingIcon
-        , type_
-        , value
-        , view
-        )
+module Material.Textfield exposing
+    ( Property
+    , view
+    , label
+    , value
+    , placeholder
+    , dense
+    , disabled
+    , leadingIcon
+    , trailingIcon
+    , iconUnclickable
+    , required
+    , invalid
+    , pattern
+    , box
+    , outlined
+    , fullwidth
+    , textarea
+    , rows
+    , cols
+    , email
+    , password
+    , type_
+    , nativeControl
+    , autocomplete
+    , autofocus
+    , onFocus
+    , onBlur
+    )
 
 {-| Text fields allow users to input, edit, and select text.
 

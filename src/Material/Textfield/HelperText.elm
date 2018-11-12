@@ -1,10 +1,9 @@
-module Material.Textfield.HelperText
-    exposing
-        ( Property
-        , helperText
-        , persistent
-        , validationMsg
-        )
+module Material.Textfield.HelperText exposing
+    ( Property
+    , helperText
+    , persistent
+    , validationMsg
+    )
 
 {-| Helper text gives context about a field’s input, such as how the input will be
 used. It should be visible either persistently or only on focus.

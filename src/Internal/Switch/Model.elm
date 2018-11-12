@@ -1,9 +1,8 @@
-module Internal.Switch.Model
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        )
+module Internal.Switch.Model exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    )
 
 
 type alias Model =

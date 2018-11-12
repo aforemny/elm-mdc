@@ -1,27 +1,26 @@
-module Internal.GridList.Implementation
-    exposing
-        ( Property
-        , gutter1
-        , headerCaption
-        , icon
-        , iconAlignEnd
-        , iconAlignStart
-        , image
-        , primary
-        , primaryContent
-        , react
-        , secondary
-        , supportText
-        , tile
-        , tileAspect16To9
-        , tileAspect2To3
-        , tileAspect3To2
-        , tileAspect3To4
-        , tileAspect4To3
-        , title
-        , twolineCaption
-        , view
-        )
+module Internal.GridList.Implementation exposing
+    ( Property
+    , gutter1
+    , headerCaption
+    , icon
+    , iconAlignEnd
+    , iconAlignStart
+    , image
+    , primary
+    , primaryContent
+    , react
+    , secondary
+    , supportText
+    , tile
+    , tileAspect16To9
+    , tileAspect2To3
+    , tileAspect3To2
+    , tileAspect3To4
+    , tileAspect4To3
+    , title
+    , twolineCaption
+    , view
+    )
 
 import DOM
 import Html exposing (Html)

@@ -1,15 +1,14 @@
-module Internal.Icon.Implementation
-    exposing
-        ( Property
-        , anchor
-        , button
-        , size18
-        , size24
-        , size36
-        , size48
-        , span
-        , view
-        )
+module Internal.Icon.Implementation exposing
+    ( Property
+    , anchor
+    , button
+    , size18
+    , size24
+    , size36
+    , size48
+    , span
+    , view
+    )
 
 import Html exposing (Html, text)
 import Internal.Options as Options exposing (Property, cs, css, styled)

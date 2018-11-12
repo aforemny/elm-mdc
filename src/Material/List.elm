@@ -1,33 +1,26 @@
-module Material.List
-    exposing
-        ( Property
-        , a
-        , activated
-        , avatarList
-        , dense
-        , divider
-        , graphic
-        , graphicIcon
-        , graphicImage
-        , group
-        , groupDivider
-        , inset
-        , li
-        , meta
-        , metaIcon
-        , metaImage
-        , metaText
-        , nav
-        , nonInteractive
-        , ol
-        , padded
-        , secondaryText
-        , selected
-        , subheader
-        , text
-        , twoLine
-        , ul
-        )
+module Material.List exposing
+    ( Property
+    , ul, ol
+    , nonInteractive
+    , dense
+    , avatarList
+    , twoLine
+    , nav
+    , li
+    , text
+    , secondaryText
+    , selected
+    , activated
+    , graphic, graphicIcon, graphicImage
+    , meta, metaText, metaIcon, metaImage
+    , a
+    , group
+    , subheader
+    , divider
+    , groupDivider
+    , padded
+    , inset
+    )
 
 {-| List provides styles which implement Material Design Lists - “A single
 continuous column of tessellated subdivisions of equal width.” Both single-line

@@ -1,15 +1,14 @@
-module Material.Icon
-    exposing
-        ( Property
-        , anchor
-        , button
-        , size18
-        , size24
-        , size36
-        , size48
-        , span
-        , view
-        )
+module Material.Icon exposing
+    ( Property
+    , view
+    , size18
+    , size24
+    , size36
+    , size48
+    , anchor
+    , button
+    , span
+    )
 
 {-| Convenience functions for producing Material Design Icons. Refer to the
 [Material Design Icons page](https://google.github.io/material-design-icons),

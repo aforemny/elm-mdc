@@ -1,11 +1,10 @@
-module Material.Switch
-    exposing
-        ( Property
-        , disabled
-        , nativeControl
-        , on
-        , view
-        )
+module Material.Switch exposing
+    ( Property
+    , view
+    , on
+    , disabled
+    , nativeControl
+    )
 
 {-| The Switch component is a spec-aligned switch component adhering to the
 Material Design Switch requirements.

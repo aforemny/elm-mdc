@@ -1,47 +1,46 @@
-module Internal.Options
-    exposing
-        ( Property
-        , addAttributes
-        , apply
-        , applyNativeControl
-        , aria
-        , attribute
-        , autocomplete
-        , autofocus
-        , collect
-        , cs
-        , css
-        , data
-        , dispatch
-        , for
-        , id
-        , internalId
-        , many
-        , nativeControl
-        , nop
-        , on
-        , onBlur
-        , onChange
-        , onCheck
-        , onClick
-        , onDoubleClick
-        , onFocus
-        , onInput
-        , onMouseDown
-        , onMouseEnter
-        , onMouseLeave
-        , onMouseOut
-        , onMouseOver
-        , onMouseUp
-        , onSubmit
-        , onWithOptions
-        , option
-        , recollect
-        , role
-        , styled
-        , tabindex
-        , when
-        )
+module Internal.Options exposing
+    ( Property
+    , addAttributes
+    , apply
+    , applyNativeControl
+    , aria
+    , attribute
+    , autocomplete
+    , autofocus
+    , collect
+    , cs
+    , css
+    , data
+    , dispatch
+    , for
+    , id
+    , internalId
+    , many
+    , nativeControl
+    , nop
+    , on
+    , onBlur
+    , onChange
+    , onCheck
+    , onClick
+    , onDoubleClick
+    , onFocus
+    , onInput
+    , onMouseDown
+    , onMouseEnter
+    , onMouseLeave
+    , onMouseOut
+    , onMouseOver
+    , onMouseUp
+    , onSubmit
+    , onWithOptions
+    , option
+    , recollect
+    , role
+    , styled
+    , tabindex
+    , when
+    )
 
 {-| TODO: Update to elm/html
 -}
@@ -200,12 +199,12 @@ virtualdom will like.
 vdom diffing will recognise two different executions of the following to be
 identical:
 
-    Decode.map lift <| Decode.succeed m    -- (a)
+    Decode.map lift <| Decode.succeed m -- (a)
 
 vdom diffing will _not_ recognise two different executions of this seemingly
 simpler variant to be identical:
 
-    Decode.succeed (lift m)              -- (b)
+    Decode.succeed (lift m) -- (b)
 
 In the common case, both `lift` and `m` will be a top-level constructors, say
 `Mdl` and `Click`. In this case, the `lift m` in (b) is constructed anew on
@@ -299,6 +298,7 @@ when : Bool -> Property c m -> Property c m
 when guard prop =
     if guard then
         prop
+
     else
         nop
 

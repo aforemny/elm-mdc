@@ -88,6 +88,7 @@ update lift msg model =
                             | dismissOnAction = model.dismissOnAction
                             , actionOnBottom = model.actionOnBottom
                         }
+
                     else
                         let
                             toast =

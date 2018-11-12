@@ -1,13 +1,12 @@
-module Demo.PersistentDrawer
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        , drawerItems
-        , subscriptions
-        , update
-        , view
-        )
+module Demo.PersistentDrawer exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    , drawerItems
+    , subscriptions
+    , update
+    , view
+    )
 
 import Demo.Page exposing (Page)
 import Html exposing (Html, text)

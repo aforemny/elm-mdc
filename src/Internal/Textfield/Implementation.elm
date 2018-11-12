@@ -1,30 +1,29 @@
-module Internal.Textfield.Implementation
-    exposing
-        ( Property
-        , box
-        , cols
-        , dense
-        , disabled
-        , email
-        , fullwidth
-        , iconUnclickable
-        , invalid
-        , label
-        , leadingIcon
-        , nativeControl
-        , outlined
-        , password
-        , pattern
-        , placeholder
-        , react
-        , required
-        , rows
-        , textarea
-        , trailingIcon
-        , type_
-        , value
-        , view
-        )
+module Internal.Textfield.Implementation exposing
+    ( Property
+    , box
+    , cols
+    , dense
+    , disabled
+    , email
+    , fullwidth
+    , iconUnclickable
+    , invalid
+    , label
+    , leadingIcon
+    , nativeControl
+    , outlined
+    , password
+    , pattern
+    , placeholder
+    , react
+    , required
+    , rows
+    , textarea
+    , trailingIcon
+    , type_
+    , value
+    , view
+    )
 
 import DOM
 import Html exposing (Html, text)
@@ -279,6 +278,7 @@ textField domId lift model options _ =
             [ [ Options.applyNativeControl summary
                     (if config.textarea then
                         Html.textarea
+
                      else
                         Html.input
                     )
@@ -287,6 +287,7 @@ textField domId lift model options _ =
                     , Options.id config.id_
                     , if config.outlined then
                         Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
+
                       else
                         Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
                     , Options.onBlur (lift Blur)
@@ -298,24 +299,28 @@ textField domId lift model options _ =
                         [ Html.type_ (Maybe.withDefault "text" config.type_)
                             |> (if not config.textarea then
                                     Just
+
                                 else
                                     always Nothing
                                )
                         , Html.disabled True
                             |> (if config.disabled then
                                     Just
+
                                 else
                                     always Nothing
                                )
                         , Html.property "required" (Encode.bool True)
                             |> (if config.required then
                                     Just
+
                                 else
                                     always Nothing
                                )
                         , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
                             |> (if config.pattern /= Nothing then
                                     Just
+
                                 else
                                     always Nothing
                                )
@@ -324,6 +329,7 @@ textField domId lift model options _ =
                         , Html.value (Maybe.withDefault "" config.value)
                             |> (if config.value /= Nothing then
                                     Just
+
                                 else
                                     always Nothing
                                )
@@ -352,6 +358,7 @@ textField domId lift model options _ =
                             Nothing ->
                                 []
                         )
+
                 else
                     text ""
               ]
@@ -362,6 +369,7 @@ textField domId lift model options _ =
                     ]
                     []
                 ]
+
               else
                 []
             , if config.outlined then
@@ -387,6 +395,7 @@ textField domId lift model options _ =
                             labelScale =
                                 if config.dense then
                                     0.923
+
                                 else
                                     0.75
 
@@ -448,6 +457,7 @@ textField domId lift model options _ =
                             , String.fromFloat leadingStrokeLength
                             ]
                                 |> String.join ""
+
                         else
                             [ "M"
                             , String.fromFloat (width - cornerWidth - leadingStrokeLength)
@@ -476,6 +486,7 @@ textField domId lift model options _ =
                     ]
                     []
                 ]
+
               else
                 []
             , let
@@ -493,6 +504,7 @@ textField domId lift model options _ =
                           <|
                             if config.iconClickable then
                                 0
+
                             else
                                 -1
                         ]

@@ -1,12 +1,11 @@
-module Internal.Switch.Implementation
-    exposing
-        ( Property
-        , disabled
-        , nativeControl
-        , on
-        , react
-        , view
-        )
+module Internal.Switch.Implementation exposing
+    ( Property
+    , disabled
+    , nativeControl
+    , on
+    , react
+    , view
+    )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html

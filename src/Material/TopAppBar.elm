@@ -1,23 +1,22 @@
-module Material.TopAppBar
-    exposing
-        ( Property
-        , actionItem
-        , alignEnd
-        , alignStart
-        , collapsed
-        , dense
-        , denseFixedAdjust
-        , fixed
-        , fixedAdjust
-        , hasActionItem
-        , navigationIcon
-        , prominent
-        , prominentFixedAdjust
-        , section
-        , short
-        , title
-        , view
-        )
+module Material.TopAppBar exposing
+    ( Property
+    , view
+    , fixed
+    , dense
+    , prominent
+    , short
+    , collapsed
+    , hasActionItem
+    , section
+    , alignStart
+    , alignEnd
+    , navigationIcon
+    , title
+    , actionItem
+    , fixedAdjust
+    , denseFixedAdjust
+    , prominentFixedAdjust
+    )
 
 {-| A top app bar is a container for items such as application title,
 navigation icon, and action items.

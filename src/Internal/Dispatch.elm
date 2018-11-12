@@ -1,15 +1,14 @@
-module Internal.Dispatch
-    exposing
-        ( Config
-        , Custom
-        , Lift
-        , add
-        , clear
-        , defaultConfig
-        , forward
-        , setLift
-        , toAttributes
-        )
+module Internal.Dispatch exposing
+    ( Config
+    , Custom
+    , Lift
+    , add
+    , clear
+    , defaultConfig
+    , forward
+    , setLift
+    , toAttributes
+    )
 
 import Dict exposing (Dict)
 import Html

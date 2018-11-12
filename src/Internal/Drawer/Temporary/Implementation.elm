@@ -1,14 +1,13 @@
-module Internal.Drawer.Temporary.Implementation
-    exposing
-        ( Property
-        , content
-        , header
-        , headerContent
-        , onClose
-        , open
-        , toolbarSpacer
-        , view
-        )
+module Internal.Drawer.Temporary.Implementation exposing
+    ( Property
+    , content
+    , header
+    , headerContent
+    , onClose
+    , open
+    , toolbarSpacer
+    , view
+    )
 
 import Html exposing (Html, text)
 import Internal.Component exposing (Index, Indexed)

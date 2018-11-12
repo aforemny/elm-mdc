@@ -1,12 +1,11 @@
-module Demo.Drawer
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        , subscriptions
-        , update
-        , view
-        )
+module Demo.Drawer exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    , subscriptions
+    , update
+    , view
+    )
 
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)

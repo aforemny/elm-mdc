@@ -1,11 +1,10 @@
-module Internal.Tabs.Model
-    exposing
-        ( Geometry
-        , Model
-        , Msg(..)
-        , defaultGeometry
-        , defaultModel
-        )
+module Internal.Tabs.Model exposing
+    ( Geometry
+    , Model
+    , Msg(..)
+    , defaultGeometry
+    , defaultModel
+    )
 
 import Dict exposing (Dict)
 import Internal.Ripple.Model as Ripple

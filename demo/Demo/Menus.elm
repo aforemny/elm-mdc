@@ -185,6 +185,7 @@ menuAnchor lift model =
                 (\c ->
                     if c == "middle" then
                         css "top" "35%"
+
                     else
                         css c "0"
                 )
@@ -220,6 +221,7 @@ menuAnchor lift model =
                         (\( index, label ) ->
                             if label == "-" then
                                 Menu.divider [] []
+
                             else
                                 let
                                     isSelected =

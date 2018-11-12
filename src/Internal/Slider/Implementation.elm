@@ -1,18 +1,17 @@
-module Internal.Slider.Implementation
-    exposing
-        ( Property
-        , disabled
-        , discrete
-        , max
-        , min
-        , onChange
-        , onInput
-        , react
-        , step
-        , trackMarkers
-        , value
-        , view
-        )
+module Internal.Slider.Implementation exposing
+    ( Property
+    , disabled
+    , discrete
+    , max
+    , min
+    , onChange
+    , onInput
+    , react
+    , step
+    , trackMarkers
+    , value
+    , view
+    )
 
 import DOM
 import Html as Html exposing (Html, text)
@@ -37,6 +36,7 @@ update lift msg model =
         Focus ->
             if not model.preventFocus then
                 ( Just { model | focus = True }, Cmd.none )
+
             else
                 ( Nothing, Cmd.none )
 
@@ -104,6 +104,7 @@ update lift msg model =
                     }
                 , Cmd.none
                 )
+
             else
                 ( Nothing, Cmd.none )
 
@@ -142,6 +143,7 @@ valueFromPageX geometry pageX =
         pctComplete =
             if isRtl then
                 1 - (xPos / geometry.rect.width)
+
             else
                 xPos / geometry.rect.width
     in
@@ -157,12 +159,14 @@ valueForKey key keyCode geometry currentValue =
         delta =
             (if isRtl && (isArrowLeft || isArrowRight) then
                 (*) -1
+
              else
                 identity
             )
             <|
                 if geometry.discrete then
                     Maybe.withDefault 1 geometry.step
+
                 else
                     (geometry.max - geometry.min) / 100
 
@@ -196,16 +200,22 @@ valueForKey key keyCode geometry currentValue =
     Maybe.map (clamp geometry.min geometry.max) <|
         if isArrowLeft || isArrowDown then
             Just (currentValue - delta)
+
         else if isArrowRight || isArrowUp then
             Just (currentValue + delta)
+
         else if isHome then
             Just geometry.min
+
         else if isEnd then
             Just geometry.max
+
         else if isPageUp then
             Just (currentValue + delta * pageFactor)
+
         else if isPageDown then
             Just (currentValue - delta * pageFactor)
+
         else
             Nothing
 
@@ -277,6 +287,7 @@ slider lift model options _ =
             if model.active then
                 model.activeValue
                     |> Maybe.withDefault config.value
+
             else
                 config.value
 
@@ -297,6 +308,7 @@ slider lift model options _ =
                         (v - config.min)
                             / (config.max - config.min)
                             |> clamp 0 1
+
                     else
                         0
             in
@@ -323,6 +335,7 @@ slider lift model options _ =
         trackScale =
             if config.max - config.min == 0 then
                 0
+
             else
                 (discreteValue - config.min) / (config.max - config.min)
 
@@ -349,6 +362,7 @@ slider lift model options _ =
                                 in
                                 if activeValue /= Nothing then
                                     Decode.succeed NoOp
+
                                 else
                                     Decode.fail ""
                             )
@@ -392,6 +406,7 @@ slider lift model options _ =
                             in
                             if activeValue /= Nothing then
                                 KeyDown
+
                             else
                                 NoOp
                         )
@@ -581,6 +596,7 @@ slider lift model options _ =
                                     []
                             )
                         ]
+
                       else
                         []
                     ]
@@ -638,6 +654,7 @@ slider lift model options _ =
                                 ]
                             ]
                         ]
+
                       else
                         []
                     ]
@@ -687,6 +704,7 @@ discretize geometry continuousValue =
                 |> (\steps_ ->
                         if steps_ == 0 then
                             1
+
                         else
                             steps_
                    )
@@ -694,6 +712,7 @@ discretize geometry continuousValue =
     clamp geometry.min geometry.max <|
         if continuous then
             continuousValue
+
         else
             let
                 numSteps =
@@ -724,6 +743,7 @@ decodeGeometry =
                     (\doesHaveClass ->
                         if doesHaveClass then
                             decoder
+
                         else
                             DOM.parentElement (Decode.lazy (\_ -> traverseToContainer decoder))
                     )

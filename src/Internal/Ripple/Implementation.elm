@@ -1,14 +1,13 @@
-module Internal.Ripple.Implementation
-    exposing
-        ( Property
-        , accent
-        , bounded
-        , primary
-        , react
-        , unbounded
-        , update
-        , view
-        )
+module Internal.Ripple.Implementation exposing
+    ( Property
+    , accent
+    , bounded
+    , primary
+    , react
+    , unbounded
+    , update
+    , view
+    )
 
 import Browser.Dom
 import Char
@@ -171,6 +170,7 @@ view isUnbounded domId lift model options =
                 , when isUnbounded (cs cssClasses.unbounded)
                 , if model.focused then
                     cs cssClasses.bgFocused
+
                   else
                     Options.nop
                 ]
@@ -300,6 +300,7 @@ cssVariables isUnbounded { fgSize, fgScale, translateStart, translateEnd, initia
                 { top = toFloat (round ((frame.height - initialSize) / 2))
                 , left = toFloat (round ((frame.width - initialSize) / 2))
                 }
+
             else
                 { top = 0, left = 0 }
 
@@ -323,6 +324,7 @@ cssVariables isUnbounded { fgSize, fgScale, translateStart, translateEnd, initia
                               , String.fromFloat unboundedCoords.left ++ "px"
                               )
                             ]
+
                           else
                             [ ( strings.varFgTranslateStart, translateStart )
                             , ( strings.varFgTranslateEnd, translateEnd )
@@ -477,12 +479,14 @@ update msg model =
                     , Task.perform (\_ -> DeactivationEnded model.animationCounter)
                         (Process.sleep numbers.tapDelayMs)
                     )
+
                 else
                     let
                         newActivatedData =
                             { activatedData | activationHasEnded = True }
                     in
                     ( { model | animationState = Activated newActivatedData }, Cmd.none )
+
             else
                 ( model, Cmd.none )
 
@@ -492,6 +496,7 @@ update msg model =
                 , Task.perform (\_ -> DeactivationEnded model.animationCounter)
                     (Process.sleep numbers.tapDelayMs)
                 )
+
             else
                 let
                     newActivatedData =
@@ -505,6 +510,7 @@ update msg model =
         ( DeactivationEnded animationCount, Deactivated _ ) ->
             if animationCount == model.animationCounter then
                 ( { model | animationState = Idle }, Cmd.none )
+
             else
                 ( model, Cmd.none )
 
@@ -526,6 +532,7 @@ layoutInternal isUnbounded frame =
         maxRadius =
             if isUnbounded then
                 maxDim
+
             else
                 boundedRadius
 
@@ -557,6 +564,7 @@ animateActivation isUnbounded frame windowPageOffset activationEvent =
         translateStart =
             if isUnbounded then
                 ""
+
             else
                 String.fromFloat startPoint.x
                     ++ "px, "
@@ -566,6 +574,7 @@ animateActivation isUnbounded frame windowPageOffset activationEvent =
         translateEnd =
             if isUnbounded then
                 ""
+
             else
                 String.fromFloat endPoint.x
                     ++ "px, "
@@ -665,6 +674,7 @@ decodeActivate { domId, isUnbounded, isActivated, previousActivationEvent } =
         (\isSurfaceDisabled isSameInteraction event ->
             if isActivated || isSurfaceDisabled || isSameInteraction then
                 Nothing
+
             else
                 Just <|
                     Activate0 domId

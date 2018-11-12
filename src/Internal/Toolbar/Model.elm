@@ -1,15 +1,14 @@
-module Internal.Toolbar.Model
-    exposing
-        ( Calculations
-        , Config
-        , Geometry
-        , Model
-        , Msg(..)
-        , defaultCalculations
-        , defaultConfig
-        , defaultGeometry
-        , defaultModel
-        )
+module Internal.Toolbar.Model exposing
+    ( Calculations
+    , Config
+    , Geometry
+    , Model
+    , Msg(..)
+    , defaultCalculations
+    , defaultConfig
+    , defaultGeometry
+    , defaultModel
+    )
 
 
 type alias Model =

@@ -1,12 +1,11 @@
-module Demo.TemporaryDrawer
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        , subscriptions
-        , update
-        , view
-        )
+module Demo.TemporaryDrawer exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    , subscriptions
+    , update
+    , view
+    )
 
 import Demo.Page exposing (Page)
 import Demo.PersistentDrawer

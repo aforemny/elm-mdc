@@ -1,18 +1,17 @@
-module Internal.Chip.Implementation
-    exposing
-        ( Property
-        , checkmark
-        , chipset
-        , choice
-        , filter
-        , input
-        , leadingIcon
-        , onClick
-        , react
-        , selected
-        , trailingIcon
-        , view
-        )
+module Internal.Chip.Implementation exposing
+    ( Property
+    , checkmark
+    , chipset
+    , choice
+    , filter
+    , input
+    , leadingIcon
+    , onClick
+    , react
+    , selected
+    , trailingIcon
+    , view
+    )
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -96,6 +95,7 @@ onClick msg =
             in
             if isEnter then
                 Json.succeed msg
+
             else
                 Json.fail ""
     in
@@ -199,6 +199,7 @@ chip domId lift model options nodes =
                                 []
                             ]
                         ]
+
                 else
                     text ""
               ]

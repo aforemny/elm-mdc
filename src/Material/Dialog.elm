@@ -1,19 +1,18 @@
-module Material.Dialog
-    exposing
-        ( Property
-        , accept
-        , backdrop
-        , body
-        , cancel
-        , footer
-        , header
-        , onClose
-        , open
-        , scrollable
-        , surface
-        , title
-        , view
-        )
+module Material.Dialog exposing
+    ( Property
+    , view
+    , open
+    , onClose
+    , surface
+    , backdrop
+    , header
+    , title
+    , body
+    , scrollable
+    , footer
+    , cancel
+    , accept
+    )
 
 {-| The Dialog component is a spec-aligned dialog component adhering to the
 Material Design dialog pattern. It implements a modal dialog window that traps

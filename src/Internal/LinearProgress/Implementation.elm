@@ -1,12 +1,11 @@
-module Internal.LinearProgress.Implementation
-    exposing
-        ( Property
-        , buffered
-        , determinate
-        , indeterminate
-        , reversed
-        , view
-        )
+module Internal.LinearProgress.Implementation exposing
+    ( Property
+    , buffered
+    , determinate
+    , indeterminate
+    , reversed
+    , view
+    )
 
 import Html exposing (Html)
 import Internal.Options as Options exposing (cs, css, styled, when)

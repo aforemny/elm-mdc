@@ -1,9 +1,8 @@
-module Internal.Dialog.Model
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        )
+module Internal.Dialog.Model exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    )
 
 
 type alias Model =

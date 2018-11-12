@@ -1,26 +1,19 @@
-module Material.GridList
-    exposing
-        ( Property
-        , gutter1
-        , headerCaption
-        , icon
-        , iconAlignEnd
-        , iconAlignStart
-        , image
-        , primary
-        , primaryContent
-        , secondary
-        , supportText
-        , tile
-        , tileAspect16To9
-        , tileAspect2To3
-        , tileAspect3To2
-        , tileAspect3To4
-        , tileAspect4To3
-        , title
-        , twolineCaption
-        , view
-        )
+module Material.GridList exposing
+    ( Property
+    , view
+    , headerCaption, twolineCaption
+    , gutter1
+    , iconAlignStart, iconAlignEnd
+    , tileAspect16To9, tileAspect4To3, tileAspect3To4, tileAspect2To3, tileAspect3To2
+    , tile
+    , primary
+    , secondary
+    , image
+    , icon
+    , title
+    , supportText
+    , primaryContent
+    )
 
 {-| Grid List provides a RTL-aware Material Design Grid list component adhering to
 the Material Design Grid list spec. Grid Lists are best suited for presenting

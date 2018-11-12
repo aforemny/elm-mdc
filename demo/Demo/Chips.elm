@@ -58,6 +58,7 @@ update lift msg model =
                             model.selectedChips
                                 |> (if Set.member index model.selectedChips then
                                         Set.remove index
+
                                     else
                                         Set.insert index
                                    )

@@ -1,7 +1,4 @@
-module Internal.Msg
-    exposing
-        ( Msg(..)
-        )
+module Internal.Msg exposing (Msg(..))
 
 import Internal.Button.Model as Button
 import Internal.Checkbox.Model as Checkbox

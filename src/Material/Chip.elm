@@ -1,17 +1,16 @@
-module Material.Chip
-    exposing
-        ( Property
-        , checkmark
-        , chipset
-        , choice
-        , filter
-        , input
-        , leadingIcon
-        , onClick
-        , selected
-        , trailingIcon
-        , view
-        )
+module Material.Chip exposing
+    ( Property
+    , view
+    , selected
+    , onClick
+    , checkmark
+    , leadingIcon
+    , trailingIcon
+    , chipset
+    , choice
+    , filter
+    , input
+    )
 
 {-| The Chip component is a spec-aligned chip component adhering to the
 Material Design chip requirements.

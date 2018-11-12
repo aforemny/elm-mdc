@@ -1,14 +1,13 @@
-module Material
-    exposing
-        ( Index
-        , Model
-        , Msg
-        , defaultModel
-        , init
-        , subscriptions
-        , top
-        , update
-        )
+module Material exposing
+    ( Model
+    , defaultModel
+    , Msg
+    , init
+    , subscriptions
+    , update
+    , Index
+    , top
+    )
 
 {-| Material is a re-implementation of Google's Internal.Components for Web (MDC
 Web) library in pure Elm, with resorting to JavaScript assets only when

@@ -1,17 +1,13 @@
-module Material.Slider
-    exposing
-        ( Property
-        , disabled
-        , discrete
-        , max
-        , min
-        , onChange
-        , onInput
-        , step
-        , trackMarkers
-        , value
-        , view
-        )
+module Material.Slider exposing
+    ( Property
+    , view
+    , value, min, max
+    , disabled
+    , onChange, onInput
+    , step
+    , discrete
+    , trackMarkers
+    )
 
 {-| Slider provides an implementation of the Material Design slider component.
 

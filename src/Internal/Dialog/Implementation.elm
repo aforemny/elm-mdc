@@ -1,20 +1,19 @@
-module Internal.Dialog.Implementation
-    exposing
-        ( Property
-        , accept
-        , backdrop
-        , body
-        , cancel
-        , footer
-        , header
-        , onClose
-        , open
-        , react
-        , scrollable
-        , surface
-        , title
-        , view
-        )
+module Internal.Dialog.Implementation exposing
+    ( Property
+    , accept
+    , backdrop
+    , body
+    , cancel
+    , footer
+    , header
+    , onClose
+    , open
+    , react
+    , scrollable
+    , surface
+    , title
+    , view
+    )
 
 import DOM
 import Html exposing (Html, text)
@@ -36,6 +35,7 @@ update lift msg model =
         SetState isOpen ->
             if isOpen /= model.open then
                 ( Just { model | animating = True, open = isOpen }, Cmd.none )
+
             else
                 ( Nothing, Cmd.none )
 
@@ -119,6 +119,7 @@ dialog lift model options nodes =
                 (\doClose ->
                     if doClose then
                         Maybe.withDefault (lift NoOp) config.onClose
+
                     else
                         lift NoOp
                 )
@@ -193,6 +194,7 @@ transitionend =
         (\className ->
             if hasClass "mdc-dialog__surface" className then
                 Json.succeed ()
+
             else
                 Json.fail ""
         )
@@ -210,6 +212,7 @@ close =
                 in
                 if hasClass "mdc-dialog__backdrop" then
                     True
+
                 else
                     False
             )

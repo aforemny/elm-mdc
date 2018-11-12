@@ -1,12 +1,11 @@
-module Demo.Url
-    exposing
-        ( ToolbarPage(..)
-        , TopAppBarPage(..)
-        , Url(..)
-        , fromString
-        , fromUrl
-        , toString
-        )
+module Demo.Url exposing
+    ( ToolbarPage(..)
+    , TopAppBarPage(..)
+    , Url(..)
+    , fromString
+    , fromUrl
+    , toString
+    )
 
 import Url
 

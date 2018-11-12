@@ -1,14 +1,12 @@
-module Material.Snackbar
-    exposing
-        ( Contents
-        , Property
-        , add
-        , alignEnd
-        , alignStart
-        , snack
-        , toast
-        , view
-        )
+module Material.Snackbar exposing
+    ( Property
+    , view
+    , alignStart, alignEnd
+    , Contents
+    , add
+    , toast
+    , snack
+    )
 
 {-| Snackbars provide brief messages about app processes at the bottom of the screen.
 

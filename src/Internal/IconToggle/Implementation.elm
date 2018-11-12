@@ -1,16 +1,15 @@
-module Internal.IconToggle.Implementation
-    exposing
-        ( Property
-        , className
-        , disabled
-        , icon
-        , icon1
-        , label
-        , label1
-        , on
-        , react
-        , view
-        )
+module Internal.IconToggle.Implementation exposing
+    ( Property
+    , className
+    , disabled
+    , icon
+    , icon1
+    , label
+    , label1
+    , on
+    , react
+    , view
+    )
 
 import Html exposing (Html, text)
 import Internal.Component as Component exposing (Index, Indexed)
@@ -99,6 +98,7 @@ iconToggle domId lift model options _ =
     Options.apply summary
         (if config.inner == Nothing then
             Html.i
+
          else
             Html.span
         )
@@ -107,6 +107,7 @@ iconToggle domId lift model options _ =
         , Options.aria "label"
             (if config.on then
                 config.label.on
+
              else
                 config.label.off
             )
@@ -121,14 +122,17 @@ iconToggle domId lift model options _ =
                 [ cs (Maybe.withDefault "material-icons" config.inner)
                 , if config.on then
                     cs config.icon.on
+
                   else
                     cs config.icon.off
                 ]
                 []
+
           else
             text
                 (if config.on then
                     config.icon.on
+
                  else
                     config.icon.off
                 )
@@ -165,4 +169,4 @@ view :
     -> Html m
 view =
     \lift index ->
-      Component.render getSet.get (iconToggle index) Internal.Msg.IconToggleMsg lift index
+        Component.render getSet.get (iconToggle index) Internal.Msg.IconToggleMsg lift index

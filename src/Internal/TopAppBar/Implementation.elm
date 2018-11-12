@@ -1,24 +1,23 @@
-module Internal.TopAppBar.Implementation
-    exposing
-        ( Property
-        , actionItem
-        , alignEnd
-        , alignStart
-        , collapsed
-        , dense
-        , denseFixedAdjust
-        , fixed
-        , fixedAdjust
-        , hasActionItem
-        , navigationIcon
-        , prominent
-        , prominentFixedAdjust
-        , react
-        , section
-        , short
-        , title
-        , view
-        )
+module Internal.TopAppBar.Implementation exposing
+    ( Property
+    , actionItem
+    , alignEnd
+    , alignStart
+    , collapsed
+    , dense
+    , denseFixedAdjust
+    , fixed
+    , fixedAdjust
+    , hasActionItem
+    , navigationIcon
+    , prominent
+    , prominentFixedAdjust
+    , react
+    , section
+    , short
+    , title
+    , view
+    )
 
 import DOM
 import Html exposing (Html, text)
@@ -80,6 +79,7 @@ update msg model =
                             , currentAppBarOffsetTop = currentAppBarOffsetTop
                             , topAppBarHeight = Just currentHeight
                         }
+
                     else
                         model
             in
@@ -110,10 +110,13 @@ topAppBarScrollHandler scrollPosition model =
                         if not isCurrentlyBeingResized then
                             if currentAppBarOffsetTop > 0 then
                                 0
+
                             else if abs currentAppBarOffsetTop > topAppBarHeight then
                                 -topAppBarHeight
+
                             else
                                 currentAppBarOffsetTop
+
                         else
                             model.currentAppBarOffsetTop
 
@@ -164,10 +167,13 @@ checkForUpdate model =
                 in
                 if partiallyShowing then
                     ( { model | wasDocked = False }, True )
+
                 else if not model.wasDocked then
                     ( { model | wasDocked = True }, True )
+
                 else if model.isDockedShowing /= hasAnyPixelsOnscreen then
                     ( { model | isDockedShowing = hasAnyPixelsOnscreen }, True )
+
                 else
                     ( model, False )
             )
@@ -190,11 +196,13 @@ moveTopAppBar model =
                                         in
                                         if abs updatedModel.currentAppBarOffsetTop > topAppBarHeight then
                                             -maxTopAppBarHeight
+
                                         else
                                             updatedModel.currentAppBarOffsetTop
                                 in
                                 { updatedModel | styleTop = Just styleTop }
                             )
+
                 else
                     Just updatedModel
             )

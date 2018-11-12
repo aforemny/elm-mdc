@@ -1,9 +1,8 @@
-module Material.FormField
-    exposing
-        ( Property
-        , alignEnd
-        , view
-        )
+module Material.FormField exposing
+    ( Property
+    , view
+    , alignEnd
+    )
 
 {-| FormField provides a helper view for easily making theme-aware, RTL-aware form
 field + label combinations.

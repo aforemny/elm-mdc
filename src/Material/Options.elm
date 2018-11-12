@@ -1,35 +1,31 @@
-module Material.Options
-    exposing
-        ( Property
-        , aria
-        , attribute
-        , cs
-        , css
-        , data
-        , for
-        , id
-        , many
-        , nop
-        , on
-        , onBlur
-        , onChange
-        , onCheck
-        , onClick
-        , onDoubleClick
-        , onFocus
-        , onInput
-        , onMouseDown
-        , onMouseEnter
-        , onMouseLeave
-        , onMouseOut
-        , onMouseOver
-        , onMouseUp
-        , onSubmit
-        , onWithOptions
-        , styled
-        , tabindex
-        , when
-        )
+module Material.Options exposing
+    ( Property, styled
+    , cs, css
+    , id
+    , many
+    , when
+    , nop
+    , attribute
+    , data
+    , aria
+    , for
+    , tabindex
+    , on
+    , onWithOptions
+    , onClick
+    , onDoubleClick
+    , onMouseDown
+    , onMouseUp
+    , onMouseEnter
+    , onMouseLeave
+    , onMouseOver
+    , onMouseOut
+    , onInput, onChange
+    , onCheck
+    , onSubmit
+    , onBlur
+    , onFocus
+    )
 
 {-| TODO: Update to elm/html
 
@@ -162,14 +158,14 @@ when =
     Internal.Options.when
 
 
-{-| HTML data-* attributes. Prefix "data-" is added automatically.
+{-| HTML data-\* attributes. Prefix "data-" is added automatically.
 -}
 data : String -> String -> Property c m
 data =
     Internal.Options.data
 
 
-{-| HTML aria-* attributes. Prefix "aria-" is added automatically.
+{-| HTML aria-\* attributes. Prefix "aria-" is added automatically.
 -}
 aria : String -> String -> Property c m
 aria =

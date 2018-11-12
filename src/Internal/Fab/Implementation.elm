@@ -1,12 +1,11 @@
-module Internal.Fab.Implementation
-    exposing
-        ( Property
-        , exited
-        , mini
-        , react
-        , ripple
-        , view
-        )
+module Internal.Fab.Implementation exposing
+    ( Property
+    , exited
+    , mini
+    , react
+    , ripple
+    , view
+    )
 
 import Html exposing (Html, text)
 import Internal.Component as Component exposing (Index, Indexed)
@@ -90,6 +89,7 @@ fab domId lift model options icon =
               ]
             , if config.ripple then
                 [ rippleInterface.style ]
+
               else
                 []
             ]
@@ -112,8 +112,8 @@ view :
     -> String
     -> Html m
 view =
-  \lift domId ->
-    Component.render getSet.get (fab domId) Internal.Msg.FabMsg lift domId
+    \lift domId ->
+        Component.render getSet.get (fab domId) Internal.Msg.FabMsg lift domId
 
 
 react :

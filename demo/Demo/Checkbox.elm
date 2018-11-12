@@ -65,6 +65,7 @@ update lift msg model =
                                         | checked =
                                             if checkboxState.checked == Nothing then
                                                 Just False
+
                                             else
                                                 Nothing
                                     }
@@ -97,6 +98,7 @@ update lift msg model =
                                         | checked =
                                             if checkboxState.checked == Nothing then
                                                 Just True
+
                                             else
                                                 Maybe.map not checkboxState.checked
                                     }

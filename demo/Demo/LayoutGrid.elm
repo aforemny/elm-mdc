@@ -1,13 +1,12 @@
-module Demo.LayoutGrid
-    exposing
-        ( Model
-        , Msg(..)
-        , defaultModel
-        , init
-        , subscriptions
-        , update
-        , view
-        )
+module Demo.LayoutGrid exposing
+    ( Model
+    , Msg(..)
+    , defaultModel
+    , init
+    , subscriptions
+    , update
+    , view
+    )
 
 import Browser.Dom
 import Browser.Events
@@ -409,8 +408,10 @@ view lift page model =
                                 (\width ->
                                     if width >= 840 then
                                         "desktop"
+
                                     else if width >= 480 then
                                         "tablet"
+
                                     else
                                         "phone"
                                 )

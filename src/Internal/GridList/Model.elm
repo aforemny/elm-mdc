@@ -1,11 +1,10 @@
-module Internal.GridList.Model
-    exposing
-        ( Geometry
-        , Model
-        , Msg(..)
-        , defaultGeometry
-        , defaultModel
-        )
+module Internal.GridList.Model exposing
+    ( Geometry
+    , Model
+    , Msg(..)
+    , defaultGeometry
+    , defaultModel
+    )
 
 
 type alias Model =

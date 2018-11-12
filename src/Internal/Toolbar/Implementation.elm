@@ -1,25 +1,24 @@
-module Internal.Toolbar.Implementation
-    exposing
-        ( Property
-        , alignEnd
-        , alignStart
-        , backgroundImage
-        , fixed
-        , fixedAdjust
-        , fixedLastRow
-        , flexible
-        , flexibleDefaultBehavior
-        , icon
-        , iconToggle
-        , menuIcon
-        , react
-        , row
-        , section
-        , shrinkToFit
-        , title
-        , view
-        , waterfall
-        )
+module Internal.Toolbar.Implementation exposing
+    ( Property
+    , alignEnd
+    , alignStart
+    , backgroundImage
+    , fixed
+    , fixedAdjust
+    , fixedLastRow
+    , flexible
+    , flexibleDefaultBehavior
+    , icon
+    , iconToggle
+    , menuIcon
+    , react
+    , row
+    , section
+    , shrinkToFit
+    , title
+    , view
+    , waterfall
+    )
 
 import DOM
 import Dict exposing (Dict)
@@ -130,6 +129,7 @@ decodeGeometry =
                     (\decodedViewportWidth ->
                         if decodedViewportWidth < numbers.toolbarMobileBreakpoint then
                             numbers.toolbarRowMobileHeight
+
                         else
                             numbers.toolbarRowHeight
                     )
@@ -324,6 +324,7 @@ adjustElementStyles config calculations =
     in
     if config.fixed then
         Just (css "margin-top" (String.fromFloat marginTop ++ "px"))
+
     else
         Nothing
 
@@ -346,12 +347,14 @@ initKeyRatio config geometry =
         firstRowMaxRatio =
             if toolbarRowHeight == 0 then
                 0
+
             else
                 geometry.getFirstRowElementOffsetHeight / toolbarRowHeight
 
         toolbarRatio =
             if toolbarRowHeight == 0 then
                 0
+
             else
                 geometry.getOffsetHeight / toolbarRowHeight
 
@@ -361,12 +364,14 @@ initKeyRatio config geometry =
         maxTranslateYRatio =
             if config.fixedLastrow then
                 toolbarRatio - firstRowMaxRatio
+
             else
                 0
 
         scrollThresholdRatio =
             if config.fixedLastrow then
                 toolbarRatio - 1
+
             else
                 firstRowMaxRatio - 1
     in
@@ -426,8 +431,10 @@ toolbarStyles config geometry scrollTop calculations =
         toolbarFlexibleState =
             if flexibleExpansionRatio_ >= 1.0 then
                 cs cssClasses.flexibleMax
+
             else if flexibleExpansionRatio_ <= 0.0 then
                 cs cssClasses.flexibleMin
+
             else
                 nop
 
@@ -453,6 +460,7 @@ toolbarStyles config geometry scrollTop calculations =
                         calculations.flexibleExpansionHeight * flexibleExpansionRatio_
                 in
                 Just { height = String.fromFloat (height + calculations.toolbarRowHeight) ++ "px" }
+
             else
                 Nothing
 
@@ -471,6 +479,7 @@ toolbarStyles config geometry scrollTop calculations =
                             + minTitleSize
                 in
                 Just { fontSize = String.fromFloat currentTitleSize ++ "rem" }
+
             else
                 Nothing
     in

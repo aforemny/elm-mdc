@@ -1,15 +1,14 @@
-module Material.Select
-    exposing
-        ( Property
-        , box
-        , disabled
-        , label
-        , option
-        , preselected
-        , selected
-        , value
-        , view
-        )
+module Material.Select exposing
+    ( Property
+    , view
+    , label
+    , preselected
+    , disabled
+    , box
+    , option
+    , value
+    , selected
+    )
 
 {-| Select provides Material Design single-option select menus. It functions
 analogously to the browser's native `<select>` element

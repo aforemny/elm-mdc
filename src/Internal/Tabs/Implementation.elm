@@ -1,16 +1,15 @@
-module Internal.Tabs.Implementation
-    exposing
-        ( Property
-        , Tab
-        , icon
-        , iconText
-        , indicator
-        , react
-        , scrolling
-        , tab
-        , view
-        , withIconAndText
-        )
+module Internal.Tabs.Implementation exposing
+    ( Property
+    , Tab
+    , icon
+    , iconText
+    , indicator
+    , react
+    , scrolling
+    , tab
+    , view
+    , withIconAndText
+    )
 
 import DOM
 import Dict exposing (Dict)
@@ -60,6 +59,7 @@ update lift msg model =
                 normalizeForRtl left width =
                     if isRtl then
                         tabBarWidth - (left + width)
+
                     else
                         left
             in
@@ -129,6 +129,7 @@ update lift msg model =
                 loop ( i, tab_ ) result =
                     if result.scrollTargetIndex /= Nothing then
                         result
+
                     else
                         let
                             tabOffsetLeft =
@@ -140,11 +141,13 @@ update lift msg model =
                             tabIsNotOccluded =
                                 if not isRtl then
                                     tabOffsetLeft > currentTranslateOffset
+
                                 else
                                     tabBarWidthLessTabOffsetLeft > currentTranslateOffset
                         in
                         if tabIsNotOccluded then
                             result
+
                         else
                             let
                                 newTabWidthAccumulator =
@@ -158,8 +161,10 @@ update lift msg model =
                                         Just <|
                                             if isRtl then
                                                 i + 1
+
                                             else
                                                 i
+
                                     else
                                         Nothing
                             in
@@ -204,6 +209,7 @@ update lift msg model =
                 loop ( i, tab_ ) result =
                     if result.scrollTargetIndex /= Nothing then
                         result
+
                     else
                         let
                             tabOffsetLeftAndWidth =
@@ -212,6 +218,7 @@ update lift msg model =
                             scrollTargetDetermined =
                                 if not isRtl then
                                     tabOffsetLeftAndWidth > scrollFrameWidth
+
                                 else
                                     let
                                         frameOffsetAndTabWidth =
@@ -225,6 +232,7 @@ update lift msg model =
                         if scrollTargetDetermined then
                             { scrollTargetIndex = Just i
                             }
+
                         else
                             { scrollTargetIndex = Nothing
                             }
@@ -259,6 +267,7 @@ update lift msg model =
                 resetAmt =
                     if isRtl then
                         model.scrollLeftAmount
+
                     else
                         0
 
@@ -292,19 +301,23 @@ update lift msg model =
                 shouldScrollBack =
                     if not isRtl then
                         rightEdge <= currentTranslateOffset
+
                     else
                         leftEdge >= tabBarWidth - currentTranslateOffset
 
                 shouldScrollForward =
                     if not isRtl then
                         rightEdge > currentTranslateOffset + scrollFrameWidth
+
                     else
                         normalizedLeftOffset > scrollFrameWidth + currentTranslateOffset
             in
             if shouldScrollForward then
                 update lift (ScrollForward geometry) model
+
             else if shouldScrollBack then
                 update lift (ScrollBack geometry) model
+
             else
                 ( Nothing, Cmd.none )
 
@@ -322,6 +335,7 @@ update lift msg model =
                 translateOffset =
                     if not isOverflowing then
                         0
+
                     else
                         model.translateOffset
 
@@ -436,6 +450,7 @@ tabs domId lift model options nodes =
                 shiftAmount =
                     if isRtl then
                         model.translateOffset
+
                     else
                         -model.translateOffset
             in
@@ -509,6 +524,7 @@ tabs domId lift model options nodes =
     in
     (if config.scroller then
         tabBarScroller
+
      else
         identity
     )
@@ -576,6 +592,7 @@ tabs domId lift model options nodes =
                                                             (\key keyCode geometry_ ->
                                                                 if key == Just "Enter" || keyCode == 13 then
                                                                     Select index geometry_
+
                                                                 else
                                                                     NoOp
                                                             )
@@ -620,6 +637,7 @@ tabs domId lift model options nodes =
                         ]
                         []
                     ]
+
                   else
                     []
                 ]
@@ -669,6 +687,7 @@ computeScale geometry index =
         Just tab_ ->
             if totalTabsWidth == 0 then
                 1
+
             else
                 tab_.offsetWidth / totalTabsWidth
 
@@ -699,6 +718,7 @@ decodeGeometryOnTab hasIndicator =
                         (\className ->
                             if String.contains " mdc-tab-bar " (" " ++ className ++ " ") then
                                 cont
+
                             else
                                 Json.fail "Material.Tabs.decodeGeometryOnTabBar"
                         )
@@ -725,6 +745,7 @@ decodeGeometry hasIndicator =
         (Json.map
             (if hasIndicator then
                 \xs -> List.take (List.length xs - 1) xs
+
              else
                 identity
             )

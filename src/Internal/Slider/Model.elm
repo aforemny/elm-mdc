@@ -1,11 +1,10 @@
-module Internal.Slider.Model
-    exposing
-        ( Geometry
-        , Model
-        , Msg(..)
-        , defaultGeometry
-        , defaultModel
-        )
+module Internal.Slider.Model exposing
+    ( Geometry
+    , Model
+    , Msg(..)
+    , defaultGeometry
+    , defaultModel
+    )
 
 
 type alias Model =

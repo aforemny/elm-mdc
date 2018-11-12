@@ -1,35 +1,34 @@
-module Internal.Menu.Implementation
-    exposing
-        ( Corner
-        , Item
-        , Margin
-        , Menu
-        , Property
-        , anchorCorner
-        , anchorMargin
-        , attach
-        , bottomEndCorner
-        , bottomLeftCorner
-        , bottomRightCorner
-        , bottomStartCorner
-        , connect
-        , divider
-        , index
-        , li
-        , menu
-        , onSelect
-        , quickOpen
-        , react
-        , subs
-        , subscriptions
-        , topEndCorner
-        , topLeftCorner
-        , topRightCorner
-        , topStartCorner
-        , ul
-        , update
-        , view
-        )
+module Internal.Menu.Implementation exposing
+    ( Corner
+    , Item
+    , Margin
+    , Menu
+    , Property
+    , anchorCorner
+    , anchorMargin
+    , attach
+    , bottomEndCorner
+    , bottomLeftCorner
+    , bottomRightCorner
+    , bottomStartCorner
+    , connect
+    , divider
+    , index
+    , li
+    , menu
+    , onSelect
+    , quickOpen
+    , react
+    , subs
+    , subscriptions
+    , topEndCorner
+    , topLeftCorner
+    , topRightCorner
+    , topStartCorner
+    , ul
+    , update
+    , view
+    )
 
 import Browser
 import Browser.Events
@@ -55,6 +54,7 @@ subscriptions model =
     -- in the first animation frame after Open by watching model.geometry.
     if model.open && (model.geometry /= Nothing) then
         Browser.Events.onClick (Decode.succeed DocumentClick)
+
     else
         Sub.none
 
@@ -107,6 +107,7 @@ update lift msg model =
             update lift
                 (if model.open then
                     Close
+
                  else
                     Open
                 )
@@ -126,9 +127,11 @@ update lift msg model =
                     }
                 , if not doQuickOpen then
                     Helpers.delayedCmd 120 (lift AnimationEnd)
+
                   else
                     Helpers.cmd (lift AnimationEnd)
                 )
+
             else
                 ( Nothing, Cmd.none )
 
@@ -147,9 +150,11 @@ update lift msg model =
                     }
                 , if not doQuickOpen then
                     Helpers.delayedCmd 70 (lift AnimationEnd)
+
                   else
                     Helpers.cmd (lift AnimationEnd)
                 )
+
             else
                 ( Nothing, Cmd.none )
 
@@ -201,24 +206,30 @@ update lift msg model =
             in
             (if altKey || ctrlKey || metaKey then
                 ( Nothing, Cmd.none )
+
              else if isArrowUp then
                 ( Just <|
                     if focusedItemIndex == 0 then
                         { model | focusedItemAtIndex = Just lastItemIndex }
+
                     else
                         { model | focusedItemAtIndex = Just (focusedItemIndex - 1) }
                 , Cmd.none
                 )
+
              else if isArrowDown then
                 ( Just <|
                     if focusedItemIndex == lastItemIndex then
                         { model | focusedItemAtIndex = Just 0 }
+
                     else
                         { model | focusedItemAtIndex = Just (focusedItemIndex + 1) }
                 , Cmd.none
                 )
+
              else if isSpace || isEnter then
                 ( Just model, Cmd.none )
+
              else
                 ( Nothing, Cmd.none )
             )
@@ -242,8 +253,10 @@ update lift msg model =
             in
             (if altKey || ctrlKey || metaKey then
                 ( Nothing, Cmd.none )
+
              else if isEscape || ((isSpace || isEnter) && model.keyDownWithinMenu) then
                 update lift Close model
+
              else
                 ( Nothing, Cmd.none )
             )
@@ -252,6 +265,7 @@ update lift msg model =
                         (\updatedModel ->
                             if (isEnter || isSpace) && updatedModel.keyDownWithinMenu then
                                 { updatedModel | keyDownWithinMenu = False }
+
                             else
                                 updatedModel
                         )
@@ -343,6 +357,7 @@ menu lift model options ulNode =
         isOpen =
             if model.animating then
                 model.open && (model.geometry /= Nothing)
+
             else
                 model.open
 
@@ -379,14 +394,17 @@ menu lift model options ulNode =
             in
             if altKey || ctrlKey || metaKey then
                 Decode.fail ""
+
             else if
                 shiftKey
                     && isTab
                     && (Maybe.withDefault 0 focusedItemAtIndex == lastItemIndex)
             then
                 Decode.succeed (lift NoOp)
+
             else if isArrowUp || isArrowDown || isSpace then
                 Decode.succeed (lift NoOp)
+
             else
                 Decode.fail ""
     in
@@ -396,6 +414,7 @@ menu lift model options ulNode =
         , when (model.animating && not (Maybe.withDefault False model.quickOpen)) <|
             if model.open then
                 cs "mdc-menu--animating-open"
+
             else
                 cs "mdc-menu--animating-closed"
         , when isOpen
@@ -464,6 +483,7 @@ menu lift model options ulNode =
                         autoFocus =
                             if hasFocus && model.open then
                                 Options.data "autofocus" ""
+
                             else
                                 Options.nop
 
@@ -497,6 +517,7 @@ menu lift model options ulNode =
                             ]
                             []
                             item.childs
+
                     else
                         Options.apply itemSummary
                             Html.li
@@ -602,12 +623,14 @@ originCorner config geometry =
         availableTop =
             if isBottomAligned then
                 geometry.viewportDistance.top + geometry.anchor.height + config.anchorMargin.bottom
+
             else
                 geometry.viewportDistance.top + config.anchorMargin.top
 
         availableBottom =
             if isBottomAligned then
                 geometry.viewportDistance.bottom - config.anchorMargin.bottom
+
             else
                 geometry.viewportDistance.bottom + geometry.anchor.height + config.anchorMargin.top
 
@@ -637,12 +660,14 @@ originCorner config geometry =
         availableLeft =
             if isAlignedRight then
                 geometry.viewportDistance.left + geometry.anchor.width + config.anchorMargin.right
+
             else
                 geometry.viewportDistance.left + config.anchorMargin.left
 
         availableRight =
             if isAlignedRight then
                 geometry.viewportDistance.right - config.anchorMargin.right
+
             else
                 geometry.viewportDistance.right + geometry.anchor.width - config.anchorMargin.left
 
@@ -682,10 +707,13 @@ horizontalOffset config corner geometry =
     if isRightAligned then
         if avoidHorizontalOverlap then
             geometry.anchor.width - config.anchorMargin.left
+
         else
             config.anchorMargin.right
+
     else if avoidHorizontalOverlap then
         geometry.anchor.width - config.anchorMargin.right
+
     else
         config.anchorMargin.left
 
@@ -708,14 +736,19 @@ verticalOffset config corner geometry =
     if isBottomAligned then
         if canOverlapVertically && (geometry.menu.height > geometry.viewportDistance.top + geometry.anchor.height) then
             -(min geometry.menu.height (geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))
+
         else if avoidVerticalOverlap then
             geometry.anchor.height - config.anchorMargin.top
+
         else
             -config.anchorMargin.bottom
+
     else if canOverlapVertically && (geometry.menu.height > geometry.viewportDistance.bottom + geometry.anchor.height) then
         -(min geometry.menu.height (geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))
+
     else if avoidVerticalOverlap then
         geometry.anchor.height + config.anchorMargin.bottom
+
     else
         config.anchorMargin.top
 
@@ -729,8 +762,10 @@ menuMaxHeight config corner geometry =
     if config.anchorCorner.bottom then
         if isBottomAligned then
             geometry.viewportDistance.top + config.anchorMargin.top
+
         else
             geometry.viewportDistance.bottom - config.anchorMargin.bottom
+
     else
         0
 
@@ -759,12 +794,14 @@ autoPosition config geometry =
         verticalAlignment =
             if corner.bottom then
                 "bottom"
+
             else
                 "top"
 
         horizontalAlignment =
             if corner.right then
                 "right"
+
             else
                 "left"
 
@@ -778,21 +815,25 @@ autoPosition config geometry =
             { top =
                 if verticalAlignment == "top" then
                     Just (String.fromFloat verticalOffset_ ++ "px")
+
                 else
                     Nothing
             , left =
                 if horizontalAlignment == "left" then
                     Just (String.fromFloat horizontalOffset_ ++ "px")
+
                 else
                     Nothing
             , bottom =
                 if verticalAlignment == "bottom" then
                     Just (String.fromFloat verticalOffset_ ++ "px")
+
                 else
                     Nothing
             , right =
                 if horizontalAlignment == "right" then
                     Just (String.fromFloat horizontalOffset_ ++ "px")
+
                 else
                     Nothing
             }
@@ -800,6 +841,7 @@ autoPosition config geometry =
         horizontalAlignment_ =
             if (geometry.anchor.width / geometry.menu.width) > 0.67 then
                 "center"
+
             else
                 horizontalAlignment
 
@@ -812,10 +854,12 @@ autoPosition config geometry =
                     originPercent =
                         if corner.bottom then
                             100 - verticalOffsetPercent
+
                         else
                             verticalOffsetPercent
                 in
                 String.fromFloat (toFloat (round (originPercent * 100)) / 100) ++ "%"
+
             else
                 verticalAlignment
     in
@@ -824,6 +868,7 @@ autoPosition config geometry =
     , maxHeight =
         if maxMenuHeight /= 0 then
             String.fromFloat maxMenuHeight ++ "px"
+
         else
             ""
     }
@@ -957,6 +1002,7 @@ onSelect msg =
             in
             if isSpace || isEnter then
                 Decode.succeed msg
+
             else
                 Decode.fail ""
     in

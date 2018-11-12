@@ -1,21 +1,20 @@
-module Internal.Card.Implementation
-    exposing
-        ( Property
-        , actionButton
-        , actionButtons
-        , actionIcon
-        , actionIcons
-        , actions
-        , aspect16To9
-        , backgroundImage
-        , fullBleed
-        , media
-        , mediaContent
-        , primaryAction
-        , square
-        , stroked
-        , view
-        )
+module Internal.Card.Implementation exposing
+    ( Property
+    , actionButton
+    , actionButtons
+    , actionIcon
+    , actionIcons
+    , actions
+    , aspect16To9
+    , backgroundImage
+    , fullBleed
+    , media
+    , mediaContent
+    , primaryAction
+    , square
+    , stroked
+    , view
+    )
 
 import Html exposing (Html, text)
 import Internal.Button.Implementation as Button
