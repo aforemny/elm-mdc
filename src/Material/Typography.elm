@@ -1,29 +1,16 @@
-module Material.Typography
-    exposing
-        ( adjustMargin
-        , body1
-        , body2
-        , button
-        , caption
-        , display1
-        , display2
-        , display3
-        , display4
-        , headline
-        , headline1
-        , headline2
-        , headline3
-        , headline4
-        , headline5
-        , headline6
-        , overline
-        , subheading1
-        , subheading2
-        , subtitle1
-        , subtitle2
-        , title
-        , typography
-        )
+module Material.Typography exposing
+    ( typography
+    , display4, display3, display2
+    , headline6, headline5, headline4, headline3, headline2, headline1
+    , subtitle2, subtitle1
+    , subheading2
+    , body2, body1
+    , caption
+    , button
+    , overline
+    , adjustMargin
+    , display1, headline, subheading1, title
+    )
 
 {-| Material Design's text sizes and styles were developed to balance content
 density and reading comfort under typical usage conditions.
@@ -58,7 +45,7 @@ density and reading comfort under typical usage conditions.
 @docs display4, display3, display2, display1 (deprecated)
 @docs headline6, headline5, headline4, headline3, headline2, headline1
 @docs headline (deprecated)
-@docs title
+@docs title (deprecated)
 @docs subtitle2, subtitle1
 @docs subheading2, subheading1 (deprecated)
 @docs body2, body1
@@ -113,10 +100,11 @@ display4 =
 
 
 {-| Sets font properties as Title.
+Deprecated - use headline1 through headline6.
 -}
 title : Property c m
 title =
-    Typography.title
+    Typography.headline5
 
 
 {-| Sets font properties as Headline.

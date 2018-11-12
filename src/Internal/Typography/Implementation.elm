@@ -1,22 +1,20 @@
-module Internal.Typography.Implementation
-    exposing
-        ( adjustMargin
-        , body1
-        , body2
-        , button
-        , caption
-        , headline1
-        , headline2
-        , headline3
-        , headline4
-        , headline5
-        , headline6
-        , overline
-        , subtitle1
-        , subtitle2
-        , title
-        , typography
-        )
+module Internal.Typography.Implementation exposing
+    ( adjustMargin
+    , body1
+    , body2
+    , button
+    , caption
+    , headline1
+    , headline2
+    , headline3
+    , headline4
+    , headline5
+    , headline6
+    , overline
+    , subtitle1
+    , subtitle2
+    , typography
+    )
 
 import Internal.Options exposing (Property, cs)
 
@@ -24,11 +22,6 @@ import Internal.Options exposing (Property, cs)
 typography : Property c m
 typography =
     cs "mdc-typography"
-
-
-title : Property c m
-title =
-    cs "mdc-typography--title"
 
 
 headline1 : Property c m
