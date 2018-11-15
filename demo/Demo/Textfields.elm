@@ -637,7 +637,7 @@ fullwidth lift index model =
                 , Textfield.view (lift << Mdc)
                     (index ++ "-textarea")
                     model.mdc
-                    [ Textfield.placeholder "Textarea Label"
+                    [ Textfield.label "Textarea Label"
                     , Textfield.textarea
                     , Textfield.fullwidth
                     , Textfield.rows 8

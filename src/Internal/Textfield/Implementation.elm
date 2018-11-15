@@ -345,7 +345,7 @@ textField domId lift model options _ =
                             Html.cols (Maybe.withDefault 0 config.cols)
                     ]
                     []
-              , if not config.fullWidth then
+              , if not config.fullWidth || config.textarea then
                     styled Html.label
                         [ cs "mdc-floating-label"
                         , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
