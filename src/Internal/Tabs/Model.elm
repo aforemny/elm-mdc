@@ -12,9 +12,7 @@ import Internal.Ripple.Model as Ripple
 
 type alias Model =
     { geometry : Maybe Geometry
-    , index : Int
     , translateOffset : Float
-    , scale : Float
     , ripples : Dict Int Ripple.Model
     , indicatorShown : Bool
     , forwardIndicator : Bool
@@ -26,9 +24,7 @@ type alias Model =
 defaultModel : Model
 defaultModel =
     { geometry = Nothing
-    , index = 0
     , translateOffset = 0
-    , scale = 0
     , ripples = Dict.empty
     , indicatorShown = False
     , forwardIndicator = False
@@ -40,7 +36,7 @@ defaultModel =
 type Msg m
     = NoOp
     | Dispatch (List m)
-    | Select Int Geometry
+    | Select Geometry
     | ScrollForward Geometry
     | ScrollBack Geometry
     | RippleMsg Int Ripple.Msg

@@ -1,6 +1,7 @@
 module Internal.Tabs.Implementation exposing
     ( Property
     , Tab
+    , activeTab
     , icon
     , iconText
     , indicator
@@ -105,13 +106,8 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        Select index geometry ->
-            ( Just
-                { model
-                    | index = index
-                    , scale = computeScale geometry index
-                    , geometry = Just geometry
-                }
+        Select geometry ->
+            ( Just { model | geometry = Just geometry }
             , Cmd.none
             )
 
@@ -345,7 +341,6 @@ update lift msg model =
               Just
                 { model
                     | geometry = Just geometry
-                    , scale = computeScale geometry model.index
                     , forwardIndicator = forwardIndicator
                     , backIndicator = backIndicator
                     , translateOffset = translateOffset
@@ -359,17 +354,17 @@ update lift msg model =
 
 
 type alias Config =
-    { active : Int
-    , scroller : Bool
+    { scroller : Bool
     , indicator : Bool
+    , activeTab : Maybe Int
     }
 
 
 defaultConfig : Config
 defaultConfig =
-    { active = 0
-    , scroller = False
+    { scroller = False
     , indicator = False
+    , activeTab = Nothing
     }
 
 
@@ -381,6 +376,11 @@ scrolling =
 indicator : Property m
 indicator =
     Options.option (\config -> { config | indicator = True })
+
+
+activeTab : Int -> Property m
+activeTab value =
+    Options.option (\config -> { config | activeTab = Just value })
 
 
 type alias Tab m =
@@ -438,6 +438,9 @@ tabs domId lift model options nodes =
         config =
             summary.config
 
+        activeTab_ =
+            Maybe.withDefault 0 config.activeTab
+
         numTabs =
             List.length nodes
 
@@ -459,18 +462,23 @@ tabs domId lift model options nodes =
         geometry =
             Maybe.withDefault defaultGeometry model.geometry
 
+        computedScale =
+            model.geometry
+                |> Maybe.map (\geometry_ -> computeScale geometry_ activeTab_)
+                |> Maybe.withDefault 1
+
         indicatorTransform =
             let
                 tabLeft =
                     geometry.tabs
-                        |> List.drop model.index
+                        |> List.drop activeTab_
                         |> List.head
                         |> Maybe.map .offsetLeft
                         |> Maybe.withDefault 0
             in
             String.join " "
                 [ "translateX(" ++ String.fromFloat tabLeft ++ "px)"
-                , "scale(" ++ String.fromFloat model.scale ++ ",1)"
+                , "scale(" ++ String.fromFloat computedScale ++ ",1)"
                 ]
 
         tabBarScroller tabBar =
@@ -580,10 +588,10 @@ tabs domId lift model options nodes =
                                             , dispatch = Dispatch.clear summary.dispatch
                                         }
                                         (cs "mdc-tab"
-                                            :: when (model.index == index) (cs "mdc-tab--active")
+                                            :: when (activeTab_ == index) (cs "mdc-tab--active")
                                             :: Options.attribute (Html.tabindex 0)
                                             :: (Options.on "click" <|
-                                                    Json.map (lift << Select index) <|
+                                                    Json.map (lift << Select) <|
                                                         decodeGeometryOnTab config.indicator
                                                )
                                             :: (Options.on "keydown" <|
@@ -591,7 +599,7 @@ tabs domId lift model options nodes =
                                                         Json.map3
                                                             (\key keyCode geometry_ ->
                                                                 if key == Just "Enter" || keyCode == 13 then
-                                                                    Select index geometry_
+                                                                    Select geometry_
 
                                                                 else
                                                                     NoOp

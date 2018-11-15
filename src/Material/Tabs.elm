@@ -3,6 +3,7 @@ module Material.Tabs exposing
     , view
     , scrolling
     , indicator
+    , activeTab
     , Tab
     , tab
     , withIconAndText
@@ -47,6 +48,7 @@ Tabs.
 @docs view
 @docs scrolling
 @docs indicator
+@docs activeTab
 
 
 ## Tabs
@@ -101,6 +103,13 @@ scrolling =
 indicator : Property m
 indicator =
     Tabs.indicator
+
+
+{-| Make the TabBar's `n`th tab active.
+-}
+activeTab : Int -> Property m
+activeTab =
+    Tabs.activeTab
 
 
 {-| A TabBar's tab type.
