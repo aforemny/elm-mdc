@@ -362,7 +362,7 @@ textField domId lift model options _ =
                 else
                     text ""
               ]
-            , if not config.outlined && not config.textarea && not config.fullWidth then
+            , if not config.outlined && not config.textarea then
                 [ styled Html.div
                     [ cs "mdc-line-ripple"
                     , cs "mdc-line-ripple--active" |> when model.focused
