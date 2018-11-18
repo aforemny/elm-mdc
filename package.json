@@ -5,6 +5,8 @@
   "main": "elm-mdc.js",
   "devDependencies": {
     "babel": "^6.23.0",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
     "elm-upgrade": "^0.19.1",
     "material-components-web": "^0.37.1",
     "webpack": "^4.12.0",
