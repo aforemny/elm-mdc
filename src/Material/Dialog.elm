@@ -36,7 +36,6 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
 
     import Html exposing (text)
     import Material.Button as Button
-    import Internal.Component exposing (Index)
     import Material.Dialog as Dialog
     import Material.Options as Options exposing (styled)
 
