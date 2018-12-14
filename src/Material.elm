@@ -395,7 +395,7 @@ subscriptions lift model =
                 …
 
             effects =
-                Cmd.map
+                Cmd.batch
                 [ Material.init Mdc
                 , …
                 ]
