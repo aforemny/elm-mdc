@@ -4,7 +4,6 @@ module Material.Textfield exposing
     , label
     , value
     , placeholder
-    , dense
     , disabled
     , leadingIcon
     , trailingIcon
@@ -59,7 +58,6 @@ module Material.Textfield exposing
 @docs label
 @docs value
 @docs placeholder
-@docs dense
 @docs disabled
 
 
@@ -223,13 +221,6 @@ rows =
 cols : Int -> Property m
 cols =
     Textfield.cols
-
-
-{-| Style the textfield as a dense textfield.
--}
-dense : Property m
-dense =
-    Textfield.dense
 
 
 {-| Mark the textfield as required.
