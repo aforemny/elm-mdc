@@ -1,7 +1,6 @@
 module Internal.Textfield.Implementation exposing
     ( Property
     , cols
-    , dense
     , disabled
     , email
     , fullwidth
@@ -44,7 +43,6 @@ type alias Config m =
     , value : Maybe String
     , defaultValue : Maybe String
     , disabled : Bool
-    , dense : Bool
     , required : Bool
     , type_ : Maybe String
     , pattern : Maybe String
@@ -70,7 +68,6 @@ defaultConfig =
     , value = Nothing
     , defaultValue = Nothing
     , disabled = False
-    , dense = False
     , required = False
     , type_ = Just "text"
     , pattern = Nothing
@@ -153,11 +150,6 @@ rows value_ =
 cols : Int -> Property m
 cols cols_ =
     Options.option (\config -> { config | cols = Just cols_ })
-
-
-dense : Property m
-dense =
-    Options.option (\config -> { config | dense = True })
 
 
 required : Property m
@@ -254,7 +246,6 @@ textField domId lift model options _ =
         , cs "mdc-text-field--upgraded"
         , cs "mdc-text-field--focused" |> when focused
         , cs "mdc-text-field--disabled" |> when config.disabled
-        , cs "mdc-text-field--dense" |> when config.dense
         , cs "mdc-text-field--fullwidth" |> when config.fullWidth
         , cs "mdc-text-field--invalid" |> when isInvalid
         , cs "mdc-text-field--textarea" |> when config.textarea
@@ -384,11 +375,7 @@ textField domId lift model options _ =
                                 abs (11 - cornerWidth)
 
                             labelScale =
-                                if config.dense then
-                                    0.923
-
-                                else
-                                    0.75
+                                0.75
 
                             scaledLabelWidth =
                                 labelScale * labelWidth
