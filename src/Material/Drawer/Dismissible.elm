@@ -1,10 +1,12 @@
-module Material.Drawer.Permanent exposing
+module Material.Drawer.Dismissible exposing
     ( Property
     , view
     , content
     , header
     , subTitle
     , title
+    , open
+    , appContent
     )
 
 {-| The MDC Navigation Drawer is used to organize access to
@@ -25,7 +27,7 @@ destinations and other functionality on an app.
     import Html exposing (Html, text, h3, h6)
     import Html.Attributes as Html
     import Material.Options as Options exposing (styled)
-    import Material.Drawer.Permanent as Drawer
+    import Material.Drawer.Dismissible as Drawer
     import Material.List as Lists
 
 
@@ -75,12 +77,14 @@ destinations and other functionality on an app.
 @docs header
 @docs title
 @docs subTitle
+@docs open
+@docs appContent
 
 -}
 
 import Html exposing (Html)
 import Internal.Component exposing (Index)
-import Internal.Drawer.Permanent.Implementation as Drawer
+import Internal.Drawer.Dismissible.Implementation as Drawer
 import Material
 import Material.List as Lists
 
@@ -111,22 +115,38 @@ header =
     Drawer.header
 
 
-{-| Class to style a title in the drawer header.
+{-| Class to style a title in drawer header.
 -}
 title : Property m
 title =
     Drawer.title
 
 
-{-| Class to style a subtitle in the drawer header.
+{-| Class to style a subtitle in drawer header.
 -}
 subTitle : Property m
 subTitle =
     Drawer.subTitle
 
 
-{-| Contains the actual lists.
+{-| Container to contain the drawer contents.
 -}
 content : List (Property m) -> List (Html m) -> Html m
 content =
     Drawer.content
+
+
+{-| When present, makes the drawer open.
+-}
+open : Property m
+open =
+    Drawer.open
+
+
+{-| Apply the mdc-drawer-app-content class to the sibling element
+after the drawer for the open/close animations to work.
+-}
+
+appContent : Property m
+appContent =
+    Drawer.appContent
