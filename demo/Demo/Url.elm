@@ -18,10 +18,9 @@ type Url
     | Chips
     | Dialog
     | Drawer
-    | TemporaryDrawer
-    | PersistentDrawer
-    | PermanentAboveDrawer
-    | PermanentBelowDrawer
+    | DismissibleDrawer
+    | ModalDrawer
+    | PermanentDrawer
     | Elevation
     | Fabs
     | GridList
@@ -139,17 +138,14 @@ toString url =
         Drawer ->
             "#drawer"
 
-        TemporaryDrawer ->
-            "#temporary-drawer"
+        DismissibleDrawer ->
+            "#dismissible-drawer"
 
-        PersistentDrawer ->
-            "#persistent-drawer"
+        ModalDrawer ->
+            "#modal-drawer"
 
-        PermanentAboveDrawer ->
-            "#permanent-drawer-above"
-
-        PermanentBelowDrawer ->
-            "#permanent-drawer-below"
+        PermanentDrawer ->
+            "#permanent-drawer"
 
         Elevation ->
             "#elevation"
@@ -247,17 +243,14 @@ fromString url =
         "drawer" ->
             Drawer
 
-        "temporary-drawer" ->
-            TemporaryDrawer
+        "dismissible-drawer" ->
+            DismissibleDrawer
 
-        "persistent-drawer" ->
-            PersistentDrawer
+        "modal-drawer" ->
+            ModalDrawer
 
-        "permanent-drawer-above" ->
-            PermanentAboveDrawer
-
-        "permanent-drawer-below" ->
-            PermanentBelowDrawer
+        "permanent-drawer" ->
+            PermanentDrawer
 
         "elevation" ->
             Elevation

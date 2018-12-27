@@ -27,7 +27,7 @@ Some things of note are:
     component messages to your top-level message type and appears throughout the
     library.
   - To distinguish components, ie. one button from another, this library uses a
-    list of integers as indices. Those indices must be unique within a
+    list of strings as indices. Those indices must be unique within a
     `Material.Model`, but you can have as many `Material.Model`s as you like.
 
 Have a look at the demo's source code for an example of how to structure large
@@ -44,7 +44,9 @@ resources:
 <script src="elm-mdc.js"></script>
 ```
 
-Set the `mdc-typography` class in the body:
+You can swap the Roboto font for any other.
+
+Set the `mdc-typography` class on the body or container of your application:
 
 ```html
 <body class="mdc-typography">
@@ -60,6 +62,7 @@ Set the `mdc-typography` class in the body:
 
 # Example
 
+    import Browser
     import Html exposing (Html, text)
     import Material
     import Material.Button as Button
@@ -84,7 +87,7 @@ Set the `mdc-typography` class in the body:
 
     main : Program Never Model Msg
     main =
-        Html.program
+        Browser.application
         { init = init
         , subscriptions = subscriptions
         , update = update
@@ -118,7 +121,6 @@ Set the `mdc-typography` class in the body:
 
     view : Model -> Html Msg
     view model =
-        Material.top <|
         Html.div []
             [
               Button.view Mdc "my-button" model.mdc

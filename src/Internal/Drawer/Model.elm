@@ -9,25 +9,23 @@ module Internal.Drawer.Model exposing
 
 type alias Model =
     { open : Bool
-    , state : Maybe Bool
     , animating : Bool
-    , persistent : Bool
+    , closeOnAnimationEnd : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
     { open = False
-    , state = Nothing
     , animating = False
-    , persistent = False
+    , closeOnAnimationEnd = False
     }
 
 
 type Msg
     = NoOp
-    | Tick
-    | SetOpen ( Bool, Bool )
+    | StartAnimation ( Bool )
+    | EndAnimation
 
 
 type alias Geometry =

@@ -1,10 +1,11 @@
-module Internal.Drawer.Persistent.Implementation exposing
+module Internal.Drawer.Dismissible.Implementation exposing
     ( Property
+    , appContent
     , content
     , header
-    , headerContent
     , open
-    , toolbarSpacer
+    , subTitle
+    , title
     , view
     )
 
@@ -14,6 +15,7 @@ import Internal.Drawer.Implementation as Drawer
 import Internal.Drawer.Model exposing (Model, Msg)
 import Internal.List.Implementation as Lists
 import Internal.Msg
+import Internal.Options as Options exposing (cs)
 
 
 type alias Config m =
@@ -34,19 +36,19 @@ header =
     Drawer.header
 
 
-headerContent : List (Property m) -> List (Html m) -> Html m
-headerContent =
-    Drawer.headerContent
+title : Property m
+title =
+    Drawer.title
 
 
-content : Lists.Property m
+subTitle : Property m
+subTitle =
+    Drawer.subTitle
+
+
+content : List (Property m) -> List (Html m) -> Html m
 content =
     Drawer.content
-
-
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer =
-    Drawer.toolbarSpacer
 
 
 type alias Store s =
@@ -88,7 +90,11 @@ open : Property m
 open =
     Drawer.open
 
+appContent : Property m
+appContent =
+    cs "mdc-drawer-app-content"
+
 
 className : String
 className =
-    "mdc-drawer--persistent"
+    "mdc-drawer--dismissible"

@@ -6,14 +6,14 @@ module Internal.Drawer.Implementation exposing
     , defaultConfig
     , emit
     , header
-    , headerContent
     , onClose
     , open
     , react
     , render
     , subs
     , subscriptions
-    , toolbarSpacer
+    , subTitle
+    , title
     , update
     , view
     )
@@ -35,22 +35,22 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        Tick ->
+        StartAnimation ( isOpen ) ->
             ( Just
                 { model
-                    | state = Just model.open
-                    , animating = False
+                    | open = True
+                    , closeOnAnimationEnd = not isOpen
+                    , animating = True
                 }
             , Cmd.none
             )
 
-        SetOpen ( isOpen, persistent ) ->
+        EndAnimation ->
             ( Just
                 { model
-                    | open = isOpen
-                    , state = Nothing
-                    , animating = True
-                    , persistent = persistent
+                    | open = if model.closeOnAnimationEnd then False else model.open
+                    , animating = False
+                    , closeOnAnimationEnd = False
                 }
             , Cmd.none
             )
@@ -80,32 +80,33 @@ view className lift model options nodes =
             Options.collect defaultConfig options
 
         stateChanged =
-            config.open /= model.open
+            (not model.closeOnAnimationEnd) && ( (config.open) /= (model.open) )
     in
     styled Html.aside
-        [ cs "mdc-drawer"
+        ( [ cs "mdc-drawer"
         , cs className
         , when stateChanged <|
-            GlobalEvents.onTick (Decode.succeed (lift (SetOpen ( config.open, model.persistent ))))
-        , cs "mdc-drawer--open" |> when model.open
-        , cs "mdc-drawer--animating" |> when model.animating
-        , Options.onClick (Maybe.withDefault (lift NoOp) config.onClose)
+            GlobalEvents.onTick (Decode.succeed (lift (StartAnimation ( config.open ))))
+
+          -- In order for the closing animation to work, we need to
+          -- keep the open class till the animation has ended
+        , cs "mdc-drawer--open" |> when (config.open || model.open)
+
+          -- Animate class needs to kick in as soon as drawer is
+          -- opened. It's only used during opening.
+        , cs "mdc-drawer--animate" |> when (config.open && (stateChanged || model.animating))
+
+          -- Wait a frame once display is no longer "none", to establish basis for animation
+        , cs "mdc-drawer--opening" |> when (config.open && model.animating)
+        , cs "mdc-drawer--closing" |> when (not config.open && model.animating)
+
+        , when model.animating (Options.on "transitionend" (Decode.succeed (lift EndAnimation)))
+
+          -- TODO: Handle Esc key for modal and dismissible.
+          -- TODO: Handle arrow keys (hard).
         ]
-        [ styled Html.nav
-            (cs "mdc-drawer__drawer"
-                :: Options.onWithOptions "click"
-                    (Decode.succeed
-                        { message = lift NoOp
-                        , stopPropagation = className == "mdc-drawer--temporary"
-                        , preventDefault = False
-                        }
-                    )
-                :: when model.open (css "transform" "translateX(0)")
-                :: when model.animating (Options.on "transitionend" (Decode.succeed (lift Tick)))
-                :: options
-            )
-            nodes
-        ]
+        ++ options )
+        nodes
 
 
 header : List (Property m) -> List (Html m) -> Html m
@@ -113,19 +114,9 @@ header options =
     styled Html.header (cs "mdc-drawer__header" :: options)
 
 
-headerContent : List (Property m) -> List (Html m) -> Html m
-headerContent options =
-    styled Html.div (cs "mdc-drawer__header-content" :: options)
-
-
-content : Lists.Property m
-content =
-    cs "mdc-drawer__content"
-
-
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer options =
-    styled Html.div (cs "mdc-drawer__toolbar-spacer" :: options)
+content : List (Property m) -> List (Html m) -> Html m
+content options =
+    styled Html.div (cs "mdc-drawer__content" :: options)
 
 
 type alias Store s =
@@ -181,3 +172,13 @@ open =
 emit : (Internal.Msg.Msg m -> m) -> Index -> Msg -> Cmd m
 emit lift idx msg =
     Helpers.cmd (lift (Internal.Msg.DrawerMsg idx msg))
+
+
+title : Property m
+title =
+    cs "mdc-drawer__title"
+
+
+subTitle : Property m
+subTitle =
+    cs "mdc-drawer__subtitle"
