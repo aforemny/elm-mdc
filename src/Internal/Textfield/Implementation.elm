@@ -1,6 +1,5 @@
 module Internal.Textfield.Implementation exposing
     ( Property
-    , box
     , cols
     , dense
     , disabled
@@ -48,7 +47,6 @@ type alias Config m =
     , dense : Bool
     , required : Bool
     , type_ : Maybe String
-    , box : Bool
     , pattern : Maybe String
     , textarea : Bool
     , fullWidth : Bool
@@ -75,7 +73,6 @@ defaultConfig =
     , dense = False
     , required = False
     , type_ = Just "text"
-    , box = False
     , pattern = Nothing
     , textarea = False
     , fullWidth = False
@@ -141,11 +138,6 @@ password =
 email : Property m
 email =
     Options.option (\config -> { config | type_ = Just "email" })
-
-
-box : Property m
-box =
-    Options.option (\config -> { config | box = True })
 
 
 pattern : String -> Property m
@@ -271,7 +263,6 @@ textField domId lift model options _ =
             |> when ((config.leadingIcon /= Nothing) && (config.trailingIcon == Nothing))
         , cs "mdc-text-field--with-trailing-icon"
             |> when (config.trailingIcon /= Nothing)
-        , when config.box (cs "mdc-text-field--box")
         ]
         []
         (List.concat

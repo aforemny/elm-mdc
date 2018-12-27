@@ -12,7 +12,6 @@ module Material.Textfield exposing
     , required
     , invalid
     , pattern
-    , box
     , outlined
     , fullwidth
     , textarea
@@ -80,7 +79,6 @@ module Material.Textfield exposing
 
 ## Variants
 
-@docs box
 @docs outlined
 @docs fullwidth
 
@@ -200,13 +198,6 @@ password =
 email : Property m
 email =
     Textfield.email
-
-
-{-| Style the textfield as a box textfield.
--}
-box : Property m
-box =
-    Textfield.box
 
 
 {-| Set a pattern to validate the textfield's input against.
