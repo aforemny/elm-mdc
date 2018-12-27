@@ -57,8 +57,8 @@ example label url =
                 ]
             ]
         , styled Html.iframe
-            [ Options.attribute (Html.src url)
-            , css "height" "600px"
+            [ Options.attribute (Html.src ("./index.html" ++ url))
+            , css "height" "400px"
             , css "width" "100vw"
             , css "max-width" "780px"
             ]
@@ -70,13 +70,15 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Drawer"
         [ styled Html.div
-            [ css "display" "flex"
-            , css "flex-wrap" "wrap"
+            [ css "display" "inline-block"
+            , css "flex" "1 1 80%"
+            , css "min-width" "400px"
+            , css "margin-left" "auto"
+            , css "margin-right" "auto"
             ]
-            [ example "Temporary Drawer" "/#temporary-drawer"
-            , example "Persistent Drawer" "/#persistent-drawer"
-            , example "Permanent Drawer above toolbar" "/#permanent-drawer-above"
-            , example "Permanent Drawer below toolbar" "/#permanent-drawer-below"
+            [ example "Drawer" "#permanent-drawer"
+            , example "Dismissible Drawer" "#dismissible-drawer"
+            , example "Modal Drawer" "#modal-drawer"
             ]
         ]
 
