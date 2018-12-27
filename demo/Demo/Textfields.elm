@@ -117,7 +117,6 @@ view lift page model =
         , textfield lift "text-fields-default" model
         , password lift "text-fields-password" model
         , outlinedTextfield lift "text-fields-outlined" model
-        , boxTextfield lift "text-fields-box" model
         , iconsTextfield lift "text-fields-icons" model
         , textarea lift "text-fields-textarea" model
         , fullwidth lift "text-fields-full-width" model
@@ -348,68 +347,6 @@ outlinedTextfield lift index model =
         ]
 
 
-boxTextfield : (Msg m -> m) -> Material.Index -> Model m -> Html m
-boxTextfield lift index model =
-    let
-        state =
-            Dict.get index model.examples
-                |> Maybe.withDefault defaultExample
-    in
-    example []
-        [ Html.h2 []
-            [ Html.text "Textfield box"
-            ]
-        , styled Html.section
-            [ Options.attribute (Html.dir "rtl") |> when state.rtl
-            ]
-            [ Html.div []
-                [ Textfield.view (lift << Mdc)
-                    index
-                    model.mdc
-                    [ Textfield.label "Your Name"
-                    , Textfield.box
-                    , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
-                    ]
-                    []
-                , Textfield.helperText
-                    [ Textfield.persistent |> when state.persistent
-                    , Textfield.validationMsg |> when state.validationMsg
-                    ]
-                    [ Html.text "Must provide a name"
-                    ]
-                ]
-            ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
-                , Html.checked state.disabled
-                ]
-                []
-            , Html.label [] [ Html.text " Disabled" ]
-            ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleRtl))
-                , Html.checked state.rtl
-                ]
-                []
-            , Html.label [] [ Html.text " RTL" ]
-            ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleDense))
-                , Html.checked state.dense
-                ]
-                []
-            , Html.label [] [ Html.text " Dense" ]
-            ]
-        ]
-
-
 iconsTextfield : (Msg m -> m) -> Material.Index -> Model m -> Html m
 iconsTextfield lift index model =
     let
@@ -433,7 +370,6 @@ iconsTextfield lift index model =
                     , Textfield.disabled |> when state.disabled
                     , Textfield.dense |> when state.dense
                     , Textfield.required |> when state.required
-                    , Textfield.box
                     , Textfield.leadingIcon "event"
                     ]
                     []
@@ -446,7 +382,6 @@ iconsTextfield lift index model =
                     , Textfield.disabled |> when state.disabled
                     , Textfield.dense |> when state.dense
                     , Textfield.required |> when state.required
-                    , Textfield.box
                     , Textfield.trailingIcon "delete"
                     ]
                     []
