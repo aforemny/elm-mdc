@@ -21,7 +21,6 @@ type alias Model m =
 type alias Example =
     { disabled : Bool
     , rtl : Bool
-    , dense : Bool
     , required : Bool
     , helperText : Bool
     , persistent : Bool
@@ -33,7 +32,6 @@ defaultExample : Example
 defaultExample =
     { disabled = False
     , rtl = False
-    , dense = False
     , required = False
     , helperText = False
     , persistent = False
@@ -56,7 +54,6 @@ type Msg m
 type ExampleMsg
     = ToggleDisabled
     | ToggleRtl
-    | ToggleDense
     | ToggleRequired
     | ToggleHelperText
     | TogglePersistent
@@ -91,9 +88,6 @@ updateExample msg model =
 
         ToggleRtl ->
             { model | rtl = not model.rtl }
-
-        ToggleDense ->
-            { model | dense = not model.dense }
 
         ToggleRequired ->
             { model | required = not model.required }
@@ -159,7 +153,6 @@ textfield lift index model =
                     model.mdc
                     [ Textfield.label "Email Address"
                     , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
                     , Textfield.required |> when state.required
                     ]
                     []
@@ -189,15 +182,6 @@ textfield lift index model =
                 ]
                 []
             , Html.label [] [ Html.text " RTL" ]
-            ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleDense))
-                , Html.checked state.dense
-                ]
-                []
-            , Html.label [] [ Html.text " Dense" ]
             ]
         , styled Html.div
             []
@@ -271,7 +255,6 @@ password lift index model =
                     , Textfield.pattern ".{8,}"
                     , Textfield.required
                     , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
                     ]
                     []
                 , Textfield.helperText
@@ -305,7 +288,6 @@ outlinedTextfield lift index model =
                     model.mdc
                     [ Textfield.label "Your Name"
                     , Textfield.outlined
-                    , Textfield.dense |> when state.dense
                     , Textfield.disabled |> when state.disabled
                     ]
                     []
@@ -335,15 +317,6 @@ outlinedTextfield lift index model =
                 []
             , Html.label [] [ Html.text " RTL" ]
             ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleDense))
-                , Html.checked state.dense
-                ]
-                []
-            , Html.label [] [ Html.text " Dense" ]
-            ]
         ]
 
 
@@ -368,7 +341,6 @@ iconsTextfield lift index model =
                     model.mdc
                     [ Textfield.label "Your name"
                     , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
                     , Textfield.required |> when state.required
                     , Textfield.leadingIcon "event"
                     ]
@@ -380,7 +352,6 @@ iconsTextfield lift index model =
                     model.mdc
                     [ Textfield.label "Your other name"
                     , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
                     , Textfield.required |> when state.required
                     , Textfield.trailingIcon "delete"
                     ]
@@ -392,7 +363,6 @@ iconsTextfield lift index model =
                     model.mdc
                     [ Textfield.label "Your other name"
                     , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
                     , Textfield.required |> when state.required
                     , Textfield.outlined
                     , Textfield.leadingIcon "event"
@@ -405,7 +375,6 @@ iconsTextfield lift index model =
                     model.mdc
                     [ Textfield.label "Your other name"
                     , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
                     , Textfield.required |> when state.required
                     , Textfield.outlined
                     , Textfield.trailingIcon "delete"
@@ -430,15 +399,6 @@ iconsTextfield lift index model =
                 ]
                 []
             , Html.label [] [ Html.text " RTL" ]
-            ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleDense))
-                , Html.checked state.dense
-                ]
-                []
-            , Html.label [] [ Html.text " Dense" ]
             ]
         , styled Html.div
             []
@@ -512,7 +472,6 @@ textarea lift index model =
                     , Textfield.rows 8
                     , Textfield.cols 40
                     , Textfield.disabled |> when state.disabled
-                    , Textfield.dense |> when state.dense
                     ]
                     []
                 ]
@@ -534,15 +493,6 @@ textarea lift index model =
                 ]
                 []
             , Html.label [] [ Html.text " RTL" ]
-            ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleDense))
-                , Html.checked state.dense
-                ]
-                []
-            , Html.label [] [ Html.text " Dense" ]
             ]
         ]
 
@@ -599,15 +549,6 @@ fullwidth lift index model =
                 ]
                 []
             , Html.label [] [ Html.text " RTL" ]
-            ]
-        , styled Html.div
-            []
-            [ checkbox
-                [ Html.onClick (lift (ExampleMsg index ToggleDense))
-                , Html.checked state.dense
-                ]
-                []
-            , Html.label [] [ Html.text " Dense" ]
             ]
         ]
 
