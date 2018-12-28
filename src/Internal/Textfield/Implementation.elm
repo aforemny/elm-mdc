@@ -239,6 +239,20 @@ textField domId lift model options _ =
 
                     Nothing ->
                         False
+
+        htmlLabel =
+            styled Html.label
+                [ cs "mdc-floating-label"
+                , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
+                , Options.for config.id_
+                ]
+            (case config.labelText of
+                 Just str ->
+                     [ text str ]
+                 Nothing ->
+                     []
+            )
+
     in
     Options.apply summary
         Html.div
@@ -264,7 +278,6 @@ textField domId lift model options _ =
                         Html.input
                     )
                     [ cs "mdc-text-field__input"
-                    , css "outline" "none"
                     , Options.id config.id_
                     , if config.outlined then
                         Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
@@ -305,8 +318,6 @@ textField domId lift model options _ =
                                 else
                                     always Nothing
                                )
-                        , Html.attribute "outline" "medium none"
-                            |> Just
                         , Html.value (Maybe.withDefault "" config.value)
                             |> (if config.value /= Nothing then
                                     Just
@@ -326,20 +337,8 @@ textField domId lift model options _ =
                             Html.cols (Maybe.withDefault 0 config.cols)
                     ]
                     []
-              , if not config.fullWidth || config.textarea then
-                    styled Html.label
-                        [ cs "mdc-floating-label"
-                        , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
-                        , Options.for config.id_
-                        ]
-                        (case config.labelText of
-                            Just str ->
-                                [ text str ]
-
-                            Nothing ->
-                                []
-                        )
-
+              , if not config.fullWidth && not config.outlined  then
+                    htmlLabel
                 else
                     text ""
               ]
@@ -354,116 +353,19 @@ textField domId lift model options _ =
               else
                 []
             , if config.outlined then
-                let
-                    isRtl =
-                        False
-
-                    d =
-                        let
-                            { labelWidth, width, height } =
-                                model.geometry
-                                    |> Maybe.withDefault defaultGeometry
-
-                            radius =
-                                4
-
-                            cornerWidth =
-                                radius + 1.2
-
-                            leadingStrokeLength =
-                                abs (11 - cornerWidth)
-
-                            labelScale =
-                                0.75
-
-                            scaledLabelWidth =
-                                labelScale * labelWidth
-
-                            paddedLabelWidth =
-                                scaledLabelWidth + 8
-
-                            pathMiddle =
-                                [ "a"
-                                , String.fromFloat radius
-                                , ","
-                                , String.fromFloat radius
-                                , " 0 0 1 "
-                                , String.fromFloat radius
-                                , ","
-                                , String.fromFloat radius
-                                , "v"
-                                , String.fromFloat (height - (2 * cornerWidth))
-                                , "a"
-                                , String.fromFloat radius
-                                , ","
-                                , String.fromFloat radius
-                                , " 0 0 1 "
-                                , String.fromFloat -radius
-                                , ","
-                                , String.fromFloat radius
-                                , "h"
-                                , String.fromFloat (-width + (2 * cornerWidth))
-                                , "a"
-                                , String.fromFloat radius
-                                , ","
-                                , String.fromFloat radius
-                                , " 0 0 1 "
-                                , String.fromFloat -radius
-                                , ","
-                                , String.fromFloat -radius
-                                , "v"
-                                , String.fromFloat (-height + (2 * cornerWidth))
-                                , "a"
-                                , String.fromFloat radius
-                                , ","
-                                , String.fromFloat radius
-                                , " 0 0 1 "
-                                , String.fromFloat radius
-                                , ","
-                                , String.fromFloat -radius
-                                ]
-                                    |> String.join ""
-                        in
-                        if not isRtl then
-                            [ "M"
-                            , String.fromFloat (cornerWidth + leadingStrokeLength + paddedLabelWidth)
-                            , ",1h"
-                            , String.fromFloat (width - (2 * cornerWidth) - paddedLabelWidth - leadingStrokeLength)
-                            , pathMiddle
-                            , "h"
-                            , String.fromFloat leadingStrokeLength
-                            ]
-                                |> String.join ""
-
-                        else
-                            [ "M"
-                            , String.fromFloat (width - cornerWidth - leadingStrokeLength)
-                            , ",1h"
-                            , String.fromFloat leadingStrokeLength
-                            , pathMiddle
-                            , "h"
-                            , String.fromFloat (width - (2 * cornerWidth) - paddedLabelWidth - leadingStrokeLength)
-                            ]
-                                |> String.join ""
-                in
                 [ styled Html.div
                     [ cs "mdc-notched-outline"
                     , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
                     ]
-                    [ Svg.svg []
-                        [ Svg.path
-                            [ Svg.Attributes.class "mdc-notched-outline__path"
-                            , Svg.Attributes.d d
-                            ]
-                            []
-                        ]
+                    [ styled Html.div [ cs "mdc-notched-outline__leading" ] []
+                    , styled Html.div
+                        [ cs "mdc-notched-outline__notch" ]
+                        [ htmlLabel ]
+                    , styled Html.div
+                        [ cs "mdc-notched-outline__trailing" ]
+                        []
                     ]
-                , styled Html.div
-                    [ cs "mdc-notched-outline__idle"
-                    ]
-                    []
                 ]
-
               else
                 []
             , let
