@@ -37,7 +37,7 @@ import Demo.Typography
 import Demo.Url exposing (ToolbarPage(..), TopAppBarPage(..))
 import Html exposing (Html, text)
 import Material
-import Material.Options as Options exposing (css, styled, when)
+import Material.Options as Options exposing (cs, css, styled, when)
 import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 import Platform.Cmd exposing (..)
@@ -404,21 +404,25 @@ view_ model =
                         , css "height" "100%"
                         , Typography.typography
                         ]
-                        (List.concat
-                            [ [ Page.toolbar Mdc
-                                    "page-toolbar"
-                                    model.mdc
-                                    Navigate
-                                    model.url
-                                    title
-                              ]
-                            , [ styled Html.div
-                                    [ Toolbar.fixedAdjust "page-toolbar" model.mdc ]
-                                    []
-                              ]
-                            , nodes
+                        [ Page.toolbar Mdc
+                              "page-toolbar"
+                              model.mdc
+                              Navigate
+                              model.url
+                                  title
+                        , styled Html.div
+                            [ cs "demo-content"
+                            , css "max-width" "900px"
+                            , css "width" "100%"
+                            , css "margin-left" "auto"
+                            , css "margin-right" "auto"
                             ]
-                        )
+                            ( styled Html.div
+                                [ Toolbar.fixedAdjust "page-toolbar" model.mdc ]
+                                []
+                                :: nodes
+                            )
+                        ]
             }
     in
     case model.url of
