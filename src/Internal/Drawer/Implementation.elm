@@ -86,7 +86,7 @@ view className lift model options nodes =
         ( [ cs "mdc-drawer"
         , cs className
         , when stateChanged <|
-            GlobalEvents.onTick (Decode.succeed (lift (StartAnimation ( config.open ))))
+            GlobalEvents.onTick (Decode.succeed (lift (StartAnimation config.open) ))
 
           -- In order for the closing animation to work, we need to
           -- keep the open class till the animation has ended
