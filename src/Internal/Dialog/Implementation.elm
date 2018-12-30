@@ -1,11 +1,10 @@
 module Internal.Dialog.Implementation exposing
     ( Property
     , accept
-    , backdrop
-    , body
+    , actions
+    , content
     , cancel
-    , footer
-    , header
+    , noScrim
     , onClose
     , open
     , react
@@ -78,6 +77,7 @@ view =
 type alias Config m =
     { onClose : Maybe m
     , open : Bool
+    , noScrim : Bool
     }
 
 
@@ -85,6 +85,7 @@ defaultConfig : Config m
 defaultConfig =
     { onClose = Nothing
     , open = False
+    , noScrim = False
     }
 
 
@@ -102,8 +103,10 @@ dialog lift model options nodes =
             config.open /= model.open
     in
     Options.apply summary
-        Html.aside
+        Html.div
         [ cs "mdc-dialog"
+        , Options.role "alertdialog"
+        , Options.aria "model" "true"
         , when stateChanged <|
             GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
         , when model.open
@@ -126,7 +129,11 @@ dialog lift model options nodes =
                 close
         ]
         []
-        nodes
+        [ container []
+              [ surface [] nodes
+              ]
+        , if config.noScrim then text "" else scrim [] []
+        ]
 
 
 open : Property m
@@ -134,19 +141,24 @@ open =
     Options.option (\config -> { config | open = True })
 
 
+container : List (Property m) -> List (Html m) -> Html m
+container options =
+    styled Html.div (cs "mdc-dialog__container" :: options)
+
+
 surface : List (Property m) -> List (Html m) -> Html m
 surface options =
     styled Html.div (cs "mdc-dialog__surface" :: options)
 
 
-backdrop : List (Property m) -> List (Html m) -> Html m
-backdrop options =
-    styled Html.div (cs "mdc-dialog__backdrop" :: options)
+scrim : List (Property m) -> List (Html m) -> Html m
+scrim options =
+    styled Html.div (cs "mdc-dialog__scrim" :: options)
 
 
-body : List (Property m) -> List (Html m) -> Html m
-body options =
-    styled Html.div (cs "mdc-dialog__body" :: options)
+content : List (Property m) -> List (Html m) -> Html m
+content options =
+    styled Html.section (cs "mdc-dialog__content" :: options)
 
 
 scrollable : Property m
@@ -154,19 +166,14 @@ scrollable =
     cs "mdc-dialog__body--scrollable"
 
 
-header : List (Property m) -> List (Html m) -> Html m
-header options =
-    styled Html.div (cs "mdc-dialog__header" :: options)
-
-
 title : Options.Property c m
 title =
-    cs "mdc-dialog__header__title"
+    cs "mdc-dialog__title"
 
 
-footer : List (Property m) -> List (Html m) -> Html m
-footer options =
-    styled Html.div (cs "mdc-dialog__footer" :: options)
+actions : List (Property m) -> List (Html m) -> Html m
+actions options =
+    styled Html.footer (cs "mdc-dialog__actions" :: options)
 
 
 cancel : Button.Property m
@@ -217,3 +224,8 @@ close =
                     False
             )
             (Json.at [ "className" ] Json.string)
+
+
+noScrim : Property m
+noScrim =
+    Options.option (\config -> { config | noScrim = True })

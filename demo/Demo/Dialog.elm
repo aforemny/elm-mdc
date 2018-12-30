@@ -15,6 +15,7 @@ import Material.Options as Options exposing (cs, css, styled, when)
 type alias Model m =
     { mdc : Material.Model m
     , rtl : Bool
+    , showAlert : Bool
     , showDialog : Bool
     , showScrollingDialog : Bool
     }
@@ -24,6 +25,7 @@ defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , rtl = False
+    , showAlert = False
     , showDialog = False
     , showScrollingDialog = False
     }
@@ -34,6 +36,7 @@ type Msg m
     | ToggleRtl
     | Accept
     | Cancel
+    | ShowAlert
     | ShowDialog
     | ShowScrollingDialog
 
@@ -48,10 +51,13 @@ update lift msg model =
             ( { model | rtl = not model.rtl }, Cmd.none )
 
         Accept ->
-            ( { model | showDialog = False, showScrollingDialog = False }, Cmd.none )
+            ( { model | showAlert = False, showDialog = False, showScrollingDialog = False }, Cmd.none )
 
         Cancel ->
-            ( { model | showDialog = False, showScrollingDialog = False }, Cmd.none )
+            ( { model | showAlert = False, showDialog = False, showScrollingDialog = False }, Cmd.none )
+
+        ShowAlert ->
+            ( { model | showAlert = True }, Cmd.none )
 
         ShowDialog ->
             ( { model | showDialog = True }, Cmd.none )
@@ -65,45 +71,71 @@ heroDialog lift index model =
     Dialog.view (lift << Mdc)
         index
         model.mdc
-        [ cs "mdc-dialog--open"
+        [ Dialog.open
+        , Dialog.noScrim
         , css "position" "relative"
         , css "width" "320px"
         , css "z-index" "auto"
         ]
-        [ Dialog.surface
-            [ css "display" "inline-flex"
-            , css "min-width" "640px"
-            , css "max-width" "865px"
-            , css "width" "calc(100% - 30px)"
+        [ styled Html.h2
+              [ Dialog.title
+              ]
+              [ text "Are you happy?"
+              ]
+        , Dialog.content []
+            [ text "Please check the left and right side of this element for fun."
             ]
-            [ Dialog.header []
-                [ styled Html.h2
-                    [ Dialog.title
-                    ]
-                    [ text "Are you happy?"
-                    ]
-                ]
-            , Dialog.body []
-                [ text "Please check the left and right side of this element for fun."
-                ]
-            , Dialog.footer []
-                [ Button.view (lift << Mdc)
-                    (index ++ "-button-cancel")
+        , Dialog.actions []
+            [ Button.view (lift << Mdc)
+                  (index ++ "-button-cancel")
+                  model.mdc
+                  [ Button.ripple
+                  , Dialog.cancel
+                  ]
+                  [ text "Cancel"
+                  ]
+            , Button.view (lift << Mdc)
+                (index ++ "button-accept")
                     model.mdc
-                    [ Button.ripple
-                    , Dialog.cancel
-                    ]
-                    [ text "Cancel"
-                    ]
-                , Button.view (lift << Mdc)
-                    (index ++ "button-accept")
-                    model.mdc
-                    [ Button.ripple
-                    , Dialog.accept
-                    ]
+                        [ Button.ripple
+                        , Dialog.accept
+                        ]
                     [ text "Continue"
                     ]
-                ]
+            ]
+        ]
+
+
+alert : (Msg m -> m) -> Material.Index -> Model m -> Html m
+alert lift index model =
+    Dialog.view (lift << Mdc)
+        index
+        model.mdc
+        [ Dialog.open |> when model.showAlert
+        , Dialog.onClose (lift Cancel)
+        ]
+        [ Dialog.content []
+              [ text "Discard draft?"
+              ]
+        , Dialog.actions []
+            [ Button.view (lift << Mdc)
+                  (index ++ "-button-cancel")
+                  model.mdc
+                  [ Button.ripple
+                  , Dialog.cancel
+                  , Options.onClick (lift Cancel)
+                  ]
+                  [ text "Cancel"
+                  ]
+            , Button.view (lift << Mdc)
+                (index ++ "-button-accept")
+                    model.mdc
+                        [ Button.ripple
+                        , Dialog.accept
+                        , Options.onClick (lift Accept)
+                        ]
+                    [ text "Discard"
+                    ]
             ]
         ]
 
@@ -116,43 +148,38 @@ dialog lift index model =
         [ Dialog.open |> when model.showDialog
         , Dialog.onClose (lift Cancel)
         ]
-        [ Dialog.surface []
-            [ Dialog.header []
-                [ styled Html.h2
-                    [ Dialog.title
-                    ]
-                    [ text "Use Google's location service?"
-                    ]
-                ]
-            , Dialog.body []
-                [ text
-                    """
-Let Google help apps determine location. This means sending anonymous location
-data to Google, even when no apps are running.
-            """
-                ]
-            , Dialog.footer []
-                [ Button.view (lift << Mdc)
-                    (index ++ "-button-cancel")
+        [ styled Html.h2
+              [ Dialog.title
+              ]
+              [ text "Use Google's location service?"
+              ]
+        , Dialog.content []
+            [ text
+                  """
+                   Let Google help apps determine location. This means sending anonymous location
+                   data to Google, even when no apps are running.
+                   """
+            ]
+        , Dialog.actions []
+            [ Button.view (lift << Mdc)
+                  (index ++ "-button-cancel")
+                  model.mdc
+                  [ Button.ripple
+                  , Dialog.cancel
+                  , Options.onClick (lift Cancel)
+                  ]
+                  [ text "Decline"
+                  ]
+            , Button.view (lift << Mdc)
+                (index ++ "-button-accept")
                     model.mdc
-                    [ Button.ripple
-                    , Dialog.cancel
-                    , Options.onClick (lift Cancel)
-                    ]
-                    [ text "Decline"
-                    ]
-                , Button.view (lift << Mdc)
-                    (index ++ "-button-accept")
-                    model.mdc
-                    [ Button.ripple
-                    , Dialog.accept
-                    , Options.onClick (lift Accept)
-                    ]
+                        [ Button.ripple
+                        , Dialog.accept
+                        , Options.onClick (lift Accept)
+                        ]
                     [ text "Continue"
                     ]
-                ]
             ]
-        , Dialog.backdrop [] []
         ]
 
 
@@ -164,18 +191,15 @@ scrollableDialog lift index model =
         [ Dialog.open |> when model.showScrollingDialog
         , Dialog.onClose (lift Cancel)
         ]
-        [ Dialog.surface []
-            [ Dialog.header []
-                [ styled Html.h2
-                    [ Dialog.title
-                    ]
-                    [ text "Choose a Ringtone"
-                    ]
-                ]
-            , Dialog.body
-                [ Dialog.scrollable
-                ]
-                [ Lists.ul []
+        [ styled Html.h2
+              [ Dialog.title
+              ]
+              [ text "Choose a Ringtone"
+              ]
+        , Dialog.content
+            [ Dialog.scrollable
+            ]
+              [ Lists.ul []
                     ([ "None"
                      , "Callisto"
                      , "Ganymede"
@@ -188,36 +212,34 @@ scrollableDialog lift index model =
                      , "Marimba"
                      , "Schwifty"
                      ]
-                        |> List.map
-                            (\label ->
-                                Lists.li []
-                                    [ text label
-                                    ]
-                            )
+                    |> List.map
+                         (\label ->
+                              Lists.li []
+                              [ text label
+                              ]
+                         )
                     )
-                ]
-            , Dialog.footer []
-                [ Button.view (lift << Mdc)
-                    (index ++ "-button-cancel")
+              ]
+        , Dialog.actions []
+            [ Button.view (lift << Mdc)
+                  (index ++ "-button-cancel")
+                  model.mdc
+                  [ Button.ripple
+                  , Dialog.cancel
+                  , Options.onClick (lift Cancel)
+                  ]
+                  [ text "Decline"
+                  ]
+            , Button.view (lift << Mdc)
+                (index ++ "-button-accept")
                     model.mdc
-                    [ Button.ripple
-                    , Dialog.cancel
-                    , Options.onClick (lift Cancel)
-                    ]
-                    [ text "Decline"
-                    ]
-                , Button.view (lift << Mdc)
-                    (index ++ "-button-accept")
-                    model.mdc
-                    [ Button.ripple
-                    , Dialog.accept
-                    , Options.onClick (lift Accept)
-                    ]
+                        [ Button.ripple
+                        , Dialog.accept
+                        , Options.onClick (lift Accept)
+                        ]
                     [ text "Continue"
                     ]
-                ]
             ]
-        , Dialog.backdrop [] []
         ]
 
 
@@ -238,12 +260,23 @@ view lift page model =
             ]
             [ dialog lift "dialog-dialog" model
             , scrollableDialog lift "dialog-scrollable-dialog" model
+            , alert lift "dialog-alert-dialog" model
             ]
         , styled Html.div
             [ css "padding" "24px"
             , css "margin" "24px"
             ]
             [ Button.view (lift << Mdc)
+                "dialog-show-alert"
+                model.mdc
+                [ Button.raised
+                , Button.ripple
+                , Options.onClick (lift ShowAlert)
+                ]
+                [ text "Alert"
+                ]
+            , text " "
+            , Button.view (lift << Mdc)
                 "dialog-show-dialog"
                 model.mdc
                 [ Button.raised
