@@ -30,7 +30,7 @@ type Msg m
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
-    case msg of
+    case Debug.log "Demo.update" msg of
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
