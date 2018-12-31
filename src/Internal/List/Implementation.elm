@@ -22,6 +22,7 @@ module Internal.List.Implementation exposing
     , nonInteractive
     , ol
     , padded
+    , primaryText
     , secondaryText
     , selected
     , subheader
@@ -139,6 +140,11 @@ a options =
 text : List (Property m) -> List (Html m) -> Html m
 text options =
     styled Html.span (cs "mdc-list-item__text" :: options)
+
+
+primaryText : List (Property m) -> List (Html m) -> Html m
+primaryText options =
+    styled Html.span (cs "mdc-list-item__primary-text" :: options)
 
 
 secondaryText : List (Property m) -> List (Html m) -> Html m

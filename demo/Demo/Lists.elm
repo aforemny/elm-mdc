@@ -416,7 +416,7 @@ twoLine options =
         )
         (Lists.li []
             [ Lists.text []
-                [ Html.text "Two-line item"
+                [ Lists.primaryText [] [ Html.text "Two-line item" ]
                 , Lists.secondaryText []
                     [ Html.text "Secondary text"
                     ]
@@ -435,7 +435,9 @@ startDetail_ options =
         (Lists.li []
             [ Lists.graphic [ cs "gray-bg" ] []
             , Lists.text []
-                [ Html.text "Two-line item"
+                [ Lists.primaryText []
+                    [ Html.text "Two-line item"
+                    ]
                 , Lists.secondaryText []
                     [ Html.text "Secondary text"
                     ]
@@ -455,7 +457,9 @@ avatarList_ options =
         (Lists.li []
             [ Lists.graphic [ cs "gray-bg" ] []
             , Lists.text []
-                [ Html.text "Two-line item"
+                [ Lists.primaryText []
+                    [ Html.text "Two-line item"
+                    ]
                 , Lists.secondaryText []
                     [ Html.text "Secondary text"
                     ]
@@ -473,7 +477,9 @@ endDetail_ options =
         )
         [ Lists.li []
             [ Lists.text []
-                [ Html.text "Two-line item"
+                [ Lists.primaryText []
+                    [ Html.text "Two-line item"
+                    ]
                 , Lists.secondaryText []
                     [ Html.text "Secondary text"
                     ]
@@ -482,7 +488,9 @@ endDetail_ options =
             ]
         , Lists.li []
             [ Lists.text []
-                [ Html.text "Two-line item"
+                [ Lists.primaryText []
+                    [ Html.text "Two-line item"
+                    ]
                 , Lists.secondaryText []
                     [ Html.text "Secondary text"
                     ]
@@ -491,7 +499,9 @@ endDetail_ options =
             ]
         , Lists.li []
             [ Lists.text []
-                [ Html.text "Two-line item"
+                [ Lists.primaryText []
+                    [ Html.text "Two-line item"
+                    ]
                 , Lists.secondaryText []
                     [ Html.text "Secondary text"
                     ]
