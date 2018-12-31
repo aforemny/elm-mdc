@@ -28,7 +28,7 @@ import Json.Decode as Json exposing (Decoder)
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
-    case Debug.log "Dialog.update" msg of
+    case msg of
         NoOp ->
             ( Nothing, Cmd.none )
 
