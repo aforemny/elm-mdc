@@ -9,6 +9,7 @@ module Material.Dialog exposing
     , actions
     , cancel
     , accept
+    , scrollLock
     , noScrim
     )
 
@@ -30,13 +31,12 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
 
     import Html exposing (text)
     import Material.Button as Button
-    import Internal.Component exposing (Index)
     import Material.Dialog as Dialog
-    import Material.Options as Options exposing (styled)
+    import Material.Options as Options exposing (styled, when)
 
 
     Dialog.view Mdc "my-dialog" model.mdc
-        [ Dialog.open
+        [ Dialog.open |> when model.showDialog
         , Dialog.onClose Cancel
         ]
         [ styled Html.h2
@@ -181,3 +181,10 @@ accept =
 noScrim : Property m
 noScrim =
     Dialog.noScrim
+
+
+{-| Set this on the body element so the page won't scroll.
+-}
+scrollLock : Property m
+scrollLock =
+    Dialog.scrollLock

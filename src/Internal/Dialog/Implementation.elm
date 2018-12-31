@@ -9,6 +9,7 @@ module Internal.Dialog.Implementation exposing
     , open
     , react
     , scrollable
+    , scrollLock
     , surface
     , title
     , view
@@ -27,21 +28,18 @@ import Json.Decode as Json exposing (Decoder)
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
-    case msg of
+    case Debug.log "Dialog.update" msg of
         NoOp ->
             ( Nothing, Cmd.none )
 
-        SetState isOpen ->
+        StartAnimation isOpen ->
             if isOpen /= model.open then
                 ( Just { model | animating = True, open = isOpen }, Cmd.none )
 
             else
                 ( Nothing, Cmd.none )
 
-        SetOpen isOpen ->
-            ( Just { model | open = isOpen }, Cmd.none )
-
-        AnimationEnd ->
+        EndAnimation ->
             ( Just { model | animating = False }, Cmd.none )
 
 
@@ -106,33 +104,49 @@ dialog lift model options nodes =
         Html.div
         [ cs "mdc-dialog"
         , Options.role "alertdialog"
-        , Options.aria "model" "true"
+        , Options.aria "modal" "true"
         , when stateChanged <|
-            GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
-        , when model.open
+            GlobalEvents.onTick (Json.succeed (lift (StartAnimation config.open)))
+
+        -- Open class should only be added when we have started
+        -- animating the opening, and removed immediately when we start closing.
+        , when ( model.open && config.open )
             << Options.many
           <|
             [ cs "mdc-dialog--open"
             , Options.data "focustrap" ""
             ]
-        , when model.animating (cs "mdc-dialog--animating")
-        , Options.on "transitionend" (Json.map (\_ -> lift AnimationEnd) transitionend)
-        , Options.on "click" <|
-            Json.map
-                (\doClose ->
-                    if doClose then
-                        Maybe.withDefault (lift NoOp) config.onClose
 
-                    else
-                        lift NoOp
-                )
-                close
+        -- Opening and closing classes need to kick in as soon as
+        -- dialog is opened or closed. They're only used for the
+        -- duration of the animation.
+        , cs "mdc-dialog--opening" |> when ( (config.open && stateChanged) || ( config.open && model.animating ) )
+        , cs "mdc-dialog--closing" |> when ( (not config.open && stateChanged) || (not config.open && model.animating ) )
+
+        , when model.animating (Options.on "transitionend" (Json.succeed (lift EndAnimation)))
         ]
         []
         [ container []
               [ surface [] nodes
               ]
-        , if config.noScrim then text "" else scrim [] []
+        , if config.noScrim then
+              text ""
+          else
+              scrim [ Options.on "click" <|
+                          Json.map
+                          (\isScrimClick ->
+                               if isScrimClick then
+                                   Maybe.withDefault (lift NoOp) config.onClose
+
+                               else
+                                   lift NoOp
+                          )
+                          -- Given the click handler is on the scrim
+                          -- element, do we really need to check we
+                          -- clicked the scrim?
+                          checkScrimClick
+                    ]
+              []
         ]
 
 
@@ -164,6 +178,11 @@ content options =
 scrollable : Property m
 scrollable =
     cs "mdc-dialog__body--scrollable"
+
+
+scrollLock : Property m
+scrollLock =
+    cs "mdc-dialog-scroll-lock"
 
 
 title : Options.Property c m
@@ -208,8 +227,8 @@ transitionend =
         (DOM.target DOM.className)
 
 
-close : Decoder Bool
-close =
+checkScrimClick : Decoder Bool
+checkScrimClick =
     DOM.target <|
         Json.map
             (\className ->
@@ -217,7 +236,7 @@ close =
                     hasClass class =
                         String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
                 in
-                if hasClass "mdc-dialog__backdrop" then
+                if hasClass "mdc-dialog__scrim" then
                     True
 
                 else
