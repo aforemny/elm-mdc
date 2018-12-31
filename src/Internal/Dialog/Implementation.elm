@@ -28,7 +28,7 @@ import Json.Decode as Json exposing (Decoder)
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
-    case Debug.log "Dialog.update" msg of
+    case msg of
         NoOp ->
             ( Nothing, Cmd.none )
 
@@ -110,11 +110,32 @@ dialog lift model options nodes =
 
         -- Open class should only be added when we have started
         -- animating the opening, and removed immediately when we start closing.
-        , when ( model.open && config.open )
+        , cs "mdc-dialog--open" |> when ( model.open && config.open )
+
+        -- Distinguish also between the fake hero dialog one, where we don't want focus trap.
+        -- TODO: uncommenting the line with config.onClose does not
+        -- work, and I don't understand why.
+        , when ( model.open && config.open && not config.noScrim )
             << Options.many
           <|
-            [ cs "mdc-dialog--open"
-            , Options.data "focustrap" ""
+            [ Options.data "focustrap" "focustrap" -- Elm 0.19 has a bug where empty attributes don't work: https://github.com/elm/virtual-dom/issues/132
+            , Options.on "keydown" <|
+                Json.map lift <|
+                    Json.map2
+                        (\key keyCode ->
+                             if key == Just "Escape" || keyCode == 27 then
+                                 --Maybe.withDefault (lift NoOp) config.onClose
+                                 NoOp
+                             else
+                                 --lift NoOp
+                                 NoOp
+                        )
+                        (Json.oneOf
+                             [ Json.map Just (Json.at [ "key" ] Json.string)
+                             , Json.succeed Nothing
+                             ]
+                        )
+                        (Json.at [ "keyCode" ] Json.int)
             ]
 
         -- Opening and closing classes need to kick in as soon as
@@ -132,20 +153,20 @@ dialog lift model options nodes =
         , if config.noScrim then
               text ""
           else
-              scrim [ Options.on "click" <|
-                          Json.map
-                          (\isScrimClick ->
-                               if isScrimClick then
-                                   Maybe.withDefault (lift NoOp) config.onClose
-
-                               else
-                                   lift NoOp
-                          )
-                          -- Given the click handler is on the scrim
-                          -- element, do we really need to check we
-                          -- clicked the scrim?
-                          checkScrimClick
-                    ]
+              scrim [
+                   Options.on "click" <|
+                       Json.map
+                           (\isScrimClick ->
+                                if isScrimClick then
+                                    Maybe.withDefault (lift NoOp) config.onClose
+                                else
+                                    lift NoOp
+                           )
+                           -- Given the click handler is on the scrim
+                           -- element, do we really need to check we
+                           -- clicked the scrim?
+                           checkScrimClick
+                  ]
               []
         ]
 
@@ -248,3 +269,14 @@ checkScrimClick =
 noScrim : Property m
 noScrim =
     Options.option (\config -> { config | noScrim = True })
+
+
+whatever : (Msg -> m) -> Config m -> Decoder m
+whatever lift config =
+    Json.map
+        (keycheck lift config)
+    (Json.at [ "keyCode" ] Json.int)
+
+keycheck : (Msg -> m) -> Config m -> Int -> m
+keycheck lift config keyCode =
+      Maybe.withDefault (lift NoOp) config.onClose
