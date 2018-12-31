@@ -254,7 +254,7 @@ view lift page model =
             ]
         , styled Html.div
             [ css "padding" "24px"
-            , css "marign" "0"
+            , css "margin" "0"
             , css "box-sizing" "border-box"
             , Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
             ]

@@ -20,6 +20,5 @@ defaultModel =
 
 type Msg
     = NoOp
-    | SetState Bool
-    | SetOpen Bool
-    | AnimationEnd
+    | StartAnimation Bool
+    | EndAnimation
