@@ -8,6 +8,7 @@ module Material.List exposing
     , nav
     , li
     , text
+    , primaryText
     , secondaryText
     , selected
     , activated
@@ -32,7 +33,8 @@ imported qualified as `Lists`.
 
 # Resources
 
-  - [Material Design guidelines: Lists](https://material.io/guidelines/components/lists.html)
+  - [Material Design guidelines: Lists](https://material.io/design/components/lists.html)
+  - [Material Components for the Web](https://material.io/develop/web/components/lists/)
   - [Demo](https://aforemny.github.io/elm-mdc/#lists)
 
 
@@ -49,7 +51,9 @@ imported qualified as `Lists`.
         [ Lists.li []
               [ Lists.graphicIcon [] "folder"
               , Lists.text []
-                    [ text "Photos"
+                    [ Lists.primaryText []
+                          [ text "Photos"
+                          ]
                     , Lists.secondaryText []
                           [ text "Jan 9, 2014"
                           ]
@@ -59,7 +63,9 @@ imported qualified as `Lists`.
         , Lists.li []
               [ Lists.graphicIcon [] "folder"
               , Lists.text []
-                    [ text "Recipes"
+                    [ Lists.primaryText []
+                          [ text "Recipes"
+                          ]
                     , Lists.secondaryText []
                           [ text "Jan 17, 2014"
                           ]
@@ -69,7 +75,9 @@ imported qualified as `Lists`.
         , Lists.li []
               [ Lists.graphicIcon [] "folder"
               , Lists.text []
-                    [ text "Work"
+                    [ Lists.primaryText []
+                          [ text "Work"
+                          ]
                     , Lists.secondaryText []
                           [ text "Jan 28, 2014"
                           ]
@@ -97,6 +105,7 @@ imported qualified as `Lists`.
 
 @docs li
 @docs text
+@docs primaryText
 @docs secondaryText
 @docs selected
 @docs activated
@@ -199,6 +208,13 @@ a =
 text : List (Property m) -> List (Html m) -> Html m
 text =
     List.text
+
+
+{-| Primary text for the row, in case the list is `twoLine`.
+-}
+primaryText : List (Property m) -> List (Html m) -> Html m
+primaryText =
+    List.primaryText
 
 
 {-| Secondary text for the row, in case the list is `twoLine`.
