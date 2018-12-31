@@ -12,20 +12,20 @@ Material Design Switch requirements.
 
 # Resources
 
-  - [Material Design guidelines: Switches](https://material.io/guidelines/components/selection-controls.html#selection-controls-switch)
+  - [Material Components for the Web](https://material.io/develop/web/components/tabs/tab/)
+  - [Material Design guidelines: Switches](https://material.io/design/components/selection-controls.html#switches)
   - [Demo](https://aforemny.github.io/elm-mdc/#switch)
 
 
 # Example
 
-    import Html exposing (text)
+    import Html exposing (text, span)
     import Html.Events
-    import Material.FormField as FormField
     import Material.Options as Options exposing (styled)
     import Material.Switch as Switch
 
 
-    FormField.view []
+    span []
         [ Switch.view Mdc "my-switch" model.mdc
               [ Switch.on
               , Options.onClick Toggle
