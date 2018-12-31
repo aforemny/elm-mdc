@@ -5,7 +5,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Material
 import Material.FormField as FormField
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (cs, css, styled, when, for)
 import Material.Switch as Switch
 import Platform.Cmd exposing (Cmd, none)
 
@@ -30,7 +30,7 @@ type Msg m
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
-    case msg of
+    case Debug.log "Demo.update" msg of
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
@@ -61,7 +61,7 @@ view lift page model =
     in
     page.body "Switches"
         [ Page.hero []
-            [ FormField.view []
+            [ Html.span []
                 [ let
                     index =
                         "switch-hero-switch"
@@ -75,9 +75,15 @@ view lift page model =
                     model.mdc
                     [ Options.onClick (lift (Toggle index))
                     , Switch.on |> when on
+                    --, Switch.label "off/on"
                     ]
                     []
                 ]
+            , styled Html.label
+                [ for "switch-hero-switch"
+                , css "margin-left" "10px"
+                ]
+                [ text "off/on" ]
             ]
         , example
             [ css "background-color" "#eee"
