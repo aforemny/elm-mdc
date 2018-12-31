@@ -9,6 +9,7 @@ module Material.Dialog exposing
     , actions
     , cancel
     , accept
+    , scrollLock
     , noScrim
     )
 
@@ -180,3 +181,10 @@ accept =
 noScrim : Property m
 noScrim =
     Dialog.noScrim
+
+
+{-| Set this on the body element so the page won't scroll.
+-}
+scrollLock : Property m
+scrollLock =
+    Dialog.scrollLock

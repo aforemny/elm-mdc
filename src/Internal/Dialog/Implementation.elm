@@ -9,6 +9,7 @@ module Internal.Dialog.Implementation exposing
     , open
     , react
     , scrollable
+    , scrollLock
     , surface
     , title
     , view
@@ -27,7 +28,7 @@ import Json.Decode as Json exposing (Decoder)
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
-    case msg of
+    case Debug.log "Dialog.update" msg of
         NoOp ->
             ( Nothing, Cmd.none )
 
@@ -198,6 +199,11 @@ content options =
 scrollable : Property m
 scrollable =
     cs "mdc-dialog__body--scrollable"
+
+
+scrollLock : Property m
+scrollLock =
+    cs "mdc-dialog-scroll-lock"
 
 
 title : Options.Property c m
