@@ -71,38 +71,42 @@ switch lift model options _ =
     Options.apply summary
         Html.div
         [ cs "mdc-switch"
+        , cs "mdc-switch--disabled" |> when config.disabled
+        , cs "mdc-switch--checked" |> when config.value
         ]
         []
-        [ Options.applyNativeControl summary
-            Html.input
-            [ cs "mdc-switch__native-control"
-            , Options.id config.id_
-            , Options.attribute <| Html.type_ "checkbox"
-            , Options.attribute <| Html.checked config.value
-            , Options.onFocus (lift (SetFocus True))
-            , Options.onBlur (lift (SetFocus False))
-            , Options.onWithOptions "click"
-                (Decode.succeed
-                    { message = lift NoOp
-                    , preventDefault = True
-                    , stopPropagation = False
-                    }
-                )
-            , when config.disabled
-                << Options.many
-              <|
-                [ cs "mdc-checkbox--disabled"
-                , Options.attribute <| Html.disabled True
-                ]
-            ]
+        [ styled Html.div
+            [ cs "mdc-switch__track" ]
             []
         , styled Html.div
-            [ cs "mdc-switch__background"
-            ]
+            [ cs "mdc-switch__thumb-underlay" ]
             [ styled Html.div
-                [ cs "mdc-switch__knob"
-                ]
-                []
+                  [ cs "mdc-switch__thumb" ]
+                  [ Options.applyNativeControl summary
+                        Html.input
+                        [ cs "mdc-switch__native-control"
+                        , Options.role "switch"
+                        , Options.id config.id_
+                        , Options.attribute <| Html.type_ "checkbox"
+                        , Options.attribute <| Html.checked config.value
+                        , Options.onFocus (lift (SetFocus True))
+                        , Options.onBlur (lift (SetFocus False))
+                        , Options.onWithOptions "click"
+                            (Decode.succeed
+                                 { message = lift NoOp
+                                 , preventDefault = True
+                                 , stopPropagation = False
+                                 }
+                            )
+                        , when config.disabled
+                            << Options.many
+                                <|
+                                [ cs "mdc-checkbox--disabled"
+                                , Options.attribute <| Html.disabled True
+                                ]
+                        ]
+                        []
+                  ]
             ]
         ]
 
