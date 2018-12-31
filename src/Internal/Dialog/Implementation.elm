@@ -9,7 +9,6 @@ module Internal.Dialog.Implementation exposing
     , open
     , react
     , scrollable
-    , scrollLock
     , surface
     , title
     , view
@@ -199,11 +198,6 @@ content options =
 scrollable : Property m
 scrollable =
     cs "mdc-dialog__body--scrollable"
-
-
-scrollLock : Property m
-scrollLock =
-    cs "mdc-dialog-scroll-lock"
 
 
 title : Options.Property c m
