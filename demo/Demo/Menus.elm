@@ -194,8 +194,7 @@ menuAnchor lift model =
         [ Button.view (lift << Mdc)
             "menus-menu-button"
             model.mdc
-            [ Button.raised
-            , Menu.attach (lift << Mdc) "menus-menu"
+            [ Menu.attach (lift << Mdc) "menus-menu"
             ]
             [ text <|
                 case model.anchorWidth of
@@ -203,7 +202,7 @@ menuAnchor lift model =
                         "Show"
 
                     Comparable ->
-                        "Show Menu"
+                        "Open Menu"
 
                     Wider ->
                         "Show Menu from here now!"
@@ -229,7 +228,7 @@ menuAnchor lift model =
                                 in
                                 Menu.li
                                     [ Menu.onSelect (lift (Select ( index, label )))
-                                    , Lists.selected |> when (model.rememberSelectedItem && isSelected)
+                                    , Menu.selected |> when (model.rememberSelectedItem && isSelected)
                                     ]
                                     [ text label
                                     ]
@@ -246,7 +245,7 @@ view lift page model =
             [ Menu.view (lift << Mdc)
                 "menus-hero-menu"
                 model.mdc
-                [ cs "mdc-menu--open"
+                [ cs "mdc-menu-surface--open"
                 ]
                 (Menu.ul []
                     [ Menu.li []
