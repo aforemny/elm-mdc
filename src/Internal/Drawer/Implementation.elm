@@ -102,7 +102,26 @@ view className lift model options nodes =
 
         , when model.animating (Options.on "transitionend" (Decode.succeed (lift EndAnimation)))
 
-          -- TODO: Handle Esc key for modal and dismissible.
+        -- TODO: Handle Esc key for modal and dismissible.
+        , Options.data "focustrap" "focustrap" |> when (not (String.isEmpty className) && ( config.open || model.open ) )
+        , Options.on "keydown" <|
+            Decode.map lift <|
+                Decode.map2
+                    (\key keyCode ->
+                         if key == Just "Escape" || keyCode == 27 then
+                             --Maybe.withDefault (lift NoOp) config.onClose
+                             NoOp
+                         else
+                             --lift NoOp
+                             NoOp
+                    )
+                    (Decode.oneOf
+                         [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                         , Decode.succeed Nothing
+                         ]
+                    )
+                    (Decode.at [ "keyCode" ] Decode.int)
+
           -- TODO: Handle arrow keys (hard).
         ]
         ++ options )
