@@ -161,7 +161,7 @@ headlinesCard lift index model =
                     , css "color" "var(--mdc-theme-text-secondary-on-light, rgba(0, 0, 0, 0.54))"
                     , css "margin" "0"
                     ]
-                    [ text title
+                    [ text body
                     ]
                 ]
     in
