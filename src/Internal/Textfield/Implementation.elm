@@ -352,6 +352,7 @@ textField domId lift model options _ =
               htmlLabel
           else
               text ""
+        , trailingIcon_
         , if not config.outlined && not config.textarea then
               styled Html.div
                   [ cs "mdc-line-ripple"
@@ -375,7 +376,6 @@ textField domId lift model options _ =
               ]
           else
               text ""
-        , trailingIcon_
         ]
 
 
