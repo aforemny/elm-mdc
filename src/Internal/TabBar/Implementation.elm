@@ -2,7 +2,9 @@ module Internal.TabBar.Implementation exposing
     ( Property
     , Tab
     , activeTab
+    , fadingIconIndicator
     , icon
+    , indicatorIcon
     , react
     , smallIndicator
     , stacked
@@ -87,7 +89,7 @@ update lift msg model =
             , backIndicator = backIndicator
             }
     in
-    case Debug.log "TabBar.update" msg of
+    case msg of
         RippleMsg index msg_ ->
             let
                 ( ripple, effects ) =
@@ -149,6 +151,8 @@ type alias Config =
     -- This value is computed by computeHorizontalScrollbarHeight in mdc-tab-sroller/util.js.
     -- No clue how to do that in Elm beside using a port. Should we?
     , horizontalScrollbarHeight : Int
+    , indicatorIcon : Maybe String
+    , fadingIconIndicator : Bool
     }
 
 
@@ -159,6 +163,8 @@ defaultConfig =
     , icon = Nothing
     , smallIndicator = False
     , horizontalScrollbarHeight = 10
+    , indicatorIcon = Nothing
+    , fadingIconIndicator = False
     }
 
 
@@ -198,6 +204,16 @@ stacked =
 smallIndicator : Property m
 smallIndicator =
     Options.option (\config -> { config | smallIndicator = True })
+
+
+indicatorIcon : String -> Property m
+indicatorIcon value =
+    Options.option (\config -> { config | indicatorIcon = Just value })
+
+
+fadingIconIndicator : Property m
+fadingIconIndicator =
+    Options.option (\config -> { config | fadingIconIndicator = True })
 
 
 type alias Property m =
@@ -312,13 +328,13 @@ tabView domId lift model options index tab_ =
         stateChanged = config.activeTab /= model.activeTab
 
         -- Only set tab to active on next tick
-        to_be_selected = stateChanged && config.activeTab == index
-
-        selected = model.activeTab == index
+        to_be_selected = (stateChanged && config.activeTab == index) && not tab_config.fadingIconIndicator
 
         tab_summary = Options.collect defaultConfig tab_.options
 
         tab_config = tab_summary.config
+
+        selected = (model.activeTab == index) || (tab_config.fadingIconIndicator && config.activeTab == index)
 
         tabDomId = domId ++ "--" ++ String.fromInt index
 
@@ -396,18 +412,31 @@ tabView domId lift model options index tab_ =
                 Nothing ->
                     text ""
 
+        icon_indicator =
+            case tab_config.indicatorIcon of
+                Just _ -> True
+                Nothing -> False
+
+        icon_name =
+            case tab_config.indicatorIcon of
+                Just name -> name
+                Nothing -> ""
+
         indicator_span =
             styled span
                 [ cs "mdc-tab-indicator"
                 , cs "mdc-tab-indicator--active" |> when selected
                 , cs "mdc-tab-indicator--no-transition" |> when to_be_selected
+                , cs "mdc-tab-indicator--fade" |> when tab_config.fadingIconIndicator
                 ]
                 [ styled span
                     [ cs "mdc-tab-indicator__content"
-                    , cs "mdc-tab-indicator__content--underline"
+                    , cs "mdc-tab-indicator__content--underline" |> when (not icon_indicator)
+                    , cs "mdc-tab-indicator__content--icon" |> when icon_indicator
+                    , cs "material-icons" |> when icon_indicator
                     , css "transform" indicatorTransform |> when to_be_selected
                     ]
-                    []
+                    [ text icon_name ]
                 ]
 
     in
