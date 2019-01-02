@@ -92,7 +92,7 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Icon toggles"
+    page.body "Icon Button" "Icons are appropriate for buttons that allow a user to take actions or make a selection, such as adding or removing a star to an item."
         [ Page.hero []
             [ let
                 isOn =

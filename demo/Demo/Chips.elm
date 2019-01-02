@@ -68,11 +68,8 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Chips"
-        [ Page.header "Chips"
-        , styled p [ Typography.body1 ]
-            [ text "Chips are compact elements that allow users to enter information, select a choice, filter content, or trigger an action."]
-        , Page.hero []
+    page.body "Chips" "Chips are compact elements that allow users to enter information, select a choice, filter content, or trigger an action."
+        [ Page.hero []
             [ heroChips lift model
             ]
         , styled Html.div

@@ -97,7 +97,7 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Slider"
+    page.body "Slider" "Sliders let users select from a range of values by moving the slider thumb."
         [ heroSlider lift model
         , example []
             [ Html.em []

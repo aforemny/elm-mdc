@@ -141,7 +141,7 @@ view lift page model =
                 , imageList
                 ]
     in
-    page.body "Image List"
+    page.body "Image List" "Image lists display a collection of images in an organized grid."
         [ Page.hero []
             [ ImageList.view
                 [ css "width" "300px"

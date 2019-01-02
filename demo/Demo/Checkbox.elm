@@ -121,11 +121,8 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Checkbox"
-        [ Page.header "Checkbox"
-        , styled p [ Typography.body1 ]
-            [ text "Checkboxes allow the user to select multiple options from a set."]
-        , let
+    page.body "Checkbox" "Checkboxes allow the user to select multiple options from a set."
+        [ let
             viewCheckbox index =
                 let
                     checkbox =

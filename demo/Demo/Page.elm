@@ -19,7 +19,7 @@ import Material.Typography as Typography
 type alias Page m =
     { toolbar : String -> Html m
     , navigate : Url -> m
-    , body : String -> List (Html m) -> Html m
+    , body : String -> String -> List (Html m) -> Html m
     }
 
 

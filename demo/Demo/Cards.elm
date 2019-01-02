@@ -349,11 +349,8 @@ view lift page model =
                 )
                 << List.map (\card -> Html.div [] [ card ])
     in
-    page.body "Card"
-        [ Page.header "Card"
-        , styled p [ Typography.body1 ]
-            [ text "Cards contain content and actions about a single subject."]
-        , Page.hero
+    page.body "Card" "Cards contain content and actions about a single subject."
+        [ Page.hero
             [ css "height" "auto"
             ]
             [ heroCard lift "card-hero-card" model
