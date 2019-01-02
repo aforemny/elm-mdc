@@ -1,4 +1,4 @@
-module Material.Tabs exposing
+module Material.TabBar exposing
     ( Property
     , view
     , scrolling
@@ -6,13 +6,12 @@ module Material.Tabs exposing
     , activeTab
     , Tab
     , tab
-    , withIconAndText
     , icon
-    , iconText
+    , stacked
+    , smallIndicator
     )
 
-{-| The Tabs component contains components which are used to create spec-aligned
-tabbed navigation components adhering to the Material Design tabs guidelines.
+{-| Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy.
 
 This component consists of a TabBar containing Tabs. It supports scrolling of
 Tabs.
@@ -63,7 +62,7 @@ Tabs.
 
 import Html exposing (Html)
 import Internal.Component exposing (Index)
-import Internal.Tabs.Implementation as Tabs
+import Internal.TabBar.Implementation as TabBar
 import Material
 import Material.Options as Options
 
@@ -71,7 +70,7 @@ import Material.Options as Options
 {-| TabBar property.
 -}
 type alias Property m =
-    Tabs.Property m
+    TabBar.Property m
 
 
 {-| TabBar view.
@@ -84,7 +83,7 @@ view :
     -> List (Tab m)
     -> Html m
 view =
-    Tabs.view
+    TabBar.view
 
 
 {-| Make the TabBar scroll if its tabs do not fit inside.
@@ -95,21 +94,21 @@ advances scroll on pressing the Tab key.
 -}
 scrolling : Property m
 scrolling =
-    Tabs.scrolling
+    TabBar.scrolling
 
 
 {-| Make the TabBar's tabs have an active indicator.
 -}
 indicator : Property m
 indicator =
-    Tabs.indicator
+    TabBar.indicator
 
 
 {-| Make the TabBar's `n`th tab active.
 -}
 activeTab : Int -> Property m
 activeTab =
-    Tabs.activeTab
+    TabBar.activeTab
 
 
 {-| A TabBar's tab type.
@@ -118,35 +117,32 @@ Use `tab` to construct.
 
 -}
 type alias Tab m =
-    Tabs.Tab m
+    TabBar.Tab m
 
 
-{-| A TabBar's tab.
+{-| A tab.
 -}
 tab : List (Property m) -> List (Html m) -> Tab m
 tab =
-    Tabs.tab
-
-
-{-| Configure tab to show both an icon and a text.
-
-Use `icon` and `iconText` as children.
-
--}
-withIconAndText : Property m
-withIconAndText =
-    Tabs.withIconAndText
+    TabBar.tab
 
 
 {-| A tab's icon.
 -}
-icon : List (Options.Property c m) -> String -> Html m
+icon : String -> Property m
 icon =
-    Tabs.icon
+    TabBar.icon
 
 
-{-| A tab's icon text.
+{-| Indicates that the tab icon and label should flow vertically instead of horizontally.
 -}
-iconText : List (Options.Property c m) -> String -> Html m
-iconText =
-    Tabs.iconText
+stacked : Property m
+stacked =
+    TabBar.stacked
+
+
+{-| Indicates that the indicator width will be restricted to the tab content width.
+-}
+smallIndicator : Property m
+smallIndicator =
+    TabBar.smallIndicator

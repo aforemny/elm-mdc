@@ -28,7 +28,7 @@ import Demo.Slider
 import Demo.Snackbar
 import Demo.Startpage
 import Demo.Switch
-import Demo.Tabs
+import Demo.TabBar
 import Demo.Textfields
 import Demo.Theme
 import Demo.Toolbar
@@ -70,7 +70,7 @@ type alias Model =
     , slider : Demo.Slider.Model Msg
     , snackbar : Demo.Snackbar.Model Msg
     , switch : Demo.Switch.Model Msg
-    , tabs : Demo.Tabs.Model Msg
+    , tabbar : Demo.TabBar.Model Msg
     , modalDrawer : Demo.ModalDrawer.Model Msg
     , textfields : Demo.Textfields.Model Msg
     , theme : Demo.Theme.Model Msg
@@ -106,7 +106,7 @@ defaultModel key =
     , slider = Demo.Slider.defaultModel
     , snackbar = Demo.Snackbar.defaultModel
     , switch = Demo.Switch.defaultModel
-    , tabs = Demo.Tabs.defaultModel
+    , tabbar = Demo.TabBar.defaultModel
     , modalDrawer = Demo.ModalDrawer.defaultModel
     , textfields = Demo.Textfields.defaultModel
     , theme = Demo.Theme.defaultModel
@@ -145,7 +145,7 @@ type Msg
     | SliderMsg (Demo.Slider.Msg Msg)
     | SnackbarMsg (Demo.Snackbar.Msg Msg)
     | SwitchMsg (Demo.Switch.Msg Msg)
-    | TabsMsg (Demo.Tabs.Msg Msg)
+    | TabBarMsg (Demo.TabBar.Msg Msg)
     | ModalDrawerMsg (Demo.ModalDrawer.Msg Msg)
     | TextfieldMsg (Demo.Textfields.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
@@ -330,12 +330,12 @@ update msg model =
             in
             ( { model | textfields = textfields }, effects )
 
-        TabsMsg msg_ ->
+        TabBarMsg msg_ ->
             let
-                ( tabs, effects ) =
-                    Demo.Tabs.update TabsMsg msg_ model.tabs
+                ( tabbar, effects ) =
+                    Demo.TabBar.update TabBarMsg msg_ model.tabbar
             in
-            ( { model | tabs = tabs }, effects )
+            ( { model | tabbar = tabbar }, effects )
 
         GridListMsg msg_ ->
             let
@@ -394,7 +394,6 @@ view_ model =
     let
         page =
             { toolbar = Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url
-            , fixedAdjust = Page.fixedAdjust "page-toolbar" model.mdc
             , navigate = Navigate
             , body =
                 \title nodes ->
@@ -492,8 +491,8 @@ view_ model =
         Demo.Url.Switch ->
             Demo.Switch.view SwitchMsg page model.switch
 
-        Demo.Url.Tabs ->
-            Demo.Tabs.view TabsMsg page model.tabs
+        Demo.Url.TabBar ->
+            Demo.TabBar.view TabBarMsg page model.tabbar
 
         Demo.Url.TextField ->
             Demo.Textfields.view TextfieldMsg page model.textfields
@@ -580,7 +579,7 @@ subscriptions model =
         , Demo.PermanentDrawer.subscriptions PermanentDrawerMsg model.permanentDrawer
         , Demo.Selects.subscriptions SelectMsg model.selects
         , Demo.Slider.subscriptions SliderMsg model.slider
-        , Demo.Tabs.subscriptions TabsMsg model.tabs
+        , Demo.TabBar.subscriptions TabBarMsg model.tabbar
         , Demo.ModalDrawer.subscriptions ModalDrawerMsg model.modalDrawer
         , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
         , Demo.TopAppBar.subscriptions TopAppBarMsg model.topAppBar

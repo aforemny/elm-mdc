@@ -187,8 +187,8 @@ import Internal.Snackbar.Implementation as Snackbar
 import Internal.Snackbar.Model as Snackbar
 import Internal.Switch.Implementation as Switch
 import Internal.Switch.Model as Switch
-import Internal.Tabs.Implementation as Tabs
-import Internal.Tabs.Model as Tabs
+import Internal.TabBar.Implementation as TabBar
+import Internal.TabBar.Model as TabBar
 import Internal.Textfield.Implementation as Textfield
 import Internal.Textfield.Model as Textfield
 import Internal.Toolbar.Implementation as Toolbar
@@ -235,7 +235,7 @@ type alias Model m =
     , slider : Indexed Slider.Model
     , snackbar : Indexed (Snackbar.Model m)
     , switch : Indexed Switch.Model
-    , tabs : Indexed Tabs.Model
+    , tabbar : Indexed TabBar.Model
     , textfield : Indexed Textfield.Model
     , toolbar : Indexed Toolbar.Model
     , topAppBar : Indexed TopAppBar.Model
@@ -267,7 +267,7 @@ defaultModel =
     , slider = Dict.empty
     , snackbar = Dict.empty
     , switch = Dict.empty
-    , tabs = Dict.empty
+    , tabbar = Dict.empty
     , textfield = Dict.empty
     , toolbar = Dict.empty
     , topAppBar = Dict.empty
@@ -359,8 +359,8 @@ update_ lift msg store =
         SwitchMsg idx msg_ ->
             Switch.react lift msg_ idx store
 
-        TabsMsg idx msg_ ->
-            Tabs.react lift msg_ idx store
+        TabBarMsg idx msg_ ->
+            TabBar.react lift msg_ idx store
 
         TextfieldMsg idx msg_ ->
             Textfield.react lift msg_ idx store

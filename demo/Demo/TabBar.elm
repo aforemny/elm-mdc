@@ -1,0 +1,171 @@
+module Demo.TabBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
+
+import Demo.Page as Page exposing (Page)
+import Dict exposing (Dict)
+import Html exposing (..)
+import Material
+import Material.Options as Options exposing (cs, css, styled, when)
+import Material.TabBar as TabBar
+import Material.Theme as Theme
+import Material.Toolbar as Toolbar
+import Material.Typography as Typography
+import Platform.Cmd exposing (Cmd, none)
+
+
+type alias Model m =
+    { mdc : Material.Model m
+    , states : Dict Material.Index Int
+    }
+
+
+defaultModel : Model m
+defaultModel =
+    { mdc = Material.defaultModel
+    , states = Dict.empty
+    }
+
+
+type Msg m
+    = Mdc (Material.Msg m)
+    | SelectTab Material.Index Int
+
+
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
+update lift msg model =
+    case msg of
+        Mdc msg_ ->
+            Material.update (lift << Mdc) msg_ model
+
+        SelectTab index tabIndex ->
+            ( { model | states = Dict.insert index tabIndex model.states }, Cmd.none )
+
+
+view : (Msg m -> m) -> Page m -> Model m -> Html m
+view lift page model =
+    page.body "TabBar"
+        [ styled h1 [ Typography.headline5 ]
+              [ text "Tab Bar" ]
+        , styled p [ Typography.body1 ]
+            [ text "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components." ]
+        , Page.hero []
+            [ heroTabs lift model "tabs-hero-tabs"
+            ]
+        , Page.demos
+              [ styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons next to labels" ]
+              , tabsWithIcons lift model "tabs-with-icons"
+              , styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons above labels and indicators restricted to content" ]
+              , tabsWithStackedIcons lift model "tabs-with-stacked-icons"
+              , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs" ]
+              , scrollingTabs lift model "scrolling-tabs"
+              ]
+        ]
+
+
+heroTabs : (Msg m -> m) -> Model m -> Material.Index -> Html m
+heroTabs lift model index =
+    let
+        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+    in
+    TabBar.view (lift << Mdc)
+        index
+        model.mdc
+        [ TabBar.activeTab active_tab_index ]
+        [ tab lift model index 0 "Home"
+        , tab lift model index 1 "Merchandise"
+        , tab lift model index 2 "About Us"
+        ]
+
+
+tabsWithIcons : (Msg m -> m) -> Model m -> Material.Index -> Html m
+tabsWithIcons lift model index =
+    let
+        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+    in
+    TabBar.view (lift << Mdc)
+        index
+        model.mdc
+        [ TabBar.activeTab active_tab_index ]
+        [ iconTab lift model index 0 "access_time" "Recents"
+        , iconTab lift model index 1 "near_me" "Nearby"
+        , iconTab lift model index 2 "favorite" "Favorites"
+        ]
+
+
+tabsWithStackedIcons lift model index =
+    let
+        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+    in
+    TabBar.view (lift << Mdc)
+        index
+        model.mdc
+        [ TabBar.activeTab active_tab_index ]
+        [ stackedTab lift model index 0 "access_time" "Recents"
+        , stackedTab lift model index 1 "near_me" "Nearby"
+        , stackedTab lift model index 2 "favorite" "Favorites"
+        ]
+
+
+scrollingTabs lift model index =
+    let
+        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+    in
+    TabBar.view (lift << Mdc)
+        index
+        model.mdc
+        [ TabBar.activeTab active_tab_index ]
+        ( [ "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight" ]
+            |> List.indexedMap (\i v -> tab lift model index i ("Tab " ++ v))
+
+        )
+
+
+tab :
+    (Msg m -> m)
+    -> Model m
+    -> Material.Index
+    -> Int
+    -> String
+    -> TabBar.Tab m
+tab lift model index tab_index label =
+    TabBar.tab
+        [ Options.onClick (lift (SelectTab index tab_index)) ]
+        [ text label ]
+
+
+iconTab :
+    (Msg m -> m)
+    -> Model m
+    -> Material.Index
+    -> Int
+    -> String
+    -> String
+    -> TabBar.Tab m
+iconTab lift model index tab_index icon label =
+    TabBar.tab
+        [ Options.onClick (lift (SelectTab index tab_index))
+        , TabBar.icon icon
+        ]
+        [ text label ]
+
+
+stackedTab :
+    (Msg m -> m)
+    -> Model m
+    -> Material.Index
+    -> Int
+    -> String
+    -> String
+    -> TabBar.Tab m
+stackedTab lift model index tab_index icon label =
+    TabBar.tab
+        [ Options.onClick (lift (SelectTab index tab_index))
+        , TabBar.icon icon
+        , TabBar.stacked
+        , TabBar.smallIndicator
+        ]
+        [ text label ]
+
+
+subscriptions : (Msg m -> m) -> Model m -> Sub m
+subscriptions lift model =
+    Material.subscriptions (lift << Mdc) model

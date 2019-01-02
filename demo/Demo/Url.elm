@@ -36,7 +36,7 @@ type Url
     | Slider
     | Snackbar
     | Switch
-    | Tabs
+    | TabBar
     | TextField
     | Theme
     | Toolbar (Maybe ToolbarPage)
@@ -192,8 +192,8 @@ toString url =
         Switch ->
             "#switch"
 
-        Tabs ->
-            "#tabs"
+        TabBar ->
+            "#tabbar"
 
         TextField ->
             "#text-field"
@@ -297,8 +297,8 @@ fromString url =
         "switch" ->
             Switch
 
-        "tabs" ->
-            Tabs
+        "tabbar" ->
+            TabBar
 
         "text-field" ->
             TextField
