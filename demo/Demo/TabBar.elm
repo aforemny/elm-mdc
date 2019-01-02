@@ -52,9 +52,15 @@ view lift page model =
             ]
         , Page.demos
               [ styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons next to labels" ]
-              , tabsWithIcons lift model "tabs-with-icons"
+              , tabsWithIcons lift model "tabs-with-icons" []
               , styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons above labels and indicators restricted to content" ]
               , tabsWithStackedIcons lift model "tabs-with-stacked-icons"
+              , styled h3 [ Typography.subtitle1 ] [ text "Tabs with fading icon indicator" ]
+              , tabsWithIcons lift model "tabs-with-fading-icon-indicator"
+                  [ TabBar.indicatorIcon "star", TabBar.fadingIconIndicator ]
+              , styled h3 [ Typography.subtitle1 ] [ text "Tabs with sliding icon indicator" ]
+              , tabsWithIcons lift model "tabs-with-sliding-icon-indicator"
+                  [ TabBar.indicatorIcon "star" ]
               , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs (not yet working)" ]
               , scrollingTabs lift model "scrolling-tabs"
               ]
@@ -76,8 +82,8 @@ heroTabs lift model index =
         ]
 
 
-tabsWithIcons : (Msg m -> m) -> Model m -> Material.Index -> Html m
-tabsWithIcons lift model index =
+tabsWithIcons : (Msg m -> m) -> Model m -> Material.Index -> List (TabBar.Property m) -> Html m
+tabsWithIcons lift model index options =
     let
         active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
     in
@@ -85,9 +91,9 @@ tabsWithIcons lift model index =
         index
         model.mdc
         [ TabBar.activeTab active_tab_index ]
-        [ iconTab lift model index 0 "access_time" "Recents"
-        , iconTab lift model index 1 "near_me" "Nearby"
-        , iconTab lift model index 2 "favorite" "Favorites"
+        [ iconTab lift model index 0 "access_time" "Recents" options
+        , iconTab lift model index 1 "near_me" "Nearby" options
+        , iconTab lift model index 2 "favorite" "Favorites" options
         ]
 
 
@@ -139,12 +145,13 @@ iconTab :
     -> Int
     -> String
     -> String
+    -> List (TabBar.Property m)
     -> TabBar.Tab m
-iconTab lift model index tab_index icon label =
+iconTab lift model index tab_index icon label options =
     TabBar.tab
-        [ Options.onClick (lift (SelectTab index tab_index))
+        ( [ Options.onClick (lift (SelectTab index tab_index))
         , TabBar.icon icon
-        ]
+        ] ++ options )
         [ text label ]
 
 
