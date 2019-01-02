@@ -120,12 +120,14 @@ select lift model options items_ =
     Options.apply summary
         Html.div
         [ cs "mdc-select"
+        , cs "mdc-select--focused" |> when focused
         , when config.disabled (cs "mdc-select--disabled")
         , Options.role "listbox"
         ]
         [ Html.tabindex 0
         ]
-        [ styled Html.select
+        [ styled Html.i [ cs "mdc-select__dropdown-icon" ] []
+        , styled Html.select
             [ cs "mdc-select__native-control"
             , Options.id config.id_
             , Options.onFocus (lift Focus)
