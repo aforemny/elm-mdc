@@ -21,7 +21,7 @@ import Demo.Startpage.Svg.Select as SelectSvg
 import Demo.Startpage.Svg.Slider as SliderSvg
 import Demo.Startpage.Svg.Snackbar as SnackbarSvg
 import Demo.Startpage.Svg.Switch as SwitchSvg
-import Demo.Startpage.Svg.Tabs as TabsSvg
+import Demo.Startpage.Svg.TabBar as TabBarSvg
 import Demo.Startpage.Svg.TextField as TextFieldSvg
 import Demo.Startpage.Svg.Theme as ThemeSvg
 import Demo.Startpage.Svg.TopAppBar as TopAppBarSvg
@@ -53,6 +53,7 @@ view page =
                                 [ cs "catalog-image-link" ]
                                 [ ImageList.imageAspectContainer
                                     [ css "padding-bottom" "100%"
+                                    , css "background-color" "#f5f5f5"
                                     ]
                                     [ ImageList.divImage [] [ icon ] ]
                                 , ImageList.supporting []
@@ -165,10 +166,10 @@ view page =
                       , title = "Switch"
                       , subtitle = "On off switches"
                       }
-                    , { url = Tabs
-                      , icon = TabsSvg.view
-                      , title = "Tabs"
-                      , subtitle = "Tabs with support for icon and text labels"
+                    , { url = TabBar
+                      , icon = TabBarSvg.view
+                      , title = "Tab Bar"
+                      , subtitle = "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy"
                       }
                     , { url = TextField
                       , icon = TextFieldSvg.view

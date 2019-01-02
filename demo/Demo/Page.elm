@@ -1,23 +1,22 @@
 module Demo.Page exposing
     ( Page
-    , fixedAdjust
     , hero
     , toolbar
+    , demos
     )
 
 import Demo.Url as Url exposing (Url)
-import Html exposing (Html, text)
+import Html exposing (Html, text, h2, div)
 import Html.Attributes as Html
 import Material
 import Material.Icon as Icon
 import Material.Options as Options exposing (Property, cs, css, styled, when)
-import Material.Toolbar as Toolbar
 import Material.TopAppBar as TopAppBar
+import Material.Typography as Typography
 
 
 type alias Page m =
     { toolbar : String -> Html m
-    , fixedAdjust : Options.Property () m
     , navigate : Url -> m
     , body : String -> List (Html m) -> Html m
     }
@@ -55,7 +54,6 @@ toolbar lift idx mdc navigate url title =
                     _ ->
                         Icon.view
                             [ Options.onClick (navigate Url.StartPage)
-                            , Toolbar.menuIcon
                             ]
                             "arrow_back"
                 ]
@@ -72,11 +70,6 @@ toolbar lift idx mdc navigate url title =
                 [ text title ]
             ]
         ]
-
-
-fixedAdjust : Material.Index -> Material.Model m -> Options.Property c m
-fixedAdjust idx mdc =
-    Toolbar.fixedAdjust idx mdc
 
 
 hero : List (Property c m) -> List (Html m) -> Html m
@@ -101,6 +94,18 @@ hero options =
                 :: css "height" "360px"
                 :: css "min-height" "360px"
                 :: css "background-color" "rgba(0, 0, 0, 0.05)"
+                :: css "padding" "24px"
                 :: options
             )
         )
+
+
+demos : List (Html m) -> Html m
+demos nodes =
+    styled div [ css "padding-bottom" "20px" ]
+        ( styled h2
+              [ Typography.headline6
+              , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+              ]
+              [ text "Demos" ]
+          :: nodes )
