@@ -42,7 +42,7 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "TabBar"
+    page.body "Tab Bar"
         [ styled h1 [ Typography.headline5 ]
               [ text "Tab Bar" ]
         , styled p [ Typography.body1 ]
