@@ -15,6 +15,10 @@
   * Remove occurances of `TabBar.indicator`.
   * Icons are handled by setting TabBar.icon property in the tab supplying the right name.
 
-* Lists: two line format needs special primaryText class.
-
 * Updated webpack to latest 4 and webpack-cli to latest 3.
+
+* Select:
+  * Select.box variant has been removed as it was removed from mdc.
+  * Select.outlined: new variant.
+
+* Lists: two line format needs special primaryText class.
