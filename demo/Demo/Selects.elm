@@ -126,8 +126,6 @@ example : List (Options.Property c m) -> List (Html m) -> Html m
 example options =
     styled Html.section
         (cs "example"
-            :: css "margin" "24px"
-            :: css "padding" "24px"
             :: css "max-width" "400px"
             :: options
         )
@@ -149,10 +147,9 @@ select lift id model selectedIndex options _ =
 
         fruits =
             Array.fromList
-                [ "Fruit Roll Ups"
-                , "Candy (cotton)"
-                , "Vegetables"
-                , "Noodles"
+                [ "Apple"
+                , "Orange"
+                , "Banana"
                 ]
 
         selectedValue =
@@ -169,15 +166,14 @@ select lift id model selectedIndex options _ =
                     state.value
     in
     [ styled Html.section
-        [ cs "demo-wrapper"
-        , css "padding-top" "4px"
+        [ css "padding-top" "4px"
         , css "padding-bottom" "4px"
         , Options.attribute (Html.attribute "dir" "rtl") |> when state.rtl
         ]
         [ Select.view (lift << Mdc)
             id
             model.mdc
-            ([ Select.label "Food Group"
+            ([ Select.label "Fruit"
              , Options.onChange (lift << Pick id)
              , Select.preselected |> when (selectedIndex /= Nothing)
              , Select.disabled |> when state.disabled
@@ -260,12 +256,19 @@ view lift page model =
             [ example []
                 (List.concat
                     [ [ styled Html.h3
-                            [ Typography.subtitle1
-                            ]
-                            [ text "Select"
-                            ]
+                            [ Typography.subtitle1 ]
+                            [ text "Select" ]
                       ]
-                    , select lift "selects-select" model (Just 2) [] []
+                    , select lift "demo-select-standard" model (Just 2) [] []
+                    ]
+                )
+            , example []
+                (List.concat
+                    [ [ styled Html.h3
+                            [ Typography.subtitle1 ]
+                            [ text "Outlined" ]
+                      ]
+                    , select lift "demo-select-outlined" model Nothing [ Select.outlined ] []
                     ]
                 )
             ]

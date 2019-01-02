@@ -3,6 +3,7 @@ module Internal.Select.Implementation exposing
     , disabled
     , label
     , option
+    , outlined
     , preselected
     , react
     , selected
@@ -47,6 +48,7 @@ type alias Config =
     { label : String
     , disabled : Bool
     , preselected : Bool
+    , outlined : Bool
     , id_ : String
     }
 
@@ -56,6 +58,7 @@ defaultConfig =
     { label = ""
     , disabled = False
     , preselected = False
+    , outlined = False
     , id_ = ""
     }
 
@@ -77,6 +80,11 @@ preselected =
 disabled : Property m
 disabled =
     Options.option (\config -> { config | disabled = True })
+
+
+outlined : Property m
+outlined =
+    Options.option (\config -> { config | outlined = True })
 
 
 select :
@@ -108,12 +116,44 @@ select lift model options items_ =
                     ]
                     []
                     :: items_
+
+        htmlLabel =
+            styled Html.label
+                [ cs "mdc-floating-label"
+                , Options.for config.id_
+                , when (focused || isDirty || config.preselected)
+                    (cs "mdc-floating-label--float-above")
+                ]
+                [ text config.label
+                ]
+
+        ripple_or_outline =
+            if config.outlined then
+                styled Html.div
+                    [ cs "mdc-notched-outline"
+                    , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
+                    ]
+                    [ styled Html.div [ cs "mdc-notched-outline__leading" ] []
+                    , styled Html.div
+                        [ cs "mdc-notched-outline__notch" ]
+                        [ htmlLabel ]
+                    , styled Html.div
+                        [ cs "mdc-notched-outline__trailing" ]
+                        []
+                    ]
+            else
+                styled Html.div
+                    [ cs "mdc-line-ripple"
+                    , when focused (cs "mdc-line-ripple--active")
+                    ]
+                []
     in
     Options.apply summary
         Html.div
         [ cs "mdc-select"
         , cs "mdc-select--focused" |> when focused
         , when config.disabled (cs "mdc-select--disabled")
+        , cs "mdc-select--outlined" |> when config.outlined
         , Options.role "listbox"
         ]
         [ Html.tabindex 0
@@ -128,19 +168,8 @@ select lift model options items_ =
             , when config.disabled (Options.attribute (Html.disabled True))
             ]
             items
-        , styled Html.label
-            [ cs "mdc-floating-label"
-            , Options.for config.id_
-            , when (focused || isDirty || config.preselected)
-                (cs "mdc-floating-label--float-above")
-            ]
-            [ text config.label
-            ]
-        , styled Html.div
-            [ cs "mdc-line-ripple"
-            , when focused (cs "mdc-line-ripple--active")
-            ]
-            []
+        , if not config.outlined then htmlLabel else text ""
+        , ripple_or_outline
         ]
 
 
