@@ -30,7 +30,7 @@ pages: build-demo
 
 clean:
 	rm -rf build
-	rm -rf elm-stuff/build-artifacts demo/elm-stuff/build-artifacts
+	rm -rf elm-stuff demo/elm-stuff
 
 distclean:
 	rm -rf build
