@@ -87,9 +87,7 @@ view lift page model =
             [ cs "demo-wrapper"
             ]
             [ styled Html.h1
-                [ cs "mdc-typography--headline5"
-
-                -- TODO: Typography.headline5?
+                [ Typography.headline5
                 ]
                 [ styled Html.h1
                     [ Typography.headline5
@@ -123,7 +121,7 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                         [ text "Raised"
                         ]
                     , Button.view (lift << Mdc)
-                        "buttons-hero-button-raised"
+                        "buttons-hero-button-unelevated"
                         model.mdc
                         [ Button.ripple
                         , Button.unelevated
@@ -132,7 +130,7 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                         [ text "Unelevated"
                         ]
                     , Button.view (lift << Mdc)
-                        "buttons-hero-button-raised"
+                        "buttons-hero-button-outlined"
                         model.mdc
                         [ Button.ripple
                         , Button.outlined
@@ -167,16 +165,12 @@ throughout your UI, in places like dialogs, forms, cards, and toolbars.
                     , icon = "images/ic_code_24px.svg"
                     , altText = "Source Code"
                     }
-                , styled Html.h2
-                    [ cs "mdc-typography--headline6"
-                    , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+                , Demo.Page.demos
+                    [ textButtons "buttons-text-buttons"
+                    , raisedButtons "buttons-raised-buttons"
+                    , unelevatedButtons "buttons-unelevated-buttons"
+                    , outlinedButtons "buttons-outlined-buttons"
                     ]
-                    [ text "Demos"
-                    ]
-                , textButtons "buttons-text-buttons"
-                , raisedButtons "buttons-raised-buttons"
-                , unelevatedButtons "buttons-unelevated-buttons"
-                , outlinedButtons "buttons-outlined-buttons"
                 ]
             ]
         ]
