@@ -4,7 +4,6 @@ module Material.Select exposing
     , label
     , preselected
     , disabled
-    , box
     , option
     , value
     , selected
@@ -54,7 +53,6 @@ manually.
 @docs label
 @docs preselected
 @docs disabled
-@docs box
 
 @docs option
 @docs value
@@ -85,13 +83,6 @@ view :
     -> Html m
 view =
     Select.view
-
-
-{-| Style the select as a box select.
--}
-box : Property m
-box =
-    Select.box
 
 
 {-| Set the select's label.

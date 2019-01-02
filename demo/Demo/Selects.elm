@@ -256,28 +256,19 @@ view lift page model =
                 ]
                 []
             ]
-        , example []
-            (List.concat
-                [ [ styled Html.h2
-                        [ Typography.title
-                        ]
-                        [ text "Select"
-                        ]
-                  ]
-                , select lift "selects-select" model (Just 2) [] []
-                ]
-            )
-        , example []
-            (List.concat
-                [ [ styled Html.h2
-                        [ Typography.title
-                        ]
-                        [ text "Select box"
-                        ]
-                  ]
-                , select lift "selects-box-select" model Nothing [ Select.box ] []
-                ]
-            )
+        , Page.demos
+            [ example []
+                (List.concat
+                    [ [ styled Html.h3
+                            [ Typography.subtitle1
+                            ]
+                            [ text "Select"
+                            ]
+                      ]
+                    , select lift "selects-select" model (Just 2) [] []
+                    ]
+                )
+            ]
         ]
 
 
