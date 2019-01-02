@@ -55,7 +55,7 @@ view lift page model =
               , tabsWithIcons lift model "tabs-with-icons"
               , styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons above labels and indicators restricted to content" ]
               , tabsWithStackedIcons lift model "tabs-with-stacked-icons"
-              , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs" ]
+              , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs (not yet working)" ]
               , scrollingTabs lift model "scrolling-tabs"
               ]
         ]
