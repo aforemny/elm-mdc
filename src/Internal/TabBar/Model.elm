@@ -14,7 +14,6 @@ type alias Model =
     { geometry : Maybe Geometry
     , translateOffset : Float
     , ripples : Dict Int Ripple.Model
-    , indicatorShown : Bool
     , scrollLeftAmount : Int
     , activeTab : Int
     }
@@ -25,7 +24,6 @@ defaultModel =
     { geometry = Nothing
     , translateOffset = 0
     , ripples = Dict.empty
-    , indicatorShown = False
     , scrollLeftAmount = 0
     , activeTab = 0
     }
@@ -36,7 +34,6 @@ type Msg m
     | Dispatch (List m)
     | RippleMsg Int Ripple.Msg
     | Init Geometry
-    | SetIndicatorShown
     | SetActiveTab Int
 
 
