@@ -1,7 +1,7 @@
 module Demo.Chips exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
+import Html exposing (Html, text, p)
 import Material
 import Material.Chip as Chip
 import Material.Options as Options exposing (cs, css, styled, when)
@@ -69,7 +69,10 @@ update lift msg model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Chips"
-        [ Page.hero []
+        [ Page.header "Chips"
+        , styled p [ Typography.body1 ]
+            [ text "Chips are compact elements that allow users to enter information, select a choice, filter content, or trigger an action."]
+        , Page.hero []
             [ heroChips lift model
             ]
         , styled Html.div
