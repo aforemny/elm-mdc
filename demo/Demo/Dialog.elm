@@ -246,11 +246,8 @@ scrollableDialog lift index model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Dialog"
-        [ Page.header "Dialog"
-        , styled p [ Typography.body1 ]
-            [ text "Dialogs inform users about a specific task and may contain critical information, require decisions, or involve multiple tasks."]
-        , Page.hero
+    page.body "Dialog" "Dialogs inform users about a specific task and may contain critical information, require decisions, or involve multiple tasks."
+        [ Page.hero
             [ css "justify-content" "center"
             , Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
             ]

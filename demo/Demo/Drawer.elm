@@ -68,11 +68,8 @@ example label url =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Drawer"
-        [ Page.header "Drawer"
-        , styled p [ Typography.body1 ]
-            [ text "The navigation drawer slides in from the left and contains the navigation destinations for your app."]
-        , styled Html.div
+    page.body "Drawer" "The navigation drawer slides in from the left and contains the navigation destinations for your app."
+        [ styled Html.div
             [ css "display" "inline-block"
             , css "flex" "1 1 80%"
             , css "min-width" "400px"

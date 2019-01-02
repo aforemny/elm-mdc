@@ -104,7 +104,7 @@ updateExample msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Text fields"
+    page.body "Text Field" "Text fields allow users to input, edit, and select text. Text fields typically reside in forms but can appear in other places, like dialog boxes and search."
         [ Html.h1
               [ Html.class "mdc-typography--headline5" ]
               [ Html.text "Text Field" ]

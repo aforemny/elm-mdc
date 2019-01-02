@@ -42,12 +42,8 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Tab Bar"
-        [ styled h1 [ Typography.headline5 ]
-              [ text "Tab Bar" ]
-        , styled p [ Typography.body1 ]
-            [ text "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components." ]
-        , Page.hero []
+    page.body "Tab Bar" "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components."
+        [ Page.hero []
             [ heroTabs lift model "tabs-hero-tabs"
             ]
         , Page.demos

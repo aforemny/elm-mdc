@@ -62,7 +62,7 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Radio buttons"
+    page.body "Radio Button" "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
         [ let
             group =
                 "hero"

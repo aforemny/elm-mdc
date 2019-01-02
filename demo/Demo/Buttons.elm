@@ -82,20 +82,11 @@ view lift page model =
                     ]
                 }
     in
-    page.body "Buttons"
+    page.body "Buttons" "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
         [ styled Html.div
             [ cs "demo-wrapper"
             ]
-            [ Page.header "Button"
-            , styled Html.p
-                [ Typography.body1
-                ]
-                [ text """
-Buttons communicate an action a user can take. They are typically placed
-throughout your UI, in places like dialogs, forms, cards, and toolbars.
-                        """
-                ]
-            , Hero.view []
+            [ Hero.view []
                 [ Button.view (lift << Mdc)
                     "buttons-hero-button-text"
                     model.mdc
