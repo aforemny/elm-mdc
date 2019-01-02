@@ -8,7 +8,7 @@ module Demo.Drawer exposing
     )
 
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
+import Html exposing (Html, text, p)
 import Html.Attributes as Html
 import Material
 import Material.Options as Options exposing (cs, css, styled, when)
@@ -69,7 +69,10 @@ example label url =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Drawer"
-        [ styled Html.div
+        [ Page.header "Drawer"
+        , styled p [ Typography.body1 ]
+            [ text "The navigation drawer slides in from the left and contains the navigation destinations for your app."]
+        , styled Html.div
             [ css "display" "inline-block"
             , css "flex" "1 1 80%"
             , css "min-width" "400px"
