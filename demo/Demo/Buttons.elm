@@ -2,7 +2,7 @@ module Demo.Buttons exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
-import Demo.Page exposing (Page)
+import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
@@ -86,91 +86,83 @@ view lift page model =
         [ styled Html.div
             [ cs "demo-wrapper"
             ]
-            [ styled Html.h1
-                [ Typography.headline5
+            [ Page.header "Button"
+            , styled Html.p
+                [ Typography.body1
                 ]
-                [ styled Html.h1
-                    [ Typography.headline5
-                    ]
-                    [ text "Button"
-                    ]
-                , styled Html.p
-                    [ Typography.body1
-                    ]
-                    [ text """
+                [ text """
 Buttons communicate an action a user can take. They are typically placed
 throughout your UI, in places like dialogs, forms, cards, and toolbars.
                         """
+                ]
+            , Hero.view []
+                [ Button.view (lift << Mdc)
+                    "buttons-hero-button-text"
+                    model.mdc
+                    [ Button.ripple
+                    , css "margin-right" "32px"
                     ]
-                , Hero.view []
-                    [ Button.view (lift << Mdc)
-                        "buttons-hero-button-text"
-                        model.mdc
-                        [ Button.ripple
-                        , css "margin-right" "32px"
-                        ]
-                        [ text "Text"
-                        ]
-                    , Button.view (lift << Mdc)
-                        "buttons-hero-button-raised"
-                        model.mdc
-                        [ Button.ripple
-                        , Button.raised
-                        , css "margin-right" "32px"
-                        ]
-                        [ text "Raised"
-                        ]
-                    , Button.view (lift << Mdc)
-                        "buttons-hero-button-unelevated"
-                        model.mdc
-                        [ Button.ripple
-                        , Button.unelevated
-                        , css "margin-right" "32px"
-                        ]
-                        [ text "Unelevated"
-                        ]
-                    , Button.view (lift << Mdc)
-                        "buttons-hero-button-outlined"
-                        model.mdc
-                        [ Button.ripple
-                        , Button.outlined
-                        , css "margin-right" "32px"
-                        ]
-                        [ text "Outlined"
-                        ]
+                    [ text "Text"
                     ]
-                , styled Html.h2
-                    [ cs "mdc-typography--headline6"
+                , Button.view (lift << Mdc)
+                    "buttons-hero-button-raised"
+                    model.mdc
+                    [ Button.ripple
+                    , Button.raised
+                    , css "margin-right" "32px"
+                    ]
+                    [ text "Raised"
+                    ]
+                , Button.view (lift << Mdc)
+                    "buttons-hero-button-unelevated"
+                    model.mdc
+                    [ Button.ripple
+                    , Button.unelevated
+                    , css "margin-right" "32px"
+                    ]
+                    [ text "Unelevated"
+                    ]
+                , Button.view (lift << Mdc)
+                    "buttons-hero-button-outlined"
+                    model.mdc
+                    [ Button.ripple
+                    , Button.outlined
+                    , css "margin-right" "32px"
+                    ]
+                    [ text "Outlined"
+                    ]
+                ]
+            , styled Html.h2
+                [ cs "mdc-typography--headline6"
 
-                    -- TODO: Typography.headline6?
-                    , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-                    ]
-                    [ text "Resources"
-                    ]
-                , ResourceLink.view
-                    { link = "https://material.io/go/design-buttons"
-                    , title = "Material Design Guidelines"
-                    , icon = "images/material.svg"
-                    , altText = "Material Design Guidelines icon"
-                    }
-                , ResourceLink.view
-                    { link = "https://material.io/components/web/catalog/buttons/"
-                    , title = "Documentation"
-                    , icon = "images/ic_drive_document_24px.svg"
-                    , altText = "Documentation icon"
-                    }
-                , ResourceLink.view
-                    { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-button"
-                    , title = "Source Code (Material Components Web)"
-                    , icon = "images/ic_code_24px.svg"
-                    , altText = "Source Code"
-                    }
-                , Demo.Page.demos
-                    [ textButtons "buttons-text-buttons"
-                    , raisedButtons "buttons-raised-buttons"
-                    , unelevatedButtons "buttons-unelevated-buttons"
-                    , outlinedButtons "buttons-outlined-buttons"
-                    ]
+                -- TODO: Typography.headline6?
+                , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+                ]
+                [ text "Resources"
+                ]
+            , ResourceLink.view
+                { link = "https://material.io/go/design-buttons"
+                , title = "Material Design Guidelines"
+                , icon = "images/material.svg"
+                , altText = "Material Design Guidelines icon"
+                }
+            , ResourceLink.view
+                { link = "https://material.io/components/web/catalog/buttons/"
+                , title = "Documentation"
+                , icon = "images/ic_drive_document_24px.svg"
+                , altText = "Documentation icon"
+                }
+            , ResourceLink.view
+                { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-button"
+                , title = "Source Code (Material Components Web)"
+                , icon = "images/ic_code_24px.svg"
+                , altText = "Source Code"
+                }
+            , Page.demos
+                [ textButtons "buttons-text-buttons"
+                , raisedButtons "buttons-raised-buttons"
+                , unelevatedButtons "buttons-unelevated-buttons"
+                , outlinedButtons "buttons-outlined-buttons"
                 ]
             ]
         ]
