@@ -7,7 +7,8 @@ module Material.Textfield exposing
     , disabled
     , leadingIcon
     , trailingIcon
-    , iconUnclickable
+    , onLeadingIconClick
+    , onTrailingIconClick
     , required
     , invalid
     , pattern
@@ -65,8 +66,8 @@ module Material.Textfield exposing
 
 @docs leadingIcon
 @docs trailingIcon
-@docs iconUnclickable
-
+@docs onLeadingIconClick
+@docs onTrailingIconClick
 
 ### Validation properties
 
@@ -135,11 +136,18 @@ view =
     Textfield.view
 
 
-{-| Make textfield icons unclickable.
+{-| Set action for when the leading icon is clicked.
 -}
-iconUnclickable : Property m
-iconUnclickable =
-    Textfield.iconUnclickable
+onLeadingIconClick : msg -> Property msg
+onLeadingIconClick =
+    Textfield.onLeadingIconClick
+
+
+{-| Set action for when the trailing icon is clicked.
+-}
+onTrailingIconClick : msg -> Property msg
+onTrailingIconClick =
+    Textfield.onTrailingIconClick
 
 
 {-| Add a leading icon to the textfield.

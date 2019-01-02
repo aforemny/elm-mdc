@@ -25,6 +25,8 @@ type alias Example =
     , helperText : Bool
     , persistent : Bool
     , validationMsg : Bool
+    , leadingIconClicked : Bool
+    , trailingIconClicked : Bool
     }
 
 
@@ -36,6 +38,8 @@ defaultExample =
     , helperText = False
     , persistent = False
     , validationMsg = False
+    , leadingIconClicked = False
+    , trailingIconClicked = False
     }
 
 
@@ -58,6 +62,8 @@ type ExampleMsg
     | ToggleHelperText
     | TogglePersistent
     | ToggleValidationMsg
+    | LeadingIconClicked
+    | TrailingIconClicked
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -101,6 +107,12 @@ updateExample msg model =
         ToggleValidationMsg ->
             { model | validationMsg = not model.validationMsg }
 
+        LeadingIconClicked ->
+            { model | leadingIconClicked = True, trailingIconClicked = False }
+
+        TrailingIconClicked ->
+            { model | leadingIconClicked = False, trailingIconClicked = True }
+
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
@@ -121,6 +133,7 @@ view lift page model =
         , password lift "text-fields-password" model
         , filled lift model
         , outlined lift model
+        , trailingAndLeadingIcon lift "trailing-and-leading-icon" model
         , textarea lift "text-fields-textarea" model
         , fullwidthTextfield lift "text-field-fullwidth-helper" model
         , fullwidthTextarea lift "text-field-fullwidth-textarea-helper" model
@@ -368,6 +381,61 @@ filled lift model =
 outlined : (Msg m -> m) -> Model m -> Html m
 outlined lift model =
     exampleRow lift "outlined" model "Outlined" [ Textfield.outlined ]
+
+
+trailingAndLeadingIcon : (Msg m -> m) -> Material.Index -> Model m -> Html m
+trailingAndLeadingIcon lift index model =
+    let
+        state =
+            Dict.get index model.examples
+                |> Maybe.withDefault defaultExample
+    in
+    example []
+        [ header "Trailing and leading icon"
+        , styled Html.section
+            [ Options.attribute (Html.dir "rtl") |> when state.rtl
+            ]
+            [ Html.div []
+                [ Textfield.view (lift << Mdc)
+                    index
+                    model.mdc
+                    [ Textfield.label "Multi-line Label"
+                    , Textfield.disabled |> when state.disabled
+                    , Textfield.leadingIcon "phone"
+                    , Textfield.trailingIcon "event"
+                    , Textfield.onLeadingIconClick (lift (ExampleMsg index LeadingIconClicked))
+                    , Textfield.onTrailingIconClick (lift (ExampleMsg index TrailingIconClicked))
+                    --, Textfield.outlined
+                    ]
+                    []
+                ]
+            ]
+        , if state.leadingIconClicked then
+              Html.p [] [ Html.text "You clicked the leading icon." ]
+          else
+              if state.trailingIconClicked then
+                  Html.p [] [ Html.text "You clicked the trailing icon." ]
+              else
+                  Html.text ""
+        , styled Html.div
+            []
+            [ checkbox
+                [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
+                , Html.checked state.disabled
+                ]
+                []
+            , Html.label [] [ Html.text " Disabled" ]
+            ]
+        , styled Html.div
+            []
+            [ checkbox
+                [ Html.onClick (lift (ExampleMsg index ToggleRtl))
+                , Html.checked state.rtl
+                ]
+                []
+            , Html.label [] [ Html.text " RTL" ]
+            ]
+        ]
 
 
 textarea : (Msg m -> m) -> Material.Index -> Model m -> Html m
