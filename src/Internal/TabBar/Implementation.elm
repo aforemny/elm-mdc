@@ -289,7 +289,7 @@ scroller lift model options nodes =
         [ styled div
               [ cs "mdc-tab-scroller__scroll-area"
               , cs "mdc-tab-scroller__scroll-area--scroll"
-              --, css "margin-bottom" ((String.fromInt -config.horizontalScrollbarHeight) ++ "px")
+              , css "margin-bottom" ((String.fromInt -config.horizontalScrollbarHeight) ++ "px")
               ]
               [ Options.apply summary
                     div
