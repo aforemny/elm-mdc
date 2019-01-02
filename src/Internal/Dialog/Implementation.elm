@@ -263,14 +263,3 @@ checkScrimClick =
 noScrim : Property m
 noScrim =
     Options.option (\config -> { config | noScrim = True })
-
-
-whatever : (Msg -> m) -> Config m -> Decoder m
-whatever lift config =
-    Json.map
-        (keycheck lift config)
-    (Json.at [ "keyCode" ] Json.int)
-
-keycheck : (Msg -> m) -> Config m -> Int -> m
-keycheck lift config keyCode =
-      Maybe.withDefault (lift NoOp) config.onClose
