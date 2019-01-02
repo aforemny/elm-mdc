@@ -7,6 +7,8 @@ module Material.TabBar exposing
     , icon
     , stacked
     , smallIndicator
+    , indicatorIcon
+    , fadingIconIndicator
     )
 
 {-| Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy.
@@ -57,6 +59,7 @@ update the active tab in your model.
 @docs icon
 @docs stacked
 @docs smallIndicator
+@docs fadingIndicator
 
 -}
 
@@ -128,3 +131,17 @@ stacked =
 smallIndicator : Property m
 smallIndicator =
     TabBar.smallIndicator
+
+
+{-| Indicates the icon to use for the sliding indicator icon effect.
+-}
+indicatorIcon : String -> Property m
+indicatorIcon  =
+    TabBar.indicatorIcon
+
+
+{-| Indicates that the indicator icon effect will use a fading effect.
+-}
+fadingIconIndicator : Property m
+fadingIconIndicator =
+    TabBar.fadingIconIndicator
