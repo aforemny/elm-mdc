@@ -12840,7 +12840,7 @@ var author$project$Demo$Cards$headlinesCard = F3(
 								]),
 							_List_fromArray(
 								[
-									elm$html$Html$text(title)
+									elm$html$Html$text(body)
 								]))
 						]));
 			});
