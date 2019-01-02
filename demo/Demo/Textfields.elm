@@ -399,13 +399,12 @@ trailingAndLeadingIcon lift index model =
                 [ Textfield.view (lift << Mdc)
                     index
                     model.mdc
-                    [ Textfield.label "Multi-line Label"
+                    [ Textfield.label "Leading and trailing icons"
                     , Textfield.disabled |> when state.disabled
                     , Textfield.leadingIcon "phone"
                     , Textfield.trailingIcon "event"
                     , Textfield.onLeadingIconClick (lift (ExampleMsg index LeadingIconClicked))
                     , Textfield.onTrailingIconClick (lift (ExampleMsg index TrailingIconClicked))
-                    --, Textfield.outlined
                     ]
                     []
                 ]
