@@ -122,6 +122,49 @@ view lift page model =
                     ]
                     [ text "Outlined"
                     ]
+                    [ text "Unelevated"
+                    ]
+                , Button.view (lift << Mdc)
+                    "buttons-hero-button-outlined"
+                    model.mdc
+                    [ Button.ripple
+                    , Button.outlined
+                    , css "margin-right" "32px"
+                    ]
+                    [ text "Outlined"
+                    ]
+                ]
+            , styled Html.h2
+                [ cs "mdc-typography--headline6"
+
+                -- TODO: Typography.headline6?
+                , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+                ]
+                [ text "Resources"
+                ]
+            , ResourceLink.view
+                { link = "https://material.io/go/design-buttons"
+                , title = "Material Design Guidelines"
+                , icon = "images/material.svg"
+                , altText = "Material Design Guidelines icon"
+                }
+            , ResourceLink.view
+                { link = "https://material.io/components/web/catalog/buttons/"
+                , title = "Documentation"
+                , icon = "images/ic_drive_document_24px.svg"
+                , altText = "Documentation icon"
+                }
+            , ResourceLink.view
+                { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-button"
+                , title = "Source Code (Material Components Web)"
+                , icon = "images/ic_code_24px.svg"
+                , altText = "Source Code"
+                }
+            , Page.demos
+                [ textButtons "buttons-text-buttons"
+                , raisedButtons "buttons-raised-buttons"
+                , unelevatedButtons "buttons-unelevated-buttons"
+                , outlinedButtons "buttons-outlined-buttons"
                 ]
             , styled Html.h2
                 [ cs "mdc-typography--headline6"
