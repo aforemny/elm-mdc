@@ -1,7 +1,7 @@
 module Demo.Dialog exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
+import Html exposing (Html, text, p)
 import Html.Attributes as Html
 import Material
 import Material.Button as Button
@@ -10,6 +10,7 @@ import Material.Dialog as Dialog
 import Material.FormField as FormField
 import Material.List as Lists
 import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Typography as Typography
 
 
 type alias Model m =
@@ -246,7 +247,10 @@ scrollableDialog lift index model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Dialog"
-        [ Page.hero
+        [ Page.header "Dialog"
+        , styled p [ Typography.body1 ]
+            [ text "Dialogs inform users about a specific task and may contain critical information, require decisions, or involve multiple tasks."]
+        , Page.hero
             [ css "justify-content" "center"
             , Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl
             ]
