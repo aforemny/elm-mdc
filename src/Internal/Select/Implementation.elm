@@ -1,6 +1,5 @@
 module Internal.Select.Implementation exposing
     ( Property
-    , box
     , disabled
     , label
     , option
@@ -46,7 +45,6 @@ update lift msg model =
 
 type alias Config =
     { label : String
-    , box : Bool
     , disabled : Bool
     , preselected : Bool
     , id_ : String
@@ -56,7 +54,6 @@ type alias Config =
 defaultConfig : Config
 defaultConfig =
     { label = ""
-    , box = False
     , disabled = False
     , preselected = False
     , id_ = ""
@@ -80,11 +77,6 @@ preselected =
 disabled : Property m
 disabled =
     Options.option (\config -> { config | disabled = True })
-
-
-box : Property m
-box =
-    cs "mdc-select--box"
 
 
 select :
