@@ -129,13 +129,9 @@ update lift msg model =
                 { model
                     | geometry = Just geometry
                     , translateOffset = translateOffset
-                    , indicatorShown = False || model.indicatorShown
                 }
-            , Helpers.delayedCmd 0 (lift SetIndicatorShown)
+            , Cmd.none
             )
-
-        SetIndicatorShown ->
-            ( Just { model | indicatorShown = True }, Cmd.none )
 
         SetActiveTab tab_index ->
             -- TODO: probably when setting the active tab we want to scroll it into view at this point.
