@@ -12,7 +12,6 @@ import Demo.ModalDrawer
 import Demo.Drawer
 import Demo.Elevation
 import Demo.Fabs
-import Demo.GridList
 import Demo.IconToggle
 import Demo.ImageList
 import Demo.LayoutGrid
