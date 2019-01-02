@@ -19,7 +19,7 @@ material-components-web.css: node_modules
 	cp node_modules/material-components-web/dist/material-components-web.css .
 
 elm-mdc.js: node_modules src/elm-mdc.js
-	./node_modules/.bin/webpack
+	./node_modules/.bin/webpack --mode production
 
 docs:
 	$(ELM) --docs=docs.json
