@@ -87,7 +87,7 @@ update lift msg model =
             , backIndicator = backIndicator
             }
     in
-    case msg of
+    case Debug.log "TabBar.update" msg of
         RippleMsg index msg_ ->
             let
                 ( ripple, effects ) =
@@ -105,219 +105,6 @@ update lift msg model =
 
         NoOp ->
             ( Nothing, Cmd.none )
-
-        Select geometry ->
-            ( Just { model | geometry = Just geometry }
-            , Cmd.none
-            -- TODO: really want to focus tab here with something like:
-            -- Task.attempt (\_ -> NoOp) (Dom.focus "tabs-hero-tabs--0")
-            )
-
-        ScrollBack geometry ->
-            let
-                tabBarWidth =
-                    geometry.tabBar.offsetWidth
-
-                scrollFrameWidth =
-                    geometry.scrollFrame.offsetWidth
-
-                currentTranslateOffset =
-                    model.translateOffset
-
-                loop ( i, tab_ ) result =
-                    if result.scrollTargetIndex /= Nothing then
-                        result
-
-                    else
-                        let
-                            tabOffsetLeft =
-                                tab_.offsetLeft
-
-                            tabBarWidthLessTabOffsetLeft =
-                                tabBarWidth - tabOffsetLeft
-
-                            tabIsNotOccluded =
-                                if not isRtl then
-                                    tabOffsetLeft > currentTranslateOffset
-
-                                else
-                                    tabBarWidthLessTabOffsetLeft > currentTranslateOffset
-                        in
-                        if tabIsNotOccluded then
-                            result
-
-                        else
-                            let
-                                newTabWidthAccumulator =
-                                    result.tabWidthAccumulator + tab_.offsetWidth
-
-                                scrollTargetDetermined =
-                                    newTabWidthAccumulator > scrollFrameWidth
-
-                                newScrollTargetIndex =
-                                    if scrollTargetDetermined then
-                                        Just <|
-                                            if isRtl then
-                                                i + 1
-
-                                            else
-                                                i
-
-                                    else
-                                        Nothing
-                            in
-                            { scrollTargetIndex = newScrollTargetIndex
-                            , tabWidthAccumulator = newTabWidthAccumulator
-                            }
-
-                scrollTargetIndex =
-                    Maybe.withDefault 0
-                        << .scrollTargetIndex
-                    <|
-                        List.foldl loop
-                            { scrollTargetIndex = Nothing
-                            , tabWidthAccumulator = 0
-                            }
-                            (List.reverse (List.indexedMap (\index tab_ -> ( index, tab_ )) geometry.tabs))
-
-                translateOffset =
-                    scrollToTabAtIndex geometry scrollTargetIndex
-
-                { forwardIndicator, backIndicator } =
-                    indicatorEnabledStates geometry translateOffset
-            in
-            ( Just
-                { model
-                    | geometry = Just geometry
-                    , translateOffset = translateOffset
-                    , forwardIndicator = forwardIndicator
-                    , backIndicator = backIndicator
-                }
-            , Cmd.none
-            )
-
-        ScrollForward geometry ->
-            let
-                currentTranslationOffset =
-                    model.translateOffset
-
-                scrollFrameWidth =
-                    geometry.scrollFrame.offsetWidth + currentTranslationOffset
-
-                loop ( i, tab_ ) result =
-                    if result.scrollTargetIndex /= Nothing then
-                        result
-
-                    else
-                        let
-                            tabOffsetLeftAndWidth =
-                                tab_.offsetLeft + tab_.offsetWidth
-
-                            scrollTargetDetermined =
-                                if not isRtl then
-                                    tabOffsetLeftAndWidth > scrollFrameWidth
-
-                                else
-                                    let
-                                        frameOffsetAndTabWidth =
-                                            scrollFrameWidth - tab_.offsetWidth
-
-                                        tabRightOffset =
-                                            tab_.offsetWidth - tabOffsetLeftAndWidth
-                                    in
-                                    tabRightOffset > frameOffsetAndTabWidth
-                        in
-                        if scrollTargetDetermined then
-                            { scrollTargetIndex = Just i
-                            }
-
-                        else
-                            { scrollTargetIndex = Nothing
-                            }
-
-                scrollTargetIndex =
-                    Maybe.withDefault 0
-                        << .scrollTargetIndex
-                    <|
-                        List.foldl loop
-                            { scrollTargetIndex = Nothing
-                            }
-                            (List.indexedMap (\index tab_ -> ( index, tab_ )) geometry.tabs)
-
-                translateOffset =
-                    scrollToTabAtIndex geometry scrollTargetIndex
-
-                { forwardIndicator, backIndicator } =
-                    indicatorEnabledStates geometry translateOffset
-            in
-            ( Just
-                { model
-                    | geometry = Just geometry
-                    , translateOffset = translateOffset
-                    , forwardIndicator = forwardIndicator
-                    , backIndicator = backIndicator
-                }
-            , Cmd.none
-            )
-
-        Focus i geometry ->
-            let
-                resetAmt =
-                    if isRtl then
-                        model.scrollLeftAmount
-
-                    else
-                        0
-
-                tab_ =
-                    geometry.tabs
-                        |> List.drop i
-                        |> List.head
-                        |> Maybe.withDefault
-                            { offsetLeft = 0
-                            , offsetWidth = 0
-                            }
-
-                scrollFrameWidth =
-                    geometry.scrollFrame.offsetWidth
-
-                tabBarWidth =
-                    geometry.tabBar.offsetWidth
-
-                leftEdge =
-                    tab_.offsetLeft
-
-                rightEdge =
-                    leftEdge + tab_.offsetWidth
-
-                normalizedLeftOffset =
-                    tabBarWidth - leftEdge
-
-                currentTranslateOffset =
-                    model.translateOffset
-
-                shouldScrollBack =
-                    if not isRtl then
-                        rightEdge <= currentTranslateOffset
-
-                    else
-                        leftEdge >= tabBarWidth - currentTranslateOffset
-
-                shouldScrollForward =
-                    if not isRtl then
-                        rightEdge > currentTranslateOffset + scrollFrameWidth
-
-                    else
-                        normalizedLeftOffset > scrollFrameWidth + currentTranslateOffset
-            in
-            if shouldScrollForward then
-                update lift (ScrollForward geometry) model
-
-            else if shouldScrollBack then
-                update lift (ScrollBack geometry) model
-
-            else
-                ( Nothing, Cmd.none )
 
         Init geometry ->
             ( let
@@ -337,14 +124,10 @@ update lift msg model =
                     else
                         model.translateOffset
 
-                { forwardIndicator, backIndicator } =
-                    indicatorEnabledStates geometry translateOffset
               in
               Just
                 { model
                     | geometry = Just geometry
-                    , forwardIndicator = forwardIndicator
-                    , backIndicator = backIndicator
                     , translateOffset = translateOffset
                     , indicatorShown = False || model.indicatorShown
                 }
@@ -355,6 +138,9 @@ update lift msg model =
             ( Just { model | indicatorShown = True }, Cmd.none )
 
         SetActiveTab tab_index ->
+            -- TODO: probably when setting the active tab we want to scroll it into view at this point.
+            -- But I don't know how. Browser.Dom.setViewportOf  seems to be the trick.
+            -- But it returns a result I don't know what to do with.
             ( Just { model | activeTab = tab_index }, Cmd.none )
 
 
@@ -491,7 +277,7 @@ scroller lift model options nodes =
         [ styled div
               [ cs "mdc-tab-scroller__scroll-area"
               , cs "mdc-tab-scroller__scroll-area--scroll"
-              , css "margin-bottom" ((String.fromInt -config.horizontalScrollbarHeight) ++ "px")
+              --, css "margin-bottom" ((String.fromInt -config.horizontalScrollbarHeight) ++ "px")
               ]
               [ Options.apply summary
                     div
@@ -638,15 +424,6 @@ tabView domId lift model options index tab_ =
             , Options.role "tab"
             , Options.aria "selected" (if selected then "true" else "false")
             , Options.tabindex (if selected then 0 else -1)
-
-            -- TODO: not sure what the purpose of this is
-            , Options.on "click" <|
-                Json.map (lift << Select) <|
-                    decodeGeometryOnTab config.indicator
-            -- TODO: not sure what the purpose of this is
-            -- , Options.on "focus" <|
-            --     Json.map (lift << Focus index) <|
-            --         decodeGeometryOnTab config.indicator
 
             -- TODO: somehow ripple needs to interact with ripple span I think?
             -- Now it sets "mdc-ripple-upgraded on the button class which is wrong.
