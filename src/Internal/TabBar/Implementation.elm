@@ -3,9 +3,7 @@ module Internal.TabBar.Implementation exposing
     , Tab
     , activeTab
     , icon
-    , indicator
     , react
-    , scrolling
     , smallIndicator
     , stacked
     , tab
@@ -362,8 +360,7 @@ update lift msg model =
 
 -- Note: tab bar and tab state use the same config.
 type alias Config =
-    { scroller : Bool
-    , indicator : Bool
+    { indicator : Bool
     , activeTab : Int
     , icon : Maybe String
     , smallIndicator : Bool
@@ -375,18 +372,12 @@ type alias Config =
 
 defaultConfig : Config
 defaultConfig =
-    { scroller = False
-    , indicator = True
+    { indicator = True
     , activeTab = 0
     , icon = Nothing
     , smallIndicator = False
     , horizontalScrollbarHeight = 10
     }
-
-
-scrolling : Property m
-scrolling =
-    Options.option (\config -> { config | scroller = True })
 
 
 indicator : Property m
