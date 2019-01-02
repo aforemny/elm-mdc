@@ -440,8 +440,6 @@ tabView domId lift model options index tab_ =
                 ]
 
     in
-        -- TODO: may need manual event dispatching here according to Tabs implementation?
-        -- Because the tab should get focus, but failed to do so.
         Options.apply tab_summary
         button
             [ cs "mdc-tab"
