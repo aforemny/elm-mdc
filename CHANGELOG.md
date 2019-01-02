@@ -3,6 +3,8 @@
 * Textfield
   * Box option is now the default, option removed.
   * Remove dense option already, will be removed soon.
+  * unClickable option is removed. Set onLeadingIconClick and
+    onTrailingIconClick to indicate actions for any icons.
 
 * Dialog
   * Surface div is gone. Put header, content and actions directly as children from dialog.

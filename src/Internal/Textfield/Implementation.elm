@@ -4,11 +4,12 @@ module Internal.Textfield.Implementation exposing
     , disabled
     , email
     , fullwidth
-    , iconUnclickable
     , invalid
     , label
     , leadingIcon
     , nativeControl
+    , onLeadingIconClick
+    , onTrailingIconClick
     , outlined
     , password
     , pattern
@@ -52,7 +53,8 @@ type alias Config m =
     , outlined : Bool
     , leadingIcon : Maybe String
     , trailingIcon : Maybe String
-    , iconClickable : Bool
+    , onLeadingIconClick : Maybe m
+    , onTrailingIconClick : Maybe m
     , placeholder : Maybe String
     , cols : Maybe Int
     , rows : Maybe Int
@@ -77,7 +79,8 @@ defaultConfig =
     , outlined = False
     , leadingIcon = Nothing
     , trailingIcon = Nothing
-    , iconClickable = True
+    , onLeadingIconClick = Nothing
+    , onTrailingIconClick = Nothing
     , placeholder = Nothing
     , cols = Nothing
     , rows = Nothing
@@ -85,10 +88,6 @@ defaultConfig =
     , id_ = ""
     }
 
-
-iconUnclickable : Property m
-iconUnclickable =
-    Options.option (\config -> { config | iconClickable = False })
 
 
 leadingIcon : String -> Property m
@@ -99,6 +98,16 @@ leadingIcon icon =
 trailingIcon : String -> Property m
 trailingIcon icon =
     Options.option (\config -> { config | trailingIcon = Just icon })
+
+
+onLeadingIconClick : m -> Property m
+onLeadingIconClick handler =
+    Options.option (\config -> { config | onLeadingIconClick = Just handler })
+
+
+onTrailingIconClick : m -> Property m
+onTrailingIconClick handler =
+    Options.option (\config -> { config | onTrailingIconClick = Just handler })
 
 
 outlined : Property m
@@ -253,6 +262,10 @@ textField domId lift model options _ =
                      []
             )
 
+        leadingIcon_ = iconView lift config.leadingIcon config.onLeadingIconClick
+
+        trailingIcon_ = iconView lift config.trailingIcon config.onTrailingIconClick
+
     in
     Options.apply summary
         Html.div
@@ -263,138 +276,124 @@ textField domId lift model options _ =
         , cs "mdc-text-field--invalid" |> when isInvalid
         , cs "mdc-text-field--textarea" |> when config.textarea
         , cs "mdc-text-field--outlined" |> when config.outlined
-        , cs "mdc-text-field--with-leading-icon"
-            |> when ((config.leadingIcon /= Nothing) && (config.trailingIcon == Nothing))
-        , cs "mdc-text-field--with-trailing-icon"
-            |> when (config.trailingIcon /= Nothing)
+        , cs "mdc-text-field--with-leading-icon" |> when (config.leadingIcon /= Nothing)
+        , cs "mdc-text-field--with-trailing-icon" |> when (config.trailingIcon /= Nothing)
         ]
         []
-        (List.concat
-            [ [ Options.applyNativeControl summary
-                    (if config.textarea then
-                        Html.textarea
+        [ leadingIcon_
+        , Options.applyNativeControl summary
+            (if config.textarea then
+                 Html.textarea
 
-                     else
-                        Html.input
-                    )
-                    [ cs "mdc-text-field__input"
-                    , Options.id config.id_
-                    , if config.outlined then
-                        Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
+             else
+                 Html.input
+            )
+              [ cs "mdc-text-field__input"
+              , Options.id config.id_
+              , if config.outlined then
+                    Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
 
-                      else
-                        Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
-                    , Options.onBlur (lift Blur)
-                    , Options.onInput (lift << Input)
-                    , Options.many
-                        << List.map Options.attribute
-                        << List.filterMap identity
-                      <|
-                        [ Html.type_ (Maybe.withDefault "text" config.type_)
-                            |> (if not config.textarea then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.disabled True
-                            |> (if config.disabled then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.property "required" (Encode.bool True)
-                            |> (if config.required then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
-                            |> (if config.pattern /= Nothing then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.value (Maybe.withDefault "" config.value)
-                            |> (if config.value /= Nothing then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        ]
-                    , when (config.placeholder /= Nothing) <|
-                        Options.attribute <|
-                            Html.placeholder (Maybe.withDefault "" config.placeholder)
-                    , when (config.textarea && (config.rows /= Nothing)) <|
-                        Options.attribute <|
-                            Html.rows (Maybe.withDefault 0 config.rows)
-                    , when (config.textarea && (config.cols /= Nothing)) <|
-                        Options.attribute <|
-                            Html.cols (Maybe.withDefault 0 config.cols)
-                    ]
-                    []
-              , if not config.fullWidth && not config.outlined  then
-                    htmlLabel
                 else
-                    text ""
-              ]
-            , if not config.outlined && not config.textarea then
-                [ styled Html.div
-                    [ cs "mdc-line-ripple"
-                    , cs "mdc-line-ripple--active" |> when model.focused
-                    ]
-                    []
-                ]
-
-              else
-                []
-            , if config.outlined then
-                [ styled Html.div
-                    [ cs "mdc-notched-outline"
-                    , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
-                    ]
-                    [ styled Html.div [ cs "mdc-notched-outline__leading" ] []
-                    , styled Html.div
-                        [ cs "mdc-notched-outline__notch" ]
-                        [ htmlLabel ]
-                    , styled Html.div
-                        [ cs "mdc-notched-outline__trailing" ]
-                        []
-                    ]
-                ]
-              else
-                []
-            , let
-                icon =
-                    config.leadingIcon
-                        |> Maybe.map Just
-                        |> Maybe.withDefault config.trailingIcon
-              in
-              case icon of
-                Just icon_ ->
-                    [ styled Html.i
-                        [ cs "material-icons mdc-text-field__icon"
-                        , Options.attribute
-                            << Html.tabindex
+                    Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
+              , Options.onBlur (lift Blur)
+              , Options.onInput (lift << Input)
+              , Options.many
+                  << List.map Options.attribute
+                      << List.filterMap identity
                           <|
-                            if config.iconClickable then
-                                0
+                          [ Html.type_ (Maybe.withDefault "text" config.type_)
+                          |> (if not config.textarea then
+                                  Just
 
-                            else
-                                -1
-                        ]
-                        [ text icon_
-                        ]
-                    ]
+                              else
+                                  always Nothing
+                             )
+                          , Html.disabled True
+                          |> (if config.disabled then
+                                  Just
 
-                Nothing ->
-                    []
-            ]
-        )
+                              else
+                                  always Nothing
+                             )
+                          , Html.property "required" (Encode.bool True)
+                          |> (if config.required then
+                                  Just
+
+                              else
+                                  always Nothing
+                             )
+                          , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
+                          |> (if config.pattern /= Nothing then
+                                  Just
+
+                                else
+                                    always Nothing
+                               )
+                          , Html.value (Maybe.withDefault "" config.value)
+                          |> (if config.value /= Nothing then
+                                  Just
+
+                              else
+                                  always Nothing
+                               )
+                          ]
+              , when (config.placeholder /= Nothing) <|
+                  Options.attribute <|
+                      Html.placeholder (Maybe.withDefault "" config.placeholder)
+              , when (config.textarea && (config.rows /= Nothing)) <|
+                    Options.attribute <|
+                        Html.rows (Maybe.withDefault 0 config.rows)
+              , when (config.textarea && (config.cols /= Nothing)) <|
+                  Options.attribute <|
+                      Html.cols (Maybe.withDefault 0 config.cols)
+              ]
+              []
+        , if not config.fullWidth && not config.outlined  then
+              htmlLabel
+          else
+              text ""
+        , if not config.outlined && not config.textarea then
+              styled Html.div
+                  [ cs "mdc-line-ripple"
+                  , cs "mdc-line-ripple--active" |> when model.focused
+                  ]
+              []
+          else
+              text ""
+        , if config.outlined then
+              styled Html.div
+                  [ cs "mdc-notched-outline"
+                  , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
+                  ]
+              [ styled Html.div [ cs "mdc-notched-outline__leading" ] []
+              , styled Html.div
+                  [ cs "mdc-notched-outline__notch" ]
+                  [ htmlLabel ]
+              , styled Html.div
+                  [ cs "mdc-notched-outline__trailing" ]
+                  []
+              ]
+          else
+              text ""
+        , trailingIcon_
+        ]
+
+
+iconView : (Msg -> m) -> Maybe String -> Maybe m -> Html m
+iconView lift icon handler =
+    case icon of
+        Just name ->
+            styled Html.i
+                [ cs "material-icons mdc-text-field__icon"
+                , Options.tabindex 0 |> when (handler /= Nothing)
+                , Options.role "button" |> when (handler /= Nothing)
+                , handler
+                    |> Maybe.map Options.onClick
+                    |> Maybe.withDefault Options.nop
+                ]
+            [ text name ]
+        Nothing ->
+            text ""
 
 
 type alias Store s =
