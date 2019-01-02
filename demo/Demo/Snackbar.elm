@@ -121,7 +121,7 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Snackbar"
+    page.body "Snackbar" "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
         [ Page.hero []
             [ styled Html.div
                 [ css "position" "relative"

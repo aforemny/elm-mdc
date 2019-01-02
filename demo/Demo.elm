@@ -12,7 +12,6 @@ import Demo.ModalDrawer
 import Demo.Drawer
 import Demo.Elevation
 import Demo.Fabs
-import Demo.GridList
 import Demo.IconToggle
 import Demo.ImageList
 import Demo.LayoutGrid
@@ -35,10 +34,10 @@ import Demo.Toolbar
 import Demo.TopAppBar
 import Demo.Typography
 import Demo.Url exposing (ToolbarPage(..), TopAppBarPage(..))
-import Html exposing (Html, text)
+import Html exposing (Html, text, p)
 import Material
 import Material.Options as Options exposing (cs, css, styled, when)
-import Material.Toolbar as Toolbar
+import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
 import Platform.Cmd exposing (..)
 import Url
@@ -396,7 +395,7 @@ view_ model =
             { toolbar = Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url
             , navigate = Navigate
             , body =
-                \title nodes ->
+                \title intro nodes ->
                     styled Html.div
                         [ css "display" "flex"
                         , css "flex-flow" "column"
@@ -417,8 +416,11 @@ view_ model =
                             , css "margin-right" "auto"
                             ]
                             ( styled Html.div
-                                [ Toolbar.fixedAdjust "page-toolbar" model.mdc ]
-                                []
+                                [ TopAppBar.fixedAdjust ]
+                                [ Page.header title
+                                , styled p [ Typography.body1 ]
+                                    [ text intro ]
+                                ]
                                 :: nodes
                             )
                         ]

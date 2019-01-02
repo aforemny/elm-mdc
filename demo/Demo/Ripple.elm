@@ -68,7 +68,7 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Ripple"
+    page.body "Ripple" "Ripples are visual representations used to communicate the status of a component or interactive element."
         [ Page.hero []
             [ let
                 ripple =

@@ -56,7 +56,7 @@ view lift page model =
                 << List.singleton
                 << Html.figcaption []
     in
-    page.body "Elevation"
+    page.body "Elevation" "Elevation is the relative depth, or distance, between two surfaces along the z-axis."
         [ Page.hero []
             [ demoSurface
                 [ Elevation.z0

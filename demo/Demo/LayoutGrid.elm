@@ -162,7 +162,7 @@ view lift page model =
                 , css "color" "white"
                 ]
     in
-    page.body "Layout grid"
+    page.body "Layout Grid" "Material design’s responsive UI is based on a 12-column grid layout."
         [ Html.node "style"
             [ Html.type_ "text/css"
             ]
