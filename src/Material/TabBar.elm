@@ -1,46 +1,42 @@
 module Material.TabBar exposing
     ( Property
     , view
+    , scrolling
+    , indicator
     , activeTab
     , Tab
     , tab
     , icon
     , stacked
     , smallIndicator
-    , indicatorIcon
-    , fadingIconIndicator
     )
 
 {-| Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy.
 
-This component consists of a TabBar containing Tabs. Scrolling of Tabs
-is currently not supported.
+This component consists of a TabBar containing Tabs. It supports scrolling of
+Tabs.
 
 
 # Resources
 
-  - [Material Components for the Web - Tab Bar](https://material.io/design/components/tabs.html)
-  - [Material Design guidelines: Tabs](https://material.io/design/components/tabs.html)
+  - [Material Design guidelines: Tabs](https://material.io/guidelines/components/tabs.html)
   - [Demo](https://aforemny.github.io/elm-mdc/#tabs)
 
 
 # Example
 
     import Html exposing (text)
-    import Material.TabBar as TabBar
+    import Material.Tabs as TabBar
 
 
     TabBar.view Mdc "my-tab-bar" model.mdc
-        [ TabBar.activeTab 0
+        [ TabBar.indicator
         ]
         [ TabBar.tab [] [ text "Item One" ]
         , TabBar.tab [] [ text "Item Two" ]
         , TabBar.tab [] [ text "Item Three" ]
         ]
 
-
-Set the Options.onClick property on each tab to send a message to
-update the active tab in your model.
 
 # Usage
 
@@ -49,6 +45,8 @@ update the active tab in your model.
 
 @docs Property
 @docs view
+@docs scrolling
+@docs indicator
 @docs activeTab
 
 
@@ -56,11 +54,9 @@ update the active tab in your model.
 
 @docs Tab
 @docs tab
+@docs withIconAndText
 @docs icon
-@docs stacked
-@docs smallIndicator
-@docs indicatorIcon
-@docs fadingIconIndicator
+@docs iconText
 
 -}
 
@@ -88,6 +84,24 @@ view :
     -> Html m
 view =
     TabBar.view
+
+
+{-| Make the TabBar scroll if its tabs do not fit inside.
+
+Displays forward and backward navigation arrows on either side if necessary and
+advances scroll on pressing the Tab key.
+
+-}
+scrolling : Property m
+scrolling =
+    TabBar.scrolling
+
+
+{-| Make the TabBar's tabs have an active indicator.
+-}
+indicator : Property m
+indicator =
+    TabBar.indicator
 
 
 {-| Make the TabBar's `n`th tab active.
@@ -132,17 +146,3 @@ stacked =
 smallIndicator : Property m
 smallIndicator =
     TabBar.smallIndicator
-
-
-{-| Indicates the icon to use for the sliding indicator icon effect.
--}
-indicatorIcon : String -> Property m
-indicatorIcon  =
-    TabBar.indicatorIcon
-
-
-{-| Indicates that the indicator icon effect will use a fading effect.
--}
-fadingIconIndicator : Property m
-fadingIconIndicator =
-    TabBar.fadingIconIndicator
