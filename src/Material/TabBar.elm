@@ -59,7 +59,8 @@ update the active tab in your model.
 @docs icon
 @docs stacked
 @docs smallIndicator
-@docs fadingIndicator
+@docs indicatorIcon
+@docs fadingIconIndicator
 
 -}
 
