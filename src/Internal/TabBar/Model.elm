@@ -15,8 +15,6 @@ type alias Model =
     , translateOffset : Float
     , ripples : Dict Int Ripple.Model
     , indicatorShown : Bool
-    , forwardIndicator : Bool
-    , backIndicator : Bool
     , scrollLeftAmount : Int
     , activeTab : Int
     }
@@ -28,8 +26,6 @@ defaultModel =
     , translateOffset = 0
     , ripples = Dict.empty
     , indicatorShown = False
-    , forwardIndicator = False
-    , backIndicator = False
     , scrollLeftAmount = 0
     , activeTab = 0
     }
@@ -38,13 +34,9 @@ defaultModel =
 type Msg m
     = NoOp
     | Dispatch (List m)
-    | Select Geometry
-    | ScrollForward Geometry
-    | ScrollBack Geometry
     | RippleMsg Int Ripple.Msg
     | Init Geometry
     | SetIndicatorShown
-    | Focus Int Geometry
     | SetActiveTab Int
 
 
