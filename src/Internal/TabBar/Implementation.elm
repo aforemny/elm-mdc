@@ -1,20 +1,22 @@
-module Internal.Tabs.Implementation exposing
+module Internal.TabBar.Implementation exposing
     ( Property
     , Tab
     , activeTab
     , icon
-    , iconText
     , indicator
     , react
     , scrolling
+    , smallIndicator
+    , stacked
     , tab
     , view
-    , withIconAndText
     )
 
 import DOM
+import Browser.Dom as Dom
+import Task
 import Dict exposing (Dict)
-import Html exposing (Html, text)
+import Html exposing (Html, text, nav, div, span, button)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Dispatch as Dispatch
@@ -25,7 +27,7 @@ import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Ripple.Model as Ripple
-import Internal.Tabs.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
+import Internal.TabBar.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode
 
@@ -109,6 +111,8 @@ update lift msg model =
         Select geometry ->
             ( Just { model | geometry = Just geometry }
             , Cmd.none
+            -- TODO: really want to focus tab here with something like:
+            -- Task.attempt (\_ -> NoOp) (Dom.focus "tabs-hero-tabs--0")
             )
 
         ScrollBack geometry ->
@@ -352,19 +356,31 @@ update lift msg model =
         SetIndicatorShown ->
             ( Just { model | indicatorShown = True }, Cmd.none )
 
+        SetActiveTab tab_index ->
+            ( Just { model | activeTab = tab_index }, Cmd.none )
 
+
+-- Note: tab bar and tab state use the same config.
 type alias Config =
     { scroller : Bool
     , indicator : Bool
-    , activeTab : Maybe Int
+    , activeTab : Int
+    , icon : Maybe String
+    , smallIndicator : Bool
+    -- This value is computed by computeHorizontalScrollbarHeight in mdc-tab-sroller/util.js.
+    -- No clue how to do that in Elm beside using a port. Should we?
+    , horizontalScrollbarHeight : Int
     }
 
 
 defaultConfig : Config
 defaultConfig =
     { scroller = False
-    , indicator = False
-    , activeTab = Nothing
+    , indicator = True
+    , activeTab = 0
+    , icon = Nothing
+    , smallIndicator = False
+    , horizontalScrollbarHeight = 10
     }
 
 
@@ -380,7 +396,7 @@ indicator =
 
 activeTab : Int -> Property m
 activeTab value =
-    Options.option (\config -> { config | activeTab = Just value })
+    Options.option (\config -> { config | activeTab = value })
 
 
 type alias Tab m =
@@ -396,50 +412,39 @@ tab options childs =
     }
 
 
-withIconAndText : Property m
-withIconAndText =
-    cs "mdc-tab--with-icon-and-text"
+icon : String -> Property m
+icon value =
+    Options.option (\config -> { config | icon = Just value })
 
 
-icon : List (Options.Property c m) -> String -> Html m
-icon options value =
-    Icon.view
-        [ cs "mdc-tab__icon"
-        ]
-        value
+stacked : Property m
+stacked =
+    cs "mdc-tab--stacked"
 
 
-iconText : List (Options.Property c m) -> String -> Html m
-iconText options str =
-    styled Html.span
-        (cs "mdc-tab__icon-text"
-            :: options
-        )
-        [ text str
-        ]
+smallIndicator : Property m
+smallIndicator =
+    Options.option (\config -> { config | smallIndicator = True })
 
 
 type alias Property m =
     Options.Property Config m
 
 
-tabs :
+tabbar :
     Index
     -> (Msg m -> m)
     -> Model
     -> List (Property m)
     -> List (Tab m)
     -> Html m
-tabs domId lift model options nodes =
+tabbar domId lift model options nodes =
     let
-        summary =
+        ({ config } as summary) =
             Options.collect defaultConfig options
 
-        config =
-            summary.config
-
-        activeTab_ =
-            Maybe.withDefault 0 config.activeTab
+        stateChanged =
+            config.activeTab /= model.activeTab
 
         numTabs =
             List.length nodes
@@ -459,205 +464,227 @@ tabs domId lift model options nodes =
             in
             "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
 
-        geometry =
-            Maybe.withDefault defaultGeometry model.geometry
+        tab_nodes = List.indexedMap (tabView domId lift model options) nodes
 
-        computedScale =
-            model.geometry
-                |> Maybe.map (\geometry_ -> computeScale geometry_ activeTab_)
-                |> Maybe.withDefault 1
-
-        indicatorTransform =
-            let
-                tabLeft =
-                    geometry.tabs
-                        |> List.drop activeTab_
-                        |> List.head
-                        |> Maybe.map .offsetLeft
-                        |> Maybe.withDefault 0
-            in
-            String.join " "
-                [ "translateX(" ++ String.fromFloat tabLeft ++ "px)"
-                , "scale(" ++ String.fromFloat computedScale ++ ",1)"
-                ]
-
-        tabBarScroller tabBar =
-            styled Html.div
-                [ cs "mdc-tab-bar-scroller"
-                ]
-                [ styled Html.div
-                    [ cs "mdc-tab-bar-scroller__indicator"
-                    , cs "mdc-tab-bar-scroller__indicator--back"
-                    , cs "mdc-tab-bar-scroller__indicator--enabled"
-                    , css "display" "none" |> when (not model.backIndicator)
-                    , Options.on "click" <|
-                        Json.map (lift << ScrollBack) <|
-                            decodeGeometryOnIndicator config.indicator
-                    ]
-                    [ styled Html.span
-                        [ cs "mdc-tab-bar__indicator__inner"
-                        , cs "material-icons"
-                        , css "pointer-events" "none"
-                        ]
-                        [ text "navigate_before"
-                        ]
-                    ]
-                , styled Html.div
-                    [ cs "mdc-tab-bar-scroller__scroll-frame"
-                    , Options.attribute
-                        << Html.property "scrollLeft"
-                      <|
-                        Json.Encode.int model.scrollLeftAmount
-                    ]
-                    [ tabBar
-                    ]
-                , styled Html.div
-                    [ cs "mdc-tab-bar-scroller__indicator"
-                    , cs "mdc-tab-bar-scroller__indicator--next"
-                    , cs "mdc-tab-bar-scroller__indicator--enabled"
-                    , Options.on "click" <|
-                        Json.map (lift << ScrollForward) <|
-                            decodeGeometryOnIndicator config.indicator
-                    , css "display" "none" |> when (not model.forwardIndicator)
-                    ]
-                    [ styled Html.span
-                        [ cs "mdc-tab-bar__indicator__inner"
-                        , cs "material-icons"
-                        , css "pointer-events" "none"
-                        ]
-                        [ text "navigate_next"
-                        ]
-                    ]
-                ]
     in
-    (if config.scroller then
-        tabBarScroller
-
-     else
-        identity
-    )
-    <|
         Options.apply summary
-            Html.nav
+            nav
             [ cs "mdc-tab-bar"
-            , cs "mdc-tab-bar-upgraded"
-            , Options.many
-                [ cs "mdc-tab-bar-scroller__scroller-frame__tabs"
-                , css "transform" tabBarTransform
-                ]
-            , when (model.geometry == Nothing) <|
-                GlobalEvents.onTick <|
-                    Json.map (lift << Init) <|
-                        decodeGeometryOnTabBar config.indicator
-            , GlobalEvents.onResize <|
-                Json.map (lift << Init) <|
-                    decodeGeometryOnTabBar config.indicator
+            , Options.role "tablist"
+            , when stateChanged <|
+                GlobalEvents.onTick (Json.succeed (lift (SetActiveTab ( config.activeTab ))))
             ]
             []
-            (List.concat
-                [ nodes
-                    |> List.indexedMap
-                        (\index node ->
-                            let
-                                tabDomId =
-                                    domId ++ "--" ++ String.fromInt index
+            [ scroller lift model
+                  []
+                  tab_nodes
+            ]
 
-                                ripple =
-                                    Ripple.view False
-                                        tabDomId
-                                        (lift << RippleMsg index)
-                                        (Dict.get index model.ripples
-                                            |> Maybe.withDefault Ripple.defaultModel
-                                        )
-                                        []
-                            in
-                            [ -- Note: We need to manually install event
-                              -- dispatching here, because both mdc-tab and
-                              -- ripple listen on focus events, and the global
-                              -- dispatch only accounts for dispatching in
-                              -- mdc-tab-bar options.
-                              Html.span
-                                (Options.addAttributes
-                                    (Options.recollect
-                                        { summary
-                                            | classes = []
-                                            , css = []
-                                            , attrs = []
-                                            , internal = []
-                                            , config = defaultConfig
-                                            , dispatch = Dispatch.clear summary.dispatch
-                                        }
-                                        (cs "mdc-tab"
-                                            :: when (activeTab_ == index) (cs "mdc-tab--active")
-                                            :: Options.attribute (Html.tabindex 0)
-                                            :: (Options.on "click" <|
-                                                    Json.map (lift << Select) <|
-                                                        decodeGeometryOnTab config.indicator
-                                               )
-                                            :: (Options.on "keydown" <|
-                                                    Json.map lift <|
-                                                        Json.map3
-                                                            (\key keyCode geometry_ ->
-                                                                if key == Just "Enter" || keyCode == 13 then
-                                                                    Select geometry_
 
-                                                                else
-                                                                    NoOp
-                                                            )
-                                                            (Json.oneOf
-                                                                [ Json.map Just (Json.at [ "key" ] Json.string)
-                                                                , Json.succeed Nothing
-                                                                ]
-                                                            )
-                                                            (Json.at [ "keyCode" ] Json.int)
-                                                            (decodeGeometryOnTab config.indicator)
-                                               )
-                                            :: Options.many
-                                                [ ripple.interactionHandler
-                                                , ripple.properties
-                                                ]
-                                            :: (when config.scroller <|
-                                                    Options.on "focus" <|
-                                                        Json.map (lift << Focus index) <|
-                                                            decodeGeometryOnTab config.indicator
-                                               )
-                                            :: node.options
-                                        )
-                                    )
-                                    []
-                                )
-                                (node.childs ++ [ ripple.style ])
-                            ]
-                        )
-                    |> List.concat
-                , if config.indicator then
-                    let
-                        indicatorFirstRender =
-                            not model.indicatorShown
-                    in
-                    [ styled Html.div
-                        [ cs "mdc-tab-bar__indicator"
-                        , css "transform" indicatorTransform
-                        , when (numTabs > 0) <|
-                            css "visibility" "visible"
-                        , when indicatorFirstRender <|
-                            css "display" "none"
-                        ]
-                        []
+{-| The scroll area view.
+-}
+scroller :
+    (Msg m -> m)
+    -> Model
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+scroller lift model options nodes =
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
+    styled div
+        [ cs "mdc-tab-scroller"
+        ]
+        [ styled div
+              [ cs "mdc-tab-scroller__scroll-area"
+              , cs "mdc-tab-scroller__scroll-area--scroll"
+              , css "margin-bottom" ((String.fromInt -config.horizontalScrollbarHeight) ++ "px")
+              ]
+              [ Options.apply summary
+                    div
+                    [ cs "mdc-tab-scroller__scroll-content"
+
+                    -- It's easiest to do geometry decoding on the immediate container of the tabs
+                    , when (model.geometry == Nothing) <|
+                        GlobalEvents.onTick <|
+                            Json.map (lift << Init) <|
+                                decodeGeometryOnScrollContent config.indicator
+                    , GlobalEvents.onResize <|
+                        Json.map (lift << Init) <|
+                            decodeGeometryOnScrollContent config.indicator
                     ]
+                    []
+                    nodes
+              ]
+        ]
 
-                  else
+
+{-| Single tab view.
+-}
+tabView :
+    Index
+    -> (Msg m -> m)
+    -> Model
+    -> List (Property m)
+    -> Int
+    -> Tab m
+    -> Html m
+tabView domId lift model options index tab_ =
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+
+        stateChanged = config.activeTab /= model.activeTab
+
+        -- Only set tab to active on next tick
+        to_be_selected = stateChanged && config.activeTab == index
+
+        selected = model.activeTab == index
+
+        tab_summary = Options.collect defaultConfig tab_.options
+
+        tab_config = tab_summary.config
+
+        tabDomId = domId ++ "--" ++ String.fromInt index
+
+        ripple =
+            Ripple.view False
+                tabDomId
+                (lift << RippleMsg index)
+                (Dict.get index model.ripples
+                |> Maybe.withDefault Ripple.defaultModel
+                )
+            []
+
+        -- Tried to do that mdc does:
+        -- This animation uses the FLIP approach. You can read more about it at the link below:
+        -- https://aerotwist.com/blog/flip-your-animations/
+
+        indicatorTransform =
+            if to_be_selected then
+                let
+                    geometry =
+                        Maybe.withDefault defaultGeometry model.geometry
+
+                    previousTab =
+                        geometry.tabs
+                            |> List.drop model.activeTab
+                            |> List.head
+
+                    currentTab =
+                        geometry.tabs
+                            |> List.drop config.activeTab
+                            |> List.head
+
+                    fromX =
+                        previousTab
+                            |> Maybe.map .offsetLeft
+                            |> Maybe.withDefault 0
+
+                    currentX =
+                        currentTab
+                            |> Maybe.map .offsetLeft
+                            |> Maybe.withDefault 0
+
+                    previousTabWidth =
+                        previousTab
+                            |> Maybe.map .offsetWidth
+                            |> Maybe.withDefault 0
+
+                    currentTabWidth =
+                        currentTab
+                            |> Maybe.map .offsetWidth
+                            |> Maybe.withDefault 0
+
+                    xPosition = fromX - currentX
+
+                    widthDelta = previousTabWidth / currentTabWidth
+
+                in
+                    String.join " "
+                        [ "translateX(" ++ String.fromFloat xPosition ++ "px)"
+                        , "scale(" ++ String.fromFloat widthDelta ++ ",1)"
+                        ]
+
+                else
+                    ""
+
+        icon_span =
+            case tab_config.icon of
+                Just name ->
+                    styled span
+                        [ cs "mdc-tab__icon"
+                        , cs "material-icons"
+                        , Options.aria "hidden" "true"
+                        ]
+                        [ text name ]
+                Nothing ->
+                    text ""
+
+        indicator_span =
+            styled span
+                [ cs "mdc-tab-indicator"
+                , cs "mdc-tab-indicator--active" |> when selected
+                , cs "mdc-tab-indicator--no-transition" |> when to_be_selected
+                ]
+                [ styled span
+                    [ cs "mdc-tab-indicator__content"
+                    , cs "mdc-tab-indicator__content--underline"
+                    , css "transform" indicatorTransform |> when to_be_selected
+                    ]
                     []
                 ]
-            )
+
+    in
+        -- TODO: may need manual event dispatching here according to Tabs implementation?
+        -- Because the tab should get focus, but failed to do so.
+        Options.apply tab_summary
+        button
+            [ cs "mdc-tab"
+            , cs "mdc-tab--active" |> when selected
+            , Options.role "tab"
+            , Options.aria "selected" (if selected then "true" else "false")
+            , Options.tabindex (if selected then 0 else -1)
+
+            -- TODO: not sure what the purpose of this is
+            , Options.on "click" <|
+                Json.map (lift << Select) <|
+                    decodeGeometryOnTab config.indicator
+            -- TODO: not sure what the purpose of this is
+            -- , Options.on "focus" <|
+            --     Json.map (lift << Focus index) <|
+            --         decodeGeometryOnTab config.indicator
+
+            -- TODO: somehow ripple needs to interact with ripple span I think?
+            -- Now it sets "mdc-ripple-upgraded on the button class which is wrong.
+            , ripple.interactionHandler
+            , ripple.properties
+            ]
+            []
+            [ styled span
+                  [ cs "mdc-tab__content" ]
+                  [ icon_span
+                  , styled span
+                        [ cs "mdc-tab__text-label" ]
+                        tab_.childs
+                  , if tab_config.smallIndicator then indicator_span else text ""
+                  ]
+            , if tab_config.smallIndicator then text "" else indicator_span
+            , styled span
+                [ cs "mdc-tab__ripple"
+                ]
+                  []
+            ]
 
 
 type alias Store s =
-    { s | tabs : Indexed Model }
+    { s | tabbar : Indexed Model }
 
 
 getSet =
-    Component.indexed .tabs (\x y -> { y | tabs = x }) defaultModel
+    Component.indexed .tabbar (\x y -> { y | tabbar = x }) defaultModel
 
 
 react :
@@ -667,7 +694,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react getSet.get getSet.set Internal.Msg.TabsMsg update
+    Component.react getSet.get getSet.set Internal.Msg.TabBarMsg update
 
 
 view :
@@ -679,27 +706,10 @@ view :
     -> Html m
 view =
     \lift domId ->
-        Component.render getSet.get (tabs domId) Internal.Msg.TabsMsg lift domId
+        Component.render getSet.get (tabbar domId) Internal.Msg.TabBarMsg lift domId
 
 
-computeScale : Geometry -> Int -> Float
-computeScale geometry index =
-    let
-        totalTabsWidth =
-            List.foldl (+) 0 (List.map .offsetWidth geometry.tabs)
-    in
-    case List.head (List.drop index geometry.tabs) of
-        Nothing ->
-            1
-
-        Just tab_ ->
-            if totalTabsWidth == 0 then
-                1
-
-            else
-                tab_.offsetWidth / totalTabsWidth
-
-
+-- TODO: probably rework, indicator is gone, but we still have some kind of scrolling.
 decodeGeometryOnIndicator : Bool -> Decoder Geometry
 decodeGeometryOnIndicator hasIndicator =
     DOM.target <|
@@ -719,23 +729,23 @@ decodeGeometryOnIndicator hasIndicator =
 decodeGeometryOnTab : Bool -> Decoder Geometry
 decodeGeometryOnTab hasIndicator =
     let
-        traverseToTabBar cont =
+        traverseToScrollContent cont =
             Json.oneOf
                 [ DOM.className
                     |> Json.andThen
                         (\className ->
-                            if String.contains " mdc-tab-bar " (" " ++ className ++ " ") then
+                            if String.contains " mdc-tab-scroller___scroll-content " (" " ++ className ++ " ") then
                                 cont
 
                             else
-                                Json.fail "Material.Tabs.decodeGeometryOnTabBar"
+                                Json.fail "Material.TabBar.decodeGeometryOnTabBar"
                         )
-                , DOM.parentElement (Json.lazy (\_ -> traverseToTabBar cont))
+                , DOM.parentElement (Json.lazy (\_ -> traverseToScrollContent cont))
                 ]
     in
     DOM.target <|
         -- .mdc-tab [*]
-        traverseToTabBar
+        traverseToScrollContent
         <|
             decodeGeometry hasIndicator
 
@@ -747,27 +757,23 @@ decodeGeometryOnTabBar hasIndicator =
         decodeGeometry hasIndicator
 
 
+decodeGeometryOnScrollContent : Bool -> Decoder Geometry
+decodeGeometryOnScrollContent hasIndicator =
+    DOM.target <|
+        -- .mdc-tab-scroller___scroll-content
+        decodeGeometry hasIndicator
+
+
 decodeGeometry : Bool -> Decoder Geometry
 decodeGeometry hasIndicator =
     Json.map3 Geometry
-        (Json.map
-            (if hasIndicator then
-                \xs -> List.take (List.length xs - 1) xs
-
-             else
-                identity
-            )
-         <|
-            Json.map (List.filterMap identity) <|
+        (Json.map (List.filterMap identity) <|
                 DOM.childNodes
                     (Json.at [ "tagName" ] Json.string
                         |> Json.andThen
                             (\tagName ->
                                 case String.toLower tagName of
-                                    "style" ->
-                                        Json.succeed Nothing
-
-                                    _ ->
+                                    "button" ->
                                         Json.map Just <|
                                             Json.map2
                                                 (\offsetLeft offsetWidth ->
@@ -777,11 +783,18 @@ decodeGeometry hasIndicator =
                                                 )
                                                 DOM.offsetLeft
                                                 DOM.offsetWidth
+
+                                    _ ->
+                                        Json.succeed Nothing
                             )
                     )
         )
         (Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth)
         (DOM.parentElement <|
-            -- .mdc-tab-bar-scroller__scroll-frame
-            Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
+             -- .mdc-tab-scroller__scroll-area
+             DOM.parentElement <|
+                 -- .mdc-tab-scroller
+                 DOM.parentElement <|
+                     -- .mdc-tab-bar
+                     Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )

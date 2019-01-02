@@ -1,4 +1,4 @@
-module Internal.Tabs.Model exposing
+module Internal.TabBar.Model exposing
     ( Geometry
     , Model
     , Msg(..)
@@ -18,6 +18,7 @@ type alias Model =
     , forwardIndicator : Bool
     , backIndicator : Bool
     , scrollLeftAmount : Int
+    , activeTab : Int
     }
 
 
@@ -30,6 +31,7 @@ defaultModel =
     , forwardIndicator = False
     , backIndicator = False
     , scrollLeftAmount = 0
+    , activeTab = 0
     }
 
 
@@ -43,6 +45,7 @@ type Msg m
     | Init Geometry
     | SetIndicatorShown
     | Focus Int Geometry
+    | SetActiveTab Int
 
 
 type alias Geometry =
@@ -55,6 +58,6 @@ type alias Geometry =
 defaultGeometry : Geometry
 defaultGeometry =
     { tabs = []
-    , tabBar = { offsetWidth = 0 }
     , scrollFrame = { offsetWidth = 0 }
+    , tabBar = { offsetWidth = 0 }
     }
