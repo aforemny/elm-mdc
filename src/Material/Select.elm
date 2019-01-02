@@ -7,6 +7,7 @@ module Material.Select exposing
     , option
     , value
     , selected
+    , outlined
     )
 
 {-| Select provides Material Design single-option select menus. It functions
@@ -57,6 +58,7 @@ manually.
 @docs option
 @docs value
 @docs selected
+@docs outlined
 
 -}
 
@@ -128,3 +130,10 @@ See `preselected`.
 selected : Property m
 selected =
     Select.selected
+
+
+{-| Draw outlined version of select.
+-}
+outlined : Property m
+outlined =
+    Select.outlined
