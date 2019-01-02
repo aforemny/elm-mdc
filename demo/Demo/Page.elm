@@ -1,5 +1,6 @@
 module Demo.Page exposing
     ( Page
+    , header
     , hero
     , toolbar
     , demos
@@ -70,6 +71,13 @@ toolbar lift idx mdc navigate url title =
                 [ text title ]
             ]
         ]
+
+
+header : String -> Html m
+header title =
+    styled Html.h1
+        [ Typography.headline5 ]
+        [ text title ]
 
 
 hero : List (Property c m) -> List (Html m) -> Html m
