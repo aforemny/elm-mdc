@@ -320,7 +320,7 @@ textFieldTrailingIcon : (Msg m -> m) -> Material.Index -> Model m -> List (Textf
 textFieldTrailingIcon lift index model options =
     Textfield.view (lift << Mdc) ( "text-field-" ++ index ++ "-leading" ) model.mdc
         ( [ Textfield.label "Standard"
-          , Textfield.leadingIcon "event"
+          , Textfield.trailingIcon "event"
           ] ++ options )
         []
 
