@@ -127,17 +127,11 @@ view className lift model options nodes =
         ++ options )
         nodes
 
-          -- In order for the closing animation to work, we need to
-          -- keep the open class till the animation has ended
-        , cs "mdc-drawer--open" |> when (config.open || model.open)
 
-          -- Animate class needs to kick in as soon as drawer is
-          -- opened. It's only used during opening.
-        , cs "mdc-drawer--animate" |> when (config.open && (stateChanged || model.animating))
+header : List (Property m) -> List (Html m) -> Html m
+header options =
+    styled Html.header (cs "mdc-drawer__header" :: options)
 
-          -- Wait a frame once display is no longer "none", to establish basis for animation
-        , cs "mdc-drawer--opening" |> when (config.open && model.animating)
-        , cs "mdc-drawer--closing" |> when (not config.open && model.animating)
 
 content : List (Property m) -> List (Html m) -> Html m
 content options =
