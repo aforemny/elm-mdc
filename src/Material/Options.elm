@@ -8,6 +8,7 @@ module Material.Options exposing
     , attribute
     , data
     , aria
+    , role
     , for
     , tabindex
     , on
@@ -41,6 +42,7 @@ module Material.Options exposing
 @docs attribute
 @docs data
 @docs aria
+@docs role
 @docs for
 @docs tabindex
 
@@ -170,6 +172,13 @@ data =
 aria : String -> String -> Property c m
 aria =
     Internal.Options.aria
+
+
+{-| HTML role attribute.
+-}
+role : String -> Property c m
+role =
+    Internal.Options.role
 
 
 {-| HTML tabindex attribute.
