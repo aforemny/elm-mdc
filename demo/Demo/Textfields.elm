@@ -126,7 +126,7 @@ view lift page model =
         , Page.hero []
             [ heroTextFieldsContainer
                   [ heroTextFieldContainer ( heroTextfield lift "text-fields-hero" model [] )
-                  , heroTextFieldContainer ( heroTextfield lift "text-fields-hero" model [ Textfield.outlined ] )
+                  , heroTextFieldContainer ( heroTextfield lift "text-fields-hero-outlined" model [ Textfield.outlined ] )
                   ]
             ]
         , defaultTextfield lift "text-fields-default" model
@@ -367,8 +367,8 @@ exampleRow lift index model title options =
             , css "flex-wrap" "wrap"
             ]
             [ textFieldContainer ( textField lift index model options )
-            , textFieldContainer ( textFieldLeadingIcon lift index model options )
-            , textFieldContainer ( textFieldTrailingIcon lift index model options )
+            , textFieldContainer ( textFieldLeadingIcon lift ( index ++ "-leading") model options )
+            , textFieldContainer ( textFieldTrailingIcon lift ( index ++ "-trailing") model options )
             ]
         ]
 
