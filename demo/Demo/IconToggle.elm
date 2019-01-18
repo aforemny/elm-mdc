@@ -100,9 +100,7 @@ view lift page model =
                         |> Maybe.withDefault False
               in
               styled Html.div
-                [ cs "demo-wrapper"
-                , css "margin-left" "1rem"
-                ]
+                [ ]
                 [ iconToggle "icon-toggle-hero-icon-toggle"
                     [ IconToggle.label
                         { on = "Remove from Fravorites"
