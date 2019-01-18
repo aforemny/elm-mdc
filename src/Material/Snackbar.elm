@@ -49,6 +49,7 @@ This would display a message without an action.
 @docs Property
 @docs view
 @docs leading
+@docs dismissible
 
 
 ## Contents
