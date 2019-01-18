@@ -1,6 +1,7 @@
 module Demo.Snackbar exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
+import Demo.Helper.ResourceLink as ResourceLink
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
@@ -115,10 +116,8 @@ view lift page model =
     let
         example options =
             styled Html.div
-                (css "display" "block"
-                    :: css "margin" "24px"
-                    :: css "padding" "24px"
-                    :: options
+                (css "margin-top" "24px"
+                :: options
                 )
     in
     page.body "Snackbar" "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
@@ -141,8 +140,31 @@ view lift page model =
                     ]
                 ]
             ]
-        , styled Html.div
-            []
+        , styled Html.h2
+            [ cs "mdc-typography--headline6"
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+            ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-snackbar"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/snackbars/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-snackbar"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
             [ example []
                 [ styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
                 , FormField.view []
