@@ -385,6 +385,7 @@ view lift page model =
             , LayoutGrid.view
                 [ demoGrid
                 , LayoutGrid.fixedColumnWidth
+                , css "width" "50%"
                 ]
                 (LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
                     |> List.repeat 3
@@ -394,6 +395,7 @@ view lift page model =
                 [ demoGrid
                 , LayoutGrid.fixedColumnWidth
                 , LayoutGrid.alignRight
+                , css "width" "50%"
                 ]
                 (LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
                     |> List.repeat 3
