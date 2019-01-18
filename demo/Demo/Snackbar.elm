@@ -130,7 +130,7 @@ view lift page model =
                             , aria "live" "polite"
                             , css "color" "hsla(0,0%,100%,.87)"
                             ]
-                            [ text "Message sent" ]
+                            [ text "Can't send photo. Retry in 5 seconds." ]
                       , styled Html.div
                           [ cs "mdc-snackbar__actions" ]
                           [ styled Html.button
@@ -138,8 +138,14 @@ view lift page model =
                                 , cs "mdc-button"
                                 , cs "mdc-snackbar__action"
                                 ]
-                                [ text "Undo"
+                                [ text "Retry"
                                 ]
+                          , styled Html.button
+                                [ cs "mdc-icon-button"
+                                , cs "mdc-snackbar__dismiss"
+                                , cs "material-icons"
+                                ]
+                                [ text "close" ]
                           ]
                       ]
                 ]
@@ -222,6 +228,16 @@ view lift page model =
                     ]
                 , text " "
                 , Button.view (lift << Mdc)
+                    "snackbar-show-button-dismissible"
+                    model.mdc
+                    [ Button.raised
+                    , css "margin-top" "14px"
+                    , Options.on "click" (Json.succeed (lift (Show "snackbar-dismissible-snackbar")))
+                    ]
+                    [ text "Show dismissible"
+                    ]
+                , text " "
+                , Button.view (lift << Mdc)
                     "snackbar-show-button-leading"
                     model.mdc
                     [ Button.raised
@@ -241,8 +257,12 @@ view lift page model =
                     [ text "Show leading rtl"
                     ]
                 , Snackbar.view (lift << Mdc) "snackbar-default-snackbar" model.mdc [] []
+                , Snackbar.view (lift << Mdc) "snackbar-dismissible-snackbar" model.mdc
+                    [ Snackbar.dismissible ]
+                    []
                 , Snackbar.view (lift << Mdc) "snackbar-leading-snackbar" model.mdc
-                    [ Snackbar.leading ]
+                    [ Snackbar.dismissible
+                    , Snackbar.leading ]
                     []
                 , Html.div
                     [ Html.attribute "dir" "rtl"
@@ -250,7 +270,8 @@ view lift page model =
                     [ Snackbar.view (lift << Mdc)
                           "snackbar-leading-snackbar-rtl"
                           model.mdc
-                          [ Snackbar.leading
+                          [ Snackbar.dismissible
+                          , Snackbar.leading
                           ]
                           []
                     ]

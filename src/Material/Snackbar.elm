@@ -1,6 +1,7 @@
 module Material.Snackbar exposing
     ( Property
     , view
+    , dismissible
     , leading
     , Contents
     , add
@@ -122,6 +123,13 @@ add :
     -> ( Material.Model m, Cmd m )
 add =
     Snackbar.add
+
+
+{-| Optional. The dismiss (“X”) icon.
+-}
+dismissible : Property m
+dismissible =
+    Snackbar.dismissible
 
 
 {-| Optional. Positions the snackbar on the leading edge of the screen

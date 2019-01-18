@@ -1,6 +1,7 @@
 module Internal.Snackbar.Implementation exposing
     ( Property
     , add
+    , dismissible
     , leading
     , react
     , snack
@@ -154,17 +155,22 @@ add lift idx contents store =
 
 
 type alias Config =
-    {}
+    { dismissible : Bool }
 
 
 defaultConfig : Config
 defaultConfig =
-    {}
+    { dismissible = False }
 
 
 leading : Property m
 leading =
     Options.cs "mdc-snackbar--leading"
+
+
+dismissible : Property m
+dismissible =
+    Options.option (\config -> { config | dismissible = True })
 
 
 snackbar : (Msg m -> m) -> Model m -> List (Property m) -> List (Html m) -> Html m
@@ -253,17 +259,23 @@ snackbar lift model options _ =
                    [ cs "mdc-button"
                    , cs "mdc-snackbar__action"
                    , Options.attribute (Html.type_ "button")
-                   , case onDismiss of
-                       Just dismissHandler ->
-                           Options.on "click" (Json.succeed (lift (Dismiss True onDismiss)))
-
-                       Nothing ->
-                           Options.nop
+                   , Options.on "click" (Json.succeed (lift (Dismiss True onDismiss)))
                    ]
                    (action
                        |> Maybe.map (\actionString -> [ text actionString ])
                        |> Maybe.withDefault []
                    )
+               , if config.dismissible then
+                     Options.styled Html.button
+                         [ cs "mdc-icon-button"
+                         , cs "mdc-snackbar__dismiss"
+                         , cs "material-icons"
+                         , Options.attribute (Html.title "Dismiss")
+                         , Options.on "click" (Json.succeed (lift (Dismiss True Nothing)))
+                         ]
+                         [ text "close" ]
+                 else
+                      text ""
                ]
            ]
         ]
