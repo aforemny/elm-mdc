@@ -117,7 +117,7 @@ view lift page model =
         , Html.node "style"
             [ Html.type_ "text/css"
             ]
-            [ text "@import url(\"https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css\");" ]
+            [ text "@import url(\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\");" ]
         , example []
             [ let
                 isOn =
@@ -164,10 +164,10 @@ view lift page model =
                             , off = "Star this Icon"
                             }
                         , IconToggle.icon
-                            { on = "fa-star"
-                            , off = "fa-star-o"
+                            { on = "fas"
+                            , off = "far"
                             }
-                        , IconToggle.className "fa"
+                        , IconToggle.className "fa-star"
                         ]
                         []
                     ]
