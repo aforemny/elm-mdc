@@ -222,55 +222,37 @@ view lift page model =
                     ]
                 , text " "
                 , Button.view (lift << Mdc)
-                    "snackbar-show-button-rtl"
+                    "snackbar-show-button-leading"
                     model.mdc
                     [ Button.raised
                     , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-default-snackbar-rtl")))
+                    , Options.on "click" (Json.succeed (lift (Show "snackbar-leading-snackbar")))
                     ]
-                    [ text "Show Rtl"
+                    [ text "Show leading"
                     ]
                 , text " "
                 , Button.view (lift << Mdc)
-                    "snackbar-show-start-aligned-button"
+                    "snackbar-show-button-leading-rtl"
                     model.mdc
                     [ Button.raised
                     , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-align-start-snackbar")))
+                    , Options.on "click" (Json.succeed (lift (Show "snackbar-leading-snackbar-rtl")))
                     ]
-                    [ text "Show Start Aligned"
-                    ]
-                , text " "
-                , Button.view (lift << Mdc)
-                    "snackbar-show-start-aligned-button-rtl"
-                    model.mdc
-                    [ Button.raised
-                    , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-align-start-snackbar-rtl")))
-                    ]
-                    [ text "Show Start Aligned (Rtl)"
+                    [ text "Show leading rtl"
                     ]
                 , Snackbar.view (lift << Mdc) "snackbar-default-snackbar" model.mdc [] []
-                , Html.div
-                    [ Html.attribute "dir" "rtl"
-                    ]
-                    [ Snackbar.view (lift << Mdc) "snackbar-default-snackbar-rtl" model.mdc [] []
-                    ]
-                , Snackbar.view (lift << Mdc)
-                    "snackbar-align-start-snackbar"
-                    model.mdc
-                    [ Snackbar.alignStart
-                    ]
+                , Snackbar.view (lift << Mdc) "snackbar-leading-snackbar" model.mdc
+                    [ Snackbar.leading ]
                     []
                 , Html.div
                     [ Html.attribute "dir" "rtl"
                     ]
                     [ Snackbar.view (lift << Mdc)
-                        "snackbar-align-start-snackbar-rtl"
-                        model.mdc
-                        [ Snackbar.alignStart
-                        ]
-                        []
+                          "snackbar-leading-snackbar-rtl"
+                          model.mdc
+                          [ Snackbar.leading
+                          ]
+                          []
                     ]
                 ]
             ]

@@ -1,8 +1,7 @@
 module Internal.Snackbar.Implementation exposing
     ( Property
     , add
-    , alignEnd
-    , alignStart
+    , leading
     , react
     , snack
     , toast
@@ -163,14 +162,9 @@ defaultConfig =
     {}
 
 
-alignStart : Property m
-alignStart =
-    Options.cs "mdc-snackbar--align-start"
-
-
-alignEnd : Property m
-alignEnd =
-    Options.cs "mdc-snackbar--align-end"
+leading : Property m
+leading =
+    Options.cs "mdc-snackbar--leading"
 
 
 snackbar : (Msg m -> m) -> Model m -> List (Property m) -> List (Html m) -> Html m
