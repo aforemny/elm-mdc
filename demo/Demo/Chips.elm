@@ -161,6 +161,7 @@ filterChips lift model =
                 index
                 model.mdc
                 [ Chip.onClick (lift (ToggleChip Filter index))
+                , Chip.checkmark
                 , when (Set.member index model.selectedChips) Chip.selected
                 ]
                 [ text label
@@ -190,7 +191,9 @@ filterChips lift model =
                 [ text label
                 ]
       in
-      Chip.chipset []
+      Chip.chipset
+        [ Chip.filter
+        ]
         [ chip "chips-filter-chips-alice" "Alice"
         , chip "chips-filter-chips-bob" "Bob"
         , chip "chips-filter-chips-charlie" "Charlie"
