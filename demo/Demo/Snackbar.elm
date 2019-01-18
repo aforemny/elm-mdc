@@ -10,7 +10,7 @@ import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
 import Material.FormField as FormField
-import Material.Options as Options exposing (cs, css, nop, styled, when)
+import Material.Options as Options exposing (cs, css, nop, styled, when, role, aria)
 import Material.Snackbar as Snackbar
 import Material.Textfield as Textfield
 import Material.Typography as Typography
@@ -19,8 +19,7 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model m =
     { mdc : Material.Model m
-    , multiline : Bool
-    , actionOnBottom : Bool
+    , stacked : Bool
     , dismissOnAction : Bool
     , messageText : String
     , actionText : String
@@ -30,8 +29,7 @@ type alias Model m =
 defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
-    , multiline = False
-    , actionOnBottom = False
+    , stacked = False
     , dismissOnAction = True
     , messageText = "Message deleted"
     , actionText = "Undo"
@@ -40,8 +38,7 @@ defaultModel =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ToggleMultiline
-    | ToggleActionOnBottom
+    | ToggleStacked
     | ToggleDismissOnAction
     | SetMessageText String
     | SetActionText String
@@ -59,11 +56,8 @@ update lift msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        ToggleMultiline ->
-            ( { model | multiline = not model.multiline }, Cmd.none )
-
-        ToggleActionOnBottom ->
-            ( { model | actionOnBottom = not model.actionOnBottom }, Cmd.none )
+        ToggleStacked ->
+            ( { model | stacked = not model.stacked }, Cmd.none )
 
         ToggleDismissOnAction ->
             ( { model | dismissOnAction = not model.dismissOnAction }, Cmd.none )
@@ -77,7 +71,7 @@ update lift msg model =
         Show idx ->
             let
                 contents =
-                    if model.multiline then
+                    if model.stacked then
                         let
                             snack =
                                 Snackbar.snack
@@ -87,7 +81,7 @@ update lift msg model =
                         in
                         { snack
                             | dismissOnAction = model.dismissOnAction
-                            , actionOnBottom = model.actionOnBottom
+                            , stacked = model.stacked
                         }
 
                     else
@@ -126,18 +120,28 @@ view lift page model =
                 [ css "position" "relative"
                 , css "left" "0"
                 , css "transform" "none"
-                , cs "mdc-snackbar mdc-snackbar--active"
+                , cs "mdc-snackbar mdc-snackbar--open"
                 ]
-                [ styled Html.div [ cs "mdc-snackbar__text" ] [ text "Message sent" ]
-                , styled Html.div
-                    [ cs "mdc-snackbar__action-wrapper" ]
-                    [ styled Html.button
-                        [ Options.attribute (Html.type_ "button")
-                        , cs "mdc-snackbar__action-button"
-                        ]
-                        [ text "Undo"
-                        ]
-                    ]
+                [ styled Html.div
+                      [ cs "mdc-snackbar__surface" ]
+                      [ styled Html.div
+                            [ cs "mdc-snackbar__label"
+                            , role "status"
+                            , aria "live" "polite"
+                            , css "color" "hsla(0,0%,100%,.87)"
+                            ]
+                            [ text "Message sent" ]
+                      , styled Html.div
+                          [ cs "mdc-snackbar__actions" ]
+                          [ styled Html.button
+                                [ Options.attribute (Html.type_ "button")
+                                , cs "mdc-button"
+                                , cs "mdc-snackbar__action"
+                                ]
+                                [ text "Undo"
+                                ]
+                          ]
+                      ]
                 ]
             ]
         , styled Html.h2
@@ -169,29 +173,13 @@ view lift page model =
                 [ styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
                 , FormField.view []
                     [ Checkbox.view (lift << Mdc)
-                        "snackbar-multiline-checkbox"
+                        "snackbar-stacked-checkbox"
                         model.mdc
-                        [ Options.onClick (lift ToggleMultiline)
-                        , Checkbox.checked model.multiline
+                        [ Options.onClick (lift ToggleStacked)
+                        , Checkbox.checked model.stacked
                         ]
                         []
-                    , Html.label [] [ text "Multiline" ]
-                    ]
-                , Html.br [] []
-                , FormField.view []
-                    [ Checkbox.view (lift << Mdc)
-                        "snackbar-toggle-action-on-bottom-checkbox"
-                        model.mdc
-                        [ Options.onClick (lift ToggleActionOnBottom)
-                        , when (not model.multiline)
-                            << Options.many
-                          <|
-                            [ Checkbox.checked model.actionOnBottom
-                            , Checkbox.disabled
-                            ]
-                        ]
-                        []
-                    , Html.label [] [ text "Action on Bottom" ]
+                    , Html.label [] [ text "Stacked" ]
                     ]
                 , Html.br [] []
                 , FormField.view []

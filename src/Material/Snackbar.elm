@@ -90,8 +90,7 @@ type alias Contents m =
     , action : Maybe String
     , timeout : Float
     , fade : Float
-    , multiline : Bool
-    , actionOnBottom : Bool
+    , stacked : Bool
     , dismissOnAction : Bool
     , onDismiss : Maybe m
     }
