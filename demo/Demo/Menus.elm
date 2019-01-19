@@ -177,7 +177,7 @@ menuAnchor lift model =
             }
     in
     styled Html.div
-        [ cs "mdc-menu-anchor"
+        [ cs "mdc-menu-surface--anchor"
         , css "margin" "16px"
         , css "position" "absolute"
         , model.position

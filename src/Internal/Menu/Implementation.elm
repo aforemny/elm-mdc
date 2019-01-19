@@ -358,7 +358,6 @@ menu lift model options ulNode =
         isOpen =
             if model.animating then
                 model.open && (model.geometry /= Nothing)
-
             else
                 model.open
 
@@ -416,7 +415,6 @@ menu lift model options ulNode =
         , when (model.animating && not (Maybe.withDefault False model.quickOpen)) <|
             if model.open then
                 cs "mdc-menu--animating-open"
-
             else
                 cs "mdc-menu--animating-closed"
         , when isOpen
@@ -447,7 +445,7 @@ menu lift model options ulNode =
                 |> when (position.right /= Nothing)
             , css "max-height" maxHeight
             ]
-        , when (model.animating && model.geometry == Nothing) <|
+        , when (isOpen && model.geometry == Nothing) <|
             GlobalEvents.onTickWith
                 { targetRect = False
                 , parentRect = True
