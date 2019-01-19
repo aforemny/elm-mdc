@@ -421,7 +421,6 @@ menu lift model options ulNode =
             << Options.many
           <|
             [ cs "mdc-menu-surface--open"
-            , Options.data "focustrap" "focustrap"
             , Options.onWithOptions "click"
                 (Decode.succeed
                     { message = lift CloseDelayed
