@@ -44,7 +44,7 @@ import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, css, styled, when, aria, role)
 import Json.Decode as Decode exposing (Decoder)
 
 
@@ -471,7 +471,13 @@ menu lift model options ulNode =
                 --            (Decode.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
                 --            |> Decode.andThen identity
                 --            )
-                ulNode.options
+                ( ulNode.options
+                      ++
+                      [ role "menu"
+                      , aria "hidden" "true"
+                      , aria "orientation" "vertical"
+                      ]
+                )
             )
             (List.indexedMap
                 (\i item ->
