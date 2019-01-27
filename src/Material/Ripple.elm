@@ -2,8 +2,6 @@ module Material.Ripple exposing
     ( Property
     , unbounded
     , bounded
-    , primary
-    , accent
     )
 
 {-| The Ripple component adds a material "ink ripple" interaction effect to
@@ -73,8 +71,6 @@ The view functions `unbounded` and `bounded` return a record with fields
 @docs Property
 @docs unbounded
 @docs bounded
-@docs primary
-@docs accent
 
 -}
 
@@ -121,17 +117,3 @@ unbounded :
         }
 unbounded =
     Ripple.unbounded
-
-
-{-| Set ripple effect to the primary color.
--}
-primary : Property m
-primary =
-    Ripple.primary
-
-
-{-| Set ripple effect to the accent color.
--}
-accent : Property m
-accent =
-    Ripple.accent
