@@ -42,31 +42,37 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Tab Bar" "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components."
+    page.body "Tab Bar"
+        "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components."
         [ Page.hero []
             [ heroTabs lift model "tabs-hero-tabs"
             ]
         , Page.demos
-              [ styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons next to labels" ]
-              , tabsWithIcons lift model "tabs-with-icons" []
-              , styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons above labels and indicators restricted to content" ]
-              , tabsWithStackedIcons lift model "tabs-with-stacked-icons"
-              , styled h3 [ Typography.subtitle1 ] [ text "Tabs with fading icon indicator" ]
-              , tabsWithIcons lift model "tabs-with-fading-icon-indicator"
-                  [ TabBar.indicatorIcon "star", TabBar.fadingIconIndicator ]
-              , styled h3 [ Typography.subtitle1 ] [ text "Tabs with sliding icon indicator" ]
-              , tabsWithIcons lift model "tabs-with-sliding-icon-indicator"
-                  [ TabBar.indicatorIcon "star" ]
-              , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs (not yet working)" ]
-              , scrollingTabs lift model "scrolling-tabs"
-              ]
+            [ styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons next to labels" ]
+            , tabsWithIcons lift model "tabs-with-icons" []
+            , styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons above labels and indicators restricted to content" ]
+            , tabsWithStackedIcons lift model "tabs-with-stacked-icons"
+            , styled h3 [ Typography.subtitle1 ] [ text "Tabs with fading icon indicator" ]
+            , tabsWithIcons lift
+                model
+                "tabs-with-fading-icon-indicator"
+                [ TabBar.indicatorIcon "star", TabBar.fadingIconIndicator ]
+            , styled h3 [ Typography.subtitle1 ] [ text "Tabs with sliding icon indicator" ]
+            , tabsWithIcons lift
+                model
+                "tabs-with-sliding-icon-indicator"
+                [ TabBar.indicatorIcon "star" ]
+            , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs (not yet working)" ]
+            , scrollingTabs lift model "scrolling-tabs"
+            ]
         ]
 
 
 heroTabs : (Msg m -> m) -> Model m -> Material.Index -> Html m
 heroTabs lift model index =
     let
-        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+        active_tab_index =
+            Dict.get index model.states |> Maybe.withDefault 0
     in
     TabBar.view (lift << Mdc)
         index
@@ -81,7 +87,8 @@ heroTabs lift model index =
 tabsWithIcons : (Msg m -> m) -> Model m -> Material.Index -> List (TabBar.Property m) -> Html m
 tabsWithIcons lift model index options =
     let
-        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+        active_tab_index =
+            Dict.get index model.states |> Maybe.withDefault 0
     in
     TabBar.view (lift << Mdc)
         index
@@ -95,7 +102,8 @@ tabsWithIcons lift model index options =
 
 tabsWithStackedIcons lift model index =
     let
-        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+        active_tab_index =
+            Dict.get index model.states |> Maybe.withDefault 0
     in
     TabBar.view (lift << Mdc)
         index
@@ -109,15 +117,15 @@ tabsWithStackedIcons lift model index =
 
 scrollingTabs lift model index =
     let
-        active_tab_index = (Dict.get index model.states |> Maybe.withDefault 0)
+        active_tab_index =
+            Dict.get index model.states |> Maybe.withDefault 0
     in
     TabBar.view (lift << Mdc)
         index
         model.mdc
         [ TabBar.activeTab active_tab_index ]
-        ( [ "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight" ]
+        ([ "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight" ]
             |> List.indexedMap (\i v -> tab lift model index i ("Tab " ++ v))
-
         )
 
 
@@ -145,9 +153,11 @@ iconTab :
     -> TabBar.Tab m
 iconTab lift model index tab_index icon label options =
     TabBar.tab
-        ( [ Options.onClick (lift (SelectTab index tab_index))
-        , TabBar.icon icon
-        ] ++ options )
+        ([ Options.onClick (lift (SelectTab index tab_index))
+         , TabBar.icon icon
+         ]
+            ++ options
+        )
         [ text label ]
 
 

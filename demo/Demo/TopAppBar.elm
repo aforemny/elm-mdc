@@ -96,7 +96,8 @@ view lift page topAppBarPage model =
             shortCollapsedTopAppBar lift "top-app-bar-short-collapsed" model
 
         Nothing ->
-            page.body "Top App Bar" "Top App Bars are a container for items such as application title, navigation icon, and action items."
+            page.body "Top App Bar"
+                "Top App Bars are a container for items such as application title, navigation icon, and action items."
                 [ Page.hero []
                     [ styled Html.div
                         [ css "width" "480px"

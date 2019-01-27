@@ -116,18 +116,19 @@ updateExample msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Text Field" "Text fields allow users to input, edit, and select text. Text fields typically reside in forms but can appear in other places, like dialog boxes and search."
+    page.body "Text Field"
+        "Text fields allow users to input, edit, and select text. Text fields typically reside in forms but can appear in other places, like dialog boxes and search."
         [ Html.h1
-              [ Html.class "mdc-typography--headline5" ]
-              [ Html.text "Text Field" ]
+            [ Html.class "mdc-typography--headline5" ]
+            [ Html.text "Text Field" ]
         , Html.p
             [ Html.class "mdc-typography--body1" ]
             [ Html.text "Text fields allow users to input, edit, and select text. Text fields typically reside in forms but can appear in other places, like dialog boxes and search." ]
         , Page.hero []
             [ heroTextFieldsContainer
-                  [ heroTextFieldContainer ( heroTextfield lift "text-fields-hero" model [] )
-                  , heroTextFieldContainer ( heroTextfield lift "text-fields-hero-outlined" model [ Textfield.outlined ] )
-                  ]
+                [ heroTextFieldContainer (heroTextfield lift "text-fields-hero" model [])
+                , heroTextFieldContainer (heroTextfield lift "text-fields-hero-outlined" model [ Textfield.outlined ])
+                ]
             ]
         , defaultTextfield lift "text-fields-default" model
         , password lift "text-fields-password" model
@@ -170,8 +171,8 @@ heroTextfield lift index model options =
     Textfield.view (lift << Mdc)
         index
         model.mdc
-        ( Textfield.label "Standard"
-          :: options
+        (Textfield.label "Standard"
+            :: options
         )
         []
 
@@ -314,27 +315,39 @@ password lift index model =
 
 textField : (Msg m -> m) -> Material.Index -> Model m -> List (Textfield.Property m) -> Html m
 textField lift index model options =
-    Textfield.view (lift << Mdc) ( "text-field-" ++ index ) model.mdc
-        ( [ Textfield.label "Standard"
-          ] ++ options )
+    Textfield.view (lift << Mdc)
+        ("text-field-" ++ index)
+        model.mdc
+        ([ Textfield.label "Standard"
+         ]
+            ++ options
+        )
         []
 
 
 textFieldLeadingIcon : (Msg m -> m) -> Material.Index -> Model m -> List (Textfield.Property m) -> Html m
 textFieldLeadingIcon lift index model options =
-    Textfield.view (lift << Mdc) ( "text-field-" ++ index ++ "-leading" ) model.mdc
-        ( [ Textfield.label "Standard"
-          , Textfield.leadingIcon "event"
-          ] ++ options )
+    Textfield.view (lift << Mdc)
+        ("text-field-" ++ index ++ "-leading")
+        model.mdc
+        ([ Textfield.label "Standard"
+         , Textfield.leadingIcon "event"
+         ]
+            ++ options
+        )
         []
 
 
 textFieldTrailingIcon : (Msg m -> m) -> Material.Index -> Model m -> List (Textfield.Property m) -> Html m
 textFieldTrailingIcon lift index model options =
-    Textfield.view (lift << Mdc) ( "text-field-" ++ index ++ "-leading" ) model.mdc
-        ( [ Textfield.label "Standard"
-          , Textfield.trailingIcon "event"
-          ] ++ options )
+    Textfield.view (lift << Mdc)
+        ("text-field-" ++ index ++ "-leading")
+        model.mdc
+        ([ Textfield.label "Standard"
+         , Textfield.trailingIcon "event"
+         ]
+            ++ options
+        )
         []
 
 
@@ -366,9 +379,9 @@ exampleRow lift index model title options =
             , css "justify-content" "space-between"
             , css "flex-wrap" "wrap"
             ]
-            [ textFieldContainer ( textField lift index model options )
-            , textFieldContainer ( textFieldLeadingIcon lift ( index ++ "-leading") model options )
-            , textFieldContainer ( textFieldTrailingIcon lift ( index ++ "-trailing") model options )
+            [ textFieldContainer (textField lift index model options)
+            , textFieldContainer (textFieldLeadingIcon lift (index ++ "-leading") model options)
+            , textFieldContainer (textFieldTrailingIcon lift (index ++ "-trailing") model options)
             ]
         ]
 
@@ -410,12 +423,13 @@ trailingAndLeadingIcon lift index model =
                 ]
             ]
         , if state.leadingIconClicked then
-              Html.p [] [ Html.text "You clicked the leading icon." ]
+            Html.p [] [ Html.text "You clicked the leading icon." ]
+
+          else if state.trailingIconClicked then
+            Html.p [] [ Html.text "You clicked the trailing icon." ]
+
           else
-              if state.trailingIconClicked then
-                  Html.p [] [ Html.text "You clicked the trailing icon." ]
-              else
-                  Html.text ""
+            Html.text ""
         , styled Html.div
             []
             [ checkbox

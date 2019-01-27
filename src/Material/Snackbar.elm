@@ -1,8 +1,8 @@
 module Material.Snackbar exposing
     ( Property
     , view
-    , dismissible
     , leading
+    , dismissible
     , Contents
     , add
     , toast
@@ -135,7 +135,6 @@ dismissible =
 
 {-| Optional. Positions the snackbar on the leading edge of the screen
 (left in LTR, right in RTL) instead of centered.
-
 -}
 leading : Property m
 leading =

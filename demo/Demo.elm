@@ -8,7 +8,6 @@ import Demo.Checkbox
 import Demo.Chips
 import Demo.Dialog
 import Demo.DismissibleDrawer
-import Demo.ModalDrawer
 import Demo.Drawer
 import Demo.Elevation
 import Demo.Fabs
@@ -19,6 +18,7 @@ import Demo.LayoutGrid
 import Demo.LinearProgress
 import Demo.Lists
 import Demo.Menus
+import Demo.ModalDrawer
 import Demo.Page as Page
 import Demo.PermanentDrawer
 import Demo.RadioButtons
@@ -35,7 +35,7 @@ import Demo.Toolbar
 import Demo.TopAppBar
 import Demo.Typography
 import Demo.Url exposing (ToolbarPage(..), TopAppBarPage(..))
-import Html exposing (Html, text, p)
+import Html exposing (Html, p, text)
 import Material
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TopAppBar as TopAppBar
@@ -404,11 +404,11 @@ view_ model =
                         , Typography.typography
                         ]
                         [ Page.toolbar Mdc
-                              "page-toolbar"
-                              model.mdc
-                              Navigate
-                              model.url
-                                  title
+                            "page-toolbar"
+                            model.mdc
+                            Navigate
+                            model.url
+                            title
                         , styled Html.div
                             [ cs "demo-content"
                             , css "max-width" "900px"
@@ -416,10 +416,11 @@ view_ model =
                             , css "margin-left" "auto"
                             , css "margin-right" "auto"
                             ]
-                            ( styled Html.div
+                            (styled Html.div
                                 [ TopAppBar.fixedAdjust ]
                                 [ Page.header title
-                                , styled p [ Typography.body1 ]
+                                , styled p
+                                    [ Typography.body1 ]
                                     [ text intro ]
                                 ]
                                 :: nodes

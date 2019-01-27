@@ -82,52 +82,53 @@ view lift page model =
                     ]
                 }
     in
-    page.body "Buttons" "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
+    page.body "Buttons"
+        "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
         [ Hero.view []
-              [ Button.view (lift << Mdc)
-                    "buttons-hero-button-text"
-                    model.mdc
-                    [ Button.ripple
-                    , css "margin-right" "32px"
-                    ]
-                    [ text "Text"
-                    ]
-              , Button.view (lift << Mdc)
-                  "buttons-hero-button-raised"
-                      model.mdc
-                          [ Button.ripple
-                          , Button.raised
-                          , css "margin-right" "32px"
-                          ]
-                      [ text "Raised"
-                      ]
-              , Button.view (lift << Mdc)
-                  "buttons-hero-button-unelevated"
-                      model.mdc
-                          [ Button.ripple
-                          , Button.unelevated
-                          , css "margin-right" "32px"
-                          ]
-                      [ text "Unelevated"
-                      ]
-              , Button.view (lift << Mdc)
-                  "buttons-hero-button-outlined"
-                      model.mdc
-                          [ Button.ripple
-                          , Button.outlined
-                          , css "margin-right" "32px"
-                          ]
-                      [ text "Outlined"
-                      ]
-              ]
+            [ Button.view (lift << Mdc)
+                "buttons-hero-button-text"
+                model.mdc
+                [ Button.ripple
+                , css "margin-right" "32px"
+                ]
+                [ text "Text"
+                ]
+            , Button.view (lift << Mdc)
+                "buttons-hero-button-raised"
+                model.mdc
+                [ Button.ripple
+                , Button.raised
+                , css "margin-right" "32px"
+                ]
+                [ text "Raised"
+                ]
+            , Button.view (lift << Mdc)
+                "buttons-hero-button-unelevated"
+                model.mdc
+                [ Button.ripple
+                , Button.unelevated
+                , css "margin-right" "32px"
+                ]
+                [ text "Unelevated"
+                ]
+            , Button.view (lift << Mdc)
+                "buttons-hero-button-outlined"
+                model.mdc
+                [ Button.ripple
+                , Button.outlined
+                , css "margin-right" "32px"
+                ]
+                [ text "Outlined"
+                ]
+            ]
         , styled Html.h2
             [ cs "mdc-typography--headline6"
 
             -- TODO: Typography.headline6?
             , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
-              [ text "Resources"
-              ]
+            [ text "Resources"
+            ]
         , ResourceLink.view
             { link = "https://material.io/go/design-buttons"
             , title = "Material Design Guidelines"

@@ -69,6 +69,7 @@ module Material.Textfield exposing
 @docs onLeadingIconClick
 @docs onTrailingIconClick
 
+
 ### Validation properties
 
 @docs required

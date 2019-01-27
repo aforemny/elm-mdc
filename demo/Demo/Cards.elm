@@ -1,7 +1,7 @@
 module Demo.Cards exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text, p)
+import Html exposing (Html, p, text)
 import Html.Attributes as Html
 import Material
 import Material.Button as Button
@@ -349,7 +349,8 @@ view lift page model =
                 )
                 << List.map (\card -> Html.div [] [ card ])
     in
-    page.body "Card" "Cards contain content and actions about a single subject."
+    page.body "Card"
+        "Cards contain content and actions about a single subject."
         [ Page.hero
             [ css "height" "auto"
             ]

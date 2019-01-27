@@ -25,7 +25,8 @@ view page =
                     ]
                 )
     in
-    page.body "Linear Progress Indicator" "Progress indicators display the length of a process or express an unspecified wait time."
+    page.body "Linear Progress Indicator"
+        "Progress indicators display the length of a process or express an unspecified wait time."
         [ Page.hero []
             [ LinearProgress.view
                 [ LinearProgress.indeterminate

@@ -56,7 +56,8 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Floating Action Button" "Floating action buttons represents the primary action in an application. Only one floating action button is recommended per screen to represent the most common action."
+    page.body "Floating Action Button"
+        "Floating action buttons represents the primary action in an application. Only one floating action button is recommended per screen to represent the most common action."
         [ Page.hero [] [ fab "fabs-hero-fab" [] ]
         , Html.section []
             [ Html.div []

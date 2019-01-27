@@ -33,7 +33,8 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Theme" "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
+    page.body "Theme"
+        "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
         [ Page.hero []
             [ Button.view (lift << Mdc)
                 "theme-button-primary"

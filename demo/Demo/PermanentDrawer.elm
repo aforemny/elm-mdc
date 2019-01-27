@@ -11,7 +11,7 @@ module Demo.PermanentDrawer exposing
     )
 
 import Demo.Page exposing (Page)
-import Html exposing (Html, text, h3, h6, div)
+import Html exposing (Html, div, h3, h6, text)
 import Html.Attributes as Html
 import Json.Decode as Json
 import Material
@@ -56,10 +56,12 @@ update lift msg model =
 drawerHeader : Html m
 drawerHeader =
     Drawer.header
-        [ ]
-        [ styled h3 [ Drawer.title ]
-              [ text "Mail" ]
-        , styled h6 [ Drawer.subTitle ]
+        []
+        [ styled h3
+            [ Drawer.title ]
+            [ text "Mail" ]
+        , styled h6
+            [ Drawer.subTitle ]
             [ text "email@material.io" ]
         ]
 
@@ -68,69 +70,72 @@ drawerItems : Html m
 drawerItems =
     Drawer.content []
         [ Lists.nav []
-              [ Lists.a
-                    [ Options.attribute (Html.href "#persistent-drawer")
-                    , Lists.activated
-                    ]
-                    [ Lists.graphicIcon [] "inbox"
-                    , text "Inbox"
-                    ]
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "star"
-                    , text "Star"
-                    ]
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "send"
-                    , text "Sent Mail"
-                    ]
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "drafts"
-                    , text "Drafts"
-                    ]
-              , Lists.divider [] []
-              , styled h6 [ cs "mdc-list-group__subheader" ] [ text "Labels" ]
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "bookmark"
-                    , text "Family"
-                    ]
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "bookmark"
-                    , text "Friends"
-                    ]
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "bookmark"
-                    , text "Work"
-                    ]
-              , Lists.divider [] []
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "settings"
-                    , text "Settings"
-                    ]
-              , Lists.a
-                  [ Options.attribute (Html.href "#persistent-drawer")
-                  ]
-                    [ Lists.graphicIcon [] "announcement"
-                    , text "Help & feedback"
-                    ]
-              ]
+            [ Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                , Lists.activated
+                ]
+                [ Lists.graphicIcon [] "inbox"
+                , text "Inbox"
+                ]
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "star"
+                , text "Star"
+                ]
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "send"
+                , text "Sent Mail"
+                ]
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "drafts"
+                , text "Drafts"
+                ]
+            , Lists.divider [] []
+            , styled h6 [ cs "mdc-list-group__subheader" ] [ text "Labels" ]
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "bookmark"
+                , text "Family"
+                ]
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "bookmark"
+                , text "Friends"
+                ]
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "bookmark"
+                , text "Work"
+                ]
+            , Lists.divider [] []
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "settings"
+                , text "Settings"
+                ]
+            , Lists.a
+                [ Options.attribute (Html.href "#persistent-drawer")
+                ]
+                [ Lists.graphicIcon [] "announcement"
+                , text "Help & feedback"
+                ]
+            ]
         ]
 
 
+
 --demoMain : Mdc -> String -> Cmd -> Html Msg
+
+
 mainContent model mdc rtl_index cmd =
     styled Html.div
         [ cs "drawer-main-content"
@@ -141,29 +146,29 @@ mainContent model mdc rtl_index cmd =
         ]
         [ styled div [ TopAppBar.fixedAdjust ] []
         , styled Html.p
-              [ ]
-              [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-              ]
-        , styled Html.p
-            [ ]
+            []
             [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             ]
         , styled Html.p
-            [ ]
+            []
             [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             ]
         , styled Html.p
-            [ ]
+            []
+            [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            ]
+        , styled Html.p
+            []
             [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             ]
         , Button.view mdc
             rtl_index
-                model.mdc
-                    [ Options.on "click" (Json.succeed cmd)
-                    ]
+            model.mdc
+            [ Options.on "click" (Json.succeed cmd)
+            ]
             [ text "Toggle RTL"
             ]
-    ]
+        ]
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
@@ -178,7 +183,7 @@ view lift page model =
         [ Drawer.view (lift << Mdc)
             "permanent-drawer-drawer"
             model.mdc
-            [ ]
+            []
             [ drawerHeader
             , drawerItems
             ]
@@ -189,10 +194,10 @@ view lift page model =
                 model.mdc
                 []
                 [ TopAppBar.section
-                      [ TopAppBar.alignStart
-                      ]
-                      [ TopAppBar.title [] [ text "Permanent Drawer" ]
-                      ]
+                    [ TopAppBar.alignStart
+                    ]
+                    [ TopAppBar.title [] [ text "Permanent Drawer" ]
+                    ]
                 ]
             , mainContent model (lift << Mdc) "permanent-drawer-toggle-rtl" (lift ToggleRtl)
             ]

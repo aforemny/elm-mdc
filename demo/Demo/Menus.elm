@@ -240,7 +240,8 @@ menuAnchor lift model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Menu" "Menus display a list of choices on a transient sheet of material."
+    page.body "Menu"
+        "Menus display a list of choices on a transient sheet of material."
         [ Page.hero []
             [ Menu.view (lift << Mdc)
                 "menus-hero-menu"

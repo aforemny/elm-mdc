@@ -71,7 +71,8 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "List" "Lists present multiple line items vertically as a single continuous element."
+    page.body "List"
+        "Lists present multiple line items vertically as a single continuous element."
         [ inlineCss
         , Page.hero []
             [ twoLineAvatarPlusTextPlusIconExample

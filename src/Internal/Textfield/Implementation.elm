@@ -89,7 +89,6 @@ defaultConfig =
     }
 
 
-
 leadingIcon : String -> Property m
 leadingIcon icon =
     Options.option (\config -> { config | leadingIcon = Just icon })
@@ -255,17 +254,19 @@ textField domId lift model options _ =
                 , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
                 , Options.for config.id_
                 ]
-            (case config.labelText of
-                 Just str ->
-                     [ text str ]
-                 Nothing ->
-                     []
-            )
+                (case config.labelText of
+                    Just str ->
+                        [ text str ]
 
-        leadingIcon_ = iconView lift config.leadingIcon config.onLeadingIconClick
+                    Nothing ->
+                        []
+                )
 
-        trailingIcon_ = iconView lift config.trailingIcon config.onTrailingIconClick
+        leadingIcon_ =
+            iconView lift config.leadingIcon config.onLeadingIconClick
 
+        trailingIcon_ =
+            iconView lift config.trailingIcon config.onTrailingIconClick
     in
     Options.apply summary
         Html.div
@@ -283,99 +284,102 @@ textField domId lift model options _ =
         [ leadingIcon_
         , Options.applyNativeControl summary
             (if config.textarea then
-                 Html.textarea
+                Html.textarea
 
              else
-                 Html.input
+                Html.input
             )
-              [ cs "mdc-text-field__input"
-              , Options.id config.id_
-              , if config.outlined then
-                    Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
+            [ cs "mdc-text-field__input"
+            , Options.id config.id_
+            , if config.outlined then
+                Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
 
-                else
-                    Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
-              , Options.onBlur (lift Blur)
-              , Options.onInput (lift << Input)
-              , Options.many
-                  << List.map Options.attribute
-                      << List.filterMap identity
-                          <|
-                          [ Html.type_ (Maybe.withDefault "text" config.type_)
-                          |> (if not config.textarea then
-                                  Just
+              else
+                Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
+            , Options.onBlur (lift Blur)
+            , Options.onInput (lift << Input)
+            , Options.many
+                << List.map Options.attribute
+                << List.filterMap identity
+              <|
+                [ Html.type_ (Maybe.withDefault "text" config.type_)
+                    |> (if not config.textarea then
+                            Just
 
-                              else
-                                  always Nothing
-                             )
-                          , Html.disabled True
-                          |> (if config.disabled then
-                                  Just
+                        else
+                            always Nothing
+                       )
+                , Html.disabled True
+                    |> (if config.disabled then
+                            Just
 
-                              else
-                                  always Nothing
-                             )
-                          , Html.property "required" (Encode.bool True)
-                          |> (if config.required then
-                                  Just
+                        else
+                            always Nothing
+                       )
+                , Html.property "required" (Encode.bool True)
+                    |> (if config.required then
+                            Just
 
-                              else
-                                  always Nothing
-                             )
-                          , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
-                          |> (if config.pattern /= Nothing then
-                                  Just
+                        else
+                            always Nothing
+                       )
+                , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
+                    |> (if config.pattern /= Nothing then
+                            Just
 
-                                else
-                                    always Nothing
-                               )
-                          , Html.value (Maybe.withDefault "" config.value)
-                          |> (if config.value /= Nothing then
-                                  Just
+                        else
+                            always Nothing
+                       )
+                , Html.value (Maybe.withDefault "" config.value)
+                    |> (if config.value /= Nothing then
+                            Just
 
-                              else
-                                  always Nothing
-                               )
-                          ]
-              , when (config.placeholder /= Nothing) <|
-                  Options.attribute <|
-                      Html.placeholder (Maybe.withDefault "" config.placeholder)
-              , when (config.textarea && (config.rows /= Nothing)) <|
-                    Options.attribute <|
-                        Html.rows (Maybe.withDefault 0 config.rows)
-              , when (config.textarea && (config.cols /= Nothing)) <|
-                  Options.attribute <|
-                      Html.cols (Maybe.withDefault 0 config.cols)
-              ]
-              []
-        , if not config.fullWidth && not config.outlined  then
-              htmlLabel
+                        else
+                            always Nothing
+                       )
+                ]
+            , when (config.placeholder /= Nothing) <|
+                Options.attribute <|
+                    Html.placeholder (Maybe.withDefault "" config.placeholder)
+            , when (config.textarea && (config.rows /= Nothing)) <|
+                Options.attribute <|
+                    Html.rows (Maybe.withDefault 0 config.rows)
+            , when (config.textarea && (config.cols /= Nothing)) <|
+                Options.attribute <|
+                    Html.cols (Maybe.withDefault 0 config.cols)
+            ]
+            []
+        , if not config.fullWidth && not config.outlined then
+            htmlLabel
+
           else
-              text ""
+            text ""
         , trailingIcon_
         , if not config.outlined && not config.textarea then
-              styled Html.div
-                  [ cs "mdc-line-ripple"
-                  , cs "mdc-line-ripple--active" |> when model.focused
-                  ]
-              []
+            styled Html.div
+                [ cs "mdc-line-ripple"
+                , cs "mdc-line-ripple--active" |> when model.focused
+                ]
+                []
+
           else
-              text ""
+            text ""
         , if config.outlined then
-              styled Html.div
-                  [ cs "mdc-notched-outline"
-                  , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
-                  ]
-              [ styled Html.div [ cs "mdc-notched-outline__leading" ] []
-              , styled Html.div
-                  [ cs "mdc-notched-outline__notch" ]
-                  [ htmlLabel ]
-              , styled Html.div
-                  [ cs "mdc-notched-outline__trailing" ]
-                  []
-              ]
+            styled Html.div
+                [ cs "mdc-notched-outline"
+                , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
+                ]
+                [ styled Html.div [ cs "mdc-notched-outline__leading" ] []
+                , styled Html.div
+                    [ cs "mdc-notched-outline__notch" ]
+                    [ htmlLabel ]
+                , styled Html.div
+                    [ cs "mdc-notched-outline__trailing" ]
+                    []
+                ]
+
           else
-              text ""
+            text ""
         ]
 
 
@@ -391,7 +395,8 @@ iconView lift icon handler =
                     |> Maybe.map Options.onClick
                     |> Maybe.withDefault Options.nop
                 ]
-            [ text name ]
+                [ text name ]
+
         Nothing ->
             text ""
 

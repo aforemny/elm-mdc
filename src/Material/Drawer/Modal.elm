@@ -3,8 +3,8 @@ module Material.Drawer.Modal exposing
     , view
     , content
     , header
-    , subTitle
     , title
+    , subTitle
     , onClose
     , open
     , scrim
@@ -73,7 +73,6 @@ destinations and other functionality on an app.
         [ cs "drawer-frame-app-content" ]
         [ p [] [ text "content" ] ]
     ]
-
 
 This example also demonstrates the use of `Drawer.scrim`, a sibling
 element that needs to be present in the HTML for the animation to work.

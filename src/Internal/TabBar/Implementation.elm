@@ -12,11 +12,10 @@ module Internal.TabBar.Implementation exposing
     , view
     )
 
-import DOM
 import Browser.Dom as Dom
-import Task
+import DOM
 import Dict exposing (Dict)
-import Html exposing (Html, text, nav, div, span, button)
+import Html exposing (Html, button, div, nav, span, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Dispatch as Dispatch
@@ -30,6 +29,7 @@ import Internal.Ripple.Model as Ripple
 import Internal.TabBar.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Json.Decode as Json exposing (Decoder)
 import Json.Encode
+import Task
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
@@ -125,7 +125,6 @@ update lift msg model =
 
                     else
                         model.translateOffset
-
               in
               Just
                 { model
@@ -142,12 +141,16 @@ update lift msg model =
             ( Just { model | activeTab = tab_index }, Cmd.none )
 
 
+
 -- Note: tab bar and tab state use the same config.
+
+
 type alias Config =
     { indicator : Bool
     , activeTab : Int
     , icon : Maybe String
     , smallIndicator : Bool
+
     -- This value is computed by computeHorizontalScrollbarHeight in mdc-tab-sroller/util.js.
     -- No clue how to do that in Elm beside using a port. Should we?
     , horizontalScrollbarHeight : Int
@@ -253,21 +256,22 @@ tabbar domId lift model options nodes =
             in
             "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
 
-        tab_nodes = List.indexedMap (tabView domId lift model options) nodes
-
+        tab_nodes =
+            List.indexedMap (tabView domId lift model options) nodes
     in
-        Options.apply summary
-            nav
-            [ cs "mdc-tab-bar"
-            , Options.role "tablist"
-            , when stateChanged <|
-                GlobalEvents.onTick (Json.succeed (lift (SetActiveTab ( config.activeTab ))))
-            ]
+    Options.apply summary
+        nav
+        [ cs "mdc-tab-bar"
+        , Options.role "tablist"
+        , when stateChanged <|
+            GlobalEvents.onTick (Json.succeed (lift (SetActiveTab config.activeTab)))
+        ]
+        []
+        [ scroller lift
+            model
             []
-            [ scroller lift model
-                  []
-                  tab_nodes
-            ]
+            tab_nodes
+        ]
 
 
 {-| The scroll area view.
@@ -287,26 +291,26 @@ scroller lift model options nodes =
         [ cs "mdc-tab-scroller"
         ]
         [ styled div
-              [ cs "mdc-tab-scroller__scroll-area"
-              , cs "mdc-tab-scroller__scroll-area--scroll"
-              , css "margin-bottom" ((String.fromInt -config.horizontalScrollbarHeight) ++ "px")
-              ]
-              [ Options.apply summary
-                    div
-                    [ cs "mdc-tab-scroller__scroll-content"
+            [ cs "mdc-tab-scroller__scroll-area"
+            , cs "mdc-tab-scroller__scroll-area--scroll"
+            , css "margin-bottom" (String.fromInt -config.horizontalScrollbarHeight ++ "px")
+            ]
+            [ Options.apply summary
+                div
+                [ cs "mdc-tab-scroller__scroll-content"
 
-                    -- It's easiest to do geometry decoding on the immediate container of the tabs
-                    , when (model.geometry == Nothing) <|
-                        GlobalEvents.onTick <|
-                            Json.map (lift << Init) <|
-                                decodeGeometryOnScrollContent config.indicator
-                    , GlobalEvents.onResize <|
+                -- It's easiest to do geometry decoding on the immediate container of the tabs
+                , when (model.geometry == Nothing) <|
+                    GlobalEvents.onTick <|
                         Json.map (lift << Init) <|
                             decodeGeometryOnScrollContent config.indicator
-                    ]
-                    []
-                    nodes
-              ]
+                , GlobalEvents.onResize <|
+                    Json.map (lift << Init) <|
+                        decodeGeometryOnScrollContent config.indicator
+                ]
+                []
+                nodes
+            ]
         ]
 
 
@@ -325,32 +329,37 @@ tabView domId lift model options index tab_ =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        stateChanged = config.activeTab /= model.activeTab
+        stateChanged =
+            config.activeTab /= model.activeTab
 
         -- Only set tab to active on next tick
-        to_be_selected = (stateChanged && config.activeTab == index) && not tab_config.fadingIconIndicator
+        to_be_selected =
+            (stateChanged && config.activeTab == index) && not tab_config.fadingIconIndicator
 
-        tab_summary = Options.collect defaultConfig tab_.options
+        tab_summary =
+            Options.collect defaultConfig tab_.options
 
-        tab_config = tab_summary.config
+        tab_config =
+            tab_summary.config
 
-        selected = (model.activeTab == index) || (tab_config.fadingIconIndicator && config.activeTab == index)
+        selected =
+            (model.activeTab == index) || (tab_config.fadingIconIndicator && config.activeTab == index)
 
-        tabDomId = domId ++ "--" ++ String.fromInt index
+        tabDomId =
+            domId ++ "--" ++ String.fromInt index
 
         ripple =
             Ripple.view False
                 tabDomId
                 (lift << RippleMsg index)
                 (Dict.get index model.ripples
-                |> Maybe.withDefault Ripple.defaultModel
+                    |> Maybe.withDefault Ripple.defaultModel
                 )
-            []
+                []
 
         -- Tried to do that mdc does:
         -- This animation uses the FLIP approach. You can read more about it at the link below:
         -- https://aerotwist.com/blog/flip-your-animations/
-
         indicatorTransform =
             if to_be_selected then
                 let
@@ -387,18 +396,19 @@ tabView domId lift model options index tab_ =
                             |> Maybe.map .offsetWidth
                             |> Maybe.withDefault 0
 
-                    xPosition = fromX - currentX
+                    xPosition =
+                        fromX - currentX
 
-                    widthDelta = previousTabWidth / currentTabWidth
-
+                    widthDelta =
+                        previousTabWidth / currentTabWidth
                 in
-                    String.join " "
-                        [ "translateX(" ++ String.fromFloat xPosition ++ "px)"
-                        , "scale(" ++ String.fromFloat widthDelta ++ ",1)"
-                        ]
+                String.join " "
+                    [ "translateX(" ++ String.fromFloat xPosition ++ "px)"
+                    , "scale(" ++ String.fromFloat widthDelta ++ ",1)"
+                    ]
 
-                else
-                    ""
+            else
+                ""
 
         icon_span =
             case tab_config.icon of
@@ -409,18 +419,25 @@ tabView domId lift model options index tab_ =
                         , Options.aria "hidden" "true"
                         ]
                         [ text name ]
+
                 Nothing ->
                     text ""
 
         icon_indicator =
             case tab_config.indicatorIcon of
-                Just _ -> True
-                Nothing -> False
+                Just _ ->
+                    True
+
+                Nothing ->
+                    False
 
         icon_name =
             case tab_config.indicatorIcon of
-                Just name -> name
-                Nothing -> ""
+                Just name ->
+                    name
+
+                Nothing ->
+                    ""
 
         indicator_span =
             styled span
@@ -438,36 +455,55 @@ tabView domId lift model options index tab_ =
                     ]
                     [ text icon_name ]
                 ]
-
     in
-        Options.apply tab_summary
+    Options.apply tab_summary
         button
-            [ cs "mdc-tab"
-            , cs "mdc-tab--active" |> when selected
-            , Options.role "tab"
-            , Options.aria "selected" (if selected then "true" else "false")
-            , Options.tabindex (if selected then 0 else -1)
+        [ cs "mdc-tab"
+        , cs "mdc-tab--active" |> when selected
+        , Options.role "tab"
+        , Options.aria "selected"
+            (if selected then
+                "true"
 
-            -- TODO: somehow ripple needs to interact with ripple span I think?
-            -- Now it sets "mdc-ripple-upgraded on the button class which is wrong.
-            , ripple.interactionHandler
-            , ripple.properties
+             else
+                "false"
+            )
+        , Options.tabindex
+            (if selected then
+                0
+
+             else
+                -1
+            )
+
+        -- TODO: somehow ripple needs to interact with ripple span I think?
+        -- Now it sets "mdc-ripple-upgraded on the button class which is wrong.
+        , ripple.interactionHandler
+        , ripple.properties
+        ]
+        []
+        [ styled span
+            [ cs "mdc-tab__content" ]
+            [ icon_span
+            , styled span
+                [ cs "mdc-tab__text-label" ]
+                tab_.childs
+            , if tab_config.smallIndicator then
+                indicator_span
+
+              else
+                text ""
+            ]
+        , if tab_config.smallIndicator then
+            text ""
+
+          else
+            indicator_span
+        , styled span
+            [ cs "mdc-tab__ripple"
             ]
             []
-            [ styled span
-                  [ cs "mdc-tab__content" ]
-                  [ icon_span
-                  , styled span
-                        [ cs "mdc-tab__text-label" ]
-                        tab_.childs
-                  , if tab_config.smallIndicator then indicator_span else text ""
-                  ]
-            , if tab_config.smallIndicator then text "" else indicator_span
-            , styled span
-                [ cs "mdc-tab__ripple"
-                ]
-                  []
-            ]
+        ]
 
 
 type alias Store s =
@@ -500,7 +536,10 @@ view =
         Component.render getSet.get (tabbar domId) Internal.Msg.TabBarMsg lift domId
 
 
+
 -- TODO: probably rework, indicator is gone, but we still have some kind of scrolling.
+
+
 decodeGeometryOnIndicator : Bool -> Decoder Geometry
 decodeGeometryOnIndicator hasIndicator =
     DOM.target <|
@@ -559,33 +598,35 @@ decodeGeometry : Bool -> Decoder Geometry
 decodeGeometry hasIndicator =
     Json.map3 Geometry
         (Json.map (List.filterMap identity) <|
-                DOM.childNodes
-                    (Json.at [ "tagName" ] Json.string
-                        |> Json.andThen
-                            (\tagName ->
-                                case String.toLower tagName of
-                                    "button" ->
-                                        Json.map Just <|
-                                            Json.map2
-                                                (\offsetLeft offsetWidth ->
-                                                    { offsetLeft = offsetLeft
-                                                    , offsetWidth = offsetWidth
-                                                    }
-                                                )
-                                                DOM.offsetLeft
-                                                DOM.offsetWidth
+            DOM.childNodes
+                (Json.at [ "tagName" ] Json.string
+                    |> Json.andThen
+                        (\tagName ->
+                            case String.toLower tagName of
+                                "button" ->
+                                    Json.map Just <|
+                                        Json.map2
+                                            (\offsetLeft offsetWidth ->
+                                                { offsetLeft = offsetLeft
+                                                , offsetWidth = offsetWidth
+                                                }
+                                            )
+                                            DOM.offsetLeft
+                                            DOM.offsetWidth
 
-                                    _ ->
-                                        Json.succeed Nothing
-                            )
-                    )
+                                _ ->
+                                    Json.succeed Nothing
+                        )
+                )
         )
         (Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth)
         (DOM.parentElement <|
-             -- .mdc-tab-scroller__scroll-area
-             DOM.parentElement <|
-                 -- .mdc-tab-scroller
-                 DOM.parentElement <|
-                     -- .mdc-tab-bar
-                     Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
+            -- .mdc-tab-scroller__scroll-area
+            DOM.parentElement
+            <|
+                -- .mdc-tab-scroller
+                DOM.parentElement
+                <|
+                    -- .mdc-tab-bar
+                    Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )

@@ -9,7 +9,7 @@ module Demo.ModalDrawer exposing
 
 import Demo.Page exposing (Page)
 import Demo.PermanentDrawer
-import Html exposing (Html, text, p, div)
+import Html exposing (Html, div, p, text)
 import Html.Attributes as Html
 import Json.Decode as Json
 import Material
@@ -83,16 +83,16 @@ view lift page model =
         , styled Html.div
             [ cs "drawer-frame-app-content" ]
             [ TopAppBar.view (lift << Mdc)
-              "modal-drawer-top-app-bar"
-              model.mdc
-              []
-              [ TopAppBar.section
+                "modal-drawer-top-app-bar"
+                model.mdc
+                []
+                [ TopAppBar.section
                     [ TopAppBar.alignStart
                     ]
                     [ TopAppBar.navigationIcon [ Options.onClick (lift OpenDrawer) ] "menu"
                     , TopAppBar.title [] [ text "Modal Drawer" ]
                     ]
-              ]
+                ]
             , Demo.PermanentDrawer.mainContent model (lift << Mdc) "modal-drawer-toggle-rtl" (lift ToggleRtl)
             ]
         ]

@@ -61,7 +61,8 @@ view lift page toolbarPage model =
             waterfallToolbarFix lift model
 
         Nothing ->
-            page.body "Toolbars - Deprecated" "Deprecated. Please use Top App Bar instead."
+            page.body "Toolbars - Deprecated"
+                "Deprecated. Please use Top App Bar instead."
                 [ Page.hero []
                     [ styled Html.div
                         [ css "width" "480px"

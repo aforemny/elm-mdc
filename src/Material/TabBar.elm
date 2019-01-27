@@ -38,9 +38,9 @@ is currently not supported.
         , TabBar.tab [] [ text "Item Three" ]
         ]
 
-
 Set the Options.onClick property on each tab to send a message to
 update the active tab in your model.
+
 
 # Usage
 
@@ -137,7 +137,7 @@ smallIndicator =
 {-| Indicates the icon to use for the sliding indicator icon effect.
 -}
 indicatorIcon : String -> Property m
-indicatorIcon  =
+indicatorIcon =
     TabBar.indicatorIcon
 
 

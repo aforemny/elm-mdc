@@ -2,7 +2,7 @@ module Demo.Checkbox exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
-import Html exposing (Html, text, p)
+import Html exposing (Html, p, text)
 import Html.Attributes as Html
 import Json.Decode as Json
 import Material
@@ -121,7 +121,8 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Checkbox" "Checkboxes allow the user to select multiple options from a set."
+    page.body "Checkbox"
+        "Checkboxes allow the user to select multiple options from a set."
         [ let
             viewCheckbox index =
                 let

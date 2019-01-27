@@ -44,7 +44,7 @@ import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when, aria, role)
+import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
 import Json.Decode as Decode exposing (Decoder)
 
 
@@ -358,6 +358,7 @@ menu lift model options ulNode =
         isOpen =
             if model.animating then
                 model.open && (model.geometry /= Nothing)
+
             else
                 model.open
 
@@ -415,6 +416,7 @@ menu lift model options ulNode =
         , when (model.animating && not (Maybe.withDefault False model.quickOpen)) <|
             if model.open then
                 cs "mdc-menu--animating-open"
+
             else
                 cs "mdc-menu--animating-closed"
         , when isOpen
@@ -461,20 +463,17 @@ menu lift model options ulNode =
         ]
         []
         [ Lists.ul
-            (
-                -- TODO:
-                --            :: Options.onWithOptions "keydown"
-                --            { stopPropagation = False, preventDefault = True }
-                --            (Decode.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
-                --            |> Decode.andThen identity
-                --            )
-                ( ulNode.options
-                      ++
-                      [ role "menu"
-                      , aria "hidden" "true"
-                      , aria "orientation" "vertical"
-                      ]
-                )
+            -- TODO:
+            --            :: Options.onWithOptions "keydown"
+            --            { stopPropagation = False, preventDefault = True }
+            --            (Decode.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
+            --            |> Decode.andThen identity
+            --            )
+            (ulNode.options
+                ++ [ role "menu"
+                   , aria "hidden" "true"
+                   , aria "orientation" "vertical"
+                   ]
             )
             (List.indexedMap
                 (\i item ->
@@ -492,7 +491,8 @@ menu lift model options ulNode =
                             else
                                 Options.nop
 
-                        isSelected = List.any (\j -> j == selected) item.options
+                        isSelected =
+                            List.any (\j -> j == selected) item.options
 
                         itemSummary =
                             -- TODO:

@@ -3,8 +3,8 @@ module Material.Drawer.Permanent exposing
     , view
     , content
     , header
-    , subTitle
     , title
+    , subTitle
     )
 
 {-| The MDC Navigation Drawer is used to organize access to

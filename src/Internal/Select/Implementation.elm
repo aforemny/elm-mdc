@@ -141,12 +141,13 @@ select lift model options items_ =
                         [ cs "mdc-notched-outline__trailing" ]
                         []
                     ]
+
             else
                 styled Html.div
                     [ cs "mdc-line-ripple"
                     , when focused (cs "mdc-line-ripple--active")
                     ]
-                []
+                    []
     in
     Options.apply summary
         Html.div
@@ -168,7 +169,11 @@ select lift model options items_ =
             , when config.disabled (Options.attribute (Html.disabled True))
             ]
             items
-        , if not config.outlined then htmlLabel else text ""
+        , if not config.outlined then
+            htmlLabel
+
+          else
+            text ""
         , ripple_or_outline
         ]
 

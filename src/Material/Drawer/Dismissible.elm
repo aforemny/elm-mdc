@@ -3,8 +3,8 @@ module Material.Drawer.Dismissible exposing
     , view
     , content
     , header
-    , subTitle
     , title
+    , subTitle
     , open
     , appContent
     )
@@ -146,7 +146,6 @@ open =
 {-| Apply the mdc-drawer-app-content class to the sibling element
 after the drawer for the open/close animations to work.
 -}
-
 appContent : Property m
 appContent =
     Drawer.appContent

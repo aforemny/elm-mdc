@@ -13,11 +13,11 @@ import Dict
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
+import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
 import Internal.Msg
-import Internal.Options as Options exposing (aria, cs, styled, when, role)
+import Internal.Options as Options exposing (aria, cs, role, styled, when)
 import Internal.Snackbar.Model exposing (Contents, Model, Msg(..), State(..), Transition(..), defaultModel)
-import Internal.GlobalEvents as GlobalEvents
 import Json.Decode as Json
 
 
@@ -131,6 +131,7 @@ update fwd msg model =
         SetOpen ->
             ( { model | open = True }, Cmd.none )
 
+
 add :
     (Internal.Msg.Msg m -> m)
     -> Index
@@ -194,6 +195,7 @@ snackbar lift model options _ =
             case model.state of
                 Active _ ->
                     not model.open
+
                 _ ->
                     False
 
@@ -201,6 +203,7 @@ snackbar lift model options _ =
             case model.state of
                 Active _ ->
                     model.open
+
                 _ ->
                     False
 
@@ -208,6 +211,7 @@ snackbar lift model options _ =
             case model.state of
                 Fading _ ->
                     True
+
                 _ ->
                     False
 
@@ -219,7 +223,6 @@ snackbar lift model options _ =
 
         stacked =
             Maybe.map .stacked contents == Just True
-
     in
     Options.apply summary
         Html.div
@@ -234,50 +237,50 @@ snackbar lift model options _ =
         -- duration of the animation.
         , cs "mdc-snackbar--opening" |> when isOpening
         , cs "mdc-snackbar--closing" |> when isFading
-        , when isOpening <| GlobalEvents.onTick (Json.succeed (lift (SetOpen)))
-
+        , when isOpening <| GlobalEvents.onTick (Json.succeed (lift SetOpen))
         , cs "mdc-snackbar--stacked"
             |> when stacked
         ]
         []
         [ styled Html.div
-           [ cs "mdc-snackbar__surface"
-           ]
-           [ styled Html.div
-               [ cs "mdc-snackbar__label"
-               , role "status"
-               , aria "live" "polite"
-               ]
-               (contents
-                   |> Maybe.map (\c -> [ text c.message ])
-                   |> Maybe.withDefault []
-               )
-           , styled Html.div
-               [ cs "mdc-snackbar__actions"
-               ]
-               [ Options.styled Html.button
-                   [ cs "mdc-button"
-                   , cs "mdc-snackbar__action"
-                   , Options.attribute (Html.type_ "button")
-                   , Options.on "click" (Json.succeed (lift (Dismiss True onDismiss)))
-                   ]
-                   (action
-                       |> Maybe.map (\actionString -> [ text actionString ])
-                       |> Maybe.withDefault []
-                   )
-               , if config.dismissible then
-                     Options.styled Html.button
-                         [ cs "mdc-icon-button"
-                         , cs "mdc-snackbar__dismiss"
-                         , cs "material-icons"
-                         , Options.attribute (Html.title "Dismiss")
-                         , Options.on "click" (Json.succeed (lift (Dismiss True Nothing)))
-                         ]
-                         [ text "close" ]
-                 else
-                      text ""
-               ]
-           ]
+            [ cs "mdc-snackbar__surface"
+            ]
+            [ styled Html.div
+                [ cs "mdc-snackbar__label"
+                , role "status"
+                , aria "live" "polite"
+                ]
+                (contents
+                    |> Maybe.map (\c -> [ text c.message ])
+                    |> Maybe.withDefault []
+                )
+            , styled Html.div
+                [ cs "mdc-snackbar__actions"
+                ]
+                [ Options.styled Html.button
+                    [ cs "mdc-button"
+                    , cs "mdc-snackbar__action"
+                    , Options.attribute (Html.type_ "button")
+                    , Options.on "click" (Json.succeed (lift (Dismiss True onDismiss)))
+                    ]
+                    (action
+                        |> Maybe.map (\actionString -> [ text actionString ])
+                        |> Maybe.withDefault []
+                    )
+                , if config.dismissible then
+                    Options.styled Html.button
+                        [ cs "mdc-icon-button"
+                        , cs "mdc-snackbar__dismiss"
+                        , cs "material-icons"
+                        , Options.attribute (Html.title "Dismiss")
+                        , Options.on "click" (Json.succeed (lift (Dismiss True Nothing)))
+                        ]
+                        [ text "close" ]
+
+                  else
+                    text ""
+                ]
+            ]
         ]
 
 

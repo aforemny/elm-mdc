@@ -3,7 +3,7 @@ module Demo.Selects exposing (Model, Msg(..), defaultModel, subscriptions, updat
 import Array
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
-import Html exposing (Html, text, p)
+import Html exposing (Html, p, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Material
@@ -237,7 +237,8 @@ select lift id model selectedIndex options _ =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Select" "Selects allow users to select from a single-option menu. It functions as a wrapper around the browser's native <select> element."
+    page.body "Select"
+        "Selects allow users to select from a single-option menu. It functions as a wrapper around the browser's native <select> element."
         [ let
             state =
                 Dict.get "selects-hero-select" model.selects

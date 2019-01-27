@@ -10,7 +10,7 @@ module Internal.Drawer.Modal.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text, div)
+import Html exposing (Html, div, text)
 import Internal.Component exposing (Index, Indexed)
 import Internal.Drawer.Implementation as Drawer
 import Internal.Drawer.Model exposing (Model, Msg)
@@ -54,7 +54,7 @@ content =
 
 scrim : List (Property m) -> List (Html m) -> Html m
 scrim options =
-    styled div ( cs "mdc-drawer-scrim" :: options)
+    styled div (cs "mdc-drawer-scrim" :: options)
 
 
 type alias Store s =

@@ -5,6 +5,7 @@ module Material.Menu exposing
     , Item
     , li
     , divider
+    , selected
     , onSelect
     , index
     , attach
@@ -21,7 +22,6 @@ module Material.Menu exposing
     , anchorMargin
     , Margin
     , quickOpen
-    , selected
     )
 
 {-| The Menu component is a spec-aligned menu component adhering to the Material

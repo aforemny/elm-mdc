@@ -83,12 +83,12 @@ view lift page model =
                 model.mdc
                 []
                 [ TopAppBar.section
-                      [ TopAppBar.alignStart
-                      ]
-                      -- TODO: bug: dismissible drawer does not want to open, no clue what's going on. The model change does not want to stick, first ruond it indeed passes the True model state, but next round it doesn't.
-                      [ TopAppBar.navigationIcon [ Options.onClick (lift ToggleDrawer) ] "menu"
-                      , TopAppBar.title [] [ text "Dismissible Drawer (Broken)" ]
-                      ]
+                    [ TopAppBar.alignStart
+                    ]
+                    -- TODO: bug: dismissible drawer does not want to open, no clue what's going on. The model change does not want to stick, first ruond it indeed passes the True model state, but next round it doesn't.
+                    [ TopAppBar.navigationIcon [ Options.onClick (lift ToggleDrawer) ] "menu"
+                    , TopAppBar.title [] [ text "Dismissible Drawer (Broken)" ]
+                    ]
                 ]
             , Demo.PermanentDrawer.mainContent model (lift << Mdc) "dismissible-drawer-toggle-rtl" (lift ToggleRtl)
             ]

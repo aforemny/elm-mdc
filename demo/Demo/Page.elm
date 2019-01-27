@@ -1,13 +1,13 @@
 module Demo.Page exposing
     ( Page
+    , demos
     , header
     , hero
     , toolbar
-    , demos
     )
 
 import Demo.Url as Url exposing (Url)
-import Html exposing (Html, text, h2, div)
+import Html exposing (Html, div, h2, text)
 import Html.Attributes as Html
 import Material
 import Material.Icon as Icon
@@ -110,10 +110,12 @@ hero options =
 
 demos : List (Html m) -> Html m
 demos nodes =
-    styled div [ css "padding-bottom" "20px" ]
-        ( styled h2
-              [ Typography.headline6
-              , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-              ]
-              [ text "Demos" ]
-          :: nodes )
+    styled div
+        [ css "padding-bottom" "20px" ]
+        (styled h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+            ]
+            [ text "Demos" ]
+            :: nodes
+        )

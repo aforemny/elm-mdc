@@ -1,7 +1,7 @@
 module Demo.Snackbar exposing (Model, Msg(..), defaultModel, update, view)
 
-import Demo.Page as Page exposing (Page)
 import Demo.Helper.ResourceLink as ResourceLink
+import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
@@ -10,7 +10,7 @@ import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
 import Material.FormField as FormField
-import Material.Options as Options exposing (cs, css, nop, styled, when, role, aria)
+import Material.Options as Options exposing (aria, cs, css, nop, role, styled, when)
 import Material.Snackbar as Snackbar
 import Material.Textfield as Textfield
 import Material.Typography as Typography
@@ -111,10 +111,11 @@ view lift page model =
         example options =
             styled Html.div
                 (css "margin-top" "24px"
-                :: options
+                    :: options
                 )
     in
-    page.body "Snackbar" "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
+    page.body "Snackbar"
+        "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
         [ Page.hero []
             [ styled Html.div
                 [ css "position" "relative"
@@ -123,31 +124,31 @@ view lift page model =
                 , cs "mdc-snackbar mdc-snackbar--open"
                 ]
                 [ styled Html.div
-                      [ cs "mdc-snackbar__surface" ]
-                      [ styled Html.div
-                            [ cs "mdc-snackbar__label"
-                            , role "status"
-                            , aria "live" "polite"
-                            , css "color" "hsla(0,0%,100%,.87)"
+                    [ cs "mdc-snackbar__surface" ]
+                    [ styled Html.div
+                        [ cs "mdc-snackbar__label"
+                        , role "status"
+                        , aria "live" "polite"
+                        , css "color" "hsla(0,0%,100%,.87)"
+                        ]
+                        [ text "Can't send photo. Retry in 5 seconds." ]
+                    , styled Html.div
+                        [ cs "mdc-snackbar__actions" ]
+                        [ styled Html.button
+                            [ Options.attribute (Html.type_ "button")
+                            , cs "mdc-button"
+                            , cs "mdc-snackbar__action"
                             ]
-                            [ text "Can't send photo. Retry in 5 seconds." ]
-                      , styled Html.div
-                          [ cs "mdc-snackbar__actions" ]
-                          [ styled Html.button
-                                [ Options.attribute (Html.type_ "button")
-                                , cs "mdc-button"
-                                , cs "mdc-snackbar__action"
-                                ]
-                                [ text "Retry"
-                                ]
-                          , styled Html.button
-                                [ cs "mdc-icon-button"
-                                , cs "mdc-snackbar__dismiss"
-                                , cs "material-icons"
-                                ]
-                                [ text "close" ]
-                          ]
-                      ]
+                            [ text "Retry"
+                            ]
+                        , styled Html.button
+                            [ cs "mdc-icon-button"
+                            , cs "mdc-snackbar__dismiss"
+                            , cs "material-icons"
+                            ]
+                            [ text "close" ]
+                        ]
+                    ]
                 ]
             ]
         , styled Html.h2
@@ -257,23 +258,28 @@ view lift page model =
                     [ text "Show leading rtl"
                     ]
                 , Snackbar.view (lift << Mdc) "snackbar-default-snackbar" model.mdc [] []
-                , Snackbar.view (lift << Mdc) "snackbar-dismissible-snackbar" model.mdc
+                , Snackbar.view (lift << Mdc)
+                    "snackbar-dismissible-snackbar"
+                    model.mdc
                     [ Snackbar.dismissible ]
                     []
-                , Snackbar.view (lift << Mdc) "snackbar-leading-snackbar" model.mdc
+                , Snackbar.view (lift << Mdc)
+                    "snackbar-leading-snackbar"
+                    model.mdc
                     [ Snackbar.dismissible
-                    , Snackbar.leading ]
+                    , Snackbar.leading
+                    ]
                     []
                 , Html.div
                     [ Html.attribute "dir" "rtl"
                     ]
                     [ Snackbar.view (lift << Mdc)
-                          "snackbar-leading-snackbar-rtl"
-                          model.mdc
-                          [ Snackbar.dismissible
-                          , Snackbar.leading
-                          ]
-                          []
+                        "snackbar-leading-snackbar-rtl"
+                        model.mdc
+                        [ Snackbar.dismissible
+                        , Snackbar.leading
+                        ]
+                        []
                     ]
                 ]
             ]

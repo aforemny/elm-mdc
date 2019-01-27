@@ -90,6 +90,7 @@ open : Property m
 open =
     Drawer.open
 
+
 appContent : Property m
 appContent =
     cs "mdc-drawer-app-content"

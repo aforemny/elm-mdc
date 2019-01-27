@@ -10,9 +10,9 @@ module Internal.Drawer.Implementation exposing
     , open
     , react
     , render
+    , subTitle
     , subs
     , subscriptions
-    , subTitle
     , title
     , update
     , view
@@ -35,7 +35,7 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        StartAnimation ( isOpen ) ->
+        StartAnimation isOpen ->
             ( Just
                 { model
                     | open = True
@@ -48,7 +48,12 @@ update lift msg model =
         EndAnimation ->
             ( Just
                 { model
-                    | open = if model.closeOnAnimationEnd then False else model.open
+                    | open =
+                        if model.closeOnAnimationEnd then
+                            False
+
+                        else
+                            model.open
                     , animating = False
                     , closeOnAnimationEnd = False
                 }
@@ -80,51 +85,52 @@ view className lift model options nodes =
             Options.collect defaultConfig options
 
         stateChanged =
-            (not model.closeOnAnimationEnd) && ( (config.open) /= (model.open) )
+            not model.closeOnAnimationEnd && (config.open /= model.open)
     in
     styled Html.aside
-        ( [ cs "mdc-drawer"
-        , cs className
-        , when stateChanged <|
-            GlobalEvents.onTick (Decode.succeed (lift (StartAnimation config.open) ))
+        ([ cs "mdc-drawer"
+         , cs className
+         , when stateChanged <|
+            GlobalEvents.onTick (Decode.succeed (lift (StartAnimation config.open)))
 
-          -- In order for the closing animation to work, we need to
-          -- keep the open class till the animation has ended
-        , cs "mdc-drawer--open" |> when (config.open || model.open)
+         -- In order for the closing animation to work, we need to
+         -- keep the open class till the animation has ended
+         , cs "mdc-drawer--open" |> when (config.open || model.open)
 
-          -- Animate class needs to kick in as soon as drawer is
-          -- opened. It's only used during opening.
-        , cs "mdc-drawer--animate" |> when (config.open && (stateChanged || model.animating))
+         -- Animate class needs to kick in as soon as drawer is
+         -- opened. It's only used during opening.
+         , cs "mdc-drawer--animate" |> when (config.open && (stateChanged || model.animating))
 
-          -- Wait a frame once display is no longer "none", to establish basis for animation
-        , cs "mdc-drawer--opening" |> when (config.open && model.animating)
-        , cs "mdc-drawer--closing" |> when (not config.open && model.animating)
+         -- Wait a frame once display is no longer "none", to establish basis for animation
+         , cs "mdc-drawer--opening" |> when (config.open && model.animating)
+         , cs "mdc-drawer--closing" |> when (not config.open && model.animating)
+         , when model.animating (Options.on "transitionend" (Decode.succeed (lift EndAnimation)))
 
-        , when model.animating (Options.on "transitionend" (Decode.succeed (lift EndAnimation)))
-
-        -- TODO: Handle Esc key for modal and dismissible.
-        , Options.data "focustrap" "focustrap" |> when (not (String.isEmpty className) && ( config.open || model.open ) )
-        , Options.on "keydown" <|
+         -- TODO: Handle Esc key for modal and dismissible.
+         , Options.data "focustrap" "focustrap" |> when (not (String.isEmpty className) && (config.open || model.open))
+         , Options.on "keydown" <|
             Decode.map lift <|
                 Decode.map2
                     (\key keyCode ->
-                         if key == Just "Escape" || keyCode == 27 then
-                             --Maybe.withDefault (lift NoOp) config.onClose
-                             NoOp
-                         else
-                             --lift NoOp
-                             NoOp
+                        if key == Just "Escape" || keyCode == 27 then
+                            --Maybe.withDefault (lift NoOp) config.onClose
+                            NoOp
+
+                        else
+                            --lift NoOp
+                            NoOp
                     )
                     (Decode.oneOf
-                         [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                         , Decode.succeed Nothing
-                         ]
+                        [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                        , Decode.succeed Nothing
+                        ]
                     )
                     (Decode.at [ "keyCode" ] Decode.int)
 
-          -- TODO: Handle arrow keys (hard).
-        ]
-        ++ options )
+         -- TODO: Handle arrow keys (hard).
+         ]
+            ++ options
+        )
         nodes
 
 

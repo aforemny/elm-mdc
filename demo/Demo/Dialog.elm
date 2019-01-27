@@ -1,7 +1,7 @@
 module Demo.Dialog exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text, p)
+import Html exposing (Html, p, text)
 import Html.Attributes as Html
 import Material
 import Material.Button as Button
@@ -79,30 +79,30 @@ heroDialog lift index model =
         , css "z-index" "auto"
         ]
         [ styled Html.h2
-              [ Dialog.title
-              ]
-              [ text "Are you happy?"
-              ]
+            [ Dialog.title
+            ]
+            [ text "Are you happy?"
+            ]
         , Dialog.content []
             [ text "Please check the left and right side of this element for fun."
             ]
         , Dialog.actions []
             [ Button.view (lift << Mdc)
-                  (index ++ "-button-cancel")
-                  model.mdc
-                  [ Button.ripple
-                  , Dialog.cancel
-                  ]
-                  [ text "Cancel"
-                  ]
+                (index ++ "-button-cancel")
+                model.mdc
+                [ Button.ripple
+                , Dialog.cancel
+                ]
+                [ text "Cancel"
+                ]
             , Button.view (lift << Mdc)
                 (index ++ "button-accept")
-                    model.mdc
-                        [ Button.ripple
-                        , Dialog.accept
-                        ]
-                    [ text "Continue"
-                    ]
+                model.mdc
+                [ Button.ripple
+                , Dialog.accept
+                ]
+                [ text "Continue"
+                ]
             ]
         ]
 
@@ -116,27 +116,27 @@ alert lift index model =
         , Dialog.onClose (lift Cancel)
         ]
         [ Dialog.content []
-              [ text "Discard draft?"
-              ]
+            [ text "Discard draft?"
+            ]
         , Dialog.actions []
             [ Button.view (lift << Mdc)
-                  (index ++ "-button-cancel")
-                  model.mdc
-                  [ Button.ripple
-                  , Dialog.cancel
-                  , Options.onClick (lift Cancel)
-                  ]
-                  [ text "Cancel"
-                  ]
+                (index ++ "-button-cancel")
+                model.mdc
+                [ Button.ripple
+                , Dialog.cancel
+                , Options.onClick (lift Cancel)
+                ]
+                [ text "Cancel"
+                ]
             , Button.view (lift << Mdc)
                 (index ++ "-button-accept")
-                    model.mdc
-                        [ Button.ripple
-                        , Dialog.accept
-                        , Options.onClick (lift Accept)
-                        ]
-                    [ text "Discard"
-                    ]
+                model.mdc
+                [ Button.ripple
+                , Dialog.accept
+                , Options.onClick (lift Accept)
+                ]
+                [ text "Discard"
+                ]
             ]
         ]
 
@@ -150,36 +150,36 @@ dialog lift index model =
         , Dialog.onClose (lift Cancel)
         ]
         [ styled Html.h2
-              [ Dialog.title
-              ]
-              [ text "Use Google's location service?"
-              ]
+            [ Dialog.title
+            ]
+            [ text "Use Google's location service?"
+            ]
         , Dialog.content []
             [ text
-                  """
+                """
                    Let Google help apps determine location. This means sending anonymous location
                    data to Google, even when no apps are running.
                    """
             ]
         , Dialog.actions []
             [ Button.view (lift << Mdc)
-                  (index ++ "-button-cancel")
-                  model.mdc
-                  [ Button.ripple
-                  , Dialog.cancel
-                  , Options.onClick (lift Cancel)
-                  ]
-                  [ text "Decline"
-                  ]
+                (index ++ "-button-cancel")
+                model.mdc
+                [ Button.ripple
+                , Dialog.cancel
+                , Options.onClick (lift Cancel)
+                ]
+                [ text "Decline"
+                ]
             , Button.view (lift << Mdc)
                 (index ++ "-button-accept")
-                    model.mdc
-                        [ Button.ripple
-                        , Dialog.accept
-                        , Options.onClick (lift Accept)
-                        ]
-                    [ text "Continue"
-                    ]
+                model.mdc
+                [ Button.ripple
+                , Dialog.accept
+                , Options.onClick (lift Accept)
+                ]
+                [ text "Continue"
+                ]
             ]
         ]
 
@@ -193,60 +193,61 @@ scrollableDialog lift index model =
         , Dialog.onClose (lift Cancel)
         ]
         [ styled Html.h2
-              [ Dialog.title
-              ]
-              [ text "Choose a Ringtone"
-              ]
+            [ Dialog.title
+            ]
+            [ text "Choose a Ringtone"
+            ]
         , Dialog.content
             [ Dialog.scrollable
             ]
-              [ Lists.ul []
-                    ([ "None"
-                     , "Callisto"
-                     , "Ganymede"
-                     , "Luna"
-                     , "Marimba"
-                     , "Schwifty"
-                     , "Callisto"
-                     , "Ganymede"
-                     , "Luna"
-                     , "Marimba"
-                     , "Schwifty"
-                     ]
+            [ Lists.ul []
+                ([ "None"
+                 , "Callisto"
+                 , "Ganymede"
+                 , "Luna"
+                 , "Marimba"
+                 , "Schwifty"
+                 , "Callisto"
+                 , "Ganymede"
+                 , "Luna"
+                 , "Marimba"
+                 , "Schwifty"
+                 ]
                     |> List.map
-                         (\label ->
-                              Lists.li []
-                              [ text label
-                              ]
-                         )
-                    )
-              ]
+                        (\label ->
+                            Lists.li []
+                                [ text label
+                                ]
+                        )
+                )
+            ]
         , Dialog.actions []
             [ Button.view (lift << Mdc)
-                  (index ++ "-button-cancel")
-                  model.mdc
-                  [ Button.ripple
-                  , Dialog.cancel
-                  , Options.onClick (lift Cancel)
-                  ]
-                  [ text "Decline"
-                  ]
+                (index ++ "-button-cancel")
+                model.mdc
+                [ Button.ripple
+                , Dialog.cancel
+                , Options.onClick (lift Cancel)
+                ]
+                [ text "Decline"
+                ]
             , Button.view (lift << Mdc)
                 (index ++ "-button-accept")
-                    model.mdc
-                        [ Button.ripple
-                        , Dialog.accept
-                        , Options.onClick (lift Accept)
-                        ]
-                    [ text "Continue"
-                    ]
+                model.mdc
+                [ Button.ripple
+                , Dialog.accept
+                , Options.onClick (lift Accept)
+                ]
+                [ text "Continue"
+                ]
             ]
         ]
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Dialog" "Dialogs inform users about a specific task and may contain critical information, require decisions, or involve multiple tasks."
+    page.body "Dialog"
+        "Dialogs inform users about a specific task and may contain critical information, require decisions, or involve multiple tasks."
         [ Page.hero
             [ css "justify-content" "center"
             , Options.attribute (Html.attribute "dir" "rtl") |> when model.rtl

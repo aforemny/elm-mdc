@@ -5,7 +5,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Material
 import Material.FormField as FormField
-import Material.Options as Options exposing (cs, css, styled, when, for)
+import Material.Options as Options exposing (cs, css, for, styled, when)
 import Material.Switch as Switch
 import Platform.Cmd exposing (Cmd, none)
 
@@ -59,7 +59,8 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Switch" "Switches communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
+    page.body "Switch"
+        "Switches communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
         [ Page.hero []
             [ Html.span []
                 [ let
@@ -75,6 +76,7 @@ view lift page model =
                     model.mdc
                     [ Options.onClick (lift (Toggle index))
                     , Switch.on |> when on
+
                     --, Switch.label "off/on"
                     ]
                     []
