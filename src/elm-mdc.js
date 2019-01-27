@@ -13,7 +13,9 @@ import CustomEvent from 'custom-event';
       return
     }
     let initialFocusElement = null
-    if (node.querySelector && (node.dataset.focustrap !== "")) {
+    if (node.querySelector
+      && (node.dataset.focustrap !== "")
+      && (node.dataset.focustrap !== "{}")) {
       try {
         initialFocusElement = node.querySelector("." + node.dataset.focustrap)
       } catch (e) {}

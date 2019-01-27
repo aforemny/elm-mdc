@@ -105,7 +105,7 @@ view className lift model options nodes =
          , cs "mdc-drawer--opening" |> when (config.open && model.animating)
          , cs "mdc-drawer--closing" |> when (not config.open && model.animating)
          , when model.animating (Options.on "transitionend" (Decode.succeed (lift EndAnimation)))
-         , Options.data "focustrap" "focustrap" |> when (not (String.isEmpty className) && (config.open || model.open))
+         , Options.data "focustrap" "{}" |> when (not (String.isEmpty className) && (config.open || model.open))
          , Options.on "keydown" <|
             Decode.map2
                 (\key keyCode ->

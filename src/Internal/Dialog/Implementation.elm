@@ -117,7 +117,7 @@ dialog lift model options nodes =
         , when (model.open && config.open && not config.noScrim)
             << Options.many
           <|
-            [ Options.data "focustrap" "focustrap" -- Elm 0.19 has a bug where empty attributes don't work: https://github.com/elm/virtual-dom/issues/132
+            [ Options.data "focustrap" "{}" -- Elm 0.19 has a bug where empty attributes don't work: https://github.com/elm/virtual-dom/issues/132
             , Options.on "keydown" <|
                 Json.map2
                     (\key keyCode ->
