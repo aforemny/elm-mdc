@@ -1,5 +1,7 @@
 module Demo.TabBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (..)
@@ -40,32 +42,22 @@ update lift msg model =
             ( { model | states = Dict.insert index tabIndex model.states }, Cmd.none )
 
 
-view : (Msg m -> m) -> Page m -> Model m -> Html m
-view lift page model =
-    page.body "Tab Bar"
-        "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components."
-        [ Page.hero []
-            [ heroTabs lift model "tabs-hero-tabs"
-            ]
-        , Page.demos
-            [ styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons next to labels" ]
-            , tabsWithIcons lift model "tabs-with-icons" []
-            , styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons above labels and indicators restricted to content" ]
-            , tabsWithStackedIcons lift model "tabs-with-stacked-icons"
-            , styled h3 [ Typography.subtitle1 ] [ text "Tabs with fading icon indicator" ]
-            , tabsWithIcons lift
-                model
-                "tabs-with-fading-icon-indicator"
-                [ TabBar.indicatorIcon "star", TabBar.fadingIconIndicator ]
-            , styled h3 [ Typography.subtitle1 ] [ text "Tabs with sliding icon indicator" ]
-            , tabsWithIcons lift
-                model
-                "tabs-with-sliding-icon-indicator"
-                [ TabBar.indicatorIcon "star" ]
-            , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs (not yet working)" ]
-            , scrollingTabs lift model "scrolling-tabs"
-            ]
-        ]
+subscriptions : (Msg m -> m) -> Model m -> Sub m
+subscriptions lift model =
+    Material.subscriptions (lift << Mdc) model
+
+
+tab :
+    (Msg m -> m)
+    -> Model m
+    -> Material.Index
+    -> Int
+    -> String
+    -> TabBar.Tab m
+tab lift model index tab_index label =
+    TabBar.tab
+        [ Options.onClick (lift (SelectTab index tab_index)) ]
+        [ text label ]
 
 
 heroTabs : (Msg m -> m) -> Model m -> Material.Index -> Html m
@@ -100,6 +92,7 @@ tabsWithIcons lift model index options =
         ]
 
 
+tabsWithStackedIcons : (Msg m -> m) -> Model m -> Material.Index -> Html m
 tabsWithStackedIcons lift model index =
     let
         active_tab_index =
@@ -115,6 +108,7 @@ tabsWithStackedIcons lift model index =
         ]
 
 
+scrollingTabs : (Msg m -> m) -> Model m -> Material.Index -> Html m
 scrollingTabs lift model index =
     let
         active_tab_index =
@@ -127,19 +121,6 @@ scrollingTabs lift model index =
         ([ "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight" ]
             |> List.indexedMap (\i v -> tab lift model index i ("Tab " ++ v))
         )
-
-
-tab :
-    (Msg m -> m)
-    -> Model m
-    -> Material.Index
-    -> Int
-    -> String
-    -> TabBar.Tab m
-tab lift model index tab_index label =
-    TabBar.tab
-        [ Options.onClick (lift (SelectTab index tab_index)) ]
-        [ text label ]
 
 
 iconTab :
@@ -179,6 +160,43 @@ stackedTab lift model index tab_index icon label =
         [ text label ]
 
 
-subscriptions : (Msg m -> m) -> Model m -> Sub m
-subscriptions lift model =
-    Material.subscriptions (lift << Mdc) model
+view : (Msg m -> m) -> Page m -> Model m -> Html m
+view lift page model =
+    page.body "Tab Bar"
+        "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components."
+        [ Page.hero []
+            [ heroTabs lift model "tabs-hero-tabs"
+            ]
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+            ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-tabs"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/tabs/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-tab-bar"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons next to labels" ]
+            , tabsWithIcons lift model "tabs-with-icons" []
+            , styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons above labels and indicators restricted to content" ]
+            , tabsWithStackedIcons lift model "tabs-with-stacked-icons"
+            , styled h3 [ Typography.subtitle1 ] [ text "Scrolling tabs" ]
+            , scrollingTabs lift model "scrolling-tabs"
+            ]
+        ]
