@@ -12,7 +12,7 @@ module Internal.TabBar.Implementation exposing
     , view
     )
 
-import Browser.Dom as Dom
+import Browser.Dom
 import DOM
 import Dict exposing (Dict)
 import Html exposing (Html, button, div, nav, span, text)
@@ -38,7 +38,6 @@ update lift msg model =
         isRtl =
             False
 
-        -- TODO
         scrollToTabAtIndex geometry i =
             let
                 tab_ =
@@ -134,11 +133,20 @@ update lift msg model =
             , Cmd.none
             )
 
-        SetActiveTab tab_index ->
-            -- TODO: probably when setting the active tab we want to scroll it into view at this point.
-            -- But I don't know how. Browser.Dom.setViewportOf  seems to be the trick.
-            -- But it returns a result I don't know what to do with.
-            ( Just { model | activeTab = tab_index }, Cmd.none )
+        SetActiveTab domId tab_index ->
+            let
+                geometry =
+                    Maybe.withDefault defaultGeometry model.geometry
+
+                scrollLeft =
+                    scrollToTabAtIndex geometry tab_index
+            in
+            ( Just { model | activeTab = tab_index }
+            , Browser.Dom.setViewportOf (domId ++ "__scroll-area") scrollLeft 0
+                |> Task.map (\_ -> NoOp)
+                |> Task.onError (\_ -> Task.succeed NoOp)
+                |> Task.perform lift
+            )
 
 
 
@@ -264,25 +272,23 @@ tabbar domId lift model options nodes =
         [ cs "mdc-tab-bar"
         , Options.role "tablist"
         , when stateChanged <|
-            GlobalEvents.onTick (Json.succeed (lift (SetActiveTab config.activeTab)))
+            GlobalEvents.onTick (Json.succeed (lift (SetActiveTab domId config.activeTab)))
         ]
         []
-        [ scroller lift
-            model
-            []
-            tab_nodes
+        [ scroller domId lift model [] tab_nodes
         ]
 
 
 {-| The scroll area view.
 -}
 scroller :
-    (Msg m -> m)
+    String
+    -> (Msg m -> m)
     -> Model
     -> List (Property m)
     -> List (Html m)
     -> Html m
-scroller lift model options nodes =
+scroller domId lift model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -291,7 +297,8 @@ scroller lift model options nodes =
         [ cs "mdc-tab-scroller"
         ]
         [ styled div
-            [ cs "mdc-tab-scroller__scroll-area"
+            [ Options.id (domId ++ "__scroll-area")
+            , cs "mdc-tab-scroller__scroll-area"
             , cs "mdc-tab-scroller__scroll-area--scroll"
             , css "margin-bottom" (String.fromInt -config.horizontalScrollbarHeight ++ "px")
             ]

@@ -34,7 +34,7 @@ type Msg m
     | Dispatch (List m)
     | RippleMsg Int Ripple.Msg
     | Init Geometry
-    | SetActiveTab Int
+    | SetActiveTab String Int
 
 
 type alias Geometry =
