@@ -40,10 +40,7 @@ view lift page model =
                 lift
                 model
                 { title = "Text Button"
-                , additionalOptions =
-                    [ Button.ripple
-                    , css "margin" "8px 16px"
-                    ]
+                , additionalOptions = []
                 }
 
         raisedButtons idx =
@@ -51,11 +48,7 @@ view lift page model =
                 lift
                 model
                 { title = "Raised Button"
-                , additionalOptions =
-                    [ Button.raised
-                    , Button.ripple
-                    , css "margin" "8px 16px"
-                    ]
+                , additionalOptions = [ Button.raised ]
                 }
 
         unelevatedButtons idx =
@@ -63,11 +56,7 @@ view lift page model =
                 lift
                 model
                 { title = "Unelevated Button"
-                , additionalOptions =
-                    [ Button.unelevated
-                    , Button.ripple
-                    , css "margin" "8px 16px"
-                    ]
+                , additionalOptions = [ Button.unelevated ]
                 }
 
         outlinedButtons idx =
@@ -75,21 +64,28 @@ view lift page model =
                 lift
                 model
                 { title = "Outlined Button"
+                , additionalOptions = [ Button.outlined ]
+                }
+
+        shapedButtons idx =
+            example idx
+                lift
+                model
+                { title = "Shaped Button"
                 , additionalOptions =
-                    [ Button.outlined
-                    , Button.ripple
-                    , css "margin" "8px 16px"
+                    [ Button.unelevated
+                    , css "border-radius" "18px"
                     ]
                 }
     in
-    page.body "Buttons"
+    page.body "Button"
         "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
         [ Hero.view []
             [ Button.view (lift << Mdc)
                 "buttons-hero-button-text"
                 model.mdc
                 [ Button.ripple
-                , css "margin-right" "32px"
+                , css "margin" "16px 32px"
                 ]
                 [ text "Text"
                 ]
@@ -98,7 +94,7 @@ view lift page model =
                 model.mdc
                 [ Button.ripple
                 , Button.raised
-                , css "margin-right" "32px"
+                , css "margin" "16px 32px"
                 ]
                 [ text "Raised"
                 ]
@@ -107,7 +103,7 @@ view lift page model =
                 model.mdc
                 [ Button.ripple
                 , Button.unelevated
-                , css "margin-right" "32px"
+                , css "margin" "16px 32px"
                 ]
                 [ text "Unelevated"
                 ]
@@ -116,15 +112,13 @@ view lift page model =
                 model.mdc
                 [ Button.ripple
                 , Button.outlined
-                , css "margin-right" "32px"
+                , css "margin" "16px 32px"
                 ]
                 [ text "Outlined"
                 ]
             ]
         , styled Html.h2
-            [ cs "mdc-typography--headline6"
-
-            -- TODO: Typography.headline6?
+            [ Typography.headline6
             , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
             [ text "Resources"
@@ -152,6 +146,7 @@ view lift page model =
             , raisedButtons "buttons-raised-buttons"
             , unelevatedButtons "buttons-unelevated-buttons"
             , outlinedButtons "buttons-outlined-buttons"
+            , shapedButtons "buttons-shaped-buttons"
             ]
         ]
 
@@ -176,29 +171,30 @@ example idx lift model { title, additionalOptions } =
         , styled Html.div
             []
             [ Button.view (lift << Mdc)
-                (idx ++ "-baseline-button")
+                (idx ++ "-default-button")
                 model.mdc
-                additionalOptions
-                [ text "Baseline" ]
+                (css "margin" "8px 16px"
+                    :: Button.ripple
+                    :: additionalOptions
+                )
+                [ text "Default" ]
             , Button.view (lift << Mdc)
                 (idx ++ "-dense-button")
                 model.mdc
-                (Button.dense :: additionalOptions)
+                (css "margin" "8px 16px"
+                    :: Button.ripple
+                    :: Button.dense
+                    :: additionalOptions
+                )
                 [ text "Dense" ]
-            , Button.view (lift << Mdc)
-                (idx ++ "-secondary-button")
-                model.mdc
-                (cs "secondary-button" :: additionalOptions)
-                [ text "Secondary" ]
             , Button.view (lift << Mdc)
                 (idx ++ "-icon-button")
                 model.mdc
-                (Button.icon "favorite" :: additionalOptions)
+                (css "margin" "8px 16px"
+                    :: Button.ripple
+                    :: Button.icon "favorite"
+                    :: additionalOptions
+                )
                 [ text "Icon" ]
-            , Button.view (lift << Mdc)
-                (idx ++ "-link-button")
-                model.mdc
-                (Button.link "#buttons" :: additionalOptions)
-                [ text "Link" ]
             ]
         ]
