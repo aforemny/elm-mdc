@@ -235,7 +235,7 @@ update msg model =
         DismissibleDrawerMsg msg_ ->
             let
                 ( dismissibleDrawer, effects ) =
-                    Demo.DismissibleDrawer.update DismissibleDrawerMsg msg_ model.modalDrawer
+                    Demo.DismissibleDrawer.update DismissibleDrawerMsg msg_ model.dismissibleDrawer
             in
             ( { model | dismissibleDrawer = dismissibleDrawer }, effects )
 

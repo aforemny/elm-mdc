@@ -70,8 +70,6 @@ view lift page model =
         [ Drawer.view (lift << Mdc)
             "dismissible-drawer-drawer"
             model.mdc
-            -- model.drawerOpen gets briefly True, then False again for no apparent reason.
-            -- Use Debug.log to see what I mean.
             [ Drawer.open |> when model.drawerOpen ]
             [ Demo.PermanentDrawer.drawerHeader
             , Demo.PermanentDrawer.drawerItems
@@ -85,9 +83,8 @@ view lift page model =
                 [ TopAppBar.section
                     [ TopAppBar.alignStart
                     ]
-                    -- TODO: bug: dismissible drawer does not want to open, no clue what's going on. The model change does not want to stick, first ruond it indeed passes the True model state, but next round it doesn't.
                     [ TopAppBar.navigationIcon [ Options.onClick (lift ToggleDrawer) ] "menu"
-                    , TopAppBar.title [] [ text "Dismissible Drawer (Broken)" ]
+                    , TopAppBar.title [] [ text "Dismissible Drawer" ]
                     ]
                 ]
             , Demo.PermanentDrawer.mainContent model (lift << Mdc) "dismissible-drawer-toggle-rtl" (lift ToggleRtl)
