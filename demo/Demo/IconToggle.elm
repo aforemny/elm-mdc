@@ -1,5 +1,7 @@
 module Demo.IconToggle exposing (Model, Msg(..), defaultModel, update, view)
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (Html, text)
@@ -7,6 +9,7 @@ import Html.Attributes as Html
 import Material
 import Material.IconToggle as IconToggle
 import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Typography as Typography
 
 
 type alias Model m =
@@ -33,164 +36,96 @@ update lift msg model =
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
-        Toggle idx ->
+        Toggle index ->
             let
-                iconToggle =
-                    Dict.get idx model.iconToggles
-                        |> Maybe.withDefault False
-                        |> not
+                iconToggles =
+                    Dict.update index
+                        (\state ->
+                            Just <|
+                                case state of
+                                    Just True ->
+                                        False
+
+                                    _ ->
+                                        True
+                        )
+                        model.iconToggles
             in
-            ( { model | iconToggles = Dict.insert idx iconToggle model.iconToggles }
-            , Cmd.none
-            )
+            ( { model | iconToggles = iconToggles }, Cmd.none )
+
+
+iconToggle :
+    (Msg m -> m)
+    -> Material.Index
+    -> Model m
+    -> String
+    -> String
+    -> Html m
+iconToggle lift index model offIcon onIcon =
+    let
+        isOn =
+            Dict.get index model.iconToggles
+                |> Maybe.withDefault False
+    in
+    IconToggle.view (lift << Mdc)
+        index
+        model.mdc
+        [ IconToggle.icon { on = onIcon, off = offIcon }
+        , Options.onClick (lift (Toggle index))
+        , when isOn IconToggle.on
+        ]
+        []
+
+
+iconButton :
+    (Msg m -> m)
+    -> Material.Index
+    -> Model m
+    -> String
+    -> Html m
+iconButton lift index model icon =
+    iconToggle lift index model icon icon
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    let
-        example options =
-            styled Html.div
-                (cs "example"
-                    :: css "margin" "24px"
-                    :: css "padding" "24px"
-                    :: css "display" "flex"
-                    :: css "flex-flow" "row wrap"
-                    :: css "align-content" "left"
-                    :: css "justify-content" "left"
-                    :: options
-                )
-
-        title options =
-            styled Html.h2
-                (css "margin-left" "0"
-                    :: css "margin-bottom" "0.8em"
-                    :: css "margin-top" "0.8em"
-                    :: css "font-size" "1.3em"
-                    :: options
-                )
-
-        toggleExample options =
-            styled Html.div
-                (cs "toggle-example"
-                    :: css "min-width" "240px"
-                    :: css "padding" "24px"
-                    :: css "margin" "24px"
-                    :: options
-                )
-
-        iconToggle idx options =
-            let
-                isOn =
-                    Dict.get idx model.iconToggles
-                        |> Maybe.withDefault False
-            in
-            IconToggle.view (lift << Mdc)
-                idx
-                model.mdc
-                (Options.onClick (lift (Toggle idx))
-                    :: when isOn IconToggle.on
-                    :: options
-                )
-    in
     page.body "Icon Button"
         "Icons are appropriate for buttons that allow a user to take actions or make a selection, such as adding or removing a star to an item."
-        [ Page.hero []
-            [ let
-                isOn =
-                    Dict.get "icon-toggle-hero-icon-toggle" model.iconToggles
-                        |> Maybe.withDefault False
-              in
-              styled Html.div
-                []
-                [ iconToggle "icon-toggle-hero-icon-toggle"
-                    [ IconToggle.label
-                        { on = "Remove from Fravorites"
-                        , off = "Add to Favorites"
-                        }
-                    , IconToggle.icon
-                        { on = "favorite"
-                        , off = "favorite_border"
-                        }
-                    ]
-                    []
-                ]
+        [ Hero.view []
+            [ iconToggle lift
+                "icon-toggle-hero-icon-toggle"
+                model
+                "favorite_border"
+                "favorite"
             ]
-        , Html.node "style"
-            [ Html.type_ "text/css"
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
-            [ text "@import url(\"https://use.fontawesome.com/releases/v5.6.3/css/all.css\");" ]
-        , example []
-            [ let
-                isOn =
-                    Dict.get "icon-toggle-default-icon-toggle" model.iconToggles
-                        |> Maybe.withDefault False
-              in
-              toggleExample []
-                [ title [] [ text "Using Material Icons" ]
-                , styled Html.div
-                    [ css "margin-left" "1rem"
-                    ]
-                    [ iconToggle "icon-toggle-default-icon-toggle"
-                        [ IconToggle.label
-                            { on = "Remove from Fravorites"
-                            , off = "Add to Favorites"
-                            }
-                        , IconToggle.icon
-                            { on = "favorite"
-                            , off = "favorite_border"
-                            }
-                        ]
-                        []
-                    ]
-                , styled Html.p
-                    [ css "margin-top" "20px"
-                    , css "margin-bottom" "20px"
-                    ]
-                    [ text <|
-                        if isOn then
-                            "Favorited? yes"
-
-                        else
-                            "Favorited? no"
-                    ]
-                ]
-            , toggleExample []
-                [ title [] [ text "Using Font Awesome" ]
-                , styled Html.div
-                    [ css "margin-left" "1rem"
-                    ]
-                    [ iconToggle "icon-toggle-fa-icon-toggle"
-                        [ IconToggle.label
-                            { on = "Unstar this Icon"
-                            , off = "Star this Icon"
-                            }
-                        , IconToggle.icon
-                            { on = "fas"
-                            , off = "far"
-                            }
-                        , IconToggle.className "fa-star"
-                        ]
-                        []
-                    ]
-                ]
-            , toggleExample []
-                [ title [] [ text "Disabled Icons" ]
-                , styled Html.div
-                    [ css "margin-left" "1rem"
-                    ]
-                    [ iconToggle "icon-toggle-disabled-icon-toggle"
-                        [ IconToggle.label
-                            { on = "Remove from Fravorites"
-                            , off = "Add to Favorites"
-                            }
-                        , IconToggle.icon
-                            { on = "favorite"
-                            , off = "favorite_border"
-                            }
-                        , IconToggle.disabled
-                        ]
-                        []
-                    ]
-                ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/design/components/buttons.html#toggle-button"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/buttons/icon-buttons/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-icon-button"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Icon Button" ]
+            , iconButton lift "icon-toggle-icon-button" model "wifi"
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Icon Toggle" ]
+            , iconToggle lift "icon-toggle-icon-toggle" model "favorite_border" "favorite"
             ]
         ]
