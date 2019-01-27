@@ -7,10 +7,14 @@ module Demo.Drawer exposing
     , view
     )
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, p, text)
 import Html.Attributes as Html
 import Material
+import Material.Drawer.Permanent as Drawer
+import Material.List as Lists
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.Typography as Typography
 
@@ -40,20 +44,26 @@ update lift msg model =
 example : String -> String -> Html m
 example label url =
     styled Html.div
-        [ css "margin" "24px"
+        [ css "display" "inline-block"
+        , css "-ms-flex" "1 1 80%"
+        , css "flex" "1 1 80%"
+        , css "-ms-flex-pack" "distribute"
+        , css "justify-content" "space-around"
+        , css "min-height" "400px"
+        , css "min-width" "400px"
+        , css "padding" "15px"
         ]
-        [ styled Html.h2
-            [ Typography.headline
-            ]
-            [ text label
-            ]
-        , styled Html.p
+        [ Html.div
             []
             [ Html.a
                 [ Html.href ("." ++ url)
                 , Html.target "_blank"
                 ]
-                [ text "View in separate window"
+                [ styled Html.h3
+                    [ Typography.subtitle1
+                    ]
+                    [ text label
+                    ]
                 ]
             ]
         , styled Html.iframe
@@ -70,16 +80,79 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Drawer"
         "The navigation drawer slides in from the left and contains the navigation destinations for your app."
-        [ styled Html.div
-            [ css "display" "inline-block"
-            , css "flex" "1 1 80%"
-            , css "min-width" "400px"
-            , css "margin-left" "auto"
-            , css "margin-right" "auto"
+        [ Hero.view []
+            [ Drawer.view (lift << Mdc)
+                "permanent-drawer-drawer"
+                model.mdc
+                []
+                [ Drawer.header
+                    []
+                    [ styled Html.h3
+                        [ Drawer.title ]
+                        [ text "Title" ]
+                    , styled Html.h6
+                        [ Drawer.subTitle ]
+                        [ text "subtext" ]
+                    ]
+                , Drawer.content []
+                    [ Lists.nav []
+                        [ Lists.a
+                            [ Options.attribute (Html.href "#drawer")
+                            , Lists.activated
+                            ]
+                            [ Lists.graphicIcon [] "inbox"
+                            , text "Inbox"
+                            ]
+                        , Lists.a
+                            [ Options.attribute (Html.href "#drawer")
+                            ]
+                            [ Lists.graphicIcon [] "star"
+                            , text "Star"
+                            ]
+                        , Lists.a
+                            [ Options.attribute (Html.href "#drawer")
+                            ]
+                            [ Lists.graphicIcon [] "send"
+                            , text "Sent Mail"
+                            ]
+                        , Lists.a
+                            [ Options.attribute (Html.href "#drawer")
+                            ]
+                            [ Lists.graphicIcon [] "drafts"
+                            , text "Drafts"
+                            ]
+                        ]
+                    ]
+                ]
             ]
-            [ example "Drawer" "#permanent-drawer"
-            , example "Dismissible Drawer" "#dismissible-drawer"
-            , example "Modal Drawer" "#modal-drawer"
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+            ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-navigation-drawer"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/drawers/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-drawer"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ example "Permanent" "#permanent-drawer"
+            , example "Dismissible" "#dismissible-drawer"
+            , example "Modal" "#modal-drawer"
             ]
         ]
 
