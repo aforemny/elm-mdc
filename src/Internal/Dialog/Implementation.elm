@@ -119,23 +119,20 @@ dialog lift model options nodes =
           <|
             [ Options.data "focustrap" "focustrap" -- Elm 0.19 has a bug where empty attributes don't work: https://github.com/elm/virtual-dom/issues/132
             , Options.on "keydown" <|
-                Json.map lift <|
-                    Json.map2
-                        (\key keyCode ->
-                            if key == Just "Escape" || keyCode == 27 then
-                                --Maybe.withDefault (lift NoOp) config.onClose
-                                NoOp
+                Json.map2
+                    (\key keyCode ->
+                        if key == Just "Escape" || keyCode == 27 then
+                            Maybe.withDefault (lift NoOp) config.onClose
 
-                            else
-                                --lift NoOp
-                                NoOp
-                        )
-                        (Json.oneOf
-                            [ Json.map Just (Json.at [ "key" ] Json.string)
-                            , Json.succeed Nothing
-                            ]
-                        )
-                        (Json.at [ "keyCode" ] Json.int)
+                        else
+                            lift NoOp
+                    )
+                    (Json.oneOf
+                        [ Json.map Just (Json.at [ "key" ] Json.string)
+                        , Json.succeed Nothing
+                        ]
+                    )
+                    (Json.at [ "keyCode" ] Json.int)
             ]
 
         -- Opening and closing classes need to kick in as soon as
