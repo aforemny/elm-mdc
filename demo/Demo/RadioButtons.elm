@@ -1,5 +1,7 @@
 module Demo.RadioButtons exposing (Model, Msg(..), defaultModel, update, view)
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (Html, text)
@@ -8,6 +10,7 @@ import Material
 import Material.FormField as FormField
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.RadioButton as RadioButton
+import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 
@@ -22,7 +25,9 @@ defaultModel =
     { mdc = Material.defaultModel
     , radios =
         Dict.fromList
-            []
+            [ ( "hero", "radio-buttons-hero-radio-1" )
+            , ( "example", "radio-buttons-example-radio-1" )
+            ]
     }
 
 
@@ -37,152 +42,90 @@ update lift msg model =
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
-        Set group value ->
-            let
-                radio =
-                    Dict.get group model.radios
-                        |> Maybe.withDefault ""
-            in
-            ( { model
-                | radios = Dict.insert group value model.radios
-              }
-            , Cmd.none
-            )
+        Set group index ->
+            ( { model | radios = Dict.insert group index model.radios }, Cmd.none )
+
+
+isSelected : String -> Material.Index -> Model m -> Bool
+isSelected group index model =
+    Dict.get group model.radios
+        |> Maybe.map ((==) index)
+        |> Maybe.withDefault False
+
+
+heroRadio : (Msg m -> m) -> Model m -> String -> Material.Index -> Html m
+heroRadio lift model group index =
+    RadioButton.view (lift << Mdc)
+        index
+        model.mdc
+        [ Options.onClick (lift (Set group index))
+        , RadioButton.selected |> when (isSelected group index model)
+        , css "margin" "0 10px"
+        ]
+        []
+
+
+heroRadioGroup : (Msg m -> m) -> Model m -> Html m
+heroRadioGroup lift model =
+    Html.div []
+        [ heroRadio lift model "hero" "radio-buttons-hero-radio-1"
+        , heroRadio lift model "hero" "radio-buttons-hero-radio-2"
+        ]
+
+
+radio : (Msg m -> m) -> Model m -> String -> Material.Index -> String -> Html m
+radio lift model group index label =
+    FormField.view [ css "margin" "0 10px" ]
+        [ RadioButton.view (lift << Mdc)
+            index
+            model.mdc
+            [ Options.onClick (lift (Set group index))
+            , RadioButton.selected |> when (isSelected group index model)
+            ]
+            []
+        , Html.label [ Html.for index ] [ text label ]
+        ]
+
+
+exampleRadioGroup : (Msg m -> m) -> Model m -> Html m
+exampleRadioGroup lift model =
+    Html.div []
+        [ radio lift model "example" "radio-buttons-example-radio-1" "Radio 1"
+        , radio lift model "example" "radio-buttons-example-radio-2" "Radio 2"
+        ]
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    let
-        example options =
-            styled Html.div
-                (cs "example"
-                    :: css "display" "block"
-                    :: css "margin" "24px"
-                    :: css "padding" "24px"
-                    :: options
-                )
-    in
     page.body "Radio Button"
         "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
-        [ let
-            group =
-                "hero"
-
-            isSelected isDef id =
-                Dict.get group model.radios
-                    |> Maybe.map ((==) id)
-                    |> Maybe.withDefault isDef
-          in
-          Page.hero []
-            [ example []
-                [ let
-                    id =
-                        "radio-buttons-hero-radio-1"
-                  in
-                  FormField.view []
-                    [ RadioButton.view (lift << Mdc)
-                        id
-                        model.mdc
-                        [ Options.onClick (lift (Set group id))
-                        , RadioButton.selected |> when (isSelected True id)
-                        ]
-                        []
-                    ]
-                , let
-                    id =
-                        "radio-buttons-hero-radio-2"
-                  in
-                  FormField.view []
-                    [ RadioButton.view (lift << Mdc)
-                        id
-                        model.mdc
-                        [ Options.onClick (lift (Set group id))
-                        , RadioButton.selected |> when (isSelected False id)
-                        ]
-                        []
-                    ]
-                ]
+        [ Hero.view [] [ heroRadioGroup lift model ]
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
-        , let
-            group =
-                "ex0"
-
-            isSelected isDef id =
-                Dict.get group model.radios
-                    |> Maybe.map ((==) id)
-                    |> Maybe.withDefault isDef
-          in
-          example []
-            [ styled Html.h2
-                [ css "margin-left" "0"
-                , css "margin-top" "0"
-                ]
-                [ text "Radio" ]
-            , let
-                id =
-                    "radio-buttons-default-radio-1"
-              in
-              FormField.view []
-                [ RadioButton.view (lift << Mdc)
-                    id
-                    model.mdc
-                    [ Options.onClick (lift (Set group id))
-                    , RadioButton.selected |> when (isSelected True id)
-                    ]
-                    []
-                , Html.label [ Html.for id ] [ text "Radio 1" ]
-                ]
-            , let
-                id =
-                    "radio-buttons-default-radio-2"
-              in
-              FormField.view []
-                [ RadioButton.view (lift << Mdc)
-                    id
-                    model.mdc
-                    [ Options.onClick (lift (Set group id))
-                    , RadioButton.selected |> when (isSelected False id)
-                    ]
-                    []
-                , Html.label [ Html.for id ] [ text "Radio 2" ]
-                ]
+            [ text "Resources"
             ]
-        , example
-            []
-            [ styled Html.h2
-                [ css "margin-left" "0"
-                , css "margin-top" "0"
-                ]
-                [ text "Disabled" ]
-            , Html.div
-                []
-                [ let
-                    id =
-                        "radio-buttons-disabled-radio-1"
-                  in
-                  FormField.view []
-                    [ RadioButton.view (lift << Mdc)
-                        id
-                        model.mdc
-                        [ RadioButton.selected
-                        , RadioButton.disabled
-                        ]
-                        []
-                    , Html.label [ Html.for id ] [ text "Disabled Radio 1" ]
-                    ]
-                , let
-                    id =
-                        "radio-buttons-disabled-radio-2"
-                  in
-                  FormField.view []
-                    [ RadioButton.view (lift << Mdc)
-                        id
-                        model.mdc
-                        [ RadioButton.disabled
-                        ]
-                        []
-                    , Html.label [ Html.for id ] [ text "Disabled Radio 2" ]
-                    ]
-                ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-buttons"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/buttons/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-button"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Radio Buttons" ]
+            , exampleRadioGroup lift model
             ]
         ]
