@@ -1,5 +1,7 @@
 module Demo.Fabs exposing (Model, Msg(..), defaultModel, update, view)
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -7,24 +9,22 @@ import Html.Events as Html
 import Material
 import Material.Fab as Fab
 import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Typography as Typography
 
 
 type alias Model m =
     { mdc : Material.Model m
-    , exited : Bool
     }
 
 
 defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
-    , exited = False
     }
 
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ToggleExited
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -33,104 +33,48 @@ update lift msg model =
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
-        ToggleExited ->
-            ( { model | exited = not model.exited }, Cmd.none )
-
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
         fab idx options =
-            Fab.view (lift << Mdc)
-                idx
-                model.mdc
-                (Fab.ripple
-                    :: css "margin" "16px"
-                    :: options
-                )
-                "favorite_border"
-
-        legend options =
-            styled Html.div
-                (css "padding" "64px 16px 24px"
-                    :: options
-                )
+            Fab.view (lift << Mdc) idx model.mdc (Fab.ripple :: options) "favorite_border"
     in
     page.body "Floating Action Button"
         "Floating action buttons represents the primary action in an application. Only one floating action button is recommended per screen to represent the most common action."
-        [ Page.hero [] [ fab "fabs-hero-fab" [] ]
-        , Html.section []
-            [ Html.div []
-                [ legend [] [ text "FABs" ]
-                , fab "fabs-fab" []
-                , fab "fabs-mini-fab" [ Fab.mini ]
-                ]
+        [ Hero.view [] [ fab "fabs-hero-fab" [] ]
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
-        , let
-            fabMotionContainer options =
-                styled Html.div
-                    (cs "fab-motion-container"
-                        :: css "border" "1px solid #ccc"
-                        :: css "margin" "1rem"
-                        :: css "padding" "0 1rem"
-                        :: css "overflow" "hidden"
-                        :: css "position" "relative"
-                        :: css "height" "10rem"
-                        :: css "width" "20rem"
-                        :: options
-                    )
-
-            fabMotionContainerView options =
-                styled Html.div
-                    (cs "fab-motion-container__view"
-                        :: css "background-color" "#fff"
-                        :: css "box-sizing" "border-box"
-                        :: css "position" "absolute"
-                        :: css "transition" "transform 375ms cubic-bezier(0.0, 0.0, 0.2, 1)"
-                        :: css "height" "100%"
-                        :: css "width" "100%"
-                        :: css "will-change" "transform"
-                        :: options
-                    )
-          in
-          Html.section []
-            [ Html.div []
-                [ legend [] [ text "Example of Enter and Exit Motions" ]
-                , fabMotionContainer []
-                    [ fabMotionContainerView []
-                        [ Html.p [] [ text "View one (with FAB)" ]
-                        ]
-                    , fabMotionContainerView
-                        [ when (not model.exited)
-                            << Options.many
-                          <|
-                            [ css "transition-timing-function" "cubic-bezier(.4, 0, 1, 1)"
-                            , css "transform" "translateY(100%)"
-                            ]
-                        ]
-                        [ Html.p [] [ text "View two (without FAB)" ]
-                        , Html.p []
-                            [ Html.button
-                                [ Html.type_ "button"
-                                , Html.disabled (not model.exited)
-                                , Html.onClick (lift ToggleExited)
-                                ]
-                                [ text "Go back"
-                                ]
-                            ]
-                        ]
-                    , Fab.view (lift << Mdc)
-                        "fabs-motion-fab"
-                        model.mdc
-                        [ Fab.exited |> when model.exited
-                        , Options.onClick (lift ToggleExited)
-                        , css "position" "absolute"
-                        , css "right" "1rem"
-                        , css "bottom" "1rem"
-                        , css "z-index" "1"
-                        ]
-                        "add"
-                    ]
-                ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-fab"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/buttons/floating-action-buttons/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/blob/master/packages/mdc-fab/"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ styled Html.h3
+                [ Typography.subtitle1 ]
+                [ text "Standard Floating Action Button" ]
+            , fab "fabs-standard-fab" []
+            , styled Html.h3
+                [ Typography.subtitle1 ]
+                [ text "Mini Floating Action Button" ]
+            , fab "fabs-mini-fab" []
             ]
         ]
