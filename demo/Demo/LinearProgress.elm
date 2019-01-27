@@ -1,5 +1,7 @@
 module Demo.LinearProgress exposing (view)
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material.LinearProgress as LinearProgress
@@ -9,91 +11,51 @@ import Material.Typography as Typography
 
 view : Page m -> Html m
 view page =
-    let
-        linearProgressDemo caption options nodes =
-            styled Html.figure
-                [ css "margin" "64px"
-                ]
-                (List.concat
-                    [ nodes
-                    , [ styled Html.figcaption
-                            [ css "margin-top" "16px"
-                            ]
-                            [ text caption
-                            ]
-                      ]
-                    ]
-                )
-    in
     page.body "Linear Progress Indicator"
         "Progress indicators display the length of a process or express an unspecified wait time."
-        [ Page.hero []
-            [ LinearProgress.view
-                [ LinearProgress.indeterminate
+        [ Hero.view []
+            [ LinearProgress.view [ LinearProgress.determinate 0.5 ] []
+            ]
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+            ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-progress-indicators"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/linear-progress/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-linear-progress"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Buffered" ]
+            , LinearProgress.view [ LinearProgress.buffered 0.5 0.75 ] []
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Indeterminate" ]
+            , LinearProgress.view [ LinearProgress.indeterminate ] []
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Reversed" ]
+            , LinearProgress.view
+                [ LinearProgress.determinate 0.5
+                , LinearProgress.reversed
                 ]
                 []
-            ]
-        , styled Html.section
-            []
-            [ styled Html.div
-                [ css "margin" "24px"
-                , css "margin-top" "0"
-                , css "margin-bottom" "16px"
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Reversed Buffered" ]
+            , LinearProgress.view
+                [ LinearProgress.buffered 0.5 0.75
+                , LinearProgress.reversed
                 ]
-                [ styled Html.legend
-                    [ Typography.title
-                    , css "display" "block"
-                    , css "padding" "16px"
-                    , css "padding-top" "64px"
-                    , css "padding-bottom" "24px"
-                    ]
-                    [ text "Linear Progress Indicators"
-                    ]
-                , linearProgressDemo "Determinate"
-                    []
-                    [ LinearProgress.view
-                        [ LinearProgress.determinate 0.5
-                        ]
-                        []
-                    ]
-                , linearProgressDemo "Indeterminate"
-                    []
-                    [ LinearProgress.view
-                        [ LinearProgress.indeterminate
-                        ]
-                        []
-                    ]
-                , linearProgressDemo "Buffer"
-                    []
-                    [ LinearProgress.view
-                        [ LinearProgress.buffered 0.5 0.75
-                        ]
-                        []
-                    ]
-                , linearProgressDemo "Reversed"
-                    []
-                    [ LinearProgress.view
-                        [ LinearProgress.reversed
-                        , LinearProgress.determinate 0.5
-                        ]
-                        []
-                    ]
-                , linearProgressDemo "Indeterminate Reversed"
-                    []
-                    [ LinearProgress.view
-                        [ LinearProgress.reversed
-                        , LinearProgress.indeterminate
-                        ]
-                        []
-                    ]
-                , linearProgressDemo "Buffer Reversed"
-                    []
-                    [ LinearProgress.view
-                        [ LinearProgress.reversed
-                        , LinearProgress.buffered 0.5 0.75
-                        ]
-                        []
-                    ]
-                ]
+                []
             ]
         ]
