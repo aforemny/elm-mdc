@@ -1,4 +1,4 @@
-module Material.Textfield exposing
+module Material.TextField exposing
     ( Property
     , view
     , label
@@ -39,10 +39,10 @@ module Material.Textfield exposing
 # Example
 
     import Material.Options as Options
-    import Material.Textfield as Textfield
+    import Material.TextField as TextField
 
-    Textfield.view Mdc "my-text-field" model.mdc
-        [ Textfield.label "Text field"
+    TextField.view Mdc "my-text-field" model.mdc
+        [ TextField.label "Text field"
         , Options.onChange UpdateTextField
         ]
         []
@@ -114,17 +114,17 @@ module Material.Textfield exposing
 import Html exposing (Html)
 import Internal.Component exposing (Index)
 import Internal.Options as Options
-import Internal.Textfield.Implementation as Textfield
+import Internal.TextField.Implementation as TextField
 import Material
 
 
-{-| Textfield property.
+{-| TextField property.
 -}
 type alias Property m =
-    Textfield.Property m
+    TextField.Property m
 
 
-{-| Textfield view.
+{-| TextField view.
 -}
 view :
     (Material.Msg m -> m)
@@ -134,77 +134,77 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Textfield.view
+    TextField.view
 
 
 {-| Set action for when the leading icon is clicked.
 -}
 onLeadingIconClick : msg -> Property msg
 onLeadingIconClick =
-    Textfield.onLeadingIconClick
+    TextField.onLeadingIconClick
 
 
 {-| Set action for when the trailing icon is clicked.
 -}
 onTrailingIconClick : msg -> Property msg
 onTrailingIconClick =
-    Textfield.onTrailingIconClick
+    TextField.onTrailingIconClick
 
 
 {-| Add a leading icon to the textfield.
 -}
 leadingIcon : String -> Property m
 leadingIcon =
-    Textfield.leadingIcon
+    TextField.leadingIcon
 
 
 {-| Add a trailing icon to the textfield.
 -}
 trailingIcon : String -> Property m
 trailingIcon =
-    Textfield.trailingIcon
+    TextField.trailingIcon
 
 
 {-| Style the textfield as an outlined textfield.
 -}
 outlined : Property m
 outlined =
-    Textfield.outlined
+    TextField.outlined
 
 
 {-| Set a label for the textfield.
 -}
 label : String -> Property m
 label =
-    Textfield.label
+    TextField.label
 
 
 {-| Set the textfield's value.
 -}
 value : String -> Property m
 value =
-    Textfield.value
+    TextField.value
 
 
 {-| Disable the textfield.
 -}
 disabled : Property m
 disabled =
-    Textfield.disabled
+    TextField.disabled
 
 
 {-| Set the textfield's `type` to `password`.
 -}
 password : Property m
 password =
-    Textfield.password
+    TextField.password
 
 
 {-| Set the textfield's `type` to `email`.
 -}
 email : Property m
 email =
-    Textfield.email
+    TextField.email
 
 
 {-| Set a pattern to validate the textfield's input against.
@@ -215,70 +215,70 @@ its input.
 -}
 pattern : String -> Property m
 pattern =
-    Textfield.pattern
+    TextField.pattern
 
 
 {-| Set the number of rows in a `textarea` textfield.
 -}
 rows : Int -> Property m
 rows =
-    Textfield.rows
+    TextField.rows
 
 
 {-| Set the number of columns in a `textarea` textfield.
 -}
 cols : Int -> Property m
 cols =
-    Textfield.cols
+    TextField.cols
 
 
 {-| Mark the textfield as required.
 -}
 required : Property m
 required =
-    Textfield.required
+    TextField.required
 
 
 {-| Set the textfield's type.
 -}
 type_ : String -> Property m
 type_ =
-    Textfield.type_
+    TextField.type_
 
 
 {-| Make the textfield take up all the available horizontal space.
 -}
 fullwidth : Property m
 fullwidth =
-    Textfield.fullwidth
+    TextField.fullwidth
 
 
 {-| Mark the textfield as invalid.
 -}
 invalid : Property m
 invalid =
-    Textfield.invalid
+    TextField.invalid
 
 
 {-| Make the textfield a `textarea` element instead of `input`.
 -}
 textarea : Property m
 textarea =
-    Textfield.textarea
+    TextField.textarea
 
 
 {-| Sets the placeholder of the textfield.
 -}
 placeholder : String -> Property m
 placeholder =
-    Textfield.placeholder
+    TextField.placeholder
 
 
 {-| Apply properties to underlying native control element.
 -}
 nativeControl : List (Options.Property () m) -> Property m
 nativeControl =
-    Textfield.nativeControl
+    TextField.nativeControl
 
 
 {-| Set a text field's HTML `autocomplete` attribute.

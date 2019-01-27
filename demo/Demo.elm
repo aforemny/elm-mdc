@@ -29,7 +29,7 @@ import Demo.Snackbar
 import Demo.Startpage
 import Demo.Switch
 import Demo.TabBar
-import Demo.Textfields
+import Demo.TextFields
 import Demo.Theme
 import Demo.Toolbar
 import Demo.TopAppBar
@@ -72,7 +72,7 @@ type alias Model =
     , switch : Demo.Switch.Model Msg
     , tabbar : Demo.TabBar.Model Msg
     , modalDrawer : Demo.ModalDrawer.Model Msg
-    , textfields : Demo.Textfields.Model Msg
+    , textfields : Demo.TextFields.Model Msg
     , theme : Demo.Theme.Model Msg
     , toolbar : Demo.Toolbar.Model Msg
     , topAppBar : Demo.TopAppBar.Model Msg
@@ -108,7 +108,7 @@ defaultModel key =
     , switch = Demo.Switch.defaultModel
     , tabbar = Demo.TabBar.defaultModel
     , modalDrawer = Demo.ModalDrawer.defaultModel
-    , textfields = Demo.Textfields.defaultModel
+    , textfields = Demo.TextFields.defaultModel
     , theme = Demo.Theme.defaultModel
     , toolbar = Demo.Toolbar.defaultModel
     , topAppBar = Demo.TopAppBar.defaultModel
@@ -147,7 +147,7 @@ type Msg
     | SwitchMsg (Demo.Switch.Msg Msg)
     | TabBarMsg (Demo.TabBar.Msg Msg)
     | ModalDrawerMsg (Demo.ModalDrawer.Msg Msg)
-    | TextfieldMsg (Demo.Textfields.Msg Msg)
+    | TextFieldMsg (Demo.TextFields.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
     | ToolbarMsg (Demo.Toolbar.Msg Msg)
     | TopAppBarMsg (Demo.TopAppBar.Msg Msg)
@@ -323,10 +323,10 @@ update msg model =
             in
             ( { model | switch = switch }, effects )
 
-        TextfieldMsg msg_ ->
+        TextFieldMsg msg_ ->
             let
                 ( textfields, effects ) =
-                    Demo.Textfields.update TextfieldMsg msg_ model.textfields
+                    Demo.TextFields.update TextFieldMsg msg_ model.textfields
             in
             ( { model | textfields = textfields }, effects )
 
@@ -499,7 +499,7 @@ view_ model =
             Demo.TabBar.view TabBarMsg page model.tabbar
 
         Demo.Url.TextField ->
-            Demo.Textfields.view TextfieldMsg page model.textfields
+            Demo.TextFields.view TextFieldMsg page model.textfields
 
         Demo.Url.Theme ->
             Demo.Theme.view ThemeMsg page model.theme

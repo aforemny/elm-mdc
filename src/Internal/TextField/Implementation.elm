@@ -1,4 +1,4 @@
-module Internal.Textfield.Implementation exposing
+module Internal.TextField.Implementation exposing
     ( Property
     , cols
     , disabled
@@ -30,7 +30,7 @@ import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
-import Internal.Textfield.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
+import Internal.TextField.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
 import Regex
@@ -416,7 +416,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd msg )
 react =
-    Component.react getSet.get getSet.set Internal.Msg.TextfieldMsg update
+    Component.react getSet.get getSet.set Internal.Msg.TextFieldMsg update
 
 
 view :
@@ -430,7 +430,7 @@ view =
     \lift domId store options ->
         Component.render getSet.get
             (textField domId)
-            Internal.Msg.TextfieldMsg
+            Internal.Msg.TextFieldMsg
             lift
             domId
             store

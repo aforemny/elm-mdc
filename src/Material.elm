@@ -189,8 +189,8 @@ import Internal.Switch.Implementation as Switch
 import Internal.Switch.Model as Switch
 import Internal.TabBar.Implementation as TabBar
 import Internal.TabBar.Model as TabBar
-import Internal.Textfield.Implementation as Textfield
-import Internal.Textfield.Model as Textfield
+import Internal.TextField.Implementation as TextField
+import Internal.TextField.Model as TextField
 import Internal.Toolbar.Implementation as Toolbar
 import Internal.Toolbar.Model as Toolbar
 import Internal.TopAppBar.Implementation as TopAppBar
@@ -202,7 +202,7 @@ import Internal.TopAppBar.Model as TopAppBar
 This is a string and is expected to be globally unique within your program. It
 coincides with `Html.id`, and we may set it as `Html.id` on a component's
 native control (`<input>`) element, ie. Checkbox, Radio, Select, Switch, and
-Textfield.
+TextField.
 
 -}
 type alias Index =
@@ -236,7 +236,7 @@ type alias Model m =
     , snackbar : Indexed (Snackbar.Model m)
     , switch : Indexed Switch.Model
     , tabbar : Indexed TabBar.Model
-    , textfield : Indexed Textfield.Model
+    , textfield : Indexed TextField.Model
     , toolbar : Indexed Toolbar.Model
     , topAppBar : Indexed TopAppBar.Model
     }
@@ -362,8 +362,8 @@ update_ lift msg store =
         TabBarMsg idx msg_ ->
             TabBar.react lift msg_ idx store
 
-        TextfieldMsg idx msg_ ->
-            Textfield.react lift msg_ idx store
+        TextFieldMsg idx msg_ ->
+            TextField.react lift msg_ idx store
 
         ToolbarMsg idx msg_ ->
             Toolbar.react lift msg_ idx store

@@ -12,7 +12,7 @@ import Material.Checkbox as Checkbox
 import Material.FormField as FormField
 import Material.Options as Options exposing (aria, cs, css, nop, role, styled, when)
 import Material.Snackbar as Snackbar
-import Material.Textfield as Textfield
+import Material.TextField as TextField
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
@@ -200,20 +200,20 @@ view lift page model =
                     , Html.label [] [ text "Dismiss On Action" ]
                     ]
                 , Html.br [] []
-                , Textfield.view (lift << Mdc)
+                , TextField.view (lift << Mdc)
                     "snackbar-message-text-field"
                     model.mdc
-                    [ Textfield.value model.messageText
-                    , Textfield.label "Message Text"
+                    [ TextField.value model.messageText
+                    , TextField.label "Message Text"
                     , Options.on "input" (Json.map (lift << SetMessageText) Html.targetValue)
                     ]
                     []
                 , Html.br [] []
-                , Textfield.view (lift << Mdc)
+                , TextField.view (lift << Mdc)
                     "snackbar-action-text-field"
                     model.mdc
-                    [ Textfield.value model.actionText
-                    , Textfield.label "Action Text"
+                    [ TextField.value model.actionText
+                    , TextField.label "Action Text"
                     , Options.on "input" (Json.map (lift << SetActionText) Html.targetValue)
                     ]
                     []
