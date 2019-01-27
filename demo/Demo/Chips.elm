@@ -1,5 +1,7 @@
 module Demo.Chips exposing (Model, Msg(..), defaultModel, update, view)
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, p, text)
 import Material
@@ -70,17 +72,39 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Chips"
         "Chips are compact elements that allow users to enter information, select a choice, filter content, or trigger an action."
-        [ Page.hero []
+        [ Hero.view []
             [ heroChips lift model
             ]
-        , styled Html.div
-            [ cs "demo-wrapper"
-            , css "padding" "48px"
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-chips"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/chips/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-chips"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
             (List.concat
                 [ choiceChips lift model
                 , filterChips lift model
                 , actionChips lift model
+                , shapedChips lift model
                 ]
             )
         ]
@@ -226,5 +250,31 @@ actionChips lift model =
         , chip "chips-action-chips-bookmark" ( "bookmark", "Bookmark" )
         , chip "chips-action-chips-set-alarm" ( "alarm", "Set alarm" )
         , chip "chips-action-chips-get-directions" ( "directions", "Get directions" )
+        ]
+    ]
+
+
+shapedChips : (Msg m -> m) -> Model m -> List (Html m)
+shapedChips lift model =
+    let
+        chip index label =
+            Chip.view (lift << Mdc)
+                index
+                model.mdc
+                [ css "border-radius" "4px"
+                ]
+                [ text label
+                ]
+    in
+    [ styled Html.h2
+        [ Typography.subheading1
+        ]
+        [ text "Shaped Chips"
+        ]
+    , Chip.chipset []
+        [ chip "chips-shaped-chips-bookcase" "Bookcase"
+        , chip "chips-shaped-chips-tv-stand" "TV Stand"
+        , chip "chips-shaped-chips-sofas" "Sofas"
+        , chip "chips-shaped-chips-office-chairs" "Office chairs"
         ]
     ]
