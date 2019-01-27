@@ -141,11 +141,11 @@ outlinedTextFields lift model =
     in
     textFieldRow []
         [ textFieldContainer []
-            (textField "text-fields-filled-1" [])
+            (textField "text-fields-outlined-1" [])
         , textFieldContainer []
-            (textField "text-fields-filled-2" [ TextField.leadingIcon "event" ])
+            (textField "text-fields-outlined-2" [ TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-filled-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-outlined-3" [ TextField.trailingIcon "trash" ])
         ]
 
 
@@ -166,11 +166,11 @@ shapedFilledTextFields lift model =
     in
     textFieldRow []
         [ textFieldContainer []
-            (textField "text-fields-filled-1" [])
+            (textField "text-fields-shaped-filled-1" [])
         , textFieldContainer []
-            (textField "text-fields-filled-2" [ TextField.leadingIcon "event" ])
+            (textField "text-fields-shaped-filled-2" [ TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-filled-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-shaped-filled-3" [ TextField.trailingIcon "trash" ])
         ]
 
 
@@ -188,27 +188,25 @@ shapedOutlinedTextFields lift model =
     in
     textFieldRow []
         [ textFieldContainer []
-            (textField "text-fields-filled-1" [])
+            (textField "text-fields-shaped-outlined-1" [])
         , textFieldContainer []
-            (textField "text-fields-filled-2" [ TextField.leadingIcon "event" ])
+            (textField "text-fields-shaped-outlined-2" [ TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-filled-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-shaped-outlined-3" [ TextField.trailingIcon "trash" ])
         ]
 
 
 fullwidthTextField : (Msg m -> m) -> Model m -> Html m
 fullwidthTextField lift model =
-    textFieldRow []
-        [ textFieldContainer []
-            [ TextField.view (lift << Mdc)
-                "text-field-fullwidth-text-field"
-                model.mdc
-                [ TextField.placeholder "Standard"
-                , TextField.fullwidth
-                ]
-                []
-            , helperText
+    textFieldContainer []
+        [ TextField.view (lift << Mdc)
+            "text-field-fullwidth-text-field"
+            model.mdc
+            [ TextField.placeholder "Standard"
+            , TextField.fullwidth
             ]
+            []
+        , helperText
         ]
 
 
