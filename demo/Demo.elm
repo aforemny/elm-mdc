@@ -1,4 +1,4 @@
-module Main exposing (Model, Msg(..), defaultModel, init, main, subscriptions, update, urlOf, view, view_)
+module Main exposing (main)
 
 import Browser
 import Browser.Navigation
@@ -60,7 +60,7 @@ type alias Model =
     , gridList : Demo.GridList.Model Msg
     , iconToggle : Demo.IconToggle.Model Msg
     , imageList : Demo.ImageList.Model Msg
-    , layoutGrid : Demo.LayoutGrid.Model
+    , layoutGrid : Demo.LayoutGrid.Model Msg
     , lists : Demo.Lists.Model Msg
     , menus : Demo.Menus.Model Msg
     , permanentDrawer : Demo.PermanentDrawer.Model Msg
@@ -135,7 +135,7 @@ type Msg
     | GridListMsg (Demo.GridList.Msg Msg)
     | IconToggleMsg (Demo.IconToggle.Msg Msg)
     | ImageListMsg (Demo.ImageList.Msg Msg)
-    | LayoutGridMsg Demo.LayoutGrid.Msg
+    | LayoutGridMsg (Demo.LayoutGrid.Msg Msg)
     | ListsMsg (Demo.Lists.Msg Msg)
     | PermanentDrawerMsg (Demo.PermanentDrawer.Msg Msg)
     | RadioButtonsMsg (Demo.RadioButtons.Msg Msg)
@@ -553,21 +553,11 @@ main =
 init : () -> Url.Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
-        ( layoutGrid, layoutGridEffects ) =
-            Demo.LayoutGrid.init LayoutGridMsg
-
-        model =
+        initialModel =
             defaultModel key
     in
-    ( { model
-        | layoutGrid = layoutGrid
-        , key = key
-        , url = Demo.Url.fromUrl url
-      }
-    , Cmd.batch
-        [ Material.init Mdc
-        , layoutGridEffects
-        ]
+    ( { initialModel | url = Demo.Url.fromUrl url }
+    , Material.init Mdc
     )
 
 
@@ -578,7 +568,6 @@ subscriptions model =
         , Demo.DismissibleDrawer.subscriptions DismissibleDrawerMsg model.dismissibleDrawer
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.GridList.subscriptions GridListMsg model.gridList
-        , Demo.LayoutGrid.subscriptions LayoutGridMsg model.layoutGrid
         , Demo.Menus.subscriptions MenuMsg model.menus
         , Demo.PermanentDrawer.subscriptions PermanentDrawerMsg model.permanentDrawer
         , Demo.Selects.subscriptions SelectMsg model.selects
