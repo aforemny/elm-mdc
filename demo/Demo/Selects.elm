@@ -1,6 +1,8 @@
 module Demo.Selects exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
 import Array
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (Html, p, text)
@@ -14,7 +16,7 @@ import Material.Typography as Typography
 
 type alias Model m =
     { mdc : Material.Model m
-    , selects : Dict Material.Index Select
+    , selects : Dict Material.Index String
     }
 
 
@@ -25,26 +27,9 @@ defaultModel =
     }
 
 
-type alias Select =
-    { value : Maybe String
-    , rtl : Bool
-    , disabled : Bool
-    }
-
-
-defaultSelect : Select
-defaultSelect =
-    { value = Nothing
-    , rtl = False
-    , disabled = False
-    }
-
-
 type Msg m
     = Mdc (Material.Msg m)
-    | Pick Material.Index String
-    | ToggleRtl Material.Index
-    | ToggleDisabled Material.Index
+    | Select Material.Index String
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -53,225 +38,114 @@ update lift msg model =
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
-        Pick index value ->
-            let
-                selects =
-                    Dict.get index model.selects
-                        |> Maybe.withDefault defaultSelect
-                        |> (\selectState ->
-                                Dict.insert index
-                                    { selectState | value = Just value }
-                                    model.selects
-                           )
-            in
-            ( { model | selects = selects }, Cmd.none )
-
-        ToggleRtl index ->
-            let
-                selects =
-                    Dict.get index model.selects
-                        |> Maybe.withDefault defaultSelect
-                        |> (\selectState ->
-                                Dict.insert index
-                                    { selectState | rtl = not selectState.rtl }
-                                    model.selects
-                           )
-            in
-            ( { model | selects = selects }, Cmd.none )
-
-        ToggleDisabled index ->
-            let
-                selects =
-                    Dict.get index model.selects
-                        |> Maybe.withDefault defaultSelect
-                        |> (\selectState ->
-                                Dict.insert index
-                                    { selectState | disabled = not selectState.disabled }
-                                    model.selects
-                           )
-            in
-            ( { model | selects = selects }, Cmd.none )
+        Select index value ->
+            ( { model | selects = Dict.insert index value model.selects }, Cmd.none )
 
 
-heroSelect :
-    (Msg m -> m)
-    -> Material.Index
-    -> Model m
-    -> List (Select.Property m)
-    -> List (Html m)
-    -> Html m
-heroSelect lift id model options _ =
-    Select.view (lift << Mdc)
-        id
-        model.mdc
-        options
-        ([ "Bread, Cereal, Rice, and Pasta"
-         , "Vegetables"
-         , "Fruit"
-         , "Milk, Yogurt, and Cheese"
-         , "Meat, Poultry, Fish, Dry Beans, Eggs, and Nuts"
-         , "Fats, Oils, and Sweets"
-         ]
-            |> List.indexedMap
-                (\index label ->
-                    Select.option
-                        [ Select.value (String.fromInt index)
-                        ]
-                        [ text label ]
-                )
-        )
-
-
-example : List (Options.Property c m) -> List (Html m) -> Html m
-example options =
-    styled Html.section
-        (cs "example"
-            :: css "max-width" "400px"
-            :: options
-        )
-
-
-select :
-    (Msg m -> m)
-    -> Material.Index
-    -> Model m
-    -> Maybe Int
-    -> List (Select.Property m)
-    -> List (Html m)
-    -> List (Html m)
-select lift id model selectedIndex options _ =
-    let
-        state =
-            Dict.get id model.selects
-                |> Maybe.withDefault defaultSelect
-
-        fruits =
-            Array.fromList
-                [ "Apple"
-                , "Orange"
-                , "Banana"
-                ]
-
-        selectedValue =
-            case state.value of
-                Nothing ->
-                    case selectedIndex of
-                        Nothing ->
-                            Nothing
-
-                        Just i ->
-                            Array.get i fruits
-
-                Just v ->
-                    state.value
-    in
-    [ styled Html.section
-        [ css "padding-top" "4px"
-        , css "padding-bottom" "4px"
-        , Options.attribute (Html.attribute "dir" "rtl") |> when state.rtl
-        ]
-        [ Select.view (lift << Mdc)
-            id
-            model.mdc
-            ([ Select.label "Fruit"
-             , Options.onChange (lift << Pick id)
-             , Select.preselected |> when (selectedIndex /= Nothing)
-             , Select.disabled |> when state.disabled
-             ]
-                ++ options
-            )
-            (fruits
-                |> Array.toList
-                |> List.indexedMap
-                    (\index label ->
-                        Select.option
-                            [ Select.value label
-                            , when
-                                (case selectedIndex of
-                                    Nothing ->
-                                        False
-
-                                    Just i ->
-                                        index == i
-                                )
-                                Select.selected
-                            ]
-                            [ text label ]
-                    )
-            )
-        ]
-    , Html.p []
-        [ text "Currently selected: "
-        , Html.span []
-            [ if selectedValue /= Nothing then
-                text (Maybe.withDefault "" selectedValue)
-
-              else
-                text "(none)"
-            ]
-        ]
-    , Html.div []
-        [ Html.label []
-            [ Html.input
-                [ Html.type_ "checkbox"
-                , Html.onClick (lift (ToggleRtl id))
-                , Html.checked state.rtl
-                ]
-                []
-            , text " RTL"
-            ]
-        ]
-    , Html.div []
-        [ Html.label []
-            [ Html.input
-                [ Html.type_ "checkbox"
-                , Html.onClick (lift (ToggleDisabled id))
-                , Html.checked state.disabled
-                ]
-                []
-            , text " Disabled"
-            ]
-        ]
+items : List (Html m)
+items =
+    [ Select.option [ Select.value "Apple" ] [ text "Apple" ]
+    , Select.option [ Select.value "Orange" ] [ text "Orange" ]
+    , Select.option [ Select.value "Banana" ] [ text "Banana" ]
     ]
+
+
+heroSelect : (Msg m -> m) -> Model m -> Html m
+heroSelect lift model =
+    Select.view (lift << Mdc)
+        "selects-hero-select"
+        model.mdc
+        [ Select.label "Fruit" ]
+        items
+
+
+filledSelect : (Msg m -> m) -> Model m -> Html m
+filledSelect lift model =
+    Select.view (lift << Mdc)
+        "selects-filled-select"
+        model.mdc
+        [ Select.label "Fruit" ]
+        items
+
+
+outlinedSelect : (Msg m -> m) -> Model m -> Html m
+outlinedSelect lift model =
+    Select.view (lift << Mdc)
+        "selects-outlined-select"
+        model.mdc
+        [ Select.label "Fruit"
+        , Select.outlined
+        ]
+        items
+
+
+shapedFilledSelect : (Msg m -> m) -> Model m -> Html m
+shapedFilledSelect lift model =
+    Select.view (lift << Mdc)
+        "selects-shaped-filled-select"
+        model.mdc
+        [ Select.label "Fruit"
+        , css "border-radius" "17.92px 17.92px 0 0"
+        ]
+        items
+
+
+shapedOutlinedSelect : (Msg m -> m) -> Model m -> Html m
+shapedOutlinedSelect lift model =
+    Select.view (lift << Mdc)
+        "selects-shaped-outlined-select"
+        model.mdc
+        [ Select.label "Fruit"
+        , Select.outlined
+
+        -- TODO:
+        -- , Select.nativeControl
+        --     [ css "border-radius" "28px"
+        --     , css "padding-left" "32px"
+        --     , css "padding-right" "52px"
+        --     ]
+        ]
+        items
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Select"
         "Selects allow users to select from a single-option menu. It functions as a wrapper around the browser's native <select> element."
-        [ let
-            state =
-                Dict.get "selects-hero-select" model.selects
-                    |> Maybe.withDefault defaultSelect
-          in
-          Page.hero []
-            [ heroSelect lift
-                "selects-hero-select"
-                model
-                [ Select.label "Pick a food group"
-                , Select.disabled |> when state.disabled
-                ]
-                []
+        [ Hero.view [] [ heroSelect lift model ]
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-text-fields"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/input-controls/select-menus/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-select"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
         , Page.demos
-            [ example []
-                (List.concat
-                    [ [ styled Html.h3
-                            [ Typography.subtitle1 ]
-                            [ text "Select" ]
-                      ]
-                    , select lift "demo-select-standard" model (Just 2) [] []
-                    ]
-                )
-            , example []
-                (List.concat
-                    [ [ styled Html.h3
-                            [ Typography.subtitle1 ]
-                            [ text "Outlined" ]
-                      ]
-                    , select lift "demo-select-outlined" model Nothing [ Select.outlined ] []
-                    ]
-                )
+            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Filled" ]
+            , filledSelect lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Outlined" ]
+            , outlinedSelect lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Shaped Filled" ]
+            , shapedFilledSelect lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Shaped Outlined" ]
+            , shapedOutlinedSelect lift model
             ]
         ]
 
