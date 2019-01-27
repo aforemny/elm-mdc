@@ -482,11 +482,7 @@ tabView domId lift model options index tab_ =
              else
                 -1
             )
-
-        -- TODO: somehow ripple needs to interact with ripple span I think?
-        -- Now it sets "mdc-ripple-upgraded on the button class which is wrong.
         , ripple.interactionHandler
-        , ripple.properties
         ]
         []
         [ styled span
@@ -508,8 +504,10 @@ tabView domId lift model options index tab_ =
             indicator_span
         , styled span
             [ cs "mdc-tab__ripple"
+            , ripple.properties
             ]
             []
+        , ripple.style
         ]
 
 
