@@ -118,7 +118,7 @@ scrollingTabs lift model index =
         index
         model.mdc
         [ TabBar.activeTab active_tab_index ]
-        ([ "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight" ]
+        ([ "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve" ]
             |> List.indexedMap (\i v -> tab lift model index i ("Tab " ++ v))
         )
 
