@@ -37,7 +37,6 @@ used. It should be visible either persistently or only on focus.
 
 # Usage
 
-@docs Property
 @docs helperText
 @docs persistent
 @docs validationMsg
