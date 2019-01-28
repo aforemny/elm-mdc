@@ -67,26 +67,6 @@ update lift msg model =
             in
             normalizeForRtl scrollTargetOffsetLeft scrollTargetOffsetWidth
 
-        indicatorEnabledStates geometry translateOffset =
-            let
-                backIndicator =
-                    translateOffset /= 0
-
-                tabBarWidth =
-                    geometry.tabBar.offsetWidth
-
-                remainingTabBarWidth =
-                    tabBarWidth - translateOffset
-
-                scrollFrameWidth =
-                    geometry.scrollFrame.offsetWidth
-
-                forwardIndicator =
-                    remainingTabBarWidth > scrollFrameWidth
-            in
-            { forwardIndicator = forwardIndicator
-            , backIndicator = backIndicator
-            }
     in
     case msg of
         RippleMsg index msg_ ->
