@@ -344,7 +344,7 @@ tabView domId lift model options index tab_ =
                 )
                 []
 
-        -- Tried to do that mdc does:
+        -- Tried to do mdc does:
         -- This animation uses the FLIP approach. You can read more about it at the link below:
         -- https://aerotwist.com/blog/flip-your-animations/
         indicatorTransform =
