@@ -30,7 +30,7 @@ Design Specification.
               , Options.onClick Select
               ]
               []
-        , Html.label
+        , styled Html.label
               [ Options.onClick Select
               ]
               [ text "Radio"
