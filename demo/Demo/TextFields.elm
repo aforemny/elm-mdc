@@ -10,7 +10,9 @@ import Html.Events as Html
 import Material
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TextField as TextField
+import Material.TextField.HelperLine as TextField
 import Material.TextField.HelperText as TextField
+import Material.TextField.CharacterCounter as TextField
 import Material.Typography as Typography
 
 
@@ -99,9 +101,22 @@ textFieldContainer options =
 
 helperText : Html m
 helperText =
-    TextField.helperText
-        [ TextField.persistent ]
-        [ text "Helper Text"
+    TextField.helperLine []
+        [ TextField.helperText
+              [ TextField.persistent ]
+              [ text "Helper Text"
+              ]
+        ]
+
+
+helperTextWithCharacterCounter : Html m
+helperTextWithCharacterCounter =
+    TextField.helperLine []
+        [ TextField.helperText
+              [ TextField.persistent ]
+              [ text "Helper Text"
+              ]
+        , TextField.characterCounter [] [ text "0 / 18" ]
         ]
 
 
@@ -188,11 +203,55 @@ shapedOutlinedTextFields lift model =
     in
     textFieldRow []
         [ textFieldContainer []
-            (textField "text-fields-shaped-outlined-1" [])
+            (textField "text-fields-shaped-outlined-1" [ cs "demo-text-field-outlined-shaped" ])
         , textFieldContainer []
-            (textField "text-fields-shaped-outlined-2" [ TextField.leadingIcon "event" ])
+            (textField "text-fields-shaped-outlined-2" [ cs "demo-text-field-outlined-shaped", TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-shaped-outlined-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-shaped-outlined-3" [ cs "demo-text-field-outlined-shaped", TextField.trailingIcon "trash" ])
+        ]
+
+
+unlabeledTextFields : (Msg m -> m) -> Model m -> Html m
+unlabeledTextFields lift model =
+    let
+        textField index options =
+            [ TextField.view (lift << Mdc)
+                index
+                model.mdc
+                options
+                []
+            , helperText
+            ]
+    in
+    textFieldRow []
+        [ textFieldContainer []
+            (textField "text-fields-unlabeled-1" [])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-2" [ TextField.outlined ])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-3" [ TextField.outlined, cs "demo-text-field-outlined-shaped" ])
+        ]
+
+
+characterCounterTextFields : (Msg m -> m) -> Model m -> Html m
+characterCounterTextFields lift model =
+    let
+        textField index options =
+            [ TextField.view (lift << Mdc)
+                index
+                model.mdc
+                options
+                []
+            , helperTextWithCharacterCounter
+            ]
+    in
+    textFieldRow []
+        [ textFieldContainer []
+            (textField "text-fields-unlabeled-1" [ ])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-2" [ TextField.outlined ])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-3" [ TextField.outlined, cs "demo-text-field-outlined-shaped" ])
         ]
 
 
@@ -221,6 +280,21 @@ textareaTextField lift model =
             , TextField.outlined
             ]
             []
+        , helperText
+        ]
+
+
+textareaTextFieldWithCharacterCounter : (Msg m -> m) -> Model m -> Html m
+textareaTextFieldWithCharacterCounter lift model =
+    textFieldContainer []
+        [ TextField.view (lift << Mdc)
+            "text-fields-textarea-text-field"
+            model.mdc
+            [ TextField.label "Standard"
+            , TextField.textarea
+            , TextField.outlined
+            ]
+            [ TextField.characterCounter [] [ text "0 / 18" ] ]
         , helperText
         ]
 
@@ -288,67 +362,19 @@ view lift page model =
             , shapedFilledTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Outlined" ]
             , outlinedTextFields lift model
-            , styled Html.h3 [ Typography.subtitle1 ] [ text "Shaped Outlined (TODO)" ]
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Shaped Outlined" ]
             , shapedOutlinedTextFields lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field without label" ]
+            , unlabeledTextFields lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field with Character Counter" ]
+            , characterCounterTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea" ]
             , textareaTextField lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea with Character Counter" ]
+            , textareaTextFieldWithCharacterCounter lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width" ]
             , fullwidthTextField lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width Textarea" ]
             , fullwidthTextareaTextField lift model
             ]
         ]
-
-
-
--- UNUSED:
--- trailingAndLeadingIcon : (Msg m -> m) -> Material.Index -> Model m -> Html m
--- trailingAndLeadingIcon lift index model =
---     example []
---         [ header "Trailing and leading icon"
---         , styled Html.section
---             [ Options.attribute (Html.dir "rtl") |> when state.rtl
---             ]
---             [ Html.div []
---                 [ TextField.view (lift << Mdc)
---                     index
---                     model.mdc
---                     [ TextField.label "Leading and trailing icons"
---                     , TextField.disabled |> when state.disabled
---                     , TextField.leadingIcon "phone"
---                     , TextField.trailingIcon "event"
---                     , TextField.onLeadingIconClick
---                         (lift (ExampleMsg index LeadingIconClicked))
---                     , TextField.onTrailingIconClick
---                         (lift (ExampleMsg index TrailingIconClicked))
---                     ]
---                     []
---                 ]
---             ]
---         , if state.leadingIconClicked then
---             Html.p [] [ text "You clicked the leading icon." ]
---
---           else if state.trailingIconClicked then
---             Html.p [] [ text "You clicked the trailing icon." ]
---
---           else
---             text ""
---         , styled Html.div
---             []
---             [ checkbox
---                 [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
---                 , Html.checked state.disabled
---                 ]
---                 []
---             , Html.label [] [ text " Disabled" ]
---             ]
---         , styled Html.div
---             []
---             [ checkbox
---                 [ Html.onClick (lift (ExampleMsg index ToggleRtl))
---                 , Html.checked state.rtl
---                 ]
---                 []
---             , Html.label [] [ text " RTL" ]
---             ]
---         ]
