@@ -31,3 +31,18 @@
   font-family: Roboto Mono, serif;
   font-weight: 400;
 }
+
+.demo-text-field-outlined-shaped .mdc-notched-outline .mdc-notched-outline__leading {
+  /* @noflip */
+  border-radius: 28px 0 0 28px;
+  width: 28px;
+}
+
+.demo-text-field-outlined-shaped .mdc-notched-outline .mdc-notched-outline__notch {
+  max-width: calc(100% - 28px * 2);
+}
+
+.demo-text-field-outlined-shaped .mdc-notched-outline .mdc-notched-outline__trailing {
+  /* @noflip */
+  border-radius: 0 28px 28px 0;
+}

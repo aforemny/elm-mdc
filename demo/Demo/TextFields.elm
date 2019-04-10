@@ -188,11 +188,33 @@ shapedOutlinedTextFields lift model =
     in
     textFieldRow []
         [ textFieldContainer []
-            (textField "text-fields-shaped-outlined-1" [])
+            (textField "text-fields-shaped-outlined-1" [ cs "demo-text-field-outlined-shaped" ])
         , textFieldContainer []
-            (textField "text-fields-shaped-outlined-2" [ TextField.leadingIcon "event" ])
+            (textField "text-fields-shaped-outlined-2" [ cs "demo-text-field-outlined-shaped", TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-shaped-outlined-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-shaped-outlined-3" [ cs "demo-text-field-outlined-shaped", TextField.trailingIcon "trash" ])
+        ]
+
+
+unlabeledTextFields : (Msg m -> m) -> Model m -> Html m
+unlabeledTextFields lift model =
+    let
+        textField index options =
+            [ TextField.view (lift << Mdc)
+                index
+                model.mdc
+                options
+                []
+            , helperText
+            ]
+    in
+    textFieldRow []
+        [ textFieldContainer []
+            (textField "text-fields-unlabeled-1" [])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-2" [ TextField.outlined ])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-3" [ TextField.outlined, cs "demo-text-field-outlined-shaped" ])
         ]
 
 
@@ -288,8 +310,10 @@ view lift page model =
             , shapedFilledTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Outlined" ]
             , outlinedTextFields lift model
-            , styled Html.h3 [ Typography.subtitle1 ] [ text "Shaped Outlined (TODO)" ]
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Shaped Outlined" ]
             , shapedOutlinedTextFields lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field without label" ]
+            , unlabeledTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea" ]
             , textareaTextField lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width" ]
@@ -298,57 +322,3 @@ view lift page model =
             , fullwidthTextareaTextField lift model
             ]
         ]
-
-
-
--- UNUSED:
--- trailingAndLeadingIcon : (Msg m -> m) -> Material.Index -> Model m -> Html m
--- trailingAndLeadingIcon lift index model =
---     example []
---         [ header "Trailing and leading icon"
---         , styled Html.section
---             [ Options.attribute (Html.dir "rtl") |> when state.rtl
---             ]
---             [ Html.div []
---                 [ TextField.view (lift << Mdc)
---                     index
---                     model.mdc
---                     [ TextField.label "Leading and trailing icons"
---                     , TextField.disabled |> when state.disabled
---                     , TextField.leadingIcon "phone"
---                     , TextField.trailingIcon "event"
---                     , TextField.onLeadingIconClick
---                         (lift (ExampleMsg index LeadingIconClicked))
---                     , TextField.onTrailingIconClick
---                         (lift (ExampleMsg index TrailingIconClicked))
---                     ]
---                     []
---                 ]
---             ]
---         , if state.leadingIconClicked then
---             Html.p [] [ text "You clicked the leading icon." ]
---
---           else if state.trailingIconClicked then
---             Html.p [] [ text "You clicked the trailing icon." ]
---
---           else
---             text ""
---         , styled Html.div
---             []
---             [ checkbox
---                 [ Html.onClick (lift (ExampleMsg index ToggleDisabled))
---                 , Html.checked state.disabled
---                 ]
---                 []
---             , Html.label [] [ text " Disabled" ]
---             ]
---         , styled Html.div
---             []
---             [ checkbox
---                 [ Html.onClick (lift (ExampleMsg index ToggleRtl))
---                 , Html.checked state.rtl
---                 ]
---                 []
---             , Html.label [] [ text " RTL" ]
---             ]
---         ]
