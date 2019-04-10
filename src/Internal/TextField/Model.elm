@@ -1,4 +1,4 @@
-module Internal.Textfield.Model exposing
+module Internal.TextField.Model exposing
     ( Geometry
     , Model
     , Msg(..)

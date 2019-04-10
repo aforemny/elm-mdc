@@ -1,11 +1,10 @@
 module Internal.Dialog.Implementation exposing
     ( Property
     , accept
-    , backdrop
-    , body
+    , actions
     , cancel
-    , footer
-    , header
+    , content
+    , noScrim
     , onClose
     , open
     , react
@@ -32,17 +31,14 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        SetState isOpen ->
+        StartAnimation isOpen ->
             if isOpen /= model.open then
                 ( Just { model | animating = True, open = isOpen }, Cmd.none )
 
             else
                 ( Nothing, Cmd.none )
 
-        SetOpen isOpen ->
-            ( Just { model | open = isOpen }, Cmd.none )
-
-        AnimationEnd ->
+        EndAnimation ->
             ( Just { model | animating = False }, Cmd.none )
 
 
@@ -78,6 +74,7 @@ view =
 type alias Config m =
     { onClose : Maybe m
     , open : Bool
+    , noScrim : Bool
     }
 
 
@@ -85,6 +82,7 @@ defaultConfig : Config m
 defaultConfig =
     { onClose = Nothing
     , open = False
+    , noScrim = False
     }
 
 
@@ -102,31 +100,73 @@ dialog lift model options nodes =
             config.open /= model.open
     in
     Options.apply summary
-        Html.aside
+        Html.div
         [ cs "mdc-dialog"
+        , Options.role "alertdialog"
+        , Options.aria "modal" "true"
         , when stateChanged <|
-            GlobalEvents.onTick (Json.succeed (lift (SetState config.open)))
-        , when model.open
+            GlobalEvents.onTick (Json.succeed (lift (StartAnimation config.open)))
+
+        -- Open class should only be added when we have started
+        -- animating the opening, and removed immediately when we start closing.
+        , cs "mdc-dialog--open" |> when (model.open && config.open)
+
+        -- Distinguish also between the fake hero dialog one, where we don't want focus trap.
+        -- TODO: uncommenting the line with config.onClose does not
+        -- work, and I don't understand why.
+        , when (model.open && config.open && not config.noScrim)
             << Options.many
           <|
-            [ cs "mdc-dialog--open"
-            , Options.data "focustrap" ""
-            ]
-        , when model.animating (cs "mdc-dialog--animating")
-        , Options.on "transitionend" (Json.map (\_ -> lift AnimationEnd) transitionend)
-        , Options.on "click" <|
-            Json.map
-                (\doClose ->
-                    if doClose then
-                        Maybe.withDefault (lift NoOp) config.onClose
+            [ Options.data "focustrap" "{}" -- Elm 0.19 has a bug where empty attributes don't work: https://github.com/elm/virtual-dom/issues/132
+            , Options.on "keydown" <|
+                Json.map2
+                    (\key keyCode ->
+                        if key == Just "Escape" || keyCode == 27 then
+                            Maybe.withDefault (lift NoOp) config.onClose
 
-                    else
-                        lift NoOp
-                )
-                close
+                        else
+                            lift NoOp
+                    )
+                    (Json.oneOf
+                        [ Json.map Just (Json.at [ "key" ] Json.string)
+                        , Json.succeed Nothing
+                        ]
+                    )
+                    (Json.at [ "keyCode" ] Json.int)
+            ]
+
+        -- Opening and closing classes need to kick in as soon as
+        -- dialog is opened or closed. They're only used for the
+        -- duration of the animation.
+        , cs "mdc-dialog--opening" |> when ((config.open && stateChanged) || (config.open && model.animating))
+        , cs "mdc-dialog--closing" |> when ((not config.open && stateChanged) || (not config.open && model.animating))
+        , when model.animating (Options.on "transitionend" (Json.succeed (lift EndAnimation)))
         ]
         []
-        nodes
+        [ container []
+            [ surface [] nodes
+            ]
+        , if config.noScrim then
+            text ""
+
+          else
+            scrim
+                [ Options.on "click" <|
+                    Json.map
+                        (\isScrimClick ->
+                            if isScrimClick then
+                                Maybe.withDefault (lift NoOp) config.onClose
+
+                            else
+                                lift NoOp
+                        )
+                        -- Given the click handler is on the scrim
+                        -- element, do we really need to check we
+                        -- clicked the scrim?
+                        checkScrimClick
+                ]
+                []
+        ]
 
 
 open : Property m
@@ -134,19 +174,24 @@ open =
     Options.option (\config -> { config | open = True })
 
 
+container : List (Property m) -> List (Html m) -> Html m
+container options =
+    styled Html.div (cs "mdc-dialog__container" :: options)
+
+
 surface : List (Property m) -> List (Html m) -> Html m
 surface options =
     styled Html.div (cs "mdc-dialog__surface" :: options)
 
 
-backdrop : List (Property m) -> List (Html m) -> Html m
-backdrop options =
-    styled Html.div (cs "mdc-dialog__backdrop" :: options)
+scrim : List (Property m) -> List (Html m) -> Html m
+scrim options =
+    styled Html.div (cs "mdc-dialog__scrim" :: options)
 
 
-body : List (Property m) -> List (Html m) -> Html m
-body options =
-    styled Html.div (cs "mdc-dialog__body" :: options)
+content : List (Property m) -> List (Html m) -> Html m
+content options =
+    styled Html.section (cs "mdc-dialog__content" :: options)
 
 
 scrollable : Property m
@@ -154,19 +199,14 @@ scrollable =
     cs "mdc-dialog__body--scrollable"
 
 
-header : List (Property m) -> List (Html m) -> Html m
-header options =
-    styled Html.div (cs "mdc-dialog__header" :: options)
-
-
 title : Options.Property c m
 title =
-    cs "mdc-dialog__header__title"
+    cs "mdc-dialog__title"
 
 
-footer : List (Property m) -> List (Html m) -> Html m
-footer options =
-    styled Html.div (cs "mdc-dialog__footer" :: options)
+actions : List (Property m) -> List (Html m) -> Html m
+actions options =
+    styled Html.footer (cs "mdc-dialog__actions" :: options)
 
 
 cancel : Button.Property m
@@ -201,8 +241,8 @@ transitionend =
         (DOM.target DOM.className)
 
 
-close : Decoder Bool
-close =
+checkScrimClick : Decoder Bool
+checkScrimClick =
     DOM.target <|
         Json.map
             (\className ->
@@ -210,10 +250,15 @@ close =
                     hasClass class =
                         String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
                 in
-                if hasClass "mdc-dialog__backdrop" then
+                if hasClass "mdc-dialog__scrim" then
                     True
 
                 else
                     False
             )
             (Json.at [ "className" ] Json.string)
+
+
+noScrim : Property m
+noScrim =
+    Options.option (\config -> { config | noScrim = True })

@@ -12,6 +12,7 @@ type alias Model m =
     { queue : List (Contents m)
     , state : State m
     , seq : Int
+    , open : Bool
     }
 
 
@@ -20,8 +21,7 @@ type alias Contents m =
     , action : Maybe String
     , timeout : Float
     , fade : Float
-    , multiline : Bool
-    , actionOnBottom : Bool
+    , stacked : Bool
     , dismissOnAction : Bool
     , onDismiss : Maybe m
     }
@@ -38,12 +38,14 @@ defaultModel =
     { queue = []
     , state = Inert
     , seq = -1
+    , open = False
     }
 
 
 type Msg m
     = Move Int Transition
     | Dismiss Bool (Maybe m)
+    | SetOpen
 
 
 type Transition

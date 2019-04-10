@@ -1,4 +1,4 @@
-module Internal.Textfield.HelperText.Implementation exposing
+module Internal.TextField.HelperText.Implementation exposing
     ( Property
     , helperText
     , persistent

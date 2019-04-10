@@ -5,6 +5,7 @@ module Material.Menu exposing
     , Item
     , li
     , divider
+    , selected
     , onSelect
     , index
     , attach
@@ -75,6 +76,7 @@ Design menu specification.
 @docs Item
 @docs li
 @docs divider
+@docs selected
 @docs onSelect
 @docs index
 @docs attach
@@ -274,3 +276,10 @@ selection.
 onSelect : m -> Lists.Property m
 onSelect =
     Menu.onSelect
+
+
+{-| Use when item should be displayed as selected.
+-}
+selected : Lists.Property m
+selected =
+    Menu.selected

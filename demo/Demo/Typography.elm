@@ -11,6 +11,7 @@ import Material.Typography as Typography
 view : Page m -> Html m
 view page =
     page.body "Typography"
+        "Roboto is the standard typeface on Android and Chrome."
         [ styled Html.div
             [ cs "demo-wrapper"
             ]

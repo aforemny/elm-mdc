@@ -3,23 +3,17 @@ module Material.Dialog exposing
     , view
     , open
     , onClose
-    , surface
-    , backdrop
-    , header
     , title
-    , body
+    , content
     , scrollable
-    , footer
+    , actions
     , cancel
     , accept
+    , noScrim
     )
 
-{-| The Dialog component is a spec-aligned dialog component adhering to the
-Material Design dialog pattern. It implements a modal dialog window that traps
-focus when opening and restores focus when closing.
-
-The current implementation requires that a dialog has as first child a
-`surface` element and as second child a `backdrop` element.
+{-| Dialogs inform users about a specific task and may contain
+critical information, require decisions, or involve multiple tasks.
 
 Because a Dialog animates when closing, it should not be removed from DOM. Use
 `Dialog.open` conditionally instead.
@@ -27,8 +21,8 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
 
 # Resources
 
-  - [Dialogs - Internal.Components for the Web](https://material.io/develop/web/components/dialogs/)
-  - [Material Design guidelines: Dialogs](https://material.io/guidelines/components/dialogs.html)
+  - [Dialogs - Material Components for the Web](https://material.io/develop/web/components/dialogs/)
+  - [Material Design guidelines: Dialogs](https://material.io/design/components/dialogs.html)
   - [Demo](https://aforemny.github.io/elm-mdc/#dialog)
 
 
@@ -37,52 +31,44 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
     import Html exposing (text)
     import Material.Button as Button
     import Material.Dialog as Dialog
-    import Material.Options as Options exposing (styled)
+    import Material.Options as Options exposing (styled, when)
 
 
     Dialog.view Mdc "my-dialog" model.mdc
-        [ Dialog.open
+        [ Dialog.open |> when model.showDialog
         , Dialog.onClose Cancel
         ]
-        [ Dialog.surface []
-              [
-                Dialog.header []
-                [ styled Html.h2
-                      [ Dialog.title
-                      ]
-                      [ text "Use Google's location service?"
-                      ]
-                ]
-              ,
-                Dialog.body []
-                    [ text
-                        """
-    Let Google help apps determine location. This means
-    sending anonymous location data to Google, even when
-    no apps are running.
-                        """
-                    ]
-              ,
-                Dialog.footer []
-                    [
-                      Button.view Mdc "my-cancel-button" model.mdc
-                          [ Button.ripple
-                          , Dialog.cancel
-                          , Options.onClick Cancel
-                          ]
-                          [ text "Decline"
-                          ]
-                    ,
-                      Button.view Mdc "my-accept-button" model.mdc
-                          [ Button.ripple
-                          , Dialog.accept
-                          , Options.onClick Accept
-                          ]
-                          [ text "Continue"
-                          ]
-                    ]
+        [ styled Html.h2
+              [ Dialog.title
               ]
-        , Dialog.backdrop [] []
+              [ text "Use Google's location service?"
+              ]
+        , Dialog.content []
+              [ text
+                    """
+                     Let Google help apps determine location. This means
+                     sending anonymous location data to Google, even when
+                     no apps are running.
+                     """
+              ]
+        , Dialog.actions []
+              [
+               Button.view Mdc "my-cancel-button" model.mdc
+                   [ Button.ripple
+                   , Dialog.cancel
+                   , Options.onClick Cancel
+                   ]
+                   [ text "Decline"
+                   ]
+              ,
+                   Button.view Mdc "my-accept-button" model.mdc
+                   [ Button.ripple
+                   , Dialog.accept
+                   , Options.onClick Accept
+                   ]
+                   [ text "Continue"
+                   ]
+              ]
         ]
 
 
@@ -92,15 +78,13 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
 @docs view
 @docs open
 @docs onClose
-@docs surface
-@docs backdrop
-@docs header
 @docs title
-@docs body
+@docs content
 @docs scrollable
-@docs footer
+@docs actions
 @docs cancel
 @docs accept
+@docs noScrim
 
 -}
 
@@ -145,37 +129,15 @@ onClose =
     Dialog.onClose
 
 
-{-| Dialog surface.
+{-| Dialog content.
 
-This element is required to be the first child of `view` and wraps all the
-dialog's content such as the `header`, `body` and `footer`.
-
--}
-surface : List (Property m) -> List (Html m) -> Html m
-surface =
-    Dialog.surface
-
-
-{-| Dialog backdrop.
-
-This element is required to be the second child of `view` and adds a backdrop
-to the dialog.
-
--}
-backdrop : List (Property m) -> List (Html m) -> Html m
-backdrop =
-    Dialog.backdrop
-
-
-{-| Dialog body.
-
-This element wraps the dialog's content except for `header` and `footer`
+This element wraps the dialog's content except for `header` and `actions`
 content.
 
 -}
-body : List (Property m) -> List (Html m) -> Html m
-body =
-    Dialog.body
+content : List (Property m) -> List (Html m) -> Html m
+content =
+    Dialog.content
 
 
 {-| Make the dialog's body scrollable.
@@ -185,13 +147,6 @@ scrollable =
     Dialog.scrollable
 
 
-{-| Dialog header.
--}
-header : List (Property m) -> List (Html m) -> Html m
-header =
-    Dialog.header
-
-
 {-| Dialog title.
 -}
 title : Options.Property c m
@@ -199,11 +154,11 @@ title =
     Dialog.title
 
 
-{-| Dialog footer.
+{-| Dialog actions, appearing as a footer.
 -}
-footer : List (Property m) -> List (Html m) -> Html m
-footer =
-    Dialog.footer
+actions : List (Property m) -> List (Html m) -> Html m
+actions =
+    Dialog.actions
 
 
 {-| Style the button as cancel button.
@@ -218,3 +173,10 @@ cancel =
 accept : Button.Property m
 accept =
     Dialog.accept
+
+
+{-| Property to indicate that no scrim should be added. Only useful for the hero example dialog.
+-}
+noScrim : Property m
+noScrim =
+    Dialog.noScrim

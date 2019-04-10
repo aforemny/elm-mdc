@@ -19,6 +19,7 @@ module Internal.Menu.Implementation exposing
     , onSelect
     , quickOpen
     , react
+    , selected
     , subs
     , subscriptions
     , topEndCorner
@@ -43,7 +44,7 @@ import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
 import Json.Decode as Decode exposing (Decoder)
 
 
@@ -411,6 +412,7 @@ menu lift model options ulNode =
     Options.apply summary
         Html.div
         [ cs "mdc-menu"
+        , cs "mdc-menu-surface"
         , when (model.animating && not (Maybe.withDefault False model.quickOpen)) <|
             if model.open then
                 cs "mdc-menu--animating-open"
@@ -420,8 +422,7 @@ menu lift model options ulNode =
         , when isOpen
             << Options.many
           <|
-            [ cs "mdc-menu--open"
-            , Options.data "focustrap" ""
+            [ cs "mdc-menu-surface--open"
             , Options.onWithOptions "click"
                 (Decode.succeed
                     { message = lift CloseDelayed
@@ -445,7 +446,7 @@ menu lift model options ulNode =
                 |> when (position.right /= Nothing)
             , css "max-height" maxHeight
             ]
-        , when (model.animating && model.geometry == Nothing) <|
+        , when (isOpen && model.geometry == Nothing) <|
             GlobalEvents.onTickWith
                 { targetRect = False
                 , parentRect = True
@@ -462,14 +463,17 @@ menu lift model options ulNode =
         ]
         []
         [ Lists.ul
-            (cs "mdc-menu__items"
-                -- TODO:
-                --            :: Options.onWithOptions "keydown"
-                --            { stopPropagation = False, preventDefault = True }
-                --            (Decode.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
-                --            |> Decode.andThen identity
-                --            )
-                :: ulNode.options
+            -- TODO:
+            --            :: Options.onWithOptions "keydown"
+            --            { stopPropagation = False, preventDefault = True }
+            --            (Decode.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
+            --            |> Decode.andThen identity
+            --            )
+            (ulNode.options
+                ++ [ role "menu"
+                   , aria "hidden" "true"
+                   , aria "orientation" "vertical"
+                   ]
             )
             (List.indexedMap
                 (\i item ->
@@ -486,6 +490,9 @@ menu lift model options ulNode =
 
                             else
                                 Options.nop
+
+                        isSelected =
+                            List.any (\j -> j == selected) item.options
 
                         itemSummary =
                             -- TODO:
@@ -522,6 +529,8 @@ menu lift model options ulNode =
                         Options.apply itemSummary
                             Html.li
                             [ cs "mdc-list-item"
+                            , cs "mdc-ripple-upgraded"
+                            , cs "mdc-ripple-upgraded--background-focused" |> when isSelected
                             , Options.attribute (Html.attribute "tabindex" "0")
                             , Options.on "focus" (Decode.succeed (lift (SetFocus focusIndex)))
                             , autoFocus
@@ -1013,3 +1022,9 @@ onSelect msg =
                 |> Decode.andThen identity
             )
         ]
+
+
+selected : Lists.Property m
+selected =
+    --cs "mdc-ripple-upgraded--background-focused"
+    cs "mdc-menu-item--selected"

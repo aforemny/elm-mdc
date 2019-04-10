@@ -144,7 +144,7 @@ input =
     Chip.input
 
 
-{-| Show a checkmark if the chip is selected.
+{-| Show a checkmark if the chip is selected. Required property for filter chips.
 -}
 checkmark : Property m
 checkmark =

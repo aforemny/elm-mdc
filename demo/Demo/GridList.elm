@@ -49,7 +49,8 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Grid list"
+    page.body "Grid List"
+        "What is this?"
         [ Page.hero []
             [ GridList.view (lift << Mdc)
                 "grid-list-hero-grid-list"

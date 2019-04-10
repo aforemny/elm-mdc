@@ -1,9 +1,10 @@
-module Internal.Tabs.Model exposing
+module Internal.TabBar.Model exposing
     ( Geometry
     , Model
     , Msg(..)
     , defaultGeometry
     , defaultModel
+    , Tab
     )
 
 import Dict exposing (Dict)
@@ -14,10 +15,7 @@ type alias Model =
     { geometry : Maybe Geometry
     , translateOffset : Float
     , ripples : Dict Int Ripple.Model
-    , indicatorShown : Bool
-    , forwardIndicator : Bool
-    , backIndicator : Bool
-    , scrollLeftAmount : Int
+    , activeTab : Int
     }
 
 
@@ -26,35 +24,35 @@ defaultModel =
     { geometry = Nothing
     , translateOffset = 0
     , ripples = Dict.empty
-    , indicatorShown = False
-    , forwardIndicator = False
-    , backIndicator = False
-    , scrollLeftAmount = 0
+    , activeTab = 0
     }
 
 
 type Msg m
     = NoOp
     | Dispatch (List m)
-    | Select Geometry
-    | ScrollForward Geometry
-    | ScrollBack Geometry
     | RippleMsg Int Ripple.Msg
     | Init Geometry
-    | SetIndicatorShown
-    | Focus Int Geometry
+    | SetActiveTab String Int Float
 
+
+type alias Tab =
+    { offsetLeft : Float
+    , offsetWidth : Float
+    , contentLeft : Float
+    , contentRight : Float
+    }
 
 type alias Geometry =
-    { tabs : List { offsetLeft : Float, offsetWidth : Float }
+    { tabs : List Tab
+    , scrollArea : { offsetWidth : Float }
     , tabBar : { offsetWidth : Float }
-    , scrollFrame : { offsetWidth : Float }
     }
 
 
 defaultGeometry : Geometry
 defaultGeometry =
     { tabs = []
+    , scrollArea = { offsetWidth = 0 }
     , tabBar = { offsetWidth = 0 }
-    , scrollFrame = { offsetWidth = 0 }
     }

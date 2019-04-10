@@ -1,6 +1,5 @@
-module Material.Textfield.HelperText exposing
-    ( Property
-    , helperText
+module Material.TextField.HelperText exposing
+    ( helperText
     , persistent
     , validationMsg
     )
@@ -18,18 +17,18 @@ used. It should be visible either persistently or only on focus.
 # Example
 
     import Html exposing (text)
-    import Material.Textfield as Textfield
-    import Material.Textfield.HelperText as Textfield
+    import Material.TextField as TextField
+    import Material.TextField.HelperText as TextField
 
 
     Html.div []
-        [ Textfield.view Mdc "my-text-field" model.mdc
-              [ Textfield.label "Email Adress"
+        [ TextField.view Mdc "my-text-field" model.mdc
+              [ TextField.label "Email Adress"
               ]
               []
-        , Textfield.helperText
-          [ Textfield.persistent
-          , Textfield.validationMsg
+        , TextField.helperText
+          [ TextField.persistent
+          , TextField.validationMsg
           ]
           [ text "Help Text (possibly validation message)"
           ]
@@ -38,7 +37,6 @@ used. It should be visible either persistently or only on focus.
 
 # Usage
 
-@docs Property
 @docs helperText
 @docs persistent
 @docs validationMsg
@@ -46,7 +44,7 @@ used. It should be visible either persistently or only on focus.
 -}
 
 import Html exposing (Html)
-import Internal.Textfield.HelperText.Implementation as HelperText
+import Internal.TextField.HelperText.Implementation as HelperText
 
 
 {-| HelperText property.

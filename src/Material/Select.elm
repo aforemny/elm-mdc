@@ -4,10 +4,10 @@ module Material.Select exposing
     , label
     , preselected
     , disabled
-    , box
     , option
     , value
     , selected
+    , outlined
     )
 
 {-| Select provides Material Design single-option select menus. It functions
@@ -54,11 +54,11 @@ manually.
 @docs label
 @docs preselected
 @docs disabled
-@docs box
 
 @docs option
 @docs value
 @docs selected
+@docs outlined
 
 -}
 
@@ -85,13 +85,6 @@ view :
     -> Html m
 view =
     Select.view
-
-
-{-| Style the select as a box select.
--}
-box : Property m
-box =
-    Select.box
 
 
 {-| Set the select's label.
@@ -137,3 +130,10 @@ See `preselected`.
 selected : Property m
 selected =
     Select.selected
+
+
+{-| Draw outlined version of select.
+-}
+outlined : Property m
+outlined =
+    Select.outlined

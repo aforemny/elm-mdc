@@ -342,8 +342,47 @@ slider lift model options _ =
         stepChanged =
             Just config.step /= Maybe.andThen .step model.geometry
     in
-    styled Html.div
-        [ cs "elm-mdc-slider-wrapper"
+    Options.apply summary
+        Html.div
+        [ cs "mdc-slider"
+        , cs "mdc-slider--focus" |> when model.focus
+        , cs "mdc-slider--active" |> when model.active
+        , cs "mdc-slider--off" |> when (discreteValue <= config.min)
+        , cs "mdc-slider--discrete" |> when config.discrete
+        , cs "mdc-slider--in-transit" |> when model.inTransit
+        , cs "mdc-slider--display-markers" |> when config.trackMarkers
+        , Options.attribute (Html.tabindex 0)
+        , Options.data "min" (String.fromFloat config.min)
+        , Options.data "max" (String.fromFloat config.max)
+        , Options.data "step" (String.fromFloat config.step)
+        , Options.role "slider"
+        , Options.aria "valuemin" (String.fromFloat config.min)
+        , Options.aria "valuemax" (String.fromFloat config.min)
+        , Options.aria "valuenow" (String.fromFloat discreteValue)
+        , when ((model.geometry == Nothing) || stepChanged) <|
+            GlobalEvents.onTick <|
+                Decode.map (lift << Init) decodeGeometry
+        , GlobalEvents.onResize <| Decode.map (lift << Resize) decodeGeometry
+        , Options.on "keydown" <|
+            Decode.map lift <|
+                Decode.map2
+                    (\key keyCode ->
+                        let
+                            activeValue =
+                                valueForKey key keyCode geometry config.value
+                        in
+                        if activeValue /= Nothing then
+                            KeyDown
+
+                        else
+                            NoOp
+                    )
+                    (Decode.oneOf
+                        [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                        , Decode.succeed Nothing
+                        ]
+                    )
+                    (Decode.at [ "keyCode" ] Decode.int)
         , Options.onWithOptions "keydown"
             (Decode.map
                 (\message ->
@@ -374,292 +413,249 @@ slider lift model options _ =
                             (Decode.at [ "keyCode" ] Decode.int)
                 )
             )
-        ]
-        [ Options.apply summary
-            Html.div
-            [ cs "mdc-slider"
-            , cs "mdc-slider--focus" |> when model.focus
-            , cs "mdc-slider--active" |> when model.active
-            , cs "mdc-slider--off" |> when (discreteValue <= config.min)
-            , cs "mdc-slider--discrete" |> when config.discrete
-            , cs "mdc-slider--in-transit" |> when model.inTransit
-            , cs "mdc-slider--display-markers" |> when config.trackMarkers
-            , Options.attribute (Html.tabindex 0)
-            , Options.data "min" (String.fromFloat config.min)
-            , Options.data "max" (String.fromFloat config.max)
-            , Options.data "step" (String.fromFloat config.step)
-            , Options.role "slider"
-            , Options.aria "valuemin" (String.fromFloat config.min)
-            , Options.aria "valuemax" (String.fromFloat config.min)
-            , Options.aria "valuenow" (String.fromFloat discreteValue)
-            , when ((model.geometry == Nothing) || stepChanged) <|
-                GlobalEvents.onTick <|
-                    Decode.map (lift << Init) decodeGeometry
-            , GlobalEvents.onResize <| Decode.map (lift << Resize) decodeGeometry
-            , Options.on "keydown" <|
-                Decode.map lift <|
-                    Decode.map2
-                        (\key keyCode ->
-                            let
-                                activeValue =
-                                    valueForKey key keyCode geometry config.value
-                            in
-                            if activeValue /= Nothing then
-                                KeyDown
-
-                            else
-                                NoOp
-                        )
-                        (Decode.oneOf
-                            [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                            , Decode.succeed Nothing
-                            ]
-                        )
-                        (Decode.at [ "keyCode" ] Decode.int)
-            , when (config.onChange /= Nothing) <|
-                Options.on "keydown" <|
-                    Decode.map2
-                        (\key keyCode ->
-                            let
-                                activeValue =
-                                    valueForKey key keyCode geometry config.value
-                                        |> Maybe.map (discretize geometry)
-                            in
-                            Maybe.map2 (<|) config.onChange activeValue
-                                |> Maybe.withDefault (lift NoOp)
-                        )
-                        (Decode.oneOf
-                            [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                            , Decode.succeed Nothing
-                            ]
-                        )
-                        (Decode.at [ "keyCode" ] Decode.int)
-            , when (config.onInput /= Nothing) <|
-                Options.on "keydown" <|
-                    Decode.map2
-                        (\key keyCode ->
-                            let
-                                activeValue =
-                                    valueForKey key keyCode geometry config.value
-                                        |> Maybe.map (discretize geometry)
-                            in
-                            Maybe.map2 (<|) config.onInput activeValue
-                                |> Maybe.withDefault (lift NoOp)
-                        )
-                        (Decode.oneOf
-                            [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                            , Decode.succeed Nothing
-                            ]
-                        )
-                        (Decode.at [ "keyCode" ] Decode.int)
-            , Options.on "focus" (Decode.succeed (lift Focus))
-            , Options.on "blur" (Decode.succeed (lift Blur))
-            , Options.many <|
+        , when (config.onChange /= Nothing) <|
+            Options.on "keydown" <|
+                Decode.map2
+                    (\key keyCode ->
+                        let
+                            activeValue =
+                                valueForKey key keyCode geometry config.value
+                                    |> Maybe.map (discretize geometry)
+                        in
+                        Maybe.map2 (<|) config.onChange activeValue
+                            |> Maybe.withDefault (lift NoOp)
+                    )
+                    (Decode.oneOf
+                        [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                        , Decode.succeed Nothing
+                        ]
+                    )
+                    (Decode.at [ "keyCode" ] Decode.int)
+        , when (config.onInput /= Nothing) <|
+            Options.on "keydown" <|
+                Decode.map2
+                    (\key keyCode ->
+                        let
+                            activeValue =
+                                valueForKey key keyCode geometry config.value
+                                    |> Maybe.map (discretize geometry)
+                        in
+                        Maybe.map2 (<|) config.onInput activeValue
+                            |> Maybe.withDefault (lift NoOp)
+                    )
+                    (Decode.oneOf
+                        [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                        , Decode.succeed Nothing
+                        ]
+                    )
+                    (Decode.at [ "keyCode" ] Decode.int)
+        , Options.on "focus" (Decode.succeed (lift Focus))
+        , Options.on "blur" (Decode.succeed (lift Blur))
+        , Options.many <|
+            List.map
+                (\event ->
+                    Options.on event (Decode.map (lift << InteractionStart event) decodePageX)
+                )
+                downs
+        , when (config.onChange /= Nothing) <|
+            Options.many <|
                 List.map
                     (\event ->
-                        Options.on event (Decode.map (lift << InteractionStart event) decodePageX)
+                        Options.on event <|
+                            Decode.map
+                                (\{ pageX } ->
+                                    let
+                                        activeValue =
+                                            valueFromPageX geometry pageX
+                                                |> discretize geometry
+                                    in
+                                    Maybe.map
+                                        (\changeHandler -> changeHandler activeValue)
+                                        config.onChange
+                                        |> Maybe.withDefault (lift NoOp)
+                                )
+                                decodePageX
                     )
                     downs
-            , when (config.onChange /= Nothing) <|
-                Options.many <|
-                    List.map
-                        (\event ->
-                            Options.on event <|
-                                Decode.map
-                                    (\{ pageX } ->
-                                        let
-                                            activeValue =
-                                                valueFromPageX geometry pageX
-                                                    |> discretize geometry
-                                        in
-                                        Maybe.map
-                                            (\changeHandler -> changeHandler activeValue)
-                                            config.onChange
-                                            |> Maybe.withDefault (lift NoOp)
-                                    )
-                                    decodePageX
-                        )
-                        downs
-            , when (config.onInput /= Nothing) <|
-                Options.many <|
-                    List.map
-                        (\event ->
-                            Options.on event <|
-                                Decode.map
-                                    (\{ pageX } ->
-                                        let
-                                            activeValue =
-                                                valueFromPageX geometry pageX
-                                                    |> discretize geometry
-                                        in
-                                        Maybe.map
-                                            (\inputHandler -> inputHandler activeValue)
-                                            config.onInput
-                                            |> Maybe.withDefault (lift NoOp)
-                                    )
-                                    decodePageX
-                        )
-                        downs
-            , -- Note: In some instances `Up` fires before `InteractionStart`.
-              -- (TODO)
-              Options.many <|
+        , when (config.onInput /= Nothing) <|
+            Options.many <|
+                List.map
+                    (\event ->
+                        Options.on event <|
+                            Decode.map
+                                (\{ pageX } ->
+                                    let
+                                        activeValue =
+                                            valueFromPageX geometry pageX
+                                                |> discretize geometry
+                                    in
+                                    Maybe.map
+                                        (\inputHandler -> inputHandler activeValue)
+                                        config.onInput
+                                        |> Maybe.withDefault (lift NoOp)
+                                )
+                                decodePageX
+                    )
+                    downs
+        , -- Note: In some instances `Up` fires before `InteractionStart`.
+          -- (TODO)
+          Options.many <|
+            List.map
+                (\handler ->
+                    handler (Decode.succeed (lift Up))
+                )
+                ups
+        , when ((config.onChange /= Nothing) && model.active) <|
+            Options.many <|
                 List.map
                     (\handler ->
-                        handler (Decode.succeed (lift Up))
+                        handler <|
+                            Decode.map
+                                (\{ pageX } ->
+                                    let
+                                        activeValue =
+                                            valueFromPageX geometry pageX
+                                                |> discretize geometry
+                                    in
+                                    Maybe.map (\changeHandler -> changeHandler activeValue) config.onChange
+                                        |> Maybe.withDefault (lift NoOp)
+                                )
+                                decodePageX
                     )
                     ups
-            , when ((config.onChange /= Nothing) && model.active) <|
-                Options.many <|
-                    List.map
-                        (\handler ->
-                            handler <|
-                                Decode.map
-                                    (\{ pageX } ->
-                                        let
-                                            activeValue =
-                                                valueFromPageX geometry pageX
-                                                    |> discretize geometry
-                                        in
-                                        Maybe.map (\changeHandler -> changeHandler activeValue) config.onChange
-                                            |> Maybe.withDefault (lift NoOp)
-                                    )
-                                    decodePageX
-                        )
-                        ups
-            , when ((config.onInput /= Nothing) && model.active) <|
-                Options.many <|
-                    List.map
-                        (\handler ->
-                            handler <|
-                                Decode.map
-                                    (\{ pageX } ->
-                                        let
-                                            activeValue =
-                                                valueFromPageX geometry pageX
-                                                    |> discretize geometry
-                                        in
-                                        Maybe.map
-                                            (\inputHandler -> inputHandler activeValue)
-                                            config.onInput
-                                            |> Maybe.withDefault (lift NoOp)
-                                    )
-                                    decodePageX
-                        )
-                        ups
-            , when model.active <|
-                Options.many <|
-                    List.map
-                        (\handler ->
-                            handler (Decode.map (lift << Drag) decodePageX)
-                        )
-                        moves
-            , when ((config.onInput /= Nothing) && model.active) <|
-                Options.many <|
-                    List.map
-                        (\handler ->
-                            handler <|
-                                Decode.map
-                                    (\{ pageX } ->
-                                        let
-                                            activeValue =
-                                                valueFromPageX geometry pageX
-                                                    |> discretize geometry
-                                        in
-                                        Maybe.map
-                                            (\inputHandler -> inputHandler activeValue)
-                                            config.onInput
-                                            |> Maybe.withDefault (lift NoOp)
-                                    )
-                                    decodePageX
-                        )
-                        moves
-            ]
-            []
-            [ styled Html.div
-                [ cs "mdc-slider__track-container"
-                ]
-                (List.concat
-                    [ [ styled Html.div
-                            [ cs "mdc-slider__track"
-                            , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
-                            ]
-                            []
-                      ]
-                    , if config.discrete then
-                        [ styled Html.div
-                            [ cs "mdc-slider__track-marker-container"
-                            ]
-                            (List.repeat (round ((config.max - config.min) / config.step)) <|
-                                styled Html.div
-                                    [ cs "mdc-slider__track-marker"
-                                    ]
-                                    []
-                            )
-                        ]
-
-                      else
-                        []
-                    ]
-                )
-            , styled Html.div
-                [ cs "mdc-slider__thumb-container"
-                , Options.many
-                    (downs
-                        |> List.map
-                            (\event ->
-                                Options.onWithOptions event
-                                    (Decode.map
-                                        (\message ->
-                                            { message = lift message
-                                            , stopPropagation = True
-                                            , preventDefault = False
-                                            }
-                                        )
-                                        (Decode.map (ThumbContainerPointer event) decodePageX)
-                                    )
-                            )
+        , when ((config.onInput /= Nothing) && model.active) <|
+            Options.many <|
+                List.map
+                    (\handler ->
+                        handler <|
+                            Decode.map
+                                (\{ pageX } ->
+                                    let
+                                        activeValue =
+                                            valueFromPageX geometry pageX
+                                                |> discretize geometry
+                                    in
+                                    Maybe.map
+                                        (\inputHandler -> inputHandler activeValue)
+                                        config.onInput
+                                        |> Maybe.withDefault (lift NoOp)
+                                )
+                                decodePageX
                     )
-                , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
-                , css "transform" <|
-                    "translateX("
-                        ++ String.fromFloat translateX
-                        ++ "px) translateX(-50%)"
-                ]
-                (List.concat
-                    [ [ Svg.svg
-                            [ Svg.class "mdc-slider__thumb"
-                            , Svg.width "21"
-                            , Svg.height "21"
-                            ]
-                            [ Svg.circle
-                                [ Svg.cx "10.5"
-                                , Svg.cy "10.5"
-                                , Svg.r "7.875"
+                    ups
+        , when model.active <|
+            Options.many <|
+                List.map
+                    (\handler ->
+                        handler (Decode.map (lift << Drag) decodePageX)
+                    )
+                    moves
+        , when ((config.onInput /= Nothing) && model.active) <|
+            Options.many <|
+                List.map
+                    (\handler ->
+                        handler <|
+                            Decode.map
+                                (\{ pageX } ->
+                                    let
+                                        activeValue =
+                                            valueFromPageX geometry pageX
+                                                |> discretize geometry
+                                    in
+                                    Maybe.map
+                                        (\inputHandler -> inputHandler activeValue)
+                                        config.onInput
+                                        |> Maybe.withDefault (lift NoOp)
+                                )
+                                decodePageX
+                    )
+                    moves
+        ]
+        []
+        [ styled Html.div
+            [ cs "mdc-slider__track-container"
+            ]
+            (List.concat
+                [ [ styled Html.div
+                        [ cs "mdc-slider__track"
+                        , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
+                        ]
+                        []
+                  ]
+                , if config.discrete then
+                    [ styled Html.div
+                        [ cs "mdc-slider__track-marker-container"
+                        ]
+                        (List.repeat (round ((config.max - config.min) / config.step)) <|
+                            styled Html.div
+                                [ cs "mdc-slider__track-marker"
                                 ]
                                 []
-                            ]
-                      , styled Html.div
-                            [ cs "mdc-slider__focus-ring"
+                        )
+                    ]
+
+                  else
+                    []
+                ]
+            )
+        , styled Html.div
+            [ cs "mdc-slider__thumb-container"
+            , Options.many
+                (downs
+                    |> List.map
+                        (\event ->
+                            Options.onWithOptions event
+                                (Decode.map
+                                    (\message ->
+                                        { message = lift message
+                                        , stopPropagation = True
+                                        , preventDefault = False
+                                        }
+                                    )
+                                    (Decode.map (ThumbContainerPointer event) decodePageX)
+                                )
+                        )
+                )
+            , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
+            , css "transform" <|
+                "translateX("
+                    ++ String.fromFloat translateX
+                    ++ "px) translateX(-50%)"
+            ]
+            (List.concat
+                [ [ Svg.svg
+                        [ Svg.class "mdc-slider__thumb"
+                        , Svg.width "21"
+                        , Svg.height "21"
+                        ]
+                        [ Svg.circle
+                            [ Svg.cx "10.5"
+                            , Svg.cy "10.5"
+                            , Svg.r "7.875"
                             ]
                             []
-                      ]
-                    , if config.discrete then
+                        ]
+                  , styled Html.div
+                        [ cs "mdc-slider__focus-ring"
+                        ]
+                        []
+                  ]
+                , if config.discrete then
+                    [ styled Html.div
+                        [ cs "mdc-slider__pin"
+                        ]
                         [ styled Html.div
-                            [ cs "mdc-slider__pin"
+                            [ cs "mdc-slider__pin-value-marker"
                             ]
-                            [ styled Html.div
-                                [ cs "mdc-slider__pin-value-marker"
-                                ]
-                                [ text (String.fromFloat discreteValue)
-                                ]
+                            [ text (String.fromFloat discreteValue)
                             ]
                         ]
-
-                      else
-                        []
                     ]
-                )
-            ]
+
+                  else
+                    []
+                ]
+            )
         ]
 
 

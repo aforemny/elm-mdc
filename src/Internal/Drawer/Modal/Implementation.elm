@@ -1,20 +1,22 @@
-module Internal.Drawer.Temporary.Implementation exposing
+module Internal.Drawer.Modal.Implementation exposing
     ( Property
     , content
     , header
-    , headerContent
     , onClose
     , open
-    , toolbarSpacer
+    , scrim
+    , subTitle
+    , title
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html, div, text)
 import Internal.Component exposing (Index, Indexed)
 import Internal.Drawer.Implementation as Drawer
 import Internal.Drawer.Model exposing (Model, Msg)
 import Internal.List.Implementation as Lists
 import Internal.Msg
+import Internal.Options as Options exposing (cs, styled)
 
 
 type alias Config m =
@@ -35,19 +37,24 @@ header =
     Drawer.header
 
 
-headerContent : List (Property m) -> List (Html m) -> Html m
-headerContent =
-    Drawer.headerContent
+title : Property m
+title =
+    Drawer.title
 
 
-content : Lists.Property m
+subTitle : Property m
+subTitle =
+    Drawer.subTitle
+
+
+content : List (Property m) -> List (Html m) -> Html m
 content =
     Drawer.content
 
 
-toolbarSpacer : List (Property m) -> List (Html m) -> Html m
-toolbarSpacer =
-    Drawer.toolbarSpacer
+scrim : List (Property m) -> List (Html m) -> Html m
+scrim options =
+    styled div (cs "mdc-drawer-scrim" :: options)
 
 
 type alias Store s =
@@ -97,4 +104,4 @@ open =
 
 className : String
 className =
-    "mdc-drawer--temporary"
+    "mdc-drawer--modal"

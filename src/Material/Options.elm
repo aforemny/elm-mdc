@@ -8,6 +8,7 @@ module Material.Options exposing
     , attribute
     , data
     , aria
+    , role
     , for
     , tabindex
     , on
@@ -41,6 +42,7 @@ module Material.Options exposing
 @docs attribute
 @docs data
 @docs aria
+@docs role
 @docs for
 @docs tabindex
 
@@ -172,6 +174,13 @@ aria =
     Internal.Options.aria
 
 
+{-| HTML role attribute.
+-}
+role : String -> Property c m
+role =
+    Internal.Options.role
+
+
 {-| HTML tabindex attribute.
 -}
 tabindex : Int -> Property c m
@@ -268,10 +277,10 @@ onBlur =
 {-| Since the `"focus"` (and `"blur"`) event does not bubble, be sure to use
 this on `nativeControl` if the component exposes that.
 
-    import Material.Textfield as Textfield
+    import Material.TextField as TextField
 
-    Textfield.view Mdc "my-text-field" model.mdc
-        [ Textfield.nativeControl
+    TextField.view Mdc "my-text-field" model.mdc
+        [ TextField.nativeControl
             [ Options.onFocus Focus
             ]
         ]

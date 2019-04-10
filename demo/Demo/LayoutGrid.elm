@@ -2,450 +2,167 @@ module Demo.LayoutGrid exposing
     ( Model
     , Msg(..)
     , defaultModel
-    , init
-    , subscriptions
     , update
     , view
     )
 
 import Browser.Dom
 import Browser.Events
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Json.Decode as Json
+import Material
 import Material.LayoutGrid as LayoutGrid
 import Material.Options as Options exposing (cs, css, styled, when)
-import Task
+import Material.Typography as Typography
 
 
-type alias Model =
-    { desktopMargin : String
-    , desktopGutter : String
-    , desktopColumnWidth : String
-    , tabletMargin : String
-    , tabletGutter : String
-    , tabletColumnWidth : String
-    , phoneMargin : String
-    , phoneGutter : String
-    , phoneColumnWidth : String
-    , windowWidth : Maybe Float
-    }
+type alias Model m =
+    { mdc : Material.Model m }
 
 
-defaultModel : Model
+defaultModel : Model m
 defaultModel =
-    { desktopMargin = "24px"
-    , desktopGutter = "24px"
-    , desktopColumnWidth = "72px"
-    , tabletMargin = "16px"
-    , tabletGutter = "16px"
-    , tabletColumnWidth = "72px"
-    , phoneMargin = "16px"
-    , phoneGutter = "16px"
-    , phoneColumnWidth = "72px"
-    , windowWidth = Nothing
-    }
+    { mdc = Material.defaultModel }
 
 
-type Msg
-    = SetDesktopMargin String
-    | SetDesktopGutter String
-    | SetDesktopColumnWidth String
-    | SetTabletMargin String
-    | SetTabletGutter String
-    | SetTabletColumnWidth String
-    | SetPhoneMargin String
-    | SetPhoneGutter String
-    | SetPhoneColumnWidth String
-    | Resize { width : Float, height : Float }
+type Msg m
+    = Mdc (Material.Msg m)
 
 
-update : (Msg -> m) -> Msg -> Model -> ( Model, Cmd m )
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
 update lift msg model =
     case msg of
-        SetDesktopMargin v ->
-            ( { model | desktopMargin = v }, Cmd.none )
-
-        SetDesktopGutter v ->
-            ( { model | desktopGutter = v }, Cmd.none )
-
-        SetDesktopColumnWidth v ->
-            ( { model | desktopColumnWidth = v }, Cmd.none )
-
-        SetTabletMargin v ->
-            ( { model | tabletMargin = v }, Cmd.none )
-
-        SetTabletGutter v ->
-            ( { model | tabletGutter = v }, Cmd.none )
-
-        SetTabletColumnWidth v ->
-            ( { model | tabletColumnWidth = v }, Cmd.none )
-
-        SetPhoneMargin v ->
-            ( { model | phoneMargin = v }, Cmd.none )
-
-        SetPhoneGutter v ->
-            ( { model | phoneGutter = v }, Cmd.none )
-
-        SetPhoneColumnWidth v ->
-            ( { model | phoneColumnWidth = v }, Cmd.none )
-
-        Resize { width, height } ->
-            ( { model | windowWidth = Just width }, Cmd.none )
+        Mdc msg_ ->
+            Material.update (lift << Mdc) msg_ model
 
 
-view : (Msg -> m) -> Page m -> Model -> Html m
-view lift page model =
-    let
-        demoGridLegend node text_ =
-            styled node
-                [ css "display" "block"
-                , cs "demo-grid-legend"
-                , css "margin" "16px 0 8px 0"
-                ]
-                [ text text_
-                ]
+demoGrid : List (LayoutGrid.Property m) -> List (Html m) -> Html m
+demoGrid options =
+    LayoutGrid.view
+        (css "background" "rgba(0,0,0,.2)"
+            :: css "min-width" "360px"
+            :: options
+        )
 
-        demoControls =
-            Options.many
-                [ cs "demo-controls"
-                , css "display" "block"
-                , css "margin-bottom" "8px"
-                ]
 
-        demoGrid =
-            Options.many
-                [ cs "demo-grid"
-                , css "background-color" "#ddd"
-                , css "margin-bottom" "32px"
-                ]
+demoCell : List (LayoutGrid.Property m) -> Html m
+demoCell options =
+    LayoutGrid.cell
+        (css "background" "rgba(0,0,0,.2)"
+            :: css "height" "100px"
+            :: options
+        )
+        []
 
-        demoCell =
-            Options.many
-                [ cs "demo-cell"
-                , css "box-sizing" "border-box"
-                , css "background-color" "#666"
-                , css "height" "200px"
-                , css "padding" "8px"
-                , css "color" "white"
-                , css "font-size" "1.5rem"
-                ]
 
-        demoParentCell =
-            Options.many
-                [ cs "demo-parent-cell"
-                , css "position" "relative"
-                , css "background-color" "#aaa"
-                ]
+heroGrid : Html m
+heroGrid =
+    demoGrid [] (List.repeat 3 (demoCell []))
 
-        demoChildCell =
-            Options.many
-                [ demoCell
-                , cs "demo-child-cell"
-                , css "position" "relative"
-                ]
 
-        demoRuler =
-            Options.many
-                [ cs "demo-ruler"
-                , css "position" "fixed"
-                , css "display" "flex"
-                , css "justify-content" "center"
-                , css "bottom" "0"
-                , css "left" "0"
-                , css "height" "20px"
-                , css "width" "100%"
-                , css "margin" "0"
-                , css "background" "black"
-                , css "color" "white"
-                ]
-    in
-    page.body "Layout grid"
-        [ Html.node "style"
-            [ Html.type_ "text/css"
-            ]
-            [ text <| """
-:root {
-    --mdc-layout-grid-margin-desktop: """ ++ model.desktopMargin ++ """;
-    --mdc-layout-grid-gutter-desktop: """ ++ model.desktopGutter ++ """;
-    --mdc-layout-grid-column-width-desktop: """ ++ model.desktopColumnWidth ++ """;
-    --mdc-layout-grid-margin-tablet: """ ++ model.tabletMargin ++ """;
-    --mdc-layout-grid-gutter-tablet: """ ++ model.tabletGutter ++ """;
-    --mdc-layout-grid-column-width-tablet: """ ++ model.tabletColumnWidth ++ """;
-    --mdc-layout-grid-margin-phone: """ ++ model.phoneMargin ++ """;
-    --mdc-layout-grid-gutter-phone: """ ++ model.phoneGutter ++ """;
-    --mdc-layout-grid-column-width-phone: """ ++ model.phoneColumnWidth ++ """;
-}
-"""
-            ]
-        , Page.hero []
-            [ LayoutGrid.view
-                [ demoGrid
-                ]
-                (List.repeat 3 <|
-                    LayoutGrid.cell
-                        [ css "height" "60px"
-                        , demoCell -- TODO: change order?
-                        , LayoutGrid.span4
-                        ]
-                        []
-                )
-            ]
-        , let
-            margins =
-                [ "8px"
-                , "16px"
-                , "24px"
-                , "40px"
-                ]
-
-            gutters =
-                margins
-
-            columnWidths =
-                [ "72px", "84px" ]
-
-            control title set get options =
-                styled Html.div
-                    [ demoControls
-                    ]
-                    [ text title
-                    , Html.select
-                        [ Html.on "change" (Json.map (lift << set) Html.targetValue)
-                        ]
-                        (options
-                            |> List.map
-                                (\v ->
-                                    Html.option
-                                        [ Html.selected (get model == v)
-                                        , Html.value v
-                                        ]
-                                        [ text v
-                                        ]
-                                )
-                        )
-                    ]
-
-            controls device setMargin getMargin setGutter getGutter =
-                LayoutGrid.cell []
-                    [ control (device ++ " Margin:") setMargin getMargin margins
-                    , control (device ++ " Gutter:") setGutter getGutter gutters
-                    ]
-          in
-          styled Html.section
-            [ cs "examples"
-            , css "margin" "24px"
-            ]
-            [ LayoutGrid.view []
-                (let
-                    desktopControls =
-                        controls "Desktop"
-                            SetDesktopMargin
-                            .desktopMargin
-                            SetDesktopGutter
-                            .desktopGutter
-
-                    tabletControls =
-                        controls "Tablet"
-                            SetTabletMargin
-                            .tabletMargin
-                            SetTabletGutter
-                            .tabletGutter
-
-                    phoneControls =
-                        controls "Phone"
-                            SetPhoneMargin
-                            .phoneMargin
-                            SetPhoneGutter
-                            .phoneGutter
-                 in
-                 [ desktopControls
-                 , tabletControls
-                 , phoneControls
-                 ]
-                )
-            , styled Html.div [ cs "demo-warning" ] []
-            , demoGridLegend Html.div "Grid of default wide (4 columns) items"
-            , LayoutGrid.view [ demoGrid ]
-                (LayoutGrid.cell [ demoCell ] [ text "4" ]
-                    |> List.repeat 3
-                )
-            , demoGridLegend Html.div "Grid of 1 column wide items"
-            , LayoutGrid.view [ demoGrid ]
-                (LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] [ text "1" ]
-                    |> List.repeat 12
-                )
-            , demoGridLegend Html.div "Grid of differently sized items"
-            , LayoutGrid.view [ demoGrid ]
-                [ LayoutGrid.cell [ demoCell, LayoutGrid.span6 ] [ text "6" ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span2 ] [ text "2" ]
-                ]
-            , demoGridLegend Html.div "Grid of items with tweaks at different screen sizes"
-            , LayoutGrid.view [ demoGrid ]
-                [ LayoutGrid.cell
-                    [ demoCell
-                    , LayoutGrid.span6
-                    , LayoutGrid.span8Tablet
-                    ]
-                    [ text "6 (8 tablet)"
-                    ]
-                , LayoutGrid.cell
-                    [ demoCell
-                    , LayoutGrid.span4
-                    , LayoutGrid.span6Tablet
-                    ]
-                    [ text "4 (6 tablet)"
-                    ]
-                , LayoutGrid.cell
-                    [ demoCell
-                    , LayoutGrid.span2
-                    , LayoutGrid.span4Phone
-                    ]
-                    [ text "2 (4 phone)"
-                    ]
-                ]
-            , demoGridLegend Html.div "Grid nested within parent grid cell"
-            , LayoutGrid.view [ demoGrid ]
-                [ LayoutGrid.cell [ demoParentCell, LayoutGrid.span4 ]
-                    [ LayoutGrid.inner []
-                        (LayoutGrid.cell
-                            [ demoChildCell
-                            , LayoutGrid.span4
-                            ]
-                            [ styled Html.span
-                                [ css "position" "absolute"
-                                , css "bottom" "8px"
-                                , css "right" "8px"
-                                , css "color" "#ddd"
-                                ]
-                                [ text "Child 4"
-                                ]
-                            ]
-                            |> List.repeat 3
-                        )
-                    , styled Html.span
-                        [ css "position" "absolute"
-                        , css "top" "8px"
-                        , css "left" "8px"
-                        , css "font-size" "1.5rem"
-                        , css "color" "white"
-                        ]
-                        [ text "Parent 4"
-                        ]
-                    ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "4" ]
-                ]
-            , demoGridLegend Html.h2 "Grid with max width"
-            , demoGridLegend Html.div "Grid with max width (1280px) and center alignment by default"
-            , LayoutGrid.view [ demoGrid, css "max-width" "1280px" ]
-                [ LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-                ]
-            , demoGridLegend Html.div "Grid with max width (1280px) and left alignment"
-            , LayoutGrid.view [ demoGrid, css "max-width" "1280px", LayoutGrid.alignLeft ]
-                [ LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-                , LayoutGrid.cell [ demoCell, LayoutGrid.span4 ] [ text "" ]
-                ]
-            , demoGridLegend Html.div "Fixed column width layout grid"
-
-            -- TODO: demoControls
-            , LayoutGrid.view []
-                [ LayoutGrid.cell
-                    [ demoControls
-                    ]
-                    [ control "Desktop Column Width:"
-                        SetDesktopColumnWidth
-                        .desktopColumnWidth
-                        columnWidths
-                    ]
-                , LayoutGrid.cell
-                    [ demoControls
-                    ]
-                    [ control "Tablet Column Width:"
-                        SetTabletColumnWidth
-                        .tabletColumnWidth
-                        columnWidths
-                    ]
-                , LayoutGrid.cell
-                    [ demoControls
-                    ]
-                    [ control "Phone Column Width:"
-                        SetPhoneColumnWidth
-                        .phoneColumnWidth
-                        columnWidths
-                    ]
-                ]
-            , demoGridLegend Html.div "Fixed column width layout grid and center alignment by default"
-            , LayoutGrid.view
-                [ demoGrid
-                , LayoutGrid.fixedColumnWidth
-                ]
-                (LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
-                    |> List.repeat 3
-                )
-            , demoGridLegend Html.div "Fixed column width layout grid and right alignment"
-            , LayoutGrid.view
-                [ demoGrid
-                , LayoutGrid.fixedColumnWidth
-                , LayoutGrid.alignRight
-                ]
-                (LayoutGrid.cell [ demoCell, LayoutGrid.span1 ] []
-                    |> List.repeat 3
-                )
-            , styled Html.div
-                [ demoRuler
-                ]
-                [ let
-                    device =
-                        model.windowWidth
-                            |> Maybe.map
-                                (\width ->
-                                    if width >= 840 then
-                                        "desktop"
-
-                                    else if width >= 480 then
-                                        "tablet"
-
-                                    else
-                                        "phone"
-                                )
-                            |> Maybe.withDefault "desktop"
-                  in
-                  Html.div []
-                    [ text <|
-                        String.fromFloat (Maybe.withDefault 0 model.windowWidth)
-                            ++ "px ("
-                            ++ device
-                            ++ ")"
-                    ]
-                ]
-            ]
+columnsGrid : Html m
+columnsGrid =
+    demoGrid []
+        [ demoCell [ LayoutGrid.span6 ]
+        , demoCell [ LayoutGrid.span3 ]
+        , demoCell [ LayoutGrid.span2 ]
+        , demoCell [ LayoutGrid.span1 ]
+        , demoCell [ LayoutGrid.span3 ]
+        , demoCell [ LayoutGrid.span1 ]
+        , demoCell [ LayoutGrid.span8 ]
         ]
 
 
-init : (Msg -> m) -> ( Model, Cmd m )
-init lift =
-    ( defaultModel
-    , Task.perform
-        (\{ viewport } ->
-            lift
-                (Resize
-                    { width = viewport.width, height = viewport.height }
-                )
-        )
-        Browser.Dom.getViewport
-    )
+leftAlignedGrid : Html m
+leftAlignedGrid =
+    demoGrid
+        [ LayoutGrid.alignLeft
+        , css "max-width" "800px"
+        ]
+        [ demoCell []
+        , demoCell []
+        , demoCell []
+        ]
 
 
-subscriptions : (Msg -> m) -> Model -> Sub m
-subscriptions lift model =
-    Browser.Events.onResize
-        (\width height ->
-            lift (Resize { width = toFloat width, height = toFloat height })
-        )
+rightAlignedGrid : Html m
+rightAlignedGrid =
+    demoGrid
+        [ LayoutGrid.alignRight
+        , css "max-width" "800px"
+        ]
+        [ demoCell []
+        , demoCell []
+        , demoCell []
+        ]
+
+
+cellAlignmentGrid : Html m
+cellAlignmentGrid =
+    demoGrid
+        [ css "min-height" "200px"
+        ]
+        [ demoCell [ LayoutGrid.alignTop, css "min-height" "50px" ]
+        , demoCell [ LayoutGrid.alignMiddle, css "min-height" "50px" ]
+        , demoCell [ LayoutGrid.alignBottom, css "min-height" "50px" ]
+        ]
+
+
+view : (Msg m -> m) -> Page m -> Model m -> Html m
+view lift page model =
+    page.body "Layout Grid"
+        "Material design’s responsive UI is based on a 12-column grid layout."
+        [ Hero.view []
+            [ heroGrid
+            ]
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+            ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/layout-grid/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-layout-grid"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ styled Html.h3
+                [ Typography.subtitle1 ]
+                [ text "Columns" ]
+            , columnsGrid
+            , styled Html.h3
+                [ Typography.subtitle1 ]
+                [ text "Grid Left Alignment" ]
+            , styled Html.p
+                [ Typography.body1 ]
+                [ text "This requires a max-width on the top-level grid element." ]
+            , leftAlignedGrid
+            , styled Html.h3
+                [ Typography.subtitle1 ]
+                [ text "Grid Right Alignment" ]
+            , styled Html.p
+                [ Typography.body1 ]
+                [ text "This requires a max-width on the top-level grid element." ]
+            , rightAlignedGrid
+            , styled Html.h3
+                [ Typography.subtitle1 ]
+                [ text "Cell Alignment" ]
+            , styled Html.p
+                [ Typography.body1 ]
+                [ text "Cell alignment requires a cell height smaller than the inner height of the grid." ]
+            , cellAlignmentGrid
+            ]
+        ]

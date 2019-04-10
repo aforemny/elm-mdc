@@ -1,5 +1,6 @@
 module Demo.Snackbar exposing (Model, Msg(..), defaultModel, update, view)
 
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -9,17 +10,16 @@ import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
 import Material.FormField as FormField
-import Material.Options as Options exposing (cs, css, nop, styled, when)
+import Material.Options as Options exposing (aria, cs, css, nop, role, styled, when)
 import Material.Snackbar as Snackbar
-import Material.Textfield as Textfield
+import Material.TextField as TextField
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 
 type alias Model m =
     { mdc : Material.Model m
-    , multiline : Bool
-    , actionOnBottom : Bool
+    , stacked : Bool
     , dismissOnAction : Bool
     , messageText : String
     , actionText : String
@@ -29,8 +29,7 @@ type alias Model m =
 defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
-    , multiline = False
-    , actionOnBottom = False
+    , stacked = False
     , dismissOnAction = True
     , messageText = "Message deleted"
     , actionText = "Undo"
@@ -39,8 +38,7 @@ defaultModel =
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ToggleMultiline
-    | ToggleActionOnBottom
+    | ToggleStacked
     | ToggleDismissOnAction
     | SetMessageText String
     | SetActionText String
@@ -58,11 +56,8 @@ update lift msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        ToggleMultiline ->
-            ( { model | multiline = not model.multiline }, Cmd.none )
-
-        ToggleActionOnBottom ->
-            ( { model | actionOnBottom = not model.actionOnBottom }, Cmd.none )
+        ToggleStacked ->
+            ( { model | stacked = not model.stacked }, Cmd.none )
 
         ToggleDismissOnAction ->
             ( { model | dismissOnAction = not model.dismissOnAction }, Cmd.none )
@@ -76,7 +71,7 @@ update lift msg model =
         Show idx ->
             let
                 contents =
-                    if model.multiline then
+                    if model.stacked then
                         let
                             snack =
                                 Snackbar.snack
@@ -86,7 +81,7 @@ update lift msg model =
                         in
                         { snack
                             | dismissOnAction = model.dismissOnAction
-                            , actionOnBottom = model.actionOnBottom
+                            , stacked = model.stacked
                         }
 
                     else
@@ -115,61 +110,83 @@ view lift page model =
     let
         example options =
             styled Html.div
-                (css "display" "block"
-                    :: css "margin" "24px"
-                    :: css "padding" "24px"
+                (css "margin-top" "24px"
                     :: options
                 )
     in
     page.body "Snackbar"
+        "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
         [ Page.hero []
             [ styled Html.div
                 [ css "position" "relative"
                 , css "left" "0"
                 , css "transform" "none"
-                , cs "mdc-snackbar mdc-snackbar--active"
+                , cs "mdc-snackbar mdc-snackbar--open"
                 ]
-                [ styled Html.div [ cs "mdc-snackbar__text" ] [ text "Message sent" ]
-                , styled Html.div
-                    [ cs "mdc-snackbar__action-wrapper" ]
-                    [ styled Html.button
-                        [ Options.attribute (Html.type_ "button")
-                        , cs "mdc-snackbar__action-button"
+                [ styled Html.div
+                    [ cs "mdc-snackbar__surface" ]
+                    [ styled Html.div
+                        [ cs "mdc-snackbar__label"
+                        , role "status"
+                        , aria "live" "polite"
+                        , css "color" "hsla(0,0%,100%,.87)"
                         ]
-                        [ text "Undo"
+                        [ text "Can't send photo. Retry in 5 seconds." ]
+                    , styled Html.div
+                        [ cs "mdc-snackbar__actions" ]
+                        [ styled Html.button
+                            [ Options.attribute (Html.type_ "button")
+                            , cs "mdc-button"
+                            , cs "mdc-snackbar__action"
+                            ]
+                            [ text "Retry"
+                            ]
+                        , styled Html.button
+                            [ cs "mdc-icon-button"
+                            , cs "mdc-snackbar__dismiss"
+                            , cs "material-icons"
+                            ]
+                            [ text "close" ]
                         ]
                     ]
                 ]
             ]
-        , styled Html.div
-            []
+        , styled Html.h2
+            [ cs "mdc-typography--headline6"
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
+            ]
+            [ text "Resources"
+            ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-snackbar"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/snackbars/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-snackbar"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
             [ example []
                 [ styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
                 , FormField.view []
                     [ Checkbox.view (lift << Mdc)
-                        "snackbar-multiline-checkbox"
+                        "snackbar-stacked-checkbox"
                         model.mdc
-                        [ Options.onClick (lift ToggleMultiline)
-                        , Checkbox.checked model.multiline
+                        [ Options.onClick (lift ToggleStacked)
+                        , Checkbox.checked model.stacked
                         ]
                         []
-                    , Html.label [] [ text "Multiline" ]
-                    ]
-                , Html.br [] []
-                , FormField.view []
-                    [ Checkbox.view (lift << Mdc)
-                        "snackbar-toggle-action-on-bottom-checkbox"
-                        model.mdc
-                        [ Options.onClick (lift ToggleActionOnBottom)
-                        , when (not model.multiline)
-                            << Options.many
-                          <|
-                            [ Checkbox.checked model.actionOnBottom
-                            , Checkbox.disabled
-                            ]
-                        ]
-                        []
-                    , Html.label [] [ text "Action on Bottom" ]
+                    , Html.label [] [ text "Stacked" ]
                     ]
                 , Html.br [] []
                 , FormField.view []
@@ -183,20 +200,20 @@ view lift page model =
                     , Html.label [] [ text "Dismiss On Action" ]
                     ]
                 , Html.br [] []
-                , Textfield.view (lift << Mdc)
+                , TextField.view (lift << Mdc)
                     "snackbar-message-text-field"
                     model.mdc
-                    [ Textfield.value model.messageText
-                    , Textfield.label "Message Text"
+                    [ TextField.value model.messageText
+                    , TextField.label "Message Text"
                     , Options.on "input" (Json.map (lift << SetMessageText) Html.targetValue)
                     ]
                     []
                 , Html.br [] []
-                , Textfield.view (lift << Mdc)
+                , TextField.view (lift << Mdc)
                     "snackbar-action-text-field"
                     model.mdc
-                    [ Textfield.value model.actionText
-                    , Textfield.label "Action Text"
+                    [ TextField.value model.actionText
+                    , TextField.label "Action Text"
                     , Options.on "input" (Json.map (lift << SetActionText) Html.targetValue)
                     ]
                     []
@@ -212,53 +229,55 @@ view lift page model =
                     ]
                 , text " "
                 , Button.view (lift << Mdc)
-                    "snackbar-show-button-rtl"
+                    "snackbar-show-button-dismissible"
                     model.mdc
                     [ Button.raised
                     , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-default-snackbar-rtl")))
+                    , Options.on "click" (Json.succeed (lift (Show "snackbar-dismissible-snackbar")))
                     ]
-                    [ text "Show Rtl"
+                    [ text "Show dismissible"
                     ]
                 , text " "
                 , Button.view (lift << Mdc)
-                    "snackbar-show-start-aligned-button"
+                    "snackbar-show-button-leading"
                     model.mdc
                     [ Button.raised
                     , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-align-start-snackbar")))
+                    , Options.on "click" (Json.succeed (lift (Show "snackbar-leading-snackbar")))
                     ]
-                    [ text "Show Start Aligned"
+                    [ text "Show leading"
                     ]
                 , text " "
                 , Button.view (lift << Mdc)
-                    "snackbar-show-start-aligned-button-rtl"
+                    "snackbar-show-button-leading-rtl"
                     model.mdc
                     [ Button.raised
                     , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-align-start-snackbar-rtl")))
+                    , Options.on "click" (Json.succeed (lift (Show "snackbar-leading-snackbar-rtl")))
                     ]
-                    [ text "Show Start Aligned (Rtl)"
+                    [ text "Show leading rtl"
                     ]
                 , Snackbar.view (lift << Mdc) "snackbar-default-snackbar" model.mdc [] []
-                , Html.div
-                    [ Html.attribute "dir" "rtl"
-                    ]
-                    [ Snackbar.view (lift << Mdc) "snackbar-default-snackbar-rtl" model.mdc [] []
-                    ]
                 , Snackbar.view (lift << Mdc)
-                    "snackbar-align-start-snackbar"
+                    "snackbar-dismissible-snackbar"
                     model.mdc
-                    [ Snackbar.alignStart
+                    [ Snackbar.dismissible ]
+                    []
+                , Snackbar.view (lift << Mdc)
+                    "snackbar-leading-snackbar"
+                    model.mdc
+                    [ Snackbar.dismissible
+                    , Snackbar.leading
                     ]
                     []
                 , Html.div
                     [ Html.attribute "dir" "rtl"
                     ]
                     [ Snackbar.view (lift << Mdc)
-                        "snackbar-align-start-snackbar-rtl"
+                        "snackbar-leading-snackbar-rtl"
                         model.mdc
-                        [ Snackbar.alignStart
+                        [ Snackbar.dismissible
+                        , Snackbar.leading
                         ]
                         []
                     ]

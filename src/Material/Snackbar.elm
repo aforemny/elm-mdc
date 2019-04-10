@@ -1,7 +1,8 @@
 module Material.Snackbar exposing
     ( Property
     , view
-    , alignStart, alignEnd
+    , leading
+    , dismissible
     , Contents
     , add
     , toast
@@ -47,7 +48,8 @@ This would display a message without an action.
 
 @docs Property
 @docs view
-@docs alignStart, alignEnd
+@docs leading
+@docs dismissible
 
 
 ## Contents
@@ -90,8 +92,7 @@ type alias Contents m =
     , action : Maybe String
     , timeout : Float
     , fade : Float
-    , multiline : Bool
-    , actionOnBottom : Bool
+    , stacked : Bool
     , dismissOnAction : Bool
     , onDismiss : Maybe m
     }
@@ -125,23 +126,16 @@ add =
     Snackbar.add
 
 
-{-| Start-align the Snackbar.
-
-By default Snackbars are center aligned. This is only configurable on tablet
-and desktops creens.
-
+{-| Optional. The dismiss (“X”) icon.
 -}
-alignStart : Property m
-alignStart =
-    Snackbar.alignStart
+dismissible : Property m
+dismissible =
+    Snackbar.dismissible
 
 
-{-| End-align the Snackbar.
-
-By default Snackbars are center aligned. This is only configurable on tablet
-and desktops creens.
-
+{-| Optional. Positions the snackbar on the leading edge of the screen
+(left in LTR, right in RTL) instead of centered.
 -}
-alignEnd : Property m
-alignEnd =
-    Snackbar.alignEnd
+leading : Property m
+leading =
+    Snackbar.leading

@@ -27,7 +27,7 @@ Some things of note are:
     component messages to your top-level message type and appears throughout the
     library.
   - To distinguish components, ie. one button from another, this library uses a
-    list of integers as indices. Those indices must be unique within a
+    list of strings as indices. Those indices must be unique within a
     `Material.Model`, but you can have as many `Material.Model`s as you like.
 
 Have a look at the demo's source code for an example of how to structure large
@@ -44,7 +44,9 @@ resources:
 <script src="elm-mdc.js"></script>
 ```
 
-Set the `mdc-typography` class in the body:
+You can swap the Roboto font for any other.
+
+Set the `mdc-typography` class on the body or container of your application:
 
 ```html
 <body class="mdc-typography">
@@ -60,6 +62,7 @@ Set the `mdc-typography` class in the body:
 
 # Example
 
+    import Browser
     import Html exposing (Html, text)
     import Material
     import Material.Button as Button
@@ -84,7 +87,7 @@ Set the `mdc-typography` class in the body:
 
     main : Program Never Model Msg
     main =
-        Html.program
+        Browser.application
         { init = init
         , subscriptions = subscriptions
         , update = update
@@ -118,7 +121,6 @@ Set the `mdc-typography` class in the body:
 
     view : Model -> Html Msg
     view model =
-        Material.top <|
         Html.div []
             [
               Button.view Mdc "my-button" model.mdc
@@ -185,10 +187,10 @@ import Internal.Snackbar.Implementation as Snackbar
 import Internal.Snackbar.Model as Snackbar
 import Internal.Switch.Implementation as Switch
 import Internal.Switch.Model as Switch
-import Internal.Tabs.Implementation as Tabs
-import Internal.Tabs.Model as Tabs
-import Internal.Textfield.Implementation as Textfield
-import Internal.Textfield.Model as Textfield
+import Internal.TabBar.Implementation as TabBar
+import Internal.TabBar.Model as TabBar
+import Internal.TextField.Implementation as TextField
+import Internal.TextField.Model as TextField
 import Internal.Toolbar.Implementation as Toolbar
 import Internal.Toolbar.Model as Toolbar
 import Internal.TopAppBar.Implementation as TopAppBar
@@ -200,7 +202,7 @@ import Internal.TopAppBar.Model as TopAppBar
 This is a string and is expected to be globally unique within your program. It
 coincides with `Html.id`, and we may set it as `Html.id` on a component's
 native control (`<input>`) element, ie. Checkbox, Radio, Select, Switch, and
-Textfield.
+TextField.
 
 -}
 type alias Index =
@@ -233,8 +235,8 @@ type alias Model m =
     , slider : Indexed Slider.Model
     , snackbar : Indexed (Snackbar.Model m)
     , switch : Indexed Switch.Model
-    , tabs : Indexed Tabs.Model
-    , textfield : Indexed Textfield.Model
+    , tabbar : Indexed TabBar.Model
+    , textfield : Indexed TextField.Model
     , toolbar : Indexed Toolbar.Model
     , topAppBar : Indexed TopAppBar.Model
     }
@@ -265,7 +267,7 @@ defaultModel =
     , slider = Dict.empty
     , snackbar = Dict.empty
     , switch = Dict.empty
-    , tabs = Dict.empty
+    , tabbar = Dict.empty
     , textfield = Dict.empty
     , toolbar = Dict.empty
     , topAppBar = Dict.empty
@@ -357,11 +359,11 @@ update_ lift msg store =
         SwitchMsg idx msg_ ->
             Switch.react lift msg_ idx store
 
-        TabsMsg idx msg_ ->
-            Tabs.react lift msg_ idx store
+        TabBarMsg idx msg_ ->
+            TabBar.react lift msg_ idx store
 
-        TextfieldMsg idx msg_ ->
-            Textfield.react lift msg_ idx store
+        TextFieldMsg idx msg_ ->
+            TextField.react lift msg_ idx store
 
         ToolbarMsg idx msg_ ->
             Toolbar.react lift msg_ idx store

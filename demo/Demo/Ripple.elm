@@ -1,15 +1,14 @@
 module Demo.Ripple exposing (Model, Msg(..), defaultModel, update, view)
 
+import Demo.Helper.Hero as Hero
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Elevation as Elevation
 import Material.Options as Options exposing (cs, css, styled)
 import Material.Ripple as Ripple
-
-
-
--- MODEL
+import Material.Typography as Typography
 
 
 type alias Model m =
@@ -34,119 +33,88 @@ update lift msg model =
             Material.update (lift << Mdc) msg_ model
 
 
+demoBox : (Msg m -> m) -> Material.Index -> Model m -> String -> Html m
+demoBox lift index model label =
+    let
+        ripple =
+            Ripple.bounded (lift << Mdc) index model.mdc []
+    in
+    styled Html.div
+        [ cs "mdc-ripple-surface"
+        , css "display" "flex"
+        , css "align-items" "center"
+        , css "justify-content" "center"
+        , css "width" "200px"
+        , css "height" "100px"
+        , css "padding" "1rem"
+        , css "cursor" "pointer"
+        , css "user-select" "none"
+        , css "background-color" "#fff"
+        , css "overflow" "hidden"
+        , Elevation.z2
+        , Options.tabindex 0
+        , ripple.interactionHandler
+        , ripple.properties
+        ]
+        [ text label
+        , ripple.style
+        ]
 
--- VIEW
+
+demoIcon : (Msg m -> m) -> Material.Index -> Model m -> String -> Html m
+demoIcon lift index model icon =
+    let
+        ripple =
+            Ripple.unbounded (lift << Mdc) index model.mdc []
+    in
+    styled Html.div
+        [ cs "mdc-ripple-surface"
+        , cs "material-icons"
+        , css "width" "24px"
+        , css "height" "24px"
+        , css "padding" "12px"
+        , css "border-radius" "50%"
+        , ripple.interactionHandler
+        , ripple.properties
+        ]
+        [ text icon
+        , ripple.style
+        ]
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    let
-        demoSurface =
-            Options.many
-                [ cs "demo-surface"
-                , cs "mdc-ripple-surface"
-                , css "display" "flex"
-                , css "align-items" "center"
-                , css "justify-content" "center"
-                , css "width" "200px"
-                , css "height" "100px"
-                , css "padding" "1rem"
-                , css "cursor" "pointer"
-                , css "user-select" "none"
-                , css "-webkit-user-select" "none"
-                , cs "mdc-ripple-surface"
-                , Options.tabindex 0
-                ]
-
-        example options =
-            styled Html.section
-                (cs "example"
-                    :: css "display" "flex"
-                    :: css "flex-flow" "column"
-                    :: css "margin" "24px"
-                    :: css "padding" "24px"
-                    :: options
-                )
-    in
     page.body "Ripple"
-        [ Page.hero []
-            [ let
-                ripple =
-                    Ripple.bounded (lift << Mdc) "ripple-hero-ripple" model.mdc []
-              in
-              styled Html.div
-                [ css "width" "100%"
-                , css "height" "100%"
-                , cs "mdc-ripple-surface"
-                , ripple.interactionHandler
-                , ripple.properties
-                ]
-                [ ripple.style
-                ]
+        "Ripples are visual representations used to communicate the status of a component or interactive element."
+        [ Hero.view [] [ demoBox lift "ripple-hero-ripple" model "Click here!" ]
+        , styled Html.h2
+            [ Typography.headline6
+            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
             ]
-        , example []
-            [ Html.h2 [] [ text "Bounded" ]
-            , let
-                ripple =
-                    Ripple.bounded (lift << Mdc) "ripple-bounded-ripple" model.mdc []
-              in
-              styled Html.div
-                [ demoSurface
-                , Elevation.z2
-                , ripple.interactionHandler
-                , ripple.properties
-                ]
-                [ text "Interact with me!"
-                , ripple.style
-                ]
+            [ text "Resources"
             ]
-        , example []
-            [ Html.h2 [] [ text "Unbounded" ]
-            , let
-                ripple =
-                    Ripple.unbounded (lift << Mdc) "ripple-unbounded-ripple" model.mdc []
-              in
-              styled Html.div
-                [ cs "material-icons"
-                , css "width" "24px"
-                , css "height" "24px"
-                , css "padding" "12px"
-                , css "border-radius" "50%"
-                , demoSurface
-                , ripple.interactionHandler
-                , ripple.properties
-                ]
-                [ text "favorite"
-                , ripple.style
-                ]
-            ]
-        , example []
-            [ Html.h2 [] [ text "Theme Styles" ]
-            , let
-                ripple =
-                    Ripple.bounded (lift << Mdc) "ripple-primary-ripple" model.mdc [ Ripple.primary ]
-              in
-              styled Html.div
-                [ demoSurface
-                , Elevation.z2
-                , ripple.interactionHandler
-                , ripple.properties
-                ]
-                [ text "Primary"
-                , ripple.style
-                ]
-            , let
-                ripple =
-                    Ripple.bounded (lift << Mdc) "ripple-accent-ripple" model.mdc [ Ripple.accent ]
-              in
-              styled Html.div
-                [ demoSurface
-                , Elevation.z2
-                , ripple.interactionHandler
-                , ripple.properties
-                ]
-                [ text "Accent"
-                , ripple.style
-                ]
+        , ResourceLink.view
+            { link = "https://material.io/go/design-states"
+            , title = "Material Design Guidelines"
+            , icon = "images/material.svg"
+            , altText = "Material Design Guidelines icon"
+            }
+        , ResourceLink.view
+            { link = "https://material.io/components/web/catalog/ripples/"
+            , title = "Documentation"
+            , icon = "images/ic_drive_document_24px.svg"
+            , altText = "Documentation icon"
+            }
+        , ResourceLink.view
+            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-ripple"
+            , title = "Source Code (Material Components Web)"
+            , icon = "images/ic_code_24px.svg"
+            , altText = "Source Code"
+            }
+        , Page.demos
+            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Bounded Ripple" ]
+            , demoBox lift "ripple-bounded-ripple" model "Interact with me!"
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Unbounded Ripple" ]
+            , demoIcon lift "ripple-unbounded-ripple" model "favorite"
             ]
         ]
