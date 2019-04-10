@@ -18,6 +18,7 @@ used. It should be visible either persistently or only on focus.
 
     import Html exposing (text)
     import Material.TextField as TextField
+    import Material.TextField.HelperLine as TextField
     import Material.TextField.HelperText as TextField
 
 
@@ -26,12 +27,14 @@ used. It should be visible either persistently or only on focus.
               [ TextField.label "Email Adress"
               ]
               []
-        , TextField.helperText
-          [ TextField.persistent
-          , TextField.validationMsg
-          ]
-          [ text "Help Text (possibly validation message)"
-          ]
+        , TextField.helperLine []
+              [ TextField.helperText
+                  [ TextField.persistent
+                  , TextField.validationMsg
+                  ]
+                  [ text "Help Text (possibly validation message)"
+                  ]
+              ]
         ]
 
 
@@ -40,6 +43,7 @@ used. It should be visible either persistently or only on focus.
 @docs helperText
 @docs persistent
 @docs validationMsg
+
 
 -}
 

@@ -34,6 +34,8 @@
         "Material.Switch",
         "Material.TabBar",
         "Material.TextField",
+        "Material.TextField.CharacterCounter",
+        "Material.TextField.HelperLine",
         "Material.TextField.HelperText",
         "Material.Theme",
         "Material.Toolbar",

@@ -1,3 +1,10 @@
+## Upgrade to 0.44.1
+
+* Textfield
+  * Material.TextField.HelperText now needs to be wrapped in Material.TextField.HelperLine.
+  * Support for character counter via Material.TextField.CharacterCounter.
+
+
 ## Upgrade to 0.42
 
 * Textfield

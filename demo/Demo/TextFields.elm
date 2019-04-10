@@ -10,7 +10,9 @@ import Html.Events as Html
 import Material
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TextField as TextField
+import Material.TextField.HelperLine as TextField
 import Material.TextField.HelperText as TextField
+import Material.TextField.CharacterCounter as TextField
 import Material.Typography as Typography
 
 
@@ -99,9 +101,22 @@ textFieldContainer options =
 
 helperText : Html m
 helperText =
-    TextField.helperText
-        [ TextField.persistent ]
-        [ text "Helper Text"
+    TextField.helperLine []
+        [ TextField.helperText
+              [ TextField.persistent ]
+              [ text "Helper Text"
+              ]
+        ]
+
+
+helperTextWithCharacterCounter : Html m
+helperTextWithCharacterCounter =
+    TextField.helperLine []
+        [ TextField.helperText
+              [ TextField.persistent ]
+              [ text "Helper Text"
+              ]
+        , TextField.characterCounter [] [ text "0 / 18" ]
         ]
 
 
@@ -218,6 +233,28 @@ unlabeledTextFields lift model =
         ]
 
 
+characterCounterTextFields : (Msg m -> m) -> Model m -> Html m
+characterCounterTextFields lift model =
+    let
+        textField index options =
+            [ TextField.view (lift << Mdc)
+                index
+                model.mdc
+                options
+                []
+            , helperTextWithCharacterCounter
+            ]
+    in
+    textFieldRow []
+        [ textFieldContainer []
+            (textField "text-fields-unlabeled-1" [ ])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-2" [ TextField.outlined ])
+        , textFieldContainer []
+            (textField "text-fields-unlabeled-3" [ TextField.outlined, cs "demo-text-field-outlined-shaped" ])
+        ]
+
+
 fullwidthTextField : (Msg m -> m) -> Model m -> Html m
 fullwidthTextField lift model =
     textFieldContainer []
@@ -243,6 +280,21 @@ textareaTextField lift model =
             , TextField.outlined
             ]
             []
+        , helperText
+        ]
+
+
+textareaTextFieldWithCharacterCounter : (Msg m -> m) -> Model m -> Html m
+textareaTextFieldWithCharacterCounter lift model =
+    textFieldContainer []
+        [ TextField.view (lift << Mdc)
+            "text-fields-textarea-text-field"
+            model.mdc
+            [ TextField.label "Standard"
+            , TextField.textarea
+            , TextField.outlined
+            ]
+            [ TextField.characterCounter [] [ text "0 / 18" ] ]
         , helperText
         ]
 
@@ -314,8 +366,12 @@ view lift page model =
             , shapedOutlinedTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field without label" ]
             , unlabeledTextFields lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field with Character Counter" ]
+            , characterCounterTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea" ]
             , textareaTextField lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea with Character Counter" ]
+            , textareaTextFieldWithCharacterCounter lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width" ]
             , fullwidthTextField lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width Textarea" ]

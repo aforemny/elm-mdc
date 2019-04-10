@@ -225,7 +225,7 @@ update lift msg model =
 
 
 textField : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-textField domId lift model options _ =
+textField domId lift model options list =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -281,7 +281,7 @@ textField domId lift model options _ =
         , cs "mdc-text-field--with-trailing-icon" |> when (config.trailingIcon /= Nothing)
         ]
         []
-        [ leadingIcon_
+        ( list ++ [ leadingIcon_
         , Options.applyNativeControl summary
             (if config.textarea then
                 Html.textarea
@@ -380,7 +380,7 @@ textField domId lift model options _ =
 
           else
             text ""
-        ]
+        ] )
 
 
 iconView : (Msg -> m) -> Maybe String -> Maybe m -> Html m

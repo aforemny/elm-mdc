@@ -43,13 +43,10 @@ helperText options text =
             Options.collect defaultConfig options
     in
     styled Html.div
-        [ cs "mdc-text-field-helper-line" ]
-        [ styled Html.div
-            (cs "mdc-text-field-helper-text"
-                :: (cs "mdc-text-field-helper-text--persistent" |> when config.persistent)
-                :: (cs "mdc-text-field-helper-text--validation-msg" |> when config.validationMsg)
-                 :: (aria "hidden" "true")
-                :: options
-            )
-            text
-        ]
+        (cs "mdc-text-field-helper-text"
+            :: (cs "mdc-text-field-helper-text--persistent" |> when config.persistent)
+            :: (cs "mdc-text-field-helper-text--validation-msg" |> when config.validationMsg)
+             :: (aria "hidden" "true")
+            :: options
+        )
+        text
