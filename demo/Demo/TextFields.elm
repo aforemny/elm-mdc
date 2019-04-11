@@ -277,7 +277,6 @@ textareaTextField lift model =
             model.mdc
             [ TextField.label "Standard"
             , TextField.textarea
-            , TextField.outlined
             ]
             []
         , helperText
@@ -288,11 +287,10 @@ textareaTextFieldWithCharacterCounter : (Msg m -> m) -> Model m -> Html m
 textareaTextFieldWithCharacterCounter lift model =
     textFieldContainer []
         [ TextField.view (lift << Mdc)
-            "text-fields-textarea-text-field"
+            "text-fields-textarea-character-counter-text-field"
             model.mdc
             [ TextField.label "Standard"
             , TextField.textarea
-            , TextField.outlined
             ]
             [ TextField.characterCounter [] [ text "0 / 18" ] ]
         , helperText

@@ -1,3 +1,8 @@
+## Bug fixes since 1.1.1
+
+* Do not specify TextField.outlined for multiline text fields.
+
+
 ## Upgrade to 0.44.1
 
 * Textfield
