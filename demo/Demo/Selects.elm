@@ -97,13 +97,7 @@ shapedOutlinedSelect lift model =
         model.mdc
         [ Select.label "Fruit"
         , Select.outlined
-
-        -- TODO:
-        -- , Select.nativeControl
-        --     [ css "border-radius" "28px"
-        --     , css "padding-left" "32px"
-        --     , css "padding-right" "52px"
-        --     ]
+        , cs "demo-select-outline-shaped"
         ]
         items
 
