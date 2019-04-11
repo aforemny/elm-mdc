@@ -165,7 +165,7 @@ trailingIcon =
     TextField.trailingIcon
 
 
-{-| Style the textfield as an outlined textfield.
+{-| Style a single line textfield as an outlined textfield. Do not use for multine textfields.
 -}
 outlined : Property m
 outlined =

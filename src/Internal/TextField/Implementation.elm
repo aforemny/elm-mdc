@@ -276,7 +276,7 @@ textField domId lift model options list =
         , cs "mdc-text-field--fullwidth" |> when config.fullWidth
         , cs "mdc-text-field--invalid" |> when isInvalid
         , cs "mdc-text-field--textarea" |> when config.textarea
-        , cs "mdc-text-field--outlined" |> when config.outlined
+        , cs "mdc-text-field--outlined" |> when (config.outlined && not config.textarea)
         , cs "mdc-text-field--with-leading-icon" |> when (config.leadingIcon /= Nothing)
         , cs "mdc-text-field--with-trailing-icon" |> when (config.trailingIcon /= Nothing)
         ]
@@ -291,7 +291,7 @@ textField domId lift model options list =
             )
             [ cs "mdc-text-field__input"
             , Options.id config.id_
-            , if config.outlined then
+            , if config.outlined && not config.textarea then
                 Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
 
               else
@@ -349,7 +349,7 @@ textField domId lift model options list =
                     Html.cols (Maybe.withDefault 0 config.cols)
             ]
             []
-        , if not config.fullWidth && not config.outlined then
+        , if not config.fullWidth && not config.outlined && not config.textarea then
             htmlLabel
 
           else
@@ -364,7 +364,7 @@ textField domId lift model options list =
 
           else
             text ""
-        , if config.outlined then
+        , if config.outlined || config.textarea then
             styled Html.div
                 [ cs "mdc-notched-outline"
                 , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
