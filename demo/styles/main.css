@@ -32,6 +32,10 @@
   font-weight: 400;
 }
 
+
+/**
+ * Textfields demo.
+ */
 .demo-text-field-outlined-shaped .mdc-notched-outline .mdc-notched-outline__leading {
   /* @noflip */
   border-radius: 28px 0 0 28px;
@@ -43,6 +47,24 @@
 }
 
 .demo-text-field-outlined-shaped .mdc-notched-outline .mdc-notched-outline__trailing {
+  /* @noflip */
+  border-radius: 0 28px 28px 0;
+}
+
+
+/**
+ * Selects demo.
+ */
+.demo-select-outline-shaped .mdc-notched-outline .mdc-notched-outline__leading {
+  /* @noflip */
+  border-radius: 28px 0 0 28px;
+  width: 28px;
+}
+
+.demo-select-outline-shaped .mdc-notched-outline .mdc-notched-outline__notch {
+  max-width: calc(100% - 28px * 2);
+}
+.demo-select-outline-shaped .mdc-notched-outline .mdc-notched-outline__trailing {
   /* @noflip */
   border-radius: 0 28px 28px 0;
 }
