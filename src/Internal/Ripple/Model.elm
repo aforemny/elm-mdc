@@ -35,7 +35,7 @@ cssClasses :
     }
 cssClasses =
     { root = "mdc-ripple-upgraded"
-    , unbounded = "mdc-rippe-upgraded--unbounded"
+    , unbounded = "mdc-ripple-upgraded--unbounded"
     , bgFocused = "mdc-ripple-upgraded--background-focused"
     , fgActivation = "mdc-ripple-upgraded--foreground-activation"
     , fgDeactivation = "mdc-ripple-upgraded--foreground-deactivation"
