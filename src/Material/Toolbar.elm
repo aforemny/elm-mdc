@@ -88,7 +88,7 @@ import Internal.Component exposing (Index)
 import Internal.Toolbar.Implementation as Toolbar
 import Material
 import Material.Icon as Icon
-import Material.IconToggle as IconToggle
+import Material.IconButton as IconButton
 import Material.Options as Options
 
 
@@ -232,10 +232,10 @@ icon =
 
 {-| Style an icon toggle as an icon at the end of the toolbar.
 
-Should be applied to a `IconToggle.view`.
+Should be applied to a `IconButton.view`.
 
 -}
-iconToggle : IconToggle.Property m
+iconToggle : IconButton.Property m
 iconToggle =
     Toolbar.iconToggle
 

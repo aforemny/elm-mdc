@@ -19,7 +19,7 @@
         "Material.FormField",
         "Material.GridList",
         "Material.Icon",
-        "Material.IconToggle",
+        "Material.IconButton",
         "Material.ImageList",
         "Material.LayoutGrid",
         "Material.LinearProgress",

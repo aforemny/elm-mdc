@@ -18,7 +18,7 @@ module Internal.Card.Implementation exposing
 
 import Html exposing (Html, text)
 import Internal.Button.Implementation as Button
-import Internal.IconToggle.Implementation as IconToggle
+import Internal.IconButton.Implementation as IconButton
 import Internal.Options as Options exposing (cs, css, styled)
 
 
@@ -100,6 +100,6 @@ actionButton =
     cs "mdc-card__action mdc-card__action-button"
 
 
-actionIcon : IconToggle.Property m
+actionIcon : IconButton.Property m
 actionIcon =
     cs "mdc-card__action mdc-card__action-icon"

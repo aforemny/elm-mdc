@@ -1,4 +1,4 @@
-module Internal.IconToggle.Model exposing
+module Internal.IconButton.Model exposing
     ( Model
     , Msg(..)
     , defaultModel

@@ -170,8 +170,8 @@ import Internal.Fab.Implementation as Fab
 import Internal.Fab.Model as Fab
 import Internal.GridList.Implementation as GridList
 import Internal.GridList.Model as GridList
-import Internal.IconToggle.Implementation as IconToggle
-import Internal.IconToggle.Model as IconToggle
+import Internal.IconButton.Implementation as IconButton
+import Internal.IconButton.Model as IconButton
 import Internal.Menu.Implementation as Menu
 import Internal.Menu.Model as Menu
 import Internal.Msg exposing (Msg(..))
@@ -227,7 +227,7 @@ type alias Model m =
     , drawer : Indexed Drawer.Model
     , fab : Indexed Fab.Model
     , gridList : Indexed GridList.Model
-    , iconToggle : Indexed IconToggle.Model
+    , iconButton : Indexed IconButton.Model
     , menu : Indexed Menu.Model
     , radio : Indexed RadioButton.Model
     , ripple : Indexed Ripple.Model
@@ -259,7 +259,7 @@ defaultModel =
     , drawer = Dict.empty
     , fab = Dict.empty
     , gridList = Dict.empty
-    , iconToggle = Dict.empty
+    , iconButton = Dict.empty
     , menu = Dict.empty
     , radio = Dict.empty
     , ripple = Dict.empty
@@ -335,8 +335,8 @@ update_ lift msg store =
         GridListMsg idx msg_ ->
             GridList.react lift msg_ idx store
 
-        IconToggleMsg idx msg_ ->
-            IconToggle.react lift msg_ idx store
+        IconButtonMsg idx msg_ ->
+            IconButton.react lift msg_ idx store
 
         MenuMsg idx msg_ ->
             Menu.react lift msg_ idx store

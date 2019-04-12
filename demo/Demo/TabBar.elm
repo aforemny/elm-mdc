@@ -9,7 +9,6 @@ import Material
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TabBar as TabBar
 import Material.Theme as Theme
-import Material.Toolbar as Toolbar
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 

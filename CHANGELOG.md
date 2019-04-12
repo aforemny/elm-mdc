@@ -1,6 +1,9 @@
-## Bug fixes since 1.1.1
+## Bug fixes since 1.1.1 release
+
+Stuff missed before I did the 1.1.1 release.
 
 * Do not specify TextField.outlined for multiline text fields.
+* The icon toggle class has been removed, use IconButton instead.
 
 
 ## Upgrade to 0.44.1
