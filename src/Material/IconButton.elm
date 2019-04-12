@@ -45,6 +45,7 @@ module Material.IconButton exposing
 @docs view
 @docs on
 @docs icon, icon1
+@docs iconElement, onIconElement
 @docs label, label1
 @docs disabled
 @docs className
