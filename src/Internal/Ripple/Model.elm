@@ -114,6 +114,7 @@ type alias Model =
     { focused : Bool
     , animationState : AnimationState
     , animationCounter : Int
+    , clientRect : Maybe ClientRect
     }
 
 
@@ -141,6 +142,7 @@ defaultModel =
     { focused = False
     , animationState = Idle
     , animationCounter = 0
+    , clientRect = Nothing -- Only available after first render
     }
 
 
@@ -153,6 +155,7 @@ type Msg
     | ActivationEnded Int
     | Deactivate
     | DeactivationEnded Int
+    | SetCssVariables Bool ClientRect
 
 
 type alias ActivateData =
