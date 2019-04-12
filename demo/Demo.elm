@@ -12,7 +12,7 @@ import Demo.Drawer
 import Demo.Elevation
 import Demo.Fabs
 import Demo.GridList
-import Demo.IconToggle
+import Demo.IconButton
 import Demo.ImageList
 import Demo.LayoutGrid
 import Demo.LinearProgress
@@ -58,7 +58,7 @@ type alias Model =
     , elevation : Demo.Elevation.Model Msg
     , fabs : Demo.Fabs.Model Msg
     , gridList : Demo.GridList.Model Msg
-    , iconToggle : Demo.IconToggle.Model Msg
+    , iconToggle : Demo.IconButton.Model Msg
     , imageList : Demo.ImageList.Model Msg
     , layoutGrid : Demo.LayoutGrid.Model Msg
     , lists : Demo.Lists.Model Msg
@@ -94,7 +94,7 @@ defaultModel key =
     , elevation = Demo.Elevation.defaultModel
     , fabs = Demo.Fabs.defaultModel
     , gridList = Demo.GridList.defaultModel
-    , iconToggle = Demo.IconToggle.defaultModel
+    , iconToggle = Demo.IconButton.defaultModel
     , imageList = Demo.ImageList.defaultModel
     , layoutGrid = Demo.LayoutGrid.defaultModel
     , lists = Demo.Lists.defaultModel
@@ -133,7 +133,7 @@ type Msg
     | ElevationMsg (Demo.Elevation.Msg Msg)
     | FabsMsg (Demo.Fabs.Msg Msg)
     | GridListMsg (Demo.GridList.Msg Msg)
-    | IconToggleMsg (Demo.IconToggle.Msg Msg)
+    | IconButtonMsg (Demo.IconButton.Msg Msg)
     | ImageListMsg (Demo.ImageList.Msg Msg)
     | LayoutGridMsg (Demo.LayoutGrid.Msg Msg)
     | ListsMsg (Demo.Lists.Msg Msg)
@@ -260,10 +260,10 @@ update msg model =
             in
             ( { model | fabs = fabs }, effects )
 
-        IconToggleMsg msg_ ->
+        IconButtonMsg msg_ ->
             let
                 ( iconToggle, effects ) =
-                    Demo.IconToggle.update IconToggleMsg msg_ model.iconToggle
+                    Demo.IconButton.update IconButtonMsg msg_ model.iconToggle
             in
             ( { model | iconToggle = iconToggle }, effects )
 
@@ -465,8 +465,8 @@ view_ model =
         Demo.Url.Fabs ->
             Demo.Fabs.view FabsMsg page model.fabs
 
-        Demo.Url.IconToggle ->
-            Demo.IconToggle.view IconToggleMsg page model.iconToggle
+        Demo.Url.IconButton ->
+            Demo.IconButton.view IconButtonMsg page model.iconToggle
 
         Demo.Url.ImageList ->
             Demo.ImageList.view ImageListMsg page model.imageList

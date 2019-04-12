@@ -14,6 +14,7 @@ import Char
 import DOM
 import Html exposing (Html, text)
 import Html.Attributes as Html
+import Internal.GlobalEvents as GlobalEvents
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Helpers as Helpers
 import Internal.Msg
@@ -177,6 +178,7 @@ view isUnbounded domId lift model options =
 
         noStyle =
             Html.node "style" [ Html.type_ "text/css" ] []
+
     in
     case model.animationState of
         Idle ->
@@ -187,11 +189,42 @@ view isUnbounded domId lift model options =
                         , activateHandler
                         ]
 
+                cssVars =
+                    case model.clientRect of
+                        Just clientRect ->
+                            let
+                                { fgScale, initialSize } =
+                                    layoutInternal isUnbounded clientRect
+                            in
+                            cssVariables isUnbounded
+                                { fgScale = fgScale
+                                , translateStart = "0px"
+                                , translateEnd = "0px"
+                                , initialSize = initialSize
+                                , frame = clientRect
+                                }
+                        Nothing ->
+                            { className = "", text = "" }
+
                 properties =
-                    baseProperties
+                    if isUnbounded then
+                        Options.many
+                            [ baseProperties
+                            , cs cssVars.className
+                            , when (model.clientRect == Nothing) <|
+                                GlobalEvents.onTick <|
+                                    Decode.map (lift << SetCssVariables isUnbounded) <|
+                                        decodeClientRect
+                            ]
+                    else
+                        baseProperties
 
                 style =
-                    noStyle
+                    if cssVars.text /= "" then
+                        Html.node "style" [ Html.type_ "text/css" ] [ text cssVars.text ]
+                    else
+                        noStyle
+
             in
             { interactionHandler = interactionHandler
             , properties = properties
@@ -209,8 +242,7 @@ view isUnbounded domId lift model options =
 
                 cssVars =
                     cssVariables isUnbounded
-                        { fgSize = String.fromFloat activatedData.initialSize ++ "px"
-                        , fgScale = activatedData.fgScale
+                        { fgScale = activatedData.fgScale
                         , translateStart = activatedData.translateStart
                         , translateEnd = activatedData.translateEnd
                         , initialSize = activatedData.initialSize
@@ -250,8 +282,7 @@ view isUnbounded domId lift model options =
 
                 cssVars =
                     cssVariables isUnbounded
-                        { fgSize = String.fromFloat activatedData.initialSize ++ "px"
-                        , fgScale = activatedData.fgScale
+                        { fgScale = activatedData.fgScale
                         , translateStart = activatedData.translateStart
                         , translateEnd = activatedData.translateEnd
                         , initialSize = activatedData.initialSize
@@ -270,8 +301,7 @@ view isUnbounded domId lift model options =
 cssVariables :
     Bool
     ->
-        { fgSize : String
-        , fgScale : Float
+        { fgScale : Float
         , translateStart : String
         , translateEnd : String
         , initialSize : Float
@@ -281,28 +311,32 @@ cssVariables :
         { className : String
         , text : String
         }
-cssVariables isUnbounded { fgSize, fgScale, translateStart, translateEnd, initialSize, frame } =
+cssVariables isUnbounded { fgScale, translateStart, translateEnd, initialSize, frame } =
     let
+        fgSize = String.fromFloat initialSize ++ "px"
+
+        unboundedCoords =
+            if isUnbounded then
+                { left = toFloat (round ((frame.width - initialSize) / 2))
+                , top = toFloat (round ((frame.height - initialSize) / 2))
+                }
+
+            else
+                { top = 0, left = 0 }
+
         className =
             (++) "mdc-ripple--" <|
                 MD5.hex <|
                     String.concat <|
-                        [ fgSize
+                        [ String.fromFloat frame.left
+                        , String.fromFloat frame.top
+                        , String.fromFloat initialSize
                         , String.fromFloat fgScale
                         , String.fromFloat unboundedCoords.top
                         , String.fromFloat unboundedCoords.left
                         , translateStart
                         , translateEnd
                         ]
-
-        unboundedCoords =
-            if isUnbounded then
-                { top = toFloat (round ((frame.height - initialSize) / 2))
-                , left = toFloat (round ((frame.width - initialSize) / 2))
-                }
-
-            else
-                { top = 0, left = 0 }
 
         text =
             (\someString -> "." ++ className ++ "{" ++ someString ++ "}") <|
@@ -414,6 +448,9 @@ update msg model =
         ( Blur, _ ) ->
             ( { model | focused = False }, Cmd.none )
 
+        ( SetCssVariables isUnbounded clientRect, _ ) ->
+            ( { model | clientRect = Just clientRect }, Cmd.none )
+
         ( Activate0 domId activateData, Idle ) ->
             ( model
             , Task.attempt (Activate activateData) (Browser.Dom.getElement domId)
@@ -467,6 +504,7 @@ update msg model =
             ( { model
                 | animationState = Activated activatedData
                 , animationCounter = newAnimationCounter
+                -- , clientRect = Just activatedData.frame
               }
             , Task.perform (\_ -> ActivationEnded newAnimationCounter)
                 (Process.sleep numbers.deactivationTimeoutMs)
@@ -710,3 +748,8 @@ normalizedEventCoords event pageOffset clientRect =
     { x = pageX - documentX
     , y = pageY - documentY
     }
+
+
+decodeClientRect : Decoder ClientRect
+decodeClientRect =
+    DOM.target <| Decode.map4 ClientRect DOM.offsetTop DOM.offsetLeft DOM.offsetWidth DOM.offsetHeight

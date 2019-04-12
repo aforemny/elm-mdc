@@ -11,7 +11,7 @@ import Material.Card as Card
 import Material.Checkbox as Checkbox
 import Material.FormField as FormField
 import Material.Icon as Icon
-import Material.IconToggle as IconToggle
+import Material.IconButton as IconButton
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.Ripple as Ripple
 import Material.Theme as Theme
@@ -107,34 +107,34 @@ cardActions lift index model =
                 ]
             ]
         , Card.actionIcons []
-            [ IconToggle.view (lift << Mdc)
+            [ IconButton.view (lift << Mdc)
                 (index ++ "-action-icon-favorite")
                 model.mdc
                 [ Card.actionIcon
-                , IconToggle.icon
+                , IconButton.icon
                     { on = "favorite"
                     , off = "favorite_border"
                     }
-                , IconToggle.label
+                , IconButton.label
                     { on = "Remove from favorites"
                     , off = "Add to favorites"
                     }
                 ]
                 []
-            , IconToggle.view (lift << Mdc)
+            , IconButton.view (lift << Mdc)
                 (index ++ "-action-icon-share")
                 model.mdc
                 [ Card.actionIcon
-                , IconToggle.icon { on = "share", off = "share" }
-                , IconToggle.label { on = "Share", off = "Share" }
+                , IconButton.icon { on = "share", off = "share" }
+                , IconButton.label { on = "Share", off = "Share" }
                 ]
                 []
-            , IconToggle.view (lift << Mdc)
+            , IconButton.view (lift << Mdc)
                 (index ++ "-action-icon-more-options")
                 model.mdc
                 [ Card.actionIcon
-                , IconToggle.icon { on = "more_vert", off = "more_vert" }
-                , IconToggle.label { on = "More options", off = "More options" }
+                , IconButton.icon { on = "more_vert", off = "more_vert" }
+                , IconButton.label { on = "More options", off = "More options" }
                 ]
                 []
             ]

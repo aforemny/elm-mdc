@@ -30,7 +30,7 @@ module Material.Card exposing
     import Html exposing (text)
     import Material.Button as Button
     import Material.Card as Card
-    import Material.IconToggle as IconToggle
+    import Material.IconButton as IconButton
     import Material.Options as Options exposing (styled, css)
     import Material.Typography as Typography
 
@@ -78,13 +78,13 @@ module Material.Card exposing
                           ]
                     ]
               , Card.actionIcons []
-                    [ IconToggle.view Mdc "my-favorite-action" model.mdc
+                    [ IconButton.view Mdc "my-favorite-action" model.mdc
                           [ Card.actionIcon
-                          , IconToggle.icon
+                          , IconButton.icon
                             { on = "favorite"
                             , off = "favorite_border"
                             }
-                          , IconToggle.label
+                          , IconButton.label
                             { on = "Remove from favorites"
                             , off = "Add to favorites"
                             }
@@ -129,7 +129,7 @@ module Material.Card exposing
 import Html exposing (Html)
 import Internal.Card.Implementation as Card
 import Material.Button as Button
-import Material.IconToggle as IconToggle
+import Material.IconButton as IconButton
 
 
 {-| Card property.
@@ -242,6 +242,6 @@ actionButton =
 
 {-| An action icon with text.
 -}
-actionIcon : IconToggle.Property m
+actionIcon : IconButton.Property m
 actionIcon =
     Card.actionIcon

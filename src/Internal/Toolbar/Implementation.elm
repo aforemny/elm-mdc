@@ -27,7 +27,7 @@ import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Icon.Implementation as Icon
-import Internal.IconToggle.Implementation as IconToggle
+import Internal.IconButton.Implementation as IconButton
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, nop, styled, when)
 import Internal.Toolbar.Model exposing (Calculations, Config, Geometry, Model, Msg(..), defaultCalculations, defaultConfig, defaultModel)
@@ -614,7 +614,7 @@ icon =
     cs "mdc-toolbar__icon"
 
 
-iconToggle : IconToggle.Property m
+iconToggle : IconButton.Property m
 iconToggle =
     cs "mdc-toolbar__icon"
 

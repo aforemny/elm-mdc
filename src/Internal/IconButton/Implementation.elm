@@ -1,19 +1,22 @@
-module Internal.IconToggle.Implementation exposing
+module Internal.IconButton.Implementation exposing
     ( Property
     , className
     , disabled
     , icon
     , icon1
+    , iconElement
     , label
     , label1
     , on
+    , onIconElement
     , react
     , view
     )
 
 import Html exposing (Html, text)
+import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
-import Internal.IconToggle.Model exposing (Model, Msg(..), defaultModel)
+import Internal.IconButton.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
@@ -33,8 +36,9 @@ update msg model =
 type alias Config =
     { on : Bool
     , label : { on : String, off : String }
+    , disabled : Bool
     , icon : { on : String, off : String }
-    , inner : Maybe String
+    , alternativeIconLibrary : Maybe String
     }
 
 
@@ -42,8 +46,9 @@ defaultConfig : Config
 defaultConfig =
     { on = False
     , label = { on = "", off = "" }
+    , disabled = False
     , icon = { on = "", off = "" }
-    , inner = Nothing
+    , alternativeIconLibrary = Nothing
     }
 
 
@@ -58,7 +63,7 @@ on =
 
 className : String -> Property m
 className value =
-    Options.option (\config -> { config | inner = Just value })
+    Options.option (\config -> { config | alternativeIconLibrary = Just value })
 
 
 icon : { on : String, off : String } -> Property m
@@ -83,71 +88,94 @@ label1 value =
 
 disabled : Property m
 disabled =
-    cs "mdc-icon-toggle--disabled"
+    Options.option (\config -> { config | disabled = True })
 
 
-iconToggle : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-iconToggle domId lift model options _ =
+iconElement : Property m
+iconElement =
+    cs "mdc-icon-button__icon"
+
+
+onIconElement : Property m
+onIconElement =
+    cs "mdc-icon-button__icon--on"
+
+
+iconButton : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+iconButton domId lift model options list =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
         ripple =
             Ripple.view True domId (lift << RippleMsg) model.ripple []
+
+        isToggle = config.icon.on /= config.icon.off
+
+        icons =
+            [ styled Html.i
+                  [ iconElement
+                  , cs "material-icons"
+                  , onIconElement ]
+                  [ text config.icon.on ]
+            , styled Html.i
+                  [ iconElement
+                  , cs "material-icons" ]
+                  [ text config.icon.off ]
+            , ripple.style
+            ]
     in
     Options.apply summary
-        (if config.inner == Nothing then
-            Html.i
-
-         else
-            Html.span
-        )
-        [ cs "mdc-icon-toggle"
-        , when (config.inner == Nothing) (cs "material-icons")
+        Html.button
+        [ cs "mdc-icon-button"
+        , cs "material-icons" |> when (config.alternativeIconLibrary == Nothing)
+        , cs "mdc-icon-button--on" |> when config.on
         , Options.aria "label"
             (if config.on then
                 config.label.on
-
              else
                 config.label.off
             )
+        , Options.aria "hidden" "True" |> when isToggle
+        , Options.aria "pressed" "True" |> when ( isToggle && config.on )
+        , Options.aria "pressed" "False" |> when ( isToggle && not config.on )
+        , Options.attribute (Html.disabled True) |> when config.disabled
         , Options.many
             [ ripple.interactionHandler
             , ripple.properties
             ]
         ]
         []
-        [ if config.inner /= Nothing then
-            styled Html.i
-                [ cs (Maybe.withDefault "material-icons" config.inner)
+        ( list
+          ++ if config.alternativeIconLibrary /= Nothing then
+            [ styled Html.i
+                [ cs (Maybe.withDefault "material-icons" config.alternativeIconLibrary)
                 , if config.on then
                     cs config.icon.on
-
                   else
                     cs config.icon.off
                 ]
                 []
-
+            , ripple.style
+            ]
           else
-            text
-                (if config.on then
-                    config.icon.on
-
-                 else
-                    config.icon.off
-                )
-        , ripple.style
-        ]
+              if config.icon.on == config.icon.off then
+                  [ text config.icon.on
+                  , ripple.style
+                  ]
+              else
+                  icons
+        )
 
 
 type alias Store s =
     { s
-        | iconToggle : Indexed Model
+        | iconButton : Indexed Model
     }
 
 
 getSet =
-    Component.indexed .iconToggle (\x y -> { y | iconToggle = x }) defaultModel
+    Component.indexed .iconButton (\x y -> { y | iconButton = x }) defaultModel
 
 
 react :
@@ -157,7 +185,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react getSet.get getSet.set Internal.Msg.IconToggleMsg (Component.generalise update)
+    Component.react getSet.get getSet.set Internal.Msg.IconButtonMsg (Component.generalise update)
 
 
 view :
@@ -169,4 +197,4 @@ view :
     -> Html m
 view =
     \lift index ->
-        Component.render getSet.get (iconToggle index) Internal.Msg.IconToggleMsg lift index
+        Component.render getSet.get (iconButton index) Internal.Msg.IconButtonMsg lift index

@@ -24,7 +24,7 @@ type Url
     | Elevation
     | Fabs
     | GridList
-    | IconToggle
+    | IconButton
     | ImageList
     | LayoutGrid
     | LinearProgress
@@ -156,8 +156,8 @@ toString url =
         GridList ->
             "#grid-list"
 
-        IconToggle ->
-            "#icon-toggle"
+        IconButton ->
+            "#icon-button"
 
         ImageList ->
             "#image-list"
@@ -261,8 +261,8 @@ fromString url =
         "grid-list" ->
             GridList
 
-        "icon-toggle" ->
-            IconToggle
+        "icon-button" ->
+            IconButton
 
         "image-list" ->
             ImageList
