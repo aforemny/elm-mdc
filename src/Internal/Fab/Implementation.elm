@@ -87,11 +87,6 @@ fab domId lift model options icon =
                     [ text icon
                     ]
               ]
-            , if config.ripple then
-                [ rippleInterface.style ]
-
-              else
-                []
             ]
         )
 

@@ -136,7 +136,6 @@ button domId lift model options nodes =
         [ cs "mdc-button"
         , cs "mdc-js-button"
         , cs "mdc-js-ripple-effect" |> when summary.config.ripple
-        , css "box-sizing" "border-box"
         , Options.attribute (Html.href (Maybe.withDefault "" config.link))
             |> when ((config.link /= Nothing) && not config.disabled)
         , Options.attribute (Html.disabled True)
@@ -160,8 +159,6 @@ button domId lift model options nodes =
                     (\icon_ -> [ Icon.view [ cs "mdc-button__icon" ] icon_ ])
                 |> Maybe.withDefault []
             , nodes
-            , [ rippleInterface.style
-              ]
             ]
         )
 

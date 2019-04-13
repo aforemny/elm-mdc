@@ -541,7 +541,6 @@ tabView domId lift model options index tab_ =
             , ripple.properties
             ]
             []
-        , ripple.style
         ]
 
 

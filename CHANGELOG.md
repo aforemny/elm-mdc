@@ -1,5 +1,15 @@
 ## Bug fixes since 1.1.1 release
 
+Implementation changes:
+
+* Ripple code has been improved to emit CSS variables as inline
+  styles. There's a bug in Elm that makes this hard, but our
+  workaround does not seem to have drawbacks.
+  There's a pull request to fix this bug: https://github.com/elm/virtual-dom/pull/127
+  You no longer have to use the returned style property, although this
+  has been left in the interface so you can update existing code at your leasure.
+
+
 Stuff missed before I did the 1.1.1 release.
 
 * Do not specify TextField.outlined for multiline text fields.
@@ -8,20 +18,20 @@ Stuff missed before I did the 1.1.1 release.
 
 ## Upgrade to 0.44.1
 
-* Textfield
+* Textfield:
   * Material.TextField.HelperText now needs to be wrapped in Material.TextField.HelperLine.
   * Support for character counter via Material.TextField.CharacterCounter.
 
 
 ## Upgrade to 0.42
 
-* Textfield
+* Textfield:
   * Box option is now the default, option removed.
   * Remove dense option already, will be removed soon.
   * unClickable option is removed. Set onLeadingIconClick and
     onTrailingIconClick to indicate actions for any icons.
 
-* Dialog
+* Dialog:
   * Surface div is gone. Put header, content and actions directly as children from dialog.
   * Dialog.body is now Dialog.content
   * Dialog.footer is now Dialog.actions.
