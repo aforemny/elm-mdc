@@ -45,7 +45,7 @@ cardMedia : Html m
 cardMedia =
     Card.media
         [ Card.aspect16To9
-        , Card.backgroundImage "images/16-9.jpg"
+        , Card.backgroundImage "images/2.jpg"
         ]
         []
 
