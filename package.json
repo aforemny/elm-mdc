@@ -8,8 +8,8 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "material-components-web": "^1.1.1",
-    "webpack": "^4.28.3",
-    "webpack-cli": "^3.1.2"
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.0"
   },
   "engines": {
     "node": ">= 4"
@@ -20,6 +20,6 @@
   "dependencies": {
     "babel-core": "^6.26.3",
     "custom-event": "^1.0.1",
-    "focus-trap": "^4.0.1"
+    "focus-trap": "^4.0.2"
   }
 }
