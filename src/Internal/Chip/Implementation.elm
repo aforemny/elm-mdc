@@ -193,7 +193,7 @@ chip domId lift model options nodes =
                             [ path
                                 [ Svg.class "mdc-chip__checkmark-path"
                                 , Svg.fill "none"
-                                , Svg.stroke "white"
+                                , Svg.stroke "black"
                                 , Svg.d "M1.73,12.91 8.1,19.28 22.79,4.59"
                                 ]
                                 []
