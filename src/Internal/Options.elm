@@ -158,14 +158,28 @@ addAttributes : Summary c m -> List (Attribute m) -> List (Attribute m)
 addAttributes summary attrs =
     {- Ordering here is important: First apply summary attributes. That way,
        internal classes and attributes override those provided by the user.
-    -}
-    summary.attrs
-        ++ List.map (\( key, value ) -> Html.Attributes.style key value) summary.css
-        ++ List.map Html.Attributes.class summary.classes
-        ++ attrs
-        ++ summary.internal
-        ++ Dispatch.toAttributes summary.dispatch
 
+       We use Html.Attributes.attribute "style" to inject CSS
+       variables. Elm has easily fixed bug where these get removed if
+       you use Html.Attributes.style. Hopefully Evan will fix this one
+       day: https://github.com/elm/virtual-dom/pull/127/files
+    -}
+    let
+        styleText = String.join "; " ( List.map (\( key, value ) -> String.join ": " [ key, value ] ) summary.css )
+        style =
+            if styleText /= "" then
+                [ Html.Attributes.attribute "style" styleText ]
+            else
+                []
+        all =
+            summary.attrs
+            ++ style
+            ++ List.map Html.Attributes.class summary.classes
+            ++ attrs
+            ++ summary.internal
+            ++ Dispatch.toAttributes summary.dispatch
+    in
+        all
 
 option : (c -> c) -> Property c m
 option =

@@ -16,9 +16,6 @@ The view functions `unbounded` and `bounded` return a record with fields
     interacted with,
   - `properties` that applies the ripple effect to the HTML element. This is
     usually the same as the one `interactionHandler` is applied to, and
-  - `style` which is a HTML `<style>` element which has to be added to the DOM.
-    It is recommended to make this a child of the element that is interacted
-    with.
 
 
 # Resources
@@ -49,7 +46,6 @@ The view functions `unbounded` and `bounded` return a record with fields
         , properties
         ]
         [ text "Interact with me!"
-        , style
         ]
 
 
@@ -88,6 +84,8 @@ type alias Property m =
 
 
 {-| Bounded view function.
+
+The style property is obsolete, you do not need to use it anymore.
 -}
 bounded :
     (Material.Msg m -> m)
@@ -104,6 +102,8 @@ bounded =
 
 
 {-| Unbounded view function.
+
+The style property is obsolete, you do not need to use it anymore.
 -}
 unbounded :
     (Material.Msg m -> m)

@@ -216,8 +216,6 @@ chip domId lift model options nodes =
                         ]
                     )
                 |> Maybe.withDefault []
-            , [ ripple.style
-              ]
             ]
         )
 

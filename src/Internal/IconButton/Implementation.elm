@@ -122,7 +122,6 @@ iconButton domId lift model options list =
                   [ iconElement
                   , cs "material-icons" ]
                   [ text config.icon.off ]
-            , ripple.style
             ]
     in
     Options.apply summary
@@ -156,12 +155,10 @@ iconButton domId lift model options list =
                     cs config.icon.off
                 ]
                 []
-            , ripple.style
             ]
           else
               if config.icon.on == config.icon.off then
                   [ text config.icon.on
-                  , ripple.style
                   ]
               else
                   icons

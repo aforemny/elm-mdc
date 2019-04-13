@@ -159,8 +159,6 @@ button domId lift model options nodes =
                     (\icon_ -> [ Icon.view [ cs "mdc-button__icon" ] icon_ ])
                 |> Maybe.withDefault []
             , nodes
-            , [ rippleInterface.style
-              ]
             ]
         )
 

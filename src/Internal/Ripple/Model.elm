@@ -129,7 +129,7 @@ type alias ActivatedData =
     , wasElementMadeActive : Bool
     , activationEvent : Maybe Event
     , fgScale : Float
-    , initialSize : Float
+    , initialSize : Int
     , translateStart : String
     , translateEnd : String
     , activationHasEnded : Bool

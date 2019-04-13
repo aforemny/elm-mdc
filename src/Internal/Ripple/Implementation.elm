@@ -176,8 +176,7 @@ view isUnbounded domId lift model options =
                     Options.nop
                 ]
 
-        noStyle =
-            Html.node "style" [ Html.type_ "text/css" ] []
+        noStyle = text ""
 
     in
     case model.animationState of
@@ -196,39 +195,30 @@ view isUnbounded domId lift model options =
                                 { fgScale, initialSize } =
                                     layoutInternal isUnbounded clientRect
                             in
-                            cssVariables isUnbounded
-                                { fgScale = fgScale
-                                , translateStart = "0px"
-                                , translateEnd = "0px"
-                                , initialSize = initialSize
-                                , frame = clientRect
-                                }
+                                cssVariables isUnbounded
+                                    { fgScale = fgScale
+                                    , translateStart = "0px"
+                                    , translateEnd = "0px"
+                                    , initialSize = initialSize
+                                    , frame = clientRect
+                                    }
                         Nothing ->
-                            { className = "", text = "" }
+                            []
 
                 properties =
-                    if isUnbounded then
-                        Options.many
-                            [ baseProperties
-                            , cs cssVars.className
-                            , when (model.clientRect == Nothing) <|
-                                GlobalEvents.onTick <|
-                                    Decode.map (lift << SetCssVariables isUnbounded) <|
-                                        decodeClientRect
-                            ]
-                    else
-                        baseProperties
-
-                style =
-                    if cssVars.text /= "" then
-                        Html.node "style" [ Html.type_ "text/css" ] [ text cssVars.text ]
-                    else
-                        noStyle
+                    Options.many
+                        [ baseProperties
+                        , Options.many cssVars
+                        , when (model.clientRect == Nothing) <|
+                            GlobalEvents.onTick <|
+                                Decode.map (lift << SetCssVariables isUnbounded) <|
+                                    decodeClientRect
+                        ]
 
             in
             { interactionHandler = interactionHandler
             , properties = properties
-            , style = style
+            , style = noStyle
             }
 
         Activated activatedData ->
@@ -252,17 +242,15 @@ view isUnbounded domId lift model options =
                 properties =
                     Options.many
                         [ baseProperties
-                        , cs cssVars.className
+                        , Options.many cssVars
                         , cs cssClasses.fgActivation
                         , when isUnbounded (Options.data "mdc-ripple-is-unbounded" "1")
                         ]
 
-                style =
-                    Html.node "style" [ Html.type_ "text/css" ] [ text cssVars.text ]
             in
             { interactionHandler = interactionHandler
             , properties = properties
-            , style = style
+            , style = noStyle
             }
 
         Deactivated activatedData ->
@@ -276,7 +264,7 @@ view isUnbounded domId lift model options =
                 properties =
                     Options.many
                         [ baseProperties
-                        , cs cssVars.className
+                        , Options.many cssVars
                         , cs cssClasses.fgDeactivation
                         ]
 
@@ -289,36 +277,32 @@ view isUnbounded domId lift model options =
                         , frame = activatedData.frame
                         }
 
-                style =
-                    Html.node "style" [ Html.type_ "text/css" ] [ text cssVars.text ]
             in
             { interactionHandler = interactionHandler
             , properties = properties
-            , style = style
+            , style = noStyle
             }
 
 
+-- TODO: get rid of className and text, we support CSS variables now.
 cssVariables :
     Bool
     ->
         { fgScale : Float
         , translateStart : String
         , translateEnd : String
-        , initialSize : Float
+        , initialSize : Int
         , frame : ClientRect
         }
-    ->
-        { className : String
-        , text : String
-        }
+    -> List (Options.Property c m)
 cssVariables isUnbounded { fgScale, translateStart, translateEnd, initialSize, frame } =
     let
-        fgSize = String.fromFloat initialSize ++ "px"
+        fgSize = String.fromInt initialSize ++ "px"
 
         unboundedCoords =
             if isUnbounded then
-                { left = toFloat (round ((frame.width - initialSize) / 2))
-                , top = toFloat (round ((frame.height - initialSize) / 2))
+                { left = toFloat (round ((frame.width - toFloat initialSize) / 2))
+                , top = toFloat (round ((frame.height - toFloat initialSize) / 2))
                 }
 
             else
@@ -330,7 +314,7 @@ cssVariables isUnbounded { fgScale, translateStart, translateEnd, initialSize, f
                     String.concat <|
                         [ String.fromFloat frame.left
                         , String.fromFloat frame.top
-                        , String.fromFloat initialSize
+                        , String.fromInt initialSize
                         , String.fromFloat fgScale
                         , String.fromFloat unboundedCoords.top
                         , String.fromFloat unboundedCoords.left
@@ -338,85 +322,25 @@ cssVariables isUnbounded { fgScale, translateStart, translateEnd, initialSize, f
                         , translateEnd
                         ]
 
-        text =
-            (\someString -> "." ++ className ++ "{" ++ someString ++ "}") <|
-                String.concat
-                    << List.map
-                        (\( key, value ) ->
-                            key ++ ":" ++ value ++ " !important;"
-                        )
-                <|
-                    List.concat
-                        [ [ ( strings.varFgSize, fgSize )
-                          , ( strings.varFgScale, String.fromFloat fgScale )
-                          ]
-                        , if isUnbounded then
-                            [ ( strings.varTop
-                              , String.fromFloat unboundedCoords.top ++ "px"
-                              )
-                            , ( strings.varLeft
-                              , String.fromFloat unboundedCoords.left ++ "px"
-                              )
-                            ]
+        variables =
+            List.concat
+                [ [ css strings.varFgSize fgSize
+                  , css strings.varFgScale ( String.fromFloat fgScale )
+                  ]
+                , if isUnbounded then
+                      [ css strings.varTop ( String.fromFloat unboundedCoords.top ++ "px" )
+                      , css strings.varLeft ( String.fromFloat unboundedCoords.left ++ "px" )
+                      ]
 
-                          else
-                            [ ( strings.varFgTranslateStart, translateStart )
-                            , ( strings.varFgTranslateEnd, translateEnd )
-                            ]
-                        ]
+                  else
+                      [ css strings.varFgTranslateStart translateStart
+                      , css strings.varFgTranslateEnd translateEnd
+                      ]
+                ]
+
     in
-    { className = className
-    , text = text
-    }
+        variables
 
-
-
---updateActivationTimerCallback : Model -> ( Model, Cmd Msg )
---updateActivationTimerCallback model =
---  runDeactivationUxLogicIfReady { model | activationAnimationHasEnded = True }
---        geometry =
---            model.geometry
---
---        surfaceWidth =
---            String.fromFloat geometry.frame.width ++ "px"
---
---        surfaceHeight =
---            String.fromFloat geometry.frame.height ++ "px"
---
---        fgSize =
---            String.fromFloat initialSize ++ "px"
---
---        surfaceDiameter =
---            sqrt ((geometry.frame.width ^ 2) + (geometry.frame.height ^ 2))
---
---        maxRadius =
---            if isUnbounded then
---                maxDimension
---            else
---                surfaceDiameter + 10
---
---        fgScale =
---            String.fromFloat (maxRadius / initialSize)
---
---        translateStart =
---            String.fromFloat startPoint.x ++ "px, " ++ String.fromFloat startPoint.y ++ "px"
---
---        translateEnd =
---            String.fromFloat endPoint.x ++ "px, " ++ String.fromFloat endPoint.y ++ "px"
---
---        wasActivatedByPointer =
---            List.member geometry.event.type_
---                [ "mousedown"
---                , "touchstart"
---                , "pointerdown"
---                ]
---
---        top =
---            String.fromFloat startPoint.y ++ "px"
---
---        left =
---            String.fromFloat startPoint.x ++ "px"
--- COMPONENT
 
 
 type alias Store s =
@@ -581,7 +505,7 @@ layoutInternal isUnbounded frame =
             maxRadius / initialSize
     in
     { fgScale = fgScale
-    , initialSize = initialSize
+    , initialSize = floor initialSize
     }
 
 
