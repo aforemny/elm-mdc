@@ -68,3 +68,84 @@
   /* @noflip */
   border-radius: 0 28px 28px 0;
 }
+
+
+/**
+ * Ripple demo.
+ */
+
+.ripple-demo-box--primary {
+  color: #6200ee;
+  /* @alternate */
+  color: var(--mdc-theme-primary, #6200ee);
+}
+.ripple-demo-box--primary::before, .ripple-demo-box--primary::after {
+  background-color: #6200ee;
+}
+@supports not (-ms-ime-align: auto) {
+  .ripple-demo-box--primary::before, .ripple-demo-box--primary::after {
+    /* @alternate */
+    background-color: var(--mdc-theme-primary, #6200ee);
+  }
+}
+.ripple-demo-box--primary:hover::before {
+  opacity: 0.04;
+}
+.ripple-demo-box--primary:not(.mdc-ripple-upgraded):focus::before, .ripple-demo-box--primary.mdc-ripple-upgraded--background-focused::before {
+  -webkit-transition-duration: 75ms;
+       -o-transition-duration: 75ms;
+          transition-duration: 75ms;
+  opacity: 0.12;
+}
+.ripple-demo-box--primary:not(.mdc-ripple-upgraded)::after {
+  -webkit-transition: opacity 150ms linear;
+  -o-transition: opacity 150ms linear;
+  transition: opacity 150ms linear;
+}
+.ripple-demo-box--primary:not(.mdc-ripple-upgraded):active::after {
+  -webkit-transition-duration: 75ms;
+       -o-transition-duration: 75ms;
+          transition-duration: 75ms;
+  opacity: 0.12;
+}
+.ripple-demo-box--primary.mdc-ripple-upgraded {
+  --mdc-ripple-fg-opacity: 0.12;
+}
+
+.ripple-demo-box--secondary {
+  color: #018786;
+  /* @alternate */
+  color: var(--mdc-theme-secondary, #018786);
+}
+.ripple-demo-box--secondary::before, .ripple-demo-box--secondary::after {
+  background-color: #018786;
+}
+@supports not (-ms-ime-align: auto) {
+  .ripple-demo-box--secondary::before, .ripple-demo-box--secondary::after {
+    /* @alternate */
+    background-color: var(--mdc-theme-secondary, #018786);
+  }
+}
+.ripple-demo-box--secondary:hover::before {
+  opacity: 0.04;
+}
+.ripple-demo-box--secondary:not(.mdc-ripple-upgraded):focus::before, .ripple-demo-box--secondary.mdc-ripple-upgraded--background-focused::before {
+  -webkit-transition-duration: 75ms;
+       -o-transition-duration: 75ms;
+          transition-duration: 75ms;
+  opacity: 0.12;
+}
+.ripple-demo-box--secondary:not(.mdc-ripple-upgraded)::after {
+  -webkit-transition: opacity 150ms linear;
+  -o-transition: opacity 150ms linear;
+  transition: opacity 150ms linear;
+}
+.ripple-demo-box--secondary:not(.mdc-ripple-upgraded):active::after {
+  -webkit-transition-duration: 75ms;
+       -o-transition-duration: 75ms;
+          transition-duration: 75ms;
+  opacity: 0.12;
+}
+.ripple-demo-box--secondary.mdc-ripple-upgraded {
+  --mdc-ripple-fg-opacity: 0.12;
+}
