@@ -23,9 +23,8 @@ module Material.List exposing
     , inset
     )
 
-{-| List provides styles which implement Material Design Lists - “A single
-continuous column of tessellated subdivisions of equal width.” Both single-line
-and two-line lists are supported.
+{-| Lists present multiple line items vertically as a single
+continuous element. Both single-line and two-line lists are supported.
 
 To avoid namespace conflicts with the `List` module, this module should be
 imported qualified as `Lists`.
