@@ -11,7 +11,6 @@ import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.RadioButton as RadioButton
-import Material.Ripple as Ripple
 import Material.Typography as Typography
 
 
