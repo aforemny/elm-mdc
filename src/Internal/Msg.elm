@@ -10,6 +10,7 @@ import Internal.Fab.Model as Fab
 import Internal.GridList.Model as GridList
 import Internal.IconButton.Model as IconButton
 import Internal.Index exposing (Index)
+import Internal.List.Model as List
 import Internal.Menu.Model as Menu
 import Internal.RadioButton.Model as RadioButton
 import Internal.Ripple.Model as Ripple
@@ -33,6 +34,7 @@ type Msg m
     | FabMsg Index Fab.Msg
     | GridListMsg Index (GridList.Msg m)
     | IconButtonMsg Index IconButton.Msg
+    | ListMsg Index (List.Msg m)
     | MenuMsg Index (Menu.Msg m)
     | RadioButtonMsg Index RadioButton.Msg
     | RippleMsg Index Ripple.Msg

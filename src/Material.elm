@@ -172,6 +172,8 @@ import Internal.GridList.Implementation as GridList
 import Internal.GridList.Model as GridList
 import Internal.IconButton.Implementation as IconButton
 import Internal.IconButton.Model as IconButton
+import Internal.List.Implementation as List
+import Internal.List.Model as List
 import Internal.Menu.Implementation as Menu
 import Internal.Menu.Model as Menu
 import Internal.Msg exposing (Msg(..))
@@ -228,6 +230,7 @@ type alias Model m =
     , fab : Indexed Fab.Model
     , gridList : Indexed GridList.Model
     , iconButton : Indexed IconButton.Model
+    , list : Indexed List.Model
     , menu : Indexed Menu.Model
     , radio : Indexed RadioButton.Model
     , ripple : Indexed Ripple.Model
@@ -260,6 +263,7 @@ defaultModel =
     , fab = Dict.empty
     , gridList = Dict.empty
     , iconButton = Dict.empty
+    , list = Dict.empty
     , menu = Dict.empty
     , radio = Dict.empty
     , ripple = Dict.empty
@@ -337,6 +341,9 @@ update_ lift msg store =
 
         IconButtonMsg idx msg_ ->
             IconButton.react lift msg_ idx store
+
+        ListMsg idx msg_ ->
+            List.react lift msg_ idx store
 
         MenuMsg idx msg_ ->
             Menu.react lift msg_ idx store
