@@ -32,10 +32,9 @@ module Material.List exposing
 continuous element. Both single-line and two-line lists are supported.
 
 The module currently presents two interfaces: one for regular lists,
-which is built up using `ListItem` elements. The other is for use with
-menus and drawers, and builds up the method with `Html m`
-elements. The latter will probably change too as we want to support
-ripples there too.
+which is built using `ListItem` elements. The other is for use with
+menus and drawers, and builds the nodes with methods which return an `Html m`
+elements. The latter will probably change too when we add ripple support here.
 
 To avoid namespace conflicts with the `List` module, this module should be
 imported qualified as `Lists`.
@@ -43,8 +42,8 @@ imported qualified as `Lists`.
 
 # Resources
 
+  - [Material Components for the Web: List](https://material-components.github.io/material-components-web-catalog/#/component/list)
   - [Material Design guidelines: Lists](https://material.io/design/components/lists.html)
-  - [Material Components for the Web](https://material.io/develop/web/components/lists/)
   - [Demo](https://aforemny.github.io/elm-mdc/#lists)
 
 
@@ -54,7 +53,7 @@ imported qualified as `Lists`.
     import Material.List as Lists
 
 
-    Lists.ul
+    Lists.ul Mdc "my-list" model.mdc
         [ Lists.twoLine
         , Lists.avatarList
         ]
@@ -374,9 +373,13 @@ inset =
     List.inset
 
 
-{-| Selected item in list. Only makes sense for single selection lists.
+{-| The currently selected item in list.
 
-Bug: the index count currently includes dividers.
+Only makes sense for single selection lists. If this is set, the
+selected and activated classes and aria elements are applied
+automatically.
+
+Bug: the index currently includes dividers.
 -}
 selectedIndex : Int -> Property m
 selectedIndex =
