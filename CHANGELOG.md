@@ -1,5 +1,12 @@
 ## Bug fixes since 1.1.1 release
 
+Breaking changes:
+
+* Lists now support ripples. To implement this, Material.List.ul now
+  needs the full Mdc, index and model parameters as is usual with the
+  other components.
+
+
 Implementation changes:
 
 * Ripple code has been improved to emit CSS variables as inline

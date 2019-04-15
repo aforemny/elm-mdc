@@ -95,7 +95,7 @@ drawerItems =
                 [ Lists.graphicIcon [] "drafts"
                 , text "Drafts"
                 ]
-            , Lists.divider [] []
+            , Lists.hr [] []
             , styled h6 [ cs "mdc-list-group__subheader" ] [ text "Labels" ]
             , Lists.a
                 [ Options.attribute (Html.href "#persistent-drawer")
@@ -115,7 +115,7 @@ drawerItems =
                 [ Lists.graphicIcon [] "bookmark"
                 , text "Work"
                 ]
-            , Lists.divider [] []
+            , Lists.hr [] []
             , Lists.a
                 [ Options.attribute (Html.href "#persistent-drawer")
                 ]

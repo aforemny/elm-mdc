@@ -462,7 +462,7 @@ menu lift model options ulNode =
                 Decode.map3 (KeyDown numItems) decodeMeta decodeKey decodeKeyCode
         ]
         []
-        [ Lists.ul
+        [ styled Html.ul
             -- TODO:
             --            :: Options.onWithOptions "keydown"
             --            { stopPropagation = False, preventDefault = True }
