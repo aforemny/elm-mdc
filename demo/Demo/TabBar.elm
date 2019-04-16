@@ -16,13 +16,15 @@ import Platform.Cmd exposing (Cmd, none)
 type alias Model m =
     { mdc : Material.Model m
     , states : Dict Material.Index Int
+    , horizontalScrollbarHeight : Int
     }
 
 
-defaultModel : Model m
-defaultModel =
+defaultModel : Int -> Model m
+defaultModel horizontalScrollbarHeight =
     { mdc = Material.defaultModel
     , states = Dict.empty
+    , horizontalScrollbarHeight = horizontalScrollbarHeight
     }
 
 
@@ -116,7 +118,9 @@ scrollingTabs lift model index =
     TabBar.view (lift << Mdc)
         index
         model.mdc
-        [ TabBar.activeTab active_tab_index ]
+        [ TabBar.activeTab active_tab_index
+        , TabBar.horizontalScrollbarHeight model.horizontalScrollbarHeight
+        ]
         ([ "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve" ]
             |> List.indexedMap (\i v -> tab lift model index i ("Tab " ++ v))
         )

@@ -7,6 +7,7 @@ module Material.TabBar exposing
     , icon
     , stacked
     , smallIndicator
+    , horizontalScrollbarHeight
     , indicatorIcon
     , fadingIconIndicator
     )
@@ -59,6 +60,7 @@ update the active tab in your model.
 @docs icon
 @docs stacked
 @docs smallIndicator
+@docs horizontalScrollbarHeight
 @docs indicatorIcon
 @docs fadingIconIndicator
 
@@ -132,6 +134,31 @@ stacked =
 smallIndicator : Property m
 smallIndicator =
     TabBar.smallIndicator
+
+
+{-| The height of the horizontal scrollbar. Needs to be set correctly
+if tab bar needs scrolling.
+
+Elm cannot calculate this value (it would require a call to
+JavaScript), so it needs to be passed to the application via a flag.
+
+The value can be calculated by calling the javascript function
+`ElmMdc.computeHorizontalScrollbarHeight()`.
+
+Example of passing the value as a flag:
+
+```javascript
+Elm.Main.init(
+  { node: document.getElementById('elm')
+  , flags: { horizontalScrollbarHeight: ElmMdc.computeHorizontalScrollbarHeight(document) }
+  })
+```
+
+Your application will then need to store this in its model and pass it to every Tab Bar.
+-}
+horizontalScrollbarHeight : Int -> Property m
+horizontalScrollbarHeight =
+    TabBar.horizontalScrollbarHeight
 
 
 {-| Indicates the icon to use for the sliding indicator icon effect.

@@ -77,8 +77,8 @@ type alias Model =
     }
 
 
-defaultModel : Browser.Navigation.Key -> Model
-defaultModel key =
+defaultModel : Browser.Navigation.Key -> Int -> Model
+defaultModel key horizontalScrollbarHeight =
     { mdc = Material.defaultModel
     , key = key
     , url = Demo.Url.StartPage
@@ -103,7 +103,7 @@ defaultModel key =
     , slider = Demo.Slider.defaultModel
     , snackbar = Demo.Snackbar.defaultModel
     , switch = Demo.Switch.defaultModel
-    , tabbar = Demo.TabBar.defaultModel
+    , tabbar = Demo.TabBar.defaultModel horizontalScrollbarHeight
     , modalDrawer = Demo.ModalDrawer.defaultModel
     , textfields = Demo.TextFields.defaultModel
     , theme = Demo.Theme.defaultModel
@@ -524,7 +524,7 @@ urlOf model =
     Demo.Url.toString model.url
 
 
-main : Program () Model Msg
+main : Program Flags Model Msg
 main =
     Browser.application
         { init = init
@@ -536,11 +536,16 @@ main =
         }
 
 
-init : () -> Url.Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
+type alias Flags =
+    { horizontalScrollbarHeight : Int
+    }
+
+
+init : Flags -> Url.Url -> Browser.Navigation.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
         initialModel =
-            defaultModel key
+            defaultModel key flags.horizontalScrollbarHeight
     in
     ( { initialModel | url = Demo.Url.fromUrl url }
     , Material.init Mdc
