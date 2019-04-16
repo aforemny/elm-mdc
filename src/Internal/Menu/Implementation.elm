@@ -22,6 +22,7 @@ module Internal.Menu.Implementation exposing
     , selected
     , subs
     , subscriptions
+    , surfaceAnchor
     , topEndCorner
     , topLeftCorner
     , topRightCorner
@@ -321,6 +322,11 @@ index value =
     Options.option (\config -> { config | index = Just value })
 
 
+surfaceAnchor : Options.Property c m
+surfaceAnchor =
+    cs "mdc-menu-surface--anchor"
+
+
 anchorCorner : Corner -> Property m
 anchorCorner value =
     Options.option (\config -> { config | anchorCorner = value })
@@ -470,7 +476,8 @@ menu lift model options ulNode =
             --            |> Decode.andThen identity
             --            )
             (ulNode.options
-                ++ [ role "menu"
+                ++ [ cs "mdc-list"
+                   , role "menu"
                    , aria "hidden" "true"
                    , aria "orientation" "vertical"
                    ]

@@ -9,6 +9,7 @@ module Material.Menu exposing
     , onSelect
     , index
     , attach
+    , surfaceAnchor
     , anchorCorner
     , Corner
     , topStartCorner
@@ -43,9 +44,7 @@ Design menu specification.
 
 
     styled Html.div
-        [ Options.cs "mdc-menu-anchor"
-        , Options.css "position" "relative"
-        ]
+        [ Menu.surfaceAnchor ]
         [ Button.view Mdc "my-button" model.mdc
               [ Menu.attach (lift << Mdc) "my-menu"
               ]
@@ -68,16 +67,11 @@ Design menu specification.
         ]
 
 
-# Usage
+# Menu
 
 @docs Property
 @docs view
 @docs ul
-@docs Item
-@docs li
-@docs divider
-@docs selected
-@docs onSelect
 @docs index
 @docs attach
 @docs anchorCorner
@@ -93,6 +87,19 @@ Design menu specification.
 @docs anchorMargin
 @docs Margin
 @docs quickOpen
+
+# Menu items
+
+@docs Item
+@docs li
+@docs divider
+@docs selected
+@docs onSelect
+
+
+# Menu anchoring
+
+@docs surfaceAnchor
 
 -}
 
@@ -159,6 +166,13 @@ ul =
 attach : (Material.Msg m -> m) -> Index -> Options.Property c m
 attach =
     Menu.attach
+
+
+{-| Use this class on a parent to automatically anchor the menu to this parent.
+-}
+surfaceAnchor : Options.Property c m
+surfaceAnchor =
+    Menu.surfaceAnchor
 
 
 {-| Menu margin from `anchorCorner`.

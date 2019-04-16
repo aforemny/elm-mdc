@@ -3,7 +3,7 @@ module Demo.Menus exposing (Model, Msg(..), defaultModel, subscriptions, update,
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
+import Html exposing (Html, text, div)
 import Html.Attributes as Html
 import Html.Events as Html
 import Json.Decode as Json
@@ -92,21 +92,24 @@ view lift page model =
                 model.mdc
                 [ Menu.attach (lift << Mdc) "menus-menu" ]
                 [ text "Open menu" ]
-            , Menu.view (lift << Mdc)
-                "menus-menu"
-                model.mdc
-                []
-                (Menu.ul []
-                    [ Menu.li [] [ text "Passionfruit" ]
-                    , Menu.li [] [ text "Orange" ]
-                    , Menu.li [] [ text "Guava" ]
-                    , Menu.li [] [ text "Pitaya" ]
-                    , Menu.divider [] []
-                    , Menu.li [] [ text "Pineapple" ]
-                    , Menu.li [] [ text "Mango" ]
-                    , Menu.li [] [ text "Papaya" ]
-                    , Menu.li [] [ text "Lychee" ]
-                    ]
-                )
+            , styled div
+                [ Menu.surfaceAnchor ]
+                [ Menu.view (lift << Mdc)
+                    "menus-menu"
+                    model.mdc
+                    []
+                    (Menu.ul []
+                        [ Menu.li [] [ text "Passionfruit" ]
+                        , Menu.li [] [ text "Orange" ]
+                        , Menu.li [] [ text "Guava" ]
+                        , Menu.li [] [ text "Pitaya" ]
+                        , Menu.divider [] []
+                        , Menu.li [] [ text "Pineapple" ]
+                        , Menu.li [] [ text "Mango" ]
+                        , Menu.li [] [ text "Papaya" ]
+                        , Menu.li [] [ text "Lychee" ]
+                        ]
+                    )
+                ]
             ]
         ]
