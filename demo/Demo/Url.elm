@@ -23,7 +23,6 @@ type Url
     | PermanentDrawer
     | Elevation
     | Fabs
-    | GridList
     | IconButton
     | ImageList
     | LayoutGrid
@@ -153,9 +152,6 @@ toString url =
         Fabs ->
             "#fab"
 
-        GridList ->
-            "#grid-list"
-
         IconButton ->
             "#icon-button"
 
@@ -257,9 +253,6 @@ fromString url =
 
         "fab" ->
             Fabs
-
-        "grid-list" ->
-            GridList
 
         "icon-button" ->
             IconButton
