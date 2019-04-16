@@ -168,8 +168,6 @@ import Internal.Drawer.Implementation as Drawer
 import Internal.Drawer.Model as Drawer
 import Internal.Fab.Implementation as Fab
 import Internal.Fab.Model as Fab
-import Internal.GridList.Implementation as GridList
-import Internal.GridList.Model as GridList
 import Internal.IconButton.Implementation as IconButton
 import Internal.IconButton.Model as IconButton
 import Internal.List.Implementation as List
@@ -228,7 +226,6 @@ type alias Model m =
     , dialog : Indexed Dialog.Model
     , drawer : Indexed Drawer.Model
     , fab : Indexed Fab.Model
-    , gridList : Indexed GridList.Model
     , iconButton : Indexed IconButton.Model
     , list : Indexed List.Model
     , menu : Indexed Menu.Model
@@ -261,7 +258,6 @@ defaultModel =
     , dialog = Dict.empty
     , drawer = Dict.empty
     , fab = Dict.empty
-    , gridList = Dict.empty
     , iconButton = Dict.empty
     , list = Dict.empty
     , menu = Dict.empty
@@ -335,9 +331,6 @@ update_ lift msg store =
 
         FabMsg idx msg_ ->
             Fab.react lift msg_ idx store
-
-        GridListMsg idx msg_ ->
-            GridList.react lift msg_ idx store
 
         IconButtonMsg idx msg_ ->
             IconButton.react lift msg_ idx store

@@ -11,7 +11,6 @@ import Demo.DismissibleDrawer
 import Demo.Drawer
 import Demo.Elevation
 import Demo.Fabs
-import Demo.GridList
 import Demo.IconButton
 import Demo.ImageList
 import Demo.LayoutGrid
@@ -57,7 +56,6 @@ type alias Model =
     , drawer : Demo.Drawer.Model Msg
     , elevation : Demo.Elevation.Model Msg
     , fabs : Demo.Fabs.Model Msg
-    , gridList : Demo.GridList.Model Msg
     , iconToggle : Demo.IconButton.Model Msg
     , imageList : Demo.ImageList.Model Msg
     , layoutGrid : Demo.LayoutGrid.Model Msg
@@ -93,7 +91,6 @@ defaultModel key =
     , drawer = Demo.Drawer.defaultModel
     , elevation = Demo.Elevation.defaultModel
     , fabs = Demo.Fabs.defaultModel
-    , gridList = Demo.GridList.defaultModel
     , iconToggle = Demo.IconButton.defaultModel
     , imageList = Demo.ImageList.defaultModel
     , layoutGrid = Demo.LayoutGrid.defaultModel
@@ -132,7 +129,6 @@ type Msg
     | DrawerMsg (Demo.Drawer.Msg Msg)
     | ElevationMsg (Demo.Elevation.Msg Msg)
     | FabsMsg (Demo.Fabs.Msg Msg)
-    | GridListMsg (Demo.GridList.Msg Msg)
     | IconButtonMsg (Demo.IconButton.Msg Msg)
     | ImageListMsg (Demo.ImageList.Msg Msg)
     | LayoutGridMsg (Demo.LayoutGrid.Msg Msg)
@@ -337,13 +333,6 @@ update msg model =
             in
             ( { model | tabbar = tabbar }, effects )
 
-        GridListMsg msg_ ->
-            let
-                ( gridList, effects ) =
-                    Demo.GridList.update GridListMsg msg_ model.gridList
-            in
-            ( { model | gridList = gridList }, effects )
-
         LayoutGridMsg msg_ ->
             let
                 ( layoutGrid, effects ) =
@@ -510,9 +499,6 @@ view_ model =
         Demo.Url.TopAppBar topAppBarPage ->
             Demo.TopAppBar.view TopAppBarMsg page topAppBarPage model.topAppBar
 
-        Demo.Url.GridList ->
-            Demo.GridList.view GridListMsg page model.gridList
-
         Demo.Url.LayoutGrid ->
             Demo.LayoutGrid.view LayoutGridMsg page model.layoutGrid
 
@@ -567,7 +553,6 @@ subscriptions model =
         [ Material.subscriptions Mdc model
         , Demo.DismissibleDrawer.subscriptions DismissibleDrawerMsg model.dismissibleDrawer
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
-        , Demo.GridList.subscriptions GridListMsg model.gridList
         , Demo.Menus.subscriptions MenuMsg model.menus
         , Demo.PermanentDrawer.subscriptions PermanentDrawerMsg model.permanentDrawer
         , Demo.Selects.subscriptions SelectMsg model.selects
