@@ -3,6 +3,7 @@ module Internal.TabBar.Implementation exposing
     , Tab
     , activeTab
     , fadingIconIndicator
+    , horizontalScrollbarHeight
     , icon
     , indicatorIcon
     , react
@@ -188,9 +189,7 @@ type alias Config =
     , activeTab : Int
     , icon : Maybe String
     , smallIndicator : Bool
-
-    -- This value is computed by computeHorizontalScrollbarHeight in mdc-tab-sroller/util.js.
-    -- No clue how to do that in Elm beside using a port. Should we?
+    -- This value must be set as config value for every tab bar that could scroll.
     , horizontalScrollbarHeight : Int
     , indicatorIcon : Maybe String
     , fadingIconIndicator : Bool
@@ -203,7 +202,9 @@ defaultConfig =
     , activeTab = 0
     , icon = Nothing
     , smallIndicator = False
-    , horizontalScrollbarHeight = 10
+    -- A value of 10 worked in the past for at least FireFox. On my machine I now need 8.
+    -- Chrome needs 0.
+    , horizontalScrollbarHeight = 0
     , indicatorIcon = Nothing
     , fadingIconIndicator = False
     }
@@ -245,6 +246,11 @@ stacked =
 smallIndicator : Property m
 smallIndicator =
     Options.option (\config -> { config | smallIndicator = True })
+
+
+horizontalScrollbarHeight : Int -> Property m
+horizontalScrollbarHeight height =
+    Options.option (\config -> { config | horizontalScrollbarHeight = height })
 
 
 indicatorIcon : String -> Property m
@@ -309,7 +315,7 @@ tabbar domId lift model options nodes =
         --     GlobalEvents.onTick (Json.succeed (lift (SetActiveTab domId config.activeTab)))
         ]
         []
-        [ scroller domId lift model [] tab_nodes
+        [ scroller domId lift model options tab_nodes
         ]
 
 
