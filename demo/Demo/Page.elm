@@ -2,6 +2,7 @@ module Demo.Page exposing
     ( Page
     , demos
     , header
+    , subheader
     , hero
     , toolbar
     )
@@ -77,6 +78,13 @@ header : String -> Html m
 header title =
     styled Html.h1
         [ Typography.headline5 ]
+        [ text title ]
+
+
+subheader : String -> Html m
+subheader title =
+    styled Html.h3
+        [ Typography.subtitle1 ]
         [ text title ]
 
 

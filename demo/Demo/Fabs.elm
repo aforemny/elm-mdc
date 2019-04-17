@@ -2,8 +2,8 @@ module Demo.Fabs exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
-import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
+import Demo.Page as Page exposing (Page, subheader)
+import Html exposing (Html, text, span, i)
 import Html.Attributes as Html
 import Html.Events as Html
 import Material
@@ -38,7 +38,10 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
         fab idx options =
-            Fab.view (lift << Mdc) idx model.mdc (Fab.ripple :: options) "favorite_border"
+            Fab.view (lift << Mdc) idx model.mdc (Fab.ripple :: Fab.icon "favorite_border" :: options) []
+
+        extendedFab idx options nodes =
+            Fab.view (lift << Mdc) idx model.mdc (Fab.ripple :: Fab.extended :: options) nodes
     in
     page.body "Floating Action Button"
         "Floating action buttons represents the primary action in an application. Only one floating action button is recommended per screen to represent the most common action."
@@ -68,13 +71,25 @@ view lift page model =
             , altText = "Source Code"
             }
         , Page.demos
-            [ styled Html.h3
-                [ Typography.subtitle1 ]
-                [ text "Standard Floating Action Button" ]
+            [ subheader "Standard Floating Action Button"
             , fab "fabs-standard-fab" []
-            , styled Html.h3
-                [ Typography.subtitle1 ]
-                [ text "Mini Floating Action Button" ]
-            , fab "fabs-mini-fab" []
+            , subheader "Mini Floating Action Button"
+            , fab "fabs-mini-fab" [ Fab.mini ]
+            , subheader "Extended FAB"
+            , extendedFab "fabs-extended-fab" [ Fab.icon "add" ] [ styled span [ Fab.label ] [text "Create" ] ]
+            , subheader "Extended FAB (Text label followed by icon)"
+            , extendedFab "fabs-extended-swapped-fab" [ ]
+                [ styled span [ Fab.label ] [text "Create" ]
+                , styled i [ Fab.iconClass, cs "material-icons" ] [ text "add" ]
+                ]
+            , subheader "FAB (Shaped)"
+            , fab "fabs-shaped-1-fab"
+                [ css "border-radius" "50% 0", css "margin-right" "24px" ]
+            , fab "fabs-shaped-2-fab"
+                [ Fab.mini, css "border-radius" "8px", css "margin-right" "24px" ]
+            , extendedFab "fabs-shaped-3-fab"
+                [ Fab.icon "add", css "border-radius" "12px" ]
+                [ styled span [ Fab.label ] [text "Create" ]
+                ]
             ]
         ]
