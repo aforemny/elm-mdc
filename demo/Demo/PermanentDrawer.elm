@@ -188,11 +188,13 @@ view lift page model =
             , drawerItems
             ]
         , styled Html.div
-            [ cs "drawer-frame-app-content" ]
+            [ cs "drawer-frame-app-content"
+            , css "position" "relative"
+            ]
             [ TopAppBar.view (lift << Mdc)
                 "permanent-drawer-top-app-bar"
                 model.mdc
-                []
+                [ css "position" "absolute" ]
                 [ TopAppBar.section
                     [ TopAppBar.alignStart
                     ]
