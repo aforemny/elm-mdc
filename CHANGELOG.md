@@ -2,6 +2,8 @@
 
 Breaking changes:
 
+* Extended fabs are now supported. The icon parameter has now been replaced with a list.
+  Set the icon as option in options: [ Fab.icon "favorites" ]
 * Lists now support ripples. To implement this, Material.List.ul now
   needs the full Mdc, index and model parameters as is usual with the
   other components.

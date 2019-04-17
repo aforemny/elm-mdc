@@ -1,6 +1,10 @@
 module Internal.Fab.Implementation exposing
     ( Property
     , exited
+    , extended
+    , icon
+    , iconClass
+    , label
     , mini
     , react
     , ripple
@@ -31,12 +35,14 @@ update msg model =
 
 type alias Config =
     { ripple : Bool
+    , icon : Maybe String
     }
 
 
 defaultConfig : Config
 defaultConfig =
     { ripple = False
+    , icon = Nothing
     }
 
 
@@ -44,9 +50,29 @@ type alias Property m =
     Options.Property Config m
 
 
+icon : String -> Property m
+icon name =
+    Options.option (\config -> { config | icon = Just name })
+
+
+iconClass : Property m
+iconClass =
+    cs "mdc-fab__icon"
+
+
 mini : Property m
 mini =
     cs "mdc-fab--mini"
+
+
+extended : Property m
+extended =
+    cs "mdc-fab--extended"
+
+
+label : Property m
+label =
+    cs "mdc-fab__label"
 
 
 exited : Property m
@@ -59,14 +85,26 @@ ripple =
     Options.option (\config -> { config | ripple = True })
 
 
-fab : Index -> (Msg -> m) -> Model -> List (Property m) -> String -> Html m
-fab domId lift model options icon =
+fab : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+fab domId lift model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
         rippleInterface =
             Ripple.view False domId (lift << RippleMsg) model.ripple []
+
+        iconSpan =
+            case config.icon of
+                Just name ->
+                    styled Html.i
+                        [ iconClass
+                        , cs "material-icons"
+                        ]
+                        [ text name ]
+                Nothing ->
+                    text ""
+
     in
     Options.apply summary
         Html.button
@@ -81,12 +119,9 @@ fab domId lift model options icon =
         ]
         []
         (List.concat
-            [ [ styled Html.span
-                    [ cs "mdc-fab__icon"
-                    ]
-                    [ text icon
-                    ]
+            [ [ iconSpan
               ]
+            , nodes
             ]
         )
 
@@ -104,7 +139,7 @@ view :
     -> Index
     -> Store s
     -> List (Property m)
-    -> String
+    -> List (Html m)
     -> Html m
 view =
     \lift domId ->
