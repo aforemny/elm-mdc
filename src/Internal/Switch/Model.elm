@@ -4,18 +4,23 @@ module Internal.Switch.Model exposing
     , defaultModel
     )
 
+import Internal.Ripple.Model as Ripple
+
 
 type alias Model =
-    { isFocused : Bool
+    { ripple : Ripple.Model
+    , isFocused : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
-    { isFocused = False
+    { ripple = Ripple.defaultModel
+    , isFocused = False
     }
 
 
 type Msg
-    = SetFocus Bool
+    = RippleMsg Ripple.Msg
+    | SetFocus Bool
     | NoOp

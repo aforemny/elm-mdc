@@ -499,13 +499,13 @@ layoutInternal isUnbounded frame =
                 boundedRadius
 
         initialSize =
-            maxDim * numbers.initialOriginScale
+            floor (maxDim * numbers.initialOriginScale)
 
         fgScale =
-            maxRadius / initialSize
+            maxRadius / (toFloat initialSize)
     in
     { fgScale = fgScale
-    , initialSize = floor initialSize
+    , initialSize = initialSize
     }
 
 
