@@ -45,7 +45,7 @@ import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
+import Internal.Options as Options exposing (aria, cs, css, role, tabindex, styled, when)
 import Json.Decode as Decode exposing (Decoder)
 
 
@@ -480,6 +480,7 @@ menu lift model options ulNode =
                    , role "menu"
                    , aria "hidden" "true"
                    , aria "orientation" "vertical"
+                   --, tabindex -1
                    ]
             )
             (List.indexedMap
@@ -538,7 +539,8 @@ menu lift model options ulNode =
                             [ cs "mdc-list-item"
                             , cs "mdc-ripple-upgraded"
                             , cs "mdc-ripple-upgraded--background-focused" |> when isSelected
-                            , Options.attribute (Html.attribute "tabindex" "0")
+                            , tabindex (if isSelected then 0 else -1)
+                            , role "menuitem"
                             , Options.on "focus" (Decode.succeed (lift (SetFocus focusIndex)))
                             , autoFocus
                             ]

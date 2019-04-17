@@ -99,7 +99,7 @@ view lift page model =
                     model.mdc
                     []
                     (Menu.ul []
-                        [ Menu.li [] [ text "Passionfruit" ]
+                        [ Menu.li [ Menu.selected ] [ text "Passionfruit" ]
                         , Menu.li [] [ text "Orange" ]
                         , Menu.li [] [ text "Guava" ]
                         , Menu.li [] [ text "Pitaya" ]
