@@ -70,7 +70,9 @@ view lift page model =
         [ Drawer.view (lift << Mdc)
             "dismissible-drawer-drawer"
             model.mdc
-            [ Drawer.open |> when model.drawerOpen ]
+            [ Drawer.open |> when model.drawerOpen
+            , Drawer.onClose (lift ToggleDrawer)
+            ]
             [ Demo.PermanentDrawer.drawerHeader
             , Demo.PermanentDrawer.drawerItems
             ]

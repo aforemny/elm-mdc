@@ -5,6 +5,7 @@ module Material.Drawer.Dismissible exposing
     , header
     , title
     , subTitle
+    , onClose
     , open
     , appContent
     )
@@ -77,6 +78,7 @@ destinations and other functionality on an app.
 @docs header
 @docs title
 @docs subTitle
+@docs onClose
 @docs open
 @docs appContent
 
@@ -134,6 +136,13 @@ subTitle =
 content : List (Property m) -> List (Html m) -> Html m
 content =
     Drawer.content
+
+
+{-| Message that must be sent when the drawer wants to be close
+-}
+onClose : m -> Property m
+onClose =
+    Drawer.onClose
 
 
 {-| When present, makes the drawer open.
