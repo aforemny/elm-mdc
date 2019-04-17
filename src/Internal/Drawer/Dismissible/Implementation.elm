@@ -3,6 +3,7 @@ module Internal.Drawer.Dismissible.Implementation exposing
     , appContent
     , content
     , header
+    , onClose
     , open
     , subTitle
     , title
@@ -84,6 +85,11 @@ subs =
 subscriptions : Model -> Sub Msg
 subscriptions =
     Drawer.subscriptions
+
+
+onClose : m -> Property m
+onClose =
+    Drawer.onClose
 
 
 open : Property m
