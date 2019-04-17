@@ -12,18 +12,26 @@ import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, many, styled, when)
+import Internal.Ripple.Implementation as Ripple
 import Internal.Switch.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode
 
 
-update : x -> Msg -> Model -> ( Maybe Model, Cmd m )
-update _ msg model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
+        RippleMsg msg_ ->
+            let
+                ( rippleState, rippleCmd ) =
+                    Ripple.update msg_ model.ripple
+            in
+            ( { model | ripple = rippleState }, Cmd.map RippleMsg rippleCmd )
+
         SetFocus focus ->
-            ( Just { model | isFocused = focus }, Cmd.none )
+            ( { model | isFocused = focus }, Cmd.none )
 
         NoOp ->
-            ( Nothing, Cmd.none )
+            ( model, Cmd.none )
 
 
 type alias Config m =
@@ -62,11 +70,16 @@ nativeControl =
     Options.nativeControl
 
 
-switch : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-switch lift model options _ =
+switch : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+switch domId lift model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
+
+        rippleDomId = domId ++ "-ripple"
+        ripple =
+            Ripple.view True rippleDomId (lift << RippleMsg) model.ripple []
+
     in
     Options.apply summary
         Html.div
@@ -79,7 +92,10 @@ switch lift model options _ =
             [ cs "mdc-switch__track" ]
             []
         , styled Html.div
-            [ cs "mdc-switch__thumb-underlay" ]
+            [ cs "mdc-switch__thumb-underlay"
+            , ripple.interactionHandler
+            , ripple.properties
+            ]
             [ styled Html.div
                 [ cs "mdc-switch__thumb" ]
                 [ Options.applyNativeControl summary
@@ -126,7 +142,7 @@ react :
     -> Store s
     -> ( Maybe (Store s), Cmd m )
 react =
-    Component.react getSet.get getSet.set Internal.Msg.SwitchMsg update
+    Component.react getSet.get getSet.set Internal.Msg.SwitchMsg (Component.generalise update)
 
 
 view :
@@ -139,7 +155,7 @@ view :
 view =
     \lift index store options ->
         Component.render getSet.get
-            switch
+            (switch index)
             Internal.Msg.SwitchMsg
             lift
             index
