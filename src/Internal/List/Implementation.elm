@@ -40,9 +40,14 @@ module Internal.List.Implementation exposing
     , view
     )
 
+import Array exposing (Array)
 import Dict exposing (Dict)
 import Html exposing (Html)
 import Html.Attributes as Html
+import Browser.Dom
+import Task
+import Process
+import Json.Decode as Decode exposing (Decoder)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
@@ -67,15 +72,30 @@ update lift msg model =
                         (Dict.get index model.ripples
                             |> Maybe.withDefault Ripple.defaultModel
                         )
+
             in
             ( Just { model | ripples = Dict.insert index ripple model.ripples }
             , Cmd.map (lift << RippleMsg index) effects
             )
 
+        ResetFocusedItem ->
+            ( Just { model | focused = Nothing }, Cmd.none )
+
+        FocusItem index id ->
+            ( Just { model | focused = Nothing }, Task.attempt (\_ -> lift NoOp) ( Browser.Dom.focus id ) )
+
+        SelectItem index m ->
+            ( Just { model | focused = Nothing }, send (m index) )
 
         NoOp ->
             ( Nothing, Cmd.none )
 
+
+{- Turn msg into Cmd msg -}
+send : msg -> Cmd msg
+send msg =
+    Task.succeed msg
+        |> Task.perform identity
 
 
 type alias Config m =
@@ -115,8 +135,10 @@ ul domId lift model options items =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
+        listItemIds = Array.fromList (List.indexedMap (doListItemDomId domId) items)
+
         list_nodes =
-            List.indexedMap (listItemView domId lift model config) items
+            List.indexedMap (listItemView domId lift model config listItemIds) items
 
     in
     Options.apply summary
@@ -124,9 +146,56 @@ ul domId lift model options items =
         [ cs "mdc-list"
         , role "listbox" |> when config.isSingleSelectionList
         , role "radiogroup" |> when config.isRadioGroup
+        , Options.id domId
+
+        -- If user tabs out of list, we reset the focused item to the
+        -- selected one, so when the user tabs back in, that is the
+        -- selected index.
+        , Options.on "focusout" <|
+            Decode.map (always (lift ResetFocusedItem)) (succeedIfLeavingList domId)
         ]
         []
         list_nodes
+
+
+-- Perhaps we need to pick up any custom id set explicitly on the list item?
+doListItemDomId : String -> Int -> ListItem m -> String
+doListItemDomId domId index listItem =
+    listItemDomId domId index
+
+
+
+{- Decoder functions to detect if focus moves away from the list itself.
+
+These functions check if a given DOM element is equal to another DOM
+element, or contained by it.
+
+Thanks: https://github.com/xarvh/elm-onclickoutside/blob/master/src/Html/OnClickOutside.elm
+-}
+succeedIfContainerOrChildOfContainer : String -> Decoder ()
+succeedIfContainerOrChildOfContainer targetId =
+    Decode.field "id" Decode.string
+        |> Decode.andThen (\id ->
+            if id == targetId then
+                Decode.succeed ()
+            else
+                Decode.field "parentNode" (succeedIfContainerOrChildOfContainer targetId))
+
+
+invertDecoder : Decoder a -> Decoder ()
+invertDecoder decoder =
+    Decode.maybe decoder
+        |> Decode.andThen ( \maybe ->
+            if maybe == Nothing then
+                Decode.succeed ()
+            else
+                Decode.fail "")
+
+succeedIfLeavingList : String -> Decoder ()
+succeedIfLeavingList targetId =
+    succeedIfContainerOrChildOfContainer targetId
+        |> Decode.field "relatedTarget"
+        |> invertDecoder
 
 
 {-| Format a single item in the list.
@@ -136,11 +205,12 @@ listItemView :
     -> (Msg m -> m)
     -> Model
     -> Config m
+    -> Array String
     -> Int
     -> ListItem m
     -> Html m
-listItemView domId lift model config index li_ =
-    li_.view domId lift model config index li_.options li_.children
+listItemView domId lift model config listItemsIds index li_ =
+    li_.view domId lift model config listItemsIds index li_.options li_.children
 
 
 {-| I think this should be considered obsolete.
@@ -197,7 +267,7 @@ twoLine =
 type alias ListItem m =
     { options : List (Property m)
     , children : List (Html m)
-    , view : Index -> (Msg m -> m) -> Model -> Config m -> Int -> List (Property m) -> List (Html m) -> Html m
+    , view : Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> List (Property m) -> List (Html m) -> Html m
     }
 
 
@@ -216,11 +286,12 @@ liView :
     -> (Msg m -> m)
     -> Model
     -> Config m
+    -> Array String
     -> Int
     -> List (Property m)
     -> List (Html m)
     -> Html m
-liView domId lift model config index options children =
+liView domId lift model config listItemIds index options children =
     let
         li_summary =
             Options.collect defaultConfig options
@@ -228,8 +299,7 @@ liView domId lift model config index options children =
         li_config =
             li_summary.config
 
-        listItemDomId =
-            domId ++ "--" ++ String.fromInt index
+        list_item_dom_id = listItemDomId domId index
 
         is_selected =
             case config.selectedIndex of
@@ -238,15 +308,20 @@ liView domId lift model config index options children =
 
         selected_index = Maybe.withDefault 0 config.selectedIndex
 
+        focused_index =
+            case model.focused of
+                Just f -> f
+                Nothing -> selected_index
+
         tab_index =
-            if selected_index == index then
+            if focused_index == index then
                 0
             else
                 -1
 
         ripple =
             Ripple.view False
-                listItemDomId
+                list_item_dom_id
                 (lift << RippleMsg index)
                 (Dict.get index model.ripples
                     |> Maybe.withDefault Ripple.defaultModel
@@ -268,10 +343,73 @@ liView domId lift model config index options children =
         , case config.onSelectListItem of
               Just onSelect -> Options.onClick (onSelect index)
               Nothing -> Options.nop
+
+        , Options.onWithOptions "keydown" <|
+            Decode.map2
+                (\key keyCode ->
+                     let
+                         next_index = index + 1
+
+                         next_item = Array.get next_index listItemIds
+
+                         previous_index = index - 1
+
+                         previous_item = Array.get previous_index listItemIds
+
+                         last_index = (Array.length listItemIds) - 1
+
+                         -- TODO: handle arrow left and right if horizontal list
+                         (index_to_focus, id_to_focus ) =
+                             if key == Just "ArrowDown" || keyCode == 40 then
+                                 case next_item of
+                                     Just id -> (Just next_index, Just id)
+                                     Nothing -> (Just next_index, Nothing)
+                             else if key == Just "ArrowUp" || keyCode == 38 then
+                                 case previous_item of
+                                     Just id -> (Just previous_index, Just id)
+                                     Nothing -> (Just previous_index, Nothing)
+                             else if key == Just "Home" || keyCode == 36 then
+                                  (Just 0, Array.get 0 listItemIds)
+                             else if key == Just "End" || keyCode == 35 then
+                                  (Just last_index, Array.get last_index listItemIds)
+                             else
+                                  (Nothing, Nothing)
+
+                         selectItem =
+                             key == Just "Enter" || keyCode == 13 ||
+                             key == Just "Space" || keyCode == 32
+
+                         msg =
+                             if selectItem then
+                                 case config.onSelectListItem of
+                                     Just onSelect -> SelectItem index onSelect
+                                     Nothing -> NoOp
+                             else
+                                 case (index_to_focus, id_to_focus) of
+                                     (Just idx, Just id) -> FocusItem idx id
+                                     (_, _) -> NoOp
+
+                     in
+                         { message = lift msg
+                         , preventDefault = index_to_focus /= Nothing || selectItem
+                         , stopPropagation = False
+                         }
+                )
+                (Decode.oneOf
+                     [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                     , Decode.succeed Nothing
+                     ]
+                 )
+                (Decode.at [ "keyCode" ] Decode.int)
         ]
         []
         children
 
+
+-- Perhaps we need to pick up any custom id set explicitly on the list item?
+listItemDomId : String -> Int -> String
+listItemDomId domId index =
+    domId ++ "--" ++ String.fromInt index
 
 
 a : List (Property m) -> List (Html m) -> Html m
@@ -409,11 +547,12 @@ dividerView :
     -> (Msg m -> m)
     -> Model
     -> Config m
+    -> Array String
     -> Int
     -> List (Property m)
     -> List (Html m)
     -> Html m
-dividerView domId lift model config index options children=
+dividerView domId lift model config listItemsIds index options children=
     let
         li_summary =
             Options.collect defaultConfig options
