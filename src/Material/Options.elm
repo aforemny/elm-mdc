@@ -310,7 +310,33 @@ onSubmit =
     Internal.Options.onSubmit
 
 
-{-| -}
+{-|
+Act on an event with the option to disable default processing.
+
+    import Html
+    import Material.Options expose (styled)
+    import Json.Decode as Decode
+
+    styled Html.li
+          [ Options.onWithOptions "keydown" <|
+              Decode.map2
+                  (\key keyCode ->
+                       let
+                           msg = NoOp
+                       in
+                           { message = lift msg
+                           , preventDefault = True
+                           , stopPropagation = False
+                           }
+                  )
+                  (Decode.oneOf
+                       [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                       , Decode.succeed Nothing
+                       ]
+                   )
+                  (Decode.at [ "keyCode" ] Decode.int)
+          ]
+-}
 onWithOptions : String -> Decoder { message : m, stopPropagation : Bool, preventDefault : Bool } -> Property c m
 onWithOptions =
     Internal.Options.onWithOptions
