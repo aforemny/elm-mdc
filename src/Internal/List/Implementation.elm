@@ -161,7 +161,10 @@ ul domId lift model options items =
 -- Perhaps we need to pick up any custom id set explicitly on the list item?
 doListItemDomId : String -> Int -> ListItem m -> String
 doListItemDomId domId index listItem =
-    listItemDomId domId index
+    if listItem.focusable then
+        listItemDomId domId index
+    else
+        ""
 
 
 
@@ -267,6 +270,7 @@ twoLine =
 type alias ListItem m =
     { options : List (Property m)
     , children : List (Html m)
+    , focusable : Bool
     , view : Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> List (Property m) -> List (Html m) -> Html m
     }
 
@@ -275,6 +279,7 @@ li : List (Property m) -> List (Html m) -> ListItem m
 li options children =
     { options = options
     , children = children
+    , focusable = True
     , view = liView
     }
 
@@ -348,30 +353,30 @@ liView domId lift model config listItemIds index options children =
             Decode.map2
                 (\key keyCode ->
                      let
-                         next_index = index + 1
-
-                         next_item = Array.get next_index listItemIds
-
-                         previous_index = index - 1
-
-                         previous_item = Array.get previous_index listItemIds
-
-                         last_index = (Array.length listItemIds) - 1
 
                          -- TODO: handle arrow left and right if horizontal list
                          (index_to_focus, id_to_focus ) =
                              if key == Just "ArrowDown" || keyCode == 40 then
-                                 case next_item of
-                                     Just id -> (Just next_index, Just id)
-                                     Nothing -> (Just next_index, Nothing)
+                                 let
+                                     focusable_element = firstNonEmptyId (index + 1) listItemIds
+                                 in
+                                 case focusable_element of
+                                     Just (next_index, next_item) -> (Just next_index, Just next_item)
+                                     Nothing -> (Just (index + 1), Nothing)
                              else if key == Just "ArrowUp" || keyCode == 38 then
-                                 case previous_item of
-                                     Just id -> (Just previous_index, Just id)
-                                     Nothing -> (Just previous_index, Nothing)
+                                 let
+                                     focusable_element = lastNonEmptyId index listItemIds
+                                 in
+                                 case focusable_element of
+                                     Just (previous_index, previous_item) -> (Just previous_index, Just previous_item)
+                                     Nothing -> (Just (index - 1), Nothing)
                              else if key == Just "Home" || keyCode == 36 then
                                   (Just 0, Array.get 0 listItemIds)
                              else if key == Just "End" || keyCode == 35 then
-                                  (Just last_index, Array.get last_index listItemIds)
+                                  let
+                                      last_index = (Array.length listItemIds) - 1
+                                  in
+                                      (Just last_index, Array.get last_index listItemIds)
                              else
                                   (Nothing, Nothing)
 
@@ -412,6 +417,48 @@ listItemDomId domId index =
     domId ++ "--" ++ String.fromInt index
 
 
+slicedIndexedList : Int -> Int -> Array a -> List (Int, a)
+slicedIndexedList from to array =
+    Array.slice from to array
+        |> Array.toIndexedList
+
+
+firstNonEmptyId : Int -> Array String -> Maybe (Int, String)
+firstNonEmptyId from array =
+    let
+        list = slicedIndexedList from (Array.length array) array
+        non_empty_id = find (\(i, id) -> id /= "") list
+    in
+        non_empty_id
+
+
+lastNonEmptyId : Int -> Array String -> Maybe (Int, String)
+lastNonEmptyId to array =
+    let
+        list = slicedIndexedList 0 to array
+        non_empty_id = find (\(i, id) -> id /= "") (List.reverse list)
+    in
+        non_empty_id
+
+
+{- Thanks to List.Extra.find
+-}
+find : (a -> Bool) -> List a -> Maybe a
+find predicate list =
+    case list of
+        [] ->
+            Nothing
+
+        first :: rest ->
+            if predicate first then
+                Just first
+
+            else
+                find predicate rest
+
+
+{- List item element as virtual dom.
+-}
 a : List (Property m) -> List (Html m) -> Html m
 a options =
     let
@@ -538,6 +585,7 @@ divider : List (Property m) -> List (Html m) -> ListItem m
 divider options children =
     { options = options
     , children = children
+    , focusable = False
     , view = dividerView
     }
 
