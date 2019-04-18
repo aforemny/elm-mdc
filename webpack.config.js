@@ -5,7 +5,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './'),
     filename: 'elm-mdc.js',
-    library: 'ElmMdc'
   },
   module: {
     rules: [

@@ -3,7 +3,6 @@ module Internal.TabBar.Implementation exposing
     , Tab
     , activeTab
     , fadingIconIndicator
-    , horizontalScrollbarHeight
     , icon
     , indicatorIcon
     , react
@@ -189,8 +188,6 @@ type alias Config =
     , activeTab : Int
     , icon : Maybe String
     , smallIndicator : Bool
-    -- This value must be set as config value for every tab bar that could scroll.
-    , horizontalScrollbarHeight : Int
     , indicatorIcon : Maybe String
     , fadingIconIndicator : Bool
     }
@@ -202,9 +199,6 @@ defaultConfig =
     , activeTab = 0
     , icon = Nothing
     , smallIndicator = False
-    -- A value of 10 worked in the past for at least FireFox. On my machine I now need 8.
-    -- Chrome needs 0.
-    , horizontalScrollbarHeight = 0
     , indicatorIcon = Nothing
     , fadingIconIndicator = False
     }
@@ -246,11 +240,6 @@ stacked =
 smallIndicator : Property m
 smallIndicator =
     Options.option (\config -> { config | smallIndicator = True })
-
-
-horizontalScrollbarHeight : Int -> Property m
-horizontalScrollbarHeight height =
-    Options.option (\config -> { config | horizontalScrollbarHeight = height })
 
 
 indicatorIcon : String -> Property m
@@ -340,7 +329,7 @@ scroller domId lift model options nodes =
             [ Options.id (domId ++ "__scroll-area")
             , cs "mdc-tab-scroller__scroll-area"
             , cs "mdc-tab-scroller__scroll-area--scroll"
-            , css "margin-bottom" (String.fromInt -config.horizontalScrollbarHeight ++ "px")
+            , css "margin-bottom" "calc(-1 * var(--elm-mdc-horizontal-scrollbar-height))"
             ]
             [ Options.apply summary
                 div

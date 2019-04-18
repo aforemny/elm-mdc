@@ -243,23 +243,12 @@ import CustomEvent from 'custom-event';
 
 
 /**
- * Stores result from computeHorizontalScrollbarHeight to avoid redundant processing.
- * @private {number|undefined}
- */
-export let horizontalScrollbarHeight_
-
-/**
  * Computes the height of browser-rendered horizontal scrollbars using a self-created test element.
  * May return 0 (e.g. on OS X browsers under default configuration).
  * @param {!Document} documentObj
- * @param {boolean=} shouldCacheResult
  * @return {number}
  */
-export function computeHorizontalScrollbarHeight(documentObj, shouldCacheResult = true) {
-  if (shouldCacheResult && typeof horizontalScrollbarHeight_ !== "undefined") {
-    return horizontalScrollbarHeight_;
-  }
-
+export function computeHorizontalScrollbarHeight(documentObj) {
   const el = documentObj.createElement("div");
   el.classList.add("mdc-tab-scroller__test");
   documentObj.body.appendChild(el);
@@ -267,8 +256,23 @@ export function computeHorizontalScrollbarHeight(documentObj, shouldCacheResult 
   const horizontalScrollbarHeight = el.offsetHeight - el.clientHeight;
   documentObj.body.removeChild(el);
 
-  if (shouldCacheResult) {
-    horizontalScrollbarHeight_ = horizontalScrollbarHeight;
-  }
   return horizontalScrollbarHeight;
 }
+
+
+/**
+ * Sets height of horizontal scrollbar as CSS variable.
+ */
+function setHorizontalScrollbarHeight(documentObj) {
+  const height = computeHorizontalScrollbarHeight(documentObj);
+  const style = documentObj.createElement("style");
+  style.innerHTML = ":root { --elm-mdc-horizontal-scrollbar-height: " + height + "px; }";
+  documentObj.head.appendChild(style);
+}
+
+
+/**
+ * Make height of horizontal scrollbar available to elm-mdc.
+ * Tip: https://discourse.elm-lang.org/t/calculating-the-height-of-the-horizontal-scrollbar-really-need-to-call-javascript/3493/9?u=berend
+ */
+setHorizontalScrollbarHeight(document);
