@@ -388,7 +388,8 @@ selectedIndex =
 
 {-| Msg to send when a list item has been selected.
 
-Bug: the index sent includes dividers.
+Perhaps a bug: the index sent includes dividers, i.e. it's an index
+into the list you passed.
 -}
 onSelectListItem : (Int -> m) -> Property m
 onSelectListItem =
