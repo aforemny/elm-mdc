@@ -68,7 +68,7 @@ destinations and other functionality on an app.
                     ]
               ]
         ]
-    , Drawer.scrim [ Options.onClick (lift CloseDrawer) ] []a
+    , Drawer.scrim [ Options.onClick CloseDrawer ] []
     , styled Html.div
         [ cs "drawer-frame-app-content" ]
         [ p [] [ text "content" ] ]
