@@ -32,6 +32,11 @@ Stuff missed before I did the 1.1.1 release.
   * Support for character counter via Material.TextField.CharacterCounter.
 
 
+## Upgrade to 0.43
+
+* Snackbar.Contents: new record structure.
+
+
 ## Upgrade to 0.42
 
 * Textfield:
@@ -45,6 +50,7 @@ Stuff missed before I did the 1.1.1 release.
   * Dialog.body is now Dialog.content
   * Dialog.footer is now Dialog.actions.
   * Dialog.header is removed.
+  * Dialog.backdrop is removed, see new structure.
 
 * Tabs: replaced by TabBar. Structure mostly the same.
   * Replace `import Material.Tabs as TabBar` with `import Material.TabBar as TabBar`.
@@ -58,3 +64,8 @@ Stuff missed before I did the 1.1.1 release.
   * Select.outlined: new variant.
 
 * Lists: two line format needs special primaryText class.
+
+
+## Upgrade to 0.39
+
+* Material.Drawer.Temporary replaced with Material.Drawer.Modal.
