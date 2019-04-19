@@ -12,14 +12,12 @@
             "elm/html": "1.0.0",
             "elm/json": "1.0.0",
             "elm/regex": "1.0.0",
-            "elm/svg": "1.0.1",
-            "truqu/elm-md5": "1.1.0"
+            "elm/svg": "1.0.1"
         },
         "indirect": {
             "elm/time": "1.0.0",
             "elm/url": "1.0.0",
-            "elm/virtual-dom": "1.0.2",
-            "zwilias/elm-utf-tools": "2.0.1"
+            "elm/virtual-dom": "1.0.2"
         }
     },
     "test-dependencies": {
