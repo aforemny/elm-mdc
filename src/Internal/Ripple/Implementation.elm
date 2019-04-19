@@ -38,7 +38,6 @@ import Internal.Ripple.Model
         , strings
         )
 import Json.Decode as Decode exposing (Decoder)
-import MD5
 import Process
 import Task
 
@@ -307,20 +306,6 @@ cssVariables isUnbounded { fgScale, translateStart, translateEnd, initialSize, f
 
             else
                 { top = 0, left = 0 }
-
-        className =
-            (++) "mdc-ripple--" <|
-                MD5.hex <|
-                    String.concat <|
-                        [ String.fromFloat frame.left
-                        , String.fromFloat frame.top
-                        , String.fromInt initialSize
-                        , String.fromFloat fgScale
-                        , String.fromFloat unboundedCoords.top
-                        , String.fromFloat unboundedCoords.left
-                        , translateStart
-                        , translateEnd
-                        ]
 
         variables =
             List.concat
