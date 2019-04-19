@@ -63,6 +63,7 @@ Assuming an empty directory, you create an elm-mdc application as follows:
 elm install elm/regex
 elm install elm/svg
 elm install elm/json
+elm install debois/elm-dom
 ```
 5. Change the `source-directories` property in `elm.json` to include `elm-mdc`:
 
