@@ -8,7 +8,7 @@ import CustomEvent from 'custom-event';
 
   window["ElmFocusTrap"] = { activeTrap: null }
 
-  let setUp = (node) => {
+  let setUp = (node, addScrollLock) => {
     if (window["ElmFocusTrap"].activeTrap !== null) {
       return
     }
@@ -32,7 +32,8 @@ import CustomEvent from 'custom-event';
         node: node,
         focusTrap: focusTrap
       }
-      document.body.classList.add("mdc-dialog-scroll-lock")
+      if (addScrollLock)
+        document.body.classList.add("mdc-dialog-scroll-lock")
     } catch (e) {
       // TODO: find out why createFocusTrap is called twice on menu
       //console.log(e)
@@ -81,7 +82,7 @@ import CustomEvent from 'custom-event';
         if (typeof node.dataset.focustrap === "undefined") {
           tearDown(node)
         } else {
-          setUp(node)
+          setUp(node, node.classList.contains("mdc-dialog"))
         }
       }
     }
