@@ -1,5 +1,6 @@
 module Material.List exposing
     ( Property
+    , ListItem
     , ul, ol
     , nonInteractive
     , dense
@@ -117,6 +118,7 @@ imported qualified as `Lists`.
 
 ## List Items
 
+@docs ListItem
 @docs li
 @docs text
 @docs primaryText
@@ -155,6 +157,14 @@ import Material.Options as Options
 -}
 type alias Property m =
     List.Property m
+
+
+{-| The ListItem type as returned by `li` and `divider` and such. As
+Html m nodes cannot be manipulated, we use pseudo nodes, which can
+render themselves when needed.
+-}
+type alias ListItem m =
+    List.ListItem m
 
 
 {-| The list element.
