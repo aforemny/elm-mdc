@@ -21,11 +21,12 @@ module Internal.TopAppBar.Implementation exposing
 
 import DOM
 import Html exposing (Html, text)
+import Html.Attributes exposing (href)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, nop, styled, when)
+import Internal.Options as Options exposing (attribute, cs, css, nop, styled, when)
 import Internal.TopAppBar.Model exposing (Config, Model, Msg(..), defaultConfig, defaultModel)
 import Json.Decode as Json exposing (Decoder)
 
@@ -370,6 +371,7 @@ navigationIcon options name =
     Icon.view
         (cs "mdc-top-app-bar__navigation-icon"
             :: Icon.anchor
+            :: attribute (href "#")
             :: options
         )
         name
@@ -396,6 +398,7 @@ actionItem options name =
     Icon.view
         (cs "mdc-top-app-bar__action-item"
             :: Icon.anchor
+            :: attribute (href "#")
             :: options
         )
         name
