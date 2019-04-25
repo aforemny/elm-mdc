@@ -10,8 +10,8 @@ module Material.Drawer.Modal exposing
     , scrim
     )
 
-{-| The MDC Navigation Drawer is used to organize access to
-destinations and other functionality on an app.
+{-| Modal drawers are elevated above most of the app’s UI and don’t
+affect the screen’s layout grid.
 
 
 # Resources
