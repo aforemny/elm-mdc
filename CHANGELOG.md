@@ -7,6 +7,9 @@ Breaking changes:
 * Lists now support ripples. To implement this, Material.List.ul now
   needs the full Mdc, index and model parameters as is usual with the
   other components.
+* TopAppBar.navigationIcon and TopAppBar.actionItem need the usual 3
+  additional arguments now, in order to implement ripples. It also
+  uses a button instead of an a element.
 
 
 Implementation changes:

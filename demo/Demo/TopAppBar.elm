@@ -111,15 +111,15 @@ view lift page topAppBarPage model =
                             [ TopAppBar.section
                                 [ TopAppBar.alignStart
                                 ]
-                                [ TopAppBar.navigationIcon [] "menu"
+                                [ TopAppBar.navigationIcon (lift << Mdc) "hero-menu" model.mdc [] "menu"
                                 , TopAppBar.title [] [ text "Title" ]
                                 ]
                             , TopAppBar.section
                                 [ TopAppBar.alignEnd
                                 ]
-                                [ TopAppBar.actionItem [] "file_download"
-                                , TopAppBar.actionItem [] "print"
-                                , TopAppBar.actionItem [] "more_vert"
+                                [ TopAppBar.actionItem (lift << Mdc) "hero-file_download" model.mdc [] "file_download"
+                                , TopAppBar.actionItem (lift << Mdc) "hero-print" model.mdc [] "print"
+                                , TopAppBar.actionItem (lift << Mdc) "hero-more_vert" model.mdc [] "more_vert"
                                 ]
                             ]
                         ]
@@ -146,7 +146,7 @@ iframe : (Msg m -> m) -> Model m -> String -> TopAppBarPage -> Html m
 iframe lift model title topAppBarPage =
     let
         url =
-            (++) "https://aforemny.github.io/elm-mdc/" <|
+            (++) "./" <|
                 Url.toString (Url.TopAppBar (Just topAppBarPage))
     in
     styled Html.div
@@ -215,6 +215,26 @@ topAppBarWrapper lift index model options topappbar =
         ]
 
 
+topAppBar  : (Msg m -> m) -> Material.Index -> Model m -> List (TopAppBar.Property m) -> Html m
+topAppBar lift index model options =
+    TopAppBar.view (lift << Mdc) index model.mdc
+        options
+        [ TopAppBar.section
+              [ TopAppBar.alignStart
+              ]
+              [ TopAppBar.navigationIcon (lift << Mdc) (index ++ "-menu") model.mdc [] "menu"
+              , TopAppBar.title [] [ text "Title" ]
+              ]
+        , TopAppBar.section
+            [ TopAppBar.alignEnd
+            ]
+              [ TopAppBar.actionItem (lift << Mdc) (index ++ "-file_down") model.mdc [] "file_download"
+              , TopAppBar.actionItem (lift << Mdc) (index ++ "-print") model.mdc [] "print"
+              , TopAppBar.actionItem (lift << Mdc) (index ++ "-bookmark") model.mdc [] "bookmark"
+              ]
+        ]
+
+
 standardTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
 standardTopAppBar lift index model =
     topAppBarWrapper lift
@@ -222,25 +242,7 @@ standardTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            index
-            model.mdc
-            []
-            [ TopAppBar.section
-                [ TopAppBar.alignStart
-                ]
-                [ TopAppBar.navigationIcon [] "menu"
-                , TopAppBar.title [] [ text "Title" ]
-                ]
-            , TopAppBar.section
-                [ TopAppBar.alignEnd
-                ]
-                [ TopAppBar.actionItem [] "file_download"
-                , TopAppBar.actionItem [] "print"
-                , TopAppBar.actionItem [] "bookmark"
-                ]
-            ]
-        )
+        ( topAppBar lift index model [] )
 
 
 fixedTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -250,59 +252,7 @@ fixedTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            index
-            model.mdc
-            [ TopAppBar.fixed
-            ]
-            [ TopAppBar.section
-                [ TopAppBar.alignStart
-                ]
-                [ TopAppBar.navigationIcon [] "menu"
-                , TopAppBar.title [] [ text "Title" ]
-                ]
-            , TopAppBar.section
-                [ TopAppBar.alignEnd
-                ]
-                [ TopAppBar.actionItem [] "file_download"
-                , TopAppBar.actionItem [] "print"
-                , TopAppBar.actionItem [] "bookmark"
-                ]
-            ]
-        )
-
-
-menuTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
-menuTopAppBar lift index model =
-    topAppBarWrapper lift
-        index
-        model
-        [ TopAppBar.fixedAdjust
-        ]
-        (TopAppBar.view (lift << Mdc)
-            index
-            model.mdc
-            [ TopAppBar.fixed
-            ]
-            [ TopAppBar.section
-                [ TopAppBar.alignStart
-                ]
-                [ TopAppBar.navigationIcon [] "menu"
-                , TopAppBar.title [] [ text "Title" ]
-                ]
-            , TopAppBar.section
-                [ TopAppBar.alignEnd
-                ]
-                [ TopAppBar.actionItem [] "file_download"
-                , TopAppBar.actionItem [] "print"
-                , TopAppBar.actionItem [] "bookmark"
-                ]
-            ]
-        )
-
-
-
--- , viewDrawer
+        ( topAppBar lift index model [ TopAppBar.fixed ] )
 
 
 denseTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -312,26 +262,7 @@ denseTopAppBar lift index model =
         model
         [ TopAppBar.denseFixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            index
-            model.mdc
-            [ TopAppBar.dense
-            ]
-            [ TopAppBar.section
-                [ TopAppBar.alignStart
-                ]
-                [ TopAppBar.navigationIcon [] "menu"
-                , TopAppBar.title [] [ text "Title" ]
-                ]
-            , TopAppBar.section
-                [ TopAppBar.alignEnd
-                ]
-                [ TopAppBar.actionItem [] "file_download"
-                , TopAppBar.actionItem [] "print"
-                , TopAppBar.actionItem [] "bookmark"
-                ]
-            ]
-        )
+        ( topAppBar lift index model [ TopAppBar.dense ] )
 
 
 prominentTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -341,26 +272,7 @@ prominentTopAppBar lift index model =
         model
         [ TopAppBar.prominentFixedAdjust
         ]
-        (TopAppBar.view (lift << Mdc)
-            index
-            model.mdc
-            [ TopAppBar.prominent
-            ]
-            [ TopAppBar.section
-                [ TopAppBar.alignStart
-                ]
-                [ TopAppBar.navigationIcon [] "menu"
-                , TopAppBar.title [] [ text "Title" ]
-                ]
-            , TopAppBar.section
-                [ TopAppBar.alignEnd
-                ]
-                [ TopAppBar.actionItem [] "file_download"
-                , TopAppBar.actionItem [] "print"
-                , TopAppBar.actionItem [] "bookmark"
-                ]
-            ]
-        )
+        ( topAppBar lift index model [ TopAppBar.prominent ] )
 
 
 shortTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -379,13 +291,13 @@ shortTopAppBar lift index model =
             [ TopAppBar.section
                 [ TopAppBar.alignStart
                 ]
-                [ TopAppBar.navigationIcon [] "menu"
+                [ TopAppBar.navigationIcon (lift << Mdc) (index ++ "-menu") model.mdc [] "menu"
                 , TopAppBar.title [] [ text "Title" ]
                 ]
             , TopAppBar.section
                 [ TopAppBar.alignEnd
                 ]
-                [ TopAppBar.actionItem [] "file_download"
+                [ TopAppBar.actionItem (lift << Mdc) (index ++ "-file_download") model.mdc [] "file_download"
                 ]
             ]
         )
@@ -408,13 +320,13 @@ shortCollapsedTopAppBar lift index model =
             [ TopAppBar.section
                 [ TopAppBar.alignStart
                 ]
-                [ TopAppBar.navigationIcon [] "menu"
+                [ TopAppBar.navigationIcon (lift << Mdc) (index ++ "-menu") model.mdc [] "menu"
                 , TopAppBar.title [] [ text "Title" ]
                 ]
             , TopAppBar.section
                 [ TopAppBar.alignEnd
                 ]
-                [ TopAppBar.actionItem [] "file_download"
+                [ TopAppBar.actionItem (lift << Mdc) (index ++ "-file_download") model.mdc [] "file_download"
                 ]
             ]
         )

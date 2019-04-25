@@ -89,7 +89,7 @@ view lift page model =
                 [ TopAppBar.section
                     [ TopAppBar.alignStart
                     ]
-                    [ TopAppBar.navigationIcon [ Options.onClick (lift OpenDrawer) ] "menu"
+                    [ TopAppBar.navigationIcon (lift << Mdc) "modal-drawer-menu" model.mdc [ Options.onClick (lift OpenDrawer) ] "menu"
                     , TopAppBar.title [] [ text "Modal Drawer" ]
                     ]
                 ]

@@ -10,8 +10,9 @@ module Material.Drawer.Dismissible exposing
     , appContent
     )
 
-{-| The MDC Navigation Drawer is used to organize access to
-destinations and other functionality on an app.
+{-| Dismissible drawers are by default hidden off screen, and can
+slide into view. Dismissible drawers should be used when navigation is
+not common, and the main app content is prioritized.
 
 
 # Resources

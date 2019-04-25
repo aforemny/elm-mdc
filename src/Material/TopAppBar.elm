@@ -38,7 +38,8 @@ navigation icon, and action items.
     TopAppBar.view Mdc "my-top-app-bar" model.mdc
         [ TopAppBar.fixed ]
         [ TopAppBar.section [ TopAppBar.alignStart ]
-              [ TopAppBar.navigationIcon [ Options.onClick OpenDrawer ] "menu"
+              [ TopAppBar.navigationIcon Mdc "my-menu" model.mdc
+                    [ Options.onClick OpenDrawer ] "menu"
               , TopAppBar.title [] [ text title ]
               ]
           , TopAppBar.section [ TopAppBar.alignEnd ]
@@ -104,7 +105,7 @@ import Internal.Component exposing (Index)
 import Internal.TopAppBar.Implementation as TopAppBar
 import Material
 import Material.Icon as Icon
-import Material.Options as Options
+import Material.Options as Options exposing (cs)
 
 
 {-| TopAppBar property.
@@ -145,9 +146,16 @@ title =
 
 {-| Action item placed on the side opposite of the navigation icon.
 -}
-actionItem : List (Icon.Property m) -> String -> Html m
-actionItem options name =
-    TopAppBar.actionItem options name
+actionItem :
+    (Material.Msg m -> m)
+    -> Index
+    -> Material.Model m
+    -> List (Icon.Property m)
+    -> String
+    -> Html m
+actionItem lift index model options name =
+    TopAppBar.actionItem lift index model (cs "mdc-top-app-bar__action-item" :: options ) name
+
 
 
 {-| Make section align to the start.
@@ -166,9 +174,17 @@ alignEnd =
 
 {-| Represent the navigation element in the top left corner.
 -}
-navigationIcon : List (Icon.Property m) -> String -> Html m
-navigationIcon =
-    TopAppBar.navigationIcon
+navigationIcon :
+    (Material.Msg m -> m)
+    -> Index
+    -> Material.Model m
+    -> List (Icon.Property m)
+    -> String
+    -> Html m
+--navigationIcon =
+--    TopAppBar.actionItem
+navigationIcon lift index model options name =
+    TopAppBar.actionItem lift index model (cs "mdc-top-app-bar__navigation-icon" :: options ) name
 
 
 {-| Fixed top app bars stay at the top of the page and elevate above
