@@ -7,8 +7,13 @@ module Internal.TopAppBar.Model exposing
     )
 
 
+import Dict exposing (Dict)
+import Internal.Ripple.Model as Ripple
+
+
 type alias Model =
-    { lastScrollPosition : Maybe Float
+    { ripples : Dict String Ripple.Model
+    , lastScrollPosition : Maybe Float
     , topAppBarHeight : Maybe Float
     , wasDocked : Bool
     , isDockedShowing : Bool
@@ -24,7 +29,8 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { lastScrollPosition = Nothing
+    { ripples = Dict.empty
+    , lastScrollPosition = Nothing
     , topAppBarHeight = Nothing
     , wasDocked = True
     , isDockedShowing = True
@@ -34,7 +40,8 @@ defaultModel =
 
 
 type Msg
-    = Init { scrollPosition : Float, topAppBarHeight : Float }
+    = RippleMsg String Ripple.Msg
+    | Init { scrollPosition : Float, topAppBarHeight : Float }
     | Resize { scrollPosition : Float, topAppBarHeight : Float }
     | Scroll { scrollPosition : Float }
 

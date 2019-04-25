@@ -85,7 +85,7 @@ view lift page model =
                 [ TopAppBar.section
                     [ TopAppBar.alignStart
                     ]
-                    [ TopAppBar.navigationIcon [ Options.onClick (lift ToggleDrawer) ] "menu"
+                    [ TopAppBar.navigationIcon (lift << Mdc) "dismissible-drawer-menu" model.mdc [ Options.onClick (lift ToggleDrawer) ] "menu"
                     , TopAppBar.title [] [ text "Dismissible Drawer" ]
                     ]
                 ]

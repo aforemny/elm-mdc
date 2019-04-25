@@ -9,7 +9,6 @@ module Internal.TopAppBar.Implementation exposing
     , fixed
     , fixedAdjust
     , hasActionItem
-    , navigationIcon
     , prominent
     , prominentFixedAdjust
     , react
@@ -19,6 +18,7 @@ module Internal.TopAppBar.Implementation exposing
     , view
     )
 
+import Dict exposing (Dict)
 import DOM
 import Html exposing (Html, text)
 import Html.Attributes exposing (href)
@@ -27,6 +27,8 @@ import Internal.GlobalEvents as GlobalEvents
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
 import Internal.Options as Options exposing (attribute, cs, css, nop, styled, when)
+import Internal.Ripple.Implementation as Ripple
+import Internal.Ripple.Model as Ripple
 import Internal.TopAppBar.Model exposing (Config, Model, Msg(..), defaultConfig, defaultModel)
 import Json.Decode as Json exposing (Decoder)
 
@@ -49,9 +51,22 @@ cssClasses =
     }
 
 
-update : Msg -> Model -> ( Model, Cmd m )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        RippleMsg index msg_ ->
+            let
+                ( ripple, effects ) =
+                    Ripple.update msg_
+                        (Dict.get index model.ripples
+                            |> Maybe.withDefault Ripple.defaultModel
+                        )
+
+            in
+            ( { model | ripples = Dict.insert index ripple model.ripples }
+            , Cmd.map (RippleMsg index) effects
+            )
+
         Init { scrollPosition, topAppBarHeight } ->
             ( topAppBarScrollHandler scrollPosition
                 { model
@@ -366,15 +381,43 @@ alignEnd =
     cs "mdc-top-app-bar__section--align-end"
 
 
-navigationIcon : List (Icon.Property m) -> String -> Html m
-navigationIcon options name =
-    Icon.view
-        (cs "mdc-top-app-bar__navigation-icon"
-            :: Icon.anchor
-            :: attribute (href "#")
+actionItemView :
+    Index
+    -> (Msg -> m)
+    -> Model
+    -> List (Icon.Property m)
+    -> String
+    -> Html m
+actionItemView domId lift model options name =
+    let
+        ripple =
+            Ripple.view True
+                domId
+                (lift << RippleMsg domId)
+                (Dict.get domId model.ripples
+                    |> Maybe.withDefault Ripple.defaultModel
+                )
+                []
+    in
+        Icon.view
+            ( Icon.button
+            :: ripple.interactionHandler
+            :: ripple.properties
             :: options
-        )
-        name
+            )
+            name
+
+
+actionItem :
+    (Internal.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> List (Icon.Property m)
+    -> String
+    -> Html m
+actionItem =
+    \lift index ->
+        Component.render getSet.get (actionItemView index ) Internal.Msg.TopAppBarMsg lift index
 
 
 section : List (Property m) -> List (Html m) -> Html m
@@ -393,15 +436,16 @@ title options =
         )
 
 
+{-
 actionItem : List (Icon.Property m) -> String -> Html m
 actionItem options name =
     Icon.view
         (cs "mdc-top-app-bar__action-item"
-            :: Icon.anchor
-            :: attribute (href "#")
+            :: Icon.button
             :: options
         )
         name
+-}
 
 
 fixedAdjust : Options.Property c m
