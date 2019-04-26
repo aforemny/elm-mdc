@@ -1,8 +1,11 @@
 {
   "name": "elm-mdc",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "main": "elm-mdc.js",
+  "scripts": {
+    "build": "webpack --mode=production"
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-loader": "^7.1.5",
