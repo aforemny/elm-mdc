@@ -2,7 +2,7 @@ module Demo.Toolbar exposing (Model, Msg(..), defaultModel, subscriptions, updat
 
 import Demo.Page as Page exposing (Page)
 import Demo.Url exposing (ToolbarPage(..))
-import Dict exposing (Dict)
+import Dict
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Material

@@ -6,12 +6,10 @@ import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text, div)
 import Html.Attributes as Html
 import Html.Events as Html
-import Json.Decode as Json
 import Material
 import Material.Button as Button
-import Material.List as Lists
 import Material.Menu as Menu
-import Material.Options as Options exposing (cs, css, nop, styled, when)
+import Material.Options exposing (cs, styled)
 import Material.Typography as Typography
 
 

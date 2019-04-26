@@ -8,7 +8,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Material
 import Material.FormField as FormField
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (css, styled, when)
 import Material.RadioButton as RadioButton
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)

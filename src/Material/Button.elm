@@ -56,7 +56,7 @@ Material Design button requirements.
 
 import Html exposing (Html)
 import Internal.Button.Implementation as Button
-import Internal.Component as Component exposing (Index)
+import Internal.Component exposing (Index)
 import Material
 
 

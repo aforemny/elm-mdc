@@ -29,13 +29,11 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, styled, when)
 import Internal.TextField.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
 import Regex
-import Svg
-import Svg.Attributes
 
 
 type alias Config m =
@@ -405,6 +403,14 @@ type alias Store s =
     { s | textfield : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | textfield : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | textfield : Indexed Model }
+          -> Model
+          -> { a | textfield : Indexed Model }
+   }
 getSet =
     Component.indexed .textfield (\x c -> { c | textfield = x }) defaultModel
 

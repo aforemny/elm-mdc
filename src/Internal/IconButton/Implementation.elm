@@ -18,7 +18,7 @@ import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.IconButton.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, styled, when)
 import Internal.Ripple.Implementation as Ripple
 
 
@@ -171,6 +171,14 @@ type alias Store s =
     }
 
 
+getSet :
+   { get : Index -> { a | iconButton : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | iconButton : Indexed Model }
+          -> Model
+          -> { a | iconButton : Indexed Model }
+   }
 getSet =
     Component.indexed .iconButton (\x y -> { y | iconButton = x }) defaultModel
 

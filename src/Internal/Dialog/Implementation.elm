@@ -21,12 +21,12 @@ import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Dialog.Model exposing (Model, Msg(..), defaultModel)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, styled, when)
 import Json.Decode as Json exposing (Decoder)
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
-update lift msg model =
+update _ msg model =
     case msg of
         NoOp ->
             ( Nothing, Cmd.none )
@@ -46,6 +46,14 @@ type alias Store s =
     { s | dialog : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | dialog : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | dialog : Indexed Model }
+          -> Model
+          -> { a | dialog : Indexed Model }
+   }
 getSet =
     Component.indexed .dialog (\x c -> { c | dialog = x }) defaultModel
 
@@ -220,23 +228,6 @@ accept =
 onClose : m -> Property m
 onClose handler =
     Options.option (\config -> { config | onClose = Just handler })
-
-
-transitionend : Decoder ()
-transitionend =
-    let
-        hasClass cs className =
-            List.member cs (String.split " " className)
-    in
-    Json.andThen
-        (\className ->
-            if hasClass "mdc-dialog__surface" className then
-                Json.succeed ()
-
-            else
-                Json.fail ""
-        )
-        (DOM.target DOM.className)
 
 
 checkScrimClick : Decoder Bool

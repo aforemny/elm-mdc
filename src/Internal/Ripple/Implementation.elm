@@ -10,26 +10,19 @@ module Internal.Ripple.Implementation exposing
     )
 
 import Browser.Dom
-import Char
 import DOM
 import Html exposing (Html, text)
-import Html.Attributes as Html
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Component as Component exposing (Index, Indexed)
-import Internal.Helpers as Helpers
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, css, when)
 import Internal.Ripple.Model
     exposing
-        ( ActivateData
-        , ActivatedData
-        , AnimateDeactivationData
-        , AnimationState(..)
+        ( AnimationState(..)
         , ClientRect
         , Event
         , Model
         , Msg(..)
-        , Point
         , activationEventTypes
         , cssClasses
         , defaultModel
@@ -77,12 +70,6 @@ type alias Config =
     }
 
 
-defaultConfig : Config
-defaultConfig =
-    { color = Nothing
-    }
-
-
 primary : Property m
 primary =
     Options.option (\config -> { config | color = Just "primary" })
@@ -110,9 +97,6 @@ view :
         }
 view isUnbounded domId lift model options =
     let
-        { config } =
-            Options.collect defaultConfig options
-
         focusHandler =
             Options.on "focus" (Decode.succeed (lift Focus))
 
@@ -487,7 +471,7 @@ layoutInternal isUnbounded frame =
             floor (maxDim * numbers.initialOriginScale)
 
         fgScale =
-            maxRadius / (toFloat initialSize)
+            maxRadius / toFloat initialSize
     in
     { fgScale = fgScale
     , initialSize = initialSize

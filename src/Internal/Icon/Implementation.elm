@@ -11,7 +11,7 @@ module Internal.Icon.Implementation exposing
     )
 
 import Html exposing (Html, text)
-import Internal.Options as Options exposing (Property, cs, css, styled)
+import Internal.Options as Options exposing (Property, cs, css)
 
 
 type alias Config =

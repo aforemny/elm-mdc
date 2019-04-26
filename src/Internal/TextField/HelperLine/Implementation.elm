@@ -3,11 +3,11 @@ module Internal.TextField.HelperLine.Implementation exposing
     )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (cs, css, when, aria, styled)
+import Internal.Options as Options exposing (cs, styled)
 
 
 helperLine : List (Options.Property c m) -> List (Html m) -> Html m
 helperLine options list =
     styled Html.div
-        ( ( cs "mdc-text-field-helper-line" ) :: options )
+        ( cs "mdc-text-field-helper-line" :: options )
         list

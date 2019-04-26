@@ -224,6 +224,14 @@ type alias Store s =
     { s | chip : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | chip : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | chip : Indexed Model }
+          -> Model
+          -> { a | chip : Indexed Model }
+   }
 getSet =
     Component.indexed .chip (\x y -> { y | chip = x }) defaultModel
 

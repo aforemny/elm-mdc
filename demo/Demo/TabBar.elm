@@ -1,14 +1,12 @@
 module Demo.TabBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
-import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
-import Html exposing (..)
+import Html exposing (Html, text, h3)
 import Material
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (styled)
 import Material.TabBar as TabBar
-import Material.Theme as Theme
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 

@@ -18,15 +18,14 @@ module Internal.Drawer.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Drawer.Model exposing (Model, Msg(..), defaultModel)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
-import Internal.List.Implementation as Lists
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, many, styled, when)
-import Json.Decode as Decode exposing (Decoder)
+import Internal.Options as Options exposing (cs, styled, when)
+import Json.Decode as Decode
 
 
 update : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
@@ -143,6 +142,14 @@ type alias Store s =
     { s | drawer : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | drawer : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | drawer : Indexed Model }
+          -> Model
+          -> { a | drawer : Indexed Model }
+   }
 getSet =
     Component.indexed .drawer (\x y -> { y | drawer = x }) defaultModel
 

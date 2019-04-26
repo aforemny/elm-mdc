@@ -1,7 +1,7 @@
 module Demo.Startpage.Svg.Theme exposing (view)
 
 import Html exposing (Html)
-import Svg exposing (circle, path, svg, text)
+import Svg exposing (circle, path, svg)
 import Svg.Attributes exposing (cx, cy, d, fill, r, viewBox)
 
 

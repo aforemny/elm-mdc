@@ -3,20 +3,17 @@ module Demo.Cards exposing (Model, Msg(..), defaultModel, update, view)
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, p, text)
+import Html exposing (Html, text)
 import Html.Attributes as Html
 import Material
 import Material.Button as Button
 import Material.Card as Card
-import Material.Checkbox as Checkbox
-import Material.FormField as FormField
-import Material.Icon as Icon
 import Material.IconButton as IconButton
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options exposing (css, styled)
 import Material.Ripple as Ripple
 import Material.Theme as Theme
 import Material.Typography as Typography
-import Platform.Cmd exposing (Cmd, none)
+import Platform.Cmd exposing (Cmd)
 
 
 type alias Model m =

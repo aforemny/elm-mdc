@@ -13,14 +13,14 @@ module Internal.Button.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Html.Attributes as Html
 import Internal.Button.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Helpers as Helpers
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, when)
+import Internal.Options as Options exposing (cs, when)
 import Internal.Ripple.Implementation as Ripple
 
 
@@ -167,6 +167,14 @@ type alias Store s =
     { s | button : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | button : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | button : Indexed Model }
+          -> Model
+          -> { a | button : Indexed Model }
+   }
 getSet =
     Component.indexed .button (\x y -> { y | button = x }) defaultModel
 

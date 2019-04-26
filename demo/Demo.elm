@@ -36,10 +36,9 @@ import Demo.Typography
 import Demo.Url exposing (ToolbarPage(..), TopAppBarPage(..))
 import Html exposing (Html, p, text)
 import Material
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (cs, css, styled)
 import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
-import Platform.Cmd exposing (..)
 import Url
 
 
@@ -120,7 +119,6 @@ defaultModel key =
 -}
 type Msg
     = Mdc (Material.Msg Msg)
-    | NoOp
     | UrlChanged Url.Url
     | UrlRequested Browser.UrlRequest
     | Navigate Demo.Url.Url
@@ -160,9 +158,6 @@ update msg model =
     case msg of
         Mdc msg_ ->
             Material.update Mdc msg_ model
-
-        NoOp ->
-            ( model, Cmd.none )
 
         Navigate url ->
             ( { model | url = url }
@@ -537,11 +532,6 @@ view_ model =
                     [ text "404" ]
                 , text requestedHash
                 ]
-
-
-urlOf : Model -> String
-urlOf model =
-    Demo.Url.toString model.url
 
 
 main : Program () Model Msg

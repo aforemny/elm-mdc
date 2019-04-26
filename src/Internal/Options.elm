@@ -233,6 +233,7 @@ See #221 / this thread on elm-discuss:
 TODO
 
 -}
+{-
 on1 : String -> (a -> b) -> a -> Property c b
 on1 event lift m =
     Listener event
@@ -245,6 +246,7 @@ on1 event lift m =
             )
             (Decode.map lift <| Decode.succeed m)
         )
+-}
 
 
 apply :

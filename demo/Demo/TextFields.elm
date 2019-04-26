@@ -3,12 +3,11 @@ module Demo.TextFields exposing (Model, Msg(..), defaultModel, update, view)
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
-import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Material
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (cs, css, styled)
 import Material.TextField as TextField
 import Material.TextField.HelperLine as TextField
 import Material.TextField.HelperText as TextField
@@ -36,18 +35,6 @@ update lift msg model =
     case msg of
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
-
-
-heroTextFieldsContainer : List (Options.Property c m) -> List (Html m) -> Html m
-heroTextFieldsContainer options =
-    styled Html.div
-        (cs "hero-text-field-container"
-            :: css "display" "flex"
-            :: css "flex" "1 1 100%"
-            :: css "justify-content" "space-around"
-            :: css "flex-wrap" "wrap"
-            :: options
-        )
 
 
 heroTextFieldContainer : List (Options.Property c m) -> List (Html m) -> Html m

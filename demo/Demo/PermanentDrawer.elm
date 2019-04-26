@@ -10,7 +10,6 @@ module Demo.PermanentDrawer exposing
     , view
     )
 
-import Array exposing (Array)
 import Demo.Page exposing (Page)
 import Html exposing (Html, div, h3, h6, text)
 import Html.Attributes as Html
@@ -18,11 +17,9 @@ import Json.Decode as Json
 import Material
 import Material.Button as Button
 import Material.Drawer.Permanent as Drawer
-import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TopAppBar as TopAppBar
-import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 
@@ -110,8 +107,6 @@ drawerItems lift index mdc url select selected =
                 ]
             , Lists.hr [] []
             , Lists.asListItem Html.h6 [ Lists.subheaderClass ] [ text "Labels" ]
-            --, Lists.subheader [ Lists.node Html.h6 ] [ text "Labels" ]
-            --, Lists.ListItem m [] [] False myView
             , Lists.a
                 [ href
                 , Lists.activated |> when (selected == 6)
@@ -150,20 +145,6 @@ drawerItems lift index mdc url select selected =
                 ]
             ]
         ]
-
-
-myView :
-    Material.Index
-    -> (Material.Msg m -> m)
-    -> Material.Model m
-    -> Lists.Property m
-    -> Array String
-    -> Int
-    -> List (Lists.Property m)
-    -> List (Html m)
-    -> Html m
-myView domId lift model config listItemIds index options children =
-    text ""
 
 
 mainContent model mdc rtl_index cmd =

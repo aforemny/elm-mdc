@@ -10,7 +10,7 @@ import Material
 import Material.Button as Button
 import Material.Checkbox as Checkbox
 import Material.FormField as FormField
-import Material.Options as Options exposing (aria, cs, css, nop, role, styled, when)
+import Material.Options as Options exposing (aria, cs, css, role, styled)
 import Material.Snackbar as Snackbar
 import Material.TextField as TextField
 import Material.Typography as Typography

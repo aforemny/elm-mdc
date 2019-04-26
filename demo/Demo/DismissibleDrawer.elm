@@ -11,16 +11,10 @@ import Demo.Page exposing (Page)
 import Demo.PermanentDrawer
 import Html exposing (Html, text)
 import Html.Attributes as Html
-import Html.Events as Events
-import Json.Decode as Json
 import Material
-import Material.Button as Button
 import Material.Drawer.Dismissible as Drawer
-import Material.Icon as Icon
-import Material.List as Lists
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TopAppBar as TopAppBar
-import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 

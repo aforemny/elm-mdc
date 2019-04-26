@@ -53,7 +53,7 @@ module Material.IconButton exposing
 -}
 
 import Html exposing (Html)
-import Internal.Component as Component exposing (Index)
+import Internal.Component exposing (Index)
 import Internal.IconButton.Implementation as IconButton
 import Material
 

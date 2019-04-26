@@ -7,7 +7,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Material
 import Material.FormField as FormField
-import Material.Options as Options exposing (cs, css, for, styled, when)
+import Material.Options as Options exposing (for, styled, when)
 import Material.Switch as Switch
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)

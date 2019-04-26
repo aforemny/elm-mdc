@@ -29,7 +29,7 @@ import Demo.Startpage.Svg.Typography as TypographySvg
 import Demo.Url exposing (Url(..))
 import Html exposing (Html, text)
 import Material.ImageList as ImageList
-import Material.Options as Options exposing (cs, css, id, styled, when)
+import Material.Options as Options exposing (cs, css, id, styled)
 
 
 view : Page m -> Html m

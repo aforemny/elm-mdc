@@ -4,12 +4,11 @@ import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
-import Html exposing (Html, p, text)
+import Html exposing (Html, text)
 import Html.Attributes as Html
 import Material
-import Material.Button as Button
 import Material.Checkbox as Checkbox
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (css, styled)
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 

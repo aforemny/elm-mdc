@@ -7,7 +7,7 @@ module Internal.Switch.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
@@ -131,6 +131,14 @@ type alias Store s =
     { s | switch : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | switch : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | switch : Indexed Model }
+          -> Model
+          -> { a | switch : Indexed Model }
+   }
 getSet =
     Component.indexed .switch (\x y -> { y | switch = x }) defaultModel
 

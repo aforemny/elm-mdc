@@ -11,7 +11,7 @@ import Material
 import Material.Checkbox as Checkbox
 import Material.Icon as Icon
 import Material.List as Lists
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (css, styled, when)
 import Material.RadioButton as RadioButton
 import Material.Typography as Typography
 
@@ -72,7 +72,7 @@ demoList lift model index =
     in
         [ css "max-width" "600px"
         , css "border" "1px solid rgba(0,0,0,.1)"
-        , Lists.onSelectListItem (lift << (SelectListItem index))
+        , Lists.onSelectListItem (lift << SelectListItem index)
         , case selected of
               Just i -> Lists.selectedIndex i
               Nothing -> Options.nop
@@ -82,7 +82,7 @@ demoList lift model index =
 heroList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 heroList lift model index =
     Lists.ul (lift << Mdc) index model.mdc
-        (css "background" "#fff" :: ( demoList lift model index))
+        (css "background" "#fff" :: demoList lift model index)
         (List.repeat 3 <| Lists.li [] [ text "Line item" ])
 
 
@@ -96,7 +96,7 @@ singleLineList lift model index =
 twoLineList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 twoLineList lift model index =
     Lists.ul (lift << Mdc) index model.mdc
-        (Lists.twoLine :: (demoList lift model index))
+        (Lists.twoLine :: demoList lift model index)
         (List.repeat 3 <|
             Lists.li []
                 [ Lists.text []
@@ -159,7 +159,7 @@ demoIcon =
 folderList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 folderList lift model index =
     Lists.ul (lift << Mdc) index model.mdc
-        (Lists.twoLine :: Lists.avatarList :: (demoList lift model index))
+        (Lists.twoLine :: Lists.avatarList :: demoList lift model index)
         [ Lists.li []
             [ Lists.graphicIcon demoIcon "folder"
             , Lists.text []

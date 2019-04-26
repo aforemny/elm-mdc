@@ -42,12 +42,11 @@ module Internal.List.Implementation exposing
     )
 
 import Array exposing (Array)
-import Dict exposing (Dict)
+import Dict
 import Html exposing (Html)
 import Html.Attributes as Html
 import Browser.Dom
 import Task
-import Process
 import Json.Decode as Decode exposing (Decoder)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Icon.Implementation as Icon
@@ -402,7 +401,7 @@ firstNonEmptyId : Int -> Array String -> Maybe (Int, String)
 firstNonEmptyId from array =
     let
         list = slicedIndexedList from (Array.length array) array
-        non_empty_id = find (\(i, id) -> id /= "") list
+        non_empty_id = find (\(_, id) -> id /= "") list
     in
         non_empty_id
 
@@ -582,7 +581,7 @@ metaImage options url =
 
 asListItem : (List (Html.Attribute m) -> List (Html m) -> Html m) -> List (Property m) -> List (Html m) -> ListItem m
 asListItem dom_node options children =
-    { options = ( node dom_node :: options )
+    { options = node dom_node :: options
     , children = children
     , focusable = False
     , view = asListItemView
@@ -655,6 +654,14 @@ type alias Store s =
     { s | list : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | list : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | list : Indexed Model }
+          -> Model
+          -> { a | list : Indexed Model }
+   }
 getSet =
     Component.indexed .list (\x y -> { y | list = x }) defaultModel
 
