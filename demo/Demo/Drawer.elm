@@ -95,7 +95,7 @@ view lift page model =
                         [ text "subtext" ]
                     ]
                 , Drawer.content []
-                    [ Lists.nav []
+                    [ Lists.ul (lift << Mdc) "permanent-drawer-drawer-list" model.mdc []
                         [ Lists.a
                             [ Options.attribute (Html.href "#drawer")
                             , Lists.activated
@@ -125,30 +125,7 @@ view lift page model =
                     ]
                 ]
             ]
-        , styled Html.h2
-            [ Typography.headline6
-            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-            ]
-            [ text "Resources"
-            ]
-        , ResourceLink.view
-            { link = "https://material.io/go/design-navigation-drawer"
-            , title = "Material Design Guidelines"
-            , icon = "images/material.svg"
-            , altText = "Material Design Guidelines icon"
-            }
-        , ResourceLink.view
-            { link = "https://material.io/components/web/catalog/drawers/"
-            , title = "Documentation"
-            , icon = "images/ic_drive_document_24px.svg"
-            , altText = "Documentation icon"
-            }
-        , ResourceLink.view
-            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-drawer"
-            , title = "Source Code (Material Components Web)"
-            , icon = "images/ic_code_24px.svg"
-            , altText = "Source Code"
-            }
+        , ResourceLink.links (lift << Mdc) model.mdc "navigation-drawer" "drawers" "mdc-drawer"
         , Page.demos
             [ example "Permanent" "#permanent-drawer"
             , example "Dismissible" "#dismissible-drawer"

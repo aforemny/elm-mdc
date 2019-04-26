@@ -1,55 +1,48 @@
-module Demo.Typography exposing (view)
+module Demo.Typography exposing (Model, Msg(..), defaultModel, update, view)
 
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page exposing (Page)
 import Html exposing (..)
+import Material
 import Material.Options as Options exposing (cs, css, nop, styled)
 import Material.Typography as Typography
 
 
-view : Page m -> Html m
-view page =
+type alias Model m =
+    { mdc : Material.Model m
+    }
+
+
+defaultModel : Model m
+defaultModel =
+    { mdc = Material.defaultModel
+    }
+
+
+type Msg m
+    = Mdc (Material.Msg m)
+
+
+update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
+update lift msg model =
+    case msg of
+        Mdc msg_ ->
+            Material.update (lift << Mdc) msg_ model
+
+
+
+view : (Msg m -> m) -> Page m -> Model m -> Html m
+view lift page model =
     page.body "Typography"
         "Roboto is the standard typeface on Android and Chrome."
         [ styled Html.div
             [ cs "demo-wrapper"
             ]
-            [ styled Html.h1 [ Typography.headline5 ] [ text "Typography" ]
-            , styled Html.p
-                [ Typography.body1
-                ]
-                [ text """
-Roboto is the standard typeface on Android and Chrome.
-                       """
-                ]
-            , Hero.view []
+            [ Hero.view []
                 [ styled Html.h1 [ Typography.headline1 ] [ text "Typography" ]
                 ]
-            , styled Html.h2
-                [ Typography.headline6
-                , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-                ]
-                [ text "Resources"
-                ]
-            , ResourceLink.view
-                { link = "https://material.io/go/design-typography"
-                , title = "Material Design Guidelines"
-                , icon = "images/material.svg"
-                , altText = "Material Design Guidelines icon"
-                }
-            , ResourceLink.view
-                { link = "https://material.io/components/web/catalog/typography/"
-                , title = "Documentation"
-                , icon = "images/ic_drive_document_24px.svg"
-                , altText = "Documentation icon"
-                }
-            , ResourceLink.view
-                { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-typography"
-                , title = "Source Code (Material Components Web)"
-                , icon = "images/ic_code_24px.svg"
-                , altText = "Source Code"
-                }
+        , ResourceLink.links (lift << Mdc) model.mdc "typography/the-type-system" "typography" "mdc-typography"
             , styled Html.h2
                 [ Typography.headline6
                 , css "border-bottom" "1px solid rgba(0,0,0,.87)"

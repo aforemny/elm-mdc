@@ -27,6 +27,7 @@ type alias Model m =
     { mdc : Material.Model m
     , rtl : Bool
     , drawerOpen : Bool
+    , selected_drawer_item : Int
     }
 
 
@@ -35,6 +36,7 @@ defaultModel =
     { mdc = Material.defaultModel
     , rtl = False
     , drawerOpen = False
+    , selected_drawer_item = 0
     }
 
 
@@ -43,6 +45,7 @@ type Msg m
     | ToggleRtl
     | OpenDrawer
     | CloseDrawer
+    | SelectDrawerItem Int
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -59,6 +62,9 @@ update lift msg model =
 
         CloseDrawer ->
             ( { model | drawerOpen = False }, Cmd.none )
+
+        SelectDrawerItem index ->
+            ( { model | selected_drawer_item = index }, Cmd.none )
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
@@ -77,7 +83,7 @@ view lift page model =
             , Drawer.onClose (lift CloseDrawer)
             ]
             [ Demo.PermanentDrawer.drawerHeader
-            , Demo.PermanentDrawer.drawerItems
+            , Demo.PermanentDrawer.drawerItems (lift << Mdc) "modal-drawer-drawer-list" model.mdc "#modal-drawer" (lift << SelectDrawerItem) model.selected_drawer_item
             ]
         , Drawer.scrim [ Options.onClick (lift CloseDrawer) ] []
         , styled Html.div

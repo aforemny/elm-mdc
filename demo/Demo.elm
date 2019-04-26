@@ -59,6 +59,7 @@ type alias Model =
     , iconToggle : Demo.IconButton.Model Msg
     , imageList : Demo.ImageList.Model Msg
     , layoutGrid : Demo.LayoutGrid.Model Msg
+    , linearProgress : Demo.LinearProgress.Model Msg
     , lists : Demo.Lists.Model Msg
     , menus : Demo.Menus.Model Msg
     , permanentDrawer : Demo.PermanentDrawer.Model Msg
@@ -74,6 +75,7 @@ type alias Model =
     , theme : Demo.Theme.Model Msg
     , toolbar : Demo.Toolbar.Model Msg
     , topAppBar : Demo.TopAppBar.Model Msg
+    , typography : Demo.Typography.Model Msg
     }
 
 
@@ -94,6 +96,7 @@ defaultModel key =
     , iconToggle = Demo.IconButton.defaultModel
     , imageList = Demo.ImageList.defaultModel
     , layoutGrid = Demo.LayoutGrid.defaultModel
+    , linearProgress = Demo.LinearProgress.defaultModel
     , lists = Demo.Lists.defaultModel
     , menus = Demo.Menus.defaultModel
     , permanentDrawer = Demo.PermanentDrawer.defaultModel
@@ -109,6 +112,7 @@ defaultModel key =
     , theme = Demo.Theme.defaultModel
     , toolbar = Demo.Toolbar.defaultModel
     , topAppBar = Demo.TopAppBar.defaultModel
+    , typography = Demo.Typography.defaultModel
     }
 
 
@@ -132,12 +136,13 @@ type Msg
     | IconButtonMsg (Demo.IconButton.Msg Msg)
     | ImageListMsg (Demo.ImageList.Msg Msg)
     | LayoutGridMsg (Demo.LayoutGrid.Msg Msg)
+    | LinearProgressMsg (Demo.LinearProgress.Msg Msg)
     | ListsMsg (Demo.Lists.Msg Msg)
+    | MenuMsg (Demo.Menus.Msg Msg)
     | PermanentDrawerMsg (Demo.PermanentDrawer.Msg Msg)
     | RadioButtonsMsg (Demo.RadioButtons.Msg Msg)
     | RippleMsg (Demo.Ripple.Msg Msg)
     | SelectMsg (Demo.Selects.Msg Msg)
-    | MenuMsg (Demo.Menus.Msg Msg)
     | SliderMsg (Demo.Slider.Msg Msg)
     | SnackbarMsg (Demo.Snackbar.Msg Msg)
     | SwitchMsg (Demo.Switch.Msg Msg)
@@ -145,6 +150,7 @@ type Msg
     | ModalDrawerMsg (Demo.ModalDrawer.Msg Msg)
     | TextFieldMsg (Demo.TextFields.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
+    | TypographyMsg (Demo.Typography.Msg Msg)
     | ToolbarMsg (Demo.Toolbar.Msg Msg)
     | TopAppBarMsg (Demo.TopAppBar.Msg Msg)
 
@@ -270,6 +276,13 @@ update msg model =
             in
             ( { model | imageList = imageList }, effects )
 
+        LinearProgressMsg msg_ ->
+            let
+                ( linearProgress, effects ) =
+                    Demo.LinearProgress.update LinearProgressMsg msg_ model.linearProgress
+            in
+            ( { model | linearProgress = linearProgress }, effects )
+
         MenuMsg msg_ ->
             let
                 ( menus, effects ) =
@@ -368,6 +381,13 @@ update msg model =
             in
             ( { model | topAppBar = topAppBar }, effects )
 
+        TypographyMsg msg_ ->
+            let
+                ( typography, effects ) =
+                    Demo.Typography.update TypographyMsg msg_ model.typography
+            in
+            ( { model | typography = typography }, effects )
+
 
 view : Model -> Browser.Document Msg
 view model =
@@ -461,7 +481,7 @@ view_ model =
             Demo.ImageList.view ImageListMsg page model.imageList
 
         Demo.Url.LinearProgress ->
-            Demo.LinearProgress.view page
+            Demo.LinearProgress.view LinearProgressMsg page model.linearProgress
 
         Demo.Url.List ->
             Demo.Lists.view ListsMsg page model.lists
@@ -506,7 +526,7 @@ view_ model =
             Demo.Ripple.view RippleMsg page model.ripple
 
         Demo.Url.Typography ->
-            Demo.Typography.view page
+            Demo.Typography.view TypographyMsg page model.typography
 
         Demo.Url.Error404 requestedHash ->
             Html.div

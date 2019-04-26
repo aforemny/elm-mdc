@@ -1,6 +1,7 @@
 module Demo.Theme exposing (Model, Msg, defaultModel, update, view)
 
 import Demo.Page as Page exposing (Page)
+import Demo.Helper.ResourceLink as ResourceLink
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
@@ -53,6 +54,7 @@ view lift page model =
                 [ text "Secondary"
                 ]
             ]
+        , ResourceLink.links (lift << Mdc) model.mdc "color/applying-color-to-ui" "theme" "mdc-theme"
         , h2 []
             [ text "Theme colors"
             ]
