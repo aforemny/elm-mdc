@@ -6,7 +6,7 @@ module Internal.TextField.HelperText.Implementation exposing
     )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (cs, css, when, aria, styled)
+import Internal.Options as Options exposing (cs, when, aria)
 
 
 type alias Config =
@@ -42,11 +42,12 @@ helperText options text =
         ({ config } as summary) =
             Options.collect defaultConfig options
     in
-    styled Html.div
-        (cs "mdc-text-field-helper-text"
-            :: (cs "mdc-text-field-helper-text--persistent" |> when config.persistent)
-            :: (cs "mdc-text-field-helper-text--validation-msg" |> when config.validationMsg)
-             :: (aria "hidden" "true")
-            :: options
-        )
+    Options.apply summary
+        Html.div
+        [ cs "mdc-text-field-helper-text"
+        , cs "mdc-text-field-helper-text--persistent" |> when config.persistent
+        , cs "mdc-text-field-helper-text--validation-msg" |> when config.validationMsg
+        , aria "hidden" "true"
+        ]
+        []
         text

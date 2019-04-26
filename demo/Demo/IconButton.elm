@@ -8,7 +8,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html exposing (src)
 import Material
 import Material.IconButton as IconButton
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (styled, when)
 import Material.Typography as Typography
 
 

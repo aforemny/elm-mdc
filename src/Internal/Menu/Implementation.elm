@@ -32,14 +32,12 @@ module Internal.Menu.Implementation exposing
     , view
     )
 
-import Browser
 import Browser.Events
 import DOM
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Html.Attributes as Html
 import Html.Events as Html
 import Internal.Component as Component exposing (Index, Indexed)
-import Internal.Dispatch as Dispatch
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
@@ -896,6 +894,14 @@ type alias Store s =
     { s | menu : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | menu : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | menu : Indexed Model }
+          -> Model
+          -> { a | menu : Indexed Model }
+   }
 getSet =
     Component.indexed .menu (\x y -> { y | menu = x }) defaultModel
 

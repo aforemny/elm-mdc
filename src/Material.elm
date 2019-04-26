@@ -406,7 +406,7 @@ subscriptions lift model =
 
 -}
 init : (Msg m -> m) -> Cmd m
-init lift =
+init _ =
     Cmd.none
 
 

@@ -6,18 +6,15 @@ module Demo.LayoutGrid exposing
     , view
     )
 
-import Browser.Dom
-import Browser.Events
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
-import Json.Decode as Json
 import Material
 import Material.LayoutGrid as LayoutGrid
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options exposing (css, styled)
 import Material.Typography as Typography
 
 

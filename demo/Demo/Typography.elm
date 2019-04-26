@@ -3,9 +3,9 @@ module Demo.Typography exposing (Model, Msg(..), defaultModel, update, view)
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page exposing (Page)
-import Html exposing (..)
+import Html exposing (Html, text)
 import Material
-import Material.Options as Options exposing (cs, css, nop, styled)
+import Material.Options exposing (cs, css, styled)
 import Material.Typography as Typography
 
 

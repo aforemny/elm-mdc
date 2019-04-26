@@ -62,7 +62,7 @@ Material Design chip requirements.
 
 import Html exposing (Html)
 import Internal.Chip.Implementation as Chip
-import Internal.Component as Component exposing (Index)
+import Internal.Component exposing (Index)
 import Material
 
 

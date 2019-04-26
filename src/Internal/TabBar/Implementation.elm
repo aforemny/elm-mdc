@@ -14,21 +14,17 @@ module Internal.TabBar.Implementation exposing
 
 import Browser.Dom
 import DOM
-import Dict exposing (Dict)
+import Dict
 import Html exposing (Html, button, div, nav, span, text)
-import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Dispatch as Dispatch
 import Internal.GlobalEvents as GlobalEvents
-import Internal.Helpers as Helpers
-import Internal.Icon.Implementation as Icon
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Ripple.Model as Ripple
 import Internal.TabBar.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Json.Decode as Json exposing (Decoder)
-import Json.Encode
 import Task
 
 
@@ -204,11 +200,6 @@ defaultConfig =
     }
 
 
-indicator : Property m
-indicator =
-    Options.option (\config -> { config | indicator = True })
-
-
 activeTab : Int -> Property m
 activeTab value =
     Options.option (\config -> { config | activeTab = value })
@@ -278,6 +269,7 @@ tabbar domId lift model options nodes =
             False
 
         -- TODO
+        {-
         tabBarTransform =
             let
                 shiftAmount =
@@ -288,6 +280,7 @@ tabbar domId lift model options nodes =
                         -model.translateOffset
             in
             "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
+         -}
 
         tab_nodes =
             List.indexedMap (tabView domId lift model options) nodes
@@ -543,6 +536,14 @@ type alias Store s =
     { s | tabbar : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | tabbar : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | tabbar : Indexed Model }
+          -> Model
+          -> { a | tabbar : Indexed Model }
+   }
 getSet =
     Component.indexed .tabbar (\x y -> { y | tabbar = x }) defaultModel
 

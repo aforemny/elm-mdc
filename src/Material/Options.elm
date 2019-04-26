@@ -28,7 +28,7 @@ module Material.Options exposing
     , onFocus
     )
 
-{-| TODO: Update to elm/html
+{-|
 
 
 # Properties
@@ -70,8 +70,7 @@ module Material.Options exposing
 
 -}
 
-import Html exposing (Attribute, Html)
-import Html.Events
+import Html exposing (Attribute)
 import Internal.Options
 import Json.Decode exposing (Decoder)
 

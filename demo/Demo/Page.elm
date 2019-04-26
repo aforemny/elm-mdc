@@ -12,7 +12,7 @@ import Html exposing (Html, div, h2, text)
 import Html.Attributes as Html
 import Material
 import Material.Icon as Icon
-import Material.Options as Options exposing (Property, cs, css, styled, when)
+import Material.Options as Options exposing (Property, cs, css, styled)
 import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
 
@@ -92,7 +92,6 @@ hero : List (Property c m) -> List (Html m) -> Html m
 hero options =
     styled Html.section
         (List.reverse
-            -- TODO: dang it
             (cs "hero"
                 :: css "display" "-webkit-box"
                 :: css "display" "-ms-flexbox"

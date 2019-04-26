@@ -4,12 +4,9 @@ import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page, subheader)
 import Html exposing (Html, text, span, i)
-import Html.Attributes as Html
-import Html.Events as Html
 import Material
 import Material.Fab as Fab
-import Material.Options as Options exposing (cs, css, styled, when)
-import Material.Typography as Typography
+import Material.Options exposing (cs, css, styled)
 
 
 type alias Model m =

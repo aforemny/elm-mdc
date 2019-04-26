@@ -24,7 +24,7 @@ import Internal.Slider.Model exposing (Geometry, Model, Msg(..), defaultGeometry
 import Json.Decode as Decode exposing (Decoder)
 import Svg
 import Svg.Attributes as Svg
-import Task exposing (Task)
+import Task
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
@@ -663,6 +663,14 @@ type alias Store s =
     { s | slider : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | slider : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | slider : Indexed Model }
+          -> Model
+          -> { a | slider : Indexed Model }
+   }
 getSet =
     Component.indexed .slider (\x y -> { y | slider = x }) defaultModel
 

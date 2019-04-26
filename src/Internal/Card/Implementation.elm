@@ -16,18 +16,13 @@ module Internal.Card.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Internal.Button.Implementation as Button
 import Internal.IconButton.Implementation as IconButton
 import Internal.Options as Options exposing (cs, css, styled)
 
 
 type alias Config =
-    {}
-
-
-defaultConfig : Config
-defaultConfig =
     {}
 
 

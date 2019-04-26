@@ -5,7 +5,7 @@ import Demo.Helper.ResourceLink as ResourceLink
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (cs, css, styled)
 import Material.Theme as Theme
 import Material.Typography as Typography
 

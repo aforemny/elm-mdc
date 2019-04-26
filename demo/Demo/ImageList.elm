@@ -6,7 +6,7 @@ import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.ImageList as ImageList
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options exposing (css, styled)
 import Material.Typography as Typography
 
 

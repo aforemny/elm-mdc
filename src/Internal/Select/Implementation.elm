@@ -15,7 +15,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Select.Model exposing (Model, Msg(..), defaultModel)
 
@@ -197,6 +197,14 @@ type alias Store s =
     { s | select : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | select : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | select : Indexed Model }
+          -> Model
+          -> { a | select : Indexed Model }
+   }
 getSet =
     Component.indexed .select (\x y -> { y | select = x }) defaultModel
 

@@ -7,7 +7,7 @@ module Internal.RadioButton.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
@@ -126,6 +126,14 @@ type alias Store s =
     { s | radio : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | radio : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | radio : Indexed Model }
+          -> Model
+          -> { a | radio : Indexed Model }
+   }
 getSet =
     Component.indexed .radio (\x y -> { y | radio = x }) defaultModel
 

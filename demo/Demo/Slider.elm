@@ -2,14 +2,13 @@ module Demo.Slider exposing (Model, Msg(..), defaultModel, subscriptions, update
 
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
-import Demo.Page as Page exposing (Page)
+import Demo.Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
-import Json.Decode as Json exposing (Decoder)
 import Material
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options exposing (styled)
 import Material.Slider as Slider
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)

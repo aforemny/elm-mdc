@@ -9,17 +9,12 @@ module Demo.ModalDrawer exposing
 
 import Demo.Page exposing (Page)
 import Demo.PermanentDrawer
-import Html exposing (Html, div, p, text)
+import Html exposing (Html, div, text)
 import Html.Attributes as Html
-import Json.Decode as Json
 import Material
-import Material.Button as Button
 import Material.Drawer.Modal as Drawer
-import Material.Icon as Icon
 import Material.Options as Options exposing (cs, css, styled, when)
-import Material.Theme as Theme
 import Material.TopAppBar as TopAppBar
-import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
 

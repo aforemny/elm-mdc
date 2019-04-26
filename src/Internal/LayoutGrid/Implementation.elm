@@ -48,15 +48,10 @@ module Internal.LayoutGrid.Implementation exposing
     )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, styled)
 
 
 type alias Config =
-    {}
-
-
-defaultConfig : Config
-defaultConfig =
     {}
 
 

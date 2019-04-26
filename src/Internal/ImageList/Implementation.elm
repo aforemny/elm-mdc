@@ -12,10 +12,10 @@ module Internal.ImageList.Implementation exposing
     , withTextProtection
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Html.Attributes as Html
 import Internal.ImageList.Model exposing (Config, defaultConfig)
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, styled, when)
 
 
 cssClasses :

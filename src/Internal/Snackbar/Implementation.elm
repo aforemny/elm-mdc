@@ -288,6 +288,14 @@ type alias Property m =
     Options.Property Config m
 
 
+getSet :
+   { get : Index -> { a | snackbar : Indexed (Model m) } -> (Model m)
+    , set :
+          Index
+          -> { a | snackbar : Indexed (Model m) }
+          -> Model m
+          -> { a | snackbar : Indexed (Model m) }
+   }
 getSet =
     Component.indexed .snackbar (\x y -> { y | snackbar = x }) defaultModel
 

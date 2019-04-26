@@ -89,7 +89,6 @@ import Html exposing (Html)
 import Internal.Component exposing (Index)
 import Internal.Drawer.Dismissible.Implementation as Drawer
 import Material
-import Material.List as Lists
 
 
 {-| Drawer property.

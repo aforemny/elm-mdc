@@ -8,11 +8,9 @@ import Html.Attributes as Html
 import Material
 import Material.Button as Button
 import Material.Dialog as Dialog
-import Material.FormField as FormField
 import Material.List as Lists
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options as Options exposing (css, styled, when)
 import Material.RadioButton as RadioButton
-import Material.Typography as Typography
 
 
 type alias Model m =

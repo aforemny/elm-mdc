@@ -18,15 +18,14 @@ module Internal.TopAppBar.Implementation exposing
     , view
     )
 
-import Dict exposing (Dict)
+import Dict
 import DOM
-import Html exposing (Html, text)
-import Html.Attributes exposing (href)
+import Html exposing (Html)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
-import Internal.Options as Options exposing (attribute, cs, css, nop, styled, when)
+import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Ripple.Model as Ripple
 import Internal.TopAppBar.Model exposing (Config, Model, Msg(..), defaultConfig, defaultModel)
@@ -80,7 +79,7 @@ update msg model =
             ( topAppBarScrollHandler scrollPosition model, Cmd.none )
 
         Resize { scrollPosition, topAppBarHeight } ->
-            -- TODO: upstream implements resize trottling to 10 p/s.
+            -- TODO: upstream implements resize throttling to 10 p/s.
             let
                 currentHeight =
                     topAppBarHeight
@@ -308,6 +307,14 @@ type alias Store s =
     { s | topAppBar : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | topAppBar : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | topAppBar : Indexed Model }
+          -> Model
+          -> { a | topAppBar : Indexed Model }
+   }
 getSet =
     Component.indexed .topAppBar (\x y -> { y | topAppBar = x }) defaultModel
 

@@ -7,14 +7,14 @@ module Internal.Checkbox.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html)
 import Html.Attributes as Html
 import Internal.Checkbox.Model exposing (Animation(..), Model, Msg(..), State(..), defaultModel)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (cs, many, styled, when)
-import Json.Decode as Decode exposing (Decoder)
+import Json.Decode as Decode
 import Json.Encode as Encode
 import Svg exposing (path)
 import Svg.Attributes as Svg
@@ -262,7 +262,3 @@ react :
     -> ( Maybe (Store s), Cmd m )
 react =
     Component.react getSet.get getSet.set Internal.Msg.CheckboxMsg update
-
-
-
--- TODO: make react always like this ^^^^, don't use generalise?

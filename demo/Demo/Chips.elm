@@ -3,10 +3,10 @@ module Demo.Chips exposing (Model, Msg(..), defaultModel, update, view)
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, p, text)
+import Html exposing (Html, text)
 import Material
 import Material.Chip as Chip
-import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Options exposing (css, styled, when)
 import Material.Typography as Typography
 import Set exposing (Set)
 

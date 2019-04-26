@@ -68,7 +68,6 @@ import Html exposing (Html)
 import Internal.Component exposing (Index)
 import Internal.TabBar.Implementation as TabBar
 import Material
-import Material.Options as Options
 
 
 {-| TabBar property.

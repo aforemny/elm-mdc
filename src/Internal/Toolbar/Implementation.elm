@@ -21,7 +21,7 @@ module Internal.Toolbar.Implementation exposing
     )
 
 import DOM
-import Dict exposing (Dict)
+import Dict
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
@@ -51,18 +51,6 @@ cssClasses =
     , flexibleDefaultBehavior = "mdc-toolbar--flexible-default-behavior"
     , flexibleMax = "mdc-toolbar--flexible-space-maximized"
     , flexibleMin = "mdc-toolbar--flexible-space-minimized"
-    }
-
-
-strings :
-    { titleSelector : String
-    , firstRowSelector : String
-    , changeEvent : String
-    }
-strings =
-    { titleSelector = "mdc-toolbar__title"
-    , firstRowSelector = "mdc-toolbar__row:first-child"
-    , changeEvent = "MDCToolbar:change"
     }
 
 
@@ -422,9 +410,6 @@ toolbarStyles :
         }
 toolbarStyles config geometry scrollTop calculations =
     let
-        hasScrolledOutOfThreshold =
-            scrollTop > calculations.scrollThreshold
-
         flexibleExpansionRatio_ =
             flexibleExpansionRatio calculations scrollTop
 
@@ -502,6 +487,14 @@ type alias Store s =
     { s | toolbar : Indexed Model }
 
 
+getSet :
+   { get : Index -> { a | toolbar : Indexed Model } -> Model
+    , set :
+          Index
+          -> { a | toolbar : Indexed Model }
+          -> Model
+          -> { a | toolbar : Indexed Model }
+   }
 getSet =
     Component.indexed .toolbar (\x y -> { y | toolbar = x }) defaultModel
 

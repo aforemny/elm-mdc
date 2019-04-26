@@ -7,21 +7,10 @@ module Internal.Drawer.Permanent.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
-import Internal.Component exposing (Index, Indexed)
+import Html exposing (Html)
+import Internal.Component exposing (Index)
 import Internal.Drawer.Implementation as Drawer
-import Internal.Drawer.Model exposing (Model, Msg)
-import Internal.List.Implementation as Lists
 import Internal.Msg
-
-
-type alias Config m =
-    Drawer.Config m
-
-
-defaultConfig : Config m
-defaultConfig =
-    Drawer.defaultConfig
 
 
 type alias Property m =
@@ -61,23 +50,3 @@ view :
     -> Html m
 view =
     Drawer.render ""
-
-
-react :
-    (Internal.Msg.Msg m -> m)
-    -> Msg
-    -> Index
-    -> Store s
-    -> ( Maybe (Store s), Cmd m )
-react =
-    Drawer.react
-
-
-subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Drawer.subs
-
-
-subscriptions : Model -> Sub Msg
-subscriptions =
-    Drawer.subscriptions
