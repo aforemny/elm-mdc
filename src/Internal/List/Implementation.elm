@@ -1,7 +1,8 @@
 module Internal.List.Implementation exposing
     ( Property
-    , a
+    , ListItem
     , activated
+    , asListItem
     , avatarList
     , defaultConfig
     , dense
@@ -13,26 +14,26 @@ module Internal.List.Implementation exposing
     , hr
     , inset
     , li
-    , ListItem
+    , listItemClass
     , meta
     , metaClass
     , metaIcon
     , metaImage
     , metaText
     , onSelectListItem
-    , nav
     , node
     , nonInteractive
-    , ol
     , padded
     , primaryText
     , radioGroup
     , react
+    , aRippled
     , secondaryText
     , selected
     , selectedIndex
     , singleSelection
     , subheader
+    , subheaderClass
     , text
     , twoLine
     , ul
@@ -216,32 +217,6 @@ listItemView domId lift model config listItemsIds index li_ =
     li_.view domId lift model config listItemsIds index li_.options li_.children
 
 
-{-| I think this should be considered obsolete.
--}
-ol : List (Property m) -> List (Html m) -> Html m
-ol options =
-    let
-        ({ config } as summary) =
-            Options.collect defaultConfig options
-    in
-    Options.apply summary
-        (Maybe.withDefault Html.ol config.node)
-        [ cs "mdc-list" ]
-        []
-
-
-nav : List (Property m) -> List (Html m) -> Html m
-nav options =
-    let
-        ({ config } as summary) =
-            Options.collect defaultConfig options
-    in
-    Options.apply summary
-        (Maybe.withDefault Html.nav config.node)
-        [ cs "mdc-list" ]
-        []
-
-
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
 node nodeFunc =
     Options.option (\config -> { config | node = Just nodeFunc })
@@ -327,16 +302,16 @@ liView domId lift model config listItemIds index options children =
         ripple =
             Ripple.view False
                 list_item_dom_id
-                (lift << RippleMsg index)
-                (Dict.get index model.ripples
+                (lift << RippleMsg list_item_dom_id)
+                (Dict.get list_item_dom_id model.ripples
                     |> Maybe.withDefault Ripple.defaultModel
                 )
                 []
 
     in
     Options.apply li_summary
-        Html.li
-        [ cs "mdc-list-item"
+        (Maybe.withDefault Html.li li_config.node)
+        [ listItemClass
         , tabindex tab_index
         , selected |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , activated |> when (config.isSingleSelectionList && is_selected && config.useActivated)
@@ -457,18 +432,52 @@ find predicate list =
                 find predicate rest
 
 
-{- List item element as virtual dom.
--}
-a : List (Property m) -> List (Html m) -> Html m
-a options =
+aRippled :
+    (Internal.Msg.Msg m -> m)
+    -> Index
+    -> Store s
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+aRippled =
+    \lift domId ->
+        Component.render getSet.get (aRippledView domId) Internal.Msg.ListMsg lift domId
+
+aRippledView :
+    Index
+    -> (Msg m -> m)
+    -> Model
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+aRippledView domId lift model options items =
     let
-        ({ config } as summary) =
+        summary =
             Options.collect defaultConfig options
+
+        config = summary.config
+
+        ripple =
+            Ripple.view False
+                domId
+                (lift << RippleMsg domId)
+                (Dict.get domId model.ripples
+                    |> Maybe.withDefault Ripple.defaultModel
+                )
+                []
     in
     Options.apply summary
         (Maybe.withDefault Html.a config.node)
-        [ cs "mdc-list-item" ]
+        [ ripple.properties
+        , ripple.interactionHandler
+        ]
         []
+        items
+
+
+listItemClass : Property m
+listItemClass =
+    cs "mdc-list-item"
 
 
 text : List (Property m) -> List (Html m) -> Html m
@@ -543,7 +552,7 @@ graphicImage options url =
 
 metaClass : Options.Property c m
 metaClass =
-    Options.cs "mdc-list-item__meta"
+    cs "mdc-list-item__meta"
 
 
 meta : List (Property m) -> List (Html m) -> Html m
@@ -571,26 +580,16 @@ metaImage options url =
         []
 
 
-group : List (Property m) -> List (Html m) -> Html m
-group options =
-    styled Html.div (cs "mdc-list-group" :: options)
-
-
-subheader : List (Property m) -> List (Html m) -> Html m
-subheader options =
-    styled Html.div (cs "mdc-list-group__subheader" :: options)
-
-
-divider : List (Property m) -> List (Html m) -> ListItem m
-divider options children =
-    { options = options
+asListItem : (List (Html.Attribute m) -> List (Html m) -> Html m) -> List (Property m) -> List (Html m) -> ListItem m
+asListItem dom_node options children =
+    { options = ( node dom_node :: options )
     , children = children
     , focusable = False
-    , view = dividerView
+    , view = asListItemView
     }
 
 
-dividerView :
+asListItemView :
     Index
     -> (Msg m -> m)
     -> Model
@@ -600,22 +599,46 @@ dividerView :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-dividerView domId lift model config listItemsIds index options children=
+asListItemView domId lift model config listItemsIds index options children=
     let
-        li_summary =
+        summary =
             Options.collect defaultConfig options
     in
-    Options.apply li_summary
-        Html.li
-            [ cs "mdc-list-divider"
-            , role "separator" ]
+    Options.apply summary
+        (Maybe.withDefault Html.div summary.config.node) []
             []
             children
 
 
-hr : List (Property m) -> List (Html m) -> Html m
+group : List (Property m) -> List (Html m) -> Html m
+group options =
+    styled Html.div (cs "mdc-list-group" :: options)
+
+
+subheader : List (Property m) -> List (Html m) -> Html m
+subheader options =
+    let
+        summary =
+            Options.collect defaultConfig options
+
+        config = summary.config
+    in
+        styled (Maybe.withDefault Html.div config.node) (subheaderClass :: options)
+
+
+subheaderClass : Options.Property c m
+subheaderClass =
+    cs "mdc-list-group__subheader"
+
+
+divider : List (Property m) -> List (Html m) -> ListItem m
+divider options =
+    asListItem Html.li ( cs "mdc-list-divider" :: role "separator" :: options )
+
+
+hr : List (Property m) -> List (Html m) -> ListItem m
 hr options =
-    styled Html.hr (cs "mdc-list-divider" :: options)
+    asListItem Html.hr ( cs "mdc-list-divider" :: options )
 
 
 padded : Property m
