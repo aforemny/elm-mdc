@@ -97,30 +97,7 @@ view lift page model =
                 ]
                 (List.repeat 15 imageListHeroItem)
             ]
-        , styled Html.h2
-            [ Typography.headline6
-            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-            ]
-            [ text "Resources"
-            ]
-        , ResourceLink.view
-            { link = "https://material.io/go/design-image-list"
-            , title = "Material Design Guidelines"
-            , icon = "images/material.svg"
-            , altText = "Material Design Guidelines icon"
-            }
-        , ResourceLink.view
-            { link = "https://material.io/components/web/catalog/image-lists/"
-            , title = "Documentation"
-            , icon = "images/ic_drive_document_24px.svg"
-            , altText = "Documentation icon"
-            }
-        , ResourceLink.view
-            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-image-list"
-            , title = "Source Code (Material Components Web)"
-            , icon = "images/ic_code_24px.svg"
-            , altText = "Source Code"
-            }
+        , ResourceLink.links (lift << Mdc) model.mdc "image-lists" "image-lists" "mdc-image-list"
         , Page.demos
             [ styled Html.h3
                 [ Typography.subtitle1 ]

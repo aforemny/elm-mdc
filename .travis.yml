@@ -16,7 +16,7 @@ before_install:
       cd ..;
     fi
   - npm i
-  - npm install -g elm@0.19
+  - npm install -g elm@latest
 script:
   - export PATH=$(npm bin):$PATH
   - sysconfcpus/bin/sysconfcpus -n 2 make clean all

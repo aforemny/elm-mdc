@@ -46,30 +46,7 @@ view lift page model =
     page.body "Floating Action Button"
         "Floating action buttons represents the primary action in an application. Only one floating action button is recommended per screen to represent the most common action."
         [ Hero.view [] [ fab "fabs-hero-fab" [] ]
-        , styled Html.h2
-            [ Typography.headline6
-            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-            ]
-            [ text "Resources"
-            ]
-        , ResourceLink.view
-            { link = "https://material.io/go/design-fab"
-            , title = "Material Design Guidelines"
-            , icon = "images/material.svg"
-            , altText = "Material Design Guidelines icon"
-            }
-        , ResourceLink.view
-            { link = "https://material.io/components/web/catalog/buttons/floating-action-buttons/"
-            , title = "Documentation"
-            , icon = "images/ic_drive_document_24px.svg"
-            , altText = "Documentation icon"
-            }
-        , ResourceLink.view
-            { link = "https://github.com/material-components/material-components-web/blob/master/packages/mdc-fab/"
-            , title = "Source Code (Material Components Web)"
-            , icon = "images/ic_code_24px.svg"
-            , altText = "Source Code"
-            }
+        , ResourceLink.links (lift << Mdc) model.mdc "buttons-floating-action-button" "buttons/floating-action-buttons" "mdc-fab"
         , Page.demos
             [ subheader "Standard Floating Action Button"
             , fab "fabs-standard-fab" []

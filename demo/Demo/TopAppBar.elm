@@ -1,6 +1,7 @@
 module Demo.TopAppBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
 import Demo.Page as Page exposing (Page)
+import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Url as Url exposing (TopAppBarPage)
 import Dict exposing (Dict)
 import Html exposing (Html, div, p, text)
@@ -124,6 +125,7 @@ view lift page topAppBarPage model =
                             ]
                         ]
                     ]
+                , ResourceLink.links (lift << Mdc) model.mdc "app-bars-top" "top-app-bar" "mdc-top-app-bar"
                 , styled Html.div
                     [ cs "mdc-topappbar-demo"
                     , css "display" "flex"

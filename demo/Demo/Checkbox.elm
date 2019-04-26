@@ -96,30 +96,7 @@ view lift page model =
                 model
                 [ css "margin" "8px" ]
             ]
-        , styled Html.h2
-            [ Typography.headline6
-            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-            ]
-            [ text "Resources"
-            ]
-        , ResourceLink.view
-            { link = "https://material.io/go/design-checkboxes"
-            , title = "Material Design Guidelines"
-            , icon = "images/material.svg"
-            , altText = "Material Design Guidelines icon"
-            }
-        , ResourceLink.view
-            { link = "https://material.io/components/web/catalog/input-controls/checkboxes/"
-            , title = "Documentation"
-            , icon = "images/ic_drive_document_24px.svg"
-            , altText = "Documentation icon"
-            }
-        , ResourceLink.view
-            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-checkbox"
-            , title = "Source Code (Material Components Web)"
-            , icon = "images/ic_code_24px.svg"
-            , altText = "Source Code"
-            }
+        , ResourceLink.links (lift << Mdc) model.mdc "selection-controls.html#checkboxes" "input-controls/checkboxes" "mdc-checkbox"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Unchecked" ]
             , checkbox lift "checkbox-unchecked-checkbox" model []

@@ -72,30 +72,7 @@ view lift page model =
                 ]
                 [ text "Raised 16dp" ]
             ]
-        , styled Html.h2
-            [ Typography.headline6
-            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-            ]
-            [ text "Resources"
-            ]
-        , ResourceLink.view
-            { link = "https://material.io/go/design-elevation"
-            , title = "Material Design Guidelines"
-            , icon = "images/material.svg"
-            , altText = "Material Design Guidelines icon"
-            }
-        , ResourceLink.view
-            { link = "https://material.io/components/web/catalog/elevation/"
-            , title = "Documentation"
-            , icon = "images/ic_drive_document_24px.svg"
-            , altText = "Documentation icon"
-            }
-        , ResourceLink.view
-            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-elevation"
-            , title = "Source Code (Material Components Web)"
-            , icon = "images/ic_code_24px.svg"
-            , altText = "Source Code"
-            }
+        , ResourceLink.links (lift << Mdc) model.mdc "environment/elevation" "elevation" "mdc-elevation"
         , Page.demos
             [ styled Html.div
                 [ cs "elevation-demo-container"

@@ -10,6 +10,7 @@ module Demo.PermanentDrawer exposing
     , view
     )
 
+import Array exposing (Array)
 import Demo.Page exposing (Page)
 import Html exposing (Html, div, h3, h6, text)
 import Html.Attributes as Html
@@ -28,6 +29,7 @@ import Platform.Cmd exposing (Cmd, none)
 type alias Model m =
     { mdc : Material.Model m
     , rtl : Bool
+    , selected_drawer_item : Int
     }
 
 
@@ -35,12 +37,14 @@ defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
     , rtl = False
+    , selected_drawer_item = 0
     }
 
 
 type Msg m
     = Mdc (Material.Msg m)
     | ToggleRtl
+    | SelectDrawerItem Int
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -51,6 +55,9 @@ update lift msg model =
 
         ToggleRtl ->
             ( { model | rtl = not model.rtl }, Cmd.none )
+
+        SelectDrawerItem index ->
+            ( { model | selected_drawer_item = index }, Cmd.none )
 
 
 drawerHeader : Html m
@@ -66,64 +73,77 @@ drawerHeader =
         ]
 
 
-drawerItems : Html m
-drawerItems =
+drawerItems : (Material.Msg m -> m) -> Material.Index -> Material.Model m -> String -> ( Int -> m ) -> Int -> Html m
+drawerItems lift index mdc url select selected =
+    let
+        href = Options.attribute (Html.href url)
+    in
     Drawer.content []
-        [ Lists.nav []
+        [ Lists.nav lift index mdc [ Lists.onSelectListItem select ]
             [ Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
-                , Lists.activated
+                [ href
+                , Lists.activated |> when (selected == 0)
                 ]
                 [ Lists.graphicIcon [] "inbox"
                 , text "Inbox"
                 ]
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 1)
                 ]
                 [ Lists.graphicIcon [] "star"
                 , text "Star"
                 ]
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 2)
                 ]
                 [ Lists.graphicIcon [] "send"
                 , text "Sent Mail"
                 ]
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 3)
                 ]
                 [ Lists.graphicIcon [] "drafts"
                 , text "Drafts"
                 ]
             , Lists.hr [] []
-            , styled h6 [ cs "mdc-list-group__subheader" ] [ text "Labels" ]
+            , Lists.asListItem Html.h6 [ Lists.subheaderClass ] [ text "Labels" ]
+            --, Lists.subheader [ Lists.node Html.h6 ] [ text "Labels" ]
+            --, Lists.ListItem m [] [] False myView
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 6)
                 ]
                 [ Lists.graphicIcon [] "bookmark"
                 , text "Family"
                 ]
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 7)
                 ]
                 [ Lists.graphicIcon [] "bookmark"
                 , text "Friends"
                 ]
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 8)
                 ]
                 [ Lists.graphicIcon [] "bookmark"
                 , text "Work"
                 ]
             , Lists.hr [] []
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 10)
                 ]
                 [ Lists.graphicIcon [] "settings"
                 , text "Settings"
                 ]
             , Lists.a
-                [ Options.attribute (Html.href "#persistent-drawer")
+                [ href
+                , Lists.activated |> when (selected == 11)
                 ]
                 [ Lists.graphicIcon [] "announcement"
                 , text "Help & feedback"
@@ -132,8 +152,18 @@ drawerItems =
         ]
 
 
-
---demoMain : Mdc -> String -> Cmd -> Html Msg
+myView :
+    Material.Index
+    -> (Material.Msg m -> m)
+    -> Material.Model m
+    -> Lists.Property m
+    -> Array String
+    -> Int
+    -> List (Lists.Property m)
+    -> List (Html m)
+    -> Html m
+myView domId lift model config listItemIds index options children =
+    text ""
 
 
 mainContent model mdc rtl_index cmd =
@@ -185,7 +215,7 @@ view lift page model =
             model.mdc
             []
             [ drawerHeader
-            , drawerItems
+            , drawerItems (lift << Mdc) "permanent-drawer-drawer-list" model.mdc "#persistent-drawer" (lift << SelectDrawerItem) model.selected_drawer_item
             ]
         , styled Html.div
             [ cs "drawer-frame-app-content"

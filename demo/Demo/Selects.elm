@@ -107,30 +107,7 @@ view lift page model =
     page.body "Select"
         "Selects allow users to select from a single-option menu. It functions as a wrapper around the browser's native <select> element."
         [ Hero.view [] [ heroSelect lift model ]
-        , styled Html.h2
-            [ Typography.headline6
-            , css "border-bottom" "1px solid rgba(0,0,0,.87)"
-            ]
-            [ text "Resources"
-            ]
-        , ResourceLink.view
-            { link = "https://material.io/go/design-text-fields"
-            , title = "Material Design Guidelines"
-            , icon = "images/material.svg"
-            , altText = "Material Design Guidelines icon"
-            }
-        , ResourceLink.view
-            { link = "https://material.io/components/web/catalog/input-controls/select-menus/"
-            , title = "Documentation"
-            , icon = "images/ic_drive_document_24px.svg"
-            , altText = "Documentation icon"
-            }
-        , ResourceLink.view
-            { link = "https://github.com/material-components/material-components-web/tree/master/packages/mdc-select"
-            , title = "Source Code (Material Components Web)"
-            , icon = "images/ic_code_24px.svg"
-            , altText = "Source Code"
-            }
+        , ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/select-menus" "mdc-select"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Filled" ]
             , filledSelect lift model

@@ -8,6 +8,7 @@ module Material.List exposing
     , twoLine
     , nav
     , li
+    , listItemClass
     , text
     , primaryText
     , secondaryText
@@ -16,8 +17,11 @@ module Material.List exposing
     , graphic, graphicIcon, graphicImage
     , meta, metaClass, metaText, metaIcon, metaImage
     , a
+    , aRippled
     , group
     , subheader
+    , subheaderClass
+    , asListItem
     , divider
     , hr
     , padded
@@ -27,15 +31,15 @@ module Material.List exposing
     , singleSelection
     , radioGroup
     , useActivated
+    , node
     )
 
 {-| Lists present multiple line items vertically as a single
 continuous element. Both single-line and two-line lists are supported.
 
-The module currently presents two interfaces: one for regular lists,
-which is built using `ListItem` elements. The other is for use with
-menus and drawers, and builds the nodes with methods which return an `Html m`
-elements. The latter will probably change too when we add ripple support here.
+The elements inside a list are not regular `Html m` elements but
+`ListItem m` elements. This to make lists easy to use while still
+providing ripple support.
 
 To avoid namespace conflicts with the `List` module, this module should be
 imported qualified as `Lists`.
@@ -114,12 +118,21 @@ imported qualified as `Lists`.
 @docs singleSelection
 @docs radioGroup
 @docs useActivated
+@docs node
 
 
 ## List Items
 
+Lists do not take the normal `Html m` elements, as that would lead to
+an awkward interface. They need a ListItem type. Usually this is
+transparent, but you'll notice when you try to use ordinary html
+inside a list. In that case prefix your html with `asListItem`.
+
 @docs ListItem
 @docs li
+@docs a
+@docs aRippled
+@docs listItemClass
 @docs text
 @docs primaryText
 @docs secondaryText
@@ -127,13 +140,14 @@ imported qualified as `Lists`.
 @docs activated
 @docs graphic, graphicIcon, graphicImage
 @docs meta, metaClass, metaText, metaIcon, metaImage
-@docs a
+@docs asListItem
 
 
 ## List Groups
 
 @docs group
 @docs subheader
+@docs subheaderClass
 
 
 ## Dividers
@@ -167,31 +181,43 @@ type alias ListItem m =
     List.ListItem m
 
 
-{-| The list element.
+{-| A list rendered with an Html.ul node.
 -}
 ul :
     (Material.Msg m -> m)
     -> Index
     -> Material.Model m
     -> List (Property m)
-    -> List (List.ListItem m)
+    -> List (ListItem m)
     -> Html m
 ul =
     List.view
 
 
-{-| The list element.
+{-| A list rendered with an Html.ol node.
 -}
-ol : List (Property m) -> List (Html m) -> Html m
-ol =
-    List.ol
+ol :
+    (Material.Msg m -> m)
+    -> Index
+    -> Material.Model m
+    -> List (Property m)
+    -> List (ListItem m)
+    -> Html m
+ol lift domId model options items =
+    List.view lift domId model ( List.node Html.ol :: options ) items
 
 
-{-| The list element rendered as `<nav>`.
+{-| A list rendered with an Html.nav node.
 -}
-nav : List (Property m) -> List (Html m) -> Html m
-nav =
-    List.nav
+nav :
+    (Material.Msg m -> m)
+    -> Index
+    -> Material.Model m
+    -> List (Property m)
+    -> List (ListItem m)
+    -> Html m
+nav lift domId model options items =
+    List.view lift domId model ( List.node Html.nav :: options ) items
 
 
 {-| Disables interactivity affordances.
@@ -215,7 +241,7 @@ avatarList =
     List.avatarList
 
 
-{-| List items have primary and secondary lines.
+{-| Optional, modifier to style list with two lines (primary and secondary lines).
 -}
 twoLine : Property m
 twoLine =
@@ -224,16 +250,36 @@ twoLine =
 
 {-| List item element.
 -}
-li : List (Property m) -> List (Html m) -> List.ListItem m
+li : List (Property m) -> List (Html m) -> ListItem m
 li =
     List.li
 
 
 {-| List item element as anchor element `<a>`.
 -}
-a : List (Property m) -> List (Html m) -> Html m
-a =
-    List.a
+a : List (Property m) -> List (Html m) -> ListItem m
+a options items =
+    List.li ( List.node Html.a :: options ) items
+
+
+{-| A list item that can be used outside a list, and still has ripple effects.
+-}
+aRippled :
+    (Material.Msg m -> m)
+    -> Index
+    -> Material.Model m
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+aRippled =
+    List.aRippled
+
+
+{-| The class that marks an element as a list item.
+-}
+listItemClass : Property m
+listItemClass =
+    List.listItemClass
 
 
 {-| Primary text for the row.
@@ -340,6 +386,13 @@ metaClass =
     List.metaClass
 
 
+{-| Insert arbitrary html into a list by prefixing it with `asListItem`.
+-}
+asListItem : (List (Html.Attribute m) -> List (Html m) -> Html m) -> List (Property m) -> List (Html m) -> ListItem m
+asListItem =
+    List.asListItem
+
+
 {-| Wrapper around two or more list elements to be grouped together.
 -}
 group : List (Property m) -> List (Html m) -> Html m
@@ -348,22 +401,41 @@ group =
 
 
 {-| Heading text displayed above each list in a group.
+
+Thed default node is a div, but you can emit an h3 with:
+
+    import Html exposing (text)
+    import Material.List as Lists
+
+    Lists.subHeader [ Lists.node Html.h3 ] [ text "List 1" ]
 -}
 subheader : List (Property m) -> List (Html m) -> Html m
 subheader =
     List.subheader
 
 
-{-| List divider list item, use this in lists.
+{-| The class that makes an item a group subheader.
+
+Usually using `subheader` is sufficient.
+
+This class is used both inside a list to label elements in a drawer, or outside
+a list to mark a group.
 -}
-divider : List (Property m) -> List (Html m) -> List.ListItem m
+subheaderClass : Options.Property c m
+subheaderClass =
+    List.subheaderClass
+
+
+{-| List divider list item.
+-}
+divider : List (Property m) -> List (Html m) -> ListItem m
 divider =
     List.divider
 
 
-{-| List divider element, use this in drawer lists.
+{-| List divider element.
 -}
-hr : List (Property m) -> List (Html m) -> Html m
+hr : List (Property m) -> List (Html m) -> ListItem m
 hr =
     List.hr
 
@@ -437,3 +509,18 @@ different, mutually-exclusive situations:
 useActivated : Property m
 useActivated =
     List.useActivated
+
+
+{-| Set the Html node to use when rendering a List or a ListItem.
+
+Example:
+
+    import Html exposing (text)
+    import Material.List as Lists
+
+    Lists.subHeader [ Lists.node Html.h3 ] [ text "List 1" ]
+
+-}
+node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
+node =
+    List.node
