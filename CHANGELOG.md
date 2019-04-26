@@ -2,11 +2,13 @@
 
 Breaking changes:
 
+* Drawer: keyboard navigation and ripples supported. But this means List.nav in
+  drawer now takes the three common parameters
 * Extended fabs are now supported. The icon parameter has now been replaced with a list.
   Set the icon as option in options: [ Fab.icon "favorites" ]
-* Lists now support ripples. To implement this, Material.List.ul now
-  needs the full Mdc, index and model parameters as is usual with the
-  other components.
+* Lists now support ripples. To implement this, List.ul, List.ol and
+  List.nav now needs the full Mdc, index and model parameters as is
+  usual with the other components.
 * TopAppBar.navigationIcon and TopAppBar.actionItem need the usual 3
   additional arguments now, in order to implement ripples. It also
   uses a button instead of an a element.
