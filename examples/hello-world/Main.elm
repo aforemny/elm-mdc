@@ -60,6 +60,7 @@ view model =
             "my-button"
             model.mdc
             [ Button.ripple
+            , Button.raised
             , Options.onClick Click
             ]
             [ text "Click me!" ]
