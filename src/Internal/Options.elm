@@ -174,7 +174,7 @@ addAttributes summary attrs =
         all =
             summary.attrs
             ++ style
-            ++ List.map Html.Attributes.class summary.classes
+            ++ List.map Html.Attributes.class (List.reverse summary.classes)
             ++ attrs
             ++ summary.internal
             ++ Dispatch.toAttributes summary.dispatch
