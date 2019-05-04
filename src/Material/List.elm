@@ -14,8 +14,8 @@ module Material.List exposing
     , secondaryText
     , selected
     , activated
-    , graphic, graphicIcon, graphicImage
-    , meta, metaClass, metaText, metaIcon, metaImage
+    , graphic, graphicIcon, graphicImage, graphicClass
+    , meta, metaText, metaIcon, metaImage, metaClass
     , a
     , aRippled
     , group
@@ -138,8 +138,8 @@ inside a list. In that case prefix your html with `asListItem`.
 @docs secondaryText
 @docs selected
 @docs activated
-@docs graphic, graphicIcon, graphicImage
-@docs meta, metaClass, metaText, metaIcon, metaImage
+@docs graphic, graphicIcon, graphicImage, graphicClass
+@docs meta, metaText, metaIcon, metaImage, metaClass
 @docs asListItem
 
 
@@ -342,6 +342,14 @@ The second argument is the URL of the image.
 graphicImage : List (Property m) -> String -> Html m
 graphicImage =
     List.graphicImage
+
+
+{-| Class to use to mark an element as the first tile in a
+row. Typically small text, icon. or image.
+-}
+graphicClass : Options.Property c m
+graphicClass =
+    List.graphicClass
 
 
 {-| The last tile in a row, typically small text, and icon or image.
