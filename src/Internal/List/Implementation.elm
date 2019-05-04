@@ -10,6 +10,7 @@ module Internal.List.Implementation exposing
     , graphic
     , graphicIcon
     , graphicImage
+    , graphicClass
     , group
     , hr
     , inset
@@ -529,20 +530,26 @@ activated =
     cs "mdc-list-item--activated"
 
 
+
+graphicClass : Options.Property c m
+graphicClass =
+    cs "mdc-list-item__graphic"
+
+
 graphic : List (Property m) -> List (Html m) -> Html m
 graphic options =
-    styled Html.span (cs "mdc-list-item__graphic" :: options)
+    styled Html.span (graphicClass :: options)
 
 
 graphicIcon : List (Icon.Property m) -> String -> Html m
 graphicIcon options =
-    Icon.view (cs "mdc-list-item__graphic" :: options)
+    Icon.view (graphicClass :: options)
 
 
 graphicImage : List (Property m) -> String -> Html m
 graphicImage options url =
     styled Html.img
-        (cs "mdc-list-item__graphic"
+        (graphicClass
             :: Options.attribute (Html.src url)
             :: options
         )
