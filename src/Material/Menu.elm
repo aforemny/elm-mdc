@@ -1,5 +1,6 @@
 module Material.Menu exposing
     ( Property
+    , Menu
     , view
     , ul
     , Item
@@ -70,6 +71,7 @@ Design menu specification.
 # Menu
 
 @docs Property
+@docs Menu
 @docs view
 @docs ul
 @docs index
@@ -150,6 +152,9 @@ divider =
     Menu.divider
 
 
+{-| Menu structure before being turned into virtual dom. This is the
+structure returned by `ul`.
+-}
 type alias Menu m =
     Menu.Menu m
 
