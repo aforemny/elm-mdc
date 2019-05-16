@@ -79,7 +79,7 @@ radioButton domId lift model options _ =
             Options.collect defaultConfig options
 
         ripple =
-            Ripple.view True domId (lift << RippleMsg) model.ripple []
+            Ripple.view True (domId ++ "-div") (lift << RippleMsg) model.ripple []
     in
     Options.apply summary
         Html.div
