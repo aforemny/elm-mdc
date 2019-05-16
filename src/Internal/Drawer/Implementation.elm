@@ -119,7 +119,6 @@ view className lift model options nodes =
                 )
                 (Decode.at [ "keyCode" ] Decode.int)
 
-         -- TODO: Handle arrow keys (hard).
          ]
             ++ options
         )
