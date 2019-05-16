@@ -11,8 +11,6 @@ module Internal.Drawer.Implementation exposing
     , react
     , render
     , subTitle
-    , subs
-    , subscriptions
     , title
     , update
     , view
@@ -174,16 +172,6 @@ react :
     -> ( Maybe (Store s), Cmd m )
 react =
     Component.react getSet.get getSet.set Internal.Msg.DrawerMsg update
-
-
-subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Component.subs Internal.Msg.DrawerMsg .drawer subscriptions
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
 
 
 onClose : m -> Property m
