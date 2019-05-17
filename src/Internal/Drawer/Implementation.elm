@@ -11,8 +11,6 @@ module Internal.Drawer.Implementation exposing
     , react
     , render
     , subTitle
-    , subs
-    , subscriptions
     , title
     , update
     , view
@@ -121,7 +119,6 @@ view className lift model options nodes =
                 )
                 (Decode.at [ "keyCode" ] Decode.int)
 
-         -- TODO: Handle arrow keys (hard).
          ]
             ++ options
         )
@@ -174,16 +171,6 @@ react :
     -> ( Maybe (Store s), Cmd m )
 react =
     Component.react getSet.get getSet.set Internal.Msg.DrawerMsg update
-
-
-subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
-subs =
-    Component.subs Internal.Msg.DrawerMsg .drawer subscriptions
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
 
 
 onClose : m -> Property m
