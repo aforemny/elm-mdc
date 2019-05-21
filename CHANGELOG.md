@@ -1,4 +1,7 @@
-## Bug fixes since 1.1.1 release
+## Upgrade to 2.2.0
+
+New features:
+* List: add support for disabled items.
 
 Breaking changes:
 
@@ -12,6 +15,8 @@ Breaking changes:
 * TopAppBar.navigationIcon and TopAppBar.actionItem need the usual 3
   additional arguments now, in order to implement ripples. It also
   uses a button instead of an a element.
+* Textfield: Do not specify outlined for multiline text fields.
+* Icon toggle: The icon toggle class has been removed, use IconButton instead.
 
 
 Implementation changes:
@@ -23,11 +28,6 @@ Implementation changes:
   You no longer have to use the returned style property, although this
   has been left in the interface so you can update existing code at your leasure.
 
-
-Stuff missed before I did the 1.1.1 release.
-
-* Do not specify TextField.outlined for multiline text fields.
-* The icon toggle class has been removed, use IconButton instead.
 
 
 ## Upgrade to 0.44.1
