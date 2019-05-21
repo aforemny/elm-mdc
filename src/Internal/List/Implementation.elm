@@ -6,6 +6,7 @@ module Internal.List.Implementation exposing
     , avatarList
     , defaultConfig
     , dense
+    , disabled
     , divider
     , graphic
     , graphicIcon
@@ -528,6 +529,11 @@ useActivated =
 activated : Property m
 activated =
     cs "mdc-list-item--activated"
+
+
+disabled : Property m
+disabled =
+    cs "mdc-list-item--disabled"
 
 
 

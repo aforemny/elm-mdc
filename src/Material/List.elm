@@ -14,6 +14,7 @@ module Material.List exposing
     , secondaryText
     , selected
     , activated
+    , disabled
     , graphic, graphicIcon, graphicImage, graphicClass
     , meta, metaText, metaIcon, metaImage, metaClass
     , a
@@ -131,16 +132,15 @@ inside a list. In that case prefix your html with `asListItem`.
 @docs ListItem
 @docs li
 @docs a
-@docs aRippled
 @docs listItemClass
 @docs text
 @docs primaryText
 @docs secondaryText
-@docs selected
-@docs activated
+@docs selected, activated, disabled
 @docs graphic, graphicIcon, graphicImage, graphicClass
 @docs meta, metaText, metaIcon, metaImage, metaClass
 @docs asListItem
+@docs aRippled
 
 
 ## List Groups
@@ -303,18 +303,44 @@ secondaryText =
     List.secondaryText
 
 
-{-| Styles a row in selected state.
+{-| Styles a row in the selected state.
 -}
 selected : Property m
 selected =
     List.selected
 
 
-{-| Styles a row in activated state.
+{-| Styles a row in the activated state.
+
+NOTE: In Material Design, the selected and activated states apply in
+different, mutually-exclusive situations:
+
+* Selected state should be applied on the list item when it is likely
+  to frequently change due to user choice. E.g., selecting one or more
+  photos to share in Google Photos.
+
+* Activated state is more permanent than selected state, and will NOT
+  change soon relative to the lifetime of the page. Common examples
+  are navigation components such as the list within a navigation
+  drawer.
+
+
 -}
 activated : Property m
 activated =
     List.activated
+
+
+{-| Styles a row in the disabled state.
+
+Disabled list item will be included in the keyboard navigation. Please
+see [Focusability of disabled
+controls](https://www.w3.org/TR/wai-aria-practices-1.1/#kbd_disabled_controls)
+section in ARIA practices article.
+-}
+disabled : Property m
+disabled =
+    List.disabled
 
 
 {-| The first tile in a row, typically an icon or image.
