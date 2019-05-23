@@ -1,3 +1,10 @@
+## IN PROGRESS
+
+Changes:
+* Snackbar timeout default is now 5 seconds to be compatible with
+  the JavaScript version.
+
+
 ## Upgrade to 2.2.0
 
 New features:

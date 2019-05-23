@@ -25,7 +25,7 @@ toast : Maybe m -> String -> Contents m
 toast onDismiss message =
     { message = message
     , action = Nothing
-    , timeout = 2750
+    , timeout = 5000
     , fade = 250
     , stacked = False
     , dismissOnAction = True
@@ -37,7 +37,7 @@ snack : Maybe m -> String -> String -> Contents m
 snack onDismiss message label =
     { message = message
     , action = Just label
-    , timeout = 2750
+    , timeout = 5000
     , fade = 250
     , stacked = True
     , dismissOnAction = True
