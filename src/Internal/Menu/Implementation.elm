@@ -52,11 +52,15 @@ subscriptions model =
     -- Note: Clicking to open a Menu immediately triggers a click on document.
     -- To prevent the Menu from closing immediately, we ignore Document clicks
     -- in the first animation frame after Open by watching model.geometry.
-    if model.open && (model.geometry /= Nothing) then
-        Browser.Events.onClick (Decode.succeed DocumentClick)
-
-    else
-        Sub.none
+    --
+    -- Note: It seems that there is a bug with dynamic subscriptions. Setting
+    -- this conditionally does not fire `DocumentClick` reliably.
+    --
+    -- > if model.open && (model.geometry /= Nothing) then
+    -- >     …
+    -- > else
+    -- >     Sub.none
+    Browser.Events.onClick (Decode.succeed DocumentClick)
 
 
 type alias Item m =
@@ -175,7 +179,12 @@ update lift msg model =
             ( Just { model | animating = False }, Cmd.none )
 
         DocumentClick ->
-            update lift Close model
+            -- Note: See the second note at the definition of `subscriptions`
+            if model.open && (model.geometry /= Nothing) then
+                update lift Close model
+
+            else
+                ( Nothing, Cmd.none )
 
         KeyDown numItems { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
