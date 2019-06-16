@@ -2,8 +2,8 @@ module Demo.Page exposing
     ( Page
     , demos
     , header
-    , subheader
     , hero
+    , subheader
     , toolbar
     )
 

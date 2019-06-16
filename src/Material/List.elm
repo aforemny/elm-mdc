@@ -1,38 +1,36 @@
 module Material.List exposing
     ( Property
-    , ListItem
     , ul, ol
     , nonInteractive
     , dense
     , avatarList
     , twoLine
     , nav
-    , li
-    , listItemClass
-    , text
-    , primaryText
-    , secondaryText
-    , selected
-    , activated
-    , disabled
-    , graphic, graphicIcon, graphicImage, graphicClass
-    , meta, metaText, metaIcon, metaImage, metaClass
-    , a
-    , aRippled
-    , group
-    , subheader
-    , subheaderClass
-    , asListItem
-    , divider
-    , hr
-    , padded
-    , inset
     , selectedIndex
     , onSelectListItem
     , singleSelection
     , radioGroup
     , useActivated
     , node
+    , ListItem
+    , li
+    , a
+    , listItemClass
+    , text
+    , primaryText
+    , secondaryText
+    , selected, activated, disabled
+    , graphic, graphicIcon, graphicImage, graphicClass
+    , meta, metaText, metaIcon, metaImage, metaClass
+    , asListItem
+    , aRippled
+    , group
+    , subheader
+    , subheaderClass
+    , divider
+    , hr
+    , padded
+    , inset
     )
 
 {-| Lists present multiple line items vertically as a single
@@ -204,7 +202,7 @@ ol :
     -> List (ListItem m)
     -> Html m
 ol lift domId model options items =
-    List.view lift domId model ( List.node Html.ol :: options ) items
+    List.view lift domId model (List.node Html.ol :: options) items
 
 
 {-| A list rendered with an Html.nav node.
@@ -217,7 +215,7 @@ nav :
     -> List (ListItem m)
     -> Html m
 nav lift domId model options items =
-    List.view lift domId model ( List.node Html.nav :: options ) items
+    List.view lift domId model (List.node Html.nav :: options) items
 
 
 {-| Disables interactivity affordances.
@@ -259,7 +257,7 @@ li =
 -}
 a : List (Property m) -> List (Html m) -> ListItem m
 a options items =
-    List.li ( List.node Html.a :: options ) items
+    List.li (List.node Html.a :: options) items
 
 
 {-| A list item that can be used outside a list, and still has ripple effects.
@@ -315,15 +313,14 @@ selected =
 NOTE: In Material Design, the selected and activated states apply in
 different, mutually-exclusive situations:
 
-* Selected state should be applied on the list item when it is likely
-  to frequently change due to user choice. E.g., selecting one or more
-  photos to share in Google Photos.
+  - Selected state should be applied on the list item when it is likely
+    to frequently change due to user choice. E.g., selecting one or more
+    photos to share in Google Photos.
 
-* Activated state is more permanent than selected state, and will NOT
-  change soon relative to the lifetime of the page. Common examples
-  are navigation components such as the list within a navigation
-  drawer.
-
+  - Activated state is more permanent than selected state, and will NOT
+    change soon relative to the lifetime of the page. Common examples
+    are navigation components such as the list within a navigation
+    drawer.
 
 -}
 activated : Property m
@@ -337,6 +334,7 @@ Disabled list item will be included in the keyboard navigation. Please
 see [Focusability of disabled
 controls](https://www.w3.org/TR/wai-aria-practices-1.1/#kbd_disabled_controls)
 section in ARIA practices article.
+
 -}
 disabled : Property m
 disabled =
@@ -442,6 +440,7 @@ Thed default node is a div, but you can emit an h3 with:
     import Material.List as Lists
 
     Lists.subHeader [ Lists.node Html.h3 ] [ text "List 1" ]
+
 -}
 subheader : List (Property m) -> List (Html m) -> Html m
 subheader =
@@ -454,6 +453,7 @@ Usually using `subheader` is sufficient.
 
 This class is used both inside a list to label elements in a drawer, or outside
 a list to mark a group.
+
 -}
 subheaderClass : Options.Property c m
 subheaderClass =
@@ -496,6 +496,7 @@ selected and activated classes and aria elements are applied
 automatically.
 
 Bug: the index currently includes dividers.
+
 -}
 selectedIndex : Int -> Property m
 selectedIndex =
@@ -506,6 +507,7 @@ selectedIndex =
 
 Perhaps a bug: the index sent includes dividers, i.e. it's an index
 into the list you passed.
+
 -}
 onSelectListItem : (Int -> m) -> Property m
 onSelectListItem =
@@ -532,13 +534,14 @@ radioGroup =
 {-| In Material Design, the selected and activated states apply in
 different, mutually-exclusive situations:
 
-* Selected state should be applied on the .mdc-list-item when it is
-  likely to frequently change due to user choice. E.g., selecting one
-  or more photos to share in Google Photos.
-* Activated state is more permanent than selected state, and will NOT
-  change soon relative to the lifetime of the page. Common examples
-  are navigation components such as the list within a navigation
-  drawer.
+  - Selected state should be applied on the .mdc-list-item when it is
+    likely to frequently change due to user choice. E.g., selecting one
+    or more photos to share in Google Photos.
+  - Activated state is more permanent than selected state, and will NOT
+    change soon relative to the lifetime of the page. Common examples
+    are navigation components such as the list within a navigation
+    drawer.
+
 -}
 useActivated : Property m
 useActivated =

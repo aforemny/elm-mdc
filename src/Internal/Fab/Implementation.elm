@@ -102,9 +102,9 @@ fab domId lift model options nodes =
                         , cs "material-icons"
                         ]
                         [ text name ]
+
                 Nothing ->
                     text ""
-
     in
     Options.apply summary
         Html.button
@@ -131,13 +131,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | fab : Indexed Model } -> Model
+    { get : Index -> { a | fab : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | fab : Indexed Model }
-          -> Model
-          -> { a | fab : Indexed Model }
-   }
+        Index
+        -> { a | fab : Indexed Model }
+        -> Model
+        -> { a | fab : Indexed Model }
+    }
 getSet =
     Component.indexed .fab (\x y -> { y | fab = x }) defaultModel
 

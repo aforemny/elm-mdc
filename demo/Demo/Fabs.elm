@@ -3,7 +3,7 @@ module Demo.Fabs exposing (Model, Msg(..), defaultModel, update, view)
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page, subheader)
-import Html exposing (Html, text, span, i)
+import Html exposing (Html, i, span, text)
 import Material
 import Material.Fab as Fab
 import Material.Options exposing (cs, css, styled)
@@ -50,10 +50,11 @@ view lift page model =
             , subheader "Mini Floating Action Button"
             , fab "fabs-mini-fab" [ Fab.mini ]
             , subheader "Extended FAB"
-            , extendedFab "fabs-extended-fab" [ Fab.icon "add" ] [ styled span [ Fab.label ] [text "Create" ] ]
+            , extendedFab "fabs-extended-fab" [ Fab.icon "add" ] [ styled span [ Fab.label ] [ text "Create" ] ]
             , subheader "Extended FAB (Text label followed by icon)"
-            , extendedFab "fabs-extended-swapped-fab" [ ]
-                [ styled span [ Fab.label ] [text "Create" ]
+            , extendedFab "fabs-extended-swapped-fab"
+                []
+                [ styled span [ Fab.label ] [ text "Create" ]
                 , styled i [ Fab.iconClass, cs "material-icons" ] [ text "add" ]
                 ]
             , subheader "FAB (Shaped)"
@@ -63,7 +64,7 @@ view lift page model =
                 [ Fab.mini, css "border-radius" "8px", css "margin-right" "24px" ]
             , extendedFab "fabs-shaped-3-fab"
                 [ Fab.icon "add", css "border-radius" "12px" ]
-                [ styled span [ Fab.label ] [text "Create" ]
+                [ styled span [ Fab.label ] [ text "Create" ]
                 ]
             ]
         ]

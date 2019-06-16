@@ -9,9 +9,9 @@ import Html.Events as Html
 import Material
 import Material.Options as Options exposing (cs, css, styled)
 import Material.TextField as TextField
+import Material.TextField.CharacterCounter as TextField
 import Material.TextField.HelperLine as TextField
 import Material.TextField.HelperText as TextField
-import Material.TextField.CharacterCounter as TextField
 import Material.Typography as Typography
 
 
@@ -90,9 +90,9 @@ helperText : Html m
 helperText =
     TextField.helperLine []
         [ TextField.helperText
-              [ TextField.persistent ]
-              [ text "Helper Text"
-              ]
+            [ TextField.persistent ]
+            [ text "Helper Text"
+            ]
         ]
 
 
@@ -100,9 +100,9 @@ helperTextWithCharacterCounter : Html m
 helperTextWithCharacterCounter =
     TextField.helperLine []
         [ TextField.helperText
-              [ TextField.persistent ]
-              [ text "Helper Text"
-              ]
+            [ TextField.persistent ]
+            [ text "Helper Text"
+            ]
         , TextField.characterCounter [] [ text "0 / 18" ]
         ]
 
@@ -234,7 +234,7 @@ characterCounterTextFields lift model =
     in
     textFieldRow []
         [ textFieldContainer []
-            (textField "text-fields-unlabeled-1" [ ])
+            (textField "text-fields-unlabeled-1" [])
         , textFieldContainer []
             (textField "text-fields-unlabeled-2" [ TextField.outlined ])
         , textFieldContainer []

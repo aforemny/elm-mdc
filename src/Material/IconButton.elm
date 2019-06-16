@@ -121,7 +121,6 @@ icon1 =
 
 {-| When using SVG or image icons, use this as the class name.
 -}
-
 iconElement : Property m
 iconElement =
     IconButton.iconElement
@@ -130,7 +129,6 @@ iconElement =
 {-| When using SVG or image icons, use this in addition to iconElement
 to specify the on icon.
 -}
-
 onIconElement : Property m
 onIconElement =
     IconButton.onIconElement

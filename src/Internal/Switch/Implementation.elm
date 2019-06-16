@@ -76,10 +76,11 @@ switch domId lift model options _ =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        rippleDomId = domId ++ "-ripple"
+        rippleDomId =
+            domId ++ "-ripple"
+
         ripple =
             Ripple.view True rippleDomId (lift << RippleMsg) model.ripple []
-
     in
     Options.apply summary
         Html.div
@@ -132,13 +133,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | switch : Indexed Model } -> Model
+    { get : Index -> { a | switch : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | switch : Indexed Model }
-          -> Model
-          -> { a | switch : Indexed Model }
-   }
+        Index
+        -> { a | switch : Indexed Model }
+        -> Model
+        -> { a | switch : Indexed Model }
+    }
 getSet =
     Component.indexed .switch (\x y -> { y | switch = x }) defaultModel
 

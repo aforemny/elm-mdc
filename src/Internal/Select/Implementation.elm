@@ -198,13 +198,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | select : Indexed Model } -> Model
+    { get : Index -> { a | select : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | select : Indexed Model }
-          -> Model
-          -> { a | select : Indexed Model }
-   }
+        Index
+        -> { a | select : Indexed Model }
+        -> Model
+        -> { a | select : Indexed Model }
+    }
 getSet =
     Component.indexed .select (\x y -> { y | select = x }) defaultModel
 

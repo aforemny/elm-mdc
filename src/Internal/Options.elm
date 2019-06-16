@@ -165,21 +165,26 @@ addAttributes summary attrs =
        day: https://github.com/elm/virtual-dom/pull/127/files
     -}
     let
-        styleText = String.join "; " ( List.map (\( key, value ) -> String.join ": " [ key, value ] ) summary.css )
+        styleText =
+            String.join "; " (List.map (\( key, value ) -> String.join ": " [ key, value ]) summary.css)
+
         style =
             if styleText /= "" then
                 [ Html.Attributes.attribute "style" styleText ]
+
             else
                 []
+
         all =
             summary.attrs
-            ++ style
-            ++ List.map Html.Attributes.class (List.reverse summary.classes)
-            ++ attrs
-            ++ summary.internal
-            ++ Dispatch.toAttributes summary.dispatch
+                ++ style
+                ++ List.map Html.Attributes.class (List.reverse summary.classes)
+                ++ attrs
+                ++ summary.internal
+                ++ Dispatch.toAttributes summary.dispatch
     in
-        all
+    all
+
 
 option : (c -> c) -> Property c m
 option =
@@ -233,19 +238,22 @@ See #221 / this thread on elm-discuss:
 TODO
 
 -}
+
+
+
 {-
-on1 : String -> (a -> b) -> a -> Property c b
-on1 event lift m =
-    Listener event
-        (Decode.map
-            (\message ->
-                { message = message
-                , stopPropagation = False
-                , preventDefault = False
-                }
-            )
-            (Decode.map lift <| Decode.succeed m)
-        )
+   on1 : String -> (a -> b) -> a -> Property c b
+   on1 event lift m =
+       Listener event
+           (Decode.map
+               (\message ->
+                   { message = message
+                   , stopPropagation = False
+                   , preventDefault = False
+                   }
+               )
+               (Decode.map lift <| Decode.succeed m)
+           )
 -}
 
 

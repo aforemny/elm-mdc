@@ -1,6 +1,7 @@
 module Internal.List.Implementation exposing
-    ( Property
-    , ListItem
+    ( ListItem
+    , Property
+    , aRippled
     , activated
     , asListItem
     , avatarList
@@ -9,9 +10,9 @@ module Internal.List.Implementation exposing
     , disabled
     , divider
     , graphic
+    , graphicClass
     , graphicIcon
     , graphicImage
-    , graphicClass
     , group
     , hr
     , inset
@@ -22,14 +23,13 @@ module Internal.List.Implementation exposing
     , metaIcon
     , metaImage
     , metaText
-    , onSelectListItem
     , node
     , nonInteractive
+    , onSelectListItem
     , padded
     , primaryText
     , radioGroup
     , react
-    , aRippled
     , secondaryText
     , selected
     , selectedIndex
@@ -44,19 +44,19 @@ module Internal.List.Implementation exposing
     )
 
 import Array exposing (Array)
+import Browser.Dom
 import Dict
 import Html exposing (Html)
 import Html.Attributes as Html
-import Browser.Dom
-import Task
-import Json.Decode as Decode exposing (Decoder)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Icon.Implementation as Icon
+import Internal.List.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Msg
 import Internal.Options as Options exposing (aria, cs, role, styled, tabindex, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Ripple.Model as Ripple
-import Internal.List.Model exposing (Model, Msg(..), defaultModel)
+import Json.Decode as Decode exposing (Decoder)
+import Task
 
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
@@ -64,7 +64,6 @@ update lift msg model =
     let
         isRtl =
             False
-
     in
     case msg of
         RippleMsg index msg_ ->
@@ -74,7 +73,6 @@ update lift msg model =
                         (Dict.get index model.ripples
                             |> Maybe.withDefault Ripple.defaultModel
                         )
-
             in
             ( Just { model | ripples = Dict.insert index ripple model.ripples }
             , Cmd.map (lift << RippleMsg index) effects
@@ -84,7 +82,7 @@ update lift msg model =
             ( Just { model | focused = Nothing }, Cmd.none )
 
         FocusItem index id ->
-            ( Just { model | focused = Nothing }, Task.attempt (\_ -> lift NoOp) ( Browser.Dom.focus id ) )
+            ( Just { model | focused = Nothing }, Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus id) )
 
         SelectItem index m ->
             ( Just { model | focused = Nothing }, send (m index) )
@@ -93,7 +91,10 @@ update lift msg model =
             ( Nothing, Cmd.none )
 
 
+
 {- Turn msg into Cmd msg -}
+
+
 send : msg -> Cmd msg
 send msg =
     Task.succeed msg
@@ -137,11 +138,11 @@ ul domId lift model options items =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        listItemIds = Array.fromList (List.indexedMap (doListItemDomId domId) items)
+        listItemIds =
+            Array.fromList (List.indexedMap (doListItemDomId domId) items)
 
         list_nodes =
             List.indexedMap (listItemView domId lift model config listItemIds) items
-
     in
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
@@ -160,11 +161,15 @@ ul domId lift model options items =
         list_nodes
 
 
+
 -- Perhaps we need to pick up any custom id set explicitly on the list item?
+
+
 doListItemDomId : String -> Int -> ListItem m -> String
 doListItemDomId domId index listItem =
     if listItem.focusable then
         listItemDomId domId index
+
     else
         ""
 
@@ -172,29 +177,38 @@ doListItemDomId domId index listItem =
 
 {- Decoder functions to detect if focus moves away from the list itself.
 
-These functions check if a given DOM element is equal to another DOM
-element, or contained by it.
+   These functions check if a given DOM element is equal to another DOM
+   element, or contained by it.
 
-Thanks: https://github.com/xarvh/elm-onclickoutside/blob/master/src/Html/OnClickOutside.elm
+   Thanks: https://github.com/xarvh/elm-onclickoutside/blob/master/src/Html/OnClickOutside.elm
 -}
+
+
 succeedIfContainerOrChildOfContainer : String -> Decoder ()
 succeedIfContainerOrChildOfContainer targetId =
     Decode.field "id" Decode.string
-        |> Decode.andThen (\id ->
-            if id == targetId then
-                Decode.succeed ()
-            else
-                Decode.field "parentNode" (succeedIfContainerOrChildOfContainer targetId))
+        |> Decode.andThen
+            (\id ->
+                if id == targetId then
+                    Decode.succeed ()
+
+                else
+                    Decode.field "parentNode" (succeedIfContainerOrChildOfContainer targetId)
+            )
 
 
 invertDecoder : Decoder a -> Decoder ()
 invertDecoder decoder =
     Decode.maybe decoder
-        |> Decode.andThen ( \maybe ->
-            if maybe == Nothing then
-                Decode.succeed ()
-            else
-                Decode.fail "")
+        |> Decode.andThen
+            (\maybe ->
+                if maybe == Nothing then
+                    Decode.succeed ()
+
+                else
+                    Decode.fail ""
+            )
+
 
 succeedIfLeavingList : String -> Decoder ()
 succeedIfLeavingList targetId =
@@ -280,23 +294,32 @@ liView domId lift model config listItemIds index options children =
         li_config =
             li_summary.config
 
-        list_item_dom_id = listItemDomId domId index
+        list_item_dom_id =
+            listItemDomId domId index
 
         is_selected =
             case config.selectedIndex of
-                Just i -> i == index
-                Nothing -> False
+                Just i ->
+                    i == index
 
-        selected_index = Maybe.withDefault 0 config.selectedIndex
+                Nothing ->
+                    False
+
+        selected_index =
+            Maybe.withDefault 0 config.selectedIndex
 
         focused_index =
             case model.focused of
-                Just f -> f
-                Nothing -> selected_index
+                Just f ->
+                    f
+
+                Nothing ->
+                    selected_index
 
         tab_index =
             if focused_index == index then
                 0
+
             else
                 -1
 
@@ -308,7 +331,6 @@ liView domId lift model config listItemIds index options children =
                     |> Maybe.withDefault Ripple.defaultModel
                 )
                 []
-
     in
     Options.apply li_summary
         (Maybe.withDefault Html.li li_config.node)
@@ -316,109 +338,153 @@ liView domId lift model config listItemIds index options children =
         , tabindex tab_index
         , selected |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , activated |> when (config.isSingleSelectionList && is_selected && config.useActivated)
-        , aria "checked" (if is_selected then "True" else "False") |> when config.isRadioGroup
+        , aria "checked"
+            (if is_selected then
+                "True"
+
+             else
+                "False"
+            )
+            |> when config.isRadioGroup
         , role "option" |> when config.isSingleSelectionList
         , role "radio" |> when config.isRadioGroup
         , ripple.interactionHandler
         , ripple.properties
         , case config.onSelectListItem of
-              Just onSelect -> Options.onClick (onSelect index)
-              Nothing -> Options.nop
+            Just onSelect ->
+                Options.onClick (onSelect index)
 
+            Nothing ->
+                Options.nop
         , Options.onWithOptions "keydown" <|
             Decode.map2
                 (\key keyCode ->
-                     let
+                    let
+                        -- TODO: handle arrow left and right if horizontal list
+                        ( index_to_focus, id_to_focus ) =
+                            if key == Just "ArrowDown" || keyCode == 40 then
+                                let
+                                    focusable_element =
+                                        firstNonEmptyId (index + 1) listItemIds
+                                in
+                                case focusable_element of
+                                    Just ( next_index, next_item ) ->
+                                        ( Just next_index, Just next_item )
 
-                         -- TODO: handle arrow left and right if horizontal list
-                         (index_to_focus, id_to_focus ) =
-                             if key == Just "ArrowDown" || keyCode == 40 then
-                                 let
-                                     focusable_element = firstNonEmptyId (index + 1) listItemIds
-                                 in
-                                 case focusable_element of
-                                     Just (next_index, next_item) -> (Just next_index, Just next_item)
-                                     Nothing -> (Just (index + 1), Nothing)
-                             else if key == Just "ArrowUp" || keyCode == 38 then
-                                 let
-                                     focusable_element = lastNonEmptyId index listItemIds
-                                 in
-                                 case focusable_element of
-                                     Just (previous_index, previous_item) -> (Just previous_index, Just previous_item)
-                                     Nothing -> (Just (index - 1), Nothing)
-                             else if key == Just "Home" || keyCode == 36 then
-                                  (Just 0, Array.get 0 listItemIds)
-                             else if key == Just "End" || keyCode == 35 then
-                                  let
-                                      last_index = (Array.length listItemIds) - 1
-                                  in
-                                      (Just last_index, Array.get last_index listItemIds)
-                             else
-                                  (Nothing, Nothing)
+                                    Nothing ->
+                                        ( Just (index + 1), Nothing )
 
-                         selectItem =
-                             key == Just "Enter" || keyCode == 13 ||
-                             key == Just "Space" || keyCode == 32
+                            else if key == Just "ArrowUp" || keyCode == 38 then
+                                let
+                                    focusable_element =
+                                        lastNonEmptyId index listItemIds
+                                in
+                                case focusable_element of
+                                    Just ( previous_index, previous_item ) ->
+                                        ( Just previous_index, Just previous_item )
 
-                         msg =
-                             if selectItem then
-                                 case config.onSelectListItem of
-                                     Just onSelect -> SelectItem index onSelect
-                                     Nothing -> NoOp
-                             else
-                                 case (index_to_focus, id_to_focus) of
-                                     (Just idx, Just id) -> FocusItem idx id
-                                     (_, _) -> NoOp
+                                    Nothing ->
+                                        ( Just (index - 1), Nothing )
 
-                     in
-                         { message = lift msg
-                         , preventDefault = index_to_focus /= Nothing || selectItem
-                         , stopPropagation = False
-                         }
+                            else if key == Just "Home" || keyCode == 36 then
+                                ( Just 0, Array.get 0 listItemIds )
+
+                            else if key == Just "End" || keyCode == 35 then
+                                let
+                                    last_index =
+                                        Array.length listItemIds - 1
+                                in
+                                ( Just last_index, Array.get last_index listItemIds )
+
+                            else
+                                ( Nothing, Nothing )
+
+                        selectItem =
+                            key
+                                == Just "Enter"
+                                || keyCode
+                                == 13
+                                || key
+                                == Just "Space"
+                                || keyCode
+                                == 32
+
+                        msg =
+                            if selectItem then
+                                case config.onSelectListItem of
+                                    Just onSelect ->
+                                        SelectItem index onSelect
+
+                                    Nothing ->
+                                        NoOp
+
+                            else
+                                case ( index_to_focus, id_to_focus ) of
+                                    ( Just idx, Just id ) ->
+                                        FocusItem idx id
+
+                                    ( _, _ ) ->
+                                        NoOp
+                    in
+                    { message = lift msg
+                    , preventDefault = index_to_focus /= Nothing || selectItem
+                    , stopPropagation = False
+                    }
                 )
                 (Decode.oneOf
-                     [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                     , Decode.succeed Nothing
-                     ]
-                 )
+                    [ Decode.map Just (Decode.at [ "key" ] Decode.string)
+                    , Decode.succeed Nothing
+                    ]
+                )
                 (Decode.at [ "keyCode" ] Decode.int)
         ]
         []
         children
 
 
+
 -- Perhaps we need to pick up any custom id set explicitly on the list item?
+
+
 listItemDomId : String -> Int -> String
 listItemDomId domId index =
     domId ++ "--" ++ String.fromInt index
 
 
-slicedIndexedList : Int -> Int -> Array a -> List (Int, a)
+slicedIndexedList : Int -> Int -> Array a -> List ( Int, a )
 slicedIndexedList from to array =
     Array.slice from to array
         |> Array.toIndexedList
 
 
-firstNonEmptyId : Int -> Array String -> Maybe (Int, String)
+firstNonEmptyId : Int -> Array String -> Maybe ( Int, String )
 firstNonEmptyId from array =
     let
-        list = slicedIndexedList from (Array.length array) array
-        non_empty_id = find (\(_, id) -> id /= "") list
+        list =
+            slicedIndexedList from (Array.length array) array
+
+        non_empty_id =
+            find (\( _, id ) -> id /= "") list
     in
-        non_empty_id
+    non_empty_id
 
 
-lastNonEmptyId : Int -> Array String -> Maybe (Int, String)
+lastNonEmptyId : Int -> Array String -> Maybe ( Int, String )
 lastNonEmptyId to array =
     let
-        list = slicedIndexedList 0 to array
-        non_empty_id = find (\(i, id) -> id /= "") (List.reverse list)
+        list =
+            slicedIndexedList 0 to array
+
+        non_empty_id =
+            find (\( i, id ) -> id /= "") (List.reverse list)
     in
-        non_empty_id
+    non_empty_id
 
 
-{- Thanks to List.Extra.find
--}
+
+{- Thanks to List.Extra.find -}
+
+
 find : (a -> Bool) -> List a -> Maybe a
 find predicate list =
     case list of
@@ -444,6 +510,7 @@ aRippled =
     \lift domId ->
         Component.render getSet.get (aRippledView domId) Internal.Msg.ListMsg lift domId
 
+
 aRippledView :
     Index
     -> (Msg m -> m)
@@ -456,7 +523,8 @@ aRippledView domId lift model options items =
         summary =
             Options.collect defaultConfig options
 
-        config = summary.config
+        config =
+            summary.config
 
         ripple =
             Ripple.view False
@@ -536,7 +604,6 @@ disabled =
     cs "mdc-list-item--disabled"
 
 
-
 graphicClass : Options.Property c m
 graphicClass =
     cs "mdc-list-item__graphic"
@@ -611,15 +678,16 @@ asListItemView :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-asListItemView domId lift model config listItemsIds index options children=
+asListItemView domId lift model config listItemsIds index options children =
     let
         summary =
             Options.collect defaultConfig options
     in
     Options.apply summary
-        (Maybe.withDefault Html.div summary.config.node) []
-            []
-            children
+        (Maybe.withDefault Html.div summary.config.node)
+        []
+        []
+        children
 
 
 group : List (Property m) -> List (Html m) -> Html m
@@ -633,9 +701,10 @@ subheader options =
         summary =
             Options.collect defaultConfig options
 
-        config = summary.config
+        config =
+            summary.config
     in
-        styled (Maybe.withDefault Html.div config.node) (subheaderClass :: options)
+    styled (Maybe.withDefault Html.div config.node) (subheaderClass :: options)
 
 
 subheaderClass : Options.Property c m
@@ -645,12 +714,12 @@ subheaderClass =
 
 divider : List (Property m) -> List (Html m) -> ListItem m
 divider options =
-    asListItem Html.li ( cs "mdc-list-divider" :: role "separator" :: options )
+    asListItem Html.li (cs "mdc-list-divider" :: role "separator" :: options)
 
 
 hr : List (Property m) -> List (Html m) -> ListItem m
 hr options =
-    asListItem Html.hr ( cs "mdc-list-divider" :: options )
+    asListItem Html.hr (cs "mdc-list-divider" :: options)
 
 
 padded : Property m
@@ -668,13 +737,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | list : Indexed Model } -> Model
+    { get : Index -> { a | list : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | list : Indexed Model }
-          -> Model
-          -> { a | list : Indexed Model }
-   }
+        Index
+        -> { a | list : Indexed Model }
+        -> Model
+        -> { a | list : Indexed Model }
+    }
 getSet =
     Component.indexed .list (\x y -> { y | list = x }) defaultModel
 

@@ -168,13 +168,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | button : Indexed Model } -> Model
+    { get : Index -> { a | button : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | button : Indexed Model }
-          -> Model
-          -> { a | button : Indexed Model }
-   }
+        Index
+        -> { a | button : Indexed Model }
+        -> Model
+        -> { a | button : Indexed Model }
+    }
 getSet =
     Component.indexed .button (\x y -> { y | button = x }) defaultModel
 

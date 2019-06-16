@@ -1,6 +1,4 @@
-module Material.TextField.CharacterCounter exposing
-    ( characterCounter
-    )
+module Material.TextField.CharacterCounter exposing (characterCounter)
 
 {-| Character counter is used if there is a character limit. It displays the ratio of characters used and the total character limit.
 
@@ -13,6 +11,7 @@ module Material.TextField.CharacterCounter exposing
 
 
 # Examples
+
 
 ## Character counter for single-line text
 
@@ -37,7 +36,6 @@ module Material.TextField.CharacterCounter exposing
 # Usage
 
 @docs characterCounter
-
 
 -}
 

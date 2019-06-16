@@ -33,7 +33,6 @@ update lift msg model =
     let
         isRtl =
             False
-
     in
     case msg of
         RippleMsg index msg_ ->
@@ -68,6 +67,7 @@ update lift msg model =
                 translateOffset =
                     if not isOverflowing then
                         0
+
                     else
                         model.translateOffset
               in
@@ -89,33 +89,37 @@ update lift msg model =
                         |> List.drop i
                         |> List.head
                         |> Maybe.withDefault
-                           { offsetLeft = 0
-                           , offsetWidth = 0
-                           , contentLeft = 0
-                           , contentRight = 0
-                           }
+                            { offsetLeft = 0
+                            , offsetWidth = 0
+                            , contentLeft = 0
+                            , contentRight = 0
+                            }
 
-                tab_ = tabAtIndex tab_index
+                tab_ =
+                    tabAtIndex tab_index
 
-                barWidth = geometry.tabBar.offsetWidth
+                barWidth =
+                    geometry.tabBar.offsetWidth
 
-                next_tab_index = findAdjacentTabIndexClosestToEdge tab_index tab_ scrollPosition barWidth
+                next_tab_index =
+                    findAdjacentTabIndexClosestToEdge tab_index tab_ scrollPosition barWidth
 
-                scrollIncrement = calculateScrollIncrement geometry tab_index next_tab_index scrollPosition barWidth
+                scrollIncrement =
+                    calculateScrollIncrement geometry tab_index next_tab_index scrollPosition barWidth
 
                 newScrollPosition =
                     if tab_index == 0 then
-                       -- Always scroll to 0 if scrolling to the 0th index
-                       0
+                        -- Always scroll to 0 if scrolling to the 0th index
+                        0
+
+                    else if tab_index == List.length geometry.tabs - 1 then
+                        -- Always scroll to the max value if scrolling to the Nth index
+                        geometry.scrollArea.offsetWidth
+
                     else
-                        if tab_index == List.length geometry.tabs - 1 then
-                            -- Always scroll to the max value if scrolling to the Nth index
-                            geometry.scrollArea.offsetWidth
-                        else
-                            scrollPosition + scrollIncrement
+                        scrollPosition + scrollIncrement
 
                 -- TODO: properly animate new scroll position using FLIP
-
             in
             ( Just { model | activeTab = tab_index }
             , Browser.Dom.setViewportOf (domId ++ "__scroll-area") newScrollPosition 0
@@ -126,30 +130,44 @@ update lift msg model =
 
 
 {-| Determines the index of the adjacent tab closest to either edge of the Tab Bar
-    TODO: Rtl
+TODO: Rtl
 -}
 findAdjacentTabIndexClosestToEdge : Int -> Internal.TabBar.Model.Tab -> Float -> Float -> Int
 findAdjacentTabIndexClosestToEdge index tab_ scrollPosition barWidth =
     let
-        rootLeft = tab_.offsetLeft
-        rootRight = tab_.offsetLeft + tab_.offsetWidth
-        relativeRootLeft = rootLeft - scrollPosition
-        relativeRootRight = rootRight - scrollPosition - barWidth
-        relativeRootDelta = relativeRootLeft + relativeRootRight
-        leftEdgeIsCloser = relativeRootLeft < 0 || relativeRootDelta < 0
-        rightEdgeIsCloser = relativeRootRight > 0 || relativeRootDelta > 0
+        rootLeft =
+            tab_.offsetLeft
+
+        rootRight =
+            tab_.offsetLeft + tab_.offsetWidth
+
+        relativeRootLeft =
+            rootLeft - scrollPosition
+
+        relativeRootRight =
+            rootRight - scrollPosition - barWidth
+
+        relativeRootDelta =
+            relativeRootLeft + relativeRootRight
+
+        leftEdgeIsCloser =
+            relativeRootLeft < 0 || relativeRootDelta < 0
+
+        rightEdgeIsCloser =
+            relativeRootRight > 0 || relativeRootDelta > 0
     in
-        if leftEdgeIsCloser then
-            index - 1
-        else
-            if rightEdgeIsCloser then
-                index + 1
-            else
-                -1
+    if leftEdgeIsCloser then
+        index - 1
+
+    else if rightEdgeIsCloser then
+        index + 1
+
+    else
+        -1
 
 
 {-| Calculates the scroll increment that will make the tab at the given index visible
-    TODO: Rtl
+TODO: Rtl
 -}
 calculateScrollIncrement : Geometry -> Int -> Int -> Float -> Float -> Float
 calculateScrollIncrement geometry index nextIndex scrollPosition barWidth =
@@ -159,25 +177,37 @@ calculateScrollIncrement geometry index nextIndex scrollPosition barWidth =
                 |> List.drop nextIndex
                 |> List.head
 
-        extraScrollAmount = 20
+        extraScrollAmount =
+            20
     in
-        case maybe_next_tab of
-            Just next_tab ->
-                let
-                    relativeContentLeft = next_tab.contentLeft - scrollPosition - barWidth
-                    relativeContentRight = next_tab.contentRight - scrollPosition
-                    leftIncrement = relativeContentRight - extraScrollAmount
-                    rightIncrement = relativeContentLeft + extraScrollAmount
-                in
-                    if nextIndex < index then
-                        min leftIncrement 0
-                    else
-                        max rightIncrement 0
-            Nothing ->
-                0
+    case maybe_next_tab of
+        Just next_tab ->
+            let
+                relativeContentLeft =
+                    next_tab.contentLeft - scrollPosition - barWidth
+
+                relativeContentRight =
+                    next_tab.contentRight - scrollPosition
+
+                leftIncrement =
+                    relativeContentRight - extraScrollAmount
+
+                rightIncrement =
+                    relativeContentLeft + extraScrollAmount
+            in
+            if nextIndex < index then
+                min leftIncrement 0
+
+            else
+                max rightIncrement 0
+
+        Nothing ->
+            0
+
 
 
 -- Note: tab bar and tab state use the same config.
+
 
 type alias Config =
     { indicator : Bool
@@ -270,18 +300,17 @@ tabbar domId lift model options nodes =
 
         -- TODO
         {-
-        tabBarTransform =
-            let
-                shiftAmount =
-                    if isRtl then
-                        model.translateOffset
+           tabBarTransform =
+               let
+                   shiftAmount =
+                       if isRtl then
+                           model.translateOffset
 
-                    else
-                        -model.translateOffset
-            in
-            "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
-         -}
-
+                       else
+                           -model.translateOffset
+               in
+               "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
+        -}
         tab_nodes =
             List.indexedMap (tabView domId lift model options) nodes
     in
@@ -293,6 +322,7 @@ tabbar domId lift model options nodes =
             GlobalEvents.onTick <|
                 Json.map (lift << SetActiveTab domId config.activeTab) <|
                     decodeScrollLeft
+
         -- , when stateChanged <|
         --     GlobalEvents.onTick (Json.succeed (lift (SetActiveTab domId config.activeTab)))
         ]
@@ -537,13 +567,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | tabbar : Indexed Model } -> Model
+    { get : Index -> { a | tabbar : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | tabbar : Indexed Model }
-          -> Model
-          -> { a | tabbar : Indexed Model }
-   }
+        Index
+        -> { a | tabbar : Indexed Model }
+        -> Model
+        -> { a | tabbar : Indexed Model }
+    }
 getSet =
     Component.indexed .tabbar (\x y -> { y | tabbar = x }) defaultModel
 
@@ -570,10 +600,9 @@ view =
         Component.render getSet.get (tabbar domId) Internal.Msg.TabBarMsg lift domId
 
 
-
 decodeScrollLeft : Decoder Float
 decodeScrollLeft =
-    DOM.target <| DOM.childNode 0 <| DOM.childNode 0 <| Json.map (\scrollLeft -> scrollLeft ) DOM.scrollLeft
+    DOM.target <| DOM.childNode 0 <| DOM.childNode 0 <| Json.map (\scrollLeft -> scrollLeft) DOM.scrollLeft
 
 
 decodeGeometryOnScrollContent : Decoder Geometry
@@ -583,8 +612,11 @@ decodeGeometryOnScrollContent =
         decodeGeometry
 
 
+
 -- Current element when we arrive here should be .mdc-tab-scroller__scroll-content
 -- i.e. the immediate container for the tabs.
+
+
 decodeGeometry : Decoder Geometry
 decodeGeometry =
     Json.map3 Geometry
@@ -597,22 +629,26 @@ decodeGeometry =
                                 "button" ->
                                     let
                                         -- TODO: get node with appropriate class name
-                                        content = DOM.childNode 0
+                                        content =
+                                            DOM.childNode 0
+
                                         dimensions =
                                             content <|
-                                            Json.map2 (\offsetLeft offsetWidth ->
-                                                          { offsetLeft = offsetLeft
-                                                          , offsetWidth = offsetWidth
-                                                          }
-                                                     )
-                                                     DOM.offsetLeft
-                                                     DOM.offsetWidth
+                                                Json.map2
+                                                    (\offsetLeft offsetWidth ->
+                                                        { offsetLeft = offsetLeft
+                                                        , offsetWidth = offsetWidth
+                                                        }
+                                                    )
+                                                    DOM.offsetLeft
+                                                    DOM.offsetWidth
                                     in
                                     Json.map Just <|
                                         Json.map2
                                             (\offsetLeft offsetWidth ->
                                                 { offsetLeft = offsetLeft
                                                 , offsetWidth = offsetWidth
+
                                                 -- TODO: get content left and right here
                                                 , contentLeft = offsetLeft + 24
                                                 , contentRight = offsetLeft + offsetWidth - 24 - 24
@@ -627,8 +663,8 @@ decodeGeometry =
                 )
         )
         (DOM.parentElement <|
-              -- .mdc-tab-scroller__scroll-area
-             Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
+            -- .mdc-tab-scroller__scroll-area
+            Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )
         (DOM.parentElement <|
             -- .mdc-tab-scroller__scroll-area

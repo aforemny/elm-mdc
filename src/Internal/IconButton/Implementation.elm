@@ -110,18 +110,21 @@ iconButton domId lift model options list =
         ripple =
             Ripple.view True domId (lift << RippleMsg) model.ripple []
 
-        isToggle = config.icon.on /= config.icon.off
+        isToggle =
+            config.icon.on /= config.icon.off
 
         icons =
             [ styled Html.i
-                  [ iconElement
-                  , cs "material-icons"
-                  , onIconElement ]
-                  [ text config.icon.on ]
+                [ iconElement
+                , cs "material-icons"
+                , onIconElement
+                ]
+                [ text config.icon.on ]
             , styled Html.i
-                  [ iconElement
-                  , cs "material-icons" ]
-                  [ text config.icon.off ]
+                [ iconElement
+                , cs "material-icons"
+                ]
+                [ text config.icon.off ]
             ]
     in
     Options.apply summary
@@ -132,12 +135,13 @@ iconButton domId lift model options list =
         , Options.aria "label"
             (if config.on then
                 config.label.on
+
              else
                 config.label.off
             )
         , Options.aria "hidden" "True" |> when isToggle
-        , Options.aria "pressed" "True" |> when ( isToggle && config.on )
-        , Options.aria "pressed" "False" |> when ( isToggle && not config.on )
+        , Options.aria "pressed" "True" |> when (isToggle && config.on)
+        , Options.aria "pressed" "False" |> when (isToggle && not config.on)
         , Options.attribute (Html.disabled True) |> when config.disabled
         , Options.many
             [ ripple.interactionHandler
@@ -145,23 +149,26 @@ iconButton domId lift model options list =
             ]
         ]
         []
-        ( list
-          ++ if config.alternativeIconLibrary /= Nothing then
-            [ styled Html.i
-                [ cs (Maybe.withDefault "material-icons" config.alternativeIconLibrary)
-                , if config.on then
-                    cs config.icon.on
-                  else
-                    cs config.icon.off
-                ]
-                []
-            ]
-          else
-              if config.icon.on == config.icon.off then
-                  [ text config.icon.on
-                  ]
-              else
-                  icons
+        (list
+            ++ (if config.alternativeIconLibrary /= Nothing then
+                    [ styled Html.i
+                        [ cs (Maybe.withDefault "material-icons" config.alternativeIconLibrary)
+                        , if config.on then
+                            cs config.icon.on
+
+                          else
+                            cs config.icon.off
+                        ]
+                        []
+                    ]
+
+                else if config.icon.on == config.icon.off then
+                    [ text config.icon.on
+                    ]
+
+                else
+                    icons
+               )
         )
 
 
@@ -172,13 +179,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | iconButton : Indexed Model } -> Model
+    { get : Index -> { a | iconButton : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | iconButton : Indexed Model }
-          -> Model
-          -> { a | iconButton : Indexed Model }
-   }
+        Index
+        -> { a | iconButton : Indexed Model }
+        -> Model
+        -> { a | iconButton : Indexed Model }
+    }
 getSet =
     Component.indexed .iconButton (\x y -> { y | iconButton = x }) defaultModel
 

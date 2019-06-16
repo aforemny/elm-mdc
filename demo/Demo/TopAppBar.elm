@@ -1,7 +1,7 @@
 module Demo.TopAppBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
-import Demo.Page as Page exposing (Page)
 import Demo.Helper.ResourceLink as ResourceLink
+import Demo.Page as Page exposing (Page)
 import Demo.Url as Url exposing (TopAppBarPage)
 import Dict exposing (Dict)
 import Html exposing (Html, div, p, text)
@@ -217,23 +217,25 @@ topAppBarWrapper lift index model options topappbar =
         ]
 
 
-topAppBar  : (Msg m -> m) -> Material.Index -> Model m -> List (TopAppBar.Property m) -> Html m
+topAppBar : (Msg m -> m) -> Material.Index -> Model m -> List (TopAppBar.Property m) -> Html m
 topAppBar lift index model options =
-    TopAppBar.view (lift << Mdc) index model.mdc
+    TopAppBar.view (lift << Mdc)
+        index
+        model.mdc
         options
         [ TopAppBar.section
-              [ TopAppBar.alignStart
-              ]
-              [ TopAppBar.navigationIcon (lift << Mdc) (index ++ "-menu") model.mdc [] "menu"
-              , TopAppBar.title [] [ text "Title" ]
-              ]
+            [ TopAppBar.alignStart
+            ]
+            [ TopAppBar.navigationIcon (lift << Mdc) (index ++ "-menu") model.mdc [] "menu"
+            , TopAppBar.title [] [ text "Title" ]
+            ]
         , TopAppBar.section
             [ TopAppBar.alignEnd
             ]
-              [ TopAppBar.actionItem (lift << Mdc) (index ++ "-file_down") model.mdc [] "file_download"
-              , TopAppBar.actionItem (lift << Mdc) (index ++ "-print") model.mdc [] "print"
-              , TopAppBar.actionItem (lift << Mdc) (index ++ "-bookmark") model.mdc [] "bookmark"
-              ]
+            [ TopAppBar.actionItem (lift << Mdc) (index ++ "-file_down") model.mdc [] "file_download"
+            , TopAppBar.actionItem (lift << Mdc) (index ++ "-print") model.mdc [] "print"
+            , TopAppBar.actionItem (lift << Mdc) (index ++ "-bookmark") model.mdc [] "bookmark"
+            ]
         ]
 
 
@@ -244,7 +246,7 @@ standardTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        ( topAppBar lift index model [] )
+        (topAppBar lift index model [])
 
 
 fixedTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -254,7 +256,7 @@ fixedTopAppBar lift index model =
         model
         [ TopAppBar.fixedAdjust
         ]
-        ( topAppBar lift index model [ TopAppBar.fixed ] )
+        (topAppBar lift index model [ TopAppBar.fixed ])
 
 
 denseTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -264,7 +266,7 @@ denseTopAppBar lift index model =
         model
         [ TopAppBar.denseFixedAdjust
         ]
-        ( topAppBar lift index model [ TopAppBar.dense ] )
+        (topAppBar lift index model [ TopAppBar.dense ])
 
 
 prominentTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m
@@ -274,7 +276,7 @@ prominentTopAppBar lift index model =
         model
         [ TopAppBar.prominentFixedAdjust
         ]
-        ( topAppBar lift index model [ TopAppBar.prominent ] )
+        (topAppBar lift index model [ TopAppBar.prominent ])
 
 
 shortTopAppBar : (Msg m -> m) -> Material.Index -> Model m -> Html m

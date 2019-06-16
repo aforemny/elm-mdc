@@ -2,9 +2,9 @@ module Internal.TabBar.Model exposing
     ( Geometry
     , Model
     , Msg(..)
+    , Tab
     , defaultGeometry
     , defaultModel
-    , Tab
     )
 
 import Dict exposing (Dict)
@@ -42,6 +42,7 @@ type alias Tab =
     , contentLeft : Float
     , contentRight : Float
     }
+
 
 type alias Geometry =
     { tabs : List Tab

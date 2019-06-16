@@ -154,8 +154,7 @@ actionItem :
     -> String
     -> Html m
 actionItem lift index model options name =
-    TopAppBar.actionItem lift index model (cs "mdc-top-app-bar__action-item" :: options ) name
-
+    TopAppBar.actionItem lift index model (cs "mdc-top-app-bar__action-item" :: options) name
 
 
 {-| Make section align to the start.
@@ -181,10 +180,15 @@ navigationIcon :
     -> List (Icon.Property m)
     -> String
     -> Html m
+
+
+
 --navigationIcon =
 --    TopAppBar.actionItem
+
+
 navigationIcon lift index model options name =
-    TopAppBar.actionItem lift index model (cs "mdc-top-app-bar__navigation-icon" :: options ) name
+    TopAppBar.actionItem lift index model (cs "mdc-top-app-bar__navigation-icon" :: options) name
 
 
 {-| Fixed top app bars stay at the top of the page and elevate above

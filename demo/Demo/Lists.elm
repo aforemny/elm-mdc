@@ -1,10 +1,9 @@
 module Demo.Lists exposing (Model, Msg, defaultModel, update, view)
 
-import Dict exposing (Dict)
-import Set exposing (Set)
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
+import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Material
@@ -14,6 +13,7 @@ import Material.List as Lists
 import Material.Options as Options exposing (css, styled, when)
 import Material.RadioButton as RadioButton
 import Material.Typography as Typography
+import Set exposing (Set)
 
 
 type alias Model m =
@@ -28,9 +28,9 @@ defaultModel =
     { mdc = Material.defaultModel
     , selectedListItem =
         Dict.empty
-        |> Dict.insert "activated-item-list" 1
-        |> Dict.insert "shaped-activated-item-list" 1
-        |> Dict.insert "lists-list-with-radio-buttons" 4
+            |> Dict.insert "activated-item-list" 1
+            |> Dict.insert "shaped-activated-item-list" 1
+            |> Dict.insert "lists-list-with-radio-buttons" 4
     , selectedCheckboxes = Set.empty
     }
 
@@ -48,54 +48,75 @@ update lift msg model =
 
         SelectListItem list index ->
             let
-                selectedListItem = Dict.insert list index model.selectedListItem
+                selectedListItem =
+                    Dict.insert list index model.selectedListItem
+
                 selectedCheckboxes =
                     if list == "lists-list-with-checkbox" then
                         let
-                            corrected_index = if index >= 2 then index - 1 else index
-                            present = Set.member corrected_index model.selectedCheckboxes
+                            corrected_index =
+                                if index >= 2 then
+                                    index - 1
+
+                                else
+                                    index
+
+                            present =
+                                Set.member corrected_index model.selectedCheckboxes
                         in
-                            if present then
-                                Set.remove corrected_index model.selectedCheckboxes
-                            else
-                                Set.insert corrected_index model.selectedCheckboxes
+                        if present then
+                            Set.remove corrected_index model.selectedCheckboxes
+
+                        else
+                            Set.insert corrected_index model.selectedCheckboxes
+
                     else
                         model.selectedCheckboxes
             in
-                ( { model | selectedListItem = selectedListItem, selectedCheckboxes = selectedCheckboxes }, Cmd.none )
+            ( { model | selectedListItem = selectedListItem, selectedCheckboxes = selectedCheckboxes }, Cmd.none )
 
 
 demoList : (Msg m -> m) -> Model m -> Material.Index -> List (Lists.Property m)
 demoList lift model index =
     let
-        selected = Dict.get index model.selectedListItem
+        selected =
+            Dict.get index model.selectedListItem
     in
-        [ css "max-width" "600px"
-        , css "border" "1px solid rgba(0,0,0,.1)"
-        , Lists.onSelectListItem (lift << SelectListItem index)
-        , case selected of
-              Just i -> Lists.selectedIndex i
-              Nothing -> Options.nop
-        ]
+    [ css "max-width" "600px"
+    , css "border" "1px solid rgba(0,0,0,.1)"
+    , Lists.onSelectListItem (lift << SelectListItem index)
+    , case selected of
+        Just i ->
+            Lists.selectedIndex i
+
+        Nothing ->
+            Options.nop
+    ]
 
 
 heroList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 heroList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (css "background" "#fff" :: demoList lift model index)
         (List.repeat 3 <| Lists.li [] [ text "Line item" ])
 
 
 singleLineList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 singleLineList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (demoList lift model index)
         (List.repeat 3 <| Lists.li [] [ text "Line item" ])
 
 
 twoLineList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 twoLineList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (Lists.twoLine :: demoList lift model index)
         (List.repeat 3 <|
             Lists.li []
@@ -109,7 +130,9 @@ twoLineList lift model index =
 
 leadingIconList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 leadingIconList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (demoList lift model index)
         [ Lists.li [] [ Lists.graphicIcon [] "wifi", text "Line item" ]
         , Lists.li [] [ Lists.graphicIcon [] "bluetooth", text "Line item" ]
@@ -119,14 +142,18 @@ leadingIconList lift model index =
 
 trailingIconList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 trailingIconList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (demoList lift model index)
         (List.repeat 3 <| Lists.li [] [ text "Line item", Lists.metaIcon [] "info" ])
 
 
 activatedItemList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 activatedItemList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (Lists.useActivated :: Lists.singleSelection :: demoList lift model index)
         [ Lists.li [] [ Lists.graphicIcon [] "inbox", text "Inbox" ]
         , Lists.li [] [ Lists.graphicIcon [] "star", text "Star" ]
@@ -137,7 +164,9 @@ activatedItemList lift model index =
 
 shapedActivatedItemList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 shapedActivatedItemList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (Lists.useActivated :: Lists.singleSelection :: demoList lift model index)
         [ Lists.li [] [ Lists.graphicIcon [] "inbox", text "Inbox" ]
         , Lists.li
@@ -158,7 +187,9 @@ demoIcon =
 
 folderList : (Msg m -> m) -> Model m -> Material.Index -> Html m
 folderList lift model index =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (Lists.twoLine :: Lists.avatarList :: demoList lift model index)
         [ Lists.li []
             [ Lists.graphicIcon demoIcon "folder"
@@ -198,7 +229,9 @@ folderList lift model index =
 
 listWithTrailing : (Msg m -> m) -> Model m -> Material.Index -> List (Lists.Property m) -> (Int -> Html m) -> Html m
 listWithTrailing lift model index options metaControl =
-    Lists.ul (lift << Mdc) index model.mdc
+    Lists.ul (lift << Mdc)
+        index
+        model.mdc
         (demoList lift model index ++ options)
         [ Lists.li []
             [ text "Dog Photos"
@@ -222,31 +255,42 @@ listWithTrailing lift model index options metaControl =
 
 listWithTrailingCheckbox : (Msg m -> m) -> Material.Index -> Model m -> Html m
 listWithTrailingCheckbox lift index model =
-    listWithTrailing lift model index []
+    listWithTrailing lift
+        model
+        index
+        []
         (\n ->
-             let
-                 selected = Set.member n model.selectedCheckboxes
-             in
-                 Checkbox.view (lift << Mdc)
-                     (index ++ "-checkbox-" ++ String.fromInt n)
-                     model.mdc
-                     [ Checkbox.checked selected
-                     , Lists.metaClass ]
-                     []
+            let
+                selected =
+                    Set.member n model.selectedCheckboxes
+            in
+            Checkbox.view (lift << Mdc)
+                (index ++ "-checkbox-" ++ String.fromInt n)
+                model.mdc
+                [ Checkbox.checked selected
+                , Lists.metaClass
+                ]
+                []
         )
 
 
 listWithTrailingRadioButton : (Msg m -> m) -> Material.Index -> Model m -> Html m
 listWithTrailingRadioButton lift index model =
     let
-        selected = Maybe.withDefault 0 (Dict.get index model.selectedListItem)
+        selected =
+            Maybe.withDefault 0 (Dict.get index model.selectedListItem)
+
         really_selected =
             if selected < 2 then
                 selected
+
             else
                 selected - 1
     in
-    listWithTrailing lift model index [ Lists.radioGroup ]
+    listWithTrailing lift
+        model
+        index
+        [ Lists.radioGroup ]
         (\n ->
             RadioButton.view (lift << Mdc)
                 (index ++ "-radio-button-" ++ String.fromInt n)

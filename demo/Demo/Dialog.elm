@@ -133,7 +133,9 @@ simpleDialog lift index model =
             [ text "Select an account"
             ]
         , Dialog.content []
-            [ Lists.ul (lift << Mdc) index model.mdc
+            [ Lists.ul (lift << Mdc)
+                index
+                model.mdc
                 [ Lists.avatarList ]
                 [ Lists.li
                     [ Options.tabindex 0
@@ -187,7 +189,9 @@ confirmationDialog lift index model =
             [ text "Phone ringtone"
             ]
         , Dialog.content []
-            [ Lists.ul (lift << Mdc) index model.mdc
+            [ Lists.ul (lift << Mdc)
+                index
+                model.mdc
                 [ Lists.avatarList ]
                 [ Lists.li []
                     [ Lists.graphic []

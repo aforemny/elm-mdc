@@ -1,6 +1,4 @@
-module Material.TextField.HelperLine exposing
-    ( helperLine
-    )
+module Material.TextField.HelperLine exposing (helperLine)
 
 {-| Use Helper line to wrap any helper text. For single line text
 fields also put the character counter inside it.
@@ -36,7 +34,6 @@ fields also put the character counter inside it.
 # Usage
 
 @docs helperLine
-
 
 -}
 

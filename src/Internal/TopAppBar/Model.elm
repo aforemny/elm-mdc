@@ -6,7 +6,6 @@ module Internal.TopAppBar.Model exposing
     , defaultModel
     )
 
-
 import Dict exposing (Dict)
 import Internal.Ripple.Model as Ripple
 

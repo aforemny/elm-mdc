@@ -488,13 +488,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | toolbar : Indexed Model } -> Model
+    { get : Index -> { a | toolbar : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | toolbar : Indexed Model }
-          -> Model
-          -> { a | toolbar : Indexed Model }
-   }
+        Index
+        -> { a | toolbar : Indexed Model }
+        -> Model
+        -> { a | toolbar : Indexed Model }
+    }
 getSet =
     Component.indexed .toolbar (\x y -> { y | toolbar = x }) defaultModel
 

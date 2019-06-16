@@ -6,7 +6,7 @@ module Internal.TextField.HelperText.Implementation exposing
     )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (cs, when, aria)
+import Internal.Options as Options exposing (aria, cs, when)
 
 
 type alias Config =

@@ -107,13 +107,15 @@ iconImageToggle lift index model offIcon onIcon =
         , when isOn IconButton.on
         ]
         [ styled Html.img
-              [ IconButton.iconElement
-              , IconButton.onIconElement
-              , Options.attribute (Html.src onIcon) ]
-              []
+            [ IconButton.iconElement
+            , IconButton.onIconElement
+            , Options.attribute (Html.src onIcon)
+            ]
+            []
         , styled Html.img
             [ IconButton.iconElement
-            , Options.attribute (Html.src offIcon) ]
+            , Options.attribute (Html.src offIcon)
+            ]
             []
         ]
 

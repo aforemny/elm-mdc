@@ -43,7 +43,7 @@ import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (aria, cs, css, role, tabindex, styled, when)
+import Internal.Options as Options exposing (aria, cs, css, role, styled, tabindex, when)
 import Json.Decode as Decode exposing (Decoder)
 
 
@@ -478,6 +478,7 @@ menu lift model options ulNode =
                    , role "menu"
                    , aria "hidden" "true"
                    , aria "orientation" "vertical"
+
                    --, tabindex -1
                    ]
             )
@@ -537,7 +538,13 @@ menu lift model options ulNode =
                             [ cs "mdc-list-item"
                             , cs "mdc-ripple-upgraded"
                             , cs "mdc-ripple-upgraded--background-focused" |> when isSelected
-                            , tabindex (if isSelected then 0 else -1)
+                            , tabindex
+                                (if isSelected then
+                                    0
+
+                                 else
+                                    -1
+                                )
                             , role "menuitem"
                             , Options.on "focus" (Decode.succeed (lift (SetFocus focusIndex)))
                             , autoFocus
@@ -895,13 +902,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | menu : Indexed Model } -> Model
+    { get : Index -> { a | menu : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | menu : Indexed Model }
-          -> Model
-          -> { a | menu : Indexed Model }
-   }
+        Index
+        -> { a | menu : Indexed Model }
+        -> Model
+        -> { a | menu : Indexed Model }
+    }
 getSet =
     Component.indexed .menu (\x y -> { y | menu = x }) defaultModel
 

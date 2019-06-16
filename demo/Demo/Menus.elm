@@ -3,7 +3,7 @@ module Demo.Menus exposing (Model, Msg(..), defaultModel, subscriptions, update,
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text, div)
+import Html exposing (Html, div, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Material

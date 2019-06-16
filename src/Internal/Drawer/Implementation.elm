@@ -118,7 +118,6 @@ view className lift model options nodes =
                     ]
                 )
                 (Decode.at [ "keyCode" ] Decode.int)
-
          ]
             ++ options
         )
@@ -140,13 +139,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | drawer : Indexed Model } -> Model
+    { get : Index -> { a | drawer : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | drawer : Indexed Model }
-          -> Model
-          -> { a | drawer : Indexed Model }
-   }
+        Index
+        -> { a | drawer : Indexed Model }
+        -> Model
+        -> { a | drawer : Indexed Model }
+    }
 getSet =
     Component.indexed .drawer (\x y -> { y | drawer = x }) defaultModel
 

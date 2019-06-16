@@ -664,13 +664,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | slider : Indexed Model } -> Model
+    { get : Index -> { a | slider : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | slider : Indexed Model }
-          -> Model
-          -> { a | slider : Indexed Model }
-   }
+        Index
+        -> { a | slider : Indexed Model }
+        -> Model
+        -> { a | slider : Indexed Model }
+    }
 getSet =
     Component.indexed .slider (\x y -> { y | slider = x }) defaultModel
 

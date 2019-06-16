@@ -86,6 +86,7 @@ type alias Property m =
 {-| Bounded view function.
 
 The style property is obsolete, you do not need to use it anymore.
+
 -}
 bounded :
     (Material.Msg m -> m)
@@ -104,6 +105,7 @@ bounded =
 {-| Unbounded view function.
 
 The style property is obsolete, you do not need to use it anymore.
+
 -}
 unbounded :
     (Material.Msg m -> m)

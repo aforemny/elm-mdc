@@ -35,7 +35,9 @@ module Material.Fab exposing
 
 # Extended floating action button
 
-    Fab.view Mdc "my-extended-fab" model.mdc
+    Fab.view Mdc
+        "my-extended-fab"
+        model.mdc
         [ Fab.ripple
         , Options.onClick Click
         , icon "add"

@@ -12,8 +12,8 @@ module Internal.Ripple.Implementation exposing
 import Browser.Dom
 import DOM
 import Html exposing (Html, text)
-import Internal.GlobalEvents as GlobalEvents
 import Internal.Component as Component exposing (Index, Indexed)
+import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, when)
 import Internal.Ripple.Model
@@ -159,8 +159,8 @@ view isUnbounded domId lift model options =
                     Options.nop
                 ]
 
-        noStyle = text ""
-
+        noStyle =
+            text ""
     in
     case model.animationState of
         Idle ->
@@ -178,13 +178,14 @@ view isUnbounded domId lift model options =
                                 { fgScale, initialSize } =
                                     layoutInternal isUnbounded clientRect
                             in
-                                cssVariables isUnbounded
-                                    { fgScale = fgScale
-                                    , translateStart = "0px"
-                                    , translateEnd = "0px"
-                                    , initialSize = initialSize
-                                    , frame = clientRect
-                                    }
+                            cssVariables isUnbounded
+                                { fgScale = fgScale
+                                , translateStart = "0px"
+                                , translateEnd = "0px"
+                                , initialSize = initialSize
+                                , frame = clientRect
+                                }
+
                         Nothing ->
                             []
 
@@ -197,7 +198,6 @@ view isUnbounded domId lift model options =
                                 Decode.map (lift << SetCssVariables isUnbounded) <|
                                     decodeClientRect
                         ]
-
             in
             { interactionHandler = interactionHandler
             , properties = properties
@@ -229,7 +229,6 @@ view isUnbounded domId lift model options =
                         , cs cssClasses.fgActivation
                         , when isUnbounded (Options.data "mdc-ripple-is-unbounded" "1")
                         ]
-
             in
             { interactionHandler = interactionHandler
             , properties = properties
@@ -259,7 +258,6 @@ view isUnbounded domId lift model options =
                         , initialSize = activatedData.initialSize
                         , frame = activatedData.frame
                         }
-
             in
             { interactionHandler = interactionHandler
             , properties = properties
@@ -267,7 +265,10 @@ view isUnbounded domId lift model options =
             }
 
 
+
 -- TODO: get rid of className and text, we support CSS variables now.
+
+
 cssVariables :
     Bool
     ->
@@ -280,7 +281,8 @@ cssVariables :
     -> List (Options.Property c m)
 cssVariables isUnbounded { fgScale, translateStart, translateEnd, initialSize, frame } =
     let
-        fgSize = String.fromInt initialSize ++ "px"
+        fgSize =
+            String.fromInt initialSize ++ "px"
 
         unboundedCoords =
             if isUnbounded then
@@ -294,22 +296,20 @@ cssVariables isUnbounded { fgScale, translateStart, translateEnd, initialSize, f
         variables =
             List.concat
                 [ [ css strings.varFgSize fgSize
-                  , css strings.varFgScale ( String.fromFloat fgScale )
+                  , css strings.varFgScale (String.fromFloat fgScale)
                   ]
                 , if isUnbounded then
-                      [ css strings.varTop ( String.fromFloat unboundedCoords.top ++ "px" )
-                      , css strings.varLeft ( String.fromFloat unboundedCoords.left ++ "px" )
-                      ]
+                    [ css strings.varTop (String.fromFloat unboundedCoords.top ++ "px")
+                    , css strings.varLeft (String.fromFloat unboundedCoords.left ++ "px")
+                    ]
 
                   else
-                      [ css strings.varFgTranslateStart translateStart
-                      , css strings.varFgTranslateEnd translateEnd
-                      ]
+                    [ css strings.varFgTranslateStart translateStart
+                    , css strings.varFgTranslateEnd translateEnd
+                    ]
                 ]
-
     in
-        variables
-
+    variables
 
 
 type alias Store s =
@@ -397,6 +397,7 @@ update msg model =
             ( { model
                 | animationState = Activated activatedData
                 , animationCounter = newAnimationCounter
+
                 -- , clientRect = Just activatedData.frame
               }
             , Task.perform (\_ -> ActivationEnded newAnimationCounter)

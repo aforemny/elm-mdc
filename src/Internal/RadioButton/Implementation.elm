@@ -127,13 +127,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | radio : Indexed Model } -> Model
+    { get : Index -> { a | radio : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | radio : Indexed Model }
-          -> Model
-          -> { a | radio : Indexed Model }
-   }
+        Index
+        -> { a | radio : Indexed Model }
+        -> Model
+        -> { a | radio : Indexed Model }
+    }
 getSet =
     Component.indexed .radio (\x y -> { y | radio = x }) defaultModel
 

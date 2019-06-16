@@ -309,8 +309,7 @@ onSubmit =
     Internal.Options.onSubmit
 
 
-{-|
-Act on an event with the option to disable default processing.
+{-| Act on an event with the option to disable default processing.
 
     import Html
     import Material.Options expose (styled)
@@ -335,6 +334,7 @@ Act on an event with the option to disable default processing.
                    )
                   (Decode.at [ "keyCode" ] Decode.int)
           ]
+
 -}
 onWithOptions : String -> Decoder { message : m, stopPropagation : Bool, preventDefault : Bool } -> Property c m
 onWithOptions =

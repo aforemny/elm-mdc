@@ -1,7 +1,7 @@
 module Demo.Theme exposing (Model, Msg, defaultModel, update, view)
 
-import Demo.Page as Page exposing (Page)
 import Demo.Helper.ResourceLink as ResourceLink
+import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button

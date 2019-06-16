@@ -18,8 +18,8 @@ module Internal.TopAppBar.Implementation exposing
     , view
     )
 
-import Dict
 import DOM
+import Dict
 import Html exposing (Html)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
@@ -60,7 +60,6 @@ update msg model =
                         (Dict.get index model.ripples
                             |> Maybe.withDefault Ripple.defaultModel
                         )
-
             in
             ( { model | ripples = Dict.insert index ripple model.ripples }
             , Cmd.map (RippleMsg index) effects
@@ -308,13 +307,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | topAppBar : Indexed Model } -> Model
+    { get : Index -> { a | topAppBar : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | topAppBar : Indexed Model }
-          -> Model
-          -> { a | topAppBar : Indexed Model }
-   }
+        Index
+        -> { a | topAppBar : Indexed Model }
+        -> Model
+        -> { a | topAppBar : Indexed Model }
+    }
 getSet =
     Component.indexed .topAppBar (\x y -> { y | topAppBar = x }) defaultModel
 
@@ -406,13 +405,13 @@ actionItemView domId lift model options name =
                 )
                 []
     in
-        Icon.view
-            ( Icon.button
+    Icon.view
+        (Icon.button
             :: ripple.interactionHandler
             :: ripple.properties
             :: options
-            )
-            name
+        )
+        name
 
 
 actionItem :
@@ -424,7 +423,7 @@ actionItem :
     -> Html m
 actionItem =
     \lift index ->
-        Component.render getSet.get (actionItemView index ) Internal.Msg.TopAppBarMsg lift index
+        Component.render getSet.get (actionItemView index) Internal.Msg.TopAppBarMsg lift index
 
 
 section : List (Property m) -> List (Html m) -> Html m
@@ -443,15 +442,16 @@ title options =
         )
 
 
+
 {-
-actionItem : List (Icon.Property m) -> String -> Html m
-actionItem options name =
-    Icon.view
-        (cs "mdc-top-app-bar__action-item"
-            :: Icon.button
-            :: options
-        )
-        name
+   actionItem : List (Icon.Property m) -> String -> Html m
+   actionItem options name =
+       Icon.view
+           (cs "mdc-top-app-bar__action-item"
+               :: Icon.button
+               :: options
+           )
+           name
 -}
 
 

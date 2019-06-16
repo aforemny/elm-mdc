@@ -90,6 +90,7 @@ view =
 Note that [according to the
 specification](https://material.io/design/components/snackbars.html)
 the minimum timeout is 4000ms.
+
 -}
 type alias Contents m =
     { message : String
@@ -105,6 +106,7 @@ type alias Contents m =
 {-| Generate toast with given message. Timeout is 5000ms, fade 250ms.
 
 The optional command is sent when the action button is triggered.
+
 -}
 toast : Maybe m -> String -> Contents m
 toast =
@@ -115,6 +117,7 @@ toast =
 Timeout is 5000ms, fade 250ms.
 
 The optional command is sent when the action button is triggered.
+
 -}
 snack : Maybe m -> String -> String -> Contents m
 snack =

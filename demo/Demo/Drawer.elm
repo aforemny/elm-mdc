@@ -95,7 +95,10 @@ view lift page model =
                         [ text "subtext" ]
                     ]
                 , Drawer.content []
-                    [ Lists.ul (lift << Mdc) "permanent-drawer-drawer-list" model.mdc []
+                    [ Lists.ul (lift << Mdc)
+                        "permanent-drawer-drawer-list"
+                        model.mdc
+                        []
                         [ Lists.a
                             [ Options.attribute (Html.href "#drawer")
                             , Lists.activated

@@ -47,13 +47,13 @@ type alias Store s =
 
 
 getSet :
-   { get : Index -> { a | dialog : Indexed Model } -> Model
+    { get : Index -> { a | dialog : Indexed Model } -> Model
     , set :
-          Index
-          -> { a | dialog : Indexed Model }
-          -> Model
-          -> { a | dialog : Indexed Model }
-   }
+        Index
+        -> { a | dialog : Indexed Model }
+        -> Model
+        -> { a | dialog : Indexed Model }
+    }
 getSet =
     Component.indexed .dialog (\x c -> { c | dialog = x }) defaultModel
 

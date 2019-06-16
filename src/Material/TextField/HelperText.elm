@@ -44,7 +44,6 @@ used. It should be visible either persistently or only on focus.
 @docs persistent
 @docs validationMsg
 
-
 -}
 
 import Html exposing (Html)

@@ -70,13 +70,17 @@ drawerHeader =
         ]
 
 
-drawerItems : (Material.Msg m -> m) -> Material.Index -> Material.Model m -> String -> ( Int -> m ) -> Int -> Html m
+drawerItems : (Material.Msg m -> m) -> Material.Index -> Material.Model m -> String -> (Int -> m) -> Int -> Html m
 drawerItems lift index mdc url select selected =
     let
-        href = Options.attribute (Html.href url)
+        href =
+            Options.attribute (Html.href url)
     in
     Drawer.content []
-        [ Lists.nav lift index mdc [ Lists.onSelectListItem select ]
+        [ Lists.nav lift
+            index
+            mdc
+            [ Lists.onSelectListItem select ]
             [ Lists.a
                 [ href
                 , Lists.activated |> when (selected == 0)

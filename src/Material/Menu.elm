@@ -3,14 +3,8 @@ module Material.Menu exposing
     , Menu
     , view
     , ul
-    , Item
-    , li
-    , divider
-    , selected
-    , onSelect
     , index
     , attach
-    , surfaceAnchor
     , anchorCorner
     , Corner
     , topStartCorner
@@ -24,6 +18,12 @@ module Material.Menu exposing
     , anchorMargin
     , Margin
     , quickOpen
+    , Item
+    , li
+    , divider
+    , selected
+    , onSelect
+    , surfaceAnchor
     )
 
 {-| The Menu component is a spec-aligned menu component adhering to the Material
@@ -89,6 +89,7 @@ Design menu specification.
 @docs anchorMargin
 @docs Margin
 @docs quickOpen
+
 
 # Menu items
 

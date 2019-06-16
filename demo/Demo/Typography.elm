@@ -31,7 +31,6 @@ update lift msg model =
             Material.update (lift << Mdc) msg_ model
 
 
-
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Typography"
@@ -42,7 +41,7 @@ view lift page model =
             [ Hero.view []
                 [ styled Html.h1 [ Typography.headline1 ] [ text "Typography" ]
                 ]
-        , ResourceLink.links (lift << Mdc) model.mdc "typography/the-type-system" "typography" "mdc-typography"
+            , ResourceLink.links (lift << Mdc) model.mdc "typography/the-type-system" "typography" "mdc-typography"
             , styled Html.h2
                 [ Typography.headline6
                 , css "border-bottom" "1px solid rgba(0,0,0,.87)"
