@@ -120,10 +120,6 @@ update lift msg model =
                 model
 
         Open ->
-            let
-                doQuickOpen =
-                    Maybe.withDefault False model.quickOpen
-            in
             if not model.open then
                 ( Just
                     { model
@@ -131,33 +127,24 @@ update lift msg model =
                         , animating = True
                         , geometry = Nothing
                     }
-                , if not doQuickOpen then
-                    Helpers.delayedCmd 120 (lift AnimationEnd)
-
-                  else
-                    Helpers.cmd (lift AnimationEnd)
+                , Cmd.none
                 )
 
             else
                 ( Nothing, Cmd.none )
 
         Close ->
-            let
-                doQuickOpen =
-                    Maybe.withDefault False model.quickOpen
-            in
             if model.open then
                 ( Just
                     { model
                         | open = False
                         , animating = True
-                        , quickOpen = Nothing
                     }
-                , if not doQuickOpen then
+                , if Maybe.withDefault False model.quickOpen then
                     Helpers.delayedCmd 70 (lift AnimationEnd)
 
                   else
-                    Helpers.cmd (lift AnimationEnd)
+                    Helpers.delayedCmd 0 (lift AnimationEnd)
                 )
 
             else
@@ -172,7 +159,14 @@ update lift msg model =
                     | geometry = Just geometry
                     , quickOpen = Just config.quickOpen
                 }
-            , Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus config.focusedItemId)
+            , Cmd.batch
+                [ Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus config.focusedItemId)
+                , if config.quickOpen then
+                    Helpers.delayedCmd 120 (lift AnimationEnd)
+
+                  else
+                    Helpers.delayedCmd 0 (lift AnimationEnd)
+                ]
             )
 
         AnimationEnd ->
@@ -299,15 +293,6 @@ menu domId lift model options ulNode =
         { position, transformOrigin, maxHeight } =
             autoPosition config geometry
 
-        -- Note: .mdc-menu--open has to be added one frame after
-        -- .mdc-menu--animating-open has been set:
-        isOpen =
-            if model.animating then
-                model.open && (model.geometry /= Nothing)
-
-            else
-                model.open
-
         numDividersBeforeIndex i =
             ulNode.items
                 |> List.take (i + 1)
@@ -324,31 +309,31 @@ menu domId lift model options ulNode =
     in
     Options.apply summary
         Html.div
-        [ cs "mdc-menu"
-        , cs "mdc-menu-surface"
-        , when (model.animating && not (Maybe.withDefault False model.quickOpen)) <|
+        [ cs "mdc-menu mdc-menu-surface"
+        , when (model.animating && not config.quickOpen) <|
             if model.open then
-                cs "mdc-menu--animating-open"
+                cs "mdc-menu-surface--animating-open"
 
             else
-                cs "mdc-menu--animating-closed"
-        , when isOpen
+                cs "mdc-menu-surface--animating-closed"
+        , -- Note: .mdc-menu--open has to be added one frame after
+          -- .mdc-menu-surface--animating-open has been set, except when
+          -- quickly opening:
+          when (model.open && (model.geometry /= Nothing || config.quickOpen)) <|
+            Options.many <|
+                [ cs "mdc-menu-surface--open"
+                , Options.onWithOptions "click"
+                    (Decode.succeed
+                        { message = lift CloseDelayed
+                        , stopPropagation = True
+                        , preventDefault = False
+                        }
+                    )
+                ]
+        , when ((model.open || model.animating) && (model.geometry /= Nothing))
             << Options.many
           <|
-            [ cs "mdc-menu-surface--open"
-            , Options.onWithOptions "click"
-                (Decode.succeed
-                    { message = lift CloseDelayed
-                    , stopPropagation = True
-                    , preventDefault = False
-                    }
-                )
-            ]
-        , when (isOpen || model.animating)
-            << Options.many
-          <|
-            [ css "position" "absolute"
-            , css "transform-origin" transformOrigin
+            [ css "transform-origin" transformOrigin
             , css "top" (Maybe.withDefault "" position.top)
                 |> when (position.top /= Nothing)
             , css "left" (Maybe.withDefault "" position.left)
@@ -359,7 +344,7 @@ menu domId lift model options ulNode =
                 |> when (position.right /= Nothing)
             , css "max-height" maxHeight
             ]
-        , when (isOpen && model.geometry == Nothing) <|
+        , when ((model.open || model.animating) && (model.geometry == Nothing)) <|
             GlobalEvents.onTickWith
                 { targetRect = False
                 , parentRect = True
@@ -776,14 +761,14 @@ autoPosition config geometry =
             else
                 verticalAlignment
     in
-    { transformOrigin = horizontalAlignment_ ++ " " ++ verticalAlignment
+    { transformOrigin = horizontalAlignment_ ++ " " ++ verticalAlignment_
     , position = position
     , maxHeight =
         if maxMenuHeight /= 0 then
             String.fromFloat maxMenuHeight ++ "px"
 
         else
-            ""
+            "auto"
     }
 
 
