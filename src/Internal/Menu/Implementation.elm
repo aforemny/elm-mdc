@@ -180,6 +180,23 @@ update lift msg model =
             else
                 ( Nothing, Cmd.none )
 
+        KeyDown { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
+            let
+                isEscape =
+                    key == "Escape" || keyCode == 27
+
+                isSpace =
+                    key == "Space" || keyCode == 32
+
+                isEnter =
+                    key == "Enter" || keyCode == 13
+            in
+            if isEscape || isSpace || isEnter then
+                ( Just { model | keyDownWithinMenu = True }, Cmd.none )
+
+            else
+                ( Nothing, Cmd.none )
+
         KeyUp { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
                 isEscape =
@@ -191,11 +208,18 @@ update lift msg model =
                 isEnter =
                     key == "Enter" || keyCode == 13
             in
-            if (isEscape || isSpace || isEnter) && not (altKey || ctrlKey || metaKey) then
+            (if
+                (isEscape || isSpace || isEnter)
+                    && not (altKey || ctrlKey || metaKey)
+                    && model.keyDownWithinMenu
+             then
                 update lift Close model
 
-            else
+             else
                 ( Nothing, Cmd.none )
+            )
+                |> Tuple.mapFirst
+                    (Maybe.map (\newModel -> { newModel | keyDownWithinMenu = False }))
 
         ListMsg msg_ ->
             Lists.update (lift << ListMsg) msg_ model.list
@@ -365,6 +389,9 @@ menu domId lift model options ulNode =
         , Options.on "keyup" <|
             Decode.map lift <|
                 Decode.map3 KeyUp decodeMeta decodeKey decodeKeyCode
+        , Options.on "keydown" <|
+            Decode.map lift <|
+                Decode.map3 KeyDown decodeMeta decodeKey decodeKeyCode
         ]
         []
         [ Lists.ul listId

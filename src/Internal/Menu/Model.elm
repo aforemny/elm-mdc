@@ -21,6 +21,7 @@ type alias Model =
     , geometry : Maybe Geometry
     , quickOpen : Maybe Bool
     , list : Lists.Model
+    , keyDownWithinMenu : Bool
     }
 
 
@@ -32,6 +33,7 @@ defaultModel =
     , geometry = Nothing
     , quickOpen = Nothing
     , list = Lists.defaultModel
+    , keyDownWithinMenu = False
     }
 
 
@@ -44,6 +46,7 @@ type Msg m
     | Toggle
     | CloseDelayed
     | DocumentClick
+    | KeyDown Meta Key KeyCode
     | KeyUp Meta Key KeyCode
     | ListMsg (Lists.Msg m)
 
