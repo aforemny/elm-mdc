@@ -601,10 +601,46 @@ decodeActivate { domId, isUnbounded, isActivated, previousActivationEvent } =
                 )
                 (Decode.at [ "pageX" ] Decode.float)
                 (Decode.at [ "pageY" ] Decode.float)
+
+        decodeIsAncestorRipple =
+            DOM.target (decodeIsAncestorRipple_ 64)
+
+        decodeIsAncestorRipple_ n =
+            if n == 0 then
+                Decode.fail ""
+
+            else
+                Decode.maybe (Decode.field "id" Decode.string)
+                    |> Decode.andThen
+                        (\currentId ->
+                            if currentId == Just domId then
+                                Decode.succeed False
+
+                            else
+                                Decode.maybe (Decode.field "className" Decode.string)
+                                    |> Decode.map (Maybe.withDefault "")
+                                    |> Decode.andThen
+                                        (\className ->
+                                            if
+                                                String.contains " mdc-ripple-upgraded "
+                                                    (" " ++ className ++ " ")
+                                            then
+                                                Decode.succeed True
+
+                                            else
+                                                Decode.lazy
+                                                    (\_ -> decodeIsAncestorRipple_ (n - 1))
+                                        )
+                        )
     in
-    Decode.map3
-        (\isSurfaceDisabled isSameInteraction event ->
-            if isActivated || isSurfaceDisabled || isSameInteraction then
+    Decode.map4
+        (\isSurfaceDisabled isSameInteraction event isAncestorRipple ->
+            if
+                isActivated
+                    || isSurfaceDisabled
+                    || isSameInteraction
+                    || isAncestorRipple
+            then
                 Nothing
 
             else
@@ -619,6 +655,7 @@ decodeActivate { domId, isUnbounded, isActivated, previousActivationEvent } =
         decodeIsSurfaceDisabled
         decodeIsSameInteraction
         decodeEvent
+        decodeIsAncestorRipple
         |> Decode.andThen
             (Maybe.map Decode.succeed
                 >> Maybe.withDefault (Decode.fail "")
