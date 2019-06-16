@@ -11,6 +11,8 @@ module Internal.Menu.Model exposing
     , defaultModel
     )
 
+import Internal.List.Model as Lists
+
 
 type alias Model =
     { index : Maybe Int
@@ -18,8 +20,7 @@ type alias Model =
     , animating : Bool
     , geometry : Maybe Geometry
     , quickOpen : Maybe Bool
-    , focusedItemAtIndex : Maybe Int
-    , keyDownWithinMenu : Bool
+    , list : Lists.Model
     }
 
 
@@ -30,23 +31,21 @@ defaultModel =
     , animating = False
     , geometry = Nothing
     , quickOpen = Nothing
-    , focusedItemAtIndex = Nothing
-    , keyDownWithinMenu = False
+    , list = Lists.defaultModel
     }
 
 
 type Msg m
     = NoOp
-    | Init { quickOpen : Bool, index : Maybe Int } Geometry
+    | Init { quickOpen : Bool, index : Maybe Int, focusedItemId : String } Geometry
     | AnimationEnd
     | Open
     | Close
     | Toggle
     | CloseDelayed
     | DocumentClick
-    | KeyDown Int Meta Key KeyCode
     | KeyUp Meta Key KeyCode
-    | SetFocus Int
+    | ListMsg (Lists.Msg m)
 
 
 type alias Meta =

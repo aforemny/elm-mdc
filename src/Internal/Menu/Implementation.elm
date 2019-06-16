@@ -32,6 +32,7 @@ module Internal.Menu.Implementation exposing
     , view
     )
 
+import Browser.Dom
 import Browser.Events
 import DOM
 import Html exposing (Html)
@@ -45,6 +46,7 @@ import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..
 import Internal.Msg
 import Internal.Options as Options exposing (aria, cs, css, role, styled, tabindex, when)
 import Json.Decode as Decode exposing (Decoder)
+import Task
 
 
 subscriptions : Model -> Sub (Msg m)
@@ -150,7 +152,6 @@ update lift msg model =
                         | open = False
                         , animating = True
                         , quickOpen = Nothing
-                        , focusedItemAtIndex = Nothing
                     }
                 , if not doQuickOpen then
                     Helpers.delayedCmd 70 (lift AnimationEnd)
@@ -170,9 +171,8 @@ update lift msg model =
                 { model
                     | geometry = Just geometry
                     , quickOpen = Just config.quickOpen
-                    , focusedItemAtIndex = config.index
                 }
-            , Cmd.none
+            , Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus config.focusedItemId)
             )
 
         AnimationEnd ->
@@ -186,69 +186,6 @@ update lift msg model =
             else
                 ( Nothing, Cmd.none )
 
-        KeyDown numItems { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
-            let
-                isTab =
-                    key == "Tab" || keyCode == 9
-
-                isArrowUp =
-                    key == "ArrowUp" || keyCode == 38
-
-                isArrowDown =
-                    key == "ArrowDown" || keyCode == 40
-
-                isSpace =
-                    key == "Space" || keyCode == 32
-
-                isEnter =
-                    key == "Enter" || keyCode == 13
-
-                lastItemIndex =
-                    numItems - 1
-
-                keyDownWithinMenu =
-                    isEnter || isSpace
-
-                focusedItemIndex =
-                    model.focusedItemAtIndex
-                        |> Maybe.withDefault 0
-            in
-            (if altKey || ctrlKey || metaKey then
-                ( Nothing, Cmd.none )
-
-             else if isArrowUp then
-                ( Just <|
-                    if focusedItemIndex == 0 then
-                        { model | focusedItemAtIndex = Just lastItemIndex }
-
-                    else
-                        { model | focusedItemAtIndex = Just (focusedItemIndex - 1) }
-                , Cmd.none
-                )
-
-             else if isArrowDown then
-                ( Just <|
-                    if focusedItemIndex == lastItemIndex then
-                        { model | focusedItemAtIndex = Just 0 }
-
-                    else
-                        { model | focusedItemAtIndex = Just (focusedItemIndex + 1) }
-                , Cmd.none
-                )
-
-             else if isSpace || isEnter then
-                ( Just model, Cmd.none )
-
-             else
-                ( Nothing, Cmd.none )
-            )
-                |> Tuple.mapFirst
-                    (Maybe.map
-                        (\updatedModel ->
-                            { updatedModel | keyDownWithinMenu = keyDownWithinMenu }
-                        )
-                    )
-
         KeyUp { shiftKey, altKey, ctrlKey, metaKey } key keyCode ->
             let
                 isEscape =
@@ -260,28 +197,23 @@ update lift msg model =
                 isEnter =
                     key == "Enter" || keyCode == 13
             in
-            (if altKey || ctrlKey || metaKey then
-                ( Nothing, Cmd.none )
-
-             else if isEscape || ((isSpace || isEnter) && model.keyDownWithinMenu) then
+            if (isEscape || isSpace || isEnter) && not (altKey || ctrlKey || metaKey) then
                 update lift Close model
 
-             else
+            else
                 ( Nothing, Cmd.none )
-            )
+
+        ListMsg msg_ ->
+            Lists.update (lift << ListMsg) msg_ model.list
                 |> Tuple.mapFirst
-                    (Maybe.map
-                        (\updatedModel ->
-                            if (isEnter || isSpace) && updatedModel.keyDownWithinMenu then
-                                { updatedModel | keyDownWithinMenu = False }
+                    (\maybeNewList ->
+                        case maybeNewList of
+                            Just newList ->
+                                Just { model | list = newList }
 
-                            else
-                                updatedModel
-                        )
+                            Nothing ->
+                                Nothing
                     )
-
-        SetFocus focusedItemAtIndex ->
-            ( Just { model | focusedItemAtIndex = Just focusedItemAtIndex }, Cmd.none )
 
 
 type alias Config =
@@ -350,12 +282,13 @@ quickOpen =
 
 
 menu :
-    (Msg m -> m)
+    Component.Index
+    -> (Msg m -> m)
     -> Model
     -> List (Property m)
     -> Menu m
     -> Html m
-menu lift model options ulNode =
+menu domId lift model options ulNode =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -375,9 +308,6 @@ menu lift model options ulNode =
             else
                 model.open
 
-        focusedItemAtIndex =
-            model.focusedItemAtIndex
-
         numDividersBeforeIndex i =
             ulNode.items
                 |> List.take (i + 1)
@@ -389,38 +319,8 @@ menu lift model options ulNode =
                 |> List.filter (not << .divider)
                 |> List.length
 
-        preventDefaultOnKeyDown { altKey, ctrlKey, metaKey, shiftKey } key keyCode =
-            let
-                isTab =
-                    key == "Tab" || keyCode == 9
-
-                isArrowUp =
-                    key == "ArrowUp" || keyCode == 38
-
-                isArrowDown =
-                    key == "ArrowDown" || keyCode == 40
-
-                isSpace =
-                    key == "Space" || keyCode == 32
-
-                lastItemIndex =
-                    numItems - 1
-            in
-            if altKey || ctrlKey || metaKey then
-                Decode.fail ""
-
-            else if
-                shiftKey
-                    && isTab
-                    && (Maybe.withDefault 0 focusedItemAtIndex == lastItemIndex)
-            then
-                Decode.succeed (lift NoOp)
-
-            else if isArrowUp || isArrowDown || isSpace then
-                Decode.succeed (lift NoOp)
-
-            else
-                Decode.fail ""
+        listId =
+            domId ++ "__list"
     in
     Options.apply summary
         Html.div
@@ -465,30 +365,32 @@ menu lift model options ulNode =
                 , parentRect = True
                 }
             <|
-                Decode.map (lift << Init { quickOpen = config.quickOpen, index = config.index })
+                Decode.map
+                    (lift
+                        << Init
+                            { quickOpen = config.quickOpen
+                            , index = config.index
+                            , focusedItemId =
+                                listId
+                                    ++ "--"
+                                    ++ String.fromInt (Maybe.withDefault 0 config.index)
+                            }
+                    )
                     decodeGeometry
         , Options.on "keyup" <|
             Decode.map lift <|
                 Decode.map3 KeyUp decodeMeta decodeKey decodeKeyCode
-        , Options.on "keydown" <|
-            Decode.map lift <|
-                Decode.map3 (KeyDown numItems) decodeMeta decodeKey decodeKeyCode
         ]
         []
-        [ styled Html.ul
-            -- TODO:
-            --            :: Options.onWithOptions "keydown"
-            --            { stopPropagation = False, preventDefault = True }
-            --            (Decode.map3 preventDefaultOnKeyDown decodeMeta decodeKey decodeKeyCode
-            --            |> Decode.andThen identity
-            --            )
+        [ Lists.ul listId
+            (lift << ListMsg)
+            model.list
             (ulNode.options
-                ++ [ cs "mdc-list"
-                   , role "menu"
+                ++ [ role "menu"
                    , aria "hidden" "true"
                    , aria "orientation" "vertical"
-
-                   --, tabindex -1
+                   , tabindex 0
+                   , Lists.selectedIndex (Maybe.withDefault 0 config.index)
                    ]
             )
             (List.indexedMap
@@ -497,68 +399,20 @@ menu lift model options ulNode =
                         focusIndex =
                             i - numDividersBeforeIndex i
 
-                        hasFocus =
-                            Just focusIndex == focusedItemAtIndex
-
-                        autoFocus =
-                            if hasFocus && model.open then
-                                Options.data "autofocus" ""
-
-                            else
-                                Options.nop
-
                         isSelected =
                             List.any (\j -> j == selected) item.options
 
                         itemSummary =
-                            -- TODO:
                             Options.collect Lists.defaultConfig item.options
-
-                        --                                |> (\freshItemSummary ->
-                        --                                        if not model.keyDownWithinMenu then
-                        --                                            let
-                        --                                                dispatch =
-                        --                                                    freshItemSummary.dispatch
-                        --                                                        |> (\(Dispatch.Config ({ decoders } as dispatch)) ->
-                        --                                                                Dispatch.Config
-                        --                                                                    { dispatch
-                        --                                                                        | decoders =
-                        --                                                                            List.filter ((/=) "keyup" << Tuple.first)
-                        --                                                                                decoders
-                        --                                                                    }
-                        --                                                           )
-                        --                                            in
-                        --                                            { freshItemSummary | dispatch = dispatch }
-                        --                                        else
-                        --                                            freshItemSummary
-                        --                                   )
                     in
                     if item.divider then
-                        Options.apply itemSummary
-                            Html.hr
-                            [ cs "mdc-list-divider"
-                            ]
-                            []
-                            item.childs
+                        Lists.divider [] item.childs
 
                     else
-                        Options.apply itemSummary
-                            Html.li
+                        Lists.li
                             [ cs "mdc-list-item"
-                            , cs "mdc-ripple-upgraded"
-                            , cs "mdc-ripple-upgraded--background-focused" |> when isSelected
-                            , tabindex
-                                (if isSelected then
-                                    0
-
-                                 else
-                                    -1
-                                )
                             , role "menuitem"
-                            , Options.on "focus" (Decode.succeed (lift (SetFocus focusIndex)))
-                            , autoFocus
                             ]
-                            []
                             item.childs
                 )
                 ulNode.items
@@ -654,7 +508,9 @@ originCorner config geometry =
 
         availableTop =
             if isBottomAligned then
-                geometry.viewportDistance.top + geometry.anchor.height + config.anchorMargin.bottom
+                geometry.viewportDistance.top
+                    + geometry.anchor.height
+                    + config.anchorMargin.bottom
 
             else
                 geometry.viewportDistance.top + config.anchorMargin.top
@@ -664,7 +520,9 @@ originCorner config geometry =
                 geometry.viewportDistance.bottom - config.anchorMargin.bottom
 
             else
-                geometry.viewportDistance.bottom + geometry.anchor.height + config.anchorMargin.top
+                geometry.viewportDistance.bottom
+                    + geometry.anchor.height
+                    + config.anchorMargin.top
 
         topOverflow =
             geometry.menu.height - availableTop
@@ -691,7 +549,9 @@ originCorner config geometry =
 
         availableLeft =
             if isAlignedRight then
-                geometry.viewportDistance.left + geometry.anchor.width + config.anchorMargin.right
+                geometry.viewportDistance.left
+                    + geometry.anchor.width
+                    + config.anchorMargin.right
 
             else
                 geometry.viewportDistance.left + config.anchorMargin.left
@@ -701,7 +561,9 @@ originCorner config geometry =
                 geometry.viewportDistance.right - config.anchorMargin.right
 
             else
-                geometry.viewportDistance.right + geometry.anchor.width - config.anchorMargin.left
+                geometry.viewportDistance.right
+                    + geometry.anchor.width
+                    - config.anchorMargin.left
 
         leftOverflow =
             geometry.menu.width - availableLeft
@@ -766,8 +628,16 @@ verticalOffset config corner geometry =
             not avoidVerticalOverlap
     in
     if isBottomAligned then
-        if canOverlapVertically && (geometry.menu.height > geometry.viewportDistance.top + geometry.anchor.height) then
-            -(min geometry.menu.height (geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))
+        if
+            canOverlapVertically
+                && (geometry.menu.height
+                        > geometry.viewportDistance.top
+                        + geometry.anchor.height
+                   )
+        then
+            -(min geometry.menu.height (geometry.viewport.height - marginToEdge)
+                - (geometry.viewportDistance.top + geometry.anchor.height)
+             )
 
         else if avoidVerticalOverlap then
             geometry.anchor.height - config.anchorMargin.top
@@ -775,8 +645,16 @@ verticalOffset config corner geometry =
         else
             -config.anchorMargin.bottom
 
-    else if canOverlapVertically && (geometry.menu.height > geometry.viewportDistance.bottom + geometry.anchor.height) then
-        -(min geometry.menu.height (geometry.viewport.height - marginToEdge) - (geometry.viewportDistance.top + geometry.anchor.height))
+    else if
+        canOverlapVertically
+            && (geometry.menu.height
+                    > geometry.viewportDistance.bottom
+                    + geometry.anchor.height
+               )
+    then
+        -(min geometry.menu.height (geometry.viewport.height - marginToEdge)
+            - (geometry.viewportDistance.top + geometry.anchor.height)
+         )
 
     else if avoidVerticalOverlap then
         geometry.anchor.height + config.anchorMargin.bottom
@@ -878,7 +756,10 @@ autoPosition config geometry =
                 horizontalAlignment
 
         verticalAlignment_ =
-            if not config.anchorCorner.bottom && (abs (verticalOffset_ / geometry.menu.height) > 0.1) then
+            if
+                not config.anchorCorner.bottom
+                    && (abs (verticalOffset_ / geometry.menu.height) > 0.1)
+            then
                 let
                     verticalOffsetPercent =
                         abs (verticalOffset_ / geometry.menu.height) * 100
@@ -940,7 +821,8 @@ view :
     -> Menu m
     -> Html m
 view =
-    Component.render getSet.get menu Internal.Msg.MenuMsg
+    \lift domId ->
+        Component.render getSet.get (menu domId) Internal.Msg.MenuMsg lift domId
 
 
 subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
@@ -1002,9 +884,15 @@ decodeGeometry =
         decodeViewportDistance decodedViewport decodedAnchorRect =
             Decode.succeed
                 { top = decodedAnchorRect.top
-                , right = decodedViewport.width - decodedAnchorRect.left - decodedAnchorRect.width
+                , right =
+                    decodedViewport.width
+                        - decodedAnchorRect.left
+                        - decodedAnchorRect.width
                 , left = decodedAnchorRect.left
-                , bottom = decodedViewport.height - decodedAnchorRect.top - decodedAnchorRect.height
+                , bottom =
+                    decodedViewport.height
+                        - decodedAnchorRect.top
+                        - decodedAnchorRect.height
                 }
 
         anchor { width, height } =
@@ -1057,5 +945,4 @@ onSelect msg =
 
 selected : Lists.Property m
 selected =
-    --cs "mdc-ripple-upgraded--background-focused"
     cs "mdc-menu-item--selected"

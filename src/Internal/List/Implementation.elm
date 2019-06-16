@@ -39,6 +39,7 @@ module Internal.List.Implementation exposing
     , text
     , twoLine
     , ul
+    , update
     , useActivated
     , view
     )
