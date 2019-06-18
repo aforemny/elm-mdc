@@ -56,8 +56,16 @@ called `elm-app.js` here, is your compiled Elm application.
 Assuming an empty directory, you create an elm-mdc application as follows:
 
 1. `elm init`.
-2. Install this library from github: `git clone git@github.com:aforemny/elm-mdc.git`
-3. Build the required sources: `make`
+2. Install this library from github: 
+```
+git clone git@github.com:aforemny/elm-mdc.git
+```
+3. Build the required sources: 
+```
+cd elm-mdc
+make
+cd ..
+```
 4. Add the required libraries (see `elm-mdc/elm.json`):
 ```
 elm install elm/regex
@@ -74,8 +82,8 @@ elm install debois/elm-dom
     ],
 ```
 6. Create an `index.html` as above.
-7. Create your first application, for now let's just copy the hello world example: `cp -p elm-mdc/examples/hello-world/Main.elm .`
-8. Compile it: `elm make Main.elm --output app.js`
+7. Create your first application, for now let's just copy the hello world example: `cp -p elm-mdc/examples/hello-world/Main.elm src/Main.elm`
+8. Compile it: `elm make src/Main.elm --output app.js`
 
 And that's it.
 
