@@ -72,6 +72,26 @@ Because a Dialog animates when closing, it should not be removed from DOM. Use
         ]
 
 
+# Aria role
+
+The default role is
+"[alertdialog](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_alertdialog_role)". If
+the dialog is not an alert dialog, override the default by passing in
+a different role, typically the "[dialog](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role)" role.
+
+
+    import Material.Dialog as Dialog
+    import Material.Options as Options exposing (role, when)
+
+    Dialog.view Mdc "my-dialog" model.mdc
+        [ Dialog.open |> when model.showDialog
+        , Dialog.onClose Cancel
+        , role "dialog"
+        ]
+        [ ]
+
+
+
 # Usage
 
 @docs Property
