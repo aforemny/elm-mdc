@@ -109,7 +109,6 @@ fab domId lift model options nodes =
     Options.apply summary
         Html.button
         [ cs "mdc-fab"
-        , cs "material-icons"
         , when config.ripple
             << Options.many
           <|
