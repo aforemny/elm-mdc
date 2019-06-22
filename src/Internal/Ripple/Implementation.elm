@@ -129,7 +129,7 @@ view isUnbounded domId lift model options =
                                     , previousActivationEvent =
                                         case model.animationState of
                                             Activated { activationEvent } ->
-                                                activationEvent
+                                                Just activationEvent
 
                                             _ ->
                                                 Nothing
@@ -354,7 +354,25 @@ update msg model =
             , Task.attempt (Reactivate activateData) (Browser.Dom.getElement domId)
             )
 
-        ( Reactivate activateData element, _ ) ->
+        ( Reactivate activateData element, Activated { activationEvent } ) ->
+            if activateData.event.eventType == activationEvent.eventType then
+                ( { model | animationState = Idle }
+                , Task.perform (\_ -> Activate activateData element) (Task.succeed ())
+                )
+
+            else
+                ( model, Cmd.none )
+
+        ( Reactivate activateData element, Deactivated { activationEvent } ) ->
+            if activateData.event.eventType == activationEvent.eventType then
+                ( { model | animationState = Idle }
+                , Task.perform (\_ -> Activate activateData element) (Task.succeed ())
+                )
+
+            else
+                ( model, Cmd.none )
+
+        ( Reactivate activateData element, Idle ) ->
             ( { model | animationState = Idle }
             , Task.perform (\_ -> Activate activateData element) (Task.succeed ())
             )
@@ -372,7 +390,7 @@ update msg model =
                         , height = element.height
                         }
                     , wasElementMadeActive = activateData.wasElementMadeActive
-                    , activationEvent = Just activateData.event
+                    , activationEvent = activateData.event
                     , fgScale = fgScale
                     , initialSize = initialSize
                     , translateStart = translateStart
@@ -432,10 +450,7 @@ update msg model =
             else
                 let
                     newActivatedData =
-                        { activatedData
-                            | activationEvent = Nothing
-                            , deactivated = True
-                        }
+                        { activatedData | deactivated = True }
                 in
                 ( { model | animationState = Activated newActivatedData }, Cmd.none )
 

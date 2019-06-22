@@ -127,7 +127,7 @@ type AnimationState
 type alias ActivatedData =
     { frame : ClientRect
     , wasElementMadeActive : Bool
-    , activationEvent : Maybe Event
+    , activationEvent : Event
     , fgScale : Float
     , initialSize : Int
     , translateStart : String
