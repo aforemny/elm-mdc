@@ -15895,7 +15895,6 @@ var author$project$Internal$Fab$Implementation$fab = F5(
 			_List_fromArray(
 				[
 					author$project$Internal$Options$cs('mdc-fab'),
-					author$project$Internal$Options$cs('material-icons'),
 					A3(
 					elm$core$Basics$composeL,
 					author$project$Internal$Options$when(config.M),
