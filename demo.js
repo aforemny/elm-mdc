@@ -10374,7 +10374,10 @@ var author$project$Internal$GlobalEvents$listener = F2(
 					A2(author$project$Material$Options$data, name, '{}')
 				]));
 	});
+var author$project$Internal$GlobalEvents$onMouseUp = author$project$Internal$GlobalEvents$listener('globalmouseup');
+var author$project$Internal$GlobalEvents$onPointerUp = author$project$Internal$GlobalEvents$listener('globalpointerup');
 var author$project$Internal$GlobalEvents$onTick = author$project$Internal$GlobalEvents$listener('globaltick');
+var author$project$Internal$GlobalEvents$onTouchEnd = author$project$Internal$GlobalEvents$listener('globaltouchend');
 var elm$html$Html$Attributes$id = elm$html$Html$Attributes$stringProperty('id');
 var author$project$Internal$Options$id = A2(elm$core$Basics$composeL, author$project$Internal$Options$Attribute, elm$html$Html$Attributes$id);
 var author$project$Internal$Options$CSS = function (a) {
@@ -10575,8 +10578,6 @@ var author$project$Internal$Ripple$Model$SetCssVariables = F2(
 var author$project$Internal$Ripple$Model$activationEventTypes = _List_fromArray(
 	['touchstart', 'pointerdown', 'mousedown']);
 var author$project$Internal$Ripple$Model$cssClasses = {en: 'mdc-ripple-upgraded--background-focused', ev: 'mdc-ripple-upgraded--foreground-activation', ew: 'mdc-ripple-upgraded--foreground-deactivation', eU: 'mdc-ripple-upgraded', e2: 'mdc-ripple-upgraded--unbounded'};
-var author$project$Internal$Ripple$Model$pointerDeactivationEvents = _List_fromArray(
-	['touchend', 'pointerup', 'mouseup']);
 var author$project$Internal$Ripple$Implementation$view = F5(
 	function (isUnbounded, domId, lift, model, options) {
 		var noStyle = elm$html$Html$text('');
@@ -10586,17 +10587,15 @@ var author$project$Internal$Ripple$Implementation$view = F5(
 			elm$json$Json$Decode$succeed(
 				lift(author$project$Internal$Ripple$Model$Focus)));
 		var deactivateHandler = function (event) {
+			var deactivate = elm$json$Json$Decode$succeed(
+				lift(author$project$Internal$Ripple$Model$Deactivate));
 			return author$project$Internal$Options$many(
-				A2(
-					elm$core$List$map,
-					function (tipe) {
-						return A2(
-							author$project$Internal$Options$on,
-							tipe,
-							elm$json$Json$Decode$succeed(
-								lift(author$project$Internal$Ripple$Model$Deactivate)));
-					},
-					author$project$Internal$Ripple$Model$pointerDeactivationEvents));
+				_List_fromArray(
+					[
+						author$project$Internal$GlobalEvents$onTouchEnd(deactivate),
+						author$project$Internal$GlobalEvents$onMouseUp(deactivate),
+						author$project$Internal$GlobalEvents$onPointerUp(deactivate)
+					]));
 		};
 		var blurHandler = A2(
 			author$project$Internal$Options$on,
@@ -19481,10 +19480,7 @@ var author$project$Internal$Slider$Implementation$value = function (value_) {
 };
 var author$project$Material$Slider$value = author$project$Internal$Slider$Implementation$value;
 var author$project$Internal$GlobalEvents$onMouseMove = author$project$Internal$GlobalEvents$listener('globalmousemove');
-var author$project$Internal$GlobalEvents$onMouseUp = author$project$Internal$GlobalEvents$listener('globalmouseup');
 var author$project$Internal$GlobalEvents$onPointerMove = author$project$Internal$GlobalEvents$listener('globalpointermove');
-var author$project$Internal$GlobalEvents$onPointerUp = author$project$Internal$GlobalEvents$listener('globalpointerup');
-var author$project$Internal$GlobalEvents$onTouchEnd = author$project$Internal$GlobalEvents$listener('globaltouchend');
 var author$project$Internal$GlobalEvents$onTouchMove = author$project$Internal$GlobalEvents$listener('globaltouchmove');
 var author$project$Internal$Slider$Implementation$data = F2(
 	function (key, decoder) {
