@@ -140,12 +140,18 @@ view isUnbounded domId lift model options =
                     activationEventTypes
 
         deactivateHandler event =
+            -- Note: We would like to subscribe to pointerDeactivationEvents on
+            -- the `document`, but since `Browser.Events` does not expose
+            -- `touchend`, or `pointerup`, we use `GlobalEvents`.
+            let
+                deactivate =
+                    Decode.succeed (lift Deactivate)
+            in
             Options.many <|
-                List.map
-                    (\tipe ->
-                        Options.on tipe (Decode.succeed (lift Deactivate))
-                    )
-                    pointerDeactivationEvents
+                [ GlobalEvents.onTouchEnd deactivate
+                , GlobalEvents.onMouseUp deactivate
+                , GlobalEvents.onPointerUp deactivate
+                ]
 
         baseProperties =
             Options.many
