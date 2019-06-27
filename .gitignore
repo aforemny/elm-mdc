@@ -1,23 +1,21 @@
-elm-stuff
 .*.sw?
 *~
-elm.js
-elm-mdc.js.map
-index.html
-docs.json
-documentation.json
+.DS_Store
 .vscode/
 
+elm-stuff/
 test.html
-examples/counter-many.html
-examples/counter1-no-parts.html
-examples/counter1.html
 
-.DS_Store
+/elm-mdc.js
+/elm-mdc.js.map
+/material-components-web.css
+/docs.json
 
-build
-node_modules
-.sass-cache
+/examples/counter-many.html
+/examples/counter1-no-parts.html
+/examples/counter1.html
 
-elm-mdc.js
-material-components-web.css
+/.sass-cache/
+/build/
+/node_modules/
+/v8-compile-cache-0/
