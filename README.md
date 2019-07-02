@@ -14,7 +14,7 @@ the documentation below).
 The implementation is based on
 [debois/elm-mdl](https://github.com/debois/elm-mdl),
 which uses the now
-[abandoned Material Design 2Light framework](https://github.com/google/material-design-lite).
+[abandoned Material Design Lite framework](https://github.com/google/material-design-lite).
 
 ## Getting started
 
