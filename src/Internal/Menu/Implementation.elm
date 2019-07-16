@@ -407,24 +407,15 @@ menu domId lift model options ulNode =
             )
             (List.indexedMap
                 (\i item ->
-                    let
-                        focusIndex =
-                            i - numDividersBeforeIndex i
-
-                        isSelected =
-                            List.any (\j -> j == selected) item.options
-
-                        itemSummary =
-                            Options.collect Lists.defaultConfig item.options
-                    in
                     if item.divider then
-                        Lists.divider [] item.childs
+                        Lists.divider item.options item.childs
 
                     else
                         Lists.li
-                            [ cs "mdc-list-item"
-                            , role "menuitem"
-                            ]
+                            (cs "mdc-list-item"
+                                :: role "menuitem"
+                                :: item.options
+                            )
                             item.childs
                 )
                 ulNode.items
