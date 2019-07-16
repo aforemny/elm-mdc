@@ -17952,7 +17952,6 @@ var author$project$Internal$Menu$Implementation$decodeMeta = A5(
 var author$project$Internal$Menu$Implementation$defaultMargin = {ep: 0, eJ: 0, eT: 0, e0: 0};
 var author$project$Internal$Menu$Implementation$topLeftCorner = {ep: false, A: false, u: false, eT: false};
 var author$project$Internal$Menu$Implementation$defaultConfig = {z: author$project$Internal$Menu$Implementation$topLeftCorner, e: author$project$Internal$Menu$Implementation$defaultMargin, ai: elm$core$Maybe$Nothing, j: false, w: false};
-var author$project$Internal$Menu$Implementation$selected = author$project$Internal$Options$cs('mdc-menu-item--selected');
 var author$project$Internal$Menu$Model$CloseDelayed = {$: 6};
 var author$project$Internal$Menu$Model$Init = F2(
 	function (a, b) {
@@ -18261,21 +18260,15 @@ var author$project$Internal$Menu$Implementation$menu = F5(
 						elm$core$List$indexedMap,
 						F2(
 							function (i, item) {
-								var itemSummary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, item.cd);
-								var isSelected = A2(
-									elm$core$List$any,
-									function (j) {
-										return _Utils_eq(j, author$project$Internal$Menu$Implementation$selected);
-									},
-									item.cd);
-								var focusIndex = i - numDividersBeforeIndex(i);
-								return item.aw ? A2(author$project$Internal$List$Implementation$divider, _List_Nil, item.a_) : A2(
+								return item.aw ? A2(author$project$Internal$List$Implementation$divider, item.cd, item.a_) : A2(
 									author$project$Internal$List$Implementation$li,
-									_List_fromArray(
-										[
-											author$project$Internal$Options$cs('mdc-list-item'),
-											author$project$Internal$Options$role('menuitem')
-										]),
+									A2(
+										elm$core$List$cons,
+										author$project$Internal$Options$cs('mdc-list-item'),
+										A2(
+											elm$core$List$cons,
+											author$project$Internal$Options$role('menuitem'),
+											item.cd)),
 									item.a_);
 							}),
 						ulNode.bf))
@@ -18337,6 +18330,7 @@ var author$project$Internal$Menu$Implementation$divider = F2(
 		return {a_: childs, aw: true, cd: options};
 	});
 var author$project$Material$Menu$divider = author$project$Internal$Menu$Implementation$divider;
+var author$project$Internal$Menu$Implementation$selected = author$project$Internal$Options$cs('mdc-menu-item--selected');
 var author$project$Material$Menu$selected = author$project$Internal$Menu$Implementation$selected;
 var author$project$Internal$Menu$Implementation$surfaceAnchor = author$project$Internal$Options$cs('mdc-menu-surface--anchor');
 var author$project$Material$Menu$surfaceAnchor = author$project$Internal$Menu$Implementation$surfaceAnchor;
