@@ -7,6 +7,7 @@ module Material.Button exposing
     , outlined
     , dense
     , icon
+    , trailingIcon
     , disabled
     , link
     , onClick
@@ -48,6 +49,7 @@ Material Design button requirements.
 @docs outlined
 @docs dense
 @docs icon
+@docs trailingIcon
 @docs disabled
 @docs link
 @docs onClick
@@ -84,6 +86,13 @@ view =
 icon : String -> Property m
 icon =
     Button.icon
+
+
+{-| Give the button a trailing icon.
+-}
+trailingIcon : String -> Property m
+trailingIcon =
+    Button.trailingIcon
 
 
 {-| Make the button elevated upon the surface.

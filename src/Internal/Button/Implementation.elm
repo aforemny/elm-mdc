@@ -9,6 +9,7 @@ module Internal.Button.Implementation exposing
     , raised
     , react
     , ripple
+    , trailingIcon
     , unelevated
     , view
     )
@@ -55,6 +56,7 @@ type alias Config m =
     , disabled : Bool
     , icon : Maybe String
     , onClick : Maybe m
+    , trailingIcon : Bool
     }
 
 
@@ -65,6 +67,7 @@ defaultConfig =
     , disabled = False
     , icon = Nothing
     , onClick = Nothing
+    , trailingIcon = False
     }
 
 
@@ -75,6 +78,11 @@ type alias Property m =
 icon : String -> Property m
 icon str =
     Options.option (\config -> { config | icon = Just str })
+
+
+trailingIcon : String -> Property m
+trailingIcon str =
+    Options.option (\config -> { config | icon = Just str, trailingIcon = True })
 
 
 raised : Property m
@@ -154,11 +162,23 @@ button domId lift model options nodes =
         ]
         []
         (List.concat
-            [ config.icon
-                |> Maybe.map
-                    (\icon_ -> [ Icon.view [ cs "mdc-button__icon" ] icon_ ])
-                |> Maybe.withDefault []
+            [ if not config.trailingIcon then
+                config.icon
+                    |> Maybe.map
+                        (\icon_ -> [ Icon.view [ cs "mdc-button__icon" ] icon_ ])
+                    |> Maybe.withDefault []
+
+              else
+                []
             , nodes
+            , if config.trailingIcon then
+                config.icon
+                    |> Maybe.map
+                        (\icon_ -> [ Icon.view [ cs "mdc-button__icon" ] icon_ ])
+                    |> Maybe.withDefault []
+
+              else
+                []
             ]
         )
 
