@@ -44,7 +44,7 @@ import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (aria, cs, css, role, styled, tabindex, when)
+import Internal.Options as Options exposing (aria, cs, css, role, tabindex, when)
 import Json.Decode as Decode exposing (Decoder)
 import Task
 
@@ -316,17 +316,6 @@ menu domId lift model options ulNode =
 
         { position, transformOrigin, maxHeight } =
             autoPosition config geometry
-
-        numDividersBeforeIndex i =
-            ulNode.items
-                |> List.take (i + 1)
-                |> List.filter .divider
-                |> List.length
-
-        numItems =
-            ulNode.items
-                |> List.filter (not << .divider)
-                |> List.length
 
         listId =
             domId ++ "__list"

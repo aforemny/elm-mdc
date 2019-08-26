@@ -225,7 +225,7 @@ toolbar lift model options nodes =
                     (\bgImage ->
                         let
                             className =
-                                (++) "mdc-toolbar-background-image-back-"
+                                "mdc-toolbar-background-image-back-" ++
                                     (bgImage
                                         |> String.split "."
                                         |> String.join "-"

@@ -27,7 +27,6 @@ import Internal.Ripple.Model
         , cssClasses
         , defaultModel
         , numbers
-        , pointerDeactivationEvents
         , strings
         )
 import Json.Decode as Decode exposing (Decoder)

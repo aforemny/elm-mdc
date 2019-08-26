@@ -118,7 +118,7 @@ decodeKeyCode =
 chipset : List (Property m) -> List (Html m) -> Html m
 chipset options nodes =
     let
-        ({ config } as summary) =
+        summary =
             Options.collect defaultConfig options
     in
     Options.apply summary
