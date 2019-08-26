@@ -34,8 +34,9 @@ import Demo.Toolbar
 import Demo.TopAppBar
 import Demo.Typography
 import Demo.Url exposing (ToolbarPage(..), TopAppBarPage(..))
-import Html exposing (Html, p, text)
+import Html exposing (Html, div, p, text)
 import Material
+import Material.Drawer.Modal as Drawer
 import Material.Options as Options exposing (cs, css, styled)
 import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
@@ -44,6 +45,7 @@ import Url
 
 type alias Model =
     { mdc : Material.Model Msg
+    , is_drawer_open : Bool
     , key : Browser.Navigation.Key
     , url : Demo.Url.Url
     , buttons : Demo.Buttons.Model Msg
@@ -81,6 +83,7 @@ type alias Model =
 defaultModel : Browser.Navigation.Key -> Model
 defaultModel key =
     { mdc = Material.defaultModel
+    , is_drawer_open = False
     , key = key
     , url = Demo.Url.StartPage
     , buttons = Demo.Buttons.defaultModel
@@ -122,6 +125,8 @@ type Msg
     | UrlChanged Url.Url
     | UrlRequested Browser.UrlRequest
     | Navigate Demo.Url.Url
+    | OpenDrawer
+    | CloseDrawer
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -167,6 +172,12 @@ update msg model =
                 -- , scrollTop () TODO
                 ]
             )
+
+        OpenDrawer ->
+            ( { model | is_drawer_open = True }, Cmd.none )
+
+        CloseDrawer ->
+            ( { model | is_drawer_open = False }, Cmd.none )
 
         UrlRequested (Browser.Internal url) ->
             ( { model | url = Demo.Url.fromUrl url }
@@ -397,38 +408,48 @@ view_ : Model -> Html Msg
 view_ model =
     let
         page =
-            { toolbar = Page.toolbar Mdc "page-toolbar" model.mdc Navigate model.url
+            { topappbar = Page.topappbar Mdc "page-topappbar" model.mdc OpenDrawer model.url
             , navigate = Navigate
             , body =
                 \title intro nodes ->
-                    styled Html.div
+                    styled div
                         [ css "display" "flex"
                         , css "flex-flow" "column"
                         , css "height" "100%"
                         , Typography.typography
                         ]
-                        [ Page.toolbar Mdc
-                            "page-toolbar"
+                        [ Page.topappbar Mdc
+                            "page-topappbar"
                             model.mdc
-                            Navigate
+                            OpenDrawer
                             model.url
                             title
-                        , styled Html.div
-                            [ cs "demo-content"
-                            , css "max-width" "900px"
-                            , css "width" "100%"
-                            , css "margin-left" "auto"
-                            , css "margin-right" "auto"
+                        , styled div
+                            [ cs "demo-panel"
                             ]
-                            (styled Html.div
-                                [ TopAppBar.fixedAdjust ]
-                                [ Page.header title
-                                , styled p
-                                    [ Typography.body1 ]
-                                    [ text intro ]
-                                ]
-                                :: nodes
-                            )
+                            [ div
+                                  []
+                                  [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer model.url model.is_drawer_open
+                                  , Drawer.scrim [ Options.onClick CloseDrawer ] []
+                                  ]
+                            , styled div
+                                  [ cs "demo-content"
+                                  , TopAppBar.fixedAdjust
+                                  , css "max-width" "900px"
+                                  , css "width" "100%"
+                                  , css "margin-left" "auto"
+                                  , css "margin-right" "auto"
+                                  ]
+                                  ( div
+                                       [ ]
+                                       [ Page.header title
+                                       , styled p
+                                           [ Typography.body1 ]
+                                           [ text intro ]
+                                       ]
+                                  :: nodes
+                                  )
+                            ]
                         ]
             }
     in
@@ -524,7 +545,7 @@ view_ model =
             Demo.Typography.view TypographyMsg page model.typography
 
         Demo.Url.Error404 requestedHash ->
-            Html.div
+            div
                 []
                 [ Options.styled Html.h1
                     [ Typography.display4

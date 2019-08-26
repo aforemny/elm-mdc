@@ -32,13 +32,14 @@ affect the screen’s layout grid.
     import Material.List as Lists
 
 
-    [ Drawer.view Mdc "my-drawer" model.mdc []
+    [ Drawer.view Mdc "my-drawer" model.mdc
+        [ Drawer.open |> when model.is_drawer_open ]
         [ Drawer.header [ ]
             [ styled h3 [ Drawer.title ] [ text "Mail" ]
             , styled h6 [ Drawer.subTitle ] [ text "email@material.io" ]
             ]
         , Drawer.content []
-              [ Lists.nav []
+              [ Lists.nav Mdc "my-list" model.mdc []
                     [ Lists.a
                           [ Options.attribute (Html.href "#persistent-drawer")
                           , Lists.activated

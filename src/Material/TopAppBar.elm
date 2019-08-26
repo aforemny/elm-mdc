@@ -180,13 +180,6 @@ navigationIcon :
     -> List (Icon.Property m)
     -> String
     -> Html m
-
-
-
---navigationIcon =
---    TopAppBar.actionItem
-
-
 navigationIcon lift index model options name =
     TopAppBar.actionItem lift index model (cs "mdc-top-app-bar__navigation-icon" :: options) name
 
