@@ -36,7 +36,7 @@ view : Page m -> Html m
 view page =
     styled Html.div
         []
-        [ page.toolbar "Material Components for the Web"
+        [ page.topappbar "Material Components for the Web"
         , styled Html.nav
             []
             [ ImageList.view
