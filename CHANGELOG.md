@@ -1,8 +1,12 @@
-## IN PROGRESS
+## Upgrade to 2.3.1
 
 Changes:
 * Snackbar timeout default is now 5 seconds to be compatible with
   the JavaScript version.
+* Keyboard support added to menu.
+
+Demo:
+* Menu now looks like MDC demo.
 
 
 ## Upgrade to 2.2.0

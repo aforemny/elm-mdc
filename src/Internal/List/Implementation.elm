@@ -62,10 +62,6 @@ import Task
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
-    let
-        isRtl =
-            False
-    in
     case msg of
         RippleMsg index msg_ ->
             let
@@ -82,7 +78,7 @@ update lift msg model =
         ResetFocusedItem ->
             ( Just { model | focused = Nothing }, Cmd.none )
 
-        FocusItem index id ->
+        FocusItem _ id ->
             ( Just { model | focused = Nothing }, Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus id) )
 
         SelectItem index m ->

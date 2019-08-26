@@ -30,10 +30,6 @@ import Task
 
 update : (Msg m -> m) -> Msg m -> Model -> ( Maybe Model, Cmd m )
 update lift msg model =
-    let
-        isRtl =
-            False
-    in
     case msg of
         RippleMsg index msg_ ->
             let
@@ -291,12 +287,6 @@ tabbar domId lift model options nodes =
 
         stateChanged =
             config.activeTab /= model.activeTab
-
-        numTabs =
-            List.length nodes
-
-        isRtl =
-            False
 
         -- TODO
         {-
@@ -632,6 +622,7 @@ decodeGeometry =
                                         content =
                                             DOM.childNode 0
 
+                                        {-
                                         dimensions =
                                             content <|
                                                 Json.map2
@@ -642,6 +633,7 @@ decodeGeometry =
                                                     )
                                                     DOM.offsetLeft
                                                     DOM.offsetWidth
+                                        -}
                                     in
                                     Json.map Just <|
                                         Json.map2
