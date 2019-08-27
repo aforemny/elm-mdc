@@ -12,7 +12,7 @@ import Demo.Url as Url exposing (Url)
 import Html exposing (Html, div, h2, span, section, text)
 import Html.Attributes as Html
 import Material
-import Material.Drawer.Dismissible as Drawer
+import Material.Drawer.Modal as Drawer
 import Material.Icon as Icon
 import Material.Options as Options exposing (Property, cs, css, styled, when)
 import Material.List as Lists

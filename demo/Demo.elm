@@ -35,7 +35,8 @@ import Demo.Typography
 import Demo.Url exposing (TopAppBarPage(..))
 import Html exposing (Html, div, text)
 import Material
-import Material.Drawer.Dismissible as Drawer
+import Material.Drawer.Modal as Drawer
+import Material.Drawer.Dismissible as DismissibleDrawer
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
@@ -417,10 +418,14 @@ view_ model =
                             [ cs "demo-panel"
                             , css "display" "flex"
                             ]
-                            [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer model.url model.is_drawer_open
+                            [ div
+                                  []
+                                  [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer model.url model.is_drawer_open
+                                  , Drawer.scrim [ Options.onClick CloseDrawer ] []
+                                  ]
                             , styled div
                                   [ cs "demo-content"
-                                  , Drawer.appContent
+                                  , DismissibleDrawer.appContent
                                   , TopAppBar.fixedAdjust
                                   , css "width" "100%"
                                   , css "display" "flex"
