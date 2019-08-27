@@ -20,30 +20,18 @@ import Platform.Cmd exposing (Cmd, none)
 
 type alias Model m =
     { mdc : Material.Model m
-    , stacked : Bool
-    , dismissOnAction : Bool
-    , messageText : String
-    , actionText : String
     }
 
 
 defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
-    , stacked = False
-    , dismissOnAction = True
-    , messageText = "Message deleted"
-    , actionText = "Undo"
     }
 
 
 type Msg m
     = Mdc (Material.Msg m)
-    | ToggleStacked
-    | ToggleDismissOnAction
-    | SetMessageText String
-    | SetActionText String
-    | Show Material.Index
+    | Show Material.Index String String
     | Dismiss String
     | NoOp
 
@@ -57,46 +45,22 @@ update lift msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        ToggleStacked ->
-            ( { model | stacked = not model.stacked }, Cmd.none )
-
-        ToggleDismissOnAction ->
-            ( { model | dismissOnAction = not model.dismissOnAction }, Cmd.none )
-
-        SetMessageText messageText ->
-            ( { model | messageText = messageText }, Cmd.none )
-
-        SetActionText actionText ->
-            ( { model | actionText = actionText }, Cmd.none )
-
-        Show idx ->
+        Show idx message label ->
             let
+                stacked = idx == "snackbar-stacked"
+
                 contents =
-                    if model.stacked then
-                        let
-                            snack =
-                                Snackbar.snack
-                                    (Just (lift (Dismiss model.messageText)))
-                                    model.messageText
-                                    model.actionText
-                        in
+                    let
+                        snack =
+                            Snackbar.snack
+                                (Just (lift (Dismiss "hello")))
+                                message
+                                label
+                    in
                         { snack
-                            | dismissOnAction = model.dismissOnAction
-                            , stacked = model.stacked
+                            | dismissOnAction = True
+                            , stacked = stacked
                         }
-
-                    else
-                        let
-                            toast =
-                                Snackbar.toast
-                                    (Just (lift (Dismiss model.messageText)))
-                                    model.messageText
-                        in
-                        { toast
-                            | dismissOnAction = model.dismissOnAction
-                            , action = Just "Hide"
-                        }
-
                 ( mdc, effects ) =
                     Snackbar.add (lift << Mdc) idx contents model.mdc
             in
@@ -104,6 +68,56 @@ update lift msg model =
 
         Dismiss str ->
             ( model, Cmd.none )
+
+
+
+snackbarButton lift index mdc buttonLabel message action =
+    Button.view (lift << Mdc)
+        ( "button-" ++index )
+        mdc
+        [ Button.raised
+        , Options.on "click" (Json.succeed (lift (Show ("snackbar-" ++ index) message action)))
+        , css "margin" "8px 16px"
+        ]
+        [ text buttonLabel
+        ]
+
+baselineButton lift mdc =
+    snackbarButton lift "baseline" mdc "Baseline" "Can't send photo. Retry in 5 seconds." "Retry"
+
+leadingButton lift mdc =
+    snackbarButton lift "leading" mdc "Leading" "Your photo has been archived." "Undo"
+
+stackedButton lift mdc =
+    snackbarButton lift "stacked" mdc "Stacked" "This item already has the label \"travel\". You can add a new label." "Add a new label"
+
+
+baselineSnackbar lift mdc =
+    Snackbar.view (lift << Mdc)
+        "snackbar-baseline"
+        mdc
+        [ Snackbar.dismissible
+        ]
+        []
+
+
+leadingSnackbar lift mdc =
+    Snackbar.view (lift << Mdc)
+        "snackbar-leading"
+        mdc
+        [ Snackbar.dismissible
+        , Snackbar.leading
+        ]
+        []
+
+
+stackedSnackbar lift mdc =
+    Snackbar.view (lift << Mdc)
+        "snackbar-stacked"
+        mdc
+        [ Snackbar.dismissible
+        ]
+        []
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
@@ -156,111 +170,11 @@ view lift page model =
         )
         [ ResourceLink.links (lift << Mdc) model.mdc "snackbars" "snackbars" "mdc-snackbar"
         , Page.demos
-            [ example []
-                [ styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
-                , FormField.view []
-                    [ Checkbox.view (lift << Mdc)
-                        "snackbar-stacked-checkbox"
-                        model.mdc
-                        [ Options.onClick (lift ToggleStacked)
-                        , Checkbox.checked model.stacked
-                        ]
-                        []
-                    , Html.label [] [ text "Stacked" ]
-                    ]
-                , Html.br [] []
-                , FormField.view []
-                    [ Checkbox.view (lift << Mdc)
-                        "snackbar-dismiss-on-action-button"
-                        model.mdc
-                        [ Options.onClick (lift ToggleDismissOnAction)
-                        , Checkbox.checked model.dismissOnAction
-                        ]
-                        []
-                    , Html.label [] [ text "Dismiss On Action" ]
-                    ]
-                , Html.br [] []
-                , TextField.view (lift << Mdc)
-                    "snackbar-message-text-field"
-                    model.mdc
-                    [ TextField.value model.messageText
-                    , TextField.label "Message Text"
-                    , Options.on "input" (Json.map (lift << SetMessageText) Html.targetValue)
-                    ]
-                    []
-                , Html.br [] []
-                , TextField.view (lift << Mdc)
-                    "snackbar-action-text-field"
-                    model.mdc
-                    [ TextField.value model.actionText
-                    , TextField.label "Action Text"
-                    , Options.on "input" (Json.map (lift << SetActionText) Html.targetValue)
-                    ]
-                    []
-                , Html.br [] []
-                , Button.view (lift << Mdc)
-                    "snackbar-show-button"
-                    model.mdc
-                    [ Button.raised
-                    , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-default-snackbar")))
-                    ]
-                    [ text "Show"
-                    ]
-                , text " "
-                , Button.view (lift << Mdc)
-                    "snackbar-show-button-dismissible"
-                    model.mdc
-                    [ Button.raised
-                    , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-dismissible-snackbar")))
-                    ]
-                    [ text "Show dismissible"
-                    ]
-                , text " "
-                , Button.view (lift << Mdc)
-                    "snackbar-show-button-leading"
-                    model.mdc
-                    [ Button.raised
-                    , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-leading-snackbar")))
-                    ]
-                    [ text "Show leading"
-                    ]
-                , text " "
-                , Button.view (lift << Mdc)
-                    "snackbar-show-button-leading-rtl"
-                    model.mdc
-                    [ Button.raised
-                    , css "margin-top" "14px"
-                    , Options.on "click" (Json.succeed (lift (Show "snackbar-leading-snackbar-rtl")))
-                    ]
-                    [ text "Show leading rtl"
-                    ]
-                , Snackbar.view (lift << Mdc) "snackbar-default-snackbar" model.mdc [] []
-                , Snackbar.view (lift << Mdc)
-                    "snackbar-dismissible-snackbar"
-                    model.mdc
-                    [ Snackbar.dismissible ]
-                    []
-                , Snackbar.view (lift << Mdc)
-                    "snackbar-leading-snackbar"
-                    model.mdc
-                    [ Snackbar.dismissible
-                    , Snackbar.leading
-                    ]
-                    []
-                , Html.div
-                    [ Html.attribute "dir" "rtl"
-                    ]
-                    [ Snackbar.view (lift << Mdc)
-                        "snackbar-leading-snackbar-rtl"
-                        model.mdc
-                        [ Snackbar.dismissible
-                        , Snackbar.leading
-                        ]
-                        []
-                    ]
-                ]
+            [ baselineButton lift model.mdc
+            , leadingButton lift model.mdc
+            , stackedButton lift model.mdc
+            , baselineSnackbar lift model.mdc
+            , leadingSnackbar lift model.mdc
+            , stackedSnackbar lift model.mdc
             ]
         ]
