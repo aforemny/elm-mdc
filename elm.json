@@ -10,6 +10,7 @@
         "Material.Card",
         "Material.Checkbox",
         "Material.Chip",
+        "Material.DataTable",
         "Material.Dialog",
         "Material.Drawer.Dismissible",
         "Material.Drawer.Modal",

@@ -18,7 +18,7 @@ Material Design chip requirements.
 
 # Resources
 
-  - [Chips - Internal.Components for the Web](https://material.io/develop/web/components/chips/)
+  - [Chips - Components for the Web](https://material.io/develop/web/components/chips/)
   - [Material Design guidelines: Chips](https://material.io/guidelines/components/chips.html)
   - [Demo](https://aforemny.github.io/elm-mdc/#chips)
 
