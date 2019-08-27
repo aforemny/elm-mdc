@@ -163,7 +163,7 @@ update msg model =
             Material.update Mdc msg_ model
 
         Navigate url ->
-            ( { model | url = url }
+            ( { model | url = url, is_drawer_open = False }
             , Cmd.batch
                 [ Browser.Navigation.pushUrl model.key (Demo.Url.toString url)
 
@@ -181,7 +181,7 @@ update msg model =
             ( { model | is_drawer_open = not model.is_drawer_open }, Cmd.none )
 
         UrlRequested (Browser.Internal url) ->
-            ( { model | url = Demo.Url.fromUrl url }
+            ( { model | url = Demo.Url.fromUrl url, is_drawer_open = False }
             , Browser.Navigation.load (Demo.Url.toString (Demo.Url.fromUrl url))
             )
 
