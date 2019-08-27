@@ -190,6 +190,14 @@ $ make docs
 $ build.cmd docs
 ```
 
+
+## Starterkit and hot reload
+
+To get started with this library more easily, have a look at the
+(elm-mdc starterkit)[https://github.com/berenddeboer/elm-mdc-starter-kit/network/alerts]. This
+contains a fully featured example that demonstrates hot code reload.
+
+
 ## Contribute
 
 Contributions are warmly encouraged - please
