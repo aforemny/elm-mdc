@@ -1,5 +1,6 @@
 module Demo.Theme exposing (Model, Msg, defaultModel, update, view)
 
+import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
@@ -36,7 +37,7 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Theme"
         "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
-        [ Page.hero []
+        [ Hero.view []
             [ Button.view (lift << Mdc)
                 "theme-button-primary"
                 model.mdc

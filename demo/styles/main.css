@@ -19,7 +19,47 @@
   transition: 125ms transform cubic-bezier(.4, 0, .2, 1);
 }
 
+
+/* dismissible drawer animation */
+
+.demo-content {
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 100px;
+}
+
+.mdc-drawer-app-content {
+  /* @noflip */
+  margin-left: 0;
+  /* @noflip */
+  margin-right: 0;
+  position: relative;
+}
+
+[dir=rtl] .mdc-drawer-app-content, .mdc-drawer-app-content[dir=rtl] {
+  /* @noflip */
+  margin-left: 0;
+  /* @noflip */
+  margin-right: 0;
+}
+
+.mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content {
+  /* @noflip */
+  margin-left: 256px;
+  /* @noflip */
+  margin-right: 0;
+}
+
+[dir=rtl] .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content, .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content[dir=rtl] {
+  /* @noflip */
+  margin-left: 0;
+  /* @noflip */
+  margin-right: 256px;
+}
+
+
 /* demo-content */
+
 .demo-wrapper {
   width: 900px;
   margin: 0 auto;

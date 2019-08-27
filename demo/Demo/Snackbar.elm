@@ -1,5 +1,6 @@
 module Demo.Snackbar exposing (Model, Msg(..), defaultModel, update, view)
 
+import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
@@ -116,7 +117,7 @@ view lift page model =
     in
     page.body "Snackbar"
         "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
-        [ Page.hero []
+        [ Hero.view []
             [ styled Html.div
                 [ css "position" "relative"
                 , css "left" "0"

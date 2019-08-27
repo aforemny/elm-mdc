@@ -30,14 +30,13 @@ import Demo.Switch
 import Demo.TabBar
 import Demo.TextFields
 import Demo.Theme
-import Demo.Toolbar
 import Demo.TopAppBar
 import Demo.Typography
-import Demo.Url exposing (ToolbarPage(..), TopAppBarPage(..))
-import Html exposing (Html, div, p, text)
+import Demo.Url exposing (TopAppBarPage(..))
+import Html exposing (Html, div, text)
 import Material
-import Material.Drawer.Modal as Drawer
-import Material.Options as Options exposing (cs, css, styled)
+import Material.Drawer.Dismissible as Drawer
+import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
 import Url
@@ -74,7 +73,6 @@ type alias Model =
     , modalDrawer : Demo.ModalDrawer.Model Msg
     , textfields : Demo.TextFields.Model Msg
     , theme : Demo.Theme.Model Msg
-    , toolbar : Demo.Toolbar.Model Msg
     , topAppBar : Demo.TopAppBar.Model Msg
     , typography : Demo.Typography.Model Msg
     }
@@ -112,7 +110,6 @@ defaultModel key =
     , modalDrawer = Demo.ModalDrawer.defaultModel
     , textfields = Demo.TextFields.defaultModel
     , theme = Demo.Theme.defaultModel
-    , toolbar = Demo.Toolbar.defaultModel
     , topAppBar = Demo.TopAppBar.defaultModel
     , typography = Demo.Typography.defaultModel
     }
@@ -127,6 +124,7 @@ type Msg
     | Navigate Demo.Url.Url
     | OpenDrawer
     | CloseDrawer
+    | ToggleDrawer
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -154,7 +152,6 @@ type Msg
     | TextFieldMsg (Demo.TextFields.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
     | TypographyMsg (Demo.Typography.Msg Msg)
-    | ToolbarMsg (Demo.Toolbar.Msg Msg)
     | TopAppBarMsg (Demo.TopAppBar.Msg Msg)
 
 
@@ -178,6 +175,9 @@ update msg model =
 
         CloseDrawer ->
             ( { model | is_drawer_open = False }, Cmd.none )
+
+        ToggleDrawer ->
+            ( { model | is_drawer_open = not model.is_drawer_open }, Cmd.none )
 
         UrlRequested (Browser.Internal url) ->
             ( { model | url = Demo.Url.fromUrl url }
@@ -373,13 +373,6 @@ update msg model =
             in
             ( { model | theme = theme }, effects )
 
-        ToolbarMsg msg_ ->
-            let
-                ( toolbar, effects ) =
-                    Demo.Toolbar.update ToolbarMsg msg_ model.toolbar
-            in
-            ( { model | toolbar = toolbar }, effects )
-
         TopAppBarMsg msg_ ->
             let
                 ( topAppBar, effects ) =
@@ -407,8 +400,9 @@ view model =
 view_ : Model -> Html Msg
 view_ model =
     let
+        bar = Page.topappbar Mdc "page-topappbar" model.mdc ToggleDrawer model.url
         page =
-            { topappbar = Page.topappbar Mdc "page-topappbar" model.mdc OpenDrawer model.url
+            { topappbar = bar
             , navigate = Navigate
             , body =
                 \title intro nodes ->
@@ -418,37 +412,29 @@ view_ model =
                         , css "height" "100%"
                         , Typography.typography
                         ]
-                        [ Page.topappbar Mdc
-                            "page-topappbar"
-                            model.mdc
-                            OpenDrawer
-                            model.url
-                            title
+                        [ bar title
                         , styled div
                             [ cs "demo-panel"
+                            , css "display" "flex"
                             ]
-                            [ div
-                                  []
-                                  [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer model.url model.is_drawer_open
-                                  , Drawer.scrim [ Options.onClick CloseDrawer ] []
-                                  ]
+                            [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer model.url model.is_drawer_open
                             , styled div
                                   [ cs "demo-content"
+                                  , Drawer.appContent
                                   , TopAppBar.fixedAdjust
-                                  , css "max-width" "900px"
                                   , css "width" "100%"
-                                  , css "margin-left" "auto"
-                                  , css "margin-right" "auto"
+                                  , css "display" "flex"
+                                  , css "justify-content" "flex-start"
+                                  , css "flex-direction" "column"
+                                  , css "align-items" "center"
                                   ]
-                                  ( div
-                                       [ ]
-                                       [ Page.header title
-                                       , styled p
-                                           [ Typography.body1 ]
-                                           [ text intro ]
-                                       ]
-                                  :: nodes
-                                  )
+                                  [ styled div
+                                    [ cs "demo-content-transition"
+                                    , css "width" "100%"
+                                    , css "max-width" "1200px"
+                                    ]
+                                    [ Page.componentCatalogPanel title intro nodes ]
+                                  ]
                             ]
                         ]
             }
@@ -529,9 +515,6 @@ view_ model =
         Demo.Url.Theme ->
             Demo.Theme.view ThemeMsg page model.theme
 
-        Demo.Url.Toolbar toolbarPage ->
-            Demo.Toolbar.view ToolbarMsg page toolbarPage model.toolbar
-
         Demo.Url.TopAppBar topAppBarPage ->
             Demo.TopAppBar.view TopAppBarMsg page topAppBarPage model.topAppBar
 
@@ -595,6 +578,5 @@ subscriptions model =
         , Demo.Slider.subscriptions SliderMsg model.slider
         , Demo.TabBar.subscriptions TabBarMsg model.tabbar
         , Demo.ModalDrawer.subscriptions ModalDrawerMsg model.modalDrawer
-        , Demo.Toolbar.subscriptions ToolbarMsg model.toolbar
         , Demo.TopAppBar.subscriptions TopAppBarMsg model.topAppBar
         ]

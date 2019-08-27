@@ -3,16 +3,16 @@ module Demo.Page exposing
     , demos
     , drawer
     , header
-    , hero
     , subheader
     , topappbar
+    , componentCatalogPanel
     )
 
 import Demo.Url as Url exposing (Url)
-import Html exposing (Html, div, h2, span, text)
+import Html exposing (Html, div, p, h2, span, section, text)
 import Html.Attributes as Html
 import Material
-import Material.Drawer.Modal as Drawer
+import Material.Drawer.Dismissible as Drawer
 import Material.Icon as Icon
 import Material.Options as Options exposing (Property, cs, css, styled, when)
 import Material.List as Lists
@@ -87,7 +87,10 @@ drawer lift idx mdc cmd current_url open =
         idx
         mdc
         [ Drawer.open |> when open
-        , Drawer.onClose cmd ]
+        , Drawer.onClose cmd
+        , TopAppBar.fixedAdjust
+        , css "z-index" "1"
+        ]
         [ Drawer.header
               [ css "padding-top" "18px"
               , css "opacity" ".74"
@@ -157,30 +160,21 @@ subheader title =
         [ text title ]
 
 
-hero : List (Property c m) -> List (Html m) -> Html m
-hero options =
-    styled Html.section
-        (List.reverse
-            (cs "hero"
-                :: css "display" "-webkit-box"
-                :: css "display" "-ms-flexbox"
-                :: css "display" "flex"
-                :: css "-webkit-box-orient" "horizontal"
-                :: css "-webkit-box-direction" "normal"
-                :: css "-ms-flex-flow" "row nowrap"
-                :: css "flex-flow" "row nowrap"
-                :: css "-webkit-box-align" "center"
-                :: css "-ms-flex-align" "center"
-                :: css "align-items" "center"
-                :: css "-webkit-box-pack" "center"
-                :: css "-ms-flex-pack" "center"
-                :: css "justify-content" "center"
-                :: css "height" "360px"
-                :: css "min-height" "360px"
-                :: css "background-color" "rgba(0, 0, 0, 0.05)"
-                :: css "padding" "24px"
-                :: options
-            )
+componentCatalogPanel : String -> String -> List (Html m) -> Html m
+componentCatalogPanel title intro nodes =
+    styled section
+        [ cs "component-catalog-panel"
+        , css "margin-top" "24px"
+        , css "padding-bottom" "24px"
+        ]
+        ( div
+          [ ]
+          [ header title
+          , styled p
+              [ Typography.body1 ]
+              [ text intro ]
+          ]
+        :: nodes
         )
 
 
