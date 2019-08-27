@@ -8,8 +8,6 @@ view : List (Property c m) -> List (Html m) -> Html m
 view options =
     styled Html.section
         (List.reverse
-            -- TODO: It seems that elm-mdc is applying `css` (and probably all)
-            -- attributes on reverse order. That should be fixed in elm-mdc.
             (cs "hero"
                 :: css "display" "-webkit-box"
                 :: css "display" "-ms-flexbox"
