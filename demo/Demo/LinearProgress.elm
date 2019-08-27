@@ -34,12 +34,14 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Linear Progress Indicator"
+    page.body
+        "Linear Progress Indicator"
         "Progress indicators display the length of a process or express an unspecified wait time."
-        [ Hero.view []
+        ( Hero.view []
             [ LinearProgress.view [ LinearProgress.determinate 0.5 ] []
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "progress-indicators" "linear-progress" "mdc-linear-progress"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "progress-indicators" "linear-progress" "mdc-linear-progress"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Buffered" ]
             , LinearProgress.view [ LinearProgress.buffered 0.5 0.75 ] []

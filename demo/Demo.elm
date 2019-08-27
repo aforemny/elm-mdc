@@ -405,7 +405,7 @@ view_ model =
             { topappbar = bar
             , navigate = Navigate
             , body =
-                \title intro nodes ->
+                \title intro hero nodes ->
                     styled div
                         [ css "display" "flex"
                         , css "flex-flow" "column"
@@ -433,7 +433,7 @@ view_ model =
                                     , css "width" "100%"
                                     , css "max-width" "1200px"
                                     ]
-                                    [ Page.componentCatalogPanel title intro nodes ]
+                                    [ Page.componentCatalogPanel title intro hero nodes ]
                                   ]
                             ]
                         ]

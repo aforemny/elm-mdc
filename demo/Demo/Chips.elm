@@ -70,12 +70,14 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Chips"
+    page.body
+        "Chips"
         "Chips are compact elements that allow users to enter information, select a choice, filter content, or trigger an action."
-        [ Hero.view []
+        ( Hero.view []
             [ heroChips lift model
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "chips" "chips" "mdc-chips"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "chips" "chips" "mdc-chips"
         , Page.demos
             (List.concat
                 [ choiceChips lift model

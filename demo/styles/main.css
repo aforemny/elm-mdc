@@ -58,6 +58,13 @@
 }
 
 
+/* hero */
+.component-catalog-panel__header-elements {
+  max-width: 300px;
+  padding-right: 40px;
+}
+
+
 /* demo-content */
 
 .demo-wrapper {

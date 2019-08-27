@@ -83,9 +83,10 @@ checkbox lift index model options =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Checkbox"
+    page.body
+        "Checkbox"
         "Checkboxes allow the user to select multiple options from a set."
-        [ Hero.view []
+        ( Hero.view []
             [ checkbox lift
                 "checkbox-checked-hero-checkbox"
                 model
@@ -95,7 +96,8 @@ view lift page model =
                 model
                 [ css "margin" "8px" ]
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "selection-controls.html#checkboxes" "input-controls/checkboxes" "mdc-checkbox"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "selection-controls.html#checkboxes" "input-controls/checkboxes" "mdc-checkbox"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Unchecked" ]
             , checkbox lift "checkbox-unchecked-checkbox" model []

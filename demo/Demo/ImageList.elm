@@ -89,15 +89,17 @@ masonryItem url =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Image List"
+    page.body
+        "Image List"
         "Image lists display a collection of images in an organized grid."
-        [ Hero.view []
+        ( Hero.view []
             [ ImageList.view
                 [ css "width" "300px"
                 ]
                 (List.repeat 15 imageListHeroItem)
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "image-lists" "image-lists" "mdc-image-list"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "image-lists" "image-lists" "mdc-image-list"
         , Page.demos
             [ styled Html.h3
                 [ Typography.subtitle1 ]

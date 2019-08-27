@@ -2,14 +2,14 @@ module Demo.Page exposing
     ( Page
     , demos
     , drawer
-    , header
     , subheader
     , topappbar
     , componentCatalogPanel
     )
 
+import Demo.Helper.Hero as Hero
 import Demo.Url as Url exposing (Url)
-import Html exposing (Html, div, p, h2, span, section, text)
+import Html exposing (Html, div, h2, span, section, text)
 import Html.Attributes as Html
 import Material
 import Material.Drawer.Dismissible as Drawer
@@ -23,7 +23,7 @@ import Material.Typography as Typography
 type alias Page m =
     { topappbar : String -> Html m
     , navigate : Url -> m
-    , body : String -> String -> List (Html m) -> Html m
+    , body : String -> String -> Html m -> List (Html m) -> Html m
     }
 
 
@@ -146,13 +146,6 @@ listItem title url current_url =
         ]
 
 
-header : String -> Html m
-header title =
-    styled Html.h1
-        [ Typography.headline5 ]
-        [ text title ]
-
-
 subheader : String -> Html m
 subheader title =
     styled Html.h3
@@ -160,20 +153,14 @@ subheader title =
         [ text title ]
 
 
-componentCatalogPanel : String -> String -> List (Html m) -> Html m
-componentCatalogPanel title intro nodes =
+componentCatalogPanel : String -> String -> Html m -> List (Html m) -> Html m
+componentCatalogPanel title intro hero nodes =
     styled section
         [ cs "component-catalog-panel"
         , css "margin-top" "24px"
         , css "padding-bottom" "24px"
         ]
-        ( div
-          [ ]
-          [ header title
-          , styled p
-              [ Typography.body1 ]
-              [ text intro ]
-          ]
+        ( Hero.area title intro hero
         :: nodes
         )
 

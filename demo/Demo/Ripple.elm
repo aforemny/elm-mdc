@@ -83,10 +83,11 @@ demoIcon lift index model icon =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Ripple"
+    page.body
+        "Ripple"
         "Ripples are visual representations used to communicate the status of a component or interactive element."
-        [ Hero.view [] [ demoBox lift "ripple-hero-ripple" model "" "Click here!" ]
-        , ResourceLink.links (lift << Mdc) model.mdc "interaction/states" "ripples" "mdc-ripple"
+        ( Hero.view [] [ demoBox lift "ripple-hero-ripple" model "" "Click here!" ] )
+        [ ResourceLink.links (lift << Mdc) model.mdc "interaction/states" "ripples" "mdc-ripple"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Bounded Ripple" ]
             , demoBox lift "ripple-bounded-ripple" model "" "Interact with me!"

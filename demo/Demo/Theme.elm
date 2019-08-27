@@ -35,9 +35,10 @@ update lift msg model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Theme"
+    page.body
+        "Theme"
         "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
-        [ Hero.view []
+        ( Hero.view []
             [ Button.view (lift << Mdc)
                 "theme-button-primary"
                 model.mdc
@@ -55,7 +56,8 @@ view lift page model =
                 [ text "Secondary"
                 ]
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "color/applying-color-to-ui" "theme" "mdc-theme"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "color/applying-color-to-ui" "theme" "mdc-theme"
         , h2 []
             [ text "Theme colors"
             ]

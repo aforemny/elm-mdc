@@ -230,12 +230,14 @@ exampleCard3 lift index model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Card"
+    page.body
+        "Card"
         "Cards contain content and actions about a single subject."
-        [ Hero.view []
+        ( Hero.view []
             [ heroCard lift "card-hero-card" model
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "cards" "cards" "mdc-card"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "cards" "cards" "mdc-card"
         , Page.demos
             [ exampleCard1 lift "cards-example-card-1" model
             , exampleCard2 lift "cards-example-card-2" model

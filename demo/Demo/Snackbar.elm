@@ -115,9 +115,10 @@ view lift page model =
                     :: options
                 )
     in
-    page.body "Snackbar"
+    page.body
+        "Snackbar"
         "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
-        [ Hero.view []
+        ( Hero.view []
             [ styled Html.div
                 [ css "position" "relative"
                 , css "left" "0"
@@ -152,7 +153,8 @@ view lift page model =
                     ]
                 ]
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "snackbars" "snackbars" "mdc-snackbar"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "snackbars" "snackbars" "mdc-snackbar"
         , Page.demos
             [ example []
                 [ styled Html.h2 [ Typography.title ] [ text "Basic Example" ]
