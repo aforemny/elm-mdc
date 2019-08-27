@@ -1,4 +1,4 @@
-module Main exposing (main)
+module Demo exposing (main)
 
 import Browser
 import Browser.Navigation
@@ -6,6 +6,7 @@ import Demo.Buttons
 import Demo.Cards
 import Demo.Checkbox
 import Demo.Chips
+import Demo.DataTable
 import Demo.Dialog
 import Demo.DismissibleDrawer
 import Demo.Drawer
@@ -52,6 +53,7 @@ type alias Model =
     , cards : Demo.Cards.Model Msg
     , checkbox : Demo.Checkbox.Model Msg
     , chips : Demo.Chips.Model Msg
+    , dataTable : Demo.DataTable.Model Msg
     , dialog : Demo.Dialog.Model Msg
     , dismissibleDrawer : Demo.DismissibleDrawer.Model Msg
     , drawer : Demo.Drawer.Model Msg
@@ -89,6 +91,7 @@ defaultModel key =
     , cards = Demo.Cards.defaultModel
     , checkbox = Demo.Checkbox.defaultModel
     , chips = Demo.Chips.defaultModel
+    , dataTable = Demo.DataTable.defaultModel
     , dialog = Demo.Dialog.defaultModel
     , dismissibleDrawer = Demo.DismissibleDrawer.defaultModel
     , drawer = Demo.Drawer.defaultModel
@@ -130,6 +133,7 @@ type Msg
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
     | ChipsMsg (Demo.Chips.Msg Msg)
+    | DataTableMsg (Demo.DataTable.Msg Msg)
     | DialogMsg (Demo.Dialog.Msg Msg)
     | DismissibleDrawerMsg (Demo.DismissibleDrawer.Msg Msg)
     | DrawerMsg (Demo.Drawer.Msg Msg)
@@ -219,6 +223,13 @@ update msg model =
                     Demo.Chips.update ChipsMsg msg_ model.chips
             in
             ( { model | chips = chips }, effects )
+
+        DataTableMsg msg_ ->
+            let
+                ( dataTable, effects ) =
+                    Demo.DataTable.update DataTableMsg msg_ model.dataTable
+            in
+            ( { model | dataTable = dataTable }, effects )
 
         DialogMsg msg_ ->
             let
@@ -459,6 +470,9 @@ view_ model =
 
         Demo.Url.Chips ->
             Demo.Chips.view ChipsMsg page model.chips
+
+        Demo.Url.DataTable ->
+            Demo.DataTable.view DataTableMsg page model.dataTable
 
         Demo.Url.Dialog ->
             Demo.Dialog.view DialogMsg page model.dialog

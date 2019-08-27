@@ -15,6 +15,7 @@ type Url
     | Card
     | Checkbox
     | Chips
+    | DataTable
     | Dialog
     | Drawer
     | DismissibleDrawer
@@ -92,6 +93,9 @@ toString url =
 
         Chips ->
             "#chips"
+
+        DataTable ->
+            "#data-table"
 
         Dialog ->
             "#dialog"
@@ -191,6 +195,9 @@ fromString url =
 
         "chips" ->
             Chips
+
+        "data-table" ->
+            DataTable
 
         "dialog" ->
             Dialog
