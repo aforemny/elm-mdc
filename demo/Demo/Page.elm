@@ -88,8 +88,9 @@ drawer lift idx mdc cmd current_url open =
         mdc
         [ Drawer.open |> when open
         , Drawer.onClose cmd
-        , TopAppBar.fixedAdjust
-        , css "z-index" "1"
+        -- we need this when we switch between modal and dismissible drawer: #233
+        -- , TopAppBar.fixedAdjust
+        -- , css "z-index" "1"
         ]
         [ Drawer.header
               [ css "padding-top" "18px"
