@@ -40,10 +40,11 @@ view lift page model =
         extendedFab idx options nodes =
             Fab.view (lift << Mdc) idx model.mdc (Fab.ripple :: Fab.extended :: options) nodes
     in
-    page.body "Floating Action Button"
+    page.body
+        "Floating Action Button"
         "Floating action buttons represents the primary action in an application. Only one floating action button is recommended per screen to represent the most common action."
-        [ Hero.view [] [ fab "fabs-hero-fab" [] ]
-        , ResourceLink.links (lift << Mdc) model.mdc "buttons-floating-action-button" "buttons/floating-action-buttons" "mdc-fab"
+        ( Hero.view [] [ fab "fabs-hero-fab" [] ] )
+        [ ResourceLink.links (lift << Mdc) model.mdc "buttons-floating-action-button" "buttons/floating-action-buttons" "mdc-fab"
         , Page.demos
             [ subheader "Standard Floating Action Button"
             , fab "fabs-standard-fab" []

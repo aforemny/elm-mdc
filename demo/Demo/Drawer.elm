@@ -78,9 +78,10 @@ example label url =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Drawer"
+    page.body
+        "Drawer"
         "The navigation drawer slides in from the left and contains the navigation destinations for your app."
-        [ Hero.view []
+        ( Hero.view []
             [ Drawer.view (lift << Mdc)
                 "permanent-drawer-drawer"
                 model.mdc
@@ -128,7 +129,8 @@ view lift page model =
                     ]
                 ]
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "navigation-drawer" "drawers" "mdc-drawer"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "navigation-drawer" "drawers" "mdc-drawer"
         , Page.demos
             [ example "Permanent" "#permanent-drawer"
             , example "Dismissible" "#dismissible-drawer"

@@ -97,10 +97,11 @@ exampleRadioGroup lift model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Radio Button"
+    page.body
+        "Radio Button"
         "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
-        [ Hero.view [] [ heroRadioGroup lift model ]
-        , ResourceLink.links (lift << Mdc) model.mdc "buttons" "buttons" "mdc-button"
+        ( Hero.view [] [ heroRadioGroup lift model ] )
+        [ ResourceLink.links (lift << Mdc) model.mdc "buttons" "buttons" "mdc-button"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Radio Buttons" ]
             , exampleRadioGroup lift model

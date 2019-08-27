@@ -56,10 +56,11 @@ heroMenu lift model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Menu"
+    page.body
+        "Menu"
         "Menus display a list of choices on a transient sheet of material."
-        [ Hero.view [] [ heroMenu lift model ]
-        , ResourceLink.links (lift << Mdc) model.mdc "menus" "menus" "mdc-menu"
+        ( Hero.view [] [ heroMenu lift model ] )
+        [ ResourceLink.links (lift << Mdc) model.mdc "menus" "menus" "mdc-menu"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Anchored menu" ]
             , Button.view (lift << Mdc)

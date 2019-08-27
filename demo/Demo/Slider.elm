@@ -126,10 +126,11 @@ discreteSliderWithTickMarks lift model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Slider"
+    page.body
+        "Slider"
         "Sliders let users select from a range of values by moving the slider thumb."
-        [ Hero.view [] [ heroSlider lift model ]
-        , ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
+        ( Hero.view [] [ heroSlider lift model ] )
+        [ ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
         , styled Html.h3 [ Typography.subtitle1 ] [ text "Continuous" ]
         , continuousSlider lift model
         , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete" ]

@@ -2,14 +2,14 @@ module Demo.Page exposing
     ( Page
     , demos
     , drawer
-    , header
-    , hero
     , subheader
     , topappbar
+    , componentCatalogPanel
     )
 
+import Demo.Helper.Hero as Hero
 import Demo.Url as Url exposing (Url)
-import Html exposing (Html, div, h2, span, text)
+import Html exposing (Html, div, h2, span, section, text)
 import Html.Attributes as Html
 import Material
 import Material.Drawer.Modal as Drawer
@@ -23,7 +23,7 @@ import Material.Typography as Typography
 type alias Page m =
     { topappbar : String -> Html m
     , navigate : Url -> m
-    , body : String -> String -> List (Html m) -> Html m
+    , body : String -> String -> Html m -> List (Html m) -> Html m
     }
 
 
@@ -87,7 +87,11 @@ drawer lift idx mdc cmd current_url open =
         idx
         mdc
         [ Drawer.open |> when open
-        , Drawer.onClose cmd ]
+        , Drawer.onClose cmd
+        -- we need this when we switch between modal and dismissible drawer: #233
+        -- , TopAppBar.fixedAdjust
+        -- , css "z-index" "1"
+        ]
         [ Drawer.header
               [ css "padding-top" "18px"
               , css "opacity" ".74"
@@ -143,13 +147,6 @@ listItem title url current_url =
         ]
 
 
-header : String -> Html m
-header title =
-    styled Html.h1
-        [ Typography.headline5 ]
-        [ text title ]
-
-
 subheader : String -> Html m
 subheader title =
     styled Html.h3
@@ -157,30 +154,15 @@ subheader title =
         [ text title ]
 
 
-hero : List (Property c m) -> List (Html m) -> Html m
-hero options =
-    styled Html.section
-        (List.reverse
-            (cs "hero"
-                :: css "display" "-webkit-box"
-                :: css "display" "-ms-flexbox"
-                :: css "display" "flex"
-                :: css "-webkit-box-orient" "horizontal"
-                :: css "-webkit-box-direction" "normal"
-                :: css "-ms-flex-flow" "row nowrap"
-                :: css "flex-flow" "row nowrap"
-                :: css "-webkit-box-align" "center"
-                :: css "-ms-flex-align" "center"
-                :: css "align-items" "center"
-                :: css "-webkit-box-pack" "center"
-                :: css "-ms-flex-pack" "center"
-                :: css "justify-content" "center"
-                :: css "height" "360px"
-                :: css "min-height" "360px"
-                :: css "background-color" "rgba(0, 0, 0, 0.05)"
-                :: css "padding" "24px"
-                :: options
-            )
+componentCatalogPanel : String -> String -> Html m -> List (Html m) -> Html m
+componentCatalogPanel title intro hero nodes =
+    styled section
+        [ cs "component-catalog-panel"
+        , css "margin-top" "24px"
+        , css "padding-bottom" "24px"
+        ]
+        ( Hero.area title intro hero
+        :: nodes
         )
 
 

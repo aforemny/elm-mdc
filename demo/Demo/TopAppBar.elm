@@ -1,5 +1,6 @@
 module Demo.TopAppBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
+import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Demo.Url as Url exposing (TopAppBarPage)
@@ -97,9 +98,10 @@ view lift page topAppBarPage model =
             shortCollapsedTopAppBar lift "top-app-bar-short-collapsed" model
 
         Nothing ->
-            page.body "Top App Bar"
+            page.body
+                "Top App Bar"
                 "Top App Bars are a container for items such as application title, navigation icon, and action items."
-                [ Page.hero []
+                ( Hero.view []
                     [ styled Html.div
                         [ css "width" "480px"
                         , css "height" "72px"
@@ -125,7 +127,8 @@ view lift page topAppBarPage model =
                             ]
                         ]
                     ]
-                , ResourceLink.links (lift << Mdc) model.mdc "app-bars-top" "top-app-bar" "mdc-top-app-bar"
+                )
+                [ ResourceLink.links (lift << Mdc) model.mdc "app-bars-top" "top-app-bar" "mdc-top-app-bar"
                 , styled Html.div
                     [ cs "mdc-topappbar-demo"
                     , css "display" "flex"

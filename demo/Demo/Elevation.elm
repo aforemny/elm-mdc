@@ -55,9 +55,10 @@ view lift page model =
                 << List.singleton
                 << Html.figcaption []
     in
-    page.body "Elevation"
+    page.body
+        "Elevation"
         "Elevation is the relative depth, or distance, between two surfaces along the z-axis."
-        [ Hero.view []
+        ( Hero.view []
             [ heroSurface
                 [ Elevation.z0
                 ]
@@ -71,7 +72,8 @@ view lift page model =
                 ]
                 [ text "Raised 16dp" ]
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "environment/elevation" "elevation" "mdc-elevation"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "environment/elevation" "elevation" "mdc-elevation"
         , Page.demos
             [ styled Html.div
                 [ cs "elevation-demo-container"

@@ -1,6 +1,5 @@
 module Demo.Url exposing
-    ( ToolbarPage(..)
-    , TopAppBarPage(..)
+    ( TopAppBarPage(..)
     , Url(..)
     , fromString
     , fromUrl
@@ -38,20 +37,9 @@ type Url
     | TabBar
     | TextField
     | Theme
-    | Toolbar (Maybe ToolbarPage)
     | TopAppBar (Maybe TopAppBarPage)
     | Typography
     | Error404 String
-
-
-type ToolbarPage
-    = DefaultToolbar
-    | FixedToolbar
-    | MenuToolbar
-    | WaterfallToolbar
-    | DefaultFlexibleToolbar
-    | WaterfallFlexibleToolbar
-    | WaterfallToolbarFix
 
 
 type TopAppBarPage
@@ -66,32 +54,6 @@ type TopAppBarPage
 toString : Url -> String
 toString url =
     let
-        toolbarCase toolbar =
-            case toolbar of
-                Nothing ->
-                    "#toolbar"
-
-                Just DefaultToolbar ->
-                    "#toolbar/default-toolbar"
-
-                Just FixedToolbar ->
-                    "#toolbar/fixed-toolbar"
-
-                Just MenuToolbar ->
-                    "#toolbar/menu-toolbar"
-
-                Just WaterfallToolbar ->
-                    "#toolbar/waterfall-toolbar"
-
-                Just DefaultFlexibleToolbar ->
-                    "#toolbar/default-flexible-toolbar"
-
-                Just WaterfallFlexibleToolbar ->
-                    "#toolbar/waterfall-flexible-toolbar"
-
-                Just WaterfallToolbarFix ->
-                    "#toolbar/waterfall-toolbar-fix-last-row"
-
         topAppBarCase topAppBar =
             case topAppBar of
                 Nothing ->
@@ -197,9 +159,6 @@ toString url =
         Theme ->
             "#theme"
 
-        Toolbar toolbar ->
-            toolbarCase toolbar
-
         TopAppBar topAppBar ->
             topAppBarCase topAppBar
 
@@ -298,27 +257,6 @@ fromString url =
 
         "theme" ->
             Theme
-
-        "toolbar" ->
-            Toolbar Nothing
-
-        "toolbar/default-toolbar" ->
-            Toolbar (Just DefaultToolbar)
-
-        "toolbar/fixed-toolbar" ->
-            Toolbar (Just FixedToolbar)
-
-        "toolbar/waterfall-toolbar" ->
-            Toolbar (Just WaterfallToolbar)
-
-        "toolbar/default-flexible-toolbar" ->
-            Toolbar (Just DefaultFlexibleToolbar)
-
-        "toolbar/waterfall-flexible-toolbar" ->
-            Toolbar (Just WaterfallFlexibleToolbar)
-
-        "toolbar/waterfall-toolbar-fix-last-row" ->
-            Toolbar (Just WaterfallToolbarFix)
 
         "top-app-bar" ->
             TopAppBar Nothing

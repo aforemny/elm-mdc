@@ -376,12 +376,14 @@ scrollableDialog lift index model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Dialog"
+    page.body
+        "Dialog"
         "Dialogs inform users about a specific task and may contain critical information, require decisions, or involve multiple tasks."
-        [ Hero.view []
+        ( Hero.view []
             [ heroDialog lift "dialog-hero-dialog" model
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "dialogs" "dialogs" "mdc-dialog"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "dialogs" "dialogs" "mdc-dialog"
         , Page.demos
             [ Button.view (lift << Mdc)
                 "dialog-show-alert"

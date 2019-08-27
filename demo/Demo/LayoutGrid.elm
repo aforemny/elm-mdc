@@ -112,12 +112,14 @@ cellAlignmentGrid =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Layout Grid"
+    page.body
+        "Layout Grid"
         "Material design’s responsive UI is based on a 12-column grid layout."
-        [ Hero.view []
+        ( Hero.view []
             [ heroGrid
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "" "layout-grid" "mdc-layout-grid"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "" "layout-grid" "mdc-layout-grid"
         , Page.demos
             [ styled Html.h3
                 [ Typography.subtitle1 ]

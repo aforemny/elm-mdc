@@ -1,5 +1,6 @@
 module Demo.TabBar exposing (Model, Msg(..), defaultModel, subscriptions, update, view)
 
+import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
@@ -160,12 +161,14 @@ stackedTab lift model index tab_index icon label =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Tab Bar"
+    page.body
+        "Tab Bar"
         "Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy. The Tab Bar contains the Tab Scroller and Tab components."
-        [ Page.hero []
+        ( Hero.view []
             [ heroTabs lift model "tabs-hero-tabs"
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "tabs" "tabs" "mdc-tab-bar"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "tabs" "tabs" "mdc-tab-bar"
         , Page.demos
             [ styled h3 [ Typography.subtitle1 ] [ text "Tabs with icons next to labels" ]
             , tabsWithIcons lift model "tabs-with-icons" []

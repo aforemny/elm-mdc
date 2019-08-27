@@ -124,14 +124,15 @@ view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body "Icon Button"
         "Icons are appropriate for buttons that allow a user to take actions or make a selection, such as adding or removing a star to an item."
-        [ Hero.view []
+        ( Hero.view []
             [ iconToggle lift
                 "icon-toggle-hero-icon-toggle"
                 model
                 "favorite_border"
                 "favorite"
             ]
-        , ResourceLink.links (lift << Mdc) model.mdc "buttons.html#toggle-button" "buttons/icon-buttons" "mdc-icon-button"
+        )
+        [ ResourceLink.links (lift << Mdc) model.mdc "buttons.html#toggle-button" "buttons/icon-buttons" "mdc-icon-button"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Icon Button" ]
             , iconButton lift "icon-button-icon-button" model "wifi"

@@ -313,10 +313,11 @@ fullwidthTextareaTextField lift model =
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    page.body "Text Field"
+    page.body
+        "Text Field"
         "Text fields allow users to input, edit, and select text. Text fields typically reside in forms but can appear in other places, like dialog boxes and search."
-        [ Hero.view [] [ heroTextFields lift model ]
-        , ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/text-field" "mdc-textfield"
+        ( Hero.view [] [ heroTextFields lift model ] )
+        [ ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/text-field" "mdc-textfield"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Filled" ]
             , filledTextFields lift model
