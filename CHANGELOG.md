@@ -1,3 +1,9 @@
+## Upgrade to 3.1.1
+
+New features
+* Data table support.
+
+
 ## Upgrade to 2.3.1
 
 Changes:
