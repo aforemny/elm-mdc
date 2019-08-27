@@ -29,7 +29,6 @@ view options =
         :: css "justify-content" "center"
         :: css "order" "4"
         :: css "flex" "1 1 100%"
-        :: css "width" "calc(100% - 340px)"
         :: css "min-height" "360px"
         :: css "padding" "24px"
         :: css "background-color" "#f2f2f2"
@@ -59,7 +58,6 @@ area title intro demo =
         [ styled div
               [ cs "component-catalog-panel__header"
               , css "display" "flex"
-              , css "flex-flow" "column wrap"
               , css "align-items" "flex-start"
               , css "height" "550px"
               ]
