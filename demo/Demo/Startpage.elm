@@ -5,6 +5,7 @@ import Demo.Startpage.Svg.Button as ButtonSvg
 import Demo.Startpage.Svg.Card as CardSvg
 import Demo.Startpage.Svg.Checkbox as CheckboxSvg
 import Demo.Startpage.Svg.Chips as ChipsSvg
+import Demo.Startpage.Svg.DataTable as DataTableSvg
 import Demo.Startpage.Svg.Dialog as DialogSvg
 import Demo.Startpage.Svg.Drawer as DrawerSvg
 import Demo.Startpage.Svg.Elevation as ElevationSvg
@@ -85,6 +86,11 @@ view page =
                       , icon = ChipsSvg.view
                       , title = "Chips"
                       , subtitle = "Chips"
+                      }
+                    , { url = DataTable
+                      , icon = DataTableSvg.view
+                      , title = "Data Table"
+                      , subtitle = "Data Table"
                       }
                     , { url = Dialog
                       , icon = DialogSvg.view
