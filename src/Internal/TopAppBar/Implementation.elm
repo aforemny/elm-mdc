@@ -407,6 +407,7 @@ actionItemView domId lift model options name =
     in
     Icon.view
         (Icon.button
+            :: cs "mdc-icon-button"
             :: ripple.interactionHandler
             :: ripple.properties
             :: options
