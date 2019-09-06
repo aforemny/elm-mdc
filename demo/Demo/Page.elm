@@ -112,6 +112,7 @@ drawer lift idx mdc cmd current_url open =
                   , a "Card" Url.Card
                   , a "Checkbox" Url.Checkbox
                   , a "Chips" Url.Chips
+                  , a "Data Table" Url.DataTable
                   , a "Dialog" Url.Dialog
                   , a "Drawer" Url.Drawer
                   , a "Elevation" Url.Elevation
