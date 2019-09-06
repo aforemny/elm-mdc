@@ -127,6 +127,13 @@ an awkward interface. They need a ListItem type. Usually this is
 transparent, but you'll notice when you try to use ordinary html
 inside a list. In that case prefix your html with `asListItem`.
 
+List items automatically get keyboard focus. Here's the algorithm
+elm-mdc follows:
+
+* If you have set `selectedIndex`, that item will receive the focus.
+* The first list item which has the `selected` or `activated` state will receive the focus.
+* Else the first list item will receive the focus.
+
 @docs ListItem
 @docs li
 @docs a
