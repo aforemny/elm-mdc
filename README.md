@@ -11,11 +11,11 @@ but reimplements the JavaScript in Elm.
 
 ## Screenshots
 
-<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/screenshots/img/dialog_screenshot.png" />
+<img src="https://raw.githubusercontent.com/aforemny/elm-mdc/master/img/dialog_screenshot.png" />
 
-<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/screenshots/img/list_screenshot.png" />
+<img src="https://raw.githubusercontent.com/aforemny/elm-mdc/master/img/list_screenshot.png" />
 
-<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/screenshots/img/snackbar_screenshot.png" />
+<img src="https://raw.githubusercontent.com/aforemny/elm-mdc/master/img/snackbar_screenshot.png" />
 
 
 ## Demo
