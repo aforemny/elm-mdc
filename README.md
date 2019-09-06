@@ -26,7 +26,7 @@ the documentation below).
 
 Create an `index.html` that looks like this:
 
-```html
+```html {.line-numbers}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,8 +49,8 @@ Create an `index.html` that looks like this:
 </body>
 ```
 
-The first three lines are CSS files provided by Google. The third is
-the CSS file provided by this library and contains the MDC CSS.
+On line 6 to 9 you see the three CSS files provided by Google. The
+fourth CSS file is provided by this library and contains the MDC CSS.
 
 Put the JavaScript in the body. The first JavasSript file,
 `elm-mdc.js`, is provided by this library. The second JavaScript file,
