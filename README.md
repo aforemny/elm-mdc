@@ -2,8 +2,11 @@
 
 [![Build Status](https://api.travis-ci.org/aforemny/elm-mdc.svg?branch=master)](https://travis-ci.org/aforemny/elm-mdc/)
 
-Elm-mdc allows you to write Elm applications with a [Material Design](https://www.google.com/design/spec/material-design/introduction.html) look. It uses the CSS from Google's
-[Material Components for the Web](https://material.io/components/web/), but reimplements the JavaScript in Elm.
+Elm-mdc allows you to write beautiful Elm applications with a
+[Material Design](https://material.io/design/introduction/) look. It
+uses the CSS from Google's [Material Components for the
+Web](https://github.com/material-components/material-components-web/),
+but reimplements the JavaScript in Elm.
 
 
 ## Screenshots
