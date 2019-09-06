@@ -2,19 +2,25 @@
 
 [![Build Status](https://api.travis-ci.org/aforemny/elm-mdc.svg?branch=master)](https://travis-ci.org/aforemny/elm-mdc/)
 
-Port of Google's
-[Material Components for the Web](https://material.io/components/web/)
-CSS/JS implementation of the
-[Material Design Specification](https://www.google.com/design/spec/material-design/introduction.html).
+Elm-mdc allows you to write Elm applications with a [Material Design](https://www.google.com/design/spec/material-design/introduction.html) look. It uses the CSS from Google's
+[Material Components for the Web](https://material.io/components/web/), but reimplements the JavaScript in Elm.
+
+
+## Screenshots
+
+<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/master/img/dialog_screenshot.png"" />
+
+<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/master/img/list_screenshot.png" />
+
+<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/master/img/snackbar_screenshot.png" />
+
+
+## Demo
 
 [Live demo](https://aforemny.github.io/elm-mdc/) &
 ~package documentation~ (not released on package.elm-lang.org yet, see Building
 the documentation below).
 
-The implementation is based on
-[debois/elm-mdl](https://github.com/debois/elm-mdl),
-which uses the now
-[abandoned Material Design Lite framework](https://github.com/google/material-design-lite).
 
 ## Getting started
 
@@ -196,6 +202,14 @@ $ build.cmd docs
 To get started with this library more easily, have a look at the
 (elm-mdc starterkit)[https://github.com/berenddeboer/elm-mdc-starter-kit/network/alerts]. This
 contains a fully featured example that demonstrates hot code reload.
+
+
+## History
+
+The implementation is based on
+[debois/elm-mdl](https://github.com/debois/elm-mdl), which uses the
+now [abandoned Material Design Lite
+framework](https://github.com/google/material-design-lite).
 
 
 ## Contribute
