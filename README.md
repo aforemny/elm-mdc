@@ -52,8 +52,8 @@ Create an `index.html` that looks like this:
 </body>
 ```
 
-On line 6 to 9 you see the three CSS files provided by Google. The
-fourth CSS file is provided by this library and contains the MDC CSS.
+The first three CSS files are provided by Google. The fourth CSS file
+is provided by this library and contains the MDC CSS.
 
 Put the JavaScript in the body. The first JavasSript file,
 `elm-mdc.js`, is provided by this library. The second JavaScript file,
@@ -203,7 +203,7 @@ $ build.cmd docs
 ## Starterkit and hot reload
 
 To get started with this library more easily, have a look at the
-(elm-mdc starterkit)[https://github.com/berenddeboer/elm-mdc-starter-kit/network/alerts]. This
+[elm-mdc starterkit](https://github.com/berenddeboer/elm-mdc-starter-kit/network/alerts). This
 contains a fully featured example that demonstrates hot code reload.
 
 
