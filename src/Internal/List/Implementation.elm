@@ -105,6 +105,7 @@ type alias Config m =
     , selectedIndex : Maybe Int
     , onSelectListItem : Maybe (Int -> m)
     , useActivated : Bool
+    , activated : Bool
     }
 
 
@@ -116,6 +117,7 @@ defaultConfig =
     , selectedIndex = Nothing
     , onSelectListItem = Nothing
     , useActivated = False
+    , activated = False
     }
 
 
@@ -138,8 +140,26 @@ ul domId lift model options items =
         listItemIds =
             Array.fromList (List.indexedMap (doListItemDomId domId) items)
 
+        -- Only at the parent level we know what list item's tabindex must be set.
+        -- Order:
+        -- 1. If user has moved focused with keyboarde, that item  gets the focus.
+        -- 2. If client has selected an item to receive the tab index, use that.
+        -- 3. If no index has set, set the index on the activated item.
+        -- 4. Else select the first item.
+        focusedIndex =
+            case model.focused of
+                Just focused -> focused
+
+                Nothing ->
+                    case config.selectedIndex of
+                        Just index -> index
+                        Nothing ->
+                            case findIndex liIsActivated items of
+                                Just i -> i
+                                Nothing -> 0
+
         list_nodes =
-            List.indexedMap (listItemView domId lift model config listItemIds) items
+            List.indexedMap (listItemView domId lift model config listItemIds focusedIndex) items
     in
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
@@ -223,10 +243,11 @@ listItemView :
     -> Config m
     -> Array String
     -> Int
+    -> Int
     -> ListItem m
     -> Html m
-listItemView domId lift model config listItemsIds index li_ =
-    li_.view domId lift model config listItemsIds index li_.options li_.children
+listItemView domId lift model config listItemsIds focusedIndex index li_ =
+    li_.view domId lift model config listItemsIds focusedIndex index li_.options li_.children
 
 
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
@@ -258,7 +279,7 @@ type alias ListItem m =
     { options : List (Property m)
     , children : List (Html m)
     , focusable : Bool
-    , view : Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> List (Property m) -> List (Html m) -> Html m
+    , view : Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m
     }
 
 
@@ -272,6 +293,8 @@ li options children =
 
 
 {-| Single list item view.
+
+focusedIndex is the index that currently has the keyboard focus.
 -}
 liView :
     Index
@@ -280,10 +303,11 @@ liView :
     -> Config m
     -> Array String
     -> Int
+    -> Int
     -> List (Property m)
     -> List (Html m)
     -> Html m
-liView domId lift model config listItemIds index options children =
+liView domId lift model config listItemIds focusedIndex index options children =
     let
         li_summary =
             Options.collect defaultConfig options
@@ -302,21 +326,9 @@ liView domId lift model config listItemIds index options children =
                 Nothing ->
                     False
 
-        selected_index =
-            Maybe.withDefault 0 config.selectedIndex
-
-        focused_index =
-            case model.focused of
-                Just f ->
-                    f
-
-                Nothing ->
-                    selected_index
-
         tab_index =
-            if focused_index == index then
+            if focusedIndex == index then
                 0
-
             else
                 -1
 
@@ -334,7 +346,7 @@ liView domId lift model config listItemIds index options children =
         [ listItemClass
         , tabindex tab_index
         , selected |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
-        , activated |> when (config.isSingleSelectionList && is_selected && config.useActivated)
+        , cs "mdc-list-item--activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
         , aria "checked"
             (if is_selected then
                 "True"
@@ -481,7 +493,6 @@ lastNonEmptyId to array =
 
 {- Thanks to List.Extra.find -}
 
-
 find : (a -> Bool) -> List a -> Maybe a
 find predicate list =
     case list of
@@ -494,6 +505,26 @@ find predicate list =
 
             else
                 find predicate rest
+
+
+{- Thanks to List.Extra.findIndex -}
+
+findIndex : (a -> Bool) -> List a -> Maybe Int
+findIndex =
+    findIndexHelp 0
+
+findIndexHelp : Int-> (a -> Bool) -> List a -> Maybe Int
+findIndexHelp index predicate list =
+    case list of
+        [] ->
+            Nothing
+
+        first :: rest ->
+            if predicate first then
+                Just index
+
+            else
+                findIndexHelp (index + 1) predicate rest
 
 
 aRippled :
@@ -593,7 +624,19 @@ useActivated =
 
 activated : Property m
 activated =
-    cs "mdc-list-item--activated"
+    Options.option (\config -> { config | activated = True } )
+
+
+liIsActivated : ListItem m -> Bool
+liIsActivated li_ =
+    let
+        li_summary =
+            Options.collect defaultConfig li_.options
+
+        li_config =
+            li_summary.config
+    in
+        li_config.activated
 
 
 disabled : Property m
@@ -672,10 +715,11 @@ asListItemView :
     -> Config m
     -> Array String
     -> Int
+    -> Int
     -> List (Property m)
     -> List (Html m)
     -> Html m
-asListItemView domId lift model config listItemsIds index options children =
+asListItemView domId lift model config listItemsIds focusedIndex index options children =
     let
         summary =
             Options.collect defaultConfig options
