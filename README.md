@@ -2,25 +2,34 @@
 
 [![Build Status](https://api.travis-ci.org/aforemny/elm-mdc.svg?branch=master)](https://travis-ci.org/aforemny/elm-mdc/)
 
-Port of Google's
-[Material Components for the Web](https://material.io/components/web/)
-CSS/JS implementation of the
-[Material Design Specification](https://www.google.com/design/spec/material-design/introduction.html).
+Elm-mdc allows you to write beautiful Elm applications with a
+[Material Design](https://material.io/design/introduction/) look. It
+uses the CSS from Google's [Material Components for the
+Web](https://github.com/material-components/material-components-web/),
+but reimplements the JavaScript in Elm.
+
+
+## Screenshots
+
+<img src="https://raw.githubusercontent.com/aforemny/elm-mdc/master/img/dialog_screenshot.png" />
+
+<img src="https://raw.githubusercontent.com/aforemny/elm-mdc/master/img/list_screenshot.png" />
+
+<img src="https://raw.githubusercontent.com/aforemny/elm-mdc/master/img/snackbar_screenshot.png" />
+
+
+## Demo
 
 [Live demo](https://aforemny.github.io/elm-mdc/) &
 ~package documentation~ (not released on package.elm-lang.org yet, see Building
 the documentation below).
 
-The implementation is based on
-[debois/elm-mdl](https://github.com/debois/elm-mdl),
-which uses the now
-[abandoned Material Design Lite framework](https://github.com/google/material-design-lite).
 
 ## Getting started
 
 Create an `index.html` that looks like this:
 
-```html
+```html {.line-numbers}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,8 +52,8 @@ Create an `index.html` that looks like this:
 </body>
 ```
 
-The first three lines are CSS files provided by Google. The third is
-the CSS file provided by this library and contains the MDC CSS.
+The first three CSS files are provided by Google. The fourth CSS file
+is provided by this library and contains the MDC CSS.
 
 Put the JavaScript in the body. The first JavasSript file,
 `elm-mdc.js`, is provided by this library. The second JavaScript file,
@@ -194,8 +203,16 @@ $ build.cmd docs
 ## Starterkit and hot reload
 
 To get started with this library more easily, have a look at the
-(elm-mdc starterkit)[https://github.com/berenddeboer/elm-mdc-starter-kit/network/alerts]. This
+[elm-mdc starterkit](https://github.com/berenddeboer/elm-mdc-starter-kit/network/alerts). This
 contains a fully featured example that demonstrates hot code reload.
+
+
+## History
+
+The implementation is based on
+[debois/elm-mdl](https://github.com/debois/elm-mdl), which uses the
+now [abandoned Material Design Lite
+framework](https://github.com/google/material-design-lite).
 
 
 ## Contribute
