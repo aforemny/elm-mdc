@@ -1,3 +1,14 @@
+## Latest changes
+
+Changes:
+* Lists: In addition to using selectedIndex you can use the selected
+  state on a list item. Depending on the use case on or the other
+  might be easier.
+
+Fixes:
+* Lists: the activated item will receive the keyboard focus by default instead of the first.
+
+
 ## Upgrade to 3.1.1
 
 New features

@@ -98,14 +98,20 @@ send msg =
         |> Task.perform identity
 
 
+{- State between ul and li is shared to make the interface easier. -}
 type alias Config m =
     { node : Maybe (List (Html.Attribute m) -> List (Html m) -> Html m)
+
+    -- list only properties
     , isSingleSelectionList : Bool
     , isRadioGroup : Bool
     , selectedIndex : Maybe Int
     , onSelectListItem : Maybe (Int -> m)
     , useActivated : Bool
+
+    -- list item only properties
     , activated : Bool
+    , selected : Bool
     }
 
 
@@ -118,6 +124,7 @@ defaultConfig =
     , onSelectListItem = Nothing
     , useActivated = False
     , activated = False
+    , selected = False
     }
 
 
@@ -154,7 +161,7 @@ ul domId lift model options items =
                     case config.selectedIndex of
                         Just index -> index
                         Nothing ->
-                            case findIndex liIsActivated items of
+                            case findIndex liIsSelectedOrActivated items of
                                 Just i -> i
                                 Nothing -> 0
 
@@ -324,7 +331,7 @@ liView domId lift model config listItemIds focusedIndex index options children =
                     i == index
 
                 Nothing ->
-                    False
+                    li_config.selected
 
         tab_index =
             if focusedIndex == index then
@@ -345,7 +352,7 @@ liView domId lift model config listItemIds focusedIndex index options children =
         (Maybe.withDefault Html.li li_config.node)
         [ listItemClass
         , tabindex tab_index
-        , selected |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
+        , cs "mdc-list-item--selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , cs "mdc-list-item--activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
         , aria "checked"
             (if is_selected then
@@ -594,7 +601,7 @@ secondaryText options =
 
 selected : Property m
 selected =
-    cs "mdc-list-item--selected"
+    Options.option (\config -> { config | activated = True } )
 
 
 selectedIndex : Int -> Property m
@@ -627,8 +634,8 @@ activated =
     Options.option (\config -> { config | activated = True } )
 
 
-liIsActivated : ListItem m -> Bool
-liIsActivated li_ =
+liIsSelectedOrActivated : ListItem m -> Bool
+liIsSelectedOrActivated li_ =
     let
         li_summary =
             Options.collect defaultConfig li_.options
@@ -636,7 +643,7 @@ liIsActivated li_ =
         li_config =
             li_summary.config
     in
-        li_config.activated
+        li_config.selected || li_config.activated
 
 
 disabled : Property m
