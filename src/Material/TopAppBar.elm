@@ -115,6 +115,10 @@ type alias Property m =
 
 
 {-| TopAppBar view.
+
+Note that you will have to mark your page's content with the property
+`TopAppBar.fixedAdjust`. Otherwise, the top app bar will overlap your content.
+
 -}
 view :
     (Material.Msg m -> m)
