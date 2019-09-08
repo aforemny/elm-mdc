@@ -35,7 +35,7 @@ destinations and other functionality on an app.
             , styled h6 [ Drawer.subTitle ] [ text "email@material.io" ]
             ]
         , Drawer.content []
-              [ Lists.nav []
+              [ Lists.nav Mdc "my-list" model.mdc []
                     [ Lists.a
                           [ Options.attribute (Html.href "#persistent-drawer")
                           , Lists.activated
