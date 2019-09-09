@@ -11,7 +11,7 @@ test.html
 /material-components-web.css
 /docs.json
 
-/examples/hello-world/elm.js
+/examples/*/elm.js
 
 /.sass-cache/
 /build/
