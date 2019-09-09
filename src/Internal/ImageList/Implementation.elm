@@ -1,11 +1,11 @@
 module Internal.ImageList.Implementation exposing
     ( Property
-    , divImage
     , image
     , imageAspectContainer
     , item
     , label
     , masonry
+    , node
     , src
     , supporting
     , view
@@ -67,17 +67,34 @@ item options =
 
 imageAspectContainer : List (Property m) -> List (Html m) -> Html m
 imageAspectContainer options =
-    styled Html.div (cs "mdc-image-list__image-aspect-container" :: options)
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+        tag = Maybe.withDefault "div" config.tag
+    in
+    styled ( Html.node tag ) (cs "mdc-image-list__image-aspect-container" :: options)
 
 
 supporting : List (Property m) -> List (Html m) -> Html m
 supporting options =
-    styled Html.div (cs "mdc-image-list__supporting" :: options)
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+
+        tag = Maybe.withDefault "div" config.tag
+    in
+    styled ( Html.node tag ) (cs "mdc-image-list__supporting" :: options)
 
 
 label : List (Property m) -> List (Html m) -> Html m
 label options =
-    styled Html.span (cs "mdc-image-list__label" :: options)
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+
+        tag = Maybe.withDefault "span" config.tag
+    in
+    styled ( Html.node tag ) (cs "mdc-image-list__label" :: options)
 
 
 withTextProtection : Property m
@@ -90,14 +107,14 @@ masonry =
     Options.option (\config -> { config | masonry = True })
 
 
+node : String -> Property m
+node tag =
+    Options.option (\config -> { config | tag = Just tag })
+
+
 image : List (Property m) -> List (Html m) -> Html m
 image options =
     styled Html.img (cs "mdc-image-list__image" :: options)
-
-
-divImage : List (Property m) -> List (Html m) -> Html m
-divImage options =
-    styled Html.div (cs "mdc-image-list__image" :: options)
 
 
 src : String -> Property m
