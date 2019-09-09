@@ -10,4 +10,4 @@ You can then open [page.html](page.html) in the browser.
 
 # Screenshot
 
-<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/hello-world-readme/examples/hello-world/screenshot.png" />
+<img src="https://raw.githubusercontent.com/aforemny/elm-mdc/master/examples/hello-world/screenshot.png" />
