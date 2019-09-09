@@ -10,6 +10,6 @@ You can then open [page.html](page.html) in the browser.
 
 # Screenshots
 
-<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/basic-app-example/examples/basic-app/screenshot.png1" />
+<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/basic-app-example/examples/basic-app/screenshot1.png" />
 
-<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/basic-app-example/examples/basic-app/screenshot.png2" />
+<img src="https://raw.githubusercontent.com/berenddeboer/elm-mdc/basic-app-example/examples/basic-app/screenshot2.png" />
