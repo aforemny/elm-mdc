@@ -346,7 +346,7 @@ Or to prevent onClock default handling:
         , Button.raised
         , Options.onWithOptions "click"
               (Decode.succeed
-                   { message = SubmittedForm
+                   { message = SubmitForm
                    , preventDefault = True
                    , stopPropagation = False
                    }
