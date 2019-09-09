@@ -54,6 +54,7 @@ optionally supporting content (i.e. a text label).
 @docs masonry
 @docs withTextProtection
 @docs item
+@docs node
 
 
 ## Image items
