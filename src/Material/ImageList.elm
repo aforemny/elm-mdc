@@ -10,6 +10,7 @@ module Material.ImageList exposing
     , divImage
     , supporting
     , label
+    , node
     )
 
 {-| An Image List consists of several items, each containing an image and
@@ -53,14 +54,15 @@ optionally supporting content (i.e. a text label).
 @docs masonry
 @docs withTextProtection
 @docs item
+@docs node
 
 
 ## Image items
 
 @docs imageAspectContainer
 @docs image
-@docs src
 @docs divImage
+@docs src
 
 
 ## Item label
@@ -128,21 +130,44 @@ masonry =
     ImageList.masonry
 
 
+{-| Change the default node of an element inside an `item`. The
+default is to use a "div" or "span" as the documentation has it, but
+sometimes another element makes more sense.
+-}
+node : String -> Property m
+node =
+    ImageList.node
+
+
 {-| The image inside an image aspect container
+
+Images in an Image List typically use the img element. However, if
+your assets don’t have the same aspect ratio as specified for list
+items, they will become distorted. In these cases, you can use a div
+element in place of img, and set the background-image of each.
+
+You can use a `div` element by setting the `node` property to "div" or
+use the `divImage` element.
+
 -}
 image : List (Property m) -> List (Html m) -> Html m
 image =
     ImageList.image
 
 
-{-| The image inside an image aspect container
+{-| Convenience function to use "div" instead of "img" as the HTML element.
+
+-For `divImage` use `Options.css "background-image"`.
+
 -}
+
 divImage : List (Property m) -> List (Html m) -> Html m
-divImage =
-    ImageList.divImage
+divImage options nodes =
+    image ( node "div" :: options ) nodes
 
 
-{-| An image's supporting element.
+
+{-| An image's supporting element. This is the usual container for `label`.
 -}
 supporting : List (Property m) -> List (Html m) -> Html m
 supporting =
@@ -150,8 +175,6 @@ supporting =
 
 
 {-| An image's HTML `src` attribute.
-
-For `divImage` use `Options.css "background-image"`.
 
 -}
 src : String -> Property m
