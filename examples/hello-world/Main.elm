@@ -4,7 +4,7 @@ import Browser
 import Html exposing (Html, text)
 import Material
 import Material.Button as Button
-import Material.Options as Options
+import Material.Options as Options exposing (css, styled)
 
 
 type alias Model =
@@ -55,7 +55,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    Html.div []
+    styled Html.div [ css "padding" "1em" ]
         [ Button.view Mdc
             "my-button"
             model.mdc

@@ -11,9 +11,7 @@ test.html
 /material-components-web.css
 /docs.json
 
-/examples/counter-many.html
-/examples/counter1-no-parts.html
-/examples/counter1.html
+/examples/hello-world/elm.js
 
 /.sass-cache/
 /build/
