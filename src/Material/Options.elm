@@ -335,6 +335,24 @@ onSubmit =
                   (Decode.at [ "keyCode" ] Decode.int)
           ]
 
+Or to prevent onClock default handling:
+
+    import Json.Decode as Decode
+    import Material.Button as Button
+    import Material.Options expose (styled)
+
+    Button.view Mdc "submit"  model.mdc
+        [ Button.ripple
+        , Button.raised
+        , Options.onWithOptions "click"
+              (Decode.succeed
+                   { message = SubmittedForm
+                   , preventDefault = True
+                   , stopPropagation = False
+                   }
+              )
+        ]
+
 -}
 onWithOptions : String -> Decoder { message : m, stopPropagation : Bool, preventDefault : Bool } -> Property c m
 onWithOptions =
