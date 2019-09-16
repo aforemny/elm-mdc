@@ -43,7 +43,7 @@ Create an `index.html` that looks like this:
 </head>
 <body class="mdc-typography">
   <script src="elm-mdc/elm-mdc.js"></script>
-  <script src="app.js"></script>
+  <script src="elm.js"></script>
   <div id="elm" />
     <script type="text/javascript">
       Elm.Main.init({ node: document.getElementById('elm') });
@@ -52,12 +52,16 @@ Create an `index.html` that looks like this:
 </body>
 ```
 
-The first three CSS files are provided by Google. The fourth CSS file
-is provided by this library and contains the MDC CSS.
+The first three CSS files are provided by Google. The fourth CSS file is
+provided by this library and contains the MDC CSS.
 
-Put the JavaScript in the body. The first JavasSript file,
-`elm-mdc.js`, is provided by this library. The second JavaScript file,
-called `elm-app.js` here, is your compiled Elm application.
+Put the JavaScript in the body. The first JavasSript file, `elm-mdc.js`, is
+provided by this library. The second JavaScript file, called `elm.js` here, is
+your compiled Elm application.
+
+Make sure that the file `elm-mdc.js` is correctly served by your web server, as
+otherwise this library will *behave unexpectedly*. See below for instructions
+on how to build `elm-mdc.js` as well as `material-components-web.css`.
 
 
 ## Install
