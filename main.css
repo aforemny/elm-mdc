@@ -19,7 +19,88 @@
   transition: 125ms transform cubic-bezier(.4, 0, .2, 1);
 }
 
+
+/* dismissible drawer animation */
+
+.demo-content {
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 100px;
+}
+
+.mdc-drawer-app-content {
+  /* @noflip */
+  margin-left: 0;
+  /* @noflip */
+  margin-right: 0;
+  position: relative;
+}
+
+[dir=rtl] .mdc-drawer-app-content, .mdc-drawer-app-content[dir=rtl] {
+  /* @noflip */
+  margin-left: 0;
+  /* @noflip */
+  margin-right: 0;
+}
+
+.mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content {
+  /* @noflip */
+  margin-left: 256px;
+  /* @noflip */
+  margin-right: 0;
+}
+
+[dir=rtl] .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content, .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content[dir=rtl] {
+  /* @noflip */
+  margin-left: 0;
+  /* @noflip */
+  margin-right: 256px;
+}
+
+
+/* hero */
+.component-catalog-panel__header-elements {
+  max-width: 300px;
+  padding-right: 40px;
+}
+
+.component-catalog-panel__header {
+  flex-flow: column wrap;
+}
+
+.component-catalog-panel .hero {
+  width: calc(100% - 340px);
+  height: 550px;
+}
+
+@media screen and (max-width: 820px) {
+  .component-catalog-panel .hero-component {
+    -ms-flex-order: 0;
+    order: 0;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    height: auto;
+  }
+  .component-catalog-panel__header-elements {
+    max-width: none;
+  }
+  .component-catalog-panel__header {
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    height: auto;
+  }
+  .component-catalog-panel .hero-options {
+    max-height: none;
+  }
+  .component-catalog-panel .hero,
+  .component-catalog-panel .hero-component {
+    width: 100%;
+  }
+}
+
+
 /* demo-content */
+
 .demo-wrapper {
   width: 900px;
   margin: 0 auto;
@@ -30,6 +111,20 @@
   text-transform: uppercase;
   font-family: Roboto Mono, serif;
   font-weight: 400;
+}
+
+.catalog-top-app-bar__title--small-screen {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .catalog-top-app-bar__title--small-screen {
+    display: inline-block;
+  }
+
+  .catalog-top-app-bar__title--large-screen {
+    display: none;
+  }
 }
 
 
