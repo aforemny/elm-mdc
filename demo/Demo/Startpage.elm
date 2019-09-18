@@ -29,8 +29,9 @@ import Demo.Startpage.Svg.TopAppBar as TopAppBarSvg
 import Demo.Startpage.Svg.Typography as TypographySvg
 import Demo.Url exposing (Url(..))
 import Html exposing (Html, text)
+import Html.Attributes exposing (href)
 import Material.ImageList as ImageList
-import Material.Options as Options exposing (cs, css, id, styled)
+import Material.Options as Options exposing (attribute, cs, css, id, styled)
 
 
 view : Page m -> Html m
@@ -45,13 +46,14 @@ view page =
                 (List.map
                     (\{ url, title, subtitle, icon } ->
                         ImageList.item
-                            [ Options.onClick (page.navigate url)
-                            , css "cursor" "pointer"
+                            [ css "cursor" "pointer"
                             , css "width" "calc(100% / 4 - 8.25px)"
                             , css "margin" "4px"
                             ]
-                            [ styled Html.div
-                                [ cs "catalog-image-link" ]
+                            [ styled Html.a
+                                [ attribute ( href (Demo.Url.toString url) )
+                                , css "text-decoration" "none"
+                                ]
                                 [ ImageList.imageAspectContainer
                                     [ css "padding-bottom" "100%"
                                     , css "background-color" "#f5f5f5"
