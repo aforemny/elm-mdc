@@ -129,21 +129,21 @@ view lift page model =
                 [ Typography.subtitle1 ]
                 [ text "Grid Left Alignment" ]
             , styled Html.p
-                [ Typography.body1 ]
+                [ Typography.body2 ]
                 [ text "This requires a max-width on the top-level grid element." ]
             , leftAlignedGrid
             , styled Html.h3
                 [ Typography.subtitle1 ]
                 [ text "Grid Right Alignment" ]
             , styled Html.p
-                [ Typography.body1 ]
+                [ Typography.body2 ]
                 [ text "This requires a max-width on the top-level grid element." ]
             , rightAlignedGrid
             , styled Html.h3
                 [ Typography.subtitle1 ]
                 [ text "Cell Alignment" ]
             , styled Html.p
-                [ Typography.body1 ]
+                [ Typography.body2 ]
                 [ text "Cell alignment requires a cell height smaller than the inner height of the grid." ]
             , cellAlignmentGrid
             ]
