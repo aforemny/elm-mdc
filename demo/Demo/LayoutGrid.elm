@@ -14,7 +14,7 @@ import Html.Attributes as Html
 import Html.Events as Html
 import Material
 import Material.LayoutGrid as LayoutGrid
-import Material.Options exposing (css, styled)
+import Material.Options exposing (cs, css, styled)
 import Material.Typography as Typography
 
 
@@ -103,10 +103,11 @@ cellAlignmentGrid : Html m
 cellAlignmentGrid =
     demoGrid
         [ css "min-height" "200px"
+        , cs "demo-grid--cell-alignment"
         ]
-        [ demoCell [ LayoutGrid.alignTop, css "min-height" "50px" ]
-        , demoCell [ LayoutGrid.alignMiddle, css "min-height" "50px" ]
-        , demoCell [ LayoutGrid.alignBottom, css "min-height" "50px" ]
+        [ demoCell [ LayoutGrid.alignTop, css "max-height" "50px" ]
+        , demoCell [ LayoutGrid.alignMiddle, css "max-height" "50px" ]
+        , demoCell [ LayoutGrid.alignBottom, css "max-height" "50px" ]
         ]
 
 
@@ -129,21 +130,21 @@ view lift page model =
                 [ Typography.subtitle1 ]
                 [ text "Grid Left Alignment" ]
             , styled Html.p
-                [ Typography.body1 ]
+                [ Typography.body2 ]
                 [ text "This requires a max-width on the top-level grid element." ]
             , leftAlignedGrid
             , styled Html.h3
                 [ Typography.subtitle1 ]
                 [ text "Grid Right Alignment" ]
             , styled Html.p
-                [ Typography.body1 ]
+                [ Typography.body2 ]
                 [ text "This requires a max-width on the top-level grid element." ]
             , rightAlignedGrid
             , styled Html.h3
                 [ Typography.subtitle1 ]
                 [ text "Cell Alignment" ]
             , styled Html.p
-                [ Typography.body1 ]
+                [ Typography.body2 ]
                 [ text "Cell alignment requires a cell height smaller than the inner height of the grid." ]
             , cellAlignmentGrid
             ]
