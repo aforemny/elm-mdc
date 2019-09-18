@@ -14,7 +14,7 @@ import Html.Attributes as Html
 import Html.Events as Html
 import Material
 import Material.LayoutGrid as LayoutGrid
-import Material.Options exposing (css, styled)
+import Material.Options exposing (cs, css, styled)
 import Material.Typography as Typography
 
 
@@ -103,10 +103,11 @@ cellAlignmentGrid : Html m
 cellAlignmentGrid =
     demoGrid
         [ css "min-height" "200px"
+        , cs "demo-grid--cell-alignment"
         ]
-        [ demoCell [ LayoutGrid.alignTop, css "min-height" "50px" ]
-        , demoCell [ LayoutGrid.alignMiddle, css "min-height" "50px" ]
-        , demoCell [ LayoutGrid.alignBottom, css "min-height" "50px" ]
+        [ demoCell [ LayoutGrid.alignTop, css "max-height" "50px" ]
+        , demoCell [ LayoutGrid.alignMiddle, css "max-height" "50px" ]
+        , demoCell [ LayoutGrid.alignBottom, css "max-height" "50px" ]
         ]
 
 

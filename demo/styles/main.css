@@ -244,3 +244,11 @@
 .ripple-demo-box--secondary.mdc-ripple-upgraded {
   --mdc-ripple-fg-opacity: 0.12;
 }
+
+
+/**
+ * Layout grid demo.
+ */
+.demo-grid--cell-alignment > .mdc-layout-grid__inner {
+  min-height: 200px;
+}
