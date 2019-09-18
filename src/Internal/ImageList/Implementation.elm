@@ -114,7 +114,12 @@ node tag =
 
 image : List (Property m) -> List (Html m) -> Html m
 image options =
-    styled Html.img (cs "mdc-image-list__image" :: options)
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+        tag = Maybe.withDefault "img" config.tag
+    in
+        styled ( Html.node tag ) (cs "mdc-image-list__image" :: options)
 
 
 src : String -> Property m
