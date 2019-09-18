@@ -4435,8 +4435,8 @@ var author$project$Demo$Mdc = function (a) {
 var elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
 var author$project$Material$defaultModel = {dd: elm$core$Dict$empty, a1: elm$core$Dict$empty, dg: elm$core$Dict$empty, a8: elm$core$Dict$empty, aw: elm$core$Dict$empty, dn: elm$core$Dict$empty, dA: elm$core$Dict$empty, dH: elm$core$Dict$empty, o: elm$core$Dict$empty, bA: elm$core$Dict$empty, bD: elm$core$Dict$empty, d9: elm$core$Dict$empty, aQ: elm$core$Dict$empty, bL: elm$core$Dict$empty, bM: elm$core$Dict$empty, aS: elm$core$Dict$empty, ei: elm$core$Dict$empty, c7: elm$core$Dict$empty, aT: elm$core$Dict$empty};
-var author$project$Demo$Buttons$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$Cards$defaultModel = {cp: author$project$Material$defaultModel};
+var author$project$Demo$Buttons$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$Cards$defaultModel = {cq: author$project$Material$defaultModel};
 var elm$core$Basics$False = 1;
 var elm$core$Basics$True = 0;
 var elm$core$Dict$Black = 1;
@@ -4679,7 +4679,7 @@ var author$project$Demo$Checkbox$defaultModel = {
 				'checkbox-checked-checkbox',
 				elm$core$Maybe$Just(true))
 			])),
-	cp: author$project$Material$defaultModel
+	cq: author$project$Material$defaultModel
 };
 var elm$core$Basics$identity = function (x) {
 	return x;
@@ -4695,36 +4695,36 @@ var elm$core$Set$fromList = function (list) {
 	return A3(elm$core$List$foldl, elm$core$Set$insert, elm$core$Set$empty, list);
 };
 var author$project$Demo$Chips$defaultModel = {
-	b4: 'chips-choice-medium',
-	cp: author$project$Material$defaultModel,
+	b5: 'chips-choice-medium',
+	cq: author$project$Material$defaultModel,
 	ao: elm$core$Set$fromList(
 		_List_fromArray(
 			['chips-choice-medium', 'chips-filter-chips-tops', 'chips-filter-chips-bottoms', 'chips-filter-chips-alice']))
 };
 var author$project$Demo$DataTable$defaultModel = {
-	b_: false,
+	b$: false,
 	I: elm$core$Set$fromList(
 		_List_fromArray(
 			[2])),
 	c_: 3,
-	cp: author$project$Material$defaultModel
+	cq: author$project$Material$defaultModel
 };
 var elm$core$Maybe$Nothing = {$: 1};
-var author$project$Demo$Dialog$defaultModel = {cp: author$project$Material$defaultModel, Y: elm$core$Maybe$Nothing};
-var author$project$Demo$DismissibleDrawer$defaultModel = {a9: false, cp: author$project$Material$defaultModel, bG: false, cB: 0};
-var author$project$Demo$Drawer$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$Elevation$defaultModel = {bb: 1, cp: author$project$Material$defaultModel, eo: false};
-var author$project$Demo$Fabs$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$IconButton$defaultModel = {aA: elm$core$Dict$empty, cp: author$project$Material$defaultModel};
-var author$project$Demo$ImageList$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$LayoutGrid$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$LinearProgress$defaultModel = {cp: author$project$Material$defaultModel};
+var author$project$Demo$Dialog$defaultModel = {cq: author$project$Material$defaultModel, Y: elm$core$Maybe$Nothing};
+var author$project$Demo$DismissibleDrawer$defaultModel = {a9: false, cq: author$project$Material$defaultModel, bG: false, cC: 0};
+var author$project$Demo$Drawer$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$Elevation$defaultModel = {bb: 1, cq: author$project$Material$defaultModel, eo: false};
+var author$project$Demo$Fabs$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$IconButton$defaultModel = {aA: elm$core$Dict$empty, cq: author$project$Material$defaultModel};
+var author$project$Demo$ImageList$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$LayoutGrid$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$LinearProgress$defaultModel = {cq: author$project$Material$defaultModel};
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);
 	});
 var author$project$Demo$Lists$defaultModel = {
-	cp: author$project$Material$defaultModel,
+	cq: author$project$Material$defaultModel,
 	Z: elm$core$Set$empty,
 	aM: A3(
 		elm$core$Dict$insert,
@@ -4736,11 +4736,11 @@ var author$project$Demo$Lists$defaultModel = {
 			1,
 			A3(elm$core$Dict$insert, 'activated-item-list', 1, elm$core$Dict$empty)))
 };
-var author$project$Demo$Menus$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$ModalDrawer$defaultModel = {a9: false, cp: author$project$Material$defaultModel, bG: false, cB: 0};
-var author$project$Demo$PermanentDrawer$defaultModel = {cp: author$project$Material$defaultModel, bG: false, cB: 0};
+var author$project$Demo$Menus$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$ModalDrawer$defaultModel = {a9: false, cq: author$project$Material$defaultModel, bG: false, cC: 0};
+var author$project$Demo$PermanentDrawer$defaultModel = {cq: author$project$Material$defaultModel, bG: false, cC: 0};
 var author$project$Demo$RadioButtons$defaultModel = {
-	cp: author$project$Material$defaultModel,
+	cq: author$project$Material$defaultModel,
 	bB: elm$core$Dict$fromList(
 		_List_fromArray(
 			[
@@ -4748,10 +4748,10 @@ var author$project$Demo$RadioButtons$defaultModel = {
 				_Utils_Tuple2('example', 'radio-buttons-example-radio-1')
 			]))
 };
-var author$project$Demo$Ripple$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$Selects$defaultModel = {cp: author$project$Material$defaultModel, aN: elm$core$Dict$empty};
+var author$project$Demo$Ripple$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$Selects$defaultModel = {cq: author$project$Material$defaultModel, aN: elm$core$Dict$empty};
 var author$project$Demo$Slider$defaultModel = {
-	cp: author$project$Material$defaultModel,
+	cq: author$project$Material$defaultModel,
 	_: elm$core$Dict$fromList(
 		_List_fromArray(
 			[
@@ -4761,23 +4761,23 @@ var author$project$Demo$Slider$defaultModel = {
 				_Utils_Tuple2('slider-discrete-slider-with-tick-marks', 50)
 			]))
 };
-var author$project$Demo$Snackbar$defaultModel = {cp: author$project$Material$defaultModel};
+var author$project$Demo$Snackbar$defaultModel = {cq: author$project$Material$defaultModel};
 var author$project$Demo$Switch$defaultModel = {
-	cp: author$project$Material$defaultModel,
+	cq: author$project$Material$defaultModel,
 	bN: elm$core$Dict$fromList(
 		_List_fromArray(
 			[
 				_Utils_Tuple2('switch-hero-switch', true)
 			]))
 };
-var author$project$Demo$TabBar$defaultModel = {cp: author$project$Material$defaultModel, aa: elm$core$Dict$empty};
-var author$project$Demo$TextFields$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$Theme$defaultModel = {cp: author$project$Material$defaultModel};
-var author$project$Demo$TopAppBar$defaultModel = {ay: elm$core$Dict$empty, cp: author$project$Material$defaultModel};
-var author$project$Demo$Typography$defaultModel = {cp: author$project$Material$defaultModel};
+var author$project$Demo$TabBar$defaultModel = {cq: author$project$Material$defaultModel, aa: elm$core$Dict$empty};
+var author$project$Demo$TextFields$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$Theme$defaultModel = {cq: author$project$Material$defaultModel};
+var author$project$Demo$TopAppBar$defaultModel = {ay: elm$core$Dict$empty, cq: author$project$Material$defaultModel};
+var author$project$Demo$Typography$defaultModel = {cq: author$project$Material$defaultModel};
 var author$project$Demo$Url$StartPage = {$: 0};
 var author$project$Demo$defaultModel = function (key) {
-	return {aZ: author$project$Demo$Buttons$defaultModel, a$: author$project$Demo$Cards$defaultModel, a1: author$project$Demo$Checkbox$defaultModel, a5: author$project$Demo$Chips$defaultModel, a7: author$project$Demo$DataTable$defaultModel, a8: author$project$Demo$Dialog$defaultModel, av: author$project$Demo$DismissibleDrawer$defaultModel, aw: author$project$Demo$Drawer$defaultModel, bb: author$project$Demo$Elevation$defaultModel, be: author$project$Demo$Fabs$defaultModel, bi: author$project$Demo$IconButton$defaultModel, bj: author$project$Demo$ImageList$defaultModel, M: false, cX: key, bq: author$project$Demo$LayoutGrid$defaultModel, bs: author$project$Demo$LinearProgress$defaultModel, bt: author$project$Demo$Lists$defaultModel, cp: author$project$Material$defaultModel, aB: author$project$Demo$Menus$defaultModel, aC: author$project$Demo$ModalDrawer$defaultModel, aI: author$project$Demo$PermanentDrawer$defaultModel, bA: author$project$Demo$RadioButtons$defaultModel, bD: author$project$Demo$Ripple$defaultModel, aN: author$project$Demo$Selects$defaultModel, aQ: author$project$Demo$Slider$defaultModel, bL: author$project$Demo$Snackbar$defaultModel, bM: author$project$Demo$Switch$defaultModel, aS: author$project$Demo$TabBar$defaultModel, bQ: author$project$Demo$TextFields$defaultModel, bR: author$project$Demo$Theme$defaultModel, aT: author$project$Demo$TopAppBar$defaultModel, bW: author$project$Demo$Typography$defaultModel, R: author$project$Demo$Url$StartPage};
+	return {aZ: author$project$Demo$Buttons$defaultModel, a$: author$project$Demo$Cards$defaultModel, a1: author$project$Demo$Checkbox$defaultModel, a5: author$project$Demo$Chips$defaultModel, a7: author$project$Demo$DataTable$defaultModel, a8: author$project$Demo$Dialog$defaultModel, av: author$project$Demo$DismissibleDrawer$defaultModel, aw: author$project$Demo$Drawer$defaultModel, bb: author$project$Demo$Elevation$defaultModel, be: author$project$Demo$Fabs$defaultModel, bi: author$project$Demo$IconButton$defaultModel, bj: author$project$Demo$ImageList$defaultModel, M: false, cX: key, bq: author$project$Demo$LayoutGrid$defaultModel, bs: author$project$Demo$LinearProgress$defaultModel, bt: author$project$Demo$Lists$defaultModel, cq: author$project$Material$defaultModel, aB: author$project$Demo$Menus$defaultModel, aC: author$project$Demo$ModalDrawer$defaultModel, aI: author$project$Demo$PermanentDrawer$defaultModel, bA: author$project$Demo$RadioButtons$defaultModel, bD: author$project$Demo$Ripple$defaultModel, aN: author$project$Demo$Selects$defaultModel, aQ: author$project$Demo$Slider$defaultModel, bL: author$project$Demo$Snackbar$defaultModel, bM: author$project$Demo$Switch$defaultModel, aS: author$project$Demo$TabBar$defaultModel, bR: author$project$Demo$TextFields$defaultModel, bS: author$project$Demo$Theme$defaultModel, aT: author$project$Demo$TopAppBar$defaultModel, bX: author$project$Demo$Typography$defaultModel, R: author$project$Demo$Url$StartPage};
 };
 var author$project$Demo$Url$Button = {$: 1};
 var author$project$Demo$Url$Card = {$: 2};
@@ -5956,7 +5956,7 @@ var author$project$Internal$Menu$Implementation$subs = A3(
 	author$project$Internal$Menu$Implementation$subscriptions);
 var author$project$Material$subscriptions = F2(
 	function (lift, model) {
-		return A2(author$project$Internal$Menu$Implementation$subs, lift, model.cp);
+		return A2(author$project$Internal$Menu$Implementation$subs, lift, model.cq);
 	});
 var author$project$Demo$DismissibleDrawer$subscriptions = F2(
 	function (lift, model) {
@@ -6116,7 +6116,7 @@ var author$project$Demo$TypographyMsg = function (a) {
 };
 var author$project$Demo$Buttons$Mdc = elm$core$Basics$identity;
 var author$project$Internal$Ripple$Model$Idle = {$: 0};
-var author$project$Internal$Ripple$Model$defaultModel = {as: 0, r: author$project$Internal$Ripple$Model$Idle, cO: elm$core$Maybe$Nothing, cg: false};
+var author$project$Internal$Ripple$Model$defaultModel = {as: 0, r: author$project$Internal$Ripple$Model$Idle, cO: elm$core$Maybe$Nothing, ch: false};
 var author$project$Internal$Button$Model$defaultModel = {bD: author$project$Internal$Ripple$Model$defaultModel};
 var elm$core$Dict$get = F2(
 	function (targetKey, dict) {
@@ -6308,14 +6308,14 @@ var author$project$Internal$Ripple$Implementation$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{cg: true}),
+							{ch: true}),
 						elm$core$Platform$Cmd$none);
 				case 1:
 					var _n2 = _n0.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{cg: false}),
+							{ch: false}),
 						elm$core$Platform$Cmd$none);
 				case 8:
 					var _n3 = _n0.a;
@@ -6419,7 +6419,7 @@ var author$project$Internal$Ripple$Implementation$update = F2(
 						var activatedData = {
 							ac: activateData.bc,
 							cM: false,
-							b7: false,
+							b8: false,
 							E: fgScale,
 							L: {d: element.d, m: element.S, g: element.T, et: element.et},
 							F: initialSize,
@@ -6446,7 +6446,7 @@ var author$project$Internal$Ripple$Implementation$update = F2(
 						var animationCount = _n0.a.a;
 						var activatedData = _n0.b.a;
 						if (_Utils_eq(animationCount, model.as)) {
-							if (activatedData.b7) {
+							if (activatedData.b8) {
 								return _Utils_Tuple2(
 									_Utils_update(
 										model,
@@ -6497,7 +6497,7 @@ var author$project$Internal$Ripple$Implementation$update = F2(
 						} else {
 							var newActivatedData = _Utils_update(
 								activatedData,
-								{b7: true});
+								{b8: true});
 							return _Utils_Tuple2(
 								_Utils_update(
 									model,
@@ -6590,7 +6590,7 @@ var author$project$Internal$Msg$ButtonMsg = F2(
 		return {$: 1, a: a, b: b};
 	});
 var author$project$Internal$Button$Implementation$react = A4(author$project$Internal$Component$react, author$project$Internal$Button$Implementation$getSet.dw, author$project$Internal$Button$Implementation$getSet.e$, author$project$Internal$Msg$ButtonMsg, author$project$Internal$Button$Implementation$update);
-var author$project$Internal$Checkbox$Model$defaultModel = {b0: elm$core$Maybe$Nothing, eO: false, cl: elm$core$Maybe$Nothing};
+var author$project$Internal$Checkbox$Model$defaultModel = {b1: elm$core$Maybe$Nothing, eO: false, cm: elm$core$Maybe$Nothing};
 var author$project$Internal$Checkbox$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -6698,8 +6698,8 @@ var author$project$Internal$Checkbox$Implementation$update = F3(
 						_Utils_update(
 							model,
 							{
-								b0: animation,
-								cl: elm$core$Maybe$Just(state)
+								b1: animation,
+								cm: elm$core$Maybe$Just(state)
 							})),
 					elm$core$Platform$Cmd$none);
 			default:
@@ -6707,7 +6707,7 @@ var author$project$Internal$Checkbox$Implementation$update = F3(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{b0: elm$core$Maybe$Nothing})),
+							{b1: elm$core$Maybe$Nothing})),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -6811,7 +6811,7 @@ var author$project$Internal$Dispatch$forward = function (msgs) {
 				elm$core$Task$succeed),
 			msgs));
 };
-var author$project$Internal$Drawer$Model$defaultModel = {aY: false, b5: false, l: false};
+var author$project$Internal$Drawer$Model$defaultModel = {aY: false, b6: false, l: false};
 var author$project$Internal$Drawer$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -6836,7 +6836,7 @@ var author$project$Internal$Drawer$Implementation$update = F3(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{aY: true, b5: !isOpen, l: true})),
+							{aY: true, b6: !isOpen, l: true})),
 					elm$core$Platform$Cmd$none);
 			default:
 				return _Utils_Tuple2(
@@ -6845,8 +6845,8 @@ var author$project$Internal$Drawer$Implementation$update = F3(
 							model,
 							{
 								aY: false,
-								b5: false,
-								l: model.b5 ? false : model.l
+								b6: false,
+								l: model.b6 ? false : model.l
 							})),
 					elm$core$Platform$Cmd$none);
 		}
@@ -6952,7 +6952,7 @@ var author$project$Internal$IconButton$Implementation$react = A4(
 	author$project$Internal$IconButton$Implementation$getSet.e$,
 	author$project$Internal$Msg$IconButtonMsg,
 	author$project$Internal$Component$generalise(author$project$Internal$IconButton$Implementation$update));
-var author$project$Internal$List$Model$defaultModel = {cg: elm$core$Maybe$Nothing, bE: elm$core$Dict$empty};
+var author$project$Internal$List$Model$defaultModel = {ch: elm$core$Maybe$Nothing, bE: elm$core$Dict$empty};
 var author$project$Internal$List$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -7011,7 +7011,7 @@ var author$project$Internal$List$Implementation$update = F3(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{cg: elm$core$Maybe$Nothing})),
+							{ch: elm$core$Maybe$Nothing})),
 					elm$core$Platform$Cmd$none);
 			case 2:
 				var id = msg.b;
@@ -7019,7 +7019,7 @@ var author$project$Internal$List$Implementation$update = F3(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{cg: elm$core$Maybe$Nothing})),
+							{ch: elm$core$Maybe$Nothing})),
 					A2(
 						elm$core$Task$attempt,
 						function (_n2) {
@@ -7033,7 +7033,7 @@ var author$project$Internal$List$Implementation$update = F3(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{cg: elm$core$Maybe$Nothing})),
+							{ch: elm$core$Maybe$Nothing})),
 					author$project$Internal$List$Implementation$send(
 						m(index)));
 			default:
@@ -7289,7 +7289,7 @@ var author$project$Internal$Msg$SelectMsg = F2(
 	function (a, b) {
 		return {$: 12, a: a, b: b};
 	});
-var author$project$Internal$Select$Model$defaultModel = {cg: false, dD: false, bD: author$project$Internal$Ripple$Model$defaultModel};
+var author$project$Internal$Select$Model$defaultModel = {ch: false, dD: false, bD: author$project$Internal$Ripple$Model$defaultModel};
 var author$project$Internal$Select$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -7322,14 +7322,14 @@ var author$project$Internal$Select$Implementation$update = F3(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{cg: false})),
+							{ch: false})),
 					elm$core$Platform$Cmd$none);
 			case 1:
 				return _Utils_Tuple2(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{cg: true})),
+							{ch: true})),
 					elm$core$Platform$Cmd$none);
 			default:
 				var msg_ = msg.a;
@@ -7352,7 +7352,7 @@ var author$project$Internal$Msg$SliderMsg = F2(
 	function (a, b) {
 		return {$: 13, a: a, b: b};
 	});
-var author$project$Internal$Slider$Model$defaultModel = {B: false, aW: elm$core$Maybe$Nothing, ce: false, ai: elm$core$Maybe$Nothing, bk: false, cv: false};
+var author$project$Internal$Slider$Model$defaultModel = {B: false, aW: elm$core$Maybe$Nothing, cf: false, ai: elm$core$Maybe$Nothing, bk: false, cw: false};
 var author$project$Internal$Slider$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -7391,18 +7391,18 @@ var author$project$Internal$Slider$Implementation$update = F3(
 				case 0:
 					return _Utils_Tuple2(elm$core$Maybe$Nothing, elm$core$Platform$Cmd$none);
 				case 5:
-					return (!model.cv) ? _Utils_Tuple2(
+					return (!model.cw) ? _Utils_Tuple2(
 						elm$core$Maybe$Just(
 							_Utils_update(
 								model,
-								{ce: true})),
+								{cf: true})),
 						elm$core$Platform$Cmd$none) : _Utils_Tuple2(elm$core$Maybe$Nothing, elm$core$Platform$Cmd$none);
 				case 6:
 					return _Utils_Tuple2(
 						elm$core$Maybe$Just(
 							_Utils_update(
 								model,
-								{ce: false, cv: false})),
+								{cf: false, cw: false})),
 						elm$core$Platform$Cmd$none);
 				case 8:
 					return _Utils_Tuple2(
@@ -7423,7 +7423,7 @@ var author$project$Internal$Slider$Implementation$update = F3(
 									B: true,
 									aW: elm$core$Maybe$Just(activeValue),
 									bk: true,
-									cv: true
+									cw: true
 								})),
 						elm$core$Platform$Cmd$none);
 				case 7:
@@ -7438,7 +7438,7 @@ var author$project$Internal$Slider$Implementation$update = F3(
 									B: true,
 									aW: elm$core$Maybe$Just(activeValue),
 									bk: false,
-									cv: true
+									cw: true
 								})),
 						elm$core$Platform$Cmd$none);
 				case 9:
@@ -7482,7 +7482,7 @@ var author$project$Internal$Slider$Implementation$update = F3(
 						elm$core$Maybe$Just(
 							_Utils_update(
 								model,
-								{ce: true})),
+								{cf: true})),
 						elm$core$Platform$Cmd$none);
 				case 10:
 					return _Utils_Tuple2(
@@ -7510,7 +7510,7 @@ var author$project$Internal$Snackbar$Model$Inert = {$: 0};
 var elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var author$project$Internal$Snackbar$Model$defaultModel = {l: false, cy: _List_Nil, aO: -1, cC: author$project$Internal$Snackbar$Model$Inert};
+var author$project$Internal$Snackbar$Model$defaultModel = {l: false, cz: _List_Nil, aO: -1, cD: author$project$Internal$Snackbar$Model$Inert};
 var author$project$Internal$Snackbar$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -7542,7 +7542,7 @@ var author$project$Internal$Snackbar$Model$Active = function (a) {
 };
 var author$project$Internal$Snackbar$Model$Timeout = 0;
 var author$project$Internal$Snackbar$Implementation$tryDequeue = function (model) {
-	var _n0 = _Utils_Tuple2(model.cC, model.cy);
+	var _n0 = _Utils_Tuple2(model.cD, model.cz);
 	if ((!_n0.a.$) && _n0.b.b) {
 		var _n1 = _n0.a;
 		var _n2 = _n0.b;
@@ -7553,9 +7553,9 @@ var author$project$Internal$Snackbar$Implementation$tryDequeue = function (model
 				model,
 				{
 					l: false,
-					cy: cs,
+					cz: cs,
 					aO: model.aO + 1,
-					cC: author$project$Internal$Snackbar$Model$Active(c)
+					cD: author$project$Internal$Snackbar$Model$Active(c)
 				}),
 			A2(
 				elm$core$Platform$Cmd$map,
@@ -7570,7 +7570,7 @@ var author$project$Internal$Snackbar$Model$Fading = function (a) {
 };
 var author$project$Internal$Snackbar$Implementation$move = F2(
 	function (transition, model) {
-		var _n0 = _Utils_Tuple2(model.cC, transition);
+		var _n0 = _Utils_Tuple2(model.cD, transition);
 		if (_n0.b === 1) {
 			if (_n0.a.$ === 1) {
 				var contents = _n0.a.a;
@@ -7579,12 +7579,12 @@ var author$project$Internal$Snackbar$Implementation$move = F2(
 					_Utils_update(
 						model,
 						{
-							cC: author$project$Internal$Snackbar$Model$Fading(contents)
+							cD: author$project$Internal$Snackbar$Model$Fading(contents)
 						}),
 					A2(
 						author$project$Internal$Snackbar$Implementation$next,
 						model,
-						A2(author$project$Internal$Helpers$delayedCmd, contents.cb, 0)));
+						A2(author$project$Internal$Helpers$delayedCmd, contents.cc, 0)));
 			} else {
 				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 			}
@@ -7601,19 +7601,19 @@ var author$project$Internal$Snackbar$Implementation$move = F2(
 						_Utils_update(
 							model,
 							{
-								cC: author$project$Internal$Snackbar$Model$Fading(contents)
+								cD: author$project$Internal$Snackbar$Model$Fading(contents)
 							}),
 						A2(
 							author$project$Internal$Snackbar$Implementation$next,
 							model,
-							A2(author$project$Internal$Helpers$delayedCmd, contents.cb, 0)));
+							A2(author$project$Internal$Helpers$delayedCmd, contents.cc, 0)));
 				default:
 					var contents = _n0.a.a;
 					var _n5 = _n0.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{cC: author$project$Internal$Snackbar$Model$Inert}),
+							{cD: author$project$Internal$Snackbar$Model$Inert}),
 						A2(
 							author$project$Internal$Snackbar$Implementation$next,
 							model,
@@ -7912,7 +7912,7 @@ var author$project$Internal$Msg$TextFieldMsg = F2(
 	function (a, b) {
 		return {$: 17, a: a, b: b};
 	});
-var author$project$Internal$TextField$Model$defaultModel = {cg: false, ai: elm$core$Maybe$Nothing, dD: false, bZ: elm$core$Maybe$Nothing};
+var author$project$Internal$TextField$Model$defaultModel = {ch: false, ai: elm$core$Maybe$Nothing, dD: false, b_: elm$core$Maybe$Nothing};
 var author$project$Internal$TextField$Implementation$getSet = A3(
 	author$project$Internal$Component$indexed,
 	function ($) {
@@ -7937,12 +7937,12 @@ var author$project$Internal$TextField$Implementation$update = F3(
 							model,
 							{
 								dD: dirty,
-								bZ: elm$core$Maybe$Just(str)
+								b_: elm$core$Maybe$Just(str)
 							})),
 					elm$core$Platform$Cmd$none);
 			case 0:
 				var geometry = function () {
-					var _n1 = model.bZ;
+					var _n1 = model.b_;
 					if (_n1.$ === 1) {
 						return elm$core$Maybe$Nothing;
 					} else {
@@ -7953,7 +7953,7 @@ var author$project$Internal$TextField$Implementation$update = F3(
 					elm$core$Maybe$Just(
 						_Utils_update(
 							model,
-							{cg: false, ai: geometry})),
+							{ch: false, ai: geometry})),
 					elm$core$Platform$Cmd$none);
 			case 1:
 				var geometry = msg.a;
@@ -7962,7 +7962,7 @@ var author$project$Internal$TextField$Implementation$update = F3(
 						_Utils_update(
 							model,
 							{
-								cg: true,
+								ch: true,
 								ai: elm$core$Maybe$Just(geometry)
 							})),
 					elm$core$Platform$Cmd$none);
@@ -7990,7 +7990,7 @@ var author$project$Internal$Toolbar$Implementation$getSet = A3(
 				{c7: x});
 		}),
 	author$project$Internal$Toolbar$Model$defaultModel);
-var author$project$Internal$Toolbar$Model$defaultCalculations = {cd: 0, dr: 0, c$: 0, dK: 0, e_: 0, d6: 0, ej: 0, el: 0, cG: 0};
+var author$project$Internal$Toolbar$Model$defaultCalculations = {ce: 0, dr: 0, c$: 0, dK: 0, e_: 0, d6: 0, ej: 0, el: 0, cG: 0};
 var author$project$Internal$Toolbar$Implementation$initKeyRatio = F2(
 	function (config, geometry) {
 		var toolbarRowHeight = geometry.cU;
@@ -8012,7 +8012,7 @@ var author$project$Internal$Toolbar$Implementation$setKeyHeights = F2(
 		var flexibleExpansionHeight = calculations.dr * toolbarRowHeight;
 		return _Utils_update(
 			calculations,
-			{cd: flexibleExpansionHeight, c$: maxTranslateYDistance, e_: scrollThreshold, ej: toolbarHeight, cG: toolbarRowHeight});
+			{ce: flexibleExpansionHeight, c$: maxTranslateYDistance, e_: scrollThreshold, ej: toolbarHeight, cG: toolbarRowHeight});
 	});
 var author$project$Internal$Toolbar$Implementation$update = F2(
 	function (msg, model) {
@@ -8362,14 +8362,14 @@ var author$project$Material$update = F3(
 					function (mdc) {
 						return _Utils_update(
 							container,
-							{cp: mdc});
+							{cq: mdc});
 					}),
 				A3(
 					author$project$Material$update_,
 					lift,
 					msg,
 					function ($) {
-						return $.cp;
+						return $.cq;
 					}(container))));
 	});
 var author$project$Demo$Buttons$update = F3(
@@ -8838,7 +8838,7 @@ var author$project$Demo$Chips$update = F3(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{b4: index}),
+						{b5: index}),
 					elm$core$Platform$Cmd$none);
 			} else {
 				var selectedChips = (A2(elm$core$Set$member, index, model.ao) ? elm$core$Set$remove(index) : elm$core$Set$insert(index))(model.ao);
@@ -8894,7 +8894,7 @@ var author$project$Demo$DataTable$update = F3(
 				_Utils_update(
 					model,
 					{
-						b_: _Utils_eq(
+						b$: _Utils_eq(
 							elm$core$Set$size(checked),
 							model.c_),
 						I: checked
@@ -8959,7 +8959,7 @@ var author$project$Demo$DismissibleDrawer$update = F3(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{cB: index}),
+						{cC: index}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -9133,7 +9133,7 @@ var author$project$Demo$ModalDrawer$update = F3(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{cB: index}),
+						{cC: index}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -9158,7 +9158,7 @@ var author$project$Demo$PermanentDrawer$update = F3(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{cB: index}),
+						{cC: index}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -9257,9 +9257,9 @@ var author$project$Internal$Snackbar$Implementation$enqueue = F2(
 		return _Utils_update(
 			model,
 			{
-				cy: A2(
+				cz: A2(
 					elm$core$List$append,
-					model.cy,
+					model.cz,
 					_List_fromArray(
 						[contents]))
 			});
@@ -9294,7 +9294,7 @@ var author$project$Internal$Snackbar$Implementation$snack = F3(
 		return {
 			cL: elm$core$Maybe$Just(label),
 			eA: true,
-			cb: 250,
+			cc: 250,
 			dL: message,
 			c3: onDismiss,
 			e0: true,
@@ -9336,13 +9336,13 @@ var author$project$Demo$Snackbar$update = F3(
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Snackbar$Mdc),
 					idx,
 					contents,
-					model.cp);
+					model.cq);
 				var mdc = _n1.a;
 				var effects = _n1.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{cp: mdc}),
+						{cq: mdc}),
 					effects);
 			default:
 				var str = msg.a;
@@ -9855,13 +9855,13 @@ var author$project$Demo$update = F2(
 					effects);
 			case 32:
 				var msg_ = msg.a;
-				var _n23 = A3(author$project$Demo$TextFields$update, author$project$Demo$TextFieldMsg, msg_, model.bQ);
+				var _n23 = A3(author$project$Demo$TextFields$update, author$project$Demo$TextFieldMsg, msg_, model.bR);
 				var textfields = _n23.a;
 				var effects = _n23.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{bQ: textfields}),
+						{bR: textfields}),
 					effects);
 			case 30:
 				var msg_ = msg.a;
@@ -9895,13 +9895,13 @@ var author$project$Demo$update = F2(
 					effects);
 			case 33:
 				var msg_ = msg.a;
-				var _n27 = A3(author$project$Demo$Theme$update, author$project$Demo$ThemeMsg, msg_, model.bR);
+				var _n27 = A3(author$project$Demo$Theme$update, author$project$Demo$ThemeMsg, msg_, model.bS);
 				var theme = _n27.a;
 				var effects = _n27.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{bR: theme}),
+						{bS: theme}),
 					effects);
 			case 35:
 				var msg_ = msg.a;
@@ -9915,13 +9915,13 @@ var author$project$Demo$update = F2(
 					effects);
 			default:
 				var msg_ = msg.a;
-				var _n29 = A3(author$project$Demo$Typography$update, author$project$Demo$TypographyMsg, msg_, model.bW);
+				var _n29 = A3(author$project$Demo$Typography$update, author$project$Demo$TypographyMsg, msg_, model.bX);
 				var typography = _n29.a;
 				var effects = _n29.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{bW: typography}),
+						{bX: typography}),
 					effects);
 		}
 	});
@@ -9948,7 +9948,7 @@ var author$project$Internal$Button$Implementation$icon = function (str) {
 			return _Utils_update(
 				config,
 				{
-					ch: elm$core$Maybe$Just(str)
+					ci: elm$core$Maybe$Just(str)
 				});
 		});
 };
@@ -9960,12 +9960,12 @@ var author$project$Internal$Button$Implementation$ripple = author$project$Intern
 			{bD: true});
 	});
 var author$project$Material$Button$ripple = author$project$Internal$Button$Implementation$ripple;
-var author$project$Internal$Button$Implementation$defaultConfig = {au: false, ch: elm$core$Maybe$Nothing, cn: elm$core$Maybe$Nothing, cr: elm$core$Maybe$Nothing, bD: false, bU: false};
+var author$project$Internal$Button$Implementation$defaultConfig = {au: false, ci: elm$core$Maybe$Nothing, co: elm$core$Maybe$Nothing, cs: elm$core$Maybe$Nothing, bD: false, bV: false};
 var author$project$Internal$Button$Model$Click = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
 	});
-var author$project$Internal$Icon$Implementation$defaultConfig = {cq: 'i'};
+var author$project$Internal$Icon$Implementation$defaultConfig = {cr: 'i'};
 var elm$core$Result$toMaybe = function (result) {
 	if (!result.$) {
 		var v = result.a;
@@ -10270,7 +10270,7 @@ var author$project$Internal$Icon$Implementation$view = F2(
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
-			elm$html$Html$node(config.cq),
+			elm$html$Html$node(config.cr),
 			_List_fromArray(
 				[
 					author$project$Internal$Options$cs('material-icons'),
@@ -10574,7 +10574,7 @@ var author$project$Internal$Ripple$Implementation$view = F5(
 					author$project$Internal$Options$when,
 					isUnbounded,
 					author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.e7)),
-					model.cg ? author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.ex) : author$project$Internal$Options$nop
+					model.ch ? author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.ex) : author$project$Internal$Options$nop
 				]));
 		var baseInteractionHandler = author$project$Internal$Options$many(
 			_List_fromArray(
@@ -10596,7 +10596,7 @@ var author$project$Internal$Ripple$Implementation$view = F5(
 										var _n3 = model.r;
 										if (_n3.$ === 1) {
 											var activationState = _n3.a;
-											return !activationState.b7;
+											return !activationState.b8;
 										} else {
 											return false;
 										}
@@ -10652,7 +10652,7 @@ var author$project$Internal$Ripple$Implementation$view = F5(
 										author$project$Internal$Ripple$Model$SetCssVariables(isUnbounded)),
 									author$project$Internal$Ripple$Implementation$decodeClientRect)))
 						]));
-				return {ci: interactionHandler, cx: properties, cD: noStyle};
+				return {cj: interactionHandler, cy: properties, cE: noStyle};
 			case 1:
 				var activatedData = _n0.a;
 				var interactionHandler = author$project$Internal$Options$many(
@@ -10677,7 +10677,7 @@ var author$project$Internal$Ripple$Implementation$view = F5(
 							isUnbounded,
 							A2(author$project$Internal$Options$data, 'mdc-ripple-is-unbounded', '1'))
 						]));
-				return {ci: interactionHandler, cx: properties, cD: noStyle};
+				return {cj: interactionHandler, cy: properties, cE: noStyle};
 			default:
 				var activatedData = _n0.a;
 				var interactionHandler = author$project$Internal$Options$many(
@@ -10694,7 +10694,7 @@ var author$project$Internal$Ripple$Implementation$view = F5(
 							author$project$Internal$Options$many(cssVars),
 							author$project$Internal$Options$cs(author$project$Internal$Ripple$Model$cssClasses.eE)
 						]));
-				return {ci: interactionHandler, cx: properties, cD: noStyle};
+				return {cj: interactionHandler, cy: properties, cE: noStyle};
 		}
 	});
 var elm$html$Html$a = _VirtualDom_node('a');
@@ -10728,7 +10728,7 @@ var author$project$Internal$Button$Implementation$button = F5(
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
-			(!_Utils_eq(config.cn, elm$core$Maybe$Nothing)) ? elm$html$Html$a : elm$html$Html$button,
+			(!_Utils_eq(config.co, elm$core$Maybe$Nothing)) ? elm$html$Html$a : elm$html$Html$button,
 			_List_fromArray(
 				[
 					author$project$Internal$Options$cs('mdc-button'),
@@ -10739,10 +10739,10 @@ var author$project$Internal$Button$Implementation$button = F5(
 					author$project$Internal$Options$cs('mdc-js-ripple-effect')),
 					A2(
 					author$project$Internal$Options$when,
-					(!_Utils_eq(config.cn, elm$core$Maybe$Nothing)) && (!config.au),
+					(!_Utils_eq(config.co, elm$core$Maybe$Nothing)) && (!config.au),
 					author$project$Internal$Options$attribute(
 						elm$html$Html$Attributes$href(
-							A2(elm$core$Maybe$withDefault, '', config.cn)))),
+							A2(elm$core$Maybe$withDefault, '', config.co)))),
 					A2(
 					author$project$Internal$Options$when,
 					config.au,
@@ -10757,7 +10757,7 @@ var author$project$Internal$Button$Implementation$button = F5(
 					author$project$Internal$Options$when(config.bD),
 					author$project$Internal$Options$many,
 					_List_fromArray(
-						[rippleInterface.ci, rippleInterface.cx])),
+						[rippleInterface.cj, rippleInterface.cy])),
 					A2(
 					elm$core$Maybe$withDefault,
 					author$project$Internal$Options$nop,
@@ -10767,13 +10767,13 @@ var author$project$Internal$Button$Implementation$button = F5(
 							elm$core$Basics$composeL,
 							A2(elm$core$Basics$composeL, author$project$Internal$Options$onClick, lift),
 							author$project$Internal$Button$Model$Click(config.bD)),
-						config.cr))
+						config.cs))
 				]),
 			_List_Nil,
 			elm$core$List$concat(
 				_List_fromArray(
 					[
-						(!config.bU) ? A2(
+						(!config.bV) ? A2(
 						elm$core$Maybe$withDefault,
 						_List_Nil,
 						A2(
@@ -10790,9 +10790,9 @@ var author$project$Internal$Button$Implementation$button = F5(
 										icon_)
 									]);
 							},
-							config.ch)) : _List_Nil,
+							config.ci)) : _List_Nil,
 						nodes,
-						config.bU ? A2(
+						config.bV ? A2(
 						elm$core$Maybe$withDefault,
 						_List_Nil,
 						A2(
@@ -10809,7 +10809,7 @@ var author$project$Internal$Button$Implementation$button = F5(
 										icon_)
 									]);
 							},
-							config.ch)) : _List_Nil
+							config.ci)) : _List_Nil
 					])));
 	});
 var author$project$Internal$Msg$Dispatch = function (a) {
@@ -10963,7 +10963,7 @@ var author$project$Demo$Buttons$example = F4(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							idx + '-default-button',
-							model.cp,
+							model.cq,
 							A2(
 								elm$core$List$cons,
 								A2(author$project$Material$Options$css, 'margin', '8px 16px'),
@@ -10976,7 +10976,7 @@ var author$project$Demo$Buttons$example = F4(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							idx + '-dense-button',
-							model.cp,
+							model.cq,
 							A2(
 								elm$core$List$cons,
 								A2(author$project$Material$Options$css, 'margin', '8px 16px'),
@@ -10992,7 +10992,7 @@ var author$project$Demo$Buttons$example = F4(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							idx + '-icon-button',
-							model.cp,
+							model.cq,
 							A2(
 								elm$core$List$cons,
 								A2(author$project$Material$Options$css, 'margin', '8px 16px'),
@@ -11080,7 +11080,7 @@ var author$project$Demo$Helper$Hero$view = function (options) {
 																							A2(author$project$Material$Options$css, 'overflow', 'auto'),
 																							options))))))))))))))))))))));
 };
-var author$project$Internal$List$Implementation$defaultConfig = {aV: false, al: false, W: false, cq: elm$core$Maybe$Nothing, bw: elm$core$Maybe$Nothing, bH: false, bI: elm$core$Maybe$Nothing, bY: false};
+var author$project$Internal$List$Implementation$defaultConfig = {aV: false, al: false, W: false, cr: elm$core$Maybe$Nothing, bw: elm$core$Maybe$Nothing, bH: false, bI: elm$core$Maybe$Nothing, bZ: false};
 var author$project$Internal$List$Implementation$aRippledView = F5(
 	function (domId, lift, model, options, items) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
@@ -11101,9 +11101,9 @@ var author$project$Internal$List$Implementation$aRippledView = F5(
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
-			A2(elm$core$Maybe$withDefault, elm$html$Html$a, config.cq),
+			A2(elm$core$Maybe$withDefault, elm$html$Html$a, config.cr),
 			_List_fromArray(
-				[ripple.cx, ripple.ci]),
+				[ripple.cy, ripple.cj]),
 			_List_Nil,
 			items);
 	});
@@ -11141,10 +11141,10 @@ var elm$html$Html$Attributes$src = function (url) {
 var elm$html$Html$Attributes$target = elm$html$Html$Attributes$stringProperty('target');
 var author$project$Demo$Helper$ResourceLink$view = F4(
 	function (lift, index, mdc, _n0) {
-		var link = _n0.cn;
+		var link = _n0.co;
 		var title = _n0.e3;
-		var icon = _n0.ch;
-		var altText = _n0.b$;
+		var icon = _n0.ci;
+		var altText = _n0.b0;
 		return A5(
 			author$project$Material$List$aRippled,
 			lift,
@@ -11229,19 +11229,19 @@ var author$project$Demo$Helper$ResourceLink$links = F5(
 					lift,
 					'guidelines-' + guidelines_id,
 					mdc,
-					{b$: 'Material Design Guidelines icon', ch: 'images/material.svg', cn: 'https://material.io/design/' + guidelines_url, e3: 'Material Design Guidelines'}) : elm$html$Html$text(''),
+					{b0: 'Material Design Guidelines icon', ci: 'images/material.svg', co: 'https://material.io/design/' + guidelines_url, e3: 'Material Design Guidelines'}) : elm$html$Html$text(''),
 					A4(
 					author$project$Demo$Helper$ResourceLink$view,
 					lift,
 					'documentation-' + documentation_id,
 					mdc,
-					{b$: 'Documentation icon', ch: 'images/ic_drive_document_24px.svg', cn: 'https://material.io/develop/web/components/' + (documentation + '/'), e3: 'Documentation'}),
+					{b0: 'Documentation icon', ci: 'images/ic_drive_document_24px.svg', co: 'https://material.io/develop/web/components/' + (documentation + '/'), e3: 'Documentation'}),
 					A4(
 					author$project$Demo$Helper$ResourceLink$view,
 					lift,
 					'package-' + _package,
 					mdc,
-					{b$: 'Source Code', ch: 'images/ic_code_24px.svg', cn: 'https://github.com/material-components/material-components-web/tree/master/packages/' + _package, e3: 'Source Code (Material Components Web)'})
+					{b0: 'Source Code', ci: 'images/ic_code_24px.svg', co: 'https://github.com/material-components/material-components-web/tree/master/packages/' + _package, e3: 'Source Code (Material Components Web)'})
 				]));
 	});
 var author$project$Demo$Page$demos = function (nodes) {
@@ -11348,7 +11348,7 @@ var author$project$Demo$Buttons$view = F3(
 						author$project$Material$Button$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						'buttons-hero-button-text',
-						model.cp,
+						model.cq,
 						_List_fromArray(
 							[
 								author$project$Material$Button$ripple,
@@ -11362,7 +11362,7 @@ var author$project$Demo$Buttons$view = F3(
 						author$project$Material$Button$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						'buttons-hero-button-raised',
-						model.cp,
+						model.cq,
 						_List_fromArray(
 							[
 								author$project$Material$Button$ripple,
@@ -11377,7 +11377,7 @@ var author$project$Demo$Buttons$view = F3(
 						author$project$Material$Button$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						'buttons-hero-button-unelevated',
-						model.cp,
+						model.cq,
 						_List_fromArray(
 							[
 								author$project$Material$Button$ripple,
@@ -11392,7 +11392,7 @@ var author$project$Demo$Buttons$view = F3(
 						author$project$Material$Button$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						'buttons-hero-button-outlined',
-						model.cp,
+						model.cq,
 						_List_fromArray(
 							[
 								author$project$Material$Button$ripple,
@@ -11409,7 +11409,7 @@ var author$project$Demo$Buttons$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'buttons',
 					'buttons',
 					'mdc-button'),
@@ -11463,7 +11463,7 @@ var author$project$Internal$IconButton$Implementation$icon = function (value) {
 		function (config) {
 			return _Utils_update(
 				config,
-				{ch: value});
+				{ci: value});
 		});
 };
 var author$project$Material$IconButton$icon = author$project$Internal$IconButton$Implementation$icon;
@@ -11479,7 +11479,7 @@ var author$project$Material$IconButton$label = author$project$Internal$IconButto
 var author$project$Internal$IconButton$Implementation$defaultConfig = {
 	ar: elm$core$Maybe$Nothing,
 	au: false,
-	ch: {aD: '', aF: ''},
+	ci: {aD: '', aF: ''},
 	bo: {aD: '', aF: ''},
 	aF: false
 };
@@ -11510,7 +11510,7 @@ var author$project$Internal$IconButton$Implementation$iconButton = F5(
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text(config.ch.aF)
+						elm$html$Html$text(config.ci.aF)
 					])),
 				A3(
 				author$project$Internal$Options$styled,
@@ -11522,10 +11522,10 @@ var author$project$Internal$IconButton$Implementation$iconButton = F5(
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text(config.ch.aD)
+						elm$html$Html$text(config.ci.aD)
 					]))
 			]);
-		var isToggle = !_Utils_eq(config.ch.aF, config.ch.aD);
+		var isToggle = !_Utils_eq(config.ci.aF, config.ci.aD);
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
@@ -11564,7 +11564,7 @@ var author$project$Internal$IconButton$Implementation$iconButton = F5(
 						elm$html$Html$Attributes$disabled(true))),
 					author$project$Internal$Options$many(
 					_List_fromArray(
-						[ripple.ci, ripple.cx]))
+						[ripple.cj, ripple.cy]))
 				]),
 			_List_Nil,
 			_Utils_ap(
@@ -11578,12 +11578,12 @@ var author$project$Internal$IconButton$Implementation$iconButton = F5(
 							[
 								author$project$Internal$Options$cs(
 								A2(elm$core$Maybe$withDefault, 'material-icons', config.ar)),
-								config.aF ? author$project$Internal$Options$cs(config.ch.aF) : author$project$Internal$Options$cs(config.ch.aD)
+								config.aF ? author$project$Internal$Options$cs(config.ci.aF) : author$project$Internal$Options$cs(config.ci.aD)
 							]),
 						_List_Nil)
-					]) : (_Utils_eq(config.ch.aF, config.ch.aD) ? _List_fromArray(
+					]) : (_Utils_eq(config.ci.aF, config.ci.aD) ? _List_fromArray(
 					[
-						elm$html$Html$text(config.ch.aF)
+						elm$html$Html$text(config.ci.aF)
 					]) : icons)));
 	});
 var author$project$Internal$IconButton$Implementation$view = F2(
@@ -11613,7 +11613,7 @@ var author$project$Demo$Cards$cardActions = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							index + '-action-button-read',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[author$project$Material$Card$actionButton, author$project$Material$Button$ripple]),
 							_List_fromArray(
@@ -11624,7 +11624,7 @@ var author$project$Demo$Cards$cardActions = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							index + '-action-button-bookmark',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[author$project$Material$Card$actionButton, author$project$Material$Button$ripple]),
 							_List_fromArray(
@@ -11641,7 +11641,7 @@ var author$project$Demo$Cards$cardActions = F3(
 							author$project$Material$IconButton$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							index + '-action-icon-favorite',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Card$actionIcon,
@@ -11655,7 +11655,7 @@ var author$project$Demo$Cards$cardActions = F3(
 							author$project$Material$IconButton$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							index + '-action-icon-share',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Card$actionIcon,
@@ -11669,7 +11669,7 @@ var author$project$Demo$Cards$cardActions = F3(
 							author$project$Material$IconButton$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							index + '-action-icon-more-options',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Card$actionIcon,
@@ -11797,7 +11797,7 @@ var author$project$Demo$Cards$exampleCard1 = F3(
 			author$project$Material$Ripple$bounded,
 			A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 			index + '-ripple',
-			model.cp,
+			model.cq,
 			_List_Nil);
 		return A2(
 			author$project$Material$Card$view,
@@ -11811,9 +11811,9 @@ var author$project$Demo$Cards$exampleCard1 = F3(
 					A2(
 					author$project$Material$Card$primaryAction,
 					_List_fromArray(
-						[ripple.cx, ripple.ci]),
+						[ripple.cy, ripple.cj]),
 					_List_fromArray(
-						[author$project$Demo$Cards$cardMedia, author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cD])),
+						[author$project$Demo$Cards$cardMedia, author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cE])),
 					A3(author$project$Demo$Cards$cardActions, lift, index, model)
 				]));
 	});
@@ -11823,7 +11823,7 @@ var author$project$Demo$Cards$exampleCard2 = F3(
 			author$project$Material$Ripple$bounded,
 			A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 			index + '-ripple',
-			model.cp,
+			model.cq,
 			_List_Nil);
 		return A2(
 			author$project$Material$Card$view,
@@ -11837,9 +11837,9 @@ var author$project$Demo$Cards$exampleCard2 = F3(
 					A2(
 					author$project$Material$Card$primaryAction,
 					_List_fromArray(
-						[ripple.cx, ripple.ci]),
+						[ripple.cy, ripple.cj]),
 					_List_fromArray(
-						[author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cD])),
+						[author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cE])),
 					A3(author$project$Demo$Cards$cardActions, lift, index, model)
 				]));
 	});
@@ -11849,7 +11849,7 @@ var author$project$Demo$Cards$exampleCard3 = F3(
 			author$project$Material$Ripple$bounded,
 			A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 			index + '-ripple',
-			model.cp,
+			model.cq,
 			_List_Nil);
 		return A2(
 			author$project$Material$Card$view,
@@ -11864,9 +11864,9 @@ var author$project$Demo$Cards$exampleCard3 = F3(
 					A2(
 					author$project$Material$Card$primaryAction,
 					_List_fromArray(
-						[ripple.cx, ripple.ci]),
+						[ripple.cy, ripple.cj]),
 					_List_fromArray(
-						[author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cD])),
+						[author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cE])),
 					A3(author$project$Demo$Cards$cardActions, lift, index, model)
 				]));
 	});
@@ -11876,7 +11876,7 @@ var author$project$Demo$Cards$heroCard = F3(
 			author$project$Material$Ripple$bounded,
 			A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 			index + '-ripple',
-			model.cp,
+			model.cq,
 			_List_Nil);
 		return A2(
 			author$project$Material$Card$view,
@@ -11889,9 +11889,9 @@ var author$project$Demo$Cards$heroCard = F3(
 					A2(
 					author$project$Material$Card$primaryAction,
 					_List_fromArray(
-						[ripple.cx, ripple.ci]),
+						[ripple.cy, ripple.cj]),
 					_List_fromArray(
-						[author$project$Demo$Cards$cardMedia, author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cD])),
+						[author$project$Demo$Cards$cardMedia, author$project$Demo$Cards$cardTitle, author$project$Demo$Cards$cardBody, ripple.cE])),
 					A3(author$project$Demo$Cards$cardActions, lift, index, model)
 				]));
 	});
@@ -11913,7 +11913,7 @@ var author$project$Demo$Cards$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'cards',
 					'cards',
 					'mdc-card'),
@@ -11938,12 +11938,12 @@ var author$project$Internal$Checkbox$Implementation$checked = function (value) {
 			return _Utils_update(
 				config,
 				{
-					cC: elm$core$Maybe$Just(state)
+					cD: elm$core$Maybe$Just(state)
 				});
 		});
 };
 var author$project$Material$Checkbox$checked = author$project$Internal$Checkbox$Implementation$checked;
-var author$project$Internal$Checkbox$Implementation$defaultConfig = {au: false, cV: '', dP: _List_Nil, cC: elm$core$Maybe$Nothing};
+var author$project$Internal$Checkbox$Implementation$defaultConfig = {au: false, cV: '', dP: _List_Nil, cD: elm$core$Maybe$Nothing};
 var author$project$Internal$Checkbox$Model$AnimationEnd = {$: 3};
 var author$project$Internal$Checkbox$Model$Init = F2(
 	function (a, b) {
@@ -12041,9 +12041,9 @@ var author$project$Internal$Checkbox$Implementation$checkbox = F4(
 		};
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Checkbox$Implementation$defaultConfig, options);
 		var config = summary.dh;
-		var configState = config.cC;
-		var currentState = A2(elm$core$Maybe$withDefault, configState, model.cl);
-		var stateChangedOrUninitialized = _Utils_eq(model.cl, elm$core$Maybe$Nothing) || (!_Utils_eq(currentState, configState));
+		var configState = config.cD;
+		var currentState = A2(elm$core$Maybe$withDefault, configState, model.cm);
+		var stateChangedOrUninitialized = _Utils_eq(model.cm, elm$core$Maybe$Nothing) || (!_Utils_eq(currentState, configState));
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
@@ -12065,17 +12065,17 @@ var author$project$Internal$Checkbox$Implementation$checkbox = F4(
 					author$project$Internal$Options$when,
 					config.au,
 					author$project$Internal$Options$cs('mdc-checkbox--disabled')),
-					animationClass(model.b0),
+					animationClass(model.b1),
 					A2(
 					author$project$Internal$Options$when,
 					stateChangedOrUninitialized,
 					author$project$Internal$GlobalEvents$onTick(
 						elm$json$Json$Decode$succeed(
 							lift(
-								A2(author$project$Internal$Checkbox$Model$Init, model.cl, configState))))),
+								A2(author$project$Internal$Checkbox$Model$Init, model.cm, configState))))),
 					A2(
 					author$project$Internal$Options$when,
-					!_Utils_eq(model.b0, elm$core$Maybe$Nothing),
+					!_Utils_eq(model.b1, elm$core$Maybe$Nothing),
 					A2(
 						author$project$Internal$Options$on,
 						'animationend',
@@ -12222,7 +12222,7 @@ var author$project$Demo$Checkbox$checkbox = F4(
 			author$project$Material$Checkbox$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Checkbox$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A2(
 				elm$core$List$cons,
 				checked,
@@ -12264,7 +12264,7 @@ var author$project$Demo$Checkbox$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Checkbox$Mdc),
-					model.cp,
+					model.cq,
 					'selection-controls.html#checkboxes',
 					'input-controls/checkboxes',
 					'mdc-checkbox'),
@@ -12309,7 +12309,7 @@ var author$project$Demo$Chips$ToggleChip = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
 	});
-var author$project$Internal$Chip$Implementation$defaultConfig = {a3: false, cm: elm$core$Maybe$Nothing, cr: elm$core$Maybe$Nothing, bH: false, bU: elm$core$Maybe$Nothing};
+var author$project$Internal$Chip$Implementation$defaultConfig = {a3: false, cn: elm$core$Maybe$Nothing, cs: elm$core$Maybe$Nothing, bH: false, bV: elm$core$Maybe$Nothing};
 var author$project$Internal$Chip$Implementation$chipset = F2(
 	function (options, nodes) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Chip$Implementation$defaultConfig, options);
@@ -12331,7 +12331,7 @@ var author$project$Internal$Chip$Implementation$leadingIcon = function (str) {
 			return _Utils_update(
 				config,
 				{
-					cm: elm$core$Maybe$Just(str)
+					cn: elm$core$Maybe$Just(str)
 				});
 		});
 };
@@ -12402,7 +12402,7 @@ var author$project$Internal$Chip$Implementation$chip = F5(
 					author$project$Internal$Options$cs('mdc-js-ripple-effect'),
 					author$project$Internal$Options$many(
 					_List_fromArray(
-						[ripple.ci, ripple.cx])),
+						[ripple.cj, ripple.cy])),
 					A2(
 					elm$core$Maybe$withDefault,
 					author$project$Internal$Options$nop,
@@ -12412,7 +12412,7 @@ var author$project$Internal$Chip$Implementation$chip = F5(
 							elm$core$Basics$composeL,
 							A2(elm$core$Basics$composeL, author$project$Internal$Options$onClick, lift),
 							author$project$Internal$Chip$Model$Click),
-						config.cr)),
+						config.cs)),
 					author$project$Internal$Options$attribute(
 					elm$html$Html$Attributes$tabindex(0))
 				]),
@@ -12442,7 +12442,7 @@ var author$project$Internal$Chip$Implementation$chip = F5(
 										icon)
 									]);
 							},
-							config.cm)),
+							config.cn)),
 						_List_fromArray(
 						[
 							config.a3 ? A3(
@@ -12507,7 +12507,7 @@ var author$project$Internal$Chip$Implementation$chip = F5(
 										icon)
 									]);
 							},
-							config.bU))
+							config.bV))
 					])));
 	});
 var author$project$Internal$Chip$Implementation$view = F2(
@@ -12532,7 +12532,7 @@ var author$project$Demo$Chips$actionChips = F2(
 					author$project$Material$Chip$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 					index,
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$Chip$onClick(
@@ -12599,7 +12599,7 @@ var author$project$Demo$Chips$choiceChips = F2(
 					author$project$Material$Chip$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 					index,
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$Chip$onClick(
@@ -12607,7 +12607,7 @@ var author$project$Demo$Chips$choiceChips = F2(
 								A2(author$project$Demo$Chips$ToggleChip, 0, index))),
 							A2(
 							author$project$Material$Options$when,
-							_Utils_eq(index, model.b4),
+							_Utils_eq(index, model.b5),
 							author$project$Material$Chip$selected)
 						]),
 					_List_fromArray(
@@ -12679,7 +12679,7 @@ var author$project$Demo$Chips$filterChips = F2(
 							author$project$Material$Chip$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 							index,
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Chip$onClick(
@@ -12724,7 +12724,7 @@ var author$project$Demo$Chips$filterChips = F2(
 							author$project$Material$Chip$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 							index,
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Chip$onClick(
@@ -12767,7 +12767,7 @@ var author$project$Demo$Chips$heroChips = F2(
 					author$project$Material$Chip$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 					'chips-hero-one',
-					model.cp,
+					model.cq,
 					_List_Nil,
 					_List_fromArray(
 						[
@@ -12777,7 +12777,7 @@ var author$project$Demo$Chips$heroChips = F2(
 					author$project$Material$Chip$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 					'chips-hero-two',
-					model.cp,
+					model.cq,
 					_List_Nil,
 					_List_fromArray(
 						[
@@ -12787,7 +12787,7 @@ var author$project$Demo$Chips$heroChips = F2(
 					author$project$Material$Chip$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 					'chips-hero-three',
-					model.cp,
+					model.cq,
 					_List_Nil,
 					_List_fromArray(
 						[
@@ -12797,7 +12797,7 @@ var author$project$Demo$Chips$heroChips = F2(
 					author$project$Material$Chip$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 					'chips-hero-four',
-					model.cp,
+					model.cq,
 					_List_Nil,
 					_List_fromArray(
 						[
@@ -12813,7 +12813,7 @@ var author$project$Demo$Chips$shapedChips = F2(
 					author$project$Material$Chip$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
 					index,
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							A2(author$project$Material$Options$css, 'border-radius', '4px')
@@ -12864,7 +12864,7 @@ var author$project$Demo$Chips$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Chips$Mdc),
-					model.cp,
+					model.cq,
 					'chips',
 					'chips',
 					'mdc-chips'),
@@ -13249,7 +13249,7 @@ var author$project$Demo$DataTable$dataTableWithRowSelection = F2(
 						author$project$Material$Checkbox$view,
 						A2(elm$core$Basics$composeL, lift, author$project$Demo$DataTable$Mdc),
 						index,
-						model.cp,
+						model.cq,
 						_List_fromArray(
 							[
 								author$project$Material$DataTable$rowCheckbox,
@@ -13300,13 +13300,13 @@ var author$project$Demo$DataTable$dataTableWithRowSelection = F2(
 													author$project$Material$Checkbox$view,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$DataTable$Mdc),
 													'checkbox-header',
-													model.cp,
+													model.cq,
 													_List_fromArray(
 														[
 															author$project$Material$DataTable$headerRowCheckbox,
 															A2(
 															author$project$Material$Options$when,
-															model.b_,
+															model.b$,
 															author$project$Material$Checkbox$checked(true)),
 															A2(
 															author$project$Material$Options$when,
@@ -13552,7 +13552,7 @@ var author$project$Demo$DataTable$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$DataTable$Mdc),
-					model.cp,
+					model.cq,
 					'data-tables',
 					'data-tables',
 					'mdc-data-table'),
@@ -13779,7 +13779,7 @@ var author$project$Demo$Dialog$alertDialog = F3(
 			author$project$Material$Dialog$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					A2(
@@ -13809,7 +13809,7 @@ var author$project$Demo$Dialog$alertDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + '-button-cancel',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -13825,7 +13825,7 @@ var author$project$Demo$Dialog$alertDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + '-button-accept',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -14218,18 +14218,18 @@ var author$project$Internal$List$Implementation$liView = F9(
 		return A5(
 			author$project$Internal$Options$apply,
 			li_summary,
-			A2(elm$core$Maybe$withDefault, elm$html$Html$li, li_config.cq),
+			A2(elm$core$Maybe$withDefault, elm$html$Html$li, li_config.cr),
 			_List_fromArray(
 				[
 					author$project$Internal$List$Implementation$listItemClass,
 					author$project$Internal$Options$tabindex(tab_index),
 					A2(
 					author$project$Internal$Options$when,
-					config.W && (is_selected && (!config.bY)),
+					config.W && (is_selected && (!config.bZ)),
 					author$project$Internal$Options$cs('mdc-list-item--selected')),
 					A2(
 					author$project$Internal$Options$when,
-					config.W && (is_selected && config.bY),
+					config.W && (is_selected && config.bZ),
 					author$project$Internal$Options$cs('mdc-list-item--activated')),
 					A2(
 					author$project$Internal$Options$when,
@@ -14246,8 +14246,8 @@ var author$project$Internal$List$Implementation$liView = F9(
 					author$project$Internal$Options$when,
 					config.al,
 					author$project$Internal$Options$role('radio')),
-					ripple.ci,
-					ripple.cx,
+					ripple.cj,
+					ripple.cy,
 					function () {
 					var _n0 = config.bw;
 					if (!_n0.$) {
@@ -14378,7 +14378,7 @@ var author$project$Internal$List$Implementation$liView = F9(
 	});
 var author$project$Internal$List$Implementation$li = F2(
 	function (options, children) {
-		return {b3: children, cf: true, bx: options, ff: author$project$Internal$List$Implementation$liView};
+		return {b4: children, cg: true, bx: options, ff: author$project$Internal$List$Implementation$liView};
 	});
 var author$project$Material$List$li = author$project$Internal$List$Implementation$li;
 var author$project$Internal$List$Implementation$text = function (options) {
@@ -14393,7 +14393,7 @@ var author$project$Internal$List$Implementation$text = function (options) {
 var author$project$Material$List$text = author$project$Internal$List$Implementation$text;
 var author$project$Internal$List$Implementation$doListItemDomId = F3(
 	function (domId, index, listItem) {
-		return listItem.cf ? A2(author$project$Internal$List$Implementation$listItemDomId, domId, index) : '';
+		return listItem.cg ? A2(author$project$Internal$List$Implementation$listItemDomId, domId, index) : '';
 	});
 var author$project$Internal$List$Implementation$findIndexHelp = F3(
 	function (index, predicate, list) {
@@ -14426,7 +14426,7 @@ var author$project$Internal$List$Implementation$liIsSelectedOrActivated = functi
 };
 var author$project$Internal$List$Implementation$listItemView = F8(
 	function (domId, lift, model, config, listItemsIds, focusedIndex, index, li_) {
-		return A9(li_.ff, domId, lift, model, config, listItemsIds, focusedIndex, index, li_.bx, li_.b3);
+		return A9(li_.ff, domId, lift, model, config, listItemsIds, focusedIndex, index, li_.bx, li_.b4);
 	});
 var elm$json$Json$Decode$maybe = function (decoder) {
 	return elm$json$Json$Decode$oneOf(
@@ -14509,7 +14509,7 @@ var author$project$Internal$List$Implementation$ul = F5(
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
 		var config = summary.dh;
 		var focusedIndex = function () {
-			var _n0 = model.cg;
+			var _n0 = model.ch;
 			if (!_n0.$) {
 				var focused = _n0.a;
 				return focused;
@@ -14536,7 +14536,7 @@ var author$project$Internal$List$Implementation$ul = F5(
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
-			A2(elm$core$Maybe$withDefault, elm$html$Html$ul, config.cq),
+			A2(elm$core$Maybe$withDefault, elm$html$Html$ul, config.cr),
 			_List_fromArray(
 				[
 					author$project$Internal$Options$cs('mdc-list'),
@@ -14576,10 +14576,10 @@ var author$project$Internal$RadioButton$Implementation$selected = author$project
 	function (config) {
 		return _Utils_update(
 			config,
-			{bZ: true});
+			{b_: true});
 	});
 var author$project$Material$RadioButton$selected = author$project$Internal$RadioButton$Implementation$selected;
-var author$project$Internal$RadioButton$Implementation$defaultConfig = {au: false, cV: '', dP: _List_Nil, bZ: false};
+var author$project$Internal$RadioButton$Implementation$defaultConfig = {au: false, cV: '', dP: _List_Nil, b_: false};
 var author$project$Internal$RadioButton$Model$NoOp = {$: 1};
 var author$project$Internal$RadioButton$Model$SetFocus = function (a) {
 	return {$: 2, a: a};
@@ -14604,7 +14604,7 @@ var author$project$Internal$RadioButton$Implementation$radioButton = F5(
 					author$project$Internal$Options$cs('mdc-radio'),
 					author$project$Internal$Options$many(
 					_List_fromArray(
-						[ripple.ci, ripple.cx]))
+						[ripple.cj, ripple.cy]))
 				]),
 			_List_Nil,
 			_List_fromArray(
@@ -14620,7 +14620,7 @@ var author$project$Internal$RadioButton$Implementation$radioButton = F5(
 							author$project$Internal$Options$attribute(
 							elm$html$Html$Attributes$type_('radio')),
 							author$project$Internal$Options$attribute(
-							elm$html$Html$Attributes$checked(config.bZ)),
+							elm$html$Html$Attributes$checked(config.b_)),
 							author$project$Internal$Options$onFocus(
 							lift(
 								author$project$Internal$RadioButton$Model$SetFocus(true))),
@@ -14698,7 +14698,7 @@ var author$project$Demo$Dialog$confirmationDialog = F3(
 			author$project$Material$Dialog$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					A2(
@@ -14730,7 +14730,7 @@ var author$project$Demo$Dialog$confirmationDialog = F3(
 							author$project$Material$List$ul,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index,
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[author$project$Material$List$avatarList]),
 							_List_fromArray(
@@ -14749,7 +14749,7 @@ var author$project$Demo$Dialog$confirmationDialog = F3(
 													author$project$Material$RadioButton$view,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 													'dialog-confirmation-dialog-checkbox-1',
-													model.cp,
+													model.cq,
 													_List_fromArray(
 														[author$project$Material$RadioButton$selected]),
 													_List_Nil)
@@ -14776,7 +14776,7 @@ var author$project$Demo$Dialog$confirmationDialog = F3(
 													author$project$Material$RadioButton$view,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 													'dialog-confirmation-dialog-checkbox-2',
-													model.cp,
+													model.cq,
 													_List_Nil,
 													_List_Nil)
 												])),
@@ -14802,7 +14802,7 @@ var author$project$Demo$Dialog$confirmationDialog = F3(
 													author$project$Material$RadioButton$view,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 													'dialog-confirmation-dialog-checkbox-3',
-													model.cp,
+													model.cq,
 													_List_Nil,
 													_List_Nil)
 												])),
@@ -14825,7 +14825,7 @@ var author$project$Demo$Dialog$confirmationDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + '-button-cancel',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -14841,7 +14841,7 @@ var author$project$Demo$Dialog$confirmationDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + '-button-accept',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -14869,7 +14869,7 @@ var author$project$Demo$Dialog$heroDialog = F3(
 			author$project$Material$Dialog$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Dialog$open,
@@ -14905,7 +14905,7 @@ var author$project$Demo$Dialog$heroDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + '-button-cancel',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[author$project$Material$Button$ripple, author$project$Material$Dialog$cancel]),
 							_List_fromArray(
@@ -14916,7 +14916,7 @@ var author$project$Demo$Dialog$heroDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + 'button-accept',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[author$project$Material$Button$ripple, author$project$Material$Dialog$accept]),
 							_List_fromArray(
@@ -14935,7 +14935,7 @@ var author$project$Demo$Dialog$scrollableDialog = F3(
 			author$project$Material$Dialog$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					A2(
@@ -15023,7 +15023,7 @@ var author$project$Demo$Dialog$scrollableDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + '-button-cancel',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -15039,7 +15039,7 @@ var author$project$Demo$Dialog$scrollableDialog = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index + '-button-accept',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -15066,7 +15066,7 @@ var author$project$Demo$Dialog$simpleDialog = F3(
 			author$project$Material$Dialog$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					A2(
@@ -15098,7 +15098,7 @@ var author$project$Demo$Dialog$simpleDialog = F3(
 							author$project$Material$List$ul,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							index,
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[author$project$Material$List$avatarList]),
 							_List_fromArray(
@@ -15203,7 +15203,7 @@ var author$project$Demo$Dialog$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
-					model.cp,
+					model.cq,
 					'dialogs',
 					'dialogs',
 					'mdc-dialog'),
@@ -15214,7 +15214,7 @@ var author$project$Demo$Dialog$view = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							'dialog-show-alert',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -15231,7 +15231,7 @@ var author$project$Demo$Dialog$view = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							'dialog-show-simple',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -15248,7 +15248,7 @@ var author$project$Demo$Dialog$view = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							'dialog-show-confirmation-dialog',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -15265,7 +15265,7 @@ var author$project$Demo$Dialog$view = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$Dialog$Mdc),
 							'dialog-show-scrollable-dialog',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$ripple,
@@ -15349,7 +15349,7 @@ var author$project$Internal$List$Implementation$node = function (nodeFunc) {
 			return _Utils_update(
 				config,
 				{
-					cq: elm$core$Maybe$Just(nodeFunc)
+					cr: elm$core$Maybe$Just(nodeFunc)
 				});
 		});
 };
@@ -15376,7 +15376,7 @@ var author$project$Internal$List$Implementation$asListItemView = F9(
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
-			A2(elm$core$Maybe$withDefault, elm$html$Html$div, summary.dh.cq),
+			A2(elm$core$Maybe$withDefault, elm$html$Html$div, summary.dh.cr),
 			_List_Nil,
 			_List_Nil,
 			children);
@@ -15384,8 +15384,8 @@ var author$project$Internal$List$Implementation$asListItemView = F9(
 var author$project$Internal$List$Implementation$asListItem = F3(
 	function (dom_node, options, children) {
 		return {
-			b3: children,
-			cf: false,
+			b4: children,
+			cg: false,
 			bx: A2(
 				elm$core$List$cons,
 				author$project$Internal$List$Implementation$node(dom_node),
@@ -15633,7 +15633,7 @@ var author$project$Demo$PermanentDrawer$mainContent = F4(
 					author$project$Material$Button$view,
 					mdc,
 					rtl_index,
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							A2(
@@ -15681,7 +15681,7 @@ var author$project$Internal$Drawer$Implementation$view = F5(
 	function (className, lift, model, options, nodes) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Drawer$Implementation$defaultConfig, options);
 		var config = summary.dh;
-		var stateChanged = (!model.b5) && (!_Utils_eq(config.l, model.l));
+		var stateChanged = (!model.b6) && (!_Utils_eq(config.l, model.l));
 		return A3(
 			author$project$Internal$Options$styled,
 			elm$html$Html$aside,
@@ -15777,7 +15777,7 @@ var author$project$Internal$Icon$Implementation$node = function (ctor) {
 		function (config) {
 			return _Utils_update(
 				config,
-				{cq: ctor});
+				{cr: ctor});
 		});
 };
 var author$project$Internal$Icon$Implementation$button = author$project$Internal$Icon$Implementation$node('button');
@@ -15806,8 +15806,8 @@ var author$project$Internal$TopAppBar$Implementation$actionItemView = F5(
 					author$project$Internal$Options$cs('mdc-icon-button'),
 					A2(
 						elm$core$List$cons,
-						ripple.ci,
-						A2(elm$core$List$cons, ripple.cx, options)))),
+						ripple.cj,
+						A2(elm$core$List$cons, ripple.cy, options)))),
 			name);
 	});
 var author$project$Internal$TopAppBar$Implementation$actionItem = F2(
@@ -15855,7 +15855,7 @@ var author$project$Internal$TopAppBar$Implementation$title = function (options) 
 var author$project$Material$TopAppBar$title = author$project$Internal$TopAppBar$Implementation$title;
 var author$project$Internal$GlobalEvents$onResize = author$project$Internal$GlobalEvents$listener('globalresize');
 var author$project$Internal$GlobalEvents$onScroll = author$project$Internal$GlobalEvents$listener('globalscroll');
-var author$project$Internal$TopAppBar$Implementation$cssClasses = {b6: 'mdc-top-app-bar--short-collapsed', b8: 'mdc-top-app-bar--dense', ag: 'mdc-top-app-bar--fixed', cw: 'mdc-top-app-bar--prominent', d8: 'mdc-top-app-bar--fixed-scrolled', aP: 'mdc-top-app-bar--short'};
+var author$project$Internal$TopAppBar$Implementation$cssClasses = {b7: 'mdc-top-app-bar--short-collapsed', b9: 'mdc-top-app-bar--dense', ag: 'mdc-top-app-bar--fixed', cx: 'mdc-top-app-bar--prominent', d8: 'mdc-top-app-bar--fixed-scrolled', aP: 'mdc-top-app-bar--short'};
 var author$project$Internal$TopAppBar$Implementation$getAppBarHeight = A2(
 	elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -15885,7 +15885,7 @@ var author$project$Internal$TopAppBar$Model$Resize = function (a) {
 var author$project$Internal$TopAppBar$Model$Scroll = function (a) {
 	return {$: 3, a: a};
 };
-var author$project$Internal$TopAppBar$Model$defaultConfig = {b6: false, b8: false, ag: false, cw: false, aP: false};
+var author$project$Internal$TopAppBar$Model$defaultConfig = {b7: false, b9: false, ag: false, cx: false, aP: false};
 var elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -15922,8 +15922,8 @@ var author$project$Internal$TopAppBar$Implementation$topAppBar = F4(
 					author$project$Internal$Options$cs('mdc-top-app-bar'),
 					A2(
 					author$project$Internal$Options$when,
-					config.b8,
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.b8)),
+					config.b9,
+					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.b9)),
 					A2(
 					author$project$Internal$Options$when,
 					config.ag,
@@ -15934,16 +15934,16 @@ var author$project$Internal$TopAppBar$Implementation$topAppBar = F4(
 					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.d8)),
 					A2(
 					author$project$Internal$Options$when,
-					config.cw,
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.cw)),
+					config.cx,
+					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.cx)),
 					A2(
 					author$project$Internal$Options$when,
 					config.aP,
 					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.aP)),
 					A2(
 					author$project$Internal$Options$when,
-					config.b6 || (config.aP && (lastScrollPosition > 0)),
-					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.b6)),
+					config.b7 || (config.aP && (lastScrollPosition > 0)),
+					author$project$Internal$Options$cs(author$project$Internal$TopAppBar$Implementation$cssClasses.b7)),
 					A2(
 					author$project$Internal$Options$when,
 					(!config.ag) && (!config.aP),
@@ -16031,7 +16031,7 @@ var author$project$Demo$DismissibleDrawer$view = F3(
 					author$project$Material$Drawer$Dismissible$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$DismissibleDrawer$Mdc),
 					'dismissible-drawer-drawer',
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							A2(author$project$Material$Options$when, model.a9, author$project$Material$Drawer$Dismissible$open),
@@ -16045,10 +16045,10 @@ var author$project$Demo$DismissibleDrawer$view = F3(
 							author$project$Demo$PermanentDrawer$drawerItems,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$DismissibleDrawer$Mdc),
 							'dismissible-drawer-drawer-list',
-							model.cp,
+							model.cq,
 							'#dismissible-drawer',
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$DismissibleDrawer$SelectDrawerItem),
-							model.cB)
+							model.cC)
 						])),
 					A3(
 					author$project$Material$Options$styled,
@@ -16061,7 +16061,7 @@ var author$project$Demo$DismissibleDrawer$view = F3(
 							author$project$Material$TopAppBar$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$DismissibleDrawer$Mdc),
 							'dismissible-drawer-top-app-bar',
-							model.cp,
+							model.cq,
 							_List_Nil,
 							_List_fromArray(
 								[
@@ -16075,7 +16075,7 @@ var author$project$Demo$DismissibleDrawer$view = F3(
 											author$project$Material$TopAppBar$navigationIcon,
 											A2(elm$core$Basics$composeL, lift, author$project$Demo$DismissibleDrawer$Mdc),
 											'dismissible-drawer-menu',
-											model.cp,
+											model.cq,
 											_List_fromArray(
 												[
 													author$project$Material$Options$onClick(
@@ -16186,7 +16186,7 @@ var author$project$Demo$Drawer$view = F3(
 						author$project$Material$Drawer$Permanent$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						'permanent-drawer-drawer',
-						model.cp,
+						model.cq,
 						_List_Nil,
 						_List_fromArray(
 							[
@@ -16223,7 +16223,7 @@ var author$project$Demo$Drawer$view = F3(
 										author$project$Material$List$ul,
 										A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 										'permanent-drawer-drawer-list',
-										model.cp,
+										model.cq,
 										_List_Nil,
 										_List_fromArray(
 											[
@@ -16285,7 +16285,7 @@ var author$project$Demo$Drawer$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'navigation-drawer',
 					'drawers',
 					'mdc-drawer'),
@@ -16441,7 +16441,7 @@ var author$project$Demo$Elevation$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'environment/elevation',
 					'elevation',
 					'mdc-elevation'),
@@ -16566,7 +16566,7 @@ var author$project$Internal$Fab$Implementation$icon = function (name) {
 			return _Utils_update(
 				config,
 				{
-					ch: elm$core$Maybe$Just(name)
+					ci: elm$core$Maybe$Just(name)
 				});
 		});
 };
@@ -16584,7 +16584,7 @@ var author$project$Internal$Fab$Implementation$ripple = author$project$Internal$
 			{bD: true});
 	});
 var author$project$Material$Fab$ripple = author$project$Internal$Fab$Implementation$ripple;
-var author$project$Internal$Fab$Implementation$defaultConfig = {ch: elm$core$Maybe$Nothing, bD: false};
+var author$project$Internal$Fab$Implementation$defaultConfig = {ci: elm$core$Maybe$Nothing, bD: false};
 var author$project$Internal$Fab$Implementation$fab = F5(
 	function (domId, lift, model, options, nodes) {
 		var rippleInterface = A5(
@@ -16597,7 +16597,7 @@ var author$project$Internal$Fab$Implementation$fab = F5(
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Fab$Implementation$defaultConfig, options);
 		var config = summary.dh;
 		var iconSpan = function () {
-			var _n0 = config.ch;
+			var _n0 = config.ci;
 			if (!_n0.$) {
 				var name = _n0.a;
 				return A3(
@@ -16628,7 +16628,7 @@ var author$project$Internal$Fab$Implementation$fab = F5(
 					author$project$Internal$Options$when(config.bD),
 					author$project$Internal$Options$many,
 					_List_fromArray(
-						[rippleInterface.ci, rippleInterface.cx]))
+						[rippleInterface.cj, rippleInterface.cy]))
 				]),
 			_List_Nil,
 			elm$core$List$concat(
@@ -16658,7 +16658,7 @@ var author$project$Demo$Fabs$view = F3(
 					author$project$Material$Fab$view,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 					idx,
-					model.cp,
+					model.cq,
 					A2(
 						elm$core$List$cons,
 						author$project$Material$Fab$ripple,
@@ -16674,7 +16674,7 @@ var author$project$Demo$Fabs$view = F3(
 					author$project$Material$Fab$view,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 					idx,
-					model.cp,
+					model.cq,
 					A2(
 						elm$core$List$cons,
 						author$project$Material$Fab$ripple,
@@ -16697,7 +16697,7 @@ var author$project$Demo$Fabs$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'buttons-floating-action-button',
 					'buttons/floating-action-buttons',
 					'mdc-fab'),
@@ -16822,7 +16822,7 @@ var author$project$Demo$IconButton$iconToggle = F5(
 			author$project$Material$IconButton$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$IconButton$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$IconButton$icon(
@@ -16850,7 +16850,7 @@ var author$project$Demo$IconButton$iconImageToggle = F5(
 			author$project$Material$IconButton$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$IconButton$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Options$onClick(
@@ -16901,7 +16901,7 @@ var author$project$Demo$IconButton$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$IconButton$Mdc),
-					model.cp,
+					model.cq,
 					'buttons.html#toggle-button',
 					'buttons/icon-buttons',
 					'mdc-icon-button'),
@@ -16941,10 +16941,14 @@ var author$project$Demo$IconButton$view = F3(
 						]))
 				]));
 	});
+var author$project$Internal$ImageList$Model$defaultConfig = {cp: false, bP: elm$core$Maybe$Nothing, cK: false};
 var author$project$Internal$ImageList$Implementation$image = function (options) {
+	var summary = A2(author$project$Internal$Options$collect, author$project$Internal$ImageList$Model$defaultConfig, options);
+	var config = summary.dh;
+	var tag = A2(elm$core$Maybe$withDefault, 'img', config.bP);
 	return A2(
 		author$project$Internal$Options$styled,
-		elm$html$Html$img,
+		elm$html$Html$node(tag),
 		A2(
 			elm$core$List$cons,
 			author$project$Internal$Options$cs('mdc-image-list__image'),
@@ -16957,7 +16961,7 @@ var author$project$Internal$ImageList$Implementation$node = function (tag) {
 			return _Utils_update(
 				config,
 				{
-					cE: elm$core$Maybe$Just(tag)
+					bP: elm$core$Maybe$Just(tag)
 				});
 		});
 };
@@ -16972,11 +16976,10 @@ var author$project$Material$ImageList$divImage = F2(
 				options),
 			nodes);
 	});
-var author$project$Internal$ImageList$Model$defaultConfig = {co: false, cE: elm$core$Maybe$Nothing, cK: false};
 var author$project$Internal$ImageList$Implementation$imageAspectContainer = function (options) {
 	var summary = A2(author$project$Internal$Options$collect, author$project$Internal$ImageList$Model$defaultConfig, options);
 	var config = summary.dh;
-	var tag = A2(elm$core$Maybe$withDefault, 'div', config.cE);
+	var tag = A2(elm$core$Maybe$withDefault, 'div', config.bP);
 	return A2(
 		author$project$Internal$Options$styled,
 		elm$html$Html$node(tag),
@@ -17024,7 +17027,7 @@ var author$project$Demo$ImageList$masonryImages = _List_fromArray(
 var author$project$Internal$ImageList$Implementation$label = function (options) {
 	var summary = A2(author$project$Internal$Options$collect, author$project$Internal$ImageList$Model$defaultConfig, options);
 	var config = summary.dh;
-	var tag = A2(elm$core$Maybe$withDefault, 'span', config.cE);
+	var tag = A2(elm$core$Maybe$withDefault, 'span', config.bP);
 	return A2(
 		author$project$Internal$Options$styled,
 		elm$html$Html$node(tag),
@@ -17065,10 +17068,10 @@ var author$project$Internal$ImageList$Implementation$masonry = author$project$In
 	function (config) {
 		return _Utils_update(
 			config,
-			{co: true});
+			{cp: true});
 	});
 var author$project$Material$ImageList$masonry = author$project$Internal$ImageList$Implementation$masonry;
-var author$project$Internal$ImageList$Implementation$cssClasses = {co: 'mdc-image-list--masonry', cK: 'mdc-image-list--with-text-protection'};
+var author$project$Internal$ImageList$Implementation$cssClasses = {cp: 'mdc-image-list--masonry', cK: 'mdc-image-list--with-text-protection'};
 var author$project$Internal$ImageList$Implementation$imageList = function (options) {
 	var summary = A2(author$project$Internal$Options$collect, author$project$Internal$ImageList$Model$defaultConfig, options);
 	var config = summary.dh;
@@ -17081,8 +17084,8 @@ var author$project$Internal$ImageList$Implementation$imageList = function (optio
 				author$project$Internal$Options$cs('mdc-image-list'),
 				A2(
 				author$project$Internal$Options$when,
-				config.co,
-				author$project$Internal$Options$cs(author$project$Internal$ImageList$Implementation$cssClasses.co)),
+				config.cp,
+				author$project$Internal$Options$cs(author$project$Internal$ImageList$Implementation$cssClasses.cp)),
 				A2(
 				author$project$Internal$Options$when,
 				config.cK,
@@ -17107,7 +17110,7 @@ var author$project$Demo$ImageList$standardImages = _List_fromArray(
 var author$project$Internal$ImageList$Implementation$supporting = function (options) {
 	var summary = A2(author$project$Internal$Options$collect, author$project$Internal$ImageList$Model$defaultConfig, options);
 	var config = summary.dh;
-	var tag = A2(elm$core$Maybe$withDefault, 'div', config.cE);
+	var tag = A2(elm$core$Maybe$withDefault, 'div', config.bP);
 	return A2(
 		author$project$Internal$Options$styled,
 		elm$html$Html$node(tag),
@@ -17218,7 +17221,7 @@ var author$project$Demo$ImageList$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'image-lists',
 					'image-lists',
 					'mdc-image-list'),
@@ -17315,7 +17318,8 @@ var author$project$Demo$LayoutGrid$cellAlignmentGrid = A2(
 	author$project$Demo$LayoutGrid$demoGrid,
 	_List_fromArray(
 		[
-			A2(author$project$Material$Options$css, 'min-height', '200px')
+			A2(author$project$Material$Options$css, 'min-height', '200px'),
+			author$project$Material$Options$cs('demo-grid--cell-alignment')
 		]),
 	_List_fromArray(
 		[
@@ -17323,19 +17327,19 @@ var author$project$Demo$LayoutGrid$cellAlignmentGrid = A2(
 			_List_fromArray(
 				[
 					author$project$Material$LayoutGrid$alignTop,
-					A2(author$project$Material$Options$css, 'min-height', '50px')
+					A2(author$project$Material$Options$css, 'max-height', '50px')
 				])),
 			author$project$Demo$LayoutGrid$demoCell(
 			_List_fromArray(
 				[
 					author$project$Material$LayoutGrid$alignMiddle,
-					A2(author$project$Material$Options$css, 'min-height', '50px')
+					A2(author$project$Material$Options$css, 'max-height', '50px')
 				])),
 			author$project$Demo$LayoutGrid$demoCell(
 			_List_fromArray(
 				[
 					author$project$Material$LayoutGrid$alignBottom,
-					A2(author$project$Material$Options$css, 'min-height', '50px')
+					A2(author$project$Material$Options$css, 'max-height', '50px')
 				]))
 		]));
 var author$project$Internal$LayoutGrid$Implementation$span = F2(
@@ -17423,8 +17427,6 @@ var author$project$Demo$LayoutGrid$rightAlignedGrid = A2(
 			author$project$Demo$LayoutGrid$demoCell(_List_Nil),
 			author$project$Demo$LayoutGrid$demoCell(_List_Nil)
 		]));
-var author$project$Internal$Typography$Implementation$body1 = author$project$Internal$Options$cs('mdc-typography--body1');
-var author$project$Material$Typography$body1 = author$project$Internal$Typography$Implementation$body1;
 var author$project$Demo$LayoutGrid$view = F3(
 	function (lift, page, model) {
 		return A4(
@@ -17441,7 +17443,7 @@ var author$project$Demo$LayoutGrid$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'',
 					'layout-grid',
 					'mdc-layout-grid'),
@@ -17471,7 +17473,7 @@ var author$project$Demo$LayoutGrid$view = F3(
 							author$project$Material$Options$styled,
 							elm$html$Html$p,
 							_List_fromArray(
-								[author$project$Material$Typography$body1]),
+								[author$project$Material$Typography$body2]),
 							_List_fromArray(
 								[
 									elm$html$Html$text('This requires a max-width on the top-level grid element.')
@@ -17490,7 +17492,7 @@ var author$project$Demo$LayoutGrid$view = F3(
 							author$project$Material$Options$styled,
 							elm$html$Html$p,
 							_List_fromArray(
-								[author$project$Material$Typography$body1]),
+								[author$project$Material$Typography$body2]),
 							_List_fromArray(
 								[
 									elm$html$Html$text('This requires a max-width on the top-level grid element.')
@@ -17509,7 +17511,7 @@ var author$project$Demo$LayoutGrid$view = F3(
 							author$project$Material$Options$styled,
 							elm$html$Html$p,
 							_List_fromArray(
-								[author$project$Material$Typography$body1]),
+								[author$project$Material$Typography$body2]),
 							_List_fromArray(
 								[
 									elm$html$Html$text('Cell alignment requires a cell height smaller than the inner height of the grid.')
@@ -17524,7 +17526,7 @@ var author$project$Internal$LinearProgress$Implementation$buffered = F2(
 			function (config) {
 				return _Utils_update(
 					config,
-					{b1: buffer, b2: true, bZ: value});
+					{b2: buffer, b3: true, b_: value});
 			});
 	});
 var author$project$Material$LinearProgress$buffered = author$project$Internal$LinearProgress$Implementation$buffered;
@@ -17533,7 +17535,7 @@ var author$project$Internal$LinearProgress$Implementation$determinate = function
 		function (config) {
 			return _Utils_update(
 				config,
-				{cT: true, bZ: value});
+				{cT: true, b_: value});
 		});
 };
 var author$project$Material$LinearProgress$determinate = author$project$Internal$LinearProgress$Implementation$determinate;
@@ -17548,10 +17550,10 @@ var author$project$Internal$LinearProgress$Implementation$reversed = author$proj
 	function (config) {
 		return _Utils_update(
 			config,
-			{cA: true});
+			{cB: true});
 	});
 var author$project$Material$LinearProgress$reversed = author$project$Internal$LinearProgress$Implementation$reversed;
-var author$project$Internal$LinearProgress$Implementation$defaultConfig = {b1: 0, b2: false, cT: false, bl: false, cA: false, bZ: 0};
+var author$project$Internal$LinearProgress$Implementation$defaultConfig = {b2: 0, b3: false, cT: false, bl: false, cB: false, b_: 0};
 var author$project$Internal$LinearProgress$Implementation$view = F2(
 	function (options, _n0) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$LinearProgress$Implementation$defaultConfig, options);
@@ -17569,7 +17571,7 @@ var author$project$Internal$LinearProgress$Implementation$view = F2(
 					author$project$Internal$Options$cs('mdc-linear-progress--indeterminate')),
 					A2(
 					author$project$Internal$Options$when,
-					config.cA,
+					config.cB,
 					author$project$Internal$Options$cs('mdc-linear-progress--reversed'))
 				]),
 			_List_Nil,
@@ -17591,11 +17593,11 @@ var author$project$Internal$LinearProgress$Implementation$view = F2(
 							author$project$Internal$Options$cs('mdc-linear-progress__buffer'),
 							A2(
 							author$project$Internal$Options$when,
-							config.b2,
+							config.b3,
 							A2(
 								author$project$Internal$Options$css,
 								'transform',
-								'scaleX(' + (elm$core$String$fromFloat(config.b1) + ')')))
+								'scaleX(' + (elm$core$String$fromFloat(config.b2) + ')')))
 						]),
 					_List_Nil),
 					A3(
@@ -17610,7 +17612,7 @@ var author$project$Internal$LinearProgress$Implementation$view = F2(
 							A2(
 								author$project$Internal$Options$css,
 								'transform',
-								'scaleX(' + (elm$core$String$fromFloat(config.bZ) + ')')))
+								'scaleX(' + (elm$core$String$fromFloat(config.b_) + ')')))
 						]),
 					_List_fromArray(
 						[
@@ -17668,7 +17670,7 @@ var author$project$Demo$LinearProgress$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'progress-indicators',
 					'linear-progress',
 					'mdc-linear-progress'),
@@ -17790,7 +17792,7 @@ var author$project$Internal$List$Implementation$useActivated = author$project$In
 	function (config) {
 		return _Utils_update(
 			config,
-			{bY: true});
+			{bZ: true});
 	});
 var author$project$Material$List$useActivated = author$project$Internal$List$Implementation$useActivated;
 var author$project$Demo$Lists$activatedItemList = F3(
@@ -17799,7 +17801,7 @@ var author$project$Demo$Lists$activatedItemList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A2(
 				elm$core$List$cons,
 				author$project$Material$List$useActivated,
@@ -17896,7 +17898,7 @@ var author$project$Demo$Lists$folderList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A2(
 				elm$core$List$cons,
 				author$project$Material$List$twoLine,
@@ -18027,7 +18029,7 @@ var author$project$Demo$Lists$heroList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A2(
 				elm$core$List$cons,
 				A2(author$project$Material$Options$css, 'background', '#fff'),
@@ -18049,7 +18051,7 @@ var author$project$Demo$Lists$leadingIconList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A3(author$project$Demo$Lists$demoList, lift, model, index),
 			_List_fromArray(
 				[
@@ -18085,7 +18087,7 @@ var author$project$Demo$Lists$listWithTrailing = F5(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_Utils_ap(
 				A3(author$project$Demo$Lists$demoList, lift, model, index),
 				options),
@@ -18141,7 +18143,7 @@ var author$project$Demo$Lists$listWithTrailingCheckbox = F3(
 					author$project$Material$Checkbox$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 					index + ('-checkbox-' + elm$core$String$fromInt(n)),
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$Checkbox$checked(selected),
@@ -18176,7 +18178,7 @@ var author$project$Demo$Lists$listWithTrailingRadioButton = F3(
 					author$project$Material$RadioButton$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 					index + ('-radio-button-' + elm$core$String$fromInt(n)),
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							A2(
@@ -18194,7 +18196,7 @@ var author$project$Demo$Lists$shapedActivatedItemList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A2(
 				elm$core$List$cons,
 				author$project$Material$List$useActivated,
@@ -18247,7 +18249,7 @@ var author$project$Demo$Lists$singleLineList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A3(author$project$Demo$Lists$demoList, lift, model, index),
 			A2(
 				elm$core$List$repeat,
@@ -18266,7 +18268,7 @@ var author$project$Demo$Lists$trailingIconList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A3(author$project$Demo$Lists$demoList, lift, model, index),
 			A2(
 				elm$core$List$repeat,
@@ -18286,7 +18288,7 @@ var author$project$Demo$Lists$twoLineList = F3(
 			author$project$Material$List$ul,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			A2(
 				elm$core$List$cons,
 				author$project$Material$List$twoLine,
@@ -18339,7 +18341,7 @@ var author$project$Demo$Lists$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Lists$Mdc),
-					model.cp,
+					model.cq,
 					'lists',
 					'lists',
 					'mdc-list'),
@@ -18441,7 +18443,7 @@ var author$project$Demo$Lists$view = F3(
 	});
 var author$project$Internal$Menu$Implementation$li = F2(
 	function (options, childs) {
-		return {a4: childs, ca: false, bx: options};
+		return {a4: childs, cb: false, bx: options};
 	});
 var author$project$Material$Menu$li = author$project$Internal$Menu$Implementation$li;
 var author$project$Internal$Menu$Implementation$ul = F2(
@@ -18853,7 +18855,7 @@ var author$project$Internal$Menu$Implementation$menu = F5(
 						elm$core$List$indexedMap,
 						F2(
 							function (i, item) {
-								return item.ca ? A2(author$project$Internal$List$Implementation$divider, item.bx, item.a4) : A2(
+								return item.cb ? A2(author$project$Internal$List$Implementation$divider, item.bx, item.a4) : A2(
 									author$project$Internal$List$Implementation$li,
 									A2(
 										elm$core$List$cons,
@@ -18884,7 +18886,7 @@ var author$project$Demo$Menus$heroMenu = F2(
 			author$project$Material$Menu$view,
 			A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 			'menus-hero-menu',
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Options$cs('mdc-menu-surface--open')
@@ -18920,7 +18922,7 @@ var author$project$Internal$Menu$Implementation$attach = F2(
 var author$project$Material$Menu$attach = author$project$Internal$Menu$Implementation$attach;
 var author$project$Internal$Menu$Implementation$divider = F2(
 	function (options, childs) {
-		return {a4: childs, ca: true, bx: options};
+		return {a4: childs, cb: true, bx: options};
 	});
 var author$project$Material$Menu$divider = author$project$Internal$Menu$Implementation$divider;
 var author$project$Internal$Menu$Implementation$selected = author$project$Internal$Options$cs('mdc-menu-item--selected');
@@ -18945,7 +18947,7 @@ var author$project$Demo$Menus$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'menus',
 					'menus',
 					'mdc-menu'),
@@ -18965,7 +18967,7 @@ var author$project$Demo$Menus$view = F3(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							'menus-button',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									A2(
@@ -18988,7 +18990,7 @@ var author$project$Demo$Menus$view = F3(
 									author$project$Material$Menu$view,
 									A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 									'menus-menu',
-									model.cp,
+									model.cq,
 									_List_Nil,
 									A2(
 										author$project$Material$Menu$ul,
@@ -19104,7 +19106,7 @@ var author$project$Demo$ModalDrawer$view = F3(
 					author$project$Material$Drawer$Modal$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$ModalDrawer$Mdc),
 					'modal-drawer-drawer',
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							A2(author$project$Material$Options$when, model.a9, author$project$Material$Drawer$Modal$open),
@@ -19118,10 +19120,10 @@ var author$project$Demo$ModalDrawer$view = F3(
 							author$project$Demo$PermanentDrawer$drawerItems,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$ModalDrawer$Mdc),
 							'modal-drawer-drawer-list',
-							model.cp,
+							model.cq,
 							'#modal-drawer',
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$ModalDrawer$SelectDrawerItem),
-							model.cB)
+							model.cC)
 						])),
 					A2(
 					author$project$Material$Drawer$Modal$scrim,
@@ -19144,7 +19146,7 @@ var author$project$Demo$ModalDrawer$view = F3(
 							author$project$Material$TopAppBar$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$ModalDrawer$Mdc),
 							'modal-drawer-top-app-bar',
-							model.cp,
+							model.cq,
 							_List_Nil,
 							_List_fromArray(
 								[
@@ -19158,7 +19160,7 @@ var author$project$Demo$ModalDrawer$view = F3(
 											author$project$Material$TopAppBar$navigationIcon,
 											A2(elm$core$Basics$composeL, lift, author$project$Demo$ModalDrawer$Mdc),
 											'modal-drawer-menu',
-											model.cp,
+											model.cq,
 											_List_fromArray(
 												[
 													author$project$Material$Options$onClick(
@@ -19200,6 +19202,8 @@ var author$project$Demo$Helper$Hero$header = function (title) {
 				elm$html$Html$text(title)
 			]));
 };
+var author$project$Internal$Typography$Implementation$body1 = author$project$Internal$Options$cs('mdc-typography--body1');
+var author$project$Material$Typography$body1 = author$project$Internal$Typography$Implementation$body1;
 var author$project$Demo$Helper$Hero$area = F3(
 	function (title, intro, demo) {
 		return A3(
@@ -19483,7 +19487,7 @@ var author$project$Demo$PermanentDrawer$view = F3(
 					author$project$Material$Drawer$Permanent$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$PermanentDrawer$Mdc),
 					'permanent-drawer-drawer',
-					model.cp,
+					model.cq,
 					_List_Nil,
 					_List_fromArray(
 						[
@@ -19492,10 +19496,10 @@ var author$project$Demo$PermanentDrawer$view = F3(
 							author$project$Demo$PermanentDrawer$drawerItems,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$PermanentDrawer$Mdc),
 							'permanent-drawer-drawer-list',
-							model.cp,
+							model.cq,
 							'#persistent-drawer',
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$PermanentDrawer$SelectDrawerItem),
-							model.cB)
+							model.cC)
 						])),
 					A3(
 					author$project$Material$Options$styled,
@@ -19511,7 +19515,7 @@ var author$project$Demo$PermanentDrawer$view = F3(
 							author$project$Material$TopAppBar$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$PermanentDrawer$Mdc),
 							'permanent-drawer-top-app-bar',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									A2(author$project$Material$Options$css, 'position', 'absolute')
@@ -19593,7 +19597,7 @@ var author$project$Demo$RadioButtons$radio = F5(
 					author$project$Material$RadioButton$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$RadioButtons$Mdc),
 					index,
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$Options$onClick(
@@ -19634,7 +19638,7 @@ var author$project$Demo$RadioButtons$heroRadio = F4(
 			author$project$Material$RadioButton$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$RadioButtons$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Options$onClick(
@@ -19677,7 +19681,7 @@ var author$project$Demo$RadioButtons$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$RadioButtons$Mdc),
-					model.cp,
+					model.cq,
 					'buttons',
 					'buttons',
 					'mdc-button'),
@@ -19703,7 +19707,7 @@ var author$project$Demo$Ripple$demoBox = F5(
 			author$project$Material$Ripple$bounded,
 			A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 			index,
-			model.cp,
+			model.cq,
 			_List_Nil);
 		return A3(
 			author$project$Material$Options$styled,
@@ -19727,8 +19731,8 @@ var author$project$Demo$Ripple$demoBox = F5(
 					A2(author$project$Material$Options$css, 'overflow', 'hidden'),
 					author$project$Material$Elevation$z2,
 					author$project$Material$Options$tabindex(0),
-					ripple.ci,
-					ripple.cx
+					ripple.cj,
+					ripple.cy
 				]),
 			_List_fromArray(
 				[
@@ -19752,7 +19756,7 @@ var author$project$Demo$Ripple$demoIcon = F4(
 			author$project$Material$Ripple$unbounded,
 			A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 			index,
-			model.cp,
+			model.cq,
 			_List_Nil);
 		return A3(
 			author$project$Material$Options$styled,
@@ -19765,8 +19769,8 @@ var author$project$Demo$Ripple$demoIcon = F4(
 					A2(author$project$Material$Options$css, 'height', '24px'),
 					A2(author$project$Material$Options$css, 'padding', '12px'),
 					A2(author$project$Material$Options$css, 'border-radius', '50%'),
-					ripple.ci,
-					ripple.cx
+					ripple.cj,
+					ripple.cy
 				]),
 			_List_fromArray(
 				[
@@ -19791,7 +19795,7 @@ var author$project$Demo$Ripple$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'interaction/states',
 					'ripples',
 					'mdc-ripple'),
@@ -19914,7 +19918,7 @@ var author$project$Internal$Select$Implementation$select = F4(
 		var isDirty = model.dD;
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Select$Implementation$defaultConfig, options);
 		var config = summary.dh;
-		var focused = model.cg && (!config.au);
+		var focused = model.ch && (!config.au);
 		var htmlLabel = A3(
 			author$project$Internal$Options$styled,
 			elm$html$Html$label,
@@ -20074,7 +20078,7 @@ var author$project$Demo$Selects$filledSelect = F2(
 			author$project$Material$Select$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Selects$Mdc),
 			'selects-filled-select',
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Select$label('Fruit')
@@ -20087,7 +20091,7 @@ var author$project$Demo$Selects$heroSelect = F2(
 			author$project$Material$Select$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Selects$Mdc),
 			'selects-hero-select',
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Select$label('Fruit')
@@ -20107,7 +20111,7 @@ var author$project$Demo$Selects$outlinedSelect = F2(
 			author$project$Material$Select$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Selects$Mdc),
 			'selects-outlined-select',
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Select$label('Fruit'),
@@ -20121,7 +20125,7 @@ var author$project$Demo$Selects$shapedFilledSelect = F2(
 			author$project$Material$Select$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Selects$Mdc),
 			'selects-shaped-filled-select',
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Select$label('Fruit'),
@@ -20135,7 +20139,7 @@ var author$project$Demo$Selects$shapedOutlinedSelect = F2(
 			author$project$Material$Select$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Selects$Mdc),
 			'selects-shaped-outlined-select',
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Select$label('Fruit'),
@@ -20162,7 +20166,7 @@ var author$project$Demo$Selects$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Selects$Mdc),
-					model.cp,
+					model.cq,
 					'text-fields',
 					'input-controls/select-menus',
 					'mdc-select'),
@@ -20250,7 +20254,7 @@ var author$project$Internal$Slider$Implementation$value = function (value_) {
 		function (config) {
 			return _Utils_update(
 				config,
-				{bZ: value_});
+				{b_: value_});
 		});
 };
 var author$project$Material$Slider$value = author$project$Internal$Slider$Implementation$value;
@@ -20372,7 +20376,7 @@ var author$project$Internal$Slider$Implementation$decodePageX = A2(
 					['pageX']),
 				elm$json$Json$Decode$float)
 			])));
-var author$project$Internal$Slider$Implementation$defaultConfig = {K: false, k: 100, e: 0, O: elm$core$Maybe$Nothing, y: elm$core$Maybe$Nothing, H: 1, cH: false, bZ: 0};
+var author$project$Internal$Slider$Implementation$defaultConfig = {K: false, k: 100, e: 0, O: elm$core$Maybe$Nothing, y: elm$core$Maybe$Nothing, H: 1, cH: false, b_: 0};
 var elm$core$Basics$clamp = F3(
 	function (low, high, number) {
 		return (_Utils_cmp(number, low) < 0) ? low : ((_Utils_cmp(number, high) > 0) ? high : number);
@@ -20470,7 +20474,7 @@ var author$project$Internal$Slider$Implementation$slider = F4(
 			['mousedown', 'pointerdown', 'touchstart']);
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$Slider$Implementation$defaultConfig, options);
 		var config = summary.dh;
-		var continuousValue = model.B ? A2(elm$core$Maybe$withDefault, config.bZ, model.aW) : config.bZ;
+		var continuousValue = model.B ? A2(elm$core$Maybe$withDefault, config.b_, model.aW) : config.b_;
 		var discreteValue = A2(author$project$Internal$Slider$Implementation$discretize, geometry, continuousValue);
 		var stepChanged = !_Utils_eq(
 			elm$core$Maybe$Just(config.H),
@@ -20495,7 +20499,7 @@ var author$project$Internal$Slider$Implementation$slider = F4(
 					author$project$Internal$Options$cs('mdc-slider'),
 					A2(
 					author$project$Internal$Options$when,
-					model.ce,
+					model.cf,
 					author$project$Internal$Options$cs('mdc-slider--focus')),
 					A2(
 					author$project$Internal$Options$when,
@@ -20567,7 +20571,7 @@ var author$project$Internal$Slider$Implementation$slider = F4(
 							elm$json$Json$Decode$map2,
 							F2(
 								function (key, keyCode) {
-									var activeValue = A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.bZ);
+									var activeValue = A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.b_);
 									return (!_Utils_eq(activeValue, elm$core$Maybe$Nothing)) ? author$project$Internal$Slider$Model$KeyDown : author$project$Internal$Slider$Model$NoOp;
 								}),
 							elm$json$Json$Decode$oneOf(
@@ -20606,7 +20610,7 @@ var author$project$Internal$Slider$Implementation$slider = F4(
 									elm$json$Json$Decode$map2,
 									F2(
 										function (key, keyCode) {
-											var activeValue = A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.bZ);
+											var activeValue = A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.b_);
 											return (!_Utils_eq(activeValue, elm$core$Maybe$Nothing)) ? elm$json$Json$Decode$succeed(author$project$Internal$Slider$Model$NoOp) : elm$json$Json$Decode$fail('');
 										}),
 									elm$json$Json$Decode$oneOf(
@@ -20640,7 +20644,7 @@ var author$project$Internal$Slider$Implementation$slider = F4(
 									var activeValue = A2(
 										elm$core$Maybe$map,
 										author$project$Internal$Slider$Implementation$discretize(geometry),
-										A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.bZ));
+										A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.b_));
 									return A2(
 										elm$core$Maybe$withDefault,
 										lift(author$project$Internal$Slider$Model$NoOp),
@@ -20677,7 +20681,7 @@ var author$project$Internal$Slider$Implementation$slider = F4(
 									var activeValue = A2(
 										elm$core$Maybe$map,
 										author$project$Internal$Slider$Implementation$discretize(geometry),
-										A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.bZ));
+										A4(author$project$Internal$Slider$Implementation$valueForKey, key, keyCode, geometry, config.b_));
 									return A2(
 										elm$core$Maybe$withDefault,
 										lift(author$project$Internal$Slider$Model$NoOp),
@@ -21059,7 +21063,7 @@ var author$project$Demo$Slider$continuousSlider = F2(
 			author$project$Material$Slider$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Slider$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Slider$value(
@@ -21100,7 +21104,7 @@ var author$project$Demo$Slider$discreteSlider = F2(
 			author$project$Material$Slider$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Slider$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Slider$value(
@@ -21134,7 +21138,7 @@ var author$project$Demo$Slider$discreteSliderWithTickMarks = F2(
 			author$project$Material$Slider$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Slider$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Slider$value(
@@ -21162,7 +21166,7 @@ var author$project$Demo$Slider$heroSlider = F2(
 			author$project$Material$Slider$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$Slider$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$Slider$value(
@@ -21196,7 +21200,7 @@ var author$project$Demo$Slider$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Slider$Mdc),
-					model.cp,
+					model.cq,
 					'sliders',
 					'input-controls/sliders',
 					'mdc-slider'),
@@ -21267,10 +21271,10 @@ var author$project$Internal$Snackbar$Implementation$dismissible = author$project
 	function (config) {
 		return _Utils_update(
 			config,
-			{b9: true});
+			{ca: true});
 	});
 var author$project$Material$Snackbar$dismissible = author$project$Internal$Snackbar$Implementation$dismissible;
-var author$project$Internal$Snackbar$Implementation$defaultConfig = {b9: false};
+var author$project$Internal$Snackbar$Implementation$defaultConfig = {ca: false};
 var author$project$Internal$Snackbar$Model$Dismiss = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
@@ -21280,7 +21284,7 @@ var elm$html$Html$Attributes$title = elm$html$Html$Attributes$stringProperty('ti
 var author$project$Internal$Snackbar$Implementation$snackbar = F4(
 	function (lift, model, options, _n0) {
 		var isOpening = function () {
-			var _n4 = model.cC;
+			var _n4 = model.cD;
 			if (_n4.$ === 1) {
 				return !model.l;
 			} else {
@@ -21288,7 +21292,7 @@ var author$project$Internal$Snackbar$Implementation$snackbar = F4(
 			}
 		}();
 		var isOpen = function () {
-			var _n3 = model.cC;
+			var _n3 = model.cD;
 			if (_n3.$ === 1) {
 				return model.l;
 			} else {
@@ -21296,7 +21300,7 @@ var author$project$Internal$Snackbar$Implementation$snackbar = F4(
 			}
 		}();
 		var isFading = function () {
-			var _n2 = model.cC;
+			var _n2 = model.cD;
 			if (_n2.$ === 2) {
 				return true;
 			} else {
@@ -21304,7 +21308,7 @@ var author$project$Internal$Snackbar$Implementation$snackbar = F4(
 			}
 		}();
 		var contents = function () {
-			var _n1 = model.cC;
+			var _n1 = model.cD;
 			switch (_n1.$) {
 				case 0:
 					return elm$core$Maybe$Nothing;
@@ -21438,7 +21442,7 @@ var author$project$Internal$Snackbar$Implementation$snackbar = F4(
 													]);
 											},
 											action))),
-									config.b9 ? A3(
+									config.ca ? A3(
 									author$project$Internal$Options$styled,
 									elm$html$Html$button,
 									_List_fromArray(
@@ -21609,19 +21613,19 @@ var author$project$Demo$Snackbar$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Snackbar$Mdc),
-					model.cp,
+					model.cq,
 					'snackbars',
 					'snackbars',
 					'mdc-snackbar'),
 					author$project$Demo$Page$demos(
 					_List_fromArray(
 						[
-							A2(author$project$Demo$Snackbar$baselineButton, lift, model.cp),
-							A2(author$project$Demo$Snackbar$leadingButton, lift, model.cp),
-							A2(author$project$Demo$Snackbar$stackedButton, lift, model.cp),
-							A2(author$project$Demo$Snackbar$baselineSnackbar, lift, model.cp),
-							A2(author$project$Demo$Snackbar$leadingSnackbar, lift, model.cp),
-							A2(author$project$Demo$Snackbar$stackedSnackbar, lift, model.cp)
+							A2(author$project$Demo$Snackbar$baselineButton, lift, model.cq),
+							A2(author$project$Demo$Snackbar$leadingButton, lift, model.cq),
+							A2(author$project$Demo$Snackbar$stackedButton, lift, model.cq),
+							A2(author$project$Demo$Snackbar$baselineSnackbar, lift, model.cq),
+							A2(author$project$Demo$Snackbar$leadingSnackbar, lift, model.cq),
+							A2(author$project$Demo$Snackbar$stackedSnackbar, lift, model.cq)
 						]))
 				]));
 	});
@@ -40807,13 +40811,11 @@ var author$project$Demo$Startpage$view = function (page) {
 								var url = _n0.R;
 								var title = _n0.e3;
 								var subtitle = _n0.b;
-								var icon = _n0.ch;
+								var icon = _n0.ci;
 								return A2(
 									author$project$Material$ImageList$item,
 									_List_fromArray(
 										[
-											author$project$Material$Options$onClick(
-											page.eS(url)),
 											A2(author$project$Material$Options$css, 'cursor', 'pointer'),
 											A2(author$project$Material$Options$css, 'width', 'calc(100% / 4 - 8.25px)'),
 											A2(author$project$Material$Options$css, 'margin', '4px')
@@ -40822,10 +40824,13 @@ var author$project$Demo$Startpage$view = function (page) {
 										[
 											A3(
 											author$project$Material$Options$styled,
-											elm$html$Html$div,
+											elm$html$Html$a,
 											_List_fromArray(
 												[
-													author$project$Material$Options$cs('catalog-image-link')
+													author$project$Material$Options$attribute(
+													elm$html$Html$Attributes$href(
+														author$project$Demo$Url$toString(url))),
+													A2(author$project$Material$Options$css, 'text-decoration', 'none')
 												]),
 											_List_fromArray(
 												[
@@ -40865,37 +40870,37 @@ var author$project$Demo$Startpage$view = function (page) {
 							},
 							_List_fromArray(
 								[
-									{ch: author$project$Demo$Startpage$Svg$Button$view, b: 'Raised and flat buttons', e3: 'Button', R: author$project$Demo$Url$Button},
-									{ch: author$project$Demo$Startpage$Svg$Card$view, b: 'Various card layout styles', e3: 'Card', R: author$project$Demo$Url$Card},
-									{ch: author$project$Demo$Startpage$Svg$Checkbox$view, b: 'Multi-selection controls', e3: 'Checkbox', R: author$project$Demo$Url$Checkbox},
-									{ch: author$project$Demo$Startpage$Svg$Chips$view, b: 'Chips', e3: 'Chips', R: author$project$Demo$Url$Chips},
-									{ch: author$project$Demo$Startpage$Svg$DataTable$view, b: 'Data Table', e3: 'Data Table', R: author$project$Demo$Url$DataTable},
-									{ch: author$project$Demo$Startpage$Svg$Dialog$view, b: 'Secondary text', e3: 'Dialog', R: author$project$Demo$Url$Dialog},
-									{ch: author$project$Demo$Startpage$Svg$Drawer$view, b: 'Various drawer styles', e3: 'Drawer', R: author$project$Demo$Url$Drawer},
-									{ch: author$project$Demo$Startpage$Svg$Elevation$view, b: 'Shadow for different elevations', e3: 'Elevation', R: author$project$Demo$Url$Elevation},
-									{ch: author$project$Demo$Startpage$Svg$Fab$view, b: 'The primary action in an application', e3: 'FAB', R: author$project$Demo$Url$Fabs},
-									{ch: author$project$Demo$Startpage$Svg$IconButton$view, b: 'Toggling icon states', e3: 'Icon Button', R: author$project$Demo$Url$IconButton},
-									{ch: author$project$Demo$Startpage$Svg$ImageList$view, b: 'An Image List consists of several items, each containing an image and optionally supporting content (i.e. a text label)', e3: 'Image List', R: author$project$Demo$Url$ImageList},
-									{ch: author$project$Demo$Startpage$Svg$LayoutGrid$view, b: 'Grid and gutter support', e3: 'Layout Grid', R: author$project$Demo$Url$LayoutGrid},
-									{ch: author$project$Demo$Startpage$Svg$List$view, b: 'Item layouts in lists', e3: 'List', R: author$project$Demo$Url$List},
-									{ch: author$project$Demo$Startpage$Svg$LinearProgress$view, b: 'Fills from 0% to 100%, represented by bars', e3: 'Linear progress', R: author$project$Demo$Url$LinearProgress},
-									{ch: author$project$Demo$Startpage$Svg$Menu$view, b: 'Pop over menus', e3: 'Menu', R: author$project$Demo$Url$Menu},
-									{ch: author$project$Demo$Startpage$Svg$Radio$view, b: 'Single selection controls', e3: 'Radio', R: author$project$Demo$Url$RadioButton},
-									{ch: author$project$Demo$Startpage$Svg$Ripple$view, b: 'Touch ripple', e3: 'Ripple', R: author$project$Demo$Url$Ripple},
-									{ch: author$project$Demo$Startpage$Svg$Select$view, b: 'Popover selection menus', e3: 'Select', R: author$project$Demo$Url$Select},
-									{ch: author$project$Demo$Startpage$Svg$Slider$view, b: 'Range Controls', e3: 'Slider', R: author$project$Demo$Url$Slider},
-									{ch: author$project$Demo$Startpage$Svg$Snackbar$view, b: 'Transient messages', e3: 'Snackbar', R: author$project$Demo$Url$Snackbar},
-									{ch: author$project$Demo$Startpage$Svg$Switch$view, b: 'On off switches', e3: 'Switch', R: author$project$Demo$Url$Switch},
-									{ch: author$project$Demo$Startpage$Svg$TabBar$view, b: 'Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy', e3: 'Tab Bar', R: author$project$Demo$Url$TabBar},
-									{ch: author$project$Demo$Startpage$Svg$TextField$view, b: 'Single and multiline text fields', e3: 'Text field', R: author$project$Demo$Url$TextField},
-									{ch: author$project$Demo$Startpage$Svg$Theme$view, b: 'Using primary and accent colors', e3: 'Theme', R: author$project$Demo$Url$Theme},
+									{ci: author$project$Demo$Startpage$Svg$Button$view, b: 'Raised and flat buttons', e3: 'Button', R: author$project$Demo$Url$Button},
+									{ci: author$project$Demo$Startpage$Svg$Card$view, b: 'Various card layout styles', e3: 'Card', R: author$project$Demo$Url$Card},
+									{ci: author$project$Demo$Startpage$Svg$Checkbox$view, b: 'Multi-selection controls', e3: 'Checkbox', R: author$project$Demo$Url$Checkbox},
+									{ci: author$project$Demo$Startpage$Svg$Chips$view, b: 'Chips', e3: 'Chips', R: author$project$Demo$Url$Chips},
+									{ci: author$project$Demo$Startpage$Svg$DataTable$view, b: 'Data Table', e3: 'Data Table', R: author$project$Demo$Url$DataTable},
+									{ci: author$project$Demo$Startpage$Svg$Dialog$view, b: 'Secondary text', e3: 'Dialog', R: author$project$Demo$Url$Dialog},
+									{ci: author$project$Demo$Startpage$Svg$Drawer$view, b: 'Various drawer styles', e3: 'Drawer', R: author$project$Demo$Url$Drawer},
+									{ci: author$project$Demo$Startpage$Svg$Elevation$view, b: 'Shadow for different elevations', e3: 'Elevation', R: author$project$Demo$Url$Elevation},
+									{ci: author$project$Demo$Startpage$Svg$Fab$view, b: 'The primary action in an application', e3: 'FAB', R: author$project$Demo$Url$Fabs},
+									{ci: author$project$Demo$Startpage$Svg$IconButton$view, b: 'Toggling icon states', e3: 'Icon Button', R: author$project$Demo$Url$IconButton},
+									{ci: author$project$Demo$Startpage$Svg$ImageList$view, b: 'An Image List consists of several items, each containing an image and optionally supporting content (i.e. a text label)', e3: 'Image List', R: author$project$Demo$Url$ImageList},
+									{ci: author$project$Demo$Startpage$Svg$LayoutGrid$view, b: 'Grid and gutter support', e3: 'Layout Grid', R: author$project$Demo$Url$LayoutGrid},
+									{ci: author$project$Demo$Startpage$Svg$List$view, b: 'Item layouts in lists', e3: 'List', R: author$project$Demo$Url$List},
+									{ci: author$project$Demo$Startpage$Svg$LinearProgress$view, b: 'Fills from 0% to 100%, represented by bars', e3: 'Linear progress', R: author$project$Demo$Url$LinearProgress},
+									{ci: author$project$Demo$Startpage$Svg$Menu$view, b: 'Pop over menus', e3: 'Menu', R: author$project$Demo$Url$Menu},
+									{ci: author$project$Demo$Startpage$Svg$Radio$view, b: 'Single selection controls', e3: 'Radio', R: author$project$Demo$Url$RadioButton},
+									{ci: author$project$Demo$Startpage$Svg$Ripple$view, b: 'Touch ripple', e3: 'Ripple', R: author$project$Demo$Url$Ripple},
+									{ci: author$project$Demo$Startpage$Svg$Select$view, b: 'Popover selection menus', e3: 'Select', R: author$project$Demo$Url$Select},
+									{ci: author$project$Demo$Startpage$Svg$Slider$view, b: 'Range Controls', e3: 'Slider', R: author$project$Demo$Url$Slider},
+									{ci: author$project$Demo$Startpage$Svg$Snackbar$view, b: 'Transient messages', e3: 'Snackbar', R: author$project$Demo$Url$Snackbar},
+									{ci: author$project$Demo$Startpage$Svg$Switch$view, b: 'On off switches', e3: 'Switch', R: author$project$Demo$Url$Switch},
+									{ci: author$project$Demo$Startpage$Svg$TabBar$view, b: 'Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy', e3: 'Tab Bar', R: author$project$Demo$Url$TabBar},
+									{ci: author$project$Demo$Startpage$Svg$TextField$view, b: 'Single and multiline text fields', e3: 'Text field', R: author$project$Demo$Url$TextField},
+									{ci: author$project$Demo$Startpage$Svg$Theme$view, b: 'Using primary and accent colors', e3: 'Theme', R: author$project$Demo$Url$Theme},
 									{
-									ch: author$project$Demo$Startpage$Svg$TopAppBar$view,
+									ci: author$project$Demo$Startpage$Svg$TopAppBar$view,
 									b: 'Container for items such as application title, navigation icon, and action items.',
 									e3: 'Top App Bar',
 									R: author$project$Demo$Url$TopAppBar(elm$core$Maybe$Nothing)
 								},
-									{ch: author$project$Demo$Startpage$Svg$Typography$view, b: 'Type hierarchy', e3: 'Typography', R: author$project$Demo$Url$Typography}
+									{ci: author$project$Demo$Startpage$Svg$Typography$view, b: 'Type hierarchy', e3: 'Typography', R: author$project$Demo$Url$Typography}
 								])))
 					]))
 			]));
@@ -40915,10 +40920,10 @@ var author$project$Internal$Switch$Implementation$on = author$project$Internal$O
 	function (config) {
 		return _Utils_update(
 			config,
-			{bZ: true});
+			{b_: true});
 	});
 var author$project$Material$Switch$on = author$project$Internal$Switch$Implementation$on;
-var author$project$Internal$Switch$Implementation$defaultConfig = {au: false, cV: '', dP: _List_Nil, bZ: false};
+var author$project$Internal$Switch$Implementation$defaultConfig = {au: false, cV: '', dP: _List_Nil, b_: false};
 var author$project$Internal$Switch$Model$NoOp = {$: 2};
 var author$project$Internal$Switch$Model$SetFocus = function (a) {
 	return {$: 1, a: a};
@@ -40948,7 +40953,7 @@ var author$project$Internal$Switch$Implementation$switch = F5(
 					author$project$Internal$Options$cs('mdc-switch--disabled')),
 					A2(
 					author$project$Internal$Options$when,
-					config.bZ,
+					config.b_,
 					author$project$Internal$Options$cs('mdc-switch--checked'))
 				]),
 			_List_Nil,
@@ -40968,8 +40973,8 @@ var author$project$Internal$Switch$Implementation$switch = F5(
 					_List_fromArray(
 						[
 							author$project$Internal$Options$cs('mdc-switch__thumb-underlay'),
-							ripple.ci,
-							ripple.cx
+							ripple.cj,
+							ripple.cy
 						]),
 					_List_fromArray(
 						[
@@ -40995,7 +41000,7 @@ var author$project$Internal$Switch$Implementation$switch = F5(
 											elm$html$Html$Attributes$type_('checkbox')),
 											A2(
 											author$project$Internal$Options$when,
-											config.bZ,
+											config.b_,
 											author$project$Internal$Options$attribute(
 												A2(elm$html$Html$Attributes$attribute, 'checked', 'checked'))),
 											author$project$Internal$Options$onFocus(
@@ -41057,7 +41062,7 @@ var author$project$Demo$Switch$exampleSwitch = F2(
 					author$project$Material$Switch$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Switch$Mdc),
 					index,
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$Options$onClick(
@@ -41094,7 +41099,7 @@ var author$project$Demo$Switch$heroSwitch = F2(
 					author$project$Material$Switch$view,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Switch$Mdc),
 					index,
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$Options$onClick(
@@ -41137,7 +41142,7 @@ var author$project$Demo$Switch$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$Switch$Mdc),
-					model.cp,
+					model.cq,
 					'selection-controls.html#switches',
 					'input-controls/switches',
 					'mdc-switch'),
@@ -41212,7 +41217,7 @@ var author$project$Internal$TabBar$Implementation$decodeScrollLeft = debois$elm_
 					return scrollLeft;
 				},
 				debois$elm_dom$DOM$scrollLeft))));
-var author$project$Internal$TabBar$Implementation$defaultConfig = {n: 0, az: false, ch: elm$core$Maybe$Nothing, dB: true, bm: elm$core$Maybe$Nothing, bK: false};
+var author$project$Internal$TabBar$Implementation$defaultConfig = {n: 0, az: false, ci: elm$core$Maybe$Nothing, dB: true, bm: elm$core$Maybe$Nothing, bK: false};
 var author$project$Internal$TabBar$Model$Geometry = F3(
 	function (tabs, scrollArea, tabBar) {
 		return {d5: scrollArea, ee: tabBar, bO: tabs};
@@ -41371,7 +41376,7 @@ var author$project$Internal$TabBar$Implementation$tabView = F6(
 				A2(elm$core$Dict$get, index, model.bE)),
 			_List_Nil);
 		var icon_span = function () {
-			var _n2 = tab_config.ch;
+			var _n2 = tab_config.ci;
 			if (!_n2.$) {
 				var name = _n2.a;
 				return A3(
@@ -41537,7 +41542,7 @@ var author$project$Internal$TabBar$Implementation$tabView = F6(
 					selected ? 'true' : 'false'),
 					author$project$Internal$Options$tabindex(
 					selected ? 0 : (-1)),
-					ripple.ci
+					ripple.cj
 				]),
 			_List_Nil,
 			_List_fromArray(
@@ -41569,7 +41574,7 @@ var author$project$Internal$TabBar$Implementation$tabView = F6(
 					_List_fromArray(
 						[
 							author$project$Internal$Options$cs('mdc-tab__ripple'),
-							ripple.cx
+							ripple.cy
 						]),
 					_List_Nil)
 				]));
@@ -41634,7 +41639,7 @@ var author$project$Demo$TabBar$heroTabs = F3(
 			author$project$Material$TabBar$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$TabBar$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$TabBar$activeTab(active_tab_index)
@@ -41656,7 +41661,7 @@ var author$project$Demo$TabBar$scrollingTabs = F3(
 			author$project$Material$TabBar$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$TabBar$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$TabBar$activeTab(active_tab_index)
@@ -41676,7 +41681,7 @@ var author$project$Internal$TabBar$Implementation$icon = function (value) {
 			return _Utils_update(
 				config,
 				{
-					ch: elm$core$Maybe$Just(value)
+					ci: elm$core$Maybe$Just(value)
 				});
 		});
 };
@@ -41709,7 +41714,7 @@ var author$project$Demo$TabBar$tabsWithIcons = F4(
 			author$project$Material$TabBar$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$TabBar$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$TabBar$activeTab(active_tab_index)
@@ -41758,7 +41763,7 @@ var author$project$Demo$TabBar$tabsWithStackedIcons = F3(
 			author$project$Material$TabBar$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$TabBar$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			_List_fromArray(
 				[
 					author$project$Material$TabBar$activeTab(active_tab_index)
@@ -41788,7 +41793,7 @@ var author$project$Demo$TabBar$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, author$project$Demo$TabBar$Mdc),
-					model.cp,
+					model.cq,
 					'tabs',
 					'tabs',
 					'mdc-tab-bar'),
@@ -41852,7 +41857,7 @@ var author$project$Internal$TextField$HelperLine$Implementation$helperLine = F2(
 			list);
 	});
 var author$project$Material$TextField$HelperLine$helperLine = author$project$Internal$TextField$HelperLine$Implementation$helperLine;
-var author$project$Internal$TextField$HelperText$Implementation$defaultConfig = {cu: false, cI: false};
+var author$project$Internal$TextField$HelperText$Implementation$defaultConfig = {cv: false, cI: false};
 var author$project$Internal$TextField$HelperText$Implementation$helperText = F2(
 	function (options, text) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$TextField$HelperText$Implementation$defaultConfig, options);
@@ -41866,7 +41871,7 @@ var author$project$Internal$TextField$HelperText$Implementation$helperText = F2(
 					author$project$Internal$Options$cs('mdc-text-field-helper-text'),
 					A2(
 					author$project$Internal$Options$when,
-					config.cu,
+					config.cv,
 					author$project$Internal$Options$cs('mdc-text-field-helper-text--persistent')),
 					A2(
 					author$project$Internal$Options$when,
@@ -41882,7 +41887,7 @@ var author$project$Internal$TextField$HelperText$Implementation$persistent = aut
 	function (config) {
 		return _Utils_update(
 			config,
-			{cu: true});
+			{cv: true});
 	});
 var author$project$Material$TextField$HelperText$persistent = author$project$Internal$TextField$HelperText$Implementation$persistent;
 var author$project$Demo$TextFields$helperTextWithCharacterCounter = A2(
@@ -41970,22 +41975,22 @@ var author$project$Internal$TextField$Implementation$defaultConfig = {
 	au: false,
 	bh: false,
 	cV: '',
-	cj: false,
+	ck: false,
 	dF: false,
-	ck: elm$core$Maybe$Nothing,
-	cm: elm$core$Maybe$Nothing,
+	cl: elm$core$Maybe$Nothing,
+	cn: elm$core$Maybe$Nothing,
 	dP: _List_Nil,
-	cs: elm$core$Maybe$Nothing,
 	ct: elm$core$Maybe$Nothing,
+	cu: elm$core$Maybe$Nothing,
 	aG: false,
 	aH: elm$core$Maybe$Nothing,
 	by: elm$core$Maybe$Nothing,
-	cz: false,
+	cA: false,
 	bF: elm$core$Maybe$Nothing,
 	t: false,
-	bU: elm$core$Maybe$Nothing,
+	bV: elm$core$Maybe$Nothing,
 	e6: elm$core$Maybe$Just('text'),
-	bZ: elm$core$Maybe$Nothing
+	b_: elm$core$Maybe$Nothing
 };
 var author$project$Internal$TextField$Implementation$iconView = F3(
 	function (lift, icon, handler) {
@@ -42056,14 +42061,14 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 	function (domId, lift, model, options, list) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$TextField$Implementation$defaultConfig, options);
 		var config = summary.dh;
-		var focused = model.cg && (!config.au);
+		var focused = model.ch && (!config.au);
 		var isDirty = model.dD || A2(
 			elm$core$Maybe$withDefault,
 			false,
 			A2(
 				elm$core$Maybe$map,
 				elm$core$Basics$neq(''),
-				config.bZ));
+				config.b_));
 		var htmlLabel = A3(
 			author$project$Internal$Options$styled,
 			elm$html$Html$label,
@@ -42077,7 +42082,7 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 					author$project$Internal$Options$for(config.cV)
 				]),
 			function () {
-				var _n1 = config.ck;
+				var _n1 = config.cl;
 				if (!_n1.$) {
 					var str = _n1.a;
 					return _List_fromArray(
@@ -42088,7 +42093,7 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 					return _List_Nil;
 				}
 			}());
-		var isInvalid = config.cj || function () {
+		var isInvalid = config.ck || function () {
 			var _n0 = config.aH;
 			if (!_n0.$) {
 				var pattern_ = _n0.a;
@@ -42104,13 +42109,13 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 								elm$regex$Regex$contains(regex));
 						},
 						elm$regex$Regex$fromString('^' + (pattern_ + '$')),
-						model.bZ));
+						model.b_));
 			} else {
 				return false;
 			}
 		}();
-		var leadingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.cm, config.cs);
-		var trailingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.bU, config.ct);
+		var leadingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.cn, config.ct);
+		var trailingIcon_ = A3(author$project$Internal$TextField$Implementation$iconView, lift, config.bV, config.cu);
 		return A5(
 			author$project$Internal$Options$apply,
 			summary,
@@ -42144,11 +42149,11 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 					author$project$Internal$Options$cs('mdc-text-field--outlined')),
 					A2(
 					author$project$Internal$Options$when,
-					!_Utils_eq(config.cm, elm$core$Maybe$Nothing),
+					!_Utils_eq(config.cn, elm$core$Maybe$Nothing),
 					author$project$Internal$Options$cs('mdc-text-field--with-leading-icon')),
 					A2(
 					author$project$Internal$Options$when,
-					!_Utils_eq(config.bU, elm$core$Maybe$Nothing),
+					!_Utils_eq(config.bV, elm$core$Maybe$Nothing),
 					author$project$Internal$Options$cs('mdc-text-field--with-trailing-icon'))
 				]),
 			_List_Nil,
@@ -42195,7 +42200,7 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 											A2(elm$core$Maybe$withDefault, 'text', config.e6))),
 										(config.au ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
 										elm$html$Html$Attributes$disabled(true)),
-										(config.cz ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
+										(config.cA ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
 										A2(
 											elm$html$Html$Attributes$property,
 											'required',
@@ -42206,9 +42211,9 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 											'pattern',
 											elm$json$Json$Encode$string(
 												A2(elm$core$Maybe$withDefault, '', config.aH)))),
-										((!_Utils_eq(config.bZ, elm$core$Maybe$Nothing)) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
+										((!_Utils_eq(config.b_, elm$core$Maybe$Nothing)) ? elm$core$Maybe$Just : elm$core$Basics$always(elm$core$Maybe$Nothing))(
 										elm$html$Html$Attributes$value(
-											A2(elm$core$Maybe$withDefault, '', config.bZ)))
+											A2(elm$core$Maybe$withDefault, '', config.b_)))
 									])),
 								A2(
 								author$project$Internal$Options$when,
@@ -42240,7 +42245,7 @@ var author$project$Internal$TextField$Implementation$textField = F5(
 								author$project$Internal$Options$cs('mdc-line-ripple'),
 								A2(
 								author$project$Internal$Options$when,
-								model.cg,
+								model.ch,
 								author$project$Internal$Options$cs('mdc-line-ripple--active'))
 							]),
 						_List_Nil) : elm$html$Html$text(''),
@@ -42311,7 +42316,7 @@ var author$project$Demo$TextFields$characterCounterTextFields = F2(
 						author$project$Material$TextField$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						index,
-						model.cp,
+						model.cq,
 						options,
 						_List_Nil),
 						author$project$Demo$TextFields$helperTextWithCharacterCounter
@@ -42369,7 +42374,7 @@ var author$project$Internal$TextField$Implementation$label = A2(
 			return _Utils_update(
 				config,
 				{
-					ck: elm$core$Maybe$Just(str)
+					cl: elm$core$Maybe$Just(str)
 				});
 		}));
 var author$project$Material$TextField$label = author$project$Internal$TextField$Implementation$label;
@@ -42379,7 +42384,7 @@ var author$project$Internal$TextField$Implementation$leadingIcon = function (ico
 			return _Utils_update(
 				config,
 				{
-					cm: elm$core$Maybe$Just(icon)
+					cn: elm$core$Maybe$Just(icon)
 				});
 		});
 };
@@ -42390,7 +42395,7 @@ var author$project$Internal$TextField$Implementation$trailingIcon = function (ic
 			return _Utils_update(
 				config,
 				{
-					bU: elm$core$Maybe$Just(icon)
+					bV: elm$core$Maybe$Just(icon)
 				});
 		});
 };
@@ -42405,7 +42410,7 @@ var author$project$Demo$TextFields$filledTextFields = F2(
 						author$project$Material$TextField$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						index,
-						model.cp,
+						model.cq,
 						A2(
 							elm$core$List$cons,
 							author$project$Material$TextField$label('Standard'),
@@ -42474,7 +42479,7 @@ var author$project$Demo$TextFields$fullwidthTextField = F2(
 					author$project$Material$TextField$view,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 					'text-field-fullwidth-text-field',
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$TextField$placeholder('Standard'),
@@ -42519,7 +42524,7 @@ var author$project$Demo$TextFields$fullwidthTextareaTextField = F2(
 							author$project$Material$TextField$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							'text-fields-fullwidth-textarea-text-field',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$TextField$label('Standard'),
@@ -42563,7 +42568,7 @@ var author$project$Demo$TextFields$heroTextFields = F2(
 							author$project$Material$TextField$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							'text-fields-hero-text-field-1',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$TextField$label('Standard')
@@ -42573,7 +42578,7 @@ var author$project$Demo$TextFields$heroTextFields = F2(
 							author$project$Material$TextField$view,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 							'text-fields-hero-text-field-2',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$TextField$label('Standard'),
@@ -42593,7 +42598,7 @@ var author$project$Demo$TextFields$outlinedTextFields = F2(
 						author$project$Material$TextField$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						index,
-						model.cp,
+						model.cq,
 						A2(
 							elm$core$List$cons,
 							author$project$Material$TextField$label('Standard'),
@@ -42643,7 +42648,7 @@ var author$project$Demo$TextFields$shapedFilledTextFields = F2(
 						author$project$Material$TextField$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						index,
-						model.cp,
+						model.cq,
 						A2(
 							elm$core$List$cons,
 							author$project$Material$TextField$label('Standard'),
@@ -42696,7 +42701,7 @@ var author$project$Demo$TextFields$shapedOutlinedTextFields = F2(
 						author$project$Material$TextField$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						index,
-						model.cp,
+						model.cq,
 						A2(
 							elm$core$List$cons,
 							author$project$Material$TextField$label('Standard'),
@@ -42755,7 +42760,7 @@ var author$project$Demo$TextFields$textareaTextField = F2(
 					author$project$Material$TextField$view,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 					'text-fields-textarea-text-field',
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$TextField$label('Standard'),
@@ -42776,7 +42781,7 @@ var author$project$Demo$TextFields$textareaTextFieldWithCharacterCounter = F2(
 					author$project$Material$TextField$view,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 					'text-fields-textarea-character-counter-text-field',
-					model.cp,
+					model.cq,
 					_List_fromArray(
 						[
 							author$project$Material$TextField$label('Standard'),
@@ -42805,7 +42810,7 @@ var author$project$Demo$TextFields$unlabeledTextFields = F2(
 						author$project$Material$TextField$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						index,
-						model.cp,
+						model.cq,
 						options,
 						_List_Nil),
 						author$project$Demo$TextFields$helperText
@@ -42859,7 +42864,7 @@ var author$project$Demo$TextFields$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'text-fields',
 					'input-controls/text-field',
 					'mdc-textfield'),
@@ -43659,7 +43664,7 @@ var author$project$Demo$Theme$view = F3(
 						author$project$Material$Button$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						'theme-button-primary',
-						model.cp,
+						model.cq,
 						_List_fromArray(
 							[
 								author$project$Material$Button$raised,
@@ -43673,7 +43678,7 @@ var author$project$Demo$Theme$view = F3(
 						author$project$Material$Button$view,
 						A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
 						'theme-button-secondary',
-						model.cp,
+						model.cq,
 						_List_fromArray(
 							[
 								author$project$Material$Button$raised,
@@ -43689,7 +43694,7 @@ var author$project$Demo$Theme$view = F3(
 					A5(
 					author$project$Demo$Helper$ResourceLink$links,
 					A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-					model.cp,
+					model.cq,
 					'color/applying-color-to-ui',
 					'theme',
 					'mdc-theme'),
@@ -43733,7 +43738,7 @@ var author$project$Demo$TopAppBar$topAppBar = F4(
 			author$project$Material$TopAppBar$view,
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 			index,
-			model.cp,
+			model.cq,
 			options,
 			_List_fromArray(
 				[
@@ -43747,7 +43752,7 @@ var author$project$Demo$TopAppBar$topAppBar = F4(
 							author$project$Material$TopAppBar$navigationIcon,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 							index + '-menu',
-							model.cp,
+							model.cq,
 							_List_Nil,
 							'menu'),
 							A2(
@@ -43768,21 +43773,21 @@ var author$project$Demo$TopAppBar$topAppBar = F4(
 							author$project$Material$TopAppBar$actionItem,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 							index + '-file_down',
-							model.cp,
+							model.cq,
 							_List_Nil,
 							'file_download'),
 							A5(
 							author$project$Material$TopAppBar$actionItem,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 							index + '-print',
-							model.cp,
+							model.cq,
 							_List_Nil,
 							'print'),
 							A5(
 							author$project$Material$TopAppBar$actionItem,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 							index + '-bookmark',
-							model.cp,
+							model.cq,
 							_List_Nil,
 							'bookmark')
 						]))
@@ -43808,7 +43813,7 @@ var author$project$Demo$TopAppBar$body = F4(
 							author$project$Material$Button$view,
 							A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 							index + '-toggle-rtl',
-							model.cp,
+							model.cq,
 							_List_fromArray(
 								[
 									author$project$Material$Button$outlined,
@@ -43862,7 +43867,7 @@ var author$project$Internal$TopAppBar$Implementation$dense = author$project$Inte
 	function (config) {
 		return _Utils_update(
 			config,
-			{b8: true});
+			{b9: true});
 	});
 var author$project$Material$TopAppBar$dense = author$project$Internal$TopAppBar$Implementation$dense;
 var author$project$Internal$TopAppBar$Implementation$denseFixedAdjust = author$project$Internal$Options$cs('mdc-top-app-bar--dense-fixed-adjust');
@@ -43993,7 +43998,7 @@ var author$project$Internal$TopAppBar$Implementation$prominent = author$project$
 	function (config) {
 		return _Utils_update(
 			config,
-			{cw: true});
+			{cx: true});
 	});
 var author$project$Material$TopAppBar$prominent = author$project$Internal$TopAppBar$Implementation$prominent;
 var author$project$Internal$TopAppBar$Implementation$prominentFixedAdjust = author$project$Internal$Options$cs('mdc-top-app-bar--prominent-fixed-adjust');
@@ -44019,7 +44024,7 @@ var author$project$Internal$TopAppBar$Implementation$collapsed = author$project$
 	function (config) {
 		return _Utils_update(
 			config,
-			{b6: true});
+			{b7: true});
 	});
 var author$project$Material$TopAppBar$collapsed = author$project$Internal$TopAppBar$Implementation$collapsed;
 var author$project$Internal$TopAppBar$Implementation$hasActionItem = author$project$Internal$Options$cs('mdc-top-app-bar--short-has-action-item');
@@ -44044,7 +44049,7 @@ var author$project$Demo$TopAppBar$shortCollapsedTopAppBar = F3(
 				author$project$Material$TopAppBar$view,
 				A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 				index,
-				model.cp,
+				model.cq,
 				_List_fromArray(
 					[author$project$Material$TopAppBar$short, author$project$Material$TopAppBar$collapsed, author$project$Material$TopAppBar$hasActionItem]),
 				_List_fromArray(
@@ -44059,7 +44064,7 @@ var author$project$Demo$TopAppBar$shortCollapsedTopAppBar = F3(
 								author$project$Material$TopAppBar$navigationIcon,
 								A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 								index + '-menu',
-								model.cp,
+								model.cq,
 								_List_Nil,
 								'menu'),
 								A2(
@@ -44080,7 +44085,7 @@ var author$project$Demo$TopAppBar$shortCollapsedTopAppBar = F3(
 								author$project$Material$TopAppBar$actionItem,
 								A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 								index + '-file_download',
-								model.cp,
+								model.cq,
 								_List_Nil,
 								'file_download')
 							]))
@@ -44099,7 +44104,7 @@ var author$project$Demo$TopAppBar$shortTopAppBar = F3(
 				author$project$Material$TopAppBar$view,
 				A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 				index,
-				model.cp,
+				model.cq,
 				_List_fromArray(
 					[author$project$Material$TopAppBar$short, author$project$Material$TopAppBar$hasActionItem]),
 				_List_fromArray(
@@ -44114,7 +44119,7 @@ var author$project$Demo$TopAppBar$shortTopAppBar = F3(
 								author$project$Material$TopAppBar$navigationIcon,
 								A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 								index + '-menu',
-								model.cp,
+								model.cq,
 								_List_Nil,
 								'menu'),
 								A2(
@@ -44135,7 +44140,7 @@ var author$project$Demo$TopAppBar$shortTopAppBar = F3(
 								author$project$Material$TopAppBar$actionItem,
 								A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 								index + '-file_download',
-								model.cp,
+								model.cq,
 								_List_Nil,
 								'file_download')
 							]))
@@ -44199,7 +44204,7 @@ var author$project$Demo$TopAppBar$view = F4(
 									author$project$Material$TopAppBar$view,
 									A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 									'top-app-bar-default-top-app-bar',
-									model.cp,
+									model.cq,
 									_List_fromArray(
 										[
 											A2(author$project$Material$Options$css, 'position', 'static')
@@ -44216,7 +44221,7 @@ var author$project$Demo$TopAppBar$view = F4(
 													author$project$Material$TopAppBar$navigationIcon,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 													'hero-menu',
-													model.cp,
+													model.cq,
 													_List_Nil,
 													'menu'),
 													A2(
@@ -44237,21 +44242,21 @@ var author$project$Demo$TopAppBar$view = F4(
 													author$project$Material$TopAppBar$actionItem,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 													'hero-file_download',
-													model.cp,
+													model.cq,
 													_List_Nil,
 													'file_download'),
 													A5(
 													author$project$Material$TopAppBar$actionItem,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 													'hero-print',
-													model.cp,
+													model.cq,
 													_List_Nil,
 													'print'),
 													A5(
 													author$project$Material$TopAppBar$actionItem,
 													A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 													'hero-more_vert',
-													model.cp,
+													model.cq,
 													_List_Nil,
 													'more_vert')
 												]))
@@ -44263,7 +44268,7 @@ var author$project$Demo$TopAppBar$view = F4(
 						A5(
 						author$project$Demo$Helper$ResourceLink$links,
 						A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
-						model.cp,
+						model.cq,
 						'app-bars-top',
 						'top-app-bar',
 						'mdc-top-app-bar'),
@@ -44463,7 +44468,7 @@ var author$project$Demo$Typography$view = F3(
 							A5(
 							author$project$Demo$Helper$ResourceLink$links,
 							A2(elm$core$Basics$composeL, lift, elm$core$Basics$identity),
-							model.cp,
+							model.cq,
 							'typography/the-type-system',
 							'typography',
 							'mdc-typography'),
@@ -44485,7 +44490,7 @@ var author$project$Demo$Typography$view = F3(
 	});
 var author$project$Material$Typography$display4 = author$project$Material$Typography$headline4;
 var author$project$Demo$view_ = function (model) {
-	var bar = A5(author$project$Demo$Page$topappbar, author$project$Demo$Mdc, 'page-topappbar', model.cp, author$project$Demo$ToggleDrawer, model.R);
+	var bar = A5(author$project$Demo$Page$topappbar, author$project$Demo$Mdc, 'page-topappbar', model.cq, author$project$Demo$ToggleDrawer, model.R);
 	var page = {
 		dc: F4(
 			function (title, intro, hero, nodes) {
@@ -44517,7 +44522,7 @@ var author$project$Demo$view_ = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											A6(author$project$Demo$Page$drawer, author$project$Demo$Mdc, 'page-drawer', model.cp, author$project$Demo$CloseDrawer, model.R, model.M),
+											A6(author$project$Demo$Page$drawer, author$project$Demo$Mdc, 'page-drawer', model.cq, author$project$Demo$CloseDrawer, model.R, model.M),
 											A2(
 											author$project$Material$Drawer$Modal$scrim,
 											_List_fromArray(
@@ -44613,9 +44618,9 @@ var author$project$Demo$view_ = function (model) {
 		case 25:
 			return A3(author$project$Demo$TabBar$view, author$project$Demo$TabBarMsg, page, model.aS);
 		case 26:
-			return A3(author$project$Demo$TextFields$view, author$project$Demo$TextFieldMsg, page, model.bQ);
+			return A3(author$project$Demo$TextFields$view, author$project$Demo$TextFieldMsg, page, model.bR);
 		case 27:
-			return A3(author$project$Demo$Theme$view, author$project$Demo$ThemeMsg, page, model.bR);
+			return A3(author$project$Demo$Theme$view, author$project$Demo$ThemeMsg, page, model.bS);
 		case 28:
 			var topAppBarPage = _n0.a;
 			return A4(author$project$Demo$TopAppBar$view, author$project$Demo$TopAppBarMsg, page, topAppBarPage, model.aT);
@@ -44624,7 +44629,7 @@ var author$project$Demo$view_ = function (model) {
 		case 19:
 			return A3(author$project$Demo$Ripple$view, author$project$Demo$RippleMsg, page, model.bD);
 		case 29:
-			return A3(author$project$Demo$Typography$view, author$project$Demo$TypographyMsg, page, model.bW);
+			return A3(author$project$Demo$Typography$view, author$project$Demo$TypographyMsg, page, model.bX);
 		default:
 			var requestedHash = _n0.a;
 			return A2(
