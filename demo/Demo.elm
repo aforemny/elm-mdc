@@ -1,5 +1,6 @@
 module Demo exposing (main)
 
+import Array
 import Browser
 import Browser.Navigation
 import Demo.Buttons
@@ -119,8 +120,6 @@ defaultModel key =
     }
 
 
-{-| TODO: Remove Navigate
--}
 type Msg
     = Mdc (Material.Msg Msg)
     | UrlChanged Url.Url
@@ -129,6 +128,7 @@ type Msg
     | OpenDrawer
     | CloseDrawer
     | ToggleDrawer
+    | SelectDrawerItem Int
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -183,6 +183,14 @@ update msg model =
 
         ToggleDrawer ->
             ( { model | is_drawer_open = not model.is_drawer_open }, Cmd.none )
+
+        SelectDrawerItem index ->
+            let
+                item = Array.get index Page.drawerItems
+            in
+                case item of
+                    Just ( title, url ) -> update ( Navigate url ) model
+                    Nothing -> ( model, Cmd.none )
 
         UrlRequested (Browser.Internal url) ->
             ( { model | url = Demo.Url.fromUrl url, is_drawer_open = False }
@@ -431,7 +439,7 @@ view_ model =
                             ]
                             [ div
                                   []
-                                  [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer model.url model.is_drawer_open
+                                  [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url model.is_drawer_open
                                   , Drawer.scrim [ Options.onClick CloseDrawer ] []
                                   ]
                             , styled div

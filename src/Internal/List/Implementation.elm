@@ -91,7 +91,6 @@ update lift msg model =
 
 {- Turn msg into Cmd msg -}
 
-
 send : msg -> Cmd msg
 send msg =
     Task.succeed msg
@@ -301,7 +300,7 @@ li options children =
 
 {-| Single list item view.
 
-focusedIndex is the index that currently has the keyboard focus.
+`focusedIndex` is the index that currently has the keyboard focus.
 -}
 liView :
     Index
@@ -331,7 +330,7 @@ liView domId lift model config listItemIds focusedIndex index options children =
                     i == index
 
                 Nothing ->
-                    li_config.selected
+                    li_config.selected || li_config.activated
 
         tab_index =
             if focusedIndex == index then

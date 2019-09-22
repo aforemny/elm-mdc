@@ -35,7 +35,10 @@ destinations and other functionality on an app.
             , styled h6 [ Drawer.subTitle ] [ text "email@material.io" ]
             ]
         , Drawer.content []
-              [ Lists.nav Mdc "my-list" model.mdc []
+              [ Lists.nav Mdc "my-list" model.mdc
+                    [ Lists.singleSelection
+                    , Lists.useActivated
+                    ]
                     [ Lists.a
                           [ Options.attribute (Html.href "#persistent-drawer")
                           , Lists.activated
@@ -65,6 +68,9 @@ destinations and other functionality on an app.
                     ]
               ]
         ]
+
+To make keyboard navigation work, you will need to add
+Lists.onSelectListItem to the list above.
 
 
 # Usage

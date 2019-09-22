@@ -2,11 +2,13 @@ module Demo.Page exposing
     ( Page
     , demos
     , drawer
+    , drawerItems
     , subheader
     , topappbar
     , componentCatalogPanel
     )
 
+import Array exposing (Array)
 import Demo.Helper.Hero as Hero
 import Demo.Url as Url exposing (Url)
 import Html exposing (Html, div, h2, span, section, text)
@@ -70,24 +72,57 @@ topappbar lift idx mdc cmd url title =
         ]
 
 
+drawerItems : Array ( String, Url )
+drawerItems =
+    Array.fromList
+        [ ( "Home", Url.StartPage )
+        , ( "Button", Url.Button )
+        , ( "Card", Url.Card )
+        , ( "Checkbox", Url.Checkbox )
+        , ( "Chips", Url.Chips )
+        , ( "Data Table", Url.DataTable )
+        , ( "Dialog", Url.Dialog )
+        , ( "Drawer", Url.Drawer )
+        , ( "Elevation", Url.Elevation )
+        , ( "FAB", Url.Fabs )
+        , ( "Icon Button", Url.IconButton )
+        , ( "Image List", Url.ImageList )
+        , ( "Layout Grid", Url.LayoutGrid )
+        , ( "Linear Progress Indicator", Url.LinearProgress )
+        , ( "List", Url.List )
+        , ( "Menu", Url.Menu )
+        , ( "Radio Button", Url.RadioButton )
+        , ( "Ripple", Url.Ripple )
+        , ( "Select", Url.Select )
+        , ( "Slider", Url.Slider )
+        , ( "Snackbar", Url.Snackbar )
+        , ( "Switch", Url.Switch )
+        , ( "Tab Bar", Url.TabBar )
+        , ( "Text Field", Url.TextField )
+        , ( "Theme", Url.Theme )
+        , ( "Top App Bar", (Url.TopAppBar Nothing) )
+        , ( "Typograpy", Url.Typography )
+        ]
+
 drawer :
     (Material.Msg m -> m)
     -> Material.Index
     -> Material.Model m
     -> m
+    -> (Int -> m)
     -> Url
     -> Bool
     -> Html m
-drawer lift idx mdc cmd current_url open =
+drawer lift idx mdc close select current_url open =
     let
-        a title url =
+        a ( title, url ) =
             listItem title url current_url
     in
     Drawer.view lift
         idx
         mdc
         [ Drawer.open |> when open
-        , Drawer.onClose cmd
+        , Drawer.onClose close
         -- we need this when we switch between modal and dismissible drawer: #233
         -- , TopAppBar.fixedAdjust
         -- , css "z-index" "1"
@@ -102,39 +137,12 @@ drawer lift idx mdc cmd current_url open =
                     [ ]
               ]
         , Drawer.content []
-            [ Lists.nav lift "drawer-list" mdc []
-                  [ Lists.a
-                        [ Options.attribute (Html.href "#")
-                        ]
-                        [ text "Home"
-                        ]
-                  , a "Button" Url.Button
-                  , a "Card" Url.Card
-                  , a "Checkbox" Url.Checkbox
-                  , a "Chips" Url.Chips
-                  , a "Data Table" Url.DataTable
-                  , a "Dialog" Url.Dialog
-                  , a "Drawer" Url.Drawer
-                  , a "Elevation" Url.Elevation
-                  , a "FAB" Url.Fabs
-                  , a "Icon Button" Url.IconButton
-                  , a "Image List" Url.ImageList
-                  , a "Layout Grid" Url.LayoutGrid
-                  , a "Linear Progress Indicator" Url.LinearProgress
-                  , a "List" Url.List
-                  , a "Menu" Url.Menu
-                  , a "Radio Button" Url.RadioButton
-                  , a "Ripple" Url.Ripple
-                  , a "Select" Url.Select
-                  , a "Slider" Url.Slider
-                  , a "Snackbar" Url.Snackbar
-                  , a "Switch" Url.Switch
-                  , a "Tab Bar" Url.TabBar
-                  , a "Text Field" Url.TextField
-                  , a "Theme" Url.Theme
-                  , a "Top App Bar" (Url.TopAppBar Nothing)
-                  , a "Typograpy" Url.Typography
+            [ Lists.nav lift "drawer-list" mdc
+                  [ Lists.singleSelection
+                  , Lists.useActivated
+                  , Lists.onSelectListItem select
                   ]
+                  ( List.map a ( Array.toList drawerItems) )
             ]
         ]
 

@@ -39,7 +39,10 @@ affect the screen’s layout grid.
             , styled h6 [ Drawer.subTitle ] [ text "email@material.io" ]
             ]
         , Drawer.content []
-              [ Lists.nav Mdc "my-list" model.mdc []
+              [ Lists.nav Mdc "my-list" model.mdc
+                    [ Lists.singleSelection
+                    , Lists.useActivated
+                    ]
                     [ Lists.a
                           [ Options.attribute (Html.href "#persistent-drawer")
                           , Lists.activated
@@ -78,6 +81,8 @@ affect the screen’s layout grid.
 This example also demonstrates the use of `Drawer.scrim`, a sibling
 element that needs to be present in the HTML for the animation to work.
 
+To make keyboard navigation work, you will need to add
+Lists.onSelectListItem to the list above.
 
 # Usage
 

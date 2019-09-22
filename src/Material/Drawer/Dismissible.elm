@@ -40,7 +40,10 @@ not common, and the main app content is prioritized.
             , styled h6 [ Drawer.subTitle ] [ text "email@material.io" ]
             ]
         , Drawer.content []
-              [ Lists.nav Mdc "my-list" model.mdc []
+              [ Lists.nav Mdc "my-list" model.mdc
+                    [ Lists.singleSelection
+                    , Lists.useActivated
+                    ]
                     [ Lists.a
                           [ Options.attribute (Html.href "#persistent-drawer")
                           , Lists.activated
@@ -70,6 +73,9 @@ not common, and the main app content is prioritized.
                     ]
               ]
         ]
+
+To make keyboard navigation work, you will need to add
+Lists.onSelectListItem to the list above.
 
 
 # Usage
