@@ -261,6 +261,7 @@ li =
 
 
 {-| List item element as anchor element `<a>`.
+
 -}
 a : List (Property m) -> List (Html m) -> ListItem m
 a options items =
@@ -502,7 +503,7 @@ Only makes sense for single selection lists. If this is set, the
 selected and activated classes and aria elements are applied
 automatically.
 
-Bug: the index currently includes dividers.
+Note: the index currently includes dividers.
 
 -}
 selectedIndex : Int -> Property m
@@ -538,16 +539,8 @@ radioGroup =
     List.radioGroup
 
 
-{-| In Material Design, the selected and activated states apply in
-different, mutually-exclusive situations:
-
-  - Selected state should be applied on the .mdc-list-item when it is
-    likely to frequently change due to user choice. E.g., selecting one
-    or more photos to share in Google Photos.
-  - Activated state is more permanent than selected state, and will NOT
-    change soon relative to the lifetime of the page. Common examples
-    are navigation components such as the list within a navigation
-    drawer.
+{-| Set this property on a list if the selection logic needs to
+apply/remove the `activated` class, instead of the `selected` class.
 
 -}
 useActivated : Property m
