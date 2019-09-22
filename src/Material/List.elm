@@ -316,7 +316,9 @@ selected =
     List.selected
 
 
-{-| Styles a row in the activated state.
+{-| Styles a row in the activated state. This will only take effect
+when the `singleSelection` and useActivated` options have been set on
+the list.
 
 NOTE: In Material Design, the selected and activated states apply in
 different, mutually-exclusive situations:
