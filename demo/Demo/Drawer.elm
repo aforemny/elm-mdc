@@ -99,10 +99,13 @@ view lift page model =
                     [ Lists.ul (lift << Mdc)
                         "permanent-drawer-drawer-list"
                         model.mdc
-                        []
+                        [ Lists.singleSelection
+                        , Lists.useActivated
+                        ]
                         [ Lists.a
                             [ Options.attribute (Html.href "#drawer")
                             , Lists.activated
+                            , Options.css "color" "red"
                             ]
                             [ Lists.graphicIcon [] "inbox"
                             , text "Inbox"

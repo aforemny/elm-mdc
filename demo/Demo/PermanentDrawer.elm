@@ -80,7 +80,9 @@ drawerItems lift index mdc url select selected =
         [ Lists.nav lift
             index
             mdc
-            [ Lists.onSelectListItem select ]
+            [ Lists.singleSelection
+            , Lists.useActivated
+            , Lists.onSelectListItem select ]
             [ Lists.a
                 [ href
                 , Lists.activated |> when (selected == 0)
