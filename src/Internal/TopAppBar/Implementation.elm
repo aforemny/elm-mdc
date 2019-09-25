@@ -152,8 +152,7 @@ topAppBarScrollHandler scrollPosition model =
 
 getViewportScrollY : Decoder Float
 getViewportScrollY =
-    DOM.target <|
-        Json.at [ "ownerDocument", "defaultView", "scrollY" ] Json.float
+    Json.at [ "target", "ownerDocument", "defaultView", "scrollY" ] Json.float
 
 
 getAppBarHeight : Decoder Float
