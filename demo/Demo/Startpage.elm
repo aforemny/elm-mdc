@@ -46,10 +46,7 @@ view page =
                 (List.map
                     (\{ url, title, subtitle, icon } ->
                         ImageList.item
-                            [ css "cursor" "pointer"
-                            , css "width" "calc(100% / 4 - 8.25px)"
-                            , css "margin" "4px"
-                            ]
+                            [ ]
                             [ styled Html.a
                                 [ attribute ( href (Demo.Url.toString url) )
                                 , css "text-decoration" "none"
