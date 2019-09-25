@@ -74,6 +74,8 @@
 .component-catalog-panel__header-elements {
   max-width: 300px;
   padding-right: 40px;
+  margin-top: revert; /* undo normalize */
+  margin-bottom: revert; /* undo normalize */
 }
 
 .component-catalog-panel__header {
