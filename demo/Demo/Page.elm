@@ -59,15 +59,11 @@ topappbar lift idx mdc cmd url title =
                           [ Options.onClick cmd ]
                           "menu"
             , TopAppBar.title
-                [ cs "catalog-top-app-bar__title"
-                ]
-                ( if url == Url.StartPage then
-                      [ styled span [ cs "catalog-top-app-bar__title--small-screen" ] [ text "MDC Web" ],
-                            styled span [ cs "catalog-top-app-bar__title--large-screen" ] [ text title ]
-                      ]
-                  else
-                      [ text "Material Components for the Web" ]
-                )
+                  [ cs "catalog-top-app-bar__title"
+                  ]
+                  [ styled span [ cs "catalog-top-app-bar__title--small-screen" ] [ text "MDC Web" ]
+                  , styled span [ cs "catalog-top-app-bar__title--large-screen" ] [ text title ]
+                  ]
             ]
         ]
 
