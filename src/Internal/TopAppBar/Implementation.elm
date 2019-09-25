@@ -18,7 +18,6 @@ module Internal.TopAppBar.Implementation exposing
     , view
     )
 
-import DOM
 import Dict
 import Html exposing (Html)
 import Internal.Component as Component exposing (Index, Indexed)
