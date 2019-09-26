@@ -18,7 +18,6 @@ import Internal.Snackbar.Model as Snackbar
 import Internal.Switch.Model as Switch
 import Internal.TabBar.Model as TabBar
 import Internal.TextField.Model as TextField
-import Internal.Toolbar.Model as Toolbar
 import Internal.TopAppBar.Model as TopAppBar
 
 
@@ -41,5 +40,4 @@ type Msg m
     | SwitchMsg Index Switch.Msg
     | TabBarMsg Index (TabBar.Msg m)
     | TextFieldMsg Index TextField.Msg
-    | ToolbarMsg Index Toolbar.Msg
     | TopAppBarMsg Index TopAppBar.Msg
