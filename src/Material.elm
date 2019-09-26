@@ -191,8 +191,6 @@ import Internal.TabBar.Implementation as TabBar
 import Internal.TabBar.Model as TabBar
 import Internal.TextField.Implementation as TextField
 import Internal.TextField.Model as TextField
-import Internal.Toolbar.Implementation as Toolbar
-import Internal.Toolbar.Model as Toolbar
 import Internal.TopAppBar.Implementation as TopAppBar
 import Internal.TopAppBar.Model as TopAppBar
 
@@ -237,7 +235,6 @@ type alias Model m =
     , switch : Indexed Switch.Model
     , tabbar : Indexed TabBar.Model
     , textfield : Indexed TextField.Model
-    , toolbar : Indexed Toolbar.Model
     , topAppBar : Indexed TopAppBar.Model
     }
 
@@ -269,7 +266,6 @@ defaultModel =
     , switch = Dict.empty
     , tabbar = Dict.empty
     , textfield = Dict.empty
-    , toolbar = Dict.empty
     , topAppBar = Dict.empty
     }
 
@@ -364,9 +360,6 @@ update_ lift msg store =
 
         TextFieldMsg idx msg_ ->
             TextField.react lift msg_ idx store
-
-        ToolbarMsg idx msg_ ->
-            Toolbar.react lift msg_ idx store
 
         TopAppBarMsg idx msg_ ->
             TopAppBar.react lift msg_ idx store

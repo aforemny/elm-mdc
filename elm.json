@@ -38,7 +38,6 @@
         "Material.TextField.HelperLine",
         "Material.TextField.HelperText",
         "Material.Theme",
-        "Material.Toolbar",
         "Material.TopAppBar",
         "Material.Typography"
     ],

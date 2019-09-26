@@ -1,10 +1,14 @@
 ## Latest changes
 
+Breaking changes:
+* Removed Toolbar (removed upstream).
+
 Changes:
 * Lists: In addition to using selectedIndex you can use the selected
   state on a list item. Depending on the use case on or the other
   might be easier.
 * ImageList: added `node` option to easily change the default "div" element to something else.
+* TopAppBar: support scrolling on any div by using `onScroll`.
 
 Fixes:
 * Lists: the activated item will receive the keyboard focus by default instead of the first.
