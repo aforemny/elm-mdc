@@ -16,6 +16,7 @@ module Material.TopAppBar exposing
     , fixedAdjust
     , denseFixedAdjust
     , prominentFixedAdjust
+    , onScroll
     )
 
 {-| A top app bar is a container for items such as application title,
@@ -54,6 +55,11 @@ navigation icon, and action items.
 
 @docs Property
 @docs view
+
+
+## Standard variant
+
+@docs onScroll
 
 
 ## Fixed variant
@@ -259,3 +265,28 @@ top app bar.
 prominentFixedAdjust : Options.Property c m
 prominentFixedAdjust =
     TopAppBar.prominentFixedAdjust
+
+
+{-| When you have a standard top app bar, but are using a dismissible
+drawer, you may wish to scroll the drawer's contents (the element that
+will have the `DismissibleDrawer.AppContent`) class. In such a case
+the global window does not scroll, so the drawer will behave like if
+you had used `fixed`. Set this property on the application contents
+class in order to scroll the top app bar when you scroll inside the
+div where you had set this property.
+
+```
+styled div
+  [ DismissibleDrawer.appContent
+  , TopAppBar.appContent
+  , TopAppBar.onScroll Mdc "my-top-appbar"
+  ]
+  [ ... ]
+```
+-}
+onScroll :
+    (Material.Msg m -> m)
+    -> Index
+    -> Options.Property c m
+onScroll =
+    TopAppBar.onScroll

@@ -14,7 +14,8 @@ import Demo.Url as Url exposing (Url)
 import Html exposing (Html, div, h2, span, section, text)
 import Html.Attributes as Html
 import Material
-import Material.Drawer.Modal as Drawer
+import Material.Drawer.Dismissible as DismissibleDrawer
+import Material.Drawer.Modal as ModalDrawer
 import Material.Icon as Icon
 import Material.Options as Options exposing (Property, cs, css, styled, when)
 import Material.List as Lists
@@ -59,15 +60,11 @@ topappbar lift idx mdc cmd url title =
                           [ Options.onClick cmd ]
                           "menu"
             , TopAppBar.title
-                [ cs "catalog-top-app-bar__title"
-                ]
-                ( if url == Url.StartPage then
-                      [ styled span [ cs "catalog-top-app-bar__title--small-screen" ] [ text "MDC Web" ],
-                            styled span [ cs "catalog-top-app-bar__title--large-screen" ] [ text title ]
-                      ]
-                  else
-                      [ text "Material Components for the Web" ]
-                )
+                  [ cs "catalog-top-app-bar__title"
+                  ]
+                  [ styled span [ cs "catalog-top-app-bar__title--small-screen" ] [ text "MDC Web" ]
+                  , styled span [ cs "catalog-top-app-bar__title--large-screen" ] [ text title ]
+                  ]
             ]
         ]
 
@@ -112,31 +109,34 @@ drawer :
     -> (Int -> m)
     -> Url
     -> Bool
+    -> Bool
     -> Html m
-drawer lift idx mdc close select current_url open =
+drawer lift idx mdc close select current_url dismissible_drawer open =
     let
         a ( title, url ) =
             listItem title url current_url
     in
-    Drawer.view lift
+    ( if dismissible_drawer then DismissibleDrawer.view else ModalDrawer.view ) lift
         idx
         mdc
-        [ Drawer.open |> when open
-        , Drawer.onClose close
-        -- we need this when we switch between modal and dismissible drawer: #233
-        -- , TopAppBar.fixedAdjust
-        -- , css "z-index" "1"
+        [ ModalDrawer.open |> when open
+        , ModalDrawer.onClose close
+        , TopAppBar.fixedAdjust
+        , css "z-index" "1" |> when dismissible_drawer
         ]
-        [ Drawer.header
-              [ css "padding-top" "18px"
+        [ ModalDrawer.header
+              [ css "position" "absolute"
+              , css "top" "18px"
               , css "opacity" ".74"
+              , css "padding" "0 16px 4px 16px"
               ]
               [ styled Html.img
                     [ Options.attribute (Html.src "https://material-components.github.io/material-components-web-catalog/static/media/ic_material_design_24px.svg")
                     ]
                     [ ]
               ]
-        , Drawer.content []
+        , ModalDrawer.content
+            [ ]
             [ Lists.nav lift "drawer-list" mdc
                   [ Lists.singleSelection
                   , Lists.useActivated
