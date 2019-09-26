@@ -2,7 +2,9 @@ module Demo exposing (main)
 
 import Array
 import Browser
+import Browser.Events
 import Browser.Navigation
+import Browser.Dom
 import Demo.Buttons
 import Demo.Cards
 import Demo.Checkbox
@@ -42,11 +44,13 @@ import Material.Drawer.Dismissible as DismissibleDrawer
 import Material.Options as Options exposing (cs, css, styled, when)
 import Material.TopAppBar as TopAppBar
 import Material.Typography as Typography
+import Task
 import Url
 
 
 type alias Model =
     { mdc : Material.Model Msg
+    , viewportWidth: Int
     , is_drawer_open : Bool
     , key : Browser.Navigation.Key
     , url : Demo.Url.Url
@@ -85,6 +89,7 @@ type alias Model =
 defaultModel : Browser.Navigation.Key -> Model
 defaultModel key =
     { mdc = Material.defaultModel
+    , viewportWidth = 0
     , is_drawer_open = False
     , key = key
     , url = Demo.Url.StartPage
@@ -122,6 +127,8 @@ defaultModel key =
 
 type Msg
     = Mdc (Material.Msg Msg)
+    | GotViewportWidth Browser.Dom.Viewport
+    | WindowResized Int Int
     | UrlChanged Url.Url
     | UrlRequested Browser.UrlRequest
     | Navigate Demo.Url.Url
@@ -165,6 +172,12 @@ update msg model =
     case msg of
         Mdc msg_ ->
             Material.update Mdc msg_ model
+
+        GotViewportWidth viewport ->
+            ( { model | viewportWidth = round viewport.scene.width }, Cmd.none )
+
+        WindowResized x y ->
+            ( { model | viewportWidth = x }, Cmd.none )
 
         Navigate url ->
             ( { model | url = url, is_drawer_open = False }
@@ -421,6 +434,9 @@ view_ : Model -> Html Msg
 view_ model =
     let
         bar = Page.topappbar Mdc "page-topappbar" model.mdc ToggleDrawer model.url
+
+        dismissible_drawer = model.viewportWidth > 1490
+
         page =
             { topappbar = bar
             , navigate = Navigate
@@ -436,21 +452,29 @@ view_ model =
                         , styled div
                             [ cs "demo-panel"
                             , css "display" "flex"
+                            , css "position" "relative"
+                            , css "height" "100vh" |> when dismissible_drawer
+                            , css "overflow" "hidden" |> when dismissible_drawer
                             ]
-                            [ div
-                                  []
-                                  [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url model.is_drawer_open
-                                  , Drawer.scrim [ Options.onClick CloseDrawer ] []
-                                  ]
+                            [ if dismissible_drawer then
+                                  Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url dismissible_drawer model.is_drawer_open
+                              else
+                                  div
+                                      []
+                                      [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url dismissible_drawer model.is_drawer_open
+                                      , Drawer.scrim [ Options.onClick CloseDrawer ] []
+                                      ]
                             , styled div
                                   [ cs "demo-content"
                                   , DismissibleDrawer.appContent
+                                  , TopAppBar.onScroll Mdc "page-topappbar"
                                   , TopAppBar.fixedAdjust
                                   , css "width" "100%"
                                   , css "display" "flex"
                                   , css "justify-content" "flex-start"
                                   , css "flex-direction" "column"
                                   , css "align-items" "center"
+                                  , css "overflow" "auto"
                                   ]
                                   [ styled div
                                     [ cs "demo-content-transition"
@@ -565,6 +589,7 @@ view_ model =
                 ]
 
 
+
 main : Program () Model Msg
 main =
     Browser.application
@@ -589,7 +614,7 @@ init flags url key =
             defaultModel key
     in
     ( { initialModel | url = Demo.Url.fromUrl url }
-    , Material.init Mdc
+    , Cmd.batch [ Material.init Mdc, Task.perform GotViewportWidth Browser.Dom.getViewport ]
     )
 
 
@@ -597,6 +622,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Material.subscriptions Mdc model
+        , Browser.Events.onResize WindowResized
         , Demo.DismissibleDrawer.subscriptions DismissibleDrawerMsg model.dismissibleDrawer
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.Menus.subscriptions MenuMsg model.menus

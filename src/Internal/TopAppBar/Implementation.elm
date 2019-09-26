@@ -9,6 +9,7 @@ module Internal.TopAppBar.Implementation exposing
     , fixed
     , fixedAdjust
     , hasActionItem
+    , onScroll
     , prominent
     , prominentFixedAdjust
     , react
@@ -467,3 +468,18 @@ denseFixedAdjust =
 prominentFixedAdjust : Options.Property c m
 prominentFixedAdjust =
     cs "mdc-top-app-bar--prominent-fixed-adjust"
+
+
+onScroll : (Internal.Msg.Msg m -> m) -> Index -> Options.Property c m
+onScroll lift index =
+    Options.on "scroll" <|
+        Json.map
+            (\scrollPosition ->
+                 lift ( Internal.Msg.TopAppBarMsg index ( Scroll { scrollPosition = scrollPosition } ) )
+            )
+            targetScrollTop
+
+
+targetScrollTop : Decoder Float
+targetScrollTop =
+  Json.at [ "target", "scrollTop" ] Json.float
