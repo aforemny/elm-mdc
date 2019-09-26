@@ -4429,11 +4429,11 @@ var author$project$Demo$UrlChanged = function (a) {
 var author$project$Demo$UrlRequested = function (a) {
 	return {$: 'UrlRequested', a: a};
 };
+var author$project$Demo$GotViewportWidth = function (a) {
+	return {$: 'GotViewportWidth', a: a};
+};
 var author$project$Demo$Mdc = function (a) {
 	return {$: 'Mdc', a: a};
-};
-var author$project$Demo$SetViewportWidth = function (a) {
-	return {$: 'SetViewportWidth', a: a};
 };
 var elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
@@ -5617,7 +5617,7 @@ var author$project$Demo$init = F3(
 				_List_fromArray(
 					[
 						author$project$Material$init(author$project$Demo$Mdc),
-						A2(elm$core$Task$perform, author$project$Demo$SetViewportWidth, elm$browser$Browser$Dom$getViewport)
+						A2(elm$core$Task$perform, author$project$Demo$GotViewportWidth, elm$browser$Browser$Dom$getViewport)
 					])));
 	});
 var author$project$Demo$DismissibleDrawerMsg = function (a) {
@@ -5647,6 +5647,10 @@ var author$project$Demo$TabBarMsg = function (a) {
 var author$project$Demo$TopAppBarMsg = function (a) {
 	return {$: 'TopAppBarMsg', a: a};
 };
+var author$project$Demo$WindowResized = F2(
+	function (a, b) {
+		return {$: 'WindowResized', a: a, b: b};
+	});
 var author$project$Demo$DismissibleDrawer$Mdc = function (a) {
 	return {$: 'Mdc', a: a};
 };
@@ -6058,11 +6062,29 @@ var author$project$Demo$TopAppBar$subscriptions = F2(
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 			model);
 	});
+var elm$browser$Browser$Events$Window = {$: 'Window'};
+var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$int = _Json_decodeInt;
+var elm$browser$Browser$Events$onResize = function (func) {
+	return A3(
+		elm$browser$Browser$Events$on,
+		elm$browser$Browser$Events$Window,
+		'resize',
+		A2(
+			elm$json$Json$Decode$field,
+			'target',
+			A3(
+				elm$json$Json$Decode$map2,
+				func,
+				A2(elm$json$Json$Decode$field, 'innerWidth', elm$json$Json$Decode$int),
+				A2(elm$json$Json$Decode$field, 'innerHeight', elm$json$Json$Decode$int))));
+};
 var author$project$Demo$subscriptions = function (model) {
 	return elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
 				A2(author$project$Material$subscriptions, author$project$Demo$Mdc, model),
+				elm$browser$Browser$Events$onResize(author$project$Demo$WindowResized),
 				A2(author$project$Demo$DismissibleDrawer$subscriptions, author$project$Demo$DismissibleDrawerMsg, model.dismissibleDrawer),
 				A2(author$project$Demo$Drawer$subscriptions, author$project$Demo$DrawerMsg, model.drawer),
 				A2(author$project$Demo$Menus$subscriptions, author$project$Demo$MenuMsg, model.menus),
@@ -9730,18 +9752,16 @@ var elm$core$Array$get = F2(
 			A3(elm$core$Array$getHelp, startShift, index, tree)));
 	});
 var elm$core$Basics$round = _Basics_round;
-var elm$core$Debug$log = _Debug_log;
 var author$project$Demo$update = F2(
 	function (msg, model) {
 		update:
 		while (true) {
-			var _n0 = A2(elm$core$Debug$log, 'update', msg);
-			switch (_n0.$) {
+			switch (msg.$) {
 				case 'Mdc':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					return A3(author$project$Material$update, author$project$Demo$Mdc, msg_, model);
-				case 'SetViewportWidth':
-					var viewport = _n0.a;
+				case 'GotViewportWidth':
+					var viewport = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9749,11 +9769,16 @@ var author$project$Demo$update = F2(
 								viewportWidth: elm$core$Basics$round(viewport.scene.width)
 							}),
 						elm$core$Platform$Cmd$none);
-				case 'Scroll':
-					var position = _n0.a;
-					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+				case 'WindowResized':
+					var x = msg.a;
+					var y = msg.b;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{viewportWidth: x}),
+						elm$core$Platform$Cmd$none);
 				case 'Navigate':
-					var url = _n0.a;
+					var url = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9785,7 +9810,7 @@ var author$project$Demo$update = F2(
 							{is_drawer_open: !model.is_drawer_open}),
 						elm$core$Platform$Cmd$none);
 				case 'SelectDrawerItem':
-					var index = _n0.a;
+					var index = msg.a;
 					var item = A2(elm$core$Array$get, index, author$project$Demo$Page$drawerItems);
 					if (item.$ === 'Just') {
 						var _n2 = item.a;
@@ -9800,8 +9825,8 @@ var author$project$Demo$update = F2(
 						return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 					}
 				case 'UrlRequested':
-					if (_n0.a.$ === 'Internal') {
-						var url = _n0.a.a;
+					if (msg.a.$ === 'Internal') {
+						var url = msg.a.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -9813,11 +9838,11 @@ var author$project$Demo$update = F2(
 								author$project$Demo$Url$toString(
 									author$project$Demo$Url$fromUrl(url))));
 					} else {
-						var string = _n0.a.a;
+						var string = msg.a.a;
 						return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 					}
 				case 'UrlChanged':
-					var url = _n0.a;
+					var url = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9826,7 +9851,7 @@ var author$project$Demo$update = F2(
 							}),
 						elm$core$Platform$Cmd$none);
 				case 'ButtonsMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n3 = A3(author$project$Demo$Buttons$update, author$project$Demo$ButtonsMsg, msg_, model.buttons);
 					var buttons = _n3.a;
 					var effects = _n3.b;
@@ -9836,7 +9861,7 @@ var author$project$Demo$update = F2(
 							{buttons: buttons}),
 						effects);
 				case 'CardsMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n4 = A3(author$project$Demo$Cards$update, author$project$Demo$CardsMsg, msg_, model.cards);
 					var cards = _n4.a;
 					var effects = _n4.b;
@@ -9846,7 +9871,7 @@ var author$project$Demo$update = F2(
 							{cards: cards}),
 						effects);
 				case 'CheckboxMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n5 = A3(author$project$Demo$Checkbox$update, author$project$Demo$CheckboxMsg, msg_, model.checkbox);
 					var checkbox = _n5.a;
 					var effects = _n5.b;
@@ -9856,7 +9881,7 @@ var author$project$Demo$update = F2(
 							{checkbox: checkbox}),
 						effects);
 				case 'ChipsMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n6 = A3(author$project$Demo$Chips$update, author$project$Demo$ChipsMsg, msg_, model.chips);
 					var chips = _n6.a;
 					var effects = _n6.b;
@@ -9866,7 +9891,7 @@ var author$project$Demo$update = F2(
 							{chips: chips}),
 						effects);
 				case 'DataTableMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n7 = A3(author$project$Demo$DataTable$update, author$project$Demo$DataTableMsg, msg_, model.dataTable);
 					var dataTable = _n7.a;
 					var effects = _n7.b;
@@ -9876,7 +9901,7 @@ var author$project$Demo$update = F2(
 							{dataTable: dataTable}),
 						effects);
 				case 'DialogMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n8 = A3(author$project$Demo$Dialog$update, author$project$Demo$DialogMsg, msg_, model.dialog);
 					var dialog = _n8.a;
 					var effects = _n8.b;
@@ -9886,7 +9911,7 @@ var author$project$Demo$update = F2(
 							{dialog: dialog}),
 						effects);
 				case 'ElevationMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n9 = A3(author$project$Demo$Elevation$update, author$project$Demo$ElevationMsg, msg_, model.elevation);
 					var elevation = _n9.a;
 					var effects = _n9.b;
@@ -9896,7 +9921,7 @@ var author$project$Demo$update = F2(
 							{elevation: elevation}),
 						effects);
 				case 'DrawerMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n10 = A3(author$project$Demo$Drawer$update, author$project$Demo$DrawerMsg, msg_, model.drawer);
 					var drawer = _n10.a;
 					var effects = _n10.b;
@@ -9906,7 +9931,7 @@ var author$project$Demo$update = F2(
 							{drawer: drawer}),
 						effects);
 				case 'DismissibleDrawerMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n11 = A3(author$project$Demo$DismissibleDrawer$update, author$project$Demo$DismissibleDrawerMsg, msg_, model.dismissibleDrawer);
 					var dismissibleDrawer = _n11.a;
 					var effects = _n11.b;
@@ -9916,7 +9941,7 @@ var author$project$Demo$update = F2(
 							{dismissibleDrawer: dismissibleDrawer}),
 						effects);
 				case 'ModalDrawerMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n12 = A3(author$project$Demo$ModalDrawer$update, author$project$Demo$ModalDrawerMsg, msg_, model.modalDrawer);
 					var modalDrawer = _n12.a;
 					var effects = _n12.b;
@@ -9926,7 +9951,7 @@ var author$project$Demo$update = F2(
 							{modalDrawer: modalDrawer}),
 						effects);
 				case 'PermanentDrawerMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n13 = A3(author$project$Demo$PermanentDrawer$update, author$project$Demo$PermanentDrawerMsg, msg_, model.permanentDrawer);
 					var permanentDrawer = _n13.a;
 					var effects = _n13.b;
@@ -9936,7 +9961,7 @@ var author$project$Demo$update = F2(
 							{permanentDrawer: permanentDrawer}),
 						effects);
 				case 'FabsMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n14 = A3(author$project$Demo$Fabs$update, author$project$Demo$FabsMsg, msg_, model.fabs);
 					var fabs = _n14.a;
 					var effects = _n14.b;
@@ -9946,7 +9971,7 @@ var author$project$Demo$update = F2(
 							{fabs: fabs}),
 						effects);
 				case 'IconButtonMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n15 = A3(author$project$Demo$IconButton$update, author$project$Demo$IconButtonMsg, msg_, model.iconToggle);
 					var iconToggle = _n15.a;
 					var effects = _n15.b;
@@ -9956,7 +9981,7 @@ var author$project$Demo$update = F2(
 							{iconToggle: iconToggle}),
 						effects);
 				case 'ImageListMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n16 = A3(author$project$Demo$ImageList$update, author$project$Demo$ImageListMsg, msg_, model.imageList);
 					var imageList = _n16.a;
 					var effects = _n16.b;
@@ -9966,7 +9991,7 @@ var author$project$Demo$update = F2(
 							{imageList: imageList}),
 						effects);
 				case 'LinearProgressMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n17 = A3(author$project$Demo$LinearProgress$update, author$project$Demo$LinearProgressMsg, msg_, model.linearProgress);
 					var linearProgress = _n17.a;
 					var effects = _n17.b;
@@ -9976,7 +10001,7 @@ var author$project$Demo$update = F2(
 							{linearProgress: linearProgress}),
 						effects);
 				case 'MenuMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n18 = A3(author$project$Demo$Menus$update, author$project$Demo$MenuMsg, msg_, model.menus);
 					var menus = _n18.a;
 					var effects = _n18.b;
@@ -9986,7 +10011,7 @@ var author$project$Demo$update = F2(
 							{menus: menus}),
 						effects);
 				case 'RadioButtonsMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n19 = A3(author$project$Demo$RadioButtons$update, author$project$Demo$RadioButtonsMsg, msg_, model.radio);
 					var radio = _n19.a;
 					var effects = _n19.b;
@@ -9996,7 +10021,7 @@ var author$project$Demo$update = F2(
 							{radio: radio}),
 						effects);
 				case 'RippleMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n20 = A3(author$project$Demo$Ripple$update, author$project$Demo$RippleMsg, msg_, model.ripple);
 					var ripple = _n20.a;
 					var effects = _n20.b;
@@ -10006,7 +10031,7 @@ var author$project$Demo$update = F2(
 							{ripple: ripple}),
 						effects);
 				case 'SelectMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n21 = A3(author$project$Demo$Selects$update, author$project$Demo$SelectMsg, msg_, model.selects);
 					var selects = _n21.a;
 					var effects = _n21.b;
@@ -10016,7 +10041,7 @@ var author$project$Demo$update = F2(
 							{selects: selects}),
 						effects);
 				case 'SliderMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n22 = A3(author$project$Demo$Slider$update, author$project$Demo$SliderMsg, msg_, model.slider);
 					var slider = _n22.a;
 					var effects = _n22.b;
@@ -10026,7 +10051,7 @@ var author$project$Demo$update = F2(
 							{slider: slider}),
 						effects);
 				case 'SnackbarMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n23 = A3(author$project$Demo$Snackbar$update, author$project$Demo$SnackbarMsg, msg_, model.snackbar);
 					var snackbar = _n23.a;
 					var effects = _n23.b;
@@ -10036,7 +10061,7 @@ var author$project$Demo$update = F2(
 							{snackbar: snackbar}),
 						effects);
 				case 'SwitchMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n24 = A3(author$project$Demo$Switch$update, author$project$Demo$SwitchMsg, msg_, model._switch);
 					var _switch = _n24.a;
 					var effects = _n24.b;
@@ -10046,7 +10071,7 @@ var author$project$Demo$update = F2(
 							{_switch: _switch}),
 						effects);
 				case 'TextFieldMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n25 = A3(author$project$Demo$TextFields$update, author$project$Demo$TextFieldMsg, msg_, model.textfields);
 					var textfields = _n25.a;
 					var effects = _n25.b;
@@ -10056,7 +10081,7 @@ var author$project$Demo$update = F2(
 							{textfields: textfields}),
 						effects);
 				case 'TabBarMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n26 = A3(author$project$Demo$TabBar$update, author$project$Demo$TabBarMsg, msg_, model.tabbar);
 					var tabbar = _n26.a;
 					var effects = _n26.b;
@@ -10066,7 +10091,7 @@ var author$project$Demo$update = F2(
 							{tabbar: tabbar}),
 						effects);
 				case 'LayoutGridMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n27 = A3(author$project$Demo$LayoutGrid$update, author$project$Demo$LayoutGridMsg, msg_, model.layoutGrid);
 					var layoutGrid = _n27.a;
 					var effects = _n27.b;
@@ -10076,7 +10101,7 @@ var author$project$Demo$update = F2(
 							{layoutGrid: layoutGrid}),
 						effects);
 				case 'ListsMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n28 = A3(author$project$Demo$Lists$update, author$project$Demo$ListsMsg, msg_, model.lists);
 					var lists = _n28.a;
 					var effects = _n28.b;
@@ -10086,7 +10111,7 @@ var author$project$Demo$update = F2(
 							{lists: lists}),
 						effects);
 				case 'ThemeMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n29 = A3(author$project$Demo$Theme$update, author$project$Demo$ThemeMsg, msg_, model.theme);
 					var theme = _n29.a;
 					var effects = _n29.b;
@@ -10096,7 +10121,7 @@ var author$project$Demo$update = F2(
 							{theme: theme}),
 						effects);
 				case 'TopAppBarMsg':
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n30 = A3(author$project$Demo$TopAppBar$update, author$project$Demo$TopAppBarMsg, msg_, model.topAppBar);
 					var topAppBar = _n30.a;
 					var effects = _n30.b;
@@ -10106,7 +10131,7 @@ var author$project$Demo$update = F2(
 							{topAppBar: topAppBar}),
 						effects);
 				default:
-					var msg_ = _n0.a;
+					var msg_ = msg.a;
 					var _n31 = A3(author$project$Demo$Typography$update, author$project$Demo$TypographyMsg, msg_, model.typography);
 					var typography = _n31.a;
 					var effects = _n31.b;
@@ -10119,27 +10144,10 @@ var author$project$Demo$update = F2(
 		}
 	});
 var author$project$Demo$CloseDrawer = {$: 'CloseDrawer'};
-var author$project$Demo$Scroll = function (a) {
-	return {$: 'Scroll', a: a};
-};
 var author$project$Demo$SelectDrawerItem = function (a) {
 	return {$: 'SelectDrawerItem', a: a};
 };
 var author$project$Demo$ToggleDrawer = {$: 'ToggleDrawer'};
-var elm$json$Json$Decode$field = _Json_decodeField;
-var elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
-	});
-var elm$json$Json$Decode$float = _Json_decodeFloat;
-var author$project$Demo$targetScrollTop = A2(
-	elm$json$Json$Decode$at,
-	_List_fromArray(
-		['target', 'scrollTop']),
-	elm$json$Json$Decode$float);
-var author$project$Demo$decodeScroll2 = function (tagger) {
-	return A2(elm$json$Json$Decode$map, tagger, author$project$Demo$targetScrollTop);
-};
 var author$project$Internal$Options$Class = function (a) {
 	return {$: 'Class', a: a};
 };
@@ -10617,7 +10625,12 @@ var author$project$Internal$Ripple$Model$Event = F2(
 		return {eventType: eventType, pagePoint: pagePoint};
 	});
 var elm$json$Json$Decode$andThen = _Json_andThen;
+var elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
+	});
 var elm$json$Json$Decode$fail = _Json_fail;
+var elm$json$Json$Decode$float = _Json_decodeFloat;
 var elm$json$Json$Decode$list = _Json_decodeList;
 var elm$json$Json$Decode$map3 = _Json_map3;
 var elm$json$Json$Decode$oneOf = _Json_oneOf;
@@ -12550,7 +12563,6 @@ var author$project$Internal$Chip$Implementation$decodeKey = A2(
 	_List_fromArray(
 		['key']),
 	elm$json$Json$Decode$string);
-var elm$json$Json$Decode$int = _Json_decodeInt;
 var elm$html$Html$Events$keyCode = A2(elm$json$Json$Decode$field, 'keyCode', elm$json$Json$Decode$int);
 var author$project$Internal$Chip$Implementation$decodeKeyCode = elm$html$Html$Events$keyCode;
 var author$project$Internal$Chip$Implementation$onClick = function (msg) {
@@ -16010,12 +16022,11 @@ var author$project$Internal$TopAppBar$Implementation$getAppBarHeight = A2(
 	_List_fromArray(
 		['target', 'clientHeight']),
 	elm$json$Json$Decode$float);
-var author$project$Internal$TopAppBar$Implementation$getViewportScrollY = debois$elm_dom$DOM$target(
-	A2(
-		elm$json$Json$Decode$at,
-		_List_fromArray(
-			['ownerDocument', 'defaultView', 'scrollY']),
-		elm$json$Json$Decode$float));
+var author$project$Internal$TopAppBar$Implementation$getViewportScrollY = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'ownerDocument', 'defaultView', 'scrollY']),
+	elm$json$Json$Decode$float);
 var author$project$Internal$TopAppBar$Implementation$row = function (options) {
 	return A2(
 		author$project$Internal$Options$styled,
@@ -19499,8 +19510,7 @@ var author$project$Demo$Page$topappbar = F6(
 			mdc,
 			_List_fromArray(
 				[
-					author$project$Material$Options$cs('catalog-top-app-bar'),
-					A2(author$project$Material$Options$css, 'z-index', '7')
+					author$project$Material$Options$cs('catalog-top-app-bar')
 				]),
 			_List_fromArray(
 				[
@@ -44592,6 +44602,29 @@ var author$project$Demo$Typography$view = F3(
 						]))
 				]));
 	});
+var author$project$Internal$TopAppBar$Implementation$targetScrollTop = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'scrollTop']),
+	elm$json$Json$Decode$float);
+var author$project$Internal$TopAppBar$Implementation$onScroll = F2(
+	function (lift, index) {
+		return A2(
+			author$project$Internal$Options$on,
+			'scroll',
+			A2(
+				elm$json$Json$Decode$map,
+				function (scrollPosition) {
+					return lift(
+						A2(
+							author$project$Internal$Msg$TopAppBarMsg,
+							index,
+							author$project$Internal$TopAppBar$Model$Scroll(
+								{scrollPosition: scrollPosition})));
+				},
+				author$project$Internal$TopAppBar$Implementation$targetScrollTop));
+	});
+var author$project$Material$TopAppBar$onScroll = author$project$Internal$TopAppBar$Implementation$onScroll;
 var author$project$Material$Typography$display4 = author$project$Material$Typography$headline4;
 var author$project$Demo$view_ = function (model) {
 	var dismissible_drawer = model.viewportWidth > 1490;
@@ -44620,8 +44653,14 @@ var author$project$Demo$view_ = function (model) {
 									author$project$Material$Options$cs('demo-panel'),
 									A2(author$project$Material$Options$css, 'display', 'flex'),
 									A2(author$project$Material$Options$css, 'position', 'relative'),
-									A2(author$project$Material$Options$css, 'height', '100vh'),
-									A2(author$project$Material$Options$css, 'overflow', 'hidden')
+									A2(
+									author$project$Material$Options$when,
+									dismissible_drawer,
+									A2(author$project$Material$Options$css, 'height', '100vh')),
+									A2(
+									author$project$Material$Options$when,
+									dismissible_drawer,
+									A2(author$project$Material$Options$css, 'overflow', 'hidden'))
 								]),
 							_List_fromArray(
 								[
@@ -44646,10 +44685,7 @@ var author$project$Demo$view_ = function (model) {
 										[
 											author$project$Material$Options$cs('demo-content'),
 											author$project$Material$Drawer$Dismissible$appContent,
-											A2(
-											author$project$Material$Options$on,
-											'scroll',
-											author$project$Demo$decodeScroll2(author$project$Demo$Scroll)),
+											A2(author$project$Material$TopAppBar$onScroll, author$project$Demo$Mdc, 'page-topappbar'),
 											author$project$Material$TopAppBar$fixedAdjust,
 											A2(author$project$Material$Options$css, 'width', '100%'),
 											A2(author$project$Material$Options$css, 'display', 'flex'),
