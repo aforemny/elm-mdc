@@ -131,7 +131,7 @@ view lift page model =
     in
     page.body
         "Snackbar"
-        "Snackbars provide brief feedback about an operation through a message at the bottom of the screen."
+        "Snackbars provide brief messages about app processes at the bottom of the screen."
         ( Hero.view []
             [ styled Html.div
                 [ css "position" "relative"
