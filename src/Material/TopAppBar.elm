@@ -44,9 +44,9 @@ navigation icon, and action items.
               , TopAppBar.title [] [ text title ]
               ]
           , TopAppBar.section [ TopAppBar.alignEnd ]
-              [ TopAppBar.actionItem [] "file_download"
-              , TopAppBar.actionItem [] "print"
-              , TopAppBar.actionItem [] "bookmark"
+              [ TopAppBar.actionItem Mdc "my-download" model.mdc [] "file_download"
+              , TopAppBar.actionItem Mdc "my-print" model.mdc [] "print"
+              , TopAppBar.actionItem Mdc "my-bookmark" model.mdc [] "bookmark"
               ]
         ]
 
