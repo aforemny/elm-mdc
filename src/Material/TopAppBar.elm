@@ -44,9 +44,9 @@ navigation icon, and action items.
               , TopAppBar.title [] [ text title ]
               ]
           , TopAppBar.section [ TopAppBar.alignEnd ]
-              [ TopAppBar.actionItem [] "file_download"
-              , TopAppBar.actionItem [] "print"
-              , TopAppBar.actionItem [] "bookmark"
+              [ TopAppBar.actionItem Mdc "my-download" model.mdc [] "file_download"
+              , TopAppBar.actionItem Mdc "my-print" model.mdc [] "print"
+              , TopAppBar.actionItem Mdc "my-bookmark" model.mdc [] "bookmark"
               ]
         ]
 
@@ -139,7 +139,9 @@ view =
 
 {-| TopAppBar section.
 
-A TopAppBar should have at least one section.
+A TopAppBar should have at least one section. Without arguments the
+section will be centered. Use `alignStart` and `alignEnd` to create
+sections that align left and right respectively.
 
 -}
 section : List (Property m) -> List (Html m) -> Html m
