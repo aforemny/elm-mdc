@@ -139,7 +139,9 @@ view =
 
 {-| TopAppBar section.
 
-A TopAppBar should have at least one section.
+A TopAppBar should have at least one section. Without arguments the
+section will be centered. Use `alignStart` and `alignEnd` to create
+sections that align left and right respectively.
 
 -}
 section : List (Property m) -> List (Html m) -> Html m
