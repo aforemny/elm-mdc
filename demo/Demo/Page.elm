@@ -1,5 +1,6 @@
 module Demo.Page exposing
     ( Page
+    , Transition(..)
     , demos
     , drawer
     , drawerItems
@@ -147,10 +148,10 @@ drawer lift idx mdc close select current_url dismissible_drawer open =
         ]
 
 
+listItem : String -> Url -> Url -> Lists.ListItem m
 listItem title url current_url =
     Lists.a
-        [ Options.attribute (Html.href (Url.toString url))
-        , Lists.activated |> when  ( current_url == url )
+        [ Lists.activated |> when  ( current_url == url )
         ]
         [ text title
         ]
@@ -163,10 +164,18 @@ subheader title =
         [ text title ]
 
 
-componentCatalogPanel : String -> String -> Html m -> List (Html m) -> Html m
-componentCatalogPanel title intro hero nodes =
+type Transition
+    = None
+    | Enter
+    | Active
+    | Done
+
+componentCatalogPanel : Transition -> String -> String -> Html m -> List (Html m) -> Html m
+componentCatalogPanel transition title intro hero nodes =
     styled section
         [ cs "component-catalog-panel"
+        , cs "loadComponent-enter" |> when (transition == Enter || transition == Active)
+        , cs "loadComponent-enter-active" |> when (transition == Active)
         , css "margin-top" "24px"
         , css "padding-bottom" "24px"
         ]

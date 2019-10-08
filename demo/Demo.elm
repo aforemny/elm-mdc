@@ -36,7 +36,7 @@ import Demo.TextFields
 import Demo.Theme
 import Demo.TopAppBar
 import Demo.Typography
-import Demo.Url exposing (TopAppBarPage(..))
+import Demo.Url exposing (Url, TopAppBarPage(..))
 import Html exposing (Html, div, text)
 import Material
 import Material.Drawer.Modal as Drawer
@@ -50,8 +50,10 @@ import Url
 
 type alias Model =
     { mdc : Material.Model Msg
-    , viewportWidth: Int
+    , useDismissibleDrawer: Bool
     , is_drawer_open : Bool
+    , navigateToUrl : Maybe Url               -- Used for animations
+    , transition : Page.Transition
     , key : Browser.Navigation.Key
     , url : Demo.Url.Url
     , buttons : Demo.Buttons.Model Msg
@@ -89,8 +91,10 @@ type alias Model =
 defaultModel : Browser.Navigation.Key -> Model
 defaultModel key =
     { mdc = Material.defaultModel
-    , viewportWidth = 0
+    , useDismissibleDrawer = True
     , is_drawer_open = False
+    , navigateToUrl = Nothing
+    , transition = Page.None
     , key = key
     , url = Demo.Url.StartPage
     , buttons = Demo.Buttons.defaultModel
@@ -136,6 +140,7 @@ type Msg
     | CloseDrawer
     | ToggleDrawer
     | SelectDrawerItem Int
+    | AnimationTick Float
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -169,18 +174,22 @@ type Msg
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    let
+        enableDismissibleDrawer x =
+            x > 1490
+    in
     case msg of
         Mdc msg_ ->
             Material.update Mdc msg_ model
 
         GotViewportWidth viewport ->
-            ( { model | viewportWidth = round viewport.scene.width }, Cmd.none )
+            ( { model | useDismissibleDrawer = enableDismissibleDrawer viewport.scene.width }, Cmd.none )
 
         WindowResized x y ->
-            ( { model | viewportWidth = x }, Cmd.none )
+            ( { model | useDismissibleDrawer = enableDismissibleDrawer x }, Cmd.none )
 
         Navigate url ->
-            ( { model | url = url, is_drawer_open = False }
+            ( { model | url = url, is_drawer_open = if not model.useDismissibleDrawer then False else model.is_drawer_open, transition = if model.navigateToUrl /= Nothing then Page.Active else Page.None, navigateToUrl = Nothing }
             , Cmd.batch
                 [ Browser.Navigation.pushUrl model.key (Demo.Url.toString url)
 
@@ -202,8 +211,13 @@ update msg model =
                 item = Array.get index Page.drawerItems
             in
                 case item of
-                    Just ( title, url ) -> update ( Navigate url ) model
+                    Just ( title, url ) -> ( { model | navigateToUrl = Just url, transition = Page.Enter }, Cmd.none )
                     Nothing -> ( model, Cmd.none )
+
+        AnimationTick _ ->
+            case model.navigateToUrl of
+                Just url -> update ( Navigate url ) model
+                Nothing -> ( model, Cmd.none )
 
         UrlRequested (Browser.Internal url) ->
             ( { model | url = Demo.Url.fromUrl url, is_drawer_open = False }
@@ -435,8 +449,6 @@ view_ model =
     let
         bar = Page.topappbar Mdc "page-topappbar" model.mdc ToggleDrawer model.url
 
-        dismissible_drawer = model.viewportWidth > 1490
-
         page =
             { topappbar = bar
             , navigate = Navigate
@@ -453,15 +465,15 @@ view_ model =
                             [ cs "demo-panel"
                             , css "display" "flex"
                             , css "position" "relative"
-                            , css "height" "100vh" |> when dismissible_drawer
-                            , css "overflow" "hidden" |> when dismissible_drawer
+                            , css "height" "100vh" |> when model.useDismissibleDrawer
+                            , css "overflow" "hidden" |> when model.useDismissibleDrawer
                             ]
-                            [ if dismissible_drawer then
-                                  Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url dismissible_drawer model.is_drawer_open
+                            [ if model.useDismissibleDrawer then
+                                  Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url model.useDismissibleDrawer model.is_drawer_open
                               else
                                   div
                                       []
-                                      [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url dismissible_drawer model.is_drawer_open
+                                      [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url model.useDismissibleDrawer model.is_drawer_open
                                       , Drawer.scrim [ Options.onClick CloseDrawer ] []
                                       ]
                             , styled div
@@ -481,7 +493,7 @@ view_ model =
                                     , css "width" "100%"
                                     , css "max-width" "1200px"
                                     ]
-                                    [ Page.componentCatalogPanel title intro hero nodes ]
+                                    [ Page.componentCatalogPanel model.transition title intro hero nodes ]
                                   ]
                             ]
                         ]
@@ -623,6 +635,7 @@ subscriptions model =
     Sub.batch
         [ Material.subscriptions Mdc model
         , Browser.Events.onResize WindowResized
+        , if model.navigateToUrl == Nothing then Sub.none else Browser.Events.onAnimationFrameDelta AnimationTick
         , Demo.DismissibleDrawer.subscriptions DismissibleDrawerMsg model.dismissibleDrawer
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.Menus.subscriptions MenuMsg model.menus
