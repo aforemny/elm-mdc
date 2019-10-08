@@ -4765,6 +4765,7 @@ var author$project$Demo$Lists$defaultModel = {
 };
 var author$project$Demo$Menus$defaultModel = {mdc: author$project$Material$defaultModel};
 var author$project$Demo$ModalDrawer$defaultModel = {drawerOpen: false, mdc: author$project$Material$defaultModel, rtl: false, selected_drawer_item: 0};
+var author$project$Demo$Page$None = {$: 'None'};
 var author$project$Demo$PermanentDrawer$defaultModel = {mdc: author$project$Material$defaultModel, rtl: false, selected_drawer_item: 0};
 var author$project$Demo$RadioButtons$defaultModel = {
 	mdc: author$project$Material$defaultModel,
@@ -4804,7 +4805,7 @@ var author$project$Demo$TopAppBar$defaultModel = {examples: elm$core$Dict$empty,
 var author$project$Demo$Typography$defaultModel = {mdc: author$project$Material$defaultModel};
 var author$project$Demo$Url$StartPage = {$: 'StartPage'};
 var author$project$Demo$defaultModel = function (key) {
-	return {buttons: author$project$Demo$Buttons$defaultModel, cards: author$project$Demo$Cards$defaultModel, checkbox: author$project$Demo$Checkbox$defaultModel, chips: author$project$Demo$Chips$defaultModel, dataTable: author$project$Demo$DataTable$defaultModel, dialog: author$project$Demo$Dialog$defaultModel, dismissibleDrawer: author$project$Demo$DismissibleDrawer$defaultModel, drawer: author$project$Demo$Drawer$defaultModel, elevation: author$project$Demo$Elevation$defaultModel, fabs: author$project$Demo$Fabs$defaultModel, iconToggle: author$project$Demo$IconButton$defaultModel, imageList: author$project$Demo$ImageList$defaultModel, is_drawer_open: false, key: key, layoutGrid: author$project$Demo$LayoutGrid$defaultModel, linearProgress: author$project$Demo$LinearProgress$defaultModel, lists: author$project$Demo$Lists$defaultModel, mdc: author$project$Material$defaultModel, menus: author$project$Demo$Menus$defaultModel, modalDrawer: author$project$Demo$ModalDrawer$defaultModel, permanentDrawer: author$project$Demo$PermanentDrawer$defaultModel, radio: author$project$Demo$RadioButtons$defaultModel, ripple: author$project$Demo$Ripple$defaultModel, selects: author$project$Demo$Selects$defaultModel, slider: author$project$Demo$Slider$defaultModel, snackbar: author$project$Demo$Snackbar$defaultModel, _switch: author$project$Demo$Switch$defaultModel, tabbar: author$project$Demo$TabBar$defaultModel, textfields: author$project$Demo$TextFields$defaultModel, theme: author$project$Demo$Theme$defaultModel, topAppBar: author$project$Demo$TopAppBar$defaultModel, typography: author$project$Demo$Typography$defaultModel, url: author$project$Demo$Url$StartPage, viewportWidth: 0};
+	return {buttons: author$project$Demo$Buttons$defaultModel, cards: author$project$Demo$Cards$defaultModel, checkbox: author$project$Demo$Checkbox$defaultModel, chips: author$project$Demo$Chips$defaultModel, dataTable: author$project$Demo$DataTable$defaultModel, dialog: author$project$Demo$Dialog$defaultModel, dismissibleDrawer: author$project$Demo$DismissibleDrawer$defaultModel, drawer: author$project$Demo$Drawer$defaultModel, elevation: author$project$Demo$Elevation$defaultModel, fabs: author$project$Demo$Fabs$defaultModel, iconToggle: author$project$Demo$IconButton$defaultModel, imageList: author$project$Demo$ImageList$defaultModel, is_drawer_open: false, key: key, layoutGrid: author$project$Demo$LayoutGrid$defaultModel, linearProgress: author$project$Demo$LinearProgress$defaultModel, lists: author$project$Demo$Lists$defaultModel, mdc: author$project$Material$defaultModel, menus: author$project$Demo$Menus$defaultModel, modalDrawer: author$project$Demo$ModalDrawer$defaultModel, navigateToUrl: elm$core$Maybe$Nothing, permanentDrawer: author$project$Demo$PermanentDrawer$defaultModel, radio: author$project$Demo$RadioButtons$defaultModel, ripple: author$project$Demo$Ripple$defaultModel, selects: author$project$Demo$Selects$defaultModel, slider: author$project$Demo$Slider$defaultModel, snackbar: author$project$Demo$Snackbar$defaultModel, _switch: author$project$Demo$Switch$defaultModel, tabbar: author$project$Demo$TabBar$defaultModel, textfields: author$project$Demo$TextFields$defaultModel, theme: author$project$Demo$Theme$defaultModel, topAppBar: author$project$Demo$TopAppBar$defaultModel, transition: author$project$Demo$Page$None, typography: author$project$Demo$Typography$defaultModel, url: author$project$Demo$Url$StartPage, useDismissibleDrawer: true};
 };
 var author$project$Demo$Url$Button = {$: 'Button'};
 var author$project$Demo$Url$Card = {$: 'Card'};
@@ -5641,6 +5642,9 @@ var author$project$Demo$init = F3(
 						A2(elm$core$Task$perform, author$project$Demo$GotViewportWidth, elm$browser$Browser$Dom$getViewport)
 					])));
 	});
+var author$project$Demo$AnimationTick = function (a) {
+	return {$: 'AnimationTick', a: a};
+};
 var author$project$Demo$DismissibleDrawerMsg = function (a) {
 	return {$: 'DismissibleDrawerMsg', a: a};
 };
@@ -6083,6 +6087,133 @@ var author$project$Demo$TopAppBar$subscriptions = F2(
 			A2(elm$core$Basics$composeL, lift, author$project$Demo$TopAppBar$Mdc),
 			model);
 	});
+var elm$browser$Browser$AnimationManager$Delta = function (a) {
+	return {$: 'Delta', a: a};
+};
+var elm$browser$Browser$AnimationManager$State = F3(
+	function (subs, request, oldTime) {
+		return {oldTime: oldTime, request: request, subs: subs};
+	});
+var elm$browser$Browser$AnimationManager$init = elm$core$Task$succeed(
+	A3(elm$browser$Browser$AnimationManager$State, _List_Nil, elm$core$Maybe$Nothing, 0));
+var elm$browser$Browser$AnimationManager$now = _Browser_now(_Utils_Tuple0);
+var elm$browser$Browser$AnimationManager$rAF = _Browser_rAF(_Utils_Tuple0);
+var elm$core$Process$spawn = _Scheduler_spawn;
+var elm$browser$Browser$AnimationManager$onEffects = F3(
+	function (router, subs, _n0) {
+		var request = _n0.request;
+		var oldTime = _n0.oldTime;
+		var _n1 = _Utils_Tuple2(request, subs);
+		if (_n1.a.$ === 'Nothing') {
+			if (!_n1.b.b) {
+				var _n2 = _n1.a;
+				return elm$browser$Browser$AnimationManager$init;
+			} else {
+				var _n4 = _n1.a;
+				return A2(
+					elm$core$Task$andThen,
+					function (pid) {
+						return A2(
+							elm$core$Task$andThen,
+							function (time) {
+								return elm$core$Task$succeed(
+									A3(
+										elm$browser$Browser$AnimationManager$State,
+										subs,
+										elm$core$Maybe$Just(pid),
+										time));
+							},
+							elm$browser$Browser$AnimationManager$now);
+					},
+					elm$core$Process$spawn(
+						A2(
+							elm$core$Task$andThen,
+							elm$core$Platform$sendToSelf(router),
+							elm$browser$Browser$AnimationManager$rAF)));
+			}
+		} else {
+			if (!_n1.b.b) {
+				var pid = _n1.a.a;
+				return A2(
+					elm$core$Task$andThen,
+					function (_n3) {
+						return elm$browser$Browser$AnimationManager$init;
+					},
+					elm$core$Process$kill(pid));
+			} else {
+				return elm$core$Task$succeed(
+					A3(elm$browser$Browser$AnimationManager$State, subs, request, oldTime));
+			}
+		}
+	});
+var elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var elm$time$Time$millisToPosix = elm$time$Time$Posix;
+var elm$browser$Browser$AnimationManager$onSelfMsg = F3(
+	function (router, newTime, _n0) {
+		var subs = _n0.subs;
+		var oldTime = _n0.oldTime;
+		var send = function (sub) {
+			if (sub.$ === 'Time') {
+				var tagger = sub.a;
+				return A2(
+					elm$core$Platform$sendToApp,
+					router,
+					tagger(
+						elm$time$Time$millisToPosix(newTime)));
+			} else {
+				var tagger = sub.a;
+				return A2(
+					elm$core$Platform$sendToApp,
+					router,
+					tagger(newTime - oldTime));
+			}
+		};
+		return A2(
+			elm$core$Task$andThen,
+			function (pid) {
+				return A2(
+					elm$core$Task$andThen,
+					function (_n1) {
+						return elm$core$Task$succeed(
+							A3(
+								elm$browser$Browser$AnimationManager$State,
+								subs,
+								elm$core$Maybe$Just(pid),
+								newTime));
+					},
+					elm$core$Task$sequence(
+						A2(elm$core$List$map, send, subs)));
+			},
+			elm$core$Process$spawn(
+				A2(
+					elm$core$Task$andThen,
+					elm$core$Platform$sendToSelf(router),
+					elm$browser$Browser$AnimationManager$rAF)));
+	});
+var elm$browser$Browser$AnimationManager$Time = function (a) {
+	return {$: 'Time', a: a};
+};
+var elm$browser$Browser$AnimationManager$subMap = F2(
+	function (func, sub) {
+		if (sub.$ === 'Time') {
+			var tagger = sub.a;
+			return elm$browser$Browser$AnimationManager$Time(
+				A2(elm$core$Basics$composeL, func, tagger));
+		} else {
+			var tagger = sub.a;
+			return elm$browser$Browser$AnimationManager$Delta(
+				A2(elm$core$Basics$composeL, func, tagger));
+		}
+	});
+_Platform_effectManagers['Browser.AnimationManager'] = _Platform_createManager(elm$browser$Browser$AnimationManager$init, elm$browser$Browser$AnimationManager$onEffects, elm$browser$Browser$AnimationManager$onSelfMsg, 0, elm$browser$Browser$AnimationManager$subMap);
+var elm$browser$Browser$AnimationManager$subscription = _Platform_leaf('Browser.AnimationManager');
+var elm$browser$Browser$AnimationManager$onAnimationFrameDelta = function (tagger) {
+	return elm$browser$Browser$AnimationManager$subscription(
+		elm$browser$Browser$AnimationManager$Delta(tagger));
+};
+var elm$browser$Browser$Events$onAnimationFrameDelta = elm$browser$Browser$AnimationManager$onAnimationFrameDelta;
 var elm$browser$Browser$Events$Window = {$: 'Window'};
 var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$json$Json$Decode$int = _Json_decodeInt;
@@ -6106,6 +6237,7 @@ var author$project$Demo$subscriptions = function (model) {
 			[
 				A2(author$project$Material$subscriptions, author$project$Demo$Mdc, model),
 				elm$browser$Browser$Events$onResize(author$project$Demo$WindowResized),
+				_Utils_eq(model.navigateToUrl, elm$core$Maybe$Nothing) ? elm$core$Platform$Sub$none : elm$browser$Browser$Events$onAnimationFrameDelta(author$project$Demo$AnimationTick),
 				A2(author$project$Demo$DismissibleDrawer$subscriptions, author$project$Demo$DismissibleDrawerMsg, model.dismissibleDrawer),
 				A2(author$project$Demo$Drawer$subscriptions, author$project$Demo$DrawerMsg, model.drawer),
 				A2(author$project$Demo$Menus$subscriptions, author$project$Demo$MenuMsg, model.menus),
@@ -9124,6 +9256,8 @@ var author$project$Demo$ModalDrawer$update = F3(
 					elm$core$Platform$Cmd$none);
 		}
 	});
+var author$project$Demo$Page$Active = {$: 'Active'};
+var author$project$Demo$Page$Enter = {$: 'Enter'};
 var elm$core$Array$fromListHelp = F3(
 	function (list, nodeList, nodeListSize) {
 		fromListHelp:
@@ -9673,11 +9807,13 @@ var elm$core$Array$get = F2(
 			A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, tail)) : elm$core$Maybe$Just(
 			A3(elm$core$Array$getHelp, startShift, index, tree)));
 	});
-var elm$core$Basics$round = _Basics_round;
 var author$project$Demo$update = F2(
 	function (msg, model) {
 		update:
 		while (true) {
+			var enableDismissibleDrawer = function (x) {
+				return x > 1490;
+			};
 			switch (msg.$) {
 				case 'Mdc':
 					var msg_ = msg.a;
@@ -9688,7 +9824,7 @@ var author$project$Demo$update = F2(
 						_Utils_update(
 							model,
 							{
-								viewportWidth: elm$core$Basics$round(viewport.scene.width)
+								useDismissibleDrawer: enableDismissibleDrawer(viewport.scene.width)
 							}),
 						elm$core$Platform$Cmd$none);
 				case 'WindowResized':
@@ -9697,14 +9833,21 @@ var author$project$Demo$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{viewportWidth: x}),
+							{
+								useDismissibleDrawer: enableDismissibleDrawer(x)
+							}),
 						elm$core$Platform$Cmd$none);
 				case 'Navigate':
 					var url = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{is_drawer_open: false, url: url}),
+							{
+								is_drawer_open: (!model.useDismissibleDrawer) ? false : model.is_drawer_open,
+								navigateToUrl: elm$core$Maybe$Nothing,
+								transition: (!_Utils_eq(model.navigateToUrl, elm$core$Maybe$Nothing)) ? author$project$Demo$Page$Active : author$project$Demo$Page$None,
+								url: url
+							}),
 						elm$core$Platform$Cmd$batch(
 							_List_fromArray(
 								[
@@ -9738,6 +9881,21 @@ var author$project$Demo$update = F2(
 						var _n2 = item.a;
 						var title = _n2.a;
 						var url = _n2.b;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									navigateToUrl: elm$core$Maybe$Just(url),
+									transition: author$project$Demo$Page$Enter
+								}),
+							elm$core$Platform$Cmd$none);
+					} else {
+						return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+					}
+				case 'AnimationTick':
+					var _n3 = model.navigateToUrl;
+					if (_n3.$ === 'Just') {
+						var url = _n3.a;
 						var $temp$msg = author$project$Demo$Navigate(url),
 							$temp$model = model;
 						msg = $temp$msg;
@@ -9774,9 +9932,9 @@ var author$project$Demo$update = F2(
 						elm$core$Platform$Cmd$none);
 				case 'ButtonsMsg':
 					var msg_ = msg.a;
-					var _n3 = A3(author$project$Demo$Buttons$update, author$project$Demo$ButtonsMsg, msg_, model.buttons);
-					var buttons = _n3.a;
-					var effects = _n3.b;
+					var _n4 = A3(author$project$Demo$Buttons$update, author$project$Demo$ButtonsMsg, msg_, model.buttons);
+					var buttons = _n4.a;
+					var effects = _n4.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9784,9 +9942,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'CardsMsg':
 					var msg_ = msg.a;
-					var _n4 = A3(author$project$Demo$Cards$update, author$project$Demo$CardsMsg, msg_, model.cards);
-					var cards = _n4.a;
-					var effects = _n4.b;
+					var _n5 = A3(author$project$Demo$Cards$update, author$project$Demo$CardsMsg, msg_, model.cards);
+					var cards = _n5.a;
+					var effects = _n5.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9794,9 +9952,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'CheckboxMsg':
 					var msg_ = msg.a;
-					var _n5 = A3(author$project$Demo$Checkbox$update, author$project$Demo$CheckboxMsg, msg_, model.checkbox);
-					var checkbox = _n5.a;
-					var effects = _n5.b;
+					var _n6 = A3(author$project$Demo$Checkbox$update, author$project$Demo$CheckboxMsg, msg_, model.checkbox);
+					var checkbox = _n6.a;
+					var effects = _n6.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9804,9 +9962,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'ChipsMsg':
 					var msg_ = msg.a;
-					var _n6 = A3(author$project$Demo$Chips$update, author$project$Demo$ChipsMsg, msg_, model.chips);
-					var chips = _n6.a;
-					var effects = _n6.b;
+					var _n7 = A3(author$project$Demo$Chips$update, author$project$Demo$ChipsMsg, msg_, model.chips);
+					var chips = _n7.a;
+					var effects = _n7.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9814,9 +9972,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'DataTableMsg':
 					var msg_ = msg.a;
-					var _n7 = A3(author$project$Demo$DataTable$update, author$project$Demo$DataTableMsg, msg_, model.dataTable);
-					var dataTable = _n7.a;
-					var effects = _n7.b;
+					var _n8 = A3(author$project$Demo$DataTable$update, author$project$Demo$DataTableMsg, msg_, model.dataTable);
+					var dataTable = _n8.a;
+					var effects = _n8.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9824,9 +9982,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'DialogMsg':
 					var msg_ = msg.a;
-					var _n8 = A3(author$project$Demo$Dialog$update, author$project$Demo$DialogMsg, msg_, model.dialog);
-					var dialog = _n8.a;
-					var effects = _n8.b;
+					var _n9 = A3(author$project$Demo$Dialog$update, author$project$Demo$DialogMsg, msg_, model.dialog);
+					var dialog = _n9.a;
+					var effects = _n9.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9834,9 +9992,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'ElevationMsg':
 					var msg_ = msg.a;
-					var _n9 = A3(author$project$Demo$Elevation$update, author$project$Demo$ElevationMsg, msg_, model.elevation);
-					var elevation = _n9.a;
-					var effects = _n9.b;
+					var _n10 = A3(author$project$Demo$Elevation$update, author$project$Demo$ElevationMsg, msg_, model.elevation);
+					var elevation = _n10.a;
+					var effects = _n10.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9844,9 +10002,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'DrawerMsg':
 					var msg_ = msg.a;
-					var _n10 = A3(author$project$Demo$Drawer$update, author$project$Demo$DrawerMsg, msg_, model.drawer);
-					var drawer = _n10.a;
-					var effects = _n10.b;
+					var _n11 = A3(author$project$Demo$Drawer$update, author$project$Demo$DrawerMsg, msg_, model.drawer);
+					var drawer = _n11.a;
+					var effects = _n11.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9854,9 +10012,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'DismissibleDrawerMsg':
 					var msg_ = msg.a;
-					var _n11 = A3(author$project$Demo$DismissibleDrawer$update, author$project$Demo$DismissibleDrawerMsg, msg_, model.dismissibleDrawer);
-					var dismissibleDrawer = _n11.a;
-					var effects = _n11.b;
+					var _n12 = A3(author$project$Demo$DismissibleDrawer$update, author$project$Demo$DismissibleDrawerMsg, msg_, model.dismissibleDrawer);
+					var dismissibleDrawer = _n12.a;
+					var effects = _n12.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9864,9 +10022,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'ModalDrawerMsg':
 					var msg_ = msg.a;
-					var _n12 = A3(author$project$Demo$ModalDrawer$update, author$project$Demo$ModalDrawerMsg, msg_, model.modalDrawer);
-					var modalDrawer = _n12.a;
-					var effects = _n12.b;
+					var _n13 = A3(author$project$Demo$ModalDrawer$update, author$project$Demo$ModalDrawerMsg, msg_, model.modalDrawer);
+					var modalDrawer = _n13.a;
+					var effects = _n13.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9874,9 +10032,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'PermanentDrawerMsg':
 					var msg_ = msg.a;
-					var _n13 = A3(author$project$Demo$PermanentDrawer$update, author$project$Demo$PermanentDrawerMsg, msg_, model.permanentDrawer);
-					var permanentDrawer = _n13.a;
-					var effects = _n13.b;
+					var _n14 = A3(author$project$Demo$PermanentDrawer$update, author$project$Demo$PermanentDrawerMsg, msg_, model.permanentDrawer);
+					var permanentDrawer = _n14.a;
+					var effects = _n14.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9884,9 +10042,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'FabsMsg':
 					var msg_ = msg.a;
-					var _n14 = A3(author$project$Demo$Fabs$update, author$project$Demo$FabsMsg, msg_, model.fabs);
-					var fabs = _n14.a;
-					var effects = _n14.b;
+					var _n15 = A3(author$project$Demo$Fabs$update, author$project$Demo$FabsMsg, msg_, model.fabs);
+					var fabs = _n15.a;
+					var effects = _n15.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9894,9 +10052,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'IconButtonMsg':
 					var msg_ = msg.a;
-					var _n15 = A3(author$project$Demo$IconButton$update, author$project$Demo$IconButtonMsg, msg_, model.iconToggle);
-					var iconToggle = _n15.a;
-					var effects = _n15.b;
+					var _n16 = A3(author$project$Demo$IconButton$update, author$project$Demo$IconButtonMsg, msg_, model.iconToggle);
+					var iconToggle = _n16.a;
+					var effects = _n16.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9904,9 +10062,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'ImageListMsg':
 					var msg_ = msg.a;
-					var _n16 = A3(author$project$Demo$ImageList$update, author$project$Demo$ImageListMsg, msg_, model.imageList);
-					var imageList = _n16.a;
-					var effects = _n16.b;
+					var _n17 = A3(author$project$Demo$ImageList$update, author$project$Demo$ImageListMsg, msg_, model.imageList);
+					var imageList = _n17.a;
+					var effects = _n17.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9914,9 +10072,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'LinearProgressMsg':
 					var msg_ = msg.a;
-					var _n17 = A3(author$project$Demo$LinearProgress$update, author$project$Demo$LinearProgressMsg, msg_, model.linearProgress);
-					var linearProgress = _n17.a;
-					var effects = _n17.b;
+					var _n18 = A3(author$project$Demo$LinearProgress$update, author$project$Demo$LinearProgressMsg, msg_, model.linearProgress);
+					var linearProgress = _n18.a;
+					var effects = _n18.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9924,9 +10082,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'MenuMsg':
 					var msg_ = msg.a;
-					var _n18 = A3(author$project$Demo$Menus$update, author$project$Demo$MenuMsg, msg_, model.menus);
-					var menus = _n18.a;
-					var effects = _n18.b;
+					var _n19 = A3(author$project$Demo$Menus$update, author$project$Demo$MenuMsg, msg_, model.menus);
+					var menus = _n19.a;
+					var effects = _n19.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9934,9 +10092,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'RadioButtonsMsg':
 					var msg_ = msg.a;
-					var _n19 = A3(author$project$Demo$RadioButtons$update, author$project$Demo$RadioButtonsMsg, msg_, model.radio);
-					var radio = _n19.a;
-					var effects = _n19.b;
+					var _n20 = A3(author$project$Demo$RadioButtons$update, author$project$Demo$RadioButtonsMsg, msg_, model.radio);
+					var radio = _n20.a;
+					var effects = _n20.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9944,9 +10102,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'RippleMsg':
 					var msg_ = msg.a;
-					var _n20 = A3(author$project$Demo$Ripple$update, author$project$Demo$RippleMsg, msg_, model.ripple);
-					var ripple = _n20.a;
-					var effects = _n20.b;
+					var _n21 = A3(author$project$Demo$Ripple$update, author$project$Demo$RippleMsg, msg_, model.ripple);
+					var ripple = _n21.a;
+					var effects = _n21.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9954,9 +10112,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'SelectMsg':
 					var msg_ = msg.a;
-					var _n21 = A3(author$project$Demo$Selects$update, author$project$Demo$SelectMsg, msg_, model.selects);
-					var selects = _n21.a;
-					var effects = _n21.b;
+					var _n22 = A3(author$project$Demo$Selects$update, author$project$Demo$SelectMsg, msg_, model.selects);
+					var selects = _n22.a;
+					var effects = _n22.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9964,9 +10122,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'SliderMsg':
 					var msg_ = msg.a;
-					var _n22 = A3(author$project$Demo$Slider$update, author$project$Demo$SliderMsg, msg_, model.slider);
-					var slider = _n22.a;
-					var effects = _n22.b;
+					var _n23 = A3(author$project$Demo$Slider$update, author$project$Demo$SliderMsg, msg_, model.slider);
+					var slider = _n23.a;
+					var effects = _n23.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9974,9 +10132,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'SnackbarMsg':
 					var msg_ = msg.a;
-					var _n23 = A3(author$project$Demo$Snackbar$update, author$project$Demo$SnackbarMsg, msg_, model.snackbar);
-					var snackbar = _n23.a;
-					var effects = _n23.b;
+					var _n24 = A3(author$project$Demo$Snackbar$update, author$project$Demo$SnackbarMsg, msg_, model.snackbar);
+					var snackbar = _n24.a;
+					var effects = _n24.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9984,9 +10142,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'SwitchMsg':
 					var msg_ = msg.a;
-					var _n24 = A3(author$project$Demo$Switch$update, author$project$Demo$SwitchMsg, msg_, model._switch);
-					var _switch = _n24.a;
-					var effects = _n24.b;
+					var _n25 = A3(author$project$Demo$Switch$update, author$project$Demo$SwitchMsg, msg_, model._switch);
+					var _switch = _n25.a;
+					var effects = _n25.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -9994,9 +10152,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'TextFieldMsg':
 					var msg_ = msg.a;
-					var _n25 = A3(author$project$Demo$TextFields$update, author$project$Demo$TextFieldMsg, msg_, model.textfields);
-					var textfields = _n25.a;
-					var effects = _n25.b;
+					var _n26 = A3(author$project$Demo$TextFields$update, author$project$Demo$TextFieldMsg, msg_, model.textfields);
+					var textfields = _n26.a;
+					var effects = _n26.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -10004,9 +10162,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'TabBarMsg':
 					var msg_ = msg.a;
-					var _n26 = A3(author$project$Demo$TabBar$update, author$project$Demo$TabBarMsg, msg_, model.tabbar);
-					var tabbar = _n26.a;
-					var effects = _n26.b;
+					var _n27 = A3(author$project$Demo$TabBar$update, author$project$Demo$TabBarMsg, msg_, model.tabbar);
+					var tabbar = _n27.a;
+					var effects = _n27.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -10014,9 +10172,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'LayoutGridMsg':
 					var msg_ = msg.a;
-					var _n27 = A3(author$project$Demo$LayoutGrid$update, author$project$Demo$LayoutGridMsg, msg_, model.layoutGrid);
-					var layoutGrid = _n27.a;
-					var effects = _n27.b;
+					var _n28 = A3(author$project$Demo$LayoutGrid$update, author$project$Demo$LayoutGridMsg, msg_, model.layoutGrid);
+					var layoutGrid = _n28.a;
+					var effects = _n28.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -10024,9 +10182,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'ListsMsg':
 					var msg_ = msg.a;
-					var _n28 = A3(author$project$Demo$Lists$update, author$project$Demo$ListsMsg, msg_, model.lists);
-					var lists = _n28.a;
-					var effects = _n28.b;
+					var _n29 = A3(author$project$Demo$Lists$update, author$project$Demo$ListsMsg, msg_, model.lists);
+					var lists = _n29.a;
+					var effects = _n29.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -10034,9 +10192,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'ThemeMsg':
 					var msg_ = msg.a;
-					var _n29 = A3(author$project$Demo$Theme$update, author$project$Demo$ThemeMsg, msg_, model.theme);
-					var theme = _n29.a;
-					var effects = _n29.b;
+					var _n30 = A3(author$project$Demo$Theme$update, author$project$Demo$ThemeMsg, msg_, model.theme);
+					var theme = _n30.a;
+					var effects = _n30.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -10044,9 +10202,9 @@ var author$project$Demo$update = F2(
 						effects);
 				case 'TopAppBarMsg':
 					var msg_ = msg.a;
-					var _n30 = A3(author$project$Demo$TopAppBar$update, author$project$Demo$TopAppBarMsg, msg_, model.topAppBar);
-					var topAppBar = _n30.a;
-					var effects = _n30.b;
+					var _n31 = A3(author$project$Demo$TopAppBar$update, author$project$Demo$TopAppBarMsg, msg_, model.topAppBar);
+					var topAppBar = _n31.a;
+					var effects = _n31.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -10054,9 +10212,9 @@ var author$project$Demo$update = F2(
 						effects);
 				default:
 					var msg_ = msg.a;
-					var _n31 = A3(author$project$Demo$Typography$update, author$project$Demo$TypographyMsg, msg_, model.typography);
-					var typography = _n31.a;
-					var effects = _n31.b;
+					var _n32 = A3(author$project$Demo$Typography$update, author$project$Demo$TypographyMsg, msg_, model.typography);
+					var typography = _n32.a;
+					var effects = _n32.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -10497,6 +10655,7 @@ var author$project$Internal$Options$css = F2(
 			_Utils_Tuple2(key, value));
 	});
 var author$project$Internal$Ripple$Model$strings = {varFgScale: '--mdc-ripple-fg-scale', varFgSize: '--mdc-ripple-fg-size', varFgTranslateEnd: '--mdc-ripple-fg-translate-end', varFgTranslateStart: '--mdc-ripple-fg-translate-start', varLeft: '--mdc-ripple-left', varTop: '--mdc-ripple-top'};
+var elm$core$Basics$round = _Basics_round;
 var author$project$Internal$Ripple$Implementation$cssVariables = F2(
 	function (isUnbounded, _n0) {
 		var fgScale = _n0.fgScale;
@@ -11223,7 +11382,7 @@ var author$project$Demo$Helper$Hero$view = function (options) {
 																							A2(author$project$Material$Options$css, 'overflow', 'auto'),
 																							options))))))))))))))))))))));
 };
-var author$project$Internal$List$Implementation$defaultConfig = {activated: false, isRadioGroup: false, isSingleSelectionList: false, node: elm$core$Maybe$Nothing, onSelectListItem: elm$core$Maybe$Nothing, selected: false, selectedIndex: elm$core$Maybe$Nothing, useActivated: false};
+var author$project$Internal$List$Implementation$defaultConfig = {activated: false, disabled: false, isRadioGroup: false, isSingleSelectionList: false, node: elm$core$Maybe$Nothing, onSelectListItem: elm$core$Maybe$Nothing, selected: false, selectedIndex: elm$core$Maybe$Nothing, useActivated: false};
 var author$project$Internal$List$Implementation$aRippledView = F5(
 	function (domId, lift, model, options, items) {
 		var summary = A2(author$project$Internal$Options$collect, author$project$Internal$List$Implementation$defaultConfig, options);
@@ -13987,6 +14146,7 @@ var author$project$Internal$Dialog$Implementation$title = author$project$Interna
 var author$project$Material$Dialog$title = author$project$Internal$Dialog$Implementation$title;
 var author$project$Internal$List$Implementation$avatarList = author$project$Internal$Options$cs('mdc-list--avatar-list');
 var author$project$Material$List$avatarList = author$project$Internal$List$Implementation$avatarList;
+var author$project$Internal$List$Implementation$disabledClass = author$project$Internal$Options$cs('mdc-list-item--disabled');
 var author$project$Internal$List$Implementation$find = F2(
 	function (predicate, list) {
 		find:
@@ -14348,14 +14508,15 @@ var author$project$Internal$List$Implementation$liView = F9(
 					author$project$Internal$Options$when,
 					config.isRadioGroup,
 					author$project$Internal$Options$role('radio')),
-					ripple.interactionHandler,
-					ripple.properties,
+					A2(author$project$Internal$Options$when, li_config.disabled, author$project$Internal$List$Implementation$disabledClass),
+					A2(author$project$Internal$Options$when, !li_config.disabled, ripple.interactionHandler),
+					A2(author$project$Internal$Options$when, !li_config.disabled, ripple.properties),
 					function () {
 					var _n0 = config.onSelectListItem;
 					if (_n0.$ === 'Just') {
 						var onSelect = _n0.a;
-						return author$project$Internal$Options$onClick(
-							onSelect(index));
+						return (!li_config.disabled) ? author$project$Internal$Options$onClick(
+							onSelect(index)) : author$project$Internal$Options$nop;
 					} else {
 						return author$project$Internal$Options$nop;
 					}
@@ -19316,14 +19477,22 @@ var author$project$Demo$Helper$Hero$area = F3(
 						]))
 				]));
 	});
-var author$project$Demo$Page$componentCatalogPanel = F4(
-	function (title, intro, hero, nodes) {
+var author$project$Demo$Page$componentCatalogPanel = F5(
+	function (transition, title, intro, hero, nodes) {
 		return A3(
 			author$project$Material$Options$styled,
 			elm$html$Html$section,
 			_List_fromArray(
 				[
 					author$project$Material$Options$cs('component-catalog-panel'),
+					A2(
+					author$project$Material$Options$when,
+					_Utils_eq(transition, author$project$Demo$Page$Enter) || _Utils_eq(transition, author$project$Demo$Page$Active),
+					author$project$Material$Options$cs('loadComponent-enter')),
+					A2(
+					author$project$Material$Options$when,
+					_Utils_eq(transition, author$project$Demo$Page$Active),
+					author$project$Material$Options$cs('loadComponent-enter-active')),
 					A2(author$project$Material$Options$css, 'margin-top', '24px'),
 					A2(author$project$Material$Options$css, 'padding-bottom', '24px')
 				]),
@@ -19338,9 +19507,6 @@ var author$project$Demo$Page$listItem = F3(
 			author$project$Material$List$a,
 			_List_fromArray(
 				[
-					author$project$Material$Options$attribute(
-					elm$html$Html$Attributes$href(
-						author$project$Demo$Url$toString(url))),
 					A2(
 					author$project$Material$Options$when,
 					_Utils_eq(current_url, url),
@@ -20584,7 +20750,7 @@ var author$project$Internal$Slider$Implementation$slider = F4(
 					A2(
 					author$project$Internal$Options$aria,
 					'valuemax',
-					elm$core$String$fromFloat(config.min)),
+					elm$core$String$fromFloat(config.max)),
 					A2(
 					author$project$Internal$Options$aria,
 					'valuenow',
@@ -21568,7 +21734,7 @@ var author$project$Demo$Snackbar$view = F3(
 		return A4(
 			page.body,
 			'Snackbar',
-			'Snackbars provide brief feedback about an operation through a message at the bottom of the screen.',
+			'Snackbars provide brief messages about app processes at the bottom of the screen.',
 			A2(
 				author$project$Demo$Helper$Hero$view,
 				_List_Nil,
@@ -44549,7 +44715,6 @@ var author$project$Internal$TopAppBar$Implementation$onScroll = F2(
 var author$project$Material$TopAppBar$onScroll = author$project$Internal$TopAppBar$Implementation$onScroll;
 var author$project$Material$Typography$display4 = author$project$Material$Typography$headline4;
 var author$project$Demo$view_ = function (model) {
-	var dismissible_drawer = model.viewportWidth > 1490;
 	var bar = A5(author$project$Demo$Page$topappbar, author$project$Demo$Mdc, 'page-topappbar', model.mdc, author$project$Demo$ToggleDrawer, model.url);
 	var page = {
 		body: F4(
@@ -44577,21 +44742,21 @@ var author$project$Demo$view_ = function (model) {
 									A2(author$project$Material$Options$css, 'position', 'relative'),
 									A2(
 									author$project$Material$Options$when,
-									dismissible_drawer,
+									model.useDismissibleDrawer,
 									A2(author$project$Material$Options$css, 'height', '100vh')),
 									A2(
 									author$project$Material$Options$when,
-									dismissible_drawer,
+									model.useDismissibleDrawer,
 									A2(author$project$Material$Options$css, 'overflow', 'hidden'))
 								]),
 							_List_fromArray(
 								[
-									dismissible_drawer ? A8(author$project$Demo$Page$drawer, author$project$Demo$Mdc, 'page-drawer', model.mdc, author$project$Demo$CloseDrawer, author$project$Demo$SelectDrawerItem, model.url, dismissible_drawer, model.is_drawer_open) : A2(
+									model.useDismissibleDrawer ? A8(author$project$Demo$Page$drawer, author$project$Demo$Mdc, 'page-drawer', model.mdc, author$project$Demo$CloseDrawer, author$project$Demo$SelectDrawerItem, model.url, model.useDismissibleDrawer, model.is_drawer_open) : A2(
 									elm$html$Html$div,
 									_List_Nil,
 									_List_fromArray(
 										[
-											A8(author$project$Demo$Page$drawer, author$project$Demo$Mdc, 'page-drawer', model.mdc, author$project$Demo$CloseDrawer, author$project$Demo$SelectDrawerItem, model.url, dismissible_drawer, model.is_drawer_open),
+											A8(author$project$Demo$Page$drawer, author$project$Demo$Mdc, 'page-drawer', model.mdc, author$project$Demo$CloseDrawer, author$project$Demo$SelectDrawerItem, model.url, model.useDismissibleDrawer, model.is_drawer_open),
 											A2(
 											author$project$Material$Drawer$Modal$scrim,
 											_List_fromArray(
@@ -44629,7 +44794,7 @@ var author$project$Demo$view_ = function (model) {
 												]),
 											_List_fromArray(
 												[
-													A4(author$project$Demo$Page$componentCatalogPanel, title, intro, hero, nodes)
+													A5(author$project$Demo$Page$componentCatalogPanel, model.transition, title, intro, hero, nodes)
 												]))
 										]))
 								]))
