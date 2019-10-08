@@ -147,10 +147,10 @@ drawer lift idx mdc close select current_url dismissible_drawer open =
         ]
 
 
+listItem : String -> Url -> Url -> Lists.ListItem m
 listItem title url current_url =
     Lists.a
-        [ Options.attribute (Html.href (Url.toString url))
-        , Lists.activated |> when  ( current_url == url )
+        [ Lists.activated |> when  ( current_url == url )
         ]
         [ text title
         ]
