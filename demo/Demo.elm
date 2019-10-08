@@ -36,7 +36,7 @@ import Demo.TextFields
 import Demo.Theme
 import Demo.TopAppBar
 import Demo.Typography
-import Demo.Url exposing (TopAppBarPage(..))
+import Demo.Url exposing (Url, TopAppBarPage(..))
 import Html exposing (Html, div, text)
 import Material
 import Material.Drawer.Modal as Drawer
@@ -52,6 +52,8 @@ type alias Model =
     { mdc : Material.Model Msg
     , useDismissibleDrawer: Bool
     , is_drawer_open : Bool
+    , navigateToUrl : Maybe Url               -- Used for animations
+    , transition : Page.Transition
     , key : Browser.Navigation.Key
     , url : Demo.Url.Url
     , buttons : Demo.Buttons.Model Msg
@@ -91,6 +93,8 @@ defaultModel key =
     { mdc = Material.defaultModel
     , useDismissibleDrawer = True
     , is_drawer_open = False
+    , navigateToUrl = Nothing
+    , transition = Page.None
     , key = key
     , url = Demo.Url.StartPage
     , buttons = Demo.Buttons.defaultModel
@@ -136,6 +140,7 @@ type Msg
     | CloseDrawer
     | ToggleDrawer
     | SelectDrawerItem Int
+    | AnimationTick Float
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -184,7 +189,7 @@ update msg model =
             ( { model | useDismissibleDrawer = enableDismissibleDrawer x }, Cmd.none )
 
         Navigate url ->
-            ( { model | url = url, is_drawer_open = if not model.useDismissibleDrawer then False else model.is_drawer_open }
+            ( { model | url = url, is_drawer_open = if not model.useDismissibleDrawer then False else model.is_drawer_open, transition = if model.navigateToUrl /= Nothing then Page.Active else Page.None, navigateToUrl = Nothing }
             , Cmd.batch
                 [ Browser.Navigation.pushUrl model.key (Demo.Url.toString url)
 
@@ -206,8 +211,13 @@ update msg model =
                 item = Array.get index Page.drawerItems
             in
                 case item of
-                    Just ( title, url ) -> update ( Navigate url ) model
+                    Just ( title, url ) -> ( { model | navigateToUrl = Just url, transition = Page.Enter }, Cmd.none )
                     Nothing -> ( model, Cmd.none )
+
+        AnimationTick _ ->
+            case model.navigateToUrl of
+                Just url -> update ( Navigate url ) model
+                Nothing -> ( model, Cmd.none )
 
         UrlRequested (Browser.Internal url) ->
             ( { model | url = Demo.Url.fromUrl url, is_drawer_open = False }
@@ -483,7 +493,7 @@ view_ model =
                                     , css "width" "100%"
                                     , css "max-width" "1200px"
                                     ]
-                                    [ Page.componentCatalogPanel title intro hero nodes ]
+                                    [ Page.componentCatalogPanel model.transition title intro hero nodes ]
                                   ]
                             ]
                         ]
@@ -625,6 +635,7 @@ subscriptions model =
     Sub.batch
         [ Material.subscriptions Mdc model
         , Browser.Events.onResize WindowResized
+        , if model.navigateToUrl == Nothing then Sub.none else Browser.Events.onAnimationFrameDelta AnimationTick
         , Demo.DismissibleDrawer.subscriptions DismissibleDrawerMsg model.dismissibleDrawer
         , Demo.Drawer.subscriptions DrawerMsg model.drawer
         , Demo.Menus.subscriptions MenuMsg model.menus

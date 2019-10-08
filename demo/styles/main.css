@@ -70,6 +70,27 @@
 }
 
 
+/* Page change animation */
+
+.loadComponent-enter {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.loadComponent-enter.loadComponent-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 235ms linear 100ms;
+}
+
+// Fixed elements do not work well with transform so the snackbar needs to be hidden
+// until the transition finishes.
+.loadComponent-enter.loadComponent-enter-active.mdc-snackbar {
+  display: none;
+}
+
+
+
 /* hero */
 .component-catalog-panel__header-elements {
   max-width: 300px;
