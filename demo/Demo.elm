@@ -50,7 +50,7 @@ import Url
 
 type alias Model =
     { mdc : Material.Model Msg
-    , viewportWidth: Int
+    , useDismissibleDrawer: Bool
     , is_drawer_open : Bool
     , key : Browser.Navigation.Key
     , url : Demo.Url.Url
@@ -89,7 +89,7 @@ type alias Model =
 defaultModel : Browser.Navigation.Key -> Model
 defaultModel key =
     { mdc = Material.defaultModel
-    , viewportWidth = 0
+    , useDismissibleDrawer = True
     , is_drawer_open = False
     , key = key
     , url = Demo.Url.StartPage
@@ -169,15 +169,19 @@ type Msg
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    let
+        enableDismissibleDrawer x =
+            x > 1490
+    in
     case msg of
         Mdc msg_ ->
             Material.update Mdc msg_ model
 
         GotViewportWidth viewport ->
-            ( { model | viewportWidth = round viewport.scene.width }, Cmd.none )
+            ( { model | useDismissibleDrawer = enableDismissibleDrawer viewport.scene.width }, Cmd.none )
 
         WindowResized x y ->
-            ( { model | viewportWidth = x }, Cmd.none )
+            ( { model | useDismissibleDrawer = enableDismissibleDrawer x }, Cmd.none )
 
         Navigate url ->
             ( { model | url = url, is_drawer_open = False }
@@ -435,8 +439,6 @@ view_ model =
     let
         bar = Page.topappbar Mdc "page-topappbar" model.mdc ToggleDrawer model.url
 
-        dismissible_drawer = model.viewportWidth > 1490
-
         page =
             { topappbar = bar
             , navigate = Navigate
@@ -453,15 +455,15 @@ view_ model =
                             [ cs "demo-panel"
                             , css "display" "flex"
                             , css "position" "relative"
-                            , css "height" "100vh" |> when dismissible_drawer
-                            , css "overflow" "hidden" |> when dismissible_drawer
+                            , css "height" "100vh" |> when model.useDismissibleDrawer
+                            , css "overflow" "hidden" |> when model.useDismissibleDrawer
                             ]
-                            [ if dismissible_drawer then
-                                  Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url dismissible_drawer model.is_drawer_open
+                            [ if model.useDismissibleDrawer then
+                                  Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url model.useDismissibleDrawer model.is_drawer_open
                               else
                                   div
                                       []
-                                      [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url dismissible_drawer model.is_drawer_open
+                                      [ Page.drawer Mdc "page-drawer" model.mdc CloseDrawer SelectDrawerItem model.url model.useDismissibleDrawer model.is_drawer_open
                                       , Drawer.scrim [ Options.onClick CloseDrawer ] []
                                       ]
                             , styled div
