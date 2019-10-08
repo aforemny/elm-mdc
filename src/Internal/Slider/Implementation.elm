@@ -357,7 +357,7 @@ slider lift model options _ =
         , Options.data "step" (String.fromFloat config.step)
         , Options.role "slider"
         , Options.aria "valuemin" (String.fromFloat config.min)
-        , Options.aria "valuemax" (String.fromFloat config.min)
+        , Options.aria "valuemax" (String.fromFloat config.max)
         , Options.aria "valuenow" (String.fromFloat discreteValue)
         , when ((model.geometry == Nothing) || stepChanged) <|
             GlobalEvents.onTick <|
