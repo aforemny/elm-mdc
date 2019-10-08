@@ -184,7 +184,7 @@ update msg model =
             ( { model | useDismissibleDrawer = enableDismissibleDrawer x }, Cmd.none )
 
         Navigate url ->
-            ( { model | url = url, is_drawer_open = False }
+            ( { model | url = url, is_drawer_open = if not model.useDismissibleDrawer then False else model.is_drawer_open }
             , Cmd.batch
                 [ Browser.Navigation.pushUrl model.key (Demo.Url.toString url)
 
