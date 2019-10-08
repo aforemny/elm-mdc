@@ -111,6 +111,7 @@ type alias Config m =
     -- list item only properties
     , activated : Bool
     , selected : Bool
+    , disabled : Bool
     }
 
 
@@ -124,6 +125,7 @@ defaultConfig =
     , useActivated = False
     , activated = False
     , selected = False
+    , disabled = False
     }
 
 
@@ -363,11 +365,15 @@ liView domId lift model config listItemIds focusedIndex index options children =
             |> when config.isRadioGroup
         , role "option" |> when config.isSingleSelectionList
         , role "radio" |> when config.isRadioGroup
-        , ripple.interactionHandler
-        , ripple.properties
+        , disabledClass |> when li_config.disabled
+        , ripple.interactionHandler |> when ( not li_config.disabled )
+        , ripple.properties |> when ( not li_config.disabled )
         , case config.onSelectListItem of
             Just onSelect ->
-                Options.onClick (onSelect index)
+                if not li_config.disabled then
+                    Options.onClick (onSelect index)
+                else
+                    Options.nop
 
             Nothing ->
                 Options.nop
@@ -647,6 +653,11 @@ liIsSelectedOrActivated li_ =
 
 disabled : Property m
 disabled =
+    Options.option (\config -> { config | disabled = True } )
+
+
+disabledClass : Property m
+disabledClass =
     cs "mdc-list-item--disabled"
 
 

@@ -130,8 +130,8 @@ inside a list. In that case prefix your html with `asListItem`.
 List items automatically get keyboard focus. Here's the algorithm
 elm-mdc follows:
 
-* If you have set `selectedIndex`, that item will receive the focus.
-* The first list item which has the `selected` or `activated` state will receive the focus.
+* If `selectedIndex` is set, that item will receive the focus.
+* Else the first list item which has the `selected` or `activated` state will receive the focus.
 * Else the first list item will receive the focus.
 
 @docs ListItem
@@ -340,6 +340,8 @@ activated =
 
 {-| Styles a row in the disabled state.
 
+Disabled rows will not ripple. Disabled rows will not trigger `onSelectListItem`.
+
 Disabled list item will be included in the keyboard navigation. Please
 see [Focusability of disabled
 controls](https://www.w3.org/TR/wai-aria-practices-1.1/#kbd_disabled_controls)
@@ -514,6 +516,8 @@ selectedIndex =
 
 
 {-| Msg to send when a list item has been selected.
+
+Disabled list items will be ignored.
 
 Perhaps a bug: the index sent includes dividers, i.e. it's an index
 into the list you passed.
