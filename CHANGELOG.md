@@ -1,5 +1,7 @@
 ## Latest changes
 
+## Upgrade to 3.2.0
+
 Breaking changes:
 * Removed Toolbar (removed upstream).
 
@@ -9,6 +11,7 @@ Changes:
   might be easier.
 * ImageList: added `node` option to easily change the default "div" element to something else.
 * TopAppBar: support scrolling on any div by using `onScroll`.
+* Menu: a menu item can now be styled in the disabled state.
 
 Fixes:
 * Lists: the activated item will receive the keyboard focus by default instead of the first.
