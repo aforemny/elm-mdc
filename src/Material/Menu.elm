@@ -22,6 +22,7 @@ module Material.Menu exposing
     , li
     , divider
     , selected
+    , disabled
     , onSelect
     , surfaceAnchor
     )
@@ -97,6 +98,7 @@ Design menu specification.
 @docs li
 @docs divider
 @docs selected
+@docs disabled
 @docs onSelect
 
 
@@ -303,3 +305,11 @@ onSelect =
 selected : Lists.Property m
 selected =
     Menu.selected
+
+
+{-| Use when menu item is displayed in disabled state.
+-}
+disabled : Lists.Property m
+disabled =
+    Menu.disabled
+

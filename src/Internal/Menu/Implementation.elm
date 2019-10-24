@@ -20,6 +20,7 @@ module Internal.Menu.Implementation exposing
     , quickOpen
     , react
     , selected
+    , disabled
     , subs
     , subscriptions
     , surfaceAnchor
@@ -938,3 +939,9 @@ onSelect msg =
 selected : Lists.Property m
 selected =
     cs "mdc-menu-item--selected"
+
+
+disabled : Lists.Property m
+disabled =
+    Options.many [ cs "mdc-list-item--disabled", aria "disabled" "true" ]
+
