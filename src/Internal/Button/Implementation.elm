@@ -170,7 +170,7 @@ button domId lift model options nodes =
 
               else
                 []
-            , nodes
+            , [ Html.span [ Html.class "mdc-button__label" ] nodes ]
             , if config.trailingIcon then
                 config.icon
                     |> Maybe.map
