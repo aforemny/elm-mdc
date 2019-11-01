@@ -47,7 +47,8 @@ update lift msg model =
 
         Show idx message label ->
             let
-                stacked = idx == "snackbar-stacked"
+                stacked =
+                    idx == "snackbar-stacked"
 
                 contents =
                     let
@@ -57,10 +58,11 @@ update lift msg model =
                                 message
                                 label
                     in
-                        { snack
-                            | dismissOnAction = True
-                            , stacked = stacked
-                        }
+                    { snack
+                        | dismissOnAction = True
+                        , stacked = stacked
+                    }
+
                 ( mdc, effects ) =
                     Snackbar.add (lift << Mdc) idx contents model.mdc
             in
@@ -70,23 +72,25 @@ update lift msg model =
             ( model, Cmd.none )
 
 
-
 snackbarButton lift index mdc buttonLabel message action =
     Button.view (lift << Mdc)
-        ( "button-" ++index )
+        ("button-" ++ index)
         mdc
-        [ Button.raised
+        [ Button.label buttonLabel
+        , Button.raised
         , Options.on "click" (Json.succeed (lift (Show ("snackbar-" ++ index) message action)))
         , css "margin" "8px 16px"
         ]
-        [ text buttonLabel
-        ]
+        []
+
 
 baselineButton lift mdc =
     snackbarButton lift "baseline" mdc "Baseline" "Can't send photo. Retry in 5 seconds." "Retry"
 
+
 leadingButton lift mdc =
     snackbarButton lift "leading" mdc "Leading" "Your photo has been archived." "Undo"
+
 
 stackedButton lift mdc =
     snackbarButton lift "stacked" mdc "Stacked" "This item already has the label \"travel\". You can add a new label." "Add a new label"
@@ -132,7 +136,7 @@ view lift page model =
     page.body
         "Snackbar"
         "Snackbars provide brief messages about app processes at the bottom of the screen."
-        ( Hero.view []
+        (Hero.view []
             [ styled Html.div
                 [ css "position" "relative"
                 , css "left" "0"

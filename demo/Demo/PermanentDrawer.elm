@@ -82,7 +82,8 @@ drawerItems lift index mdc url select selected =
             mdc
             [ Lists.singleSelection
             , Lists.useActivated
-            , Lists.onSelectListItem select ]
+            , Lists.onSelectListItem select
+            ]
             [ Lists.a
                 [ href
                 , Lists.activated |> when (selected == 0)
@@ -181,10 +182,10 @@ mainContent model mdc rtl_index cmd =
         , Button.view mdc
             rtl_index
             model.mdc
-            [ Options.on "click" (Json.succeed cmd)
+            [ Button.label "Toggle RTL"
+            , Options.on "click" (Json.succeed cmd)
             ]
-            [ text "Toggle RTL"
-            ]
+            []
         ]
 
 

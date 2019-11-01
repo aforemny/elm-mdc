@@ -3,6 +3,7 @@ module Internal.Button.Implementation exposing
     , dense
     , disabled
     , icon
+    , label
     , link
     , onClick
     , outlined
@@ -52,6 +53,7 @@ update lift msg model =
 
 type alias Config m =
     { ripple : Bool
+    , label : Maybe String
     , link : Maybe String
     , disabled : Bool
     , icon : Maybe String
@@ -63,6 +65,7 @@ type alias Config m =
 defaultConfig : Config m
 defaultConfig =
     { ripple = False
+    , label = Nothing
     , link = Nothing
     , disabled = False
     , icon = Nothing
@@ -73,6 +76,11 @@ defaultConfig =
 
 type alias Property m =
     Options.Property (Config m) m
+
+
+label : String -> Property m
+label str =
+    Options.option (\config -> { config | label = Just str })
 
 
 icon : String -> Property m
@@ -170,6 +178,9 @@ button domId lift model options nodes =
 
               else
                 []
+            , config.label
+                |> Maybe.map (\label_ -> [ Html.span [ Html.class "mdc-button__label" ] [ Html.text label_ ] ])
+                |> Maybe.withDefault []
             , nodes
             , if config.trailingIcon then
                 config.icon

@@ -81,42 +81,42 @@ view lift page model =
     page.body
         "Button"
         "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
-        ( Hero.view []
+        (Hero.view []
             [ Button.view (lift << Mdc)
                 "buttons-hero-button-text"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Text"
+                , Button.ripple
                 , css "margin" "16px 32px"
                 ]
-                [ text "Text"
-                ]
+                []
             , Button.view (lift << Mdc)
                 "buttons-hero-button-raised"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Raised"
+                , Button.ripple
                 , Button.raised
                 , css "margin" "16px 32px"
                 ]
-                [ text "Raised"
-                ]
+                []
             , Button.view (lift << Mdc)
                 "buttons-hero-button-unelevated"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Unelevated"
+                , Button.ripple
                 , Button.unelevated
                 , css "margin" "16px 32px"
                 ]
-                [ text "Unelevated"
-                ]
+                []
             , Button.view (lift << Mdc)
                 "buttons-hero-button-outlined"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Outlined"
+                , Button.ripple
                 , Button.outlined
                 , css "margin" "16px 32px"
                 ]
-                [ text "Outlined"
-                ]
+                []
             ]
         )
         [ ResourceLink.links (lift << Mdc) model.mdc "buttons" "buttons" "mdc-button"
@@ -153,27 +153,30 @@ example idx lift model { title, additionalOptions } =
                 (idx ++ "-default-button")
                 model.mdc
                 (css "margin" "8px 16px"
+                    :: Button.label "Default"
                     :: Button.ripple
                     :: additionalOptions
                 )
-                [ text "Default" ]
+                []
             , Button.view (lift << Mdc)
                 (idx ++ "-dense-button")
                 model.mdc
                 (css "margin" "8px 16px"
+                    :: Button.label "Dense"
                     :: Button.ripple
                     :: Button.dense
                     :: additionalOptions
                 )
-                [ text "Dense" ]
+                []
             , Button.view (lift << Mdc)
                 (idx ++ "-icon-button")
                 model.mdc
                 (css "margin" "8px 16px"
+                    :: Button.label "Icon"
                     :: Button.ripple
                     :: Button.icon "favorite"
                     :: additionalOptions
                 )
-                [ text "Icon" ]
+                []
             ]
         ]

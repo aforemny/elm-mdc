@@ -38,23 +38,23 @@ view lift page model =
     page.body
         "Theme"
         "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
-        ( Hero.view []
+        (Hero.view []
             [ Button.view (lift << Mdc)
                 "theme-button-primary"
                 model.mdc
-                [ Button.raised
+                [ Button.label "Primary"
+                , Button.raised
                 , css "margin" "24px"
                 ]
-                [ text "Primary"
-                ]
+                []
             , Button.view (lift << Mdc)
                 "theme-button-secondary"
                 model.mdc
-                [ Button.raised
+                [ Button.label "Secondary"
+                , Button.raised
                 , css "margin" "24px"
                 ]
-                [ text "Secondary"
-                ]
+                []
             ]
         )
         [ ResourceLink.links (lift << Mdc) model.mdc "color/applying-color-to-ui" "theme" "mdc-theme"

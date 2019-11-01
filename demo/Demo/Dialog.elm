@@ -68,19 +68,19 @@ heroDialog lift index model =
             [ Button.view (lift << Mdc)
                 (index ++ "-button-cancel")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Decline"
+                , Button.ripple
                 , Dialog.cancel
                 ]
-                [ text "Decline"
-                ]
+                []
             , Button.view (lift << Mdc)
                 (index ++ "button-accept")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Accept"
+                , Button.ripple
                 , Dialog.accept
                 ]
-                [ text "Accept"
-                ]
+                []
             ]
         ]
 
@@ -100,21 +100,21 @@ alertDialog lift index model =
             [ Button.view (lift << Mdc)
                 (index ++ "-button-cancel")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Cancel"
+                , Button.ripple
                 , Dialog.cancel
                 , Options.onClick (lift Close)
                 ]
-                [ text "Cancel"
-                ]
+                []
             , Button.view (lift << Mdc)
                 (index ++ "-button-accept")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Discard"
+                , Button.ripple
                 , Dialog.accept
                 , Options.onClick (lift Close)
                 ]
-                [ text "Discard"
-                ]
+                []
             ]
         ]
 
@@ -229,21 +229,21 @@ confirmationDialog lift index model =
             [ Button.view (lift << Mdc)
                 (index ++ "-button-cancel")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Cancel"
+                , Button.ripple
                 , Dialog.cancel
                 , Options.onClick (lift Close)
                 ]
-                [ text "Cancel"
-                ]
+                []
             , Button.view (lift << Mdc)
                 (index ++ "-button-accept")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "OK"
+                , Button.ripple
                 , Dialog.accept
                 , Options.onClick (lift Close)
                 ]
-                [ text "OK"
-                ]
+                []
             ]
         ]
 
@@ -355,21 +355,21 @@ scrollableDialog lift index model =
             [ Button.view (lift << Mdc)
                 (index ++ "-button-cancel")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Decline"
+                , Button.ripple
                 , Dialog.cancel
                 , Options.onClick (lift Close)
                 ]
-                [ text "Decline"
-                ]
+                []
             , Button.view (lift << Mdc)
                 (index ++ "-button-accept")
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Continue"
+                , Button.ripple
                 , Dialog.accept
                 , Options.onClick (lift Close)
                 ]
-                [ text "Continue"
-                ]
+                []
             ]
         ]
 
@@ -379,7 +379,7 @@ view lift page model =
     page.body
         "Dialog"
         "Dialogs inform users about a specific task and may contain critical information, require decisions, or involve multiple tasks."
-        ( Hero.view []
+        (Hero.view []
             [ heroDialog lift "dialog-hero-dialog" model
             ]
         )
@@ -388,38 +388,38 @@ view lift page model =
             [ Button.view (lift << Mdc)
                 "dialog-show-alert"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Alert"
+                , Button.ripple
                 , Options.onClick (lift (Show "dialog-alert-dialog"))
                 ]
-                [ text "Alert"
-                ]
+                []
             , text " "
             , Button.view (lift << Mdc)
                 "dialog-show-simple"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Simple"
+                , Button.ripple
                 , Options.onClick (lift (Show "dialog-simple-dialog"))
                 ]
-                [ text "Simple"
-                ]
+                []
             , text " "
             , Button.view (lift << Mdc)
                 "dialog-show-confirmation-dialog"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Confirmation"
+                , Button.ripple
                 , Options.onClick (lift (Show "dialog-confirmation-dialog"))
                 ]
-                [ text "Confirmation"
-                ]
+                []
             , text " "
             , Button.view (lift << Mdc)
                 "dialog-show-scrollable-dialog"
                 model.mdc
-                [ Button.ripple
+                [ Button.label "Scrollable"
+                , Button.ripple
                 , Options.onClick (lift (Show "dialog-scrollable-dialog"))
                 ]
-                [ text "Scrollable"
-                ]
+                []
             , alertDialog lift "dialog-alert-dialog" model
             , simpleDialog lift "dialog-simple-dialog" model
             , confirmationDialog lift "dialog-confirmation-dialog" model

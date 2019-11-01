@@ -90,18 +90,18 @@ cardActions lift index model =
                 (index ++ "-action-button-read")
                 model.mdc
                 [ Card.actionButton
+                , Button.label "Read"
                 , Button.ripple
                 ]
-                [ text "Read"
-                ]
+                []
             , Button.view (lift << Mdc)
                 (index ++ "-action-button-bookmark")
                 model.mdc
                 [ Card.actionButton
+                , Button.label "Bookmark"
                 , Button.ripple
                 ]
-                [ text "Bookmark"
-                ]
+                []
             ]
         , Card.actionIcons []
             [ IconButton.view (lift << Mdc)
@@ -233,7 +233,7 @@ view lift page model =
     page.body
         "Card"
         "Cards contain content and actions about a single subject."
-        ( Hero.view []
+        (Hero.view []
             [ heroCard lift "card-hero-card" model
             ]
         )

@@ -101,7 +101,7 @@ view lift page topAppBarPage model =
             page.body
                 "Top App Bar"
                 "Top App Bars are a container for items such as application title, navigation icon, and action items."
-                ( Hero.view []
+                (Hero.view []
                     [ styled Html.div
                         [ css "width" "480px"
                         , css "height" "72px"
@@ -347,12 +347,12 @@ body options lift index model =
             [ [ Button.view (lift << Mdc)
                     (index ++ "-toggle-rtl")
                     model.mdc
-                    [ Button.outlined
+                    [ Button.label "Toggle RTL"
+                    , Button.outlined
                     , Button.dense
                     , Options.onClick (lift (ExampleMsg (index ++ "-toggle-rtl") ToggleRtl))
                     ]
-                    [ text "Toggle RTL"
-                    ]
+                    []
               ]
             , List.repeat 18 <|
                 Html.p []

@@ -11,6 +11,7 @@ module Material.Button exposing
     , disabled
     , link
     , onClick
+    , label
     )
 
 {-| The Button component is a spec-aligned button component adhering to the
@@ -32,11 +33,11 @@ Material Design button requirements.
 
 
     Button.view Mdc "my-button" model.mdc
-        [ Button.ripple
+        [ Button.label "Button"
+        , Button.ripple
         , Options.onClick Click
         ]
-        [ text "Button"
-        ]
+        []
 
 
 # Usage
@@ -79,6 +80,16 @@ view :
     -> Html m
 view =
     Button.view
+
+
+{-| Give the button a label.
+
+Explicitly setting the label will ensure that any trailing icon will be properly styled.
+
+-}
+label : String -> Property m
+label =
+    Button.label
 
 
 {-| Give the button an icon.
