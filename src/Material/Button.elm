@@ -1,6 +1,7 @@
 module Material.Button exposing
     ( Property
     , view
+    , label
     , ripple
     , raised
     , unelevated
@@ -11,7 +12,6 @@ module Material.Button exposing
     , disabled
     , link
     , onClick
-    , label
     )
 
 {-| The Button component is a spec-aligned button component adhering to the
@@ -44,6 +44,7 @@ Material Design button requirements.
 
 @docs Property
 @docs view
+@docs label
 @docs ripple
 @docs raised
 @docs unelevated
