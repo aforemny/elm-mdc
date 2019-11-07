@@ -3,7 +3,7 @@ module Demo.Theme exposing (Model, Msg, defaultModel, update, view)
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
+import Html exposing (Html, text, div, fieldset, h2, h3, legend)
 import Material
 import Material.Button as Button
 import Material.Options as Options exposing (cs, css, styled)
@@ -38,263 +38,97 @@ view lift page model =
     page.body
         "Theme"
         "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
-        ( Hero.view []
+        ( Hero.view [ cs "theme-demo" ]
             [ Button.view (lift << Mdc)
-                "theme-button-primary"
+                "theme-button-text"
                 model.mdc
-                [ Button.raised
-                , css "margin" "24px"
-                ]
-                [ text "Primary"
+                [ ]
+                [ text "Text"
                 ]
             , Button.view (lift << Mdc)
-                "theme-button-secondary"
+                "theme-button-raised"
                 model.mdc
                 [ Button.raised
-                , css "margin" "24px"
+                , css "padding-left" "16px"
+                , css "padding-right" "16px"
                 ]
-                [ text "Secondary"
+                [ text "Raised"
+                ]
+            , Button.view (lift << Mdc)
+                "theme-button-outlined"
+                model.mdc
+                [ Button.outlined
+                , css "padding-left" "15px"
+                , css "padding-right" "15px"
+                ]
+                [ text "Outlined"
                 ]
             ]
         )
         [ ResourceLink.links (lift << Mdc) model.mdc "color/applying-color-to-ui" "theme" "mdc-theme"
-        , h2 []
-            [ text "Theme colors"
+        , Page.demos [
+               styled div
+                   [ cs "theme-demo"
+                   , css "padding" "24px"
+                   ]
+                   [ styled h2 [ Typography.headline4 ]
+                         [ text "Baseline Colors"
+                         ]
+                   , styled h3 [ Typography.headline5 ]
+                       [ text "CSS classes"
+                       ]
+                   , styled div [ cs "demo-theme-color-section" ]
+                       [ styled div
+                             [ cs "demo-theme-color-section__row" ]
+                             [ themeColorsAsText
+                             , themeColorsAsBackground
+                             ]
+                       ]
+                   ]
             ]
-        , themeColorsAsText
-        , themeColorsAsBackground
-        , h2 []
-            [ text "Text colors for contrast"
-            ]
-        , example1
         ]
 
 
 themeColorsAsText : Html m
 themeColorsAsText =
-    example []
-        [ h3 []
-            [ text "Theme colors as text"
-            ]
-        , demoThemeColor []
-            [ demoThemeColorBlock
-                [ Theme.primary
-                ]
-                [ text "Primary"
-                ]
-            , demoThemeColorBlock
-                [ Theme.primaryLight
-                ]
-                [ text "Primary Light"
-                ]
-            , demoThemeColorBlock
-                [ Theme.primaryDark
-                ]
-                [ text "Primary Dark"
-                ]
-            ]
-        , demoThemeColor []
-            [ demoThemeColorBlock
-                [ Theme.secondary
-                ]
-                [ text "Secondary"
-                ]
-            , demoThemeColorBlock
-                [ Theme.secondaryLight
-                ]
-                [ text "Secondary Light"
-                ]
-            , demoThemeColorBlock
-                [ Theme.secondaryDark
-                ]
-                [ text "Secondary Dark"
-                ]
-            ]
+    styled fieldset [ cs "demo-fieldset--color" ]
+        [ styled legend
+              [ cs "mdc-typography--subtitle1" ]
+              [ text "Theme colors as text"
+              ]
+        , styled div
+              [ cs "demo-theme-color-group" ]
+              [ swatch [ cs "mdc-theme--primary", Typography.body2 ]
+                    [ text "Primary" ]
+              , swatch [ cs "mdc-theme--secondary", Typography.body2 ]
+                    [ text "Secondary" ]
+              ]
         ]
 
 
 themeColorsAsBackground : Html m
 themeColorsAsBackground =
-    example []
-        [ h3 []
-            [ text "Theme colors as background"
-            ]
-        , demoThemeColor []
-            [ demoThemeColorBlock
-                [ Theme.primaryBg
-                ]
-                [ text "Primary"
-                ]
-            , demoThemeColorBlock
-                [ Theme.primaryLightBg
-                ]
-                [ text "Primary Light"
-                ]
-            , demoThemeColorBlock
-                [ Theme.primaryDarkBg
-                ]
-                [ text "Primary Dark"
-                ]
-            ]
-        , demoThemeColor []
-            [ demoThemeColorBlock
-                [ Theme.secondaryBg
-                ]
-                [ text "Secondary"
-                ]
-            , demoThemeColorBlock
-                [ Theme.secondaryLightBg
-                ]
-                [ text "Secondary Light"
-                ]
-            , demoThemeColorBlock
-                [ Theme.secondaryDarkBg
-                ]
-                [ text "Secondary Dark"
-                ]
-            ]
-        , demoThemeColor []
-            [ demoThemeColorBlock
-                [ Theme.background
-                ]
-                [ text "Background"
-                ]
-            ]
+    styled fieldset [ cs "demo-fieldset--color" ]
+        [ styled legend
+              [ cs "mdc-typography--subtitle1" ]
+              [ text "Theme colors as background"
+              ]
+        , styled div
+              [ cs "demo-theme-color-group" ]
+              [ swatch [ cs "mdc-theme--primary-bg mdc-theme--on-primary", Typography.body2 ]
+                    [ text "Primary" ]
+              , swatch [ cs "mdc-theme--secondary-bg mdc-theme--on-secondary", Typography.body2 ]
+                    [ text "Secondary" ]
+              , swatch [ cs "theme--background mdc-theme--text-primary-on-background", Typography.body2 ]
+                    [ text "Background" ]
+              ]
         ]
 
 
-demoThemeColor : List (Options.Property c m) -> List (Html m) -> Html m
-demoThemeColor options =
-    styled Html.div
-        (cs "demo-theme__color"
-            :: css "display" "inline-flex"
-            :: css "flex-direction" "column"
-            :: options
-        )
-
-
-demoThemeColorBlock : List (Options.Property c m) -> List (Html m) -> Html m
-demoThemeColorBlock options =
-    styled Html.div
-        (cs "demo-theme__color__block"
-            :: css "display" "inline-block"
-            :: css "box-sizing" "border-box"
-            :: css "width" "150px"
-            :: css "height" "50px"
-            :: css "line-height" "50px"
-            :: css "text-align" "center"
-            :: css "border" "1px solid #f0f0f0"
-            :: options
-        )
-
-
-example1 : Html m
-example1 =
-    let
-        demo background nodes =
-            demoThemeTextStyles
-                [ Typography.typography
-                , Typography.body2
-                , background
-                ]
-                (let
-                    options =
-                        [ css "padding" "0 16px"
-                        ]
-                 in
-                 nodes
-                    |> List.map (\node -> node options)
-                )
-    in
-    example []
-        [ h3 []
-            [ text "Text on background"
-            ]
-        , demo Theme.background
-            [ \options -> styled Html.span (Theme.textPrimaryOnBackground :: options) [ text "Primary" ]
-            , \options -> styled Html.span (Theme.textSecondaryOnBackground :: options) [ text "Secondary" ]
-            , \options -> styled Html.span (Theme.textHintOnBackground :: options) [ text "Hint" ]
-            , \options -> styled Html.span (Theme.textHintOnBackground :: options) [ text "Disabled" ]
-            , \options -> styled Html.span (Theme.textIconOnBackground :: options) [ text "favorite" ]
-            ]
-        , h3 []
-            [ text "Text on primary"
-            ]
-        , demo Theme.primaryBg
-            [ \options -> styled Html.span (Theme.textPrimaryOnPrimary :: options) [ text "Primary" ]
-            , \options -> styled Html.span (Theme.textSecondaryOnPrimary :: options) [ text "Secondary" ]
-            , \options -> styled Html.span (Theme.textHintOnPrimary :: options) [ text "Hint" ]
-            , \options -> styled Html.span (Theme.textHintOnPrimary :: options) [ text "Disabled" ]
-            , \options -> styled Html.span (Theme.textIconOnPrimary :: options) [ text "favorite" ]
-            ]
-        , h3 []
-            [ text "Text on secondary"
-            ]
-        , demo Theme.secondaryBg
-            [ \options -> styled Html.span (Theme.textPrimaryOnSecondary :: options) [ text "Primary" ]
-            , \options -> styled Html.span (Theme.textSecondaryOnSecondary :: options) [ text "Secondary" ]
-            , \options -> styled Html.span (Theme.textHintOnSecondary :: options) [ text "Hint" ]
-            , \options -> styled Html.span (Theme.textHintOnSecondary :: options) [ text "Disabled" ]
-            , \options -> styled Html.span (Theme.textIconOnSecondary :: options) [ text "favorite" ]
-            ]
-        , h3 []
-            [ text "Text on user-defined light background"
-            ]
-        , demo (css "background-color" "#dddddd")
-            [ \options -> styled Html.span (Theme.textPrimaryOnLight :: options) [ text "Primary" ]
-            , \options -> styled Html.span (Theme.textSecondaryOnLight :: options) [ text "Secondary" ]
-            , \options -> styled Html.span (Theme.textHintOnLight :: options) [ text "Hint" ]
-            , \options -> styled Html.span (Theme.textHintOnLight :: options) [ text "Disabled" ]
-            , \options -> styled Html.span (Theme.textIconOnLight :: options) [ text "favorite" ]
-            ]
-        , h3 []
-            [ text "Text on user-defined dark background"
-            ]
-        , demo (css "background-color" "#1d1d1d")
-            [ \options -> styled Html.span (Theme.textPrimaryOnDark :: options) [ text "Primary" ]
-            , \options -> styled Html.span (Theme.textSecondaryOnDark :: options) [ text "Secondary" ]
-            , \options -> styled Html.span (Theme.textHintOnDark :: options) [ text "Hint" ]
-            , \options -> styled Html.span (Theme.textHintOnDark :: options) [ text "Disabled" ]
-            , \options -> styled Html.span (Theme.textIconOnDark :: options) [ text "favorite" ]
-            ]
+swatch options nodes =
+    styled div
+        [ cs "demo-theme-color-swatches" ]
+        [ styled div
+              ( cs "demo-theme-color-swatch demo-theme-color-swatch--elevated" :: options )
+              nodes
         ]
-
-
-demoThemeTextStyles : List (Options.Property c m) -> List (Html m) -> Html m
-demoThemeTextStyles options =
-    styled Html.div
-        (cs "demo-theme__text--styles"
-            :: css "display" "inline-flex"
-            :: css "box-sizing" "border-box"
-            :: css "padding" "16px"
-            :: css "border" "1px solid #f0f0f0"
-            :: css "align-items" "center"
-            :: css "flex-direction" "row"
-            :: options
-        )
-
-
-h2 : List (Options.Property () m) -> List (Html m) -> Html m
-h2 options =
-    styled Html.h2
-        (Typography.display1
-            :: css "margin" "30px 0 30px 48px"
-            :: options
-        )
-
-
-h3 : List (Options.Property () m) -> List (Html m) -> Html m
-h3 options =
-    styled Html.h2
-        (Typography.title
-            :: options
-        )
-
-
-example : List (Options.Property () m) -> List (Html m) -> Html m
-example options =
-    styled Html.section
-        (css "margin" "24px"
-            :: css "padding" "24px"
-            :: options
-        )

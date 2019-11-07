@@ -92,6 +92,7 @@
 
 
 /* hero */
+
 .component-catalog-panel__header-elements {
   max-width: 300px;
   padding-right: 40px;
@@ -286,4 +287,133 @@
  */
 .demo-grid--cell-alignment > .mdc-layout-grid__inner {
   min-height: 200px;
+}
+
+
+/**
+ * Theme demo. This is stuff you really want to do with SCSS instead of getting the CSS right.
+ */
+.theme-demo .mdc-theme--primary {
+  color: #fcb8ab !important;
+}
+
+.theme-demo .mdc-theme--secondary {
+  color: #feeae6 !important;
+}
+
+.theme-demo .mdc-theme--on-secondary {
+  color: #442c2e !important;
+}
+
+.theme-demo .mdc-theme--text-primary-on-background {
+  color: rgba(0,0,0,.87) !important;
+}
+
+.theme-demo .mdc-theme--on-primary {
+  color: #442b2d !important;
+}
+
+.theme-demo .mdc-theme--primary-bg {
+  background-color: #fcb8ab !important;
+}
+
+.theme-demo .mdc-theme--secondary-bg {
+  background-color: #feeae6 !important;
+}
+
+.theme-demo .mdc-theme--text-primary-on-background {
+  color: rgba(0,0,0,.87) !important;
+}
+
+.theme-demo .mdc-button {
+  font-family: Rubik,sans-serif;
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: .0892857143em;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 0 8px;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 64px;
+  height: 36px;
+  outline: none;
+  line-height: inherit;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  vertical-align: middle;
+  border-radius: 4px;
+  margin: 32px;
+}
+
+.theme-demo .mdc-button:not(:disabled) {
+  color: #fcb8ab;
+}
+
+.theme-demo .mdc-button:not(:disabled) {
+  background-color: transparent;
+}
+
+.theme-demo .mdc-button--raised:not(:disabled),
+.theme-demo .mdc-button--unelevated:not(:disabled) {
+  background-color: #fcb8ab;
+}
+
+.theme-demo .mdc-button--raised:not(:disabled),
+.theme-demo .mdc-button--unelevated:not(:disabled) {
+  color: #442b2d;
+}
+
+.theme-demo .mdc-button--outlined:not(:disabled) {
+  border-color: #fcb8ab;
+}
+
+.theme-demo .demo-theme-color-section__row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.theme-demo .demo-theme-color-group {
+  padding: 16px 0;
+}
+
+.theme-demo .demo-fieldset--color {
+  margin-right: 36px;
+}
+
+.theme-demo fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.theme-demo .demo-theme-color-swatches {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-right: 16px;
+}
+
+.theme-demo .demo-theme-color-swatch {
+  -webkit-box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  margin-bottom: 8px;
+  border-radius: 4px;
 }

@@ -38,7 +38,9 @@ links lift mdc guidelines documentation package =
         documentation_id =
             String.replace "/" "-" documentation
     in
-    Html.div [ class "resources" ]
+    styled Html.div
+        [ cs "resources"
+        , css "padding-top" "1px" ] -- Prevent margin collapse
         [ styled Html.h2
             [ Typography.headline6
             , css "border-bottom" "1px solid rgba(0,0,0,.87)"
