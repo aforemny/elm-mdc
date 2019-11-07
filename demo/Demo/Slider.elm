@@ -2,7 +2,7 @@ module Demo.Slider exposing (Model, Msg(..), defaultModel, subscriptions, update
 
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
-import Demo.Page exposing (Page)
+import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
 import Html exposing (Html, text)
 import Html.Attributes as Html
@@ -131,10 +131,12 @@ view lift page model =
         "Sliders let users select from a range of values by moving the slider thumb."
         ( Hero.view [] [ heroSlider lift model ] )
         [ ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
-        , styled Html.h3 [ Typography.subtitle1 ] [ text "Continuous" ]
-        , continuousSlider lift model
-        , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete" ]
-        , discreteSlider lift model
-        , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete with Tick Marks" ]
-        , discreteSliderWithTickMarks lift model
+        , Page.demos [
+              styled Html.h3 [ Typography.subtitle1 ] [ text "Continuous" ]
+              , continuousSlider lift model
+              , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete" ]
+              , discreteSlider lift model
+              , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete with Tick Marks" ]
+              , discreteSliderWithTickMarks lift model
+              ]
         ]
