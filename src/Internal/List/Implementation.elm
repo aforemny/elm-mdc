@@ -1,5 +1,6 @@
 module Internal.List.Implementation exposing
-    ( ListItem
+    ( Config
+    , ListItem
     , Property
     , aRippled
     , activated
@@ -23,6 +24,7 @@ module Internal.List.Implementation exposing
     , metaIcon
     , metaImage
     , metaText
+    , nestedUl
     , node
     , nonInteractive
     , onSelectListItem
@@ -255,7 +257,14 @@ listItemView :
     -> ListItem m
     -> Html m
 listItemView domId lift model config listItemsIds focusedIndex index li_ =
-    li_.view domId lift model config listItemsIds focusedIndex index li_.options li_.children
+    case li_.children of
+        HtmlList children ->
+            li_.view domId lift model config listItemsIds focusedIndex index li_.options children
+        ListItemList items ->
+            let
+                groupDomId = domId ++ "-" ++ (String.fromInt index)
+            in
+            li_.view domId lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (listItemView groupDomId lift model config listItemsIds focusedIndex) items )
 
 
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
@@ -283,21 +292,65 @@ twoLine =
     cs "mdc-list--two-line"
 
 
+type ChildList m
+    = HtmlList ( List (Html m) )
+    | ListItemList ( List (ListItem m) )
+
 type alias ListItem m =
     { options : List (Property m)
-    , children : List (Html m)
+    , children : ChildList m
     , focusable : Bool
     , view : Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m
     }
 
 
+
+-- ITEMS WHICH CAN OCCUR IN A LIST
+
+
 li : List (Property m) -> List (Html m) -> ListItem m
 li options children =
     { options = options
-    , children = children
+    , children = HtmlList children
     , focusable = True
     , view = liView
     }
+
+
+asListItem : (List (Html.Attribute m) -> List (Html m) -> Html m) -> List (Property m) -> List (Html m) -> ListItem m
+asListItem dom_node options children =
+    { options = node dom_node :: options
+    , children = HtmlList children
+    , focusable = False
+    , view = asListItemView
+    }
+
+
+divider : List (Property m) -> List (Html m) -> ListItem m
+divider options =
+    asListItem Html.li (cs "mdc-list-divider" :: role "separator" :: options)
+
+
+hr : List (Property m) -> List (Html m) -> ListItem m
+hr options =
+    asListItem Html.hr (cs "mdc-list-divider" :: options)
+
+
+nestedUl :
+    ( Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m )
+    -> List (Property m)
+    -> List (ListItem m)
+    -> ListItem m
+nestedUl a_view options children =
+    { options = options
+    , children = ListItemList children
+    , focusable = True
+    , view = a_view
+    }
+
+
+
+-- RENDERING LIST ITEMS
 
 
 {-| Single list item view.
@@ -539,6 +592,31 @@ findIndexHelp index predicate list =
                 findIndexHelp (index + 1) predicate rest
 
 
+
+{- Custom HTML inserted in list. -}
+asListItemView :
+    Index
+    -> (Msg m -> m)
+    -> Model
+    -> Config m
+    -> Array String
+    -> Int
+    -> Int
+    -> List (Property m)
+    -> List (Html m)
+    -> Html m
+asListItemView domId lift model config listItemsIds focusedIndex index options children =
+    let
+        summary =
+            Options.collect defaultConfig options
+    in
+    Options.apply summary
+        (Maybe.withDefault Html.div summary.config.node)
+        []
+        []
+        children
+
+
 aRippled :
     (Internal.Msg.Msg m -> m)
     -> Index
@@ -716,38 +794,6 @@ metaImage options url =
         []
 
 
-asListItem : (List (Html.Attribute m) -> List (Html m) -> Html m) -> List (Property m) -> List (Html m) -> ListItem m
-asListItem dom_node options children =
-    { options = node dom_node :: options
-    , children = children
-    , focusable = False
-    , view = asListItemView
-    }
-
-
-asListItemView :
-    Index
-    -> (Msg m -> m)
-    -> Model
-    -> Config m
-    -> Array String
-    -> Int
-    -> Int
-    -> List (Property m)
-    -> List (Html m)
-    -> Html m
-asListItemView domId lift model config listItemsIds focusedIndex index options children =
-    let
-        summary =
-            Options.collect defaultConfig options
-    in
-    Options.apply summary
-        (Maybe.withDefault Html.div summary.config.node)
-        []
-        []
-        children
-
-
 group : List (Property m) -> List (Html m) -> Html m
 group options =
     styled Html.div (cs "mdc-list-group" :: options)
@@ -768,16 +814,6 @@ subheader options =
 subheaderClass : Options.Property c m
 subheaderClass =
     cs "mdc-list-group__subheader"
-
-
-divider : List (Property m) -> List (Html m) -> ListItem m
-divider options =
-    asListItem Html.li (cs "mdc-list-divider" :: role "separator" :: options)
-
-
-hr : List (Property m) -> List (Html m) -> ListItem m
-hr options =
-    asListItem Html.hr (cs "mdc-list-divider" :: options)
 
 
 padded : Property m
