@@ -120,6 +120,9 @@ button =
 
 
 {-| Icon will be a HTML `span` element.
+
+    Icon.view [ Icon.span ] "check"
+
 -}
 span : Property m
 span =

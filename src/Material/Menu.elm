@@ -21,6 +21,9 @@ module Material.Menu exposing
     , Item
     , li
     , divider
+    , text
+    , selectionGroup
+    , selectionGroupIcon
     , selected
     , disabled
     , onSelect
@@ -92,15 +95,25 @@ Design menu specification.
 @docs quickOpen
 
 
-# Menu items
+# Menu.ul children
 
 @docs Item
 @docs li
 @docs divider
+
+# Menu.li options
+
 @docs selected
 @docs disabled
 @docs onSelect
 
+# Selection Group Menu
+
+Menus can contain a group of list items that can represent the selection state of elements within the group.
+
+@docs selectionGroup
+@docs selectionGroupIcon
+@docs text
 
 # Menu anchoring
 
@@ -141,18 +154,48 @@ type alias Item m =
     Menu.Item m
 
 
-{-| Menu item wrapper.
+{-| A single menu item.
 -}
 li : List (Lists.Property m) -> List (Html m) -> Item m
 li =
     Menu.li
 
 
-{-| Menu item divider.
+{-| Horizontal divider.
 -}
 divider : List (Lists.Property m) -> List (Html m) -> Item m
 divider =
     Menu.divider
+
+
+{-| A menu selection group.
+
+Example:
+
+    Menu.ul []
+        [ Menu.selectionGroup []
+            [ Menu.li []
+                [ Menu.selectionGroupIcon []
+                      [ Icon.view [ Icon.span ] "check"
+                , Menu.text []
+                      [ Html.text "Single" ]
+                ]
+            , Menu.li []
+                [ Menu.selectionGroupIcon []
+                      [ Icon.view [ Icon.span ] "check"
+                , Menu.text []
+                      [ HTml.text "Double" ]
+                ]
+            ]
+        , Menu.divider [] []
+        , Menu.li []
+            [ text "Add space before paragraph" ]
+        ]
+
+-}
+selectionGroup : List (Lists.Property m) -> List (Item m) -> Item m
+selectionGroup =
+    Menu.selectionGroup
 
 
 {-| Menu structure before being turned into virtual dom. This is the
@@ -312,4 +355,36 @@ selected =
 disabled : Lists.Property m
 disabled =
     Menu.disabled
+
+
+
+{-| The text of an `li`.
+
+Example:
+
+    Menu.li []
+        [ Menu.text [] [ text "My item" ]
+
+-}
+text : List (Lists.Property m) -> List (Html m) -> Html m
+text =
+    Menu.text
+
+
+
+{-| The text of an `li`.
+
+Example:
+
+    Menu.li []
+        [ Menu.selectionGroupIcon []
+              [ Icon.view [ Icon.span ] "check" ]
+        , Menu.text []
+              [ Html.text "Single" ]
+        ]
+
+-}
+selectionGroupIcon : List (Lists.Property m) -> List (Html m) -> Html m
+selectionGroupIcon =
+    Menu.selectionGroupIcon
 

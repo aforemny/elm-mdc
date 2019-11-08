@@ -21,9 +21,12 @@ module Internal.Menu.Implementation exposing
     , react
     , selected
     , disabled
+    , selectionGroup
+    , selectionGroupIcon
     , subs
     , subscriptions
     , surfaceAnchor
+    , text
     , topEndCorner
     , topLeftCorner
     , topRightCorner
@@ -33,19 +36,21 @@ module Internal.Menu.Implementation exposing
     , view
     )
 
+import Array exposing (Array)
 import Browser.Dom
 import Browser.Events
 import DOM
-import Html exposing (Html)
+import Html exposing (Html, div, span)
 import Html.Attributes as Html
 import Html.Events as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
 import Internal.List.Implementation as Lists
+import Internal.List.Model as Lists
 import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
-import Internal.Options as Options exposing (aria, cs, css, role, tabindex, when)
+import Internal.Options as Options exposing (aria, cs, css, role, styled, tabindex, when)
 import Json.Decode as Decode exposing (Decoder)
 import Task
 
@@ -66,21 +71,25 @@ subscriptions model =
     Browser.Events.onClick (Decode.succeed DocumentClick)
 
 
-type alias Item m =
-    { options : List (Lists.Property m)
-    , childs : List (Html m)
-    , divider : Bool
-    }
+type Item m
+    = ListItem ( List (Lists.Property m) ) ( List (Html m) )
+    | Divider ( List (Lists.Property m) ) ( List (Html m) )
+    | Group ( List (Lists.Property m) ) ( List (Item m) )
 
 
 li : List (Lists.Property m) -> List (Html m) -> Item m
-li options childs =
-    { options = options, childs = childs, divider = False }
+li options children =
+    ListItem options children
 
 
 divider : List (Lists.Property m) -> List (Html m) -> Item m
-divider options childs =
-    { options = options, childs = childs, divider = True }
+divider options children =
+    Divider options children
+
+
+selectionGroup : List (Lists.Property m) -> List (Item m) -> Item m
+selectionGroup options children =
+    Group options children
 
 
 type alias Menu m =
@@ -322,7 +331,7 @@ menu domId lift model options ulNode =
             domId ++ "__list"
     in
     Options.apply summary
-        Html.div
+        div
         [ cs "mdc-menu mdc-menu-surface"
         , when (model.animating && not config.quickOpen) <|
             if model.open then
@@ -395,22 +404,56 @@ menu domId lift model options ulNode =
                    , Lists.selectedIndex (Maybe.withDefault 0 config.index)
                    ]
             )
-            (List.indexedMap
-                (\i item ->
-                    if item.divider then
-                        Lists.divider item.options item.childs
-
-                    else
-                        Lists.li
-                            (cs "mdc-list-item"
-                                :: role "menuitem"
-                                :: item.options
-                            )
-                            item.childs
-                )
-                ulNode.items
-            )
+            ( toListItem ulNode.items )
         ]
+
+
+toListItem :
+    List (Item m)
+    -> List (Lists.ListItem m)
+toListItem items =
+    List.indexedMap
+        (\i item ->
+             case item of
+                 Divider options children ->
+                     Lists.divider options children
+                 ListItem options children ->
+                     Lists.li
+                         (cs "mdc-list-item"
+                         :: role "menuitem"
+                         :: options
+                         )
+                         children
+                 Group options children ->
+                     -- TODO
+                     Lists.nestedUl selectionGroupView options (toListItem children)
+        )
+        items
+
+
+selectionGroupView :
+    Index
+    -> (Lists.Msg m -> m)
+    -> Lists.Model
+    -> Lists.Config m
+    -> Array String
+    -> Int
+    -> Int
+    -> List (Lists.Property m)
+    -> List (Html m)
+    -> Html m
+selectionGroupView domId lift model config listItemIds focusedIndex an_index options children =
+    let
+        summary =
+            Options.collect Lists.defaultConfig options
+    in
+    Options.apply summary
+        (Maybe.withDefault Html.div summary.config.node)
+        [ cs "mdc-menu__selection-group" ]
+        []
+        children
+
+
 
 
 type alias Corner =
@@ -944,4 +987,19 @@ selected =
 disabled : Lists.Property m
 disabled =
     Options.many [ cs "mdc-list-item--disabled", aria "disabled" "true" ]
+
+
+graphic : Lists.Property m
+graphic =
+    cs "mdc-list-item__graphic"
+
+
+text : List (Lists.Property m) -> List (Html m) -> Html m
+text options nodes =
+    styled span ( cs "mdc-list-item__text" :: options ) nodes
+
+
+selectionGroupIcon : List (Lists.Property m) -> List (Html m) -> Html m
+selectionGroupIcon options nodes =
+    styled span ( graphic :: cs "mdc-menu__selection-group-icon" :: options ) nodes
 

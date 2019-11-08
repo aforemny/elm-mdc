@@ -1,5 +1,13 @@
 ## Latest changes
 
+Breaking changes:
+* List.ListItem.children had to change, because of support for the Menu Selection Group.
+  You probably can simply stick List.HtmlList in front of what you have.
+
+New features
+* Support for the menu selection group.
+
+
 ## Upgrade to 3.2.0
 
 Breaking changes:
