@@ -1,5 +1,6 @@
 module Internal.List.Implementation exposing
-    ( Config
+    ( ChildList(..)
+    , Config
     , ListItem
     , Property
     , aRippled

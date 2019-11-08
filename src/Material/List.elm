@@ -1,5 +1,7 @@
 module Material.List exposing
-    ( Property
+    ( ChildList
+    , Property
+    , ListItem
     , ul, ol
     , nonInteractive
     , dense
@@ -12,7 +14,6 @@ module Material.List exposing
     , radioGroup
     , useActivated
     , node
-    , ListItem
     , li
     , a
     , listItemClass
@@ -135,6 +136,7 @@ elm-mdc follows:
 * Else the first list item will receive the focus.
 
 @docs ListItem
+@docs ChildList
 @docs li
 @docs a
 @docs listItemClass
@@ -176,6 +178,12 @@ import Material.Options as Options
 -}
 type alias Property m =
     List.Property m
+
+
+{-| Use to set the appropriate type for ListItem.children in case you create your own `ListItem`.
+-}
+type alias ChildList m =
+    List.ChildList m
 
 
 {-| The ListItem type as returned by `li` and `divider` and such. As
