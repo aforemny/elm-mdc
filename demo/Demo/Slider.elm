@@ -124,19 +124,40 @@ discreteSliderWithTickMarks lift model =
         []
 
 
+disabledSlider : (Msg m -> m) -> Model m -> Html m
+disabledSlider lift model =
+    let
+        index =
+            "slider-disabled-slider"
+    in
+    Slider.view (lift << Mdc)
+        index
+        model.mdc
+        [ Slider.value (Maybe.withDefault 0 (Dict.get index model.sliders))
+        , Slider.onChange (lift << Change index)
+        , Slider.min 0
+        , Slider.max 100
+        , Slider.value 50
+        , Slider.disabled
+        ]
+        []
+
+
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
         "Slider"
         "Sliders let users select from a range of values by moving the slider thumb."
-        ( Hero.view [] [ heroSlider lift model ] )
+        (Hero.view [] [ heroSlider lift model ])
         [ ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
-        , Page.demos [
-              styled Html.h3 [ Typography.subtitle1 ] [ text "Continuous" ]
-              , continuousSlider lift model
-              , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete" ]
-              , discreteSlider lift model
-              , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete with Tick Marks" ]
-              , discreteSliderWithTickMarks lift model
-              ]
+        , Page.demos
+            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Continuous" ]
+            , continuousSlider lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete" ]
+            , discreteSlider lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Discrete with Tick Marks" ]
+            , discreteSliderWithTickMarks lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Disabled" ]
+            , disabledSlider lift model
+            ]
         ]

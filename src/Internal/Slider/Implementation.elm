@@ -229,6 +229,7 @@ type alias Config m =
     , onInput : Maybe (Float -> m)
     , onChange : Maybe (Float -> m)
     , trackMarkers : Bool
+    , disabled : Bool
     }
 
 
@@ -242,6 +243,7 @@ defaultConfig =
     , onInput = Nothing
     , onChange = Nothing
     , trackMarkers = False
+    , disabled = False
     }
 
 
@@ -271,10 +273,7 @@ discrete =
 
 disabled : Property m
 disabled =
-    Options.many
-        [ cs "mdc-slider--disabled"
-        , Options.attribute <| Html.disabled True
-        ]
+    Options.option (\config -> { config | disabled = True })
 
 
 slider : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -349,9 +348,11 @@ slider lift model options _ =
         , cs "mdc-slider--active" |> when model.active
         , cs "mdc-slider--off" |> when (discreteValue <= config.min)
         , cs "mdc-slider--discrete" |> when config.discrete
+        , cs "mdc-slider--disabled" |> when config.disabled
         , cs "mdc-slider--in-transit" |> when model.inTransit
         , cs "mdc-slider--display-markers" |> when config.trackMarkers
         , Options.attribute (Html.tabindex 0)
+        , Options.aria "disabled" "true" |> when config.disabled
         , Options.data "min" (String.fromFloat config.min)
         , Options.data "max" (String.fromFloat config.max)
         , Options.data "step" (String.fromFloat config.step)
@@ -451,12 +452,13 @@ slider lift model options _ =
                     (Decode.at [ "keyCode" ] Decode.int)
         , Options.on "focus" (Decode.succeed (lift Focus))
         , Options.on "blur" (Decode.succeed (lift Blur))
-        , Options.many <|
-            List.map
-                (\event ->
-                    Options.on event (Decode.map (lift << InteractionStart event) decodePageX)
-                )
-                downs
+        , Options.when (not config.disabled) <|
+            Options.many <|
+                List.map
+                    (\event ->
+                        Options.on event (Decode.map (lift << InteractionStart event) decodePageX)
+                    )
+                    downs
         , when (config.onChange /= Nothing) <|
             Options.many <|
                 List.map
@@ -600,22 +602,23 @@ slider lift model options _ =
             )
         , styled Html.div
             [ cs "mdc-slider__thumb-container"
-            , Options.many
-                (downs
-                    |> List.map
-                        (\event ->
-                            Options.onWithOptions event
-                                (Decode.map
-                                    (\message ->
-                                        { message = lift message
-                                        , stopPropagation = True
-                                        , preventDefault = False
-                                        }
+            , Options.when (not config.disabled) <|
+                Options.many
+                    (downs
+                        |> List.map
+                            (\event ->
+                                Options.onWithOptions event
+                                    (Decode.map
+                                        (\message ->
+                                            { message = lift message
+                                            , stopPropagation = True
+                                            , preventDefault = False
+                                            }
+                                        )
+                                        (Decode.map (ThumbContainerPointer event) decodePageX)
                                     )
-                                    (Decode.map (ThumbContainerPointer event) decodePageX)
-                                )
-                        )
-                )
+                            )
+                    )
             , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
             , css "transform" <|
                 "translateX("
