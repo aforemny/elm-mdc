@@ -11,7 +11,7 @@ module Internal.Fab.Implementation exposing
     , view
     )
 
-import Html exposing (Html, text)
+import Html exposing (Html, text, div)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Fab.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Msg
@@ -118,7 +118,10 @@ fab domId lift model options nodes =
         ]
         []
         (List.concat
-            [ [ iconSpan
+            [ [ styled div
+                  [ cs "mdc-fab__ripple" ]
+                  []
+              , iconSpan
               ]
             , nodes
             ]
