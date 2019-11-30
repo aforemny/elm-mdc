@@ -142,8 +142,6 @@ button domId lift model options nodes =
             Html.button
         )
         [ cs "mdc-button"
-        , cs "mdc-js-button"
-        , cs "mdc-js-ripple-effect" |> when summary.config.ripple
         , Options.attribute (Html.href (Maybe.withDefault "" config.link))
             |> when ((config.link /= Nothing) && not config.disabled)
         , Options.attribute (Html.disabled True)

@@ -157,7 +157,6 @@ chip domId lift model options nodes =
         Html.div
         [ cs "mdc-chip"
         , when config.selected (cs "mdc-chip--selected")
-        , cs "mdc-js-ripple-effect"
         , Options.many
             [ ripple.interactionHandler
             , ripple.properties
