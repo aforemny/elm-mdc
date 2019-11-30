@@ -425,7 +425,6 @@ toListItem items =
                          )
                          children
                  Group options children ->
-                     -- TODO
                      Lists.nestedUl selectionGroupView options (toListItem children)
         )
         items
