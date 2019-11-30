@@ -199,6 +199,9 @@ checkbox lift model options _ =
                 [ cs "mdc-checkbox__mixedmark"
                 ]
                 []
+            , styled Html.div
+                [ cs "mdc-checkbox__ripple" ]
+                []
             ]
         ]
 
