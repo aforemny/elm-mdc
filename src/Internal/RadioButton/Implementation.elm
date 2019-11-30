@@ -119,6 +119,9 @@ radioButton domId lift model options _ =
             [ styled Html.div [ cs "mdc-radio__inner-circle" ] []
             , styled Html.div [ cs "mdc-radio__outer-circle" ] []
             ]
+        , styled Html.div
+            [ cs "mdc-radio__ripple" ]
+            []
         ]
 
 
