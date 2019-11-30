@@ -417,3 +417,12 @@
   margin-bottom: 8px;
   border-radius: 4px;
 }
+
+
+/**
+ * Chips
+ */
+.demo-chip-shaped,
+.demo-chip-shaped .mdc-chip__ripple {
+  border-radius: 4px;
+}

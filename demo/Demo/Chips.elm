@@ -6,7 +6,7 @@ import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Chip as Chip
-import Material.Options exposing (css, styled, when)
+import Material.Options exposing (cs, styled, when)
 import Material.Typography as Typography
 import Set exposing (Set)
 
@@ -240,7 +240,7 @@ shapedChips lift model =
             Chip.view (lift << Mdc)
                 index
                 model.mdc
-                [ css "border-radius" "4px"
+                [ cs "demo-chip-shaped"
                 ]
                 [ text label
                 ]
