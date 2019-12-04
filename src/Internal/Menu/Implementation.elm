@@ -46,9 +46,10 @@ import Html.Events as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
+import Internal.Keyboard as Keyboard exposing (Key, KeyCode, Meta, decodeMeta, decodeKey, decodeKeyCode)
 import Internal.List.Implementation as Lists
 import Internal.List.Model as Lists
-import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
+import Internal.Menu.Model exposing (Geometry, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
 import Internal.Options as Options exposing (aria, cs, css, role, styled, tabindex, when)
 import Json.Decode as Decode exposing (Decoder)
@@ -863,32 +864,6 @@ view =
 subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
 subs =
     Component.subs Internal.Msg.MenuMsg .menu subscriptions
-
-
-decodeMeta : Decoder Meta
-decodeMeta =
-    Decode.map4
-        (\altKey ctrlKey metaKey shiftKey ->
-            { altKey = altKey
-            , ctrlKey = ctrlKey
-            , metaKey = metaKey
-            , shiftKey = shiftKey
-            }
-        )
-        (Decode.at [ "altKey" ] Decode.bool)
-        (Decode.at [ "ctrlKey" ] Decode.bool)
-        (Decode.at [ "metaKey" ] Decode.bool)
-        (Decode.at [ "shiftKey" ] Decode.bool)
-
-
-decodeKey : Decoder Key
-decodeKey =
-    Decode.at [ "key" ] Decode.string
-
-
-decodeKeyCode : Decoder KeyCode
-decodeKeyCode =
-    Html.keyCode
 
 
 decodeGeometry : Decoder Geometry
