@@ -34,6 +34,5 @@ type Msg m
     | RippleMsg Ripple.Msg
     | KeyDown String Key KeyCode
     | OpenMenu String
-    | CloseMenu
     | ToggleMenu
     | MenuMsg (Menu.Msg m)
