@@ -270,10 +270,6 @@ view isUnbounded domId lift model options =
             }
 
 
-
--- TODO: get rid of className and text, we support CSS variables now.
-
-
 cssVariables :
     Bool
     ->
