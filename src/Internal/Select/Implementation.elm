@@ -195,11 +195,13 @@ select domId lift model options items_ =
                     []
                     :: items_
 
+        floatAbove =
+            focused || isDirty || config.selectedText /= ""
+
         htmlLabel =
             styled Html.span
                 [ cs "mdc-floating-label"
-                , when (focused || isDirty || config.selectedText /= "" )
-                    (cs "mdc-floating-label--float-above")
+                , cs "mdc-floating-label--float-above" |> when floatAbove
                 ]
                 [ text config.label
                 ]
@@ -208,7 +210,7 @@ select domId lift model options items_ =
             if config.outlined then
                 styled Html.div
                     [ cs "mdc-notched-outline"
-                    , cs "mdc-notched-outline--notched" |> when (focused || isDirty)
+                    , cs "mdc-notched-outline--notched" |> when floatAbove
                     ]
                     [ styled Html.div [ cs "mdc-notched-outline__leading" ] []
                     , styled Html.div
