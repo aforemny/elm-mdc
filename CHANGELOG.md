@@ -23,6 +23,7 @@ Breaking changes:
 * `Select.preselected` has been removed. Use `Select.required` for a similar effect.
 * You will need to call `Material.Subscriptions` to make sure you can
   click outside the select menu to close it.
+* The Menu used to have the first item selected by default, but it no longer does.
 
 Bug fixes:
 * List.selected did set the activated property instead of the selected property.
