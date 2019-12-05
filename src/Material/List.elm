@@ -512,7 +512,7 @@ inset =
 {-| The currently selected item in list.
 
 Only makes sense for single selection lists. If this is set, the
-selected and activated classes and aria elements are applied
+`selected` and `activated` classes and aria elements are applied
 automatically.
 
 Note: the index currently includes dividers.
