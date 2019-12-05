@@ -420,8 +420,7 @@ toListItem items =
                      Lists.divider options children
                  ListItem options children ->
                      Lists.li
-                         (cs "mdc-list-item"
-                         :: role "menuitem"
+                         ( role "menuitem"
                          :: options
                          )
                          children
