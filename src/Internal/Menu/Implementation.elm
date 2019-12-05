@@ -1,6 +1,6 @@
 module Internal.Menu.Implementation exposing
     ( Corner
-    , Item
+    , Item(..)
     , Margin
     , Menu
     , Property
@@ -80,7 +80,7 @@ type Item m
 
 li : List (Lists.Property m) -> List (Html m) -> Item m
 li options children =
-    ListItem options children
+    ListItem ( role "menuitem" :: options ) children
 
 
 divider : List (Lists.Property m) -> List (Html m) -> Item m
@@ -401,8 +401,7 @@ menu domId lift model options ulNode =
                 ++ [ role "menu"
                    , aria "hidden" "true"
                    , aria "orientation" "vertical"
-                   , tabindex 0
-                   , Lists.selectedIndex (Maybe.withDefault 0 config.index)
+                   , tabindex -1
                    ]
             )
             ( toListItem ulNode.items )
@@ -420,10 +419,7 @@ toListItem items =
                      Lists.divider options children
                  ListItem options children ->
                      Lists.li
-                         ( role "menuitem"
-                         :: options
-                         )
-                         children
+                         options children
                  Group options children ->
                      Lists.nestedUl selectionGroupView options (toListItem children)
         )

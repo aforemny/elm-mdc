@@ -8,7 +8,8 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Material
-import Material.Options exposing (cs, css, styled)
+import Material.Menu as Menu
+import Material.Options exposing (cs, css, styled, when)
 import Material.Select as Select
 import Material.Typography as Typography
 
@@ -41,12 +42,27 @@ update lift msg model =
             ( { model | selects = Dict.insert index value model.selects }, Cmd.none )
 
 
-items : List (Html m)
-items =
-    [ Select.option [ Select.value "Apple" ] [ text "Apple" ]
-    , Select.option [ Select.value "Orange" ] [ text "Orange" ]
-    , Select.option [ Select.value "Banana" ] [ text "Banana" ]
-    ]
+fruits =
+        [ ( "apple", "Apple" )
+        , ( "orange", "Orange" )
+        , ( "banana", "Banana")
+        ]
+
+fruitsDict : Dict String String
+fruitsDict =
+    Dict.fromList fruits
+
+items : String -> List (Menu.Item m)
+items selectedValue =
+    List.map
+        (\(value, display) ->
+             Select.option
+             [ Select.value value
+             , Select.selected |> when (value == selectedValue)
+             ]
+             [ text display ]
+        )
+        fruits
 
 
 heroSelect : (Msg m -> m) -> Model m -> Html m
@@ -55,57 +71,64 @@ heroSelect lift model =
         "selects-hero-select"
         model.mdc
         [ Select.label "Fruit" ]
-        items
+        ( items "" )
+
+
+theSelect : (Msg m -> m) -> Material.Index -> Model m -> List (Select.Property m) -> Html m
+theSelect lift index model options =
+    let
+        selectedValue =
+            Dict.get index model.selects
+                |> Maybe.withDefault ""
+
+        selectedText =
+            Dict.get selectedValue fruitsDict
+                |> Maybe.withDefault ""
+
+    in
+    Select.view (lift << Mdc)
+        index
+        model.mdc
+        ( [ Select.label "Fruit"
+        , Select.selectedText selectedText
+        , Select.onSelect (Select index >> lift)
+        ]
+        ++ options )
+        ( items selectedValue )
 
 
 filledSelect : (Msg m -> m) -> Model m -> Html m
 filledSelect lift model =
-    Select.view (lift << Mdc)
-        "selects-filled-select"
-        model.mdc
-        [ Select.label "Fruit" ]
-        items
+    theSelect lift "selects-filled-select" model []
 
 
 outlinedSelect : (Msg m -> m) -> Model m -> Html m
 outlinedSelect lift model =
-    Select.view (lift << Mdc)
-        "selects-outlined-select"
-        model.mdc
-        [ Select.label "Fruit"
-        , Select.outlined
+    theSelect lift "selects-outlined-select" model
+        [ Select.outlined
         ]
-        items
 
 
 shapedFilledSelect : (Msg m -> m) -> Model m -> Html m
 shapedFilledSelect lift model =
-    Select.view (lift << Mdc)
-        "selects-shaped-filled-select"
-        model.mdc
-        [ Select.label "Fruit"
-        , css "border-radius" "17.92px 17.92px 0 0"
+    theSelect lift "selects-shaped-filled-select" model
+        [ css "border-radius" "17.92px 17.92px 0 0"
         ]
-        items
 
 
 shapedOutlinedSelect : (Msg m -> m) -> Model m -> Html m
 shapedOutlinedSelect lift model =
-    Select.view (lift << Mdc)
-        "selects-shaped-outlined-select"
-        model.mdc
-        [ Select.label "Fruit"
-        , Select.outlined
+    theSelect lift "selects-shaped-outlined-select" model
+        [ Select.outlined
         , cs "demo-select-outline-shaped"
         ]
-        items
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
         "Select"
-        "Selects allow users to select from a single-option menu. It functions as a wrapper around the browser's native <select> element."
+        "Selects allow users to select from a single-option menu."
         ( Hero.view [] [ heroSelect lift model ] )
         [ ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/select-menus" "mdc-select"
         , Page.demos

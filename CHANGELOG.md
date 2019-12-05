@@ -1,11 +1,38 @@
 ## Latest changes
 
+
+## Upgrade to 4.0.0
+
+New features:
+* Support for the menu selection group.
+* Upgrade to MDC 4.0.0. Ripples are now done with internal elements,
+  but this should be transparent for the users of this library.
+* Selects now display as the enhanced select.
+
 Breaking changes:
 * List.ListItem.children had to change, because of support for the Menu Selection Group.
   You probably can simply stick List.HtmlList in front of what you have.
+* The select no longer uses the native select control. When an option
+  is selected in a select, the displayed text is no longer automatically
+  updated. Set the `Select.selectedText` property to the text you want
+  to display. You can use `Select.onSelect` to update your model with
+  the text to display for example.
+  We possibly could have used the nodes of the option that is
+  selected, but this gives you fewer options, and the behaviour didn't
+  feel entirely Elm like. But feedback appreciated.
+* `Select.preselected` has been removed. Use `Select.required` for a similar effect.
+* You will need to call `Material.Subscriptions` to make sure you can
+  click outside the select menu to close it.
 
-New features
-* Support for the menu selection group.
+Bug fixes:
+* List.selected did set the activated property instead of the selected property.
+
+Possible bugs:
+* The selected option when you drop down a select is shown in the
+  activated colour in the MDC demo. However it is not clear how this
+  is eached, since it uses the selected state like we do, and
+  therefere should have the colours of the selected state.
+  Exactly why the CSS of the MDC demo is different is not yet known.
 
 
 ## Upgrade to 3.2.0
