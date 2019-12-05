@@ -160,7 +160,7 @@ addAttributes summary attrs =
        internal classes and attributes override those provided by the user.
 
        We use Html.Attributes.attribute "style" to inject CSS
-       variables. Elm has easily fixed bug where these get removed if
+       variables. Elm has an easily fixed bug where these get removed if
        you use Html.Attributes.style. Hopefully Evan will fix this one
        day: https://github.com/elm/virtual-dom/pull/127/files
     -}
