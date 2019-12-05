@@ -80,10 +80,23 @@ update lift msg model =
                 ( Nothing, Cmd.none )
 
         OpenMenu menuIndex ->
-            ( Nothing, Cmd.batch [ Helpers.cmd ( lift (MenuMsg Menu.Open) ), Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus menuIndex) ] )
+            ( Nothing
+            , Cmd.batch
+                [ Helpers.cmd ( lift (MenuMsg Menu.Open) )
+                , Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus menuIndex)
+                ]
+            )
 
         ToggleMenu ->
             update lift (MenuMsg Menu.Toggle) model
+
+        MenuSelection index onSelect_ v ->
+            ( Nothing
+            , Cmd.batch
+                [ Helpers.cmd (onSelect_ v)
+                , Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus index)
+                ]
+            )
 
         MenuMsg msg_ ->
             Menu.update (lift << MenuMsg) msg_ model.menu
@@ -225,12 +238,15 @@ select domId lift model options items_ =
                              in
                                  case maybe_value of
                                      Just v ->
-                                         Menu.ListItem ( Menu.onSelect (msg v ) :: options_ ) nodes
+                                         Menu.ListItem ( Menu.onSelect (lift (MenuSelection selectedTextDomId msg v)) :: options_ ) nodes
                                      Nothing ->
                                          item
                          _ ->
                              item
                 )
+
+        selectedTextDomId =
+            (domId ++ "__selected-text")
 
     in
     Options.apply summary
@@ -240,6 +256,7 @@ select domId lift model options items_ =
         , cs "mdc-select--activated" |> when model.menu.open
         , cs "mdc-select--disabled" |> when config.disabled
         , cs "mdc-select--outlined" |> when config.outlined
+        , Options.id domId
         ]
         [ ]
         [ styled Html.div
@@ -253,6 +270,7 @@ select domId lift model options items_ =
                     []
               , styled Html.div
                   [ cs "mdc-select__selected-text"
+                  , Options.id selectedTextDomId
                   , Options.tabindex 0
                   , Options.aria "disabled" (if config.disabled then "true" else "false")
                   , Options.aria "expanded" (if model.menu.open then "true" else "false")

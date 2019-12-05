@@ -35,4 +35,5 @@ type Msg m
     | KeyDown String Key KeyCode
     | OpenMenu String
     | ToggleMenu
+    | MenuSelection String (String -> m) String
     | MenuMsg (Menu.Msg m)
