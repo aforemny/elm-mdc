@@ -120,55 +120,51 @@ stackedSnackbar lift mdc =
         []
 
 
+heroComponent =
+    styled Html.div
+        [ css "position" "relative"
+        , css "left" "0"
+        , css "transform" "none"
+        , cs "mdc-snackbar mdc-snackbar--open"
+        ]
+        [ styled Html.div
+              [ cs "mdc-snackbar__surface" ]
+              [ styled Html.div
+                    [ cs "mdc-snackbar__label"
+                    , role "status"
+                    , aria "live" "polite"
+                    , css "color" "hsla(0,0%,100%,.87)"
+                    ]
+                    [ text "Can't send photo. Retry in 5 seconds." ]
+              , styled Html.div
+                  [ cs "mdc-snackbar__actions" ]
+                  [ styled Html.button
+                        [ Options.attribute (Html.type_ "button")
+                        , cs "mdc-button"
+                        , cs "mdc-snackbar__action"
+                        ]
+                        [ text "Retry"
+                        ]
+                  , styled Html.button
+                      [ cs "mdc-icon-button"
+                      , cs "mdc-snackbar__dismiss"
+                      , cs "material-icons"
+                      ]
+                        [ text "close" ]
+                  ]
+              ]
+        ]
+
+
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
-    let
-        example options =
-            styled Html.div
-                (css "margin-top" "24px"
-                    :: options
-                )
-    in
     page.body
-        "Snackbar"
-        "Snackbars provide brief messages about app processes at the bottom of the screen."
-        ( Hero.view []
-            [ styled Html.div
-                [ css "position" "relative"
-                , css "left" "0"
-                , css "transform" "none"
-                , cs "mdc-snackbar mdc-snackbar--open"
-                ]
-                [ styled Html.div
-                    [ cs "mdc-snackbar__surface" ]
-                    [ styled Html.div
-                        [ cs "mdc-snackbar__label"
-                        , role "status"
-                        , aria "live" "polite"
-                        , css "color" "hsla(0,0%,100%,.87)"
-                        ]
-                        [ text "Can't send photo. Retry in 5 seconds." ]
-                    , styled Html.div
-                        [ cs "mdc-snackbar__actions" ]
-                        [ styled Html.button
-                            [ Options.attribute (Html.type_ "button")
-                            , cs "mdc-button"
-                            , cs "mdc-snackbar__action"
-                            ]
-                            [ text "Retry"
-                            ]
-                        , styled Html.button
-                            [ cs "mdc-icon-button"
-                            , cs "mdc-snackbar__dismiss"
-                            , cs "material-icons"
-                            ]
-                            [ text "close" ]
-                        ]
-                    ]
-                ]
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "snackbars" "snackbars" "mdc-snackbar"
+        [ Hero.view
+              [ Hero.header "Snackbar"
+              , Hero.intro "Snackbars provide brief messages about app processes at the bottom of the screen."
+              , Hero.component [] [ heroComponent ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "snackbars" "snackbars" "mdc-snackbar"
         , Page.demos
             [ baselineButton lift model.mdc
             , leadingButton lift model.mdc

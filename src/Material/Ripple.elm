@@ -37,7 +37,6 @@ The view functions `unbounded` and `bounded` return a record with fields
     let
         { interactionHandler
         , properties
-        , style
         } =
             Ripple.bounded Mdc "my-ripple" model.mdc
     in
@@ -52,7 +51,7 @@ The view functions `unbounded` and `bounded` return a record with fields
 ## Unbounded Ripple effect
 
     let
-        { interactionHandler, properties, style } =
+        { interactionHandler, properties } =
             Ripple.unbounded Mdc "my-ripple" model.mdc
     in
     Icon.view
@@ -85,8 +84,6 @@ type alias Property m =
 
 {-| Bounded view function.
 
-The style property is obsolete, you do not need to use it anymore.
-
 -}
 bounded :
     (Material.Msg m -> m)
@@ -96,15 +93,12 @@ bounded :
     ->
         { interactionHandler : Options.Property c m
         , properties : Options.Property c m
-        , style : Html m
         }
 bounded =
     Ripple.bounded
 
 
 {-| Unbounded view function.
-
-The style property is obsolete, you do not need to use it anymore.
 
 -}
 unbounded :
@@ -115,7 +109,6 @@ unbounded :
     ->
         { interactionHandler : Options.Property c m
         , properties : Options.Property c m
-        , style : Html m
         }
 unbounded =
     Ripple.unbounded

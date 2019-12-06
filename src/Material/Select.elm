@@ -2,19 +2,21 @@ module Material.Select exposing
     ( Property
     , view
     , label
-    , preselected
+    , required
     , disabled
+    , selectedText
+    , onSelect
     , option
     , value
     , selected
     , outlined
     )
 
-{-| Select provides Material Design single-option select menus. It functions
-analogously to the browser's native `<select>` element
+{-| Select provides Material Design single-option select menus.
 
-Because of limitations of the current implementation, you have to set a `width`
-manually.
+The select requires that you set the width of the `mdc-select__anchor`
+element as well as setting the width of the `mdc-select__menu` element
+to match. This is best done through the use of another class.
 
 
 # Resources
@@ -30,15 +32,18 @@ manually.
     import Material.Options exposing (css)
     import Material.Select as Select
 
+    type Msg =
+        ProcessSelection String
 
     Select.view Mdc "my-select" model.mdc
         [ Select.label "Food Group"
-        , Select.preselected
-        , Options.onChange ProcessMyChange
+        , Select.required
+        , Options.onSelect ProcessSelection
+        , Select.selectedText model.selectedText
         ]
         [ Select.option
               [ Select.value "Fruit Roll Ups"
-              , Select.selected True
+              , Select.selected
               ]
               [ text "Fruit Roll Ups" ]
         , Select.option
@@ -49,16 +54,23 @@ manually.
 
 # Usage
 
+
+## The select element
+
 @docs Property
 @docs view
 @docs label
-@docs preselected
+@docs required
 @docs disabled
+@docs outlined
+@docs selectedText
+@docs onSelect
 
+
+## The option element
 @docs option
 @docs value
 @docs selected
-@docs outlined
 
 -}
 
@@ -66,6 +78,8 @@ import Html exposing (Html)
 import Internal.Component exposing (Index)
 import Internal.Select.Implementation as Select
 import Material
+import Material.List as Lists
+import Material.Menu as Menu
 
 
 {-| Select property.
@@ -81,7 +95,7 @@ view :
     -> Index
     -> Material.Model m
     -> List (Property m)
-    -> List (Html m)
+    -> List (Menu.Item m)
     -> Html m
 view =
     Select.view
@@ -94,13 +108,6 @@ label =
     Select.label
 
 
-{-| Use this if an option has been preselected.
--}
-preselected : Property m
-preselected =
-    Select.preselected
-
-
 {-| Disable the select.
 -}
 disabled : Property m
@@ -108,32 +115,57 @@ disabled =
     Select.disabled
 
 
+{-| Draw outlined version of select.
+-}
+outlined : Property m
+outlined =
+    Select.outlined
+
+
+{-| Is a selection required, if set, the user cannot select the empty
+value from the menu.
+-}
+required : Property m
+required =
+    Select.required
+
+
+{-| Send a message when user has made a selection.
+
+The selected text on a select will not change by itself, unlike the
+built-in HTML select. Use this message to set the `selectedText`
+property to display once a selection has been made.
+-}
+onSelect : (String -> m) -> Property m
+onSelect =
+    Select.onSelect
+
+
+{-| Sets the text to display as the selected text.
+-}
+selectedText : String -> Property m
+selectedText =
+    Select.selectedText
+
+
 {-| A select's option.
 -}
-option : List (Property m) -> List (Html m) -> Html m
+option : List (Lists.Property m) -> List (Html m) -> Menu.Item m
 option =
     Select.option
 
 
-{-| Set an option's value.
+{-| Set an option's value to send when selected.
 -}
-value : String -> Property m
+value : String -> Lists.Property m
 value =
     Select.value
 
 
 {-| Make an option selected.
 
-See `preselected`.
-
+There should be only one option selected.
 -}
-selected : Property m
+selected : Lists.Property m
 selected =
     Select.selected
-
-
-{-| Draw outlined version of select.
--}
-outlined : Property m
-outlined =
-    Select.outlined

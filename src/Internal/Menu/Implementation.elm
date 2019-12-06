@@ -1,6 +1,6 @@
 module Internal.Menu.Implementation exposing
     ( Corner
-    , Item
+    , Item(..)
     , Margin
     , Menu
     , Property
@@ -46,9 +46,10 @@ import Html.Events as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers as Helpers
+import Internal.Keyboard as Keyboard exposing (Key, KeyCode, Meta, decodeMeta, decodeKey, decodeKeyCode)
 import Internal.List.Implementation as Lists
 import Internal.List.Model as Lists
-import Internal.Menu.Model exposing (Geometry, Key, KeyCode, Meta, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
+import Internal.Menu.Model exposing (Geometry, Model, Msg(..), Viewport, defaultGeometry, defaultModel)
 import Internal.Msg
 import Internal.Options as Options exposing (aria, cs, css, role, styled, tabindex, when)
 import Json.Decode as Decode exposing (Decoder)
@@ -79,7 +80,7 @@ type Item m
 
 li : List (Lists.Property m) -> List (Html m) -> Item m
 li options children =
-    ListItem options children
+    ListItem ( role "menuitem" :: options ) children
 
 
 divider : List (Lists.Property m) -> List (Html m) -> Item m
@@ -400,8 +401,7 @@ menu domId lift model options ulNode =
                 ++ [ role "menu"
                    , aria "hidden" "true"
                    , aria "orientation" "vertical"
-                   , tabindex 0
-                   , Lists.selectedIndex (Maybe.withDefault 0 config.index)
+                   , tabindex -1
                    ]
             )
             ( toListItem ulNode.items )
@@ -419,13 +419,8 @@ toListItem items =
                      Lists.divider options children
                  ListItem options children ->
                      Lists.li
-                         (cs "mdc-list-item"
-                         :: role "menuitem"
-                         :: options
-                         )
-                         children
+                         options children
                  Group options children ->
-                     -- TODO
                      Lists.nestedUl selectionGroupView options (toListItem children)
         )
         items
@@ -864,32 +859,6 @@ view =
 subs : (Internal.Msg.Msg m -> m) -> Store s -> Sub m
 subs =
     Component.subs Internal.Msg.MenuMsg .menu subscriptions
-
-
-decodeMeta : Decoder Meta
-decodeMeta =
-    Decode.map4
-        (\altKey ctrlKey metaKey shiftKey ->
-            { altKey = altKey
-            , ctrlKey = ctrlKey
-            , metaKey = metaKey
-            , shiftKey = shiftKey
-            }
-        )
-        (Decode.at [ "altKey" ] Decode.bool)
-        (Decode.at [ "ctrlKey" ] Decode.bool)
-        (Decode.at [ "metaKey" ] Decode.bool)
-        (Decode.at [ "shiftKey" ] Decode.bool)
-
-
-decodeKey : Decoder Key
-decodeKey =
-    Decode.at [ "key" ] Decode.string
-
-
-decodeKeyCode : Decoder KeyCode
-decodeKeyCode =
-    Html.keyCode
 
 
 decodeGeometry : Decoder Geometry

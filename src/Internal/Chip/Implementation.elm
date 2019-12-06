@@ -157,7 +157,6 @@ chip domId lift model options nodes =
         Html.div
         [ cs "mdc-chip"
         , when config.selected (cs "mdc-chip--selected")
-        , cs "mdc-js-ripple-effect"
         , Options.many
             [ ripple.interactionHandler
             , ripple.properties
@@ -169,7 +168,11 @@ chip domId lift model options nodes =
         ]
         []
         (List.concat
-            [ config.leadingIcon
+            [ [ styled Html.div
+                    [ cs "mdc-chip__ripple" ]
+                    []
+              ]
+            , config.leadingIcon
                 |> Maybe.map
                     (\icon ->
                         [ Icon.view
@@ -183,8 +186,8 @@ chip domId lift model options nodes =
                         ]
                     )
                 |> Maybe.withDefault []
-            , [ if config.checkmark then
-                    styled Html.div
+            , if config.checkmark then
+                    [ styled Html.div
                         [ cs "mdc-chip__checkmark" ]
                         [ Svg.svg
                             [ Svg.class "mdc-chip__checkmark-svg"
@@ -199,20 +202,30 @@ chip domId lift model options nodes =
                                 []
                             ]
                         ]
-
+                    ]
                 else
-                    text ""
+                    []
+            , [ styled Html.span
+                    [ Options.role "gridcell" ]
+                    [ styled Html.span
+                          [ cs "mdc-chip__text"
+                            , Options.role "button"
+                          ]
+                          nodes
+                    ]
               ]
-            , [ styled Html.div [ cs "mdc-chip__text" ] nodes ]
             , config.trailingIcon
                 |> Maybe.map
                     (\icon ->
-                        [ Icon.view
-                            [ cs "mdc-chip__icon mdc-chip__icon--trailing"
-                            , Options.attribute (Html.tabindex 0)
-                            , Options.role "button"
-                            ]
-                            icon
+                        [ styled Html.span
+                              [ Options.role "gridcell" ]
+                              [ Icon.view
+                                    [ cs "mdc-chip__icon mdc-chip__icon--trailing"
+                                    , Options.attribute (Html.tabindex -1)
+                                    , Options.role "button"
+                                    ]
+                                    icon
+                              ]
                         ]
                     )
                 |> Maybe.withDefault []

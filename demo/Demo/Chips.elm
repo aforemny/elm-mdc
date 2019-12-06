@@ -6,7 +6,7 @@ import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
 import Material
 import Material.Chip as Chip
-import Material.Options exposing (css, styled, when)
+import Material.Options exposing (cs, styled, when)
 import Material.Typography as Typography
 import Set exposing (Set)
 
@@ -71,13 +71,12 @@ update lift msg model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Chips"
-        "Chips are compact elements that allow users to enter information, select a choice, filter content, or trigger an action."
-        ( Hero.view []
-            [ heroChips lift model
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "chips" "chips" "mdc-chips"
+        [ Hero.view
+              [ Hero.header "Chips"
+              , Hero.intro "Chips are compact elements that allow users to enter information, select a choice, filter content, or trigger an action."
+              , Hero.component [] [ heroChips lift model ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "chips" "chips" "mdc-chips"
         , Page.demos
             (List.concat
                 [ choiceChips lift model
@@ -240,7 +239,7 @@ shapedChips lift model =
             Chip.view (lift << Mdc)
                 index
                 model.mdc
-                [ css "border-radius" "4px"
+                [ cs "demo-chip-shaped"
                 ]
                 [ text label
                 ]

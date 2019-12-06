@@ -1,17 +1,14 @@
 module Internal.Menu.Model exposing
     ( Geometry
-    , Key
-    , KeyCode
-    , Meta
     , Model
     , Msg(..)
     , Viewport
     , defaultGeometry
-    , defaultMeta
     , defaultModel
     )
 
 import Internal.List.Model as Lists
+import Internal.Keyboard as Keyboard exposing (Meta, Key, KeyCode)
 
 
 type alias Model =
@@ -49,31 +46,6 @@ type Msg m
     | KeyDown Meta Key KeyCode
     | KeyUp Meta Key KeyCode
     | ListMsg (Lists.Msg m)
-
-
-type alias Meta =
-    { altKey : Bool
-    , ctrlKey : Bool
-    , metaKey : Bool
-    , shiftKey : Bool
-    }
-
-
-defaultMeta : Meta
-defaultMeta =
-    { altKey = False
-    , ctrlKey = False
-    , metaKey = False
-    , shiftKey = False
-    }
-
-
-type alias Key =
-    String
-
-
-type alias KeyCode =
-    Int
 
 
 type alias Geometry =

@@ -154,7 +154,6 @@ heroCard lift index model =
             [ cardMedia
             , cardTitle
             , cardBody
-            , ripple.style
             ]
         , cardActions lift index model
         ]
@@ -177,7 +176,6 @@ exampleCard1 lift index model =
             [ cardMedia
             , cardTitle
             , cardBody
-            , ripple.style
             ]
         , cardActions lift index model
         ]
@@ -199,7 +197,6 @@ exampleCard2 lift index model =
             ]
             [ cardTitle
             , cardBody
-            , ripple.style
             ]
         , cardActions lift index model
         ]
@@ -222,7 +219,6 @@ exampleCard3 lift index model =
             ]
             [ cardTitle
             , cardBody
-            , ripple.style
             ]
         , cardActions lift index model
         ]
@@ -231,13 +227,12 @@ exampleCard3 lift index model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Card"
-        "Cards contain content and actions about a single subject."
-        ( Hero.view []
-            [ heroCard lift "card-hero-card" model
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "cards" "cards" "mdc-card"
+        [ Hero.view
+              [ Hero.header "Card"
+              , Hero.intro "Cards contain content and actions about a single subject."
+              , Hero.component [] [ heroCard lift "card-hero-card" model ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "cards" "cards" "mdc-card"
         , Page.demos
             [ exampleCard1 lift "cards-example-card-1" model
             , exampleCard2 lift "cards-example-card-2" model

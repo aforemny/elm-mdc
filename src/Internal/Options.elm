@@ -109,9 +109,19 @@ collect1 opt acc =
 
 
 recollect : Summary c m -> List (Property c m) -> Summary c m
-recollect =
-    List.foldl collect1
-
+recollect summary properties =
+    let
+        reversed_summary = List.foldl collect1 summary properties
+        new_summary =
+            { classes = List.reverse reversed_summary.classes
+            , css = List.reverse reversed_summary.css
+            , attrs = List.reverse reversed_summary.attrs
+            , internal = List.reverse reversed_summary.internal
+            , dispatch = reversed_summary.dispatch
+            , config = reversed_summary.config
+            }
+    in
+        new_summary
 
 collect : c -> List (Property c m) -> Summary c m
 collect =
@@ -160,7 +170,7 @@ addAttributes summary attrs =
        internal classes and attributes override those provided by the user.
 
        We use Html.Attributes.attribute "style" to inject CSS
-       variables. Elm has easily fixed bug where these get removed if
+       variables. Elm has an easily fixed bug where these get removed if
        you use Html.Attributes.style. Hopefully Evan will fix this one
        day: https://github.com/elm/virtual-dom/pull/127/files
     -}
@@ -178,7 +188,7 @@ addAttributes summary attrs =
         all =
             summary.attrs
                 ++ style
-                ++ List.map Html.Attributes.class (List.reverse summary.classes)
+                ++ List.map Html.Attributes.class summary.classes
                 ++ attrs
                 ++ summary.internal
                 ++ Dispatch.toAttributes summary.dispatch

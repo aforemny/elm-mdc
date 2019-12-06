@@ -33,6 +33,7 @@ module Internal.List.Implementation exposing
     , primaryText
     , radioGroup
     , react
+    , rippleDisabled
     , secondaryText
     , selected
     , selectedIndex
@@ -110,11 +111,16 @@ type alias Config m =
     , selectedIndex : Maybe Int
     , onSelectListItem : Maybe (Int -> m)
     , useActivated : Bool
+    , isInteractive : Bool
 
     -- list item only properties
     , activated : Bool
     , selected : Bool
     , disabled : Bool
+    , ripple : Bool
+
+    -- only used for the menu item in selects
+    , dataValue : Maybe String
     }
 
 
@@ -126,9 +132,12 @@ defaultConfig =
     , selectedIndex = Nothing
     , onSelectListItem = Nothing
     , useActivated = False
+    , isInteractive = True
     , activated = False
     , selected = False
     , disabled = False
+    , ripple = True
+    , dataValue = Nothing
     }
 
 
@@ -153,7 +162,7 @@ ul domId lift model options items =
 
         -- Only at the parent level we know what list item's tabindex must be set.
         -- Order:
-        -- 1. If user has moved focused with keyboarde, that item  gets the focus.
+        -- 1. If user has moved focused with keyboard, that item  gets the focus.
         -- 2. If client has selected an item to receive the tab index, use that.
         -- 3. If no index has set, set the index on the activated item.
         -- 4. Else select the first item.
@@ -175,6 +184,7 @@ ul domId lift model options items =
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
         [ cs "mdc-list"
+        , nonInteractiveClass |> when (not config.isInteractive)
         , role "listbox" |> when config.isSingleSelectionList
         , role "radiogroup" |> when config.isRadioGroup
         , Options.id domId
@@ -275,6 +285,10 @@ node nodeFunc =
 
 nonInteractive : Property m
 nonInteractive =
+    Options.option (\config -> { config | isInteractive = False })
+
+
+nonInteractiveClass =
     cs "mdc-list--non-interactive"
 
 
@@ -394,34 +408,50 @@ liView domId lift model config listItemIds focusedIndex index options children =
             else
                 -1
 
+        rippled =
+            li_config.ripple && config.isInteractive
+
         ripple =
-            Ripple.view False
-                list_item_dom_id
-                (lift << RippleMsg list_item_dom_id)
-                (Dict.get list_item_dom_id model.ripples
-                    |> Maybe.withDefault Ripple.defaultModel
-                )
-                []
+            if rippled then
+                Ripple.view False
+                    list_item_dom_id
+                        (lift << RippleMsg list_item_dom_id)
+                        (Dict.get list_item_dom_id model.ripples
+                        |> Maybe.withDefault Ripple.defaultModel
+                        )
+                    []
+            else
+                Ripple.none
+
     in
     Options.apply li_summary
         (Maybe.withDefault Html.li li_config.node)
         [ listItemClass
-        , tabindex tab_index
+        , tabindex tab_index |> when config.isInteractive
         , cs "mdc-list-item--selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , cs "mdc-list-item--activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
         , aria "checked"
             (if is_selected then
-                "True"
-
+                "true"
              else
-                "False"
+                "false"
             )
             |> when config.isRadioGroup
-        , role "option" |> when config.isSingleSelectionList
+        , aria "selected"
+            (if is_selected then
+                "true"
+             else
+                "false"
+            )
+            |> when ( not config.isRadioGroup && config.isInteractive )
+        , role "option" |> when (config.isSingleSelectionList )
         , role "radio" |> when config.isRadioGroup
         , disabledClass |> when li_config.disabled
-        , ripple.interactionHandler |> when ( not li_config.disabled )
-        , ripple.properties |> when ( not li_config.disabled )
+        , case li_config.dataValue of
+              Just v -> Options.data "value" v
+              Nothing -> Options.nop
+        , ripple.interactionHandler |> when rippled
+        , ripple.properties |> when rippled
         , case config.onSelectListItem of
             Just onSelect ->
                 if not li_config.disabled then
@@ -685,7 +715,7 @@ secondaryText options =
 
 selected : Property m
 selected =
-    Options.option (\config -> { config | activated = True } )
+    Options.option (\config -> { config | selected = True } )
 
 
 selectedIndex : Int -> Property m
@@ -732,7 +762,12 @@ liIsSelectedOrActivated li_ =
 
 disabled : Property m
 disabled =
-    Options.option (\config -> { config | disabled = True } )
+    Options.option (\config -> { config | disabled = True, ripple = False } )
+
+
+rippleDisabled : Property m
+rippleDisabled =
+    Options.option (\config -> { config | ripple = False } )
 
 
 disabledClass : Property m

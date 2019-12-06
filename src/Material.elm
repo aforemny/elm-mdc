@@ -376,7 +376,7 @@ update_ lift msg store =
 -}
 subscriptions : (Msg m -> m) -> { model | mdc : Model m } -> Sub m
 subscriptions lift model =
-    Menu.subs lift model.mdc
+    Sub.batch [ Menu.subs lift model.mdc, Select.subs lift model.mdc ]
 
 
 {-| Material init.

@@ -35,8 +35,7 @@ update lift msg model =
             Material.update (lift << Mdc) msg_ model
 
 
-view : (Msg m -> m) -> Page m -> Model m -> Html m
-view lift page model =
+heroComponent =
     let
         heroSurface options =
             styled Html.figure
@@ -55,25 +54,30 @@ view lift page model =
                 << List.singleton
                 << Html.figcaption []
     in
+    [ heroSurface
+          [ Elevation.z0
+          ]
+          [ text "Flat 0dp" ]
+    , heroSurface
+          [ Elevation.z8
+          ]
+          [ text "Raised 8dp" ]
+    , heroSurface
+          [ Elevation.z16
+          ]
+          [ text "Raised 16dp" ]
+    ]
+
+
+view : (Msg m -> m) -> Page m -> Model m -> Html m
+view lift page model =
     page.body
-        "Elevation"
-        "Elevation is the relative depth, or distance, between two surfaces along the z-axis."
-        ( Hero.view []
-            [ heroSurface
-                [ Elevation.z0
-                ]
-                [ text "Flat 0dp" ]
-            , heroSurface
-                [ Elevation.z8
-                ]
-                [ text "Raised 8dp" ]
-            , heroSurface
-                [ Elevation.z16
-                ]
-                [ text "Raised 16dp" ]
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "environment/elevation" "elevation" "mdc-elevation"
+        [ Hero.view
+              [ Hero.header "Elevation"
+              , Hero.intro "Elevation is the relative depth, or distance, between two surfaces along the z-axis."
+              , Hero.component [] heroComponent
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "environment/elevation" "elevation" "mdc-elevation"
         , Page.demos
             [ styled Html.div
                 [ cs "elevation-demo-container"

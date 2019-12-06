@@ -343,7 +343,7 @@ onSelect =
     Menu.onSelect
 
 
-{-| Use when item should be displayed as selected.
+{-| Used to indicate which element in a selection group is selected.
 -}
 selected : Lists.Property m
 selected =

@@ -2,6 +2,7 @@ module Internal.Ripple.Implementation exposing
     ( Property
     , accent
     , bounded
+    , none
     , primary
     , react
     , unbounded
@@ -42,7 +43,6 @@ bounded :
     ->
         { interactionHandler : Options.Property c m
         , properties : Options.Property c m
-        , style : Html m
         }
 bounded =
     \lift domId ->
@@ -57,7 +57,6 @@ unbounded :
     ->
         { interactionHandler : Options.Property c m
         , properties : Options.Property c m
-        , style : Html m
         }
 unbounded =
     \lift domId ->
@@ -92,7 +91,6 @@ view :
     ->
         { interactionHandler : Options.Property c m
         , properties : Options.Property c m
-        , style : Html m
         }
 view isUnbounded domId lift model options =
     let
@@ -164,8 +162,6 @@ view isUnbounded domId lift model options =
                     Options.nop
                 ]
 
-        noStyle =
-            text ""
     in
     case model.animationState of
         Idle ->
@@ -206,7 +202,6 @@ view isUnbounded domId lift model options =
             in
             { interactionHandler = interactionHandler
             , properties = properties
-            , style = noStyle
             }
 
         Activated activatedData ->
@@ -237,7 +232,6 @@ view isUnbounded domId lift model options =
             in
             { interactionHandler = interactionHandler
             , properties = properties
-            , style = noStyle
             }
 
         Deactivated activatedData ->
@@ -266,12 +260,17 @@ view isUnbounded domId lift model options =
             in
             { interactionHandler = interactionHandler
             , properties = properties
-            , style = noStyle
             }
 
 
-
--- TODO: get rid of className and text, we support CSS variables now.
+none :
+    { interactionHandler : Options.Property c m
+    , properties : Options.Property c m
+    }
+none =
+    { interactionHandler = Options.nop
+    , properties = Options.nop
+    }
 
 
 cssVariables :

@@ -247,6 +247,8 @@ type_ =
 
 
 {-| Make the textfield take up all the available horizontal space.
+
+Full width textfields cannot not have a label. Use a placeholder instead.
 -}
 fullwidth : Property m
 fullwidth =

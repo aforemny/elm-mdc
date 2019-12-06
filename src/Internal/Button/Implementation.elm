@@ -14,14 +14,14 @@ module Internal.Button.Implementation exposing
     , view
     )
 
-import Html exposing (Html)
+import Html exposing (Html, div)
 import Html.Attributes as Html
 import Internal.Button.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Helpers as Helpers
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
-import Internal.Options as Options exposing (cs, when)
+import Internal.Options as Options exposing (cs, styled, when)
 import Internal.Ripple.Implementation as Ripple
 
 
@@ -142,8 +142,6 @@ button domId lift model options nodes =
             Html.button
         )
         [ cs "mdc-button"
-        , cs "mdc-js-button"
-        , cs "mdc-js-ripple-effect" |> when summary.config.ripple
         , Options.attribute (Html.href (Maybe.withDefault "" config.link))
             |> when ((config.link /= Nothing) && not config.disabled)
         , Options.attribute (Html.disabled True)
@@ -162,7 +160,10 @@ button domId lift model options nodes =
         ]
         []
         (List.concat
-            [ if not config.trailingIcon then
+            [ [ styled div
+                  [ cs "mdc-button__ripple" ]
+                  [] ]
+            , if not config.trailingIcon then
                 config.icon
                     |> Maybe.map
                         (\icon_ -> [ Icon.view [ cs "mdc-button__icon" ] icon_ ])
