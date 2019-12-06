@@ -111,6 +111,7 @@ type alias Config m =
     , selectedIndex : Maybe Int
     , onSelectListItem : Maybe (Int -> m)
     , useActivated : Bool
+    , isInteractive : Bool
 
     -- list item only properties
     , activated : Bool
@@ -131,6 +132,7 @@ defaultConfig =
     , selectedIndex = Nothing
     , onSelectListItem = Nothing
     , useActivated = False
+    , isInteractive = True
     , activated = False
     , selected = False
     , disabled = False
@@ -182,6 +184,7 @@ ul domId lift model options items =
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
         [ cs "mdc-list"
+        , nonInteractiveClass |> when (not config.isInteractive)
         , role "listbox" |> when config.isSingleSelectionList
         , role "radiogroup" |> when config.isRadioGroup
         , Options.id domId
@@ -282,6 +285,10 @@ node nodeFunc =
 
 nonInteractive : Property m
 nonInteractive =
+    Options.option (\config -> { config | isInteractive = False })
+
+
+nonInteractiveClass =
     cs "mdc-list--non-interactive"
 
 
@@ -401,19 +408,26 @@ liView domId lift model config listItemIds focusedIndex index options children =
             else
                 -1
 
+        rippled =
+            li_config.ripple && config.isInteractive
+
         ripple =
-            Ripple.view False
-                list_item_dom_id
-                (lift << RippleMsg list_item_dom_id)
-                (Dict.get list_item_dom_id model.ripples
-                    |> Maybe.withDefault Ripple.defaultModel
-                )
-                []
+            if rippled then
+                Ripple.view False
+                    list_item_dom_id
+                        (lift << RippleMsg list_item_dom_id)
+                        (Dict.get list_item_dom_id model.ripples
+                        |> Maybe.withDefault Ripple.defaultModel
+                        )
+                    []
+            else
+                Ripple.none
+
     in
     Options.apply li_summary
         (Maybe.withDefault Html.li li_config.node)
         [ listItemClass
-        , tabindex tab_index
+        , tabindex tab_index |> when config.isInteractive
         , cs "mdc-list-item--selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , cs "mdc-list-item--activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
         , aria "checked"
@@ -429,15 +443,15 @@ liView domId lift model config listItemIds focusedIndex index options children =
              else
                 "false"
             )
-            |> when ( not config.isRadioGroup )
+            |> when ( not config.isRadioGroup && config.isInteractive )
         , role "option" |> when (config.isSingleSelectionList )
         , role "radio" |> when config.isRadioGroup
         , disabledClass |> when li_config.disabled
         , case li_config.dataValue of
               Just v -> Options.data "value" v
               Nothing -> Options.nop
-        , ripple.interactionHandler |> when li_config.ripple
-        , ripple.properties |> when li_config.ripple
+        , ripple.interactionHandler |> when rippled
+        , ripple.properties |> when rippled
         , case config.onSelectListItem of
             Just onSelect ->
                 if not li_config.disabled then
