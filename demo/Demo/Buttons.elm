@@ -32,6 +32,45 @@ update lift msg model =
             Material.update (lift << Mdc) msg_ model
 
 
+heroComponent lift model =
+    [ Button.view (lift << Mdc)
+          "buttons-hero-button-text"
+          model.mdc
+          [ Button.ripple
+          , css "margin" "16px 32px"
+          ]
+          [ text "Text"
+          ]
+    , Button.view (lift << Mdc)
+          "buttons-hero-button-raised"
+          model.mdc
+          [ Button.ripple
+          , Button.raised
+          , css "margin" "16px 32px"
+          ]
+          [ text "Raised"
+          ]
+    , Button.view (lift << Mdc)
+          "buttons-hero-button-unelevated"
+          model.mdc
+          [ Button.ripple
+          , Button.unelevated
+          , css "margin" "16px 32px"
+          ]
+          [ text "Unelevated"
+          ]
+    , Button.view (lift << Mdc)
+          "buttons-hero-button-outlined"
+          model.mdc
+          [ Button.ripple
+          , Button.outlined
+          , css "margin" "16px 32px"
+          ]
+          [ text "Outlined"
+          ]
+    ]
+
+
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     let
@@ -79,47 +118,12 @@ view lift page model =
                 }
     in
     page.body
-        "Button"
-        "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
-        ( Hero.view []
-            [ Button.view (lift << Mdc)
-                "buttons-hero-button-text"
-                model.mdc
-                [ Button.ripple
-                , css "margin" "16px 32px"
-                ]
-                [ text "Text"
-                ]
-            , Button.view (lift << Mdc)
-                "buttons-hero-button-raised"
-                model.mdc
-                [ Button.ripple
-                , Button.raised
-                , css "margin" "16px 32px"
-                ]
-                [ text "Raised"
-                ]
-            , Button.view (lift << Mdc)
-                "buttons-hero-button-unelevated"
-                model.mdc
-                [ Button.ripple
-                , Button.unelevated
-                , css "margin" "16px 32px"
-                ]
-                [ text "Unelevated"
-                ]
-            , Button.view (lift << Mdc)
-                "buttons-hero-button-outlined"
-                model.mdc
-                [ Button.ripple
-                , Button.outlined
-                , css "margin" "16px 32px"
-                ]
-                [ text "Outlined"
-                ]
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "buttons" "buttons" "mdc-button"
+        [ Hero.view
+              [ Hero.header "Button"
+              , Hero.intro "Buttons communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
+              , Hero.component [] ( heroComponent lift model )
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "buttons" "buttons" "mdc-button"
         , Page.demos
             [ textButtons "buttons-text-buttons"
             , raisedButtons "buttons-raised-buttons"

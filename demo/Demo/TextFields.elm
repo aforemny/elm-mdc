@@ -1,13 +1,23 @@
-module Demo.TextFields exposing (Model, Msg(..), defaultModel, update, view)
+module Demo.TextFields exposing
+    (Model
+    , Msg(..)
+    , defaultModel
+    , update
+    , view
+    , subscriptions
+    )
 
 import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
-import Html exposing (Html, text)
-import Html.Attributes as Html
+import Html exposing (Html, text, a, span)
+import Html.Attributes as Html exposing (href)
 import Html.Events as Html
 import Material
-import Material.Options as Options exposing (cs, css, styled)
+import Material.Chip as Chip
+import Material.List as Lists
+import Material.Options as Options exposing (cs, css, styled, when)
+import Material.Select as Select
 import Material.TextField as TextField
 import Material.TextField.CharacterCounter as TextField
 import Material.TextField.HelperLine as TextField
@@ -15,19 +25,42 @@ import Material.TextField.HelperText as TextField
 import Material.Typography as Typography
 
 
+type HeroDisplay
+    = DemoHero
+    | ElmHero
+
+
 type alias Model m =
     { mdc : Material.Model m
+    , heroOutlinedVariant : String
+    , heroOutlined : Bool
+    , heroLabel : String
+    , heroLeadingIcon : Bool
+    , heroTrailingIcon : Bool
+    , heroDisplay : HeroDisplay
     }
 
 
 defaultModel : Model m
 defaultModel =
     { mdc = Material.defaultModel
+    , heroOutlinedVariant = "Filled"
+    , heroOutlined = False
+    , heroLabel = "Name"
+    , heroLeadingIcon = False
+    , heroTrailingIcon = False
+    , heroDisplay = DemoHero
     }
 
 
 type Msg m
     = Mdc (Material.Msg m)
+    | UpdateLabel String
+    | ToggleLeadingIcon
+    | ToggleTrailingIcon
+    | SelectVariant String
+    | DemoTab
+    | ElmTab
 
 
 update : (Msg m -> m) -> Msg m -> Model m -> ( Model m, Cmd m )
@@ -36,33 +69,51 @@ update lift msg model =
         Mdc msg_ ->
             Material.update (lift << Mdc) msg_ model
 
+        UpdateLabel label ->
+            ( { model | heroLabel = label }, Cmd.none )
 
-heroTextFieldContainer : List (Options.Property c m) -> List (Html m) -> Html m
-heroTextFieldContainer options =
-    styled Html.div
-        (cs "text-field-container"
-            :: css "min-width" "200px"
-            :: css "padding" "20px"
-            :: options
-        )
+        ToggleLeadingIcon ->
+            ( { model | heroLeadingIcon = not model.heroLeadingIcon }, Cmd.none )
+
+        ToggleTrailingIcon ->
+            ( { model | heroTrailingIcon = not model.heroTrailingIcon }, Cmd.none )
+
+        SelectVariant key ->
+            ( { model | heroOutlinedVariant = key, heroOutlined = key == "Outlined" }, Cmd.none )
+
+        DemoTab ->
+            ( { model | heroDisplay = DemoHero }, Cmd.none )
+
+        ElmTab ->
+            ( { model | heroDisplay = ElmHero }, Cmd.none )
 
 
-heroTextFields : (Msg m -> m) -> Model m -> Html m
-heroTextFields lift model =
-    heroTextFieldContainer []
-        [ textFieldContainer []
-            [ TextField.view (lift << Mdc)
+
+heroComponent : (Msg m -> m) -> Model m -> Html m
+heroComponent lift model =
+    case model.heroDisplay of
+        DemoHero ->
+            TextField.view (lift << Mdc)
                 "text-fields-hero-text-field-1"
                 model.mdc
-                [ TextField.label "Standard" ]
+                [ TextField.label model.heroLabel
+                , TextField.outlined |> when model.heroOutlined
+                , TextField.leadingIcon "favorite" |> when model.heroLeadingIcon
+                , TextField.trailingIcon "visibility" |> when model.heroTrailingIcon
+                ]
                 []
-            , TextField.view (lift << Mdc)
-                "text-fields-hero-text-field-2"
-                model.mdc
-                [ TextField.label "Standard", TextField.outlined ]
-                []
-            ]
+        ElmHero ->
+            Html.pre []
+                [ text """
+    import Material.Options as Options
+    import Material.TextField as TextField
+
+    TextField.view Mdc "my-text-field" model.mdc
+        [ TextField.label "Text field"
+        , Options.onChange UpdateTextField
         ]
+        []""" ]
+
 
 
 textFieldRow : List (Options.Property c m) -> List (Html m) -> Html m
@@ -314,10 +365,95 @@ fullwidthTextareaTextField lift model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Text Field"
-        "Text fields allow users to input, edit, and select text. Text fields typically reside in forms but can appear in other places, like dialog boxes and search."
-        ( Hero.view [] [ heroTextFields lift model ] )
-        [ ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/text-field" "mdc-textfield"
+        [ Hero.view
+              [ Hero.header "Text Field"
+              , Hero.intro "Text fields allow users to input, edit, and select text."
+              , Hero.component [ cs "hero-component" ]
+                  [ Hero.tabBar (lift << Mdc) model (lift DemoTab) (lift ElmTab)
+                  , Hero.tabContainer []
+                      [ Hero.tabContent []
+                            [ heroComponent lift model ]
+                      ]
+                  ]
+              , Hero.options
+                  [ Lists.ul (lift << Mdc)
+                        "hero-options"
+                        model.mdc
+                        [ Lists.nonInteractive ]
+                        [ Lists.li []
+                              [ styled span
+                                    [ cs "mdc-typography--overline" ]
+                                    [ text "Options" ]
+                              ]
+                        , Lists.li [ cs "catalog-tf-list-item" ]
+                            [ Select.view (lift << Mdc)
+                                  "hero-option-variant"
+                                  model.mdc
+                                  [ Select.label "Variant"
+                                  , Select.selectedText model.heroOutlinedVariant
+                                  , Select.required
+                                  , Select.outlined
+                                  , Select.onSelect (lift << SelectVariant)
+                                  ]
+                                  [ Select.option
+                                        [ Select.value "Filled" ]
+                                        [ text "Filled" ]
+                                  , Select.option
+                                      [ Select.value "Outlined" ]
+                                      [ text "Outlined" ]
+                                  ]
+                            ]
+                        , Lists.li [ cs "catalog-tf-list-item" ]
+                            [ TextField.view (lift << Mdc)
+                                  "hero-option-label"
+                                  model.mdc
+                                  [ TextField.label "Label"
+                                  , TextField.outlined
+                                  , Options.onInput (lift << UpdateLabel)
+                                  , TextField.value model.heroLabel
+                                  ]
+                                  []
+                            ]
+                        , Lists.li []
+                            [ styled span
+                                  [ Typography.overline ]
+                                  [ text "Icons" ]
+                            ]
+                        , Lists.li []
+                            [ styled span
+                                  [ Typography.caption ]
+                                  [ text "We recommend using Material Icons. Follow the "
+                                  , a [ href "http://google.github.io/material-design-icons/" ] [ text "instructions"]
+                                  , text " to embed the icon font in your site."
+                                  ]
+                            ]
+                            , Lists.li []
+                                [ Chip.chipset
+                                      [ Chip.filter
+                                      , cs "hero-component__filter-chip-set-option"
+                                      ]
+                                      [ Chip.view (lift << Mdc)
+                                            "hero-option-leading-icon"
+                                            model.mdc
+                                            [ Chip.checkmark
+                                            , Chip.selected |> when model.heroLeadingIcon
+                                            , Chip.onClick (lift ToggleLeadingIcon)
+                                            ]
+                                            [ text "Leading Icon" ]
+                                      , Chip.view (lift << Mdc)
+                                            "hero-option-trailing-icon"
+                                            model.mdc
+                                            [ Chip.checkmark
+                                            , Chip.selected |> when model.heroTrailingIcon
+                                            , Chip.onClick (lift ToggleTrailingIcon)
+                                            ]
+                                            [ text "Trailing Icon" ]
+                                      ]
+                                ]
+                        ]
+                  ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/text-field" "mdc-textfield"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Filled" ]
             , filledTextFields lift model
@@ -341,3 +477,8 @@ view lift page model =
             , fullwidthTextareaTextField lift model
             ]
         ]
+
+
+subscriptions : (Msg m -> m) -> Model m -> Sub m
+subscriptions lift model =
+    Material.subscriptions (lift << Mdc) model

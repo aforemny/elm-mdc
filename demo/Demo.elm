@@ -453,14 +453,14 @@ view_ model =
             { topappbar = bar
             , navigate = Navigate
             , body =
-                \title intro hero nodes ->
+                \nodes ->
                     styled div
                         [ css "display" "flex"
                         , css "flex-flow" "column"
                         , css "height" "100%"
                         , Typography.typography
                         ]
-                        [ bar title
+                        [ bar "Material components for the Web"
                         , styled div
                             [ cs "demo-panel"
                             , css "display" "flex"
@@ -493,7 +493,7 @@ view_ model =
                                     , css "width" "100%"
                                     , css "max-width" "1200px"
                                     ]
-                                    [ Page.componentCatalogPanel model.transition title intro hero nodes ]
+                                    [ Page.componentCatalogPanel model.transition nodes ]
                                   ]
                             ]
                         ]

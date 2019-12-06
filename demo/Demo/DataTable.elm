@@ -57,13 +57,12 @@ update lift msg model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Data Table"
-        "Data tables display information in a way that’s easy to scan, so that users can look for patterns and insights."
-        (Hero.view []
-            [ heroDataTable
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "data-tables" "data-tables" "mdc-data-table"
+        [ Hero.view
+              [ Hero.header "Data Table"
+              , Hero.intro "Data tables display information in a way that’s easy to scan, so that users can look for patterns and insights."
+              , Hero.component [] [ heroDataTable ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "data-tables" "data-tables" "mdc-data-table"
         , Page.demos
             [ standardDataTable
             , rowSelectionDataTable lift model

@@ -146,10 +146,12 @@ disabledSlider lift model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Slider"
-        "Sliders let users select from a range of values by moving the slider thumb."
-        (Hero.view [] [ heroSlider lift model ])
-        [ ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
+        [ Hero.view
+              [ Hero.header "Slider"
+              , Hero.intro "Sliders let users select from a range of values by moving the slider thumb."
+              , Hero.component [] [ heroSlider lift model ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Continuous" ]
             , continuousSlider lift model

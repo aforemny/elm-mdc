@@ -27,7 +27,7 @@ import Material.Typography as Typography
 type alias Page m =
     { topappbar : String -> Html m
     , navigate : Url -> m
-    , body : String -> String -> Html m -> List (Html m) -> Html m
+    , body : List (Html m) -> Html m
     }
 
 
@@ -170,8 +170,8 @@ type Transition
     | Active
     | Done
 
-componentCatalogPanel : Transition -> String -> String -> Html m -> List (Html m) -> Html m
-componentCatalogPanel transition title intro hero nodes =
+componentCatalogPanel : Transition -> List (Html m) -> Html m
+componentCatalogPanel transition nodes =
     styled section
         [ cs "component-catalog-panel"
         , cs "loadComponent-enter" |> when (transition == Enter || transition == Active)
@@ -179,9 +179,7 @@ componentCatalogPanel transition title intro hero nodes =
         , css "margin-top" "24px"
         , css "padding-bottom" "24px"
         ]
-        ( Hero.area title intro hero
-        :: nodes
-        )
+        nodes
 
 
 demos : List (Html m) -> Html m

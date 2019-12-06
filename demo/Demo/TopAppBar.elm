@@ -76,6 +76,33 @@ updateExample msg model =
             model
 
 
+heroComponent lift model =
+    styled Html.div
+        [ css "width" "480px"
+        , css "height" "72px"
+        ]
+        [ TopAppBar.view (lift << Mdc)
+              "top-app-bar-default-top-app-bar"
+              model.mdc
+              [ css "position" "static"
+              ]
+              [ TopAppBar.section
+                    [ TopAppBar.alignStart
+                    ]
+                    [ TopAppBar.navigationIcon (lift << Mdc) "hero-menu" model.mdc [] "menu"
+                    , TopAppBar.title [] [ text "Title" ]
+                    ]
+              , TopAppBar.section
+                  [ TopAppBar.alignEnd
+                  ]
+                    [ TopAppBar.actionItem (lift << Mdc) "hero-file_download" model.mdc [] "file_download"
+                    , TopAppBar.actionItem (lift << Mdc) "hero-print" model.mdc [] "print"
+                    , TopAppBar.actionItem (lift << Mdc) "hero-more_vert" model.mdc [] "more_vert"
+                    ]
+              ]
+        ]
+
+
 view : (Msg m -> m) -> Page m -> Maybe TopAppBarPage -> Model m -> Html m
 view lift page topAppBarPage model =
     case topAppBarPage of
@@ -99,51 +126,27 @@ view lift page topAppBarPage model =
 
         Nothing ->
             page.body
-                "Top App Bar"
-                "Top App Bars are a container for items such as application title, navigation icon, and action items."
-                ( Hero.view []
-                    [ styled Html.div
-                        [ css "width" "480px"
-                        , css "height" "72px"
-                        ]
-                        [ TopAppBar.view (lift << Mdc)
-                            "top-app-bar-default-top-app-bar"
-                            model.mdc
-                            [ css "position" "static"
-                            ]
-                            [ TopAppBar.section
-                                [ TopAppBar.alignStart
-                                ]
-                                [ TopAppBar.navigationIcon (lift << Mdc) "hero-menu" model.mdc [] "menu"
-                                , TopAppBar.title [] [ text "Title" ]
-                                ]
-                            , TopAppBar.section
-                                [ TopAppBar.alignEnd
-                                ]
-                                [ TopAppBar.actionItem (lift << Mdc) "hero-file_download" model.mdc [] "file_download"
-                                , TopAppBar.actionItem (lift << Mdc) "hero-print" model.mdc [] "print"
-                                , TopAppBar.actionItem (lift << Mdc) "hero-more_vert" model.mdc [] "more_vert"
-                                ]
-                            ]
-                        ]
-                    ]
-                )
-                [ ResourceLink.links (lift << Mdc) model.mdc "app-bars-top" "top-app-bar" "mdc-top-app-bar"
+                [ Hero.view
+                      [ Hero.header "Top App Bar"
+                      , Hero.intro "Top App Bars are a container for items such as application title, navigation icon, and action items."
+                      , Hero.component [] [ heroComponent lift model ]
+                      ]
+                , ResourceLink.links (lift << Mdc) model.mdc "app-bars-top" "top-app-bar" "mdc-top-app-bar"
                 , styled Html.div
                     [ cs "mdc-topappbar-demo"
                     , css "display" "flex"
                     , css "flex-flow" "row wrap"
                     ]
-                    [ iframe lift model "Standard TopAppBar" Url.StandardTopAppBar
-                    , iframe lift model "Fixed TopAppBar" Url.FixedTopAppBar
-                    , iframe lift model "Dense TopAppBar" Url.DenseTopAppBar
-                    , iframe lift model "Prominent TopAppBar" Url.ProminentTopAppBar
-                    , iframe lift model "Short TopAppBar" Url.ShortTopAppBar
-                    , iframe lift
-                        model
-                        "Short - Always Closed TopAppBar"
-                        Url.ShortCollapsedTopAppBar
-                    ]
+                      [ iframe lift model "Standard TopAppBar" Url.StandardTopAppBar
+                      , iframe lift model "Fixed TopAppBar" Url.FixedTopAppBar
+                      , iframe lift model "Dense TopAppBar" Url.DenseTopAppBar
+                      , iframe lift model "Prominent TopAppBar" Url.ProminentTopAppBar
+                      , iframe lift model "Short TopAppBar" Url.ShortTopAppBar
+                      , iframe lift
+                          model
+                          "Short - Always Closed TopAppBar"
+                              Url.ShortCollapsedTopAppBar
+                      ]
                 ]
 
 

@@ -104,9 +104,19 @@
   flex-flow: column wrap;
 }
 
-.component-catalog-panel .hero {
+.component-catalog-panel .hero,
+.component-catalog-panel .hero-component {
   width: calc(100% - 340px);
   height: 550px;
+}
+
+.component-catalog-panel .hero {
+  padding: 24px;
+}
+
+.component-catalog-panel .hero-component {
+  padding: 0;
+  margin-top: 32px;
 }
 
 @media screen and (max-width: 820px) {
@@ -128,10 +138,22 @@
   .component-catalog-panel .hero-options {
     max-height: none;
   }
-  .component-catalog-panel .hero,
   .component-catalog-panel .hero-component {
     width: 100%;
   }
+}
+
+.hero-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #000;
+}
+
+.hero-tab .mdc-tab-indicator .mdc-tab-indicator__content--underline {
+  border-color: #000;
+}
+
+.hero-tab .mdc-tab__ripple::after,
+.hero-tab .mdc-tab__ripple::before {
+    background-color: #000;
 }
 
 
@@ -165,6 +187,35 @@
 
 
 /**
+ * Tabbed hero.
+ */
+.tab-content,
+.tab-container {
+  display: flex;
+  /* This is an IE11 workaround where flex doesn't center elements properly unless height is explicitly
+     set to a value (100% doesn't work). By setting the height to a value lower than min-height, min-height
+    will be used but the flex system will work properly.
+    See https://github.com/philipwalton/flexbugs/issues/231
+ */
+  height: 0;
+  min-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  padding: 24px 0;
+  flex: 1 1 auto;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-container {
+  min-height: 360px;
+  position: relative;
+};
+
+
+
+/**
  * Textfields demo.
  */
 .demo-text-field-outlined-shaped .mdc-notched-outline .mdc-notched-outline__leading {
@@ -180,6 +231,32 @@
 .demo-text-field-outlined-shaped .mdc-notched-outline .mdc-notched-outline__trailing {
   /* @noflip */
   border-radius: 0 28px 28px 0;
+}
+
+.hero-options .catalog-tf-list-item {
+  min-height: 65px;
+  overflow: visible;
+  padding-bottom: 24px;
+}
+
+.hero-options .mdc-chip-set {
+    padding: 16px 0;
+}
+
+.hero-options .mdc-chip-set .mdc-chip {
+    margin: 0 4px 0 0;
+}
+
+.hero-component__filter-chip-set-option .mdc-chip {
+  border-radius: 4px;
+  background-color: #fff;
+  padding-right: 11px;
+  padding-left: 11px;
+  border: 1px solid rgba(25,25,25,.32);
+}
+
+.hero-component__filter-chip-set-option .mdc-chip .mdc-chip__ripple {
+  border-radius: 4px;
 }
 
 

@@ -127,10 +127,12 @@ shapedOutlinedSelect lift model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Select"
-        "Selects allow users to select from a single-option menu."
-        ( Hero.view [] [ heroSelect lift model ] )
-        [ ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/select-menus" "mdc-select"
+        [ Hero.view
+              [ Hero.header "Select"
+              , Hero.intro "Selects allow users to select from a single-option menu."
+              , Hero.component [] [ heroSelect lift model ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "text-fields" "input-controls/select-menus" "mdc-select"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Filled" ]
             , filledSelect lift model

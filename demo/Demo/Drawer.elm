@@ -76,64 +76,67 @@ example label url =
         ]
 
 
+heroComponent lift model =
+    Drawer.view (lift << Mdc)
+        "permanent-drawer-drawer"
+        model.mdc
+        []
+        [ Drawer.header
+              []
+              [ styled Html.h3
+                    [ Drawer.title ]
+                    [ text "Title" ]
+              , styled Html.h6
+                  [ Drawer.subTitle ]
+                  [ text "subtext" ]
+              ]
+        , Drawer.content []
+            [ Lists.ul (lift << Mdc)
+                  "permanent-drawer-drawer-list"
+                  model.mdc
+                  [ Lists.singleSelection
+                  , Lists.useActivated
+                  ]
+                  [ Lists.a
+                        [ Options.attribute (Html.href "#drawer")
+                        , Lists.activated
+                        , Options.css "color" "red"
+                        ]
+                        [ Lists.graphicIcon [] "inbox"
+                        , text "Inbox"
+                        ]
+                  , Lists.a
+                      [ Options.attribute (Html.href "#drawer")
+                      ]
+                        [ Lists.graphicIcon [] "star"
+                        , text "Star"
+                        ]
+                  , Lists.a
+                      [ Options.attribute (Html.href "#drawer")
+                      ]
+                        [ Lists.graphicIcon [] "send"
+                        , text "Sent Mail"
+                        ]
+                  , Lists.a
+                      [ Options.attribute (Html.href "#drawer")
+                      ]
+                        [ Lists.graphicIcon [] "drafts"
+                        , text "Drafts"
+                        ]
+                  ]
+            ]
+        ]
+
+
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Drawer"
-        "The navigation drawer slides in from the left and contains the navigation destinations for your app."
-        ( Hero.view []
-            [ Drawer.view (lift << Mdc)
-                "permanent-drawer-drawer"
-                model.mdc
-                []
-                [ Drawer.header
-                    []
-                    [ styled Html.h3
-                        [ Drawer.title ]
-                        [ text "Title" ]
-                    , styled Html.h6
-                        [ Drawer.subTitle ]
-                        [ text "subtext" ]
-                    ]
-                , Drawer.content []
-                    [ Lists.ul (lift << Mdc)
-                        "permanent-drawer-drawer-list"
-                        model.mdc
-                        [ Lists.singleSelection
-                        , Lists.useActivated
-                        ]
-                        [ Lists.a
-                            [ Options.attribute (Html.href "#drawer")
-                            , Lists.activated
-                            , Options.css "color" "red"
-                            ]
-                            [ Lists.graphicIcon [] "inbox"
-                            , text "Inbox"
-                            ]
-                        , Lists.a
-                            [ Options.attribute (Html.href "#drawer")
-                            ]
-                            [ Lists.graphicIcon [] "star"
-                            , text "Star"
-                            ]
-                        , Lists.a
-                            [ Options.attribute (Html.href "#drawer")
-                            ]
-                            [ Lists.graphicIcon [] "send"
-                            , text "Sent Mail"
-                            ]
-                        , Lists.a
-                            [ Options.attribute (Html.href "#drawer")
-                            ]
-                            [ Lists.graphicIcon [] "drafts"
-                            , text "Drafts"
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "navigation-drawer" "drawers" "mdc-drawer"
+        [ Hero.view
+              [ Hero.header "Drawer"
+              , Hero.intro "The navigation drawer slides in from the left and contains the navigation destinations for your app."
+              , Hero.component [] [ heroComponent lift model ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "navigation-drawer" "drawers" "mdc-drawer"
         , Page.demos
             [ example "Permanent" "#permanent-drawer"
             , example "Dismissible" "#dismissible-drawer"

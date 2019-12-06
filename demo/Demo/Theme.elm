@@ -36,36 +36,37 @@ update lift msg model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Theme"
-        "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
-        ( Hero.view [ cs "theme-demo" ]
-            [ Button.view (lift << Mdc)
-                "theme-button-text"
-                model.mdc
-                [ ]
-                [ text "Text"
-                ]
-            , Button.view (lift << Mdc)
-                "theme-button-raised"
-                model.mdc
-                [ Button.raised
-                , css "padding-left" "16px"
-                , css "padding-right" "16px"
-                ]
-                [ text "Raised"
-                ]
-            , Button.view (lift << Mdc)
-                "theme-button-outlined"
-                model.mdc
-                [ Button.outlined
-                , css "padding-left" "15px"
-                , css "padding-right" "15px"
-                ]
-                [ text "Outlined"
-                ]
-            ]
-        )
-        [ ResourceLink.links (lift << Mdc) model.mdc "color/applying-color-to-ui" "theme" "mdc-theme"
+        [ Hero.view
+              [ Hero.header "Theme"
+              , Hero.intro "Color in Material Design is inspired by bold hues juxtaposed with muted environments, deep shadows, and bright highlights."
+              , Hero.component []
+                  [ Button.view (lift << Mdc)
+                        "theme-button-text"
+                        model.mdc
+                        [ ]
+                        [ text "Text"
+                        ]
+                  , Button.view (lift << Mdc)
+                        "theme-button-raised"
+                        model.mdc
+                        [ Button.raised
+                        , css "padding-left" "16px"
+                        , css "padding-right" "16px"
+                        ]
+                        [ text "Raised"
+                        ]
+                  , Button.view (lift << Mdc)
+                        "theme-button-outlined"
+                        model.mdc
+                        [ Button.outlined
+                        , css "padding-left" "15px"
+                        , css "padding-right" "15px"
+                        ]
+                        [ text "Outlined"
+                        ]
+                  ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "color/applying-color-to-ui" "theme" "mdc-theme"
         , Page.demos [
                styled div
                    [ cs "theme-demo"

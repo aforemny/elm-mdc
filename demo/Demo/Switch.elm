@@ -100,10 +100,12 @@ exampleSwitch lift model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "Switch"
-        "Switches communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
-        ( Hero.view [] [ heroSwitch lift model ] )
-        [ ResourceLink.links (lift << Mdc) model.mdc "selection-controls.html#switches" "input-controls/switches" "mdc-switch"
+        [ Hero.view
+              [ Hero.header "Switch"
+              , Hero.intro "Switches communicate an action a user can take. They are typically placed throughout your UI, in places like dialogs, forms, cards, and toolbars."
+              , Hero.component [] [ heroSwitch lift model ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "selection-controls.html#switches" "input-controls/switches" "mdc-switch"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Switch" ]
             , exampleSwitch lift model

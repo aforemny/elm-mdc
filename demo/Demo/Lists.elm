@@ -305,10 +305,12 @@ listWithTrailingRadioButton lift index model =
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
-        "List"
-        "Lists present multiple line items vertically as a single continuous element."
-        ( Hero.view [] [ heroList lift model "hero-list" ] )
-        [ ResourceLink.links (lift << Mdc) model.mdc "lists" "lists" "mdc-list"
+        [ Hero.view
+              [ Hero.header "List"
+              , Hero.intro "Lists present multiple line items vertically as a single continuous element."
+              , Hero.component [] [ heroList lift model "hero-list" ]
+              ]
+        , ResourceLink.links (lift << Mdc) model.mdc "lists" "lists" "mdc-list"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Single-Line" ]
             , singleLineList lift model "single-line-list"
