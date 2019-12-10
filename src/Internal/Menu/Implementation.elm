@@ -337,9 +337,9 @@ menu domId lift model options ulNode =
         , when (model.animating && not config.quickOpen) <|
             if model.open then
                 cs "mdc-menu-surface--animating-open"
-
             else
                 cs "mdc-menu-surface--animating-closed"
+
         , -- Note: .mdc-menu--open has to be added one frame after
           -- .mdc-menu-surface--animating-open has been set, except when
           -- quickly opening:
