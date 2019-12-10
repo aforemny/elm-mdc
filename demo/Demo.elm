@@ -644,5 +644,6 @@ subscriptions model =
         , Demo.Slider.subscriptions SliderMsg model.slider
         , Demo.TabBar.subscriptions TabBarMsg model.tabbar
         , Demo.ModalDrawer.subscriptions ModalDrawerMsg model.modalDrawer
+        , Demo.TextFields.subscriptions TextFieldMsg model.textfields
         , Demo.TopAppBar.subscriptions TopAppBarMsg model.topAppBar
         ]

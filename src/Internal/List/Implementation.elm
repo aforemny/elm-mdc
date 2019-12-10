@@ -427,6 +427,7 @@ liView domId lift model config listItemIds focusedIndex index options children =
     Options.apply li_summary
         (Maybe.withDefault Html.li li_config.node)
         [ listItemClass
+        , Options.id list_item_dom_id |> when (not rippled)
         , tabindex tab_index |> when config.isInteractive
         , cs "mdc-list-item--selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , cs "mdc-list-item--activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
