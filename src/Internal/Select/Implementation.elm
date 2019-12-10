@@ -80,12 +80,7 @@ update lift msg model =
                 ( Nothing, Cmd.none )
 
         OpenMenu menuIndex ->
-            ( Nothing
-            , Cmd.batch
-                [ Helpers.cmd ( lift (MenuMsg Menu.Open) )
-                , Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus menuIndex)
-                ]
-            )
+            ( Nothing, Helpers.cmd ( lift (MenuMsg Menu.Open) ) )
 
         ToggleMenu ->
             update lift (MenuMsg Menu.Toggle) model
