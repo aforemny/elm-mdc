@@ -32,7 +32,7 @@ Bug fixes:
 Possible bugs:
 * The selected option when you drop down a select is shown in the
   activated colour in the MDC demo. However it is not clear how this
-  is eached, since it uses the selected state like we do, and
+  is accomplished, since it uses the selected state like we do, and
   therefere should have the colours of the selected state.
   Exactly why the CSS of the MDC demo is different is not yet known.
 
