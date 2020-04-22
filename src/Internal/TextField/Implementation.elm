@@ -231,6 +231,12 @@ textField domId lift model options list =
         isDirty =
             model.isDirty || Maybe.withDefault False (Maybe.map ((/=) "") config.value)
 
+        isFilled =
+            not config.outlined && not config.textarea
+
+        isOutlined =
+            config.outlined && not config.textarea
+
         focused =
             model.focused && not config.disabled
 
@@ -261,10 +267,10 @@ textField domId lift model options list =
                 )
 
         leadingIcon_ =
-            iconView lift config.leadingIcon config.onLeadingIconClick
+            iconView lift config.leadingIcon "leading" config.onLeadingIconClick
 
         trailingIcon_ =
-            iconView lift config.trailingIcon config.onTrailingIconClick
+            iconView lift config.trailingIcon "trailing" config.onTrailingIconClick
     in
     Options.apply summary
         Html.div
@@ -274,13 +280,18 @@ textField domId lift model options list =
         , cs "mdc-text-field--fullwidth" |> when config.fullWidth
         , cs "mdc-text-field--invalid" |> when isInvalid
         , cs "mdc-text-field--textarea" |> when config.textarea
-        , cs "mdc-text-field--outlined" |> when (config.outlined && not config.textarea)
+        , cs "mdc-text-field--filled" |> when isFilled
+        , cs "mdc-text-field--outlined" |> when isOutlined
         , cs "mdc-text-field--with-leading-icon" |> when (config.leadingIcon /= Nothing)
         , cs "mdc-text-field--with-trailing-icon" |> when (config.trailingIcon /= Nothing)
         ]
         []
         (list
-            ++ [ leadingIcon_
+            ++ [ if isFilled then
+                     styled Html.span [ cs "mdc-text-field__ripple" ] []
+                 else
+                     text ""
+               , leadingIcon_
                , Options.applyNativeControl summary
                     (if config.textarea then
                         Html.textarea
@@ -383,12 +394,12 @@ textField domId lift model options list =
         )
 
 
-iconView : (Msg -> m) -> Maybe String -> Maybe m -> Html m
-iconView lift icon handler =
+iconView : (Msg -> m) -> Maybe String -> String -> Maybe m -> Html m
+iconView lift icon iconClass handler =
     case icon of
         Just name ->
             styled Html.i
-                [ cs "material-icons mdc-text-field__icon"
+                [ cs ( "material-icons mdc-text-field__icon mdc-text-field__icon--" ++ iconClass)
                 , Options.tabindex 0 |> when (handler /= Nothing)
                 , Options.role "button" |> when (handler /= Nothing)
                 , handler

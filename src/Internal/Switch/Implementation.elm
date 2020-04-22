@@ -99,13 +99,15 @@ switch domId lift model options _ =
             ]
             [ styled Html.div
                 [ cs "mdc-switch__thumb" ]
-                [ Options.applyNativeControl summary
-                    Html.input
+                []
+            , Options.applyNativeControl summary
+                Html.input
                     [ cs "mdc-switch__native-control"
                     , Options.role "switch"
                     , Options.id config.id_
                     , Options.attribute <| Html.type_ "checkbox"
                     , Options.attribute (Html.attribute "checked" "checked") |> when config.value
+                    , Options.aria "checked" ( if config.value then "true" else "false" )
                     , Options.onFocus (lift (SetFocus True))
                     , Options.onBlur (lift (SetFocus False))
                     , Options.onWithOptions "click"
@@ -123,7 +125,6 @@ switch domId lift model options _ =
                         ]
                     ]
                     []
-                ]
             ]
         ]
 

@@ -208,10 +208,15 @@ chip domId lift model options nodes =
             , [ styled Html.span
                     [ Options.role "gridcell" ]
                     [ styled Html.span
-                          [ cs "mdc-chip__text"
-                            , Options.role "button"
+                          [ cs "mdc-chip__primary-action"
+                          , Options.role "button"
+                          -- TODO: what about tabindex?
                           ]
-                          nodes
+                          [ styled Html.span
+                                [ cs "mdc-chip__text"
+                                ]
+                                nodes
+                          ]
                     ]
               ]
             , config.trailingIcon

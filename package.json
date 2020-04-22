@@ -10,9 +10,9 @@
     "babel": "^6.23.0",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
-    "material-components-web": "^4.0.0",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.0"
+    "material-components-web": "^5.1.0",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.11"
   },
   "engines": {
     "node": ">= 4"
