@@ -1,6 +1,12 @@
 ## Latest changes
 
 
+## Upgrade to 5.0.0
+
+* Upgrade to MDC 5.1.0. DOM changes, but all internal. No user visible changes.
+
+
+
 ## Upgrade to 4.0.0
 
 New features:
