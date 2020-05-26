@@ -28,7 +28,7 @@ module Material.Fab exposing
     Fab.view Mdc "my-fab" model.mdc
         [ Fab.ripple
         , Options.onClick Click
-        , icon "favorite_border"
+        , Fab.icon "favorite_border"
         ]
         []
 
@@ -40,7 +40,7 @@ module Material.Fab exposing
         model.mdc
         [ Fab.ripple
         , Options.onClick Click
-        , icon "add"
+        , Fab.icon "add"
         , Fab.extended
         ]
         [ span [ Fab.label ] [ text "Create" ] ]
