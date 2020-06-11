@@ -665,45 +665,13 @@ decodeGeometry =
     Decode.map3 Geometry
         (Decode.map (List.filterMap identity) <|
             DOM.childNodes
-                (Decode.at [ "tagName" ] Decode.string
+                ( DOM.classList
                     |> Decode.andThen
-                        (\tagName ->
-                            case String.toLower tagName of
-                                "button" ->
-                                    let
-                                        -- TODO: get node with appropriate class name
-                                        content =
-                                            DOM.childNode 0
-
-                                        {-
-                                        dimensions =
-                                            content <|
-                                                Decode.map2
-                                                    (\offsetLeft offsetWidth ->
-                                                        { offsetLeft = offsetLeft
-                                                        , offsetWidth = offsetWidth
-                                                        }
-                                                    )
-                                                    DOM.offsetLeft
-                                                    DOM.offsetWidth
-                                        -}
-                                    in
-                                    Decode.map Just <|
-                                        Decode.map2
-                                            (\offsetLeft offsetWidth ->
-                                                { offsetLeft = offsetLeft
-                                                , offsetWidth = offsetWidth
-
-                                                -- TODO: get .mdc-tab__content left and right here
-                                                , contentLeft = offsetLeft + 24
-                                                , contentRight = offsetLeft + offsetWidth - 24 - 24
-                                                }
-                                            )
-                                            DOM.offsetLeft
-                                            DOM.offsetWidth
-
-                                _ ->
-                                    Decode.succeed Nothing
+                        (\classes ->
+                             if List.member "mdc-tab" classes then
+                                 tabDimensions
+                             else
+                                 Decode.succeed Nothing
                         )
                 )
         )
@@ -720,3 +688,50 @@ decodeGeometry =
                     -- .mdc-tab-bar
                     Decode.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )
+
+{-| Decode .mdc-tab
+-}
+tabDimensions : Decoder ( Maybe { offsetLeft : Float, offsetWidth : Float, contentLeft : Float, contentRight : Float } )
+tabDimensions =
+    Decode.map3
+        (\rootLeft rootWidth content ->
+             let
+                 ( contentLeft, contentWidth ) =
+                     case List.head content of
+                         Just c -> ( c.contentLeft, c.contentWidth )
+                         Nothing -> ( 0, 0 )
+             in
+             Just { offsetLeft = rootLeft
+                  , offsetWidth = rootWidth
+                  , contentLeft = rootLeft + contentLeft
+                  , contentRight = rootLeft + contentLeft + contentWidth
+             }
+        )
+        DOM.offsetLeft
+        DOM.offsetWidth
+        contentDimensions
+
+
+{-| Decode .mdc-tab__content
+-}
+contentDimensions : Decoder ( List { contentLeft : Float, contentWidth : Float } )
+contentDimensions =
+    Decode.map (List.filterMap identity) <|
+        DOM.childNodes
+            ( DOM.classList
+            |> Decode.andThen
+                 (\classes ->
+                      if List.member "mdc-tab__content" classes then
+                          Decode.map Just <|
+                              Decode.map2
+                              (\contentLeft contentWidth ->
+                                   { contentLeft = contentLeft
+                                   , contentWidth = contentWidth
+                                   }
+                              )
+                              DOM.offsetLeft
+                              DOM.offsetWidth
+                      else
+                          Decode.succeed Nothing
+                 )
+            )
