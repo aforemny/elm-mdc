@@ -705,7 +705,7 @@ decodeGeometry =
                                                 { offsetLeft = offsetLeft
                                                 , offsetWidth = offsetWidth
 
-                                                -- TODO: get content left and right here
+                                                -- TODO: get .mdc-tab__content left and right here
                                                 , contentLeft = offsetLeft + 24
                                                 , contentRight = offsetLeft + offsetWidth - 24 - 24
                                                 }
