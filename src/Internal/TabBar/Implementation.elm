@@ -54,11 +54,11 @@ update lift msg model =
                 tabBarWidth =
                     geometry.tabBar.offsetWidth
 
-                scrollAreaWidth =
-                    geometry.scrollArea.offsetWidth
+                scrollContentWidth =
+                    geometry.scrollContent.offsetWidth
 
                 isOverflowing =
-                    tabBarWidth > scrollAreaWidth
+                    tabBarWidth > scrollContentWidth
 
                 translateOffset =
                     if not isOverflowing then
@@ -110,7 +110,7 @@ update lift msg model =
 
                     else if tab_index == List.length geometry.tabs - 1 then
                         -- Always scroll to the max value if scrolling to the Nth index
-                        geometry.scrollArea.offsetWidth
+                        geometry.scrollContent.offsetWidth
 
                     else
                         scrollPosition + scrollIncrement
@@ -606,7 +606,6 @@ decodeGeometryOnScrollContent =
 -- Current element when we arrive here should be .mdc-tab-scroller__scroll-content
 -- i.e. the immediate container for the tabs.
 
-
 decodeGeometry : Decoder Geometry
 decodeGeometry =
     Json.map3 Geometry
@@ -654,9 +653,8 @@ decodeGeometry =
                         )
                 )
         )
-        (DOM.parentElement <|
-            -- .mdc-tab-scroller__scroll-area
-            Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
+        ( -- .mdc-tab-scroller__scroll-content
+          Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )
         (DOM.parentElement <|
             -- .mdc-tab-scroller__scroll-area

@@ -46,7 +46,7 @@ type alias Tab =
 
 type alias Geometry =
     { tabs : List Tab
-    , scrollArea : { offsetWidth : Float }
+    , scrollContent : { offsetWidth : Float }
     , tabBar : { offsetWidth : Float }
     }
 
@@ -54,6 +54,6 @@ type alias Geometry =
 defaultGeometry : Geometry
 defaultGeometry =
     { tabs = []
-    , scrollArea = { offsetWidth = 0 }
+    , scrollContent = { offsetWidth = 0 }
     , tabBar = { offsetWidth = 0 }
     }
