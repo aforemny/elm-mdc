@@ -54,6 +54,7 @@ import Dict
 import Html exposing (Html)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
+import Internal.Helpers exposing (cmd, succeedIfLeavingElement)
 import Internal.Icon.Implementation as Icon
 import Internal.List.Model exposing (Model, Msg(..), defaultModel)
 import Internal.Msg
@@ -86,19 +87,11 @@ update lift msg model =
             ( Just { model | focused = Nothing }, Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus id) )
 
         SelectItem index m ->
-            ( Just { model | focused = Nothing }, send (m index) )
+            ( Just { model | focused = Nothing }, cmd (m index) )
 
         NoOp ->
             ( Nothing, Cmd.none )
 
-
-
-{- Turn msg into Cmd msg -}
-
-send : msg -> Cmd msg
-send msg =
-    Task.succeed msg
-        |> Task.perform identity
 
 
 {- State between ul and li is shared to make the interface easier. -}
@@ -193,7 +186,7 @@ ul domId lift model options items =
         -- selected one, so when the user tabs back in, that is the
         -- selected index.
         , Options.on "focusout" <|
-            Decode.map (always (lift ResetFocusedItem)) (succeedIfLeavingList domId)
+            Decode.map (always (lift ResetFocusedItem)) (succeedIfLeavingElement domId)
         ]
         []
         list_nodes
@@ -211,48 +204,6 @@ doListItemDomId domId index listItem =
     else
         ""
 
-
-
-{- Decoder functions to detect if focus moves away from the list itself.
-
-   These functions check if a given DOM element is equal to another DOM
-   element, or contained by it.
-
-   Thanks: https://github.com/xarvh/elm-onclickoutside/blob/master/src/Html/OnClickOutside.elm
--}
-
-
-succeedIfContainerOrChildOfContainer : String -> Decoder ()
-succeedIfContainerOrChildOfContainer targetId =
-    Decode.field "id" Decode.string
-        |> Decode.andThen
-            (\id ->
-                if id == targetId then
-                    Decode.succeed ()
-
-                else
-                    Decode.field "parentNode" (succeedIfContainerOrChildOfContainer targetId)
-            )
-
-
-invertDecoder : Decoder a -> Decoder ()
-invertDecoder decoder =
-    Decode.maybe decoder
-        |> Decode.andThen
-            (\maybe ->
-                if maybe == Nothing then
-                    Decode.succeed ()
-
-                else
-                    Decode.fail ""
-            )
-
-
-succeedIfLeavingList : String -> Decoder ()
-succeedIfLeavingList targetId =
-    succeedIfContainerOrChildOfContainer targetId
-        |> Decode.field "relatedTarget"
-        |> invertDecoder
 
 
 {-| Format a single item in the list.

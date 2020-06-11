@@ -9,6 +9,7 @@ module Internal.TabBar.Model exposing
 
 import Dict exposing (Dict)
 import Internal.Ripple.Model as Ripple
+import Internal.Keyboard as Keyboard exposing (Meta, Key, KeyCode)
 
 
 type alias Model =
@@ -16,6 +17,7 @@ type alias Model =
     , translateOffset : Float
     , ripples : Dict Int Ripple.Model
     , activeTab : Int
+    , focusedTab : Maybe Int
     }
 
 
@@ -25,6 +27,7 @@ defaultModel =
     , translateOffset = 0
     , ripples = Dict.empty
     , activeTab = 0
+    , focusedTab = Nothing
     }
 
 
@@ -34,6 +37,11 @@ type Msg m
     | RippleMsg Int Ripple.Msg
     | Init Geometry
     | SetActiveTab String Int Float
+    | FocusTab String Int
+    | ResetFocusedTab
+    | Left String Int
+    | Right String Int
+    | SelectTab (Int -> m) Int
 
 
 type alias Tab =
