@@ -51,7 +51,7 @@ import Html.Attributes
 import Html.Events
 import Internal.Dispatch as Dispatch
 import Internal.Index exposing (Index)
-import Internal.Keyboard as Keyboard exposing (decodeMeta, decodeKey)
+import Internal.Keyboard as Keyboard exposing (decodeMeta, decodeKey, decodeKeyCode)
 import Internal.Msg exposing (Msg(..))
 import Json.Decode as Decode exposing (Decoder)
 import String
@@ -395,7 +395,7 @@ onAKeyDown ( keyCode, keyName ) m =
     Listener "keydown" <|
         ( Decode.map3
               (\meta code key -> (meta, code, key))
-              decodeMeta ( decodeKeyCode keyCode) ( decodeKeyName keyName )
+              decodeMeta decodeKeyCode decodeKey
           |> Decode.andThen
               (\({ shiftKey, altKey, ctrlKey, metaKey }, code, key) ->
                    let
@@ -413,29 +413,6 @@ onAKeyDown ( keyCode, keyName ) m =
                            Decode.fail ""
               )
         )
-
-
-decodeKeyCode : Keyboard.KeyCode -> Decoder Keyboard.KeyCode
-decodeKeyCode accepted_code =
-    Html.Events.keyCode
-        |> Decode.andThen
-           (\code ->
-                if code == accepted_code then
-                    Html.Events.keyCode
-                else
-                    Decode.fail <| ""
-           )
-
-decodeKeyName : Keyboard.Key -> Decoder Keyboard.Key
-decodeKeyName accepted_name =
-    Decode.at [ "key" ] Decode.string
-        |> Decode.andThen
-           (\name ->
-                if name == accepted_name then
-                    Keyboard.decodeKey
-                else
-                    Decode.fail <| ""
-           )
 
 
 id : String -> Property c m
