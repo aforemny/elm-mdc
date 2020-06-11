@@ -5,6 +5,7 @@ module Internal.TabBar.Implementation exposing
     , fadingIconIndicator
     , icon
     , indicatorIcon
+    , onSelectTab
     , react
     , smallIndicator
     , stacked
@@ -19,12 +20,14 @@ import Html exposing (Html, button, div, nav, span, text)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Dispatch as Dispatch
 import Internal.GlobalEvents as GlobalEvents
+import Internal.Helpers exposing (cmd, succeedIfLeavingElement)
+import Internal.Keyboard as Keyboard exposing (Key, KeyCode, Meta, decodeMeta, decodeKey, decodeKeyCode)
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Ripple.Model as Ripple
 import Internal.TabBar.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
-import Json.Decode as Json exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder)
 import Task
 
 
@@ -54,11 +57,11 @@ update lift msg model =
                 tabBarWidth =
                     geometry.tabBar.offsetWidth
 
-                scrollAreaWidth =
-                    geometry.scrollArea.offsetWidth
+                scrollContentWidth =
+                    geometry.scrollContent.offsetWidth
 
                 isOverflowing =
-                    tabBarWidth > scrollAreaWidth
+                    tabBarWidth > scrollContentWidth
 
                 translateOffset =
                     if not isOverflowing then
@@ -107,22 +110,59 @@ update lift msg model =
                     if tab_index == 0 then
                         -- Always scroll to 0 if scrolling to the 0th index
                         0
-
                     else if tab_index == List.length geometry.tabs - 1 then
                         -- Always scroll to the max value if scrolling to the Nth index
-                        geometry.scrollArea.offsetWidth
-
+                        geometry.scrollContent.offsetWidth
                     else
                         scrollPosition + scrollIncrement
 
                 -- TODO: properly animate new scroll position using FLIP
             in
-            ( Just { model | activeTab = tab_index }
+            ( Just { model | activeTab = tab_index, focusedTab = Nothing }
             , Browser.Dom.setViewportOf (domId ++ "__scroll-area") newScrollPosition 0
                 |> Task.map (\_ -> NoOp)
                 |> Task.onError (\_ -> Task.succeed NoOp)
                 |> Task.perform lift
             )
+
+        FocusTab domId index ->
+            ( Just model, Task.attempt (\_ -> lift NoOp) (Browser.Dom.focus (tabId domId index)) )
+
+        ResetFocusedTab ->
+            ( Just { model | focusedTab = Nothing }, Cmd.none )
+
+        Left domId tab_index ->
+            let
+                focusedTab =
+                    case model.focusedTab of
+                        Just index -> index - 1
+                        Nothing -> tab_index - 1
+            in
+                if focusedTab >= 0 then
+                    update lift (FocusTab domId focusedTab) { model | focusedTab = Just focusedTab }
+                else
+                    ( Nothing, Cmd.none )
+
+        Right domId tab_index ->
+            let
+                geometry =
+                    Maybe.withDefault defaultGeometry model.geometry
+
+                max_tabs = List.length geometry.tabs
+
+                focusedTab =
+                    case model.focusedTab of
+                        Just index -> index + 1
+                        Nothing -> tab_index + 1
+
+            in
+                if focusedTab < max_tabs then
+                    update lift (FocusTab domId focusedTab) { model | focusedTab = Just focusedTab }
+                else
+                    ( Nothing, Cmd.none )
+
+        SelectTab m tab_index ->
+            ( Just { model | focusedTab = Nothing }, cmd (m tab_index) )
 
 
 {-| Determines the index of the adjacent tab closest to either edge of the Tab Bar
@@ -205,17 +245,18 @@ calculateScrollIncrement geometry index nextIndex scrollPosition barWidth =
 -- Note: tab bar and tab state use the same config.
 
 
-type alias Config =
+type alias Config m =
     { indicator : Bool
     , activeTab : Int
     , icon : Maybe String
     , smallIndicator : Bool
     , indicatorIcon : Maybe String
     , fadingIconIndicator : Bool
+    , onSelectTab : Maybe (Int -> m)
     }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
     { indicator = True
     , activeTab = 0
@@ -223,6 +264,7 @@ defaultConfig =
     , smallIndicator = False
     , indicatorIcon = Nothing
     , fadingIconIndicator = False
+    , onSelectTab = Nothing
     }
 
 
@@ -269,8 +311,13 @@ fadingIconIndicator =
     Options.option (\config -> { config | fadingIconIndicator = True })
 
 
+onSelectTab : (Int -> m) -> Property m
+onSelectTab handler =
+    Options.option (\config -> { config | onSelectTab = Just handler })
+
+
 type alias Property m =
-    Options.Property Config m
+    Options.Property (Config m) m
 
 
 tabbar :
@@ -307,14 +354,24 @@ tabbar domId lift model options nodes =
     Options.apply summary
         nav
         [ cs "mdc-tab-bar"
+        , Options.id domId
         , Options.role "tablist"
         , when stateChanged <|
             GlobalEvents.onTick <|
-                Json.map (lift << SetActiveTab domId config.activeTab) <|
+                Decode.map (lift << SetActiveTab domId config.activeTab) <|
                     decodeScrollLeft
 
         -- , when stateChanged <|
-        --     GlobalEvents.onTick (Json.succeed (lift (SetActiveTab domId config.activeTab)))
+        --     GlobalEvents.onTick (Decode.succeed (lift (SetActiveTab domId config.activeTab)))
+
+        , Options.onAKeyDown Keyboard.arrowRight (lift <| Right domId config.activeTab)
+        , Options.onAKeyDown Keyboard.arrowLeft (lift <| Left domId config.activeTab)
+
+        -- If user tabs out of list, we reset the focused item to the
+        -- selected one, so when the user tabs back in, that is the
+        -- selected index.
+        , Options.on "focusout" <|
+            Decode.map (always (lift ResetFocusedTab)) (succeedIfLeavingElement domId)
         ]
         []
         [ scroller domId lift model options tab_nodes
@@ -351,10 +408,10 @@ scroller domId lift model options nodes =
                 -- It's easiest to do geometry decoding on the immediate container of the tabs
                 , when (model.geometry == Nothing) <|
                     GlobalEvents.onTick <|
-                        Json.map (lift << Init) <|
+                        Decode.map (lift << Init) <|
                             decodeGeometryOnScrollContent
                 , GlobalEvents.onResize <|
-                    Json.map (lift << Init) <|
+                    Decode.map (lift << Init) <|
                         decodeGeometryOnScrollContent
                 ]
                 []
@@ -509,7 +566,11 @@ tabView domId lift model options index tab_ =
         button
         [ cs "mdc-tab"
         , cs "mdc-tab--active" |> when selected
+        , Options.id ( tabId domId index )
         , Options.role "tab"
+        , case config.onSelectTab of
+            Just handler -> Options.onClick (lift <| SelectTab handler index)
+            Nothing -> Options.nop
         , Options.aria "selected"
             (if selected then
                 "true"
@@ -552,6 +613,10 @@ tabView domId lift model options index tab_ =
         ]
 
 
+tabId domId index =
+    domId ++ "--button-" ++ (String.fromInt index)
+
+
 type alias Store s =
     { s | tabbar : Indexed Model }
 
@@ -592,7 +657,7 @@ view =
 
 decodeScrollLeft : Decoder Float
 decodeScrollLeft =
-    DOM.target <| DOM.childNode 0 <| DOM.childNode 0 <| Json.map (\scrollLeft -> scrollLeft) DOM.scrollLeft
+    DOM.target <| DOM.childNode 0 <| DOM.childNode 0 <| Decode.map (\scrollLeft -> scrollLeft) DOM.scrollLeft
 
 
 decodeGeometryOnScrollContent : Decoder Geometry
@@ -606,14 +671,13 @@ decodeGeometryOnScrollContent =
 -- Current element when we arrive here should be .mdc-tab-scroller__scroll-content
 -- i.e. the immediate container for the tabs.
 
-
 decodeGeometry : Decoder Geometry
 decodeGeometry =
-    Json.map3 Geometry
-        (Json.map (List.filterMap identity) <|
+    Decode.map3 Geometry
+        (Decode.map (List.filterMap identity) <|
             DOM.childNodes
-                (Json.at [ "tagName" ] Json.string
-                    |> Json.andThen
+                (Decode.at [ "tagName" ] Decode.string
+                    |> Decode.andThen
                         (\tagName ->
                             case String.toLower tagName of
                                 "button" ->
@@ -625,7 +689,7 @@ decodeGeometry =
                                         {-
                                         dimensions =
                                             content <|
-                                                Json.map2
+                                                Decode.map2
                                                     (\offsetLeft offsetWidth ->
                                                         { offsetLeft = offsetLeft
                                                         , offsetWidth = offsetWidth
@@ -635,8 +699,8 @@ decodeGeometry =
                                                     DOM.offsetWidth
                                         -}
                                     in
-                                    Json.map Just <|
-                                        Json.map2
+                                    Decode.map Just <|
+                                        Decode.map2
                                             (\offsetLeft offsetWidth ->
                                                 { offsetLeft = offsetLeft
                                                 , offsetWidth = offsetWidth
@@ -650,13 +714,12 @@ decodeGeometry =
                                             DOM.offsetWidth
 
                                 _ ->
-                                    Json.succeed Nothing
+                                    Decode.succeed Nothing
                         )
                 )
         )
-        (DOM.parentElement <|
-            -- .mdc-tab-scroller__scroll-area
-            Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
+        ( -- .mdc-tab-scroller__scroll-content
+          Decode.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )
         (DOM.parentElement <|
             -- .mdc-tab-scroller__scroll-area
@@ -666,5 +729,5 @@ decodeGeometry =
                 DOM.parentElement
                 <|
                     -- .mdc-tab-bar
-                    Json.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
+                    Decode.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )

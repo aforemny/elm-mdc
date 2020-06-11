@@ -6,6 +6,9 @@ module Internal.Keyboard exposing
     , decodeMeta
     , decodeKey
     , decodeKeyCode
+    , arrowLeft
+    , arrowRight
+    , enter
     )
 
 
@@ -66,3 +69,16 @@ decodeKey =
 decodeKeyCode : Decoder KeyCode
 decodeKeyCode =
     Html.keyCode
+
+
+{-| List of known keys.
+
+-}
+arrowRight =
+    ( 39, "ArrowRight" )
+
+arrowLeft =
+    ( 37, "ArrowLeft" )
+
+enter =
+    ( 13, "Enter" )

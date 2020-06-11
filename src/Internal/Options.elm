@@ -26,6 +26,7 @@ module Internal.Options exposing
     , onDoubleClick
     , onFocus
     , onInput
+    , onAKeyDown
     , onMouseDown
     , onMouseEnter
     , onMouseLeave
@@ -50,6 +51,7 @@ import Html.Attributes
 import Html.Events
 import Internal.Dispatch as Dispatch
 import Internal.Index exposing (Index)
+import Internal.Keyboard as Keyboard exposing (decodeMeta, decodeKey)
 import Internal.Msg exposing (Msg(..))
 import Json.Decode as Decode exposing (Decoder)
 import String
@@ -384,6 +386,56 @@ on event decodeMessage =
             )
             decodeMessage
         )
+
+
+{-| Map a single key to a message. Key is not propagated.
+-}
+onAKeyDown : ( Int, String ) -> m -> Property c m
+onAKeyDown ( keyCode, keyName ) m =
+    Listener "keydown" <|
+        ( Decode.map3
+              (\meta code key -> (meta, code, key))
+              decodeMeta ( decodeKeyCode keyCode) ( decodeKeyName keyName )
+          |> Decode.andThen
+              (\({ shiftKey, altKey, ctrlKey, metaKey }, code, key) ->
+                   let
+                       found =
+                           code == keyCode && key == keyName &&
+                           not (altKey || ctrlKey || metaKey)
+                   in
+                       if found then
+                           Decode.succeed
+                                { message = m
+                                , preventDefault = True
+                                , stopPropagation = False
+                                }
+                       else
+                           Decode.fail ""
+              )
+        )
+
+
+decodeKeyCode : Keyboard.KeyCode -> Decoder Keyboard.KeyCode
+decodeKeyCode accepted_code =
+    Html.Events.keyCode
+        |> Decode.andThen
+           (\code ->
+                if code == accepted_code then
+                    Html.Events.keyCode
+                else
+                    Decode.fail <| ""
+           )
+
+decodeKeyName : Keyboard.Key -> Decoder Keyboard.Key
+decodeKeyName accepted_name =
+    Decode.at [ "key" ] Decode.string
+        |> Decode.andThen
+           (\name ->
+                if name == accepted_name then
+                    Keyboard.decodeKey
+                else
+                    Decode.fail <| ""
+           )
 
 
 id : String -> Property c m
