@@ -5,7 +5,6 @@ module Internal.TabBar.Implementation exposing
     , fadingIconIndicator
     , icon
     , indicatorIcon
-    , onSelectTab
     , react
     , smallIndicator
     , stacked
@@ -245,18 +244,17 @@ calculateScrollIncrement geometry index nextIndex scrollPosition barWidth =
 -- Note: tab bar and tab state use the same config.
 
 
-type alias Config m =
+type alias Config =
     { indicator : Bool
     , activeTab : Int
     , icon : Maybe String
     , smallIndicator : Bool
     , indicatorIcon : Maybe String
     , fadingIconIndicator : Bool
-    , onSelectTab : Maybe (Int -> m)
     }
 
 
-defaultConfig : Config m
+defaultConfig : Config
 defaultConfig =
     { indicator = True
     , activeTab = 0
@@ -264,7 +262,6 @@ defaultConfig =
     , smallIndicator = False
     , indicatorIcon = Nothing
     , fadingIconIndicator = False
-    , onSelectTab = Nothing
     }
 
 
@@ -311,13 +308,8 @@ fadingIconIndicator =
     Options.option (\config -> { config | fadingIconIndicator = True })
 
 
-onSelectTab : (Int -> m) -> Property m
-onSelectTab handler =
-    Options.option (\config -> { config | onSelectTab = Just handler })
-
-
 type alias Property m =
-    Options.Property (Config m) m
+    Options.Property Config m
 
 
 tabbar :
@@ -568,9 +560,6 @@ tabView domId lift model options index tab_ =
         , cs "mdc-tab--active" |> when selected
         , Options.id ( tabId domId index )
         , Options.role "tab"
-        , case config.onSelectTab of
-            Just handler -> Options.onClick (lift <| SelectTab handler index)
-            Nothing -> Options.nop
         , Options.aria "selected"
             (if selected then
                 "true"
