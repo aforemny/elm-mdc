@@ -1,6 +1,7 @@
 ## Latest changes
 
 * TabBar: keyboard interaction now works.
+* TabBar: scrolling animation now works.
 
 Breaking changes:
 * Switched from ummaintained "debois/elm-dom" to "K-Adam/elm-dom"

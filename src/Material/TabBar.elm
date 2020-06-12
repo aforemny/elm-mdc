@@ -13,8 +13,10 @@ module Material.TabBar exposing
 
 {-| Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy.
 
-This component consists of a TabBar containing Tabs. Scrolling of Tabs
-is currently not supported.
+This component consists of a TabBar containing Tabs.
+
+Note that scrolling tabs will not work properly if a font change
+occurs. Make sure your font is fully loaded before rendering this component.
 
 
 # Resources

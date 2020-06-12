@@ -14,20 +14,24 @@ import Internal.Keyboard as Keyboard exposing (Meta, Key, KeyCode)
 
 type alias Model =
     { geometry : Maybe Geometry
-    , translateOffset : Float
+    , scrollDelta : Float
     , ripples : Dict Int Ripple.Model
     , activeTab : Int
     , focusedTab : Maybe Int
+    , startAnimating : Bool
+    , animating : Bool
     }
 
 
 defaultModel : Model
 defaultModel =
     { geometry = Nothing
-    , translateOffset = 0
+    , scrollDelta = 0
     , ripples = Dict.empty
     , activeTab = 0
     , focusedTab = Nothing
+    , startAnimating = False
+    , animating = False
     }
 
 
@@ -42,6 +46,7 @@ type Msg m
     | Left String Int
     | Right String Int
     | SelectTab (Int -> m) Int
+    | AnimationStart
 
 
 type alias Tab =

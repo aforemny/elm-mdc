@@ -52,7 +52,21 @@ update lift msg model =
             ( Nothing, Cmd.none )
 
         Init geometry ->
-            ( let
+            ( Just
+                { model
+                    | geometry = Just geometry
+                }
+            , Cmd.none
+            )
+
+        AnimationStart ->
+            ( Just { model | animating = True, startAnimating = False, scrollDelta = 0 }, Cmd.none )
+
+        SetActiveTab domId tab_index scrollPosition ->
+            let
+                geometry =
+                    Maybe.withDefault defaultGeometry model.geometry
+
                 tabBarWidth =
                     geometry.tabBar.offsetWidth
 
@@ -60,27 +74,7 @@ update lift msg model =
                     geometry.scrollContent.offsetWidth
 
                 isOverflowing =
-                    tabBarWidth > scrollContentWidth
-
-                translateOffset =
-                    if not isOverflowing then
-                        0
-
-                    else
-                        model.translateOffset
-              in
-              Just
-                { model
-                    | geometry = Just geometry
-                    , translateOffset = translateOffset
-                }
-            , Cmd.none
-            )
-
-        SetActiveTab domId tab_index scrollPosition ->
-            let
-                geometry =
-                    Maybe.withDefault defaultGeometry model.geometry
+                    scrollContentWidth > tabBarWidth
 
                 tabAtIndex i =
                     geometry.tabs
@@ -111,15 +105,22 @@ update lift msg model =
                         0
                     else if tab_index == List.length geometry.tabs - 1 then
                         -- Always scroll to the max value if scrolling to the Nth index
-                        geometry.scrollContent.offsetWidth
+                        scrollContentWidth - tabBarWidth
                     else
                         scrollPosition + scrollIncrement
 
-                -- TODO: properly animate new scroll position using FLIP
+                scrollDelta = scrollPosition - newScrollPosition
+
+                ( animate, m ) =
+                    if isOverflowing then
+                        ( True, AnimationStart )
+                    else
+                        ( False, NoOp )
+
             in
-            ( Just { model | activeTab = tab_index, focusedTab = Nothing }
+            ( Just { model | activeTab = tab_index, focusedTab = Nothing, scrollDelta = scrollDelta, startAnimating = animate, animating = False }
             , Browser.Dom.setViewportOf (domId ++ "__scroll-area") newScrollPosition 0
-                |> Task.map (\_ -> NoOp)
+                |> Task.map (\_ -> m)
                 |> Task.onError (\_ -> Task.succeed NoOp)
                 |> Task.perform lift
             )
@@ -162,6 +163,7 @@ update lift msg model =
 
         SelectTab m tab_index ->
             ( Just { model | focusedTab = Nothing }, cmd (m tab_index) )
+
 
 
 {-| Determines the index of the adjacent tab closest to either edge of the Tab Bar
@@ -327,19 +329,6 @@ tabbar domId lift model options nodes =
         stateChanged =
             config.activeTab /= model.activeTab
 
-        -- TODO
-        {-
-           tabBarTransform =
-               let
-                   shiftAmount =
-                       if isRtl then
-                           model.translateOffset
-
-                       else
-                           -model.translateOffset
-               in
-               "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
-        -}
         tab_nodes =
             List.indexedMap (tabView domId lift model options) nodes
     in
@@ -383,9 +372,24 @@ scroller domId lift model options nodes =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
+
+        isRtl = False
+
+        tabBarTransform =
+            let
+                shiftAmount =
+                    if isRtl then
+                        model.scrollDelta
+                    else
+                        -model.scrollDelta
+            in
+                "translateX(" ++ String.fromFloat shiftAmount ++ "px)"
+
     in
     styled div
         [ cs "mdc-tab-scroller"
+        , when model.animating <|
+            cs "mdc-tab-scroller--animating"
         ]
         [ styled div
             [ Options.id (domId ++ "__scroll-area")
@@ -396,8 +400,23 @@ scroller domId lift model options nodes =
             [ Options.apply summary
                 div
                 [ cs "mdc-tab-scroller__scroll-content"
+                , when model.startAnimating <|
+                    css "transform" tabBarTransform
+                --, when model.startAnimating <|
+                --    GlobalEvents.onTick (Decode.succeed (lift AnimationStart))
+                , when model.animating <|
+                    css "transform" "none"
 
-                -- It's easiest to do geometry decoding on the immediate container of the tabs
+                -- It's easiest to do geometry decoding on the immediate container of the tabs.
+                -- Note that we do this as soon as the tab bar is created.
+                -- It will do this given the currently available font.
+
+                -- If the font changes, for example you load Roboto,
+                -- but don't wait for it to become available before
+                -- initialising Elm, the geometry will be wrong!
+                -- TODO: recalculate if the font changes.
+                -- Perhaps another solution might be to retrieve the
+                -- geometry just before when we need it.
                 , when (model.geometry == Nothing) <|
                     GlobalEvents.onTick <|
                         Decode.map (lift << Init) <|
@@ -689,7 +708,7 @@ decodeGeometry =
                     Decode.map (\offsetWidth -> { offsetWidth = offsetWidth }) DOM.offsetWidth
         )
 
-{-| Decode .mdc-tab
+{-| Decode .mdc-tab.
 -}
 tabDimensions : Decoder ( Maybe { offsetLeft : Float, offsetWidth : Float, contentLeft : Float, contentRight : Float } )
 tabDimensions =
