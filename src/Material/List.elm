@@ -459,7 +459,7 @@ Thed default node is a div, but you can emit an h3 with:
     import Html exposing (text)
     import Material.List as Lists
 
-    Lists.subHeader [ Lists.node Html.h3 ] [ text "List 1" ]
+    Lists.subheader [ Lists.node Html.h3 ] [ text "List 1" ]
 
 -}
 subheader : List (Property m) -> List (Html m) -> Html m
