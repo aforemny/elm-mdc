@@ -1,5 +1,12 @@
 ## Latest changes
 
+* TabBar: keyboard interaction now works.
+* TabBar: scrolling animation now works.
+
+Breaking changes:
+* Switched from ummaintained "debois/elm-dom" to "K-Adam/elm-dom"
+  In your elm.json replace "debois/elm-dom": "1.3.0" with "K-Adam/elm-dom": "1.0.0"
+
 
 ## Upgrade to 5.0.0
 

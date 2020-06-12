@@ -9,13 +9,14 @@ module Material.TabBar exposing
     , smallIndicator
     , indicatorIcon
     , fadingIconIndicator
-    , onSelectTab
     )
 
 {-| Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy.
 
-This component consists of a TabBar containing Tabs. Scrolling of Tabs
-is currently not supported.
+This component consists of a TabBar containing Tabs.
+
+Note that scrolling tabs will not work properly if a font change
+occurs. Make sure your font is fully loaded before rendering this component.
 
 
 # Resources
@@ -62,7 +63,6 @@ update the active tab in your model.
 @docs smallIndicator
 @docs indicatorIcon
 @docs fadingIconIndicator
-@docs onSelectTab
 
 -}
 
@@ -147,12 +147,3 @@ indicatorIcon =
 fadingIconIndicator : Property m
 fadingIconIndicator =
     TabBar.fadingIconIndicator
-
-
-{-| Msg to send when a tab bar has been selected.
-
-Do not assign onClick to an individual tab, that won't work for keyboard navigation.
--}
-onSelectTab : (Int -> m) -> Property m
-onSelectTab =
-    TabBar.onSelectTab
