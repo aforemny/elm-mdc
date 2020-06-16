@@ -106,6 +106,13 @@ selected =
     Chip.selected
 
 
+{-| Show a checkmark if the chip is selected. Required property for filter chips.
+-}
+checkmark : Property m
+checkmark =
+    Chip.checkmark
+
+
 {-| Click handler that respects the chip's ripple ink effect.
 
 The event will be raised only after the ripple animation finished playing.
@@ -116,36 +123,31 @@ onClick =
     Chip.onClick
 
 
-{-| Container of chips
+{-| Container of chips.
 -}
 chipset : List (Property m) -> List (Html m) -> Html m
 chipset =
     Chip.chipset
 
 
-{-| Use this property when you allow multiple selection from a collection.
+{-| Use this property when you allow multiple selection from a `chipset`.
 -}
 filter : Property m
 filter =
     Chip.filter
 
 
-{-| Use this property when you allow single selection from a collection.
+{-| Use this property when you allow single selection from a `chipset`.
 -}
 choice : Property m
 choice =
     Chip.choice
 
 
-{-| Use this property if you are conveing user input into a collection.
+{-| Input chips are a variant of chips which enable user input by
+converting text into chips. Use this property on a `chipset` to mark
+the chips as input chips.
 -}
 input : Property m
 input =
     Chip.input
-
-
-{-| Show a checkmark if the chip is selected. Required property for filter chips.
--}
-checkmark : Property m
-checkmark =
-    Chip.checkmark
