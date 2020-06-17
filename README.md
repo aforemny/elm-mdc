@@ -44,7 +44,7 @@ Create an `index.html` that looks like this:
 <body class="mdc-typography">
   <script src="elm-mdc/elm-mdc.js"></script>
   <script src="elm.js"></script>
-  <div id="elm" />
+  <div id="elm">
     <script type="text/javascript">
       Elm.Main.init({ node: document.getElementById('elm') });
     </script>
