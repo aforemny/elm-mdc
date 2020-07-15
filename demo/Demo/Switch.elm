@@ -4,10 +4,9 @@ import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Dict exposing (Dict)
-import Html exposing (Html, text)
+import Html exposing (Html, text, div)
 import Material
-import Material.FormField as FormField
-import Material.Options as Options exposing (for, styled, when)
+import Material.Options as Options exposing (css, for, styled, when)
 import Material.Switch as Switch
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
@@ -67,7 +66,7 @@ heroSwitch lift model =
         index =
             "switch-hero-switch"
     in
-    FormField.view []
+    div []
         [ Switch.view (lift << Mdc)
             index
             model.mdc
@@ -75,7 +74,11 @@ heroSwitch lift model =
             , Switch.on |> when (isOn index model)
             ]
             []
-        , styled Html.label [ Options.for index ] [ text "off/on" ]
+        , styled Html.label
+            [ Options.for index
+            , css "margin-left" "10px"
+            ]
+            [ text "off/on" ]
         ]
 
 
@@ -85,7 +88,7 @@ exampleSwitch lift model =
         index =
             "switch-example-switch"
     in
-    FormField.view []
+    div []
         [ Switch.view (lift << Mdc)
             index
             model.mdc
@@ -93,7 +96,11 @@ exampleSwitch lift model =
             , Switch.on |> when (isOn index model)
             ]
             []
-        , styled Html.label [ Options.for index ] [ text "off/on" ]
+        , styled Html.label
+            [ Options.for index
+            , css "margin-left" "10px"
+            ]
+            [ text "off/on" ]
         ]
 
 
