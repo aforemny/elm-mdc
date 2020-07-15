@@ -70,15 +70,19 @@ view options _ =
         ]
         []
         [ styled Html.div
-            [ cs "mdc-linear-progress__buffering-dots"
-            ]
-            []
-        , styled Html.div
             [ cs "mdc-linear-progress__buffer"
-            , when config.buffered <|
-                css "transform" ("scaleX(" ++ String.fromFloat config.buffer ++ ")")
             ]
-            []
+            [ styled Html.div
+                  [ cs "mdc-linear-progress__buffer-bar"
+                  , when config.buffered <|
+                      css "flex-basis" <| String.fromFloat (config.buffer * 100)  ++ "%"
+                  ]
+                  []
+            , styled Html.div
+                  [ cs "mdc-linear-progress__buffer-dots"
+                  ]
+                  []
+            ]
         , styled Html.div
             [ cs "mdc-linear-progress__bar mdc-linear-progress__primary-bar"
             , when (not config.indeterminate) <|
