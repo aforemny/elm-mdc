@@ -3,12 +3,16 @@
 * TabBar: keyboard interaction now works.
 * TabBar: scrolling animation now works.
 
+Fixes:
+* Slider mouse position could be incorrect (this fix was not mentioned
+  in any of the docs, so not picked up in the 5.0.0 release).
+
 Breaking changes:
 * Switched from ummaintained "debois/elm-dom" to "K-Adam/elm-dom"
   In your elm.json replace "debois/elm-dom": "1.3.0" with "K-Adam/elm-dom": "1.0.0"
 
 
-## Upgrade to 5.0.0
+## Upgrade to 5.1.0
 
 * Upgrade to MDC 5.1.0. DOM changes, but all internal. No user visible changes.
 
