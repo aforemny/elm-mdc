@@ -32,13 +32,13 @@ type Msg m
     = NoOp
     | Init Geometry
     | Resize Geometry
-    | InteractionStart String { pageX : Float }
+    | InteractionStart String { clientX : Float }
     | KeyDown
     | Focus
     | Blur
-    | ThumbContainerPointer String { pageX : Float }
+    | ThumbContainerPointer String { clientX : Float }
     | TransitionEnd
-    | Drag { pageX : Float }
+    | Drag { clientX : Float }
     | Up
     | ActualUp
 

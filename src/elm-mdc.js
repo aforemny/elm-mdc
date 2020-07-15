@@ -188,6 +188,8 @@ import CustomEvent from 'custom-event';
       dispatch(document, "globalmouseup", (target, event) => {
           event.pageX = originalEvent.pageX
           event.pageY = originalEvent.pageY
+          event.clientX = originalEvent.clientX
+          event.clientY = originalEvent.clientY
           return event
       })
   })
@@ -198,6 +200,8 @@ import CustomEvent from 'custom-event';
       dispatch(document, "globalpointerup", (target, event) => {
           event.pageX = originalEvent.pageX
           event.pageY = originalEvent.pageY
+          event.clientX = originalEvent.clientX
+          event.clientY = originalEvent.clientY
           return event
       })
   })
@@ -217,6 +221,8 @@ import CustomEvent from 'custom-event';
       dispatch(document, "globalmousemove", (target, event) => {
           event.pageX = originalEvent.pageX
           event.pageY = originalEvent.pageY
+          event.clientX = originalEvent.clientX
+          event.clientY = originalEvent.clientY
           return event
       })
   })
@@ -227,6 +233,8 @@ import CustomEvent from 'custom-event';
       dispatch(document, "globalpointermove", (target, event) => {
           event.pageX = originalEvent.pageX
           event.pageY = originalEvent.pageY
+          event.clientX = originalEvent.clientX
+          event.clientY = originalEvent.clientY
           return event
       })
   })
