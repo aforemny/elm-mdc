@@ -25,7 +25,7 @@ import Internal.List.Implementation as Lists
 import Internal.Menu.Implementation as Menu
 import Internal.Menu.Model as Menu
 import Internal.Msg
-import Internal.Options as Options exposing (cs, role, styled, when)
+import Internal.Options as Options exposing (aria, cs, role, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Select.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode
@@ -249,6 +249,8 @@ select domId lift model options items_ =
     Options.apply summary
         Html.div
         [ cs "mdc-select"
+        , role "button"
+        , aria "haspopup" "listbox"
         , cs "mdc-select--focused" |> when focused
         , cs "mdc-select--activated" |> when model.menu.open
         , cs "mdc-select--disabled" |> when config.disabled
@@ -260,11 +262,7 @@ select domId lift model options items_ =
               [ cs "mdc-select__anchor"
               , Options.onClick (lift ToggleMenu)
               ]
-              [ styled Html.i
-                    [ cs "mdc-select__dropdown-icon"
-                    , Options.onClick (lift ToggleMenu)
-                    ]
-                    []
+              [ styled Html.span [ cs "mdc-select__ripple" ] []
               , styled Html.div
                   [ cs "mdc-select__selected-text"
                   , Options.id selectedTextDomId
@@ -278,6 +276,11 @@ select domId lift model options items_ =
                           Decode.map2 (KeyDown menuIndex) decodeKey decodeKeyCode
                   ]
                   [ text config.selectedText ]
+              , styled Html.i
+                    [ cs "mdc-select__dropdown-icon"
+                    , Options.onClick (lift ToggleMenu)
+                    ]
+                    []
               , if not config.outlined then
                     htmlLabel
                 else
