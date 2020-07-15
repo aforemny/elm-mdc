@@ -12,6 +12,17 @@ module Internal.GlobalEvents exposing
     , onTouchMove
     )
 
+
+{-| This module allows you to listen to events bound to the document
+node. It has a complex interaction with elm-mdc.js.
+
+In particular if certain event fields do not show up in your Elm code,
+look in elm-mdc.js, and add them there. Basically you receive a "new"
+event, not the originally fired event. Only fields explicitly passes
+by elm-mdc.js will be seen in the Elm code.
+-}
+
+
 import Json.Decode exposing (Decoder, Value)
 import Json.Encode as Encode
 import Material.Options as Options exposing (Property)

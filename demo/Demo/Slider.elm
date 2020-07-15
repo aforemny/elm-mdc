@@ -8,7 +8,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Material
-import Material.Options exposing (styled)
+import Material.Options exposing (css, styled)
 import Material.Slider as Slider
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
@@ -149,7 +149,7 @@ view lift page model =
         [ Hero.view
               [ Hero.header "Slider"
               , Hero.intro "Sliders let users select from a range of values by moving the slider thumb."
-              , Hero.component [] [ heroSlider lift model ]
+              , Hero.component [ css "width" "100%" ] [ heroSlider lift model ]
               ]
         , ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
         , Page.demos

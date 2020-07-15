@@ -52,13 +52,13 @@ update lift msg model =
         TransitionEnd ->
             ( Just { model | inTransit = False }, Cmd.none )
 
-        InteractionStart _ { pageX } ->
+        InteractionStart _ { clientX } ->
             let
                 geometry =
                     Maybe.withDefault defaultGeometry model.geometry
 
                 activeValue =
-                    valueFromPageX geometry pageX
+                    valueFromClientX geometry clientX
             in
             ( Just
                 { model
@@ -70,13 +70,13 @@ update lift msg model =
             , Cmd.none
             )
 
-        ThumbContainerPointer _ { pageX } ->
+        ThumbContainerPointer _ { clientX } ->
             let
                 geometry =
                     Maybe.withDefault defaultGeometry model.geometry
 
                 activeValue =
-                    valueFromPageX geometry pageX
+                    valueFromClientX geometry clientX
             in
             ( Just
                 { model
@@ -88,14 +88,14 @@ update lift msg model =
             , Cmd.none
             )
 
-        Drag { pageX } ->
+        Drag { clientX } ->
             if model.active then
                 let
                     geometry =
                         Maybe.withDefault defaultGeometry model.geometry
 
                     activeValue =
-                        valueFromPageX geometry pageX
+                        valueFromClientX geometry clientX
                 in
                 ( Just
                     { model
@@ -131,14 +131,16 @@ update lift msg model =
             ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
 
 
-valueFromPageX : Geometry -> Float -> Float
-valueFromPageX geometry pageX =
+{- Computes the new value from the clientX position -}
+
+valueFromClientX : Geometry -> Float -> Float
+valueFromClientX geometry clientX =
     let
         isRtl =
             False
 
         xPos =
-            pageX - geometry.rect.left
+            clientX - geometry.rect.left
 
         pctComplete =
             if isRtl then
@@ -456,7 +458,7 @@ slider lift model options _ =
             Options.many <|
                 List.map
                     (\event ->
-                        Options.on event (Decode.map (lift << InteractionStart event) decodePageX)
+                        Options.on event (Decode.map (lift << InteractionStart event) decodeClientX)
                     )
                     downs
         , when (config.onChange /= Nothing) <|
@@ -465,10 +467,10 @@ slider lift model options _ =
                     (\event ->
                         Options.on event <|
                             Decode.map
-                                (\{ pageX } ->
+                                (\{ clientX } ->
                                     let
                                         activeValue =
-                                            valueFromPageX geometry pageX
+                                            valueFromClientX geometry clientX
                                                 |> discretize geometry
                                     in
                                     Maybe.map
@@ -476,7 +478,7 @@ slider lift model options _ =
                                         config.onChange
                                         |> Maybe.withDefault (lift NoOp)
                                 )
-                                decodePageX
+                                decodeClientX
                     )
                     downs
         , when (config.onInput /= Nothing) <|
@@ -485,10 +487,10 @@ slider lift model options _ =
                     (\event ->
                         Options.on event <|
                             Decode.map
-                                (\{ pageX } ->
+                                (\{ clientX } ->
                                     let
                                         activeValue =
-                                            valueFromPageX geometry pageX
+                                            valueFromClientX geometry clientX
                                                 |> discretize geometry
                                     in
                                     Maybe.map
@@ -496,7 +498,7 @@ slider lift model options _ =
                                         config.onInput
                                         |> Maybe.withDefault (lift NoOp)
                                 )
-                                decodePageX
+                                decodeClientX
                     )
                     downs
         , -- Note: In some instances `Up` fires before `InteractionStart`.
@@ -513,16 +515,16 @@ slider lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ pageX } ->
+                                (\{ clientX } ->
                                     let
                                         activeValue =
-                                            valueFromPageX geometry pageX
+                                            valueFromClientX geometry clientX
                                                 |> discretize geometry
                                     in
                                     Maybe.map (\changeHandler -> changeHandler activeValue) config.onChange
                                         |> Maybe.withDefault (lift NoOp)
                                 )
-                                decodePageX
+                                decodeClientX
                     )
                     ups
         , when ((config.onInput /= Nothing) && model.active) <|
@@ -531,10 +533,10 @@ slider lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ pageX } ->
+                                (\{ clientX } ->
                                     let
                                         activeValue =
-                                            valueFromPageX geometry pageX
+                                            valueFromClientX geometry clientX
                                                 |> discretize geometry
                                     in
                                     Maybe.map
@@ -542,14 +544,14 @@ slider lift model options _ =
                                         config.onInput
                                         |> Maybe.withDefault (lift NoOp)
                                 )
-                                decodePageX
+                                decodeClientX
                     )
                     ups
         , when model.active <|
             Options.many <|
                 List.map
                     (\handler ->
-                        handler (Decode.map (lift << Drag) decodePageX)
+                        handler (Decode.map (lift << Drag) decodeClientX)
                     )
                     moves
         , when ((config.onInput /= Nothing) && model.active) <|
@@ -558,10 +560,10 @@ slider lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ pageX } ->
+                                (\{ clientX } ->
                                     let
                                         activeValue =
-                                            valueFromPageX geometry pageX
+                                            valueFromClientX geometry clientX
                                                 |> discretize geometry
                                     in
                                     Maybe.map
@@ -569,7 +571,7 @@ slider lift model options _ =
                                         config.onInput
                                         |> Maybe.withDefault (lift NoOp)
                                 )
-                                decodePageX
+                                decodeClientX
                     )
                     moves
         ]
@@ -615,7 +617,7 @@ slider lift model options _ =
                                             , preventDefault = False
                                             }
                                         )
-                                        (Decode.map (ThumbContainerPointer event) decodePageX)
+                                        (Decode.map (ThumbContainerPointer event) decodeClientX)
                                     )
                             )
                     )
@@ -731,13 +733,18 @@ discretize geometry continuousValue =
             quantizedVal
 
 
-decodePageX : Decoder { pageX : Float }
-decodePageX =
-    Decode.map (\pageX -> { pageX = pageX }) <|
+{- Get the appropriate clientX value.
+
+NOTE: changedTouches is a property introduced by elm-mdc.js and only
+valid for the globaltouchend event.
+-}
+decodeClientX : Decoder { clientX : Float }
+decodeClientX =
+    Decode.map (\clientX -> { clientX = clientX }) <|
         Decode.oneOf
-            [ Decode.at [ "targetTouches", "0", "pageX" ] Decode.float
+            [ Decode.at [ "targetTouches", "0", "clientX" ] Decode.float
             , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
-            , Decode.at [ "pageX" ] Decode.float
+            , Decode.at [ "clientX" ] Decode.float
             ]
 
 
