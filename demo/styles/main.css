@@ -277,6 +277,15 @@
   border-radius: 0 28px 28px 0;
 }
 
+.mdc-select.custom-enhanced-select-width .mdc-select__anchor {
+  width: 240px;
+}
+
+.mdc-select.custom-enhanced-select-width .mdc-select__menu {
+  width: 240px;
+}
+
+
 
 /**
  * Ripple demo.
