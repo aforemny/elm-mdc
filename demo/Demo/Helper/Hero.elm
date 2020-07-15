@@ -39,6 +39,7 @@ component options_ =
         :: css "max-width" "860px"
         :: css "background-color" "#f7f7f7"
         :: css "overflow" "auto"
+        :: css "width" "100%"
         :: options_
         )
 
