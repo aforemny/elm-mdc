@@ -262,7 +262,10 @@ select domId lift model options items_ =
               [ cs "mdc-select__anchor"
               , Options.onClick (lift ToggleMenu)
               ]
-              [ styled Html.span [ cs "mdc-select__ripple" ] []
+              [ if not config.outlined then
+                    styled Html.span [ cs "mdc-select__ripple" ] []
+                else
+                    text ""
               , styled Html.div
                   [ cs "mdc-select__selected-text"
                   , Options.id selectedTextDomId
