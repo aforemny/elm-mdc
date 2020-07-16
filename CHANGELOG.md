@@ -1,7 +1,15 @@
 ## Latest changes
 
+
+## Upgrade to 6.0.0
+
+New features:
 * TabBar: keyboard interaction now works.
 * TabBar: scrolling animation now works.
+* Material.CircularProgress: new component. Only the determine version
+  display is correct. The indeterminate version should animate, but
+  this does not happen at the moment. We'll have another look at
+  this with version 7.
 
 Fixes:
 * Slider mouse position could be incorrect (this fix was not mentioned
