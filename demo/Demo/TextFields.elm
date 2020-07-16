@@ -315,6 +315,7 @@ textareaTextField lift model =
             model.mdc
             [ TextField.label "Standard"
             , TextField.textarea
+            , TextField.outlined
             ]
             []
         , helperText
@@ -329,6 +330,7 @@ textareaTextFieldWithCharacterCounter lift model =
             model.mdc
             [ TextField.label "Standard"
             , TextField.textarea
+            , TextField.outlined
             ]
             [ TextField.characterCounter [] [ text "0 / 18" ] ]
         , helperText

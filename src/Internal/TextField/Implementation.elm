@@ -232,10 +232,10 @@ textField domId lift model options list =
             model.isDirty || Maybe.withDefault False (Maybe.map ((/=) "") config.value)
 
         isFilled =
-            not config.outlined && not config.textarea
+            not config.outlined
 
         isOutlined =
-            config.outlined && not config.textarea
+            config.outlined
 
         focused =
             model.focused && not config.disabled
