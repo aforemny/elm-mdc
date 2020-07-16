@@ -39,7 +39,7 @@ view lift page model =
               [ Hero.header "Circular Progress Indicator"
               , Hero.intro "Progress indicators display the length of a process or express an unspecified wait time."
               , Hero.component []
-                  [ CircularProgress.view [ CircularProgress.progress 0.5 ] []
+                  [ CircularProgress.view [ CircularProgress.progress 0.75 ] []
                   ]
               ]
         , ResourceLink.links (lift << Mdc) model.mdc "progress-indicators" "linear-progress" "mdc-linear-progress"
