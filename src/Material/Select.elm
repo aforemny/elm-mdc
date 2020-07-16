@@ -10,6 +10,7 @@ module Material.Select exposing
     , value
     , selected
     , outlined
+    , fullWidth
     )
 
 {-| Select provides Material Design single-option select menus.
@@ -62,6 +63,7 @@ to match. This is best done through the use of another class.
 @docs label
 @docs required
 @docs disabled
+@docs fullWidth
 @docs outlined
 @docs selectedText
 @docs onSelect
@@ -113,6 +115,13 @@ label =
 disabled : Property m
 disabled =
     Select.disabled
+
+
+{-| Expand the width of the select to its container instead of its natural width.
+-}
+fullWidth : Property m
+fullWidth =
+    Select.fullWidth
 
 
 {-| Draw outlined version of select.

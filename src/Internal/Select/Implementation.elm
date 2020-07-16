@@ -1,6 +1,7 @@
 module Internal.Select.Implementation exposing
     ( Property
     , disabled
+    , fullWidth
     , label
     , onSelect
     , option
@@ -151,6 +152,11 @@ required =
 disabled : Property m
 disabled =
     Options.option (\config -> { config | disabled = True })
+
+
+fullWidth : Property m
+fullWidth =
+    modifier "fullwidth"
 
 
 outlined : Property m
