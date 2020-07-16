@@ -30,6 +30,8 @@ import Internal.Ripple.Implementation as Ripple
 import Internal.Select.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode
 import Task
+import Svg exposing (polygon)
+import Svg.Attributes as Svg exposing (stroke, fillRule, points, viewBox)
 
 
 subscriptions : Model -> Sub (Msg m)
@@ -248,7 +250,7 @@ select domId lift model options items_ =
     in
     Options.apply summary
         Html.div
-        [ cs "mdc-select"
+        [ block
         , role "button"
         , aria "haspopup" "listbox"
         , cs "mdc-select--focused" |> when focused
@@ -266,7 +268,11 @@ select domId lift model options items_ =
                     styled Html.span [ cs "mdc-select__ripple" ] []
                 else
                     text ""
-              , styled Html.div
+              , if not config.outlined then
+                    htmlLabel
+                else
+                    text ""
+              , styled Html.span
                   [ cs "mdc-select__selected-text"
                   , Options.id selectedTextDomId
                   , Options.tabindex 0
@@ -279,15 +285,30 @@ select domId lift model options items_ =
                           Decode.map2 (KeyDown menuIndex) decodeKey decodeKeyCode
                   ]
                   [ text config.selectedText ]
-              , styled Html.i
+              , styled Html.span
                     [ cs "mdc-select__dropdown-icon"
                     , Options.onClick (lift ToggleMenu)
                     ]
-                    []
-              , if not config.outlined then
-                    htmlLabel
-                else
-                    text ""
+                    [ Svg.svg
+                          [ Svg.class "mdc-select__dropdown-icon-graphic"
+                          , viewBox "7 10 10 5"
+                          ]
+                          [ polygon
+                                [ Svg.class "mdc-select__dropdown-icon-inactive"
+                                , stroke "none"
+                                , fillRule "evenodd"
+                                , points "7 10 12 15 17 10"
+                                ]
+                                []
+                          , polygon
+                                [ Svg.class "mdc-select__dropdown-icon-active"
+                                , stroke "none"
+                                , fillRule "evenodd"
+                                , points "7 15 12 10 17 15"
+                                ]
+                                []
+                          ]
+                    ]
               , ripple_or_outline
               ]
         , Menu.menu
@@ -381,3 +402,22 @@ view =
             index
             store
             (Options.internalId index :: options)
+
+
+{- Make it easier to work with BEM conventions
+-}
+block : Property m
+block =
+    cs blockName
+
+element : String -> Property m
+element module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+modifier : String -> Property m
+modifier modifier_ =
+    cs ( blockName ++ "--" ++ modifier_ )
+
+blockName : String
+blockName =
+    "mdc-select"
