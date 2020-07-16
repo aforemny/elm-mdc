@@ -2,6 +2,7 @@ module Material.CircularProgress exposing
   (Property
   , view
   , progress
+  , size
   )
 
 {-| The MDC Circular Progress component is a spec-aligned circular
@@ -42,6 +43,7 @@ progress indicator component adhering to the [Material Design progress
 @docs Property
 @docs view
 @docs progress
+@docs size
 
 -}
 
@@ -70,3 +72,10 @@ The argument is a floating point value between 0 and 1.
 progress : Float -> Property m
 progress =
     CircularProgress.progress
+
+
+{-| Set the size of the circle. The default is 48. Common sizes are 36 and 24.
+-}
+size : Int -> Property m
+size =
+    CircularProgress.size

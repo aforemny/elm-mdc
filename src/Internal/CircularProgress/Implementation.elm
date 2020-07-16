@@ -1,6 +1,7 @@
 module Internal.CircularProgress.Implementation exposing
     ( Property
     , progress
+    , size
     , view
     )
 
@@ -13,6 +14,7 @@ import Svg.Attributes as Svg exposing (cx, cy, r, strokeDasharray, strokeDashoff
 type alias Config =
     { progress : Maybe Float
     , radius : Float
+    , size : Int
     }
 
 
@@ -20,6 +22,7 @@ defaultConfig : Config
 defaultConfig =
     { progress = Nothing
     , radius = 18
+    , size = 48
     }
 
 
@@ -30,6 +33,11 @@ type alias Property m =
 progress : Float -> Property m
 progress value =
     Options.option (\config -> { config | progress = Just value })
+
+
+size : Int -> Property m
+size value =
+    Options.option (\config -> { config | size = value })
 
 
 view : List (Property m) -> List (Html m) -> Html m
@@ -47,7 +55,9 @@ view options _ =
     Options.apply summary
         Html.div
         [ block
-        , modifier "large"
+        , modifier "indeterminate" |> when isIndeterminate
+        , css "width" (String.fromInt config.size ++ "px" )
+        , css "height" (String.fromInt config.size ++ "px" )
         , aria "valuemin" "0"
         , aria "valuemax" "1"
         , aria "valuenow" (String.fromFloat valuenow) |> when (not isIndeterminate)
@@ -55,39 +65,100 @@ view options _ =
         ]
         []
         [ if isIndeterminate then
-              viewIndeterminateContainer
+              viewIndeterminateContainer config.size
           else
-              viewDeterminateContainer valuenow config.radius
+              viewDeterminateContainer config.size valuenow
         ]
 
 
-viewDeterminateContainer : Float -> Float -> Html msg
-viewDeterminateContainer progress_ radius =
+viewDeterminateContainer : Int -> Float -> Html msg
+viewDeterminateContainer size_ progress_ =
     let
-        unfilledArcLength =
-          (1 - progress_) * (2 * pi * radius)
+        sizeStr = String.fromInt size_
     in
     styled div
         [ element "determinate-container" ]
         [ Svg.svg
               [ Svg.class "mdc-circular-progress__determinate-circle-graphic"
-              , viewBox "0 0 48 48" ]
-              [ Svg.circle
-                    [ Svg.class "mdc-circular-progress__determinate-circle"
-                    , cx "24"
-                    , cy "24"
-                    , r "18"
-                    , strokeDasharray "113.097"
-                    , strokeDashoffset (String.fromFloat unfilledArcLength)
-                    , strokeWidth "4"
-                    ]
-                    []
+              , viewBox ( "0 0 " ++ sizeStr ++ " " ++ sizeStr ) ]
+              [ viewDeterminateCircle size_ progress_
               ]
         ]
 
 
-viewIndeterminateContainer : Html msg
-viewIndeterminateContainer =
+viewDeterminateCircle : Int -> Float -> Html msg
+viewDeterminateCircle size_ progress_ =
+    let
+        centre = size_ // 2
+
+        stroke_width =
+            round <| toFloat size_ / 12
+
+        radius =
+            case size_ of
+                48 -> 18
+                36 -> 12.5
+                24 -> 8.75
+                _ ->
+                    -- TODO: I'm not sure I captured the right calculation here
+                    toFloat ( centre - stroke_width - 2 )
+
+        stroke_dash_array =
+            2 * pi * radius
+
+        unfilledArcLength =
+          (1 - progress_) * (2 * pi * radius)
+    in
+    Svg.circle
+        [ Svg.class "mdc-circular-progress__determinate-circle"
+        , cx (String.fromInt centre)
+        , cy (String.fromInt centre)
+        , r (String.fromFloat radius)
+        , strokeDasharray (String.fromFloat stroke_dash_array)
+        , strokeDashoffset (String.fromFloat unfilledArcLength)
+        , strokeWidth (String.fromInt stroke_width)
+        ]
+        []
+
+
+
+viewIndeterminateContainer : Int -> Html msg
+viewIndeterminateContainer size_ =
+    let
+        centre = size_ // 2
+
+        stroke_width =
+            toFloat size_ / 12
+
+        stroke_adjustment =
+            stroke_width * 0.20
+
+        radius =
+            case size_ of
+                48 -> 18
+                36 -> 12.5
+                24 -> 8.75
+                _ ->
+                    -- TODO: I'm not sure I captured the right calculation here
+                    toFloat centre - stroke_width - 2
+
+        stroke_dash_array =
+            strokeDasharray <| String.fromFloat <| 2 * pi * radius
+
+        progress_ = 0.50
+
+        unfilledArcLength =
+          (1 - progress_) * (2 * pi * radius)
+
+        view_box = viewBox ( "0 0 " ++ String.fromInt size_ ++ " " ++ String.fromInt size_ )
+
+        c = String.fromInt centre
+
+        r = String.fromFloat radius
+
+        stroke_dash_offset =
+            strokeDashoffset (String.fromFloat unfilledArcLength)
+    in
     styled div
         [ element "indeterminate-container" ]
         [ styled div
@@ -96,30 +167,30 @@ viewIndeterminateContainer =
                     [ element "circle-clipper"
                     , element "circle-left"
                     ]
-                    [ viewCircle 4 ]
+                    [ viewCircle view_box c r stroke_width stroke_dash_array stroke_dash_offset ]
               , styled div
                   [ element "gap-patch" ]
-                  [ viewCircle 3.2 ]
+                  [ viewCircle view_box c r ( stroke_width - stroke_adjustment )  stroke_dash_array stroke_dash_offset ]
               , styled div
                   [ element "circle-clipper"
                   , element "circle-right"
                   ]
-                  [ viewCircle 4 ]
+                  [ viewCircle view_box c r stroke_width  stroke_dash_array stroke_dash_offset ]
               ]
         ]
 
 
-viewCircle : Float -> Html msg
-viewCircle stroke_width =
+viewCircle : Svg.Attribute msg -> String -> String -> Float -> Svg.Attribute msg -> Svg.Attribute msg -> Html msg
+viewCircle view_box c r_ stroke_width  stroke_dash_array stroke_dash_offset =
     Svg.svg
         [ Svg.class "mdc-circular-progress__indeterminate-circle-graphic"
-        , viewBox "0 0 48 48" ]
+        , view_box ]
         [ Svg.circle
-              [ cx "24"
-              , cy "24"
-              , r "18"
-              , strokeDasharray "113.097"
-              , strokeDashoffset "56.549"
+              [ cx c
+              , cy c
+              , r r_
+              , stroke_dash_array
+              , stroke_dash_offset
               , strokeWidth (String.fromFloat stroke_width)
               ]
               []
@@ -134,11 +205,11 @@ block =
 
 element : String -> Property m
 element module_ =
-    cs ( blockName ++ "__ " ++ module_ )
+    cs ( blockName ++ "__" ++ module_ )
 
 modifier : String -> Property m
 modifier modifier_ =
-    cs ( blockName ++ "__ " ++ modifier_ )
+    cs ( blockName ++ "--" ++ modifier_ )
 
 blockName : String
 blockName =
