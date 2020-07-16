@@ -16,22 +16,32 @@ progress indicator component adhering to the [Material Design progress
   - [Demo](https://aforemny.github.io/elm-mdc/#circular-progress)
 
 
-# Example
+# Determinate example
 
     import Html exposing (text)
     import Material.CircularProgress as CircularProgress
-    import Material.Options as Options
 
-    CircularProgress.view Mdc "my-progress" model.mdc
+    CircularProgress.view
+        [ CircularProgress.progress 0.75 ]
+        [ ]
+
+
+
+# Indeterminate example
+
+    import Html exposing (text)
+    import Material.CircularProgress as CircularProgress
+
+    CircularProgress.view
         []
-        [ text "Chip"
-        ]
+        []
 
 
 # Usage
 
 @docs Property
 @docs view
+@docs progress
 
 -}
 
@@ -60,4 +70,3 @@ The argument is a floating point value between 0 and 1.
 progress : Float -> Property m
 progress =
     CircularProgress.progress
-
