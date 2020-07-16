@@ -262,6 +262,8 @@ select domId lift model options items_ =
         [ ]
         [ styled Html.div
               [ cs "mdc-select__anchor"
+              , role "button"
+              , aria "haspopup" "listbox"
               , Options.onClick (lift ToggleMenu)
               ]
               [ if not config.outlined then
@@ -316,6 +318,7 @@ select domId lift model options items_ =
             ( lift << MenuMsg )
             model.menu
             [ cs "mdc-select__menu"
+            , role "listbox"
             , Menu.anchorCorner Menu.bottomLeftCorner
             ]
             (Menu.ul [ Lists.singleSelection ]
