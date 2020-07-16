@@ -75,8 +75,11 @@ update lift msg model =
 
                 isEnter =
                     key == "Enter" || keyCode == 13
+
+                isArrowDown =
+                    key == "ArrowDown" || keyCode == 40
             in
-            if isEscape || isSpace || isEnter then
+            if isEscape || isSpace || isEnter || isArrowDown then
                 ( Nothing, Helpers.delayedCmd 16 (lift (OpenMenu menuIndex)) )
             else
                 ( Nothing, Cmd.none )
@@ -251,23 +254,21 @@ select domId lift model options items_ =
     Options.apply summary
         Html.div
         [ block
-        , role "button"
-        , aria "haspopup" "listbox"
-        , cs "mdc-select--focused" |> when focused
-        , cs "mdc-select--activated" |> when model.menu.open
-        , cs "mdc-select--disabled" |> when config.disabled
-        , cs "mdc-select--outlined" |> when config.outlined
+        , modifier "focused" |> when focused
+        , modifier "activated" |> when model.menu.open
+        , modifier "disabled" |> when config.disabled
+        , modifier "outlined" |> when config.outlined
         , Options.id domId
         ]
         [ ]
         [ styled Html.div
-              [ cs "mdc-select__anchor"
+              [ element "anchor"
               , role "button"
               , aria "haspopup" "listbox"
               , Options.onClick (lift ToggleMenu)
               ]
               [ if not config.outlined then
-                    styled Html.span [ cs "mdc-select__ripple" ] []
+                    styled Html.span [ element "ripple" ] []
                 else
                     text ""
               , if not config.outlined then
@@ -275,7 +276,7 @@ select domId lift model options items_ =
                 else
                     text ""
               , styled Html.span
-                  [ cs "mdc-select__selected-text"
+                  [ element "selected-text"
                   , Options.id selectedTextDomId
                   , Options.tabindex 0
                   , Options.aria "disabled" (if config.disabled then "true" else "false")
@@ -288,7 +289,7 @@ select domId lift model options items_ =
                   ]
                   [ text config.selectedText ]
               , styled Html.span
-                    [ cs "mdc-select__dropdown-icon"
+                    [ element "dropdown-icon"
                     , Options.onClick (lift ToggleMenu)
                     ]
                     [ Svg.svg
