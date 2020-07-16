@@ -258,6 +258,7 @@ select domId lift model options items_ =
         , modifier "activated" |> when model.menu.open
         , modifier "disabled" |> when config.disabled
         , modifier "outlined" |> when config.outlined
+        , modifier "filled" |> when ( not config.outlined )
         , Options.id domId
         ]
         [ ]
