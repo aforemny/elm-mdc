@@ -149,7 +149,7 @@ view lift page model =
         [ Hero.view
               [ Hero.header "Slider"
               , Hero.intro "Sliders let users select from a range of values by moving the slider thumb."
-              , Hero.component [ css "width" "100%" ] [ heroSlider lift model ]
+              , Hero.component [] [ heroSlider lift model ]
               ]
         , ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
         , Page.demos

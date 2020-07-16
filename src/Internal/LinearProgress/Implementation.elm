@@ -8,7 +8,7 @@ module Internal.LinearProgress.Implementation exposing
     )
 
 import Html exposing (Html)
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
 
 
 type alias Config =
@@ -67,18 +67,24 @@ view options _ =
         [ cs "mdc-linear-progress"
         , cs "mdc-linear-progress--indeterminate" |> when config.indeterminate
         , cs "mdc-linear-progress--reversed" |> when config.reversed
+        , aria "valuenow" (String.fromFloat config.value) |> when (not config.indeterminate)
+        , role "progressbar"
         ]
         []
         [ styled Html.div
-            [ cs "mdc-linear-progress__buffering-dots"
-            ]
-            []
-        , styled Html.div
             [ cs "mdc-linear-progress__buffer"
-            , when config.buffered <|
-                css "transform" ("scaleX(" ++ String.fromFloat config.buffer ++ ")")
             ]
-            []
+            [ styled Html.div
+                  [ cs "mdc-linear-progress__buffer-bar"
+                  , when config.buffered <|
+                      css "flex-basis" <| String.fromFloat (config.buffer * 100)  ++ "%"
+                  ]
+                  []
+            , styled Html.div
+                  [ cs "mdc-linear-progress__buffer-dots"
+                  ]
+                  []
+            ]
         , styled Html.div
             [ cs "mdc-linear-progress__bar mdc-linear-progress__primary-bar"
             , when (not config.indeterminate) <|

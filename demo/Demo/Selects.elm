@@ -70,7 +70,9 @@ heroSelect lift model =
     Select.view (lift << Mdc)
         "selects-hero-select"
         model.mdc
-        [ Select.label "Fruit" ]
+        [ Select.label "Fruit"
+        , cs "custom-enhanced-select-width"
+        ]
         ( items "" )
 
 

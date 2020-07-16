@@ -97,10 +97,7 @@ switch domId lift model options _ =
             , ripple.interactionHandler
             , ripple.properties
             ]
-            [ styled Html.div
-                [ cs "mdc-switch__thumb" ]
-                []
-            , Options.applyNativeControl summary
+            [ Options.applyNativeControl summary
                 Html.input
                     [ cs "mdc-switch__native-control"
                     , Options.role "switch"
@@ -125,6 +122,9 @@ switch domId lift model options _ =
                         ]
                     ]
                     []
+            , styled Html.div
+                [ cs "mdc-switch__thumb" ]
+                []
             ]
         ]
 

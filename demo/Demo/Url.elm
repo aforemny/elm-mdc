@@ -15,6 +15,7 @@ type Url
     | Card
     | Checkbox
     | Chips
+    | CircularProgress
     | DataTable
     | Dialog
     | Drawer
@@ -93,6 +94,9 @@ toString url =
 
         Chips ->
             "#chips"
+
+        CircularProgress ->
+            "#circular-progress"
 
         DataTable ->
             "#data-table"
@@ -195,6 +199,9 @@ fromString url =
 
         "chips" ->
             Chips
+
+        "circular-progress" ->
+            CircularProgress
 
         "data-table" ->
             DataTable

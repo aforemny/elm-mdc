@@ -78,6 +78,7 @@ drawerItems =
         , ( "Card", Url.Card )
         , ( "Checkbox", Url.Checkbox )
         , ( "Chips", Url.Chips )
+        , ( "Circular Progress Indicator", Url.CircularProgress )
         , ( "Data Table", Url.DataTable )
         , ( "Dialog", Url.Dialog )
         , ( "Drawer", Url.Drawer )
