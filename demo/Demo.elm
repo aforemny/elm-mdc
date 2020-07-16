@@ -9,6 +9,7 @@ import Demo.Buttons
 import Demo.Cards
 import Demo.Checkbox
 import Demo.Chips
+import Demo.CircularProgress
 import Demo.DataTable
 import Demo.Dialog
 import Demo.DismissibleDrawer
@@ -60,6 +61,7 @@ type alias Model =
     , cards : Demo.Cards.Model Msg
     , checkbox : Demo.Checkbox.Model Msg
     , chips : Demo.Chips.Model Msg
+    , circularProgress : Demo.CircularProgress.Model Msg
     , dataTable : Demo.DataTable.Model Msg
     , dialog : Demo.Dialog.Model Msg
     , dismissibleDrawer : Demo.DismissibleDrawer.Model Msg
@@ -101,6 +103,7 @@ defaultModel key =
     , cards = Demo.Cards.defaultModel
     , checkbox = Demo.Checkbox.defaultModel
     , chips = Demo.Chips.defaultModel
+    , circularProgress = Demo.CircularProgress.defaultModel
     , dataTable = Demo.DataTable.defaultModel
     , dialog = Demo.Dialog.defaultModel
     , dismissibleDrawer = Demo.DismissibleDrawer.defaultModel
@@ -145,6 +148,7 @@ type Msg
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
     | ChipsMsg (Demo.Chips.Msg Msg)
+    | CircularProgressMsg (Demo.CircularProgress.Msg Msg)
     | DataTableMsg (Demo.DataTable.Msg Msg)
     | DialogMsg (Demo.Dialog.Msg Msg)
     | DismissibleDrawerMsg (Demo.DismissibleDrawer.Msg Msg)
@@ -258,6 +262,13 @@ update msg model =
                     Demo.Chips.update ChipsMsg msg_ model.chips
             in
             ( { model | chips = chips }, effects )
+
+        CircularProgressMsg msg_ ->
+            let
+                ( circularProgress, effects ) =
+                    Demo.CircularProgress.update CircularProgressMsg msg_ model.circularProgress
+            in
+            ( { model | circularProgress = circularProgress }, effects )
 
         DataTableMsg msg_ ->
             let
@@ -514,6 +525,9 @@ view_ model =
 
         Demo.Url.Chips ->
             Demo.Chips.view ChipsMsg page model.chips
+
+        Demo.Url.CircularProgress ->
+            Demo.CircularProgress.view CircularProgressMsg page model.circularProgress
 
         Demo.Url.DataTable ->
             Demo.DataTable.view DataTableMsg page model.dataTable

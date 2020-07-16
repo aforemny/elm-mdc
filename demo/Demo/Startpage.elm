@@ -5,6 +5,7 @@ import Demo.Startpage.Svg.Button as ButtonSvg
 import Demo.Startpage.Svg.Card as CardSvg
 import Demo.Startpage.Svg.Checkbox as CheckboxSvg
 import Demo.Startpage.Svg.Chips as ChipsSvg
+import Demo.Startpage.Svg.CircularProgress as CircularProgressSvg
 import Demo.Startpage.Svg.DataTable as DataTableSvg
 import Demo.Startpage.Svg.Dialog as DialogSvg
 import Demo.Startpage.Svg.Drawer as DrawerSvg
@@ -85,6 +86,11 @@ view page =
                       , icon = ChipsSvg.view
                       , title = "Chips"
                       , subtitle = "Chips"
+                      }
+                    , { url = CircularProgress
+                      , icon = CircularProgressSvg.view
+                      , title = "Circular Progress"
+                      , subtitle = "Fills from 0% to 100%, represented by a circle"
                       }
                     , { url = DataTable
                       , icon = DataTableSvg.view
