@@ -8,6 +8,8 @@ module Material.Chip exposing
     , trailingIcon
     , chipset
     , choice
+    , editable
+    , editing
     , filter
     , input
     )
@@ -43,6 +45,8 @@ Material Design chip requirements.
 @docs selected
 @docs onClick
 @docs checkmark
+@docs editable
+@docs editing
 
 
 ### Leading and trailing icon
@@ -149,3 +153,18 @@ input =
 checkmark : Property m
 checkmark =
     Chip.checkmark
+
+
+{-| Set state of chip to editable.
+-}
+editable : Property m
+editable =
+    Chip.editable
+
+
+{-| Set state of chip to editing. Now support for this is provided,
+this is up to the client to determine what this means.
+-}
+editing : Property m
+editing =
+    Chip.editing
