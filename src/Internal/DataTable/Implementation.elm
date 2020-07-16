@@ -182,10 +182,6 @@ element : String -> Property m
 element module_ =
     cs ( blockName ++ "__" ++ module_ )
 
-modifier : String -> Property m
-modifier modifier_ =
-    cs ( blockName ++ "__" ++ modifier_ )
-
 blockName : String
 blockName =
     "mdc-data-table"
