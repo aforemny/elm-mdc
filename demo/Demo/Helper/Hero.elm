@@ -33,12 +33,8 @@ component options_ =
         :: css "-webkit-box-pack" "center"
         :: css "-ms-flex-pack" "center"
         :: css "justify-content" "center"
-        :: css "order" "4"
-        :: css "flex" "1 1 100%"
-        :: css "min-height" "360px"
         :: css "max-width" "860px"
         :: css "background-color" "#f7f7f7"
-        :: css "overflow" "auto"
         :: css "width" "100%"
         :: options_
         )
@@ -82,7 +78,6 @@ view nodes =
               [ cs "component-catalog-panel__header"
               , css "display" "flex"
               , css "align-items" "flex-start"
-              , css "height" "550px"
               ]
               nodes
         ]
@@ -113,7 +108,7 @@ tabBar msg model demoMsg elmMsg =
 
 tabContainer options_ nodes =
     styled div
-        ( cs "tab-container" :: options_ )
+        ( cs "tab-container" :: css "min-height" "360px" :: options_ )
         nodes
 
 

@@ -102,12 +102,17 @@
 
 .component-catalog-panel__header {
   flex-flow: column wrap;
+  height: 550px;
 }
 
 .component-catalog-panel .hero,
 .component-catalog-panel .hero-component {
   width: calc(100% - 340px);
   height: 550px;
+  -ms-flex-order: 4;
+  order: 4;
+  -ms-flex: 1 1 100%;
+  flex: 1 1 100%;
 }
 
 .component-catalog-panel .hero {
