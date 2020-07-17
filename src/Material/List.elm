@@ -296,7 +296,7 @@ listItemClass =
     List.listItemClass
 
 
-{-| Primary text for the row.
+{-| Wrapper element for text in list item. Required when using `primaryText` and `secondaryText`.
 -}
 text : List (Property m) -> List (Html m) -> Html m
 text =
