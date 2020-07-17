@@ -208,6 +208,7 @@ select domId lift model options items_ =
             styled Html.span
                 [ cs "mdc-floating-label"
                 , cs "mdc-floating-label--float-above" |> when floatAbove
+                , cs "mdc-floating-label--required" |> when config.required
                 ]
                 [ text config.label
                 ]
