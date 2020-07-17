@@ -806,7 +806,7 @@ subheaderClass =
 
 padded : Property m
 padded =
-    cs "mdc-list-divier--padded"
+    cs "mdc-list-divider--padded"
 
 
 inset : Property m
