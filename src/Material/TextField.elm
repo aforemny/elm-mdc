@@ -14,6 +14,8 @@ module Material.TextField exposing
     , pattern
     , outlined
     , fullwidth
+    , prefix
+    , suffix
     , textarea
     , internalCounter
     , rows
@@ -61,6 +63,8 @@ module Material.TextField exposing
 @docs value
 @docs placeholder
 @docs disabled
+@docs affix
+@docs suffix
 
 
 ### Icon properties
@@ -193,6 +197,22 @@ value =
 disabled : Property m
 disabled =
     TextField.disabled
+
+
+{-| Prefix and suffix text can add context to a text field, such as a
+currency symbol prefix or a unit of mass suffix.
+-}
+prefix : String -> Property m
+prefix =
+    TextField.prefix
+
+
+{-| Prefix and suffix text can add context to a text field, such as a
+currency symbol prefix or a unit of mass suffix.
+-}
+suffix : String -> Property m
+suffix =
+    TextField.suffix
 
 
 {-| Set the textfield's `type` to `password`.

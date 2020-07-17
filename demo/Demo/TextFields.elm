@@ -271,6 +271,29 @@ unlabeledTextFields lift model =
         ]
 
 
+affixedTextFields : (Msg m -> m) -> Model m -> Html m
+affixedTextFields lift model =
+    let
+        textField index options =
+            [ TextField.view (lift << Mdc)
+                index
+                model.mdc
+                (TextField.label "Standard"
+                    :: options
+                )
+                []
+            ]
+    in
+    textFieldRow []
+        [ textFieldContainer []
+            (textField "text-fields-affixed-1" [ TextField.prefix "$" ] )
+        , textFieldContainer []
+            (textField "text-fields-affixed-2" [ TextField.suffix "NZD" ])
+        , textFieldContainer []
+            (textField "text-fields-affixed-3" [ TextField.prefix "$", TextField.suffix "NZD" ])
+        ]
+
+
 characterCounterTextFields : (Msg m -> m) -> Model m -> Html m
 characterCounterTextFields lift model =
     let
@@ -483,6 +506,8 @@ view lift page model =
             , shapedOutlinedTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field without label" ]
             , unlabeledTextFields lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field with affixes" ]
+            , affixedTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field with Character Counter" ]
             , characterCounterTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea" ]

@@ -40,6 +40,7 @@ module Internal.Options exposing
     , role
     , styled
     , tabindex
+    , viewJust
     , when
     )
 
@@ -518,3 +519,12 @@ dispatch lift =
                 }
             )
         )
+
+
+{- Call view function when variable is a Just a
+-}
+viewJust : Maybe a -> (a -> Html msg) -> Html msg
+viewJust value view =
+    case value of
+        Just a -> view a
+        Nothing -> Html.text ""
