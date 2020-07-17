@@ -290,6 +290,7 @@ textField domId lift model options list =
             styled Html.label
                 [ cs "mdc-floating-label"
                 , cs "mdc-floating-label--float-above" |> when shouldFloat
+                , cs "mdc-floating-label--required" |> when config.required
                 , Options.for config.id_
                 ]
                 (case config.labelText of
