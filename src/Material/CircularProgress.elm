@@ -2,6 +2,7 @@ module Material.CircularProgress exposing
   (Property
   , view
   , progress
+  , size
   )
 
 {-| The MDC Circular Progress component is a spec-aligned circular
@@ -16,22 +17,33 @@ progress indicator component adhering to the [Material Design progress
   - [Demo](https://aforemny.github.io/elm-mdc/#circular-progress)
 
 
-# Example
+# Determinate example
 
     import Html exposing (text)
     import Material.CircularProgress as CircularProgress
-    import Material.Options as Options
 
-    CircularProgress.view Mdc "my-progress" model.mdc
+    CircularProgress.view
+        [ CircularProgress.progress 0.75 ]
+        [ ]
+
+
+
+# Indeterminate example
+
+    import Html exposing (text)
+    import Material.CircularProgress as CircularProgress
+
+    CircularProgress.view
         []
-        [ text "Chip"
-        ]
+        []
 
 
 # Usage
 
 @docs Property
 @docs view
+@docs progress
+@docs size
 
 -}
 
@@ -61,3 +73,9 @@ progress : Float -> Property m
 progress =
     CircularProgress.progress
 
+
+{-| Set the size of the circle. The default is 48. Common sizes are 36 and 24.
+-}
+size : Int -> Property m
+size =
+    CircularProgress.size

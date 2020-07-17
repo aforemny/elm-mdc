@@ -4,6 +4,7 @@ module Internal.TextField.Implementation exposing
     , disabled
     , email
     , fullwidth
+    , internalCounter
     , invalid
     , label
     , leadingIcon
@@ -14,9 +15,11 @@ module Internal.TextField.Implementation exposing
     , password
     , pattern
     , placeholder
+    , prefix
     , react
     , required
     , rows
+    , suffix
     , textarea
     , trailingIcon
     , type_
@@ -29,7 +32,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Msg
-import Internal.Options as Options exposing (cs, styled, when)
+import Internal.Options as Options exposing (cs, styled, when, viewJust)
 import Internal.TextField.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
@@ -43,6 +46,8 @@ type alias Config m =
     , defaultValue : Maybe String
     , disabled : Bool
     , required : Bool
+    , prefix : Maybe String
+    , suffix : Maybe String
     , type_ : Maybe String
     , pattern : Maybe String
     , textarea : Bool
@@ -69,6 +74,8 @@ defaultConfig =
     , defaultValue = Nothing
     , disabled = False
     , required = False
+    , prefix = Nothing
+    , suffix = Nothing
     , type_ = Just "text"
     , pattern = Nothing
     , textarea = False
@@ -133,6 +140,18 @@ disabled =
         (\config -> { config | disabled = True })
 
 
+prefix : String -> Property m
+prefix text =
+    Options.option
+        (\config -> { config | prefix = Just text })
+
+
+suffix : String -> Property m
+suffix text =
+    Options.option
+        (\config -> { config | suffix = Just text })
+
+
 password : Property m
 password =
     Options.option (\config -> { config | type_ = Just "password" })
@@ -156,6 +175,11 @@ rows value_ =
 cols : Int -> Property m
 cols cols_ =
     Options.option (\config -> { config | cols = Just cols_ })
+
+
+internalCounter : Property m
+internalCounter =
+    modifier "with-internal-counter"
 
 
 required : Property m
@@ -232,10 +256,10 @@ textField domId lift model options list =
             model.isDirty || Maybe.withDefault False (Maybe.map ((/=) "") config.value)
 
         isFilled =
-            not config.outlined && not config.textarea
+            not config.outlined
 
         isOutlined =
-            config.outlined && not config.textarea
+            config.outlined
 
         focused =
             model.focused && not config.disabled
@@ -252,10 +276,21 @@ textField domId lift model options list =
                     Nothing ->
                         False
 
+        shouldAlwaysFloat =
+            case config.type_ of
+                Just t ->
+                    t == "color" || t == "date" || t == "datetime-local" || t == "month" || t == "range" || t == "time" || t == "week"
+                Nothing ->
+                    False
+
+        shouldFloat =
+            shouldAlwaysFloat || focused || isDirty
+
         htmlLabel =
             styled Html.label
                 [ cs "mdc-floating-label"
-                , cs "mdc-floating-label--float-above" |> when (focused || isDirty)
+                , cs "mdc-floating-label--float-above" |> when shouldFloat
+                , cs "mdc-floating-label--required" |> when config.required
                 , Options.for config.id_
                 ]
                 (case config.labelText of
@@ -271,97 +306,123 @@ textField domId lift model options list =
 
         trailingIcon_ =
             iconView lift config.trailingIcon "trailing" config.onTrailingIconClick
+
+        input =
+            Options.applyNativeControl summary
+                (if config.textarea then
+                    Html.textarea
+
+                 else
+                    Html.input
+                )
+                [ cs "mdc-text-field__input"
+                , Options.id config.id_
+                , if config.outlined && not config.textarea then
+                    Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
+
+                  else
+                    Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
+                , Options.onBlur (lift Blur)
+                , Options.onInput (lift << Input)
+                , Options.many
+                    << List.map Options.attribute
+                    << List.filterMap identity
+                  <|
+                    [ Html.type_ (Maybe.withDefault "text" config.type_)
+                        |> (if not config.textarea then
+                                Just
+
+                            else
+                                always Nothing
+                           )
+                    , Html.disabled True
+                        |> (if config.disabled then
+                                Just
+
+                            else
+                                always Nothing
+                           )
+                    , Html.property "required" (Encode.bool True)
+                        |> (if config.required then
+                                Just
+
+                            else
+                                always Nothing
+                           )
+                    , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
+                        |> (if config.pattern /= Nothing then
+                                Just
+
+                            else
+                                always Nothing
+                           )
+                    , Html.value (Maybe.withDefault "" config.value)
+                        |> (if config.value /= Nothing then
+                                Just
+
+                            else
+                                always Nothing
+                           )
+                    ]
+                , when (config.placeholder /= Nothing) <|
+                    Options.attribute <|
+                        Html.placeholder (Maybe.withDefault "" config.placeholder)
+                , when (config.textarea && (config.rows /= Nothing)) <|
+                    Options.attribute <|
+                        Html.rows (Maybe.withDefault 0 config.rows)
+                , when (config.textarea && (config.cols /= Nothing)) <|
+                    Options.attribute <|
+                        Html.cols (Maybe.withDefault 0 config.cols)
+                ]
+                []
+
+        viewPrefix s =
+            styled Html.span
+                [ element "affix"
+                , element "affix--prefix"
+                ]
+                [ Html.text s ]
+
+        viewSuffix s =
+            styled Html.span
+                [ element "affix"
+                , element "affix--suffix"
+                ]
+                [ Html.text s ]
+
     in
     Options.apply summary
         Html.div
-        [ cs "mdc-text-field"
-        , cs "mdc-text-field--focused" |> when focused
-        , cs "mdc-text-field--disabled" |> when config.disabled
-        , cs "mdc-text-field--fullwidth" |> when config.fullWidth
-        , cs "mdc-text-field--invalid" |> when isInvalid
-        , cs "mdc-text-field--textarea" |> when config.textarea
-        , cs "mdc-text-field--filled" |> when isFilled
-        , cs "mdc-text-field--outlined" |> when isOutlined
-        , cs "mdc-text-field--with-leading-icon" |> when (config.leadingIcon /= Nothing)
-        , cs "mdc-text-field--with-trailing-icon" |> when (config.trailingIcon /= Nothing)
+        [ block
+        , modifier "focused" |> when focused
+        , modifier "label-floating" |> when shouldFloat
+        , modifier "disabled" |> when config.disabled
+        , modifier "fullwidth" |> when config.fullWidth
+        , modifier "invalid" |> when isInvalid
+        , modifier "filled" |> when isFilled
+        , modifier "outlined" |> when isOutlined
+        , modifier "with-leading-icon" |> when (config.leadingIcon /= Nothing)
+        , modifier "with-trailing-icon" |> when (config.trailingIcon /= Nothing)
+        , modifier "textarea" |> when config.textarea
         ]
         []
         (list
             ++ [ if isFilled then
-                     styled Html.span [ cs "mdc-text-field__ripple" ] []
+                     styled Html.span [ element "ripple" ] []
                  else
                      text ""
                , leadingIcon_
-               , Options.applyNativeControl summary
-                    (if config.textarea then
-                        Html.textarea
-
-                     else
-                        Html.input
-                    )
-                    [ cs "mdc-text-field__input"
-                    , Options.id config.id_
-                    , if config.outlined && not config.textarea then
-                        Options.on "focus" (Decode.map (lift << Focus) decodeGeometry)
-
-                      else
-                        Options.on "focus" (Decode.succeed (lift (Focus defaultGeometry)))
-                    , Options.onBlur (lift Blur)
-                    , Options.onInput (lift << Input)
-                    , Options.many
-                        << List.map Options.attribute
-                        << List.filterMap identity
-                      <|
-                        [ Html.type_ (Maybe.withDefault "text" config.type_)
-                            |> (if not config.textarea then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.disabled True
-                            |> (if config.disabled then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.property "required" (Encode.bool True)
-                            |> (if config.required then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.property "pattern" (Encode.string (Maybe.withDefault "" config.pattern))
-                            |> (if config.pattern /= Nothing then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        , Html.value (Maybe.withDefault "" config.value)
-                            |> (if config.value /= Nothing then
-                                    Just
-
-                                else
-                                    always Nothing
-                               )
-                        ]
-                    , when (config.placeholder /= Nothing) <|
-                        Options.attribute <|
-                            Html.placeholder (Maybe.withDefault "" config.placeholder)
-                    , when (config.textarea && (config.rows /= Nothing)) <|
-                        Options.attribute <|
-                            Html.rows (Maybe.withDefault 0 config.rows)
-                    , when (config.textarea && (config.cols /= Nothing)) <|
-                        Options.attribute <|
-                            Html.cols (Maybe.withDefault 0 config.cols)
-                    ]
-                    []
+               , if not config.textarea then
+                     viewJust config.prefix viewPrefix
+                 else
+                     text ""
+               , input
+               , if not config.textarea then
+                     viewJust config.suffix viewSuffix
+                 else
+                     text ""
                , if not config.fullWidth && not config.outlined && not config.textarea then
                     htmlLabel
-
                  else
                     text ""
                , trailingIcon_
@@ -471,5 +532,20 @@ decodeGeometry =
                 (DOM.childNode 1 DOM.offsetWidth)
 
 
+{- Make it easier to work with BEM conventions
+-}
+block : Property m
+block =
+    cs blockName
 
--- .mdc-text-field__label
+element : String -> Property m
+element module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+modifier : String -> Property m
+modifier modifier_ =
+    cs ( blockName ++ "--" ++ modifier_ )
+
+blockName : String
+blockName =
+    "mdc-text-field"

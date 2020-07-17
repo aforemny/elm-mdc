@@ -36,9 +36,12 @@ view options nodes =
     in
     Options.apply summary
         Html.div
-        [ cs "mdc-data-table" ]
+        [ block ]
         []
-        nodes
+        [ styled div
+              [ element "container"]
+              nodes
+        ]
 
 
 table :
@@ -52,7 +55,7 @@ table options nodes =
     in
     Options.apply summary
         Html.table
-        [ cs "mdc-data-table__table" ]
+        [ element "table" ]
         []
         nodes
 
@@ -84,7 +87,7 @@ trh options nodes =
     in
     Options.apply summary
         Html.tr
-        [ cs "mdc-data-table__header-row" ]
+        [ element "header-row" ]
         []
         nodes
 
@@ -100,7 +103,7 @@ tr options nodes =
     in
     Options.apply summary
         Html.tr
-        [ cs "mdc-data-table__row" ]
+        [ element "row" ]
         []
         nodes
 
@@ -116,7 +119,7 @@ th options nodes =
     in
     Options.apply summary
         Html.th
-        [ cs "mdc-data-table__header-cell"
+        [ element "header-cell"
         , role "columnheader"
         ]
         []
@@ -134,7 +137,7 @@ td options nodes =
     in
     Options.apply summary
         Html.td
-        [ cs "mdc-data-table__cell" ]
+        [ element "cell" ]
         []
         nodes
 
@@ -167,3 +170,18 @@ rowCheckbox =
 selectedRow : Property m
 selectedRow =
     cs "mdc-data-table__row--selected"
+
+
+{- Make it easier to work with BEM conventions
+-}
+block : Property m
+block =
+    cs blockName
+
+element : String -> Property m
+element module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+blockName : String
+blockName =
+    "mdc-data-table"

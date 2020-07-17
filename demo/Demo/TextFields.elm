@@ -271,6 +271,29 @@ unlabeledTextFields lift model =
         ]
 
 
+affixedTextFields : (Msg m -> m) -> Model m -> Html m
+affixedTextFields lift model =
+    let
+        textField index options =
+            [ TextField.view (lift << Mdc)
+                index
+                model.mdc
+                (TextField.label "Standard"
+                    :: options
+                )
+                []
+            ]
+    in
+    textFieldRow []
+        [ textFieldContainer []
+            (textField "text-fields-affixed-1" [ TextField.prefix "$" ] )
+        , textFieldContainer []
+            (textField "text-fields-affixed-2" [ TextField.suffix "NZD" ])
+        , textFieldContainer []
+            (textField "text-fields-affixed-3" [ TextField.prefix "$", TextField.suffix "NZD" ])
+        ]
+
+
 characterCounterTextFields : (Msg m -> m) -> Model m -> Html m
 characterCounterTextFields lift model =
     let
@@ -315,6 +338,7 @@ textareaTextField lift model =
             model.mdc
             [ TextField.label "Standard"
             , TextField.textarea
+            , TextField.outlined
             ]
             []
         , helperText
@@ -329,6 +353,23 @@ textareaTextFieldWithCharacterCounter lift model =
             model.mdc
             [ TextField.label "Standard"
             , TextField.textarea
+            , TextField.outlined
+            ]
+            [ ]
+        , helperTextWithCharacterCounter
+        ]
+
+
+textareaTextFieldWithInternalCharacterCounter : (Msg m -> m) -> Model m -> Html m
+textareaTextFieldWithInternalCharacterCounter lift model =
+    textFieldContainer []
+        [ TextField.view (lift << Mdc)
+            "text-fields-textarea-internal-character-counter-text-field"
+            model.mdc
+            [ TextField.label "Standard"
+            , TextField.textarea
+            , TextField.outlined
+            , TextField.internalCounter
             ]
             [ TextField.characterCounter [] [ text "0 / 18" ] ]
         , helperText
@@ -465,12 +506,16 @@ view lift page model =
             , shapedOutlinedTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field without label" ]
             , unlabeledTextFields lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field with affixes" ]
+            , affixedTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Text Field with Character Counter" ]
             , characterCounterTextFields lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea" ]
             , textareaTextField lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea with Character Counter" ]
             , textareaTextFieldWithCharacterCounter lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea with Internal character Counter" ]
+            , textareaTextFieldWithInternalCharacterCounter lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width" ]
             , fullwidthTextField lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width Textarea" ]

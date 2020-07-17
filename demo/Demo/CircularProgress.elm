@@ -44,9 +44,26 @@ view lift page model =
               ]
         , ResourceLink.links (lift << Mdc) model.mdc "progress-indicators" "linear-progress" "mdc-linear-progress"
         , Page.demos
-            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Determinate" ]
-            , CircularProgress.view [ CircularProgress.progress 0.75 ] []
-            , styled Html.h3 [ Typography.subtitle1 ] [ text "Indeterminate" ]
+            [ styled Html.h3 [ Typography.subtitle1 ] [ text "Determinate large" ]
+            , CircularProgress.view
+                [ CircularProgress.progress 0.75 ] []
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Determinate medium" ]
+            , CircularProgress.view
+                [ CircularProgress.progress 0.75
+                , CircularProgress.size 36
+                ]
+                []
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Determinate small" ]
+            , CircularProgress.view
+                [ CircularProgress.progress 0.75
+                , CircularProgress.size 24
+                ]
+                []
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Indeterminate large" ]
             , CircularProgress.view [ ] []
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Indeterminate medium" ]
+            , CircularProgress.view [ CircularProgress.size 36 ] []
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Indeterminate small" ]
+            , CircularProgress.view [ CircularProgress.size 24 ] []
             ]
         ]

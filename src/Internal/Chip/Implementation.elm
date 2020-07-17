@@ -3,6 +3,8 @@ module Internal.Chip.Implementation exposing
     , checkmark
     , chipset
     , choice
+    , editable
+    , editing
     , filter
     , input
     , leadingIcon
@@ -137,6 +139,16 @@ filter =
 choice : Property m
 choice =
     cs "mdc-chip-set--choice"
+
+
+editable : Property m
+editable =
+    cs "mdc-chip-set--editable"
+
+
+editing : Property m
+editing =
+    cs "mdc-chip-set--editing"
 
 
 input : Property m

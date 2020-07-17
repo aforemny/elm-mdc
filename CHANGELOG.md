@@ -1,12 +1,27 @@
 ## Latest changes
 
 
+## Upgrade to 7.0.0
+
+New features:
+* See Material Components for the Web [v7.0.0](https://github.com/material-components/material-components-web/blob/master/CHANGELOG.md) release for all details.
+* Material.CircularProgress: allow setting size.
+* TextField: allow setting prefix and suffix text.
+
+Fixes:
+* Material.CircularProgress: indeterminate version now works properly.
+
+Breaking changes:
+* Textarea default is filled, you will need to specify
+  Textarea.outlined to get the previous default.
+* Textarea with internal character counter needs to get property Textfield.internalCounter
+
 ## Upgrade to 6.0.0
 
 New features:
 * TabBar: keyboard interaction now works.
 * TabBar: scrolling animation now works.
-* Material.CircularProgress: new component. Only the determine version
+* Material.CircularProgress: new component. Only the determinate version
   display is correct. The indeterminate version should animate, but
   this does not happen at the moment. We'll have another look at
   this with version 7.

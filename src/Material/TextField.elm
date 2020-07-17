@@ -14,7 +14,10 @@ module Material.TextField exposing
     , pattern
     , outlined
     , fullwidth
+    , prefix
+    , suffix
     , textarea
+    , internalCounter
     , rows
     , cols
     , email
@@ -60,6 +63,8 @@ module Material.TextField exposing
 @docs value
 @docs placeholder
 @docs disabled
+@docs prefix
+@docs suffix
 
 
 ### Icon properties
@@ -88,6 +93,7 @@ module Material.TextField exposing
 @docs textarea
 @docs rows
 @docs cols
+@docs internalCounter
 
 
 ## Type
@@ -193,6 +199,22 @@ disabled =
     TextField.disabled
 
 
+{-| Prefix and suffix text can add context to a text field, such as a
+currency symbol prefix or a unit of mass suffix.
+-}
+prefix : String -> Property m
+prefix =
+    TextField.prefix
+
+
+{-| Prefix and suffix text can add context to a text field, such as a
+currency symbol prefix or a unit of mass suffix.
+-}
+suffix : String -> Property m
+suffix =
+    TextField.suffix
+
+
 {-| Set the textfield's `type` to `password`.
 -}
 password : Property m
@@ -230,6 +252,13 @@ rows =
 cols : Int -> Property m
 cols =
     TextField.cols
+
+
+{-| Set this property if a character counter is placed inside the textarea's body.
+-}
+internalCounter : Property m
+internalCounter =
+    TextField.internalCounter
 
 
 {-| Mark the textfield as required.

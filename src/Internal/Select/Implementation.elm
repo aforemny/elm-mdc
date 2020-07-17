@@ -1,6 +1,7 @@
 module Internal.Select.Implementation exposing
     ( Property
     , disabled
+    , fullWidth
     , label
     , onSelect
     , option
@@ -30,6 +31,8 @@ import Internal.Ripple.Implementation as Ripple
 import Internal.Select.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode
 import Task
+import Svg exposing (polygon)
+import Svg.Attributes as Svg exposing (stroke, fillRule, points, viewBox)
 
 
 subscriptions : Model -> Sub (Msg m)
@@ -73,8 +76,11 @@ update lift msg model =
 
                 isEnter =
                     key == "Enter" || keyCode == 13
+
+                isArrowDown =
+                    key == "ArrowDown" || keyCode == 40
             in
-            if isEscape || isSpace || isEnter then
+            if isEscape || isSpace || isEnter || isArrowDown then
                 ( Nothing, Helpers.delayedCmd 16 (lift (OpenMenu menuIndex)) )
             else
                 ( Nothing, Cmd.none )
@@ -148,6 +154,11 @@ disabled =
     Options.option (\config -> { config | disabled = True })
 
 
+fullWidth : Property m
+fullWidth =
+    modifier "fullwidth"
+
+
 outlined : Property m
 outlined =
     Options.option (\config -> { config | outlined = True })
@@ -197,6 +208,7 @@ select domId lift model options items_ =
             styled Html.span
                 [ cs "mdc-floating-label"
                 , cs "mdc-floating-label--float-above" |> when floatAbove
+                , cs "mdc-floating-label--required" |> when config.required
                 ]
                 [ text config.label
                 ]
@@ -248,26 +260,31 @@ select domId lift model options items_ =
     in
     Options.apply summary
         Html.div
-        [ cs "mdc-select"
-        , role "button"
-        , aria "haspopup" "listbox"
-        , cs "mdc-select--focused" |> when focused
-        , cs "mdc-select--activated" |> when model.menu.open
-        , cs "mdc-select--disabled" |> when config.disabled
-        , cs "mdc-select--outlined" |> when config.outlined
+        [ block
+        , modifier "focused" |> when focused
+        , modifier "activated" |> when model.menu.open
+        , modifier "disabled" |> when config.disabled
+        , modifier "outlined" |> when config.outlined
+        , modifier "filled" |> when ( not config.outlined )
         , Options.id domId
         ]
         [ ]
         [ styled Html.div
-              [ cs "mdc-select__anchor"
+              [ element "anchor"
+              , role "button"
+              , aria "haspopup" "listbox"
               , Options.onClick (lift ToggleMenu)
               ]
               [ if not config.outlined then
-                    styled Html.span [ cs "mdc-select__ripple" ] []
+                    styled Html.span [ element "ripple" ] []
                 else
                     text ""
-              , styled Html.div
-                  [ cs "mdc-select__selected-text"
+              , if not config.outlined then
+                    htmlLabel
+                else
+                    text ""
+              , styled Html.span
+                  [ element "selected-text"
                   , Options.id selectedTextDomId
                   , Options.tabindex 0
                   , Options.aria "disabled" (if config.disabled then "true" else "false")
@@ -279,15 +296,30 @@ select domId lift model options items_ =
                           Decode.map2 (KeyDown menuIndex) decodeKey decodeKeyCode
                   ]
                   [ text config.selectedText ]
-              , styled Html.i
-                    [ cs "mdc-select__dropdown-icon"
+              , styled Html.span
+                    [ element "dropdown-icon"
                     , Options.onClick (lift ToggleMenu)
                     ]
-                    []
-              , if not config.outlined then
-                    htmlLabel
-                else
-                    text ""
+                    [ Svg.svg
+                          [ Svg.class "mdc-select__dropdown-icon-graphic"
+                          , viewBox "7 10 10 5"
+                          ]
+                          [ polygon
+                                [ Svg.class "mdc-select__dropdown-icon-inactive"
+                                , stroke "none"
+                                , fillRule "evenodd"
+                                , points "7 10 12 15 17 10"
+                                ]
+                                []
+                          , polygon
+                                [ Svg.class "mdc-select__dropdown-icon-active"
+                                , stroke "none"
+                                , fillRule "evenodd"
+                                , points "7 15 12 10 17 15"
+                                ]
+                                []
+                          ]
+                    ]
               , ripple_or_outline
               ]
         , Menu.menu
@@ -295,6 +327,7 @@ select domId lift model options items_ =
             ( lift << MenuMsg )
             model.menu
             [ cs "mdc-select__menu"
+            , role "listbox"
             , Menu.anchorCorner Menu.bottomLeftCorner
             ]
             (Menu.ul [ Lists.singleSelection ]
@@ -381,3 +414,22 @@ view =
             index
             store
             (Options.internalId index :: options)
+
+
+{- Make it easier to work with BEM conventions
+-}
+block : Property m
+block =
+    cs blockName
+
+element : String -> Property m
+element module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+modifier : String -> Property m
+modifier modifier_ =
+    cs ( blockName ++ "--" ++ modifier_ )
+
+blockName : String
+blockName =
+    "mdc-select"
