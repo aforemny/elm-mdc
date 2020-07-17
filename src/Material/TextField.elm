@@ -63,7 +63,7 @@ module Material.TextField exposing
 @docs value
 @docs placeholder
 @docs disabled
-@docs affix
+@docs prefix
 @docs suffix
 
 
