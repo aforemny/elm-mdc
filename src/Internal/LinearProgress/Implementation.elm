@@ -67,6 +67,8 @@ view options _ =
         [ cs "mdc-linear-progress"
         , cs "mdc-linear-progress--indeterminate" |> when config.indeterminate
         , cs "mdc-linear-progress--reversed" |> when config.reversed
+        , aria "valuemin" "0"
+        , aria "valuemax" "1"
         , aria "valuenow" (String.fromFloat config.value) |> when (not config.indeterminate)
         , role "progressbar"
         ]
