@@ -4,6 +4,7 @@ module Internal.TextField.Implementation exposing
     , disabled
     , email
     , fullwidth
+    , internalCounter
     , invalid
     , label
     , leadingIcon
@@ -158,6 +159,11 @@ cols cols_ =
     Options.option (\config -> { config | cols = Just cols_ })
 
 
+internalCounter : Property m
+internalCounter =
+    modifier "with-internal-counter"
+
+
 required : Property m
 required =
     Options.option (\config -> { config | required = True })
@@ -274,21 +280,21 @@ textField domId lift model options list =
     in
     Options.apply summary
         Html.div
-        [ cs "mdc-text-field"
-        , cs "mdc-text-field--focused" |> when focused
-        , cs "mdc-text-field--disabled" |> when config.disabled
-        , cs "mdc-text-field--fullwidth" |> when config.fullWidth
-        , cs "mdc-text-field--invalid" |> when isInvalid
-        , cs "mdc-text-field--textarea" |> when config.textarea
-        , cs "mdc-text-field--filled" |> when isFilled
-        , cs "mdc-text-field--outlined" |> when isOutlined
-        , cs "mdc-text-field--with-leading-icon" |> when (config.leadingIcon /= Nothing)
-        , cs "mdc-text-field--with-trailing-icon" |> when (config.trailingIcon /= Nothing)
+        [ block
+        , modifier "focused" |> when focused
+        , modifier "disabled" |> when config.disabled
+        , modifier "fullwidth" |> when config.fullWidth
+        , modifier "invalid" |> when isInvalid
+        , modifier "textarea" |> when config.textarea
+        , modifier "filled" |> when isFilled
+        , modifier "outlined" |> when isOutlined
+        , modifier "with-leading-icon" |> when (config.leadingIcon /= Nothing)
+        , modifier "with-trailing-icon" |> when (config.trailingIcon /= Nothing)
         ]
         []
         (list
             ++ [ if isFilled then
-                     styled Html.span [ cs "mdc-text-field__ripple" ] []
+                     styled Html.span [ element "ripple" ] []
                  else
                      text ""
                , leadingIcon_
@@ -471,5 +477,20 @@ decodeGeometry =
                 (DOM.childNode 1 DOM.offsetWidth)
 
 
+{- Make it easier to work with BEM conventions
+-}
+block : Property m
+block =
+    cs blockName
 
--- .mdc-text-field__label
+element : String -> Property m
+element module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+modifier : String -> Property m
+modifier modifier_ =
+    cs ( blockName ++ "--" ++ modifier_ )
+
+blockName : String
+blockName =
+    "mdc-text-field"

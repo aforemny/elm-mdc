@@ -15,6 +15,7 @@ module Material.TextField exposing
     , outlined
     , fullwidth
     , textarea
+    , internalCounter
     , rows
     , cols
     , email
@@ -88,6 +89,7 @@ module Material.TextField exposing
 @docs textarea
 @docs rows
 @docs cols
+@docs internalCounter
 
 
 ## Type
@@ -230,6 +232,13 @@ rows =
 cols : Int -> Property m
 cols =
     TextField.cols
+
+
+{-| Set this property if a character counter is placed inside the textarea's body.
+-}
+internalCounter : Property m
+internalCounter =
+    TextField.internalCounter
 
 
 {-| Mark the textfield as required.

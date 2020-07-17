@@ -332,6 +332,22 @@ textareaTextFieldWithCharacterCounter lift model =
             , TextField.textarea
             , TextField.outlined
             ]
+            [ ]
+        , helperTextWithCharacterCounter
+        ]
+
+
+textareaTextFieldWithInternalCharacterCounter : (Msg m -> m) -> Model m -> Html m
+textareaTextFieldWithInternalCharacterCounter lift model =
+    textFieldContainer []
+        [ TextField.view (lift << Mdc)
+            "text-fields-textarea-internal-character-counter-text-field"
+            model.mdc
+            [ TextField.label "Standard"
+            , TextField.textarea
+            , TextField.outlined
+            , TextField.internalCounter
+            ]
             [ TextField.characterCounter [] [ text "0 / 18" ] ]
         , helperText
         ]
@@ -473,6 +489,8 @@ view lift page model =
             , textareaTextField lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea with Character Counter" ]
             , textareaTextFieldWithCharacterCounter lift model
+            , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea with Internal character Counter" ]
+            , textareaTextFieldWithInternalCharacterCounter lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width" ]
             , fullwidthTextField lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width Textarea" ]
