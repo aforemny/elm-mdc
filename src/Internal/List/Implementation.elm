@@ -176,7 +176,7 @@ ul domId lift model options items =
     in
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
-        [ cs "mdc-list"
+        [ block list
         , nonInteractiveClass |> when (not config.isInteractive)
         , role "listbox" |> when config.isSingleSelectionList
         , role "radiogroup" |> when config.isRadioGroup
@@ -197,8 +197,8 @@ ul domId lift model options items =
 
 
 doListItemDomId : String -> Int -> ListItem m -> String
-doListItemDomId domId index listItem =
-    if listItem.focusable then
+doListItemDomId domId index item =
+    if item.focusable then
         listItemDomId domId index
 
     else
@@ -240,22 +240,22 @@ nonInteractive =
 
 
 nonInteractiveClass =
-    cs "mdc-list--non-interactive"
+    modifier list "non-interactive"
 
 
 dense : Property m
 dense =
-    cs "mdc-list--dense"
+    modifier list "dense"
 
 
 avatarList : Property m
 avatarList =
-    cs "mdc-list--avatar-list"
+    modifier list "avatar-list"
 
 
 twoLine : Property m
 twoLine =
-    cs "mdc-list--two-line"
+    modifier list "two-line"
 
 
 type ChildList m
@@ -294,12 +294,12 @@ asListItem dom_node options children =
 
 divider : List (Property m) -> List (Html m) -> ListItem m
 divider options =
-    asListItem Html.li (cs "mdc-list-divider" :: role "separator" :: options)
+    asListItem Html.li (block listDivider :: role "separator" :: options)
 
 
 hr : List (Property m) -> List (Html m) -> ListItem m
 hr options =
-    asListItem Html.hr (cs "mdc-list-divider" :: options)
+    asListItem Html.hr (block listDivider :: options)
 
 
 nestedUl :
@@ -380,8 +380,8 @@ liView domId lift model config listItemIds focusedIndex index options children =
         [ listItemClass
         , Options.id list_item_dom_id |> when (not rippled)
         , tabindex tab_index |> when config.isInteractive
-        , cs "mdc-list-item--selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
-        , cs "mdc-list-item--activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
+        , modifier listItem "selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
+        , modifier listItem "activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
         , aria "checked"
             (if is_selected then
                 "true"
@@ -496,7 +496,8 @@ liView domId lift model config listItemIds focusedIndex index options children =
                 (Decode.at [ "keyCode" ] Decode.int)
         ]
         []
-        children
+        ( styled Html.span [ element listItem "ripple" ] []
+        :: children )
 
 
 
@@ -517,11 +518,11 @@ slicedIndexedList from to array =
 firstNonEmptyId : Int -> Array String -> Maybe ( Int, String )
 firstNonEmptyId from array =
     let
-        list =
+        sliced =
             slicedIndexedList from (Array.length array) array
 
         non_empty_id =
-            find (\( _, id ) -> id /= "") list
+            find (\( _, id ) -> id /= "") sliced
     in
     non_empty_id
 
@@ -529,11 +530,11 @@ firstNonEmptyId from array =
 lastNonEmptyId : Int -> Array String -> Maybe ( Int, String )
 lastNonEmptyId to array =
     let
-        list =
+        sliced =
             slicedIndexedList 0 to array
 
         non_empty_id =
-            find (\( i, id ) -> id /= "") (List.reverse list)
+            find (\( i, id ) -> id /= "") (List.reverse sliced)
     in
     non_empty_id
 
@@ -542,8 +543,8 @@ lastNonEmptyId to array =
 {- Thanks to List.Extra.find -}
 
 find : (a -> Bool) -> List a -> Maybe a
-find predicate list =
-    case list of
+find predicate list_ =
+    case list_ of
         [] ->
             Nothing
 
@@ -562,8 +563,8 @@ findIndex =
     findIndexHelp 0
 
 findIndexHelp : Int-> (a -> Bool) -> List a -> Maybe Int
-findIndexHelp index predicate list =
-    case list of
+findIndexHelp index predicate list_ =
+    case list_ of
         [] ->
             Nothing
 
@@ -647,22 +648,22 @@ aRippledView domId lift model options items =
 
 listItemClass : Property m
 listItemClass =
-    cs "mdc-list-item"
+    block listItem
 
 
 text : List (Property m) -> List (Html m) -> Html m
 text options =
-    styled Html.span (cs "mdc-list-item__text" :: options)
+    styled Html.span (element listItem "text" :: options)
 
 
 primaryText : List (Property m) -> List (Html m) -> Html m
 primaryText options =
-    styled Html.span (cs "mdc-list-item__primary-text" :: options)
+    styled Html.span (element listItem "primary-text" :: options)
 
 
 secondaryText : List (Property m) -> List (Html m) -> Html m
 secondaryText options =
-    styled Html.span (cs "mdc-list-item__secondary-text" :: options)
+    styled Html.span (element listItem "secondary-text" :: options)
 
 
 selected : Property m
@@ -724,12 +725,12 @@ rippleDisabled =
 
 disabledClass : Property m
 disabledClass =
-    cs "mdc-list-item--disabled"
+    modifier listItem "disabled"
 
 
 graphicClass : Options.Property c m
 graphicClass =
-    cs "mdc-list-item__graphic"
+    element listItem "graphic"
 
 
 graphic : List (Property m) -> List (Html m) -> Html m
@@ -754,7 +755,7 @@ graphicImage options url =
 
 metaClass : Options.Property c m
 metaClass =
-    cs "mdc-list-item__meta"
+    element listItem "meta"
 
 
 meta : List (Property m) -> List (Html m) -> Html m
@@ -784,7 +785,7 @@ metaImage options url =
 
 group : List (Property m) -> List (Html m) -> Html m
 group options =
-    styled Html.div (cs "mdc-list-group" :: options)
+    styled Html.div (block listGroup :: options)
 
 
 subheader : List (Property m) -> List (Html m) -> Html m
@@ -801,17 +802,17 @@ subheader options =
 
 subheaderClass : Options.Property c m
 subheaderClass =
-    cs "mdc-list-group__subheader"
+    element listGroup "subheader"
 
 
 padded : Property m
 padded =
-    cs "mdc-list-divider--padded"
+    modifier listDivider "padded"
 
 
 inset : Property m
 inset =
-    cs "mdc-list-divider--inset"
+    modifier listDivider "inset"
 
 
 type alias Store s =
@@ -850,3 +851,34 @@ view :
 view =
     \lift domId ->
         Component.render getSet.get (ul domId) Internal.Msg.ListMsg lift domId
+
+
+{- Make it easier to work with BEM conventions
+-}
+block : String -> Options.Property c m
+block blockName =
+    cs blockName
+
+element : String -> String -> Options.Property c m
+element blockName module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+modifier : String -> String -> Options.Property c m
+modifier blockName modifier_ =
+    cs ( blockName ++ "--" ++ modifier_ )
+
+list : String
+list =
+    "mdc-list"
+
+listGroup : String
+listGroup =
+    "mdc-list-group"
+
+listItem : String
+listItem =
+    "mdc-list-item"
+
+listDivider : String
+listDivider =
+    "mdc-list-divider"
