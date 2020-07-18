@@ -1,5 +1,6 @@
 module Internal.Slider.Model exposing
     ( Geometry
+    , Rect
     , Model
     , Msg(..)
     , defaultGeometry
@@ -14,6 +15,9 @@ type alias Model =
     , activeValue : Maybe Float
     , inTransit : Bool
     , preventFocus : Bool
+    , min : Float
+    , max : Float
+    , step : Float
     }
 
 
@@ -25,18 +29,21 @@ defaultModel =
     , activeValue = Nothing
     , inTransit = False
     , preventFocus = False
+    , min = 0
+    , max = 100
+    , step = 1
     }
 
 
 type Msg m
     = NoOp
-    | Init Geometry
-    | Resize Geometry
-    | InteractionStart String { clientX : Float }
+    | Init Float Float Float Geometry
+    | Resize Float Float Float Geometry
+    | InteractionStart { clientX : Float }
     | KeyDown
     | Focus
     | Blur
-    | ThumbContainerPointer String { clientX : Float }
+    | ThumbContainerPointer { clientX : Float }
     | TransitionEnd
     | Drag { clientX : Float }
     | Up
@@ -45,10 +52,6 @@ type Msg m
 
 type alias Geometry =
     { rect : Rect
-    , discrete : Bool
-    , step : Maybe Float
-    , min : Float
-    , max : Float
     }
 
 
@@ -61,8 +64,4 @@ type alias Rect =
 defaultGeometry : Geometry
 defaultGeometry =
     { rect = { left = 0, width = 0 }
-    , discrete = False
-    , min = 0
-    , max = 100
-    , step = Nothing
     }
