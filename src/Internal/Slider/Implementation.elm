@@ -53,7 +53,7 @@ update lift msg model =
         TransitionEnd ->
             ( Just { model | inTransit = False }, Cmd.none )
 
-        InteractionStart id_ { clientX } ->
+        InteractionStart id_ clientX ->
             -- Get current slider dimensions before determine what value the user clicked
             ( Nothing
             , Task.attempt (\result ->
@@ -81,7 +81,7 @@ update lift msg model =
             , Cmd.none
             )
 
-        ThumbContainerPointer { clientX } ->
+        ThumbContainerPointer clientX ->
             let
                 geometry =
                     Maybe.withDefault defaultGeometry model.geometry
@@ -99,7 +99,7 @@ update lift msg model =
             , Cmd.none
             )
 
-        Drag { clientX } ->
+        Drag clientX ->
             if model.active then
                 let
                     geometry =
@@ -498,7 +498,7 @@ slider domId lift model options _ =
                     (\event ->
                         Options.on event <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
                                             valueFromClientX config model clientX
@@ -518,7 +518,7 @@ slider domId lift model options _ =
                     (\event ->
                         Options.on event <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
                                             valueFromClientX config model clientX
@@ -546,7 +546,7 @@ slider domId lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
                                             valueFromClientX config model clientX
@@ -564,7 +564,7 @@ slider domId lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
                                             valueFromClientX config model clientX
@@ -591,7 +591,7 @@ slider domId lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
                                             valueFromClientX config model clientX
@@ -775,14 +775,13 @@ discretize geometry continuousValue =
 NOTE: changedTouches is a property introduced by elm-mdc.js and only
 valid for the globaltouchend event.
 -}
-decodeClientX : Decoder { clientX : Float }
+decodeClientX : Decoder Float
 decodeClientX =
-    Decode.map (\clientX -> { clientX = clientX }) <|
-        Decode.oneOf
-            [ Decode.at [ "targetTouches", "0", "clientX" ] Decode.float
-            , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
-            , Decode.at [ "clientX" ] Decode.float
-            ]
+    Decode.oneOf
+        [ Decode.at [ "targetTouches", "0", "clientX" ] Decode.float
+        , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
+        , Decode.at [ "clientX" ] Decode.float
+        ]
 
 
 decodeGeometry : Decoder Geometry

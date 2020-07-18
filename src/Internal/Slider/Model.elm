@@ -46,14 +46,14 @@ type Msg m
     = NoOp
     | Init String Float Float Float Geometry
     | Resize String Float Float Float Geometry
-    | InteractionStart String { clientX : Float }
+    | InteractionStart String Float
     | DoInteractionStart Dom.Element Float
     | KeyDown
     | Focus
     | Blur
-    | ThumbContainerPointer { clientX : Float }
+    | ThumbContainerPointer Float
     | TransitionEnd
-    | Drag { clientX : Float }
+    | Drag Float
     | Up
     | ActualUp
     | GotElement Dom.Element
