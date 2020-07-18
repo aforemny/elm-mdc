@@ -46,8 +46,9 @@ type Msg m
     = NoOp
     | Init String Float Float Float Geometry
     | Resize String Float Float Float Geometry
-    | InteractionStart String Float
-    | DoInteractionStart Dom.Element Float
+    | RequestSliderDimensions String (Float -> Msg m) Float
+    | GotSliderDimensions Dom.Element (Float -> Msg m) Float
+    | InteractionStart Float
     | KeyDown
     | Focus
     | Blur

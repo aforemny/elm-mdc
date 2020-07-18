@@ -53,26 +53,33 @@ update lift msg model =
         TransitionEnd ->
             ( Just { model | inTransit = False }, Cmd.none )
 
-        InteractionStart id_ clientX ->
+        RequestSliderDimensions id_ next clientX ->
             -- Get current slider dimensions before determine what value the user clicked
             ( Nothing
             , Task.attempt (\result ->
                                 case result of
-                                    Ok r -> lift (DoInteractionStart r clientX)
+                                    Ok r -> lift (GotSliderDimensions r next clientX)
                                     Err _ -> lift NoOp)
                            (Browser.Dom.getElement id_)
             )
 
-        DoInteractionStart element clientX ->
+        GotSliderDimensions element next clientX ->
             let
                 new_model =
-                    { model | left = element.element.x, width = element.element.width }
+                    { model
+                        | left = element.element.x
+                        , width = element.element.width
+                    }
+            in
+                update lift (next clientX) new_model
 
+        InteractionStart clientX ->
+            let
                 activeValue =
-                    valueFromClientX new_model new_model clientX
+                    valueFromClientX model model clientX
             in
             ( Just
-                { new_model
+                { model
                     | active = True
                     , inTransit = True
                     , activeValue = Just activeValue
@@ -83,9 +90,6 @@ update lift msg model =
 
         ThumbContainerPointer clientX ->
             let
-                geometry =
-                    Maybe.withDefault defaultGeometry model.geometry
-
                 activeValue =
                     valueFromClientX model model clientX
             in
@@ -102,9 +106,6 @@ update lift msg model =
         Drag clientX ->
             if model.active then
                 let
-                    geometry =
-                        Maybe.withDefault defaultGeometry model.geometry
-
                     activeValue =
                         valueFromClientX model model clientX
                 in
@@ -340,7 +341,7 @@ slider domId lift model options _ =
                     else
                         0
             in
-            c * geometry.rect.width
+            c * model.width
 
         downs =
             [ "mousedown"
@@ -489,7 +490,7 @@ slider domId lift model options _ =
             Options.many <|
                 List.map
                     (\event ->
-                        Options.on event (Decode.map (lift << InteractionStart config.id_) decodeClientX)
+                        Options.on event (Decode.map (lift << RequestSliderDimensions config.id_ InteractionStart) decodeClientX)
                     )
                     downs
         , when (config.onChange /= Nothing) <|
@@ -582,7 +583,7 @@ slider domId lift model options _ =
             Options.many <|
                 List.map
                     (\handler ->
-                        handler (Decode.map (lift << Drag) decodeClientX)
+                        handler (Decode.map (lift << RequestSliderDimensions config.id_ Drag) decodeClientX)
                     )
                     moves
         , when ((config.onInput /= Nothing) && model.active) <|
@@ -648,7 +649,7 @@ slider domId lift model options _ =
                                             , preventDefault = False
                                             }
                                         )
-                                        (Decode.map (ThumbContainerPointer) decodeClientX)
+                                        (Decode.map (RequestSliderDimensions config.id_ ThumbContainerPointer) decodeClientX)
                                     )
                             )
                     )
