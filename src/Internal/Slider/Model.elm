@@ -1,9 +1,6 @@
 module Internal.Slider.Model exposing
-    ( Geometry
-    , Rect
-    , Model
+    ( Model
     , Msg(..)
-    , defaultGeometry
     , defaultModel
     )
 
@@ -12,9 +9,9 @@ import Browser.Dom as Dom
 
 
 type alias Model =
-    { focus : Bool
+    { initialized : Bool
+    , focus : Bool
     , active : Bool
-    , geometry : Maybe Geometry
     , activeValue : Maybe Float
     , inTransit : Bool
     , preventFocus : Bool
@@ -28,9 +25,9 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { focus = False
+    { initialized = False
+    , focus = False
     , active = False
-    , geometry = Nothing
     , activeValue = Nothing
     , inTransit = False
     , preventFocus = False
@@ -44,8 +41,8 @@ defaultModel =
 
 type Msg m
     = NoOp
-    | Init String Float Float Float Geometry
-    | Resize String Float Float Float Geometry
+    | Init String Float Float Float
+    | Resize String Float Float Float
     | RequestSliderDimensions String (Float -> Msg m) Float
     | GotSliderDimensions Dom.Element (Float -> Msg m) Float
     | InteractionStart Float
@@ -58,20 +55,3 @@ type Msg m
     | Up
     | ActualUp
     | GotElement Dom.Element
-
-
-type alias Geometry =
-    { rect : Rect
-    }
-
-
-type alias Rect =
-    { left : Float
-    , width : Float
-    }
-
-
-defaultGeometry : Geometry
-defaultGeometry =
-    { rect = { left = 0, width = 0 }
-    }

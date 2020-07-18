@@ -14,14 +14,13 @@ module Internal.Slider.Implementation exposing
     )
 
 import Browser.Dom
-import DOM
 import Html as Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
-import Internal.Slider.Model exposing (Geometry, Rect, Model, Msg(..), defaultGeometry, defaultModel)
+import Internal.Slider.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode exposing (Decoder)
 import Svg
 import Svg.Attributes as Svg
@@ -120,10 +119,10 @@ update lift msg model =
             else
                 ( Nothing, Cmd.none )
 
-        Init id_ min_ max_ step_ geometry ->
+        Init id_ min_ max_ step_ ->
             ( Just
                 { model
-                    | geometry = Just geometry
+                    | initialized = True
                     , min = min_
                     , max = max_
                     , step = step_
@@ -135,8 +134,8 @@ update lift msg model =
                            (Browser.Dom.getElement id_)
             )
 
-        Resize id_ min_ max_ step_ geometry ->
-            update lift (Init id_ min_ max_ step_ geometry) model
+        Resize id_ min_ max_ step_ ->
+            update lift (Init id_ min_ max_ step_) model
 
         GotElement element ->
             ( Just { model
@@ -157,7 +156,10 @@ update lift msg model =
             ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
 
 
-{- Computes the new value from the clientX position -}
+{- Computes the new value from the clientX position.
+
+In order for this function to work the most current element left and width must be passed in.
+-}
 
 valueFromClientX : { a | min : Float, max : Float } -> { b | left : Float, width : Float } -> Float -> Float
 valueFromClientX config rect clientX =
@@ -320,9 +322,6 @@ slider domId lift model options _ =
             else
                 config.value
 
-        geometry =
-            Maybe.withDefault defaultGeometry model.geometry
-
         discreteValue =
             discretize config continuousValue
 
@@ -394,10 +393,11 @@ slider domId lift model options _ =
         , Options.aria "valuemin" (String.fromFloat config.min)
         , Options.aria "valuemax" (String.fromFloat config.max)
         , Options.aria "valuenow" (String.fromFloat discreteValue)
-        , when (model.geometry == Nothing || configChanged) <|
+        , when (not model.initialized || configChanged) <|
             GlobalEvents.onTick <|
-                Decode.map (lift << Init config.id_ config.min config.max config.step) decodeGeometry
-        , GlobalEvents.onResize <| Decode.map (lift << Resize config.id_ config.min config.max config.step) decodeGeometry
+                Decode.succeed (lift <| Init config.id_ config.min config.max config.step)
+        , GlobalEvents.onResize <|
+            Decode.succeed (lift <| Resize config.id_ config.min config.max config.step)
         , Options.on "keydown" <|
             Decode.map lift <|
                 Decode.map2
@@ -783,31 +783,6 @@ decodeClientX =
         , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
         , Decode.at [ "clientX" ] Decode.float
         ]
-
-
-decodeGeometry : Decoder Geometry
-decodeGeometry =
-    let
-        traverseToContainer decoder =
-            hasClass "mdc-slider"
-                |> Decode.andThen
-                    (\doesHaveClass ->
-                        if doesHaveClass then
-                            decoder
-
-                        else
-                            DOM.parentElement (Decode.lazy (\_ -> traverseToContainer decoder))
-                    )
-    in
-    DOM.target <|
-        traverseToContainer <|
-            Decode.map2
-                (\offsetWidth offsetLeft ->
-                    { rect = { width = offsetWidth, left = offsetLeft }
-                    }
-                )
-                DOM.offsetWidth
-                DOM.offsetLeft
 
 
 data : String -> Decoder a -> Decoder a
