@@ -4,6 +4,7 @@ import Demo.Helper.Hero as Hero
 import Demo.Helper.ResourceLink as ResourceLink
 import Demo.Page as Page exposing (Page)
 import Html exposing (Html, text)
+import Html.Attributes as Html
 import Material
 import Material.Chip as Chip
 import Material.Options exposing (cs, styled, when)
@@ -83,6 +84,7 @@ view lift page model =
                 , filterChips lift model
                 , actionChips lift model
                 , shapedChips lift model
+                , imageChips lift model
                 ]
             )
         ]
@@ -254,5 +256,30 @@ shapedChips lift model =
         , chip "chips-shaped-chips-tv-stand" "TV Stand"
         , chip "chips-shaped-chips-sofas" "Sofas"
         , chip "chips-shaped-chips-office-chairs" "Office chairs"
+        ]
+    ]
+
+
+imageChips : (Msg m -> m) -> Model m -> List (Html m)
+imageChips lift model =
+    let
+        chip index filename label =
+            Chip.view (lift << Mdc)
+                index
+                model.mdc
+                [ cs "demo-chip-image"
+                , Chip.leadingThumbnail [ Html.img [ Html.src <| "images/" ++ filename ++ ".svg" ] [] ]
+                ]
+                [ text label
+                ]
+    in
+    [ styled Html.h2
+        [ Typography.subheading1
+        ]
+        [ text "Image Chips"
+        ]
+    , Chip.chipset []
+        [ chip "chips-image-chips-animal1" "animal1" "Animal 1"
+        , chip "chips-dimage-chips-animal2" "animal2" "Animal 2"
         ]
     ]

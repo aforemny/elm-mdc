@@ -8,6 +8,7 @@ module Internal.Chip.Implementation exposing
     , filter
     , input
     , leadingIcon
+    , leadingThumbnail
     , onClick
     , react
     , selected
@@ -23,7 +24,7 @@ import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Helpers as Helpers
 import Internal.Icon.Implementation as Icon
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (cs, css, styled, viewJust, when)
 import Internal.Ripple.Implementation as Ripple
 import Json.Decode as Json exposing (Decoder)
 import Svg exposing (path)
@@ -47,6 +48,7 @@ update lift msg model =
 type alias Config m =
     { leadingIcon : Maybe String
     , trailingIcon : Maybe String
+    , leadingThumbnail : Maybe ( List (Html m) )
     , onClick : Maybe m
     , selected : Bool
     , checkmark : Bool
@@ -57,6 +59,7 @@ defaultConfig : Config m
 defaultConfig =
     { leadingIcon = Nothing
     , trailingIcon = Nothing
+    , leadingThumbnail = Nothing
     , onClick = Nothing
     , selected = False
     , checkmark = False
@@ -75,6 +78,11 @@ leadingIcon str =
 trailingIcon : String -> Property m
 trailingIcon str =
     Options.option (\config -> { config | trailingIcon = Just str })
+
+
+leadingThumbnail : List (Html m) -> Property m
+leadingThumbnail nodes =
+    Options.option (\config -> { config | leadingThumbnail = Just nodes })
 
 
 selected : Property m
@@ -164,6 +172,34 @@ chip domId lift model options nodes =
 
         ripple =
             Ripple.view False domId (lift << RippleMsg) model.ripple []
+
+        viewLeadingIcon icon =
+            Icon.view
+                [ cs "mdc-chip__icon mdc-chip__icon--leading"
+                , when (config.selected && config.checkmark) <|
+                    cs "mdc-chip__icon--leading-hidden"
+                , -- Make icon size fixed during animation
+                    css "font-size" "20px"
+                ]
+                icon
+
+        viewTrailingIcon icon =
+            styled Html.span
+                [ Options.role "gridcell" ]
+                [ Icon.view
+                      [ cs "mdc-chip__icon mdc-chip__icon--trailing"
+                      , Options.attribute (Html.tabindex -1)
+                      , Options.role "button"
+                      ]
+                      icon
+                ]
+
+        viewThumbnail thumbnail =
+            styled Html.span
+                [ cs "mdc-chip__icon mdc-chip__icon--leading"
+                ]
+                thumbnail
+
     in
     Options.apply summary
         Html.div
@@ -184,20 +220,8 @@ chip domId lift model options nodes =
                     [ cs "mdc-chip__ripple" ]
                     []
               ]
-            , config.leadingIcon
-                |> Maybe.map
-                    (\icon ->
-                        [ Icon.view
-                            [ cs "mdc-chip__icon mdc-chip__icon--leading"
-                            , when (config.selected && config.checkmark) <|
-                                cs "mdc-chip__icon--leading-hidden"
-                            , -- Make icon size fixed during animation
-                              css "font-size" "20px"
-                            ]
-                            icon
-                        ]
-                    )
-                |> Maybe.withDefault []
+            , [ viewJust config.leadingThumbnail viewThumbnail ]
+            , [ viewJust config.leadingIcon viewLeadingIcon ]
             , if config.checkmark then
                     [ styled Html.div
                         [ cs "mdc-chip__checkmark" ]
@@ -231,21 +255,7 @@ chip domId lift model options nodes =
                           ]
                     ]
               ]
-            , config.trailingIcon
-                |> Maybe.map
-                    (\icon ->
-                        [ styled Html.span
-                              [ Options.role "gridcell" ]
-                              [ Icon.view
-                                    [ cs "mdc-chip__icon mdc-chip__icon--trailing"
-                                    , Options.attribute (Html.tabindex -1)
-                                    , Options.role "button"
-                                    ]
-                                    icon
-                              ]
-                        ]
-                    )
-                |> Maybe.withDefault []
+            , [ viewJust config.trailingIcon viewTrailingIcon ]
             ]
         )
 

@@ -7,6 +7,8 @@ New features:
 * See Material Components for the Web [v7.0.0](https://github.com/material-components/material-components-web/blob/master/CHANGELOG.md) release for all details.
 * Material.CircularProgress: allow setting size.
 * TextField: allow setting prefix and suffix text.
+* Chips.leadingThumbnail: allow passing random nodes, for example to
+  display a user avatar or thumbnail, instead of just an icon.
 
 Fixes:
 * Material.CircularProgress: indeterminate version now works properly.
