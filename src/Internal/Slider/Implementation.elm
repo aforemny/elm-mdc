@@ -13,7 +13,7 @@ module Internal.Slider.Implementation exposing
     , view
     )
 
-import Browser.Dom
+import Browser.Dom as Dom
 import Html as Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
@@ -55,14 +55,10 @@ update lift msg model =
         RequestSliderDimensions id_ next clientX ->
             -- Get current slider dimensions before determine what value the user clicked
             ( Nothing
-            , Task.attempt (\result ->
-                                case result of
-                                    Ok r -> lift (GotSliderDimensions r next clientX)
-                                    Err _ -> lift NoOp)
-                           (Browser.Dom.getElement id_)
+            , getElement lift id_ (GotSliderDimensions next clientX)
             )
 
-        GotSliderDimensions element next clientX ->
+        GotSliderDimensions next clientX element ->
             let
                 new_model =
                     { model
@@ -127,11 +123,7 @@ update lift msg model =
                     , max = max_
                     , step = step_
                 }
-            , Task.attempt (\result ->
-                                case result of
-                                    Ok r -> lift (GotElement r)
-                                    Err _ -> lift NoOp)
-                           (Browser.Dom.getElement id_)
+            , getElement lift id_ GotElement
             )
 
         Resize id_ min_ max_ step_ ->
@@ -156,11 +148,23 @@ update lift msg model =
             ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
 
 
-{- Computes the new value from the clientX position.
+
+{-| Attempt to retrieve the dimension of the given element.
+-}
+getElement : (Msg m -> m) -> String -> (Dom.Element -> Msg m) -> Cmd m
+getElement lift id_ msg =
+    Task.attempt
+        (\result ->
+             case result of
+                 Ok r -> lift (msg r)
+                 Err _ -> lift NoOp)
+        (Dom.getElement id_)
+
+
+{-| Computes the new value from the clientX position.
 
 In order for this function to work the most current element left and width must be passed in.
 -}
-
 valueFromClientX : { a | min : Float, max : Float } -> { b | left : Float, width : Float } -> Float -> Float
 valueFromClientX config rect clientX =
     let

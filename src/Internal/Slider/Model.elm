@@ -44,7 +44,7 @@ type Msg m
     | Init String Float Float Float
     | Resize String Float Float Float
     | RequestSliderDimensions String (Float -> Msg m) Float
-    | GotSliderDimensions Dom.Element (Float -> Msg m) Float
+    | GotSliderDimensions (Float -> Msg m) Float Dom.Element
     | InteractionStart Float
     | KeyDown
     | Focus
