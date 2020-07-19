@@ -53,17 +53,17 @@ update lift msg model =
             ( Just { model | inTransit = False }, Cmd.none )
 
         RequestSliderDimensions id_ next clientX ->
-            -- Get current slider dimensions before determine what value the user clicked
+            -- Get current slider dimensions before determining what value the user clicked
             ( Nothing
             , getElement lift id_ (GotSliderDimensions next clientX)
             )
 
-        GotSliderDimensions next clientX element ->
+        GotSliderDimensions next clientX el ->
             let
                 new_model =
                     { model
-                        | left = element.element.x
-                        , width = element.element.width
+                        | left = el.element.x
+                        , width = el.element.width
                     }
             in
                 update lift (next clientX) new_model
@@ -129,10 +129,10 @@ update lift msg model =
         Resize id_ min_ max_ step_ ->
             update lift (Init id_ min_ max_ step_) model
 
-        GotElement element ->
+        GotElement el ->
             ( Just { model
-                       | left = element.element.x
-                       , width = element.element.width
+                       | left = el.element.x
+                       , width = el.element.width
                    }
             , Cmd.none )
 
@@ -380,14 +380,14 @@ slider domId lift model options _ =
     Options.apply summary
         Html.div
         [ Options.id config.id_
-        , cs "mdc-slider"
-        , cs "mdc-slider--focus" |> when model.focus
-        , cs "mdc-slider--active" |> when model.active
-        , cs "mdc-slider--off" |> when (discreteValue <= config.min)
-        , cs "mdc-slider--discrete" |> when config.discrete
-        , cs "mdc-slider--disabled" |> when config.disabled
-        , cs "mdc-slider--in-transit" |> when model.inTransit
-        , cs "mdc-slider--display-markers" |> when config.trackMarkers
+        , block
+        , modifier "focus" |> when model.focus
+        , modifier "active" |> when model.active
+        , modifier "off" |> when (discreteValue <= config.min)
+        , modifier "discrete" |> when config.discrete
+        , modifier "disabled" |> when config.disabled
+        , modifier "in-transit" |> when model.inTransit
+        , modifier "display-markers" |> when config.trackMarkers
         , Options.attribute (Html.tabindex 0)
         , Options.aria "disabled" "true" |> when config.disabled
         , Options.data "min" (String.fromFloat config.min)
@@ -613,22 +613,22 @@ slider domId lift model options _ =
         ]
         []
         [ styled Html.div
-            [ cs "mdc-slider__track-container"
+            [ element "track-container"
             ]
             (List.concat
                 [ [ styled Html.div
-                        [ cs "mdc-slider__track"
+                        [ element "track"
                         , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
                         ]
                         []
                   ]
                 , if config.discrete then
                     [ styled Html.div
-                        [ cs "mdc-slider__track-marker-container"
+                        [ element "track-marker-container"
                         ]
                         (List.repeat (round ((config.max - config.min) / config.step)) <|
                             styled Html.div
-                                [ cs "mdc-slider__track-marker"
+                                [ element "track-marker"
                                 ]
                                 []
                         )
@@ -639,7 +639,7 @@ slider domId lift model options _ =
                 ]
             )
         , styled Html.div
-            [ cs "mdc-slider__thumb-container"
+            [ element "thumb-container"
             , Options.when (not config.disabled) <|
                 Options.many
                     (downs
@@ -677,16 +677,16 @@ slider domId lift model options _ =
                             []
                         ]
                   , styled Html.div
-                        [ cs "mdc-slider__focus-ring"
+                        [ element "focus-ring"
                         ]
                         []
                   ]
                 , if config.discrete then
                     [ styled Html.div
-                        [ cs "mdc-slider__pin"
+                        [ element "pin"
                         ]
                         [ styled Html.div
-                            [ cs "mdc-slider__pin-value-marker"
+                            [ element "pin-value-marker"
                             ]
                             [ text (String.fromFloat discreteValue)
                             ]
@@ -821,3 +821,22 @@ step value_ =
 trackMarkers : Property m
 trackMarkers =
     Options.option (\config -> { config | trackMarkers = True })
+
+
+{- Make it easier to work with BEM conventions
+-}
+block : Property m
+block =
+    cs blockName
+
+element : String -> Property m
+element module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+modifier : String -> Property m
+modifier modifier_ =
+    cs ( blockName ++ "--" ++ modifier_ )
+
+blockName : String
+blockName =
+    "mdc-slider"
