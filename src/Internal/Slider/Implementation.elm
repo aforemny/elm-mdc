@@ -371,6 +371,17 @@ slider domId lift model options _ =
             else
                 (discreteValue - config.min) / (config.max - config.min)
 
+        -- keep calculation in css for better rounding/subpixel behavior
+        markerStyle min_ max_ step_ =
+            let
+                markerAmount = "((" ++ String.fromFloat max_ ++ " - " ++ String.fromFloat min_ ++ ") / " ++ String.fromFloat step_ ++ ")"
+                markerWidth = "2px"
+                markerBkgdImage = "linear-gradient(to right, currentColor " ++ markerWidth ++ ", transparent 0)"
+                markerBkgdLayout = "0 center / calc((100% - " ++ markerWidth ++ ") / " ++ markerAmount ++ ") 100% repeat-x"
+            in
+                markerBkgdImage ++ " " ++ markerBkgdLayout
+
+
         configChanged =
             config.min /= model.min ||
             config.max /= model.max ||
@@ -615,29 +626,20 @@ slider domId lift model options _ =
         [ styled Html.div
             [ element "track-container"
             ]
-            (List.concat
-                [ [ styled Html.div
-                        [ element "track"
-                        , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
-                        ]
-                        []
+            [ styled Html.div
+                  [ element "track"
+                  , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
                   ]
-                , if config.discrete then
-                    [ styled Html.div
-                        [ element "track-marker-container"
-                        ]
-                        (List.repeat (round ((config.max - config.min) / config.step)) <|
-                            styled Html.div
-                                [ element "track-marker"
-                                ]
-                                []
-                        )
-                    ]
-
-                  else
-                    []
-                ]
-            )
+                  []
+            , if config.discrete then
+                  styled Html.div
+                      [ element "track-marker-container"
+                      , css "background" <| markerStyle config.min config.max config.step
+                      ]
+                      []
+              else
+                  text ""
+            ]
         , styled Html.div
             [ element "thumb-container"
             , Options.when (not config.disabled) <|
