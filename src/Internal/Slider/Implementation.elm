@@ -13,14 +13,14 @@ module Internal.Slider.Implementation exposing
     , view
     )
 
-import DOM
+import Browser.Dom as Dom
 import Html as Html exposing (Html, text)
 import Html.Attributes as Html
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (cs, css, styled, when)
-import Internal.Slider.Model exposing (Geometry, Model, Msg(..), defaultGeometry, defaultModel)
+import Internal.Slider.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode exposing (Decoder)
 import Svg
 import Svg.Attributes as Svg
@@ -52,13 +52,26 @@ update lift msg model =
         TransitionEnd ->
             ( Just { model | inTransit = False }, Cmd.none )
 
-        InteractionStart _ { clientX } ->
-            let
-                geometry =
-                    Maybe.withDefault defaultGeometry model.geometry
+        RequestSliderDimensions id_ next clientX ->
+            -- Get current slider dimensions before determining what value the user clicked
+            ( Nothing
+            , getElement lift id_ (GotSliderDimensions next clientX)
+            )
 
+        GotSliderDimensions next clientX el ->
+            let
+                new_model =
+                    { model
+                        | left = el.element.x
+                        , width = el.element.width
+                    }
+            in
+                update lift (next clientX) new_model
+
+        InteractionStart clientX ->
+            let
                 activeValue =
-                    valueFromClientX geometry clientX
+                    valueFromClientX model model clientX
             in
             ( Just
                 { model
@@ -70,13 +83,10 @@ update lift msg model =
             , Cmd.none
             )
 
-        ThumbContainerPointer _ { clientX } ->
+        ThumbContainerPointer clientX ->
             let
-                geometry =
-                    Maybe.withDefault defaultGeometry model.geometry
-
                 activeValue =
-                    valueFromClientX geometry clientX
+                    valueFromClientX model model clientX
             in
             ( Just
                 { model
@@ -88,14 +98,11 @@ update lift msg model =
             , Cmd.none
             )
 
-        Drag { clientX } ->
+        Drag clientX ->
             if model.active then
                 let
-                    geometry =
-                        Maybe.withDefault defaultGeometry model.geometry
-
                     activeValue =
-                        valueFromClientX geometry clientX
+                        valueFromClientX model model clientX
                 in
                 ( Just
                     { model
@@ -108,16 +115,26 @@ update lift msg model =
             else
                 ( Nothing, Cmd.none )
 
-        Init geometry ->
+        Init id_ min_ max_ step_ ->
             ( Just
                 { model
-                    | geometry = Just geometry
+                    | initialized = True
+                    , min = min_
+                    , max = max_
+                    , step = step_
                 }
-            , Cmd.none
+            , getElement lift id_ GotElement
             )
 
-        Resize geometry ->
-            update lift (Init geometry) model
+        Resize id_ min_ max_ step_ ->
+            update lift (Init id_ min_ max_ step_) model
+
+        GotElement el ->
+            ( Just { model
+                       | left = el.element.x
+                       , width = el.element.width
+                   }
+            , Cmd.none )
 
         KeyDown ->
             ( Just { model | focus = True }, Cmd.none )
@@ -131,28 +148,43 @@ update lift msg model =
             ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
 
 
-{- Computes the new value from the clientX position -}
 
-valueFromClientX : Geometry -> Float -> Float
-valueFromClientX geometry clientX =
+{-| Attempt to retrieve the dimension of the given element.
+-}
+getElement : (Msg m -> m) -> String -> (Dom.Element -> Msg m) -> Cmd m
+getElement lift id_ msg =
+    Task.attempt
+        (\result ->
+             case result of
+                 Ok r -> lift (msg r)
+                 Err _ -> lift NoOp)
+        (Dom.getElement id_)
+
+
+{-| Computes the new value from the clientX position.
+
+In order for this function to work the most current element left and width must be passed in.
+-}
+valueFromClientX : { a | min : Float, max : Float } -> { b | left : Float, width : Float } -> Float -> Float
+valueFromClientX config rect clientX =
     let
         isRtl =
             False
 
         xPos =
-            clientX - geometry.rect.left
+            clientX - rect.left
 
         pctComplete =
             if isRtl then
-                1 - (xPos / geometry.rect.width)
+                1 - (xPos / rect.width)
 
             else
-                xPos / geometry.rect.width
+                xPos / rect.width
     in
-    geometry.min + pctComplete * (geometry.max - geometry.min)
+    config.min + pctComplete * (config.max - config.min)
 
 
-valueForKey : Maybe String -> Int -> Geometry -> Float -> Maybe Float
+valueForKey : Maybe String -> Int -> { a | step : Float, min : Float, max : Float, discrete : Bool } -> Float -> Maybe Float
 valueForKey key keyCode geometry currentValue =
     let
         isRtl =
@@ -167,7 +199,7 @@ valueForKey key keyCode geometry currentValue =
             )
             <|
                 if geometry.discrete then
-                    Maybe.withDefault 1 geometry.step
+                    geometry.step
 
                 else
                     (geometry.max - geometry.min) / 100
@@ -223,7 +255,8 @@ valueForKey key keyCode geometry currentValue =
 
 
 type alias Config m =
-    { value : Float
+    { id_ : Index
+    , value : Float
     , min : Float
     , max : Float
     , discrete : Bool
@@ -237,7 +270,8 @@ type alias Config m =
 
 defaultConfig : Config m
 defaultConfig =
-    { value = 0
+    { id_ = ""
+    , value = 0
     , min = 0
     , max = 100
     , step = 1
@@ -278,8 +312,8 @@ disabled =
     Options.option (\config -> { config | disabled = True })
 
 
-slider : (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-slider lift model options _ =
+slider : Index -> (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+slider domId lift model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
@@ -292,11 +326,8 @@ slider lift model options _ =
             else
                 config.value
 
-        geometry =
-            Maybe.withDefault defaultGeometry model.geometry
-
         discreteValue =
-            discretize geometry continuousValue
+            discretize config continuousValue
 
         translateX =
             let
@@ -313,7 +344,7 @@ slider lift model options _ =
                     else
                         0
             in
-            c * geometry.rect.width
+            c * model.width
 
         downs =
             [ "mousedown"
@@ -340,19 +371,34 @@ slider lift model options _ =
             else
                 (discreteValue - config.min) / (config.max - config.min)
 
-        stepChanged =
-            Just config.step /= Maybe.andThen .step model.geometry
+        -- keep calculation in css for better rounding/subpixel behavior
+        markerStyle min_ max_ step_ =
+            let
+                markerAmount = "((" ++ String.fromFloat max_ ++ " - " ++ String.fromFloat min_ ++ ") / " ++ String.fromFloat step_ ++ ")"
+                markerWidth = "2px"
+                markerBkgdImage = "linear-gradient(to right, currentColor " ++ markerWidth ++ ", transparent 0)"
+                markerBkgdLayout = "0 center / calc((100% - " ++ markerWidth ++ ") / " ++ markerAmount ++ ") 100% repeat-x"
+            in
+                markerBkgdImage ++ " " ++ markerBkgdLayout
+
+
+        configChanged =
+            config.min /= model.min ||
+            config.max /= model.max ||
+            config.step /= model.step
+
     in
     Options.apply summary
         Html.div
-        [ cs "mdc-slider"
-        , cs "mdc-slider--focus" |> when model.focus
-        , cs "mdc-slider--active" |> when model.active
-        , cs "mdc-slider--off" |> when (discreteValue <= config.min)
-        , cs "mdc-slider--discrete" |> when config.discrete
-        , cs "mdc-slider--disabled" |> when config.disabled
-        , cs "mdc-slider--in-transit" |> when model.inTransit
-        , cs "mdc-slider--display-markers" |> when config.trackMarkers
+        [ Options.id config.id_
+        , block
+        , modifier "focus" |> when model.focus
+        , modifier "active" |> when model.active
+        , modifier "off" |> when (discreteValue <= config.min)
+        , modifier "discrete" |> when config.discrete
+        , modifier "disabled" |> when config.disabled
+        , modifier "in-transit" |> when model.inTransit
+        , modifier "display-markers" |> when config.trackMarkers
         , Options.attribute (Html.tabindex 0)
         , Options.aria "disabled" "true" |> when config.disabled
         , Options.data "min" (String.fromFloat config.min)
@@ -362,17 +408,18 @@ slider lift model options _ =
         , Options.aria "valuemin" (String.fromFloat config.min)
         , Options.aria "valuemax" (String.fromFloat config.max)
         , Options.aria "valuenow" (String.fromFloat discreteValue)
-        , when ((model.geometry == Nothing) || stepChanged) <|
+        , when (not model.initialized || configChanged) <|
             GlobalEvents.onTick <|
-                Decode.map (lift << Init) decodeGeometry
-        , GlobalEvents.onResize <| Decode.map (lift << Resize) decodeGeometry
+                Decode.succeed (lift <| Init config.id_ config.min config.max config.step)
+        , GlobalEvents.onResize <|
+            Decode.succeed (lift <| Resize config.id_ config.min config.max config.step)
         , Options.on "keydown" <|
             Decode.map lift <|
                 Decode.map2
                     (\key keyCode ->
                         let
                             activeValue =
-                                valueForKey key keyCode geometry config.value
+                                valueForKey key keyCode config config.value
                         in
                         if activeValue /= Nothing then
                             KeyDown
@@ -400,7 +447,7 @@ slider lift model options _ =
                             (\key keyCode ->
                                 let
                                     activeValue =
-                                        valueForKey key keyCode geometry config.value
+                                        valueForKey key keyCode config config.value
                                 in
                                 if activeValue /= Nothing then
                                     Decode.succeed NoOp
@@ -422,8 +469,8 @@ slider lift model options _ =
                     (\key keyCode ->
                         let
                             activeValue =
-                                valueForKey key keyCode geometry config.value
-                                    |> Maybe.map (discretize geometry)
+                                valueForKey key keyCode config config.value
+                                    |> Maybe.map (discretize config)
                         in
                         Maybe.map2 (<|) config.onChange activeValue
                             |> Maybe.withDefault (lift NoOp)
@@ -440,8 +487,8 @@ slider lift model options _ =
                     (\key keyCode ->
                         let
                             activeValue =
-                                valueForKey key keyCode geometry config.value
-                                    |> Maybe.map (discretize geometry)
+                                valueForKey key keyCode config config.value
+                                    |> Maybe.map (discretize config)
                         in
                         Maybe.map2 (<|) config.onInput activeValue
                             |> Maybe.withDefault (lift NoOp)
@@ -458,7 +505,7 @@ slider lift model options _ =
             Options.many <|
                 List.map
                     (\event ->
-                        Options.on event (Decode.map (lift << InteractionStart event) decodeClientX)
+                        Options.on event (Decode.map (lift << RequestSliderDimensions config.id_ InteractionStart) decodeClientX)
                     )
                     downs
         , when (config.onChange /= Nothing) <|
@@ -467,11 +514,11 @@ slider lift model options _ =
                     (\event ->
                         Options.on event <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
-                                            valueFromClientX geometry clientX
-                                                |> discretize geometry
+                                            valueFromClientX config model clientX
+                                                |> discretize config
                                     in
                                     Maybe.map
                                         (\changeHandler -> changeHandler activeValue)
@@ -487,11 +534,11 @@ slider lift model options _ =
                     (\event ->
                         Options.on event <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
-                                            valueFromClientX geometry clientX
-                                                |> discretize geometry
+                                            valueFromClientX config model clientX
+                                                |> discretize config
                                     in
                                     Maybe.map
                                         (\inputHandler -> inputHandler activeValue)
@@ -515,11 +562,11 @@ slider lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
-                                            valueFromClientX geometry clientX
-                                                |> discretize geometry
+                                            valueFromClientX config model clientX
+                                                |> discretize config
                                     in
                                     Maybe.map (\changeHandler -> changeHandler activeValue) config.onChange
                                         |> Maybe.withDefault (lift NoOp)
@@ -533,11 +580,11 @@ slider lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
-                                            valueFromClientX geometry clientX
-                                                |> discretize geometry
+                                            valueFromClientX config model clientX
+                                                |> discretize config
                                     in
                                     Maybe.map
                                         (\inputHandler -> inputHandler activeValue)
@@ -551,7 +598,7 @@ slider lift model options _ =
             Options.many <|
                 List.map
                     (\handler ->
-                        handler (Decode.map (lift << Drag) decodeClientX)
+                        handler (Decode.map (lift << RequestSliderDimensions config.id_ Drag) decodeClientX)
                     )
                     moves
         , when ((config.onInput /= Nothing) && model.active) <|
@@ -560,11 +607,11 @@ slider lift model options _ =
                     (\handler ->
                         handler <|
                             Decode.map
-                                (\{ clientX } ->
+                                (\clientX ->
                                     let
                                         activeValue =
-                                            valueFromClientX geometry clientX
-                                                |> discretize geometry
+                                            valueFromClientX config model clientX
+                                                |> discretize config
                                     in
                                     Maybe.map
                                         (\inputHandler -> inputHandler activeValue)
@@ -577,33 +624,24 @@ slider lift model options _ =
         ]
         []
         [ styled Html.div
-            [ cs "mdc-slider__track-container"
+            [ element "track-container"
             ]
-            (List.concat
-                [ [ styled Html.div
-                        [ cs "mdc-slider__track"
-                        , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
-                        ]
-                        []
+            [ styled Html.div
+                  [ element "track"
+                  , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
                   ]
-                , if config.discrete then
-                    [ styled Html.div
-                        [ cs "mdc-slider__track-marker-container"
-                        ]
-                        (List.repeat (round ((config.max - config.min) / config.step)) <|
-                            styled Html.div
-                                [ cs "mdc-slider__track-marker"
-                                ]
-                                []
-                        )
-                    ]
-
-                  else
-                    []
-                ]
-            )
+                  []
+            , if config.discrete then
+                  styled Html.div
+                      [ element "track-marker-container"
+                      , css "background" <| markerStyle config.min config.max config.step
+                      ]
+                      []
+              else
+                  text ""
+            ]
         , styled Html.div
-            [ cs "mdc-slider__thumb-container"
+            [ element "thumb-container"
             , Options.when (not config.disabled) <|
                 Options.many
                     (downs
@@ -617,7 +655,7 @@ slider lift model options _ =
                                             , preventDefault = False
                                             }
                                         )
-                                        (Decode.map (ThumbContainerPointer event) decodeClientX)
+                                        (Decode.map (RequestSliderDimensions config.id_ ThumbContainerPointer) decodeClientX)
                                     )
                             )
                     )
@@ -641,16 +679,16 @@ slider lift model options _ =
                             []
                         ]
                   , styled Html.div
-                        [ cs "mdc-slider__focus-ring"
+                        [ element "focus-ring"
                         ]
                         []
                   ]
                 , if config.discrete then
                     [ styled Html.div
-                        [ cs "mdc-slider__pin"
+                        [ element "pin"
                         ]
                         [ styled Html.div
-                            [ cs "mdc-slider__pin-value-marker"
+                            [ element "pin-value-marker"
                             ]
                             [ text (String.fromFloat discreteValue)
                             ]
@@ -698,10 +736,17 @@ view :
     -> List (Html m)
     -> Html m
 view =
-    Component.render getSet.get slider Internal.Msg.SliderMsg
+    \lift domId store options ->
+        Component.render getSet.get
+            (slider domId)
+            Internal.Msg.SliderMsg
+            lift
+            domId
+            store
+            (Options.internalId domId :: options)
 
 
-discretize : Geometry -> Float -> Float
+discretize : { a | min : Float, max : Float, step : Float, discrete : Bool } -> Float -> Float
 discretize geometry continuousValue =
     let
         continuous =
@@ -709,7 +754,6 @@ discretize geometry continuousValue =
 
         steps =
             geometry.step
-                |> Maybe.withDefault 1
                 |> (\steps_ ->
                         if steps_ == 0 then
                             1
@@ -738,51 +782,13 @@ discretize geometry continuousValue =
 NOTE: changedTouches is a property introduced by elm-mdc.js and only
 valid for the globaltouchend event.
 -}
-decodeClientX : Decoder { clientX : Float }
+decodeClientX : Decoder Float
 decodeClientX =
-    Decode.map (\clientX -> { clientX = clientX }) <|
-        Decode.oneOf
-            [ Decode.at [ "targetTouches", "0", "clientX" ] Decode.float
-            , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
-            , Decode.at [ "clientX" ] Decode.float
-            ]
-
-
-decodeGeometry : Decoder Geometry
-decodeGeometry =
-    let
-        traverseToContainer decoder =
-            hasClass "mdc-slider"
-                |> Decode.andThen
-                    (\doesHaveClass ->
-                        if doesHaveClass then
-                            decoder
-
-                        else
-                            DOM.parentElement (Decode.lazy (\_ -> traverseToContainer decoder))
-                    )
-    in
-    DOM.target <|
-        traverseToContainer <|
-            Decode.map6
-                (\offsetWidth offsetLeft decodedDiscrete decodedMin decodedMax decodedStep ->
-                    { rect = { width = offsetWidth, left = offsetLeft }
-                    , discrete = decodedDiscrete
-                    , min = decodedMin
-                    , max = decodedMax
-                    , step = decodedStep
-                    }
-                )
-                DOM.offsetWidth
-                DOM.offsetLeft
-                (hasClass "mdc-slider--discrete")
-                (data "min" (Decode.map (String.toFloat >> Maybe.withDefault 1) Decode.string))
-                (data "max" (Decode.map (String.toFloat >> Maybe.withDefault 1) Decode.string))
-                (Decode.oneOf
-                    [ data "step" (Decode.map String.toFloat Decode.string)
-                    , Decode.succeed Nothing
-                    ]
-                )
+    Decode.oneOf
+        [ Decode.at [ "targetTouches", "0", "clientX" ] Decode.float
+        , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
+        , Decode.at [ "clientX" ] Decode.float
+        ]
 
 
 data : String -> Decoder a -> Decoder a
@@ -817,3 +823,22 @@ step value_ =
 trackMarkers : Property m
 trackMarkers =
     Options.option (\config -> { config | trackMarkers = True })
+
+
+{- Make it easier to work with BEM conventions
+-}
+block : Property m
+block =
+    cs blockName
+
+element : String -> Property m
+element module_ =
+    cs ( blockName ++ "__" ++ module_ )
+
+modifier : String -> Property m
+modifier modifier_ =
+    cs ( blockName ++ "--" ++ modifier_ )
+
+blockName : String
+blockName =
+    "mdc-slider"

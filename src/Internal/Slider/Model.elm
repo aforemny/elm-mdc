@@ -1,68 +1,57 @@
 module Internal.Slider.Model exposing
-    ( Geometry
-    , Model
+    ( Model
     , Msg(..)
-    , defaultGeometry
     , defaultModel
     )
 
 
+import Browser.Dom as Dom
+
+
 type alias Model =
-    { focus : Bool
+    { initialized : Bool
+    , focus : Bool
     , active : Bool
-    , geometry : Maybe Geometry
     , activeValue : Maybe Float
     , inTransit : Bool
     , preventFocus : Bool
+    , min : Float
+    , max : Float
+    , step : Float
+    , left : Float
+    , width : Float
     }
 
 
 defaultModel : Model
 defaultModel =
-    { focus = False
+    { initialized = False
+    , focus = False
     , active = False
-    , geometry = Nothing
     , activeValue = Nothing
     , inTransit = False
     , preventFocus = False
+    , min = 0
+    , max = 100
+    , step = 1
+    , left = 0
+    , width = 0
     }
 
 
 type Msg m
     = NoOp
-    | Init Geometry
-    | Resize Geometry
-    | InteractionStart String { clientX : Float }
+    | Init String Float Float Float
+    | Resize String Float Float Float
+    | RequestSliderDimensions String (Float -> Msg m) Float
+    | GotSliderDimensions (Float -> Msg m) Float Dom.Element
+    | InteractionStart Float
     | KeyDown
     | Focus
     | Blur
-    | ThumbContainerPointer String { clientX : Float }
+    | ThumbContainerPointer Float
     | TransitionEnd
-    | Drag { clientX : Float }
+    | Drag Float
     | Up
     | ActualUp
-
-
-type alias Geometry =
-    { rect : Rect
-    , discrete : Bool
-    , step : Maybe Float
-    , min : Float
-    , max : Float
-    }
-
-
-type alias Rect =
-    { left : Float
-    , width : Float
-    }
-
-
-defaultGeometry : Geometry
-defaultGeometry =
-    { rect = { left = 0, width = 0 }
-    , discrete = False
-    , min = 0
-    , max = 100
-    , step = Nothing
-    }
+    | GotElement Dom.Element

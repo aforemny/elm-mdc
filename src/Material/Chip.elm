@@ -6,6 +6,7 @@ module Material.Chip exposing
     , checkmark
     , leadingIcon
     , trailingIcon
+    , leadingThumbnail
     , chipset
     , choice
     , editable
@@ -53,6 +54,7 @@ Material Design chip requirements.
 
 @docs leadingIcon
 @docs trailingIcon
+@docs leadingThumbnail
 
 
 # Chip sets
@@ -89,18 +91,27 @@ view =
     Chip.view
 
 
-{-| Give the chip an leading icon.
+{-| Give the chip a leading icon.
 -}
 leadingIcon : String -> Property m
 leadingIcon =
     Chip.leadingIcon
 
 
-{-| Give the chip an trailing icon.
+{-| Give the chip a trailing icon.
 -}
 trailingIcon : String -> Property m
 trailingIcon =
     Chip.trailingIcon
+
+
+{-| Give the chip a leading image or svg. It's like `leadingIcon`, but
+allows you ultimate flexibility in what is displayed as the trailing
+thumbnail. Use this to display a profile image for example.
+-}
+leadingThumbnail : List (Html m) -> Property m
+leadingThumbnail =
+    Chip.leadingThumbnail
 
 
 {-| Make the chip selected

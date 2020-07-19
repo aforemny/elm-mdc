@@ -84,7 +84,7 @@ cd ..
 elm install elm/regex
 elm install elm/svg
 elm install elm/json
-elm install debois/elm-dom
+elm install K-Adam/elm-dom
 ```
 5. Change the `source-directories` property in `elm.json` to include `elm-mdc`:
 

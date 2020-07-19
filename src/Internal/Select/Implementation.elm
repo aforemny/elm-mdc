@@ -117,7 +117,7 @@ type alias Config m =
     , disabled : Bool
     , required : Bool
     , outlined : Bool
-    , id_ : String
+    , id_ : Index
     , selectedText : String
     , onSelect : Maybe (String -> m)
     }
