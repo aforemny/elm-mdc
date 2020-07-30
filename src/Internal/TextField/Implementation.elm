@@ -286,6 +286,11 @@ textField domId lift model options list =
         shouldFloat =
             shouldAlwaysFloat || focused || isDirty
 
+        canHaveLabel =
+            not (config.fullWidth || config.outlined || config.textarea)
+
+        hasLabel = config.labelText /= Nothing
+
         htmlLabel =
             styled Html.label
                 [ cs "mdc-floating-label"
@@ -396,6 +401,7 @@ textField domId lift model options list =
         [ block
         , modifier "focused" |> when focused
         , modifier "label-floating" |> when shouldFloat
+        , modifier "no-label" |> when (canHaveLabel && not hasLabel)
         , modifier "disabled" |> when config.disabled
         , modifier "fullwidth" |> when config.fullWidth
         , modifier "invalid" |> when isInvalid
@@ -421,7 +427,7 @@ textField domId lift model options list =
                      viewJust config.suffix viewSuffix
                  else
                      text ""
-               , if not config.fullWidth && not config.outlined && not config.textarea then
+               , if hasLabel && canHaveLabel then
                     htmlLabel
                  else
                     text ""
