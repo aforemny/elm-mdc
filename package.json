@@ -11,7 +11,7 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "material-components-web": "^7.0.0",
-    "webpack": "^4.43.0",
+    "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "engines": {
@@ -23,6 +23,6 @@
   "dependencies": {
     "babel-core": "^6.26.3",
     "custom-event": "^1.0.1",
-    "focus-trap": "^4.0.2"
+    "focus-trap": "^5.1.0"
   }
 }
