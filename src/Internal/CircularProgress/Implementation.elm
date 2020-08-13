@@ -58,6 +58,7 @@ view options _ =
         , modifier "indeterminate" |> when isIndeterminate
         , css "width" (String.fromInt config.size ++ "px" )
         , css "height" (String.fromInt config.size ++ "px" )
+        , css "text-align" "left"
         , aria "valuemin" "0"
         , aria "valuemax" "1"
         , aria "valuenow" (String.fromFloat valuenow) |> when (not isIndeterminate)
