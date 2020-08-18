@@ -267,24 +267,16 @@ onCheck =
 
 
 {-| See `onFocus` for additional information.
+
+The underlying implementation actually uses "focusout" instead of the "blur" event.
 -}
 onBlur : msg -> Property c msg
 onBlur =
     Internal.Options.onBlur
 
 
-{-| Since the `"focus"` (and `"blur"`) event does not bubble, be sure to use
-this on `nativeControl` if the component exposes that.
-
-    import Material.TextField as TextField
-
-    TextField.view Mdc "my-text-field" model.mdc
-        [ TextField.nativeControl
-            [ Options.onFocus Focus
-            ]
-        ]
-        []
-
+{-| Since the `"focus"` (and `"blur"`) event does not bubble, the
+underlying implementation actually uses the "focusin" event.
 -}
 onFocus : msg -> Property c msg
 onFocus =

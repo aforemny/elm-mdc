@@ -1,5 +1,10 @@
 ## Latest changes
 
+Breaking changes:
+- Possibly breaking change: Options.onFocus and Options.onBlur now
+  bubble focus and blur by using focusin and focusout
+  respectively. This leads to a more natural API.
+
 
 ## Upgrade to 7.0.0
 
