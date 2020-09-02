@@ -16,6 +16,7 @@ module Internal.Slider.Implementation exposing
 import Browser.Dom as Dom
 import Html as Html exposing (Html, text)
 import Html.Attributes as Html
+import Internal.Helpers exposing (delayedCmd)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
@@ -140,9 +141,8 @@ update lift msg model =
             ( Just { model | focus = True }, Cmd.none )
 
         Up ->
-            -- Note: In some instances `Up` fires before `InteractionStart`.
-            -- (TODO)
-            ( Just model, Task.perform lift (Task.succeed ActualUp) )
+            -- Note: On mobile `Up` (tends to) fire before `InteractionStart`.
+            ( Nothing, delayedCmd 50 (lift ActualUp) )
 
         ActualUp ->
             ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
@@ -548,9 +548,7 @@ slider domId lift model options _ =
                                 decodeClientX
                     )
                     downs
-        , -- Note: In some instances `Up` fires before `InteractionStart`.
-          -- (TODO)
-          Options.many <|
+        , Options.many <|
             List.map
                 (\handler ->
                     handler (Decode.succeed (lift Up))
