@@ -100,7 +100,7 @@ drawerItems =
         , ( "Text Field", Url.TextField )
         , ( "Theme", Url.Theme )
         , ( "Top App Bar", (Url.TopAppBar Nothing) )
-        , ( "Typograpy", Url.Typography )
+        , ( "Typography", Url.Typography )
         ]
 
 drawer :
