@@ -1,5 +1,10 @@
 ## Latest changes
 
+Fixes:
+* Material.List: nonInteractive list still had rippled element.
+* Material.Slider: fix behaviour on phone where slider would move when you scrolled the page.
+* Material.CircularProgress: display correct when container text is not left aligned.
+
 
 ## Upgrade to 7.0.0
 
