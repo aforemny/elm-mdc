@@ -496,7 +496,10 @@ liView domId lift model config listItemIds focusedIndex index options children =
                 (Decode.at [ "keyCode" ] Decode.int)
         ]
         []
-        ( styled Html.span [ element listItem "ripple" ] []
+        ( ( if rippled then
+              styled Html.span [ element listItem "ripple" ] []
+          else
+              Html.text "" )
         :: children )
 
 
