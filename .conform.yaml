@@ -1,0 +1,43 @@
+policies:
+  - type: commit
+    spec:
+      headerLength: 100
+      dco: false
+      gpg: false
+      imperative: true
+      maximumOfOneCommit: false
+      requireCommitBody: false
+      conventional:
+        types:
+          - "build"
+          - "chore"
+          - "ci"
+          - "docs"
+          - "perf"
+          - "refactor"
+          - "style"
+          - "test"
+          - "type"
+          - "vendor"
+        scopes:
+          - "demo"
+          - "button"
+          - "chip"
+          - "circular-progress"
+          - "data-table"
+          - "linear-progress"
+          - "select"
+          - "slider"
+          - "switch"
+          - "text-field"
+  - type: license
+    spec:
+      skipPaths:
+        - .git/
+        - .build*/
+      includeSuffixes:
+        - .ext
+      excludeSuffixes:
+        - .exclude-ext-prefix.ext
+      header: |
+        This is the contents of a license header.
