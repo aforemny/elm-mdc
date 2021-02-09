@@ -1,24 +1,13 @@
 module Material.Theme exposing
-    ( primary, primaryLight, primaryDark
-    , secondary, secondaryLight, secondaryDark
+    ( primary
+    , secondary
     , background
-    , primaryBg, primaryLightBg, primaryDarkBg
-    , secondaryBg, secondaryLightBg, secondaryDarkBg
-    , textPrimaryOnPrimary
-    , textSecondaryOnPrimary
-    , textHintOnPrimary
-    , textDisabledOnPrimary
-    , textIconOnPrimary
-    , textPrimaryOnSecondary
-    , textSecondaryOnSecondary
-    , textHintOnSecondary
-    , textDisabledOnSecondary
-    , textIconOnSecondary
-    , textPrimaryOnBackground
-    , textSecondaryOnBackground
-    , textHintOnBackground
-    , textDisabledOnBackground
-    , textIconOnBackground
+    , surface
+    , onPrimary
+    , onSecondary
+    , onSurface
+    , primaryBg
+    , secondaryBg
     , textPrimaryOnLight
     , textSecondaryOnLight
     , textHintOnLight
@@ -31,8 +20,11 @@ module Material.Theme exposing
     , textIconOnDark
     )
 
-{-| This color palette comprises primary and secondary colors that can be used for
-illustration or to develop your brand colors.
+{-| Color scheme will only get you 80% of the way to a well-designed app. Inevitably there will be some components that do not work "out of the box". To fix problems with accessibility and design, we suggest you use our Sass mixins, such as `button.filled-accessible()`. For more information, consult the documentation for each component.
+
+Only a very limited number of Material Design color customization
+features are supported for non-Sass clients. They are a set of CSS
+custom properties, and a set of CSS classes.
 
 The colors in this module are derived from three theme colors:
 
@@ -54,7 +46,7 @@ and five text styles:
 
 # Resources
 
-  - [Material Design guidelines: Color](https://material.io/guidelines/style/color.html)
+  - [Material Design guidelines: Color](https://material.io/design/guidelines-overview)
   - [Demo](https://aforemny.github.io/elm-mdc/#theme)
 
 
@@ -63,34 +55,23 @@ and five text styles:
 
 ## Text color
 
-@docs primary, primaryLight, primaryDark
-@docs secondary, secondaryLight, secondaryDark
+@docs primary
+@docs secondary
 
 
 ## Background colors
 
 @docs background
-@docs primaryBg, primaryLightBg, primaryDarkBg
-@docs secondaryBg, secondaryLightBg, secondaryDarkBg
+@docs surface
+@docs primaryBg
+@docs secondaryBg
 
 
 ## Text colors on specific background colors
 
-@docs textPrimaryOnPrimary
-@docs textSecondaryOnPrimary
-@docs textHintOnPrimary
-@docs textDisabledOnPrimary
-@docs textIconOnPrimary
-@docs textPrimaryOnSecondary
-@docs textSecondaryOnSecondary
-@docs textHintOnSecondary
-@docs textDisabledOnSecondary
-@docs textIconOnSecondary
-@docs textPrimaryOnBackground
-@docs textSecondaryOnBackground
-@docs textHintOnBackground
-@docs textDisabledOnBackground
-@docs textIconOnBackground
+@docs onPrimary
+@docs onSecondary
+@docs onSurface
 
 
 ## Text colors on generic background colors
@@ -126,32 +107,39 @@ secondary =
     Theme.secondary
 
 
-{-| Sets the text color to the theme primary color (light variant).
+{-| Sets the background color to the theme background color.
 -}
-primaryLight : Property c m
-primaryLight =
-    Theme.primaryLight
+background : Property c m
+background =
+    Theme.background
 
 
-{-| Sets the text color to the theme secondary color (light variant).
+{-| Sets the surface color to the theme surface color.
 -}
-secondaryLight : Property c m
-secondaryLight =
-    Theme.secondaryLight
+surface : Property c m
+surface =
+    Theme.surface
 
 
-{-| Sets the text color to the theme primary color (dark variant).
+{-| Sets the text color to the theme on-primary color
 -}
-primaryDark : Property c m
-primaryDark =
-    Theme.primaryDark
+onPrimary : Property c m
+onPrimary =
+    Theme.onPrimary
 
 
-{-| Sets the text color to the theme secondary color (dark variant).
+{-| Sets the text color to the theme on-secondary color.
 -}
-secondaryDark : Property c m
-secondaryDark =
-    Theme.secondaryDark
+onSecondary : Property c m
+onSecondary =
+    Theme.onSecondary
+
+
+{-| Sets the text color to the theme on-secondary color.
+-}
+onSurface : Property c m
+onSurface =
+    Theme.onSurface
 
 
 {-| Sets the background color to the theme primary color.
@@ -167,155 +155,6 @@ secondaryBg : Property c m
 secondaryBg =
     Theme.secondaryBg
 
-
-{-| Sets the background color to the theme primary color (light variant).
--}
-primaryLightBg : Property c m
-primaryLightBg =
-    Theme.primaryLightBg
-
-
-{-| Sets the background color to the theme secondary color (light variant).
--}
-secondaryLightBg : Property c m
-secondaryLightBg =
-    Theme.secondaryLightBg
-
-
-{-| Sets the background color to the theme primary color (dark variant).
--}
-primaryDarkBg : Property c m
-primaryDarkBg =
-    Theme.primaryDarkBg
-
-
-{-| Sets the background color to the theme secondary color (dark variant).
--}
-secondaryDarkBg : Property c m
-secondaryDarkBg =
-    Theme.secondaryDarkBg
-
-
-{-| Sets the background color to the theme background color.
--}
-background : Property c m
-background =
-    Theme.background
-
-
-{-| Sets text to a suitable color for primary text on top of primary color
-background.
--}
-textPrimaryOnPrimary : Property c m
-textPrimaryOnPrimary =
-    Theme.textPrimaryOnPrimary
-
-
-{-| Sets text to a suitable color for secondary text on top of primary color
-background.
--}
-textSecondaryOnPrimary : Property c m
-textSecondaryOnPrimary =
-    Theme.textSecondaryOnPrimary
-
-
-{-| Sets text to a suitable color for hint text on top of primary color
-background.
--}
-textHintOnPrimary : Property c m
-textHintOnPrimary =
-    Theme.textHintOnPrimary
-
-
-{-| Sets text to a suitable color for disabled text on top of primary color
-background.
--}
-textDisabledOnPrimary : Property c m
-textDisabledOnPrimary =
-    Theme.textDisabledOnPrimary
-
-
-{-| Sets text to a suitable color for icons on top of primary color
-background.
--}
-textIconOnPrimary : Property c m
-textIconOnPrimary =
-    Theme.textIconOnPrimary
-
-
-{-| Sets text to a suitable color for primary text on top of secondary color
-background.
--}
-textPrimaryOnSecondary : Property c m
-textPrimaryOnSecondary =
-    Theme.textPrimaryOnSecondary
-
-
-{-| Sets text to a suitable color for secondary text on top of secondary color
-background.
--}
-textSecondaryOnSecondary : Property c m
-textSecondaryOnSecondary =
-    Theme.textSecondaryOnSecondary
-
-
-{-| Sets text to a suitable color for hint text on top of secondary color
-background.
--}
-textHintOnSecondary : Property c m
-textHintOnSecondary =
-    Theme.textHintOnSecondary
-
-
-{-| Sets text to a suitable color for disabled text on top of secondary color
-background.
--}
-textDisabledOnSecondary : Property c m
-textDisabledOnSecondary =
-    Theme.textDisabledOnSecondary
-
-
-{-| Sets text to a suitable color for icons on top of secondary color
-background.
--}
-textIconOnSecondary : Property c m
-textIconOnSecondary =
-    Theme.textIconOnSecondary
-
-
-{-| Sets text to a suitable color for primary text on top of background.
--}
-textPrimaryOnBackground : Property c m
-textPrimaryOnBackground =
-    Theme.textPrimaryOnBackground
-
-
-{-| Sets text to a suitable color for secondary text on top of background.
--}
-textSecondaryOnBackground : Property c m
-textSecondaryOnBackground =
-    Theme.textSecondaryOnBackground
-
-
-{-| Sets text to a suitable color for hint text on top of background.
--}
-textHintOnBackground : Property c m
-textHintOnBackground =
-    Theme.textHintOnBackground
-
-
-{-| Sets text to a suitable color for disabled text on top of background.
--}
-textDisabledOnBackground : Property c m
-textDisabledOnBackground =
-    Theme.textDisabledOnBackground
-
-
-{-| Sets text to a suitable color for icons on top of background.
--}
-textIconOnBackground : Property c m
-textIconOnBackground =
-    Theme.textIconOnBackground
 
 
 {-| Sets text to a suitable color for primary text on top of light background.
