@@ -1,5 +1,10 @@
 ## Latest changes
 
+Breaking changes:
+- Possibly breaking change: Options.onFocus and Options.onBlur now
+  bubble focus and blur by using focusin and focusout
+  respectively. This leads to a more natural API.
+
 Fixes:
 * Material.List: nonInteractive list still had rippled element.
 * Material.Slider: fix behaviour on phone where slider would move when you scrolled the page.

@@ -468,12 +468,12 @@ onCheck toMsg =
 
 onBlur : msg -> Property c msg
 onBlur msg =
-    on "blur" (Decode.succeed msg)
+    on "focusout" (Decode.succeed msg)
 
 
 onFocus : msg -> Property c msg
 onFocus msg =
-    on "focus" (Decode.succeed msg)
+    on "focusin" (Decode.succeed msg)
 
 
 onInput : (String -> m) -> Property c m
