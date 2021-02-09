@@ -4,6 +4,7 @@ Breaking changes:
 - Possibly breaking change: Options.onFocus and Options.onBlur now
   bubble focus and blur by using focusin and focusout
   respectively. This leads to a more natural API.
+- Classes exported by Theme now conform to available classes.
 
 Fixes:
 * Material.List: nonInteractive list still had rippled element.
