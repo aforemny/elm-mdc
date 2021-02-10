@@ -23,6 +23,7 @@ module Material.TextField exposing
     , email
     , password
     , type_
+    , name
     , nativeControl
     , autocomplete
     , autofocus
@@ -103,17 +104,21 @@ module Material.TextField exposing
 @docs type_
 
 
-## Autocomplete
+## Form submission
 
-@docs nativeControl
+@docs name
 
-
-## Native control
+## Control
 
 @docs autocomplete
 @docs autofocus
 @docs onFocus
 @docs onBlur
+
+
+## Native control
+
+@docs nativeControl
 
 -}
 
@@ -273,6 +278,13 @@ required =
 type_ : String -> Property m
 type_ =
     TextField.type_
+
+
+{-| Set the textfield's name.
+-}
+name : String -> Property m
+name =
+    TextField.name
 
 
 {-| Make the textfield take up all the available horizontal space.
