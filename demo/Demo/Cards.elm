@@ -60,7 +60,7 @@ cardTitle =
             ]
         , styled Html.h3
             [ Typography.subtitle2
-            , Theme.textSecondaryOnBackground
+            , Theme.textSecondaryOnLight
             , css "margin" "0"
             ]
             [ text "by Kurt Wagner"
@@ -73,7 +73,7 @@ cardBody =
     styled Html.div
         [ css "padding" "0 1rem 0.5rem 1rem"
         , Typography.body2
-        , Theme.textSecondaryOnBackground
+        , Theme.textSecondaryOnLight
         ]
         [ text """
             Visit ten places on our planet that are undergoing the biggest
