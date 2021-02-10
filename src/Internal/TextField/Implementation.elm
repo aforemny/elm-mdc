@@ -8,6 +8,7 @@ module Internal.TextField.Implementation exposing
     , invalid
     , label
     , leadingIcon
+    , name
     , nativeControl
     , onLeadingIconClick
     , onTrailingIconClick
@@ -49,6 +50,7 @@ type alias Config m =
     , prefix : Maybe String
     , suffix : Maybe String
     , type_ : Maybe String
+    , name : Maybe String
     , pattern : Maybe String
     , textarea : Bool
     , fullWidth : Bool
@@ -77,6 +79,7 @@ defaultConfig =
     , prefix = Nothing
     , suffix = Nothing
     , type_ = Just "text"
+    , name = Nothing
     , pattern = Nothing
     , textarea = False
     , fullWidth = False
@@ -190,6 +193,11 @@ required =
 type_ : String -> Property m
 type_ value_ =
     Options.option (\config -> { config | type_ = Just value_ })
+
+
+name : String -> Property m
+name value_ =
+    Options.option (\config -> { config | name = Just value_ })
 
 
 fullwidth : Property m
@@ -340,6 +348,13 @@ textField domId lift model options list =
                             else
                                 always Nothing
                            )
+                    , Html.name (Maybe.withDefault "" config.name)
+                        |> (if config.name /= Nothing then
+                                Just
+
+                            else
+                                always Nothing
+                           )
                     , Html.disabled True
                         |> (if config.disabled then
                                 Just
@@ -464,7 +479,7 @@ textField domId lift model options list =
 iconView : (Msg -> m) -> Maybe String -> String -> Maybe m -> Html m
 iconView lift icon iconClass handler =
     case icon of
-        Just name ->
+        Just name_ ->
             styled Html.i
                 [ cs ( "material-icons mdc-text-field__icon mdc-text-field__icon--" ++ iconClass)
                 , Options.tabindex 0 |> when (handler /= Nothing)
@@ -473,7 +488,7 @@ iconView lift icon iconClass handler =
                     |> Maybe.map Options.onClick
                     |> Maybe.withDefault Options.nop
                 ]
-                [ text name ]
+                [ text name_ ]
 
         Nothing ->
             text ""
