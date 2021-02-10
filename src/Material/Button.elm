@@ -19,7 +19,7 @@ Material Design button requirements.
 
 # Resources
 
-  - [Buttons - Internal.Components for the Web](https://material.io/develop/web/components/buttons/)
+  - [Buttons - Material Components for the Web](https://material.io/develop/web/components/buttons/)
   - [Material Design guidelines: Buttons](https://material.io/guidelines/components/buttons.html)
   - [Demo](https://aforemny.github.io/elm-mdc/#buttons)
 
