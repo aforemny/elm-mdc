@@ -6,6 +6,7 @@
     "version": "1.0.0",
     "exposed-modules": [
         "Material",
+        "Material.Banner",
         "Material.Button",
         "Material.Card",
         "Material.Checkbox",
