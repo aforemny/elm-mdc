@@ -20,17 +20,13 @@ import Internal.Button.Implementation as Button
 
 
 type alias Config =
-    { centered : Bool
-    , fixed : Bool
-    , stacked : Bool
+    { fixed : Bool
     }
 
 
 defaultConfig : Config
 defaultConfig =
-    { centered = False
-    , fixed = False
-    , stacked = False
+    { fixed = False
     }
 
 
@@ -40,7 +36,7 @@ type alias Property m =
 
 centered : Property m
 centered =
-    Options.option (\config -> { config | centered = True })
+    modifier "centered"
 
 
 fixed : Property m
@@ -50,7 +46,7 @@ fixed =
 
 stacked : Property m
 stacked =
-    Options.option (\config -> { config | stacked = True })
+    modifier "mobile-stacked"
 
 
 view : List (Property m) -> List (Html m) -> Html m
@@ -63,8 +59,6 @@ view options nodes =
         Html.div
         [ block
         , role "banner"
-        , modifier "centered" |> when config.centered
-        , modifier "mobile-stacked" |> when config.stacked
         ]
         []
         [ if config.fixed then
