@@ -23,6 +23,6 @@
   "dependencies": {
     "babel-core": "^6.26.3",
     "custom-event": "^1.0.1",
-    "focus-trap": "^5.1.0"
+    "focus-trap": "^6.3.0"
   }
 }
