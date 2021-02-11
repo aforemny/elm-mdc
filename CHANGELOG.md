@@ -1,4 +1,7 @@
-## Latest changes
+## Upgrade to 8.0.0
+
+New features:
+* Banner component.
 
 Breaking changes:
 - Possibly breaking change: Options.onFocus and Options.onBlur now
@@ -10,6 +13,9 @@ Fixes:
 * Material.List: nonInteractive list still had rippled element.
 * Material.Slider: fix behaviour on phone where slider would move when you scrolled the page.
 * Material.CircularProgress: display correct when container text is not left aligned.
+
+Known issues:
+- Select: menu does not get keyboard focus when opened.
 
 
 ## Upgrade to 7.0.0

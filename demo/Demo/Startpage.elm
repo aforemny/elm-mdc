@@ -67,7 +67,12 @@ view page =
                                 ]
                             ]
                     )
-                    [ { url = Button
+                    [ { url = Banner
+                      , icon = (text "")
+                      , title = "Banner"
+                      , subtitle = "Banners"
+                      }
+                    , { url = Button
                       , icon = ButtonSvg.view
                       , title = "Button"
                       , subtitle = "Raised and flat buttons"

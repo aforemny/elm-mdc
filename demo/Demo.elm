@@ -5,6 +5,7 @@ import Browser
 import Browser.Events
 import Browser.Navigation
 import Browser.Dom
+import Demo.Banners
 import Demo.Buttons
 import Demo.Cards
 import Demo.Checkbox
@@ -57,6 +58,7 @@ type alias Model =
     , transition : Page.Transition
     , key : Browser.Navigation.Key
     , url : Demo.Url.Url
+    , banners : Demo.Banners.Model Msg
     , buttons : Demo.Buttons.Model Msg
     , cards : Demo.Cards.Model Msg
     , checkbox : Demo.Checkbox.Model Msg
@@ -99,6 +101,7 @@ defaultModel key =
     , transition = Page.None
     , key = key
     , url = Demo.Url.StartPage
+    , banners = Demo.Banners.defaultModel
     , buttons = Demo.Buttons.defaultModel
     , cards = Demo.Cards.defaultModel
     , checkbox = Demo.Checkbox.defaultModel
@@ -144,6 +147,7 @@ type Msg
     | ToggleDrawer
     | SelectDrawerItem Int
     | AnimationTick Float
+    | BannersMsg (Demo.Banners.Msg Msg)
     | ButtonsMsg (Demo.Buttons.Msg Msg)
     | CardsMsg (Demo.Cards.Msg Msg)
     | CheckboxMsg (Demo.Checkbox.Msg Msg)
@@ -235,6 +239,14 @@ update msg model =
             ( { model | url = Demo.Url.fromUrl url }, Cmd.none )
 
         -- TODO: scrollTop ())
+
+        BannersMsg msg_ ->
+            let
+                ( banners, effects ) =
+                    Demo.Banners.update BannersMsg msg_ model.banners
+            in
+            ( { model | banners = banners }, effects )
+
         ButtonsMsg msg_ ->
             let
                 ( buttons, effects ) =
@@ -513,6 +525,9 @@ view_ model =
     case model.url of
         Demo.Url.StartPage ->
             Demo.Startpage.view page
+
+        Demo.Url.Banner ->
+            Demo.Banners.view BannersMsg page model.banners
 
         Demo.Url.Button ->
             Demo.Buttons.view ButtonsMsg page model.buttons

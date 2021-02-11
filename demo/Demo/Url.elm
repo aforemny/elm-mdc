@@ -11,6 +11,7 @@ import Url
 
 type Url
     = StartPage
+    | Banner
     | Button
     | Card
     | Checkbox
@@ -82,6 +83,9 @@ toString url =
     case url of
         StartPage ->
             "#"
+
+        Banner ->
+            "#banners"
 
         Button ->
             "#buttons"
@@ -187,6 +191,9 @@ fromString url =
     case url of
         "" ->
             StartPage
+
+        "banners" ->
+            Banner
 
         "buttons" ->
             Button

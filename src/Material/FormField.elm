@@ -2,6 +2,7 @@ module Material.FormField exposing
     ( Property
     , view
     , alignEnd
+    , noWrap
     )
 
 {-| FormField provides a helper view for easily making theme-aware, RTL-aware form
@@ -35,6 +36,10 @@ field + label combinations.
 @docs view
 @docs alignEnd
 
+# Options
+
+@docs noWrap
+
 -}
 
 import Html exposing (Html)
@@ -62,3 +67,14 @@ By default, the label is positioned after the input.
 alignEnd : Property m
 alignEnd =
     FormField.alignEnd
+
+
+{-| If the label text is too long for a single line, it will wrap the
+text by default. You can force the text to stay on a single line and
+ellipse the overflow text by using the `noWrap` property.
+
+-}
+noWrap : Property m
+noWrap =
+    FormField.noWrap
+

@@ -82,9 +82,45 @@ viewDeterminateContainer size_ progress_ =
         [ Svg.svg
               [ Svg.class "mdc-circular-progress__determinate-circle-graphic"
               , viewBox ( "0 0 " ++ sizeStr ++ " " ++ sizeStr ) ]
-              [ viewDeterminateCircle size_ progress_
+              [ viewDeterminateTrack size_ progress_
+              , viewDeterminateCircle size_ progress_
               ]
         ]
+
+
+viewDeterminateTrack : Int -> Float -> Html msg
+viewDeterminateTrack size_ progress_ =
+    let
+        centre = size_ // 2
+
+        stroke_width =
+            round <| toFloat size_ / 12
+
+        radius =
+            case size_ of
+                48 -> 18
+                36 -> 12.5
+                24 -> 8.75
+                _ ->
+                    -- TODO: I'm not sure I captured the right calculation here
+                    toFloat ( centre - stroke_width - 2 )
+
+        stroke_dash_array =
+            2 * pi * radius
+
+        unfilledArcLength =
+          (1 - progress_) * (2 * pi * radius)
+    in
+    Svg.circle
+        [ Svg.class "mdc-circular-progress__determinate-track"
+        , cx (String.fromInt centre)
+        , cy (String.fromInt centre)
+        , r (String.fromFloat radius)
+        , strokeDasharray (String.fromFloat stroke_dash_array)
+        , strokeDashoffset (String.fromFloat unfilledArcLength)
+        , strokeWidth (String.fromInt stroke_width)
+        ]
+        []
 
 
 viewDeterminateCircle : Int -> Float -> Html msg
