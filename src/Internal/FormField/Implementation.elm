@@ -2,6 +2,7 @@ module Internal.FormField.Implementation exposing
     ( Property
     , alignEnd
     , view
+    , noWrap
     )
 
 import Html exposing (Html)
@@ -24,3 +25,7 @@ view options =
 alignEnd : Property m
 alignEnd =
     cs "mdc-form-field--align-end"
+
+noWrap : Property m
+noWrap =
+    cs "mdc-form-field--nowrap"
