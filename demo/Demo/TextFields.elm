@@ -176,7 +176,7 @@ filledTextFields lift model =
         , textFieldContainer []
             (textField "text-fields-filled-2" [ TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-filled-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-filled-3" [ TextField.trailingIcon "delete" ])
         ]
 
 
@@ -198,7 +198,7 @@ outlinedTextFields lift model =
         , textFieldContainer []
             (textField "text-fields-outlined-2" [ TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-outlined-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-outlined-3" [ TextField.trailingIcon "delete" ])
         ]
 
 
@@ -223,7 +223,7 @@ shapedFilledTextFields lift model =
         , textFieldContainer []
             (textField "text-fields-shaped-filled-2" [ TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-shaped-filled-3" [ TextField.trailingIcon "trash" ])
+            (textField "text-fields-shaped-filled-3" [ TextField.trailingIcon "delete" ])
         ]
 
 
@@ -245,7 +245,7 @@ shapedOutlinedTextFields lift model =
         , textFieldContainer []
             (textField "text-fields-shaped-outlined-2" [ cs "demo-text-field-outlined-shaped", TextField.leadingIcon "event" ])
         , textFieldContainer []
-            (textField "text-fields-shaped-outlined-3" [ cs "demo-text-field-outlined-shaped", TextField.trailingIcon "trash" ])
+            (textField "text-fields-shaped-outlined-3" [ cs "demo-text-field-outlined-shaped", TextField.trailingIcon "delete" ])
         ]
 
 
