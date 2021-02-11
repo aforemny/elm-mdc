@@ -61,14 +61,16 @@ view options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
+
+        isDeterminate = not config.indeterminate
     in
     Options.apply summary
         Html.div
         [ cs "mdc-linear-progress"
         , cs "mdc-linear-progress--indeterminate" |> when config.indeterminate
         , cs "mdc-linear-progress--reversed" |> when config.reversed
-        , aria "valuemin" "0"
-        , aria "valuemax" "1"
+        , aria "valuemin" "0" |> when isDeterminate
+        , aria "valuemax" "1" |> when isDeterminate
         , aria "valuenow" (String.fromFloat config.value) |> when (not config.indeterminate)
         , role "progressbar"
         ]
