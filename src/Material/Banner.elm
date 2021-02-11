@@ -17,7 +17,7 @@ module Material.Banner exposing
 
 # Resources
 
-  - [Buttons - Material Components for the Web](https://github.com/material-components/material-components-web/tree/master/packages/mdc-banner)
+  - [Banner - Material Components for the Web](https://github.com/material-components/material-components-web/tree/master/packages/mdc-banner)
   - [Material Design guidelines: Banners](https://material.io/guidelines/components/banners.html)
   - [Demo](https://aforemny.github.io/elm-mdc/#banners)
 
@@ -26,10 +26,21 @@ module Material.Banner exposing
 
     import Material.Banner as Banner
 
-    Banner.view
-        [
+    Banner.view []
+        [ Banner.graphicTextWrapper []
+            [ Banner.text [] [ text "There was a problem processing a transaction on your credit card." ]
+            ]
+        , Banner.actions []
+            [ Button.view Mdc
+                "primary-action-button"
+                model.mdc
+                [ Button.ripple
+                , Banner.primaryAction
+                ]
+                [ text "Fix it"
+                ]
+            ]
         ]
-        []
 
 
 # Usage
