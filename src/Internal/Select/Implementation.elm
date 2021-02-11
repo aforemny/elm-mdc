@@ -247,15 +247,15 @@ select domId lift model options items_ =
                              in
                                  case maybe_value of
                                      Just v ->
-                                         Menu.ListItem ( Menu.onSelect (lift (MenuSelection selectedTextDomId msg v)) :: options_ ) nodes
+                                         Menu.ListItem ( Menu.onSelect (lift (MenuSelection anchorDomId msg v)) :: options_ ) nodes
                                      Nothing ->
                                          item
                          _ ->
                              item
                 )
 
-        selectedTextDomId =
-            (domId ++ "__selected-text")
+        anchorDomId =
+            (domId ++ "__anchor")
 
     in
     Options.apply summary
@@ -273,7 +273,16 @@ select domId lift model options items_ =
               [ element "anchor"
               , role "button"
               , aria "haspopup" "listbox"
+              , Options.aria "disabled" (if config.disabled then "true" else "false")
+              , Options.aria "expanded" (if model.menu.open then "true" else "false")
               , Options.onClick (lift ToggleMenu)
+              , Options.tabindex 0
+              , Options.id anchorDomId
+              , Options.onFocus (lift Focus)
+              , Options.onBlur (lift Blur)
+              , Options.on "keydown" <|
+                  Decode.map lift <|
+                      Decode.map2 (KeyDown menuIndex) decodeKey decodeKeyCode
               ]
               [ if not config.outlined then
                     styled Html.span [ element "ripple" ] []
@@ -284,18 +293,13 @@ select domId lift model options items_ =
                 else
                     text ""
               , styled Html.span
-                  [ element "selected-text"
-                  , Options.id selectedTextDomId
-                  , Options.tabindex 0
-                  , Options.aria "disabled" (if config.disabled then "true" else "false")
-                  , Options.aria "expanded" (if model.menu.open then "true" else "false")
-                  , Options.onFocus (lift Focus)
-                  , Options.onBlur (lift Blur)
-                  , Options.on "keydown" <|
-                      Decode.map lift <|
-                          Decode.map2 (KeyDown menuIndex) decodeKey decodeKeyCode
+                  [ element "selected-text-container"
                   ]
-                  [ text config.selectedText ]
+                  [ styled Html.span
+                        [ element "selected-text"
+                        ]
+                        [ text config.selectedText ]
+                  ]
               , styled Html.span
                     [ element "dropdown-icon"
                     , Options.onClick (lift ToggleMenu)
