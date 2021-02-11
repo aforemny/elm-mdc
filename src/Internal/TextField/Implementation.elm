@@ -433,20 +433,10 @@ textField domId lift model options list =
                  else
                      text ""
                , leadingIcon_
-               , if not config.textarea then
-                     viewJust config.prefix viewPrefix
-                 else
-                     text ""
-               , input
-               , if not config.textarea then
-                     viewJust config.suffix viewSuffix
-                 else
-                     text ""
                , if hasLabel && canHaveLabel then
                     htmlLabel
                  else
                     text ""
-               , trailingIcon_
                , if not config.outlined && not config.textarea then
                     styled Html.div
                         [ cs "mdc-line-ripple"
@@ -472,6 +462,16 @@ textField domId lift model options list =
 
                  else
                     text ""
+               , if not config.textarea then
+                     viewJust config.prefix viewPrefix
+                 else
+                     text ""
+               , input
+               , if not config.textarea then
+                     viewJust config.suffix viewSuffix
+                 else
+                     text ""
+               , trailingIcon_
                ]
         )
 
