@@ -6,15 +6,14 @@ module Internal.Slider.Model exposing
 
 
 import Browser.Dom as Dom
+import Internal.Ripple.Model as Ripple
 
 
 type alias Model =
-    { initialized : Bool
-    , focus : Bool
-    , active : Bool
-    , activeValue : Maybe Float
-    , inTransit : Bool
-    , preventFocus : Bool
+    { ripple : Ripple.Model
+    , initialized : Bool
+    , dragStarted : Bool
+    , showThumbIndicator : Bool
     , min : Float
     , max : Float
     , step : Float
@@ -25,12 +24,10 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { initialized = False
-    , focus = False
-    , active = False
-    , activeValue = Nothing
-    , inTransit = False
-    , preventFocus = False
+    { ripple = Ripple.defaultModel
+    , initialized = False
+    , dragStarted = False
+    , showThumbIndicator = False
     , min = 0
     , max = 100
     , step = 1
@@ -41,17 +38,12 @@ defaultModel =
 
 type Msg m
     = NoOp
+    | RippleMsg Ripple.Msg
     | Init String Float Float Float
     | Resize String Float Float Float
-    | RequestSliderDimensions String (Float -> Msg m) Float
-    | GotSliderDimensions (Float -> Msg m) Float Dom.Element
-    | InteractionStart Float
-    | KeyDown
+    | DragStart String (Float -> m) Float
     | Focus
     | Blur
-    | ThumbContainerPointer Float
-    | TransitionEnd
-    | Drag Float
     | Up
     | ActualUp
     | GotElement Dom.Element

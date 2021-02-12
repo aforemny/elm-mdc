@@ -5,7 +5,6 @@ module Internal.Slider.Implementation exposing
     , max
     , min
     , onChange
-    , onInput
     , react
     , step
     , trackMarkers
@@ -14,13 +13,14 @@ module Internal.Slider.Implementation exposing
     )
 
 import Browser.Dom as Dom
-import Html as Html exposing (Html, text)
+import Html as Html exposing (Html, text, div)
 import Html.Attributes as Html
 import Internal.Helpers exposing (delayedCmd)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
-import Internal.Options as Options exposing (cs, css, styled, when)
+import Internal.Options as Options exposing (aria, cs, css, styled, when)
+import Internal.Ripple.Implementation as Ripple
 import Internal.Slider.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode exposing (Decoder)
 import Svg
@@ -34,87 +34,28 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        Focus ->
-            if not model.preventFocus then
-                ( Just { model | focus = True }, Cmd.none )
+        RippleMsg msg_ ->
+            let
+                ( rippleState, rippleCmd ) =
+                    Ripple.update msg_ model.ripple
+            in
+            ( Just { model | ripple = rippleState }
+            , Cmd.map (lift << RippleMsg) rippleCmd
+            )
 
-            else
-                ( Nothing, Cmd.none )
+        Focus ->
+            ( Just { model | showThumbIndicator = True }, Cmd.none )
 
         Blur ->
-            ( Just
-                { model
-                    | focus = False
-                    , preventFocus = False
-                }
-            , Cmd.none
+            ( Just { model | showThumbIndicator = False }, Cmd.none )
+
+        DragStart inputId change_handler clientX ->
+            ( Just { model | dragStarted = True }
+            , Cmd.batch
+                [ cmd (change_handler clientX )
+                , Task.attempt (\_ -> lift NoOp) (Dom.focus inputId)
+                ]
             )
-
-        TransitionEnd ->
-            ( Just { model | inTransit = False }, Cmd.none )
-
-        RequestSliderDimensions id_ next clientX ->
-            -- Get current slider dimensions before determining what value the user clicked
-            ( Nothing
-            , getElement lift id_ (GotSliderDimensions next clientX)
-            )
-
-        GotSliderDimensions next clientX el ->
-            let
-                new_model =
-                    { model
-                        | left = el.element.x
-                        , width = el.element.width
-                    }
-            in
-                update lift (next clientX) new_model
-
-        InteractionStart clientX ->
-            let
-                activeValue =
-                    valueFromClientX model model clientX
-            in
-            ( Just
-                { model
-                    | active = True
-                    , inTransit = True
-                    , activeValue = Just activeValue
-                    , preventFocus = True
-                }
-            , Cmd.none
-            )
-
-        ThumbContainerPointer clientX ->
-            let
-                activeValue =
-                    valueFromClientX model model clientX
-            in
-            ( Just
-                { model
-                    | active = True
-                    , inTransit = False
-                    , activeValue = Just activeValue
-                    , preventFocus = True
-                }
-            , Cmd.none
-            )
-
-        Drag clientX ->
-            if model.active then
-                let
-                    activeValue =
-                        valueFromClientX model model clientX
-                in
-                ( Just
-                    { model
-                        | inTransit = False
-                        , activeValue = Just activeValue
-                    }
-                , Cmd.none
-                )
-
-            else
-                ( Nothing, Cmd.none )
 
         Init id_ min_ max_ step_ ->
             ( Just
@@ -137,16 +78,18 @@ update lift msg model =
                    }
             , Cmd.none )
 
-        KeyDown ->
-            ( Just { model | focus = True }, Cmd.none )
-
         Up ->
-            -- Note: On mobile `Up` (tends to) fire before `InteractionStart`.
+            -- Note: On mobile `Up` (tends to) fire before `Dragtart`.
+            -- Note 2: not sure this still happens after the rewrite
             ( Nothing, delayedCmd 50 (lift ActualUp) )
 
         ActualUp ->
-            ( Just { model | active = False, activeValue = Nothing }, Cmd.none )
+            ( Just { model | dragStarted = False }, Cmd.none )
 
+
+cmd : msg -> Cmd msg
+cmd m =
+    Task.perform (always m) (Task.succeed ())
 
 
 {-| Attempt to retrieve the dimension of the given element.
@@ -161,98 +104,6 @@ getElement lift id_ msg =
         (Dom.getElement id_)
 
 
-{-| Computes the new value from the clientX position.
-
-In order for this function to work the most current element left and width must be passed in.
--}
-valueFromClientX : { a | min : Float, max : Float } -> { b | left : Float, width : Float } -> Float -> Float
-valueFromClientX config rect clientX =
-    let
-        isRtl =
-            False
-
-        xPos =
-            clientX - rect.left
-
-        pctComplete =
-            if isRtl then
-                1 - (xPos / rect.width)
-
-            else
-                xPos / rect.width
-    in
-    config.min + pctComplete * (config.max - config.min)
-
-
-valueForKey : Maybe String -> Int -> { a | step : Float, min : Float, max : Float, discrete : Bool } -> Float -> Maybe Float
-valueForKey key keyCode geometry currentValue =
-    let
-        isRtl =
-            False
-
-        delta =
-            (if isRtl && (isArrowLeft || isArrowRight) then
-                (*) -1
-
-             else
-                identity
-            )
-            <|
-                if geometry.discrete then
-                    geometry.step
-
-                else
-                    (geometry.max - geometry.min) / 100
-
-        isArrowLeft =
-            key == Just "ArrowLeft" || keyCode == 37
-
-        isArrowRight =
-            key == Just "ArrowRight" || keyCode == 39
-
-        isArrowUp =
-            key == Just "ArrowUp" || keyCode == 38
-
-        isArrowDown =
-            key == Just "ArrowDown" || keyCode == 40
-
-        isHome =
-            key == Just "Home" || keyCode == 36
-
-        isEnd =
-            key == Just "End" || keyCode == 35
-
-        isPageUp =
-            key == Just "PageUp" || keyCode == 33
-
-        isPageDown =
-            key == Just "PageDown" || keyCode == 34
-
-        pageFactor =
-            4
-    in
-    Maybe.map (clamp geometry.min geometry.max) <|
-        if isArrowLeft || isArrowDown then
-            Just (currentValue - delta)
-
-        else if isArrowRight || isArrowUp then
-            Just (currentValue + delta)
-
-        else if isHome then
-            Just geometry.min
-
-        else if isEnd then
-            Just geometry.max
-
-        else if isPageUp then
-            Just (currentValue + delta * pageFactor)
-
-        else if isPageDown then
-            Just (currentValue - delta * pageFactor)
-
-        else
-            Nothing
-
 
 type alias Config m =
     { id_ : Index
@@ -261,10 +112,10 @@ type alias Config m =
     , max : Float
     , discrete : Bool
     , step : Float
-    , onInput : Maybe (Float -> m)
     , onChange : Maybe (Float -> m)
     , trackMarkers : Bool
     , disabled : Bool
+    , isRange : Bool
     }
 
 
@@ -276,10 +127,10 @@ defaultConfig =
     , max = 100
     , step = 1
     , discrete = False
-    , onInput = Nothing
     , onChange = Nothing
     , trackMarkers = False
     , disabled = False
+    , isRange = False -- TODO implement range sliders
     }
 
 
@@ -312,39 +163,56 @@ disabled =
     Options.option (\config -> { config | disabled = True })
 
 
+
+onChange : (Float -> m) -> Property m
+onChange handler =
+    Options.option (\config -> { config | onChange = Just handler })
+
+
+step : Float -> Property m
+step value_ =
+    Options.option (\config -> { config | step = value_ })
+
+
+trackMarkers : Property m
+trackMarkers =
+    Options.option (\config -> { config | trackMarkers = True })
+
+
+
 slider : Index -> (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
 slider domId lift model options _ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        continuousValue =
-            if model.active then
-                model.activeValue
-                    |> Maybe.withDefault config.value
+        clampedValue =
+            config.value
+                |> clamp config.min config.max
 
-            else
-                config.value
+        range = config.max - config.min
 
-        discreteValue =
-            discretize config continuousValue
+        pctComplete = (clampedValue - config.min) / range
 
-        translateX =
-            let
-                v =
-                    discreteValue
-                        |> clamp config.min config.max
+        rangePx = pctComplete * model.width
 
-                c =
-                    if (config.max - config.min) /= 0 then
-                        (v - config.min)
-                            / (config.max - config.min)
-                            |> clamp 0 1
+        number_of_tick_marks =
+            ( range / config.step |> ceiling ) + 1
 
-                    else
-                        0
-            in
-            c * model.width
+        active_marks =
+            ( ( range / config.step) + 1 ) * pctComplete |> ceiling
+
+        tickMark i =
+            styled div
+                [ element (if i <= active_marks then "tick-mark--active" else "tick-mark--inactive" ) ]
+                []
+
+        inputId = domId ++ "--input"
+
+        thumbId = domId ++ "--thumb"
+
+        rippleInterface =
+            Ripple.view True thumbId (lift << RippleMsg) model.ripple [ ]
 
         downs =
             [ "mousedown"
@@ -364,24 +232,6 @@ slider domId lift model options _ =
             , GlobalEvents.onPointerMove
             ]
 
-        trackScale =
-            if config.max - config.min == 0 then
-                0
-
-            else
-                (discreteValue - config.min) / (config.max - config.min)
-
-        -- keep calculation in css for better rounding/subpixel behavior
-        markerStyle min_ max_ step_ =
-            let
-                markerAmount = "((" ++ String.fromFloat max_ ++ " - " ++ String.fromFloat min_ ++ ") / " ++ String.fromFloat step_ ++ ")"
-                markerWidth = "2px"
-                markerBkgdImage = "linear-gradient(to right, currentColor " ++ markerWidth ++ ", transparent 0)"
-                markerBkgdLayout = "0 center / calc((100% - " ++ markerWidth ++ ") / " ++ markerAmount ++ ") 100% repeat-x"
-            in
-                markerBkgdImage ++ " " ++ markerBkgdLayout
-
-
         configChanged =
             config.min /= model.min ||
             config.max /= model.max ||
@@ -389,136 +239,48 @@ slider domId lift model options _ =
 
     in
     Options.apply summary
-        Html.div
+        div
         [ Options.id config.id_
         , block
-        , modifier "focus" |> when model.focus
-        , modifier "active" |> when model.active
-        , modifier "off" |> when (discreteValue <= config.min)
         , modifier "discrete" |> when config.discrete
         , modifier "disabled" |> when config.disabled
-        , modifier "in-transit" |> when model.inTransit
-        , modifier "display-markers" |> when config.trackMarkers
-        , Options.attribute (Html.tabindex 0)
-        , Options.aria "disabled" "true" |> when config.disabled
-        , Options.data "min" (String.fromFloat config.min)
-        , Options.data "max" (String.fromFloat config.max)
-        , Options.data "step" (String.fromFloat config.step)
-        , Options.role "slider"
-        , Options.aria "valuemin" (String.fromFloat config.min)
-        , Options.aria "valuemax" (String.fromFloat config.max)
-        , Options.aria "valuenow" (String.fromFloat discreteValue)
+        , modifier "tick-marks" |> when config.trackMarkers
+        , modifier "tick-marks" |> when config.trackMarkers
+
         , when (not model.initialized || configChanged) <|
             GlobalEvents.onTick <|
                 Decode.succeed (lift <| Init config.id_ config.min config.max config.step)
         , GlobalEvents.onResize <|
             Decode.succeed (lift <| Resize config.id_ config.min config.max config.step)
-        , Options.on "keydown" <|
-            Decode.map lift <|
-                Decode.map2
-                    (\key keyCode ->
-                        let
-                            activeValue =
-                                valueForKey key keyCode config config.value
-                        in
-                        if activeValue /= Nothing then
-                            KeyDown
 
-                        else
-                            NoOp
-                    )
-                    (Decode.oneOf
-                        [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                        , Decode.succeed Nothing
-                        ]
-                    )
-                    (Decode.at [ "keyCode" ] Decode.int)
-        , Options.onWithOptions "keydown"
-            (Decode.map
-                (\message ->
-                    { message = message
-                    , preventDefault = True
-                    , stopPropagation = False
-                    }
-                )
-                (Decode.map lift <|
-                    Decode.andThen identity <|
-                        Decode.map2
-                            (\key keyCode ->
-                                let
-                                    activeValue =
-                                        valueForKey key keyCode config config.value
-                                in
-                                if activeValue /= Nothing then
-                                    Decode.succeed NoOp
-
-                                else
-                                    Decode.fail ""
+        , when (not config.disabled) <|
+            case config.onChange of
+                Just on_change ->
+                    Options.many <|
+                        List.map
+                            (\event ->
+                                 Options.on event <|
+                                     Decode.map
+                                         (\clientX ->
+                                              let
+                                                  activeValue = mapClientXOnSliderScale model.left model.width config.min config.max config.step clientX
+                                              in
+                                                  lift ( DragStart inputId on_change activeValue)
+                                         )
+                                         decodeClientX
                             )
-                            (Decode.oneOf
-                                [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                                , Decode.succeed Nothing
-                                ]
-                            )
-                            (Decode.at [ "keyCode" ] Decode.int)
-                )
-            )
-        , when (config.onChange /= Nothing) <|
-            Options.on "keydown" <|
-                Decode.map2
-                    (\key keyCode ->
-                        let
-                            activeValue =
-                                valueForKey key keyCode config config.value
-                                    |> Maybe.map (discretize config)
-                        in
-                        Maybe.map2 (<|) config.onChange activeValue
-                            |> Maybe.withDefault (lift NoOp)
-                    )
-                    (Decode.oneOf
-                        [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                        , Decode.succeed Nothing
-                        ]
-                    )
-                    (Decode.at [ "keyCode" ] Decode.int)
-        , when (config.onInput /= Nothing) <|
-            Options.on "keydown" <|
-                Decode.map2
-                    (\key keyCode ->
-                        let
-                            activeValue =
-                                valueForKey key keyCode config config.value
-                                    |> Maybe.map (discretize config)
-                        in
-                        Maybe.map2 (<|) config.onInput activeValue
-                            |> Maybe.withDefault (lift NoOp)
-                    )
-                    (Decode.oneOf
-                        [ Decode.map Just (Decode.at [ "key" ] Decode.string)
-                        , Decode.succeed Nothing
-                        ]
-                    )
-                    (Decode.at [ "keyCode" ] Decode.int)
-        , Options.on "focus" (Decode.succeed (lift Focus))
-        , Options.on "blur" (Decode.succeed (lift Blur))
-        , Options.when (not config.disabled) <|
+                            downs
+                Nothing -> Options.nop
+        , when model.dragStarted <|
             Options.many <|
                 List.map
-                    (\event ->
-                        Options.on event (Decode.map (lift << RequestSliderDimensions config.id_ InteractionStart) decodeClientX)
-                    )
-                    downs
-        , when (config.onChange /= Nothing) <|
-            Options.many <|
-                List.map
-                    (\event ->
-                        Options.on event <|
+                    (\handler ->
+                        handler <|
                             Decode.map
                                 (\clientX ->
                                     let
                                         activeValue =
-                                            valueFromClientX config model clientX
-                                                |> discretize config
+                                            mapClientXOnSliderScale model.left model.width config.min config.max config.step clientX
                                     in
                                     Maybe.map
                                         (\changeHandler -> changeHandler activeValue)
@@ -527,177 +289,125 @@ slider domId lift model options _ =
                                 )
                                 decodeClientX
                     )
-                    downs
-        , when (config.onInput /= Nothing) <|
-            Options.many <|
-                List.map
-                    (\event ->
-                        Options.on event <|
-                            Decode.map
-                                (\clientX ->
-                                    let
-                                        activeValue =
-                                            valueFromClientX config model clientX
-                                                |> discretize config
-                                    in
-                                    Maybe.map
-                                        (\inputHandler -> inputHandler activeValue)
-                                        config.onInput
-                                        |> Maybe.withDefault (lift NoOp)
-                                )
-                                decodeClientX
-                    )
-                    downs
+                    moves
         , Options.many <|
             List.map
                 (\handler ->
                     handler (Decode.succeed (lift Up))
                 )
                 ups
-        , when ((config.onChange /= Nothing) && model.active) <|
-            Options.many <|
-                List.map
-                    (\handler ->
-                        handler <|
-                            Decode.map
-                                (\clientX ->
-                                    let
-                                        activeValue =
-                                            valueFromClientX config model clientX
-                                                |> discretize config
-                                    in
-                                    Maybe.map (\changeHandler -> changeHandler activeValue) config.onChange
-                                        |> Maybe.withDefault (lift NoOp)
-                                )
-                                decodeClientX
-                    )
-                    ups
-        , when ((config.onInput /= Nothing) && model.active) <|
-            Options.many <|
-                List.map
-                    (\handler ->
-                        handler <|
-                            Decode.map
-                                (\clientX ->
-                                    let
-                                        activeValue =
-                                            valueFromClientX config model clientX
-                                                |> discretize config
-                                    in
-                                    Maybe.map
-                                        (\inputHandler -> inputHandler activeValue)
-                                        config.onInput
-                                        |> Maybe.withDefault (lift NoOp)
-                                )
-                                decodeClientX
-                    )
-                    ups
-        , when model.active <|
-            Options.many <|
-                List.map
-                    (\handler ->
-                        handler (Decode.map (lift << RequestSliderDimensions config.id_ Drag) decodeClientX)
-                    )
-                    moves
-        , when ((config.onInput /= Nothing) && model.active) <|
-            Options.many <|
-                List.map
-                    (\handler ->
-                        handler <|
-                            Decode.map
-                                (\clientX ->
-                                    let
-                                        activeValue =
-                                            valueFromClientX config model clientX
-                                                |> discretize config
-                                    in
-                                    Maybe.map
-                                        (\inputHandler -> inputHandler activeValue)
-                                        config.onInput
-                                        |> Maybe.withDefault (lift NoOp)
-                                )
-                                decodeClientX
-                    )
-                    moves
         ]
         []
-        [ styled Html.div
-            [ element "track-container"
+        [ styled Html.input
+              [ element "input"
+              , Options.id inputId
+              , Options.attribute (Html.type_ "range")
+              , Options.attribute (Html.min <| String.fromFloat config.min)
+              , Options.attribute (Html.max <| String.fromFloat config.max)
+              , Options.attribute (Html.attribute "value" <| String.fromFloat clampedValue)
+              , Options.attribute (Html.step <| String.fromFloat config.step)
+              , Options.attribute (Html.disabled True) |> when config.disabled
+              , Options.onFocus (lift Focus)
+              , Options.onBlur (lift Blur)
+              , when (not config.disabled) <|
+                  case config.onChange of
+                      Just on_change ->
+                          Options.onChange (String.toFloat >> Maybe.withDefault 0 >> on_change)
+                      Nothing ->
+                          Options.nop
+              ]
+              []
+        , styled div
+            [ element "track"
             ]
-            [ styled Html.div
-                  [ element "track"
-                  , css "transform" ("scaleX(" ++ String.fromFloat trackScale ++ ")")
-                  ]
+            [ styled div [ element "track--inactive" ]
                   []
-            , if config.discrete then
-                  styled Html.div
-                      [ element "track-marker-container"
-                      , css "background" <| markerStyle config.min config.max config.step
+            , styled div [ element "track--active" ]
+                [ styled div
+                      [ element "track--active_fill"
+                      , css "transform" ("scaleX(" ++ String.fromFloat pctComplete ++ ")")
                       ]
                       []
+                ]
+            , if config.discrete && config.trackMarkers then
+                  -- TODO: add active and inactive markers
+                  styled div [ element "tick-marks" ]
+                      ( List.range 1 number_of_tick_marks
+                            |> List.map tickMark
+                      )
               else
                   text ""
             ]
-        , styled Html.div
-            [ element "thumb-container"
-            , Options.when (not config.disabled) <|
-                Options.many
-                    (downs
-                        |> List.map
-                            (\event ->
-                                Options.onWithOptions event
-                                    (Decode.map
-                                        (\message ->
-                                            { message = lift message
-                                            , stopPropagation = True
-                                            , preventDefault = False
-                                            }
-                                        )
-                                        (Decode.map (RequestSliderDimensions config.id_ ThumbContainerPointer) decodeClientX)
-                                    )
-                            )
-                    )
-            , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
-            , css "transform" <|
-                "translateX("
-                    ++ String.fromFloat translateX
-                    ++ "px) translateX(-50%)"
+        , styled div
+            [ element "thumb"
+            , element "thumb--with-indicator" |> when model.showThumbIndicator
+            , Options.id thumbId
+            , css "transform" ("translateX(" ++ String.fromFloat rangePx ++ "px)")
+            , rippleInterface.interactionHandler
+            , rippleInterface.properties
             ]
-            (List.concat
-                [ [ Svg.svg
-                        [ Svg.class "mdc-slider__thumb"
-                        , Svg.width "21"
-                        , Svg.height "21"
-                        ]
-                        [ Svg.circle
-                            [ Svg.cx "10.5"
-                            , Svg.cy "10.5"
-                            , Svg.r "7.875"
+            [ if config.discrete then
+                  styled div
+                      [ element "value-indicator-container"
+                      , aria "hidden" "true"
+                      ]
+                      [ styled div
+                            [ element "value-indicator" ]
+                            [ styled div
+                                  [ element "value-indicator-text" ]
+                                  [ text <| String.fromFloat clampedValue ]
                             ]
-                            []
-                        ]
-                  , styled Html.div
-                        [ element "focus-ring"
-                        ]
-                        []
-                  ]
-                , if config.discrete then
-                    [ styled Html.div
-                        [ element "pin"
-                        ]
-                        [ styled Html.div
-                            [ element "pin-value-marker"
-                            ]
-                            [ text (String.fromFloat discreteValue)
-                            ]
-                        ]
-                    ]
-
-                  else
-                    []
-                ]
-            )
+                      ]
+              else
+                  text ""
+            , styled div
+                  [ element "thumb-knob" ]
+                  []
+            ]
         ]
+
+
+
+{- Get the appropriate clientX value.
+
+NOTE: changedTouches is a property introduced by elm-mdc.js and only
+valid for the globaltouchend event.
+-}
+decodeClientX : Decoder Float
+decodeClientX =
+    Decode.oneOf
+        [ Decode.at [ "targetTouches", "0", "clientX" ] Decode.float
+        , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
+        , Decode.at [ "clientX" ] Decode.float
+        ]
+
+
+mapClientXOnSliderScale : Float -> Float -> Float -> Float -> Float -> Float -> Float
+mapClientXOnSliderScale left width min_ max_ steps clientX =
+    let
+        xPos = clientX - left
+
+        pctComplete = xPos / width
+
+        -- Fit the percentage complete between the range [min,max]
+        -- by remapping from [0, 1] to [min, min+(max-min)].
+        value_ = min_ + pctComplete * (max_ - min_)
+
+    in
+        if value_ == max_ || value_ == min_ then
+            value_
+        else
+            quantize steps value_
+
+
+{- Calculates the quantized value based on step value.
+-}
+quantize : Float -> Float -> Float
+quantize steps value_ =
+    let
+        numSteps = value_ / steps |> round |> toFloat
+    in
+        numSteps * steps
 
 
 type alias Store s =
@@ -742,85 +452,6 @@ view =
             domId
             store
             (Options.internalId domId :: options)
-
-
-discretize : { a | min : Float, max : Float, step : Float, discrete : Bool } -> Float -> Float
-discretize geometry continuousValue =
-    let
-        continuous =
-            not geometry.discrete
-
-        steps =
-            geometry.step
-                |> (\steps_ ->
-                        if steps_ == 0 then
-                            1
-
-                        else
-                            steps_
-                   )
-    in
-    clamp geometry.min geometry.max <|
-        if continuous then
-            continuousValue
-
-        else
-            let
-                numSteps =
-                    round (continuousValue / steps)
-
-                quantizedVal =
-                    toFloat numSteps * steps
-            in
-            quantizedVal
-
-
-{- Get the appropriate clientX value.
-
-NOTE: changedTouches is a property introduced by elm-mdc.js and only
-valid for the globaltouchend event.
--}
-decodeClientX : Decoder Float
-decodeClientX =
-    Decode.oneOf
-        [ Decode.at [ "targetTouches", "0", "clientX" ] Decode.float
-        , Decode.at [ "changedTouches", "0", "pageX" ] Decode.float
-        , Decode.at [ "clientX" ] Decode.float
-        ]
-
-
-data : String -> Decoder a -> Decoder a
-data key decoder =
-    Decode.at [ "dataset", key ] decoder
-
-
-hasClass : String -> Decoder Bool
-hasClass class =
-    Decode.map
-        (\className ->
-            String.contains (" " ++ class ++ " ") (" " ++ className ++ " ")
-        )
-        (Decode.at [ "className" ] Decode.string)
-
-
-onChange : (Float -> m) -> Property m
-onChange handler =
-    Options.option (\config -> { config | onChange = Just handler })
-
-
-onInput : (Float -> m) -> Property m
-onInput handler =
-    Options.option (\config -> { config | onInput = Just handler })
-
-
-step : Float -> Property m
-step value_ =
-    Options.option (\config -> { config | step = value_ })
-
-
-trackMarkers : Property m
-trackMarkers =
-    Options.option (\config -> { config | trackMarkers = True })
 
 
 {- Make it easier to work with BEM conventions

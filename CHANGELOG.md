@@ -1,4 +1,25 @@
-## Upgrade to 8.0.0
+# Upgrade to 9.0.0
+
+Changes:
+- Slider now uses <input type="range">, the change should be invisible
+  to elm-mdc users, but internally the slider has been completely
+  rewritten.
+
+Breaking changes:
+- Slider:
+  - onInput has been removed.
+  - the slider now longer keeps of an internal value, in order to
+    (visually) change the value, you need to listen to the onChange event, and
+    update your model's value.
+    Previously you could update the slider as it kept track of an
+    internal value, but this behaviour is simpler to implement and
+    exactly how an input or Material.TextField works.
+
+Known issues:
+- Select: menu does not get keyboard focus when opened.
+
+
+# Upgrade to 8.0.0
 
 New features:
 * Banner component.
@@ -18,7 +39,7 @@ Known issues:
 - Select: menu does not get keyboard focus when opened.
 
 
-## Upgrade to 7.0.0
+# Upgrade to 7.0.0
 
 New features:
 * See Material Components for the Web [v7.0.0](https://github.com/material-components/material-components-web/blob/master/CHANGELOG.md) release for all details.
@@ -35,7 +56,7 @@ Breaking changes:
   Textarea.outlined to get the previous default.
 * Textarea with internal character counter needs to get property Textfield.internalCounter
 
-## Upgrade to 6.0.0
+# Upgrade to 6.0.0
 
 New features:
 * TabBar: keyboard interaction now works.
@@ -54,13 +75,13 @@ Breaking changes:
   In your elm.json replace "debois/elm-dom": "1.3.0" with "K-Adam/elm-dom": "1.0.0"
 
 
-## Upgrade to 5.1.0
+# Upgrade to 5.1.0
 
 * Upgrade to MDC 5.1.0. DOM changes, but all internal. No user visible changes.
 
 
 
-## Upgrade to 4.0.0
+# Upgrade to 4.0.0
 
 New features:
 * Support for the menu selection group.
@@ -96,7 +117,7 @@ Possible bugs:
   Exactly why the CSS of the MDC demo is different is not yet known.
 
 
-## Upgrade to 3.2.0
+# Upgrade to 3.2.0
 
 Breaking changes:
 * Removed Toolbar (removed upstream).
@@ -113,13 +134,13 @@ Fixes:
 * Lists: the activated item will receive the keyboard focus by default instead of the first.
 
 
-## Upgrade to 3.1.1
+# Upgrade to 3.1.1
 
 New features
 * Data table support.
 
 
-## Upgrade to 2.3.1
+# Upgrade to 2.3.1
 
 Changes:
 * Snackbar timeout default is now 5 seconds to be compatible with
@@ -130,7 +151,7 @@ Demo:
 * Menu now looks like MDC demo.
 
 
-## Upgrade to 2.2.0
+# Upgrade to 2.2.0
 
 New features:
 * List: add support for disabled items.
@@ -162,19 +183,19 @@ Implementation changes:
 
 
 
-## Upgrade to 0.44.1
+# Upgrade to 0.44.1
 
 * Textfield:
   * Material.TextField.HelperText now needs to be wrapped in Material.TextField.HelperLine.
   * Support for character counter via Material.TextField.CharacterCounter.
 
 
-## Upgrade to 0.43
+# Upgrade to 0.43
 
 * Snackbar.Contents: new record structure.
 
 
-## Upgrade to 0.42
+# Upgrade to 0.42
 
 * Textfield:
   * Box option is now the default, option removed.
@@ -203,6 +224,6 @@ Implementation changes:
 * Lists: two line format needs special primaryText class.
 
 
-## Upgrade to 0.39
+# Upgrade to 0.39
 
 * Material.Drawer.Temporary replaced with Material.Drawer.Modal.

@@ -118,7 +118,7 @@ discreteSliderWithTickMarks lift model =
         , Slider.discrete
         , Slider.min 0
         , Slider.max 100
-        , Slider.step 1
+        , Slider.step 10
         , Slider.trackMarkers
         ]
         []

@@ -3,7 +3,7 @@ module Material.Slider exposing
     , view
     , value, min, max
     , disabled
-    , onChange, onInput
+    , onChange
     , step
     , discrete
     , trackMarkers
@@ -14,11 +14,12 @@ module Material.Slider exposing
 Note that vertical sliders and range (multi-thumb) sliders are not supported,
 due to their absence from the material design spec.
 
-Slider uses custom `onChage` and `onInput` event handlers.
+Slider uses custom `onChange` event handlers.
 
 
 # Resources
 
+  - [Slider - Material Components for the Web](https://github.com/material-components/material-components-web/tree/master/packages/mdc-slider)
   - [Material Design guidelines: Sliders](https://material.io/guidelines/components/sliders.html)
   - [Demo](https://aforemny.github.io/elm-mdc/slider)
 
@@ -43,7 +44,7 @@ Slider uses custom `onChage` and `onInput` event handlers.
 @docs view
 @docs value, min, max
 @docs disabled
-@docs onChange, onInput
+@docs onChange,
 @docs step
 
 
@@ -122,13 +123,6 @@ disabled =
 onChange : (Float -> m) -> Property m
 onChange =
     Slider.onChange
-
-
-{-| Slider `onInput` event listener.
--}
-onInput : (Float -> m) -> Property m
-onInput =
-    Slider.onInput
 
 
 {-| Specify the steps the value will be a multiple of.

@@ -51,6 +51,10 @@ view options _ =
 
         isIndeterminate =
             config.progress == Nothing
+
+        isDeterminate =
+            config.progress /= Nothing
+
     in
     Options.apply summary
         Html.div
@@ -59,8 +63,8 @@ view options _ =
         , css "width" (String.fromInt config.size ++ "px" )
         , css "height" (String.fromInt config.size ++ "px" )
         , css "text-align" "left"
-        , aria "valuemin" "0"
-        , aria "valuemax" "1"
+        , aria "valuemin" "0" |> when isDeterminate
+        , aria "valuemax" "1" |> when isDeterminate
         , aria "valuenow" (String.fromFloat valuenow) |> when (not isIndeterminate)
         , role "progressbar"
         ]
