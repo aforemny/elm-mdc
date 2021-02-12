@@ -1,4 +1,4 @@
-import createFocusTrap from 'focus-trap';
+import * as focusTrap from 'focus-trap';
 import CustomEvent from 'custom-event';
 
 
@@ -21,7 +21,7 @@ import CustomEvent from 'custom-event';
       } catch (e) {}
     }
     try {
-      let focusTrap = createFocusTrap(node, {
+      let focusTrap = focusTrap.createFocusTrap(node, {
         initialFocus: initialFocusElement,
         // Note: It is necessary for Menu to set clickOutsideDeactivates to
         // true.
