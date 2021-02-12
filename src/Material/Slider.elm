@@ -44,7 +44,7 @@ Slider uses custom `onChange` event handlers.
 @docs view
 @docs value, min, max
 @docs disabled
-@docs onChange,
+@docs onChange
 @docs step
 
 
