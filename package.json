@@ -10,7 +10,7 @@
     "babel": "^6.23.0",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
-    "material-components-web": "^9.0.0",
+    "material-components-web": "^10.0.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
