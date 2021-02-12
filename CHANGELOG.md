@@ -2,6 +2,7 @@
 
 Fixes:
 - elm-mdc.js: import of focusTrap incorrect since upgrade to v6.
+- docs did not compile.
 
 
 # Upgrade to 10.0.0
