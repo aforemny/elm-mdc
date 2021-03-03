@@ -2,7 +2,6 @@ module Material exposing
     ( Model
     , defaultModel
     , Msg
-    , init
     , subscriptions
     , update
     , Index
@@ -97,7 +96,7 @@ Set the `mdc-typography` class on the body or container of your application:
 
     init : ( Model, Cmd Msg )
     init =
-        ( defaultModel, Material.init Mdc )
+        ( defaultModel, Cmd.none )
 
 
     subscriptions : Model -> Sub Msg
@@ -139,7 +138,6 @@ Set the `mdc-typography` class on the body or container of your application:
 @docs Model
 @docs defaultModel
 @docs Msg
-@docs init
 @docs subscriptions
 @docs update
 @docs Index
@@ -377,27 +375,6 @@ update_ lift msg store =
 subscriptions : (Msg m -> m) -> { model | mdc : Model m } -> Sub m
 subscriptions lift model =
     Sub.batch [ Menu.subs lift model.mdc, Select.subs lift model.mdc ]
-
-
-{-| Material init.
-
-    init =
-        let
-            defaultModel =
-                …
-
-            effects =
-                Cmd.batch
-                [ Material.init Mdc
-                , …
-                ]
-        in
-        ( defaultModel, effects )
-
--}
-init : (Msg m -> m) -> Cmd m
-init _ =
-    Cmd.none
 
 
 {-| A top-level wrapper for quick prototyping. This wraps your HTML content and

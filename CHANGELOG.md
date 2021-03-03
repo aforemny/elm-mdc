@@ -4,6 +4,9 @@ Fixes:
 - elm-mdc.js: import of focusTrap incorrect since upgrade to v6.
 - docs did not compile.
 
+Breaking changes:
+- Material.init removed, as it didn't do anything.
+
 
 # Upgrade to 10.0.0
 
