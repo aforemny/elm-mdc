@@ -442,11 +442,13 @@ selectionGroupView domId lift model config listItemIds focusedIndex an_index opt
         summary =
             Options.collect Lists.defaultConfig options
     in
-    Options.apply summary
-        (Maybe.withDefault Html.div summary.config.node)
-        [ cs "mdc-menu__selection-group" ]
-        []
-        children
+        Html.li []
+            [ Options.apply summary
+                  (Maybe.withDefault Html.ul summary.config.node)
+                  [ cs "mdc-menu__selection-group" ]
+                  []
+                  children
+            ]
 
 
 
