@@ -262,11 +262,7 @@ listItemView domId lift model config listItemsIds focusedIndex index li_ =
         HtmlList children ->
             li_.view listItemId lift model config listItemsIds focusedIndex index li_.options children
         ListItemList items ->
-            let
-                --groupDomId = domId ++ "-" ++ (String.fromInt index)
-                groupDomId = domId
-            in
-            li_.view domId lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (listItemView groupDomId lift model config listItemsIds focusedIndex) items )
+            li_.view domId lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (\childIndex item -> listItemView domId lift model config listItemsIds focusedIndex (index + childIndex) item) items )
 
 
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
