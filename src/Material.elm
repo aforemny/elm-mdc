@@ -28,6 +28,7 @@ Some things of note are:
   - To distinguish components, ie. one button from another, this library uses a
     list of strings as indices. Those indices must be unique within a
     `Material.Model`, but you can have as many `Material.Model`s as you like.
+  - A common pattern is to have a `Material.Model` per page.
 
 Have a look at the demo's source code for an example of how to structure large
 applications using this library.
