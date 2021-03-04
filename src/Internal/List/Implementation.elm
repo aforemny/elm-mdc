@@ -150,12 +150,47 @@ ul domId lift model options items =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
+        -- Lots of complex list manipulation to handle nested lists.
+        -- We need to emit unique dom ids, and it is easier to treat
+        -- this as a single vertical list.
+        itemList item =
+            case item.children of
+                HtmlList _ -> [ item ]
+                ListItemList children -> children
+
+        all_items = List.map itemList items
+
+        flattened_items = List.concat all_items
+
         listItemIds =
-            Array.fromList (List.indexedMap (doListItemDomId domId) items)
+            flattened_items
+                |> List.indexedMap (focusableListItemDomId domId)
+                |> Array.fromList
+
+        myIndex : Int -> List (ListItem m) -> Int
+        myIndex index items_ =
+            items_
+                |> List.take index
+                |> List.foldl
+                   (\item total ->
+                        case item.children of
+                            HtmlList _ -> total + 1
+                            ListItemList children -> List.length children
+                   ) 0
+
+        calculate_base_index : List (ListItem m) -> List Int
+        calculate_base_index items_ =
+            items_
+                |> List.indexedMap
+                   (\index item -> myIndex index items_)
+
+        base_indices =
+            calculate_base_index items
+                |> Array.fromList
 
         -- Only at the parent level we know what list item's tabindex must be set.
         -- Order:
-        -- 1. If user has moved focused with keyboard, that item  gets the focus.
+        -- 1. If user has moved focused with keyboard, that item gets the focus.
         -- 2. If client has selected an item to receive the tab index, use that.
         -- 3. If no index has set, set the index on the activated item.
         -- 4. Else select the first item.
@@ -172,7 +207,16 @@ ul domId lift model options items =
                                 Nothing -> 0
 
         list_nodes =
-            List.indexedMap (listItemView domId lift model config listItemIds focusedIndex) items
+            items
+                |> List.indexedMap
+                   (\index item ->
+                        let
+                            base_index =
+                                Array.get index base_indices
+                                    |> Maybe.withDefault index
+                        in
+                            listItemView domId lift model config listItemIds focusedIndex base_index item
+                   )
     in
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
@@ -195,12 +239,10 @@ ul domId lift model options items =
 
 -- Perhaps we need to pick up any custom id set explicitly on the list item?
 
-
-doListItemDomId : String -> Int -> ListItem m -> String
-doListItemDomId domId index item =
+focusableListItemDomId : String -> Int -> ListItem m -> String
+focusableListItemDomId domId index item =
     if item.focusable then
         listItemDomId domId index
-
     else
         ""
 
@@ -219,12 +261,19 @@ listItemView :
     -> ListItem m
     -> Html m
 listItemView domId lift model config listItemsIds focusedIndex index li_ =
+    let
+        listItemId =
+            (Debug.log "listItemIds" listItemsIds)
+                |> Array.get index
+                |> Maybe.withDefault domId
+    in
     case li_.children of
         HtmlList children ->
-            li_.view domId lift model config listItemsIds focusedIndex index li_.options children
+            li_.view (Debug.log "listItemId" listItemId) lift model config listItemsIds focusedIndex index li_.options children
         ListItemList items ->
             let
-                groupDomId = domId ++ "-" ++ (String.fromInt index)
+                --groupDomId = domId ++ "-" ++ (String.fromInt index)
+                groupDomId = domId
             in
             li_.view domId lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (listItemView groupDomId lift model config listItemsIds focusedIndex) items )
 
@@ -342,9 +391,6 @@ liView domId lift model config listItemIds focusedIndex index options children =
         li_config =
             li_summary.config
 
-        list_item_dom_id =
-            listItemDomId domId index
-
         is_selected =
             case config.selectedIndex of
                 Just i ->
@@ -365,9 +411,9 @@ liView domId lift model config listItemIds focusedIndex index options children =
         ripple =
             if rippled then
                 Ripple.view False
-                    list_item_dom_id
-                        (lift << RippleMsg list_item_dom_id)
-                        (Dict.get list_item_dom_id model.ripples
+                    domId
+                        (lift << RippleMsg domId)
+                        (Dict.get domId model.ripples
                         |> Maybe.withDefault Ripple.defaultModel
                         )
                     []
@@ -378,7 +424,7 @@ liView domId lift model config listItemIds focusedIndex index options children =
     Options.apply li_summary
         (Maybe.withDefault Html.li li_config.node)
         [ listItemClass
-        , Options.id list_item_dom_id |> when (not rippled)
+        , Options.id domId |> when (not rippled)
         , tabindex tab_index |> when config.isInteractive
         , modifier listItem "selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , modifier listItem "activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
