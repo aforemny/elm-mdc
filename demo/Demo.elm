@@ -655,7 +655,7 @@ init flags url key =
             defaultModel key
     in
     ( { initialModel | url = Demo.Url.fromUrl url }
-    , Cmd.batch [ Material.init Mdc, Task.perform GotViewportWidth Browser.Dom.getViewport ]
+    , Task.perform GotViewportWidth Browser.Dom.getViewport
     )
 
 
