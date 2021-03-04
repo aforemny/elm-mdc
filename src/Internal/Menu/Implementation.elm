@@ -330,6 +330,14 @@ menu domId lift model options ulNode =
 
         listId =
             domId ++ "__list"
+
+        list_items = toListItem ulNode.items
+
+        focusedIndex =
+            case config.index of
+                Just i -> i
+                Nothing ->
+                    Lists.findFocusedIndex list_items
     in
     Options.apply summary
         div
@@ -382,7 +390,7 @@ menu domId lift model options ulNode =
                             , focusedItemId =
                                 listId
                                     ++ "--"
-                                    ++ String.fromInt (Maybe.withDefault 0 config.index)
+                                    ++ String.fromInt focusedIndex
                             }
                     )
                     decodeGeometry
@@ -404,7 +412,7 @@ menu domId lift model options ulNode =
                    , tabindex -1
                    ]
             )
-            ( toListItem ulNode.items )
+            list_items
         ]
 
 
@@ -952,7 +960,7 @@ onSelect msg =
 
 selected : Lists.Property m
 selected =
-    cs "mdc-menu-item--selected"
+    Lists.selected
 
 
 disabled : Lists.Property m

@@ -11,6 +11,7 @@ module Internal.List.Implementation exposing
     , dense
     , disabled
     , divider
+    , findFocusedIndex
     , graphic
     , graphicClass
     , graphicIcon
@@ -153,14 +154,7 @@ ul domId lift model options items =
         -- Lots of complex list manipulation to handle nested lists.
         -- We need to emit unique dom ids, and it is easier to treat
         -- this as a single vertical list.
-        itemList item =
-            case item.children of
-                HtmlList _ -> [ item ]
-                ListItemList children -> children
-
-        all_items = List.map itemList items
-
-        flattened_items = List.concat all_items
+        flattened_items = flattenItems items
 
         listItemIds =
             flattened_items
@@ -201,10 +195,7 @@ ul domId lift model options items =
                 Nothing ->
                     case config.selectedIndex of
                         Just index -> index
-                        Nothing ->
-                            case findIndex liIsSelectedOrActivated items of
-                                Just i -> i
-                                Nothing -> 0
+                        Nothing -> findFocusedIndex items
 
         list_nodes =
             items
@@ -263,13 +254,13 @@ listItemView :
 listItemView domId lift model config listItemsIds focusedIndex index li_ =
     let
         listItemId =
-            (Debug.log "listItemIds" listItemsIds)
+            listItemsIds
                 |> Array.get index
                 |> Maybe.withDefault domId
     in
     case li_.children of
         HtmlList children ->
-            li_.view (Debug.log "listItemId" listItemId) lift model config listItemsIds focusedIndex index li_.options children
+            li_.view listItemId lift model config listItemsIds focusedIndex index li_.options children
         ListItemList items ->
             let
                 --groupDomId = domId ++ "-" ++ (String.fromInt index)
@@ -625,6 +616,46 @@ findIndexHelp index predicate list_ =
                 findIndexHelp (index + 1) predicate rest
 
 
+{-| Unroll a grouped list
+-}
+flattenItems : List (ListItem m) -> List (ListItem m)
+flattenItems items =
+    let
+        itemList item =
+            case item.children of
+                HtmlList _ -> [ item ]
+                ListItemList children -> children
+
+        all_items = List.map itemList items
+    in
+        List.concat all_items
+
+
+
+
+{-| Determine the index of the focused item. The index returned is
+that of the flattened list.
+-}
+findFocusedIndex : List (ListItem m) -> Int
+findFocusedIndex items =
+    let
+        flattened_items = flattenItems items
+    in
+        findIndex liIsSelectedOrActivated flattened_items
+            |> Maybe.withDefault 0
+
+
+liIsSelectedOrActivated : ListItem m -> Bool
+liIsSelectedOrActivated li_ =
+    let
+        li_summary =
+            Options.collect defaultConfig li_.options
+
+        li_config =
+            li_summary.config
+    in
+        li_config.selected || li_config.activated
+
 
 {- Custom HTML inserted in list. -}
 asListItemView :
@@ -748,18 +779,6 @@ useActivated =
 activated : Property m
 activated =
     Options.option (\config -> { config | activated = True } )
-
-
-liIsSelectedOrActivated : ListItem m -> Bool
-liIsSelectedOrActivated li_ =
-    let
-        li_summary =
-            Options.collect defaultConfig li_.options
-
-        li_config =
-            li_summary.config
-    in
-        li_config.selected || li_config.activated
 
 
 disabled : Property m
