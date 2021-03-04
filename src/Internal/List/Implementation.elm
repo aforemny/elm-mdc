@@ -11,6 +11,7 @@ module Internal.List.Implementation exposing
     , dense
     , disabled
     , divider
+    , findFocusedIndex
     , graphic
     , graphicClass
     , graphicIcon
@@ -150,12 +151,40 @@ ul domId lift model options items =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
+        -- Lots of complex list manipulation to handle nested lists.
+        -- We need to emit unique dom ids, and it is easier to treat
+        -- this as a single vertical list.
+        flattened_items = flattenItems items
+
         listItemIds =
-            Array.fromList (List.indexedMap (doListItemDomId domId) items)
+            flattened_items
+                |> List.indexedMap (focusableListItemDomId domId)
+                |> Array.fromList
+
+        myIndex : Int -> List (ListItem m) -> Int
+        myIndex index items_ =
+            items_
+                |> List.take index
+                |> List.foldl
+                   (\item total ->
+                        case item.children of
+                            HtmlList _ -> total + 1
+                            ListItemList children -> List.length children
+                   ) 0
+
+        calculate_base_index : List (ListItem m) -> List Int
+        calculate_base_index items_ =
+            items_
+                |> List.indexedMap
+                   (\index item -> myIndex index items_)
+
+        base_indices =
+            calculate_base_index items
+                |> Array.fromList
 
         -- Only at the parent level we know what list item's tabindex must be set.
         -- Order:
-        -- 1. If user has moved focused with keyboard, that item  gets the focus.
+        -- 1. If user has moved focused with keyboard, that item gets the focus.
         -- 2. If client has selected an item to receive the tab index, use that.
         -- 3. If no index has set, set the index on the activated item.
         -- 4. Else select the first item.
@@ -166,13 +195,19 @@ ul domId lift model options items =
                 Nothing ->
                     case config.selectedIndex of
                         Just index -> index
-                        Nothing ->
-                            case findIndex liIsSelectedOrActivated items of
-                                Just i -> i
-                                Nothing -> 0
+                        Nothing -> findFocusedIndex items
 
         list_nodes =
-            List.indexedMap (listItemView domId lift model config listItemIds focusedIndex) items
+            items
+                |> List.indexedMap
+                   (\index item ->
+                        let
+                            base_index =
+                                Array.get index base_indices
+                                    |> Maybe.withDefault index
+                        in
+                            listItemView lift model config listItemIds focusedIndex base_index item
+                   )
     in
     Options.apply summary
         (Maybe.withDefault Html.ul config.node)
@@ -195,12 +230,10 @@ ul domId lift model options items =
 
 -- Perhaps we need to pick up any custom id set explicitly on the list item?
 
-
-doListItemDomId : String -> Int -> ListItem m -> String
-doListItemDomId domId index item =
+focusableListItemDomId : String -> Int -> ListItem m -> String
+focusableListItemDomId domId index item =
     if item.focusable then
         listItemDomId domId index
-
     else
         ""
 
@@ -208,9 +241,8 @@ doListItemDomId domId index item =
 
 {-| Format a single item in the list.
 -}
-listItemView :
-    Index
-    -> (Msg m -> m)
+listItemView
+    : (Msg m -> m)
     -> Model
     -> Config m
     -> Array String
@@ -218,15 +250,12 @@ listItemView :
     -> Int
     -> ListItem m
     -> Html m
-listItemView domId lift model config listItemsIds focusedIndex index li_ =
+listItemView lift model config listItemsIds focusedIndex index li_ =
     case li_.children of
         HtmlList children ->
-            li_.view domId lift model config listItemsIds focusedIndex index li_.options children
+            li_.view lift model config listItemsIds focusedIndex index li_.options children
         ListItemList items ->
-            let
-                groupDomId = domId ++ "-" ++ (String.fromInt index)
-            in
-            li_.view domId lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (listItemView groupDomId lift model config listItemsIds focusedIndex) items )
+            li_.view lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (\childIndex item -> listItemView lift model config listItemsIds focusedIndex (index + childIndex) item) items )
 
 
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
@@ -266,7 +295,7 @@ type alias ListItem m =
     { options : List (Property m)
     , children : ChildList m
     , focusable : Bool
-    , view : Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m
+    , view : (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m
     }
 
 
@@ -303,7 +332,7 @@ hr options =
 
 
 nestedUl :
-    ( Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m )
+    ( (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m )
     -> List (Property m)
     -> List (ListItem m)
     -> ListItem m
@@ -323,9 +352,8 @@ nestedUl a_view options children =
 
 `focusedIndex` is the index that currently has the keyboard focus.
 -}
-liView :
-    Index
-    -> (Msg m -> m)
+liView
+    : (Msg m -> m)
     -> Model
     -> Config m
     -> Array String
@@ -334,16 +362,18 @@ liView :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-liView domId lift model config listItemIds focusedIndex index options children =
+liView lift model config listItemIds focusedIndex index options children =
     let
+        domId =
+            listItemIds
+                |> Array.get index
+                |> Maybe.withDefault "" -- Can't happen
+
         li_summary =
             Options.collect defaultConfig options
 
         li_config =
             li_summary.config
-
-        list_item_dom_id =
-            listItemDomId domId index
 
         is_selected =
             case config.selectedIndex of
@@ -365,9 +395,9 @@ liView domId lift model config listItemIds focusedIndex index options children =
         ripple =
             if rippled then
                 Ripple.view False
-                    list_item_dom_id
-                        (lift << RippleMsg list_item_dom_id)
-                        (Dict.get list_item_dom_id model.ripples
+                    domId
+                        (lift << RippleMsg domId)
+                        (Dict.get domId model.ripples
                         |> Maybe.withDefault Ripple.defaultModel
                         )
                     []
@@ -378,7 +408,7 @@ liView domId lift model config listItemIds focusedIndex index options children =
     Options.apply li_summary
         (Maybe.withDefault Html.li li_config.node)
         [ listItemClass
-        , Options.id list_item_dom_id |> when (not rippled)
+        , Options.id domId |> when (not rippled)
         , tabindex tab_index |> when config.isInteractive
         , modifier listItem "selected" |> when (config.isSingleSelectionList && is_selected && not config.useActivated)
         , modifier listItem "activated" |> when (config.isSingleSelectionList && is_selected && config.useActivated)
@@ -579,11 +609,50 @@ findIndexHelp index predicate list_ =
                 findIndexHelp (index + 1) predicate rest
 
 
+{-| Unroll a grouped list
+-}
+flattenItems : List (ListItem m) -> List (ListItem m)
+flattenItems items =
+    let
+        itemList item =
+            case item.children of
+                HtmlList _ -> [ item ]
+                ListItemList children -> children
+
+        all_items = List.map itemList items
+    in
+        List.concat all_items
+
+
+
+
+{-| Determine the index of the focused item. The index returned is
+that of the flattened list.
+-}
+findFocusedIndex : List (ListItem m) -> Int
+findFocusedIndex items =
+    let
+        flattened_items = flattenItems items
+    in
+        findIndex liIsSelectedOrActivated flattened_items
+            |> Maybe.withDefault 0
+
+
+liIsSelectedOrActivated : ListItem m -> Bool
+liIsSelectedOrActivated li_ =
+    let
+        li_summary =
+            Options.collect defaultConfig li_.options
+
+        li_config =
+            li_summary.config
+    in
+        li_config.selected || li_config.activated
+
 
 {- Custom HTML inserted in list. -}
-asListItemView :
-    Index
-    -> (Msg m -> m)
+asListItemView
+    : (Msg m -> m)
     -> Model
     -> Config m
     -> Array String
@@ -592,7 +661,7 @@ asListItemView :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-asListItemView domId lift model config listItemsIds focusedIndex index options children =
+asListItemView lift model config listItemsIds focusedIndex index options children =
     let
         summary =
             Options.collect defaultConfig options
@@ -702,18 +771,6 @@ useActivated =
 activated : Property m
 activated =
     Options.option (\config -> { config | activated = True } )
-
-
-liIsSelectedOrActivated : ListItem m -> Bool
-liIsSelectedOrActivated li_ =
-    let
-        li_summary =
-            Options.collect defaultConfig li_.options
-
-        li_config =
-            li_summary.config
-    in
-        li_config.selected || li_config.activated
 
 
 disabled : Property m
