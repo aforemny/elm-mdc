@@ -35,7 +35,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( defaultModel, Material.init Mdc )
+    ( defaultModel, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
