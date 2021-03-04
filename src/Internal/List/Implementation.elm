@@ -206,7 +206,7 @@ ul domId lift model options items =
                                 Array.get index base_indices
                                     |> Maybe.withDefault index
                         in
-                            listItemView domId lift model config listItemIds focusedIndex base_index item
+                            listItemView lift model config listItemIds focusedIndex base_index item
                    )
     in
     Options.apply summary
@@ -241,9 +241,8 @@ focusableListItemDomId domId index item =
 
 {-| Format a single item in the list.
 -}
-listItemView :
-    Index
-    -> (Msg m -> m)
+listItemView
+    : (Msg m -> m)
     -> Model
     -> Config m
     -> Array String
@@ -251,18 +250,12 @@ listItemView :
     -> Int
     -> ListItem m
     -> Html m
-listItemView domId lift model config listItemsIds focusedIndex index li_ =
-    let
-        listItemId =
-            listItemsIds
-                |> Array.get index
-                |> Maybe.withDefault domId
-    in
+listItemView lift model config listItemsIds focusedIndex index li_ =
     case li_.children of
         HtmlList children ->
-            li_.view listItemId lift model config listItemsIds focusedIndex index li_.options children
+            li_.view lift model config listItemsIds focusedIndex index li_.options children
         ListItemList items ->
-            li_.view domId lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (\childIndex item -> listItemView domId lift model config listItemsIds focusedIndex (index + childIndex) item) items )
+            li_.view lift model config listItemsIds focusedIndex index li_.options ( List.indexedMap (\childIndex item -> listItemView lift model config listItemsIds focusedIndex (index + childIndex) item) items )
 
 
 node : (List (Html.Attribute m) -> List (Html m) -> Html m) -> Property m
@@ -302,7 +295,7 @@ type alias ListItem m =
     { options : List (Property m)
     , children : ChildList m
     , focusable : Bool
-    , view : Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m
+    , view : (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m
     }
 
 
@@ -339,7 +332,7 @@ hr options =
 
 
 nestedUl :
-    ( Index -> (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m )
+    ( (Msg m -> m) -> Model -> Config m -> Array String -> Int -> Int -> List (Property m) -> List (Html m) -> Html m )
     -> List (Property m)
     -> List (ListItem m)
     -> ListItem m
@@ -359,9 +352,8 @@ nestedUl a_view options children =
 
 `focusedIndex` is the index that currently has the keyboard focus.
 -}
-liView :
-    Index
-    -> (Msg m -> m)
+liView
+    : (Msg m -> m)
     -> Model
     -> Config m
     -> Array String
@@ -370,8 +362,13 @@ liView :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-liView domId lift model config listItemIds focusedIndex index options children =
+liView lift model config listItemIds focusedIndex index options children =
     let
+        domId =
+            listItemIds
+                |> Array.get index
+                |> Maybe.withDefault "" -- Can't happen
+
         li_summary =
             Options.collect defaultConfig options
 
@@ -654,9 +651,8 @@ liIsSelectedOrActivated li_ =
 
 
 {- Custom HTML inserted in list. -}
-asListItemView :
-    Index
-    -> (Msg m -> m)
+asListItemView
+    : (Msg m -> m)
     -> Model
     -> Config m
     -> Array String
@@ -665,7 +661,7 @@ asListItemView :
     -> List (Property m)
     -> List (Html m)
     -> Html m
-asListItemView domId lift model config listItemsIds focusedIndex index options children =
+asListItemView lift model config listItemsIds focusedIndex index options children =
     let
         summary =
             Options.collect defaultConfig options

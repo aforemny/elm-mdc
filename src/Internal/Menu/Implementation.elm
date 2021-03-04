@@ -434,9 +434,8 @@ toListItem items =
         items
 
 
-selectionGroupView :
-    Index
-    -> (Lists.Msg m -> m)
+selectionGroupView
+    : (Lists.Msg m -> m)
     -> Lists.Model
     -> Lists.Config m
     -> Array String
@@ -445,7 +444,7 @@ selectionGroupView :
     -> List (Lists.Property m)
     -> List (Html m)
     -> Html m
-selectionGroupView domId lift model config listItemIds focusedIndex an_index options children =
+selectionGroupView lift model config listItemIds focusedIndex an_index options children =
     let
         summary =
             Options.collect Lists.defaultConfig options
