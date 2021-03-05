@@ -1,7 +1,7 @@
 {
     "type": "package",
     "name": "aforemny/elm-mdc",
-    "summary": "Material Components for the Web port to Elm",
+    "summary": "Elm port of Google's Material Components for the Web",
     "license": "Apache-2.0",
     "version": "1.0.0",
     "exposed-modules": [
