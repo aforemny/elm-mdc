@@ -530,6 +530,8 @@ Disabled list items will be ignored.
 Perhaps a bug: the index sent includes dividers, i.e. it's an index
 into the list you passed.
 
+This property can be set both at the ul level and at the individual li
+level. If it is set at the ul level, the one at the li level is ignored.
 -}
 onSelectListItem : (Int -> m) -> Property m
 onSelectListItem =

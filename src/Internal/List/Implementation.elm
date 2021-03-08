@@ -434,15 +434,18 @@ liView lift model config listItemIds focusedIndex index options children =
               Nothing -> Options.nop
         , ripple.interactionHandler |> when rippled
         , ripple.properties |> when rippled
-        , case config.onSelectListItem of
-            Just onSelect ->
-                if not li_config.disabled then
-                    Options.onClick (onSelect index)
-                else
-                    Options.nop
-
-            Nothing ->
-                Options.nop
+        , if not li_config.disabled then
+              case config.onSelectListItem of
+                  Just onSelect ->
+                      Options.onClick (onSelect index)
+                  Nothing ->
+                      case li_config.onSelectListItem of
+                          Just onSelect ->
+                              Options.onClick (onSelect index)
+                          Nothing ->
+                              Options.nop
+          else
+              Options.nop
         , Options.onWithOptions "keydown" <|
             Decode.map2
                 (\key keyCode ->
@@ -503,7 +506,11 @@ liView lift model config listItemIds focusedIndex index options children =
                                         SelectItem index onSelect
 
                                     Nothing ->
-                                        NoOp
+                                        case li_config.onSelectListItem of
+                                            Just onSelect ->
+                                                SelectItem index onSelect
+                                            Nothing ->
+                                                NoOp
 
                             else
                                 case ( index_to_focus, id_to_focus ) of
