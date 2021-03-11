@@ -111,6 +111,7 @@ withTooltip :
 withTooltip mdc anchor_id tooltip_id =
     Options.many
         [ Options.id anchor_id
+        , Options.aria "describedby" tooltip_id
         , Options.onMouseEnter ( mdc <| show anchor_id tooltip_id  )
         , Options.onMouseLeave ( mdc <| hide tooltip_id )
         , Options.onFocus ( mdc <| show anchor_id tooltip_id )

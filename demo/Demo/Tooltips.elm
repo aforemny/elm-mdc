@@ -79,15 +79,8 @@ view lift page model =
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Plain tooltips" ]
             , plainTooltip lift "tooltip-id" model
             , styled a
-                [ id "link-id"
-                , aria "describedby" "tooltip-id"
+                [ withTooltip (lift << Mdc) "link-id" "tooltip-id"
                 , attribute <| href "www.google.com"
-                -- , Options.onMouseEnter (lift ShowTooltip)
-                , withTooltip (lift << Mdc) "link-id" "tooltip-id"
-                --, Options.onMouseEnter ( lift <| Mdc <| Tooltip.show "tooltip-id" "link-id" )
-                --, Options.onMouseLeave ( lift <| Mdc <| Tooltip.hide "tooltip-id" )
-                --, Options.onFocus ( lift <| Mdc <| Tooltip.show "tooltip-id" "link-id" )
-                --, Options.onBlur ( lift <| Mdc <| Tooltip.hide "tooltip-id" )
                 ]
                 [ text "Link" ]
             ]
