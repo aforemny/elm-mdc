@@ -79,8 +79,8 @@ view lift page model =
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Plain tooltips" ]
             , plainTooltip lift "tooltip-id" model
             , styled a
-                [ withTooltip (lift << Mdc) "link-id" "tooltip-id"
-                , attribute <| href "www.google.com"
+                [ attribute <| href "www.google.com"
+                , withTooltip (lift << Mdc) "link-id" "tooltip-id"
                 ]
                 [ text "Link" ]
             ]

@@ -95,9 +95,7 @@ import Material.Options as Options exposing (styled)
 import Material.Tooltip as Tooltip exposing (withTooltip)
 
 styled a
-  [ id "link-id"
-  , aria "describedby" "tooltip-id"
-  , attribute <| href "www.google.com"
+  [ attribute <| href "www.google.com"
   , withTooltip Mdc "link-id" "tooltip-id"
   ]
   [ text "Link" ]
