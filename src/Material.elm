@@ -190,8 +190,12 @@ import Internal.TabBar.Implementation as TabBar
 import Internal.TabBar.Model as TabBar
 import Internal.TextField.Implementation as TextField
 import Internal.TextField.Model as TextField
+import Internal.Tooltip.Implementation as Tooltip
+import Internal.Tooltip.Model as Tooltip
 import Internal.TopAppBar.Implementation as TopAppBar
 import Internal.TopAppBar.Model as TopAppBar
+import Internal.Tooltip.Implementation as Tooltip
+import Internal.Tooltip.Model as Tooltip
 
 
 {-| Different instances of components are differentiated by an `Index`.
@@ -234,6 +238,7 @@ type alias Model m =
     , switch : Indexed Switch.Model
     , tabbar : Indexed TabBar.Model
     , textfield : Indexed TextField.Model
+    , tooltip : Indexed Tooltip.Model
     , topAppBar : Indexed TopAppBar.Model
     }
 
@@ -265,6 +270,7 @@ defaultModel =
     , switch = Dict.empty
     , tabbar = Dict.empty
     , textfield = Dict.empty
+    , tooltip = Dict.empty
     , topAppBar = Dict.empty
     }
 
@@ -362,6 +368,9 @@ update_ lift msg store =
 
         TopAppBarMsg idx msg_ ->
             TopAppBar.react lift msg_ idx store
+
+        TooltipMsg idx msg_ ->
+            Tooltip.react lift msg_ idx store
 
 
 {-| Material subscriptions.
