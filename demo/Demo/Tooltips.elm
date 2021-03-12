@@ -52,7 +52,9 @@ heroTooltip lift model =
     Tooltip.view (lift << Mdc)
         "tooltip-hero"
         model.mdc
-        []
+        [ Tooltip.shown
+        , css "position" "static"
+        ]
         [ text "lorem ipsum dolor" ]
 
 
@@ -61,8 +63,7 @@ plainTooltip lift index model =
     Tooltip.view (lift << Mdc)
         index
         model.mdc
-        [ -- Tooltip.show |> when model.show
-        ]
+        []
         [ text "lorem ipsum dolor" ]
 
 

@@ -1,6 +1,7 @@
 module Internal.Tooltip.Implementation exposing
     ( Property
     , react
+    , shown
     , view
     )
 
@@ -359,6 +360,11 @@ defaultConfig : Config
 defaultConfig =
     { show = False
     }
+
+
+shown : Property m
+shown =
+    Options.option (\config -> { config | show = True })
 
 
 numbers =

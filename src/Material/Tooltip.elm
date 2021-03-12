@@ -2,6 +2,7 @@ module Material.Tooltip exposing
     ( Property
     , hide
     , show
+    , shown
     , view
     , withTooltip
     )
@@ -31,6 +32,7 @@ module Material.Tooltip exposing
 
 @docs Property
 @docs view
+@docs shown
 
 ## Anchor
 
@@ -66,6 +68,16 @@ view :
     -> Html m
 view =
     Tooltip.view
+
+
+{-| Force showing the tooltip without animation.
+
+Only useful for our demo. Has no other use.
+-}
+shown : Property m
+shown =
+    Tooltip.shown
+
 
 
 {-| Message to make tooltip appear next to its anchor.
