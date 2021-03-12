@@ -40,7 +40,7 @@
         "Material.TextField.HelperLine",
         "Material.TextField.HelperText",
         "Material.Theme",
-        "Material.Tooltip",
+        "Material.PlainTooltip",
         "Material.TopAppBar",
         "Material.Typography"
     ],

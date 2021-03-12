@@ -18,12 +18,20 @@ module Material.PlainTooltip exposing
 
 # Example
 
-    import Material.Tooltip as Tooltip
+    import Material.Options as Options exposing (styled)
+    import Material.PlainTooltip as Tooltip exposing (withTooltip)
 
-    Tooltip.view Mdc "my-tooltip" model.mdc
-        []
-        [ text "lorem ipsum dolor" ]
-
+    view =
+        div
+            [ Tooltip.view Mdc "my-tooltip" model.mdc
+                []
+                [ text "lorem ipsum dolor" ]
+            , styled a
+                [ attribute <| href "www.google.com"
+                , withTooltip (lift << Mdc) "link-id" "tooltip-id"
+                ]
+                [ text "Link" ]
+            ]
 
 # Usage
 
@@ -99,6 +107,8 @@ hide tooltip_id =
 
 
 {-| Option to add to anchor element to link it to a given tooltip.
+
+It also adds tghe `id` and `aria-describedby` attributes to the anchor element.
 
 Example:
 
