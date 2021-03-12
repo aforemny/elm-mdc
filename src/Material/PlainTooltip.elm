@@ -1,4 +1,4 @@
-module Material.Tooltip exposing
+module Material.PlainTooltip exposing
     ( Property
     , hide
     , show

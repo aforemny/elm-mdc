@@ -9,7 +9,7 @@ import Html.Attributes as Html exposing (href)
 import Html.Events as Html
 import Material exposing (Index)
 import Material.Options as Options exposing (aria, attribute, css, id, styled, when)
-import Material.Tooltip as Tooltip exposing (withTooltip)
+import Material.PlainTooltip as PlainTooltip exposing (withTooltip)
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
@@ -49,10 +49,10 @@ subscriptions lift model =
 
 heroTooltip : (Msg m -> m) -> Model m -> Html m
 heroTooltip lift model =
-    Tooltip.view (lift << Mdc)
+    PlainTooltip.view (lift << Mdc)
         "tooltip-hero"
         model.mdc
-        [ Tooltip.shown
+        [ PlainTooltip.shown
         , css "position" "static"
         ]
         [ text "lorem ipsum dolor" ]
@@ -60,7 +60,7 @@ heroTooltip lift model =
 
 plainTooltip : (Msg m -> m) -> Index -> Model m -> Html m
 plainTooltip lift index model =
-    Tooltip.view (lift << Mdc)
+    PlainTooltip.view (lift << Mdc)
         index
         model.mdc
         []
