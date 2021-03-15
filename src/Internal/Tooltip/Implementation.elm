@@ -88,7 +88,7 @@ update lift msg model =
             let
                 e = el.element
             in
-                update lift Show { model | anchorRect = Just <| ClientRect e.x (e.x + e.width) e.y (e.y + e.height) e.width e.height }
+                update lift Show { model | anchorRect = Just <| ClientRect (e.x - el.viewport.x) (e.x - el.viewport.x + e.width) (e.y - el.viewport.y) (e.y - el.viewport.y + e.height) e.width e.height }
 
         GotTooltipElement el ->
             let
