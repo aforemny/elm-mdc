@@ -18,8 +18,10 @@ module Internal.Tooltip.Implementation exposing
 import Browser.Dom as Dom
 import Html as Html exposing (Html, text, div)
 import Html.Attributes as Html
+import Internal.GlobalEvents as GlobalEvents
 import Internal.Helpers exposing (delayedCmd)
 import Internal.Component as Component exposing (Index, Indexed)
+import Internal.Keyboard as Keyboard exposing (Key, KeyCode, decodeKey, decodeKeyCode)
 import Internal.Msg
 import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
 import Internal.Tooltip.Model exposing (..)
@@ -106,6 +108,13 @@ update lift msg model =
         TransitionEnd ->
             if model.inTransition then
                 ( Just { model | inTransition = False, state = if model.state == Hide then Hidden else model.state }, Cmd.none )
+            else
+                ( Nothing, Cmd.none )
+
+        KeyDown key keyCode ->
+            if key == "Escape" || keyCode == 27 then
+                -- Hide the tooltip immediately on ESC key.
+                update lift DoStartHide model
             else
                 ( Nothing, Cmd.none )
 
@@ -564,6 +573,9 @@ tooltip domId lift model options nodes =
         , css "left" (String.fromFloat model.left ++ "px")
         , css "top" (String.fromFloat model.top ++ "px")
         , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
+        , when show <|
+            GlobalEvents.onKeyDown
+                <| Decode.map2 (\key keyCode -> lift <| KeyDown key keyCode) decodeKey decodeKeyCode
         ]
         []
         [ styled Html.div

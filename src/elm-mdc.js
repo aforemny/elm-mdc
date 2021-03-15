@@ -247,6 +247,20 @@ import CustomEvent from 'custom-event';
           return event
       })
   })
+
+
+  // custom event "globalkeydown"
+  document.body.addEventListener("keydown", (originalEvent) => {
+      dispatch(document, "globalkeydown", (target, event) => {
+          event.altKey = originalEvent.altKey
+          event.ctrlKey = originalEvent.ctrlKey
+          event.metaKey = originalEvent.metaKey
+          event.shiftKey = originalEvent.shiftKey
+          event.key = originalEvent.key
+          event.keyCode = originalEvent.keyCode
+          return event
+      })
+  })
 })();
 
 

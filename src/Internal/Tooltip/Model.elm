@@ -12,6 +12,7 @@ module Internal.Tooltip.Model exposing
 
 
 import Browser.Dom as Dom
+import Internal.Keyboard as Keyboard exposing (Key, KeyCode)
 import Internal.Tooltip.XPosition as XPosition exposing (XPosition)
 import Internal.Tooltip.YPosition as YPosition exposing (YPosition)
 
@@ -98,3 +99,4 @@ type Msg m
     | StartHide
     | DoStartHide
     | TransitionEnd
+    | KeyDown Key KeyCode
