@@ -2,6 +2,7 @@ module Internal.Tooltip.Model exposing
     ( ClientRect
     , Model
     , Msg(..)
+    , ParentRect
     , Tooltip
     , TooltipState(..)
     , XTransformOrigin(..)
@@ -14,6 +15,11 @@ import Browser.Dom as Dom
 import Internal.Tooltip.XPosition as XPosition exposing (XPosition)
 import Internal.Tooltip.YPosition as YPosition exposing (YPosition)
 
+
+type alias ParentRect =
+    { left : Float
+    , top : Float
+    }
 
 type alias ClientRect =
     { left : Float
@@ -29,6 +35,7 @@ type alias Tooltip =
     , height : Float
     , viewportHeight : Float
     , viewportWidth : Float
+    , isRich : Bool
     }
 
 type XTransformOrigin
@@ -47,8 +54,10 @@ type TooltipState
     | Hide
 
 type alias Model =
-    { anchorRect : Maybe ClientRect
+    { parentRect : Maybe ParentRect
+    , anchorRect : Maybe ClientRect
     , tooltip : Maybe Tooltip
+    , isRich : Bool
     , xTooltipPos : XPosition
     , yTooltipPos : YPosition
     , state : TooltipState
@@ -61,8 +70,10 @@ type alias Model =
 
 defaultModel : Model
 defaultModel =
-    { anchorRect = Nothing
+    { parentRect = Nothing
+    , anchorRect = Nothing
     , tooltip = Nothing
+    , isRich = False
     , xTooltipPos = XPosition.Detected -- TODO: we currently have no way to set this
     , yTooltipPos = YPosition.Detected -- TODO: we currently have no way to set this
     , state = Hidden
@@ -76,9 +87,14 @@ defaultModel =
 
 type Msg m
     = NoOp
-    | StartShow String String
+    | ShowPlainTooltip String String
+    | DoShowPlainTooltip String String
+    | ShowRichTooltip String String String
+    | DoShowRichTooltip String String String
     | Show
+    | GotParentElement Dom.Element
     | GotAnchorElement Dom.Element
     | GotTooltipElement Dom.Element
     | StartHide
+    | DoStartHide
     | TransitionEnd

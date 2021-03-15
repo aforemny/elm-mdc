@@ -1,8 +1,17 @@
 module Internal.Tooltip.Implementation exposing
     ( Property
+    , actions
+    , button
+    , content
+    , contentLink
+    , interactive
+    , persistent
     , react
+    , rich
     , shown
+    , title
     , view
+    , wrapper
     )
 
 import Browser.Dom as Dom
@@ -10,7 +19,6 @@ import Html as Html exposing (Html, text, div)
 import Html.Attributes as Html
 import Internal.Helpers exposing (delayedCmd)
 import Internal.Component as Component exposing (Index, Indexed)
-import Internal.GlobalEvents as GlobalEvents
 import Internal.Msg
 import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
 import Internal.Tooltip.Model exposing (..)
@@ -29,9 +37,12 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        StartShow tooltip_id anchor_id ->
+        ShowPlainTooltip anchor_id tooltip_id ->
+            ( Nothing, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id )
+
+        DoShowPlainTooltip anchor_id tooltip_id ->
             if model.state == Hidden then
-                ( Just { model | state = Showing, inTransition = False, anchorRect = Nothing, tooltip = Nothing }
+                ( Just { model | state = Showing, isRich = False, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing }
                 , Cmd.batch
                       [ getElement lift tooltip_id GotTooltipElement
                       , getElement lift anchor_id GotAnchorElement
@@ -40,18 +51,35 @@ update lift msg model =
             else
                 ( Nothing, Cmd.none )
 
-        Show ->
-            case ( model.anchorRect, model.tooltip ) of
-                ( Just anchorRect, Just a_tooltip ) ->
-                    let
-                        { top, yTransformOrigin, left, xTransformOrigin } = calculateTooltipStyles model.xTooltipPos model.yTooltipPos anchorRect a_tooltip
+        ShowRichTooltip wrapper_id anchor_id tooltip_id ->
+            ( Nothing, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id )
 
-                        -- MDC calls `getCorrectPropertyName()`, not sure why
-                        transformProperty = "transform"
-                    in
-                        ( Just { model | state = Shown, inTransition = True, xTransformOrigin = xTransformOrigin, yTransformOrigin = yTransformOrigin, left = left, top = top }, Cmd.none )
-                ( _, _ ) ->
+        DoShowRichTooltip wrapper_id anchor_id tooltip_id ->
+            if model.state == Hidden then
+                ( Just { model | state = Showing, isRich = True, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing }
+                , Cmd.batch
+                      [ getElement lift tooltip_id GotTooltipElement
+                      , getElement lift anchor_id GotAnchorElement
+                      , getElement lift wrapper_id GotParentElement
+                      ]
+                )
+            else
+                ( Nothing, Cmd.none )
+
+        Show ->
+            case ( model.parentRect, model.anchorRect, model.tooltip ) of
+                ( Nothing, Just anchorRect, Just a_tooltip ) ->
+                    ( Just <| if not model.isRich then positionPlainTooltip model anchorRect a_tooltip else model, Cmd.none )
+                ( Just parentRect, Just anchorRect, Just a_tooltip ) ->
+                    ( Just <| positionRichTooltip model parentRect anchorRect a_tooltip, Cmd.none )
+                ( _, _, _ ) ->
                     ( Just model, Cmd.none )
+
+        GotParentElement el ->
+            let
+                e = el.element
+            in
+                update lift Show { model | parentRect = Just <| ParentRect e.x e.y }
 
         GotAnchorElement el ->
             let
@@ -63,19 +91,57 @@ update lift msg model =
             let
                 e = el.element
             in
-                update lift Show  { model | tooltip = Just <| Tooltip e.width e.height el.viewport.width el.viewport.height }
+                update lift Show  { model | tooltip = Just <| Tooltip e.width e.height el.viewport.width el.viewport.height model.isRich }
 
         StartHide ->
-            if model.state == Shown then
-                ( Just { model | state = Hide, inTransition = True }, Cmd.none )
+            if model.state == Shown && not model.inTransition then
+                ( Nothing, delayedCmd hideDelayMs <| lift <| DoStartHide )
             else
                 ( Nothing, Cmd.none )
+
+        DoStartHide ->
+            ( Just { model | state = Hide, inTransition = True }, Cmd.none )
 
         TransitionEnd ->
             if model.inTransition then
                 ( Just { model | inTransition = False, state = if model.state == Hide then Hidden else model.state }, Cmd.none )
             else
                 ( Nothing, Cmd.none )
+
+
+
+positionPlainTooltip : Model -> ClientRect -> Tooltip -> Model
+positionPlainTooltip model anchorRect a_tooltip =
+    let
+        { top, yTransformOrigin, left, xTransformOrigin } = calculateTooltipStyles model.xTooltipPos model.yTooltipPos anchorRect a_tooltip
+
+        -- MDC calls `getCorrectPropertyName()`, not sure why
+        transformProperty = "transform"
+    in
+        { model | state = Shown, inTransition = True, xTransformOrigin = xTransformOrigin, yTransformOrigin = yTransformOrigin, left = left, top = top }
+
+
+
+positionRichTooltip : Model -> ParentRect -> ClientRect -> Tooltip -> Model
+positionRichTooltip model parentRect anchorRect a_tooltip =
+    let
+        -- getComputedStyleProperty is used instead of getTooltipSize since
+        -- getTooltipSize returns the offSetWidth, which includes the border and
+        -- padding. What we need is the width of the tooltip without border and
+        -- padding.
+        -- TODO: how do we do this in Elm?
+        -- width = getComputedStyleProperty "width"
+
+        { top, yTransformOrigin, left, xTransformOrigin } = calculateTooltipStyles model.xTooltipPos model.yTooltipPos anchorRect a_tooltip
+
+        -- MDC calls `getCorrectPropertyName()`, not sure why
+        transformProperty = "transform"
+
+        leftAdjustment = left - parentRect.left
+        topAdjustment = top - parentRect.top
+
+    in
+        { model | state = Shown, inTransition = True, xTransformOrigin = xTransformOrigin, yTransformOrigin = yTransformOrigin, left = leftAdjustment, top = topAdjustment }
 
 
 
@@ -130,32 +196,60 @@ calculateXTooltipDistance xTooltipPos anchorRect a_tooltip =
         isLTR = True
 
         startPos =
-            if isLTR then
-                anchorRect.left
+            if a_tooltip.isRich then
+                if isLTR then
+                    anchorRect.left - tooltipWidth
+                else
+                    anchorRect.right
             else
-                anchorRect.right - tooltipWidth
+                if isLTR then
+                    anchorRect.left
+                else
+                    anchorRect.right - tooltipWidth
 
         endPos =
-            if isLTR then
-                anchorRect.right - tooltipWidth
+            if a_tooltip.isRich then
+                if isLTR then
+                    anchorRect.right
+                else
+                    anchorRect.left - tooltipWidth
             else
-                anchorRect.left
+                if isLTR then
+                    anchorRect.right - tooltipWidth
+                else
+                    anchorRect.left
 
         centerPos = anchorRect.left + (anchorRect.width - tooltipWidth) / 2
 
         startTransformOrigin =
-            if isLTR then
-                Left
+            if a_tooltip.isRich then
+                if isLTR then
+                    Right
+                else
+                    Left
             else
-                Right
+                if isLTR then
+                    Left
+                else
+                    Right
 
         endTransformOrigin =
-            if isLTR then
-                Right
+            if a_tooltip.isRich then
+                if isLTR then
+                    Left
+                else
+                    Right
             else
-                Left
+                if isLTR then
+                    Right
+                else
+                    Left
 
-        positionOptions = determineValidPositionOptions a_tooltip [ centerPos, startPos, endPos ]
+        positionOptions =
+            if a_tooltip.isRich then
+                determineValidPositionOptions a_tooltip [ startPos, endPos ]
+            else
+                determineValidPositionOptions a_tooltip [ centerPos, startPos, endPos ]
     in
 
         if xTooltipPos == XPosition.Start && Set.member startPos positionOptions then
@@ -175,10 +269,15 @@ calculateXTooltipDistance xTooltipPos anchorRect a_tooltip =
                     -- tooltips default to center, start, then end.
                     let
                         possiblePositions =
-                            [ { distance = centerPos, transformOrigin = Center }
-                            , { distance = startPos, transformOrigin = startTransformOrigin }
-                            , { distance = endPos, transformOrigin = endTransformOrigin}
-                            ]
+                            if a_tooltip.isRich then
+                                [ { distance = endPos, transformOrigin = endTransformOrigin}
+                                , { distance = startPos, transformOrigin = startTransformOrigin }
+                                ]
+                            else
+                                [ { distance = centerPos, transformOrigin = Center }
+                                , { distance = startPos, transformOrigin = startTransformOrigin }
+                                , { distance = endPos, transformOrigin = endTransformOrigin}
+                                ]
 
                         maybe_validPosition =
                             possiblePositions
@@ -353,18 +452,54 @@ getElement lift id_ msg =
 
 type alias Config =
     { show : Bool
+    , rich : Bool
+    , interactive : Bool
+    , persistent : Bool
     }
 
 
 defaultConfig : Config
 defaultConfig =
     { show = False
+    , rich = False
+    , interactive = False
+    , persistent = False
     }
 
 
 shown : Property m
 shown =
     Options.option (\config -> { config | show = True })
+
+
+rich : Property m
+rich =
+    Options.option (\config -> { config | rich = True })
+
+
+interactive : Property m
+interactive =
+    Options.option (\config -> { config | interactive = True })
+
+
+persistent : Property m
+persistent =
+    Options.option (\config -> { config | persistent = True })
+
+
+content : Property m
+content =
+    element "content"
+
+
+contentLink : Property m
+contentLink =
+    element "content-link"
+
+
+title : Property m
+title =
+    element "title"
 
 
 numbers =
@@ -378,9 +513,14 @@ numbers =
     }
 
 
+showDelayMs =
+    numbers.showDelayMs
+
+hideDelayMs =
+    numbers.hideDelayMs
+
 anchorGap =
     numbers.boundedAnchorGap
-
 
 minViewportTooltipThreshold =
       numbers.minViewportTooltipThreshold
@@ -388,6 +528,10 @@ minViewportTooltipThreshold =
 
 type alias Property m =
     Options.Property Config m
+
+
+
+-- VIEW TOOLTIPS
 
 
 tooltip : Index -> (Msg m -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
@@ -399,14 +543,17 @@ tooltip domId lift model options nodes =
         show = config.show || model.state == Shown
 
         hide = model.state == Hide
+
     in
     Options.apply summary
         div
         [ Options.id domId
         , block
-        , role "tooltip"
-        , aria "hidden" "true" |> when (not show)
-        , aria "hidden" "false" |> when show
+        , modifier "rich" |> when config.rich
+        , role "tooltip" |> when ( not config.interactive )
+        , role "dialog" |> when config.interactive
+        , aria "hidden" <| if not show then "true" else "false"
+        , aria "tabindex" "-1" |> when config.persistent
         , modifier "showing" |> when ( model.state == Showing )
         , modifier "shown" |> when show
         , modifier "showing-transition" |> when ( show && model.inTransition )
@@ -423,6 +570,34 @@ tooltip domId lift model options nodes =
               nodes
         ]
 
+
+
+-- RICH TOOLTIPS
+
+wrapper : List (Property m) -> List (Html m) -> Html m
+wrapper options nodes =
+    styled div
+        ( cs "mdc-tooltip-wrapper--rich" :: options )
+        nodes
+
+
+actions : List (Property m) -> List (Html m) -> Html m
+actions options nodes =
+    styled div
+        ( element "rich-actions" :: options )
+        nodes
+
+
+button : List (Property m) -> List (Html m) -> Html m
+button options nodes =
+    styled Html.button
+        ( element "action" :: options )
+        nodes
+
+
+
+
+-- HOOK INTO COMPONENT MODEL
 
 type alias Store s =
     { s | tooltip : Indexed Model }

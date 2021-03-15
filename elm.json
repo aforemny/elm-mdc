@@ -41,6 +41,7 @@
         "Material.TextField.HelperText",
         "Material.Theme",
         "Material.PlainTooltip",
+        "Material.RichTooltip",
         "Material.TopAppBar",
         "Material.Typography"
     ],

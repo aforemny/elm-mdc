@@ -99,6 +99,7 @@ drawerItems =
         , ( "Tab Bar", Url.TabBar )
         , ( "Text Field", Url.TextField )
         , ( "Theme", Url.Theme )
+        , ( "Tooltip", Url.Tooltip )
         , ( "Top App Bar", (Url.TopAppBar Nothing) )
         , ( "Typography", Url.Typography )
         ]

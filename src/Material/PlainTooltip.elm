@@ -94,7 +94,7 @@ You probably want to use `withTooltip` instead.
 -}
 show : Index -> Index -> Msg m
 show anchor_id tooltip_id =
-    Internal.Msg.TooltipMsg tooltip_id <| Tooltip.StartShow tooltip_id anchor_id
+    Internal.Msg.TooltipMsg tooltip_id <| Tooltip.ShowPlainTooltip anchor_id tooltip_id
 
 
 {-| Message to hide tooltip.
@@ -108,7 +108,7 @@ hide tooltip_id =
 
 {-| Option to add to anchor element to link it to a given tooltip.
 
-It also adds tghe `id` and `aria-describedby` attributes to the anchor element.
+It also adds the `id` and `aria-describedby` attributes to the anchor element.
 
 Example:
 
