@@ -80,7 +80,6 @@ view lift page model =
         , ResourceLink.links (lift << Mdc) model.mdc "sliders" "input-controls/sliders" "mdc-slider"
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Plain tooltips" ]
-                  {-
             , plainTooltip lift "tooltip-id" model
             , styled a
                 [ attribute <| href "www.google.com"
@@ -89,7 +88,6 @@ view lift page model =
                 [ text "Link" ]
             , br [] []
             , br [] []
-                   -}
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Rich tooltip without interactive content" ]
             , RichTooltip.wrapper
                 [ id "rich-tooltip-wrapper" ]
