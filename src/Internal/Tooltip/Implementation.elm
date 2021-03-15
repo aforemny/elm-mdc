@@ -4,6 +4,7 @@ module Internal.Tooltip.Implementation exposing
     , button
     , content
     , contentLink
+    , hide
     , interactive
     , persistent
     , react
@@ -542,7 +543,7 @@ tooltip domId lift model options nodes =
 
         show = config.show || model.state == Shown
 
-        hide = model.state == Hide
+        hide_ = model.state == Hide
 
     in
     Options.apply summary
@@ -557,8 +558,8 @@ tooltip domId lift model options nodes =
         , modifier "showing" |> when ( model.state == Showing )
         , modifier "shown" |> when show
         , modifier "showing-transition" |> when ( show && model.inTransition )
-        , modifier "hide" |> when hide
-        , modifier "hide-transition" |> when ( hide && model.inTransition )
+        , modifier "hide" |> when hide_
+        , modifier "hide-transition" |> when ( hide_ && model.inTransition )
         , css "transform-origin" "left top" |> when show
         , css "left" (String.fromFloat model.left ++ "px")
         , css "top" (String.fromFloat model.top ++ "px")
@@ -594,6 +595,15 @@ button options nodes =
         ( element "action" :: options )
         nodes
 
+
+
+-- EXTERNALLY VISIBLE MESSAGES TO CHANGE STATE
+
+{-| Message to hide tooltip.
+-}
+hide : Index -> Internal.Msg.Msg m
+hide tooltip_id =
+    Internal.Msg.TooltipMsg tooltip_id StartHide
 
 
 

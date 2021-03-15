@@ -10,6 +10,7 @@ module Material.RichTooltip exposing
     , shown
     , title
     , view
+    , withInteractiveTooltip
     , withTooltip
     , wrapper
     )
@@ -25,7 +26,10 @@ module Material.RichTooltip exposing
 
 # Rich tooltips
 
-Rich tooltips have two variants: default and persistent.
+Rich tooltips have two variants: non-interactive and interactive. An
+interactive tooltip has a link or a button.
+
+A rich tooltip can also be persisent. The default is not persistent.
 
 Default rich tooltips are shown when users hover over or focus on
 their anchor element. They remain shown when users focus/hover over
@@ -48,27 +52,77 @@ action; the click action for the anchor element should be used solely
 to toggle the visibility of the rich tooltip.
 
 
-# Example
+# Non-interactive rich tooltip example
 
-    import Material.Options as Options exposing (styled)
-    import Material.PlainTooltip as Tooltip exposing (withTooltip)
+Non-interactive rich tooltips have neither a link nor action
+button. Use `withTooltip` to link the anchor to the tooltip.
 
-    view =
-        div
-            [ Tooltip.view Mdc "my-tooltip" model.mdc
-                []
-                [ text "lorem ipsum dolor" ]
-            , styled a
-                [ attribute <| href "www.google.com"
-                , withTooltip (lift << Mdc) "link-id" "tooltip-id"
-                ]
-                [ text "Link" ]
-            ]
+```
+import Material.Options as Options exposing (styled)
+import Material.PlainTooltip as Tooltip exposing (withTooltip)
+
+view =
+  div []
+    [ RichTooltip.wrapper
+      [ id "rich-tooltip-wrapper" ]
+      [ Button.view Mdc
+        "rich-tooltip-button"
+        model.mdc
+        [ Button.ripple
+        , RichTooltip.withTooltip Mdc "rich-tooltip-wrapper" "rich-tooltip-button" "tt0"
+        ]
+        [ text "Button"
+        ]
+      , RichTooltip.view Mdc
+        "tt0"
+        model.mdc
+        [ id "tt0" ]
+        [ styled p [ RichTooltip.content ]
+              [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pretium vitae est et dapibus. Aenean sit amet felis eu lorem fermentum aliquam sit amet sit amet eros." ]
+        ]
+      ]
+    ]
+```
+
+# Interactive rich tooltip example
+
+Interactive rich tooltips have a link or action button. Use
+`withRichTooltip` to link the anchor to the tooltip.
+
+```
+div []
+  [ RichTooltip.wrapper
+    [ id "rich-interactive-tooltip-wrapper" ]
+    [ Button.view Mdc
+      "rich-interactive-tooltip-button"
+      model.mdc
+      [ Button.ripple
+      , RichTooltip.withInteractiveTooltip Mdc model.mdc "rich-interactive-tooltip-wrapper" "rich-interactive-tooltip-button" "tt1"
+      ]
+      [ text "Button"
+      ]
+    , RichTooltip.view Mdc
+      "tt1"
+      model.mdc
+      [ id "tt1"
+      , RichTooltip.interactive
+      ]
+      [ styled h2 [ RichTooltip.title ] [ text "Lorem Ipsum" ]
+      , styled p [ RichTooltip.content ]
+        [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pretium vitae est et dapibus. Aenean sit amet felis eu lorem fermentum aliquam sit amet sit amet eros. "
+        , styled a [ RichTooltip.contentLink, attribute <| href "google.com" ] [ text "link" ]
+        ]
+      , RichTooltip.actions []
+        [ RichTooltip.button [] [ text "action" ]
+        ]
+      ]
+    ]
+  ]
+```
 
 # Usage
 
-
-## Non-interactive tooltip
+## Rich tooltip
 
 @docs Property
 @docs view
@@ -88,6 +142,7 @@ to toggle the visibility of the rich tooltip.
 @docs show
 @docs hide
 @docs withTooltip
+@docs withInteractiveTooltip
 
 ## Wrapper for tooltip and anchor
 
@@ -95,9 +150,10 @@ to toggle the visibility of the rich tooltip.
 
 -}
 
+import Dict
 import Html exposing (Html)
 import Internal.Component exposing (Index)
-import Internal.Options as Options exposing (cs, when)
+import Internal.Options as Options exposing (aria, cs, when)
 import Internal.Tooltip.Implementation as Tooltip
 import Internal.Tooltip.Model as Tooltip
 import Internal.Msg exposing (Msg)
@@ -129,10 +185,13 @@ Example:
 ```
 import Material.RichTooltip as RichTooltip
 
-RichTooltip.view []
-    styled p
-        [ RichTooltip.content ]
-        [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pretium vitae est et dapibus. Aenean sit amet felis eu lorem fermentum aliquam sit amet sit amet eros." ]
+RichTooltip.view Mdc "tt1" model.mdc
+    [ id "tt1" ]
+    [ styled p
+          [ RichTooltip.content ]
+          [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pretium vitae est et dapibus. Aenean sit amet felis eu lorem fermentum aliquam sit amet sit amet eros."
+          ]
+    ]
 ```
 -}
 content : Property m
@@ -140,7 +199,8 @@ content =
     Tooltip.content
 
 
-{-| Class to use for a link inside the content.
+{-| Class to use for a link inside `content`. This is needed to make
+sure the link is formatted properly.
 
 Example:
 ```
@@ -214,15 +274,13 @@ show wrapper_id anchor_id tooltip_id =
 You probably want to use `withTooltip` instead.
 -}
 hide : Index -> Msg m
-hide tooltip_id =
-    Internal.Msg.TooltipMsg tooltip_id Tooltip.StartHide
+hide =
+    Tooltip.hide
 
 
-{-| Option to set on anchor element to link it to the given tooltip.
+{-| Option to set on anchor element to link it to a non-interactive rich tooltip.
 
-It also adds the `id` attribute to the anchor element. Note that the
-"aria-describedby" element is not set. This should be added to the
-anchor element manually if the tooltip is not interactive.
+It also adds the `id` attribute to the anchor element.
 
 Example:
 
@@ -233,16 +291,15 @@ import Material.Tooltip as Tooltip exposing (withTooltip)
 div []
     [ RichTooltip.wrapper
           [ id "rich-tooltip-wrapper" ]
-          [ Button.view (lift << Mdc)
+          [ Button.view Mdc
                 "rich-tooltip-button"
                 model.mdc
                 [ Button.ripple
-                , Button.unelevated
-                , RichTooltip.withTooltip (lift << Mdc) "rich-tooltip-wrapper" "rich-tooltip-button" "tt0"
+                , RichTooltip.withTooltip Mdc "rich-tooltip-wrapper" "rich-tooltip-button" "tt0"
                 ]
                 [ text "Button"
                 ]
-          , RichTooltip.view (lift << Mdc)
+          , RichTooltip.view Mdc
                 "tt0"
                 model.mdc
                 [ id "tt0" ]
@@ -259,14 +316,84 @@ withTooltip :
     -> Index
     -> Index
     -> Options.Property c m
-withTooltip mdc wrapper_id anchor_id tooltip_id =
+withTooltip lift wrapper_id anchor_id tooltip_id =
     Options.many
         [ Options.id anchor_id
-        , Options.onMouseEnter ( mdc <| show wrapper_id anchor_id tooltip_id  )
-        , Options.onMouseLeave ( mdc <| hide tooltip_id )
-        , Options.onFocus ( mdc <| show wrapper_id anchor_id tooltip_id )
-        , Options.onBlur ( mdc <| hide tooltip_id )
+        , aria "describedby" tooltip_id
+        , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id  )
+        , Options.onMouseLeave ( lift <| hide tooltip_id )
+        , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id )
+        , Options.onBlur ( lift <| hide tooltip_id )
         ]
+
+
+
+{-| Option to set on anchor element to link it to the given tooltip.
+
+It also adds the `id` attribute to the anchor element. Note that the
+"aria-describedby" element is not set. This should be added to the
+anchor element manually if the tooltip is not interactive.
+
+Example:
+
+```
+import Material.Options as Options exposing (styled)
+import Material.Tooltip as Tooltip exposing (withInteractiveTooltip)
+
+div []
+    [ RichTooltip.wrapper
+          [ id "rich-tooltip-wrapper" ]
+          [ Button.view Mdc
+                "rich-tooltip-button"
+                model.mdc
+                [ Button.ripple
+                , RichTooltip.withInteractiveTooltip Mdc model.mdc "rich-tooltip-wrapper" "rich-tooltip-button" "tt0"
+                ]
+                [ text "Button" ]
+          , RichTooltip.view Mdc
+                "tt0"
+                model.mdc
+                [ id "tt0"
+                , RichTooltip.interactive
+                ]
+                [ styled p [ RichTooltip.content ]
+                      [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                      , styled a [ RichTooltip.contentLink, attribute <| href "google.com" ] [ text "link" ]
+                      ]
+                ]
+          , RichTooltip.actions []
+                [ RichTooltip.button [] [ text "action" ]
+                ]
+          ]
+    ]
+```
+-}
+withInteractiveTooltip :
+    (Material.Msg m -> m)
+    -> Material.Model m
+    -> Index
+    -> Index
+    -> Index
+    -> Options.Property c m
+withInteractiveTooltip lift mdc wrapper_id anchor_id tooltip_id =
+    let
+        tooltip = Dict.get tooltip_id mdc.tooltip
+
+        is_expanded =
+            case tooltip of
+                Just t -> t.state == Tooltip.Showing || t.state == Tooltip.Shown
+                Nothing -> False
+    in
+    Options.many
+        [ Options.id anchor_id
+        , aria "haspopup" "dialog"
+        , aria "expanded" (if is_expanded then "true" else "false")
+        , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id  )
+        , Options.onMouseLeave ( lift <| hide tooltip_id )
+        , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id )
+        , Options.onBlur ( lift <| hide tooltip_id )
+        ]
+
 
 
 

@@ -117,9 +117,7 @@ view lift page model =
                       "rich-interactive-tooltip-button"
                       model.mdc
                       [ Button.ripple
-                      , RichTooltip.withTooltip (lift << Mdc) "rich-interactive-tooltip-wrapper" "rich-interactive-tooltip-button" "tt1"
-                      , aria "haspopup" "dialog"
-                      , aria "expanded" "false" -- SHOULD BE SET TO TRUE WHEN TOOLTIP IS VISIBLE, HOW CAN A USER DO THAT?
+                      , RichTooltip.withInteractiveTooltip (lift << Mdc) model.mdc "rich-interactive-tooltip-wrapper" "rich-interactive-tooltip-button" "tt1"
                       ]
                       [ text "Button"
                       ]

@@ -102,8 +102,8 @@ show anchor_id tooltip_id =
 You probably want to use `withTooltip` instead.
 -}
 hide : Index -> Msg m
-hide tooltip_id =
-    Internal.Msg.TooltipMsg tooltip_id Tooltip.StartHide
+hide =
+    Tooltip.hide
 
 
 {-| Option to add to anchor element to link it to a given tooltip.
@@ -128,12 +128,12 @@ withTooltip :
     -> Index
     -> Index
     -> Property m
-withTooltip mdc anchor_id tooltip_id =
+withTooltip lift anchor_id tooltip_id =
     Options.many
         [ Options.id anchor_id
         , Options.aria "describedby" tooltip_id
-        , Options.onMouseEnter ( mdc <| show anchor_id tooltip_id  )
-        , Options.onMouseLeave ( mdc <| hide tooltip_id )
-        , Options.onFocus ( mdc <| show anchor_id tooltip_id )
-        , Options.onBlur ( mdc <| hide tooltip_id )
+        , Options.onMouseEnter ( lift <| show anchor_id tooltip_id  )
+        , Options.onMouseLeave ( lift <| hide tooltip_id )
+        , Options.onFocus ( lift <| show anchor_id tooltip_id )
+        , Options.onBlur ( lift <| hide tooltip_id )
         ]
