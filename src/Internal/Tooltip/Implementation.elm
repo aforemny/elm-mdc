@@ -82,7 +82,7 @@ update lift msg model =
             let
                 e = el.element
             in
-                update lift Show { model | parentRect = Just <| ParentRect e.x e.y }
+                update lift Show { model | parentRect = Just <| ParentRect (e.x - el.viewport.x) (e.y - el.viewport.y) }
 
         GotAnchorElement el ->
             let
