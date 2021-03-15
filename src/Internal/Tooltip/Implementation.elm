@@ -44,7 +44,7 @@ update lift msg model =
             ( Nothing, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id )
 
         DoShowPlainTooltip anchor_id tooltip_id ->
-            if model.state == Hidden then
+            if model.state == Hidden || model.state == Hide then
                 ( Just { model | state = Showing, isRich = False, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing }
                 , Cmd.batch
                       [ getElement lift tooltip_id GotTooltipElement
@@ -58,7 +58,7 @@ update lift msg model =
             ( Nothing, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id )
 
         DoShowRichTooltip wrapper_id anchor_id tooltip_id ->
-            if model.state == Hidden then
+            if model.state == Hidden || model.state == Hide then
                 ( Just { model | state = Showing, isRich = True, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing }
                 , Cmd.batch
                       [ getElement lift tooltip_id GotTooltipElement
