@@ -578,7 +578,6 @@ tooltip domId lift model options nodes =
         , modifier "showing-transition" |> when ( show && model.inTransition )
         , modifier "hide" |> when hide_
         , modifier "hide-transition" |> when ( hide_ && model.inTransition )
-        , css "transform-origin" "left top" |> when visible
         , css "left" (String.fromFloat model.left ++ "px") |> when visible
         , css "top" (String.fromFloat model.top ++ "px") |> when visible
         , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
@@ -588,7 +587,9 @@ tooltip domId lift model options nodes =
         ]
         []
         [ styled Html.div
-              [ element "surface" ]
+              [ element "surface"
+              , css "transform-origin" "left top" |> when visible
+              ]
               nodes
         ]
 
