@@ -1,4 +1,4 @@
-module Internal.Tooltip.XPosition exposing
+module Material.Tooltip.XPosition exposing
     ( XPosition(..)
     )
 

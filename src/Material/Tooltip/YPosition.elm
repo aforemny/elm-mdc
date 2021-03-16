@@ -1,4 +1,4 @@
-module Internal.Tooltip.YPosition exposing
+module Material.Tooltip.YPosition exposing
     ( YPosition(..)
     )
 

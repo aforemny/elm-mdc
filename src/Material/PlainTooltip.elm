@@ -5,6 +5,7 @@ module Material.PlainTooltip exposing
     , shown
     , view
     , withTooltip
+    , withTooltipPosition
     )
 
 {-| Tooltips display informative text when users hover over, focus on, or tap an element.
@@ -55,6 +56,8 @@ import Internal.Component exposing (Index)
 import Internal.Options as Options
 import Internal.Tooltip.Implementation as Tooltip
 import Internal.Tooltip.Model as Tooltip
+import Material.Tooltip.XPosition as XPosition exposing (XPosition)
+import Material.Tooltip.YPosition as YPosition exposing (YPosition)
 import Internal.Msg exposing (Msg)
 import Material
 
@@ -63,6 +66,7 @@ import Material
 -}
 type alias Property m =
     Tooltip.Property m
+
 
 
 {-| Tooltip view.
@@ -92,9 +96,9 @@ shown =
 
 You probably want to use `withTooltip` instead.
 -}
-show : Index -> Index -> Msg m
-show anchor_id tooltip_id =
-    Internal.Msg.TooltipMsg tooltip_id <| Tooltip.ShowPlainTooltip anchor_id tooltip_id
+show : Index -> Index -> XPosition -> YPosition -> Msg m
+show anchor_id tooltip_id xposition yposition =
+    Internal.Msg.TooltipMsg tooltip_id <| Tooltip.ShowPlainTooltip anchor_id tooltip_id xposition yposition
 
 
 {-| Message to hide tooltip.
@@ -129,11 +133,32 @@ withTooltip :
     -> Index
     -> Property m
 withTooltip lift anchor_id tooltip_id =
+    withTooltipPosition lift anchor_id tooltip_id XPosition.Detected YPosition.Detected
+
+
+{-| As `withTooltip` but allows you to set the preferred x and y position of the tooltip.
+
+```
+import Material.PlainTooltip exposing (withTooltipPosition)
+import Material.Tooltip.XPosition as XPosition exposing (XPosition)
+import Material.Tooltip.YPosition as YPosition exposing (YPosition)
+
+[ withTooltipPosition Mdc "link-id" "tooltip-id" XPosition.End YPosition.Above ]
+```
+-}
+withTooltipPosition :
+    (Material.Msg m -> m)
+    -> Index
+    -> Index
+    -> XPosition
+    -> YPosition
+    -> Property m
+withTooltipPosition lift anchor_id tooltip_id xposition yposition =
     Options.many
         [ Options.id anchor_id
         , Options.aria "describedby" tooltip_id
-        , Options.onMouseEnter ( lift <| show anchor_id tooltip_id  )
+        , Options.onMouseEnter ( lift <| show anchor_id tooltip_id xposition yposition )
         , Options.onMouseLeave ( lift <| hide tooltip_id )
-        , Options.onFocus ( lift <| show anchor_id tooltip_id )
+        , Options.onFocus ( lift <| show anchor_id tooltip_id xposition yposition )
         , Options.onBlur ( lift <| hide tooltip_id )
         ]

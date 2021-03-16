@@ -10,8 +10,10 @@ import Html.Events as Html
 import Material exposing (Index)
 import Material.Button as Button
 import Material.Options as Options exposing (aria, attribute, css, id, styled, when)
-import Material.PlainTooltip as PlainTooltip exposing (withTooltip)
+import Material.PlainTooltip as PlainTooltip exposing (withTooltip, withTooltipPosition)
 import Material.RichTooltip as RichTooltip
+import Material.Tooltip.XPosition as XPosition exposing (XPosition)
+import Material.Tooltip.YPosition as YPosition exposing (YPosition)
 import Material.Typography as Typography
 import Platform.Cmd exposing (Cmd, none)
 
@@ -81,11 +83,20 @@ view lift page model =
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Plain tooltips" ]
             , plainTooltip lift "tooltip-id" model
-            , styled a
-                [ attribute <| href "www.google.com"
-                , withTooltip (lift << Mdc) "link-id" "tooltip-id"
+            , p []
+                [ styled a
+                      [ attribute <| href "www.google.com"
+                      , withTooltip (lift << Mdc) "link-id" "tooltip-id"
+                      ]
+                      [ text "Link" ]
                 ]
-                [ text "Link" ]
+            , p []
+                [ styled a
+                      [ attribute <| href "www.google.com"
+                      , withTooltipPosition (lift << Mdc) "top-link-id" "tooltip-id" XPosition.End YPosition.Above
+                      ]
+                      [ text "Link where tooltip displays above and at end" ]
+                ]
             , br [] []
             , br [] []
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Rich tooltip without interactive content" ]

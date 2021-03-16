@@ -13,8 +13,8 @@ module Internal.Tooltip.Model exposing
 
 import Browser.Dom as Dom
 import Internal.Keyboard as Keyboard exposing (Key, KeyCode)
-import Internal.Tooltip.XPosition as XPosition exposing (XPosition)
-import Internal.Tooltip.YPosition as YPosition exposing (YPosition)
+import Material.Tooltip.XPosition as XPosition exposing (XPosition)
+import Material.Tooltip.YPosition as YPosition exposing (YPosition)
 
 
 type alias ParentRect =
@@ -34,8 +34,8 @@ type alias ClientRect =
 type alias Tooltip =
     { width : Float
     , height : Float
-    , viewportHeight : Float
     , viewportWidth : Float
+    , viewportHeight : Float
     , isRich : Bool
     }
 
@@ -75,8 +75,8 @@ defaultModel =
     , anchorRect = Nothing
     , tooltip = Nothing
     , isRich = False
-    , xTooltipPos = XPosition.Detected -- TODO: we currently have no way to set this
-    , yTooltipPos = YPosition.Detected -- TODO: we currently have no way to set this
+    , xTooltipPos = XPosition.Detected
+    , yTooltipPos = YPosition.Detected
     , state = Hidden
     , inTransition = False
     , xTransformOrigin = Left
@@ -88,8 +88,8 @@ defaultModel =
 
 type Msg m
     = NoOp
-    | ShowPlainTooltip String String
-    | DoShowPlainTooltip String String
+    | ShowPlainTooltip String String XPosition YPosition
+    | DoShowPlainTooltip String String XPosition YPosition
     | ShowRichTooltip String String String
     | DoShowRichTooltip String String String
     | Show

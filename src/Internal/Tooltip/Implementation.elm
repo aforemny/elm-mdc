@@ -25,8 +25,8 @@ import Internal.Keyboard as Keyboard exposing (Key, KeyCode, decodeKey, decodeKe
 import Internal.Msg
 import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
 import Internal.Tooltip.Model exposing (..)
-import Internal.Tooltip.XPosition as XPosition exposing (XPosition)
-import Internal.Tooltip.YPosition as YPosition exposing (YPosition)
+import Material.Tooltip.XPosition as XPosition exposing (XPosition)
+import Material.Tooltip.YPosition as YPosition exposing (YPosition)
 import Json.Decode as Decode exposing (Decoder)
 import Set exposing (Set)
 import Svg
@@ -40,12 +40,12 @@ update lift msg model =
         NoOp ->
             ( Nothing, Cmd.none )
 
-        ShowPlainTooltip anchor_id tooltip_id ->
-            ( Nothing, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id )
+        ShowPlainTooltip anchor_id tooltip_id xposition yposition ->
+            ( Nothing, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id xposition yposition )
 
-        DoShowPlainTooltip anchor_id tooltip_id ->
+        DoShowPlainTooltip anchor_id tooltip_id xposition yposition ->
             if model.state == Hidden || model.state == Hide then
-                ( Just { model | state = Showing, isRich = False, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing }
+                ( Just { model | state = Showing, isRich = False, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing, xTooltipPos = xposition, yTooltipPos = yposition }
                 , Cmd.batch
                       [ getElement lift tooltip_id GotTooltipElement
                       , getElement lift anchor_id GotAnchorElement
@@ -266,7 +266,7 @@ calculateXTooltipDistance xTooltipPos anchorRect a_tooltip =
             { distance = startPos, transformOrigin = startTransformOrigin }
         else
             if xTooltipPos == XPosition.End && Set.member endPos positionOptions then
-                    { distance = endPos, transformOrigin = endTransformOrigin }
+                { distance = endPos, transformOrigin = endTransformOrigin }
             else
                 if xTooltipPos == XPosition.Center && Set.member centerPos positionOptions then
                     -- This code path is only executed if calculating
