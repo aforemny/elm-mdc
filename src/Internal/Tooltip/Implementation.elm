@@ -41,10 +41,12 @@ update lift msg model =
             ( Nothing, Cmd.none )
 
         ShowPlainTooltip anchor_id tooltip_id xposition yposition ->
-            ( Nothing, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id xposition yposition )
+            -- Transition to DelayShowing, when mouse moves away before
+            -- `showDelayMs` we can cancel this state immediately.
+            ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id xposition yposition )
 
         DoShowPlainTooltip anchor_id tooltip_id xposition yposition ->
-            if model.state == Hidden || model.state == Hide then
+            if model.state == DelayShowing || model.state == Hide then
                 ( Just { model | state = Showing, isRich = False, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing, xTooltipPos = xposition, yTooltipPos = yposition }
                 , Cmd.batch
                       [ getElement lift tooltip_id GotTooltipElement
@@ -55,10 +57,12 @@ update lift msg model =
                 ( Nothing, Cmd.none )
 
         ShowRichTooltip wrapper_id anchor_id tooltip_id ->
-            ( Nothing, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id )
+            -- Transition to DelayShowing, when mouse moves away before
+            -- `showDelayMs` we can cancel this state immediately.
+            ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id )
 
         DoShowRichTooltip wrapper_id anchor_id tooltip_id ->
-            if model.state == Hidden || model.state == Hide then
+            if model.state == DelayShowing || model.state == Hide then
                 ( Just { model | state = Showing, isRich = True, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing }
                 , Cmd.batch
                       [ getElement lift tooltip_id GotTooltipElement
@@ -97,10 +101,13 @@ update lift msg model =
                 update lift Show  { model | tooltip = Just <| Tooltip e.width e.height el.viewport.width el.viewport.height model.isRich }
 
         StartHide ->
-            if model.state == Shown && not model.inTransition then
-                ( Nothing, delayedCmd hideDelayMs <| lift <| DoStartHide )
+            if model.state == DelayShowing then
+                ( Just { model | state = Hidden, inTransition = False }, Cmd.none )
             else
-                ( Nothing, Cmd.none )
+                if model.state == Shown && not model.inTransition then
+                    ( Nothing, delayedCmd hideDelayMs <| lift <| DoStartHide )
+                else
+                    ( Nothing, Cmd.none )
 
         DoStartHide ->
             ( Just { model | state = Hide, inTransition = True }, Cmd.none )
@@ -554,6 +561,8 @@ tooltip domId lift model options nodes =
 
         hide_ = model.state == Hide
 
+        visible = show || model.state == Hide
+
     in
     Options.apply summary
         div
@@ -569,9 +578,9 @@ tooltip domId lift model options nodes =
         , modifier "showing-transition" |> when ( show && model.inTransition )
         , modifier "hide" |> when hide_
         , modifier "hide-transition" |> when ( hide_ && model.inTransition )
-        , css "transform-origin" "left top" |> when show
-        , css "left" (String.fromFloat model.left ++ "px")
-        , css "top" (String.fromFloat model.top ++ "px")
+        , css "transform-origin" "left top" |> when visible
+        , css "left" (String.fromFloat model.left ++ "px") |> when visible
+        , css "top" (String.fromFloat model.top ++ "px") |> when visible
         , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
         , when show <|
             GlobalEvents.onKeyDown

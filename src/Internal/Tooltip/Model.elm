@@ -48,8 +48,10 @@ type YTransformOrigin
     = Bottom
     | Top
 
+-- States are getting complex, we need TLA+ to check our code
 type TooltipState
     = Hidden
+    | DelayShowing
     | Showing
     | Shown
     | Hide
