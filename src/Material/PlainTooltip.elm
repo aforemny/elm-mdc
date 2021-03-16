@@ -48,6 +48,7 @@ module Material.PlainTooltip exposing
 @docs show
 @docs hide
 @docs withTooltip
+@docs withTooltipPosition
 
 -}
 
