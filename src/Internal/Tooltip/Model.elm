@@ -61,6 +61,7 @@ type alias Model =
     , anchorRect : Maybe ClientRect
     , tooltip : Maybe Tooltip
     , isRich : Bool
+    , isMultiline : Bool
     , xTooltipPos : XPosition
     , yTooltipPos : YPosition
     , state : TooltipState
@@ -77,6 +78,7 @@ defaultModel =
     , anchorRect = Nothing
     , tooltip = Nothing
     , isRich = False
+    , isMultiline = False
     , xTooltipPos = XPosition.Detected
     , yTooltipPos = YPosition.Detected
     , state = Hidden

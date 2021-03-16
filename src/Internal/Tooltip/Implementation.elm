@@ -98,7 +98,7 @@ update lift msg model =
             let
                 e = el.element
             in
-                update lift Show  { model | tooltip = Just <| Tooltip e.width e.height el.viewport.width el.viewport.height model.isRich }
+                update lift Show  { model | tooltip = Just <| Tooltip e.width e.height el.viewport.width el.viewport.height model.isRich, isMultiline = e.height > numbers.minHeight && e.width >= numbers.maxWidth }
 
         StartHide ->
             if model.state == DelayShowing then
@@ -526,7 +526,7 @@ numbers =
     , hideDelayMs = 600
     , showDelayMs = 500
     , minHeight = 24
-    , maxWiddth = 200
+    , maxWidth = 200
     }
 
 
@@ -578,6 +578,7 @@ tooltip domId lift model options nodes =
         , modifier "showing-transition" |> when ( show && model.inTransition )
         , modifier "hide" |> when hide_
         , modifier "hide-transition" |> when ( hide_ && model.inTransition )
+        , modifier "multiline" |> when model.isMultiline
         , css "left" (String.fromFloat model.left ++ "px") |> when visible
         , css "top" (String.fromFloat model.top ++ "px") |> when visible
         , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
