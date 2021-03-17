@@ -56,14 +56,14 @@ update lift msg model =
             else
                 ( Nothing, Cmd.none )
 
-        ShowRichTooltip wrapper_id anchor_id tooltip_id ->
+        ShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition ->
             -- Transition to DelayShowing, when mouse moves away before
             -- `showDelayMs` we can cancel this state immediately.
-            ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id )
+            ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition )
 
-        DoShowRichTooltip wrapper_id anchor_id tooltip_id ->
+        DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition ->
             if model.state == DelayShowing || model.state == Hide then
-                ( Just { model | state = Showing, isRich = True, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing }
+                ( Just { model | state = Showing, isRich = True, inTransition = False, parentRect = Nothing, anchorRect = Nothing, tooltip = Nothing, xTooltipPos = xposition, yTooltipPos = yposition }
                 , Cmd.batch
                       [ getElement lift tooltip_id GotTooltipElement
                       , getElement lift anchor_id GotAnchorElement

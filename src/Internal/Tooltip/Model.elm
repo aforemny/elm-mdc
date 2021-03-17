@@ -94,8 +94,8 @@ type Msg m
     = NoOp
     | ShowPlainTooltip String String XPosition YPosition
     | DoShowPlainTooltip String String XPosition YPosition
-    | ShowRichTooltip String String String
-    | DoShowRichTooltip String String String
+    | ShowRichTooltip String String String XPosition YPosition
+    | DoShowRichTooltip String String String XPosition YPosition
     | Show
     | GotParentElement Dom.Element
     | GotAnchorElement Dom.Element

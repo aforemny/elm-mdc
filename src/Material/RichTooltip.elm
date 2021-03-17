@@ -11,7 +11,9 @@ module Material.RichTooltip exposing
     , title
     , view
     , withInteractiveTooltip
+    , withInteractiveTooltipPosition
     , withTooltip
+    , withTooltipPosition
     , wrapper
     )
 
@@ -142,7 +144,9 @@ div []
 @docs show
 @docs hide
 @docs withTooltip
+@docs withTooltipPosition
 @docs withInteractiveTooltip
+@docs withInteractiveTooltipPosition
 
 ## Wrapper for tooltip and anchor
 
@@ -156,6 +160,8 @@ import Internal.Component exposing (Index)
 import Internal.Options as Options exposing (aria, cs, when)
 import Internal.Tooltip.Implementation as Tooltip
 import Internal.Tooltip.Model as Tooltip
+import Material.Tooltip.XPosition as XPosition exposing (XPosition)
+import Material.Tooltip.YPosition as YPosition exposing (YPosition)
 import Internal.Msg exposing (Msg)
 import Material
 
@@ -264,9 +270,9 @@ interactive =
 
 You probably want to use `withTooltip` instead.
 -}
-show : Index -> Index -> Index -> Msg m
-show wrapper_id anchor_id tooltip_id =
-    Internal.Msg.TooltipMsg tooltip_id <| Tooltip.ShowRichTooltip wrapper_id anchor_id tooltip_id
+show : Index -> Index -> Index -> XPosition -> YPosition -> Msg m
+show wrapper_id anchor_id tooltip_id xposition yposition =
+    Internal.Msg.TooltipMsg tooltip_id <| Tooltip.ShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition
 
 
 {-| Message to hide tooltip.
@@ -281,6 +287,8 @@ hide =
 {-| Option to set on anchor element to link it to a non-interactive rich tooltip.
 
 It also adds the `id` attribute to the anchor element.
+
+See `withTooltipPosition` if you want to change the default position of the tooltip.
 
 Example:
 
@@ -317,12 +325,28 @@ withTooltip :
     -> Index
     -> Options.Property c m
 withTooltip lift wrapper_id anchor_id tooltip_id =
+    withTooltipPosition lift wrapper_id anchor_id tooltip_id XPosition.Detected YPosition.Detected
+
+
+{-| As `withTooltip` but allows you to set the preferred x and y position of the tooltip.
+
+Note that the center position `Xposition.Center` is not supported for rich tooltips.
+-}
+withTooltipPosition :
+    (Material.Msg m -> m)
+    -> Index
+    -> Index
+    -> Index
+    -> XPosition
+    -> YPosition
+    -> Options.Property c m
+withTooltipPosition lift wrapper_id anchor_id tooltip_id xposition yposition =
     Options.many
         [ Options.id anchor_id
         , aria "describedby" tooltip_id
-        , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id  )
+        , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onMouseLeave ( lift <| hide tooltip_id )
-        , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id )
+        , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onBlur ( lift <| hide tooltip_id )
         ]
 
@@ -376,6 +400,29 @@ withInteractiveTooltip :
     -> Index
     -> Options.Property c m
 withInteractiveTooltip lift mdc wrapper_id anchor_id tooltip_id =
+    withInteractiveTooltipPosition lift mdc wrapper_id anchor_id tooltip_id XPosition.Detected YPosition.Detected
+
+
+
+{-| As `withInteractiveTooltip`, but this allows you to specify the
+preferred tooltip position.
+
+styled div
+    [ RichTooltip.withInteractiveTooltipPosition Mdc model.mdc "tooltip-wrapper" "my-div" "tooltip_id" XPosition.End YPosition.Above
+    ]
+    []
+
+-}
+withInteractiveTooltipPosition :
+    (Material.Msg m -> m)
+    -> Material.Model m
+    -> Index
+    -> Index
+    -> Index
+    -> XPosition
+    -> YPosition
+    -> Options.Property c m
+withInteractiveTooltipPosition lift mdc wrapper_id anchor_id tooltip_id xposition yposition =
     let
         tooltip = Dict.get tooltip_id mdc.tooltip
 
@@ -388,9 +435,9 @@ withInteractiveTooltip lift mdc wrapper_id anchor_id tooltip_id =
         [ Options.id anchor_id
         , aria "haspopup" "dialog"
         , aria "expanded" (if is_expanded then "true" else "false")
-        , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id  )
+        , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onMouseLeave ( lift <| hide tooltip_id )
-        , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id )
+        , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onBlur ( lift <| hide tooltip_id )
         ]
 
