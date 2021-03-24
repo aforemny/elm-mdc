@@ -54,6 +54,7 @@ type TooltipState
     | DelayShowing
     | Showing
     | Shown
+    | DelayHiding
     | Hide
 
 type alias Model =

@@ -41,9 +41,17 @@ update lift msg model =
             ( Nothing, Cmd.none )
 
         ShowPlainTooltip anchor_id tooltip_id xposition yposition ->
-            -- Transition to DelayShowing, when mouse moves away before
-            -- `showDelayMs` we can cancel this state immediately.
-            ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id xposition yposition )
+            if model.state == DelayHiding then
+                -- Covers the instance where a user hovers over
+                -- the anchor to reveal the tooltip, and then
+                -- quickly navigates away and then back to the
+                -- anchor.  The tooltip should stay visible
+                -- without animating out and then back in again.
+                ( Just { model | state = Shown }, Cmd.none )
+            else
+                -- Transition to DelayShowing, when mouse moves away before
+                -- `showDelayMs` we can cancel this state immediately.
+                ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id xposition yposition )
 
         DoShowPlainTooltip anchor_id tooltip_id xposition yposition ->
             if model.state == DelayShowing || model.state == Hide then
@@ -57,9 +65,17 @@ update lift msg model =
                 ( Nothing, Cmd.none )
 
         ShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition ->
-            -- Transition to DelayShowing, when mouse moves away before
-            -- `showDelayMs` we can cancel this state immediately.
-            ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition )
+            if model.state == DelayHiding then
+                -- Covers the instance where a user hovers over
+                -- the anchor to reveal the tooltip, and then
+                -- quickly navigates away and then back to the
+                -- anchor.  The tooltip should stay visible
+                -- without animating out and then back in again.
+                ( Just { model | state = Shown }, Cmd.none )
+            else
+                -- Transition to DelayShowing, when mouse moves away before
+                -- `showDelayMs` we can cancel this state immediately.
+                ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition )
 
         DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition ->
             if model.state == DelayShowing || model.state == Hide then
@@ -105,12 +121,15 @@ update lift msg model =
                 ( Just { model | state = Hidden, inTransition = False }, Cmd.none )
             else
                 if model.state == Shown && not model.inTransition then
-                    ( Nothing, delayedCmd hideDelayMs <| lift <| DoStartHide )
+                    ( Just { model | state = DelayHiding }, delayedCmd hideDelayMs <| lift <| DoStartHide )
                 else
                     ( Nothing, Cmd.none )
 
         DoStartHide ->
-            ( Just { model | state = Hide, inTransition = True }, Cmd.none )
+            if model.state == DelayHiding then
+                ( Just { model | state = Hide, inTransition = True }, Cmd.none )
+            else
+                ( Nothing, Cmd.none )
 
         TransitionEnd ->
             if model.inTransition then
@@ -557,7 +576,7 @@ tooltip domId lift model options nodes =
         ({ config } as summary) =
             Options.collect defaultConfig options
 
-        show = config.show || model.state == Shown
+        show = config.show || model.state == Shown || model.state == DelayHiding
 
         hide_ = model.state == Hide
 
