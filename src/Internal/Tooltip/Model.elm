@@ -102,6 +102,7 @@ type Msg m
     | GotAnchorElement Dom.Element
     | GotTooltipElement Dom.Element
     | StartHide
+    | HideImmediately
     | DoStartHide
     | TransitionEnd
     | KeyDown Key KeyCode

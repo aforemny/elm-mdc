@@ -346,6 +346,7 @@ withTooltipPosition lift wrapper_id anchor_id tooltip_id xposition yposition =
         , aria "describedby" tooltip_id
         , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onMouseLeave ( lift <| hide tooltip_id )
+        , Options.onClick ( lift <| Tooltip.hide_immediately tooltip_id )
         , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onBlur ( lift <| hide tooltip_id )
         ]
@@ -437,6 +438,7 @@ withInteractiveTooltipPosition lift mdc wrapper_id anchor_id tooltip_id xpositio
         , aria "expanded" (if is_expanded then "true" else "false")
         , Options.onMouseEnter ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onMouseLeave ( lift <| hide tooltip_id )
+        , Options.onClick ( lift <| Tooltip.hide_immediately tooltip_id )
         , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
         , Options.onBlur ( lift <| hide tooltip_id )
         ]

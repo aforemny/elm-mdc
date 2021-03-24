@@ -5,6 +5,7 @@ module Internal.Tooltip.Implementation exposing
     , content
     , contentLink
     , hide
+    , hide_immediately
     , interactive
     , persistent
     , react
@@ -73,9 +74,12 @@ update lift msg model =
                 -- without animating out and then back in again.
                 ( Just { model | state = Shown }, Cmd.none )
             else
-                -- Transition to DelayShowing, when mouse moves away before
-                -- `showDelayMs` we can cancel this state immediately.
-                ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition )
+                if model.state /= Shown then
+                    -- Transition to DelayShowing, when mouse moves away before
+                    -- `showDelayMs` we can cancel this state immediately.
+                    ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition )
+                else
+                    ( Nothing, Cmd.none )
 
         DoShowRichTooltip wrapper_id anchor_id tooltip_id xposition yposition ->
             if model.state == DelayShowing || model.state == Hide then
@@ -124,6 +128,12 @@ update lift msg model =
                     ( Just { model | state = DelayHiding }, delayedCmd hideDelayMs <| lift <| DoStartHide )
                 else
                     ( Nothing, Cmd.none )
+
+        HideImmediately ->
+            if model.state == Shown && not model.inTransition then
+                ( Just { model | state = Hide, inTransition = True }, Cmd.none )
+            else
+                ( Nothing, Cmd.none )
 
         DoStartHide ->
             if model.state == DelayHiding then
@@ -641,11 +651,18 @@ button options nodes =
 
 -- EXTERNALLY VISIBLE MESSAGES TO CHANGE STATE
 
-{-| Message to hide tooltip.
+{-| Message to hide tooltip after a delay.
 -}
 hide : Index -> Internal.Msg.Msg m
 hide tooltip_id =
     Internal.Msg.TooltipMsg tooltip_id StartHide
+
+
+{-| Message to hide tooltip immediately.
+-}
+hide_immediately : Index -> Internal.Msg.Msg m
+hide_immediately tooltip_id =
+    Internal.Msg.TooltipMsg tooltip_id HideImmediately
 
 
 
