@@ -235,6 +235,14 @@ type alias Store s =
     { s | checkbox : Indexed Model }
 
 
+getSet :
+    { get : Index -> { a | checkbox : Indexed Model } -> Model
+    , set :
+        Index
+        -> { a | checkbox : Indexed Model }
+        -> Model
+        -> { a | checkbox : Indexed Model }
+    }
 getSet =
     Component.indexed .checkbox (\x y -> { y | checkbox = x }) defaultModel
 

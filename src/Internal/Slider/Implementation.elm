@@ -23,7 +23,6 @@ import Internal.Options as Options exposing (aria, cs, css, styled, when)
 import Internal.Ripple.Implementation as Ripple
 import Internal.Slider.Model exposing (Model, Msg(..), defaultModel)
 import Json.Decode as Decode exposing (Decoder)
-import Svg
 import Svg.Attributes as Svg
 import Task
 

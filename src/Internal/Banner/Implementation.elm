@@ -15,7 +15,7 @@ module Internal.Banner.Implementation exposing
 
 import Html exposing (Html)
 import Html.Attributes exposing (alt)
-import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
+import Internal.Options as Options exposing (aria, cs, role, styled)
 import Internal.Button.Implementation as Button
 
 

@@ -194,8 +194,6 @@ import Internal.Tooltip.Implementation as Tooltip
 import Internal.Tooltip.Model as Tooltip
 import Internal.TopAppBar.Implementation as TopAppBar
 import Internal.TopAppBar.Model as TopAppBar
-import Internal.Tooltip.Implementation as Tooltip
-import Internal.Tooltip.Model as Tooltip
 
 
 {-| Different instances of components are differentiated by an `Index`.
