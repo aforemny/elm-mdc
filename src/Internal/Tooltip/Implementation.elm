@@ -613,7 +613,7 @@ tooltip domId lift model options nodes =
         , modifier "multiline" |> when model.isMultiline
         , css "left" (String.fromFloat model.left ++ "px") |> when visible
         , css "top" (String.fromFloat model.top ++ "px") |> when visible
-        , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
+        , Options.onTransitionEnd  (lift TransitionEnd)
             -- If mouse enters rich tooltip, keep showing it
         , Options.onMouseEnter (lift Show) |> when (config.rich && not config.persistent)
             -- If mouse leave rich tooltip, hide id

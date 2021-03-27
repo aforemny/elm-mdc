@@ -34,6 +34,7 @@ module Internal.Options exposing
     , onMouseOver
     , onMouseUp
     , onSubmit
+    , onTransitionEnd
     , onWithOptions
     , option
     , recollect
@@ -498,6 +499,11 @@ onSubmit f =
             )
             (Decode.map f Html.Events.targetValue)
         )
+
+
+onTransitionEnd : msg -> Property c msg
+onTransitionEnd msg =
+    on "transitionend" (Decode.succeed msg)
 
 
 onWithOptions :

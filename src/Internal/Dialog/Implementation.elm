@@ -124,7 +124,7 @@ dialog lift model options nodes =
         -- duration of the animation.
         , cs "mdc-dialog--opening" |> when ((config.open && stateChanged) || (config.open && model.animating))
         , cs "mdc-dialog--closing" |> when ((not config.open && stateChanged) || (not config.open && model.animating))
-        , when model.animating (Options.on "transitionend" (Json.succeed (lift EndAnimation)))
+        , Options.onTransitionEnd (lift EndAnimation) |> when model.animating
 
         -- Distinguish also between the fake hero dialog one, where we don't want focus trap.
         , when (model.open && config.open && not config.noScrim)
