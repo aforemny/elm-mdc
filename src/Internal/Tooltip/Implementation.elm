@@ -5,7 +5,7 @@ module Internal.Tooltip.Implementation exposing
     , content
     , contentLink
     , hide
-    , hide_immediately
+    , hideImmediately
     , interactive
     , persistent
     , react
@@ -94,13 +94,16 @@ update lift msg model =
                 ( Nothing, Cmd.none )
 
         Show ->
-            case ( model.parentRect, model.anchorRect, model.tooltip ) of
-                ( Nothing, Just anchorRect, Just a_tooltip ) ->
-                    ( Just <| if not model.isRich then positionPlainTooltip model anchorRect a_tooltip else model, Cmd.none )
-                ( Just parentRect, Just anchorRect, Just a_tooltip ) ->
-                    ( Just <| positionRichTooltip model parentRect anchorRect a_tooltip, Cmd.none )
-                ( _, _, _ ) ->
-                    ( Just model, Cmd.none )
+             if model.state == DelayHiding then
+                 ( Just { model | state = Shown }, Cmd.none )
+             else
+                 case ( model.parentRect, model.anchorRect, model.tooltip ) of
+                     ( Nothing, Just anchorRect, Just a_tooltip ) ->
+                         ( Just <| if not model.isRich then positionPlainTooltip model anchorRect a_tooltip else model, Cmd.none )
+                     ( Just parentRect, Just anchorRect, Just a_tooltip ) ->
+                         ( Just <| positionRichTooltip model parentRect anchorRect a_tooltip, Cmd.none )
+                     ( _, _, _ ) ->
+                         ( Just model, Cmd.none )
 
         GotParentElement el ->
             let
@@ -611,6 +614,10 @@ tooltip domId lift model options nodes =
         , css "left" (String.fromFloat model.left ++ "px") |> when visible
         , css "top" (String.fromFloat model.top ++ "px") |> when visible
         , Options.on "transitionend" (Decode.succeed (lift TransitionEnd))
+            -- If mouse enters rich tooltip, keep showing it
+        , Options.onMouseEnter (lift Show) |> when (config.rich && not config.persistent)
+            -- If mouse leave rich tooltip, hide id
+        , Options.onMouseLeave (lift StartHide) |> when (config.rich && not config.persistent)
         , when show <|
             GlobalEvents.onKeyDown
                 <| Decode.map2 (\key keyCode -> lift <| KeyDown key keyCode) decodeKey decodeKeyCode
@@ -660,8 +667,8 @@ hide tooltip_id =
 
 {-| Message to hide tooltip immediately.
 -}
-hide_immediately : Index -> Internal.Msg.Msg m
-hide_immediately tooltip_id =
+hideImmediately : Index -> Internal.Msg.Msg m
+hideImmediately tooltip_id =
     Internal.Msg.TooltipMsg tooltip_id HideImmediately
 
 
