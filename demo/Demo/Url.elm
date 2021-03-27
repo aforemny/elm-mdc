@@ -40,6 +40,7 @@ type Url
     | TabBar
     | TextField
     | Theme
+    | Tooltip
     | TopAppBar (Maybe TopAppBarPage)
     | Typography
     | Error404 String
@@ -171,6 +172,9 @@ toString url =
         Theme ->
             "#theme"
 
+        Tooltip ->
+            "#tooltips"
+
         TopAppBar topAppBar ->
             topAppBarCase topAppBar
 
@@ -278,6 +282,9 @@ fromString url =
 
         "theme" ->
             Theme
+
+        "tooltips" ->
+            Tooltip
 
         "top-app-bar" ->
             TopAppBar Nothing

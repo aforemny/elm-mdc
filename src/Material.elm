@@ -28,6 +28,7 @@ Some things of note are:
   - To distinguish components, ie. one button from another, this library uses a
     list of strings as indices. Those indices must be unique within a
     `Material.Model`, but you can have as many `Material.Model`s as you like.
+  - A common pattern is to have a `Material.Model` per page.
 
 Have a look at the demo's source code for an example of how to structure large
 applications using this library.
@@ -189,6 +190,8 @@ import Internal.TabBar.Implementation as TabBar
 import Internal.TabBar.Model as TabBar
 import Internal.TextField.Implementation as TextField
 import Internal.TextField.Model as TextField
+import Internal.Tooltip.Implementation as Tooltip
+import Internal.Tooltip.Model as Tooltip
 import Internal.TopAppBar.Implementation as TopAppBar
 import Internal.TopAppBar.Model as TopAppBar
 
@@ -233,6 +236,7 @@ type alias Model m =
     , switch : Indexed Switch.Model
     , tabbar : Indexed TabBar.Model
     , textfield : Indexed TextField.Model
+    , tooltip : Indexed Tooltip.Model
     , topAppBar : Indexed TopAppBar.Model
     }
 
@@ -264,6 +268,7 @@ defaultModel =
     , switch = Dict.empty
     , tabbar = Dict.empty
     , textfield = Dict.empty
+    , tooltip = Dict.empty
     , topAppBar = Dict.empty
     }
 
@@ -361,6 +366,9 @@ update_ lift msg store =
 
         TopAppBarMsg idx msg_ ->
             TopAppBar.react lift msg_ idx store
+
+        TooltipMsg idx msg_ ->
+            Tooltip.react lift msg_ idx store
 
 
 {-| Material subscriptions.

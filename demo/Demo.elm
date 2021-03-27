@@ -35,6 +35,7 @@ import Demo.Startpage
 import Demo.Switch
 import Demo.TabBar
 import Demo.TextFields
+import Demo.Tooltips
 import Demo.Theme
 import Demo.TopAppBar
 import Demo.Typography
@@ -84,6 +85,7 @@ type alias Model =
     , snackbar : Demo.Snackbar.Model Msg
     , switch : Demo.Switch.Model Msg
     , tabbar : Demo.TabBar.Model Msg
+    , tooltips : Demo.Tooltips.Model Msg
     , modalDrawer : Demo.ModalDrawer.Model Msg
     , textfields : Demo.TextFields.Model Msg
     , theme : Demo.Theme.Model Msg
@@ -127,6 +129,7 @@ defaultModel key =
     , snackbar = Demo.Snackbar.defaultModel
     , switch = Demo.Switch.defaultModel
     , tabbar = Demo.TabBar.defaultModel
+    , tooltips = Demo.Tooltips.defaultModel
     , modalDrawer = Demo.ModalDrawer.defaultModel
     , textfields = Demo.TextFields.defaultModel
     , theme = Demo.Theme.defaultModel
@@ -177,6 +180,7 @@ type Msg
     | TextFieldMsg (Demo.TextFields.Msg Msg)
     | ThemeMsg (Demo.Theme.Msg Msg)
     | TypographyMsg (Demo.Typography.Msg Msg)
+    | TooltipsMsg (Demo.Tooltips.Msg Msg)
     | TopAppBarMsg (Demo.TopAppBar.Msg Msg)
 
 
@@ -450,6 +454,13 @@ update msg model =
             in
             ( { model | topAppBar = topAppBar }, effects )
 
+        TooltipsMsg msg_ ->
+            let
+                ( tooltips, effects ) =
+                    Demo.Tooltips.update TooltipsMsg msg_ model.tooltips
+            in
+            ( { model | tooltips = tooltips }, effects )
+
         TypographyMsg msg_ ->
             let
                 ( typography, effects ) =
@@ -606,6 +617,9 @@ view_ model =
 
         Demo.Url.Theme ->
             Demo.Theme.view ThemeMsg page model.theme
+
+        Demo.Url.Tooltip ->
+            Demo.Tooltips.view TooltipsMsg page model.tooltips
 
         Demo.Url.TopAppBar topAppBarPage ->
             Demo.TopAppBar.view TopAppBarMsg page topAppBarPage model.topAppBar

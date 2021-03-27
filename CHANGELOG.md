@@ -1,5 +1,8 @@
 # Latest changes
 
+New features:
+- Tooltip component. Both plain and rich tooltips are supported.
+
 Fixes:
 - elm-mdc.js: import of focusTrap incorrect since upgrade to v6.
 - docs did not compile.
@@ -9,6 +12,7 @@ Breaking changes:
 
 
 # Upgrade to 10.0.0
+
 
 # Upgrade to 9.0.0
 

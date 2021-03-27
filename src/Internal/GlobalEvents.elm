@@ -1,5 +1,6 @@
 module Internal.GlobalEvents exposing
     ( TickConfig
+    , onKeyDown
     , onMouseMove
     , onMouseUp
     , onPointerMove
@@ -90,6 +91,11 @@ onTouchEnd =
 onPointerUp : Decoder m -> Property c m
 onPointerUp =
     listener "globalpointerup"
+
+
+onKeyDown : Decoder m -> Property c m
+onKeyDown =
+    listener "globalkeydown"
 
 
 listener : String -> Decoder m -> Property c m

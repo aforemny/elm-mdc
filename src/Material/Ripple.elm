@@ -69,7 +69,6 @@ The view functions `unbounded` and `bounded` return a record with fields
 
 -}
 
-import Html exposing (Html)
 import Internal.Component exposing (Index)
 import Internal.Ripple.Implementation as Ripple
 import Material
