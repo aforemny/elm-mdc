@@ -157,7 +157,7 @@ div []
 import Dict
 import Html exposing (Html)
 import Internal.Component exposing (Index)
-import Internal.Options as Options exposing (aria, cs, when)
+import Internal.Options as Options exposing (aria)
 import Internal.Tooltip.Implementation as Tooltip
 import Internal.Tooltip.Model as Tooltip
 import Material.Tooltip.XPosition as XPosition exposing (XPosition)
@@ -348,7 +348,8 @@ withTooltipPosition lift wrapper_id anchor_id tooltip_id xposition yposition =
         , Options.onMouseLeave ( lift <| hide tooltip_id )
         , Options.onClick ( lift <| Tooltip.hideImmediately tooltip_id )
         , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
-        , Options.onBlur ( lift <| hide tooltip_id )
+        --, Options.onBlur ( lift <| hide tooltip_id )
+        , Tooltip.onRichTooltipBlur lift tooltip_id
         ]
 
 
@@ -440,7 +441,8 @@ withInteractiveTooltipPosition lift mdc wrapper_id anchor_id tooltip_id xpositio
         , Options.onMouseLeave ( lift <| hide tooltip_id )
         , Options.onClick ( lift <| Tooltip.hideImmediately tooltip_id )
         , Options.onFocus ( lift <| show wrapper_id anchor_id tooltip_id xposition yposition )
-        , Options.onBlur ( lift <| hide tooltip_id )
+        --, Options.onBlur ( lift <| hide tooltip_id )
+        , Tooltip.onRichTooltipBlur lift tooltip_id
         ]
 
 

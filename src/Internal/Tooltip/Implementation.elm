@@ -7,6 +7,7 @@ module Internal.Tooltip.Implementation exposing
     , hide
     , hideImmediately
     , interactive
+    , onRichTooltipBlur
     , persistent
     , react
     , rich
@@ -24,7 +25,7 @@ import Internal.Helpers exposing (delayedCmd)
 import Internal.Component as Component exposing (Index, Indexed)
 import Internal.Keyboard as Keyboard exposing (Key, KeyCode, decodeKey, decodeKeyCode)
 import Internal.Msg
-import Internal.Options as Options exposing (aria, cs, css, role, styled, when)
+import Internal.Options as Options exposing (aria, cs, css, on, role, styled, when)
 import Internal.Tooltip.Model exposing (..)
 import Material.Tooltip.XPosition as XPosition exposing (XPosition)
 import Material.Tooltip.YPosition as YPosition exposing (YPosition)
@@ -616,8 +617,10 @@ tooltip domId lift model options nodes =
         , Options.onTransitionEnd  (lift TransitionEnd)
             -- If mouse enters rich tooltip, keep showing it
         , Options.onMouseEnter (lift Show) |> when (config.rich && not config.persistent)
-            -- If mouse leave rich tooltip, hide id
+            -- If mouse leave rich tooltip, hide it
         , Options.onMouseLeave (lift StartHide) |> when (config.rich && not config.persistent)
+            -- If focus leaves rich tooltip, and does not enter anchor, hide it
+        , onRichTooltipBlur2 (lift StartHide) domId |> when (config.rich && not config.persistent)
         , when show <|
             GlobalEvents.onKeyDown
                 <| Decode.map2 (\key keyCode -> lift <| KeyDown key keyCode) decodeKey decodeKeyCode
@@ -670,6 +673,25 @@ hide tooltip_id =
 hideImmediately : Index -> Internal.Msg.Msg m
 hideImmediately tooltip_id =
     Internal.Msg.TooltipMsg tooltip_id HideImmediately
+
+
+{-| Special onBlur which only sends `msg` when focus has not entered the tooltip.
+-}
+onRichTooltipBlur : (Internal.Msg.Msg msg -> msg) -> String -> Options.Property c msg
+onRichTooltipBlur lift id =
+    on "blur" <|
+        Decode.map
+            (\_ -> lift <| hide id )
+            ( Internal.Helpers.succeedIfLeavingElement id)
+
+
+
+onRichTooltipBlur2 : msg -> String -> Options.Property c msg
+onRichTooltipBlur2 msg id =
+    on "focusout" <|
+        Decode.map
+            (\_ -> msg )
+            ( Internal.Helpers.succeedIfLeavingElement id)
 
 
 
