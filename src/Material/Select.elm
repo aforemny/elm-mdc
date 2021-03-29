@@ -2,9 +2,11 @@ module Material.Select exposing
     ( Property
     , view
     , label
+    , name
     , required
     , disabled
     , selectedText
+    , selectedValue
     , onSelect
     , option
     , value
@@ -63,10 +65,16 @@ to match. This is best done through the use of another class.
 @docs label
 @docs required
 @docs disabled
+@docs name
+@docs selectedText
+@docs selectedValue
+@docs onSelect
+
+
+## Select variants
+
 @docs fullWidth
 @docs outlined
-@docs selectedText
-@docs onSelect
 
 
 ## The option element
@@ -78,6 +86,7 @@ to match. This is best done through the use of another class.
 
 import Html exposing (Html)
 import Internal.Component exposing (Index)
+import Internal.Options as Options
 import Internal.Select.Implementation as Select
 import Material
 import Material.List as Lists
@@ -124,6 +133,17 @@ fullWidth =
     Select.fullWidth
 
 
+{-| If set, the select will get a hidden input with this name, and an
+optional avalue. This can make HTML form submissions easier.
+
+The value is set with using `selectedValue`. If `selectedValue` is not
+set, the hidden input will not have a value (attribute).
+-}
+name : String -> Property m
+name =
+    Options.name
+
+
 {-| Draw outlined version of select.
 -}
 outlined : Property m
@@ -155,6 +175,14 @@ onSelect =
 selectedText : String -> Property m
 selectedText =
     Select.selectedText
+
+
+{-| Indicates the selected value. Only used when `name` is set, and
+used for the value for that hidden input.
+-}
+selectedValue : String -> Property m
+selectedValue =
+    Select.selectedValue
 
 
 {-| A select's option.

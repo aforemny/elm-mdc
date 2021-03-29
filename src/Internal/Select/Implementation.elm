@@ -10,6 +10,7 @@ module Internal.Select.Implementation exposing
     , required
     , selected
     , selectedText
+    , selectedValue
     , subs
     , subscriptions
     , value
@@ -113,24 +114,28 @@ update lift msg model =
 
 
 type alias Config m =
-    { label : String
+    { id_ : Index
+    , name : Maybe String
+    , label : String
     , disabled : Bool
     , required : Bool
     , outlined : Bool
-    , id_ : Index
     , selectedText : String
+    , selectedValue : Maybe String
     , onSelect : Maybe (String -> m)
     }
 
 
 defaultConfig : Config m
 defaultConfig =
-    { label = ""
+    { id_ = ""
+    , name = Nothing
+    , label = ""
     , disabled = False
     , required = False
     , outlined = False
-    , id_ = ""
     , selectedText = ""
+    , selectedValue = Nothing
     , onSelect = Nothing
     }
 
@@ -167,6 +172,11 @@ outlined =
 selectedText : String -> Property m
 selectedText v =
     Options.option (\config -> { config | selectedText = v } )
+
+
+selectedValue : String -> Property m
+selectedValue v =
+    Options.option (\config -> { config | selectedValue = Just v } )
 
 
 onSelect : (String -> m) -> Property m
@@ -270,7 +280,18 @@ select lift model options items_ =
         , Options.id domId
         ]
         [ ]
-        [ styled Html.div
+        [ case config.name of
+              Just name ->
+                  let
+                      maybe_value =
+                          case config.selectedValue of
+                              Just v -> Html.value v
+                              Nothing -> Html.classList []
+                  in
+                      Html.input [ Html.type_ "hidden", Html.name name, maybe_value ] []
+              Nothing ->
+                  text ""
+        , styled Html.div
               [ element "anchor"
               , role "button"
               , aria "haspopup" "listbox"
