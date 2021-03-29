@@ -8,7 +8,6 @@ module Internal.TextField.Implementation exposing
     , invalid
     , label
     , leadingIcon
-    , name
     , nativeControl
     , onLeadingIconClick
     , onTrailingIconClick
@@ -193,11 +192,6 @@ required =
 type_ : String -> Property m
 type_ value_ =
     Options.option (\config -> { config | type_ = Just value_ })
-
-
-name : String -> Property m
-name value_ =
-    Options.option (\config -> { config | name = Just value_ })
 
 
 fullwidth : Property m

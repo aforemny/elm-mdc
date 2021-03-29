@@ -16,6 +16,7 @@ module Internal.Options exposing
     , id
     , internalId
     , many
+    , name
     , nativeControl
     , nop
     , on
@@ -219,6 +220,13 @@ nativeControl options =
 internalId : Index -> Property { c | id_ : Index } m
 internalId id_ =
     option (\config -> { config | id_ = id_ })
+
+
+{- Use to set name attribute of an HTML control.
+-}
+name : String -> Property { c | name : Maybe String } m
+name value =
+    option (\config -> { config | name = Just value })
 
 
 for : String -> Property c m
