@@ -8,7 +8,6 @@ module Internal.TextField.Implementation exposing
     , invalid
     , label
     , leadingIcon
-    , name
     , nativeControl
     , onLeadingIconClick
     , onTrailingIconClick
@@ -195,11 +194,6 @@ type_ value_ =
     Options.option (\config -> { config | type_ = Just value_ })
 
 
-name : String -> Property m
-name value_ =
-    Options.option (\config -> { config | name = Just value_ })
-
-
 fullwidth : Property m
 fullwidth =
     Options.option (\config -> { config | fullWidth = True })
@@ -254,11 +248,13 @@ update lift msg model =
             ( Just model, Cmd.none )
 
 
-textField : Index -> (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
-textField domId lift model options list =
+textField : (Msg -> m) -> Model -> List (Property m) -> List (Html m) -> Html m
+textField lift model options list =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
+
+        domId = config.id_
 
         isDirty =
             model.isDirty || Maybe.withDefault False (Maybe.map ((/=) "") config.value)
@@ -530,7 +526,7 @@ view :
 view =
     \lift domId store options ->
         Component.render getSet.get
-            (textField domId)
+            textField
             Internal.Msg.TextFieldMsg
             lift
             domId

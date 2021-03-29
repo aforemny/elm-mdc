@@ -284,7 +284,7 @@ type_ =
 -}
 name : String -> Property m
 name =
-    TextField.name
+    Options.name
 
 
 {-| Make the textfield take up all the available horizontal space.
