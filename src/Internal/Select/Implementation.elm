@@ -175,16 +175,17 @@ onSelect msg =
 
 
 select :
-    Component.Index
-    -> (Msg m -> m)
+    (Msg m -> m)
     -> Model
     -> List (Property m)
     -> List (Menu.Item m)
     -> Html m
-select domId lift model options items_ =
+select lift model options items_ =
     let
         ({ config } as summary) =
             Options.collect defaultConfig options
+
+        domId = config.id_
 
         isDirty =
             model.isDirty
@@ -412,7 +413,7 @@ view :
 view =
     \lift index store options ->
         Component.render getSet.get
-            ( select index )
+            select
             Internal.Msg.SelectMsg
             lift
             index
