@@ -628,6 +628,7 @@ tooltip domId lift model options nodes =
         []
         [ styled Html.div
               [ element "surface"
+              , element "surface-animation"
               , css "transform-origin" "left top" |> when visible
               ]
               nodes
