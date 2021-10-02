@@ -225,7 +225,7 @@ snackbar lift model options _ =
             Maybe.map .stacked contents == Just True
     in
     Options.apply summary
-        Html.div
+        Html.aside
         [ cs "mdc-snackbar"
 
         -- Open class should only be added when we have started
