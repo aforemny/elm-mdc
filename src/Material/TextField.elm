@@ -13,7 +13,6 @@ module Material.TextField exposing
     , invalid
     , pattern
     , outlined
-    , fullwidth
     , prefix
     , suffix
     , textarea
@@ -86,7 +85,6 @@ module Material.TextField exposing
 ## Variants
 
 @docs outlined
-@docs fullwidth
 
 
 ### Multiline
@@ -285,15 +283,6 @@ type_ =
 name : String -> Property m
 name =
     Options.name
-
-
-{-| Make the textfield take up all the available horizontal space.
-
-Full width textfields cannot not have a label. Use a placeholder instead.
--}
-fullwidth : Property m
-fullwidth =
-    TextField.fullwidth
 
 
 {-| Mark the textfield as invalid.

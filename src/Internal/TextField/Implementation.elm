@@ -3,7 +3,6 @@ module Internal.TextField.Implementation exposing
     , cols
     , disabled
     , email
-    , fullwidth
     , internalCounter
     , invalid
     , label
@@ -52,7 +51,6 @@ type alias Config m =
     , name : Maybe String
     , pattern : Maybe String
     , textarea : Bool
-    , fullWidth : Bool
     , invalid : Bool
     , outlined : Bool
     , leadingIcon : Maybe String
@@ -81,7 +79,6 @@ defaultConfig =
     , name = Nothing
     , pattern = Nothing
     , textarea = False
-    , fullWidth = False
     , invalid = False
     , outlined = False
     , leadingIcon = Nothing
@@ -194,11 +191,6 @@ type_ value_ =
     Options.option (\config -> { config | type_ = Just value_ })
 
 
-fullwidth : Property m
-fullwidth =
-    Options.option (\config -> { config | fullWidth = True })
-
-
 invalid : Property m
 invalid =
     Options.option (\config -> { config | invalid = True })
@@ -291,7 +283,7 @@ textField lift model options list =
             shouldAlwaysFloat || focused || isDirty
 
         canHaveLabel =
-            not (config.fullWidth || config.outlined || config.textarea)
+            not (config.outlined || config.textarea)
 
         hasLabel = config.labelText /= Nothing
 
@@ -414,7 +406,6 @@ textField lift model options list =
         , modifier "label-floating" |> when shouldFloat
         , modifier "no-label" |> when (canHaveLabel && not hasLabel)
         , modifier "disabled" |> when config.disabled
-        , modifier "fullwidth" |> when config.fullWidth
         , modifier "invalid" |> when isInvalid
         , modifier "filled" |> when isFilled
         , modifier "outlined" |> when isOutlined
