@@ -1,6 +1,6 @@
 # Material Components for the Web for Elm
 
-[![Build Status](https://api.travis-ci.org/aforemny/elm-mdc.svg?branch=master)](https://travis-ci.org/aforemny/elm-mdc/)
+[![Build](https://github.com/aforemny/elm-mdc/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/aforemny/elm-mdc/actions/workflows/build.yml)
 
 Elm-mdc allows you to write beautiful Elm applications with a
 [Material Design](https://material.io/design/introduction/) look. It
