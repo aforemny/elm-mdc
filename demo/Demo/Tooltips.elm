@@ -71,6 +71,15 @@ plainTooltip lift index model =
         [ text "lorem ipsum dolor" ]
 
 
+plainTopTooltip : (Msg m -> m) -> Index -> Model m -> Html m
+plainTopTooltip lift index model =
+    PlainTooltip.view (lift << Mdc)
+        index
+        model.mdc
+        []
+        [ text "lorem ipsum dolor" ]
+
+
 view : (Msg m -> m) -> Page m -> Model m -> Html m
 view lift page model =
     page.body
@@ -83,6 +92,7 @@ view lift page model =
         , Page.demos
             [ styled Html.h3 [ Typography.subtitle1 ] [ text "Plain tooltips" ]
             , plainTooltip lift "tooltip-id" model
+            , plainTopTooltip lift "top-tooltip-id" model
             , p []
                 [ styled a
                       [ attribute <| href "www.google.com"
@@ -93,7 +103,7 @@ view lift page model =
             , p []
                 [ styled a
                       [ attribute <| href "www.google.com"
-                      , withTooltipPosition (lift << Mdc) "top-link-id" "tooltip-id" XPosition.End YPosition.Above
+                      , withTooltipPosition (lift << Mdc) "top-link-id" "top-tooltip-id" XPosition.End YPosition.Above
                       ]
                       [ text "Link where tooltip displays above and at end" ]
                 ]
