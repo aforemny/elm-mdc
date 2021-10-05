@@ -1,0 +1,16 @@
+name: Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm i
+      - run: npm install -g elm@latest
+      - run: elm --version
+      - run: make clean all
+      - run: make docs
+      - run: make
+        working-directory: examples/hello-world
+      - run: make
+        working-directory: examples/basic-app
