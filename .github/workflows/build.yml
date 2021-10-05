@@ -5,7 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: ls
       - run: npm i
       - run: npm install -g elm@latest
       - run: elm --version
+      - run: make clean all
+      - run: make docs
+      - run: cd examples/hello-world
+      - run: make
+      - run: cd ../basic-app
+      - run: make
+      - run: cd ../..
