@@ -1,0 +1,10 @@
+name: Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: ls
+      - run: npm i
+      - run: npm install -g elm@latest
+      - run: elm --version
