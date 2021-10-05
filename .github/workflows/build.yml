@@ -10,8 +10,7 @@ jobs:
       - run: elm --version
       - run: make clean all
       - run: make docs
-      - run: cd examples/hello-world
       - run: make
-      - run: cd ../basic-app
+        working-directory: examples/hello-world
       - run: make
-      - run: cd ../..
+        working-directory: examples/basic-app
