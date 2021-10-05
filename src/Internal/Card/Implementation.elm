@@ -19,7 +19,7 @@ module Internal.Card.Implementation exposing
 import Html exposing (Html)
 import Internal.Button.Implementation as Button
 import Internal.IconButton.Implementation as IconButton
-import Internal.Options as Options exposing (cs, css, styled)
+import Internal.Options as Options exposing (cs, css, styled, tabindex)
 
 
 type alias Config =
@@ -41,8 +41,14 @@ stroked =
 
 
 primaryAction : List (Property m) -> List (Html m) -> Html m
-primaryAction options =
-    styled Html.div (cs "mdc-card__primary-action" :: options)
+primaryAction options inner =
+    styled Html.div
+        ( cs "mdc-card__primary-action"
+        :: tabindex 0
+        :: options
+        )
+        ( [ styled Html.div [ cs "mdc-card__ripple" ] [] ]
+        ++ inner )
 
 
 media : List (Property m) -> List (Html m) -> Html m
