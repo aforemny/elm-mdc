@@ -1,4 +1,4 @@
-# Latest changes
+# Upgrade to 11.0.0
 
 New features:
 - Tooltip component. Both plain and rich tooltips are supported.
@@ -9,6 +9,7 @@ Fixes:
 
 Breaking changes:
 - Material.init removed, as it didn't do anything.
+- TextField.fullWidth option removed as this was dropped in 8.0.0.
 
 
 # Upgrade to 10.0.0

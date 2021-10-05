@@ -80,7 +80,7 @@ content : List (Property m) -> List (Html m) -> Html m
 content options nodes =
     styled Html.div
         [ element "content"
-        , role "status"
+        , role "alertdialog"
         , aria "live" "assertive"
         ]
         nodes

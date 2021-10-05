@@ -43,17 +43,20 @@ update lift msg model =
             ( Nothing, Cmd.none )
 
         ShowPlainTooltip anchor_id tooltip_id xposition yposition ->
-            if model.state == DelayHiding then
-                -- Covers the instance where a user hovers over
-                -- the anchor to reveal the tooltip, and then
-                -- quickly navigates away and then back to the
-                -- anchor.  The tooltip should stay visible
-                -- without animating out and then back in again.
-                ( Just { model | state = Shown }, Cmd.none )
+            if model.state == Shown then
+                ( Nothing, Cmd.none)
             else
-                -- Transition to DelayShowing, when mouse moves away before
-                -- `showDelayMs` we can cancel this state immediately.
-                ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id xposition yposition )
+                if model.state == DelayHiding then
+                    -- Covers the instance where a user hovers over
+                    -- the anchor to reveal the tooltip, and then
+                    -- quickly navigates away and then back to the
+                    -- anchor.  The tooltip should stay visible
+                    -- without animating out and then back in again.
+                    ( Just { model | state = Shown }, Cmd.none )
+                else
+                    -- Transition to DelayShowing, when mouse moves away before
+                    -- `showDelayMs` we can cancel this state immediately.
+                    ( Just { model | state = DelayShowing }, delayedCmd showDelayMs <| lift <| DoShowPlainTooltip anchor_id tooltip_id xposition yposition )
 
         DoShowPlainTooltip anchor_id tooltip_id xposition yposition ->
             if model.state == DelayShowing || model.state == Hide then
@@ -428,11 +431,14 @@ calculateYTooltipDistance yTooltipPos anchorRect a_tooltip =
                 if Set.member belowYPos yPositionOptions then
                     { distance = belowYPos, transformOrigin = Top }
                 else
-                    {- Indicates that all potential positions would
-                     result in the tooltip colliding with the
-                     viewport. This would only occur when the viewport
-                     is very short. -}
-                    { distance = belowYPos, transformOrigin = Top }
+                    if Set.member aboveYPos yPositionOptions then
+                        { distance = aboveYPos, transformOrigin = Bottom }
+                    else
+                        {- Indicates that all potential positions would
+                        result in the tooltip colliding with the
+                        viewport. This would only occur when the viewport
+                        is very short. -}
+                        { distance = belowYPos, transformOrigin = Top }
 
 
 determineValidYPositionOptions : Tooltip -> Float -> Float -> Set Float
@@ -628,6 +634,7 @@ tooltip domId lift model options nodes =
         []
         [ styled Html.div
               [ element "surface"
+              , element "surface-animation"
               , css "transform-origin" "left top" |> when visible
               ]
               nodes

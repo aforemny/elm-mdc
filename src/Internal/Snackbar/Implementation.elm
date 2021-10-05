@@ -225,7 +225,7 @@ snackbar lift model options _ =
             Maybe.map .stacked contents == Just True
     in
     Options.apply summary
-        Html.div
+        Html.aside
         [ cs "mdc-snackbar"
 
         -- Open class should only be added when we have started
@@ -244,11 +244,12 @@ snackbar lift model options _ =
         []
         [ styled Html.div
             [ cs "mdc-snackbar__surface"
+            , role "status"
+            , aria "relevant" "additions"
             ]
             [ styled Html.div
                 [ cs "mdc-snackbar__label"
-                , role "status"
-                , aria "live" "polite"
+                , aria "atomic" "false"
                 ]
                 (contents
                     |> Maybe.map (\c -> [ text c.message ])
@@ -256,6 +257,7 @@ snackbar lift model options _ =
                 )
             , styled Html.div
                 [ cs "mdc-snackbar__actions"
+                , aria "atomic" "true"
                 ]
                 [ Options.styled Html.button
                     [ cs "mdc-button"

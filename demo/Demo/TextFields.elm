@@ -316,20 +316,6 @@ characterCounterTextFields lift model =
         ]
 
 
-fullwidthTextField : (Msg m -> m) -> Model m -> Html m
-fullwidthTextField lift model =
-    textFieldContainer []
-        [ TextField.view (lift << Mdc)
-            "text-field-fullwidth-text-field"
-            model.mdc
-            [ TextField.placeholder "Standard"
-            , TextField.fullwidth
-            ]
-            []
-        , helperText
-        ]
-
-
 textareaTextField : (Msg m -> m) -> Model m -> Html m
 textareaTextField lift model =
     textFieldContainer []
@@ -375,32 +361,6 @@ textareaTextFieldWithInternalCharacterCounter lift model =
         , helperText
         ]
 
-
-textFieldRowFullwidth : List (Options.Property c m) -> List (Html m) -> Html m
-textFieldRowFullwidth options =
-    styled Html.div
-        (cs "text-field-row text-field-row--fullwidth"
-            :: css "display" "block"
-            :: options
-        )
-
-
-fullwidthTextareaTextField : (Msg m -> m) -> Model m -> Html m
-fullwidthTextareaTextField lift model =
-    textFieldRowFullwidth []
-        [ textFieldContainer []
-            [ TextField.view (lift << Mdc)
-                "text-fields-fullwidth-textarea-text-field"
-                model.mdc
-                [ TextField.label "Standard"
-                , TextField.textarea
-                , TextField.fullwidth
-                , TextField.outlined
-                ]
-                []
-            , helperText
-            ]
-        ]
 
 
 view : (Msg m -> m) -> Page m -> Model m -> Html m
@@ -516,10 +476,6 @@ view lift page model =
             , textareaTextFieldWithCharacterCounter lift model
             , styled Html.h3 [ Typography.subtitle1 ] [ text "Textarea with Internal character Counter" ]
             , textareaTextFieldWithInternalCharacterCounter lift model
-            , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width" ]
-            , fullwidthTextField lift model
-            , styled Html.h3 [ Typography.subtitle1 ] [ text "Full Width Textarea" ]
-            , fullwidthTextareaTextField lift model
             ]
         ]
 
