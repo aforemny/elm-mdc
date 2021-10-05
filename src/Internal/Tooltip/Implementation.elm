@@ -428,11 +428,14 @@ calculateYTooltipDistance yTooltipPos anchorRect a_tooltip =
                 if Set.member belowYPos yPositionOptions then
                     { distance = belowYPos, transformOrigin = Top }
                 else
-                    {- Indicates that all potential positions would
-                     result in the tooltip colliding with the
-                     viewport. This would only occur when the viewport
-                     is very short. -}
-                    { distance = belowYPos, transformOrigin = Top }
+                    if Set.member aboveYPos yPositionOptions then
+                        { distance = aboveYPos, transformOrigin = Bottom }
+                    else
+                        {- Indicates that all potential positions would
+                        result in the tooltip colliding with the
+                        viewport. This would only occur when the viewport
+                        is very short. -}
+                        { distance = belowYPos, transformOrigin = Top }
 
 
 determineValidYPositionOptions : Tooltip -> Float -> Float -> Set Float
