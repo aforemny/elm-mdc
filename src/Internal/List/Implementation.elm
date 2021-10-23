@@ -936,16 +936,16 @@ modifier blockName modifier_ =
 
 list : String
 list =
-    "mdc-list"
+    "mdc-deprecated-list"
 
 listGroup : String
 listGroup =
-    "mdc-list-group"
+    "mdc-deprecated-list-group"
 
 listItem : String
 listItem =
-    "mdc-list-item"
+    "mdc-deprecated-list-item"
 
 listDivider : String
 listDivider =
-    "mdc-list-divider"
+    "mdc-deprecated-list-divider"
