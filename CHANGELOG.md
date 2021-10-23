@@ -1,3 +1,9 @@
+# Latest
+
+Fixes:
+* List had to use the deprecated list when upgrading to version 13. This was badly documented.
+
+
 # Upgrade to 13.0.0
 
 No user visible changes.
