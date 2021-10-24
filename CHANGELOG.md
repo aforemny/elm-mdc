@@ -6,7 +6,10 @@ Fixes:
 
 # Upgrade to 13.0.0
 
-No user visible changes.
+Breaking changes:
+- List: SCSS styling now needs to use the `mdc-deprecated-list`,
+  `mdc-deprecated-list-item` classes for styling.
+
 
 # Upgrade to 12.0.0
 
@@ -24,6 +27,8 @@ Fixes:
 Breaking changes:
 - Material.init removed, as it didn't do anything.
 - TextField.fullWidth option removed as this was dropped in 8.0.0.
+- Chips: MDC deprecated previous .scss mixins. If you have customised
+  styling using chip mixins, you most likely will need to update your custom styling.
 
 
 # Upgrade to 10.0.0
