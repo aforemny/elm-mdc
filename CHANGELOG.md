@@ -2,6 +2,8 @@
 
 Fixes:
 * List had to use the deprecated list when upgrading to version 13. This was badly documented.
+* Switch: missed a DOM restructure (and still can't find this described in the documentation).
+  So it looked like a checkbox.
 
 
 # Upgrade to 13.0.0
