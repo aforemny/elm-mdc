@@ -6,6 +6,7 @@ module Internal.Banner.Implementation exposing
     , graphic
     , graphicTextWrapper
     , icon
+    , open
     , stacked
     , primaryAction
     , secondaryAction
@@ -42,6 +43,11 @@ centered =
 fixed : Property m
 fixed =
     Options.option (\config -> { config | fixed = True })
+
+
+open : Property m
+open =
+    modifier "open"
 
 
 stacked : Property m
