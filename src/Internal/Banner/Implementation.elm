@@ -6,6 +6,7 @@ module Internal.Banner.Implementation exposing
     , graphic
     , graphicTextWrapper
     , icon
+    , open
     , stacked
     , primaryAction
     , secondaryAction
@@ -42,6 +43,11 @@ centered =
 fixed : Property m
 fixed =
     Options.option (\config -> { config | fixed = True })
+
+
+open : Property m
+open =
+    modifier "open"
 
 
 stacked : Property m
@@ -87,19 +93,31 @@ content options nodes =
 
 graphicTextWrapper : List (Property m) -> List (Html m) -> Html m
 graphicTextWrapper options nodes =
-    styled Html.div
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
+    Options.apply summary
+        Html.div
         [ element "graphic-text-wrapper"
         ]
+        []
         nodes
 
 
 graphic : List (Property m) -> List (Html m) -> Html m
 graphic options nodes =
-    styled Html.div
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
+    Options.apply summary
+        Html.div
         [ element "graphic"
         , role "img"
         , Options.attribute (alt "")
         ]
+        []
         nodes
 
 
@@ -114,9 +132,15 @@ icon name =
 
 text : List (Property m) -> List (Html m) -> Html m
 text options nodes =
-    styled Html.div
+    let
+        ({ config } as summary) =
+            Options.collect defaultConfig options
+    in
+    Options.apply summary
+        Html.div
         [ element "text"
         ]
+        []
         nodes
 
 

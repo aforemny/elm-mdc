@@ -6,6 +6,7 @@ module Material.Banner exposing
     , graphicTextWrapper
     , graphic
     , icon
+    , open
     , stacked
     , primaryAction
     , secondaryAction
@@ -25,8 +26,9 @@ module Material.Banner exposing
 # Example
 
     import Material.Banner as Banner
+    import Material.Button as Button
 
-    Banner.view []
+    Banner.view [ Banner.open ]
         [ Banner.graphicTextWrapper []
             [ Banner.text [] [ text "There was a problem processing a transaction on your credit card." ]
             ]
@@ -49,6 +51,7 @@ module Material.Banner exposing
 @docs view
 @docs graphicTextWrapper
 @docs actions
+@docs open
 
 # Variants
 
@@ -101,6 +104,15 @@ top of the screen. This can be done by using the fixed option.
 fixed : Property m
 fixed =
     Banner.fixed
+
+
+{-| Make banner visible. No animation is used, and this is currently
+the only way to make the banner visible. This property will disappear
+in a future version when opening and closing animation will be added.
+-}
+open : Property m
+open =
+    Banner.open
 
 
 {-| On mobile view, banners with long text should have their action(s)
